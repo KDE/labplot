@@ -1,0 +1,576 @@
+LabPlot WISHLIST:
+#################
+
+GUI/Application:
+****************
+	* GUI improvement
+		* better dialogs : -> use designer *.ui files ? (ste)
+			* usr/lib/qt3/bin/uic set_dlg.ui -o set_dlg.h
+			* /usr/lib/qt3/bin/uic set_dlg.ui -i set_dlg.h -o set_dlg.cpp
+	* use context menu in worksheet ?
+		* analysis, appearance, drawing, etc. ?
+	* LabPlot API
+		* KOffice integration :
+			* John : koshell
+			* better KPart/create Koffice Part ?
+		* example programs ?	(linking to libLabPlot.so, etc.)
+	F "Dialogs are in-efficient, since kde based ones support preview, bookmarking etc."
+			* open/save dialogs	-> preview file
+	* use/save predefined functions (in function dialog)
+		* load from Origin projects
+	* use QLabel::setBuddy() for accels
+	* Q_CHECK_PTR() for all pointer ?
+	* browse on the fly (Daniel)
+	* configure :
+		(* save data in project as link (yes/no))
+		(* open new Plot in active Worksheet or in new Worksheet)
+		* graphs (link to data !)
+	* Scripting :
+		* MainWin : print, ... -> KPrintDialog ?
+		* ConfigureDialog
+		(* define analysis plugins)
+		(* define fit functions)
+		* type "Legend" ? (use in LegendDialog)
+	* Spreadsheet
+		* save last used formula for each column.
+		U Am besten den horizontalen Scrollbereich der Scrollleiste erhöhen, so
+			dass man immer noch etwa 1,5 Spaltenbreiten in den grau hinterlegten
+			Bereich scrollen kann, auch wenn das Fenster schmaler ist, als die
+			aktuell vorhandenen Spalten. Oder rechts von den Spalten ein graues Feld in die
+			Titelzeile plotten, das so aussieht, wie die Titelleiste, und auf das man
+			dann doppelclicken kann. (und das dann erscrollt werden kann.)
+		* Selection like Kaleidagraph (Pascal)
+		* format in spreadsheet	(show as ..., convert isodate->double, double->isodate, ....)
+		U mark column if right clicked on header
+			-> too complicated
+	U speed/memory optimization :
+		U LTable	: QString **data
+			* import data
+			* (see Roberts mail (AirLineFit))
+			old : >5min, 395M  new : 1:03 min, 102M
+			* fill random/row number
+			* check all functions !
+	* get the index of the double clicked object (for object dialog list index)
+	* nicer dialogs
+		* exclusive buttongroups (enable/disable) when needed
+		* completion of line edits (filename)	: use KDECompletion ? (filename, ...)
+	* include kghostview menus and toolbars, etc. in print preview (see kgv_part.rc)
+		-> how to delete gv part gui elements ?
+	* Print with correct scales (mm/in)
+	* use STL contructs for some critical objects (see C++-Unleashed & SGI docu)
+	* animations
+I/O:
+****
+	* wenn man LabPlot eigenständig verwenden will, wäre eine Aktualisierungsroutine 
+		(zeitgesteuert oder bei Änderung der externen Daten) sinnvoll.
+		* in Spreadsheet
+			* Spreadsheet::datafile
+			MainWin : watch all files (Spreads and Worksheets)
+				* connect to datafile and reimport in necessary ?
+		* in plot : connect graph to data file ?
+		* check for changes and reimport if necessary
+		(* real time data import)
+		(* Sync\ between\ Real\ Data\ and\ plots)
+			check() {
+				time = QDateTime::current().toTime_t();
+				filetime = lastModified(filename).toTime_t();
+				if(time-filetime < checkinterval)
+					rereadData();
+			}
+		* connect data to spreadsheet ?
+			update plot when data changes in spreadsheet
+	* performance improvements : check and test large datasets, big values
+		"LabPlot and large data sets"
+	* move magic and audiofile into ascii section (else)
+		-> see ImportDialog.cc
+	* R : 
+		- ability to retrieve data from R data objects for rendering in LabPlot
+			-> call R scripts and work on this data	
+			* import different formats using R (package foreign; R Data Import/Export)
+			* export different formats using R (package foreign; R Data Import/Export)
+		- use of labplot as an interactive graphical plotting front-end for R
+			* call R plotting routines with data ?
+	* GraphIMAGE : 
+		(* use KImageIO::pattern	(filter for all image files when opening) )
+		(* ImageDialog : add more methods (see ImageListDialog.cc) )
+	* GRAPH2DL, GRAPH3DL
+		-> x-y-label, x-y-z-label
+		* use for 2d annotate label
+	* set cbi->currentItem with re-read data dialog
+	* reading multiple files from data dialog
+		-> also "same x column"
+	F support "indexed" matrix format
+	F import Bes3T data format
+	* SAVE/OPEN :
+		* save data file externally ? (separate from project file)
+			* saving a data file name in a project file instead of the data itself (hotlink data)
+			-> update function ?
+		* XML -> OASIS format (John)
+	* transparent background when exporting to SVG ?
+		* svg export option "transparent background" ?
+	* g3data import feature
+	* IMPORT/EXPORT
+		* hdf5 IMPORT (see /sw/hdf5-1.6.1/doc/html/)
+			* import
+				* datatype	uchar, time
+			* export
+				* data type	time
+			-> examples : sp_Diagrams_20070626_093808.hdf,DAMARIS_data_pool_small.h5
+			* read other data types (string in compound, time, array)
+		* import PostgreSQL connection
+			* fix import problems :
+			> When I try to import data from the DB, I open the import dialog
+			> and select the "PostgreSQL, mySQL, etc" filter. I then select
+			> the PostgreSQL driver, add the neccessary connection information
+			> (hostname, username, password) and LabPlot indeed shows all
+			> databases installed on this DB server. I then select the database
+			> I'm interested in and LabPlot shows a dialog to select the
+			> table - but the list of tables is empty so I can not select the
+			> table containig my measurement values!
+			> In the PostgreSQL logs I see the following messages related to this:
+			>
+			> [...]
+			> ERROR:  relation "kexi__db" does not exist
+			> ERROR:  relation "kexi__objects" does not exist
+			> [...]
+			a) Possibility to "connect" LabPlot to a free hand database
+			~   query like
+			
+			~   SELECT ts AS x, pv AS y
+			~     FROM t_mv
+			~    WHERE zr=502 AND ts BETWEEN '2005-06-01 00:00:00'
+			~                            AND '2005-06-02 00:00:00';
+			
+			b) Possibility to store the query (not the data) inside the
+			~   LabPlot project ("by reference"). That way it would be
+			~   possible to get any updated data very easily and the project
+			~   file would be quite small even for large datasets. Of course
+			~   it should also be possible to store the dataset "by value"
+			
+			c) Possibility to assign properties to the columns returned
+			~   by the database query (like axis, domain, etc.). It would
+			~   also be nice if LabPlot could automatically determine those
+			~   properties in a more or less intelligent way from the database
+			~   metadata.
+			
+			d) Support for advanced features like SQL arrays. If column
+			~   pv of paragraph a) was an array, this would automatically
+			~   lead to a 3-dimensional dataset (ts=x, row in the array=y,
+			~   value of each element in the array=z)
+			
+			e) Possibility to connect some of the where clauses of the
+			~   query to a list of elements, possibly connected to some
+			~   other table in the database, and let the user iterate
+			~   through the list. That would add just another dimension
+			~   to the evaluations.
+		* read date format "2000/12/24" ("Temperatur.dat")
+		U import/export data to/from openoffice/kspread formats : filter ?
+		* ignore columns
+		* multiple column files (NXY)	-> XYYYYY... / YYYYYYYY, X-index
+		* netcdf/cdf
+			* read/dump matrix data from/to netcdf/cdf (also images)
+			* netcdf header not imported correct (simple.nc)
+		* progress when exporting data
+		* only export selected region
+		* export to audio
+			* option : 8/16 bit
+			* option : sample format
+		* binary data	:
+			* Filter "LeCroy binary" -> too complicated
+			* "HP binary"
+		* other data file support -> examples/fileformats/
+			* piolib, boomerang and blast (see kst)
+			* zip, rar,... compressed data
+	* import project files ?
+		* grace, kst, kpl, qtiplot
+		* sigmaplot, kaleidagraph, flexpro, axum, igor, ...
+
+drawing/ data manipulation :
+*******************************
+	* any formula as baseline
+		-> evaluate expression in baseline line edit
+	* Symbols
+		* more symbols : N types (...)
+		* more fills : 16 types (center, corner,...)
+		* character as symbols
+		* opaque symbols
+		* (x/y/x,y) values as symbol
+	* move marker with mouse
+	* image profiling (vertical/horizontal profiles)
+	* audio file data editing like normal audio programs	-> Analysis
+		* fade in / fade out
+		* ...
+	* Spreadsheet
+		* a function that generate a sequence of number in a specific column 
+		(if you know excel: you can write 1 2 3 in a column and then drag & drop to extend the sequence).
+		* values dialog : show number of parameter of selectable functions : fun1(,) fun2(,,)
+	* update open dialogs
+		* update object dialog listviews
+	* Plots :
+		* I'm making a 2D scatter plot, but I want each data point labelled with an
+			atomic symbol (Al, Sc, Y etc...). I have the data labels in a spreadsheet
+			column I have designated "label", but I can't find how to assign them to the
+			data series.
+		* set drawing object relative to graph (fixed to axes)
+		* axis position (left,center,right)
+		* sqrt/x² scales
+			* data mode Plot.cc
+			* maglens/mask/pan zoom (Worksheet.cc)
+			* X/YCoordinate
+			* partRanges
+		* period or comma as decimal point (configure LabPlot)
+		* broken axes
+		* gradient plot / graph background, fill
+			-> use QBrush of Qt 4.0 ?
+		* zoom-plot (extra plot as zoom of another plot)
+		* legend  :
+			* background
+			* multiline label
+		* new plot type (Taylor diagrams) : Taylor_2001_JGR.pdf
+			If you want to improve a new graph type, for time series analysis of
+			the results of a model the best are the Taylor diagrams.
+		* annotated values :
+			* use own format and rounding (see axes settings)
+			* rotation
+			* size, color, font
+		* handle log axis errorbar problems (y=1,dy=2, etc. )
+		* place legend automatical in a corner
+		* wizard for plots (generic plot dialog : type/x-column/y-columns ?)
+			* Probably you have added what I meant in Labplot 1.5.0., but it is something 
+			like to have an option in the Plot menu: New graph. When you choose it some 
+			questions should be answered: type of graph? (XY, XYZ, ...); worksheet where 
+			the graph will be added?(existing ones or new); plot where the graph will be 
+			added?(existing ones ore new); spreadsheet to contain XY data? (if XY graph); 
+			column for X data?; column for Y data?
+			Of course it is interesting to have some other fast way to create a graph, but 
+			I find this way really versatile and it would include all the possibilies 
+			commented above.
+		* find the active sheet
+		* improve bar charts (stacked, horizontal, ... )	-> see notes
+			* each box another color	-> Style::autocolor (good also for Symbols)
+			* grouped data	: a1b1c1d1,a2b2c2d2,...	+legend
+			* stacked data : a1b1c1,a2b2c2 + legend
+		* Surface plot :
+			* set z range ?
+			* custom contour level (Rudi)
+			* plot points and Delaunay triangulation
+			* reading x-y-z data	(gyrodata.dat)
+			* scaled values (z-Axis)
+				* logarithmic z-axis ? (legend)
+				(contour lines 1e0,1e1,1e2,1e3 )
+			* relative colorscale used ?
+			* select range to draw (dont draw other pixel)
+			* filled contour plot
+			* contour label
+			* third type : vector field plot, windbarbs	-> data format ?
+			* test more than 1 graph
+			* read date/time matrix
+			* improve  legend (0..1)
+				* KGradientSelector
+				* rbg vs hsv
+			* contoulinien glättung einstellbar
+			* es wäre gut min/max für z von hand angeben zu können. auf diese weise könnte
+				man z.b.  einen bereich farblich 'hochauflösen' und alles ausserhalb mit der
+				min bzw. max farbe füllen bsp: werte  0 bis 10
+				min für farbskala 4, max 6 > bei grey.map wäre dann alles bis 4 weiss, alles 
+				über 6 schwarz ...
+			* x bzw. y achse auch auf der gegenüberliegenden seite (wenn ich die density
+				ausschalte fehlt mir dort ein rahmen und die ticks [ohne labels])
+			* wenn ich aus einem xyz datensatz einen qwt3d plot mache. habe ich nur punkte
+				und keine möglichkeit gefunden eine oberfläche zu erhalten (übersehe ich was?)
+		* QWT3D plot :
+			V BUG : QWT3D plot rescaled if mouse disabled
+			V BUG : QWT3D zoom doesn't work
+			V BUG : QWT3D plot moving legend+title doesn't work	
+			* bei dem QWT Plot würde mir z.B. die Möglichkeit der Farb- oder
+				Radiusänderungen der einzelnen Kugelobjekte sehr helfen (wiederum aktualisierbar).
+			* more analysis functions
+			* support two datasets ?
+			* Example datafile to import in a qwt 3d plot, that returns for me only a very
+			basic wireframe (the data is a time evolution of a concentration profile, so
+			(t,x,C(t,x))) in attachment.
+			* connect points in qwt plot
+				delaunay triangulation
+			F Surface/QWT plot :
+				* dens_indizes : 24x24x40 ?
+				* test dens_3d_in_one_row (after convert to matrix : howto ? )
+				* test irregular X-Y-Z data : data points ? / mesh grid ?
+			* legend box undefined (used for legend.inside() !)
+			* use Qwt3D::USERSCALE for log2,ln,sqrt ?
+			* use settings from style tab
+			* custom plotstyle (boxes, etc.)
+			* vector plot
+			* speed mode
+			* animate plot (update data ?)
+			U base line ?
+			U show/hide (works with two graphs !)
+			U title : boxed, rotation, (richtext : greek, sub, super (?))
+			U legend: boxed, (minors, majors), tic font
+			U axes :
+				* fix log scale range
+				*log2/e/sqrt scale / range, scaling, shift
+				* label : boxed, rotation, gap (position) to axis
+				* richtext label(?) : color, greek, sub/super
+				* tics label format, precision, rotation, pre+suf, color, pos(in/out)
+				* grid style, color for every axis, width
+			U open dialogs with mouse double click
+				-> see qtiplot	 graph3D.cpp eventFilter
+					-> QWidget ?, mouse double click ?
+			U use actions toolbar : mag, pan, data, mask
+			U multiple graphs
+				U add function/data in qwt3d graphlist
+			U x-y-z data : not only points style : howto ?
+			U analysis functions (result ?)
+			U support errorbars (error plot ?)
+			U zoom in 3d data
+			U drawing objects (after freeze plot)
+			U multiplot with qwt3d plot (Plot::savePixmap() ???)
+				-> qwt 0.3.0 ?
+		* 3D plot :-> better use QWT3D plot
+			* x²+sqrt scales
+			* y axes tic scale + rounding bug
+			* 3D error plots :
+				* DataDialog : "x-y-z-dz" (GRAPH4D : 3D error)
+				* plot in Plot3D.cc
+			* baseline 3d
+			* xy-region for 3d integration, fit, etc.
+			* convert 3d type to matrix (NX=64 & NY=1 -> NX=NY=8)
+			* connect type 3d data points in 3d plot
+			* 3d data -> set nx, ny
+			* 3d matrix display : use nx and ny
+			* correct boxes style
+				* change x,y actranges (not ranges !)
+			* known 3D bugs
+			* fill with colors (z-value,colorscale), contour (new style type ?)
+			* transparent filling (no hidden3d)
+		* Pie plot :
+			* explode segments
+			* segment legend
+			* brush
+			* scale pie % with plot
+			* round % (using precision ?)
+			* tic label format, rotation
+			* axes dialog : from 0..1 (disable) ?
+			* make a legend from all points (1 - 12 %, 2 - 27 %, ...)
+		* Polar plot :
+			* coordinates
+			* plot minor tics, minor grid
+			* tic width/grid/border properties
+		* Ternary Plot :
+			* coordinates
+			* tic label precision + format
+			* 3 custom axes label
+			* tic label gap
+			* tic width/grid/border properties
+			(* draw minor tics, grid)
+			(* use axis scale)
+		* More plot types :
+			* support waterfall plot (see matlab)
+			* Pie3D plot
+			* Polar3D plot	(r,theta,phi)
+			* xy chart (xmgrace)
+			* smith plot
+			* implicit plot (x+2*y=1)
+			* space curve (sin(t),t=0..10) (cylindrical coordinates r,phi,z)
+			* rose plot (polar histogram)	[-> wind directions]
+			* polar contour
+		* support x=f(y) plots (f(x)=sin(y))
+		* ArrangePlotDialog :
+			* size+pos for nr = 9,10,11,12,13,14,15,16
+		* Wie waere es, wenn es eine "Repeat" Option fuer jede Achse gibt zusammen mit
+		der einer Auswahl fuer die Position? Dann waere das fuer den Nutzer
+		eindeutiger. Wenn ich eine neue y-Achse aktiviere, erwarte ich eigentlich
+		eine *neue* y-Achse. Oder eine Schaltflaeche wie "Connected to" wuerde die
+		gleiche functionalitaet bieten und offensichtlich fuer den Nutzer sein.
+		Bei der Gelegenheit: Eine Erweiterung der Anzahl an y-Achsen(3,4,5,...) mit
+		auswahl auf welcher Seite des Diagramms diese stehen waere auch ein sehr
+		willkommenes Feature. Ich weiss, dies ist eigentlich *verboten* doch ist z.b.
+		die darstellung von clima daten mit 3 oder 4 verschiedenen groessen ueblich.
+		* data over (structured-unstructured) meshes, like 
+			the ones generated in finite element modeling, 2D and 3D.
+		* support for 2D/3D indexed data		-> CRD/
+			However, for aerodynamic visualisation I am looking for a program that can handle
+			data in the 2D/3D index space. I am not so much interested in plotting
+			math functions but data stemming from CFD grid generation and CFD
+			solution. So my data is mostly looking like this:
+			
+			Two/three nested do loops would run over this index range
+			I = 1 .. NI
+			J= 1 .. NJ
+			K=1 .. NK
+			Reading such a list of variables
+			X(I,J,K), Y(I,J,K), Z(I,J,K), CP(I,J,K), RHO(I,J,K), . and so on. 
+	
+			In such a way I can handle arbitrary surfaces and assigning each surface
+			point a variable value for achieving contour plots e.g. However, I found
+			out (please correct me if I am wrong) that data is handled in the
+			physical space in LabPlot, only. The matrix data format makes it
+			impossible to assign each special point additional scalar values.
+	* A simple way to create x-y1-y2 plots where axes y1 and y2 are very different from 
+		each other, with independent scaling on each axis.
+		: overlay two plots (x-y1+x-y2) with same x-axis
+		-> implement as QSA macro
+	Axes :
+		* axis tic label format :
+			* the settings of the tics are quite complicated :
+				* auoscale in axes dialog ?	-> change act range to active graph range ?
+			* PI (0,PI,2PI)
+			* hexadecimal, binary (000 001 010 011 100 101 110 111)
+			* degree (2°10'33'')
+		* (fast) flip x-y graph
+		* scales :
+			* x²	: -10..10 ?
+			* new 1/x,1/x² scales
+			* db axis scale (exp+log)
+		* grid, ticks and numbers : in or out of plotarea
+		* minor tic label for log scale (?)
+	* Ebenso fehlt die Zeichenbefehlen zum Gruppieren / Gruppe aufheben, eine 
+		Zeichenebene nach oben / unten oder nach ganz oben oder unten verschieben
+		Click + Ziehen um alle Elemente im aufgezogenen Bereich auszuwählen wäre
+		gut. (Dann Rechtsclickmenu zum Gruppieren anbieten.)
+		V wenn man Textdaten, oder eine lange Zahl im Maus-Clipboard
+			(x-Clipboard) hat, und sie in eine Zelle einfügen will, dann klappt das 
+			nicht direkt, sondern man muß die Zelle erst mit F2 oder Doppelclick in 
+			den Text-Bearbeiten-Modus bringen. Intuitiv einfacher wäre es, wenn die 
+			Daten durch einen Mittelclick eingefügt würden - und noch besser, wenn 
+			diese Einfügung auch Spaltensprünge mittels "TAB" und Zeilensprünge 
+			mittels "CR" verstehen würde.
+		V Wenn man einen Bereich kopiert, und dann in eine Zelle einfügt,
+				(wobei die Tabelle nicht bei bedarf nach rechts oder nach unten vergrößert wird.)
+				* am besten wäre es m.E. nach, wenn einfach stillschweigend die 
+				Variante der automatisch vergrößerten auswahl passiert, wenn die 
+				betroffenen zellen leer sind, und nur beim überschreiben anderer Daten 
+				nachgefragt wird.
+		O Die am rechten Rand überstehenden Daten werden trotzdem schon 
+				versteckt eingefügt (d.h. man kann sie normalerweise nicht löschen) und 
+				tauchen plötzlich auf, wenn man von Hand neue Spalten einfügt. - Es wäre 
+				besser, wenn diese Spalten gleich beim Einfügen von Textdaten, die über 
+				den rechten Rand hinausgehen automatisch erstellt würden.
+		O Zum Kopieren und verschieben fehlt mir eine gute Tastaturnavigation 
+			im Arbeitsblatt. (z.B. Crtl+Cursor - Analog zum springen zum Wortanfang, 
+			oder zum nächsten Absatz: zum nächsten bzw. vorigen Wechsel zwischen 
+			leeren und ausgefüllten Feldern springen. Crtl + PageDown: eine 
+			Bildschirmbreite, oder auch ganz nach rechts im Worksheet. Crtl  + Pos1: 
+			Nach ganz links oben springen. Crtl + Ende: nach ganz rechts unten (bzgl 
+			der vorhandenen Daten, nicht der verfügbaren Spalten) springen. Zum Ende 
+			der Spalte Springen)
+		* Neben dem Datei-Menü sollte ein echtes Edit-Menü stehen, mit dem man die 
+		jeweiligen Objekte kopieren, ausschneiden, einfügen oder löschen kann, 
+		ggf auch ein "Einfügen als". (irgendwann auch falls sinnvoll: 
+		"Wiederholen" eines Edits am aktuellen Objekt und "Rückgängig".)
+		* In den Office-Tabellenkalkulationen kann man mit Tab separierten Text 
+		direkt aus der Text-Zwischenablage mehrspaltig einfügen und aussschneiden.
+		Bei Doppeltabs werden dann auch mehrere spalten auf einmal übersprungen. 
+		(ich hoffe, es kommt in Form von Tabs an...)
+		1    2    3    4
+		1    2        4
+		1    2    3    4
+		1        3    4
+		* Um bei LabPlot Text aus der Zwischenablage einzufügen, muss man entweder 
+		über das Menü gehen, oder die Zelle in den bearbeiten-Modus schalten 
+		oder crtl+v drücken. Ein direktes Einfügen mit der mittleren Maustaste 
+		geht noch nicht. - Und einfaches Markieren zum Kopieren in das 
+		Text-Clipboard geht auch noch nicht.
+		Normarweise:
+		crtl + "Einf"ügen  == Crtl + c == Kopieren ins Clipboard.
+		shift + "Einf"ügen  == Crtl + v == Einfügen aus Clipboard.
+		shift + "Entf"ernen == Crtl + x  == Ausschneiden richtung Clipboard. 
+		(zum Verschieben von Elementen, die danach mit Crtl+v wieder eingefügt 
+		werden).
+		Die Kombinationen mit "Einf"ügen und "Entf"ernen versteht LabPlot nicht
+		- könnten sie noch ergänzt werden?
+		* Es könnte noch etwas Keyboard-Navigation ergänzt werden:
+		Crtl + Cursor: Sprung zum nächsten Wechsel zwischen leeren und gefüllten 
+		Zellen in Richtung des Cursors (um an das Ende des aktuellen Datenblocks 
+		zu springen / bzw. zum beginn des nächsten Datenblocks.) - Wenn 
+		gleichzeitig Shift gedrückt wird, dann die aktuelle Markierung erweitern.
+
+		Crtl + Bild-Ab : Eine Fensterbreite nach rechts
+		Crtl + Bild-Auf: Eine Fensterbreite nach links.
+		(bei gleichzeigigem Shift: Bereich zwische erster Position und letzter 
+		erreichter Position markieren
+		
+		Im Arbeitsblatt fehlt mir die Möglichkeit Einzelelemente, wie
+		Achsenbeschriftung / Titel / Legende o.ä. als aktives Element
+		auszuwählen und dann mit den Cursortasten anstelle des Graphen zu 
+		verschieben (Crtl+Cursortasten: Pixelweise / bzw. fein verschieben)
+	* extract feature (see grace)
+
+ANALYSIS :
+***********
+	*  Analysis: approximation 
+		In the analysis menu, there is "interpolation", but it
+		is often desirable to have approximation instead.
+		Smoothing is not an alternative to a solid
+		approximation. A good approximation (for example, by an
+		exponential spline) can also be the tool to create
+		relatively noiseless derivatives - something currently
+		lacking, as far as I see. 
+	* curve discussion (root finding (GSL), local max/min, etc.)
+	* 2D histogram
+		* graph3d	 -> read 2d transform
+	* mask : average, smooth, compress, period, season, prune, hist, peak, diff, fft, interpol, convol, wavlet, hankel
+	* from spreadsheet : peak, regression, fft, convolution, wavelet
+	* GraphM : period, seasonal, prune, peak, diff, int, interpol
+	* addon functions fresnel/tamu-anova/Whittaker+Rydberg ?
+	* Statistics
+		* Box & Whisker plot
+			* support box plots : F Can Labplot make boxed 2d plots? Like origin in win or kpl in linux?
+			I did not found this options in axes. If it is so, could you add this options in next version?
+			In scientific word such plots are always preferable.
+		* MatrixRListDialog : matrix operations : diagonalize, eigenvalues, invert, ...
+			* on Spreadsheet
+		* TestsRListDialog :
+			* more tests/ options
+				* check stat12b.pdf
+					* binom, chisq
+				* check stat R package docu
+			* AnovaRListDialog.cc
+			* Survival Analysis
+	* check out KST plugins :
+		* periodigram (720 lines)
+		* cross spectrum (150+3500 lines)
+	* Regression
+		U log, exp, sqrt, -> see xmgrace : a*x^b, a*exp(b*x), a+b*ln(x), 1/(a+b*x)
+		Y=a*x^b, Y=a*e^(b*x), Y=c+a*e^(b*x), Y=a*e^(b/x), Y=a+b/x, Y=a+b*log(x)
+			möglicherweise wäre manchmal auch eine Skizze des ausgewählten Modells vorteilhaft.
+	* FFT
+		* inverse ( gsl_fft_complex_inverse/ fftw REDFT00,RODFT00, etc.)
+		* data window
+		// halflen (all values)
+		// amp_correction
+	* Noise :  matrix / 3d plot / image
+	* nonlinear fitting
+		* guess initial parameters
+		* Origin bietet auch die Möglichkeit dass mehrere y-Spalten, die gefittet 
+			werden gemeinsame Parameter ("shared") haben können. (z.B. mehrere 
+			Messkurven, unter die man jeweils den gleichen untergrund fitten 
+			möchte.) - damit lassen sich im Prinzip die statistischen Fehler 
+			verringern. - Wie das allerdings im Algorithmus erreicht wird, weiss ich 
+			nicht. - Siehe Screenshot. "Origin-Fitting1.jpg"
+	* differences :		(dy(x))
+		* use gsl numeric differences
+	* integrate :
+		* gsl numerical integration
+		* weighted ?
+		* use the correct function if available	(checkbox) -> undefinite integral (?)
+	* histogram :
+		* logarithmic bins (see GSL docu)
+		* weighted	: gsl_histogram_accumulate (h,x,weight)
+			-> weight what ?
+	* (de)convolution of two data sets :
+		* use fftw/fftw3 too
+		* use mixed radix fft 
+		* 2D convolution (using 2d fft)
+	U simplify fit equation :
+		You insert 3 equations k1*x+y=2, y=k2*x^2+z, z=k3*x^.5+x^3
+		So, in the end if you replace y and z in the first equation, youll have only
+		one equation, and only one curve: k1*x+k2*x^2+k3*x^.5+x^3=2
+		Origin has this feature to simplify the writing of very large equations.
+	* smooth Savitzky-Golay (point-wise polynomial fit/ see Numerical Recipes)
+	* image operations ?
+	* all selected graphs/cols ?
+misc :
+	* world/viewport coordinates
+		* range from 2..4 in graph
+	* select range by mouse

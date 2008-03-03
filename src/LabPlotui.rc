@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui name="LabPlot" version="1">
+ 
+<ToolBar name="mainToolBar" >
+<text>Main Toolbar</text>
+<Action name="import" />
+<Action name="new spreadsheet" />
+<Action name="new function" />
+<ActionList name="dynamicActionlist" />
+</ToolBar>
+<MenuBar>
+<Menu name="file" >
+<text>&amp;File</text>
+<Action name="import" />
+<Action name="project" />
+</Menu>
+<Menu name="edit"><text>&amp;Edit</text>
+<Action name="new spreadsheet" />
+<Action name="new worksheet" />
+<Action name="new function" />
+</Menu>
+<Menu name="spreadsheet"><text>&amp;Spreadsheet</text>
+<Action name="new spreadsheet" />
+</Menu>
+<Menu name="appearance"><text>&amp;Appearance</text>
+<Action name="title settings" />
+<Action name="axes settings" />
+<Action name="legend settings" />
+<Separator/>
+<Action name="plot settings" />
+<Action name="worksheet settings" />
+</Menu>
+<Menu name="analysis"><text>&amp;Analysis</text>
+</Menu>
+<Menu name="drawing"><text>&amp;Drawing</text>
+</Menu>
+<Menu name="script"><text>&amp;Script</text>
+</Menu>
+</MenuBar>
+</gui>

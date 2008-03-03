@@ -1,0 +1,77 @@
+Origin 7.5 column value display
+###############################
+Numeric, Text&Numeric:
+	Decimal:1000            = 0
+	Scientific:1E3          = 1
+	Engeneering:1k          = 2
+	Decimal:1,000           = 3
+
+Time:
+	hh:mm                   = 0
+	hh                      = 1
+	hh:mm:ss                = 2
+	hh:mm:ss.zz             = 3
+	hh ap                   = 4
+	hh:mm ap                = 5
+	mm:ss                   = 6
+	mm:ss.zz                = 7
+	hhmm                    = 8
+	hhmmss                  = 9
+	hh:mm:ss.zzz            = 10
+
+Date:
+    dd/MM/yyyy              = -128
+    dd/MM/yyyy HH:mm        = -119
+    dd/MM/yyyy HH:mm:ss     = -118
+	dd.MM.yyyy              = 0
+	y.                      = 1  (year abbreviation - for instance, 'ã.' in russian)
+	MMM d                   = 2
+	M/d                     = 3
+	d                       = 4
+	ddd                     = 5
+	F                       = 6	 (first letter of day of week)
+	yyyy                    = 7
+	yy                      = 8
+	dd.MM.yyyy hh:mm        = 9
+	dd.MM.yyyy hh:mm:ss     = 10
+	yyMMdd                  = 11
+	yyMMdd hh:mm            = 12
+	yyMMdd hh:mm:ss         = 13
+	yyMMdd hhmm             = 14
+	yyMMdd hhmmss           = 15
+	MMM                     = 16
+	J                       = 17 (first letter of month)
+	Q1                      = 18 (quartal)
+	M-d-yyyy (Custom1)      = 19
+	hh:mm:ss.zzzz (Custom2) = 20
+
+Month:
+	MMM                     = 0
+	MMMM                    = 1
+	J                       = 2	 (first letter of month)
+
+Day of Week:
+	ddd                     = 0
+	dddd                    = 1
+	F                       = 2	 (first letter of day of week)
+
+Fill Area Patterns
+	none = 0
+	///  = 1
+	/ /  = 2
+	 /   = 3
+	\\\  = 4
+	\ \  = 5
+	 \   = 6
+	xxx  = 7
+	x x  = 8
+	 x   = 9
+	---  = 10
+	- -  = 11
+	 -   = 12
+	|||  = 13
+	| |  = 14
+	 |   = 15
+	+++  = 16
+	+ +  = 17
+	 +   = 18

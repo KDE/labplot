@@ -1,0 +1,43 @@
+/* XPM */
+static const char *plot2d_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    32    32        4            1",
+/* colors */
+". c #2f2f2f",
+"# c #7f7f7f",
+"a c #ff0000",
+"b c None",
+/* pixels */
+"bbbbbbbbbbbbbb...bbbbbbbbabbbbb#",
+"bbbbbbbbbbbbbbb.bbbbbbbbbabbbbb#",
+"bbbbbbbbbbbbbbb.bbbbbbbbbabbbbb#",
+"bbbbbbbbbbbbbb...bbbbbbbbabbbbb#",
+"bbbbbbbbbbbbbbb.bbbbbbbbbabbbbb#",
+"bbbbbbbbaabbbbb.bbbbbbbbbabbbbb#",
+"bbbbbbbabbabbb...bbbbbbbbabbbbb#",
+"bbbbbbabbbbabbb.bbbbbbbbbabbbbb#",
+"bbbbbbabbbbabbb.bbbbbbbbbabbbbb#",
+"bbbbbabbbbbbab...bbbbbbbbabbbbb#",
+"bbbbbabbbbbbabb.bbbbbbbbabbbbbb#",
+"bbbbbabbbbbbabb.bbbbbbbbabbbbbb#",
+"bbbbbabbbbbbba...bbbbbbbabbbbbb#",
+"bbbbbabbbbbbbab.bbbbbbbbabbbbbb#",
+".bb.ab.bb.bb.ab.bb.bb.bbabb.bb.#",
+"....a.........a.........a......#",
+".bb.ab.bb.bb.ba.bb.bb.bbabb.bb.#",
+"bbbbabbbbbbbbbbabbbbbbbabbbbbbb#",
+"bbbbabbbbbbbbb.a.bbbbbbabbbbbbb#",
+"bbbbabbbbbbbbbbabbbbbbbabbbbbbb#",
+"bbbbabbbbbbbbbb.abbbbbbabbbbbbb#",
+"bbbabbbbbbbbbb..abbbbbbabbbbbbb#",
+"bbbabbbbbbbbbbb.abbbbbbabbbbbbb#",
+"bbbabbbbbbbbbbb.babbbbabbbbbbbb#",
+"bbbabbbbbbbbbb...abbbbabbbbbbbb#",
+"bbbabbbbbbbbbbb.bbabbabbbbbbbbb#",
+"bbbabbbbbbbbbbb.bbbaabbbbbbbbbb#",
+"bbbabbbbbbbbbb...bbbbbbbbbbbbbb#",
+"bbbabbbbbbbbbbb.bbbbbbbbbbbbbbb#",
+"bbbabbbbbbbbbbb.bbbbbbbbbbbbbbb#",
+"bbbabbbbbbbbbb...bbbbbbbbbbbbbb#",
+"################################"
+};

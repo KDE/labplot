@@ -1,0 +1,42 @@
+/* XPM */
+static const char *legend_xpm[] = {
+/* width height num_colors chars_per_pixel */
+"    15    18       17            1",
+/* colors */
+"  c None",
+". c #000000",
+"# c #808080",
+"a c #800000",
+"b c #808000",
+"c c #008000",
+"d c #008080",
+"e c #000080",
+"f c #800080",
+"g c #ffffff",
+"h c #c0c0c0",
+"i c #ff0000",
+"j c #ffff00",
+"k c #00ff00",
+"l c #00ffff",
+"m c #0000ff",
+"n c #ff00ff",
+/* pixels */
+"               ",
+"   . . . . .   ",
+"  .g#g#g#g#g.  ",
+" #g.g.g.g.g.g. ",
+" #ggggggggggh. ",
+" #ggggggggggh. ",
+" #gg...g..ggh. ",
+" #ggggggggggh. ",
+" #gg......ggh. ",
+" #ggggggggggh. ",
+" #gg......ggh. ",
+" #ggggggggggh. ",
+" #gg......ggh. ",
+" #ggggggggggh. ",
+" #ggggggggggh. ",
+" #hhhhhhhhhhh. ",
+"  ...........  ",
+"               "
+};

@@ -1,0 +1,271 @@
+/* LabPlot : parser.y	*/
+
+%{
+#include "parser.h"
+%}
+
+%union {
+double dval;  /* For returning numbers.                   */
+symrec *tptr;   /* For returning symbol-table pointers      */
+}
+     
+%token <dval>  NUM 	/* Simple double precision number   */
+%token <tptr> VAR FNCT	/* Variable and Function            */
+%type  <dval>  expr
+    
+%right '='
+%left '-' '+'
+%left '*' '/'
+%left NEG     /* Negation--unary minus */
+%right '^'    /* Exponential        */
+     
+%%
+input:   /* empty */
+	| input line
+;
+     
+line:	'\n'
+	| expr '\n'   { res=$1; }
+	| error '\n' { yyerrok;                  }
+;
+     
+expr:      NUM       { $$ = $1;                         }
+| VAR                { $$ = $1->value.var;              }
+| VAR '=' expr       { $$ = $3; $1->value.var = $3;     }
+| FNCT '(' ')'       { $$ = (*($1->value.fnctptr))();   }
+| FNCT '(' expr ')'  { $$ = (*($1->value.fnctptr))($3); }
+| FNCT '(' expr ',' expr ')'  { $$ = (*($1->value.fnctptr))($3,$5); }
+| FNCT '(' expr ',' expr ','expr ')'  { $$ = (*($1->value.fnctptr))($3,$5,$7); }
+| FNCT '(' expr ',' expr ',' expr ','expr ')'  { $$ = (*($1->value.fnctptr))($3,$5,$7,$9); }
+| expr '+' expr      { $$ = $1 + $3;                    }
+| expr '-' expr      { $$ = $1 - $3;                    }
+| expr '*' expr      { $$ = $1 * $3;                    }
+| expr '/' expr      { $$ = $1 / $3;                    }
+| '-' expr  %prec NEG{ $$ = -$2;                        }
+| expr '^' expr      { $$ = pow ($1, $3);               }
+| '(' expr ')'       { $$ = $2;                         }
+;
+
+%%
+
+/* The symbol table: a chain of `struct symrec'.  */
+symrec *sym_table = (symrec *) 0;
+
+/* debugging flag */
+/* #define LDEBUG */
+
+double parse(char *str) {
+#ifdef LDEBUG
+	printf("parse(%s)\n",str);
+#endif
+	pos=0;
+
+	/* reset string, because it's global !	*/
+	bzero(string, PARSE_STRING_SIZE);
+
+	/* leave space to terminate string by "\n\0" */
+	strncpy(string, str, PARSE_STRING_SIZE - 2);
+	string[strlen(string)] = '\n';
+
+	/* be sure that the symbol table has been initialized */
+
+	if (!sym_table)
+	   init_table();
+
+#ifdef LDEBUG
+	printf("calling yyparse()\n");
+#endif
+	yyparse();
+#ifdef LDEBUG
+	printf("After calling yyparse()\n");
+#endif
+
+#ifdef LDEBUG
+	printf("parse() DONE\n");
+#endif
+	return res;
+}
+ 
+int parse_errors() {
+	return yynerrs;
+}
+
+int yyerror (const char *s){
+	printf ("ERROR : %s\n", s);
+	return 0;
+}
+     
+/* put arithmetic functions in table. */
+void init_table (void) {
+#ifdef LDEBUG
+	printf("init_table()\n");
+#endif
+	symrec *ptr;
+	int i;
+	/* add functions */
+	for (i = 0; arith_fncts[i].fname != 0; i++) {
+		ptr = putsym (arith_fncts[i].fname, FNCT);
+		ptr->value.fnctptr = arith_fncts[i].fnct;
+	}
+	/* add constants */
+	for (i = 0; constants[i].name != 0; i++) {
+		ptr = putsym (constants[i].name, VAR);
+		ptr->value.var = constants[i].value;
+	}
+#ifdef LDEBUG
+	printf("init_table() DONE\n");
+#endif
+}
+
+void delete_table(void) {
+	while(sym_table) {
+		symrec *tmp = sym_table;
+		sym_table = sym_table->next;
+		free(tmp->name);
+		free(tmp);
+	}
+}
+
+symrec* putsym (const char *sym_name, int sym_type) {
+#ifdef LDEBUG
+	printf("putsym() : sym_name = %s\n",sym_name);
+#endif
+	symrec *ptr;
+	ptr = (symrec *) malloc (sizeof (symrec));
+	ptr->name = (char *) malloc (strlen (sym_name) + 1);
+	strcpy (ptr->name,sym_name);
+	ptr->type = sym_type;
+	ptr->value.var = 0; /* set value to 0 even if fctn.  */
+	ptr->next = (struct symrec *)sym_table;
+	sym_table = ptr;
+#ifdef LDEBUG
+	printf("putsym() DONE\n");
+#endif
+	return ptr;
+}
+
+symrec* getsym (const char *sym_name) {
+#ifdef LDEBUG
+	printf("getsym() : sym_name = %s\n",sym_name);
+#endif
+	symrec *ptr;
+	for (ptr = sym_table; ptr != (symrec *) 0;
+			ptr = (symrec *)ptr->next)
+		if (strcmp (ptr->name,sym_name) == 0)
+			return ptr;
+	return 0;
+}
+
+symrec* assign_variable(const char* symb_name, double value) {
+	symrec* ptr;
+	ptr = getsym(symb_name);
+	if (!ptr)
+	ptr = putsym(symb_name,VAR);
+	ptr->value.var=value;
+	return ptr;  
+};
+
+static int getcharstr(void) {
+#ifdef LDEBUG
+	printf("getcharstr()\n");
+#endif
+	if ('\0' == string[pos])
+		return EOF;
+	return (int) string[pos++];
+}
+ 
+static void ungetcstr(void) {
+    if (pos > 0)
+        pos--;
+} 
+
+int yylex (void) {
+#ifdef LDEBUG
+	printf("yylex()\n");
+#endif
+	int c;
+	
+	/* skip white space  */
+	while ((c = getcharstr ()) == ' ' || c == '\t');
+
+#ifdef LDEBUG
+	printf("c=%c\n",c);
+#endif
+	/* return end-of-file  */
+	if (c == EOF) {
+		return 0;
+	}
+	/* process numbers   */
+	/* TODO : catch single '.' as error "1+." */
+	if (c == '.' || isdigit (c)) {
+#ifdef LDEBUG
+		printf("is digit or .\n");
+#endif
+		char *tmp, *tmp2;
+                double result;
+                ungetcstr();
+                tmp = &string[pos];
+#ifdef LDEBUG
+		printf("tmp = %s\n",tmp);
+#endif
+                result = strtod(tmp,&tmp2);
+		/* check conversion */
+		if(strlen(tmp) == strlen(tmp2))
+			return 0;
+#ifdef LDEBUG
+		printf("result = %g\n",result);
+#endif
+                sscanf (tmp,"%lf", &(yylval.dval));
+                pos+= strlen(tmp)-strlen(tmp2);
+		
+		return NUM;
+	}
+
+	/* Char starts an identifier => read the name. */
+	if (isalpha (c)) {
+#ifdef LDEBUG
+		printf("is alpha\n");
+#endif
+		symrec *s;
+		static char *symbuf = 0;
+		static int length = 0;
+		int i;
+
+		/* Initially make the buffer long enough
+		   for a 20-character symbol name.  */
+		if (length == 0)
+			length = 20, symbuf = (char *)malloc (length + 1);
+
+		i = 0;
+		do {
+			/* If buffer is full, make it bigger.        */
+			if (i == length) {
+				length *= 2;
+				symbuf = (char *)realloc (symbuf, length + 1);
+			}
+			/* Add this character to the buffer.         */
+			symbuf[i++] = c;
+			/* Get another character.                    */
+			c = getcharstr ();
+		}
+		while (c != EOF && (isalnum (c) || c == '_'));
+
+		ungetcstr ();
+		symbuf[i] = '\0';
+
+		s = getsym (symbuf);
+		/* symbol unknown */
+		if(s == 0)
+			return 0;
+		/* old behavior */
+		/* if (s == 0)
+			 s = putsym (symbuf, VAR); 
+		*/
+		yylval.tptr = s;
+		return s->type;
+	}
+
+
+	/* return single chars */
+	return c;
+}
