@@ -55,14 +55,24 @@ TODO :
 		Worksheet::setupPrinter();
 	* use GSL (functions.h)
 		* GSL_VERSION ?
-	labelWidget(): title dialog, function dialog
+	* labelWidget(): title dialog, function dialog
+	* Use QTableView with own model (QAbstractTableModell) for a faster/smaller Spreadsheet
+	* Use const declarations when possible
+	* use macros for standard declarations
+		#define ACCESSOR(type, var, method) \
+			type method() const { return var; }; \
+			void set ## method(const type value) { var = value; }
+		Example usage:
+			ACCESSOR(int, version, Version);
+	* MainWin::modified -> Project::modified
+	* add Doxygen style documentations
 -------------------------------------------------------------------------
+	Settings Dialog			Alexander
+	Axes Dialog			Alexander
 	add function to spreadsheet
 XX	Worksheet
 		legend dialog
-		title dialog
-			saveSettings
-		axes dialog
+		title dialog : saveSettings
 		set dialog
 		draw other symbols
 		draw other styles
