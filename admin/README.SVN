@@ -1,0 +1,16 @@
+Import :
+########
+
+cd LabPlot-2.0.0
+svn import -m "inital import" https://svn.sourceforge.net/svnroot/labplot/2.0 --username=<login>
+
+Checkout:
+#########
+
+svn co https://labplot.svn.sourceforge.net/svnroot/labplot/2.0
+( svn update )
+
+Commit :
+########
+svn delete file.tmp
+svn commit -m "deleted tmp file" --username=<login>
