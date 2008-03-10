@@ -255,18 +255,6 @@ ImportDialog.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/ImportDialog.s
 
 # target to build an object file
-LRange.o:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/LRange.o
-
-# target to preprocess a source file
-LRange.i:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/LRange.i
-
-# target to generate assembly for a file
-LRange.s:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/LRange.s
-
-# target to build an object file
 LabPlot.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/LabPlot.o
 
@@ -411,6 +399,18 @@ ProjectDialog.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/ProjectDialog.s
 
 # target to build an object file
+Range.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Range.o
+
+# target to preprocess a source file
+Range.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Range.i
+
+# target to generate assembly for a file
+Range.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Range.s
+
+# target to build an object file
 Set.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Set.o
 
@@ -469,6 +469,18 @@ Symbol.i:
 # target to generate assembly for a file
 Symbol.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Symbol.s
+
+# target to build an object file
+TableModel.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/TableModel.o
+
+# target to preprocess a source file
+TableModel.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/TableModel.i
+
+# target to generate assembly for a file
+TableModel.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/TableModel.s
 
 # target to build an object file
 TitleDialog.o:
@@ -563,9 +575,6 @@ help::
 	@echo "... ImportDialog.o"
 	@echo "... ImportDialog.i"
 	@echo "... ImportDialog.s"
-	@echo "... LRange.o"
-	@echo "... LRange.i"
-	@echo "... LRange.s"
 	@echo "... LabPlot.o"
 	@echo "... LabPlot.i"
 	@echo "... LabPlot.s"
@@ -602,6 +611,9 @@ help::
 	@echo "... ProjectDialog.o"
 	@echo "... ProjectDialog.i"
 	@echo "... ProjectDialog.s"
+	@echo "... Range.o"
+	@echo "... Range.i"
+	@echo "... Range.s"
 	@echo "... Set.o"
 	@echo "... Set.i"
 	@echo "... Set.s"
@@ -617,6 +629,9 @@ help::
 	@echo "... Symbol.o"
 	@echo "... Symbol.i"
 	@echo "... Symbol.s"
+	@echo "... TableModel.o"
+	@echo "... TableModel.i"
+	@echo "... TableModel.s"
 	@echo "... TitleDialog.o"
 	@echo "... TitleDialog.i"
 	@echo "... TitleDialog.s"

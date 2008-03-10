@@ -9,6 +9,7 @@
 #include "Style.h"
 #include "Symbol.h"
 #include "settype.h"
+#include "defs.h"
 
 class Set
 {
@@ -38,10 +39,8 @@ public:
 	Symbol *getSymbol() { return symbol; }
 	void setSymbol(Symbol *s) { symbol = s; }
 
-	int Number() { return number; }
-	void setNumber(int n) { number = n; }
-	bool isShown() { return shown; }
-	void setShown(bool b) { shown = b; }
+	ACCESS(int, number, Number);
+	ACCESSFLAG(shown, Shown);
 /*	AnnotateValues getAnnotateValues() { return av; }
 	void setAnnotateValues(AnnotateValues a) { av=a;}
 	QString FitFunction() { return fitfunction; }
@@ -51,18 +50,17 @@ public:
 
 protected:
 	SetType type;
-	QString name;		// name
+	QString name;
 	int number;
-	bool shown;		// shown/hidden
+	bool shown;		//!< shown/hidden
 	Label *label;
-/*	PType type;		// plot type of a graph
+/*	PType type;		//!< plot type of a graph
 	LSource source;
-	int readas;		// selected read as for data
+	int readas;		//!< selected read as for data
 */	Style* style;
 	Symbol* symbol;
-/*	AnnotateValues av;
-	QString fitfunction;
-*/
+//	AnnotateValues av;
+//	QString fitfunction;
 };
 
 #endif // Set_H

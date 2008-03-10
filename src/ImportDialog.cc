@@ -510,7 +510,7 @@ void ImportDialog::importBinary(QIODevice *file, Spreadsheet *s) {
              			break;
 			}
 		}
-
+#ifndef TABLEVIEW
 		 for ( int i=0; i<fields; i++ ) {
 			QTableWidgetItem *item = s->item(row,i);
 			if(item==0) {
@@ -519,6 +519,7 @@ void ImportDialog::importBinary(QIODevice *file, Spreadsheet *s) {
 			}
 			item->setText(QString::number(getBinaryValue(&ds,(BinaryFormat) formatcb->currentIndex()),'g',10));
 		}
+#endif
 		row++;
 	}
 	s->setRowCount(row);
@@ -621,6 +622,7 @@ void ImportDialog::importASCII(QIODevice *file, Spreadsheet *s) {
 				s->setColumnName(i,oneline.at(i));
 		}
 		else {
+#ifndef TABLEVIEW
 		 	for ( int i=0; i<oneline.size(); i++ ) {
 				QTableWidgetItem *item = s->item(actrow,i);
 				if(item==0) {
@@ -629,6 +631,7 @@ void ImportDialog::importASCII(QIODevice *file, Spreadsheet *s) {
 				}
 				item->setText(oneline.at(i));
 			}
+#endif
 		}
 		if(row>endRow())
 			break;

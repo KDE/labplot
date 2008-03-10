@@ -45,6 +45,7 @@ int FilterOPJ::import() {
 			spread->setColumnName(j,name.replace(QRegExp(".*_"),""));
 			spread->setColumnType(j,opj.colType(s,j));
 
+#ifndef TABLEVIEW
 			for (int i=0;i<opj.numRows(s,j);i++) {
 				double *v = (double *) opj.oData(s,j,i,true);
 
@@ -61,6 +62,7 @@ int FilterOPJ::import() {
 				else					// label
 					item->setText(QString((char *) opj.oData(s,j,i)));
 			}
+#endif
 		}
 	}
 	// TODO

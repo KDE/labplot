@@ -14,7 +14,6 @@ set(LabPlot_SRCS
   Label.cc
   LabPlot.cc
   LegendDialog.cc
-  LRange.cc
   MainWin.cc
   Plot.cc
   Plot2D.cc
@@ -23,11 +22,13 @@ set(LabPlot_SRCS
   Point.cc
   Project.cc
   ProjectDialog.cc
+  Range.cc
   Set.cc
   Set2D.cc
   Spreadsheet.cc
   Style.cc
   Symbol.cc
+  TableModel.cc
   TitleDialog.cc
   Worksheet.cc
   WorksheetDialog.cc

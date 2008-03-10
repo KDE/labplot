@@ -17,9 +17,9 @@ public:
 	MainWin(QWidget *parent=0);
 	int activeSheetIndex();
 	QMdiArea* getMdi() { return mdi; }
-	Project* getProject() { return project; } 
 	Spreadsheet* activeSpreadsheet();
 	Worksheet* activeWorksheet();
+	Project* getProject() { return project; } 
 	void setProject(Project *p) { project=p; } 
 	void addSet(Set *g, int sheet, PlotType ptype);
 private:
@@ -27,10 +27,11 @@ private:
 	Project *project;
 	QMenu *spreadsheetmenu;
 	KAction *spreadaction;
-	bool modified;		// needs to be saved
 	void setupActions();
 	bool warnModified();
-	void updateSheetList();
+	void updateGUI();		//!< update GUI of main window
+	void updateSheetList();		//!< creates dynamic sheet list menu
+	void updateSetList();		//!< creates dynamic set list menu
 public slots:
 	Spreadsheet* newSpreadsheet();
 	Worksheet* newWorksheet();

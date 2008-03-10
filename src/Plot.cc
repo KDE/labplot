@@ -152,21 +152,21 @@ void Plot::resetRanges() {
 	double xmin=0,xmax=1,ymin=0,ymax=1,zmin=0,zmax=1;
 	for (int i=0;i<set.size();i++) {
 		kdDebug()<<"	using set "<<i<<endl;
-		if(!set[i]->isShown())
+		if(!set[i]->ShownEnabled())
 			continue;	// do not use hidden graphs
 
 		SetType stype = set[i]->Type();
 		kdDebug()<<"	Set "<<i<<" / Type = "<<stype<<endl;
 
-		LRange xrange,yrange,zrange;
+		Range xrange,yrange,zrange;
 		if(stype == SET2D) {
 			kdDebug()<<"Set2D"<<endl;
 			if(set[i] == 0) {
 				kdDebug()<<"ERROR : set == 0!"<<endl;
 				continue;
 			}
-			xrange = ((Set2D *)set[i])->Range(0);
-			yrange = ((Set2D *)set[i])->Range(1);
+			xrange = ((Set2D *)set[i])->getRange(0);
+			yrange = ((Set2D *)set[i])->getRange(1);
 		}
 		/*else if(s == GRAPH3D) {
 			kdDebug()<<"	GRAPH3D"<<endl;
@@ -204,25 +204,25 @@ void Plot::resetRanges() {
 		}*/
 
 		if (i==0) {	// first set
-			xmin=xrange.rMin();
-			xmax=xrange.rMax();
-			ymin=yrange.rMin();
-			ymax=yrange.rMax();
+			xmin=xrange.Min();
+			xmax=xrange.Max();
+			ymin=yrange.Min();
+			ymax=yrange.Max();
 
 			/*if (s == GRAPH3D || s == GRAPHM) {
-				zmin=zrange.rMin();
-				zmax=zrange.rMax();
+				zmin=zrange.Min();
+				zmax=zrange.Max();
 			}*/
 		}
 		else {
-			xrange.rMin()<xmin?xmin=xrange.rMin():0;
-			xrange.rMax()>xmax?xmax=xrange.rMax():0;
-			yrange.rMin()<ymin?ymin=yrange.rMin():0;
-			yrange.rMax()>ymax?ymax=yrange.rMax():0;
+			xrange.Min()<xmin?xmin=xrange.Min():0;
+			xrange.Max()>xmax?xmax=xrange.Max():0;
+			yrange.Min()<ymin?ymin=yrange.Min():0;
+			yrange.Max()>ymax?ymax=yrange.Max():0;
 
 			/*if (s == GRAPH3D || s == GRAPHM) {
-				zrange.rMin()<zmin?zmin=zrange.rMin():0;
-				zrange.rMax()>zmax?zmax=zrange.rMax():0;
+				zrange.Min()<zmin?zmin=zrange.Min():0;
+				zrange.Max()>zmax?zmax=zrange.Max():0;
 			}*/
 		}
 	}
@@ -248,10 +248,10 @@ void Plot::resetRanges() {
 	kdDebug()<<"	ymin/ymax "<<ymin<<' '<<ymax<<endl;
 	kdDebug()<<"	zmin/zmax "<<zmin<<' '<<zmax<<endl;
 
-	LRange range[3];
-	range[0] = LRange(xmin,xmax);
-	range[1] = LRange(ymin,ymax);
-	range[2] = LRange(zmin,zmax);
+	Range range[3];
+	range[0] = Range(xmin,xmax);
+	range[1] = Range(ymin,ymax);
+	range[2] = Range(zmin,zmax);
 	setRanges(range);
 
 	//mw->setModified();
@@ -261,23 +261,23 @@ void Plot::resetRanges() {
 
 void Plot::drawStyle(QPainter *p, Style *style, Symbol *symbol, QVector<QPoint> pa, int xmin, int xmax, int ymin, int ymax) {
 	kdDebug()<<"Plot::drawStyle()"<<endl;
-	bool filled = style->isFilled();
+	bool filled = style->FillEnabled();
 	QColor c = style->FillColor();
  	QPen pen( style->Color(), style->Width(),(Qt::PenStyle)style->PenStyle() );
 	p->setPen(pen);
-	QBrush brush(c,(Qt::BrushStyle)style->Brush());
+	QBrush brush(c,style->BrushStyle());
 
 	// calculate baseline
-	double min = actrange[1].rMin();
-	double max = actrange[1].rMax();
-	double minx = actrange[0].rMin();
-	double maxx = actrange[0].rMax();
+	double min = actrange[1].Min();
+	double max = actrange[1].Max();
+	double minx = actrange[0].Min();
+	double maxx = actrange[0].Max();
 
 	//int basey = ymax - (int) ((baseline-min)/(max-min)*(double)(ymax-ymin));
 	//int basex = xmin + (int) ((xbaseline-minx)/(maxx-minx)*(double)(xmax-xmin));
 	int bw = style->BoxWidth();
-	//int rmin = xmin + (int) ((region->rMin()-minx)/(maxx-minx)*(double)(xmax-xmin));
-	//int rmax = xmin + (int) ((region->rMax()-minx)/(maxx-minx)*(double)(xmax-xmin));
+	//int rmin = xmin + (int) ((region->Min()-minx)/(maxx-minx)*(double)(xmax-xmin));
+	//int rmax = xmin + (int) ((region->Max()-minx)/(maxx-minx)*(double)(xmax-xmin));
 	//kdDebug()<<"BASEX = "<<basex<<endl;
 	//kdDebug()<<"BASEY = "<<basey<<endl;
 

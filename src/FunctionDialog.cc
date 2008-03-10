@@ -441,8 +441,7 @@ void FunctionDialog::Apply() {
 	Set2D *g = new Set2D(f,data,NX);
 	setupLabel(g->getLabel());
 //	Set2D *g = new Set2D(f,title,range,SFUNCTION,type,style,symbol,ptr,NX);
-	// create Plot
-	// TODO : other plot types
+	// create plot, TODO : other plot types
 	mw->addSet(g,sheetcb->currentIndex(),PLOT2D);
 }
 

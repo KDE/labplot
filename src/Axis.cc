@@ -30,7 +30,7 @@ Axis::Axis() {
 	ticklabelformat = AUTO;
 	datetimeformat = "auto";
 	ticklabelprecision = 3;
-	tickpos = 0;
+	tickposition = 0;
 	gap = 15;
 	majorgridtype = Qt::DashLine;
 	minorgridtype = Qt::DotLine;

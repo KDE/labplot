@@ -1,3 +1,6 @@
+2008-03-08	use ACCESS macro for standard methods
+		MainWin::modified -> Project::changed
+		started with own TableModel for faster Spreadsheet
 2008-03-03	released 2.0.0.alpha1
 2008-02-17	worksheet, plots and axes
 2008-02-08	column dialog

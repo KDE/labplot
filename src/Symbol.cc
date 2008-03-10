@@ -14,7 +14,7 @@ Symbol::Symbol(SType t, QColor c, int s, FType f, QColor fc, int b)
 	type = t;
 	color = c;
 	size = s;
-	fill = f;
+	filltype = f;
 	fillcolor = fc;
 	brush = b;
 //	errorbar = new Errorbar();
@@ -132,7 +132,7 @@ void Symbol::draw(QPainter *p, QPoint point) {
 		p->drawLine(X-size,Y,X+size,Y);
 		break;
 	case SCIRCLE:
-		switch (fill) {
+		switch (filltype) {
 		case FNONE:
 			break;
 		case FFULL:

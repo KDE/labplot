@@ -17,10 +17,10 @@ public:
 	void openAxes(QTextStream *t, int version);
 	Axis *getAxis(int i) { return &axis[i]; }
 */
-	void setRanges(LRange* r) {range[0]=r[0];range[1]=r[1];}
-	void setActRanges(LRange* r);
-	void setRange(LRange* r,int i) {range[i]=*r;}
-	void setActRange(LRange* r,int i);
+	void setRanges(Range* r) {range[0]=r[0];range[1]=r[1];}
+	void setActRanges(Range* r);
+	void setRange(Range* r,int i) {range[i]=*r;}
+	void setActRange(Range* r,int i);
 
 	void drawAxes(QPainter *p, int w, int h);
 	void drawAxesTicks(QPainter *p, int w, int h, int k);

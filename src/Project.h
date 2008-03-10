@@ -8,28 +8,23 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include "defs.h"
+
 class Project
 {
 public:
 	Project();
 	QDomElement saveXML(QDomDocument doc);
 	void openXML(QDomNode node);
-	QString Filename() { return filename; }
-	void setFilename(QString f) {filename=f;}
-	int Version() {return version; }
-	void setVersion (int v) { version = v;}
-	QString LabPlot() { return labplot; }
-	void setLabPlot(QString l) {labplot=l;}
-	QString Title() { return title; }
-	void setTitle(QString t) {title=t;}
-	QString Author() { return author; }
-	void setAuthor(QString a) {author=a;}
-	QDateTime Created() { return created; }
-	void setCreated(QDateTime c) {created=c;}
-	QDateTime Modified() { return modified; }
-	void setModified(QDateTime m) {modified=m;}
-	QString Notes() { return notes; }
-	void setNotes(QString c) {notes=c;}
+	ACCESS(QString, filename, Filename);
+	ACCESS(int, version, Version);
+	ACCESS(QString, labplot, LabPlot);
+	ACCESS(QString, title, Title);
+	ACCESS(QString, author, Author);
+	ACCESS(QDateTime, created, Created);
+	ACCESS(QDateTime, modified, Modified);
+	ACCESS(QString, notes, Notes);
+	ACCESS(bool, changed, Changed);
 private:
 	QString filename;
 	int version;
@@ -39,6 +34,7 @@ private:
 	QDateTime created;
 	QDateTime modified;
 	QString notes;
+	bool changed;		//!< set when project was changed
 };
 
 #endif //PROJECT_H

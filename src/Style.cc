@@ -3,16 +3,16 @@
 #include <KDebug>
 #include "Style.h"
 
-Style::Style(StyleType t, QColor c, bool f, QColor fc, int w, int p, int b)
+Style::Style(StyleType t, QColor c, bool f, QColor fc, int w, Qt::PenStyle p, Qt::BrushStyle b)
 {
 	kdDebug()<<"Style()"<<endl;
 	type = t;
 	color = c;
-	fill = f;
+	filled = f;
 	fillcolor = fc;
 	width=w;
-	penStyle = p;
-	brush = b;
+	penstyle = p;
+	brushstyle = b;
 	boxwidth=10;
 	autoboxwidth=false;
 	sort_points=true;

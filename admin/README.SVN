@@ -12,5 +12,10 @@ svn co https://labplot.svn.sourceforge.net/svnroot/labplot/2.0
 
 Commit :
 ########
+svn status	<- shows modified, deleted, added files
+
+svn add file
+svn rename --force oldfile newfile
 svn delete file.tmp
+
 svn commit -m "deleted tmp file" --username=<login>

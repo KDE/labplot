@@ -24,13 +24,13 @@ public:
 	Plot *getActivePlot() { return plot[api]; }
 private:
 	MainWin *mw;
-	SheetType type;		// needed for mw->active{Work,Spread}sheet()
-	QList<Plot *> plot;	// list of plots
-	int api;		// active plot index
+	SheetType type;			// needed for mw->active{Work,Spread}sheet()
+	QList<Plot *> plot;		//!< list of plots
+	int api;			//!< active plot index
 	void paintEvent(QPaintEvent *);
 	void setupPrinter(QPrinter *pr, QString fn);
 	void draw(QPainter *p, int w, int h);
-	void addPlot(PlotType ptype);
+	void addPlot(PlotType ptype);	//!< add plot of type ptype
 };
 
 #endif //WORKSHEET

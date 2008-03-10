@@ -12,8 +12,6 @@
 #include <hdf5.h>
 #endif
 
-using namespace std;
-
 class FilterHDF5
 {
 public:
@@ -30,7 +28,7 @@ public:
 	QString groupName(int set);
 	QString datasetName(int set);
 	QString columnName(int set, int col);
-	double Data(int set, int row, int col);		       //!< get data of column c and rows r of spreadsheet s
+	double Data(int set, int row, int col);	       //!< get data of column c and rows r of spreadsheet s
 	int Rows(int set);
 	int Cols(int set);
 	QString getAttribute(int i);
@@ -38,7 +36,7 @@ public:
 #endif
 protected:
 private:
-	bool fileok;			// is a hdf5 file and is readable
+	bool fileok;			//!< is a hdf5 file and is readable
 	QString filename;
 };
 

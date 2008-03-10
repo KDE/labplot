@@ -115,7 +115,7 @@ void MainWin::setupActions() {
 }
 
 bool MainWin::warnModified() {
-	if(mdi->subWindowList().size() > 0 && modified) {
+	if(mdi->subWindowList().size() > 0 && project->Changed()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
 			i18n("The current project has been modified.\nDo you want to save it?"),
 			i18n("Save Project"));
@@ -131,7 +131,7 @@ bool MainWin::warnModified() {
 		}
 	}
 
-	modified=false;
+	project->setChanged(false);
 	return 0;
 }
 
@@ -139,12 +139,38 @@ void MainWin::updateSheetList() {
 	// TODO
 }
 
+void MainWin::updateSetList() {
+	// TODO
+}
+
+void MainWin::updateGUI() {
+	updateSheetList();
+	updateSetList();
+
+	// TODO : disable/enable menu items, etc.
+	if(activeWorksheet() == 0) {
+		(static_cast<QMenu*> (guiFactory()->container("appearance",this)))->setEnabled(false);
+		(static_cast<QMenu*> (guiFactory()->container("viewmenu",this)))->setEnabled(false);
+		(static_cast<QMenu*> (guiFactory()->container("drawing",this)))->setEnabled(false);
+		if(activeSpreadsheet() == 0)
+			(static_cast<QMenu*> (guiFactory()->container("analysis",this)))->setEnabled(false);
+		else
+			(static_cast<QMenu*> (guiFactory()->container("analysis",this)))->setEnabled(true);
+	}
+	else {
+		(static_cast<QMenu*> (guiFactory()->container("appearance",this)))->setEnabled(true);
+		(static_cast<QMenu*> (guiFactory()->container("viewmenu",this)))->setEnabled(true);
+		(static_cast<QMenu*> (guiFactory()->container("drawing",this)))->setEnabled(true);
+		(static_cast<QMenu*> (guiFactory()->container("analysis",this)))->setEnabled(true);
+	}
+}
+
 void MainWin::openNew() {
 	kdDebug()<<"MainWin::New()"<<endl;
 //	if(warnModified()) return;
 
 	mdi->closeAllSubWindows();
-	updateSheetList();
+	updateGUI();
 /*	gvpart=0;
 	defining_region=0;
 	defining_line=0;
@@ -157,7 +183,7 @@ void MainWin::openNew() {
 	defining_panzoom=0;
 */
 	project = new Project();
-	modified=false;
+	project->setChanged(false);
 }
 
 void MainWin::print() {
@@ -191,7 +217,9 @@ Spreadsheet* MainWin::newSpreadsheet() {
 	s->setAttribute(Qt::WA_DeleteOnClose);
 	mdi->addSubWindow(s);
 	s->show();
-	modified=true;
+	project->setChanged(true);
+
+	updateGUI();
 
         return s;
 }
@@ -201,7 +229,9 @@ Worksheet* MainWin::newWorksheet() {
         Worksheet *w = new Worksheet(this);
 	mdi->addSubWindow(w);
 	w->show();
-	modified=true;
+	project->setChanged(true);
+
+	updateGUI();
 
         return w;
 }
@@ -231,7 +261,7 @@ Worksheet* MainWin::activeWorksheet() {
 
 /******************** dialogs *****************************/
 void MainWin::importDialog() { (new ImportDialog(this))->show(); }
-void MainWin::projectDialog() { (new ProjectDialog(this))->show(); modified=true;}
+void MainWin::projectDialog() { (new ProjectDialog(this))->show(); project->setChanged(true); }
 void MainWin::functionDialog() { (new FunctionDialog(this))->show(); }
 void MainWin::titleDialog() {
 	kdDebug()<<"MainWin::titleDialog()"<<endl;
@@ -288,5 +318,7 @@ void MainWin::addSet(Set *set, int sheet, PlotType ptype) {
 			}
 		}
 	}
+	
+	updateGUI();
 }
 

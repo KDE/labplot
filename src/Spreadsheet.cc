@@ -9,19 +9,30 @@
 
 #include "Spreadsheet.h"
 #include "MainWin.h"
+#ifdef TABLEVIEW
+#include "TableModel.h"
+#endif
 #include "ColumnDialog.h"
 #include "pixmaps/pixmap.h"
 #include "column.h"
 
 Spreadsheet::Spreadsheet(MainWin *m)
+#ifdef TABLEVIEW
+	:QTableView(), mw(m)
+#else
 	:QTableWidget(), mw(m)
+#endif
 {
 	kdDebug()<<"Spreadsheet()"<<endl;
 	type = SPREADSHEET;
 	setColumnCount(2);
 	setRowCount(100);
 	setSortingEnabled(false);
-
+	
+#ifdef TABLEVIEW
+	setModel(new TableModel());
+#endif
+	
 	resetHeader();
 	
 /*	ld=0;
@@ -144,12 +155,14 @@ QString Spreadsheet::columnHeader(int col) {
 } 
 
 void Spreadsheet::setColumnHeader(int col, QString name) {
+#ifndef TABLEVIEW
 	QTableWidgetItem *item = horizontalHeaderItem(col);
 	if(item==0) {
 		item = new QTableWidgetItem();
 		setHorizontalHeaderItem(col,item);
 	}
 	item->setText(name);
+#endif
 }
 
 void Spreadsheet::setProperties(QString label, int type, int format) {
@@ -218,8 +231,59 @@ void Spreadsheet::setColumnFormat(int col, QString format) {
 	setColumnHeader(col, label);
 }
 
+int Spreadsheet::filledRows(int col) {
+//	kdDebug()<<"Spreadsheet::filledRows("<<col<<")"<<endl;
+	if(col < 0 || col > columnCount())
+		return -1;
+
+	for(int row=rowCount()-1;row>=0;row--) {
+#ifndef TABLEVIEW
+		QTableWidgetItem *it = item(row,col);
+		if (it && !it->text().isEmpty())
+			return row;
+#endif
+	}
+	return 0;
+}
+
 void Spreadsheet::addSet(Set *s) {
-	//kdDebug()<<"Spreadsheet::addSet()"<<endl;
-	kdDebug()<<"Spreadsheet::addSet() not implemented yet!"<<endl;
-	// TODO
+	kdDebug()<<"Spreadsheet::addSet()"<<endl;
+
+	int columns=0;
+	switch(s->Type()) {
+	case SET2D:
+		columns=2;
+		break;
+	default: break;
+	}
+
+	if(columnCount()<columns)
+		setColumnCount(columns);
+// add empty columns if necessary
+	for(int i=0;i<columns;i++) {
+		if(filledRows(columnCount()-columns)>1)
+			setColumnCount(columnCount()+1);
+	}
+
+	if(s->Number() > rowCount())
+		setRowCount(s->Number());
+
+	// TODO : add data
+#ifndef TABLEVIEW
+/* OLD :
+	Point *data = g->Data();
+	table->horizontalHeader()->setLabel(table->numCols()-2 , QString( "A ")+i18n("{double}")+" [X]");
+	table->horizontalHeader()->setLabel(table->numCols()-1 , QString( "B ")+i18n("{double}")+" [Y]");
+	for(int i=0;i<g->Number();i++) {
+		LTableItem *xitem = new LTableItem( table, QTableItem::OnTyping,QString::number(data[i].X(),'g',15));
+		LTableItem *yitem = new LTableItem( table, QTableItem::OnTyping,QString::number(data[i].Y(),'g',15));
+		if(data[i].Masked()) {
+			xitem->setMasked();
+			yitem->setMasked();
+		}
+		table->setItem(i, table->numCols()-2, xitem);
+		table->setItem(i, table->numCols()-1, yitem);
+	}
+*/
+#endif
 }

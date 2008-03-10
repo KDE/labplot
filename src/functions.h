@@ -106,7 +106,6 @@ double conicalP_sphreg(double l,double L,double x) { return gsl_sf_conicalP_sph_
 double conicalP_cylreg(double m,double l,double x) { return gsl_sf_conicalP_sph_reg((int)m,l,x); }
 double legendre_H3d(double l, double L,double e) { return gsl_sf_legendre_H3d((int)l,L,e); }
 
-double gsl_pow(double x, double n) { return gsl_sf_pow_int(x,(int)n); }
 double psii(double n) { return gsl_sf_psi_int((int)n); }
 double psi1i(double n) { return gsl_sf_psi_1_int((int)n); }
 double psi_n(double m, double x) { return gsl_sf_psi_n((int)m,x); }
@@ -130,6 +129,15 @@ double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf((unsigne
 
 struct init arith_fncts[] = {
 /*glibc*/
+  	{"sqrt", sqrt},
+	{"cbrt",cbrt},
+#ifdef HAVE_GSL
+	{"exp",gsl_sf_exp},
+	{"hypot",gsl_hypot},
+#else
+	{"exp",exp},
+	{"hypot",hypot},
+#endif
 	{"sin",sin},
 	{"cos",cos},
 	{"tan",tan},
@@ -139,12 +147,28 @@ struct init arith_fncts[] = {
 	{"sinh",sinh},
 	{"cosh",cosh},
 	{"tanh",tanh},
+#ifdef HAVE_GSL
+	{"asinh",gsl_asinh},
+	{"acosh",gsl_acosh},
+	{"atanh",gsl_atanh},
+	{"log",gsl_sf_log},
+	{"log1p",gsl_log1p},
+/*	{"logp",gsl_sf_log_1plusx},*/
+	{"loga",gsl_sf_log_abs},
+	{"logm",gsl_sf_log_1plusx_mx},
+	{"expm1",gsl_expm1},
+	{"ldexp",gsl_ldexp},
+#else
 	{"asinh",asinh},
 	{"acosh",acosh},
 	{"atanh",atanh},
-  	{"sqrt", sqrt},
-	{"cbrt",cbrt},
-	{"exp",exp},
+	{"log",log},
+	{"log2",log2},
+	{"log10",log10},
+	{"log1p",log1p},
+	{"expm1",expm1},
+	{"ldexp",ldexp},
+#endif
 /*	{"exp2",exp2},*/
 /*	{"exp10",exp10},*/
   	{"j0", j0},
@@ -153,101 +177,11 @@ struct init arith_fncts[] = {
 	{"y0",y0},
 	{"y1",y1},
 	{"yn",my_yn},	/*TODO*/
-/*  {"beta",beta},
-  {"chbevl",chbevl},
-  {"ceil",ceil},
-  {"chdtrc",chdtrc},
-  {"chdtr",chdtr},
-  {"chdtri",chdtri},
-  {"ellie",ellie},
-  {"ellik",ellik},
-  {"expn",expn},
-  {"fac",my_fac},
-  {"fdtrc",my_fdtrc},
-  {"fdtr",my_fdtr},
-  {"fdtri",my_fdtri},
-  {"gdtr",gdtr},
-  {"gdtrc",gdtrc},
-  {"hyp2f1",hyp2f1},
-  {"hyperg",hyperg},
-  {"igamc",igamc},
-  {"igam",igam},
-  {"igami",igami},
-  {"incbet",incbet},
-  {"incbi",incbi},
-  {"iv",iv},
-  {"jn",my_jn},
-  {"jv",jv},
-  {"kn",my_kn},
-  {"lbeta",lbeta},
-  {"ldexp",my_ldexp},
-  {"pdtrc",my_pdtrc},
-  {"pdtr",my_pdtr},
-  {"pdtri",my_pdtri},
-  {"pow",pow},
-  {"stdtr",my_stdtr},
-  {"stdtri",my_stdtri},
-  {"struve",struve},
-  {"yn",my_yn},
-  {"yv",yv},
-  {"zeta",zeta},
-*/
-/*  {"cosm1",cosm1},
-  {"dawsn",dawsn},
-  {"ellpe",ellpe},
-  {"ellpk",ellpk},
-  {"erf",erf},
-  {"erfc",erfc},
-  {"exp", exp},
-  {"expm1",expm1},
-  {"fabs",fabs},
-*/
-/*  {"fresnl",fresnl},*/
-/*  {"i0",i0},
-  {"i0e",i0e},
-  {"i1",i1},
-  {"i1e",i1e},
-*/
-/*  {"ilogb",ilogb},*/
-/* 
-  {"k0",k0},
-  {"k0e",k0e},
-  {"k1",k1},
-  {"k1e",k1e},
-  {"ln", log},
-  {"log",log10},
-  {"logb",logb},
-  {"log1p",log1p},
-*/
-/*  {"mtherr",mtherr},*/
-/*  {"ndtr",ndtr},
-  {"ndtri",ndtri},
-  {"psi",psi},
-*/
-/*#ifndef HAVE_SOLARIS
-  {"rand",my_rand},
-  {"random",my_random},
-  {"drand",drand},
-#endif*/
-/*  {"revers",revers},*/
-/*  {"rgamma",rgamma},
-  {"rint",rint},
-*/
-/*  {"round",round},*/
-/*  {"shichi",shichi},*/
-/*  {"sici",sici},*/
-/*  {"spence",spence},*/
-/*  {"true_gamma",true_gamma},*/
-/*  {"trunc",trunc},*/
-/*  {"zetac",zetac},*/
+#ifdef HAVE_GSL
+	{"beta",gsl_sf_beta},
+#endif
 /*TODO*/
 #ifdef HAVE_GSL
-  {"gsl_log1p",gsl_log1p},
-  {"gsl_expm1",gsl_expm1},
-  {"gsl_hypot",gsl_hypot},
-  {"gsl_acosh",gsl_acosh},
-  {"gsl_asinh",gsl_asinh},
-  {"gsl_atanh",gsl_atanh},
   {"airy_ai",airy_Ai},
   {"airy_bi",airy_Bi},
   {"airy_ais",airy_Ais},
@@ -332,7 +266,6 @@ struct init arith_fncts[] = {
   {"log_erfc",gsl_sf_log_erfc},
   {"erf_z",gsl_sf_erf_Z},
   {"erf_q",gsl_sf_erf_Q},
-  {"gsl_exp",gsl_sf_exp},
   {"exprel",gsl_sf_exprel},
   {"exprel_2",gsl_sf_exprel_2},
   {"exprel_n",exprel_n},
@@ -370,7 +303,6 @@ struct init arith_fncts[] = {
   {"pochrel",gsl_sf_pochrel},
   {"gamma_inc_q",gsl_sf_gamma_inc_Q},
   {"gamma_inc_p",gsl_sf_gamma_inc_P},
-  {"gsl_beta",gsl_sf_beta},
   {"lnbeta",gsl_sf_lnbeta},
   {"beta_inc",gsl_sf_beta_inc},
   {"gegenpoly_1",gsl_sf_gegenpoly_1},
@@ -410,11 +342,6 @@ struct init arith_fncts[] = {
   {"legendre_h3d_0",gsl_sf_legendre_H3d_0},
   {"legendre_h3d_1",gsl_sf_legendre_H3d_1},
   {"legendre_h3d",legendre_H3d},
-  {"gsl_log",gsl_sf_log},
-  {"loga",gsl_sf_log_abs},
-  {"logp",gsl_sf_log_1plusx},
-  {"logm",gsl_sf_log_1plusx_mx},
-  {"gsl_pow",gsl_pow},
   {"psii",psii},
   {"psi",gsl_sf_psi},
   {"psiy",gsl_sf_psi_1piy},
@@ -485,9 +412,7 @@ struct init arith_fncts[] = {
   {"bessel_j",bessel_j},
   {"bessel_k",bessel_k},
   {"bessel_y",bessel_y},
-  {"R_pow",R_pow},
   {"pythag",pythag},
-  {"log1p",log1p},
   {"log1pmx",log1pmx},
   {"lgamma1p",lgamma1p},
   {"logspace_add",logspace_add},

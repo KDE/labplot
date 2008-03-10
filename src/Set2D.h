@@ -5,7 +5,7 @@
 
 #include "Set.h"
 #include "Point.h"
-#include "LRange.h"
+#include "Range.h"
 
 class Set2D: public Set
 {
@@ -16,8 +16,8 @@ public:
 	~Graph2D();
 	Graph2D *Clone();		// clone this graph
 */
-	LRange Range(int i) { return range[i]; }
-	void setRange(LRange r[2]) { range[0]=r[0]; range[1]=r[1]; }
+	Range getRange(int i) { return range[i]; }
+	void setRange(Range r[2]) { range[0]=r[0]; range[1]=r[1]; }
 
 	Point *Data() { return data; }
 //	void setData(Point *d) { data = d; }
@@ -29,7 +29,7 @@ public:
 */
 private:
 	Point *data;
-	LRange range[2];
+	Range range[2];
 	void resetRanges();
 };
 

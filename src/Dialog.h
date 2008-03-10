@@ -25,8 +25,8 @@ protected:
 	QGridLayout *layout;
 	KDoubleNumInput *xni, *yni;	// label widget
 	QTextEdit *labelte;
-	void labelWidget(QWidget *parent, Label *label);
-	void setupLabel(Label *label);	// apply settings from label widget
+	void labelWidget(QWidget *parent, Label *label);	//!< widget for label settings
+	void setupLabel(Label *label);				//!< apply settings from label widget
 private slots:
 	void setLabelFont(QFont font);
 	void setLabelSize(QString size);

@@ -14,6 +14,7 @@ Project::Project()
 	created=QDateTime::currentDateTime();
 	modified=QDateTime::currentDateTime();
 	notes=QString("");
+	changed=false;
 }
 
 QDomElement Project::saveXML(QDomDocument doc) {

@@ -6,6 +6,7 @@
 #include <QColor>
 #include <QDomElement>
 #include "errorbars.h"
+#include "defs.h"
 
 class Errorbar {
 public:
@@ -15,26 +16,16 @@ public:
 	void openXML(QDomNode node);
 //	void draw(QPainter *p, QPointArray pa, QPointArray hpa, QPointArray vpa);
 
-	QColor Color() { return color; }
-	void setColor(QColor c) { color=c; }
-	QColor BaseColor() { return basecolor; }
-	void setBaseColor(QColor c) { basecolor=c; }
-	int XSize() { return xsize; }
-	void setXSize(int s) { xsize=s; }
-	int YSize() { return ysize; }
-	void setYSize(int s) { ysize=s; }
-	Qt::PenStyle Style() { return style; }
-	void setStyle(Qt::PenStyle p) { style=p; }
-	Qt::PenStyle BaseStyle() { return basestyle; }
-	void setBaseStyle(Qt::PenStyle p) { basestyle=p; }
-	int Width() { return width; }
-	void setWidth(int w) { width=w; }
-	int BaseWidth() { return basewidth; }
-	void setBaseWidth(int w) { basewidth=w; }
-	EType XType() { return xtype; }
-	void setXType(EType e) { xtype=e; }
-	EType YType() { return ytype; }
-	void setYType(EType e) { ytype=e; }
+	ACCESS(QColor, color, Color);
+	ACCESS(QColor, basecolor, BaseColor);
+	ACCESS(int, xsize, XSize);
+	ACCESS(int, ysize, YSize);
+	ACCESS(Qt::PenStyle, style, Style);
+	ACCESS(Qt::PenStyle, basestyle, BaseStyle);
+	ACCESS(int, width, Width);
+	ACCESS(int, basewidth, BaseWidth);
+	ACCESS(EType, xtype, XType);
+	ACCESS(EType, ytype, YType);
 private:
 	QColor color;			// errorbar settings
 	int xsize, ysize;

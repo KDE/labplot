@@ -68,12 +68,11 @@ void Worksheet::addSet(Set *s, PlotType ptype) {
 	if(plotCount() == 0 || ptype != plot[api]->Type() )
 		addPlot(ptype);
 	plot[api]->addSet(s);
-
 	plot[api]->resetRanges();
 
 	// set actrange for new plots
-	LRange *actrange = plot[api]->ActRanges();
-	if (actrange[0].rMax()-actrange[0].rMin() == 0)
+	Range *actrange = plot[api]->ActRanges();
+	if (actrange[0].Max()-actrange[0].Min() == 0)
 		plot[api]->setActRanges(plot[api]->Ranges());
 	repaint();
 }

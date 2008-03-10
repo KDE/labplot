@@ -31,6 +31,8 @@
 <Action name="plot settings" />
 <Action name="worksheet settings" />
 </Menu>
+<Menu name="viewmenu"><text>&amp;View</text>
+</Menu>
 <Menu name="analysis"><text>&amp;Analysis</text>
 </Menu>
 <Menu name="drawing"><text>&amp;Drawing</text>

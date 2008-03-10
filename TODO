@@ -38,10 +38,13 @@ BUGS:
 TODO :
 ******
 -------------------------------------------------------------------------
+	* updateGUI() when closing a sheet, changing active sheet
 	* create parser.tab.c with cmake
 		"bison parser.y"
 	* use numinputs in import dialog (when ok)
 	* check functions.h, constants.h
+XX		* use GSL
+		* GSL_VERSION
 	* Import Dialog
 		Options
 			same first column
@@ -51,39 +54,31 @@ TODO :
 			audio
 			database (kexi ?)
 		file info dialog
+XX	* labelWidget(): title dialog, function dialog, axes dialog
+XX	* Use QTableView with own model (QAbstractTableModel) for a faster/smaller Spreadsheet
+XX	* add function to spreadsheet
+	* Use const declarations when possible
+	* dialogs
+		* SettingsDialog		Alexander
+		* AxesDialog			Alexander
+		* LegendDialog
+		* PlotDialog
+		* WorksheetDialog
+		* dataset dialog
+		* title dialog : saveSettings
+		* FunctionDialog
+			style/symbol
+			update sheetcb after apply
+			other plot types
+			save/load settings
 	* Print 
 		Worksheet::setupPrinter();
-	* use GSL (functions.h)
-		* GSL_VERSION ?
-	* labelWidget(): title dialog, function dialog
-	* Use QTableView with own model (QAbstractTableModell) for a faster/smaller Spreadsheet
-	* Use const declarations when possible
-	* use macros for standard declarations
-		#define ACCESSOR(type, var, method) \
-			type method() const { return var; }; \
-			void set ## method(const type value) { var = value; }
-		Example usage:
-			ACCESSOR(int, version, Version);
-	* MainWin::modified -> Project::modified
-	* add Doxygen style documentations
+	* Project explorer
+	* analysis functions
 -------------------------------------------------------------------------
-	Settings Dialog			Alexander
-	Axes Dialog			Alexander
-	add function to spreadsheet
-XX	Worksheet
-		legend dialog
-		title dialog : saveSettings
-		set dialog
+	Worksheet
 		draw other symbols
 		draw other styles
-		Settings dialog
-	plot dialog
-	worksheet dialog
-XX	Function Dialog
-		style/symbol
-		update sheetcb after apply
-		other plot types
-		save/load settings
 	Spreadsheet 
 		column dialog on double click
 		new column on click (empty header)
@@ -105,20 +100,19 @@ XX	Function Dialog
 		surface
 		qwt plot
 		3d ?
-	Project explorer
 	MainWin
 		Print Preview	(see Qt textedit demo)
 		Export to eps, svg, ...
-		open
-		save, save as
-	analysis functions
+		open, save, save as
+		dynamic menus (sheets + data sets)
+	View: autoscale, zoom, etc.
 	Scripting (Workbench ?)
-	dynamic menus (sheets + graphs)
+	* add Doxygen style documentations
 	...
 		
 
 ##############################################################################################################
-NEW FEATURES :
+PLANNED NEW FEATURES :
 	* independent/different y axes
 		* option to disconnect y2,x2 axes ?
 	* Undo/Redo support
@@ -208,9 +202,3 @@ NEW FEATURES :
 	* include all subdirs
 	* install
 	* uninstall	-> see cmake FAQ
-
-* Qt/KDE 4 :
-	* qt3to4
-	* kdeconfig 	-> kde4-config
-	* ./configure --with-qt-dir=/home/kde4/qt
-	* libqt-mt	-> libQtCore, etc.

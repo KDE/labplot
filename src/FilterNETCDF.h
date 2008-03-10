@@ -59,8 +59,8 @@ protected:
 	QString pr_att(int ncid,int varid,const char *varname, int ia);
 #endif
 private:
-	bool fileok;						// is a netcdf file and readable
-	QString filename;					// file
+	bool fileok;				//!< is a netcdf file and readable
+	QString filename;
 #ifdef HAVE_NETCDF
 	int ncid, ndims, nvars, natts, xdimid;	// netcdf id / number of dimensions / vars / attributes / dim id
 	ncdim dims[NC_MAX_DIMS];			// nc dimensions

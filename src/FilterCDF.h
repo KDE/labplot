@@ -24,8 +24,8 @@ public:
 	long MaxRec() { return maxrec; }
 	long NVars() { return nvars; }
 	long NAtts() { return natts; }
-	QString Att(int aid);				 	// get attribute aid
-	QString Var(int varid);					// get variable varid description
+	QString Att(int aid);			 	// get attribute aid
+	QString Var(int varid);				// get variable varid description
 	QString VarName(int varid);			// get variable varid name 
 	long VarLen(QString name);
 	QStringList DataString(int varid);		// data info
@@ -40,8 +40,8 @@ protected:
 	double Value(void *value,long type);
 #endif
 private:
-	QString filename;			// file name
-	bool fileok;				// is a netcdf file and readable
+	QString filename;
+	bool fileok;			//!< is a netcdf file and readable
 #ifdef HAVE_CDF
 	CDFid id;					// file id
 	long ndims, enc, nvars, natts, maj, maxrec;  

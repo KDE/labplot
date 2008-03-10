@@ -105,10 +105,10 @@ void Plot2DSimple::calculateXY(Point d,double *x, double *y, int w, int h) {
 	const int xmax = (int)(w*(size.X()*p2.X()+position.X()));
 	const int ymin = (int)(h*(size.Y()*p1.Y()+position.Y()));
 	const int ymax = (int)(h*(size.Y()*p2.Y()+position.Y()));
-	double minx = actrange[0].rMin();
-	double maxx = actrange[0].rMax();
-	double miny = actrange[1].rMin();
-	double maxy = actrange[1].rMax();
+	double minx = actrange[0].Min();
+	double maxx = actrange[0].Max();
+	double miny = actrange[1].Min();
+	double maxy = actrange[1].Max();
 
 	switch(axis[0]->Scale()) {
 		case LINEAR:	*x += (d.X() - minx) * (xmax-xmin)/(maxx-minx); break;
@@ -179,10 +179,10 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 	// TODO
 	//p->setClipRect(xmin-clipoffset,ymin-clipoffset,xmax-xmin+2*clipoffset,ymax-ymin+2*clipoffset);
 
-	double minx = actrange[0].rMin();
-	double maxx = actrange[0].rMax();
-	double miny = actrange[1].rMin();
-	double maxy = actrange[1].rMax();
+	double minx = actrange[0].Min();
+	double maxx = actrange[0].Max();
+	double miny = actrange[1].Min();
+	double maxy = actrange[1].Max();
 
 	for (int i=0; i < set.size() ; i++) {
 		SetType stype = set[i]->Type();
