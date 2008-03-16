@@ -1,0 +1,86 @@
+<ui version="4.0" >
+ <class>SettingsGeneralPage</class>
+ <widget class="QWidget" name="SettingsGeneralPage" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>348</width>
+    <height>133</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Auto-Save</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" colspan="2" >
+       <widget class="QCheckBox" name="checkBoxAutoSave" >
+        <property name="text" >
+         <string>activate auto-save function</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>10</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0" colspan="2" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Time interval</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>51</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="3" >
+       <widget class="QSpinBox" name="spinBox" >
+        <property name="value" >
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4" >
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>min.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
