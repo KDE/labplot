@@ -39,5 +39,15 @@
 </Menu>
 <Menu name="script"><text>&amp;Script</text>
 </Menu>
+<Menu name="windows"><text>&amp;Windows</text>
+<Action name="close window" />
+<Action name="close all windows" />
+<Separator/>
+<Action name="tile windows" />
+<Action name="cascade windows" />
+<Separator/>
+<Action name="next window" />
+<Action name="previous window" />
+</Menu>
 </MenuBar>
 </gui>

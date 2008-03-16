@@ -9,7 +9,7 @@
 #include "Worksheet.h"
 #include "Project.h"
 #include "Set2D.h"
- 
+
 class MainWin : public KXmlGuiWindow
 {
 	Q_OBJECT
@@ -19,8 +19,8 @@ public:
 	QMdiArea* getMdi() { return mdi; }
 	Spreadsheet* activeSpreadsheet();
 	Worksheet* activeWorksheet();
-	Project* getProject() { return project; } 
-	void setProject(Project *p) { project=p; } 
+	Project* getProject() { return project; }
+	void setProject(Project *p) { project=p; }
 	void addSet(Set *g, int sheet, PlotType ptype);
 private:
 	QMdiArea *mdi;
@@ -47,6 +47,7 @@ private slots:
 	void legendDialog();
 	void plotDialog();
 	void worksheetDialog();
+	void settingsDialog();
 };
- 
+
 #endif

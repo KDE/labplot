@@ -1,6 +1,11 @@
 #include "MainWin.h"
 #include "ImportDialog.h"
- 
+
+//****** GUI **************
+#include "gui/SettingsDialog.h"
+#include "gui/SettingsDialog.h"
+#include "gui/AxesDialog.h"
+
 #include <KApplication>
 #include <KAction>
 #include <KActionCollection>
@@ -14,11 +19,10 @@
 #include "ProjectDialog.h"
 #include "FunctionDialog.h"
 #include "TitleDialog.h"
-#include "AxesDialog.h"
 #include "LegendDialog.h"
 #include "PlotDialog.h"
 #include "WorksheetDialog.h"
- 
+
 #include "pixmaps/pixmap.h"
 
 MainWin::MainWin(QWidget *parent)
@@ -51,11 +55,11 @@ void MainWin::setupActions() {
 	action->setEnabled(false);
 
 	// Doesn't work	: action = new KAction("import", i18n("Import"), actionCollection(), "import");
-	action = new KAction(KIcon("document-import-database"), i18n("Import"), this);
+	action = new KAction(KIcon("document-import-database"), i18n("Importdfsa"), this);
 	action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_L);
 	actionCollection()->addAction("import", action);
 	connect(action, SIGNAL(triggered()),SLOT(importDialog()));
-	
+
 	action = new KAction (KIcon(QIcon(project_xpm)),i18n("Project &Info"), this);
 	action->setShortcut(Qt::ALT+Qt::Key_V);
 	actionCollection()->addAction("project", action);
@@ -109,8 +113,43 @@ void MainWin::setupActions() {
 	// Drawing
 	// Script
 
+	//Windows
+	action= new KAction(i18n("Cl&ose"), this);
+    action->setShortcut(tr("Ctrl+F4"));
+    action->setStatusTip(i18n("Close the active window"));
+	actionCollection()->addAction("close window", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(closeActiveSubWindow()));
+
+    action = new KAction(i18n("Close &All"), this);
+    action->setStatusTip(i18n("Close all the windows"));
+	actionCollection()->addAction("close all windows", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(closeAllSubWindows()));
+
+    action = new KAction(i18n("&Tile"), this);
+    action->setStatusTip(i18n("Tile the windows"));
+	actionCollection()->addAction("tile windows", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(tileSubWindows()));
+
+    action = new KAction(i18n("&Cascade"), this);
+    action->setStatusTip(i18n("Cascade the windows"));
+	actionCollection()->addAction("cascade windows", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(cascadeSubWindows()));
+
+    action = new KAction(i18n("Ne&xt"), this);
+    action->setStatusTip(i18n("Move the focus to the next window"));
+	actionCollection()->addAction("next window", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(activateNextSubWindow()));
+
+    action = new KAction(i18n("Pre&vious"), this);
+    action->setStatusTip(i18n("Move the focus to the previous window"));
+	actionCollection()->addAction("previous window", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousSubWindow()));
+
+
+	//"Standard actions"
+    KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
 	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
- 
+
 	setupGUI();
 }
 
@@ -166,24 +205,24 @@ void MainWin::updateGUI() {
 }
 
 void MainWin::openNew() {
-	kdDebug()<<"MainWin::New()"<<endl;
-//	if(warnModified()) return;
-
-	mdi->closeAllSubWindows();
-	updateGUI();
-/*	gvpart=0;
-	defining_region=0;
-	defining_line=0;
-	defining_rect=0;
-	defining_ellipse=0;
-	defining_label=false;
-	defining_image=false;
-	defining_baseline=false;
-	defining_maglens=0;
-	defining_panzoom=0;
-*/
-	project = new Project();
-	project->setChanged(false);
+// 	kdDebug()<<"MainWin::New()"<<endl;
+// //	if(warnModified()) return;
+//
+// 	mdi->closeAllSubWindows();
+// 	updateGUI();
+// /*	gvpart=0;
+// 	defining_region=0;
+// 	defining_line=0;
+// 	defining_rect=0;
+// 	defining_ellipse=0;
+// 	defining_label=false;
+// 	defining_image=false;
+// 	defining_baseline=false;
+// 	defining_maglens=0;
+// 	defining_panzoom=0;
+// */
+// 	project = new Project();
+// 	project->setChanged(false);
 }
 
 void MainWin::print() {
@@ -286,6 +325,7 @@ void MainWin::axesDialog() { (new AxesDialog(this))->show(); }
 void MainWin::plotDialog() { (new PlotDialog(this))->show(); }
 void MainWin::worksheetDialog() { (new WorksheetDialog(this))->show(); }
 void MainWin::legendDialog() { (new LegendDialog(this))->show(); }
+void MainWin::settingsDialog(){ (new SettingsDialog(this))->show(); }
 /******************** dialogs end *****************************/
 
 void MainWin::addSet(Set *set, int sheet, PlotType ptype) {
@@ -318,7 +358,6 @@ void MainWin::addSet(Set *set, int sheet, PlotType ptype) {
 			}
 		}
 	}
-	
+
 	updateGUI();
 }
-
