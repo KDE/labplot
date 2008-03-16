@@ -26,6 +26,11 @@ LabPlot 2.0.0:	(see also WISHLIST)
 *************
 -> start a new project and add features step by step
 
+use the "usual" c++ naming convention:
+http://techbase.kde.org/index.php?title=Policies/Library_Code_Policy
+"Class names starts with a capital K. The rest is in camel case.
+Function names starts with a lower case, but the first letter of each successive word is capitalized."
+
 BUGS:
 	Import dialog : set "OK" as default button
 	Import dialog : not resized if options hidden
@@ -37,6 +42,7 @@ BUGS:
 
 TODO :
 ******
+	
 -------------------------------------------------------------------------
 	* updateGUI() when closing a sheet, changing active sheet
 	* create parser.tab.c with cmake
@@ -61,16 +67,18 @@ XX	* add function to spreadsheet
 	* dialogs
 		* SettingsDialog		Alexander
 		* AxesDialog			Alexander
-		* LegendDialog
-		* PlotDialog
-		* WorksheetDialog
-		* dataset dialog
-		* title dialog : saveSettings
-		* FunctionDialog
+		* LegendDialog		Alexander
+		* PlotDialog			Alexander
+		* WorksheetDialog	Alexander
+		* dataset dialog		Alexander
+		* title dialog : saveSettings	Alexander
+		* FunctionDialog		Alexander
 			style/symbol
 			update sheetcb after apply
 			other plot types
 			save/load settings
+		port RichTextWidget and use it	Alexander
+		figure out how to use KDE4-widgets (e.g. KFontChooser) in designer	Alexander
 	* Print 
 		Worksheet::setupPrinter();
 	* Project explorer

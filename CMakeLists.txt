@@ -1,8 +1,12 @@
 project(LabPlot)
  
 find_package(KDE4 REQUIRED)
-include_directories( ${KDE4_INCLUDES} )
 
+add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+include_directories( ${KDE4_INCLUDES} )
+add_definitions( ${KDE4_DEFINITIONS} )
 add_definitions ('-DLVERSION=\"2.0.0.alpha1\"')
 
 ### GSL ######################################
@@ -88,12 +92,12 @@ IF(OPJ_LIBRARY)
 MESSAGE ("-- Found liborigin library: ${OPJ_LIBRARY}" )
 ELSE(OPJ_LIBRARY)
 MESSAGE ("-- System OPJ library not found! Using included version." )
-add_subdirectory(liborigin)
-SET(OPJ_LIBRARY "-L../liborigin/lib/ -lorigin")
+# add_subdirectory(liborigin)
+SET(OPJ_LIBRARY "-L../liborigin -lorigin")
 ENDIF(OPJ_LIBRARY)
 ##############################################
 
+
 add_subdirectory(src)
- 
-install( FILES src/LabPlotui.rc labplot.png
-         DESTINATION  ${DATA_INSTALL_DIR}/LabPlot )
+
+install( FILES src/LabPlotui.rc labplot.png DESTINATION  ${DATA_INSTALL_DIR}/LabPlot )
