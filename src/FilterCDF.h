@@ -3,8 +3,8 @@
 #ifndef FILTERCDF_H
 #define FILTERCDF_H
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 #ifdef HAVE_CDF
 #include <cdf.h>
@@ -14,29 +14,29 @@ class FilterCDF
 {
 public:
 	FilterCDF(QString filename=0);
-	bool fileOK() { return fileok; }
+	bool fileOK() const { return fileok; }
 #ifdef HAVE_CDF
 	QString version();
 	QString copyright();
-	long NDims() { return ndims; }
-	QString Maj();
-	QString Compression();
-	long MaxRec() { return maxrec; }
-	long NVars() { return nvars; }
-	long NAtts() { return natts; }
-	QString Att(int aid);			 	// get attribute aid
-	QString Var(int varid);				// get variable varid description
-	QString VarName(int varid);			// get variable varid name 
-	long VarLen(QString name);
-	QStringList DataString(int varid);		// data info
-	double Data(QString varname, int i);
+	long NDims() const { return ndims; }
+	QString Maj() const;
+	QString Compression() const;
+	long MaxRec() const { return maxrec; }
+	long NVars() const { return nvars; }
+	long NAtts() const { return natts; }
+	QString Att(int aid) const;			 	// get attribute aid
+	QString Var(int varid) const;				// get variable varid description
+	QString VarName(int varid) const;			// get variable varid name 
+	long VarLen(QString name) const;
+	QStringList DataString(int varid) const;		// data info
+	double Data(QString varname, int i) const;
 	
-	QString Comp(int c);
-	QString Enc(int e);
+	QString Comp(int c) const;
+	QString Enc(int e) const;
 protected:
-	QString Type(int t);
-	bool isZvar(int varid);
-	bool isZvar(QString varname);
+	QString Type(int t) const;
+	bool isZvar(int varid) const;
+	bool isZvar(QString varname) const;
 	double Value(void *value,long type);
 #endif
 private:

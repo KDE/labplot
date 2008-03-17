@@ -1,4 +1,5 @@
 make clean
 rm -rf CMakeFiles CMakeTmp src/CMakeFiles
 rm -f Makefile CMakeCache.txt cmake_install.cmake cmake_uninstall.cmake install_manifest.txt
-rm -f src/LabPlot src/LabPlot.shell src/moc_* src/LabPlot_automoc.cpp src/LabPlot_automoc.cpp.files src/cmake_install.cmake
+rm -f src/LabPlot_automoc.cpp src/LabPlot_automoc.cpp.files src/cmake_install.cmake
+rm -f src/LabPlot src/LabPlot.shell src/moc_* src/parser.tab.c

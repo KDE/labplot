@@ -35,7 +35,7 @@ Plot::Plot()
 }
 
 //! build the tic label string according to atlf
-QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) {
+QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) const {
 	QString label;
 
 	switch(atlf) {

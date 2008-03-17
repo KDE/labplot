@@ -16,10 +16,10 @@ public:
 	~Graph2D();
 	Graph2D *Clone();		// clone this graph
 */
-	Range getRange(int i) { return range[i]; }
+	Range getRange(int i) const { return range[i]; }
 	void setRange(Range r[2]) { range[0]=r[0]; range[1]=r[1]; }
 
-	Point *Data() { return data; }
+	Point *Data() const { return data; }
 //	void setData(Point *d) { data = d; }
 /*	QStringList Info();	
 	void save(QTextStream *t, QProgressDialog *progress);

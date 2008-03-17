@@ -26,17 +26,17 @@ public:
 	void openGraphXML(QDomElement e);
 	QString Name() { return name; }
 */
-	SetType Type() { return type; }
-	Label* getLabel() { return label; }
+	SetType Type() const { return type; }
+	Label* getLabel() const { return label; }
 //	void setLabel(Label* l) { label=l; }
 /*	LSource Source() { return source; }
 	void setSource(LSource s) { source=s; }
 	int ReadAs() { return readas; }
 	void setReadAs(int r) { readas = r; }
 	PType Type() { return type; }
-*/	Style *getStyle() { return style; }
+*/	Style *getStyle() const { return style; }
 	void setStyle(Style *s) { style = s; }
-	Symbol *getSymbol() { return symbol; }
+	Symbol *getSymbol() const { return symbol; }
 	void setSymbol(Symbol *s) { symbol = s; }
 
 	ACCESS(int, number, Number);

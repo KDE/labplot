@@ -9,29 +9,21 @@
 
 #include "Spreadsheet.h"
 #include "MainWin.h"
-#ifdef TABLEVIEW
 #include "TableModel.h"
-#endif
 #include "ColumnDialog.h"
 #include "pixmaps/pixmap.h"
 #include "column.h"
 
-Spreadsheet::Spreadsheet(MainWin *m)
-#ifdef TABLEVIEW
-	:QTableView(), mw(m)
-#else
-	:QTableWidget(), mw(m)
-#endif
+Spreadsheet::Spreadsheet(MainWin *mw)
+	:QTableView(), mw(mw)
 {
 	kdDebug()<<"Spreadsheet()"<<endl;
 	type = SPREADSHEET;
+	setModel(new TableModel());
+
 	setColumnCount(2);
 	setRowCount(100);
 	setSortingEnabled(false);
-	
-#ifdef TABLEVIEW
-	setModel(new TableModel());
-#endif
 	
 	resetHeader();
 	
@@ -77,6 +69,11 @@ Spreadsheet::Spreadsheet(MainWin *m)
 */
 }
 
+Spreadsheet::~Spreadsheet() {
+	mw->updateGUI();
+	delete model();
+}
+
 void Spreadsheet::contextMenuEvent(QContextMenuEvent *) {
 	QMenu *menu = new QMenu(this);
 	Menu(menu);
@@ -108,6 +105,9 @@ void Spreadsheet::Menu(QMenu *menu) {
 	action = new KAction(KIcon("select"),i18n("Set row count"),this);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),SLOT(setRowNumber()));
+	action = new KAction(KIcon("select"),i18n("Add column"),this);
+	menu->addAction(action);
+	connect(action, SIGNAL(triggered()),SLOT(addColumn()));
 	action = new KAction(KIcon("select"),i18n("Column properties"),this);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),SLOT(setProperties()));
@@ -133,9 +133,19 @@ void Spreadsheet::setRowNumber(int row) {
 	if(row<=0)
 		row = QInputDialog::getInteger(this,"LabPlot", i18n("Row count : "), rowCount(), 1, INT_MAX, 1, &ok);
 
-	if(ok && row>0) {
+	if(ok && row>0)
 		setRowCount(row);
-	}
+}
+
+QString Spreadsheet::text(int row, int col) const {
+//	kdDebug()<<"Spreadsheet::text("<<row<<col<<")"<<endl;
+	QModelIndex index=model()->index(row,col);
+	return model()->data(index).toString();
+}
+
+void Spreadsheet::setText(int row, int col, QString text) {
+	QModelIndex index=model()->index(row,col);
+	model()->setData(index,text);
 }
 
 void Spreadsheet::setNotes(QString t) {
@@ -148,22 +158,11 @@ void Spreadsheet::setNotes(QString t) {
 	notes = t;
 }
 
-QString Spreadsheet::columnHeader(int col) {
+QString Spreadsheet::columnHeader(int col) const {
 //	kdDebug()<<"Spreadsheet::columnheader("<<col<<")"<<endl;
 	if(col<0) col=0; 
 	return model()->headerData(col,Qt::Horizontal).toString(); 
 } 
-
-void Spreadsheet::setColumnHeader(int col, QString name) {
-#ifndef TABLEVIEW
-	QTableWidgetItem *item = horizontalHeaderItem(col);
-	if(item==0) {
-		item = new QTableWidgetItem();
-		setHorizontalHeaderItem(col,item);
-	}
-	item->setText(name);
-#endif
-}
 
 void Spreadsheet::setProperties(QString label, int type, int format) {
 	if(label.isEmpty())
@@ -172,8 +171,8 @@ void Spreadsheet::setProperties(QString label, int type, int format) {
 		setColumnHeader(currentColumn(),label + ' ' + '{'+columnformatitems[format]+'}' + ' ' + '['+columntypeitems[type]+']');
 }
 
-void Spreadsheet::resetHeader() {
-	for (int col=0;col<columnCount();col++) {
+void Spreadsheet::resetHeader(int from) {
+	for (int col=from;col<columnCount();col++) {
 		QString l;
 		if(col==0)
 			l=(QChar(col+65)+' '+'{'+columnformatitems[0]+'}'+' '+'['+columntypeitems[0]+']');
@@ -185,7 +184,7 @@ void Spreadsheet::resetHeader() {
 	}
 }
 
-QString Spreadsheet::columnName(int col) {
+QString Spreadsheet::columnName(int col) const {
 	QString label = columnHeader(col);
 	label.remove(QRegExp(" \\{.+\\]"));
 
@@ -201,7 +200,7 @@ void Spreadsheet::setColumnName(int col, QString name) {
 }
 
 
-QString Spreadsheet::columnType(int col) {
+QString Spreadsheet::columnType(int col) const {
 	QString header = columnHeader(col);
 	header.remove(QRegExp(".*\\["));
 	header.remove(QRegExp("\\].*"));
@@ -216,7 +215,7 @@ void Spreadsheet::setColumnType(int col, QString type) {
 	setColumnHeader(col, label);
 }
 
-QString Spreadsheet::columnFormat(int col) {
+QString Spreadsheet::columnFormat(int col) const {
 	QString header = columnHeader(col);
 	header.remove(QRegExp(".*\\{"));
 	header.remove(QRegExp("\\}.*"));
@@ -231,17 +230,14 @@ void Spreadsheet::setColumnFormat(int col, QString format) {
 	setColumnHeader(col, label);
 }
 
-int Spreadsheet::filledRows(int col) {
-//	kdDebug()<<"Spreadsheet::filledRows("<<col<<")"<<endl;
+int Spreadsheet::filledRows(int col) const {
+	kdDebug()<<"Spreadsheet::filledRows("<<col<<")"<<endl;
 	if(col < 0 || col > columnCount())
 		return -1;
 
 	for(int row=rowCount()-1;row>=0;row--) {
-#ifndef TABLEVIEW
-		QTableWidgetItem *it = item(row,col);
-		if (it && !it->text().isEmpty())
+		if(!text(row,col).isEmpty())
 			return row;
-#endif
 	}
 	return 0;
 }
@@ -259,7 +255,7 @@ void Spreadsheet::addSet(Set *s) {
 
 	if(columnCount()<columns)
 		setColumnCount(columns);
-// add empty columns if necessary
+	// add empty columns if necessary
 	for(int i=0;i<columns;i++) {
 		if(filledRows(columnCount()-columns)>1)
 			setColumnCount(columnCount()+1);
@@ -268,22 +264,20 @@ void Spreadsheet::addSet(Set *s) {
 	if(s->Number() > rowCount())
 		setRowCount(s->Number());
 
-	// TODO : add data
-#ifndef TABLEVIEW
-/* OLD :
-	Point *data = g->Data();
-	table->horizontalHeader()->setLabel(table->numCols()-2 , QString( "A ")+i18n("{double}")+" [X]");
-	table->horizontalHeader()->setLabel(table->numCols()-1 , QString( "B ")+i18n("{double}")+" [Y]");
-	for(int i=0;i<g->Number();i++) {
-		LTableItem *xitem = new LTableItem( table, QTableItem::OnTyping,QString::number(data[i].X(),'g',15));
-		LTableItem *yitem = new LTableItem( table, QTableItem::OnTyping,QString::number(data[i].Y(),'g',15));
-		if(data[i].Masked()) {
-			xitem->setMasked();
-			yitem->setMasked();
-		}
-		table->setItem(i, table->numCols()-2, xitem);
-		table->setItem(i, table->numCols()-1, yitem);
-	}
+	// add data
+	switch(s->Type()) {
+	case SET2D: {
+		Point *data = ((Set2D *)s)->Data();
+		for(int i=0;i<s->Number();i++) {
+			setText(i,columnCount()-2,QString::number(data[i].X(),'g',10));
+			setText(i,columnCount()-1,QString::number(data[i].Y(),'g',10));
+/*			if(data[i].Masked()) {
+				xitem->setMasked();
+				yitem->setMasked();
+			}
 */
-#endif
+		}
+		};break;
+	default: break;
+	}
 }

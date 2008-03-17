@@ -18,8 +18,8 @@ class Plot {
 public:
 	Plot();
 	virtual ~Plot() {}
-	PlotType Type() { return type; }
-	Label *Title() { return title; }
+	PlotType Type() const { return type; }
+	Label *Title() const { return title; }
 	void addSet(Set *s) { set.append(s); }
 	virtual void setRange(Range *,int i) = 0;
 	Range* getRange(int i) { return &range[i];}
@@ -30,7 +30,7 @@ public:
 	virtual void setActRanges(Range *) = 0;
 	Range* ActRanges() { return actrange;}
 	virtual void draw(QPainter *p, int w, int h) = 0;
-	QString TicLabel(int atlf, int prec, QString dtf, double value);
+	QString TicLabel(int atlf, int prec, QString dtf, double value) const;
 	void resetRanges();
 	void drawStyle(QPainter *p, Style *style, Symbol *symbol, QVector<QPoint> pa, int xmin, int xmax, int ymin, int ymax);
 protected:

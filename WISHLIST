@@ -43,13 +43,6 @@ GUI/Application:
 		* format in spreadsheet	(show as ..., convert isodate->double, double->isodate, ....)
 		U mark column if right clicked on header
 			-> too complicated
-	U speed/memory optimization :
-		U LTable	: QString **data
-			* import data
-			* (see Roberts mail (AirLineFit))
-			old : >5min, 395M  new : 1:03 min, 102M
-			* fill random/row number
-			* check all functions !
 	* get the index of the double clicked object (for object dialog list index)
 	* nicer dialogs
 		* exclusive buttongroups (enable/disable) when needed

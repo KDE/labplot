@@ -32,10 +32,10 @@ private:
 	KLineEdit *fieldsle;
 	KComboBox *formatcb, *byteordercb;
 	void setupGUI();
-	int startRow();
-	int endRow();
+	int startRow() const;
+	int endRow() const;
 	void importBinary(QIODevice *file, Spreadsheet *s);
-	double getBinaryValue(QDataStream *ds, BinaryFormat type);
+	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
 	void importASCII(QIODevice *file, Spreadsheet *s);
 	void importOPJ(QString filename);
 	int importHDF5(QString filename, Spreadsheet *s);

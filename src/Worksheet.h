@@ -16,12 +16,13 @@ class Worksheet: public QWidget
 {
 	Q_OBJECT
 public:
-	Worksheet(MainWin *mw);
-	SheetType sheetType() { return type; }
-	int plotCount() { return plot.count(); }
+	Worksheet(MainWin *m);
+	~Worksheet();
+	SheetType sheetType() const { return type; }
+	int plotCount() const { return plot.count(); }
 	void print(QString file=0);
 	void addSet(Set *set, PlotType ptype);
-	Plot *getActivePlot() { return plot[api]; }
+	Plot *getActivePlot() const { return plot[api]; }
 private:
 	MainWin *mw;
 	SheetType type;			// needed for mw->active{Work,Spread}sheet()

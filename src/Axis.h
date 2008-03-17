@@ -19,7 +19,7 @@ public:
 	void centerY(int plotsize, double center);	//!< center label on y axis
 
 // TODO	void setLabel(Label *l);
-	Label *getLabel() { return label; }
+	Label *getLabel() const { return label; }
 	ACCESS(bool, enabled, Enabled);
 	ACCESS(TScale, scale, Scale);
 	ACCESS(double, scaling, Scaling);

@@ -54,4 +54,8 @@ kde4_add_executable(LabPlot ${LabPlot_SRCS})
 INCLUDE_DIRECTORIES(../liborigin)
 target_link_libraries(LabPlot ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${CDF_LIBRARY} ${OPJ_LIBRARY})
 
+add_custom_command (OUTPUT parser.tab.c
+                   COMMAND ${YACC_EXECUTABLE} ARGS -b parser parser.y
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 install(TARGETS LabPlot DESTINATION ${BIN_INSTALL_DIR})

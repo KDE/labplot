@@ -26,28 +26,17 @@ public:
 	bool insideZ(int x0, int y0, Point pos, Point size, int w, int h);	// for 3d y-axes
 */
 	void setPosition(double X, double Y) { x=X; y=Y; }
-	double X() { return x;}
-	double Y() { return y;}
-	void setX(double X) { x=X; }
-	void setY(double Y) { y=Y; }
+	ACCESS(double,x,X);
+	ACCESS(double,y,Y);
 
-	QString Text() { return text; }		
-	QString simpleText();		// all html tags removed from title		
-	void setText(QString t) { text = t; }
-	void setColor(QColor c) { color = c; }
-	void setColor(QString c) { color = QColor(c); }
-	QColor Color() { return color; }
-	void setBackgroundColor(QColor c) { bgcolor = c; }
-	void setBackgroundColor(QString c) { bgcolor = QColor(c); }
-	QColor BackgroundColor() { return bgcolor; }
-	void setFont(QFont f) { font = f; }
-	QFont Font() { return font; }
-	void setBoxed(bool b=true) { boxed = b; }
-	bool Boxed() { return boxed; }
-	void setTransparent(bool t) { transparent = t; }
-	bool Transparent() { return transparent; }
-	double Rotation() { return rotation; }
-	void setRotation(double r) { rotation = r; }
+	ACCESS(QString,text,Text);
+	QString simpleText() const;		// all html tags removed from title		
+	ACCESS(QColor, color, Color);
+	ACCESS(QColor, bgcolor, BackgroundColor);
+	ACCESS(QFont,font,Font);
+	ACCESSFLAG(boxed,Boxed);
+	ACCESSFLAG(transparent,Transparent);
+	ACCESS(double,rotation,Rotation);
 /*	bool isTeXLabel() { return is_texlabel; }
 	void setTeXLabel(bool t) { is_texlabel=t; }
 	int Length();						// calculate length of richtext

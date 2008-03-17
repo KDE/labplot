@@ -242,7 +242,7 @@ void MainWin::SpreadsheetMenu() {
 	}
 }
 
-int MainWin::activeSheetIndex() {
+int MainWin::activeSheetIndex() const {
 	QList<QMdiSubWindow *> wlist = mdi->subWindowList();
 	for (int i=0; i<wlist.size(); i++)
 		if(wlist.at(i) == mdi->activeSubWindow())
@@ -275,7 +275,7 @@ Worksheet* MainWin::newWorksheet() {
         return w;
 }
 
-Spreadsheet* MainWin::activeSpreadsheet() {
+Spreadsheet* MainWin::activeSpreadsheet() const {
 	kdDebug()<<"MainWin::activeSpreadsheet()"<<endl;
 	QMdiSubWindow *subWindow = mdi->activeSubWindow();
 	if(subWindow != 0) {
@@ -286,7 +286,7 @@ Spreadsheet* MainWin::activeSpreadsheet() {
 	return 0;
 }
 
-Worksheet* MainWin::activeWorksheet() {
+Worksheet* MainWin::activeWorksheet() const {
 	kdDebug()<<"MainWin::activeWorksheet()"<<endl;
 	QMdiSubWindow *subWindow = mdi->activeSubWindow();
 	if(subWindow != 0) {

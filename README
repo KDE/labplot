@@ -2,3 +2,15 @@ compile :
 
 # ./build
 # make install
+
+clean-up:
+# ./clean
+
+#############
+TableView/Model vs. TableWidget:
+
+import data :
+data		time TV	memory TV	time TW	memory TW
+3x99731	ASCII	4s	17,5m		7s	41m
+2x10^6	ASCII	27s	90m		50s	262m
+2x10^6 binary	23s	114m		45s	285m

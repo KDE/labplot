@@ -10,6 +10,7 @@
 	void set ## method(const type value) { var=value; }
 #define ACCESSFLAG(var, method) \
 	bool method ## Enabled() const { return var; } \
+	bool is ## method() const { return var; } \
 	void enable ## method(const bool value=true) { var=value; }
 
 #endif // DEFS_H

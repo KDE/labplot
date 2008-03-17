@@ -202,14 +202,14 @@ void ImportDialog::toggleBinary(bool checked) {
 	byteordercb->setVisible(checked);
 }
 
-int ImportDialog::startRow() {
+int ImportDialog::startRow() const {
 	int row=0;
 	if(!startle->text().isEmpty())
 		row = startle->text().toInt()-1;
 	return row;
 }
 
-int ImportDialog::endRow() {
+int ImportDialog::endRow() const {
 	int row=INT_MAX;
 	if(!endle->text().isEmpty())
 		row = endle->text().toInt()-1;
@@ -374,20 +374,14 @@ int ImportDialog::importHDF5(QString filename, Spreadsheet *s) {
 		s->setRowCount(rows);
 		s->setColumnCount(cols);
 		s->resetHeader();
-		for (int c=0;c<cols;c++) {
-			QString colname = hdf5.columnName(i,c);
+		for (int col=0;col<cols;col++) {
+			QString colname = hdf5.columnName(i,col);
 			if(colname.length()<1)
-				colname = QChar(c+65);
-			s->setColumnName(c,colname);
+				colname = QChar(col+65);
+			s->setColumnName(col,colname);
 
-		 	for ( int j=0; j<rows; j++ ) {
-				QTableWidgetItem *item = s->item(j,c);
-				if(item==0) {
-					item = new QTableWidgetItem();
-     					s->setItem(j,c, item);
-				}
-				item->setText(QString::number(hdf5.Data(i,j,c),'g',10));
-			}
+		 	for ( int j=0; j<rows; j++ )
+				s->setText(j,col);
 		}
 	}
 
@@ -421,14 +415,9 @@ int ImportDialog::importNETCDF(QString filename, Spreadsheet *s) {
 
 		if (j==startRow() || s->rowCount()<rows)
 			s->setRowCount(rows);
-		for ( int i=0; i<rows; i++ ) {
-			QTableWidgetItem *item = s->item(i,j);
-			if(item==0) {
-				item = new QTableWidgetItem();
-     				s->setItem(i,j, item);
-			}
-			item->setText(QString::number(ncf.Data(name,i),'g',10));
-		}
+		for ( int i=0; i<rows; i++ )
+			s->setText(i,j,QString::number(ncf.Data(name,i),'g',10));
+
 		if (j>endRow())
 			break;
 	}
@@ -464,14 +453,9 @@ int ImportDialog::importCDF(QString filename, Spreadsheet *s) {
 
 		s->setColumnName(j-startRow(),name);
 
-		for (int i=0;i<rows;i++) {
-			QTableWidgetItem *item = s->item(i,j);
-			if(item==0) {
-				item = new QTableWidgetItem();
-     				s->setItem(i,j, item);
-			}
-			item->setText(QString::number(cdf.Data(name,i),'g',10));
-		}
+		for (int i=0;i<rows;i++)
+			s->setText(i,j,QString::number(cdf.Data(name,i),'g',10));
+
 		if (j>endRow())
 			break;
 	}
@@ -502,31 +486,24 @@ void ImportDialog::importBinary(QIODevice *file, Spreadsheet *s) {
 	for (int j=0;j<fields*startRow();j++)
 		getBinaryValue(&ds,(BinaryFormat) formatcb->currentIndex());
 	while(!ds.atEnd()) {
-		if (row%5000==0) {
+		if (row%50000==0) {
 			progress.setValue(file->pos());
-			s->setRowCount(row+5000);
+			s->setRowCount(row+50000);
 			if (progress.wasCanceled()) {
 				kdDebug()<<"WARNING: Import canceled()"<<endl;
              			break;
 			}
 		}
-#ifndef TABLEVIEW
-		 for ( int i=0; i<fields; i++ ) {
-			QTableWidgetItem *item = s->item(row,i);
-			if(item==0) {
-				item = new QTableWidgetItem();
-     				s->setItem(row,i, item);
-			}
-			item->setText(QString::number(getBinaryValue(&ds,(BinaryFormat) formatcb->currentIndex()),'g',10));
-		}
-#endif
+		 for ( int i=0; i<fields; i++ )
+			s->setText(row, i, QString::number(getBinaryValue(&ds,(BinaryFormat) formatcb->currentIndex()),'g',10));
+
 		row++;
 	}
 	s->setRowCount(row);
 	s->setUpdatesEnabled(true);
 }
 
-double ImportDialog::getBinaryValue(QDataStream *ds, BinaryFormat type) {
+double ImportDialog::getBinaryValue(QDataStream *ds, BinaryFormat type) const {
 	//kdDebug()<<"Dialog::getBinaryValue() : Type = "<<type<<endl;
 	double value=0;
 
@@ -584,9 +561,9 @@ void ImportDialog::importASCII(QIODevice *file, Spreadsheet *s) {
 		actrow = row-startRow();
 		if (headercb->isChecked()) actrow--;
 
-		if (row%5000==0) {
+		if (row%50000==0) {
 			progress.setValue(file->pos());
-			s->setRowCount(actrow+5000);
+			s->setRowCount(actrow+50000);
 			if (progress.wasCanceled()) {
 				kdDebug()<<"WARNING: Import canceled()"<<endl;
              			break;
@@ -622,16 +599,8 @@ void ImportDialog::importASCII(QIODevice *file, Spreadsheet *s) {
 				s->setColumnName(i,oneline.at(i));
 		}
 		else {
-#ifndef TABLEVIEW
-		 	for ( int i=0; i<oneline.size(); i++ ) {
-				QTableWidgetItem *item = s->item(actrow,i);
-				if(item==0) {
-					item = new QTableWidgetItem();
-     					s->setItem(actrow,i, item);
-				}
-				item->setText(oneline.at(i));
-			}
-#endif
+		 	for ( int i=0; i<oneline.size(); i++ )
+				s->setText(actrow, i, oneline.at(i));
 		}
 		if(row>endRow())
 			break;

@@ -15,12 +15,19 @@ class MainWin : public KXmlGuiWindow
 	Q_OBJECT
 public:
 	MainWin(QWidget *parent=0);
-	int activeSheetIndex();
-	QMdiArea* getMdi() { return mdi; }
-	Spreadsheet* activeSpreadsheet();
-	Worksheet* activeWorksheet();
-	Project* getProject() { return project; }
+	int activeSheetIndex() const;
+	QMdiArea* getMdi() const { return mdi; }
+	Spreadsheet* activeSpreadsheet() const;
+	Worksheet* activeWorksheet() const;
+	Project* getProject() const { return project; } 
+	void setProject(Project *p) { project=p; } 
+	int activeSheetIndex() const;
+	QMdiArea* getMdi() const { return mdi; }
+	Spreadsheet* activeSpreadsheet() const;
+	Worksheet* activeWorksheet() const;
+	Project* getProject() const { return project; }
 	void setProject(Project *p) { project=p; }
+	void updateGUI();		//!< update GUI of main window
 	void addSet(Set *g, int sheet, PlotType ptype);
 private:
 	QMdiArea *mdi;
@@ -29,7 +36,6 @@ private:
 	KAction *spreadaction;
 	void setupActions();
 	bool warnModified();
-	void updateGUI();		//!< update GUI of main window
 	void updateSheetList();		//!< creates dynamic sheet list menu
 	void updateSetList();		//!< creates dynamic set list menu
 public slots:

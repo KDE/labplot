@@ -40,20 +40,25 @@ BUGS:
 	Import dialog : compressed data shows no progress
 	config settings not always used ? (function dialog)
 	message boxes sometimes hang the application
-	progress dialog can not be canceled
+	progress in function dialog can not be canceled
 
 TODO :
 ******
 	
 -------------------------------------------------------------------------
-	* updateGUI() when closing a sheet, changing active sheet
-	* create parser.tab.c with cmake
-		"bison parser.y"
-	* use numinputs in import dialog (when ok)
+General :
 	* check functions.h, constants.h
-XX		* use GSL
+		* use GSL
 		* GSL_VERSION
+	* use newest liborigin
+-------------------------------------------------------------------------
+Pending :
+	* labelWidget(): title dialog, function dialog, axes dialog
+	* Print 
+		Worksheet::setupPrinter();
 	* Import Dialog
+		* use numinputs when possible
+		* warn if selected file doesn't exist when apply
 		Options
 			same first column
 		Formats
@@ -62,10 +67,6 @@ XX		* use GSL
 			audio
 			database (kexi ?)
 		file info dialog
-XX	* labelWidget(): title dialog, function dialog, axes dialog
-XX	* Use QTableView with own model (QAbstractTableModel) for a faster/smaller Spreadsheet
-XX	* add function to spreadsheet
-	* Use const declarations when possible
 	* dialogs
 		* SettingsDialog		Alexander
 		* AxesDialog			Alexander
@@ -79,19 +80,22 @@ XX	* add function to spreadsheet
 			update sheetcb after apply
 			other plot types
 			save/load settings
+-------------------------------------------------------------------------
+more things :
+=======
 		port RichTextWidget and use it	Alexander
 		figure out how to use KDE4-widgets (e.g. KFontChooser) in designer	Alexander
 	* Print 
 		Worksheet::setupPrinter();
 	* Project explorer
-	* analysis functions
--------------------------------------------------------------------------
 	Worksheet
 		draw other symbols
 		draw other styles
 	Spreadsheet 
-		column dialog on double click
 		new column on click (empty header)
+		column dialog on double click
+		mask data (TableModel ?)
+		TableModel selections
 		Menu (also in MainWin)
 			add column
 			export dialog
@@ -116,8 +120,9 @@ XX	* add function to spreadsheet
 		open, save, save as
 		dynamic menus (sheets + data sets)
 	View: autoscale, zoom, etc.
+	analysis functions
 	Scripting (Workbench ?)
-	* add Doxygen style documentations
+	add Doxygen style documentations
 	...
 		
 

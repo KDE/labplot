@@ -1,8 +1,12 @@
 
 DIR=LabPlot-2.0.0
 
+#######################
 cd
+cd $DIR
+./clean
 
+cd -
 tar zcf "$DIR.tar.gz" $DIR
 
 scp "$DIR.tar.gz" linux:/sw/

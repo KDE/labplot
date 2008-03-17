@@ -209,7 +209,7 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 			QVector<QPoint> pa;
 			int pointindex=0;
 			for(int j=0;j<s->Number();j++) {
-				if(d[j].Masked() == true)
+				if(d[j].isMasked() == true)
 					continue;
 
 				// TODO

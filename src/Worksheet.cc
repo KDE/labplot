@@ -7,10 +7,11 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include "Worksheet.h"
+#include "MainWin.h"
 #include "Plot2DSimple.h"
 
-Worksheet::Worksheet(MainWin *mw)
-	:QWidget(), mw(mw)
+Worksheet::Worksheet(MainWin *m)
+	:QWidget(), mw(m)
 {
 	kdDebug()<<"Worksheet()"<<endl;
 	type = WORKSHEET;
@@ -24,6 +25,10 @@ Worksheet::Worksheet(MainWin *mw)
 	int w = conf.readEntry("Width",600);
 	int h = conf.readEntry("Height",400);
 	resize(w,h);
+}
+
+Worksheet::~Worksheet() {
+	mw->updateGUI();
 }
 
 void Worksheet::paintEvent(QPaintEvent *) {

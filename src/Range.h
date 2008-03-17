@@ -10,7 +10,7 @@ class Range
 public:
 	Range(double min=0, double max=0);
 	void setRange(double rmin=0, double rmax=1) {min=rmin; max=rmax; }
-	double Diff() { return max-min; }
+	double Diff() const { return max-min; }
 	ACCESS(double, min, Min);
 	ACCESS(double, max, Max);
 	

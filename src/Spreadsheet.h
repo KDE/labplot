@@ -1,62 +1,60 @@
 #ifndef SPREADSHEET_H
 #define SPREADSHEET_H
 
-//#define TABLEVIEW
-
 #include <QWidget>
 #include <QMenu>
-#ifdef TABLEVIEW
 #include <QTableView>
 #include "TableModel.h"
-#else
-#include <QTableWidget>
-#endif
 
 #include "Set.h"
 #include "sheettype.h"
 
 class MainWin;
 
-#ifdef TABLEVIEW
 class Spreadsheet: public QTableView
-#else
-class Spreadsheet: public QTableWidget
-#endif
 {
 	Q_OBJECT
 public:
 	Spreadsheet(MainWin *m);
-	SheetType sheetType() { return type; }
-	void resetHeader();
+	~Spreadsheet();
+	SheetType sheetType() const { return type; }
+	void resetHeader(int from=0);
 	void addSet(Set *set);
-	QString columnName(int col);
+	QString columnName(int col) const;
 	void setColumnName(int col, QString name);
-	QString columnType(int col);
+	QString columnType(int col) const;
 	void setColumnType(int col, QString name);
-	QString columnFormat(int col);
+	QString columnFormat(int col) const;
 	void setColumnFormat(int col, QString name);
-#ifdef TABLEVIEW
+
+	int rowCount() const { return model()->rowCount(); }
+	void setRowCount(int count) { ((TableModel *)model())->setRowCount(count); }
+	int columnCount() const { return model()->columnCount(); }
+	void setColumnCount(int count) {
+		int oldcount=columnCount();
+		((TableModel *)model())->setColumnCount(count); 
+		resetHeader(oldcount);
+	}
+	QString text(int row, int col) const;
+	void setText(int row, int col, QString text);
 // TODO
-	int currentColumn() { return 0; }
-	int rowCount() { return model()->rowCount(); }
-	void setRowCount(int c) { }
-//	void setRowCount(int c) { ((TableModel *)model())->setRowCount(c); }
-	int columnCount() { return model()->columnCount(); }
-	void setColumnCount(int c) { }
-//	void setColumnCount(int c) { ((TableModel *)model())->setColumnCount(c); }
-#endif
+	int currentRow() const { return 0;}
+	int currentColumn() const { return 0; }
 private:
 	MainWin *mw;
 	SheetType type;	// needed for mw->active{Work,Spread}sheet()
 	QString notes;
 	void contextMenuEvent(QContextMenuEvent *);
-	QString columnHeader(int col);
-	void setColumnHeader(int col, QString name); 
-	int filledRows(int col);	//!< returns number of filled rows in column col
+	QString columnHeader(int col) const;
+	void setColumnHeader(int col, QString name) {
+		model()->setHeaderData(col,Qt::Horizontal,name);
+	}
+	int filledRows(int col) const;	//!< returns number of filled rows in column col
 public slots:
 	void Menu(QMenu *menu);
 	void setTitle(QString title="");
 	void setRowNumber(int row=0);
+	void addColumn() { setColumnCount(columnCount()+1); }
 	QString Notes() const { return notes; }	
 	void setNotes(QString notes="");
 	void setProperties(QString label=0, int type=1, int format=0);	

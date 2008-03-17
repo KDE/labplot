@@ -1,3 +1,9 @@
+2008-03-15	TableModel : insert/remove rows/cols, header
+		Spreadsheet: insert data from import/function dialog
+		switched to TableModel
+		use const when possible
+		add function to spreadsheet
+		generate parser.tab.c with cmake
 2008-03-08	use ACCESS macro for standard methods
 		MainWin::modified -> Project::changed
 		started with own TableModel for faster Spreadsheet

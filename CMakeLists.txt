@@ -9,6 +9,11 @@ include_directories( ${KDE4_INCLUDES} )
 add_definitions( ${KDE4_DEFINITIONS} )
 add_definitions ('-DLVERSION=\"2.0.0.alpha1\"')
 
+FIND_PROGRAM(YACC_EXECUTABLE
+	NAMES yacc bison
+	PATHS /usr/bin /usr/local/bin
+	DOC "Yacc or Bison executable")
+
 ### GSL ######################################
 FIND_LIBRARY(GSL_LIBRARIES gsl
 	PATHS

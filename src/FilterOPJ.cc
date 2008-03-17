@@ -45,24 +45,17 @@ int FilterOPJ::import() {
 			spread->setColumnName(j,name.replace(QRegExp(".*_"),""));
 			spread->setColumnType(j,opj.colType(s,j));
 
-#ifndef TABLEVIEW
 			for (int i=0;i<opj.numRows(s,j);i++) {
 				double *v = (double *) opj.oData(s,j,i,true);
 
-				QTableWidgetItem *item = spread->item(i,j);
-				if(item==0) {
-					item = new QTableWidgetItem();
-     					spread->setItem(i,j, item);
-				}
 				if(strcmp(opj.colType(s,j),"LABEL")) {	// number
 					if(fabs(*v)>0 && fabs(*v)<2.0e-300)	// empty entry
 						continue;
-					item->setText(QString::number(*v));
+					spread->setText(i,j,QString::number(*v));
 				}
 				else					// label
-					item->setText(QString((char *) opj.oData(s,j,i)));
+					spread->setText(i,j,QString((char *) opj.oData(s,j,i)));
 			}
-#endif
 		}
 	}
 	// TODO
@@ -482,7 +475,7 @@ void FilterOPJ::setSymbolType(Symbol *symbol,int type) {
 	}
 }
 
-Qt::PenStyle FilterOPJ::translateOriginLineStyle(int linestyle) {
+Qt::PenStyle FilterOPJ::translateOriginLineStyle(int linestyle) const {
 	Qt::PenStyle style=Qt::SolidLine;
 
 	// TODO
@@ -510,7 +503,7 @@ Qt::PenStyle FilterOPJ::translateOriginLineStyle(int linestyle) {
 	return style;
 }
 
-QColor FilterOPJ::translateOriginColor(int color) {
+QColor FilterOPJ::translateOriginColor(int color) const {
 	QColor qcolor=Qt::black;
 	switch(color) {
 	case 0:
@@ -601,7 +594,7 @@ QString strreverse(const QString &str) { 	//QString reversing
 }
 
 
-QString FilterOPJ::parseOriginText(const QString &str) {
+QString FilterOPJ::parseOriginText(const QString &str) const {
 	QStringList lines=str.split("\n");
 	QString text="";
 	for(int i=0; i<lines.size(); ++i) {
@@ -612,7 +605,7 @@ QString FilterOPJ::parseOriginText(const QString &str) {
 	return text;
 }
 
-QString FilterOPJ::parseOriginTags(const QString &str) {
+QString FilterOPJ::parseOriginTags(const QString &str) const {
 	QString line=str;
 	//replace \l(...) and %(...) tags
 	// TODO
