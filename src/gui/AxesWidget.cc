@@ -1,59 +1,27 @@
 #include "AxesWidget.h"
+#include "LabelWidget.h"
 
 AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 
 	ui.setupUi(this);
 	plotType=PLOT2D;
 
-	//Populate the comboboxes
-	QFont symbol("Symbol", 15, QFont::Bold);
- 	ui.cbSmallGreekLetters->setFont(symbol);
-	for(int i=97;i<122;i++)
-		ui.cbSmallGreekLetters->addItem(QChar(i));
-
-	ui.cbBigGreekLetters->setFont(symbol);
-	for(int i=68;i<90;i++)
-		ui.cbBigGreekLetters->addItem(QChar(i));
-
-	ui.cbSymbolLetters->setFont(symbol);
- 	ui.cbSymbolLetters->addItem(QChar(34));
-	ui.cbSymbolLetters->addItem(QChar(36));
-	ui.cbSymbolLetters->addItem(QChar(39));
-	ui.cbSymbolLetters->addItem(QChar(64));
-	for(int i=160;i<255;i++)
-		ui.cbSymbolLetters->addItem(QChar(i));
-
 	//Validators
 	ui.leLowerLimit->setValidator( new QDoubleValidator(ui.leLowerLimit) );
 	ui.leUpperLimit->setValidator( new QDoubleValidator(ui.leUpperLimit) );
 	ui.leZeroOffset->setValidator( new QDoubleValidator(ui.leZeroOffset) );
 	ui.leScaleFactor->setValidator( new QDoubleValidator(ui.leScaleFactor) );
-	ui.leTitlePositionX->setValidator( new QDoubleValidator(ui.leTitlePositionX) );
-	ui.leTitlePositionY->setValidator( new QDoubleValidator(ui.leTitlePositionY) );
-	ui.leTitleRotation->setValidator( new QDoubleValidator(ui.leTitleRotation) );
 	ui.leMajorTicksNumber->setValidator( new QIntValidator(ui.leMajorTicksNumber) );
 	ui.leMinorTicksNumber->setValidator( new QIntValidator(ui.leMinorTicksNumber) );
-	ui.leTitleRotation->setValidator( new QDoubleValidator(ui.leTitleRotation) );
 
 	//Slots
 	connect( ui.cbAxes, SIGNAL(stateChanged(int)), this, SLOT(currentAxisChanged(int)) );
 
 	//"Title"-tab
-	connect( ui.cbTitlePosition, SIGNAL(currentIndexChanged(int)), this, SLOT(titlePositionChanged(int)) );
-	connect( ui.rbTitleFilling0, SIGNAL(toggled(bool)), this, SLOT( titleFillingChanged(bool)) );
-	connect( ui.rbTitleFilling1, SIGNAL(toggled(bool)), this, SLOT( titleFillingChanged(bool)) );
-//TODO ??? 	connect( ui.bTitleFillingColour, SIGNAL(clicked()), this, SLOT( titleFillingColourClicked()) );
-	connect( ui.bTitleFont, SIGNAL(clicked()), this, SLOT( titleFontClicked()) );
-	connect( ui.bTitleFontColour, SIGNAL(clicked()), this, SLOT( titleFontColourClicked()) );
-	connect( ui.chbTitleUseTex, SIGNAL(stateChanged(int)), this, SLOT(titleUseTexChanged(int)) );
-	connect( ui.bTitleTextBold, SIGNAL(clicked()), this, SLOT( titleFontBoldClicked()) );
-	connect( ui.bTitleTextItalic, SIGNAL(clicked()), this, SLOT( titleFontItalicClicked()) );
-	connect( ui.bTitleTextUnderline, SIGNAL(clicked()), this, SLOT( titleFontUnderlineClicked()) );
-	connect( ui.bTitleTextUp, SIGNAL(clicked()), this, SLOT( titleFontUpClicked()) );
-	connect( ui.bTitleTextDown, SIGNAL(clicked()), this, SLOT( titleFontDownClicked()) );
-	connect( ui.cbSmallGreekLetters, SIGNAL(activated(const QString &)), this, SLOT(insertSymbol(const QString &)));
-	connect( ui.cbBigGreekLetters, SIGNAL(activated(const QString &)), this, SLOT(insertSymbol(const QString &)));
-	connect( ui.cbSymbolLetters, SIGNAL(activated(const QString &)), this, SLOT(insertSymbol(const QString &)));
+	//create a labelwidget
+    QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+	LabelWidget* labelWidget=new LabelWidget(ui.tabTitle);
+    hboxLayout->addWidget(labelWidget);
 
 	//"Ticks"-tab
 	connect( ui.cbTicksStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(ticksStyleChanged(int)) );
@@ -320,89 +288,6 @@ void AxesWidget::currentAxisChanged(int const number){
 }
 
 //"General"-tab
-
-//"Title"-tab
-/*!
-	called if the current position of the title is changed in the combobox.
-	Enables/disables the lineedits for x- and y-coordinates if the "custom"-item is selected/deselected
-*/
-void AxesWidget::titlePositionChanged(int index){
-	if (index == ui.cbTitlePosition->count()-1 ){
-		ui.leTitlePositionX->setEnabled(true);
-		ui.leTitlePositionY->setEnabled(true);
-	}else{
-		ui.leTitlePositionX->setEnabled(false);
-		ui.leTitlePositionY->setEnabled(false);
-	}
-}
-
-/*!
-
-*/
-void AxesWidget::titleFillingChanged(bool){
-	if (ui.rbTitleFilling0->isChecked())
-		ui.bTitleFillingColour->setEnabled(false);
-	else
-		ui.bTitleFillingColour->setEnabled(true);
-}
-
-void AxesWidget::titleFillingColourClicked(){
-
-}
-
-void AxesWidget::titleFontClicked(){
-
-}
-
-void AxesWidget::titleFontColourClicked(){
-
-}
-
-void AxesWidget::titleUseTexChanged(int state){
-	if (state==Qt::Checked){
-		//use Tex-syntax
-		ui.frameTitleTextOptions->setEnabled(false);
-		//TODO remove bold-, italic- etc. properties in texteditwidget
-	}else{
-		ui.frameTitleTextOptions->setEnabled(true);
-	}
-}
-
-void AxesWidget::titleFontBoldClicked(){
-// 	if (ui.bTitleTextBold->isChecked())
-// 		ui.teTitleLabel->setFontBold(true);
-// 	else
-// 		ui.teTitleLabel->setFontBold(false);
-}
-
-
-void AxesWidget::titleFontItalicClicked(){
-// 	if (ui.bTitleTextItalic->isChecked())
-// 		ui.teTitleLabel->setFontItalic(true);
-// 	else
-// 		ui.teTitleLabel->setFontItalic(false);
-}
-
-void AxesWidget::titleFontUnderlineClicked(){
-	if (ui.bTitleTextUnderline->isChecked())
-		ui.teTitleLabel->setFontUnderline(true);
-	else
-		ui.teTitleLabel->setFontUnderline(false);
-}
-
-void AxesWidget::titleFontUpClicked(){
-//TODO
-}
-
-
-void AxesWidget::titleFontDownClicked(){
-//TODO
-}
-
-void AxesWidget::insertSymbol(const QString& string) {
-	ui.teTitleLabel->setFontFamily("Symbol");
-	ui.teTitleLabel->insertPlainText(string);
-}
 
 
 //"Ticks"-tab

@@ -37,20 +37,7 @@ private slots:
 	void currentAxisChanged(int);
 
 	//"General"-tab
-	void titlePositionChanged(int);
-	void titleFillingChanged(bool);
-	void titleFillingColourClicked();
-	void titleFontClicked();
-	void titleFontColourClicked();
-	void titleUseTexChanged(int);
-	void insertSymbol(const QString &);
 
-	//"Title"-tab
-	void titleFontBoldClicked();
-	void titleFontItalicClicked();
-	void titleFontUnderlineClicked();
-	void titleFontUpClicked();
-	void titleFontDownClicked();
 
 	//"Ticks"-tab
 	void ticksStyleChanged(int);
