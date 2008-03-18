@@ -5,7 +5,7 @@
 WorksheetDialog::WorksheetDialog(MainWin *mw)
 	: Dialog(mw)
 {
-	kdDebug()<<"WorksheetDialog()"<<endl;
+	kDebug()<<"WorksheetDialog()"<<endl;
 	setCaption(i18n("Worksheet Settings"));
 	layout->addWidget(new QLabel(i18n("Not implemented yet!")),1,0);
 

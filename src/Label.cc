@@ -68,7 +68,7 @@ void Label::save(QTextStream *ts) {
 
 //!< ALSO change in Plot.cc !!!
 void Label::open(QTextStream *ts,int version, bool skip) {
-//	kdDebug()<<"Label::open()"<<endl;
+//	kDebug()<<"Label::open()"<<endl;
 	QString t, family, c;
 	int pointsize, weight, italic, tmp;
 	double tmpx,tmpy;
@@ -88,8 +88,8 @@ void Label::open(QTextStream *ts,int version, bool skip) {
 
 	font = QFont(family,pointsize,weight,italic);
 
-//	kdDebug()<<"Label : "<<title<<endl;
-//	kdDebug()<<"(family/pointsize/weight/italic) : "<<family<<' '<<pointsize<<' '<<weight<<' '<<italic<<endl;
+//	kDebug()<<"Label : "<<title<<endl;
+//	kDebug()<<"(family/pointsize/weight/italic) : "<<family<<' '<<pointsize<<' '<<weight<<' '<<italic<<endl;
 
 	if (version > 3) {
 		*ts>>c;
@@ -113,7 +113,7 @@ void Label::open(QTextStream *ts,int version, bool skip) {
 		bgcolor = QColor(c);
 		*ts>>tmp;
 		transparent=(bool)tmp;
-//		kdDebug()<<"	BGCOLOR : "<<bgcolor.name()<<endl;
+//		kDebug()<<"	BGCOLOR : "<<bgcolor.name()<<endl;
 	}
 }
 
@@ -167,8 +167,8 @@ QDomElement Label::saveXML(QDomDocument doc) {
 void Label::openXML(QDomNode node) {
 	while(!node.isNull()) {
 		QDomElement e = node.toElement();
-//		kdDebug()<<"LABEL TAG = "<<e.tagName()<<endl;
-//		kdDebug()<<"LABEL TEXT = "<<e.text()<<endl;
+//		kDebug()<<"LABEL TAG = "<<e.tagName()<<endl;
+//		kDebug()<<"LABEL TEXT = "<<e.text()<<endl;
 
 		if(e.tagName() == "Title")
 			title = e.text();
@@ -223,7 +223,7 @@ void Label::readSettings(KConfig *config, QString entry) {
 }
 */
 void Label::draw(QPainter *p, Point pos, Point size, int w, int h, double phi) {
-	kdDebug()<<"Label::draw()"<<endl;
+	kDebug()<<"Label::draw()"<<endl;
 /*	// resize font with plot size
 	QFont tmpfont(font);
 	int tmpsize = font.pointSize();
@@ -261,7 +261,7 @@ void Label::draw(QPainter *p, Point pos, Point size, int w, int h, double phi) {
 		*proc << "texvc";
 		*proc << "/tmp"<<dirname<<title;
 		if( proc->start(KProcess::Block) == false) {
-			kdDebug()<<"COULD NOT FIND texvc! Gving up."<<endl;
+			kDebug()<<"COULD NOT FIND texvc! Gving up."<<endl;
 			KMessageBox::error((QWidget *)ws,i18n("Could not find texvc! Falling back to normal label."));
 			is_texlabel = false;
 		}
@@ -271,7 +271,7 @@ void Label::draw(QPainter *p, Point pos, Point size, int w, int h, double phi) {
 			QString filename = dirname+QString(d[2]);
 			QImage *image = new QImage(filename);
  			if(!image->isNull()) {
-//				kdDebug()<<"\n	drawing TeX image file "<<filename<<endl;
+//				kDebug()<<"\n	drawing TeX image file "<<filename<<endl;
 				p->save();
 				p->translate((pos.X()+x*size.X())*w,(pos.Y()+y*size.Y())*h);
 				// phi : normal angle, rotation : additional rotation
@@ -311,8 +311,8 @@ bool Label::insideY(int x0, int y0, Point pos, Point size, int w, int h) {
 	int y2 = (int)(h*(pos.Y()+size.Y()*y));		// top
 	int y1 = (int)(y2-richtext->widthUsed());		// botton
 
-	//kdDebug()<<"Label::insideY()  X/Y    X1/X2 | Y1/Y2"<<endl;
-	//kdDebug()<<"       "<<x0<<' '<<y0<<"   "<<x1<<'/'<<x2<<" | "<<y1<<'/'<<y2<<endl;
+	//kDebug()<<"Label::insideY()  X/Y    X1/X2 | Y1/Y2"<<endl;
+	//kDebug()<<"       "<<x0<<' '<<y0<<"   "<<x1<<'/'<<x2<<" | "<<y1<<'/'<<y2<<endl;
 
 	if (x0>x1 && x0<x2 && y0>y1 && y0<y2 )
 		return true;

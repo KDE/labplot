@@ -196,7 +196,7 @@ QStringList FilterCDF::DataString(int varid){
 	void *binary=new double;
 	long indices[CDF_MAX_DIMS];
 
-	kdDebug() << "Reading " << maxrec << " value(s) from "<<Var(varid)<<" of type "<<Type(type)<<endl;
+	kDebug() << "Reading " << maxrec << " value(s) from "<<Var(varid)<<" of type "<<Type(type)<<endl;
 
 	for (int i = 0; i < maxrec; i++) {	// maxrec+1 valid value ?
 		if (iszvar) {
@@ -205,13 +205,13 @@ QStringList FilterCDF::DataString(int varid){
 		}
 		else {
 			CDFlib(CONFIRM_,rVAR_SEQPOS_,&seqpos,indices);
-			//kdDebug()<<"rVAR seqpos = "<<seqpos<<endl;
+			//kDebug()<<"rVAR seqpos = "<<seqpos<<endl;
 			CDFlib(SELECT_, rVAR_SEQPOS_, (long) i, indices);
 			CDFlib(GET_, rVAR_SEQDATA_, binary, NULL_);
 		}
 		v = Value(binary,type);
 
- 	    	//kdDebug() << getVar(varid) << "[" << i << "]=" << v << endl;
+ 	    	//kDebug() << getVar(varid) << "[" << i << "]=" << v << endl;
 		line += QString::number(v)+' ';
 	}
 

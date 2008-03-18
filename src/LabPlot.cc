@@ -14,6 +14,7 @@ int main (int argc, char *argv[]) {
 			KAboutData::License_GPL,
 			ki18n("Copyright (c) 2008 Stefan Gerlach") );
 	aboutData.addAuthor(ki18n("Stefan Gerlach"), ki18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
+	aboutData.addAuthor(ki18n("Alexander Semke"), ki18n("developer"), "", 0);
 
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineOptions options;
@@ -36,17 +37,17 @@ int main (int argc, char *argv[]) {
 	}
 
 #ifdef HAVE_GSL
-	kdDebug()<<"HAVE_GSL defined"<<endl;
+	kDebug()<<"HAVE_GSL defined"<<endl;
 #endif
 #ifdef GSL_FOUND
-	kdDebug()<<"GSL_FOUND defined"<<endl;
+	kDebug()<<"GSL_FOUND defined"<<endl;
 #endif
 #ifdef GSL_VERSION
-	kdDebug()<<"GSL_VERSION defined"<<endl;
+	kDebug()<<"GSL_VERSION defined"<<endl;
 #endif
 // TODO:
 //#if GSL_VERSION > 1.8
-//	kdDebug()<<"GSL_VERSION > 1.8"<<endl;
+//	kDebug()<<"GSL_VERSION > 1.8"<<endl;
 //#endif
 
 	MainWin* window = new MainWin();

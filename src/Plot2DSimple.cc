@@ -168,12 +168,12 @@ void Plot2DSimple::calculateXY(Point d,double *x, double *y, int w, int h) {
 }
 
 void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
-	kdDebug()<<"Plot2DSimple::drawCurves()"<<endl;
+	kDebug()<<"Plot2DSimple::drawCurves()"<<endl;
 	const int xmin = (int)(w*(size.X()*p1.X()+position.X()));
 	const int xmax = (int)(w*(size.X()*p2.X()+position.X()));
 	const int ymin = (int)(h*(size.Y()*p1.Y()+position.Y()));
 	const int ymax = (int)(h*(size.Y()*p2.Y()+position.Y()));
-	//kdDebug()<<"xmin/xmax ymin/ymax : "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
+	//kDebug()<<"xmin/xmax ymin/ymax : "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
 
 	// clipping rect with some space (clipoffset)
 	// TODO
@@ -187,21 +187,21 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 	for (int i=0; i < set.size() ; i++) {
 		SetType stype = set[i]->Type();
 
-		kdDebug()<<"Set "<<i<<endl;
-		kdDebug()<<"Set type "<<stype<<endl;
+		kDebug()<<"Set "<<i<<endl;
+		kDebug()<<"Set type "<<stype<<endl;
 		// TODO
 		//if(set[i]->isShown() == false)
 		//	continue;
 // TODO
 		if (stype == SET2D) {
 			Set2D *s = (Set2D *) set[i];
-//			kdDebug()<<"GRAPH2D Label = "<<g->getLabel()->simpleTitle()<<endl;
+//			kDebug()<<"GRAPH2D Label = "<<g->getLabel()->simpleTitle()<<endl;
 
-			//kdDebug()<<"Type T2D\n";
-			//kdDebug()<<"xmin/xmax "<<xmin<<' '<<xmax<<endl;
-			//kdDebug()<<"ymin/ymax "<<ymin<<' '<<ymax<<endl;
-			//kdDebug()<<"xact1/xact2 "<<actrange[0].rMin()<<' '<<actrange[0].rMax()<<endl;
-			//kdDebug()<<"yact1/yact2 "<<actrange[1].rMin()<<' '<<actrange[1].rMax()<<endl;
+			//kDebug()<<"Type T2D\n";
+			//kDebug()<<"xmin/xmax "<<xmin<<' '<<xmax<<endl;
+			//kDebug()<<"ymin/ymax "<<ymin<<' '<<ymax<<endl;
+			//kDebug()<<"xact1/xact2 "<<actrange[0].rMin()<<' '<<actrange[0].rMax()<<endl;
+			//kDebug()<<"yact1/yact2 "<<actrange[1].rMin()<<' '<<actrange[1].rMax()<<endl;
 
 			Point *d = s->Data();
 			double oldx = 0.0, oldy = 0.0;
@@ -249,9 +249,9 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 /*		else if (s == GRAPH3D)	{ // 2D error plot
 			Graph3D *g = graphlist->getGraph3D(i);
 
-			//kdDebug()<<"GRAPH3D\n";
-			//kdDebug()<<"OK : "<<i<<" 3D number="<<g->Number()<<endl;
-			//kdDebug()<<"OK : "<<i<<" NX/NY="<<g->NX()<<"/"<<g->NY()<<endl;
+			//kDebug()<<"GRAPH3D\n";
+			//kDebug()<<"OK : "<<i<<" 3D number="<<g->Number()<<endl;
+			//kDebug()<<"OK : "<<i<<" NX/NY="<<g->NX()<<"/"<<g->NY()<<endl;
 
 			Point3D *d = g->Data();
 			double oldx=0, oldy=0;
@@ -325,7 +325,7 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 					}; break;
 				}
 
-				//kdDebug()<<"ytop="<<ytop<<",ybottom="<<ybottom<<endl;
+				//kDebug()<<"ytop="<<ytop<<",ybottom="<<ybottom<<endl;
 
 				// errorbar points;
 				hpa[pointindex]=QPoint((int)x,(int)x);
@@ -354,8 +354,8 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 		else if (s == GRAPH4D) {		// x-y-dx-dy or x-y-dy1-dy2
 			Graph4D *g = graphlist->getGraph4D(i);
 
-			//kdDebug()<<"GRAPH4D"<<endl;
-			//kdDebug()<<"OK : "<<i<<" number="<<g->Number()<<endl;
+			//kDebug()<<"GRAPH4D"<<endl;
+			//kDebug()<<"OK : "<<i<<" number="<<g->Number()<<endl;
 
 			Point4D *d = g->Data();
 			double oldx=0, oldy=0;
@@ -506,8 +506,8 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 					}; break;
 				}
 
-				//kdDebug()<<"xleft="<<xleft<<",xright="<<xright<<endl;
-				//kdDebug()<<"ytop="<<ytop<<",ybottom="<<ybottom<<endl;
+				//kDebug()<<"xleft="<<xleft<<",xright="<<xright<<endl;
+				//kDebug()<<"ytop="<<ytop<<",ybottom="<<ybottom<<endl;
 
 				// errorbar points;
 				hpa[pointindex]=QPoint((int)xleft,(int)xright);
@@ -538,6 +538,6 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 	}
 
 	p->setClipping(false);
-	kdDebug()<<"Plot2DSimple::drawCurves() DONE"<<endl;
+	kDebug()<<"Plot2DSimple::drawCurves() DONE"<<endl;
 }
 

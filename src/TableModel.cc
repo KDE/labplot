@@ -21,7 +21,7 @@ int TableModel::columnCount(const QModelIndex &) const {
 }
 
 void TableModel::setRowCount(int rows) {
-	kdDebug()<<"TableModel::setRowCount("<<rows<<") rowCount()="<<rowCount()<<endl;
+	kDebug()<<"TableModel::setRowCount("<<rows<<") rowCount() ="<<rowCount()<<endl;
 	if(rows==rowCount())
 		return;
 	else if(rows>rowCount())
@@ -31,7 +31,7 @@ void TableModel::setRowCount(int rows) {
 }
 
 void TableModel::setColumnCount(int cols) {
-	kdDebug()<<"TableModel::setColumnCount("<<cols<<")"<<endl;
+	kDebug()<<"TableModel::setColumnCount("<<cols<<")"<<endl;
 	if(cols==columnCount())
 		return;
 	else if(cols>columnCount())
@@ -41,7 +41,7 @@ void TableModel::setColumnCount(int cols) {
 }
 
 bool TableModel::insertRows(int row, int count, const QModelIndex &parent) {
-	kdDebug()<<"TableModel::insertRows("<<row<<count<<")"<<endl;
+	kDebug()<<"TableModel::insertRows("<<row<<count<<")"<<endl;
 	beginInsertRows(parent,row,row+count-1);
 	for(int i=0;i<columnCount();i++) {
 		for(int j=row;j<row+count;j++)
@@ -53,7 +53,7 @@ bool TableModel::insertRows(int row, int count, const QModelIndex &parent) {
 }
 
 bool TableModel::removeRows(int row, int count, const QModelIndex &parent) {
-	kdDebug()<<"TableModel::removeRows("<<row<<count<<")"<<endl;
+	kDebug()<<"TableModel::removeRows("<<row<<count<<")"<<endl;
 	beginRemoveRows(parent,row,row+count-1);
 	for(int i=0;i<columnCount();i++) {
 		for(int j=0;j<count;j++)
@@ -64,7 +64,7 @@ bool TableModel::removeRows(int row, int count, const QModelIndex &parent) {
 }
 
 bool TableModel::insertColumns(int col, int count, const QModelIndex &parent) {
-	kdDebug()<<"TableModel::insertColumns("<<col<<count<<")"<<endl;
+	kDebug()<<"TableModel::insertColumns("<<col<<count<<")"<<endl;
 	beginInsertColumns(parent,col,col+count-1);
 	for(int i=0;i<count;i++) {
 		QList<QString> list;
@@ -79,7 +79,7 @@ bool TableModel::insertColumns(int col, int count, const QModelIndex &parent) {
 }
 
 bool TableModel::removeColumns(int col, int count, const QModelIndex &parent) {
-	kdDebug()<<"TableModel::removeColumns("<<col<<count<<")"<<endl;
+	kDebug()<<"TableModel::removeColumns("<<col<<count<<")"<<endl;
 	beginRemoveColumns(parent,col,col+count-1);
 	for(int j=0;j<count;j++) {
 		table.removeLast();

@@ -21,12 +21,6 @@ public:
 	Worksheet* activeWorksheet() const;
 	Project* getProject() const { return project; } 
 	void setProject(Project *p) { project=p; } 
-	int activeSheetIndex() const;
-	QMdiArea* getMdi() const { return mdi; }
-	Spreadsheet* activeSpreadsheet() const;
-	Worksheet* activeWorksheet() const;
-	Project* getProject() const { return project; }
-	void setProject(Project *p) { project=p; }
 	void updateGUI();		//!< update GUI of main window
 	void addSet(Set *g, int sheet, PlotType ptype);
 private:

@@ -1,8 +1,9 @@
  set(GUI_SOURCES
 	gui/AxesDialog.cc
 	gui/AxesWidget.cc
-  	 gui/SettingsDialog.cc
-	 gui/SettingsGeneralPage.cc
+	gui/LabelWidget.cc
+	gui/SettingsDialog.cc
+	gui/SettingsGeneralPage.cc
 	gui/SettingsPage.cc
 	gui/SettingsPrintingPage.cc
 )
@@ -44,6 +45,7 @@ set(LabPlot_SRCS ${GUI_SOURCES}
 
 set(UI_SOURCES
 	gui/ui/axeswidget.ui
+	gui/ui/labelwidget.ui
 	gui/ui/settingsgeneralpage.ui
 	gui/ui/settingsprintingpage.ui
 )

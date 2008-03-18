@@ -6,7 +6,7 @@
 ColumnDialog::ColumnDialog(MainWin *mw, Spreadsheet *s)
 	: Dialog(mw), s(s)
 {
-	kdDebug()<<"ColumnDialog()"<<endl;
+	kDebug()<<"ColumnDialog()"<<endl;
 	setCaption(i18n("Column settings"));
 
 	setupGUI();
@@ -17,7 +17,7 @@ ColumnDialog::ColumnDialog(MainWin *mw, Spreadsheet *s)
 }
 
 void ColumnDialog::setupGUI() {
-	kdDebug()<<"ColumnDialog::setupGUI()"<<endl;
+	kDebug()<<"ColumnDialog::setupGUI()"<<endl;
 	layout->addWidget(new QLabel(i18n("Label : ")),0,0);
 	labelle =  new KLineEdit(s->columnName(s->currentColumn()));
 	layout->addWidget(labelle,0,1);

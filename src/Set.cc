@@ -60,14 +60,14 @@ void Graph::openGraph(QTextStream *t,int version) {
 			if(version>18) {
 				t->readLine();
 				fitfunction = t->readLine();
-				//kdDebug()<<"FIT FUNCTION : "<<fitfunction<<endl;
+				//kDebug()<<"FIT FUNCTION : "<<fitfunction<<endl;
 			}
 		}
 	}
 }
 
 QDomElement Graph::saveGraphXML(QDomDocument doc, int gtype) {
-	kdDebug()<<"Graph::saveGraphXML()"<<endl;
+	kDebug()<<"Graph::saveGraphXML()"<<endl;
 	QDomElement graphtag = doc.createElement( "Graph" );
 	graphtag.setAttribute("type",QString::number(gtype));
 
@@ -111,9 +111,9 @@ QDomElement Graph::saveGraphXML(QDomDocument doc, int gtype) {
 	tag = symbol->saveXML(doc);
     	graphtag.appendChild( tag );
 
-	kdDebug()<<"	calling saveXML()"<<endl;
+	kDebug()<<"	calling saveXML()"<<endl;
 	saveXML(doc,graphtag);
-	kdDebug()<<"	done"<<endl;
+	kDebug()<<"	done"<<endl;
 
 	return graphtag;
 }

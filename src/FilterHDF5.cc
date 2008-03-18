@@ -463,7 +463,7 @@ FilterHDF5::FilterHDF5(QString fn)
 
 void FilterHDF5::importFile() {
 #ifdef HAVE_HDF5
-	kdDebug()<< "Opening hdf5 file"<<endl;
+	kDebug()<< "Opening hdf5 file"<<endl;
 	hid_t file = H5Fopen(filename.toAscii(), H5F_ACC_RDONLY, H5P_DEFAULT);
 
 	printf(" ROOT GROUP :\n");
@@ -519,7 +519,7 @@ void FilterHDF5::importFile() {
 
 //! export data to the file
 int FilterHDF5::exportFile(MainWin *mw, bool all, int datatype, int order, int start, int end) {
-	kdDebug()<<"FilterHDF5::exportFile()"<<endl;
+	kDebug()<<"FilterHDF5::exportFile()"<<endl;
 #ifdef HAVE_HDF5
 //	hid_t file = H5Fcreate(filename.toAscii(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 

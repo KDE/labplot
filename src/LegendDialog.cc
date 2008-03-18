@@ -5,7 +5,7 @@
 LegendDialog::LegendDialog(MainWin *mw)
 	: Dialog(mw)
 {
-	kdDebug()<<"LegendDialog()"<<endl;
+	kDebug()<<"LegendDialog()"<<endl;
 	setCaption(i18n("Legend Settings"));
 	layout->addWidget(new QLabel(i18n("Not implemented yet!")),1,0);
 
@@ -53,7 +53,7 @@ LegendDialog::LegendDialog(MainWin *mw)
 
 /*
 void LegendDialog::updateDialog(Worksheet *ws) {
-	kdDebug()<<"LegendDialog::updateDialog()"<<endl;
+	kDebug()<<"LegendDialog::updateDialog()"<<endl;
 	if(ws == 0) {
 		p = mw->activeWorksheet();
 		s = mw->activeSpreadsheet();

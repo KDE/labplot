@@ -13,7 +13,7 @@
 Worksheet::Worksheet(MainWin *m)
 	:QWidget(), mw(m)
 {
-	kdDebug()<<"Worksheet()"<<endl;
+	kDebug()<<"Worksheet()"<<endl;
 	type = WORKSHEET;
 	setWindowTitle(i18n("Worksheet"));
 
@@ -25,6 +25,7 @@ Worksheet::Worksheet(MainWin *m)
 	int w = conf.readEntry("Width",600);
 	int h = conf.readEntry("Height",400);
 	resize(w,h);
+	kDebug()<<"Worksheet() DONE"<<endl;
 }
 
 Worksheet::~Worksheet() {
@@ -32,7 +33,7 @@ Worksheet::~Worksheet() {
 }
 
 void Worksheet::paintEvent(QPaintEvent *) {
-	kdDebug()<<"Worksheet::paintEvent()"<<endl;
+	kDebug()<<"Worksheet::paintEvent()"<<endl;
 	QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);	
 
@@ -40,7 +41,7 @@ void Worksheet::paintEvent(QPaintEvent *) {
 }
 
 void Worksheet::draw(QPainter *p, int w, int h) {
-	kdDebug()<<"Worksheet::Draw() : w/h ="<<w<<h<<endl;
+	kDebug()<<"Worksheet::Draw() : w/h ="<<w<<h<<endl;
 	// TEST
 	p->setBrush(Qt::yellow);
 	p->drawRect(0,0,w,h);
@@ -48,13 +49,13 @@ void Worksheet::draw(QPainter *p, int w, int h) {
 	p->drawLine(0,h,w,0);
 
 	for (int i=0;i<plotCount();i++) {
-		kdDebug()<<"plot "<<i<<endl;
+		kDebug()<<"plot "<<i<<endl;
 		plot[i]->draw(p,w,h);
 	}
 }
 
 void Worksheet::addPlot(PlotType ptype) {
-	kdDebug()<<"Worksheet::newPlot() : type ="<<ptype<<endl;
+	kDebug()<<"Worksheet::newPlot() : type ="<<ptype<<endl;
 	Plot *newplot=0;
 	switch(ptype) {
 	case PLOT2D:
@@ -63,12 +64,12 @@ void Worksheet::addPlot(PlotType ptype) {
 		break;
 	}
 	api = plotCount();
-	kdDebug()<<"api ="<<api<<endl;
+	kDebug()<<"api ="<<api<<endl;
 	plot += newplot;
 }
 
 void Worksheet::addSet(Set *s, PlotType ptype) {
-	kdDebug()<<"Worksheet::addSet() plot type ="<<ptype<<endl;
+	kDebug()<<"Worksheet::addSet() plot type ="<<ptype<<endl;
 
 	if(plotCount() == 0 || ptype != plot[api]->Type() )
 		addPlot(ptype);
@@ -83,7 +84,7 @@ void Worksheet::addSet(Set *s, PlotType ptype) {
 }
 
 void Worksheet::setupPrinter(QPrinter *pr, QString fn) {
-	kdDebug()<<"Worksheet::setupPrinter()"<<endl;
+	kDebug()<<"Worksheet::setupPrinter()"<<endl;
 	// TODO
 //	KConfig *config = mw->Config();
 //	config->setGroup( "KPrinter Settings" );
@@ -104,7 +105,7 @@ void Worksheet::setupPrinter(QPrinter *pr, QString fn) {
 }
 
 void Worksheet::print(QString file) {
-	kdDebug()<<"Worksheet::Print("<<file<<")"<<endl;
+	kDebug()<<"Worksheet::Print("<<file<<")"<<endl;
 
 	QPrinter printer(QPrinter::ScreenResolution);
 	setupPrinter(&printer,file);

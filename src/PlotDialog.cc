@@ -5,7 +5,7 @@
 PlotDialog::PlotDialog(MainWin *mw)
 	: Dialog(mw)
 {
-	kdDebug()<<"LegendDialog()"<<endl;
+	kDebug()<<"LegendDialog()"<<endl;
 	setCaption(i18n("Plot Dialog"));
 	layout->addWidget(new QLabel(i18n("Not implemented yet!")),1,0);
 

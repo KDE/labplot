@@ -11,18 +11,18 @@
 Plot2D::Plot2D()
 	: Plot() 
 {
-	kdDebug()<<"Plot2D::Plot2D()"<<endl;
+	kDebug()<<"Plot2D::Plot2D()"<<endl;
 	type = PLOT2D;
 /*	QFont font;
 	if(p==0)
-		kdDebug()<<"WARNING : no Worksheet defined!"<<endl;
+		kDebug()<<"WARNING : no Worksheet defined!"<<endl;
 	else {
 		MainWin *mw = p->getMainWin();
 		if(mw)
 			font = mw->defaultFont();
 	}
 	font.setPointSize((int)(0.7*font.pointSize()));	// for axes label
-	kdDebug()<<"Plot2D()"<<endl;
+	kDebug()<<"Plot2D()"<<endl;
 */
 	axis.append(new Axis());
 	axis.append(new Axis());
@@ -46,11 +46,11 @@ Plot2D::Plot2D()
 	axis[2].setTickLabelFont(font);
 	axis[3].setTickLabelFont(font);
 */
-	kdDebug()<<"Plot2D::Plot2D() DONE"<<endl;
+	kDebug()<<"Plot2D::Plot2D() DONE"<<endl;
 }
 
 void Plot2D::setActRange(Range* r, int i) {
-	kdDebug()<<"Plot2D::setActRange("<<i<<")"<<endl;
+	kDebug()<<"Plot2D::setActRange("<<i<<")"<<endl;
 	Range tmp;
 
 	double offset=0;//(r->rMax()-r->rMin())/10;
@@ -65,7 +65,7 @@ void Plot2D::setActRanges(Range* r) {
 }
 
 /*void Plot2D::setBorder(int item, bool on) {
-	kdDebug()<<"Plot2D::setBorder()"<<endl;
+	kDebug()<<"Plot2D::setBorder()"<<endl;
 	const int unit = 5, numunit = 40, numunit2 = 20;
 	int w = worksheet->width(), h = worksheet->height();
 
@@ -130,8 +130,8 @@ void Plot2D::setActRanges(Range* r) {
 }*/
 
 void Plot2D::draw(QPainter *p, int w, int h) {
-	kdDebug()<<"Plot2D::draw() w/h :"<<w<<h<<endl;
-	kdDebug()<<"	TYPE = "<<type<<endl;
+	kDebug()<<"Plot2D::draw() w/h :"<<w<<h<<endl;
+	kDebug()<<"	TYPE = "<<type<<endl;
 /*
 	if(aspect_enabled) {	// set aspect ratio to 1
 		int wsize = (int) fmin(w,h);
@@ -143,8 +143,8 @@ void Plot2D::draw(QPainter *p, int w, int h) {
 	int ymin = (int)(h*(size.Y()*p1.Y()+position.Y()));
 	int ymax = (int)(h*(size.Y()*p2.Y()+position.Y()));
 
-	kdDebug()<<"	XMIN-MXAX/YMIN-YMAX = "<<xmin<<'-'<<xmax<<','<<ymin<<'-'<<ymax<<endl;
-	kdDebug()<<"	corner1 = "<<p1.X()<<'/'<<p1.Y()<<" corner2 = "<<p2.X()<<'/'<<p2.Y()<<endl;
+	kDebug()<<"	XMIN-MXAX/YMIN-YMAX = "<<xmin<<'-'<<xmax<<','<<ymin<<'-'<<ymax<<endl;
+	kDebug()<<"	corner1 = "<<p1.X()<<'/'<<p1.Y()<<" corner2 = "<<p2.X()<<'/'<<p2.Y()<<endl;
 
 	if (!transparent) {
 		// background color
@@ -201,7 +201,7 @@ void Plot2D::draw(QPainter *p, int w, int h) {
 			break;
 		default: break;
 		}
-		//kdDebug()<< "Y BASLINE @ "<<y<<endl;
+		//kDebug()<< "Y BASLINE @ "<<y<<endl;
 		p->drawLine(xmin,y,xmax,y);
 	}
 	if (xbaseline_enabled) {
@@ -229,7 +229,7 @@ void Plot2D::draw(QPainter *p, int w, int h) {
 			break;
 		default: break;
 		}
-		//kdDebug()<< "X BASLINE @ "<<y<<endl;
+		//kDebug()<< "X BASLINE @ "<<y<<endl;
 		p->drawLine(x,ymin,x,ymax);
 	}
 
@@ -266,7 +266,7 @@ void Plot2D::draw(QPainter *p, int w, int h) {
 		default: break;
 		}
 
-		// kdDebug()<<"REGION : "<<minx<<" "<<maxx<<endl;
+		// kDebug()<<"REGION : "<<minx<<" "<<maxx<<endl;
 
 		if(minx != maxx) {
 			p->drawLine(minx,ymin,minx,ymax);
@@ -403,7 +403,7 @@ void Plot2D::draw(QPainter *p, int w, int h) {
 	}
 
 	if(legend.Enabled()) {
-//		kdDebug()<<"	Legend enabled"<<endl;
+//		kDebug()<<"	Legend enabled"<<endl;
 
 		if (type == PSURFACE) {		// legend can't do this :-(
 			if (legend.X() == 0.7 && legend.Y() == 0.05 ) // replace the legend for surface plots first time
@@ -421,22 +421,22 @@ void Plot2D::draw(QPainter *p, int w, int h) {
 			legend.draw(p,type,graphlist,position,size,w,h);
 
 //		legend.draw(p,type,graphlist,position,size,w,h);
-//		kdDebug()<<" drawing legend with pos = "<<position.X()<<' '<<position.Y()<<endl;
-//		kdDebug()<<" 	size.X()*w/size.Y()*h = "<<size.X()*w<<' '<<size.Y()*h<<endl;
+//		kDebug()<<" drawing legend with pos = "<<position.X()<<' '<<position.Y()<<endl;
+//		kDebug()<<" 	size.X()*w/size.Y()*h = "<<size.X()*w<<' '<<size.Y()*h<<endl;
 
 	}
 	p->setPen(Qt::NoPen);
 */
-	kdDebug()<<"Plot2D::draw() DONE"<<endl;
+	kDebug()<<"Plot2D::draw() DONE"<<endl;
 }
 
 void Plot2D::drawBorder(QPainter *p, int w, int h) {
-	kdDebug()<<"Plot2D::drawBorder()"<<endl;
+	kDebug()<<"Plot2D::drawBorder()"<<endl;
 	int xmin = (int)(w*(size.X()*p1.X()+position.X()));
 	int xmax = (int)(w*(size.X()*p2.X()+position.X()));
 	int ymin = (int)(h*(size.Y()*p1.Y()+position.Y()));
 	int ymax = (int)(h*(size.Y()*p2.Y()+position.Y()));
-	kdDebug()<<"	xmin/xmax ymin/ymax "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
+	kDebug()<<"	xmin/xmax ymin/ymax "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
 
 	if (axis[1]->BorderEnabled()) {
 		p->setPen(QPen(axis[1]->BorderColor(),axis[1]->BorderWidth()));
@@ -457,7 +457,7 @@ void Plot2D::drawBorder(QPainter *p, int w, int h) {
 }
 
 void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
-	kdDebug()<<"Plot2D::drawAxesTicks()"<<endl;
+	kDebug()<<"Plot2D::drawAxesTicks()"<<endl;
 	Axis *a = axis[k];
 
 	int xmin = (int)(w*(size.X()*p1.X()+position.X()));
@@ -476,7 +476,7 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 	if (a->MajorTicksEnabled() && a->Enabled()) {
 		double min = actrange[axistype].Min();
 		double max = actrange[axistype].Max();
-		kdDebug()<<"	MIN/MAX "<<min<<max<<endl;
+		kDebug()<<"	MIN/MAX "<<min<<max<<endl;
 		TScale scale = a->Scale();
 		int pos = a->Position();
 		if(pos) {
@@ -500,7 +500,7 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 			case LN: t = (int) log(max/min)+2; break;
 			}
 			if(t==0) t=-1;
-			kdDebug()<<"	T="<<t<<endl;
+			kDebug()<<"	T="<<t<<endl;
 
 			for (int i = 0;i <= t; i++) {
 				int x1=0, x2=0, y1=0,y2=0;
@@ -815,25 +815,25 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 			// use axis Major Ticks as increment
 			double inc = a->MajorTicks();
 			double dx=max-min;
-//			kdDebug()<<"	DX = "<<dx<<endl;
+//			kDebug()<<"	DX = "<<dx<<endl;
 			if(inc == -1)	// auto tics
 				inc = pow(10,floor(log10(dx)));
 			if(inc >= dx || inc <=0 )	// reset if needed
 				inc = dx/10;
-//			kdDebug()<<"	INC = "<<inc<<endl;
+//			kDebug()<<"	INC = "<<inc<<endl;
 
 			int t=(int) ceil(dx/inc);
-//			kdDebug()<<"	T = "<<t<<endl;
+//			kDebug()<<"	T = "<<t<<endl;
 			double c = inc*floor(min/inc);
-//			kdDebug()<<"	C = "<<c<<endl;
+//			kDebug()<<"	C = "<<c<<endl;
 			for(int i=0;i<=t;i++) {
 				double value = c+i*inc;
 				int x1=0, y1=0;
 
 				if(axistype == 0) {	// X Major Ticks
 					x1 = xmin+(int)((value-min)*(xmax-xmin)/dx);
-//					kdDebug()<<"	VALUE : "<<value<<endl;
-//					kdDebug()<<"	X1 : "<<x1<<endl;
+//					kDebug()<<"	VALUE : "<<value<<endl;
+//					kDebug()<<"	X1 : "<<x1<<endl;
 					if(x1<=xmax+1 && x1>=xmin-1) {
 						p->setPen(QPen(a->TickColor(),a->majorTickWidth()));
 						if(k==0) {	// x
@@ -868,8 +868,8 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 				}
 				else {	// Y Major Axis
 					y1 = ymax-(int)((value-min)*(ymax-ymin)/dx);
-//					kdDebug()<<"	VALUE : "<<value<<endl;
-//					kdDebug()<<"	Y1 : "<<y1<<endl;
+//					kDebug()<<"	VALUE : "<<value<<endl;
+//					kDebug()<<"	Y1 : "<<y1<<endl;
 
 					if(y1<=ymax+1 && y1>=ymin-1) { // major tics
 						p->setPen(QPen(a->TickColor(),a->majorTickWidth()));
@@ -987,7 +987,7 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 							//else if (scale == LOG10)	// TODO : check
 							//	x=(int)(x1+t*dx*log10((double)(j)));
 							// TODO : SQRT minor tics ?
-//							kdDebug()<<"	X ("<<j<<")  ="<<x<<endl;
+//							kDebug()<<"	X ("<<j<<")  ="<<x<<endl;
 							// other scales have no minor tics
 
 							if(x<=xmax+1 && x>=xmin-1) { // minor tics
@@ -1029,7 +1029,7 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 							//else if (scale == LOG10)	// TODO : check
 							//	y=(int)(y1+(y2-y1)*log10((double)(j)));
 							// all other scales have minor tics = 0
-//							kdDebug()<<"	Y ("<<j<<")  ="<<y<<endl;
+//							kDebug()<<"	Y ("<<j<<")  ="<<y<<endl;
 
 							if(y<=ymax+1 && y>=ymin-1) { // minor tics
 								p->setPen(QPen(a->TickColor(),a->minorTickWidth()));
@@ -1071,7 +1071,7 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 }
 
 void Plot2D::drawAxes(QPainter *p,int w, int h) {
-	kdDebug()<<"Plot2D::drawAxes()"<<endl;
+	kDebug()<<"Plot2D::drawAxes()"<<endl;
 	const int unit = (int)(5*size.X());
 	const int numunit = (int)(40*size.X()), numunit2 = (int)(20*size.X());
 
@@ -1079,11 +1079,11 @@ void Plot2D::drawAxes(QPainter *p,int w, int h) {
 	int xmax = (int)(w*(size.X()*p2.X()+position.X()));
 	int ymin = (int)(h*(size.Y()*p1.Y()+position.Y()));
 	int ymax = (int)(h*(size.Y()*p2.Y()+position.Y()));
-//	kdDebug()<<"	xmin/xmax ymin/ymax : "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
-//	kdDebug()<<"	width/height : "<<w<<'/'<<h<<endl;
+//	kDebug()<<"	xmin/xmax ymin/ymax : "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
+//	kDebug()<<"	width/height : "<<w<<'/'<<h<<endl;
 
 	// axes label
-	kdDebug()<<"	drawing axis label"<<endl;
+	kDebug()<<"	drawing axis label"<<endl;
 	Label *label = axis[3]->getLabel();	// x2
 	if (label->X()==0 && label->Y()==0)	// default
 		label->setPosition((xmin+(xmax-xmin)/2)/(double)w,
@@ -1120,7 +1120,7 @@ void Plot2D::drawAxes(QPainter *p,int w, int h) {
 	// axes tics and grid
 	for (int i=0;i<axis.size();i++)
 		drawAxesTicks(p, w, h, i);
-	kdDebug()<<"Plot2D::drawAxes() DONE"<<endl;
+	kDebug()<<"Plot2D::drawAxes() DONE"<<endl;
 }
 /*
 void Plot2D::saveAxes(QTextStream *t) {
@@ -1146,7 +1146,7 @@ void Plot2D::saveXML(QDomDocument doc, QDomElement plottag) {
 }
 
 void Plot2D::openXML(QDomElement e) {
-//	kdDebug()<<"Plot2D::openXML()"<<endl;
+//	kDebug()<<"Plot2D::openXML()"<<endl;
 	if(e.tagName() == "Axis")
 		axis[e.attribute("id").toInt()].openXML(e.firstChild());
 

@@ -5,7 +5,7 @@
 
 Style::Style(StyleType t, QColor c, bool f, QColor fc, int w, Qt::PenStyle p, Qt::BrushStyle b)
 {
-	kdDebug()<<"Style()"<<endl;
+	kDebug()<<"Style()"<<endl;
 	type = t;
 	color = c;
 	filled = f;
@@ -27,7 +27,7 @@ void Style::save(QTextStream *t) {
 }
 
 int Style::open(QTextStream *t,int version) {
-	kdDebug()<<"Style::open()"<<endl;
+	kDebug()<<"Style::open()"<<endl;
 	QString c;
 	int graphtype, f, tmptype;
 
@@ -103,8 +103,8 @@ QDomElement Style::saveXML(QDomDocument doc) {
 void Style::openXML(QDomNode node) {
 	while(!node.isNull()) {
 		QDomElement e = node.toElement();
-//		kdDebug()<<"STYLE TAG = "<<e.tagName()<<endl;
-//		kdDebug()<<"STYLE TEXT = "<<e.text()<<endl;
+//		kDebug()<<"STYLE TAG = "<<e.tagName()<<endl;
+//		kDebug()<<"STYLE TEXT = "<<e.text()<<endl;
 
 		if(e.tagName() == "Type")
 			type = (StylesType) e.text().toInt();

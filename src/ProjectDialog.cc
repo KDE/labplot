@@ -40,7 +40,7 @@ void ProjectDialog::setupGUI() {
 }
 
 void ProjectDialog::Apply() {
-	kdDebug()<<"ProjectDialog::Apply()"<<endl;
+	kDebug()<<"ProjectDialog::Apply()"<<endl;
 	project->setTitle(titlele->text());
 	project->setAuthor(authorle->text());
 	project->setNotes(noteste->toPlainText());

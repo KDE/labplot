@@ -16,7 +16,7 @@ extern "C" init arith_fncts[];
 FunctionDialog::FunctionDialog(MainWin *mw)
 	: Dialog(mw)
 {
-	kdDebug()<<"FunctionDialog()"<<endl;
+	kDebug()<<"FunctionDialog()"<<endl;
 	setCaption(i18n("Add Function"));
 
 	type = PLOT2D;
@@ -29,7 +29,7 @@ FunctionDialog::FunctionDialog(MainWin *mw)
 	QObject::connect(this,SIGNAL(user1Clicked()),SLOT(saveSettings()));
 	//QObject::connect(this,SIGNAL(user2Clicked()),SLOT(toggleOptions()));
 
-	kdDebug()<<"FunctionDialog() DONE"<<endl;
+	kDebug()<<"FunctionDialog() DONE"<<endl;
 
 /*	Plot *plot=0;
 	if(p != 0)
@@ -60,7 +60,7 @@ FunctionDialog::FunctionDialog(MainWin *mw)
 		if(symbol) symbol->setType(SCROSS);
 	}
 
-	kdDebug()<<"get values"<<endl;
+	kDebug()<<"get values"<<endl;
 	// default style and symbol for polar plots
 	if (item == -1) {	// new graph
 		graph = 0;
@@ -72,7 +72,7 @@ FunctionDialog::FunctionDialog(MainWin *mw)
 
 		style = graph->getStyle();
 		symbol = graph->getSymbol();
-		kdDebug()<<"Struct : "<<st<<endl;
+		kDebug()<<"Struct : "<<st<<endl;
 
 		if (st == GRAPH2D) {
 			Graph2D *g = gl->getGraph2D(item);
@@ -99,11 +99,11 @@ FunctionDialog::FunctionDialog(MainWin *mw)
 }
 
 void FunctionDialog::setupGUI() {
-	kdDebug()<<"FunctionDialog::setupGUI()"<<endl;
+	kDebug()<<"FunctionDialog::setupGUI()"<<endl;
 	KConfigGroup conf(KSharedConfig::openConfig(),"Function");
 	//TODO : config bug
 	QString entry = QString("PlotType %1 ").arg(type);
-//	kdDebug()<<"	default function :"<<conf.readEntry(entry+"Function",i18n("sin(x)"))<<endl;
+//	kDebug()<<"	default function :"<<conf.readEntry(entry+"Function",i18n("sin(x)"))<<endl;
 
 	QTabWidget *tw = new QTabWidget;
 	layout->addWidget(tw,0,0,1,2);
@@ -248,7 +248,7 @@ void FunctionDialog::setupGUI() {
 }
 
 void FunctionDialog::saveSettings() {
-	kdDebug()<<"FunctionDialog::saveSettings()"<<endl;
+	kDebug()<<"FunctionDialog::saveSettings()"<<endl;
 	KConfigGroup conf(KSharedConfig::openConfig(),"Function");
 	QString entry = QString("PlotType %1 ").arg(type);
 
@@ -288,13 +288,13 @@ void FunctionDialog::saveSettings() {
 */
 
 void FunctionDialog::insertConstant(QString c) {
-	kdDebug()<<"FunctionDialog::insertConstant("<<c<<")"<<endl;
+	kDebug()<<"FunctionDialog::insertConstant("<<c<<")"<<endl;
 	functionle->insert(c);
 	functionle->setFocus();
 }
 
 void FunctionDialog::insertFunction(QString f) {
-	kdDebug()<<"FunctionDialog::insertFunction("<<f<<")"<<endl;
+	kDebug()<<"FunctionDialog::insertFunction("<<f<<")"<<endl;
 	functionle->insert(f);
 	functionle->setFocus();
 	functionle->setCursorPosition(functionle->cursorPosition()-1);
@@ -304,9 +304,9 @@ void FunctionDialog::insertFunction(QString f) {
 /*
 // search for a usable plot; add worksheet if necessary
 void FunctionDialog::findPlot() {
-	kdDebug()<<"FunctionDialog::findPlot()"<<endl;
+	kDebug()<<"FunctionDialog::findPlot()"<<endl;
 	int sitem = sheetcb->currentItem(), count = sheetcb->count();
-	kdDebug()<<"	sheetcb->currentItem() = "<<sitem<<" of "<<count<<endl;
+	kDebug()<<"	sheetcb->currentItem() = "<<sitem<<" of "<<count<<endl;
 
 	if(sitem>=count-2)		// new sheet selected
 		return;
@@ -323,7 +323,7 @@ void FunctionDialog::findPlot() {
 		plot = p->getPlot(p->API());
 
 	if(plot && plot->Type() == PQWT3D || type == PQWT3D) {	// new worksheet if plot is qwt3d or type = qwt3d
-		kdDebug()<<"	QWT Plot found! type = "<<type<<endl;
+		kDebug()<<"	QWT Plot found! type = "<<type<<endl;
 		if(plot && plot->getGraphList()->Number() > 0 ) {
 			p = mw->newWorksheet();
 			p->newPlot(type);
@@ -345,19 +345,19 @@ int FunctionDialog::apply_clicked() {
 //	QString label = labelle->text();
 	int status=0;
 	if (reread && reread->isChecked()) {
-		kdDebug()<<"	reread is checked"<<endl;
+		kDebug()<<"	reread is checked"<<endl;
 		status = addFunction();
 	}
 	else {	// only edit function
-		kdDebug()<<"	plot type = "<<type<<endl;
+		kDebug()<<"	plot type = "<<type<<endl;
 		if(type == PSURFACE) {
-			kdDebug()<<"	surface plot"<<endl;
+			kDebug()<<"	surface plot"<<endl;
 			if (p != 0) {
-				kdDebug()<<"		p != 0 surface plot"<<endl;
+				kDebug()<<"		p != 0 surface plot"<<endl;
 				Plot2DSurface *plot = (Plot2DSurface *)p->getPlot(p->API());
 
 				if (plot != 0) {
-					kdDebug()<<"	reading settings"<<endl;
+					kDebug()<<"	reading settings"<<endl;
 					plot->enableDensity(dcb->isChecked());
 					plot->enableContour(ccb->isChecked());
 					plot->setNumber(numberle->text().toInt());
@@ -405,11 +405,11 @@ int FunctionDialog::apply_clicked() {
 */
 
 void FunctionDialog::Apply() {
-	kdDebug()<<"FunctionDialog::Apply()"<<endl;
+	kDebug()<<"FunctionDialog::Apply()"<<endl;
 
 	QString f = functionle->text().toLower();
 	f.remove(QRegExp(".*="));		// remove any "xyz =" before expression
-	kdDebug()<<"Parsing "<<f<<endl;
+	kDebug()<<"Parsing "<<f<<endl;
 
 	int NX = nxi->value();
 	Point *data = new Point[NX];
@@ -431,7 +431,7 @@ void FunctionDialog::Apply() {
 			return;
 		}
 		if (progress.wasCanceled()) {
-			kdDebug()<<"WARNING: Creating data canceled()"<<endl;
+			kDebug()<<"WARNING: Creating data canceled()"<<endl;
              		return;
 		}
 		data[i].setPoint(x,y);
@@ -454,7 +454,7 @@ int FunctionDialog::addFunction() {
 	QProgressDialog progress( i18n("Creating function ..."), i18n("Cancel"), NX,this, "progress", true );
 	progress.setMinimumDuration(2000);
 	if (type == P2D || type == PPOLAR) {
-		kdDebug()<<"	\"2d\" or \" polar \" selected"<<endl;
+		kDebug()<<"	\"2d\" or \" polar \" selected"<<endl;
 		Point *ptr = new Point[NX];
 
 		double ymi=0, yma=1;
@@ -469,7 +469,7 @@ int FunctionDialog::addFunction() {
 			double x = (xma-xmi)*i/(double)(NX-1)+xmi;
 			char var[]="x";
 			assign_variable(var,x);
-//			kdDebug()<<"	parsing "<<fun.latin1()<<endl;
+//			kDebug()<<"	parsing "<<fun.latin1()<<endl;
 #ifdef HAVE_GSL
 			gsl_set_error_handler_off();
 #endif
@@ -525,20 +525,20 @@ int FunctionDialog::addFunction() {
 		Symbol *symbol = new Symbol((SType)symbolcb->currentItem(),scolor->color(),ssize->value(),
 			(FType)symbolfillcb->currentItem(),sfcolor->color(),sbrushcb->currentItem());
 
-		kdDebug()<<"	range[0]="<<range[0].rMin()<<","<<range[0].rMax()<<endl;
-		kdDebug()<<"	range[1]="<<range[1].rMin()<<","<<range[1].rMax()<<endl;
+		kDebug()<<"	range[0]="<<range[0].rMin()<<","<<range[0].rMax()<<endl;
+		kDebug()<<"	range[1]="<<range[1].rMin()<<","<<range[1].rMax()<<endl;
 
 		Graph2D *g = new Graph2D(fun,title,range,SFUNCTION,type,style,symbol,ptr,NX);
 		g->setLabel(label);
-		kdDebug()<<"	label->isTeXLabel() : "<<label->isTeXLabel()<<endl;
+		kDebug()<<"	label->isTeXLabel() : "<<label->isTeXLabel()<<endl;
 
 		AnnotateValues av(typecb->currentItem(),positioncb->currentItem(),distance->value());
 		g->setAnnotateValues(av);
 		mw->addGraph2D(g,sheetcb->currentItem(),type);
 	}
 	else if (type == PSURFACE || type == PQWT3D) {
-		kdDebug()<<"	\"surface\" or \" qwt 3d \" selected"<<endl;
-		kdDebug()<<"	NX = "<<NX<<"/ NY = "<<NY<<endl;
+		kDebug()<<"	\"surface\" or \" qwt 3d \" selected"<<endl;
+		kDebug()<<"	NX = "<<NX<<"/ NY = "<<NY<<endl;
 
 		double *a = new double[NY*NX];
 
@@ -573,7 +573,7 @@ int FunctionDialog::addFunction() {
 				bool nanvalue=false;
 				if (!finite(z)) { z=0; nanvalue=true; }
 
-				//kdDebug()<<"z = "<<z<<" (i/j = "<<i<<'/'<<j<<")\n";
+				//kDebug()<<"z = "<<z<<" (i/j = "<<i<<'/'<<j<<")\n";
 
 				if (i == 0 && j == 0) {
 					zmin=z;
@@ -593,9 +593,9 @@ int FunctionDialog::addFunction() {
 		}
 		delete_table();
 
-		if(p==0) kdDebug()<<"	p==0"<<endl;
+		if(p==0) kDebug()<<"	p==0"<<endl;
 		if( p!=0 && type == PSURFACE) {
-			kdDebug()<<"	p!=0 && type == PSURFACE"<<endl;
+			kDebug()<<"	p!=0 && type == PSURFACE"<<endl;
 			Plot2DSurface *plot = (Plot2DSurface *)p->getPlot(p->API());
 
 			// edit graph
@@ -603,8 +603,8 @@ int FunctionDialog::addFunction() {
 				plot->getGraphList()->delGraph(item);
 
 			if (plot != 0) {
-				kdDebug()<<"	plot!=0"<<endl;
-				kdDebug()<<"	reading settings"<<endl;
+				kDebug()<<"	plot!=0"<<endl;
+				kDebug()<<"	reading settings"<<endl;
 				plot->enableDensity(dcb->isChecked());
 				plot->enableContour(ccb->isChecked());
 				plot->setNumber(numberle->text().toInt());
@@ -619,7 +619,7 @@ int FunctionDialog::addFunction() {
 			}
 		}
 		else if (type == PQWT3D) {
-			kdDebug() << "\"qwt 3d \" selected"<<endl;
+			kDebug() << "\"qwt 3d \" selected"<<endl;
 			// TODO
 			//PlotQWT3D *plot = (PlotQWT3D *)p->getPlot(p->API());
 		}
@@ -636,15 +636,15 @@ int FunctionDialog::addFunction() {
 		range[1] = LRange(ymi,yma);
 		range[2] = LRange(zmin,zmax);
 
-		kdDebug()<<"zmin : "<<zmin<<"/ zmax : "<<zmax<<endl;
-		kdDebug()<<"range : "<<range[0].rMin()<<' '<<range[0].rMax()<<endl;
-		kdDebug()<<"range : "<<range[1].rMin()<<' '<<range[1].rMax()<<endl;
-		kdDebug()<<"range : "<<range[2].rMin()<<' '<<range[2].rMax()<<endl;
+		kDebug()<<"zmin : "<<zmin<<"/ zmax : "<<zmax<<endl;
+		kDebug()<<"range : "<<range[0].rMin()<<' '<<range[0].rMax()<<endl;
+		kDebug()<<"range : "<<range[1].rMin()<<' '<<range[1].rMax()<<endl;
+		kDebug()<<"range : "<<range[2].rMin()<<' '<<range[2].rMax()<<endl;
 */		/*for(int i=0;i<NX;i++) {
 			for(int j=0;j<NY;j++) {
-				kdDebug()<<" ("<<j+NY*i<<')'<<a[j+NY*i]<<endl;
+				kDebug()<<" ("<<j+NY*i<<')'<<a[j+NY*i]<<endl;
 			}
-			kdDebug()<<endl;
+			kDebug()<<endl;
 		}*/
 
 /*		Style *style = new Style(LINESTYLE);
@@ -654,7 +654,7 @@ int FunctionDialog::addFunction() {
 		mw->addGraphM(g,sheetcb->currentItem(),type);
 	}
 	else if (type == P3D) {
-		kdDebug() << "\"3d\" selected"<<endl;
+		kDebug() << "\"3d\" selected"<<endl;
 
 		Point3D *ptr = new Point3D[NX*NY];
 
@@ -690,7 +690,7 @@ int FunctionDialog::addFunction() {
 				bool nanvalue=false;
 				if (!finite(z)) { z=0; nanvalue=true; }
 
-				//kdDebug()<<"z = "<<z<<endl;
+				//kDebug()<<"z = "<<z<<endl;
 
 				if (i == 0 && j==0 ) zmin=zmax=z;
 				z<zmin?zmin=z:0;
@@ -720,7 +720,7 @@ int FunctionDialog::addFunction() {
 		range[1] = LRange(ymi,yma);
 		range[2] = LRange(zmin,zmax);
 
-		kdDebug()<<"Z RANGE = "<<zmin<<' '<<zmax<<endl;
+		kDebug()<<"Z RANGE = "<<zmin<<' '<<zmax<<endl;
 
 		Style *style = new Style((StylesType)cb2->currentItem(),color->color(),filled->isChecked(),fcolor->color(),width->value(),
 			pencb->currentItem(),brushcb->currentItem());
@@ -741,7 +741,7 @@ int FunctionDialog::addFunction() {
 	Label* nlabel = new Label(*label);
 	rtw->setLabel(nlabel);
 
-	kdDebug()<<"FunctionDialog::apply_clicked() : DONE"<<endl;
+	kDebug()<<"FunctionDialog::apply_clicked() : DONE"<<endl;
 
 	return 0;
 }*/

@@ -17,7 +17,7 @@
 Spreadsheet::Spreadsheet(MainWin *mw)
 	:QTableView(), mw(mw)
 {
-	kdDebug()<<"Spreadsheet()"<<endl;
+	kDebug()<<"Spreadsheet()"<<endl;
 	type = SPREADSHEET;
 	setModel(new TableModel());
 
@@ -35,7 +35,7 @@ Spreadsheet::Spreadsheet(MainWin *mw)
 	QWidgetList list = mw->getWorkspace()->windowList();
 	int nr=0, sheets = mw->NrWorksheets()+mw->NrSpreadsheets();
 	bool found_free=false;
-	kdDebug()<<"	Number of sheets "<<sheets<<endl;
+	kDebug()<<"	Number of sheets "<<sheets<<endl;
 	while(nr <= sheets && !found_free ) {
 		nr++;
 		found_free=true;
@@ -45,7 +45,7 @@ Spreadsheet::Spreadsheet(MainWin *mw)
 		}
 	}
 
-	kdDebug()<<"	Using number "<<nr<<endl;
+	kDebug()<<"	Using number "<<nr<<endl;
 	title = i18n("Spreadsheet")+QString(" ")+QString::number(nr);
 	setCaption(title);
 */
@@ -81,7 +81,7 @@ void Spreadsheet::contextMenuEvent(QContextMenuEvent *) {
 }
 
 void Spreadsheet::Menu(QMenu *menu) {
-	kdDebug()<<"Spreadsheet::Menu()"<<endl;
+	kDebug()<<"Spreadsheet::Menu()"<<endl;
 	menu->clear();
 
 	KAction *spreadaction = new KAction(KIcon(QIcon(spreadsheet_xpm)),i18n("New spreadsheet"),this);
@@ -116,7 +116,7 @@ void Spreadsheet::Menu(QMenu *menu) {
 void Spreadsheet::newSpreadsheet() { mw->newSpreadsheet(); }
 
 void Spreadsheet::setTitle(QString title) {
-	kdDebug()<<"Spreadsheet::setTitle("<<title<<")"<<endl;
+	kDebug()<<"Spreadsheet::setTitle("<<title<<")"<<endl;
 	bool ok=true;
 	if(title.isEmpty())
 		title = QInputDialog::getText(this,"LabPlot", i18n("Spreadsheet title : "),QLineEdit::Normal, windowTitle(), &ok);
@@ -128,7 +128,7 @@ void Spreadsheet::setTitle(QString title) {
 }
 
 void Spreadsheet::setRowNumber(int row) {
-	kdDebug()<<"Spreadsheet::setRowNumber("<<row<<")"<<endl;
+	kDebug()<<"Spreadsheet::setRowNumber("<<row<<")"<<endl;
 	bool ok=true;
 	if(row<=0)
 		row = QInputDialog::getInteger(this,"LabPlot", i18n("Row count : "), rowCount(), 1, INT_MAX, 1, &ok);
@@ -138,7 +138,7 @@ void Spreadsheet::setRowNumber(int row) {
 }
 
 QString Spreadsheet::text(int row, int col) const {
-//	kdDebug()<<"Spreadsheet::text("<<row<<col<<")"<<endl;
+//	kDebug()<<"Spreadsheet::text("<<row<<col<<")"<<endl;
 	QModelIndex index=model()->index(row,col);
 	return model()->data(index).toString();
 }
@@ -149,7 +149,7 @@ void Spreadsheet::setText(int row, int col, QString text) {
 }
 
 void Spreadsheet::setNotes(QString t) {
-	kdDebug()<<"Spreadsheet::setNotes()"<<endl;
+	kDebug()<<"Spreadsheet::setNotes()"<<endl;
 	bool ok=true;
 	if(t.isEmpty())
 		t = QInputDialog::getText(this,"LabPlot", i18n("Spreadsheet notes : "),QLineEdit::Normal, notes, &ok);
@@ -159,7 +159,7 @@ void Spreadsheet::setNotes(QString t) {
 }
 
 QString Spreadsheet::columnHeader(int col) const {
-//	kdDebug()<<"Spreadsheet::columnheader("<<col<<")"<<endl;
+//	kDebug()<<"Spreadsheet::columnheader("<<col<<")"<<endl;
 	if(col<0) col=0; 
 	return model()->headerData(col,Qt::Horizontal).toString(); 
 } 
@@ -192,7 +192,7 @@ QString Spreadsheet::columnName(int col) const {
 }
 
 void Spreadsheet::setColumnName(int col, QString name) {
-	kdDebug()<<"setColumnName() : col="<<col<<" name = "<<name<<endl;
+	kDebug()<<"setColumnName() : col="<<col<<" name = "<<name<<endl;
 	if(col<0) return;
 	QString header = columnHeader(col);
 	header.replace(QRegExp(".*\\{"),name+" {");
@@ -208,7 +208,7 @@ QString Spreadsheet::columnType(int col) const {
 }
 
 void Spreadsheet::setColumnType(int col, QString type) {
-	kdDebug()<<"setColumnType() : col="<<col<<" type = "<<type<<endl;
+	kDebug()<<"setColumnType() : col="<<col<<" type = "<<type<<endl;
 	if(col<0) return;
 	QString label = columnHeader(col);
 	label.replace(QRegExp(" \\[.+\\]"),QString(" ["+type+"]"));
@@ -223,7 +223,7 @@ QString Spreadsheet::columnFormat(int col) const {
 }
 
 void Spreadsheet::setColumnFormat(int col, QString format) {
-	kdDebug()<<"setColumnFormat() : col="<<col<<" type = "<<format<<endl;
+	kDebug()<<"setColumnFormat() : col="<<col<<" type = "<<format<<endl;
 	if(col<0) return;
 	QString label = columnHeader(col);
 	label.replace(QRegExp(" \\{.+\\}"),QString(" {"+format+"}"));
@@ -231,7 +231,7 @@ void Spreadsheet::setColumnFormat(int col, QString format) {
 }
 
 int Spreadsheet::filledRows(int col) const {
-	kdDebug()<<"Spreadsheet::filledRows("<<col<<")"<<endl;
+	kDebug()<<"Spreadsheet::filledRows("<<col<<")"<<endl;
 	if(col < 0 || col > columnCount())
 		return -1;
 
@@ -243,7 +243,7 @@ int Spreadsheet::filledRows(int col) const {
 }
 
 void Spreadsheet::addSet(Set *s) {
-	kdDebug()<<"Spreadsheet::addSet()"<<endl;
+	kDebug()<<"Spreadsheet::addSet()"<<endl;
 
 	int columns=0;
 	switch(s->Type()) {

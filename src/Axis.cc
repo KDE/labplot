@@ -5,7 +5,7 @@
 
 //! general axis class
 Axis::Axis() {
-	kdDebug()<<"Axis()"<<endl;
+	kDebug()<<"Axis()"<<endl;
 	label = new Label();
 	scale = LINEAR;
 	position = 0;
@@ -51,23 +51,23 @@ Axis::Axis() {
 
 void Axis::centerX(int plotsize, double center) {
 	int length = label->Length();
-//	kdDebug()<<"LENGTH = "<<length<<endl;
-//	kdDebug()<<"PLOTSIZE = "<<plotsize<<endl;
-//	kdDebug()<<"CENTER = "<<center<<endl;
+//	kDebug()<<"LENGTH = "<<length<<endl;
+//	kDebug()<<"PLOTSIZE = "<<plotsize<<endl;
+//	kDebug()<<"CENTER = "<<center<<endl;
 
 	double nx = center - length/(2.0*plotsize);
-	kdDebug()<<"NX="<<nx<<endl;
+	kDebug()<<"NX="<<nx<<endl;
 	label->setX(nx);
 }
 
 void Axis::centerY(int plotsize, double center) {
 	int length = label->Length();
-//	kdDebug()<<"LENGTH = "<<length<<endl;
-//	kdDebug()<<"PLOTSIZE = "<<plotsize<<endl;
-//	kdDebug()<<"CENTER = "<<center<<endl;
+//	kDebug()<<"LENGTH = "<<length<<endl;
+//	kDebug()<<"PLOTSIZE = "<<plotsize<<endl;
+//	kDebug()<<"CENTER = "<<center<<endl;
 
 	double ny = center + length/(2.0*plotsize);
-	kdDebug()<<"NY="<<ny<<endl;
+	kDebug()<<"NY="<<ny<<endl;
 	label->setY(ny);
 }
 
@@ -180,10 +180,10 @@ QDomElement Axis::saveXML(QDomDocument doc, int id) {
 }
 
 void Axis::openXML(QDomNode node) {
-	kdDebug()<<"Axis::openXML()"<<endl;
+	kDebug()<<"Axis::openXML()"<<endl;
 	while(!node.isNull()) {
 		QDomElement e = node.toElement();
-//		kdDebug()<<"AXIS TAG : "<<e.text()<<endl;
+//		kDebug()<<"AXIS TAG : "<<e.text()<<endl;
 
 		if(e.tagName() == "Enabled")
 			enabled = (bool) e.text().toInt();
@@ -234,7 +234,7 @@ void Axis::openXML(QDomNode node) {
 			QDomNode ticknode = e.firstChild();
 			while(!ticknode.isNull()) {
 				QDomElement te = ticknode.toElement();
-//				kdDebug()<<"TICK TAG : "<<te.text()<<endl;
+//				kDebug()<<"TICK TAG : "<<te.text()<<endl;
 				if(te.tagName() == "Prefix")
 					ticklabelprefix = te.text();
 				else if(te.tagName() == "Suffix")

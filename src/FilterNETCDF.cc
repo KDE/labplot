@@ -128,12 +128,12 @@ QStringList FilterNETCDF::DataString(int varid){
 	else if (var.ndims==2) {
 		int sizey = dims[var.dims[1]].size;
 		data = new double[sizex*sizey];
-		//kdDebug()<<"x/y size : "<<sizex<<'/'<<sizey<<endl;
+		//kDebug()<<"x/y size : "<<sizex<<'/'<<sizey<<endl;
 		for (int j=0;j<sizey;j++) {
 			line=QString(" ");
 			for (int i=0;i<sizex;i++) {
 				nc_get_var_double(ncid,varid,data);
-				//kdDebug()<<"value ("<<i<<','<<j<<") : "<<data[i+j*sizex]<<" / index = "<<index<<endl;
+				//kDebug()<<"value ("<<i<<','<<j<<") : "<<data[i+j*sizex]<<" / index = "<<index<<endl;
 				line += QString::number(data[i+j*sizex])+' ';
 			}
 			list += line;//selvarlb->insertItem(line);
@@ -152,7 +152,7 @@ double FilterNETCDF::Data(QString name, const size_t index) {
 	int varid;
 
 	nc_inq_varid(ncid,name.toAscii(),&varid);	// get varid
-//	kdDebug()<<"varid = "<<varid<<endl;
+//	kDebug()<<"varid = "<<varid<<endl;
 	if (varid>nvars)
 		return 0;
 
@@ -174,7 +174,7 @@ double FilterNETCDF::Data(QString name, const size_t index) {
 		// TODO
 	}
 
-//	kdDebug()<<"var "<<varid<<"("<<index<<") = "<<value<<endl;
+//	kDebug()<<"var "<<varid<<"("<<index<<") = "<<value<<endl;
 
 	return value;
 }

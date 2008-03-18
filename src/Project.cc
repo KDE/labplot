@@ -60,8 +60,8 @@ QDomElement Project::saveXML(QDomDocument doc) {
 void Project::openXML(QDomNode node) {
 	while(!node.isNull()) {
 		QDomElement e = node.toElement();
-//		kdDebug()<<"PROJECT TAG = "<<e.tagName()<<endl;
-//		kdDebug()<<"PROJECT TEXT = "<<e.text()<<endl;
+//		kDebug()<<"PROJECT TAG = "<<e.tagName()<<endl;
+//		kDebug()<<"PROJECT TEXT = "<<e.text()<<endl;
 
 		if(e.tagName() == "Title")
 			title = e.text();

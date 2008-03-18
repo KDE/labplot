@@ -5,10 +5,9 @@
 TitleDialog::TitleDialog(MainWin *mw, Label *title)
 	: Dialog(mw), title(title)
 {
-	kdDebug()<<"TitleDialog()"<<endl;
-	if(title != 0) {
-		kdDebug()<<"	title="<<title->Text()<<endl;
-	}
+	kDebug()<<"TitleDialog()"<<endl;
+	if(title != 0)
+		kDebug()<<"	title="<<title->Text()<<endl;
 	setCaption(i18n("Title"));
 
 	QWidget *widget = new QWidget;

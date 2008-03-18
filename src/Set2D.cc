@@ -6,14 +6,14 @@
 Set2D::Set2D(QString name, Point *data, int number)
 	: Set(name, number), data(data)
 {
-	kdDebug()<<"Set2D()"<<endl;
+	kDebug()<<"Set2D()"<<endl;
 	type = SET2D;
 	if(number>0) resetRanges();
 }
 
 // calculate ranges from data
 void Set2D::resetRanges() {
-	kdDebug()<<"Set2D::resetRanges()"<<endl;
+	kDebug()<<"Set2D::resetRanges()"<<endl;
 	double xmin=data[0].X(),xmax=xmin;
 	double ymin=data[0].Y(),ymax=ymin;
 	for(int i=1;i<number;i++) {
@@ -24,8 +24,8 @@ void Set2D::resetRanges() {
 	}
 	range[0].setRange(xmin,xmax);
 	range[1].setRange(ymin,ymax);
-	kdDebug()<<"	x range : "<<xmin<<xmax<<endl;
-	kdDebug()<<"	y range : "<<ymin<<ymax<<endl;
+	kDebug()<<"	x range : "<<xmin<<xmax<<endl;
+	kDebug()<<"	y range : "<<ymin<<ymax<<endl;
 }
 
 /*Graph2D::Graph2D(QString n, QString l, LRange r[2], LSource src, PType t, Style *st,
@@ -101,7 +101,7 @@ QStringList Graph2D::Info()
 }
 
 void Graph2D::saveXML(QDomDocument doc, QDomElement graphtag) {
-	kdDebug()<<"Graph2D::saveXML()"<<endl;
+	kDebug()<<"Graph2D::saveXML()"<<endl;
 	QDomElement tag = doc.createElement( "Range" );
 	tag.setAttribute("xmin",QString::number(range[0].rMin()));
 	tag.setAttribute("xmax",QString::number(range[0].rMax()));
@@ -116,15 +116,15 @@ void Graph2D::saveXML(QDomDocument doc, QDomElement graphtag) {
 		tag.setAttribute("masked",QString::number(ptr[i].Masked()));
     		graphtag.appendChild( tag );
 	}
-	kdDebug()<<"Graph2D::saveXML() DONE"<<endl;
+	kDebug()<<"Graph2D::saveXML() DONE"<<endl;
 }
 
 void Graph2D::openXML(QDomNode node) {
 	int i=0;
 	while(!node.isNull()) {
 		QDomElement e = node.toElement();
-//		kdDebug()<<"GRAPH TAG = "<<e.tagName()<<endl;
-//		kdDebug()<<"GRAPH TEXT = "<<e.text()<<endl;
+//		kDebug()<<"GRAPH TAG = "<<e.tagName()<<endl;
+//		kDebug()<<"GRAPH TEXT = "<<e.text()<<endl;
 
 		openGraphXML(e);
 
@@ -135,7 +135,7 @@ void Graph2D::openXML(QDomNode node) {
 			range[1].setRange(e.attribute("ymin").toDouble(),e.attribute("ymax").toDouble());
 		}
 		else if(e.tagName() == "Data") {
-			// kdDebug()<<"I = "<<i<<" x ="<<e.attribute("x").toDouble()<<endl;
+			// kDebug()<<"I = "<<i<<" x ="<<e.attribute("x").toDouble()<<endl;
 			ptr[i].setPoint(e.attribute("x").toDouble(),e.attribute("y").toDouble());
 			ptr[i].setMasked((bool) e.attribute("masked").toInt());
 			i++;

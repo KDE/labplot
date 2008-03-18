@@ -11,7 +11,7 @@
 
 Plot::Plot()
 {
-	kdDebug()<<"Plot::Plot()"<<endl;
+	kDebug()<<"Plot::Plot()"<<endl;
 	title = new Label(i18n("Title"));
 	// OLD : title = new Label(i18n("Title"),font,QColor(Qt::black));
 	title->setPosition(0.4,0.04);
@@ -113,7 +113,7 @@ QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) const {
 		if (dtf != i18n("auto"))
 			format = dtf;
 		label=time.toString(format);
-		kdDebug()<<"VALUE in Time Format : "<<label<<endl;
+		kDebug()<<"VALUE in Time Format : "<<label<<endl;
 		}
 		break;
 	case DATE: {
@@ -123,19 +123,19 @@ QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) const {
 		if (dtf != i18n("auto"))
 			format = dtf;
 			label=date.toString(format);
-			kdDebug()<<"VALUE in Date Format ( "<<format<<") : "<<label<<endl;
+			kDebug()<<"VALUE in Date Format ( "<<format<<") : "<<label<<endl;
 		}
 		break;
 	case DATETIME: {
 		QDate date(1970,1,1);
 		QDateTime datetime(date);
-//		kdDebug()<<"value = "<<(int) value<<endl;
+//		kDebug()<<"value = "<<(int) value<<endl;
 		datetime=datetime.addSecs((int)value);
 		QString format("dd.MM.yyyy h:mm:ss");
 		if (dtf != i18n("auto"))
 			format = dtf;
 		label = datetime.toString(format);
-//		kdDebug()<<"VALUE in DateTime Format ( "<<format<<") : "<<label<<endl;
+//		kDebug()<<"VALUE in DateTime Format ( "<<format<<") : "<<label<<endl;
 		}
 		break;
 	case DEGREE:
@@ -147,34 +147,34 @@ QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) const {
 }
 
 void Plot::resetRanges() {
-	kdDebug()<<"Plot::resetRanges()"<<endl;
+	kDebug()<<"Plot::resetRanges()"<<endl;
 
 	double xmin=0,xmax=1,ymin=0,ymax=1,zmin=0,zmax=1;
 	for (int i=0;i<set.size();i++) {
-		kdDebug()<<"	using set "<<i<<endl;
+		kDebug()<<"	using set "<<i<<endl;
 		if(!set[i]->ShownEnabled())
 			continue;	// do not use hidden graphs
 
 		SetType stype = set[i]->Type();
-		kdDebug()<<"	Set "<<i<<" / Type = "<<stype<<endl;
+		kDebug()<<"	Set "<<i<<" / Type = "<<stype<<endl;
 
 		Range xrange,yrange,zrange;
 		if(stype == SET2D) {
-			kdDebug()<<"Set2D"<<endl;
+			kDebug()<<"Set2D"<<endl;
 			if(set[i] == 0) {
-				kdDebug()<<"ERROR : set == 0!"<<endl;
+				kDebug()<<"ERROR : set == 0!"<<endl;
 				continue;
 			}
 			xrange = ((Set2D *)set[i])->getRange(0);
 			yrange = ((Set2D *)set[i])->getRange(1);
 		}
 		/*else if(s == GRAPH3D) {
-			kdDebug()<<"	GRAPH3D"<<endl;
+			kDebug()<<"	GRAPH3D"<<endl;
 			Graph3D *g = graphlist->getGraph3D(i);
 			if(g == 0)
-				kdDebug()<<"ERROR : g==0!"<<endl;
+				kDebug()<<"ERROR : g==0!"<<endl;
 			PType t = plot[api]->Type();
-			kdDebug()<<"	PType = "<<t<<endl;
+			kDebug()<<"	PType = "<<t<<endl;
 
 			xrange = g->Range(0);
 			if(t == P2D)	// x-y-dy
@@ -184,20 +184,20 @@ void Plot::resetRanges() {
 			zrange = g->Range(2);
 		}
 		else if(s == GRAPHM) {
-			kdDebug()<<"GRAPHM"<<endl;
+			kDebug()<<"GRAPHM"<<endl;
 			GraphM *g = graphlist->getGraphM(i);
 			xrange = g->Range(0);
 			yrange = g->Range(1);
 			zrange = g->Range(2);
 		}
 		else if(s == GRAPH4D) {
-			kdDebug()<<"GRAPH4D"<<endl;
+			kDebug()<<"GRAPH4D"<<endl;
 			Graph4D *g = graphlist->getGraph4D(i);
 			xrange = g->ErrorDXRange();
 			yrange = g->ErrorDYRange();
 		}
 		else if(s == GRAPHIMAGE) {
-			kdDebug()<<"GRAPHIMAGE"<<endl;
+			kDebug()<<"GRAPHIMAGE"<<endl;
 			GraphIMAGE *g = graphlist->getGraphIMAGE(i);
 			xrange = g->Range(0);
 			yrange = g->Range(1);
@@ -229,24 +229,24 @@ void Plot::resetRanges() {
 
 	// fix zero range	TODO : MIN
 	if(xmax-xmin == 0) {
-		kdDebug()<<"WARNING: x range 0."<<endl;
+		kDebug()<<"WARNING: x range 0."<<endl;
 		xmin -= 1.0;
 		xmax += 1.0;
 	}
 	if(ymax-ymin == 0) {
-		kdDebug()<<"WARNING: y range 0."<<endl;
+		kDebug()<<"WARNING: y range 0."<<endl;
 		ymin -= 1.0;
 		ymax += 1.0;
 	}
 	if(zmax-zmin == 0) {
-		kdDebug()<<"WARNING: z range 0."<<endl;
+		kDebug()<<"WARNING: z range 0."<<endl;
 		zmin -= 1.0;
 		zmax += 1.0;
 	}
 
-	kdDebug()<<"	xmin/xmax "<<xmin<<' '<<xmax<<endl;
-	kdDebug()<<"	ymin/ymax "<<ymin<<' '<<ymax<<endl;
-	kdDebug()<<"	zmin/zmax "<<zmin<<' '<<zmax<<endl;
+	kDebug()<<"	xmin/xmax "<<xmin<<' '<<xmax<<endl;
+	kDebug()<<"	ymin/ymax "<<ymin<<' '<<ymax<<endl;
+	kDebug()<<"	zmin/zmax "<<zmin<<' '<<zmax<<endl;
 
 	Range range[3];
 	range[0] = Range(xmin,xmax);
@@ -256,11 +256,11 @@ void Plot::resetRanges() {
 
 	//mw->setModified();
 	
-	kdDebug()<<"Plot::resetRanges() DONE"<<endl;
+	kDebug()<<"Plot::resetRanges() DONE"<<endl;
 }
 
 void Plot::drawStyle(QPainter *p, Style *style, Symbol *symbol, QVector<QPoint> pa, int xmin, int xmax, int ymin, int ymax) {
-	kdDebug()<<"Plot::drawStyle()"<<endl;
+	kDebug()<<"Plot::drawStyle()"<<endl;
 	bool filled = style->FillEnabled();
 	QColor c = style->FillColor();
  	QPen pen( style->Color(), style->Width(),(Qt::PenStyle)style->PenStyle() );
@@ -278,11 +278,11 @@ void Plot::drawStyle(QPainter *p, Style *style, Symbol *symbol, QVector<QPoint> 
 	int bw = style->BoxWidth();
 	//int rmin = xmin + (int) ((region->Min()-minx)/(maxx-minx)*(double)(xmax-xmin));
 	//int rmax = xmin + (int) ((region->Max()-minx)/(maxx-minx)*(double)(xmax-xmin));
-	//kdDebug()<<"BASEX = "<<basex<<endl;
-	//kdDebug()<<"BASEY = "<<basey<<endl;
+	//kDebug()<<"BASEX = "<<basex<<endl;
+	//kDebug()<<"BASEY = "<<basey<<endl;
 
 
-//	kdDebug()<<"POINTARRAY "<<i<<'='<<pa[i].x()<<' '<<pa[i].y()<<endl;
+//	kDebug()<<"POINTARRAY "<<i<<'='<<pa[i].x()<<' '<<pa[i].y()<<endl;
 
 	switch(style->Type()) {
 	case LINESTYLE:

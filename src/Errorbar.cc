@@ -72,8 +72,8 @@ QDomElement Errorbar::saveXML(QDomDocument doc) {
 void Errorbar::openXML(QDomNode node) {
 	while(!node.isNull()) {
 		QDomElement e = node.toElement();
-		kdDebug()<<"ERRORBAR TAG = "<<e.tagName()<<endl;
-		kdDebug()<<"ERRORBAR TEXT = "<<e.text()<<endl;
+		kDebug()<<"ERRORBAR TAG = "<<e.tagName()<<endl;
+		kDebug()<<"ERRORBAR TEXT = "<<e.text()<<endl;
 
 		if(e.tagName() == "Color")
 			color = QColor(e.text());

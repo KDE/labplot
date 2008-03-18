@@ -10,7 +10,7 @@
 
 Symbol::Symbol(SType t, QColor c, int s, FType f, QColor fc, int b)
 {
-	kdDebug()<<"Symbol()"<<endl;
+	kDebug()<<"Symbol()"<<endl;
 	type = t;
 	color = c;
 	size = s;
@@ -79,8 +79,8 @@ QDomElement Symbol::saveXML(QDomDocument doc) {
 void Symbol::openXML(QDomNode node) {
 	while(!node.isNull()) {
 		QDomElement e = node.toElement();
-//		kdDebug()<<"SYMBOL TAG = "<<e.tagName()<<endl;
-//		kdDebug()<<"SYMBOL TEXT = "<<e.text()<<endl;
+//		kDebug()<<"SYMBOL TAG = "<<e.tagName()<<endl;
+//		kDebug()<<"SYMBOL TEXT = "<<e.text()<<endl;
 
 		if(e.tagName() == "Type")
 			type = (SType) e.text().toInt();

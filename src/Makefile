@@ -123,18 +123,6 @@ LabPlot/fast:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/build
 
 # target to build an object file
-AxesDialog.o:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/AxesDialog.o
-
-# target to preprocess a source file
-AxesDialog.i:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/AxesDialog.i
-
-# target to generate assembly for a file
-AxesDialog.s:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/AxesDialog.s
-
-# target to build an object file
 Axis.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Axis.o
 
@@ -519,6 +507,90 @@ WorksheetDialog.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/WorksheetDialog.s
 
 # target to build an object file
+gui/AxesDialog.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/AxesDialog.o
+
+# target to preprocess a source file
+gui/AxesDialog.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/AxesDialog.i
+
+# target to generate assembly for a file
+gui/AxesDialog.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/AxesDialog.s
+
+# target to build an object file
+gui/AxesWidget.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/AxesWidget.o
+
+# target to preprocess a source file
+gui/AxesWidget.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/AxesWidget.i
+
+# target to generate assembly for a file
+gui/AxesWidget.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/AxesWidget.s
+
+# target to build an object file
+gui/LabelWidget.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LabelWidget.o
+
+# target to preprocess a source file
+gui/LabelWidget.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LabelWidget.i
+
+# target to generate assembly for a file
+gui/LabelWidget.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LabelWidget.s
+
+# target to build an object file
+gui/SettingsDialog.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsDialog.o
+
+# target to preprocess a source file
+gui/SettingsDialog.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsDialog.i
+
+# target to generate assembly for a file
+gui/SettingsDialog.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsDialog.s
+
+# target to build an object file
+gui/SettingsGeneralPage.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsGeneralPage.o
+
+# target to preprocess a source file
+gui/SettingsGeneralPage.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsGeneralPage.i
+
+# target to generate assembly for a file
+gui/SettingsGeneralPage.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsGeneralPage.s
+
+# target to build an object file
+gui/SettingsPage.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsPage.o
+
+# target to preprocess a source file
+gui/SettingsPage.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsPage.i
+
+# target to generate assembly for a file
+gui/SettingsPage.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsPage.s
+
+# target to build an object file
+gui/SettingsPrintingPage.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsPrintingPage.o
+
+# target to preprocess a source file
+gui/SettingsPrintingPage.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsPrintingPage.i
+
+# target to generate assembly for a file
+gui/SettingsPrintingPage.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsPrintingPage.s
+
+# target to build an object file
 parser.tab.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/parser.tab.o
 
@@ -542,9 +614,6 @@ help::
 	@echo "... install/local"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... AxesDialog.o"
-	@echo "... AxesDialog.i"
-	@echo "... AxesDialog.s"
 	@echo "... Axis.o"
 	@echo "... Axis.i"
 	@echo "... Axis.s"
@@ -641,6 +710,27 @@ help::
 	@echo "... WorksheetDialog.o"
 	@echo "... WorksheetDialog.i"
 	@echo "... WorksheetDialog.s"
+	@echo "... gui/AxesDialog.o"
+	@echo "... gui/AxesDialog.i"
+	@echo "... gui/AxesDialog.s"
+	@echo "... gui/AxesWidget.o"
+	@echo "... gui/AxesWidget.i"
+	@echo "... gui/AxesWidget.s"
+	@echo "... gui/LabelWidget.o"
+	@echo "... gui/LabelWidget.i"
+	@echo "... gui/LabelWidget.s"
+	@echo "... gui/SettingsDialog.o"
+	@echo "... gui/SettingsDialog.i"
+	@echo "... gui/SettingsDialog.s"
+	@echo "... gui/SettingsGeneralPage.o"
+	@echo "... gui/SettingsGeneralPage.i"
+	@echo "... gui/SettingsGeneralPage.s"
+	@echo "... gui/SettingsPage.o"
+	@echo "... gui/SettingsPage.i"
+	@echo "... gui/SettingsPage.s"
+	@echo "... gui/SettingsPrintingPage.o"
+	@echo "... gui/SettingsPrintingPage.i"
+	@echo "... gui/SettingsPrintingPage.s"
 	@echo "... parser.tab.o"
 	@echo "... parser.tab.i"
 	@echo "... parser.tab.s"

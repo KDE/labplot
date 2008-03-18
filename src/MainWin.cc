@@ -55,7 +55,7 @@ void MainWin::setupActions() {
 	action->setEnabled(false);
 
 	// Doesn't work	: action = new KAction("import", i18n("Import"), actionCollection(), "import");
-	action = new KAction(KIcon("document-import-database"), i18n("Importdfsa"), this);
+	action = new KAction(KIcon("document-import-database"), i18n("Import"), this);
 	action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_L);
 	actionCollection()->addAction("import", action);
 	connect(action, SIGNAL(triggered()),SLOT(importDialog()));
@@ -205,11 +205,11 @@ void MainWin::updateGUI() {
 }
 
 void MainWin::openNew() {
-// 	kdDebug()<<"MainWin::New()"<<endl;
+ 	kDebug()<<"MainWin::New()"<<endl;
 // //	if(warnModified()) return;
 //
-// 	mdi->closeAllSubWindows();
-// 	updateGUI();
+ 	mdi->closeAllSubWindows();
+ 	updateGUI();
 // /*	gvpart=0;
 // 	defining_region=0;
 // 	defining_line=0;
@@ -221,8 +221,8 @@ void MainWin::openNew() {
 // 	defining_maglens=0;
 // 	defining_panzoom=0;
 // */
-// 	project = new Project();
-// 	project->setChanged(false);
+ 	project = new Project();
+ 	project->setChanged(false);
 }
 
 void MainWin::print() {
@@ -232,7 +232,7 @@ void MainWin::print() {
 
 /************** sheet stuff *************************/
 void MainWin::SpreadsheetMenu() {
-	kdDebug()<<"MainWin::SpreadsheetMenu()"<<endl;
+	kDebug()<<"MainWin::SpreadsheetMenu()"<<endl;
 	Spreadsheet *s = activeSpreadsheet();
 	if(s) {
 		s->Menu(spreadsheetmenu);
@@ -251,7 +251,7 @@ int MainWin::activeSheetIndex() const {
 }
 
 Spreadsheet* MainWin::newSpreadsheet() {
-        kdDebug()<<"MainWin::newSpreadsheet()"<<endl;
+        kDebug()<<"MainWin::newSpreadsheet()"<<endl;
         Spreadsheet *s = new Spreadsheet(this);
 	s->setAttribute(Qt::WA_DeleteOnClose);
 	mdi->addSubWindow(s);
@@ -264,7 +264,7 @@ Spreadsheet* MainWin::newSpreadsheet() {
 }
 
 Worksheet* MainWin::newWorksheet() {
-        kdDebug()<<"MainWin::newWorksheet()"<<endl;
+        kDebug()<<"MainWin::newWorksheet()"<<endl;
         Worksheet *w = new Worksheet(this);
 	mdi->addSubWindow(w);
 	w->show();
@@ -272,11 +272,12 @@ Worksheet* MainWin::newWorksheet() {
 
 	updateGUI();
 
+        kDebug()<<"MainWin::newWorksheet() DONE"<<endl;
         return w;
 }
 
 Spreadsheet* MainWin::activeSpreadsheet() const {
-	kdDebug()<<"MainWin::activeSpreadsheet()"<<endl;
+	kDebug()<<"MainWin::activeSpreadsheet()"<<endl;
 	QMdiSubWindow *subWindow = mdi->activeSubWindow();
 	if(subWindow != 0) {
 		Spreadsheet *s = (Spreadsheet *) subWindow->widget();
@@ -287,7 +288,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 }
 
 Worksheet* MainWin::activeWorksheet() const {
-	kdDebug()<<"MainWin::activeWorksheet()"<<endl;
+	kDebug()<<"MainWin::activeWorksheet()"<<endl;
 	QMdiSubWindow *subWindow = mdi->activeSubWindow();
 	if(subWindow != 0) {
 		Worksheet *w = (Worksheet *) subWindow->widget();
@@ -303,19 +304,19 @@ void MainWin::importDialog() { (new ImportDialog(this))->show(); }
 void MainWin::projectDialog() { (new ProjectDialog(this))->show(); project->setChanged(true); }
 void MainWin::functionDialog() { (new FunctionDialog(this))->show(); }
 void MainWin::titleDialog() {
-	kdDebug()<<"MainWin::titleDialog()"<<endl;
+	kDebug()<<"MainWin::titleDialog()"<<endl;
 	Worksheet *w = activeWorksheet();
 	if(w == 0) {
-		kdDebug()<<"ERROR: no worksheet active!"<<endl;
+		kDebug()<<"ERROR: no worksheet active!"<<endl;
 		return;
 	}
 	if(w->plotCount() == 0) {
-		kdDebug()<<"ERROR: worksheet has no plot!"<<endl;
+		kDebug()<<"ERROR: worksheet has no plot!"<<endl;
 		return;
 	}
 	Plot *plot = w->getActivePlot();
 	if(plot == 0) {
-		kdDebug()<<"ERROR: no active plot found!"<<endl;
+		kDebug()<<"ERROR: no active plot found!"<<endl;
 		return;
 	}
 
@@ -329,10 +330,10 @@ void MainWin::settingsDialog(){ (new SettingsDialog(this))->show(); }
 /******************** dialogs end *****************************/
 
 void MainWin::addSet(Set *set, int sheet, PlotType ptype) {
-	kdDebug()<<"MainWin::addGraph2D() sheet ="<<sheet<<endl;
+	kDebug()<<"MainWin::addGraph2D() sheet ="<<sheet<<endl;
 
 	int nr_sheets = mdi->subWindowList().size();
-	kdDebug()<<" Number of sheets :"<<nr_sheets<<endl;
+	kDebug()<<" Number of sheets :"<<nr_sheets<<endl;
 	if(sheet == nr_sheets) {	// new worksheet
 		Worksheet *w = newWorksheet();
 		w->addSet(set,ptype);
@@ -342,12 +343,12 @@ void MainWin::addSet(Set *set, int sheet, PlotType ptype) {
 		s->addSet(set);
 	}
 	else {
-		kdDebug()<<" Using sheet "<<sheet<<endl;
+		kDebug()<<" Using sheet "<<sheet<<endl;
 		QMdiSubWindow *subWindow = mdi->subWindowList()[sheet];
 		if(subWindow != 0) {
 			Worksheet *w = (Worksheet *) subWindow->widget();
 			if(w == 0) {
-				kdDebug()<<"ERROR: selected sheet found!"<<endl;
+				kDebug()<<"ERROR: selected sheet found!"<<endl;
 				return;
 			}
 			if (w->sheetType() == WORKSHEET)

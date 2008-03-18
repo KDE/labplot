@@ -15,24 +15,24 @@ FilterOPJ::FilterOPJ(MainWin *mw, QString filename)
 {}
 
 int FilterOPJ::import() {
-	kdDebug()<<"FilterOPJ::import() : "<<filename<<endl;
+	kDebug()<<"FilterOPJ::import() : "<<filename<<endl;
 
 	OPJFile opj(qPrintable(filename));
 	qPrintable(filename);	// needed for some reason
-	kdDebug()<<"	Parsing OPJ file "<<filename<<" ..."<<endl;
+	kDebug()<<"	Parsing OPJ file "<<filename<<" ..."<<endl;
 	int status = opj.Parse();
-	kdDebug()<<"	Parsing OPJ file DONE. status = "<<status<<endl;
+	kDebug()<<"	Parsing OPJ file DONE. status = "<<status<<endl;
 
-	kdDebug()<<"	Import OPJ file ..."<<endl;
-	kdDebug()<<"		Number of Spreadsheets : "<<opj.numSpreads()<<endl;
-	kdDebug()<<"		Number of Matrices : "<<opj.numMatrices()<<endl;
-	kdDebug()<<"		Number of Functions : "<<opj.numFunctions()<<endl;
-	kdDebug()<<"		Number of Graphs : "<<opj.numGraphs()<<endl;
-	kdDebug()<<"		Number of Notes : "<<opj.numNotes()<<endl;
+	kDebug()<<"	Import OPJ file ..."<<endl;
+	kDebug()<<"		Number of Spreadsheets : "<<opj.numSpreads()<<endl;
+	kDebug()<<"		Number of Matrices : "<<opj.numMatrices()<<endl;
+	kDebug()<<"		Number of Functions : "<<opj.numFunctions()<<endl;
+	kDebug()<<"		Number of Graphs : "<<opj.numGraphs()<<endl;
+	kDebug()<<"		Number of Notes : "<<opj.numNotes()<<endl;
 
 	for (int s=0;s<opj.numSpreads();s++) {
 		Spreadsheet *spread = mw->newSpreadsheet();
-		kdDebug()<<"	SPREADNAME "<<s<<" = "<<opj.spreadName(s)<<endl;
+		kDebug()<<"	SPREADNAME "<<s<<" = "<<opj.spreadName(s)<<endl;
 		spread->setTitle(opj.spreadName(s));
 
 		int nr_cols = opj.numCols(s), maxrows = opj.maxRows(s);
@@ -60,13 +60,13 @@ int FilterOPJ::import() {
 	}
 	// TODO
 /*	for (int s=0;s<opj.numMatrices();s++) {
-		kdDebug()<<"		Matrix "<<s+1<<" : "<<opj.matrixName(s)<<" (ParentFolder : "<<opj.matrixParentFolder(s)<<")"<<endl;
-		kdDebug()<<"			Label : "<<opj.matrixLabel(s)<<" Cols/Rows : "<<opj.numMatrixCols(s)<<'/'<<opj.numMatrixRows(s)<<endl;
-		kdDebug()<<"			Formula : "<<opj.matrixFormula(s)<<" DisplayType : "<<opj.matrixNumDisplayType(s)<<endl;
+		kDebug()<<"		Matrix "<<s+1<<" : "<<opj.matrixName(s)<<" (ParentFolder : "<<opj.matrixParentFolder(s)<<")"<<endl;
+		kDebug()<<"			Label : "<<opj.matrixLabel(s)<<" Cols/Rows : "<<opj.numMatrixCols(s)<<'/'<<opj.numMatrixRows(s)<<endl;
+		kDebug()<<"			Formula : "<<opj.matrixFormula(s)<<" DisplayType : "<<opj.matrixNumDisplayType(s)<<endl;
 
 		Spreadsheet *spread = mw->newSpreadsheet();
 		QTable *table = spread->Table();
-		kdDebug()<<"	SPREADNAME "<<s<<" = "<<opj.matrixName(s)<<endl;
+		kDebug()<<"	SPREADNAME "<<s<<" = "<<opj.matrixName(s)<<endl;
 		spread->setTitle(opj.matrixName(s));
 		int nr_cols = opj.numMatrixCols(s), nr_rows = opj.numMatrixRows(s);
 		table->setNumCols(nr_cols);
@@ -97,15 +97,15 @@ int FilterOPJ::import() {
 
 	QString notes = mw->getProject()->Notes();
 	for (int s=0;s<opj.numNotes();s++) {
-		kdDebug()<<"		Note "<<s+1<<" : "<<opj.noteName(s)<<" (ParentFolder : "<<opj.noteParentFolder(s)<<")"<<endl;
-		kdDebug()<<"			Label : "<<opj.noteLabel(s)<<" Text : "<<opj.noteText(s)<<endl;
+		kDebug()<<"		Note "<<s+1<<" : "<<opj.noteName(s)<<" (ParentFolder : "<<opj.noteParentFolder(s)<<")"<<endl;
+		kDebug()<<"			Label : "<<opj.noteLabel(s)<<" Text : "<<opj.noteText(s)<<endl;
 		notes.append(QString(opj.noteLabel(s))+":\n");
 		notes.append(opj.noteText(s));
 	}
 	for (int s=0;s<opj.numFunctions();s++) {
-		kdDebug()<<"		Function "<<s+1<<" : "<<opj.functionName(s)<<" (Type : "<<opj.functionType(s)<<")"<<endl;
-		kdDebug()<<"			Start/End : "<<opj.functionBegin(s)<<"/"<<opj.functionEnd(s)<<"  Points : "<<opj.functionPoints(s)<<endl;
-		kdDebug()<<"			Formula : "<<opj.functionFormula(s)<<endl;
+		kDebug()<<"		Function "<<s+1<<" : "<<opj.functionName(s)<<" (Type : "<<opj.functionType(s)<<")"<<endl;
+		kDebug()<<"			Start/End : "<<opj.functionBegin(s)<<"/"<<opj.functionEnd(s)<<"  Points : "<<opj.functionPoints(s)<<endl;
+		kDebug()<<"			Formula : "<<opj.functionFormula(s)<<endl;
 		notes.append(QString(opj.functionName(s)+QString(": ")+QString(opj.functionFormula(s))+" "));
 		notes.append(QString::number(opj.functionBegin(s))+" - "+QString::number(opj.functionEnd(s)));
 		notes.append(" ("+QString::number(opj.functionPoints(s))+" Points)");
@@ -113,8 +113,8 @@ int FilterOPJ::import() {
 	}
 
 	for (int s=0;s<opj.numGraphs();s++) {
-		kdDebug()<<"		Graph "<<s+1<<" : "<<opj.graphName(s)<<" (ParentFolder : "<<opj.graphParentFolder(s)<<")"<<endl;
-		kdDebug()<<"			Label : "<<opj.graphLabel(s)<<" Layers : "<<opj.numLayers(s)<<endl;
+		kDebug()<<"		Graph "<<s+1<<" : "<<opj.graphName(s)<<" (ParentFolder : "<<opj.graphParentFolder(s)<<")"<<endl;
+		kDebug()<<"			Label : "<<opj.graphLabel(s)<<" Layers : "<<opj.numLayers(s)<<endl;
 
 		Worksheet *work = mw->newWorksheet();
 		Plot2DSimple *plot = (Plot2DSimple *) work->newPlot();
@@ -123,32 +123,32 @@ int FilterOPJ::import() {
 		plot->Title()->setTitle("");
 
 		rect r = opj.graphRect(s);
-		kdDebug()<<"Rect : "<<r.left<<" "<<r.right<<" "<<r.top<<" "<<r.bottom<<endl;
-		kdDebug()<<"Number of Layers : "<<opj.numLayers(s)<<endl;
+		kDebug()<<"Rect : "<<r.left<<" "<<r.right<<" "<<r.top<<" "<<r.bottom<<endl;
+		kDebug()<<"Number of Layers : "<<opj.numLayers(s)<<endl;
 		for(int l=0;l<opj.numLayers(s);l++) {
 			rect lr = opj.layerRect(s,l);
-			kdDebug()<<"LayerRect : "<<lr.left<<" "<<lr.right<<" "<<lr.top<<" "<<lr.bottom<<endl;
+			kDebug()<<"LayerRect : "<<lr.left<<" "<<lr.right<<" "<<lr.top<<" "<<lr.bottom<<endl;
 #if LIBORIGIN_VERSION < 0x00071119
-			kdDebug()<<"Layer	x axis : "<<opj.layerXAxisTitle(s,l)<<endl;
-			kdDebug()<<"Layer	y axis : "<<opj.layerYAxisTitle(s,l)<<endl;
+			kDebug()<<"Layer	x axis : "<<opj.layerXAxisTitle(s,l)<<endl;
+			kDebug()<<"Layer	y axis : "<<opj.layerYAxisTitle(s,l)<<endl;
 			Label *xlabel = new Label(parseOriginText(QString::fromLocal8Bit(opj.layerXAxisTitle(s,l))));
 			Label *ylabel = new Label(parseOriginText(QString::fromLocal8Bit(opj.layerYAxisTitle(s,l))));
-			kdDebug()<<"Layer	legend : "<<opj.layerLegend(s,l)<<endl;
+			kDebug()<<"Layer	legend : "<<opj.layerLegend(s,l)<<endl;
 #else
-			kdDebug()<<"Layer	x axis : "<<opj.layerXAxisTitle(s,l).txt<<endl;
-			kdDebug()<<"Layer	y axis : "<<opj.layerYAxisTitle(s,l).txt<<endl;
+			kDebug()<<"Layer	x axis : "<<opj.layerXAxisTitle(s,l).txt<<endl;
+			kDebug()<<"Layer	y axis : "<<opj.layerYAxisTitle(s,l).txt<<endl;
 			Label *xlabel = new Label(parseOriginText(opj.layerXAxisTitle(s,l).txt));
 			Label *ylabel = new Label(parseOriginText(opj.layerYAxisTitle(s,l).txt));
-			kdDebug()<<"Layer	legend : "<<opj.layerLegend(s,l).txt<<endl;
+			kDebug()<<"Layer	legend : "<<opj.layerLegend(s,l).txt<<endl;
 #endif
 			plot->getAxis(0)->setLabel(xlabel);
 			plot->getAxis(1)->setLabel(ylabel);
 			//if(strlen(opj.layerLegend(g,l))>0)
 			//	graph->newLegend(parseOriginText(QString::fromLocal8Bit(opj.layerLegend(g,l))));
 			
-			kdDebug()<<"Layer	nr curves : "<<opj.numCurves(s,l)<<endl;
+			kDebug()<<"Layer	nr curves : "<<opj.numCurves(s,l)<<endl;
 			for(int c=0;c<opj.numCurves(s,l);c++) {
-				kdDebug()<<"	Curve "<<c+1<<" :"<<endl;
+				kDebug()<<"	Curve "<<c+1<<" :"<<endl;
 				int cstyle = opj.curveType(s,l,c);
 */
 				/* case OPJFile::Line:
@@ -167,15 +167,15 @@ int FilterOPJ::import() {
 				case OPJFile::Histogram:
 					style=Graph::Histogram;
 				*/
-/*				kdDebug()<<"	Curve Style "<<cstyle<<endl;
+/*				kDebug()<<"	Curve Style "<<cstyle<<endl;
 
 				QString data(opj.curveDataName(s,l,c));
 				QString tableName;
 				switch(data[0].latin1()) {
 				case 'T': {
-					kdDebug()<<"	Table data"<<endl;
+					kDebug()<<"	Table data"<<endl;
 					tableName = data.right(data.length()-2);
-					kdDebug()<<"	Table Name : "<<tableName<<endl;
+					kDebug()<<"	Table Name : "<<tableName<<endl;
 
 					// do we have errorbars ? : use next curve
 					bool errorbars=false;
@@ -187,9 +187,9 @@ int FilterOPJ::import() {
 					}
 
 					if(errorbars)
-						kdDebug()<<"	X/Y/DY Column : "<<opj.curveXColName(s,l,c)<<' '<<opj.curveYColName(s,l,c)<<' '<<opj.curveYColName(s,l,c+1)<<endl;
+						kDebug()<<"	X/Y/DY Column : "<<opj.curveXColName(s,l,c)<<' '<<opj.curveYColName(s,l,c)<<' '<<opj.curveYColName(s,l,c+1)<<endl;
 					else
-						kdDebug()<<"	X/Y Column : "<<opj.curveXColName(s,l,c)<<' '<<opj.curveYColName(s,l,c)<<endl;
+						kDebug()<<"	X/Y Column : "<<opj.curveXColName(s,l,c)<<' '<<opj.curveYColName(s,l,c)<<endl;
 
 					Spreadsheet *ss = mw->getSpreadsheet(tableName);
 					if(ss == 0)
@@ -199,12 +199,12 @@ int FilterOPJ::import() {
 					int zindex;
 					if(errorbars) {
 						zindex=ss->getColumnIndex(opj.curveYColName(s,l,c+1));
-						kdDebug()<<"	X/Y/DY column : "<<xindex<<' '<<yindex<<' '<<zindex<<endl;
+						kDebug()<<"	X/Y/DY column : "<<xindex<<' '<<yindex<<' '<<zindex<<endl;
 					}
 					else
-						kdDebug()<<"	X/Y column : "<<xindex<<' '<<yindex<<endl;
+						kDebug()<<"	X/Y column : "<<xindex<<' '<<yindex<<endl;
 					int nr_rows = ss->filledRows(xindex);
-					kdDebug()<<"	nr of rows : "<<nr_rows<<endl;
+					kDebug()<<"	nr of rows : "<<nr_rows<<endl;
 
 					Symbol *symbol = new Symbol();
 					symbol->setSize((int)ceil(opj.curveSymbolSize(s,l,c)));
@@ -238,9 +238,9 @@ int FilterOPJ::import() {
 							break;
 					}
 
-					kdDebug()<<"Curve line width = "<<opj.curveLineWidth(s,l,c)<<endl;
-					kdDebug()<<"Curve line color = "<<translateOriginColor(opj.curveLineColor(s,l,c)).name()<<endl;
-					kdDebug()<<"Curve line style = "<<opj.curveLineStyle(s,l,c)<<endl;
+					kDebug()<<"Curve line width = "<<opj.curveLineWidth(s,l,c)<<endl;
+					kDebug()<<"Curve line color = "<<translateOriginColor(opj.curveLineColor(s,l,c)).name()<<endl;
+					kDebug()<<"Curve line style = "<<opj.curveLineStyle(s,l,c)<<endl;
 					style->setColor(translateOriginColor(opj.curveLineColor(s,l,c)));
 					style->setWidth((int)ceil(opj.curveLineWidth(s,l,c)));
 					style->setPenStyle(translateOriginLineStyle(opj.curveLineStyle(s,l,c)));
@@ -334,7 +334,7 @@ int FilterOPJ::import() {
 					}
 					}; break;
 				case 'F':
-					kdDebug()<<"Function data (TODO)"<<endl;
+					kDebug()<<"Function data (TODO)"<<endl;
 					// TODO
 					break;
 				}
@@ -349,8 +349,8 @@ int FilterOPJ::import() {
 			plot->setActRanges(range);
 
 			// axis scale
-			kdDebug()<<"	X Scale : "<<opj.layerXScale(s,l)<<endl;
-			kdDebug()<<"	Y Scale : "<<opj.layerYScale(s,l)<<endl;
+			kDebug()<<"	X Scale : "<<opj.layerXScale(s,l)<<endl;
+			kDebug()<<"	Y Scale : "<<opj.layerYScale(s,l)<<endl;
 			Axis *xaxis = plot->getAxis(0);
 			Axis *yaxis = plot->getAxis(1);
 			switch(opj.layerXScale(s,l)) {
@@ -412,11 +412,11 @@ int FilterOPJ::import() {
 		}
 		work->updatePixmap();
 	}
-	kdDebug()<<"	ResultsLogString : "<<opj.resultsLogString()<<endl;
+	kDebug()<<"	ResultsLogString : "<<opj.resultsLogString()<<endl;
 	notes.append(opj.resultsLogString());
 	mw->getProject()->setNotes(notes);
 */
-	kdDebug()<<"	Import OPJ file DONE"<<endl;
+	kDebug()<<"	Import OPJ file DONE"<<endl;
 
 	return 0;
 }

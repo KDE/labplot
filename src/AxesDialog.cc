@@ -5,19 +5,19 @@
 AxesDialog::AxesDialog(MainWin *mw)
 	: Dialog(mw)
 {
-	kdDebug()<<"AxesDialog()"<<endl;
+	kDebug()<<"AxesDialog()"<<endl;
 	setCaption(i18n("Axes Settings"));
 	layout->addWidget(new QLabel(i18n("Not implemented yet!")),1,0);
 
 	showButton(KDialog::User1,false);
-//	kdDebug()<<"	Axis nr = "<<axesnr<<endl;
+//	kDebug()<<"	Axis nr = "<<axesnr<<endl;
 
 /*	// TODO : use updateDialog()
 	plot = p->getPlot(p->API());
 	if(plot==0)
 		return;
 	type = plot->Type();
-	kdDebug()<<"	Plot Type : "<<type<<endl;
+	kDebug()<<"	Plot Type : "<<type<<endl;
 
 	if (type == P2D || type == PSURFACE) {
 		for (int i=0;i<4;i++)
@@ -405,7 +405,7 @@ void AxesDialog::updateTickType(int tt) {
 //! called when axis tic format is changed : update format line edit & ranges
 void AxesDialog::update_timeformat() {
 	int item = axescb->currentItem();
-	kdDebug()<<"ATLF = "<<atlfcb->currentText()<<endl;
+	kDebug()<<"ATLF = "<<atlfcb->currentText()<<endl;
 	if (atlfcb->currentText() == i18n("time") || atlfcb->currentText() == i18n("date")
 		|| atlfcb->currentText() == i18n("datetime") )
 		timeformat->setEnabled("true");
@@ -460,7 +460,7 @@ void AxesDialog::update_timeformat() {
 }
 
 void AxesDialog::axisEnabled(bool on) {
-	kdDebug()<<"AxesDialog::axisEnabled() : "<<on<<endl;
+	kDebug()<<"AxesDialog::axisEnabled() : "<<on<<endl;
 	int item = axescb->currentItem();
 	if (on) {	// axis should be enabled
 		axis[item]->enableBorder();
@@ -477,7 +477,7 @@ void AxesDialog::centerEnabled(bool on) {
 
 //! update the selected axis
 void AxesDialog::updateAxis(int i) {
-	kdDebug()<<"AxesDialog::updateAxis()"<<endl;
+	kDebug()<<"AxesDialog::updateAxis()"<<endl;
 	int item;
 	i==-1?item = axescb->currentItem():item=i;
 	axiscb->setChecked(axis[item]->Enabled());
@@ -725,7 +725,7 @@ void AxesDialog::saveSettings() {
 }
 
 int AxesDialog::apply_clicked() {
-	kdDebug()<<"AxesDialog::apply_clicked()"<<endl;
+	kDebug()<<"AxesDialog::apply_clicked()"<<endl;
 	int item = axescb->currentItem();
 
 	// change xmin,etc. if somethings changed
@@ -807,7 +807,7 @@ int AxesDialog::apply_clicked() {
 	TFormat atlf = axis[item]->TickLabelFormat();
 	double rmin = plot->TicLabelValue(atlf,minle->text());
 	double rmax = plot->TicLabelValue(atlf,maxle->text());
-	kdDebug()<<"	TYPE = "<<type<<endl;
+	kDebug()<<"	TYPE = "<<type<<endl;
 	if (type == P2D || type == PSURFACE || type == PPOLAR) {
 		bool tt = ticktypecb->currentItem();
 		axis[item]->setTickType(tt);
@@ -852,10 +852,10 @@ int AxesDialog::apply_clicked() {
 		}
 	}
 	else if (type == P3D || type == PQWT3D) {
-		kdDebug()<<"	P3D or PQWT3D"<<endl;
+		kDebug()<<"	P3D or PQWT3D"<<endl;
 
 		if (item == 0 || item == 3 || item == 6 || item == 9) {
-			kdDebug()<<"	X"<<endl;
+			kDebug()<<"	X"<<endl;
 			plot->setXRange(rmin,rmax);
 
 			axis[0]->setScale((TScale)ascb->currentItem());
@@ -869,7 +869,7 @@ int AxesDialog::apply_clicked() {
 			axis[item]->setMinorTicks(minorle->text().toInt());
 		}
 		else if (item == 1 || item == 4 || item == 7 || item == 10) {
-			kdDebug()<<"	Y"<<endl;
+			kDebug()<<"	Y"<<endl;
 			plot->setYRange(rmin,rmax);
 
 			axis[1]->setScale((TScale)ascb->currentItem());
@@ -883,7 +883,7 @@ int AxesDialog::apply_clicked() {
 			axis[item]->setMinorTicks(minorle->text().toInt());
 		}
 		else if (item == 2 || item == 5 || item == 8 || item == 11) {
-			kdDebug()<<"	Z"<<endl;
+			kDebug()<<"	Z"<<endl;
 			plot->setZRange(rmin,rmax);
 
 			axis[2]->setScale((TScale)ascb->currentItem());

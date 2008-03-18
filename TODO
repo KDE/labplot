@@ -24,15 +24,6 @@ RELEASE :
 ##############################################################################################################
 LabPlot 2.0.0:	(see also WISHLIST)
 *************
--> start a new project and add features step by step
-
-*use the "usual" c++ naming convention:
-http://techbase.kde.org/index.php?title=Policies/Library_Code_Policy
-"Class names starts with a capital K. The rest is in camel case.
-Function names starts with a lower case, but the first letter of each successive word is capitalized."
-
-*split up the src-directory in gui, filters etc.
-
 BUGS:
 	Import dialog : set "OK" as default button
 	Import dialog : not resized if options hidden
@@ -44,16 +35,21 @@ BUGS:
 
 TODO :
 ******
-	
 -------------------------------------------------------------------------
 General :
+	*use the "usual" c++ naming convention:
+	http://techbase.kde.org/index.php?title=Policies/Library_Code_Policy
+	"Class names starts with a capital K. The rest is in camel case.
+	Function names starts with a lower case, but the first letter of each successive word is capitalized."
+
+	*split up the src-directory in gui, filters etc.
+
 	* check functions.h, constants.h
 		* use GSL
 		* GSL_VERSION
 	* use newest liborigin
 -------------------------------------------------------------------------
 Pending :
-	* labelWidget(): title dialog, function dialog, axes dialog
 	* Print 
 		Worksheet::setupPrinter();
 	* Import Dialog
@@ -68,6 +64,7 @@ Pending :
 			database (kexi ?)
 		file info dialog
 	* dialogs
+		* LabelWidget: title dialog, function dialog, axes dialog
 		* SettingsDialog		Alexander
 		* AxesDialog			Alexander
 		* LegendDialog		Alexander
