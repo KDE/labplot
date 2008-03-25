@@ -37,12 +37,13 @@ public:
 	}
 	QString text(int row, int col) const;
 	void setText(int row, int col, QString text);
-// TODO
-	int currentRow() const { return 0;}
-	int currentColumn() const { return 0; }
+	int currentRow() const;			//!< returns current row (latest selection)
+	int currentColumn() const;		//!< returns current column (latest selection)
+	QList<int> currentRows() const;		//!< returns a sorted list of selected rows
+	QList<int> currentColumns() const;	//!< returns a sorted list of selected columns
 private:
 	MainWin *mw;
-	SheetType type;	// needed for mw->active{Work,Spread}sheet()
+	SheetType type;			//!< needed for mw->active{Work,Spread}sheet()
 	QString notes;
 	void contextMenuEvent(QContextMenuEvent *);
 	QString columnHeader(int col) const;
@@ -59,7 +60,11 @@ public slots:
 	void setNotes(QString notes="");
 	void setProperties(QString label=0, int type=1, int format=0);	
 private slots:
-	void newSpreadsheet();	// needed for menu since direct connect crashes
+	void plot();		//!< create a plot from the selected data
+	void exportData();	//!< export selected data (ExportDialog)
+	void setColumnValues();	//!< set colum  values (ColumnValuesDialog)
+	void deleteSelectedColumns();
+	void deleteSelectedRows();
 };
 
 #endif //SPREADSHEET

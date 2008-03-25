@@ -38,7 +38,7 @@ MainWin::MainWin(QWidget *parent)
 	openNew();
 
 	spreadsheetmenu = static_cast<QMenu*> (guiFactory()->container("spreadsheet",this));
-	connect(spreadsheetmenu, SIGNAL(aboutToShow()), this, SLOT(SpreadsheetMenu()) );
+	connect(spreadsheetmenu, SIGNAL(aboutToShow()), SLOT(SpreadsheetMenu()) );
 }
 
 void MainWin::setupActions() {
@@ -114,40 +114,39 @@ void MainWin::setupActions() {
 	// Script
 
 	//Windows
-	action= new KAction(i18n("Cl&ose"), this);
-    action->setShortcut(tr("Ctrl+F4"));
-    action->setStatusTip(i18n("Close the active window"));
+	action  = new KAction(i18n("Cl&ose"), this);
+	action->setShortcut(tr("Ctrl+F4"));
+	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(closeActiveSubWindow()));
+	connect(action, SIGNAL(triggered()), mdi, SLOT(closeActiveSubWindow()));
 
-    action = new KAction(i18n("Close &All"), this);
-    action->setStatusTip(i18n("Close all the windows"));
+	action = new KAction(i18n("Close &All"), this);
+	action->setStatusTip(i18n("Close all the windows"));
 	actionCollection()->addAction("close all windows", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(closeAllSubWindows()));
+	connect(action, SIGNAL(triggered()), mdi, SLOT(closeAllSubWindows()));
 
-    action = new KAction(i18n("&Tile"), this);
-    action->setStatusTip(i18n("Tile the windows"));
+	action = new KAction(i18n("&Tile"), this);
+	action->setStatusTip(i18n("Tile the windows"));
 	actionCollection()->addAction("tile windows", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(tileSubWindows()));
+	connect(action, SIGNAL(triggered()), mdi, SLOT(tileSubWindows()));
 
-    action = new KAction(i18n("&Cascade"), this);
-    action->setStatusTip(i18n("Cascade the windows"));
+	action = new KAction(i18n("&Cascade"), this);
+	action->setStatusTip(i18n("Cascade the windows"));
 	actionCollection()->addAction("cascade windows", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(cascadeSubWindows()));
+	connect(action, SIGNAL(triggered()), mdi, SLOT(cascadeSubWindows()));
 
-    action = new KAction(i18n("Ne&xt"), this);
-    action->setStatusTip(i18n("Move the focus to the next window"));
+	action = new KAction(i18n("Ne&xt"), this);
+	action->setStatusTip(i18n("Move the focus to the next window"));
 	actionCollection()->addAction("next window", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(activateNextSubWindow()));
+	connect(action, SIGNAL(triggered()), mdi, SLOT(activateNextSubWindow()));
 
-    action = new KAction(i18n("Pre&vious"), this);
-    action->setStatusTip(i18n("Move the focus to the previous window"));
+	action = new KAction(i18n("Pre&vious"), this);
+	action->setStatusTip(i18n("Move the focus to the previous window"));
 	actionCollection()->addAction("previous window", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousSubWindow()));
-
+	connect(action, SIGNAL(triggered()), mdi, SLOT(activatePreviousSubWindow()));
 
 	//"Standard actions"
-    KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
+	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
 	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
 
 	setupGUI();
@@ -251,7 +250,7 @@ int MainWin::activeSheetIndex() const {
 }
 
 Spreadsheet* MainWin::newSpreadsheet() {
-        kDebug()<<"MainWin::newSpreadsheet()"<<endl;
+	kDebug()<<"MainWin::newSpreadsheet()"<<endl;
         Spreadsheet *s = new Spreadsheet(this);
 	s->setAttribute(Qt::WA_DeleteOnClose);
 	mdi->addSubWindow(s);
@@ -264,7 +263,7 @@ Spreadsheet* MainWin::newSpreadsheet() {
 }
 
 Worksheet* MainWin::newWorksheet() {
-        kDebug()<<"MainWin::newWorksheet()"<<endl;
+        kDebug()<<"()"<<endl;
         Worksheet *w = new Worksheet(this);
 	mdi->addSubWindow(w);
 	w->show();
@@ -277,7 +276,7 @@ Worksheet* MainWin::newWorksheet() {
 }
 
 Spreadsheet* MainWin::activeSpreadsheet() const {
-	kDebug()<<"MainWin::activeSpreadsheet()"<<endl;
+	kDebug()<<"()"<<endl;
 	QMdiSubWindow *subWindow = mdi->activeSubWindow();
 	if(subWindow != 0) {
 		Spreadsheet *s = (Spreadsheet *) subWindow->widget();
@@ -287,14 +286,30 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 	return 0;
 }
 
+Spreadsheet* MainWin::getSpreadsheet(QString name) const {
+	QList<QMdiSubWindow *> wlist = mdi->subWindowList();
+	for (int i=0; i<wlist.size(); i++)
+		if(wlist.at(i)->windowTitle() == name)
+			return (Spreadsheet *)wlist.at(i);
+	return 0;
+}
+
 Worksheet* MainWin::activeWorksheet() const {
-	kDebug()<<"MainWin::activeWorksheet()"<<endl;
+	kDebug()<<"()"<<endl;
 	QMdiSubWindow *subWindow = mdi->activeSubWindow();
 	if(subWindow != 0) {
 		Worksheet *w = (Worksheet *) subWindow->widget();
 		if (w && w->sheetType() == WORKSHEET)
 			return w;
 	}
+	return 0;
+}
+
+Worksheet* MainWin::getWorksheet(QString name) const {
+	QList<QMdiSubWindow *> wlist = mdi->subWindowList();
+	for (int i=0; i<wlist.size(); i++)
+		if(wlist.at(i)->windowTitle() == name)
+			return (Worksheet *)wlist.at(i);
 	return 0;
 }
 /************** sheet stuff end *************************/

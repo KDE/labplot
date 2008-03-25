@@ -29,6 +29,8 @@ BUGS:
 	Import dialog : not resized if options hidden
 	Import dialog : file info with nonexisting file hangs in KMessageBox::sorry()
 	Import dialog : compressed data shows no progress
+	Spreadsheet : column selection doesn't work when is CTRL pressed (extended selection)
+	Spreadsheet : crashes when adding a column in an empty spreadsheet
 	config settings not always used ? (function dialog)
 	message boxes sometimes hang the application
 	progress in function dialog can not be canceled
@@ -77,6 +79,10 @@ Pending :
 			update sheetcb after apply
 			other plot types
 			save/load settings
+		* ExportDialog
+			ascii, binary, hdf5, magick, cdf, audio, database
+		* ColumnValuesDialog
+		* SpreadsheetPlotDialog
 -------------------------------------------------------------------------
 more things :
 =======
@@ -92,27 +98,14 @@ more things :
 		new column on click (empty header)
 		column dialog on double click
 		mask data (TableModel ?)
-		TableModel selections
-		Menu (also in MainWin)
-			add column
-			export dialog
-				ascii
-				binary
-				hdf5
-				magick
-				cdf
-				audio
-				kexi(?)
-			sort
-			fill
-			Plot -> type ..
+		menu
 			...
 	Plots
 		surface
 		qwt plot
 		3d ?
 	MainWin
-		Print Preview	(see Qt textedit demo)
+		Print Preview (see Qt textedit demo)
 		Export to eps, svg, ...
 		open, save, save as
 		dynamic menus (sheets + data sets)

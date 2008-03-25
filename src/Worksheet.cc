@@ -15,16 +15,21 @@ Worksheet::Worksheet(MainWin *m)
 {
 	kDebug()<<"Worksheet()"<<endl;
 	type = WORKSHEET;
-	setWindowTitle(i18n("Worksheet"));
+
+	//  set title
+	int number=1;
+	while(mw->getWorksheet(i18n("Worksheet %1").arg(number)) != 0)
+		number++;
+	setWindowTitle(i18n("Worksheet %1").arg(number));
 
 	KConfigGroup conf(KSharedConfig::openConfig(),"Worksheet");
-	api=0;
-
 	// TODO : hardcoded :-(
 	setMinimumSize(300,200);
 	int w = conf.readEntry("Width",600);
 	int h = conf.readEntry("Height",400);
 	resize(w,h);
+
+	api=0;
 	kDebug()<<"Worksheet() DONE"<<endl;
 }
 

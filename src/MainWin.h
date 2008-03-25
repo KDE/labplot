@@ -17,11 +17,15 @@ public:
 	MainWin(QWidget *parent=0);
 	int activeSheetIndex() const;
 	QMdiArea* getMdi() const { return mdi; }
-	Spreadsheet* activeSpreadsheet() const;
-	Worksheet* activeWorksheet() const;
+	Spreadsheet* activeSpreadsheet() const;			//!< get active spreadsheet
+	Spreadsheet* getSpreadsheet(QString title) const;	//!< get Spreadsheet of name title
+	Worksheet* activeWorksheet() const;			//!< get active worksheet
+	Worksheet* getWorksheet(QString name) const;		//!< get Worksheet of name title
 	Project* getProject() const { return project; } 
 	void setProject(Project *p) { project=p; } 
 	void updateGUI();		//!< update GUI of main window
+	void updateSheetList();		//!< update dynamic sheet list menu
+	void updateSetList();		//!< update dynamic set list menu
 	void addSet(Set *g, int sheet, PlotType ptype);
 private:
 	QMdiArea *mdi;
@@ -30,8 +34,6 @@ private:
 	KAction *spreadaction;
 	void setupActions();
 	bool warnModified();
-	void updateSheetList();		//!< creates dynamic sheet list menu
-	void updateSetList();		//!< creates dynamic set list menu
 public slots:
 	Spreadsheet* newSpreadsheet();
 	Worksheet* newWorksheet();

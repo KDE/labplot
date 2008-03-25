@@ -57,14 +57,14 @@ bool TableModel::removeRows(int row, int count, const QModelIndex &parent) {
 	beginRemoveRows(parent,row,row+count-1);
 	for(int i=0;i<columnCount();i++) {
 		for(int j=0;j<count;j++)
-			table[i].removeLast();
+			table[i].removeAt(row);
 	}
 	endRemoveRows();
 	return true;
 }
 
 bool TableModel::insertColumns(int col, int count, const QModelIndex &parent) {
-	kDebug()<<"TableModel::insertColumns("<<col<<count<<")"<<endl;
+	kDebug()<<"column ="<<col<<"count ="<<count<<endl;
 	beginInsertColumns(parent,col,col+count-1);
 	for(int i=0;i<count;i++) {
 		QList<QString> list;
@@ -82,8 +82,8 @@ bool TableModel::removeColumns(int col, int count, const QModelIndex &parent) {
 	kDebug()<<"TableModel::removeColumns("<<col<<count<<")"<<endl;
 	beginRemoveColumns(parent,col,col+count-1);
 	for(int j=0;j<count;j++) {
-		table.removeLast();
-		header.removeLast();
+		table.removeAt(col);
+		header.removeAt(col);
 	}
 	endRemoveColumns();
 	return true;
@@ -105,6 +105,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const {
 }
 
 bool TableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+//	kDebug()<<endl;
 	if (index.isValid() && role == Qt::EditRole) {
 		table[index.column()].replace(index.row(),value.toString());
 		emit dataChanged(index, index);
@@ -114,10 +115,12 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value, int ro
 }
 
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const {
-     if (!index.isValid())
-         return Qt::ItemIsEnabled;
+//	kDebug()<<endl;
+//	TODO: crashes on empty spreadsheet
+	if (index.isValid())
+		return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
 
-     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+	return Qt::ItemIsEnabled;
 }
 
 QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const {

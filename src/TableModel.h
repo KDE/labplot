@@ -30,6 +30,7 @@ public:
 private:
 	QList< QList<QString> > table;
 	QList< QString> header;
+//	QList< QList<bool> > masked;	TODO
 };
 
 #endif // TABLEMODEL_H

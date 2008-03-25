@@ -2,7 +2,7 @@
 
 #include <KLocale>
 #include <KDebug>
-#include <QInputDialog>
+#include <KInputDialog>
 #include <QHeaderView>
 #include <QStandardItemModel>
 #include <KAction>
@@ -21,52 +21,19 @@ Spreadsheet::Spreadsheet(MainWin *mw)
 	type = SPREADSHEET;
 	setModel(new TableModel());
 
+	//  set title
+	int number=1;
+	while(mw->getSpreadsheet(i18n("Spreadsheet %1").arg(number)) != 0)
+		number++;
+	setWindowTitle(i18n("Spreadsheet %1").arg(number));
+
 	setColumnCount(2);
 	setRowCount(100);
 	setSortingEnabled(false);
-	
 	resetHeader();
-	
-/*	ld=0;
-	graph=0;
-	gtype=GRAPH2D;
 
-	// find free worksheet number
-	QWidgetList list = mw->getWorkspace()->windowList();
-	int nr=0, sheets = mw->NrWorksheets()+mw->NrSpreadsheets();
-	bool found_free=false;
-	kDebug()<<"	Number of sheets "<<sheets<<endl;
-	while(nr <= sheets && !found_free ) {
-		nr++;
-		found_free=true;
-		for(int i=0;i<sheets;i++) {
-			if(list.at(i) && list.at(i)->caption() == QString(i18n("Spreadsheet")+QString(" ")+QString::number(nr)))
-				found_free=false;
-		}
-	}
-
-	kDebug()<<"	Using number "<<nr<<endl;
-	title = i18n("Spreadsheet")+QString(" ")+QString::number(nr);
-	setCaption(title);
-*/
-	setWindowTitle("Spreadsheet");
-	// TODO : set unique title "Spreadsheet 1", etc.
-
-/*	table->setRowMovingEnabled (true);
-	table->setColumnMovingEnabled (true);
-	table->horizontalHeader()->installEventFilter(this );
-
-	table->setFocusPolicy(QWidget::StrongFocus);
-	table->setFocus();
-	QObject::connect(table,SIGNAL(currentChanged(int,int)),this,SLOT(updateValuesDialog()));
-	QObject::connect(table,SIGNAL(selectionChanged()),this,SLOT(selectionChanged()));
-
-	if(mw) mw->updateSheetList();
-
-	destination=-1;
-	values_dialog=0;
-	datafile=QString("");
-*/
+//	QObject::connect(table,SIGNAL(currentChanged(int,int)),this,SLOT(updateValuesDialog()));
+//	QObject::connect(table,SIGNAL(selectionChanged()),this,SLOT(selectionChanged()));
 }
 
 Spreadsheet::~Spreadsheet() {
@@ -83,55 +50,123 @@ void Spreadsheet::contextMenuEvent(QContextMenuEvent *) {
 void Spreadsheet::Menu(QMenu *menu) {
 	kDebug()<<"Spreadsheet::Menu()"<<endl;
 	menu->clear();
+	// sum=1, max=1
 
-	KAction *spreadaction = new KAction(KIcon(QIcon(spreadsheet_xpm)),i18n("New spreadsheet"),this);
-	spreadaction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-	menu->addAction(spreadaction);
-	// TODO
-	// getting action from mw crashes
-	// this crashes too
-	//connect(spreadaction, SIGNAL(triggered()),mw, SLOT(newSpreadsheet()));
-	// Doesn't work in main menu but in context menu
-	connect(spreadaction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
-
-	// TODO
 	KAction *action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Plot"),this);
-	action->setEnabled(false);
+	connect(action, SIGNAL(triggered()),SLOT(plot()));
 	menu->addAction(action);
-	
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Export"),this);
+	connect(action, SIGNAL(triggered()),SLOT(exportData()));
+	menu->addAction(action);
+	menu->addSeparator();
+
+	action = new KAction(KIcon("select"),i18n("Column properties"),this);
+	menu->addAction(action);
+	connect(action, SIGNAL(triggered()),SLOT(setProperties()));
+	menu->addSeparator();
+
 	action = new KAction(KIcon("select"),i18n("Set title"),this);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),SLOT(setTitle()));
 	action = new KAction(KIcon("select"),i18n("Set row count"),this);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),SLOT(setRowNumber()));
+	action = new KAction(KIcon("select"),i18n("Set notes"),this);
+	menu->addAction(action);
+	connect(action, SIGNAL(triggered()),SLOT(setNotes()));
+	menu->addSeparator();
+
+	action = new KAction(KIcon("select"),i18n("Cut"),this);
+	menu->addAction(action);
+	action->setEnabled(false);
+	action = new KAction(KIcon("select"),i18n("Copy"),this);
+	menu->addAction(action);
+	action->setEnabled(false);
+	action = new KAction(KIcon("select"),i18n("Paste"),this);
+	menu->addAction(action);
+	action->setEnabled(false);
+	action = new KAction(KIcon("select"),i18n("Clear"),this);
+	menu->addAction(action);
+	action->setEnabled(false);
+	action = new KAction(KIcon("select"),i18n("Select"),this);
+	menu->addAction(action);
+	action->setEnabled(false);
+	// .. all, nothing, invert
+	menu->addSeparator();
+
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Set column values"),this);
+	connect(action, SIGNAL(triggered()),SLOT(setColumnValues()));
+	menu->addAction(action);
+	menu->addSeparator();
+
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Fill with"),this);
+	action->setEnabled(false);
+	// row number, random value
+	menu->addAction(action);
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Convert"),this);
+	action->setEnabled(false);
+	// ...
+	menu->addAction(action);
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Edit with"),this);
+	action->setEnabled(false);
+	menu->addAction(action);
+	// ...
+	menu->addSeparator();
+	
 	action = new KAction(KIcon("select"),i18n("Add column"),this);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),SLOT(addColumn()));
-	action = new KAction(KIcon("select"),i18n("Column properties"),this);
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Delete selected column"),this);
+	connect(action, SIGNAL(triggered()),SLOT(deleteSelectedColumns()));
 	menu->addAction(action);
-	connect(action, SIGNAL(triggered()),SLOT(setProperties()));
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Delete selected row"),this);
+	connect(action, SIGNAL(triggered()),SLOT(deleteSelectedRows()));
+	menu->addAction(action);
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Masking"),this);
+	action->setEnabled(false);
+	menu->addAction(action);
+	// ...
+	menu->addSeparator();
+
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Normalize"),this);
+	action->setEnabled(false);
+	// sum=1, max=1
+	menu->addAction(action);
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Sort"),this);
+	action->setEnabled(false);
+	// ascending, descending
+	menu->addAction(action);
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Statistics on column"),this);
+	action->setEnabled(false);
+	menu->addAction(action);
+	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Statistics on row"),this);
+	action->setEnabled(false);
+	menu->addAction(action);
+	menu->addSeparator();
+	
+	action = new KAction(KIcon(QIcon(spreadsheet_xpm)),i18n("New spreadsheet"),this);
+	action->setShortcut(Qt::CTRL+Qt::Key_Equal);
+	menu->addAction(action);
+	connect(action, SIGNAL(triggered()),mw, SLOT(newSpreadsheet()));
 }
 
-void Spreadsheet::newSpreadsheet() { mw->newSpreadsheet(); }
-
 void Spreadsheet::setTitle(QString title) {
-	kDebug()<<"Spreadsheet::setTitle("<<title<<")"<<endl;
+	kDebug()<<"title ="<<title<<endl;
 	bool ok=true;
 	if(title.isEmpty())
-		title = QInputDialog::getText(this,"LabPlot", i18n("Spreadsheet title : "),QLineEdit::Normal, windowTitle(), &ok);
+		title = KInputDialog::getText("LabPlot", i18n("Spreadsheet title : "), windowTitle(), &ok);
 
 	if(ok && !title.isEmpty()) {
 		setWindowTitle(title);
-		//mw->updateSheetList();
+		mw->updateSheetList();
 	}
 }
 
 void Spreadsheet::setRowNumber(int row) {
-	kDebug()<<"Spreadsheet::setRowNumber("<<row<<")"<<endl;
+	kDebug()<<"row ="<<row<<endl;
 	bool ok=true;
 	if(row<=0)
-		row = QInputDialog::getInteger(this,"LabPlot", i18n("Row count : "), rowCount(), 1, INT_MAX, 1, &ok);
+		row = KInputDialog::getInteger("LabPlot", i18n("Row count : "), rowCount(), 1, INT_MAX, 1, 10, &ok);
 
 	if(ok && row>0)
 		setRowCount(row);
@@ -149,10 +184,10 @@ void Spreadsheet::setText(int row, int col, QString text) {
 }
 
 void Spreadsheet::setNotes(QString t) {
-	kDebug()<<"Spreadsheet::setNotes()"<<endl;
+	kDebug()<<endl;
 	bool ok=true;
 	if(t.isEmpty())
-		t = QInputDialog::getText(this,"LabPlot", i18n("Spreadsheet notes : "),QLineEdit::Normal, notes, &ok);
+		t = KInputDialog::getMultiLineText("LabPlot", i18n("Spreadsheet notes : "), notes, &ok);
 	if(!ok) return;
 
 	notes = t;
@@ -172,6 +207,7 @@ void Spreadsheet::setProperties(QString label, int type, int format) {
 }
 
 void Spreadsheet::resetHeader(int from) {
+	kDebug()<<endl;
 	for (int col=from;col<columnCount();col++) {
 		QString l;
 		if(col==0)
@@ -192,7 +228,7 @@ QString Spreadsheet::columnName(int col) const {
 }
 
 void Spreadsheet::setColumnName(int col, QString name) {
-	kDebug()<<"setColumnName() : col="<<col<<" name = "<<name<<endl;
+	kDebug()<<"column ="<<col<<", name = "<<name<<endl;
 	if(col<0) return;
 	QString header = columnHeader(col);
 	header.replace(QRegExp(".*\\{"),name+" {");
@@ -208,7 +244,7 @@ QString Spreadsheet::columnType(int col) const {
 }
 
 void Spreadsheet::setColumnType(int col, QString type) {
-	kDebug()<<"setColumnType() : col="<<col<<" type = "<<type<<endl;
+	kDebug()<<"column ="<<col<<",type = "<<type<<endl;
 	if(col<0) return;
 	QString label = columnHeader(col);
 	label.replace(QRegExp(" \\[.+\\]"),QString(" ["+type+"]"));
@@ -223,7 +259,7 @@ QString Spreadsheet::columnFormat(int col) const {
 }
 
 void Spreadsheet::setColumnFormat(int col, QString format) {
-	kDebug()<<"setColumnFormat() : col="<<col<<" type = "<<format<<endl;
+	kDebug()<<"column ="<<col<<",type = "<<format<<endl;
 	if(col<0) return;
 	QString label = columnHeader(col);
 	label.replace(QRegExp(" \\{.+\\}"),QString(" {"+format+"}"));
@@ -242,8 +278,50 @@ int Spreadsheet::filledRows(int col) const {
 	return 0;
 }
 
+int Spreadsheet::currentColumn() const {
+	QModelIndex index = currentIndex();
+	return index.column();
+}
+
+QList<int> Spreadsheet::currentColumns() const {
+	QList<int> columns; 
+	QModelIndexList list = selectionModel()->selectedColumns();
+	for (int i=0; i<list.size(); i++)
+		columns.append(list.at(i).column());
+	return columns;
+}
+
+int Spreadsheet::currentRow() const {
+	QModelIndex index = currentIndex();
+	return index.row();
+}
+
+QList<int> Spreadsheet::currentRows() const {
+	QList<int> rows; 
+	QModelIndexList list = selectionModel()->selectedRows();
+	for (int i=0; i<list.size(); i++)
+		rows.append(list.at(i).row());
+	return rows;
+}
+
+void Spreadsheet::deleteSelectedColumns() {
+	QList<int> columns = currentColumns();
+	for (int i=0; i<columns.size(); i++) {
+//		kDebug()<<"removing column ="<<columns.at(i)<<endl;
+		model()->removeColumns(columns.at(i)-i,1);
+	}
+}
+
+void Spreadsheet::deleteSelectedRows() {
+	QList<int> rows = currentRows();
+	for (int i=0; i<rows.size(); i++) {
+//		kDebug()<<"removing row ="<<rows.at(i)<<endl;
+		model()->removeRows(rows.at(i)-i,1);
+	}
+}
+
 void Spreadsheet::addSet(Set *s) {
-	kDebug()<<"Spreadsheet::addSet()"<<endl;
+	kDebug()<<endl;
 
 	int columns=0;
 	switch(s->Type()) {
@@ -280,4 +358,30 @@ void Spreadsheet::addSet(Set *s) {
 		};break;
 	default: break;
 	}
+}
+
+void Spreadsheet::plot() {
+	kDebug()<<"not implemented yet!"<<endl;
+	// TODO : use SpreadsheetPlotDialog 
+	// plot type, which columns, destination
+	
+	// create set
+	int N=rowCount();
+	Point *data = new Point[N];
+	for(int i = 0;i < N;i++) {
+		data[i].setPoint(text(i,0).toDouble(),text(i,1).toDouble());
+	}
+	Set2D *g = new Set2D(windowTitle(),data,N);
+	//mw->addSet(g,sheetcb->currentIndex(),PLOT2D);
+	mw->addSet(g,1,PLOT2D);
+}
+
+void Spreadsheet::exportData() {
+	kDebug()<<"not implemented yet!"<<endl;
+	// TODO : export dialog 
+}
+
+void Spreadsheet::setColumnValues() {
+	kDebug()<<"not implemented yet!"<<endl;
+	// TODO : column values dialog
 }
