@@ -17,7 +17,7 @@ Project::Project()
 	changed=false;
 }
 
-QDomElement Project::saveXML(QDomDocument doc) {
+QDomElement Project::save(QDomDocument doc) {
 	QDomElement ptag = doc.createElement( "Project" );
 
 	QDomElement tag = doc.createElement( "Title" );
@@ -57,7 +57,7 @@ QDomElement Project::saveXML(QDomDocument doc) {
 	return ptag;
 }
 
-void Project::openXML(QDomNode node) {
+void Project::open(QDomNode node) {
 	while(!node.isNull()) {
 		QDomElement e = node.toElement();
 //		kDebug()<<"PROJECT TAG = "<<e.tagName()<<endl;

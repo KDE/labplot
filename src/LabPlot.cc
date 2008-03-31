@@ -50,7 +50,7 @@ int main (int argc, char *argv[]) {
 //	kDebug()<<"GSL_VERSION > 1.8"<<endl;
 //#endif
 
-	MainWin* window = new MainWin();
+	MainWin* window = new MainWin(0,filename);
 	window->show();
 //	sleep(1);		// to see splash screen
 	if(splash)

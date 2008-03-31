@@ -101,13 +101,13 @@ more things :
 		menu
 			...
 	Plots
+		save/open
 		surface
 		qwt plot
 		3d ?
 	MainWin
 		Print Preview (see Qt textedit demo)
 		Export to eps, svg, ...
-		open, save, save as
 		dynamic menus (sheets + data sets)
 	View: autoscale, zoom, etc.
 	analysis functions

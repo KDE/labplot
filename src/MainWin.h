@@ -14,7 +14,7 @@ class MainWin : public KXmlGuiWindow
 {
 	Q_OBJECT
 public:
-	MainWin(QWidget *parent=0);
+	MainWin(QWidget *parent=0,QString filename=0);
 	int activeSheetIndex() const;
 	QMdiArea* getMdi() const { return mdi; }
 	Spreadsheet* activeSpreadsheet() const;			//!< get active spreadsheet
@@ -26,6 +26,8 @@ public:
 	void updateGUI();		//!< update GUI of main window
 	void updateSheetList();		//!< update dynamic sheet list menu
 	void updateSetList();		//!< update dynamic set list menu
+	void openXML(QIODevice *file);	//!< do the actual opening
+	void saveXML(QIODevice *file);	//!< do the actual saving
 	void addSet(Set *g, int sheet, PlotType ptype);
 private:
 	QMdiArea *mdi;
@@ -37,6 +39,9 @@ private:
 public slots:
 	Spreadsheet* newSpreadsheet();
 	Worksheet* newWorksheet();
+	void save(QString filename=0);	//!< save project (.lml format)
+	void open(QString filename);	//!< open project (.lml format)
+	void saveAs();	//!< save as different file name (.lml format)
 private slots:
 	void openNew();
 	void print();

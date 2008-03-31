@@ -14,8 +14,8 @@ class Project
 {
 public:
 	Project();
-	QDomElement saveXML(QDomDocument doc);
-	void openXML(QDomNode node);
+	QDomElement save(QDomDocument doc);
+	void open(QDomNode node);
 	ACCESS(QString, filename, Filename);
 	ACCESS(int, version, Version);
 	ACCESS(QString, labplot, LabPlot);

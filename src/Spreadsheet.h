@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMenu>
+#include <QDomElement>
 #include <QTableView>
 #include "TableModel.h"
 
@@ -19,6 +20,9 @@ public:
 	~Spreadsheet();
 	SheetType sheetType() const { return type; }
 	void resetHeader(int from=0);
+	QDomElement save(QDomDocument doc);
+	void open(QDomNode node);
+
 	void addSet(Set *set);
 	QString columnName(int col) const;
 	void setColumnName(int col, QString name);

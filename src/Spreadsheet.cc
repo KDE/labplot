@@ -150,6 +150,94 @@ void Spreadsheet::Menu(QMenu *menu) {
 	connect(action, SIGNAL(triggered()),mw, SLOT(newSpreadsheet()));
 }
 
+QDomElement Spreadsheet::save(QDomDocument doc) {
+	kDebug()<<endl;
+	QDomElement sstag = doc.createElement( "Spreadsheet" );
+	QDomElement tag = doc.createElement( "Position" );
+	tag.setAttribute("x",QString::number(parentWidget()->pos().x()));
+	tag.setAttribute("y",QString::number(parentWidget()->pos().y()));
+	sstag.appendChild( tag );
+	tag = doc.createElement( "Size" );
+	tag.setAttribute("rows",QString::number(rowCount()));
+	tag.setAttribute("cols",QString::number(columnCount()));
+	sstag.appendChild( tag );
+	tag = doc.createElement( "Title" );
+	sstag.appendChild( tag );
+	QDomText t = doc.createTextNode( windowTitle() );
+	tag.appendChild( t );
+	tag = doc.createElement( "Notes" );
+	sstag.appendChild( tag );
+	t = doc.createTextNode( notes );
+	tag.appendChild( t );
+/*	tag = doc.createElement( "Datafile" );
+	sstag.appendChild( tag );
+	t = doc.createTextNode( datafile );
+ 	tag.appendChild( t );
+*/
+	// header
+	for(int i=0;i < columnCount();i++) {
+		tag = doc.createElement( "Column" );
+		tag.setAttribute("nr",QString::number(i));
+		sstag.appendChild( tag );
+  		t = doc.createTextNode( columnHeader(i) );
+ 		tag.appendChild( t );
+	}
+
+	// data
+	for(int i=0;i < rowCount();i++) {
+		for(int j=0;j < columnCount();j++) {
+			if(!text(i,j).isEmpty()) {	// only filled cells
+				tag = doc.createElement( "Cell" );
+				tag.setAttribute("row",QString::number(i));
+				tag.setAttribute("col",QString::number(j));
+//				tag.setAttribute("masked",QString::number(((LTableItem *)table->item(i,j))->Masked()));
+				sstag.appendChild( tag );
+  				t = doc.createTextNode( text(i,j) );
+ 				tag.appendChild( t );
+			}
+		}
+	}
+
+	return sstag;
+}
+
+void Spreadsheet::open(QDomNode node) {
+	kDebug()<<endl;
+	while(!node.isNull()) {
+		QDomElement e = node.toElement();
+//		kDebug()<<"SS TAG = "<<e.tagName()<<endl;
+//		kDebug()<<"SS TEXT = "<<e.text()<<endl;
+
+		if(e.tagName() == "Position") {
+			int px = e.attribute("x").toInt();
+			int py = e.attribute("y").toInt();
+			parentWidget()->move(QPoint(px,py));
+			if(px<0 || py<0) {	// fullscreen
+				mw->getMdi()->cascadeSubWindows();
+				showMaximized();
+			}
+		}
+		else if(e.tagName() == "Size") {
+			setRowCount(e.attribute("rows").toInt());
+			setColumnCount(e.attribute("cols").toInt());
+		}
+		else if(e.tagName() == "Title")
+			setTitle(e.text());
+		else if(e.tagName() == "Notes")
+			notes = e.text();
+//		else if(e.tagName() == "Datafile")
+//			datafile = e.text();
+		else if(e.tagName() == "Column")
+			model()->setHeaderData(e.attribute("nr").toInt(),Qt::Horizontal,e.text());
+		else if(e.tagName() == "Cell") {
+//			item->setMasked(e.attribute("masked").toInt());
+			setText(e.attribute("row").toInt(), e.attribute("col").toInt(),e.text());
+		}
+
+		node = node.nextSibling();
+	}
+}
+
 void Spreadsheet::setTitle(QString title) {
 	kDebug()<<"title ="<<title<<endl;
 	bool ok=true;

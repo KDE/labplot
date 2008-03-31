@@ -16,6 +16,7 @@
 #include <KStatusBar>
 #include <KLocale>
 #include <KDebug>
+#include <KFilterDev>
 #include "ProjectDialog.h"
 #include "FunctionDialog.h"
 #include "TitleDialog.h"
@@ -23,22 +24,35 @@
 #include "PlotDialog.h"
 #include "WorksheetDialog.h"
 
+#include "sheettype.h"
 #include "pixmaps/pixmap.h"
 
-MainWin::MainWin(QWidget *parent)
+MainWin::MainWin(QWidget *parent, QString filename)
  : KXmlGuiWindow(parent)
 {
 	mdi = new QMdiArea;
 	setCentralWidget(mdi);
 
 	setCaption("LabPlot "LVERSION);
-	//setCaption("LabPlot "LVERSION+i18n(" : ")+project->Filename());
 	setupActions();
 
 	openNew();
 
+	// commandline filename
+	if(!filename.isEmpty() && !QFile::exists(filename)) {
+		int ret = KMessageBox::warningContinueCancel( this,
+			i18n( "Could not open file \'%1\'!").arg(filename),i18n("Warning"));
+		if (ret==KMessageBox::Cancel)
+			exit(-1);
+	}
+	else if (filename.contains(".lml") || filename.contains(".xml")) {
+		open(filename);
+	}
+	
 	spreadsheetmenu = static_cast<QMenu*> (guiFactory()->container("spreadsheet",this));
 	connect(spreadsheetmenu, SIGNAL(aboutToShow()), SLOT(SpreadsheetMenu()) );
+	
+	statusBar()->showMessage(i18n("Welcome to LabPlot ")+LVERSION);
 }
 
 void MainWin::setupActions() {
@@ -47,9 +61,7 @@ void MainWin::setupActions() {
 	action = KStandardAction::open(this, SLOT(open()),actionCollection());
 	action->setEnabled(false);
 	action = KStandardAction::save(this, SLOT(save()),actionCollection());
-	action->setEnabled(false);
 	action = KStandardAction::saveAs(this, SLOT(saveAs()),actionCollection());
-	action->setEnabled(false);
 	action = KStandardAction::print(this, SLOT(print()),actionCollection());
 	action = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
 	action->setEnabled(false);
@@ -159,7 +171,7 @@ bool MainWin::warnModified() {
 			i18n("Save Project"));
 		switch (want_save) {
 		case KMessageBox::Yes:
-// TODO	:		saveXML();
+			save();
 			break;
 		case KMessageBox::No:
 			break;
@@ -169,7 +181,6 @@ bool MainWin::warnModified() {
 		}
 	}
 
-	project->setChanged(false);
 	return 0;
 }
 
@@ -205,8 +216,8 @@ void MainWin::updateGUI() {
 
 void MainWin::openNew() {
  	kDebug()<<"MainWin::New()"<<endl;
-// //	if(warnModified()) return;
-//
+	if(warnModified()) return;
+
  	mdi->closeAllSubWindows();
  	updateGUI();
 // /*	gvpart=0;
@@ -221,7 +232,170 @@ void MainWin::openNew() {
 // 	defining_panzoom=0;
 // */
  	project = new Project();
+ 	project->setChanged(true);
+}
+
+void MainWin::open(QString filename) {
+	kDebug()<<filename<<endl;
+	if (filename.isEmpty())
+		filename = QFileDialog::getOpenFileName(this,i18n("Open project"),QString::null,
+			i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
+	if(filename.isEmpty())
+		return;
+
+	QIODevice *file = KFilterDev::deviceForFile(filename,QString::null,true);
+	if (file==0) file = new QFile(filename);
+	if ( file->open( QIODevice::ReadOnly | QFile::Text) == 0) {
+		KMessageBox::error(this, i18n("Sorry. Could not open file for reading!"));
+		return;
+	}
+	openNew();
+	openXML(file);
+	project->setFilename(filename);
  	project->setChanged(false);
+	//recent->addURL(fn);
+
+	setCaption("LabPlot "LVERSION+i18n(" : ")+project->Filename());
+}
+
+void MainWin::openXML(QIODevice *file) {
+	QDomDocument doc;
+	kDebug()<<"	reading ..."<<endl;
+	if(doc.setContent(file) != true ) {
+		kDebug()<<"ERROR: reading file content"<<endl;
+		return;
+	}
+	file->close();
+
+	QDomElement root = doc.documentElement();
+	kDebug()<<"ROOT TAG = "<<root.tagName()<<endl;
+	kDebug()<<"ROOT ATTR version = "<<root.attribute("version")<<endl;
+	Q_ASSERT(root.tagName() == "LabPlot");
+
+//Unused : project->setFilename(fn);
+	project->setLabPlot(root.attribute("version"));
+
+	QDomNode node = root.firstChild();
+	while(!node.isNull()) {
+		QDomElement e = node.toElement();
+//		kDebug()<<"TAG = "<<e.tagName()<<endl;
+//		kDebug()<<"TEXT = "<<e.text()<<endl;
+
+		if(e.tagName() == "SpeedMode")
+			kDebug()<<"Speedmode ="<<(bool)e.text().toInt()<<endl;
+//			speedmode = (bool)e.text().toInt();
+		else if(e.tagName() == "Project")
+			project->open(e.firstChild());
+		else if(e.tagName() == "Worksheet") {
+			Worksheet *p = newWorksheet();
+			p->open(e.firstChild());
+		}
+		else if(e.tagName() == "Spreadsheet") {
+			Spreadsheet *s = newSpreadsheet();
+			s->open(e.firstChild());
+		}
+		node = node.nextSibling();
+	}
+}
+
+void MainWin::save(QString filename) {
+	if (filename.isEmpty() ) {
+		if(project->Filename().isEmpty()) {
+			saveAs();	// need a file name
+			return;
+		}
+		else
+			filename = project->Filename();
+	}
+
+	kDebug()<<filename<<endl;
+	if(project->Filename() == filename && project->Changed() == false) {
+		kDebug()<<"no changes to be saved"<<endl;
+		return;
+	}
+
+	QIODevice *xmlfile = KFilterDev::deviceForFile(filename,QString::null,true);
+	if (xmlfile==0) xmlfile = new QFile(filename);
+	saveXML(xmlfile);
+	project->setFilename(filename);
+
+	setCaption("LabPlot "LVERSION+i18n(" : ")+project->Filename());
+}
+
+void MainWin::saveXML(QIODevice *file) {
+	kDebug()<<endl;
+	QDomDocument doc("LabPlot");
+	QString header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	QString doctype = "<!DOCTYPE LabPlotXML>\n";
+	doc.setContent(header+doctype);
+
+	QDomElement root = doc.createElement( "LabPlot" );
+	root.setAttribute("version",QString(LVERSION));
+	doc.appendChild( root );
+
+	QDomElement tag = project->save(doc);
+    	root.appendChild( tag );
+//	tag = doc.createElement( "SpeedMode" );
+//	root.appendChild( tag );
+//	QDomText t = doc.createTextNode( QString::number(speedmode));
+//	tag.appendChild( t );
+
+	QList<QMdiSubWindow *> list = mdi->subWindowList();
+	for (int i = 0; i < list.size(); i++ ) {
+		QMdiSubWindow *subWindow = list[i];
+		kDebug()<<"	Saving sheet "<<i<<endl;
+		Worksheet *w = (Worksheet *) subWindow->widget();
+		if(w && w->sheetType() == WORKSHEET) {
+			kDebug()<<"	Saving worksheet "<<i<<endl;
+			QDomElement wtag = w->save(doc);
+    			root.appendChild(wtag);
+		}
+		else {
+			Spreadsheet *s = (Spreadsheet *) subWindow->widget();
+			if( s==0 || s->sheetType() != SPREADSHEET) {
+				kDebug()<<"ERROR: unknown sheet found!"<<endl;
+				return;
+			}
+			kDebug()<<"	Saving spreadsheet "<<i<<endl;
+			QDomElement stag = s->save(doc);
+    			root.appendChild(stag);
+		}
+	}
+
+	if(file->open(QIODevice::WriteOnly | QFile::Text)) {
+		QTextStream ts(file);
+		doc.save(ts,4);
+		ts<<endl;
+		statusBar()->showMessage(i18n("Project saved"));
+		file->close();
+
+		project->setChanged(false);
+	}
+	else
+		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));
+}
+
+void MainWin::saveAs() {
+	kDebug()<<endl;
+	QString fn = QFileDialog::getSaveFileName(this, i18n("Save project"),QString::null,
+		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
+	if(fn.isEmpty())	// "Cancel"
+		return;
+	
+	if(fn.contains(QString(".lml"),Qt::CaseInsensitive) == false)
+			fn.append(".lml");
+
+	QFile file(fn);
+	if ( file.exists() ) {
+		int answer = KMessageBox::warningYesNoCancel( this,
+				i18n( "Overwrite\n\'%1\'?" ).arg(fn), i18n("Save Project"));
+		if (answer == KMessageBox::Cancel)
+			return;
+		else if (answer == KMessageBox::No)
+			saveAs();
+	}
+	
+	save(fn);
 }
 
 void MainWin::print() {
