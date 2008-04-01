@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
-    <height>498</height>
+    <width>427</width>
+    <height>448</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -154,12 +154,6 @@
       <string>Background</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
-       <number>3</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>3</number>
-      </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="lFilling" >
         <property name="text" >
@@ -174,7 +168,7 @@
         </property>
         <property name="sizeHint" >
          <size>
-          <width>21</width>
+          <width>41</width>
           <height>20</height>
          </size>
         </property>
@@ -193,35 +187,28 @@
       <item row="0" column="3" >
        <widget class="QRadioButton" name="rbFilling1" >
         <property name="text" >
-         <string>colour</string>
+         <string>color</string>
         </property>
        </widget>
       </item>
       <item row="0" column="4" >
-       <widget class="QPushButton" name="bFillingColor" >
+       <widget class="KColorButton" name="kcbFillingColor" >
         <property name="enabled" >
          <bool>false</bool>
         </property>
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+        <property name="color" >
+         <color>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
         </property>
-        <property name="minimumSize" >
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="maximumSize" >
-         <size>
-          <width>30</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="toolTip" >
-         <string>click to select a colour</string>
+        <property name="defaultColor" >
+         <color>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
         </property>
        </widget>
       </item>
@@ -248,12 +235,6 @@
       <string>Text</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
-       <number>5</number>
-      </property>
-      <property name="verticalSpacing" >
-       <number>5</number>
-      </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="lFont" >
         <property name="text" >
@@ -261,15 +242,21 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1" colspan="2" >
+       <widget class="KFontRequester" name="kfontRequester" />
+      </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="lFontColor" >
         <property name="text" >
-         <string>Colour</string>
+         <string>Color</string>
         </property>
        </widget>
       </item>
+      <item row="1" column="1" colspan="2" >
+       <widget class="KColorButton" name="kcbTextColor" />
+      </item>
       <item row="2" column="0" >
-       <widget class="QCheckBox" name="chbUseTex" >
+       <widget class="QCheckBox" name="chbTex" >
         <property name="text" >
          <string>Tex-syntax</string>
         </property>
@@ -288,7 +275,7 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="2" colspan="2" >
+      <item row="2" column="2" >
        <widget class="QFrame" name="frameFontOptions" >
         <property name="frameShape" >
          <enum>QFrame::NoFrame</enum>
@@ -314,6 +301,12 @@
          </property>
          <item>
           <widget class="QPushButton" name="bFontBold" >
+           <property name="minimumSize" >
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
            <property name="maximumSize" >
             <size>
              <width>30</width>
@@ -325,9 +318,6 @@
              <weight>75</weight>
              <bold>true</bold>
             </font>
-           </property>
-           <property name="text" >
-            <string>B</string>
            </property>
            <property name="checkable" >
             <bool>true</bool>
@@ -347,9 +337,6 @@
              <italic>true</italic>
             </font>
            </property>
-           <property name="text" >
-            <string>I</string>
-           </property>
            <property name="checkable" >
             <bool>true</bool>
            </property>
@@ -367,9 +354,6 @@
             <font>
              <underline>true</underline>
             </font>
-           </property>
-           <property name="text" >
-            <string>U</string>
            </property>
            <property name="checkable" >
             <bool>true</bool>
@@ -400,9 +384,6 @@
              <height>30</height>
             </size>
            </property>
-           <property name="text" >
-            <string>x²</string>
-           </property>
            <property name="checkable" >
             <bool>true</bool>
            </property>
@@ -415,9 +396,6 @@
              <width>30</width>
              <height>30</height>
             </size>
-           </property>
-           <property name="text" >
-            <string>x_2</string>
            </property>
            <property name="checkable" >
             <bool>true</bool>
@@ -473,7 +451,7 @@
         </layout>
        </widget>
       </item>
-      <item row="3" column="0" colspan="4" >
+      <item row="3" column="0" colspan="3" >
        <widget class="QTextEdit" name="teLabel" />
       </item>
      </layout>
@@ -481,6 +459,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

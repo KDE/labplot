@@ -3,8 +3,6 @@
 
 #include "../ui_labelwidget.h"
 class Label;
-class KFontRequester;
-class KColorButton;
 
 /**
  * @brief Widget for changing the properties of the Label object
@@ -17,14 +15,13 @@ public:
 	~LabelWidget();
 
 public slots:
-	void setLabel(const Label*);
+	void setLabel(Label*);
 	void setLabelRotationEnabled(const bool);
-	void saveLabel(Label*) const;
+	void save() const;
 
 private:
 	Ui::LabelWidget ui;
-	KFontRequester* fontRequester;
-	KColorButton* colorButton;
+	Label* label;
 
 private slots:
 	void positionChanged(int);
@@ -32,7 +29,7 @@ private slots:
 	void fillingColorClicked();
 
 	void fontChanged(const QFont&);
-	void fontColorChanged(const QColor&);
+	void textColorChanged(const QColor&);
 
 	void useTexChanged(int);
 	void fontBoldToggled(bool);

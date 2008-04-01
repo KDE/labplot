@@ -13,7 +13,7 @@
 #include <KNumInput>
 
 #include "MainWin.h"
-#include "Label.h"
+#include "elements/Label.h"
 
 class Dialog: public KDialog
 {

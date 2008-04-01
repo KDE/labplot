@@ -6,7 +6,7 @@
 #include <QBrush>
 #include "Point.h"
 #include "Range.h"
-#include "Label.h"
+#include "elements/Label.h"
 #include "plottype.h"
 
 class Set;

@@ -15,21 +15,22 @@ Dialog::Dialog(MainWin *mw)
 	setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply| KDialog::User1 | KDialog::User2 );
 	setButtonText(KDialog::User1,i18n("Save"));
 	setButtonText(KDialog::User2,i18n("Show options"));
-	//TODO (not working) 
+	//TODO (not working)
 	setDefaultButton(KDialog::Ok);
 
 	QObject::connect(this,SIGNAL(cancelClicked()),SLOT(reject()));
 }
 
 void Dialog::labelWidget(QWidget *parent, Label *label) {
+	/*
 	QGridLayout *grid = new QGridLayout(parent);
 	//grid->addWidget(new QLabel(i18n("Position :")),0,0);
 	grid->addWidget(new QLabel(i18n("Under construction ...")),0,0);
 	grid->addWidget(new QLabel(i18n("x :")),1,0,Qt::AlignRight);
-	xni = new KDoubleNumInput(0.0,1.0,label->X());
+	xni = new KDoubleNumInput(0.0,1.0,label->position().x());
 	grid->addWidget(xni,1,1);
 	grid->addWidget(new QLabel(i18n("y :")),1,2,Qt::AlignRight);
-	yni = new KDoubleNumInput(0.0,1.0,label->Y());
+	yni = new KDoubleNumInput(0.0,1.0,label->position().y());
 	grid->addWidget(yni,1,3);
 	// TODO :
 	// tex label
@@ -77,6 +78,7 @@ void Dialog::labelWidget(QWidget *parent, Label *label) {
 	// TODO : combobox : normal, x^2, x_2
 	labelte->setHtml(label->Text());
 	grid->addWidget(labelte,4,0,1,4);
+	*/
 }
 
 void Dialog::setLabelFont(QFont font) {
@@ -90,17 +92,17 @@ void Dialog::setLabelFont(QFont font) {
 
 void Dialog::setLabelSize(QString size) {
 	// TODO : set font size of cursor?
-	labelte->setFontPointSize(size.toInt());
+// 	labelte->setFontPointSize(size.toInt());
 }
 
 void Dialog::insertSymbol(QString c) {
-	labelte->setFontFamily("Symbol");
-	labelte->insertPlainText(c);
+// 	labelte->setFontFamily("Symbol");
+// 	labelte->insertPlainText(c);
 }
 
 void Dialog::setupLabel(Label *label) {
-	label->setX(xni->value());
-	label->setY(yni->value());
-	// TODO
-	label->setText(labelte->toHtml());
+// 	label->setX(xni->value());
+// 	label->setY(yni->value());
+// 	// TODO
+// 	label->setText(labelte->toHtml());
 }

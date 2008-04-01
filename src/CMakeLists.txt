@@ -1,16 +1,23 @@
  set(GUI_SOURCES
 	gui/AxesDialog.cc
 	gui/AxesWidget.cc
+	gui/FunctionDialog.cc
+  	gui/FunctionWidget.cc
 	gui/LabelWidget.cc
+	gui/LegendDialog.cc
+	gui/LegendWidget.cc
+  	gui/PlotStyleWidget.cc
+# 	gui/PlotSurfaceWidget.cc
 	gui/SettingsDialog.cc
 	gui/SettingsGeneralPage.cc
 	gui/SettingsPage.cc
 	gui/SettingsPrintingPage.cc
+	gui/TitleDialog.cc
 )
 
 set(LabPlot_SRCS ${GUI_SOURCES}
   parser.tab.c
-  Axis.cc
+  elements/Axis.cc
   ColumnDialog.cc
   Dialog.cc
   FileInfoDialog.cc
@@ -18,11 +25,10 @@ set(LabPlot_SRCS ${GUI_SOURCES}
   FilterHDF5.cc
   FilterNETCDF.cc
   FilterOPJ.cc
-  FunctionDialog.cc
   ImportDialog.cc
-  Label.cc
+  elements/Label.cc
+  elements/Legend.cc
   LabPlot.cc
-  LegendDialog.cc
   MainWin.cc
   Plot.cc
   Plot2D.cc
@@ -38,14 +44,17 @@ set(LabPlot_SRCS ${GUI_SOURCES}
   Style.cc
   Symbol.cc
   TableModel.cc
-  TitleDialog.cc
   Worksheet.cc
   WorksheetDialog.cc
 )
 
 set(UI_SOURCES
 	gui/ui/axeswidget.ui
+	gui/ui/functionwidget.ui
 	gui/ui/labelwidget.ui
+	gui/ui/legendwidget.ui
+	gui/ui/plotstylewidget.ui
+# 	gui/ui/plotsurfacewidget.ui
 	gui/ui/settingsgeneralpage.ui
 	gui/ui/settingsprintingpage.ui
 )

@@ -9,7 +9,7 @@
 
 // general 2D Plot class
 Plot2D::Plot2D()
-	: Plot() 
+	: Plot()
 {
 	kDebug()<<"Plot2D::Plot2D()"<<endl;
 	type = PLOT2D;
@@ -1072,6 +1072,8 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 
 void Plot2D::drawAxes(QPainter *p,int w, int h) {
 	kDebug()<<"Plot2D::drawAxes()"<<endl;
+	//TODO !!!!!!!!!!!
+	/*
 	const int unit = (int)(5*size.X());
 	const int numunit = (int)(40*size.X()), numunit2 = (int)(20*size.X());
 
@@ -1120,6 +1122,7 @@ void Plot2D::drawAxes(QPainter *p,int w, int h) {
 	// axes tics and grid
 	for (int i=0;i<axis.size();i++)
 		drawAxesTicks(p, w, h, i);
+	*/
 	kDebug()<<"Plot2D::drawAxes() DONE"<<endl;
 }
 /*

@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>458</width>
-    <height>596</height>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -94,7 +94,7 @@
            </spacer>
           </item>
           <item row="1" column="2" >
-           <widget class="QComboBox" name="cbAxisType" />
+           <widget class="QComboBox" name="cbScaleType" />
           </item>
           <item row="2" column="0" >
            <widget class="QLabel" name="lblAxisPosition" >
@@ -104,7 +104,7 @@
            </widget>
           </item>
           <item row="2" column="2" >
-           <widget class="QComboBox" name="cbAxisPosition" />
+           <widget class="QComboBox" name="cbPosition" />
           </item>
          </layout>
         </widget>
@@ -185,9 +185,9 @@
            </widget>
           </item>
           <item row="1" column="0" >
-           <widget class="QLabel" name="lBorderColour" >
+           <widget class="QLabel" name="lBorderColor" >
             <property name="text" >
-             <string>Colour</string>
+             <string>Color</string>
             </property>
            </widget>
           </item>
@@ -205,23 +205,7 @@
            </spacer>
           </item>
           <item row="1" column="2" >
-           <widget class="QPushButton" name="bBorderColour" >
-            <property name="minimumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-           </widget>
+           <widget class="KColorButton" name="kcbBorderColor" />
           </item>
           <item row="2" column="0" >
            <widget class="QLabel" name="lBorderWidth" >
@@ -275,7 +259,7 @@
       </attribute>
       <layout class="QVBoxLayout" >
        <item>
-        <widget class="QGroupBox" name="groupBox_4" >
+        <widget class="QGroupBox" name="gbTicksGeneral" >
          <property name="title" >
           <string>General</string>
          </property>
@@ -300,17 +284,17 @@
             </property>
            </spacer>
           </item>
-          <item row="0" column="2" colspan="2" >
+          <item row="0" column="2" >
            <widget class="QComboBox" name="cbTicksPosition" />
           </item>
           <item row="1" column="0" >
-           <widget class="QLabel" name="lTicksStyle" >
+           <widget class="QLabel" name="lTicksType" >
             <property name="text" >
-             <string>Style</string>
+             <string>Type</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="2" colspan="2" >
+          <item row="1" column="2" >
            <widget class="QComboBox" name="cbTicksStyle" >
             <item>
              <property name="text" >
@@ -325,52 +309,20 @@
            </widget>
           </item>
           <item row="2" column="0" >
-           <widget class="QLabel" name="lTicksColour" >
+           <widget class="QLabel" name="lTicksColor" >
             <property name="text" >
-             <string>Colour</string>
+             <string>Color</string>
             </property>
            </widget>
           </item>
           <item row="2" column="2" >
-           <widget class="QPushButton" name="bTicksColour" >
-            <property name="minimumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="toolTip" >
-             <string>click to select a colour</string>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>121</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
+           <widget class="KColorButton" name="kcbTicksColor" />
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_5" >
+        <widget class="QGroupBox" name="gbMajorTicks" >
          <property name="title" >
           <string>Major Ticks</string>
          </property>
@@ -396,13 +348,27 @@
             </property>
             <property name="sizeHint" >
              <size>
-              <width>181</width>
-              <height>20</height>
+              <width>71</width>
+              <height>25</height>
              </size>
             </property>
            </spacer>
           </item>
           <item row="1" column="2" >
+           <widget class="QComboBox" name="cbMajorTicksNumber" >
+            <item>
+             <property name="text" >
+              <string>auto</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>custom</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="3" >
            <widget class="QLineEdit" name="leMajorTicksNumber" />
           </item>
           <item row="2" column="0" >
@@ -412,7 +378,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="2" >
+          <item row="2" column="3" >
            <widget class="QSpinBox" name="sbMajorTicksWidth" >
             <property name="minimum" >
              <number>1</number>
@@ -429,7 +395,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="2" >
+          <item row="3" column="3" >
            <widget class="QSpinBox" name="sbMajorTicksLength" >
             <property name="minimum" >
              <number>1</number>
@@ -443,7 +409,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_6" >
+        <widget class="QGroupBox" name="gbMinorTicks" >
          <property name="title" >
           <string>Minor Ticks</string>
          </property>
@@ -469,13 +435,27 @@
             </property>
             <property name="sizeHint" >
              <size>
-              <width>220</width>
-              <height>20</height>
+              <width>81</width>
+              <height>29</height>
              </size>
             </property>
            </spacer>
           </item>
           <item row="1" column="2" >
+           <widget class="QComboBox" name="cbMinorTicksNumber" >
+            <item>
+             <property name="text" >
+              <string>auto</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>custom</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="3" >
            <widget class="QLineEdit" name="leMinorTicksNumber" />
           </item>
           <item row="2" column="0" >
@@ -485,7 +465,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="2" >
+          <item row="2" column="3" >
            <widget class="QSpinBox" name="sbMinorTicksWidth" >
             <property name="minimum" >
              <number>1</number>
@@ -502,7 +482,7 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="2" >
+          <item row="3" column="3" >
            <widget class="QSpinBox" name="sbMinorTicksLength" >
             <property name="minimum" >
              <number>1</number>
@@ -569,7 +549,7 @@
            </spacer>
           </item>
           <item row="1" column="2" colspan="2" >
-           <widget class="QComboBox" name="lLabelsPosition" >
+           <widget class="QComboBox" name="cbLabelsPosition" >
             <item>
              <property name="text" >
               <string>left</string>
@@ -600,7 +580,7 @@
            </widget>
           </item>
           <item row="2" column="2" >
-           <widget class="QLineEdit" name="leLabelsRotations" />
+           <widget class="QLineEdit" name="leLabelsRotation" />
           </item>
           <item row="2" column="3" >
            <widget class="QLabel" name="label_26" >
@@ -701,61 +681,17 @@
            </spacer>
           </item>
           <item row="0" column="2" colspan="2" >
-           <widget class="QLineEdit" name="leLabelsFont" />
-          </item>
-          <item row="0" column="4" >
-           <widget class="QPushButton" name="bLabelsFont" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="toolTip" >
-             <string>click to select a font</string>
-            </property>
-           </widget>
+           <widget class="KFontRequester" name="kfontrequesterLabels" />
           </item>
           <item row="1" column="0" >
-           <widget class="QLabel" name="lLabelsColour" >
+           <widget class="QLabel" name="lLabelsColor" >
             <property name="text" >
-             <string>Colour</string>
+             <string>Color</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="4" >
-           <widget class="QPushButton" name="bLabelsColour" >
-            <property name="minimumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="toolTip" >
-             <string>click to select a colour</string>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-           </widget>
+          <item row="1" column="2" colspan="2" >
+           <widget class="KColorButton" name="kcbLabelsColor" />
           </item>
           <item row="2" column="0" >
            <spacer>
@@ -767,8 +703,8 @@
             </property>
             <property name="sizeHint" >
              <size>
-              <width>20</width>
-              <height>10</height>
+              <width>42</width>
+              <height>16</height>
              </size>
             </property>
            </spacer>
@@ -793,7 +729,7 @@
             </property>
            </spacer>
           </item>
-          <item row="3" column="3" colspan="2" >
+          <item row="3" column="3" >
            <widget class="QLineEdit" name="leLabelsPrefix" />
           </item>
           <item row="4" column="0" >
@@ -803,7 +739,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="3" colspan="2" >
+          <item row="4" column="3" >
            <widget class="QLineEdit" name="leLabelsSuffix" />
           </item>
          </layout>
@@ -817,7 +753,7 @@
          <property name="sizeHint" >
           <size>
            <width>418</width>
-           <height>31</height>
+           <height>16</height>
           </size>
          </property>
         </spacer>
@@ -866,52 +802,14 @@
            <widget class="QComboBox" name="cbMajorGridStyle" />
           </item>
           <item row="2" column="0" >
-           <widget class="QLabel" name="lMajorGridColour" >
+           <widget class="QLabel" name="lMajorGridColor" >
             <property name="text" >
-             <string>Colour</string>
+             <string>Color</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="2" >
-           <widget class="QPushButton" name="bMajorGridColour" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="toolTip" >
-             <string>click to select a colour</string>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>61</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
+          <item row="2" column="2" colspan="2" >
+           <widget class="KColorButton" name="kcbMajorGridColor" />
           </item>
           <item row="3" column="0" >
            <widget class="QLabel" name="lMajorGridWidth" >
@@ -929,6 +827,19 @@
              <number>10</number>
             </property>
            </widget>
+          </item>
+          <item row="3" column="3" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -970,52 +881,14 @@
            <widget class="QComboBox" name="cbMinorGridStyle" />
           </item>
           <item row="2" column="0" >
-           <widget class="QLabel" name="lMinorGridColour" >
+           <widget class="QLabel" name="lMinorGridColor" >
             <property name="text" >
-             <string>Colour</string>
+             <string>Color</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="2" >
-           <widget class="QPushButton" name="bMinorGridColour" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="toolTip" >
-             <string>click to select a colour</string>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>61</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
+          <item row="2" column="2" colspan="2" >
+           <widget class="KColorButton" name="kcbMinorGridColor" />
           </item>
           <item row="3" column="0" >
            <widget class="QLabel" name="lMinorGridWidth" >
@@ -1033,6 +906,19 @@
              <number>10</number>
             </property>
            </widget>
+          </item>
+          <item row="3" column="3" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>61</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -1063,6 +949,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

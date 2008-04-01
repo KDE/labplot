@@ -10,11 +10,11 @@ class Point
 public:
 	Point(double a=0, double b=0);
 	void setPoint(double, double);
-	ACCESS(double,x,X);
+	ACCESS(double,x, X);
 	ACCESS(double,y,Y);
 	ACCESSFLAG(masked,Masked);
 protected:
-	double x,y;		
+	double x,y;
 	bool masked;
 };
 

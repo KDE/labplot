@@ -1,6 +1,8 @@
 #include "TitleDialog.h"
-#include "gui/LabelWidget.h"
-#include "..
+#include "LabelWidget.h"
+#include "../MainWin.h"
+#include <KDebug>
+
 TitleDialog::TitleDialog(MainWin *mw, Label *title)	: KDialog(mw){
 
 	kDebug()<<"TitleDialog()"<<endl;
@@ -12,7 +14,7 @@ TitleDialog::TitleDialog(MainWin *mw, Label *title)	: KDialog(mw){
 	this->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply);
 
 	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
-	connect( this, SIGNAL( okClicked() ), this, SLOT( ok() ) );
+	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
 	connect( this, SIGNAL( changed( bool ) ), this, SLOT( enableButtonApply( bool ) ) );
 
 	this->enableButtonApply( false );
@@ -20,7 +22,7 @@ TitleDialog::TitleDialog(MainWin *mw, Label *title)	: KDialog(mw){
 
 }
 
-void TitleDialog::saveSettings() {
+void TitleDialog::save() {
 	labelWidget->save();
 
 	//TODO close the dialog

@@ -14,7 +14,7 @@ Plot::Plot()
 	kDebug()<<"Plot::Plot()"<<endl;
 	title = new Label(i18n("Title"));
 	// OLD : title = new Label(i18n("Title"),font,QColor(Qt::black));
-	title->setPosition(0.4,0.04);
+	title->setPosition( QPoint(0.4,0.04) );
 
 	background = QBrush(Qt::white);
 	areabackground = QBrush(Qt::yellow);	// Qt::white
@@ -255,7 +255,7 @@ void Plot::resetRanges() {
 	setRanges(range);
 
 	//mw->setModified();
-	
+
 	kDebug()<<"Plot::resetRanges() DONE"<<endl;
 }
 

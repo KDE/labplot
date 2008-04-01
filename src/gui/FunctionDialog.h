@@ -1,21 +1,23 @@
-//LabPlot : FunctionDialog.h
-
 #ifndef FUNCTIONDIALOG_H
 #define FUNCTIONDIALOG_H
 
 #include "kdialog.h"
-#include "plottype.h"
+#include "../plottype.h"
 
 class MainWin;
-class Label;
+class FunctionWidget;
+class Function;
 
 class FunctionDialog: public KDialog{
 	Q_OBJECT
 
 public:
-	FunctionDialog(MainWin *mw);
+	FunctionDialog(MainWin *mw, const PlotType& type=PLOT2D);
 
 public slots:
+	void setFunction( Function* );
+// 	void saveFunction( Function* ) const;
+
 /*	int addFunction();
 	void updateLabel() { rtw->getLabel()->setTitle(funle->text()); rtw->update(); }
 
@@ -35,29 +37,10 @@ public slots:
 	int Apply() { return apply_clicked(); }
 */
 private:
-	PlotType type;
+	FunctionWidget* functionWidget;
 
-// TODO	Set *set;	-> for changing set
-	KComboBox *constantscb, *functionscb;
-	KLineEdit *functionle;
-	KLineEdit *minle, *maxle;
-	KIntNumInput *nxi;
-	KComboBox *sheetcb;
-	void setupGUI();
-/*
-	void findPlot();
-	KLineEdit *ymin, *ymax;
-	KIntNumInput *ny;
-	QCheckBox *reread;
-	ListDialog *l;
-	int item;
-	PType type;
-	Graph *graph;			// Graph
-	RichTextWidget *rtw;		// label widget
-*/
 private slots :
-	void saveSettings();
-//	void toggleOptions();
-	void Apply();
+	void save() const;
+	void apply() const;
 };
 #endif //FUNCTIONDIALOG_H

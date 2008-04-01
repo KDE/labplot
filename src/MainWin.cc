@@ -3,8 +3,10 @@
 
 //****** GUI **************
 #include "gui/SettingsDialog.h"
-#include "gui/SettingsDialog.h"
+#include "gui/FunctionDialog.h"
 #include "gui/AxesDialog.h"
+#include "gui/LegendDialog.h"
+#include "gui/TitleDialog.h"
 
 #include <KApplication>
 #include <KAction>
@@ -18,9 +20,6 @@
 #include <KDebug>
 #include <KFilterDev>
 #include "ProjectDialog.h"
-#include "FunctionDialog.h"
-#include "TitleDialog.h"
-#include "LegendDialog.h"
 #include "PlotDialog.h"
 #include "WorksheetDialog.h"
 
@@ -514,7 +513,11 @@ void MainWin::titleDialog() {
 void MainWin::axesDialog() { (new AxesDialog(this))->show(); }
 void MainWin::plotDialog() { (new PlotDialog(this))->show(); }
 void MainWin::worksheetDialog() { (new WorksheetDialog(this))->show(); }
-void MainWin::legendDialog() { (new LegendDialog(this))->show(); }
+void MainWin::legendDialog() {
+	//TODO
+	(new LegendDialog(this))->show();
+
+}
 void MainWin::settingsDialog(){ (new SettingsDialog(this))->show(); }
 /******************** dialogs end *****************************/
 

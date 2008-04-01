@@ -1,23 +1,9 @@
 #include "LabelWidget.h"
-#include "../Label.h"
-
-#include <kfontrequester.h>
-#include <kcolorbutton.h>
+#include "../elements/Label.h"
 
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 
 	ui.setupUi(this);
-
-	//******************************
-	//Manage to use kde4-widgets in designer and move the following stuff to the ui-file
-	fontRequester = new KFontRequester(ui.gbText);
-	qobject_cast<QGridLayout*>(ui.gbText->layout())->addWidget(fontRequester, 0, 2, 1, 2);
-
-	colorButton= new KColorButton(ui.gbText);
-	qobject_cast<QGridLayout*>(ui.gbText->layout())->addWidget(colorButton, 1, 2, 1, 2);
-
-	//TODO colorbutton for the filling color.
-	//*************************
 
 	//Populate the comboboxes
 	QFont symbol("Symbol", 12, QFont::Bold);
@@ -42,18 +28,25 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.lePositionY->setValidator( new QDoubleValidator(ui.lePositionY) );
 	ui.leRotation->setValidator( new QDoubleValidator(ui.leRotation) );
 
+	//Icons
+	ui.bFontBold->setIcon( KIcon("format-text-bold") );
+	ui.bFontItalic->setIcon( KIcon("format-text-italic") );
+	ui.bFontUnderline->setIcon( KIcon("format-text-underline") );
+	ui.bFontSuperscript->setIcon( KIcon("format-text-superscript") );
+	ui.bFontSubscript->setIcon( KIcon("format-text-subscript") );
+
 	//Slots
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
 	connect( ui.rbFilling0, SIGNAL(toggled(bool)), this, SLOT( fillingChanged(bool)) );
 	connect( ui.rbFilling1, SIGNAL(toggled(bool)), this, SLOT( fillingChanged(bool)) );
 
 	//TODO These signals doesn't work at the moment.
-// 	connect( colorButton, SIGNAL(changed(const QColor& c)), ui.teLabel, SLOT(setTextColor(const QColor& c)) );
-// 	connect( fontRequester, SIGNAL(fontSelected(const QFont& f)), ui.teLabel, SLOT(setCurrentFont(const QFont& f)) );
-	connect( colorButton, SIGNAL(changed(const QColor& c)), this, SLOT(fontColorChanged(const QColor& c)) );
-	connect( fontRequester, SIGNAL(fontSelected(const QFont& f)), this, SLOT(fontChanged(const QFont& f)) );
+	connect( ui.kcbTextColor, SIGNAL(changed(const QColor& c)), ui.teLabel, SLOT(setTextColor(const QColor& c)) );
+	connect( ui.kfontRequester, SIGNAL(fontSelected(const QFont& f)), ui.teLabel, SLOT(setCurrentFont(const QFont& f)) );
+// 	connect( ui.kcbTextColor, SIGNAL(changed(const QColor& c)), this, SLOT(textColorChanged(const QColor& c)) );
+// 	connect( ui.kfontRequester, SIGNAL(fontSelected(const QFont& f)), this, SLOT(fontChanged(const QFont& f)) );
 
-	connect( ui.chbUseTex, SIGNAL(stateChanged(int)), this, SLOT(useTexChanged(int)) );
+	connect( ui.chbTex, SIGNAL(stateChanged(int)), this, SLOT(useTexChanged(int)) );
 	connect( ui.bFontBold, SIGNAL(toggled(bool)), this, SLOT( fontBoldToggled(bool)) );
 	connect( ui.bFontItalic, SIGNAL(toggled(bool)), this, SLOT( fontItalicToggled(bool)) );
 	connect( ui.bFontUnderline, SIGNAL(toggled(bool)), this, SLOT( fontUnderlineToggled(bool)) );
@@ -67,7 +60,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 
 LabelWidget::~LabelWidget() {}
 
-void LabelWidget::setLabel(const Label* l) {
+void LabelWidget::setLabel(Label* label) {
 	//kdDebug()<<"RTW::update()"<<endl;
 	//TODO add some "asserts"!!!
 	/*
@@ -93,6 +86,23 @@ void LabelWidget::setLabel(const Label* l) {
 	colorButton->setColor( l->fontColor() );
 	ui.chbUseTex->setChecked( l->isTeXLabel() );
 	*/
+
+	ui.cbPosition->setCurrentIndex( label->positionType() );
+	ui.lePositionX->setText( QString::number(label->position().x()) );
+	ui.lePositionY->setText( QString::number(label->position().y()) );
+	if ( label->isFillingEnabled() == false )
+		ui.rbFilling0->setChecked(true);
+	else
+		ui.rbFilling1->setChecked(true);
+
+	ui.kcbFillingColor->setColor(label->fillingColor());
+	ui.chbBox->setChecked( label->isBoxEnabled() );
+	ui.chbShadow->setChecked( label->isShadowEnabled() );
+
+	ui.kfontRequester->setFont(label->textFont() );
+	ui.kcbTextColor->setColor(label->textColor());
+	ui.chbTex->setChecked( label->isTexEnabled() );
+	ui.teLabel->setText( label->text() );
 }
 
 void LabelWidget::setLabelRotationEnabled(const bool b){
@@ -102,7 +112,7 @@ void LabelWidget::setLabelRotationEnabled(const bool b){
 }
 
 //TODO
-void LabelWidget::saveLabel(Label*) const{
+void LabelWidget::save() const{
 	/*
 	l->setTeXLabel(texcb->isChecked());
 	if(l->isTeXLabel())
@@ -155,9 +165,9 @@ void LabelWidget::positionChanged(int index){
 */
 void LabelWidget::fillingChanged(bool){
 	if (ui.rbFilling0->isChecked())
-		ui.bFillingColor->setEnabled(false);
+		ui.kcbFillingColor->setEnabled(false);
 	else
-		ui.bFillingColor->setEnabled(true);
+		ui.kcbFillingColor->setEnabled(true);
 }
 
 void LabelWidget::fillingColorClicked(){
@@ -169,7 +179,7 @@ void LabelWidget::fontChanged(const QFont& font){
 	ui.teLabel->setFocus();
 }
 
-void LabelWidget::fontColorChanged(const QColor& color){
+void LabelWidget::textColorChanged(const QColor& color){
 	ui.teLabel->setTextColor(color);
 	ui.teLabel->setFocus();
 }
@@ -184,7 +194,7 @@ void LabelWidget::useTexChanged(int state){
 
 		ui.frameFontOptions->setEnabled(false);
 	}else{
-		font=fontRequester->font();
+		font=ui.kfontRequester->font();
 		font.setBold(ui.bFontBold->isChecked());
 		font.setItalic(ui.bFontItalic->isChecked());
 		font.setUnderline(ui.bFontUnderline->isChecked());

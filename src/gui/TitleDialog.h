@@ -1,8 +1,9 @@
 #ifndef TITLEDIALOG_H
 #define TITLEDIALOG_H
 
-#include "kialog.h"
+#include <kdialog.h>
 
+class MainWin;
 class LabelWidget;
 class Label;
 
@@ -18,7 +19,7 @@ private:
 
 private slots:
 	void apply();
-	void ok();
+	void save();
 };
 
 #endif //TITLEDIALOG_H

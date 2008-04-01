@@ -5,7 +5,7 @@
 
 #include <QString>
 #include <QPainter>
-#include "Label.h"
+#include "elements/Label.h"
 #include "Style.h"
 #include "Symbol.h"
 #include "settype.h"
@@ -15,7 +15,7 @@ class Set
 {
 public:
 	Set(QString name="", int number=100);
-/*	Set(QString n="", QString label="", LSource src=SFUNCTION, PType t=P2D, Style *st=0, 
+/*	Set(QString n="", QString label="", LSource src=SFUNCTION, PType t=P2D, Style *st=0,
 			Symbol *sy=0,int nr=0, bool s=true);
 	virtual ~Set() {}
 	void openSet(QTextStream *t,int version);

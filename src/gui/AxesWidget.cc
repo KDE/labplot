@@ -6,6 +6,11 @@ AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 	ui.setupUi(this);
 	plotType=PLOT2D;
 
+	//create a LabelWidget in the "Title"-tab
+    QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+	labelWidget=new LabelWidget(ui.tabTitle);
+    hboxLayout->addWidget(labelWidget);
+
 	//Validators
 	ui.leLowerLimit->setValidator( new QDoubleValidator(ui.leLowerLimit) );
 	ui.leUpperLimit->setValidator( new QDoubleValidator(ui.leUpperLimit) );
@@ -14,29 +19,45 @@ AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 	ui.leMajorTicksNumber->setValidator( new QIntValidator(ui.leMajorTicksNumber) );
 	ui.leMinorTicksNumber->setValidator( new QIntValidator(ui.leMinorTicksNumber) );
 
+
+	//TODO move this stuff to retranslateUI()
+	ui.cbTicksPosition->addItem( i18n("in") );
+	ui.cbTicksPosition->addItem( i18n("out") );
+	ui.cbTicksPosition->addItem( i18n("in and out") );
+	ui.cbTicksPosition->addItem( i18n("none") );
+
+	//Tick labels format
+	 ui.cbLabelsFormat->addItem( i18n("automatic") );
+	 ui.cbLabelsFormat->addItem( i18n("normal") );
+	 ui.cbLabelsFormat->addItem( i18n("scientific") );
+	 ui.cbLabelsFormat->addItem( i18n("power of 10") );
+	 ui.cbLabelsFormat->addItem( i18n("power of 2") );
+	 ui.cbLabelsFormat->addItem( i18n("power of e") );
+	 ui.cbLabelsFormat->addItem( i18n("sqrt") );
+	 ui.cbLabelsFormat->addItem( i18n("time") );
+	 ui.cbLabelsFormat->addItem( i18n("date") );
+	 ui.cbLabelsFormat->addItem( i18n("datetime") );
+	 ui.cbLabelsFormat->addItem( i18n("degree") );
+
+
 	//Slots
 	connect( ui.cbAxes, SIGNAL(stateChanged(int)), this, SLOT(currentAxisChanged(int)) );
 
-	//"Title"-tab
-	//create a labelwidget
-    QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
-	LabelWidget* labelWidget=new LabelWidget(ui.tabTitle);
-    hboxLayout->addWidget(labelWidget);
+	//"General"-tab
+	//TODO add slot for position (show text filed if "custom" selected)
+
 
 	//"Ticks"-tab
 	connect( ui.cbTicksStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(ticksStyleChanged(int)) );
-	connect( ui.bTicksColour, SIGNAL(clicked()), this, SLOT( ticksColourClicked()) );
 
 	//"Tick labels"-tab
-	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(labelFormatChanged(int)) );
-	connect( ui.bLabelsFont, SIGNAL(clicked()), this, SLOT( labelFontClicked()) );
-	connect( ui.bLabelsColour, SIGNAL(clicked()), this, SLOT( labelColourClicked()) );
+	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(labelFormatChanged(const QString&)) );
 
 	//"Grid"-tab
 	connect( ui.sbMajorGridWidth, SIGNAL(valueChanged(int)), this, SLOT(createMajorGridStyles()) );
-	//TODO colour
+	connect( ui.kcbMajorGridColor, SIGNAL(changed (const QColor &)), this, SLOT(createMajorGridStyles()) );
 	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(int)), this, SLOT(createMinorGridStyles()) );
-	//TODO colour
+	connect( ui.kcbMinorGridColor, SIGNAL(changed (const QColor &)), this, SLOT(createMinorGridStyles()) );
 }
 
 
@@ -45,6 +66,20 @@ AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 	Depending on the current type adjusts the appearance of the widget.
 */
 void AxesWidget::setPlotType(const PlotType& type){
+	QStringList list;
+	if (type == PLOT2D || type == PLOTSURFACE) {
+		list<<QString("x")<<QString("y")<<QString("y2")<<QString("x2");
+	}else if (type == PLOT3D || type == PLOTQWT3D){
+		list<<QString("x")<<QString("y")<<QString("z")<<QString("x2")<<QString("x3")<<QString("x4");
+		list<<QString("y4")<<QString("y3")<<QString("y2")<<QString("z2")<<QString("z4")<<QString("z3");
+	}else if (type == PLOTPOLAR) {
+		list<<QString("phi")<<QString("r");
+	}else if (type == PLOTTERNARY || type == PLOTPIE) {
+		list<<QString("a");
+	}
+
+	ui.cbAxes->insertItems( -1, list );
+
 	//TODO
 	if(type == PLOTPIE) {
 // 		ui.tab2->hide();
@@ -68,19 +103,18 @@ void AxesWidget::setPlotType(const PlotType& type){
 /*!
 	sets the pointer \c axes to list containing all the axes. \c axisNumber is the number of the axis to be edited.<br>
 */
-void AxesWidget::setAxesData(const QList<Axis>& axes, const int axisNumber){
+void AxesWidget::setAxesList(const QList<Axis> axes, const int axis){
 	//Create a local working copy of the axes list
 	listAxes = axes;
 
 	//Fill the ComboBox
 	ui.cbAxes->clear();
 	for (int i=0; i<listAxes.size(); i++){
-		ui.cbAxes->addItem( listAxes[i].getLabel()->Text() );
+		ui.cbAxes->addItem( listAxes[i].label()->text() );
 	}
 
 	//Show the settings for the current axis
-	currentAxis=axisNumber;
-	this->currentAxisChanged(currentAxis);
+	this->currentAxisChanged(axis);
 }
 
 /*!
@@ -109,9 +143,14 @@ void AxesWidget::restoreDefaults(){
 //**********************************************************
 /*!
  	Shows the data for the axis \c number.
-	Is called when the user changes the current axis in the corepsonding ComboBox
+	Is called when the user changes the current axis in the coresponding ComboBox
 */
-void AxesWidget::currentAxisChanged(int const number){
+void AxesWidget::currentAxisChanged(int index){
+	if (!dataChanged)
+		return;
+
+	currentAxis=index;
+
 	//TODO
 /*
 	if (type == P2D || type == PSURFACE) {
@@ -131,9 +170,9 @@ void AxesWidget::currentAxisChanged(int const number){
 
 	QHBox *hb = new QHBox(vbox);
 	new QLabel(i18n("Selected Axis"),hb);
+*/
 
-	axescb = new KComboBox(vbox);
-	QStringList list;
+	/*
 	double rmin=0, rmax=0;	// axes range
 	// TODO : switch ListBox to KComboBox
 	if (type == P2D || type == PSURFACE) {
@@ -179,126 +218,100 @@ void AxesWidget::currentAxisChanged(int const number){
 	axescb->insertStringList(list);
 	axescb->setCurrentItem(axesnr);
 	QObject::connect(axescb,SIGNAL(activated(int)),this,SLOT(updateAxis(int)));
+	*/
 //*****************
 
-	Axis* axis=&listAxes.at(currentAxis);
+	const Axis* axis=&listAxes.at(currentAxis);
 
 	//*************************  "General"-tab  ************************************
-	ui.chbAxisEnabled->setChecked( axis->isEnabled() );
-	ui.cbStyle->setCurrentItem( axis->getStyle() );
-	ui.cbPosition->setCurrentItem( axis->getPosition() );
+	ui.chbAxisEnabled->setChecked( axis->isAxisEnabled() );
+	ui.cbScaleType->setCurrentIndex( axis->scaleType() );
+	ui.cbPosition->setCurrentIndex( axis->position() );
 
-	double rmin, rmax; //TODO here the Plot-object is needed!!!
-	ui.leLowerLimit->setText( QString::number(rmin) );
-	ui.leUpperLimit->setText( QString::number(rmax) );
-	ui.leZeroOffset->setText( QString::number(axis->getShift()) );
-	ui.leScaleFactor->setText( QString::number(axis->getScaleFactor()) );
+	ui.leLowerLimit->setText( QString::number(axis->lowerLimit()) );
+	ui.leUpperLimit->setText( QString::number(axis->upperLimit()) );
+	ui.leZeroOffset->setText( QString::number(axis->offset()) );
+	ui.leScaleFactor->setText( QString::number(axis->scaleFactor()) );
 
-	ui.chbBorderEnabled->setChecked( axis->isBorder() );
-	//TODO border colour
-	ui.sbBorderWidth->setValue( axis->getBorderWidth() );
+	ui.chbBorder->setChecked( axis->isBorderEnabled() );
+	ui.kcbBorderColor->setColor( axis->borderColor() );
+	ui.sbBorderWidth->setValue( axis->borderWidth() );
 
 	//*******************   "Title"-tab  *************************************
-	ui.cbTitlePosition->setCurrentItem( axis->getTitlePosition() );
-	ui.leTitlePositionX->setText( axis->getTitlePositionX() );
-	ui.leTitlePositionY->setText( axis->getTitlePositionY() );
-	if ( axis->getTitleFilling() == 0 )
-		ui.rbTitleFilling0->setChecked(true);
-	else
-		ui.rbTitleFilling1->setChecked(true);
-
-	//TODO fiiling colour
-	ui.chbTitleBox->setChecked( axis->isTitleBoxEnabled() );
-	ui.chbTitleShadow->setChecked( axis->isTitleShadowEnabled() );
-	//TODO text colour and font
-	ui.chbTitleShadow->setChecked( axis->isTitleTexUsed() );
-	ui.teTitleLabel->setText( axis->getLabel() );
+	//TODO !!!!!!!!!!!!!!
+// 	const Label* label=axis->label();
+// 	labelWidget->setLabel( label );
 
 
 	//*******************   "Ticks"-tab  *************************************
-	//TODO
-	//i=0;
-	//while(tickpositems[i] != 0) tickposcb->insertItem(i18n(tickpositems[i++]));
-
-	ui.cbTicksPosition->setCurrentItem( axis->getTicksPosition() );
-	ui.cbTicksStyle->setCurrentItem( axis->getTicksStyle() );
-	//TODO ticks colour
-	//tcb = new KColorButton(axis[axesnr]->TickColor(),hb);
+	ui.cbTicksPosition->setCurrentIndex( axis->ticksPosition() );
+	ui.cbTicksStyle->setCurrentIndex( axis->ticksType() );
+	ui.kcbTicksColor->setColor( axis->ticksColor() );
 
 	ui.chbMajorTicks->setChecked( axis->majorTicksEnabled() );
-	//TODO ???
-// 	majorlabel = new QLabel(i18n("Number : "),hb);
-// 	if(axis[axesnr]->tickType() == 1)
-// 		majorlabel->setText(i18n("Increment : "));
-// 	majortickscb->setChecked(axis[axesnr]->MajorTicksEnabled());
-// 	if(axis[axesnr]->MajorTicks()==-1)
-// 		majorle = new KLineEdit(i18n("auto"),hb);
-// 	else
-// 		majorle = new KLineEdit(QString::number(axis[axesnr]->MajorTicks()),hb);
-
-	ui.sbMajorTicksWidth->setValue(axis->getMajorTicksWidth() );
-	ui.chbMinorTicks->setChecked( axis->minorTicksEnabled() );
-
-// 	new QLabel(i18n("Number : "),hb);
-// 	minorle = new KLineEdit(QString::number(axis[axesnr]->MinorTicks()),hb);
-// 	minorle->setValidator(new QIntValidator(minorle));
-// 	hb = new QHBox(minortickgb);
-	ui.sbMajorTicksWidth->setValue(axis->getMajorTicksWidth() );
-
-	if(plotType == PLOTQWT3D) {
-		ui.sbMajorTicksWidth->setValue(axis->getMajorTicksWidth() );
-		ui.sbMajorTicksWidth->setValue(axis->getMinorTicksWidth() );
+	if (axis->majorTicksNumber()==-1){
+		ui.cbMajorTicksNumber->setCurrentIndex(0);
+		ui.leMajorTicksNumber->setText( "" );
+	}else{
+		ui.cbMajorTicksNumber->setCurrentIndex(1);
+		ui.leMajorTicksNumber->setText( QString::number(axis->majorTicksNumber()) );
 	}
+	ui.sbMajorTicksWidth->setValue( axis->majorTicksWidth() );
+	ui.sbMajorTicksLength->setValue( axis->majorTicksLength() );
+
+	ui.chbMinorTicks->setChecked( axis->minorTicksEnabled() );
+	if (axis->minorTicksNumber()==-1){
+		ui.cbMinorTicksNumber->setCurrentIndex(0);
+		ui.leMinorTicksNumber->setText( "" );
+	}else{
+		ui.cbMinorTicksNumber->setCurrentIndex(1);
+		ui.leMinorTicksNumber->setText( QString::number(axis->minorTicksNumber()) );
+	}
+	ui.sbMinorTicksWidth->setValue( axis->minorTicksWidth() );
+	ui.sbMinorTicksLength->setValue( axis->minorTicksLength() );
+
+
+	//TODO ???
+// 	if(plotType == PLOTQWT3D) {
+// 		ui.sbMajorTicksWidth->setValue(axis->getMajorTicksWidth() );
+// 		ui.sbMajorTicksWidth->setValue(axis->getMinorTicksWidth() );
+// 	}
 
 
 	//*******************   "Tick labels"-tab  ************************************
 	ui.chbLabels->setChecked( axis->labelsEnabled() );
-	ui.cbLabelsPosition->setCurrentItem( axis->getLabelsPosition() );
-	ui.leLabelsRotation->setText( QString::number(axis->getLabelsRotation()) );
+	ui.cbLabelsPosition->setCurrentIndex( axis->labelsPosition() );
+	ui.leLabelsRotation->setText( QString::number(axis->labelsRotation()) );
 
-	ui.cbLabelsPrecision->setValue( axis->getLabelsPrecision() );
-	ui.cbLabelsFormat->setCurrentItem( axis->getLabelsFormat() );
+	ui.sbLabelsPrecision->setValue( axis->labelsPrecision() );
+	ui.cbLabelsFormat->setCurrentIndex( axis->labelsFormat() );
+	ui.leLabelsDateFormat->setText( axis->labelsDateFormat() );
 
-	//TODO
-// 	i=0;
-// 	while(tickformatitems[i] != 0) atlfcb->insertItem(i18n(tickformatitems[i++]));
-// 	atlfcb->setCurrentItem(axis[axesnr]->TickLabelFormat());
-	ui.leLabelsDateFormat->setText( axis->getLabelsDateFormat() );
-	if ( ui.cbLabelsDateFormat->currentText() != i18n("time") && ui.cbLabelsDateFormat->currentText() != i18n("date")
-		&& ui.cbLabelsDateFormat->currentText() != i18n("datetime"))
-		ui.leLabelsDateFormat->setDisabled("true");
-
-
-	//TODO font and colour
-	ui.leLabelsPrefix->setText( axis->getLabelsPrefix() );
-	ui.leLabelsSuffix->setText( axis->getLabelsSuffix() );
+	ui.kfontrequesterLabels->setFont( axis->labelsFont() );
+	ui.kcbLabelsColor->setColor( axis->labelsColor() );
+	ui.leLabelsPrefix->setText( axis->labelsPrefix() );
+	ui.leLabelsSuffix->setText( axis->labelsSuffix() );
 
 
 	//*******************   "Grid"-tab  ************************************
 	ui.chbMajorGrid->setChecked( axis->isMajorGridEnabled() );
-	ui.cbMajorGridStyle->setCurrentItem( axis->getMajorGridStyle() );
-	//TODO colour
-	ui.sbMajorGridWidth->setValue( axis->getMajorGridWidth() );
+	ui.cbMajorGridStyle->setCurrentIndex( axis->majorGridStyle() );
+	ui.kcbMajorGridColor->setColor( axis->majorGridColor() );
+	ui.sbMajorGridWidth->setValue( axis->majorGridWidth() );
 
-	ui.chbMajorGrid->setChecked( axis->isMajorGridEnabled() );
-	ui.cbMajorGridStyle->setCurrentItem( axis->getMajorGridStyle() );
-	//TODO colour
-	ui.sbMajorGridWidth->setValue( axis->getMajorGridWidth() );
-	*/
+	ui.chbMinorGrid->setChecked( axis->isMinorGridEnabled() );
+	ui.cbMinorGridStyle->setCurrentIndex( axis->minorGridStyle() );
+	ui.kcbMinorGridColor->setColor( axis->minorGridColor() );
+	ui.sbMinorGridWidth->setValue( axis->minorGridWidth() );
 }
 
-//"General"-tab
 
 
 //"Ticks"-tab
-void AxesWidget::ticksColourClicked(){
-
-}
-
 /*!
-	called if the current style of the ticks is changed. Adjustes the names of the corresponding labels in UI.
+	called if the current style of the ticks (Number or Increment) is changed. Adjustes the names of the corresponding labels in UI.
 */
-void AxesWidget::ticksStyleChanged(int index) {
+void AxesWidget::ticksStyleChanged(int index){
 	if (index==0){
 		ui.lMajorTicksNumber->setText( i18n("Number") );
 		ui.lMinorTicksNumber->setText( i18n("Number") );
@@ -308,14 +321,34 @@ void AxesWidget::ticksStyleChanged(int index) {
 	}
 }
 
-
-//"Tick labels"-tab
-void AxesWidget::labelFontClicked(){
-
+/*!
+	called if the Number-Style (auto or custom) is changed in the corresponding ComboBox.
+	Enables/disables the text field for the number of major ticks if custom/auto is selected.
+*/
+void AxesWidget::majorTicksChanged(int index){
+	ui.leMajorTicksNumber->setEnabled((bool)index);
 }
 
-void AxesWidget::labelColourClicked(){
 
+/*!
+	called if the Number-Style (auto or custom) is changed in the corresponding ComboBox.
+	Enables/disables the textfield for the number of minor ticks if custom/auto is selected.
+*/
+void AxesWidget::minorTicksChanged(int index){
+	ui.leMinorTicksNumber->setEnabled((bool)index);
+}
+
+//"Tick labels"-tab
+/*!
+	called if the ticks format is changed in the corresponding ComboBox.
+	Enables an additional textfield for "Date-Format" if time/date/datetime selected.
+	Disables this field otherwise.
+*/
+void AxesWidget::labelFormatChanged(const QString& text){
+	if ( text != i18n("time") && text != i18n("date") && text != i18n("datetime") )
+		ui.leLabelsDateFormat->setEnabled(false);
+	else
+		ui.leLabelsDateFormat->setEnabled(true);
 }
 
 
@@ -344,7 +377,7 @@ void AxesWidget::createMajorGridStyles(){
 
 // 	QColor penColor = listAxes.at(currentAxis).MajorGridColor();
 // 	int penWidth = listAxes.at(currentAxis).MajorGridWidth();
- 	QColor penColor = Qt::black;
+ 	QColor penColor = ui.kcbMajorGridColor->color();
 	int penWidth = ui.sbMajorGridWidth->value();
 
 	for (int i=1;i<6;i++) {
@@ -483,10 +516,6 @@ void AxesDialog::axisEnabled(bool on) {
 
 }
 
-void AxesDialog::centerEnabled(bool on) {
-	// set position xle,yle readonly
-	rtw->setPostionReadOnly(on);
-}
 */
 
 //! update the selected axis
