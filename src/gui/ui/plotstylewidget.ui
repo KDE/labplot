@@ -1,0 +1,345 @@
+<ui version="4.0" >
+ <class>PlotStyleWidget</class>
+ <widget class="QWidget" name="PlotStyleWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>447</width>
+    <height>525</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Line:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QCheckBox" name="cbLineEnabled" >
+     <property name="text" >
+      <string>activate</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="2" >
+    <widget class="QLabel" name="label_3" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>30</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="4" >
+    <widget class="QComboBox" name="cbLineType" />
+   </item>
+   <item row="2" column="2" >
+    <widget class="QLabel" name="label_5" >
+     <property name="text" >
+      <string>Style</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4" >
+    <widget class="QComboBox" name="cbLineStyle" />
+   </item>
+   <item row="2" column="5" >
+    <widget class="KColorButton" name="kcbLineColor" />
+   </item>
+   <item row="3" column="2" >
+    <widget class="QLabel" name="label_6" >
+     <property name="text" >
+      <string>Width</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4" >
+    <widget class="QSpinBox" name="sbLineWidth" >
+     <property name="minimum" >
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="0" >
+    <widget class="QLabel" name="label_16" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Filling:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" >
+    <widget class="QCheckBox" name="cbFillingEnabled" >
+     <property name="text" >
+      <string>activate</string>
+     </property>
+     <property name="checked" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2" >
+    <widget class="QLabel" name="label_8" >
+     <property name="text" >
+      <string>Pattern</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="4" >
+    <widget class="QComboBox" name="cbFillingPattern" />
+   </item>
+   <item row="6" column="5" >
+    <widget class="KColorButton" name="kcbFillingColor" />
+   </item>
+   <item row="7" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Symbols:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" >
+    <widget class="QCheckBox" name="checkBox_5" >
+     <property name="text" >
+      <string>activate</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="2" >
+    <widget class="QLabel" name="label_10" >
+     <property name="text" >
+      <string>Type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="4" >
+    <widget class="QComboBox" name="cbSymbolsType" />
+   </item>
+   <item row="9" column="5" >
+    <widget class="KColorButton" name="kcbSymbolsColor" />
+   </item>
+   <item row="10" column="2" >
+    <widget class="QLabel" name="label_11" >
+     <property name="text" >
+      <string>Width</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="4" >
+    <widget class="QSpinBox" name="sbSymbolsWidth" >
+     <property name="minimum" >
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="2" >
+    <widget class="QLabel" name="label_15" >
+     <property name="text" >
+      <string>Filling</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="4" >
+    <widget class="QComboBox" name="cbSymbolsFilling" />
+   </item>
+   <item row="11" column="5" >
+    <widget class="KColorButton" name="kcbSymbolsFillingColor" />
+   </item>
+   <item row="12" column="2" >
+    <widget class="QLabel" name="label_13" >
+     <property name="text" >
+      <string>Pattern</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="4" >
+    <widget class="QComboBox" name="cbSymbolsPattern" />
+   </item>
+   <item row="13" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="14" column="0" colspan="2" >
+    <widget class="QLabel" name="label_17" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Misc:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="2" >
+    <widget class="QLabel" name="label_7" >
+     <property name="text" >
+      <string>Box width</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="4" >
+    <widget class="QCheckBox" name="checkBox_2" >
+     <property name="text" >
+      <string>auto</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="5" >
+    <widget class="QSpinBox" name="spinBox" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="2" >
+    <widget class="QCheckBox" name="checkBox_4" >
+     <property name="text" >
+      <string>sort points</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>31</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
