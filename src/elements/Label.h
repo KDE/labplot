@@ -32,18 +32,18 @@ public:
 */
 // 	void setPosition(double X, double Y) { m_x=X; m_y=Y; }
 
-	ACCESSFUNC(short, m_positionType, positionType, PositionType);
-	ACCESSFUNC(QPoint, m_position, position, Position);
+	ACCESS(short, positionType, PositionType);
+	ACCESS(QPoint, position, Position);
 
-	ACCESSFUNCFLAG(m_fillingEnabled, Filling);
-	ACCESSFUNC(QColor, m_fillingColor, fillingColor, FillingColor);
-	ACCESSFUNCFLAG(m_boxEnabled, Box);
-	ACCESSFUNCFLAG(m_shadowEnabled, Shadow);
+	ACCESSFLAG(m_fillingEnabled, Filling);
+	ACCESS(QColor, fillingColor, FillingColor);
+	ACCESSFLAG(m_boxEnabled, Box);
+	ACCESSFLAG(m_shadowEnabled, Shadow);
 
-	ACCESSFUNC(QFont, m_textFont, textFont, TextFont);
-	ACCESSFUNC(QColor, m_textColor, textColor, TextColor);
-	ACCESSFUNCFLAG(m_texEnabled, Tex);
-	ACCESSFUNC(QString, m_text, text, Text);
+	ACCESS(QFont, textFont, TextFont);
+	ACCESS(QColor, textColor, TextColor);
+	ACCESSFLAG(m_texEnabled, Tex);
+	ACCESS(QString, text, Text);
 
 private:
 	short m_positionType;

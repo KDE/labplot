@@ -2,8 +2,8 @@
 
 #include "Range.h"
 
-Range::Range(double a, double b)
+Range::Range(double min, double max)
 {
-	min = a;
-	max = b;
+	m_min = min;
+	m_max = max;
 }

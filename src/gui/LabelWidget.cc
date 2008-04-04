@@ -90,18 +90,18 @@ void LabelWidget::setLabel(Label* label) {
 	ui.cbPosition->setCurrentIndex( label->positionType() );
 	ui.lePositionX->setText( QString::number(label->position().x()) );
 	ui.lePositionY->setText( QString::number(label->position().y()) );
-	if ( label->isFillingEnabled() == false )
+	if ( label->hasFilling() == false )
 		ui.rbFilling0->setChecked(true);
 	else
 		ui.rbFilling1->setChecked(true);
 
 	ui.kcbFillingColor->setColor(label->fillingColor());
-	ui.chbBox->setChecked( label->isBoxEnabled() );
-	ui.chbShadow->setChecked( label->isShadowEnabled() );
+	ui.chbBox->setChecked( label->hasBox() );
+	ui.chbShadow->setChecked( label->hasShadow() );
 
 	ui.kfontRequester->setFont(label->textFont() );
 	ui.kcbTextColor->setColor(label->textColor());
-	ui.chbTex->setChecked( label->isTexEnabled() );
+	ui.chbTex->setChecked( label->isTex() );
 	ui.teLabel->setText( label->text() );
 }
 

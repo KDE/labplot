@@ -51,6 +51,8 @@ IF (GSL_FOUND)
 ELSE (GSL_FOUND)
 	MESSAGE (STATUS "GNU Scientific Library not found. "
 			"LabPlot will be build without GSL suppot.")
+	SET (GSL_LIBRARIES "" )
+	SET (GSL_CBLAS_LIBRARIES "" )
 ENDIF (GSL_FOUND)
 
 ### HDF5 #####################################
@@ -97,8 +99,8 @@ IF(OPJ_LIBRARY)
 MESSAGE ("-- Found liborigin library: ${OPJ_LIBRARY}" )
 ELSE(OPJ_LIBRARY)
 MESSAGE ("-- System OPJ library not found! Using included version." )
-# add_subdirectory(liborigin)
-SET(OPJ_LIBRARY "-L../liborigin -lorigin")
+add_subdirectory(liborigin)
+SET(OPJ_LIBRARY "-L../lib -lorigin")
 ENDIF(OPJ_LIBRARY)
 ##############################################
 

@@ -7,7 +7,7 @@
 //#include <qdom.h>
 
 #include "styletype.h"
-#include "defs.h"
+#include "definitions.h"
 
 class Style
 {
@@ -21,24 +21,24 @@ public:
 	ACCESS(StyleType, type, Type);
 	ACCESS(QColor, color, Color);
 	ACCESS(int, width, Width);
-	ACCESS(Qt::PenStyle, penstyle, PenStyle);
-	ACCESS(Qt::BrushStyle, brushstyle, BrushStyle);
-	ACCESSFLAG(filled, Fill);
-	ACCESS(QColor, fillcolor, FillColor);
-	ACCESS(int, boxwidth, BoxWidth);
-	ACCESSFLAG(autoboxwidth,AutoBoxWidth);
-	ACCESSFLAG(sort_points,PointsSorting);
+	ACCESS(Qt::PenStyle, penStyle, PenStyle);
+	ACCESS(Qt::BrushStyle, brushStyle, BrushStyle);
+	ACCESSFLAG(m_filled, Fill);
+	ACCESS(QColor, fillColor, FillColor);
+	ACCESS(int, boxWidth, BoxWidth);
+	ACCESSFLAG(m_autoBoxWidth,AutoBoxWidth);
+	ACCESSFLAG(m_sortPoints,PointsSorting);
 private:
-	StyleType type;
-	QColor color;		//!< line color
-	int width;		//!< line width
-	bool filled;		//!< filled to baseline
-	QColor fillcolor;
-	Qt::PenStyle penstyle;	//!< pen style
-	Qt::BrushStyle brushstyle;	//!< fill brush
-	int boxwidth;		//!< width for type boxes
-	bool autoboxwidth;	//!< automatic box width ?
-	bool sort_points;	//!< sort points before plotting ?
+	StyleType m_type;
+	QColor m_color;		//!< line color
+	int m_width;		//!< line width
+	bool m_filled;		//!< filled to baseline
+	QColor m_fillColor;
+	Qt::PenStyle m_penStyle;	//!< pen style
+	Qt::BrushStyle m_brushStyle;	//!< fill brush
+	int m_boxWidth;		//!< width for type boxes
+	bool m_autoBoxWidth;	//!< automatic box width ?
+	bool m_sortPoints;	//!< sort points before plotting ?
 };
 
 #endif // STYLE_H

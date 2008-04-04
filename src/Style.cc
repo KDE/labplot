@@ -3,19 +3,19 @@
 #include <KDebug>
 #include "Style.h"
 
-Style::Style(StyleType t, QColor c, bool f, QColor fc, int w, Qt::PenStyle p, Qt::BrushStyle b)
+Style::Style(StyleType type, QColor color, bool filled, QColor fillColor, int width, Qt::PenStyle penStyle, Qt::BrushStyle brushStyle)
 {
 	kDebug()<<"Style()"<<endl;
-	type = t;
-	color = c;
-	filled = f;
-	fillcolor = fc;
-	width=w;
-	penstyle = p;
-	brushstyle = b;
-	boxwidth=10;
-	autoboxwidth=false;
-	sort_points=true;
+	m_type = type;
+	m_color = color;
+	m_filled = filled;
+	m_fillColor = fillColor;
+	m_width=width;
+	m_penStyle = penStyle;
+	m_brushStyle = brushStyle;
+	m_boxWidth=10;
+	m_autoBoxWidth=false;
+	m_sortPoints=true;
 }
 /*
 void Style::save(QTextStream *t) {

@@ -4,26 +4,26 @@
 #include "Set2D.h"
 
 Set2D::Set2D(QString name, Point *data, int number)
-	: Set(name, number), data(data)
+	: Set(name, number), m_data(data)
 {
 	kDebug()<<"Set2D()"<<endl;
-	type = SET2D;
-	if(number>0) resetRanges();
+	m_type = SET2D;
+	if(m_number>0) resetRanges();
 }
 
 // calculate ranges from data
 void Set2D::resetRanges() {
 	kDebug()<<"Set2D::resetRanges()"<<endl;
-	double xmin=data[0].X(),xmax=xmin;
-	double ymin=data[0].Y(),ymax=ymin;
-	for(int i=1;i<number;i++) {
-		data[i].X()<xmin?xmin=data[i].X():0;
-		data[i].X()>xmax?xmax=data[i].X():0;
-		data[i].Y()<ymin?ymin=data[i].Y():0;
-		data[i].Y()>ymax?ymax=data[i].Y():0;
+	double xmin=m_data[0].x(),xmax=xmin;
+	double ymin=m_data[0].y(),ymax=ymin;
+	for(int i=1;i<m_number;i++) {
+		m_data[i].x()<xmin?xmin=m_data[i].x():0;
+		m_data[i].x()>xmax?xmax=m_data[i].x():0;
+		m_data[i].y()<ymin?ymin=m_data[i].y():0;
+		m_data[i].y()>ymax?ymax=m_data[i].y():0;
 	}
-	range[0].setRange(xmin,xmax);
-	range[1].setRange(ymin,ymax);
+	m_range[0].setRange(xmin,xmax);
+	m_range[1].setRange(ymin,ymax);
 	kDebug()<<"	x range : "<<xmin<<xmax<<endl;
 	kDebug()<<"	y range : "<<ymin<<ymax<<endl;
 }

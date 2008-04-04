@@ -14,15 +14,15 @@ class Legend {
 public:
 	Legend();
 
-	ACCESSFUNC(QPoint, m_position, position, Position);
+	ACCESS(QPoint, position, Position);
 
-	ACCESSFUNCFLAG(m_fillingEnabled, Filling);
-	ACCESSFUNC(QColor, m_fillingColor, fillingColor, FillingColor);
-	ACCESSFUNCFLAG(m_boxEnabled, Box);
-	ACCESSFUNCFLAG(m_shadowEnabled, Shadow);
+	ACCESSFLAG(m_fillingEnabled, Filling);
+	ACCESS(QColor, fillingColor, FillingColor);
+	ACCESSFLAG(m_boxEnabled, Box);
+	ACCESSFLAG(m_shadowEnabled, Shadow);
 
-	ACCESSFUNC(QFont, m_textFont, textFont, TextFont);
-	ACCESSFUNC(QColor, m_textColor, textColor, TextColor);
+	ACCESS(QFont, textFont, TextFont);
+	ACCESS(QColor, textColor, TextColor);
 
 	/*
 	void save(QTextStream *t);

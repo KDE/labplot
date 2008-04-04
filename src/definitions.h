@@ -1,13 +1,17 @@
-// LabPltot : defs.h
+// LabPltot : definitions.h
 
-#ifndef DEFINITIONSS_H
-#define DEFINITIONSS_H
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
-#define ACCESSFUNC(type, var, method, Method) \
-	type method() const { return var; } \
-	void set ## Method(const type value) { var=value; }
-#define ACCESSFUNCFLAG(var, Method) \
-	bool is ## Method ## Enabled() const { return var; } \
-	void enable ## Method(const bool value=true) { var=value; }
+// (QString, title, Title)	variable is m_title
+#define ACCESS(type, name, Method) \
+	type name() const { return m_ ## name; } \
+	void set ## Method(const type value) { m_ ## name=value; }
+// (m_transparent, Transparent)
+#define ACCESSFLAG(var, Method) \
+	bool is ## Method() const { return var; } \
+	bool has ## Method() const { return var; } \
+	void enable ## Method(const bool value=true) { var=value; } \
+	void set ## Method(const bool value=true) { var=value; }
 
-#endif // DEFS_H
+#endif // DEFINITIONS_H

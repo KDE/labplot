@@ -1,6 +1,6 @@
 #include "AxesDialog.h"
 #include "AxesWidget.h"
-#include "../Axis.h"
+#include "../elements/Axis.h"
 #include "../MainWin.h"
 #include <KDebug>
 

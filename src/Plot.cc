@@ -7,7 +7,7 @@
 #include "Plot.h"
 #include "Set.h"
 #include "Set2D.h"
-#include "tickformat.h"
+#include "elements/Axis.h"
 
 Plot::Plot()
 {
@@ -39,28 +39,28 @@ QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) const {
 	QString label;
 
 	switch(atlf) {
-	case AUTO:
+	case Axis::LABELSFORMAT_AUTO:
 		label = QString::number(value,'g',prec);
 		break;
-	case NORMAL:
+	case Axis::LABELSFORMAT_NORMAL:
 		label = QString::number(value,'f',prec);
 		break;
-	case SCIENTIFIC:
+	case Axis::LABELSFORMAT_SCIENTIFIC:
 		label = QString::number(value,'e',prec);
 		break;
-	case POWER10:
+	case Axis::LABELSFORMAT_POWER10:
 		label = "10<span style=\"vertical-align:super\">"+ QString::number(log10(value),'g',prec)+"</span>";
 		break;
-	case POWER2:
+	case Axis::LABELSFORMAT_POWER2:
 		label = "2<span style=\"vertical-align:super\">"+ QString::number(log2(value),'g',prec)+"</span>";
 		break;
-	case POWERE:
+	case Axis::LABELSFORMAT_POWERE:
 		label = "e<span style=\"vertical-align:super\">"+ QString::number(log(value),'g',prec)+"</span>";
 		break;
-	case FSQRT:
+	case Axis::LABELSFORMAT_FSQRT:
 		label = "sqrt("+ QString::number(value*value,'g',prec) + ")";
 		break;
-	case TIME: {
+	case Axis::LABELSFORMAT_TIME: {
 		QTime time;
 		time=time.addMSecs((int) (value*1000));
 
@@ -116,7 +116,7 @@ QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) const {
 		kDebug()<<"VALUE in Time Format : "<<label<<endl;
 		}
 		break;
-	case DATE: {
+	case Axis::LABELSFORMAT_DATE: {
 		QDate date(1970,1,1);
 		date=date.addDays((int) value);
 		QString format("dd.MM.yyyy");
@@ -126,7 +126,7 @@ QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) const {
 			kDebug()<<"VALUE in Date Format ( "<<format<<") : "<<label<<endl;
 		}
 		break;
-	case DATETIME: {
+	case Axis::LABELSFORMAT_DATETIME: {
 		QDate date(1970,1,1);
 		QDateTime datetime(date);
 //		kDebug()<<"value = "<<(int) value<<endl;
@@ -138,7 +138,7 @@ QString Plot::TicLabel(int atlf, int prec, QString dtf, double value) const {
 //		kDebug()<<"VALUE in DateTime Format ( "<<format<<") : "<<label<<endl;
 		}
 		break;
-	case DEGREE:
+	case Axis::LABELSFORMAT_DEGREE:
 		label = QString::number(180.0/M_PI*value,'f',prec)+'°';
 		break;
 	}
@@ -152,14 +152,14 @@ void Plot::resetRanges() {
 	double xmin=0,xmax=1,ymin=0,ymax=1,zmin=0,zmax=1;
 	for (int i=0;i<set.size();i++) {
 		kDebug()<<"	using set "<<i<<endl;
-		if(!set[i]->ShownEnabled())
+		if(!set[i]->isShown())
 			continue;	// do not use hidden graphs
 
-		SetType stype = set[i]->Type();
+		Set::SetType stype = set[i]->type();
 		kDebug()<<"	Set "<<i<<" / Type = "<<stype<<endl;
 
 		Range xrange,yrange,zrange;
-		if(stype == SET2D) {
+		if(stype == Set::SET2D) {
 			kDebug()<<"Set2D"<<endl;
 			if(set[i] == 0) {
 				kDebug()<<"ERROR : set == 0!"<<endl;
@@ -204,10 +204,10 @@ void Plot::resetRanges() {
 		}*/
 
 		if (i==0) {	// first set
-			xmin=xrange.Min();
-			xmax=xrange.Max();
-			ymin=yrange.Min();
-			ymax=yrange.Max();
+			xmin=xrange.min();
+			xmax=xrange.max();
+			ymin=yrange.min();
+			ymax=yrange.max();
 
 			/*if (s == GRAPH3D || s == GRAPHM) {
 				zmin=zrange.Min();
@@ -215,10 +215,10 @@ void Plot::resetRanges() {
 			}*/
 		}
 		else {
-			xrange.Min()<xmin?xmin=xrange.Min():0;
-			xrange.Max()>xmax?xmax=xrange.Max():0;
-			yrange.Min()<ymin?ymin=yrange.Min():0;
-			yrange.Max()>ymax?ymax=yrange.Max():0;
+			xrange.min()<xmin?xmin=xrange.min():0;
+			xrange.max()>xmax?xmax=xrange.max():0;
+			yrange.min()<ymin?ymin=yrange.min():0;
+			yrange.max()>ymax?ymax=yrange.max():0;
 
 			/*if (s == GRAPH3D || s == GRAPHM) {
 				zrange.Min()<zmin?zmin=zrange.Min():0;
@@ -261,21 +261,21 @@ void Plot::resetRanges() {
 
 void Plot::drawStyle(QPainter *p, Style *style, Symbol *symbol, QVector<QPoint> pa, int xmin, int xmax, int ymin, int ymax) {
 	kDebug()<<"Plot::drawStyle()"<<endl;
-	bool filled = style->FillEnabled();
-	QColor c = style->FillColor();
- 	QPen pen( style->Color(), style->Width(),(Qt::PenStyle)style->PenStyle() );
+	bool filled = style->hasFill();
+	QColor c = style->fillColor();
+ 	QPen pen( style->color(), style->width(),(Qt::PenStyle)style->penStyle() );
 	p->setPen(pen);
-	QBrush brush(c,style->BrushStyle());
+	QBrush brush(c,style->brushStyle());
 
 	// calculate baseline
-	double min = actrange[1].Min();
-	double max = actrange[1].Max();
-	double minx = actrange[0].Min();
-	double maxx = actrange[0].Max();
+	double min = actrange[1].min();
+	double max = actrange[1].max();
+	double minx = actrange[0].min();
+	double maxx = actrange[0].max();
 
 	//int basey = ymax - (int) ((baseline-min)/(max-min)*(double)(ymax-ymin));
 	//int basex = xmin + (int) ((xbaseline-minx)/(maxx-minx)*(double)(xmax-xmin));
-	int bw = style->BoxWidth();
+	int bw = style->boxWidth();
 	//int rmin = xmin + (int) ((region->Min()-minx)/(maxx-minx)*(double)(xmax-xmin));
 	//int rmax = xmin + (int) ((region->Max()-minx)/(maxx-minx)*(double)(xmax-xmin));
 	//kDebug()<<"BASEX = "<<basex<<endl;
@@ -284,7 +284,7 @@ void Plot::drawStyle(QPainter *p, Style *style, Symbol *symbol, QVector<QPoint> 
 
 //	kDebug()<<"POINTARRAY "<<i<<'='<<pa[i].x()<<' '<<pa[i].y()<<endl;
 
-	switch(style->Type()) {
+	switch(style->type()) {
 	case LINESTYLE:
 		/*if (filled) {
 			p->setPen(Qt::NoPen);

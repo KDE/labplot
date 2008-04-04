@@ -233,7 +233,7 @@ void AxesWidget::currentAxisChanged(int index){
 	ui.leZeroOffset->setText( QString::number(axis->offset()) );
 	ui.leScaleFactor->setText( QString::number(axis->scaleFactor()) );
 
-	ui.chbBorder->setChecked( axis->isBorderEnabled() );
+	ui.chbBorder->setChecked( axis->hasBorder() );
 	ui.kcbBorderColor->setColor( axis->borderColor() );
 	ui.sbBorderWidth->setValue( axis->borderWidth() );
 
@@ -248,7 +248,7 @@ void AxesWidget::currentAxisChanged(int index){
 	ui.cbTicksStyle->setCurrentIndex( axis->ticksType() );
 	ui.kcbTicksColor->setColor( axis->ticksColor() );
 
-	ui.chbMajorTicks->setChecked( axis->majorTicksEnabled() );
+	ui.chbMajorTicks->setChecked( axis->hasMajorTicks() );
 	if (axis->majorTicksNumber()==-1){
 		ui.cbMajorTicksNumber->setCurrentIndex(0);
 		ui.leMajorTicksNumber->setText( "" );
@@ -279,7 +279,7 @@ void AxesWidget::currentAxisChanged(int index){
 
 
 	//*******************   "Tick labels"-tab  ************************************
-	ui.chbLabels->setChecked( axis->labelsEnabled() );
+	ui.chbLabels->setChecked( axis->hasLabels() );
 	ui.cbLabelsPosition->setCurrentIndex( axis->labelsPosition() );
 	ui.leLabelsRotation->setText( QString::number(axis->labelsRotation()) );
 
@@ -294,12 +294,12 @@ void AxesWidget::currentAxisChanged(int index){
 
 
 	//*******************   "Grid"-tab  ************************************
-	ui.chbMajorGrid->setChecked( axis->isMajorGridEnabled() );
+	ui.chbMajorGrid->setChecked( axis->hasMajorGrid() );
 	ui.cbMajorGridStyle->setCurrentIndex( axis->majorGridStyle() );
 	ui.kcbMajorGridColor->setColor( axis->majorGridColor() );
 	ui.sbMajorGridWidth->setValue( axis->majorGridWidth() );
 
-	ui.chbMinorGrid->setChecked( axis->isMinorGridEnabled() );
+	ui.chbMinorGrid->setChecked( axis->hasMinorGrid() );
 	ui.cbMinorGridStyle->setCurrentIndex( axis->minorGridStyle() );
 	ui.kcbMinorGridColor->setColor( axis->minorGridColor() );
 	ui.sbMinorGridWidth->setValue( axis->minorGridWidth() );

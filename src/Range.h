@@ -3,19 +3,19 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "defs.h"
+#include "definitions.h"
 
 class Range
 {
 public:
 	Range(double min=0, double max=0);
-	void setRange(double rmin=0, double rmax=1) {min=rmin; max=rmax; }
-	double Diff() const { return max-min; }
+	void setRange(double min=0, double max=1) {m_min=min; m_max=max; }
+	double Diff() const { return m_max - m_min; }
 	ACCESS(double, min, Min);
 	ACCESS(double, max, Max);
 	
 private:
-	double min, max;
+	double m_min, m_max;
 };
 
 #endif //RANGE_H

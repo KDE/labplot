@@ -8,7 +8,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-#include "defs.h"
+#include "definitions.h"
 
 class Project
 {
@@ -18,23 +18,23 @@ public:
 	void open(QDomNode node);
 	ACCESS(QString, filename, Filename);
 	ACCESS(int, version, Version);
-	ACCESS(QString, labplot, LabPlot);
+	ACCESS(QString, labPlot, LabPlot);
 	ACCESS(QString, title, Title);
 	ACCESS(QString, author, Author);
 	ACCESS(QDateTime, created, Created);
 	ACCESS(QDateTime, modified, Modified);
 	ACCESS(QString, notes, Notes);
-	ACCESS(bool, changed, Changed);
+	ACCESSFLAG(m_changed, Changed);
 private:
-	QString filename;
-	int version;
-	QString labplot;
-	QString title;
-	QString author;
-	QDateTime created;
-	QDateTime modified;
-	QString notes;
-	bool changed;		//!< set when project was changed
+	QString m_filename;
+	int m_version;
+	QString m_labPlot;
+	QString m_title;
+	QString m_author;
+	QDateTime m_created;
+	QDateTime m_modified;
+	QString m_notes;
+	bool m_changed;		//!< set when project was changed
 };
 
 #endif //PROJECT_H

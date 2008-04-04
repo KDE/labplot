@@ -1,23 +1,22 @@
 //LabPlot : Graph.cc
 
 #include "Set.h"
-#include "settype.h"
 
 //Graph::Graph(QString n, QString l, LSource src, PType t, Style *st, Symbol *sy, int nr, bool s)
 Set::Set(QString name, int number)
-	: name(name), number(number)
+	: m_name(name), m_number(number)
 {
-	label = new Label();
+	m_label = new Label();
 //	source = src;
 //	type = t;
 //	style = st;
 //	if(style == 0)
-		style = new Style();
+		m_style = new Style();
 //	symbol = sy;
 //	if(symbol == 0)
-		symbol = new Symbol();
+		m_symbol = new Symbol();
 
-	shown = true;
+	m_shown = true;
 //	readas = 0;
 //	fitfunction = QString("a*x+b");
 }

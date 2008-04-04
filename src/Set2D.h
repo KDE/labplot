@@ -16,11 +16,11 @@ public:
 	~Graph2D();
 	Graph2D *Clone();		// clone this graph
 */
-	Range getRange(int i) const { return range[i]; }
-	void setRange(Range r[2]) { range[0]=r[0]; range[1]=r[1]; }
+	Range getRange(int i) const { return m_range[i]; }
+	void setRange(Range range[2]) { m_range[0]=range[0]; m_range[1]=range[1]; }
 
-	Point *Data() const { return data; }
-//	void setData(Point *d) { data = d; }
+	Point *data() const { return m_data; }
+	void setData(Point *data) { m_data = data; }
 /*	QStringList Info();	
 	void save(QTextStream *t, QProgressDialog *progress);
 	void open(QTextStream *t, int version, QProgressDialog *progress);
@@ -28,8 +28,8 @@ public:
 	void openXML(QDomNode node);
 */
 private:
-	Point *data;
-	Range range[2];
+	Point *m_data;
+	Range m_range[2];
 	void resetRanges();
 };
 

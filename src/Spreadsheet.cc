@@ -412,8 +412,8 @@ void Spreadsheet::addSet(Set *s) {
 	kDebug()<<endl;
 
 	int columns=0;
-	switch(s->Type()) {
-	case SET2D:
+	switch(s->type()) {
+	case Set::SET2D:
 		columns=2;
 		break;
 	default: break;
@@ -427,16 +427,16 @@ void Spreadsheet::addSet(Set *s) {
 			setColumnCount(columnCount()+1);
 	}
 
-	if(s->Number() > rowCount())
-		setRowCount(s->Number());
+	if(s->number() > rowCount())
+		setRowCount(s->number());
 
 	// add data
-	switch(s->Type()) {
-	case SET2D: {
-		Point *data = ((Set2D *)s)->Data();
-		for(int i=0;i<s->Number();i++) {
-			setText(i,columnCount()-2,QString::number(data[i].X(),'g',10));
-			setText(i,columnCount()-1,QString::number(data[i].Y(),'g',10));
+	switch(s->type()) {
+	case Set::SET2D: {
+		Point *data = ((Set2D *)s)->data();
+		for(int i=0;i<s->number();i++) {
+			setText(i,columnCount()-2,QString::number(data[i].x(),'g',10));
+			setText(i,columnCount()-1,QString::number(data[i].y(),'g',10));
 /*			if(data[i].Masked()) {
 				xitem->setMasked();
 				yitem->setMasked();

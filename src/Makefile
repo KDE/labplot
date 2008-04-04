@@ -123,18 +123,6 @@ LabPlot/fast:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/build
 
 # target to build an object file
-Axis.o:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Axis.o
-
-# target to preprocess a source file
-Axis.i:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Axis.i
-
-# target to generate assembly for a file
-Axis.s:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Axis.s
-
-# target to build an object file
 ColumnDialog.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/ColumnDialog.o
 
@@ -219,18 +207,6 @@ FilterOPJ.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/FilterOPJ.s
 
 # target to build an object file
-FunctionDialog.o:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/FunctionDialog.o
-
-# target to preprocess a source file
-FunctionDialog.i:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/FunctionDialog.i
-
-# target to generate assembly for a file
-FunctionDialog.s:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/FunctionDialog.s
-
-# target to build an object file
 ImportDialog.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/ImportDialog.o
 
@@ -265,30 +241,6 @@ LabPlot_automoc.i:
 # target to generate assembly for a file
 LabPlot_automoc.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/LabPlot_automoc.s
-
-# target to build an object file
-Label.o:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Label.o
-
-# target to preprocess a source file
-Label.i:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Label.i
-
-# target to generate assembly for a file
-Label.s:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Label.s
-
-# target to build an object file
-LegendDialog.o:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/LegendDialog.o
-
-# target to preprocess a source file
-LegendDialog.i:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/LegendDialog.i
-
-# target to generate assembly for a file
-LegendDialog.s:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/LegendDialog.s
 
 # target to build an object file
 MainWin.o:
@@ -471,18 +423,6 @@ TableModel.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/TableModel.s
 
 # target to build an object file
-TitleDialog.o:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/TitleDialog.o
-
-# target to preprocess a source file
-TitleDialog.i:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/TitleDialog.i
-
-# target to generate assembly for a file
-TitleDialog.s:
-	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/TitleDialog.s
-
-# target to build an object file
 Worksheet.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Worksheet.o
 
@@ -505,6 +445,42 @@ WorksheetDialog.i:
 # target to generate assembly for a file
 WorksheetDialog.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/WorksheetDialog.s
+
+# target to build an object file
+elements/Axis.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Axis.o
+
+# target to preprocess a source file
+elements/Axis.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Axis.i
+
+# target to generate assembly for a file
+elements/Axis.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Axis.s
+
+# target to build an object file
+elements/Label.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Label.o
+
+# target to preprocess a source file
+elements/Label.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Label.i
+
+# target to generate assembly for a file
+elements/Label.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Label.s
+
+# target to build an object file
+elements/Legend.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Legend.o
+
+# target to preprocess a source file
+elements/Legend.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Legend.i
+
+# target to generate assembly for a file
+elements/Legend.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Legend.s
 
 # target to build an object file
 gui/AxesDialog.o:
@@ -531,6 +507,30 @@ gui/AxesWidget.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/AxesWidget.s
 
 # target to build an object file
+gui/FunctionDialog.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/FunctionDialog.o
+
+# target to preprocess a source file
+gui/FunctionDialog.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/FunctionDialog.i
+
+# target to generate assembly for a file
+gui/FunctionDialog.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/FunctionDialog.s
+
+# target to build an object file
+gui/FunctionWidget.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/FunctionWidget.o
+
+# target to preprocess a source file
+gui/FunctionWidget.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/FunctionWidget.i
+
+# target to generate assembly for a file
+gui/FunctionWidget.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/FunctionWidget.s
+
+# target to build an object file
 gui/LabelWidget.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LabelWidget.o
 
@@ -541,6 +541,42 @@ gui/LabelWidget.i:
 # target to generate assembly for a file
 gui/LabelWidget.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LabelWidget.s
+
+# target to build an object file
+gui/LegendDialog.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LegendDialog.o
+
+# target to preprocess a source file
+gui/LegendDialog.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LegendDialog.i
+
+# target to generate assembly for a file
+gui/LegendDialog.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LegendDialog.s
+
+# target to build an object file
+gui/LegendWidget.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LegendWidget.o
+
+# target to preprocess a source file
+gui/LegendWidget.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LegendWidget.i
+
+# target to generate assembly for a file
+gui/LegendWidget.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/LegendWidget.s
+
+# target to build an object file
+gui/PlotStyleWidget.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/PlotStyleWidget.o
+
+# target to preprocess a source file
+gui/PlotStyleWidget.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/PlotStyleWidget.i
+
+# target to generate assembly for a file
+gui/PlotStyleWidget.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/PlotStyleWidget.s
 
 # target to build an object file
 gui/SettingsDialog.o:
@@ -591,6 +627,18 @@ gui/SettingsPrintingPage.s:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/SettingsPrintingPage.s
 
 # target to build an object file
+gui/TitleDialog.o:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/TitleDialog.o
+
+# target to preprocess a source file
+gui/TitleDialog.i:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/TitleDialog.i
+
+# target to generate assembly for a file
+gui/TitleDialog.s:
+	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/gui/TitleDialog.s
+
+# target to build an object file
 parser.tab.o:
 	cd /root/LabPlot-2.0.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/parser.tab.o
 
@@ -614,9 +662,6 @@ help::
 	@echo "... install/local"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... Axis.o"
-	@echo "... Axis.i"
-	@echo "... Axis.s"
 	@echo "... ColumnDialog.o"
 	@echo "... ColumnDialog.i"
 	@echo "... ColumnDialog.s"
@@ -638,9 +683,6 @@ help::
 	@echo "... FilterOPJ.o"
 	@echo "... FilterOPJ.i"
 	@echo "... FilterOPJ.s"
-	@echo "... FunctionDialog.o"
-	@echo "... FunctionDialog.i"
-	@echo "... FunctionDialog.s"
 	@echo "... ImportDialog.o"
 	@echo "... ImportDialog.i"
 	@echo "... ImportDialog.s"
@@ -650,12 +692,6 @@ help::
 	@echo "... LabPlot_automoc.o"
 	@echo "... LabPlot_automoc.i"
 	@echo "... LabPlot_automoc.s"
-	@echo "... Label.o"
-	@echo "... Label.i"
-	@echo "... Label.s"
-	@echo "... LegendDialog.o"
-	@echo "... LegendDialog.i"
-	@echo "... LegendDialog.s"
 	@echo "... MainWin.o"
 	@echo "... MainWin.i"
 	@echo "... MainWin.s"
@@ -701,24 +737,45 @@ help::
 	@echo "... TableModel.o"
 	@echo "... TableModel.i"
 	@echo "... TableModel.s"
-	@echo "... TitleDialog.o"
-	@echo "... TitleDialog.i"
-	@echo "... TitleDialog.s"
 	@echo "... Worksheet.o"
 	@echo "... Worksheet.i"
 	@echo "... Worksheet.s"
 	@echo "... WorksheetDialog.o"
 	@echo "... WorksheetDialog.i"
 	@echo "... WorksheetDialog.s"
+	@echo "... elements/Axis.o"
+	@echo "... elements/Axis.i"
+	@echo "... elements/Axis.s"
+	@echo "... elements/Label.o"
+	@echo "... elements/Label.i"
+	@echo "... elements/Label.s"
+	@echo "... elements/Legend.o"
+	@echo "... elements/Legend.i"
+	@echo "... elements/Legend.s"
 	@echo "... gui/AxesDialog.o"
 	@echo "... gui/AxesDialog.i"
 	@echo "... gui/AxesDialog.s"
 	@echo "... gui/AxesWidget.o"
 	@echo "... gui/AxesWidget.i"
 	@echo "... gui/AxesWidget.s"
+	@echo "... gui/FunctionDialog.o"
+	@echo "... gui/FunctionDialog.i"
+	@echo "... gui/FunctionDialog.s"
+	@echo "... gui/FunctionWidget.o"
+	@echo "... gui/FunctionWidget.i"
+	@echo "... gui/FunctionWidget.s"
 	@echo "... gui/LabelWidget.o"
 	@echo "... gui/LabelWidget.i"
 	@echo "... gui/LabelWidget.s"
+	@echo "... gui/LegendDialog.o"
+	@echo "... gui/LegendDialog.i"
+	@echo "... gui/LegendDialog.s"
+	@echo "... gui/LegendWidget.o"
+	@echo "... gui/LegendWidget.i"
+	@echo "... gui/LegendWidget.s"
+	@echo "... gui/PlotStyleWidget.o"
+	@echo "... gui/PlotStyleWidget.i"
+	@echo "... gui/PlotStyleWidget.s"
 	@echo "... gui/SettingsDialog.o"
 	@echo "... gui/SettingsDialog.i"
 	@echo "... gui/SettingsDialog.s"
@@ -731,6 +788,9 @@ help::
 	@echo "... gui/SettingsPrintingPage.o"
 	@echo "... gui/SettingsPrintingPage.i"
 	@echo "... gui/SettingsPrintingPage.s"
+	@echo "... gui/TitleDialog.o"
+	@echo "... gui/TitleDialog.i"
+	@echo "... gui/TitleDialog.s"
 	@echo "... parser.tab.o"
 	@echo "... parser.tab.i"
 	@echo "... parser.tab.s"

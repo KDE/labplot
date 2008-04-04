@@ -164,7 +164,7 @@ void MainWin::setupActions() {
 }
 
 bool MainWin::warnModified() {
-	if(mdi->subWindowList().size() > 0 && project->Changed()) {
+	if(mdi->subWindowList().size() > 0 && project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
 			i18n("The current project has been modified.\nDo you want to save it?"),
 			i18n("Save Project"));
@@ -254,7 +254,7 @@ void MainWin::open(QString filename) {
  	project->setChanged(false);
 	//recent->addURL(fn);
 
-	setCaption("LabPlot "LVERSION+i18n(" : ")+project->Filename());
+	setCaption("LabPlot "LVERSION+i18n(" : ")+project->filename());
 }
 
 void MainWin::openXML(QIODevice *file) {
@@ -299,16 +299,16 @@ void MainWin::openXML(QIODevice *file) {
 
 void MainWin::save(QString filename) {
 	if (filename.isEmpty() ) {
-		if(project->Filename().isEmpty()) {
+		if(project->filename().isEmpty()) {
 			saveAs();	// need a file name
 			return;
 		}
 		else
-			filename = project->Filename();
+			filename = project->filename();
 	}
 
 	kDebug()<<filename<<endl;
-	if(project->Filename() == filename && project->Changed() == false) {
+	if(project->filename() == filename && project->hasChanged() == false) {
 		kDebug()<<"no changes to be saved"<<endl;
 		return;
 	}
@@ -318,7 +318,7 @@ void MainWin::save(QString filename) {
 	saveXML(xmlfile);
 	project->setFilename(filename);
 
-	setCaption("LabPlot "LVERSION+i18n(" : ")+project->Filename());
+	setCaption("LabPlot "LVERSION+i18n(" : ")+project->filename());
 }
 
 void MainWin::saveXML(QIODevice *file) {

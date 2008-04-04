@@ -2,15 +2,15 @@
 
 #include "Point.h"
 
-Point::Point(double a, double b)
+Point::Point(double x, double y)
 {
-	x = a;
-	y = b;
-	masked = false;
+	m_x = x;
+	m_y = y;
+	m_masked = false;
 }
 
-void Point::setPoint(double a, double b)
+void Point::setPoint(double x, double y)
 {
-	x = a;
-	y = b;
+	m_x = x;
+	m_y = y;
 }

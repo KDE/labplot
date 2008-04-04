@@ -8,7 +8,7 @@
 //#include <qdom.h>
 //#include "Errorbar.h"
 #include "symbol.h"
-#include "defs.h"
+#include "definitions.h"
 
 class Symbol {
 public:
@@ -22,8 +22,8 @@ public:
 	ACCESS(SType, type, Type);
 	ACCESS(QColor, color, Color);
 	ACCESS(int, size, Size);
-	ACCESS(FType, filltype, FillType);
-	ACCESS(QColor, fillcolor, FillColor);
+	ACCESS(FType, fillType, FillType);
+	ACCESS(QColor, fillColor, FillColor);
 	ACCESS(int, brush, Brush);
 //	void setErrorbar(Errorbar *e) { errorbar=e; }
 //	Errorbar *errorBar() { return errorbar; }
@@ -32,12 +32,12 @@ public:
 //	int errorbarSize() { return esize; }
 //	void setErrorbarSize(int s) { esize=s; }
 private:
-	SType type;
-	QColor color;
-	int size;
-	FType filltype;
-	QColor fillcolor;
-	int brush;	// TODO: use QBrush ?
+	SType m_type;
+	QColor m_color;
+	int m_size;
+	FType m_fillType;
+	QColor m_fillColor;
+	int m_brush;	// TODO: use QBrush ?
 //	Errorbar *errorbar;
 };
 

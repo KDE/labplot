@@ -248,7 +248,7 @@ void Worksheet::addSet(Set *s, PlotType ptype) {
 
 	// set actrange for new plots
 	Range *actrange = plot[api]->ActRanges();
-	if (actrange[0].Max()-actrange[0].Min() == 0)
+	if (actrange[0].max()-actrange[0].min() == 0)
 		plot[api]->setActRanges(plot[api]->Ranges());
 	repaint();
 }
