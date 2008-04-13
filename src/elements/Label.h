@@ -30,10 +30,10 @@ public:
 	bool insideY(int x0, int y0, Point pos, Point size, int w, int h);
 	bool insideZ(int x0, int y0, Point pos, Point size, int w, int h);	// for 3d y-axes
 */
-// 	void setPosition(double X, double Y) { m_x=X; m_y=Y; }
 
 	ACCESS(short, positionType, PositionType);
-	ACCESS(QPoint, position, Position);
+	ACCESS(QPointF, position, Position);
+	ACCESS(float, rotation, Rotation);
 
 	ACCESSFLAG(m_fillingEnabled, Filling);
 	ACCESS(QColor, fillingColor, FillingColor);
@@ -47,8 +47,8 @@ public:
 
 private:
 	short m_positionType;
-	QPoint m_position;
-	double m_rotation;		// label rotation
+	QPointF m_position;
+	float m_rotation;		// label rotation
 
 	bool m_fillingEnabled;
 	QColor m_fillingColor;

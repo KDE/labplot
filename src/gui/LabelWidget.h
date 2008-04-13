@@ -15,13 +15,12 @@ public:
 	~LabelWidget();
 
 public slots:
-	void setLabel(Label*);
+	void setLabel(const Label*);
 	void setLabelRotationEnabled(const bool);
-	void save() const;
+	void saveLabel(Label*) const;
 
 private:
 	Ui::LabelWidget ui;
-	Label* label;
 
 private slots:
 	void positionChanged(int);

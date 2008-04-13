@@ -3,10 +3,10 @@
 #include "../MainWin.h"
 #include <KDebug>
 
-TitleDialog::TitleDialog(MainWin *mw, Label *title)	: KDialog(mw){
+TitleDialog::TitleDialog(MainWin *mw, Label *label)	: KDialog(mw){
 
-	kDebug()<<"TitleDialog()"<<endl;
-	setCaption(i18n("Title"));
+	setCaption(i18n("Title Dialog"));
+	title=label;
 
 	labelWidget = new LabelWidget(this);
 	labelWidget->setLabel(title);
@@ -15,26 +15,26 @@ TitleDialog::TitleDialog(MainWin *mw, Label *title)	: KDialog(mw){
 
 	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
 	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
-	connect( this, SIGNAL( changed( bool ) ), this, SLOT( enableButtonApply( bool ) ) );
+	connect( this, SIGNAL( changed( bool ) ), this, SLOT( enableButtonApply( bool ) ) ); //TODO
 
 	this->enableButtonApply( false );
 	resize( QSize(300,400) );
-
+	kDebug()<<"Initialization done."<<endl;
 }
 
 void TitleDialog::save() {
-	labelWidget->save();
-
-	//TODO close the dialog
-
+	this->apply();
+	this->close();
+	kDebug()<<"Changes saved."<<endl;
 }
 
 void TitleDialog::apply() {
-	labelWidget->save();
+	labelWidget->saveLabel(title);
 
 	//TODO
 	// mw->update()
 // 	Worksheet *w = mw->activeWorksheet();
 // 	if(w != 0)
 // 		w->repaint();
+	kDebug()<<"Changes applied."<<endl;
 }

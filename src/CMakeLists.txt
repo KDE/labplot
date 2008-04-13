@@ -1,13 +1,14 @@
  set(GUI_SOURCES
 	gui/AxesDialog.cc
 	gui/AxesWidget.cc
-	gui/FunctionDialog.cc
-  	gui/FunctionWidget.cc
+#  	gui/ColorMapPreview.cc
+	gui/FunctionPlotDialog.cc
+  	gui/FunctionPlotWidget.cc
 	gui/LabelWidget.cc
 	gui/LegendDialog.cc
 	gui/LegendWidget.cc
   	gui/PlotStyleWidget.cc
-# 	gui/PlotSurfaceWidget.cc
+ 	gui/PlotSurfaceStyleWidget.cc
 	gui/SettingsDialog.cc
 	gui/SettingsGeneralPage.cc
 	gui/SettingsPage.cc
@@ -18,6 +19,9 @@
 set(LabPlot_SRCS ${GUI_SOURCES}
   parser.tab.c
   elements/Axis.cc
+  elements/Function.cc
+  elements/Style.cc
+  elements/Symbol.cc
   ColumnDialog.cc
   Dialog.cc
   FileInfoDialog.cc
@@ -41,8 +45,6 @@ set(LabPlot_SRCS ${GUI_SOURCES}
   Set.cc
   Set2D.cc
   Spreadsheet.cc
-  Style.cc
-  Symbol.cc
   TableModel.cc
   Worksheet.cc
   WorksheetDialog.cc
@@ -50,11 +52,11 @@ set(LabPlot_SRCS ${GUI_SOURCES}
 
 set(UI_SOURCES
 	gui/ui/axeswidget.ui
-	gui/ui/functionwidget.ui
+	gui/ui/functionplotwidget.ui
 	gui/ui/labelwidget.ui
 	gui/ui/legendwidget.ui
 	gui/ui/plotstylewidget.ui
-# 	gui/ui/plotsurfacewidget.ui
+ 	gui/ui/plotsurfacestylewidget.ui
 	gui/ui/settingsgeneralpage.ui
 	gui/ui/settingsprintingpage.ui
 )

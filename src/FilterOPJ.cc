@@ -80,7 +80,7 @@ int FilterOPJ::import() {
 
 			for (int i=0;i<nr_rows;i++) {
 				double v = opj.matrixData(s,j,i);
-	
+
 				LTableItem *item;
 				if(fabs(v)>0 && fabs(v)<2.0e-300)	// empty entry
 					continue;
@@ -145,7 +145,7 @@ int FilterOPJ::import() {
 			plot->getAxis(1)->setLabel(ylabel);
 			//if(strlen(opj.layerLegend(g,l))>0)
 			//	graph->newLegend(parseOriginText(QString::fromLocal8Bit(opj.layerLegend(g,l))));
-			
+
 			kDebug()<<"Layer	nr curves : "<<opj.numCurves(s,l)<<endl;
 			for(int c=0;c<opj.numCurves(s,l);c++) {
 				kDebug()<<"	Curve "<<c+1<<" :"<<endl;
@@ -271,7 +271,7 @@ int FilterOPJ::import() {
 								z<zmin?zmin=z:0;
 								z>zmax?zmax=z:0;
 							}
-							
+
 							ptr[i++].setPoint(x,y,z);
 						}
 
@@ -291,7 +291,7 @@ int FilterOPJ::import() {
 							work->addGraph3D(g,P2D);
 							break;
 						}
-						
+
 						c++;	// next curve already used as errorbar
 					}
 					else {
@@ -328,7 +328,7 @@ int FilterOPJ::import() {
 						case OPJFile::Line :
 						case OPJFile::Scatter :
 						case OPJFile::LineSymbol :
-							work->addGraph2D(g,P2D);	
+							work->addGraph2D(g,P2D);
 							break;
 						}
 					}
@@ -424,54 +424,54 @@ int FilterOPJ::import() {
 void FilterOPJ::setSymbolType(Symbol *symbol,int type) {
 	switch(type & 0xFF) {
 	case 0: //NoSymbol
-		symbol->setType(SNONE);
+		symbol->setType(Symbol::SNONE);
 		break;
 	case 1: //Rect
-		symbol->setType(SRECT);
+		symbol->setType(Symbol::SRECT);
 		break;
 	case 2: //Ellipse
 	case 20://Sphere
-		symbol->setType(SCIRCLE);
+		symbol->setType(Symbol::SCIRCLE);
 		break;
 	case 3: //UTriangle
-		symbol->setType(STRIANGLE);
+		symbol->setType(Symbol::STRIANGLE);
 		break;
 	case 4: //DTriangle
-		symbol->setType(SUTRIANGLE);
+		symbol->setType(Symbol::SUTRIANGLE);
 		break;
 	case 5: //Diamond
-		symbol->setType(SDIAMOND);
+		symbol->setType(Symbol::SDIAMOND);
 		break;
 	case 6: //Cross +
-		symbol->setType(SPLUS);
+		symbol->setType(Symbol::SPLUS);
 		break;
 	case 7: //Cross x
-		symbol->setType(SCROSS);
+		symbol->setType(Symbol::SCROSS);
 		break;
 	case 8: //Snow
 	case 18: //Star
-		symbol->setType(SSTAR);
+		symbol->setType(Symbol::SSTAR);
 		break;
 	case 9: //Horizontal -
-		symbol->setType(SMINUS);
+		symbol->setType(Symbol::SMINUS);
 		break;
 	case 10: //Vertical |
-		symbol->setType(SVBAR);
+		symbol->setType(Symbol::SVBAR);
 		break;
 	case 15: //LTriangle
-		symbol->setType(SRTRIANGLE);
+		symbol->setType(Symbol::SRTRIANGLE);
 		break;
 	case 16: //RTriangle
-		symbol->setType(SLTRIANGLE);
+		symbol->setType(Symbol::SLTRIANGLE);
 		break;
 	case 17: //Hexagon
-		symbol->setType(SHEXAGON);
+		symbol->setType(Symbol::SHEXAGON);
 		break;
 	case 19: //Pentagon
-		symbol->setType(SPENTA);
+		symbol->setType(Symbol::SPENTA);
 		break;
 	default:
-		symbol->setType(SNONE);					
+		symbol->setType(Symbol::SNONE);
 	}
 }
 
@@ -499,7 +499,7 @@ Qt::PenStyle FilterOPJ::translateOriginLineStyle(int linestyle) const {
 		       	style=Qt::DashDotDotLine;
 			break;
 	}
-*/	
+*/
 	return style;
 }
 

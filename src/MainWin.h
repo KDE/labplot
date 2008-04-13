@@ -9,6 +9,7 @@
 #include "Worksheet.h"
 #include "Project.h"
 #include "Set2D.h"
+#include "plottype.h"
 
 class MainWin : public KXmlGuiWindow
 {
@@ -21,8 +22,8 @@ public:
 	Spreadsheet* getSpreadsheet(QString title) const;	//!< get Spreadsheet of name title
 	Worksheet* activeWorksheet() const;			//!< get active worksheet
 	Worksheet* getWorksheet(QString name) const;		//!< get Worksheet of name title
-	Project* getProject() const { return project; } 
-	void setProject(Project *p) { project=p; } 
+	Project* getProject() const { return project; }
+	void setProject(Project *p) { project=p; }
 	void updateGUI();		//!< update GUI of main window
 	void updateSheetList();		//!< update dynamic sheet list menu
 	void updateSetList();		//!< update dynamic set list menu
@@ -48,7 +49,7 @@ private slots:
 	void SpreadsheetMenu();
 	void importDialog();
 	void projectDialog();
-	void functionDialog();
+	void functionActionTriggered(QAction*);
 	void titleDialog();
 	void axesDialog();
 	void legendDialog();

@@ -1,13 +1,18 @@
-#include "FunctionWidget.h"
+#include "FunctionPlotWidget.h"
 #include "LabelWidget.h"
 #include "PlotStyleWidget.h"
+#include "PlotSurfaceStyleWidget.h"
+#include "../elements/Function.h"
+#include "../Set.h"
+
+#include <QMdiSubWindow>
 
 #include "../parser_struct.h"
 extern "C" con constants[];
 extern "C" init arith_fncts[];
 #include "../parser_extern.h"
 
-FunctionWidget::FunctionWidget(QWidget* parent):QWidget(parent){
+FunctionPlotWidget::FunctionPlotWidget(QWidget* parent):QWidget(parent){
 
 	ui.setupUi(this);
 	plotType=PLOT2D;
@@ -18,17 +23,10 @@ FunctionWidget::FunctionWidget(QWidget* parent):QWidget(parent){
 	ui.leAxis2Start->setValidator( new QDoubleValidator(ui.leAxis2Start) );
 	ui.leAxis2End->setValidator( new QDoubleValidator(ui.leAxis2End) );
 
-	//"Title"-tab
-	//create a labelwidget
+	//"Title"-tab ->create a LabelWidget
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget=new LabelWidget(ui.tabTitle);
     hboxLayout->addWidget(labelWidget);
-
-	//"Plotstyle"-tab
-    hboxLayout = new QHBoxLayout(ui.tabPlotStyle);
-	plotStyleWidget=new PlotStyleWidget(ui.tabPlotStyle);
-    hboxLayout->addWidget(plotStyleWidget);
-
 
 	ui.bClear->setIcon( KIcon("edit-clear-locationbar-rtl") );
 
@@ -54,24 +52,66 @@ FunctionWidget::FunctionWidget(QWidget* parent):QWidget(parent){
 	connect( ui.bClear, SIGNAL(clicked()), ui.leFunction, SLOT(clear()) );
  	connect( ui.cbFunctions,SIGNAL(activated(const QString&)),SLOT(insert(const QString&)) );
 	connect( ui.cbConstants,SIGNAL(activated(const QString&)),SLOT(insert(const QString&)) );
-	/*
-	//"Ticks"-tab
-	connect( ui.cbTicksStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(ticksStyleChanged(int)) );
-	connect( ui.bTicksColour, SIGNAL(clicked()), this, SLOT( ticksColourClicked()) );
+}
 
-	//"Tick labels"-tab
-	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(labelFormatChanged(int)) );
-	connect( ui.bLabelsFont, SIGNAL(clicked()), this, SLOT( labelFontClicked()) );
-	connect( ui.bLabelsColour, SIGNAL(clicked()), this, SLOT( labelColourClicked()) );
-
-	//"Grid"-tab
-	connect( ui.sbMajorGridWidth, SIGNAL(valueChanged(int)), this, SLOT(createMajorGridStyles()) );
-	//TODO colour
-	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(int)), this, SLOT(createMinorGridStyles()) );
-	//TODO colour
-	*/
+FunctionPlotWidget::~FunctionPlotWidget(){
+}
 
 
+/*!
+	sets the current plot type  in this widget.
+	Depending on the current type adjusts the appearance of the widget.
+*/
+void FunctionPlotWidget::setPlotType(const PlotType& type){
+	//TODO
+
+	//"Plotstyle"-tab
+    QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabPlotStyle);
+	if (type==PLOTSURFACE){
+		plotSurfaceStyleWidget=new PlotSurfaceStyleWidget(ui.tabPlotStyle);
+		hboxLayout->addWidget(plotSurfaceStyleWidget);
+	}else{
+		plotStyleWidget=new PlotStyleWidget(ui.tabPlotStyle);
+		hboxLayout->addWidget(plotStyleWidget);
+	}
+	//TODO what about  3D-QWT-functions
+
+	if (type == PLOT2D || type == PLOTPOLAR){
+		ui.leFunction->setText( QString("sin(x)") );
+		ui.frameAxis2->hide();
+	}else if (type == PLOT3D || type == PLOTSURFACE || type == PLOTQWT3D){
+		ui.leFunction->setText( QString("sin(x+y)") );
+		ui.frameAxis2->show();
+	}
+
+	plotType=type;
+}
+
+
+/*!
+	set the set object \c set to be displayed/edited in this widget
+*/
+void FunctionPlotWidget::setSet(Set* set){
+	ui.leFunction->setText( set->function()->text() );
+
+	ui.leAxis1Start->setText( QString::number(set->function()->axis1Start()) );
+	ui.leAxis1End->setText( QString::number(set->function()->axis1End()) );
+	ui.sbAxis1Number->setValue( set->function()->axis1Number() );
+
+	if (plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D){
+	ui.leAxis2Start->setText( QString::number(set->function()->axis2Start()) );
+	ui.leAxis2End->setText( QString::number(set->function()->axis2End()) );
+	ui.sbAxis2Number->setValue( set->function()->axis2Number() );
+	}
+
+	labelWidget->saveLabel(set->label());
+
+	if (plotType==PLOTSURFACE)
+		plotStyleWidget->saveStyle(set->style());
+	else
+		plotSurfaceStyleWidget->saveStyle(set->style());
+
+	//TODO
 		/*
 	Style *style=0;
 	Symbol *symbol=0;
@@ -120,39 +160,30 @@ FunctionWidget::FunctionWidget(QWidget* parent):QWidget(parent){
 */
 }
 
-FunctionWidget::~FunctionWidget(){
-}
-
-
-/*!
-	sets the current plot type for the axes to be edited in this widget.
-	Depending on the current type adjusts the appearance of the widget.
-*/
-void FunctionWidget::setPlotType(const PlotType& type){
-	//TODO
-
-
-	if (type == PLOT2D)
-		ui.leFunction->setText( QString("sin(x)") );
-	else if (type == PLOT3D || type == PLOTSURFACE || type == PLOTQWT3D)
-		ui.leFunction->setText( QString("sin(x+y)") );
-
-	plotType=type;
-}
-
-/*!
-	sets the pointer \c axes to list containing all the axes. \c axisNumber is the number of the axis to be edited.<br>
-*/
-void FunctionWidget::setFunction(const Function& func){
-
-}
-
 /*!
 
 */
-void FunctionWidget::saveFunction(Function* func) const{
-	//TODO
+void FunctionPlotWidget::saveSet(Set* set){//TODO add const
+// 	set->function()->setText( ui.leFunction->text() );
+//
+// 	set->function()->setAxis1Start( ui.leAxis1Start->text().toFloat() );
+// 	set->function()->setAxis1End( ui.leAxis1End->text().toFloat() );
+// 	set->function()->setAxis1Number( ui.sbAxis1Number->value() );
+//
+// 	if (plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D){
+// 		set->function()->setAxis2Start( ui.leAxis2Start->text().toFloat() );
+// 		set->function()->setAxis2End( ui.leAxis2End->text().toFloat() );
+// 		set->function()->setAxis2Number( ui.sbAxis2Number->value() );
+// 	}
+//
+// 	labelWidget->saveLabel(set->label());
+//
+// 	if (plotType==PLOTSURFACE)
+// 		plotStyleWidget->saveStyle(set->style());
+// 	else
+// 		plotSurfaceStyleWidget->saveStyle(set->style());
 
+	//TODO "Tick labels"
 }
 
 
@@ -161,9 +192,9 @@ void FunctionWidget::saveFunction(Function* func) const{
 //**********************************************************
 /*!
  	Shows the data for the axis \c number.
-	Is called when the user changes the current axis in the corepsonding ComboBox
+	Is called when the user changes the current axis in the corresponding ComboBox
 */
-void FunctionWidget::insert(const QString s){
+void FunctionPlotWidget::insert(const QString s){
 	ui.leFunction->insert(s);
 	ui.leFunction->setFocus();
 }
@@ -290,21 +321,6 @@ void FunctionDialog::saveSettings() {
 	}
 */
 
-/*
-void FunctionDialog::insertConstant(QString c) {
-	kDebug()<<"FunctionDialog::insertConstant("<<c<<")"<<endl;
-	functionle->insert(c);
-	functionle->setFocus();
-}
-
-void FunctionDialog::insertFunction(QString f) {
-	kDebug()<<"FunctionDialog::insertFunction("<<f<<")"<<endl;
-	functionle->insert(f);
-	functionle->setFocus();
-	functionle->setCursorPosition(functionle->cursorPosition()-1);
-	// TODO : insert "x" ?
-}
-*/
 
 /*
 // search for a usable plot; add worksheet if necessary
@@ -452,7 +468,8 @@ void FunctionDialog::Apply() {
 }
 */
 
-/* OLD:
+// OLD:
+/*
 int FunctionDialog::addFunction() {
 	int NY = 0;
 	if (type == P3D || type == PSURFACE || type == PQWT3D)
@@ -647,14 +664,15 @@ int FunctionDialog::addFunction() {
 		kDebug()<<"range : "<<range[0].rMin()<<' '<<range[0].rMax()<<endl;
 		kDebug()<<"range : "<<range[1].rMin()<<' '<<range[1].rMax()<<endl;
 		kDebug()<<"range : "<<range[2].rMin()<<' '<<range[2].rMax()<<endl;
-*/		/*for(int i=0;i<NX;i++) {
+*/
+	/*for(int i=0;i<NX;i++) {
 			for(int j=0;j<NY;j++) {
 				kDebug()<<" ("<<j+NY*i<<')'<<a[j+NY*i]<<endl;
 			}
 			kDebug()<<endl;
 		}*/
-
-/*		Style *style = new Style(LINESTYLE);
+/*
+	Style *style = new Style(LINESTYLE);
 		Symbol *symbol = new Symbol(SNONE);
 		GraphM *g = new GraphM(fun,title,range,SFUNCTION,type,style,symbol,a,NX,NY);
 		g->setLabel(label);
@@ -751,5 +769,5 @@ int FunctionDialog::addFunction() {
 	kDebug()<<"FunctionDialog::apply_clicked() : DONE"<<endl;
 
 	return 0;
-}*/
-
+}
+*/

@@ -1,5 +1,6 @@
 #include "LabelWidget.h"
 #include "../elements/Label.h"
+#include <KDebug>
 
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 
@@ -60,36 +61,16 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 
 LabelWidget::~LabelWidget() {}
 
-void LabelWidget::setLabel(Label* label) {
-	//kdDebug()<<"RTW::update()"<<endl;
+/*!
+	displays the Label object \c label in the widget.
+*/
+void LabelWidget::setLabel(const Label* label) {
 	//TODO add some "asserts"!!!
-	/*
-	//Alignment
-	ui.cbPosition->setCurrentIndex( l->position() );
-	ui.lePositionX->setText( QString::number(l->x()) );
-	ui.lePositionY->setText( QString::number(l->y()) );
-	ui.leRotation->setText( QString::number(l->rotation()) );
-
-	//Background
-	if ( l->isTransparent() )
-		ui.rbFilling0->setChecked(true);
-	else
-		ui.rbFilling0->setChecked(true);
-
-	//backgroundColorButton->setColor( l->backgroundColor() );
-	ui.chbBox->setChecked( l->hasBox() );
-	ui.chbShadow->setChecked( l->hasShadow() );
-
-	//Text
-	fontRequester->setFont( l->font() );
-	ui.teLabel->setFont( l->font() );
-	colorButton->setColor( l->fontColor() );
-	ui.chbUseTex->setChecked( l->isTeXLabel() );
-	*/
-
 	ui.cbPosition->setCurrentIndex( label->positionType() );
 	ui.lePositionX->setText( QString::number(label->position().x()) );
 	ui.lePositionY->setText( QString::number(label->position().y()) );
+	ui.leRotation->setText( QString::number(label->rotation()) );
+
 	if ( label->hasFilling() == false )
 		ui.rbFilling0->setChecked(true);
 	else
@@ -102,25 +83,43 @@ void LabelWidget::setLabel(Label* label) {
 	ui.kfontRequester->setFont(label->textFont() );
 	ui.kcbTextColor->setColor(label->textColor());
 	ui.chbTex->setChecked( label->isTex() );
-	ui.teLabel->setText( label->text() );
+	ui.teLabel->setPlainText( label->text() );
+
+	kDebug()<<"Label data shown."<<endl;
 }
 
+/*!
+	enables ( \c b=true ) or disables ( \c b=true ) rotation.
+	Needed for/in ??? //TODO
+*/
 void LabelWidget::setLabelRotationEnabled(const bool b){
 	ui.lRotation->setEnabled(b);
 	ui.leRotation->setEnabled(b);
 	ui.lDegree->setEnabled(b);
 }
 
-//TODO
-void LabelWidget::save() const{
-	/*
-	l->setTeXLabel(texcb->isChecked());
-	if(l->isTeXLabel())
-		te->setTextFormat(Qt::PlainText);
-	*/
-//	kdDebug()<<"LabelWidget::apply()"<<endl;
-//	kdDebug()<<"	RICHTEXT = "<<te->text()<<endl;
 
+/*!
+	saves the Label object \c label.
+*/
+void LabelWidget::saveLabel(Label* label) const{
+	label->setPositionType( ui.cbPosition->currentIndex() );
+	label->setPosition( QPointF(ui.lePositionX->text().toFloat(), ui.lePositionY->text().toFloat()) );
+	label->setRotation( ui.leRotation->text().toFloat() );
+
+	label->setFilling( ui.rbFilling1->isChecked() );
+	label->setFillingColor( ui.kcbFillingColor->color() );
+	label->enableBox( ui.chbBox->isChecked() );
+	label->enableShadow( ui.chbShadow->isChecked() );
+
+	label->setTextFont( ui.kfontRequester->font() );
+	label->setTextColor( ui.kcbTextColor->color() );
+	label->enableTex( ui.chbTex->isChecked() );
+	label->setText( ui.teLabel->toPlainText()  );
+
+	kDebug()<<"Label data saved."<<endl;
+
+	//TODO old stuff. What for?
 	// doesn't work :-(
 /*	const QChar *utf8text = te->text().unicode();
 
@@ -130,16 +129,6 @@ void LabelWidget::save() const{
 	kdDebug()<<"	PLAINTEXT = "<<te->text().unicode()<<endl;
 	kdDebug()<<"	UTF8 TEXT = "<<utf8text<<endl;
 */
-
-	//****
-	/*
-	l->setTitle(te->text());
-	l->setPosition(xle->text().toDouble(),yle->text().toDouble());
-	l->setBoxed(boxedcb->isChecked());
-	l->setRotation(rotle->text().toDouble());
-	l->setTransparent(transcb->isChecked());
-	l->setBackgroundColor(bgcolor->color());
-	*/
 }
 
 

@@ -27,7 +27,7 @@
     </widget>
    </item>
    <item row="1" column="0" >
-    <widget class="QCheckBox" name="cbLineEnabled" >
+    <widget class="QCheckBox" name="chbLineEnabled" >
      <property name="text" >
       <string>activate</string>
      </property>
@@ -136,12 +136,12 @@
       </font>
      </property>
      <property name="text" >
-      <string>Filling:</string>
+      <string>Area Filling:</string>
      </property>
     </widget>
    </item>
    <item row="6" column="0" >
-    <widget class="QCheckBox" name="cbFillingEnabled" >
+    <widget class="QCheckBox" name="chbAreaFillingEnabled" >
      <property name="text" >
       <string>activate</string>
      </property>
@@ -158,10 +158,10 @@
     </widget>
    </item>
    <item row="6" column="4" >
-    <widget class="QComboBox" name="cbFillingPattern" />
+    <widget class="QComboBox" name="cbAreaFillingPattern" />
    </item>
    <item row="6" column="5" >
-    <widget class="KColorButton" name="kcbFillingColor" />
+    <widget class="KColorButton" name="kcbAreaFillingColor" />
    </item>
    <item row="7" column="0" >
     <spacer>
@@ -193,7 +193,7 @@
     </widget>
    </item>
    <item row="9" column="0" >
-    <widget class="QCheckBox" name="checkBox_5" >
+    <widget class="QCheckBox" name="chbSymbolsEnabled" >
      <property name="text" >
       <string>activate</string>
      </property>
@@ -210,10 +210,10 @@
     </widget>
    </item>
    <item row="9" column="4" >
-    <widget class="QComboBox" name="cbSymbolsType" />
+    <widget class="QComboBox" name="cbSymbolType" />
    </item>
    <item row="9" column="5" >
-    <widget class="KColorButton" name="kcbSymbolsColor" />
+    <widget class="KColorButton" name="kcbSymbolColor" />
    </item>
    <item row="10" column="2" >
     <widget class="QLabel" name="label_11" >
@@ -223,34 +223,37 @@
     </widget>
    </item>
    <item row="10" column="4" >
-    <widget class="QSpinBox" name="sbSymbolsWidth" >
+    <widget class="QSpinBox" name="sbSymbolWidth" >
      <property name="minimum" >
       <number>1</number>
+     </property>
+     <property name="maximum" >
+      <number>30</number>
      </property>
     </widget>
    </item>
    <item row="11" column="2" >
-    <widget class="QLabel" name="label_15" >
+    <widget class="QLabel" name="lSymbolFilling" >
      <property name="text" >
       <string>Filling</string>
      </property>
     </widget>
    </item>
    <item row="11" column="4" >
-    <widget class="QComboBox" name="cbSymbolsFilling" />
+    <widget class="QComboBox" name="cbSymbolFilling" />
    </item>
    <item row="11" column="5" >
-    <widget class="KColorButton" name="kcbSymbolsFillingColor" />
+    <widget class="KColorButton" name="kcbSymbolFillingColor" />
    </item>
    <item row="12" column="2" >
-    <widget class="QLabel" name="label_13" >
+    <widget class="QLabel" name="lSymbolFillingPattern" >
      <property name="text" >
       <string>Pattern</string>
      </property>
     </widget>
    </item>
    <item row="12" column="4" >
-    <widget class="QComboBox" name="cbSymbolsPattern" />
+    <widget class="QComboBox" name="cbSymbolFillingPattern" />
    </item>
    <item row="13" column="0" >
     <spacer>
@@ -289,7 +292,7 @@
     </widget>
    </item>
    <item row="15" column="4" >
-    <widget class="QCheckBox" name="checkBox_2" >
+    <widget class="QCheckBox" name="chbBoxWidth" >
      <property name="text" >
       <string>auto</string>
      </property>
@@ -299,7 +302,7 @@
     </widget>
    </item>
    <item row="15" column="5" >
-    <widget class="QSpinBox" name="spinBox" >
+    <widget class="QSpinBox" name="sbBoxWidth" >
      <property name="enabled" >
       <bool>false</bool>
      </property>

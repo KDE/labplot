@@ -3,7 +3,7 @@
 
 //****** GUI **************
 #include "gui/SettingsDialog.h"
-#include "gui/FunctionDialog.h"
+#include "gui/FunctionPlotDialog.h"
 #include "gui/AxesDialog.h"
 #include "gui/LegendDialog.h"
 #include "gui/TitleDialog.h"
@@ -47,10 +47,10 @@ MainWin::MainWin(QWidget *parent, QString filename)
 	else if (filename.contains(".lml") || filename.contains(".xml")) {
 		open(filename);
 	}
-	
+
 	spreadsheetmenu = static_cast<QMenu*> (guiFactory()->container("spreadsheet",this));
 	connect(spreadsheetmenu, SIGNAL(aboutToShow()), SLOT(SpreadsheetMenu()) );
-	
+
 	statusBar()->showMessage(i18n("Welcome to LabPlot ")+LVERSION);
 }
 
@@ -87,10 +87,31 @@ void MainWin::setupActions() {
 	actionCollection()->addAction("new worksheet", action);
 	connect(action, SIGNAL(triggered()), SLOT(newWorksheet()));
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New Function"),this);
-	action->setShortcut(Qt::CTRL+Qt::Key_E);
-	actionCollection()->addAction("new function", action);
-	connect(action, SIGNAL(triggered()), SLOT(functionDialog()));
+	//Function plots
+   QActionGroup* functionActions = new QActionGroup(this);
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Function Plot"),this);
+// 	action->setShortcut(Qt::CTRL+Qt::Key_E);
+	actionCollection()->addAction("new_2D_function_plot", action);
+	functionActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Function Plot"),this);
+// 	action->setShortcut(Qt::CTRL+Qt::Key_E);
+	actionCollection()->addAction("new_2D_surface_function_plot", action);
+	functionActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Function Plot"),this);
+// 	action->setShortcut(Qt::CTRL+Qt::Key_E);
+	actionCollection()->addAction("new_2D_polar_function_plot", action);
+	functionActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Function Plot"),this);
+// 	action->setShortcut(Qt::CTRL+Qt::Key_E);
+	actionCollection()->addAction("new_3D_function_plot", action);
+	functionActions->addAction(action);
+
+	//TODO 3D-QWT?
+
+	connect(functionActions, SIGNAL(triggered(QAction*)), this, SLOT(functionActionTriggered(QAction*)));
 
 	// Appearance
 	action = new KAction(KIcon(QIcon(title_xpm)),i18n("Title Settings"),this);
@@ -380,7 +401,7 @@ void MainWin::saveAs() {
 		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
 	if(fn.isEmpty())	// "Cancel"
 		return;
-	
+
 	if(fn.contains(QString(".lml"),Qt::CaseInsensitive) == false)
 			fn.append(".lml");
 
@@ -393,7 +414,7 @@ void MainWin::saveAs() {
 		else if (answer == KMessageBox::No)
 			saveAs();
 	}
-	
+
 	save(fn);
 }
 
@@ -490,7 +511,23 @@ Worksheet* MainWin::getWorksheet(QString name) const {
 /******************** dialogs *****************************/
 void MainWin::importDialog() { (new ImportDialog(this))->show(); }
 void MainWin::projectDialog() { (new ProjectDialog(this))->show(); project->setChanged(true); }
-void MainWin::functionDialog() { (new FunctionDialog(this))->show(); }
+
+void MainWin::functionActionTriggered(QAction* action){
+	PlotType type;
+	QString name=action->objectName();
+	if (name == "new_2D_function_plot")
+		type=PLOT2D;
+	else if (name == "new_2D_surface_function_plot")
+		type=PLOTSURFACE;
+	else if (name == "new_2D_polar_function_plot")
+		type=PLOTPOLAR;
+	else
+		type=PLOT3D;
+	//TODO 3D-QWT?
+
+	 (new FunctionPlotDialog(this, type))->show();
+}
+
 void MainWin::titleDialog() {
 	kDebug()<<"MainWin::titleDialog()"<<endl;
 	Worksheet *w = activeWorksheet();

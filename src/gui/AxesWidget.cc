@@ -1,5 +1,6 @@
 #include "AxesWidget.h"
 #include "LabelWidget.h"
+#include <KDebug>
 
 AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 
@@ -39,7 +40,12 @@ AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 	 ui.cbLabelsFormat->addItem( i18n("datetime") );
 	 ui.cbLabelsFormat->addItem( i18n("degree") );
 
-
+	//Grid
+// 	 ui.kcbMajorGridColor->setColor(Qt::black);
+// 	 this->createMajorGridStyles();
+// 	 ui.kcbMinorGridColor->setColor(Qt::black);
+// 	 this->createMinorGridStyles();
+//
 	//Slots
 	connect( ui.cbAxes, SIGNAL(stateChanged(int)), this, SLOT(currentAxisChanged(int)) );
 
@@ -368,18 +374,14 @@ void AxesWidget::createMajorGridStyles(){
 	//It' not so nice. Look for another possiblity (rewrite combobox and use QIconView to show the pixmaps?)
 	QPainter painter;
 	int w=ui.cbMajorGridStyle->width()-50;
-// 	int h=ui.cbMajorGridStyle->height();
 	int h=10;
 	int offset=5;
 	QPixmap pm( w, h );
-// 	ui.cbMajorGridStyle->setIconSize( QSize(w, ui.cbMajorGridStyle->iconSize().height() ) );
 	ui.cbMajorGridStyle->setIconSize( QSize(w,h) );
-
-// 	QColor penColor = listAxes.at(currentAxis).MajorGridColor();
-// 	int penWidth = listAxes.at(currentAxis).MajorGridWidth();
  	QColor penColor = ui.kcbMajorGridColor->color();
 	int penWidth = ui.sbMajorGridWidth->value();
 
+	//loop over six possible PenStyles, draw on the pixmap and insert it
 	for (int i=1;i<6;i++) {
 		pm.fill(Qt::transparent);
 		painter.begin( &pm );
@@ -391,6 +393,7 @@ void AxesWidget::createMajorGridStyles(){
 	ui.cbMajorGridStyle->setCurrentIndex(index);
 
 	//TODO add the possibility to add/create custom penstyles?
+	kDebug()<<"major grid styles updated"<<endl;
 }
 
 /*!
@@ -404,18 +407,15 @@ void AxesWidget::createMinorGridStyles(){
 
 	QPainter painter;
 	int w=ui.cbMinorGridStyle->width()-50;
-// 	int h=ui.cbMinorGridStyle->height();
 	int h=10;
 	int offset=5;
 	QPixmap pm( w, h );
-// 	ui.cbMajorGridStyle->setIconSize( QSize(w, ui.cbMajorGridStyle->iconSize().height() ) );
 	ui.cbMinorGridStyle->setIconSize( QSize(w,h) );
 
-// 	QColor penColor = listAxes.at(currentAxis).MinorGridColor();
-// 	int penWidth = listAxes.at(currentAxis).MinorGridWidth();
- 	QColor penColor = Qt::black;
+	QColor penColor = ui.kcbMinorGridColor->color();
  	int penWidth = ui.sbMinorGridWidth->value();
 
+	//loop over six possible PenStyles, draw on the pixmap and insert it
 	for (int i=1;i<6;i++) {
 		pm.fill(Qt::transparent);
 		painter.begin( &pm );
@@ -426,7 +426,7 @@ void AxesWidget::createMinorGridStyles(){
 	}
 	ui.cbMajorGridStyle->setCurrentIndex(index);
 
-	//TODO add the possibility to add/create custom penstyles?
+	kDebug()<<"minor grid styles updated"<<endl;
 }
 
 //! update values if scale changed

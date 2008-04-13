@@ -1,22 +1,21 @@
-#ifndef FUNCTIONDIALOG_H
-#define FUNCTIONDIALOG_H
+#ifndef FUNCTIONPLOTDIALOG_H
+#define FUNCTIONPLOTDIALOG_H
 
+#include <QtGui>
 #include "kdialog.h"
 #include "../plottype.h"
 
 class MainWin;
-class FunctionWidget;
-class Function;
+class FunctionPlotWidget;
+class Set;
 
-class FunctionDialog: public KDialog{
+class FunctionPlotDialog: public KDialog{
 	Q_OBJECT
 
 public:
-	FunctionDialog(MainWin *mw, const PlotType& type=PLOT2D);
-
-public slots:
-	void setFunction( Function* );
-// 	void saveFunction( Function* ) const;
+	FunctionPlotDialog(MainWin *mw, const PlotType& type=PLOT2D);
+	void setSet(Set*);
+	void save();
 
 /*	int addFunction();
 	void updateLabel() { rtw->getLabel()->setTitle(funle->text()); rtw->update(); }
@@ -37,10 +36,15 @@ public slots:
 	int Apply() { return apply_clicked(); }
 */
 private:
-	FunctionWidget* functionWidget;
+	FunctionPlotWidget* functionPlotWidget;
+	QFrame* frameAddTo;
+	QComboBox* cbAddTo;
+	Set* set;
+	bool editMode;
+	MainWin* mainWin;
 
 private slots :
 	void save() const;
 	void apply() const;
 };
-#endif //FUNCTIONDIALOG_H
+#endif

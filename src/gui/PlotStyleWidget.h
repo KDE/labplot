@@ -1,13 +1,13 @@
 #ifndef PLOTSTYLEWIDGET_H
 #define PLOTSTYLEWIDGET_H
 
-// #include <QtGui>
-
 #include "../ui_plotstylewidget.h"
 
+class Style;
+
 /**
- * @brief Represents the widget where all the axes setting can be modified
- * This widget is embedded in \c AxisDialog.
+ * @brief Represents the widget where all the style setting of a plot can be modified.
+ * This widget is embedded in \c FunctionWidget.
  */
 class PlotStyleWidget : public QWidget{
     Q_OBJECT
@@ -15,18 +15,24 @@ class PlotStyleWidget : public QWidget{
 public:
     PlotStyleWidget(QWidget*);
     ~PlotStyleWidget();
-/*
-	void setAxesData(const QList<Axis>&, const int axisNumber=0);
-	void saveAxesData(QList<Axis>*) const;
-	void apply(QList<Axis>*) const;
-	void setPlotType(const PlotType& );*/
+
+	void setStyle(const Style* );
+	void saveStyle(Style*) const;
 
 private:
 	Ui::PlotStyleWidget ui;
 
 private slots:
-// 	void currentAxisChanged(int);
+	void symbolTypeChanged(int);
+	void symbolFillingColorChanged();
 
+	void fillLineStyleBox();
+	void fillAreaFillingPatternBox();
+	void fillSymbolTypeBox();
+	void fillSymbolFillingBox();
+	void fillSymbolFillingPatternBox();
+
+	void boxWidthStateChanged(int);
 };
 
 #endif

@@ -3,11 +3,13 @@
 #ifndef SET_H
 #define SET_H
 
+class Function;
+
 #include <QString>
 #include <QPainter>
 #include "elements/Label.h"
 #include "Style.h"
-#include "Symbol.h"
+#include "elements/Symbol.h"
 #include "definitions.h"
 
 class Set
@@ -30,6 +32,9 @@ public:
 	ACCESS(Set::SetType,type,Type);
 	Label* label() { return m_label; }
 	void setLabel(Label* label) { m_label=label; }
+
+	const Function* function() { return m_function; }
+
 /*	LSource Source() { return source; }
 	void setSource(LSource s) { source=s; }
 	int ReadAs() { return readas; }
@@ -54,6 +59,7 @@ protected:
 	QString m_name;
 	int m_number;
 	bool m_shown;		//!< shown/hidden
+	Function* m_function;
 	Label *m_label;
 /*	PType type;		//!< plot type of a graph
 	LSource source;

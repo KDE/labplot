@@ -433,6 +433,6 @@ void Plot::drawStyle(QPainter *p, Style *style, Symbol *symbol, QVector<QPoint> 
 	}
 
 	// draw symbol
-	for (int i=0;i<pa.size();i++)
-		symbol->draw(p,pa[i]);
+// 	for (int i=0;i<pa.size();i++)
+// TODO		symbol->draw(p,pa[i]);
 }

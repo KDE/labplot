@@ -5,7 +5,7 @@
 
 #include <qstring.h>
 #include "MainWin.h"
-#include "Symbol.h"
+#include "elements/Symbol.h"
 
 class FilterOPJ
 {
