@@ -1,3 +1,8 @@
+2008-04-13  First versions of FunctionPlotDialog, FunctionPlotWidget, PlotStyleWidget and PlotSurfaceStyleWidget uploaded.
+			Moved Style and Symbol to elements
+			Function-object introduced.
+			ColorMapPreview ported.
+			Minor changes in the gui-classes.
 2008-04-03	fixed ACCESS functions
 		using elements/classes
 2008-04-01	first versions of Function-, Legend-, Title-Dialogs/Widgets uploaded
