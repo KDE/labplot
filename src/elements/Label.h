@@ -6,8 +6,8 @@
 #include <QColor>
 #include <QPoint>
 
+#include "Point.h"
 #include "../definitions.h"
-#include "../Point.h"
 
 class Label {
 
@@ -15,7 +15,6 @@ public:
 	Label( QString text=QString("") );
 	void draw(QPainter *p, QPoint pos, QPoint size, int w, int h, double phi);
 	void draw(QPainter *p, Point pos, Point size, int w, int h, double phi);
-
 
 /*	QStringList Info();
 	void save(QTextStream *ts);

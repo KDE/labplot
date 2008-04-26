@@ -4,8 +4,8 @@
 #define PLOT_H
 
 #include <QBrush>
-#include "Point.h"
-#include "Range.h"
+#include "elements/Point.h"
+#include "elements/Range.h"
 #include "elements/Label.h"
 #include "plottype.h"
 

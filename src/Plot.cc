@@ -1,16 +1,15 @@
-// LabPlot : Plot.cc
+#include "Plot.h"
+#include "elements/Set.h"
+#include "elements/Axis.h"
 
 #include <KDebug>
 #include <KLocale>
 #include <QDateTime>
-#include <math.h>
-#include "Plot.h"
-#include "Set.h"
-#include "Set2D.h"
-#include "elements/Axis.h"
+#include <QPainter>
 
-Plot::Plot()
-{
+#include <math.h>
+
+Plot::Plot(){
 	kDebug()<<"Plot::Plot()"<<endl;
 	title = new Label(i18n("Title"));
 	// OLD : title = new Label(i18n("Title"),font,QColor(Qt::black));
@@ -165,8 +164,10 @@ void Plot::resetRanges() {
 				kDebug()<<"ERROR : set == 0!"<<endl;
 				continue;
 			}
-			xrange = ((Set2D *)set[i])->getRange(0);
-			yrange = ((Set2D *)set[i])->getRange(1);
+// 			xrange = ((Set2D *)set[i])->getRange(0);
+// 			yrange = ((Set2D *)set[i])->getRange(1);
+			xrange = set[i]->ranges[0];
+			yrange = set[i]->ranges[1];
 		}
 		/*else if(s == GRAPH3D) {
 			kDebug()<<"	GRAPH3D"<<endl;

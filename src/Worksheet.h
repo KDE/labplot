@@ -7,7 +7,7 @@
 #include <QDomElement>
 
 #include "Plot.h"
-#include "Set.h"
+#include "elements/Set.h"
 #include "sheettype.h"
 #include "plottype.h"
 

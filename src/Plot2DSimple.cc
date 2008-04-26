@@ -5,7 +5,7 @@
 //#include <QPointArray>
 #include <math.h>
 #include "Plot2DSimple.h"
-#include "Set2D.h"
+#include "elements/Set.h"
 #include "elements/Axis.h"
 
 // simple 2D Plot class
@@ -193,7 +193,9 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 		//	continue;
 // TODO
 		if (stype == Set::SET2D) {
-			Set2D *s = (Set2D *) set[i];
+// 			Set2D *s = (Set2D *) set[i];
+			Set *s = set[i];
+
 //			kDebug()<<"GRAPH2D Label = "<<g->getLabel()->simpleTitle()<<endl;
 
 			//kDebug()<<"Type T2D\n";
@@ -202,12 +204,12 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 			//kDebug()<<"xact1/xact2 "<<actrange[0].rMin()<<' '<<actrange[0].rMax()<<endl;
 			//kDebug()<<"yact1/yact2 "<<actrange[1].rMin()<<' '<<actrange[1].rMax()<<endl;
 
-			QList<Point>* d = s->data();
+			QList<Point>* d = &s->data;
 			double oldx = 0.0, oldy = 0.0;
 			//QPointArray pa(g->Number());
 			QVector<QPoint> pa;
 			int pointindex=0;
-			for(int j=0;j<s->number();j++) {
+			for(int j=0;j<s->data.size();j++) {
 				if(d->at(j).isMasked() == true)
 					continue;
 
@@ -243,7 +245,7 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 			//if(g->getStyle()->PointsSortingEnabled())
 			//	sortPoints(pa,0,pa.size()-1);
 			// TODO
-			drawStyle(p,s->style(),s->symbol(),pa,xmin,xmax,ymin,ymax);
+// 			drawStyle(p,s->style(), s->symbol(), pa,xmin,xmax,ymin,ymax);
 		}
 /*		else if (s == GRAPH3D)	{ // 2D error plot
 			Graph3D *g = graphlist->getGraph3D(i);
