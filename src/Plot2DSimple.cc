@@ -202,13 +202,13 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 			//kDebug()<<"xact1/xact2 "<<actrange[0].rMin()<<' '<<actrange[0].rMax()<<endl;
 			//kDebug()<<"yact1/yact2 "<<actrange[1].rMin()<<' '<<actrange[1].rMax()<<endl;
 
-			Point *d = s->data();
+			QList<Point>* d = s->data();
 			double oldx = 0.0, oldy = 0.0;
 			//QPointArray pa(g->Number());
 			QVector<QPoint> pa;
 			int pointindex=0;
 			for(int j=0;j<s->number();j++) {
-				if(d[j].isMasked() == true)
+				if(d->at(j).isMasked() == true)
 					continue;
 
 				// TODO
@@ -219,7 +219,7 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 				}*/
 
 				double x=xmin,y=ymax;
-				calculateXY(d[j],&x,&y,w,h);
+				calculateXY(d->at(j),&x,&y,w,h);
 
 				//TODO
 				// dont draw outside border
@@ -230,7 +230,7 @@ void Plot2DSimple::drawCurves(QPainter *p,int w, int h) {
 				else {
 					pa.resize(pointindex+1);
 					pa[pointindex++] = QPoint((int)x,(int)y);
-				}				
+				}
 
 				// TODO
 				//s->getAnnotateValues().draw(p,(int)x,(int)y,d[j].x(),d[j].y());

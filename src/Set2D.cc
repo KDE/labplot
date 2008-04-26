@@ -3,9 +3,7 @@
 #include <KDebug>
 #include "Set2D.h"
 
-Set2D::Set2D(QString name, Point *data, int number)
-	: Set(name, number), m_data(data)
-{
+Set2D::Set2D(QString name, int number) : Set(name, number){
 	kDebug()<<"Set2D()"<<endl;
 	m_type = SET2D;
 	if(m_number>0) resetRanges();

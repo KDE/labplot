@@ -6,12 +6,13 @@
 #include "Set.h"
 #include "Point.h"
 #include "Range.h"
+#include <QList>
 
-class Set2D: public Set
-{
+class Set2D: public Set{
+
 public:
-	Set2D(QString name="", Point *data=0, int number=0);
-/*	Graph2D(QString n="", QString l="",LRange r[2]=0, LSource src=SFUNCTION, PType t=P2D, Style *st=0, 
+	Set2D(QString name="", int number=0);
+/*	Graph2D(QString n="", QString l="",LRange r[2]=0, LSource src=SFUNCTION, PType t=P2D, Style *st=0,
 		Symbol *sy=0, Point *p=0, int nr=0, bool b=true);
 	~Graph2D();
 	Graph2D *Clone();		// clone this graph
@@ -19,18 +20,16 @@ public:
 	Range getRange(int i) const { return m_range[i]; }
 	void setRange(Range range[2]) { m_range[0]=range[0]; m_range[1]=range[1]; }
 
-	Point *data() const { return m_data; }
-	void setData(Point *data) { m_data = data; }
-/*	QStringList Info();	
+
+/*	QStringList Info();
 	void save(QTextStream *t, QProgressDialog *progress);
 	void open(QTextStream *t, int version, QProgressDialog *progress);
 	void saveXML(QDomDocument doc, QDomElement graphtag);
 	void openXML(QDomNode node);
 */
 private:
-	Point *m_data;
 	Range m_range[2];
 	void resetRanges();
 };
 
-#endif // SET2D_H
+#endif

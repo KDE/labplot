@@ -558,16 +558,18 @@ void MainWin::legendDialog() {
 void MainWin::settingsDialog(){ (new SettingsDialog(this))->show(); }
 /******************** dialogs end *****************************/
 
-void MainWin::addSet(Set *set, int sheet, PlotType ptype) {
+void MainWin::addSet(Set set, int sheet, PlotType ptype) {
 	kDebug()<<"MainWin::addGraph2D() sheet ="<<sheet<<endl;
 
 	int nr_sheets = mdi->subWindowList().size();
 	kDebug()<<" Number of sheets :"<<nr_sheets<<endl;
 	if(sheet == nr_sheets) {	// new worksheet
+		kDebug()<<"Creating new worksheet"<<endl;
 		Worksheet *w = newWorksheet();
-		w->addSet(set,ptype);
+ 		w->addSet(&set,ptype);
 	}
 	else if(sheet == nr_sheets+1) {	// new spreadsheet
+		kDebug()<<"Creating new worksheet"<<endl;
 		Spreadsheet *s = newSpreadsheet();
 		s->addSet(set);
 	}
@@ -581,7 +583,7 @@ void MainWin::addSet(Set *set, int sheet, PlotType ptype) {
 				return;
 			}
 			if (w->sheetType() == WORKSHEET)
-				w->addSet(set,ptype);
+				w->addSet(&set,ptype);
 			else {
 				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
 				s->addSet(set);

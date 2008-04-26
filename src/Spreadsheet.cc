@@ -13,6 +13,8 @@
 #include "ColumnDialog.h"
 #include "pixmaps/pixmap.h"
 #include "column.h"
+#include "elements/Point3D.h"
+#include "gui/FunctionPlotDialog.h"
 
 Spreadsheet::Spreadsheet(MainWin *mw)
 	:QTableView(), mw(mw)
@@ -55,8 +57,11 @@ void Spreadsheet::Menu(QMenu *menu) {
 	KAction *action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Plot"),this);
 	connect(action, SIGNAL(triggered()),SLOT(plot()));
 	menu->addAction(action);
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Export"),this);
+	action = new KAction(KIcon("document-export"),i18n("Export"),this);
 	connect(action, SIGNAL(triggered()),SLOT(exportData()));
+	menu->addAction(action);
+	action = new KAction(KIcon("edit-rename"),i18n("Edit Function"),this);
+	connect(action, SIGNAL(triggered()),SLOT(editFunction()));
 	menu->addAction(action);
 	menu->addSeparator();
 
@@ -71,24 +76,24 @@ void Spreadsheet::Menu(QMenu *menu) {
 	action = new KAction(KIcon("select"),i18n("Set row count"),this);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),SLOT(setRowNumber()));
-	action = new KAction(KIcon("select"),i18n("Set notes"),this);
+	action = new KAction(KIcon("draw-freehand"),i18n("Set notes"),this);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),SLOT(setNotes()));
 	menu->addSeparator();
 
-	action = new KAction(KIcon("select"),i18n("Cut"),this);
+	action = new KAction(KIcon("edit-cut"),i18n("Cut"),this);
 	menu->addAction(action);
 	action->setEnabled(false);
-	action = new KAction(KIcon("select"),i18n("Copy"),this);
+	action = new KAction(KIcon("edit-copy"),i18n("Copy"),this);
 	menu->addAction(action);
 	action->setEnabled(false);
-	action = new KAction(KIcon("select"),i18n("Paste"),this);
+	action = new KAction(KIcon("edit-paste"),i18n("Paste"),this);
 	menu->addAction(action);
 	action->setEnabled(false);
-	action = new KAction(KIcon("select"),i18n("Clear"),this);
+	action = new KAction(KIcon("edit-clear"),i18n("Clear"),this);
 	menu->addAction(action);
 	action->setEnabled(false);
-	action = new KAction(KIcon("select"),i18n("Select"),this);
+	action = new KAction(KIcon("edit-select-all"),i18n("Select"),this);
 	menu->addAction(action);
 	action->setEnabled(false);
 	// .. all, nothing, invert
@@ -103,7 +108,7 @@ void Spreadsheet::Menu(QMenu *menu) {
 	action->setEnabled(false);
 	// row number, random value
 	menu->addAction(action);
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Convert"),this);
+	action = new KAction(KIcon("transform-rotate"),i18n("Convert"),this);
 	action->setEnabled(false);
 	// ...
 	menu->addAction(action);
@@ -112,14 +117,14 @@ void Spreadsheet::Menu(QMenu *menu) {
 	menu->addAction(action);
 	// ...
 	menu->addSeparator();
-	
-	action = new KAction(KIcon("select"),i18n("Add column"),this);
+
+	action = new KAction(KIcon("list-add"),i18n("Add column"),this);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),SLOT(addColumn()));
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Delete selected column"),this);
+	action = new KAction(KIcon("list-remove"),i18n("Delete selected column"),this);
 	connect(action, SIGNAL(triggered()),SLOT(deleteSelectedColumns()));
 	menu->addAction(action);
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Delete selected row"),this);
+	action = new KAction(KIcon("list-remove"),i18n("Delete selected row"),this);
 	connect(action, SIGNAL(triggered()),SLOT(deleteSelectedRows()));
 	menu->addAction(action);
 	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Masking"),this);
@@ -143,8 +148,8 @@ void Spreadsheet::Menu(QMenu *menu) {
 	action->setEnabled(false);
 	menu->addAction(action);
 	menu->addSeparator();
-	
-	action = new KAction(KIcon(QIcon(spreadsheet_xpm)),i18n("New spreadsheet"),this);
+
+	action = new KAction(KIcon("insert-table"),i18n("New spreadsheet"),this);
 	action->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	menu->addAction(action);
 	connect(action, SIGNAL(triggered()),mw, SLOT(newSpreadsheet()));
@@ -283,9 +288,9 @@ void Spreadsheet::setNotes(QString t) {
 
 QString Spreadsheet::columnHeader(int col) const {
 //	kDebug()<<"Spreadsheet::columnheader("<<col<<")"<<endl;
-	if(col<0) col=0; 
-	return model()->headerData(col,Qt::Horizontal).toString(); 
-} 
+	if(col<0) col=0;
+	return model()->headerData(col,Qt::Horizontal).toString();
+}
 
 void Spreadsheet::setProperties(QString label, int type, int format) {
 	if(label.isEmpty())
@@ -372,7 +377,7 @@ int Spreadsheet::currentColumn() const {
 }
 
 QList<int> Spreadsheet::currentColumns() const {
-	QList<int> columns; 
+	QList<int> columns;
 	QModelIndexList list = selectionModel()->selectedColumns();
 	for (int i=0; i<list.size(); i++)
 		columns.append(list.at(i).column());
@@ -385,7 +390,7 @@ int Spreadsheet::currentRow() const {
 }
 
 QList<int> Spreadsheet::currentRows() const {
-	QList<int> rows; 
+	QList<int> rows;
 	QModelIndexList list = selectionModel()->selectedRows();
 	for (int i=0; i<list.size(); i++)
 		rows.append(list.at(i).row());
@@ -408,68 +413,117 @@ void Spreadsheet::deleteSelectedRows() {
 	}
 }
 
-void Spreadsheet::addSet(Set *s) {
+void Spreadsheet::addSet(const Set s) {
 	kDebug()<<endl;
+	m_set=s;
 
 	int columns=0;
-	switch(s->type()) {
+	switch(s.type()) {
 	case Set::SET2D:
 		columns=2;
+		break;
+	case Set::SET3D:
+		columns=3;
 		break;
 	default: break;
 	}
 
 	if(columnCount()<columns)
 		setColumnCount(columns);
+
 	// add empty columns if necessary
 	for(int i=0;i<columns;i++) {
 		if(filledRows(columnCount()-columns)>1)
 			setColumnCount(columnCount()+1);
 	}
 
-	if(s->number() > rowCount())
-		setRowCount(s->number());
+	if(s.data.size() > rowCount()) //TODO do we really need this if here?
+		setRowCount(s.data.size());
 
-	// add data
-	switch(s->type()) {
+	this->displaySet();
+}
+
+void Spreadsheet::displaySet(){
+//TODO clear the content of the table!!!
+
+	int columns=this->columnCount();
+	switch(m_set.type()) {
 	case Set::SET2D: {
-		Point *data = ((Set2D *)s)->data();
-		for(int i=0;i<s->number();i++) {
-			setText(i,columnCount()-2,QString::number(data[i].x(),'g',10));
-			setText(i,columnCount()-1,QString::number(data[i].y(),'g',10));
+		kDebug()<<"set2d is going to be shown"<<endl;
+ 		const Point* point;
+		for(int i=0; i<m_set.data.size(); i++) {
+			point=&m_set.data.at(i);
+			this->setText(i, columns-2, QString::number(point->x(), 'g', 10));
+			this->setText(i, columns-1, QString::number(point->y(), 'g', 10));
 /*			if(data[i].Masked()) {
 				xitem->setMasked();
 				yitem->setMasked();
 			}
 */
 		}
-		};break;
-	default: break;
+		break;
 	}
+	case Set::SET3D: {
+		kDebug()<<"set3d is going to be shown"<<endl;
+		const Point3D* point;
+		for(int i=0; i<m_set.data.size(); i++) {
+			point=static_cast<const Point3D*>(&m_set.data.at(i));
+			this->setText(i, columns-3, QString::number(point->x(), 'g', 10));
+			this->setText(i, columns-2, QString::number(point->y(), 'g', 10));
+			this->setText(i, columns-1, QString::number(point->z(), 'g', 10));
+/*			if(data[i].Masked()) {
+				xitem->setMasked();
+				yitem->setMasked();
+			zitem->setMasked();
+			}
+*/
+		}
+		break;
+	}
+	default:
+		 break;
+	}
+
+	kDebug()<<"set displayed"<<endl;
 }
 
 void Spreadsheet::plot() {
 	kDebug()<<"not implemented yet!"<<endl;
-	// TODO : use SpreadsheetPlotDialog 
+	// TODO : use SpreadsheetPlotDialog
 	// plot type, which columns, destination
-	
+
 	// create set
-	int N=rowCount();
-	Point *data = new Point[N];
-	for(int i = 0;i < N;i++) {
-		data[i].setPoint(text(i,0).toDouble(),text(i,1).toDouble());
-	}
-	Set2D *g = new Set2D(windowTitle(),data,N);
+// 	int N=rowCount();
+// 	Point *data = new Point[N];
+// 	for(int i = 0;i < N;i++) {
+// 		data[i].setPoint(text(i,0).toDouble(),text(i,1).toDouble());
+// 	}
+// 	Set2D *g = new Set2D(windowTitle(),data,N);
+
 	//mw->addSet(g,sheetcb->currentIndex(),PLOT2D);
-	mw->addSet(g,1,PLOT2D);
+	//TODO mw->addSet(g,1,PLOT2D);
 }
 
 void Spreadsheet::exportData() {
 	kDebug()<<"not implemented yet!"<<endl;
-	// TODO : export dialog 
+	// TODO : export dialog
 }
 
 void Spreadsheet::setColumnValues() {
 	kDebug()<<"not implemented yet!"<<endl;
 	// TODO : column values dialog
+}
+
+void Spreadsheet::editFunction(){
+	PlotType type;
+	//TODO rethink/reimplement this approach
+	if (m_set.type()==Set::SET2D)
+		type=PLOT2D;
+	else if (m_set.type()==Set::SET3D)
+		type=PLOT3D;
+
+	FunctionPlotDialog* dlg=new FunctionPlotDialog(mw, type);
+	dlg->setSet(&m_set);
+	if (dlg->exec())
+		this->displaySet(); //TODO trigger update only if data set was changed
 }

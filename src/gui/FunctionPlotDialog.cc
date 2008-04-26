@@ -6,6 +6,9 @@
 FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const PlotType& type)
 	: KDialog(mw){
 
+	plotType=type;
+	editMode=false;
+
 	QWidget* mainWidget = new QWidget(this);
 	QVBoxLayout* vLayout = new QVBoxLayout(mainWidget);
 
@@ -19,7 +22,7 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const PlotType& type)
 	hLayout->addWidget( new QLabel(i18n("Add function to"),  frameAddTo) );
 	hLayout->addItem( new QSpacerItem(10, 20, QSizePolicy::Expanding) );
 
-	QComboBox* cbAddTo = new QComboBox(frameAddTo);
+	cbAddTo = new QComboBox(frameAddTo);
 	hLayout->addWidget( cbAddTo);
 
 	mainWin=mw;
@@ -41,7 +44,6 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const PlotType& type)
 // 	Plot *plot=0;
 // 	if(p != 0)
 // 	 	plot = p->getPlot(p->API());
-// 	type = newtype;
 
 	QString caption;
 	if (type == PLOT2D)
@@ -75,7 +77,7 @@ void FunctionPlotDialog::setSet(Set* s){
 	set=s;
 	functionPlotWidget->setSet(s);
 
-	//in the edit mode there should be no possibility to add the changed set
+	//in the edit mode. There should be no possibility to add the changed set
 	//to a new worksheet/spreadsheet.
 	editMode=true;
 	frameAddTo->hide();
@@ -83,8 +85,8 @@ void FunctionPlotDialog::setSet(Set* s){
 
 void FunctionPlotDialog::save(){
 	this->apply();
-	this->close();
 	kDebug()<<"Changes saved."<<endl;
+	this->close();
 }
 
 
@@ -97,9 +99,15 @@ void FunctionPlotDialog::apply() const{
 	}else{
 		//there is no set-object:
 		// -> create a new one and add it in MainWin.
+		kDebug()<<"Not in the edit-mode. Create new data set and apply the changes."<<endl;
 		Set newSet;
+		if (plotType==PLOT2D || plotType==PLOTPOLAR)
+			newSet.setType(Set::SET2D);
+		else
+			newSet.setType(Set::SET3D);
+
 		functionPlotWidget->saveSet(&newSet);
-		//TODO mainWin->addSet(set, cbAddTo->currentIndex());
+   		mainWin->addSet(newSet, cbAddTo->currentIndex(), plotType);
 	}
 	kDebug()<<"Changes applied."<<endl;
 }

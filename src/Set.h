@@ -32,8 +32,9 @@ public:
 	ACCESS(Set::SetType,type,Type);
 	Label* label() { return m_label; }
 	void setLabel(Label* label) { m_label=label; }
-
-	const Function* function() { return m_function; }
+	QList<Point>* data() { return &m_data; }
+	void setData(QList<Point> data) { m_data = data;}
+	Function* function() { return m_function; }
 
 /*	LSource Source() { return source; }
 	void setSource(LSource s) { source=s; }
@@ -61,6 +62,7 @@ protected:
 	bool m_shown;		//!< shown/hidden
 	Function* m_function;
 	Label *m_label;
+	QList<Point> m_data;
 /*	PType type;		//!< plot type of a graph
 	LSource source;
 	int readas;		//!< selected read as for data

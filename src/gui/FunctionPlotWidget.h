@@ -32,6 +32,8 @@ private:
 	PlotSurfaceStyleWidget* plotSurfaceStyleWidget;
 	PlotType plotType;
 
+	int createSetData(Set* set);
+
 private slots:
 	void insert(const QString s);
 };

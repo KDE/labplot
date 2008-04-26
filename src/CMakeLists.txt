@@ -16,12 +16,20 @@
 	gui/TitleDialog.cc
 )
 
-set(LabPlot_SRCS ${GUI_SOURCES}
-  parser.tab.c
+set(ELEMENTS_SOURCES
   elements/Axis.cc
-  elements/Function.cc
+  elements/Label.cc
+  elements/Legend.cc
+  elements/Point.cc
+  elements/Point3D.cc
+  elements/Range.cc
+  elements/Set.cc
   elements/Style.cc
   elements/Symbol.cc
+)
+
+set(LabPlot_SRCS ${GUI_SOURCES} ${ELEMENTS_SOURCES}
+  parser.tab.c
   ColumnDialog.cc
   Dialog.cc
   FileInfoDialog.cc
@@ -30,20 +38,14 @@ set(LabPlot_SRCS ${GUI_SOURCES}
   FilterNETCDF.cc
   FilterOPJ.cc
   ImportDialog.cc
-  elements/Label.cc
-  elements/Legend.cc
   LabPlot.cc
   MainWin.cc
   Plot.cc
   Plot2D.cc
   Plot2DSimple.cc
   PlotDialog.cc
-  Point.cc
   Project.cc
   ProjectDialog.cc
-  Range.cc
-  Set.cc
-  Set2D.cc
   Spreadsheet.cc
   TableModel.cc
   Worksheet.cc

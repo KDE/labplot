@@ -8,7 +8,7 @@
 #include "Spreadsheet.h"
 #include "Worksheet.h"
 #include "Project.h"
-#include "Set2D.h"
+#include "elements/Set.h"
 #include "plottype.h"
 
 class MainWin : public KXmlGuiWindow
@@ -29,7 +29,7 @@ public:
 	void updateSetList();		//!< update dynamic set list menu
 	void openXML(QIODevice *file);	//!< do the actual opening
 	void saveXML(QIODevice *file);	//!< do the actual saving
-	void addSet(Set *g, int sheet, PlotType ptype);
+	void addSet(Set s, int sheet, PlotType ptype);
 private:
 	QMdiArea *mdi;
 	Project *project;

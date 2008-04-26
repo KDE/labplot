@@ -4,10 +4,10 @@
 #include <QWidget>
 #include <QMenu>
 #include <QDomElement>
-#include <QTableView>
-#include "TableModel.h"
+ #include <QTableView>
 
-#include "Set.h"
+#include "TableModel.h"
+#include "elements/Set.h"
 #include "sheettype.h"
 
 class MainWin;
@@ -23,7 +23,9 @@ public:
 	QDomElement save(QDomDocument doc);
 	void open(QDomNode node);
 
-	void addSet(Set *set);
+	void addSet(const Set set);
+	Set* set(){ return &m_set;}
+
 	QString columnName(int col) const;
 	void setColumnName(int col, QString name);
 	QString columnType(int col) const;
@@ -34,38 +36,45 @@ public:
 	int rowCount() const { return model()->rowCount(); }
 	void setRowCount(int count) { ((TableModel *)model())->setRowCount(count); }
 	int columnCount() const { return model()->columnCount(); }
-	void setColumnCount(int count) {
+	void setColumnCount(int count){
 		int oldcount=columnCount();
-		((TableModel *)model())->setColumnCount(count); 
+		((TableModel *)model())->setColumnCount(count);
 		resetHeader(oldcount);
 	}
+
 	QString text(int row, int col) const;
 	void setText(int row, int col, QString text);
 	int currentRow() const;			//!< returns current row (latest selection)
 	int currentColumn() const;		//!< returns current column (latest selection)
 	QList<int> currentRows() const;		//!< returns a sorted list of selected rows
 	QList<int> currentColumns() const;	//!< returns a sorted list of selected columns
+
 private:
 	MainWin *mw;
 	SheetType type;			//!< needed for mw->active{Work,Spread}sheet()
 	QString notes;
+	Set m_set;
 	void contextMenuEvent(QContextMenuEvent *);
 	QString columnHeader(int col) const;
 	void setColumnHeader(int col, QString name) {
 		model()->setHeaderData(col,Qt::Horizontal,name);
 	}
 	int filledRows(int col) const;	//!< returns number of filled rows in column col
+	void displaySet();
+
 public slots:
 	void Menu(QMenu *menu);
 	void setTitle(QString title="");
 	void setRowNumber(int row=0);
 	void addColumn() { setColumnCount(columnCount()+1); }
-	QString Notes() const { return notes; }	
+	QString Notes() const { return notes; }
 	void setNotes(QString notes="");
-	void setProperties(QString label=0, int type=1, int format=0);	
+	void setProperties(QString label=0, int type=1, int format=0);
+
 private slots:
 	void plot();		//!< create a plot from the selected data
 	void exportData();	//!< export selected data (ExportDialog)
+	void editFunction();
 	void setColumnValues();	//!< set colum  values (ColumnValuesDialog)
 	void deleteSelectedColumns();
 	void deleteSelectedRows();

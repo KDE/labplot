@@ -1,6 +1,7 @@
 //LabPlot : Graph.cc
 
 #include "Set.h"
+#include "elements/Function.h"
 
 //Graph::Graph(QString n, QString l, LSource src, PType t, Style *st, Symbol *sy, int nr, bool s)
 Set::Set(QString name, int number)
@@ -11,10 +12,11 @@ Set::Set(QString name, int number)
 //	type = t;
 //	style = st;
 //	if(style == 0)
-		m_style = new Style();
+	m_style = new Style();
 //	symbol = sy;
 //	if(symbol == 0)
-		m_symbol = new Symbol();
+	m_symbol = new Symbol();
+	m_function = new Function();
 
 	m_shown = true;
 //	readas = 0;

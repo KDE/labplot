@@ -306,18 +306,6 @@ PlotDialog.s:
 	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/PlotDialog.s
 
 # target to build an object file
-Point.o:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Point.o
-
-# target to preprocess a source file
-Point.i:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Point.i
-
-# target to generate assembly for a file
-Point.s:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Point.s
-
-# target to build an object file
 Project.o:
 	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Project.o
 
@@ -340,42 +328,6 @@ ProjectDialog.i:
 # target to generate assembly for a file
 ProjectDialog.s:
 	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/ProjectDialog.s
-
-# target to build an object file
-Range.o:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Range.o
-
-# target to preprocess a source file
-Range.i:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Range.i
-
-# target to generate assembly for a file
-Range.s:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Range.s
-
-# target to build an object file
-Set.o:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Set.o
-
-# target to preprocess a source file
-Set.i:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Set.i
-
-# target to generate assembly for a file
-Set.s:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Set.s
-
-# target to build an object file
-Set2D.o:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Set2D.o
-
-# target to preprocess a source file
-Set2D.i:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Set2D.i
-
-# target to generate assembly for a file
-Set2D.s:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/Set2D.s
 
 # target to build an object file
 Spreadsheet.o:
@@ -438,18 +390,6 @@ elements/Axis.s:
 	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Axis.s
 
 # target to build an object file
-elements/Function.o:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Function.o
-
-# target to preprocess a source file
-elements/Function.i:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Function.i
-
-# target to generate assembly for a file
-elements/Function.s:
-	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Function.s
-
-# target to build an object file
 elements/Label.o:
 	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Label.o
 
@@ -472,6 +412,54 @@ elements/Legend.i:
 # target to generate assembly for a file
 elements/Legend.s:
 	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Legend.s
+
+# target to build an object file
+elements/Point.o:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Point.o
+
+# target to preprocess a source file
+elements/Point.i:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Point.i
+
+# target to generate assembly for a file
+elements/Point.s:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Point.s
+
+# target to build an object file
+elements/Point3D.o:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Point3D.o
+
+# target to preprocess a source file
+elements/Point3D.i:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Point3D.i
+
+# target to generate assembly for a file
+elements/Point3D.s:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Point3D.s
+
+# target to build an object file
+elements/Range.o:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Range.o
+
+# target to preprocess a source file
+elements/Range.i:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Range.i
+
+# target to generate assembly for a file
+elements/Range.s:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Range.s
+
+# target to build an object file
+elements/Set.o:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Set.o
+
+# target to preprocess a source file
+elements/Set.i:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Set.i
+
+# target to generate assembly for a file
+elements/Set.s:
+	cd /home/alex/Projekte/labplot/2.0 && $(MAKE) -f src/CMakeFiles/LabPlot.dir/build.make src/CMakeFiles/LabPlot.dir/elements/Set.s
 
 # target to build an object file
 elements/Style.o:
@@ -734,24 +722,12 @@ help::
 	@echo "... PlotDialog.o"
 	@echo "... PlotDialog.i"
 	@echo "... PlotDialog.s"
-	@echo "... Point.o"
-	@echo "... Point.i"
-	@echo "... Point.s"
 	@echo "... Project.o"
 	@echo "... Project.i"
 	@echo "... Project.s"
 	@echo "... ProjectDialog.o"
 	@echo "... ProjectDialog.i"
 	@echo "... ProjectDialog.s"
-	@echo "... Range.o"
-	@echo "... Range.i"
-	@echo "... Range.s"
-	@echo "... Set.o"
-	@echo "... Set.i"
-	@echo "... Set.s"
-	@echo "... Set2D.o"
-	@echo "... Set2D.i"
-	@echo "... Set2D.s"
 	@echo "... Spreadsheet.o"
 	@echo "... Spreadsheet.i"
 	@echo "... Spreadsheet.s"
@@ -767,15 +743,24 @@ help::
 	@echo "... elements/Axis.o"
 	@echo "... elements/Axis.i"
 	@echo "... elements/Axis.s"
-	@echo "... elements/Function.o"
-	@echo "... elements/Function.i"
-	@echo "... elements/Function.s"
 	@echo "... elements/Label.o"
 	@echo "... elements/Label.i"
 	@echo "... elements/Label.s"
 	@echo "... elements/Legend.o"
 	@echo "... elements/Legend.i"
 	@echo "... elements/Legend.s"
+	@echo "... elements/Point.o"
+	@echo "... elements/Point.i"
+	@echo "... elements/Point.s"
+	@echo "... elements/Point3D.o"
+	@echo "... elements/Point3D.i"
+	@echo "... elements/Point3D.s"
+	@echo "... elements/Range.o"
+	@echo "... elements/Range.i"
+	@echo "... elements/Range.s"
+	@echo "... elements/Set.o"
+	@echo "... elements/Set.i"
+	@echo "... elements/Set.s"
 	@echo "... elements/Style.o"
 	@echo "... elements/Style.i"
 	@echo "... elements/Style.s"

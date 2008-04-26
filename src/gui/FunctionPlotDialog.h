@@ -42,6 +42,7 @@ private:
 	Set* set;
 	bool editMode;
 	MainWin* mainWin;
+	PlotType plotType;
 
 private slots :
 	void save() const;

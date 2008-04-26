@@ -2,10 +2,18 @@
 #include "LabelWidget.h"
 #include "PlotStyleWidget.h"
 #include "PlotSurfaceStyleWidget.h"
-#include "../elements/Function.h"
-#include "../Set.h"
+#include "../elements/Set.h"
+#include "../elements/Point3D.h"
 
 #include <QMdiSubWindow>
+#include <QProgressDialog>
+#include <KDebug>
+#include <KMessageBox>
+
+#ifdef HAVE_GSL
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_math.h>
+#endif
 
 #include "../parser_struct.h"
 extern "C" con constants[];
@@ -77,10 +85,16 @@ void FunctionPlotWidget::setPlotType(const PlotType& type){
 	//TODO what about  3D-QWT-functions
 
 	if (type == PLOT2D || type == PLOTPOLAR){
-		ui.leFunction->setText( QString("sin(x)") );
+		ui.leFunction->setText( "sin(x)" );
+		ui.leAxis1Start->setText( "0" );
+		ui.leAxis1End->setText( "1" );
 		ui.frameAxis2->hide();
 	}else if (type == PLOT3D || type == PLOTSURFACE || type == PLOTQWT3D){
-		ui.leFunction->setText( QString("sin(x+y)") );
+		ui.leFunction->setText( "sin(x+y)" );
+		ui.leAxis1Start->setText( "0" );
+		ui.leAxis1End->setText( "1" );
+		ui.leAxis2Start->setText( "0" );
+		ui.leAxis2End->setText( "1" );
 		ui.frameAxis2->show();
 	}
 
@@ -92,26 +106,29 @@ void FunctionPlotWidget::setPlotType(const PlotType& type){
 	set the set object \c set to be displayed/edited in this widget
 */
 void FunctionPlotWidget::setSet(Set* set){
-	ui.leFunction->setText( set->function()->text() );
+	ui.leFunction->setText( set->functionName() );
 
-	ui.leAxis1Start->setText( QString::number(set->function()->axis1Start()) );
-	ui.leAxis1End->setText( QString::number(set->function()->axis1End()) );
-	ui.sbAxis1Number->setValue( set->function()->axis1Number() );
+	ui.leAxis1Start->setText( QString::number(set->ranges.at(0).min()) );
+	ui.leAxis1End->setText( QString::number(set->ranges.at(0).max()) );
+	ui.sbAxis1Number->setValue( set->numbers.at(0) );
 
 	if (plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D){
-	ui.leAxis2Start->setText( QString::number(set->function()->axis2Start()) );
-	ui.leAxis2End->setText( QString::number(set->function()->axis2End()) );
-	ui.sbAxis2Number->setValue( set->function()->axis2Number() );
+		ui.leAxis2Start->setText( QString::number(set->ranges.at(2).min()) );
+		ui.leAxis2End->setText( QString::number(set->ranges.at(2).max()) );
+		ui.sbAxis2Number->setValue( set->numbers.at(1) );
 	}
 
-	labelWidget->saveLabel(set->label());
+	labelWidget->setLabel(set->label());
 
 	if (plotType==PLOTSURFACE)
-		plotStyleWidget->saveStyle(set->style());
+		plotStyleWidget->setStyle(set->style());
 	else
-		plotSurfaceStyleWidget->saveStyle(set->style());
+		plotSurfaceStyleWidget->setStyle(set->style());
 
-	//TODO
+	//TODO "Tick labels"
+
+
+	//TODO old stuff
 		/*
 	Style *style=0;
 	Symbol *symbol=0;
@@ -164,28 +181,188 @@ void FunctionPlotWidget::setSet(Set* set){
 
 */
 void FunctionPlotWidget::saveSet(Set* set){//TODO add const
-// 	set->function()->setText( ui.leFunction->text() );
-//
-// 	set->function()->setAxis1Start( ui.leAxis1Start->text().toFloat() );
-// 	set->function()->setAxis1End( ui.leAxis1End->text().toFloat() );
-// 	set->function()->setAxis1Number( ui.sbAxis1Number->value() );
-//
-// 	if (plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D){
-// 		set->function()->setAxis2Start( ui.leAxis2Start->text().toFloat() );
-// 		set->function()->setAxis2End( ui.leAxis2End->text().toFloat() );
-// 		set->function()->setAxis2Number( ui.sbAxis2Number->value() );
-// 	}
-//
-// 	labelWidget->saveLabel(set->label());
-//
-// 	if (plotType==PLOTSURFACE)
-// 		plotStyleWidget->saveStyle(set->style());
-// 	else
-// 		plotSurfaceStyleWidget->saveStyle(set->style());
+	set->setFunctionName( ui.leFunction->text() );
+
+	set->ranges[0].setMin( ui.leAxis1Start->text().toFloat() );
+	set->ranges[0].setMax( ui.leAxis1End->text().toFloat() );
+	set->numbers[0] = ui.sbAxis1Number->value();
+
+	if (plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D){
+		set->ranges[1].setMin( ui.leAxis2Start->text().toFloat() );
+		set->ranges[1].setMax( ui.leAxis2End->text().toFloat() );
+		set->numbers[1] = ui.sbAxis2Number->value();
+	}
+
+	labelWidget->saveLabel(set->label());
+
+	if (plotType==PLOTSURFACE)
+		plotStyleWidget->saveStyle(set->style());
+	else
+		plotSurfaceStyleWidget->saveStyle(set->style());
 
 	//TODO "Tick labels"
+
+	//call this only if the function was changed.
+ 	this->createSetData(set);
+	kDebug()<<"Set saved"<<endl;
 }
 
+int FunctionPlotWidget::createSetData(Set* set) {
+	set->data.clear(); //clear the old stuff. a new data set is going to be created now.
+	int NX=set->numbers[0];
+
+	QProgressDialog progress( i18n("Creating function ..."), i18n("Cancel"), 0, NX, this );
+	progress.setMinimumDuration(2000);
+	progress.setWindowModality(Qt::WindowModal);
+	bool nanvalue;
+	double x, y;
+// 	char* function= set->functionName().toLatin1().data();
+	if (plotType == PLOT2D || plotType == PLOTPOLAR){
+		kDebug()<<"	\"2d\" or \" polar \" selected"<<endl;
+		double xmin = parse( QString::number(set->ranges[0].min()).toLatin1().data() );
+		double xmax = parse( QString::number(set->ranges[0].max()).toLatin1().data() );
+		double ymin=0, ymax=1;
+
+		kDebug()<<"xmi="<<xmin<<"	xma="<<xmax<<endl;
+		kDebug()<<"NX="<<NX<<endl;
+		kDebug()<<"	parsing "<<set->functionName()<<endl;
+
+		init_table();
+		for(int i = 0;i < NX;i++) {
+			if(i%100 == 0) progress.setValue( i );
+    			qApp->processEvents();
+
+			x = (xmax-xmin)*i/(double)(NX-1)+xmin;
+			char var[]="x";
+			assign_variable(var,x);
+#ifdef HAVE_GSL
+			gsl_set_error_handler_off();
+#endif
+   			y = parse( (char *) set->functionName().toLatin1().data() );
+//   			y = parse(function);
+
+			if(parse_errors()>0) {
+				progress.cancel();
+				KMessageBox::error(this, i18n("Parse Error!\n Please check the given function."));
+				delete_table();
+				return 1;
+			}
+
+			nanvalue=false;
+			if (!finite(x))	{ x=0; nanvalue=true; }
+			if (!finite(y))	{ y=0; nanvalue=true; }
+
+			if (i == 0) ymin=ymax=y;
+			y<ymin?ymin=y:0;
+			y>ymax?ymax=y:0;
+
+			Point point(x, y);
+			if(nanvalue)
+				point.setMasked();
+
+			if ( progress.wasCanceled() ) {
+				delete_table();
+				return 1;
+			}
+
+			set->data<<point;
+// 			kDebug()<<"Point created:   x="<<point.x()<<",	 y="<<point.y()<<endl;
+		}
+		delete_table();
+
+		if(ymax-ymin == 0) {
+			ymin -= 1;
+			ymax += 1;
+		}
+
+		if(plotType == PLOTPOLAR) {
+			xmin = 0;
+			xmax = 2*M_PI;
+		}
+
+		set->ranges.clear();
+ 		set->ranges<<Range(xmin, xmax);
+ 		set->ranges<< Range(ymin, ymax);
+		kDebug()<<"	\"2D\" or \" polar \" data set created"<<endl;
+	}else if( plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D ){
+ 		int NY = set->numbers[1];
+
+		kDebug()<<"	\"surface\" or \" qwt 3d \" selected"<<endl;
+		kDebug()<<"	NX = "<<NX<<"/ NY = "<<NY<<endl;
+		kDebug()<<"	parsing "<<set->functionName()<<endl;
+
+		double xmin = parse( QString::number(set->ranges[0].min()).toLatin1().data() );
+		double xmax = parse( QString::number(set->ranges[0].max()).toLatin1().data() );
+		double ymin = parse( QString::number(set->ranges[1].min()).toLatin1().data() );
+		double ymax = parse( QString::number(set->ranges[1].max()).toLatin1().data() );
+		double zmin=0,  zmax=1;
+
+		init_table();
+		double z;
+		for (int i=0;i<NY;i++) {
+			if(i%10==0)
+				progress.setValue( i );
+
+    		qApp->processEvents();
+			y = (ymax-ymin)*i/(double)(NY-1)+ymin;
+			char var[]="y";
+			assign_variable(var, y);
+
+			for (int j=0;j<NX;j++) {
+				x = (xmax-xmin)*j/(double)(NX-1)+xmin;
+ 				var[0]='x';
+				assign_variable(var, x);
+#ifdef HAVE_GSL
+			gsl_set_error_handler_off();
+#endif
+				z = parse( (char *) set->functionName().toLatin1().data() );
+				if(parse_errors()>0) {
+					progress.cancel();
+					KMessageBox::error(this, i18n("Parse Error!\n Please check the given function."));
+					delete_table();
+					return 1;
+				}
+
+				nanvalue=false;
+				if (!finite(z)){
+					z=0;
+					nanvalue=true;
+				}
+
+				if (i == 0 && j == 0) {
+					zmin=z;
+					zmax=z;
+				}
+
+				z<zmin?zmin=z:0;
+				z>zmax?zmax=z:0;
+
+				Point3D point(x, y, z);
+				if(nanvalue)
+					point.setMasked();
+
+				if ( progress.wasCanceled() ) {
+					delete_table();
+					return 1;
+				}
+ 				set->data<<point;
+				kDebug()<<"Point created:   x="<<x<<",	 y="<<y<<",	 z="<<z<<endl;
+			}
+		}
+		delete_table();
+
+		if(zmax-zmin == 0) {
+			zmin -= 1;
+			zmax += 1;
+		}
+
+		set->ranges.clear();
+ 		set->ranges<<Range(xmin,xmax);
+ 		set->ranges<< Range(ymin,ymax);
+		set->ranges<< Range(zmin,zmax);
+		kDebug()<<"	\"3D\"  data set created"<<endl;
+	}
+}
 
 //**********************************************************
 //****************** SLOTS ********************************
