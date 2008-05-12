@@ -71,17 +71,14 @@ FunctionPlotWidget::~FunctionPlotWidget(){
 	Depending on the current type adjusts the appearance of the widget.
 */
 void FunctionPlotWidget::setPlotType(const PlotType& type){
-	//TODO
-
 	//"Plotstyle"-tab
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabPlotStyle);
-	if (type==PLOTSURFACE){
-		plotSurfaceStyleWidget=new PlotSurfaceStyleWidget(ui.tabPlotStyle);
-		hboxLayout->addWidget(plotSurfaceStyleWidget);
-	}else{
+	if (type==PLOTSURFACE)
+		plotStyleWidget=new PlotSurfaceStyleWidget(ui.tabPlotStyle);
+	else
 		plotStyleWidget=new PlotStyleWidget(ui.tabPlotStyle);
-		hboxLayout->addWidget(plotStyleWidget);
-	}
+
+	hboxLayout->addWidget( dynamic_cast<QWidget*>(plotStyleWidget) );
 	//TODO what about  3D-QWT-functions
 
 	if (type == PLOT2D || type == PLOTPOLAR){
@@ -119,11 +116,8 @@ void FunctionPlotWidget::setSet(Set* set){
 	}
 
 	labelWidget->setLabel(set->label());
+	plotStyleWidget->setStyle(set->style());
 
-	if (plotType==PLOTSURFACE)
-		plotStyleWidget->setStyle(set->style());
-	else
-		plotSurfaceStyleWidget->setStyle(set->style());
 
 	//TODO "Tick labels"
 
@@ -194,11 +188,7 @@ void FunctionPlotWidget::saveSet(Set* set){//TODO add const
 	}
 
 	labelWidget->saveLabel(set->label());
-
-	if (plotType==PLOTSURFACE)
-		plotStyleWidget->saveStyle(set->style());
-	else
-		plotSurfaceStyleWidget->saveStyle(set->style());
+	plotStyleWidget->saveStyle(set->style());
 
 	//TODO "Tick labels"
 
@@ -216,7 +206,6 @@ int FunctionPlotWidget::createSetData(Set* set) {
 	progress.setWindowModality(Qt::WindowModal);
 	bool nanvalue;
 	double x, y;
-// 	char* function= set->functionName().toLatin1().data();
 	if (plotType == PLOT2D || plotType == PLOTPOLAR){
 		kDebug()<<"	\"2d\" or \" polar \" selected"<<endl;
 		double xmin = parse( QString::number(set->ranges[0].min()).toLatin1().data() );
@@ -239,7 +228,6 @@ int FunctionPlotWidget::createSetData(Set* set) {
 			gsl_set_error_handler_off();
 #endif
    			y = parse( (char *) set->functionName().toLatin1().data() );
-//   			y = parse(function);
 
 			if(parse_errors()>0) {
 				progress.cancel();

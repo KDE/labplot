@@ -6,8 +6,7 @@
 
 class Set;
 class LabelWidget;
-class PlotStyleWidget;
-class PlotSurfaceStyleWidget;
+class PlotStyleWidgetInterface;
 class QMdiSubWindow;
 
 /**
@@ -28,8 +27,7 @@ public:
 private:
 	Ui::FunctionPlotWidget ui;
 	LabelWidget* labelWidget;
-	PlotStyleWidget* plotStyleWidget;
-	PlotSurfaceStyleWidget* plotSurfaceStyleWidget;
+	PlotStyleWidgetInterface* plotStyleWidget;
 	PlotType plotType;
 
 	int createSetData(Set* set);

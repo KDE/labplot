@@ -5,17 +5,24 @@
 
 class Style;
 
+class PlotStyleWidgetInterface{
+public:
+	virtual void setStyle(const Style* )=0;
+	virtual void saveStyle(Style*) const=0;
+	virtual ~PlotStyleWidgetInterface(){}
+};
+
+
 /**
  * @brief Represents the widget where all the style setting of a plot can be modified.
  * This widget is embedded in \c FunctionWidget.
  */
-class PlotStyleWidget : public QWidget{
+class PlotStyleWidget : public QWidget, public PlotStyleWidgetInterface{
     Q_OBJECT
 
 public:
     PlotStyleWidget(QWidget*);
     ~PlotStyleWidget();
-
 	void setStyle(const Style* );
 	void saveStyle(Style*) const;
 

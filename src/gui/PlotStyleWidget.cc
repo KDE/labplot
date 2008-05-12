@@ -3,7 +3,7 @@
 #include "../elements/Symbol.h"
 #include <KDebug>
 
-PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent){
+PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent), PlotStyleWidgetInterface(){
 
 	ui.setupUi(this);
 
@@ -11,6 +11,7 @@ PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent){
 	stylelist<<i18n("Lines")<<i18n("NoCurve")<<i18n("Steps")<<i18n("Boxes")<<i18n("Impulses")<<i18n("Y Boxes");
 	ui.cbLineType->insertItems(-1, stylelist);
 
+	//TODO read out and set the default settings
 	ui.kcbLineColor->setColor(Qt::black);
 	this->fillLineStyleBox();
 	ui.cbLineStyle->setCurrentIndex(0);
@@ -47,11 +48,14 @@ PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent){
 PlotStyleWidget::~PlotStyleWidget(){}
 
 void PlotStyleWidget::setStyle(const Style* style){
-
+	ui.cbLineType->setCurrentIndex(style->type());
+	//TODO
 }
 
 void PlotStyleWidget::saveStyle(Style* style) const{
-
+ 	style->setType( (StyleType)ui.cbLineType->currentIndex() );
+// 	style->setLineStyle(
+	//TODO
 }
 
 /*!
@@ -270,103 +274,3 @@ void PlotStyleWidget::boxWidthStateChanged(int state){
 	else
 		ui.sbBoxWidth->setEnabled(true);
 }
-
-
-//TODO old code. Check whether everything, was taken over and remove the old stuff.
-/*
-QVBox* Dialog::simpleStyle(QTabWidget *tw, Style *style, Symbol *symbol) {
-
-
-	cb2->setCurrentItem(style==0?config->readNumEntry("Graph Style",0):style->Type());
-	sortpointscb = new QCheckBox(i18n("sort points"),hb);
-	sortpointscb->setChecked(style==0?config->readBoolEntry("Sort Points",true):style->PointsSortingEnabled());
-
-	hb = new QHBox(stylegb);
-	new QLabel(i18n(" Box width : "),hb);
-	boxwidth = new KIntNumInput(style==0?config->readNumEntry("Box Width",10):style->BoxWidth(),hb);
-	boxwidth->setRange(1,1000,1,false);
-	autobox = new QCheckBox(i18n("auto box width"),hb);
-	autobox->setChecked(style==0?config->readBoolEntry("Auto Box Width",false):style->AutoBoxWidth());
-
-	hb = new QHBox(stylegb);
-	new QLabel(i18n("   Color : "),hb);
-	color = new KColorButton(style==0?config->readColorEntry("Style Color",&Qt::blue):style->Color(),hb);
-	QObject::connect(color,SIGNAL(changed(const QColor &)),this,SLOT(styleChanged()));
-	hb = new QHBox(stylegb);
-	new QLabel(i18n(" Line Width : "),hb);
-	width = new KIntNumInput(style==0?config->readNumEntry("Style Width",1):style->Width(),hb);
-	width->setMinValue(0);
-	new QLabel(i18n(" Style : "),hb);
-	pencb = new KComboBox(hb);
-	pencb->clear();
-	for (int i=0;i<6;i++) {
-		QPainter pa;
-		QPixmap pm( 50, 30 );
-		pm.fill(Qt::white);
-		pa.begin( &pm );
-
-		pa.setPen((PenStyle)i);
-		pa.drawLine(5,15,45,15);
-		pa.end();
-
-		pencb->insertItem(pm);
-	}
-	pencb->setCurrentItem(style==0?config->readNumEntry("Pen Style",1):style->PenStyle());
-
-	hb = new QHBox(stylegb);
-	filled = new QCheckBox(i18n("Filled "),hb);
-	filled->setChecked(style==0?config->readBoolEntry("Filled",false):style->isFilled());
-	fcolor = new KColorButton(style==0?config->readColorEntry("Fill Color",&Qt::green):style->FillColor(),hb);
-	QObject::connect(fcolor,SIGNAL(changed(const QColor &)),this,SLOT(styleChanged()));
-
-	hb = new QHBox(stylegb);
-	new QLabel(i18n("    Brush : "),hb);
-	brushcb = new KComboBox(hb);
-	fillBrushBox(brushcb,SRECT,Qt::blue,FFULL,fcolor->color());
-	brushcb->setCurrentItem(style==0?config->readNumEntry("Brush",0):style->Brush());
-
-	// read Symbol values from config or from symbol if defined
-	SType stype = (SType) (symbol==0?config->readNumEntry("Symbol Type",SNONE):symbol->Type());
-	QColor sycolor = (symbol==0?config->readColorEntry("Symbol Color",&Qt::blue):symbol->Color());
-	FType sfill = (FType) (symbol==0?config->readNumEntry("Symbol Fill",FNONE):symbol->Fill());
-	QColor syfillcolor = (symbol==0?config->readColorEntry("Symbol Fill Color",&Qt::red):symbol->FillColor());
-	int sysize = (symbol==0?config->readNumEntry("Symbol Size",5):symbol->Size());
-	int sbrush = (symbol==0?config->readNumEntry("Symbol Brush",1):symbol->Brush());
-
-	QGroupBox *symbolgb = new QGroupBox(1,QGroupBox::Horizontal,i18n("Symbol"),styletab);
-	hb = new QHBox(symbolgb);
-	new QLabel(i18n(" Type : "),hb);
-	symbolcb = new KComboBox(hb);
-	fillSymbolBox(sycolor,sfill,syfillcolor,sbrush);
-	symbolcb->setCurrentItem(stype);
-	QObject::connect(symbolcb,SIGNAL(activated(int)),this,SLOT(symbolChanged()));
-	scolor = new KColorButton(sycolor,hb);
-	QObject::connect(scolor,SIGNAL(changed(const QColor &)),this,SLOT(symbolChanged()));
-
-	hb = new QHBox(symbolgb);
-	new QLabel(i18n("    Size : "),hb);
-	ssize = new KIntNumInput(sysize,hb);
-	ssize->setRange(1,30);
-
-	hb = new QHBox(symbolgb);
-	new QLabel(i18n("    Fill : "),hb);
-	symbolfillcb = new KComboBox(hb);
-	fillSymbolFillBox(stype,sycolor,syfillcolor,sbrush);
-	symbolfillcb->setCurrentItem(sfill);
-	QObject::connect(symbolfillcb,SIGNAL(activated(int)),this,SLOT(symbolChanged()));
-
-	// needed ???
-	ssize->setValue(sysize);
-	sfcolor = new KColorButton(syfillcolor,hb);
-	QObject::connect(sfcolor,SIGNAL(changed(const QColor &)),this,SLOT(symbolChanged()));
-
-	hb = new QHBox(symbolgb);
-	new QLabel(i18n("    Brush : "),hb);
-	sbrushcb = new KComboBox(hb);
-	fillBrushBox(sbrushcb,stype,sycolor,sfill,syfillcolor);
-	sbrushcb->setCurrentItem(sbrush);
-	QObject::connect(sbrushcb,SIGNAL(activated(int)),this,SLOT(symbolChanged()));
-
-	return styletab;
-}
-*/

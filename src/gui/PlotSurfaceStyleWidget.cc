@@ -1,11 +1,12 @@
 #include "ColorMapPreview.h"
 #include "PlotSurfaceStyleWidget.h"
 #include "../elements/Symbol.h"
+#include "../elements/Style.h"
 
 #include <KFileDialog>
 #include <KDebug>
 
-PlotSurfaceStyleWidget::PlotSurfaceStyleWidget(QWidget* parent):QWidget(parent){
+PlotSurfaceStyleWidget::PlotSurfaceStyleWidget(QWidget* parent):QWidget(parent), PlotStyleWidgetInterface(){
 
 	ui.setupUi(this);
 
@@ -16,11 +17,13 @@ PlotSurfaceStyleWidget::PlotSurfaceStyleWidget(QWidget* parent):QWidget(parent){
 PlotSurfaceStyleWidget::~PlotSurfaceStyleWidget(){}
 
 void PlotSurfaceStyleWidget::setStyle(const Style* style){
-
+	ui.kcbAreaFillingColor->setColor(style->color());
+	//TODO
 }
 
 void PlotSurfaceStyleWidget::saveStyle(Style* style) const{
-
+	style->setColor(ui.kcbAreaFillingColor->color());
+	//TODO
 }
 
 //**********************************************************
