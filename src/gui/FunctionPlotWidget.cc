@@ -9,6 +9,7 @@
 #include <QProgressDialog>
 #include <KDebug>
 #include <KMessageBox>
+#include <cmath>
 
 #ifdef HAVE_GSL
 #include <gsl/gsl_errno.h>
@@ -350,6 +351,8 @@ int FunctionPlotWidget::createSetData(Set* set) {
 		set->ranges<< Range(zmin,zmax);
 		kDebug()<<"	\"3D\"  data set created"<<endl;
 	}
+
+	return 0;
 }
 
 //**********************************************************

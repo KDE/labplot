@@ -14,9 +14,7 @@ Label::Label(QString text){
 }
 /*
 Label::Label(QString t, QFont f, QColor c) {
-	text = t;
 	font = f;
-	color = c;
 	bgcolor = Qt::white;
 	x = y = 0;
 	boxed = false;

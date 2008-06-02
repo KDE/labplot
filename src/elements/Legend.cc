@@ -1,9 +1,9 @@
 //LabPlot: Legend.cc
 
-#include <math.h>
+#include <cmath>
 #include <iostream>
-#include <qbrush.h>
-#include <qcolor.h>
+#include <QBrush>
+#include <QColor>
 #include "Legend.h"
 
 /*

@@ -3,7 +3,7 @@
 #include <KDebug>
 #include <QPainter>
 //#include <QPointArray>
-#include <math.h>
+#include <cmath>
 #include "Plot2DSimple.h"
 #include "elements/Set.h"
 #include "elements/Axis.h"

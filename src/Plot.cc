@@ -7,7 +7,7 @@
 #include <QDateTime>
 #include <QPainter>
 
-#include <math.h>
+#include <cmath>
 
 Plot::Plot(){
 	kDebug()<<"Plot::Plot()"<<endl;

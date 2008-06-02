@@ -527,3 +527,4 @@ void Spreadsheet::editFunction(){
 	if (dlg->exec())
 		this->displaySet(); //TODO trigger update only if data set was changed
 }
+

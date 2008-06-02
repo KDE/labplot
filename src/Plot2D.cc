@@ -1,6 +1,6 @@
 // LabPlot : Plot2D.cc
 
-#include <math.h>
+#include <cmath>
 #include <KDebug>
 #include <KLocale>
 #include <QPainter>
@@ -1072,35 +1072,36 @@ void Plot2D::drawAxesTicks(QPainter *p, int w, int h, int k) {
 
 void Plot2D::drawAxes(QPainter *p,int w, int h) {
 	kDebug()<<"Plot2D::drawAxes()"<<endl;
-	//TODO !!!!!!!!!!!
-	/*
-	const int unit = (int)(5*size.X());
-	const int numunit = (int)(40*size.X()), numunit2 = (int)(20*size.X());
+	
+	const int unit = (int)(5*size.x());
+	const int numunit = (int)(40*size.x()), numunit2 = (int)(20*size.x());
 
-	int xmin = (int)(w*(size.X()*p1.X()+position.X()));
-	int xmax = (int)(w*(size.X()*p2.X()+position.X()));
-	int ymin = (int)(h*(size.Y()*p1.Y()+position.Y()));
-	int ymax = (int)(h*(size.Y()*p2.Y()+position.Y()));
+	int xmin = (int)(w*(size.x()*p1.x()+position.x()));
+	int xmax = (int)(w*(size.x()*p2.x()+position.x()));
+	int ymin = (int)(h*(size.y()*p1.y()+position.y()));
+	int ymax = (int)(h*(size.y()*p2.y()+position.y()));
 //	kDebug()<<"	xmin/xmax ymin/ymax : "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
 //	kDebug()<<"	width/height : "<<w<<'/'<<h<<endl;
 
 	// axes label
+	//TODO !!!!!!!!!!!
+	/*
 	kDebug()<<"	drawing axis label"<<endl;
-	Label *label = axis[3]->getLabel();	// x2
+	Label *label = axis[3]->label();	// x2
 	if (label->X()==0 && label->Y()==0)	// default
 		label->setPosition((xmin+(xmax-xmin)/2)/(double)w,
 			(ymin-(unit+3*numunit2)*axis[3]->MajorTicksEnabled()-2*unit)/(double)h);
 	if (axis[3]->Enabled())
 		label->draw(p,position,size,w,h,0);
 
-	label = axis[0]->getLabel();		// x
+	label = axis[0]->label();		// x
 	if (label->X()==0 && label->Y()==0)	// default
 		label->setPosition((xmin+(xmax-xmin)/2)/(double)w,
 			(ymax+(unit+numunit2)*axis[0]->MajorTicksEnabled())/(double)h);
 	if (axis[0]->Enabled())
 		label->draw(p,position,size,w,h,0);
 
-	label = axis[1]->getLabel();		// y
+	label = axis[1]->label();		// y
 	if (label->X()==0 && label->Y()==0)	// default
 		label->setPosition(0.01, (ymin+(ymax-ymin)/2)/(double)h);
 	if (axis[1]->Enabled()) {
@@ -1109,7 +1110,7 @@ void Plot2D::drawAxes(QPainter *p,int w, int h) {
 		p->restore();
 	}
 
-	label = axis[2]->getLabel();		// y2
+	label = axis[2]->label();		// y2
 	if (label->X()==0 && label->Y()==0)	// default
 		label->setPosition((xmax+(2*unit+numunit)*axis[2]->MajorTicksEnabled())/(double)w,
 			(ymin+(ymax-ymin)/2)/(double)h);
@@ -1118,11 +1119,12 @@ void Plot2D::drawAxes(QPainter *p,int w, int h) {
 		label->draw(p,position,size,w,h,270);
 		p->restore();
 	}
+	*/
 
 	// axes tics and grid
 	for (int i=0;i<axis.size();i++)
 		drawAxesTicks(p, w, h, i);
-	*/
+
 	kDebug()<<"Plot2D::drawAxes() DONE"<<endl;
 }
 /*

@@ -29,7 +29,7 @@ BUGS:
 	Import dialog : not resized if options hidden
 	Import dialog : file info with nonexisting file hangs in KMessageBox::sorry()
 	Import dialog : compressed data shows no progress
-	Spreadsheet : column selection doesn't work when is CTRL pressed (extended selection)
+	Spreadsheet : column selection doesn't work when CTRL is pressed (extended selection)
 	Spreadsheet : crashes when adding a column in an empty spreadsheet
 	config settings not always used ? (function dialog)
 	message boxes sometimes hang the application

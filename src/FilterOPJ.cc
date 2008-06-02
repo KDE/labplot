@@ -1,11 +1,10 @@
 //LabPlot : FilterOPJ.cc
 
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <kdebug.h>
+#include <QString>
+#include <QRegExp>
+#include <KDebug>
 #include "FilterOPJ.h"
 
 #include <OPJFile.h>

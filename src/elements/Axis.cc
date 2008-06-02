@@ -6,42 +6,41 @@
 //! general axis class
 Axis::Axis() {
 	kDebug()<<"Axis()"<<endl;
-	/*
-	label = new Label();
-	scale = LINEAR;
-	position = 0;
-	scaling=1;
-	shift=0;
-	enabled = true;
-	ticktype = 1;
-	ticklabelrotation = 0;
-	ticklabelprefix = QString("");
-	ticklabelsuffix = QString("");
-	tickfont = QFont(QString("Adobe Times"),12);
-	tickcolor = QColor("black");
-	ticklabelcolor = QColor("black");
-	bordercolor = QColor("black");
-	minorgridcolor = QColor("black");
-	majorgridcolor = QColor("black");
-	majorticks = -1;		// default ("auto")
-	minorticks = 3;
-	majorticks_enabled = true;
-	minorticks_enabled = true;
-	ticklabel_enabled = true;
-	ticklabelformat = AUTO;
-	datetimeformat = "auto";
-	ticklabelprecision = 3;
-	tickposition = 0;
-	gap = 15;
-	majorgridtype = Qt::DashLine;
-	minorgridtype = Qt::DotLine;
-	majortickwidth = minortickwidth = 1;
-	borderwidth = 1;
-	majorgridwidth = minorgridwidth = 1;
-	border_enabled = true;
-	majorgrid_enabled = false;
-	minorgrid_enabled = false;
-	*/
+
+//	m_label = new Label();
+	m_scaleType = SCALETYPE_LINEAR;
+	m_position = 0;
+	m_scaleFactor = 1;
+	m_offset = 0;
+	m_enabled = true;
+	m_ticksType = 1;
+	m_labelsRotation = 0;
+	m_labelsPrefix = QString("");
+	m_labelsSuffix = QString("");
+	m_labelsFont = QFont(QString("Adobe Times"),12);
+	m_ticksColor = QColor("black");
+	m_labelsColor = QColor("black");
+	m_borderColor = QColor("black");
+	m_minorGridColor = QColor("black");
+	m_majorGridColor = QColor("black");
+	m_majorTicksNumber = -1;		// default ("auto")
+	m_minorTicksNumber = 3;
+	m_majorTicksEnabled = true;
+	m_minorTicksEnabled = true;
+	m_labelsEnabled = true;
+	m_labelsFormat = LABELSFORMAT_AUTO;
+	m_labelsDateFormat = "auto";
+	m_labelsPrecision = 3;
+	m_ticksPosition = TICKSPOSITION_IN;
+//	m_gap = 15;
+	m_majorGridStyle = Qt::DashLine;
+	m_minorGridStyle = Qt::DotLine;
+	m_majorTicksWidth = m_minorTicksWidth = 1;
+	m_borderWidth = 1;
+	m_majorGridWidth = m_minorGridWidth = 1;
+	m_borderEnabled = true;
+	m_majorGridEnabled = false;
+	m_minorGridEnabled = false;
 }
 
 /*void Axis::setLabel(Label *l) {
