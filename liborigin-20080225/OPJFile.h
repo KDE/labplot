@@ -756,7 +756,7 @@ private:
 	void skipObjectInfo(FILE *fopj, FILE *fdebug);
 	void setColName(int spread);		//!< set default column name starting from spreadsheet spread
 	void convertSpreadToExcel(int spread);
-	const char* filename;			//!< project file name
+	string filename;			//!< project file name
 	int version;				//!< project version
 	int dataIndex;
 	int objectIndex;

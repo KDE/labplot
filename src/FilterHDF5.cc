@@ -1,10 +1,12 @@
 //LabPlot : FilterHDF5.cc
 
-#include <stdlib.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <cstdlib>
+#include <KLocale>
+#include <KDebug>
 
 #include "FilterHDF5.h"
+
+using namespace std;
 
 #ifdef HAVE_HDF5
 int numgroups=0, numsets=0, numattr=0;
@@ -17,50 +19,50 @@ vector <QString> sets;
 vector <QString> attributes;
 vector < vector <QString> > setattributes;
 
-int FilterHDF5::numSets() {
+int FilterHDF5::numSets() const {
 	return numsets;
 }
 
-int FilterHDF5::numGroups() {
+int FilterHDF5::numGroups() const{
 	return numgroups;
 }
 
-int FilterHDF5::numAttributes() {
+int FilterHDF5::numAttributes() const{
 	return attributes.size();
 }
 
-int FilterHDF5::numSetAttributes(int set) {
+int FilterHDF5::numSetAttributes(int set) const{
 	return setattributes[set].size();
 }
 
-QString FilterHDF5::groupName(int set) {
+QString FilterHDF5::groupName(int set) const{
 	return groups[set];
 }
 
-QString FilterHDF5::datasetName(int set) {
+QString FilterHDF5::datasetName(int set) const{
 	return sets[set];
 }
 
-QString FilterHDF5::columnName(int set, int col) {
+QString FilterHDF5::columnName(int set, int col) const{
 	return columnname[set][col];
 }
 
-QString FilterHDF5::getAttribute(int i) {
+QString FilterHDF5::getAttribute(int i) const{
 	if(i>numAttributes())
 		return 0;
 	return attributes[i];
 }
 
-QString FilterHDF5::getSetAttribute(int set, int i) {
+QString FilterHDF5::getSetAttribute(int set, int i) const{
 	if(i>numSetAttributes(set))
 		return 0;
 	return setattributes[set][i];
 }
 
-double FilterHDF5::Data(int set, int row, int col) { return data[set][row][col]; }
+double FilterHDF5::Data(int set, int row, int col) const { return data[set][row][col]; }
 
-int FilterHDF5::Rows(int s) { return dim[s].size(); }
-int FilterHDF5::Cols(int s) {
+int FilterHDF5::Rows(int s) const { return dim[s].size(); }
+int FilterHDF5::Cols(int s) const{
 	// sanity check
 	if(dim[s][0]>100000)
 		return 100000;

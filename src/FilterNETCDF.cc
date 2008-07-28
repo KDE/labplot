@@ -25,7 +25,7 @@ FilterNETCDF::FilterNETCDF(QString fn)
 
 #ifdef HAVE_NETCDF
 //! return type name
-QString FilterNETCDF::typeName(nc_type type) {
+QString FilterNETCDF::typeName(nc_type type) const{
     switch (type) {
       case NC_BYTE:
 	return i18n("byte");
@@ -44,7 +44,7 @@ QString FilterNETCDF::typeName(nc_type type) {
     }
 }
 
-QString FilterNETCDF::Dim(int dimid) {
+QString FilterNETCDF::Dim(int dimid) const{
 	if (dimid == xdimid)
 		return (QString(dims[dimid].name)+QString(" = ")+i18n("UNLIMITED")+QString(" (")+
 				QString::number(dims[dimid].size)+QString(")"));
@@ -74,7 +74,7 @@ QString FilterNETCDF::Var(int varid) {
 	return line;
 }
 
-QString FilterNETCDF::VarName(int varid) {
+QString FilterNETCDF::VarName(int varid) const{
 	ncvar var;
 
 	nc_inq_var(ncid, varid, var.name, &var.type, &var.ndims, var.dims, &var.natts);
@@ -82,7 +82,7 @@ QString FilterNETCDF::VarName(int varid) {
 }
 
 //! return length of variable var
-int FilterNETCDF::VarLen(QString name) {
+int FilterNETCDF::VarLen(QString name) const{
 	ncvar var;
 	int varid;
 
@@ -104,7 +104,7 @@ int FilterNETCDF::VarLen(QString name) {
 	return 0;
 }
 
-QStringList FilterNETCDF::DataString(int varid){
+QStringList FilterNETCDF::DataString(int varid) const{
 	QString line;
 	QStringList list;
 	double *data;
@@ -147,7 +147,7 @@ QStringList FilterNETCDF::DataString(int varid){
 	return list;
 }
 
-double FilterNETCDF::Data(QString name, const size_t index) {
+double FilterNETCDF::Data(QString name, const size_t index) const{
 	ncvar var;
 	int varid;
 

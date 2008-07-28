@@ -59,9 +59,8 @@ void OPJFile::ByteSwap(unsigned char * b, int n) {
 	}
 }
 
-OPJFile::OPJFile(const char *filename)
-	: filename(filename)
-{
+OPJFile::OPJFile(const char *fn) {
+	filename = string(fn);
 	version=0;
 	dataIndex=0;
 	objectIndex=0;
@@ -214,8 +213,9 @@ filepre +
 /* parse file "filename" completely and save values */
 int OPJFile::Parse() {
 	FILE *f;
-	if((f=fopen(filename,"rb")) == NULL ) {
-		printf("Could not open %s!\n",filename);
+	printf("FILENAME=%s\n",filename.c_str());
+	if((f=fopen(filename.c_str(),"rb")) == NULL ) {
+		printf("Could not open %s!\n",filename.c_str());
 		return -1;
 	}
 
@@ -238,8 +238,8 @@ int OPJFile::Parse() {
 int OPJFile::ParseFormatOld() {
 	int i;
 	FILE *f, *debug;
-	if((f=fopen(filename,"rb")) == NULL ) {
-		printf("Could not open %s!\n",filename);
+	if((f=fopen(filename.c_str(),"rb")) == NULL ) {
+		printf("Could not open %s!\n",filename.c_str());
 		return -1;
 	}
 
@@ -669,8 +669,8 @@ int OPJFile::ParseFormatOld() {
 int OPJFile::ParseFormatNew() {
 	int i;
 	FILE *f, *debug;
-	if((f=fopen(filename,"rb")) == NULL ) {
-		printf("Could not open %s!\n",filename);
+	if((f=fopen(filename.c_str(),"rb")) == NULL ) {
+		printf("Could not open %s!\n",filename.c_str());
 		return -1;
 	}
 

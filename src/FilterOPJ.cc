@@ -17,7 +17,7 @@ int FilterOPJ::import() {
 	kDebug()<<"FilterOPJ::import() : "<<filename<<endl;
 
 	OPJFile opj(qPrintable(filename));
-	qPrintable(filename);	// needed for some reason
+	//qPrintable(filename);	// needed for some reason
 	kDebug()<<"	Parsing OPJ file "<<filename<<" ..."<<endl;
 	int status = opj.Parse();
 	kDebug()<<"	Parsing OPJ file DONE. status = "<<status<<endl;

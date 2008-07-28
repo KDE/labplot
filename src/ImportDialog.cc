@@ -342,7 +342,7 @@ int ImportDialog::importHDF5(QString filename, Spreadsheet *s) {
 	QString notes;
 	if(hdf5.numAttributes()>0) {
 		project = mw->getProject();
-		notes = project->Notes();
+		notes = project->notes();
 	}
 	for (int i=0;i<hdf5.numAttributes();i++) {
 		notes.append(hdf5.getAttribute(i)+"\n");
@@ -381,7 +381,7 @@ int ImportDialog::importHDF5(QString filename, Spreadsheet *s) {
 			s->setColumnName(col,colname);
 
 		 	for ( int j=0; j<rows; j++ )
-				s->setText(j,col);
+				s->setText(j,col,QString::number(hdf5.Data(i,j,col)));
 		}
 	}
 

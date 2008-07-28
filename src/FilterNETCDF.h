@@ -46,9 +46,9 @@ public:
 	int NAtts() const { return natts; }
 	int DimId() const { return xdimid; }
 	QString Dim(int dimid) const;				// get dimension dimid
-	QString Var(int varid) const;					// get variable varid description
+	QString Var(int varid);					// get variable varid description
 	QString VarName(int varid) const;			// get variable varid name
-	QString Att(int aid) const { return pr_att(ncid, NC_GLOBAL, "", aid); } // get attribute aid
+	QString Att(int aid) { return pr_att(ncid, NC_GLOBAL, "", aid); } // get attribute aid
 	int VarLen(QString var) const;				// get length of variable var
 	QStringList DataString(int varid) const;		// get variable data as string
 	double Data(QString var,size_t index) const;		// get data for variable var at index
