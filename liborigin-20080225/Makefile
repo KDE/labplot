@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /root/2.0-rv36
+CMAKE_SOURCE_DIR = /root/2.0
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /root/2.0-rv36
+CMAKE_BINARY_DIR = /root/2.0
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -50,7 +50,7 @@ CMAKE_BINARY_DIR = /root/2.0-rv36
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	cd /root/2.0-rv36/liborigin && /usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /root/2.0/liborigin && /usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -60,19 +60,19 @@ edit_cache/fast: edit_cache
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	cd /root/2.0-rv36/liborigin && /usr/bin/cmake -P cmake_install.cmake
+	cd /root/2.0/liborigin && /usr/bin/cmake -P cmake_install.cmake
 .PHONY : install
 
 # Special rule for the target install
 install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	cd /root/2.0-rv36/liborigin && /usr/bin/cmake -P cmake_install.cmake
+	cd /root/2.0/liborigin && /usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	cd /root/2.0-rv36/liborigin && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+	cd /root/2.0/liborigin && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local
 
 # Special rule for the target install/local
@@ -82,7 +82,7 @@ install/local/fast: install/local
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	cd /root/2.0-rv36/liborigin && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	cd /root/2.0/liborigin && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip
 
 # Special rule for the target install/strip
@@ -101,7 +101,7 @@ list_install_components/fast: list_install_components
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	cd /root/2.0-rv36/liborigin && /usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	cd /root/2.0/liborigin && /usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -110,14 +110,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /root/2.0-rv36 && $(CMAKE_COMMAND) -E cmake_progress_start /root/2.0-rv36/CMakeFiles /root/2.0-rv36/liborigin/CMakeFiles/progress.make
-	cd /root/2.0-rv36 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/2.0-rv36/CMakeFiles 0
+	cd /root/2.0 && $(CMAKE_COMMAND) -E cmake_progress_start /root/2.0/CMakeFiles /root/2.0/liborigin/CMakeFiles/progress.make
+	cd /root/2.0 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/2.0/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /root/2.0-rv36 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/clean
+	cd /root/2.0 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/clean
 .PHONY : clean
 
 # The main clean target
@@ -126,22 +126,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /root/2.0-rv36 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/preinstall
+	cd /root/2.0 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /root/2.0-rv36 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/preinstall
+	cd /root/2.0 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /root/2.0-rv36 && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /root/2.0 && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 liborigin/CMakeFiles/opj2dat.dir/rule:
-	cd /root/2.0-rv36 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/CMakeFiles/opj2dat.dir/rule
+	cd /root/2.0 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/CMakeFiles/opj2dat.dir/rule
 .PHONY : liborigin/CMakeFiles/opj2dat.dir/rule
 
 # Convenience name for target.
@@ -150,12 +150,12 @@ opj2dat: liborigin/CMakeFiles/opj2dat.dir/rule
 
 # fast build rule for target.
 opj2dat/fast:
-	cd /root/2.0-rv36 && $(MAKE) -f liborigin/CMakeFiles/opj2dat.dir/build.make liborigin/CMakeFiles/opj2dat.dir/build
+	cd /root/2.0 && $(MAKE) -f liborigin/CMakeFiles/opj2dat.dir/build.make liborigin/CMakeFiles/opj2dat.dir/build
 .PHONY : opj2dat/fast
 
 # Convenience name for target.
 liborigin/CMakeFiles/origin.dir/rule:
-	cd /root/2.0-rv36 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/CMakeFiles/origin.dir/rule
+	cd /root/2.0 && $(MAKE) -f CMakeFiles/Makefile2 liborigin/CMakeFiles/origin.dir/rule
 .PHONY : liborigin/CMakeFiles/origin.dir/rule
 
 # Convenience name for target.
@@ -164,37 +164,37 @@ origin: liborigin/CMakeFiles/origin.dir/rule
 
 # fast build rule for target.
 origin/fast:
-	cd /root/2.0-rv36 && $(MAKE) -f liborigin/CMakeFiles/origin.dir/build.make liborigin/CMakeFiles/origin.dir/build
+	cd /root/2.0 && $(MAKE) -f liborigin/CMakeFiles/origin.dir/build.make liborigin/CMakeFiles/origin.dir/build
 .PHONY : origin/fast
 
 # target to build an object file
 OPJFile.o:
-	cd /root/2.0-rv36 && $(MAKE) -f liborigin/CMakeFiles/origin.dir/build.make liborigin/CMakeFiles/origin.dir/OPJFile.o
+	cd /root/2.0 && $(MAKE) -f liborigin/CMakeFiles/origin.dir/build.make liborigin/CMakeFiles/origin.dir/OPJFile.o
 .PHONY : OPJFile.o
 
 # target to preprocess a source file
 OPJFile.i:
-	cd /root/2.0-rv36 && $(MAKE) -f liborigin/CMakeFiles/origin.dir/build.make liborigin/CMakeFiles/origin.dir/OPJFile.i
+	cd /root/2.0 && $(MAKE) -f liborigin/CMakeFiles/origin.dir/build.make liborigin/CMakeFiles/origin.dir/OPJFile.i
 .PHONY : OPJFile.i
 
 # target to generate assembly for a file
 OPJFile.s:
-	cd /root/2.0-rv36 && $(MAKE) -f liborigin/CMakeFiles/origin.dir/build.make liborigin/CMakeFiles/origin.dir/OPJFile.s
+	cd /root/2.0 && $(MAKE) -f liborigin/CMakeFiles/origin.dir/build.make liborigin/CMakeFiles/origin.dir/OPJFile.s
 .PHONY : OPJFile.s
 
 # target to build an object file
 opj2dat.o:
-	cd /root/2.0-rv36 && $(MAKE) -f liborigin/CMakeFiles/opj2dat.dir/build.make liborigin/CMakeFiles/opj2dat.dir/opj2dat.o
+	cd /root/2.0 && $(MAKE) -f liborigin/CMakeFiles/opj2dat.dir/build.make liborigin/CMakeFiles/opj2dat.dir/opj2dat.o
 .PHONY : opj2dat.o
 
 # target to preprocess a source file
 opj2dat.i:
-	cd /root/2.0-rv36 && $(MAKE) -f liborigin/CMakeFiles/opj2dat.dir/build.make liborigin/CMakeFiles/opj2dat.dir/opj2dat.i
+	cd /root/2.0 && $(MAKE) -f liborigin/CMakeFiles/opj2dat.dir/build.make liborigin/CMakeFiles/opj2dat.dir/opj2dat.i
 .PHONY : opj2dat.i
 
 # target to generate assembly for a file
 opj2dat.s:
-	cd /root/2.0-rv36 && $(MAKE) -f liborigin/CMakeFiles/opj2dat.dir/build.make liborigin/CMakeFiles/opj2dat.dir/opj2dat.s
+	cd /root/2.0 && $(MAKE) -f liborigin/CMakeFiles/opj2dat.dir/build.make liborigin/CMakeFiles/opj2dat.dir/opj2dat.s
 .PHONY : opj2dat.s
 
 # Help Target
@@ -228,6 +228,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /root/2.0-rv36 && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /root/2.0 && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
