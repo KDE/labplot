@@ -4,7 +4,7 @@
 #include "../MainWin.h"
 #include <KDebug>
 
-AxesDialog::AxesDialog(MainWin *mw, const PlotType type) : KDialog(mw){
+AxesDialog::AxesDialog(MainWin *mw, const Plot::PlotType type) : KDialog(mw){
   	kDebug()<<"AxesDialog starting"<<endl;
 	setCaption(i18n("Axes Settings"));
 

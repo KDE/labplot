@@ -5,7 +5,7 @@
 AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 
 	ui.setupUi(this);
-	plotType=PLOT2D;
+	plotType=Plot::PLOT2D;
 
 	//create a LabelWidget in the "Title"-tab
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -71,16 +71,16 @@ AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 	sets the current plot type for the axes to be edited in this widget.
 	Depending on the current type adjusts the appearance of the widget.
 */
-void AxesWidget::setPlotType(const PlotType& type){
+void AxesWidget::setPlotType(const Plot::PlotType& type){
 	QStringList list;
-	if (type == PLOT2D || type == PLOTSURFACE) {
+	if (type == Plot::PLOT2D || type == Plot::PLOTSURFACE) {
 		list<<QString("x")<<QString("y")<<QString("y2")<<QString("x2");
-	}else if (type == PLOT3D || type == PLOTQWT3D){
+	}else if (type == Plot::PLOT3D || type == Plot::PLOTQWT3D){
 		list<<QString("x")<<QString("y")<<QString("z")<<QString("x2")<<QString("x3")<<QString("x4");
 		list<<QString("y4")<<QString("y3")<<QString("y2")<<QString("z2")<<QString("z4")<<QString("z3");
-	}else if (type == PLOTPOLAR) {
+	}else if (type == Plot::PLOTPOLAR) {
 		list<<QString("phi")<<QString("r");
-	}else if (type == PLOTTERNARY || type == PLOTPIE) {
+	}else if (type == Plot::PLOTTERNARY || type == Plot::PLOTPIE) {
 		list<<QString("a");
 	}
 
@@ -88,16 +88,16 @@ void AxesWidget::setPlotType(const PlotType& type){
 	ui.cbAxes->insertItems( -1, list );
 
 	//TODO
-	if(type == PLOTPIE) {
+	if(type == Plot::PLOTPIE) {
 // 		ui.tab2->hide();
 // 		ui.tab3->hide();
 // 		ui.tab5->hide();
-	}else if (type == PLOTPOLAR) {
+	}else if (type == Plot::PLOTPOLAR) {
 // 		minle->setEnabled(false);
 // 		maxle->setEnabled(false);
 	}
 
-	if(type != PLOTQWT3D) {
+	if(type != Plot::PLOTQWT3D) {
 		ui.lMajorTicksLength->hide();
 		ui.sbMajorTicksLength->hide();
 		ui.lMinorTicksLength->hide();

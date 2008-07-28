@@ -4,7 +4,7 @@
 #include <QtGui>
 
 #include "../ui_axeswidget.h"
-#include "../plottype.h"
+#include "../plots/Plot.h"
 #include "../elements/Axis.h"
 
 class LabelWidget;
@@ -23,13 +23,13 @@ public:
 	void setAxesList( const QList<Axis>, const int axisNumber=0);
 	void saveAxesData(QList<Axis>*) const;
 	void apply(QList<Axis>*) const;
-	void setPlotType(const PlotType& );
+	void setPlotType(const Plot::PlotType& );
 
 private:
 	Ui::AxesWidget ui;
 	LabelWidget* labelWidget	;
 	QList<Axis> listAxes;
-	PlotType plotType;
+	Plot::PlotType plotType;
 	int currentAxis;
 	bool dataChanged;
 
