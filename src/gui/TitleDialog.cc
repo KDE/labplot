@@ -5,7 +5,9 @@
 
 TitleDialog::TitleDialog(MainWin *mw, Label *label)	: KDialog(mw){
 
-	setCaption(i18n("Title Dialog"));
+	this->setCaption(i18n("Title Dialog"));
+	this->setWindowIcon( KIcon("draw-text") );
+	mainWin=mw;
 	title=label;
 
 	labelWidget = new LabelWidget(this);
@@ -13,9 +15,9 @@ TitleDialog::TitleDialog(MainWin *mw, Label *label)	: KDialog(mw){
 	this->setMainWidget( labelWidget );
 	this->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply);
 
+	connect( labelWidget, SIGNAL(dataWasChanged(bool)), SLOT(enableButtonApply(bool)) );
 	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
 	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
-	connect( this, SIGNAL( changed( bool ) ), this, SLOT( enableButtonApply( bool ) ) ); //TODO
 
 	this->enableButtonApply( false );
 	resize( QSize(300,400) );
@@ -31,10 +33,11 @@ void TitleDialog::save() {
 void TitleDialog::apply() {
 	labelWidget->saveLabel(title);
 
-	//TODO
-	// mw->update()
-// 	Worksheet *w = mw->activeWorksheet();
-// 	if(w != 0)
-// 		w->repaint();
+	//TODO rewrite/redesign
+	Worksheet *w = mainWin->activeWorksheet();
+	if(w != 0)
+		w->repaint();
+
+	this->enableButtonApply( false );
 	kDebug()<<"Changes applied."<<endl;
 }

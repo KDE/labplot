@@ -24,7 +24,7 @@ extern "C" init arith_fncts[];
 FunctionPlotWidget::FunctionPlotWidget(QWidget* parent):QWidget(parent){
 
 	ui.setupUi(this);
-	plotType=PLOT2D;
+	plotType=Plot::Plot::PLOT2D;
 
 	//Validators
 	ui.leAxis1Start->setValidator( new QDoubleValidator(ui.leAxis1Start) );
@@ -71,10 +71,10 @@ FunctionPlotWidget::~FunctionPlotWidget(){
 	sets the current plot type  in this widget.
 	Depending on the current type adjusts the appearance of the widget.
 */
-void FunctionPlotWidget::setPlotType(const PlotType& type){
+void FunctionPlotWidget::setPlotType(const Plot::PlotType& type){
 	//"Plotstyle"-tab
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabPlotStyle);
-	if (type==PLOTSURFACE)
+	if (type==Plot::PLOTSURFACE)
 		plotStyleWidget=new PlotSurfaceStyleWidget(ui.tabPlotStyle);
 	else
 		plotStyleWidget=new PlotStyleWidget(ui.tabPlotStyle);
@@ -82,12 +82,12 @@ void FunctionPlotWidget::setPlotType(const PlotType& type){
 	hboxLayout->addWidget( dynamic_cast<QWidget*>(plotStyleWidget) );
 	//TODO what about  3D-QWT-functions
 
-	if (type == PLOT2D || type == PLOTPOLAR){
+	if (type == Plot::Plot::PLOT2D || type == Plot::PLOTPOLAR){
 		ui.leFunction->setText( "sin(x)" );
 		ui.leAxis1Start->setText( "0" );
 		ui.leAxis1End->setText( "1" );
 		ui.frameAxis2->hide();
-	}else if (type == PLOT3D || type == PLOTSURFACE || type == PLOTQWT3D){
+	}else if (type == Plot::PLOT3D || type == Plot::PLOTSURFACE || type == Plot::PLOTQWT3D){
 		ui.leFunction->setText( "sin(x+y)" );
 		ui.leAxis1Start->setText( "0" );
 		ui.leAxis1End->setText( "1" );
@@ -106,14 +106,14 @@ void FunctionPlotWidget::setPlotType(const PlotType& type){
 void FunctionPlotWidget::setSet(Set* set){
 	ui.leFunction->setText( set->functionName() );
 
-	ui.leAxis1Start->setText( QString::number(set->ranges.at(0).min()) );
-	ui.leAxis1End->setText( QString::number(set->ranges.at(0).max()) );
-	ui.sbAxis1Number->setValue( set->numbers.at(0) );
+	ui.leAxis1Start->setText( QString::number(set->list_ranges.at(0).min()) );
+	ui.leAxis1End->setText( QString::number(set->list_ranges.at(0).max()) );
+	ui.sbAxis1Number->setValue( set->list_numbers.at(0) );
 
-	if (plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D){
-		ui.leAxis2Start->setText( QString::number(set->ranges.at(2).min()) );
-		ui.leAxis2End->setText( QString::number(set->ranges.at(2).max()) );
-		ui.sbAxis2Number->setValue( set->numbers.at(1) );
+	if (plotType == Plot::PLOT3D || plotType == Plot::PLOTSURFACE || plotType == Plot::PLOTQWT3D){
+		ui.leAxis2Start->setText( QString::number(set->list_ranges.at(2).min()) );
+		ui.leAxis2End->setText( QString::number(set->list_ranges.at(2).max()) );
+		ui.sbAxis2Number->setValue( set->list_numbers.at(1) );
 	}
 
 	labelWidget->setLabel(set->label());
@@ -178,14 +178,14 @@ void FunctionPlotWidget::setSet(Set* set){
 void FunctionPlotWidget::saveSet(Set* set){//TODO add const
 	set->setFunctionName( ui.leFunction->text() );
 
-	set->ranges[0].setMin( ui.leAxis1Start->text().toFloat() );
-	set->ranges[0].setMax( ui.leAxis1End->text().toFloat() );
-	set->numbers[0] = ui.sbAxis1Number->value();
+	set->list_ranges[0].setMin( ui.leAxis1Start->text().toFloat() );
+	set->list_ranges[0].setMax( ui.leAxis1End->text().toFloat() );
+	set->list_numbers[0] = ui.sbAxis1Number->value();
 
-	if (plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D){
-		set->ranges[1].setMin( ui.leAxis2Start->text().toFloat() );
-		set->ranges[1].setMax( ui.leAxis2End->text().toFloat() );
-		set->numbers[1] = ui.sbAxis2Number->value();
+	if (plotType == Plot::PLOT3D || plotType == Plot::PLOTSURFACE || plotType == Plot::PLOTQWT3D){
+		set->list_ranges[1].setMin( ui.leAxis2Start->text().toFloat() );
+		set->list_ranges[1].setMax( ui.leAxis2End->text().toFloat() );
+		set->list_numbers[1] = ui.sbAxis2Number->value();
 	}
 
 	labelWidget->saveLabel(set->label());
@@ -199,18 +199,18 @@ void FunctionPlotWidget::saveSet(Set* set){//TODO add const
 }
 
 int FunctionPlotWidget::createSetData(Set* set) {
-	set->data.clear(); //clear the old stuff. a new data set is going to be created now.
-	int NX=set->numbers[0];
+	set->list_data.clear(); //clear the old stuff. a new data set is going to be created now.
+	int NX=set->list_numbers[0];
 
 	QProgressDialog progress( i18n("Creating function ..."), i18n("Cancel"), 0, NX, this );
 	progress.setMinimumDuration(2000);
 	progress.setWindowModality(Qt::WindowModal);
 	bool nanvalue;
 	double x, y;
-	if (plotType == PLOT2D || plotType == PLOTPOLAR){
+	if (plotType == Plot::PLOT2D || plotType == Plot::PLOTPOLAR){
 		kDebug()<<"	\"2d\" or \" polar \" selected"<<endl;
-		double xmin = parse( QString::number(set->ranges[0].min()).toLatin1().data() );
-		double xmax = parse( QString::number(set->ranges[0].max()).toLatin1().data() );
+		double xmin = parse( QString::number(set->list_ranges[0].min()).toLatin1().data() );
+		double xmax = parse( QString::number(set->list_ranges[0].max()).toLatin1().data() );
 		double ymin=0, ymax=1;
 
 		kDebug()<<"xmi="<<xmin<<"	xma="<<xmax<<endl;
@@ -254,7 +254,7 @@ int FunctionPlotWidget::createSetData(Set* set) {
 				return 1;
 			}
 
-			set->data<<point;
+			set->list_data<<point;
 // 			kDebug()<<"Point created:   x="<<point.x()<<",	 y="<<point.y()<<endl;
 		}
 		delete_table();
@@ -264,26 +264,26 @@ int FunctionPlotWidget::createSetData(Set* set) {
 			ymax += 1;
 		}
 
-		if(plotType == PLOTPOLAR) {
+		if(plotType == Plot::PLOTPOLAR) {
 			xmin = 0;
 			xmax = 2*M_PI;
 		}
 
-		set->ranges.clear();
- 		set->ranges<<Range(xmin, xmax);
- 		set->ranges<< Range(ymin, ymax);
+		set->list_ranges.clear();
+ 		set->list_ranges<<Range(xmin, xmax);
+ 		set->list_ranges<< Range(ymin, ymax);
 		kDebug()<<"	\"2D\" or \" polar \" data set created"<<endl;
-	}else if( plotType == PLOT3D || plotType == PLOTSURFACE || plotType == PLOTQWT3D ){
- 		int NY = set->numbers[1];
+	}else if( plotType == Plot::PLOT3D || plotType == Plot::PLOTSURFACE || plotType == Plot::PLOTQWT3D ){
+ 		int NY = set->list_numbers[1];
 
 		kDebug()<<"	\"surface\" or \" qwt 3d \" selected"<<endl;
 		kDebug()<<"	NX = "<<NX<<"/ NY = "<<NY<<endl;
 		kDebug()<<"	parsing "<<set->functionName()<<endl;
 
-		double xmin = parse( QString::number(set->ranges[0].min()).toLatin1().data() );
-		double xmax = parse( QString::number(set->ranges[0].max()).toLatin1().data() );
-		double ymin = parse( QString::number(set->ranges[1].min()).toLatin1().data() );
-		double ymax = parse( QString::number(set->ranges[1].max()).toLatin1().data() );
+		double xmin = parse( QString::number(set->list_ranges[0].min()).toLatin1().data() );
+		double xmax = parse( QString::number(set->list_ranges[0].max()).toLatin1().data() );
+		double ymin = parse( QString::number(set->list_ranges[1].min()).toLatin1().data() );
+		double ymax = parse( QString::number(set->list_ranges[1].max()).toLatin1().data() );
 		double zmin=0,  zmax=1;
 
 		init_table();
@@ -334,7 +334,7 @@ int FunctionPlotWidget::createSetData(Set* set) {
 					delete_table();
 					return 1;
 				}
- 				set->data<<point;
+ 				set->list_data<<point;
 				kDebug()<<"Point created:   x="<<x<<",	 y="<<y<<",	 z="<<z<<endl;
 			}
 		}
@@ -345,10 +345,10 @@ int FunctionPlotWidget::createSetData(Set* set) {
 			zmax += 1;
 		}
 
-		set->ranges.clear();
- 		set->ranges<<Range(xmin,xmax);
- 		set->ranges<< Range(ymin,ymax);
-		set->ranges<< Range(zmin,zmax);
+		set->list_ranges.clear();
+ 		set->list_ranges<<Range(xmin,xmax);
+ 		set->list_ranges<< Range(ymin,ymax);
+		set->list_ranges<< Range(zmin,zmax);
 		kDebug()<<"	\"3D\"  data set created"<<endl;
 	}
 
@@ -632,7 +632,7 @@ void FunctionDialog::Apply() {
 	setupLabel(g->getLabel());
 //	Set2D *g = new Set2D(f,title,range,SFUNCTION,type,style,symbol,ptr,NX);
 	// create plot, TODO : other plot types
-	mw->addSet(g,sheetcb->currentIndex(),PLOT2D);
+	mw->addSet(g,sheetcb->currentIndex(),Plot::PLOT2D);
 }
 */
 

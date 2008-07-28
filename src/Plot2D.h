@@ -9,7 +9,7 @@ class Plot2D:public Plot {
 public:
 	// Plot2D(Worksheet *p);
 	Plot2D();
-	void draw(QPainter *p, int w, int h);
+	void draw(QPainter *p, const int w, const int h) const;
 /*	~Plot2D();
 	void saveXML(QDomDocument doc, QDomElement plottag);
 	void openXML(QDomElement e);
@@ -22,10 +22,10 @@ public:
 	void setRange(Range* r,int i) {range[i]=*r;}
 	void setActRange(Range* r,int i);
 
-	void drawAxes(QPainter *p, int w, int h);
-	void drawAxesTicks(QPainter *p, int w, int h, int k);
-	void drawBorder(QPainter *p, int w, int h);
-	virtual void drawCurves(QPainter *p, int w, int h) = 0;
+	void drawAxes(QPainter *p, const int w, const int h) const;
+	void drawAxesTicks(QPainter *p, const int w, const int h, const int k) const;
+	void drawBorder(QPainter *p, const int w, const int h) const;
+// TODO	virtual void drawCurves(QPainter *p, int w, int h) = 0;
 //	virtual void drawFill(QPainter *p, int w, int h) = 0;
 };
 

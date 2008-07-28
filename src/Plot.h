@@ -18,7 +18,7 @@ class Plot {
 public:
 	Plot();
 	virtual ~Plot() {}
-	PlotType Type() const { return type; }
+	PlotType plotType() const { return m_plotType; }
 	Label *Title() const { return title; }
 	void addSet(Set *s) { set.append(s); }
 	virtual void setRange(Range *,int i) = 0;
@@ -29,12 +29,12 @@ public:
 	Range* Ranges() { return range;}
 	virtual void setActRanges(Range *) = 0;
 	Range* ActRanges() { return actrange;}
-	virtual void draw(QPainter *p, int w, int h) = 0;
+	virtual void draw(QPainter *p, const int w, const int h) const = 0 ;
 	QString TicLabel(int atlf, int prec, QString dtf, double value) const;
 	void resetRanges();
 	void drawStyle(QPainter *p, Style *style, Symbol *symbol, QVector<QPoint> pa, int xmin, int xmax, int ymin, int ymax);
 protected:
-	PlotType type;
+	PlotType m_plotType;
 	QList<Set *> set;			//!< data set list
 	QList<Axis *> axis;			//!< axis list
 	Point p1, p2;				//!< plotting area	(0..1)

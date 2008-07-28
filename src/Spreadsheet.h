@@ -23,8 +23,8 @@ public:
 	QDomElement save(QDomDocument doc);
 	void open(QDomNode node);
 
-	void addSet(const Set set);
-	Set* set(){ return &m_set;}
+	void addSet(Set* set);
+	Set* set(){ return m_set;}
 
 	QString columnName(int col) const;
 	void setColumnName(int col, QString name);
@@ -53,7 +53,7 @@ private:
 	MainWin *mw;
 	SheetType type;			//!< needed for mw->active{Work,Spread}sheet()
 	QString notes;
-	Set m_set;
+	Set* m_set;
 	void contextMenuEvent(QContextMenuEvent *);
 	QString columnHeader(int col) const;
 	void setColumnHeader(int col, QString name) {

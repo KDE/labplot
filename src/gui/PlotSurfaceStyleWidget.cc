@@ -17,12 +17,12 @@ PlotSurfaceStyleWidget::PlotSurfaceStyleWidget(QWidget* parent):QWidget(parent),
 PlotSurfaceStyleWidget::~PlotSurfaceStyleWidget(){}
 
 void PlotSurfaceStyleWidget::setStyle(const Style* style){
-	ui.kcbAreaFillingColor->setColor(style->color());
+	ui.kcbAreaFillingColor->setColor(style->fillColor());
 	//TODO
 }
 
 void PlotSurfaceStyleWidget::saveStyle(Style* style) const{
-	style->setColor(ui.kcbAreaFillingColor->color());
+	style->setFillColor(ui.kcbAreaFillingColor->color());
 	//TODO
 }
 

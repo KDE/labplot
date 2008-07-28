@@ -5,6 +5,7 @@
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 
 	ui.setupUi(this);
+	ui.teLabel->setTextColor(Qt::red);
 
 	//Populate the comboboxes
 	QFont symbol("Symbol", 12, QFont::Bold);
@@ -37,15 +38,22 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.bFontSubscript->setIcon( KIcon("format-text-subscript") );
 
 	//Slots
+	//Alignment
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
+	connect( ui.lePositionX, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataWasChanged()) );
+	connect( ui.lePositionY, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataWasChanged()) );
+	connect( ui.leRotation, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataWasChanged()) );
+
+	//Background
 	connect( ui.rbFilling0, SIGNAL(toggled(bool)), this, SLOT( fillingChanged(bool)) );
 	connect( ui.rbFilling1, SIGNAL(toggled(bool)), this, SLOT( fillingChanged(bool)) );
+	connect( ui.kcbFillingColor, SIGNAL(changed(const QColor& )), this, SLOT(slotDataWasChanged()) );
+	connect( ui.chbBox, SIGNAL(stateChanged(int)), this, SLOT(slotDataWasChanged()) );
+	connect( ui.chbShadow, SIGNAL(stateChanged(int)), this, SLOT(slotDataWasChanged()) );
 
-	//TODO These signals doesn't work at the moment.
-	connect( ui.kcbTextColor, SIGNAL(changed(const QColor& c)), ui.teLabel, SLOT(setTextColor(const QColor& c)) );
-	connect( ui.kfontRequester, SIGNAL(fontSelected(const QFont& f)), ui.teLabel, SLOT(setCurrentFont(const QFont& f)) );
-// 	connect( ui.kcbTextColor, SIGNAL(changed(const QColor& c)), this, SLOT(textColorChanged(const QColor& c)) );
-// 	connect( ui.kfontRequester, SIGNAL(fontSelected(const QFont& f)), this, SLOT(fontChanged(const QFont& f)) );
+	//Text
+ 	connect( ui.kcbTextColor, SIGNAL(changed(const QColor& )), this, SLOT(textColorChanged(const QColor& )) );
+ 	connect( ui.kfontRequester, SIGNAL(fontSelected(const QFont& )), this, SLOT(fontChanged(const QFont& )) );
 
 	connect( ui.chbTex, SIGNAL(stateChanged(int)), this, SLOT(useTexChanged(int)) );
 	connect( ui.bFontBold, SIGNAL(toggled(bool)), this, SLOT( fontBoldToggled(bool)) );
@@ -57,6 +65,8 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect( ui.cbSmallGreekLetters, SIGNAL(activated(const QString &)), this, SLOT(insertSymbol(const QString &)));
 	connect( ui.cbBigGreekLetters, SIGNAL(activated(const QString &)), this, SLOT(insertSymbol(const QString &)));
 	connect( ui.cbSymbolLetters, SIGNAL(activated(const QString &)), this, SLOT(insertSymbol(const QString &)));
+
+	connect( ui.teLabel, SIGNAL(textChanged()), this, SLOT(slotDataWasChanged()) );
 }
 
 LabelWidget::~LabelWidget() {}
@@ -82,8 +92,13 @@ void LabelWidget::setLabel(const Label* label) {
 
 	ui.kfontRequester->setFont(label->textFont() );
 	ui.kcbTextColor->setColor(label->textColor());
-	ui.chbTex->setChecked( label->isTex() );
-	ui.teLabel->setPlainText( label->text() );
+	if (label->isTex() ){
+		ui.chbTex->setChecked( true );
+		ui.teLabel->setPlainText( label->text() );
+	}else{
+		ui.chbTex->setChecked( false );
+		ui.teLabel->setHtml( label->text() );
+	}
 
 	kDebug()<<"Label data shown."<<endl;
 }
@@ -98,12 +113,11 @@ void LabelWidget::setLabelRotationEnabled(const bool b){
 	ui.lDegree->setEnabled(b);
 }
 
-
 /*!
 	saves the Label object \c label.
 */
 void LabelWidget::saveLabel(Label* label) const{
-	label->setPositionType( ui.cbPosition->currentIndex() );
+	label->setPositionType( Label::LabelPosition(ui.cbPosition->currentIndex()) );
 	label->setPosition( QPointF(ui.lePositionX->text().toFloat(), ui.lePositionY->text().toFloat()) );
 	label->setRotation( ui.leRotation->text().toFloat() );
 
@@ -115,11 +129,15 @@ void LabelWidget::saveLabel(Label* label) const{
 	label->setTextFont( ui.kfontRequester->font() );
 	label->setTextColor( ui.kcbTextColor->color() );
 	label->enableTex( ui.chbTex->isChecked() );
-	label->setText( ui.teLabel->toPlainText()  );
+	if ( label->isTex() )
+		label->setText( ui.teLabel->toPlainText() );
+	else
+		label->setText( ui.teLabel->toHtml() );
 
 	kDebug()<<"Label data saved."<<endl;
 
-	//TODO old stuff. What for?
+	//TODO old stuff. Can be removed?
+
 	// doesn't work :-(
 /*	const QChar *utf8text = te->text().unicode();
 
@@ -135,6 +153,7 @@ void LabelWidget::saveLabel(Label* label) const{
 //***********************************************************************************
 //**********************************    SLOTS   **************************************
 //***********************************************************************************
+
 /*!
 	called if the current position of the title is changed in the combobox.
 	Enables/disables the lineedits for x- and y-coordinates if the "custom"-item is selected/deselected
@@ -147,6 +166,7 @@ void LabelWidget::positionChanged(int index){
 		ui.lePositionX->setEnabled(false);
 		ui.lePositionY->setEnabled(false);
 	}
+	emit dataWasChanged(true);
 }
 
 /*!
@@ -157,20 +177,34 @@ void LabelWidget::fillingChanged(bool){
 		ui.kcbFillingColor->setEnabled(false);
 	else
 		ui.kcbFillingColor->setEnabled(true);
+
+	emit dataWasChanged(true);
 }
 
 void LabelWidget::fillingColorClicked(){
-
+	emit dataWasChanged(true);
 }
 
 void LabelWidget::fontChanged(const QFont& font){
+ 	ui.teLabel->selectAll();
 	ui.teLabel->setCurrentFont(font);
+
+	//TODO Clear selection!!!
+// 	ui.teLabel->textCursor().clearSelection();
+
 	ui.teLabel->setFocus();
+	emit dataWasChanged(true);
 }
 
 void LabelWidget::textColorChanged(const QColor& color){
+ 	ui.teLabel->selectAll();
 	ui.teLabel->setTextColor(color);
+
+	//TODO Clear selection!!!
+// 	ui.teLabel->textCursor().clearSelection();
+
 	ui.teLabel->setFocus();
+	emit dataWasChanged(true);
 }
 
 void LabelWidget::useTexChanged(int state){
@@ -249,4 +283,9 @@ void LabelWidget::insertSymbol(const QString& string) {
 	ui.teLabel->setFocus();
 	ui.teLabel->setFontFamily(fontFamily);
 	ui.teLabel->setFocus();
+	emit dataWasChanged(true);
+}
+
+void LabelWidget::slotDataWasChanged(){
+	emit dataWasChanged(true);
 }

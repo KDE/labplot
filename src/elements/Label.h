@@ -12,9 +12,10 @@
 class Label {
 
 public:
+	enum LabelPosition {LEFT, CENTER, RIGHT, CUSTOM};
+
 	Label( QString text=QString("") );
-	void draw(QPainter *p, QPoint pos, QPoint size, int w, int h, double phi);
-	void draw(QPainter *p, Point pos, Point size, int w, int h, double phi);
+	void draw(QPainter *p, const Point pos, const Point size, const int w, const int h, const double phi) const;
 
 /*	QStringList Info();
 	void save(QTextStream *ts);
@@ -30,7 +31,7 @@ public:
 	bool insideZ(int x0, int y0, Point pos, Point size, int w, int h);	// for 3d y-axes
 */
 
-	ACCESS(short, positionType, PositionType);
+	ACCESS(LabelPosition, positionType, PositionType);
 	ACCESS(QPointF, position, Position);
 	ACCESS(float, rotation, Rotation);
 
@@ -45,7 +46,7 @@ public:
 	ACCESS(QString, text, Text);
 
 private:
-	short m_positionType;
+	LabelPosition m_positionType;
 	QPointF m_position;
 	float m_rotation;		// label rotation
 

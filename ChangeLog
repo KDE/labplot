@@ -1,3 +1,8 @@
+2008-07-28 implemented save/set-functions in PlotStyleWidget
+			Bounding box, shadow and positioning of a label in Label::draw()
+			A lot of minor changes
+			Moved Plot, Plot2D, Plot2DSimple to plots/
+			Started to acitvate/port/implement functions for simple 2D-drawing.
 2008-06-01,sg	default values in Axis.cc
 		code cleanup
 2008-04-13  First versions of FunctionPlotDialog, FunctionPlotWidget, PlotStyleWidget and PlotSurfaceStyleWidget uploaded.

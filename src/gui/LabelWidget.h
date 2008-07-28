@@ -14,6 +14,9 @@ public:
 	LabelWidget(QWidget *parent);
 	~LabelWidget();
 
+signals:
+	void dataWasChanged(bool);
+
 public slots:
 	void setLabel(const Label*);
 	void setLabelRotationEnabled(const bool);
@@ -37,6 +40,7 @@ private slots:
 	void fontSuperscriptToggled(bool);
 	void fontSubscriptToggled(bool);
 	void insertSymbol(const QString &);
+	void slotDataWasChanged();
 };
 
 #endif //LABELWIDGET_H

@@ -2,7 +2,7 @@
 #define FUNCTIONWIDGET_H
 
 #include "../ui_functionplotwidget.h"
-#include "../plottype.h"
+#include "../plots/Plot.h"
 
 class Set;
 class LabelWidget;
@@ -22,13 +22,13 @@ public:
 
 	void setSet(Set*);
 	void saveSet(Set*);
-	void setPlotType(const PlotType&);
+	void setPlotType(const Plot::PlotType&);
 
 private:
 	Ui::FunctionPlotWidget ui;
 	LabelWidget* labelWidget;
 	PlotStyleWidgetInterface* plotStyleWidget;
-	PlotType plotType;
+	Plot::PlotType plotType;
 
 	int createSetData(Set* set);
 

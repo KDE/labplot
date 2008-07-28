@@ -3,7 +3,7 @@
 
 #include <QtGui>
 #include "kdialog.h"
-#include "../plottype.h"
+#include "../plots/Plot.h"
 
 class MainWin;
 class FunctionPlotWidget;
@@ -13,10 +13,10 @@ class FunctionPlotDialog: public KDialog{
 	Q_OBJECT
 
 public:
-	FunctionPlotDialog(MainWin *mw, const PlotType& type=PLOT2D);
+	FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type=Plot::PLOT2D);
 	void setSet(Set*);
-	void save();
-
+	void saveSet(Set*) const;
+	int currentSheetIndex() const;
 /*	int addFunction();
 	void updateLabel() { rtw->getLabel()->setTitle(funle->text()); rtw->update(); }
 
@@ -42,10 +42,10 @@ private:
 	Set* set;
 	bool editMode;
 	MainWin* mainWin;
-	PlotType plotType;
+	Plot::PlotType plotType;
 
 private slots :
-	void save() const;
+// 	void save() const;
 	void apply() const;
 };
 #endif

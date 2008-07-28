@@ -413,12 +413,12 @@ void Spreadsheet::deleteSelectedRows() {
 	}
 }
 
-void Spreadsheet::addSet(const Set s) {
+void Spreadsheet::addSet(Set* s) {
 	kDebug()<<endl;
 	m_set=s;
 
 	int columns=0;
-	switch(s.type()) {
+	switch(s->type()) {
 	case Set::SET2D:
 		columns=2;
 		break;
@@ -437,8 +437,8 @@ void Spreadsheet::addSet(const Set s) {
 			setColumnCount(columnCount()+1);
 	}
 
-	if(s.data.size() > rowCount()) //TODO do we really need this if here?
-		setRowCount(s.data.size());
+	if(s->list_data.size() > rowCount()) //TODO do we really need this if here?
+		setRowCount(s->list_data.size());
 
 	this->displaySet();
 }
@@ -447,12 +447,12 @@ void Spreadsheet::displaySet(){
 //TODO clear the content of the table!!!
 
 	int columns=this->columnCount();
-	switch(m_set.type()) {
+	switch(m_set->type()) {
 	case Set::SET2D: {
 		kDebug()<<"set2d is going to be shown"<<endl;
  		const Point* point;
-		for(int i=0; i<m_set.data.size(); i++) {
-			point=&m_set.data.at(i);
+		for(int i=0; i<m_set->list_data.size(); i++) {
+			point=&m_set->list_data.at(i);
 			this->setText(i, columns-2, QString::number(point->x(), 'g', 10));
 			this->setText(i, columns-1, QString::number(point->y(), 'g', 10));
 /*			if(data[i].Masked()) {
@@ -466,8 +466,8 @@ void Spreadsheet::displaySet(){
 	case Set::SET3D: {
 		kDebug()<<"set3d is going to be shown"<<endl;
 		const Point3D* point;
-		for(int i=0; i<m_set.data.size(); i++) {
-			point=static_cast<const Point3D*>(&m_set.data.at(i));
+		for(int i=0; i<m_set->list_data.size(); i++) {
+			point=static_cast<const Point3D*>(&m_set->list_data.at(i));
 			this->setText(i, columns-3, QString::number(point->x(), 'g', 10));
 			this->setText(i, columns-2, QString::number(point->y(), 'g', 10));
 			this->setText(i, columns-1, QString::number(point->z(), 'g', 10));
@@ -500,8 +500,8 @@ void Spreadsheet::plot() {
 // 	}
 // 	Set2D *g = new Set2D(windowTitle(),data,N);
 
-	//mw->addSet(g,sheetcb->currentIndex(),PLOT2D);
-	//TODO mw->addSet(g,1,PLOT2D);
+	//mw->addSet(g,sheetcb->currentIndex(),Plot::PLOT2D);
+	//TODO mw->addSet(g,1,Plot::PLOT2D);
 }
 
 void Spreadsheet::exportData() {
@@ -515,15 +515,15 @@ void Spreadsheet::setColumnValues() {
 }
 
 void Spreadsheet::editFunction(){
-	PlotType type;
+	Plot::PlotType type;
 	//TODO rethink/reimplement this approach
-	if (m_set.type()==Set::SET2D)
-		type=PLOT2D;
-	else if (m_set.type()==Set::SET3D)
-		type=PLOT3D;
+	if (m_set->type()==Set::SET2D)
+		type=Plot::PLOT2D;
+	else if (m_set->type()==Set::SET3D)
+		type=Plot::PLOT3D;
 
 	FunctionPlotDialog* dlg=new FunctionPlotDialog(mw, type);
-	dlg->setSet(&m_set);
+	dlg->setSet(m_set);
 	if (dlg->exec())
 		this->displaySet(); //TODO trigger update only if data set was changed
 }

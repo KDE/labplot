@@ -1,13 +1,10 @@
-//LabPlot: Axis.cc
-
-#include <KDebug>
 #include "Axis.h"
+#include <KDebug>
 
 //! general axis class
 Axis::Axis() {
 	kDebug()<<"Axis()"<<endl;
 
-//	m_label = new Label();
 	m_scaleType = SCALETYPE_LINEAR;
 	m_position = 0;
 	m_scaleFactor = 1;
@@ -43,6 +40,10 @@ Axis::Axis() {
 	m_minorGridEnabled = false;
 }
 
+Label* Axis::label(){
+	return &m_label;
+}
+
 /*void Axis::setLabel(Label *l) {
 	if(label != 0 && l != 0)
 		delete label;
@@ -71,7 +72,9 @@ void Axis::centerY(int plotsize, double center) {
 	kDebug()<<"NY="<<ny<<endl;
 	label->setY(ny);
 }
+*/
 
+/*
 QDomElement Axis::saveXML(QDomDocument doc, int id) {
 	QDomElement axistag = doc.createElement( "Axis" );
 	axistag.setAttribute("id",QString::number(id));

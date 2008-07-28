@@ -1,7 +1,7 @@
 #include "Symbol.h"
 #include <KDebug>
-
-Symbol::Symbol(SType type, QColor color, int size, FType fillType, QColor fillColor, int fillBrush){
+/*
+Symbol::Symbol(SymbolType type, QColor color, int size, SymbolFillType fillType, QColor fillColor, int fillBrush){
 	kDebug()<<"Symbol()"<<endl;
 	m_type = type;
 	m_color = color;
@@ -10,7 +10,23 @@ Symbol::Symbol(SType type, QColor color, int size, FType fillType, QColor fillCo
 	m_fillColor = fillColor;
 	m_brush = fillBrush;
 //	errorbar = new Errorbar();
+}*/
+
+Symbol::Symbol(){
+
 }
+/*!
+	 return the total number in symbol types.
+	The number is 50. At the moment only 5 types are implemented.
+*/
+int Symbol::styleCount(){
+	 return 6;
+}
+
+int Symbol::fillingTypeCount(){
+	 return 10;
+}
+
 /*
 void Symbol::save(QTextStream *t) {
 	*t<<type<<' '<<color.name()<<endl;
@@ -96,11 +112,11 @@ void Symbol::openxML(QDomNode node) {
 }
 */
 
-void Symbol::draw(QPainter *p, const QPoint point, const SType symbolType, const QColor color,
-					   const int size, const FType fillType, const QColor fillColor, const Qt::BrushStyle fillBrushStyle){
+void Symbol::draw(QPainter *p, const QPoint* point, const SymbolType symbolType, const QColor color,
+					   const int size, const SymbolFillType fillType, const QColor fillColor, const Qt::BrushStyle fillBrushStyle){
 
-	int x=point.x();
-	int y=point.y();
+	int x=point->x();
+	int y=point->y();
 	QPolygonF polygon;
 	QBrush brush(fillColor, fillBrushStyle);
 	p->setPen(color);
@@ -203,12 +219,12 @@ void Symbol::draw(QPainter *p, const QPoint point, const SType symbolType, const
 
 //! draw the Symbol to the specified QPainter at position x,y
 //TODO Check, whether the static function above can be used everywhere and remove this function.
-void Symbol::draw(QPainter *p, QPoint point) {
+void Symbol::draw(QPainter* p, const QPointF& point) {
 	// TODO : QPointArray -> const QPoint *points
 	// p->draw(Poly)Line(points)
 
 	int x=point.x(), y=point.y();
-	QBrush qbrush(m_fillColor,(Qt::BrushStyle)m_brush);
+	QBrush qbrush(m_fillColor, m_fillBrushStyle);
 
 	p->setPen(Qt::NoPen);
 	p->setBrush(qbrush);

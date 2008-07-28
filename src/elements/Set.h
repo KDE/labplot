@@ -33,9 +33,9 @@ public:
 
 	void drawStyle(QPainter *p, int x, int y);	//!< draw style and symbol on QPainter
 
-	QList<Point> data;
-	QList<Range> ranges;
-	QList<int> numbers;
+	QList<Point> list_data;
+	QList<Range> list_ranges;
+	QList<int> list_numbers;
 
 
 	/*	Set(QString n="", QString label="", LSource src=SFUNCTION, PType t=P2D, Style *st=0,

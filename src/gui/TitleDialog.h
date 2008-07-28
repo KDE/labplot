@@ -14,6 +14,7 @@ public:
 	TitleDialog(MainWin *mw, Label *title=0);
 
 private:
+	MainWin* mainWin;
 	LabelWidget* labelWidget;
 	Label *title;
 

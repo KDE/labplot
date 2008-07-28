@@ -1,6 +1,8 @@
 #include "Set.h"
 
-Set::Set(){}
+Set::Set(){
+	m_shown=true;
+}
 
 Set::Set(const Set::SetType type){
 	this->setType(type);
@@ -8,11 +10,11 @@ Set::Set(const Set::SetType type){
 
 void Set::setType(const Set::SetType type){
 	if (type==SET2D){
-		ranges<<Range()<<Range();
-		numbers<<100;
+		list_ranges<<Range()<<Range();
+		list_numbers<<100;
 	}else if (type==SET3D){
-		ranges<<Range()<<Range()<<Range();
-		numbers<<100<<100;
+		list_ranges<<Range()<<Range()<<Range();
+		list_numbers<<100<<100;
 	}
 	m_type=type;
 	m_shown = true;

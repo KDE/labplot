@@ -40,9 +40,9 @@ set(LabPlot_SRCS ${GUI_SOURCES} ${ELEMENTS_SOURCES}
   ImportDialog.cc
   LabPlot.cc
   MainWin.cc
-  Plot.cc
-  Plot2D.cc
-  Plot2DSimple.cc
+  plots/Plot.cc
+  plots/Plot2D.cc
+  plots/Plot2DSimple.cc
   PlotDialog.cc
   Project.cc
   ProjectDialog.cc

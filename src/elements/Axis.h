@@ -40,8 +40,7 @@ public:
 	ACCESS(QColor, borderColor, BorderColor);
 	ACCESS(int, borderWidth, BorderWidth);
 
-	Label* label(){ return &m_label; }
-// 	ACCESS(Label, m_label, label);
+	Label* label();
 
 	ACCESS(Axis::TicksPosition, ticksPosition, TickPosition);
 	ACCESS(short, ticksType, TicksType);

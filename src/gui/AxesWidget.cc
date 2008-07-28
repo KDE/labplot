@@ -84,6 +84,7 @@ void AxesWidget::setPlotType(const PlotType& type){
 		list<<QString("a");
 	}
 
+	ui.cbAxes->clear();
 	ui.cbAxes->insertItems( -1, list );
 
 	//TODO

@@ -9,7 +9,7 @@
 #include "Worksheet.h"
 #include "Project.h"
 #include "elements/Set.h"
-#include "plottype.h"
+#include "plots/Plot.h"
 
 class MainWin : public KXmlGuiWindow
 {
@@ -29,7 +29,7 @@ public:
 	void updateSetList();		//!< update dynamic set list menu
 	void openXML(QIODevice *file);	//!< do the actual opening
 	void saveXML(QIODevice *file);	//!< do the actual saving
-	void addSet(Set s, int sheet, PlotType ptype);
+
 private:
 	QMdiArea *mdi;
 	Project *project;
@@ -37,12 +37,15 @@ private:
 	KAction *spreadaction;
 	void setupActions();
 	bool warnModified();
+	void addSet(Set* s, const int sheet, const Plot::PlotType ptype);
+
 public slots:
 	Spreadsheet* newSpreadsheet();
 	Worksheet* newWorksheet();
 	void save(QString filename=0);	//!< save project (.lml format)
 	void open(QString filename);	//!< open project (.lml format)
 	void saveAs();	//!< save as different file name (.lml format)
+
 private slots:
 	void openNew();
 	void print();

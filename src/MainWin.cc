@@ -77,7 +77,7 @@ void MainWin::setupActions() {
 	connect(action, SIGNAL(triggered()),SLOT(projectDialog()));
 
 	// Edit
-	spreadaction = new KAction(KIcon(QIcon(spreadsheet_xpm)),i18n("New Spreadsheet"),this);
+	spreadaction = new KAction(KIcon("insert-table"),i18n("New Spreadsheet"),this);
 	spreadaction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new spreadsheet", spreadaction);
 	connect(spreadaction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
@@ -114,7 +114,7 @@ void MainWin::setupActions() {
 	connect(functionActions, SIGNAL(triggered(QAction*)), this, SLOT(functionActionTriggered(QAction*)));
 
 	// Appearance
-	action = new KAction(KIcon(QIcon(title_xpm)),i18n("Title Settings"),this);
+	action = new KAction(KIcon("draw-text"),i18n("Title Settings"),this);
 	action->setShortcut(Qt::CTRL+Qt::Key_T);
 	actionCollection()->addAction("title settings", action);
 	connect(action, SIGNAL(triggered()), SLOT(titleDialog()));
@@ -513,19 +513,25 @@ void MainWin::importDialog() { (new ImportDialog(this))->show(); }
 void MainWin::projectDialog() { (new ProjectDialog(this))->show(); project->setChanged(true); }
 
 void MainWin::functionActionTriggered(QAction* action){
-	PlotType type;
+	Plot::PlotType type;
 	QString name=action->objectName();
 	if (name == "new_2D_function_plot")
-		type=PLOT2D;
+		type=Plot::PLOT2D;
 	else if (name == "new_2D_surface_function_plot")
-		type=PLOTSURFACE;
+		type=Plot::PLOTSURFACE;
 	else if (name == "new_2D_polar_function_plot")
-		type=PLOTPOLAR;
+		type=Plot::PLOTPOLAR;
 	else
-		type=PLOT3D;
+		type=Plot::PLOT3D;
 	//TODO 3D-QWT?
 
-	 (new FunctionPlotDialog(this, type))->show();
+	 FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
+	if ( dlg->exec() == QDialog::Accepted ) {
+		Set* set=new Set(Set::SET2D);
+		dlg->saveSet(set);
+		int i=dlg->currentSheetIndex();
+		this->addSet(set, i, type);
+	}
 }
 
 void MainWin::titleDialog() {
@@ -545,7 +551,7 @@ void MainWin::titleDialog() {
 		return;
 	}
 
-	(new TitleDialog(this,plot->Title()))->show();
+	(new TitleDialog(this, plot->titleLabel()))->show();
 }
 void MainWin::axesDialog() { (new AxesDialog(this))->show(); }
 void MainWin::plotDialog() { (new PlotDialog(this))->show(); }
@@ -558,7 +564,7 @@ void MainWin::legendDialog() {
 void MainWin::settingsDialog(){ (new SettingsDialog(this))->show(); }
 /******************** dialogs end *****************************/
 
-void MainWin::addSet(Set set, int sheet, PlotType ptype) {
+void MainWin::addSet(Set* set, const int sheet, const Plot::PlotType ptype) {
 	kDebug()<<"MainWin::addGraph2D() sheet ="<<sheet<<endl;
 
 	int nr_sheets = mdi->subWindowList().size();
@@ -566,12 +572,12 @@ void MainWin::addSet(Set set, int sheet, PlotType ptype) {
 	if(sheet == nr_sheets) {	// new worksheet
 		kDebug()<<"Creating new worksheet"<<endl;
 		Worksheet *w = newWorksheet();
- 		w->addSet(&set,ptype);
+ 		w->addSet(set,ptype);
 	}
 	else if(sheet == nr_sheets+1) {	// new spreadsheet
-		kDebug()<<"Creating new worksheet"<<endl;
+		kDebug()<<"Creating new spreadsheet"<<endl;
 		Spreadsheet *s = newSpreadsheet();
-		s->addSet(set);
+ 		s->addSet(set);
 	}
 	else {
 		kDebug()<<" Using sheet "<<sheet<<endl;
@@ -583,10 +589,10 @@ void MainWin::addSet(Set set, int sheet, PlotType ptype) {
 				return;
 			}
 			if (w->sheetType() == WORKSHEET)
-				w->addSet(&set,ptype);
+				w->addSet(set,ptype);
 			else {
 				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
-				s->addSet(set);
+ 				s->addSet(set);
 			}
 		}
 	}

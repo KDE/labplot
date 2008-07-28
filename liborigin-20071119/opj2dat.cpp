@@ -17,25 +17,25 @@ int main(int argc, char *argv[]) {
 	}
 
 	printf("opj2dat %s, Copyright (C) 2007 Stefan Gerlach\n",LIBORIGIN_VERSION_STRING);
-	
+
 	if(!strcmp(argv[1],"-v"))
 		return 0;
 
-	OPJFile opj(argv[1]);
-	int status = opj.Parse();
+ 	OPJFile opj(argv[1]);
+ 	int status = opj.Parse();
 	printf("Parsing status = %d\n",status);
 	printf("OPJ PROJECT \"%s\" VERSION = %.2f\n",argv[1],opj.Version());
-	
+
 	printf("NUMBER OF SPREADSHEETS = %d\n",opj.numSpreads());
 	for (int s=0;s<opj.numSpreads();s++) {
 		int nr_cols=opj.numCols(s);
-		
+
 		printf("SPREADSHEET %d : %s\n",s+1,opj.spreadName(s));
 		printf("	COLUMNS = %d\n",nr_cols);
 		for (int j=0;j<nr_cols;j++) {
 			printf("	COLUMN %d : %s / TYPE = %s,ROWS = %d\n",
 				j+1,opj.colName(s,j),opj.colType(s,j),opj.numRows(s,j));
-			
+
 		}
 		FILE *out;
 		char filename[255];
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 		}
 		// header
 		for (int j=0;j<nr_cols;j++)
-			fprintf(out,"%s ",opj.colName(s,j));	
+			fprintf(out,"%s ",opj.colName(s,j));
 		fprintf(out,"\n");
 		// data
 		for (int i=0;i<opj.maxRows(s);i++) {
@@ -65,9 +65,10 @@ int main(int argc, char *argv[]) {
 						v = (double *) opj.oData(s,j,i);
 					if(fabs(*v)>2.0e-300)
 						fprintf(out,"%g ",*v);
-				}		
+				}
 			}
 			fprintf(out,"\n");
 		}
 	}
+
 }

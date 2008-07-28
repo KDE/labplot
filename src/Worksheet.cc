@@ -1,21 +1,20 @@
-// LabPlot : Worksheet.cc
-
 #include <KDebug>
 #include <KLocale>
-#include <KSharedConfig>
+// #include <KSharedConfig>
 #include <KConfigGroup>
-#include <QPrinter>
-#include <QPrintDialog>
 #include <KInputDialog>
+#include <kmessagebox.h>
+
 #include "Worksheet.h"
+#include "elements/Set.h"
 #include "MainWin.h"
-#include "Plot2DSimple.h"
+#include "plots/Plot2DSimple.h"
 
 Worksheet::Worksheet(MainWin *m)
-	:QWidget(), mw(m)
-{
+	:QWidget(),
+ mw(m){
 	kDebug()<<"Worksheet()"<<endl;
-	type = WORKSHEET;
+		type = WORKSHEET;
 
 	//  set title
 	int number=1;
@@ -30,7 +29,7 @@ Worksheet::Worksheet(MainWin *m)
 	int h = conf.readEntry("Height",400);
 	resize(w,h);
 
-	api=0;
+	currentPlotIndex=0; //TODO realy needed?
 	kDebug()<<"Worksheet() DONE"<<endl;
 }
 
@@ -38,18 +37,21 @@ Worksheet::~Worksheet() {
 	mw->updateGUI();
 }
 
+Plot* Worksheet::getActivePlot(){
+	 return listPlots[currentPlotIndex];
+}
 void Worksheet::paintEvent(QPaintEvent *) {
 	kDebug()<<"Worksheet::paintEvent()"<<endl;
 	QPainter painter(this);
-	painter.setRenderHint(QPainter::Antialiasing);	
+	painter.setRenderHint(QPainter::Antialiasing);
 
-	draw(&painter,width(),height());
+	draw(&painter, this->width(), this->height());
 }
 
 QDomElement Worksheet::save(QDomDocument doc) {
 	kDebug()<<endl;
 	QDomElement wstag = doc.createElement( "Worksheet" );
-	wstag.setAttribute("api",QString::number(api));
+	wstag.setAttribute("api",QString::number(currentPlotIndex));
 //	wstag.setAttribute("nr_plots",QString::number(nr_plots));
 
 	QDomElement tag = doc.createElement( "Position" );
@@ -212,45 +214,57 @@ void Worksheet::setTitle(QString title) {
 
 void Worksheet::draw(QPainter *p, int w, int h) {
 	kDebug()<<"Worksheet::Draw() : w/h ="<<w<<h<<endl;
-	// TEST
-	p->setBrush(Qt::yellow);
-	p->drawRect(0,0,w,h);
-	p->drawLine(0,0,w,h);
-	p->drawLine(0,h,w,0);
+// 	// TEST
+// 	p->setBrush(Qt::yellow);
+// 	p->drawRect(0,0,w,h);
+// 	p->drawLine(0,0,w,h);
+// 	p->drawLine(0,h,w,0);
 
-	for (int i=0;i<plotCount();i++) {
-		kDebug()<<"plot "<<i<<endl;
-		plot[i]->draw(p,w,h);
+	for (int i=0; i<listPlots.size(); i++) {
+		kDebug()<<"Plot "<<i<<" drawn"<<endl;
+ 		listPlots.at(i)->draw(p,w,h);
 	}
 }
 
-void Worksheet::addPlot(PlotType ptype) {
-	kDebug()<<"Worksheet::newPlot() : type ="<<ptype<<endl;
-	Plot *newplot=0;
-	switch(ptype) {
-	case PLOT2D:
-		newplot = new Plot2DSimple();break;
+void Worksheet::addPlot(Plot::PlotType plotType) {
+	kDebug()<<"Plot of type "<<plotType<<" is going to be created"<<endl;
+	switch(plotType) {
+	case Plot::PLOT2D:{
+//   		listPlots<<Plot2D();
+//  		Plot2D* plot = new Plot2D();
+// 		listPlots<<plot;
+   		listPlots<<(new Plot2DSimple());
+		break;
+	}
 	default:
 		break;
 	}
-	api = plotCount();
-	kDebug()<<"api ="<<api<<endl;
-	plot += newplot;
+
+    currentPlotIndex=listPlots.size()-1;
+	kDebug()<<"Plot number "<<currentPlotIndex+1<<"added"<<endl;
 }
 
-void Worksheet::addSet(Set *s, PlotType ptype) {
-	kDebug()<<"Worksheet::addSet() plot type ="<<ptype<<endl;
+void Worksheet::addSet(Set *s, Plot::PlotType type) {
+	kDebug()<<"Worksheet::addSet() plot type ="<<type<<endl;
 
-	if(plotCount() == 0 || ptype != plot[api]->Type() )
-		addPlot(ptype);
-	plot[api]->addSet(s);
-	plot[api]->resetRanges();
+//  	if(plotCount() == 0 || ptype != plot[api]->Type() )
+	if (listPlots.size()!=0){
+		if ( listPlots.at(0)->plotType() != type)
+			KMessageBox::error( this, i18n("Plot cannot be added."), i18n("Plot type mismatch") );
+			return;
+	}
+	this->addPlot(type);
+
+ 	listPlots[currentPlotIndex]->addSet(s);
+ 	listPlots[currentPlotIndex]->resetRanges();
 
 	// set actrange for new plots
-	Range *actrange = plot[api]->ActRanges();
-	if (actrange[0].max()-actrange[0].min() == 0)
-		plot[api]->setActRanges(plot[api]->Ranges());
-	repaint();
+// 	Range *actrange = listPlots[currentPlotIndex]->ActRanges();
+// 	if (actrange[0].max()-actrange[0].min() == 0)
+// 		listPlots[currentPlotIndex]->setActRanges( listPlots[currentPlotIndex]->Ranges() );
+
+ 	repaint();
+	kDebug()<<"Set added."<<endl;
 }
 
 void Worksheet::setupPrinter(QPrinter *pr, QString fn) {

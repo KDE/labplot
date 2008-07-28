@@ -5,12 +5,10 @@
 #include <KLocale>
 #include <QPainter>
 #include "Plot2D.h"
-#include "elements/Axis.h"
+#include "../elements/Axis.h"
 
 // general 2D Plot class
-Plot2D::Plot2D()
-	: Plot()
-{
+Plot2D::Plot2D() : Plot(){
 	kDebug()<<"Plot2D::Plot2D()"<<endl;
 	//TODO what for? type = PLOT2D;
 /*	QFont font;
@@ -24,15 +22,17 @@ Plot2D::Plot2D()
 	font.setPointSize((int)(0.7*font.pointSize()));	// for axes label
 	kDebug()<<"Plot2D()"<<endl;
 */
-	axis.append(new Axis());
-	axis.append(new Axis());
-	axis.append(new Axis());
-	axis.append(new Axis());
 	// TODO : font
-	axis[0]->label()->setText(i18n("x-Axis"));
-	axis[1]->label()->setText(i18n("y-Axis"));
-	axis[2]->label()->setText(i18n("y2-Axis"));
-	axis[3]->label()->setText(i18n("x2-Axis"));
+
+	Axis a;
+	a.label()->setText( i18n("x-Axis") );
+	list_Axes.append(a);
+	a.label()->setText( i18n("y-Axis") );
+	list_Axes.append(a);
+	a.label()->setText( i18n("y2-Axis") );
+	list_Axes.append(a);
+	a.label()->setText( i18n("x2-Axis") );
+	list_Axes.append(a);
 
 /* OLD :
 	// set default axis settings for all axes
@@ -46,23 +46,23 @@ Plot2D::Plot2D()
 	axis[2].setTickLabelFont(font);
 	axis[3].setTickLabelFont(font);
 */
-	kDebug()<<"Plot2D::Plot2D() DONE"<<endl;
+	kDebug()<<"Initialization done"<<endl;
 }
 
-void Plot2D::setActRange(Range* r, int i) {
-	kDebug()<<"Plot2D::setActRange("<<i<<")"<<endl;
-	Range tmp;
-
-	double offset=0;//(r->rMax()-r->rMin())/10;
-
-	tmp = Range(r->min()-offset,r->max()+offset);
-	actrange[i]=tmp;
-}
-
-void Plot2D::setActRanges(Range* r) {
-	setActRange(&r[0],0);
-	setActRange(&r[1],1);
-}
+// void Plot2D::setActRange(Range* r, int i) {
+// 	kDebug()<<"Plot2D::setActRange("<<i<<")"<<endl;
+// 	Range tmp;
+//
+// 	double offset=0;//(r->rMax()-r->rMin())/10;
+//
+// 	tmp = Range(r->min()-offset,r->max()+offset);
+// 	actrange[i]=tmp;
+// }
+//
+// void Plot2D::setActRanges(Range* r) {
+// 	setActRange(&r[0],0);
+// 	setActRange(&r[1],1);
+// }
 
 /*void Plot2D::setBorder(int item, bool on) {
 	kDebug()<<"Plot2D::setBorder()"<<endl;
@@ -129,7 +129,7 @@ void Plot2D::setActRanges(Range* r) {
 	setYMax(ymax,h);
 }*/
 
-void Plot2D::draw(QPainter *p, const int w, const int h) const{
+void Plot2D::draw(QPainter *p, const int w, const int h){
 	kDebug()<<"Plot2D::draw() w/h :"<<w<<h<<endl;
 // 	kDebug()<<"	TYPE = "<<type<<endl;
 /*
@@ -148,31 +148,30 @@ void Plot2D::draw(QPainter *p, const int w, const int h) const{
 
 	if (!transparent) {
 		// background color
-		p->setBrush(background);
+		p->setBrush(backgroundBrush);
 		p->setPen(Qt::NoPen);
 		p->drawRect((int)(w*position.x()),(int)(h*position.y()),(int)(w*size.x()),(int)(h*size.y()));
 
 		// graph background color
-		if(areabackground.style() != Qt::SolidPattern) {	// don't draw plot background pattern in graph area
+		if(areaBackgroundBrush.style() != Qt::SolidPattern) {	// don't draw plot background pattern in graph area
 			p->setBrush(QBrush(Qt::white,Qt::SolidPattern));
 			p->setPen(Qt::NoPen);
 			p->drawRect(xmin,ymin,xmax-xmin,ymax-ymin);
 		}
-		p->setBrush(areabackground);
+		p->setBrush(areaBackgroundBrush);
 		p->setPen(Qt::NoPen);
 		p->drawRect(xmin,ymin,xmax-xmin,ymax-ymin);
 	}
 
-	title->draw(p,position,size,w,h,0);
-
-	this->drawAxes(p,w,h);
-	this->drawBorder(p,w,h);
+	m_titleLabel.draw(p, position, size, w, h, 0);
+//   	this->drawAxes(p, w, h);
+  	this->drawBorder(p, w, h);
 
 	// fill between curves
 //	if(fill_enabled)
 //		drawFill(p,w,h);
 
-// TODO 	drawCurves(p,w,h);
+ 	drawCurves(p,w,h);
 
 /*	TScale xscale = axis[0].Scale();
 	TScale yscale = axis[1].Scale();
@@ -401,7 +400,9 @@ void Plot2D::draw(QPainter *p, const int w, const int h) const{
 
 		p->setPen(Qt::black);
 	}
+*/
 
+	/*
 	if(legend.Enabled()) {
 //		kDebug()<<"	Legend enabled"<<endl;
 
@@ -430,35 +431,50 @@ void Plot2D::draw(QPainter *p, const int w, const int h) const{
 	kDebug()<<"Plot2D::draw() DONE"<<endl;
 }
 
-void Plot2D::drawBorder(QPainter *p, const int w, const int h) const{
+/*!
+	draws the border of the plot. The four border lines are represented by the four axis lines, if enabled.
+*/
+void Plot2D::drawBorder(QPainter *p, const int w, const int h) {
 	kDebug()<<"Plot2D::drawBorder()"<<endl;
+
 	int xmin = (int)(w*(size.x()*p1.x()+position.x()));
 	int xmax = (int)(w*(size.x()*p2.x()+position.x()));
 	int ymin = (int)(h*(size.y()*p1.y()+position.y()));
 	int ymax = (int)(h*(size.y()*p2.y()+position.y()));
-	kDebug()<<"	xmin/xmax ymin/ymax "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
 
-	if (axis[1]->hasBorder()) {
-		p->setPen(QPen(axis[1]->borderColor(),axis[1]->borderWidth()));
-		p->drawLine(xmin,ymin,xmin,ymax);
+// 	kDebug()<<"	xmin/xmax ymin/ymax "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
+
+	const Axis a0=list_Axes.at(0);
+	if ( a0.hasBorder() ){
+		p->setPen( QPen(a0.borderColor(), a0.borderWidth()) );
+		p->drawLine(xmin, ymax, xmax, ymax);
 	}
-	if (axis[3]->hasBorder()) {
-		p->setPen(QPen(axis[3]->borderColor(),axis[3]->borderWidth()));
-		p->drawLine(xmin,ymin,xmax,ymin);
+
+	//y1-axis
+	const Axis a1=list_Axes.at(1);
+	if ( a1.hasBorder() ){
+		p->setPen( QPen(a1.borderColor(), a1.borderWidth()) );
+		p->drawLine(xmin, ymin, xmin, ymax);
 	}
-	if (axis[2]->hasBorder()) {
-		p->setPen(QPen(axis[2]->borderColor(),axis[2]->borderWidth()));
-		p->drawLine(xmax,ymin,xmax,ymax);
+
+	//y2-axis
+	const Axis a2=list_Axes.at(2);
+	if ( a2.hasBorder() ){
+		p->setPen( QPen(a2.borderColor(), a2.borderWidth()) );
+		p->drawLine(xmax, ymin, xmax, ymax);
 	}
-	if (axis[0]->hasBorder()) {
-		p->setPen(QPen(axis[0]->borderColor(),axis[0]->borderWidth()));
-		p->drawLine(xmin,ymax,xmax,ymax);
+
+	//y2-axis
+	const Axis a3=list_Axes.at(3);
+	if ( a3.hasBorder() ){
+		p->setPen( QPen(a3.borderColor(), a3.borderWidth()) );
+		p->drawLine(xmin, ymin, xmax, ymin);
 	}
 }
 
-void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) const{
+void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k){
 	kDebug()<<"Plot2D::drawAxesTicks()"<<endl;
-	Axis *a = axis[k];
+	const Axis a = list_Axes.at(k);
 
 	int xmin = (int)(w*(size.x()*p1.x()+position.x()));
 	int xmax = (int)(w*(size.x()*p2.x()+position.x()));
@@ -473,12 +489,12 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 	case 3: tmpi=4; break;
 	}
 
-	if (a->hasMajorTicks() && a->isAxisEnabled()) {
-		double min = actrange[axistype].min();
-		double max = actrange[axistype].max();
+	if (a.hasMajorTicks() && a.isAxisEnabled()) {
+		double min = list_plotRanges.at(axistype).min();
+		double max = list_plotRanges.at(axistype).max();
 		kDebug()<<"	MIN/MAX "<<min<<max<<endl;
-		Axis::ScaleType scale = a->scaleType();
-		int pos = a->position();
+		Axis::ScaleType scale = a.scaleType();
+		int pos = a.position();
 		if(pos) {
 			p->setPen(Qt::SolidLine);
 			if (axistype == 0)
@@ -487,11 +503,11 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 				p->drawLine((int)((xmin+xmax)/2.0),ymin,(int)((xmax+xmin)/2.0),ymax);
 		}
 
-		if(a->ticksType() == 0 || scale != Axis::SCALETYPE_LINEAR) {	// Tick Type NUMBER and all nonlinear scales
+		if(a.ticksType() == 0 || scale != Axis::SCALETYPE_LINEAR) {	// Tick Type NUMBER and all nonlinear scales
 			int t=-1;		// number of major tics
 			switch (scale) {
 			case Axis::SCALETYPE_LINEAR: case Axis::SCALETYPE_SQRT : case Axis::SCALETYPE_SX2:
-				t = (int) a->majorTicksNumber();
+				t = (int) a.majorTicksNumber();
 //				if(t==-1)
 //					t=autoTicks(min,max);
 				break;
@@ -540,12 +556,12 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 					}
 
 					if(x1<=xmax+1 && x1>=xmin-1) { // major tics
-						p->setPen(QPen(a->ticksColor(),a->majorTicksWidth()));
+						p->setPen(QPen(a.ticksColor(),a.majorTicksWidth()));
 						if(k==0) {	// x
 							int ypos = ymax;
 							if(pos)
 								ypos = (int) ((ymax+ymin)/2.0);
-							switch(a->ticksPosition()) {
+							switch(a.ticksPosition()) {
 							case 0: p->drawLine(x1,ypos,x1,ypos+10); break;
 							case 1: p->drawLine(x1,ypos-10,x1,ypos); break;
 							case 2: p->drawLine(x1,ypos-10,x1,ypos+10); break;
@@ -556,7 +572,7 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 							int ypos = ymin;
 							if(pos)
 								ypos = (int) ((ymax+ymin)/2.0);
-							switch(a->ticksPosition()) {
+							switch(a.ticksPosition()) {
 							case 0: p->drawLine(x1,ypos-10,x1,ypos); break;
 							case 1: p->drawLine(x1,ypos,x1,ypos+10); break;
 							case 2: p->drawLine(x1,ypos-10,x1,ypos+10); break;
@@ -564,8 +580,8 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 							}
 						}
 
-						if (a->hasMajorGrid()) {
-							p->setPen(QPen(a->majorGridColor(),a->majorGridWidth(),a->majorGridStyle()));
+						if (a.hasMajorGrid()) {
+							p->setPen(QPen(a.majorGridColor(),a.majorGridWidth(),a.majorGridStyle()));
 							p->drawLine(x1,ymin,x1,ymax);
 							p->setPen(Qt::SolidLine);
 						}
@@ -606,12 +622,12 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 					}
 
 					if(y1<=ymax+1 && y1>=ymin-1) { // major tics
-						p->setPen(QPen(a->ticksColor(),a->majorTicksWidth()));
+						p->setPen(QPen(a.ticksColor(), a.majorTicksWidth()));
 						if(k==1) {	// y
 							int xpos = xmin;
 							if(pos)
 								xpos = (int) ((xmax+xmin)/2.0);
-							switch(a->ticksPosition()) {
+							switch(a.ticksPosition()) {
 							case 0: p->drawLine(xpos-10,y1,xpos,y1); break;
 							case 1: p->drawLine(xpos,y1,xpos+10,y1); break;
 							case 2: p->drawLine(xpos-10,y1,xpos+10,y1); break;
@@ -622,25 +638,25 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 							int xpos = xmax;
 							if(pos)
 								xpos = (int) ((xmax+xmin)/2.0);
-							switch(a->ticksPosition()) {
+							switch(a.ticksPosition()) {
 							case 0: p->drawLine(xpos,y1,xpos+10,y1); break;
 							case 1: p->drawLine(xpos-10,y1,xpos,y1); break;
 							case 2: p->drawLine(xpos-10,y1,xpos+10,y1); break;
 							case 3: break;
 							}
 						}
-						if (a->hasMajorGrid()) {
-							p->setPen(QPen(a->majorGridColor(),a->majorGridWidth(),a->majorGridStyle()));
+						if (a.hasMajorGrid()) {
+							p->setPen(QPen(a.majorGridColor(),a.majorGridWidth(),a.majorGridStyle()));
 							p->drawLine(xmin,y1,xmax,y1);
 							p->setPen(Qt::SolidLine);
 						}
 					}
 				}
 
-				//if (a->tickLabelEnabled() && graphlist->Number() > 0) {		// Numbers
-				if (a->hasLabels() && set.size() > 0 ) {		// Numbers
-					QColor c = a->labelsColor();
-					QFont f = a->labelsFont();
+				//if (a.tickLabelEnabled() && graphlist->Number() > 0) {		// Numbers
+				if (a.hasLabels() && list_Sets.size() > 0 ) {		// Numbers
+					QColor c = a.labelsColor();
+					QFont f = a.labelsFont();
 					double dx = max-min, value=0;
 
 					switch(scale) {
@@ -651,23 +667,23 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 					}
 
 					// round small values
-					int prec = a->labelsPrecision();
+					int prec = a.labelsPrecision();
 					if(scale == Axis::SCALETYPE_LINEAR && prec>0)
 							value = dx*round(value*pow(10.0,prec)/dx)/pow(10.0,prec);
 
 					// apply scale and shift value
-					value = value*a->scaleFactor()+a->offset();
+					value = value*a.scaleFactor()+a.offset();
 
-					Axis::LabelsFormat atlf = a->labelsFormat();
-					QString label = TicLabel(atlf, prec, a->labelsDateFormat(), value);
+					Axis::LabelsFormat atlf = a.labelsFormat();
+					QString label = getTicLabel(atlf, prec, a.labelsDateFormat(), value);
 
 					// apply prefix & suffix
-					label.prepend(a->labelsPrefix());
-					label.append(a->labelsSuffix());
+					label.prepend(a.labelsPrefix());
+					label.append(a.labelsSuffix());
 
 					// draw tic label
 					QFontMetrics fm(f);
-					int gap = (int)(a->labelsPosition());
+					int gap = (int)(a.labelsPosition());
 
 					switch(k) {
 					case 0:	y1 = ymax + gap + (int)(size.y()*fm.ascent()/2); break;
@@ -687,7 +703,7 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 
 					p->save();
 					p->translate(x1,y1);
-					p->rotate(a->labelsRotation());
+					p->rotate(a.labelsRotation());
 					f.setPointSize((int)(f.pointSize()*size.x()));	// resize tic label
 					if (atlf == Axis::LABELSFORMAT_AUTO || atlf == Axis::LABELSFORMAT_NORMAL || atlf == Axis::LABELSFORMAT_SCIENTIFIC) {
 						p->setPen(c);
@@ -721,27 +737,27 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 					p->restore();
 				}
 
-				if (a->minorTicksEnabled() && i != t ) {	// Minor Ticks
-					for (int j=1;j <= a->minorTicksNumber();j++) {
+				if (a.minorTicksEnabled() && i != t ) {	// Minor Ticks
+					for (int j=1;j <= a.minorTicksNumber();j++) {
 						if(scale == Axis::SCALETYPE_LOG10 && j > 8)	// maximal 8 minor ticks possible
 							break;
 
 						if(axistype == 0) {	// X Minor Ticks
 							int x=0;
 							if(scale == Axis::SCALETYPE_LINEAR)
-								x = x1+j*(x2-x1)/(a->minorTicksNumber()+1);
+								x = x1+j*(x2-x1)/(a.minorTicksNumber()+1);
 							else if (scale == Axis::SCALETYPE_LOG10)
 								x = (int)(x1+(x2-x1)*log10((double)(j+1)));
 							// TODO : SQRT minor tics ?
 							// other scales have no minor tics
 
 							if(x<=xmax+1 && x>=xmin-1) { // minor tics
-								p->setPen(QPen(a->ticksColor(),a->minorTicksWidth()));
+								p->setPen(QPen(a.ticksColor(),a.minorTicksWidth()));
 								if(k==0) {	// x
 									int ypos = ymax;
 									if(pos)
 										ypos = (int) ((ymax+ymin)/2.0);
-									switch(a->ticksPosition()) {
+									switch(a.ticksPosition()) {
 									case 0: p->drawLine(x,ypos,x,ypos+5); break;
 									case 1: p->drawLine(x,ypos-5,x,ypos); break;
 									case 2: p->drawLine(x,ypos-5,x,ypos+5); break;
@@ -752,16 +768,16 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 									int ypos = ymin;
 									if(pos)
 										ypos = (int) ((ymax+ymin)/2.0);
-									switch(a->ticksPosition()) {
+									switch(a.ticksPosition()) {
 									case 0: p->drawLine(x,ypos-5,x,ypos); break;
 									case 1: p->drawLine(x,ypos,x,ypos+5); break;
 									case 2: p->drawLine(x,ypos-5,x,ypos+5); break;
 									case 3: break;
 									}
 								}
-								if (a->hasMinorGrid() && j != a->minorTicksNumber()+1) {
-									p->setPen(QPen(a->minorGridColor(),
-										a->minorGridWidth(),a->minorGridStyle()));
+								if (a.hasMinorGrid() && j != a.minorTicksNumber()+1) {
+									p->setPen(QPen(a.minorGridColor(),
+										a.minorGridWidth(),a.minorGridStyle()));
 									p->drawLine(x,ymin,x,ymax);
 									p->setPen(Qt::SolidLine);
 								}
@@ -770,18 +786,18 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 						else {	// Y Minor Ticks
 							int y=0;
 							if(scale == Axis::SCALETYPE_LINEAR)
-								y = y1+j*(y2-y1)/(a->minorTicksNumber()+1);
+								y = y1+j*(y2-y1)/(a.minorTicksNumber()+1);
 							else if (scale == Axis::SCALETYPE_LOG10)
 								y = (int)(y1+(double)(y2-y1)*log10((double)(j+1)));
 							// all other scales have minor tics = 0
 
 							if(y<=ymax+1 && y>=ymin-1) { // minor tics
-								p->setPen(QPen(a->ticksColor(),a->minorTicksWidth()));
+								p->setPen(QPen(a.ticksColor(),a.minorTicksWidth()));
 								if(k==1) {	// y
 									int xpos = xmin;
 									if(pos)
 										xpos = (int) ((xmax+xmin)/2.0);
-									switch(a->ticksPosition()) {
+									switch(a.ticksPosition()) {
 									case 0: p->drawLine(xpos-5,y,xpos,y); break;
 									case 1: p->drawLine(xpos,y,xpos+5,y); break;
 									case 2: p->drawLine(xpos-5,y,xpos+5,y); break;
@@ -792,16 +808,16 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 									int xpos = xmax;
 									if(pos)
 										xpos = (int) ((xmax+xmin)/2.0);
-									switch(a->ticksPosition()) {
+									switch(a.ticksPosition()) {
 									case 0: p->drawLine(xpos,y,xpos+5,y); break;
 									case 1: p->drawLine(xpos-5,y,xpos,y); break;
 									case 2: p->drawLine(xpos-5,y,xpos+5,y); break;
 									case 3: break;
 									}
 								}
-								if (a->hasMinorGrid() && j != a->minorTicksNumber()+1) {
-									p->setPen(QPen(a->minorGridColor(),
-										a->minorGridWidth(),a->minorGridStyle()));
+								if (a.hasMinorGrid() && j != a.minorTicksNumber()+1) {
+									p->setPen(QPen(a.minorGridColor(),
+										a.minorGridWidth(),a.minorGridStyle()));
 									p->drawLine(xmin,y,xmax,y);
 								}
 								p->setPen(Qt::SolidLine);
@@ -813,7 +829,7 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 		}
 		else {		// Tic Type INCREMENT
 			// use axis Major Ticks as increment
-			double inc = a->majorTicksNumber();
+			double inc = a.majorTicksNumber();
 			double dx=max-min;
 //			kDebug()<<"	DX = "<<dx<<endl;
 			if(inc == -1)	// auto tics
@@ -835,12 +851,12 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 //					kDebug()<<"	VALUE : "<<value<<endl;
 //					kDebug()<<"	X1 : "<<x1<<endl;
 					if(x1<=xmax+1 && x1>=xmin-1) {
-						p->setPen(QPen(a->ticksColor(),a->majorTicksWidth()));
+						p->setPen(QPen(a.ticksColor(),a.majorTicksWidth()));
 						if(k==0) {	// x
 							int ypos = ymax;
 							if(pos)
 								ypos = (int) ((ymax+ymin)/2.0);
-							switch(a->ticksPosition()) {
+							switch(a.ticksPosition()) {
 							case 0: p->drawLine(x1,ypos,x1,ypos+10); break;
 							case 1: p->drawLine(x1,ypos-10,x1,ypos); break;
 							case 2: p->drawLine(x1,ypos-10,x1,ypos+10); break;
@@ -851,7 +867,7 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 							int ypos = ymin;
 							if(pos)
 								ypos = (int) ((ymax+ymin)/2.0);
-							switch(a->ticksPosition()) {
+							switch(a.ticksPosition()) {
 							case 0: p->drawLine(x1,ypos-10,x1,ypos); break;
 							case 1: p->drawLine(x1,ypos,x1,ypos+10); break;
 							case 2: p->drawLine(x1,ypos-10,x1,ypos+10); break;
@@ -859,8 +875,8 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 							}
 						}
 
-						if (a->hasMajorGrid()) {
-							p->setPen(QPen(a->majorGridColor(),a->majorGridWidth(),a->majorGridStyle()));
+						if (a.hasMajorGrid()) {
+							p->setPen(QPen(a.majorGridColor(),a.majorGridWidth(),a.majorGridStyle()));
 							p->drawLine(x1,ymin,x1,ymax);
 							p->setPen(Qt::SolidLine);
 						}
@@ -872,12 +888,12 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 //					kDebug()<<"	Y1 : "<<y1<<endl;
 
 					if(y1<=ymax+1 && y1>=ymin-1) { // major tics
-						p->setPen(QPen(a->ticksColor(),a->majorTicksWidth()));
+						p->setPen(QPen(a.ticksColor(),a.majorTicksWidth()));
 						if(k==1) {	// y
 							int xpos = xmin;
 							if(pos)
 								xpos = (int) ((xmax+xmin)/2.0);
-							switch(a->ticksPosition()) {
+							switch(a.ticksPosition()) {
 							case 0: p->drawLine(xpos-10,y1,xpos,y1); break;
 							case 1: p->drawLine(xpos,y1,xpos+10,y1); break;
 							case 2: p->drawLine(xpos-10,y1,xpos+10,y1); break;
@@ -888,43 +904,43 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 							int xpos = xmax;
 							if(pos)
 								xpos = (int) ((xmax+xmin)/2.0);
-							switch(a->ticksPosition()) {
+							switch(a.ticksPosition()) {
 							case 0: p->drawLine(xpos,y1,xpos+10,y1); break;
 							case 1: p->drawLine(xpos-10,y1,xpos,y1); break;
 							case 2: p->drawLine(xpos-10,y1,xpos+10,y1); break;
 							case 3: break;
 							}
 						}
-						if (a->hasMajorGrid()) {
-							p->setPen(QPen(a->majorGridColor(),a->majorGridWidth(),a->majorGridStyle()));
+						if (a.hasMajorGrid()) {
+							p->setPen(QPen(a.majorGridColor(),a.majorGridWidth(),a.majorGridStyle()));
 							p->drawLine(xmin,y1,xmax,y1);
 							p->setPen(Qt::SolidLine);
 						}
 					}
 				}
 
-				if (a->hasLabels() && set.size() > 0) {		// Numbers
-					QColor c = a->labelsColor();
-					QFont f = a->labelsFont();
+				if (a.hasLabels() && list_Sets.size() > 0) {		// Numbers
+					QColor c = a.labelsColor();
+					QFont f = a.labelsFont();
 
 					// round small values
-					int prec = a->labelsPrecision();
+					int prec = a.labelsPrecision();
 					if(prec>0)
 						value = inc*round(value*pow(10.0,prec)/inc)/pow(10.0,prec);
 
 					// apply scale and shift value
-					value = value*a->scaleFactor()+a->offset();
+					value = value*a.scaleFactor()+a.offset();
 
-					Axis::LabelsFormat atlf = a->labelsFormat();
-					QString label = TicLabel(atlf, prec, a->labelsDateFormat(), value);
+					Axis::LabelsFormat atlf = a.labelsFormat();
+					QString label = getTicLabel(atlf, prec, a.labelsDateFormat(), value);
 
 					// apply prefix & suffix
-					label.prepend(a->labelsPrefix());
-					label.append(a->labelsSuffix());
+					label.prepend(a.labelsPrefix());
+					label.append(a.labelsSuffix());
 
 					// draw tic label
 					QFontMetrics fm(f);
-					int gap = (int)(a->labelsPosition());
+					int gap = (int)(a.labelsPosition());
 
 					switch(k) {
 					case 0:	y1=ymax+gap+(int)(size.y()*fm.ascent()/2); break;
@@ -944,7 +960,7 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 
 					p->save();
 					p->translate(x1,y1);
-					p->rotate(a->labelsRotation());
+					p->rotate(a.labelsRotation());
 					if (atlf == Axis::LABELSFORMAT_AUTO || atlf == Axis::LABELSFORMAT_NORMAL || atlf == Axis::LABELSFORMAT_SCIENTIFIC) {
 						p->setPen(c);
 						p->setFont(f);
@@ -977,8 +993,8 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 					p->restore();
 				}
 
-				if (a->minorTicksEnabled()) {	// Minor Ticks
-					int tt = a->minorTicksNumber()+1;
+				if (a.minorTicksEnabled()) {	// Minor Ticks
+					int tt = a.minorTicksNumber()+1;
 					for (int j=1;j < tt;j++) {
 						if(axistype == 0) {	// X Minor Ticks
 							int x=0;
@@ -991,12 +1007,12 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 							// other scales have no minor tics
 
 							if(x<=xmax+1 && x>=xmin-1) { // minor tics
-								p->setPen(QPen(a->ticksColor(),a->minorTicksWidth()));
+								p->setPen(QPen(a.ticksColor(),a.minorTicksWidth()));
 								if(k==0) {	// x
 									int ypos = ymax;
 									if(pos)
 										ypos = (int) ((ymax+ymin)/2.0);
-									switch(a->ticksPosition()) {
+									switch(a.ticksPosition()) {
 									case 0: p->drawLine(x,ypos,x,ypos+5); break;
 									case 1: p->drawLine(x,ypos-5,x,ypos); break;
 									case 2: p->drawLine(x,ypos-5,x,ypos+5); break;
@@ -1007,16 +1023,16 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 									int ypos = ymin;
 									if(pos)
 										ypos = (int) ((ymax+ymin)/2.0);
-									switch(a->ticksPosition()) {
+									switch(a.ticksPosition()) {
 									case 0: p->drawLine(x,ypos-5,x,ypos); break;
 									case 1: p->drawLine(x,ypos,x,ypos+5); break;
 									case 2: p->drawLine(x,ypos-5,x,ypos+5); break;
 									case 3: break;
 									}
 								}
-								if (a->hasMinorGrid() && j != a->minorTicksNumber()+1) {
-									p->setPen(QPen(a->minorGridColor(),
-										a->minorGridWidth(),a->minorGridStyle()));
+								if (a.hasMinorGrid() && j != a.minorTicksNumber()+1) {
+									p->setPen(QPen(a.minorGridColor(),
+										a.minorGridWidth(),a.minorGridStyle()));
 									p->drawLine(x,ymin,x,ymax);
 									p->setPen(Qt::SolidLine);
 								}
@@ -1032,12 +1048,12 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 //							kDebug()<<"	Y ("<<j<<")  ="<<y<<endl;
 
 							if(y<=ymax+1 && y>=ymin-1) { // minor tics
-								p->setPen(QPen(a->ticksColor(),a->minorTicksWidth()));
+								p->setPen(QPen(a.ticksColor(),a.minorTicksWidth()));
 								if(k==1) {	// y
 									int xpos=xmin;
 									if(pos)
 										xpos = (int) ((xmax+xmin)/2.0);
-									switch(a->ticksPosition()) {
+									switch(a.ticksPosition()) {
 									case 0: p->drawLine(xpos-5,y,xpos,y); break;
 									case 1: p->drawLine(xpos,y,xpos+5,y); break;
 									case 2: p->drawLine(xpos-5,y,xpos+5,y); break;
@@ -1048,16 +1064,16 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 									int xpos=xmax;
 									if(pos)
 										xpos = (int) ((xmax+xmin)/2.0);
-									switch(a->ticksPosition()) {
+									switch(a.ticksPosition()) {
 									case 0: p->drawLine(xpos,y,xpos+5,y); break;
 									case 1: p->drawLine(xpos-5,y,xpos,y); break;
 									case 2: p->drawLine(xpos-5,y,xpos+5,y); break;
 									case 3: break;
 									}
 								}
-								if (a->hasMinorGrid() && j != a->minorTicksNumber()+1) {
-									p->setPen(QPen(a->minorGridColor(),
-										a->minorGridWidth(),a->minorGridStyle()));
+								if (a.hasMinorGrid() && j != a.minorTicksNumber()+1) {
+									p->setPen(QPen(a.minorGridColor(),
+										a.minorGridWidth(),a.minorGridStyle()));
 									p->drawLine(xmin,y,xmax,y);
 								}
 								p->setPen(Qt::SolidLine);
@@ -1070,9 +1086,10 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int k) c
 	}
 }
 
-void Plot2D::drawAxes(QPainter *p, const int w, const int h) const{
-	kDebug()<<"Plot2D::drawAxes()"<<endl;
-	
+//TODO !!!!!!!!!!!!!
+void Plot2D::drawAxes(QPainter *p, const int w, const int h){
+	kDebug()<<"drawing axis label"<<endl;
+
 	const int unit = (int)(5*size.x());
 	const int numunit = (int)(40*size.x()), numunit2 = (int)(20*size.x());
 
@@ -1080,53 +1097,67 @@ void Plot2D::drawAxes(QPainter *p, const int w, const int h) const{
 	int xmax = (int)(w*(size.x()*p2.x()+position.x()));
 	int ymin = (int)(h*(size.y()*p1.y()+position.y()));
 	int ymax = (int)(h*(size.y()*p2.y()+position.y()));
-//	kDebug()<<"	xmin/xmax ymin/ymax : "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
-//	kDebug()<<"	width/height : "<<w<<'/'<<h<<endl;
+	kDebug()<<"	xmin/xmax ymin/ymax : "<<xmin<<'/'<<xmax<<' '<<ymin<<'/'<<ymax<<endl;
+	kDebug()<<"	width/height : "<<w<<'/'<<h<<endl;
+	Label * label;
+	Axis* a;
+	QPointF position;
+	//x1
+// 	 a= &list_Axes[0];
+// 	 if ( a->isAxisEnabled() ){
+// 		label = a->label();
+// 		if (label->position().x()==0 && label->position().y()==0){	// default
+//   			position.setX( (xmin+(xmax-xmin)/2)/(double)w );
+//  			position.setY( (ymax+(unit+numunit2)*a->hasMajorTicks())/(double)h );
+// //  			point.setX( xmin+(xmax-xmin)/2 );
+// //  			point.setY( ymax+(unit+numunit2)*a->hasMajorTicks() );
+// 		}
+// //  	label->setPosition(point);
+// // 		 label->draw(p);
+//   		label->draw(p, position, size, w, h, 0);
+// 	}
 
-	// axes label
-	//TODO !!!!!!!!!!!
-	/*
-	kDebug()<<"	drawing axis label"<<endl;
-	Label *label = axis[3]->label();	// x2
-	if (label->X()==0 && label->Y()==0)	// default
-		label->setPosition((xmin+(xmax-xmin)/2)/(double)w,
-			(ymin-(unit+3*numunit2)*axis[3]->MajorTicksEnabled()-2*unit)/(double)h);
-	if (axis[3]->Enabled())
-		label->draw(p,position,size,w,h,0);
+// 	// y1
+// 	a= &list_Axes[1];
+// 	if (a->isAxisEnabled()) {
+// 		label = a->label();
+// 		if (label->position().x()==0 && label->position().y()==0)	{// default
+// 			point.setX( 0.01 );
+// 			point.setY( (ymin+(ymax-ymin)/2)/(double)h );
+// 		}
+// 		label->setPosition(point);
+// 		label->draw(p,position,size,w,h,270);
+// 	}
 
-	label = axis[0]->label();		// x
-	if (label->X()==0 && label->Y()==0)	// default
-		label->setPosition((xmin+(xmax-xmin)/2)/(double)w,
-			(ymax+(unit+numunit2)*axis[0]->MajorTicksEnabled())/(double)h);
-	if (axis[0]->Enabled())
-		label->draw(p,position,size,w,h,0);
+// 	// y2
+// 	a= &list_Axes[2];
+// 	if (a->isAxisEnabled()) {
+// 		label = a->label();
+// 		if ( label->position().x()==0 && label->position().y()==0 ){	// default
+// 			label->position().setX( (xmax+(2*unit+numunit)*a->hasMajorTicks())/(double)w );
+// 			label->position().setY( (ymin+(ymax-ymin)/2)/(double)h );
+// 		}
+// 		label->draw(p,position,size,w,h,270);
+// 	}
 
-	label = axis[1]->label();		// y
-	if (label->X()==0 && label->Y()==0)	// default
-		label->setPosition(0.01, (ymin+(ymax-ymin)/2)/(double)h);
-	if (axis[1]->Enabled()) {
-		p->save();
-		label->draw(p,position,size,w,h,270);
-		p->restore();
-	}
+// 	//x2
+//  * a= &list_Axes[3];
+// 	if (a->isAxisEnabled()){
+// 		label = a->label();
+// 		if (label->position().x()==0 && label->position().y()==0){	// default
+// 			label->position().setX( (xmin+(xmax-xmin)/2)/(double)w );
+// 			label->position().setY( (ymin-(unit+3*numunit2)*a->hasMajorTicks()-2*unit)/(double)h );
+// 		}
+// 		label->draw(p,position,size,w,h,0);
+// 	}
 
-	label = axis[2]->label();		// y2
-	if (label->X()==0 && label->Y()==0)	// default
-		label->setPosition((xmax+(2*unit+numunit)*axis[2]->MajorTicksEnabled())/(double)w,
-			(ymin+(ymax-ymin)/2)/(double)h);
-	if (axis[2]->Enabled()) {
-		p->save();
-		label->draw(p,position,size,w,h,270);
-		p->restore();
-	}
-	*/
-
-	// axes tics and grid
-	for (int i=0;i<axis.size();i++)
-		drawAxesTicks(p, w, h, i);
+// 	// axes tics and grid
+// 	for (int i=0; i<list_Axes.size(); i++)
+// 		drawAxesTicks(p, w, h, i);
 
 	kDebug()<<"Plot2D::drawAxes() DONE"<<endl;
 }
+
 /*
 void Plot2D::saveAxes(QTextStream *t) {
 	for (int i = 0; i < 4; i++)

@@ -1,41 +1,41 @@
 #ifndef WORKSHEET_H
 #define WORKSHEET_H
 
-#include <QWidget>
-#include <QPainter>
-#include <QList>
-#include <QDomElement>
+#include <QtGui>
+#include <QtXml>
 
-#include "Plot.h"
-#include "elements/Set.h"
+#include "plots/Plot.h"
 #include "sheettype.h"
-#include "plottype.h"
 
 class MainWin;
+class Set;
 
-class Worksheet: public QWidget
-{
+class Worksheet: public QWidget{
 	Q_OBJECT
+
 public:
 	Worksheet(MainWin *m);
 	~Worksheet();
+
 	SheetType sheetType() const { return type; }
-	int plotCount() const { return plot.count(); }
+	int plotCount() const { return listPlots.count(); }
 	void print(QString file=0);
-	void addSet(Set *set, PlotType ptype);
-	Plot *getActivePlot() const { return plot[api]; }
+	void addSet(Set *set, Plot::PlotType ptype);
+	Plot* getActivePlot();
 	QDomElement save(QDomDocument doc);
 	void open(QDomNode node);
+
 private:
 	MainWin *mw;
 	SheetType type;			// needed for mw->active{Work,Spread}sheet()
-	QList<Plot *> plot;		//!< list of plots
-	int api;			//!< active plot index
+	QList<Plot*> listPlots;		//!< list of plots
+	int currentPlotIndex;
+
 	void paintEvent(QPaintEvent *);
 	void setTitle(QString title);
 	void setupPrinter(QPrinter *pr, QString fn);
 	void draw(QPainter *p, int w, int h);
-	void addPlot(PlotType ptype);	//!< add plot of type ptype
+	void addPlot(Plot::PlotType ptype);	//!< add plot of type ptype
 };
 
 #endif //WORKSHEET

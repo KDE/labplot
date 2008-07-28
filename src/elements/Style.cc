@@ -1,21 +1,26 @@
-//LabPlot : Style.cc
-
-#include <KDebug>
 #include "Style.h"
+#include <KDebug>
 
-Style::Style(StyleType type, QColor color, bool filled, QColor fillColor, int width, Qt::PenStyle penStyle, Qt::BrushStyle brushStyle)
+Style::Style(bool l, Style::StyleType type, QColor color, bool filled, QColor fillColor, int width, Qt::PenStyle penStyle, Qt::BrushStyle brushStyle)
 {
 	kDebug()<<"Style()"<<endl;
 	m_type = type;
-	m_color = color;
+	m_lineEnabled=l;
+	m_lineStyle = penStyle;
+	m_lineColor = color;
+	m_lineWidth=width;
+
 	m_filled = filled;
 	m_fillColor = fillColor;
-	m_width=width;
-	m_penStyle = penStyle;
-	m_brushStyle = brushStyle;
+	m_fillBrushStyle = brushStyle;
+
 	m_boxWidth=10;
 	m_autoBoxWidth=false;
 	m_sortPoints=true;
+}
+
+Symbol* Style::symbol(){
+	return &m_symbol;
 }
 /*
 void Style::save(QTextStream *t) {

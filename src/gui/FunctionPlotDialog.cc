@@ -3,7 +3,7 @@
 #include "FunctionPlotWidget.h"
 #include <KDebug>
 
-FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const PlotType& type)
+FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type)
 	: KDialog(mw){
 
 	plotType=type;
@@ -38,7 +38,7 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const PlotType& type)
 	vLayout->addWidget(frameAddTo);
 
 	this->setMainWidget( mainWidget );
-	this->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
+	this->setButtons( KDialog::Ok | KDialog::Cancel );
 
 	//TODO
 // 	Plot *plot=0;
@@ -46,32 +46,30 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const PlotType& type)
 // 	 	plot = p->getPlot(p->API());
 
 	QString caption;
-	if (type == PLOT2D)
+	if (type == Plot::PLOT2D)
 		caption=i18n("Add New 2D Function Plot");
-	else if (type == PLOTSURFACE)
+	else if (type == Plot::PLOTSURFACE)
 		caption=i18n("Add New 2D Surface Function Plot");
-	else if (type == PLOTPOLAR)
+	else if (type == Plot::PLOTPOLAR)
 		caption=i18n("Add New 2D Polar Function");
-	else if (type == PLOT3D)
+	else if (type == Plot::PLOT3D)
 		caption=i18n("Add New 3D Function");
-	else if (type == PLOTQWT3D)
+	else if (type == Plot::PLOTQWT3D)
 		caption=i18n("Add New QWT Function");
 
 	this->setCaption(caption);
 
 	//SLOTs
 	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
-	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
+// 	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
 	connect( this, SIGNAL( changed( bool ) ), this, SLOT( enableButtonApply( bool ) ) ); //TODO
 
-	this->enableButtonApply( false );
 	resize( QSize(300,400) );
-
 	kDebug()<<"Initialization done."<<endl;
 }
 
 /*!
-	sets the data set \c s to be edited.
+	displays the data set \c s to be edited.
 */
 void FunctionPlotDialog::setSet(Set* s){
 	set=s;
@@ -81,16 +79,27 @@ void FunctionPlotDialog::setSet(Set* s){
 	//to a new worksheet/spreadsheet.
 	editMode=true;
 	frameAddTo->hide();
+
+	//Add apply-Button
+	this->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
+	this->enableButtonApply( false );
 }
 
-void FunctionPlotDialog::save(){
-	this->apply();
+void FunctionPlotDialog::saveSet(Set* set) const{
+	//TODO
+	//this->apply();
+	functionPlotWidget->saveSet(set);
 	kDebug()<<"Changes saved."<<endl;
-	this->close();
+// 	this->close();
 }
 
+int FunctionPlotDialog::currentSheetIndex() const{
+	return cbAddTo->currentIndex();
+}
 
 void FunctionPlotDialog::apply() const{
+	functionPlotWidget->saveSet(set);
+/*
 	if (editMode){
 		//we're in the edit mode, there is an edit-object:
 		// -> save the changes and trigger the update in MainWin
@@ -109,5 +118,6 @@ void FunctionPlotDialog::apply() const{
 		functionPlotWidget->saveSet(&newSet);
    		mainWin->addSet(newSet, cbAddTo->currentIndex(), plotType);
 	}
+	*/
 	kDebug()<<"Changes applied."<<endl;
 }

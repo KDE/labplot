@@ -1,6 +1,5 @@
 #include "PlotStyleWidget.h"
 #include "../elements/Style.h"
-#include "../elements/Symbol.h"
 #include <KDebug>
 
 PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent), PlotStyleWidgetInterface(){
@@ -8,7 +7,7 @@ PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent), PlotStyleWidg
 	ui.setupUi(this);
 
 	QStringList stylelist;
-	stylelist<<i18n("Lines")<<i18n("NoCurve")<<i18n("Steps")<<i18n("Boxes")<<i18n("Impulses")<<i18n("Y Boxes");
+	stylelist<<i18n("Lines")<<i18n("Steps")<<i18n("Boxes")<<i18n("Impulses")<<i18n("Y Boxes");
 	ui.cbLineType->insertItems(-1, stylelist);
 
 	//TODO read out and set the default settings
@@ -18,20 +17,21 @@ PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent), PlotStyleWidg
 
 	ui.kcbAreaFillingColor->setColor(Qt::green);
 	this->fillAreaFillingPatternBox();
-	ui.cbAreaFillingPattern->setCurrentIndex(0);
+	ui.cbFillBrushStyle->setCurrentIndex(0);
 
 	ui.kcbSymbolColor->setColor(Qt::black);
 	this->fillSymbolTypeBox();
 	ui.cbSymbolType->setCurrentIndex(0);
 	this->symbolTypeChanged(0);
 
-	ui.kcbSymbolFillingColor->setColor(Qt::black);
+	ui.kcbSymbolFillColor->setColor(Qt::black);
 	this->fillSymbolFillingPatternBox();
-	ui.cbSymbolFillingPattern->setCurrentIndex(0);
+	ui.cbSymbolFillBrushStyle->setCurrentIndex(0);
 	this->fillSymbolFillingBox();
-	ui.cbSymbolFilling->setCurrentIndex(0);
+	ui.cbSymbolFillType->setCurrentIndex(0);
 
 	//Slots
+	connect( ui.cbSymbolType, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolTypeChanged(int)) );
 	connect( ui.kcbLineColor, SIGNAL(changed (const QColor &)), this, SLOT(fillLineStyleBox()) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(int)), this, SLOT(fillLineStyleBox()) );
 
@@ -39,23 +39,75 @@ PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent), PlotStyleWidg
 
 	connect( ui.cbSymbolType, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolTypeChanged(int)) );
 	connect( ui.kcbSymbolColor, SIGNAL(changed (const QColor &)), this, SLOT(fillSymbolTypeBox()) );
-	connect( ui.kcbSymbolFillingColor, SIGNAL(changed (const QColor &)), this, SLOT(symbolFillingColorChanged()) );
-	connect( ui.cbSymbolFillingPattern, SIGNAL(currentIndexChanged(int)), this, SLOT(fillSymbolFillingBox()) );
+	connect( ui.kcbSymbolFillColor, SIGNAL(changed (const QColor &)), this, SLOT(symbolFillingColorChanged()) );
+	connect( ui.cbSymbolFillBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillSymbolFillingBox()) );
 
-	connect( ui.chbBoxWidth, SIGNAL(stateChanged (int)), this, SLOT(boxWidthStateChanged(int)) );
+	connect( ui.chbAutoBoxWidth, SIGNAL(stateChanged (int)), this, SLOT(boxWidthStateChanged(int)) );
 }
 
 PlotStyleWidget::~PlotStyleWidget(){}
 
+/*!
+	displays the properties of the Style \c style in the widget.
+*/
 void PlotStyleWidget::setStyle(const Style* style){
-	ui.cbLineType->setCurrentIndex(style->type());
-	//TODO
+	//LineStyle
+	ui.chbLineEnabled->setChecked( style->isLineEnabled() );
+	ui.cbLineType->setCurrentIndex( style->type() );
+ 	ui.cbLineStyle->setCurrentIndex( style->lineStyle()-1 );
+	ui.kcbLineColor->setColor( style->lineColor() );
+	ui.sbLineWidth->setValue( style->lineWidth()  );
+
+	//Area filling
+	ui.chbAreaFillingEnabled->setChecked( style->isFilled()  );
+	ui.cbFillBrushStyle->setCurrentIndex( style->fillBrushStyle()  );
+	ui.kcbAreaFillingColor->setColor( style->fillColor()  );
+
+	//Symbol
+	Symbol* symbol=const_cast<Style*>(style)->symbol();
+	ui.chbSymbolEnabled->setChecked( style->isSymbolEnabled() );
+	ui.cbSymbolType->setCurrentIndex( symbol->type()-1 );
+	ui.kcbSymbolColor->setColor( symbol->color()  );
+	ui.sbSymbolSize->setValue( symbol->size()  );
+	ui.cbSymbolFillType->setCurrentIndex( symbol->fillType() );
+	ui.kcbSymbolFillColor->setColor( symbol->fillColor() );
+	ui.cbSymbolFillBrushStyle->setCurrentIndex( symbol->fillBrushStyle()-1 );
+
+	//Misc
+	ui.chbAutoBoxWidth->setChecked( style->isAutoBoxWidth() );
+	ui.sbBoxWidth->setValue( style->boxWidth() );
+ 	ui.chbSortPoints->setChecked( style->isPointsSorting() );
 }
 
+/*!
+	save the widget data in the Style \c style.
+*/
 void PlotStyleWidget::saveStyle(Style* style) const{
- 	style->setType( (StyleType)ui.cbLineType->currentIndex() );
-// 	style->setLineStyle(
-	//TODO
+	//Line style
+	style->setLineEnabled( ui.chbLineEnabled->isChecked() );
+ 	style->setType( (Style::StyleType)ui.cbLineType->currentIndex() );
+ 	style->setLineStyle( Qt::PenStyle(ui.cbLineStyle->currentIndex()+1) );
+	style->setLineColor( ui.kcbLineColor->color() );
+	style->setLineWidth( ui.sbLineWidth->value() );
+
+	//Area filling
+	style->setFilled( ui.chbAreaFillingEnabled->isChecked() );
+	style->setFillBrushStyle( (Qt::BrushStyle)ui.cbFillBrushStyle->currentIndex() );
+	style->setFillColor( ui.kcbAreaFillingColor->color() );
+
+	//Symbol
+	style->setSymbolEnabled( ui.chbSymbolEnabled->isChecked() );
+	style->symbol()->setType( Symbol::SymbolType(ui.cbSymbolType->currentIndex() +1) );
+	style->symbol()->setColor( ui.kcbSymbolColor->color() );
+	style->symbol()->setSize( ui.sbSymbolSize->value() );
+	style->symbol()->setFillType( Symbol::SymbolFillType(ui.cbSymbolFillType->currentIndex()) );
+	style->symbol()->setFillColor( ui.kcbSymbolFillColor->color() );
+	style->symbol()->setFillBrushStyle( Qt::BrushStyle(ui.cbSymbolFillBrushStyle->currentIndex()+1) );
+
+	//Misc
+	style->setAutoBoxWidth( ui.chbAutoBoxWidth->isChecked() );
+	style->setBoxWidth( ui.sbBoxWidth->value() );
+	style->setPointsSorting( ui.chbSortPoints->isChecked() );
 }
 
 /*!
@@ -96,15 +148,15 @@ void PlotStyleWidget::fillLineStyleBox(){
 	Called on start and if the color of the area filling is changed.
 */
 void PlotStyleWidget::fillAreaFillingPatternBox() {
-	int index=ui.cbAreaFillingPattern->currentIndex();
-	ui.cbAreaFillingPattern->clear();
+	int index=ui.cbFillBrushStyle->currentIndex();
+	ui.cbFillBrushStyle->clear();
 
 	QPainter pa;
 	int offset=5;
-	int w=ui.cbAreaFillingPattern->width() - 2*offset;
-	int h=ui.cbAreaFillingPattern->height() - 2*offset;
+	int w=ui.cbFillBrushStyle->width() - 2*offset;
+	int h=ui.cbFillBrushStyle->height() - 2*offset;
 	QPixmap pm( w, h );
-	ui.cbAreaFillingPattern->setIconSize( QSize(w,h) );
+	ui.cbFillBrushStyle->setIconSize( QSize(w,h) );
 
  	QColor penColor = ui.kcbAreaFillingColor->color();
 	QPen pen(Qt::SolidPattern, 1);
@@ -118,10 +170,10 @@ void PlotStyleWidget::fillAreaFillingPatternBox() {
  		pa.setBrush( QBrush(penColor, (Qt::BrushStyle)i) );
 		pa.drawRect( offset, offset, w-2*offset, h-2*offset);
 		pa.end();
-		ui.cbAreaFillingPattern->addItem( QIcon(pm), "" );
+		ui.cbFillBrushStyle->addItem( QIcon(pm), "" );
 	}
 
-	ui.cbAreaFillingPattern->setCurrentIndex(index);
+	ui.cbFillBrushStyle->setCurrentIndex(index);
 }
 
 /*!
@@ -133,8 +185,8 @@ void PlotStyleWidget::fillSymbolTypeBox(){
 	ui.cbSymbolType->clear();
 
 	QColor color=ui.kcbSymbolColor->color();
-// 	QColor fillColor=ui.kcbSymbolFillingColor->color();
-// 	Qt::BrushStyle fillBrushStyle=Qt::BrushStyle(ui.cbSymbolFillingPattern->currentIndex());
+// 	QColor fillColor=ui.kcbSymbolFillColor->color();
+// 	Qt::BrushStyle fillBrushStyle=Qt::BrushStyle(ui.cbSymbolFillBrushStyle->currentIndex());
 	QPainter pa;
 
 	int offset=5;
@@ -151,7 +203,7 @@ void PlotStyleWidget::fillSymbolTypeBox(){
 
 		//draw the symbol in the middle of the pixmap
 // 		Symbol::draw(&pa, QPoint(size/2, size/2), (Symbol::SType)i, color, size, Symbol::FNONE, fillColor, fillBrushStyle);
-		Symbol::draw(&pa, QPoint(size/2, size/2), (Symbol::SType)i, color, size-2*offset, Symbol::FNONE);
+		Symbol::draw(&pa, new QPoint(size/2, size/2), (Symbol::SymbolType)i, color, size-2*offset, Symbol::FNONE);
 		pa.end();
 
 		ui.cbSymbolType->addItem(QIcon(pm), "");
@@ -165,13 +217,13 @@ void PlotStyleWidget::fillSymbolTypeBox(){
 	Called on start and if the symbol filling color or the symbol type are changed.
 */
 void PlotStyleWidget::fillSymbolFillingBox(){
-		int index = ui.cbSymbolFilling->currentIndex();
-		ui.cbSymbolFilling->clear();
+		int index = ui.cbSymbolFillType->currentIndex();
+		ui.cbSymbolFillType->clear();
 
 		QColor color=ui.kcbSymbolColor->color();
-		Symbol::SType symbolType=Symbol::SType(ui.cbSymbolType->currentIndex() +1);
-		QColor fillColor=ui.kcbSymbolFillingColor->color();
-		Qt::BrushStyle fillBrushStyle=Qt::BrushStyle(ui.cbSymbolFillingPattern->currentIndex()+1);
+		Symbol::SymbolType symbolType=Symbol::SymbolType(ui.cbSymbolType->currentIndex() +1);
+		QColor fillColor=ui.kcbSymbolFillColor->color();
+		Qt::BrushStyle fillBrushStyle=Qt::BrushStyle(ui.cbSymbolFillBrushStyle->currentIndex()+1);
 		QPainter pa;
 
 		int offset=5;
@@ -179,19 +231,19 @@ void PlotStyleWidget::fillSymbolFillingBox(){
 		QPixmap pm( size, size );
 
 		int c=Symbol::fillingTypeCount();
-		ui.cbSymbolFilling->addItem( i18n("no filling") );
+		ui.cbSymbolFillType->addItem( i18n("no filling") );
 		for (int i=1; i<c; i++) {
 			pm.fill(Qt::transparent);
 			pa.begin( &pm );
 			pa.setRenderHint(QPainter::Antialiasing);
 
 			//draw the symbol in the middle of the pixmap
-			Symbol::draw(&pa, QPoint(size/2, size/2), symbolType, color, size-2*offset, (Symbol::FType)i, fillColor, fillBrushStyle);
+			Symbol::draw(&pa, new QPoint(size/2, size/2), symbolType, color, size-2*offset, (Symbol::SymbolFillType)i, fillColor, fillBrushStyle);
 			pa.end();
 
-			ui.cbSymbolFilling->addItem(QIcon(pm), "");
+			ui.cbSymbolFillType->addItem(QIcon(pm), "");
 		}
-		ui.cbSymbolFilling->setCurrentIndex(index);
+		ui.cbSymbolFillType->setCurrentIndex(index);
 }
 
 /*!
@@ -199,17 +251,17 @@ void PlotStyleWidget::fillSymbolFillingBox(){
 	Called on start and if the symbol filling color is changed.
 */
 void PlotStyleWidget::fillSymbolFillingPatternBox() {
-	int index=ui.cbSymbolFillingPattern->currentIndex();
-	ui.cbSymbolFillingPattern->clear();
+	int index=ui.cbSymbolFillBrushStyle->currentIndex();
+	ui.cbSymbolFillBrushStyle->clear();
 
 	QPainter pa;
 	int offset=5;
-	int w=ui.cbSymbolFillingPattern->width() - 2*offset;
-	int h=ui.cbSymbolFillingPattern->height() - 2*offset;
+	int w=ui.cbSymbolFillBrushStyle->width() - 2*offset;
+	int h=ui.cbSymbolFillBrushStyle->height() - 2*offset;
 	QPixmap pm( w, h );
-	ui.cbSymbolFillingPattern->setIconSize( QSize(w,h) );
+	ui.cbSymbolFillBrushStyle->setIconSize( QSize(w,h) );
 
- 	QColor penColor = ui.kcbSymbolFillingColor->color();
+ 	QColor penColor = ui.kcbSymbolFillColor->color();
 	QPen pen(Qt::SolidPattern, 1);
  	pa.setPen( pen );
 
@@ -221,10 +273,10 @@ void PlotStyleWidget::fillSymbolFillingPatternBox() {
  		pa.setBrush( QBrush(penColor, (Qt::BrushStyle)i) );
 		pa.drawRect( offset, offset, w-2*offset, h-2*offset);
 		pa.end();
-		ui.cbSymbolFillingPattern->addItem( QIcon(pm), "" );
+		ui.cbSymbolFillBrushStyle->addItem( QIcon(pm), "" );
 	}
 
-	ui.cbSymbolFillingPattern->setCurrentIndex(index);
+	ui.cbSymbolFillBrushStyle->setCurrentIndex(index);
 }
 
 
@@ -246,22 +298,22 @@ void PlotStyleWidget::symbolFillingColorChanged(){
 	Depending on the selected symbol type, enables/disables the widgets for the symboll filling.
 */
 void PlotStyleWidget::symbolTypeChanged(int index){
-	Symbol::SType t = Symbol::SType(index+1);
+	Symbol::SymbolType t = Symbol::SymbolType(index+1);
 	kDebug()<<"Symbol"<<t<<" selected"<<endl;
 
 	if (t==Symbol::SCROSS || t==Symbol::SDOT || t==Symbol::SPLUS
 		   || t==Symbol::SSTAR || t==Symbol::SMINUS || t==Symbol::SPIPE || t==Symbol::SSTAR2){
 		ui.lSymbolFilling->setEnabled(false);
-		ui.cbSymbolFilling->setEnabled(false);
-		ui.kcbSymbolFillingColor->setEnabled(false);
+		ui.cbSymbolFillType->setEnabled(false);
+		ui.kcbSymbolFillColor->setEnabled(false);
 		ui.lSymbolFillingPattern->setEnabled(false);
-		ui.cbSymbolFillingPattern->setEnabled(false);
+		ui.cbSymbolFillBrushStyle->setEnabled(false);
 	}else{
 		ui.lSymbolFilling->setEnabled(true);
-		ui.cbSymbolFilling->setEnabled(true);
-		ui.kcbSymbolFillingColor->setEnabled(true);
+		ui.cbSymbolFillType->setEnabled(true);
+		ui.kcbSymbolFillColor->setEnabled(true);
 		ui.lSymbolFillingPattern->setEnabled(true);
-		ui.cbSymbolFillingPattern->setEnabled(true);
+		ui.cbSymbolFillBrushStyle->setEnabled(true);
 
 		this->fillSymbolFillingBox();
 	}
