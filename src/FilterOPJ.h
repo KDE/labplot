@@ -15,6 +15,7 @@ public:
 	void setSymbolType(Symbol *symbol,int type);
 	Qt::PenStyle translateOriginLineStyle(int linestyle) const;
 	QColor translateOriginColor(int color) const;
+	QString translateOriginColType(int type) const;
 	QString parseOriginText(const QString &str) const;
 	QString parseOriginTags(const QString &str) const;
 private:

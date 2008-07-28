@@ -1,7 +1,7 @@
 #!/bin/bash
 # build liborigin RPM package
 
-LVERSION=20070821
+LVERSION=20080225
 SPEC=liborigin.spec
 
 ################################

@@ -49,7 +49,6 @@ General :
 	* check functions.h, constants.h
 		* use GSL
 		* GSL_VERSION
-	* use newest liborigin
 -------------------------------------------------------------------------
 Pending :
 	* Print 
@@ -60,7 +59,7 @@ Pending :
 		Options
 			same first column
 		Formats
-			advanced opj
+			advanced opj (matrices, etc.)
 			magick (images)
 			audio
 			database (kexi ?)
@@ -99,7 +98,7 @@ more things :
 		column dialog on double click
 		mask data (TableModel ?)
 		menu
-			...
+		...
 	Plots
 		save/open
 		surface

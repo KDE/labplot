@@ -15,7 +15,7 @@ FilterOPJ::FilterOPJ(MainWin *mw, QString filename)
 
 int FilterOPJ::import() {
 	kDebug()<<"FilterOPJ::import() : "<<filename<<endl;
-/*
+
 	OPJFile opj(qPrintable(filename));
 	qPrintable(filename);	// needed for some reason
 	kDebug()<<"	Parsing OPJ file "<<filename<<" ..."<<endl;
@@ -42,12 +42,12 @@ int FilterOPJ::import() {
 		for (int j=0;j<nr_cols;j++) {
 			QString name(opj.colName(s,j));
 			spread->setColumnName(j,name.replace(QRegExp(".*_"),""));
-			spread->setColumnType(j,opj.colType(s,j));
+			spread->setColumnType(j,translateOriginColType(opj.colType(s,j)));
 
 			for (int i=0;i<opj.numRows(s,j);i++) {
 				double *v = (double *) opj.oData(s,j,i,true);
 
-				if(strcmp(opj.colType(s,j),"LABEL")) {	// number
+				if(opj.colType(s,j) != Label) {	// number
 					if(fabs(*v)>0 && fabs(*v)<2.0e-300)	// empty entry
 						continue;
 					spread->setText(i,j,QString::number(*v));
@@ -57,7 +57,7 @@ int FilterOPJ::import() {
 			}
 		}
 	}
-	*/
+
 	// TODO
 /*	for (int s=0;s<opj.numMatrices();s++) {
 		kDebug()<<"		Matrix "<<s+1<<" : "<<opj.matrixName(s)<<" (ParentFolder : "<<opj.matrixParentFolder(s)<<")"<<endl;
@@ -583,6 +583,21 @@ QColor FilterOPJ::translateOriginColor(int color) const {
 	}
 
 	return qcolor;
+}
+
+QString FilterOPJ::translateOriginColType(int type) const {
+	QString s;
+	switch(type) {
+	case X: s="X"; break;
+	case Y: s="Y"; break;
+	case Z:	s="Z"; break;
+	case XErr: s="DX"; break;
+	case YErr: s="DY"; break;
+	case Label: s="LABEL"; break;
+	default: s="NONE"; break;
+	}
+
+	return s;
 }
 
 QString strreverse(const QString &str) { 	//QString reversing

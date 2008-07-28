@@ -1,0 +1,11 @@
+VERSION	= 0.0.4
+all : liborigin.dylib opj2dat 
+
+liborigin.dylib : OPJFile.cpp OPJFile.h
+	g++ -dynamiclib -multiply_defined suppress -current_version $(VERSION) -compatibility_version $(VERSION) -headerpad_max_install_names -install_name @PREFIX@/lib/liborigin.0.dylib -fPIC OPJFile.cpp -o liborigin.0.0.dylib
+
+opj2dat: opj2dat.cpp OPJFile.cpp
+	g++ -o opj2dat opj2dat.cpp -L. -lorigin.0.0
+
+clean :
+	rm -f *~ *.o opj2dat liborigin.so

@@ -1,14 +1,14 @@
 #
 # spec file for liborigin
 #
-# Copyright (c) 2007 Stefan Gerlach.
+# Copyright (c) 2008 Stefan Gerlach.
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
 #
 # Please submit bugfixes or comments to stefan.gerlach@uni-konstanz.de
 #
 
-%define version 20070821
+%define version 20080225
 %define release 1
 
 ################################################################################

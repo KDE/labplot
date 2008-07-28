@@ -1,9 +1,10 @@
 /***************************************************************************
     File                 : OPJFile.h
     --------------------------------------------------------------------
-    Copyright            : (C) 2005-2007 Stefan Gerlach
-                           (C) 2007 by Alex Kargovsky, Ion Vasilief
-    Email (use @ for *)  : kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr
+    Copyright            : (C) 2005-2008 Stefan Gerlach
+                           (C) 2008 by Alex Kargovsky, Ion Vasilief
+    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de,
+			   kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr
     Description          : Origin project import class
 
  ***************************************************************************/
@@ -32,9 +33,9 @@
 #ifndef OPJFILE_H
 #define OPJFILE_H
 
-/* version 0.0 2007-11-19 */
-#define LIBORIGIN_VERSION 0x00071119
-#define LIBORIGIN_VERSION_STRING "2007-11-19"
+/* version 0.0 2008-02-25 */
+#define LIBORIGIN_VERSION 0x00080225
+#define LIBORIGIN_VERSION_STRING "2008-02-25"
 
 #include <string>
 #include <vector>
@@ -69,20 +70,26 @@ struct rect {
 
 struct originWindow {
 	enum State {Normal, Minimized, Maximized};
+	enum Title {Name, Label, Both};
 
 	string name;
 	string label;
 	int objectID;
-	string parentFolder;
 	bool bHidden;
 	State state;
+	Title title;
 	rect clientRect;
+	double creation_date;	  // Julian date/time
+	double modification_date; // Julian date/time
 
 	originWindow(string _name="", string _label="", bool _bHidden=false)
 	:	name(_name)
 	,	label(_label)
 	,	bHidden(_bHidden)
 	,	state(Normal)
+	,	title(Both)
+	,	creation_date(0.0)
+	,	modification_date(0.0)
 	{};
 };
 struct originData {
@@ -101,9 +108,11 @@ struct originData {
 	{};
 };
 
+enum ColumnType {X, Y, Z, XErr, YErr, Label, NONE};
+
 struct spreadColumn {
 	string name;
-	string type;
+	ColumnType type;
 	int value_type;//Numeric = 0, Text = 1, Date = 2, Time = 3, Month = 4, Day = 5, Text&Numeric = 6
 	int value_type_specification; //see above
 	int significant_digits;
@@ -318,6 +327,26 @@ struct graphCurve {
 
 enum AxisPosition {Left = 0, Bottom = 1, Right = 2, Top = 3};
 
+struct graphAxisBreak {
+	bool show;
+
+	bool log10;
+	double from;
+	double to;
+	int position;
+
+	double scale_increment_before;
+	double scale_increment_after;
+
+	unsigned char minor_ticks_before;
+	unsigned char minor_ticks_after;
+
+	graphAxisBreak()
+	:	show(false)
+	{
+	}
+};
+
 struct graphGrid {
 	bool hidden;
 	int color;
@@ -421,6 +450,9 @@ struct graphLayer {
 	graphAxis xAxis;
 	graphAxis yAxis;
 
+	graphAxisBreak xAxisBreak;
+	graphAxisBreak yAxisBreak;
+
 	double histogram_bin;
 	double histogram_begin;
 	double histogram_end;
@@ -429,6 +461,19 @@ struct graphLayer {
 	vector<line> lines;
 	vector<bitmap> bitmaps;
 	vector<graphCurve> curve;
+};
+
+struct graphLayerRange {
+	double min;
+	double max;
+	double step;
+
+	graphLayerRange(double _min=0.0, double _max=0.0, double _step=0.0)
+	{
+		min=_min;
+		max=_max;
+		step=_step;
+	};
 };
 
 struct graph : public originWindow {
@@ -451,9 +496,14 @@ struct note : public originWindow {
 struct projectNode {
 	int type; // 0 - object, 1 - folder
 	string name;
-	projectNode(string _name="", int _type=0)
+	double creation_date;	  // Julian date/time
+	double modification_date; // Julian date/time
+
+	projectNode(string _name="", int _type=0, double _creation_date=0.0, double _modification_date=0.0)
 	:	name(_name)
 	,	type(_type)
+	,	creation_date(_creation_date)
+	,	modification_date(_modification_date)
 	{};
 };
 
@@ -476,19 +526,21 @@ public:
 	//spreadsheet properties
 	int numSpreads() const { return SPREADSHEET.size(); }			//!< get number of spreadsheets
 	const char *spreadName(int s) const { return SPREADSHEET[s].name.c_str(); }	//!< get name of spreadsheet s
-	const char *spreadParentFolder(int s) const { return SPREADSHEET[s].parentFolder.c_str(); }	//!< get parent folder of spreadsheet s
 	bool spreadHidden(int s) const { return SPREADSHEET[s].bHidden; }	//!< is spreadsheet s hidden
 	bool spreadLoose(int s) const { return SPREADSHEET[s].bLoose; }	//!< is spreadsheet s loose
 	rect spreadWindowRect(int s) const { return SPREADSHEET[s].clientRect; }		//!< get window rectangle of spreadsheet s
 	const char *spreadLabel(int s) const { return SPREADSHEET[s].label.c_str(); }	//!< get label of spreadsheet s
+	double spreadCreationDate(int s) const { return SPREADSHEET[s].creation_date; }	//!< get creation date of spreadsheet s
+	double spreadModificationDate(int s) const { return SPREADSHEET[s].modification_date; }	//!< get modification date of spreadsheet s
 	originWindow::State spreadState(int s) const { return SPREADSHEET[s].state; }	//!< get window state of spreadsheet s
+	originWindow::Title spreadTitle(int s) const { return SPREADSHEET[s].title; }	//!< get window state of spreadsheet s
 	int numCols(int s) const { return SPREADSHEET[s].column.size(); }		//!< get number of columns of spreadsheet s
 	int numRows(int s,int c) const { return SPREADSHEET[s].column[c].odata.size(); }	//!< get number of rows of column c of spreadsheet s
 	int maxRows(int s) const { return SPREADSHEET[s].maxRows; }		//!< get maximum number of rows of spreadsheet s
 
 	//spreadsheet's column properties
 	const char *colName(int s, int c) const { return SPREADSHEET[s].column[c].name.c_str(); }	//!< get name of column c of spreadsheet s
-	const char *colType(int s, int c) const { return SPREADSHEET[s].column[c].type.c_str(); }	//!< get type of column c of spreadsheet s
+	ColumnType colType(int s, int c) const { return SPREADSHEET[s].column[c].type; }	//!< get type of column c of spreadsheet s
 	const char *colCommand(int s, int c) const { return SPREADSHEET[s].column[c].command.c_str(); }	//!< get command of column c of spreadsheet s
 	const char *colComment(int s, int c) const { return SPREADSHEET[s].column[c].comment.c_str(); }	//!< get comment of column c of spreadsheet s
 	int colValueType(int s, int c) const { return SPREADSHEET[s].column[c].value_type; }	//!< get value type of column c of spreadsheet s
@@ -509,11 +561,13 @@ public:
 	//matrix properties
 	int numMatrices() const { return MATRIX.size(); }			//!< get number of matrices
 	const char *matrixName(int m) const { return MATRIX[m].name.c_str(); }	//!< get name of matrix m
-	const char *matrixParentFolder(int m) const { return MATRIX[m].parentFolder.c_str(); }	//!< get parent folder of matrix m
 	bool matrixHidden(int m) const { return MATRIX[m].bHidden; }	//!< is matrix m hidden
 	rect matrixWindowRect(int m) const { return MATRIX[m].clientRect; }		//!< get window rectangle of matrix m
 	const char *matrixLabel(int m) const { return MATRIX[m].label.c_str(); }	//!< get label of matrix m
+	double matrixCreationDate(int m) const { return MATRIX[m].creation_date; }	//!< get creation date of matrix m
+	double matrixModificationDate(int m) const { return MATRIX[m].modification_date; }	//!< get modification date of matrix m
 	originWindow::State matrixState(int m) const { return MATRIX[m].state; }	//!< get window state of matrix m
+	originWindow::Title matrixTitle(int m) const { return MATRIX[m].title; }	//!< get window state of matrix m
 	int numMatrixCols(int m) const { return MATRIX[m].nr_cols; }		//!< get number of columns of matrix m
 	int numMatrixRows(int m) const { return MATRIX[m].nr_rows; }	//!< get number of rows of matrix m
 	const char *matrixFormula(int m) const { return MATRIX[m].command.c_str(); }	//!< get formula of matrix m
@@ -566,9 +620,11 @@ public:
 
 	int numGraphs() const { return GRAPH.size(); }			//!< get number of graphs
 	const char *graphName(int s) const { return GRAPH[s].name.c_str(); }	//!< get name of graph s
-	const char *graphParentFolder(int s) const { return GRAPH[s].parentFolder.c_str(); }	//!< get parent folder of graph s
 	const char *graphLabel(int s) const { return GRAPH[s].label.c_str(); }	//!< get name of graph s
+	double graphCreationDate(int s) const { return GRAPH[s].creation_date; }	//!< get creation date of graph s
+	double graphModificationDate(int s) const { return GRAPH[s].modification_date; }	//!< get modification date of graph s
 	originWindow::State graphState(int s) const { return GRAPH[s].state; }	//!< get window state of graph s
+	originWindow::Title graphTitle(int s) const { return GRAPH[s].title; }	//!< get window state of graph s
 	bool graphHidden(int s) const { return GRAPH[s].bHidden; }	//!< is graph s hidden
 	rect graphRect(int s) const { return rect(GRAPH[s].width, GRAPH[s].height); }		//!< get rectangle of graph s
 	rect graphWindowRect(int s) const { return GRAPH[s].clientRect; }		//!< get window rectangle of graph s
@@ -577,22 +633,16 @@ public:
 	text layerXAxisTitle(int s, int l) const { return GRAPH[s].layer[l].xAxis.label; }		//!< get label of X-axis of layer l of graph s
 	text layerYAxisTitle(int s, int l) const { return GRAPH[s].layer[l].yAxis.label; }		//!< get label of Y-axis of layer l of graph s
 	text layerLegend(int s, int l) const { return GRAPH[s].layer[l].legend; }		//!< get legend of layer l of graph s
-	vector<text> layerTexts(int s, int l) const {	return GRAPH[s].layer[l].texts; } //!< get texts of layer l of graph s
-	vector<line> layerLines(int s, int l) const {	return GRAPH[s].layer[l].lines; } //!< get lines of layer l of graph s
-	vector<bitmap> layerBitmaps(int s, int l) const {	return GRAPH[s].layer[l].bitmaps; } //!< get bitmaps of layer l of graph s
-	vector<double> layerXRange(int s, int l) const {
-		vector<double> range;
-		range.push_back(GRAPH[s].layer[l].xAxis.min);
-		range.push_back(GRAPH[s].layer[l].xAxis.max);
-		range.push_back(GRAPH[s].layer[l].xAxis.step);
-		return range;
+	vector<text> layerTexts(int s, int l) const { return GRAPH[s].layer[l].texts; } //!< get texts of layer l of graph s
+	vector<line> layerLines(int s, int l) const { return GRAPH[s].layer[l].lines; } //!< get lines of layer l of graph s
+	vector<bitmap> layerBitmaps(int s, int l) const { return GRAPH[s].layer[l].bitmaps; } //!< get bitmaps of layer l of graph s
+	graphAxisBreak layerXBreak(int s, int l) const { return GRAPH[s].layer[l].xAxisBreak; } //!< get break of horizontal axis of layer l of graph s
+	graphAxisBreak layerYBreak(int s, int l) const { return GRAPH[s].layer[l].yAxisBreak; } //!< get break of vertical axis of layer l of graph s
+	graphLayerRange layerXRange(int s, int l) const {
+		return graphLayerRange(GRAPH[s].layer[l].xAxis.min, GRAPH[s].layer[l].xAxis.max, GRAPH[s].layer[l].xAxis.step);
 	} //!< get X-range of layer l of graph s
-	vector<double> layerYRange(int s, int l) const {
-		vector<double> range;
-		range.push_back(GRAPH[s].layer[l].yAxis.min);
-		range.push_back(GRAPH[s].layer[l].yAxis.max);
-		range.push_back(GRAPH[s].layer[l].yAxis.step);
-		return range;
+	graphLayerRange layerYRange(int s, int l) const {
+		return graphLayerRange(GRAPH[s].layer[l].yAxis.min, GRAPH[s].layer[l].yAxis.max, GRAPH[s].layer[l].yAxis.step);
 	} //!< get Y-range of layer l of graph s
 	vector<int> layerXTicks(int s, int l) const {
 		vector<int> tick;
@@ -670,9 +720,12 @@ public:
 
 	int numNotes() const { return NOTE.size(); }			//!< get number of notes
 	const char *noteName(int n) const { return NOTE[n].name.c_str(); }	//!< get name of note n
-	const char *noteParentFolder(int n) const { return NOTE[n].parentFolder.c_str(); }	//!< get parent folder of note n
 	const char *noteLabel(int n) const { return NOTE[n].label.c_str(); }	//!< get label of note n
 	const char *noteText(int n) const { return NOTE[n].text.c_str(); }	//!< get text of note n
+	double noteCreationDate(int n) const { return NOTE[n].creation_date; }	//!< get creation date of note n
+	double noteModificationDate(int n) const { return NOTE[n].modification_date; }	//!< get modification date of note n
+	originWindow::State noteState(int n) const { return NOTE[n].state; }	//!< get window state of note n
+	originWindow::Title noteTitle(int n) const { return NOTE[n].title; }	//!< get window state of note n
 
 	const char* resultsLogString() const { return resultsLog.c_str();}		//!< get Results Log
 
@@ -688,12 +741,13 @@ private:
 	int compareMatrixnames(char *sname) const;				//!< returns matching matrix index
 	int compareFunctionnames(const char *sname) const;				//!< returns matching function index
 	vector<string> findDataByIndex(int index) const;
-	string findObjectByIndex(int index, string folder);
+	string findObjectByIndex(int index);
 	void readSpreadInfo(FILE *fopj, FILE *fdebug);
 	void readExcelInfo(FILE *f, FILE *debug);
 	void readMatrixInfo(FILE *fopj, FILE *fdebug);
 	void readGraphInfo(FILE *fopj, FILE *fdebug);
 	void readGraphGridInfo(graphGrid &grid, FILE *fopj, int pos);
+	void readGraphAxisBreakInfo(graphAxisBreak &axis_break, FILE *fopj, int pos);
 	void readGraphAxisFormatInfo(graphAxisFormat &format, FILE *fopj, int pos);
 	void readGraphAxisTickLabelsInfo(graphAxisTick &tick, FILE *fopj, int pos);
 	void readProjectTree(FILE *f, FILE *debug);

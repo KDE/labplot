@@ -3,6 +3,7 @@
 			A lot of minor changes
 			Moved Plot, Plot2D, Plot2DSimple to plots/
 			Started to acitvate/port/implement functions for simple 2D-drawing.
+2008-07-26,sg   updated liborigin to 20080225
 2008-06-01,sg	default values in Axis.cc
 		code cleanup
 2008-04-13  First versions of FunctionPlotDialog, FunctionPlotWidget, PlotStyleWidget and PlotSurfaceStyleWidget uploaded.

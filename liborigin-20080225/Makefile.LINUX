@@ -2,7 +2,7 @@ TARGET	= liborigin
 TARGET0	= $(TARGET).so
 TARGET1	= $(TARGET0).0
 TARGET2	= $(TARGET0).0.0
-TARGET3	= $(TARGET0).0.0.3
+TARGET3	= $(TARGET0).0.0.4
 OPJ     = OPJFile
 OPJ2DAT = opj2dat
 CC	= g++
@@ -23,7 +23,7 @@ $(TARGET0) : $(OPJ).cpp $(OPJ).h
 	ln -sf $(TARGET3) $(TARGET2))
 
 $(OPJ2DAT): $(OPJ2DAT).cpp 
-	g++ -L lib/ -o $(OPJ2DAT) -lorigin $(OPJ2DAT).cpp
+	$(CC) $(CFLAGS) -L lib/ -o $(OPJ2DAT) -lorigin $(OPJ2DAT).cpp
 
 clean :
 	rm -f *~ *.o $(OPJ2DAT) $(TARGET0)*

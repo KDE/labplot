@@ -58,11 +58,12 @@ X	V Crash on Fred2_....OPJ
 * hex dump opj files :
 	hexdump -C file.opj > file.dump
 
-* check all projects within labplot (to check that it doesn't crash)
+* check all projects within LabPlot 1.X (to check that it doesn't crash)
 	LabPlot import.qs
 ---------------------------------------------------------------------------
 Changelog :
 
+2008-02-25	* improvements from qtiplot
 2007-08-21	* added build script and spec file
 		* added tree.hh installation to Makefile.LINUX
 2007-08-17	* clean up, Excel worksheets
