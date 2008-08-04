@@ -17,7 +17,7 @@ public:
 	enum PlotType {PLOT2D,PLOTSURFACE,PLOT3D,PLOTGRASS,PLOTVTK,PLOTPIE,PLOTPOLAR,PLOTTERNARY,PLOTQWT3D};
 
 	Plot();
-	~Plot();
+	virtual ~Plot();
 
 	Plot::PlotType plotType() const;
 	void addSet(Set*);

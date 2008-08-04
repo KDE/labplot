@@ -1,7 +1,7 @@
 make clean
-rm -rf CMakeFiles CMakeTmp src/CMakeFiles liborigin/CMakeFiles
+rm -rf CMakeFiles CMakeTmp src/CMakeFiles liborigin/CMakeFiles liborigin/cmake_install.cmake liborigin/Makefile
 rm -f Makefile CMakeCache.txt cmake_install.cmake cmake_uninstall.cmake install_manifest.txt
 rm -f src/LabPlot_automoc.cpp src/LabPlot_automoc.cpp.files src/cmake_install.cmake
-rm -f src/LabPlot src/LabPlot.shell src/moc_* src/ui_* src/parser.tab.c
+rm -f src/LabPlot src/LabPlot.shell src/moc_* src/ui_* src/Makefile
 
-rm -rf lib/ liborigin/opj2dat
+rm -rf lib/ liborigin/opj2dat opjfile.log

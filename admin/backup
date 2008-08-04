@@ -1,0 +1,17 @@
+
+BACKUPDIR=LabPlot-2.0
+BASEDIR=/root/
+BACKUPHOST=linux
+BACKUP=/sw/
+#######################
+cd $BASEDIR
+cd $BACKUPDIR
+./clean
+
+cd -
+tar zcf "$BACKUPDIR.tar.gz" $BACKUPDIR
+
+scp "$BACKUPDIR.tar.gz" $BACKUPHOST:$BACKUP
+rm "$BACKUPDIR.tar.gz"
+
+cd -

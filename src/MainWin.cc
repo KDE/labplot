@@ -37,11 +37,11 @@ MainWin::MainWin(QWidget *parent, QString filename)
 
 	openNew();
 
-	// commandline filename
+	// command line file name
 	if(!filename.isEmpty() && !QFile::exists(filename)) {
-		int ret = KMessageBox::warningContinueCancel( this,
+		int state = KMessageBox::warningContinueCancel( this,
 			i18n( "Could not open file \'%1\'!").arg(filename),i18n("Warning"));
-		if (ret==KMessageBox::Cancel)
+		if (state == KMessageBox::Cancel)
 			exit(-1);
 	}
 	else if (filename.contains(".lml") || filename.contains(".xml")) {
@@ -232,6 +232,7 @@ void MainWin::updateGUI() {
 		(static_cast<QMenu*> (guiFactory()->container("drawing",this)))->setEnabled(true);
 		(static_cast<QMenu*> (guiFactory()->container("analysis",this)))->setEnabled(true);
 	}
+	(static_cast<QMenu*> (guiFactory()->container("script",this)))->setEnabled(false);
 }
 
 void MainWin::openNew() {

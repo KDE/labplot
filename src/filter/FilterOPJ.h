@@ -4,8 +4,8 @@
 #define FILTEROPJ_H
 
 #include <qstring.h>
-#include "MainWin.h"
-#include "elements/Symbol.h"
+#include "../MainWin.h"
+#include "../elements/Symbol.h"
 
 class FilterOPJ
 {

@@ -521,7 +521,7 @@ void FilterHDF5::importFile() {
 
 //! export data to the file
 int FilterHDF5::exportFile(MainWin *mw, bool all, int datatype, int order, int start, int end) {
-	kDebug()<<"FilterHDF5::exportFile()"<<endl;
+	kDebug()<<"FilterHDF5::exportFile()	: not implemented yet!"<<endl;
 #ifdef HAVE_HDF5
 //	hid_t file = H5Fcreate(filename.toAscii(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
@@ -608,6 +608,7 @@ int FilterHDF5::exportFile(MainWin *mw, bool all, int datatype, int order, int s
 
 	return H5Fclose(file);
 */
+	
 #else
 	return -1;
 #endif

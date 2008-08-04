@@ -7,7 +7,7 @@ include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DI
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 include_directories( ${KDE4_INCLUDES} )
 add_definitions( ${KDE4_DEFINITIONS} )
-add_definitions ('-DLVERSION=\"2.0.0.alpha1\"')
+add_definitions ('-DLVERSION=\"2.0.0.alpha2\"')
 
 FIND_PROGRAM(YACC_EXECUTABLE
 	NAMES yacc bison

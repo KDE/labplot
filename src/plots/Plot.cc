@@ -153,7 +153,7 @@ QString Plot::getTicLabel(const int atlf, const int prec, const QString dtf, con
 		}
 		break;
 	case Axis::LABELSFORMAT_DEGREE:
-		label = QString::number(180.0/M_PI*value,'f',prec)+'°';
+		label = QString(QString::number(180.0/M_PI*value,'f',prec)+'°');
 		break;
 	}
 
@@ -461,7 +461,7 @@ void Plot::drawStyle(QPainter *p, const Style *style, const QPolygonF vec_Points
 	// draw symbol if enabled
 	if (style->isSymbolEnabled() ){
 		Symbol* s=const_cast<Style*>(style)->symbol();
-		for (unsigned int i=0;i<vec_Points.size();i++)
+		for (int i=0;i<vec_Points.size();i++)
  			s->draw( p, vec_Points.at(i) );
 	}
 }

@@ -16,10 +16,10 @@
 #include <gsl/gsl_math.h>
 #endif
 
-#include "../parser_struct.h"
+#include "../parser/parser_struct.h"
 extern "C" con constants[];
 extern "C" init arith_fncts[];
-#include "../parser_extern.h"
+#include "../parser/parser_extern.h"
 
 FunctionPlotWidget::FunctionPlotWidget(QWidget* parent):QWidget(parent){
 

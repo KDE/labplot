@@ -11,10 +11,10 @@
 
 #include "ImportDialog.h"
 #include "FileInfoDialog.h"
-#include "FilterCDF.h"
-#include "FilterHDF5.h"
-#include "FilterNETCDF.h"
-#include "FilterOPJ.h"
+#include "filter/FilterCDF.h"
+#include "filter/FilterHDF5.h"
+#include "filter/FilterNETCDF.h"
+#include "filter/FilterOPJ.h"
 #include "Project.h"
 #include "importitems.h"
 

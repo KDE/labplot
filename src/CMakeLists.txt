@@ -28,15 +28,18 @@ set(ELEMENTS_SOURCES
   elements/Symbol.cc
 )
 
-set(LabPlot_SRCS ${GUI_SOURCES} ${ELEMENTS_SOURCES}
-  parser.tab.c
+set(FILTER_SOURCES
+  filter/FilterCDF.cc
+  filter/FilterHDF5.cc
+  filter/FilterNETCDF.cc
+  filter/FilterOPJ.cc
+)
+
+set(LabPlot_SRCS ${GUI_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
+  parser/parser.tab.c
   ColumnDialog.cc
   Dialog.cc
   FileInfoDialog.cc
-  FilterCDF.cc
-  FilterHDF5.cc
-  FilterNETCDF.cc
-  FilterOPJ.cc
   ImportDialog.cc
   LabPlot.cc
   MainWin.cc
@@ -69,8 +72,8 @@ kde4_add_executable(LabPlot ${LabPlot_SRCS})
 INCLUDE_DIRECTORIES(../liborigin)
 target_link_libraries(LabPlot ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${CDF_LIBRARY} ${OPJ_LIBRARY})
 
-add_custom_command (OUTPUT parser.tab.c
+add_custom_command (OUTPUT parser/parser.tab.c
                    COMMAND ${YACC_EXECUTABLE} ARGS -b parser parser.y
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
 install(TARGETS LabPlot DESTINATION ${BIN_INSTALL_DIR})

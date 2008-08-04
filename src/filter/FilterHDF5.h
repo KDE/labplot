@@ -6,7 +6,7 @@
 #include <vector>
 #include <QString>
 #include <QStringList>
-#include "MainWin.h"
+#include "../MainWin.h"
 
 #ifdef HAVE_HDF5
 #include <hdf5.h>
