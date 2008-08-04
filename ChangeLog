@@ -1,3 +1,4 @@
+2008-08-04,sg	released 2.0.0.alpha2
 2008-08-03,sg	moved Filter* to filter/
 		moved parser stuff to parser/
 2008-07-28,as	implemented save/set-functions in PlotStyleWidget
