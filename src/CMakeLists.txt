@@ -4,6 +4,8 @@
 #  	gui/ColorMapPreview.cc
 	gui/FunctionPlotDialog.cc
   	gui/FunctionPlotWidget.cc
+	gui/ImportDialog.cc
+	gui/ImportWidget.cc
 	gui/LabelWidget.cc
 	gui/LegendDialog.cc
 	gui/LegendWidget.cc
@@ -39,25 +41,22 @@ set(LabPlot_SRCS ${GUI_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
   parser/parser.tab.c
   ColumnDialog.cc
   Dialog.cc
-  FileInfoDialog.cc
-  ImportDialog.cc
   LabPlot.cc
   MainWin.cc
   plots/Plot.cc
   plots/Plot2D.cc
   plots/Plot2DSimple.cc
-  PlotDialog.cc
   Project.cc
   ProjectDialog.cc
   Spreadsheet.cc
   TableModel.cc
   Worksheet.cc
-  WorksheetDialog.cc
 )
 
 set(UI_SOURCES
 	gui/ui/axeswidget.ui
 	gui/ui/functionplotwidget.ui
+	gui/ui/importwidget.ui
 	gui/ui/labelwidget.ui
 	gui/ui/legendwidget.ui
 	gui/ui/plotstylewidget.ui

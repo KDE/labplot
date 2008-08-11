@@ -191,13 +191,13 @@ struct matrix : public originWindow {
 };
 
 struct function {
-	string name;
 	int type;//Normal = 0, Polar = 1
+	int index;
+	string name;
 	string formula;
 	double begin;
 	double end;
 	int points;
-	int index;
 	function(string _name="", int _index=0)
 	:	name(_name)
 	,	index(_index)

@@ -25,15 +25,12 @@ RELEASE :
 LabPlot 2.0.0:	(see also WISHLIST)
 *************
 BUGS:
-	Import dialog : set "OK" as default button
-	Import dialog : not resized if options hidden
-	Import dialog : file info with nonexisting file hangs in KMessageBox::sorry()
+	V Import dialog : not resized if options hidden
+	V Spreadsheet : crashes when adding a column in an empty spreadsheet
+	V CRASH : using spreadsheet-> edit function
 	Import dialog : compressed data shows no progress
 	Spreadsheet : column selection doesn't work when CTRL is pressed (extended selection)
-	Spreadsheet : crashes when adding a column in an empty spreadsheet
-	config settings not always used ? (function dialog)
-	message boxes sometimes hang the application
-	progress in function dialog can not be canceled
+	? message boxes sometimes hang the application
 
 TODO :
 ******
@@ -43,9 +40,7 @@ General :
 	http://techbase.kde.org/index.php?title=Policies/Library_Code_Policy
 	"Class names starts with a capital K. The rest is in camel case.
 	Function names starts with a lower case, but the first letter of each successive word is capitalized."
-
-	*split up the src-directory in gui, filters etc.
-
+	* split up the src-directory in gui, filters etc.
 	* check functions.h, constants.h
 		* use GSL
 		* GSL_VERSION
@@ -53,8 +48,7 @@ General :
 Pending :
 	* Print 
 		Worksheet::setupPrinter();
-	* Import Dialog
-		* use numinputs when possible
+	* Import Dialog		Stefan
 		* warn if selected file doesn't exist when apply
 		Options
 			same first column
@@ -63,8 +57,11 @@ Pending :
 			magick (images)
 			audio
 			database (kexi ?)
+			more formas (file type selection)
 		file info dialog
 	* dialogs
+		* convert to ui style
+			ColumnDialog, ProjectDialog
 		* LabelWidget: title dialog, function dialog, axes dialog
 		* SettingsDialog		Alexander
 		* AxesDialog			Alexander
@@ -78,7 +75,7 @@ Pending :
 			update sheetcb after apply
 			other plot types
 			save/load settings
-		* ExportDialog
+		* ExportDialog		Stefan
 			ascii, binary, hdf5, magick, cdf, audio, database
 		* ColumnValuesDialog
 		* SpreadsheetPlotDialog

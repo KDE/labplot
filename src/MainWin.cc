@@ -1,5 +1,4 @@
 #include "MainWin.h"
-#include "ImportDialog.h"
 
 //****** GUI **************
 #include "gui/SettingsDialog.h"
@@ -7,6 +6,7 @@
 #include "gui/AxesDialog.h"
 #include "gui/LegendDialog.h"
 #include "gui/TitleDialog.h"
+#include "gui/ImportDialog.h"
 
 #include <KApplication>
 #include <KAction>
@@ -20,8 +20,6 @@
 #include <KDebug>
 #include <KFilterDev>
 #include "ProjectDialog.h"
-#include "PlotDialog.h"
-#include "WorksheetDialog.h"
 
 #include "sheettype.h"
 #include "pixmaps/pixmap.h"
@@ -555,8 +553,6 @@ void MainWin::titleDialog() {
 	(new TitleDialog(this, plot->titleLabel()))->show();
 }
 void MainWin::axesDialog() { (new AxesDialog(this))->show(); }
-void MainWin::plotDialog() { (new PlotDialog(this))->show(); }
-void MainWin::worksheetDialog() { (new WorksheetDialog(this))->show(); }
 void MainWin::legendDialog() {
 	//TODO
 	(new LegendDialog(this))->show();

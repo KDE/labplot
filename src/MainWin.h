@@ -56,8 +56,6 @@ private slots:
 	void titleDialog();
 	void axesDialog();
 	void legendDialog();
-	void plotDialog();
-	void worksheetDialog();
 	void settingsDialog();
 };
 
