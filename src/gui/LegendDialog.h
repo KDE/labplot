@@ -1,7 +1,7 @@
 #ifndef LEGENDDIALOG_H
 #define LEGENDDIALOG_H
 
-#include <kdialog.h>
+#include <KDialog>
 
 class MainWin;
 class Legend;

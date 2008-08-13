@@ -3,7 +3,7 @@
 #ifndef FILTERNETCDF_H
 #define FILTERNETCDF_H
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 
 #ifdef HAVE_NETCDF

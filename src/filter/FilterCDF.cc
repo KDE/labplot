@@ -1,7 +1,7 @@
 //LabPlot : FilterCDF.cc
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocale>
+#include <KDebug>
 
 #include "FilterCDF.h"
 

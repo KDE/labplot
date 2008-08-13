@@ -1,7 +1,7 @@
 #ifndef AXESDIALOG_H
 #define AXESDIALOG_H
 
-#include <kdialog.h>
+#include <KDialog>
 #include "../plots/Plot.h"
 
 class AxesWidget;

@@ -3,7 +3,7 @@
 #ifndef FILTEROPJ_H
 #define FILTEROPJ_H
 
-#include <qstring.h>
+#include <QString>
 #include "../MainWin.h"
 #include "../elements/Symbol.h"
 

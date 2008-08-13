@@ -1,8 +1,8 @@
 //LabPlot : FilterNETCDF.cc
 
-#include <stdlib.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <cstdlib>
+#include <KLocale>
+#include <KDebug>
 
 #include "FilterNETCDF.h"
 

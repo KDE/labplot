@@ -1,10 +1,9 @@
 #include "SettingsGeneralPage.h"
 #include "../MainWin.h"
 
-#include <kdialog.h>
+#include <KDialog>
+#include <KLocale>
 #include <kfiledialog.h>
-#include <klocale.h>
-
 
 SettingsGeneralPage::SettingsGeneralPage(MainWin* main, QWidget* parent) :
     SettingsPage(parent){

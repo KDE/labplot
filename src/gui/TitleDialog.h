@@ -1,7 +1,7 @@
 #ifndef TITLEDIALOG_H
 #define TITLEDIALOG_H
 
-#include <kdialog.h>
+#include <KDialog>
 
 class MainWin;
 class LabelWidget;

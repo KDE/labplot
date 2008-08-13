@@ -4,9 +4,9 @@
 #include "SettingsGeneralPage.h"
 #include "SettingsPrintingPage.h"
 
-#include <klocale.h>
+#include <KLocale>
 #include <kmessagebox.h>
-#include <kicon.h>
+#include <KIcon>
 
 SettingsDialog::SettingsDialog(MainWin* mainWindow) :
     KPageDialog(mainWindow){
