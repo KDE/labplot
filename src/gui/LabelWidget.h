@@ -15,7 +15,7 @@ public:
 	~LabelWidget();
 
 signals:
-	void dataWasChanged(bool);
+	void dataChanged(bool);
 
 public slots:
 	void setLabel(const Label*);
@@ -40,7 +40,7 @@ private slots:
 	void fontSuperscriptToggled(bool);
 	void fontSubscriptToggled(bool);
 	void insertSymbol(const QString &);
-	void slotDataWasChanged();
+	void slotDataChanged();
 };
 
 #endif //LABELWIDGET_H

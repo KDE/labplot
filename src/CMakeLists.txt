@@ -76,3 +76,4 @@ add_custom_command (OUTPUT parser/parser.tab.c
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
 install(TARGETS LabPlot DESTINATION ${BIN_INSTALL_DIR})
+# install(FILES LabPlotui.rc DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)

@@ -40,16 +40,16 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	//Slots
 	//Alignment
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
-	connect( ui.lePositionX, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataWasChanged()) );
-	connect( ui.lePositionY, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataWasChanged()) );
-	connect( ui.leRotation, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataWasChanged()) );
+	connect( ui.lePositionX, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
+	connect( ui.lePositionY, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
+	connect( ui.leRotation, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
 
 	//Background
 	connect( ui.rbFilling0, SIGNAL(toggled(bool)), this, SLOT( fillingChanged(bool)) );
 	connect( ui.rbFilling1, SIGNAL(toggled(bool)), this, SLOT( fillingChanged(bool)) );
-	connect( ui.kcbFillingColor, SIGNAL(changed(const QColor& )), this, SLOT(slotDataWasChanged()) );
-	connect( ui.chbBox, SIGNAL(stateChanged(int)), this, SLOT(slotDataWasChanged()) );
-	connect( ui.chbShadow, SIGNAL(stateChanged(int)), this, SLOT(slotDataWasChanged()) );
+	connect( ui.kcbFillingColor, SIGNAL(changed(const QColor& )), this, SLOT(slotDataChanged()) );
+	connect( ui.chbBox, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
+	connect( ui.chbShadow, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
 
 	//Text
  	connect( ui.kcbTextColor, SIGNAL(changed(const QColor& )), this, SLOT(textColorChanged(const QColor& )) );
@@ -66,7 +66,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect( ui.cbBigGreekLetters, SIGNAL(activated(const QString &)), this, SLOT(insertSymbol(const QString &)));
 	connect( ui.cbSymbolLetters, SIGNAL(activated(const QString &)), this, SLOT(insertSymbol(const QString &)));
 
-	connect( ui.teLabel, SIGNAL(textChanged()), this, SLOT(slotDataWasChanged()) );
+	connect( ui.teLabel, SIGNAL(textChanged()), this, SLOT(slotDataChanged()) );
 }
 
 LabelWidget::~LabelWidget() {}
@@ -166,7 +166,7 @@ void LabelWidget::positionChanged(int index){
 		ui.lePositionX->setEnabled(false);
 		ui.lePositionY->setEnabled(false);
 	}
-	emit dataWasChanged(true);
+	emit dataChanged(true);
 }
 
 /*!
@@ -178,11 +178,11 @@ void LabelWidget::fillingChanged(bool){
 	else
 		ui.kcbFillingColor->setEnabled(true);
 
-	emit dataWasChanged(true);
+	emit dataChanged(true);
 }
 
 void LabelWidget::fillingColorClicked(){
-	emit dataWasChanged(true);
+	emit dataChanged(true);
 }
 
 void LabelWidget::fontChanged(const QFont& font){
@@ -193,7 +193,7 @@ void LabelWidget::fontChanged(const QFont& font){
 // 	ui.teLabel->textCursor().clearSelection();
 
 	ui.teLabel->setFocus();
-	emit dataWasChanged(true);
+	emit dataChanged(true);
 }
 
 void LabelWidget::textColorChanged(const QColor& color){
@@ -204,7 +204,7 @@ void LabelWidget::textColorChanged(const QColor& color){
 // 	ui.teLabel->textCursor().clearSelection();
 
 	ui.teLabel->setFocus();
-	emit dataWasChanged(true);
+	emit dataChanged(true);
 }
 
 void LabelWidget::useTexChanged(int state){
@@ -283,9 +283,9 @@ void LabelWidget::insertSymbol(const QString& string) {
 	ui.teLabel->setFocus();
 	ui.teLabel->setFontFamily(fontFamily);
 	ui.teLabel->setFocus();
-	emit dataWasChanged(true);
+	emit dataChanged(true);
 }
 
-void LabelWidget::slotDataWasChanged(){
-	emit dataWasChanged(true);
+void LabelWidget::slotDataChanged(){
+	emit dataChanged(true);
 }

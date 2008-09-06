@@ -5,39 +5,63 @@
 Axis::Axis() {
 	kDebug()<<"Axis()"<<endl;
 
-	m_scaleType = SCALETYPE_LINEAR;
-	m_position = 0;
+	//********** General *****************
+	m_enabled = true;
+	m_scaleType = Axis::SCALETYPE_LINEAR;
+	m_position = Axis::POSITION_NORMAL;
+	m_positionOffset = 0;
+
 	m_scaleFactor = 1;
 	m_offset = 0;
-	m_enabled = true;
-	m_ticksType = 1;
-	m_labelsRotation = 0;
-	m_labelsPrefix = QString("");
-	m_labelsSuffix = QString("");
-	m_labelsFont = QFont(QString("Adobe Times"),12);
-	m_ticksColor = QColor("black");
-	m_labelsColor = QColor("black");
-	m_borderColor = QColor("black");
-	m_minorGridColor = QColor("black");
-	m_majorGridColor = QColor("black");
-	m_majorTicksNumber = -1;		// default ("auto")
-	m_minorTicksNumber = 3;
-	m_majorTicksEnabled = true;
-	m_minorTicksEnabled = true;
-	m_labelsEnabled = true;
-	m_labelsFormat = LABELSFORMAT_AUTO;
-	m_labelsDateFormat = "auto";
-	m_labelsPrecision = 3;
-	m_ticksPosition = TICKSPOSITION_IN;
-//	m_gap = 15;
-	m_majorGridStyle = Qt::DashLine;
-	m_minorGridStyle = Qt::DotLine;
-	m_majorTicksWidth = m_minorTicksWidth = 1;
-	m_borderWidth = 1;
-	m_majorGridWidth = m_minorGridWidth = 1;
+
 	m_borderEnabled = true;
+	m_borderColor = QColor( Qt::black );
+	m_borderWidth = 1;
+
+
+	//*************** Ticks ******************
+	m_ticksPosition = Axis::TICKSPOSITION_IN;
+	m_ticksType = Axis::TICKSTYPE_INCREMENT;
+	m_ticksColor = QColor( Qt::black );
+
+	m_majorTicksEnabled = true;
+	m_majorTicksNumberType = Axis::TICKSNUMBERTYPE_AUTO;
+	m_majorTicksNumber = 1;
+	m_majorTicksWidth = 1;
+	m_majorTicksLength = 0.05;
+
+	m_minorTicksEnabled = true;
+	m_minorTicksNumberType = Axis::TICKSNUMBERTYPE_CUSTOM;
+	m_minorTicksNumber = 3;
+	m_minorTicksWidth = 1;
+	m_minorTicksLength = 0.05;
+
+
+	//*********** Tick labels ******************
+	m_labelsEnabled = true;
+	m_labelsPosition = 15;
+	m_labelsRotation = 0;
+
+	m_labelsPrecision = 3;
+	m_labelsFormat = Axis::LABELSFORMAT_AUTO;
+	m_labelsDateFormat = "auto";//TODO
+
+// 	m_labelsFont = QFont(QString("Adobe Times"),12); //TODO use the system default font?
+	m_labelsColor = QColor( Qt::black );
+	m_labelsPrefix = "";
+	m_labelsSuffix = "";
+
+
+	//************ Grid ***********************
 	m_majorGridEnabled = false;
+	m_majorGridStyle = Qt::DashLine;
+	m_majorGridColor = QColor( Qt::black );
+	m_majorGridWidth = 1;
+
 	m_minorGridEnabled = false;
+	m_minorGridStyle = Qt::DotLine;
+	m_minorGridColor = QColor( Qt::black );
+	m_minorGridWidth = 1;
 }
 
 Label* Axis::label(){

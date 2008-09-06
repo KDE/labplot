@@ -37,7 +37,7 @@ Worksheet::~Worksheet() {
 	mw->updateGUI();
 }
 
-Plot* Worksheet::getActivePlot(){
+Plot* Worksheet::activePlot(){
 	 return listPlots[currentPlotIndex];
 }
 void Worksheet::paintEvent(QPaintEvent *) {

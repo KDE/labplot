@@ -26,6 +26,8 @@ public:
 	virtual void draw(QPainter *p, const int w, const int h) =0;
 	void drawStyle(QPainter*, const Style*, const QPolygonF, const int xmin, const int xmax, const int ymin, const int ymax);
 
+	QList<Axis>* axes();
+
  	void resetRanges();
 	Label* titleLabel();
 	/*

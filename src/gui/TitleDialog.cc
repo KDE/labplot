@@ -15,7 +15,7 @@ TitleDialog::TitleDialog(MainWin *mw, Label *label)	: KDialog(mw){
 	this->setMainWidget( labelWidget );
 	this->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply);
 
-	connect( labelWidget, SIGNAL(dataWasChanged(bool)), SLOT(enableButtonApply(bool)) );
+	connect( labelWidget, SIGNAL(dataChanged(bool)), SLOT(enableButtonApply(bool)) );
 	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
 	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
 

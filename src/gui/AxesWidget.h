@@ -20,9 +20,8 @@ public:
     AxesWidget(QWidget*);
     ~AxesWidget();
 
-	void setAxesList( const QList<Axis>, const int axisNumber=0);
-	void saveAxesData(QList<Axis>*) const;
-	void apply(QList<Axis>*) const;
+	void setAxes( QList<Axis>*, const int axisNumber=0);
+	void saveAxes(QList<Axis>*);
 	void setPlotType(const Plot::PlotType& );
 
 private:
@@ -31,7 +30,14 @@ private:
 	QList<Axis> listAxes;
 	Plot::PlotType plotType;
 	int currentAxis;
-	bool dataChanged;
+	bool m_dataChanged;
+	bool initializing;
+	void showAxis(const short);
+	void saveAxis(const short);
+	void resizeEvent(QResizeEvent *);
+
+signals:
+	void dataChanged(bool);
 
 public slots:
 	void restoreDefaults();
@@ -40,19 +46,23 @@ private slots:
 	void currentAxisChanged(int);
 
 	//"General"-tab
-
+	void axisStateChanged(int);
+	void scaleTypeChanged(int);
+	void positionChanged(int);
 
 	//"Ticks"-tab
-	void ticksStyleChanged(int);
+	void ticksTypeChanged(int);
+	void majorTicksNumberTypeChanged(int);
+	void minorTicksNumberTypeChanged(int);
 
 	//"Tick labels"-tab
 	void labelFormatChanged(const QString&);
-	void majorTicksChanged(int index);
-	void minorTicksChanged(int index);
 
 	//"Grid"-tab
 	void createMajorGridStyles();
 	void createMinorGridStyles();
+
+	void slotDataChanged();
 };
 
 #endif

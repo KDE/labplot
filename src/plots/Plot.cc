@@ -10,7 +10,8 @@ Plot::Plot(){
 	kDebug()<<"Plot::Plot()"<<endl;
 
 	m_titleLabel.setText(i18n("Title"));
-	m_titleLabel.setPosition( QPoint(0.4,0.04) );
+// 	m_titleLabel.setPosition( QPoint(0.4,0.04) );
+	m_titleLabel.setPositionType(Label::CENTER);
 
 	backgroundBrush = QBrush(Qt::white);
 	areaBackgroundBrush = QBrush(Qt::white);
@@ -42,6 +43,10 @@ Plot::PlotType Plot::plotType()const{
 
 Label* Plot::titleLabel(){
 	return &m_titleLabel;
+}
+
+QList<Axis>* Plot::axes(){
+	return &list_Axes;
 }
 
 void Plot::addSet(Set* s){

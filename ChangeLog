@@ -1,3 +1,6 @@
+2008-09-06, as	AxesWidget implemented, stil lacks some functions (handling of ranges, datetime format etc.).Tested only with Plot2D.
+			Changed the ordering of x2 and y2 axes in Plot2D::drawAxesTicks().
+			Some minor changes.
 2008-08-10,sg	new ImportDialog using ui style
 2008-08-04,sg	released 2.0.0.alpha2
 2008-08-03,sg	moved Filter* to filter/
@@ -17,7 +20,7 @@
 		Minor changes in the gui-classes.
 2008-04-03	fixed ACCESS functions
 		using elements/classes
-2008-04-01	first versions of Function-, Legend-, Title-Dialogs/Widgets uploaded
+2008-04-01, as	first versions of Function-, Legend-, Title-Dialogs/Widgets uploaded
 			src/elements created
 2008-03-30	started with open/save projects
 2008-03-22	Worksheet/Spreadsheet title

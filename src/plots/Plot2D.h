@@ -24,6 +24,7 @@ private:
 	void drawAxes(QPainter *p, const int w, const int h);
 	void drawAxesTicks(QPainter *p, const int w, const int h, const int k);
 	void drawBorder(QPainter *p, const int w, const int h);
+	void drawLegend(QPainter *p, const int w, const int h);
 	virtual void drawCurves(QPainter *p, int w, int h) = 0;
 	virtual void drawFill(QPainter *p, int w, int h) = 0;
 };

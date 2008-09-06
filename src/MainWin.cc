@@ -33,7 +33,7 @@ MainWin::MainWin(QWidget *parent, QString filename)
 	setCaption("LabPlot "LVERSION);
 	setupActions();
 
-	openNew();
+ 	openNew();
 
 	// command line file name
 	if(!filename.isEmpty() && !QFile::exists(filename)) {
@@ -237,8 +237,8 @@ void MainWin::openNew() {
  	kDebug()<<"MainWin::New()"<<endl;
 	if(warnModified()) return;
 
- 	mdi->closeAllSubWindows();
- 	updateGUI();
+  	mdi->closeAllSubWindows();
+   	updateGUI();
 // /*	gvpart=0;
 // 	defining_region=0;
 // 	defining_line=0;
@@ -534,6 +534,7 @@ void MainWin::functionActionTriggered(QAction* action){
 }
 
 void MainWin::titleDialog() {
+	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
 	kDebug()<<"MainWin::titleDialog()"<<endl;
 	Worksheet *w = activeWorksheet();
 	if(w == 0) {
@@ -544,7 +545,7 @@ void MainWin::titleDialog() {
 		kDebug()<<"ERROR: worksheet has no plot!"<<endl;
 		return;
 	}
-	Plot *plot = w->getActivePlot();
+	Plot *plot = w->activePlot();
 	if(plot == 0) {
 		kDebug()<<"ERROR: no active plot found!"<<endl;
 		return;
@@ -552,7 +553,29 @@ void MainWin::titleDialog() {
 
 	(new TitleDialog(this, plot->titleLabel()))->show();
 }
-void MainWin::axesDialog() { (new AxesDialog(this))->show(); }
+
+void MainWin::axesDialog(){
+	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
+	kDebug()<<"MainWin::titleDialog()"<<endl;
+	Worksheet *w = activeWorksheet();
+	if(w == 0) {
+		kDebug()<<"ERROR: no worksheet active!"<<endl;
+		return;
+	}
+	if(w->plotCount() == 0) {
+		kDebug()<<"ERROR: worksheet has no plot!"<<endl;
+		return;
+	}
+	Plot *plot = w->activePlot();
+	if(plot == 0) {
+		kDebug()<<"ERROR: no active plot found!"<<endl;
+		return;
+	}
+
+	AxesDialog* dlg = new AxesDialog(this);
+	dlg->setWorksheet(w);
+	dlg->exec();
+}
 void MainWin::legendDialog() {
 	//TODO
 	(new LegendDialog(this))->show();

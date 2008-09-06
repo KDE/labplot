@@ -15,7 +15,7 @@ FilterOPJ::FilterOPJ(MainWin *mw, QString filename)
 
 int FilterOPJ::import() {
 	kDebug()<<"FilterOPJ::import() : "<<filename<<endl;
-
+/*
 	OPJFile opj(qPrintable(filename));
 	//qPrintable(filename);	// needed for some reason
 	kDebug()<<"	Parsing OPJ file "<<filename<<" ..."<<endl;
@@ -57,7 +57,7 @@ int FilterOPJ::import() {
 			}
 		}
 	}
-
+*/
 	// TODO
 /*	for (int s=0;s<opj.numMatrices();s++) {
 		kDebug()<<"		Matrix "<<s+1<<" : "<<opj.matrixName(s)<<" (ParentFolder : "<<opj.matrixParentFolder(s)<<")"<<endl;

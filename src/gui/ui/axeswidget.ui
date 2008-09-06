@@ -56,6 +56,14 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>442</width>
+        <height>519</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>General</string>
       </attribute>
@@ -67,14 +75,14 @@
          </property>
          <layout class="QGridLayout" >
           <item row="0" column="0" >
-           <widget class="QCheckBox" name="chbAxisEnabled" >
+           <widget class="QCheckBox" name="chbAxis" >
             <property name="text" >
              <string>Show axis</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0" >
-           <widget class="QLabel" name="lblAxisType" >
+           <widget class="QLabel" name="lAxisType" >
             <property name="text" >
              <string>Type</string>
             </property>
@@ -85,10 +93,10 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
-              <width>81</width>
-              <height>20</height>
+              <width>161</width>
+              <height>23</height>
              </size>
             </property>
            </spacer>
@@ -97,7 +105,7 @@
            <widget class="QComboBox" name="cbScaleType" />
           </item>
           <item row="2" column="0" >
-           <widget class="QLabel" name="lblAxisPosition" >
+           <widget class="QLabel" name="lPosition" >
             <property name="text" >
              <string>Position</string>
             </property>
@@ -105,6 +113,23 @@
           </item>
           <item row="2" column="2" >
            <widget class="QComboBox" name="cbPosition" />
+          </item>
+          <item row="3" column="0" >
+           <widget class="QLabel" name="lPositionOffset" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Position offset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" >
+           <widget class="QLineEdit" name="lePositionOffset" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -116,7 +141,7 @@
          </property>
          <layout class="QGridLayout" >
           <item row="0" column="0" >
-           <widget class="QLabel" name="lblLowerLimit" >
+           <widget class="QLabel" name="lLowerLimit" >
             <property name="text" >
              <string>Lower limit</string>
             </property>
@@ -127,7 +152,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>181</width>
               <height>20</height>
@@ -139,7 +164,7 @@
            <widget class="QLineEdit" name="leLowerLimit" />
           </item>
           <item row="1" column="0" >
-           <widget class="QLabel" name="lblUpperLimit" >
+           <widget class="QLabel" name="lUpperLimit" >
             <property name="text" >
              <string>Upper limit</string>
             </property>
@@ -149,7 +174,7 @@
            <widget class="QLineEdit" name="leUpperLimit" />
           </item>
           <item row="2" column="0" >
-           <widget class="QLabel" name="lblZeroOffset" >
+           <widget class="QLabel" name="lZeroOffset" >
             <property name="text" >
              <string>Zero-offset</string>
             </property>
@@ -159,7 +184,7 @@
            <widget class="QLineEdit" name="leZeroOffset" />
           </item>
           <item row="3" column="0" >
-           <widget class="QLabel" name="lblScaleFactor" >
+           <widget class="QLabel" name="lScaleFactor" >
             <property name="text" >
              <string>Scaling factor</string>
             </property>
@@ -196,7 +221,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>161</width>
               <height>20</height>
@@ -238,10 +263,10 @@
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>418</width>
-           <height>61</height>
+           <height>31</height>
           </size>
          </property>
         </spacer>
@@ -249,15 +274,31 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabTitle" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>442</width>
+        <height>519</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Title</string>
       </attribute>
      </widget>
      <widget class="QWidget" name="tabTicks" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>442</width>
+        <height>519</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Ticks</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QVBoxLayout" name="verticalLayout_2" >
        <item>
         <widget class="QGroupBox" name="gbTicksGeneral" >
          <property name="title" >
@@ -276,7 +317,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>91</width>
               <height>20</height>
@@ -295,7 +336,7 @@
            </widget>
           </item>
           <item row="1" column="2" >
-           <widget class="QComboBox" name="cbTicksStyle" >
+           <widget class="QComboBox" name="cbTicksType" >
             <item>
              <property name="text" >
               <string>Number</string>
@@ -326,7 +367,7 @@
          <property name="title" >
           <string>Major Ticks</string>
          </property>
-         <layout class="QGridLayout" >
+         <layout class="QGridLayout" name="gridLayout_2" >
           <item row="0" column="0" >
            <widget class="QCheckBox" name="chbMajorTicks" >
             <property name="text" >
@@ -346,7 +387,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>71</width>
               <height>25</height>
@@ -355,7 +396,7 @@
            </spacer>
           </item>
           <item row="1" column="2" >
-           <widget class="QComboBox" name="cbMajorTicksNumber" >
+           <widget class="QComboBox" name="cbMajorTicksNumberType" >
             <item>
              <property name="text" >
               <string>auto</string>
@@ -400,14 +441,7 @@
            </widget>
           </item>
           <item row="3" column="3" >
-           <widget class="QSpinBox" name="sbMajorTicksLength" >
-            <property name="minimum" >
-             <number>1</number>
-            </property>
-            <property name="maximum" >
-             <number>10</number>
-            </property>
-           </widget>
+           <widget class="QLineEdit" name="leMajorTicksLength" />
           </item>
          </layout>
         </widget>
@@ -417,7 +451,7 @@
          <property name="title" >
           <string>Minor Ticks</string>
          </property>
-         <layout class="QGridLayout" >
+         <layout class="QGridLayout" name="gridLayout_3" >
           <item row="0" column="0" >
            <widget class="QCheckBox" name="chbMinorTicks" >
             <property name="text" >
@@ -437,7 +471,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>81</width>
               <height>29</height>
@@ -446,7 +480,7 @@
            </spacer>
           </item>
           <item row="1" column="2" >
-           <widget class="QComboBox" name="cbMinorTicksNumber" >
+           <widget class="QComboBox" name="cbMinorTicksNumberType" >
             <item>
              <property name="text" >
               <string>auto</string>
@@ -491,14 +525,7 @@
            </widget>
           </item>
           <item row="3" column="3" >
-           <widget class="QSpinBox" name="sbMinorTicksLength" >
-            <property name="minimum" >
-             <number>1</number>
-            </property>
-            <property name="maximum" >
-             <number>10</number>
-            </property>
-           </widget>
+           <widget class="QLineEdit" name="leMinorTicksLength" />
           </item>
          </layout>
         </widget>
@@ -508,7 +535,7 @@
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>418</width>
            <height>20</height>
@@ -519,16 +546,24 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabLabels" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>442</width>
+        <height>519</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Tick labels</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QVBoxLayout" name="verticalLayout" >
        <item>
         <widget class="QGroupBox" name="groupBox_12" >
          <property name="title" >
           <string>General</string>
          </property>
-         <layout class="QGridLayout" >
+         <layout class="QGridLayout" name="gridLayout" >
           <item row="0" column="0" >
            <widget class="QCheckBox" name="chbLabels" >
             <property name="text" >
@@ -548,7 +583,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>71</width>
               <height>20</height>
@@ -556,29 +591,8 @@
             </property>
            </spacer>
           </item>
-          <item row="1" column="2" colspan="2" >
-           <widget class="QComboBox" name="cbLabelsPosition" >
-            <item>
-             <property name="text" >
-              <string>left</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>center</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>right</string>
-             </property>
-            </item>
-            <item>
-             <property name="text" >
-              <string>custom</string>
-             </property>
-            </item>
-           </widget>
+          <item row="1" column="2" >
+           <widget class="QSpinBox" name="sbLabelsPosition" />
           </item>
           <item row="2" column="0" >
            <widget class="QLabel" name="lLabelsRotation" >
@@ -618,7 +632,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>121</width>
               <height>20</height>
@@ -652,12 +666,16 @@
           <item row="2" column="0" >
            <widget class="QLabel" name="lLabelsDateFormat" >
             <property name="text" >
-             <string>Date-Format</string>
+             <string>Time/Date/Datetime format</string>
             </property>
            </widget>
           </item>
           <item row="2" column="2" >
-           <widget class="QLineEdit" name="leLabelsDateFormat" />
+           <widget class="QLineEdit" name="leLabelsDateFormat" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -680,7 +698,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>40</width>
               <height>20</height>
@@ -689,7 +707,7 @@
            </spacer>
           </item>
           <item row="0" column="2" colspan="2" >
-           <widget class="KFontRequester" name="kfontrequesterLabels" />
+           <widget class="KFontRequester" name="kfrLabelsFont" />
           </item>
           <item row="1" column="0" >
            <widget class="QLabel" name="lLabelsColor" >
@@ -709,7 +727,7 @@
             <property name="sizeType" >
              <enum>QSizePolicy::Fixed</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>42</width>
               <height>16</height>
@@ -729,7 +747,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>131</width>
               <height>23</height>
@@ -758,7 +776,7 @@
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>418</width>
            <height>16</height>
@@ -769,6 +787,14 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabGrid" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>442</width>
+        <height>519</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Grid</string>
       </attribute>
@@ -798,7 +824,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>61</width>
               <height>20</height>
@@ -841,7 +867,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>40</width>
               <height>20</height>
@@ -855,13 +881,13 @@
        <item>
         <widget class="QGroupBox" name="groupBox_8" >
          <property name="title" >
-          <string>Major Grid</string>
+          <string>Minor Grid</string>
          </property>
          <layout class="QGridLayout" >
           <item row="0" column="0" >
            <widget class="QCheckBox" name="chbMinorGrid" >
             <property name="text" >
-             <string>Enable major grid</string>
+             <string>Enable minor grid</string>
             </property>
            </widget>
           </item>
@@ -877,7 +903,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>61</width>
               <height>20</height>
@@ -920,7 +946,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>61</width>
               <height>20</height>
@@ -936,7 +962,7 @@
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>20</width>
            <height>40</height>
