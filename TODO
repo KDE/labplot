@@ -61,7 +61,7 @@ Pending :
 		file info dialog
 	* dialogs
 		* convert to ui style
-			ColumnDialog, ProjectDialog
+			ProjectDialog
 		* LabelWidget: title dialog, function dialog, axes dialog
 		* SettingsDialog		Alexander
 		* AxesDialog			Alexander

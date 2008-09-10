@@ -10,7 +10,7 @@
 #include "Spreadsheet.h"
 #include "MainWin.h"
 #include "TableModel.h"
-#include "ColumnDialog.h"
+#include "gui/ColumnDialog.h"
 #include "pixmaps/pixmap.h"
 #include "column.h"
 #include "elements/Point3D.h"

@@ -14,9 +14,9 @@ ImportDialog::ImportDialog(MainWin *parent) : KDialog(parent), mainWin(parent) {
 void ImportDialog::setupGUI() {
 	kDebug()<<"ImportDialog::setupGUI()"<<endl;
 	importWidget = new ImportWidget( this );
-	this->setMainWidget( importWidget );
+	setMainWidget( importWidget );
 
-	this->setButtons( KDialog::Ok | KDialog::User1 | KDialog::User2 | KDialog::Cancel | KDialog::Apply );
+	setButtons( KDialog::Ok | KDialog::User1 | KDialog::User2 | KDialog::Cancel | KDialog::Apply );
         setButtonText(KDialog::User1,i18n("Save"));
         setButtonText(KDialog::User2,i18n("Show Options"));
 

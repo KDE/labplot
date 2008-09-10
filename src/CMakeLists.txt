@@ -2,6 +2,7 @@
 	gui/AxesDialog.cc
 	gui/AxesWidget.cc
 #  	gui/ColorMapPreview.cc
+  	gui/ColumnDialog.cc
 	gui/FunctionPlotDialog.cc
   	gui/FunctionPlotWidget.cc
 	gui/ImportDialog.cc
@@ -39,7 +40,6 @@ set(FILTER_SOURCES
 
 set(LabPlot_SRCS ${GUI_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
   parser/parser.tab.c
-  ColumnDialog.cc
   Dialog.cc
   LabPlot.cc
   MainWin.cc
@@ -55,6 +55,7 @@ set(LabPlot_SRCS ${GUI_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
 
 set(UI_SOURCES
 	gui/ui/axeswidget.ui
+	gui/ui/columndialog.ui
 	gui/ui/functionplotwidget.ui
 	gui/ui/importwidget.ui
 	gui/ui/labelwidget.ui
