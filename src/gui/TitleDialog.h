@@ -3,20 +3,20 @@
 
 #include <KDialog>
 
-class MainWin;
 class LabelWidget;
 class Label;
+class Worksheet;
 
 class TitleDialog: public KDialog{
 	Q_OBJECT
 
 public:
-	TitleDialog(MainWin *mw, Label *title=0);
+	TitleDialog(QWidget*);
+	void setWorksheet(Worksheet*);
 
 private:
-	MainWin* mainWin;
 	LabelWidget* labelWidget;
-	Label *title;
+	Worksheet* worksheet;
 
 private slots:
 	void apply();

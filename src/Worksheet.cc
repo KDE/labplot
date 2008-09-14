@@ -244,7 +244,7 @@ void Worksheet::addPlot(Plot::PlotType plotType) {
 	kDebug()<<"Plot number "<<currentPlotIndex+1<<"added"<<endl;
 }
 
-void Worksheet::addSet(Set *s, Plot::PlotType type) {
+void Worksheet::addSet(Set s, Plot::PlotType type) {
 	kDebug()<<"Worksheet::addSet() plot type ="<<type<<endl;
 
 //  	if(plotCount() == 0 || ptype != plot[api]->Type() )

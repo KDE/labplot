@@ -2,24 +2,24 @@
 #include "AxesWidget.h"
 #include "../elements/Axis.h"
 #include "../Worksheet.h"
-#include "../MainWin.h"
 #include <KDebug>
 
-AxesDialog::AxesDialog(MainWin *mw, const Plot::PlotType type) : KDialog(mw){
-  	kDebug()<<"AxesDialog starting"<<endl;
-	setCaption(i18n("Axes Settings"));
+AxesDialog::AxesDialog(QWidget* parent) : KDialog(parent){
+	this->setCaption(i18n("Axes Settings"));
+	this->setWindowIcon(KIcon(QIcon("axes-xpm")));
 
 	axesWidget = new AxesWidget( this );
 	this->setMainWidget( axesWidget );
+
 	this->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply  | KDialog::Default );
-
-	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
-	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
-	connect( this, SIGNAL( defaultClicked() ), axesWidget, SLOT( restoreDefaults() ) );
-	connect( axesWidget, SIGNAL(dataChanged(bool)), SLOT(enableButtonApply(bool)) );
-
 	this->enableButtonApply( false );
  	resize( QSize(300,400) );
+
+  	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
+ 	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
+	connect( axesWidget, SIGNAL(dataChanged(bool)), SLOT(enableButtonApply(bool)) );
+
+	kDebug()<<"Initialization done."<<endl;
 }
 
 AxesDialog::~AxesDialog(){}
@@ -29,27 +29,35 @@ void AxesDialog::setWorksheet(Worksheet* w){
 	worksheet=w;
  	axesWidget->setPlotType( worksheet->activePlot()->plotType() );
 	axesWidget->setAxes( worksheet->activePlot()->axes() );
-	this->enableButtonApply( false );
+	enableButtonApply( false );
 }
 
 void AxesDialog::setAxes(QList<Axis>* axes, const int axisNumber){
   	axesWidget->setAxes(axes, axisNumber);
-// 	list_axes=axes;
-	this->enableButtonApply( false );
-}
-
-void AxesDialog::apply(){
- 	axesWidget->saveAxes( worksheet->activePlot()->axes() );
-	worksheet->repaint();//TODO triggers repaint for all plots in the worksheet. redesign.
-	this->enableButtonApply( false );
-	kDebug()<<"Changes applied."<<endl;
+	enableButtonApply( false );
 }
 
 /*!
-	save and close
+	called, if the user clicks the apply-button in the dialog.
+	Triggers saving of the axes properties in AxisWidget
+	and repainting of the axes in the worksheet.
+*/
+void AxesDialog::apply(){
+	axesWidget->saveAxes( worksheet->activePlot()->axes() );
+ 	worksheet->repaint();//TODO triggers repaint for all plots in the worksheet. redesign.
+	enableButtonApply( false );
+	kDebug()<<"Changes applied."<<endl;
+}
+
+
+/*!
+	called, if the user clicks the Ok-button in the dialog.
+	Saves the changes, if needed, and closes the dialog.
 */
 void AxesDialog::save(){
-	this->apply();
+	if ( this->isButtonEnabled(KDialog::Apply) )
+		this->apply();
+
 	this->close();
 	kDebug()<<"Changes saved."<<endl;
 }

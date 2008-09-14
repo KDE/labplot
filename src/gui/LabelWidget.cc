@@ -225,6 +225,7 @@ void LabelWidget::useTexChanged(int state){
 		ui.frameFontOptions->setEnabled(true);
 	}
 	ui.teLabel->setCurrentFont(font);
+	emit dataChanged(true);
 }
 
 void LabelWidget::fontBoldToggled(bool checked){

@@ -168,14 +168,6 @@ void AxesWidget::setPlotType(const Plot::PlotType& type){
 // 		maxle->setEnabled(false);
 	}
 
-	//Enable tick length for all plots
-// 	if(type != Plot::PLOTQWT3D) {
-// 		ui.lMajorTicksLength->hide();
-// 		ui.sbMajorTicksLength->hide();
-// 		ui.lMinorTicksLength->hide();
-// 		ui.sbMinorTicksLength->hide();
-// 	}
-
 	plotType=type;
 }
 

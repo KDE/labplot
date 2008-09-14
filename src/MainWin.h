@@ -37,7 +37,7 @@ private:
 	KAction *spreadaction;
 	void setupActions();
 	bool warnModified();
-	void addSet(Set* s, const int sheet, const Plot::PlotType ptype);
+	void addSet(Set s, const int sheet, const Plot::PlotType ptype);
 
 public slots:
 	Spreadsheet* newSpreadsheet();

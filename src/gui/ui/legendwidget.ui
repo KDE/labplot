@@ -6,21 +6,21 @@
     <x>0</x>
     <y>0</y>
     <width>405</width>
-    <height>359</height>
+    <height>393</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout" >
    <item>
     <widget class="QGroupBox" name="gbGeneral" >
      <property name="title" >
       <string>General</string>
      </property>
-     <layout class="QGridLayout" >
+     <layout class="QGridLayout" name="gridLayout" >
       <item row="0" column="0" >
-       <widget class="QCheckBox" name="cbLegendEnabled" >
+       <widget class="QCheckBox" name="chbLegend" >
         <property name="text" >
          <string>show Legend</string>
         </property>
@@ -41,7 +41,7 @@
         <property name="sizeType" >
          <enum>QSizePolicy::Fixed</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>71</width>
           <height>20</height>
@@ -77,7 +77,7 @@
         <property name="sizeType" >
          <enum>QSizePolicy::Fixed</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>16</width>
           <height>20</height>
@@ -105,6 +105,27 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="lOrientation" >
+        <property name="text" >
+         <string>Alignment</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" colspan="4" >
+       <widget class="QComboBox" name="cbOrientation" >
+        <item>
+         <property name="text" >
+          <string>Vertical</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Horizontal</string>
+         </property>
+        </item>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -126,7 +147,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>41</width>
           <height>20</height>
@@ -203,7 +224,7 @@
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="KFontRequester" name="kfontRequester" />
+       <widget class="KFontRequester" name="kfrTextFont" />
       </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="lFontColor" >
@@ -223,7 +244,7 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>20</width>
        <height>40</height>

@@ -12,6 +12,7 @@ Plot::Plot(){
 	m_titleLabel.setText(i18n("Title"));
 // 	m_titleLabel.setPosition( QPoint(0.4,0.04) );
 	m_titleLabel.setPositionType(Label::CENTER);
+	m_legend.setEnabled(true);
 
 	backgroundBrush = QBrush(Qt::white);
 	areaBackgroundBrush = QBrush(Qt::white);
@@ -33,8 +34,8 @@ Plot::Plot(){
 }
 
 Plot::~Plot(){
-	while (!list_Sets.isEmpty())
-    	 delete list_Sets.takeFirst();
+/*	while (!list_Sets.isEmpty())
+    	 delete list_Sets.takeFirst();*/
 }
 
 Plot::PlotType Plot::plotType()const{
@@ -45,11 +46,15 @@ Label* Plot::titleLabel(){
 	return &m_titleLabel;
 }
 
+Legend* Plot::legend(){
+	return &m_legend;
+}
+
 QList<Axis>* Plot::axes(){
 	return &list_Axes;
 }
 
-void Plot::addSet(Set* s){
+void Plot::addSet(Set s){
 	list_Sets.append(s);
 }
 
@@ -172,7 +177,7 @@ void Plot::resetRanges() {
 
 	double xmin=0,xmax=1,ymin=0,ymax=1,zmin=0,zmax=1;
 	for (int i=0;i<list_Sets.size();i++) {
-		const Set* set=list_Sets.at(i);
+		const Set* set=&list_Sets.at(i);
 		kDebug()<<"	using set "<<i<<endl;
 		if( !set->isShown() )
 			continue;	// do not use hidden graphs

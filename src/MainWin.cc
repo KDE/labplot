@@ -122,7 +122,7 @@ void MainWin::setupActions() {
 	actionCollection()->addAction("axes settings", action);
 	connect(action, SIGNAL(triggered()), SLOT(axesDialog()));
 
-	action = new KAction(KIcon(QIcon(legend_xpm)),i18n("Legend Settings"),this);
+	action = new KAction(KIcon("format-list-unordered"),i18n("Legend Settings"),this);
 	action->setShortcut(Qt::CTRL+Qt::Key_L);
 	actionCollection()->addAction("legend settings", action);
 	connect(action, SIGNAL(triggered()), SLOT(legendDialog()));
@@ -526,8 +526,8 @@ void MainWin::functionActionTriggered(QAction* action){
 
 	 FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
 	if ( dlg->exec() == QDialog::Accepted ) {
-		Set* set=new Set(Set::SET2D);
-		dlg->saveSet(set);
+		Set set(Set::SET2D);
+		dlg->saveSet(&set);
 		int i=dlg->currentSheetIndex();
 		this->addSet(set, i, type);
 	}
@@ -551,7 +551,9 @@ void MainWin::titleDialog() {
 		return;
 	}
 
-	(new TitleDialog(this, plot->titleLabel()))->show();
+	TitleDialog* dlg = new TitleDialog(this);
+	dlg->setWorksheet(w);
+	dlg->exec();
 }
 
 void MainWin::axesDialog(){
@@ -576,15 +578,38 @@ void MainWin::axesDialog(){
 	dlg->setWorksheet(w);
 	dlg->exec();
 }
-void MainWin::legendDialog() {
-	//TODO
-	(new LegendDialog(this))->show();
 
+
+void MainWin::legendDialog() {
+	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
+	kDebug()<<"MainWin::titleDialog()"<<endl;
+	Worksheet *w = activeWorksheet();
+	if(w == 0) {
+		kDebug()<<"ERROR: no worksheet active!"<<endl;
+		return;
+	}
+	if(w->plotCount() == 0) {
+		kDebug()<<"ERROR: worksheet has no plot!"<<endl;
+		return;
+	}
+	Plot *plot = w->activePlot();
+	if(plot == 0) {
+		kDebug()<<"ERROR: no active plot found!"<<endl;
+		return;
+	}
+
+	LegendDialog* dlg = new LegendDialog(this);
+	dlg->setWorksheet(w);
+	dlg->exec();
 }
-void MainWin::settingsDialog(){ (new SettingsDialog(this))->show(); }
+
+void MainWin::settingsDialog(){
+	//TODO
+	(new SettingsDialog(this))->show();
+}
 /******************** dialogs end *****************************/
 
-void MainWin::addSet(Set* set, const int sheet, const Plot::PlotType ptype) {
+void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 	kDebug()<<"MainWin::addGraph2D() sheet ="<<sheet<<endl;
 
 	int nr_sheets = mdi->subWindowList().size();
@@ -597,7 +622,8 @@ void MainWin::addSet(Set* set, const int sheet, const Plot::PlotType ptype) {
 	else if(sheet == nr_sheets+1) {	// new spreadsheet
 		kDebug()<<"Creating new spreadsheet"<<endl;
 		Spreadsheet *s = newSpreadsheet();
- 		s->addSet(set);
+		//TODO pointer or referenz
+ 		s->addSet(&set);
 	}
 	else {
 		kDebug()<<" Using sheet "<<sheet<<endl;
@@ -612,7 +638,8 @@ void MainWin::addSet(Set* set, const int sheet, const Plot::PlotType ptype) {
 				w->addSet(set,ptype);
 			else {
 				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
- 				s->addSet(set);
+				//TODO pointer or referenz
+ 				s->addSet(&set);
 			}
 		}
 	}

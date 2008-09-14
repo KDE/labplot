@@ -1,5 +1,3 @@
-//LabPlot : Plot.h
-
 #ifndef PLOT_H
 #define PLOT_H
 
@@ -7,10 +5,13 @@
 
 #include "../elements/Axis.h"
 #include "../elements/Label.h"
+#include "../elements/Legend.h"
 #include "../elements/Point.h"
 #include "../elements/Range.h"
 #include "../elements/Set.h"
 #include "../elements/Symbol.h"
+
+class Legend;
 
 class Plot{
 public:
@@ -20,7 +21,7 @@ public:
 	virtual ~Plot();
 
 	Plot::PlotType plotType() const;
-	void addSet(Set*);
+	void addSet(Set);
 	QString getTicLabel(const int, const int, const QString, const double) const;
 
 	virtual void draw(QPainter *p, const int w, const int h) =0;
@@ -30,6 +31,8 @@ public:
 
  	void resetRanges();
 	Label* titleLabel();
+ 	Legend* legend();
+
 	/*
 	 void setRange(Range *,int i)();
 	Range* getRange(int i) { return &range[i];}
@@ -46,14 +49,13 @@ public:
 	void draw(QPainter *p, const int w, const int h) const ;
 */
 
-
-
 protected:
 	Plot::PlotType m_plotType;
-	QList<Set*> list_Sets;			//!< data set list
+	QList<Set> list_Sets;			//!< data set list
 	QList<Axis> list_Axes;			//!< axes list
 	Point p1, p2;				//!< plotting area	(0..1)
 	Label m_titleLabel;
+ 	Legend m_legend;
 	QList<Range> list_setRanges;				//!< list of set ranges
 	QList<Range> list_plotRanges;			//!< list of plot ranges
 	QBrush backgroundBrush, areaBackgroundBrush;

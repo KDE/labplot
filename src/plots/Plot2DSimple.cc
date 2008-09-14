@@ -121,17 +121,17 @@ void Plot2DSimple::drawCurves(QPainter *p, const int w, const int h) {
 	double maxy = list_plotRanges.at(1).max();
 
 	for (int i=0; i < list_Sets.size() ; i++) {
-		Set::SetType stype = list_Sets.at(i)->type();
+		Set::SetType stype = list_Sets.at(i).type();
 
 		kDebug()<<"Set "<<i<<endl;
 
 
-		if( list_Sets.at(i)->isShown() == false)
+		if( list_Sets.at(i).isShown() == false)
 			continue;
 
 	// TODO
 		if (stype == Set::SET2D) {
-			const Set* set= list_Sets.at(i);
+			const Set* set= &list_Sets.at(i);
 
 			//kDebug()<<"GRAPH2D Label = "<<g->getLabel()->simpleTitle()<<endl;
 			//kDebug()<<"Type T2D\n";

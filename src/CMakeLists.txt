@@ -38,14 +38,18 @@ set(FILTER_SOURCES
   filter/FilterOPJ.cc
 )
 
-set(LabPlot_SRCS ${GUI_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
-  parser/parser.tab.c
-  Dialog.cc
-  LabPlot.cc
-  MainWin.cc
+set(PLOTS_SOURCES
   plots/Plot.cc
   plots/Plot2D.cc
   plots/Plot2DSimple.cc
+)
+
+set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
+  parser/parser.tab.c
+  tools/TexRenderer.cc
+  Dialog.cc
+  LabPlot.cc
+  MainWin.cc
   Project.cc
   ProjectDialog.cc
   Spreadsheet.cc

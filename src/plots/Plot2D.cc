@@ -1164,32 +1164,35 @@ void Plot2D::drawAxes(QPainter *p, const int w, const int h){
 
 
 void Plot2D::drawLegend(QPainter *p, const int w, const int h){
-	/*
-	if(legend.Enabled()) {
-//		kDebug()<<"	Legend enabled"<<endl;
+	if( !m_legend.isEnabled() ){
+		p->setPen(Qt::NoPen);
+		return;
+	}
 
-		if (type == PSURFACE) {		// legend can't do this :-(
-			if (legend.X() == 0.7 && legend.Y() == 0.05 ) // replace the legend for surface plots first time
-				legend.setPosition(0.83,0.05);
+	kDebug()<<"	Legend enabled"<<endl;
 
-			int x = (int) (w*(size.X()*legend.X()+position.X()));
-			int y = (int) (h*(size.Y()*legend.Y()+position.Y()));
+	if (m_plotType == Plot::PLOTSURFACE) {		// legend can't do this :-(
+		/*
+		if (legend.X() == 0.7 && legend.Y() == 0.05 ) // replace the legend for surface plots first time
+			legend.setPosition(0.83,0.05);
 
-			Plot2DSurface *plot = (Plot2DSurface *)this;
-			plot->drawLegend(p,x,y);
-			legend.draw(p,type,graphlist,position,size,w,h);
-			plot->drawLegend(p,x,y);
-		}
-		else
-			legend.draw(p,type,graphlist,position,size,w,h);
+		int x = (int) (w*(size.X()*legend.X()+position.X()));
+		int y = (int) (h*(size.Y()*legend.Y()+position.Y()));
+
+		Plot2DSurface *plot = (Plot2DSurface *)this;
+		plot->drawLegend(p,x,y);
+		legend.draw(p,type,graphlist,position,size,w,h);
+		plot->drawLegend(p,x,y);
+		*/
+	}else{
+		m_legend.draw( p, &list_Sets, position, size, w, h );
+	}
 
 //		legend.draw(p,type,graphlist,position,size,w,h);
 //		kDebug()<<" drawing legend with pos = "<<position.X()<<' '<<position.Y()<<endl;
 //		kDebug()<<" 	size.X()*w/size.Y()*h = "<<size.X()*w<<' '<<size.Y()*h<<endl;
 
-	}
 	p->setPen(Qt::NoPen);
-*/
 }
 
 /*

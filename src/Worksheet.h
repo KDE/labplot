@@ -20,7 +20,7 @@ public:
 	SheetType sheetType() const { return type; }
 	int plotCount() const { return listPlots.count(); }
 	void print(QString file=0);
-	void addSet(Set *set, Plot::PlotType ptype);
+	void addSet(Set set, Plot::PlotType ptype);
 	Plot* activePlot();
 	QDomElement save(QDomDocument doc);
 	void open(QDomNode node);

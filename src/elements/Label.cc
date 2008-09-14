@@ -1,9 +1,11 @@
-//LabPlot: Label.cc
+#include "Label.h"
+#include "../tools/TexRenderer.h"
 
-#include <KDebug>
 #include <QPainter>
 #include <QTextDocument>
-#include "Label.h"
+#include <KMessageBox>
+#include <KDebug>
+#include <KLocalizedString>
 
 Label::Label(QString text){
 	m_text=text;
@@ -65,11 +67,28 @@ void Label::draw(QPainter *p, const Point pos, const Point size, const int w, co
 	tmpfont.setPointSize((int)(size.X()*tmpsize));
 */
 
-	QTextDocument *t = new QTextDocument();
-	t->setDefaultFont(m_textFont);
-	t->setHtml(m_text);
-	QRect box( 0, 0, t->size().width(), t->size().height() );
 	float xOffset, yOffset;
+	QRect box;
+	box.setTopLeft( QPoint(0, 0) );
+
+	QTextDocument textDocument;
+	QImage texImage;
+	if ( m_texEnabled ){
+		if ( TexRenderer::createImage(m_text, texImage)==false ){
+			KMessageBox::error(0, i18n("Error occured during Tex-rendering. Normal text is used instead."),  i18n("Tex-rendering") );
+
+			//fall back to normal text
+			textDocument.setDefaultFont(m_textFont);
+			textDocument.setHtml(m_text);
+			box.setBottomRight( QPoint(textDocument.size().width(), textDocument.size().height() ) );
+		}else{
+			box.setBottomRight( QPoint(texImage.width(), texImage.height() ) );
+		}
+	}else{
+		textDocument.setDefaultFont(m_textFont);
+		textDocument.setHtml(m_text);
+		box.setBottomRight( QPoint(textDocument.size().width(), textDocument.size().height() ) );
+	}
 
 	//TODO: adjust the offsets depending on whether
 	//the bounding box and shadow are enabled or not
@@ -79,11 +98,11 @@ void Label::draw(QPainter *p, const Point pos, const Point size, const int w, co
 			yOffset = 0;
 			break;
 		case CENTER:
-			xOffset = (size.x()-t->size().width()/w)/2;
+			xOffset = (size.x() - textDocument.size().width()/w)/2;
 			yOffset = 0;
 			break;
 	case RIGHT:
-			xOffset = size.x()-t->size().width()/w;
+			xOffset = size.x() - textDocument.size().width()/w;
 			yOffset = 0;
 			break;
 	case CUSTOM:
@@ -118,47 +137,14 @@ void Label::draw(QPainter *p, const Point pos, const Point size, const int w, co
 	if( m_fillingEnabled )
 		p->fillRect( box, QBrush(m_fillingColor) );
 
-
-		//TODO
-	/*	if(is_texlabel) {
-		KTempDir *tmpdir = new KTempDir();
-		QString dirname = tmpdir->name();
-		KProcess *proc = new KProcess;
-		*proc << "texvc";
-		*proc << "/tmp"<<dirname<<title;
-		if( proc->start(KProcess::Block) == false) {
-			kDebug()<<"COULD NOT FIND texvc! Gving up."<<endl;
-			KMessageBox::error((QWidget *)ws,i18n("Could not find texvc! Falling back to normal label."));
-			is_texlabel = false;
-		}
-		else {
-			// take resulting image and show it
-			QDir d(dirname);
-			QString filename = dirname+QString(d[2]);
-			QImage *image = new QImage(filename);
- 			if(!image->isNull()) {
-//				kDebug()<<"\n	drawing TeX image file "<<filename<<endl;
-				p->save();
-				p->translate((pos.X()+x*size.X())*w,(pos.Y()+y*size.Y())*h);
-				// phi : normal angle, rotation : additional rotation
-				p->rotate(phi+rotation);
-				if (boxed) {
-					p->setPen(QColor("black"));
-					p->drawRect(-1,-1,image->width()+2,image->height()+2);
-				}
-				p->drawImage(0,0,*image);
-				p->restore();
-			}
-#if KDE_VERSION > 0x030104
-			tmpdir->unlink();
-#else
-		rmdir(dirname.latin1());
-#endif
-			return;
-		}
+	if (m_texEnabled){
+		//copy the content of the tex-pixmap to the box
+		p->drawImage(0, 0, texImage);
+	}else{
+		//render the content of the QTextDocument to the box
+		textDocument.drawContents(p);
 	}
-	*/
-	t->drawContents(p);
+
 	p->restore();
 	kDebug()<<"Label drawn"<<endl;
 }

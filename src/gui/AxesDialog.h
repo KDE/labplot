@@ -6,7 +6,6 @@
 
 class AxesWidget;
 class Axis;
-class MainWin;
 class Worksheet;
 
 /**
@@ -16,16 +15,14 @@ class AxesDialog: public KDialog{
 	Q_OBJECT
 
 public:
-	AxesDialog(MainWin*, const Plot::PlotType type=Plot::PLOT2D);
+	AxesDialog(QWidget*);
 	~AxesDialog();
 
 	void setWorksheet(Worksheet*);
 	void setAxes(QList<Axis>* list_axes, const int axisNumber=0);
-	void saveAxes() const;
 
 private:
 	AxesWidget* axesWidget;
-	QList<Axis>* list_axes;
 	Worksheet* worksheet;
 
 private slots:

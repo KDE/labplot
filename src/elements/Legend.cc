@@ -1,49 +1,120 @@
-//LabPlot: Legend.cc
+#include "Legend.h"
 
 #include <cmath>
 #include <iostream>
-#include <QBrush>
-#include <QColor>
-#include "Legend.h"
 
-/*
-#include <qdir.h>
-#include <qimage.h>
-#include <kdebug.h>
-#include <kdeversion.h>
-#if KDE_VERSION > 0x030104
-#include <ktempdir.h>
-#else
-#include <sys/stat.h>
-#include <sys/types.h>
-#endif
-#include <kprocess.h>
-#include <kmessagebox.h>
+#include <KDebug>
 
-#include "GraphList.h"
+Legend::Legend(){
+	m_enabled = true;
+	m_position.setX( 0.7 );
+	m_position.setY( 0.05 );
+	m_orientation=Qt::Vertical;
 
-using namespace std;
-*/
+	m_fillingEnabled=false;
+	m_fillingColor = QColor(Qt::white);
+	m_boxEnabled = true;
+	m_shadowEnabled = true;
 
-Legend::Legend() {
-// 	font = QFont(QString("Adobe Times"),8);
-// 	enabled = true;
-// 	border = true;
-// 	x = 0.7;
-// 	y = 0.05;
-// 	color = QColor(Qt::white);
-// 	transparent = true;
+	//font = QFont(QString("Adobe Times"),8);
+	m_textColor = QColor(Qt::black);
+
+
+	//TODO ???
 // 	namelength=0;
-// 	orientation=0;
 // 	ticlabellength=0;
 }
 
+
+ void Legend::draw( QPainter *p, const QList<Set>*list_Sets, const Point pos, const Point size, const int w, const int h){
+ 	kDebug()<<""<<endl;
 /*
-int Legend::drawGraphs(QPainter *p, GraphList *gl, PType type, Point size, QFont tmpfont ) {
+	int x1 = x2 = (int) ((x*size.X()+pos.X())*w);
+	int y1 = y2 = (int) ((y*size.Y()+pos.Y())*h);
+
+	int=namelength=0;	// reset namelength for legend box
+
+	// set point size
+	int pointsize = m_textFont.pointSize();
+	QFont tmpfont = m_textFont;
+	tmpfont.setPointSize((int)(pointsize*size.X()));
+	p->setFont(tmpfont);
+	QFontMetrics fm = p->fontMetrics();
+
+	int number = drawGraphs(p,graphlist,type,size,tmpfont);
+
+	if (type == PSURFACE) {
+		if(orientation) {
+			x2 = (int) (x1+size.X()*(20+125+10));
+			y2 = (int) (y1+40*size.Y()*number+namelength+5);
+		}
+		else {
+			y2 = (int) (y1+size.Y()*(40*number+125+10));
+			x2 = (int) (x1+40*size.X()+fmax(namelength-20*size.X(),ticlabellength)+5);
+		}
+	}
+	else {
+		x2 = (int) (x1+40*size.X()+namelength+5);
+		y2 = (int) (y1+size.X()*pointsize*(1.5+1.5*number));
+	}
+
+		QRect box( 0, 0, t->size().width(), t->size().height() );
+
+	//show shadow, if enabled
+	//TODO make the size of the shadow depend on w and h.
+	if (m_shadowEnabled){
+		QRectF rightShadow(box.right()+1, box.top() + 5, 5, box.height());
+		QRectF bottomShadow(box.left() + 5, box.bottom()+1, box.width(), 5);
+		p->fillRect(rightShadow, Qt::darkGray);
+		p->fillRect(bottomShadow, Qt::darkGray);
+	}
+
+	//show bounding box, if enabled
+	if (m_boxEnabled) {
+		p->setPen( Qt::black );
+		p->drawRect(box);
+	}
+
+	//fill the label box, if enabled.
+	if( m_fillingEnabled )
+		p->fillRect( box, QBrush(m_fillingColor) );
+	*/
+
+/* alter Kode
+	if ( m_fillingEnabled ) {
+		p->setBrush(m_fillingColor);
+		p->setPen(Qt::NoPen);
+		p->drawRect(x1,y1,x2-x1,y2-y1);
+		p->setBrush(QBrush::NoBrush);
+
+		// draw again (since it gets overwritten)
+		drawGraphs(p,graphlist,type,size,tmpfont);
+	}
+	p->setBrush(QBrush::NoBrush);
+	if (border)
+		p->drawRect(x1,y1,x2-x1,y2-y1);
+*/
+
+
+	/*
+	this->drawSetLegends(p, list_Sets, size, tmpfont);
+
+	//TODO ???
+	// reset font point size
+	//kdDebug()<<"Resetting font size to "<<pointsize<<endl;
+	tmpfont.setPointSize(pointsize);
+	p->setFont(tmpfont);
+	*/
+}
+
+
+
+void Legend::drawSetLegends(QPainter *p, const QList<Set>*list_Sets, const Point& size, const QFont& tmpfont ) {
+	/*
 	kdDebug()<<"Legend::drawGraphs()"<<endl;
 	QFontMetrics fm = p->fontMetrics();
 	int number=0;	// sed for hidden graphs
-	for (unsigned int i = 0 ; i < gl->Number(); i++) {
+	for (unsigned int i = 0 ; i < gl->Number(); i++) {Tach.
 		Graph *g = gl->getGraph(i);
 //		kdDebug()<<"GRAPH "<<i<<" Label : "<<g->getLabel()->simpleTitle()<<endl;
 		if(g->isShown() == false)
@@ -209,60 +280,11 @@ int Legend::drawGraphs(QPainter *p, GraphList *gl, PType type, Point size, QFont
 	}
 
 	return number;
+	*/
 }
 
-void Legend::draw( QPainter *p, PType type, GraphList *graphlist, Point pos, Point size, int w, int h) {
-	kdDebug()<<"Legend::draw()"<<endl;
 
-	x1 = x2 = (int) ((x*size.X()+pos.X())*w);
-	y1 = y2 = (int) ((y*size.Y()+pos.Y())*h);
-
-	namelength=0;	// reset namelength for legend box
-
-	// set point size
-	int pointsize = font.pointSize();
-	QFont tmpfont = font;
-	//kdDebug()<<"Setting font size to "<<(int) (pointsize*size.X())<<endl;
-	tmpfont.setPointSize((int)(pointsize*size.X()));
-	p->setFont(tmpfont);
-	QFontMetrics fm = p->fontMetrics();
-
-	int number = drawGraphs(p,graphlist,type,size,tmpfont);
-
-	if (type == PSURFACE) {
-		if(orientation) {
-			x2 = (int) (x1+size.X()*(20+125+10));
-			y2 = (int) (y1+40*size.Y()*number+namelength+5);
-		}
-		else {
-			y2 = (int) (y1+size.Y()*(40*number+125+10));
-//			kdDebug()<<"	NL "<<namelength<<" | TLL "<<ticlabellength<<endl;
-			x2 = (int) (x1+40*size.X()+fmax(namelength-20*size.X(),ticlabellength)+5);
-		}
-	}
-	else {
-		x2 = (int) (x1+40*size.X()+namelength+5);
-		y2 = (int) (y1+size.X()*pointsize*(1.5+1.5*number));
-	}
-
-	if (!transparent) {
-		p->setBrush(color);
-		p->setPen(Qt::NoPen);
-		p->drawRect(x1,y1,x2-x1,y2-y1);
-		p->setBrush(QBrush::NoBrush);
-		// draw again (since it gets overwritten)
-		drawGraphs(p,graphlist,type,size,tmpfont);
-	}
-	p->setBrush(QBrush::NoBrush);
-	if (border)
-		p->drawRect(x1,y1,x2-x1,y2-y1);
-
-	// reset font point size
-	//kdDebug()<<"Resetting font size to "<<pointsize<<endl;
-	tmpfont.setPointSize(pointsize);
-	p->setFont(tmpfont);
-}
-
+/*
 //! calculate if point x,y is inside the legend box (for mouse event)
 bool Legend::inside(int X, int Y) {
 	kdDebug()<<"x1/x2 y1/y2 "<<x1<<'/'<<x2<<' '<<y1<<'/'<<y2<<endl;

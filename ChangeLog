@@ -1,3 +1,5 @@
+2008-09-14, as	Introduced tools/TexRenderer
+			Code clean-up in gui/
 2008-09-09,sg	converted ColumnDialog to ui style
 2008-09-06,as	AxesWidget implemented, stil lacks some functions (handling of ranges, datetime format etc.).Tested only with Plot2D.
 			Changed the ordering of x2 and y2 axes in Plot2D::drawAxesTicks().
