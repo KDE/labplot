@@ -14,6 +14,7 @@
 #include "pixmaps/pixmap.h"
 #include "column.h"
 #include "elements/Point3D.h"
+#include "gui/ExportDialog.h"
 #include "gui/FunctionPlotDialog.h"
 
 Spreadsheet::Spreadsheet(MainWin *mw)
@@ -505,8 +506,9 @@ void Spreadsheet::plot() {
 }
 
 void Spreadsheet::exportData() {
-	kDebug()<<"not implemented yet!"<<endl;
-	// TODO : export dialog
+	kDebug()<<endl;
+	ExportDialog* dlg=new ExportDialog(mw);
+	dlg->exec();
 }
 
 void Spreadsheet::setColumnValues() {

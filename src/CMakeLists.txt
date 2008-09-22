@@ -3,6 +3,8 @@
 	gui/AxesWidget.cc
 #  	gui/ColorMapPreview.cc
   	gui/ColumnDialog.cc
+	gui/ExportDialog.cc
+	gui/ExportWidget.cc
 	gui/FunctionPlotDialog.cc
   	gui/FunctionPlotWidget.cc
 	gui/ImportDialog.cc
@@ -60,6 +62,7 @@ set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SO
 set(UI_SOURCES
 	gui/ui/axeswidget.ui
 	gui/ui/columndialog.ui
+	gui/ui/exportwidget.ui
 	gui/ui/functionplotwidget.ui
 	gui/ui/importwidget.ui
 	gui/ui/labelwidget.ui

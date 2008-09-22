@@ -8,7 +8,7 @@ class Spreadsheet;
 #include "../binaryformat.h"
 
 /**
- * @brief Represents the widget where all the importsettings can be modified
+ * @brief Represents the widget where all the import settings can be modified
  * This widget is embedded in \c ImportDialog
  */
 class ImportWidget : public QWidget{
@@ -18,7 +18,6 @@ public:
 	ImportWidget(QWidget*);
 	~ImportWidget();
 
-	QStringList fileNames() { return ui.leFileName->text().split(";"); }
 	void apply(MainWin *mainWin);	// used from ImportDialog
 private:
 	Ui::ImportWidget ui;
@@ -33,6 +32,7 @@ private:
 	void importASCII(QIODevice *file, Spreadsheet *s);
 	void importBinary(QIODevice *file, Spreadsheet *s);
 	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
+	QStringList fileNames() { return ui.leFileName->text().split(";"); }
 private slots:
 	void save();
 	void selectFile();
