@@ -5,14 +5,14 @@
 #include "../MainWin.h"
 
 ImportDialog::ImportDialog(MainWin *parent) : KDialog(parent), mainWin(parent) {
-	kDebug()<<"ImportDialog()"<<endl;
+	kDebug()<<endl;
 	setCaption(i18n("Import Data"));
 
 	setupGUI();
 }
 
 void ImportDialog::setupGUI() {
-	kDebug()<<"ImportDialog::setupGUI()"<<endl;
+	kDebug()<<endl;
 	importWidget = new ImportWidget( this );
 	setMainWidget( importWidget );
 

@@ -1,4 +1,7 @@
-2008-09-14, as	Introduced tools/TexRenderer
+2008-09-29,sg	new style ProjectDialog
+		old Dialog class removed
+2008-09-21,sg	ExportDialog  added
+2008-09-14,as	Introduced tools/TexRenderer
 			Code clean-up in gui/
 2008-09-09,sg	converted ColumnDialog to ui style
 2008-09-06,as	AxesWidget implemented, stil lacks some functions (handling of ranges, datetime format etc.).Tested only with Plot2D.

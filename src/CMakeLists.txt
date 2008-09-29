@@ -14,6 +14,7 @@
 	gui/LegendWidget.cc
   	gui/PlotStyleWidget.cc
  	gui/PlotSurfaceStyleWidget.cc
+	gui/ProjectDialog.cc
 	gui/SettingsDialog.cc
 	gui/SettingsGeneralPage.cc
 	gui/SettingsPage.cc
@@ -49,11 +50,9 @@ set(PLOTS_SOURCES
 set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
   parser/parser.tab.c
   tools/TexRenderer.cc
-  Dialog.cc
   LabPlot.cc
   MainWin.cc
   Project.cc
-  ProjectDialog.cc
   Spreadsheet.cc
   TableModel.cc
   Worksheet.cc
@@ -69,6 +68,7 @@ set(UI_SOURCES
 	gui/ui/legendwidget.ui
 	gui/ui/plotstylewidget.ui
  	gui/ui/plotsurfacestylewidget.ui
+ 	gui/ui/projectdialog.ui
 	gui/ui/settingsgeneralpage.ui
 	gui/ui/settingsprintingpage.ui
 )

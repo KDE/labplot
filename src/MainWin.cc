@@ -1,12 +1,13 @@
 #include "MainWin.h"
 
 //****** GUI **************
-#include "gui/SettingsDialog.h"
-#include "gui/FunctionPlotDialog.h"
 #include "gui/AxesDialog.h"
-#include "gui/LegendDialog.h"
-#include "gui/TitleDialog.h"
+#include "gui/FunctionPlotDialog.h"
 #include "gui/ImportDialog.h"
+#include "gui/LegendDialog.h"
+#include "gui/ProjectDialog.h"
+#include "gui/SettingsDialog.h"
+#include "gui/TitleDialog.h"
 
 #include <KApplication>
 #include <KAction>
@@ -19,7 +20,6 @@
 #include <KLocale>
 #include <KDebug>
 #include <KFilterDev>
-#include "ProjectDialog.h"
 
 #include "sheettype.h"
 #include "pixmaps/pixmap.h"
