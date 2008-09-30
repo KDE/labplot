@@ -78,11 +78,6 @@
         <property name="enabled" >
          <bool>true</bool>
         </property>
-        <item>
-         <property name="text" >
-          <string>automatic</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="0" column="2" >
@@ -102,11 +97,6 @@
        </widget>
       </item>
      </layout>
-     <zorder>leFileName</zorder>
-     <zorder>lFileType</zorder>
-     <zorder>label_3</zorder>
-     <zorder>cbFileType</zorder>
-     <zorder>pbBrowse</zorder>
     </widget>
    </item>
    <item>

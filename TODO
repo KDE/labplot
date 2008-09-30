@@ -60,8 +60,6 @@ Pending :
 			more formas (file type selection)
 		file info dialog
 	* dialogs
-		* convert to ui style
-			ProjectDialog
 		* LabelWidget: title dialog, function dialog, axes dialog
 		* SettingsDialog		Alexander
 		* AxesDialog			Alexander
@@ -76,7 +74,7 @@ Pending :
 			other plot types
 			save/load settings
 		* ExportDialog		Stefan
-			ascii, binary, hdf5, magick, cdf, audio, database
+			ascii, binary, hdf5, magick, cdf, (audio, database)
 		* ColumnValuesDialog
 		* SpreadsheetPlotDialog
 -------------------------------------------------------------------------

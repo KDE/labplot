@@ -29,14 +29,15 @@ private:
 	int importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s);
 	int importNETCDF(QString filename, Spreadsheet *s);
 	int importCDF(QString filename, Spreadsheet *s);
-	void importASCII(QIODevice *file, Spreadsheet *s);
-	void importBinary(QIODevice *file, Spreadsheet *s);
-	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
 */
+//	void importASCII(QIODevice *file, Spreadsheet *s);
+	void exportASCII(QTextStream *t);
+//	void importBinary(QIODevice *file, Spreadsheet *s);
+//	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
 private slots:
 	void save();
 	void selectFile();
-//	void updateFileType();
+	void updateSelectedFormat();
 //	void fileInfoDialog();
 //	void toggleOptions();
 };

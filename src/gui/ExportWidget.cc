@@ -8,17 +8,19 @@
 #include "../filter/FilterHDF5.h"
 #include "../filter/FilterCDF.h"
 #include "../filter/FilterNETCDF.h"
-//#include "../importitems.h"
+#include "../export.h"
 
 ExportWidget::ExportWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
 	KConfigGroup conf(KSharedConfig::openConfig(),"Export");
 	ui.leFileName->setText(conf.readEntry("Filename",""));
-//	updateFileType();
+	updateSelectedFormat();
+
+	ui.cbFileType->insertItems(0,exportitems);
+	ui.cbFileType->setCurrentIndex(conf.readEntry("Filetype",0));
 
 	ui.gbOptions->hide();
-	// TODO : file type selection
 /*	ui.niStartRow->setValue(conf.readEntry("StartRow",1));
 	ui.niEndRow->setValue(conf.readEntry("EndRow",0));
 	ui.cbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces",true));
@@ -52,7 +54,7 @@ void ExportWidget::save() {
 	KConfigGroup conf(KSharedConfig::openConfig(),"Export");
 	
 	conf.writeEntry("Filename",ui.leFileName->text());
-	//TODO : file type selection
+	conf.writeEntry("Filetype",ui.cbFileType->currentIndex());
 
 /*	// options
 	conf.writeEntry("StartRow",ui.niStartRow->value());
@@ -79,32 +81,15 @@ void ExportWidget::selectFile() {
 	QString file = QFileDialog::getSaveFileName(this,i18n("Select one or more files to open"));
 	ui.leFileName->setText(file);
 }
-/*
-void ExportWidget::updateFileType() {
-	QProcess *proc = new QProcess(this);
-	QString program= "file";
-	QStringList args;
-	args<<"-b"<<ui.leFileName->text();
-	proc->start(program,args);
-	if(proc->waitForReadyRead(1000) == false)
-		kDebug()<<"ERROR: reading file type of file"<<ui.leFileName->text()<<endl;
-	else {
-		QString info = proc->readLine().left(60);
-		if(info.contains(i18n("cannot open")))
-			ui.lFileType->setText("");
-		else {
-			info.remove(info.length()-1,1);	// remove '\n'
-			kDebug()<<info<<endl;
-			if(info == "data")
-				binaryMode=true;
-			else
-				binaryMode=false;
-			updateBinaryMode();
-			ui.lFileType->setText(info);
-		}
-	}
+
+/*update export file type*/
+void ExportWidget::updateSelectedFormat() {
+	//TODO
+	//get ending	
+	//switch()	-> set selection
 }
 
+/*
 void ExportWidget::toggleOptions() {
 	if(ui.gbOptions->isHidden() && ui.gbBinaryOptions->isHidden()) {
 		if(binaryMode)
@@ -153,65 +138,80 @@ int ExportWidget::endRow() const {
 }
 */
 void ExportWidget::apply(MainWin *mainWin) {
-	kDebug()<<"ExportWidget::apply() not implemented yet!"<<endl;
+	kDebug()<<endl;
 
 	QString filename = ui.leFileName->text();
 	if(filename.isEmpty())
 		return;
+	
+	// check if file exists
+	if ( QFile::exists(filename) ) {
+		int answer = KMessageBox::warningYesNoCancel( this,
+			i18n( "Overwrite\n\'%1\'?" ).arg( filename ), i18n("Export data"));
+		if (answer != KMessageBox::Yes)
+			return;
+		else {
+			// delete it (needed for CDF)
+			QFile::remove(filename);
+		}
+	}
 
-	// TODO
-/*		
-		// TODO : if file type selected ...
-		// exit
+	QIODevice *file=0;
+	QTextStream t;
+	QDataStream d;
+	int format = ui.cbFileType->currentIndex();
+	if(format == EASCII || format == EBINARY) {
+		file = KFilterDev::deviceForFile(filename,QString::null,true);
+		if(file == 0) file = new QFile(filename);
 
-		// automatic
-		if (filename.endsWith(".opj",Qt::CaseInsensitive)) {
-			importOPJ(mainWin, filename);
+		if (! file->open( QIODevice::WriteOnly )) {
+			KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));
 			return;
 		}
 
-		// open a spreadsheet
-		Spreadsheet *s=0;
-		if( ! ui.cbCreateSpreadsheet->isChecked() && i == 0 )
-			s=mainWin->activeSpreadsheet();
-		if(!s)
-			s=mainWin->newSpreadsheet();
+		if(format == EASCII)
+			t.setDevice(file);
+		else if (format == EBINARY)
+			d.setDevice(file);
+	}
 
-		if(!s) {
-			kDebug()<<"ERROR : Couldn't create spreadsheet!"<<endl;
-			continue;
-		}
-
-		if(ui.cbUseFilename->isChecked())
-			s->setTitle(filename);
-	
-		// filter using file ending
-		if(filename.endsWith(".hdf",Qt::CaseInsensitive) || filename.endsWith(".h5",Qt::CaseInsensitive))
-			importHDF5(mainWin,filename,s);
-		else if (filename.endsWith(".nc",Qt::CaseInsensitive))
-			importNETCDF(filename,s);
-		else if (filename.endsWith(".cdf",Qt::CaseInsensitive))
-			importCDF(filename,s);
-		else {
-			kDebug()<<"	Opening file"<<filename<<endl;
-			QIODevice *file = KFilterDev::deviceForFile(filename,QString::null,true);
-			if(file==0) {
-				kDebug()<<"No device for file found. Opening as normal file."<<endl;
-				file = new QFile(filename);
-			}
-			if (!file->open(QIODevice::ReadOnly)) {
-				kDebug()<<"ERROR : Unable to open file "<<filename<<" for reading!"<<endl;
-				continue;
-			}
-
-			if(binaryMode)
-				importBinary(file,s);
-			else
-				importASCII(file,s);
-
-			delete file;
-		}
+/*	switch (exportcb->currentItem()) {
+	case EASCII: 	dumpASCII(&t, sep); break;
+	case ECDF: dumpCDF(filename); break;
+	case ENETCDF: dumpNETCDF(filename); break;
+	case EAUDIO: 	dumpAUDIOFILE(filename); break;
+	case EIMAGE: dumpIMAGE(filename); break;
+	case EBINARY: dumpBINARY(&d); break;
+	case EKEXIDB: dumpKexiDB(); break;
+	case EHDF5: dumpHDF5(filename); break;
+	}
 */
+
+	// TODO
+	if ( ui.cbFileType->currentIndex() == EAUTO) {
+		if (filename.endsWith(".dat",Qt::CaseInsensitive) ||
+			filename.endsWith(".txt",Qt::CaseInsensitive) )
+				exportASCII(&t);
+		// TODO : check for other file ending
+	}
+	else {
+		// TODO : implement all formats
+		switch(ui.cbFileType->currentIndex()) {
+		case EASCII: 
+			kDebug()<<"ASCII selected"<<endl;
+			exportASCII(&t);
+			break;
+		case ECDF: break;
+		case EAUDIO: break;
+		case EIMAGE: break;
+		case EBINARY: break;
+		case EDATABASE: break;
+		case EHDF5: break;
+		default: break;
+		}
+	}
+	
+	if(file) file->close();
 }
 /*
 void ExportWidget::importOPJ(MainWin *mainWin, QString filename) {
@@ -446,72 +446,11 @@ double ExportWidget::getBinaryValue(QDataStream *ds, BinaryFormat type) const {
 
 	return value;
 }
-
-void ExportWidget::importASCII(QIODevice *file, Spreadsheet *s) {
-	kDebug()<<"ExportDialog::importASCII()"<<endl;
-	// TODO : use samex
-
-	int row=0,actrow=0;
-	QTextStream in(file);
-	QProgressDialog progress( i18n("Reading ASCII data ..."), i18n("Cancel"), 0, file->size());
-	progress.setWindowModality(Qt::WindowModal);
-	s->setUpdatesEnabled(false);
-	while (!in.atEnd()) {
-		while(row<startRow()) {
-			in.readLine();
-			row++;
-		}
-		actrow = row-startRow();
-		if (ui.cbExportHeader->isChecked()) actrow--;
-
-		if (row%50000==0) {
-			progress.setValue(file->pos());
-			s->setRowCount(actrow+50000);
-			if (progress.wasCanceled()) {
-				kDebug()<<"WARNING: Export canceled()"<<endl;
-             			break;
-			}
-		}
-
-		QString line = in.readLine();
-		
-		if(ui.cbSimplifyWhitespaces->isChecked())
-			line = line.simplified();
-		if(line.startsWith(ui.cbCommentCharacter->currentText()) == true)
-			continue;
-
-		QStringList oneline;
-		QString sep=ui.cbSeparatingCharacter->currentText();
-		if(sep == "auto")
-			oneline = line.split(QRegExp("\\s+"),(QString::SplitBehavior)ui.cbEmptyLines->isChecked());
-		else
-			oneline = line.split(sep,(QString::SplitBehavior)ui.cbEmptyLines->isChecked());
-
-		// handle empty lines correct
-		if(oneline.count() == 0)
-			continue;
-		// kDebug()<<"cols="<<oneline.size()<<endl;
-		if(oneline.size() > s->columnCount()) {
-			s->setColumnCount(oneline.size());
-			s->resetHeader();
-		}
-
-		// import header
-		if(row==startRow() && ui.cbImportHeader->isChecked()) {
-	 		for ( int i=0; i<oneline.size(); i++ )
-				s->setColumnName(i,oneline.at(i));
-		}
-		else {
-		 	for ( int i=0; i<oneline.size(); i++ )
-				s->setText(actrow, i, oneline.at(i));
-		}
-		if(row>endRow())
-			break;
-		row++;
-	}
-	s->setRowCount(actrow+1);
-	if( ! ui.cbImportHeader->isChecked())
-		s->resetHeader();
-	s->setUpdatesEnabled(true);
-}
 */
+
+void ExportWidget::exportASCII(QTextStream *t) {
+	kDebug()<<"not implemented yet!"<<endl;
+
+	//TODO
+}
+
