@@ -225,11 +225,12 @@ void ImportWidget::apply(MainWin *mainWin) {
 
 		// open a spreadsheet
 		Spreadsheet *s=0;
+#if 0 // TODO: this has just been temporally disabled for the SciDAVis integration
 		if( ! ui.cbCreateSpreadsheet->isChecked() && i == 0 )
 			s=mainWin->activeSpreadsheet();
 		if(!s)
 			s=mainWin->newSpreadsheet();
-
+#endif
 		if(!s) {
 			kDebug()<<"ERROR : Couldn't create spreadsheet!"<<endl;
 			continue;
@@ -324,7 +325,6 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s)
 
 		s->setRowCount(rows);
 		s->setColumnCount(cols);
-		s->resetHeader();
 		for (int col=0;col<cols;col++) {
 			QString colname = hdf5.columnName(i,col);
 			if(colname.length()<1)
@@ -351,7 +351,6 @@ int ImportWidget::importNETCDF(QString filename, Spreadsheet *s) {
 	if(!ncf.fileOK()) return -1;
 	kDebug()<<"Reading NETCDF data"<<endl;
 	s->setColumnCount(ncf.NVars());
-	s->resetHeader();
 
 	kDebug()<<" nvars = "<<ncf.NVars()<<endl;
 	QProgressDialog progress( i18n("Reading NETCDF data ..."), i18n("Cancel"), 0, ncf.NVars()-startRow());
@@ -391,7 +390,6 @@ int ImportWidget::importCDF(QString filename, Spreadsheet *s) {
 
 	s->setColumnCount(cdf.NVars());
 	s->setRowCount(cdf.MaxRec());
-	s->resetHeader();
 
 	kDebug()<<" nvars = "<<cdf.NVars()<<endl;
 	QProgressDialog progress( i18n("Reading CDF data ..."), i18n("Cancel"), 0, cdf.NVars()-startRow());
@@ -546,7 +544,6 @@ void ImportWidget::importASCII(QIODevice *file, Spreadsheet *s) {
 		// kDebug()<<"cols="<<oneline.size()<<endl;
 		if(oneline.size() > s->columnCount()) {
 			s->setColumnCount(oneline.size());
-			s->resetHeader();
 		}
 
 		// import header
@@ -564,6 +561,5 @@ void ImportWidget::importASCII(QIODevice *file, Spreadsheet *s) {
 	}
 	s->setRowCount(actrow+1);
 	if( ! ui.cbImportHeader->isChecked())
-		s->resetHeader();
 	s->setUpdatesEnabled(true);
 }

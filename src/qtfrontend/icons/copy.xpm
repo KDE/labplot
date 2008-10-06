@@ -1,0 +1,20 @@
+/* XPM */
+static const char *copy_xpm[]={
+"15 13 4 1",
+"# c None",
+". c #000000",
+"b c #00007f",
+"a c #ffffff",
+"......#########",
+".aaaa..########",
+".aaaa.a.#######",
+".a..a.bbbbbb###",
+".aaaaabaaaabb##",
+".a....baaaabab#",
+".aaaaaba..abbbb",
+".a....baaaaaaab",
+".aaaaaba.....ab",
+"......baaaaaaab",
+"######ba.....ab",
+"######baaaaaaab",
+"######bbbbbbbbb"};

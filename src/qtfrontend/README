@@ -1,0 +1,81 @@
+=== What is SciDAVis? ===
+
+SciDAVis is a free application for _Sci_entific _D_ata _A_nalysis and _Vis_ualization.
+
+
+=== License ===
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or   
+(at your option) any later version.                                 
+                                                                    
+This program is distributed in the hope that it will be useful,     
+but WITHOUT ANY WARRANTY; without even the implied warranty of      
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the       
+GNU General Public License for more details.                        
+
+A copy of this license is provided in the file gpl.txt.
+
+
+=== Platforms ===
+
+SciDAVis runs on GNU/Linux, Windows and MacOS X; 
+possibly also on other platforms like *BSD.
+
+
+=== Installation ===
+
+See INSTALL.html
+
+
+=== Web site ===
+
+http://scidavis.sourceforge.net
+
+
+=== Authors ===
+
+These are the people currently working on SciDAVis, in alphabetical order:
+o Knut Franke (knut.franke at gmx.de) - developer, project admin
+o Roger Gadiou - documentation, screenshots
+o Tilman Hoener zu Siederdissen (thzs at gmx.net) - developer, project admin
+
+
+=== Credits ===
+
+The following people have written parts of SciDAVis, ranging from a few lines to large chunks.
+In alphabetical order:
+
+Shen Chen, Borries Demeler, Jose Antonio Lorenzo Fernandez, Knut Franke, Vasileios Gkanis,
+Gudjon Gudjonsson, Tilman Hoener zu Siederdissen, Alex Kargovsky, Michael Mac-Vicar,
+Tomomasa Ohkubo, Aaron Van Tassle, Branimir Vasilic, Ion Vasilief, Vincent Wagelaar
+
+The following people have written parts of the manual and/or other documentation.
+In alphabetical order:
+
+Knut Franke, Roger Gadiou, Ion Vasilief
+
+The following people have contributed translations or parts thereof.
+In alphabetical order:
+
+Markus Bongard, Tobias Burnus, Remy Claverie, Jose Antonio Lorenzo Fernandez,
+Tilman Hoener zu Siederdissen, Daniel Klaer, Peter Landgren, Tomomasa Ohkubo,
+Mikhail Shevyakov
+
+We also want to acknowledge the people having helped us indirectly by contributing to the following
+fine pieces of software. In no particular order:
+
+Qt (http://doc.trolltech.com/4.3/credits.html),
+Qwt (http://qwt.sourceforge.net/#credits),
+Qwtplot3D (http://qwtplot3d.sourceforge.net/),
+muParser (http://muparser.sourceforge.net/),
+Python (http://www.python.org/),
+liborigin (http://sourceforge.net/projects/liborigin/),
+Vim (http://www.vim.org/thanks.php/),
+webgen (http://webgen.rubyforge.org/),
+Doxygen (http://www.doxygen.org/),
+Subversion (http://subversion.tigris.org/),
+GSL (http://www.gnu.org/software/gsl/)
+
+... and many more we just forgot to mention.

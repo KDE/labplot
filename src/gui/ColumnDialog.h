@@ -40,7 +40,7 @@ class Spreadsheet;
 class ColumnDialog: public KDialog {
 	Q_OBJECT
 public:
-	ColumnDialog(MainWin *mw, Spreadsheet *s);
+	ColumnDialog(QWidget *parent, Spreadsheet *s);
 private:
 	Ui::ColumnDialog ui;
 	Spreadsheet *s;

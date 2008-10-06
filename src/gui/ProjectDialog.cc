@@ -31,6 +31,7 @@
 #include <KDebug>
 #include "ProjectDialog.h"
 #include "../MainWin.h"
+#include "core/Project.h"
 
 ProjectDialog::ProjectDialog(MainWin *mw) : KDialog(mw) {
 	kDebug()<<endl;
@@ -50,23 +51,23 @@ void ProjectDialog::setupGUI() {
 	connect(this,SIGNAL(applyClicked()),SLOT(apply()));
 	connect(this,SIGNAL(okClicked()),SLOT(apply()));
 
-	ui.lFileName->setText(project->filename());
+	ui.lFileName->setText(project->fileName());
 	ui.lProjectVersion->setText(QString::number(project->version()));
 	ui.lLabPlotVersion->setText(project->labPlot());
-	ui.leTitle->setText(project->title());
+	ui.leTitle->setText(project->name());
 	ui.leAuthor->setText(project->author());
-	ui.dtwCreated->setDateTime(project->created());
-	ui.dtwModified->setDateTime(project->modified());
-	ui.tbNotes->setText(project->notes());
+	ui.dtwCreated->setDateTime(project->creationTime());
+	ui.dtwModified->setDateTime(project->modificationTime());
+	ui.tbNotes->setText(project->comment());
 	ui.tbNotes->setReadOnly(false);
 //	noteste->setTextFormat( Qt::PlainText );
 }
 
 void ProjectDialog::apply() {
 	kDebug()<<endl;
-	project->setTitle(ui.leTitle->text());
+	project->setName(ui.leTitle->text());
 	project->setAuthor(ui.leAuthor->text());
-	project->setNotes(ui.tbNotes->toPlainText());
+	project->setComment(ui.tbNotes->toPlainText());
 	// not changable
 //	project->setCreated(created->dateTime());
 //	project->setModified(created->dateTime());

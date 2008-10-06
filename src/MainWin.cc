@@ -52,16 +52,45 @@
 #include "sheettype.h"
 #include "pixmaps/pixmap.h"
 
+#include "core/Project.h"
+#include "core/Folder.h"
+#include "core/AbstractAspect.h"
+#include "core/ProjectExplorer.h"
+#include "core/AspectTreeModel.h"
+#include "table/Table.h"
+
 MainWin::MainWin(QWidget *parent, QString filename)
  : KXmlGuiWindow(parent)
 {
-	mdi = new QMdiArea;
-	setCentralWidget(mdi);
-
+	m_mdi_area = new QMdiArea;
+	setCentralWidget(m_mdi_area);
+	
 	setCaption("LabPlot "LVERSION);
 	setupActions();
 
+	m_project = NULL;	
  	openNew();
+	
+
+	m_current_aspect = m_project;
+	m_current_folder = m_project;
+
+	initProjectExplorer();
+
+	connect(m_mdi_area, SIGNAL(subWindowActivated(QMdiSubWindow*)),
+			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)), 
+		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect *)));
+	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *, int)), 
+		this, SLOT(handleAspectAdded(const AbstractAspect *, int)));
+	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, int)), 
+		this, SLOT(handleAspectRemoved(const AbstractAspect *, int)));
+	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *, int)), 
+		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect *, int)));
+	connect(m_project, SIGNAL(statusInfo(const QString&)),
+			statusBar(), SLOT(showMessage(const QString&)));
+	
+	handleAspectDescriptionChanged(m_project);
 
 	// command line file name
 	if(!filename.isEmpty() && !QFile::exists(filename)) {
@@ -78,6 +107,15 @@ MainWin::MainWin(QWidget *parent, QString filename)
 	connect(spreadsheetmenu, SIGNAL(aboutToShow()), SLOT(SpreadsheetMenu()) );
 
 	statusBar()->showMessage(i18n("Welcome to LabPlot ")+LVERSION);
+
+	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+	connect(m_project, SIGNAL(requestFolderContextMenu(QMenu*)), this, SLOT(createFolderContextMenu(QMenu*)));
+	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
+}
+
+MainWin::~MainWin()
+{
+	delete m_project;
 }
 
 void MainWin::setupActions() {
@@ -107,6 +145,22 @@ void MainWin::setupActions() {
 	spreadaction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new spreadsheet", spreadaction);
 	connect(spreadaction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
+
+	m_folderAction = new KAction(KIcon("folder-new"),i18n("New Folder"),this);
+	actionCollection()->addAction("new folder", m_folderAction);
+	connect(m_folderAction, SIGNAL(triggered()),SLOT(newFolder()));
+
+	m_historyAction = new KAction(i18n("Undo/Redo History"),this);
+	actionCollection()->addAction("history", m_historyAction);
+	connect(m_historyAction, SIGNAL(triggered()),SLOT(showHistory()));
+
+	m_undoAction = new KAction(KIcon("edit-undo"),i18n("Undo"),this);
+	actionCollection()->addAction("undo", m_undoAction);
+	connect(m_undoAction, SIGNAL(triggered()),SLOT(undo()));
+
+	m_redoAction = new KAction(KIcon("edit-redo"),i18n("Redo"),this);
+	actionCollection()->addAction("redo", m_redoAction);
+	connect(m_redoAction, SIGNAL(triggered()),SLOT(redo()));
 
 	action = new KAction(KIcon(QIcon(worksheet_xpm)),i18n("New Worksheet"),this);
 	action->setShortcut(Qt::ALT+Qt::Key_X);
@@ -173,35 +227,35 @@ void MainWin::setupActions() {
 
 	//Windows
 	action  = new KAction(i18n("Cl&ose"), this);
-	action->setShortcut(tr("Ctrl+F4"));
+	action->setShortcut(i18n("Ctrl+F4"));
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
-	connect(action, SIGNAL(triggered()), mdi, SLOT(closeActiveSubWindow()));
+	connect(action, SIGNAL(triggered()), m_mdi_area, SLOT(closeActiveSubWindow()));
 
 	action = new KAction(i18n("Close &All"), this);
 	action->setStatusTip(i18n("Close all the windows"));
 	actionCollection()->addAction("close all windows", action);
-	connect(action, SIGNAL(triggered()), mdi, SLOT(closeAllSubWindows()));
+	connect(action, SIGNAL(triggered()), m_mdi_area, SLOT(closeAllSubWindows()));
 
 	action = new KAction(i18n("&Tile"), this);
 	action->setStatusTip(i18n("Tile the windows"));
 	actionCollection()->addAction("tile windows", action);
-	connect(action, SIGNAL(triggered()), mdi, SLOT(tileSubWindows()));
+	connect(action, SIGNAL(triggered()), m_mdi_area, SLOT(tileSubWindows()));
 
 	action = new KAction(i18n("&Cascade"), this);
 	action->setStatusTip(i18n("Cascade the windows"));
 	actionCollection()->addAction("cascade windows", action);
-	connect(action, SIGNAL(triggered()), mdi, SLOT(cascadeSubWindows()));
+	connect(action, SIGNAL(triggered()), m_mdi_area, SLOT(cascadeSubWindows()));
 
 	action = new KAction(i18n("Ne&xt"), this);
 	action->setStatusTip(i18n("Move the focus to the next window"));
 	actionCollection()->addAction("next window", action);
-	connect(action, SIGNAL(triggered()), mdi, SLOT(activateNextSubWindow()));
+	connect(action, SIGNAL(triggered()), m_mdi_area, SLOT(activateNextSubWindow()));
 
 	action = new KAction(i18n("Pre&vious"), this);
 	action->setStatusTip(i18n("Move the focus to the previous window"));
 	actionCollection()->addAction("previous window", action);
-	connect(action, SIGNAL(triggered()), mdi, SLOT(activatePreviousSubWindow()));
+	connect(action, SIGNAL(triggered()), m_mdi_area, SLOT(activatePreviousSubWindow()));
 
 	//"Standard actions"
 	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
@@ -211,7 +265,7 @@ void MainWin::setupActions() {
 }
 
 bool MainWin::warnModified() {
-	if(mdi->subWindowList().size() > 0 && project->hasChanged()) {
+	if(m_mdi_area->subWindowList().size() > 0 && m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
 			i18n("The current project has been modified.\nDo you want to save it?"),
 			i18n("Save Project"));
@@ -265,7 +319,7 @@ void MainWin::openNew() {
  	kDebug()<<"MainWin::New()"<<endl;
 	if(warnModified()) return;
 
-  	mdi->closeAllSubWindows();
+  	m_mdi_area->closeAllSubWindows();
    	updateGUI();
 // /*	gvpart=0;
 // 	defining_region=0;
@@ -278,8 +332,9 @@ void MainWin::openNew() {
 // 	defining_maglens=0;
 // 	defining_panzoom=0;
 // */
- 	project = new Project();
- 	project->setChanged(true);
+	delete m_project; 	
+ 	m_project = new Project(this);
+ 	m_project->setChanged(true);
 }
 
 void MainWin::open(QString filename) {
@@ -298,125 +353,70 @@ void MainWin::open(QString filename) {
 	}
 	openNew();
 	openXML(file);
-	project->setFilename(filename);
- 	project->setChanged(false);
+	m_project->setFileName(filename);
+ 	m_project->setChanged(false);
 	//recent->addURL(fn);
 
-	setCaption("LabPlot "LVERSION+i18n(" : ")+project->filename());
+	setCaption("LabPlot "LVERSION+i18n(" : ")+m_project->fileName());
 }
 
 void MainWin::openXML(QIODevice *file) {
-	QDomDocument doc;
+
 	kDebug()<<"	reading ..."<<endl;
-	if(doc.setContent(file) != true ) {
+	XmlStreamReader reader(file);
+	if (m_project->load(&reader) == false) {
 		kDebug()<<"ERROR: reading file content"<<endl;
+		QString msg_text = reader.errorString();
+		KMessageBox::error(this, msg_text, i18n("Error opening project"));
+		statusBar()->showMessage(msg_text);
 		return;
 	}
-	file->close();
-
-	QDomElement root = doc.documentElement();
-	kDebug()<<"ROOT TAG = "<<root.tagName()<<endl;
-	kDebug()<<"ROOT ATTR version = "<<root.attribute("version")<<endl;
-	Q_ASSERT(root.tagName() == "LabPlot");
-
-//Unused : project->setFilename(fn);
-	project->setLabPlot(root.attribute("version"));
-
-	QDomNode node = root.firstChild();
-	while(!node.isNull()) {
-		QDomElement e = node.toElement();
-//		kDebug()<<"TAG = "<<e.tagName()<<endl;
-//		kDebug()<<"TEXT = "<<e.text()<<endl;
-
-		if(e.tagName() == "SpeedMode")
-			kDebug()<<"Speedmode ="<<(bool)e.text().toInt()<<endl;
-//			speedmode = (bool)e.text().toInt();
-		else if(e.tagName() == "Project")
-			project->open(e.firstChild());
-		else if(e.tagName() == "Worksheet") {
-			Worksheet *p = newWorksheet();
-			p->open(e.firstChild());
-		}
-		else if(e.tagName() == "Spreadsheet") {
-			Spreadsheet *s = newSpreadsheet();
-			s->open(e.firstChild());
-		}
-		node = node.nextSibling();
+	if (reader.hasWarnings()) {
+		QString msg_text = i18n("The following problems occured when loading the project:\n");
+		QStringList warnings = reader.warningStrings();
+		foreach(QString str, warnings)
+			msg_text += str + "\n";
+		KMessageBox::error(this, msg_text, i18n("Project loading partly failed"));
+		statusBar()->showMessage(msg_text);
 	}
+	file->close();
 }
 
 void MainWin::save(QString filename) {
 	if (filename.isEmpty() ) {
-		if(project->filename().isEmpty()) {
+		if(m_project->fileName().isEmpty()) {
 			saveAs();	// need a file name
 			return;
 		}
 		else
-			filename = project->filename();
+			filename = m_project->fileName();
 	}
 
 	kDebug()<<filename<<endl;
-	if(project->filename() == filename && project->hasChanged() == false) {
+	if(m_project->fileName() == filename && m_project->hasChanged() == false) {
 		kDebug()<<"no changes to be saved"<<endl;
 		return;
 	}
 
+
 	QIODevice *xmlfile = KFilterDev::deviceForFile(filename,QString::null,true);
 	if (xmlfile==0) xmlfile = new QFile(filename);
 	saveXML(xmlfile);
-	project->setFilename(filename);
+	m_project->setFileName(filename);
 
-	setCaption("LabPlot "LVERSION+i18n(" : ")+project->filename());
+	setCaption("LabPlot "LVERSION+i18n(" : ")+m_project->fileName());
 }
 
 void MainWin::saveXML(QIODevice *file) {
 	kDebug()<<endl;
-	QDomDocument doc("LabPlot");
-	QString header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-	QString doctype = "<!DOCTYPE LabPlotXML>\n";
-	doc.setContent(header+doctype);
-
-	QDomElement root = doc.createElement( "LabPlot" );
-	root.setAttribute("version",QString(LVERSION));
-	doc.appendChild( root );
-
-	QDomElement tag = project->save(doc);
-    	root.appendChild( tag );
-//	tag = doc.createElement( "SpeedMode" );
-//	root.appendChild( tag );
-//	QDomText t = doc.createTextNode( QString::number(speedmode));
-//	tag.appendChild( t );
-
-	QList<QMdiSubWindow *> list = mdi->subWindowList();
-	for (int i = 0; i < list.size(); i++ ) {
-		QMdiSubWindow *subWindow = list[i];
-		kDebug()<<"	Saving sheet "<<i<<endl;
-		Worksheet *w = (Worksheet *) subWindow->widget();
-		if(w && w->sheetType() == WORKSHEET) {
-			kDebug()<<"	Saving worksheet "<<i<<endl;
-			QDomElement wtag = w->save(doc);
-    			root.appendChild(wtag);
-		}
-		else {
-			Spreadsheet *s = (Spreadsheet *) subWindow->widget();
-			if( s==0 || s->sheetType() != SPREADSHEET) {
-				kDebug()<<"ERROR: unknown sheet found!"<<endl;
-				return;
-			}
-			kDebug()<<"	Saving spreadsheet "<<i<<endl;
-			QDomElement stag = s->save(doc);
-    			root.appendChild(stag);
-		}
-	}
 
 	if(file->open(QIODevice::WriteOnly | QFile::Text)) {
-		QTextStream ts(file);
-		doc.save(ts,4);
-		ts<<endl;
+		QXmlStreamWriter writer(file);
+		m_project->save(&writer);
+		m_project->undoStack()->clear();
+		m_project->setChanged(false);
 		statusBar()->showMessage(i18n("Project saved"));
 		file->close();
-
-		project->setChanged(false);
 	}
 	else
 		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));
@@ -462,82 +462,93 @@ void MainWin::SpreadsheetMenu() {
 	}
 }
 
-int MainWin::activeSheetIndex() const {
-	QList<QMdiSubWindow *> wlist = mdi->subWindowList();
-	for (int i=0; i<wlist.size(); i++)
-		if(wlist.at(i) == mdi->activeSubWindow())
-			return i;
-	return -1;
-}
-
-Spreadsheet* MainWin::newSpreadsheet() {
+Table* MainWin::newSpreadsheet() {
 	kDebug()<<"MainWin::newSpreadsheet()"<<endl;
-        Spreadsheet *s = new Spreadsheet(this);
-	s->setAttribute(Qt::WA_DeleteOnClose);
-	mdi->addSubWindow(s);
-	s->show();
-	project->setChanged(true);
+
+	Table * table = new Table(0, 100, 2, i18n("Spreadsheet %1").arg(1));
+
+	QModelIndex index = m_project_explorer->currentIndex();
+
+	if(!index.isValid()) 
+		m_project->addChild(table);
+	else
+	{
+		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
+		parent_aspect->folder()->addChild(table);
+	}
 
 	updateGUI();
 
-        return s;
+    return table;
 }
 
 Worksheet* MainWin::newWorksheet() {
         kDebug()<<"()"<<endl;
+#if 0 // TODO: make an aspect for a worksheet
         Worksheet *w = new Worksheet(this);
-	mdi->addSubWindow(w);
+	m_mdi_area->addSubWindow(w);
 	w->show();
-	project->setChanged(true);
+	m_project->setChanged(true);
 
 	updateGUI();
 
         kDebug()<<"MainWin::newWorksheet() DONE"<<endl;
         return w;
+#endif
+	return NULL;
 }
 
 Spreadsheet* MainWin::activeSpreadsheet() const {
+#if 0 // TODO: port to use aspects
 	kDebug()<<"()"<<endl;
-	QMdiSubWindow *subWindow = mdi->activeSubWindow();
+	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
 	if(subWindow != 0) {
 		Spreadsheet *s = (Spreadsheet *) subWindow->widget();
 		if (s && s->sheetType() == SPREADSHEET)
 			return s;
 	}
+#endif
 	return 0;
 }
 
 Spreadsheet* MainWin::getSpreadsheet(QString name) const {
-	QList<QMdiSubWindow *> wlist = mdi->subWindowList();
+#if 0 // TODO: port to use aspects
+	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
 	for (int i=0; i<wlist.size(); i++)
 		if(wlist.at(i)->windowTitle() == name)
 			return (Spreadsheet *)wlist.at(i);
+#endif
 	return 0;
 }
 
 Worksheet* MainWin::activeWorksheet() const {
+#if 0 // TODO: port to use aspects
 	kDebug()<<"()"<<endl;
-	QMdiSubWindow *subWindow = mdi->activeSubWindow();
+	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
 	if(subWindow != 0) {
 		Worksheet *w = (Worksheet *) subWindow->widget();
 		if (w && w->sheetType() == WORKSHEET)
 			return w;
 	}
+#endif
 	return 0;
 }
 
 Worksheet* MainWin::getWorksheet(QString name) const {
-	QList<QMdiSubWindow *> wlist = mdi->subWindowList();
+#if 0 // TODO: port to use aspects
+	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
 	for (int i=0; i<wlist.size(); i++)
 		if(wlist.at(i)->windowTitle() == name)
 			return (Worksheet *)wlist.at(i);
+#endif
 	return 0;
 }
 /************** sheet stuff end *************************/
 
 /******************** dialogs *****************************/
 void MainWin::importDialog() { (new ImportDialog(this))->show(); }
-void MainWin::projectDialog() { (new ProjectDialog(this))->show(); project->setChanged(true); }
+void MainWin::projectDialog() { (new ProjectDialog(this))->show(); m_project->setChanged(true); }
 
 void MainWin::functionActionTriggered(QAction* action){
 	Plot::PlotType type;
@@ -639,8 +650,8 @@ void MainWin::settingsDialog(){
 
 void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 	kDebug()<<"MainWin::addGraph2D() sheet ="<<sheet<<endl;
-
-	int nr_sheets = mdi->subWindowList().size();
+#if 0 // TODO: port this to use aspects
+	int nr_sheets = m_mdi_area->subWindowList().size();
 	kDebug()<<" Number of sheets :"<<nr_sheets<<endl;
 	if(sheet == nr_sheets) {	// new worksheet
 		kDebug()<<"Creating new worksheet"<<endl;
@@ -655,7 +666,7 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 	}
 	else {
 		kDebug()<<" Using sheet "<<sheet<<endl;
-		QMdiSubWindow *subWindow = mdi->subWindowList()[sheet];
+		QMdiSubWindow *subWindow = m_mdi_area->subWindowList()[sheet];
 		if(subWindow != 0) {
 			Worksheet *w = (Worksheet *) subWindow->widget();
 			if(w == 0) {
@@ -671,6 +682,223 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 			}
 		}
 	}
-
+#endif
 	updateGUI();
 }
+
+void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) 
+{
+	PartMdiView *view = qobject_cast<PartMdiView*>(win);
+	updateGUI();
+	if (!view) return;
+	emit partActivated(view->part());
+	m_project_explorer->setCurrentAspect(view->part());
+}
+
+void MainWin::handleAspectDescriptionChanged(const AbstractAspect *aspect)
+{
+	if (aspect != static_cast<AbstractAspect *>(m_project)) return;
+	setCaption("LabPlot "LVERSION+i18n(" : ")+m_project->fileName());
+}
+
+void MainWin::handleAspectAdded(const AbstractAspect *parent, int index)
+{
+	handleAspectAddedInternal(parent->child(index));
+	updateMdiWindowVisibility();
+	handleCurrentSubWindowChanged(m_mdi_area->currentSubWindow());
+}
+
+void MainWin::handleAspectAddedInternal(AbstractAspect * aspect)
+{
+	int count = aspect->childCount();
+	for (int i=0; i<count; i++)
+		handleAspectAddedInternal(aspect->child(i));
+
+	AbstractPart *part = qobject_cast<AbstractPart*>(aspect);
+	if (part)
+	{
+		PartMdiView *win = part->mdiSubWindow();
+		Q_ASSERT(win);
+		m_mdi_area->addSubWindow(win);
+		connect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)), 
+				this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
+	}
+}
+
+void MainWin::handleAspectRemoved(const AbstractAspect *parent, int index)
+{
+	Q_UNUSED(index);
+	m_project_explorer->setCurrentAspect(parent);
+}
+
+void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *parent, int index)
+{
+	AbstractPart *part = qobject_cast<AbstractPart*>(parent->child(index));
+	if (!part) return;
+	PartMdiView *win = part->mdiSubWindow();
+	Q_ASSERT(win);
+	disconnect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)), 
+		this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
+	m_mdi_area->removeSubWindow(win);
+	updateGUI();
+}
+
+void MainWin::initProjectExplorer()
+{
+	// project explorer
+	m_project_explorer_dock = new QDockWidget(this);
+	m_project_explorer_dock->setWindowTitle(tr("Project Explorer"));
+	m_project_explorer = new ProjectExplorer(m_project_explorer_dock);
+	m_project_explorer->setModel(new AspectTreeModel(m_project, this));
+	m_project_explorer_dock->setWidget(m_project_explorer);
+	addDockWidget(Qt::BottomDockWidgetArea, m_project_explorer_dock);
+	connect(m_project_explorer, SIGNAL(currentAspectChanged(AbstractAspect *)),
+		this, SLOT(handleCurrentAspectChanged(AbstractAspect *)));
+	m_project_explorer->setCurrentAspect(m_project);
+}
+
+void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect)
+{
+	if(!aspect) aspect = m_project; // should never happen, just in case
+	if(aspect->folder() != m_current_folder)
+	{
+		m_current_folder = aspect->folder();
+		updateMdiWindowVisibility();
+	}
+	if(aspect != m_current_aspect)
+	{
+		AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
+		if (part)
+			m_mdi_area->setActiveSubWindow(part->mdiSubWindow());
+	}
+	m_current_aspect = aspect;
+}
+
+void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to) 
+{
+	if (view == m_mdi_area->currentSubWindow())
+	{
+		updateGUI();
+	}
+}
+
+void MainWin::setMdiWindowVisibility(QAction * action) 
+{
+	// TODO: write a KAction based version of this
+#if 0
+	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
+#endif
+}
+		
+Folder* MainWin::newFolder()
+{
+	kDebug()<<"MainWin::newFolder()"<<endl;
+
+	Folder * folder = new Folder(tr("Folder %1").arg(1));
+
+	QModelIndex index = m_project_explorer->currentIndex();
+
+	if(!index.isValid()) 
+		m_project->addChild(folder);
+	else
+	{
+		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
+		parent_aspect->folder()->addChild(folder);
+	}
+
+	updateGUI();
+
+    return folder;
+}
+
+void MainWin::showHistory()
+{   // TODO: this is Qt-only code, you may want to add KDE specific stuff here
+	if (!m_project->undoStack()) return;
+	QDialog dialog;
+	QVBoxLayout layout(&dialog);
+
+    QDialogButtonBox button_box;
+	button_box.setOrientation(Qt::Horizontal);
+    button_box.setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok);
+    QObject::connect(&button_box, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    QObject::connect(&button_box, SIGNAL(rejected()), &dialog, SLOT(reject()));
+
+	int index = m_project->undoStack()->index();
+	QUndoView undo_view(m_project->undoStack());
+
+	layout.addWidget(&undo_view);
+	layout.addWidget(&button_box);
+
+	dialog.setWindowTitle(tr("Undo/Redo History"));
+	if (dialog.exec() == QDialog::Accepted)
+		return;
+
+	m_project->undoStack()->setIndex(index);
+}
+
+void MainWin::createContextMenu(QMenu * menu) const
+{
+	// this is called on a right click on the root folder in the project explorer
+	// TODO: what to add here?
+}
+
+void MainWin::createFolderContextMenu(const Folder * folder, QMenu * menu) const
+{
+	// this is called on a right click on a non-root folder in the project explorer
+	// TODO: what to add here?
+}
+
+void MainWin::undo()
+{
+	WAIT_CURSOR;
+	m_project->undoStack()->undo();
+	RESET_CURSOR;
+}
+
+void MainWin::redo()
+{
+	WAIT_CURSOR;
+	m_project->undoStack()->redo();
+	RESET_CURSOR;
+}
+
+void MainWin::updateMdiWindowVisibility()
+{
+	QList<QMdiSubWindow *> windows = m_mdi_area->subWindowList();
+	PartMdiView * part_view;
+	switch(m_project->mdiWindowVisibility()) 
+	{
+		case Project::allMdiWindows:
+			foreach(QMdiSubWindow *window, windows) 
+			{
+				part_view = qobject_cast<PartMdiView *>(window);
+				Q_ASSERT(part_view);
+				part_view->show();
+			}
+			break;
+		case Project::folderOnly:
+			foreach(QMdiSubWindow *window, windows) 
+			{
+				part_view = qobject_cast<PartMdiView *>(window);
+				Q_ASSERT(part_view);
+				if(part_view->part()->folder() == m_current_folder)
+					part_view->show();
+				else
+					part_view->hide();
+			}
+			break;
+		case Project::folderAndSubfolders:
+			foreach(QMdiSubWindow *window, windows) 
+			{
+				part_view = qobject_cast<PartMdiView *>(window);
+				if(part_view->part()->isDescendantOf(m_current_folder))
+					part_view->show();
+				else
+					part_view->hide();
+			}
+			break;
+	}
+}
+
+

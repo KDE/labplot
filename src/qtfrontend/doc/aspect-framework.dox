@@ -1,0 +1,126 @@
+/**\page aspect The Aspect Framework
+
+The notion of what we call Aspects pervades and unifies the internal representation of SciDAVis
+projects. Basically, every line in the project explorer corresponds to an Aspect, although Aspects
+which the user normally does not need to know about are hidden by default. Also, note that Aspects
+are internal in the sense that they do not interact directly with the user. The latter task is done
+by views. Most Aspects have a primary view with which they have a 1:1 relationship; specifically, if
+its primary view is closed, an Aspect gets removed. However, Aspects also can have multiple views on
+them or no views at all. Aspects organize themselves into trees, usually with a Project at the top.
+They can also be used standalone, although in that case some features (especially undo) do not work.
+
+Every Aspect is internally divided into three layers: private %data, undo commands and public API.
+Additionally, two more layers are built on top of Aspects.
+
+\section layer0 Layer 0 (private data)
+
+Every Aspect class has an internal class called Private, which manages its persistent %data. The fact
+that it is internal implies that it cannot inherit from QObject (or any of its descendants);
+usually, Private will not inherit from any class. %Note that since most classes in the inheritance
+chain of an Aspect _class_ have their own Private _classes_, Aspect _objects_ in general have
+multiple Private _objects_ associated to them. Every Private object knows its owning Aspect and can
+use its inherited public API (layer 2) to talk to the other Private objects of the same Aspect
+object.
+
+When their %data is changed, Private objects cause their Aspect to send signals to views and
+other Aspects so they can update themselves if necessary. Apart from the raw %data and accessor
+methods, Private classes usually provide functionality common to multiple undo commands (layer 1).
+These methods must only operate on the internal %data, since write calls into layer 2 usually cause
+undo commands to be pushed onto the undo stack (which must not happen within another undo command).
+Purely internal Aspects which are not part of the hierarchy of the Aspect in question (e.g.,
+temporary filters or columns) count as internal %data and can of course be modified.
+
+\section layer1 Layer 1 (undo commands)
+
+Every undo command is associated to exactly one Aspect class and only accesses %data and methods of
+this classe's Private object. Undo commands belonging to an Aspect class MyAspect are named
+MyAspect*Cmd and gathered into source files myaspectcommands.cpp and myaspectcommands.h in order to
+reflect this association. Read access to other Private objects of the same Aspect is done via the
+Aspect's inherited public API. Undo commands recieve a pointer to their Private object in their
+constructor; a pointer to the Aspect can be obtained from the Private object if necessary.
+
+Usually, undo commands will rely on implementation details of their Private class; they even may
+require a call protocol, that is, make assumptions about the context of their employment. Since
+undo commands are internal to an Aspect and often only used in one place, this is not a big
+problem. Still, it makes sense to document such assumptions to ease future changes to the code.
+
+\section layer2 Layer 2 (public API)
+
+The public API of an Aspect consists exclusively of methods which a) are undo safe, b) have no side
+effects (orthogonality) and c) don't require call protocols (they are atomic). Basically, the API
+will provide direct read access to the %data in Private (layer 0) and translate write access into
+instantiations of appropriate undo commands (layer 1). Actions that require changes to multiple
+Private objects are a bit more subtle, since they require multiple undo commands to be
+instantiated and packaged into a macro; possibly with some simple logic to connect them.
+As opposed to layers 0 and 1, layer 2 may also use the public API of other Aspects in the hierarchy
+without restrictions. Part of the public API are also signals sent to views and other Aspects in
+order to notify them of changes in the %data.
+
+\section layer3 Layer 3 (Qt models)
+
+Between an Aspect and one of its views, classes derived from QAbstractItemModel may be used to
+translate between the Aspect's public API (layer 2) and Qt's Model/View framework. Every view
+(layer 4) can own one or more such translation objects.
+Examples include AspectTreeModel and TableModel.
+
+This layer is only needed in order to use existing views of Qt's Model/View framework;
+and as such it is optional.
+
+\section layer4 Layer 4 (views and scripts)
+
+Views use layers 2 and 3 of an Aspect in order to build the GUI and process user
+input. An Aspect and its primary view know about each other and call each other's API. View-related
+actions in the project explorer (like "maximize") always act on the primary view. The primary view
+class of an Aspect class MyAspect is called MyAspectView. Most users will not notice a difference or
+have to make a distinction between an Aspect and its primary view, whereas secondary views are
+represented as distinct entities (typically modeless dialogs) to the user. Showing and hiding of the
+primary view is done via the public API of the Aspect so as to be available via the Aspect's context
+menu.
+
+Views can access layer 2 APIs of other Aspects, although this is expected to be rare. A view
+recieves signals only from its associated Aspect. Should a view need to react on changes to multiple
+Aspects, then one Aspect has to gather signals from the others and relay them to the view.
+
+Because views and scripts make changes to the underlying %data only via the public API, one does not
+have to care about undo or synchronisation between different views or scripts and views on this
+layer. Views just have to make sure that they update themselves upon the appropriate change signals
+from their Aspect. Also, only the API of layer 2 has to be wrapped for access from within scripting
+languages.
+
+The details of handling primary views is dependant on the kind of Aspect. For example, AbstractPart
+expects its implementations to provide a view() method returning a QWidget. To the outside world,
+it provides the method mdiSubWindow(), which wraps the result of view() into an MDI window and
+makes sure that this window gets closed when the Aspect is removed and vice versa.
+
+\section bases Base Classes for Aspects
+
+\subsection AbstractAspect AbstractAspect
+
+The base class of all Aspects is AbstractAspect. It implements undo-aware adding and removing of
+child aspects, basic properties like name and creation time and provides methods for handling undo
+commands. Upon changes to the Aspect tree or to the properties, signals are emitted. It also allows
+implementations to specify a context menu and an icon for use by the project explorer.
+
+\subsection AbstractPart AbstractPart
+
+AbstractPart is the base class of all Parts, which are somewhat analogous to KDE's KParts. As a
+first approximation, a Part is everything that gets displayed in its own MDI subwindow, although in
+principle Parts could be displayed differently, e.g. in their own main windows.
+
+\subsection AbstractColumn AbstractColumn
+
+AbstractColumn provides a generic interface for data columns. Its purpose is to abstract away the
+differences between stored and computed data, allowing filters and graphs to transparently
+handle all kinds of data sources.
+
+\subsection AbstractFilter AbstractFilter
+
+AbstractFilter is the base class for all analysis operations. It is modelled on integrated circuits,
+which is to say, a filter is basically a black box with input and output ports. Input ports accept
+their data in the form of AbstractColumn instances; output ports provide their data in the same
+form. Typically filters generate their data lazily; that is, only when asked for data on an output
+port they will start reading from their inputs. This is not true for all filters, however;
+StatisticsFilter being a noteworthy exception. Notification of changes to the input data is
+propagated in the form of signals.
+
+*/

@@ -32,7 +32,7 @@
 #include "../column.h"
 #include "../MainWin.h"
 
-ColumnDialog::ColumnDialog(MainWin *parent, Spreadsheet *s) : KDialog(parent), s(s) {
+ColumnDialog::ColumnDialog(QWidget *parent, Spreadsheet *s) : KDialog(parent), s(s) {
 	kDebug()<<"ColumnDialog()"<<endl;
 
 	setupGUI();

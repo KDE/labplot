@@ -1,0 +1,23 @@
+/* XPM */
+static const char *new_xpm[]={
+"14 16 4 1",
+"# c None",
+". c #000000",
+"b c #a0a7af",
+"a c #ffffff",
+"..........####",
+".aaaaaaaa..###",
+".aaaaaaaa.b.##",
+".aaaaaaaa.bb.#",
+".aaaaaaaa.bbb.",
+".aaaaaaaa.....",
+".aaaaaaaaaaaa.",
+".aaaaaaaaaaaa.",
+".aaaaaaaaaaaa.",
+".aaaaaaaaaaaa.",
+".aaaaaaaaaaaa.",
+".aaaaaaaaaaaa.",
+".aaaaaaaaaaaa.",
+".aaaaaaaaaaaa.",
+".aaaaaaaaaaaa.",
+".............."};

@@ -25,8 +25,13 @@
 <Action name="project" />
 </Menu>
 <Menu name="edit"><text>&amp;Editklj</text>
+	<Action name="undo" />
+	<Action name="redo" />
+	<Action name="history" />
+	<Separator/>
 	<Action name="new spreadsheet" />
 	<Action name="new worksheet" />
+	<Action name="new folder" />
 	<Menu name="new_function_plot">
 		<text>New Function Plot</text>
 		<Action name="new_2D_function_plot" />

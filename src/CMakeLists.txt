@@ -52,9 +52,9 @@ set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SO
   tools/TexRenderer.cc
   LabPlot.cc
   MainWin.cc
-  Project.cc
+#  Project.cc
   Spreadsheet.cc
-  TableModel.cc
+#  TableModel.cc
   Worksheet.cc
 )
 
@@ -73,8 +73,60 @@ set(UI_SOURCES
 	gui/ui/settingsprintingpage.ui
 )
 
+set(BACKEND_DIR backend)
+set(QTFRONTEND_DIR qtfrontend)
+INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} .)
+
+set(BACKEND_SOURCES
+	${BACKEND_DIR}/core/Folder.cpp
+	${BACKEND_DIR}/core/AbstractAspect.cpp
+	${BACKEND_DIR}/core/AspectPrivate.cpp
+	${BACKEND_DIR}/core/globals.cpp
+	${BACKEND_DIR}/core/AbstractFilter.cpp
+	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
+	${BACKEND_DIR}/core/column/Column.cpp
+	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
+	${BACKEND_DIR}/core/column/columncommands.cpp
+	${BACKEND_DIR}/core/AbstractScriptingEngine.cpp
+	${BACKEND_DIR}/core/AbstractScript.cpp
+	${BACKEND_DIR}/core/ScriptingEngineManager.cpp
+	${BACKEND_DIR}/core/Project.cpp
+	${BACKEND_DIR}/core/AbstractPart.cpp
+	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
+	${BACKEND_DIR}/core/datatypes/String2DateTimeFilter.cpp
+	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
+	${BACKEND_DIR}/table/Table.cpp
+	${BACKEND_DIR}/table/tablecommands.cpp
+	${BACKEND_DIR}/lib/XmlStreamReader.cpp
+)
+
+set(QTFRONTEND_SOURCES
+	${QTFRONTEND_DIR}/core/ProjectExplorer.cpp
+	${QTFRONTEND_DIR}/core/PartMdiView.cpp
+	${QTFRONTEND_DIR}/core/AspectTreeModel.cpp
+	${QTFRONTEND_DIR}/table/TableModel.cpp
+)
+
+set(QTMOC_HDRS
+	${BACKEND_DIR}/core/AbstractColumn.h
+	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2MonthFilter.h
+	${BACKEND_DIR}/core/datatypes/Month2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
+	${BACKEND_DIR}/core/datatypes/String2DayOfWeekFilter.h
+	${BACKEND_DIR}/core/datatypes/String2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
+)
+
+qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
+
+add_definitions(-DSUPPRESS_SCRIPTING_INIT)
+
 kde4_add_ui_files(LabPlot_SRCS ${UI_SOURCES})
-kde4_add_executable(LabPlot ${LabPlot_SRCS})
+kde4_add_executable(LabPlot ${LabPlot_SRCS} ${BACKEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
 
 INCLUDE_DIRECTORIES(../liborigin)
 target_link_libraries(LabPlot ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${CDF_LIBRARY} ${OPJ_LIBRARY})

@@ -1,0 +1,257 @@
+<!DOCTYPE QPH><QPH>
+<phrase>
+    <source>all</source>
+    <target>alle</target>
+</phrase>
+<phrase>
+    <source>anitaliasing</source>
+    <target>Kantenglättung</target>
+</phrase>
+<phrase>
+    <source>anlysis</source>
+    <target>Analyse</target>
+</phrase>
+<phrase>
+    <source>axes</source>
+    <target>Achsen</target>
+</phrase>
+<phrase>
+    <source>axis</source>
+    <target>Achse</target>
+</phrase>
+<phrase>
+    <source>background</source>
+    <target>Hintergrund</target>
+</phrase>
+<phrase>
+    <source>bar</source>
+    <target>Balken</target>
+</phrase>
+<phrase>
+    <source>border</source>
+    <target>Rahmen</target>
+</phrase>
+<phrase>
+    <source>cancel</source>
+    <target>abbrechen</target>
+</phrase>
+<phrase>
+    <source>canvas</source>
+    <target>Untergrund</target>
+</phrase>
+<phrase>
+    <source>choose</source>
+    <target>auswählen</target>
+</phrase>
+<phrase>
+    <source>clear</source>
+    <target>leeren</target>
+</phrase>
+<phrase>
+    <source>column</source>
+    <target>Spalte</target>
+</phrase>
+<phrase>
+    <source>compressed</source>
+    <target>komprimiert</target>
+</phrase>
+<phrase>
+    <source>continue</source>
+    <target>fortfahren</target>
+</phrase>
+<phrase>
+    <source>copy</source>
+    <target>kopieren</target>
+</phrase>
+<phrase>
+    <source>curve</source>
+    <target>Kurve</target>
+</phrase>
+<phrase>
+    <source>cut</source>
+    <target>ausschneiden</target>
+</phrase>
+<phrase>
+    <source>data</source>
+    <target>Daten</target>
+</phrase>
+<phrase>
+    <source>delete</source>
+    <target>löschen</target>
+</phrase>
+<phrase>
+    <source>directory</source>
+    <target>Verzeichnis</target>
+</phrase>
+<phrase>
+    <source>end limit</source>
+    <target>Endwert</target>
+</phrase>
+<phrase>
+    <source>error</source>
+    <target>Fehler</target>
+</phrase>
+<phrase>
+    <source>FFT</source>
+    <target>FFT</target>
+    <definition>Fast Fourier Transform</definition>
+</phrase>
+<phrase>
+    <source>fit</source>
+    <target>anpassen</target>
+    <definition>verb</definition>
+</phrase>
+<phrase>
+    <source>fit</source>
+    <target>Anpassung</target>
+    <definition>noun</definition>
+</phrase>
+<phrase>
+    <source>folder</source>
+    <target>Ordner</target>
+</phrase>
+<phrase>
+    <source>font</source>
+    <target>Schriftart</target>
+</phrase>
+<phrase>
+    <source>graph</source>
+    <target>Grafik</target>
+</phrase>
+<phrase>
+    <source>help</source>
+    <target>Hilfe</target>
+</phrase>
+<phrase>
+    <source>label</source>
+    <target>Beschriftung</target>
+</phrase>
+<phrase>
+    <source>layer</source>
+    <target>Ebene</target>
+</phrase>
+<phrase>
+    <source>margin</source>
+    <target>Abstand</target>
+</phrase>
+<phrase>
+    <source>matrices</source>
+    <target>Matrizen</target>
+</phrase>
+<phrase>
+    <source>matrix</source>
+    <target>Matrix</target>
+</phrase>
+<phrase>
+    <source>no</source>
+    <target>nein</target>
+</phrase>
+<phrase>
+    <source>opacity</source>
+    <target>Deckkraft</target>
+</phrase>
+<phrase>
+    <source>open</source>
+    <target>Öffnen</target>
+</phrase>
+<phrase>
+    <source>peak</source>
+    <target>Scheitelpunkt</target>
+</phrase>
+<phrase>
+    <source>Peaks</source>
+    <target>Scheitelpunkte</target>
+</phrase>
+<phrase>
+    <source>plot</source>
+    <target>Diagramm</target>
+</phrase>
+<phrase>
+    <source>plot designation</source>
+    <target>Darstellungszuordnung</target>
+</phrase>
+<phrase>
+    <source>plugin</source>
+    <target>Plugin</target>
+</phrase>
+<phrase>
+    <source>project</source>
+    <target>Projekt</target>
+</phrase>
+<phrase>
+    <source>QtiPlot</source>
+    <target>QtiPlot</target>
+</phrase>
+<phrase>
+    <source>redo</source>
+    <target>wiederherstellen</target>
+</phrase>
+<phrase>
+    <source>remove</source>
+    <target>entfernen</target>
+</phrase>
+<phrase>
+    <source>row</source>
+    <target>Zeile</target>
+</phrase>
+<phrase>
+    <source>save</source>
+    <target>speichern</target>
+</phrase>
+<phrase>
+    <source>SciDAVis</source>
+    <target>SciDAVis</target>
+</phrase>
+<phrase>
+    <source>SciDAVis project</source>
+    <target>SciDAVis Projekt</target>
+</phrase>
+<phrase>
+    <source>script</source>
+    <target>Skript</target>
+</phrase>
+<phrase>
+    <source>scripting</source>
+    <target>Skriptunterstützung</target>
+</phrase>
+<phrase>
+    <source>selection</source>
+    <target>Auswahl</target>
+</phrase>
+<phrase>
+    <source>Size</source>
+    <target>Größe</target>
+</phrase>
+<phrase>
+    <source>start limit</source>
+    <target>Startwert</target>
+</phrase>
+<phrase>
+    <source>surface</source>
+    <target>Oberfläche</target>
+</phrase>
+<phrase>
+    <source>symbol</source>
+    <target>Symbol</target>
+</phrase>
+<phrase>
+    <source>table</source>
+    <target>Tabelle</target>
+</phrase>
+<phrase>
+    <source>undo</source>
+    <target>rückgängig</target>
+</phrase>
+<phrase>
+    <source>warning</source>
+    <target>Warnung</target>
+</phrase>
+<phrase>
+    <source>window</source>
+    <target>Fenster</target>
+</phrase>
+<phrase>
+    <source>yes</source>
+    <target>ja</target>
+</phrase>
+</QPH>
