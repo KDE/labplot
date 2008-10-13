@@ -29,13 +29,13 @@
 
 #include "MainWin.h"
 //****** GUI **************
-#include "gui/AxesDialog.h"
-#include "gui/FunctionPlotDialog.h"
-#include "gui/ImportDialog.h"
-#include "gui/LegendDialog.h"
-#include "gui/ProjectDialog.h"
-#include "gui/SettingsDialog.h"
-#include "gui/TitleDialog.h"
+#include "kdefrontend/AxesDialog.h"
+#include "kdefrontend/FunctionPlotDialog.h"
+#include "kdefrontend/ImportDialog.h"
+#include "kdefrontend/LegendDialog.h"
+#include "kdefrontend/ProjectDialog.h"
+#include "kdefrontend/SettingsDialog.h"
+#include "kdefrontend/TitleDialog.h"
 
 #include <KApplication>
 #include <KAction>
@@ -452,7 +452,7 @@ void MainWin::print() {
 
 /************** sheet stuff *************************/
 void MainWin::SpreadsheetMenu() {
-	kDebug()<<"MainWin::SpreadsheetMenu()"<<endl;
+	kDebug()<<endl;
 	Spreadsheet *s = activeSpreadsheet();
 	if(s) {
 		s->Menu(spreadsheetmenu);
@@ -463,7 +463,7 @@ void MainWin::SpreadsheetMenu() {
 }
 
 Table* MainWin::newSpreadsheet() {
-	kDebug()<<"MainWin::newSpreadsheet()"<<endl;
+	kDebug()<<endl;
 
 	Table * table = new Table(0, 100, 2, i18n("Spreadsheet %1").arg(1));
 
@@ -484,7 +484,7 @@ Table* MainWin::newSpreadsheet() {
 }
 
 Worksheet* MainWin::newWorksheet() {
-        kDebug()<<"()"<<endl;
+        kDebug()<<endl;
 #if 0 // TODO: make an aspect for a worksheet
         Worksheet *w = new Worksheet(this);
 	m_mdi_area->addSubWindow(w);

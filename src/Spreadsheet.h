@@ -79,7 +79,6 @@ public:
 private:
 	Table *m_table;
 	SheetType m_type;			//!< needed for mw->active{Work,Spread}sheet()
-	QString notes;
 	Set* m_set;
 	void contextMenuEvent(QContextMenuEvent *);
 	QString columnHeader(int col) const;
@@ -91,7 +90,7 @@ public slots:
 	void setTitle(QString title="");
 	void setRowNumber(int row=0);
 	void addColumn() { setColumnCount(columnCount()+1); }
-	QString Notes() const { return notes; }
+	QString Notes() const { return m_table->comment(); }
 	void setNotes(QString notes="");
 	void setProperties(QString label=0, int type=1, int format=0);
 

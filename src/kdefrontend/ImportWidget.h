@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : ExportDialog.h
+    File                 : ImportWidget.h
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
-    Description          : dialog for exporting data
+    Description          : import data widget
                            
  ***************************************************************************/
 
@@ -26,29 +26,48 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef IMPORTWIDGET_H
+#define IMPORTWIDGET_H
 
-#ifndef EXPORTDIALOG_H
-#define EXPORTDIALOG_H
-
-#include <KDialog>
-
+#include <QtGui>
+#include "../ui_importwidget.h"
 class MainWin;
 class Spreadsheet;
-#include "ExportWidget.h"
+class Table;
+#include "../binaryformat.h"
 
 /**
- * @brief Provides a dialog for exporting data from a spreadsheet.
+ * @brief Represents the widget where all the import settings can be modified
+ * This widget is embedded in \c ImportDialog
  */
-class ExportDialog: public KDialog {
-	Q_OBJECT
+class ImportWidget : public QWidget{
+    Q_OBJECT
+
 public:
-	ExportDialog(MainWin *mw);
+	ImportWidget(QWidget*);
+	~ImportWidget();
+
+	void apply(MainWin *mainWin);	// used from ImportDialog
 private:
-	MainWin *mainWin;
-	ExportWidget *exportWidget;
-	void setupGUI();
+	Ui::ImportWidget ui;
+	bool binaryMode;
+	void updateBinaryMode();
+	int startRow() const;
+	int endRow() const;
+	void importOPJ(MainWin *mainWin, QString filename);
+	int importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s);
+	int importNETCDF(QString filename, Spreadsheet *s);
+	int importCDF(QString filename, Spreadsheet *s);
+	void importASCII(QIODevice *file, Spreadsheet *s);
+	void importBinary(QIODevice *file, Spreadsheet *s);
+	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
+	QStringList fileNames() { return ui.leFileName->text().split(";"); }
 private slots:
-	void apply() { exportWidget->apply(mainWin); }
+	void save();
+	void selectFile();
+	void updateFileType();
+	void fileInfoDialog();
+	void toggleOptions();
 };
 
-#endif //EXPORTDIALOG_H
+#endif

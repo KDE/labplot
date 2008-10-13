@@ -18,7 +18,7 @@ public:
 	ExportWidget(QWidget*);
 	~ExportWidget();
 
-	void apply(MainWin *mainWin);	// used from ExportDialog
+	void apply();	// used from ExportDialog
 private:
 	Ui::ExportWidget ui;
 //	bool binaryMode;

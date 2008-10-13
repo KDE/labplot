@@ -37,11 +37,11 @@
 
 #include "Spreadsheet.h"
 #include "MainWin.h"
-#include "gui/ColumnDialog.h"
+#include "kdefrontend/ColumnDialog.h"
 #include "pixmaps/pixmap.h"
 #include "elements/Point3D.h"
-#include "gui/ExportDialog.h"
-#include "gui/FunctionPlotDialog.h"
+#include "kdefrontend/ExportDialog.h"
+#include "kdefrontend/FunctionPlotDialog.h"
 
 #include "table/Table.h"
 #include "table/TableModel.h"
@@ -153,7 +153,7 @@ void Spreadsheet::contextMenuEvent(QContextMenuEvent *) {
 }
 
 void Spreadsheet::Menu(QMenu *menu) {
-	kDebug()<<"Spreadsheet::Menu()"<<endl;
+	kDebug()<<endl;
 	menu->clear();
 	// sum=1, max=1
 
@@ -297,14 +297,14 @@ void Spreadsheet::setNotes(QString t) {
 	kDebug()<<endl;
 	bool ok=true;
 	if(t.isEmpty())
-		t = KInputDialog::getMultiLineText("LabPlot", i18n("Spreadsheet notes : "), notes, &ok);
+		t = KInputDialog::getMultiLineText("LabPlot", i18n("Spreadsheet notes : "), 
+			Notes(), &ok);
 	if(!ok) return;
 
 	m_table->setComment(t);
 }
 
 QString Spreadsheet::columnHeader(int col) const {
-//	kDebug()<<"Spreadsheet::columnheader("<<col<<")"<<endl;
 	if(col<0) col=0;
 	return m_view_widget->model()->headerData(col,Qt::Horizontal).toString();
 }
@@ -314,6 +314,7 @@ void Spreadsheet::setProperties(QString label, int type, int format) {
 	if(label.isEmpty())
 		(new ColumnDialog(this,this))->show();
 	else
+		// NEW : m_table->column(currentColumn())->setName(label);
 		setColumnHeader(currentColumn(),label + ' ' + '{'+columnformatitems[format]+'}' + ' ' + '['+columntypeitems[type]+']');
 #endif
 }
@@ -518,13 +519,7 @@ void Spreadsheet::plot() {
 }
 
 void Spreadsheet::exportData() {
-	kDebug()<<endl;
-	// TODO: As I stated in other places: I would be better for Spreadsheet not depend on MainWin at all.
-	// But if you really need it, this is the "SciDAVis way" of getting a pointer to the main window: - Tilman
-	if (m_table->project() == NULL) return;
-	MainWin * mw = static_cast<MainWin *>(m_table->project()->view());
-	ExportDialog* dlg=new ExportDialog(mw);
-	dlg->exec();
+	(new ExportDialog(this))->exec();
 }
 
 void Spreadsheet::setColumnValues() {

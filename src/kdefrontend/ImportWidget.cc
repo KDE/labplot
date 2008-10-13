@@ -32,6 +32,7 @@
 #include "ImportWidget.h"
 #include "../MainWin.h"
 #include "../Spreadsheet.h"
+#include "../Project.h"
 #include "../filter/FilterOPJ.h"
 #include "../filter/FilterHDF5.h"
 #include "../filter/FilterCDF.h"
@@ -305,22 +306,23 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s)
 
 	// read data
 	for (int i=0;i<hdf5.numSets();i++) {
-		if(i>0) s = mainWin->newSpreadsheet();
+		// disabled for SciDAVis
+		//if(i>0) s = mainWin->newSpreadsheet();
 
 		int rows = hdf5.Rows(i);
 		int cols = hdf5.Cols(i);
 		if(rows==0) cols=0;
 		kDebug()<<"Dataset "<<i+1<<" ("<<hdf5.datasetName(i)<<") has "<< rows<<" rows and "<<cols<<" cols"<<endl;
-		s->setTitle(hdf5.datasetName(i));
+		//s->setTitle(hdf5.datasetName(i));
 
 		// spreadsheet notes
 		QString setnotes;
 		int nrsetattr = hdf5.numSetAttributes(i);
 		if(nrsetattr>0) {
-			setnotes = s->Notes();
-			for(int j=0;j<nrsetattr;j++)
-				setnotes.append(hdf5.getSetAttribute(i,j)+"\n");
-			s->setNotes(setnotes);
+			//setnotes = s->Notes();
+			//for(int j=0;j<nrsetattr;j++)
+			//	setnotes.append(hdf5.getSetAttribute(i,j)+"\n");
+			//s->setNotes(setnotes);
 		}
 
 		s->setRowCount(rows);
@@ -329,10 +331,10 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s)
 			QString colname = hdf5.columnName(i,col);
 			if(colname.length()<1)
 				colname = QChar(col+65);
-			s->setColumnName(col,colname);
+		//	s->setColumnName(col,colname);
 
-		 	for ( int j=0; j<rows; j++ )
-				s->setText(j,col,QString::number(hdf5.Data(i,j,col)));
+		// 	for ( int j=0; j<rows; j++ )
+		//		s->setText(j,col,QString::number(hdf5.Data(i,j,col)));
 		}
 	}
 

@@ -137,7 +137,7 @@ int ExportWidget::endRow() const {
 	return row;
 }
 */
-void ExportWidget::apply(MainWin *mainWin) {
+void ExportWidget::apply() {
 	kDebug()<<endl;
 
 	QString filename = ui.leFileName->text();

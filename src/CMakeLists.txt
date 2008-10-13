@@ -1,25 +1,26 @@
- set(GUI_SOURCES
-	gui/AxesDialog.cc
-	gui/AxesWidget.cc
-#  	gui/ColorMapPreview.cc
-  	gui/ColumnDialog.cc
-	gui/ExportDialog.cc
-	gui/ExportWidget.cc
-	gui/FunctionPlotDialog.cc
-  	gui/FunctionPlotWidget.cc
-	gui/ImportDialog.cc
-	gui/ImportWidget.cc
-	gui/LabelWidget.cc
-	gui/LegendDialog.cc
-	gui/LegendWidget.cc
-  	gui/PlotStyleWidget.cc
- 	gui/PlotSurfaceStyleWidget.cc
-	gui/ProjectDialog.cc
-	gui/SettingsDialog.cc
-	gui/SettingsGeneralPage.cc
-	gui/SettingsPage.cc
-	gui/SettingsPrintingPage.cc
-	gui/TitleDialog.cc
+set(KDEFRONTEND_DIR kdefrontend)
+set(GUI_SOURCES
+	${KDEFRONTEND_DIR}/AxesDialog.cc
+	${KDEFRONTEND_DIR}/AxesWidget.cc
+#  	${KDEFRONTEND_DIR}/ColorMapPreview.cc
+  	${KDEFRONTEND_DIR}/ColumnDialog.cc
+	${KDEFRONTEND_DIR}/ExportDialog.cc
+	${KDEFRONTEND_DIR}/ExportWidget.cc
+	${KDEFRONTEND_DIR}/FunctionPlotDialog.cc
+  	${KDEFRONTEND_DIR}/FunctionPlotWidget.cc
+	${KDEFRONTEND_DIR}/ImportDialog.cc
+	${KDEFRONTEND_DIR}/ImportWidget.cc
+	${KDEFRONTEND_DIR}/LabelWidget.cc
+	${KDEFRONTEND_DIR}/LegendDialog.cc
+	${KDEFRONTEND_DIR}/LegendWidget.cc
+  	${KDEFRONTEND_DIR}/PlotStyleWidget.cc
+ 	${KDEFRONTEND_DIR}/PlotSurfaceStyleWidget.cc
+	${KDEFRONTEND_DIR}/ProjectDialog.cc
+	${KDEFRONTEND_DIR}/SettingsDialog.cc
+	${KDEFRONTEND_DIR}/SettingsGeneralPage.cc
+	${KDEFRONTEND_DIR}/SettingsPage.cc
+	${KDEFRONTEND_DIR}/SettingsPrintingPage.cc
+	${KDEFRONTEND_DIR}/TitleDialog.cc
 )
 
 set(ELEMENTS_SOURCES
@@ -59,18 +60,18 @@ set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SO
 )
 
 set(UI_SOURCES
-	gui/ui/axeswidget.ui
-	gui/ui/columndialog.ui
-	gui/ui/exportwidget.ui
-	gui/ui/functionplotwidget.ui
-	gui/ui/importwidget.ui
-	gui/ui/labelwidget.ui
-	gui/ui/legendwidget.ui
-	gui/ui/plotstylewidget.ui
- 	gui/ui/plotsurfacestylewidget.ui
- 	gui/ui/projectdialog.ui
-	gui/ui/settingsgeneralpage.ui
-	gui/ui/settingsprintingpage.ui
+	${KDEFRONTEND_DIR}/ui/axeswidget.ui
+	${KDEFRONTEND_DIR}/ui/columndialog.ui
+	${KDEFRONTEND_DIR}/ui/exportwidget.ui
+	${KDEFRONTEND_DIR}/ui/functionplotwidget.ui
+	${KDEFRONTEND_DIR}/ui/importwidget.ui
+	${KDEFRONTEND_DIR}/ui/labelwidget.ui
+	${KDEFRONTEND_DIR}/ui/legendwidget.ui
+	${KDEFRONTEND_DIR}/ui/plotstylewidget.ui
+ 	${KDEFRONTEND_DIR}/ui/plotsurfacestylewidget.ui
+ 	${KDEFRONTEND_DIR}/ui/projectdialog.ui
+	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
+	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 )
 
 set(BACKEND_DIR backend)

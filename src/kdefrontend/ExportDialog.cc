@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : ImportWidget.h
+    File                 : ExportDialog.cc
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
-    Description          : import data widget
+    Description          : dialog for exporting data
                            
  ***************************************************************************/
 
@@ -26,47 +26,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef IMPORTWIDGET_H
-#define IMPORTWIDGET_H
 
-#include <QtGui>
-#include "../ui_importwidget.h"
-class MainWin;
-class Spreadsheet;
-#include "../binaryformat.h"
+#include <KDebug>
+#include "ExportDialog.h"
+#include "../MainWin.h"
 
-/**
- * @brief Represents the widget where all the import settings can be modified
- * This widget is embedded in \c ImportDialog
- */
-class ImportWidget : public QWidget{
-    Q_OBJECT
+ExportDialog::ExportDialog(Spreadsheet *parent) : KDialog(parent) {
+	kDebug()<<endl;
+	setCaption(i18n("Export Data"));
 
-public:
-	ImportWidget(QWidget*);
-	~ImportWidget();
+	setupGUI();
+}
 
-	void apply(MainWin *mainWin);	// used from ImportDialog
-private:
-	Ui::ImportWidget ui;
-	bool binaryMode;
-	void updateBinaryMode();
-	int startRow() const;
-	int endRow() const;
-	void importOPJ(MainWin *mainWin, QString filename);
-	int importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s);
-	int importNETCDF(QString filename, Spreadsheet *s);
-	int importCDF(QString filename, Spreadsheet *s);
-	void importASCII(QIODevice *file, Spreadsheet *s);
-	void importBinary(QIODevice *file, Spreadsheet *s);
-	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
-	QStringList fileNames() { return ui.leFileName->text().split(";"); }
-private slots:
-	void save();
-	void selectFile();
-	void updateFileType();
-	void fileInfoDialog();
-	void toggleOptions();
-};
+void ExportDialog::setupGUI() {
+	kDebug()<<endl;
+	exportWidget = new ExportWidget( this );
+	setMainWidget( exportWidget );
 
-#endif
+	setButtons( KDialog::Ok | KDialog::User1 | KDialog::User2 | KDialog::Cancel | KDialog::Apply );
+        setButtonText(KDialog::User1,i18n("Save"));
+        setButtonText(KDialog::User2,i18n("Show Options"));
+
+	connect(this,SIGNAL(applyClicked()),SLOT(apply()));
+	connect(this,SIGNAL(okClicked()),SLOT(apply()));
+	connect(this,SIGNAL(user1Clicked()),exportWidget,SLOT(save()));
+	connect(this,SIGNAL(user2Clicked()),exportWidget,SLOT(toggleOptions()));
+
+	resize( QSize(500,200) );
+}
