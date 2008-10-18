@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : legend settings widget
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,7 +31,6 @@
 #include <KDebug>
 
 LegendWidget::LegendWidget(QWidget* parent):QWidget(parent){
-	kDebug()<<""<<endl;
 	ui.setupUi(this);
 	initializing=false;
 
@@ -43,9 +42,11 @@ LegendWidget::LegendWidget(QWidget* parent):QWidget(parent){
 	connect( ui.chbLegend, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
 	connect( ui.lePositionX, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
 	connect( ui.lePositionY, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
+	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDataChanged()) );
 
 	connect( ui.rbFilling0, SIGNAL(toggled(bool)), this, SLOT( fillingChanged(bool)) );
 	connect( ui.rbFilling1, SIGNAL(toggled(bool)), this, SLOT( fillingChanged(bool)) );
+	connect( ui.kcbFillingColor, SIGNAL(changed(const QColor& )), this, SLOT(slotDataChanged()) );
 	connect( ui.chbBox, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
 	connect( ui.chbShadow, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
 
@@ -66,7 +67,7 @@ void LegendWidget::setLegend(const Legend* l){
 	ui.chbLegend->setChecked( l->isEnabled() );
 	ui.lePositionX->setText( QString().setNum( l->position().x() ) );
 	ui.lePositionY->setText( QString().setNum( l->position().y() ) );
-	ui.cbOrientation->setCurrentIndex( l->orientation() );
+	ui.cbOrientation->setCurrentIndex( l->orientation()-1 ); //-1 because of Qt::Horizontal=0x1 and Qt::Vertical=0x2
 
 	ui.kcbFillingColor->setColor( l->fillingColor() );
 	if ( l->hasFilling() )
@@ -88,10 +89,9 @@ void LegendWidget::setLegend(const Legend* l){
 	saves the content of the UI to the legend-object \c l.
 */
 void LegendWidget::saveLegend(Legend* l) const{
-	kDebug()<<""<<endl;
 	l->setEnabled( ui.chbLegend->isChecked()  );
-	l->setPosition( QPoint(ui.lePositionX->text().toDouble(), ui.lePositionX->text().toDouble()) );
-	l->setOrientation( (Qt::Orientation)ui.cbOrientation->currentIndex() );
+	l->setPosition( QPointF(ui.lePositionX->text().toDouble(), ui.lePositionY->text().toDouble()) );
+	l->setOrientation( Qt::Orientation(ui.cbOrientation->currentIndex()+1) );//+1 because of Qt::Horizontal=0x1 and Qt::Vertical=0x2
 
 	l->setFillingColor( ui.kcbFillingColor->color( ) );
 	if ( ui.rbFilling1->isChecked() )
@@ -99,12 +99,11 @@ void LegendWidget::saveLegend(Legend* l) const{
 	else
 		l->enableFilling(false);
 
-
 	l->enableBox( ui.chbBox->isChecked() );
 	l->enableShadow( ui.chbShadow->isChecked() );
 
-	ui.kfrTextFont->setFont( l->textFont() );
-	ui.kcbTextColor->setColor( l->textColor() );
+	l->setTextFont( ui.kfrTextFont->font()  );
+	l->setTextColor( ui.kcbTextColor->color() );
 	kDebug()<<"legend saved."<<endl;
 }
 
@@ -119,6 +118,10 @@ void LegendWidget::slotDataChanged(){
 	emit dataChanged(true);
 }
 
+/*!
+	called, if the filling type (transparent or not) was changed.
+	Enables/disables the button for choosing the filling color.
+*/
 void LegendWidget::fillingChanged(bool){
 	if (ui.rbFilling0->isChecked())
 		ui.kcbFillingColor->setEnabled(false);

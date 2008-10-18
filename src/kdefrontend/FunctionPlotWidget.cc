@@ -30,6 +30,7 @@
 #include "LabelWidget.h"
 #include "PlotStyleWidget.h"
 #include "PlotSurfaceStyleWidget.h"
+#include "ValuesWidget.h"
 #include "../elements/Set.h"
 #include "../elements/Point3D.h"
 
@@ -64,6 +65,11 @@ FunctionPlotWidget::FunctionPlotWidget(QWidget* parent):QWidget(parent){
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget=new LabelWidget(ui.tabTitle);
     hboxLayout->addWidget(labelWidget);
+
+	//"Values"-tab ->create a ValuesWidget
+    hboxLayout = new QHBoxLayout(ui.tabValues);
+	valuesWidget=new ValuesWidget(ui.tabValues);
+    hboxLayout->addWidget(valuesWidget);
 
 	ui.bClear->setIcon( KIcon("edit-clear-locationbar-rtl") );
 

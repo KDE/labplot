@@ -2,8 +2,8 @@ set(KDEFRONTEND_DIR kdefrontend)
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/AxesDialog.cc
 	${KDEFRONTEND_DIR}/AxesWidget.cc
-#  	${KDEFRONTEND_DIR}/ColorMapPreview.cc
-  	${KDEFRONTEND_DIR}/ColumnDialog.cc
+# 	${KDEFRONTEND_DIR}/ColorMapPreview.cc
+   	${KDEFRONTEND_DIR}/ColumnDialog.cc
 	${KDEFRONTEND_DIR}/ExportDialog.cc
 	${KDEFRONTEND_DIR}/ExportWidget.cc
 	${KDEFRONTEND_DIR}/FunctionPlotDialog.cc
@@ -21,6 +21,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsPage.cc
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cc
 	${KDEFRONTEND_DIR}/TitleDialog.cc
+	${KDEFRONTEND_DIR}/ValuesWidget.cc
 )
 
 set(ELEMENTS_SOURCES
@@ -72,6 +73,7 @@ set(UI_SOURCES
  	${KDEFRONTEND_DIR}/ui/projectdialog.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
+	${KDEFRONTEND_DIR}/ui/valueswidget.ui
 )
 
 set(BACKEND_DIR backend)

@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : legend settings widget
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,8 +34,9 @@
 
 class Legend;
 
-/**
- * @brief Represents a widget where all the legend settings can be modified
+/*!
+ * \brief Represents a widget where all the legend settings can be modified.
+*.
  * This widget is embedded in \c LegendDialog
  */
 class LegendWidget : public QWidget{

@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : generic plot class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,15 +30,12 @@
 #include <KDebug>
 #include <KLocale>
 #include <QDateTime>
-// #include <QPainter>
-//
- #include <cmath>
+#include <cmath>
 
 Plot::Plot(){
-	kDebug()<<"Plot::Plot()"<<endl;
+	kDebug()<<"Starting initialization"<<endl;
 
 	m_titleLabel.setText(i18n("Title"));
-// 	m_titleLabel.setPosition( QPoint(0.4,0.04) );
 	m_titleLabel.setPositionType(Label::CENTER);
 	m_legend.setEnabled(true);
 

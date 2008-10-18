@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : PlotStyleWidget.h
+    File                 : ValuesWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
-    Description          : plot style widget
+    Description          : values widget class
 
  ***************************************************************************/
 
@@ -26,50 +26,35 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef PLOTSTYLEWIDGET_H
-#define PLOTSTYLEWIDGET_H
+#ifndef VALUESWIDGET_H
+#define VALUESWIDGET_H
 
-#include "../ui_plotstylewidget.h"
-
-class Style;
-
-class PlotStyleWidgetInterface{
-public:
-	virtual void setStyle(const Style* )=0;
-	virtual void saveStyle(Style*) const=0;
-	virtual ~PlotStyleWidgetInterface(){}
-};
-
+#include "../ui_valueswidget.h"
 
 /**
- * \brief Represents the widget where all the style setting of a plot can be modified.
+ * \brief Widget for changing the properties of the values annotation.
 *
- * This widget is embedded in \c FunctionWidget.
+* This widget is embedded in \c FunctionPlotWidget.
  */
-class PlotStyleWidget : public QWidget, public PlotStyleWidgetInterface{
-    Q_OBJECT
+class ValuesWidget: public QWidget{
+	Q_OBJECT
 
 public:
-    PlotStyleWidget(QWidget*);
-    ~PlotStyleWidget();
-	void setStyle(const Style* );
-	void saveStyle(Style*) const;
+	ValuesWidget(QWidget *parent);
+	~ValuesWidget();
+
+signals:
+	void dataChanged(bool);
+
+public slots:
+
 
 private:
-	Ui::PlotStyleWidget ui;
-	void resizeEvent(QResizeEvent *);
+	Ui::ValuesWidget ui;
 
 private slots:
-	void symbolTypeChanged(int);
-	void symbolFillingColorChanged();
-
-	void fillLineStyleBox();
-	void fillAreaFillingPatternBox();
-	void fillSymbolTypeBox();
-	void fillSymbolFillingBox();
-	void fillSymbolFillingPatternBox();
-
-	void boxWidthStateChanged(int);
+	void labelFormatChanged(const QString&);
+	void slotDataChanged();
 };
 
-#endif
+#endif //VALUESWIDGET_H

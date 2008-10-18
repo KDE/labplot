@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : label class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -157,6 +157,7 @@ void Label::draw(QPainter *p, const Point pos, const Point size, const int w, co
 
 	//show bounding box, if enabled
 	if (m_boxEnabled) {
+		p->setBrush( Qt::NoBrush ); // do not fill
 		p->setPen( Qt::black );
 		p->drawRect(box);
 	}

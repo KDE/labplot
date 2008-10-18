@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : plot style widget
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,27 +31,28 @@
 #include <KDebug>
 
 PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent), PlotStyleWidgetInterface(){
-
 	ui.setupUi(this);
 
+	//Line
 	QStringList stylelist;
 	stylelist<<i18n("Lines")<<i18n("Steps")<<i18n("Boxes")<<i18n("Impulses")<<i18n("Y Boxes");
 	ui.cbLineType->insertItems(-1, stylelist);
-
-	//TODO read out and set the default settings
 	ui.kcbLineColor->setColor(Qt::black);
 	this->fillLineStyleBox();
 	ui.cbLineStyle->setCurrentIndex(0);
 
+	//Area filling
 	ui.kcbAreaFillingColor->setColor(Qt::green);
 	this->fillAreaFillingPatternBox();
 	ui.cbFillBrushStyle->setCurrentIndex(0);
 
+	//Symbols
 	ui.kcbSymbolColor->setColor(Qt::black);
 	this->fillSymbolTypeBox();
 	ui.cbSymbolType->setCurrentIndex(0);
 	this->symbolTypeChanged(0);
 
+	//Misc
 	ui.kcbSymbolFillColor->setColor(Qt::black);
 	this->fillSymbolFillingPatternBox();
 	ui.cbSymbolFillBrushStyle->setCurrentIndex(0);
@@ -74,6 +75,13 @@ PlotStyleWidget::PlotStyleWidget(QWidget* parent):QWidget(parent), PlotStyleWidg
 }
 
 PlotStyleWidget::~PlotStyleWidget(){}
+
+void PlotStyleWidget::resizeEvent(QResizeEvent * event){
+	this->fillLineStyleBox();
+	this->fillAreaFillingPatternBox();
+	this->fillSymbolFillingPatternBox();
+}
+
 
 /*!
 	displays the properties of the Style \c style in the widget.
@@ -194,7 +202,7 @@ void PlotStyleWidget::fillAreaFillingPatternBox() {
 	for (int i=1;i<15;i++) {
 		pm.fill(Qt::transparent);
 		pa.begin( &pm );
-// 		pa.setRenderHint(QPainter::Antialiasing);
+//  		pa.setRenderHint(QPainter::Antialiasing);
  		pa.setBrush( QBrush(penColor, (Qt::BrushStyle)i) );
 		pa.drawRect( offset, offset, w-2*offset, h-2*offset);
 		pa.end();
@@ -213,8 +221,6 @@ void PlotStyleWidget::fillSymbolTypeBox(){
 	ui.cbSymbolType->clear();
 
 	QColor color=ui.kcbSymbolColor->color();
-// 	QColor fillColor=ui.kcbSymbolFillColor->color();
-// 	Qt::BrushStyle fillBrushStyle=Qt::BrushStyle(ui.cbSymbolFillBrushStyle->currentIndex());
 	QPainter pa;
 
 	int offset=5;
@@ -230,7 +236,6 @@ void PlotStyleWidget::fillSymbolTypeBox(){
 		pa.setRenderHint(QPainter::Antialiasing);
 
 		//draw the symbol in the middle of the pixmap
-// 		Symbol::draw(&pa, QPoint(size/2, size/2), (Symbol::SType)i, color, size, Symbol::FNONE, fillColor, fillBrushStyle);
 		Symbol::draw(&pa, new QPoint(size/2, size/2), (Symbol::SymbolType)i, color, size-2*offset, Symbol::FNONE);
 		pa.end();
 

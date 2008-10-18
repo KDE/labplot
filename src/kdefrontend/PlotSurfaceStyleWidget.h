@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : widget for surface plot style
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,9 +32,10 @@
 #include "../ui_plotsurfacestylewidget.h"
 #include "PlotStyleWidget.h"
 
-/**
+/*!
  * @brief Represents the widget where all the style settings of a surface plot can be modified
- * This widget is embedded in \c FunctionWidget.
+*
+ * This widget is embedded in \c FunctionPlotWidget.
  */
 class PlotSurfaceStyleWidget : public QWidget, public PlotStyleWidgetInterface{
     Q_OBJECT
@@ -42,6 +43,7 @@ class PlotSurfaceStyleWidget : public QWidget, public PlotStyleWidgetInterface{
 public:
     PlotSurfaceStyleWidget(QWidget*);
     ~PlotSurfaceStyleWidget();
+
 	void setStyle(const Style* );
 	void saveStyle(Style*) const;
 

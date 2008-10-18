@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : legend class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,59 +34,96 @@
 #include <KDebug>
 
 Legend::Legend(){
+	//General
 	m_enabled = true;
 	m_position.setX( 0.7 );
 	m_position.setY( 0.05 );
 	m_orientation=Qt::Vertical;
+	m_lineLength=50;
 
+	//Background
 	m_fillingEnabled=false;
 	m_fillingColor = QColor(Qt::white);
 	m_boxEnabled = true;
 	m_shadowEnabled = true;
 
-	//font = QFont(QString("Adobe Times"),8);
+	//Text font (default system font is used)
+	m_textFont.setPointSize(8);
 	m_textColor = QColor(Qt::black);
 
-
-	//TODO ???
-// 	namelength=0;
-// 	ticlabellength=0;
+	//Layout
+	m_layoutLeftMargin=4;
+	m_layoutTopMargin=4;
+	m_layoutRightMargin=4;
+	m_layoutBottomMargin=4;
+	m_layoutHorizontalSpacing=4;
+	m_layoutVerticalSpacing=4;
 }
 
+/*!
+	draws the legend for the data sets in \c list_Sets.
+*/
+ void Legend::draw( QPainter* p, const QList<Set>* list_Sets, const Point pos, const Point size, const int w, const int h){
+	QFont tmpFont=p->font();
+	p->setFont(m_textFont);
 
- void Legend::draw( QPainter *p, const QList<Set>*list_Sets, const Point pos, const Point size, const int w, const int h){
- 	kDebug()<<""<<endl;
-/*
-	int x1 = x2 = (int) ((x*size.X()+pos.X())*w);
-	int y1 = y2 = (int) ((y*size.Y()+pos.Y())*h);
+	int x1 = (int) ((m_position.x()*size.x()+pos.x())*w);
+	int y1 = (int) ((m_position.y()*size.y()+pos.y())*h);
+	int maxLabelWidth=0;
+	int totalLabelWidth=0;
+	int labelHeight;//=m_textFont.pointSize();
+	int setsNumber=0;
 
-	int=namelength=0;	// reset namelength for legend box
+// 	// set point size
+// 	int pointsize = m_textFont.pointSize();
+// 	QFont tmpfont = m_textFont;
+// 	tmpfont.setPointSize((int)(pointsize*size.x()));
+// 	p->setFont(tmpfont);
+// 	QFontMetrics fm = p->fontMetrics();
 
-	// set point size
-	int pointsize = m_textFont.pointSize();
-	QFont tmpfont = m_textFont;
-	tmpfont.setPointSize((int)(pointsize*size.X()));
-	p->setFont(tmpfont);
-	QFontMetrics fm = p->fontMetrics();
+	//determine the number of all visible/shown sets
+	// and the maximal length of the set's labels.
+	const Set* set;
+	const Label* label;
+	QTextDocument textDocument;
+	textDocument.setDefaultFont( m_textFont );//TODO doesn't work!!!
+	for (int i=0; i<list_Sets->size(); i++){
+		set = &list_Sets->at(i);
+		if (set->isShown()==false)
+			continue;
 
-	int number = drawGraphs(p,graphlist,type,size,tmpfont);
+		setsNumber++;
+		label=const_cast<Set*>(set)->label();
+		if ( label->isTex() ){
 
-	if (type == PSURFACE) {
-		if(orientation) {
-			x2 = (int) (x1+size.X()*(20+125+10));
-			y2 = (int) (y1+40*size.Y()*number+namelength+5);
-		}
-		else {
-			y2 = (int) (y1+size.Y()*(40*number+125+10));
-			x2 = (int) (x1+40*size.X()+fmax(namelength-20*size.X(),ticlabellength)+5);
+		}else{
+			textDocument.setHtml( label->text() );
+			totalLabelWidth += textDocument.size().width();
+			if ( textDocument.size().width()>maxLabelWidth )
+				maxLabelWidth=textDocument.size().width();
 		}
 	}
-	else {
-		x2 = (int) (x1+40*size.X()+namelength+5);
-		y2 = (int) (y1+size.X()*pointsize*(1.5+1.5*number));
-	}
+	labelHeight=textDocument.size().height();
 
-		QRect box( 0, 0, t->size().width(), t->size().height() );
+	int boxWidth;
+	int boxHeight;
+
+	// 		TODO
+// 	if (type == PSURFACE) {
+
+
+	//TODO consider also the case wenn the thickness of the line is greater as the fond size
+	if(m_orientation==Qt::Vertical){
+		boxWidth = m_layoutLeftMargin+m_lineLength+m_layoutHorizontalSpacing+maxLabelWidth+m_layoutRightMargin;
+ 		boxHeight=m_layoutTopMargin+setsNumber*labelHeight
+						+(setsNumber-1)*m_layoutVerticalSpacing+m_layoutBottomMargin;
+ 	} else {
+	 	boxWidth = m_layoutLeftMargin+setsNumber*(m_lineLength+m_layoutHorizontalSpacing)+totalLabelWidth
+				+(setsNumber-1)*3*m_layoutHorizontalSpacing+m_layoutRightMargin;
+ 		boxHeight=m_layoutTopMargin+labelHeight+m_layoutBottomMargin;
+ 	}
+
+	QRect box(x1, y1, boxWidth, boxHeight);
 
 	//show shadow, if enabled
 	//TODO make the size of the shadow depend on w and h.
@@ -99,90 +136,103 @@ Legend::Legend(){
 
 	//show bounding box, if enabled
 	if (m_boxEnabled) {
-		p->setPen( Qt::black );
+		p->setBrush( Qt::NoBrush ); // do not fill
+ 		p->setPen( Qt::black );
 		p->drawRect(box);
 	}
 
-	//fill the label box, if enabled.
+	//fill the legend box, if enabled.
 	if( m_fillingEnabled )
 		p->fillRect( box, QBrush(m_fillingColor) );
-	*/
 
-/* alter Kode
-	if ( m_fillingEnabled ) {
-		p->setBrush(m_fillingColor);
-		p->setPen(Qt::NoPen);
-		p->drawRect(x1,y1,x2-x1,y2-y1);
-		p->setBrush(QBrush::NoBrush);
 
-		// draw again (since it gets overwritten)
-		drawGraphs(p,graphlist,type,size,tmpfont);
+	//draw the lines and the labels of the shown sets
+	Style* style;
+	Symbol* symbol;
+	int currentLineX=0;
+	int currentLineY=0;
+	int currentLabelX=0;
+	int currentLabelY=0;
+	int offsetX=x1+m_layoutLeftMargin;
+	int offsetY=y1+m_layoutTopMargin;
+	for (int i = 0 ; i <list_Sets->size(); i++){
+		set = &list_Sets->at(i);
+		if (set->isShown()==false)
+			continue;
+
+		textDocument.setHtml( const_cast<Set*>(set)->label()->text() );
+		style = const_cast<Set*>(set)->style();
+		QPen pen( style->lineColor(), style->lineWidth(), style->lineStyle() );
+		p->setPen(pen);
+
+		//determine the coordinates for drawing the line and the label
+		currentLineX = offsetX;
+		currentLabelX = offsetX+m_lineLength+m_layoutHorizontalSpacing;
+		currentLineY=offsetY+labelHeight/2;
+		currentLabelY=offsetY;
+
+		if (m_orientation==Qt::Vertical){
+			offsetY += labelHeight+m_layoutVerticalSpacing;
+		}else{
+			offsetX += m_lineLength+m_layoutHorizontalSpacing+textDocument.size().width()+3*m_layoutHorizontalSpacing;
+		}
+
+		//draw the line
+		p->drawLine(currentLineX, currentLineY, currentLineX+m_lineLength, currentLineY);
+
+		//draw the symbol, if enabled,  in the middle of the line
+		if (style->isSymbolEnabled() ){
+			symbol=const_cast<Style*>(style)->symbol();
+			symbol->draw( p, QPoint(currentLineX+m_lineLength/2, currentLineY) );
+		}
+
+		//draw the label of the current set
+		p->save();
+		p->translate(currentLabelX, currentLabelY);
+		textDocument.drawContents(p);
+		p->restore();
 	}
-	p->setBrush(QBrush::NoBrush);
-	if (border)
-		p->drawRect(x1,y1,x2-x1,y2-y1);
-*/
 
-
-	/*
-	this->drawSetLegends(p, list_Sets, size, tmpfont);
-
-	//TODO ???
+	//TODO
 	// reset font point size
-	//kdDebug()<<"Resetting font size to "<<pointsize<<endl;
-	tmpfont.setPointSize(pointsize);
-	p->setFont(tmpfont);
-	*/
+// 	tmpfont.setPointSize(pointsize);
+	p->setFont(tmpFont);
+
+// 	p->restore();
+	kDebug()<<"Legend drawn"<<endl;
 }
 
 
 
-void Legend::drawSetLegends(QPainter *p, const QList<Set>*list_Sets, const Point& size, const QFont& tmpfont ) {
-	/*
+//TODO old code -> port/remove
+
+// void Legend::drawSetLegends(QPainter *p, const QList<Set>*list_Sets, const Point& size, const QFont& tmpfont ) {
+/*
 	kdDebug()<<"Legend::drawGraphs()"<<endl;
 	QFontMetrics fm = p->fontMetrics();
-	int number=0;	// sed for hidden graphs
-	for (unsigned int i = 0 ; i < gl->Number(); i++) {Tach.
-		Graph *g = gl->getGraph(i);
+
+	Set* set;
+	for (unsigned int i = 0 ; i < gl->Number(); i++) {
+		set = list_Sets.at(i);
 //		kdDebug()<<"GRAPH "<<i<<" Label : "<<g->getLabel()->simpleTitle()<<endl;
-		if(g->isShown() == false)
+		if( !set->isShown() )
 			continue;
 
-		Label *label = g->getLabel();
-		QString title = label->Title();
-
-		Style *style = g->getStyle();
-
-		QPen pen( style->Color(), style->Width(), (Qt::PenStyle) style->PenStyle() );
+		Label *label = set->getLabel();
+// 		QString title = label->Title();
+		Style *style = set->getStyle();
+		QPen pen( style->Color(), style->Width(), style->PenStyle() );
 		p->setPen(pen);	// EPS BUG
 
 		if (type == PSURFACE) {
 			if(label->isTeXLabel()) {
-#if KDE_VERSION > 0x030104
-				KTempDir *tmpdir = new KTempDir();
-				QString dirname = tmpdir->name();
-#else
-				QString dirname("/tmp/LabPlot-texvc");
-				mkdir(dirname.latin1(),S_IRWXU);
-#endif
-				KProcess *proc = new KProcess;
-				*proc << "texvc";
-				*proc << "/tmp"<<dirname<<title;
-				if( proc->start(KProcess::Block) == false) {
-					kdDebug()<<"COULD NOT FIND texvc! Gving up."<<endl;
-					// TODO : KMessageBox::error((QWidget *)ws,i18n("Could not find texvc! Falling back to normal label."));
-					label->setTeXLabel(false);
-				}
-				else {
-					// take resulting image and show it
-					QDir d(dirname);
-					QString filename = dirname+QString(d[2]);
-					QImage *image = new QImage(filename);
+				QImage *image = new QImage(filename);
 					if(!image->isNull()) {
 						namelength < image->width() ? namelength = image->width() :0;
 
 						//				kdDebug()<<"\n	drawing TeX image file "<<filename<<endl;
 						p->save();
+
 						if(orientation)
 							p->translate((int)(x1+70*size.X()),(int)(y1+size.Y()*(20*number+5)));
 						else
@@ -196,17 +246,7 @@ void Legend::drawSetLegends(QPainter *p, const QList<Set>*list_Sets, const Point
 						p->drawImage(0,0,*image);
 						p->restore();
 					}
-					delete image;
-#if KDE_VERSION > 0x030104
-					tmpdir->unlink();
-#else
-					rmdir(dirname.latin1());
-#endif
-				}
-				delete proc;
-			}
-
-			if(!label->isTeXLabel()) {
+			}else{
 				QSimpleRichText *richtext = new QSimpleRichText(title,tmpfont);
 				richtext->setWidth(p,500);
 				namelength = richtext->widthUsed();
@@ -221,19 +261,7 @@ void Legend::drawSetLegends(QPainter *p, const QList<Set>*list_Sets, const Point
 
 				delete richtext;
 			}
-
-// 		// old style
-// 			namelength  =  fm.width(name);
-// 			if(namelength<8)	// minimum width
-// 				namelength=8;
-// 			p->setPen(Qt::black);
-// 			if(orientation)
-// 				p->drawText((int)(x1+70*size.X()),(int)(y1+size.Y()*(20*number+20)), name);
-// 			else
-// 				p->drawText((int)(x1+10*size.X()),(int)(y1+size.Y()*(20*number+20)), name);
-
-		}
-		else {	// simple 2d plot
+		}else{	// simple 2d plot
 			QFont tmpfont = font;
 			int tmpsize = font.pointSize();
 			tmpfont.setPointSize((int)(size.X()*tmpsize));
@@ -246,25 +274,6 @@ void Legend::drawSetLegends(QPainter *p, const QList<Set>*list_Sets, const Point
 
 			// NOT working : label->draw(0,p,pos,size,size.X(),size.Y(),0);
 			if(label->isTeXLabel()) {
-#if KDE_VERSION > 0x030104
-				KTempDir *tmpdir = new KTempDir();
-				QString dirname = tmpdir->name();
-#else
-				QString dirname("/tmp/LabPlot-texvc");
-				mkdir(dirname.latin1(),S_IRWXU);
-#endif
-				KProcess *proc = new KProcess;
-				*proc << "texvc";
-				*proc << "/tmp"<<dirname<<title;
-				if( proc->start(KProcess::Block) == false) {
-					kdDebug()<<"COULD NOT FIND texvc! Gving up."<<endl;
-					// TODO : KMessageBox::error((QWidget *)ws,i18n("Could not find texvc! Falling back to normal label."));
-					label->setTeXLabel(false);
-				}
-				else {
-					// take resulting image and show it
-					QDir d(dirname);
-					QString filename = dirname+QString(d[2]);
 					QImage *image = new QImage(filename);
 					if(!image->isNull()) {
 						namelength < image->width() ? namelength = image->width() :0;
@@ -282,16 +291,7 @@ void Legend::drawSetLegends(QPainter *p, const QList<Set>*list_Sets, const Point
 						p->restore();
 					}
 					delete image;
-#if KDE_VERSION > 0x030104
-					tmpdir->unlink();
-#else
-					rmdir(dirname.latin1());
-#endif
-				}
-				delete proc;
-			}
-
-			if(!label->isTeXLabel()) {
+			}else{
 				QSimpleRichText *richtext = new QSimpleRichText(title,tmpfont);
 				richtext->setWidth(p,500);
 				namelength < richtext->widthUsed() ? namelength = richtext->widthUsed() :0;
@@ -304,25 +304,12 @@ void Legend::drawSetLegends(QPainter *p, const QList<Set>*list_Sets, const Point
 				delete richtext;
 			}
 		}
-		number++;
 	}
-
-	return number;
-	*/
-}
+*/
+// }
 
 
 /*
-//! calculate if point x,y is inside the legend box (for mouse event)
-bool Legend::inside(int X, int Y) {
-	kdDebug()<<"x1/x2 y1/y2 "<<x1<<'/'<<x2<<' '<<y1<<'/'<<y2<<endl;
-	kdDebug()<<"x/y "<<x<<' '<<y<<endl;
-	if (X>x1 && X<x2 && Y>y1 && Y<y2)
-		return true;
-	else
-		return false;
-}
-
 void Legend::save(QTextStream *t) {
 	*t<<x<<' '<<y<<endl;
 	*t<<font.family()<<endl;

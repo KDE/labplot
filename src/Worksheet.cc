@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : worksheet class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -45,10 +45,11 @@ Worksheet::Worksheet(MainWin *m)
 		type = WORKSHEET;
 
 	//  set title
-	int number=1;
-	while(mw->getWorksheet(i18n("Worksheet %1").arg(number)) != 0)
-		number++;
-	setWindowTitle(i18n("Worksheet %1").arg(number));
+		//TODO !!!
+// 	int number=1;
+// 	while(mw->getWorksheet(i18n("Worksheet %1").arg(number)) != 0)
+// 		number++;
+// 	setWindowTitle(i18n("Worksheet %1").arg(number));
 
 	KConfigGroup conf(KSharedConfig::openConfig(),"Worksheet");
 	// TODO : hardcoded :-(
@@ -242,11 +243,6 @@ void Worksheet::setTitle(QString title) {
 
 void Worksheet::draw(QPainter *p, int w, int h) {
 	kDebug()<<"Worksheet::Draw() : w/h ="<<w<<h<<endl;
-// 	// TEST
-// 	p->setBrush(Qt::yellow);
-// 	p->drawRect(0,0,w,h);
-// 	p->drawLine(0,0,w,h);
-// 	p->drawLine(0,h,w,0);
 
 	for (int i=0; i<listPlots.size(); i++) {
 		kDebug()<<"Plot "<<i<<" drawn"<<endl;
@@ -256,11 +252,9 @@ void Worksheet::draw(QPainter *p, int w, int h) {
 
 void Worksheet::addPlot(Plot::PlotType plotType) {
 	kDebug()<<"Plot of type "<<plotType<<" is going to be created"<<endl;
+
 	switch(plotType) {
 	case Plot::PLOT2D:{
-//   		listPlots<<Plot2D();
-//  		Plot2D* plot = new Plot2D();
-// 		listPlots<<plot;
    		listPlots<<(new Plot2DSimple());
 		break;
 	}
@@ -276,12 +270,15 @@ void Worksheet::addSet(Set s, Plot::PlotType type) {
 	kDebug()<<"Worksheet::addSet() plot type ="<<type<<endl;
 
 //  	if(plotCount() == 0 || ptype != plot[api]->Type() )
-	if (listPlots.size()!=0){
-		if ( listPlots.at(0)->plotType() != type)
+ 	if (listPlots.size()==0){
+		this->addPlot(type);
+	}else{
+		//TODO  add new plot if type mismatch instead of MessageBox
+		if ( listPlots.at(0)->plotType() != type){
 			KMessageBox::error( this, i18n("Plot cannot be added."), i18n("Plot type mismatch") );
 			return;
-	}
-	this->addPlot(type);
+		}
+ 	}
 
  	listPlots[currentPlotIndex]->addSet(s);
  	listPlots[currentPlotIndex]->resetRanges();
@@ -291,7 +288,7 @@ void Worksheet::addSet(Set s, Plot::PlotType type) {
 // 	if (actrange[0].max()-actrange[0].min() == 0)
 // 		listPlots[currentPlotIndex]->setActRanges( listPlots[currentPlotIndex]->Ranges() );
 
- 	repaint();
+   	repaint();
 	kDebug()<<"Set added."<<endl;
 }
 

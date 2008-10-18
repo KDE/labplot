@@ -35,6 +35,7 @@
 class Set;
 class LabelWidget;
 class PlotStyleWidgetInterface;
+class ValuesWidget;
 class QMdiSubWindow;
 
 /**
@@ -55,6 +56,7 @@ public:
 private:
 	Ui::FunctionPlotWidget ui;
 	LabelWidget* labelWidget;
+	ValuesWidget* valuesWidget;
 	PlotStyleWidgetInterface* plotStyleWidget;
 	Plot::PlotType plotType;
 

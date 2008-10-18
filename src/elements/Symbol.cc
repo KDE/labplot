@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : plot symbol class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -248,14 +248,14 @@ void Symbol::draw(QPainter *p, const QPoint* point, const SymbolType symbolType,
 //! draw the Symbol to the specified QPainter at position x,y
 //TODO Check, whether the static function above can be used everywhere and remove this function.
 void Symbol::draw(QPainter* p, const QPointF& point) {
-	// TODO : QPointArray -> const QPoint *points
-	// p->draw(Poly)Line(points)
+	int x=point.x();
+	 int y=point.y();
 
-	int x=point.x(), y=point.y();
+	 QPolygonF polygon;
 	QBrush qbrush(m_fillColor, m_fillBrushStyle);
-
 	p->setPen(Qt::NoPen);
 	p->setBrush(qbrush);
+
 	switch (m_type) {
 	case SNONE:
 		break;
@@ -310,46 +310,86 @@ void Symbol::draw(QPainter* p, const QPointF& point) {
 		p->setBrush(Qt::NoBrush);
 		p->drawEllipse(x-m_size,y-m_size,2*m_size,2*m_size);
 		break;
-	/*case STRIANGLE:
-		switch (fill) {
+// 	case STRIANGLE:
+// 		switch (fill) {
+// 		case FNONE:
+// 			break;
+// 		case FFULL:
+// 			a.setPoints(3,x-m_size,y+m_size, x+m_size,y+m_size,x,y-m_size);
+// 			break;
+// 		case FBOTTOM:
+// 			a.setPoints(4,x-m_size,y+m_size, x+m_size,y+m_size,x+m_size/2,y, x-m_size/2,y);
+// 			break;
+// 		case FTOP:
+// 			a.setPoints(3,x,y-m_size, x-m_size/2,y,x+m_size/2,y);
+// 			break;
+// 		case FLEFT:
+// 			a.setPoints(3,x,y-m_size, x-m_size,y+m_size,x,y+m_size);
+// 			break;
+// 		case FRIGHT:
+// 			a.setPoints(3,x,y-m_size, x+m_size,y+m_size,x,y+m_size);
+// 			break;
+// 		case FURIGHT:
+// 			a.setPoints(3,x,y-m_size, x-m_size/2,y,x+m_size,y+m_size);
+// 			break;
+// 		case FDLEFT:
+// 			a.setPoints(3,x-m_size,y+m_size, x-m_size/2,y,x+m_size,y+m_size);
+// 			break;
+// 		case FDRIGHT:
+// 			a.setPoints(3,x-m_size,y+m_size, x+m_size/2,y,x+m_size,y+m_size);
+// 			break;
+// 		case FULEFT:
+// 			a.setPoints(3,x-m_size,y+m_size, x+m_size/2,y,x,y-m_size);
+// 			break;
+// 		}
+// 		p->drawPolygon(a);
+//
+// 		p->setPen(color);
+// 		p->setBrush(Qt::NoBrush);
+// 		a.setPoints(4,x-m_size,y+m_size, x+m_size,y+m_size, x,y-m_size, x-m_size,y+m_size);
+// 		p->drawPolygon(a);
+// 		break;
+	case STRIANGLE:
+		switch (m_fillType) {
 		case FNONE:
 			break;
 		case FFULL:
-			a.setPoints(3,x-m_size,y+m_size, x+m_size,y+m_size,x,y-m_size);
+			polygon<<QPoint(x-m_size, y+m_size)<<QPoint(x+m_size, y+m_size)<<QPoint(x, y-m_size);
 			break;
 		case FBOTTOM:
-			a.setPoints(4,x-m_size,y+m_size, x+m_size,y+m_size,x+m_size/2,y, x-m_size/2,y);
+			polygon<<QPoint(x-m_size, y+m_size)<<QPoint(x+m_size, y+m_size)<<QPoint(x+m_size/2, y)<<QPoint(x-m_size/2, y);
 			break;
 		case FTOP:
-			a.setPoints(3,x,y-m_size, x-m_size/2,y,x+m_size/2,y);
+			polygon<<QPoint(x, y-m_size)<<QPoint(x-m_size/2, y)<<QPoint(x+m_size/2, y);
 			break;
 		case FLEFT:
-			a.setPoints(3,x,y-m_size, x-m_size,y+m_size,x,y+m_size);
+			polygon<<QPoint(x, y-m_size)<<QPoint(x-m_size, y+m_size)<<QPoint(x, y+m_size);
 			break;
 		case FRIGHT:
-			a.setPoints(3,x,y-m_size, x+m_size,y+m_size,x,y+m_size);
+			polygon<<QPoint(x, y-m_size)<<QPoint(x+m_size, y+m_size)<<QPoint(x, y+m_size);
 			break;
 		case FURIGHT:
-			a.setPoints(3,x,y-m_size, x-m_size/2,y,x+m_size,y+m_size);
+			polygon<<QPoint(x, y-m_size)<<QPoint(x-m_size/2, y)<<QPoint(x+m_size, y+m_size);
 			break;
 		case FDLEFT:
-			a.setPoints(3,x-m_size,y+m_size, x-m_size/2,y,x+m_size,y+m_size);
+			polygon<<QPoint(x-m_size, y+m_size)<<QPoint(x-m_size/2, y)<<QPoint(x+m_size, y+m_size);
 			break;
 		case FDRIGHT:
-			a.setPoints(3,x-m_size,y+m_size, x+m_size/2,y,x+m_size,y+m_size);
+			polygon<<QPoint(x-m_size, y+m_size)<<QPoint(x+m_size/2, y)<<QPoint(x+m_size, y+m_size);
 			break;
 		case FULEFT:
-			a.setPoints(3,x-m_size,y+m_size, x+m_size/2,y,x,y-m_size);
+			polygon<<QPoint(x-m_size, y+m_size)<<QPoint(x+m_size/2, y)<<QPoint(x, y-m_size);
 			break;
 		}
-		p->drawPolygon(a);
+		p->drawPolygon(polygon);
 
-		p->setPen(color);
 		p->setBrush(Qt::NoBrush);
-		a.setPoints(4,x-m_size,y+m_size, x+m_size,y+m_size, x,y-m_size, x-m_size,y+m_size);
-		p->drawPolygon(a);
+		polygon.clear();
+		polygon<<QPoint(x-m_size, y+m_size)<<QPoint( x+m_size, y+m_size)<<QPoint(x,y-m_size)<<QPoint(x-m_size, y+m_size);
+		p->drawPolygon(polygon);
 		break;
-	case SUTRIANGLE:
+
+	/*case SUTRIANGLE:
 		switch (fill) {
 		case FNONE:
 			break;

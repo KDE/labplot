@@ -59,7 +59,7 @@
       <item row="1" column="3" >
        <widget class="QLineEdit" name="lePositionX" >
         <property name="enabled" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
@@ -95,7 +95,7 @@
       <item row="1" column="6" >
        <widget class="QLineEdit" name="lePositionY" >
         <property name="enabled" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
@@ -116,12 +116,12 @@
        <widget class="QComboBox" name="cbOrientation" >
         <item>
          <property name="text" >
-          <string>Vertical</string>
+          <string>Horizontal</string>
          </property>
         </item>
         <item>
          <property name="text" >
-          <string>Horizontal</string>
+          <string>Vertical</string>
          </property>
         </item>
        </widget>

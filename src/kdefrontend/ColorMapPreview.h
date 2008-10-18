@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : color map preview
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,13 +36,14 @@
 #ifdef HAVE_GL
 #include "qwt3d_types.h"
 #endif
+class QLabel;
 
 class ColorMapPreview : public KPreviewWidgetBase{
  	Q_OBJECT
 
 public:
 	ColorMapPreview( QWidget *parent );
-// 	~ColorMapPreview();
+ 	~ColorMapPreview();
 
 private:
 #ifdef HAVE_GL

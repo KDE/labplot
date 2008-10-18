@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : widget for surface plot style
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -28,7 +28,6 @@
  ***************************************************************************/
 #include "ColorMapPreview.h"
 #include "PlotSurfaceStyleWidget.h"
-#include "../elements/Symbol.h"
 #include "../elements/Style.h"
 
 #include <KFileDialog>
@@ -61,14 +60,14 @@ void PlotSurfaceStyleWidget::selectColorMap(){
 // 	KUrl url=KUrl::fromPath(locate("data","LabPlot/colormaps/");
 	KUrl url=KUrl::fromPath("../../1.6.0/examples/colormaps"); //TODO !!!
 	QString filter="Colormap files (*.map; *.MAP)";
-/*
-	KFileDialog* dialog = new KFileDialog(url, filter, this);
-	ColorMapPreview* colormap= new ColorMapPreview( this );
-	dialog->setPreviewWidget(colormap);
 
-	if (dialog->exec()){
-		//get the pixmal and show on the button
-	}*/
+// 	KFileDialog* dialog = new KFileDialog(url, filter, this, 0);
+// 	ColorMapPreview* colormap= new ColorMapPreview( this );
+// 	dialog->setPreviewWidget(colormap);
+
+// 	if (dialog->exec()){
+// 		//get the pixmal and show on the button
+// 	}
 
 
 	//OLD

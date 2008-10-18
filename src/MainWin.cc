@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : main window
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -64,13 +64,13 @@ MainWin::MainWin(QWidget *parent, QString filename)
 {
 	m_mdi_area = new QMdiArea;
 	setCentralWidget(m_mdi_area);
-	
+
 	setCaption("LabPlot "LVERSION);
 	setupActions();
 
-	m_project = NULL;	
+	m_project = NULL;
  	openNew();
-	
+
 
 	m_current_aspect = m_project;
 	m_current_folder = m_project;
@@ -79,17 +79,17 @@ MainWin::MainWin(QWidget *parent, QString filename)
 
 	connect(m_mdi_area, SIGNAL(subWindowActivated(QMdiSubWindow*)),
 			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
-	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)), 
+	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)),
 		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect *)));
-	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *, int)), 
+	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *, int)),
 		this, SLOT(handleAspectAdded(const AbstractAspect *, int)));
-	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, int)), 
+	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, int)),
 		this, SLOT(handleAspectRemoved(const AbstractAspect *, int)));
-	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *, int)), 
+	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *, int)),
 		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect *, int)));
 	connect(m_project, SIGNAL(statusInfo(const QString&)),
 			statusBar(), SLOT(showMessage(const QString&)));
-	
+
 	handleAspectDescriptionChanged(m_project);
 
 	// command line file name
@@ -332,7 +332,7 @@ void MainWin::openNew() {
 // 	defining_maglens=0;
 // 	defining_panzoom=0;
 // */
-	delete m_project; 	
+	delete m_project;
  	m_project = new Project(this);
  	m_project->setChanged(true);
 }
@@ -469,7 +469,7 @@ Table* MainWin::newSpreadsheet() {
 
 	QModelIndex index = m_project_explorer->currentIndex();
 
-	if(!index.isValid()) 
+	if(!index.isValid())
 		m_project->addChild(table);
 	else
 	{
@@ -484,19 +484,18 @@ Table* MainWin::newSpreadsheet() {
 }
 
 Worksheet* MainWin::newWorksheet() {
-        kDebug()<<endl;
-#if 0 // TODO: make an aspect for a worksheet
-        Worksheet *w = new Worksheet(this);
+	kDebug()<<endl;
+// #if 0 // TODO: make an aspect for a worksheet
+	Worksheet *w = new Worksheet(this);
 	m_mdi_area->addSubWindow(w);
 	w->show();
 	m_project->setChanged(true);
 
 	updateGUI();
-
-        kDebug()<<"MainWin::newWorksheet() DONE"<<endl;
-        return w;
-#endif
-	return NULL;
+	kDebug()<<"MainWin::newWorksheet() DONE"<<endl;
+	return w;
+// #endif
+// 	return NULL;
 }
 
 Spreadsheet* MainWin::activeSpreadsheet() const {
@@ -523,7 +522,7 @@ Spreadsheet* MainWin::getSpreadsheet(QString name) const {
 }
 
 Worksheet* MainWin::activeWorksheet() const {
-#if 0 // TODO: port to use aspects
+// #if 0 // TODO: port to use aspects
 	kDebug()<<"()"<<endl;
 	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
 	if(subWindow != 0) {
@@ -531,18 +530,18 @@ Worksheet* MainWin::activeWorksheet() const {
 		if (w && w->sheetType() == WORKSHEET)
 			return w;
 	}
-#endif
-	return 0;
+// #endif
+// 	return 0;
 }
 
 Worksheet* MainWin::getWorksheet(QString name) const {
-#if 0 // TODO: port to use aspects
+// #if 0 // TODO: port to use aspects
 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
 	for (int i=0; i<wlist.size(); i++)
 		if(wlist.at(i)->windowTitle() == name)
 			return (Worksheet *)wlist.at(i);
-#endif
-	return 0;
+// #endif
+// 	return 0;
 }
 /************** sheet stuff end *************************/
 
@@ -565,6 +564,11 @@ void MainWin::functionActionTriggered(QAction* action){
 
 	 FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
 	if ( dlg->exec() == QDialog::Accepted ) {
+		if (type!=Plot::PLOT2D){
+			KMessageBox::error(this, i18n("Not yet implemented."));
+			return;
+		}
+
 		Set set(Set::SET2D);
 		dlg->saveSet(&set);
 		int i=dlg->currentSheetIndex();
@@ -650,19 +654,19 @@ void MainWin::settingsDialog(){
 
 void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 	kDebug()<<"MainWin::addGraph2D() sheet ="<<sheet<<endl;
-#if 0 // TODO: port this to use aspects
+// #if 0 // TODO: port this to use aspects
 	int nr_sheets = m_mdi_area->subWindowList().size();
 	kDebug()<<" Number of sheets :"<<nr_sheets<<endl;
 	if(sheet == nr_sheets) {	// new worksheet
 		kDebug()<<"Creating new worksheet"<<endl;
-		Worksheet *w = newWorksheet();
+		Worksheet *w = this->newWorksheet();
  		w->addSet(set,ptype);
 	}
 	else if(sheet == nr_sheets+1) {	// new spreadsheet
-		kDebug()<<"Creating new spreadsheet"<<endl;
-		Spreadsheet *s = newSpreadsheet();
-		//TODO pointer or referenz
- 		s->addSet(&set);
+// 		kDebug()<<"Creating new spreadsheet"<<endl;
+// 		Spreadsheet *s = newSpreadsheet();
+// 		//TODO pointer or referenz
+//  		s->addSet(&set);
 	}
 	else {
 		kDebug()<<" Using sheet "<<sheet<<endl;
@@ -676,17 +680,17 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 			if (w->sheetType() == WORKSHEET)
 				w->addSet(set,ptype);
 			else {
-				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
-				//TODO pointer or referenz
- 				s->addSet(&set);
+// 				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
+// 				//TODO pointer or referenz
+//  				s->addSet(&set);
 			}
 		}
 	}
-#endif
+// #endif
 	updateGUI();
 }
 
-void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) 
+void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win)
 {
 	PartMdiView *view = qobject_cast<PartMdiView*>(win);
 	updateGUI();
@@ -720,7 +724,7 @@ void MainWin::handleAspectAddedInternal(AbstractAspect * aspect)
 		PartMdiView *win = part->mdiSubWindow();
 		Q_ASSERT(win);
 		m_mdi_area->addSubWindow(win);
-		connect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)), 
+		connect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
 				this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
 	}
 }
@@ -737,7 +741,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *parent, int ind
 	if (!part) return;
 	PartMdiView *win = part->mdiSubWindow();
 	Q_ASSERT(win);
-	disconnect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)), 
+	disconnect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
 		this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
 	m_mdi_area->removeSubWindow(win);
 	updateGUI();
@@ -774,7 +778,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect)
 	m_current_aspect = aspect;
 }
 
-void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to) 
+void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to)
 {
 	if (view == m_mdi_area->currentSubWindow())
 	{
@@ -782,14 +786,14 @@ void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWi
 	}
 }
 
-void MainWin::setMdiWindowVisibility(QAction * action) 
+void MainWin::setMdiWindowVisibility(QAction * action)
 {
 	// TODO: write a KAction based version of this
 #if 0
 	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
 #endif
 }
-		
+
 Folder* MainWin::newFolder()
 {
 	kDebug()<<"MainWin::newFolder()"<<endl;
@@ -798,7 +802,7 @@ Folder* MainWin::newFolder()
 
 	QModelIndex index = m_project_explorer->currentIndex();
 
-	if(!index.isValid()) 
+	if(!index.isValid())
 		m_project->addChild(folder);
 	else
 	{
@@ -867,10 +871,10 @@ void MainWin::updateMdiWindowVisibility()
 {
 	QList<QMdiSubWindow *> windows = m_mdi_area->subWindowList();
 	PartMdiView * part_view;
-	switch(m_project->mdiWindowVisibility()) 
+	switch(m_project->mdiWindowVisibility())
 	{
 		case Project::allMdiWindows:
-			foreach(QMdiSubWindow *window, windows) 
+			foreach(QMdiSubWindow *window, windows)
 			{
 				part_view = qobject_cast<PartMdiView *>(window);
 				Q_ASSERT(part_view);
@@ -878,7 +882,7 @@ void MainWin::updateMdiWindowVisibility()
 			}
 			break;
 		case Project::folderOnly:
-			foreach(QMdiSubWindow *window, windows) 
+			foreach(QMdiSubWindow *window, windows)
 			{
 				part_view = qobject_cast<PartMdiView *>(window);
 				Q_ASSERT(part_view);
@@ -889,7 +893,7 @@ void MainWin::updateMdiWindowVisibility()
 			}
 			break;
 		case Project::folderAndSubfolders:
-			foreach(QMdiSubWindow *window, windows) 
+			foreach(QMdiSubWindow *window, windows)
 			{
 				part_view = qobject_cast<PartMdiView *>(window);
 				if(part_view->part()->isDescendantOf(m_current_folder))

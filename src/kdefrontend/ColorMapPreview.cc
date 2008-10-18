@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : color map preview
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,10 +26,10 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 // #include <fstream>
 //using namespace std;
 #include "ColorMapPreview.h"
-
 
 ColorMapPreview::ColorMapPreview( QWidget *parent ): KPreviewWidgetBase( parent ){
 	label = new QLabel(this);
@@ -38,9 +38,9 @@ ColorMapPreview::ColorMapPreview( QWidget *parent ): KPreviewWidgetBase( parent 
 	QVBoxLayout* layout = new QVBoxLayout( this );
 	layout->addWidget( label );
 }
-/*
+
 ColorMapPreview::~ColorMapPreview(){
-}*/
+}
 
 void ColorMapPreview::showPreview( const KUrl &u ){
 	QString path = u.path();
@@ -55,6 +55,7 @@ void ColorMapPreview::showPreview( const KUrl &u ){
 
 void ColorMapPreview::clearPreview(){
 	label->setPixmap(0);
+	label->setText( "No color map" );
 }
 
 bool ColorMapPreview::open(QString fname) {

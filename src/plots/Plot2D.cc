@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : 2d plot class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -196,6 +196,7 @@ void Plot2D::draw(QPainter *p, const int w, const int h){
 	m_titleLabel.draw(p, position, size, w, h, 0);
    	this->drawAxes(p, w, h);
   	this->drawBorder(p, w, h);
+	this->drawLegend(p, w, h);
 
 	//TODO fill between curves
 //	if(fill_enabled)
@@ -1196,30 +1197,31 @@ void Plot2D::drawLegend(QPainter *p, const int w, const int h){
 		return;
 	}
 
-	kDebug()<<"	Legend enabled"<<endl;
+	m_legend.draw( p, &list_Sets, position, size, w, h );
+	kDebug()<<"Legend drawn"<<endl;
 
-	if (m_plotType == Plot::PLOTSURFACE) {		// legend can't do this :-(
-		/*
-		if (legend.X() == 0.7 && legend.Y() == 0.05 ) // replace the legend for surface plots first time
-			legend.setPosition(0.83,0.05);
-
-		int x = (int) (w*(size.X()*legend.X()+position.X()));
-		int y = (int) (h*(size.Y()*legend.Y()+position.Y()));
-
-		Plot2DSurface *plot = (Plot2DSurface *)this;
-		plot->drawLegend(p,x,y);
-		legend.draw(p,type,graphlist,position,size,w,h);
-		plot->drawLegend(p,x,y);
-		*/
-	}else{
-		m_legend.draw( p, &list_Sets, position, size, w, h );
-	}
-
-//		legend.draw(p,type,graphlist,position,size,w,h);
-//		kDebug()<<" drawing legend with pos = "<<position.X()<<' '<<position.Y()<<endl;
-//		kDebug()<<" 	size.X()*w/size.Y()*h = "<<size.X()*w<<' '<<size.Y()*h<<endl;
-
-	p->setPen(Qt::NoPen);
+// 	if (m_plotType == Plot::PLOTSURFACE) {		// legend can't do this :-(
+// 		/*
+// 		if (legend.X() == 0.7 && legend.Y() == 0.05 ) // replace the legend for surface plots first time
+// 			legend.setPosition(0.83,0.05);
+//
+// 		int x = (int) (w*(size.X()*legend.X()+position.X()));
+// 		int y = (int) (h*(size.Y()*legend.Y()+position.Y()));
+//
+// 		Plot2DSurface *plot = (Plot2DSurface *)this;
+// 		plot->drawLegend(p,x,y);
+// 		legend.draw(p,type,graphlist,position,size,w,h);
+// 		plot->drawLegend(p,x,y);
+// 		*/
+// 	}else{
+// 		m_legend.draw( p, &list_Sets, position, size, w, h );
+// 	}
+//
+// //		legend.draw(p,type,graphlist,position,size,w,h);
+// //		kDebug()<<" drawing legend with pos = "<<position.X()<<' '<<position.Y()<<endl;
+// //		kDebug()<<" 	size.X()*w/size.Y()*h = "<<size.X()*w<<' '<<size.Y()*h<<endl;
+//
+// 	p->setPen(Qt::NoPen);
 }
 
 /*
