@@ -2,8 +2,10 @@
     File                 : Spreadsheet.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+	Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
+                           (replace * with @ in the email addresses) 
     Description          : spreadsheet class
                            
  ***************************************************************************/

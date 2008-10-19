@@ -4,8 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 by Knut Franke
     Email (use @ for *)  : knut.franke*gmx.de
-    Description          : Base class for doing fits using the algorithms
-                           provided by GSL.
+    Description          : Base class for least-squares fitting.
 
  ***************************************************************************/
 
@@ -32,98 +31,135 @@
 
 #include "AbstractFilter.h"
 
-class gsl_vector;
-class gsl_matrix;
+#include <math.h>
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_matrix.h>
 
-class FitSetAlgorithmCmd;
+class FitSetYErrorSourceCmd;
+class ResultsColumn;
+class ErrorsColumn;
+class NamesColumn;
+class DescriptionsColumn;
 
 /**
- * \brief Base class for doing fits using the algorithms provided by GSL.
+ * \brief Base class for least-squares fitting.
  *
- * Implementations of AbstractFit essentially provide methods to compute a specific function to be
- * fitted, its derivatives with respect to the fit parameters and sensible estimates for the
- * parameters (given the data to be fitted).
+ * This is a completely algorithm-agnostic minimal base class, providing mainly a common
+ * interface for AbstractNonlinearFit and AbstractLinearFit.
  *
- * Input is accepted on two ports: X and Y. Y is assumed to be a function of X, which is
+ * Input is accepted on three ports: X, Y and Y error. Y is assumed to be a function of X, which is
  * approximated by the function specified by the implementation of AbstractFit being used.
  *
  * On its output ports, AbstractFit provides (in order) the current values of the parameters,
- * their names, and textual descriptions. Current values can be initial values specified by
- * the user, automated estimates made by the implementation, or the results of the fit.
+ * error estimates, their names, and textual descriptions. Current values can be initial values
+ * specified by the user, automated estimates made by the implementation, or the results of the fit.
  * You only ever get to see the first two when you haven't connected the input ports of
- * AbstractFit yet, because after the first connect (and possibly subsequent calls to
- * setInitialValue()), the fit is automatically recomputed. After calling setAutoRefit(),
- * it is also recomputed whenever the input data changes.
+ * AbstractFit yet, because after the first connect, the fit is automatically recomputed.
  */
 class AbstractFit : public AbstractFilter
 {
+	Q_OBJECT
+
 	public:
-		enum Algorithm { ScaledLevenbergMarquardt, UnscaledLevenbergMarquardt, NelderMeadSimplex };
-		//! Possible sources for weighting data.
-		enum Weighting {
-			NoWeighting, //!< Use 1.0 as weight for all points (=> cannot produce sensible error estimates)
-			Poisson,     //!< Assume data follows Poisson distribution (weight with sqrt(N)).
-			Dataset      //!< Use weighting data from a user-specified data source.
+		//! Possible sources for error data.
+		enum ErrorSource {
+			UnknownErrors,    //!< Errors unknown; estimate parameter errors from scatter of input data.
+			AssociatedErrors, //!< Use error data set associated with Y input.
+			PoissonErrors,    //!< Y data is Poisson distributed; use sqrt(Y) as error estimate.
+			CustomErrors      //!< Use error data from user-specified data source.
 		};
-		static QString nameOf(Algorithm algo) {
-			switch(algo) {
-				case ScaledLevenbergMarquardt: return tr("scaled Levenberg-Marquardt");
-				case UnscaledLevenbergMarquardt: return tr("unscaled Levenberg-Marquardt");
-				case NelderMeadSimplex: return tr("Nelder-Mead / simplex");
-			}
-		};
-		static QString nameOf(Weighting weighting) {
-			switch(weighting) {
-				case NoWeighting: return tr("no weighting");
-				case Poisson: return tr("Poisson / sqrt(N)");
-				case Dataset: return tr("user-supplied");
+		static QString nameOf(ErrorSource source) {
+			switch(source) {
+				case UnknownErrors: return tr("unknown");
+				case AssociatedErrors: return tr("associated");
+				case PoissonErrors: return tr("Poisson (sqrt(Y))");
+				case CustomErrors: return tr("user-supplied");
 			}
 		}
-		AbstractFit() : m_algorithm(ScaledLevenbergMarquardt), m_tolerance(1e-8), m_maxiter(1000), m_auto_refit(false), m_outdated(true) {}
-		virtual ~AbstractFit() {}
-		bool isOutdated() const { return m_outdated; }
-		void setAlgorithm(Algorithm a) { m_algorithm = a; }
-		void setAutoRefit(bool auto_refit = true) { m_auto_refit = auto_refit; }
+		AbstractFit();
+		virtual ~AbstractFit();
+
+		ErrorSource yErrorSource() const { return m_y_error_source; }
+		void setYErrorSource(ErrorSource e);
 
 		//!\name Handling of fit parameters
 		//@{
-		void setInitialValue(int parameter, double value);
-		virtual void guessInitialValues() = 0;
+		virtual int numParameters() const = 0;
+		virtual QString parameterName(int index) const = 0;
+		virtual QString parameterDescription(int index) const = 0;
 		//@}
 
 		//!\name Reimplemented from AbstractFilter
 		//@{
 	public:
-		virtual int inputCount() const { return 2; }
-		virtual QString inputName(int port) const { return port==0 ? "X" : "Y"; }
-		virtual int outputCount() const { return 3; }
-	protected:
-		virtual void dataChanged(AbstractDataSource*) {
+		virtual int inputCount() const { return 3; }
+		virtual QString inputName(int port) const {
+			switch (port) {
+				case 0: return "X";
+				case 1: return "Y";
+				case 2: return "Y error";
+			}
+		}
+		virtual int outputCount() const { return 4; }
+		virtual AbstractColumn * output(int port=0) {
+			if (port < 0 || port >= outputCount())
+				return 0;
+			return m_outputs[port];
 		}
 		//@}
 
-	protected:
-		static virtual double fitFunctionSimplex(const gsl_vector*, void*) = 0;
-		static virtual int fitFunction(const gsl_vector*, void*, gsl_vector*) = 0;
-		static virtual int fitFunctionDf(const gsl_vector*, void*, gsl_matrix*) = 0;
-		static virtual int fitFunctionFdf(const gsl_vector*, void*, gsl_vector*, gsl_matrix*) {
+	public:
+		inline double X(int i) const {
+			const AbstractColumn * x = m_inputs.value(0);
+			if (!x) return NAN;
+			return x->valueAt(i);
 		}
+		inline double Y(int i) const {
+			const AbstractColumn * y = m_inputs.value(1);
+			if (!y) return NAN;
+			return y->valueAt(i);
+		}
+		inline double yError(int i) const {
+			if (m_y_errors && 0 <= i && i < m_input_points)
+				return m_y_errors[i];
+			else
+				return NAN;
+		}
+		double chiSquare() const {
+			return m_chi_square;
+		}
+		double chiSquareDof() const {
+			return m_chi_square / (m_input_points - numParameters());
+		}
+		double rSquare() const;
+
+	protected:
+		//! Update internal state (number of input points and Y errors may have changed).
+		void dataChanged(AbstractColumn*);
+		virtual bool inputAcceptable(int port, const AbstractColumn *source);
+
+		//! Number of data points supplied on inputs.
+		int m_input_points;
+		//! Where to take Y error estimates from.
+		ErrorSource m_y_error_source;
+		//! Y error estimates
+		double * m_y_errors;
+		//! Resulting fit parameters.
+		gsl_vector * m_results;
+		//! Covariance matrix of results.
+		gsl_matrix * m_covariance_matrix;
+		//! Residual sum of squares.
+		double m_chi_square;
 
 	private:
-		//! Fit algorithm to use.
-		Algorithm m_algorithm;
-		//! Where to take weights from.
-		WeightingMethod m_weighting;
-		//! The tolerance ("epsilon") to be used for deciding when the fit was successful.
-		double m_tolerance;
-		//! The maximum number of iterations to do before declaring the fit to have failed.
-		int m_maxiter;
-		//! Whether to redo the fit each time input data changes.
-		bool m_auto_refit;
-		//! If #m_auto_refit is false, this is true when the input data has changed since the last fit.
-		bool m_outdated;
+		//! Output ports.
+		AbstractColumn ** m_outputs;
 
-	friend class FitSetAlgorithmCmd;
+		friend class FitSetYErrorSourceCmd;
+		friend class ResultsColumn;
+		friend class ErrorsColumn;
+		friend class NamesColumn;
+		friend class DescriptionsColumn;
 };
 
 #endif // ifndef ABSTRACT_FIT_H

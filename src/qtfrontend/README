@@ -34,37 +34,81 @@ See INSTALL.html
 http://scidavis.sourceforge.net
 
 
-=== Authors ===
-
-These are the people currently working on SciDAVis, in alphabetical order:
-o Knut Franke (knut.franke at gmx.de) - developer, project admin
-o Roger Gadiou - documentation, screenshots
-o Tilman Hoener zu Siederdissen (thzs at gmx.net) - developer, project admin
-
-
 === Credits ===
 
-The following people have written parts of SciDAVis, ranging from a few lines to large chunks.
-In alphabetical order:
+--- Developers ---
 
-Shen Chen, Borries Demeler, Jose Antonio Lorenzo Fernandez, Knut Franke, Vasileios Gkanis,
-Gudjon Gudjonsson, Tilman Hoener zu Siederdissen, Alex Kargovsky, Michael Mac-Vicar,
-Tomomasa Ohkubo, Aaron Van Tassle, Branimir Vasilic, Ion Vasilief, Vincent Wagelaar
+The following people have written parts of the SciDAVis source code, ranging from a few lines to large chunks.
+In alphabetical order.
+
+Tilman Benkert[1], 
+Knut Franke
+
+--- Documentation ---
 
 The following people have written parts of the manual and/or other documentation.
-In alphabetical order:
+In alphabetical order.
+
+Knut Franke, Roger Gadiou
+
+--- Translations ---
+
+The following people have contributed translations or parts thereof.
+In alphabetical order.
+
+Tilman Benkert[1],
+Markus Bongard,
+Tobias Burnus,
+Rémy Claverie,
+f0ma,
+Jose Antonio Lorenzo Fernandez,
+Daniel Klaer,
+Peter Landgren,
+Tomomasa Ohkubo,
+Mikhail Shevyakov,
+Mauricio Troviano
+
+--- Packagers ---
+
+The following people have made installing SciDAVis easier by providing specialized binary packages.
+In alphabetical order.
+
+Burkhard Bunk (Debian),
+Quentin Denis (SUSE),
+Eric Tanguy (Fedora),
+Mauricio Troviano (Windows installer),
+Yu-Hung Lien (Intel-Mac binary)
+
+--- QtiPlot ---
+
+SciDAVis uses code from QtiPlot, which consisted (at the time of the fork, i.e. QtiPlot 0.9-rc2) of code by the following people:
+
+Tilman Benkert[1],
+Shen Chen,
+Borries Demeler,
+José Antonio Lorenzo Fernández,
+Knut Franke,
+Vasileios Gkanis,
+Gudjon Gudjonsson,
+Alex Kargovsky,
+Michael Mac-Vicar,
+Tomomasa Ohkubo,
+Aaron Van Tassle,
+Branimir Vasilic,
+Ion Vasilief,
+Vincent Wagelaar
+
+The SciDAVis manual is based on the QtiPlot manual, written by (in alphabetical order):
 
 Knut Franke, Roger Gadiou, Ion Vasilief
 
-The following people have contributed translations or parts thereof.
-In alphabetical order:
+footnotes:
+[1] birth name: Tilman Hoener zu Siederdissen
 
-Markus Bongard, Tobias Burnus, Remy Claverie, Jose Antonio Lorenzo Fernandez,
-Tilman Hoener zu Siederdissen, Daniel Klaer, Peter Landgren, Tomomasa Ohkubo,
-Mikhail Shevyakov
+=== Special Thanks ===
 
 We also want to acknowledge the people having helped us indirectly by contributing to the following
-fine pieces of software. In no particular order:
+fine pieces of software. In no particular order.
 
 Qt (http://doc.trolltech.com/4.3/credits.html),
 Qwt (http://qwt.sourceforge.net/#credits),

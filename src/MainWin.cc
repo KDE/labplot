@@ -2,8 +2,10 @@
     File                 : MainWin.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
+    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2007-2008 Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
+                           (replace * with @ in the email addresses) 
     Description          : main window
 
  ***************************************************************************/

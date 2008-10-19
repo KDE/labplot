@@ -29,20 +29,16 @@
 				<li><a href="http://www.trolltech.com/products/qt/index.html">Qt (>=4.2)</a>,</li>
 				<li><a href="http://qwt.sourceforge.net/index.html">Qwt (>=5.0.0)</a>,</li>
 				<li><a href="http://qwtplot3d.sourceforge.net/">QwtPlot3D (>=0.2.6)</a>,</li>
-				<li><a href="http://sources.redhat.com/gsl/">GSL (>=1.8)</a>,</li>
+				<li><a href="http://www.gnu.org/software/gsl/">GSL (>=1.8)</a>,</li>
 				<li><a href="http://muparser.sourceforge.net">muParser (>=1.28)</a> and</li>
 				<li><a href="http://www.zlib.net/">zlib (>=1.2.3)</a>.</li>
 			</ul>
 			<strong>QwtPlot3D and Qwt must be compiled against Qt 4.x! If these are compiled with Qt3,
 				the application will crash!</strong>
 			See below for how to ensure this.
-			</p><p>
-			This version of SciDAVis uses a modified version of
-			<a href="http://sourceforge.net/projects/liborigin/">liborigin</a> which is supplied in the "3rdparty" folder.
-			It is already included in the scidavis/scidavis.pro file and does not need to be compiled or installed separately.
 			</p>
 
-			<h1>Linux / Mac OS X</h1>
+			<h1>Linux</h1>
 			<ol>
 				<li>Install
 				<a href="http://www.trolltech.com/products/qt/index.html">Qt (>=4.2)</a>,
@@ -52,7 +48,8 @@
 				either from your package manager or from the sources.
 				If you are using precompiled packages, make sure you also install the corresponding development packages (*-dev or *-devel).
 				If you want to display the manual from within SciDAVis (you can also view it with your favorite browser),
-				you need to have the Qt Assistant installed, which sometimes comes in a separate package (qt4-dev-tools for Ubuntu edgy).</li>
+				you need to have the Qt Assistant installed, which sometimes comes in a separate package (qt4-dev-tools for Ubuntu edgy).
+				</li>
 				<li>Open a terminal window.</li>
 				<li>Get <a href="http://qwt.sourceforge.net/index.html">Qwt (>=5.0.0)</a> sources and unpack them to the 3rdparty folder:<br>
 				<code>cd scidavis-X.X.X/3rdparty<br>tar -xvjf /path/to/qwt-Y.Y.Y.tar.bz2</code></li>
@@ -61,7 +58,8 @@
 				<li>We want to build the static version of Qwt in order to avoid potential conflicts with an already installed version.
 				Open the file qwt/qwtconfig.pri and comment out the line<br>
 				<code>CONFIG += QwtDll</code></li>
-				<li>Build Qwt:<br><code>cd qwt; qmake &amp;&amp; make; cd ..</code></li>
+				<li>Build Qwt:<br><code>cd qwt; qmake &amp;&amp; make; cd ..</code><br>
+				On some systems (such as Debian, Ubuntu, ...) the <code>qmake</code>-Tool for Qt 4.x is called <code>qmake-qt4</code>. Make sure you don't use the version that belongs to Qt 3.x.
 				<li>Get <a href="http://qwtplot3d.sourceforge.net/">QwtPlot3D</a> sources and also unpack them to scidavis-X.X.X/3rdparty:<br>
 				<code>tar -xvzf qwtplot3d-Z.Z.Z.tgz</code></li>
 				<li>We also want to build a static version here, so open qwtplot3d/qwtplot3d.pro in your favorite text editor and add the line<br>
@@ -71,8 +69,8 @@
 				<li>Go to the directory scidavis-X.X.X/scidavis:<br><code>cd ../scidavis</code></li>
 				<li>If you want to use Python expressions and scripts, make sure you have the following additional dependencies installed:
 				<a href="http://www.python.org/">Python</a> 2.5,
-				<a href="http://www.riverbankcomputing.co.uk/sip">SIP</a> 4.5.2 or 4.6,
-				<a href="http://www.riverbankcomputing.co.uk/pyqt">PyQt</a> 4.2.
+				<a href="http://www.riverbankcomputing.co.uk/software/sip/intro">SIP</a> 4.5.2 or 4.6,
+				<a href="http://www.riverbankcomputing.co.uk/software/pyqt/intro">PyQt</a> 4.2.
 				Other versions as those indicated above may or may not work.
 				Specifically, there are known issues with a number of SIP versions and
 				a given version of PyQt will only work with a limited range of SIP
@@ -105,11 +103,11 @@
 			<code>;D:\Qt\4.2.3\bin;D:\MinGW\bin;D:\Python25</code> (use the paths where you installed Qt, Python, and MinGW) to the existing string there.
 			</li>
 			<li>Download the SIP source code for Windows from
-			<a href="http://www.riverbankcomputing.co.uk/sip/download.php">http://www.riverbankcomputing.co.uk/sip/download.php</a>
+			<a href="http://www.riverbankcomputing.co.uk/software/sip/download">http://www.riverbankcomputing.co.uk/software/sip/download</a>
 			and unpack it.
 			</li>
 			<li>Download the PyQt v4 source code for Windows from
-			<a href="http://www.riverbankcomputing.co.uk/pyqt/download.php">http://www.riverbankcomputing.co.uk/pyqt/download.php</a>
+			<a href="http://www.riverbankcomputing.co.uk/software/pyqt/download">http://www.riverbankcomputing.co.uk/software/pyqt/download</a>
 			and unpack it.
 			</li>
 			<li>Download the "Developer files" of the GSL from
@@ -174,6 +172,206 @@ SUBDIRS += fitPlugins/fitRational0\
 			</li>
 			<li>Copy qwtplot3d.dll to the directory where you installed scidavis.exe.
 			</ol>
+
+			<h1>Mac OS X</h1>
+
+			<p>These instructions where kindly provided by Yu-Hung Lien.</p>
+
+			<p>
+			<b>Downloading the requirements:</b><br>
+			Please download Qt, GSL, MuParser, Qwt and Qwt3D from their web sites before building:<br>
+			<ol>
+
+			<li>Qt: <a href="ftp://ftp.trolltech.com/qt/source/qt-mac-opensource-4.4.1.dmg">ftp://ftp.trolltech.com/qt/source/qt-mac-opensource-4.4.1.dmg</a> (this is for version 4.4.1, the current one at the time of writing, there may be a newer)<br>
+			
+
+			<li>GSL: <a href="ftp://ftp.gnu.org/gnu/gsl/">ftp://ftp.gnu.org/gnu/gsl/</a> (the current version at the time of writing: 1.11)</li>
+
+			<li>muParser: <a href="http://downloads.sourceforge.net/muparser/muparser_v130.tar.gz?modtime=1219351493&big_mirror=0">http://downloads.sourceforge.net/muparser/muparser_v130.tar.gz?modtime=1219351493&big_mirror=0"</a> (the current version at the time of writing: 1.30)</li>
+
+			<li>Qwt: <a href="http://downloads.sourceforge.net/qwt/qwt-5.1.1.zip?modtime=1211655872&big_mirror=0">http://downloads.sourceforge.net/qwt/qwt-5.1.1.zip?modtime=1211655872&big_mirror=0</a> (the current version at the time of writing: 5.1.1)</li>
+
+			<li>QwtPlot3D: <a href="http://prdownloads.sourceforge.net/qwtplot3d/qwtplot3d-0.2.7.zip?download">http://prdownloads.sourceforge.net/qwtplot3d/qwtplot3d-0.2.7.zip?download</a> (the current version at the time of writing: 0.2.7)</li>
+			</ol>
+			</p>
+
+			<p>
+			<b>(I) Building the OS X binary on one's own platform:</b><br>
+			
+			<ol>
+			<li value=1> Open the image file and install Qt for Mac. </li>
+
+			<li value=2> Open Terminal and change to the directory which the gsl-x.xx.tar.gz locates. For example, type "cd Downloads", if gsl-x.xx.tar.gz locates in the downloads folder of your home directory. </li>
+
+			<li value=3> Type " tar -xzf gsl-x.xx.tar.gz" to extract the files </li>
+
+			<li value=4> Type "cd gsl-x.xx" </li>
+
+			<li value=5> Type "./configure". </li>
+
+			<li value=6> Type " sudo make" and enter your password as prompted. </li>
+
+			<li value=7> If there is no error occurring, then type "sudo make install" to install GSL. If you regret for the installation, you can type "sudo make uninstall". If there is any error occurs and you want to restart the process, please type "make clean". </li>
+
+
+			<li value=8> Change to the directory which the muparser*.tar.gz locates and type " tar -xzf muparser*.tar.gz" to extract the files. </li>
+
+			<li value=9> Type "cd muparser". </li>
+
+			<li value=10> Type "./configure --enable-shared=no" because scidavis requires static library. </li>
+
+			<li value=11> Type "make". </li>
+
+			<li value=12> Type "sudo make install". The same options of make in (7) are still applicable. </li>
+
+
+			<li value=13> Change to the directory which the qwt*.zip locates and type "unzip qwt*.zip" to extract the files. </li>
+
+
+			<li value=14> Change to the directory which the qwtplot3d*.zip locates and type "unzip qwtplot3d*.zip" to extract the files. </li>
+
+
+			<li value=15> Change to the directory which the scidavis*.zip locates and type "unzip scidavis*.zip" to extract the files. </li>
+
+
+			<li value=16> Copy both qwt-*.*.* and qwtplot3d folders into scidavis_*/3rdparty/, and change the folder name qwt-*.*.* into qwt </li>
+
+
+			<li value=17> Change to the newly created directory scidavis*/3rdparty/qwt </li>
+
+			<li value=18> Open qwtconfig.pri with any text editor and add "#" at the beginning of the line "CONFIG           += QwtDll" for building static library. </li>
+
+			<li value=19> Type "qmake -spec macx-g++" to create make file for gcc compilier instead of xcode. </li>
+
+			<li value=20> Type "make". The same option "clean" of make in (7) is still applicable here. </li>
+
+
+			<li value=21> Change to the newly created directory scidavis*/3rdparty/qwtplot3d </li>
+
+			<li value=22> Open qwtplot3d.pro with any text editor and add a line "CONFIG += staticlib" next to the line "QT += opengl" for building static library. </li>
+
+			<li value=23> Type "qmake -spec macx-g++" to create make file for gcc compilier instead of xcode. </li>
+
+			<li value=24> Type "make". The same option "clean" of make in (7) is still applicable here. </li>
+
+
+			<li value=25> Change to the directory scidavis*/fitplugins/fitrational0. </li>
+
+			<li value=26> Open fitrational0.pro with any text editor, and remove the white space between -L and /usr/........... in the line "unix:LIBS += -L /usr/lib$${libsuff} -lgsl -lgslcblas" </li>
+
+
+			<li value=27> Change to the directory scidavis*/fitplugins/fitrational1. </li>
+
+			<li value=28> Open fitrational1.pro with any text editor, and remove the white space between -L and /usr/........... in the line "unix:LIBS += -L /usr/lib$${libsuff} -lgsl -lgslcblas" </li>
+
+
+			<li value=29> Open scidavis*/scidavis/src/future/core/AbstractAspect.h with any text editor </li>
+
+			<li value=30> Add "#include <QXmlStreamWriter>" but remove "class QXmlStreamWriter;" to account a Qt XML bug in Mac OS X. The related discussions can be found at: 
+			<a href="https://sourceforge.net/forum/forum.php?thread_id=2177079&forum_id=708156">https://sourceforge.net/forum/forum.php?thread_id=2177079&forum_id=708156</a>
+			<a href="http://lists.trolltech.com/qt-interest/2008-07/thread00798-0.html">http://lists.trolltech.com/qt-interest/2008-07/thread00798-0.html</a>
+			</li>
+
+
+			<li value=31> Back to scidavis*/ and type "qmake -spec macx-g++" </li>
+
+			<li value=32> Type "sudo make" </li>
+
+			<li value=33> As the building ends up with no error, the scidavis application will be in scidavis*/scidavis. Unfortunately, the icon seems missed for some unknown reason and shows as a generic application icon. </li>
+			</ol>
+
+			<b>(II) Building Universal Binaries (UB):</b><br>
+
+				The whole process is essentially same as above except some extra commands for universal binaries. The references for building universal binaries for typical unix make systems can be found at:<br>
+
+				<ol>
+
+				<li><a href="http://developer.apple.com/documentation/Porting/Conceptual/PortingUnix/compiling/chapter_4_section_3.html#//apple_ref/doc/uid/TP40002850-BAJCFEBA">Porting UNIX/Linux Applications to Mac OS X: Compiling for Multiple CPU Architectures</a></li>
+
+				<li><a href="http://developer.apple.com/technotes/tn2005/tn2137.html">Building Universal Binaries from "configure"-based Open Source Projects</a></li>
+
+				<li><a href="http://doc.trolltech.com/4.4/qmake-platform-notes.html#mac-os-x">qmake Platform Notes</a></li>
+
+				<li><a href="http://doc.trolltech.com/4.4/deployment-mac.html">Deploying an Application on Qt/Mac</a></li>
+				</ol>
+				<br>
+
+				The basic step for building UB is to pass the option "-arch ppc -arch i386" to compiler gcc and linker ld. Qt simply takes care this problem by adding the block<br>
+				<code>
+				macx {<br>
+					CONFIG += x86 ppc<br>
+				}<br>
+				</code>
+			in each source's *.pro file. However, it is somewhat different for unix "configure"-base stuffs. The followings are the procedure for reference.<br>
+			<ol>
+			<li value=1> Building GSL in UB </li>
+			<ol>
+			<li type=a> Change to the root directory of GSL source and type "./configure --disable-dependency-tracking" </li>
+
+			<li type=a> Type "make CFLAGS="-g -O2 -arch i386 -arch ppc" LDFLAGS="-arch i386 -arch ppc"" to pass the desired option. The original values of CFLAGS and LDFLAGS in makefile after executing configure script are "-g -O2" and "", respectively. Therefore, I just append "-arch i386 -arch ppc" to the original values and put them after "make" to override. </li>
+
+			<li type=a> Same as (I).(7). </li>
+
+			</ol>
+			<li value=2> Building muParser in UB </li>
+			<ol>
+
+			<li type=a> Change to the root directory of GSL source and type "./configure --enable-shared=no --disable-dependency-tracking". </li>
+
+			<li type=a> Type "make CPPFLAGS="-arch i386 -arch ppc" LDFLAGS="-arch i386 -arch ppc"". I do not use CFLAGS variable becuase the makefile does not contain it. However, I find CPPFLAGS, which should stands for c++ flags, in makefile and then I use it to pass the desired option. </li>
+
+			<li type=a> Same as (I).(12). </li>
+			</ol>
+
+			<li value=3> Building Qwt and QwtPlot3D in UB </li>
+			<ol>
+			<li type=a> Change to scidavis*/3rdparty/qwt and open qwtconfig.pri with text editor. </li>
+
+			<li type=a> Adding the block </li>
+			<code>
+			macx {<br>
+			CONFIG += x86 ppc<br>
+			}<br>
+			</code>
+			after "CONFIG           += thread". In fact, this location is somewhat arbitrary and not necessary to be here.
+
+			<li type=a> Same as (I).(18)--(20) </li>
+
+			<li type=a> Change to scidavis*/3rdparty/qwtplot3d and open qwtplot3d.pro with text editor. </li>
+
+			<li type=a> Adding the block<br>
+			<code>
+			macx {<br>
+			CONFIG += x86 ppc<br>
+			}
+			</code>
+			after "QT           += opengl". In fact, this location is somewhat arbitrary and not necessary to be here.</li>
+
+			<li type=a> Same as (I).(22)--(24) </li>
+			</ol>
+
+			<li value=4> Building SciDavis in UB </li>
+			<ol>
+			<li type=a> Change to scidavis*/scidavis and open scidavis.pro with text editor. </li>
+
+			<li type=a> Adding the block<br>
+			<code>
+			macx {<br>
+			CONFIG += x86 ppc<br>
+			}
+			</code>
+in the section for "Default settings for Linux / Mac OS X"</li>
+		
+			<li type=a> Same as (I).(25)--(35) </li>
+			</ol>
+			</ol>
+
+			<br>
+			<p>
+			Closing remark: The described procedures are testes and built on OS X 10.5.4 and a macbook. The older OS such as 10.4.x and PPC machine might need to minor revision on the procedures. For example, "QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.4u.sdk" might need to be added into the *.pro, "-isysroot /Developer/SDKs/MacOSX10.4u.sdk" need to be added into CFLAGS and LDFLAGS.<br>
+			<br>
+			Good luck building scidavis on Mac OS X. - Yu-Hung Lien<br>
+			</p>
 
 			<h1>Additional information</h1>
 

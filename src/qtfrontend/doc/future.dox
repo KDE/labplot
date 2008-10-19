@@ -1,5 +1,12 @@
 /**\page future Future Plans
 
+See this page:http://scidavis.sourceforge.net/contributing/plans.html
+for an updated plans and tasks description. 
+As SciDAVis (since Sep. 2008) collaborates closely with the LabPlot project, 
+looking here:http://sourceforge.net/projects/labplot/ and especially 
+here:http://sourceforge.net/mailarchive/forum.php?forum_name=labplot-devel 
+is also a good idea.
+
 - Make SciDAVis easier to extend and maintain by modularizing it and add 
  generic plug-in support, support for implementing extensions in Python. 
 For example, ideally it should be possible to implement new plot or marker

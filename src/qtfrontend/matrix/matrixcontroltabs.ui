@@ -49,14 +49,6 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="coordinates_tab" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>252</width>
-        <height>198</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Coordinates</string>
       </attribute>
@@ -64,7 +56,7 @@
        <item>
         <widget class="QPushButton" name="button_set_coordinates" >
          <property name="text" >
-          <string>&amp;Apply</string>
+          <string>Appl&amp;y</string>
          </property>
         </widget>
        </item>
@@ -329,14 +321,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="format_tab" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>252</width>
-        <height>198</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Format</string>
       </attribute>
@@ -356,14 +340,14 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Apply new type and format to all selected columns&lt;/p>&lt;/body>&lt;/html></string>
          </property>
          <property name="text" >
-          <string>&amp;Apply</string>
+          <string>Appl&amp;y</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0" >
         <widget class="QLabel" name="format_label" >
          <property name="text" >
-          <string>&amp;Format:</string>
+          <string>Format:</string>
          </property>
          <property name="buddy" >
           <cstring>format_box</cstring>
@@ -398,7 +382,7 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="0" >
         <widget class="QLabel" name="digits_label" >
          <property name="text" >
-          <string>&amp;Decimal Digits:</string>
+          <string>Decimal Digits:</string>
          </property>
          <property name="buddy" >
           <cstring>digits_box</cstring>
@@ -489,14 +473,6 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="formula_tab" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>252</width>
-        <height>198</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Formula</string>
       </attribute>
@@ -504,7 +480,7 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="0" >
         <widget class="QLabel" name="formula_label" >
          <property name="text" >
-          <string>&amp;Formula:</string>
+          <string>Formula:</string>
          </property>
          <property name="buddy" >
           <cstring>formula_box</cstring>
@@ -520,7 +496,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Apply the formula to all selected cells&lt;/p>&lt;/body>&lt;/html></string>
          </property>
          <property name="text" >
-          <string>&amp;Apply</string>
+          <string>Appl&amp;y</string>
          </property>
         </widget>
        </item>
