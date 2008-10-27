@@ -29,7 +29,7 @@
 #ifndef PLOTSURFACESTYLEWIDGET_H
 #define PLOTSURFACESTYLEWIDGET_H
 
-#include "../ui_plotsurfacestylewidget.h"
+#include "ui_plotsurfacestylewidget.h"
 #include "PlotStyleWidget.h"
 
 /*!

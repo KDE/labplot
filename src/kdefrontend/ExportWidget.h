@@ -2,10 +2,10 @@
 #define EXPORTWIDGET_H
 
 #include <QtGui>
-#include "../ui_exportwidget.h"
+#include "ui_exportwidget.h"
 class MainWin;
 class Spreadsheet;
-//#include "../binaryformat.h"
+//#include "elements/binaryformat.h"
 
 /**
  * @brief Represents the widget where all the export settings can be modified

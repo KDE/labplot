@@ -28,7 +28,7 @@
  ***************************************************************************/
 #include "SettingsDialog.h"
 
-#include "../MainWin.h"
+#include "MainWin.h"
 #include "SettingsGeneralPage.h"
 #include "SettingsPrintingPage.h"
 

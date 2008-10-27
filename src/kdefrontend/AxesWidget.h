@@ -31,9 +31,9 @@
 
 #include <QtGui>
 
-#include "../ui_axeswidget.h"
-#include "../plots/Plot.h"
-#include "../elements/Axis.h"
+#include "ui_axeswidget.h"
+#include "plots/Plot.h"
+#include "elements/Axis.h"
 
 class LabelWidget;
 

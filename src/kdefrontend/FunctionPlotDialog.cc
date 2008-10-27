@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "FunctionPlotDialog.h"
-#include "../MainWin.h"
+#include "MainWin.h"
 #include "FunctionPlotWidget.h"
 #include <KDebug>
 

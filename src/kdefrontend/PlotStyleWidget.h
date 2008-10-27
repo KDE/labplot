@@ -29,7 +29,7 @@
 #ifndef PLOTSTYLEWIDGET_H
 #define PLOTSTYLEWIDGET_H
 
-#include "../ui_plotstylewidget.h"
+#include "ui_plotstylewidget.h"
 
 class Style;
 

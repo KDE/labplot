@@ -58,7 +58,7 @@ class SciDAVis : public QObject
 			Y = 2, //!< y values 
 			Z = 3, //!< z values
 			xErr = 4, //!< x errors
-			yErr = 5 //!< y errors
+			yErr = 5  //!< y errors
 		};
 
 		//! The column mode (defines output and input filter for table columns)
@@ -68,7 +68,7 @@ class SciDAVis : public QObject
 			Text = 1,       //!< column contains strings
 			Month = 4,      //!< column contains month names
 			Day = 5,        //!< column containts day of week names
-			DateTime = 6,   //!< column contains dates and/or times
+			DateTime = 6    //!< column contains dates and/or times
 			// 2 and 3 are skipped to avoid problems with old obsolete values
 		};
 

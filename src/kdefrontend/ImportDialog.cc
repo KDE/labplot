@@ -29,7 +29,7 @@
 
 #include <KDebug>
 #include "ImportDialog.h"
-#include "../MainWin.h"
+#include "MainWin.h"
 
 ImportDialog::ImportDialog(MainWin *parent) : KDialog(parent), mainWin(parent) {
 	kDebug()<<endl;

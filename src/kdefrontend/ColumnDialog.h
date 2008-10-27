@@ -30,12 +30,11 @@
 #ifndef COLUMNDIALOG_H
 #define COLUMNDIALOG_H
 
-#include "../ui_columndialog.h"
-class MainWin;
+#include "ui_columndialog.h"
 class Spreadsheet;
 
 /**
- * @brief Provides a dialog for editing the properties of a spreadsheet column.
+ * @brief Provides a dialog for editing the properties of the current spreadsheet column.
  */
 class ColumnDialog: public KDialog {
 	Q_OBJECT

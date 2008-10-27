@@ -29,7 +29,7 @@
 #include "AxesDialog.h"
 #include "AxesWidget.h"
 #include "../elements/Axis.h"
-#include "../Worksheet.h"
+#include "Worksheet.h"
 #include <KDebug>
 
 AxesDialog::AxesDialog(QWidget* parent) : KDialog(parent){

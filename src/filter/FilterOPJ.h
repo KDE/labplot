@@ -31,7 +31,7 @@
 #define FILTEROPJ_H
 
 #include <QString>
-#include "../MainWin.h"
+#include "../kdefrontend/MainWin.h"
 #include "../elements/Symbol.h"
 
 class FilterOPJ

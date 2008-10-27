@@ -1,1 +1,7 @@
+# for building KDE4 frontend (LabPlot) just use 
+
 cmake . -DCMAKE_INSTALL_PREFIX=/usr && make
+
+# for building Qt Frontend (SciDAVis) use
+
+# cd src/qtfrontend && qmake scidavis.pro && make

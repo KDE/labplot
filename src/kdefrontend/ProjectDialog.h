@@ -32,7 +32,7 @@
 
 #include <KDialog>
 #include <QtGui>
-#include "../ui_projectdialog.h"
+#include "ui_projectdialog.h"
 class MainWin;
 class Project;
 

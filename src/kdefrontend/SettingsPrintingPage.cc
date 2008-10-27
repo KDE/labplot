@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "SettingsPrintingPage.h"
-#include "../MainWin.h"
+#include "MainWin.h"
 
 SettingsPrintingPage::SettingsPrintingPage(MainWin* main, QWidget* parent)
 	:SettingsPage(parent){

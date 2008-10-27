@@ -28,7 +28,7 @@
  ***************************************************************************/
 #include "TitleDialog.h"
 #include "LabelWidget.h"
-#include "../Worksheet.h"
+#include "Worksheet.h"
 #include <KDebug>
 
 TitleDialog::TitleDialog(QWidget* parent): KDialog(parent){

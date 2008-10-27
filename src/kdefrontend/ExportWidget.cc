@@ -2,13 +2,12 @@
 #include <KMessageBox>
 #include <KFilterDev>
 #include "ExportWidget.h"
-#include "../MainWin.h"
-#include "../Spreadsheet.h"
-#include "../filter/FilterOPJ.h"
-#include "../filter/FilterHDF5.h"
-#include "../filter/FilterCDF.h"
-#include "../filter/FilterNETCDF.h"
-#include "../export.h"
+#include "MainWin.h"
+#include "filter/FilterOPJ.h"
+#include "filter/FilterHDF5.h"
+#include "filter/FilterCDF.h"
+#include "filter/FilterNETCDF.h"
+#include "elements/export.h"
 
 ExportWidget::ExportWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);

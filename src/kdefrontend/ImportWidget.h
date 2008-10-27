@@ -30,11 +30,11 @@
 #define IMPORTWIDGET_H
 
 #include <QtGui>
-#include "../ui_importwidget.h"
+#include "ui_importwidget.h"
 class MainWin;
 class Spreadsheet;
 class Table;
-#include "../binaryformat.h"
+#include "elements/binaryformat.h"
 
 /**
  * @brief Represents the widget where all the import settings can be modified

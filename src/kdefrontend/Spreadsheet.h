@@ -39,7 +39,7 @@
 #include "table/TableModel.h"
 #include "table/Table.h"
 #include "elements/Set.h"
-#include "sheettype.h"
+#include "elements/sheettype.h"
 
 class QHBoxLayout;
 class MainWin;
@@ -51,18 +51,16 @@ public:
 	Spreadsheet(Table *table);
 	~Spreadsheet();
 	SheetType sheetType() const { return m_type; }
-#if 0
 	void resetHeader(int from=0);
-#endif
 	void addSet(Set* set);
 	Set* set(){ return m_set;}
 
 	QString columnName(int col) const;
 	void setColumnName(int col, QString name);
-	QString columnType(int col) const;
-	void setColumnType(int col, QString name);
-	QString columnFormat(int col) const;
-	void setColumnFormat(int col, QString name);
+	SciDAVis::PlotDesignation columnType(int col) const;
+	void setColumnType(int col, SciDAVis::PlotDesignation type);
+	SciDAVis::ColumnMode columnFormat(int col) const;
+	void setColumnFormat(int col, SciDAVis::ColumnMode name);
 
 	int rowCount() const { return m_table->rowCount(); }
 	void setRowCount(int count) { m_table->setRowCount(count); }
@@ -94,7 +92,9 @@ public slots:
 	void addColumn() { setColumnCount(columnCount()+1); }
 	QString Notes() const { return m_table->comment(); }
 	void setNotes(QString notes="");
-	void setProperties(QString label=0, int type=1, int format=0);
+	void setProperties(QString label=0, 
+		SciDAVis::PlotDesignation type=SciDAVis::X, 
+		SciDAVis::ColumnMode format=SciDAVis::Numeric);
 
 private slots:
 	void plot();		//!< create a plot from the selected data

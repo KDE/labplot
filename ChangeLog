@@ -1,3 +1,6 @@
+2008-10-26,sg	moved MainWin,etc. to kdefrontend/
+		cleaned up src/ directory
+		column dialog for new format
 2008-10-12,sg	moved gui/ to kdefrontend/
 2008-10-03,sg	source copyright added
 2008-09-30,sg	improved ExportDialog

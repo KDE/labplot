@@ -29,7 +29,7 @@
 
 #include <KDebug>
 #include "ExportDialog.h"
-#include "../MainWin.h"
+#include "MainWin.h"
 
 ExportDialog::ExportDialog(Spreadsheet *parent) : KDialog(parent) {
 	kDebug()<<endl;

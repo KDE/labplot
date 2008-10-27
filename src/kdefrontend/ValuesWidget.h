@@ -29,7 +29,7 @@
 #ifndef VALUESWIDGET_H
 #define VALUESWIDGET_H
 
-#include "../ui_valueswidget.h"
+#include "ui_valueswidget.h"
 
 /**
  * \brief Widget for changing the properties of the values annotation.

@@ -1,5 +1,0 @@
-I am not moving the LabPlot files here because that would 
-make merging back to the main branch much harder. Once everything 
-is in merged, this directory should contain all files 
-that depend on KDE libraries and those that are
-only used by LabPlot.

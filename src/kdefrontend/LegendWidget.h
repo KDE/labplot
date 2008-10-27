@@ -30,7 +30,7 @@
 #define LEGENDWIDGET_H
 
 #include <QtGui>
-#include "../ui_legendwidget.h"
+#include "ui_legendwidget.h"
 
 class Legend;
 

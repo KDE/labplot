@@ -36,7 +36,7 @@
 #include "core/ProjectWindow.h"
 #include "core/ProjectConfigPage.h"
 #else
-#include "MainWin.h"
+#include "kdefrontend/MainWin.h"
 #endif
 #include <QUndoStack>
 #include <QString>

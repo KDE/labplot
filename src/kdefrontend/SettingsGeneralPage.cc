@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "SettingsGeneralPage.h"
-#include "../MainWin.h"
+#include "MainWin.h"
 
 #include <KDialog>
 #include <KLocale>

@@ -95,7 +95,7 @@ void Label::draw(QPainter *p, const Point pos, const Point size, const int w, co
 	tmpfont.setPointSize((int)(size.X()*tmpsize));
 */
 
-	float xOffset, yOffset;
+	float xOffset=0, yOffset=0;
 	QRect box;
 	box.setTopLeft( QPoint(0, 0) );
 

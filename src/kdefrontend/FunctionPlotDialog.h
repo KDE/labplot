@@ -31,7 +31,7 @@
 
 #include <QtGui>
 #include "kdialog.h"
-#include "../plots/Plot.h"
+#include "plots/Plot.h"
 
 class MainWin;
 class FunctionPlotWidget;

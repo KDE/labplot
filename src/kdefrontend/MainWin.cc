@@ -31,13 +31,13 @@
 
 #include "MainWin.h"
 //****** GUI **************
-#include "kdefrontend/AxesDialog.h"
-#include "kdefrontend/FunctionPlotDialog.h"
-#include "kdefrontend/ImportDialog.h"
-#include "kdefrontend/LegendDialog.h"
-#include "kdefrontend/ProjectDialog.h"
-#include "kdefrontend/SettingsDialog.h"
-#include "kdefrontend/TitleDialog.h"
+#include "AxesDialog.h"
+#include "FunctionPlotDialog.h"
+#include "ImportDialog.h"
+#include "LegendDialog.h"
+#include "ProjectDialog.h"
+#include "SettingsDialog.h"
+#include "TitleDialog.h"
 
 #include <KApplication>
 #include <KAction>
@@ -51,7 +51,7 @@
 #include <KDebug>
 #include <KFilterDev>
 
-#include "sheettype.h"
+#include "elements/sheettype.h"
 #include "pixmaps/pixmap.h"
 
 #include "core/Project.h"

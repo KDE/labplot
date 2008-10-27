@@ -32,7 +32,7 @@
 #include <QtGui>
 
 #include "SettingsPage.h"
-#include "../ui_settingsprintingpage.h"
+#include "ui_settingsprintingpage.h"
 
 class MainWin;
 

@@ -29,8 +29,8 @@
 #ifndef FUNCTIONWIDGET_H
 #define FUNCTIONWIDGET_H
 
-#include "../ui_functionplotwidget.h"
-#include "../plots/Plot.h"
+#include "ui_functionplotwidget.h"
+#include "plots/Plot.h"
 
 class Set;
 class LabelWidget;

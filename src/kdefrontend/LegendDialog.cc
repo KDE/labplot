@@ -29,7 +29,7 @@
 #include "LegendDialog.h"
 #include "LegendWidget.h"
 #include "../elements/Legend.h"
-#include "../Worksheet.h"
+#include "Worksheet.h"
 #include <KDebug>
 
 LegendDialog::LegendDialog(QWidget* parent) : KDialog(parent){

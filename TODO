@@ -40,7 +40,6 @@ General :
 	http://techbase.kde.org/index.php?title=Policies/Library_Code_Policy
 	"Class names starts with a capital K. The rest is in camel case.
 	Function names starts with a lower case, but the first letter of each successive word is capitalized."
-	* split up the src-directory in gui, filters etc.
 	* check functions.h, constants.h
 		* use GSL
 		* GSL_VERSION
@@ -112,16 +111,10 @@ more things :
 
 ##############################################################################################################
 PLANNED NEW FEATURES :
+	* Undo/Redo support
+		-> using new backend classes
 	* independent/different y axes
 		* option to disconnect y2,x2 axes ?
-	* Undo/Redo support
-		-> libundo
-			U CRASH : menu after undo
-			* in Worksheet
-			* TODO : MainWin::redoAction()
-		-> History of actions? Can also be used to save all action ("Replay")
-			"class History"
-			How to  ...
 	* Categorical x-axis (also y-axis ?)	-> see mails
 	* custom ticks (position & label)
 	* parametric plot 

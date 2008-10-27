@@ -30,7 +30,7 @@
 #define AXESDIALOG_H
 
 #include <KDialog>
-#include "../plots/Plot.h"
+#include "plots/Plot.h"
 
 class AxesWidget;
 class Axis;

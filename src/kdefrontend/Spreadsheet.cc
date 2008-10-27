@@ -39,19 +39,17 @@
 
 #include "Spreadsheet.h"
 #include "MainWin.h"
-#include "kdefrontend/ColumnDialog.h"
+#include "ColumnDialog.h"
+#include "ExportDialog.h"
+#include "FunctionPlotDialog.h"
 #include "pixmaps/pixmap.h"
 #include "elements/Point3D.h"
-#include "kdefrontend/ExportDialog.h"
-#include "kdefrontend/FunctionPlotDialog.h"
 
-#include "table/Table.h"
-#include "table/TableModel.h"
 #include "table/tablecommands.h"
 #include "lib/macros.h"
 #include "core/Project.h"
-#include "core/column/Column.h"
 #include "core/AbstractFilter.h"
+#include "core/column/Column.h"
 #include "core/datatypes/SimpleCopyThroughFilter.h"
 #include "core/datatypes/Double2StringFilter.h"
 #include "core/datatypes/String2DoubleFilter.h"
@@ -311,80 +309,61 @@ QString Spreadsheet::columnHeader(int col) const {
 	return m_view_widget->model()->headerData(col,Qt::Horizontal).toString();
 }
 
-void Spreadsheet::setProperties(QString label, int type, int format) {
-#if 0 // TODO: I strongly recommend not to store such information in a string, see SciDAVis' TableModel for a better way to generate the header - Tilman
+void Spreadsheet::setProperties(QString label, 
+	SciDAVis::PlotDesignation type, SciDAVis::ColumnMode format) {
+	kDebug()<<label<<type<<format<<endl;
+	
 	if(label.isEmpty())
 		(new ColumnDialog(this,this))->show();
-	else
-		// NEW : m_table->column(currentColumn())->setName(label);
-		setColumnHeader(currentColumn(),label + ' ' + '{'+columnformatitems[format]+'}' + ' ' + '['+columntypeitems[type]+']');
-#endif
+	else {
+		setColumnName(currentColumn(),label);
+		setColumnType(currentColumn(),type);
+		setColumnFormat(currentColumn(),format);
+	}	
 }
 
-#if 0  // TODO: rewrite the TableModel to show the header in this way
 void Spreadsheet::resetHeader(int from) {
 	kDebug()<<endl;
 	for (int col=from;col<columnCount();col++) {
-		QString l;
+		setColumnFormat(col,SciDAVis::Numeric);
 		if(col==0)
-			l=(QChar(col+65)+' '+'{'+columnformatitems[0]+'}'+' '+'['+columntypeitems[0]+']');
-		else if(col<26)
-			l=(QChar(col+65)+' '+'{'+columnformatitems[0]+'}'+' '+'['+columntypeitems[1]+']');
+			setColumnType(col,SciDAVis::X);
 		else
-			l=(QString(QChar(65+col/26-1)) +QString(QChar(65+col%26))+' '+'{'+columnformatitems[0]+'}'+' '+'['+columntypeitems[1]+']');
-		setColumnHeader(col,l);
+			setColumnType(col,SciDAVis::Y);
+		if(col<26)
+			setColumnName(col,QChar(col+65));
+		else		
+			setColumnName(col,QString(QChar(col/26-1+65))+QString(QChar(65+col%26)));
 	}
 }
-#endif
 
-QString Spreadsheet::columnName(int col) const {
-	return m_table->column(col)->name();
+QString Spreadsheet::columnName(int col) const { 
+	if(col<0 || col > columnCount()) return QString();
+	return m_table->column(col)->name(); 
 }
 
 void Spreadsheet::setColumnName(int col, QString name) {
-	kDebug()<<"column ="<<col<<", name = "<<name<<endl;
+	if(col<0 || col > columnCount()) return;
+//	kDebug()<<"column ="<<col<<", name = "<<name<<endl;
 	if(col<0) return;
 	m_table->column(col)->setName(name);
 }
 
-
-QString Spreadsheet::columnType(int col) const {
-#if 0 // TODO: see comment in setProperties
-	QString header = columnHeader(col);
-	header.remove(QRegExp(".*\\["));
-	header.remove(QRegExp("\\].*"));
-	return header;
-#endif
-	return QString();
+SciDAVis::PlotDesignation Spreadsheet::columnType(int col) const {
+	if(col<0 || col > columnCount()) return SciDAVis::noDesignation;
+	return m_table->column(col)->plotDesignation();
 }
 
-void Spreadsheet::setColumnType(int col, QString type) {
-#if 0 // TODO: see comment in setProperties
-	kDebug()<<"column ="<<col<<",type = "<<type<<endl;
-	if(col<0) return;
-	QString label = columnHeader(col);
-	label.replace(QRegExp(" \\[.+\\]"),QString(" ["+type+"]"));
-	setColumnHeader(col, label);
-#endif
+void Spreadsheet::setColumnType(int col, SciDAVis::PlotDesignation type) {
+	m_table->column(col)->setPlotDesignation(type);
 }
 
-QString Spreadsheet::columnFormat(int col) const {
-#if 0 // TODO: see comment in setProperties
-	QString header = columnHeader(col);
-	header.remove(QRegExp(".*\\{"));
-	header.remove(QRegExp("\\}.*"));
-	return header;
-#endif
+SciDAVis::ColumnMode Spreadsheet::columnFormat(int col) const {
+	return m_table->column(col)->columnMode();
 }
 
-void Spreadsheet::setColumnFormat(int col, QString format) {
-#if 0 // TODO: see comment in setProperties
-	kDebug()<<"column ="<<col<<",type = "<<format<<endl;
-	if(col<0) return;
-	QString label = columnHeader(col);
-	label.replace(QRegExp(" \\{.+\\}"),QString(" {"+format+"}"));
-	setColumnHeader(col, label);
-#endif
+void Spreadsheet::setColumnFormat(int col, SciDAVis::ColumnMode format) {
+	m_table->column(col)->setColumnMode(format);
 }
 
 int Spreadsheet::filledRows(int col) const {

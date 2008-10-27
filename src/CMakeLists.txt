@@ -11,8 +11,10 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/ImportDialog.cc
 	${KDEFRONTEND_DIR}/ImportWidget.cc
 	${KDEFRONTEND_DIR}/LabelWidget.cc
+ 	${KDEFRONTEND_DIR}/LabPlot.cc
 	${KDEFRONTEND_DIR}/LegendDialog.cc
 	${KDEFRONTEND_DIR}/LegendWidget.cc
+  	${KDEFRONTEND_DIR}/MainWin.cc
   	${KDEFRONTEND_DIR}/PlotStyleWidget.cc
  	${KDEFRONTEND_DIR}/PlotSurfaceStyleWidget.cc
 	${KDEFRONTEND_DIR}/ProjectDialog.cc
@@ -20,8 +22,10 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cc
 	${KDEFRONTEND_DIR}/SettingsPage.cc
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cc
+  	${KDEFRONTEND_DIR}/Spreadsheet.cc
 	${KDEFRONTEND_DIR}/TitleDialog.cc
 	${KDEFRONTEND_DIR}/ValuesWidget.cc
+  	${KDEFRONTEND_DIR}/Worksheet.cc
 )
 
 set(ELEMENTS_SOURCES
@@ -52,12 +56,6 @@ set(PLOTS_SOURCES
 set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
   parser/parser.tab.c
   tools/TexRenderer.cc
-  LabPlot.cc
-  MainWin.cc
-#  Project.cc
-  Spreadsheet.cc
-#  TableModel.cc
-  Worksheet.cc
 )
 
 set(UI_SOURCES
@@ -99,6 +97,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/String2DateTimeFilter.cpp
 	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
 	${BACKEND_DIR}/table/Table.cpp
+	${BACKEND_DIR}/table/TableModel.cpp
 	${BACKEND_DIR}/table/tablecommands.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 )
@@ -107,7 +106,6 @@ set(QTFRONTEND_SOURCES
 	${QTFRONTEND_DIR}/core/ProjectExplorer.cpp
 	${QTFRONTEND_DIR}/core/PartMdiView.cpp
 	${QTFRONTEND_DIR}/core/AspectTreeModel.cpp
-	${QTFRONTEND_DIR}/table/TableModel.cpp
 )
 
 set(QTMOC_HDRS

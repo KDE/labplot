@@ -29,11 +29,10 @@
 
 #include <KDebug>
 #include "ColumnDialog.h"
-#include "../column.h"
-#include "../MainWin.h"
+#include "Spreadsheet.h"
 
 ColumnDialog::ColumnDialog(QWidget *parent, Spreadsheet *s) : KDialog(parent), s(s) {
-	kDebug()<<"ColumnDialog()"<<endl;
+	kDebug()<<endl;
 
 	setupGUI();
 }
@@ -44,10 +43,32 @@ void ColumnDialog::setupGUI() {
 	ui.setupUi(widget);
 	
 	ui.leLabel->setText(s->columnName(s->currentColumn()));
-	ui.cbFormat->insertItems(0,columnformatitems);
-	ui.cbFormat->setCurrentItem(s->columnFormat(s->currentColumn()));
-	ui.cbType->insertItems(0,columntypeitems);
-	ui.cbType->setCurrentItem(s->columnType(s->currentColumn()));
+
+	// column format selection
+	unsigned int i=0, j=0;
+	kDebug()<<"size : "<<sizeof(SciDAVis::ColumnMode)<<endl;
+	do {
+		QString item = SciDAVis::enumValueToString(j++, "ColumnMode");
+		kDebug()<<i<<item<<endl;
+		if(! item.isEmpty())
+			ui.cbFormat->insertItem(i++,item);
+	} while (i<5);
+	// sizeof(SciDAVis::ColumnMode) does not work	
+	//kDebug()<<s->columnFormat(s->currentColumn())<<endl;
+	ui.cbFormat->setCurrentIndex((int)s->columnFormat(s->currentColumn()));
+
+	// column type selection
+	i=0, j=0;
+	kDebug()<<"size : "<<sizeof(SciDAVis::PlotDesignation)<<endl;
+	do {
+		QString item = SciDAVis::enumValueToString(j++, "PlotDesignation");
+		kDebug()<<i<<item<<endl;
+		if(! item.isEmpty())
+			ui.cbType->insertItem(i++,item);
+	} while (i<6);
+	
+	//kDebug()<<s->columnType(s->currentColumn())<<endl;
+	ui.cbType->setCurrentIndex((int)(s->columnType(s->currentColumn())));
 
 	setMainWidget(widget);
 	setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
@@ -59,6 +80,9 @@ void ColumnDialog::setupGUI() {
 void ColumnDialog::apply() {
 	int col = s->currentColumn();
 	s->setColumnName(col,ui.leLabel->text());
-	s->setColumnFormat(col,ui.cbFormat->currentText());
-	s->setColumnType(col,ui.cbType->currentText());
+	// item-enum mismatch :
+	s->setColumnFormat(col,(SciDAVis::ColumnMode) SciDAVis::enumStringToValue(
+		ui.cbFormat->currentText(),"ColumnMode"));
+	s->setColumnType(col,(SciDAVis::PlotDesignation) ui.cbType->currentIndex());
+	//TODO : repaint header ?
 }

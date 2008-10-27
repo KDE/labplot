@@ -30,14 +30,13 @@
 #include <KMessageBox>
 #include <KFilterDev>
 #include "ImportWidget.h"
-#include "../MainWin.h"
-#include "../Spreadsheet.h"
-#include "../Project.h"
-#include "../filter/FilterOPJ.h"
-#include "../filter/FilterHDF5.h"
-#include "../filter/FilterCDF.h"
-#include "../filter/FilterNETCDF.h"
-#include "../importitems.h"
+#include "MainWin.h"
+#include "core/Project.h"
+#include "filter/FilterOPJ.h"
+#include "filter/FilterHDF5.h"
+#include "filter/FilterCDF.h"
+#include "filter/FilterNETCDF.h"
+#include "elements/importitems.h"
 
 ImportWidget::ImportWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
@@ -295,14 +294,14 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s)
 	QString notes;
 	if(hdf5.numAttributes()>0) {
 		project = mainWin->getProject();
-		notes = project->notes();
+		notes = project->comment();
 	}
 	for (int i=0;i<hdf5.numAttributes();i++) {
 		notes.append(hdf5.getAttribute(i)+"\n");
 		// kDebug()<<"	ATTRIBUTE "<<i+1<<" : "<<hdf5.getAttribute(i)<<endl;
 	}
 	if(hdf5.numAttributes()>0)
-		project->setNotes(notes);
+		project->setComment(notes);
 
 	// read data
 	for (int i=0;i<hdf5.numSets();i++) {

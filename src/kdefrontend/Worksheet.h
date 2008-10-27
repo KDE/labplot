@@ -33,7 +33,7 @@
 #include <QtXml>
 
 #include "plots/Plot.h"
-#include "sheettype.h"
+#include "elements/sheettype.h"
 
 class MainWin;
 class Set;

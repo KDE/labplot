@@ -30,7 +30,7 @@
 
 #include <KDebug>
 #include "ProjectDialog.h"
-#include "../MainWin.h"
+#include "MainWin.h"
 #include "core/Project.h"
 
 ProjectDialog::ProjectDialog(MainWin *mw) : KDialog(mw) {

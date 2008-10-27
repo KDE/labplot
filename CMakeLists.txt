@@ -107,4 +107,4 @@ ENDIF(OPJ_LIBRARY)
 
 add_subdirectory(src)
 
-install( FILES src/LabPlotui.rc labplot.png DESTINATION  ${DATA_INSTALL_DIR}/LabPlot )
+install( FILES src/kdefrontend/LabPlotui.rc src/kdefrontend/labplot.png DESTINATION  ${DATA_INSTALL_DIR}/LabPlot )

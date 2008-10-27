@@ -29,7 +29,7 @@
 #ifndef LABELWIDGET_H
 #define LABELWIDGET_H
 
-#include "../ui_labelwidget.h"
+#include "ui_labelwidget.h"
 class Label;
 
 /**

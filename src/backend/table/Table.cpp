@@ -37,7 +37,7 @@
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "table/TableView.h"
 #else
-#include "Spreadsheet.h"
+#include "kdefrontend/Spreadsheet.h"
 #endif
 #include "table/tablecommands.h"
 #include "core/column/Column.h"

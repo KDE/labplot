@@ -188,7 +188,7 @@ QString Plot::getTicLabel(const int atlf, const int prec, const QString dtf, con
 		}
 		break;
 	case Axis::LABELSFORMAT_DEGREE:
-		label = QString(QString::number(180.0/M_PI*value,'f',prec)+'°');
+		label = QString(QString::number(180.0/M_PI*value,'f',prec) + "°");
 		break;
 	}
 

@@ -32,7 +32,7 @@
 #include <QtGui>
 
 #include "SettingsPage.h"
-#include "../ui_settingsgeneralpage.h"
+#include "ui_settingsgeneralpage.h"
 
 class MainWin;
 

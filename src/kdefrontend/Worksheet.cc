@@ -33,14 +33,13 @@
 #include <KInputDialog>
 #include <kmessagebox.h>
 
+#include "MainWin.h"
 #include "Worksheet.h"
 #include "elements/Set.h"
-#include "MainWin.h"
 #include "plots/Plot2DSimple.h"
 
 Worksheet::Worksheet(MainWin *m)
-	:QWidget(),
- mw(m){
+	:QWidget(), mw(m){
 	kDebug()<<"Worksheet()"<<endl;
 		type = WORKSHEET;
 
