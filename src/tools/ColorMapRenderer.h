@@ -1,11 +1,11 @@
 /***************************************************************************
-    File                 : PlotSurfaceStyleWidget.h
+    File                 : ColorMapRenderer.h
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
-    Description          : widget for surface plot style
-
+    Description          : colormap renderer class
+                           
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,36 +26,16 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef PLOTSURFACESTYLEWIDGET_H
-#define PLOTSURFACESTYLEWIDGET_H
+#ifndef COLORMAPRENDERER_H
+#define COLORMAPRENDERER_H
 
-#include "ui_plotsurfacestylewidget.h"
-#include "PlotStyleWidget.h"
+#include <QPixmap>
 
-/*!
- * @brief Represents the widget where all the style settings of a surface plot can be modified
-*
- * This widget is embedded in \c FunctionPlotWidget.
- */
-class PlotSurfaceStyleWidget : public QWidget, public PlotStyleWidgetInterface{
-    Q_OBJECT
+class ColorMapRenderer{
 
 public:
-    PlotSurfaceStyleWidget(QWidget*);
-    ~PlotSurfaceStyleWidget();
+  static QPixmap pixmap( const QString& );
 
-	void setStyle(const Style* );
-	void saveStyle(Style*) const;
-
-private:
-	Ui::PlotSurfaceStyleWidget ui;
-	void resizeEvent(QResizeEvent *);
-	void fillPatternBox() const;
-
-private slots:
-	void openColorMap();
-	void createColorMap();
-	void multiColoringChanged(int);
 };
 
 #endif

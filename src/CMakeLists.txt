@@ -2,7 +2,7 @@ set(KDEFRONTEND_DIR kdefrontend)
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/AxesDialog.cc
 	${KDEFRONTEND_DIR}/AxesWidget.cc
-# 	${KDEFRONTEND_DIR}/ColorMapPreview.cc
+	${KDEFRONTEND_DIR}/ColorMapPreview.cc
    	${KDEFRONTEND_DIR}/ColumnDialog.cc
 	${KDEFRONTEND_DIR}/ExportDialog.cc
 	${KDEFRONTEND_DIR}/ExportWidget.cc
@@ -56,6 +56,7 @@ set(PLOTS_SOURCES
 set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
   parser/parser.tab.c
   tools/TexRenderer.cc
+  tools/ColorMapRenderer.cc
 )
 
 set(UI_SOURCES
@@ -130,7 +131,7 @@ kde4_add_ui_files(LabPlot_SRCS ${UI_SOURCES})
 kde4_add_executable(LabPlot ${LabPlot_SRCS} ${BACKEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
 
 INCLUDE_DIRECTORIES(../liborigin)
-target_link_libraries(LabPlot ${KDE4_KDEUI_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${CDF_LIBRARY} ${OPJ_LIBRARY})
+target_link_libraries(LabPlot ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${CDF_LIBRARY} ${OPJ_LIBRARY})
 
 add_custom_command (OUTPUT parser/parser.tab.c
                    COMMAND ${YACC_EXECUTABLE} ARGS -b parser parser.y

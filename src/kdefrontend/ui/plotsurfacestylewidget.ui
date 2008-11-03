@@ -5,37 +5,169 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>392</width>
-    <height>332</height>
+    <width>421</width>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QGridLayout" name="gridLayout_2" >
    <item row="0" column="0" >
-    <widget class="QCheckBox" name="checkBox" >
+    <widget class="QLabel" name="lDensity" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text" >
       <string>Density</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0" >
-    <widget class="QCheckBox" name="checkBox_2" >
+    <widget class="QCheckBox" name="chbDensityEnabled" >
      <property name="text" >
-      <string>Contour</string>
+      <string>activate</string>
      </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="3" row="1" column="2" >
+    <widget class="QLabel" name="lColorMap" >
+     <property name="text" >
+      <string>Color map</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="3" row="1" column="4" >
+    <widget class="QFrame" name="frame" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <item row="1" column="1" >
+       <widget class="QPushButton" name="bCreateColorMap" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>Create new color map</string>
+        </property>
+        <property name="text" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="3" row="0" column="0" >
+       <widget class="QLabel" name="lColorMapPixmap" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>40</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="frameShape" >
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow" >
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <spacer name="verticalSpacer" >
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>68</width>
+          <height>32</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QPushButton" name="bOpenColorMap" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>Open existing color map</string>
+        </property>
+        <property name="text" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+     <zorder>bCreateColorMap</zorder>
+     <zorder>lColorMapPixmap</zorder>
+     <zorder>verticalSpacer</zorder>
+     <zorder>bOpenColorMap</zorder>
     </widget>
    </item>
    <item row="2" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>Number of levels</string>
+    <spacer name="verticalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>56</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="2" column="1" >
-    <spacer>
+    <spacer name="horizontalSpacer" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
@@ -44,70 +176,177 @@
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>40</width>
+       <width>20</width>
+       <height>56</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="3" >
+    <spacer name="horizontalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
        <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="2" column="2" >
-    <widget class="QLineEdit" name="lineEdit" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_8" >
+   <item row="4" column="2" >
+    <widget class="QLabel" name="lFillBrushStyle" >
      <property name="text" >
       <string>Pattern</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="2" >
-    <widget class="QComboBox" name="cbAreaFillingPattern" />
+   <item row="4" column="4" >
+    <widget class="QComboBox" name="cbFillBrushStyle" />
    </item>
-   <item row="3" column="3" >
-    <widget class="KColorButton" name="kcbAreaFillingColor" />
-   </item>
-   <item row="4" column="0" >
-    <widget class="QLabel" name="label_2" >
+   <item row="5" column="2" colspan="2" >
+    <widget class="QLabel" name="lThreshold" >
      <property name="text" >
-      <string>TODO</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignCenter</set>
+      <string>Threshold</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
-      <string>Color palette</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2" >
-    <widget class="QPushButton" name="bColorMap" >
+   <item row="5" column="4" >
+    <widget class="QLineEdit" name="leThreshold" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
-      <size>
-       <width>80</width>
-       <height>110</height>
-      </size>
-     </property>
      <property name="text" >
-      <string/>
+      <string>10</string>
      </property>
     </widget>
+   </item>
+   <item row="6" column="4" >
+    <widget class="QCheckBox" name="cbMeshEnabled" >
+     <property name="text" >
+      <string>Mesh</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="4" >
+    <widget class="QCheckBox" name="cbRelativeScaleEnabled" >
+     <property name="text" >
+      <string>Relative scale</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2" >
+    <spacer name="spacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>121</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="9" column="0" >
+    <widget class="QLabel" name="lLevels" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Levels</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="2" >
+    <widget class="QLabel" name="lLevelsNumber" >
+     <property name="text" >
+      <string>Number of levels</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="4" >
+    <widget class="QLineEdit" name="leLevelsNumber" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>10</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" >
+    <widget class="QCheckBox" name="chbLevelsEnabled" >
+     <property name="text" >
+      <string>activate</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="2" >
+    <widget class="QLabel" name="lLevelsLineWidth" >
+     <property name="text" >
+      <string>Line width</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="4" >
+    <widget class="QSpinBox" name="sbLevelsLineWidth" >
+     <property name="minimum" >
+      <number>1</number>
+     </property>
+     <property name="maximum" >
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="2" >
+    <widget class="QLabel" name="lLevelsLineColor" >
+     <property name="text" >
+      <string>Line color</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="4" >
+    <widget class="KColorButton" name="kcbLevelsLineColor" />
+   </item>
+   <item row="13" column="4" >
+    <widget class="QCheckBox" name="chbLevelsMultiColoring" >
+     <property name="text" >
+      <string>Multicoloring</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="4" >
+    <spacer name="spacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>145</width>
+       <height>45</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -118,6 +357,20 @@
    <header>kcolorbutton.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>chbDensityEnabled</tabstop>
+  <tabstop>bOpenColorMap</tabstop>
+  <tabstop>bCreateColorMap</tabstop>
+  <tabstop>cbFillBrushStyle</tabstop>
+  <tabstop>leThreshold</tabstop>
+  <tabstop>cbMeshEnabled</tabstop>
+  <tabstop>cbRelativeScaleEnabled</tabstop>
+  <tabstop>chbLevelsEnabled</tabstop>
+  <tabstop>leLevelsNumber</tabstop>
+  <tabstop>sbLevelsLineWidth</tabstop>
+  <tabstop>kcbLevelsLineColor</tabstop>
+  <tabstop>chbLevelsMultiColoring</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

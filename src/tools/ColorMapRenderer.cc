@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : PlotSurfaceStyleWidget.h
+    File                 : ColorMapRenderer.cc
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
-    Description          : widget for surface plot style
+    Description          : colormap renderer class
 
  ***************************************************************************/
 
@@ -26,36 +26,42 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef PLOTSURFACESTYLEWIDGET_H
-#define PLOTSURFACESTYLEWIDGET_H
+#include "ColorMapRenderer.h"
 
-#include "ui_plotsurfacestylewidget.h"
-#include "PlotStyleWidget.h"
+#include <KDebug>
+#include <QFile>
+#include <QPainter>
 
-/*!
- * @brief Represents the widget where all the style settings of a surface plot can be modified
-*
- * This widget is embedded in \c FunctionPlotWidget.
- */
-class PlotSurfaceStyleWidget : public QWidget, public PlotStyleWidgetInterface{
-    Q_OBJECT
+QPixmap ColorMapRenderer::pixmap(const QString& fileName) {
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+		kDebug()<<"file "<<fileName<<" not found"<<endl;
+		return QPixmap();
+	}
 
-public:
-    PlotSurfaceStyleWidget(QWidget*);
-    ~PlotSurfaceStyleWidget();
+	QColor rgb;
+	QList<QColor> list_rgb;
+	int  red, green, blue;
+	QTextStream in(&file);
 
-	void setStyle(const Style* );
-	void saveStyle(Style*) const;
+	while ( !in.atEnd() ){
+        in.readLine();
+ 		in >> red >> green >> blue;
+		rgb.setRgb( red, green, blue );
+		list_rgb.append(rgb);
+//		kDebug()<<red<<"\t"<<green<<"\t"<<blue<<endl;
+	}
 
-private:
-	Ui::PlotSurfaceStyleWidget ui;
-	void resizeEvent(QResizeEvent *);
-	void fillPatternBox() const;
+	int height=list_rgb.size();
+	int width=80;
+// 	kDebug()<<height<<"line read."<<endl;
+	QPixmap pixmap(width, height);
+	QPainter p( &pixmap );
+	for (int i=0; i!=height; ++i)	{
+		rgb = list_rgb.at(i);
+		p.setPen( rgb );
+		p.drawLine( QPoint(0, height-i), QPoint(width, height-i) );
+	}
 
-private slots:
-	void openColorMap();
-	void createColorMap();
-	void multiColoringChanged(int);
-};
-
-#endif
+	return pixmap;
+}
