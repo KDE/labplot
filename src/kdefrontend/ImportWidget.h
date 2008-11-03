@@ -32,7 +32,6 @@
 #include <QtGui>
 #include "ui_importwidget.h"
 class MainWin;
-class Spreadsheet;
 class Table;
 #include "elements/binaryformat.h"
 
@@ -55,11 +54,11 @@ private:
 	int startRow() const;
 	int endRow() const;
 	void importOPJ(MainWin *mainWin, QString filename);
-	int importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s);
-	int importNETCDF(QString filename, Spreadsheet *s);
-	int importCDF(QString filename, Spreadsheet *s);
-	void importASCII(QIODevice *file, Spreadsheet *s);
-	void importBinary(QIODevice *file, Spreadsheet *s);
+	int importHDF5(MainWin *mainWin, QString filename, Table *table);
+	int importNETCDF(QString filename, Table *table);
+	int importCDF(QString filename, Table *table);
+	void importASCII(QIODevice *file, Table *table);
+	void importBinary(QIODevice *file, Table *table);
 	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
 	QStringList fileNames() { return ui.leFileName->text().split(";"); }
 private slots:

@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-	Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
     Description          : spreadsheet class
@@ -65,8 +65,7 @@ Spreadsheet::Spreadsheet(Table *table)
 	init();
 }
 
-Spreadsheet::~Spreadsheet() 
-{
+Spreadsheet::~Spreadsheet() {
 	delete m_model;
 }
 
@@ -439,6 +438,7 @@ void Spreadsheet::addSet(Set* s) {
 }
 
 void Spreadsheet::displaySet(){
+// TODO : use m_table
 //TODO clear the content of the table!!!
 
 	int columns=this->columnCount();
@@ -526,8 +526,7 @@ void Spreadsheet::editFunction(){
 		this->displaySet(); //TODO trigger update only if data set was changed
 }
 
-int Spreadsheet::selectedColumnCount(bool full)
-{
+int Spreadsheet::selectedColumnCount(bool full) {
 	int count = 0;
 	int cols = m_table->columnCount();
 	for (int i=0; i<cols; i++)
@@ -535,8 +534,7 @@ int Spreadsheet::selectedColumnCount(bool full)
 	return count;
 }
 
-int Spreadsheet::selectedColumnCount(SciDAVis::PlotDesignation pd)
-{
+int Spreadsheet::selectedColumnCount(SciDAVis::PlotDesignation pd) {
 	int count = 0;
 	int cols = m_table->columnCount();
 	for (int i=0; i<cols; i++)
@@ -545,16 +543,14 @@ int Spreadsheet::selectedColumnCount(SciDAVis::PlotDesignation pd)
 	return count;
 }
 
-bool Spreadsheet::isColumnSelected(int col, bool full)
-{
+bool Spreadsheet::isColumnSelected(int col, bool full) {
 	if (full)
 		return m_view_widget->selectionModel()->isColumnSelected(col, QModelIndex());
 	else
 		return m_view_widget->selectionModel()->columnIntersectsSelection(col, QModelIndex());
 }
 
-QList<Column*> Spreadsheet::selectedColumns(bool full)
-{
+QList<Column*> Spreadsheet::selectedColumns(bool full) {
 	QList<Column*> list;
 	int cols = m_table->columnCount();
 	for (int i=0; i<cols; i++)
@@ -563,8 +559,7 @@ QList<Column*> Spreadsheet::selectedColumns(bool full)
 	return list;
 }
 
-int Spreadsheet::selectedRowCount(bool full)
-{
+int Spreadsheet::selectedRowCount(bool full) {
 	int count = 0;
 	int rows = m_table->rowCount();
 	for (int i=0; i<rows; i++)
@@ -572,8 +567,7 @@ int Spreadsheet::selectedRowCount(bool full)
 	return count;
 }
 
-bool Spreadsheet::isRowSelected(int row, bool full)
-{
+bool Spreadsheet::isRowSelected(int row, bool full) {
 	if (full)
 		return m_view_widget->selectionModel()->isRowSelected(row, QModelIndex());
 	else
@@ -583,8 +577,7 @@ bool Spreadsheet::isRowSelected(int row, bool full)
 int Spreadsheet::firstSelectedColumn(bool full)
 {
 	int cols = m_table->columnCount();
-	for (int i=0; i<cols; i++)
-	{
+	for (int i=0; i<cols; i++) {
 		if (isColumnSelected(i, full))
 			return i;
 	}
@@ -993,8 +986,7 @@ void Spreadsheet::clearSelectedColumns()
 	RESET_CURSOR;
 }
 
-void Spreadsheet::setSelectionAs(SciDAVis::PlotDesignation pd)
-{
+void Spreadsheet::setSelectionAs(SciDAVis::PlotDesignation pd) {
 	WAIT_CURSOR;
 	m_table->beginMacro(QObject::tr("%1: set plot designation(s)").arg(m_table->name()));
 
@@ -1006,38 +998,31 @@ void Spreadsheet::setSelectionAs(SciDAVis::PlotDesignation pd)
 	RESET_CURSOR;
 }
 
-void Spreadsheet::setSelectedColumnsAsX()
-{
+void Spreadsheet::setSelectedColumnsAsX() {
 	setSelectionAs(SciDAVis::X);
 }
 
-void Spreadsheet::setSelectedColumnsAsY()
-{
+void Spreadsheet::setSelectedColumnsAsY() {
 	setSelectionAs(SciDAVis::Y);
 }
 
-void Spreadsheet::setSelectedColumnsAsZ()
-{
+void Spreadsheet::setSelectedColumnsAsZ() {
 	setSelectionAs(SciDAVis::Z);
 }
 
-void Spreadsheet::setSelectedColumnsAsYError()
-{
+void Spreadsheet::setSelectedColumnsAsYError() {
 	setSelectionAs(SciDAVis::yErr);
 }
 
-void Spreadsheet::setSelectedColumnsAsXError()
-{
+void Spreadsheet::setSelectedColumnsAsXError() {
 	setSelectionAs(SciDAVis::xErr);
 }
 
-void Spreadsheet::setSelectedColumnsAsNone()
-{
+void Spreadsheet::setSelectedColumnsAsNone() {
 	setSelectionAs(SciDAVis::noDesignation);
 }
 
-void Spreadsheet::normalizeSelectedColumns()
-{
+void Spreadsheet::normalizeSelectedColumns() {
 	WAIT_CURSOR;
 	m_table->beginMacro(QObject::tr("%1: normalize column(s)").arg(m_table->name()));
 	QList< Column* > cols = selectedColumns();
@@ -1220,8 +1205,7 @@ void Spreadsheet::goToCell(int row, int col)
 	m_view_widget->setCurrentIndex(index);
 }
 
-void Spreadsheet::dimensionsDialog()
-{
+void Spreadsheet::dimensionsDialog() {
 	// TODO: Design a nicer dialog for this
 	bool ok;
 
@@ -1237,33 +1221,27 @@ void Spreadsheet::dimensionsDialog()
 	m_table->setRowCount(rows);
 }
 
-void Spreadsheet::addColumns()
-{
+void Spreadsheet::addColumns() {
 	m_table->addColumns(selectedColumnCount(false));
 }
 
-void Spreadsheet::addRows()
-{
+void Spreadsheet::addRows() {
 	m_table->addColumns(selectedRowCount(false));
 }
 
-int Spreadsheet::defaultColumnWidth() 
-{ 
+int Spreadsheet::defaultColumnWidth() {
 	return Table::global("default_column_width").toInt(); 
 }
 
-void Spreadsheet::setDefaultColumnWidth(int width) 
-{ 
+void Spreadsheet::setDefaultColumnWidth(int width) {
 	Table::setGlobal("default_column_width", width); 
 }
 
-void Spreadsheet::setDefaultCommentVisibility(bool visible) 
-{ 
+void Spreadsheet::setDefaultCommentVisibility(bool visible) {
 	Table::setGlobal("default_comment_visibility", visible); 
 }
 
-bool Spreadsheet::defaultCommentVisibility() 
-{ 
+bool Spreadsheet::defaultCommentVisibility() { 
 	return Table::global("default_comment_visibility").toBool(); 
 }
 
@@ -1282,5 +1260,4 @@ void Spreadsheet::handleHorizontalSectionResized(int logicalIndex, int oldSize, 
 
 	inside = false;
 }
-
 

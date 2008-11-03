@@ -73,7 +73,6 @@ MainWin::MainWin(QWidget *parent, QString filename)
 	m_project = NULL;
  	openNew();
 
-
 	m_current_aspect = m_project;
 	m_current_folder = m_project;
 
@@ -115,8 +114,7 @@ MainWin::MainWin(QWidget *parent, QString filename)
 	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
 }
 
-MainWin::~MainWin()
-{
+MainWin::~MainWin() {
 	delete m_project;
 }
 
@@ -363,7 +361,6 @@ void MainWin::open(QString filename) {
 }
 
 void MainWin::openXML(QIODevice *file) {
-
 	kDebug()<<"	reading ..."<<endl;
 	XmlStreamReader reader(file);
 	if (m_project->load(&reader) == false) {
@@ -473,8 +470,7 @@ Table* MainWin::newSpreadsheet() {
 
 	if(!index.isValid())
 		m_project->addChild(table);
-	else
-	{
+	else {
 		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
 		parent_aspect->folder()->addChild(table);
@@ -501,49 +497,43 @@ Worksheet* MainWin::newWorksheet() {
 }
 
 Spreadsheet* MainWin::activeSpreadsheet() const {
-#if 0 // TODO: port to use aspects
-	kDebug()<<"()"<<endl;
+// TODO: port to use aspects
 	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
 	if(subWindow != 0) {
 		Spreadsheet *s = (Spreadsheet *) subWindow->widget();
 		if (s && s->sheetType() == SPREADSHEET)
 			return s;
 	}
-#endif
 	return 0;
 }
 
 Spreadsheet* MainWin::getSpreadsheet(QString name) const {
-#if 0 // TODO: port to use aspects
+// TODO: port to use aspects
 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
 	for (int i=0; i<wlist.size(); i++)
 		if(wlist.at(i)->windowTitle() == name)
 			return (Spreadsheet *)wlist.at(i);
-#endif
 	return 0;
 }
 
 Worksheet* MainWin::activeWorksheet() const {
-// #if 0 // TODO: port to use aspects
-	kDebug()<<"()"<<endl;
+// TODO: port to use aspects
 	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
 	if(subWindow != 0) {
 		Worksheet *w = (Worksheet *) subWindow->widget();
 		if (w && w->sheetType() == WORKSHEET)
 			return w;
 	}
-// #endif
-// 	return 0;
+ 	return 0;
 }
 
 Worksheet* MainWin::getWorksheet(QString name) const {
-// #if 0 // TODO: port to use aspects
+// TODO: port to use aspects
 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
 	for (int i=0; i<wlist.size(); i++)
 		if(wlist.at(i)->windowTitle() == name)
 			return (Worksheet *)wlist.at(i);
-// #endif
-// 	return 0;
+ 	return 0;
 }
 /************** sheet stuff end *************************/
 
@@ -580,7 +570,7 @@ void MainWin::functionActionTriggered(QAction* action){
 
 void MainWin::titleDialog() {
 	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
-	kDebug()<<"MainWin::titleDialog()"<<endl;
+	kDebug()<<endl;
 	Worksheet *w = activeWorksheet();
 	if(w == 0) {
 		kDebug()<<"ERROR: no worksheet active!"<<endl;
@@ -603,7 +593,7 @@ void MainWin::titleDialog() {
 
 void MainWin::axesDialog(){
 	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
-	kDebug()<<"MainWin::titleDialog()"<<endl;
+	kDebug()<<endl;
 	Worksheet *w = activeWorksheet();
 	if(w == 0) {
 		kDebug()<<"ERROR: no worksheet active!"<<endl;
@@ -627,7 +617,7 @@ void MainWin::axesDialog(){
 
 void MainWin::legendDialog() {
 	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
-	kDebug()<<"MainWin::titleDialog()"<<endl;
+	kDebug()<<endl;
 	Worksheet *w = activeWorksheet();
 	if(w == 0) {
 		kDebug()<<"ERROR: no worksheet active!"<<endl;
@@ -655,7 +645,7 @@ void MainWin::settingsDialog(){
 /******************** dialogs end *****************************/
 
 void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
-	kDebug()<<"MainWin::addGraph2D() sheet ="<<sheet<<endl;
+	kDebug()<<"sheet ="<<sheet<<endl;
 // #if 0 // TODO: port this to use aspects
 	int nr_sheets = m_mdi_area->subWindowList().size();
 	kDebug()<<" Number of sheets :"<<nr_sheets<<endl;
@@ -667,7 +657,7 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 	else if(sheet == nr_sheets+1) {	// new spreadsheet
 // 		kDebug()<<"Creating new spreadsheet"<<endl;
 // 		Spreadsheet *s = newSpreadsheet();
-// 		//TODO pointer or referenz
+// 		//TODO pointer or reference
 //  		s->addSet(&set);
 	}
 	else {
@@ -683,7 +673,7 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 				w->addSet(set,ptype);
 			else {
 // 				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
-// 				//TODO pointer or referenz
+// 				//TODO pointer or reference
 //  				s->addSet(&set);
 			}
 		}
@@ -782,8 +772,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect)
 
 void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to)
 {
-	if (view == m_mdi_area->currentSubWindow())
-	{
+	if (view == m_mdi_area->currentSubWindow()) {
 		updateGUI();
 	}
 }
@@ -796,9 +785,8 @@ void MainWin::setMdiWindowVisibility(QAction * action)
 #endif
 }
 
-Folder* MainWin::newFolder()
-{
-	kDebug()<<"MainWin::newFolder()"<<endl;
+Folder* MainWin::newFolder() {
+	kDebug()<<endl;
 
 	Folder * folder = new Folder(tr("Folder %1").arg(1));
 

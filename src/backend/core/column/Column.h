@@ -169,7 +169,7 @@ class Column : public AbstractColumn
 		QList< Interval<int> > invalidIntervals() const;
 		//! Return whether a certain row is masked 	 
 		bool isMasked(int row) const;
-		//! Return whether a certain interval of rows rows is fully masked 	 
+		//! Return whether a certain interval of rows is fully masked 	 
 		bool isMasked(Interval<int> i) const;
 		//! Return all intervals of masked rows
 		QList< Interval<int> > maskedIntervals() const;

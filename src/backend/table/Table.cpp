@@ -1048,7 +1048,7 @@ void Table::Private::updateHorizontalHeader(int start_col, int end_col)
 			switch(m_columns.at(i)->dataType())
 			{
 				case SciDAVis::TypeDouble:
-					middleSection = " {double} ";
+					middleSection = " {numeric} ";
 					break;
 				case SciDAVis::TypeQString:
 					middleSection = " {text} ";
@@ -1102,7 +1102,7 @@ void Table::Private::updateHorizontalHeader(int start_col, int end_col)
 			switch(m_columns.at(i)->dataType())
 			{
 				case SciDAVis::TypeDouble:
-					middleSection = " {double} ";
+					middleSection = " {numeric} ";
 					break;
 				case SciDAVis::TypeQString:
 					middleSection = " {text} ";

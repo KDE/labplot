@@ -46,10 +46,10 @@ void ColumnDialog::setupGUI() {
 
 	// column format selection
 	unsigned int i=0, j=0;
-	kDebug()<<"size : "<<sizeof(SciDAVis::ColumnMode)<<endl;
+//	kDebug()<<"size : "<<sizeof(SciDAVis::ColumnMode)<<endl;
 	do {
 		QString item = SciDAVis::enumValueToString(j++, "ColumnMode");
-		kDebug()<<i<<item<<endl;
+//		kDebug()<<i<<item<<endl;
 		if(! item.isEmpty())
 			ui.cbFormat->insertItem(i++,item);
 	} while (i<5);
@@ -59,10 +59,10 @@ void ColumnDialog::setupGUI() {
 
 	// column type selection
 	i=0, j=0;
-	kDebug()<<"size : "<<sizeof(SciDAVis::PlotDesignation)<<endl;
+//	kDebug()<<"size : "<<sizeof(SciDAVis::PlotDesignation)<<endl;
 	do {
 		QString item = SciDAVis::enumValueToString(j++, "PlotDesignation");
-		kDebug()<<i<<item<<endl;
+//		kDebug()<<i<<item<<endl;
 		if(! item.isEmpty())
 			ui.cbType->insertItem(i++,item);
 	} while (i<6);

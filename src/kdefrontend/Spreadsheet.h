@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-	Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
     Description          : spreadsheet class
@@ -53,7 +53,8 @@ public:
 	SheetType sheetType() const { return m_type; }
 	void resetHeader(int from=0);
 	void addSet(Set* set);
-	Set* set(){ return m_set;}
+	Set* set() { return m_set; }
+	Table* table() { return m_table; }
 
 	QString columnName(int col) const;
 	void setColumnName(int col, QString name);

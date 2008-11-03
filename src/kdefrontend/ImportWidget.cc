@@ -32,6 +32,7 @@
 #include "ImportWidget.h"
 #include "MainWin.h"
 #include "core/Project.h"
+#include "core/column/Column.h"
 #include "filter/FilterOPJ.h"
 #include "filter/FilterHDF5.h"
 #include "filter/FilterCDF.h"
@@ -224,28 +225,29 @@ void ImportWidget::apply(MainWin *mainWin) {
 		}
 
 		// open a spreadsheet
-		Spreadsheet *s=0;
-#if 0 // TODO: this has just been temporally disabled for the SciDAVis integration
-		if( ! ui.cbCreateSpreadsheet->isChecked() && i == 0 )
-			s=mainWin->activeSpreadsheet();
-		if(!s)
-			s=mainWin->newSpreadsheet();
-#endif
-		if(!s) {
+		Table *table=0;
+		if( ! ui.cbCreateSpreadsheet->isChecked() && i == 0 ) {
+			Spreadsheet *s = mainWin->activeSpreadsheet();
+			if (s!=0)
+				table=s->table();
+		}
+		if(!table)
+			table=mainWin->newSpreadsheet();
+		if(!table) {
 			kDebug()<<"ERROR : Couldn't create spreadsheet!"<<endl;
 			continue;
 		}
 
 		if(ui.cbUseFilename->isChecked())
-			s->setTitle(filename);
+			table->setName(filename);
 	
 		// filter using file ending
 		if(filename.endsWith(".hdf",Qt::CaseInsensitive) || filename.endsWith(".h5",Qt::CaseInsensitive))
-			importHDF5(mainWin,filename,s);
+			importHDF5(mainWin,filename,table);
 		else if (filename.endsWith(".nc",Qt::CaseInsensitive))
-			importNETCDF(filename,s);
+			importNETCDF(filename,table);
 		else if (filename.endsWith(".cdf",Qt::CaseInsensitive))
-			importCDF(filename,s);
+			importCDF(filename,table);
 		else {
 			kDebug()<<"	Opening file"<<filename<<endl;
 			QIODevice *file = KFilterDev::deviceForFile(filename,QString::null,true);
@@ -259,9 +261,9 @@ void ImportWidget::apply(MainWin *mainWin) {
 			}
 
 			if(binaryMode)
-				importBinary(file,s);
+				importBinary(file,table);
 			else
-				importASCII(file,s);
+				importASCII(file,table);
 
 			delete file;
 		}
@@ -273,9 +275,9 @@ void ImportWidget::importOPJ(MainWin *mainWin, QString filename) {
 	importer.import();
 }
 
-int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s) {
+int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Table *table) {
 	Q_UNUSED(mainWin);
-	Q_UNUSED(s);
+	Q_UNUSED(table);
 	kDebug()<<"ImportDialog::importHDF5("<<filename<<")"<<endl;
 #ifdef HAVE_HDF5
 	FilterHDF5 hdf5 = FilterHDF5(filename);
@@ -305,35 +307,33 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s)
 
 	// read data
 	for (int i=0;i<hdf5.numSets();i++) {
-		// disabled for SciDAVis
-		//if(i>0) s = mainWin->newSpreadsheet();
+		if(i>0) table = mainWin->newSpreadsheet();
 
 		int rows = hdf5.Rows(i);
 		int cols = hdf5.Cols(i);
 		if(rows==0) cols=0;
 		kDebug()<<"Dataset "<<i+1<<" ("<<hdf5.datasetName(i)<<") has "<< rows<<" rows and "<<cols<<" cols"<<endl;
-		//s->setTitle(hdf5.datasetName(i));
+		table->setName(hdf5.datasetName(i));
 
-		// spreadsheet notes
 		QString setnotes;
 		int nrsetattr = hdf5.numSetAttributes(i);
 		if(nrsetattr>0) {
-			//setnotes = s->Notes();
-			//for(int j=0;j<nrsetattr;j++)
-			//	setnotes.append(hdf5.getSetAttribute(i,j)+"\n");
-			//s->setNotes(setnotes);
+			setnotes = table->comment();
+			for(int j=0;j<nrsetattr;j++)
+				setnotes.append(hdf5.getSetAttribute(i,j)+"\n");
+			table->setComment(setnotes);
 		}
 
-		s->setRowCount(rows);
-		s->setColumnCount(cols);
+		table->setRowCount(rows);
+		table->setColumnCount(cols);
 		for (int col=0;col<cols;col++) {
 			QString colname = hdf5.columnName(i,col);
 			if(colname.length()<1)
 				colname = QChar(col+65);
-		//	s->setColumnName(col,colname);
+			table->column(col)->setName(colname);
 
-		// 	for ( int j=0; j<rows; j++ )
-		//		s->setText(j,col,QString::number(hdf5.Data(i,j,col)));
+		 	for ( int j=0; j<rows; j++ )
+				table->column(col)->setValueAt(j,hdf5.Data(i,j,col));
 		}
 	}
 
@@ -344,36 +344,36 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s)
 #endif	
 }
 
-int ImportWidget::importNETCDF(QString filename, Spreadsheet *s) {
-	Q_UNUSED(s);
+int ImportWidget::importNETCDF(QString filename, Table *table) {
+	Q_UNUSED(table);
 	kDebug()<<"ImportDialog::importNETCDF("<<filename<<")"<<endl;
 #ifdef HAVE_NETCDF
 	FilterNETCDF ncf = FilterNETCDF(filename);
 	if(!ncf.fileOK()) return -1;
 	kDebug()<<"Reading NETCDF data"<<endl;
-	s->setColumnCount(ncf.NVars());
+	table->setColumnCount(ncf.NVars());
 
 	kDebug()<<" nvars = "<<ncf.NVars()<<endl;
 	QProgressDialog progress( i18n("Reading NETCDF data ..."), i18n("Cancel"), 0, ncf.NVars()-startRow());
 	progress.setWindowModality(Qt::WindowModal);
-	s->setUpdatesEnabled(false);
+//	s->setUpdatesEnabled(false);
 	for (int j=startRow();j<ncf.NVars();j++) {
 		progress.setValue(j-startRow());
 
 		QString name = ncf.VarName(j);
 		int rows = ncf.VarLen(name);
 		kDebug()<<" var / varid / len = "<<name<<' '<<j<<' '<<rows<<endl;
-		s->setColumnName(j-startRow(),name);
+		table->column(j-startRow())->setName(name);
 
-		if (j==startRow() || s->rowCount()<rows)
-			s->setRowCount(rows);
+		if (j==startRow() || table->rowCount()<rows)
+			table->setRowCount(rows);
 		for ( int i=0; i<rows; i++ )
-			s->setText(i,j,QString::number(ncf.Data(name,i),'g',10));
+			table->column(j)->setValueAt(i,ncf.Data(name,i));
 
 		if (j>endRow())
 			break;
 	}
-	s->setUpdatesEnabled(true);
+//	s->setUpdatesEnabled(true);
 #else
 	kDebug()<<"Not compiled with NETCDF support!"<<endl;
 	return 1;
@@ -381,8 +381,8 @@ int ImportWidget::importNETCDF(QString filename, Spreadsheet *s) {
 	return 0;
 }
 
-int ImportWidget::importCDF(QString filename, Spreadsheet *s) {
-	Q_UNUSED(s);
+int ImportWidget::importCDF(QString filename, Table *table) {
+	Q_UNUSED(table);
 	kDebug()<<"ImportDialog::importCDF("<<filename<<")"<<endl;
 #ifdef HAVE_CDF
 	FilterCDF cdf = FilterCDF(filename);
@@ -395,7 +395,7 @@ int ImportWidget::importCDF(QString filename, Spreadsheet *s) {
 	kDebug()<<" nvars = "<<cdf.NVars()<<endl;
 	QProgressDialog progress( i18n("Reading CDF data ..."), i18n("Cancel"), 0, cdf.NVars()-startRow());
 	progress.setWindowModality(Qt::WindowModal);
-	s->setUpdatesEnabled(false);
+//	s->setUpdatesEnabled(false);
 	for (int j=startRow();j<cdf.NVars();j++) {
 		progress.setValue(j-startRow());
 
@@ -403,15 +403,15 @@ int ImportWidget::importCDF(QString filename, Spreadsheet *s) {
 		int rows = cdf.VarLen(name);
 		kDebug()<<" var / varid / len = "<<name<<' '<<j<<' '<<rows<<endl;
 
-		s->setColumnName(j-startRow(),name);
+		table->setColumnName(j-startRow(),name);
 
 		for (int i=0;i<rows;i++)
-			s->setText(i,j,QString::number(cdf.Data(name,i),'g',10));
+			table->setText(i,j,QString::number(cdf.Data(name,i),'g',10));
 
 		if (j>endRow())
 			break;
 	}
-	s->setUpdatesEnabled(true);
+//	s->setUpdatesEnabled(true);
 #else
 	kDebug()<<"Not compiled with CDF support!"<<endl;
 	return 1;
@@ -420,7 +420,7 @@ int ImportWidget::importCDF(QString filename, Spreadsheet *s) {
 }
 
 
-void ImportWidget::importBinary(QIODevice *file, Spreadsheet *s) {
+void ImportWidget::importBinary(QIODevice *file, Table *table) {
 	kDebug()<<"ImportDialog::importBinary()"<<endl;
 // TODO : use samex
 
@@ -430,12 +430,12 @@ void ImportWidget::importBinary(QIODevice *file, Spreadsheet *s) {
 	kDebug()<<"	byte order : "<<byteorder<<" (big/little endian : "<<QDataStream::BigEndian<<"/"<<QDataStream::LittleEndian<<")"<<endl;
 
 	int fields = ui.niBinaryFields->value();
-	if(fields > s->columnCount())
-		s->setColumnCount(fields);
+	if(fields > table->columnCount())
+		table->setColumnCount(fields);
 
 	QProgressDialog progress( i18n("Reading binary data ..."), i18n("Cancel"), 0, file->size());
 	progress.setWindowModality(Qt::WindowModal);
-	s->setUpdatesEnabled(false);
+//	s->setUpdatesEnabled(false);
 	int row=0;
 	BinaryFormat format = (BinaryFormat) ui.cbBinaryFormat->currentIndex();
 	for (int j=0;j<fields*startRow();j++)
@@ -443,19 +443,19 @@ void ImportWidget::importBinary(QIODevice *file, Spreadsheet *s) {
 	while(!ds.atEnd()) {
 		if (row%50000==0) {
 			progress.setValue(file->pos());
-			s->setRowCount(row+50000);
+			table->setRowCount(row+50000);
 			if (progress.wasCanceled()) {
 				kDebug()<<"WARNING: Import canceled()"<<endl;
              			break;
 			}
 		}
 		 for ( int i=0; i<fields; i++ )
-			s->setText(row, i, QString::number(getBinaryValue(&ds,format),'g',10));
+			table->column(i)->setValueAt(row,getBinaryValue(&ds,format));
 
 		row++;
 	}
-	s->setRowCount(row);
-	s->setUpdatesEnabled(true);
+	table->setRowCount(row);
+//	s->setUpdatesEnabled(true);
 }
 
 double ImportWidget::getBinaryValue(QDataStream *ds, BinaryFormat type) const {
@@ -499,7 +499,7 @@ double ImportWidget::getBinaryValue(QDataStream *ds, BinaryFormat type) const {
 	return value;
 }
 
-void ImportWidget::importASCII(QIODevice *file, Spreadsheet *s) {
+void ImportWidget::importASCII(QIODevice *file, Table *table) {
 	kDebug()<<"ImportDialog::importASCII()"<<endl;
 	// TODO : use samex
 
@@ -507,7 +507,7 @@ void ImportWidget::importASCII(QIODevice *file, Spreadsheet *s) {
 	QTextStream in(file);
 	QProgressDialog progress( i18n("Reading ASCII data ..."), i18n("Cancel"), 0, file->size());
 	progress.setWindowModality(Qt::WindowModal);
-	s->setUpdatesEnabled(false);
+//	s->setUpdatesEnabled(false);
 	while (!in.atEnd()) {
 		while(row<startRow()) {
 			in.readLine();
@@ -516,9 +516,9 @@ void ImportWidget::importASCII(QIODevice *file, Spreadsheet *s) {
 		actrow = row-startRow();
 		if (ui.cbImportHeader->isChecked()) actrow--;
 
-		if (row%50000==0) {
+		if (row%100==0) {
 			progress.setValue(file->pos());
-			s->setRowCount(actrow+50000);
+			table->setRowCount(actrow+100);
 			if (progress.wasCanceled()) {
 				kDebug()<<"WARNING: Import canceled()"<<endl;
              			break;
@@ -543,24 +543,25 @@ void ImportWidget::importASCII(QIODevice *file, Spreadsheet *s) {
 		if(oneline.count() == 0)
 			continue;
 		// kDebug()<<"cols="<<oneline.size()<<endl;
-		if(oneline.size() > s->columnCount()) {
-			s->setColumnCount(oneline.size());
-		}
+		if(oneline.size() > table->columnCount())
+			table->setColumnCount(oneline.size());
 
 		// import header
 		if(row==startRow() && ui.cbImportHeader->isChecked()) {
 	 		for ( int i=0; i<oneline.size(); i++ )
-				s->setColumnName(i,oneline.at(i));
+				table->column(i)->setName(oneline.at(i));
 		}
 		else {
+// TODO : read strings (comments) or datetime too
 		 	for ( int i=0; i<oneline.size(); i++ )
-				s->setText(actrow, i, oneline.at(i));
+				//table->column(i)->setTextAt(actrow, oneline.at(i));
+				table->column(i)->setValueAt(actrow, oneline.at(i).toDouble());
 		}
 		if(row>endRow())
 			break;
 		row++;
 	}
-	s->setRowCount(actrow+1);
-	if( ! ui.cbImportHeader->isChecked())
-	s->setUpdatesEnabled(true);
+	table->setRowCount(actrow+1);
+//	if( ! ui.cbImportHeader->isChecked())
+//		s->setUpdatesEnabled(true);
 }

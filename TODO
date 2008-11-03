@@ -48,6 +48,7 @@ Pending :
 	* Print 
 		Worksheet::setupPrinter();
 	* Import Dialog		Stefan
+		* import data into table
 		* warn if selected file doesn't exist when apply
 		Options
 			same first column
