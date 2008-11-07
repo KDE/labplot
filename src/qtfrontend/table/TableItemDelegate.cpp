@@ -30,7 +30,7 @@
 #include <QPainter>
 #include <QModelIndex>
 #include "TableItemDelegate.h"
-#include "TableModel.h"
+#include <table/TableModel.h>
 
 TableItemDelegate::TableItemDelegate(QObject * parent)
  : QItemDelegate(parent)

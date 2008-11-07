@@ -3,5 +3,7 @@ rm -rf CMakeFiles CMakeTmp src/CMakeFiles liborigin/CMakeFiles liborigin/cmake_i
 rm -f Makefile CMakeCache.txt cmake_install.cmake cmake_uninstall.cmake install_manifest.txt
 rm -f src/LabPlot_automoc.cpp src/LabPlot_automoc.cpp.files src/cmake_install.cmake
 rm -f src/LabPlot src/LabPlot.shell src/moc_* src/ui_* src/Makefile
+rm -f src/qtfrontend/scidavis src/qtfrontend/Makefile src/qtfrontend/table/Makefile src/qtfrontend/core/Makefile
+rm -f src/qtfrontend/libscidavis_table.so
 
-rm -rf lib/ src/tmp/ liborigin/opj2dat opjfile.log
+rm -rf lib/ src/tmp/ src/qtfrontend/tmp/ liborigin/opj2dat opjfile.log

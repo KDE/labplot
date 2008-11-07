@@ -32,7 +32,7 @@
 #define TABLECOMMENTSHEADERMODEL_H
 
 #include <QAbstractTableModel>
-#include "TableModel.h"
+#include <table/TableModel.h>
 
 //! Model class wrapping a TableModel to display column comments in a TableCommentsHeaderView
 class TableCommentsHeaderModel : public QAbstractTableModel
