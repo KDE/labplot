@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : generic plot class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -58,6 +58,7 @@ public:
 	QList<Axis>* axes();
 
  	void resetRanges();
+	virtual void setPlotRanges(const QList<Range>&)=0;
 	Label* titleLabel();
  	Legend* legend();
 
@@ -85,7 +86,7 @@ protected:
 	Label m_titleLabel;
  	Legend m_legend;
 	QList<Range> list_setRanges;				//!< list of set ranges
-	QList<Range> list_plotRanges;			//!< list of plot ranges
+	QList<Range> list_plotRanges;			//!< list of plot ranges //TODO don't need anymore, use Axis::lowerLimit/upperLimit instead
 	QBrush backgroundBrush, areaBackgroundBrush;
 	Point position, size;
 	bool transparent;

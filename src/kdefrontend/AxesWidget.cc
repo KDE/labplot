@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : axes widget class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,6 +29,7 @@
 #include "AxesWidget.h"
 #include "LabelWidget.h"
 #include <KDebug>
+#include <KMessageBox>
 
 AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 
@@ -157,9 +158,8 @@ AxesWidget::AxesWidget(QWidget* parent):QWidget(parent){
 AxesWidget::~AxesWidget(){}
 
 void AxesWidget::resizeEvent(QResizeEvent * event){
-	//TODO
-// 	this->createMajorGridStyles();
-// 	this->createMinorGridStyles();
+	this->createMajorGridStyles();
+	this->createMinorGridStyles();
 }
 
 /*!
@@ -185,16 +185,6 @@ void AxesWidget::setPlotType(const Plot::PlotType& type){
 	ui.cbAxes->clear();
   	ui.cbAxes->insertItems( -1, list );
 	initializing=false;
-
-	//TODO
-	if(type == Plot::PLOTPIE) {
-// 		ui.tab2->hide();
-// 		ui.tab3->hide();
-// 		ui.tab5->hide();
-	}else if (type == Plot::PLOTPOLAR) {
-// 		minle->setEnabled(false);
-// 		maxle->setEnabled(false);
-	}
 
 	plotType=type;
 }
@@ -290,97 +280,6 @@ void AxesWidget::showAxis(const short axisIndex){
 	ui.cbMinorGridStyle->setCurrentIndex( axis->minorGridStyle()-1 );
 	ui.kcbMinorGridColor->setColor( axis->minorGridColor() );
 	ui.sbMinorGridWidth->setValue( axis->minorGridWidth() );
-
-	//TODO old code:
-		/*
-	double rmin=0, rmax=0;	// axes range
-	// TODO : switch ListBox to KComboBox
-	if (type == P2D || type == PSURFACE) {
-		list<<QString("x")<<QString("y")<<QString("y2")<<QString("x2");
-		if(axesnr == 0 || axesnr == 3) {
-			rmin = plot->ActRanges()[0].rMin();
-			rmax = plot->ActRanges()[0].rMax();
-		}
-		else {
-			rmin = plot->ActRanges()[1].rMin();
-			rmax = plot->ActRanges()[1].rMax();
-		}
-	}
-	else if (type == P3D || type == PQWT3D){
-		list<<QString("x")<<QString("y")<<QString("z")<<QString("x2")<<QString("x3")<<QString("x4");
-		list<<QString("y4")<<QString("y3")<<QString("y2")<<QString("z2")<<QString("z4")<<QString("z3");
-		if(axesnr == 0 || axesnr == 3 || axesnr == 4 || axesnr == 5) {
-			rmin = plot->ActRanges()[0].rMin();
-			rmax = plot->ActRanges()[0].rMax();
-		}
-		else if(axesnr == 1 || axesnr == 6 || axesnr == 7 || axesnr == 8) {
-			rmin = plot->ActRanges()[1].rMin();
-			rmax = plot->ActRanges()[1].rMax();
-		}
-		else {
-			rmin = plot->ActRanges()[2].rMin();
-			rmax = plot->ActRanges()[2].rMax();
-		}
-	}
-	else if (type == PPOLAR) {
-		list<<QString("phi")<<QString("r");
-
-		rmin = plot->ActRanges()[axesnr].rMin();
-		rmax = plot->ActRanges()[axesnr].rMax();
-	}
-	else if (type == PTERNARY || type == PPIE) {
-		list<<QString("a");
-
-		rmin = plot->ActRanges()[axesnr].rMin();
-		rmax = plot->ActRanges()[axesnr].rMax();
-	}
-
-	axescb->insertStringList(list);
-	axescb->setCurrentItem(axesnr);
-	QObject::connect(axescb,SIGNAL(activated(int)),this,SLOT(updateAxis(int)));
-	*/
-
-	//TODO following lines were previously in updateAxis(). looks very similar to the above code. combine/port/remove.
-	/*
-		double rmin=0, rmax=1;
-	if (type == P2D || type == PSURFACE || type == PPOLAR) {
-		if(item == 0 || item == 3) {
-			rmin = plot->ActRanges()[0].rMin();
-			rmax = plot->ActRanges()[0].rMax();
-
-			ascb->setCurrentItem(axis[0]->Scale());
-			if (type == PPOLAR) {
-				maxle->setEnabled(false);
-			}
-		}
-		else if (item == 1 || item == 2) {
-			rmin = plot->ActRanges()[1].rMin();
-			rmax = plot->ActRanges()[1].rMax();
-
-			ascb->setCurrentItem(axis[1]->Scale());
-			if (type == PPOLAR) {
-				maxle->setEnabled(true);
-			}
-		}
-	}
-	else if (type == P3D || type == PQWT3D){
-		if(item == 0 || item == 3 || item == 6 || item == 9) {
-			rmin = plot->ActRanges()[0].rMin();
-			rmax = plot->ActRanges()[0].rMax();
-			ascb->setCurrentItem(axis[0]->Scale());
-		}
-		else if (item == 1 || item == 4 || item == 7 || item == 10) {
-			rmin = plot->ActRanges()[1].rMin();
-			rmax = plot->ActRanges()[1].rMax();
-			ascb->setCurrentItem(axis[1]->Scale());
-		}
-		else if (item == 2 || item == 5 || item == 8 || item == 11) {
-			rmin = plot->ActRanges()[2].rMin();
-			rmax = plot->ActRanges()[2].rMax();
-			ascb->setCurrentItem(axis[2]->Scale());
-		}
-	}
-	*/
 }
 
 /*!
@@ -400,12 +299,12 @@ void AxesWidget::saveAxes(QList<Axis>* axes){
 		axes->append( listAxes[i] );
 
 	if ( ui.chbUseAsDefault->isChecked() ){
-		if (QMessageBox::warning(this,
-			i18n("Save default axes values"), tr("Default settings will be overwritten by the current values. Do you want to continue?"),
-				QMessageBox::Yes | QMessageBox::No)==QMessageBox::Yes){
+		if (KMessageBox::warningYesNo(this,
+														i18n("Default settings will be overwritten by the current values. Do you want to continue?"),
+														i18n("Save default axes values")) == KMessageBox::Yes){
 
 			//TODO
-			QMessageBox::warning(this, i18n("Save default axes values"), i18n("Not yet implemented. Sorry.") );
+			KMessageBox::sorry(this, i18n("Not yet implemented. Sorry."), i18n("Save default axes values"));
 		}
 	}
 }
@@ -414,6 +313,27 @@ void AxesWidget::saveAxes(QList<Axis>* axes){
 	saves the data in the UI to the axis with the index \c axisIndex.
 */
 void AxesWidget::saveAxis(const short axisIndex){
+	Axis::ScaleType scaleType=(Axis::ScaleType)ui.cbScaleType->currentIndex();
+	float lowerLimit=ui.leLowerLimit->text().toDouble();
+
+	//check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set default value.
+	if (scaleType==Axis::SCALETYPE_LOG10 || scaleType==Axis::SCALETYPE_LOG2 || scaleType==Axis::SCALETYPE_LN){
+		if(lowerLimit <= 0) {
+			KMessageBox::sorry(this,
+											i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
+											i18n("Wrong lower limit value") );
+			ui.leLowerLimit->setText( "0.01" );
+		}
+	}else if (scaleType==Axis::SCALETYPE_SQRT){
+		if(lowerLimit < 0) {
+			KMessageBox::sorry(this,
+											i18n("The axes lower limit has a negative value. Default minimal value will be used."),
+											i18n("Wrong lower limit value") );
+			ui.leLowerLimit->setText( "0" );
+		}
+	}
+
+
 	Axis* axisSave=&listAxes[axisIndex];
 
 	//*************************  "General"-tab  ************************************
@@ -486,199 +406,14 @@ void AxesWidget::saveAxis(const short axisIndex){
 	restores/shows default axis properties in the UI.
 */
 void AxesWidget::restoreDefaults(){
-	if (QMessageBox::warning(this,
-		i18n("Restore default axes values"), i18n("All settings will be reset to the default values. Do you want to continue?"),
-			QMessageBox::Yes | QMessageBox::No)==QMessageBox::Yes){
+	if (KMessageBox::warningYesNo(this,
+																i18n("All settings will be reset to the default values. Do you want to continue?"),
+																i18n("Restore default axes values")) ==  KMessageBox::Yes){
 
 		//TODO
-		QMessageBox::warning(this, i18n("Restore default axes values"), i18n("Not yet implemented. Sorry.") );
+		KMessageBox::sorry(this,  i18n("Not yet implemented. Sorry."), i18n("Restore default axes values") );
 	}
 }
-
-//TODO
-/*
-void AxesWidget::apply(QList<Axis>*) const{
-	kdDebug()<<"AxesDialog::apply_clicked()"<<endl;
-	int item = axescb->currentItem();
-
-	// change xmin,etc. if somethings changed
-	if(axiscb->isChecked() != axis[item]->Enabled())
-		axis[item]->enableBorder(axiscb->isChecked());
-	axis[item]->Enable(axiscb->isChecked());
-
-	// DONT DO THIS !!!
-	label = rtw->label();
-	//axis[item]->setLabel(rtw->label());
-
-	if(centercb->isChecked()) {	// center if selected
-		switch(type) {
-		case P2D: case PSURFACE :
-			if(item == 0 || item == 3)
-				axis[item]->centerX((int)(plot->Size().X()*p->getX()),0.5*(plot->P2().X()+plot->P1().X()));
-			else
-				axis[item]->centerY((int)(plot->Size().Y()*p->getY()),0.5*(plot->P2().Y()+plot->P1().Y()));
-			break;
-		default: break;
-		}
-		// update shown position when center label
-		rtw->setLabel(axis[item]->getLabel());
-	}
-
-	axis[item]->setPosition(positioncb->currentItem());
-	axis[item]->setScaling(scalingle->text().toDouble());
-	axis[item]->setShift(shiftle->text().toDouble());
-
-	axis[item]->setMajorTickWidth(majortickwidth->value());
-	axis[item]->setMinorTickWidth(minortickwidth->value());
-	if(type == PQWT3D) {
-		axis[item]->setMajorTickLength(majorticklengthle->text().toDouble());
-		axis[item]->setMinorTickLength(minorticklengthle->text().toDouble());
-	}
-	axis[item]->setTickLabelPrefix(tlprefix->text());
-	axis[item]->setTickLabelSuffix(tlsuffix->text());
-
-	axis[item]->enableTickLabel(ticklabelcb->isChecked());
-	axis[item]->setTickLabelFont(tf);
-	axis[item]->setTickColor(tcb->color());
-	axis[item]->setTickLabelColor(tlcb->color());
-	axis[item]->setMajorGridColor(majorgridcolorcb->color());
-	axis[item]->setMinorGridColor(minorgridcolorcb->color());
-	axis[item]->setBorderColor(bcb->color());
-	axis[item]->setMajorGridType((Qt::PenStyle) majorgridstylecb->currentItem());
-	axis[item]->setMinorGridType((Qt::PenStyle) minorgridstylecb->currentItem());
-	axis[item]->setMajorGridWidth(majorgridwidth->value());
-	axis[item]->setMinorGridWidth(minorgridwidth->value());
-
-	axis[item]->setTickPos(tickposcb->currentItem());
-	axis[item]->setTickLabelFormat((TFormat)atlfcb->currentItem());
-	axis[item]->setTickLabelPrecision(tlpni->value());
-	axis[item]->setTickLabelPosition(tlgni->value());
-	axis[item]->setDateTimeFormat(timeformat->text());
-	axis[item]->setTickLabelRotation(tlrotation->text().toDouble());
-	axis[item]->setBorderWidth(borderwidth->value());
-
-	double ret = parse((char *) (minle->text()).latin1());
-	switch((TScale)(ascb->currentItem()) ) {
-	case LOG10: case LOG2: case LN:
-		if(ret <= 0) {
-			KMessageBox::warningContinueCancel(this,
-				i18n("The axes range has negative values!\nResetting minimum value."));
-			minle->setText(QString("0.01"));
-		}
-		break;
-	case SQRT:
-		if(ret < 0) {
-			KMessageBox::warningContinueCancel(this,
-				i18n("The axes range has negative values!\nResetting minimum value."));
-			minle->setText(QString("0"));
-		}
-		break;
-	default: break;
-	}
-
-	// TODO : read range line edits with format !
-	TFormat atlf = axis[item]->TickLabelFormat();
-	double rmin = plot->TicLabelValue(atlf,minle->text());
-	double rmax = plot->TicLabelValue(atlf,maxle->text());
-	kdDebug()<<"	TYPE = "<<type<<endl;
-	if (type == P2D || type == PSURFACE || type == PPOLAR) {
-		bool tt = ticktypecb->currentItem();
-		axis[item]->setTickType(tt);
-		axis[item]->enableMajorTicks(majortickscb->isChecked());
-		axis[item]->enableMinorTicks(minortickscb->isChecked());
-		if(majorle->text()==i18n("auto"))
-			axis[item]->setMajorTicks(-1);
-		else
-			axis[item]->setMajorTicks(majorle->text().toDouble());
-		axis[item]->setMinorTicks(minorle->text().toInt());
-
-		if (item == 0 || item == 3 ) {
-			plot->setXRange(rmin, rmax);
-			axis[0]->setScale((TScale)ascb->currentItem());
-			if (type != PPOLAR) {
-				if (item == 0) {
-					axis[3]->setMajorGridColor(axis[0]->majorGridColor());
-					axis[3]->setMinorGridColor(axis[0]->minorGridColor());
-				}
-				else {
-					axis[0]->setMajorGridColor(axis[3]->majorGridColor());
-					axis[0]->setMinorGridColor(axis[3]->minorGridColor());
-				}
-				axis[3]->setScale((TScale)ascb->currentItem());
-			}
-		}
-		else if (item == 1 || item == 2){
-			plot->setYRange(rmin, rmax);
-			axis[1]->setScale((TScale)ascb->currentItem());
-
-			if (type != PPOLAR) {
-				if (item == 1) {
-					axis[2]->setMajorGridColor(axis[1]->majorGridColor());
-					axis[2]->setMinorGridColor(axis[1]->minorGridColor());
-				}
-				else {
-					axis[1]->setMajorGridColor(axis[2]->majorGridColor());
-					axis[1]->setMinorGridColor(axis[2]->minorGridColor());
-				}
-				axis[2]->setScale((TScale)ascb->currentItem());
-			}
-		}
-	}
-	else if (type == P3D || type == PQWT3D) {
-		kdDebug()<<"	P3D or PQWT3D"<<endl;
-
-		if (item == 0 || item == 3 || item == 6 || item == 9) {
-			kdDebug()<<"	X"<<endl;
-			plot->setXRange(rmin,rmax);
-
-			axis[0]->setScale((TScale)ascb->currentItem());
-
-			axis[item]->enableMajorTicks(majortickscb->isChecked());
-			axis[item]->enableMinorTicks(minortickscb->isChecked());
-			if(majorle->text()==i18n("auto"))
-				axis[item]->setMajorTicks(-1);
-			else
-				axis[item]->setMajorTicks(majorle->text().toDouble());
-			axis[item]->setMinorTicks(minorle->text().toInt());
-		}
-		else if (item == 1 || item == 4 || item == 7 || item == 10) {
-			kdDebug()<<"	Y"<<endl;
-			plot->setYRange(rmin,rmax);
-
-			axis[1]->setScale((TScale)ascb->currentItem());
-
-			axis[item]->enableMajorTicks(majortickscb->isChecked());
-			axis[item]->enableMinorTicks(minortickscb->isChecked());
-			if(majorle->text()==i18n("auto"))
-				axis[item]->setMajorTicks(-1);
-			else
-				axis[item]->setMajorTicks(majorle->text().toDouble());
-			axis[item]->setMinorTicks(minorle->text().toInt());
-		}
-		else if (item == 2 || item == 5 || item == 8 || item == 11) {
-			kdDebug()<<"	Z"<<endl;
-			plot->setZRange(rmin,rmax);
-
-			axis[2]->setScale((TScale)ascb->currentItem());
-
-			axis[item]->enableMajorTicks(majortickscb->isChecked());
-			axis[item]->enableMinorTicks(minortickscb->isChecked());
-			if(majorle->text()==i18n("auto"))
-				axis[item]->setMajorTicks(-1);
-			else
-				axis[item]->setMajorTicks(majorle->text().toDouble());
-			axis[item]->setMinorTicks(minorle->text().toInt());
-		}
-	}
-
-	axis[item]->enableMajorGrid(majorgridcb->isChecked());
-	axis[item]->enableMinorGrid(minorgridcb->isChecked());
-	axis[item]->enableBorder(bordercb->isChecked());
-	p->updatePixmap();
-
-	return 0;
-}
-*/
 
 
 //**********************************************************
@@ -868,7 +603,6 @@ void AxesDialog::update_timeformat() {
 /*!
 	inserts five possible Qt pen styles for the major grid.<br>
 	The pixmaps where the styles are painted on have the current width of the coresponding ComboBox.
-	//TODO call this function in the resize-event to adjust the width of the pixmaps.
 */
 void AxesWidget::createMajorGridStyles(){
 	int index=ui.cbMajorGridStyle->currentIndex();
@@ -904,7 +638,6 @@ void AxesWidget::createMajorGridStyles(){
 /*!
 	inserts five possible Qt pen styles for the minor grid.<br>
 	The pixmaps where the styles are painted on have the current width of the coresponding ComboBox.
-	//TODO call this function in the resize-event to adjust the width of the pixmaps.
 */
 void AxesWidget::createMinorGridStyles(){
 	int index=ui.cbMajorGridStyle->currentIndex();
@@ -933,68 +666,3 @@ void AxesWidget::createMinorGridStyles(){
 
 	kDebug()<<"minor grid styles updated"<<endl;
 }
-
-
-//TODO port/remove this function
-/*
-void AxesDialog::saveSettings() {
-	int item = axescb->currentItem();
-
-	KConfig *config = mw->Config();
-	config->setGroup( "Axes" );
-
-	QString entry = QString("PlotType %1 Axis %2 ").arg(type).arg(item);
-
-	config->writeEntry(entry+"Enabled",axiscb->isChecked());
-	config->writeEntry(entry+"Position",positioncb->currentItem());
-	config->writeEntry(entry+"Scale",ascb->currentItem());
-	config->writeEntry(entry+"Scaling",scalingle->text().toDouble());
-	config->writeEntry(entry+"Shift",shiftle->text().toDouble());
-	config->writeEntry(entry+"RangeMin",minle->text().toDouble());
-	config->writeEntry(entry+"RangeMax",maxle->text().toDouble());
-
-	config->writeEntry(entry+"CenterLabel",centercb->isChecked());
-	rtw->getLabel()->saveSettings(config,entry);
-
-	config->writeEntry(entry+"TickPosition",tickposcb->currentItem());
-	config->writeEntry(entry+"TickStyle",ticktypecb->currentItem());
-	config->writeEntry(entry+"MajorTicksEnabled",majortickscb->isChecked());
-	if(majorle->text() == i18n("auto"))
-		config->writeEntry(entry+"MajorTicks",-1);
-	else
-		config->writeEntry(entry+"MajorTicks",majorle->text().toDouble());
-	config->writeEntry(entry+"MajorTicksWidth",majortickwidth->value());
-	if(type == PQWT3D)
-		config->writeEntry(entry+"MajorTicksLength",majorticklengthle->text().toInt());
-	config->writeEntry(entry+"MinorTicksEnabled",minortickscb->isChecked());
-	config->writeEntry(entry+"MinorTicks",minorle->text().toInt());
-	config->writeEntry(entry+"MinorTicksWidth",minortickwidth->value());
-	if(type == PQWT3D)
-		config->writeEntry(entry+"MinorTicksLength",minorticklengthle->text().toInt());
-	config->writeEntry(entry+"TickColor",tcb->color());
-
-	config->writeEntry(entry+"TickLabelEnabled",ticklabelcb->isChecked());
-	config->writeEntry(entry+"TickLabelFont",tf);
-	config->writeEntry(entry+"TickLabelColor",tlcb->color());
-	config->writeEntry(entry+"TickLabelFormat",atlfcb->currentItem());
-	config->writeEntry(entry+"DateTimeFormat",timeformat->text());
-	config->writeEntry(entry+"TickLabelPrecision",tlpni->value());
-	config->writeEntry(entry+"TickLabelPosition",tlgni->value());
-	config->writeEntry(entry+"TickLabelPrefix",tlprefix->text());
-	config->writeEntry(entry+"TickLabelSuffix",tlsuffix->text());
-	config->writeEntry(entry+"TickLabelRotation",tlrotation->text().toInt());
-
-	config->writeEntry(entry+"MajorGridEnabled",majorgridcb->isChecked());
-	config->writeEntry(entry+"MajorGridWidth",majorgridwidth->value());
-	config->writeEntry(entry+"MajorGridStyle",majorgridstylecb->currentItem());
-	config->writeEntry(entry+"MajorGridColor",majorgridcolorcb->color());
-	config->writeEntry(entry+"MinorGridEnabled",minorgridcb->isChecked());
-	config->writeEntry(entry+"MinorGridWidth",minorgridwidth->value());
-	config->writeEntry(entry+"MinorGridStyle",minorgridstylecb->currentItem());
-	config->writeEntry(entry+"MinorGridColor",minorgridcolorcb->color());
-
-	config->writeEntry(entry+"BorderEnabled",bordercb->isChecked());
-	config->writeEntry(entry+"BorderColor",bcb->color());
-	config->writeEntry(entry+"BorderWidth",borderwidth->value());
-}
-*/

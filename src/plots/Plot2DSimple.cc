@@ -142,11 +142,16 @@ void Plot2DSimple::drawCurves(QPainter *p, const int w, const int h) {
 	// clipping rect with some space (clipoffset)
 	// TODO
 	//p->setClipRect(xmin-clipoffset,ymin-clipoffset,xmax-xmin+2*clipoffset,ymax-ymin+2*clipoffset);
-
+/*
 	double minx = list_plotRanges.at(0).min();
 	double maxx = list_plotRanges.at(0).max();
 	double miny = list_plotRanges.at(1).min();
 	double maxy = list_plotRanges.at(1).max();
+*/
+	double minx = list_Axes.at(0).lowerLimit();
+	double maxx = list_Axes.at(0).upperLimit();
+	double miny = list_Axes.at(1).lowerLimit();
+	double maxy = list_Axes.at(1).upperLimit();
 
 	for (int i=0; i < list_Sets.size() ; i++) {
 		Set::SetType stype = list_Sets.at(i).type();
@@ -523,10 +528,16 @@ void Plot2DSimple::calculateXY(Point d, double *x, double *y, int w, int h) {
 	const int xmax = (int)(w*(size.x()*p2.x()+position.x()));
 	const int ymin = (int)(h*(size.y()*p1.y()+position.y()));
 	const int ymax = (int)(h*(size.y()*p2.y()+position.y()));
+	/*
 	double minx = list_plotRanges.at(0).min();
 	double maxx = list_plotRanges.at(0).max();
 	double miny = list_plotRanges.at(1).min();
 	double maxy = list_plotRanges.at(0).max();
+	*/
+	double minx = list_Axes.at(0).lowerLimit();
+	double maxx = list_Axes.at(0).upperLimit();
+	double miny = list_Axes.at(1).lowerLimit();
+	double maxy = list_Axes.at(1).upperLimit();
 
 	switch(list_Axes.at(0).scaleType()) {
 		case Axis::SCALETYPE_LINEAR:	*x += (d.x() - minx) * (xmax-xmin)/(maxx-minx); break;

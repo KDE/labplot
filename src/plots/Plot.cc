@@ -81,6 +81,7 @@ QList<Axis>* Plot::axes(){
 
 void Plot::addSet(Set s){
 	list_Sets.append(s);
+	setPlotRanges( s.list_ranges );
 }
 
 //! build the tic label string according to atlf

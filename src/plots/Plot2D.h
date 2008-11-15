@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : 2d plot class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -44,6 +44,7 @@ public:
 	Axis *getAxis(int i) { return &axis[i]; }
 */
 private:
+	void setPlotRanges(const QList<Range>&);
 // 	void setRanges(Range* r) {range[0]=r[0];range[1]=r[1];}
 // 	void setActRanges(Range* r);
 // 	void setRange(Range* r,int i) {range[i]=*r;}

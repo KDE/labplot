@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : axes settings dialog
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,11 +30,12 @@
 #include "AxesWidget.h"
 #include "../elements/Axis.h"
 #include "Worksheet.h"
+#include "pixmaps/pixmap.h"
 #include <KDebug>
 
 AxesDialog::AxesDialog(QWidget* parent) : KDialog(parent){
 	this->setCaption(i18n("Axes Settings"));
-	this->setWindowIcon(KIcon(QIcon("axes-xpm")));
+	this->setWindowIcon(KIcon(QIcon(axes_xpm)));
 
 	axesWidget = new AxesWidget( this );
 	this->setMainWidget( axesWidget );
@@ -45,6 +46,7 @@ AxesDialog::AxesDialog(QWidget* parent) : KDialog(parent){
 
   	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
  	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
+	connect( this, SIGNAL( defaultClicked() ), axesWidget, SLOT( restoreDefaults() ) );
 	connect( axesWidget, SIGNAL(dataChanged(bool)), SLOT(enableButtonApply(bool)) );
 
 	kDebug()<<"Initialization done."<<endl;

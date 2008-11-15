@@ -79,6 +79,27 @@ Plot2D::Plot2D() : Plot(){
 	kDebug()<<"Initialization done"<<endl;
 }
 
+/*!
+	sets the ranges of the plot. Plot ranges are stored in the Axis-objects
+*/
+void Plot2D::setPlotRanges( const QList<Range>& ranges ){
+	//x1
+	this->list_Axes[0].setLowerLimit( ranges.at(0).min() );
+	this->list_Axes[0].setUpperLimit( ranges.at(0).max() );
+
+	//y1
+	this->list_Axes[1].setLowerLimit( ranges.at(1).min() );
+	this->list_Axes[1].setUpperLimit( ranges.at(0).max() );
+
+	//x2
+	this->list_Axes[2].setLowerLimit( ranges.at(0).min() );
+	this->list_Axes[2].setUpperLimit( ranges.at(0).max() );
+
+	//y2
+	this->list_Axes[3].setLowerLimit( ranges.at(1).min() );
+	this->list_Axes[3].setUpperLimit( ranges.at(0).max() );
+}
+
 // void Plot2D::setActRange(Range* r, int i) {
 // 	kDebug()<<"Plot2D::setActRange("<<i<<")"<<endl;
 // 	Range tmp;
@@ -500,8 +521,13 @@ void Plot2D::drawAxesTicks(QPainter *p, const int w, const int h, const int axis
 	}
 
 	if ( a.hasMajorTicks() ) {
+		/*
 		double min = list_plotRanges.at(axistype).min();
 		double max = list_plotRanges.at(axistype).max();
+		*/
+		double min = list_Axes.at(axistype).lowerLimit();
+		double max = list_Axes.at(axistype).upperLimit();
+
 		kDebug()<<"	MIN/MAX "<<min<<max<<endl;
 		Axis::ScaleType scale = a.scaleType();
 		Axis::Position axisPosition = a.position();
