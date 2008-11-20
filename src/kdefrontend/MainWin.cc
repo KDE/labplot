@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2007-2008 Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
     Description          : main window
 
  ***************************************************************************/
@@ -61,9 +61,10 @@
 #include "core/AspectTreeModel.h"
 #include "table/Table.h"
 
-MainWin::MainWin(QWidget *parent, QString filename)
+MainWin::MainWin(QWidget *parent, const QString& filename)
  : KXmlGuiWindow(parent)
 {
+	m_fileName=filename;
 	m_mdi_area = new QMdiArea;
 	setCentralWidget(m_mdi_area);
 
@@ -93,17 +94,6 @@ MainWin::MainWin(QWidget *parent, QString filename)
 
 	handleAspectDescriptionChanged(m_project);
 
-	// command line file name
-	if(!filename.isEmpty() && !QFile::exists(filename)) {
-		int state = KMessageBox::warningContinueCancel( this,
-			i18n( "Could not open file \'%1\'!").arg(filename),i18n("Warning"));
-		if (state == KMessageBox::Cancel)
-			exit(-1);
-	}
-	else if (filename.contains(".lml") || filename.contains(".xml")) {
-		open(filename);
-	}
-
 	spreadsheetmenu = static_cast<QMenu*> (guiFactory()->container("spreadsheet",this));
 	connect(spreadsheetmenu, SIGNAL(aboutToShow()), SLOT(SpreadsheetMenu()) );
 
@@ -112,10 +102,17 @@ MainWin::MainWin(QWidget *parent, QString filename)
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 	connect(m_project, SIGNAL(requestFolderContextMenu(QMenu*)), this, SLOT(createFolderContextMenu(QMenu*)));
 	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
+
+	QTimer::singleShot( 0, this, SLOT(initObject()) );
 }
 
 MainWin::~MainWin() {
 	delete m_project;
+}
+
+void MainWin::initObject(){
+	if ( !m_fileName.isEmpty() )
+		open(m_fileName);
 }
 
 void MainWin::setupActions() {
@@ -188,8 +185,6 @@ void MainWin::setupActions() {
 // 	action->setShortcut(Qt::CTRL+Qt::Key_E);
 	actionCollection()->addAction("new_3D_function_plot", action);
 	functionActions->addAction(action);
-
-	//TODO 3D-QWT?
 
 	connect(functionActions, SIGNAL(triggered(QAction*)), this, SLOT(functionActionTriggered(QAction*)));
 

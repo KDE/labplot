@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : main class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,7 +32,8 @@
 #include <KStandardDirs>
 #include <KSplashScreen>
 #include <KDebug>
- 
+#include <KMessageBox>
+
 #include "MainWin.h"
 #include "core/Project.h"
 #include "table/Table.h"
@@ -51,12 +52,32 @@ int main (int argc, char *argv[]) {
 	options.add("no-splash",ki18n("do not show the splash screen"));
 	options.add("+[file]",ki18n("open a project file"));
 	KCmdLineArgs::addCmdLineOptions( options );
- 
+
 	KApplication app;
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	QString filename;
 	if (args->count() > 0)
 		filename = args->arg(0);
+
+	if(!filename.isEmpty() ){
+		if ( !QFile::exists(filename)) {
+			if ( KMessageBox::warningContinueCancel( 0,
+																						i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.").arg(filename),
+																						i18n("Failed to open")) == KMessageBox::Cancel){
+				exit(-1);  //"Cancel" clicked -> exit the application
+			}else{
+				filename=""; //Wrong file -> clear the file name and continue
+			}
+		}else if ( !(filename.contains(".lml") || filename.contains(".xml")) ){
+			if ( KMessageBox::warningContinueCancel( 0,
+																							i18n( "File \'%1\' doesn't contain any labplot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.").arg(filename),
+																							i18n("Failed to open")) == KMessageBox::Cancel){
+				exit(-1); //"Cancel" clicked -> exit the application
+			}else{
+				filename=""; //Wrong file -> clear the file name and continue
+			}
+		}
+	}
 
 	KSplashScreen *splash=0;
 	if (args->isSet("-splash")) {

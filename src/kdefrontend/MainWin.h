@@ -5,9 +5,9 @@
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2007-2008 Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
     Description          : main class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -51,7 +51,7 @@ class MainWin : public KXmlGuiWindow
 {
 	Q_OBJECT
 public:
-	MainWin(QWidget *parent=0,QString filename=0);
+	MainWin(QWidget *parent=0, const QString& filename=0);
 	~MainWin();
 	QMdiArea* getMdi() const { return m_mdi_area; }
 	Spreadsheet* activeSpreadsheet() const;			//!< get active spreadsheet
@@ -84,6 +84,7 @@ private:
 	ProjectExplorer * m_project_explorer;
 	QDockWidget * m_project_explorer_dock;
 	void handleAspectAddedInternal(AbstractAspect *aspect);
+	QString m_fileName; //name of the file to be opened (command line argument)
 
 public slots:
 	Table* newSpreadsheet();
@@ -101,6 +102,7 @@ public slots:
 	void updateMdiWindowVisibility();
 
 private slots:
+	void initObject();
 	void openNew();
 	void print();
 	void SpreadsheetMenu();
@@ -114,7 +116,7 @@ private slots:
 
 signals:
 	void partActivated(AbstractPart*);
-	
+
 
 private slots:
 	void handleAspectAdded(const AbstractAspect *parent, int index);
