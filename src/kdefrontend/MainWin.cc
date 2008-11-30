@@ -52,7 +52,7 @@
 #include <KFilterDev>
 
 #include "elements/sheettype.h"
-#include "pixmaps/pixmap.h"
+#include "pixmaps/pixmap.h" //TODO remove this. Use Qt's resource system instead.
 
 #include "core/Project.h"
 #include "core/Folder.h"

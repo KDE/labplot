@@ -36,6 +36,7 @@
 #include "WorksheetView.h"
 #include "elements/Set.h"
 #include "plots/Plot2DSimple.h"
+#include "pixmaps/pixmap.h" //TODO remove this. Use Qt's resource system instead.
 
 class WorksheetPrivate{
 
@@ -46,7 +47,6 @@ public:
 	QString title() const;
 	void setTitle(const QString& title);
 	QWidget* view();
-// 	SheetType sheetType() const { return type; }
 	int plotCount() const { return m_listPlots.count(); }
 	void print(QString file=0);
 	void createPlot(const Plot::PlotType);
@@ -58,7 +58,6 @@ public:
 
 private:
 	QString m_title;
-// 	SheetType type;			// needed for mw->active{Work,Spread}sheet()
 	QList<Plot*> m_listPlots;		//!< list of plots
 	int currentPlotIndex;
 	Worksheet* m_worksheet;
@@ -134,6 +133,12 @@ void Worksheet::repaint(){
 
 QMenu* Worksheet::createContextMenu(){
 	return new QMenu(0);
+}
+
+QIcon Worksheet::icon() const{
+	//TODO Use Qt's resource system.
+	//TODO add on- and off-icons.
+	return KIcon(QIcon(worksheet_xpm));
 }
 
 //********************************************************

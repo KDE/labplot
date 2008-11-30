@@ -56,6 +56,7 @@ class Worksheet : public AbstractPart, public scripted{
 		Plot* activePlot() const;
 		QList<Plot*>* listPlots();
 		void repaint();
+		QIcon icon() const;
 
 		QMenu *createContextMenu();
 	private:
