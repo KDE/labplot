@@ -26,6 +26,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/TitleDialog.cc
 	${KDEFRONTEND_DIR}/ValuesWidget.cc
   	${KDEFRONTEND_DIR}/Worksheet.cc
+	${KDEFRONTEND_DIR}/WorksheetView.cpp
 )
 
 set(ELEMENTS_SOURCES

@@ -70,8 +70,9 @@ private:
 	QMdiArea *m_mdi_area;
 	Project *m_project;
 	QMenu *spreadsheetmenu;
-	KAction *spreadaction;
-	KAction *m_folderAction;
+	KAction *m_newFolderAction;
+	KAction *m_newSpreadsheetAction;
+	KAction *m_newWorksheetAction;
 	KAction *m_historyAction;
 	KAction *m_undoAction;
 	KAction *m_redoAction;
@@ -108,6 +109,7 @@ private slots:
 	void SpreadsheetMenu();
 	void importDialog();
 	void projectDialog();
+	void newPlotActionTriggered(QAction*);
 	void functionActionTriggered(QAction*);
 	void titleDialog();
 	void axesDialog();

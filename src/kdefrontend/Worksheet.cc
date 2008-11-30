@@ -2,8 +2,8 @@
     File                 : Worksheet.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
+    Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
+    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : worksheet class
 
  ***************************************************************************/
@@ -28,57 +28,147 @@
  ***************************************************************************/
 #include <KDebug>
 #include <KLocale>
-// #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KInputDialog>
 #include <kmessagebox.h>
 
-#include "MainWin.h"
 #include "Worksheet.h"
+#include "WorksheetView.h"
 #include "elements/Set.h"
 #include "plots/Plot2DSimple.h"
 
-Worksheet::Worksheet(MainWin *m)
-	:QWidget(), mw(m){
-	kDebug()<<"Worksheet()"<<endl;
-		type = WORKSHEET;
+class WorksheetPrivate{
 
-	//  set title
-		//TODO !!!
-// 	int number=1;
-// 	while(mw->getWorksheet(i18n("Worksheet %1").arg(number)) != 0)
-// 		number++;
-// 	setWindowTitle(i18n("Worksheet %1").arg(number));
+public:
+	WorksheetPrivate(Worksheet*);
+	~WorksheetPrivate();
 
-	KConfigGroup conf(KSharedConfig::openConfig(),"Worksheet");
-	// TODO : hardcoded :-(
-	setMinimumSize(300,200);
-	int w = conf.readEntry("Width",600);
-	int h = conf.readEntry("Height",400);
-	resize(w,h);
+	QString title() const;
+	void setTitle(const QString& title);
+	QWidget* view();
+// 	SheetType sheetType() const { return type; }
+	int plotCount() const { return m_listPlots.count(); }
+	void print(QString file=0);
+	void createPlot(const Plot::PlotType);
+	void addSet(const Set set, const Plot::PlotType ptype);
+	Plot* activePlot();
+	QList<Plot*>* listPlots();
+	QDomElement save(QDomDocument doc);
+	void open(QDomNode node);
 
+private:
+	QString m_title;
+// 	SheetType type;			// needed for mw->active{Work,Spread}sheet()
+	QList<Plot*> m_listPlots;		//!< list of plots
+	int currentPlotIndex;
+	Worksheet* m_worksheet;
+	WorksheetView* m_view;
+	void setupPrinter(QPrinter *pr, QString fn);
+};
+
+/*!
+    \class Worksheet
+
+    \brief The Worksheet class provides ???
+
+    \ingroup ???
+*/
+
+/*!
+	Constructor of the class.
+*/
+Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString& name)
+	: AbstractPart(name), scripted(engine){
+
+	d = new WorksheetPrivate(this);
+}
+
+Worksheet::~Worksheet(){
+	delete d;
+}
+
+/*!
+	returns the title of the object.
+*/
+QString Worksheet::title() const{
+	return d->title();
+}
+
+/*!
+	sets the title of the object to \a title.
+*/
+void Worksheet::setTitle(const QString& title){
+	d->setTitle(title);
+}
+
+/*!
+
+*/
+void Worksheet::addSet(const Set set, const Plot::PlotType plotType){
+	d->addSet(set, plotType);
+}
+
+void Worksheet::createPlot(const Plot::PlotType plotType){
+	d->createPlot(plotType);
+}
+
+QWidget* Worksheet::view(){
+	return d->view();
+}
+
+Plot* Worksheet::activePlot() const{
+	return d->activePlot();
+}
+
+QList<Plot*>* Worksheet::listPlots(){
+	return d->listPlots();
+}
+
+int Worksheet::plotCount() const{
+	return d->plotCount();
+}
+
+void Worksheet::repaint(){
+	d->view()->repaint();
+}
+
+QMenu* Worksheet::createContextMenu(){
+	return new QMenu(0);
+}
+
+//********************************************************
+//***** Implementation of Worksheet in WorksheetPrivate****
+//********************************************************
+WorksheetPrivate::WorksheetPrivate(Worksheet* w){
+	m_worksheet=w;
+	m_view=0;
 	currentPlotIndex=0; //TODO realy needed?
-	kDebug()<<"Worksheet() DONE"<<endl;
 }
 
-Worksheet::~Worksheet() {
-	mw->updateGUI();
+WorksheetPrivate::~WorksheetPrivate() {
+	if (m_view)
+		delete m_view;
 }
 
-Plot* Worksheet::activePlot(){
-	 return listPlots[currentPlotIndex];
-}
-void Worksheet::paintEvent(QPaintEvent *) {
-	kDebug()<<"Worksheet::paintEvent()"<<endl;
-	QPainter painter(this);
-	painter.setRenderHint(QPainter::Antialiasing);
+QWidget* WorksheetPrivate::view(){
+	if (!m_view)
+		m_view = new WorksheetView(0, m_worksheet);
 
-	draw(&painter, this->width(), this->height());
+	return m_view;
 }
 
-QDomElement Worksheet::save(QDomDocument doc) {
+Plot* WorksheetPrivate::activePlot(){
+	 return m_listPlots[currentPlotIndex];
+}
+
+QList<Plot*>* WorksheetPrivate::listPlots(){
+	return &m_listPlots;
+}
+
+QDomElement WorksheetPrivate::save(QDomDocument doc) {
+	/*
 	kDebug()<<endl;
-	QDomElement wstag = doc.createElement( "Worksheet" );
+	QDomElement wstag = doc.createElement( "WorksheetPrivate" );
 	wstag.setAttribute("api",QString::number(currentPlotIndex));
 //	wstag.setAttribute("nr_plots",QString::number(nr_plots));
 
@@ -94,6 +184,9 @@ QDomElement Worksheet::save(QDomDocument doc) {
 	wstag.appendChild( tag );
 	QDomText t = doc.createTextNode( windowTitle() );
 	tag.appendChild( t );
+	*/
+
+
 	// TODO
 /*	tag = doc.createElement( "TitleEnabled" );
 	wstag.appendChild( tag );
@@ -161,138 +254,127 @@ QDomElement Worksheet::save(QDomDocument doc) {
 		wstag.appendChild(tag);
 	}
 */
-	return wstag;
+// 	return wstag;
 }
 
-void Worksheet::open(QDomNode node) {
-	kDebug()<<endl;
-	int tmpnr_plots=0;
-//	int nr_label=0, nr_line=0, nr_rect=0, nr_ellipse=0, nr_image=0;
-	while(!node.isNull()) {
-		QDomElement e = node.toElement();
-		kDebug()<<"WS TAG = "<<e.tagName()<<endl;
-		kDebug()<<"WS TEXT = "<<e.text()<<endl;
-
-		if(e.tagName() == "Position") {
-			int px = e.attribute("x").toInt();
-			int py = e.attribute("y").toInt();
-			parentWidget()->move(QPoint(px,py));
-			if(px<0 || py<0) {	// fullscreen
-				mw->getMdi()->cascadeSubWindows();
-				showMaximized();
-			}
-		}
-		else if(e.tagName() == "Size") {
-			int X = e.attribute("width").toInt();
-			int Y = e.attribute("height").toInt();
-			resize(X,Y);
-			kDebug()<<"Resizing to "<<X<<' '<<Y<<endl;
-		}
-		else if(e.tagName() == "Title")
-			setTitle(e.text());
-		// TODO
-//		else if(e.tagName() == "TitleEnabled")
-//			title_enabled = (bool) e.text().toInt();
-//		else if(e.tagName() == "Background")
-//			background.setColor(QColor(e.text()));
-//		else if(e.tagName() == "Brush")
-//			background.setStyle(Qt::BrushStyle(e.text().toInt()));
-//		else if(e.tagName() == "Timestamp")
-//			timestamp.setTime_t(e.text().toInt());
-//		else if(e.tagName() == "TimestampEnabled")
-//			timestamp_enabled = (bool) e.text().toInt();
-//		else if(e.tagName() == "DrawObjectsFirst")
-//			draw_objects_first = (bool) e.text().toInt();
-
-/*		else if(e.tagName() == "Label")
-			label[nr_label++]->openXML(e.firstChild());
-		else if(e.tagName() == "Line")
-			line[nr_line++]->openXML(e.firstChild());
-		else if(e.tagName() == "Rect")
-			rect[nr_rect++]->openXML(e.firstChild());
-		else if(e.tagName() == "Ellipse")
-			ellipse[nr_ellipse++]->openXML(e.firstChild());
-		else if(e.tagName() == "Image")
-			image[nr_image++]->openXML(e.firstChild());
-*/
-		else if(e.tagName() == "Plot") {
-			// TODO
-			kDebug()<<"	TAG Plot : type = "<<e.attribute("type").toInt()<<endl;
-//			newPlot((PlotType) e.attribute("type").toInt());
-			kDebug()<<"tmpnr_plots = "<<tmpnr_plots<<endl;
-			kDebug()<<"	Calling openPlotXML()"<<endl;
-//			plot[tmpnr_plots++]->openPlotXML(e.firstChild());
-		}
-
-		node = node.nextSibling();
-	}
+void WorksheetPrivate::open(QDomNode node) {
+// 	kDebug()<<endl;
+// 	int tmpnr_plots=0;
+// //	int nr_label=0, nr_line=0, nr_rect=0, nr_ellipse=0, nr_image=0;
+// 	while(!node.isNull()) {
+// 		QDomElement e = node.toElement();
+// 		kDebug()<<"WS TAG = "<<e.tagName()<<endl;
+// 		kDebug()<<"WS TEXT = "<<e.text()<<endl;
+//
+// 		if(e.tagName() == "Position") {
+// 			int px = e.attribute("x").toInt();
+// 			int py = e.attribute("y").toInt();
+// 			parentWidget()->move(QPoint(px,py));
+// 			if(px<0 || py<0) {	// fullscreen
+// 				mw->getMdi()->cascadeSubWindows();
+// 				showMaximized();
+// 			}
+// 		}
+// 		else if(e.tagName() == "Size") {
+// 			int X = e.attribute("width").toInt();
+// 			int Y = e.attribute("height").toInt();
+// 			resize(X,Y);
+// 			kDebug()<<"Resizing to "<<X<<' '<<Y<<endl;
+// 		}
+// 		else if(e.tagName() == "Title")
+// 			setTitle(e.text());
+// 		// TODO
+// //		else if(e.tagName() == "TitleEnabled")
+// //			title_enabled = (bool) e.text().toInt();
+// //		else if(e.tagName() == "Background")
+// //			background.setColor(QColor(e.text()));
+// //		else if(e.tagName() == "Brush")
+// //			background.setStyle(Qt::BrushStyle(e.text().toInt()));
+// //		else if(e.tagName() == "Timestamp")
+// //			timestamp.setTime_t(e.text().toInt());
+// //		else if(e.tagName() == "TimestampEnabled")
+// //			timestamp_enabled = (bool) e.text().toInt();
+// //		else if(e.tagName() == "DrawObjectsFirst")
+// //			draw_objects_first = (bool) e.text().toInt();
+//
+// /*		else if(e.tagName() == "Label")
+// 			label[nr_label++]->openXML(e.firstChild());
+// 		else if(e.tagName() == "Line")
+// 			line[nr_line++]->openXML(e.firstChild());
+// 		else if(e.tagName() == "Rect")
+// 			rect[nr_rect++]->openXML(e.firstChild());
+// 		else if(e.tagName() == "Ellipse")
+// 			ellipse[nr_ellipse++]->openXML(e.firstChild());
+// 		else if(e.tagName() == "Image")
+// 			image[nr_image++]->openXML(e.firstChild());
+// */
+// 		else if(e.tagName() == "Plot") {
+// 			// TODO
+// 			kDebug()<<"	TAG Plot : type = "<<e.attribute("type").toInt()<<endl;
+// //			newPlot((PlotType) e.attribute("type").toInt());
+// 			kDebug()<<"tmpnr_plots = "<<tmpnr_plots<<endl;
+// 			kDebug()<<"	Calling openPlotXML()"<<endl;
+// //			plot[tmpnr_plots++]->openPlotXML(e.firstChild());
+// 		}
+//
+// 		node = node.nextSibling();
+// 	}
 }
 
-void Worksheet::setTitle(QString title) {
-	kDebug()<<"title ="<<title<<endl;
-	bool ok=true;
-	if(title.isEmpty())
-		title = KInputDialog::getText("LabPlot", i18n("Worksheet title : "), windowTitle(), &ok);
-
-	if(ok && !title.isEmpty()) {
-		setWindowTitle(title);
-		mw->updateSheetList();
-	}
+void WorksheetPrivate::setTitle(const QString& title) {
+	m_title=title;
 }
 
-void Worksheet::draw(QPainter *p, int w, int h) {
-	kDebug()<<"Worksheet::Draw() : w/h ="<<w<<h<<endl;
-
-	for (int i=0; i<listPlots.size(); i++) {
-		kDebug()<<"Plot "<<i<<" drawn"<<endl;
- 		listPlots.at(i)->draw(p,w,h);
-	}
+QString WorksheetPrivate::title() const{
+	return m_title;
 }
 
-void Worksheet::addPlot(Plot::PlotType plotType) {
+void WorksheetPrivate::createPlot(const Plot::PlotType plotType){
 	kDebug()<<"Plot of type "<<plotType<<" is going to be created"<<endl;
 
 	switch(plotType) {
 	case Plot::PLOT2D:{
-   		listPlots<<(new Plot2DSimple());
+   		m_listPlots<<(new Plot2DSimple());
 		break;
 	}
 	default:
 		break;
 	}
 
-    currentPlotIndex=listPlots.size()-1;
+    currentPlotIndex=m_listPlots.size()-1;
 	kDebug()<<"Plot number "<<currentPlotIndex+1<<"added"<<endl;
 }
 
-void Worksheet::addSet(Set s, Plot::PlotType type) {
-	kDebug()<<"Worksheet::addSet() plot type ="<<type<<endl;
+void WorksheetPrivate::addSet(const Set s, const Plot::PlotType type) {
+	kDebug()<<"WorksheetPrivate::addSet() plot type ="<<type<<endl;
 
-//  	if(plotCount() == 0 || ptype != plot[api]->Type() )
- 	if (listPlots.size()==0){
-		this->addPlot(type);
+ 	if (m_listPlots.size()==0){
+		this->createPlot(type);
 	}else{
 		//TODO  add new plot if type mismatch instead of MessageBox
-		if ( listPlots.at(0)->plotType() != type){
-			KMessageBox::error( this, i18n("Plot cannot be added."), i18n("Plot type mismatch") );
+		if ( m_listPlots.at(0)->plotType() != type){
+			KMessageBox::error( 0, i18n("Plot cannot be added."), i18n("Plot type mismatch") );
 			return;
 		}
  	}
 
- 	listPlots[currentPlotIndex]->addSet(s);
- 	listPlots[currentPlotIndex]->resetRanges();
+ 	m_listPlots[currentPlotIndex]->addSet(s);
+ 	m_listPlots[currentPlotIndex]->resetRanges();
 
 	// set actrange for new plots
 // 	Range *actrange = listPlots[currentPlotIndex]->ActRanges();
 // 	if (actrange[0].max()-actrange[0].min() == 0)
 // 		listPlots[currentPlotIndex]->setActRanges( listPlots[currentPlotIndex]->Ranges() );
 
-   	repaint();
+	//TODO repaint only the currently affected plot!
+    if (m_view)
+		m_view->repaint();
+
 	kDebug()<<"Set added."<<endl;
 }
 
-void Worksheet::setupPrinter(QPrinter *pr, QString fn) {
-	kDebug()<<"Worksheet::setupPrinter()"<<endl;
+void WorksheetPrivate::setupPrinter(QPrinter *pr, QString fn) {
+	kDebug()<<"WorksheetPrivate::setupPrinter()"<<endl;
 	// TODO
 //	KConfig *config = mw->Config();
 //	config->setGroup( "KPrinter Settings" );
@@ -312,22 +394,22 @@ void Worksheet::setupPrinter(QPrinter *pr, QString fn) {
 //		pr->setColorMode(KPrinter::GrayScale);
 }
 
-void Worksheet::print(QString file) {
-	kDebug()<<"Worksheet::Print("<<file<<")"<<endl;
-
-	QPrinter printer(QPrinter::ScreenResolution);
-	setupPrinter(&printer,file);
-
-	if (file.isEmpty()) {
-		QPrintDialog *dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(tr("Print Document"));
-		dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
-		if (dialog->exec() != QDialog::Accepted)
-			return;
-	}
-
-	QPainter painter;
-	painter.begin(&printer);
-	draw(&painter,printer.width(),printer.height());
-	painter.end();
+void WorksheetPrivate::print(QString file) {
+// 	kDebug()<<"WorksheetPrivate::Print("<<file<<")"<<endl;
+//
+// 	QPrinter printer(QPrinter::ScreenResolution);
+// 	setupPrinter(&printer,file);
+//
+// 	if (file.isEmpty()) {
+// 		QPrintDialog *dialog = new QPrintDialog(&printer, 0);
+// 		dialog->setWindowTitle(i18n("Print Document"));
+// 		dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
+// 		if (dialog->exec() != QDialog::Accepted)
+// 			return;
+// 	}
+//
+// 	QPainter painter;
+// 	painter.begin(&printer);
+// 	draw(&painter,printer.width(),printer.height());
+// 	painter.end();
 }

@@ -74,7 +74,7 @@ void AxesDialog::setAxes(QList<Axis>* axes, const int axisNumber){
 */
 void AxesDialog::apply(){
 	axesWidget->saveAxes( worksheet->activePlot()->axes() );
- 	worksheet->repaint();//TODO triggers repaint for all plots in the worksheet. redesign.
+	worksheet->repaint();//TODO triggers repaint for all plots and for all objects in the worksheet. redesign.
 	enableButtonApply( false );
 	kDebug()<<"Changes applied."<<endl;
 }

@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -135,36 +135,28 @@ QWidget *Project::view()
 
 QMenu *Project::createContextMenu()
 {
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QMenu * menu = new QMenu(); // no remove action from AbstractAspect in the project context menu
 	emit requestProjectContextMenu(menu);
 	return menu;
-#else
-	return NULL;
-#endif
 }
 
 QMenu *Project::createFolderContextMenu(const Folder * folder)
 {
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QMenu * menu = const_cast<Folder *>(folder)->AbstractAspect::createContextMenu();
 	Q_ASSERT(menu);
 	emit requestFolderContextMenu(folder, menu);
 	return menu;
-#else
-	return NULL;
-#endif
 }
 
 void Project::setMdiWindowVisibility(MdiWindowVisibility visibility)
-{ 
-	d->mdi_window_visibility = visibility; 
+{
+	d->mdi_window_visibility = visibility;
 	emit mdiWindowVisibilityChanged();
 }
-		
-Project::MdiWindowVisibility Project::mdiWindowVisibility() const 
-{ 
-	return d->mdi_window_visibility; 
+
+Project::MdiWindowVisibility Project::mdiWindowVisibility() const
+{
+	return d->mdi_window_visibility;
 }
 
 AbstractScriptingEngine * Project::scriptingEngine() const
@@ -191,7 +183,7 @@ BASIC_D_ACCESSOR_IMPL(Project, int, version, Version, version)
 CLASS_D_ACCESSOR_IMPL(Project, QString, labPlot, LabPlot, labPlot)
 #endif
 // TODO: add support for these in the SciDAVis UI
-CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)  
+CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modification_time)
 FLAG_D_ACCESSOR_IMPL(Project, Changed, changed)
 
@@ -242,9 +234,9 @@ bool Project::load(XmlStreamReader * reader)
 		if (!reader->skipToNextTag()) return false;
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		if (reader->name() == "scidavis_project") 
+		if (reader->name() == "scidavis_project")
 #else
-		if (reader->name() == "labplot_project") 
+		if (reader->name() == "labplot_project")
 #endif
 		{
 			setComment("");
@@ -252,24 +244,24 @@ bool Project::load(XmlStreamReader * reader)
 
 			bool ok;
 			int version = reader->readAttributeInt("version", &ok);
-			if(!ok) 
+			if(!ok)
 			{
 				reader->raiseError(tr("invalid or missing project version"));
 				return false;
 			}
 			setVersion(version);
 			// version dependent staff goes here
-			
+
 			if (!readBasicAttributes(reader)) return false;
 			if (!readProjectAttributes(reader)) return false;
-			
-			while (!reader->atEnd()) 
+
+			while (!reader->atEnd())
 			{
 				reader->readNext();
 
 				if (reader->isEndElement()) break;
 
-				if (reader->isStartElement()) 
+				if (reader->isStartElement())
 				{
 					if (reader->name() == "comment")
 					{
@@ -286,7 +278,7 @@ bool Project::load(XmlStreamReader * reader)
 						reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
 						if (!reader->skipToEndElement()) return false;
 					}
-				} 
+				}
 			}
 		}
 		else // no project element

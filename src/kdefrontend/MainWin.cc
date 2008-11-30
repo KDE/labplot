@@ -100,7 +100,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	statusBar()->showMessage(i18n("Welcome to LabPlot ")+LVERSION);
 
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_project, SIGNAL(requestFolderContextMenu(QMenu*)), this, SLOT(createFolderContextMenu(QMenu*)));
+	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*, QMenu*)), this, SLOT(createFolderContextMenu(const Folder*, QMenu*)));
 	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
 
 	QTimer::singleShot( 0, this, SLOT(initObject()) );
@@ -138,19 +138,7 @@ void MainWin::setupActions() {
 	connect(action, SIGNAL(triggered()),SLOT(projectDialog()));
 
 	// Edit
-	spreadaction = new KAction(KIcon("insert-table"),i18n("New Spreadsheet"),this);
-	spreadaction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-	actionCollection()->addAction("new spreadsheet", spreadaction);
-	connect(spreadaction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
-
-	m_folderAction = new KAction(KIcon("folder-new"),i18n("New Folder"),this);
-	actionCollection()->addAction("new folder", m_folderAction);
-	connect(m_folderAction, SIGNAL(triggered()),SLOT(newFolder()));
-
-	m_historyAction = new KAction(i18n("Undo/Redo History"),this);
-	actionCollection()->addAction("history", m_historyAction);
-	connect(m_historyAction, SIGNAL(triggered()),SLOT(showHistory()));
-
+	//Undo/Redo-stuff
 	m_undoAction = new KAction(KIcon("edit-undo"),i18n("Undo"),this);
 	actionCollection()->addAction("undo", m_undoAction);
 	connect(m_undoAction, SIGNAL(triggered()),SLOT(undo()));
@@ -159,34 +147,84 @@ void MainWin::setupActions() {
 	actionCollection()->addAction("redo", m_redoAction);
 	connect(m_redoAction, SIGNAL(triggered()),SLOT(redo()));
 
-	action = new KAction(KIcon(QIcon(worksheet_xpm)),i18n("New Worksheet"),this);
-	action->setShortcut(Qt::ALT+Qt::Key_X);
-	actionCollection()->addAction("new worksheet", action);
-	connect(action, SIGNAL(triggered()), SLOT(newWorksheet()));
+	m_historyAction = new KAction(i18n("Undo/Redo History"),this);
+	actionCollection()->addAction("history", m_historyAction);
+	connect(m_historyAction, SIGNAL(triggered()),SLOT(showHistory()));
+
+	//New Folder/Spreasheet/Worksheet
+	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("New Spreadsheet"),this);
+	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
+	actionCollection()->addAction("new spreadsheet", m_newSpreadsheetAction);
+	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
+
+	m_newFolderAction = new KAction(KIcon("folder-new"),i18n("New Folder"),this);
+	actionCollection()->addAction("new folder", m_newFolderAction);
+	connect(m_newFolderAction, SIGNAL(triggered()),SLOT(newFolder()));
+
+	m_newWorksheetAction= new KAction(KIcon(QIcon(worksheet_xpm)),i18n("New Worksheet"),this);
+	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
+	actionCollection()->addAction("new worksheet", m_newWorksheetAction);
+	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
+
+	//"New plots"
+	QActionGroup* newPlotActions = new QActionGroup(this);
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Plot"),this);
+	actionCollection()->addAction("new_2D_plot", action);
+	newPlotActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Plot"),this);
+	actionCollection()->addAction("new_2D_surface_plot", action);
+	newPlotActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Plot"),this);
+	actionCollection()->addAction("new_2D_polar_plot", action);
+	newPlotActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Plot"),this);
+	actionCollection()->addAction("new_3D_plot", action);
+	newPlotActions->addAction(action);
+
+	connect(newPlotActions, SIGNAL(triggered(QAction*)), this, SLOT(newPlotActionTriggered(QAction*)));
 
 	//Function plots
    QActionGroup* functionActions = new QActionGroup(this);
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Function Plot"),this);
-// 	action->setShortcut(Qt::CTRL+Qt::Key_E);
 	actionCollection()->addAction("new_2D_function_plot", action);
 	functionActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Function Plot"),this);
-// 	action->setShortcut(Qt::CTRL+Qt::Key_E);
 	actionCollection()->addAction("new_2D_surface_function_plot", action);
 	functionActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Function Plot"),this);
-// 	action->setShortcut(Qt::CTRL+Qt::Key_E);
 	actionCollection()->addAction("new_2D_polar_function_plot", action);
 	functionActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Function Plot"),this);
-// 	action->setShortcut(Qt::CTRL+Qt::Key_E);
 	actionCollection()->addAction("new_3D_function_plot", action);
 	functionActions->addAction(action);
 
 	connect(functionActions, SIGNAL(triggered(QAction*)), this, SLOT(functionActionTriggered(QAction*)));
+
+
+	//"New data plots"
+	QActionGroup* newDataPlotActions = new QActionGroup(this);
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Data Plot"),this);
+	actionCollection()->addAction("new_2D_data_plot", action);
+	newDataPlotActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Data Plot"),this);
+	actionCollection()->addAction("new_2D_surface_data_plot", action);
+	newDataPlotActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Data Plot"),this);
+	actionCollection()->addAction("new_2D_polar_data_plot", action);
+	newDataPlotActions->addAction(action);
+
+	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Data Plot"),this);
+	actionCollection()->addAction("new_3D_data_plot", action);
+	newDataPlotActions->addAction(action);
+
 
 	// Appearance
 	action = new KAction(KIcon("draw-text"),i18n("Title Settings"),this);
@@ -440,8 +478,8 @@ void MainWin::saveAs() {
 }
 
 void MainWin::print() {
-	if (Worksheet *w = activeWorksheet()) w->print();
-	statusBar()->showMessage(i18n("Printed worksheet"));
+// 	if (Worksheet *w = activeWorksheet()) w->print();
+// 	statusBar()->showMessage(i18n("Printed worksheet"));
 }
 
 /************** sheet stuff *************************/
@@ -452,7 +490,7 @@ void MainWin::SpreadsheetMenu() {
 		s->Menu(spreadsheetmenu);
 	} else {
 		spreadsheetmenu->clear();
-		spreadsheetmenu->addAction(spreadaction);
+		spreadsheetmenu->addAction(m_newSpreadsheetAction);
 	}
 }
 
@@ -478,17 +516,20 @@ Table* MainWin::newSpreadsheet() {
 
 Worksheet* MainWin::newWorksheet() {
 	kDebug()<<endl;
-// #if 0 // TODO: make an aspect for a worksheet
-	Worksheet *w = new Worksheet(this);
-	m_mdi_area->addSubWindow(w);
-	w->show();
-	m_project->setChanged(true);
+
+	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet %1").arg(1));
+	QModelIndex index = m_project_explorer->currentIndex();
+
+	if(!index.isValid())
+		m_project->addChild(worksheet);
+	else {
+		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
+		parent_aspect->folder()->addChild(worksheet);
+	}
 
 	updateGUI();
-	kDebug()<<"MainWin::newWorksheet() DONE"<<endl;
-	return w;
-// #endif
-// 	return NULL;
+    return worksheet;
 }
 
 Spreadsheet* MainWin::activeSpreadsheet() const {
@@ -513,28 +554,44 @@ Spreadsheet* MainWin::getSpreadsheet(QString name) const {
 
 Worksheet* MainWin::activeWorksheet() const {
 // TODO: port to use aspects
-	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
-	if(subWindow != 0) {
-		Worksheet *w = (Worksheet *) subWindow->widget();
-		if (w && w->sheetType() == WORKSHEET)
-			return w;
-	}
- 	return 0;
+// 	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
+// 	if(subWindow != 0) {
+// 		Worksheet *w = (Worksheet *) subWindow->widget();
+// 		if (w && w->sheetType() == WORKSHEET)
+// 			return w;
+// 	}
+//  	return 0;
 }
 
 Worksheet* MainWin::getWorksheet(QString name) const {
 // TODO: port to use aspects
-	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
-	for (int i=0; i<wlist.size(); i++)
-		if(wlist.at(i)->windowTitle() == name)
-			return (Worksheet *)wlist.at(i);
- 	return 0;
+// 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
+// 	for (int i=0; i<wlist.size(); i++)
+// 		if(wlist.at(i)->windowTitle() == name)
+// 			return (Worksheet *)wlist.at(i);
+//  	return 0;
 }
 /************** sheet stuff end *************************/
 
 /******************** dialogs *****************************/
 void MainWin::importDialog() { (new ImportDialog(this))->show(); }
 void MainWin::projectDialog() { (new ProjectDialog(this))->show(); m_project->setChanged(true); }
+
+
+void MainWin::newPlotActionTriggered(QAction* action){
+	Plot::PlotType type;
+	QString name=action->objectName();
+	if (name == "new_2D_function_plot")
+		type=Plot::PLOT2D;
+	else if (name == "new_2D_surface_function_plot")
+		type=Plot::PLOTSURFACE;
+	else if (name == "new_2D_polar_function_plot")
+		type=Plot::PLOTPOLAR;
+	else
+		type=Plot::PLOT3D;
+
+// 	activeWorksheet()->createPlot(type);
+}
 
 void MainWin::functionActionTriggered(QAction* action){
 	Plot::PlotType type;
@@ -547,9 +604,8 @@ void MainWin::functionActionTriggered(QAction* action){
 		type=Plot::PLOTPOLAR;
 	else
 		type=Plot::PLOT3D;
-	//TODO 3D-QWT?
 
-	 FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
+	FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
 	if ( dlg->exec() == QDialog::Accepted ) {
 		if (type!=Plot::PLOT2D){
 			KMessageBox::error(this, i18n("Not yet implemented."));
@@ -659,6 +715,8 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 		kDebug()<<" Using sheet "<<sheet<<endl;
 		QMdiSubWindow *subWindow = m_mdi_area->subWindowList()[sheet];
 		if(subWindow != 0) {
+			kDebug()<<" Subwindow exists"<<endl;
+			/*
 			Worksheet *w = (Worksheet *) subWindow->widget();
 			if(w == 0) {
 				kDebug()<<"ERROR: selected sheet found!"<<endl;
@@ -667,10 +725,21 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 			if (w->sheetType() == WORKSHEET)
 				w->addSet(set,ptype);
 			else {
-// 				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
-// 				//TODO pointer or reference
-//  				s->addSet(&set);
+				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
+				//TODO pointer or reference
+ 				s->addSet(&set);
 			}
+			*/
+// 			Worksheet *w = dynamic_cast<Worksheet *>(subWindow->widget());
+// // 			kDebug()<<"object Name "<<subWindow->widget()->objectName()<<endl;
+// 			if (w!=0){
+// 				w->addSet(set,ptype);
+// 			}else{
+//
+// 			}
+
+//  			QAbstractItemModel* model=m_project_explorer->model();
+// 			QModelIndex* index=model->index();
 		}
 	}
 // #endif
@@ -826,16 +895,25 @@ void MainWin::showHistory()
 	m_project->undoStack()->setIndex(index);
 }
 
+/*!
+	this is called on a right click on the root folder in the project explorer
+*/
 void MainWin::createContextMenu(QMenu * menu) const
 {
-	// this is called on a right click on the root folder in the project explorer
-	// TODO: what to add here?
+	menu->addAction(m_newFolderAction);
+	menu->addAction(m_newSpreadsheetAction);
+	menu->addAction(m_newWorksheetAction);
 }
-
+/*!
+	this is called on a right click on a non-root folder in the project explorer
+*/
 void MainWin::createFolderContextMenu(const Folder * folder, QMenu * menu) const
 {
-	// this is called on a right click on a non-root folder in the project explorer
-	// TODO: what to add here?
+	//Folder provides it's own context menu. Add a separator befor adding additional actions.
+	menu->addSeparator();
+	menu->addAction(m_newFolderAction);
+	menu->addAction(m_newSpreadsheetAction);
+	menu->addAction(m_newWorksheetAction);
 }
 
 void MainWin::undo()
@@ -889,5 +967,3 @@ void MainWin::updateMdiWindowVisibility()
 			break;
 	}
 }
-
-

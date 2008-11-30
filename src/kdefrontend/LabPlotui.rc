@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <gui name="LabPlot" version="1">
- 
+
 <ToolBar name="mainToolBar" >
 <text>Main Toolbar</text>
 <Action name="import" />
@@ -32,6 +32,15 @@
 	<Action name="new spreadsheet" />
 	<Action name="new worksheet" />
 	<Action name="new folder" />
+	<Separator/>
+	<Menu name="new_plot">
+		<text>New Plot</text>
+		<Action name="new_2D_plot" />
+		<Action name="new_2D_surface_plot" />
+		<Action name="new_2D_polar_plot" />
+		 <Separator/>
+		 <Action name="new_3D_plot" />
+	</Menu>
 	<Menu name="new_function_plot">
 		<text>New Function Plot</text>
 		<Action name="new_2D_function_plot" />
@@ -39,6 +48,14 @@
 		<Action name="new_2D_polar_function_plot" />
 		 <Separator/>
 		 <Action name="new_3D_function_plot" />
+	</Menu>
+		<Menu name="new_data_plot">
+		<text>New Data Plot</text>
+		<Action name="new_2D_data_plot" />
+		<Action name="new_2D_surface_data_plot" />
+		<Action name="new_2D_polar_data_plot" />
+		 <Separator/>
+		 <Action name="new_3D_data_plot" />
 	</Menu>
 </Menu>
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text>

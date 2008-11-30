@@ -2,10 +2,10 @@
     File                 : Worksheet.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
+    Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
+    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : worksheet class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -33,37 +33,33 @@
 #include <QtXml>
 
 #include "plots/Plot.h"
-#include "elements/sheettype.h"
 
-class MainWin;
-class Set;
+#include "core/AbstractPart.h"
+#include "core/AbstractScriptingEngine.h"
+#include "core/globals.h"
 
-class Worksheet: public QWidget{
+class WorksheetPrivate;
+
+class Worksheet : public AbstractPart, public scripted{
 	Q_OBJECT
 
-public:
-	Worksheet(MainWin *m);
-	~Worksheet();
+	public:
+		Worksheet(AbstractScriptingEngine*, const QString &name);
+		~Worksheet();
 
-	SheetType sheetType() const { return type; }
-	int plotCount() const { return listPlots.count(); }
-	void print(QString file=0);
-	void addSet(Set set, Plot::PlotType ptype);
-	Plot* activePlot();
-	QDomElement save(QDomDocument doc);
-	void open(QDomNode node);
+		QString title() const;
+		void setTitle(const QString& title);
+		QWidget *view();
+		int plotCount() const;
+		void addSet(const Set set, const Plot::PlotType ptype);
+		void createPlot(const Plot::PlotType ptype);
+		Plot* activePlot() const;
+		QList<Plot*>* listPlots();
+		void repaint();
 
-private:
-	MainWin *mw;
-	SheetType type;			// needed for mw->active{Work,Spread}sheet()
-	QList<Plot*> listPlots;		//!< list of plots
-	int currentPlotIndex;
-
-	void paintEvent(QPaintEvent *);
-	void setTitle(QString title);
-	void setupPrinter(QPrinter *pr, QString fn);
-	void draw(QPainter *p, int w, int h);
-	void addPlot(Plot::PlotType ptype);	//!< add plot of type ptype
+		QMenu *createContextMenu();
+	private:
+		WorksheetPrivate* d;
 };
 
 #endif //WORKSHEET

@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : legend settings dialog
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -63,7 +63,7 @@ void LegendDialog::setWorksheet(Worksheet* w){
 */
 void LegendDialog::apply(){
  	legendWidget->saveLegend( worksheet->activePlot()->legend() );
-	worksheet->repaint();//TODO triggers repaint for all plots and for all objects in the worksheet. redesign.
+ 	worksheet->repaint();//TODO triggers repaint for all plots and for all objects in the worksheet. redesign.
 	this->enableButtonApply( false );
 	kDebug()<<"Changes applied."<<endl;
 }
