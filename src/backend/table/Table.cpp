@@ -6,7 +6,7 @@
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2006-2008 Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief*yahoo.fr)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -37,6 +37,7 @@
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "table/TableView.h"
 #else
+#include <KIcon>
 #include "kdefrontend/Spreadsheet.h"
 #endif
 #include "table/tablecommands.h"
@@ -79,7 +80,7 @@ Table::Table(AbstractScriptingEngine *engine, int rows, int columns, const QStri
 	appendColumns(cols);
 	setRowCount(rows);
 
-	m_view = NULL; 
+	m_view = NULL;
 }
 
 Table::~Table()
@@ -87,12 +88,12 @@ Table::~Table()
 }
 
 Column * Table::column(int index) const
-{ 
-	return m_table_private->column(index); 
+{
+	return m_table_private->column(index);
 }
 
 Column * Table::column(const QString & name) const
-{ 
+{
 	for (int i=0; i<columnCount(); i++)
 	{
 		if (m_table_private->column(i)->name() == name)
@@ -184,7 +185,7 @@ void Table::setRowCount(int new_size)
 	{
 		int end = m_table_private->columnCount();
 		for(int col=0; col<end; col++)
-		{	
+		{
 			Column *col_ptr = m_table_private->column(col);
 			if (col_ptr->rowCount() > new_size)
 				col_ptr->removeRows(new_size, col_ptr->rowCount() - new_size);
@@ -211,7 +212,7 @@ int Table::columnCount(SciDAVis::PlotDesignation pd) const
 	int cols = columnCount();
 	for(int i=0; i<cols; i++)
 		if(column(i)->plotDesignation() == pd) count++;
-	
+
 	return count;
 }
 
@@ -237,10 +238,10 @@ void Table::setColumnCount(int new_size)
 	}
 	RESET_CURSOR;
 }
-		
-int Table::columnIndex(const Column * col) const 
-{ 
-	return m_table_private->columnIndex(col); 
+
+int Table::columnIndex(const Column * col) const
+{
+	return m_table_private->columnIndex(col);
 }
 
 void Table::clear()
@@ -315,12 +316,12 @@ bool Table::fillProjectMenu(QMenu * menu)
 #endif
 }
 
-		
+
 void Table::moveColumn(int from, int to)
 {
 	beginMacro(tr("%1: move column %2 from position %3 to %4.").arg(name()).arg(m_table_private->column(from)->name()).arg(from+1).arg(to+1));
 	moveChild(from, to);
-	exec(new TableMoveColumnCmd(m_table_private, from, to));	
+	exec(new TableMoveColumnCmd(m_table_private, from, to));
 	endMacro();
 }
 
@@ -328,7 +329,7 @@ void Table::copy(Table * other)
 {
 	WAIT_CURSOR;
 	beginMacro(QObject::tr("%1: copy %2").arg(name()).arg(other->name()));
-	
+
 	removeColumns(0, columnCount());
 	QList<Column *> columns;
 	for (int i=0; i<other->columnCount(); i++)
@@ -395,7 +396,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// thefore we use our own compare functions
-	class CompareFunctions{ 
+	class CompareFunctions{
 		public:
 			static bool doubleLess(const QPair<double, int>& a, const QPair<double, int>& b)
 			{
@@ -439,7 +440,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 
 				for(int j=0; j<rows; j++)
 					map.append(QPair<double, int>(col->valueAt(j), j));
-	
+
 				if(ascending)
 					qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
 				else
@@ -447,7 +448,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 
 				QListIterator< QPair<double, int> > it(map);
 				Column *temp_col = new Column("temp", col->columnMode());
-				
+
 				int k=0;
 				// put the values in the right order into temp_col
 				while(it.hasNext())
@@ -467,7 +468,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 
 				for(int j=0; j<rows; j++)
 					map.append(QPair<QString, int>(col->textAt(j), j));
-	
+
 				if(ascending)
 					qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
 				else
@@ -475,7 +476,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 
 				QListIterator< QPair<QString, int> > it(map);
 				Column *temp_col = new Column("temp", col->columnMode());
-				
+
 				int k=0;
 				// put the values in the right order into temp_col
 				while(it.hasNext())
@@ -495,7 +496,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 
 				for(int j=0; j<rows; j++)
 					map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
-	
+
 				if(ascending)
 					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
 				else
@@ -503,7 +504,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 
 				QListIterator< QPair<QDateTime, int> > it(map);
 				Column *temp_col = new Column("temp", col->columnMode());
-				
+
 				int k=0;
 				// put the values in the right order into temp_col
 				while(it.hasNext())
@@ -517,7 +518,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 				delete temp_col;
 			}
 		}
-		
+
 	}
 	else // sort with leading column
 	{
@@ -535,7 +536,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 				qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 			QListIterator< QPair<double, int> > it(map);
 
-			for(int i=0; i<cols.size(); i++) 
+			for(int i=0; i<cols.size(); i++)
 			{
 				Column *temp_col = new Column("temp", cols.at(i)->columnMode());
 				it.toFront();
@@ -566,7 +567,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 				qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 			QListIterator< QPair<QString, int> > it(map);
 
-			for(int i=0; i<cols.size(); i++) 
+			for(int i=0; i<cols.size(); i++)
 			{
 				Column *temp_col = new Column("temp", cols.at(i)->columnMode());
 				it.toFront();
@@ -597,7 +598,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 				qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 			QListIterator< QPair<QDateTime, int> > it(map);
 
-			for(int i=0; i<cols.size(); i++) 
+			for(int i=0; i<cols.size(); i++)
 			{
 				Column *temp_col = new Column("temp", cols.at(i)->columnMode());
 				it.toFront();
@@ -623,9 +624,13 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 QIcon Table::icon() const
 {
 	QIcon ico;
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	ico.addPixmap(QPixmap(":/16x16/table.png"));
 	ico.addPixmap(QPixmap(":/24x24/table.png"));
 	ico.addPixmap(QPixmap(":/32x32/table.png"));
+#else
+	ico=KIcon("x-office-spreadsheet");
+#endif
 	return ico;
 }
 
@@ -669,12 +674,12 @@ void Table::handleDataChange(const AbstractColumn * col)
 {
 	int index = columnIndex(static_cast<const Column *>(col));
 	if(index != -1)
-		emit dataChanged(0, index, col->rowCount()-1, index);	
+		emit dataChanged(0, index, col->rowCount()-1, index);
 }
 
 void Table::handleRowsAboutToBeInserted(const AbstractColumn * col, int before, int count)
 {
-	int new_size = col->rowCount() + count; 
+	int new_size = col->rowCount() + count;
 	if(before <= col->rowCount() && new_size > rowCount())
 		setRowCount(new_size);
 }
@@ -707,26 +712,26 @@ void Table::handleRowsRemoved(const AbstractColumn * col, int first, int count)
 
 void Table::connectColumn(const Column* col)
 {
-	connect(col, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)), this, 
+	connect(col, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)), this,
 			SLOT(handleDescriptionChange(const AbstractAspect *)));
-	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn *)), this, 
+	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn *)), this,
 			SLOT(handlePlotDesignationChange(const AbstractColumn *)));
-	connect(col, SIGNAL(modeChanged(const AbstractColumn *)), this, 
+	connect(col, SIGNAL(modeChanged(const AbstractColumn *)), this,
 			SLOT(handleDataChange(const AbstractColumn *)));
-	connect(col, SIGNAL(dataChanged(const AbstractColumn *)), this, 
+	connect(col, SIGNAL(dataChanged(const AbstractColumn *)), this,
 			SLOT(handleDataChange(const AbstractColumn *)));
-	connect(col, SIGNAL(modeChanged(const AbstractColumn *)), this, 
+	connect(col, SIGNAL(modeChanged(const AbstractColumn *)), this,
 			SLOT(handleModeChange(const AbstractColumn *)));
-	connect(col, SIGNAL(rowsAboutToBeInserted(const AbstractColumn *, int, int)), this, 
+	connect(col, SIGNAL(rowsAboutToBeInserted(const AbstractColumn *, int, int)), this,
 			SLOT(handleRowsAboutToBeInserted(const AbstractColumn *,int,int)));
-	connect(col, SIGNAL(rowsInserted(const AbstractColumn *, int, int)), this, 
-			SLOT(handleRowsInserted(const AbstractColumn *,int,int))); 
-	connect(col, SIGNAL(rowsAboutToBeRemoved(const AbstractColumn *, int, int)), this, 
-			SLOT(handleRowsAboutToBeRemoved(const AbstractColumn *,int,int))); 
-	connect(col, SIGNAL(rowsRemoved(const AbstractColumn *, int, int)), this, 
-			SLOT(handleRowsRemoved(const AbstractColumn *,int,int))); 
-	connect(col, SIGNAL(maskingChanged(const AbstractColumn *)), this, 
-			SLOT(handleDataChange(const AbstractColumn *))); 
+	connect(col, SIGNAL(rowsInserted(const AbstractColumn *, int, int)), this,
+			SLOT(handleRowsInserted(const AbstractColumn *,int,int)));
+	connect(col, SIGNAL(rowsAboutToBeRemoved(const AbstractColumn *, int, int)), this,
+			SLOT(handleRowsAboutToBeRemoved(const AbstractColumn *,int,int)));
+	connect(col, SIGNAL(rowsRemoved(const AbstractColumn *, int, int)), this,
+			SLOT(handleRowsRemoved(const AbstractColumn *,int,int)));
+	connect(col, SIGNAL(maskingChanged(const AbstractColumn *)), this,
+			SLOT(handleDataChange(const AbstractColumn *)));
 }
 
 void Table::disconnectColumn(const Column* col)
@@ -784,7 +789,7 @@ void Table::save(QXmlStreamWriter * writer) const
 
 bool Table::load(XmlStreamReader * reader)
 {
-	if(reader->isStartElement() && reader->name() == "table") 
+	if(reader->isStartElement() && reader->name() == "table")
 	{
 		setColumnCount(0);
 		setRowCount(0);
@@ -797,7 +802,7 @@ bool Table::load(XmlStreamReader * reader)
 		int rows, cols;
 		rows = reader->readAttributeInt("rows", &ok1);
 		cols = reader->readAttributeInt("columns", &ok2);
-		if(!ok1 || !ok2) 
+		if(!ok1 || !ok2)
 		{
 			reader->raiseError(tr("invalid row or column count"));
 			return false;
@@ -805,13 +810,13 @@ bool Table::load(XmlStreamReader * reader)
 
 		setRowCount(rows);
 		// read child elements
-		while (!reader->atEnd()) 
+		while (!reader->atEnd())
 		{
 			reader->readNext();
 
 			if (reader->isEndElement()) break;
 
-			if (reader->isStartElement()) 
+			if (reader->isStartElement())
 			{
 				if (reader->name() == "comment")
 				{
@@ -838,7 +843,7 @@ bool Table::load(XmlStreamReader * reader)
 					reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
-			} 
+			}
 		}
 		if (cols != columnCount())
 			reader->raiseWarning(tr("columns attribute and number of read columns do not match"));
@@ -873,22 +878,22 @@ bool Table::readColumnWidthElement(XmlStreamReader * reader)
 
 /* ========== end of loading and saving ============ */
 
-void Table::setColumnWidth(int col, int width) 
-{ 
-	m_table_private->setColumnWidth(col, width); 
+void Table::setColumnWidth(int col, int width)
+{
+	m_table_private->setColumnWidth(col, width);
 }
 
-int Table::columnWidth(int col) const 
-{ 
-	return m_table_private->columnWidth(col); 
+int Table::columnWidth(int col) const
+{
+	return m_table_private->columnWidth(col);
 }
 
 
 /* ========================== Table::Private ====================== */
 
-Column * Table::Private::column(int index) const		
-{ 
-	return m_columns.value(index); 
+Column * Table::Private::column(int index) const
+{
+	return m_columns.value(index);
 }
 
 void Table::Private::replaceColumns(int first, QList<Column*> new_cols)
@@ -902,7 +907,7 @@ void Table::Private::replaceColumns(int first, QList<Column*> new_cols)
 	{
 		int rows = new_cols.at(i)->rowCount();
 		if(rows > m_row_count)
-			setRowCount(rows); 
+			setRowCount(rows);
 
 		if(m_columns.at(first+i))
 			m_columns.at(first+i)->notifyReplacement(new_cols.at(i));
@@ -929,7 +934,7 @@ void Table::Private::insertColumns(int before, QList<Column*> cols)
 	{
 		rows = cols.at(i)->rowCount();
 		if(rows > m_row_count)
-			setRowCount(rows); 
+			setRowCount(rows);
 	}
 
 	emit m_owner->columnsAboutToBeInserted(before, cols);
@@ -974,7 +979,7 @@ void Table::Private::moveColumn(int from, int to)
 {
 	if( from < 0 || from >= m_column_count) return;
 	if( to < 0 || to >= m_column_count) return;
-	
+
 	m_columns.move(from, to);
 	m_column_widths.move(from, to);
 	updateHorizontalHeader(qMin(from, to), qMax(from, to));
@@ -987,7 +992,7 @@ void Table::Private::setRowCount(int rows)
 {
 	int diff = rows - m_row_count;
 	int old_row_count = m_row_count;
-	if(diff == 0) 
+	if(diff == 0)
 		return;
 
 	if(diff > 0)
@@ -1013,11 +1018,11 @@ QString Table::Private::columnHeader(int col)
 int Table::Private::numColsWithPD(SciDAVis::PlotDesignation pd)
 {
 	int count = 0;
-	
+
 	for (int i=0; i<m_column_count; i++)
 		if(m_columns.at(i)->plotDesignation() == pd)
 			count++;
-	
+
 	return count;
 }
 
@@ -1028,7 +1033,7 @@ void Table::Private::updateVerticalHeader(int start_row)
 		m_vertical_header_data.replace(i, QString::number(i+1));
 	for(; i<m_row_count; i++)
 		m_vertical_header_data << QString::number(i+1);
-	emit m_owner->headerDataChanged(Qt::Vertical, start_row, m_row_count -1);	
+	emit m_owner->headerDataChanged(Qt::Vertical, start_row, m_row_count -1);
 }
 
 void Table::Private::updateHorizontalHeader(int start_col, int end_col)
@@ -1058,7 +1063,7 @@ void Table::Private::updateHorizontalHeader(int start_col, int end_col)
 					break;
 			}
 #endif
-	
+
 			if (m_columns.at(i)->plotDesignation() == SciDAVis::X)
 				composeColumnHeader(i, m_columns.at(i)->name()+middleSection+"[X" + QString::number(++x_cols) +"]");
 			else if (m_columns.at(i)->plotDesignation() == SciDAVis::Y)
@@ -1112,7 +1117,7 @@ void Table::Private::updateHorizontalHeader(int start_col, int end_col)
 					break;
 			}
 #endif
-	
+
 			if (m_columns.at(i)->plotDesignation() == SciDAVis::X)
 				composeColumnHeader(i, m_columns.at(i)->name()+middleSection+"[X]");
 			else if(m_columns.at(i)->plotDesignation() == SciDAVis::Y)
@@ -1127,7 +1132,7 @@ void Table::Private::updateHorizontalHeader(int start_col, int end_col)
 				composeColumnHeader(i, m_columns.at(i)->name()+middleSection);
 		}
 	}
-	emit m_owner->headerDataChanged(Qt::Horizontal, start_col, end_col);	
+	emit m_owner->headerDataChanged(Qt::Horizontal, start_col, end_col);
 }
 
 void Table::Private::composeColumnHeader(int col, const QString& label)

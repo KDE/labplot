@@ -325,11 +325,14 @@ void MainWin::updateSetList() {
 	// TODO
 }
 
+/*!
+	disables/enables menu items etc. depending on the currently selected MDI-subwindow.
+*/
 void MainWin::updateGUI() {
 	updateSheetList();
 	updateSetList();
 
-	// TODO : disable/enable menu items, etc.
+	// TODO
 	if(activeWorksheet() == 0) {
 		(static_cast<QMenu*> (guiFactory()->container("appearance",this)))->setEnabled(false);
 		(static_cast<QMenu*> (guiFactory()->container("viewmenu",this)))->setEnabled(false);
@@ -346,6 +349,8 @@ void MainWin::updateGUI() {
 		(static_cast<QMenu*> (guiFactory()->container("analysis",this)))->setEnabled(true);
 	}
 	(static_cast<QMenu*> (guiFactory()->container("script",this)))->setEnabled(false);
+
+	kDebug()<<"GUI updated"<<endl;
 }
 
 void MainWin::openNew() {
@@ -509,7 +514,7 @@ Table* MainWin::newSpreadsheet() {
 		parent_aspect->folder()->addChild(table);
 	}
 
-	updateGUI();
+// 	updateGUI();
 
     return table;
 }
@@ -528,7 +533,7 @@ Worksheet* MainWin::newWorksheet() {
 		parent_aspect->folder()->addChild(worksheet);
 	}
 
-	updateGUI();
+// 	updateGUI();
     return worksheet;
 }
 
@@ -552,15 +557,18 @@ Spreadsheet* MainWin::getSpreadsheet(QString name) const {
 	return 0;
 }
 
+/*!
+	returns a Worksheet-pointer, if the currently
+*/
 Worksheet* MainWin::activeWorksheet() const {
-// TODO: port to use aspects
-// 	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
-// 	if(subWindow != 0) {
-// 		Worksheet *w = (Worksheet *) subWindow->widget();
-// 		if (w && w->sheetType() == WORKSHEET)
-// 			return w;
-// 	}
-//  	return 0;
+	Worksheet* w=0;
+	if (!m_current_aspect){
+		w=qobject_cast<Worksheet*>(m_current_aspect);
+		kDebug()<<m_current_aspect->name()<<endl;
+	}
+
+	kDebug()<<w<<endl;
+	return w;
 }
 
 Worksheet* MainWin::getWorksheet(QString name) const {
@@ -830,8 +838,9 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect)
 		AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
 		if (part)
 			m_mdi_area->setActiveSubWindow(part->mdiSubWindow());
-	}
+ 	}
 	m_current_aspect = aspect;
+	kDebug()<<"current aspect  "<<m_current_aspect->name()<<endl;
 }
 
 void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to)

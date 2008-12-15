@@ -136,8 +136,7 @@ QMenu* Worksheet::createContextMenu(){
 }
 
 QIcon Worksheet::icon() const{
-	//TODO Use Qt's resource system.
-	//TODO add on- and off-icons.
+	//TODO Use Qt's resource system or one of the KDE4 icons
 	return KIcon(QIcon(worksheet_xpm));
 }
 

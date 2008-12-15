@@ -5,9 +5,9 @@
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
     Description          : spreadsheet class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -76,11 +76,11 @@ void Spreadsheet::init()
 	m_main_layout = new QHBoxLayout(this);
 	m_main_layout->setSpacing(0);
 	m_main_layout->setContentsMargins(0, 0, 0, 0);
-	
+
 	m_view_widget = new QTableView(this);
 	m_view_widget->setModel(m_model);
 	m_main_layout->addWidget(m_view_widget);
-	
+
 	m_view_widget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
 	m_main_layout->setStretchFactor(m_view_widget, 1);
 
@@ -101,11 +101,11 @@ void Spreadsheet::init()
 	v_header->setMovable(false);
 	h_header->setResizeMode(QHeaderView::Interactive);
 	h_header->setMovable(false);
-	
+
 	h_header->setDefaultSectionSize(defaultColumnWidth());
 
 	rereadSectionSizes();
-	
+
 	// keyboard shortcuts
 	QShortcut * sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Table: select all")), m_view_widget);
 	connect(sel_all, SIGNAL(activated()), m_view_widget, SLOT(selectAll()));
@@ -121,7 +121,7 @@ void Spreadsheet::rereadSectionSizes()
 	int cols = m_table->columnCount();
 	for (int i=0; i<cols; i++)
 		h_header->resizeSection(i, m_table->columnWidth(i));
-		
+
 	connect(h_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
 }
 
@@ -135,13 +135,13 @@ void Spreadsheet::deselectAll()
 	m_view_widget->clearSelection();
 }
 
-void Spreadsheet::setColumnWidth(int col, int width) 
-{ 
+void Spreadsheet::setColumnWidth(int col, int width)
+{
 	m_view_widget->horizontalHeader()->resizeSection(col, width);
 }
 
-int Spreadsheet::columnWidth(int col) const 
-{ 
+int Spreadsheet::columnWidth(int col) const
+{
 	return m_view_widget->horizontalHeader()->sectionSize(col);
 }
 
@@ -296,7 +296,7 @@ void Spreadsheet::setNotes(QString t) {
 	kDebug()<<endl;
 	bool ok=true;
 	if(t.isEmpty())
-		t = KInputDialog::getMultiLineText("LabPlot", i18n("Spreadsheet notes : "), 
+		t = KInputDialog::getMultiLineText("LabPlot", i18n("Spreadsheet notes : "),
 			Notes(), &ok);
 	if(!ok) return;
 
@@ -308,17 +308,17 @@ QString Spreadsheet::columnHeader(int col) const {
 	return m_view_widget->model()->headerData(col,Qt::Horizontal).toString();
 }
 
-void Spreadsheet::setProperties(QString label, 
+void Spreadsheet::setProperties(QString label,
 	SciDAVis::PlotDesignation type, SciDAVis::ColumnMode format) {
 	kDebug()<<label<<type<<format<<endl;
-	
+
 	if(label.isEmpty())
 		(new ColumnDialog(this,this))->show();
 	else {
 		setColumnName(currentColumn(),label);
 		setColumnType(currentColumn(),type);
 		setColumnFormat(currentColumn(),format);
-	}	
+	}
 }
 
 void Spreadsheet::resetHeader(int from) {
@@ -331,14 +331,14 @@ void Spreadsheet::resetHeader(int from) {
 			setColumnType(col,SciDAVis::Y);
 		if(col<26)
 			setColumnName(col,QChar(col+65));
-		else		
+		else
 			setColumnName(col,QString(QChar(col/26-1+65))+QString(QChar(65+col%26)));
 	}
 }
 
-QString Spreadsheet::columnName(int col) const { 
+QString Spreadsheet::columnName(int col) const {
 	if(col<0 || col > columnCount()) return QString();
-	return m_table->column(col)->name(); 
+	return m_table->column(col)->name();
 }
 
 void Spreadsheet::setColumnName(int col, QString name) {
@@ -622,7 +622,7 @@ bool Spreadsheet::isCellSelected(int row, int col)
 
 void Spreadsheet::setCellSelected(int row, int col, bool select)
 {
-	 m_view_widget->selectionModel()->select(m_model->index(row, col), 
+	 m_view_widget->selectionModel()->select(m_model->index(row, col),
 			 select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
 }
 
@@ -630,14 +630,14 @@ void Spreadsheet::setCellsSelected(int first_row, int first_col, int last_row, i
 {
 	QModelIndex top_left = m_model->index(first_row, first_col);
 	QModelIndex bottom_right = m_model->index(last_row, last_col);
-	m_view_widget->selectionModel()->select(QItemSelection(top_left, bottom_right), 
+	m_view_widget->selectionModel()->select(QItemSelection(top_left, bottom_right),
 			select ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Deselect);
 }
 
 void Spreadsheet::getCurrentCell(int * row, int * col)
 {
 	QModelIndex index = m_view_widget->selectionModel()->currentIndex();
-	if (index.isValid()) 
+	if (index.isValid())
 	{
 		*row = index.row();
 		*col = index.column();
@@ -649,14 +649,14 @@ void Spreadsheet::getCurrentCell(int * row, int * col)
 	}
 }
 
-bool Spreadsheet::formulaModeActive() const 
-{ 
-	return m_model->formulaModeActive(); 
+bool Spreadsheet::formulaModeActive() const
+{
+	return m_model->formulaModeActive();
 }
 
-void Spreadsheet::activateFormulaMode(bool on) 
-{ 
-	m_model->activateFormulaMode(on); 
+void Spreadsheet::activateFormulaMode(bool on)
+{
+	m_model->activateFormulaMode(on);
 }
 
 void Spreadsheet::goToNextColumn()
@@ -706,14 +706,14 @@ void Spreadsheet::copySelection()
 	if (last_row == -2) return;
 	int cols = last_col - first_col +1;
 	int rows = last_row - first_row +1;
-	
+
 	WAIT_CURSOR;
 	QString output_str;
 
 	for (int r=0; r<rows; r++)
 	{
 		for (int c=0; c<cols; c++)
-		{	
+		{
 			Column *col_ptr = m_table->column(first_col + c);
 			if (isCellSelected(first_row + r, first_col + c))
 			{
@@ -724,7 +724,7 @@ void Spreadsheet::copySelection()
 				else if (col_ptr->dataType() == SciDAVis::TypeDouble)
 				{
 					Double2StringFilter * out_fltr = static_cast<Double2StringFilter *>(col_ptr->outputFilter());
-					output_str += QLocale().toString(col_ptr->valueAt(first_row + r), 
+					output_str += QLocale().toString(col_ptr->valueAt(first_row + r),
 							out_fltr->numericFormat(), 16); // copy with max. precision
 				}
 				else
@@ -814,7 +814,7 @@ void Spreadsheet::pasteIntoSelection()
 					Column * col_ptr = m_table->column(first_col + c);
 					if (formulaModeActive())
 					{
-						col_ptr->setFormula(first_row + r, cell_texts.at(r).at(c));  
+						col_ptr->setFormula(first_row + r, cell_texts.at(r).at(c));
 					}
 					else
 						col_ptr->asStringColumn()->setTextAt(first_row+r, cell_texts.at(r).at(c));
@@ -839,7 +839,7 @@ void Spreadsheet::maskSelection()
 	{
 		int col = m_table->columnIndex(col_ptr);
 		for (int row=first; row<=last; row++)
-			if (isCellSelected(row, col)) col_ptr->setMasked(row);  
+			if (isCellSelected(row, col)) col_ptr->setMasked(row);
 	}
 	m_table->endMacro();
 	RESET_CURSOR;
@@ -858,7 +858,7 @@ void Spreadsheet::unmaskSelection()
 	{
 		int col = m_table->columnIndex(col_ptr);
 		for (int row=first; row<=last; row++)
-			if (isCellSelected(row, col)) col_ptr->setMasked(row, false);  
+			if (isCellSelected(row, col)) col_ptr->setMasked(row, false);
 	}
 	m_table->endMacro();
 	RESET_CURSOR;
@@ -870,7 +870,7 @@ void Spreadsheet::fillSelectedCellsWithRowNumbers()
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if ( first < 0 ) return;
-	
+
 	WAIT_CURSOR;
 	m_table->beginMacro(tr("%1: fill cells with row numbers").arg(m_table->name()));
 	QList<Column*> list = selectedColumns();
@@ -878,7 +878,7 @@ void Spreadsheet::fillSelectedCellsWithRowNumbers()
 	{
 		int col = m_table->columnIndex(col_ptr);
 		for (int row=first; row<=last; row++)
-			if (isCellSelected(row, col)) 
+			if (isCellSelected(row, col))
 				col_ptr->asStringColumn()->setTextAt(row, QString::number(row+1));
 	}
 	m_table->endMacro();
@@ -891,7 +891,7 @@ void Spreadsheet::fillSelectedCellsWithRandomNumbers()
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if ( first < 0 ) return;
-	
+
 	WAIT_CURSOR;
 	m_table->beginMacro(tr("%1: fill cells with random values").arg(m_table->name()));
 	qsrand(QTime::currentTime().msec());
@@ -900,7 +900,7 @@ void Spreadsheet::fillSelectedCellsWithRandomNumbers()
 	{
 		int col = m_table->columnIndex(col_ptr);
 		for (int row=first; row<=last; row++)
-			if (isCellSelected(row, col)) 
+			if (isCellSelected(row, col))
 			{
 				if (col_ptr->columnMode() == SciDAVis::Numeric)
 					col_ptr->setValueAt(row, double(qrand())/double(RAND_MAX));
@@ -1127,7 +1127,7 @@ void Spreadsheet::clearSelectedRows()
 			for (int row=last; row>=first; row--)
 				if (isRowSelected(row, false))
 				{
-					col_ptr->setFormula(row, "");  
+					col_ptr->setFormula(row, "");
 				}
 		}
 		else
@@ -1163,7 +1163,7 @@ void Spreadsheet::clearSelectedCells()
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
-					col_ptr->setFormula(row, "");  
+					col_ptr->setFormula(row, "");
 				}
 		}
 		else
@@ -1216,7 +1216,7 @@ void Spreadsheet::dimensionsDialog() {
 	int rows = QInputDialog::getInteger(0, tr("Set Table Dimensions"), tr("Enter number of rows"),
 			m_table->rowCount(), 1, 1e9, 1, &ok);
 	if ( !ok ) return;
-	
+
 	m_table->setColumnCount(cols);
 	m_table->setRowCount(rows);
 }
@@ -1230,23 +1230,23 @@ void Spreadsheet::addRows() {
 }
 
 int Spreadsheet::defaultColumnWidth() {
-	return Table::global("default_column_width").toInt(); 
+	return Table::global("default_column_width").toInt();
 }
 
 void Spreadsheet::setDefaultColumnWidth(int width) {
-	Table::setGlobal("default_column_width", width); 
+	Table::setGlobal("default_column_width", width);
 }
 
 void Spreadsheet::setDefaultCommentVisibility(bool visible) {
-	Table::setGlobal("default_comment_visibility", visible); 
+	Table::setGlobal("default_comment_visibility", visible);
 }
 
-bool Spreadsheet::defaultCommentVisibility() { 
-	return Table::global("default_comment_visibility").toBool(); 
+bool Spreadsheet::defaultCommentVisibility() {
+	return Table::global("default_comment_visibility").toBool();
 }
 
 void Spreadsheet::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize)
-{	
+{
 	Q_UNUSED(oldSize);
 	static bool inside = false;
 	m_table->setColumnWidth(logicalIndex, newSize);
@@ -1255,7 +1255,7 @@ void Spreadsheet::handleHorizontalSectionResized(int logicalIndex, int oldSize, 
 
 	int cols = m_table->columnCount();
 	for (int i=0; i<cols; i++)
-		if (isColumnSelected(i, true)) 
+		if (isColumnSelected(i, true))
 			m_view_widget->horizontalHeader()->resizeSection(i, newSize);
 
 	inside = false;

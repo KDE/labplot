@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -39,6 +39,7 @@
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QPluginLoader>
 #else
+#include <KIcon>
 #include "table/Table.h"
 #include <klocalizedstring.h>
 #endif
@@ -56,8 +57,12 @@ Folder::~Folder()
 QIcon Folder::icon() const
 {
 	QIcon result;
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	result.addFile(":/folder_closed.xpm", QSize(), QIcon::Normal, QIcon::Off);
-	result.addFile(":/folder_open.xpm", QSize(), QIcon::Normal, QIcon::On);	
+	result.addFile(":/folder_open.xpm", QSize(), QIcon::Normal, QIcon::On);
+#else
+	result=KIcon("folder");
+#endif
 	return result;
 }
 
@@ -86,7 +91,7 @@ void Folder::save(QXmlStreamWriter * writer) const
 
 bool Folder::load(XmlStreamReader * reader)
 {
-	if(reader->isStartElement() && reader->name() == "folder") 
+	if(reader->isStartElement() && reader->name() == "folder")
 	{
 		setComment("");
 		removeAllChildAspects();
@@ -94,13 +99,13 @@ bool Folder::load(XmlStreamReader * reader)
 		if (!readBasicAttributes(reader)) return false;
 
 		// read child elements
-		while (!reader->atEnd()) 
+		while (!reader->atEnd())
 		{
 			reader->readNext();
 
 			if (reader->isEndElement()) break;
 
-			if (reader->isStartElement()) 
+			if (reader->isStartElement())
 			{
 				if (reader->name() == "comment")
 				{
@@ -117,7 +122,7 @@ bool Folder::load(XmlStreamReader * reader)
 					reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
-			} 
+			}
 		}
 	}
 	else // no folder element
@@ -159,7 +164,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	else
 	{
-		foreach(QObject * plugin, QPluginLoader::staticInstances()) 
+		foreach(QObject * plugin, QPluginLoader::staticInstances())
 		{
 			XmlElementAspectMaker * maker = qobject_cast<XmlElementAspectMaker *>(plugin);
 			if (maker && maker->canCreate(element_name))

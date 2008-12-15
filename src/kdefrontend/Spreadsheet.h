@@ -5,9 +5,9 @@
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
     Description          : spreadsheet class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -93,8 +93,8 @@ public slots:
 	void addColumn() { setColumnCount(columnCount()+1); }
 	QString Notes() const { return m_table->comment(); }
 	void setNotes(QString notes="");
-	void setProperties(QString label=0, 
-		SciDAVis::PlotDesignation type=SciDAVis::X, 
+	void setProperties(QString label=0,
+		SciDAVis::PlotDesignation type=SciDAVis::X,
 		SciDAVis::ColumnMode format=SciDAVis::Numeric);
 
 private slots:
@@ -109,7 +109,7 @@ private slots:
 		//@{
 		//! Return how many columns are selected
 		/**
-		 * If full is true, this function only returns the number of fully 
+		 * If full is true, this function only returns the number of fully
 		 * selected columns.
 		 */
 		int selectedColumnCount(bool full = false);
@@ -117,49 +117,49 @@ private slots:
 		int selectedColumnCount(SciDAVis::PlotDesignation pd);
 		//! Returns true if column 'col' is selected; otherwise false
 		/**
-		 * If full is true, this function only returns true if the whole 
+		 * If full is true, this function only returns true if the whole
 		 * column is selected.
 		 */
 		bool isColumnSelected(int col, bool full = false);
 		//! Return all selected columns
 		/**
-		 * If full is true, this function only returns a column if the whole 
+		 * If full is true, this function only returns a column if the whole
 		 * column is selected.
 		 */
 		QList<Column *> selectedColumns(bool full = false);
 		//! Return how many rows are (at least partly) selected
 		/**
-		 * If full is true, this function only returns the number of fully 
+		 * If full is true, this function only returns the number of fully
 		 * selected rows.
 		 */
 		int selectedRowCount(bool full = false);
 		//! Returns true if row 'row' is selected; otherwise false
 		/**
-		 * If full is true, this function only returns true if the whole 
+		 * If full is true, this function only returns true if the whole
 		 * row is selected.
 		 */
 		bool isRowSelected(int row, bool full = false);
 		//! Return the index of the first selected column
 		/**
-		 * If full is true, this function only looks for fully 
+		 * If full is true, this function only looks for fully
 		 * selected columns.
 		 */
 		int firstSelectedColumn(bool full = false);
 		//! Return the index of the last selected column
 		/**
-		 * If full is true, this function only looks for fully 
+		 * If full is true, this function only looks for fully
 		 * selected columns.
 		 */
 		int lastSelectedColumn(bool full = false);
 		//! Return the index of the first selected row
 		/**
-		 * If full is true, this function only looks for fully 
+		 * If full is true, this function only looks for fully
 		 * selected rows.
 		 */
 		int firstSelectedRow(bool full = false);
 		//! Return the index of the last selected row
 		/**
-		 * If full is true, this function only looks for fully 
+		 * If full is true, this function only looks for fully
 		 * selected rows.
 		 */
 		int lastSelectedRow(bool full = false);
@@ -222,7 +222,7 @@ private slots:
 		void rereadSectionSizes();
 		void selectAll();
 		void deselectAll();
-		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize); 
+		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 		void goToNextColumn();
 		void goToPreviousColumn();
 		void dimensionsDialog();
@@ -238,7 +238,7 @@ private slots:
 
 		//! Initialization
 		void init();
-	
+
 };
 
 #endif //SPREADSHEET
