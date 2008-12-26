@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : ExportDialog.cc
+    File                 : TreeViewComboBox.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
-    Description          : dialog for exporting data
+    Copyright            : (C) 2008 by Alexander Semke
+    Email (use @ for *)  : alexander.semke*web.de
+    Description          : Provides a QTreeView in a QComboBox
 
  ***************************************************************************/
 
@@ -27,31 +27,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <KDebug>
-#include "ExportDialog.h"
-#include "MainWin.h"
-#include "Spreadsheet.h"
+#ifndef TREEVIEWCOMBOBOX_H
+#define TREEVIEWCOMBOBOX_H
 
-ExportDialog::ExportDialog(Spreadsheet *parent) : KDialog(parent) {
-	kDebug()<<endl;
-	setCaption(i18n("Export Data"));
+#include <QtGui>
 
-	setupGUI();
-}
+/**
+	@author
+*/
+class TreeViewComboBox : public QComboBox
+{
+public:
+    TreeViewComboBox(QWidget* parent = 0);
+    ~TreeViewComboBox();
 
-void ExportDialog::setupGUI() {
-	kDebug()<<endl;
-	exportWidget = new ExportWidget( this );
-	setMainWidget( exportWidget );
+ 	void setModel(QAbstractItemModel *model);
+//     void keyPressEvent(QKeyEvent* e);
+//     void keyReleaseEvent(QKeyEvent* e);
+//     void mousePressEvent(QMouseEvent* e);
+//     void mouseReleaseEvent(QMouseEvent* e);
 
-	setButtons( KDialog::Ok | KDialog::User1 | KDialog::User2 | KDialog::Cancel | KDialog::Apply );
-        setButtonText(KDialog::User1,i18n("Save"));
-        setButtonText(KDialog::User2,i18n("Show Options"));
+private:
+	QTreeView treeView;
+};
 
-	connect(this,SIGNAL(applyClicked()),SLOT(apply()));
-	connect(this,SIGNAL(okClicked()),SLOT(apply()));
-	connect(this,SIGNAL(user1Clicked()),exportWidget,SLOT(save()));
-	connect(this,SIGNAL(user2Clicked()),exportWidget,SLOT(toggleOptions()));
-
-	resize( QSize(500,200) );
-}
+#endif

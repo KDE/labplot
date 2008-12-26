@@ -68,9 +68,12 @@ class AspectTreeModel : public QAbstractItemModel
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 		Qt::ItemFlags flags(const QModelIndex &index) const;
+		void stripDownToTopLevel();
+		void showTopLevelOnly(const bool);
+		void setFolderSelectable(const bool);
 
 		//! Convenience wrapper around QAbstractItemModel::createIndex().
-		QModelIndex modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const 
+		QModelIndex modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const
 		{
 			return createIndex(aspect->index(), column, const_cast<AbstractAspect*>(aspect));
 		}
@@ -85,6 +88,8 @@ class AspectTreeModel : public QAbstractItemModel
 
 	private:
 		AbstractAspect* m_root;
+		bool m_topLevelOnly;
+		bool m_folderSelectable;
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H

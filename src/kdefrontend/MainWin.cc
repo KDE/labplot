@@ -40,29 +40,29 @@
 #include "TitleDialog.h"
 
 #include <KApplication>
-#include <KAction>
 #include <KActionCollection>
 #include <KStandardAction>
-#include <kxmlguifactory.h>
+ #include <kxmlguifactory.h>
 #include <KMessageBox>
-#include <QMdiSubWindow>
 #include <KStatusBar>
 #include <KLocale>
 #include <KDebug>
 #include <KFilterDev>
 
-#include "elements/sheettype.h"
+#include "Spreadsheet.h"
+#include "Worksheet.h"
+#include "elements/Set.h"
+#include "plots/Plot.h"
 #include "pixmaps/pixmap.h" //TODO remove this. Use Qt's resource system instead.
 
 #include "core/Project.h"
 #include "core/Folder.h"
-#include "core/AbstractAspect.h"
 #include "core/ProjectExplorer.h"
 #include "core/AspectTreeModel.h"
 #include "table/Table.h"
 
 MainWin::MainWin(QWidget *parent, const QString& filename)
- : KXmlGuiWindow(parent)
+	: KXmlGuiWindow(parent)
 {
 	m_fileName=filename;
 	m_mdi_area = new QMdiArea;
@@ -70,11 +70,12 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 
 	setCaption("LabPlot "LVERSION);
 	setupActions();
+	setupGUI();
 
 	m_project = NULL;
  	openNew();
 
-	m_current_aspect = m_project;
+ 	m_current_aspect = m_project;
 	m_current_folder = m_project;
 
 	initProjectExplorer();
@@ -97,7 +98,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	spreadsheetmenu = static_cast<QMenu*> (guiFactory()->container("spreadsheet",this));
 	connect(spreadsheetmenu, SIGNAL(aboutToShow()), SLOT(SpreadsheetMenu()) );
 
-	statusBar()->showMessage(i18n("Welcome to LabPlot ")+LVERSION);
+	statusBar()->showMessage(i18n("Welcome to LabPlot") + " " + LVERSION);
 
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*, QMenu*)), this, SLOT(createFolderContextMenu(const Folder*, QMenu*)));
@@ -230,29 +231,32 @@ void MainWin::setupActions() {
 	action = new KAction(KIcon("draw-text"),i18n("Title Settings"),this);
 	action->setShortcut(Qt::CTRL+Qt::Key_T);
 	actionCollection()->addAction("title settings", action);
+	action->setWhatsThis(i18n("Changes the title settings of the active plot"));
 	connect(action, SIGNAL(triggered()), SLOT(titleDialog()));
 
 	action = new KAction(KIcon(QIcon(axes_xpm)),i18n("Axes Settings"),this);
-	action->setShortcut(Qt::CTRL+Qt::Key_B);
+	action->setShortcut(Qt::CTRL+Qt::Key_A);
 	actionCollection()->addAction("axes settings", action);
+	action->setWhatsThis(i18n("Changes the axis settings of the active plot"));
 	connect(action, SIGNAL(triggered()), SLOT(axesDialog()));
 
 	action = new KAction(KIcon("format-list-unordered"),i18n("Legend Settings"),this);
 	action->setShortcut(Qt::CTRL+Qt::Key_L);
 	actionCollection()->addAction("legend settings", action);
+	action->setWhatsThis(i18n("Changes the legend settings of the active plot"));
 	connect(action, SIGNAL(triggered()), SLOT(legendDialog()));
 
 	action = new KAction(KIcon(QIcon(set_xpm)),i18n("Plot Settings"),this);
 	action->setShortcut(Qt::CTRL+Qt::Key_J);
+	action->setWhatsThis(i18n("Changes the settings of the active plot"));
 	actionCollection()->addAction("plot settings", action);
 	connect(action, SIGNAL(triggered()), SLOT(plotDialog()));
-	//plot_action->setWhatsThis(i18n("This lets you change the settings of the active plot"));
 
 	action = new KAction(KIcon(QIcon(worksheet_xpm)),i18n("Worksheet Settings"),this);
-	action->setShortcut(Qt::ALT+Qt::Key_W);
+	action->setShortcut(Qt::CTRL+Qt::Key_W);
+	action->setWhatsThis(i18n("Changes the settings of the active worksheet"));
 	actionCollection()->addAction("worksheet settings", action);
 	connect(action, SIGNAL(triggered()), SLOT(worksheetDialog()));
-	//worksheet_action->setWhatsThis(i18n("This lets you change the settings of the active worksheet"));
 
 	// Analysis
 	// Drawing
@@ -293,8 +297,6 @@ void MainWin::setupActions() {
 	//"Standard actions"
 	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
 	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
-
-	setupGUI();
 }
 
 bool MainWin::warnModified() {
@@ -326,29 +328,51 @@ void MainWin::updateSetList() {
 }
 
 /*!
-	disables/enables menu items etc. depending on the currently selected MDI-subwindow.
+	disables/enables menu items etc. depending on the currently selected Aspect.
 */
 void MainWin::updateGUI() {
 	updateSheetList();
 	updateSetList();
+	KXMLGUIFactory* factory=this->guiFactory();
+	KActionCollection* collection=this->actionCollection();
 
-	// TODO
-	if(activeWorksheet() == 0) {
-		(static_cast<QMenu*> (guiFactory()->container("appearance",this)))->setEnabled(false);
-		(static_cast<QMenu*> (guiFactory()->container("viewmenu",this)))->setEnabled(false);
-		(static_cast<QMenu*> (guiFactory()->container("drawing",this)))->setEnabled(false);
-		if(activeSpreadsheet() == 0)
-			(static_cast<QMenu*> (guiFactory()->container("analysis",this)))->setEnabled(false);
-		else
-			(static_cast<QMenu*> (guiFactory()->container("analysis",this)))->setEnabled(true);
+	//Handle the Worksheet-object
+	Worksheet* w=this->activeWorksheet();
+	if (w==0){
+		//no workseet selected->deactivate the corresponding menus
+		factory->container("appearance", this)->setEnabled(false);
+		collection->action("worksheet settings")->setEnabled(false);
+		factory->container("view", this)->setEnabled(false);
+		factory->container("drawing", this)->setEnabled(false);
+
+		//Handle the Table-object
+		if (activeTable()){
+			factory->container("analysis", this)->setEnabled(true);
+		}else{
+			factory->container("analysis", this)->setEnabled(false);
+		}
+	}else{
+		//workseet selected->activate corresponding menus
+		factory->container("appearance", this)->setEnabled(true);
+		collection->action("worksheet settings")->setEnabled(true);
+		factory->container("view", this)->setEnabled(true);
+		factory->container("drawing", this)->setEnabled(true);
+		factory->container("analysis", this)->setEnabled(true);
+
+ 		if (w->plotCount()==0){
+ 			//no plots available->deactivate "Plot appearance" actions
+			collection->action("plot settings")->setEnabled(false);
+			collection->action("title settings")->setEnabled(false);
+			collection->action("axes settings")->setEnabled(false);
+			collection->action("legend settings")->setEnabled(false);
+ 		}else{
+ 			//plots available->activate "Plot appearance" menus
+			collection->action("plot settings")->setEnabled(true);
+			collection->action("title settings")->setEnabled(true);
+			collection->action("axes settings")->setEnabled(true);
+			collection->action("legend settings")->setEnabled(true);
+ 		}
 	}
-	else {
-		(static_cast<QMenu*> (guiFactory()->container("appearance",this)))->setEnabled(true);
-		(static_cast<QMenu*> (guiFactory()->container("viewmenu",this)))->setEnabled(true);
-		(static_cast<QMenu*> (guiFactory()->container("drawing",this)))->setEnabled(true);
-		(static_cast<QMenu*> (guiFactory()->container("analysis",this)))->setEnabled(true);
-	}
-	(static_cast<QMenu*> (guiFactory()->container("script",this)))->setEnabled(false);
 
 	kDebug()<<"GUI updated"<<endl;
 }
@@ -357,8 +381,7 @@ void MainWin::openNew() {
  	kDebug()<<"MainWin::New()"<<endl;
 	if(warnModified()) return;
 
-  	m_mdi_area->closeAllSubWindows();
-   	updateGUI();
+	//TODO
 // /*	gvpart=0;
 // 	defining_region=0;
 // 	defining_line=0;
@@ -370,7 +393,11 @@ void MainWin::openNew() {
 // 	defining_maglens=0;
 // 	defining_panzoom=0;
 // */
+	m_mdi_area->closeAllSubWindows();
 	delete m_project;
+	m_current_aspect=0;
+	m_current_folder=0;
+	updateGUI();
  	m_project = new Project(this);
  	m_project->setChanged(true);
 }
@@ -482,8 +509,15 @@ void MainWin::saveAs() {
 	save(fn);
 }
 
+/*!
+	prints the current Worksheet
+*/
+  //TODO
 void MainWin::print() {
-// 	if (Worksheet *w = activeWorksheet()) w->print();
+//  Worksheet *w = activeWorksheet();
+//   if (w)
+// 	  w->print();
+
 // 	statusBar()->showMessage(i18n("Printed worksheet"));
 }
 
@@ -500,8 +534,6 @@ void MainWin::SpreadsheetMenu() {
 }
 
 Table* MainWin::newSpreadsheet() {
-	kDebug()<<endl;
-
 	Table * table = new Table(0, 100, 2, i18n("Spreadsheet %1").arg(1));
 
 	QModelIndex index = m_project_explorer->currentIndex();
@@ -514,14 +546,11 @@ Table* MainWin::newSpreadsheet() {
 		parent_aspect->folder()->addChild(table);
 	}
 
-// 	updateGUI();
-
+	kDebug()<<"new spreadsheet created"<<endl;
     return table;
 }
 
 Worksheet* MainWin::newWorksheet() {
-	kDebug()<<endl;
-
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet %1").arg(1));
 	QModelIndex index = m_project_explorer->currentIndex();
 
@@ -533,22 +562,36 @@ Worksheet* MainWin::newWorksheet() {
 		parent_aspect->folder()->addChild(worksheet);
 	}
 
-// 	updateGUI();
+	kDebug()<<"new worksheet created"<<endl;
     return worksheet;
 }
 
-Spreadsheet* MainWin::activeSpreadsheet() const {
-// TODO: port to use aspects
-	QMdiSubWindow *subWindow = m_mdi_area->activeSubWindow();
-	if(subWindow != 0) {
-		Spreadsheet *s = (Spreadsheet *) subWindow->widget();
-		if (s && s->sheetType() == SPREADSHEET)
-			return s;
-	}
-	return 0;
+
+/*!
+	returns a pointer to a Spreadsheet-object, if the currently active/selected Aspect is of type \a Spreadsheet.
+	Otherwise returns \a 0.
+*/
+Spreadsheet* MainWin::activeSpreadsheet() const{
+	Spreadsheet* s=0;
+	if ( m_current_aspect )
+  		s=qobject_cast<Spreadsheet*>(m_current_aspect);
+
+	return s;
 }
 
-Spreadsheet* MainWin::getSpreadsheet(QString name) const {
+/*!
+	returns a pointer to a Spreadsheet-object, if the currently active/selected Aspect is of type \a Spreadsheet.
+	Otherwise returns \a 0.
+*/
+Table* MainWin::activeTable() const{
+	Table* t=0;
+	if ( m_current_aspect )
+  		t=qobject_cast<Table*>(m_current_aspect);
+
+	return t;
+}
+
+Spreadsheet* MainWin::getSpreadsheet(QString name) const{
 // TODO: port to use aspects
 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
 	for (int i=0; i<wlist.size(); i++)
@@ -558,19 +601,19 @@ Spreadsheet* MainWin::getSpreadsheet(QString name) const {
 }
 
 /*!
-	returns a Worksheet-pointer, if the currently
+	returns a pointer to a Worksheet-object, if the currently active/selected Aspect is of type \a Worksheet.
+	Otherwise returns \a 0.
 */
-Worksheet* MainWin::activeWorksheet() const {
+Worksheet* MainWin::activeWorksheet() const{
 	Worksheet* w=0;
-	if (!m_current_aspect){
-		w=qobject_cast<Worksheet*>(m_current_aspect);
-		kDebug()<<m_current_aspect->name()<<endl;
-	}
+	if ( m_current_aspect )
+  		w=qobject_cast<Worksheet*>(m_current_aspect);
 
-	kDebug()<<w<<endl;
 	return w;
 }
 
+
+//TODO remove
 Worksheet* MainWin::getWorksheet(QString name) const {
 // TODO: port to use aspects
 // 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
@@ -586,21 +629,35 @@ void MainWin::importDialog() { (new ImportDialog(this))->show(); }
 void MainWin::projectDialog() { (new ProjectDialog(this))->show(); m_project->setChanged(true); }
 
 
+/*!
+	adds a new plot to the current worksheet.
+*/
 void MainWin::newPlotActionTriggered(QAction* action){
 	Plot::PlotType type;
 	QString name=action->objectName();
-	if (name == "new_2D_function_plot")
+	kDebug()<<name<<endl;
+	if (name == "new_2D_plot")
 		type=Plot::PLOT2D;
-	else if (name == "new_2D_surface_function_plot")
+	else if (name == "new_2D_surface_plot")
 		type=Plot::PLOTSURFACE;
-	else if (name == "new_2D_polar_function_plot")
+	else if (name == "new_2D_polar_plot")
 		type=Plot::PLOTPOLAR;
 	else
 		type=Plot::PLOT3D;
 
-// 	activeWorksheet()->createPlot(type);
+	if (type!=Plot::PLOT2D){
+			KMessageBox::error(this, i18n("Not yet implemented."));
+			return;
+	}else{
+ 		activeWorksheet()->createPlot(type);
+	}
+	this->updateGUI();
 }
 
+/*!
+	shows the \a FunctionPlotDialog.
+	Creates a data set from a function and adds it to the current Worksheet or Spreadsheet.
+*/
 void MainWin::functionActionTriggered(QAction* action){
 	Plot::PlotType type;
 	QString name=action->objectName();
@@ -614,6 +671,12 @@ void MainWin::functionActionTriggered(QAction* action){
 		type=Plot::PLOT3D;
 
 	FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
+	AspectTreeModel* model=new AspectTreeModel(m_project, this);
+ 	model->stripDownToTopLevel();
+	model->showTopLevelOnly(true);
+	model->setFolderSelectable(false);
+
+	dlg->setModel( model );
 	if ( dlg->exec() == QDialog::Accepted ) {
 		if (type!=Plot::PLOT2D){
 			KMessageBox::error(this, i18n("Not yet implemented."));
@@ -622,8 +685,9 @@ void MainWin::functionActionTriggered(QAction* action){
 
 		Set set(Set::SET2D);
 		dlg->saveSet(&set);
-		int i=dlg->currentSheetIndex();
-		this->addSet(set, i, type);
+		//TODO
+// 		QModelIndex index=dlg->currentModelIndex();
+// 		this->addSet(set, i, type);
 	}
 }
 
@@ -697,6 +761,21 @@ void MainWin::legendDialog() {
 	dlg->exec();
 }
 
+/*!
+	shows the dialog for editing the properties of the current workhseet
+*/
+void MainWin::worksheetDialog() {
+	Worksheet *w = activeWorksheet();
+	if(w == 0) {
+		kDebug()<<"ERROR: no worksheet active! Should never happen."<<endl;
+		return;
+	}
+
+// 	WorksheetDialog* dlg = new WorksheetDialog(this);
+// 	dlg->setWorksheet(w);
+// 	dlg->exec();
+}
+
 void MainWin::settingsDialog(){
 	//TODO
 	(new SettingsDialog(this))->show();
@@ -745,9 +824,6 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 // 			}else{
 //
 // 			}
-
-//  			QAbstractItemModel* model=m_project_explorer->model();
-// 			QModelIndex* index=model->index();
 		}
 	}
 // #endif
@@ -757,10 +833,10 @@ void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win)
 {
 	PartMdiView *view = qobject_cast<PartMdiView*>(win);
-	updateGUI();
 	if (!view) return;
 	emit partActivated(view->part());
 	m_project_explorer->setCurrentAspect(view->part());
+	updateGUI();
 }
 
 void MainWin::handleAspectDescriptionChanged(const AbstractAspect *aspect)
@@ -833,18 +909,20 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect)
 		m_current_folder = aspect->folder();
 		updateMdiWindowVisibility();
 	}
-	if(aspect != m_current_aspect)
-	{
+//  	if(aspect != m_current_aspect)
+//  	{
+ 		m_current_aspect = aspect;
 		AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
 		if (part)
 			m_mdi_area->setActiveSubWindow(part->mdiSubWindow());
- 	}
-	m_current_aspect = aspect;
+//   	}
+//  	m_current_aspect = aspect;
 	kDebug()<<"current aspect  "<<m_current_aspect->name()<<endl;
 }
 
 void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to)
 {
+	kDebug()<<""<<endl;
 	if (view == m_mdi_area->currentSubWindow()) {
 		updateGUI();
 	}

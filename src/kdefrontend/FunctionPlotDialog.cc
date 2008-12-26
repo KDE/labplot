@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : dialog for plotting function
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,6 +29,7 @@
 #include "FunctionPlotDialog.h"
 #include "MainWin.h"
 #include "FunctionPlotWidget.h"
+#include "../backend/widgets/TreeViewComboBox.h"
 #include <KDebug>
 
 FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type)
@@ -48,30 +49,25 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type)
 	frameAddTo = new QFrame(mainWidget);
 	QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
 	hLayout->addWidget( new QLabel(i18n("Add function to"),  frameAddTo) );
-	hLayout->addItem( new QSpacerItem(10, 20, QSizePolicy::Expanding) );
+// 	hLayout->addItem( new QSpacerItem(10, 20, QSizePolicy::Expanding) );
 
-	cbAddTo = new QComboBox(frameAddTo);
+	cbAddTo = new TreeViewComboBox(frameAddTo);
 	hLayout->addWidget( cbAddTo);
 
 	mainWin=mw;
-	QList<QMdiSubWindow *> wlist = mw->getMdi()->subWindowList();
- 	qSort(wlist);
-
-	for (int i=0; i<wlist.size(); i++)
-     	cbAddTo->addItem( wlist.at(i)->windowTitle() );
-
-	cbAddTo->addItem( i18n("New Worksheet") );
-	cbAddTo->addItem( i18n("New Spreadsheet") );
+// 	QList<QMdiSubWindow *> wlist = mw->getMdi()->subWindowList();
+//  	qSort(wlist);
+//
+// 	for (int i=0; i<wlist.size(); i++)
+//      	cbAddTo->addItem( wlist.at(i)->windowTitle() );
+//
+// 	cbAddTo->addItem( i18n("New Worksheet") );
+// 	cbAddTo->addItem( i18n("New Spreadsheet") );
 
 	vLayout->addWidget(frameAddTo);
 
 	this->setMainWidget( mainWidget );
 	this->setButtons( KDialog::Ok | KDialog::Cancel );
-
-	//TODO
-// 	Plot *plot=0;
-// 	if(p != 0)
-// 	 	plot = p->getPlot(p->API());
 
 	QString caption;
 	if (type == Plot::PLOT2D)
@@ -94,6 +90,10 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type)
 
 	resize( QSize(300,400) );
 	kDebug()<<"Initialization done."<<endl;
+}
+
+void FunctionPlotDialog::setModel(QAbstractItemModel * model){
+ 	cbAddTo->setModel(model);
 }
 
 /*!

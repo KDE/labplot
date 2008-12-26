@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : import data widget
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -33,11 +33,13 @@
 #include "MainWin.h"
 #include "core/Project.h"
 #include "core/column/Column.h"
+#include "table/Table.h"
 #include "filter/FilterOPJ.h"
 #include "filter/FilterHDF5.h"
 #include "filter/FilterCDF.h"
 #include "filter/FilterNETCDF.h"
 #include "elements/importitems.h"
+#include "Spreadsheet.h"
 
 ImportWidget::ImportWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
@@ -80,7 +82,7 @@ ImportWidget::~ImportWidget() {
 
 void ImportWidget::save() {
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
-	
+
 	conf.writeEntry("Filename",ui.leFileName->text());
 	conf.writeEntry("CreateNewSpreadsheet",ui.cbCreateSpreadsheet->isChecked());
 	conf.writeEntry("UseFilenameAsTitle",ui.cbUseFilename->isChecked());
@@ -98,7 +100,7 @@ void ImportWidget::save() {
 	conf.writeEntry("HideOptions",ui.gbOptions->isHidden() && ui.gbBinaryOptions->isHidden());
 	conf.writeEntry("Binary",binaryMode);
 //TODO	conf.writeEntry("SameXColumn",samexcb->isChecked());
-	
+
 	conf.writeEntry("BinaryFields",ui.niBinaryFields->value());
 	conf.writeEntry("BinaryFormat",ui.cbBinaryFormat->currentIndex());
 	conf.writeEntry("ByteOrder",ui.cbBinaryByteOrder->currentIndex());
@@ -146,7 +148,7 @@ void ImportWidget::fileInfoDialog() {
 			continue;
 
 		QIODevice *file = KFilterDev::deviceForFile(filename,QString::null,true);
-		if(file==0) 
+		if(file==0)
 			file = new QFile(filename);
 
 		if (file->open(QIODevice::ReadOnly))
@@ -214,7 +216,7 @@ void ImportWidget::apply(MainWin *mainWin) {
 		QString filename = files.at(i);
 		if(filename.isEmpty())
 			continue;
-		
+
 		// TODO : if file type selected ...
 		// exit
 
@@ -240,7 +242,7 @@ void ImportWidget::apply(MainWin *mainWin) {
 
 		if(ui.cbUseFilename->isChecked())
 			table->setName(filename);
-	
+
 		// filter using file ending
 		if(filename.endsWith(".hdf",Qt::CaseInsensitive) || filename.endsWith(".h5",Qt::CaseInsensitive))
 			importHDF5(mainWin,filename,table);
@@ -285,7 +287,7 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Table *table) {
 		kDebug()<<"ERROR : unable to read HDF5 file "<<filename<<endl;
 		 return -1;
 	}
-	
+
 	hdf5.importFile();
 	kDebug()<<"Reading HDF5 data"<<endl;
 	kDebug()<<"number of attributes = "<<hdf5.numAttributes()<<endl;
@@ -341,7 +343,7 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Table *table) {
 #else
 	kDebug()<<"Not compiled with HDF5 support!"<<endl;
 	return -2;
-#endif	
+#endif
 }
 
 int ImportWidget::importNETCDF(QString filename, Table *table) {
@@ -526,7 +528,7 @@ void ImportWidget::importASCII(QIODevice *file, Table *table) {
 		}
 
 		QString line = in.readLine();
-		
+
 		if(ui.cbSimplifyWhitespaces->isChecked())
 			line = line.simplified();
 		if(line.startsWith(ui.cbCommentCharacter->currentText()) == true)

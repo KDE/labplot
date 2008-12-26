@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : dialog for plotting functions
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,12 +36,14 @@
 class MainWin;
 class FunctionPlotWidget;
 class Set;
+class TreeViewComboBox;
 
 class FunctionPlotDialog: public KDialog{
 	Q_OBJECT
 
 public:
 	FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type=Plot::PLOT2D);
+	void setModel(QAbstractItemModel * model);
 	void setSet(Set*);
 	void saveSet(Set*) const;
 	int currentSheetIndex() const;
@@ -66,7 +68,7 @@ public:
 private:
 	FunctionPlotWidget* functionPlotWidget;
 	QFrame* frameAddTo;
-	QComboBox* cbAddTo;
+	TreeViewComboBox* cbAddTo;
 	Set* set;
 	bool editMode;
 	MainWin* mainWin;

@@ -31,30 +31,31 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 #include <KXmlGuiWindow>
-#include <QMdiArea>
-#include <KTextEdit>
 #include <KAction>
-
-#include "Spreadsheet.h"
-#include "Worksheet.h"
+#include "core/PartMdiView.h"
 #include "elements/Set.h"
 #include "plots/Plot.h"
 
 class AbstractAspect;
 class Folder;
 class ProjectExplorer;
-class Table;
 class Project;
-#include "core/PartMdiView.h"
+class Worksheet;
+class Table;
+// class Set;
+// class Plot;
+class Spreadsheet;
 
 class MainWin : public KXmlGuiWindow
 {
 	Q_OBJECT
 public:
-	MainWin(QWidget *parent=0, const QString& filename=0);
+	MainWin(QWidget *   parent = 0, const QString& filename=0);
 	~MainWin();
+
 	QMdiArea* getMdi() const { return m_mdi_area; }
 	Spreadsheet* activeSpreadsheet() const;			//!< get active spreadsheet
+	Table* activeTable() const;			//!< get active table
 	Spreadsheet* getSpreadsheet(QString title) const;	//!< get Spreadsheet of name title
 	Worksheet* activeWorksheet() const;			//!< get active worksheet
 	Worksheet* getWorksheet(QString name) const;		//!< get Worksheet of name title
@@ -115,10 +116,10 @@ private slots:
 	void axesDialog();
 	void legendDialog();
 	void settingsDialog();
+	void worksheetDialog();
 
 signals:
 	void partActivated(AbstractPart*);
-
 
 private slots:
 	void handleAspectAdded(const AbstractAspect *parent, int index);

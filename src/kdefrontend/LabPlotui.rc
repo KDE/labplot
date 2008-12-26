@@ -6,15 +6,15 @@
 <text>Main Toolbar</text>
 <Action name="import" />
 <Action name="new spreadsheet" />
-<!-- <Action name="new function" /> -->
-<Menu name="new_function_plot">
+<Action name="new worksheet" />
+<!--<Menu name="new_function_plot">
 	<text>New Function Plot</text>
 	<Action name="new_2D_function_plot" />
 	<Action name="new_2D_surface_function_plot" />
 	<Action name="new_2D_polar_function_plot" />
 		<Separator/>
 		<Action name="new_3D_function_plot" />
-</Menu>
+</Menu>-->
 <ActionList name="dynamicActionlist" />
 </ToolBar>
 
@@ -62,14 +62,14 @@
 <Action name="new spreadsheet" />
 </Menu>
 <Menu name="appearance"><text>&amp;Appearance</text>
+<Action name="plot settings" />
 <Action name="title settings" />
 <Action name="axes settings" />
 <Action name="legend settings" />
 <Separator/>
-<Action name="plot settings" />
 <Action name="worksheet settings" />
 </Menu>
-<Menu name="viewmenu"><text>&amp;View</text>
+<Menu name="view"><text>&amp;View</text>
 </Menu>
 <Menu name="analysis"><text>&amp;Analysis</text>
 </Menu>

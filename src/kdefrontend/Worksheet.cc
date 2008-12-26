@@ -108,7 +108,9 @@ void Worksheet::addSet(const Set set, const Plot::PlotType plotType){
 }
 
 void Worksheet::createPlot(const Plot::PlotType plotType){
+	beginMacro( i18n("Plot added") );
 	d->createPlot(plotType);
+	endMacro();
 }
 
 QWidget* Worksheet::view(){
@@ -335,17 +337,22 @@ QString WorksheetPrivate::title() const{
 
 void WorksheetPrivate::createPlot(const Plot::PlotType plotType){
 	kDebug()<<"Plot of type "<<plotType<<" is going to be created"<<endl;
-
+	Plot* plot;
 	switch(plotType) {
 	case Plot::PLOT2D:{
-   		m_listPlots<<(new Plot2DSimple());
+   		plot=new Plot2DSimple();
 		break;
 	}
 	default:
 		break;
 	}
 
+	m_listPlots<<plot;
     currentPlotIndex=m_listPlots.size()-1;
+	//TODO repaint only the currently affected plot!
+    if (m_view)
+		m_view->repaint();
+
 	kDebug()<<"Plot number "<<currentPlotIndex+1<<"added"<<endl;
 }
 
