@@ -102,6 +102,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/table/TableModel.cpp
 	${BACKEND_DIR}/table/tablecommands.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
+	${BACKEND_DIR}/widgets/TreeViewComboBox.cpp
 )
 
 set(QTFRONTEND_SOURCES
