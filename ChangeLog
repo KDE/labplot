@@ -2,7 +2,23 @@
 2008-10-26,sg	moved MainWin,etc. to kdefrontend/
 		cleaned up src/ directory
 		column dialog for new format
+2008-10-19,tb	updated Changelog, README, AUTHORS, some Copyright statements, 
+		merged changes from SciDAVis trunk up to rev 1018
 2008-10-12,sg	moved gui/ to kdefrontend/
+2008-10-07,tb	merged all changes from the integrate_scidavis branch
+		where I integrated parts of the SciDAVis code into LabPlot.
+		This includes:
+		- added SciDAVis modules core, lib, table, and matrix 
+		  (matrix not integrated yet)
+		- merged/ported the main functions
+		- merged/ported MainWin (many parts taken from ProjectWindow)
+		- merged class Project
+		- merged/ported class Spreadsheet (many parts from TableView)
+		- adjusted src/CMakeLists.txt
+		- added KDE frontend specific table header code
+		- added KDE frontend specific (non-plugin) Folder loading code
+		- added several other KDE frontend specific code parts 
+		  (mostly inside #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE blocks)
 2008-10-03,sg	source copyright added
 2008-09-30,sg	improved ExportDialog
 2008-09-29,sg	new style ProjectDialog
