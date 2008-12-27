@@ -2,8 +2,9 @@
     File                 : TreeViewComboBox.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
+                           (replace * with @ in the email addresses)
     Description          : Provides a QTreeView in a QComboBox
 
  ***************************************************************************/
@@ -37,6 +38,8 @@
 */
 class TreeViewComboBox : public QComboBox
 {
+Q_OBJECT
+
 public:
     TreeViewComboBox(QWidget* parent = 0);
     ~TreeViewComboBox();
@@ -47,8 +50,12 @@ public:
 //     void mousePressEvent(QMouseEvent* e);
 //     void mouseReleaseEvent(QMouseEvent* e);
 
+	virtual void showPopup();
 private:
-	QTreeView treeView;
+	QTreeView m_treeView;
+	QList<const char *> m_topLevelClasses;
+	void showTopLevelOnly(const QModelIndex & index);
+	
 };
 
 #endif

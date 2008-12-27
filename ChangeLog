@@ -1,3 +1,4 @@
+2008-12-27,tb	improved TreeViewComboBox
 2008-11-01,sg	use new table in import dialog
 2008-10-26,sg	moved MainWin,etc. to kdefrontend/
 		cleaned up src/ directory
