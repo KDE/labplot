@@ -33,9 +33,6 @@
 
 #include <QtGui>
 
-/**
-	@author
-*/
 class TreeViewComboBox : public QComboBox
 {
 Q_OBJECT
@@ -45,17 +42,13 @@ public:
     ~TreeViewComboBox();
 
  	void setModel(QAbstractItemModel *model);
-//     void keyPressEvent(QKeyEvent* e);
-//     void keyReleaseEvent(QKeyEvent* e);
-//     void mousePressEvent(QMouseEvent* e);
-//     void mouseReleaseEvent(QMouseEvent* e);
-
 	virtual void showPopup();
+
 private:
 	QTreeView m_treeView;
 	QList<const char *> m_topLevelClasses;
 	void showTopLevelOnly(const QModelIndex & index);
-	
+	bool m_firstPopup;
 };
 
 #endif

@@ -32,10 +32,12 @@
 #include "../core/Folder.h"
 #include <KDebug>
 
-TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
+TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent)
+{
 	m_treeView.header()->hide();
  	setView(&m_treeView);
 	m_topLevelClasses << "Folder" << "Table" << "Worksheet";
+	m_firstPopup=true;
 }
 
 
@@ -48,15 +50,15 @@ void TreeViewComboBox::setModel(QAbstractItemModel *model){
 	m_treeView.hideColumn(1);
 	m_treeView.hideColumn(2);
 	m_treeView.hideColumn(3);
-
-	//TODO why this doesn't work?!?
-	//m_treeView.expandAll();
-	// my guess would be that it requires the view to be visible - Tilman
 }
 
 void TreeViewComboBox::showPopup()
 {
-	m_treeView.expandAll();
+	if (m_firstPopup){
+		m_treeView.expandAll();
+		m_firstPopup=false;
+	}
+
 	QModelIndex root = model()->index(0,0);
 	showTopLevelOnly(root);
 	QComboBox::showPopup();
@@ -76,28 +78,3 @@ void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index)
 		m_treeView.setRowHidden(i, index, !isTopLevel);
 	}
 }
-
-/*
-void TreeViewComboBox::keyPressEvent(QKeyEvent* e)
-{
-    QComboBox::keyPressEvent(e);
-}
-
-void TreeViewComboBox::keyReleaseEvent(QKeyEvent* e)
-{
-		kDebug()<<"";
-    QComboBox::keyReleaseEvent(e);
-}
-
-void TreeViewComboBox::mousePressEvent(QMouseEvent* e)
-{
-    QComboBox::mousePressEvent(e);
-}
-
-void TreeViewComboBox::mouseReleaseEvent(QMouseEvent* e)
-{
-
-    QComboBox::mouseReleaseEvent(e);
-}
-
-*/

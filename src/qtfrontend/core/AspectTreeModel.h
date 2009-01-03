@@ -68,8 +68,6 @@ class AspectTreeModel : public QAbstractItemModel
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 		Qt::ItemFlags flags(const QModelIndex &index) const;
-		void stripDownToTopLevel();
-		void showTopLevelOnly(const bool);
 		void setFolderSelectable(const bool);
 
 		//! Convenience wrapper around QAbstractItemModel::createIndex().

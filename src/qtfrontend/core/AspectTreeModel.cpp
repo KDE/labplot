@@ -31,13 +31,11 @@
 #include <QDateTime>
 #include <QIcon>
 #include <QMenu>
- #include <KDebug>
 
 AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject *parent)
 	: QAbstractItemModel(parent), m_root(root)
 {
 
-	m_topLevelOnly=false;
 	m_folderSelectable=true;
 
 	connect(m_root, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)),
@@ -55,36 +53,6 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject *parent)
 AspectTreeModel::~AspectTreeModel()
 {
 	disconnect(m_root,0,this,0);
-}
-
-void AspectTreeModel::stripDownToTopLevel(){
-	QModelIndex parentIndex=modelIndexOfAspect(m_root);
-	QModelIndex index;
-	AbstractAspect *aspect;
-	this->removeColumn(1, parentIndex);
-	this->removeColumn(2, parentIndex);
-	this->removeColumn(3, parentIndex);
-
-	int rows=this->rowCount(parentIndex);
-	for (int i=0; i<rows; i++){
-		index=this->index(i, 0, parentIndex );
-
-		aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (aspect->inherits("Table")){
-			int aspectRows=this->rowCount( modelIndexOfAspect(aspect) );
-// 			kDebug()<<aspect->name()<<"        "<<aspectRows<<endl;
-			this->removeRows(i, aspectRows, index);
-		}
-
-// 		if (aspect->inherits("Table") || aspect->inherits("Worksheet")){
-// // 			kDebug()<<aspect->name()<<endl;
-// 			aspect->removeAllChildAspects();
-// 		}
-	}
-}
-
-void AspectTreeModel::showTopLevelOnly(const bool b){
-	m_topLevelOnly=b;
 }
 
 void AspectTreeModel::setFolderSelectable(const bool b){
@@ -157,15 +125,6 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const
 	AbstractAspect *aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch(role) {
 		case Qt::DisplayRole:
-// 			if (m_topLevelOnly){
-// 				if (aspect->inherits("Folder") || aspect->inherits("Table") || aspect->inherits("Worksheet"))
-// 					return aspect->name();
-// 				else
-// 					return 0;
-// 			}else{
-// 				return aspect->name();
-// 			}
-// 		}
 		case Qt::EditRole:
 			switch(index.column()) {
 				case 0: return aspect->name();
@@ -188,21 +147,14 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const
 {
 	if (!index.isValid()) return 0;
-// 	Qt::ItemFlags result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+ 	Qt::ItemFlags result = Qt::ItemIsEnabled;
 	AbstractAspect *aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	Qt::ItemFlags result;
- 	if (m_topLevelOnly){
-		if ( aspect->inherits("Folder") || aspect->inherits("Table") || aspect->inherits("Worksheet") )
-			result	= Qt::ItemIsEnabled;
-	}else{
-		result	= Qt::ItemIsEnabled;
-	}
 
-	if( aspect->inherits("Folder")){
-		if ( m_folderSelectable)
-			result |= Qt::ItemIsSelectable;
+	if (!m_folderSelectable) {
+			if (!aspect->inherits("Folder"))
+					result |= Qt::ItemIsSelectable;
 	}else{
-		result |= Qt::ItemIsSelectable;
+			result |= Qt::ItemIsSelectable;
 	}
 
 	if (index.column() == 0 || index.column() == 3)

@@ -672,8 +672,6 @@ void MainWin::functionActionTriggered(QAction* action){
 
 	FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
- 	model->stripDownToTopLevel();
-	model->showTopLevelOnly(true);
 	model->setFolderSelectable(false);
 
 	dlg->setModel( model );
