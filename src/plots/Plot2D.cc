@@ -35,7 +35,8 @@
 #include "../elements/Axis.h"
 
 // general 2D Plot class
-Plot2D::Plot2D() : Plot(){
+Plot2D::Plot2D(AbstractScriptingEngine *engine, const QString& name)
+	: Plot(engine, name){
 	kDebug()<<"Plot2D::Plot2D()"<<endl;
 
 	m_plotType = Plot::PLOT2D;

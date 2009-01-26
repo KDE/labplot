@@ -32,7 +32,9 @@
 #include <QDateTime>
 #include <cmath>
 
-Plot::Plot(){
+Plot::Plot(AbstractScriptingEngine *engine, const QString& name)
+	: AbstractPart(name), scripted(engine){
+
 	kDebug()<<"Starting initialization"<<endl;
 
 	m_titleLabel.setText(i18n("Title"));

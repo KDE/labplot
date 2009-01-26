@@ -43,6 +43,7 @@
 
 class QHBoxLayout;
 class MainWin;
+class KAction;
 
 class Spreadsheet: public QWidget // remark: you could inherit from QTableView here, but that makes it really hard to add any other widget to the view later
 {
@@ -50,6 +51,8 @@ class Spreadsheet: public QWidget // remark: you could inherit from QTableView h
 public:
 	Spreadsheet(Table *table);
 	~Spreadsheet();
+
+	void createMenu(QMenu* menu=0) const;
 	SheetType sheetType() const { return m_type; }
 	void resetHeader(int from=0);
 	void addSet(Set* set);
@@ -85,9 +88,9 @@ private:
 	QString columnHeader(int col) const;
 	int filledRows(int col) const;	//!< returns number of filled rows in column col
 	void displaySet();
+	void createActions();
 
 public slots:
-	void Menu(QMenu *menu);
 	void setTitle(QString title="");
 	void setRowNumber(int row=0);
 	void addColumn() { setColumnCount(columnCount()+1); }
@@ -239,6 +242,31 @@ private slots:
 		//! Initialization
 		void init();
 
+		//Actions
+		KAction* plotAction;
+		KAction* exportDataAction;
+		KAction* editFunctionAction;
+		KAction* columnPropertiesAction;
+		KAction* titleAction;
+		KAction* rowCountAction;
+		KAction* notesAction;
+		KAction* cutAction;
+		KAction* copyAction;
+		KAction* pasteAction;
+		KAction* clearAction;
+		KAction* selectAction;
+		KAction* columnValuesAction;
+		KAction* fillWithAction;
+		KAction* convertAction;
+		KAction* editWithAction;
+		KAction* addColumnAction;
+		KAction* deleteColumnAction;
+		KAction* deleteRowAction;
+		KAction* maskingAction;
+		KAction* normalizeAction;
+		KAction* sortAction;
+		KAction* columnStatisticsAction;
+		KAction* rowStatisticsAction;
 };
 
 #endif //SPREADSHEET

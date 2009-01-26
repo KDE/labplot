@@ -58,25 +58,12 @@
 		 <Action name="new_3D_data_plot" />
 	</Menu>
 </Menu>
-<Menu name="spreadsheet"><text>&amp;Spreadsheet</text>
-<Action name="new spreadsheet" />
-</Menu>
-<Menu name="appearance"><text>&amp;Appearance</text>
-<Action name="plot settings" />
-<Action name="title settings" />
-<Action name="axes settings" />
-<Action name="legend settings" />
-<Separator/>
-<Action name="worksheet settings" />
-</Menu>
-<Menu name="view"><text>&amp;View</text>
-</Menu>
-<Menu name="analysis"><text>&amp;Analysis</text>
-</Menu>
-<Menu name="drawing"><text>&amp;Drawing</text>
-</Menu>
-<Menu name="script"><text>&amp;Script</text>
-</Menu>
+<Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
+<Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
+<Menu name="view"><text>&amp;View</text></Menu>
+<Menu name="analysis"><text>&amp;Analysis</text></Menu>
+<Menu name="drawing"><text>&amp;Drawing</text></Menu>
+<Menu name="script"><text>&amp;Script</text></Menu>
 <Menu name="windows"><text>&amp;Windows</text>
 <Action name="close window" />
 <Action name="close all windows" />

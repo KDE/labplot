@@ -54,11 +54,8 @@ public:
 	~MainWin();
 
 	QMdiArea* getMdi() const { return m_mdi_area; }
-	Spreadsheet* activeSpreadsheet() const;			//!< get active spreadsheet
 	Table* activeTable() const;			//!< get active table
-	Spreadsheet* getSpreadsheet(QString title) const;	//!< get Spreadsheet of name title
 	Worksheet* activeWorksheet() const;			//!< get active worksheet
-	Worksheet* getWorksheet(QString name) const;		//!< get Worksheet of name title
 	Project* getProject() const { return m_project; }
 	void setProject(Project *p) { m_project=p; }
 	void updateGUI();		//!< update GUI of main window
@@ -70,7 +67,6 @@ public:
 private:
 	QMdiArea *m_mdi_area;
 	Project *m_project;
-	QMenu *spreadsheetmenu;
 	KAction *m_newFolderAction;
 	KAction *m_newSpreadsheetAction;
 	KAction *m_newWorksheetAction;
@@ -87,6 +83,7 @@ private:
 	QDockWidget * m_project_explorer_dock;
 	void handleAspectAddedInternal(AbstractAspect *aspect);
 	QString m_fileName; //name of the file to be opened (command line argument)
+	QString m_undoViewEmptyLabel;
 
 public slots:
 	Table* newSpreadsheet();
@@ -107,16 +104,11 @@ private slots:
 	void initObject();
 	void openNew();
 	void print();
-	void SpreadsheetMenu();
 	void importDialog();
 	void projectDialog();
+	void settingsDialog();
 	void newPlotActionTriggered(QAction*);
 	void functionActionTriggered(QAction*);
-	void titleDialog();
-	void axesDialog();
-	void legendDialog();
-	void settingsDialog();
-	void worksheetDialog();
 
 signals:
 	void partActivated(AbstractPart*);

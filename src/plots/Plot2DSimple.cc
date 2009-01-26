@@ -35,8 +35,13 @@
 /*!
 
 */
-Plot2DSimple::Plot2DSimple() 	: Plot2D(){
+Plot2DSimple::Plot2DSimple(AbstractScriptingEngine *engine, const QString& name)
+	: Plot2D(engine, name){
 
+}
+
+QWidget* Plot2DSimple::view(){
+	return 0;
 }
 
 /*QStringList Plot2DSimple::Info() {

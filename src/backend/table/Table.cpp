@@ -301,7 +301,7 @@ QMenu *Table::createContextMenu()
 	emit requestProjectContextMenu(menu);
 	return menu;
 #else
-	return NULL;
+	return new QMenu(0);
 #endif
 }
 

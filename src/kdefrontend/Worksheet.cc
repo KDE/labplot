@@ -108,9 +108,9 @@ void Worksheet::addSet(const Set set, const Plot::PlotType plotType){
 }
 
 void Worksheet::createPlot(const Plot::PlotType plotType){
-	beginMacro( i18n("Plot added") );
+//  	beginMacro( i18n("Plot added") );
 	d->createPlot(plotType);
-	endMacro();
+// 	endMacro();
 }
 
 QWidget* Worksheet::view(){
@@ -337,10 +337,11 @@ QString WorksheetPrivate::title() const{
 
 void WorksheetPrivate::createPlot(const Plot::PlotType plotType){
 	kDebug()<<"Plot of type "<<plotType<<" is going to be created"<<endl;
+// 	beginMacro( i18n("Plot added") );
 	Plot* plot;
 	switch(plotType) {
 	case Plot::PLOT2D:{
-   		plot=new Plot2DSimple();
+//    		plot=new Plot2DSimple();
 		break;
 	}
 	default:

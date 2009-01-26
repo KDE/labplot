@@ -33,7 +33,7 @@
 #include "../elements/Range.h"
 class Plot2D : public Plot{
 public:
-	Plot2D();
+	Plot2D(AbstractScriptingEngine*, const QString &name);
 	void draw(QPainter *p, const int w, const int h);
 
 /*	~Plot2D();

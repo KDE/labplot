@@ -229,9 +229,7 @@ void ImportWidget::apply(MainWin *mainWin) {
 		// open a spreadsheet
 		Table *table=0;
 		if( ! ui.cbCreateSpreadsheet->isChecked() && i == 0 ) {
-			Spreadsheet *s = mainWin->activeSpreadsheet();
-			if (s!=0)
-				table=s->table();
+			table=mainWin->activeTable();
 		}
 		if(!table)
 			table=mainWin->newSpreadsheet();

@@ -32,6 +32,7 @@
 #include <QtGui>
 
 class Worksheet;
+class KAction;
 
 class WorksheetView : public QWidget{
 	Q_OBJECT
@@ -39,11 +40,31 @@ class WorksheetView : public QWidget{
 	public:
     	WorksheetView(QWidget* parent = 0, Worksheet* w=0);
     	~WorksheetView();
+		void createMenu(QMenu* menu=0) const;
 
 	private:
-			void paintEvent(QPaintEvent *);
-			void draw();
-			Worksheet* worksheet;
+		void paintEvent(QPaintEvent *);
+		void contextMenuEvent(QContextMenuEvent *);
+		void draw();
+		void createActions();
+
+		Worksheet* worksheet;
+		KAction* titleSettingsAction;
+		KAction* axesSettingsAction;
+		KAction* legendSettingsAction;
+		KAction* plotSettingsAction;
+		KAction* arrangePlotsAction;
+		KAction* overlayPlotsAction;
+		KAction* worksheetSettingsAction;
+
+	private slots:
+		void titleDialog();
+		void axesDialog();
+		void legendDialog();
+		void plotDialog();
+		void arrangeDialog();
+		void overlayDialog();
+		void worksheetDialog();
 };
 
 #endif

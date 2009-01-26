@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : simple 2d plot
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,8 +34,9 @@
 //! simple 2D Plot	(line, error)
 class Plot2DSimple:public Plot2D {
 public:
-	Plot2DSimple();
-//	QStringList Info();
+	Plot2DSimple(AbstractScriptingEngine*, const QString &name);
+	//	QStringList Info();
+	QWidget *view();
 	void calculateXY(Point d,double *x, double *y, int w, int h);
 	void drawFill(QPainter *p, int w, int h);
 	void drawCurves(QPainter *p, const int w, const int h);

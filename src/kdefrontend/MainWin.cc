@@ -31,13 +31,10 @@
 
 #include "MainWin.h"
 //****** GUI **************
-#include "AxesDialog.h"
 #include "FunctionPlotDialog.h"
 #include "ImportDialog.h"
-#include "LegendDialog.h"
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
-#include "TitleDialog.h"
 
 #include <KApplication>
 #include <KActionCollection>
@@ -51,6 +48,7 @@
 
 #include "Spreadsheet.h"
 #include "Worksheet.h"
+#include "WorksheetView.h"
 #include "elements/Set.h"
 #include "plots/Plot.h"
 #include "pixmaps/pixmap.h" //TODO remove this. Use Qt's resource system instead.
@@ -95,9 +93,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 
 	handleAspectDescriptionChanged(m_project);
 
-	spreadsheetmenu = static_cast<QMenu*> (guiFactory()->container("spreadsheet",this));
-	connect(spreadsheetmenu, SIGNAL(aboutToShow()), SLOT(SpreadsheetMenu()) );
-
 	statusBar()->showMessage(i18n("Welcome to LabPlot") + " " + LVERSION);
 
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
@@ -127,7 +122,6 @@ void MainWin::setupActions() {
 	action = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
 	action->setEnabled(false);
 
-	// Doesn't work	: action = new KAction("import", i18n("Import"), actionCollection(), "import");
 	action = new KAction(KIcon("document-import-database"), i18n("Import"), this);
 	action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_L);
 	actionCollection()->addAction("import", action);
@@ -148,11 +142,11 @@ void MainWin::setupActions() {
 	actionCollection()->addAction("redo", m_redoAction);
 	connect(m_redoAction, SIGNAL(triggered()),SLOT(redo()));
 
-	m_historyAction = new KAction(i18n("Undo/Redo History"),this);
+	m_historyAction = new KAction(KIcon("view-history"), i18n("Undo/Redo History"),this);
 	actionCollection()->addAction("history", m_historyAction);
 	connect(m_historyAction, SIGNAL(triggered()),SLOT(showHistory()));
 
-	//New Folder/Spreasheet/Worksheet
+	//New Folder/Spreadsheet/Worksheet
 	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("New Spreadsheet"),this);
 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new spreadsheet", m_newSpreadsheetAction);
@@ -207,7 +201,6 @@ void MainWin::setupActions() {
 
 	connect(functionActions, SIGNAL(triggered(QAction*)), this, SLOT(functionActionTriggered(QAction*)));
 
-
 	//"New data plots"
 	QActionGroup* newDataPlotActions = new QActionGroup(this);
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Data Plot"),this);
@@ -226,38 +219,7 @@ void MainWin::setupActions() {
 	actionCollection()->addAction("new_3D_data_plot", action);
 	newDataPlotActions->addAction(action);
 
-
 	// Appearance
-	action = new KAction(KIcon("draw-text"),i18n("Title Settings"),this);
-	action->setShortcut(Qt::CTRL+Qt::Key_T);
-	actionCollection()->addAction("title settings", action);
-	action->setWhatsThis(i18n("Changes the title settings of the active plot"));
-	connect(action, SIGNAL(triggered()), SLOT(titleDialog()));
-
-	action = new KAction(KIcon(QIcon(axes_xpm)),i18n("Axes Settings"),this);
-	action->setShortcut(Qt::CTRL+Qt::Key_A);
-	actionCollection()->addAction("axes settings", action);
-	action->setWhatsThis(i18n("Changes the axis settings of the active plot"));
-	connect(action, SIGNAL(triggered()), SLOT(axesDialog()));
-
-	action = new KAction(KIcon("format-list-unordered"),i18n("Legend Settings"),this);
-	action->setShortcut(Qt::CTRL+Qt::Key_L);
-	actionCollection()->addAction("legend settings", action);
-	action->setWhatsThis(i18n("Changes the legend settings of the active plot"));
-	connect(action, SIGNAL(triggered()), SLOT(legendDialog()));
-
-	action = new KAction(KIcon(QIcon(set_xpm)),i18n("Plot Settings"),this);
-	action->setShortcut(Qt::CTRL+Qt::Key_J);
-	action->setWhatsThis(i18n("Changes the settings of the active plot"));
-	actionCollection()->addAction("plot settings", action);
-	connect(action, SIGNAL(triggered()), SLOT(plotDialog()));
-
-	action = new KAction(KIcon(QIcon(worksheet_xpm)),i18n("Worksheet Settings"),this);
-	action->setShortcut(Qt::CTRL+Qt::Key_W);
-	action->setWhatsThis(i18n("Changes the settings of the active worksheet"));
-	actionCollection()->addAction("worksheet settings", action);
-	connect(action, SIGNAL(triggered()), SLOT(worksheetDialog()));
-
 	// Analysis
 	// Drawing
 	// Script
@@ -339,39 +301,41 @@ void MainWin::updateGUI() {
 	//Handle the Worksheet-object
 	Worksheet* w=this->activeWorksheet();
 	if (w==0){
-		//no workseet selected->deactivate the corresponding menus
-		factory->container("appearance", this)->setEnabled(false);
-		collection->action("worksheet settings")->setEnabled(false);
-		factory->container("view", this)->setEnabled(false);
-		factory->container("drawing", this)->setEnabled(false);
+		//no workseet selected -> deactivate worksheet related menus
+		factory->container("worksheet", this)->setEnabled(false);
+ 		factory->container("view", this)->setEnabled(false);
+ 		factory->container("drawing", this)->setEnabled(false);
 
 		//Handle the Table-object
-		if (activeTable()){
+		Table* table=activeTable();
+		if (table){
+			//enable spreadsheet related menus
 			factory->container("analysis", this)->setEnabled(true);
+			factory->container("spreadsheet", this)->setEnabled(true);
+
+			Spreadsheet* view =qobject_cast<Spreadsheet*>(table->view());
+			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
+			view->createMenu(menu);
 		}else{
+			//no spreadsheet selected -> deactivate spreadsheet related menus
 			factory->container("analysis", this)->setEnabled(false);
+			factory->container("spreadsheet", this)->setEnabled(false);
 		}
 	}else{
-		//workseet selected->activate corresponding menus
-		factory->container("appearance", this)->setEnabled(true);
-		collection->action("worksheet settings")->setEnabled(true);
+		//enable worksheet related menus
+		factory->container("worksheet", this)->setEnabled(true);
 		factory->container("view", this)->setEnabled(true);
 		factory->container("drawing", this)->setEnabled(true);
 		factory->container("analysis", this)->setEnabled(true);
 
- 		if (w->plotCount()==0){
- 			//no plots available->deactivate "Plot appearance" actions
-			collection->action("plot settings")->setEnabled(false);
-			collection->action("title settings")->setEnabled(false);
-			collection->action("axes settings")->setEnabled(false);
-			collection->action("legend settings")->setEnabled(false);
- 		}else{
- 			//plots available->activate "Plot appearance" menus
-			collection->action("plot settings")->setEnabled(true);
-			collection->action("title settings")->setEnabled(true);
-			collection->action("axes settings")->setEnabled(true);
-			collection->action("legend settings")->setEnabled(true);
- 		}
+		//populate workseet-menu
+		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
+		view->createMenu(menu);
+
+		//disable speadsheet related menus
+		factory->container("analysis", this)->setEnabled(false);
+		factory->container("spreadsheet", this)->setEnabled(false);
 	}
 
 	kDebug()<<"GUI updated"<<endl;
@@ -400,6 +364,7 @@ void MainWin::openNew() {
 	updateGUI();
  	m_project = new Project(this);
  	m_project->setChanged(true);
+	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
 }
 
 void MainWin::open(QString filename) {
@@ -420,6 +385,7 @@ void MainWin::open(QString filename) {
 	openXML(file);
 	m_project->setFileName(filename);
  	m_project->setChanged(false);
+	m_undoViewEmptyLabel = i18n("Project %1 opened").arg(m_project->name());
 	//recent->addURL(fn);
 
 	setCaption("LabPlot "LVERSION+i18n(" : ")+m_project->fileName());
@@ -521,18 +487,9 @@ void MainWin::print() {
 // 	statusBar()->showMessage(i18n("Printed worksheet"));
 }
 
-/************** sheet stuff *************************/
-void MainWin::SpreadsheetMenu() {
-	kDebug()<<endl;
-	Spreadsheet *s = activeSpreadsheet();
-	if(s) {
-		s->Menu(spreadsheetmenu);
-	} else {
-		spreadsheetmenu->clear();
-		spreadsheetmenu->addAction(m_newSpreadsheetAction);
-	}
-}
-
+/*!
+	adds a new Table (Spreadsheet) to the project.
+*/
 Table* MainWin::newSpreadsheet() {
 	Table * table = new Table(0, 100, 2, i18n("Spreadsheet %1").arg(1));
 
@@ -550,6 +507,9 @@ Table* MainWin::newSpreadsheet() {
     return table;
 }
 
+/*!
+	adds a new Worksheet to the project.
+*/
 Worksheet* MainWin::newWorksheet() {
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet %1").arg(1));
 	QModelIndex index = m_project_explorer->currentIndex();
@@ -568,19 +528,7 @@ Worksheet* MainWin::newWorksheet() {
 
 
 /*!
-	returns a pointer to a Spreadsheet-object, if the currently active/selected Aspect is of type \a Spreadsheet.
-	Otherwise returns \a 0.
-*/
-Spreadsheet* MainWin::activeSpreadsheet() const{
-	Spreadsheet* s=0;
-	if ( m_current_aspect )
-  		s=qobject_cast<Spreadsheet*>(m_current_aspect);
-
-	return s;
-}
-
-/*!
-	returns a pointer to a Spreadsheet-object, if the currently active/selected Aspect is of type \a Spreadsheet.
+	returns a pointer to a Table-object, if the currently active/selected Aspect is of type \a Spreadsheet.
 	Otherwise returns \a 0.
 */
 Table* MainWin::activeTable() const{
@@ -589,15 +537,6 @@ Table* MainWin::activeTable() const{
   		t=qobject_cast<Table*>(m_current_aspect);
 
 	return t;
-}
-
-Spreadsheet* MainWin::getSpreadsheet(QString name) const{
-// TODO: port to use aspects
-	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
-	for (int i=0; i<wlist.size(); i++)
-		if(wlist.at(i)->windowTitle() == name)
-			return (Spreadsheet *)wlist.at(i);
-	return 0;
 }
 
 /*!
@@ -612,17 +551,27 @@ Worksheet* MainWin::activeWorksheet() const{
 	return w;
 }
 
+//TODO remove?
+// Spreadsheet* MainWin::getSpreadsheet(QString name) const{
+// // TODO: port to use aspects
+// 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
+// 	for (int i=0; i<wlist.size(); i++)
+// 		if(wlist.at(i)->windowTitle() == name)
+// 			return (Spreadsheet *)wlist.at(i);
+// 	return 0;
+// }
 
-//TODO remove
-Worksheet* MainWin::getWorksheet(QString name) const {
+
+//TODO remove?
+// Worksheet* MainWin::getWorksheet(QString name) const {
 // TODO: port to use aspects
 // 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
 // 	for (int i=0; i<wlist.size(); i++)
 // 		if(wlist.at(i)->windowTitle() == name)
 // 			return (Worksheet *)wlist.at(i);
 //  	return 0;
-}
-/************** sheet stuff end *************************/
+// }
+
 
 /******************** dialogs *****************************/
 void MainWin::importDialog() { (new ImportDialog(this))->show(); }
@@ -633,6 +582,9 @@ void MainWin::projectDialog() { (new ProjectDialog(this))->show(); m_project->se
 	adds a new plot to the current worksheet.
 */
 void MainWin::newPlotActionTriggered(QAction* action){
+	KMessageBox::error(this, i18n("Not yet implemented."));
+		return;
+
 	Plot::PlotType type;
 	QString name=action->objectName();
 	kDebug()<<name<<endl;
@@ -646,8 +598,8 @@ void MainWin::newPlotActionTriggered(QAction* action){
 		type=Plot::PLOT3D;
 
 	if (type!=Plot::PLOT2D){
-			KMessageBox::error(this, i18n("Not yet implemented."));
-			return;
+		KMessageBox::error(this, i18n("Not yet implemented."));
+		return;
 	}else{
  		activeWorksheet()->createPlot(type);
 	}
@@ -659,6 +611,9 @@ void MainWin::newPlotActionTriggered(QAction* action){
 	Creates a data set from a function and adds it to the current Worksheet or Spreadsheet.
 */
 void MainWin::functionActionTriggered(QAction* action){
+	KMessageBox::error(this, i18n("Not yet implemented."));
+		return;
+
 	Plot::PlotType type;
 	QString name=action->objectName();
 	if (name == "new_2D_function_plot")
@@ -689,90 +644,6 @@ void MainWin::functionActionTriggered(QAction* action){
 	}
 }
 
-void MainWin::titleDialog() {
-	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
-	kDebug()<<endl;
-	Worksheet *w = activeWorksheet();
-	if(w == 0) {
-		kDebug()<<"ERROR: no worksheet active!"<<endl;
-		return;
-	}
-	if(w->plotCount() == 0) {
-		kDebug()<<"ERROR: worksheet has no plot!"<<endl;
-		return;
-	}
-	Plot *plot = w->activePlot();
-	if(plot == 0) {
-		kDebug()<<"ERROR: no active plot found!"<<endl;
-		return;
-	}
-
-	TitleDialog* dlg = new TitleDialog(this);
-	dlg->setWorksheet(w);
-	dlg->exec();
-}
-
-void MainWin::axesDialog(){
-	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
-	kDebug()<<endl;
-	Worksheet *w = activeWorksheet();
-	if(w == 0) {
-		kDebug()<<"ERROR: no worksheet active!"<<endl;
-		return;
-	}
-	if(w->plotCount() == 0) {
-		kDebug()<<"ERROR: worksheet has no plot!"<<endl;
-		return;
-	}
-	Plot *plot = w->activePlot();
-	if(plot == 0) {
-		kDebug()<<"ERROR: no active plot found!"<<endl;
-		return;
-	}
-
-	AxesDialog* dlg = new AxesDialog(this);
-	dlg->setWorksheet(w);
-	dlg->exec();
-}
-
-
-void MainWin::legendDialog() {
-	//TODO redesign: it shouldn't be possible to select this menu, if no worksheet is active.
-	kDebug()<<endl;
-	Worksheet *w = activeWorksheet();
-	if(w == 0) {
-		kDebug()<<"ERROR: no worksheet active!"<<endl;
-		return;
-	}
-	if(w->plotCount() == 0) {
-		kDebug()<<"ERROR: worksheet has no plot!"<<endl;
-		return;
-	}
-	Plot *plot = w->activePlot();
-	if(plot == 0) {
-		kDebug()<<"ERROR: no active plot found!"<<endl;
-		return;
-	}
-
-	LegendDialog* dlg = new LegendDialog(this);
-	dlg->setWorksheet(w);
-	dlg->exec();
-}
-
-/*!
-	shows the dialog for editing the properties of the current workhseet
-*/
-void MainWin::worksheetDialog() {
-	Worksheet *w = activeWorksheet();
-	if(w == 0) {
-		kDebug()<<"ERROR: no worksheet active! Should never happen."<<endl;
-		return;
-	}
-
-// 	WorksheetDialog* dlg = new WorksheetDialog(this);
-// 	dlg->setWorksheet(w);
-// 	dlg->exec();
-}
 
 void MainWin::settingsDialog(){
 	//TODO
@@ -955,25 +826,28 @@ Folder* MainWin::newFolder() {
     return folder;
 }
 
+/*!
+	shows the dialog with the Undo-history.
+*/
 void MainWin::showHistory()
-{   // TODO: this is Qt-only code, you may want to add KDE specific stuff here
-	if (!m_project->undoStack()) return;
-	QDialog dialog;
-	QVBoxLayout layout(&dialog);
+{
+	if (!m_project->undoStack())
+		 return;
 
-    QDialogButtonBox button_box;
-	button_box.setOrientation(Qt::Horizontal);
-    button_box.setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok);
-    QObject::connect(&button_box, SIGNAL(accepted()), &dialog, SLOT(accept()));
-    QObject::connect(&button_box, SIGNAL(rejected()), &dialog, SLOT(reject()));
+	KDialog dialog;
+	dialog.setWindowIcon( KIcon("view-history") );
+	dialog.setWindowTitle(i18n("Undo/Redo History"));
+	dialog.setButtons( KDialog::Ok | KDialog::Cancel );
 
 	int index = m_project->undoStack()->index();
 	QUndoView undo_view(m_project->undoStack());
+	undo_view.setCleanIcon( KIcon("edit-clear-history") );
+ 	undo_view.setEmptyLabel(m_undoViewEmptyLabel);
+	undo_view.setMinimumWidth(350);
+	undo_view.setWhatsThis(i18n("List of all performed steps/actions.")+"\n"
+			 + i18n("Select an item in the list to navigate to the corresponding step."));
+	dialog.setMainWidget(&undo_view);
 
-	layout.addWidget(&undo_view);
-	layout.addWidget(&button_box);
-
-	dialog.setWindowTitle(tr("Undo/Redo History"));
 	if (dialog.exec() == QDialog::Accepted)
 		return;
 

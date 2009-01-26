@@ -29,7 +29,11 @@
 #ifndef PLOT_H
 #define PLOT_H
 
-#include <QBrush>
+#include <QtGui>
+
+#include "core/AbstractPart.h"
+#include "core/AbstractScriptingEngine.h"
+#include "core/globals.h"
 
 #include "../elements/Axis.h"
 #include "../elements/Label.h"
@@ -41,11 +45,13 @@
 
 class Legend;
 
-class Plot{
+class Plot : public AbstractPart, public scripted{
+	Q_OBJECT
+
 public:
 	enum PlotType {PLOT2D,PLOTSURFACE,PLOT3D,PLOTGRASS,PLOTVTK,PLOTPIE,PLOTPOLAR,PLOTTERNARY,PLOTQWT3D};
 
-	Plot();
+	Plot(AbstractScriptingEngine*, const QString &name);
 	virtual ~Plot();
 
 	Plot::PlotType plotType() const;

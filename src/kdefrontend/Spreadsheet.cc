@@ -71,7 +71,7 @@ Spreadsheet::~Spreadsheet() {
 
 void Spreadsheet::init()
 {
-//	createActions();
+	createActions();
 
 	m_main_layout = new QHBoxLayout(this);
 	m_main_layout->setSpacing(0);
@@ -145,118 +145,137 @@ int Spreadsheet::columnWidth(int col) const
 	return m_view_widget->horizontalHeader()->sectionSize(col);
 }
 
-void Spreadsheet::contextMenuEvent(QContextMenuEvent *) {
+void Spreadsheet::contextMenuEvent(QContextMenuEvent* e) {
 	QMenu *menu = new QMenu(this);
-	Menu(menu);
+	this->createMenu(menu);
 	menu->exec(QCursor::pos());
 }
 
-void Spreadsheet::Menu(QMenu *menu) {
-	kDebug()<<endl;
-	menu->clear();
-	// sum=1, max=1
+/*!
+	initializes KActions used in the context menu of Spreadsheet and in the menu of MainWin.
+*/
+void Spreadsheet::createActions(){
+	plotAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Plot"),this);
+	connect(plotAction, SIGNAL(triggered()),SLOT(plot()));
 
-	KAction *action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Plot"),this);
-	connect(action, SIGNAL(triggered()),SLOT(plot()));
-	menu->addAction(action);
-	action = new KAction(KIcon("document-export"),i18n("Export"),this);
-	connect(action, SIGNAL(triggered()),SLOT(exportData()));
-	menu->addAction(action);
-	action = new KAction(KIcon("edit-rename"),i18n("Edit Function"),this);
-	connect(action, SIGNAL(triggered()),SLOT(editFunction()));
-	menu->addAction(action);
-	menu->addSeparator();
+	exportDataAction= new KAction(KIcon("document-export"),i18n("Export"),this);
+	connect(exportDataAction, SIGNAL(triggered()),SLOT(exportData()));
 
-	action = new KAction(KIcon("select"),i18n("Column properties"),this);
-	menu->addAction(action);
-	connect(action, SIGNAL(triggered()),SLOT(setProperties()));
-	menu->addSeparator();
+	editFunctionAction = new KAction(KIcon("edit-rename"),i18n("Edit Function"),this);
+	connect(editFunctionAction, SIGNAL(triggered()),SLOT(editFunction()));
 
-	action = new KAction(KIcon("select"),i18n("Set title"),this);
-	menu->addAction(action);
-	connect(action, SIGNAL(triggered()),SLOT(setTitle()));
-	action = new KAction(KIcon("select"),i18n("Set row count"),this);
-	menu->addAction(action);
-	connect(action, SIGNAL(triggered()),SLOT(setRowNumber()));
-	action = new KAction(KIcon("draw-freehand"),i18n("Set notes"),this);
-	menu->addAction(action);
-	connect(action, SIGNAL(triggered()),SLOT(setNotes()));
-	menu->addSeparator();
+	columnPropertiesAction = new KAction(KIcon("select"),i18n("Column properties"),this);
+	connect(columnPropertiesAction, SIGNAL(triggered()),SLOT(setProperties()));
 
-	action = new KAction(KIcon("edit-cut"),i18n("Cut"),this);
-	menu->addAction(action);
-	action->setEnabled(false);
-	action = new KAction(KIcon("edit-copy"),i18n("Copy"),this);
-	menu->addAction(action);
-	action->setEnabled(false);
-	action = new KAction(KIcon("edit-paste"),i18n("Paste"),this);
-	menu->addAction(action);
-	action->setEnabled(false);
-	action = new KAction(KIcon("edit-clear"),i18n("Clear"),this);
-	menu->addAction(action);
-	action->setEnabled(false);
-	action = new KAction(KIcon("edit-select-all"),i18n("Select"),this);
-	menu->addAction(action);
-	action->setEnabled(false);
+	titleAction = new KAction(KIcon("select"),i18n("Set title"),this);
+	connect(titleAction, SIGNAL(triggered()),SLOT(setTitle()));
+
+	rowCountAction = new KAction(KIcon("select"),i18n("Set row count"),this);
+	connect(rowCountAction, SIGNAL(triggered()),SLOT(setRowNumber()));
+
+	notesAction = new KAction(KIcon("draw-freehand"),i18n("Set notes"),this);
+	connect(notesAction, SIGNAL(triggered()),SLOT(setNotes()));
+
+	//TODO add connects
+	cutAction = new KAction(KIcon("edit-cut"),i18n("Cut"),this);
+	cutAction->setEnabled(false);
+	copyAction = new KAction(KIcon("edit-copy"),i18n("Copy"),this);
+	copyAction->setEnabled(false);
+	pasteAction = new KAction(KIcon("edit-paste"),i18n("Paste"),this);
+	pasteAction->setEnabled(false);
+	clearAction = new KAction(KIcon("edit-clear"),i18n("Clear"),this);
+	clearAction->setEnabled(false);
+	selectAction = new KAction(KIcon("edit-select-all"),i18n("Select"),this);
+	selectAction->setEnabled(false);
 	// .. all, nothing, invert
-	menu->addSeparator();
 
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Set column values"),this);
-	connect(action, SIGNAL(triggered()),SLOT(setColumnValues()));
-	menu->addAction(action);
-	menu->addSeparator();
+	columnValuesAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Set column values"),this);
+	connect(columnValuesAction, SIGNAL(triggered()),SLOT(setColumnValues()));
 
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Fill with"),this);
-	action->setEnabled(false);
+	fillWithAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Fill with"),this);
+	fillWithAction->setEnabled(false);
+
 	// row number, random value
-	menu->addAction(action);
-	action = new KAction(KIcon("transform-rotate"),i18n("Convert"),this);
-	action->setEnabled(false);
-	// ...
-	menu->addAction(action);
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Edit with"),this);
-	action->setEnabled(false);
-	menu->addAction(action);
-	// ...
-	menu->addSeparator();
 
-	action = new KAction(KIcon("list-add"),i18n("Add column"),this);
-	menu->addAction(action);
-	connect(action, SIGNAL(triggered()),SLOT(addColumn()));
-	action = new KAction(KIcon("list-remove"),i18n("Delete selected column"),this);
-	connect(action, SIGNAL(triggered()),SLOT(deleteSelectedColumns()));
-	menu->addAction(action);
-	action = new KAction(KIcon("list-remove"),i18n("Delete selected row"),this);
-	connect(action, SIGNAL(triggered()),SLOT(deleteSelectedRows()));
-	menu->addAction(action);
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Masking"),this);
-	action->setEnabled(false);
-	menu->addAction(action);
-	// ...
-	menu->addSeparator();
+	convertAction = new KAction(KIcon("transform-rotate"),i18n("Convert"),this);
+	convertAction->setEnabled(false);
 
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Normalize"),this);
-	action->setEnabled(false);
+	// ...
+	editWithAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Edit with"),this);
+	// ...
+
+	addColumnAction = new KAction(KIcon("list-add"),i18n("Add column"),this);
+	connect(addColumnAction, SIGNAL(triggered()),SLOT(addColumn()));
+
+	deleteColumnAction = new KAction(KIcon("list-remove"),i18n("Delete selected column"),this);
+	connect(deleteColumnAction, SIGNAL(triggered()),SLOT(deleteSelectedColumns()));
+
+	deleteRowAction = new KAction(KIcon("list-remove"),i18n("Delete selected row"),this);
+	connect(deleteRowAction, SIGNAL(triggered()),SLOT(deleteSelectedRows()));
+
+	maskingAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Masking"),this);
+	maskingAction->setEnabled(false);
+	// ...
+
+	normalizeAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Normalize"),this);
+	normalizeAction->setEnabled(false);
+
 	// sum=1, max=1
-	menu->addAction(action);
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Sort"),this);
-	action->setEnabled(false);
-	// ascending, descending
-	menu->addAction(action);
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Statistics on column"),this);
-	action->setEnabled(false);
-	menu->addAction(action);
-	action = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Statistics on row"),this);
-	action->setEnabled(false);
-	menu->addAction(action);
-	menu->addSeparator();
 
-#if 0 // TODO: Do you really need this action inside Spreadsheet? If yes, I recommend a signal to avoid depending on MainWin - Tilman
-	action = new KAction(KIcon("insert-table"),i18n("New spreadsheet"),this);
-	action->setShortcut(Qt::CTRL+Qt::Key_Equal);
-	menu->addAction(action);
-	connect(action, SIGNAL(triggered()),mw, SLOT(newSpreadsheet()));
-#endif
+	sortAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Sort"),this);
+	sortAction->setEnabled(false);
+
+	// ascending, descending
+
+	columnStatisticsAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Statistics on column"),this);
+	columnStatisticsAction ->setEnabled(false);
+	rowStatisticsAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Statistics on row"),this);
+	rowStatisticsAction ->setEnabled(false);
+}
+
+void Spreadsheet::createMenu(QMenu *menu) const{
+	if (!menu)
+		menu=new QMenu();
+
+	menu->addAction(plotAction);
+	menu->addAction(exportDataAction);
+	menu->addAction(editFunctionAction);
+	menu->addSeparator();
+	menu->addAction(columnPropertiesAction);
+
+	menu->addSeparator();
+	menu->addAction(titleAction);
+	menu->addAction(rowCountAction);
+	menu->addAction(notesAction);
+
+	menu->addSeparator();
+	menu->addAction(cutAction);
+	menu->addAction(copyAction);
+	menu->addAction(pasteAction);
+	menu->addAction(clearAction);
+	menu->addAction(selectAction);
+
+	menu->addSeparator();
+	menu->addAction(columnValuesAction);
+
+	menu->addSeparator();
+	menu->addAction(fillWithAction);
+	menu->addAction(convertAction);
+	menu->addAction(editWithAction);
+
+	menu->addSeparator();
+	menu->addAction(addColumnAction);
+	menu->addAction(deleteColumnAction);
+	menu->addAction(deleteRowAction);
+	menu->addAction(maskingAction);
+
+	menu->addSeparator();
+	menu->addAction(normalizeAction);
+	menu->addAction(sortAction);
+	menu->addAction(columnStatisticsAction);
+	menu->addAction(rowStatisticsAction);
+
+	kDebug()<<"Spreadsheet menu created"<<endl;
 }
 
 
