@@ -301,7 +301,7 @@ void MainWin::updateGUI() {
 	//Handle the Worksheet-object
 	Worksheet* w=this->activeWorksheet();
 	if (w==0){
-		//no workseet selected -> deactivate worksheet related menus
+		//no worksheet selected -> deactivate worksheet related menus
 		factory->container("worksheet", this)->setEnabled(false);
  		factory->container("view", this)->setEnabled(false);
  		factory->container("drawing", this)->setEnabled(false);
@@ -313,7 +313,7 @@ void MainWin::updateGUI() {
 			factory->container("analysis", this)->setEnabled(true);
 			factory->container("spreadsheet", this)->setEnabled(true);
 
-			Spreadsheet* view =qobject_cast<Spreadsheet*>(table->view());
+			Spreadsheet* view=qobject_cast<Spreadsheet*>(table->view());
 			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
 			view->createMenu(menu);
 		}else{
@@ -328,12 +328,12 @@ void MainWin::updateGUI() {
 		factory->container("drawing", this)->setEnabled(true);
 		factory->container("analysis", this)->setEnabled(true);
 
-		//populate workseet-menu
+		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
 		view->createMenu(menu);
 
-		//disable speadsheet related menus
+		//disable spreadsheet related menus
 		factory->container("analysis", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
 	}

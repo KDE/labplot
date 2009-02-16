@@ -118,6 +118,8 @@ void WorksheetView::createActions(){
 void WorksheetView::createMenu(QMenu* menu) const{
 	if (!menu)
 		menu = new QMenu();
+	else
+		menu->clear();
 
 	menu->addAction(titleSettingsAction);
 	menu->addAction(axesSettingsAction);

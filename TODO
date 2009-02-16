@@ -25,8 +25,9 @@ RELEASE :
 LabPlot 2.0.0:	(see also WISHLIST)
 *************
 BUGS:
+	V Application crashes when main window is closed (X)
+	V Application crashes when saving project
 	V Import dialog : not resized if options hidden
-	V Spreadsheet : crashes when adding a column in an empty spreadsheet
 	V CRASH : using spreadsheet-> edit function
 	Import dialog : compressed data shows no progress
 	Spreadsheet : column selection doesn't work when CTRL is pressed (extended selection)
@@ -44,21 +45,23 @@ General :
 		* use GSL
 		* GSL_VERSION
 -------------------------------------------------------------------------
+Ideas :
+	* use cmake to build either kdefrontend or
+		qtfrontend, something like "-with-qt" / "-with-kde" 
+	* put ProjectExplorer and PartMdiView in common frontend dir
+		( if there is no KDE version)
+	* Our approach also is to put as much code as possible into the aspect 
+		(or its view) that it is related to rather than the
+		main window. So we prefer (in pseudo code, just to show the principle)
+		activeWindow().aspect().showMeYourContextMenu(Position)
+		over
+		if (activeWindowType() == spreadsheet) openSpreadSheetContextMenu(Position)
+
+-------------------------------------------------------------------------
 Pending :
+	* Worksheet-Aspect	Alexander
 	* Print 
 		Worksheet::setupPrinter();
-	* Import Dialog		Stefan
-		* import data into table
-		* warn if selected file doesn't exist when apply
-		Options
-			same first column
-		Formats
-			advanced opj (matrices, etc.)
-			magick (images)
-			audio
-			database (kexi ?)
-			more formas (file type selection)
-		file info dialog
 	* dialogs
 		* LabelWidget: title dialog, function dialog, axes dialog
 		* SettingsDialog		Alexander
@@ -75,16 +78,25 @@ Pending :
 			save/load settings
 		* ExportDialog		Stefan
 			ascii, binary, hdf5, magick, cdf, (audio, database)
+		* Import Dialog		Stefan
+			* import data into table
+			* warn if selected file doesn't exist when apply
+			Options
+				same first column
+			Formats
+				advanced opj (matrices, etc.)
+				magick (images)
+				audio
+				database (kexi ?)
+				more formas (file type selection)
+			file info dialog
 		* ColumnValuesDialog
 		* SpreadsheetPlotDialog
+	* port RichTextWidget and use it	Alexander
+	* figure out how to use KDE4-widgets (e.g. KFontChooser) in designer	Alexander
 -------------------------------------------------------------------------
 more things :
-=======
-		port RichTextWidget and use it	Alexander
-		figure out how to use KDE4-widgets (e.g. KFontChooser) in designer	Alexander
-	* Print 
-		Worksheet::setupPrinter();
-	* Project explorer
+=============
 	Worksheet
 		draw other symbols
 		draw other styles
@@ -109,89 +121,4 @@ more things :
 	add Doxygen style documentations
 	...
 		
-
 ##############################################################################################################
-PLANNED NEW FEATURES :
-	* Undo/Redo support
-		-> using new backend classes
-	* independent/different y axes
-		* option to disconnect y2,x2 axes ?
-	* Categorical x-axis (also y-axis ?)	-> see mails
-	* custom ticks (position & label)
-	* parametric plot 
-		* (XY(t)). ( using scripting ? )
-		* from function  (y(t) vs x(t))
-	* multiple regions
-		* shown/ not shown in print
-		* with background color
-	* contraints for fit parameter
-		-> fix values in iteration loop or use ool ? : see msg00411
-	* data dialog has the same functions as the import dialog
-		-> merge into import dialog
-	* mask matrix data :
-			* mask single points
-			* check plotting from spreadsheet
-			* 2d surface plot
-			* mask data with mouse (maskPlot)
-			* check mask in graphlist
-	* connect to octave/scilab, etc.
-		* It will help enormously if one could drive Labplot from Octave (or
-		other numerical language) and interact with Labplot using some form of
-		RPC. I know that Labplot supports Qt scripting interface. Has anyone
-		created Labplot bindings for Octave or similar packages??
-	* One thing i just missed is a search field for headers from a spreadsheet as
-		data source when adding a new graph.
-		I created a new empty graph/ 2D plot and started adding data to plot. Because
-		there are so many columns, it would help a lot if there would be some search
-		field to filter the columns with data to plot.
-		-> filter for spreadsheet column names in AddGraphDialog.cc
-	* improve graph list
-		* set all line styles to same style
-		* set all symbols to same symbol
-		* set line/symbol width/size for all graphs
-	* limit drawing of symbols in legend to legend box
-	* data mode
-		* jump in data point steps (configure steps)
-			Worksheet::keyPressEvent()
-		* select plot for data mode
-	* support new liborigin features	-> see qtiplot/importOPJ.cpp
-		* import graphs
-			* axes
-				* tic format & style
-				* axes label style
-			* import function
-			* texts (special label)
-			* use opj.curveLineConnect(g,l,c)
-			* legend
-
-##############################################################################################################
-* CMAKE :
-		-> see cmake-2.4.6/Source/CTest/Curl/CmakeLists.txt
-
-	* check for used libs
-	gsl	: VERSION, HAVE_GSL14, etc.
-		MAJOR : gsl-config --version | sed -e 's/^\([0-9]*\).*/\1/'
-		MINOR : gsl-config --version | sed 's/^\([0-9]*\)\.\{0,1\}\([0-9]*\).*/\2/'
-		EXECUTE_PROCESS(...)
-		STRING(REGEX REPLACE ".([bd])." "[\\1]" RESULT "a(b)c(d)e")
-			-> REPLACE ALL "."?
-		? -> STRING(REGEX MATCH "(?)\." "[\\1]" RESULT GSL_VERSION)
-			./cmake-2.4.6/Tests/ComplexRelativePaths/CMakeLists.txt
-			or STRING(COMPARE) ?
-		IF("${GSL_MAJOR_VERSION}.${GSL_MINOR_VERSION}" GREATER 1.5)	
-	qwtplot3d
-	ImageMagick
-	textvc
-	pstoedit
-	netcdf
-	cdf
-	hdf5
-	qhull
-	audiofile
-	...
-	* add options "-disable-qwtplot3d", etc.
-		OPTION(OPTION_VAR "help string describing option"
-                       [initial value])
-	* include all subdirs
-	* install
-	* uninstall	-> see cmake FAQ

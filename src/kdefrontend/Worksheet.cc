@@ -338,13 +338,15 @@ QString WorksheetPrivate::title() const{
 void WorksheetPrivate::createPlot(const Plot::PlotType plotType){
 	kDebug()<<"Plot of type "<<plotType<<" is going to be created"<<endl;
 // 	beginMacro( i18n("Plot added") );
-	Plot* plot;
+	Plot* plot=0;
 	switch(plotType) {
 	case Plot::PLOT2D:{
 //    		plot=new Plot2DSimple();
 		break;
 	}
 	default:
+		KMessageBox::error(0, i18n("Not yet implemented."));
+		// exit ?
 		break;
 	}
 

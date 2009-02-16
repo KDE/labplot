@@ -95,6 +95,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/ScriptingEngineManager.cpp
 	${BACKEND_DIR}/core/Project.cpp
 	${BACKEND_DIR}/core/AbstractPart.cpp
+	${BACKEND_DIR}/core/AspectTreeModel.cpp
 	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
 	${BACKEND_DIR}/core/datatypes/String2DateTimeFilter.cpp
 	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
@@ -108,7 +109,6 @@ set(BACKEND_SOURCES
 set(QTFRONTEND_SOURCES
 	${QTFRONTEND_DIR}/core/ProjectExplorer.cpp
 	${QTFRONTEND_DIR}/core/PartMdiView.cpp
-	${QTFRONTEND_DIR}/core/AspectTreeModel.cpp
 )
 
 set(QTMOC_HDRS

@@ -1,3 +1,7 @@
+2009-02-14,sg	fixed bug in orksheet menu
+		moved AspectTreeModel from qtfrontend/core to backend/core
+		cleaned up TODO list
+2009-02-13,sg	fixed issue with new hdf5-1.8 API
 2008-12-27,tb	improved TreeViewComboBox
 2008-11-01,sg	use new table in import dialog
 2008-10-26,sg	moved MainWin,etc. to kdefrontend/

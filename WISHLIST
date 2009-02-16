@@ -1,6 +1,57 @@
 LabPlot WISHLIST:
 #################
 
+Planned Features:
+	* independent/different y axes
+		* option to disconnect y2,x2 axes ?
+	* Categorical x-axis (also y-axis ?)	-> see mails
+	* custom ticks (position & label)
+	* parametric plot 
+		* (XY(t)). ( using scripting ? )
+		* from function  (y(t) vs x(t))
+	* multiple regions
+		* shown/ not shown in print
+		* with background color
+	* contraints for fit parameter
+		-> fix values in iteration loop or use ool ? : see msg00411
+	* data dialog has the same functions as the import dialog
+		-> merge into import dialog
+	* mask matrix data :
+			* mask single points
+			* check plotting from spreadsheet
+			* 2d surface plot
+			* mask data with mouse (maskPlot)
+			* check mask in graphlist
+	* connect to octave/scilab, etc.
+		* It will help enormously if one could drive Labplot from Octave (or
+		other numerical language) and interact with Labplot using some form of
+		RPC. I know that Labplot supports Qt scripting interface. Has anyone
+		created Labplot bindings for Octave or similar packages??
+	* One thing i just missed is a search field for headers from a spreadsheet as
+		data source when adding a new graph.
+		I created a new empty graph/ 2D plot and started adding data to plot. Because
+		there are so many columns, it would help a lot if there would be some search
+		field to filter the columns with data to plot.
+		-> filter for spreadsheet column names in AddGraphDialog.cc
+	* improve graph list
+		* set all line styles to same style
+		* set all symbols to same symbol
+		* set line/symbol width/size for all graphs
+	* limit drawing of symbols in legend to legend box
+	* data mode
+		* jump in data point steps (configure steps)
+			Worksheet::keyPressEvent()
+		* select plot for data mode
+	* support new liborigin features	-> see qtiplot/importOPJ.cpp
+		* import graphs
+			* axes
+				* tic format & style
+				* axes label style
+			* import function
+			* texts (special label)
+			* use opj.curveLineConnect(g,l,c)
+			* legend
+
 GUI/Application:
 ****************
 	* GUI improvement

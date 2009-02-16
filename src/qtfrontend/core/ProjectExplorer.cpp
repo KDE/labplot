@@ -30,7 +30,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "ProjectExplorer.h"
-#include "AspectTreeModel.h"
+#include "core/AspectTreeModel.h"
 
 #include <QContextMenuEvent>
 #include <QMenu>

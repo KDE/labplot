@@ -62,6 +62,8 @@ FIND_LIBRARY(HDF5_LIBRARY
 IF(HDF5_LIBRARY)
 MESSAGE ("-- Found HDF5 library: ${HDF5_LIBRARY}" )
 add_definitions ('-DHAVE_HDF5=1')
+###### version 1.8 has different API
+add_definitions ('-DH5_USE_16_API=1')
 ELSE(HDF5_LIBRARY)
 MESSAGE ("-- HDF5 library NOT FOUND!" )
 SET(HDF5_LIBRARY "")

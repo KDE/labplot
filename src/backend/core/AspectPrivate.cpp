@@ -177,16 +177,15 @@ QString AbstractAspect::Private::caption() const
 	QRegExp magic("%(.)");
 	for(int pos=magic.indexIn(result, 0); pos >= 0; pos=magic.indexIn(result, pos)) {
 		QString replacement;
-		int length;
+		int length=0;
 		switch(magic.cap(1).at(0).toAscii()) {
 			case '%': replacement = "%"; length=2; break;
 			case 'n': replacement = m_name; length=2; break;
 			case 'c': replacement = m_comment; length=2; break;
 			case 't': replacement = m_creation_time.toString(); length=2; break;
-			case 'C':
-						 length = indexOfMatchingBrace(result, pos) - pos + 1;
-						 replacement = m_comment.isEmpty() ? "" : result.mid(pos+3, length-4);
-						 break;
+			case 'C': length = indexOfMatchingBrace(result, pos) - pos + 1;
+					replacement = m_comment.isEmpty() ? "" : result.mid(pos+3, length-4);
+				 	break;
 		}
 		result.replace(pos, length, replacement);
 		pos += replacement.size();
