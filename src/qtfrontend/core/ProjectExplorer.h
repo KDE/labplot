@@ -50,6 +50,14 @@ class ProjectExplorer : public QTreeView
 		void setCurrentAspect(const AbstractAspect * aspect);
 		virtual void setModel(QAbstractItemModel * model);
 
+	private:
+		bool eventFilter(QObject*, QEvent*);
+		int m_contextMenuColumn;
+
+	private slots:
+		void hideColumnSlot();
+		void showColumnSlot(QAction*);
+
 	protected slots:
 		virtual void currentChanged(const QModelIndex & current, const QModelIndex & previous);
 

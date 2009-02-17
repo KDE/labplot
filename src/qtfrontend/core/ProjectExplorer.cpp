@@ -36,14 +36,18 @@
 #include <QMenu>
 #include <QWidget>
 #include <QHeaderView>
+#include <QMessageBox>
 
-ProjectExplorer::ProjectExplorer(QWidget *parent) 
-	: QTreeView(parent) 
+ProjectExplorer::ProjectExplorer(QWidget *parent)
+	: QTreeView(parent)
 {
 	setAnimated(true);
 	setAlternatingRowColors(true);
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::SingleSelection);
+	m_contextMenuColumn=0;
+
+	header()->installEventFilter(this);
 }
 
 void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event)
@@ -55,7 +59,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event)
 	menu->exec(event->globalPos());
 	delete menu;
 }
-		
+
 void ProjectExplorer::setCurrentAspect(const AbstractAspect * aspect)
 {
 	AspectTreeModel * tree_model = qobject_cast<AspectTreeModel *>(model());
@@ -74,4 +78,73 @@ void ProjectExplorer::setModel(QAbstractItemModel * model)
 	for(int i=0; i<header()->length(); ++i)
 		setColumnWidth(i, model->headerData(i, Qt::Horizontal, Qt::SizeHintRole).toSize().width());
 	// beats me why QHeaderView doesn't do this... it does use the height() part, though
+}
+
+
+/*!
+	handles the contextmenu-event of the header.
+	//TODO add i18n (and mayby some icons) for KDE.
+*/
+bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event)
+{
+	QHeaderView* h=header();
+	if (obj==h){
+		if (event->type() == QEvent::ContextMenu){
+			QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
+			m_contextMenuColumn=h->logicalIndexAt(e->pos());
+
+			QMenu *menu = new QMenu(h);
+			QAction* action=0;
+
+			//allow column hiding only if there are more than one column visible
+			if ( model()->columnCount()-h->hiddenSectionCount()>1 ){
+				action=menu->addAction( tr("Hide %1").arg(model()->headerData(m_contextMenuColumn, Qt::Horizontal).toString() ) );
+				connect( action, SIGNAL(triggered()), SLOT(hideColumnSlot()) );
+			}
+
+			//show-menu is only visible, if there are hidden columns
+			//show-submenu lists only hidden columns
+			if (h->hiddenSectionCount()>0){
+				QMenu* showMenu = menu->addMenu( tr("Show") );
+				QActionGroup* showActions = new QActionGroup(this);
+				for (int i=0; i<model()->columnCount(); i++){
+					if ( h->isSectionHidden(i) ){
+						action = new QAction(model()->headerData(i, Qt::Horizontal).toString(), menu);
+						action->setShortcut(0);
+						showMenu->addAction(action);
+						showActions->addAction( action );
+					}
+				}
+				connect(showActions, SIGNAL(triggered(QAction*)), SLOT(showColumnSlot(QAction*)));
+			}
+
+ 			menu->exec(e->globalPos());
+			return true;
+		}
+	}
+
+	return QObject::eventFilter(obj, event);
+}
+
+void ProjectExplorer::hideColumnSlot()
+{
+	hideColumn(m_contextMenuColumn);
+}
+
+void ProjectExplorer::showColumnSlot(QAction* action)
+{
+	QString name=action->text().remove("&");
+	for (int i=0; i<model()->columnCount(); i++){
+		if (model()->headerData(i, Qt::Horizontal).toString()==name){
+			showColumn(i);
+
+			// the just shown column gets extendend a lot :-(
+			//TODO better way to adjust the width?
+			//TODO remove scrollbar wenn not needed (e.g. if only one column is visible)
+			for(int k=0; k<header()->length(); k++)
+				setColumnWidth(k, model()->headerData(k, Qt::Horizontal, Qt::SizeHintRole).toSize().width());
+
+			return;
+		}
+	}
 }
