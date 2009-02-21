@@ -4,10 +4,11 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/AxesWidget.cc
 	${KDEFRONTEND_DIR}/ColorMapPreview.cc
    	${KDEFRONTEND_DIR}/ColumnDialog.cc
+	${KDEFRONTEND_DIR}/DataPlotDialog.cc
 	${KDEFRONTEND_DIR}/ExportDialog.cc
 	${KDEFRONTEND_DIR}/ExportWidget.cc
 	${KDEFRONTEND_DIR}/FunctionPlotDialog.cc
-  	${KDEFRONTEND_DIR}/FunctionPlotWidget.cc
+  	${KDEFRONTEND_DIR}/FunctionWidget.cc
 	${KDEFRONTEND_DIR}/ImportDialog.cc
 	${KDEFRONTEND_DIR}/ImportWidget.cc
 	${KDEFRONTEND_DIR}/LabelWidget.cc
@@ -64,7 +65,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/axeswidget.ui
 	${KDEFRONTEND_DIR}/ui/columndialog.ui
 	${KDEFRONTEND_DIR}/ui/exportwidget.ui
-	${KDEFRONTEND_DIR}/ui/functionplotwidget.ui
+	${KDEFRONTEND_DIR}/ui/functionwidget.ui
 	${KDEFRONTEND_DIR}/ui/importwidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/legendwidget.ui
