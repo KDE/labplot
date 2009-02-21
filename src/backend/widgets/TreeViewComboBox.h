@@ -42,6 +42,8 @@ public:
     ~TreeViewComboBox();
 
  	void setModel(QAbstractItemModel *model);
+	void setCurrentIndex(const QModelIndex&);
+	QModelIndex currentIndex() const;
 	virtual void showPopup();
 
 private:

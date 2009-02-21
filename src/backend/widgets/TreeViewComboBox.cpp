@@ -32,9 +32,17 @@
 #include "../core/Folder.h"
 #include <KDebug>
 
+/*!
+    \class TreeViewComboBox
+    \brief Provides a QTreeView in a QComboBox
+
+    \ingroup backend/widgets
+ */
+
 TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent)
 {
 	m_treeView.header()->hide();
+	m_treeView.setSelectionMode(QAbstractItemView::SingleSelection);
  	setView(&m_treeView);
 	m_topLevelClasses << "Folder" << "Table" << "Worksheet";
 	m_firstPopup=true;
@@ -45,6 +53,9 @@ TreeViewComboBox::~TreeViewComboBox()
 {
 }
 
+/*!
+	Sets the \a model for the view to present.
+*/
 void TreeViewComboBox::setModel(QAbstractItemModel *model){
  	QComboBox::setModel(model);
 	m_treeView.hideColumn(1);
@@ -52,6 +63,33 @@ void TreeViewComboBox::setModel(QAbstractItemModel *model){
 	m_treeView.hideColumn(3);
 }
 
+/*!
+	Sets the current item to be the item at \a index and selects it.
+
+	\sa currentIndex()
+*/
+void TreeViewComboBox::setCurrentIndex(const QModelIndex& index){
+	//TODO selection of the current index doesn't work if treeview is used.
+	m_treeView.setCurrentIndex(index);
+// 	view()->selectionModel()->select(index, QItemSelectionModel::Select);
+	m_treeView.setExpanded(index, true);
+}
+
+
+/*!
+	Returns the model index of the current item.
+
+	\sa setCurrentIndex()
+*/
+QModelIndex TreeViewComboBox::currentIndex() const{
+	return m_treeView.currentIndex();
+}
+
+/*!
+	Displays the tree view of items in the combobox.
+	Triggers showTopLevelOnly() to show toplevel items only.
+	Expands the complete tree on the first call of this function.
+*/
 void TreeViewComboBox::showPopup()
 {
 	if (m_firstPopup){
@@ -64,17 +102,24 @@ void TreeViewComboBox::showPopup()
 	QComboBox::showPopup();
 }
 
+/*!
+	Hides the non-toplevel items of the model used in the tree view.
+*/
 void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index)
 {
 	int rows = index.model()->rowCount(index);
+	AbstractAspect *aspect;
+	QModelIndex currentChild;
+	bool isTopLevel;
 	for (int i=0; i<rows; i++) {
-		QModelIndex currentChild = index.child(i, 0);
+		currentChild = index.child(i, 0);
 		showTopLevelOnly(currentChild);
-		AbstractAspect *aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
-		bool isTopLevel = false;
+		aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
+		isTopLevel = false;
 		foreach(const char * classString, m_topLevelClasses)
 			if (aspect->inherits(classString))
 				isTopLevel = true;
+
 		m_treeView.setRowHidden(i, index, !isTopLevel);
 	}
 }
