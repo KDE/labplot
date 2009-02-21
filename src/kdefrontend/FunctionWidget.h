@@ -2,10 +2,10 @@
     File                 : FunctionWidget.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
+    Copyright            : (C) 2009 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
-    Description          : widget for creating plot function
-                           
+    Description          : widget for creating a data set from a function
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,41 +29,35 @@
 #ifndef FUNCTIONWIDGET_H
 #define FUNCTIONWIDGET_H
 
-#include "ui_functionplotwidget.h"
+#include "ui_functionwidget.h"
 #include "plots/Plot.h"
 
 class Set;
-class LabelWidget;
-class PlotStyleWidgetInterface;
-class ValuesWidget;
-class QMdiSubWindow;
 
-/**
- * @brief Represents the widget where a function can be created/edited
- * This widget is embedded in \c FunctionPlotDialog.
- */
-class FunctionPlotWidget : public QWidget{
+
+class FunctionWidget : public QWidget{
     Q_OBJECT
 
-public:
-    FunctionPlotWidget(QWidget*);
-    ~FunctionPlotWidget();
+	public:
+		FunctionWidget(QWidget*, const Plot::PlotType& type=Plot::PLOT2D);
+		~FunctionWidget();
 
-	void setSet(Set*);
-	void saveSet(Set*);
-	void setPlotType(const Plot::PlotType&);
+		void init();
+		void setSet(Set*);
+		void saveSet(Set*);
 
-private:
-	Ui::FunctionPlotWidget ui;
-	LabelWidget* labelWidget;
-	ValuesWidget* valuesWidget;
-	PlotStyleWidgetInterface* plotStyleWidget;
-	Plot::PlotType plotType;
+	private:
+		Ui::FunctionWidget ui;
+		Plot::PlotType plotType;
+		int createSetData(Set* set);
 
-	int createSetData(Set* set);
+	private slots:
+		void insertSlot(const QString&);
+		void functionChangedSlot(const QString&);
+		void syncStatusChangedSlot(bool);
 
-private slots:
-	void insert(const QString s);
+	 signals:
+		void functionChanged(const QString&);
 };
 
 #endif
