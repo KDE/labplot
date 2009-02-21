@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : import data widget
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,15 +30,13 @@
 #define IMPORTWIDGET_H
 
 #include <QtGui>
+#include "elements/binaryformat.h"
 #include "ui_importwidget.h"
+
 class MainWin;
 class Table;
-#include "elements/binaryformat.h"
 
-/**
- * @brief Represents the widget where all the import settings can be modified
- * This widget is embedded in \c ImportDialog
- */
+
 class ImportWidget : public QWidget{
     Q_OBJECT
 
@@ -46,7 +44,9 @@ public:
 	ImportWidget(QWidget*);
 	~ImportWidget();
 
-	void apply(MainWin *mainWin);	// used from ImportDialog
+	void apply(MainWin *mainWin);
+	void showOptions() const;
+
 private:
 	Ui::ImportWidget ui;
 	bool binaryMode;
@@ -60,7 +60,8 @@ private:
 	void importASCII(QIODevice *file, Table *table);
 	void importBinary(QIODevice *file, Table *table);
 	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
-	QStringList fileNames() { return ui.leFileName->text().split(";"); }
+	QStringList fileNames()const;
+
 private slots:
 	void save();
 	void selectFile();

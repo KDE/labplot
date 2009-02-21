@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : label settings widget
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,10 +30,18 @@
 #include "../elements/Label.h"
 #include <KDebug>
 
+/*!
+	\class LabelWidget
+ 	\brief Widget for editing the properties of a Label object.
+
+ 	\ingroup kdefrontend
+ */
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 
 	ui.setupUi(this);
-	ui.teLabel->setTextColor(Qt::red);
+	ui.teLabel->setTextColor(Qt::black);
+	ui.kcbFillingColor->setColor(Qt::black);
+	ui.kcbTextColor->setColor(Qt::black);
 
 	//Populate the comboboxes
 	QFont symbol("Symbol", 12, QFont::Bold);
@@ -163,18 +171,6 @@ void LabelWidget::saveLabel(Label* label) const{
 		label->setText( ui.teLabel->toHtml() );
 
 	kDebug()<<"Label data saved."<<endl;
-
-	//TODO old stuff. Can be removed?
-
-	// doesn't work :-(
-/*	const QChar *utf8text = te->text().unicode();
-
-	te->setTextFormat(Qt::PlainText);
-	kdDebug()<<"	PLAINTEXT = "<<te->text().utf8()<<endl;
-	kdDebug()<<"	PLAINTEXT = "<<te->text().local8Bit()<<endl;
-	kdDebug()<<"	PLAINTEXT = "<<te->text().unicode()<<endl;
-	kdDebug()<<"	UTF8 TEXT = "<<utf8text<<endl;
-*/
 }
 
 
@@ -313,6 +309,11 @@ void LabelWidget::insertSymbol(const QString& string) {
 	ui.teLabel->setFontFamily(fontFamily);
 	ui.teLabel->setFocus();
 	emit dataChanged(true);
+}
+
+void LabelWidget::setText(const QString& s){
+	ui.teLabel->clear();
+	ui.teLabel->insertPlainText(s);
 }
 
 void LabelWidget::slotDataChanged(){

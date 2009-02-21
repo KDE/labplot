@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : label settings widget
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,9 +32,6 @@
 #include "ui_labelwidget.h"
 class Label;
 
-/**
- * @brief Widget for changing the properties of the Label object
- */
 class LabelWidget: public QWidget{
 	Q_OBJECT
 
@@ -49,6 +46,7 @@ public slots:
 	void setLabel(const Label*);
 	void setLabelRotationEnabled(const bool);
 	void saveLabel(Label*) const;
+	void setText(const QString&);
 
 private:
 	Ui::LabelWidget ui;

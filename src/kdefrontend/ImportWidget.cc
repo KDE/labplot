@@ -41,6 +41,13 @@
 #include "elements/importitems.h"
 #include "Spreadsheet.h"
 
+ /*!
+	\class ImportWidget
+	\brief Widget for importing data.
+
+	\ingroup kdefrontend
+ */
+
 ImportWidget::ImportWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
@@ -48,7 +55,7 @@ ImportWidget::ImportWidget(QWidget* parent) : QWidget(parent) {
 	ui.leFileName->setText(conf.readEntry("Filename",""));
 	updateFileType();
 
-	ui.gbOptions->hide();
+ 	ui.gbOptions->hide();
 	// TODO : file type selection
 	ui.niStartRow->setValue(conf.readEntry("StartRow",1));
 	ui.niEndRow->setValue(conf.readEntry("EndRow",0));
@@ -78,6 +85,10 @@ ImportWidget::ImportWidget(QWidget* parent) : QWidget(parent) {
 }
 
 ImportWidget::~ImportWidget() {
+}
+
+void ImportWidget::showOptions() const{
+	ui.gbOptions->show();
 }
 
 void ImportWidget::save() {
@@ -112,6 +123,10 @@ void ImportWidget::selectFile() {
 	QStringList filelist = QFileDialog::getOpenFileNames(this,i18n("Select one or more files to open"));
 	if (! filelist.isEmpty() )
 		ui.leFileName->setText(filelist.join(";"));
+}
+
+QStringList ImportWidget::fileNames() const{
+	 return ui.leFileName->text().split(";");
 }
 
 void ImportWidget::updateFileType() {

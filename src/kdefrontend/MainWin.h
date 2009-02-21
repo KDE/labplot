@@ -33,7 +33,7 @@
 #include <KXmlGuiWindow>
 #include <KAction>
 #include "core/PartMdiView.h"
-#include "elements/Set.h"
+// #include "elements/Set.h" //TODO remove
 #include "plots/Plot.h"
 
 class AbstractAspect;
@@ -42,9 +42,6 @@ class ProjectExplorer;
 class Project;
 class Worksheet;
 class Table;
-// class Set;
-// class Plot;
-class Spreadsheet;
 
 class MainWin : public KXmlGuiWindow
 {
@@ -76,7 +73,9 @@ private:
 	void setupActions();
 	void initProjectExplorer();
 	bool warnModified();
-	void addSet(Set s, const int sheet, const Plot::PlotType ptype);
+	void ensureSheet();
+	bool hasSheet(const QModelIndex & index) const;
+// 	void addSet(Set s, const int sheet, const Plot::PlotType ptype);//TODO remove?
 	AbstractAspect * m_current_aspect;
 	Folder * m_current_folder;
 	ProjectExplorer * m_project_explorer;
@@ -108,7 +107,8 @@ private slots:
 	void projectDialog();
 	void settingsDialog();
 	void newPlotActionTriggered(QAction*);
-	void functionActionTriggered(QAction*);
+	void functionPlotActionTriggered(QAction*);
+	void dataPlotActionTriggered(QAction*);
 
 signals:
 	void partActivated(AbstractPart*);

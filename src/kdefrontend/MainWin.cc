@@ -32,6 +32,7 @@
 #include "MainWin.h"
 //****** GUI **************
 #include "FunctionPlotDialog.h"
+#include "DataPlotDialog.h"
 #include "ImportDialog.h"
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
@@ -182,42 +183,44 @@ void MainWin::setupActions() {
 	connect(newPlotActions, SIGNAL(triggered(QAction*)), this, SLOT(newPlotActionTriggered(QAction*)));
 
 	//Function plots
-   QActionGroup* functionActions = new QActionGroup(this);
+   QActionGroup* functionPlotActions = new QActionGroup(this);
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Function Plot"),this);
 	actionCollection()->addAction("new_2D_function_plot", action);
-	functionActions->addAction(action);
+	functionPlotActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Function Plot"),this);
 	actionCollection()->addAction("new_2D_surface_function_plot", action);
-	functionActions->addAction(action);
+	functionPlotActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Function Plot"),this);
 	actionCollection()->addAction("new_2D_polar_function_plot", action);
-	functionActions->addAction(action);
+	functionPlotActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Function Plot"),this);
 	actionCollection()->addAction("new_3D_function_plot", action);
-	functionActions->addAction(action);
+	functionPlotActions->addAction(action);
 
-	connect(functionActions, SIGNAL(triggered(QAction*)), this, SLOT(functionActionTriggered(QAction*)));
+	connect(functionPlotActions, SIGNAL(triggered(QAction*)), this, SLOT(functionPlotActionTriggered(QAction*)));
 
 	//"New data plots"
-	QActionGroup* newDataPlotActions = new QActionGroup(this);
+	QActionGroup* dataPlotActions = new QActionGroup(this);
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Data Plot"),this);
 	actionCollection()->addAction("new_2D_data_plot", action);
-	newDataPlotActions->addAction(action);
+	dataPlotActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Data Plot"),this);
 	actionCollection()->addAction("new_2D_surface_data_plot", action);
-	newDataPlotActions->addAction(action);
+	dataPlotActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Data Plot"),this);
 	actionCollection()->addAction("new_2D_polar_data_plot", action);
-	newDataPlotActions->addAction(action);
+	dataPlotActions->addAction(action);
 
 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Data Plot"),this);
 	actionCollection()->addAction("new_3D_data_plot", action);
-	newDataPlotActions->addAction(action);
+	dataPlotActions->addAction(action);
+
+	connect(dataPlotActions, SIGNAL(triggered(QAction*)), this, SLOT(dataPlotActionTriggered(QAction*)));
 
 	// Appearance
 	// Analysis
@@ -579,12 +582,32 @@ void MainWin::projectDialog() { (new ProjectDialog(this))->show(); m_project->se
 
 
 /*!
+	creates a new worksheet if there are no sheets (worksheet or spreadsheet) in the model at all.
+	TODO: dirty hack. redesign and remove this function and hasSheet().
+*/
+void MainWin::ensureSheet(){
+	if (this->hasSheet(m_project_explorer->model()->index(0,0))==false)
+		this->newWorksheet();
+}
+
+bool MainWin::hasSheet(const QModelIndex & index) const{
+	int rows = index.model()->rowCount(index);
+	AbstractAspect *aspect;
+	for (int i=0; i<rows; i++) {
+		QModelIndex currentChild = index.child(i, 0);
+		hasSheet(currentChild);
+		aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
+		bool isTopLevel = false;
+		if (aspect->inherits("Worksheet") || aspect->inherits("Table"))
+				return true;
+	}
+	return false;
+}
+
+/*!
 	adds a new plot to the current worksheet.
 */
 void MainWin::newPlotActionTriggered(QAction* action){
-	KMessageBox::error(this, i18n("Not yet implemented."));
-		return;
-
 	Plot::PlotType type;
 	QString name=action->objectName();
 	kDebug()<<name<<endl;
@@ -597,23 +620,19 @@ void MainWin::newPlotActionTriggered(QAction* action){
 	else
 		type=Plot::PLOT3D;
 
-	if (type!=Plot::PLOT2D){
-		KMessageBox::error(this, i18n("Not yet implemented."));
-		return;
-	}else{
- 		activeWorksheet()->createPlot(type);
+	this->ensureSheet();
+	Worksheet* w=activeWorksheet();
+	if (w){
+		w->createPlot(type);
+		this->updateGUI();
 	}
-	this->updateGUI();
 }
 
 /*!
 	shows the \a FunctionPlotDialog.
 	Creates a data set from a function and adds it to the current Worksheet or Spreadsheet.
 */
-void MainWin::functionActionTriggered(QAction* action){
-	KMessageBox::error(this, i18n("Not yet implemented."));
-		return;
-
+void MainWin::functionPlotActionTriggered(QAction* action){
 	Plot::PlotType type;
 	QString name=action->objectName();
 	if (name == "new_2D_function_plot")
@@ -625,25 +644,56 @@ void MainWin::functionActionTriggered(QAction* action){
 	else
 		type=Plot::PLOT3D;
 
+	this->ensureSheet();
+
 	FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
 	model->setFolderSelectable(false);
-
 	dlg->setModel( model );
-	if ( dlg->exec() == QDialog::Accepted ) {
-		if (type!=Plot::PLOT2D){
-			KMessageBox::error(this, i18n("Not yet implemented."));
-			return;
-		}
+ 	dlg->setCurrentIndex( m_project_explorer->currentIndex());
 
+	if ( dlg->exec() == QDialog::Accepted ) {
 		Set set(Set::SET2D);
 		dlg->saveSet(&set);
-		//TODO
-// 		QModelIndex index=dlg->currentModelIndex();
-// 		this->addSet(set, i, type);
+		QModelIndex index=dlg->currentIndex();
+		AbstractAspect * aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		Worksheet* w=0;
+		w=qobject_cast<Worksheet*>(aspect);
+		if (w!=0){
+			w->addSet(set, type);
+		}else{
+			//TODO
+// 			Table* t=0;
+// 			if (t!=0){
+// 				t->addSet(set, type);
+		}
 	}
 }
 
+void MainWin::dataPlotActionTriggered(QAction* action){
+	Plot::PlotType type;
+	QString name=action->objectName();
+	if (name == "new_2D_data_plot")
+		type=Plot::PLOT2D;
+	else if (name == "new_2D_surface_data_plot")
+		type=Plot::PLOTSURFACE;
+	else if (name == "new_2D_polar_data_plot")
+		type=Plot::PLOTPOLAR;
+	else
+		type=Plot::PLOT3D;
+
+	this->ensureSheet();
+
+	DataPlotDialog* dlg = new DataPlotDialog(this, type);
+	AspectTreeModel* model=new AspectTreeModel(m_project, this);
+	model->setFolderSelectable(false);
+	dlg->setModel( model );
+	dlg->setCurrentIndex( m_project_explorer->currentIndex());
+
+	if ( dlg->exec() == QDialog::Accepted ) {
+		//TODO
+	}
+}
 
 void MainWin::settingsDialog(){
 	//TODO
@@ -651,53 +701,6 @@ void MainWin::settingsDialog(){
 }
 /******************** dialogs end *****************************/
 
-void MainWin::addSet(Set set, const int sheet, const Plot::PlotType ptype) {
-	kDebug()<<"sheet ="<<sheet<<endl;
-// #if 0 // TODO: port this to use aspects
-	int nr_sheets = m_mdi_area->subWindowList().size();
-	kDebug()<<" Number of sheets :"<<nr_sheets<<endl;
-	if(sheet == nr_sheets) {	// new worksheet
-		kDebug()<<"Creating new worksheet"<<endl;
-		Worksheet *w = this->newWorksheet();
- 		w->addSet(set,ptype);
-	}
-	else if(sheet == nr_sheets+1) {	// new spreadsheet
-// 		kDebug()<<"Creating new spreadsheet"<<endl;
-// 		Spreadsheet *s = newSpreadsheet();
-// 		//TODO pointer or reference
-//  		s->addSet(&set);
-	}
-	else {
-		kDebug()<<" Using sheet "<<sheet<<endl;
-		QMdiSubWindow *subWindow = m_mdi_area->subWindowList()[sheet];
-		if(subWindow != 0) {
-			kDebug()<<" Subwindow exists"<<endl;
-			/*
-			Worksheet *w = (Worksheet *) subWindow->widget();
-			if(w == 0) {
-				kDebug()<<"ERROR: selected sheet found!"<<endl;
-				return;
-			}
-			if (w->sheetType() == WORKSHEET)
-				w->addSet(set,ptype);
-			else {
-				Spreadsheet *s = (Spreadsheet *) subWindow->widget();
-				//TODO pointer or reference
- 				s->addSet(&set);
-			}
-			*/
-// 			Worksheet *w = dynamic_cast<Worksheet *>(subWindow->widget());
-// // 			kDebug()<<"object Name "<<subWindow->widget()->objectName()<<endl;
-// 			if (w!=0){
-// 				w->addSet(set,ptype);
-// 			}else{
-//
-// 			}
-		}
-	}
-// #endif
-	updateGUI();
-}
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win)
 {

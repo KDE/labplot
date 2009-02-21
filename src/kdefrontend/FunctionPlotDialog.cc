@@ -2,7 +2,7 @@
     File                 : FunctionPlotDialog.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach, Alexander Semke
+    Copyright            : (C) 2009 by Stefan Gerlach, Alexander Semke
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
     Description          : dialog for plotting function
 
@@ -28,22 +28,46 @@
  ***************************************************************************/
 #include "FunctionPlotDialog.h"
 #include "MainWin.h"
-#include "FunctionPlotWidget.h"
+#include "FunctionWidget.h"
+#include "LabelWidget.h"
+#include "PlotStyleWidget.h"
+#include "ImportWidget.h"
+#include "PlotSurfaceStyleWidget.h"
+#include "ValuesWidget.h"
 #include "../backend/widgets/TreeViewComboBox.h"
+#include "pixmaps/pixmap.h" //TODO remove this. Use Qt's resource system instead.
 #include <KDebug>
+#include <KMessageBox>
 
 FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type)
 	: KDialog(mw){
 
+	mainWin=mw;
 	plotType=type;
 	editMode=false;
 
 	QWidget* mainWidget = new QWidget(this);
 	QVBoxLayout* vLayout = new QVBoxLayout(mainWidget);
+	tabWidget = new QTabWidget(mainWidget);
 
-	functionPlotWidget = new FunctionPlotWidget( mainWidget );
-	functionPlotWidget->setPlotType(type);
-	vLayout->addWidget(functionPlotWidget);
+	functionWidget = new FunctionWidget( mainWidget, type );
+ 	tabWidget->addTab(functionWidget, i18n("Function"));
+
+ 	labelWidget = new LabelWidget(mainWidget);
+ 	tabWidget->addTab(labelWidget, i18n("Title"));
+
+	if (type==Plot::PLOTSURFACE)
+		plotStyleWidget=new PlotSurfaceStyleWidget(mainWidget);
+	else
+		plotStyleWidget=new PlotStyleWidget(mainWidget);
+
+	tabWidget->addTab(dynamic_cast<QWidget*>(plotStyleWidget), i18n("Style"));
+
+	valuesWidget = new ValuesWidget(mainWidget);
+	tabWidget->addTab(valuesWidget, i18n("Values"));
+
+	vLayout->addWidget(tabWidget);
+
 
 	//Frame for the "Add To"-Stuff
 	frameAddTo = new QFrame(mainWidget);
@@ -53,17 +77,6 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type)
 
 	cbAddTo = new TreeViewComboBox(frameAddTo);
 	hLayout->addWidget( cbAddTo);
-
-	mainWin=mw;
-// 	QList<QMdiSubWindow *> wlist = mw->getMdi()->subWindowList();
-//  	qSort(wlist);
-//
-// 	for (int i=0; i<wlist.size(); i++)
-//      	cbAddTo->addItem( wlist.at(i)->windowTitle() );
-//
-// 	cbAddTo->addItem( i18n("New Worksheet") );
-// 	cbAddTo->addItem( i18n("New Spreadsheet") );
-
 	vLayout->addWidget(frameAddTo);
 
 	this->setMainWidget( mainWidget );
@@ -75,25 +88,27 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type)
 	else if (type == Plot::PLOTSURFACE)
 		caption=i18n("Add New 2D Surface Function Plot");
 	else if (type == Plot::PLOTPOLAR)
-		caption=i18n("Add New 2D Polar Function");
+		caption=i18n("Add New 2D Polar Function Plot");
 	else if (type == Plot::PLOT3D)
-		caption=i18n("Add New 3D Function");
-	else if (type == Plot::PLOTQWT3D)
-		caption=i18n("Add New QWT Function");
+		caption=i18n("Add New 3D Function Plot");
 
 	this->setCaption(caption);
+	this->setWindowIcon(QIcon(newFunction_xpm));
 
 	//SLOTs
 	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
-// 	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
+ 	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
 	connect( this, SIGNAL( changed( bool ) ), this, SLOT( enableButtonApply( bool ) ) ); //TODO
+	connect(functionWidget, SIGNAL( functionChanged(const QString&) ), labelWidget, SLOT( setText(const QString&) ) );
 
-	resize( QSize(300,400) );
+	functionWidget->init(); //call this to trigger the signal in FunctionWidget in order to update of the Label text
+	resize( QSize(200,400) );
 	kDebug()<<"Initialization done."<<endl;
 }
 
 void FunctionPlotDialog::setModel(QAbstractItemModel * model){
  	cbAddTo->setModel(model);
+	//TODO select the first non-folder item in the TreeView
 }
 
 /*!
@@ -101,7 +116,10 @@ void FunctionPlotDialog::setModel(QAbstractItemModel * model){
 */
 void FunctionPlotDialog::setSet(Set* s){
 	set=s;
-	functionPlotWidget->setSet(s);
+	functionWidget->setSet(s);
+	labelWidget->setLabel(set->label());
+	plotStyleWidget->setStyle(set->style());
+	//TODO valuesWidget->setStyle(set->style());
 
 	//in the edit mode. There should be no possibility to add the changed set
 	//to a new worksheet/spreadsheet.
@@ -114,24 +132,38 @@ void FunctionPlotDialog::setSet(Set* s){
 }
 
 void FunctionPlotDialog::saveSet(Set* set) const{
-	//TODO
-	//this->apply();
-	functionPlotWidget->saveSet(set);
+	functionWidget->saveSet(set);
+	labelWidget->saveLabel(set->label());
+	plotStyleWidget->saveStyle(set->style());
+	//TODO valuesWidget->saveStyle(set->style());
+
 	kDebug()<<"Changes saved."<<endl;
-// 	this->close();
 }
 
-int FunctionPlotDialog::currentSheetIndex() const{
+void FunctionPlotDialog::setCurrentIndex(const QModelIndex& index){
+	cbAddTo->setCurrentIndex(index);
+}
+
+QModelIndex FunctionPlotDialog::currentIndex() const{
 	return cbAddTo->currentIndex();
 }
 
+void FunctionPlotDialog::save(){
+// 	AbstractAspect* aspect =  static_cast<AbstractAspect*>(currentIndex().internalPointer());
+// 	if (aspect->inherits("Worksheet")==false){
+// 		KMessageBox::error(this, i18n("No worksheet selected"), i18n("Please select a worksheet.") );
+// 		return;
+// 	}
+// 	close();
+}
+
 void FunctionPlotDialog::apply() const{
-	functionPlotWidget->saveSet(set);
+	functionWidget->saveSet(set);
 /*
 	if (editMode){
 		//we're in the edit mode, there is an edit-object:
 		// -> save the changes and trigger the update in MainWin
-		functionPlotWidget->saveSet(set);
+		functionWidget->saveSet(set);
 		//TODO
 	}else{
 		//there is no set-object:
@@ -143,7 +175,7 @@ void FunctionPlotDialog::apply() const{
 		else
 			newSet.setType(Set::SET3D);
 
-		functionPlotWidget->saveSet(&newSet);
+		functionWidget->saveSet(&newSet);
    		mainWin->addSet(newSet, cbAddTo->currentIndex(), plotType);
 	}
 	*/
