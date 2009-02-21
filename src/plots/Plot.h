@@ -45,7 +45,7 @@
 
 class Legend;
 
-class Plot : public AbstractPart, public scripted{
+class Plot : public AbstractAspect, public scripted{
 	Q_OBJECT
 
 public:

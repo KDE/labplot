@@ -33,7 +33,7 @@
 #include <cmath>
 
 Plot::Plot(AbstractScriptingEngine *engine, const QString& name)
-	: AbstractPart(name), scripted(engine){
+	: AbstractAspect(name), scripted(engine){
 
 	kDebug()<<"Starting initialization"<<endl;
 

@@ -65,6 +65,22 @@ Plot2D::Plot2D(AbstractScriptingEngine *engine, const QString& name)
 	a.label()->setText( i18n("y2-Axis") );
 	list_Axes.append(a);
 
+	//x1
+	this->list_Axes[0].setLowerLimit(0);
+	this->list_Axes[0].setUpperLimit(1);
+
+	//y1
+	this->list_Axes[1].setLowerLimit(0);
+	this->list_Axes[1].setUpperLimit(1);
+
+	//x2
+	this->list_Axes[2].setLowerLimit(0);
+	this->list_Axes[2].setUpperLimit(1);
+
+	//y2
+	this->list_Axes[3].setLowerLimit(0);
+	this->list_Axes[3].setUpperLimit(1);
+
 /* OLD :
 	// set default axis settings for all axes
 	for(int i=0;i<4;i++)
