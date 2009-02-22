@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>FunctionPlotWidget</class>
- <widget class="QWidget" name="FunctionPlotWidget" >
+ <class>FunctionWidget</class>
+ <widget class="QWidget" name="FunctionWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>
