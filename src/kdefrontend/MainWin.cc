@@ -83,12 +83,12 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)),
 		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect *)));
-	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *, int)),
-		this, SLOT(handleAspectAdded(const AbstractAspect *, int)));
-	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, int)),
-		this, SLOT(handleAspectRemoved(const AbstractAspect *, int)));
-	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *, int)),
-		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect *, int)));
+	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *)),
+		this, SLOT(handleAspectAdded(const AbstractAspect *)));
+	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
+		this, SLOT(handleAspectRemoved(const AbstractAspect *)));
+	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)),
+		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect *)));
 	connect(m_project, SIGNAL(statusInfo(const QString&)),
 			statusBar(), SLOT(showMessage(const QString&)));
 
@@ -717,20 +717,19 @@ void MainWin::handleAspectDescriptionChanged(const AbstractAspect *aspect)
 	setCaption("LabPlot "LVERSION+i18n(" : ")+m_project->fileName());
 }
 
-void MainWin::handleAspectAdded(const AbstractAspect *parent, int index)
+void MainWin::handleAspectAdded(const AbstractAspect *aspect)
 {
-	handleAspectAddedInternal(parent->child(index));
+	handleAspectAddedInternal(aspect);
 	updateMdiWindowVisibility();
 	handleCurrentSubWindowChanged(m_mdi_area->currentSubWindow());
 }
 
-void MainWin::handleAspectAddedInternal(AbstractAspect * aspect)
+void MainWin::handleAspectAddedInternal(const AbstractAspect * aspect)
 {
-	int count = aspect->childCount();
-	for (int i=0; i<count; i++)
-		handleAspectAddedInternal(aspect->child(i));
+	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>())
+		handleAspectAddedInternal(child);
 
-	AbstractPart *part = qobject_cast<AbstractPart*>(aspect);
+	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
 	if (part)
 	{
 		PartMdiView *win = part->mdiSubWindow();
@@ -741,15 +740,14 @@ void MainWin::handleAspectAddedInternal(AbstractAspect * aspect)
 	}
 }
 
-void MainWin::handleAspectRemoved(const AbstractAspect *parent, int index)
+void MainWin::handleAspectRemoved(const AbstractAspect *parent)
 {
-	Q_UNUSED(index);
 	m_project_explorer->setCurrentAspect(parent);
 }
 
-void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *parent, int index)
+void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect)
 {
-	AbstractPart *part = qobject_cast<AbstractPart*>(parent->child(index));
+	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
 	if (!part) return;
 	PartMdiView *win = part->mdiSubWindow();
 	Q_ASSERT(win);

@@ -103,8 +103,8 @@ int main (int argc, char *argv[]) {
 
 	// init global defaults
 	Project::staticInit();
+	Column::staticInit();
 	Table::setGlobalDefault("default_comment_visibility", false);
-	Table::setGlobalDefault("default_column_width", 120);
 
 	MainWin* window = new MainWin(0,filename);
 	window->show();

@@ -50,6 +50,9 @@ class AbstractAspect::Private
 		int removeChild(AbstractAspect* child);
 		int childCount() const;
 		AbstractAspect* child(int index);
+		const QList< AbstractAspect* > children() const {
+		    return m_children;
+		};
 
 		QString name() const;
 		void setName(const QString &value);
@@ -59,6 +62,8 @@ class AbstractAspect::Private
 		void setCaptionSpec(const QString &value);
 		QDateTime creationTime() const;
 		void setCreationTime(const QDateTime& time);
+		bool hidden() const;
+		void setHidden(bool value);
 
 		QString caption() const;
 		AbstractAspect * owner() { return m_owner; }
@@ -74,6 +79,7 @@ class AbstractAspect::Private
 		QList< AbstractAspect* > m_children;
 		QString m_name, m_comment, m_caption_spec;
 		QDateTime m_creation_time;
+		bool m_hidden;
 		AbstractAspect * m_owner;
 		AbstractAspect * m_parent;
 };

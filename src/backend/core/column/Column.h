@@ -59,6 +59,9 @@ class Column : public AbstractColumn
 	public:
 		class Private;
 		friend class Private;
+
+		static void staticInit();
+
 		//! Ctor
 		/**
 		 * \param name the column name (= aspect name)
@@ -86,6 +89,8 @@ class Column : public AbstractColumn
 		 * \param validity a list of invalid intervals (optional)
 		 */
 		Column(const QString& name, QList<QDateTime> data, IntervalAttribute<bool> validity = IntervalAttribute<bool>());
+		//! Common part of ctors
+		void init();
 		//! Dtor
 		~Column();
 
@@ -146,6 +151,10 @@ class Column : public AbstractColumn
 		SciDAVis::PlotDesignation plotDesignation() const;
 		//! Set the column plot designation
 		void setPlotDesignation(SciDAVis::PlotDesignation pd);
+		//! Get width
+		int width() const;
+		//! Set width
+		void setWidth(int value);
 		//! Clear the whole column
 		void clear();
 		//! This must be called before the column is replaced by another
@@ -304,6 +313,10 @@ class Column : public AbstractColumn
 		//! Read XML row element
 		bool XmlReadRow(XmlStreamReader * reader);
 		//@}
+
+	signals:
+		void widthAboutToChange(const Column*);
+		void widthChanged(const Column*);
 
 	private slots:
 		void notifyDisplayChange();

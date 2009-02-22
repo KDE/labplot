@@ -53,8 +53,7 @@ class Column::Private
 
 		//! Return the data type of the column
 		SciDAVis::ColumnDataType dataType() const { return m_data_type; };
-		//! Return whether the object is read-only
-		bool isReadOnly() const { return false; };
+
 		//! Return the column mode
 		/**
 		 * This function is most used by tables but can also be used
@@ -130,14 +129,18 @@ class Column::Private
 		void insertRows(int before, int count);
 		//! Remove 'count' rows starting from row 'first'
 		void removeRows(int first, int count);
-		//! Return the column name/label
-		QString name() const;
-		//! Return the column comment
-		QString comment() const;
+		//! Return the column name
+		const QString name() const {
+			return m_owner->name();
+		}
 		//! Return the column plot designation
 		SciDAVis::PlotDesignation plotDesignation() const { return m_plot_designation; };
 		//! Set the column plot designation
 		void setPlotDesignation(SciDAVis::PlotDesignation pd);
+		//! Get width
+		int width() const { return m_width; }
+		//! Set width
+		void setWidth(int value);
 		//! Clear the whole column
 		void clear();
 		//! Return the data pointer
@@ -321,6 +324,8 @@ class Column::Private
 		IntervalAttribute<QString> m_formulas;
 		//! The plot designation
 		SciDAVis::PlotDesignation m_plot_designation;
+		//! Width to be used by views
+		int m_width;
 		//! The owner column
 		Column * m_owner;
 		//@}

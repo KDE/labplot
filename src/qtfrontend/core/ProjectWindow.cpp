@@ -118,12 +118,12 @@ void ProjectWindow::init()
 	
 	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)), 
 		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect *)));
-	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *, int)), 
-		this, SLOT(handleAspectAdded(const AbstractAspect *, int)));
-	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, int)), 
-		this, SLOT(handleAspectRemoved(const AbstractAspect *, int)));
-	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *, int)), 
-		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect *, int)));
+	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *)),
+		this, SLOT(handleAspectAdded(const AbstractAspect *)));
+	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
+		this, SLOT(handleAspectRemoved(const AbstractAspect *)));
+	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)),
+		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect *)));
 	connect(m_project, SIGNAL(statusInfo(const QString&)),
 			statusBar(), SLOT(showMessage(const QString&)));
 
@@ -154,20 +154,19 @@ void ProjectWindow::handleAspectDescriptionChanged(const AbstractAspect *aspect)
 	setWindowTitle(m_project->caption() + " - SciDAVis");
 }
 
-void ProjectWindow::handleAspectAdded(const AbstractAspect *parent, int index)
+void ProjectWindow::handleAspectAdded(const AbstractAspect *aspect)
 {
-	handleAspectAddedInternal(parent->child(index));
+	handleAspectAddedInternal(aspect);
 	updateMdiWindowVisibility();
 	handleCurrentSubWindowChanged(m_mdi_area->currentSubWindow());
 }
 
-void ProjectWindow::handleAspectAddedInternal(AbstractAspect * aspect)
+void ProjectWindow::handleAspectAddedInternal(const AbstractAspect * aspect)
 {
-	int count = aspect->childCount();
-	for (int i=0; i<count; i++)
-		handleAspectAddedInternal(aspect->child(i));
+	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>())
+		handleAspectAddedInternal(child);
 
-	AbstractPart *part = qobject_cast<AbstractPart*>(aspect);
+	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
 	if (part)
 	{
 		PartMdiView *win = part->mdiSubWindow();
@@ -178,9 +177,9 @@ void ProjectWindow::handleAspectAddedInternal(AbstractAspect * aspect)
 	}
 }
 
-void ProjectWindow::handleAspectAboutToBeRemoved(const AbstractAspect *parent, int index)
+void ProjectWindow::handleAspectAboutToBeRemoved(const AbstractAspect *aspect)
 {
-	AbstractPart *part = qobject_cast<AbstractPart*>(parent->child(index));
+	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
 	if (!part) return;
 	PartMdiView *win = part->mdiSubWindow();
 	Q_ASSERT(win);
@@ -194,9 +193,8 @@ void ProjectWindow::handleAspectAboutToBeRemoved(const AbstractAspect *parent, i
 	}
 }
 
-void ProjectWindow::handleAspectRemoved(const AbstractAspect *parent, int index)
+void ProjectWindow::handleAspectRemoved(const AbstractAspect *parent)
 {
-	Q_UNUSED(index);
 	m_project_explorer->setCurrentAspect(parent);
 }
 
@@ -763,9 +761,8 @@ void ProjectWindow::importAspect()
 					Folder * folder = new Folder(aspect->name());
 					folder->setComment(aspect->comment());
 					folder->setCaptionSpec(aspect->captionSpec());
-					for (int i=0; i<aspect->childCount(); i++) {
-						// TODO: implement reparenting of Aspects
-					}
+					foreach (AbstractAspect * child, aspect->children<AbstractAspect>(AbstractAspect::IncludeHidden))
+						child->reparent(folder);
 					addNewAspect(folder);
 					delete aspect;
 				} else
@@ -955,8 +952,8 @@ void ProjectWindow::setMdiWindowVisibility(QAction * action)
 		
 void ProjectWindow::chooseFolder()
 {
-	QList<AbstractAspect *> list = m_project->descendantsThatInherit("Folder");
-	if (list.isEmpty()) return;
+	QList<Folder *> list = m_project->children<Folder>(AbstractAspect::Recursive);
+	list.prepend(m_project);
 	
 	// TODO: make a nicer dialog
 	QDialog dialog;

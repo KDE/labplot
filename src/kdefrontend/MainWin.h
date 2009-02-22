@@ -80,7 +80,7 @@ private:
 	Folder * m_current_folder;
 	ProjectExplorer * m_project_explorer;
 	QDockWidget * m_project_explorer_dock;
-	void handleAspectAddedInternal(AbstractAspect *aspect);
+	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	QString m_fileName; //name of the file to be opened (command line argument)
 	QString m_undoViewEmptyLabel;
 
@@ -114,9 +114,9 @@ signals:
 	void partActivated(AbstractPart*);
 
 private slots:
-	void handleAspectAdded(const AbstractAspect *parent, int index);
-	void handleAspectAboutToBeRemoved(const AbstractAspect *parent, int index);
-	void handleAspectRemoved(const AbstractAspect *parent, int index);
+	void handleAspectAdded(const AbstractAspect *aspect);
+	void handleAspectAboutToBeRemoved(const AbstractAspect *aspect);
+	void handleAspectRemoved(const AbstractAspect *parent);
 	void handleAspectDescriptionChanged(const AbstractAspect *aspect);
 	void handleCurrentAspectChanged(AbstractAspect *aspect);
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);

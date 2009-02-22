@@ -54,13 +54,13 @@ class AbstractPart : public AbstractAspect
 		 * This method may be called multiple times during the life time of a Part, or it might not get
 		 * called at all. Parts must not depend on the existence of a view for their operation.
 		 */
-		virtual QWidget * view() = 0;
+		virtual QWidget * view() const = 0;
 		//! Wrap the view() into a PartMdiView.
 		/**
 		 * A new view is only created the first time this method is called;
 		 * after that, a pointer to the pre-existing view is returned.
 		 */
-		PartMdiView * mdiSubWindow();
+		PartMdiView * mdiSubWindow() const;
 		//! Return AbstractAspect::createContextMenu() plus operations on the primary view.
 		virtual QMenu * createContextMenu();
 		//! Fill the part specific menu for the main window including setting the title
@@ -79,7 +79,7 @@ class AbstractPart : public AbstractAspect
 
 	private:
 		//! The MDI sub-window that is wrapped around my primary view.
-		PartMdiView *m_mdi_window;
+		mutable PartMdiView *m_mdi_window;
 };
 
 #endif // ifndef ABSTRACT_PART_H

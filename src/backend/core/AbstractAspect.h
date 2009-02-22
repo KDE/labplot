@@ -2,7 +2,7 @@
     File                 : AbstractAspect.h
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
+    Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Base class for all persistent objects in a Project.
 
@@ -30,6 +30,7 @@
 #define ABSTRACT_ASPECT_H
 
 #include <QObject>
+#include <QList>
 
 class AspectPrivate;
 class Project;
@@ -54,7 +55,9 @@ class QAction;
  * ancestor, project() will return 0 and undo does not work). Children are organized using
  * addChild(), removeChild(), child(), indexOfChild() and childCount() on the parent's side as well
  * as the equivalent convenience methods index() and remove() on the child's side.
- * 
+ * In contrast to the similar feature of QObject, Aspect trees are fully undo/redo aware and provide
+ * signals around object adding/removal.
+ *
  * AbstractAspect manages for every Aspect the properties #name, #comment, #caption_spec and
  * #creation_time. All of these translate into the caption() as described in the documentation
  * of setCaptionSpec().
@@ -68,7 +71,7 @@ class QAction;
  * you can supply an icon() to be used by different views (including the ProjectExplorer)
  * and/or reimplement createContextMenu() for a custom context menu of views.
  *
- * The private data of AbstractAspect is contained in a separate class AbstractAspect::Private. 
+ * The private data of AbstractAspect is contained in a separate class AbstractAspect::Private.
  * The write access to AbstractAspect::Private should always be done using aspect commands
  * to allow undo/redo.
  */
@@ -77,6 +80,12 @@ class AbstractAspect : public QObject
 	Q_OBJECT
 
 	public:
+		//! Flags which control numbering scheme of children.
+		enum ChildIndexFlags {
+			IncludeHidden = 1,
+			Recursive = 2,
+		};
+
 		class Private;
 		friend class Private;
 
@@ -99,7 +108,7 @@ class AbstractAspect : public QObject
 		//! Add the given Aspect to my list of children.
 		void addChild(AbstractAspect* child);
 		//! Insert the given Aspect at a specific position in my list of children.
-		void insertChild(AbstractAspect *child, int index);
+		void insertChildBefore(AbstractAspect *child, AbstractAspect *before);
 		//! Remove the given Aspect from my list of children.
 		/**
 		 * The ownership of the child is transfered to the undo command,
@@ -107,31 +116,72 @@ class AbstractAspect : public QObject
 		 * \sa reparentChild()
 		 */
 		void removeChild(AbstractAspect* child);
-		//! Remove the Aspect at the given index from my list of children.
+		//! Return list of children (optionally only those inheriting class T).
+		template < class T > QList<T*> children(int flags=0) const {
+			QList<T*> result;
+			foreach (AbstractAspect * child, rawChildren()) {
+				if (flags & IncludeHidden || !child->hidden()) {
+					T * i = qobject_cast< T* >(child);
+					result << i;
+					if (flags & Recursive)
+						result << i->children<T>(flags);
+				}
+			}
+			return result;
+		}
+
+		//! Return child identified by (0 based) index and (optionally) class.
 		/**
-		 * The ownership of the child is transfered to the undo command,
-		 * i.e., the aspect is deleted by the undo command.
-		 * \sa reparentChild()
+		 * Identifying objects by an index is inherently error-prone and confusing,
+		 * given that the index can be based on different criteria (viz, counting
+		 * only instances of specific classes and including/excluding hidden
+		 * aspects). Therefore, it is recommended to avoid indices wherever possibly
+		 * and instead refer to aspects using AbstractAspect pointers.
 		 */
-		void removeChild(int index);
-		//! Get a child by its position in my list of children.
-		AbstractAspect* child(int index) const;
-		//! Return the number of child Aspects.
-		int childCount() const;
-		//! Return the position of child in my list of children.
-		int indexOfChild(const AbstractAspect * child) const;
-		//! Return my position in my parent's list of children.
-		int index() const { return parentAspect() ? parentAspect()->indexOfChild(this) : 0; }
-		//! Change the positon of a child in my list of children.
-		void moveChild(int from, int to);
-		//! Move a child to another aspect and transfer ownership.
-		void reparentChild(AbstractAspect *new_parent, AbstractAspect *child, int new_index);
-		//! Move a child to another aspect and transfer ownership.
-		void reparentChild(AbstractAspect *new_parent, AbstractAspect *child);
-		//! Get all descendents that inherit the given class
-		QList<AbstractAspect *> descendantsThatInherit(const char *class_name);
+		template < class T > T * child(int index, int flags=0) const {
+			int i = 0;
+			foreach(AbstractAspect * child, rawChildren()) {
+				T * c = qobject_cast< T* >(child);
+				if (c && (flags & IncludeHidden || !child->hidden()) && index == i++)
+					return c;
+			}
+			return 0;
+		}
+		//! Get child by name and (optionally) class.
+		template < class T > T * child(const QString &name) const {
+			foreach(AbstractAspect * child, rawChildren()) {
+			T * c = qobject_cast< T* >(child);
+			if (c && child->name() == name)
+				return c;
+			}
+			return 0;
+		}
+		//! Return the number of child Aspects inheriting from given class.
+		template < class T > int childCount(int flags=0) const {
+			int result = 0;
+			foreach(AbstractAspect * child, rawChildren()) {
+				T * i = qobject_cast< T* >(child);
+				if (i && (flags & IncludeHidden || !child->hidden()))
+					result++;
+			}
+			return result;
+		}
+		//! Return the (0 based) index
+		template < class T > int indexOfChild(const AbstractAspect * child, int flags=0) const {
+			int index = 0;
+			foreach(AbstractAspect * c, rawChildren()) {
+				if (child == c) return index;
+				T * i = qobject_cast< T* >(c);
+				if (i && (flags & IncludeHidden || !c->hidden()))
+					index++;
+			}
+			return -1;
+		}
+		//! Move a child to another parent aspect and transfer ownership.
+		void reparent(AbstractAspect * new_parent, int new_index=-1);
+
 		//! Remove all child aspects
-		virtual void removeAllChildAspects();
+		void removeAllChildren();
 
 		//! Return the Project this Aspect belongs to, or 0 if it is currently not part of one.
 		virtual const Project *project() const { return parentAspect() ? parentAspect()->project() : 0; }
@@ -157,6 +207,7 @@ class AbstractAspect : public QObject
 		QString captionSpec() const;
 		QDateTime creationTime() const;
 		QString caption() const;
+		bool hidden() const;
 
 		//! \name undo related
 		//@{
@@ -189,11 +240,11 @@ class AbstractAspect : public QObject
 		//! Load from XML
 		/**
 		 * XmlStreamReader supports errors as well as warnings. If only
-		 * warnings (non-critial errors) occur, this function must return 
-		 * the reader at the end element corresponding to the current 
-		 * element at the time the function was called. 
+		 * warnings (non-critial errors) occur, this function must return
+		 * the reader at the end element corresponding to the current
+		 * element at the time the function was called.
 		 *
-		 * This function is normally intended to be called directly 
+		 * This function is normally intended to be called directly
 		 * after the ctor. If you want to call load on an aspect that
 		 * has been altered, you must make sure beforehand that
 		 * it is in the same state as after creation, e.g., remove
@@ -233,8 +284,10 @@ class AbstractAspect : public QObject
 		 * The default caption specification is "%n%C{ - }%c".
 		 */
 		void setCaptionSpec(const QString &value);
+		//! Set "hidden" property, i.e. whether to exclude this aspect from being shown in the explorer.
+		void setHidden(bool value);
 		//! Remove me from my parent's list of children.
-		virtual void remove() { if(parentAspect()) parentAspect()->removeChild(parentAspect()->indexOfChild(this)); }
+		virtual void remove() { if(parentAspect()) parentAspect()->removeChild(this); }
 		//! Make the specified name unique among my children by incrementing a trailing number.
 		QString uniqueNameFor(const QString &current_name) const;
 
@@ -244,17 +297,17 @@ class AbstractAspect : public QObject
 		//! Emit this when the name, comment or caption spec changed
 		void aspectDescriptionChanged(const AbstractAspect *aspect);
 		//! Emit this when a parent aspect is about to get a new child inserted
-		void aspectAboutToBeAdded(const AbstractAspect *parent, int index);
+		void aspectAboutToBeAdded(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect * child);
 		//! Emit this from a newly added aspect
 		void aspectAdded(const AbstractAspect *aspect);
-		//! Emit this from a parent after adding a new child to it
-		void aspectAdded(const AbstractAspect *parent, int index);
 		//! Emit this from an aspect about to be removed from its parent's children
 		void aspectAboutToBeRemoved(const AbstractAspect *aspect);
-		//! Emit this from a parent before removing its child
-		void aspectAboutToBeRemoved(const AbstractAspect *parent, int index);
 		//! Emit this from the parent after removing a child
-		void aspectRemoved(const AbstractAspect *parent, int index);
+		void aspectRemoved(const AbstractAspect *parent, const AbstractAspect * before, const AbstractAspect * child);
+		//! Emit this before the hidden attribute is changed
+		void aspectHiddenAboutToChange(const AbstractAspect *aspect);
+		//! Emit this after the hidden attribute has changed
+		void aspectHiddenChanged(const AbstractAspect *aspect);
 		//! Emit this to give status information to the user.
 		void statusInfo(const QString &text);
 
@@ -266,18 +319,6 @@ class AbstractAspect : public QObject
 		 * is loaded from a file.
 		 */
 		void setCreationTime(const QDateTime& time);
-		//! Called after a new child has been inserted or added.
-		/**
-		 * Unlike the aspectAdded() signals, this method does not get called inside undo/redo actions;
-		 * allowing subclasses to execute undo commands of their own.
-		 */
-		virtual void completeAspectInsertion(AbstractAspect * aspect, int index) { Q_UNUSED(aspect); Q_UNUSED(index); }
-		//! Called before a child is removed.
-		/**
-		 * Unlike the aspectAboutToBeRemoved() signals, this method does not get called inside undo/redo actions;
-		 * allowing subclasses to execute undo commands of their own.
-		 */
-		virtual void prepareAspectRemoval(AbstractAspect * aspect) { Q_UNUSED(aspect); }
 		//! Implementations should call this whenever status information should be given to the user.
 		/**
 		 * This will cause statusInfo() to be emitted. Typically, this will cause the specified string
@@ -288,6 +329,7 @@ class AbstractAspect : public QObject
 
 	private:
 		Private * m_aspect_private;
+		const QList< AbstractAspect* > rawChildren() const;
 };
 
 #endif // ifndef ABSTRACT_ASPECT_H

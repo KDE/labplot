@@ -222,7 +222,6 @@ private slots:
 	public slots:
 		void activateFormulaMode(bool on);
 		void goToCell(int row, int col);
-		void rereadSectionSizes();
 		void selectAll();
 		void deselectAll();
 		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
@@ -230,6 +229,11 @@ private slots:
 		void goToPreviousColumn();
 		void dimensionsDialog();
 		void goToCell();
+
+	protected slots:
+		void handleAspectAdded(const AbstractAspect * aspect);
+		void handleAspectAboutToBeRemoved(const AbstractAspect * aspect);
+		void updateSectionSize(const Column* col);
 
 	protected:
 		//! Pointer to the current underlying model

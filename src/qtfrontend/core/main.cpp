@@ -33,6 +33,7 @@
 #include <QPluginLoader>
 #include "core/Project.h"
 #include "core/ProjectWindow.h"
+#include "core/column/Column.h"
 
 // The following stuff is for the doxygen title page
 /*!  \mainpage SciDAVis - Scientific Data Analysis and Visualization - API documentation
@@ -73,6 +74,7 @@ int main( int argc, char ** argv )
 
 	// module initialization
 	Project::staticInit();
+	Column::staticInit();
 	foreach(QObject *plugin, QPluginLoader::staticInstances()) 
 	{
 		NeedsStaticInit * module = qobject_cast<NeedsStaticInit *>(plugin);

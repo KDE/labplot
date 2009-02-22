@@ -45,7 +45,7 @@ QSettings * AbstractAspect::Private::g_settings =
 QHash<QString, QVariant> AbstractAspect::Private::g_defaults;
 
 AbstractAspect::Private::Private(AbstractAspect * owner, const QString& name)
-	: m_name(name), m_caption_spec("%n%C{ - }%c"), m_owner(owner), m_parent(0)
+	: m_name(name), m_caption_spec("%n%C{ - }%c"), m_owner(owner), m_parent(0), m_hidden(false)
 {
 	m_creation_time = QDateTime::currentDateTime();
 }
@@ -63,7 +63,7 @@ void AbstractAspect::Private::addChild(AbstractAspect* child)
 
 void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)
 {
-	emit m_owner->aspectAboutToBeAdded(m_owner, index);
+	emit m_owner->aspectAboutToBeAdded(m_owner, m_children.value(index), child);
 	m_children.insert(index, child);
 	// Always remove from any previous parent before adding to a new one!
 	// Can't handle this case here since two undo commands have to be created.
@@ -73,21 +73,20 @@ void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)
 			m_owner, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect *)));
 	connect(child, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)), 
 			m_owner, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)));
-	connect(child, SIGNAL(aspectAboutToBeAdded(const AbstractAspect *, int)), 
-			m_owner, SIGNAL(aspectAboutToBeAdded(const AbstractAspect *, int)));
-	connect(child, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *, int)), 
-			m_owner, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *, int)));
-	connect(child, SIGNAL(aspectAdded(const AbstractAspect *, int)), 
-			m_owner, SIGNAL(aspectAdded(const AbstractAspect *, int)));
-	connect(child, SIGNAL(aspectRemoved(const AbstractAspect *, int)), 
-			m_owner, SIGNAL(aspectRemoved(const AbstractAspect *, int)));
-	connect(child, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)), 
-			m_owner, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)));
-	connect(child, SIGNAL(aspectAdded(const AbstractAspect *)), 
+	connect(child, SIGNAL(aspectAboutToBeAdded(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
+			m_owner, SIGNAL(aspectAboutToBeAdded(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)));
+	connect(child, SIGNAL(aspectAdded(const AbstractAspect *)),
 			m_owner, SIGNAL(aspectAdded(const AbstractAspect *)));
+	connect(child, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)),
+			m_owner, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)));
+	connect(child, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
+			m_owner, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)));
+	connect(child, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect *)),
+			m_owner, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect *)));
+	connect(child, SIGNAL(aspectHiddenChanged(const AbstractAspect*)),
+			m_owner, SIGNAL(aspectHiddenChanged(const AbstractAspect*)));
 	connect(child, SIGNAL(statusInfo(const QString&)),
 			m_owner, SIGNAL(statusInfo(const QString&)));
-	emit m_owner->aspectAdded(m_owner, index);
 	emit child->aspectAdded(child);
 }
 
@@ -102,12 +101,11 @@ int AbstractAspect::Private::removeChild(AbstractAspect* child)
 {
 	int index = indexOfChild(child);
 	Q_ASSERT(index != -1);
-	emit m_owner->aspectAboutToBeRemoved(m_owner, index);
 	emit child->aspectAboutToBeRemoved(child);
 	m_children.removeAll(child);
 	QObject::disconnect(child, 0, m_owner, 0);
 	child->m_aspect_private->m_parent = 0;
-	emit m_owner->aspectRemoved(m_owner, index);
+	emit m_owner->aspectRemoved(m_owner, m_children.value(index), child);
 	return index;
 }
 
@@ -161,6 +159,18 @@ void AbstractAspect::Private::setCaptionSpec(const QString &value)
 void AbstractAspect::Private::setCreationTime(const QDateTime &time)
 {
 	m_creation_time = time;
+}
+
+bool AbstractAspect::Private::hidden() const
+{
+    return m_hidden;
+}
+
+void AbstractAspect::Private::setHidden(bool value)
+{
+    emit m_owner->aspectHiddenAboutToChange(m_owner);
+    m_hidden = value;
+    emit m_owner->aspectHiddenChanged(m_owner);
 }
 
 int AbstractAspect::Private::indexOfMatchingBrace(const QString &str, int start)

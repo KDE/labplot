@@ -121,9 +121,9 @@ class ProjectWindow : public QMainWindow
 		void partActivated(AbstractPart*);
 	
 	private slots:
-		void handleAspectAdded(const AbstractAspect *parent, int index);
-		void handleAspectAboutToBeRemoved(const AbstractAspect *parent, int index);
-		void handleAspectRemoved(const AbstractAspect *parent, int index);
+		void handleAspectAdded(const AbstractAspect *aspect);
+		void handleAspectAboutToBeRemoved(const AbstractAspect *aspect);
+		void handleAspectRemoved(const AbstractAspect *parent);
 		void handleAspectDescriptionChanged(const AbstractAspect *aspect);
 		void handleCurrentAspectChanged(AbstractAspect *aspect);
 		void handleCurrentSubWindowChanged(QMdiSubWindow*);
@@ -136,7 +136,7 @@ class ProjectWindow : public QMainWindow
 		void renameUndoRedo();
 
 	protected:
-		void handleAspectAddedInternal(AbstractAspect *aspect);
+		void handleAspectAddedInternal(const AbstractAspect *aspect);
 
 	private:
 		Project * m_project;

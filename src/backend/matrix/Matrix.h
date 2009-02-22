@@ -78,7 +78,7 @@ class Matrix : public AbstractPart, public scripted
 		 * This method may be called multiple times during the life time of an Aspect, or it might not get
 		 * called at all. Aspects must not depend on the existence of a view for their operation.
 		 */
-		virtual QWidget *view();
+		virtual QWidget *view() const;
 		//! Create a menu with selection related operations
 		/**
 		 * \param append_to if a pointer to a QMenu is passed
@@ -269,7 +269,7 @@ class Matrix : public AbstractPart, public scripted
 	private:
 		void createActions();
 		void connectActions();
-		void addActionsToView();
+		void addActionsToView() const;
 
 		//! Read XML display element
 		bool readDisplayElement(XmlStreamReader * reader);
@@ -323,7 +323,7 @@ class Matrix : public AbstractPart, public scripted
 		QAction * action_add_rows;
 		//@}
 
-		MatrixView *m_view;
+		mutable MatrixView *m_view;
 		Private *m_matrix_private;
 };
 

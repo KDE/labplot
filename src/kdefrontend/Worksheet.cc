@@ -47,6 +47,7 @@ public:
 	QString title() const;
 	void setTitle(const QString& title);
 	QWidget* view();
+	QWidget* view() const;
 	int plotCount() const { return m_listPlots.count(); }
 	void print(QString file=0);
 	void createPlot(const Plot::PlotType);
@@ -113,7 +114,7 @@ void Worksheet::createPlot(const Plot::PlotType plotType){
 // 	endMacro();
 }
 
-QWidget* Worksheet::view(){
+QWidget* Worksheet::view() const {
 	return d->view();
 }
 
@@ -161,6 +162,10 @@ QWidget* WorksheetPrivate::view(){
 		m_view = new WorksheetView(0, m_worksheet);
 
 	return m_view;
+}
+
+QWidget* WorksheetPrivate::view() const {
+	return const_cast<WorksheetPrivate*>(this)->view();
 }
 
 Plot* WorksheetPrivate::activePlot(){

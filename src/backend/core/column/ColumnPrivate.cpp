@@ -686,6 +686,13 @@ void Column::Private::setPlotDesignation(SciDAVis::PlotDesignation pd)
 	emit m_owner->plotDesignationChanged(m_owner);
 }
 
+void Column::Private::setWidth(int value)
+{
+	emit m_owner->widthAboutToChange(m_owner);
+	m_width = value;
+	emit m_owner->widthChanged(m_owner);
+}
+
 void Column::Private::clear()
 {
 	removeRows(0, rowCount());
@@ -899,15 +906,5 @@ void Column::Private::replaceMasking(IntervalAttribute<bool> masking)
 void Column::Private::replaceFormulas(IntervalAttribute<QString> formulas)
 {
 	m_formulas = formulas;
-}
-
-QString Column::Private::name() const
-{ 
-	return m_owner->name();
-}
-
-QString Column::Private::comment() const
-{
-	return m_owner->comment();
 }
 

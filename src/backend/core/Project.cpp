@@ -213,11 +213,9 @@ void Project::save(QXmlStreamWriter * writer) const
 
 	writeCommentElement(writer);
 
-	int child_count = childCount();
-	for (int i=0; i<child_count; i++)
-	{
+	foreach(AbstractAspect * child, children<AbstractAspect>(IncludeHidden)) {
 		writer->writeStartElement("child_aspect");
-		child(i)->save(writer);
+		child->save(writer);
 		writer->writeEndElement();
 	}
 
@@ -240,7 +238,7 @@ bool Project::load(XmlStreamReader * reader)
 #endif
 		{
 			setComment("");
-			removeAllChildAspects();
+			removeAllChildren();
 
 			bool ok;
 			int version = reader->readAttributeInt("version", &ok);

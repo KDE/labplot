@@ -57,6 +57,7 @@ class TableModel;
 class TableItemDelegate;
 class TableDoubleHeaderView;
 class ActionManager;
+class AbstractAspect;
 
 //! Helper class for TableView
 class TableViewWidget : public QTableView
@@ -290,7 +291,6 @@ class TableView : public QWidget
 	public slots:
 		void activateFormulaMode(bool on);
 		void goToCell(int row, int col);
-		void rereadSectionSizes();
 		void selectAll();
 		void deselectAll();
 		void toggleControlTabBar();
@@ -319,6 +319,9 @@ class TableView : public QWidget
 		void applyDescription();
 		void applyType();
 		void adjustActionNames();
+		void handleAspectAdded(const AbstractAspect * aspect);
+		void handleAspectAboutToBeRemoved(const AbstractAspect * aspect);
+		void updateSectionSize(const Column* col);
 
 	protected:
 		//! Pointer to the item delegate

@@ -31,7 +31,6 @@
 #include "table/TableView.h"
 #include "table/TableModel.h"
 #include "table/TableItemDelegate.h"
-#include "table/tablecommands.h"
 #include "table/TableDoubleHeaderView.h"
 #include "lib/ActionManager.h"
 #include "lib/macros.h"
@@ -140,6 +139,7 @@ void TableView::init()
 	m_horizontal_header->setMovable(true);
 	connect(m_horizontal_header, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
 	connect(m_horizontal_header, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
+	connect(m_horizontal_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
 	
 	m_horizontal_header->setDefaultSectionSize(defaultColumnWidth());
 
@@ -152,7 +152,9 @@ void TableView::init()
 	connect(m_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, 
 		SLOT(handleHeaderDataChanged(Qt::Orientation,int,int)) ); 
 
-	rereadSectionSizes();
+	int i=0;
+	foreach(Column * col, m_table->children<Column>())
+		m_horizontal_header->resizeSection(i++, col->width());
 	
 	// keyboard shortcuts
 	QShortcut * sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Table: select all")), m_view_widget);
@@ -179,7 +181,10 @@ void TableView::init()
 	connectActions();
 	showComments(defaultCommentVisibility());
 
-	connect(m_table, SIGNAL(sectionSizesChanged()), this, SLOT(rereadSectionSizes()));
+	connect(m_table, SIGNAL(aspectAdded(const AbstractAspect*)),
+			this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(m_table, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_table, SIGNAL(requestProjectMenu(QMenu*,bool*)), this, SLOT(fillProjectMenu(QMenu*,bool*)));
 	connect(m_table, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 }
@@ -190,15 +195,26 @@ TableView::TableView()
 	createActions();
 }
 
+void TableView::handleAspectAdded(const AbstractAspect * aspect)
+{
+	const Column * col = qobject_cast<const Column*>(aspect);
+	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_table))
+		return;
+	connect(col, SIGNAL(widthChanged(const Column*)), this, SLOT(updateSectionSize(const Column*)));
+}
 
-void TableView::rereadSectionSizes()
+void TableView::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
+{
+	const Column * col = qobject_cast<const Column*>(aspect);
+	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_table))
+		return;
+	disconnect(col, 0, this, 0);
+}
+
+void TableView::updateSectionSize(const Column* col)
 {
 	disconnect(m_horizontal_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
-
-	int cols = m_table->columnCount();
-	for (int i=0; i<cols; i++)
-		m_horizontal_header->resizeSection(i, m_table->columnWidth(i));
-		
+	m_horizontal_header->resizeSection(m_table->indexOfChild<Column>(col), col->width());
 	connect(m_horizontal_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
 }
 
@@ -216,7 +232,7 @@ void TableView::handleHorizontalSectionResized(int logicalIndex, int oldSize, in
 {	
 	Q_UNUSED(oldSize);
 	static bool inside = false;
-	m_table->setColumnWidth(logicalIndex, newSize);
+	m_table->column(logicalIndex)->setWidth(newSize);
 	if (inside) return;
 	inside = true;
 
@@ -916,7 +932,7 @@ void TableView::copySelection()
 				}
 				else
 				{
-					output_str += m_table->text(first_row + r, first_col + c);
+					output_str += m_table->column(first_col+c)->asStringColumn()->textAt(first_row + r);
 				}
 			}
 			if (c < cols-1)
@@ -975,14 +991,12 @@ void TableView::pasteIntoSelection()
 			// resize the table if necessary
 			if (last_col >= m_table->columnCount())
 			{
-				QList<Column*> cols;
 				for (int i=0; i<last_col+1-m_table->columnCount(); i++)
 				{
 					Column * new_col = new Column(QString::number(i+1), SciDAVis::Text);
 					new_col->setPlotDesignation(SciDAVis::Y);
-					cols << new_col;
+					m_table->addChild(new_col);
 				}
-				m_table->appendColumns(cols);
 			}
 			if (last_row >= m_table->rowCount())
 				m_table->appendRows(last_row+1-m_table->rowCount());
@@ -1024,7 +1038,7 @@ void TableView::maskSelection()
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->columnIndex(col_ptr);
+		int col = m_table->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) col_ptr->setMasked(row);  
 	}
@@ -1043,7 +1057,7 @@ void TableView::unmaskSelection()
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->columnIndex(col_ptr);
+		int col = m_table->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) col_ptr->setMasked(row, false);  
 	}
@@ -1074,7 +1088,7 @@ void TableView::fillSelectedCellsWithRowNumbers()
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->columnIndex(col_ptr);
+		int col = m_table->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) 
 				col_ptr->asStringColumn()->setTextAt(row, QString::number(row+1));
@@ -1096,7 +1110,7 @@ void TableView::fillSelectedCellsWithRandomNumbers()
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->columnIndex(col_ptr);
+		int col = m_table->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) 
 			{
@@ -1120,12 +1134,7 @@ void TableView::fillSelectedCellsWithRandomNumbers()
 
 void TableView::sortTable()
 {
-	QList<Column*> cols;
-	
-	for (int i=0; i<m_table->columnCount(); i++)
-		cols.append(m_table->column(i));
-
-	sortDialog(cols);
+	sortDialog(m_table->children<Column>());
 }
 
 void TableView::insertEmptyColumns()
@@ -1134,7 +1143,6 @@ void TableView::insertEmptyColumns()
 	int last = lastSelectedColumn();
 	if ( first < 0 ) return;
 	int count, current = first;
-	QList<Column*> cols;
 
 	WAIT_CURSOR;
 	m_table->beginMacro(QObject::tr("%1: insert empty column(s)").arg(m_table->name()));
@@ -1143,14 +1151,13 @@ void TableView::insertEmptyColumns()
 		current = first+1;
 		while( current <= last && isColumnSelected(current) ) current++;
 		count = current-first;
+		Column *first_col = m_table->child<Column>(first);
 		for (int i=0; i<count; i++)
 		{
 			Column * new_col = new Column(QString::number(i+1), SciDAVis::Numeric);
 			new_col->setPlotDesignation(SciDAVis::Y);
-			cols << new_col;
+			m_table->insertChildBefore(new_col, first_col);
 		}
-		m_table->insertColumns(first, cols);
-		cols.clear();
 		current += count;
 		last += count;
 		while( current <= last && !isColumnSelected(current) ) current++;
@@ -1167,7 +1174,7 @@ void TableView::removeSelectedColumns()
 
 	QList< Column* > list = selectedColumns();
 	foreach(Column* ptr, list)
-		m_table->removeColumn(ptr);
+		m_table->removeChild(ptr);
 
 	m_table->endMacro();
 	RESET_CURSOR;
@@ -1403,7 +1410,7 @@ void TableView::clearSelectedCells()
 	{
 		if (formulaModeActive())
 		{
-			int col = m_table->columnIndex(col_ptr);
+			int col = m_table->indexOfChild<Column>(col_ptr);
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
@@ -1412,7 +1419,7 @@ void TableView::clearSelectedCells()
 		}
 		else
 		{
-			int col = m_table->columnIndex(col_ptr);
+			int col = m_table->indexOfChild<Column>(col_ptr);
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
@@ -1738,7 +1745,7 @@ void TableView::connectActions()
 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
 	connect(action_select_all, SIGNAL(triggered()), this, SLOT(selectAll()));
-	connect(action_add_column, SIGNAL(triggered()), m_table, SLOT(addColumn()));
+	connect(action_add_column, SIGNAL(triggered()), m_table, SLOT(appendColumn()));
 	connect(action_clear_table, SIGNAL(triggered()), m_table, SLOT(clear()));
 	connect(action_clear_masks, SIGNAL(triggered()), m_table, SLOT(clearMasks()));
 	connect(action_sort_table, SIGNAL(triggered()), this, SLOT(sortTable()));
@@ -1864,12 +1871,12 @@ void TableView::sortDialog(QList<Column*> cols)
 
 void TableView::addColumns()
 {
-	m_table->addColumns(selectedColumnCount(false));
+	m_table->appendColumns(selectedColumnCount(false));
 }
 
 void TableView::addRows()
 {
-	m_table->addColumns(selectedRowCount(false));
+	m_table->appendRows(selectedRowCount(false));
 }
 
 void TableView::adjustActionNames()
@@ -1912,12 +1919,7 @@ void TableView::initActionManager()
 
 int TableView::defaultColumnWidth() 
 { 
-	return Table::global("default_column_width").toInt(); 
-}
-
-void TableView::setDefaultColumnWidth(int width) 
-{ 
-	Table::setGlobal("default_column_width", width); 
+	return Column::global("default_width").toInt();
 }
 
 void TableView::setDefaultCommentVisibility(bool visible) 

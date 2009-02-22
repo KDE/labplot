@@ -76,14 +76,14 @@ Matrix::~Matrix()
 {
 }
 
-QWidget *Matrix::view()
+QWidget *Matrix::view() const
 {
 	if (!m_view)
 	{
-		m_view = new MatrixView(this); 
+		m_view = new MatrixView(const_cast<Matrix*>(this));
 		addActionsToView();
 		connect(m_view, SIGNAL(controlTabBarStatusChanged(bool)), this, SLOT(adjustTabBarAction(bool)));
-		adjustTabBarAction(true);
+		const_cast<Matrix*>(this)->adjustTabBarAction(true);
 	}
 	return m_view;
 }
@@ -681,7 +681,7 @@ void Matrix::connectActions()
 	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
 }
 
-void Matrix::addActionsToView()
+void Matrix::addActionsToView() const
 {
 	connect(action_toggle_tabbar, SIGNAL(triggered()), m_view, SLOT(toggleControlTabBar()));
 

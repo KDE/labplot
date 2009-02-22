@@ -2,7 +2,7 @@
     File                 : AbstractAspect.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
+    Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Base class for all persistent objects in a Project.
 
@@ -123,78 +123,48 @@ void AbstractAspect::addChild(AbstractAspect* child)
 		child->setName(new_name);
 	}
 	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->childCount()));
-	completeAspectInsertion(child, m_aspect_private->childCount()-1);
 	endMacro();
 }
 
-void AbstractAspect::insertChild(AbstractAspect* child, int index)
+void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before)
 {
 	Q_CHECK_PTR(child);
 	QString new_name = m_aspect_private->uniqueNameFor(child->name());
-	beginMacro(tr("%1: insert %2 at position %3.").arg(name()).arg(new_name).arg(index+1));
+	beginMacro(tr("%1: insert %2 before %3.").arg(name()).arg(new_name).arg(before ? before->name() : "end"));
 	if (new_name != child->name()) {
 		info(tr("Renaming \"%1\" to \"%2\" in order to avoid name collision.").arg(child->name()).arg(new_name));
 		child->setName(new_name);
 	}
+	int index = m_aspect_private->indexOfChild(before);
+	if (index == -1) index = m_aspect_private->childCount();
 	exec(new AspectChildAddCmd(m_aspect_private, child, index));
-	completeAspectInsertion(child, index);
 	endMacro();
 }
 
 void AbstractAspect::removeChild(AbstractAspect* child)
 {
-	Q_ASSERT(indexOfChild(child) != -1);
+	Q_ASSERT(child->parentAspect() == this);
 	beginMacro(tr("%1: remove %2.").arg(name()).arg(child->name()));
-	prepareAspectRemoval(child);
 	exec(new AspectChildRemoveCmd(m_aspect_private, child));
 	endMacro();
 }
 
-void AbstractAspect::reparentChild(AbstractAspect *new_parent, AbstractAspect *child)
+void AbstractAspect::reparent(AbstractAspect * new_parent, int new_index)
 {
+	Q_ASSERT(parentAspect() != NULL);
 	Q_ASSERT(new_parent != NULL);
-	reparentChild(new_parent, child, new_parent->childCount());
-}
-
-void AbstractAspect::reparentChild(AbstractAspect *new_parent, AbstractAspect *child, int new_index)
-{
-	Q_ASSERT(indexOfChild(child) != -1);
-	Q_ASSERT(new_index > 0 && new_index <= new_parent->childCount());
-	Q_ASSERT(new_parent != NULL);
-	beginMacro(tr("%1: move %2 to %3.").arg(name()).arg(child->name()).arg(new_parent->name()));
-	prepareAspectRemoval(child);
-	exec(new AspectChildReparentCmd(m_aspect_private, new_parent->m_aspect_private, child, new_index));
-	new_parent->completeAspectInsertion(child, new_index);
+	int max_index = new_parent->childCount<AbstractAspect>(IncludeHidden);
+	if (new_index == -1)
+		new_index = max_index;
+	Q_ASSERT(new_index >= 0 && new_index <= max_index);
+	beginMacro(tr("%1: move from %2 to %3").arg(name()).arg(parentAspect()->name()).arg(new_parent->name()));
+	exec(new AspectChildReparentCmd(parentAspect()->m_aspect_private, new_parent->m_aspect_private, this, new_index));
 	endMacro();
 }
 
-void AbstractAspect::removeChild(int index)
+const QList< AbstractAspect* > AbstractAspect::rawChildren() const
 {
-	Q_ASSERT(index >= 0 && index <= childCount());
-	removeChild(m_aspect_private->child(index));
-}
-
-AbstractAspect* AbstractAspect::child(int index) const
-{
-	Q_ASSERT(index >= 0 && index <= childCount());
-	return m_aspect_private->child(index);
-}
-
-int AbstractAspect::childCount() const
-{
-	return m_aspect_private->childCount();
-}
-
-int AbstractAspect::indexOfChild(const AbstractAspect *child) const
-{
-	return m_aspect_private->indexOfChild(child);
-}
-
-void AbstractAspect::moveChild(int from, int to)
-{
-	Q_ASSERT(0 <= from && from < m_aspect_private->childCount());
-	Q_ASSERT(0 <= to   && to   < m_aspect_private->childCount());
-	exec(new AspectChildMoveCmd(m_aspect_private, from, to));
+    return m_aspect_private->children();
 }
 
 void AbstractAspect::exec(QUndoCommand *cmd)
@@ -280,6 +250,17 @@ QString AbstractAspect::caption() const
 	return m_aspect_private->caption();
 }
 
+bool AbstractAspect::hidden() const
+{
+    return m_aspect_private->hidden();
+}
+
+void AbstractAspect::setHidden(bool value)
+{
+    if (value == m_aspect_private->hidden()) return;
+    exec(new AspectHiddenChangeCmd(m_aspect_private, value));
+}
+
 QIcon AbstractAspect::icon() const
 {
 	return QIcon();
@@ -324,21 +305,11 @@ QString AbstractAspect::uniqueNameFor(const QString &current_name) const
 	return m_aspect_private->uniqueNameFor(current_name);
 }
 
-QList<AbstractAspect *> AbstractAspect::descendantsThatInherit(const char * class_name)
-{
-	QList<AbstractAspect *> list;
-	if (inherits(class_name))
-		list << this;
-	for (int i=0; i<childCount(); i++)
-		list << child(i)->descendantsThatInherit(class_name);
-	return list;
-}
-
-void AbstractAspect::removeAllChildAspects()
+void AbstractAspect::removeAllChildren()
 {
 	beginMacro(tr("%1: remove all children.").arg(name()));
-	for (int i=childCount()-1; i >= 0; i--) 
-		removeChild(i);
+	foreach(AbstractAspect * child, rawChildren())
+		exec(new AspectChildRemoveCmd(m_aspect_private, child));
 	endMacro();
 }
 

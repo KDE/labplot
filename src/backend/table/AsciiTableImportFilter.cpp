@@ -94,7 +94,8 @@ AbstractAspect * AsciiTableImportFilter::importAspect(QIODevice * input)
 	}
 
 	// build a Table from the gathered data
-	QList<Column*> cols;
+	// renaming will be done by the kernel
+	Table * result = new Table(0, 0, 0, tr("Table"));
 	for (i=0; i<data.size(); ++i)
 	{
 		Column *new_col = new Column(column_names[i], data[i], invalid_cells[i]);
@@ -102,11 +103,9 @@ AbstractAspect * AsciiTableImportFilter::importAspect(QIODevice * input)
 			new_col->setPlotDesignation(SciDAVis::X);
 		else
 			new_col->setPlotDesignation(SciDAVis::Y);
-		cols << new_col;
+		result->addChild(new_col);
 	}
-	// renaming will be done by the kernel
-	Table * result = new Table(0, 0, 0, tr("Table"));
-	result->appendColumns(cols);
+
 	return result;
 }
 

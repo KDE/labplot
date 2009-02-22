@@ -45,7 +45,6 @@
 #include "pixmaps/pixmap.h"
 #include "elements/Point3D.h"
 
-#include "table/tablecommands.h"
 #include "lib/macros.h"
 #include "core/Project.h"
 #include "core/AbstractFilter.h"
@@ -104,24 +103,41 @@ void Spreadsheet::init()
 
 	h_header->setDefaultSectionSize(defaultColumnWidth());
 
-	rereadSectionSizes();
+	int i = 0;
+	foreach(Column * col, m_table->children<Column>())
+		h_header->resizeSection(i++, col->width());
 
 	// keyboard shortcuts
 	QShortcut * sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Table: select all")), m_view_widget);
 	connect(sel_all, SIGNAL(activated()), m_view_widget, SLOT(selectAll()));
 
-	connect(m_table, SIGNAL(sectionSizesChanged()), this, SLOT(rereadSectionSizes()));
+	connect(m_table, SIGNAL(aspectAdded(const AbstractAspect*)),
+			this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(m_table, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 }
 
-void Spreadsheet::rereadSectionSizes()
+void Spreadsheet::handleAspectAdded(const AbstractAspect * aspect)
+{
+	const Column * col = qobject_cast<const Column*>(aspect);
+	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_table))
+		return;
+	connect(col, SIGNAL(widthChanged(const Column*)), this, SLOT(updateSectionSize(const Column*)));
+}
+
+void Spreadsheet::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
+{
+	const Column * col = qobject_cast<const Column*>(aspect);
+	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_table))
+		return;
+	disconnect(col, 0, this, 0);
+}
+
+void Spreadsheet::updateSectionSize(const Column* col)
 {
 	QHeaderView *h_header = m_view_widget->horizontalHeader();
 	disconnect(h_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
-
-	int cols = m_table->columnCount();
-	for (int i=0; i<cols; i++)
-		h_header->resizeSection(i, m_table->columnWidth(i));
-
+	h_header->resizeSection(m_table->indexOfChild<Column>(col), col->width());
 	connect(h_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
 }
 
@@ -807,14 +823,12 @@ void Spreadsheet::pasteIntoSelection()
 			// resize the table if necessary
 			if (last_col >= m_table->columnCount())
 			{
-				QList<Column*> cols;
 				for (int i=0; i<last_col+1-m_table->columnCount(); i++)
 				{
 					Column * new_col = new Column(QString::number(i+1), SciDAVis::Text);
 					new_col->setPlotDesignation(SciDAVis::Y);
-					cols << new_col;
+					m_table->addChild(new_col);
 				}
-				m_table->appendColumns(cols);
 			}
 			if (last_row >= m_table->rowCount())
 				m_table->appendRows(last_row+1-m_table->rowCount());
@@ -856,7 +870,7 @@ void Spreadsheet::maskSelection()
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->columnIndex(col_ptr);
+		int col = m_table->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) col_ptr->setMasked(row);
 	}
@@ -875,7 +889,7 @@ void Spreadsheet::unmaskSelection()
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->columnIndex(col_ptr);
+		int col = m_table->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) col_ptr->setMasked(row, false);
 	}
@@ -895,7 +909,7 @@ void Spreadsheet::fillSelectedCellsWithRowNumbers()
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->columnIndex(col_ptr);
+		int col = m_table->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col))
 				col_ptr->asStringColumn()->setTextAt(row, QString::number(row+1));
@@ -917,7 +931,7 @@ void Spreadsheet::fillSelectedCellsWithRandomNumbers()
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->columnIndex(col_ptr);
+		int col = m_table->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col))
 			{
@@ -945,7 +959,6 @@ void Spreadsheet::insertEmptyColumns()
 	int last = lastSelectedColumn();
 	if ( first < 0 ) return;
 	int count, current = first;
-	QList<Column*> cols;
 
 	WAIT_CURSOR;
 	m_table->beginMacro(QObject::tr("%1: insert empty column(s)").arg(m_table->name()));
@@ -958,10 +971,8 @@ void Spreadsheet::insertEmptyColumns()
 		{
 			Column * new_col = new Column(QString::number(i+1), SciDAVis::Numeric);
 			new_col->setPlotDesignation(SciDAVis::Y);
-			cols << new_col;
+			m_table->addChild(new_col);
 		}
-		m_table->insertColumns(first, cols);
-		cols.clear();
 		current += count;
 		last += count;
 		while( current <= last && !isColumnSelected(current) ) current++;
@@ -977,8 +988,8 @@ void Spreadsheet::removeSelectedColumns()
 	m_table->beginMacro(QObject::tr("%1: remove selected column(s)").arg(m_table->name()));
 
 	QList< Column* > list = selectedColumns();
-	foreach(Column* ptr, list)
-		m_table->removeColumn(ptr);
+	foreach(Column* col, list)
+		col->remove();
 
 	m_table->endMacro();
 	RESET_CURSOR;
@@ -1178,7 +1189,7 @@ void Spreadsheet::clearSelectedCells()
 	{
 		if (formulaModeActive())
 		{
-			int col = m_table->columnIndex(col_ptr);
+			int col = m_table->indexOfChild<Column>(col_ptr);
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
@@ -1187,7 +1198,7 @@ void Spreadsheet::clearSelectedCells()
 		}
 		else
 		{
-			int col = m_table->columnIndex(col_ptr);
+			int col = m_table->indexOfChild<Column>(col_ptr);
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
@@ -1241,19 +1252,19 @@ void Spreadsheet::dimensionsDialog() {
 }
 
 void Spreadsheet::addColumns() {
-	m_table->addColumns(selectedColumnCount(false));
+	m_table->appendColumns(selectedColumnCount(false));
 }
 
 void Spreadsheet::addRows() {
-	m_table->addColumns(selectedRowCount(false));
+	m_table->appendColumns(selectedRowCount(false));
 }
 
 int Spreadsheet::defaultColumnWidth() {
-	return Table::global("default_column_width").toInt();
+	return Column::global("default_width").toInt();
 }
 
 void Spreadsheet::setDefaultColumnWidth(int width) {
-	Table::setGlobal("default_column_width", width);
+	Column::setGlobal("default_width", width);
 }
 
 void Spreadsheet::setDefaultCommentVisibility(bool visible) {
@@ -1268,7 +1279,7 @@ void Spreadsheet::handleHorizontalSectionResized(int logicalIndex, int oldSize, 
 {
 	Q_UNUSED(oldSize);
 	static bool inside = false;
-	m_table->setColumnWidth(logicalIndex, newSize);
+	m_table->column(logicalIndex)->setWidth(newSize);
 	if (inside) return;
 	inside = true;
 

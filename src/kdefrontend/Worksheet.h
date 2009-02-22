@@ -49,7 +49,7 @@ class Worksheet : public AbstractPart, public scripted{
 
 		QString title() const;
 		void setTitle(const QString& title);
-		QWidget *view();
+		QWidget *view() const;
 		int plotCount() const;
 		void addSet(const Set set, const Plot::PlotType ptype);
 		void createPlot(const Plot::PlotType ptype);

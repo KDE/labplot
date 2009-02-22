@@ -34,16 +34,18 @@
 #include <QIcon>
 #include <QXmlStreamWriter>
 #include <QtDebug>
+#include <QVariant>
+
+void Column::staticInit()
+{
+	setGlobalDefault("default_width", 120);
+}
 
 Column::Column(const QString& name, SciDAVis::ColumnMode mode)
  : AbstractColumn(name)
 {
 	m_column_private = new Private(this, mode);
-	m_string_io = new ColumnStringIO(this);
-	m_column_private->inputFilter()->input(0,m_string_io);
-	m_column_private->outputFilter()->input(0,this);
-	addChild(m_column_private->inputFilter());
-	addChild(m_column_private->outputFilter());
+	init();
 }
 
 Column::Column(const QString& name, QVector<double> data, IntervalAttribute<bool> validity)
@@ -51,11 +53,7 @@ Column::Column(const QString& name, QVector<double> data, IntervalAttribute<bool
 {
 	m_column_private = new Private(this, SciDAVis::TypeDouble, 
 		SciDAVis::Numeric, new QVector<double>(data), validity);
-	m_string_io = new ColumnStringIO(this);
-	m_column_private->inputFilter()->input(0,m_string_io);
-	m_column_private->outputFilter()->input(0,this);
-	addChild(m_column_private->inputFilter());
-	addChild(m_column_private->outputFilter());
+	init();
 }
 
 Column::Column(const QString& name, QStringList data, IntervalAttribute<bool> validity)
@@ -63,11 +61,7 @@ Column::Column(const QString& name, QStringList data, IntervalAttribute<bool> va
 {
 	m_column_private = new Private(this, SciDAVis::TypeQString,
 		SciDAVis::Text, new QStringList(data), validity);
-	m_string_io = new ColumnStringIO(this);
-	m_column_private->inputFilter()->input(0,m_string_io);
-	m_column_private->outputFilter()->input(0,this);
-	addChild(m_column_private->inputFilter());
-	addChild(m_column_private->outputFilter());
+	init();
 }
 
 Column::Column(const QString& name, QList<QDateTime> data, IntervalAttribute<bool> validity)
@@ -75,11 +69,19 @@ Column::Column(const QString& name, QList<QDateTime> data, IntervalAttribute<boo
 {
 	m_column_private = new Private(this, SciDAVis::TypeQDateTime, 
 		SciDAVis::DateTime, new QList<QDateTime>(data), validity);
+	init();
+}
+
+void Column::init()
+{
 	m_string_io = new ColumnStringIO(this);
 	m_column_private->inputFilter()->input(0,m_string_io);
 	m_column_private->outputFilter()->input(0,this);
+	m_column_private->inputFilter()->setHidden(true);
+	m_column_private->outputFilter()->setHidden(true);
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
+	m_column_private->setWidth(global("default_width").toInt());
 }
 
 Column::~Column()
@@ -142,6 +144,17 @@ void Column::setPlotDesignation(SciDAVis::PlotDesignation pd)
 {
 	if(pd != plotDesignation())
 		exec(new ColumnSetPlotDesignationCmd(m_column_private, pd));
+}
+
+int Column::width() const
+{
+	return m_column_private->width();
+}
+
+void Column::setWidth(int value)
+{
+	if (value != m_column_private->width())
+		exec(new ColumnSetWidthCmd(m_column_private, value));
 }
 
 void Column::clear()
@@ -288,6 +301,7 @@ void Column::save(QXmlStreamWriter * writer) const
 	writer->writeAttribute("type", SciDAVis::enumValueToString(dataType(), "ColumnDataType"));
 	writer->writeAttribute("mode", SciDAVis::enumValueToString(columnMode(), "ColumnMode"));
 	writer->writeAttribute("plot_designation", SciDAVis::enumValueToString(plotDesignation(), "PlotDesignation"));
+	writer->writeAttribute("width", QString::number(width()));
 	writeCommentElement(writer);
 	writer->writeStartElement("input_filter");
 	m_column_private->inputFilter()->save(writer);
@@ -419,6 +433,14 @@ bool Column::load(XmlStreamReader * reader)
 		}
 		else
 			setPlotDesignation((SciDAVis::PlotDesignation)pd_code);
+		bool ok;
+		int width = attribs.value(reader->namespaceUri().toString(), "width").toString().toInt(&ok);
+		if (ok)
+			setWidth(width);
+		else {
+			reader->raiseError(tr("missing or invalid column width"));
+			return false;
+		}
 
 		setComment("");
 		if (rowCount() > 0)

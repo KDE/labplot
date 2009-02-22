@@ -32,10 +32,10 @@
 #include <QMenu>
 #include <QStyle>
 
-PartMdiView* AbstractPart::mdiSubWindow()
+PartMdiView* AbstractPart::mdiSubWindow() const
 {
 	if (!m_mdi_window)
-		m_mdi_window = new PartMdiView(this, view());
+		m_mdi_window = new PartMdiView(const_cast<AbstractPart*>(this), view());
 	return m_mdi_window;
 }
 

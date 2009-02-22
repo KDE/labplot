@@ -21,7 +21,6 @@ HEADERS += \
 	TableItemDelegate.h \
 	TableModel.h \
 	Table.h \
-	tablecommands.h \
 	SortDialog.h \
 	TableDoubleHeaderView.h \
 	TableCommentsHeaderModel.h  \
@@ -39,7 +38,6 @@ SOURCES += \
 	TableView.cpp \
 	TableItemDelegate.cpp \
 	Table.cpp \
-	tablecommands.cpp \
 	TableModel.cpp \
 	SortDialog.cpp \
 	TableDoubleHeaderView.cpp \

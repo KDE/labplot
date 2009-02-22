@@ -4,6 +4,7 @@
     Description          : Model for the access to a Table
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2009 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -31,13 +32,12 @@
 #define TABLEMODEL_H
 
 #include <QAbstractItemModel>
-#include <QList>
 #include <QStringList>
-#include "core/AbstractFilter.h"
-#include <QColor>
 
 class Column;
 class Table;
+class AbstractAspect;
+class AbstractColumn;
 
 //! Model for the access to a Table
 /**
@@ -75,6 +75,7 @@ class TableModel : public QAbstractItemModel
 		int rowCount(const QModelIndex &parent = QModelIndex()) const;
 		int columnCount(const QModelIndex & parent = QModelIndex()) const;
 		bool setData(const QModelIndex & index, const QVariant & value, int role);
+		bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 		QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 		QModelIndex parent(const QModelIndex & child) const;
 		//@}
@@ -85,23 +86,35 @@ class TableModel : public QAbstractItemModel
 		bool formulaModeActive() const { return m_formula_mode; }
 
 	private slots:
-		//! \name Handlers for events from Table
+		//! \name Column insert/remove event handlers
 		//@{
-		void handleColumnsAboutToBeInserted(int, QList<Column*>);
-		void handleColumnsInserted(int first, int count);
-		void handleColumnsAboutToBeRemoved(int first, int count);
-		void handleColumnsRemoved(int first, int count);
-		void handleRowsAboutToBeInserted(int before, int count);
-		void handleRowsInserted(int first, int count);
-		void handleRowsAboutToBeRemoved(int first, int count);
-		void handleRowsRemoved(int first, int count);
-		void handleDataChanged(int top, int left, int bottom, int right);
+		void handleAspectAboutToBeAdded(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * child);
+		void handleAspectAdded(const AbstractAspect * aspect);
+		void handleAspectAboutToBeRemoved(const AbstractAspect * aspect);
+		void handleAspectRemoved(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * child);
 		//@}
+		//! \name Column event handlers
+		//@{
+		void handleDescriptionChange(const AbstractAspect * aspect);
+		void handleModeChange(const AbstractColumn * col);
+		void handlePlotDesignationChange(const AbstractColumn * col);
+		void handleDataChange(const AbstractColumn * col);
+		void handleRowsInserted(const AbstractColumn * col, int before, int count);
+		void handleRowsRemoved(const AbstractColumn * col, int first, int count);
+		//@}
+
+	protected:
+		void updateVerticalHeader();
+		void updateHorizontalHeader();
 
 	private:
 		Table * m_table;
 		//! Toggle flag for formula mode
 		bool m_formula_mode;
+		//! Vertical header data
+		QStringList m_vertical_header_data;
+		//! Horizontal header data
+		QStringList m_horizontal_header_data;
 }; 
 
 #endif

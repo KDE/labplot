@@ -79,11 +79,9 @@ void Folder::save(QXmlStreamWriter * writer) const
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	int child_count = childCount();
-	for (int i=0; i<child_count; i++)
-	{
+	foreach(AbstractAspect * child, children<AbstractAspect>(IncludeHidden)) {
 		writer->writeStartElement("child_aspect");
-		child(i)->save(writer);
+		child->save(writer);
 		writer->writeEndElement(); // "child_aspect"
 	}
 	writer->writeEndElement(); // "folder"
@@ -94,7 +92,7 @@ bool Folder::load(XmlStreamReader * reader)
 	if(reader->isStartElement() && reader->name() == "folder")
 	{
 		setComment("");
-		removeAllChildAspects();
+		removeAllChildren();
 
 		if (!readBasicAttributes(reader)) return false;
 

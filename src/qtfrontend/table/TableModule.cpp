@@ -140,7 +140,6 @@ AbstractAspect * TableModule::createAspectFromXml(XmlStreamReader * reader)
 void TableModule::staticInit()
 {
 	Table::setGlobalDefault("default_comment_visibility", false);
-	Table::setGlobalDefault("default_column_width", 120);
 }
 
 Q_EXPORT_PLUGIN2(scidavis_table, TableModule)
