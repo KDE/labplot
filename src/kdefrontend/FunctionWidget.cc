@@ -58,7 +58,7 @@ FunctionWidget::FunctionWidget(QWidget* parent, const Plot::PlotType& type)
 
 	ui.setupUi(this);
 	ui.bClear->setIcon( KIcon("edit-clear-locationbar-rtl") );
-	//ui.bSync->setIcon( KIcon("view-refresh") );
+	ui.bSync->setIcon( KIcon("view-refresh") );
 
 	//Validators
 	ui.leAxis1Start->setValidator( new QDoubleValidator(ui.leAxis1Start) );
@@ -102,7 +102,7 @@ FunctionWidget::FunctionWidget(QWidget* parent, const Plot::PlotType& type)
 
 	//SLOTS
 	connect( ui.bClear, SIGNAL(clicked()), ui.leFunction, SLOT(clear()) );
-	//connect( ui.bSync, SIGNAL(toggled(bool)),  SLOT(syncStatusChangedSlot(bool)) );
+	connect( ui.bSync, SIGNAL(toggled(bool)),  SLOT(syncStatusChangedSlot(bool)) );
  	connect( ui.cbFunctions,SIGNAL(activated(const QString&)),SLOT(insertSlot(const QString&)) );
 	connect( ui.cbConstants,SIGNAL(activated(const QString&)),SLOT(insertSlot(const QString&)) );
 	connect( ui.leFunction, SIGNAL(textChanged (const QString&)), SLOT(functionChangedSlot(const QString&)) );
@@ -335,11 +335,8 @@ void FunctionWidget::insertSlot(const QString& s){
 	called if the function was changed. If sync-button is toggled, emits \a functionChanged().
 */
 void FunctionWidget::functionChangedSlot(const QString& s){
-	kDebug()<<"";
-	/*
  	if (ui.bSync->isChecked())
 		emit functionChanged(s);
-		*/
 }
 
 /*!
