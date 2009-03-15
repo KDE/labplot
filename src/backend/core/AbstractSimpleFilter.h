@@ -33,9 +33,6 @@
 #include "AbstractFilter.h"
 #include "AbstractColumn.h"
 #include "lib/IntervalAttribute.h"
-#include "lib/XmlStreamReader.h"
-#include <QUndoCommand>
-#include <QXmlStreamWriter>
 
 // forward declaration - class follows
 class SimpleFilterColumn;
@@ -140,72 +137,41 @@ class AbstractSimpleFilter : public AbstractFilter
 		virtual AbstractColumn* output(int port);
 		virtual const AbstractColumn * output(int port) const;
 		//! Copy plot designation of input port 0.
-		virtual SciDAVis::PlotDesignation plotDesignation() const {
-			return m_inputs.value(0) ?
-				m_inputs.at(0)->plotDesignation() :
-				SciDAVis::noDesignation;
-		}
+		virtual SciDAVis::PlotDesignation plotDesignation() const;
 		//! Return the data type of the input
-		virtual SciDAVis::ColumnDataType dataType() const
-		{
-			// calling this function while m_input is empty is a sign of very bad code
-			// nevertheless it will return some rather meaningless value to
-			// avoid crashes
-			return m_inputs.value(0) ? m_inputs.at(0)->dataType() : SciDAVis::TypeQString;
-		}
+		virtual SciDAVis::ColumnDataType dataType() const;
 		//! Return the column mode
 		/**
 		 * This function is most used by tables but can also be used
 		 * by plots. The column mode specifies how to interpret 
 		 * the values in the column additional to the data type.
 		 */ 
-		virtual SciDAVis::ColumnMode columnMode() const
-		{
-			// calling this function while m_input is empty is a sign of very bad code
-			// nevertheless it will return some rather meaningless value to
-			// avoid crashes
-			return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : SciDAVis::Text;
-		}
+		virtual SciDAVis::ColumnMode columnMode() const;
 		//! Return the content of row 'row'.
 		/**
 		 * Use this only when dataType() is QString
 		 */
-		virtual QString textAt(int row) const
-		{
-			return m_inputs.value(0) ? m_inputs.at(0)->textAt(row) : QString();
-		}
+		virtual QString textAt(int row) const;
 		//! Return the date part of row 'row'
 		/**
 		 * Use this only when dataType() is QDateTime
 		 */
-		virtual QDate dateAt(int row) const
-		{
-			return m_inputs.value(0) ? m_inputs.at(0)->dateAt(row) : QDate();
-		}
+		virtual QDate dateAt(int row) const;
 		//! Return the time part of row 'row'
 		/**
 		 * Use this only when dataType() is QDateTime
 		 */
-		virtual QTime timeAt(int row) const
-		{
-			return m_inputs.value(0) ? m_inputs.at(0)->timeAt(row) : QTime();
-		}
+		virtual QTime timeAt(int row) const;
 		//! Set the content of row 'row'
 		/**
 		 * Use this only when dataType() is QDateTime
 		 */
-		virtual QDateTime dateTimeAt(int row) const
-		{
-			return m_inputs.value(0) ? m_inputs.at(0)->dateTimeAt(row) : QDateTime();
-		}
+		virtual QDateTime dateTimeAt(int row) const;;
 		//! Return the double value in row 'row'
 		/**
 		 * Use this only when dataType() is double
 		 */
-		virtual double valueAt(int row) const
-		{
-			return m_inputs.value(0) ? m_inputs.at(0)->valueAt(row) : 0.0;
-		}
+		virtual double valueAt(int row) const;
 
 		//!\name assuming a 1:1 correspondence between input and output rows
 		//@{
@@ -283,8 +249,8 @@ class SimpleFilterColumn : public AbstractColumn
 	public:
 		SimpleFilterColumn(AbstractSimpleFilter *owner) : AbstractColumn(owner->name()), m_owner(owner) {}
 
-		virtual SciDAVis::ColumnDataType dataType() const { return m_owner->dataType(); }
-		virtual SciDAVis::ColumnMode columnMode() const { return m_owner->columnMode(); }
+		virtual SciDAVis::ColumnDataType dataType() const;
+		virtual SciDAVis::ColumnMode columnMode() const;
 		virtual int rowCount() const { return m_owner->rowCount(); }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
 		virtual bool isInvalid(int row) const { return m_owner->isInvalid(row); }
@@ -294,11 +260,11 @@ class SimpleFilterColumn : public AbstractColumn
 		virtual bool isMasked(Interval<int> i) const { return m_owner->isMasked(i); }
 		virtual QList< Interval<int> > maskedIntervals() const { return m_owner->maskedIntervals(); }
 		virtual void clearMasks() { m_owner->clearMasks(); }
-		virtual QString textAt(int row) const { return m_owner->textAt(row); }
-		virtual QDate dateAt(int row) const { return m_owner->dateAt(row); }
-		virtual QTime timeAt(int row) const { return m_owner->timeAt(row); }
-		virtual QDateTime dateTimeAt(int row) const { return m_owner->dateTimeAt(row); }
-		virtual double valueAt(int row) const { return m_owner->valueAt(row); }
+		virtual QString textAt(int row) const;
+		virtual QDate dateAt(int row) const;
+		virtual QTime timeAt(int row) const;
+		virtual QDateTime dateTimeAt(int row) const;
+		virtual double valueAt(int row) const;
 
 	private:
 		AbstractSimpleFilter *m_owner;

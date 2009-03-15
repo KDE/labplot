@@ -31,9 +31,6 @@
 #define STRING2DATE_TIME_FILTER_H
 
 #include "core/AbstractSimpleFilter.h"
-#include <QDateTime>
-#include <QDate>
-#include <QTime>
 
 /**
  * \brief Conversion filter QString -> QDateTime.
@@ -61,7 +58,7 @@ class String2DateTimeFilter : public AbstractSimpleFilter
 		QString format() const { return m_format; }
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQDateTime; }
+		virtual SciDAVis::ColumnDataType dataType() const;
 
 		//! \name XML related functions
 		//@{
@@ -82,27 +79,12 @@ class String2DateTimeFilter : public AbstractSimpleFilter
 
 	public:
 		virtual QDateTime dateTimeAt(int row) const;
-		virtual QDate dateAt(int row) const { return dateTimeAt(row).date(); }
-		virtual QTime timeAt(int row) const { return dateTimeAt(row).time(); }
+		virtual QDate dateAt(int row) const;
+		virtual QTime timeAt(int row) const;
 
 	protected:
 		//! Using typed ports: only string inputs are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->dataType() == SciDAVis::TypeQString;
-		}
-};
-
-class String2DateTimeFilterSetFormatCmd : public QUndoCommand
-{
-	public:
-		String2DateTimeFilterSetFormatCmd(String2DateTimeFilter* target, const QString &new_format);
-
-		virtual void redo();
-		virtual void undo();
-
-	private:
-		String2DateTimeFilter* m_target;
-		QString m_other_format;
+		virtual bool inputAcceptable(int, const AbstractColumn *source);
 };
 
 #endif // ifndef STRING2DATE_TIME_FILTER_H

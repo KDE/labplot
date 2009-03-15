@@ -41,32 +41,16 @@ class ErrorsColumn;
 class NamesColumn;
 class DescriptionsColumn;
 
-/**
- * \brief Base class for least-squares fitting.
- *
- * This is a completely algorithm-agnostic minimal base class, providing mainly a common
- * interface for AbstractNonlinearFit and AbstractLinearFit.
- *
- * Input is accepted on three ports: X, Y and Y error. Y is assumed to be a function of X, which is
- * approximated by the function specified by the implementation of AbstractFit being used.
- *
- * On its output ports, AbstractFit provides (in order) the current values of the parameters,
- * error estimates, their names, and textual descriptions. Current values can be initial values
- * specified by the user, automated estimates made by the implementation, or the results of the fit.
- * You only ever get to see the first two when you haven't connected the input ports of
- * AbstractFit yet, because after the first connect, the fit is automatically recomputed.
- */
 class AbstractFit : public AbstractFilter
 {
 	Q_OBJECT
 
 	public:
-		//! Possible sources for error data.
 		enum ErrorSource {
-			UnknownErrors,    //!< Errors unknown; estimate parameter errors from scatter of input data.
-			AssociatedErrors, //!< Use error data set associated with Y input.
-			PoissonErrors,    //!< Y data is Poisson distributed; use sqrt(Y) as error estimate.
-			CustomErrors      //!< Use error data from user-specified data source.
+			UnknownErrors,
+			AssociatedErrors,
+			PoissonErrors,
+			CustomErrors
 		};
 		static QString nameOf(ErrorSource source) {
 			switch(source) {
@@ -79,18 +63,13 @@ class AbstractFit : public AbstractFilter
 		AbstractFit();
 		virtual ~AbstractFit();
 
-		ErrorSource yErrorSource() const { return m_y_error_source; }
+		ErrorSource yErrorSource() const;
 		void setYErrorSource(ErrorSource e);
 
-		//!\name Handling of fit parameters
-		//@{
 		virtual int numParameters() const = 0;
 		virtual QString parameterName(int index) const = 0;
 		virtual QString parameterDescription(int index) const = 0;
-		//@}
 
-		//!\name Reimplemented from AbstractFilter
-		//@{
 	public:
 		virtual int inputCount() const { return 3; }
 		virtual QString inputName(int port) const {
@@ -106,7 +85,6 @@ class AbstractFit : public AbstractFilter
 				return 0;
 			return m_outputs[port];
 		}
-		//@}
 
 	public:
 		inline double X(int i) const {
@@ -134,25 +112,17 @@ class AbstractFit : public AbstractFilter
 		double rSquare() const;
 
 	protected:
-		//! Update internal state (number of input points and Y errors may have changed).
 		void dataChanged(AbstractColumn*);
 		virtual bool inputAcceptable(int port, const AbstractColumn *source);
 
-		//! Number of data points supplied on inputs.
 		int m_input_points;
-		//! Where to take Y error estimates from.
 		ErrorSource m_y_error_source;
-		//! Y error estimates
 		double * m_y_errors;
-		//! Resulting fit parameters.
 		gsl_vector * m_results;
-		//! Covariance matrix of results.
 		gsl_matrix * m_covariance_matrix;
-		//! Residual sum of squares.
 		double m_chi_square;
 
 	private:
-		//! Output ports.
 		AbstractColumn ** m_outputs;
 
 		friend class FitSetYErrorSourceCmd;

@@ -33,28 +33,16 @@
 class AbstractAspect;
 class QIODevice;
 class QStringList;
+class QString;
 
-//! Interface for export operations.
-/**
- * This is analogous to AbstractImportFilter.
- */
 class AbstractExportFilter
 {
 	public:
 		virtual ~AbstractExportFilter() {}
-		//! Export object to output.
-		/**
-		 * \return true if export was sucessfull, false otherwise
-		 */
 		virtual bool exportAspect(AbstractAspect * object, QIODevice * output) = 0;
-		//! The file extension(s) typically associated with the handled format.
 		virtual QStringList fileExtensions() const = 0;
-		//! A (localized) name for the filter.
 		virtual QString name() const = 0;
-		//! Uses name() and fileExtensions() to produce a filter specification as used by QFileDialog.
-		QString nameAndPatterns() const {
-			return name() + " (*." + fileExtensions().join(" *.") + ")";
-		}
+		QString nameAndPatterns() const;
 };
 
 #endif // ifndef ABSTRACT_EXPORT_FILTER_H

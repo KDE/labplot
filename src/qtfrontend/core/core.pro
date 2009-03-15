@@ -101,6 +101,7 @@ SOURCES += \
 	Folder.cpp \
 	AbstractAspect.cpp \
 	AspectPrivate.cpp \
+	AbstractColumn.cpp \
 	globals.cpp \
 	AbstractFilter.cpp \
 	AbstractSimpleFilter.cpp \
@@ -121,6 +122,8 @@ SOURCES += \
 	DateTime2StringFilter.cpp \
 	String2DateTimeFilter.cpp \
 	Double2StringFilter.cpp \
+	AbstractImportFilter.cpp \
+	AbstractExportFilter.cpp \
 	ImportDialog.cpp \
 	ProjectConfigPage.cpp \
 	# TODO: port or delete the following files

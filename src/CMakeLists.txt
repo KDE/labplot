@@ -86,6 +86,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractAspect.cpp
 	${BACKEND_DIR}/core/AspectPrivate.cpp
 	${BACKEND_DIR}/core/globals.cpp
+	${BACKEND_DIR}/core/AbstractColumn.cpp
 	${BACKEND_DIR}/core/AbstractFilter.cpp
 	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
 	${BACKEND_DIR}/core/column/Column.cpp
@@ -112,7 +113,6 @@ set(QTFRONTEND_SOURCES
 )
 
 set(QTMOC_HDRS
-	${BACKEND_DIR}/core/AbstractColumn.h
 	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h

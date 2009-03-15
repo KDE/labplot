@@ -85,32 +85,5 @@ class Double2StringFilter : public AbstractSimpleFilter
 		}
 };
 
-class Double2StringFilterSetFormatCmd : public QUndoCommand
-{
-	public:
-		Double2StringFilterSetFormatCmd(Double2StringFilter* target, char new_format);
-
-		virtual void redo();
-		virtual void undo();
-
-	private:
-		Double2StringFilter* m_target;
-		char m_other_format;
-};
-
-class Double2StringFilterSetDigitsCmd : public QUndoCommand
-{
-	public:
-		Double2StringFilterSetDigitsCmd(Double2StringFilter* target, int new_digits);
-
-		virtual void redo();
-		virtual void undo();
-
-	private:
-		Double2StringFilter* m_target;
-		int m_other_digits;
-};
-
-
 #endif // ifndef DOUBLE2STRING_FILTER_H
 

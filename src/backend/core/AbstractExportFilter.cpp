@@ -1,12 +1,11 @@
 /***************************************************************************
-    File                 : DateTime2StringFilter.h
+    File                 : AbstractExportFilter.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-                           Knut Franke
-    Email (use @ for *)  : thzs*gmx.net, knut.franke*gmx.de
-    Description          : Conversion filter QDateTime -> QString.
-                           
+    Copyright            : (C) 2009 Knut Franke
+    Email (use @ for *)  : Knut.Franke*gmx.net
+    Description          : Interface for export operations.
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,55 +26,39 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef DATE_TIME2STRING_FILTER_H
-#define DATE_TIME2STRING_FILTER_H
 
-#include "core/AbstractSimpleFilter.h"
+#include "AbstractExportFilter.h"
 
-class DateTime2StringFilterSetFormatCmd;
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
-//! Conversion filter QDateTime -> QString.
-class DateTime2StringFilter : public AbstractSimpleFilter
-{
-	Q_OBJECT
+/**
+ * \class AbstractExportFilter
+ * \brief Interface for export operations.
+ *
+ * This is analogous to AbstractImportFilter.
+ */
 
-	public:
-		//! Standard constructor.
-		explicit DateTime2StringFilter(QString format="yyyy-MM-dd hh:mm:ss.zzz") : m_format(format) {}
-		//! Set the format string to be used for conversion.
-		void setFormat(const QString& format);
+/**
+ * \fn bool AbstractExportFilter::exportAspect(AbstractAspect *object, QIODevice *output)
+ * \brief Export object to output.
+ *
+ * \return true if export was sucessfull, false otherwise
+ */
 
-		//! Return the format string
-		/**
-		 * The default format string is "yyyy-MM-dd hh:mm:ss.zzz".
-		 * \sa QDate::toString()
-		 */
-		QString format() const { return m_format; }
+/**
+ * \fn QStringList AbstractExportFilter::fileExtensions() const
+ * \brief The file extension(s) typically associated with the handled format.
+ */
 
-		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQString; }
+/**
+ * \fn QString AbstractExportFilter::name() const
+ * \brief A (localized) name for the filter.
+ */
 
-	signals:
-		void formatChanged();
-
-	private:
-		friend class DateTime2StringFilterSetFormatCmd;
-		//! The format string.
-		QString m_format;
-
-	public:
-		virtual QString textAt(int row) const;
-
-		//! \name XML related functions
-		//@{
-		virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
-		virtual bool load(XmlStreamReader * reader);
-		//@}
-
-	protected:
-		//! Using typed ports: only DateTime inputs are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *source);
-};
-
-#endif // ifndef DATE_TIME2STRING_FILTER_H
-
+/**
+ * \brief Uses name() and fileExtensions() to produce a filter specification as used by QFileDialog.
+ */
+QString AbstractExportFilter::nameAndPatterns() const {
+	return name() + " (*." + fileExtensions().join(" *.") + ")";
+}

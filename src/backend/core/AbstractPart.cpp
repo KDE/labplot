@@ -32,6 +32,30 @@
 #include <QMenu>
 #include <QStyle>
 
+/**
+ * \class AbstractPart
+ * \brief Base class of Aspects with MDI windows as views.
+ *
+ * SciDAVis's Parts are somewhat similar to KDE's KParts in that they are independent application
+ * components running on top of a kernel (a bit like KOffice's shell).
+ */
+
+/**
+ * \fn QWidget *AbstractPart::view() const
+ * \brief Construct a primary view on me.
+ *
+ * The caller recieves ownership of the view.
+ *
+ * This method may be called multiple times during the life time of a Part, or it might not get
+ * called at all. Parts must not depend on the existence of a view for their operation.
+ */
+
+/**
+ * \brief Wrap the view() into a PartMdiView.
+ *
+ * A new view is only created the first time this method is called;
+ * after that, a pointer to the pre-existing view is returned.
+ */
 PartMdiView* AbstractPart::mdiSubWindow() const
 {
 	if (!m_mdi_window)
@@ -39,6 +63,9 @@ PartMdiView* AbstractPart::mdiSubWindow() const
 	return m_mdi_window;
 }
 
+/**
+ * \brief Return AbstractAspect::createContextMenu() plus operations on the primary view.
+ */
 QMenu* AbstractPart::createContextMenu()
 {
 	QMenu * menu = AbstractAspect::createContextMenu();
@@ -64,4 +91,34 @@ QMenu* AbstractPart::createContextMenu()
 
 	return menu;
 }
+
+/**
+ * \brief Fill the part specific menu for the main window including setting the title
+ *
+ * \return true on success, otherwise false (e.g. part has no actions).
+ */
+bool AbstractPart::fillProjectMenu(QMenu * menu) {
+	Q_UNUSED(menu);
+	return false;
+}
+
+/**
+ * \brief Copy current selection.
+ */
+void AbstractPart::editCopy() {}
+
+/**
+ * \brief Cut current selection.
+ */
+void AbstractPart::editCut() {}
+
+/**
+ * \brief Paste at the current location or into the current selection.
+ */
+void AbstractPart::editPaste() {}
+
+/**
+ * \var AbstractPart::m_mdi_window
+ * \brief The MDI sub-window that is wrapped around my primary view.
+ */
 

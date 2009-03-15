@@ -30,6 +30,33 @@
 #include "Double2StringFilter.h"
 #include "lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
+#include <QUndoCommand>
+
+class Double2StringFilterSetFormatCmd : public QUndoCommand
+{
+	public:
+		Double2StringFilterSetFormatCmd(Double2StringFilter* target, char new_format);
+
+		virtual void redo();
+		virtual void undo();
+
+	private:
+		Double2StringFilter* m_target;
+		char m_other_format;
+};
+
+class Double2StringFilterSetDigitsCmd : public QUndoCommand
+{
+	public:
+		Double2StringFilterSetDigitsCmd(Double2StringFilter* target, int new_digits);
+
+		virtual void redo();
+		virtual void undo();
+
+	private:
+		Double2StringFilter* m_target;
+		int m_other_digits;
+};
 
 void Double2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
 {

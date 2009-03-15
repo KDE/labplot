@@ -34,51 +34,24 @@
 class PartMdiView;
 class QMenu;
 
-//! Base class of Aspects with MDI windows as views.
-/**
- * SciDAVis's Parts are somewhat similar to KDE's KParts in that they are independent application
- * components running on top of a kernel (a bit like KOffice's shell).
- */
 class AbstractPart : public AbstractAspect
 {
 	Q_OBJECT
 
 	public:
-		//! Constructor.
 		AbstractPart(const QString &name) : AbstractAspect(name), m_mdi_window(0) {}
 		virtual ~AbstractPart() {}
-		//! Construct a primary view on me.
-		/**
-		 * The caller recieves ownership of the view.
-		 *
-		 * This method may be called multiple times during the life time of a Part, or it might not get
-		 * called at all. Parts must not depend on the existence of a view for their operation.
-		 */
-		virtual QWidget * view() const = 0;
-		//! Wrap the view() into a PartMdiView.
-		/**
-		 * A new view is only created the first time this method is called;
-		 * after that, a pointer to the pre-existing view is returned.
-		 */
+		virtual QWidget *view() const = 0;
 		PartMdiView * mdiSubWindow() const;
-		//! Return AbstractAspect::createContextMenu() plus operations on the primary view.
 		virtual QMenu * createContextMenu();
-		//! Fill the part specific menu for the main window including setting the title
-		/**
-		 * \return true on success, otherwise false (e.g. part has no actions).
-		 */
-		virtual bool fillProjectMenu(QMenu * menu) { Q_UNUSED(menu); return false; }
+		virtual bool fillProjectMenu(QMenu * menu);
 
 	public slots:
-		//! Copy current selection.
-		virtual void editCopy() {};
-		//! Cut current selection.
-		virtual void editCut() {};
-		//! Paste at the current location or into the current selection.
-		virtual void editPaste() {};
+		virtual void editCopy();
+		virtual void editCut();
+		virtual void editPaste();
 
 	private:
-		//! The MDI sub-window that is wrapped around my primary view.
 		mutable PartMdiView *m_mdi_window;
 };
 

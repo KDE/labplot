@@ -32,6 +32,9 @@
 #include <QUndoCommand>
 #include <gsl/gsl_statistics.h>
 
+/**
+ * \brief Command for setting the error source of a fit.
+ */
 class FitSetYErrorSourceCmd : public QUndoCommand
 {
 	public:
@@ -54,6 +57,9 @@ class FitSetYErrorSourceCmd : public QUndoCommand
 		AbstractFit::ErrorSource m_other_source;
 };
 
+/**
+ * \brief Column representing the result parameters of a fit.
+ */
 class ResultsColumn : public AbstractColumn
 {
 
@@ -70,6 +76,9 @@ class ResultsColumn : public AbstractColumn
 		AbstractFit * m_owner;
 };
 
+/**
+ * \brief Column representing standard errors of result parameters.
+ */
 class ErrorsColumn : public AbstractColumn
 {
 
@@ -86,6 +95,9 @@ class ErrorsColumn : public AbstractColumn
 		AbstractFit * m_owner;
 };
 
+/**
+ * \brief Column representing the parameter names of a fit.
+ */
 class NamesColumn : public AbstractColumn
 {
 
@@ -102,6 +114,9 @@ class NamesColumn : public AbstractColumn
 		AbstractFit * m_owner;
 };
 
+/**
+ * \brief Column representing descriptions for the parameters of a fit.
+ */
 class DescriptionsColumn : public AbstractColumn
 {
 
@@ -117,6 +132,44 @@ class DescriptionsColumn : public AbstractColumn
 	private:
 		AbstractFit * m_owner;
 };
+
+/**
+ * \class AbstractFit
+ * \brief Base class for least-squares fitting.
+ *
+ * This is a completely algorithm-agnostic minimal base class, providing mainly a common
+ * interface for AbstractNonlinearFit and AbstractLinearFit.
+ *
+ * Input is accepted on three ports: X, Y and Y error. Y is assumed to be a function of X, which is
+ * approximated by the function specified by the implementation of AbstractFit being used.
+ *
+ * On its output ports, AbstractFit provides (in order) the current values of the parameters,
+ * error estimates, their names, and textual descriptions. Current values can be initial values
+ * specified by the user, automated estimates made by the implementation, or the results of the fit.
+ * You only ever get to see the first two when you haven't connected the input ports of
+ * AbstractFit yet, because after the first connect, the fit is automatically recomputed.
+ */
+
+/**
+ * \enum AbstractFit::ErrorSource
+ * \brief Possible sources for error data.
+ */
+/**
+ * \var AbstractFit::UnknownErrors
+ * \brief Errors unknown; estimate parameter errors from scatter of input data.
+ */
+/**
+ * \var AbstractFit::AssociatedErrors
+ * \brief Use error data set associated with Y input.
+ */
+/**
+ * \var AbstractFit::PoissonErrors
+ * \brief Y data is Poisson distributed; use sqrt(Y) as error estimate.
+ */
+/**
+ * \var AbstractFit::CustomErrors
+ * \brief Use error data from user-specified data source.
+ */
 
 AbstractFit::AbstractFit() :
 	AbstractFilter(metaObject()->className()),
@@ -145,6 +198,16 @@ AbstractFit::~AbstractFit()
 		gsl_matrix_free(m_covariance_matrix);
 }
 
+/**
+ * \brief Currently set source of Y standard errors.
+ */
+ErrorSource AbstractFit::yErrorSource() const {
+	return m_y_error_source;
+}
+
+/**
+ * \brief Change the source of Y standard errors.
+ */
 void AbstractFit::setYErrorSource(ErrorSource e)
 {
 	exec(new FitSetYErrorSourceCmd(this, e));
@@ -157,6 +220,9 @@ bool AbstractFit::inputAcceptable(int port, const AbstractColumn *source)
 	return source->columnMode() == SciDAVis::Numeric;
 }
 
+/**
+ * \brief Update internal state (number of input points and Y errors may have changed).
+ */
 void AbstractFit::dataChanged(AbstractColumn*)
 {
 	const AbstractColumn * x = m_inputs.value(0);
@@ -219,3 +285,40 @@ double AbstractFit::rSquare() const
 	delete[] weights;
 	return 1 - m_chi_square/tss;
 }
+
+/**
+ * \var AbstractFit::m_input_points
+ * \brief Number of data points supplied on inputs.
+ */
+
+/**
+ * \var AbstractFit::m_y_error_source
+ * \brief Where to take Y error estimates from.
+ */
+
+/**
+ * \var AbstractFit::m_y_errors
+ * \brief Y error estimates
+ */
+
+/**
+ * \var AbstractFit::m_results
+ * \brief Resulting fit parameters.
+ */
+
+/**
+ * \var AbstractFit::m_covariance_matrix
+ * \brief Covariance matrix of results.
+ */
+
+/**
+ * \var AbstractFit::m_chi_square
+ * \brief Residual sum of squares.
+ */
+
+/**
+ * \var AbstractFit::m_outputs
+ * \brief Output ports.
+ */
+
+

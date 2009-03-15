@@ -35,6 +35,9 @@
 #include "Column.h"
 #include "core/AbstractSimpleFilter.h"
 #include "lib/IntervalAttribute.h"
+#include <QDateTime>
+#include <QDate>
+#include <QTime>
 
 ///////////////////////////////////////////////////////////////////////////
 // class ColumnSetModeCmd

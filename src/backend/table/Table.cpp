@@ -37,7 +37,8 @@
 #include "kdefrontend/Spreadsheet.h"
 #endif
 
-#include<QApplication>
+#include <QApplication>
+#include <QDateTime>
 
 Table::Table(AbstractScriptingEngine *engine, int rows, int columns, const QString& name)
 	: AbstractPart(name), scripted(engine)

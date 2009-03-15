@@ -29,13 +29,60 @@
  ***************************************************************************/
 
 #include "AbstractSimpleFilter.h"
-#include <QtDebug>
+#include "globals.h"
+
+#include <QtCore/QString>
+#include <QtCore/QDateTime>
+#include <QtCore/QDate>
+#include <QtCore/QTime>
+#include <QtXml/QXmlStreamWriter>
+#include "lib/XmlStreamReader.h"
 
 // TODO: should simple filters have a name argument?
 AbstractSimpleFilter::AbstractSimpleFilter()
 	: AbstractFilter("SimpleFilter"), m_output_column(new SimpleFilterColumn(this))
 {
 	addChild(m_output_column);
+}
+
+SciDAVis::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
+	return m_inputs.value(0) ?
+		m_inputs.at(0)->plotDesignation() :
+		SciDAVis::noDesignation;
+}
+
+SciDAVis::ColumnDataType AbstractSimpleFilter::dataType() const {
+	// calling this function while m_input is empty is a sign of very bad code
+	// nevertheless it will return some rather meaningless value to
+	// avoid crashes
+	return m_inputs.value(0) ? m_inputs.at(0)->dataType() : SciDAVis::TypeQString;
+}
+
+SciDAVis::ColumnMode AbstractSimpleFilter::columnMode() const {
+	// calling this function while m_input is empty is a sign of very bad code
+	// nevertheless it will return some rather meaningless value to
+	// avoid crashes
+	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : SciDAVis::Text;
+}
+
+QString AbstractSimpleFilter::textAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->textAt(row) : QString();
+}
+
+QDate AbstractSimpleFilter::dateAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->dateAt(row) : QDate();
+}
+
+QTime AbstractSimpleFilter::timeAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->timeAt(row) : QTime();
+}
+
+QDateTime AbstractSimpleFilter::dateTimeAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->dateTimeAt(row) : QDateTime();
+}
+
+double AbstractSimpleFilter::valueAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->valueAt(row) : 0.0;
 }
 
 void AbstractSimpleFilter::clearMasks()
@@ -173,3 +220,34 @@ bool AbstractSimpleFilter::load(XmlStreamReader * reader)
 	return !reader->hasError();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//! \class SimpleFilterColumn
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SciDAVis::ColumnDataType SimpleFilterColumn::dataType() const {
+	return m_owner->dataType();
+}
+
+SciDAVis::ColumnMode SimpleFilterColumn::columnMode() const {
+	return m_owner->columnMode();
+}
+
+QString SimpleFilterColumn::textAt(int row) const {
+	return m_owner->textAt(row);
+}
+
+QDate SimpleFilterColumn::dateAt(int row) const {
+	return m_owner->dateAt(row);
+}
+
+QTime SimpleFilterColumn::timeAt(int row) const {
+	return m_owner->timeAt(row);
+}
+
+QDateTime SimpleFilterColumn::dateTimeAt(int row) const {
+	return m_owner->dateTimeAt(row);
+}
+
+double SimpleFilterColumn::valueAt(int row) const {
+	return m_owner->valueAt(row);
+}

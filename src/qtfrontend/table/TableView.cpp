@@ -71,6 +71,8 @@
 #include <QDialog>
 #include <QInputDialog>
 #include <QMenuBar>
+#include <QDate>
+#include <QDateTime>
 
 TableView::TableView(Table *table)
  : m_plot_menu(0), m_table(table)

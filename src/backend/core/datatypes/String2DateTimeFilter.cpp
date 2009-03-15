@@ -30,7 +30,23 @@
 #include "String2DateTimeFilter.h"
 #include <QStringList>
 #include "lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
+#include <QUndoCommand>
+#include <QDateTime>
+#include <QTime>
+#include <QDate>
+
+class String2DateTimeFilterSetFormatCmd : public QUndoCommand
+{
+	public:
+		String2DateTimeFilterSetFormatCmd(String2DateTimeFilter* target, const QString &new_format);
+
+		virtual void redo();
+		virtual void undo();
+
+	private:
+		String2DateTimeFilter* m_target;
+		QString m_other_format;
+};
 
 const char * String2DateTimeFilter::date_formats[] = {
 	"yyyy-M-d", // ISO 8601 w/ and w/o leading zeros
@@ -59,6 +75,10 @@ const char * String2DateTimeFilter::time_formats[] = {
 	"hmmss",
 	0
 };
+
+SciDAVis::ColumnDataType String2DateTimeFilter::dataType() const {
+	return SciDAVis::TypeQDateTime;
+}
 
 QDateTime String2DateTimeFilter::dateTimeAt(int row) const
 {
@@ -106,6 +126,18 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const
 		date_result.setDate(1900,1,1);	// this is what QDateTime does e.g. for
 													// QDateTime::fromString("00:00","hh:mm");
 	return QDateTime(date_result, time_result);
+}
+
+QDate String2DateTimeFilter::dateAt(int row) const {
+	return dateTimeAt(row).date();
+}
+
+QTime String2DateTimeFilter::timeAt(int row) const {
+	return dateTimeAt(row).time();
+}
+
+bool String2DateTimeFilter::inputAcceptable(int, const AbstractColumn *source) {
+	return source->dataType() == SciDAVis::TypeQString;
 }
 
 void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
