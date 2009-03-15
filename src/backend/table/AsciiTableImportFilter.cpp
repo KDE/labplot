@@ -2,7 +2,7 @@
     File                 : AsciiTableImportFilter.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Knut Franke
+    Copyright            : (C) 2008-2009 Knut Franke
     Email (use @ for *)  : Knut.Franke*gmx.net
     Description          : Import an ASCII file as Table.
 
@@ -31,6 +31,7 @@
 #include "table/Table.h"
 #include "lib/IntervalAttribute.h"
 #include "core/column/Column.h"
+#include "core/datatypes/String2DoubleFilter.h"
 
 #include <QTextStream>
 #include <QStringList>
@@ -98,7 +99,18 @@ AbstractAspect * AsciiTableImportFilter::importAspect(QIODevice * input)
 	Table * result = new Table(0, 0, 0, tr("Table"));
 	for (i=0; i<data.size(); ++i)
 	{
-		Column *new_col = new Column(column_names[i], data[i], invalid_cells[i]);
+		Column *new_col;
+		if (m_convert_to_numeric) {
+			Column * string_col = new Column(column_names[i], data[i], invalid_cells[i]);
+			String2DoubleFilter * filter = new String2DoubleFilter;
+			filter->setNumericLocale(m_numeric_locale);
+			filter->input(0, string_col);
+			new_col = new Column(column_names[i], SciDAVis::Numeric);
+			new_col->copy(filter->output(0));
+			delete filter;
+			delete string_col;
+		} else
+			new_col = new Column(column_names[i], data[i], invalid_cells[i]);
 		if (i == 0) 
 			new_col->setPlotDesignation(SciDAVis::X);
 		else
