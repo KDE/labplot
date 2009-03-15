@@ -58,7 +58,7 @@ TableDoubleHeaderView::TableDoubleHeaderView(QWidget * parent)
 : QHeaderView(Qt::Horizontal, parent)
 { 
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignTop);
-	m_slave = new TableCommentsHeaderView(this); 
+	m_slave = new TableCommentsHeaderView(); 
 	m_slave->setDefaultAlignment(Qt::AlignLeft | Qt::AlignTop);
 	m_show_comments = true;
 }

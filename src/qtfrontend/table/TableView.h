@@ -331,7 +331,7 @@ class TableView : public QWidget
 
 		virtual void changeEvent(QEvent * event);
 		void retranslateStrings();
-		void setColumnForDescriptionTab(int col);
+		void setColumnForControlTabs(int col);
 
 		bool eventFilter( QObject * watched, QEvent * event);
 

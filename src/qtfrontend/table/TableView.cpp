@@ -345,10 +345,10 @@ void TableView::currentColumnChanged(const QModelIndex & current, const QModelIn
 	Q_UNUSED(previous);
 	int col = current.column();	
 	if (col < 0 || col >= m_table->columnCount()) return;
-	setColumnForDescriptionTab(col);
+	setColumnForControlTabs(col);
 }
 
-void TableView::setColumnForDescriptionTab(int col)
+void TableView::setColumnForControlTabs(int col)
 {
 	if (col < 0 || col >= m_table->columnCount()) return;
 	Column *col_ptr = m_table->column(col);
@@ -356,10 +356,29 @@ void TableView::setColumnForDescriptionTab(int col)
 	QString str = QString(tr("Current column:\nName: %1\nPosition: %2"))\
 		.arg(col_ptr->name()).arg(col+1);
 		
-	// TODO: currently, this eats up considerable screen space for duplicate information - do we need it?
-	//ui.column_info->document()->setPlainText(str);
 	ui.name_edit->setText(col_ptr->name());
 	ui.comment_box->document()->setPlainText(col_ptr->comment());
+	ui.type_box->setCurrentIndex(ui.type_box->findData((int)col_ptr->columnMode()));
+	switch(col_ptr->columnMode()) {
+		case SciDAVis::Numeric:
+			{
+				Double2StringFilter * filter = static_cast<Double2StringFilter*>(col_ptr->outputFilter());
+				ui.format_box->setCurrentIndex(ui.format_box->findData(filter->numericFormat()));
+				ui.digits_box->setValue(filter->numDigits());
+				break;
+			}
+		case SciDAVis::Month:
+		case SciDAVis::Day:
+		case SciDAVis::DateTime:
+			{
+				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(col_ptr->outputFilter());
+				ui.format_box->setCurrentIndex(ui.format_box->findData(filter->format()));
+				break;
+			}
+		default:
+			break;
+	}
+	ui.formula_box->setText(col_ptr->formula(0));
 }
 
 void TableView::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected)
@@ -381,6 +400,8 @@ void TableView::updateFormatBox()
 			ui.format_box->addItem(tr("Decimal"), QVariant('f'));
 			ui.format_box->addItem(tr("Scientific (e)"), QVariant('e'));
 			ui.format_box->addItem(tr("Scientific (E)"), QVariant('E'));
+			ui.format_box->addItem(tr("Automatic (e)"), QVariant('g'));
+			ui.format_box->addItem(tr("Automatic (E)"), QVariant('G'));
 			break;
 		case SciDAVis::Text:
 			ui.format_box->addItem(tr("Text"), QVariant());
@@ -543,8 +564,9 @@ void TableView::applyType()
 			{
 				col->setColumnMode(mode);
 				Double2StringFilter * filter = static_cast<Double2StringFilter*>(col->outputFilter());
+				int digits = ui.digits_box->value(); // setNumericFormat causes digits_box to be modified...
 				filter->setNumericFormat(ui.format_box->itemData(format_index).toChar().toLatin1());
-				filter->setNumDigits(ui.digits_box->value());
+				filter->setNumDigits(digits);
 				// TODO: make sure this is done by a signal from the filter to the column on to the table
 	//			m_model->emitColumnChanged(col); 
 				}
@@ -576,7 +598,7 @@ void TableView::handleHeaderDataChanged(Qt::Orientation orientation, int first, 
 
 	int col = sel_model->currentIndex().column();
 	if (col < first || col > last) return;
-	setColumnForDescriptionTab(col);
+	setColumnForControlTabs(col);
 }
 
 int TableView::selectedColumnCount(bool full)
