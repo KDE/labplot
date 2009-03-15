@@ -400,8 +400,8 @@ void TableView::updateFormatBox()
 			ui.format_box->addItem(tr("Decimal"), QVariant('f'));
 			ui.format_box->addItem(tr("Scientific (e)"), QVariant('e'));
 			ui.format_box->addItem(tr("Scientific (E)"), QVariant('E'));
-			ui.format_box->addItem(tr("Automatic (e)"), QVariant('g'));
-			ui.format_box->addItem(tr("Automatic (E)"), QVariant('G'));
+			ui.format_box->addItem(tr("Automatic (g)"), QVariant('g'));
+			ui.format_box->addItem(tr("Automatic (G)"), QVariant('G'));
 			break;
 		case SciDAVis::Text:
 			ui.format_box->addItem(tr("Text"), QVariant());

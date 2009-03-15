@@ -225,7 +225,7 @@
           <item row="3" column="0" >
            <widget class="QLabel" name="last_row_label" >
             <property name="text" >
-             <string>Last row X =</string>
+             <string>Last row Y =</string>
             </property>
             <property name="alignment" >
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
