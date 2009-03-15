@@ -81,10 +81,11 @@ class AbstractAspect : public QObject
 
 	public:
 		//! Flags which control numbering scheme of children.
-		enum ChildIndexFlags {
-			IncludeHidden = 1,
-			Recursive = 2,
+		enum ChildIndexFlag {
+			IncludeHidden = 0x01,
+			Recursive = 0x02,
 		};
+		Q_DECLARE_FLAGS(ChildIndexFlags, ChildIndexFlag)
 
 		class Private;
 		friend class Private;
@@ -117,7 +118,7 @@ class AbstractAspect : public QObject
 		 */
 		void removeChild(AbstractAspect* child);
 		//! Return list of children (optionally only those inheriting class T).
-		template < class T > QList<T*> children(int flags=0) const {
+		template < class T > QList<T*> children(const ChildIndexFlags &flags=0) const {
 			QList<T*> result;
 			foreach (AbstractAspect * child, rawChildren()) {
 				if (flags & IncludeHidden || !child->hidden()) {
@@ -138,7 +139,7 @@ class AbstractAspect : public QObject
 		 * aspects). Therefore, it is recommended to avoid indices wherever possibly
 		 * and instead refer to aspects using AbstractAspect pointers.
 		 */
-		template < class T > T * child(int index, int flags=0) const {
+		template < class T > T * child(int index, const ChildIndexFlags &flags=0) const {
 			int i = 0;
 			foreach(AbstractAspect * child, rawChildren()) {
 				T * c = qobject_cast< T* >(child);
@@ -157,7 +158,7 @@ class AbstractAspect : public QObject
 			return 0;
 		}
 		//! Return the number of child Aspects inheriting from given class.
-		template < class T > int childCount(int flags=0) const {
+		template < class T > int childCount(const ChildIndexFlags &flags=0) const {
 			int result = 0;
 			foreach(AbstractAspect * child, rawChildren()) {
 				T * i = qobject_cast< T* >(child);
@@ -167,7 +168,7 @@ class AbstractAspect : public QObject
 			return result;
 		}
 		//! Return the (0 based) index
-		template < class T > int indexOfChild(const AbstractAspect * child, int flags=0) const {
+		template < class T > int indexOfChild(const AbstractAspect * child, const ChildIndexFlags &flags=0) const {
 			int index = 0;
 			foreach(AbstractAspect * c, rawChildren()) {
 				if (child == c) return index;
@@ -331,5 +332,7 @@ class AbstractAspect : public QObject
 		Private * m_aspect_private;
 		const QList< AbstractAspect* > rawChildren() const;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)
 
 #endif // ifndef ABSTRACT_ASPECT_H
