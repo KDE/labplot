@@ -37,17 +37,11 @@ TODO :
 ******
 -------------------------------------------------------------------------
 General :
-	*use the "usual" c++ naming convention:
-	http://techbase.kde.org/index.php?title=Policies/Library_Code_Policy
-	"Class names starts with a capital K. The rest is in camel case.
-	Function names starts with a lower case, but the first letter of each successive word is capitalized."
 	* check functions.h, constants.h
 		* use GSL
 		* GSL_VERSION
 -------------------------------------------------------------------------
 Ideas :
-	* use cmake to build either kdefrontend or
-		qtfrontend, something like "-with-qt" / "-with-kde" 
 	* put ProjectExplorer and PartMdiView in common frontend dir
 		( if there is no KDE version)
 	* Our approach also is to put as much code as possible into the aspect 
