@@ -1,64 +1,64 @@
 set(KDEFRONTEND_DIR kdefrontend)
 set(GUI_SOURCES
-	${KDEFRONTEND_DIR}/AxesDialog.cc
-	${KDEFRONTEND_DIR}/AxesWidget.cc
-	${KDEFRONTEND_DIR}/ColorMapPreview.cc
-   	${KDEFRONTEND_DIR}/ColumnDialog.cc
-	${KDEFRONTEND_DIR}/DataPlotDialog.cc
-	${KDEFRONTEND_DIR}/ExportDialog.cc
-	${KDEFRONTEND_DIR}/ExportWidget.cc
-	${KDEFRONTEND_DIR}/FunctionPlotDialog.cc
-  	${KDEFRONTEND_DIR}/FunctionWidget.cc
-	${KDEFRONTEND_DIR}/ImportDialog.cc
-	${KDEFRONTEND_DIR}/ImportWidget.cc
-	${KDEFRONTEND_DIR}/LabelWidget.cc
- 	${KDEFRONTEND_DIR}/LabPlot.cc
-	${KDEFRONTEND_DIR}/LegendDialog.cc
-	${KDEFRONTEND_DIR}/LegendWidget.cc
-  	${KDEFRONTEND_DIR}/MainWin.cc
-  	${KDEFRONTEND_DIR}/PlotStyleWidget.cc
- 	${KDEFRONTEND_DIR}/PlotSurfaceStyleWidget.cc
-	${KDEFRONTEND_DIR}/ProjectDialog.cc
-	${KDEFRONTEND_DIR}/SettingsDialog.cc
-	${KDEFRONTEND_DIR}/SettingsGeneralPage.cc
-	${KDEFRONTEND_DIR}/SettingsPage.cc
-	${KDEFRONTEND_DIR}/SettingsPrintingPage.cc
-  	${KDEFRONTEND_DIR}/Spreadsheet.cc
-	${KDEFRONTEND_DIR}/TitleDialog.cc
-	${KDEFRONTEND_DIR}/ValuesWidget.cc
-  	${KDEFRONTEND_DIR}/Worksheet.cc
+	${KDEFRONTEND_DIR}/AxesDialog.cpp
+	${KDEFRONTEND_DIR}/AxesWidget.cpp
+	${KDEFRONTEND_DIR}/ColorMapPreview.cpp
+   	${KDEFRONTEND_DIR}/ColumnDialog.cpp
+	${KDEFRONTEND_DIR}/DataPlotDialog.cpp
+	${KDEFRONTEND_DIR}/ExportDialog.cpp
+	${KDEFRONTEND_DIR}/ExportWidget.cpp
+	${KDEFRONTEND_DIR}/FunctionPlotDialog.cpp
+  	${KDEFRONTEND_DIR}/FunctionWidget.cpp
+	${KDEFRONTEND_DIR}/ImportDialog.cpp
+	${KDEFRONTEND_DIR}/ImportWidget.cpp
+	${KDEFRONTEND_DIR}/LabelWidget.cpp
+ 	${KDEFRONTEND_DIR}/LabPlot.cpp
+	${KDEFRONTEND_DIR}/LegendDialog.cpp
+	${KDEFRONTEND_DIR}/LegendWidget.cpp
+  	${KDEFRONTEND_DIR}/MainWin.cpp
+  	${KDEFRONTEND_DIR}/PlotStyleWidget.cpp
+ 	${KDEFRONTEND_DIR}/PlotSurfaceStyleWidget.cpp
+	${KDEFRONTEND_DIR}/ProjectDialog.cpp
+	${KDEFRONTEND_DIR}/SettingsDialog.cpp
+	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
+	${KDEFRONTEND_DIR}/SettingsPage.cpp
+	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
+  	${KDEFRONTEND_DIR}/Spreadsheet.cpp
+	${KDEFRONTEND_DIR}/TitleDialog.cpp
+	${KDEFRONTEND_DIR}/ValuesWidget.cpp
+  	${KDEFRONTEND_DIR}/Worksheet.cpp
 	${KDEFRONTEND_DIR}/WorksheetView.cpp
 )
 
 set(ELEMENTS_SOURCES
-  elements/Axis.cc
-  elements/Label.cc
-  elements/Legend.cc
-  elements/Point.cc
-  elements/Point3D.cc
-  elements/Range.cc
-  elements/Set.cc
-  elements/Style.cc
-  elements/Symbol.cc
+  elements/Axis.cpp
+  elements/Label.cpp
+  elements/Legend.cpp
+  elements/Point.cpp
+  elements/Point3D.cpp
+  elements/Range.cpp
+  elements/Set.cpp
+  elements/Style.cpp
+  elements/Symbol.cpp
 )
 
 set(FILTER_SOURCES
-  filter/FilterCDF.cc
-  filter/FilterHDF5.cc
-  filter/FilterNETCDF.cc
-  filter/FilterOPJ.cc
+  filter/FilterCDF.cpp
+  filter/FilterHDF5.cpp
+  filter/FilterNETCDF.cpp
+  filter/FilterOPJ.cpp
 )
 
 set(PLOTS_SOURCES
-  plots/Plot.cc
-  plots/Plot2D.cc
-  plots/Plot2DSimple.cc
+  plots/Plot.cpp
+  plots/Plot2D.cpp
+  plots/Plot2DSimple.cpp
 )
 
 set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
   parser/parser.tab.c
-  tools/TexRenderer.cc
-  tools/ColorMapRenderer.cc
+  tools/TexRenderer.cpp
+  tools/ColorMapRenderer.cpp
 )
 
 set(UI_SOURCES
