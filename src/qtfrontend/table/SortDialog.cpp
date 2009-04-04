@@ -86,6 +86,8 @@ void SortDialog::accept()
 	Column* leading;
 	if(ui.box_type->currentIndex() == Together) 
 		leading = m_columns_list.at(ui.columns_list->currentIndex());
+	else
+		leading = 0;
 	emit sort(leading, m_columns_list, ui.box_order->currentIndex() == Ascending );
 	//close();
 }
