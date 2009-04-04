@@ -329,6 +329,8 @@ void Column::Private::setColumnMode(SciDAVis::ColumnMode mode)
 	new_out_filter->setName("OutputFilter");
 	m_input_filter = new_in_filter;
 	m_output_filter = new_out_filter;
+	m_input_filter->input(0, m_owner->m_string_io);
+	m_output_filter->input(0, m_owner);
 
 	if (temp_col) // if temp_col == 0, only the input/output filters need to be changed
 	{
@@ -372,6 +374,8 @@ void Column::Private::replaceModeData(SciDAVis::ColumnMode mode, SciDAVis::Colum
 	out_filter->setName("OutputFilter");
 	m_input_filter = in_filter;
 	m_output_filter = out_filter;
+	m_input_filter->input(0, m_owner->m_string_io);
+	m_output_filter->input(0, m_owner);
 
 	// connect formatChanged()
 	switch(m_column_mode)
