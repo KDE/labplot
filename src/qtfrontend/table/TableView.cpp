@@ -802,7 +802,7 @@ QMenu * TableView::createSelectionMenu(QMenu * append_to)
 	if (!menu)
 		menu = new QMenu();
 
-	QMenu * submenu = new QMenu("Fi&ll Selection with");
+	QMenu * submenu = new QMenu(tr("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
 	menu->addMenu(submenu);
@@ -845,7 +845,7 @@ QMenu * TableView::createColumnMenu(QMenu * append_to)
 	menu->addMenu(submenu);
 	menu->addSeparator();
 
-	submenu = new QMenu("Fi&ll Selection with");
+	submenu = new QMenu(tr("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
 	menu->addMenu(submenu);
@@ -906,7 +906,7 @@ QMenu * TableView::createRowMenu(QMenu * append_to)
 	menu->addAction(action_clear_rows);
 	menu->addAction(action_add_rows);
 	menu->addSeparator();
-	QMenu *submenu = new QMenu("Fi&ll Selection with");
+	QMenu *submenu = new QMenu(tr("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
 	menu->addMenu(submenu);
@@ -1482,7 +1482,7 @@ void TableView::fillProjectMenu(QMenu * menu, bool * rc)
 	menu->addMenu(submenu);
 	menu->addSeparator();
 
-	submenu = new QMenu("Fi&ll Selection with");
+	submenu = new QMenu(tr("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
 	menu->addMenu(submenu);
