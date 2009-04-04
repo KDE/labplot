@@ -57,6 +57,7 @@ class String2DayOfWeekFilter : public AbstractSimpleFilter
 			if (!m_inputs.value(0)) return QDateTime();
 
 			QString input_value = m_inputs.value(0)->textAt(row);
+			if (input_value.isEmpty()) return QDateTime();
 			bool ok;
 			int day_value = input_value.toInt(&ok);
 			if(!ok)
@@ -78,7 +79,7 @@ class String2DayOfWeekFilter : public AbstractSimpleFilter
 					temp = QDate::fromString(input_value, "dddd");
 #endif
 				if(!temp.isValid())
-					day_value = 1;
+					return QDateTime();
 				else
 					day_value = temp.dayOfWeek();
 			}
@@ -88,6 +89,29 @@ class String2DayOfWeekFilter : public AbstractSimpleFilter
 			QDate result_date = QDate(1900,1,1).addDays(day_value - 1);
 			QTime result_time = QTime(0,0,0,0);
 			return QDateTime(result_date, result_time);
+		}
+		virtual bool isInvalid(int row) const { 
+			const AbstractColumn *col = m_inputs.value(0);
+			if (!col) return false;
+			return !(dateTimeAt(row).isValid()) || col->isInvalid(row);
+		}
+		virtual bool isInvalid(Interval<int> i) const {
+			if (!m_inputs.value(0)) return false;
+			for (int row = i.start(); row <= i.end(); row++) {
+				if (!isInvalid(row))
+					return false;
+			}
+			return true;
+		}
+		virtual QList< Interval<int> > invalidIntervals() const 
+		{
+			IntervalAttribute<bool> validity;
+			if (m_inputs.value(0)) {
+				int rows = m_inputs.value(0)->rowCount();
+				for (int i=0; i<rows; i++) 
+					validity.setValue(i, isInvalid(i));
+			}
+			return validity.intervals();
 		}
 
 		//! Return the data type of the column

@@ -844,7 +844,7 @@ void Column::Private::setDateTimeAt(int row, const QDateTime& new_value)
 	}
 
 	static_cast< QList<QDateTime>* >(m_data)->replace(row, new_value);
-	m_validity.setValue(Interval<int>(row, row), false);
+	m_validity.setValue(Interval<int>(row, row), !new_value.isValid());
 	emit m_owner->dataChanged(m_owner);
 }
 
@@ -859,9 +859,10 @@ void Column::Private::replaceDateTimes(int first, const QList<QDateTime>& new_va
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
 
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<num_rows; i++) {
 		static_cast< QList<QDateTime>* >(m_data)->replace(first+i, new_values.at(i));
-	m_validity.setValue(Interval<int>(first, first+num_rows-1), false);
+		m_validity.setValue(i, !new_values.at(i).isValid());
+	}
 	emit m_owner->dataChanged(m_owner);
 }
 

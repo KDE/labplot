@@ -84,10 +84,11 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const
 {
 	if (!m_inputs.value(0)) return QDateTime();
 	QString input_value = m_inputs.value(0)->textAt(row);
+	if (input_value.isEmpty()) return QDateTime();
 
 	// first try the selected format string m_format
 	QDateTime result = QDateTime::fromString(input_value, m_format);
-	if(result.date().isValid() || result.time().isValid())
+	if(result.isValid())
 		return result;
 
 	// fallback:
@@ -122,7 +123,7 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const
 			break;
 	}
 
-	if(!date_result.isValid())
+	if(!date_result.isValid() && time_result.isValid())
 		date_result.setDate(1900,1,1);	// this is what QDateTime does e.g. for
 													// QDateTime::fromString("00:00","hh:mm");
 	return QDateTime(date_result, time_result);
@@ -161,6 +162,31 @@ bool String2DateTimeFilter::load(XmlStreamReader * reader)
 void String2DateTimeFilter::setFormat(const QString& format) 
 { 
 	exec(new String2DateTimeFilterSetFormatCmd(this, format));
+}
+
+bool String2DateTimeFilter::isInvalid(int row) const { 
+	const AbstractColumn *col = m_inputs.value(0);
+	if (!col) return false;
+	return !(dateTimeAt(row).isValid()) || col->isInvalid(row);
+}
+
+bool String2DateTimeFilter::isInvalid(Interval<int> i) const {
+	if (!m_inputs.value(0)) return false;
+	for (int row = i.start(); row <= i.end(); row++) {
+		if (!isInvalid(row))
+			return false;
+	}
+	return true;
+}
+
+QList< Interval<int> > String2DateTimeFilter::invalidIntervals() const {
+	IntervalAttribute<bool> validity;
+	if (m_inputs.value(0)) {
+		int rows = m_inputs.value(0)->rowCount();
+		for (int i=0; i<rows; i++) 
+			validity.setValue(i, isInvalid(i));
+	}
+	return validity.intervals();
 }
 
 String2DateTimeFilterSetFormatCmd::String2DateTimeFilterSetFormatCmd(String2DateTimeFilter* target, const QString &new_format)
