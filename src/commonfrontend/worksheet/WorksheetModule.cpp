@@ -38,7 +38,7 @@
 #include <QPixmap>
 #include <QtDebug>
 #include <QSettings>
-#include "ui_WorksheetConfigPage.h"
+// TODO #include "ui_WorksheetConfigPage.h"
 
 
 /**
@@ -55,18 +55,18 @@
  *
  */
 
-ActionManager * WorksheetModules::actionManager() { 
+ActionManager * WorksheetModule::actionManager() { 
 	return WorksheetView::actionManager(); 
 }
 
 
 WorksheetConfigPage::WorksheetConfigPage() {
-	ui = new Ui_WorksheetConfigPage();
-	ui->setupUi(this);
+// TODO	ui = new Ui_WorksheetConfigPage();
+// TODO	ui->setupUi(this);
 }
 
 WorksheetConfigPage::~WorksheetConfigPage() {
-	delete ui;
+// TODO	delete ui;
 }
 
 void WorksheetConfigPage::apply() {
@@ -74,7 +74,7 @@ void WorksheetConfigPage::apply() {
 }
 
 AbstractPart * WorksheetModule::makePart() {
-	return new Worksheet(tr("Worksheet %1").arg(1));
+	return new Worksheet(NULL, tr("Worksheet %1").arg(1));
 }
 
 QAction * WorksheetModule::makeAction(QObject *parent) {
@@ -124,7 +124,7 @@ bool WorksheetModule::canCreate(const QString & element_name) {
 }
 
 AbstractAspect * WorksheetModule::createAspectFromXml(XmlStreamReader * reader) {
-	Worksheet * worksheet = new Worksheet(tr("Worksheet %1").arg(1));
+	Worksheet * worksheet = new Worksheet(NULL, tr("Worksheet %1").arg(1));
 	if (!(worksheet->load(reader)))
 	{
 		delete worksheet;

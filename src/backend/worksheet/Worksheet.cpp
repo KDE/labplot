@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "Worksheet.h"
+#include <QIcon>
 /**
  * \class Worksheet
  * \brief The plotting part. 
@@ -36,6 +37,14 @@
  *
  */
 		
+Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
+	: AbstractPart(name), scripted(engine)
+{
+}
+
+Worksheet::~Worksheet() {
+}
+
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
 	// TODO

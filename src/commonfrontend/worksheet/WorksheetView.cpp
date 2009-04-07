@@ -27,8 +27,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "WorksheetView.h"
-#include "WorksheetModel.h"
+#include "worksheet/WorksheetView.h"
+#include "worksheet/WorksheetModel.h"
+#include "lib/ActionManager.h"
 #include <QGraphicsView>
 
 /**
@@ -39,7 +40,7 @@
  */
 
 WorksheetView::WorksheetView(Worksheet *worksheet)
- : m_plot_menu(0), m_worksheet(worksheet)
+ : m_worksheet(worksheet)
 {
 	m_model = new WorksheetModel(worksheet);
 	init();
@@ -57,23 +58,23 @@ WorksheetView::WorksheetView()
 	createActions();
 }
 
-void TableView::init() {
+void WorksheetView::init() {
 	createActions();
 // TODO
 }
 
-void TableView::createActions() {
+void WorksheetView::createActions() {
 // TODO
 }
-void TableView::connectActions() {
-// TODO
-}
-
-void TableView::createContextMenu(QMenu *menu) {
+void WorksheetView::connectActions() {
 // TODO
 }
 
-void TableView::fillProjectMenu(QMenu *menu, bool *rc) {
+void WorksheetView::createContextMenu(QMenu *menu) {
+// TODO
+}
+
+void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
 // TODO
 }
 

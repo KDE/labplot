@@ -30,14 +30,14 @@
 #ifndef WORKSHEETELEMENTGROUP_H
 #define WORKSHEETELEMENTGROUP_H
 
-#include "worksheet/WorksheetElement.h"
+#include "worksheet/AbstractWorksheetElement.h"
 
-class WorksheetElementGroup: public WorksheetElement {
+class WorksheetElementGroup: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
-		WorksheetElement(const QString &name);
-		~WorksheetElement();
+		WorksheetElementGroup(const QString &name);
+		~WorksheetElementGroup();
 
 		const QGraphicsItem *graphicsItem() const;
 

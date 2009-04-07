@@ -37,15 +37,16 @@
  *
  */
 
-WorksheetElement::WorksheetElement(const QString &name) {
+WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
+: AbstractWorksheetElement(name) {
 // TODO
 }
 
-WorksheetElement::~WorksheetElement() {
+WorksheetElementGroup::~WorksheetElementGroup() {
 // TODO
 }
 
-const QGraphicsItem *WorksheetElement::graphicsItem() const {
+const QGraphicsItem *WorksheetElementGroup::graphicsItem() const {
 // TODO
 }
 

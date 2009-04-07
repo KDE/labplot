@@ -27,10 +27,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef WORKSHEETMODEL.H
-#define WORKSHEETMODEL.H
+#ifndef WORKSHEETMODEL_H
+#define WORKSHEETMODEL_H
 
 #include <QGraphicsScene>
+#include "worksheet/Worksheet.h"
 
 class WorksheetModel: public QGraphicsScene {
 	Q_OBJECT

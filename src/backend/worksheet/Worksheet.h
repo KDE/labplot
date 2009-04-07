@@ -31,6 +31,7 @@
 #define WORKSHEET_H
 
 #include "core/AbstractPart.h"
+#include "core/AbstractScriptingEngine.h"
 
 class Worksheet: public AbstractPart, public scripted {
 	Q_OBJECT

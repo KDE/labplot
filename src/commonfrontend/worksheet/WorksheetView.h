@@ -27,12 +27,17 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef WORKSHEETVIEW.H
-#define WORKSHEETVIEW.H
+#ifndef WORKSHEETVIEW_H
+#define WORKSHEETVIEW_H
 
 #include <QWidget>
+class Worksheet;
 class QGraphicsView;
 class WorksheetModel;
+class QToolButton;
+class QHBoxLayout;
+class QMenu;
+class ActionManager;
 
 class WorksheetView: public QWidget {
 	Q_OBJECT
@@ -48,7 +53,7 @@ class WorksheetView: public QWidget {
 		WorksheetModel *m_model;
 		QGraphicsView *m_view_widget;
 		QWidget *m_control_tabs;
-		Ui::ControlTabs ui;
+// TODO		Ui::ControlTabs ui;
 		QToolButton *m_hide_button;
 		QHBoxLayout *m_main_layout;
 

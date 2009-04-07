@@ -28,15 +28,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef WORKSHEETMODULE.H
-#define WORKSHEETMODULE.H
+#ifndef WORKSHEETMODULE_H
+#define WORKSHEETMODULE_H
 
 #include "core/interfaces.h"
 
 class WorksheetModule: public QObject, public PartMaker, public ActionManagerOwner, public ConfigPageMaker, 
 	public XmlElementAspectMaker, public NeedsStaticInit {
 	Q_OBJECT
-	Q_INTERFACES(PartMaker FileFormat ActionManagerOwner ConfigPageMaker XmlElementAspectMaker NeedsStaticInit)
+	Q_INTERFACES(PartMaker ActionManagerOwner ConfigPageMaker XmlElementAspectMaker NeedsStaticInit)
 
 	public:
 		virtual AbstractPart * makePart();
