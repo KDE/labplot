@@ -27,8 +27,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "Worksheet.h"
+#include "worksheet/Worksheet.h"
+#include "worksheet/WorksheetView.h"
 #include <QIcon>
+#include <QWidget>
 /**
  * \class Worksheet
  * \brief The plotting part. 
@@ -38,8 +40,7 @@
  */
 		
 Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
-	: AbstractPart(name), scripted(engine)
-{
+	: AbstractPart(name), scripted(engine), m_view(NULL) {
 }
 
 Worksheet::~Worksheet() {
@@ -47,7 +48,13 @@ Worksheet::~Worksheet() {
 
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
-	// TODO
+	QIcon ico;
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	ico.addPixmap(QPixmap(":/graph.xpm"));
+#else
+	ico = KIcon(QIcon(worksheet_xpm));
+#endif
+	return ico;
 }
 
 //! Fill the part specific menu for the main window including setting the title
@@ -56,6 +63,7 @@ QIcon Worksheet::icon() const {
  */
 bool Worksheet::fillProjectMenu(QMenu * menu) {
 	// TODO
+	return false;
 }
 
 //! Return a new context menu.
@@ -64,6 +72,7 @@ bool Worksheet::fillProjectMenu(QMenu * menu) {
  */
 QMenu *Worksheet::createContextMenu() {
 	// TODO
+	return NULL;
 }
 
 //! Construct a primary view on me.
@@ -72,7 +81,11 @@ QMenu *Worksheet::createContextMenu() {
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
 QWidget *Worksheet::view() const {
-	// TODO
+	if (!m_view) {
+		m_view = new WorksheetView(const_cast<Worksheet *>(this));
+		connect(m_view, SIGNAL(statusInfo(const QString&)), this, SIGNAL(statusInfo(const QString&)));
+	}
+	return m_view;
 }
 
 //! Save as XML
@@ -83,4 +96,6 @@ void Worksheet::save(QXmlStreamWriter *) const {
 //! Load from XML
 bool Worksheet::load(XmlStreamReader *) {
 	// TODO
+	return false;
 }
+

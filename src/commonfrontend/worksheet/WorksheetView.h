@@ -31,6 +31,7 @@
 #define WORKSHEETVIEW_H
 
 #include <QWidget>
+#include <QGraphicsView>
 class Worksheet;
 class QGraphicsView;
 class WorksheetModel;
@@ -38,6 +39,8 @@ class QToolButton;
 class QHBoxLayout;
 class QMenu;
 class ActionManager;
+
+class WorksheetGraphicsView;
 
 class WorksheetView: public QWidget {
 	Q_OBJECT
@@ -51,7 +54,7 @@ class WorksheetView: public QWidget {
 
 		Worksheet *m_worksheet;
 		WorksheetModel *m_model;
-		QGraphicsView *m_view_widget;
+		WorksheetGraphicsView *m_view_widget;
 		QWidget *m_control_tabs;
 // TODO		Ui::ControlTabs ui;
 		QToolButton *m_hide_button;
@@ -63,6 +66,18 @@ class WorksheetView: public QWidget {
 		void createContextMenu(QMenu *menu);
 		void fillProjectMenu(QMenu *menu, bool *rc);
 
+	public slots:
+		void toggleControlTabBar();
+
+	protected:
+		void retranslateStrings();
+
+	signals:
+		void statusInfo(const QString &text);
+
+	private slots:
+		void handleScaleFactorChange(qreal factor);
+
 	public:
 		static ActionManager *actionManager();
 		static void initActionManager();
@@ -70,6 +85,33 @@ class WorksheetView: public QWidget {
 		static ActionManager *action_manager;
 		WorksheetView();
 };
+
+class WorksheetGraphicsView : public QGraphicsView
+{
+	Q_OBJECT
+
+	public:
+		WorksheetGraphicsView(QWidget * parent = 0);
+		~WorksheetGraphicsView();
+
+		void setScene(QGraphicsScene * scene);
+
+		void setScaleFactor(qreal factor);
+		qreal scaleFactor() const;
+
+	protected:
+		virtual void drawBackground(QPainter *painter, const QRectF &rect);
+		virtual void wheelEvent(QWheelEvent *event);
+
+	signals:
+		void scaleFactorChanged(qreal factor);
+
+	private:
+		qreal m_scale_factor;
+		qreal horizontal_screen_dpi;
+		qreal vertical_screen_dpi;
+};
+
 
 #endif
 
