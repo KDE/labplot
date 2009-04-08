@@ -28,12 +28,16 @@
  ***************************************************************************/
 
 #include "worksheet/WorksheetView.h"
+#include "worksheet/Worksheet.h"
 #include "worksheet/WorksheetModel.h"
+#include "worksheet/DecorationPlot.h"
+#include "worksheet/WorksheetRectangleElement.h"
 #include "lib/ActionManager.h"
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QWheelEvent>
 #include <QtGlobal>
+#include <QShortcut>
 
 #define SHADOW_SIZE 80
 
@@ -60,6 +64,8 @@ void WorksheetGraphicsView::setScene(QGraphicsScene * scene) {
 
 void WorksheetGraphicsView::drawBackground(QPainter * painter, const QRectF & rect) {
 	// TODO: paint in rect only
+	painter->save();
+	painter->setRenderHint(QPainter::Antialiasing);
 	// background
 	painter->fillRect(rect, Qt::lightGray);
 
@@ -76,6 +82,8 @@ void WorksheetGraphicsView::drawBackground(QPainter * painter, const QRectF & re
 
 	// canvas
 	painter->fillRect(scene_rect, Qt::white);
+
+	painter->restore();
 }
 
 void WorksheetGraphicsView::wheelEvent(QWheelEvent *event) {
@@ -134,13 +142,11 @@ void WorksheetView::init() {
 	m_main_layout->setContentsMargins(0, 0, 0, 0);
 	
 	m_view_widget = new WorksheetGraphicsView(this);
-	m_model->setSceneRect(0, 0, 210, 297); // A4  // TODO make this variable
-	m_view_widget->setScene(m_model);
+	m_view_widget->setScene(m_model->scene());
 	m_main_layout->addWidget(m_view_widget);
 	connect(m_view_widget, SIGNAL(scaleFactorChanged(qreal)), this, SLOT(handleScaleFactorChange(qreal)));
 
 	m_view_widget->setInteractive(true);
-	m_view_widget->setRenderHints(QPainter::Antialiasing);
 	m_view_widget->setDragMode(QGraphicsView::RubberBandDrag);
 	m_view_widget->setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
     m_view_widget->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
@@ -173,7 +179,18 @@ void WorksheetView::init() {
 // TODO
 
 	// TODO: remove test code
-	m_model->addRect(QRectF(100,100,50,20), QPen(QColor(Qt::red)));
+	m_model->scene()->addRect(QRectF(100,100,50,20), QPen(QColor(Qt::red)));
+
+	QShortcut * start_test = new QShortcut(QKeySequence(tr("Ctrl+Shift+T")), m_view_widget);
+	connect(start_test, SIGNAL(activated()), this, SLOT(startTestCode()));
+}
+
+void WorksheetView::startTestCode() {
+	DecorationPlot *plot = new DecorationPlot("plot1");
+	m_worksheet->addChild(plot);
+	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
+	rect->setRect(QRectF(50, 50, 30, 40));
+	plot->addChild(rect);
 }
 
 void WorksheetView::createActions() {

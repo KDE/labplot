@@ -28,7 +28,9 @@
  ***************************************************************************/
 
 #include "worksheet/Worksheet.h"
+#include "worksheet/AbstractWorksheetElement.h"
 #include "worksheet/WorksheetView.h"
+#include "worksheet/WorksheetGraphicsScene.h"
 #include <QIcon>
 #include <QWidget>
 /**
@@ -40,10 +42,17 @@
  */
 		
 Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
-	: AbstractPart(name), scripted(engine), m_view(NULL) {
+		: AbstractPart(name), scripted(engine), m_view(NULL) {
+	m_scene = new WorksheetGraphicsScene();
+	m_scene->setSceneRect(0, 0, 210, 297); // A4  // TODO make this variable
+	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
+		this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 }
 
 Worksheet::~Worksheet() {
+	delete m_scene;
 }
 
 //! Return an icon to be used for decorating my views.
@@ -97,5 +106,27 @@ void Worksheet::save(QXmlStreamWriter *) const {
 bool Worksheet::load(XmlStreamReader *) {
 	// TODO
 	return false;
+}
+
+void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
+	const AbstractWorksheetElement *elem = qobject_cast<const AbstractWorksheetElement*>(aspect);
+	if (elem) {
+		QList<QGraphicsItem *> itemList = elem->graphicsItems();
+		foreach(QGraphicsItem *item, itemList)
+			m_scene->addItem(item);
+	}
+}
+
+void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
+	const AbstractWorksheetElement *elem = qobject_cast<const AbstractWorksheetElement*>(aspect);
+	if (elem) {
+		QList<QGraphicsItem *> itemList = elem->graphicsItems();
+		foreach(QGraphicsItem *item, itemList)
+			m_scene->removeItem(item);
+	}
+}
+
+WorksheetGraphicsScene *Worksheet::scene() const {
+	return m_scene;
 }
 

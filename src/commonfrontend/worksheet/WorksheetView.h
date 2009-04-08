@@ -51,10 +51,12 @@ class WorksheetView: public QWidget {
 
 	protected:
 		void init();
+		void retranslateStrings();
 
+	private:
 		Worksheet *m_worksheet;
-		WorksheetModel *m_model;
 		WorksheetGraphicsView *m_view_widget;
+		WorksheetModel *m_model;
 		QWidget *m_control_tabs;
 // TODO		Ui::ControlTabs ui;
 		QToolButton *m_hide_button;
@@ -69,14 +71,12 @@ class WorksheetView: public QWidget {
 	public slots:
 		void toggleControlTabBar();
 
-	protected:
-		void retranslateStrings();
-
 	signals:
 		void statusInfo(const QString &text);
 
 	private slots:
 		void handleScaleFactorChange(qreal factor);
+		void startTestCode(); // TODO: remove later
 
 	public:
 		static ActionManager *actionManager();

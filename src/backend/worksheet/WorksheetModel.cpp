@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : WorksheetModel.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Model (graphics scene) for the access to a Worksheet
+    Description          : Model for the access to a Worksheet.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -28,21 +28,25 @@
  ***************************************************************************/
 
 #include "WorksheetModel.h"
+#include "worksheet/Worksheet.h"
+#include "worksheet/WorksheetGraphicsScene.h"
 
 /**
  * \class WorksheetModel
- * \brief Model (graphics scene) for the access to Worksheet.
+ * \brief Model for the access to Worksheet.
  *
- * 
+ * This class is just a very thin wrapper around Worksheet to honor the
+ * 5 layer paradigm.
  */
 
 WorksheetModel::WorksheetModel(Worksheet * worksheet)
-		: QGraphicsScene(NULL), m_worksheet(worksheet) {
-	// TODO
+	: m_worksheet(worksheet) {
 }
 
 WorksheetModel::~WorksheetModel() {
-	// TODO
 }
 
+QGraphicsScene *WorksheetModel::scene() const {
+	return m_worksheet->scene();
+}
 

@@ -32,6 +32,9 @@
 
 #include "core/AbstractPart.h"
 #include "core/AbstractScriptingEngine.h"
+class QGraphicsScene;
+class WorksheetGraphicsScene;
+#include "worksheet/WorksheetModel.h"
 
 class Worksheet: public AbstractPart, public scripted {
 	Q_OBJECT
@@ -41,15 +44,22 @@ class Worksheet: public AbstractPart, public scripted {
 		~Worksheet();
 
 		virtual QIcon icon() const;
-		virtual bool fillProjectMenu(QMenu * menu);
+		virtual bool fillProjectMenu(QMenu *menu);
 		virtual QMenu *createContextMenu();
 		virtual QWidget *view() const;
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 		
+	private slots:
+		void handleAspectAdded(const AbstractAspect *handleAspect);
+		void handleAspectAboutToBeRemoved(const AbstractAspect *handleAspect);
+
 	private:
 		mutable QWidget *m_view;
+		WorksheetGraphicsScene *m_scene;
+		WorksheetGraphicsScene *scene() const;
+		friend QGraphicsScene *WorksheetModel::scene() const;
 };
 
 

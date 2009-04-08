@@ -30,15 +30,18 @@
 #ifndef WORKSHEETMODEL_H
 #define WORKSHEETMODEL_H
 
-#include <QGraphicsScene>
-#include "worksheet/Worksheet.h"
+#include <QObject>
+class Worksheet;
+class QGraphicsScene;
 
-class WorksheetModel: public QGraphicsScene {
+class WorksheetModel: public QObject {
 	Q_OBJECT
 
 	public:
 		explicit WorksheetModel(Worksheet * worksheet);
 		~WorksheetModel();
+
+		QGraphicsScene *scene() const;
 
 	private:
 		Worksheet *m_worksheet;

@@ -37,4 +37,12 @@
  *
  */ 
 
+AbstractPlot::AbstractPlot(const QString &name) 
+	: WorksheetElementGroup(name) {
+// TODO
+}
+
+AbstractPlot::~AbstractPlot() {
+// TODO
+}
 

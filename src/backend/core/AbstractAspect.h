@@ -53,6 +53,7 @@ class AbstractAspect : public QObject
 		enum ChildIndexFlag {
 			IncludeHidden = 0x01,
 			Recursive = 0x02,
+			Compress = 0x04,
 		};
 		Q_DECLARE_FLAGS(ChildIndexFlags, ChildIndexFlag)
 
@@ -74,9 +75,11 @@ class AbstractAspect : public QObject
 			foreach (AbstractAspect * child, rawChildren()) {
 				if (flags & IncludeHidden || !child->hidden()) {
 					T * i = qobject_cast< T* >(child);
-					result << i;
-					if (flags & Recursive)
-						result << i->children<T>(flags);
+					if ((NULL != i) || !(flags & Compress)) {
+						result << i;
+						if (flags & Recursive)
+							result << i->children<T>(flags);
+					}
 				}
 			}
 			return result;

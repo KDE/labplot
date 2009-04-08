@@ -17,17 +17,23 @@ HEADERS += \
 	WorksheetModule.h \
 	WorksheetView.h \
 	WorksheetModel.h \
+	WorksheetGraphicsScene.h \
 	Worksheet.h \
 	AbstractWorksheetElement.h \
-#	AbstractPlot.h \
+	AbstractPlot.h \
+	DecorationPlot.h \
 	WorksheetElementGroup.h \
+	WorksheetRectangleElement.h \
 	
 SOURCES += \
 	WorksheetModule.cpp \
 	WorksheetView.cpp \
 	Worksheet.cpp \
 	WorksheetModel.cpp \
+	WorksheetGraphicsScene.cpp \
 	AbstractWorksheetElement.cpp \
-#	AbstractPlot.cpp \
+	AbstractPlot.cpp \
+	DecorationPlot.cpp \
 	WorksheetElementGroup.cpp \
+	WorksheetRectangleElement.cpp \
 

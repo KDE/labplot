@@ -85,6 +85,10 @@
  * \var AbstractAspect::Recursive
  * \brief Recursively handle all descendents, not just immediate children.
  */
+/**
+ * \var AbstractAspect::Compress
+ * \brief Remove all null pointers from the result list.
+ */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // documentation of template and inline methods

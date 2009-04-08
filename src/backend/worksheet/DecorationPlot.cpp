@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : AbstractWorksheetElement.h
+    File                 : DecorationPlot.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Base class for basically all children of a Worksheet object
+    Description          : A plot containing decoration elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,42 +27,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTWORKSHEETELEMENT_H
-#define ABSTRACTWORKSHEETELEMENT_H
+#include "worksheet/DecorationPlot.h"
 
-#include "core/AbstractAspect.h"
-#include <QGraphicsItem>
+/**
+ * \class DecorationPlot
+ * \brief A plot containing decoration elements.
+ *
+ * 
+ */
 
-class AbstractWorksheetElement: public AbstractAspect {
-	Q_OBJECT
+DecorationPlot::DecorationPlot(const QString &name) 
+	: AbstractPlot(name) {
+// TODO
+}
 
-	public:
-		AbstractWorksheetElement(const QString &name);
-		virtual ~AbstractWorksheetElement();
+DecorationPlot::~DecorationPlot() {
+// TODO
+}
 
-		virtual QList<QGraphicsItem *> graphicsItems() const = 0;
-
-		virtual void setZValue(qreal z) = 0;
-		virtual qreal zValue() const = 0;
-
-		virtual void setXScale(qreal xScale, bool keepAspectRatio=false) = 0;
-		virtual void setYScale(qreal yScale, bool keepAspectRatio=false) = 0;
-		virtual qreal xScale() const = 0;
-		virtual qreal yScale() const = 0;
-
-    	virtual void setRotationAngle(qreal angle) = 0;
-		virtual qreal rotationAngle() const = 0;
-
-	    virtual void setPosition(const QPointF &position) = 0;
-    	virtual QPointF position() const = 0;
-
-    	virtual QRectF boundingRect() const = 0;
-		virtual bool contains(const QPointF &position) const = 0;
-
-		virtual void setVisible(bool on) = 0;
-		virtual bool isVisible() const = 0;
-		virtual bool isFullVisible() const;
-};
-
-#endif
 

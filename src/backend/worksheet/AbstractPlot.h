@@ -30,10 +30,16 @@
 #ifndef ABSTRACTPLOT_H
 #define ABSTRACTPLOT_H
 
-class AbstractPlot: public /* TODO */ {
+#include "worksheet/WorksheetElementGroup.h"
+
+class AbstractPlot: public WorksheetElementGroup {
 	Q_OBJECT
 
 	public:
+		AbstractPlot(const QString &name);
+		~AbstractPlot();
+
+		// TODO add abstract methods interface (such as transform(...))
 };
 
 

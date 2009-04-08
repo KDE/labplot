@@ -39,8 +39,31 @@ class WorksheetElementGroup: public AbstractWorksheetElement {
 		WorksheetElementGroup(const QString &name);
 		~WorksheetElementGroup();
 
-		const QGraphicsItem *graphicsItem() const;
+		virtual QList<QGraphicsItem *> graphicsItems() const;
 
+		virtual void setZValue(qreal z);
+		virtual qreal zValue() const;
+		virtual void setZValueRange(qreal minZ, qreal maxZ);
+		virtual qreal zValueMin() const ;
+		virtual qreal zValueMax() const ;
+
+		virtual void setXScale(qreal xScale, bool keepAspectRatio=false);
+		virtual void setYScale(qreal yScale, bool keepAspectRatio=false);
+		virtual qreal xScale() const;
+		virtual qreal yScale() const;
+
+    	virtual void setRotationAngle(qreal angle);
+		virtual qreal rotationAngle() const;
+
+	    virtual void setPosition(const QPointF &position);
+    	virtual QPointF position() const;
+
+    	virtual QRectF boundingRect() const;
+		virtual bool contains(const QPointF &position) const;
+
+		virtual void setVisible(bool on);
+		virtual bool isVisible() const;
+		virtual bool isFullVisible() const;
 };
 
 #endif
