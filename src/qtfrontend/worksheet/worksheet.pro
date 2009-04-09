@@ -24,6 +24,8 @@ HEADERS += \
 	DecorationPlot.h \
 	WorksheetElementGroup.h \
 	WorksheetRectangleElement.h \
+	AbstractCoordinateSystem.h \
+	CartesianCoordinateSystem.h \
 	
 SOURCES += \
 	WorksheetModule.cpp \
@@ -36,4 +38,6 @@ SOURCES += \
 	DecorationPlot.cpp \
 	WorksheetElementGroup.cpp \
 	WorksheetRectangleElement.cpp \
+	AbstractCoordinateSystem.cpp \
+	CartesianCoordinateSystem.cpp \
 

@@ -52,6 +52,12 @@
 		return d->var; \
 	}
 
+#define BASIC_D_READER_IMPL(classname, type, method, var) \
+	type classname::method() const \
+	{ \
+		return d->var; \
+	}
+
 #define CLASS_D_ACCESSOR_DECL(type, method, Method) \
 	type method() const; \
 	void set ## Method(const type & value);
@@ -61,6 +67,12 @@
 	{ \
 		d->var = value; \
 	} \
+	type classname::method() const \
+	{ \
+		return d->var; \
+	}
+
+#define CLASS_D_READER_IMPL(classname, type, method, var) \
 	type classname::method() const \
 	{ \
 		return d->var; \
@@ -93,6 +105,5 @@
 
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
-
 
 #endif // MACROS_H

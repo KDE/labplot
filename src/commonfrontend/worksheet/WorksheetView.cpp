@@ -31,6 +31,7 @@
 #include "worksheet/Worksheet.h"
 #include "worksheet/WorksheetModel.h"
 #include "worksheet/DecorationPlot.h"
+#include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
 #include "lib/ActionManager.h"
 #include <QHBoxLayout>
@@ -186,11 +187,24 @@ void WorksheetView::init() {
 }
 
 void WorksheetView::startTestCode() {
+	QRectF pageRect = m_model->scene()->sceneRect();
 	DecorationPlot *plot = new DecorationPlot("plot1");
 	m_worksheet->addChild(plot);
+	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords1");
+	coordSys->setPosition(QPointF(pageRect.width() / 2, pageRect.height() / 2));
+	coordSys->setScaleX(4.0);
+	coordSys->setScaleY(0.25);
+	plot->addChild(coordSys);
 	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
-	rect->setRect(QRectF(50, 50, 30, 40));
-	plot->addChild(rect);
+	rect->setRect(QRectF(0, 0, 40, 30));
+	rect->transform(*coordSys);
+	coordSys->addChild(rect);
+	WorksheetRectangleElement *rect2 = new WorksheetRectangleElement("rect2");
+	rect2->setRect(QRectF(0, 0, 40, 30));
+	m_worksheet->addChild(rect2);
+	WorksheetRectangleElement *rect3 = new WorksheetRectangleElement("rect3");
+	rect3->setRect(QRectF(pageRect.width() / 2 - 2, pageRect.height() / 2 - 2, 10 + 4, 120 + 4));
+	m_worksheet->addChild(rect3);
 }
 
 void WorksheetView::createActions() {

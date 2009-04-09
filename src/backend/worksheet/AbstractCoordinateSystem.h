@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetModel.cpp
+    File                 : AbstractCoordinateSystem.h
     Project              : LabPlot/SciDAVis
-    Description          : Model for the access to a Worksheet.
+    Description          : Base class of all worksheet coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,26 +27,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetGraphicsScene.h"
+#ifndef ABSTRACTCOORDINATESYSTEM_H
+#define ABSTRACTCOORDINATESYSTEM_H
 
-/**
- * \class WorksheetModel
- * \brief Model for the access to Worksheet.
- *
- * This class is just a very thin wrapper around Worksheet to honor the
- * 5 layer paradigm.
- */
+#include "worksheet/WorksheetElementGroup.h"
 
-WorksheetModel::WorksheetModel(Worksheet * worksheet)
-	: m_worksheet(worksheet) {
-}
+class AbstractCoordinateSystem: public WorksheetElementGroup {
+	Q_OBJECT
 
-WorksheetModel::~WorksheetModel() {
-}
+	public:
+		AbstractCoordinateSystem(const QString &name);
+		virtual ~AbstractCoordinateSystem();
 
-QGraphicsScene *WorksheetModel::scene() const {
-	return m_worksheet->scene();
-}
+		virtual QPointF mapLogicalToScene(const QPointF &point) const = 0;
+		virtual QPointF mapSceneToLogical(const QPointF &point) const = 0;
+};
+
+#endif
+
 

@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : AbstractWorksheetElement.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Base class for basically all children of a Worksheet object
+    Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,11 +27,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "AbstractWorksheetElement.h"
+#include "worksheet/AbstractWorksheetElement.h"
 
 /**
  * \class AbstractWorksheetElement
- * \brief Base class for basically all children of a Worksheet object.
+ * \brief Base class for all Worksheet children.
  *
  */
 
@@ -71,66 +71,29 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
  */
 
 /**
- * \fn void AbstractWorksheetElement::setXScale(qreal xScale, bool keepAspectRatio=false)
- * \brief Set the X scaling factor.
- *
- */
-
-/**
- * \fn void AbstractWorksheetElement::setYScale(qreal yScale, bool keepAspectRatio=false)
- * \brief Set the Y scaling factor.
- *
- */
-/**
- * \fn qreal AbstractWorksheetElement::xScale() const
- * \brief Return the X scaling factor.
- *
- */
-/**
- * \fn qreal AbstractWorksheetElement::yScale() const
- * \brief Return the Y scaling factor.
- *
- */
-/**
- * \fn void AbstractWorksheetElement::setRotationAngle(qreal angle)
- * \brief Set the rotation angle.
- *
- */
-/**
- * \fn qreal AbstractWorksheetElement::rotationAngle() const
- * \brief Return the rotation angle.
- *
- */
-/**
- * \fn void AbstractWorksheetElement::setPosition(const QPointF &position)
- * \brief Set the element's position.
- *
- */
-/**
- * \fn QPointF AbstractWorksheetElement::position() const
- * \brief Return the element's position.
- *
- */
-/**
  * \fn QRectF AbstractWorksheetElement::boundingRect() const
  * \brief Return the bounding rect.
  *
  */
+
 /**
  * \fn bool AbstractWorksheetElement::contains(const QPointF &position) const
  * \brief Return whether the given position is inside the element.
  *
  */
+
 /**
  * \fn void AbstractWorksheetElement::setVisible(bool on)
  * \brief Show/hide the element.
  *
  */
+
 /**
  * \fn bool AbstractWorksheetElement::isVisible() const
  * \brief Return whether the element is (at least) partially visible.
  *
  */
+
 /**
  * \brief Return whether the element is fully visible (i.e., including all child elements).
  *
@@ -139,4 +102,11 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
 bool AbstractWorksheetElement::isFullVisible() const {
 	return isVisible();
 }
+		
+/**
+ * \fn void AbstractWorksheetElement::transform(const AbstractCoordinateSystem &system)
+ * \brief Tell the element to transform its graphics item into the given coordinate system.
+ *
+ */
+		
 

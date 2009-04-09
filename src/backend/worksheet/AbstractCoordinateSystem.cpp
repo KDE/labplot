@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetModel.cpp
+    File                 : AbstractCoordinateSystem.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Model for the access to a Worksheet.
+    Description          : Base class of all worksheet coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,26 +27,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetGraphicsScene.h"
+#include "worksheet/AbstractCoordinateSystem.h"
 
 /**
- * \class WorksheetModel
- * \brief Model for the access to Worksheet.
+ * \class AbstractCoordinateSystem
+ * \brief Base class of all worksheet coordinate systems.
  *
- * This class is just a very thin wrapper around Worksheet to honor the
- * 5 layer paradigm.
+ * 
  */
 
-WorksheetModel::WorksheetModel(Worksheet * worksheet)
-	: m_worksheet(worksheet) {
+
+AbstractCoordinateSystem::AbstractCoordinateSystem(const QString &name) 
+	: WorksheetElementGroup(name) {
 }
 
-WorksheetModel::~WorksheetModel() {
+AbstractCoordinateSystem::~AbstractCoordinateSystem() {
 }
 
-QGraphicsScene *WorksheetModel::scene() const {
-	return m_worksheet->scene();
-}
+/**
+ * \fn QPointF AbstractCoordinateSystem::mapLogicalToScene(const QPointF &point) const = 0;
+ * \brief Map a point in logical coordinates into graphics scene (page) coordinates.
+ */
+
+/**
+ * \fn QPointF AbstractCoordinateSystem::mapSceneToLogical(const QPointF &point) const = 0;
+ * \brief Map a point in scene coordinates into logical coordinates.
+ */
 

@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetModel.cpp
+    File                 : AbstractWorksheetDecorationElement.h
     Project              : LabPlot/SciDAVis
-    Description          : Model for the access to a Worksheet.
+    Description          : Base class for decoration elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,26 +27,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetGraphicsScene.h"
+#ifndef ABSTRACTWORKSHEETDECORATIONELEMENT_H
+#define ABSTRACTWORKSHEETDECORATIONELEMENT_H
 
-/**
- * \class WorksheetModel
- * \brief Model for the access to Worksheet.
- *
- * This class is just a very thin wrapper around Worksheet to honor the
- * 5 layer paradigm.
- */
+#include "worksheet/AbstractWorksheetElement.h"
 
-WorksheetModel::WorksheetModel(Worksheet * worksheet)
-	: m_worksheet(worksheet) {
-}
+class AbstractWorksheetDecorationElement {
+	Q_OBJECT
 
-WorksheetModel::~WorksheetModel() {
-}
+	public:
+		virtual void setXScale(qreal xScale, bool keepAspectRatio=false) = 0;
+		virtual void setYScale(qreal yScale, bool keepAspectRatio=false) = 0;
+		virtual qreal xScale() const = 0;
+		virtual qreal yScale() const = 0;
 
-QGraphicsScene *WorksheetModel::scene() const {
-	return m_worksheet->scene();
-}
+    	virtual void setRotationAngle(qreal angle) = 0;
+		virtual qreal rotationAngle() const = 0;
+
+	    virtual void setPosition(const QPointF &position) = 0;
+    	virtual QPointF position() const = 0;
+};
+
+#endif
+
 

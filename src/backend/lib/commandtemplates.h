@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetModel.cpp
+    File                 : commandtemplates.h
     Project              : LabPlot/SciDAVis
-    Description          : Model for the access to a Worksheet.
+    Description          : Undo command templates.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,26 +27,60 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetGraphicsScene.h"
+#ifndef COMMANDTEMPLATES_H
+#define COMMANDTEMPLATES_H
 
-/**
- * \class WorksheetModel
- * \brief Model for the access to Worksheet.
- *
- * This class is just a very thin wrapper around Worksheet to honor the
- * 5 layer paradigm.
- */
+#include <QUndoCommand>
 
-WorksheetModel::WorksheetModel(Worksheet * worksheet)
-	: m_worksheet(worksheet) {
-}
+template <class target_class, class value_class>
+class StandardClassSetterCmd: public QUndoCommand {
+	public:
+		StandardClassSetterCmd(target_class *target, const value_class &newValue, const QString &description) // use tr() for last arg
+			: m_target(target), m_otherValue(newValue) {
+				setText(description.arg(m_target->name()));
+			}
 
-WorksheetModel::~WorksheetModel() {
-}
+		virtual void *targetFieldAddress() = 0;
 
-QGraphicsScene *WorksheetModel::scene() const {
-	return m_worksheet->scene();
-}
+		virtual void redo() {
+			value_class *ptr = static_cast<value_class *>(targetFieldAddress());
+			value_class tmp = *ptr;
+			*ptr = m_otherValue;
+			m_otherValue = tmp;
+		}
+
+		virtual void undo() { redo(); }
+
+	protected:
+		target_class *m_target;
+		value_class m_otherValue;
+};
+
+template <class target_class, typename value_type>
+class StandardBasicSetterCmd: public QUndoCommand {
+	public:
+		StandardBasicSetterCmd(target_class *target, value_type newValue, const QString &description) // use tr() for last arg
+			: m_target(target), m_otherValue(newValue) {
+				setText(description.arg(m_target->name()));
+			}
+
+		virtual void *targetFieldAddress() = 0;
+
+		virtual void redo() {
+			value_type *ptr = static_cast<value_type *>(targetFieldAddress());
+			value_type tmp = *ptr;
+			*ptr = m_otherValue;
+			m_otherValue = tmp;
+		}
+
+		virtual void undo() { redo(); }
+
+	protected:
+		target_class *m_target;
+		value_type m_otherValue;
+};
+
+
+#endif
+
 

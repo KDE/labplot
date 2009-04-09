@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetModel.cpp
+    File                 : CartesianCoordinateSystem.h
     Project              : LabPlot/SciDAVis
-    Description          : Model for the access to a Worksheet.
+    Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,26 +27,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetGraphicsScene.h"
+#ifndef CARTESIANCOORDINATESYSTEM_H
+#define CARTESIANCOORDINATESYSTEM_H
 
-/**
- * \class WorksheetModel
- * \brief Model for the access to Worksheet.
- *
- * This class is just a very thin wrapper around Worksheet to honor the
- * 5 layer paradigm.
- */
+#include "worksheet/AbstractCoordinateSystem.h"
+#include "lib/macros.h"
+#include <QObject>
 
-WorksheetModel::WorksheetModel(Worksheet * worksheet)
-	: m_worksheet(worksheet) {
-}
+class CartesianCoordinateSystem: public AbstractCoordinateSystem {
+	Q_OBJECT
 
-WorksheetModel::~WorksheetModel() {
-}
+	public:
+		CartesianCoordinateSystem(const QString &name);
+		virtual ~CartesianCoordinateSystem();
 
-QGraphicsScene *WorksheetModel::scene() const {
-	return m_worksheet->scene();
-}
+		QPointF mapLogicalToScene(const QPointF &point) const;
+		QPointF mapSceneToLogical(const QPointF &point) const;
+
+		CLASS_D_ACCESSOR_DECL(QPointF, position, Position);
+		BASIC_D_ACCESSOR_DECL(qreal, scaleX, ScaleX);
+		BASIC_D_ACCESSOR_DECL(qreal, scaleY, ScaleY);
+
+		class Private;
+	private:
+		friend class Private;
+		Private * const d;
+};
+
+#endif
+
 

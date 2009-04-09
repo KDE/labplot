@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetModel.cpp
+    File                 : WorksheetDecorationElement.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Model for the access to a Worksheet.
+    Description          : Base class for decoration elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,26 +27,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetGraphicsScene.h"
+#include "worksheet/AbstractWorksheetDecorationElement.h"
 
 /**
- * \class WorksheetModel
- * \brief Model for the access to Worksheet.
+ * \class WorksheetDecorationElement
+ * \brief Base class for decoration elements.
  *
- * This class is just a very thin wrapper around Worksheet to honor the
- * 5 layer paradigm.
+ * 
  */
 
-WorksheetModel::WorksheetModel(Worksheet * worksheet)
-	: m_worksheet(worksheet) {
-}
+/**
+ * \fn void AbstractWorksheetDecorationElement::setXScale(qreal xScale, bool keepAspectRatio=false)
+ * \brief Set the X scaling factor.
+ *
+ */
 
-WorksheetModel::~WorksheetModel() {
-}
-
-QGraphicsScene *WorksheetModel::scene() const {
-	return m_worksheet->scene();
-}
-
+/**
+ * \fn void AbstractWorksheetDecorationElement::setYScale(qreal yScale, bool keepAspectRatio=false)
+ * \brief Set the Y scaling factor.
+ *
+ */
+/**
+ * \fn qreal AbstractWorksheetDecorationElement::xScale() const
+ * \brief Return the X scaling factor.
+ *
+ */
+/**
+ * \fn qreal AbstractWorksheetDecorationElement::yScale() const
+ * \brief Return the Y scaling factor.
+ *
+ */
+/**
+ * \fn void AbstractWorksheetDecorationElement::setRotationAngle(qreal angle)
+ * \brief Set the rotation angle.
+ *
+ */
+/**
+ * \fn qreal AbstractWorksheetDecorationElement::rotationAngle() const
+ * \brief Return the rotation angle.
+ *
+ */
+/**
+ * \fn void AbstractWorksheetDecorationElement::setPosition(const QPointF &position)
+ * \brief Set the element's position.
+ *
+ */
+/**
+ * \fn QPointF AbstractWorksheetDecorationElement::position() const
+ * \brief Return the element's position.
+ *
+ */

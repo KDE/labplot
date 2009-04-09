@@ -27,7 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "WorksheetRectangleElement.h"
+#include "worksheet/WorksheetRectangleElement.h"
+#include "worksheet/AbstractCoordinateSystem.h"
 
 /**
  * \class WorksheetRectangleElement
@@ -120,4 +121,9 @@ QRectF WorksheetRectangleElement::rect() const {
 	return m_rect;
 }
 
+void WorksheetRectangleElement::transform(const AbstractCoordinateSystem &system) {
+	QPointF topLeft = system.mapLogicalToScene(m_rect.topLeft());
+	QPointF bottomRight = system.mapLogicalToScene(m_rect.bottomRight());
+	m_item.setRect(QRectF(topLeft, bottomRight));
+}
 

@@ -123,42 +123,6 @@ qreal WorksheetElementGroup::zValueMax() const {
 	return max;
 }
 
-void WorksheetElementGroup::setXScale(qreal xScale, bool keepAspectRatio) {
-	// TODO
-}
-
-void WorksheetElementGroup::setYScale(qreal yScale, bool keepAspectRatio) {
-	// TODO
-}
-
-qreal WorksheetElementGroup::xScale() const {
-	// TODO
-	return 1.0;
-}
-
-qreal WorksheetElementGroup::yScale() const {
-	// TODO
-	return 1.0;
-}
-
-void WorksheetElementGroup::setRotationAngle(qreal angle) {
-	// TODO
-}
-
-qreal WorksheetElementGroup::rotationAngle() const {
-	// TODO
-	return 0.0;
-}
-
-void WorksheetElementGroup::setPosition(const QPointF &position) {
-	// TODO
-}
-
-QPointF WorksheetElementGroup::position() const {
-	// TODO
-	return QPoint(0.0, 0.0);
-}
-
 QRectF WorksheetElementGroup::boundingRect() const {
 	// TODO
 	return QRect(0.0, 0.0, 0.0, 0.0);
@@ -190,5 +154,14 @@ bool WorksheetElementGroup::isFullVisible() const {
 	}
 	return true;
 }
+
+
+void WorksheetElementGroup::transform(const AbstractCoordinateSystem &system) {
+	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(AbstractWorksheetElement *elem, childList)
+		elem->transform(system);
+}
+
+
 
 

@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "AbstractPlot.h"
+#include "worksheet/AbstractPlot.h"
 
 /**
  * \class AbstractPlot

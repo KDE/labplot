@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : AbstractWorksheetElement.h
     Project              : LabPlot/SciDAVis
-    Description          : Base class for basically all children of a Worksheet object
+    Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -32,6 +32,7 @@
 
 #include "core/AbstractAspect.h"
 #include <QGraphicsItem>
+class AbstractCoordinateSystem;
 
 class AbstractWorksheetElement: public AbstractAspect {
 	Q_OBJECT
@@ -45,23 +46,14 @@ class AbstractWorksheetElement: public AbstractAspect {
 		virtual void setZValue(qreal z) = 0;
 		virtual qreal zValue() const = 0;
 
-		virtual void setXScale(qreal xScale, bool keepAspectRatio=false) = 0;
-		virtual void setYScale(qreal yScale, bool keepAspectRatio=false) = 0;
-		virtual qreal xScale() const = 0;
-		virtual qreal yScale() const = 0;
-
-    	virtual void setRotationAngle(qreal angle) = 0;
-		virtual qreal rotationAngle() const = 0;
-
-	    virtual void setPosition(const QPointF &position) = 0;
-    	virtual QPointF position() const = 0;
-
     	virtual QRectF boundingRect() const = 0;
 		virtual bool contains(const QPointF &position) const = 0;
 
 		virtual void setVisible(bool on) = 0;
 		virtual bool isVisible() const = 0;
 		virtual bool isFullVisible() const;
+
+		virtual void transform(const AbstractCoordinateSystem &system) = 0;
 };
 
 #endif

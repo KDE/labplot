@@ -62,6 +62,8 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 
+		virtual void transform(const AbstractCoordinateSystem &system);
+
 		void setRect(const QRectF &rect);
 		QRectF rect() const;
 

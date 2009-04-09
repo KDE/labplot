@@ -31,6 +31,7 @@
 #define WORKSHEETELEMENTGROUP_H
 
 #include "worksheet/AbstractWorksheetElement.h"
+class AbstractCoordinateSystem;
 
 class WorksheetElementGroup: public AbstractWorksheetElement {
 	Q_OBJECT
@@ -47,23 +48,14 @@ class WorksheetElementGroup: public AbstractWorksheetElement {
 		virtual qreal zValueMin() const ;
 		virtual qreal zValueMax() const ;
 
-		virtual void setXScale(qreal xScale, bool keepAspectRatio=false);
-		virtual void setYScale(qreal yScale, bool keepAspectRatio=false);
-		virtual qreal xScale() const;
-		virtual qreal yScale() const;
-
-    	virtual void setRotationAngle(qreal angle);
-		virtual qreal rotationAngle() const;
-
-	    virtual void setPosition(const QPointF &position);
-    	virtual QPointF position() const;
-
     	virtual QRectF boundingRect() const;
 		virtual bool contains(const QPointF &position) const;
 
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual bool isFullVisible() const;
+
+		virtual void transform(const AbstractCoordinateSystem &system);
 };
 
 #endif
