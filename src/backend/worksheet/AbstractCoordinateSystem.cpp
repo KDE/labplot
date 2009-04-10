@@ -38,7 +38,7 @@
 
 
 AbstractCoordinateSystem::AbstractCoordinateSystem(const QString &name) 
-	: WorksheetElementGroup(name) {
+	: WorksheetElementContainer(name) {
 }
 
 AbstractCoordinateSystem::~AbstractCoordinateSystem() {

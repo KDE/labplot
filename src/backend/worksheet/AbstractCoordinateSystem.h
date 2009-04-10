@@ -30,9 +30,9 @@
 #ifndef ABSTRACTCOORDINATESYSTEM_H
 #define ABSTRACTCOORDINATESYSTEM_H
 
-#include "worksheet/WorksheetElementGroup.h"
+#include "worksheet/WorksheetElementContainer.h"
 
-class AbstractCoordinateSystem: public WorksheetElementGroup {
+class AbstractCoordinateSystem: public WorksheetElementContainer {
 	Q_OBJECT
 
 	public:

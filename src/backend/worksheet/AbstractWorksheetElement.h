@@ -53,7 +53,10 @@ class AbstractWorksheetElement: public AbstractAspect {
 		virtual bool isVisible() const = 0;
 		virtual bool isFullVisible() const;
 
-		virtual void transform(const AbstractCoordinateSystem &system) = 0;
+		virtual AbstractCoordinateSystem *coordinateSystem() const;
+
+	public slots:
+		virtual void retransform() const = 0;
 };
 
 #endif

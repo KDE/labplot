@@ -30,6 +30,7 @@
 #include "worksheet/WorksheetView.h"
 #include "worksheet/Worksheet.h"
 #include "worksheet/WorksheetModel.h"
+#include "worksheet/WorksheetElementGroup.h"
 #include "worksheet/DecorationPlot.h"
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
@@ -197,7 +198,6 @@ void WorksheetView::startTestCode() {
 	plot->addChild(coordSys);
 	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
 	rect->setRect(QRectF(0, 0, 40, 30));
-	rect->transform(*coordSys);
 	coordSys->addChild(rect);
 	WorksheetRectangleElement *rect2 = new WorksheetRectangleElement("rect2");
 	rect2->setRect(QRectF(0, 0, 40, 30));
@@ -205,6 +205,12 @@ void WorksheetView::startTestCode() {
 	WorksheetRectangleElement *rect3 = new WorksheetRectangleElement("rect3");
 	rect3->setRect(QRectF(pageRect.width() / 2 - 2, pageRect.height() / 2 - 2, 10 + 4, 120 + 4));
 	m_worksheet->addChild(rect3);
+	
+	WorksheetElementGroup *group1 = new WorksheetElementGroup("some items");
+	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 5, 20, 20)));
+	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(4, 5, 25, 15)));
+	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 3, 26, 25)));
+	coordSys->addChild(group1);
 }
 
 void WorksheetView::createActions() {

@@ -38,7 +38,7 @@
  */ 
 
 AbstractPlot::AbstractPlot(const QString &name) 
-	: WorksheetElementGroup(name) {
+	: WorksheetElementContainer(name) {
 // TODO
 }
 

@@ -38,6 +38,7 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 
 	public:
 		WorksheetRectangleElement(const QString &name);
+		WorksheetRectangleElement(const QString &name, const QRectF &rect);
 		virtual ~WorksheetRectangleElement();
 
 		virtual QList<QGraphicsItem *> graphicsItems() const;
@@ -62,13 +63,13 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 
-		virtual void transform(const AbstractCoordinateSystem &system);
-
 		void setRect(const QRectF &rect);
 		QRectF rect() const;
 
+	public slots:
+		virtual void retransform() const;
+
 	private:
-		// TODO: this needs to be a polygon as it might not be a rectangle in some coordinate systems
 		mutable QGraphicsRectItem m_item;
 		QRectF m_rect;
 };

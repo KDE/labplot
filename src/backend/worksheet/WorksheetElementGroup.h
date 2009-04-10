@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : WorksheetElementGroup.h
     Project              : LabPlot/SciDAVis
-    Description          : Generic WorksheetElement container
+    Description          : Groups worksheet elements for collective operations.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -30,32 +30,15 @@
 #ifndef WORKSHEETELEMENTGROUP_H
 #define WORKSHEETELEMENTGROUP_H
 
-#include "worksheet/AbstractWorksheetElement.h"
-class AbstractCoordinateSystem;
+#include "worksheet/WorksheetElementContainer.h"
 
-class WorksheetElementGroup: public AbstractWorksheetElement {
+class WorksheetElementGroup: public WorksheetElementContainer {
 	Q_OBJECT
 
 	public:
 		WorksheetElementGroup(const QString &name);
 		~WorksheetElementGroup();
 
-		virtual QList<QGraphicsItem *> graphicsItems() const;
-
-		virtual void setZValue(qreal z);
-		virtual qreal zValue() const;
-		virtual void setZValueRange(qreal minZ, qreal maxZ);
-		virtual qreal zValueMin() const ;
-		virtual qreal zValueMax() const ;
-
-    	virtual QRectF boundingRect() const;
-		virtual bool contains(const QPointF &position) const;
-
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-		virtual bool isFullVisible() const;
-
-		virtual void transform(const AbstractCoordinateSystem &system);
 };
 
 #endif

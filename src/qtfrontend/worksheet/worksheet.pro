@@ -22,6 +22,7 @@ HEADERS += \
 	AbstractWorksheetElement.h \
 	AbstractPlot.h \
 	DecorationPlot.h \
+	WorksheetElementContainer.h \
 	WorksheetElementGroup.h \
 	WorksheetRectangleElement.h \
 	AbstractCoordinateSystem.h \
@@ -36,6 +37,7 @@ SOURCES += \
 	AbstractWorksheetElement.cpp \
 	AbstractPlot.cpp \
 	DecorationPlot.cpp \
+	WorksheetElementContainer.cpp \
 	WorksheetElementGroup.cpp \
 	WorksheetRectangleElement.cpp \
 	AbstractCoordinateSystem.cpp \

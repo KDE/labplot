@@ -111,6 +111,7 @@ bool Worksheet::load(XmlStreamReader *) {
 void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 	const AbstractWorksheetElement *elem = qobject_cast<const AbstractWorksheetElement*>(aspect);
 	if (elem) {
+		elem->retransform();
 		QList<QGraphicsItem *> itemList = elem->graphicsItems();
 		foreach(QGraphicsItem *item, itemList)
 			m_scene->addItem(item);

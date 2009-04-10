@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : AbstractPlot.h
+    File                 : WorksheetElementContainer.h
     Project              : LabPlot/SciDAVis
-    Description          : Second level container in a Worksheet for logical grouping
+    Description          : Generic WorksheetElement container.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,21 +27,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTPLOT_H
-#define ABSTRACTPLOT_H
+#ifndef WORKSHEETELEMENTCONTAINER_H
+#define WORKSHEETELEMENTCONTAINER_H
 
-#include "worksheet/WorksheetElementContainer.h"
+#include "worksheet/AbstractWorksheetElement.h"
+class AbstractCoordinateSystem;
 
-class AbstractPlot: public WorksheetElementContainer {
+class WorksheetElementContainer: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
-		AbstractPlot(const QString &name);
-		~AbstractPlot();
+		WorksheetElementContainer(const QString &name);
+		~WorksheetElementContainer();
 
-		// TODO add abstract methods interface (such as transform(...))
+		virtual QList<QGraphicsItem *> graphicsItems() const;
+
+		virtual void setZValue(qreal z);
+		virtual qreal zValue() const;
+		virtual void setZValueRange(qreal minZ, qreal maxZ);
+		virtual qreal zValueMin() const ;
+		virtual qreal zValueMax() const ;
+
+    	virtual QRectF boundingRect() const;
+		virtual bool contains(const QPointF &position) const;
+
+		virtual void setVisible(bool on);
+		virtual bool isVisible() const;
+		virtual bool isFullVisible() const;
+
+		virtual void retransform() const;
 };
-
 
 #endif
 

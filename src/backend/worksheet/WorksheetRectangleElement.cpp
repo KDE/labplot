@@ -34,12 +34,24 @@
  * \class WorksheetRectangleElement
  * \brief Rectangle worksheet (decoration) element.
  *
+ *
+ * This element will be a rectangle in all coordinate systems, even if it is
+ * a polar coordinate system or other "curved" coordinate system. Only the 
+ * top-left and bottom-right points will be transformed.
  * 
  */
+
+
+// TODO: undo cmds
+
 
 WorksheetRectangleElement::WorksheetRectangleElement(const QString &name) 
 		: AbstractWorksheetElement(name) {
 }
+WorksheetRectangleElement::WorksheetRectangleElement(const QString &name, const QRectF &rect)
+		: AbstractWorksheetElement(name), m_rect(rect) {
+}
+
 WorksheetRectangleElement::~WorksheetRectangleElement() {
 }
 
@@ -112,18 +124,21 @@ bool WorksheetRectangleElement::isVisible() const {
 
 void WorksheetRectangleElement::setRect(const QRectF &rect) {
 	m_rect = rect;
-	// TODO: transform rect
-	QRectF transformedRect = rect;
-	m_item.setRect(transformedRect);
+	retransform();
 }
 
 QRectF WorksheetRectangleElement::rect() const {
 	return m_rect;
 }
 
-void WorksheetRectangleElement::transform(const AbstractCoordinateSystem &system) {
-	QPointF topLeft = system.mapLogicalToScene(m_rect.topLeft());
-	QPointF bottomRight = system.mapLogicalToScene(m_rect.bottomRight());
-	m_item.setRect(QRectF(topLeft, bottomRight));
+void WorksheetRectangleElement::retransform() const {
+	AbstractCoordinateSystem *system = coordinateSystem();
+	if (system) {
+		QPointF topLeft = system->mapLogicalToScene(m_rect.topLeft());
+		QPointF bottomRight = system->mapLogicalToScene(m_rect.bottomRight());
+		m_item.setRect(QRectF(topLeft, bottomRight));
+	}
+	else
+		m_item.setRect(m_rect);
 }
 

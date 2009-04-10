@@ -27,7 +27,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "worksheet/Worksheet.h"
 #include "worksheet/AbstractWorksheetElement.h"
+#include "worksheet/AbstractCoordinateSystem.h"
 
 /**
  * \class AbstractWorksheetElement
@@ -55,7 +57,7 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
  * An element of high Z-value will be drawn on top of all elements in the worksheet with a lower Z-value.
  * Contrary to a QGraphicsItem's Z-value, the parent-child relation does not matter here. Using this
  * function on worksheet element containers is mostly not what you want, 
- * use WorksheetElementGroup::setZValueRange() instead.
+ * use WorksheetElementContainer::setZValueRange() instead.
  *
  * \see void AbstractWorksheetElement::setZValueRange(qreal minZ, qreal maxZ)
  */
@@ -65,7 +67,7 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
  * \brief Return the Z value for the drawing order.
  *
  * Using this function on worksheet element containers is mostly not what you want, 
- * use WorksheetElementGroup::zValueMin() and WorksheetElementGroup::zValueMax() instead.
+ * use WorksheetElementContainer::zValueMin() and WorksheetElementContainer::zValueMax() instead.
  *
  * \see setZValue()
  */
@@ -104,9 +106,32 @@ bool AbstractWorksheetElement::isFullVisible() const {
 }
 		
 /**
- * \fn void AbstractWorksheetElement::transform(const AbstractCoordinateSystem &system)
- * \brief Tell the element to transform its graphics item into the given coordinate system.
+ * \fn void AbstractWorksheetElement::retransform() const
+ * \brief Tell the element to newly transform its graphics item into its coordinate system.
  *
+ * This method is const as it is not allowed to change the data of the element, only
+ * the graphics item which should be declared as "mutable".
  */
 		
+/**
+ * \fn AbstractCoordinateSystem *AbstractWorksheetElement::coordinateSystem() const
+ * \brief Return the current coordinate system (can be NULL which means don't transform).
+ *
+ * The standard implementation looks for the first ancestor within the worksheet which
+ * inherits AbstractCoordinateSystem.
+ */
+
+AbstractCoordinateSystem *AbstractWorksheetElement::coordinateSystem() const {
+	AbstractAspect * parent = parentAspect();
+	while (parent) {
+		AbstractCoordinateSystem *system = qobject_cast<AbstractCoordinateSystem *>(parent);
+		if (system)
+			return system;
+		Worksheet *worksheet = qobject_cast<Worksheet *>(parent);
+		if (worksheet)
+			return NULL;
+		parent = parent->parentAspect();
+	}
+	return NULL;
+}
 
