@@ -28,9 +28,7 @@
  ***************************************************************************/
 
 #include "worksheet/CartesianCoordinateSystem.h"
-#include "lib/macros.h"
 #include "lib/commandtemplates.h"
-#include <QUndoCommand>
 
 /**
  * \class CartesianCoordinateSystem
@@ -56,15 +54,14 @@ class CartesianCoordinateSystem::Private {
 		qreal scaleX; //!< X ratio logical units / scene units
 		qreal scaleY; //!< Y ratio logical units / scene units
 
-	private:
 		CartesianCoordinateSystem * const q;
 };
 
 CartesianCoordinateSystem::CartesianCoordinateSystem(const QString &name) 
-	: AbstractCoordinateSystem(name), d(new Private(this)) {
-		d->position = QPointF(0, 0); 
-		d->scaleX = 1.0;
-		d->scaleY = 1.0;
+		: AbstractCoordinateSystem(name), d(new Private(this)) {
+	d->position = QPointF(0, 0); 
+	d->scaleX = 1.0;
+	d->scaleY = -1.0;
 }
 
 CartesianCoordinateSystem::~CartesianCoordinateSystem() {
@@ -85,29 +82,17 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF &point) const
 	return result;
 }
 
-class CartesianCoordinateSystemSetPositionCmd: public StandardClassSetterCmd<CartesianCoordinateSystem::Private, QPointF> {
-	public:
-		CartesianCoordinateSystemSetPositionCmd(CartesianCoordinateSystem::Private *target, const QPointF &newValue, const QString &description)
-			: StandardClassSetterCmd<CartesianCoordinateSystem::Private, QPointF>(target, newValue, description) {}
-		virtual void *targetFieldAddress() { return &(m_target->position); }
-};
-
 /**
  * \fn CartesianCoordinateSystem::CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
  * \brief Get/set the position of the coordinate system origin on the page.
  */
 
 CLASS_D_READER_IMPL(CartesianCoordinateSystem, QPointF, position, position);
+STD_SETTER_CMD_IMPL_F(CartesianCoordinateSystem, SetPosition, QPointF, position, q->retransform);
 void CartesianCoordinateSystem::setPosition(const QPointF &position) {
 	exec(new CartesianCoordinateSystemSetPositionCmd(d, position, tr("%1: move")));
 }
 
-class CartesianCoordinateSystemSetScaleXCmd: public StandardBasicSetterCmd<CartesianCoordinateSystem::Private, qreal> {
-	public:
-		CartesianCoordinateSystemSetScaleXCmd(CartesianCoordinateSystem::Private *target, qreal newValue, const QString &description)
-			: StandardBasicSetterCmd<CartesianCoordinateSystem::Private, qreal>(target, newValue, description) {}
-		virtual void *targetFieldAddress() { return &(m_target->scaleX); }
-};
 
 /**
  * \fn CartesianCoordinateSystem::BASIC_D_ACCESSOR_DECL(qreal, scaleX, ScaleX)
@@ -115,17 +100,12 @@ class CartesianCoordinateSystemSetScaleXCmd: public StandardBasicSetterCmd<Carte
  */
 
 BASIC_D_READER_IMPL(CartesianCoordinateSystem, qreal, scaleX, scaleX);
+STD_SETTER_CMD_IMPL_F(CartesianCoordinateSystem, SetScaleX, qreal, scaleX, q->retransform);
 void CartesianCoordinateSystem::setScaleX(qreal scale) {
 	if (scale != 0.0) // no proper fp comparison needed, just avoid division by zero in mapping functions
 		exec(new CartesianCoordinateSystemSetScaleXCmd(d, scale, tr("%1: set X scale")));
 }
 
-class CartesianCoordinateSystemSetScaleYCmd: public StandardBasicSetterCmd<CartesianCoordinateSystem::Private, qreal> {
-	public:
-		CartesianCoordinateSystemSetScaleYCmd(CartesianCoordinateSystem::Private *target, qreal newValue, const QString &description)
-			: StandardBasicSetterCmd<CartesianCoordinateSystem::Private, qreal>(target, newValue, description) {}
-		virtual void *targetFieldAddress() { return &(m_target->scaleY); }
-};
 
 /**
  * \fn CartesianCoordinateSystem::BASIC_D_ACCESSOR_DECL(qreal, scaleY, ScaleY)
@@ -133,9 +113,29 @@ class CartesianCoordinateSystemSetScaleYCmd: public StandardBasicSetterCmd<Carte
  */
 
 BASIC_D_READER_IMPL(CartesianCoordinateSystem, qreal, scaleY, scaleY);
+STD_SETTER_CMD_IMPL_F(CartesianCoordinateSystem, SetScaleY, qreal, scaleY, q->retransform);
 void CartesianCoordinateSystem::setScaleY(qreal scale) {
 	if (scale != 0.0) // no proper fp comparison needed, just avoid division by zero in mapping functions
 		exec(new CartesianCoordinateSystemSetScaleYCmd(d, scale, tr("%1: set Y scale")));
 }
 
+/**
+ * \brief Determine the horizontal direction relative to the page.
+ *
+ * This function is needed for untransformed lengths such as axis tick length.
+ * \return 1 or -1
+ */
+int CartesianCoordinateSystem::xDirection() const {
+	return scaleX() < 0 ? -1 : 1;
+}
+
+/**
+ * \brief Determine the vertical direction relative to the page.
+ *
+ * This function is needed for untransformed lengths such as axis tick length.
+ * \return 1 or -1
+ */
+int CartesianCoordinateSystem::yDirection() const {
+	return scaleY() < 0 ? -1 : 1;
+}
 

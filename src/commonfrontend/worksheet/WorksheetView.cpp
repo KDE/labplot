@@ -34,6 +34,7 @@
 #include "worksheet/DecorationPlot.h"
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
+#include "worksheet/LinearAxis.h"
 #include "lib/ActionManager.h"
 #include <QHBoxLayout>
 #include <QToolButton>
@@ -194,23 +195,52 @@ void WorksheetView::startTestCode() {
 	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords1");
 	coordSys->setPosition(QPointF(pageRect.width() / 2, pageRect.height() / 2));
 	coordSys->setScaleX(4.0);
-	coordSys->setScaleY(0.25);
+	coordSys->setScaleY(-0.25);
 	plot->addChild(coordSys);
 	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
 	rect->setRect(QRectF(0, 0, 40, 30));
-	coordSys->addChild(rect);
+//	coordSys->addChild(rect);
 	WorksheetRectangleElement *rect2 = new WorksheetRectangleElement("rect2");
 	rect2->setRect(QRectF(0, 0, 40, 30));
-	m_worksheet->addChild(rect2);
+//	m_worksheet->addChild(rect2);
 	WorksheetRectangleElement *rect3 = new WorksheetRectangleElement("rect3");
 	rect3->setRect(QRectF(pageRect.width() / 2 - 2, pageRect.height() / 2 - 2, 10 + 4, 120 + 4));
-	m_worksheet->addChild(rect3);
+//	m_worksheet->addChild(rect3);
 	
 	WorksheetElementGroup *group1 = new WorksheetElementGroup("some items");
-	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 5, 20, 20)));
-	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(4, 5, 25, 15)));
-	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 3, 26, 25)));
+//	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 5, 20, 20)));
+//	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(4, 5, 25, 15)));
+//	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 3, 26, 25)));
 	coordSys->addChild(group1);
+
+	LinearAxis *xAxis1 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
+	plot->addChild(xAxis1);
+	LinearAxis *yAxis1 = new LinearAxis("y axis 1", LinearAxis::axisLeft);
+	plot->addChild(yAxis1);
+
+	LinearAxis *xAxis2 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
+	coordSys->addChild(xAxis2);
+	xAxis2->setMajorTicksLength(3);
+	xAxis2->setMinorTicksLength(1);
+	xAxis2->setMinorTickCount(3);
+	LinearAxis *yAxis2 = new LinearAxis("y axis 1", LinearAxis::axisLeft);
+	yAxis2->setMajorTicksLength(3);
+	yAxis2->setMinorTicksLength(1);
+	yAxis2->setMinorTickCount(4);
+	coordSys->addChild(yAxis2);
+
+	LinearAxis *xAxis3 = new LinearAxis("x axis 2", LinearAxis::axisTop);
+	xAxis3->setOffset(10);
+	coordSys->addChild(xAxis3);
+	LinearAxis *yAxis3 = new LinearAxis("y axis 2", LinearAxis::axisRight);
+	yAxis3->setOffset(10);
+	yAxis3->setMajorTicksDirection(LinearAxis::ticksBoth);
+	yAxis3->setMinorTicksDirection(LinearAxis::ticksBoth);
+	yAxis3->setTickStart(0.5);
+	yAxis3->setTickEnd(9.5);
+	yAxis3->setMajorTickCount(9);
+	coordSys->addChild(yAxis3);
+	coordSys->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
 }
 
 void WorksheetView::createActions() {

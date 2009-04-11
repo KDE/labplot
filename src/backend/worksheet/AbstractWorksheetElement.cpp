@@ -74,7 +74,7 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
 
 /**
  * \fn QRectF AbstractWorksheetElement::boundingRect() const
- * \brief Return the bounding rect.
+ * \brief Return the bounding rect in scene coodinates.
  *
  */
 

@@ -47,6 +47,8 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		CLASS_D_ACCESSOR_DECL(QPointF, position, Position);
 		BASIC_D_ACCESSOR_DECL(qreal, scaleX, ScaleX);
 		BASIC_D_ACCESSOR_DECL(qreal, scaleY, ScaleY);
+		int xDirection() const;
+		int yDirection() const;
 
 		class Private;
 	private:

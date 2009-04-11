@@ -32,45 +32,40 @@
 
 #include <QUndoCommand>
 
-template <class target_class, class value_class>
-class StandardClassSetterCmd: public QUndoCommand {
+/**
+ * \brief Template for simple setter undo commands.
+ *
+ * Use it like this:
+ * \code
+class MyClassSetMyValueCmd: public StandardClassSetterCmd<MyClass::Private, TheValueTypeOrClass> {
 	public:
-		StandardClassSetterCmd(target_class *target, const value_class &newValue, const QString &description) // use tr() for last arg
-			: m_target(target), m_otherValue(newValue) {
-				setText(description.arg(m_target->name()));
-			}
-
-		virtual void *targetFieldAddress() = 0;
-
-		virtual void redo() {
-			value_class *ptr = static_cast<value_class *>(targetFieldAddress());
-			value_class tmp = *ptr;
-			*ptr = m_otherValue;
-			m_otherValue = tmp;
-		}
-
-		virtual void undo() { redo(); }
-
-	protected:
-		target_class *m_target;
-		value_class m_otherValue;
+		MyClassSetMyValueCmd(MyClass::Private *target, const TheValueTypeOrClass &newValue, const QString &description)
+			: StandardSetterCmd<MyClass::Private, TheValueTypeOrClass>(target, newValue, description) {}
+		virtual void initialize() { emit m_target->q->myValueAboutToChange(); }
+		virtual void *targetFieldAddress() { return &(m_target->myValue); }
+		virtual void finalize() { emit m_target->q->myValueChanged(); }
 };
-
+ * \endcode
+ */
 template <class target_class, typename value_type>
-class StandardBasicSetterCmd: public QUndoCommand {
+class StandardSetterCmd: public QUndoCommand {
 	public:
-		StandardBasicSetterCmd(target_class *target, value_type newValue, const QString &description) // use tr() for last arg
+		StandardSetterCmd(target_class *target, const value_type &newValue, const QString &description) // use tr("%1: ...") for last arg
 			: m_target(target), m_otherValue(newValue) {
 				setText(description.arg(m_target->name()));
 			}
 
+		virtual void initialize() {};
 		virtual void *targetFieldAddress() = 0;
+		virtual void finalize() {};
 
 		virtual void redo() {
+			initialize();
 			value_type *ptr = static_cast<value_type *>(targetFieldAddress());
 			value_type tmp = *ptr;
 			*ptr = m_otherValue;
 			m_otherValue = tmp;
+			finalize();
 		}
 
 		virtual void undo() { redo(); }

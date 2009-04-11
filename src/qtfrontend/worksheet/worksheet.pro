@@ -27,6 +27,7 @@ HEADERS += \
 	WorksheetRectangleElement.h \
 	AbstractCoordinateSystem.h \
 	CartesianCoordinateSystem.h \
+	LinearAxis.h \
 	
 SOURCES += \
 	WorksheetModule.cpp \
@@ -42,4 +43,5 @@ SOURCES += \
 	WorksheetRectangleElement.cpp \
 	AbstractCoordinateSystem.cpp \
 	CartesianCoordinateSystem.cpp \
+	LinearAxis.cpp \
 

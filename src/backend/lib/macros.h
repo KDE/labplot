@@ -106,4 +106,40 @@
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 
+#define STD_SETTER_CMD_IMPL(class_name, cmd_name, value_type, field_name) \
+class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
+	public: \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+			: StandardSetterCmd<class_name::Private, value_type>(target, newValue, description) {} \
+		virtual void *targetFieldAddress() { return &(m_target->field_name); } \
+};
+
+#define STD_SETTER_CMD_IMPL_F(class_name, cmd_name, value_type, field_name, finalize_method) \
+class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
+	public: \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+			: StandardSetterCmd<class_name::Private, value_type>(target, newValue, description) {} \
+		virtual void *targetFieldAddress() { return &(m_target->field_name); } \
+		virtual void finalize() { m_target->finalize_method(); } \
+};
+
+#define STD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, field_name, init_method) \
+class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
+	public: \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+			: StandardSetterCmd<class_name::Private, value_type>(target, newValue, description) {} \
+		virtual void initialize() { m_target->init_method(); } \
+		virtual void *targetFieldAddress() { return &(m_target->field_name); } \
+};
+
+#define STD_SETTER_CMD_IMPL_IF(class_name, cmd_name, value_type, field_name, init_method, finalize_method) \
+class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
+	public: \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+			: StandardSetterCmd<class_name::Private, value_type>(target, newValue, description) {} \
+		virtual void initialize() { m_target->init_method(); } \
+		virtual void *targetFieldAddress() { return &(m_target->field_name); } \
+		virtual void finalize() { m_target->finalize_method(); } \
+};
+
 #endif // MACROS_H
