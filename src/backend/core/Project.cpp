@@ -319,11 +319,6 @@ bool Project::readProjectAttributes(XmlStreamReader * reader)
 		setModificationTime(modification_time);
 
 	str = attribs.value(reader->namespaceUri().toString(), "author").toString();
-	if(str.isEmpty())
-	{
-		reader->raiseError(prefix+tr("author attribute missing")+postfix);
-		return false;
-	}
 	setAuthor(str);
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE

@@ -52,6 +52,11 @@ TableModel::TableModel(Table * table)
 			this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	connect(m_table, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 			this, SLOT(handleDescriptionChange(const AbstractAspect*)));
+
+	for (int i=0; i < table->columnCount(); i++) {
+		beginInsertColumns(QModelIndex(), i, i);
+		handleAspectAdded(table->column(i));
+	}
 }
 
 TableModel::~TableModel()
@@ -244,20 +249,20 @@ void TableModel::handleAspectAdded(const AbstractAspect * aspect)
 
 	reset();
 
-	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn *)), this,
-			SLOT(handlePlotDesignationChange(const AbstractColumn *)));
-	connect(col, SIGNAL(modeChanged(const AbstractColumn *)), this,
-			SLOT(handleDataChange(const AbstractColumn *)));
-	connect(col, SIGNAL(dataChanged(const AbstractColumn *)), this,
-			SLOT(handleDataChange(const AbstractColumn *)));
-	connect(col, SIGNAL(modeChanged(const AbstractColumn *)), this,
-			SLOT(handleModeChange(const AbstractColumn *)));
-	connect(col, SIGNAL(rowsInserted(const AbstractColumn *, int, int)), this,
-			SLOT(handleRowsInserted(const AbstractColumn *,int,int)));
-	connect(col, SIGNAL(rowsRemoved(const AbstractColumn *, int, int)), this,
-			SLOT(handleRowsRemoved(const AbstractColumn *,int,int)));
-	connect(col, SIGNAL(maskingChanged(const AbstractColumn *)), this,
-			SLOT(handleDataChange(const AbstractColumn *)));
+	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn*)), this,
+			SLOT(handlePlotDesignationChange(const AbstractColumn*)));
+	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
+			SLOT(handleDataChange(const AbstractColumn*)));
+	connect(col, SIGNAL(dataChanged(const AbstractColumn*)), this,
+			SLOT(handleDataChange(const AbstractColumn*)));
+	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
+			SLOT(handleModeChange(const AbstractColumn*)));
+	connect(col, SIGNAL(rowsInserted(const AbstractColumn*,int,int)), this,
+			SLOT(handleRowsInserted(const AbstractColumn*,int,int)));
+	connect(col, SIGNAL(rowsRemoved(const AbstractColumn*,int,int)), this,
+			SLOT(handleRowsRemoved(const AbstractColumn*,int,int)));
+	connect(col, SIGNAL(maskingChanged(const AbstractColumn*)), this,
+			SLOT(handleDataChange(const AbstractColumn*)));
 }
 
 void TableModel::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
@@ -331,6 +336,7 @@ void TableModel::handleRowsInserted(const AbstractColumn * col, int before, int 
 void TableModel::handleRowsRemoved(const AbstractColumn * col, int first, int count)
 {
 	Q_UNUSED(first) Q_UNUSED(count)
+	updateVerticalHeader();
 	int i = m_table->indexOfChild<Column>(col);
 	emit dataChanged(index(0, i), index(col->rowCount()-1, i));
 }
@@ -340,11 +346,16 @@ void TableModel::updateVerticalHeader()
 	int old_rows = m_vertical_header_data.size();
 	int new_rows = m_table->rowCount();
 	if (new_rows > old_rows) {
+		beginInsertRows(QModelIndex(), old_rows, new_rows-1);
 		for(int i=old_rows+1; i<=new_rows; i++)
 			m_vertical_header_data << QString::number(i);
-	} else
+		endInsertRows();
+	} else {
+		beginRemoveRows(QModelIndex(), new_rows, old_rows-1);
 		while (m_vertical_header_data.size() > new_rows)
 			m_vertical_header_data.removeLast();
+		endRemoveRows();
+	}
 
 	Q_ASSERT(m_vertical_header_data.size() == m_table->rowCount());
 }
