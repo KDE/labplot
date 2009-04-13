@@ -137,9 +137,11 @@ void Table::insertColumns(int before, int count)
 	WAIT_CURSOR;
 	beginMacro(QObject::tr("%1: insert %2 column(s)").arg(name()).arg(count));
 	Column * before_col = column(before);
+	int rows = rowCount();
 	for (int i=0; i<count; i++) {
 		Column * new_col = new Column(QString::number(i+1), SciDAVis::Numeric);
 		new_col->setPlotDesignation(SciDAVis::Y);
+		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
 	}
 	endMacro();

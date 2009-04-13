@@ -1027,6 +1027,7 @@ void TableView::pasteIntoSelection()
 				{
 					Column * new_col = new Column(QString::number(i+1), SciDAVis::Text);
 					new_col->setPlotDesignation(SciDAVis::Y);
+					new_col->insertRows(0, m_table->rowCount());
 					m_table->addChild(new_col);
 				}
 			}
@@ -1178,6 +1179,7 @@ void TableView::insertEmptyColumns()
 
 	WAIT_CURSOR;
 	m_table->beginMacro(QObject::tr("%1: insert empty column(s)").arg(m_table->name()));
+	int rows = m_table->rowCount();
 	while( current <= last )
 	{
 		current = first+1;
@@ -1188,6 +1190,7 @@ void TableView::insertEmptyColumns()
 		{
 			Column * new_col = new Column(QString::number(i+1), SciDAVis::Numeric);
 			new_col->setPlotDesignation(SciDAVis::Y);
+			new_col->insertRows(0, rows);
 			m_table->insertChildBefore(new_col, first_col);
 		}
 		current += count;
