@@ -350,7 +350,7 @@ void TableModel::updateVerticalHeader()
 		for(int i=old_rows+1; i<=new_rows; i++)
 			m_vertical_header_data << QString::number(i);
 		endInsertRows();
-	} else {
+	} else if (new_rows < old_rows) {
 		beginRemoveRows(QModelIndex(), new_rows, old_rows-1);
 		while (m_vertical_header_data.size() > new_rows)
 			m_vertical_header_data.removeLast();
