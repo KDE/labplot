@@ -1411,10 +1411,10 @@ void TableView::clearSelectedRows()
 			for (int row=last; row>=first; row--)
 				if (isRowSelected(row, false))
 				{
-					if (row == (col_ptr->rowCount()-1) )
-						col_ptr->removeRows(row,1);
-					else if (row < col_ptr->rowCount())
+					if (row < col_ptr->rowCount()) {
 						col_ptr->asStringColumn()->setTextAt(row, "");
+						col_ptr->setInvalid(row);
+					}
 				}
 		}
 	}
@@ -1458,10 +1458,10 @@ void TableView::clearSelectedCells()
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
-					if (row == (col_ptr->rowCount()-1) )
-						col_ptr->removeRows(row,1);
-					else if (row < col_ptr->rowCount())
+					if (row < col_ptr->rowCount()) {
 						col_ptr->asStringColumn()->setTextAt(row, "");
+						col_ptr->setInvalid(row);
+					}
 				}
 		}
 	}

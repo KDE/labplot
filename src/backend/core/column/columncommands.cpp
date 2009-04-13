@@ -377,22 +377,29 @@ void ColumnClearCmd::redo()
 	if(!m_empty_data)
 	{
 		m_type = m_col->dataType();
+		int rowCount = m_col->rowCount();
 		switch(m_type)
 		{
 			case SciDAVis::TypeDouble:
-				m_empty_data = new QVector<double>();
+				m_empty_data = new QVector<double>(rowCount);
 				break;
 			case SciDAVis::TypeQDateTime:
 				m_empty_data = new QList<QDateTime>();
+				for(int i=0; i<rowCount; i++)
+					static_cast< QList<QDateTime> *>(m_empty_data)->append(QDateTime());
 				break;
 			case SciDAVis::TypeQString:
 				m_empty_data = new QStringList();
+				for(int i=0; i<rowCount; i++)
+					static_cast< QStringList *>(m_empty_data)->append(QString());
 				break;
 		}
 		m_data = m_col->dataPointer();
 		m_validity = m_col->validityAttribute();
+		if (m_col->rowCount() > 0)
+			m_new_validity.setValue(Interval<int>(0, m_col->rowCount()-1));
 	}
-	m_col->replaceData(m_empty_data, IntervalAttribute<bool>());
+	m_col->replaceData(m_empty_data, m_new_validity);
 	m_undone = false;
 }
 

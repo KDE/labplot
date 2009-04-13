@@ -346,6 +346,8 @@ private:
 	void * m_empty_data;
 	//! The old validity
 	IntervalAttribute<bool> m_validity;
+	//! The new validity
+	IntervalAttribute<bool> m_new_validity;
 	//! Status flag
 	bool m_undone;
 

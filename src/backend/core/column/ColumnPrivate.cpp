@@ -697,11 +697,6 @@ void Column::Private::setWidth(int value)
 	emit m_owner->widthChanged(m_owner);
 }
 
-void Column::Private::clear()
-{
-	removeRows(0, rowCount());
-}
-
 void Column::Private::clearValidity()
 {
 	emit m_owner->dataAboutToChange(m_owner);	

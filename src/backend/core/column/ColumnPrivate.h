@@ -141,8 +141,6 @@ class Column::Private
 		int width() const { return m_width; }
 		//! Set width
 		void setWidth(int value);
-		//! Clear the whole column
-		void clear();
 		//! Return the data pointer
 		void * dataPointer() const { return m_data; }
 		//! Return the input filter (for string -> data type conversion)
