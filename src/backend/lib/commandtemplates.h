@@ -32,21 +32,6 @@
 
 #include <QUndoCommand>
 
-/**
- * \brief Template for simple setter undo commands.
- *
- * Use it like this:
- * \code
-class MyClassSetMyValueCmd: public StandardClassSetterCmd<MyClass::Private, TheValueTypeOrClass> {
-	public:
-		MyClassSetMyValueCmd(MyClass::Private *target, const TheValueTypeOrClass &newValue, const QString &description)
-			: StandardSetterCmd<MyClass::Private, TheValueTypeOrClass>(target, newValue, description) {}
-		virtual void initialize() { emit m_target->q->myValueAboutToChange(); }
-		virtual void *targetFieldAddress() { return &(m_target->myValue); }
-		virtual void finalize() { emit m_target->q->myValueChanged(); }
-};
- * \endcode
- */
 template <class target_class, typename value_type>
 class StandardSetterCmd: public QUndoCommand {
 	public:

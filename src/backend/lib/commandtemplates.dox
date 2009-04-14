@@ -1,0 +1,20 @@
+/**
+ * \class StandardSetterCmd
+ * \brief Template for simple setter undo commands.
+ *
+ * Use it like this:
+ * \code
+class MyClassSetMyValueCmd: public StandardClassSetterCmd<MyClass::Private, TheValueTypeOrClass> {
+	public:
+		MyClassSetMyValueCmd(MyClass::Private *target, const TheValueTypeOrClass &newValue, const QString &description)
+			: StandardSetterCmd<MyClass::Private, TheValueTypeOrClass>(target, newValue, description) {}
+		virtual void initialize() { emit m_target->q->myValueAboutToChange(); }
+		virtual void *targetFieldAddress() { return &(m_target->myValue); }
+		virtual void finalize() { emit m_target->q->myValueChanged(); }
+};
+ * \endcode
+ * When instanciating the class, use 
+ * \code tr("%1: what the command does") \endcode for the description argument. The "%1" will automatically be replaced by 
+ * the aspect name (the private class must implement "QString name() const").
+ */
+
