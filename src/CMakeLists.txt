@@ -26,8 +26,8 @@ set(GUI_SOURCES
   	${KDEFRONTEND_DIR}/Spreadsheet.cpp
 	${KDEFRONTEND_DIR}/TitleDialog.cpp
 	${KDEFRONTEND_DIR}/ValuesWidget.cpp
-  	${KDEFRONTEND_DIR}/Worksheet.cpp
-	${KDEFRONTEND_DIR}/WorksheetView.cpp
+#  	${KDEFRONTEND_DIR}/Worksheet.cpp
+#	${KDEFRONTEND_DIR}/WorksheetView.cpp
 )
 
 set(ELEMENTS_SOURCES
@@ -79,7 +79,8 @@ set(UI_SOURCES
 
 set(BACKEND_DIR backend)
 set(QTFRONTEND_DIR qtfrontend)
-INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} .)
+set(COMMONFRONTEND_DIR commonfrontend)
+INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} ${COMMONFRONTEND_DIR} .)
 
 set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/Folder.cpp
@@ -105,11 +106,24 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/table/TableModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/widgets/TreeViewComboBox.cpp
+	${BACKEND_DIR}/worksheet/Worksheet.cpp
+	${BACKEND_DIR}/worksheet/WorksheetModel.cpp
+	${BACKEND_DIR}/worksheet/WorksheetGraphicsScene.cpp
+	${BACKEND_DIR}/worksheet/DecorationPlot.cpp
+	${BACKEND_DIR}/worksheet/WorksheetRectangleElement.cpp
+	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
+	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
+	${BACKEND_DIR}/worksheet/AbstractPlot.cpp
 )
 
 set(QTFRONTEND_SOURCES
 	${QTFRONTEND_DIR}/core/ProjectExplorer.cpp
 	${QTFRONTEND_DIR}/core/PartMdiView.cpp
+	${QTFRONTEND_DIR}//lib/ActionManager.cpp
+)
+
+set(COMMONFRONTEND_SOURCES
+	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 )
 
 set(QTMOC_HDRS
@@ -130,7 +144,7 @@ qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
 add_definitions(-DSUPPRESS_SCRIPTING_INIT)
 
 kde4_add_ui_files(LabPlot_SRCS ${UI_SOURCES})
-kde4_add_executable(LabPlot ${LabPlot_SRCS} ${BACKEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
+kde4_add_executable(LabPlot ${LabPlot_SRCS} ${BACKEND_SOURCES} ${QTFRONTEND_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTMOC_HDRS})
 
 INCLUDE_DIRECTORIES(../liborigin)
 target_link_libraries(LabPlot ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${CDF_LIBRARY} ${OPJ_LIBRARY})

@@ -29,7 +29,7 @@
 #include "AxesDialog.h"
 #include "AxesWidget.h"
 #include "../elements/Axis.h"
-#include "Worksheet.h"
+#include "worksheet/Worksheet.h"
 #include "pixmaps/pixmap.h"
 #include <KDebug>
 
@@ -57,8 +57,8 @@ AxesDialog::~AxesDialog(){}
 void AxesDialog::setWorksheet(Worksheet* w){
 	kDebug()<<"";
 	worksheet=w;
- 	axesWidget->setPlotType( worksheet->activePlot()->plotType() );
-	axesWidget->setAxes( worksheet->activePlot()->axes() );
+ 	//axesWidget->setPlotType( worksheet->activePlot()->plotType() );
+	//axesWidget->setAxes( worksheet->activePlot()->axes() );
 	enableButtonApply( false );
 }
 
@@ -73,8 +73,8 @@ void AxesDialog::setAxes(QList<Axis>* axes, const int axisNumber){
 	and repainting of the axes in the worksheet.
 */
 void AxesDialog::apply(){
-	axesWidget->saveAxes( worksheet->activePlot()->axes() );
-	worksheet->repaint();//TODO triggers repaint for all plots and for all objects in the worksheet. redesign.
+	//axesWidget->saveAxes( worksheet->activePlot()->axes() );
+	//worksheet->repaint();//TODO triggers repaint for all plots and for all objects in the worksheet. redesign.
 	enableButtonApply( false );
 	kDebug()<<"Changes applied."<<endl;
 }

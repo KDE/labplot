@@ -29,7 +29,7 @@
 #include "LegendDialog.h"
 #include "LegendWidget.h"
 #include "../elements/Legend.h"
-#include "Worksheet.h"
+#include "worksheet/Worksheet.h"
 #include <KDebug>
 
 LegendDialog::LegendDialog(QWidget* parent) : KDialog(parent){
@@ -53,7 +53,7 @@ LegendDialog::LegendDialog(QWidget* parent) : KDialog(parent){
 
 void LegendDialog::setWorksheet(Worksheet* w){
 	worksheet=w;
- 	legendWidget->setLegend( worksheet->activePlot()->legend() );
+ 	//legendWidget->setLegend( worksheet->activePlot()->legend() );
 }
 
 /*!
@@ -62,8 +62,8 @@ void LegendDialog::setWorksheet(Worksheet* w){
 	and repainting of the legend in the worksheet.
 */
 void LegendDialog::apply(){
- 	legendWidget->saveLegend( worksheet->activePlot()->legend() );
- 	worksheet->repaint();//TODO triggers repaint for all plots and for all objects in the worksheet. redesign.
+ 	//legendWidget->saveLegend( worksheet->activePlot()->legend() );
+ 	//worksheet->repaint();//TODO triggers repaint for all plots and for all objects in the worksheet. redesign.
 	this->enableButtonApply( false );
 	kDebug()<<"Changes applied."<<endl;
 }

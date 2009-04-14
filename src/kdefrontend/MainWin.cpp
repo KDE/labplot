@@ -48,8 +48,8 @@
 #include <KFilterDev>
 
 #include "Spreadsheet.h"
-#include "Worksheet.h"
-#include "WorksheetView.h"
+#include "worksheet/Worksheet.h"
+#include "worksheet/WorksheetView.h"
 #include "elements/Set.h"
 #include "plots/Plot.h"
 #include "pixmaps/pixmap.h" //TODO remove this. Use Qt's resource system instead.
@@ -334,7 +334,7 @@ void MainWin::updateGUI() {
 		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
-		view->createMenu(menu);
+		//view->createMenu(menu);
 
 		//disable spreadsheet related menus
 		factory->container("analysis", this)->setEnabled(false);
@@ -623,7 +623,7 @@ void MainWin::newPlotActionTriggered(QAction* action){
 	this->ensureSheet();
 	Worksheet* w=activeWorksheet();
 	if (w){
-		w->createPlot(type);
+		//w->createPlot(type);
 		this->updateGUI();
 	}
 }
@@ -660,7 +660,7 @@ void MainWin::functionPlotActionTriggered(QAction* action){
 		Worksheet* w=0;
 		w=qobject_cast<Worksheet*>(aspect);
 		if (w!=0){
-			w->addSet(set, type);
+			//w->addSet(set, type);
 		}else{
 			//TODO
 // 			Table* t=0;

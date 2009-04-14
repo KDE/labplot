@@ -58,11 +58,11 @@ Worksheet::~Worksheet() {
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
 	QIcon ico;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+//#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	ico.addPixmap(QPixmap(":/graph.xpm"));
-#else
-	ico = KIcon(QIcon(worksheet_xpm));
-#endif
+//#else
+//	ico = KIcon(QIcon(worksheet_xpm));
+//#endif
 	return ico;
 }
 

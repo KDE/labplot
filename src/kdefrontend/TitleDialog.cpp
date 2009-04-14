@@ -28,7 +28,7 @@
  ***************************************************************************/
 #include "TitleDialog.h"
 #include "LabelWidget.h"
-#include "Worksheet.h"
+#include "worksheet/Worksheet.h"
 #include <KDebug>
 
 TitleDialog::TitleDialog(QWidget* parent): KDialog(parent){
@@ -50,7 +50,7 @@ TitleDialog::TitleDialog(QWidget* parent): KDialog(parent){
 
 void TitleDialog::setWorksheet(Worksheet* w){
 	worksheet=w;
-	labelWidget->setLabel( worksheet->activePlot()->titleLabel() );
+	//labelWidget->setLabel( worksheet->activePlot()->titleLabel() );
 	enableButtonApply( false );
 }
 
@@ -60,8 +60,8 @@ void TitleDialog::setWorksheet(Worksheet* w){
 	and repainting of the Title in the worksheet.
 */
 void TitleDialog::apply() {
-	labelWidget->saveLabel(worksheet->activePlot()->titleLabel());
-	worksheet->repaint();//TODO triggers repaint for all plots in the worksheet. redesign.
+	//labelWidget->saveLabel(worksheet->activePlot()->titleLabel());
+	//worksheet->repaint();//TODO triggers repaint for all plots in the worksheet. redesign.
 	this->enableButtonApply( false );
 	kDebug()<<"Changes applied."<<endl;
 }
