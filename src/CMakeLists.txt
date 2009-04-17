@@ -112,8 +112,12 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/DecorationPlot.cpp
 	${BACKEND_DIR}/worksheet/WorksheetRectangleElement.cpp
 	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
-	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
 	${BACKEND_DIR}/worksheet/AbstractPlot.cpp
+	${BACKEND_DIR}/worksheet/LinearAxis.cpp
+	${BACKEND_DIR}/worksheet/AbstractCoordinateSystem.cpp
+	${BACKEND_DIR}/worksheet/CartesianCoordinateSystem.cpp
+	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
+	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
 )
 
 set(QTFRONTEND_SOURCES

@@ -161,6 +161,8 @@ bool TableModel::setHeaderData(int section, Qt::Orientation orientation, const Q
 		emit headerDataChanged(Qt::Horizontal, section, section);
 	} else
 		QAbstractItemModel::setHeaderData(section, orientation, value, role);
+
+	return true;
 }
 
 int TableModel::rowCount(const QModelIndex &parent) const
@@ -237,7 +239,8 @@ void TableModel::handleAspectAdded(const AbstractAspect * aspect)
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_table))
 		return;
 
-	int old_rows = m_vertical_header_data.size();
+	// unused
+	//int old_rows = m_vertical_header_data.size();
 
 	updateVerticalHeader();
 	updateHorizontalHeader();
@@ -412,6 +415,8 @@ void TableModel::updateHorizontalHeader()
 
 			case SciDAVis::yErr:
 				designation_section = x_cols>0 ? QString("[yEr%1]").arg(x_cols) : QString("[yEr]");
+				break;
+			case SciDAVis::noDesignation:
 				break;
 		}
 
