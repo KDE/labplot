@@ -1,11 +1,11 @@
 /***************************************************************************
-    File                 : ScriptingEngineManager.cpp
-    Project              : SciDAVis
+    File                 : HelloWorldPlugin.h
+    Project              : LabPlot/SciDAVis
+    Description          : Example plugin
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Knut Franke
-    Email (use @ for *)  : Knut.Franke*gmx.net
-    Description          : Entry point for dealing with scripting.
-
+    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+                           (replace * with @ in the email addresses) 
+                           
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,46 +27,54 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "core/ScriptingEngineManager.h"
-#include "core/AbstractScriptingEngine.h"
-#include "core/plugin/PluginManager.h"
+#ifndef HELLOWORLDPLUGIN_H
+#define HELLOWORLDPLUGIN_H
 
-#include <QStringList>
+#include "core/interfaces.h"
+#include "core/AbstractPart.h"
+#include <QObject>
 
-ScriptingEngineManager * ScriptingEngineManager::instance()
+class HelloWorldPart: public AbstractPart {
+    Q_OBJECT
+
+	public:
+		HelloWorldPart(const QString &name);
+		~HelloWorldPart();
+		virtual QWidget *view() const;
+		virtual bool fillProjectMenu(QMenu * menu);
+		virtual QIcon icon() const;
+
+	private:
+		mutable QWidget *m_view;
+};
+
+class HelloWorldConfigPage : public ConfigPageWidget
 {
-	static ScriptingEngineManager the_instance;
-	return &the_instance;
-}
+	Q_OBJECT
 
-ScriptingEngineManager::ScriptingEngineManager()
-{
-	foreach(QObject *plugin, PluginManager::plugins()) {
-		AbstractScriptingEngine * engine = qobject_cast<AbstractScriptingEngine*>(plugin);
-		if (engine) m_engines << engine;
-	}
-}
+	public:
+		HelloWorldConfigPage();
+		~HelloWorldConfigPage();
 
-ScriptingEngineManager::~ScriptingEngineManager()
-{
-	qDeleteAll(m_engines);
-}
+	public slots:
+		virtual void apply();
+};
 
-QStringList ScriptingEngineManager::engineNames() const
-{
-	QStringList result;
-	foreach(AbstractScriptingEngine * engine, m_engines)
-		result << engine->objectName();
-	return result;
-}
+class HelloWorldPlugin: public QObject, public VersionedPlugin, public PartMaker, public ConfigPageMaker {
+	Q_OBJECT
+	Q_INTERFACES(VersionedPlugin PartMaker ConfigPageMaker)
 
-AbstractScriptingEngine * ScriptingEngineManager::engine(const QString &name)
-{
-	foreach(AbstractScriptingEngine * engine, m_engines)
-		if (engine->objectName() == name) {
-			if (!engine->initialized())
-				engine->initialize();
-			return engine->initialized() ? engine : 0;
-		}
-	return 0;
-}
+	public:
+		virtual int pluginTargetAppVersion() const;
+		virtual QString pluginTargetAppName() const;
+		virtual QString pluginName() const;
+		virtual AbstractPart *makePart();
+		virtual QAction *makeAction(QObject *parent);
+		virtual ConfigPageWidget *makeConfigPage();
+		virtual QString configPageLabel();
+};
+
+
+#endif
+
+

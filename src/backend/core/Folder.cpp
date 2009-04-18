@@ -37,7 +37,7 @@
 #include <QStyle>
 #include <QXmlStreamWriter>
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <QPluginLoader>
+#include "core/plugin/PluginManager.h"
 #else
 #include <KIcon>
 #include "table/Table.h"
@@ -162,7 +162,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	else
 	{
-		foreach(QObject * plugin, QPluginLoader::staticInstances())
+		foreach(QObject *plugin, PluginManager::plugins())
 		{
 			XmlElementAspectMaker * maker = qobject_cast<XmlElementAspectMaker *>(plugin);
 			if (maker && maker->canCreate(element_name))

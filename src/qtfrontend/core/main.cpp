@@ -30,7 +30,6 @@
 #include <QAction>
 #include <QSplashScreen>
 #include <QTimer>
-#include <QPluginLoader>
 #include "core/Project.h"
 #include "core/ProjectWindow.h"
 #include "core/column/Column.h"

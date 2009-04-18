@@ -43,7 +43,6 @@
 #include <QKeySequence>
 #include <QMenu>
 #include <QSettings>
-#include <QPluginLoader>
 #include <QComboBox>
 #include <QFile>
 #include <QXmlStreamWriter>

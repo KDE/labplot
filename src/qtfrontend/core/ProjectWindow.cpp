@@ -43,6 +43,7 @@
 #include "lib/ActionManager.h"
 #include "lib/ShortcutsDialog.h"
 #include "core/globals.h"
+#include "core/plugin/PluginManager.h"
 
 #include <QMenuBar>
 #include <QMenu>
@@ -53,7 +54,6 @@
 #include <QUndoStack>
 #include <QUndoView>
 #include <QToolButton>
-#include <QPluginLoader>
 #include <QSignalMapper>
 #include <QStatusBar>
 #include <QVBoxLayout>
@@ -130,7 +130,7 @@ void ProjectWindow::init()
 	handleAspectDescriptionChanged(m_project);
 
 	// init action managers
-	foreach(QObject *plugin, QPluginLoader::staticInstances()) 
+	foreach(QObject *plugin, PluginManager::plugins()) 
 	{
 		ActionManagerOwner * manager_owner = qobject_cast<ActionManagerOwner *>(plugin);
 		if (manager_owner) 
@@ -266,7 +266,7 @@ void ProjectWindow::initActions()
 
 	m_part_maker_map = new QSignalMapper(this);
 	connect(m_part_maker_map, SIGNAL(mapped(QObject*)), this, SLOT(addNewAspect(QObject*)));
-	foreach(QObject *plugin, QPluginLoader::staticInstances()) {
+	foreach(QObject *plugin, PluginManager::plugins()) {
 		PartMaker *maker = qobject_cast<PartMaker*>(plugin);
 		if (maker) {
 			QAction *make = maker->makeAction(this);
@@ -734,7 +734,7 @@ void ProjectWindow::importAspect()
 {
 	QMap<QString, AbstractImportFilter*> filter_map;
 
-	foreach(QObject * plugin, QPluginLoader::staticInstances()) {
+	foreach(QObject *plugin, PluginManager::plugins()) {
 		FileFormat * ff = qobject_cast<FileFormat*>(plugin);
 		if (!ff) continue;
 		AbstractImportFilter *filter = ff->makeImportFilter();
@@ -797,7 +797,7 @@ void ProjectWindow::showKeyboardShortcutsDialog()
 	QList<ActionManager *> managers;
 	managers.append(action_manager);
 	// TODO: add action manager for project window first
-	foreach(QObject *plugin, QPluginLoader::staticInstances()) 
+	foreach(QObject *plugin, PluginManager::plugins()) 
 	{
 		ActionManagerOwner * manager_owner = qobject_cast<ActionManagerOwner *>(plugin);
 		if (manager_owner) 
@@ -828,8 +828,7 @@ void ProjectWindow::showPreferencesDialog()
 	tab_widget.addTab(current, Project::configPageLabel());
 	widgets.append(current);
 
-	foreach(QObject * plugin, QPluginLoader::staticInstances()) 
-	{
+	foreach(QObject *plugin, PluginManager::plugins()) {
 		ConfigPageMaker * ctm = qobject_cast<ConfigPageMaker*>(plugin);
 		if (!ctm) continue;
 		current = ctm->makeConfigPage();
