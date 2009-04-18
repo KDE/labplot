@@ -79,6 +79,7 @@ Q_DECLARE_INTERFACE(FileFormat, "net.sf.scidavis.fileformat/0.1")
 class ActionManagerOwner
 {
 	public:
+		virtual ~ActionManagerOwner() {}
 		virtual ActionManager * actionManager() = 0;
 		virtual void initActionManager() {}
 };
@@ -87,6 +88,7 @@ Q_DECLARE_INTERFACE(ActionManagerOwner, "net.sf.scidavis.actionmanagerowner/0.1"
 
 class ConfigPageMaker {
 	public:
+		virtual ~ConfigPageMaker() {}
 		virtual ConfigPageWidget * makeConfigPage() = 0;
 		virtual QString configPageLabel() = 0;
 		// TODO (maybe): icons instead of tabs to select the pages
@@ -114,5 +116,16 @@ class NeedsStaticInit
 };
 
 Q_DECLARE_INTERFACE(NeedsStaticInit, "net.sf.scidavis.needsstaticinit/0.1")
+
+class VersionedPlugin
+{
+	public:
+		virtual ~VersionedPlugin() {}
+		virtual int pluginTargetAppVersion() const = 0;
+		virtual QString pluginTargetAppName() const = 0;
+		virtual QString pluginName() const = 0;
+};
+
+Q_DECLARE_INTERFACE(VersionedPlugin, "net.sf.scidavis.versionedplugin/0.1")
 
 #endif // ifndef INTERFACES_H

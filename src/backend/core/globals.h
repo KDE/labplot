@@ -101,6 +101,8 @@ class SciDAVis : public QObject
 		//! Show about dialog
 		static void about();
 
+		static const QString appName;
+
 	private:
 		//  Don't forget to change the Doxyfile when changing these!
 		//! SciDAVis version number

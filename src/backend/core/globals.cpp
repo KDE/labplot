@@ -15,14 +15,19 @@
 #include <QMetaObject>
 #include <QMetaEnum>
 
+// TODO: This is still very SciDAVis specific, should be adjusted to be used by LabPlot as well.
+//       Maybe rename to class Globals and add several #ifdefs.
+
 //  Don't forget to change the Doxyfile when changing these!
 const int SciDAVis::scidavis_version = 0x000300;
 
-const char * SciDAVis::extra_version = "";
+const char * SciDAVis::extra_version = "-SVN";
 
 const char * SciDAVis::copyright_string = "Developers (alphabetical order):\nKnut Franke\nTilman Benkert\n\nDocumentation:\nRoger Gadiou\n\nSpecial thanks to (alphabetical order):\nQuentin Denis\nGudjon I. Gudjonsson\nAlex Kargovsky\nIon Vasilief\n\nThanks to (no particular order):\nthe developers of Qt, Qwt, QwtPlot3D, GSL, muParser, zlib, Python, PyQt, and liborigin\nall bug reporters, translators and other contributors";
 
-const char * SciDAVis::release_date = " XXXX-XX-XX";
+const char * SciDAVis::release_date = "XXXX-XX-XX";
+		
+const QString SciDAVis::appName = "SciDAVis";
 
 int SciDAVis::version()
 {
@@ -31,7 +36,7 @@ int SciDAVis::version()
 
 QString SciDAVis::versionString()
 {
-	return "SciDAVis " + 
+	return appName + " " + 
 			QString::number((scidavis_version & 0xFF0000) >> 16)+"."+ 
 			QString::number((scidavis_version & 0x00FF00) >> 8)+"."+
 			QString::number(scidavis_version & 0x0000FF);

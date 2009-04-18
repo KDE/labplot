@@ -69,3 +69,18 @@
  * \brief A Module that needs to be initialized at application startup.
  */
 
+/**
+ * \class VersionedPlugin
+ * \brief Interface for plugins to identify which version and which application they are for.
+ */
+ 
+/**
+ * \fn VersionedPlugin::pluginTargetAppVersion()
+ * \brief Return the version number of the application the plugin was compiled for.
+ */
+
+/**
+ * \fn VersionedPlugin::pluginTargetAppName()
+ * \brief Return the application name of the application the plugin was compiled for.
+*/
+

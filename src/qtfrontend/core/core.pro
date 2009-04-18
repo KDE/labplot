@@ -1,7 +1,7 @@
 include(../config.pri)
 TEMPLATE = app
 TARGET = ../scidavis
-DEPENDPATH += . .. ../../backend ../../backend/core ../../backend/core/column  ../../backend/core/datatypes ../../backend/core/filters
+DEPENDPATH += . .. ../../backend ../../backend/core ../../backend/core/column  ../../backend/core/datatypes ../../backend/core/filters ../../backend/core/plugin
 INCLUDEPATH += .. ../../backend
 QT += xml network
 CONFIG += assistant
@@ -78,6 +78,8 @@ HEADERS += \
 	AbstractExportFilter.h \
 	ImportDialog.h \
 	ProjectConfigPage.h \
+	PluginManager.h \
+	PluginLoader.h \
 	# TODO: port or delete the following files
 	#ApplicationWindow.h \
 	#PreferencesDialog.h \
@@ -126,6 +128,8 @@ SOURCES += \
 	AbstractExportFilter.cpp \
 	ImportDialog.cpp \
 	ProjectConfigPage.cpp \
+	PluginManager.cpp \
+	PluginLoader.cpp \
 	# TODO: port or delete the following files
 	#ApplicationWindow.cpp \
 	#PreferencesDialog.cpp \

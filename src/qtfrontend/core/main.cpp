@@ -34,6 +34,8 @@
 #include "core/Project.h"
 #include "core/ProjectWindow.h"
 #include "core/column/Column.h"
+#include "core/plugin/PluginManager.h"
+#include <stdio.h>
 
 // The following stuff is for the doxygen title page
 /*!  \mainpage SciDAVis - Scientific Data Analysis and Visualization - API documentation
@@ -64,24 +66,73 @@ int main( int argc, char ** argv )
 {
     QApplication app( argc, argv );
 
-	// show splash screen
-	QSplashScreen splash(QPixmap(":/appsplash"));
-	splash.show();
-	QTimer *timer = new QTimer(&app);
-	app.connect( timer, SIGNAL(timeout()), &splash, SLOT(close()) );
-	app.connect( timer, SIGNAL(timeout()), timer, SLOT(stop()) );
-	timer->start(5000); // autoclose after 5 seconds
+	QStringList args = app.arguments();
+	args.removeFirst(); // remove application name
+
+	bool noGui = false;
+	bool noSplash = false;
+	while (args.count() > 0) {
+		if (("--help" == args[0]) || ("-h" == args[0])) {
+			args.removeFirst();
+			printf("%s%s\n", SciDAVis::versionString().toAscii().data(), SciDAVis::extraVersion().toAscii().data());
+			printf("Released %s\n", SciDAVis::releaseDateString().toAscii().data());
+			printf("License: GPLv2 or later\n");
+			printf("Supported command line arguments:\n");
+			printf("--about | -a: show about dialog\n");
+			printf("--help | -h: show version info and command line arguments\n");
+			printf("--enable-plugin FILENAME | -ep FILENAME: enable and load the plugin FILENAME\n");
+			printf("--disable-plugin FILENAME | -dp FILENAME: disable the plugin FILENAME\n");
+			printf("--no-gui: don't start the graphical user interface, only parse\n the command line arguments and quit\n");
+			printf("--no-splash: disable the splash sceen\n");
+		} else if (("--about" == args[0]) || ("-a" == args[0])) {
+			args.removeFirst();
+			SciDAVis::about();
+		} else if ("--no-gui" == args[0]) {
+			args.removeFirst();
+			noGui = true;
+		} else if ("--no-splash" == args[0]) {
+			args.removeFirst();
+			noSplash = true;
+		} else if (("--enable-plugin" == args[0]) || ("-ep" == args[0])) {
+			args.removeFirst();
+			if (args.count() > 0) {
+	 			PluginManager::enablePlugin(args[0]);
+				args.removeFirst();
+			}
+		} else if (("--disable-plugin" == args[0]) || ("-dp" == args[0])) {
+			args.removeFirst();
+			if (args.count() > 0) {
+	 			PluginManager::disablePlugin(args[0]);
+				args.removeFirst();
+			}
+		}
+	}
+
+#ifdef QT_DEBUG
+	PluginManager::printAll();
+#endif
+
+	if (!noSplash) {
+		// show splash screen
+		QSplashScreen splash(QPixmap(":/appsplash"));
+		splash.show();
+		QTimer *timer = new QTimer(&app);
+		app.connect( timer, SIGNAL(timeout()), &splash, SLOT(close()) );
+		app.connect( timer, SIGNAL(timeout()), timer, SLOT(stop()) );
+		timer->start(5000); // autoclose after 5 seconds
+	}
 
 	// module initialization
 	Project::staticInit();
 	Column::staticInit();
-	foreach(QObject *plugin, QPluginLoader::staticInstances()) 
+	foreach(QObject *plugin, PluginManager::plugins()) 
 	{
 		NeedsStaticInit * module = qobject_cast<NeedsStaticInit *>(plugin);
 		if (module) 
 			module->staticInit();
 	}
-	//
+	if (noGui)
+		return 0;
 
 	// create initial empty project
 	Project* p = new Project();
