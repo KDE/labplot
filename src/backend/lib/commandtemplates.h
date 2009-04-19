@@ -35,20 +35,19 @@
 template <class target_class, typename value_type>
 class StandardSetterCmd: public QUndoCommand {
 	public:
-		StandardSetterCmd(target_class *target, const value_type &newValue, const QString &description) // use tr("%1: ...") for last arg
-			: m_target(target), m_otherValue(newValue) {
+		StandardSetterCmd(target_class *target, value_type target_class:: *field, 
+				const value_type &newValue, const QString &description) // use tr("%1: ...") for last arg
+			: m_target(target), m_field(field), m_otherValue(newValue)  {
 				setText(description.arg(m_target->name()));
 			}
 
 		virtual void initialize() {};
-		virtual void *targetFieldAddress() = 0;
 		virtual void finalize() {};
 
 		virtual void redo() {
 			initialize();
-			value_type *ptr = static_cast<value_type *>(targetFieldAddress());
-			value_type tmp = *ptr;
-			*ptr = m_otherValue;
+			value_type tmp = *m_target.*m_field;
+			*m_target.*m_field = m_otherValue;
 			m_otherValue = tmp;
 			finalize();
 		}
@@ -57,6 +56,33 @@ class StandardSetterCmd: public QUndoCommand {
 
 	protected:
 		target_class *m_target;
+		value_type target_class:: *m_field;
+		value_type m_otherValue;
+};
+
+template <class target_class, typename value_type>
+class StandardSwapMethodSetterCmd: public QUndoCommand {
+	public:
+		StandardSwapMethodSetterCmd(target_class *target, value_type (target_class::*method)(const value_type &), 
+				const value_type &newValue, const QString &description) // use tr("%1: ...") for last arg
+			: m_target(target), m_method(method), m_otherValue(newValue) {
+				setText(description.arg(m_target->name()));
+			}
+
+		virtual void initialize() {};
+		virtual void finalize() {};
+
+		virtual void redo() {
+			initialize();
+			m_otherValue = (*m_target.*m_method)(m_otherValue);
+			finalize();
+		}
+
+		virtual void undo() { redo(); }
+
+	protected:
+		target_class *m_target;
+		value_type (target_class:: *m_method)(const value_type &);
 		value_type m_otherValue;
 };
 

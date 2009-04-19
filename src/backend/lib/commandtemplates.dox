@@ -7,14 +7,48 @@
 class MyClassSetMyValueCmd: public StandardClassSetterCmd<MyClass::Private, TheValueTypeOrClass> {
 	public:
 		MyClassSetMyValueCmd(MyClass::Private *target, const TheValueTypeOrClass &newValue, const QString &description)
-			: StandardSetterCmd<MyClass::Private, TheValueTypeOrClass>(target, newValue, description) {}
+			: StandardSetterCmd<MyClass::Private, TheValueTypeOrClass>(target, &MyClass::Private::myValue, newValue, description) {}
 		virtual void initialize() { emit m_target->q->myValueAboutToChange(); }
-		virtual void *targetFieldAddress() { return &(m_target->myValue); }
 		virtual void finalize() { emit m_target->q->myValueChanged(); }
 };
  * \endcode
  * When instanciating the class, use 
  * \code tr("%1: what the command does") \endcode for the description argument. The "%1" will automatically be replaced by 
  * the aspect name (the private class must implement "QString name() const").
+ * Example: \code
+class MyClass::Private {
+	public:
+		Private(MyClass *owner) : q(owner) {
+		}
+
+		QString name() const {
+			return q->name();
+		}
+
+		int myValue;
+		MyClass *const q;
+};
+
+void MyClass::setMyValue(int value) {
+	exec(new MyClassSetMyValueCmd(d, value, tr("%1: set my value")));
+}
+ * \endcode
+ */
+
+/**
+ * \class StandardSwapMethodSetterCmd
+ * \brief Template for setter undo commands which require a function call.
+ *
+ * This template is very similar to StandardSetterCmd but it takes a method address
+ * instead of a field address. The method must be a setter function which returns the
+ * old value. Example: \code
+qreal MyClass::Private::setZValue(const qreal &z) {
+	qreal oldZ = calculateMyZValue();
+	myZValue = z;
+	setZValueForAllChildren(z);
+	return oldZ;
+}
+ * \endcode
+ * For simplicity, the argument to the function is always a const reference, even for basic data types.
  */
 

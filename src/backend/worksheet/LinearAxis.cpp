@@ -77,6 +77,8 @@ class LinearAxis::Private {
 		void retransform() const;
 		void retransformTicks() const;
 		void retransformTicks(const AbstractCoordinateSystem *cSystem) const;
+		qreal setZValue(const qreal &z);
+		bool setVisible(const bool &on);
 
 		LinearAxis * const q;
 };
@@ -176,62 +178,74 @@ CLASS_D_READER_IMPL(LinearAxis, LinearAxis::TicksDirection, minorTicksDirection,
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetOrientation, LinearAxis::AxisOrientation, orientation, retransform);
 void LinearAxis::setOrientation(const AxisOrientation &orientation) {
-	exec(new LinearAxisSetOrientationCmd(d, orientation, tr("%1: set axis orientation")));
+	if (orientation != d->orientation)
+		exec(new LinearAxisSetOrientationCmd(d, orientation, tr("%1: set axis orientation")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetOffset, qreal, offset, retransform);
 void LinearAxis::setOffset(qreal offset) {
-	exec(new LinearAxisSetOffsetCmd(d, offset, tr("%1: set axis offset")));
+	if (offset != d->offset)
+		exec(new LinearAxisSetOffsetCmd(d, offset, tr("%1: set axis offset")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetStart, qreal, start, retransform);
 void LinearAxis::setStart(qreal start) {
-	exec(new LinearAxisSetStartCmd(d, start, tr("%1: set axis start")));
+	if (start != d->start)
+		exec(new LinearAxisSetStartCmd(d, start, tr("%1: set axis start")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetEnd, qreal, end, retransform);
 void LinearAxis::setEnd(qreal end) {
-	exec(new LinearAxisSetEndCmd(d, end, tr("%1: set axis end")));
+	if (end != d->end)
+		exec(new LinearAxisSetEndCmd(d, end, tr("%1: set axis end")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetTickStart, qreal, tickStart, retransformTicks);
 void LinearAxis::setTickStart(qreal tickStart) {
-	exec(new LinearAxisSetTickStartCmd(d, tickStart, tr("%1: set first tick")));
+	if (tickStart != d->tickStart)
+		exec(new LinearAxisSetTickStartCmd(d, tickStart, tr("%1: set first tick")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetTickEnd, qreal, tickEnd, retransformTicks);
 void LinearAxis::setTickEnd(qreal tickEnd) {
-	exec(new LinearAxisSetTickEndCmd(d, tickEnd, tr("%1: set axis end")));
+	if (tickEnd != d->tickEnd)
+		exec(new LinearAxisSetTickEndCmd(d, tickEnd, tr("%1: set axis end")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMajorTickCount, int, majorTickCount, retransformTicks);
 void LinearAxis::setMajorTickCount(int majorTickCount) {
-	exec(new LinearAxisSetMajorTickCountCmd(d, majorTickCount, tr("%1: set major tick count")));
+	if (majorTickCount != d->majorTickCount)
+		exec(new LinearAxisSetMajorTickCountCmd(d, majorTickCount, tr("%1: set major tick count")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMinorTickCount, int, minorTickCount, retransformTicks);
 void LinearAxis::setMinorTickCount(int minorTickCount) {
-	exec(new LinearAxisSetMinorTickCountCmd(d, minorTickCount, tr("%1: set minor tick count")));
+	if (minorTickCount != d->minorTickCount)
+		exec(new LinearAxisSetMinorTickCountCmd(d, minorTickCount, tr("%1: set minor tick count")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMajorTicksLength, qreal, majorTicksLength, retransformTicks);
 void LinearAxis::setMajorTicksLength(qreal majorTicksLength) {
-	exec(new LinearAxisSetMajorTicksLengthCmd(d, majorTicksLength, tr("%1: set major ticks length")));
+	if (majorTicksLength != d->majorTicksLength)
+		exec(new LinearAxisSetMajorTicksLengthCmd(d, majorTicksLength, tr("%1: set major ticks length")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMinorTicksLength, qreal, minorTicksLength, retransformTicks);
 void LinearAxis::setMinorTicksLength(qreal minorTicksLength) {
-	exec(new LinearAxisSetMinorTicksLengthCmd(d, minorTicksLength, tr("%1: set minor ticks length")));
+	if (minorTicksLength != d->minorTicksLength)
+		exec(new LinearAxisSetMinorTicksLengthCmd(d, minorTicksLength, tr("%1: set minor ticks length")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMajorTicksDirection, LinearAxis::TicksDirection, majorTicksDirection, retransformTicks);
 void LinearAxis::setMajorTicksDirection(const TicksDirection &majorTicksDirection) {
-	exec(new LinearAxisSetMajorTicksDirectionCmd(d, majorTicksDirection, tr("%1: set major ticks direction")));
+	if (majorTicksDirection != d->majorTicksDirection)
+		exec(new LinearAxisSetMajorTicksDirectionCmd(d, majorTicksDirection, tr("%1: set major ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMinorTicksDirection, LinearAxis::TicksDirection, minorTicksDirection, retransformTicks);
 void LinearAxis::setMinorTicksDirection(const TicksDirection &minorTicksDirection) {
-	exec(new LinearAxisSetMinorTicksDirectionCmd(d, minorTicksDirection, tr("%1: set minor ticks direction")));
+	if (minorTicksDirection != d->minorTicksDirection)
+		exec(new LinearAxisSetMinorTicksDirectionCmd(d, minorTicksDirection, tr("%1: set minor ticks direction")));
 }
 
 /* ============================ other methods ================= */
@@ -240,13 +254,20 @@ QList<QGraphicsItem *> LinearAxis::graphicsItems() const {
 	return QList<QGraphicsItem *>() << &(d->itemGroup);
 }
 
-// TODO: undo cmd
+qreal LinearAxis::Private::setZValue(const qreal &z) {
+	qreal oldZ = itemGroup.zValue();
+	itemGroup.setZValue(z);
+	foreach(QGraphicsLineItem *item, majorTickItems)
+		item->setZValue(z);
+	foreach(QGraphicsLineItem *item, minorTickItems)
+		item->setZValue(z);
+	return oldZ;
+}
+
+STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetZ, qreal, setZValue);
 void LinearAxis::setZValue(qreal z) {
-	d->itemGroup.setZValue(z);
-	foreach(QGraphicsLineItem *item, d->majorTickItems)
-		item->setZValue(z);
-	foreach(QGraphicsLineItem *item, d->minorTickItems)
-		item->setZValue(z);
+	if (zValue() != z)
+		exec(new LinearAxisSetZCmd(d, z, tr("%1: set z value")));
 }
 
 qreal LinearAxis::zValue () const {
@@ -262,9 +283,15 @@ bool LinearAxis::contains(const QPointF &position) const {
 	return false;
 }
 
+bool LinearAxis::Private::setVisible(const bool &on) {
+	bool oldValue = itemGroup.isVisible();
+	itemGroup.setVisible(on);
+	return oldValue;
+}
+
+STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetVisible, bool, setVisible);
 void LinearAxis::setVisible(bool on) {
-	// TODO: undo cmd
-	d->itemGroup.setVisible(on);
+	exec(new LinearAxisSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
 }
 
 bool LinearAxis::isVisible() const {
