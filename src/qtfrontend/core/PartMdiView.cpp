@@ -50,6 +50,7 @@ PartMdiView::PartMdiView(AbstractPart *part, QWidget * embedded_view)
 void PartMdiView::contextMenuEvent(QContextMenuEvent *event)
 {
 	QMenu *menu = m_part->createContextMenu();
+	Q_ASSERT(menu);
 	menu->exec(event->globalPos());
 	delete menu;
 }
