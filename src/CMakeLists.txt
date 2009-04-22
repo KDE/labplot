@@ -102,6 +102,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
 	${BACKEND_DIR}/core/datatypes/String2DateTimeFilter.cpp
 	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
+	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
+	${BACKEND_DIR}/core/plugin/PluginManager.cpp
 	${BACKEND_DIR}/table/Table.cpp
 	${BACKEND_DIR}/table/TableModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
