@@ -31,6 +31,11 @@
 #include <QRegExp>
 #include <QStringList>
 
+/**
+ * \class AbstractAspect::Private
+ * \brief Private data managed by AbstractAspect.
+ */
+
 QSettings * AbstractAspect::Private::g_settings =
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #ifdef Q_OS_MAC

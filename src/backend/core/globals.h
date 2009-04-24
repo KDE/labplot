@@ -34,10 +34,6 @@
 #include <QObject>
 #include <QString>
 
-//! Definition of global constants and enums
-/**
- * This class must not be instanced. All members are static.
- */
 class SciDAVis : public QObject
 {
 	Q_OBJECT
@@ -46,33 +42,30 @@ class SciDAVis : public QObject
 	Q_ENUMS(ColumnDataType)
 
 	private:
-		SciDAVis() {} // don't allow instancing
+		SciDAVis() {} // don't allow instanciating
 
 	public:
 		virtual ~SciDAVis() {} // avoid the warning message
-		//! Types of plot designations
 		enum PlotDesignation
 		{
-			noDesignation = 0, //!< no plot designation
-			X = 1,  //!< x values
-			Y = 2, //!< y values 
-			Z = 3, //!< z values
-			xErr = 4, //!< x errors
-			yErr = 5  //!< y errors
+			noDesignation = 0,
+			X = 1,
+			Y = 2,
+			Z = 3,
+			xErr = 4,
+			yErr = 5
 		};
 
-		//! The column mode (defines output and input filter for table columns)
 		enum ColumnMode
 		{
-			Numeric = 0, 	//!< column contains doubles
-			Text = 1,       //!< column contains strings
-			Month = 4,      //!< column contains month names
-			Day = 5,        //!< column containts day of week names
-			DateTime = 6    //!< column contains dates and/or times
+			Numeric = 0,
+			Text = 1,
+			Month = 4,
+			Day = 5,
+			DateTime = 6
 			// 2 and 3 are skipped to avoid problems with old obsolete values
 		};
 
-		//! Column data type
 		enum ColumnDataType
 		{
 			TypeDouble = 1,
@@ -80,44 +73,27 @@ class SciDAVis : public QObject
 			TypeQDateTime = 3
 		};
 
-		//! Return the SciDAVis version number
 		static int version();
 
 		static QString enumValueToString(int key, const QString& enum_name);
 		static int enumStringToValue(const QString& string, const QString& enum_name);
 
-		//! Return the SciDAVis version string ("SciDAVis x.y.z" without extra version)
 		static QString versionString();
 
-		//! Return the extra version as a string
 		static QString extraVersion();
 
-		//! Return the copyright string
 		static QString copyrightString();
 
-		//! Return the release date as a string
 		static QString releaseDateString();
 
-		//! Show about dialog
 		static void about();
 
 		static const QString appName;
 
 	private:
-		//  Don't forget to change the Doxyfile when changing these!
-		//! SciDAVis version number
-		/**
-		 * 0xMMmmbb means MM.mm.bb with<br>
-		 * MM = major version
-		 * mm = minor version
-		 * bb = bugfix version
-		 */
 		static const int scidavis_version;
-		//! Extra version information string (like "-alpha", "-beta", "-rc1", etc...)
 		static const char * extra_version;
-		//! Copyright string containing the author names etc.
 		static const char * copyright_string;
-		//! Release date as a string
 		static const char * release_date;
 };
 

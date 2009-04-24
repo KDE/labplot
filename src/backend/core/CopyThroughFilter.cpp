@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : CopyThroughFilter.h
+    File                 : CopyThroughFilter.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke
@@ -27,18 +27,36 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef COPY_THROUGH_FILTER_H
-#define COPY_THROUGH_FILTER_H
 
-#include "AbstractFilter.h"
+#include "CopyThroughFilter.h"
 
-class CopyThroughFilter : public AbstractFilter
-{
-	public:
-		virtual int inputCount() const;
-		virtual int outputCount() const;
-		virtual AbstractColumn* output(int port) const;
-};
+/**
+ * \class CopyThroughFilter
+ * \brief Filter which copies all provided inputs unaltered to an equal number of outputs.
+ *
+ * This is probably the simplest filter you can possibly write.
+ * It accepts an arbitrary number of inputs and provides the same AbstractColumn objects
+ * as outputs again.
+ */
 
-#endif // ifndef COPY_THROUGH_FILTER_H
+/**
+ * \brief Accept any number of inputs.
+ */
+int CopyThroughFilter::inputCount() const {
+	return -1;
+}
+
+/**
+ * \brief Provide as many output ports as inputs have been connected.
+ */
+int CopyThroughFilter::outputCount() const {
+	return m_inputs.size();
+}
+
+/**
+ * \brief When asked for an output port, just return the corresponding input port.
+ */
+AbstractColumn *CopyThroughFilter::output(int port) const {
+	return m_inputs.value(port);
+}
 

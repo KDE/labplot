@@ -32,6 +32,37 @@
 #include <QIcon>
 #include <QMenu>
 
+/**
+ * \class AspectTreeModel
+ * \brief Represents a tree of AbstractAspect objects as a Qt item model.
+ *
+ * This class is an adapter between an AbstractAspect hierarchy and Qt's view classes.
+ *
+ * It represents children of an Aspect as rows in the model, with the fixed columns
+ * Name (AbstractAspect::name()), Type (the class name), Created (AbstractAspect::creationTime())
+ * and Comment (AbstractAspect::comment()). Name is decorated using AbstractAspect::icon().
+ * The tooltip for all columns is generated from AbstractAspect::caption().
+ *
+ * Name and Comment are editable.
+ *
+ * For views which support this (currently ProjectExplorer), the menu created by
+ * AbstractAspect::createContextMenu() is made availabel via the custom role ContextMenuRole.
+ */
+
+/**
+ * \enum AspectTreeModel::CustomDataRole
+ * \brief Custom data roles used in addition to Qt::ItemDataRole
+ */
+/**
+ * \var AspectTreeModel::ContextMenuRole
+ * \brief pointer to a new context menu for an Aspect
+ */
+
+/**
+ * \fn QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const
+ * \brief Convenience wrapper around QAbstractItemModel::createIndex().
+ */
+
 AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject *parent)
 	: QAbstractItemModel(parent), m_root(root)
 {

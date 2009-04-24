@@ -32,7 +32,6 @@
 
 #include "AbstractAspect.h"
 
-//! Folder in a project
 class Folder : public AbstractAspect
 {
 	Q_OBJECT
@@ -43,22 +42,12 @@ class Folder : public AbstractAspect
 		virtual ~Folder();
 
 		virtual QIcon icon() const;
-		//! Return a new context menu.
-		/**
-		 * The caller takes ownership of the menu.
-		 */
 		virtual QMenu *createContextMenu();
 
-		//! \name serialize/deserialize
-		//@{
-		//! Save as XML
 		virtual void save(QXmlStreamWriter *) const;
-		//! Load from XML
 		virtual bool load(XmlStreamReader *);
 	protected:
-		//! Read child aspect from XML
 		bool readChildAspectElement(XmlStreamReader * reader);
-		//@}
 };
 
 #endif // ifndef FOLDER_H

@@ -59,17 +59,11 @@ class AbstractScriptingEngine;
 - bool m_changed: now d->changed
 */
 
-//! Represents a SciDAVis project.
-/**
- * Project manages an undo stack and is responsible for creating ProjectWindow instances
- * as views on itself.
- */
 class Project : public Folder
 {
 	Q_OBJECT
 
 	public:
-		//! MDI subwindow visibility setting
 		enum MdiWindowVisibility
 		{
 			folderOnly,
@@ -85,15 +79,12 @@ class Project : public Folder
 #endif
 		~Project();
 
-		//!\name Reimplemented from AbstractAspect
-		//@{
 		virtual const Project *project() const { return this; }
 		virtual Project *project() { return this; }
 		virtual QUndoStack *undoStack() const;
 		virtual QString path() const { return name(); }
 		virtual QWidget *view();
 		virtual QMenu *createContextMenu();
-		//@}
 		virtual QMenu *createFolderContextMenu(const Folder * folder);
 
 		AbstractScriptingEngine * scriptingEngine() const;
@@ -115,13 +106,8 @@ class Project : public Folder
 #endif
 		static void staticInit();
 	
-		//! \name serialize/deserialize
-		//@{
-		//! Save as XML
 		virtual void save(QXmlStreamWriter *) const;
-		//! Load from XML
 		virtual bool load(XmlStreamReader *);
-		//@}
 
 	signals:
 		void requestProjectContextMenu(QMenu*);

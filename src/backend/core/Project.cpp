@@ -51,6 +51,31 @@
 
 #define NOT_IMPL (QMessageBox::information(0, "info", "not yet implemented"))
 
+/**
+ * \class Project
+ * \brief Represents a SciDAVis project.
+ *
+ * Project manages an undo stack and is responsible for creating ProjectWindow instances
+ * as views on itself.
+ */
+
+/**
+ * \enum Project::MdiWindowVisibility
+ * \brief MDI subwindow visibility setting
+ */
+/**
+ * \var Project::folderOnly
+ * \brief only show MDI windows corresponding to Parts in the current folder
+ */
+/**
+ * \var Project::foldAndSubfolders
+ * \brief show MDI windows corresponding to Parts in the current folder and its subfolders
+ */
+/**
+ * \var Project::allMdiWindows
+ * \brief show MDI windows for all Parts in the project simultaneously
+ */
+
 class Project::Private
 {
 	public:
@@ -186,6 +211,14 @@ CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modification_time)
 FLAG_D_ACCESSOR_IMPL(Project, Changed, changed)
 
+////////////////////////////////////////////////////////////////////////////////
+//! \name serialize/deserialize
+//@{
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * \brief Save as XML
+ */
 void Project::save(QXmlStreamWriter * writer) const
 {
 	writer->writeStartDocument();
@@ -222,6 +255,9 @@ void Project::save(QXmlStreamWriter * writer) const
 	writer->writeEndDocument();
 }
 
+/**
+ * \brief Load from XML
+ */
 bool Project::load(XmlStreamReader * reader)
 {
 	while (!(reader->isStartDocument() || reader->atEnd()))
@@ -332,6 +368,10 @@ bool Project::readProjectAttributes(XmlStreamReader * reader)
 
 	return true;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//@}
+////////////////////////////////////////////////////////////////////////////////
 
 void Project::staticInit()
 {

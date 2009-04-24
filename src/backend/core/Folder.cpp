@@ -45,6 +45,11 @@
 #endif
 #include <QtDebug>
 
+/**
+ * \class Folder
+ * \brief Folder in a project
+ */
+
 Folder::Folder(const QString &name)
 	: AbstractAspect(name)
 {
@@ -66,6 +71,11 @@ QIcon Folder::icon() const
 	return result;
 }
 
+/**
+ * \brief Return a new context menu.
+ *
+ * The caller takes ownership of the menu.
+ */
 QMenu *Folder::createContextMenu()
 {
 	if (project())
@@ -73,6 +83,14 @@ QMenu *Folder::createContextMenu()
 	return 0;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//! \name serialize/deserialize
+//@{
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * \brief Save as XML
+ */
 void Folder::save(QXmlStreamWriter * writer) const
 {
 	writer->writeStartElement("folder");
@@ -87,6 +105,9 @@ void Folder::save(QXmlStreamWriter * writer) const
 	writer->writeEndElement(); // "folder"
 }
 
+/**
+ * \brief Load from XML
+ */
 bool Folder::load(XmlStreamReader * reader)
 {
 	if(reader->isStartElement() && reader->name() == "folder")
@@ -129,6 +150,9 @@ bool Folder::load(XmlStreamReader * reader)
 	return !reader->hasError();
 }
 
+/**
+ * \brief Read child aspect from XML
+ */
 bool Folder::readChildAspectElement(XmlStreamReader * reader)
 {
 	bool loaded = false;
@@ -210,3 +234,6 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 	return !reader->hasError();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//@}
+////////////////////////////////////////////////////////////////////////////////

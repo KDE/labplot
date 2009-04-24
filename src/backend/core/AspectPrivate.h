@@ -37,7 +37,6 @@
 #include <QSettings>
 #include <QHash>
 
-//! Private data managed by AbstractAspect.
 class AbstractAspect::Private
 {
 	public:
