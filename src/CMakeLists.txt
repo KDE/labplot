@@ -23,7 +23,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
-  	${KDEFRONTEND_DIR}/Spreadsheet.cpp
+  	${KDEFRONTEND_DIR}/SpreadsheetView.cpp
 	${KDEFRONTEND_DIR}/TitleDialog.cpp
 	${KDEFRONTEND_DIR}/ValuesWidget.cpp
 #  	${KDEFRONTEND_DIR}/Worksheet.cpp
@@ -104,8 +104,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
-	${BACKEND_DIR}/table/Table.cpp
-	${BACKEND_DIR}/table/TableModel.cpp
+	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
+	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/widgets/TreeViewComboBox.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp

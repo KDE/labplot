@@ -50,7 +50,7 @@
 
 /**
  * \class WorksheetConfigPage
- * \brief Helper class for TableModule.
+ * \brief Helper class for WorksheetModule.
  *
  *
  */

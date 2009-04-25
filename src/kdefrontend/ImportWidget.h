@@ -34,7 +34,7 @@
 #include "ui_importwidget.h"
 
 class MainWin;
-class Table;
+class Spreadsheet;
 
 
 class ImportWidget : public QWidget{
@@ -54,11 +54,11 @@ private:
 	int startRow() const;
 	int endRow() const;
 	void importOPJ(MainWin *mainWin, QString filename);
-	int importHDF5(MainWin *mainWin, QString filename, Table *table);
-	int importNETCDF(QString filename, Table *table);
-	int importCDF(QString filename, Table *table);
-	void importASCII(QIODevice *file, Table *table);
-	void importBinary(QIODevice *file, Table *table);
+	int importHDF5(MainWin *mainWin, QString filename, Spreadsheet *spreadsheet);
+	int importNETCDF(QString filename, Spreadsheet *spreadsheet);
+	int importCDF(QString filename, Spreadsheet *spreadsheet);
+	void importASCII(QIODevice *file, Spreadsheet *spreadsheet);
+	void importBinary(QIODevice *file, Spreadsheet *spreadsheet);
 	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
 	QStringList fileNames()const;
 

@@ -31,7 +31,7 @@
 #define COLUMNDIALOG_H
 
 #include "ui_columndialog.h"
-class Spreadsheet;
+class SpreadsheetView;
 
 /**
  * @brief Provides a dialog for editing the properties of the current spreadsheet column.
@@ -39,10 +39,10 @@ class Spreadsheet;
 class ColumnDialog: public KDialog {
 	Q_OBJECT
 public:
-	ColumnDialog(QWidget *parent, Spreadsheet *s);
+	ColumnDialog(QWidget *parent, SpreadsheetView *s);
 private:
 	Ui::ColumnDialog ui;
-	Spreadsheet *s;
+	SpreadsheetView *s;
 	void setupGUI();
 private slots:
 	void apply();

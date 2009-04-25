@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ExportTableDialog.cpp
+    File                 : ExportSpreadsheetDialog.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2006 by Ion Vasilief, Tilman Benkert
@@ -26,7 +26,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "ExportTableDialog.h"
+#include "ExportSpreadsheetDialog.h"
 
 #include <QLayout>
 #include <QLabel>
@@ -35,21 +35,21 @@
 #include <QCheckBox>
 #include <QComboBox>
 
-ExportTableDialog::ExportTableDialog( QWidget* parent, Qt::WFlags fl )
+ExportSpreadsheetDialog::ExportSpreadsheetDialog( QWidget* parent, Qt::WFlags fl )
     : QDialog( parent, fl )
 {
 	setWindowTitle( tr( "Export ASCII" ) );
 	setSizeGripEnabled( true );
 	
 	QGridLayout *gl1 = new QGridLayout();
-    gl1->addWidget(new QLabel(tr("Table")), 0, 0);
-	boxTable = new QComboBox();
-	boxTable->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-	gl1->addWidget(boxTable, 0, 1);
+    gl1->addWidget(new QLabel(tr("Spreadsheet")), 0, 0);
+	boxSpreadsheet = new QComboBox();
+	boxSpreadsheet->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+	gl1->addWidget(boxSpreadsheet, 0, 1);
 
-	boxAllTables = new QCheckBox(tr( "&All" ));
-    boxAllTables->setChecked(false);
-	gl1->addWidget(boxAllTables, 0, 2);
+	boxAllSpreadsheets = new QCheckBox(tr( "&All" ));
+    boxAllSpreadsheets->setChecked(false);
+	gl1->addWidget(boxAllSpreadsheets, 0, 2);
 	
     QLabel *sepText = new QLabel( tr( "Separator" ) );
 	gl1->addWidget(sepText, 1, 0);
@@ -107,32 +107,32 @@ ExportTableDialog::ExportTableDialog( QWidget* parent, Qt::WFlags fl )
     connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( buttonHelp, SIGNAL( clicked() ), this, SLOT( help() ) );
-	connect( boxAllTables, SIGNAL( toggled(bool) ), this, SLOT( enableTableName(bool) ) );
+	connect( boxAllSpreadsheets, SIGNAL( toggled(bool) ), this, SLOT( enableSpreadsheetName(bool) ) );
 }
 
-void ExportTableDialog::help()
+void ExportSpreadsheetDialog::help()
 {
 	QString s = tr("The column separator can be customized. The following special codes can be used:\n\\t for a TAB character \n\\s for a SPACE");
 	s += "\n"+tr("The separator must not contain the following characters: 0-9eE.+-");
 	QMessageBox::about(0, tr("Help"),s);
 }
 
-void ExportTableDialog::setTableNames(const QStringList& names)
+void ExportSpreadsheetDialog::setSpreadsheetNames(const QStringList& names)
 {
-	boxTable->addItems(names);
+	boxSpreadsheet->addItems(names);
 }
 
-void ExportTableDialog::setActiveTableName(const QString& name)
+void ExportSpreadsheetDialog::setActiveSpreadsheetName(const QString& name)
 {
-	boxTable->setCurrentIndex(boxTable->findText(name));
+	boxSpreadsheet->setCurrentIndex(boxSpreadsheet->findText(name));
 }
 
-void ExportTableDialog::enableTableName(bool ok)
+void ExportSpreadsheetDialog::enableSpreadsheetName(bool ok)
 {
-	boxTable->setEnabled(!ok);
+	boxSpreadsheet->setEnabled(!ok);
 }
 
-void ExportTableDialog::accept()
+void ExportSpreadsheetDialog::accept()
 {
 	QString sep = boxSeparator->currentText();
 	sep.replace(tr("TAB"), "\t", Qt::CaseInsensitive);
@@ -148,15 +148,15 @@ void ExportTableDialog::accept()
 	}
 
 	hide();
-	if (boxAllTables->isChecked())
-		emit exportAllTables(sep, boxNames->isChecked(), boxSelection->isChecked());
+	if (boxAllSpreadsheets->isChecked())
+		emit exportAllSpreadsheets(sep, boxNames->isChecked(), boxSelection->isChecked());
 	else
-		emit exportTable(boxTable->currentText(), sep, 
+		emit exportSpreadsheet(boxSpreadsheet->currentText(), sep, 
 				boxNames->isChecked(), boxSelection->isChecked());
 	close();
 }
 
-void ExportTableDialog::setColumnSeparator(const QString& sep)
+void ExportSpreadsheetDialog::setColumnSeparator(const QString& sep)
 {
 	if (sep=="\t")
 		boxSeparator->setCurrentIndex(0);
@@ -181,6 +181,6 @@ void ExportTableDialog::setColumnSeparator(const QString& sep)
 	}
 }
 
-ExportTableDialog::~ExportTableDialog()
+ExportSpreadsheetDialog::~ExportSpreadsheetDialog()
 {
 }

@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : AsciiTableImportFilter.cpp
+    File                 : AsciiSpreadsheetImportFilter.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2009 Knut Franke
     Email (use @ for *)  : Knut.Franke*gmx.net
-    Description          : Import an ASCII file as Table.
+    Description          : Import an ASCII file as Spreadsheet.
 
  ***************************************************************************/
 
@@ -27,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "table/AsciiTableImportFilter.h"
-#include "table/Table.h"
+#include "spreadsheet/AsciiSpreadsheetImportFilter.h"
+#include "spreadsheet/Spreadsheet.h"
 #include "lib/IntervalAttribute.h"
 #include "core/column/Column.h"
 #include "core/datatypes/String2DoubleFilter.h"
@@ -36,12 +36,12 @@
 #include <QTextStream>
 #include <QStringList>
 
-QStringList AsciiTableImportFilter::fileExtensions() const
+QStringList AsciiSpreadsheetImportFilter::fileExtensions() const
 {
 	return QStringList() << "txt" << "csv" << "dat";
 }
 
-AbstractAspect * AsciiTableImportFilter::importAspect(QIODevice * input)
+AbstractAspect * AsciiSpreadsheetImportFilter::importAspect(QIODevice * input)
 {
 	QTextStream stream(input);
 	QStringList row, column_names;
@@ -94,9 +94,9 @@ AbstractAspect * AsciiTableImportFilter::importAspect(QIODevice * input)
 		}
 	}
 
-	// build a Table from the gathered data
+	// build a Spreadsheet from the gathered data
 	// renaming will be done by the kernel
-	Table * result = new Table(0, 0, 0, tr("Table"));
+	Spreadsheet * result = new Spreadsheet(0, 0, 0, tr("Spreadsheet"));
 	for (i=0; i<data.size(); ++i)
 	{
 		Column *new_col;

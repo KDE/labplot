@@ -30,9 +30,9 @@
 #include <KDebug>
 #include "ExportDialog.h"
 #include "MainWin.h"
-#include "Spreadsheet.h"
+#include "SpreadsheetView.h"
 
-ExportDialog::ExportDialog(Spreadsheet *parent) : KDialog(parent) {
+ExportDialog::ExportDialog(SpreadsheetView *parent) : KDialog(parent) {
 	kDebug()<<endl;
 	setCaption(i18n("Export Data"));
 

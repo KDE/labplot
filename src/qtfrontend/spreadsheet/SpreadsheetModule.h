@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : TableModule.h
+    File                 : SpreadsheetModule.h
     Project              : SciDAVis
-    Description          : Module providing the table Part and support classes.
+    Description          : Module providing the spreadsheet Part and support classes.
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email address)
@@ -30,11 +30,11 @@
 #define TABLE_MODULE_H
 
 #include "core/interfaces.h"
-#include "table/Table.h"
-#include "table/TableView.h"
+#include "spreadsheet/Spreadsheet.h"
+#include "spreadsheet/SpreadsheetView.h"
 #include <QMenu>
 
-class TableModule : public QObject, public PartMaker, public FileFormat, public ActionManagerOwner, public ConfigPageMaker, 
+class SpreadsheetModule : public QObject, public PartMaker, public FileFormat, public ActionManagerOwner, public ConfigPageMaker, 
 	public XmlElementAspectMaker, public NeedsStaticInit
 {
 	Q_OBJECT
@@ -45,7 +45,7 @@ class TableModule : public QObject, public PartMaker, public FileFormat, public 
 		virtual QAction * makeAction(QObject *parent);
 		virtual AbstractImportFilter * makeImportFilter();
 		virtual AbstractExportFilter * makeExportFilter();
-		virtual ActionManager * actionManager() { return TableView::actionManager(); }
+		virtual ActionManager * actionManager() { return SpreadsheetView::actionManager(); }
 		virtual void initActionManager();
 		virtual ConfigPageWidget * makeConfigPage();
 		virtual QString configPageLabel();
@@ -56,22 +56,22 @@ class TableModule : public QObject, public PartMaker, public FileFormat, public 
 		virtual void staticInit();
 };
 
-class Ui_TableConfigPage;
+class Ui_SpreadsheetConfigPage;
 
-//! Helper class for TableModule
-class TableConfigPage : public ConfigPageWidget
+//! Helper class for SpreadsheetModule
+class SpreadsheetConfigPage : public ConfigPageWidget
 {
 	Q_OBJECT
 
 	public:
-		TableConfigPage();
-		~TableConfigPage();
+		SpreadsheetConfigPage();
+		~SpreadsheetConfigPage();
 
 	public slots:
 		virtual void apply();
 
 	private:
-		Ui_TableConfigPage *ui;
+		Ui_SpreadsheetConfigPage *ui;
 };
 
 #endif // ifndef TABLE_MODULE_H

@@ -1,11 +1,11 @@
 /***************************************************************************
-    File                 : ExportTableDialog.h
+    File                 : SpreadsheetDialog.h
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2006 by Ion Vasilief, Tilman Benkert
     Email (use @ for *)  : ion_vasilief*yahoo.fr, thzs*gmx.net
-    Description          : Export ASCII dialog
-                           
+    Description          : Column options dialog
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,79 +26,74 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef EXPORT_TABLE_DIALOG_H
-#define EXPORT_TABLE_DIALOG_H
+#ifndef TABLEDIALOG_H
+#define TABLEDIALOG_H
 
 #include <QDialog>
+
 class QPushButton;
+class QLineEdit;
 class QCheckBox;
 class QComboBox;
+class QLabel;
+class QTextEdit;
+class QSpinBox;
+class Spreadsheet;
 
-//! Export ASCII dialog
-class ExportTableDialog : public QDialog
+//! Column options dialog
+class SpreadsheetDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-
-	//! Constructor
-	/**
-	 * \param parent parent widget
-	 * \param fl window flags
-	 */
-    ExportTableDialog( QWidget* parent = 0, Qt::WFlags fl = 0 );
-	//! Destructor
-    ~ExportTableDialog();
-
-private:
-    QPushButton* buttonOk;
-	QPushButton* buttonCancel;
-	QPushButton* buttonHelp;
-    QCheckBox* boxNames;
-    QCheckBox* boxSelection;
-	QCheckBox* boxAllTables;
-    QComboBox* boxSeparator;
-	QComboBox* boxTable;
-
-public slots:
-	//! Set the column delimiter
-	void setColumnSeparator(const QString& sep);
-	//! Set the list of tables
-	void setTableNames(const QStringList& names);
-	//! Select a table
-	void setActiveTableName(const QString& name);
+    SpreadsheetDialog(Spreadsheet *t, QWidget* parent, Qt::WFlags fl = 0 );
 
 private slots:
-	//! Enable/disable the tables combox box
-	/**
-	 * The tables combo box is disabled when
-	 * the checkbox "all" is selected.
-	 */
-	void enableTableName(bool ok);
-
-protected slots:
-	//! Accept changes
+	void prevColumn();
+	void nextColumn();
+	void selectColumn(int sc);
+	void updateColumn(int);
+	void changeColWidth(int width);
+	void showPrecisionBox(int item);
+	void updatePrecision(int prec);
+	void setPlotDesignation(int i);
 	void accept();
-	//! Display help
-	void help();
+	void apply();
+	void updateDisplay(int item);
+	void enablePrecision(int f);
+	void setNumericFormat(int type, int prec, bool allRightColumns);
+	void setDayFormat(const QString& format, bool allRightColumns);
+	void setMonthFormat(const QString& format, bool allRightColumns);
 
 signals:
-	//! Export one table
-	/**
-	 * \param tableName name of the table to export
-	 * \param separator separator to be put between the columns
-	 * \param exportColumnNames flag: column names in the first line or not
-	 * \param exportSelection flag: export only selection or all cells
-	 */
-	void exportTable(const QString& tableName, const QString& separator, bool exportColumnNames, bool exportSelection);
-	//! Export all tables
-	/**
-	 * \param separator separator to be put between the columns
-	 * \param exportColumnNames flag: column names in the first line or not
-	 * \param exportSelection flag: export only selection or all cells
-	 */
-	void exportAllTables(const QString& separator, bool exportColumnNames, bool exportSelection);
+	void nameChanged(const QString&);
+	void enumRightCols(bool);
+	void changeWidth(const QString&, bool);
 
+private:
+    void setDateTimeFormat(int type, const QString& format, bool allRightColumns);
+	void setTextFormat(bool allRightColumns);
+    void closeEvent( QCloseEvent *);
+
+    Spreadsheet * m_spreadsheet;
+
+    QPushButton* buttonOk;
+    QPushButton* buttonCancel;
+	QPushButton* buttonApply;
+	QPushButton* buttonPrev;
+	QPushButton* buttonNext;
+    QComboBox* boxSelectColumn;
+    QLineEdit* colName;
+    QCheckBox* enumerateAllBox;
+    QCheckBox* applyToRightCols;
+    QCheckBox* applyToAllBox;
+    QComboBox* formatBox;
+	QComboBox* displayBox;
+    QComboBox* columnsBox;
+    QSpinBox* colWidth, *precisionBox;
+	QLabel *labelNumeric, *labelFormat;
+	QTextEdit *comments;
+	QCheckBox *boxShowSpreadsheetComments;
 };
 
-#endif // ifndef EXPORT_TABLE_DIALOG_H
+#endif // TABLEDIALOG_H

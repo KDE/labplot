@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>TableConfigPage</class>
- <widget class="QWidget" name="TableConfigPage" >
+ <class>SpreadsheetConfigPage</class>
+ <widget class="QWidget" name="SpreadsheetConfigPage" >
   <property name="geometry" >
    <rect>
     <x>0</x>

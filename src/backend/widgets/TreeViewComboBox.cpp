@@ -44,7 +44,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent)
 	m_treeView.header()->hide();
 	m_treeView.setSelectionMode(QAbstractItemView::SingleSelection);
  	setView(&m_treeView);
-	m_topLevelClasses << "Folder" << "Table" << "Worksheet";
+	m_topLevelClasses << "Folder" << "Spreadsheet" << "Worksheet";
 	m_firstPopup=true;
 }
 

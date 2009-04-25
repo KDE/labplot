@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : TableItemDelegate.h
+    File                 : SpreadsheetItemDelegate.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert,
     Email (use @ for *)  : thzs*gmx.net
-    Description          : Item delegate for TableView
+    Description          : Item delegate for SpreadsheetView
 
  ***************************************************************************/
 
@@ -27,29 +27,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QItemDelegate>
-#include <QtDebug>
-#include <QMetaProperty>
-#include <QAbstractItemModel>
+#include <QPainter>
+#include <QModelIndex>
+#include "spreadsheet/SpreadsheetItemDelegate.h"
+#include "spreadsheet/SpreadsheetModel.h"
 
-//! Item delegate for TableView
-class TableItemDelegate : public QItemDelegate
+SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject * parent)
+ : QItemDelegate(parent)
 {
-	Q_OBJECT
+	m_masking_color = QColor(0xff,0,0);
+}
 
-	public:
-		//! Standard constructor.
-		TableItemDelegate(QObject * parent = 0);
-		//! Custom cell painting.
-		virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-		//! Set the color for masked cells
-		void setMaskingColor(const QColor& color) { m_masking_color = color; }
-		//! Return the color for masked cells
-		QColor maskingColor() const { return m_masking_color; }
-		void setEditorData ( QWidget * editor, const QModelIndex & index ) const;
-		void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const;
+void SpreadsheetItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+		const QModelIndex &index) const
+{
+	QItemDelegate::paint(painter, option, index);
+	if (!index.data(SpreadsheetModel::MaskingRole).toBool())
+		return;
+	painter->save();
+	// masked cells are displayed as hatched
+	painter->fillRect(option.rect, QBrush(m_masking_color, Qt::BDiagPattern));
+	painter->restore();
+}
 
-	private:
-		//! The color for masked cells
-		QColor m_masking_color;
-};
+void SpreadsheetItemDelegate::setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const
+{
+	model->setData(index, editor->metaObject()->userProperty().read(editor), Qt::EditRole);
+}
+
+void SpreadsheetItemDelegate::setEditorData ( QWidget * editor, const QModelIndex & index ) const
+{
+	editor->metaObject()->userProperty().write(editor, index.data(Qt::EditRole));
+}
+

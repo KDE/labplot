@@ -84,7 +84,7 @@ PreferencesDialog::PreferencesDialog( QWidget* parent, Qt::WFlags fl )
 	itemsList->setAlternatingRowColors( true );
 
 	initAppPage();
-	initTablesPage();
+	initSpreadsheetsPage();
 	initPlotsPage();
 	initPlots3DPage();
 	initFittingPage();
@@ -160,7 +160,7 @@ void PreferencesDialog::setCurrentPage(int index)
 		lblPageHeader->setText(itemsList->currentItem()->text());
 }
 
-void PreferencesDialog::initTablesPage()
+void PreferencesDialog::initSpreadsheetsPage()
 {
 	ApplicationWindow *app = (ApplicationWindow *)parentWidget();
 	tables = new QWidget();
@@ -182,11 +182,11 @@ void PreferencesDialog::initTablesPage()
 	lblSeparator->setWhatsThis(help);
 	lblSeparator->setToolTip(help);
 
-	groupBoxTableCol = new QGroupBox();
-	QGridLayout * colorsLayout = new QGridLayout(groupBoxTableCol);
+	groupBoxSpreadsheetCol = new QGroupBox();
+	QGridLayout * colorsLayout = new QGridLayout(groupBoxSpreadsheetCol);
 
-	lblTableBackground = new QLabel();
-	colorsLayout->addWidget( lblTableBackground, 0, 0 );
+	lblSpreadsheetBackground = new QLabel();
+	colorsLayout->addWidget( lblSpreadsheetBackground, 0, 0 );
 	buttonBackground= new ColorButton();
 	buttonBackground->setColor(app->tableBkgdColor);
 	colorsLayout->addWidget( buttonBackground, 0, 1 );
@@ -203,22 +203,22 @@ void PreferencesDialog::initTablesPage()
 	buttonHeader->setColor(app->tableHeaderColor);
 	colorsLayout->addWidget( buttonHeader, 2, 1 );
 
-	groupBoxTableFonts = new QGroupBox();
-	QHBoxLayout * bottomLayout = new QHBoxLayout( groupBoxTableFonts );
+	groupBoxSpreadsheetFonts = new QGroupBox();
+	QHBoxLayout * bottomLayout = new QHBoxLayout( groupBoxSpreadsheetFonts );
 
 	buttonTextFont= new QPushButton();
 	bottomLayout->addWidget( buttonTextFont );
 	buttonHeaderFont= new QPushButton();
 	bottomLayout->addWidget( buttonHeaderFont );
 
-	boxTableComments = new QCheckBox();
-	boxTableComments->setChecked(app->m_show_table_comments);
+	boxSpreadsheetComments = new QCheckBox();
+	boxSpreadsheetComments->setChecked(app->m_show_table_comments);
 
 	QVBoxLayout * tablesPageLayout = new QVBoxLayout( tables );
-	tablesPageLayout->addWidget(boxTableComments);
+	tablesPageLayout->addWidget(boxSpreadsheetComments);
 	tablesPageLayout->addLayout(topLayout,1);
-	tablesPageLayout->addWidget(groupBoxTableCol);
-	tablesPageLayout->addWidget(groupBoxTableFonts);
+	tablesPageLayout->addWidget(groupBoxSpreadsheetCol);
+	tablesPageLayout->addWidget(groupBoxSpreadsheetFonts);
 	tablesPageLayout->addStretch();
 }
 
@@ -746,9 +746,9 @@ void PreferencesDialog::initConfirmationsPage()
 	boxFolders->setChecked(app->confirmCloseFolder);
 	layout->addWidget( boxFolders );
 
-	boxTables = new QCheckBox();
-	boxTables->setChecked(app->confirmCloseTable);
-	layout->addWidget( boxTables );
+	boxSpreadsheets = new QCheckBox();
+	boxSpreadsheets->setChecked(app->confirmCloseSpreadsheet);
+	layout->addWidget( boxSpreadsheets );
 
 	boxMatrices = new QCheckBox();
 	boxMatrices->setChecked(app->confirmCloseMatrix);
@@ -780,7 +780,7 @@ void PreferencesDialog::languageChange()
 	// pages list
 	itemsList->clear();
 	itemsList->addItem( tr( "General" ) );
-	itemsList->addItem( tr( "Tables" ) );
+	itemsList->addItem( tr( "Spreadsheets" ) );
 	itemsList->addItem( tr( "2D Plots" ) );
 	itemsList->addItem( tr( "3D Plots" ) );
 	itemsList->addItem( tr( "Fitting" ) );
@@ -849,7 +849,7 @@ void PreferencesDialog::languageChange()
 	//confirmations page
 	groupBoxConfirm->setTitle(tr("Prompt on closing"));
 	boxFolders->setText(tr("Folders"));
-	boxTables->setText(tr("Tables"));
+	boxSpreadsheets->setText(tr("Spreadsheets"));
 	boxPlots3D->setText(tr("3D Plots"));
 	boxPlots2D->setText(tr("2D Plots"));
 	boxMatrices->setText(tr("Matrices"));
@@ -883,7 +883,7 @@ void PreferencesDialog::languageChange()
 	boxMinutes->setSuffix(tr(" minutes"));
 	lblScriptingLanguage->setText(tr("Default scripting language"));
 
-    boxUpdateSeparators->setText(tr("Update separators in Tables/Matrices"));
+    boxUpdateSeparators->setText(tr("Update separators in Spreadsheets/Matrices"));
     boxUseGroupSeparator->setText(tr("Use group separator","option: use separator every 3 digits"));
 	lblAppPrecision->setText(tr("Number of Decimal Digits"));
 	lblDecimalSeparator->setText(tr("Decimal Separators"));
@@ -903,8 +903,8 @@ void PreferencesDialog::languageChange()
 	boxSeparatorPreview->setText(tr("Preview:","preview of the decimal separator") + " " + QLocale().toString(1000.1234567890123456, 'f', boxAppPrecision->value()) );
 
 	//tables page
-	boxTableComments->setText(tr("&Display Comments in Header"));
-	groupBoxTableCol->setTitle(tr("Colors"));
+	boxSpreadsheetComments->setText(tr("&Display Comments in Header"));
+	groupBoxSpreadsheetCol->setTitle(tr("Colors"));
 	lblSeparator->setText(tr("Default Column Separator"));
 	boxSeparator->clear();
 	boxSeparator->addItem(tr("TAB"));
@@ -917,10 +917,10 @@ void PreferencesDialog::languageChange()
 	boxSeparator->addItem(",");
 	setColumnSeparator(app->columnSeparator);
 
-	lblTableBackground->setText(tr( "Background" ));
+	lblSpreadsheetBackground->setText(tr( "Background" ));
 	lblTextColor->setText(tr( "Text" ));
 	lblHeaderColor->setText(tr("Labels"));
-	groupBoxTableFonts->setTitle(tr("Fonts"));
+	groupBoxSpreadsheetFonts->setTitle(tr("Fonts"));
 
 	//curves page
 	lblCurveStyle->setText(tr( "Default curve style" ));
@@ -1028,8 +1028,8 @@ void PreferencesDialog::apply()
 	}
 
 	app->columnSeparator = sep;
-	app->customizeTables(buttonBackground->color(), buttonText->color(),
-			buttonHeader->color(), textFont, headerFont, boxTableComments->isChecked());
+	app->customizeSpreadsheets(buttonBackground->color(), buttonText->color(),
+			buttonHeader->color(), textFont, headerFont, boxSpreadsheetComments->isChecked());
 	// 2D plots page: options tab
 	app->titleOn=boxTitle->isChecked();
 	app->allAxesOn = boxAllAxes->isChecked();
@@ -1108,8 +1108,8 @@ void PreferencesDialog::apply()
             foreach(QWidget *w, *lst){
 					// TODO
 					/*
-                if(w->inherits("Table"))
-                    ((Table *)w)->updateDecimalSeparators();
+                if(w->inherits("Spreadsheet"))
+                    ((Spreadsheet *)w)->updateDecimalSeparators();
                 else */ if(w->inherits("Matrix"))
                     ((Matrix *)w)->updateDecimalSeparators();
             }
@@ -1120,7 +1120,7 @@ void PreferencesDialog::apply()
 
 	// general page: confirmations tab
 	app->confirmCloseFolder = boxFolders->isChecked();
-	app->updateConfirmOptions(boxTables->isChecked(), boxMatrices->isChecked(),
+	app->updateConfirmOptions(boxSpreadsheets->isChecked(), boxMatrices->isChecked(),
 			boxPlots2D->isChecked(), boxPlots3D->isChecked(),
 			boxNotes->isChecked());
 	// general page: colors tab

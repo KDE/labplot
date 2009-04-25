@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : AsciiTableImportFilter.h
+    File                 : AsciiSpreadsheetImportFilter.h
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2009 Knut Franke
     Email (use @ for *)  : Knut.Franke*gmx.net
-    Description          : Import an ASCII file as Table.
+    Description          : Import an ASCII file as Spreadsheet.
 
  ***************************************************************************/
 
@@ -27,33 +27,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ASCII_TABLE_IMPORT_FILTER_H
-#define ASCII_TABLE_IMPORT_FILTER_H
+#ifndef ASCII_SPREADSHEET_IMPORT_FILTER_H
+#define ASCII_SPREADSHEET_IMPORT_FILTER_H
 
 #include "core/AbstractImportFilter.h"
 #include <QLocale>
 
-//! Import an ASCII file as Table.
+//! Import an ASCII file as Spreadsheet.
 /**
- * This is a complete rewrite of equivalent functionality previously found in Table.
+ * This is a complete rewrite of equivalent functionality previously found in Spreadsheet.
  *
  * Originally, this filter wasn't meant to handle conversion of ASCII text to other
  * data types. While it's conceptually elegant and flexible to import text data as
  * text columns, testing this in everyday usage revealed that, for the common use case
  * of importing lots of numeric data, having to convert imported tables to numeric
- * by hand is a bit of a nuisance. Therefore, AsciiTableImportFilter has an option
+ * by hand is a bit of a nuisance. Therefore, AsciiSpreadsheetImportFilter has an option
  * for converting all columns to Numeric. Importing non-numeric data is possible by
- * disabling this and (optionally) converting texts to other formats using Table's
+ * disabling this and (optionally) converting texts to other formats using Spreadsheet's
  * type control tab.
  *
  * TODO: port options GUI from ImportTableDialog
  */
-class AsciiTableImportFilter : public AbstractImportFilter
+class AsciiSpreadsheetImportFilter : public AbstractImportFilter
 {
 	Q_OBJECT
 
 	public:
-		AsciiTableImportFilter() :
+		AsciiSpreadsheetImportFilter() :
 			m_ignored_lines(0),
 			m_separator("\t"),
 			m_first_row_names_columns(true),
@@ -98,4 +98,4 @@ class AsciiTableImportFilter : public AbstractImportFilter
 		QLocale m_numeric_locale;
 };
 
-#endif // ifndef ASCII_TABLE_IMPORT_FILTER_H
+#endif // ifndef ASCII_SPREADSHEET_IMPORT_FILTER_H

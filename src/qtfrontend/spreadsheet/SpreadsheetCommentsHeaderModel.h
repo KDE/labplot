@@ -1,10 +1,11 @@
 /***************************************************************************
-    File                 : TableItemDelegate.cpp
+    File                 : SpreadsheetCommentsHeaderModel.h
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert,
     Email (use @ for *)  : thzs*gmx.net
-    Description          : Item delegate for TableView
+    Description          : Model wrapping a SpreadsheetModel to display column 
+                           comments in a SpreadsheetCommentsHeaderView
 
  ***************************************************************************/
 
@@ -27,36 +28,35 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <QPainter>
-#include <QModelIndex>
-#include "TableItemDelegate.h"
-#include <table/TableModel.h>
+#ifndef TABLECOMMENTSHEADERMODEL_H
+#define TABLECOMMENTSHEADERMODEL_H
 
-TableItemDelegate::TableItemDelegate(QObject * parent)
- : QItemDelegate(parent)
+#include <QAbstractTableModel>
+#include <spreadsheet/SpreadsheetModel.h>
+
+//! Model class wrapping a SpreadsheetModel to display column comments in a SpreadsheetCommentsHeaderView
+class SpreadsheetCommentsHeaderModel : public QAbstractTableModel
 {
-	m_masking_color = QColor(0xff,0,0);
-}
+	Q_OBJECT
 
-void TableItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-		const QModelIndex &index) const
-{
-	QItemDelegate::paint(painter, option, index);
-	if (!index.data(TableModel::MaskingRole).toBool())
-		return;
-	painter->save();
-	// masked cells are displayed as hatched
-	painter->fillRect(option.rect, QBrush(m_masking_color, Qt::BDiagPattern));
-	painter->restore();
-}
+	public:
+		//! Constructor
+		explicit SpreadsheetCommentsHeaderModel( SpreadsheetModel * spreadsheet_model, QObject * parent = 0 );
+		//! Destructor
+		virtual ~SpreadsheetCommentsHeaderModel();
 
-void TableItemDelegate::setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const
-{
-	model->setData(index, editor->metaObject()->userProperty().read(editor), Qt::EditRole);
-}
+		//! \name Overloaded functions from QAbstractItemModel
+		//@{
+		Qt::ItemFlags flags( const QModelIndex & index ) const;
+		QVariant data(const QModelIndex &index, int role) const;
+		QVariant headerData(int section, 
+				Qt::Orientation orientation,int role) const;
+		int rowCount(const QModelIndex &parent = QModelIndex()) const;
+		int columnCount(const QModelIndex & parent = QModelIndex()) const;
+		//@}
 
-void TableItemDelegate::setEditorData ( QWidget * editor, const QModelIndex & index ) const
-{
-	editor->metaObject()->userProperty().write(editor, index.data(Qt::EditRole));
-}
+	private:
+		SpreadsheetModel * m_spreadsheet_model;
+};
 
+#endif

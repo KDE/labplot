@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ImportTableDialog.h
+    File                 : ImportSpreadsheetDialog.h
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2006,2007 by Ion Vasilief,
@@ -41,7 +41,7 @@ class QGroupBox;
 class QPushButton;
 
 //! Import ASCII file(s) dialog
-class ImportTableDialog: public ExtensibleFileDialog
+class ImportSpreadsheetDialog: public ExtensibleFileDialog
 {
 	Q_OBJECT
 
@@ -51,10 +51,10 @@ public:
 	 * Important: Keep this in sync with the initialization of #m_import_mode in initAdvancedOptions().
 	 */
 	enum ImportMode {
-		NewTables, //!< create a new table for each file (default)
-		NewColumns, //!< add each file as new columns to the current table
-		NewRows, //!< add each file as new rows to the current table
-		Overwrite //!< replace content of current table with the selected file (like importing a single file in previous versions of SciDAVis)
+		NewSpreadsheets, //!< create a new spreadsheet for each file (default)
+		NewColumns, //!< add each file as new columns to the current spreadsheet
+		NewRows, //!< add each file as new rows to the current spreadsheet
+		Overwrite //!< replace content of current spreadsheet with the selected file (like importing a single file in previous versions of SciDAVis)
 	};
 
 	//! Constructor
@@ -64,7 +64,7 @@ public:
 	 * \param extended flag: show/hide the advanced options on start-up
 	 * \param flags window flags
 	 */
-	ImportTableDialog(bool importModeEnabled, QWidget * parent = 0, bool extended = true, Qt::WFlags flags = 0 );
+	ImportSpreadsheetDialog(bool importModeEnabled, QWidget * parent = 0, bool extended = true, Qt::WFlags flags = 0 );
 
 	//! Return the selected import mode
 	/**

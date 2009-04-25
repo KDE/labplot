@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : TableModel.h
+    File                 : SpreadsheetModel.h
     Project              : SciDAVis
-    Description          : Model for the access to a Table
+    Description          : Model for the access to a Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke*gmx.de)
@@ -28,36 +28,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TABLEMODEL_H
-#define TABLEMODEL_H
+#ifndef SPREADSHEETMODEL_H
+#define SPREADSHEETMODEL_H
 
 #include <QAbstractItemModel>
 #include <QStringList>
 
 class Column;
-class Table;
+class Spreadsheet;
 class AbstractAspect;
 class AbstractColumn;
 
-//! Model for the access to a Table
+//! Model for the access to a Spreadsheet
 /**
 	This is a model in the sense of Qt4 model/view framework which is used 
-	to access a Table object from any of Qt4s view classes, typically a QTableView. 
-	Its main purposes are translating Table signals into QAbstractItemModel signals
+	to access a Spreadsheet object from any of Qt4s view classes, typically a QTableView. 
+	Its main purposes are translating Spreadsheet signals into QAbstractItemModel signals
 	and translating calls to the QAbstractItemModel read/write API into calls
-	in the public API of Table. In many cases a pointer to the addressed column
-	is obtained by calling Table::column() and the manipulation is done using the
+	in the public API of Spreadsheet. In many cases a pointer to the addressed column
+	is obtained by calling Spreadsheet::column() and the manipulation is done using the
 	public API of column. 
   */
-class TableModel : public QAbstractItemModel
+class SpreadsheetModel : public QAbstractItemModel
 {
 	Q_OBJECT
 
 	public:
 		//! Constructor
-		explicit TableModel(Table * table);
+		explicit SpreadsheetModel(Spreadsheet * spreadsheet);
 		//! Destructor
-		~TableModel();
+		~SpreadsheetModel();
 
 		//! Custom data roles used in addition to Qt::ItemDataRole
 		enum CustomDataRole {
@@ -108,7 +108,7 @@ class TableModel : public QAbstractItemModel
 		void updateHorizontalHeader();
 
 	private:
-		Table * m_table;
+		Spreadsheet * m_spreadsheet;
 		//! Toggle flag for formula mode
 		bool m_formula_mode;
 		//! Vertical header data

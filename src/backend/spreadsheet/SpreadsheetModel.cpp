@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : TableModel.cpp
+    File                 : SpreadsheetModel.cpp
     Project              : SciDAVis
-    Description          : Model for the access to a Table
+    Description          : Model for the access to a Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke*gmx.de)
@@ -29,41 +29,41 @@
  ***************************************************************************/
 
 #include "core/column/Column.h"
-#include "table/Table.h"
-#include "table/TableModel.h"
+#include "spreadsheet/Spreadsheet.h"
+#include "spreadsheet/SpreadsheetModel.h"
 #include <QString>
 #include <QBrush>
 #include <QIcon>
 #include <QPixmap>
 
-TableModel::TableModel(Table * table)
-	: QAbstractItemModel(0), m_table(table), m_formula_mode(false)
+SpreadsheetModel::SpreadsheetModel(Spreadsheet * spreadsheet)
+	: QAbstractItemModel(0), m_spreadsheet(spreadsheet), m_formula_mode(false)
 {
 	updateVerticalHeader();
 	updateHorizontalHeader();
 
-	connect(m_table, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+	connect(m_spreadsheet, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(m_table, SIGNAL(aspectAdded(const AbstractAspect*)),
+	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
 			this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(m_table, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_table, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+	connect(m_spreadsheet, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 			this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(m_table, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
+	connect(m_spreadsheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 			this, SLOT(handleDescriptionChange(const AbstractAspect*)));
 
-	for (int i=0; i < table->columnCount(); i++) {
+	for (int i=0; i < spreadsheet->columnCount(); i++) {
 		beginInsertColumns(QModelIndex(), i, i);
-		handleAspectAdded(table->column(i));
+		handleAspectAdded(spreadsheet->column(i));
 	}
 }
 
-TableModel::~TableModel()
+SpreadsheetModel::~SpreadsheetModel()
 {
 }
 
-Qt::ItemFlags TableModel::flags(const QModelIndex & index ) const
+Qt::ItemFlags SpreadsheetModel::flags(const QModelIndex & index ) const
 {
 	if (index.isValid())
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
@@ -71,14 +71,14 @@ Qt::ItemFlags TableModel::flags(const QModelIndex & index ) const
 		return Qt::ItemIsEnabled;
 }
 
-QVariant TableModel::data(const QModelIndex &index, int role) const
+QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 {
 	if( !index.isValid() )
 		return QVariant();
 	
 	int row = index.row();
 	int col = index.column();
-	Column * col_ptr = m_table->column(col);
+	Column * col_ptr = m_spreadsheet->column(col);
 	if(!col_ptr)
 		return QVariant();
 
@@ -122,11 +122,11 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 	return QVariant();
 }
 
-QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	switch(orientation) {
 		case Qt::Horizontal:
-			if (section < 0 || section >= m_table->columnCount())
+			if (section < 0 || section >= m_spreadsheet->columnCount())
 				return QVariant();
 			switch(role) {
 				case Qt::DisplayRole:
@@ -135,15 +135,15 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 					return m_horizontal_header_data.at(section);
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 				case Qt::DecorationRole:
-					return m_table->child<Column>(section)->icon();
+					return m_spreadsheet->child<Column>(section)->icon();
 #endif
-				case TableModel::CommentRole:
-					return m_table->child<Column>(section)->comment();
+				case SpreadsheetModel::CommentRole:
+					return m_spreadsheet->child<Column>(section)->comment();
 				case Qt::SizeHintRole:
-					return QSize(m_table->child<Column>(section)->width(), 20);
+					return QSize(m_spreadsheet->child<Column>(section)->width(), 20);
 			}
 		case Qt::Vertical:
-			if (section < 0 || section >= m_table->rowCount())
+			if (section < 0 || section >= m_spreadsheet->rowCount())
 				return QVariant();
 			switch(role) {
 				case Qt::DisplayRole:
@@ -154,10 +154,10 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 	return QVariant();
 }
 
-bool TableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
+bool SpreadsheetModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
 	if (orientation == Qt::Horizontal && role == Qt::SizeHintRole) {
-		m_table->child<Column>(section)->setWidth(value.toSize().width());
+		m_spreadsheet->child<Column>(section)->setWidth(value.toSize().width());
 		emit headerDataChanged(Qt::Horizontal, section, section);
 	} else
 		QAbstractItemModel::setHeaderData(section, orientation, value, role);
@@ -165,19 +165,19 @@ bool TableModel::setHeaderData(int section, Qt::Orientation orientation, const Q
 	return true;
 }
 
-int TableModel::rowCount(const QModelIndex &parent) const
+int SpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
 	Q_UNUSED(parent)
-	return m_table->rowCount();
+	return m_spreadsheet->rowCount();
 }
 
-int TableModel::columnCount(const QModelIndex & parent) const
+int SpreadsheetModel::columnCount(const QModelIndex & parent) const
 {
 	Q_UNUSED(parent)
-	return m_table->columnCount();
+	return m_spreadsheet->columnCount();
 }
 
-bool TableModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool SpreadsheetModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
 	if (!index.isValid())
 		return false;
@@ -188,7 +188,7 @@ bool TableModel::setData(const QModelIndex & index, const QVariant & value, int 
 	{  
 		case Qt::EditRole:
 			{
-				Column* col_ptr = m_table->column(index.column());
+				Column* col_ptr = m_spreadsheet->column(index.column());
 				// remark: the validity of the cell is determined by the input filter
 				if (m_formula_mode)
 					col_ptr->setFormula(row, value.toString());
@@ -198,12 +198,12 @@ bool TableModel::setData(const QModelIndex & index, const QVariant & value, int 
 			}
 		case MaskingRole:
 			{
-				m_table->column(index.column())->setMasked(row, value.toBool());  
+				m_spreadsheet->column(index.column())->setMasked(row, value.toBool());  
 				return true;
 			}
 		case FormulaRole:
 			{
-				m_table->column(index.column())->setFormula(row, value.toString());  
+				m_spreadsheet->column(index.column())->setFormula(row, value.toString());  
 				return true;
 			}
 	}
@@ -211,32 +211,32 @@ bool TableModel::setData(const QModelIndex & index, const QVariant & value, int 
 	return false;
 }
 
-QModelIndex TableModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex &parent) const
 {
 	Q_UNUSED(parent)
 	return createIndex(row, column);
 }
 
-QModelIndex TableModel::parent(const QModelIndex & child) const
+QModelIndex SpreadsheetModel::parent(const QModelIndex & child) const
 {
 	Q_UNUSED(child)
     return QModelIndex();
 }
 
-void TableModel::handleAspectAboutToBeAdded(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * new_child)
+void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * new_child)
 {
 	const Column * col = qobject_cast<const Column*>(new_child);
-	if (!col || parent != static_cast<AbstractAspect*>(m_table))
+	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
-	int index = before ? m_table->indexOfChild<Column>(before) : 0;
+	int index = before ? m_spreadsheet->indexOfChild<Column>(before) : 0;
 	beginInsertColumns(QModelIndex(), index, index);
 }
 
-void TableModel::handleAspectAdded(const AbstractAspect * aspect)
+void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect)
 {
 	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_table))
+	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
 	// unused
@@ -246,9 +246,9 @@ void TableModel::handleAspectAdded(const AbstractAspect * aspect)
 	updateHorizontalHeader();
 	endInsertColumns();
 
-	emit headerDataChanged(Qt::Horizontal, 0, m_table->columnCount()-1);
-	//emit headerDataChanged(Qt::Vertical, old_rows, m_table->rowCount()-1);
-	emit headerDataChanged(Qt::Vertical, 0, m_table->rowCount()-1);
+	emit headerDataChanged(Qt::Horizontal, 0, m_spreadsheet->columnCount()-1);
+	//emit headerDataChanged(Qt::Vertical, old_rows, m_spreadsheet->rowCount()-1);
+	emit headerDataChanged(Qt::Vertical, 0, m_spreadsheet->rowCount()-1);
 
 	reset();
 
@@ -268,22 +268,22 @@ void TableModel::handleAspectAdded(const AbstractAspect * aspect)
 			SLOT(handleDataChange(const AbstractColumn*)));
 }
 
-void TableModel::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
+void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
 {
 	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_table))
+	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
-	int index = m_table->indexOfChild<Column>(col);
+	int index = m_spreadsheet->indexOfChild<Column>(col);
 	beginRemoveColumns(QModelIndex(), index, index);
 	disconnect(col, 0, this, 0);
 }
 
-void TableModel::handleAspectRemoved(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * child)
+void SpreadsheetModel::handleAspectRemoved(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * child)
 {
 	Q_UNUSED(before)
 	const Column * col = qobject_cast<const Column*>(child);
-	if (!col || parent != static_cast<AbstractAspect*>(m_table))
+	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
 	int old_rows = m_vertical_header_data.size();
@@ -292,62 +292,62 @@ void TableModel::handleAspectRemoved(const AbstractAspect * parent, const Abstra
 	updateHorizontalHeader();
 	endRemoveColumns();
 
-	emit headerDataChanged(Qt::Horizontal, 0, m_table->columnCount()-1);
-	emit headerDataChanged(Qt::Vertical, old_rows, m_table->rowCount()-1);
+	emit headerDataChanged(Qt::Horizontal, 0, m_spreadsheet->columnCount()-1);
+	emit headerDataChanged(Qt::Vertical, old_rows, m_spreadsheet->rowCount()-1);
 
 	reset();
 }
 
-void TableModel::handleDescriptionChange(const AbstractAspect * aspect)
+void SpreadsheetModel::handleDescriptionChange(const AbstractAspect * aspect)
 {
 	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_table))
+	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 	updateHorizontalHeader();
-	int index = m_table->indexOfChild<Column>(col);
+	int index = m_spreadsheet->indexOfChild<Column>(col);
 	emit headerDataChanged(Qt::Horizontal, index, index);
 }
 
-void TableModel::handleModeChange(const AbstractColumn * col)
+void SpreadsheetModel::handleModeChange(const AbstractColumn * col)
 {
 	updateHorizontalHeader();
-	int index = m_table->indexOfChild<Column>(col);
+	int index = m_spreadsheet->indexOfChild<Column>(col);
 	emit headerDataChanged(Qt::Horizontal, index, index);
 }
 
-void TableModel::handlePlotDesignationChange(const AbstractColumn * col)
+void SpreadsheetModel::handlePlotDesignationChange(const AbstractColumn * col)
 {
 	updateHorizontalHeader();
-	int index = m_table->indexOfChild<Column>(col);
-	emit headerDataChanged(Qt::Horizontal, index, m_table->columnCount()-1);
+	int index = m_spreadsheet->indexOfChild<Column>(col);
+	emit headerDataChanged(Qt::Horizontal, index, m_spreadsheet->columnCount()-1);
 }
 
-void TableModel::handleDataChange(const AbstractColumn * col)
+void SpreadsheetModel::handleDataChange(const AbstractColumn * col)
 {
-	int i = m_table->indexOfChild<Column>(col);
+	int i = m_spreadsheet->indexOfChild<Column>(col);
 	emit dataChanged(index(0, i), index(col->rowCount()-1, i));
 }
 
-void TableModel::handleRowsInserted(const AbstractColumn * col, int before, int count)
+void SpreadsheetModel::handleRowsInserted(const AbstractColumn * col, int before, int count)
 {
 	Q_UNUSED(before) Q_UNUSED(count)
 	updateVerticalHeader();
-	int i = m_table->indexOfChild<Column>(col);
+	int i = m_spreadsheet->indexOfChild<Column>(col);
 	emit dataChanged(index(0, i), index(col->rowCount()-1, i));
 }
 
-void TableModel::handleRowsRemoved(const AbstractColumn * col, int first, int count)
+void SpreadsheetModel::handleRowsRemoved(const AbstractColumn * col, int first, int count)
 {
 	Q_UNUSED(first) Q_UNUSED(count)
 	updateVerticalHeader();
-	int i = m_table->indexOfChild<Column>(col);
+	int i = m_spreadsheet->indexOfChild<Column>(col);
 	emit dataChanged(index(0, i), index(col->rowCount()-1, i));
 }
 
-void TableModel::updateVerticalHeader()
+void SpreadsheetModel::updateVerticalHeader()
 {
 	int old_rows = m_vertical_header_data.size();
-	int new_rows = m_table->rowCount();
+	int new_rows = m_spreadsheet->rowCount();
 	if (new_rows > old_rows) {
 		beginInsertRows(QModelIndex(), old_rows, new_rows-1);
 		for(int i=old_rows+1; i<=new_rows; i++)
@@ -360,12 +360,12 @@ void TableModel::updateVerticalHeader()
 		endRemoveRows();
 	}
 
-	Q_ASSERT(m_vertical_header_data.size() == m_table->rowCount());
+	Q_ASSERT(m_vertical_header_data.size() == m_spreadsheet->rowCount());
 }
 
-void TableModel::updateHorizontalHeader()
+void SpreadsheetModel::updateHorizontalHeader()
 {
-	int column_count = m_table->childCount<Column>();
+	int column_count = m_spreadsheet->childCount<Column>();
 
 	while(m_horizontal_header_data.size() < column_count)
 		m_horizontal_header_data << QString();
@@ -373,13 +373,13 @@ void TableModel::updateHorizontalHeader()
 		m_horizontal_header_data.removeLast();
 
 	int x_cols;
-	if(m_table->columnCount(SciDAVis::X) <= 1)
+	if(m_spreadsheet->columnCount(SciDAVis::X) <= 1)
 		x_cols = -1;
 	else
 		x_cols = 0;
 
 	for (int i=0; i<column_count; i++) {
-		Column * col = m_table->child<Column>(i);
+		Column * col = m_spreadsheet->child<Column>(i);
 
 		QString middle_section;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -423,20 +423,20 @@ void TableModel::updateHorizontalHeader()
 		m_horizontal_header_data.replace(i, col->name() + middle_section + designation_section);
 	}
 
-	Q_ASSERT(m_horizontal_header_data.size() == m_table->columnCount());
+	Q_ASSERT(m_horizontal_header_data.size() == m_spreadsheet->columnCount());
 }
 
-Column * TableModel::column(int index)
+Column * SpreadsheetModel::column(int index)
 {
-	return m_table->column(index);
+	return m_spreadsheet->column(index);
 }
 		
-void TableModel::activateFormulaMode(bool on)
+void SpreadsheetModel::activateFormulaMode(bool on)
 {
 	if (m_formula_mode == on) return;
 	m_formula_mode = on;
-	int rows = m_table->rowCount();
-	int cols = m_table->columnCount();
+	int rows = m_spreadsheet->rowCount();
+	int cols = m_spreadsheet->columnCount();
 	if (rows > 0 && cols > 0)
 		emit dataChanged(index(0,0), index(rows-1,cols-1));
 }

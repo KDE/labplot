@@ -49,8 +49,8 @@ class ColumnStringIO;
   on the mode of the column.
 
   Column inherits from AbstractAspect and is intended to be a child
-  of the corresponding Table in the aspect hierarchy. Columns don't
-  have a view as they are intended to be displayed inside a table.
+  of the corresponding Spreadsheet in the aspect hierarchy. Columns don't
+  have a view as they are intended to be displayed inside a spreadsheet.
  */
 class Column : public AbstractColumn
 {
@@ -96,7 +96,7 @@ class Column : public AbstractColumn
 
 		//! \name aspect related functions
 		//@{
-		//! Return an icon to be used for decorating the views and table column headers
+		//! Return an icon to be used for decorating the views and spreadsheet column headers
 		virtual QIcon icon() const;
 		//@}
 
@@ -106,7 +106,7 @@ class Column : public AbstractColumn
 		bool isReadOnly() const { return false; };
 		//! Return the column mode
 		/**
-		 * This function is most used by tables but can also be used
+		 * This function is most used by spreadsheets but can also be used
 		 * by plots. The column mode specifies how to interpret 
 		 * the values in the column additional to the data type.
 		 */ 

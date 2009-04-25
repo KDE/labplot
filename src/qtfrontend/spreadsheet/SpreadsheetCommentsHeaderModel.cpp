@@ -1,11 +1,11 @@
 /***************************************************************************
-    File                 : TableCommentsHeaderModel.cpp
+    File                 : SpreadsheetCommentsHeaderModel.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert,
     Email (use @ for *)  : thzs*gmx.net
-    Description          : Model wrapping a TableModel to display column 
-                           comments in a TableCommentsHeaderView
+    Description          : Model wrapping a SpreadsheetModel to display column 
+                           comments in a SpreadsheetCommentsHeaderView
 
  ***************************************************************************/
 
@@ -28,30 +28,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "TableCommentsHeaderModel.h"
+#include "spreadsheet/SpreadsheetCommentsHeaderModel.h"
 
-TableCommentsHeaderModel::TableCommentsHeaderModel( TableModel * table_model, QObject * parent )
-	: QAbstractTableModel( parent ), m_table_model(table_model)
+SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel( SpreadsheetModel * spreadsheet_model, QObject * parent )
+	: QAbstractTableModel( parent ), m_spreadsheet_model(spreadsheet_model)
 {
-	connect(m_table_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
+	connect(m_spreadsheet_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
 		this, SIGNAL(headerDataChanged(Qt::Orientation,int,int)));
-	connect(m_table_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
+	connect(m_spreadsheet_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
 		this, SIGNAL(headerDataChanged(Qt::Orientation,int,int)));
-	connect(m_table_model, SIGNAL(columnsAboutToBeInserted(const QModelIndex&,int,int)),
+	connect(m_spreadsheet_model, SIGNAL(columnsAboutToBeInserted(const QModelIndex&,int,int)),
 		this, SIGNAL(columnsAboutToBeInserted(const QModelIndex&,int,int)));
-	connect(m_table_model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex&,int,int)),
+	connect(m_spreadsheet_model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex&,int,int)),
 		this, SIGNAL(columnsAboutToBeRemoved(const QModelIndex&,int,int)));
-	connect(m_table_model, SIGNAL(columnsInserted(const QModelIndex&,int,int)),
+	connect(m_spreadsheet_model, SIGNAL(columnsInserted(const QModelIndex&,int,int)),
 		this, SIGNAL(columnsInserted(const QModelIndex&,int,int)));
-	connect(m_table_model, SIGNAL(columnsRemoved(const QModelIndex&,int,int)),
+	connect(m_spreadsheet_model, SIGNAL(columnsRemoved(const QModelIndex&,int,int)),
 		this, SIGNAL(columnsRemoved(const QModelIndex&,int,int)));
 }
 
-TableCommentsHeaderModel::~TableCommentsHeaderModel()
+SpreadsheetCommentsHeaderModel::~SpreadsheetCommentsHeaderModel()
 {
 }
 
-Qt::ItemFlags TableCommentsHeaderModel::flags(const QModelIndex & index ) const
+Qt::ItemFlags SpreadsheetCommentsHeaderModel::flags(const QModelIndex & index ) const
 {
 	if (index.isValid())
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -60,31 +60,31 @@ Qt::ItemFlags TableCommentsHeaderModel::flags(const QModelIndex & index ) const
 }
 
 
-QVariant TableCommentsHeaderModel::data(const QModelIndex &index, int role) const
+QVariant SpreadsheetCommentsHeaderModel::data(const QModelIndex &index, int role) const
 {
 	Q_UNUSED(index);
 	Q_UNUSED(role);
 	return QVariant();
 }
 
-QVariant TableCommentsHeaderModel::headerData(int section, Qt::Orientation orientation,
+QVariant SpreadsheetCommentsHeaderModel::headerData(int section, Qt::Orientation orientation,
 		int role) const
 {
 	if( orientation != Qt::Horizontal || role != Qt::DisplayRole || section < 0 || section >= columnCount())
 		return QVariant();
 
-	return QVariant(m_table_model->headerData(section, Qt::Horizontal, TableModel::CommentRole));
+	return QVariant(m_spreadsheet_model->headerData(section, Qt::Horizontal, SpreadsheetModel::CommentRole));
 }
 
-int TableCommentsHeaderModel::rowCount(const QModelIndex &parent) const
+int SpreadsheetCommentsHeaderModel::rowCount(const QModelIndex &parent) const
 {
 	Q_UNUSED(parent)
-	return m_table_model->rowCount();
+	return m_spreadsheet_model->rowCount();
 }
 
-int TableCommentsHeaderModel::columnCount(const QModelIndex & parent) const
+int SpreadsheetCommentsHeaderModel::columnCount(const QModelIndex & parent) const
 {
 	Q_UNUSED(parent)
-	return m_table_model->columnCount();
+	return m_spreadsheet_model->columnCount();
 }
 

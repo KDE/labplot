@@ -40,7 +40,7 @@
 #include "core/plugin/PluginManager.h"
 #else
 #include <KIcon>
-#include "table/Table.h"
+#include "spreadsheet/Spreadsheet.h"
 #include <klocalizedstring.h>
 #endif
 #include <QtDebug>
@@ -212,15 +212,15 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 		if (!reader->skipToEndElement()) return false;
 	}
 #else
-	else if (element_name == "table")
+	else if (element_name == "spreadsheet")
 	{
-		Table * table = new Table(0, 0, 0, tr("Table %1").arg(1));
-		if (!table->load(reader))
+		Spreadsheet * spreadsheet = new Spreadsheet(0, 0, 0, tr("Spreadsheet %1").arg(1));
+		if (!spreadsheet->load(reader))
 		{
-			delete table;
+			delete spreadsheet;
 			return false;
 		}
-		addChild(table);
+		addChild(spreadsheet);
 		loaded = true;
 	}
 	if (!loaded)

@@ -32,7 +32,7 @@
 
 #include <KDialog>
 
-class Spreadsheet;
+class SpreadsheetView;
 #include "ExportWidget.h"
 
 /**
@@ -41,7 +41,7 @@ class Spreadsheet;
 class ExportDialog: public KDialog {
 	Q_OBJECT
 public:
-	ExportDialog(Spreadsheet *);
+	ExportDialog(SpreadsheetView *);
 private:
 	ExportWidget *exportWidget;
 	void setupGUI();

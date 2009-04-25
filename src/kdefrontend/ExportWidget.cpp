@@ -218,7 +218,7 @@ void ExportWidget::importOPJ(MainWin *mainWin, QString filename) {
 	importer.import();
 }
 
-int ExportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s) {
+int ExportWidget::importHDF5(MainWin *mainWin, QString filename, SpreadsheetView *s) {
 	Q_UNUSED(mainWin);
 	Q_UNUSED(s);
 	kDebug()<<"ExportDialog::importHDF5("<<filename<<")"<<endl;
@@ -289,7 +289,7 @@ int ExportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s)
 #endif	
 }
 
-int ExportWidget::importNETCDF(QString filename, Spreadsheet *s) {
+int ExportWidget::importNETCDF(QString filename, SpreadsheetView *s) {
 	Q_UNUSED(s);
 	kDebug()<<"ExportDialog::importNETCDF("<<filename<<")"<<endl;
 #ifdef HAVE_NETCDF
@@ -327,7 +327,7 @@ int ExportWidget::importNETCDF(QString filename, Spreadsheet *s) {
 	return 0;
 }
 
-int ExportWidget::importCDF(QString filename, Spreadsheet *s) {
+int ExportWidget::importCDF(QString filename, SpreadsheetView *s) {
 	Q_UNUSED(s);
 	kDebug()<<"ExportDialog::importCDF("<<filename<<")"<<endl;
 #ifdef HAVE_CDF
@@ -367,7 +367,7 @@ int ExportWidget::importCDF(QString filename, Spreadsheet *s) {
 }
 
 
-void ExportWidget::importBinary(QIODevice *file, Spreadsheet *s) {
+void ExportWidget::importBinary(QIODevice *file, SpreadsheetView *s) {
 	kDebug()<<"ExportDialog::importBinary()"<<endl;
 // TODO : use samex
 

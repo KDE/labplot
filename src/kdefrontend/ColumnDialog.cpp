@@ -29,9 +29,9 @@
 
 #include <KDebug>
 #include "ColumnDialog.h"
-#include "Spreadsheet.h"
+#include "SpreadsheetView.h"
 
-ColumnDialog::ColumnDialog(QWidget *parent, Spreadsheet *s) : KDialog(parent), s(s) {
+ColumnDialog::ColumnDialog(QWidget *parent, SpreadsheetView *s) : KDialog(parent), s(s) {
 	kDebug()<<endl;
 
 	setupGUI();

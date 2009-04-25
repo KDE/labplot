@@ -1,12 +1,12 @@
 /***************************************************************************
-    File                 : Spreadsheet.h
+    File                 : SpreadsheetView.h
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses)
-    Description          : spreadsheet class
+    Description          : spreadsheet view class
 
  ***************************************************************************/
 
@@ -28,16 +28,16 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef SPREADSHEET_H
-#define SPREADSHEET_H
+#ifndef SPREADSHEETVIEW_H
+#define SPREADSHEETVIEW_H
 
 #include <QWidget>
 #include <QMenu>
 #include <QDomElement>
 #include <QTableView>
 
-#include "table/TableModel.h"
-#include "table/Table.h"
+#include "spreadsheet/SpreadsheetModel.h"
+#include "spreadsheet/Spreadsheet.h"
 #include "elements/Set.h"
 #include "elements/sheettype.h"
 
@@ -45,19 +45,19 @@ class QHBoxLayout;
 class MainWin;
 class KAction;
 
-class Spreadsheet: public QWidget // remark: you could inherit from QTableView here, but that makes it really hard to add any other widget to the view later
+class SpreadsheetView: public QWidget // remark: you could inherit from QTableView here, but that makes it really hard to add any other widget to the view later
 {
 	Q_OBJECT
 public:
-	Spreadsheet(Table *table);
-	~Spreadsheet();
+	SpreadsheetView(Spreadsheet *spreadsheet);
+	~SpreadsheetView();
 
 	void createMenu(QMenu* menu=0) const;
 	SheetType sheetType() const { return m_type; }
 	void resetHeader(int from=0);
 	void addSet(Set* set);
 	Set* set() { return m_set; }
-	Table* table() { return m_table; }
+	Spreadsheet* spreadsheet() { return m_spreadsheet; }
 
 	QString columnName(int col) const;
 	void setColumnName(int col, QString name);
@@ -66,11 +66,11 @@ public:
 	SciDAVis::ColumnMode columnFormat(int col) const;
 	void setColumnFormat(int col, SciDAVis::ColumnMode name);
 
-	int rowCount() const { return m_table->rowCount(); }
-	void setRowCount(int count) { m_table->setRowCount(count); }
-	int columnCount() const { return m_table->columnCount(); }
+	int rowCount() const { return m_spreadsheet->rowCount(); }
+	void setRowCount(int count) { m_spreadsheet->setRowCount(count); }
+	int columnCount() const { return m_spreadsheet->columnCount(); }
 	void setColumnCount(int count){
-		m_table->setColumnCount(count);
+		m_spreadsheet->setColumnCount(count);
 	}
 
 	QString text(int row, int col) const;
@@ -81,7 +81,7 @@ public:
 	QList<int> currentColumns() const;	//!< returns a sorted list of selected columns
 
 private:
-	Table *m_table;
+	Spreadsheet *m_spreadsheet;
 	SheetType m_type;			//!< needed for mw->active{Work,Spread}sheet()
 	Set* m_set;
 	void contextMenuEvent(QContextMenuEvent *);
@@ -94,7 +94,7 @@ public slots:
 	void setTitle(QString title="");
 	void setRowNumber(int row=0);
 	void addColumn() { setColumnCount(columnCount()+1); }
-	QString Notes() const { return m_table->comment(); }
+	QString Notes() const { return m_spreadsheet->comment(); }
 	void setNotes(QString notes="");
 	void setProperties(QString label=0,
 		SciDAVis::PlotDesignation type=SciDAVis::X,
@@ -214,9 +214,9 @@ private slots:
 	public:
 		static int defaultColumnWidth();
 		static void setDefaultColumnWidth(int width);
-		//! Set default for comment visibility for table views
+		//! Set default for comment visibility for spreadsheet views
 		static void setDefaultCommentVisibility(bool visible);
-		//! Return the default for comment visibility for table views
+		//! Return the default for comment visibility for spreadsheet views
 		static bool defaultCommentVisibility();
 
 	public slots:
@@ -237,9 +237,9 @@ private slots:
 
 	protected:
 		//! Pointer to the current underlying model
-		TableModel * m_model;
+		SpreadsheetModel * m_model;
 
-		//! The table view
+		//! The spreadsheet view
 		QTableView * m_view_widget;
 		QHBoxLayout * m_main_layout;
 

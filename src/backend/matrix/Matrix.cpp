@@ -741,7 +741,7 @@ bool Matrix::fillProjectMenu(QMenu * menu)
 	return true;
 
 	// TODO:
-	// Convert to Table
+	// Convert to Spreadsheet
 	// Export 
 }
 

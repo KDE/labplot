@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : Table.cpp
+    File                 : Spreadsheet.cpp
     Project              : SciDAVis
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
@@ -28,19 +28,19 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "table/Table.h"
+#include "spreadsheet/Spreadsheet.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include "table/TableView.h"
+#include "spreadsheet/SpreadsheetView.h"
 #else
 #include <KIcon>
-#include "kdefrontend/Spreadsheet.h"
+#include "kdefrontend/SpreadsheetView.h"
 #endif
 
 #include <QApplication>
 #include <QDateTime>
 
-Table::Table(AbstractScriptingEngine *engine, int rows, int columns, const QString& name)
+Spreadsheet::Spreadsheet(AbstractScriptingEngine *engine, int rows, int columns, const QString& name)
 	: AbstractPart(name), scripted(engine)
 {
 	// set initial number of rows and columns
@@ -55,24 +55,20 @@ Table::Table(AbstractScriptingEngine *engine, int rows, int columns, const QStri
 	m_view = NULL;
 }
 
-Table::~Table()
+Spreadsheet::~Spreadsheet()
 {
 }
 
-QWidget *Table::view() const
+QWidget *Spreadsheet::view() const
 {
 	if (!m_view)
 	{
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		m_view = new TableView(const_cast<Table*>(this));
-#else
-		m_view = new Spreadsheet(const_cast<Table*>(this));
-#endif
+		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
 	}
 	return m_view;
 }
 
-int Table::rowCount() const
+int Spreadsheet::rowCount() const
 {
 	int col_rows, result=0;
 	foreach(Column * col, children<Column>())
@@ -81,7 +77,7 @@ int Table::rowCount() const
 	return result;
 }
 
-void Table::removeRows(int first, int count)
+void Spreadsheet::removeRows(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
@@ -92,7 +88,7 @@ void Table::removeRows(int first, int count)
 	RESET_CURSOR;
 }
 
-void Table::insertRows(int before, int count)
+void Spreadsheet::insertRows(int before, int count)
 {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
@@ -103,7 +99,7 @@ void Table::insertRows(int before, int count)
 	RESET_CURSOR;
 }
 
-void Table::setRowCount(int new_size)
+void Spreadsheet::setRowCount(int new_size)
 {
 	int current_size = rowCount();
 	if (new_size > current_size)
@@ -112,7 +108,7 @@ void Table::setRowCount(int new_size)
 		removeRows(new_size, current_size-new_size);
 }
 
-int Table::columnCount(SciDAVis::PlotDesignation pd) const
+int Spreadsheet::columnCount(SciDAVis::PlotDesignation pd) const
 {
 	int count = 0;
 	foreach(Column * col, children<Column>())
@@ -121,7 +117,7 @@ int Table::columnCount(SciDAVis::PlotDesignation pd) const
 	return count;
 }
 
-void Table::removeColumns(int first, int count)
+void Spreadsheet::removeColumns(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
@@ -132,7 +128,7 @@ void Table::removeColumns(int first, int count)
 	RESET_CURSOR;
 }
 
-void Table::insertColumns(int before, int count)
+void Spreadsheet::insertColumns(int before, int count)
 {
 	WAIT_CURSOR;
 	beginMacro(QObject::tr("%1: insert %2 column(s)").arg(name()).arg(count));
@@ -148,7 +144,7 @@ void Table::insertColumns(int before, int count)
 	RESET_CURSOR;
 }
 
-void Table::setColumnCount(int new_size)
+void Spreadsheet::setColumnCount(int new_size)
 {
 	int old_size = columnCount();
 	if ( old_size == new_size || new_size < 0 )
@@ -160,7 +156,7 @@ void Table::setColumnCount(int new_size)
 		insertColumns(old_size, new_size-old_size);
 }
 
-void Table::clear()
+void Spreadsheet::clear()
 {
 	WAIT_CURSOR;
 	beginMacro(QObject::tr("%1: clear").arg(name()));
@@ -170,7 +166,7 @@ void Table::clear()
 	RESET_CURSOR;
 }
 
-void Table::clearMasks()
+void Spreadsheet::clearMasks()
 {
 	WAIT_CURSOR;
 	beginMacro(QObject::tr("%1: clear all masks").arg(name()));
@@ -180,7 +176,7 @@ void Table::clearMasks()
 	RESET_CURSOR;
 }
 
-QMenu *Table::createContextMenu()
+QMenu *Spreadsheet::createContextMenu()
 {
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QMenu *menu = AbstractPart::createContextMenu();
@@ -192,7 +188,7 @@ QMenu *Table::createContextMenu()
 #endif
 }
 
-bool Table::fillProjectMenu(QMenu * menu)
+bool Spreadsheet::fillProjectMenu(QMenu * menu)
 {
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	bool rc = false;
@@ -204,7 +200,7 @@ bool Table::fillProjectMenu(QMenu * menu)
 }
 
 
-void Table::moveColumn(int from, int to)
+void Spreadsheet::moveColumn(int from, int to)
 {
 	Column * col = child<Column>(from);
 	beginMacro(tr("%1: move column %2 from position %3 to %4.").arg(name()).arg(col->name()).arg(from+1).arg(to+1));
@@ -213,7 +209,7 @@ void Table::moveColumn(int from, int to)
 	endMacro();
 }
 
-void Table::copy(Table * other)
+void Spreadsheet::copy(Spreadsheet * other)
 {
 	WAIT_CURSOR;
 	beginMacro(QObject::tr("%1: copy %2").arg(name()).arg(other->name()));
@@ -240,7 +236,7 @@ void Table::copy(Table * other)
 	RESET_CURSOR;
 }
 
-int Table::colX(int col)
+int Spreadsheet::colX(int col)
 {
 	for(int i=col-1; i>=0; i--)
 	{
@@ -256,7 +252,7 @@ int Table::colX(int col)
 	return -1;
 }
 
-int Table::colY(int col)
+int Spreadsheet::colY(int col)
 {
 	int cols = columnCount();
 	// look to the right first
@@ -273,7 +269,7 @@ int Table::colY(int col)
 	return -1;
 }
 
-void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
+void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 {
 	if(cols.isEmpty()) return;
 
@@ -504,7 +500,7 @@ void Table::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 } // end of sortColumns()
 
 
-QIcon Table::icon() const
+QIcon Spreadsheet::icon() const
 {
 	QIcon ico;
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -517,7 +513,7 @@ QIcon Table::icon() const
 	return ico;
 }
 
-QString Table::text(int row, int col) const
+QString Spreadsheet::text(int row, int col) const
 {
 	Column * col_ptr = column(col);
 	if(!col_ptr)
@@ -529,20 +525,20 @@ QString Table::text(int row, int col) const
 }
 /* ========== loading and saving ============ */
 
-void Table::save(QXmlStreamWriter * writer) const
+void Spreadsheet::save(QXmlStreamWriter * writer) const
 {
-	writer->writeStartElement("table");
+	writer->writeStartElement("spreadsheet");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	foreach (Column * col, children<Column>(IncludeHidden))
 		col->save(writer);
-	writer->writeEndElement(); // "table"
+	writer->writeEndElement(); // "spreadsheet"
 }
 
-bool Table::load(XmlStreamReader * reader)
+bool Spreadsheet::load(XmlStreamReader * reader)
 {
-	if(reader->isStartElement() && reader->name() == "table")
+	if(reader->isStartElement() && reader->name() == "spreadsheet")
 	{
 		setColumnCount(0);
 		setRowCount(0);
@@ -581,8 +577,8 @@ bool Table::load(XmlStreamReader * reader)
 			}
 		}
 	}
-	else // no table element
-		reader->raiseError(tr("no table element found"));
+	else // no spreadsheet element
+		reader->raiseError(tr("no spreadsheet element found"));
 
 	return !reader->hasError();
 }

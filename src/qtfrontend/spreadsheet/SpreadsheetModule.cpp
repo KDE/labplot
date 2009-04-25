@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : TableModule.cpp
+    File                 : SpreadsheetModule.cpp
     Project              : SciDAVis
-    Description          : Module providing the table Part and support classes.
+    Description          : Module providing the spreadsheet Part and support classes.
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email address)
@@ -26,11 +26,11 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "TableModule.h"
+#include "SpreadsheetModule.h"
 
-#include "table/Table.h"
-#include "table/TableView.h"
-#include "table/AsciiTableImportFilter.h"
+#include "spreadsheet/Spreadsheet.h"
+#include "spreadsheet/SpreadsheetView.h"
+#include "spreadsheet/AsciiSpreadsheetImportFilter.h"
 #include "core/Project.h"
 #include "core/ProjectWindow.h"
 #include "lib/ActionManager.h"
@@ -38,77 +38,65 @@
 #include <QPixmap>
 #include <QtDebug>
 #include <QSettings>
-#include "ui_TableConfigPage.h"
+#include "ui_SpreadsheetConfigPage.h"
 
-TableConfigPage::TableConfigPage() 
+SpreadsheetConfigPage::SpreadsheetConfigPage() 
 {
-	ui = new Ui_TableConfigPage();
+	ui = new Ui_SpreadsheetConfigPage();
 	ui->setupUi(this);
 }
 
-TableConfigPage::~TableConfigPage() 
+SpreadsheetConfigPage::~SpreadsheetConfigPage() 
 {
 	delete ui;
 }
 
-void TableConfigPage::apply()
+void SpreadsheetConfigPage::apply()
 {
-	// TODO: read settings from ui and change them in Table
+	// TODO: read settings from ui and change them in Spreadsheet
 }
 
-AbstractPart * TableModule::makePart()
+AbstractPart * SpreadsheetModule::makePart()
 {
-	return new Table(0, 30, 2, tr("Table %1").arg(1));
+	return new Spreadsheet(0, 30, 2, tr("Spreadsheet %1").arg(1));
 }
 
-QAction * TableModule::makeAction(QObject *parent)
+QAction * SpreadsheetModule::makeAction(QObject *parent)
 {
-	QAction *new_table = new QAction(tr("New &Table"), parent);
-	new_table->setShortcut(tr("Ctrl+T", "new table shortcut"));
-	new_table->setIcon(QIcon(QPixmap(":/table.xpm")));
-	TableView::actionManager()->addAction(new_table, "new_table");
-	return new_table;
+	QAction *new_spreadsheet = new QAction(tr("New &Spreadsheet"), parent);
+	new_spreadsheet->setShortcut(tr("Ctrl+T", "new spreadsheet shortcut"));
+	new_spreadsheet->setIcon(QIcon(QPixmap(":/table.xpm")));
+	SpreadsheetView::actionManager()->addAction(new_spreadsheet, "new_spreadsheet");
+	return new_spreadsheet;
 }
 
-AbstractImportFilter * TableModule::makeImportFilter()
+AbstractImportFilter * SpreadsheetModule::makeImportFilter()
 {
-	return new AsciiTableImportFilter();
+	return new AsciiSpreadsheetImportFilter();
 }
 
-AbstractExportFilter * TableModule::makeExportFilter()
+AbstractExportFilter * SpreadsheetModule::makeExportFilter()
 {
 	// TODO
 	return 0;
 }
 
-void TableModule::initActionManager()
+void SpreadsheetModule::initActionManager()
 {
-	TableView::initActionManager();
+	SpreadsheetView::initActionManager();
 }
 
-ConfigPageWidget * TableModule::makeConfigPage()
+ConfigPageWidget * SpreadsheetModule::makeConfigPage()
 {
-	return new TableConfigPage();
+	return new SpreadsheetConfigPage();
 }
 		
-QString TableModule::configPageLabel()
+QString SpreadsheetModule::configPageLabel()
 {
-	return QObject::tr("Table");
+	return QObject::tr("Spreadsheet");
 }
 
-void TableModule::loadSettings()
-{
-#ifdef Q_OS_MAC // Mac
-	QSettings settings(QSettings::IniFormat,QSettings::UserScope, "SciDAVis", "SciDAVis");
-#else
-	QSettings settings(QSettings::NativeFormat,QSettings::UserScope, "SciDAVis", "SciDAVis");
-#endif
-
-	settings.beginGroup("Table");
-	settings.endGroup();
-}
-
-void TableModule::saveSettings()
+void SpreadsheetModule::loadSettings()
 {
 #ifdef Q_OS_MAC // Mac
 	QSettings settings(QSettings::IniFormat,QSettings::UserScope, "SciDAVis", "SciDAVis");
@@ -116,32 +104,44 @@ void TableModule::saveSettings()
 	QSettings settings(QSettings::NativeFormat,QSettings::UserScope, "SciDAVis", "SciDAVis");
 #endif
 
-	settings.beginGroup("Table");
+	settings.beginGroup("Spreadsheet");
 	settings.endGroup();
 }
 
-bool TableModule::canCreate(const QString & element_name)
+void SpreadsheetModule::saveSettings()
+{
+#ifdef Q_OS_MAC // Mac
+	QSettings settings(QSettings::IniFormat,QSettings::UserScope, "SciDAVis", "SciDAVis");
+#else
+	QSettings settings(QSettings::NativeFormat,QSettings::UserScope, "SciDAVis", "SciDAVis");
+#endif
+
+	settings.beginGroup("Spreadsheet");
+	settings.endGroup();
+}
+
+bool SpreadsheetModule::canCreate(const QString & element_name)
 {	
-	return element_name == "table";
+	return element_name == "spreadsheet";
 }
 
-AbstractAspect * TableModule::createAspectFromXml(XmlStreamReader * reader)
+AbstractAspect * SpreadsheetModule::createAspectFromXml(XmlStreamReader * reader)
 {
-	Table * table = new Table(0, 0, 0, tr("Table %1").arg(1));
-	if (!(table->load(reader)))
+	Spreadsheet * spreadsheet = new Spreadsheet(0, 0, 0, tr("Spreadsheet %1").arg(1));
+	if (!(spreadsheet->load(reader)))
 	{
-		delete table;
+		delete spreadsheet;
 		return NULL;
 	}
 	else
-		return table;
+		return spreadsheet;
 }
 
-void TableModule::staticInit()
+void SpreadsheetModule::staticInit()
 {
-	Table::setGlobalDefault("default_comment_visibility", false);
+	Spreadsheet::setGlobalDefault("default_comment_visibility", false);
 }
 
-Q_EXPORT_PLUGIN2(scidavis_table, TableModule)
+Q_EXPORT_PLUGIN2(scidavis_spreadsheet, SpreadsheetModule)
 
 

@@ -38,7 +38,7 @@
 #include "analysis/UserFunctionFit.h"
 #include "analysis/SigmoidalFit.h"
 #include "matrix/Matrix.h"
-#include "table/Table.h"
+#include "table/Spreadsheet.h"
 
 #include <muParserError.h>
 
@@ -218,7 +218,7 @@ void FitDialog::initFitPage()
 	connect( btnDeleteFitCurves, SIGNAL( clicked() ), this, SLOT(deleteFitCurves()));
 	connect( boxWeighting, SIGNAL( activated(int) ), this, SLOT( enableWeightingParameters(int) ) );
 	connect( buttonAdvanced, SIGNAL(clicked()), this, SLOT(showAdvancedPage() ) );
-    connect( tableNamesBox, SIGNAL( activated(int) ), this, SLOT( selectSrcTable(int) ) );
+    connect( tableNamesBox, SIGNAL( activated(int) ), this, SLOT( selectSrcSpreadsheet(int) ) );
 
 	setFocusProxy(boxFunction);
 }
@@ -1371,7 +1371,7 @@ void FitDialog::selectSrcTable(int tabnr)
 	
 	if (tabnr >= 0 && tabnr < m_src_table->count())
 	{
-		Table *t = (Table*)m_src_table->at(tabnr);
+		Spreadsheet *t = (Spreadsheet*)m_src_table->at(tabnr);
 		if (t)
 			colNamesBox->addItems(t->colNames());
 	}

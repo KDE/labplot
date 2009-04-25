@@ -298,7 +298,7 @@ void AbstractSimpleFilter::setMasked(Interval<int> i, bool mask)
 /**
  * \brief Overloaded function for convenience
  */
-void AbstractSimpleFilter::setMasked(int row, bool mask = true) {
+void AbstractSimpleFilter::setMasked(int row, bool mask) {
 	setMasked(Interval<int>(row,row), mask);
 }
 

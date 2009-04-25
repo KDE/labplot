@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : TableDialog.cpp
+    File                 : SpreadsheetDialog.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2006 by Ion Vasilief, Tilman Benkert
@@ -26,8 +26,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "TableDialog.h"
-#include "Table.h"
+#include "SpreadsheetDialog.h"
+#include "Spreadsheet.h"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -43,9 +43,9 @@
 #include <QRegExp>
 #include <QDate>
 
-TableDialog::TableDialog(Table *t, QWidget* parent, Qt::WFlags fl )
+SpreadsheetDialog::SpreadsheetDialog(Spreadsheet *t, QWidget* parent, Qt::WFlags fl )
     : QDialog( parent, fl ),
-    m_table(t)
+    m_spreadsheet(t)
 {
     setWindowTitle( tr( "Column options" ) );
     setSizeGripEnabled(true);
@@ -61,10 +61,10 @@ TableDialog::TableDialog(Table *t, QWidget* parent, Qt::WFlags fl )
 	buttonPrev->setAutoDefault(false);
 
 	boxSelectColumn = new QComboBox();
-	QStringList colNames = m_table->colNames();
+	QStringList colNames = m_spreadsheet->colNames();
 	for (int i=0; i<colNames.size(); i++)
 		boxSelectColumn->addItem(colNames[i]); 
-	boxSelectColumn->setCurrentIndex(m_table->selectedColumn());
+	boxSelectColumn->setCurrentIndex(m_spreadsheet->selectedColumn());
 
 	buttonNext = new QPushButton(tr("Next &>>","next column"));
 	buttonNext->setAutoDefault(false);
@@ -159,9 +159,9 @@ TableDialog::TableDialog(Table *t, QWidget* parent, Qt::WFlags fl )
 	hbox2->addWidget(applyToAllBox);
 
 	comments = new QTextEdit();
-	boxShowTableComments = new QCheckBox(tr("&Display Comments in Header"));
+	boxShowSpreadsheetComments = new QCheckBox(tr("&Display Comments in Header"));
 	// TODO
-	//boxShowTableComments->setChecked(m_table->commentsEnabled());
+	//boxShowSpreadsheetComments->setChecked(m_spreadsheet->commentsEnabled());
 
 	QVBoxLayout* vbox4 = new QVBoxLayout();
 	vbox4->addLayout(hbox1);
@@ -169,12 +169,12 @@ TableDialog::TableDialog(Table *t, QWidget* parent, Qt::WFlags fl )
 	vbox4->addLayout(hbox2);
 	vbox4->addWidget(new QLabel(tr( "Comment:" )));
 	vbox4->addWidget(comments);
-	vbox4->addWidget(boxShowTableComments);
+	vbox4->addWidget(boxShowSpreadsheetComments);
 
 	setLayout(vbox4);
 	setFocusProxy (colName);
 
-	updateColumn(m_table->selectedColumn());
+	updateColumn(m_spreadsheet->selectedColumn());
 	resize(minimumSize());
 
 	// signals and slots connections
@@ -189,10 +189,10 @@ TableDialog::TableDialog(Table *t, QWidget* parent, Qt::WFlags fl )
 	connect(buttonNext, SIGNAL(clicked()), this, SLOT(nextColumn()));
 	connect(formatBox, SIGNAL(activated(int)), this, SLOT(enablePrecision(int)) );
 	connect(precisionBox, SIGNAL(valueChanged(int)), this, SLOT(updatePrecision(int)));
-	connect(boxShowTableComments, SIGNAL(toggled(bool)), m_table, SLOT(showComments(bool)));
+	connect(boxShowSpreadsheetComments, SIGNAL(toggled(bool)), m_spreadsheet, SLOT(showComments(bool)));
 }
 
-void TableDialog::enablePrecision(int f)
+void SpreadsheetDialog::enablePrecision(int f)
 {
 	if(displayBox->currentIndex())
 		return;//the col type != "Numeric"
@@ -200,63 +200,63 @@ void TableDialog::enablePrecision(int f)
 	precisionBox->setEnabled(f > 0);
 }
 
-void TableDialog::accept()
+void SpreadsheetDialog::accept()
 {
 	apply();
 	close();
 }
 
-void TableDialog::prevColumn()
+void SpreadsheetDialog::prevColumn()
 {
-	int sc = m_table->selectedColumn();
+	int sc = m_spreadsheet->selectedColumn();
 	apply();
 	updateColumn(--sc);
 }
 
-void TableDialog::nextColumn()
+void SpreadsheetDialog::nextColumn()
 {
-	int sc = m_table->selectedColumn();
+	int sc = m_spreadsheet->selectedColumn();
 	apply();
 	updateColumn(++sc);
 }
 
-void TableDialog::selectColumn(int sc)
+void SpreadsheetDialog::selectColumn(int sc)
 {
 	apply();
 	updateColumn(sc);
 }
 
-void TableDialog::updateColumn(int sc)
+void SpreadsheetDialog::updateColumn(int sc)
 {
-	if(sc <0) sc = m_table->columnCount() -1;
-	if(sc >= m_table->columnCount()) sc = 0;
+	if(sc <0) sc = m_spreadsheet->columnCount() -1;
+	if(sc >= m_spreadsheet->columnCount()) sc = 0;
 
-	int colType = m_table->columnType(sc);
+	int colType = m_spreadsheet->columnType(sc);
 
 	// TODO replace the commented out lines (###)
-	// acessing TableView from outside Table is absolutely forbidden
-	m_table->setSelectedCol(sc);
-	//### m_table->table()->clearSelection ();
-	//### m_table->table()->selectColumn(sc);
-	columnsBox->setCurrentIndex(m_table->colPlotDesignation(sc));
+	// acessing SpreadsheetView from outside Spreadsheet is absolutely forbidden
+	m_spreadsheet->setSelectedCol(sc);
+	//### m_spreadsheet->spreadsheet()->clearSelection ();
+	//### m_spreadsheet->spreadsheet()->selectColumn(sc);
+	columnsBox->setCurrentIndex(m_spreadsheet->colPlotDesignation(sc));
 
-	QString colLabel = m_table->colLabel(sc);
+	QString colLabel = m_spreadsheet->colLabel(sc);
 	colName->setText(colLabel);
 	colName->selectAll();
 
-	comments->setText(m_table->colComment(sc));
-	colWidth->setValue(m_table->columnWidth(sc));
+	comments->setText(m_spreadsheet->colComment(sc));
+	colWidth->setValue(m_spreadsheet->columnWidth(sc));
 
 	displayBox->setCurrentIndex(colType);
 	updateDisplay(colType);
 
-	// TODO not implemented yet in the new Table
-	//### m_table->saveToMemory();
+	// TODO not implemented yet in the new Spreadsheet
+	//### m_spreadsheet->saveToMemory();
 
 	if (colType == SciDAVis::Numeric)
 	{
 		int f, prec;
-		m_table->columnNumericFormat(sc, &f, &prec);
+		m_spreadsheet->columnNumericFormat(sc, &f, &prec);
 
 		formatBox->setCurrentIndex(f);
 		precisionBox->setValue(prec);
@@ -264,7 +264,7 @@ void TableDialog::updateColumn(int sc)
 	}
 	else if (colType == SciDAVis::Time || colType == SciDAVis::Date)
 	{
-		QString format = m_table->columnFormat(sc);
+		QString format = m_spreadsheet->columnFormat(sc);
 		if (formatBox->findText(format) < 0)
 			formatBox->insertItem(0, format);
 
@@ -272,7 +272,7 @@ void TableDialog::updateColumn(int sc)
 	}
 	else if (colType == SciDAVis::Day)
 	{
-		QString format = m_table->columnFormat(sc);
+		QString format = m_spreadsheet->columnFormat(sc);
 		if (format == "ddd")
 			formatBox->setCurrentIndex(0);
 		else if (format == "dddd")
@@ -282,7 +282,7 @@ void TableDialog::updateColumn(int sc)
 	}
 	else if (colType == SciDAVis::Month)
 	{
-		QString format = m_table->columnFormat(sc);
+		QString format = m_spreadsheet->columnFormat(sc);
 		if (format == "MMM")
 			formatBox->setCurrentIndex(0);
 		else if (format == "MMMM")
@@ -292,14 +292,14 @@ void TableDialog::updateColumn(int sc)
 	}
 }
 
-void TableDialog::changeColWidth(int width)
+void SpreadsheetDialog::changeColWidth(int width)
 {
-	m_table->changeColWidth(width, applyToAllBox->isChecked());
+	m_spreadsheet->changeColWidth(width, applyToAllBox->isChecked());
 	// TODO
-	//m_table->setHeaderColType();
+	//m_spreadsheet->setHeaderColType();
 }
 
-void TableDialog::apply()
+void SpreadsheetDialog::apply()
 {
 	if (colName->text().contains("_")){
 		QMessageBox::warning(this, tr("Warning"),
@@ -312,15 +312,15 @@ void TableDialog::apply()
 				tr("The column names must only contain letters and digits!"));
 		name.remove(QRegExp("\\W"));
 	}
-	m_table->changeColWidth(colWidth->value(), applyToAllBox->isChecked());
+	m_spreadsheet->changeColWidth(colWidth->value(), applyToAllBox->isChecked());
 	// FIXME: allowing line breaks in comments may brake the file format
-	// old code: m_table->setColComment(m_table->selectedColumn(), comments->text().replace("\n", " ").replace("\t", " "));
-	m_table->setColComment(m_table->selectedColumn(), comments->text().replace("\t", " "));
+	// old code: m_spreadsheet->setColComment(m_spreadsheet->selectedColumn(), comments->text().replace("\n", " ").replace("\t", " "));
+	m_spreadsheet->setColComment(m_spreadsheet->selectedColumn(), comments->text().replace("\t", " "));
 
-	m_table->changeColName(name.replace("_", "-"));
-	m_table->enumerateRightCols(enumerateAllBox->isChecked());
+	m_spreadsheet->changeColName(name.replace("_", "-"));
+	m_spreadsheet->enumerateRightCols(enumerateAllBox->isChecked());
 	enumerateAllBox->setChecked(false);
-	colName->setText(m_table->colNames().at(m_table->selectedColumn()));
+	colName->setText(m_spreadsheet->colNames().at(m_spreadsheet->selectedColumn()));
 
 	int format = formatBox->currentIndex();
 	int colType = displayBox->currentIndex();
@@ -362,52 +362,52 @@ void TableDialog::apply()
 	}
 
 	boxSelectColumn->disconnect();
-	QStringList colNames = m_table->colNames();
+	QStringList colNames = m_spreadsheet->colNames();
 	boxSelectColumn->clear();
 	for (int i=0; i<colNames.size(); i++)
 		boxSelectColumn->addItem(colNames[i]); 
-	boxSelectColumn->setCurrentIndex(m_table->selectedColumn());
+	boxSelectColumn->setCurrentIndex(m_spreadsheet->selectedColumn());
 	connect(boxSelectColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(selectColumn(int)));
 }
 
-void TableDialog::closeEvent( QCloseEvent* ce )
+void SpreadsheetDialog::closeEvent( QCloseEvent* ce )
 {
-	// TODO not implemented yet in the new Table
-	//m_table->freeMemory();
+	// TODO not implemented yet in the new Spreadsheet
+	//m_spreadsheet->freeMemory();
 	ce->accept();
 }
 
-void TableDialog::setPlotDesignation(int i)
+void SpreadsheetDialog::setPlotDesignation(int i)
 {
 	switch(i)
 	{
 		case 0:
-			m_table->setPlotDesignation(SciDAVis::noDesignation);
+			m_spreadsheet->setPlotDesignation(SciDAVis::noDesignation);
 			break;
 
 		case 1:
-			m_table->setPlotDesignation(SciDAVis::X);
+			m_spreadsheet->setPlotDesignation(SciDAVis::X);
 			break;
 
 		case 2:
-			m_table->setPlotDesignation(SciDAVis::Y);
+			m_spreadsheet->setPlotDesignation(SciDAVis::Y);
 			break;
 
 		case 3:
-			m_table->setPlotDesignation(SciDAVis::Z);
+			m_spreadsheet->setPlotDesignation(SciDAVis::Z);
 			break;
 
 		case 4:
-			m_table->setPlotDesignation(SciDAVis::xErr);
+			m_spreadsheet->setPlotDesignation(SciDAVis::xErr);
 			break;
 
 		case 5:
-			m_table->setPlotDesignation(SciDAVis::yErr);
+			m_spreadsheet->setPlotDesignation(SciDAVis::yErr);
 			break;
 	}
 }
 
-void TableDialog::showPrecisionBox(int item)
+void SpreadsheetDialog::showPrecisionBox(int item)
 {
 	switch(item)
 	{
@@ -429,12 +429,12 @@ void TableDialog::showPrecisionBox(int item)
 	}
 }
 
-void TableDialog::updatePrecision(int prec)
+void SpreadsheetDialog::updatePrecision(int prec)
 {
 	setNumericFormat(formatBox->currentIndex(), prec, applyToRightCols->isChecked());
 }
 
-void TableDialog::updateDisplay(int item)
+void SpreadsheetDialog::updateDisplay(int item)
 {
 	labelFormat->show();
 	formatBox->show();
@@ -512,27 +512,27 @@ void TableDialog::updateDisplay(int item)
 	}
 }
 
-void TableDialog::setDateTimeFormat(int type, const QString& format, bool allRightColumns)
+void SpreadsheetDialog::setDateTimeFormat(int type, const QString& format, bool allRightColumns)
 {
 	// TODO
 	/*
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	bool ok = false;
-	int sc = m_table->selectedColumn();
+	int sc = m_spreadsheet->selectedColumn();
 	if (allRightColumns){
-		for (int i = sc; i<m_table->columnCount(); i++){
+		for (int i = sc; i<m_spreadsheet->columnCount(); i++){
 			if (type == SciDAVis::Date)
-				ok = m_table->setDateFormat(format, i);
+				ok = m_spreadsheet->setDateFormat(format, i);
 			else if (type == SciDAVis::Time)
-				ok = m_table->setTimeFormat(format, i);
+				ok = m_spreadsheet->setTimeFormat(format, i);
 			if (!ok)
 				break;
 		}
 	}
 	else if (type == SciDAVis::Date)
-		ok = m_table->setDateFormat(format, sc);
+		ok = m_spreadsheet->setDateFormat(format, sc);
 	else if (type == SciDAVis::Time)
-		ok = m_table->setTimeFormat(format, sc);
+		ok = m_spreadsheet->setTimeFormat(format, sc);
 
 	QApplication::restoreOverrideCursor();
 
@@ -546,67 +546,67 @@ void TableDialog::setDateTimeFormat(int type, const QString& format, bool allRig
 		formatBox->insertItem(0, format);
 		formatBox->setCurrentText(format);
 	}
-	m_table->notifyChanges();
+	m_spreadsheet->notifyChanges();
 	*/
 }
 
-void TableDialog::setNumericFormat(int type, int prec, bool allRightColumns)
+void SpreadsheetDialog::setNumericFormat(int type, int prec, bool allRightColumns)
 {
 	// TODO
 	/*
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	int sc = m_table->selectedColumn();
+	int sc = m_spreadsheet->selectedColumn();
 	if (allRightColumns)
 	{
-		for (int i = sc; i<m_table->columnCount(); i++)
-			m_table->setColNumericFormat(type, prec, i);
+		for (int i = sc; i<m_spreadsheet->columnCount(); i++)
+			m_spreadsheet->setColNumericFormat(type, prec, i);
 	}
 	else
-		m_table->setColNumericFormat(type, prec, sc);
+		m_spreadsheet->setColNumericFormat(type, prec, sc);
 
-	m_table->notifyChanges();
+	m_spreadsheet->notifyChanges();
 	QApplication::restoreOverrideCursor();
 	*/
 }
 
-void TableDialog::setTextFormat(bool allRightColumns)
+void SpreadsheetDialog::setTextFormat(bool allRightColumns)
 {
-	int sc = m_table->selectedColumn();
+	int sc = m_spreadsheet->selectedColumn();
 // TODO
 /*	if (allRightColumns){
-		for (int i = sc; i<m_table->columnCount(); i++)
-			m_table->setTextFormat(i);
+		for (int i = sc; i<m_spreadsheet->columnCount(); i++)
+			m_spreadsheet->setTextFormat(i);
 	}
 	else*/
-		m_table->setTextFormat(sc);
+		m_spreadsheet->setTextFormat(sc);
 }
 
-void TableDialog::setDayFormat(const QString& format, bool allRightColumns)
+void SpreadsheetDialog::setDayFormat(const QString& format, bool allRightColumns)
 {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	int sc = m_table->selectedColumn();
+	int sc = m_spreadsheet->selectedColumn();
 	if (allRightColumns){
-		for (int i = sc; i<m_table->columnCount(); i++)
-			m_table->setDayFormat(format, i);
+		for (int i = sc; i<m_spreadsheet->columnCount(); i++)
+			m_spreadsheet->setDayFormat(format, i);
 	}
 	else
-		m_table->setDayFormat(format, sc);
+		m_spreadsheet->setDayFormat(format, sc);
 
 	QApplication::restoreOverrideCursor();
-	m_table->notifyChanges();
+	m_spreadsheet->notifyChanges();
 }
 
-void TableDialog::setMonthFormat(const QString& format, bool allRightColumns)
+void SpreadsheetDialog::setMonthFormat(const QString& format, bool allRightColumns)
 {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	int sc = m_table->selectedColumn();
+	int sc = m_spreadsheet->selectedColumn();
 	if (allRightColumns){
-		for (int i = sc; i<m_table->columnCount(); i++)
-			m_table->setMonthFormat(format, i);
+		for (int i = sc; i<m_spreadsheet->columnCount(); i++)
+			m_spreadsheet->setMonthFormat(format, i);
 	}
 	else
-		m_table->setMonthFormat(format, sc);
+		m_spreadsheet->setMonthFormat(format, sc);
 
 	QApplication::restoreOverrideCursor();
-	m_table->notifyChanges();
+	m_spreadsheet->notifyChanges();
 }

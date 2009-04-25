@@ -120,7 +120,7 @@ private:
 	void initAppPage();
 	void initCurvesPage();
 	void initPlots3DPage();
-	void initTablesPage();
+	void initSpreadsheetsPage();
 	void initConfirmationsPage();
 	void initFittingPage();
 
@@ -141,7 +141,7 @@ private:
 	QWidget *application, *curves, *plots3D, *fitPage, *numericFormatPage;
 	QPushButton* buttonAxesFont, *buttonNumbersFont, *buttonLegendFont, *buttonTitleFont, *fontsBtn;
 	QCheckBox *boxSearchUpdates, *boxOrthogonal, *logBox, *plotLabelBox, *scaleErrorsBox;
-	QCheckBox *boxTitle, *boxFrame, *boxPlots3D, *boxPlots2D, *boxTables, *boxNotes, *boxFolders;
+	QCheckBox *boxTitle, *boxFrame, *boxPlots3D, *boxPlots2D, *boxSpreadsheets, *boxNotes, *boxFolders;
 	QCheckBox *boxSave, *boxBackbones, *boxAllAxes, *boxShowLegend, *boxSmoothMesh;
 	QCheckBox *boxAutoscaling, *boxShowProjection, *boxMatrices, *boxScaleFonts, *boxResize, *boxUseGroupSeparator;
 	QComboBox *boxMajTicks, *boxMinTicks, *boxStyle, *boxCurveStyle, *boxSeparator, *boxLanguage, *boxDecimalSeparator;
@@ -153,8 +153,8 @@ private:
 	QLabel *labelFrameWidth, *lblLanguage, *lblWorkspace, *lblPanels, *lblPageHeader;
 	QLabel *lblPanelsText, *lblFonts, *lblStyle, *lblDecimalSeparator, *lblAppPrecision;
 	QGroupBox *groupBoxConfirm;
-	QGroupBox *groupBoxTableFonts, *groupBoxTableCol;
-	QLabel *lblSeparator, *lblTableBackground, *lblTextColor, *lblHeaderColor;
+	QGroupBox *groupBoxSpreadsheetFonts, *groupBoxSpreadsheetCol;
+	QLabel *lblSeparator, *lblSpreadsheetBackground, *lblTextColor, *lblHeaderColor;
 	QLabel *lblSymbSize, *lblAxesLineWidth, *lblCurveStyle, *lblResolution, *lblPrecision;
 	QGroupBox *groupBox3DFonts, *groupBox3DCol;
 	QLabel *lblMargin, *lblMajTicks, *lblMajTicksLength, *lblLineWidth, *lblMinTicks, *lblMinTicksLength, *lblPoints, *lblPeaksColor;
@@ -164,7 +164,7 @@ private:
 	ColorBox *boxPeaksColor;
 	QLabel *lblScriptingLanguage;
 	QComboBox *boxScriptingLanguage;
-	QCheckBox *boxAntialiasing, *boxAutoscale3DPlots, *boxTableComments;
+	QCheckBox *boxAntialiasing, *boxAutoscale3DPlots, *boxSpreadsheetComments;
 };
 
 #endif // ifndef PREFERENCES_DIALOG_H

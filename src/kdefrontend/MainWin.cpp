@@ -47,7 +47,7 @@
 #include <KDebug>
 #include <KFilterDev>
 
-#include "Spreadsheet.h"
+#include "SpreadsheetView.h"
 #include "worksheet/Worksheet.h"
 #include "worksheet/WorksheetView.h"
 #include "elements/Set.h"
@@ -58,7 +58,7 @@
 #include "core/Folder.h"
 #include "core/ProjectExplorer.h"
 #include "core/AspectTreeModel.h"
-#include "table/Table.h"
+#include "spreadsheet/Spreadsheet.h"
 
 MainWin::MainWin(QWidget *parent, const QString& filename)
 	: KXmlGuiWindow(parent)
@@ -309,14 +309,14 @@ void MainWin::updateGUI() {
  		factory->container("view", this)->setEnabled(false);
  		factory->container("drawing", this)->setEnabled(false);
 
-		//Handle the Table-object
-		Table* table=activeTable();
-		if (table){
+		//Handle the Spreadsheet-object
+		Spreadsheet* spreadsheet=activeSpreadsheet();
+		if (spreadsheet){
 			//enable spreadsheet related menus
 			factory->container("analysis", this)->setEnabled(true);
 			factory->container("spreadsheet", this)->setEnabled(true);
 
-			Spreadsheet* view=qobject_cast<Spreadsheet*>(table->view());
+			SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
 			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
 			view->createMenu(menu);
 		}else{
@@ -493,21 +493,21 @@ void MainWin::print() {
 /*!
 	adds a new Table (Spreadsheet) to the project.
 */
-Table* MainWin::newSpreadsheet() {
-	Table * table = new Table(0, 100, 2, i18n("Spreadsheet %1").arg(1));
+Spreadsheet* MainWin::newSpreadsheet() {
+	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, i18n("Spreadsheet %1").arg(1));
 
 	QModelIndex index = m_project_explorer->currentIndex();
 
 	if(!index.isValid())
-		m_project->addChild(table);
+		m_project->addChild(spreadsheet);
 	else {
 		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
-		parent_aspect->folder()->addChild(table);
+		parent_aspect->folder()->addChild(spreadsheet);
 	}
 
 	kDebug()<<"new spreadsheet created"<<endl;
-    return table;
+    return spreadsheet;
 }
 
 /*!
@@ -531,13 +531,13 @@ Worksheet* MainWin::newWorksheet() {
 
 
 /*!
-	returns a pointer to a Table-object, if the currently active/selected Aspect is of type \a Spreadsheet.
+	returns a pointer to a Spreadsheet-object, if the currently active/selected Aspect is of type \a Spreadsheet.
 	Otherwise returns \a 0.
 */
-Table* MainWin::activeTable() const{
-	Table* t=0;
+Spreadsheet* MainWin::activeSpreadsheet() const{
+	Spreadsheet* t=0;
 	if ( m_current_aspect )
-  		t=qobject_cast<Table*>(m_current_aspect);
+  		t=qobject_cast<Spreadsheet*>(m_current_aspect);
 
 	return t;
 }
@@ -555,12 +555,12 @@ Worksheet* MainWin::activeWorksheet() const{
 }
 
 //TODO remove?
-// Spreadsheet* MainWin::getSpreadsheet(QString name) const{
+// SpreadsheetView* MainWin::getSpreadsheet(QString name) const{
 // // TODO: port to use aspects
 // 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
 // 	for (int i=0; i<wlist.size(); i++)
 // 		if(wlist.at(i)->windowTitle() == name)
-// 			return (Spreadsheet *)wlist.at(i);
+// 			return (SpreadsheetView *)wlist.at(i);
 // 	return 0;
 // }
 
@@ -598,7 +598,7 @@ bool MainWin::hasSheet(const QModelIndex & index) const{
 		hasSheet(currentChild);
 		aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
 		bool isTopLevel = false;
-		if (aspect->inherits("Worksheet") || aspect->inherits("Table"))
+		if (aspect->inherits("Worksheet") || aspect->inherits("Spreadsheet"))
 				return true;
 	}
 	return false;
@@ -663,7 +663,7 @@ void MainWin::functionPlotActionTriggered(QAction* action){
 			//w->addSet(set, type);
 		}else{
 			//TODO
-// 			Table* t=0;
+// 			Spreadsheet* t=0;
 // 			if (t!=0){
 // 				t->addSet(set, type);
 		}

@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : TableDoubleHeaderView.cpp
+    File                 : SpreadsheetDoubleHeaderView.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert,
     Email (use @ for *)  : thzs*gmx.net
-    Description          : Horizontal header for TableView displaying comments in a second header
+    Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 
  ***************************************************************************/
 
@@ -27,48 +27,48 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "TableDoubleHeaderView.h"
-#include "TableCommentsHeaderModel.h"
+#include "spreadsheet/SpreadsheetDoubleHeaderView.h"
+#include "spreadsheet/SpreadsheetCommentsHeaderModel.h"
 #include <QApplication>
 #include <QEvent>
 #include <QLayout>
 
-TableCommentsHeaderView::TableCommentsHeaderView(QWidget *parent) 
+SpreadsheetCommentsHeaderView::SpreadsheetCommentsHeaderView(QWidget *parent) 
 	: QHeaderView(Qt::Horizontal, parent) 
 {
 }
 
-TableCommentsHeaderView::~TableCommentsHeaderView() 
+SpreadsheetCommentsHeaderView::~SpreadsheetCommentsHeaderView() 
 {	
 	delete model();
 }
 
-void TableCommentsHeaderView::setModel(QAbstractItemModel * model)
+void SpreadsheetCommentsHeaderView::setModel(QAbstractItemModel * model)
 {
-	Q_ASSERT(model->inherits("TableModel"));
+	Q_ASSERT(model->inherits("SpreadsheetModel"));
 	QAbstractItemModel *old_model = QHeaderView::model();
-	TableCommentsHeaderModel *new_model = new TableCommentsHeaderModel(static_cast<TableModel *>(model));
+	SpreadsheetCommentsHeaderModel *new_model = new SpreadsheetCommentsHeaderModel(static_cast<SpreadsheetModel *>(model));
 	QHeaderView::setModel(new_model);
     QObject::disconnect(new_model, SIGNAL(columnsInserted(QModelIndex,int,int)),
    		this, SLOT(sectionsInserted(QModelIndex,int,int))); // We have to make sure sectionsInserted is called in the right order
 	delete old_model;
 }
 
-TableDoubleHeaderView::TableDoubleHeaderView(QWidget * parent) 
+SpreadsheetDoubleHeaderView::SpreadsheetDoubleHeaderView(QWidget * parent) 
 : QHeaderView(Qt::Horizontal, parent)
 { 
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignTop);
-	m_slave = new TableCommentsHeaderView(); 
+	m_slave = new SpreadsheetCommentsHeaderView(); 
 	m_slave->setDefaultAlignment(Qt::AlignLeft | Qt::AlignTop);
 	m_show_comments = true;
 }
 
-TableDoubleHeaderView::~TableDoubleHeaderView()
+SpreadsheetDoubleHeaderView::~SpreadsheetDoubleHeaderView()
 {
 	delete m_slave;
 }
 
-QSize TableDoubleHeaderView::sizeHint() const
+QSize SpreadsheetDoubleHeaderView::sizeHint() const
 {
 	QSize master_size, slave_size;
 	master_size = QHeaderView::sizeHint();
@@ -78,15 +78,15 @@ QSize TableDoubleHeaderView::sizeHint() const
 	return master_size;
 }
 
-void TableDoubleHeaderView::setModel(QAbstractItemModel * model)
+void SpreadsheetDoubleHeaderView::setModel(QAbstractItemModel * model)
 {
-	Q_ASSERT(model->inherits("TableModel"));
+	Q_ASSERT(model->inherits("SpreadsheetModel"));
 	m_slave->setModel(model);
 	QHeaderView::setModel(model);
 	connect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(headerDataChanged(Qt::Orientation,int,int)));
 }
 
-void TableDoubleHeaderView::paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const
+void SpreadsheetDoubleHeaderView::paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const
 {
 	QRect master_rect = rect;
 	if(m_show_comments)
@@ -99,18 +99,18 @@ void TableDoubleHeaderView::paintSection ( QPainter * painter, const QRect & rec
 	}
 }
 
-bool TableDoubleHeaderView::areCommentsShown() const
+bool SpreadsheetDoubleHeaderView::areCommentsShown() const
 {
 	return m_show_comments;
 }
 
-void TableDoubleHeaderView::showComments(bool on)
+void SpreadsheetDoubleHeaderView::showComments(bool on)
 {
 	m_show_comments = on;
 	refresh();
 }
 
-void TableDoubleHeaderView::refresh()
+void SpreadsheetDoubleHeaderView::refresh()
 {
 	// adjust geometry and repaint header (still looking for a more elegant solution)
 	m_slave->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
@@ -122,7 +122,7 @@ void TableDoubleHeaderView::refresh()
 	update();
 }
 
-void TableDoubleHeaderView::headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast)
+void SpreadsheetDoubleHeaderView::headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast)
 {	
 	Q_UNUSED(logicalFirst);
 	Q_UNUSED(logicalLast);
@@ -130,7 +130,7 @@ void TableDoubleHeaderView::headerDataChanged(Qt::Orientation orientation, int l
 		refresh();
 }
 		
-void TableDoubleHeaderView::sectionsInserted(const QModelIndex & parent, int logicalFirst, int logicalLast )
+void SpreadsheetDoubleHeaderView::sectionsInserted(const QModelIndex & parent, int logicalFirst, int logicalLast )
 {
 	m_slave->sectionsInserted(parent, logicalFirst, logicalLast);
 	QHeaderView::sectionsInserted(parent, logicalFirst, logicalLast);

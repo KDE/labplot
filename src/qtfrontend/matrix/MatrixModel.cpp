@@ -87,7 +87,7 @@ QVariant MatrixModel::data(const QModelIndex &index, int role) const
 		case Qt::DisplayRole:
 			return QVariant(m_matrix->text(row, col));
 		case Qt::BackgroundRole:
-			return QVariant(QBrush(QColor(0xff,0xff,0x77))); // yellow color to distinguish a matrix from a table
+			return QVariant(QBrush(QColor(0xff,0xff,0x77))); // yellow color to distinguish a matrix from a spreadsheet
 	}
 
 	return QVariant();

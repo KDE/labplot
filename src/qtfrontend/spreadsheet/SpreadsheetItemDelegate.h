@@ -1,11 +1,10 @@
 /***************************************************************************
-    File                 : TableCommentsHeaderModel.h
+    File                 : SpreadsheetItemDelegate.h
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert,
     Email (use @ for *)  : thzs*gmx.net
-    Description          : Model wrapping a TableModel to display column 
-                           comments in a TableCommentsHeaderView
+    Description          : Item delegate for SpreadsheetView
 
  ***************************************************************************/
 
@@ -28,35 +27,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TABLECOMMENTSHEADERMODEL_H
-#define TABLECOMMENTSHEADERMODEL_H
+#include <QItemDelegate>
+#include <QtDebug>
+#include <QMetaProperty>
+#include <QAbstractItemModel>
 
-#include <QAbstractTableModel>
-#include <table/TableModel.h>
-
-//! Model class wrapping a TableModel to display column comments in a TableCommentsHeaderView
-class TableCommentsHeaderModel : public QAbstractTableModel
+//! Item delegate for SpreadsheetView
+class SpreadsheetItemDelegate : public QItemDelegate
 {
 	Q_OBJECT
 
 	public:
-		//! Constructor
-		explicit TableCommentsHeaderModel( TableModel * table_model, QObject * parent = 0 );
-		//! Destructor
-		virtual ~TableCommentsHeaderModel();
-
-		//! \name Overloaded functions from QAbstractItemModel
-		//@{
-		Qt::ItemFlags flags( const QModelIndex & index ) const;
-		QVariant data(const QModelIndex &index, int role) const;
-		QVariant headerData(int section, 
-				Qt::Orientation orientation,int role) const;
-		int rowCount(const QModelIndex &parent = QModelIndex()) const;
-		int columnCount(const QModelIndex & parent = QModelIndex()) const;
-		//@}
+		//! Standard constructor.
+		SpreadsheetItemDelegate(QObject * parent = 0);
+		//! Custom cell painting.
+		virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+		//! Set the color for masked cells
+		void setMaskingColor(const QColor& color) { m_masking_color = color; }
+		//! Return the color for masked cells
+		QColor maskingColor() const { return m_masking_color; }
+		void setEditorData ( QWidget * editor, const QModelIndex & index ) const;
+		void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const;
 
 	private:
-		TableModel * m_table_model;
+		//! The color for masked cells
+		QColor m_masking_color;
 };
-
-#endif

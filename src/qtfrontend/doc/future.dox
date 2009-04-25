@@ -57,5 +57,5 @@ modifying just a few lines in a build script.
 - Improved import of Origin project files
 - More import/export filters including Open Document spreadsheets (plugin)
 
-\sa ApplicationWindow, Graph, Layer, Graph3D, ImageMarker, Legend, MyWidget, SelectionMoveResizer, MyParser, Note, ScriptEdit, Table
+\sa ApplicationWindow, Graph, Layer, Graph3D, ImageMarker, Legend, MyWidget, SelectionMoveResizer, MyParser, Note, ScriptEdit, Spreadsheet
 */

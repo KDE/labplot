@@ -61,7 +61,7 @@ order to notify them of changes in the %data.
 Between an Aspect and one of its views, classes derived from QAbstractItemModel may be used to
 translate between the Aspect's public API (layer 2) and Qt's Model/View framework. Every view
 (layer 4) can own one or more such translation objects.
-Examples include AspectTreeModel and TableModel.
+Examples include AspectTreeModel and SpreadsheetModel.
 
 This layer is only needed in order to use existing views of Qt's Model/View framework;
 and as such it is optional.

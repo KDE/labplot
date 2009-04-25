@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : Table.h
+    File                 : Spreadsheet.h
     Project              : SciDAVis
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
@@ -28,8 +28,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef TABLE_H
-#define TABLE_H
+#ifndef SPREADSHEET_H
+#define SPREADSHEET_H
 
 #include "core/AbstractPart.h"
 #include "core/AbstractScriptingEngine.h"
@@ -39,28 +39,28 @@
 
 /*!\brief Aspect providing a spreadsheet table with column logic.
  *
- * Table is a container object for columns with no data of its own. By definition, it's columns
+ * Spreadsheet is a container object for columns with no data of its own. By definition, it's columns
  * are all of its children inheriting from class Column. Thus, the basic API is already defined
  * by AbstractAspect (managing the list of columns, notification of column insertion/removal)
  * and Column (changing and monitoring state of the actual data).
  *
- * Table stores a pointer to its primary view of class TableView. TableView calls the Table
- * API but Table only notifies TableView by signals without calling its API directly. This ensures a
- * maximum independence of UI and backend. TableView can be easily replaced by a different class.
- * User interaction is completely handled in TableView and translated into
- * Table API calls (e.g., when a user edits a cell this will be handled by the delegate of
- * TableView and Table will not know whether a script or a user changed the data.). All actions,
- * menus etc. for the user interaction are handled TableView, e.g., via a context menu.
- * Selections are also handled by TableView. The view itself is created by the first call to view();
+ * Spreadsheet stores a pointer to its primary view of class SpreadsheetView. SpreadsheetView calls the Spreadsheet
+ * API but Spreadsheet only notifies SpreadsheetView by signals without calling its API directly. This ensures a
+ * maximum independence of UI and backend. SpreadsheetView can be easily replaced by a different class.
+ * User interaction is completely handled in SpreadsheetView and translated into
+ * Spreadsheet API calls (e.g., when a user edits a cell this will be handled by the delegate of
+ * SpreadsheetView and Spreadsheet will not know whether a script or a user changed the data.). All actions,
+ * menus etc. for the user interaction are handled SpreadsheetView, e.g., via a context menu.
+ * Selections are also handled by SpreadsheetView. The view itself is created by the first call to view();
  */
-class Table : public AbstractPart, public scripted
+class Spreadsheet : public AbstractPart, public scripted
 {
 	Q_OBJECT
 
 	public:
 
-		Table(AbstractScriptingEngine *engine, int rows, int columns, const QString &name);
-		~Table();
+		Spreadsheet(AbstractScriptingEngine *engine, int rows, int columns, const QString &name);
+		~Spreadsheet();
 
 		//! Return an icon to be used for decorating my views.
 		virtual QIcon icon() const;
@@ -82,7 +82,7 @@ class Table : public AbstractPart, public scripted
 		 */
 		virtual QWidget *view() const;
 
-		//! Return the total number of columns in the table
+		//! Return the total number of columns in the spreadsheet
 		int columnCount() const { return childCount<Column>(); }
 		//! Return the number of columns matching the given designation
 		int columnCount(SciDAVis::PlotDesignation pd) const;
@@ -92,7 +92,7 @@ class Table : public AbstractPart, public scripted
 		 */
 		Column* column(int index) const { return child<Column>(index); }
 		Column* column(const QString &name) const { return child<Column>(name); }
-		//! Return the total number of rows in the table
+		//! Return the total number of rows in the spreadsheet
 		int rowCount() const;
 
 		void removeRows(int first, int count);
@@ -108,7 +108,7 @@ class Table : public AbstractPart, public scripted
 		//! Return the text displayed in the given cell
 		QString text(int row, int col) const;
 
-		void copy(Table * other);
+		void copy(Spreadsheet * other);
 
 		//! \name serialize/deserialize
 		//@{
@@ -126,12 +126,12 @@ class Table : public AbstractPart, public scripted
 
 		//! Set the number of columns
 		void setColumnCount(int new_size);
-		//! Set the number of rows of the table
+		//! Set the number of rows of the spreadsheet
 		void setRowCount(int new_size);
 
-		//! Clear the whole table
+		//! Clear the whole spreadsheet
 		void clear();
-		//! Clear all mask in the table
+		//! Clear all mask in the spreadsheet
 		void clearMasks();
 
 		void moveColumn(int from, int to);

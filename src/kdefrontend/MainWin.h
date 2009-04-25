@@ -41,7 +41,7 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
-class Table;
+class Spreadsheet;
 
 class MainWin : public KXmlGuiWindow
 {
@@ -51,7 +51,7 @@ public:
 	~MainWin();
 
 	QMdiArea* getMdi() const { return m_mdi_area; }
-	Table* activeTable() const;			//!< get active table
+	Spreadsheet* activeSpreadsheet() const;			//!< get active spreadsheet
 	Worksheet* activeWorksheet() const;			//!< get active worksheet
 	Project* getProject() const { return m_project; }
 	void setProject(Project *p) { m_project=p; }
@@ -85,7 +85,7 @@ private:
 	QString m_undoViewEmptyLabel;
 
 public slots:
-	Table* newSpreadsheet();
+	Spreadsheet* newSpreadsheet();
 	Folder* newFolder();
 	Worksheet* newWorksheet();
 	void save(QString filename=0);	//!< save project (.lml format)

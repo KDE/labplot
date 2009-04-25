@@ -4,7 +4,7 @@
 #include <QtGui>
 #include "ui_exportwidget.h"
 class MainWin;
-class Spreadsheet;
+class SpreadsheetView;
 //#include "elements/binaryformat.h"
 
 /**
@@ -26,13 +26,13 @@ private:
 //	int startRow() const;
 //	int endRow() const;
 /*	void importOPJ(MainWin *mainWin, QString filename);
-	int importHDF5(MainWin *mainWin, QString filename, Spreadsheet *s);
-	int importNETCDF(QString filename, Spreadsheet *s);
-	int importCDF(QString filename, Spreadsheet *s);
+	int importHDF5(MainWin *mainWin, QString filename, SpreadsheetView *s);
+	int importNETCDF(QString filename, SpreadsheetView *s);
+	int importCDF(QString filename, SpreadsheetView *s);
 */
-//	void importASCII(QIODevice *file, Spreadsheet *s);
+//	void importASCII(QIODevice *file, SpreadsheetView *s);
 	void exportASCII(QTextStream *t);
-//	void importBinary(QIODevice *file, Spreadsheet *s);
+//	void importBinary(QIODevice *file, SpreadsheetView *s);
 //	double getBinaryValue(QDataStream *ds, BinaryFormat type) const;
 private slots:
 	void save();

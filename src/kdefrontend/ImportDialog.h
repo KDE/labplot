@@ -34,7 +34,7 @@
 #include <KDialog>
 
 class MainWin;
-class Spreadsheet;
+class SpreadsheetView;
 #include "ImportWidget.h"
 
 /**

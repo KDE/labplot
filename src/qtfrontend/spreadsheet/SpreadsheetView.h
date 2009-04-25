@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : TableView.h
+    File                 : SpreadsheetView.h
     Project              : SciDAVis
-    Description          : View class for Table
+    Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -52,21 +52,21 @@
 #include "core/globals.h"
 
 class Column;
-class Table;
-class TableModel;
-class TableItemDelegate;
-class TableDoubleHeaderView;
+class Spreadsheet;
+class SpreadsheetModel;
+class SpreadsheetItemDelegate;
+class SpreadsheetDoubleHeaderView;
 class ActionManager;
 class AbstractAspect;
 
-//! Helper class for TableView
-class TableViewWidget : public QTableView
+//! Helper class for SpreadsheetView
+class SpreadsheetViewWidget : public QTableView
 {
     Q_OBJECT
 
 	public:
 		//! Constructor
-		TableViewWidget(QWidget * parent = 0) : QTableView(parent) {};
+		SpreadsheetViewWidget(QWidget * parent = 0) : QTableView(parent) {};
 
 	protected:
 		//! Overloaded function (cf. Qt documentation)
@@ -82,16 +82,16 @@ class TableViewWidget : public QTableView
 			void selectAll();
 };
 
-//! View class for Table
-class TableView : public QWidget
+//! View class for Spreadsheet
+class SpreadsheetView : public QWidget
 {
     Q_OBJECT
 
 	public:
 		//! Constructor
-		TableView(Table *table);
+		SpreadsheetView(Spreadsheet *spreadsheet);
 		//! Destructor
-		virtual ~TableView();
+		virtual ~SpreadsheetView();
 		bool isControlTabBarVisible() { return m_control_tabs->isVisible(); }
 		//! Show or hide (if on = false) the column comments
 		void showComments(bool on = true);
@@ -187,16 +187,16 @@ class TableView : public QWidget
 		 * it instead of the creation of a new menu.
 		 */
 		QMenu * createRowMenu(QMenu * append_to = 0);
-		//! Create a menu with table related operations
+		//! Create a menu with spreadsheet related operations
 		/**
 		 * \param append_to if a pointer to a QMenu is passed
 		 * to the function, the actions are appended to
 		 * it instead of the creation of a new menu.
 		 */
-		QMenu * createTableMenu(QMenu * append_to = 0);
+		QMenu * createSpreadsheetMenu(QMenu * append_to = 0);
 		//! Set a plot menu 
 		/**
-		 * The table takes ownership of the menu.
+		 * The spreadsheet takes ownership of the menu.
 		 */
 		void setPlotMenu(QMenu * menu);
 		
@@ -241,17 +241,17 @@ class TableView : public QWidget
 		/**
 		 * \param pos global position of the event 
 		*/
-		void showTableViewContextMenu(const QPoint& pos);
+		void showSpreadsheetViewContextMenu(const QPoint& pos);
 		//! Show a context menu for the selected columns
 		/**
 		 * \param pos global position of the event 
 		*/
-		void showTableViewColumnContextMenu(const QPoint& pos);
+		void showSpreadsheetViewColumnContextMenu(const QPoint& pos);
 		//! Show a context menu for the selected rows
 		/**
 		 * \param pos global position of the event 
 		*/
-		void showTableViewRowContextMenu(const QPoint& pos);
+		void showSpreadsheetViewRowContextMenu(const QPoint& pos);
 		void createActions();
 		void connectActions();
 
@@ -276,16 +276,16 @@ class TableView : public QWidget
 	public:
 		static int defaultColumnWidth();
 		static void setDefaultColumnWidth(int width);
-		//! Set default for comment visibility for table views
+		//! Set default for comment visibility for spreadsheet views
 		static void setDefaultCommentVisibility(bool visible);
-		//! Return the default for comment visibility for table views
+		//! Return the default for comment visibility for spreadsheet views
 		static bool defaultCommentVisibility();
 		static ActionManager * actionManager();
 		static void initActionManager();
 	private:
 		static ActionManager * action_manager;
 		//! Private ctor for initActionManager() only
-		TableView();
+		SpreadsheetView();
 
 
 	public slots:
@@ -303,7 +303,7 @@ class TableView : public QWidget
 		void goToPreviousColumn();
 		void dimensionsDialog();
 		//! Open the sort dialog for all columns
-		void sortTable();
+		void sortSpreadsheet();
 		void goToCell();
 
 	protected slots:
@@ -325,9 +325,9 @@ class TableView : public QWidget
 
 	protected:
 		//! Pointer to the item delegate
-		TableItemDelegate * m_delegate;
+		SpreadsheetItemDelegate * m_delegate;
 		//! Pointer to the current underlying model
-		TableModel * m_model;
+		SpreadsheetModel * m_model;
 
 		virtual void changeEvent(QEvent * event);
 		void retranslateStrings();
@@ -337,15 +337,15 @@ class TableView : public QWidget
 
 		//! UI with options tabs (description, format, formula etc.)
 		Ui::ControlTabs ui;
-		//! The table view (first part of the UI)
-		TableViewWidget * m_view_widget;
+		//! The spreadsheet view (first part of the UI)
+		SpreadsheetViewWidget * m_view_widget;
 		//! Widget that contains the control tabs UI from #ui
 		QWidget * m_control_tabs;
 		//! Button to toogle the visibility of #m_tool_box
 		QToolButton * m_hide_button;
 		QHBoxLayout * m_main_layout;
-		TableDoubleHeaderView * m_horizontal_header;
-		Table * m_table;
+		SpreadsheetDoubleHeaderView * m_horizontal_header;
+		Spreadsheet * m_spreadsheet;
 
 		//! Initialization
 		void init();
@@ -363,15 +363,15 @@ class TableView : public QWidget
 		QAction * action_fill_row_numbers;
 		QAction * action_fill_random;
 		//@}
-		//! \name table related actions
+		//! \name spreadsheet related actions
 		//@{
 		QAction * action_toggle_comments;
 		QAction * action_toggle_tabbar;
 		QAction * action_select_all;
 		QAction * action_add_column;
-		QAction * action_clear_table;
+		QAction * action_clear_spreadsheet;
 		QAction * action_clear_masks;
-		QAction * action_sort_table;
+		QAction * action_sort_spreadsheet;
 		QAction * action_go_to_cell;
 		QAction * action_dimensions_dialog;
 		QAction * action_formula_mode;

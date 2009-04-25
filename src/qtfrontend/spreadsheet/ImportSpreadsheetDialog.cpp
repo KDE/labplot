@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ImportTableDialog.cpp
+    File                 : ImportSpreadsheetDialog.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2006,2007 by Ion Vasilief,
@@ -30,7 +30,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ImportTableDialog.h"
+#include "ImportSpreadsheetDialog.h"
 #include "core/ApplicationWindow.h"
 
 #include <QGridLayout>
@@ -43,7 +43,7 @@
 #include <QLabel>
 #include <QCloseEvent>
 
-ImportTableDialog::ImportTableDialog(bool import_mode_enabled, QWidget * parent, bool extended, Qt::WFlags flags )
+ImportSpreadsheetDialog::ImportSpreadsheetDialog(bool import_mode_enabled, QWidget * parent, bool extended, Qt::WFlags flags )
 : ExtensibleFileDialog(parent, extended, flags )
 {
 	setWindowTitle(tr("Import ASCII File(s)"));
@@ -81,7 +81,7 @@ ImportTableDialog::ImportTableDialog(bool import_mode_enabled, QWidget * parent,
 	connect(m_import_mode, SIGNAL(currentIndexChanged(int)), this, SLOT(updateImportMode(int)));
 }
 
-void ImportTableDialog::initAdvancedOptions()
+void ImportSpreadsheetDialog::initAdvancedOptions()
 {
 	m_advanced_options = new QGroupBox();
 	QVBoxLayout *main_layout = new QVBoxLayout(m_advanced_options);
@@ -91,10 +91,10 @@ void ImportTableDialog::initAdvancedOptions()
 	advanced_layout->addWidget(new QLabel(tr("Import each file as: ")), 0, 0);
 	m_import_mode = new QComboBox();
 	// Important: Keep this in sync with the ImportMode enum.
-	m_import_mode->addItem(tr("New Table"));
+	m_import_mode->addItem(tr("New Spreadsheet"));
 	m_import_mode->addItem(tr("New Columns"));
 	m_import_mode->addItem(tr("New Rows"));
-	m_import_mode->addItem(tr("Overwrite Current Table"));
+	m_import_mode->addItem(tr("Overwrite Current Spreadsheet"));
 	advanced_layout->addWidget(m_import_mode, 0, 1);
 
 	QLabel *label_column_separator = new QLabel(tr("Separator:"));
@@ -170,7 +170,7 @@ void ImportTableDialog::initAdvancedOptions()
 	main_layout->addLayout(meta_options_layout);
 }
 
-void ImportTableDialog::setColumnSeparator(const QString& sep)
+void ImportSpreadsheetDialog::setColumnSeparator(const QString& sep)
 {
 	if (sep=="\t")
 		m_column_separator->setCurrentIndex(0);
@@ -195,7 +195,7 @@ void ImportTableDialog::setColumnSeparator(const QString& sep)
 	}
 }
 
-const QString ImportTableDialog::columnSeparator() const
+const QString ImportSpreadsheetDialog::columnSeparator() const
 {
 	QString sep = m_column_separator->currentText();
 
@@ -217,7 +217,7 @@ const QString ImportTableDialog::columnSeparator() const
 	return sep;
 }
 
-void ImportTableDialog::displayHelp()
+void ImportSpreadsheetDialog::displayHelp()
 {
 	QString s = tr("The column separator can be customized. The following special codes can be used:\n\\t for a TAB character \n\\s for a SPACE");
 	s += "\n"+tr("The separator must not contain the following characters: 0-9eE.+-") + "\n\n";
@@ -233,7 +233,7 @@ void ImportTableDialog::displayHelp()
 	QMessageBox::about(this, tr("Help"), s);
 }
 
-void ImportTableDialog::updateImportMode(int mode)
+void ImportSpreadsheetDialog::updateImportMode(int mode)
 {
 	if (mode == Overwrite)
 		setFileMode( QFileDialog::ExistingFile );
@@ -241,7 +241,7 @@ void ImportTableDialog::updateImportMode(int mode)
 		setFileMode( QFileDialog::ExistingFiles );
 }
 
-void ImportTableDialog::closeEvent(QCloseEvent* e)
+void ImportSpreadsheetDialog::closeEvent(QCloseEvent* e)
 {
 	ApplicationWindow *app = (ApplicationWindow *)this->parent();
 	if (app){
@@ -252,7 +252,7 @@ void ImportTableDialog::closeEvent(QCloseEvent* e)
 	e->accept();
 }
 
-QLocale ImportTableDialog::decimalSeparators()
+QLocale ImportSpreadsheetDialog::decimalSeparators()
 {
 	QLocale locale;
     switch (boxDecimalSeparator->currentIndex()){

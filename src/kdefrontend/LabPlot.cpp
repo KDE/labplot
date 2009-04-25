@@ -36,7 +36,7 @@
 
 #include "MainWin.h"
 #include "core/Project.h"
-#include "table/Table.h"
+#include "spreadsheet/Spreadsheet.h"
 
 int main (int argc, char *argv[]) {
 	KAboutData aboutData( "LabPlot", "LabPlot",
@@ -104,7 +104,7 @@ int main (int argc, char *argv[]) {
 	// init global defaults
 	Project::staticInit();
 	Column::staticInit();
-	Table::setGlobalDefault("default_comment_visibility", false);
+	Spreadsheet::setGlobalDefault("default_comment_visibility", false);
 
 	MainWin* window = new MainWin(0,filename);
 	window->show();

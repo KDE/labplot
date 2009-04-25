@@ -1,12 +1,12 @@
 /***************************************************************************
-    File                 : Spreadsheet.cc
+    File                 : SpreadsheetView.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses)
-    Description          : spreadsheet class
+    Description          : spreadsheet view class
 
  ***************************************************************************/
 
@@ -37,7 +37,7 @@
 #include <KAction>
 #include <QHBoxLayout>
 
-#include "Spreadsheet.h"
+#include "SpreadsheetView.h"
 #include "MainWin.h"
 #include "ColumnDialog.h"
 #include "ExportDialog.h"
@@ -55,20 +55,20 @@
 #include "core/datatypes/DateTime2StringFilter.h"
 #include "core/datatypes/String2DateTimeFilter.h"
 
-Spreadsheet::Spreadsheet(Table *table)
- :  m_table(table)
+SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet)
+ :  m_spreadsheet(spreadsheet)
 {
-	kDebug()<<"Spreadsheet()"<<endl;
+	kDebug()<<"SpreadsheetView()"<<endl;
 	m_type = SPREADSHEET;
-	m_model = new TableModel(table);
+	m_model = new SpreadsheetModel(spreadsheet);
 	init();
 }
 
-Spreadsheet::~Spreadsheet() {
+SpreadsheetView::~SpreadsheetView() {
 	delete m_model;
 }
 
-void Spreadsheet::init()
+void SpreadsheetView::init()
 {
 	createActions();
 
@@ -104,73 +104,73 @@ void Spreadsheet::init()
 	h_header->setDefaultSectionSize(defaultColumnWidth());
 
 	int i = 0;
-	foreach(Column * col, m_table->children<Column>())
+	foreach(Column * col, m_spreadsheet->children<Column>())
 		h_header->resizeSection(i++, col->width());
 
 	// keyboard shortcuts
-	QShortcut * sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Table: select all")), m_view_widget);
+	QShortcut * sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Spreadsheet: select all")), m_view_widget);
 	connect(sel_all, SIGNAL(activated()), m_view_widget, SLOT(selectAll()));
 
-	connect(m_table, SIGNAL(aspectAdded(const AbstractAspect*)),
+	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
 			this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(m_table, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 }
 
-void Spreadsheet::handleAspectAdded(const AbstractAspect * aspect)
+void SpreadsheetView::handleAspectAdded(const AbstractAspect * aspect)
 {
 	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_table))
+	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 	connect(col, SIGNAL(widthChanged(const Column*)), this, SLOT(updateSectionSize(const Column*)));
 }
 
-void Spreadsheet::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
+void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
 {
 	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_table))
+	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 	disconnect(col, 0, this, 0);
 }
 
-void Spreadsheet::updateSectionSize(const Column* col)
+void SpreadsheetView::updateSectionSize(const Column* col)
 {
 	QHeaderView *h_header = m_view_widget->horizontalHeader();
 	disconnect(h_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
-	h_header->resizeSection(m_table->indexOfChild<Column>(col), col->width());
+	h_header->resizeSection(m_spreadsheet->indexOfChild<Column>(col), col->width());
 	connect(h_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
 }
 
-void Spreadsheet::selectAll()
+void SpreadsheetView::selectAll()
 {
 	m_view_widget->selectAll();
 }
 
-void Spreadsheet::deselectAll()
+void SpreadsheetView::deselectAll()
 {
 	m_view_widget->clearSelection();
 }
 
-void Spreadsheet::setColumnWidth(int col, int width)
+void SpreadsheetView::setColumnWidth(int col, int width)
 {
 	m_view_widget->horizontalHeader()->resizeSection(col, width);
 }
 
-int Spreadsheet::columnWidth(int col) const
+int SpreadsheetView::columnWidth(int col) const
 {
 	return m_view_widget->horizontalHeader()->sectionSize(col);
 }
 
-void Spreadsheet::contextMenuEvent(QContextMenuEvent* e) {
+void SpreadsheetView::contextMenuEvent(QContextMenuEvent* e) {
 	QMenu *menu = new QMenu(this);
 	this->createMenu(menu);
 	menu->exec(QCursor::pos());
 }
 
 /*!
-	initializes KActions used in the context menu of Spreadsheet and in the menu of MainWin.
+	initializes KActions used in the context menu of SpreadsheetView and in the menu of MainWin.
 */
-void Spreadsheet::createActions(){
+void SpreadsheetView::createActions(){
 	plotAction = new KAction(KIcon(QIcon(plot2d_xpm)),i18n("Plot"),this);
 	connect(plotAction, SIGNAL(triggered()),SLOT(plot()));
 
@@ -249,7 +249,7 @@ void Spreadsheet::createActions(){
 	rowStatisticsAction ->setEnabled(false);
 }
 
-void Spreadsheet::createMenu(QMenu *menu) const{
+void SpreadsheetView::createMenu(QMenu *menu) const{
 	if (!menu)
 		menu=new QMenu();
 
@@ -291,59 +291,59 @@ void Spreadsheet::createMenu(QMenu *menu) const{
 	menu->addAction(columnStatisticsAction);
 	menu->addAction(rowStatisticsAction);
 
-	kDebug()<<"Spreadsheet menu created"<<endl;
+	kDebug()<<"SpreadsheetView menu created"<<endl;
 }
 
 
-void Spreadsheet::setTitle(QString title) {
+void SpreadsheetView::setTitle(QString title) {
 	kDebug()<<"title ="<<title<<endl;
 	bool ok=true;
 	if(title.isEmpty())
-		title = KInputDialog::getText("LabPlot", i18n("Spreadsheet title : "), m_table->name(), &ok);
+		title = KInputDialog::getText("LabPlot", i18n("SpreadsheetView title : "), m_spreadsheet->name(), &ok);
 
 	if(ok && !title.isEmpty()) {
-		m_table->setName(title);
+		m_spreadsheet->setName(title);
 	}
 }
 
-void Spreadsheet::setRowNumber(int row) {
+void SpreadsheetView::setRowNumber(int row) {
 	kDebug()<<"row ="<<row<<endl;
 	bool ok=true;
 	if(row<=0)
 		row = KInputDialog::getInteger("LabPlot", i18n("Row count : "), rowCount(), 1, INT_MAX, 1, 10, &ok);
 
 	if(ok && row>0)
-		m_table->setRowCount(row);
+		m_spreadsheet->setRowCount(row);
 }
 
-QString Spreadsheet::text(int row, int col) const {
-//	kDebug()<<"Spreadsheet::text("<<row<<col<<")"<<endl;
+QString SpreadsheetView::text(int row, int col) const {
+//	kDebug()<<"SpreadsheetView::text("<<row<<col<<")"<<endl;
 	QModelIndex index=m_view_widget->model()->index(row,col);
 	return m_view_widget->model()->data(index).toString();
 }
 
-void Spreadsheet::setText(int row, int col, QString text) {
+void SpreadsheetView::setText(int row, int col, QString text) {
 	QModelIndex index=m_view_widget->model()->index(row,col);
 	m_view_widget->model()->setData(index,text);
 }
 
-void Spreadsheet::setNotes(QString t) {
+void SpreadsheetView::setNotes(QString t) {
 	kDebug()<<endl;
 	bool ok=true;
 	if(t.isEmpty())
-		t = KInputDialog::getMultiLineText("LabPlot", i18n("Spreadsheet notes : "),
+		t = KInputDialog::getMultiLineText("LabPlot", i18n("SpreadsheetView notes : "),
 			Notes(), &ok);
 	if(!ok) return;
 
-	m_table->setComment(t);
+	m_spreadsheet->setComment(t);
 }
 
-QString Spreadsheet::columnHeader(int col) const {
+QString SpreadsheetView::columnHeader(int col) const {
 	if(col<0) col=0;
 	return m_view_widget->model()->headerData(col,Qt::Horizontal).toString();
 }
 
-void Spreadsheet::setProperties(QString label,
+void SpreadsheetView::setProperties(QString label,
 	SciDAVis::PlotDesignation type, SciDAVis::ColumnMode format) {
 	kDebug()<<label<<type<<format<<endl;
 
@@ -356,7 +356,7 @@ void Spreadsheet::setProperties(QString label,
 	}
 }
 
-void Spreadsheet::resetHeader(int from) {
+void SpreadsheetView::resetHeader(int from) {
 	kDebug()<<endl;
 	for (int col=from;col<columnCount();col++) {
 		setColumnFormat(col,SciDAVis::Numeric);
@@ -371,49 +371,49 @@ void Spreadsheet::resetHeader(int from) {
 	}
 }
 
-QString Spreadsheet::columnName(int col) const {
+QString SpreadsheetView::columnName(int col) const {
 	if(col<0 || col > columnCount()) return QString();
-	return m_table->column(col)->name();
+	return m_spreadsheet->column(col)->name();
 }
 
-void Spreadsheet::setColumnName(int col, QString name) {
+void SpreadsheetView::setColumnName(int col, QString name) {
 	if(col<0 || col > columnCount()) return;
 //	kDebug()<<"column ="<<col<<", name = "<<name<<endl;
 	if(col<0) return;
-	m_table->column(col)->setName(name);
+	m_spreadsheet->column(col)->setName(name);
 }
 
-SciDAVis::PlotDesignation Spreadsheet::columnType(int col) const {
+SciDAVis::PlotDesignation SpreadsheetView::columnType(int col) const {
 	if(col<0 || col > columnCount()) return SciDAVis::noDesignation;
-	return m_table->column(col)->plotDesignation();
+	return m_spreadsheet->column(col)->plotDesignation();
 }
 
-void Spreadsheet::setColumnType(int col, SciDAVis::PlotDesignation type) {
-	m_table->column(col)->setPlotDesignation(type);
+void SpreadsheetView::setColumnType(int col, SciDAVis::PlotDesignation type) {
+	m_spreadsheet->column(col)->setPlotDesignation(type);
 }
 
-SciDAVis::ColumnMode Spreadsheet::columnFormat(int col) const {
-	return m_table->column(col)->columnMode();
+SciDAVis::ColumnMode SpreadsheetView::columnFormat(int col) const {
+	return m_spreadsheet->column(col)->columnMode();
 }
 
-void Spreadsheet::setColumnFormat(int col, SciDAVis::ColumnMode format) {
-	m_table->column(col)->setColumnMode(format);
+void SpreadsheetView::setColumnFormat(int col, SciDAVis::ColumnMode format) {
+	m_spreadsheet->column(col)->setColumnMode(format);
 }
 
-int Spreadsheet::filledRows(int col) const {
-	kDebug()<<"Spreadsheet::filledRows("<<col<<")"<<endl;
+int SpreadsheetView::filledRows(int col) const {
+	kDebug()<<"SpreadsheetView::filledRows("<<col<<")"<<endl;
 	if(col < 0 || col > columnCount())
 		return -1;
 
-	return m_table->column(col)->rowCount();
+	return m_spreadsheet->column(col)->rowCount();
 }
 
-int Spreadsheet::currentColumn() const {
+int SpreadsheetView::currentColumn() const {
 	QModelIndex index = m_view_widget->currentIndex();
 	return index.column();
 }
 
-QList<int> Spreadsheet::currentColumns() const {
+QList<int> SpreadsheetView::currentColumns() const {
 	QList<int> columns;
 	QModelIndexList list = m_view_widget->selectionModel()->selectedColumns();
 	for (int i=0; i<list.size(); i++)
@@ -421,12 +421,12 @@ QList<int> Spreadsheet::currentColumns() const {
 	return columns;
 }
 
-int Spreadsheet::currentRow() const {
+int SpreadsheetView::currentRow() const {
 	QModelIndex index = m_view_widget->currentIndex();
 	return index.row();
 }
 
-QList<int> Spreadsheet::currentRows() const {
+QList<int> SpreadsheetView::currentRows() const {
 	QList<int> rows;
 	QModelIndexList list = m_view_widget->selectionModel()->selectedRows();
 	for (int i=0; i<list.size(); i++)
@@ -434,15 +434,15 @@ QList<int> Spreadsheet::currentRows() const {
 	return rows;
 }
 
-void Spreadsheet::deleteSelectedColumns() {
+void SpreadsheetView::deleteSelectedColumns() {
 	removeSelectedColumns();
 }
 
-void Spreadsheet::deleteSelectedRows() {
+void SpreadsheetView::deleteSelectedRows() {
 	removeSelectedRows();
 }
 
-void Spreadsheet::addSet(Set* s) {
+void SpreadsheetView::addSet(Set* s) {
 	kDebug()<<endl;
 	m_set=s;
 
@@ -472,9 +472,9 @@ void Spreadsheet::addSet(Set* s) {
 	this->displaySet();
 }
 
-void Spreadsheet::displaySet(){
-// TODO : use m_table
-//TODO clear the content of the table!!!
+void SpreadsheetView::displaySet(){
+// TODO : use m_spreadsheet
+//TODO clear the content of the spreadsheet!!!
 
 	int columns=this->columnCount();
 	switch(m_set->type()) {
@@ -517,9 +517,9 @@ void Spreadsheet::displaySet(){
 	kDebug()<<"set displayed"<<endl;
 }
 
-void Spreadsheet::plot() {
+void SpreadsheetView::plot() {
 	kDebug()<<"not implemented yet!"<<endl;
-	// TODO : use SpreadsheetPlotDialog
+	// TODO : use SpreadsheetViewPlotDialog
 	// plot type, which columns, destination
 
 	// create set
@@ -534,16 +534,16 @@ void Spreadsheet::plot() {
 	//TODO mw->addSet(g,1,Plot::PLOT2D);
 }
 
-void Spreadsheet::exportData() {
+void SpreadsheetView::exportData() {
 	(new ExportDialog(this))->exec();
 }
 
-void Spreadsheet::setColumnValues() {
+void SpreadsheetView::setColumnValues() {
 	kDebug()<<"not implemented yet!"<<endl;
 	// TODO : column values dialog
 }
 
-void Spreadsheet::editFunction(){
+void SpreadsheetView::editFunction(){
 	Plot::PlotType type;
 	//TODO rethink/reimplement this approach
 	if (m_set->type()==Set::SET2D)
@@ -551,67 +551,67 @@ void Spreadsheet::editFunction(){
 	else if (m_set->type()==Set::SET3D)
 		type=Plot::PLOT3D;
 
-	// TODO: As I stated in other places: I would be better for Spreadsheet not depend on MainWin at all.
+	// TODO: As I stated in other places: I would be better for SpreadsheetView not depend on MainWin at all.
 	// But if you really need it, this is the "SciDAVis way" of getting a pointer to the main window: - Tilman
-	if (m_table->project() == NULL) return;
-	MainWin * mw = static_cast<MainWin *>(m_table->project()->view());
+	if (m_spreadsheet->project() == NULL) return;
+	MainWin * mw = static_cast<MainWin *>(m_spreadsheet->project()->view());
 	FunctionPlotDialog* dlg=new FunctionPlotDialog(mw, type);
 	dlg->setSet(m_set);
 	if (dlg->exec())
 		this->displaySet(); //TODO trigger update only if data set was changed
 }
 
-int Spreadsheet::selectedColumnCount(bool full) {
+int SpreadsheetView::selectedColumnCount(bool full) {
 	int count = 0;
-	int cols = m_table->columnCount();
+	int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
 		if (isColumnSelected(i, full)) count++;
 	return count;
 }
 
-int Spreadsheet::selectedColumnCount(SciDAVis::PlotDesignation pd) {
+int SpreadsheetView::selectedColumnCount(SciDAVis::PlotDesignation pd) {
 	int count = 0;
-	int cols = m_table->columnCount();
+	int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
-		if ( isColumnSelected(i, false) && (m_table->column(i)->plotDesignation() == pd) ) count++;
+		if ( isColumnSelected(i, false) && (m_spreadsheet->column(i)->plotDesignation() == pd) ) count++;
 
 	return count;
 }
 
-bool Spreadsheet::isColumnSelected(int col, bool full) {
+bool SpreadsheetView::isColumnSelected(int col, bool full) {
 	if (full)
 		return m_view_widget->selectionModel()->isColumnSelected(col, QModelIndex());
 	else
 		return m_view_widget->selectionModel()->columnIntersectsSelection(col, QModelIndex());
 }
 
-QList<Column*> Spreadsheet::selectedColumns(bool full) {
+QList<Column*> SpreadsheetView::selectedColumns(bool full) {
 	QList<Column*> list;
-	int cols = m_table->columnCount();
+	int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
-		if (isColumnSelected(i, full)) list << m_table->column(i);
+		if (isColumnSelected(i, full)) list << m_spreadsheet->column(i);
 
 	return list;
 }
 
-int Spreadsheet::selectedRowCount(bool full) {
+int SpreadsheetView::selectedRowCount(bool full) {
 	int count = 0;
-	int rows = m_table->rowCount();
+	int rows = m_spreadsheet->rowCount();
 	for (int i=0; i<rows; i++)
 		if (isRowSelected(i, full)) count++;
 	return count;
 }
 
-bool Spreadsheet::isRowSelected(int row, bool full) {
+bool SpreadsheetView::isRowSelected(int row, bool full) {
 	if (full)
 		return m_view_widget->selectionModel()->isRowSelected(row, QModelIndex());
 	else
 		return m_view_widget->selectionModel()->rowIntersectsSelection(row, QModelIndex());
 }
 
-int Spreadsheet::firstSelectedColumn(bool full)
+int SpreadsheetView::firstSelectedColumn(bool full)
 {
-	int cols = m_table->columnCount();
+	int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++) {
 		if (isColumnSelected(i, full))
 			return i;
@@ -619,18 +619,18 @@ int Spreadsheet::firstSelectedColumn(bool full)
 	return -1;
 }
 
-int Spreadsheet::lastSelectedColumn(bool full)
+int SpreadsheetView::lastSelectedColumn(bool full)
 {
-	int cols = m_table->columnCount();
+	int cols = m_spreadsheet->columnCount();
 	for (int i=cols-1; i>=0; i--)
 		if (isColumnSelected(i, full)) return i;
 
 	return -2;
 }
 
-int Spreadsheet::firstSelectedRow(bool full)
+int SpreadsheetView::firstSelectedRow(bool full)
 {
-	int rows = m_table->rowCount();
+	int rows = m_spreadsheet->rowCount();
 	for (int i=0; i<rows; i++)
 	{
 		if (isRowSelected(i, full))
@@ -639,29 +639,29 @@ int Spreadsheet::firstSelectedRow(bool full)
 	return -1;
 }
 
-int Spreadsheet::lastSelectedRow(bool full)
+int SpreadsheetView::lastSelectedRow(bool full)
 {
-	int rows = m_table->rowCount();
+	int rows = m_spreadsheet->rowCount();
 	for (int i=rows-1; i>=0; i--)
 		if (isRowSelected(i, full)) return i;
 
 	return -2;
 }
 
-bool Spreadsheet::isCellSelected(int row, int col)
+bool SpreadsheetView::isCellSelected(int row, int col)
 {
-	if (row < 0 || col < 0 || row >= m_table->rowCount() || col >= m_table->columnCount()) return false;
+	if (row < 0 || col < 0 || row >= m_spreadsheet->rowCount() || col >= m_spreadsheet->columnCount()) return false;
 
 	return m_view_widget->selectionModel()->isSelected(m_model->index(row, col));
 }
 
-void Spreadsheet::setCellSelected(int row, int col, bool select)
+void SpreadsheetView::setCellSelected(int row, int col, bool select)
 {
 	 m_view_widget->selectionModel()->select(m_model->index(row, col),
 			 select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
 }
 
-void Spreadsheet::setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select)
+void SpreadsheetView::setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select)
 {
 	QModelIndex top_left = m_model->index(first_row, first_col);
 	QModelIndex bottom_right = m_model->index(last_row, last_col);
@@ -669,7 +669,7 @@ void Spreadsheet::setCellsSelected(int first_row, int first_col, int last_row, i
 			select ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Deselect);
 }
 
-void Spreadsheet::getCurrentCell(int * row, int * col)
+void SpreadsheetView::getCurrentCell(int * row, int * col)
 {
 	QModelIndex index = m_view_widget->selectionModel()->currentIndex();
 	if (index.isValid())
@@ -684,52 +684,52 @@ void Spreadsheet::getCurrentCell(int * row, int * col)
 	}
 }
 
-bool Spreadsheet::formulaModeActive() const
+bool SpreadsheetView::formulaModeActive() const
 {
 	return m_model->formulaModeActive();
 }
 
-void Spreadsheet::activateFormulaMode(bool on)
+void SpreadsheetView::activateFormulaMode(bool on)
 {
 	m_model->activateFormulaMode(on);
 }
 
-void Spreadsheet::goToNextColumn()
+void SpreadsheetView::goToNextColumn()
 {
-	if (m_table->columnCount() == 0) return;
+	if (m_spreadsheet->columnCount() == 0) return;
 
 	QModelIndex idx = m_view_widget->currentIndex();
 	int col = idx.column()+1;
-    if (col >= m_table->columnCount())
+    if (col >= m_spreadsheet->columnCount())
 		col = 0;
 	m_view_widget->setCurrentIndex(idx.sibling(idx.row(), col));
 }
 
-void Spreadsheet::goToPreviousColumn()
+void SpreadsheetView::goToPreviousColumn()
 {
-	if (m_table->columnCount() == 0) return;
+	if (m_spreadsheet->columnCount() == 0) return;
 
 	QModelIndex idx = m_view_widget->currentIndex();
 	int col = idx.column()-1;
     if (col < 0)
-		col = m_table->columnCount()-1;
+		col = m_spreadsheet->columnCount()-1;
 	m_view_widget->setCurrentIndex(idx.sibling(idx.row(), col));
 }
 
-void Spreadsheet::cutSelection()
+void SpreadsheetView::cutSelection()
 {
 	int first = firstSelectedRow();
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(tr("%1: cut selected cell(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(tr("%1: cut selected cell(s)").arg(m_spreadsheet->name()));
 	copySelection();
 	clearSelectedCells();
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::copySelection()
+void SpreadsheetView::copySelection()
 {
 	int first_col = firstSelectedColumn(false);
 	if (first_col == -1) return;
@@ -749,7 +749,7 @@ void Spreadsheet::copySelection()
 	{
 		for (int c=0; c<cols; c++)
 		{
-			Column *col_ptr = m_table->column(first_col + c);
+			Column *col_ptr = m_spreadsheet->column(first_col + c);
 			if (isCellSelected(first_row + r, first_col + c))
 			{
 				if (formulaModeActive())
@@ -764,7 +764,7 @@ void Spreadsheet::copySelection()
 				}
 				else
 				{
-					output_str += m_table->text(first_row + r, first_col + c);
+					output_str += m_spreadsheet->text(first_row + r, first_col + c);
 				}
 			}
 			if (c < cols-1)
@@ -777,12 +777,12 @@ void Spreadsheet::copySelection()
 	RESET_CURSOR;
 }
 
-void Spreadsheet::pasteIntoSelection()
+void SpreadsheetView::pasteIntoSelection()
 {
-	if (m_table->columnCount() < 1 || m_table->rowCount() < 1) return;
+	if (m_spreadsheet->columnCount() < 1 || m_spreadsheet->rowCount() < 1) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(tr("%1: paste from clipboard").arg(m_table->name()));
+	m_spreadsheet->beginMacro(tr("%1: paste from clipboard").arg(m_spreadsheet->name()));
 	const QMimeData * mime_data = QApplication::clipboard()->mimeData();
 
 	int first_col = firstSelectedColumn(false);
@@ -820,18 +820,18 @@ void Spreadsheet::pasteIntoSelection()
 			first_row = current_row;
 			last_row = first_row + input_row_count -1;
 			last_col = first_col + input_col_count -1;
-			// resize the table if necessary
-			if (last_col >= m_table->columnCount())
+			// resize the spreadsheet if necessary
+			if (last_col >= m_spreadsheet->columnCount())
 			{
-				for (int i=0; i<last_col+1-m_table->columnCount(); i++)
+				for (int i=0; i<last_col+1-m_spreadsheet->columnCount(); i++)
 				{
 					Column * new_col = new Column(QString::number(i+1), SciDAVis::Text);
 					new_col->setPlotDesignation(SciDAVis::Y);
-					m_table->addChild(new_col);
+					m_spreadsheet->addChild(new_col);
 				}
 			}
-			if (last_row >= m_table->rowCount())
-				m_table->appendRows(last_row+1-m_table->rowCount());
+			if (last_row >= m_spreadsheet->rowCount())
+				m_spreadsheet->appendRows(last_row+1-m_spreadsheet->rowCount());
 			// select the rectangle to be pasted in
 			setCellsSelected(first_row, first_col, last_row, last_col);
 		}
@@ -844,7 +844,7 @@ void Spreadsheet::pasteIntoSelection()
 			{
 				if (isCellSelected(first_row + r, first_col + c) && (c < cell_texts.at(r).count()) )
 				{
-					Column * col_ptr = m_table->column(first_col + c);
+					Column * col_ptr = m_spreadsheet->column(first_col + c);
 					if (formulaModeActive())
 					{
 						col_ptr->setFormula(first_row + r, cell_texts.at(r).at(c));
@@ -855,49 +855,49 @@ void Spreadsheet::pasteIntoSelection()
 			}
 		}
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::maskSelection()
+void SpreadsheetView::maskSelection()
 {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(tr("%1: mask selected cell(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(tr("%1: mask selected cell(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->indexOfChild<Column>(col_ptr);
+		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) col_ptr->setMasked(row);
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::unmaskSelection()
+void SpreadsheetView::unmaskSelection()
 {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(tr("%1: unmask selected cell(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(tr("%1: unmask selected cell(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->indexOfChild<Column>(col_ptr);
+		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) col_ptr->setMasked(row, false);
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::fillSelectedCellsWithRowNumbers()
+void SpreadsheetView::fillSelectedCellsWithRowNumbers()
 {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
@@ -905,20 +905,20 @@ void Spreadsheet::fillSelectedCellsWithRowNumbers()
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(tr("%1: fill cells with row numbers").arg(m_table->name()));
+	m_spreadsheet->beginMacro(tr("%1: fill cells with row numbers").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->indexOfChild<Column>(col_ptr);
+		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col))
 				col_ptr->asStringColumn()->setTextAt(row, QString::number(row+1));
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::fillSelectedCellsWithRandomNumbers()
+void SpreadsheetView::fillSelectedCellsWithRandomNumbers()
 {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
@@ -926,12 +926,12 @@ void Spreadsheet::fillSelectedCellsWithRandomNumbers()
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(tr("%1: fill cells with random values").arg(m_table->name()));
+	m_spreadsheet->beginMacro(tr("%1: fill cells with random values").arg(m_spreadsheet->name()));
 	qsrand(QTime::currentTime().msec());
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		int col = m_table->indexOfChild<Column>(col_ptr);
+		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col))
 			{
@@ -949,11 +949,11 @@ void Spreadsheet::fillSelectedCellsWithRandomNumbers()
 					col_ptr->setTextAt(row, QString::number(double(qrand())/double(RAND_MAX)));
 			}
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::insertEmptyColumns()
+void SpreadsheetView::insertEmptyColumns()
 {
 	int first = firstSelectedColumn();
 	int last = lastSelectedColumn();
@@ -961,7 +961,7 @@ void Spreadsheet::insertEmptyColumns()
 	int count, current = first;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: insert empty column(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: insert empty column(s)").arg(m_spreadsheet->name()));
 	while( current <= last )
 	{
 		current = first+1;
@@ -971,34 +971,34 @@ void Spreadsheet::insertEmptyColumns()
 		{
 			Column * new_col = new Column(QString::number(i+1), SciDAVis::Numeric);
 			new_col->setPlotDesignation(SciDAVis::Y);
-			m_table->addChild(new_col);
+			m_spreadsheet->addChild(new_col);
 		}
 		current += count;
 		last += count;
 		while( current <= last && !isColumnSelected(current) ) current++;
 		first = current;
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::removeSelectedColumns()
+void SpreadsheetView::removeSelectedColumns()
 {
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: remove selected column(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: remove selected column(s)").arg(m_spreadsheet->name()));
 
 	QList< Column* > list = selectedColumns();
 	foreach(Column* col, list)
 		col->remove();
 
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::clearSelectedColumns()
+void SpreadsheetView::clearSelectedColumns()
 {
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: clear selected column(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: clear selected column(s)").arg(m_spreadsheet->name()));
 
 	QList< Column* > list = selectedColumns();
 	if (formulaModeActive())
@@ -1012,49 +1012,49 @@ void Spreadsheet::clearSelectedColumns()
 			ptr->clear();
 	}
 
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::setSelectionAs(SciDAVis::PlotDesignation pd) {
+void SpreadsheetView::setSelectionAs(SciDAVis::PlotDesignation pd) {
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: set plot designation(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: set plot designation(s)").arg(m_spreadsheet->name()));
 
 	QList< Column* > list = selectedColumns();
 	foreach(Column* ptr, list)
 		ptr->setPlotDesignation(pd);
 
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::setSelectedColumnsAsX() {
+void SpreadsheetView::setSelectedColumnsAsX() {
 	setSelectionAs(SciDAVis::X);
 }
 
-void Spreadsheet::setSelectedColumnsAsY() {
+void SpreadsheetView::setSelectedColumnsAsY() {
 	setSelectionAs(SciDAVis::Y);
 }
 
-void Spreadsheet::setSelectedColumnsAsZ() {
+void SpreadsheetView::setSelectedColumnsAsZ() {
 	setSelectionAs(SciDAVis::Z);
 }
 
-void Spreadsheet::setSelectedColumnsAsYError() {
+void SpreadsheetView::setSelectedColumnsAsYError() {
 	setSelectionAs(SciDAVis::yErr);
 }
 
-void Spreadsheet::setSelectedColumnsAsXError() {
+void SpreadsheetView::setSelectedColumnsAsXError() {
 	setSelectionAs(SciDAVis::xErr);
 }
 
-void Spreadsheet::setSelectedColumnsAsNone() {
+void SpreadsheetView::setSelectedColumnsAsNone() {
 	setSelectionAs(SciDAVis::noDesignation);
 }
 
-void Spreadsheet::normalizeSelectedColumns() {
+void SpreadsheetView::normalizeSelectedColumns() {
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: normalize column(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: normalize column(s)").arg(m_spreadsheet->name()));
 	QList< Column* > cols = selectedColumns();
 	foreach(Column * col, cols)
 	{
@@ -1071,38 +1071,38 @@ void Spreadsheet::normalizeSelectedColumns() {
 					col->setValueAt(row, col->valueAt(row) / max);
 		}
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::normalizeSelection()
+void SpreadsheetView::normalizeSelection()
 {
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: normalize selection").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: normalize selection").arg(m_spreadsheet->name()));
 	double max = 0.0;
 	for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
-		if (m_table->column(col)->dataType() == SciDAVis::TypeDouble)
-			for (int row=0; row<m_table->rowCount(); row++)
+		if (m_spreadsheet->column(col)->dataType() == SciDAVis::TypeDouble)
+			for (int row=0; row<m_spreadsheet->rowCount(); row++)
 			{
-				if (isCellSelected(row, col) && m_table->column(col)->valueAt(row) > max)
-					max = m_table->column(col)->valueAt(row);
+				if (isCellSelected(row, col) && m_spreadsheet->column(col)->valueAt(row) > max)
+					max = m_spreadsheet->column(col)->valueAt(row);
 			}
 
 	if (max != 0.0) // avoid division by zero
 	{
 		for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
-			if (m_table->column(col)->dataType() == SciDAVis::TypeDouble)
-				for (int row=0; row<m_table->rowCount(); row++)
+			if (m_spreadsheet->column(col)->dataType() == SciDAVis::TypeDouble)
+				for (int row=0; row<m_spreadsheet->rowCount(); row++)
 				{
 					if (isCellSelected(row, col))
-						m_table->column(col)->setValueAt(row, m_table->column(col)->valueAt(row) / max);
+						m_spreadsheet->column(col)->setValueAt(row, m_spreadsheet->column(col)->valueAt(row) / max);
 				}
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::insertEmptyRows()
+void SpreadsheetView::insertEmptyRows()
 {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
@@ -1111,44 +1111,44 @@ void Spreadsheet::insertEmptyRows()
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: insert empty rows(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: insert empty rows(s)").arg(m_spreadsheet->name()));
 	while( current <= last )
 	{
 		current = first+1;
 		while( current <= last && isRowSelected(current) ) current++;
 		count = current-first;
-		m_table->insertRows(first, count);
+		m_spreadsheet->insertRows(first, count);
 		current += count;
 		last += count;
 		while( current <= last && !isRowSelected(current) ) current++;
 		first = current;
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::removeSelectedRows()
+void SpreadsheetView::removeSelectedRows()
 {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: remove selected rows(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: remove selected rows(s)").arg(m_spreadsheet->name()));
 	for (int i=last; i>=first; i--)
-		if (isRowSelected(i, false)) m_table->removeRows(i, 1);
-	m_table->endMacro();
+		if (isRowSelected(i, false)) m_spreadsheet->removeRows(i, 1);
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::clearSelectedRows()
+void SpreadsheetView::clearSelectedRows()
 {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(QObject::tr("%1: clear selected rows(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(QObject::tr("%1: clear selected rows(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
@@ -1172,24 +1172,24 @@ void Spreadsheet::clearSelectedRows()
 				}
 		}
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::clearSelectedCells()
+void SpreadsheetView::clearSelectedCells()
 {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_table->beginMacro(tr("%1: clear selected cell(s)").arg(m_table->name()));
+	m_spreadsheet->beginMacro(tr("%1: clear selected cell(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
 		if (formulaModeActive())
 		{
-			int col = m_table->indexOfChild<Column>(col_ptr);
+			int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
@@ -1198,7 +1198,7 @@ void Spreadsheet::clearSelectedCells()
 		}
 		else
 		{
-			int col = m_table->indexOfChild<Column>(col_ptr);
+			int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
@@ -1209,81 +1209,81 @@ void Spreadsheet::clearSelectedCells()
 				}
 		}
 	}
-	m_table->endMacro();
+	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
-void Spreadsheet::goToCell()
+void SpreadsheetView::goToCell()
 {
 	bool ok;
 
 	int col = QInputDialog::getInteger(0, tr("Go to Cell"), tr("Enter column"),
-			1, 1, m_table->columnCount(), 1, &ok);
+			1, 1, m_spreadsheet->columnCount(), 1, &ok);
 	if ( !ok ) return;
 
 	int row = QInputDialog::getInteger(0, tr("Go to Cell"), tr("Enter row"),
-			1, 1, m_table->rowCount(), 1, &ok);
+			1, 1, m_spreadsheet->rowCount(), 1, &ok);
 	if ( !ok ) return;
 
 	goToCell(row-1, col-1);
 }
 
-void Spreadsheet::goToCell(int row, int col)
+void SpreadsheetView::goToCell(int row, int col)
 {
 	QModelIndex index = m_model->index(row, col);
 	m_view_widget->scrollTo(index);
 	m_view_widget->setCurrentIndex(index);
 }
 
-void Spreadsheet::dimensionsDialog() {
+void SpreadsheetView::dimensionsDialog() {
 	// TODO: Design a nicer dialog for this
 	bool ok;
 
-	int cols = QInputDialog::getInteger(0, tr("Set Table Dimensions"), tr("Enter number of columns"),
-			m_table->columnCount(), 1, 1e9, 1, &ok);
+	int cols = QInputDialog::getInteger(0, tr("Set Spreadsheet Dimensions"), tr("Enter number of columns"),
+			m_spreadsheet->columnCount(), 1, 1e9, 1, &ok);
 	if ( !ok ) return;
 
-	int rows = QInputDialog::getInteger(0, tr("Set Table Dimensions"), tr("Enter number of rows"),
-			m_table->rowCount(), 1, 1e9, 1, &ok);
+	int rows = QInputDialog::getInteger(0, tr("Set Spreadsheet Dimensions"), tr("Enter number of rows"),
+			m_spreadsheet->rowCount(), 1, 1e9, 1, &ok);
 	if ( !ok ) return;
 
-	m_table->setColumnCount(cols);
-	m_table->setRowCount(rows);
+	m_spreadsheet->setColumnCount(cols);
+	m_spreadsheet->setRowCount(rows);
 }
 
-void Spreadsheet::addColumns() {
-	m_table->appendColumns(selectedColumnCount(false));
+void SpreadsheetView::addColumns() {
+	m_spreadsheet->appendColumns(selectedColumnCount(false));
 }
 
-void Spreadsheet::addRows() {
-	m_table->appendColumns(selectedRowCount(false));
+void SpreadsheetView::addRows() {
+	m_spreadsheet->appendColumns(selectedRowCount(false));
 }
 
-int Spreadsheet::defaultColumnWidth() {
+int SpreadsheetView::defaultColumnWidth() {
 	return Column::global("default_width").toInt();
 }
 
-void Spreadsheet::setDefaultColumnWidth(int width) {
+void SpreadsheetView::setDefaultColumnWidth(int width) {
 	Column::setGlobal("default_width", width);
 }
 
-void Spreadsheet::setDefaultCommentVisibility(bool visible) {
-	Table::setGlobal("default_comment_visibility", visible);
+void SpreadsheetView::setDefaultCommentVisibility(bool visible) {
+	Spreadsheet::setGlobal("default_comment_visibility", visible);
 }
 
-bool Spreadsheet::defaultCommentVisibility() {
-	return Table::global("default_comment_visibility").toBool();
+bool SpreadsheetView::defaultCommentVisibility() {
+	return Spreadsheet::global("default_comment_visibility").toBool();
 }
 
-void Spreadsheet::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize)
+void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize)
 {
 	Q_UNUSED(oldSize);
 	static bool inside = false;
-	m_table->column(logicalIndex)->setWidth(newSize);
+	m_spreadsheet->column(logicalIndex)->setWidth(newSize);
 	if (inside) return;
 	inside = true;
 
-	int cols = m_table->columnCount();
+	int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
 		if (isColumnSelected(i, true))
 			m_view_widget->horizontalHeader()->resizeSection(i, newSize);

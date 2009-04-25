@@ -29,7 +29,7 @@
 #include "CurveRangeDialog.h"
 #include "graph/PlotCurve.h"
 #include "graph/Layer.h"
-#include "table/Table.h"
+#include "table/Spreadsheet.h"
 
 #include <QGroupBox>
 #include <QMessageBox>
@@ -101,7 +101,7 @@ void CurveRangeDialog::setCurveToModify(Layer *layer, int curve)
 	if (!m_curve)
 		return;
 
-    Table *t = m_curve->table();
+    Spreadsheet *t = m_curve->table();
 	if (t)
 	{
 		boxStart->setMaxValue(t->rowCount());
