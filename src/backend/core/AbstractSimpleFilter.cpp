@@ -66,10 +66,10 @@
  * 03 {
  * 04	protected:
  * 05		virtual bool inputAcceptable(int, AbstractColumn *source) {
- * 06			return (source->dataType() == SciDAVis::TypeDouble);
+ * 06			return (source->columnMode() == SciDAVis::Numeric);
  * 07		}
  * 08	public:
- * 09		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeDouble; }
+ * 09		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
  * 10
  * 11		virtual double valueAt(int row) const {
  * 12			if (!m_inputs.value(0)) return 0.0;
@@ -82,7 +82,7 @@
  * This filter reads an input value (line 13) and returns its square (line 14).
  * Reimplementing inputAcceptable() makes sure that the data source really is of type
  * double (lines 5 to 7). Otherwise, the source will be rejected by AbstractFilter::input().
- * The output type is repoted by reimplementing dataType() (line 09).
+ * The output type is reported by reimplementing columnMode() (line 09).
  * Before you actually use m_inputs.value(0), make sure that the input port has
  * been connected to a data source (line 12).
  * Otherwise line 13 would result in a crash. That's it, we've already written a
@@ -110,10 +110,10 @@
  * 03 {
  * 04	protected:
  * 05		virtual bool inputAcceptable(int, AbstractColumn *source) {
- * 06			return (source->dataType() == SciDAVis::TypeDouble);
+ * 06			return (source->columnMode() == SciDAVis::Numeric);
  * 07		}
  * 08	public:
- * 09		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeDouble; }
+ * 09		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
  * \endcode
  * Even rows (including row 0) get dropped, odd rows are renumbered:
  * \code
@@ -159,16 +159,6 @@ SciDAVis::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
 }
 
 /**
- * \brief Return the data type of the input
- */
-SciDAVis::ColumnDataType AbstractSimpleFilter::dataType() const {
-	// calling this function while m_input is empty is a sign of very bad code
-	// nevertheless it will return some rather meaningless value to
-	// avoid crashes
-	return m_inputs.value(0) ? m_inputs.at(0)->dataType() : SciDAVis::TypeQString;
-}
-
-/**
  * \brief Return the column mode
  *
  * This function is most used by tables but can also be used
@@ -185,7 +175,7 @@ SciDAVis::ColumnMode AbstractSimpleFilter::columnMode() const {
 /**
  * \brief Return the content of row 'row'.
  *
- * Use this only when dataType() is QString
+ * Use this only when columnMode() is Text
  */
 QString AbstractSimpleFilter::textAt(int row) const {
 	return m_inputs.value(0) ? m_inputs.at(0)->textAt(row) : QString();
@@ -194,7 +184,7 @@ QString AbstractSimpleFilter::textAt(int row) const {
 /**
  * \brief Return the date part of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QDate AbstractSimpleFilter::dateAt(int row) const {
 	return m_inputs.value(0) ? m_inputs.at(0)->dateAt(row) : QDate();
@@ -203,7 +193,7 @@ QDate AbstractSimpleFilter::dateAt(int row) const {
 /**
  * \brief Return the time part of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QTime AbstractSimpleFilter::timeAt(int row) const {
 	return m_inputs.value(0) ? m_inputs.at(0)->timeAt(row) : QTime();
@@ -212,7 +202,7 @@ QTime AbstractSimpleFilter::timeAt(int row) const {
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QDateTime AbstractSimpleFilter::dateTimeAt(int row) const {
 	return m_inputs.value(0) ? m_inputs.at(0)->dateTimeAt(row) : QDateTime();
@@ -221,7 +211,7 @@ QDateTime AbstractSimpleFilter::dateTimeAt(int row) const {
 /**
  * \brief Return the double value in row 'row'
  *
- * Use this only when dataType() is double
+ * Use this only when columnMode() is Numeric
  */
 double AbstractSimpleFilter::valueAt(int row) const {
 	return m_inputs.value(0) ? m_inputs.at(0)->valueAt(row) : 0.0;
@@ -485,10 +475,6 @@ bool AbstractSimpleFilter::load(XmlStreamReader * reader)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \class SimpleFilterColumn
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-SciDAVis::ColumnDataType SimpleFilterColumn::dataType() const {
-	return m_owner->dataType();
-}
 
 SciDAVis::ColumnMode SimpleFilterColumn::columnMode() const {
 	return m_owner->columnMode();

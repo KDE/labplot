@@ -51,9 +51,9 @@
  * Classes derived from this will either store a 
  * vector with entries of one certain data type, e.g. double, QString, 
  * QDateTime, or generate such values on demand. To determine the data
- * type of a class derived from this, use the dataType() function. 
+ * type of a class derived from this, use the columnMode() function. 
  * AbstractColumn defines all access functions for all supported data 
- * types but only those corresponding to the return value of dataType() 
+ * types but only those corresponding to the return value of columnMode() 
  * will return a meaningful value. Calling functions not belonging to 
  * the data type of the column is safe, but will do nothing (writing
  * function) or return some default value (reading functions).
@@ -70,11 +70,6 @@
  * All writing functions have a "do nothing" standard implementation to
  * make deriving a read-only class very easy without bothering about the
  * writing interface. 
- */
-
-/**
- * \fn SciDAVis::ColumnDataType AbstractColumn::dataType() const
- * \brief Return the data type of the column
  */
 
 /**
@@ -333,7 +328,7 @@ void AbstractColumn::clearFormulas() {};
 /**
  * \brief Return the content of row 'row'.
  *
- * Use this only when dataType() is QString
+ * Use this only when columnMode() is Text
  */
 QString AbstractColumn::textAt(int row) const {
 	Q_UNUSED(row);
@@ -343,7 +338,7 @@ QString AbstractColumn::textAt(int row) const {
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QString
+ * Use this only when columnMode() is Text
  */
 void AbstractColumn::setTextAt(int row, const QString& new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value) 
@@ -352,7 +347,7 @@ void AbstractColumn::setTextAt(int row, const QString& new_value) {
 /**
  * \brief Replace a range of values 
  *
- * Use this only when dataType() is QString
+ * Use this only when columnMode() is Text
  */
 void AbstractColumn::replaceTexts(int first, const QStringList& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
@@ -361,7 +356,7 @@ void AbstractColumn::replaceTexts(int first, const QStringList& new_values) {
 /**
  * \brief Return the date part of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QDate AbstractColumn::dateAt(int row) const {
 	Q_UNUSED(row);
@@ -371,7 +366,7 @@ QDate AbstractColumn::dateAt(int row) const {
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 void AbstractColumn::setDateAt(int row, const QDate& new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value)
@@ -380,7 +375,7 @@ void AbstractColumn::setDateAt(int row, const QDate& new_value) {
 /**
  * \brief Return the time part of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QTime AbstractColumn::timeAt(int row) const {
 	Q_UNUSED(row);
@@ -390,7 +385,7 @@ QTime AbstractColumn::timeAt(int row) const {
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 void AbstractColumn::setTimeAt(int row, const QTime& new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value)
@@ -399,7 +394,7 @@ void AbstractColumn::setTimeAt(int row, const QTime& new_value) {
 /**
  * \brief Return the QDateTime in row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QDateTime AbstractColumn::dateTimeAt(int row) const {
 	Q_UNUSED(row);
@@ -409,7 +404,7 @@ QDateTime AbstractColumn::dateTimeAt(int row) const {
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 void AbstractColumn::setDateTimeAt(int row, const QDateTime& new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value)
@@ -418,7 +413,7 @@ void AbstractColumn::setDateTimeAt(int row, const QDateTime& new_value) {
 /**
  * \brief Replace a range of values 
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 void AbstractColumn::replaceDateTimes(int first, const QList<QDateTime>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
@@ -427,7 +422,7 @@ void AbstractColumn::replaceDateTimes(int first, const QList<QDateTime>& new_val
 /**
  * \brief Return the double value in row 'row'
  *
- * Use this only when dataType() is double
+ * Use this only when columnMode() is Numeric
  */
 double AbstractColumn::valueAt(int row) const {
 	Q_UNUSED(row);
@@ -437,7 +432,7 @@ double AbstractColumn::valueAt(int row) const {
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is double
+ * Use this only when columnMode() is Numeric
  */
 void AbstractColumn::setValueAt(int row, double new_value) {
 	Q_UNUSED(row) Q_UNUSED(new_value)
@@ -446,7 +441,7 @@ void AbstractColumn::setValueAt(int row, double new_value) {
 /**
  * \brief Replace a range of values 
  *
- * Use this only when dataType() is double
+ * Use this only when columnMode() is Numeric
  */
 void AbstractColumn::replaceValues(int first, const QVector<double>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)

@@ -47,12 +47,12 @@ class DayOfWeek2DoubleFilter : public AbstractSimpleFilter
 		}
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeDouble; }
+		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
 
 	protected:
 		//! Using typed ports: only date-time inputs are accepted.
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->dataType() == SciDAVis::TypeQDateTime;
+			return source->columnMode() == SciDAVis::Day;
 		}
 };
 

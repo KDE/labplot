@@ -956,7 +956,7 @@ void SpreadsheetView::copySelection()
 				{
 					output_str += col_ptr->formula(first_row + r);
 				}
-				else if (col_ptr->dataType() == SciDAVis::TypeDouble)
+				else if (col_ptr->columnMode() == SciDAVis::Numeric)
 				{
 					Double2StringFilter * out_fltr = static_cast<Double2StringFilter *>(col_ptr->outputFilter());
 					output_str += QLocale().toString(col_ptr->valueAt(first_row + r), 
@@ -1146,20 +1146,25 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers()
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		for (int row=first; row<=last; row++)
 			if (isCellSelected(row, col)) 
-			{
-				if (col_ptr->columnMode() == SciDAVis::Numeric)
-					col_ptr->setValueAt(row, double(qrand())/double(RAND_MAX));
-				else if (col_ptr->dataType() == SciDAVis::TypeQDateTime)
-				{
-					QDate date(1,1,1);
-					QTime time(0,0,0,0);
-					int days = (int)( (double)date.daysTo(QDate(2999,12,31)) * double(qrand())/double(RAND_MAX) );
-					qint64 msecs = (qint64)(double(qrand())/double(RAND_MAX) * 1000.0 * 60.0 * 60.0 * 24.0);
-					col_ptr->setDateTimeAt(row, QDateTime(date.addDays(days), time.addMSecs(msecs)));
+				switch (col_ptr->columnMode()) {
+					case SciDAVis::Numeric:
+						col_ptr->setValueAt(row, double(qrand())/double(RAND_MAX));
+						break;
+					case SciDAVis::DateTime:
+					case SciDAVis::Month:
+					case SciDAVis::Day:
+						{
+							QDate date(1,1,1);
+							QTime time(0,0,0,0);
+							int days = (int)( (double)date.daysTo(QDate(2999,12,31)) * double(qrand())/double(RAND_MAX) );
+							qint64 msecs = (qint64)(double(qrand())/double(RAND_MAX) * 1000.0 * 60.0 * 60.0 * 24.0);
+							col_ptr->setDateTimeAt(row, QDateTime(date.addDays(days), time.addMSecs(msecs)));
+							break;
+						}
+					case SciDAVis::Text:
+						col_ptr->setTextAt(row, QString::number(double(qrand())/double(RAND_MAX)));
+						break;
 				}
-				else
-					col_ptr->setTextAt(row, QString::number(double(qrand())/double(RAND_MAX)));
-			}
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1286,7 +1291,7 @@ void SpreadsheetView::normalizeSelectedColumns()
 	QList< Column* > cols = selectedColumns();
 	foreach(Column * col, cols)
 	{
-		if (col->dataType() == SciDAVis::TypeDouble)
+		if (col->columnMode() == SciDAVis::Numeric)
 		{
 			double max = 0.0;
 			for (int row=0; row<col->rowCount(); row++)
@@ -1309,7 +1314,7 @@ void SpreadsheetView::normalizeSelection()
 	m_spreadsheet->beginMacro(QObject::tr("%1: normalize selection").arg(m_spreadsheet->name()));
 	double max = 0.0;
 	for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
-		if (m_spreadsheet->column(col)->dataType() == SciDAVis::TypeDouble)
+		if (m_spreadsheet->column(col)->columnMode() == SciDAVis::Numeric)
 			for (int row=0; row<m_spreadsheet->rowCount(); row++)
 			{
 				if (isCellSelected(row, col) && m_spreadsheet->column(col)->valueAt(row) > max)
@@ -1319,7 +1324,7 @@ void SpreadsheetView::normalizeSelection()
 	if (max != 0.0) // avoid division by zero
 	{
 		for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
-			if (m_spreadsheet->column(col)->dataType() == SciDAVis::TypeDouble)
+			if (m_spreadsheet->column(col)->columnMode() == SciDAVis::Numeric)
 				for (int row=0; row<m_spreadsheet->rowCount(); row++)
 				{
 					if (isCellSelected(row, col))

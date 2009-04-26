@@ -51,7 +51,7 @@ class Double2StringFilter : public AbstractSimpleFilter
 		int numDigits() const { return m_digits; }
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQString; }
+		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
 
 	signals:
 		void formatChanged();
@@ -82,7 +82,7 @@ class Double2StringFilter : public AbstractSimpleFilter
 	protected:
 		//! Using typed ports: only double inputs are accepted.
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->dataType() == SciDAVis::TypeDouble;
+			return source->columnMode() == SciDAVis::Numeric;
 		}
 };
 

@@ -53,7 +53,7 @@ class DateTime2StringFilter : public AbstractSimpleFilter
 		QString format() const { return m_format; }
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQString; }
+		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
 
 	signals:
 		void formatChanged();

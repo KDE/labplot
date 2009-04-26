@@ -57,7 +57,6 @@ class Column : public AbstractColumn
 
 		virtual QIcon icon() const;
 
-		SciDAVis::ColumnDataType dataType() const;
 		bool isReadOnly() const;
 		SciDAVis::ColumnMode columnMode() const;
 		void setColumnMode(SciDAVis::ColumnMode mode);
@@ -138,7 +137,6 @@ class ColumnStringIO : public AbstractColumn
 	public:
 		ColumnStringIO(Column * owner) : AbstractColumn(tr("as string")), m_owner(owner), m_setting(false) {}
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQString; }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
 		virtual int rowCount() const { return m_owner->rowCount(); }
 		virtual QString textAt(int row) const;

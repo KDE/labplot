@@ -383,16 +383,18 @@ void SpreadsheetModel::updateHorizontalHeader()
 
 		QString middle_section;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		switch(col->dataType()) {
-				case SciDAVis::TypeDouble:
-			middle_section = " {numeric} ";
-			break;
-				case SciDAVis::TypeQString:
-			middle_section = " {text} ";
-			break;
-				case SciDAVis::TypeQDateTime:
-			middle_section = " {datetime} ";
-			break;
+		switch(col->columnMode()) {
+			case SciDAVis::Numeric:
+				middle_section = " {numeric} ";
+				break;
+			case SciDAVis::Text:
+				middle_section = " {text} ";
+				break;
+			case SciDAVis::DateTime:
+			case SciDAVis::Month:
+			case SciDAVis::Day:
+				middle_section = " {datetime} ";
+				break;
 		}
 #endif
 		QString designation_section;

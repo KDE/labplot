@@ -66,7 +66,6 @@ class ResultsColumn : public AbstractColumn
 	public:
 		ResultsColumn(AbstractFit * owner) : AbstractColumn(tr("value")), m_owner(owner) {}
 
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeDouble; }
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
 		virtual int rowCount() const { return m_owner->numParameters(); }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return SciDAVis::Y; }
@@ -85,7 +84,6 @@ class ErrorsColumn : public AbstractColumn
 	public:
 		ErrorsColumn(AbstractFit * owner) : AbstractColumn(tr("error")), m_owner(owner) {}
 
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeDouble; }
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
 		virtual int rowCount() const { return m_owner->numParameters(); }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return SciDAVis::Y; }
@@ -104,7 +102,6 @@ class NamesColumn : public AbstractColumn
 	public:
 		NamesColumn(AbstractFit * owner) : AbstractColumn(tr("error")), m_owner(owner) {}
 
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQString; }
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
 		virtual int rowCount() const { return m_owner->numParameters(); }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return SciDAVis::Y; }
@@ -123,7 +120,6 @@ class DescriptionsColumn : public AbstractColumn
 	public:
 		DescriptionsColumn(AbstractFit * owner) : AbstractColumn(tr("error")), m_owner(owner) {}
 
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQString; }
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
 		virtual int rowCount() const { return m_owner->numParameters(); }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return SciDAVis::Y; }

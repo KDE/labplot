@@ -50,7 +50,6 @@ class AbstractColumn : public AbstractAspect
 		AbstractColumn(const QString& name) : AbstractAspect(name) {}
 		virtual ~AbstractColumn() { aboutToBeDestroyed(this);}
 
-		virtual SciDAVis::ColumnDataType dataType() const = 0;
 		virtual bool isReadOnly() const { return true; };
 		virtual SciDAVis::ColumnMode columnMode() const = 0;
 		virtual void setColumnMode(SciDAVis::ColumnMode mode);

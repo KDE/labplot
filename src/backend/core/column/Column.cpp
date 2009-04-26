@@ -81,8 +81,7 @@ Column::Column(const QString& name, SciDAVis::ColumnMode mode)
 Column::Column(const QString& name, QVector<double> data, IntervalAttribute<bool> validity)
  : AbstractColumn(name)
 {
-	m_column_private = new Private(this, SciDAVis::TypeDouble, 
-		SciDAVis::Numeric, new QVector<double>(data), validity);
+	m_column_private = new Private(this, SciDAVis::Numeric, new QVector<double>(data), validity);
 	init();
 }
 
@@ -96,8 +95,7 @@ Column::Column(const QString& name, QVector<double> data, IntervalAttribute<bool
 Column::Column(const QString& name, QStringList data, IntervalAttribute<bool> validity)
  : AbstractColumn(name)
 {
-	m_column_private = new Private(this, SciDAVis::TypeQString,
-		SciDAVis::Text, new QStringList(data), validity);
+	m_column_private = new Private(this, SciDAVis::Text, new QStringList(data), validity);
 	init();
 }
 
@@ -111,8 +109,7 @@ Column::Column(const QString& name, QStringList data, IntervalAttribute<bool> va
 Column::Column(const QString& name, QList<QDateTime> data, IntervalAttribute<bool> validity)
  : AbstractColumn(name)
 {
-	m_column_private = new Private(this, SciDAVis::TypeQDateTime, 
-		SciDAVis::DateTime, new QList<QDateTime>(data), validity);
+	m_column_private = new Private(this, SciDAVis::DateTime, new QList<QDateTime>(data), validity);
 	init();
 }
 
@@ -179,7 +176,7 @@ void Column::setColumnMode(SciDAVis::ColumnMode mode)
 bool Column::copy(const AbstractColumn * other)
 {
 	Q_CHECK_PTR(other);
-	if(other->dataType() != dataType()) return false;
+	if(other->columnMode() != columnMode()) return false;
 	exec(new ColumnFullCopyCmd(m_column_private, other));
 	return true;
 }
@@ -198,7 +195,7 @@ bool Column::copy(const AbstractColumn * other)
 bool Column::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows)
 {
 	Q_CHECK_PTR(source);
-	if(source->dataType() != dataType()) return false;
+	if(source->columnMode() != columnMode()) return false;
 	exec(new ColumnPartialCopyCmd(m_column_private, source, source_start, dest_start, num_rows));
 	return true;
 }
@@ -362,7 +359,7 @@ void Column::clearFormulas()
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QString
+ * Use this only when columnMode() is Text
  */
 void Column::setTextAt(int row, const QString& new_value)
 {
@@ -372,7 +369,7 @@ void Column::setTextAt(int row, const QString& new_value)
 /**
  * \brief Replace a range of values 
  *
- * Use this only when dataType() is QString
+ * Use this only when columnMode() is Text
  */
 void Column::replaceTexts(int first, const QStringList& new_values)
 {
@@ -383,7 +380,7 @@ void Column::replaceTexts(int first, const QStringList& new_values)
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateAt(int row, const QDate& new_value)
 {
@@ -393,7 +390,7 @@ void Column::setDateAt(int row, const QDate& new_value)
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setTimeAt(int row,const QTime& new_value)
 {
@@ -403,7 +400,7 @@ void Column::setTimeAt(int row,const QTime& new_value)
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value)
 {
@@ -413,7 +410,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value)
 /**
  * \brief Replace a range of values 
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::replaceDateTimes(int first, const QList<QDateTime>& new_values)
 {
@@ -424,7 +421,7 @@ void Column::replaceDateTimes(int first, const QList<QDateTime>& new_values)
 /**
  * \brief Set the content of row 'row'
  *
- * Use this only when dataType() is double
+ * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, double new_value)
 {
@@ -434,7 +431,7 @@ void Column::setValueAt(int row, double new_value)
 /**
  * \brief Replace a range of values 
  *
- * Use this only when dataType() is double
+ * Use this only when columnMode() is Numeric
  */
 void Column::replaceValues(int first, const QVector<double>& new_values)
 {
@@ -445,7 +442,7 @@ void Column::replaceValues(int first, const QVector<double>& new_values)
 /**
  * \brief Return the content of row 'row'.
  *
- * Use this only when dataType() is QString
+ * Use this only when columnMode() is Text
  */
 QString Column::textAt(int row) const
 {
@@ -455,7 +452,7 @@ QString Column::textAt(int row) const
 /**
  * \brief Return the date part of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QDate Column::dateAt(int row) const
 {
@@ -465,7 +462,7 @@ QDate Column::dateAt(int row) const
 /**
  * \brief Return the time part of row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QTime Column::timeAt(int row) const
 {
@@ -475,7 +472,7 @@ QTime Column::timeAt(int row) const
 /**
  * \brief Return the QDateTime in row 'row'
  *
- * Use this only when dataType() is QDateTime
+ * Use this only when columnMode() is DateTime, Month or Day
  */
 QDateTime Column::dateTimeAt(int row) const
 {
@@ -499,13 +496,14 @@ double Column::valueAt(int row) const
  */
 QIcon Column::icon() const
 {
-	switch(dataType())
-	{
-		case SciDAVis::TypeDouble:
+	switch(columnMode()) {
+		case SciDAVis::Numeric:
 			return QIcon(QPixmap(":/numerictype.png"));
-		case SciDAVis::TypeQString:
+		case SciDAVis::Text:
 			return QIcon(QPixmap(":/texttype.png"));
-		case SciDAVis::TypeQDateTime:
+		case SciDAVis::DateTime:
+		case SciDAVis::Month:
+		case SciDAVis::Day:
 			return QIcon(QPixmap(":/datetype.png"));
 	}
 	return QIcon();
@@ -523,7 +521,6 @@ void Column::save(QXmlStreamWriter * writer) const
 {
 	writer->writeStartElement("column");
 	writeBasicAttributes(writer);
-	writer->writeAttribute("type", SciDAVis::enumValueToString(dataType(), "ColumnDataType"));
 	writer->writeAttribute("mode", SciDAVis::enumValueToString(columnMode(), "ColumnMode"));
 	writer->writeAttribute("plot_designation", SciDAVis::enumValueToString(plotDesignation(), "PlotDesignation"));
 	writer->writeAttribute("width", QString::number(width()));
@@ -552,24 +549,21 @@ void Column::save(QXmlStreamWriter * writer) const
 		writer->writeEndElement();
 	}
 	int i;
-	switch(dataType())
-	{
-		case SciDAVis::TypeDouble:
+	switch(columnMode()) {
+		case SciDAVis::Numeric:
 			for(i=0; i<rowCount(); i++)
 			{
 				writer->writeStartElement("row");
-				writer->writeAttribute("type", SciDAVis::enumValueToString(dataType(), "ColumnDataType"));
 				writer->writeAttribute("index", QString::number(i));
 				writer->writeAttribute("invalid", isInvalid(i) ? "yes" : "no");
 				writer->writeCharacters(QString::number(valueAt(i), 'e', 16));
 				writer->writeEndElement();
 			}
 			break;
-		case SciDAVis::TypeQString:
+		case SciDAVis::Text:
 			for(i=0; i<rowCount(); i++)
 			{
 				writer->writeStartElement("row");
-				writer->writeAttribute("type", SciDAVis::enumValueToString(dataType(), "ColumnDataType"));
 				writer->writeAttribute("index", QString::number(i));
 				writer->writeAttribute("invalid", isInvalid(i) ? "yes" : "no");
 				writer->writeCharacters(textAt(i));
@@ -577,11 +571,12 @@ void Column::save(QXmlStreamWriter * writer) const
 			}
 			break;
 
-		case SciDAVis::TypeQDateTime:
+		case SciDAVis::DateTime:
+		case SciDAVis::Month:
+		case SciDAVis::Day:
 			for(i=0; i<rowCount(); i++)
 			{
 				writer->writeStartElement("row");
-				writer->writeAttribute("type", SciDAVis::enumValueToString(dataType(), "ColumnDataType"));
 				writer->writeAttribute("index", QString::number(i));
 				writer->writeAttribute("invalid", isInvalid(i) ? "yes" : "no");
 #if QT_VERSION < 0x040400  // avoid a bug in Qt < 4.4
@@ -616,19 +611,6 @@ bool Column::load(XmlStreamReader * reader)
 		QXmlStreamAttributes attribs = reader->attributes();
 		QString str;
 
-		// read type
-		str = attribs.value(reader->namespaceUri().toString(), "type").toString();
-		if(str.isEmpty())
-		{
-			reader->raiseError(tr("column type missing"));
-			return false;
-		}
-		int type_code = SciDAVis::enumStringToValue(str, "ColumnDataType");
-		if(type_code == -1)
-		{
-			reader->raiseError(tr("column type invalid"));
-			return false;
-		}
 		// read mode
 		str = attribs.value(reader->namespaceUri().toString(), "mode").toString();
 		if(str.isEmpty())
@@ -643,11 +625,6 @@ bool Column::load(XmlStreamReader * reader)
 			return false;
 		}
 		setColumnMode((SciDAVis::ColumnMode)mode_code);
-		if(type_code != int(dataType()))
-		{
-			reader->raiseError(tr("column type or mode invalid"));
-			return false;
-		}
 		// read plot designation
 		str = attribs.value(reader->namespaceUri().toString(), "plot_designation").toString();
 		int pd_code = SciDAVis::enumStringToValue(str, "PlotDesignation");
@@ -790,22 +767,12 @@ bool Column::XmlReadRow(XmlStreamReader * reader)
 	Q_ASSERT(reader->isStartElement() && reader->name() == "row");
 	
 	QString str;
-	int type_code;
 
 	QXmlStreamAttributes attribs = reader->attributes();
-	// verfiy type
-	str = attribs.value(reader->namespaceUri().toString(), "type").toString();
-	type_code = SciDAVis::enumStringToValue(str, "ColumnDataType");
-	if(str.isEmpty() || type_code == -1 || type_code != int(dataType()))
-	{
-		reader->raiseError(tr("invalid or missing row type"));
-		return false;
-	}
 	
 	bool ok;
 	int index = reader->readAttributeInt("index", &ok);
-	if(!ok)
-	{
+	if(!ok) {
 		reader->raiseError(tr("invalid or missing row index"));
 		return false;
 	}
@@ -814,24 +781,24 @@ bool Column::XmlReadRow(XmlStreamReader * reader)
 	if(str == "yes") setInvalid(index);
 
 	str = reader->readElementText();
-	switch(dataType())
-	{
-		case SciDAVis::TypeDouble:
+	switch(columnMode()) {
+		case SciDAVis::Numeric:
 			{
 				double value = str.toDouble(&ok);
-				if(!ok)
-				{
+				if(!ok) {
 					reader->raiseError(tr("invalid row value"));
 					return false;
 				}
 				setValueAt(index, value);
 				break;
 			}
-		case SciDAVis::TypeQString:
+		case SciDAVis::Text:
 			setTextAt(index, str);
 			break;
 
-		case SciDAVis::TypeQDateTime:
+		case SciDAVis::DateTime:
+		case SciDAVis::Month:
+		case SciDAVis::Day:
 			QDateTime date_time = QDateTime::fromString(str,"yyyy-dd-MM hh:mm:ss:zzz");
 			setDateTimeAt(index, date_time);
 			break;
@@ -843,14 +810,6 @@ bool Column::XmlReadRow(XmlStreamReader * reader)
 ////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////
-
-/**
- * \brief Return the data type of the column
- */
-SciDAVis::ColumnDataType Column::dataType() const 
-{ 
-	return m_column_private->dataType(); 
-}
 
 /**
  * \brief Return whether the object is read-only

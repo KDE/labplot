@@ -39,7 +39,6 @@ class SciDAVis : public QObject
 	Q_OBJECT
 	Q_ENUMS(PlotDesignation)
 	Q_ENUMS(ColumnMode)
-	Q_ENUMS(ColumnDataType)
 
 	private:
 		SciDAVis() {} // don't allow instanciating
@@ -64,13 +63,6 @@ class SciDAVis : public QObject
 			Day = 5,
 			DateTime = 6
 			// 2 and 3 are skipped to avoid problems with old obsolete values
-		};
-
-		enum ColumnDataType
-		{
-			TypeDouble = 1,
-			TypeQString = 2,
-			TypeQDateTime = 3
 		};
 
 		static int version();

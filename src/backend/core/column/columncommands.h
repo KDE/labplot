@@ -52,8 +52,6 @@ private:
 	Column::Private * m_col;
 	SciDAVis::ColumnMode m_old_mode;	
 	SciDAVis::ColumnMode m_mode;
-	SciDAVis::ColumnDataType m_old_type;
-	SciDAVis::ColumnDataType m_new_type;
 	void * m_old_data;
 	void * m_new_data;
 	AbstractSimpleFilter* m_new_in_filter;
@@ -183,7 +181,6 @@ public:
 
 private:
 	Column::Private * m_col;
-	SciDAVis::ColumnDataType m_type;
 	void * m_data;
 	void * m_empty_data;
 	IntervalAttribute<bool> m_validity;

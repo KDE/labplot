@@ -48,7 +48,6 @@ class AbstractSimpleFilter : public AbstractFilter
 		virtual AbstractColumn* output(int port);
 		virtual const AbstractColumn * output(int port) const;
 		virtual SciDAVis::PlotDesignation plotDesignation() const;
-		virtual SciDAVis::ColumnDataType dataType() const;
 		virtual SciDAVis::ColumnMode columnMode() const;
 		virtual QString textAt(int row) const;
 		virtual QDate dateAt(int row) const;
@@ -99,7 +98,6 @@ class SimpleFilterColumn : public AbstractColumn
 	public:
 		SimpleFilterColumn(AbstractSimpleFilter *owner) : AbstractColumn(owner->name()), m_owner(owner) {}
 
-		virtual SciDAVis::ColumnDataType dataType() const;
 		virtual SciDAVis::ColumnMode columnMode() const;
 		virtual int rowCount() const { return m_owner->rowCount(); }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }

@@ -59,12 +59,12 @@ class Double2DateTimeFilter : public AbstractSimpleFilter
 		}
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQDateTime; }
+		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::DateTime; }
 
 	protected:
 		//! Using typed ports: only double inputs are accepted.
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->dataType() == SciDAVis::TypeDouble;
+			return source->columnMode() == SciDAVis::Numeric;
 		}
 };
 

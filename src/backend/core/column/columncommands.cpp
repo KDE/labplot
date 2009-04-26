@@ -51,16 +51,6 @@
  */
 
 /**
- * \var ColumnSetModeCmd::m_old_type
- * \brief The old data type
- */
-
-/**
- * \var ColumnSetModeCmd::m_new_type
- * \brief The new data type
- */
-
-/**
  * \var ColumnSetModeCmd::m_old_data
  * \brief Pointer to old data
  */
@@ -124,33 +114,38 @@ ColumnSetModeCmd::ColumnSetModeCmd(Column::Private * col, SciDAVis::ColumnMode m
 /**
  * \brief Dtor
  */
-ColumnSetModeCmd::~ColumnSetModeCmd()
-{
-	if(m_undone)
-	{
+ColumnSetModeCmd::~ColumnSetModeCmd() {
+	if(m_undone) {
 		if(m_new_data != m_old_data)
-		{
-			if(m_new_type == SciDAVis::TypeDouble)
-				delete static_cast< QVector<double>* >(m_new_data);
-			else if(m_new_type == SciDAVis::TypeQString)
-				delete static_cast< QStringList* >(m_new_data);
-			else if(m_new_type == SciDAVis::TypeQDateTime)
-				delete static_cast< QList<QDateTime>* >(m_new_data);
-		}
-	}
-	else
-	{
+			switch (m_mode) {
+				case SciDAVis::Numeric:
+					delete static_cast< QVector<double>* >(m_new_data);
+					break;
+				case SciDAVis::Text:
+					delete static_cast< QStringList* >(m_new_data);
+					break;
+				case SciDAVis::DateTime:
+				case SciDAVis::Month:
+				case SciDAVis::Day:
+					delete static_cast< QList<QDateTime>* >(m_new_data);
+					break;
+			}
+	} else {
 		if(m_new_data != m_old_data)
-		{
-			if(m_old_type == SciDAVis::TypeDouble)
-				delete static_cast< QVector<double>* >(m_old_data);
-			else if(m_old_type == SciDAVis::TypeQString)
-				delete static_cast< QStringList* >(m_old_data);
-			else if(m_old_type == SciDAVis::TypeQDateTime)
-				delete static_cast< QList<QDateTime>* >(m_old_data);
-		}
+			switch (m_old_mode) {
+				case SciDAVis::Numeric:
+					delete static_cast< QVector<double>* >(m_old_data);
+					break;
+				case SciDAVis::Text:
+					delete static_cast< QStringList* >(m_old_data);
+					break;
+				case SciDAVis::DateTime:
+				case SciDAVis::Month:
+				case SciDAVis::Day:
+					delete static_cast< QList<QDateTime>* >(m_old_data);
+					break;
+			}
 	}
-
 }
 
 /**
@@ -162,7 +157,6 @@ void ColumnSetModeCmd::redo()
 	{
 		// save old values
 		m_old_mode = m_col->columnMode();	
-		m_old_type = m_col->dataType();
 		m_old_data = m_col->dataPointer();
 		m_old_in_filter = m_col->inputFilter();
 		m_old_out_filter = m_col->outputFilter();
@@ -172,7 +166,6 @@ void ColumnSetModeCmd::redo()
 		m_col->setColumnMode(m_mode);
 
 		// save new values
-		m_new_type = m_col->dataType();
 		m_new_data = m_col->dataPointer();
 		m_new_in_filter = m_col->inputFilter();
 		m_new_out_filter = m_col->outputFilter();
@@ -182,7 +175,7 @@ void ColumnSetModeCmd::redo()
 	else
 	{
 		// set to saved new values
-		m_col->replaceModeData(m_mode, m_new_type, m_new_data, m_new_in_filter, m_new_out_filter, m_new_validity);
+		m_col->replaceModeData(m_mode, m_new_data, m_new_in_filter, m_new_out_filter, m_new_validity);
 	}
 	m_undone = false;
 }
@@ -193,7 +186,7 @@ void ColumnSetModeCmd::redo()
 void ColumnSetModeCmd::undo()
 {
 	// reset to old values
-	m_col->replaceModeData(m_old_mode, m_old_type, m_old_data, m_old_in_filter, m_old_out_filter, m_old_validity);
+	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter, m_old_validity);
 
 	m_undone = true;
 }
@@ -665,11 +658,6 @@ void ColumnSetWidthCmd::undo()
  */
 
 /**
- * \var ColumnClearCmd::m_type
- * \brief The column's data type
- */
-
-/**
  * \var ColumnClearCmd::m_data
  * \brief Pointer to the old data pointer
  */
@@ -702,6 +690,7 @@ ColumnClearCmd::ColumnClearCmd(Column::Private * col, QUndoCommand * parent )
 {
 	setText(QObject::tr("%1: clear column").arg(col->name()));
 	m_empty_data = 0;
+	m_data = 0;
 	m_undone = false;
 }
 
@@ -710,23 +699,36 @@ ColumnClearCmd::ColumnClearCmd(Column::Private * col, QUndoCommand * parent )
  */
 ColumnClearCmd::~ColumnClearCmd()
 {
-	if(m_undone)
-	{
-		if(m_type == SciDAVis::TypeDouble)
-			delete static_cast< QVector<double>* >(m_empty_data);
-		else if(m_type == SciDAVis::TypeQString)
-			delete static_cast< QStringList* >(m_empty_data);
-		else if(m_type == SciDAVis::TypeQDateTime)
-			delete static_cast< QList<QDateTime>* >(m_empty_data);
-	}
-	else
-	{
-		if(m_type == SciDAVis::TypeDouble)
-			delete static_cast< QVector<double>* >(m_data);
-		else if(m_type == SciDAVis::TypeQString)
-			delete static_cast< QStringList* >(m_data);
-		else if(m_type == SciDAVis::TypeQDateTime)
-			delete static_cast< QList<QDateTime>* >(m_data);
+	if(m_undone) {
+		if (!m_empty_data) return;
+		switch(m_col->columnMode()) {
+			case SciDAVis::Numeric:
+				delete static_cast< QVector<double>* >(m_empty_data);
+				break;
+			case SciDAVis::Text:
+				delete static_cast< QStringList* >(m_empty_data);
+				break;
+			case SciDAVis::DateTime:
+			case SciDAVis::Month:
+			case SciDAVis::Day:
+				delete static_cast< QList<QDateTime>* >(m_empty_data);
+				break;
+		}
+	} else {
+		if (!m_data) return;
+		switch(m_col->columnMode()) {
+			case SciDAVis::Numeric:
+				delete static_cast< QVector<double>* >(m_data);
+				break;
+			case SciDAVis::Text:
+				delete static_cast< QStringList* >(m_data);
+				break;
+			case SciDAVis::DateTime:
+			case SciDAVis::Month:
+			case SciDAVis::Day:
+				delete static_cast< QList<QDateTime>* >(m_data);
+				break;
+		}
 	}
 }
 
@@ -735,21 +737,20 @@ ColumnClearCmd::~ColumnClearCmd()
  */
 void ColumnClearCmd::redo()
 {
-	if(!m_empty_data)
-	{
-		m_type = m_col->dataType();
+	if(!m_empty_data) {
 		int rowCount = m_col->rowCount();
-		switch(m_type)
-		{
-			case SciDAVis::TypeDouble:
+		switch(m_col->columnMode()) {
+			case SciDAVis::Numeric:
 				m_empty_data = new QVector<double>(rowCount);
 				break;
-			case SciDAVis::TypeQDateTime:
+			case SciDAVis::DateTime:
+			case SciDAVis::Month:
+			case SciDAVis::Day:
 				m_empty_data = new QList<QDateTime>();
 				for(int i=0; i<rowCount; i++)
 					static_cast< QList<QDateTime> *>(m_empty_data)->append(QDateTime());
 				break;
-			case SciDAVis::TypeQString:
+			case SciDAVis::Text:
 				m_empty_data = new QStringList();
 				for(int i=0; i<rowCount; i++)
 					static_cast< QStringList *>(m_empty_data)->append(QString());

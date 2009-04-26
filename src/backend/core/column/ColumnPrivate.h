@@ -41,10 +41,7 @@ class Column::Private
 	public:
 		Private(Column * owner, SciDAVis::ColumnMode mode);
 		~Private();
-		Private(Column * owner, SciDAVis::ColumnDataType type, SciDAVis::ColumnMode mode, 
-				void * data, IntervalAttribute<bool> validity);
-
-		SciDAVis::ColumnDataType dataType() const;
+		Private(Column * owner, SciDAVis::ColumnMode mode, void * data, IntervalAttribute<bool> validity);
 
 		SciDAVis::ColumnMode columnMode() const;
 		void setColumnMode(SciDAVis::ColumnMode mode);
@@ -65,8 +62,8 @@ class Column::Private
 		void *dataPointer() const;
 		AbstractSimpleFilter* inputFilter() const;
 		AbstractSimpleFilter* outputFilter() const;
-		void replaceModeData(SciDAVis::ColumnMode mode, SciDAVis::ColumnDataType type, void * data,
-			AbstractSimpleFilter *in_filter, AbstractSimpleFilter *out_filter, IntervalAttribute<bool> validity);
+		void replaceModeData(SciDAVis::ColumnMode mode, void * data, AbstractSimpleFilter *in_filter,
+				AbstractSimpleFilter *out_filter, IntervalAttribute<bool> validity);
 		void replaceData(void * data, IntervalAttribute<bool> validity);
 		IntervalAttribute<bool> validityAttribute() const;
 		IntervalAttribute<bool> maskingAttribute() const;
@@ -108,7 +105,6 @@ class Column::Private
 		void replaceValues(int first, const QVector<double>& new_values);
 
 	private:
-		SciDAVis::ColumnDataType m_data_type;
 		SciDAVis::ColumnMode m_column_mode;
 		void * m_data;
 		AbstractSimpleFilter* m_input_filter;

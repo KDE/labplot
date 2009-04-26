@@ -85,12 +85,12 @@ class String2DoubleFilter : public AbstractSimpleFilter
 
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeDouble; }
+		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
 
 	protected:
 		//! Using typed ports: only string inputs are accepted.
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->dataType() == SciDAVis::TypeQString;
+			return source->columnMode() == SciDAVis::Text;
 		}
 
 	private:

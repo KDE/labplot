@@ -76,11 +76,6 @@
  * \brief column contains dates and/or times
  */
 
-/**
- * \enum SciDAVis::ColumnDataType
- * \brief Column data type
- */
-
 // TODO: This is still very SciDAVis specific, should be adjusted to be used by LabPlot as well.
 //       Maybe rename to class Globals and add several #ifdefs.
 

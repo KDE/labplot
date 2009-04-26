@@ -115,11 +115,11 @@ class String2DayOfWeekFilter : public AbstractSimpleFilter
 		}
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQDateTime; }
+		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Day; }
 
 	protected:
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->dataType() == SciDAVis::TypeQString;
+			return source->columnMode() == SciDAVis::Text;
 		}
 };
 

@@ -101,11 +101,11 @@ class String2MonthFilter : public AbstractSimpleFilter
 		}
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnDataType dataType() const { return SciDAVis::TypeQDateTime; }
+		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Month; }
 
 	protected:
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->dataType() == SciDAVis::TypeQString;
+			return source->columnMode() == SciDAVis::Text;
 		}
 };
 

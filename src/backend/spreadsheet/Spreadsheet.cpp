@@ -306,193 +306,191 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 	WAIT_CURSOR;
 	beginMacro(tr("%1: sort column(s)").arg(name()));
 
-	if(leading == 0) // sort separately
-	{
-		for(int i=0; i<cols.size(); i++)
-		{
-			Column* col = cols.at(i);
+	if(leading == 0) { // sort separately
+		foreach(Column *col, cols) {
+			switch (col->columnMode()) {
+				case SciDAVis::Numeric:
+					{
+						int rows = col->rowCount();
+						QList< QPair<double, int> > map;
 
-			if(col->dataType() == SciDAVis::TypeDouble)
-			{
-				int rows = col->rowCount();
-				QList< QPair<double, int> > map;
+						for(int j=0; j<rows; j++)
+							map.append(QPair<double, int>(col->valueAt(j), j));
 
-				for(int j=0; j<rows; j++)
-					map.append(QPair<double, int>(col->valueAt(j), j));
+						if(ascending)
+							qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
+						else
+							qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
-				if(ascending)
-					qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
-				else
-					qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+						QListIterator< QPair<double, int> > it(map);
+						Column *temp_col = new Column("temp", col->columnMode());
 
-				QListIterator< QPair<double, int> > it(map);
-				Column *temp_col = new Column("temp", col->columnMode());
+						int k=0;
+						// put the values in the right order into temp_col
+						while(it.hasNext()) {
+							temp_col->copy(col, it.peekNext().second, k, 1);
+							temp_col->setMasked(col->isMasked(it.next().second));
+							k++;
+						}
+						// copy the sorted column
+						col->copy(temp_col, 0, 0, rows);
+						delete temp_col;
+						break;
+					}
+				case SciDAVis::Text:
+					{
+						int rows = col->rowCount();
+						QList< QPair<QString, int> > map;
 
-				int k=0;
-				// put the values in the right order into temp_col
-				while(it.hasNext())
-				{
-					temp_col->copy(col, it.peekNext().second, k, 1);
-					temp_col->setMasked(col->isMasked(it.next().second));
-					k++;
-				}
-				// copy the sorted column
-				col->copy(temp_col, 0, 0, rows);
-				delete temp_col;
-			}
-			else if(col->dataType() == SciDAVis::TypeQString)
-			{
-				int rows = col->rowCount();
-				QList< QPair<QString, int> > map;
+						for(int j=0; j<rows; j++)
+							map.append(QPair<QString, int>(col->textAt(j), j));
 
-				for(int j=0; j<rows; j++)
-					map.append(QPair<QString, int>(col->textAt(j), j));
+						if(ascending)
+							qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
+						else
+							qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
-				if(ascending)
-					qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
-				else
-					qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
+						QListIterator< QPair<QString, int> > it(map);
+						Column *temp_col = new Column("temp", col->columnMode());
 
-				QListIterator< QPair<QString, int> > it(map);
-				Column *temp_col = new Column("temp", col->columnMode());
+						int k=0;
+						// put the values in the right order into temp_col
+						while(it.hasNext()) {
+							temp_col->copy(col, it.peekNext().second, k, 1);
+							temp_col->setMasked(col->isMasked(it.next().second));
+							k++;
+						}
+						// copy the sorted column
+						col->copy(temp_col, 0, 0, rows);
+						delete temp_col;
+						break;
+					}
+				case SciDAVis::DateTime:
+				case SciDAVis::Month:
+				case SciDAVis::Day:
+					{
+						int rows = col->rowCount();
+						QList< QPair<QDateTime, int> > map;
 
-				int k=0;
-				// put the values in the right order into temp_col
-				while(it.hasNext())
-				{
-					temp_col->copy(col, it.peekNext().second, k, 1);
-					temp_col->setMasked(col->isMasked(it.next().second));
-					k++;
-				}
-				// copy the sorted column
-				col->copy(temp_col, 0, 0, rows);
-				delete temp_col;
-			}
-			else if(col->dataType() == SciDAVis::TypeQDateTime)
-			{
-				int rows = col->rowCount();
-				QList< QPair<QDateTime, int> > map;
+						for(int j=0; j<rows; j++)
+							map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
 
-				for(int j=0; j<rows; j++)
-					map.append(QPair<QDateTime, int>(col->dateTimeAt(j), j));
+						if(ascending)
+							qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+						else
+							qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
-				if(ascending)
-					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
-				else
-					qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+						QListIterator< QPair<QDateTime, int> > it(map);
+						Column *temp_col = new Column("temp", col->columnMode());
 
-				QListIterator< QPair<QDateTime, int> > it(map);
-				Column *temp_col = new Column("temp", col->columnMode());
-
-				int k=0;
-				// put the values in the right order into temp_col
-				while(it.hasNext())
-				{
-					temp_col->copy(col, it.peekNext().second, k, 1);
-					temp_col->setMasked(col->isMasked(it.next().second));
-					k++;
-				}
-				// copy the sorted column
-				col->copy(temp_col, 0, 0, rows);
-				delete temp_col;
-			}
-		}
-
-	}
-	else // sort with leading column
-	{
-		if(leading->dataType() == SciDAVis::TypeDouble)
-		{
-			QList< QPair<double, int> > map;
-			int rows = leading->rowCount();
-
-			for(int i=0; i<rows; i++)
-				map.append(QPair<double, int>(leading->valueAt(i), i));
-
-			if(ascending)
-				qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
-			else
-				qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
-			QListIterator< QPair<double, int> > it(map);
-
-			for(int i=0; i<cols.size(); i++)
-			{
-				Column *temp_col = new Column("temp", cols.at(i)->columnMode());
-				it.toFront();
-				int j=0;
-				// put the values in the right order into temp_col
-				while(it.hasNext())
-				{
-					temp_col->copy(cols.at(i), it.peekNext().second, j, 1);
-					temp_col->setMasked(cols.at(i)->isMasked(it.next().second));
-					j++;
-				}
-				// copy the sorted column
-				cols.at(i)->copy(temp_col, 0, 0, rows);
-				delete temp_col;
+						int k=0;
+						// put the values in the right order into temp_col
+						while(it.hasNext()) {
+							temp_col->copy(col, it.peekNext().second, k, 1);
+							temp_col->setMasked(col->isMasked(it.next().second));
+							k++;
+						}
+						// copy the sorted column
+						col->copy(temp_col, 0, 0, rows);
+						delete temp_col;
+						break;
+					}
 			}
 		}
-		else if(leading->dataType() == SciDAVis::TypeQString)
-		{
-			QList< QPair<QString, int> > map;
-			int rows = leading->rowCount();
-
-			for(int i=0; i<rows; i++)
-				map.append(QPair<QString, int>(leading->textAt(i), i));
-
-			if(ascending)
-				qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
-			else
-				qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
-			QListIterator< QPair<QString, int> > it(map);
-
-			for(int i=0; i<cols.size(); i++)
-			{
-				Column *temp_col = new Column("temp", cols.at(i)->columnMode());
-				it.toFront();
-				int j=0;
-				// put the values in the right order into temp_col
-				while(it.hasNext())
+	} else { // sort with leading column
+		switch (leading->columnMode()) {
+			case SciDAVis::Numeric:
 				{
-					temp_col->copy(cols.at(i), it.peekNext().second, j, 1);
-					temp_col->setMasked(cols.at(i)->isMasked(it.next().second));
-					j++;
+					QList< QPair<double, int> > map;
+					int rows = leading->rowCount();
+
+					for(int i=0; i<rows; i++)
+						map.append(QPair<double, int>(leading->valueAt(i), i));
+
+					if(ascending)
+						qStableSort(map.begin(), map.end(), CompareFunctions::doubleLess);
+					else
+						qStableSort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+					QListIterator< QPair<double, int> > it(map);
+
+					foreach (Column *col, cols) {
+						Column *temp_col = new Column("temp", col->columnMode());
+						it.toFront();
+						int j=0;
+						// put the values in the right order into temp_col
+						while(it.hasNext()) {
+							temp_col->copy(col, it.peekNext().second, j, 1);
+							temp_col->setMasked(col->isMasked(it.next().second));
+							j++;
+						}
+						// copy the sorted column
+						col->copy(temp_col, 0, 0, rows);
+						delete temp_col;
+					}
+					break;
 				}
-				// copy the sorted column
-				cols.at(i)->copy(temp_col, 0, 0, rows);
-				delete temp_col;
-			}
-		}
-		else if(leading->dataType() == SciDAVis::TypeQDateTime)
-		{
-			QList< QPair<QDateTime, int> > map;
-			int rows = leading->rowCount();
-
-			for(int i=0; i<rows; i++)
-				map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
-
-			if(ascending)
-				qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
-			else
-				qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
-			QListIterator< QPair<QDateTime, int> > it(map);
-
-			for(int i=0; i<cols.size(); i++)
-			{
-				Column *temp_col = new Column("temp", cols.at(i)->columnMode());
-				it.toFront();
-				int j=0;
-				// put the values in the right order into temp_col
-				while(it.hasNext())
+			case SciDAVis::Text:
 				{
-					temp_col->copy(cols.at(i), it.peekNext().second, j, 1);
-					temp_col->setMasked(cols.at(i)->isMasked(it.next().second));
-					j++;
+					QList< QPair<QString, int> > map;
+					int rows = leading->rowCount();
+
+					for(int i=0; i<rows; i++)
+						map.append(QPair<QString, int>(leading->textAt(i), i));
+
+					if(ascending)
+						qStableSort(map.begin(), map.end(), CompareFunctions::QStringLess);
+					else
+						qStableSort(map.begin(), map.end(), CompareFunctions::QStringGreater);
+					QListIterator< QPair<QString, int> > it(map);
+
+					foreach (Column *col, cols) {
+						Column *temp_col = new Column("temp", col->columnMode());
+						it.toFront();
+						int j=0;
+						// put the values in the right order into temp_col
+						while(it.hasNext()) {
+							temp_col->copy(col, it.peekNext().second, j, 1);
+							temp_col->setMasked(col->isMasked(it.next().second));
+							j++;
+						}
+						// copy the sorted column
+						col->copy(temp_col, 0, 0, rows);
+						delete temp_col;
+					}
+					break;
 				}
-				// copy the sorted column
-				cols.at(i)->copy(temp_col, 0, 0, rows);
-				delete temp_col;
-			}
+			case SciDAVis::DateTime:
+			case SciDAVis::Month:
+			case SciDAVis::Day:
+				{
+					QList< QPair<QDateTime, int> > map;
+					int rows = leading->rowCount();
+
+					for(int i=0; i<rows; i++)
+						map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
+
+					if(ascending)
+						qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+					else
+						qStableSort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+					QListIterator< QPair<QDateTime, int> > it(map);
+
+					foreach (Column *col, cols) {
+						Column *temp_col = new Column("temp", col->columnMode());
+						it.toFront();
+						int j=0;
+						// put the values in the right order into temp_col
+						while(it.hasNext()) {
+							temp_col->copy(col, it.peekNext().second, j, 1);
+							temp_col->setMasked(col->isMasked(it.next().second));
+							j++;
+						}
+						// copy the sorted column
+						col->copy(temp_col, 0, 0, rows);
+						delete temp_col;
+					}
+					break;
+				}
 		}
 	}
 	endMacro();
