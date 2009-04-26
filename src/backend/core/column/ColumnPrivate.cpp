@@ -511,7 +511,7 @@ IntervalAttribute<bool> Column::Private::validityAttribute() const {
 /**
  * \brief Return the masking interval attribute
  */
-IntervalAttribute<bool> Column::Private::makingAttribute() const {
+IntervalAttribute<bool> Column::Private::maskingAttribute() const {
 	return m_masking;
 }
 

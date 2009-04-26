@@ -116,7 +116,6 @@ class AbstractColumn : public AbstractAspect
 
 		friend class ColumnPrivate;
 		friend class AbstractSimpleFilter;
-		friend class SimpleMappingFilter;
 		friend class SimpleCopyThroughFilter;
 };
 

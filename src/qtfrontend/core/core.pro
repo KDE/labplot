@@ -73,7 +73,6 @@ HEADERS += \
 	AbstractPart.h \
 	PartMdiView.h \
 	ProjectExplorer.h \
-	#SimpleMappingFilter.h \
 	AbstractImportFilter.h \
 	AbstractExportFilter.h \
 	ImportDialog.h \
@@ -81,18 +80,13 @@ HEADERS += \
 	PluginManager.h \
 	PluginLoader.h \
 	# TODO: port or delete the following files
-	#ApplicationWindow.h \
 	#PreferencesDialog.h \
 	#CopyThroughFilter.h \
 	#CurveRangeDialog.h \
 	#DataSetDialog.h \
-	#Filter.h \
 	#FilterDialog.h \
 	#FindWindowDialog.h \
-	#Fit.h \
 	#FitDialog.h \
-	#MyParser.h \
-	#MyWidget.h \
 	#OpenProjectDialog.h \
 	#ReadOnlyTableModel.h \
 	#RenameWindowDialog.h \
@@ -120,7 +114,6 @@ SOURCES += \
 	AbstractPart.cpp \
 	PartMdiView.cpp \
 	ProjectExplorer.cpp \
-	#SimpleMappingFilter.cpp \
 	DateTime2StringFilter.cpp \
 	String2DateTimeFilter.cpp \
 	Double2StringFilter.cpp \
@@ -131,18 +124,12 @@ SOURCES += \
 	PluginManager.cpp \
 	PluginLoader.cpp \
 	# TODO: port or delete the following files
-	#ApplicationWindow.cpp \
 	#PreferencesDialog.cpp \
 	#CurveRangeDialog.cpp \
 	#DataSetDialog.cpp \
-	#Filter.cpp \
 	#FilterDialog.cpp \
 	#FindWindowDialog.cpp \
-	#Fit.cpp \
 	#FitDialog.cpp \
-	#Folder.cpp \
-	#MyParser.cpp \
-	#MyWidget.cpp \
 	#OpenProjectDialog.cpp \
 	#ReadOnlyTableModel.cpp \
 	#ScriptingLangDialog.cpp \
