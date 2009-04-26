@@ -81,9 +81,6 @@ class String2DateTimeFilter : public AbstractSimpleFilter
 		virtual QDateTime dateTimeAt(int row) const;
 		virtual QDate dateAt(int row) const;
 		virtual QTime timeAt(int row) const;
-		virtual bool isInvalid(int row) const;
-		virtual bool isInvalid(Interval<int> i) const;
-		virtual QList< Interval<int> > invalidIntervals() const;
 
 	protected:
 		//! Using typed ports: only string inputs are accepted.

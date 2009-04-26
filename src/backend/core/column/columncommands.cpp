@@ -81,16 +81,6 @@
  */
 
 /**
- * \var ColumnSetModeCmd::m_old_validity
- * \brief The old validity information
- */
-
-/**
- * \var ColumnSetModeCmd::m_new_validity
- * \brief The new validity information
- */
-
-/**
  * \var ColumnSetModeCmd::m_undone
  * \brief Flag indicating whether this command has been undone (and not redone).
  */
@@ -160,7 +150,6 @@ void ColumnSetModeCmd::redo()
 		m_old_data = m_col->dataPointer();
 		m_old_in_filter = m_col->inputFilter();
 		m_old_out_filter = m_col->outputFilter();
-		m_old_validity = m_col->validityAttribute();
 
 		// do the conversion
 		m_col->setColumnMode(m_mode);
@@ -169,13 +158,12 @@ void ColumnSetModeCmd::redo()
 		m_new_data = m_col->dataPointer();
 		m_new_in_filter = m_col->inputFilter();
 		m_new_out_filter = m_col->outputFilter();
-		m_new_validity = m_col->validityAttribute();
 		m_executed = true;
 	}
 	else
 	{
 		// set to saved new values
-		m_col->replaceModeData(m_mode, m_new_data, m_new_in_filter, m_new_out_filter, m_new_validity);
+		m_col->replaceModeData(m_mode, m_new_data, m_new_in_filter, m_new_out_filter);
 	}
 	m_undone = false;
 }
@@ -186,7 +174,7 @@ void ColumnSetModeCmd::redo()
 void ColumnSetModeCmd::undo()
 {
 	// reset to old values
-	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter, m_old_validity);
+	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter);
 
 	m_undone = true;
 }
@@ -252,11 +240,10 @@ void ColumnFullCopyCmd::redo()
 	}
 	else
 	{
-		// swap data + validity of orig. column and backup
-		IntervalAttribute<bool> val_temp = m_col->invalidIntervals();
+		// swap data of orig. column and backup
 		void * data_temp = m_col->dataPointer();
-		m_col->replaceData(m_backup->dataPointer(), m_backup->validityAttribute());
-		m_backup->replaceData(data_temp, val_temp);
+		m_col->replaceData(m_backup->dataPointer());
+		m_backup->replaceData(data_temp);
 	}
 }
 
@@ -265,11 +252,10 @@ void ColumnFullCopyCmd::redo()
  */
 void ColumnFullCopyCmd::undo()
 {
-	// swap data + validity of orig. column and backup
-	IntervalAttribute<bool> val_temp = m_col->validityAttribute();
+	// swap data of orig. column and backup
 	void * data_temp = m_col->dataPointer();
-	m_col->replaceData(m_backup->dataPointer(), m_backup->validityAttribute());
-	m_backup->replaceData(data_temp, val_temp);
+	m_col->replaceData(m_backup->dataPointer());
+	m_backup->replaceData(data_temp);
 }
 
 /** ***************************************************************************
@@ -336,11 +322,6 @@ void ColumnFullCopyCmd::undo()
  */
 
 /**
- * \var ColumnPartialCopyCmd::m_old_validity
- * \brief The old validity information
- */
-
-/**
  * \brief Ctor
  */
 ColumnPartialCopyCmd::ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent )
@@ -375,7 +356,6 @@ void ColumnPartialCopyCmd::redo()
 		m_col_backup = new Column::Private(m_col_backup_owner, m_col->columnMode());
 		m_col_backup->copy(m_col, m_dest_start, 0, m_num_rows);
 		m_old_row_count = m_col->rowCount();
-		m_old_validity = m_col->validityAttribute();
 	}
 	m_col->copy(m_src_backup, 0, m_dest_start, m_num_rows);
 }
@@ -387,7 +367,7 @@ void ColumnPartialCopyCmd::undo()
 {
 	m_col->copy(m_col_backup, 0, m_dest_start, m_num_rows);
 	m_col->resizeTo(m_old_row_count);
-	m_col->replaceData(m_col->dataPointer(), m_old_validity);
+	m_col->replaceData(m_col->dataPointer());
 }
 
 /** ***************************************************************************
@@ -668,16 +648,6 @@ void ColumnSetWidthCmd::undo()
  */
 
 /**
- * \var ColumnClearCmd::m_validity
- * \brief The old validity
- */
-
-/**
- * \var ColumnClearCmd::m_new_validity
- * \brief The new validity
- */
-
-/**
  * \var ColumnClearCmd::m_undone
  * \brief Status flag
  */
@@ -757,11 +727,8 @@ void ColumnClearCmd::redo()
 				break;
 		}
 		m_data = m_col->dataPointer();
-		m_validity = m_col->validityAttribute();
-		if (m_col->rowCount() > 0)
-			m_new_validity.setValue(Interval<int>(0, m_col->rowCount()-1));
 	}
-	m_col->replaceData(m_empty_data, m_new_validity);
+	m_col->replaceData(m_empty_data);
 	m_undone = false;
 }
 
@@ -770,66 +737,8 @@ void ColumnClearCmd::redo()
  */
 void ColumnClearCmd::undo()
 {
-	m_col->replaceData(m_data, m_validity);
+	m_col->replaceData(m_data);
 	m_undone = true;
-}
-
-/** ***************************************************************************
- * \class ColumnClearValidityCmd
- * \brief Clear validity information 
- ** ***************************************************************************/
-
-/**
- * \var ColumnClearValidityCmd::m_col
- * \brief The private column data to modify
- */
-
-/**
- * \var ColumnClearValidityCmd::m_validity
- * \brief The old validity
- */
-
-/**
- * \var ColumnClearValidityCmd::m_copied
- * \brief A status flag
- */
-
-/**
- * \brief Ctor
- */
-ColumnClearValidityCmd::ColumnClearValidityCmd(Column::Private * col, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col)
-{
-	setText(QObject::tr("%1: mark all cells valid").arg(col->name()));
-	m_copied = false;
-}
-
-/**
- * \brief Dtor
- */
-ColumnClearValidityCmd::~ColumnClearValidityCmd()
-{
-}
-
-/**
- * \brief Execute the command
- */
-void ColumnClearValidityCmd::redo()
-{
-	if(!m_copied)
-	{
-		m_validity = m_col->validityAttribute();
-		m_copied = true;
-	}
-	m_col->clearValidity();
-}
-
-/**
- * \brief Undo the command
- */
-void ColumnClearValidityCmd::undo()
-{
-	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
 /** ***************************************************************************
@@ -888,77 +797,6 @@ void ColumnClearMasksCmd::redo()
 void ColumnClearMasksCmd::undo()
 {
 	m_col->replaceMasking(m_masking);
-}
-
-/** ***************************************************************************
- * \class ColumnSetInvalidCmd
- * \brief Mark an interval of rows as invalid 
- ** ***************************************************************************/
-
-/**
- * \var ColumnSetInvalidCmd::m_col
- * \brief The private column data to modify
- */
-
-/**
- * \var ColumnSetInvalidCmd::m_interval
- * \brief The interval
- */
-
-/**
- * \var ColumnSetInvalidCmd::m_invalid
- * \brief Valid/invalid flag
- */
-
-/**
- * \var ColumnSetInvalidCmd::m_validity
- * \brief Interval attribute backup
- */
-
-/**
- * \var ColumnSetInvalidCmd::m_copied
- * \brief A status flag
- */
-
-/**
- * \brief Ctor
- */
-ColumnSetInvalidCmd::ColumnSetInvalidCmd(Column::Private * col, Interval<int> interval, bool invalid, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_interval(interval), m_invalid(invalid)
-{
-	if(invalid)
-		setText(QObject::tr("%1: mark cells invalid").arg(col->name()));
-	else
-		setText(QObject::tr("%1: mark cells valid").arg(col->name()));
-	m_copied = false;
-}
-
-/**
- * \brief Dtor
- */
-ColumnSetInvalidCmd::~ColumnSetInvalidCmd()
-{
-}
-
-/**
- * \brief Execute the command
- */
-void ColumnSetInvalidCmd::redo()
-{
-	if(!m_copied)
-	{
-		m_validity = m_col->validityAttribute();
-		m_copied = true;
-	}
-	m_col->setInvalid(m_interval, m_invalid);
-}
-
-/**
- * \brief Undo the command
- */
-void ColumnSetInvalidCmd::undo()
-{
-	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
 /** ***************************************************************************
@@ -1189,11 +1027,6 @@ void ColumnClearFormulasCmd::undo()
  */
 
 /**
- * \var ColumnSetTextCmd::m_validity
- * \brief The old validity
- */
-
-/**
  * \brief Ctor
  */
 ColumnSetTextCmd::ColumnSetTextCmd(Column::Private * col, int row, const QString& new_value, QUndoCommand * parent )
@@ -1216,7 +1049,6 @@ void ColumnSetTextCmd::redo()
 {
 	m_old_value = m_col->textAt(m_row);
 	m_row_count = m_col->rowCount();
-	m_validity = m_col->validityAttribute();
 	m_col->setTextAt(m_row, m_new_value);
 }
 
@@ -1227,7 +1059,7 @@ void ColumnSetTextCmd::undo()
 {
 	m_col->setTextAt(m_row, m_old_value);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer(), m_validity);
+	m_col->replaceData(m_col->dataPointer());
 }
 
 /** ***************************************************************************
@@ -1261,11 +1093,6 @@ void ColumnSetTextCmd::undo()
  */
 
 /**
- * \var ColumnSetValueCmd::m_validity
- * \brief The old validity
- */
-
-/**
  * \brief Ctor
  */
 ColumnSetValueCmd::ColumnSetValueCmd(Column::Private * col, int row, double new_value, QUndoCommand * parent )
@@ -1288,7 +1115,6 @@ void ColumnSetValueCmd::redo()
 {
 	m_old_value = m_col->valueAt(m_row);
 	m_row_count = m_col->rowCount();
-	m_validity = m_col->validityAttribute();
 	m_col->setValueAt(m_row, m_new_value);
 }
 
@@ -1299,7 +1125,7 @@ void ColumnSetValueCmd::undo()
 {
 	m_col->setValueAt(m_row, m_old_value);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer(), m_validity);
+	m_col->replaceData(m_col->dataPointer());
 }
 
 /** ***************************************************************************
@@ -1333,11 +1159,6 @@ void ColumnSetValueCmd::undo()
  */
 
 /**
- * \var ColumnSetDateTimeCmd::m_validity
- * \brief The old validity
- */
-
-/**
  * \brief Ctor
  */
 ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(Column::Private * col, int row, const QDateTime& new_value, QUndoCommand * parent )
@@ -1360,7 +1181,6 @@ void ColumnSetDateTimeCmd::redo()
 {
 	m_old_value = m_col->dateTimeAt(m_row);
 	m_row_count = m_col->rowCount();
-	m_validity = m_col->validityAttribute();
 	m_col->setDateTimeAt(m_row, m_new_value);
 }
 
@@ -1371,7 +1191,7 @@ void ColumnSetDateTimeCmd::undo()
 {
 	m_col->setDateTimeAt(m_row, m_old_value);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer(), m_validity);
+	m_col->replaceData(m_col->dataPointer());
 }
 
 /** ***************************************************************************
@@ -1410,11 +1230,6 @@ void ColumnSetDateTimeCmd::undo()
  */
 
 /**
- * \var ColumnReplaceTextsCmd::m_validity
- * \brief The old validity
- */
-
-/**
  * \brief Ctor
  */
 ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(Column::Private * col, int first, const QStringList& new_values, QUndoCommand * parent )
@@ -1440,7 +1255,6 @@ void ColumnReplaceTextsCmd::redo()
 	{
 		m_old_values = static_cast< QStringList* >(m_col->dataPointer())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
-		m_validity = m_col->validityAttribute();
 		m_copied = true;
 	}
 	m_col->replaceTexts(m_first, m_new_values);
@@ -1453,7 +1267,7 @@ void ColumnReplaceTextsCmd::undo()
 {
 	m_col->replaceTexts(m_first, m_old_values);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer(), m_validity);
+	m_col->replaceData(m_col->dataPointer());
 }
 
 /** ***************************************************************************
@@ -1492,11 +1306,6 @@ void ColumnReplaceTextsCmd::undo()
  */
 
 /**
- * \var ColumnReplaceValuesCmd::m_validity
- * \brief The old validity
- */
-
-/**
  * \brief Ctor
  */
 ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(Column::Private * col, int first, const QVector<double>& new_values, QUndoCommand * parent )
@@ -1522,7 +1331,6 @@ void ColumnReplaceValuesCmd::redo()
 	{
 		m_old_values = static_cast< QVector<double>* >(m_col->dataPointer())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
-		m_validity = m_col->validityAttribute();
 		m_copied = true;
 	}
 	m_col->replaceValues(m_first, m_new_values);
@@ -1535,7 +1343,7 @@ void ColumnReplaceValuesCmd::undo()
 {
 	m_col->replaceValues(m_first, m_old_values);
 	m_col->resizeTo(m_row_count);
-	m_col->replaceData(m_col->dataPointer(), m_validity);
+	m_col->replaceData(m_col->dataPointer());
 }
 
 /** ***************************************************************************
@@ -1574,11 +1382,6 @@ void ColumnReplaceValuesCmd::undo()
  */
 
 /**
- * \var ColumnReplaceDateTimesCmd::m_validity
- * \brief The old validity
- */
-
-/**
  * \brief Ctor
  */
 ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(Column::Private * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent )
@@ -1604,7 +1407,6 @@ void ColumnReplaceDateTimesCmd::redo()
 	{
 		m_old_values = static_cast< QList<QDateTime>* >(m_col->dataPointer())->mid(m_first, m_new_values.count());
 		m_row_count = m_col->rowCount();
-		m_validity = m_col->validityAttribute();
 		m_copied = true;
 	}
 	m_col->replaceDateTimes(m_first, m_new_values);
@@ -1616,7 +1418,7 @@ void ColumnReplaceDateTimesCmd::redo()
 void ColumnReplaceDateTimesCmd::undo()
 {
 	m_col->replaceDateTimes(m_first, m_old_values);
-	m_col->replaceData(m_col->dataPointer(), m_validity);
+	m_col->replaceData(m_col->dataPointer());
 	m_col->resizeTo(m_row_count);
 }
 

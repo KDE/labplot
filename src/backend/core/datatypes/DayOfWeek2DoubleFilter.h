@@ -34,6 +34,7 @@
 #include <QDateTime>
 #include "lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
+#include <math.h>
 
 //! Conversion filter QDateTime -> double, translating dates into days of the week (Monday -> 1).
 class DayOfWeek2DoubleFilter : public AbstractSimpleFilter
@@ -42,8 +43,10 @@ class DayOfWeek2DoubleFilter : public AbstractSimpleFilter
 
 	public:
 		virtual double valueAt(int row) const {
-			if (!m_inputs.value(0)) return 0;
-			return double(m_inputs.value(0)->dateAt(row).dayOfWeek());
+			if (!m_inputs.value(0)) return NAN;
+			QDate date = m_inputs.value(0)->dateAt(row);
+			if (!date.isValid()) return NAN;
+			return double(date.dayOfWeek());
 		}
 
 		//! Return the data type of the column

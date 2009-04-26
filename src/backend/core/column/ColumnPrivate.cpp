@@ -151,13 +151,11 @@ Column::Private::Private(Column * owner, SciDAVis::ColumnMode mode)
 /**
  * \brief Special ctor (to be called from Column only!)
  */
-Column::Private::Private(Column * owner, SciDAVis::ColumnMode mode, void * data,
-		IntervalAttribute<bool> validity) 
+Column::Private::Private(Column * owner, SciDAVis::ColumnMode mode, void * data) 
 	: m_owner(owner)
 {
 	m_column_mode = mode;
 	m_data = data;
-	m_validity = validity;
 
 	switch(mode)
 	{		
@@ -266,22 +264,22 @@ void Column::Private::setColumnMode(SciDAVis::ColumnMode mode)
 					break;
 				case SciDAVis::Text:
 					filter = outputFilter(); filter_is_temporary = false;
-					temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)));
 					m_data = new QStringList();
 					break;
 				case SciDAVis::DateTime:
 					filter = new Double2DateTimeFilter(); filter_is_temporary = true;
-					temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)));
 					m_data = new QList<QDateTime>();
 					break;
 				case SciDAVis::Month:
 					filter = new Double2MonthFilter(); filter_is_temporary = true;
-					temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)));
 					m_data = new QList<QDateTime>();
 					break;
 				case SciDAVis::Day:
 					filter = new Double2DayOfWeekFilter(); filter_is_temporary = true;
-					temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QVector<double>* >(old_data)));
 					m_data = new QList<QDateTime>();
 					break;
 			} // switch(mode)
@@ -294,22 +292,22 @@ void Column::Private::setColumnMode(SciDAVis::ColumnMode mode)
 					break;
 				case SciDAVis::Numeric:
 					filter = new String2DoubleFilter(); filter_is_temporary = true;
-					temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)));
 					m_data = new QVector<double>();
 					break;
 				case SciDAVis::DateTime:
 					filter = new String2DateTimeFilter(); filter_is_temporary = true;
-					temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)));
 					m_data = new QList<QDateTime>();
 					break;
 				case SciDAVis::Month:
 					filter = new String2MonthFilter(); filter_is_temporary = true;
-					temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)));
 					m_data = new QList<QDateTime>();
 					break;
 				case SciDAVis::Day:
 					filter = new String2DayOfWeekFilter(); filter_is_temporary = true;
-					temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QStringList* >(old_data)));
 					m_data = new QList<QDateTime>();
 					break;
 			} // switch(mode)
@@ -326,7 +324,7 @@ void Column::Private::setColumnMode(SciDAVis::ColumnMode mode)
 					break;
 				case SciDAVis::Text:
 					filter = outputFilter(); filter_is_temporary = false;
-					temp_col = new Column("temp_col", *(static_cast< QList<QDateTime>* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QList<QDateTime>* >(old_data)));
 					m_data = new QStringList();
 					break;
 				case SciDAVis::Numeric:
@@ -337,7 +335,7 @@ void Column::Private::setColumnMode(SciDAVis::ColumnMode mode)
 					else
 						filter = new DateTime2DoubleFilter();
 					filter_is_temporary = true;
-					temp_col = new Column("temp_col", *(static_cast< QList<QDateTime>* >(old_data)), m_validity);
+					temp_col = new Column("temp_col", *(static_cast< QList<QDateTime>* >(old_data)));
 					m_data = new QVector<double>();
 					break;
 				case SciDAVis::Month:
@@ -409,10 +407,10 @@ void Column::Private::setColumnMode(SciDAVis::ColumnMode mode)
 /**
  * \brief Replace all mode related members
  *
- * Replace column mode, data type, data pointer, validity and filters directly 
+ * Replace column mode, data type, data pointer and filters directly 
  */
 void Column::Private::replaceModeData(SciDAVis::ColumnMode mode, void * data, 
-	AbstractSimpleFilter * in_filter, AbstractSimpleFilter * out_filter, IntervalAttribute<bool> validity)
+	AbstractSimpleFilter * in_filter, AbstractSimpleFilter * out_filter)
 {
 	emit m_owner->modeAboutToChange(m_owner);
 	// disconnect formatChanged()
@@ -458,26 +456,17 @@ void Column::Private::replaceModeData(SciDAVis::ColumnMode mode, void * data,
 			break;
 	} 
 
-	m_validity = validity;
 	emit m_owner->modeChanged(m_owner);
 }
 
 /**
- * \brief Replace data pointer and validity
+ * \brief Replace data pointer
  */
-void Column::Private::replaceData(void * data, IntervalAttribute<bool> validity)
+void Column::Private::replaceData(void * data)
 {
 	emit m_owner->dataAboutToChange(m_owner);
 	m_data = data;
-	m_validity = validity;
 	emit m_owner->dataChanged(m_owner);
-}
-
-/**
- * \brief Return the validity interval attribute
- */
-IntervalAttribute<bool> Column::Private::validityAttribute() const {
-	return m_validity;
 }
 
 /**
@@ -492,7 +481,6 @@ IntervalAttribute<bool> Column::Private::maskingAttribute() const {
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * The validity information for the rows is also copied.
  * Use a filter to convert a column to another type.
  */
 bool Column::Private::copy(const AbstractColumn * other)
@@ -527,8 +515,6 @@ bool Column::Private::copy(const AbstractColumn * other)
 				break;
 			}
 	}
-	// copy the validity information
-	m_validity = other->invalidIntervals();
 
 	emit m_owner->dataChanged(m_owner);
 
@@ -540,7 +526,6 @@ bool Column::Private::copy(const AbstractColumn * other)
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * The validity information for the rows is also copied.
  * \param other pointer to the column to copy
  * \param src_start first row to copy in the column to copy
  * \param dest_start first row to copy in
@@ -552,8 +537,6 @@ bool Column::Private::copy(const AbstractColumn * source, int source_start, int 
 	if (num_rows == 0) return true;
 
 	emit m_owner->dataAboutToChange(m_owner);
-	if (dest_start+1-rowCount() > 1)
-		m_validity.setValue(Interval<int>(rowCount(), dest_start-1), true);
 	if (dest_start + num_rows > rowCount())
 		resizeTo(dest_start + num_rows); 
 
@@ -577,9 +560,6 @@ bool Column::Private::copy(const AbstractColumn * source, int source_start, int 
 					static_cast< QList<QDateTime>* >(m_data)->replace(dest_start+i, source->dateTimeAt(source_start + i));
 				break;
 	}
-	// copy the validity information
-	for(int i=0; i<num_rows; i++)
-		setInvalid(dest_start+i, source->isInvalid(source_start+i));
 
 	emit m_owner->dataChanged(m_owner);
 
@@ -591,7 +571,6 @@ bool Column::Private::copy(const AbstractColumn * source, int source_start, int 
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * The validity information for the rows is also copied.
  * Use a filter to convert a column to another type.
  */
 bool Column::Private::copy(const Private * other)
@@ -626,8 +605,6 @@ bool Column::Private::copy(const Private * other)
 				break;
 			}
 	}
-	// copy the validity information
-	m_validity = other->invalidIntervals();
 
 	emit m_owner->dataChanged(m_owner);
 
@@ -639,7 +616,6 @@ bool Column::Private::copy(const Private * other)
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * The validity information for the rows is also copied.
  * \param other pointer to the column to copy
  * \param src_start first row to copy in the column to copy
  * \param dest_start first row to copy in
@@ -651,8 +627,6 @@ bool Column::Private::copy(const Private * source, int source_start, int dest_st
 	if (num_rows == 0) return true;
 
 	emit m_owner->dataAboutToChange(m_owner);
-	if (dest_start+1-rowCount() > 1)
-		m_validity.setValue(Interval<int>(rowCount(), dest_start-1), true);
 	if (dest_start + num_rows > rowCount())
 		resizeTo(dest_start + num_rows); 
 
@@ -676,9 +650,6 @@ bool Column::Private::copy(const Private * source, int source_start, int dest_st
 					static_cast< QList<QDateTime>* >(m_data)->replace(dest_start+i, source->dateTimeAt(source_start + i));
 				break;
 	}
-	// copy the validity information
-	for(int i=0; i<num_rows; i++)
-		setInvalid(dest_start+i, source->isInvalid(source_start+i));
 
 	emit m_owner->dataChanged(m_owner);
 
@@ -725,8 +696,11 @@ void Column::Private::resizeTo(int new_size)
 
 	switch(m_column_mode) {
 		case SciDAVis::Numeric:
-			static_cast< QVector<double>* >(m_data)->resize(new_size);
-			break;
+			{
+				QVector<double> *numeric_data = static_cast< QVector<double>* >(m_data);
+				numeric_data->insert(numeric_data->begin(), new_size-old_size, NAN);
+				break;
+			}
 		case SciDAVis::DateTime:
 		case SciDAVis::Month:
 		case SciDAVis::Day:
@@ -764,15 +738,13 @@ void Column::Private::insertRows(int before, int count)
 	if (count == 0) return;
 
 	emit m_owner->rowsAboutToBeInserted(m_owner, before, count);
-	m_validity.insertRows(before, count);
 	m_masking.insertRows(before, count);
 	m_formulas.insertRows(before, count);
 
 	if (before <= rowCount()) {
-		m_validity.setValue(Interval<int>(before, before+count-1), true);
 		switch(m_column_mode) {
 			case SciDAVis::Numeric:
-				static_cast< QVector<double>* >(m_data)->insert(before, count, 0.0);
+				static_cast< QVector<double>* >(m_data)->insert(before, count, NAN);
 				break;
 			case SciDAVis::DateTime:
 			case SciDAVis::Month:
@@ -797,7 +769,6 @@ void Column::Private::removeRows(int first, int count)
 	if (count == 0) return;
 
 	emit m_owner->rowsAboutToBeRemoved(m_owner, first, count);
-	m_validity.removeRows(first, count);
 	m_masking.removeRows(first, count);
 	m_formulas.removeRows(first, count);
 
@@ -892,27 +863,6 @@ AbstractSimpleFilter *Column::Private::outputFilter() const {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * \brief Return whether a certain row contains an invalid value 	 
- */
-bool Column::Private::isInvalid(int row) const {
-	return m_validity.isSet(row);
-}
-
-/**
- * \brief Return whether a certain interval of rows contains only invalid values 	 
- */
-bool Column::Private::isInvalid(Interval<int> i) const {
-	return m_validity.isSet(i);
-}
-
-/**
- * \brief Return all intervals of invalid rows
- */
-QList< Interval<int> > Column::Private::invalidIntervals() const {
-	return m_validity.intervals();
-}
-
-/**
  * \brief Return whether a certain row is masked
  */
 bool Column::Private::isMasked(int row) const {
@@ -934,16 +884,6 @@ QList< Interval<int> > Column::Private::maskedIntervals() const {
 }
 	
 /**
- * \brief Clear all validity information
- */
-void Column::Private::clearValidity()
-{
-	emit m_owner->dataAboutToChange(m_owner);	
-	m_validity.clear();
-	emit m_owner->dataChanged(m_owner);	
-}
-
-/**
  * \brief Clear all masking information
  */
 void Column::Private::clearMasks()
@@ -951,27 +891,6 @@ void Column::Private::clearMasks()
 	emit m_owner->maskingAboutToChange(m_owner);	
 	m_masking.clear();
 	emit m_owner->maskingChanged(m_owner);	
-}
-
-/**
- * \brief Set an interval invalid or valid
- *
- * \param i the interval
- * \param invalid true: set invalid, false: set valid
- */ 
-void Column::Private::setInvalid(Interval<int> i, bool invalid)
-{
-	emit m_owner->dataAboutToChange(m_owner);	
-	m_validity.setValue(i, invalid);
-	emit m_owner->dataChanged(m_owner);	
-}
-
-/**
- * \brief Overloaded function for convenience
- */
-void Column::Private::setInvalid(int row, bool invalid)
-{
-	setInvalid(Interval<int>(row,row), invalid);
 }
 
 /**
@@ -1112,7 +1031,7 @@ QDateTime Column::Private::dateTimeAt(int row) const
 double Column::Private::valueAt(int row) const
 {
 	if (m_column_mode != SciDAVis::Numeric) return NAN;
-	return static_cast< QVector<double>* >(m_data)->value(row);
+	return static_cast< QVector<double>* >(m_data)->value(row, NAN);
 }
 
 /**
@@ -1126,14 +1045,9 @@ void Column::Private::setTextAt(int row, const QString& new_value)
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
-	{	
-		if (row+1-rowCount() > 1) // we are adding more than one row in resizeTo()
-			m_validity.setValue(Interval<int>(rowCount(), row-1), true);
 		resizeTo(row+1); 
-	}
 
 	static_cast< QStringList* >(m_data)->replace(row, new_value);
-	m_validity.setValue(Interval<int>(row, row), false);
 	emit m_owner->dataChanged(m_owner);
 }
 
@@ -1148,14 +1062,11 @@ void Column::Private::replaceTexts(int first, const QStringList& new_values)
 	
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
-	if (first+1-rowCount() > 1)
-		m_validity.setValue(Interval<int>(rowCount(), first-1), true);
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
 
 	for(int i=0; i<num_rows; i++)
 		static_cast< QStringList* >(m_data)->replace(first+i, new_values.at(i));
-	m_validity.setValue(Interval<int>(first, first+num_rows-1), false);
 	emit m_owner->dataChanged(m_owner);
 }
 
@@ -1203,14 +1114,9 @@ void Column::Private::setDateTimeAt(int row, const QDateTime& new_value)
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
-	{	
-		if (row+1-rowCount() > 1) // we are adding more than one row in resizeTo()
-			m_validity.setValue(Interval<int>(rowCount(), row-1), true);
 		resizeTo(row+1); 
-	}
 
 	static_cast< QList<QDateTime>* >(m_data)->replace(row, new_value);
-	m_validity.setValue(Interval<int>(row, row), !new_value.isValid());
 	emit m_owner->dataChanged(m_owner);
 }
 
@@ -1228,15 +1134,11 @@ void Column::Private::replaceDateTimes(int first, const QList<QDateTime>& new_va
 	
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
-	if (first+1-rowCount() > 1)
-		m_validity.setValue(Interval<int>(rowCount(), first-1), true);
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
 
-	for(int i=0; i<num_rows; i++) {
+	for(int i=0; i<num_rows; i++)
 		static_cast< QList<QDateTime>* >(m_data)->replace(first+i, new_values.at(i));
-		m_validity.setValue(i, !new_values.at(i).isValid());
-	}
 	emit m_owner->dataChanged(m_owner);
 }
 
@@ -1251,14 +1153,9 @@ void Column::Private::setValueAt(int row, double new_value)
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
-	{	
-		if (row+1-rowCount() > 1) // we are adding more than one row in resizeTo()
-			m_validity.setValue(Interval<int>(rowCount(), row-1), true);
 		resizeTo(row+1); 
-	}
 
 	static_cast< QVector<double>* >(m_data)->replace(row, new_value);
-	m_validity.setValue(Interval<int>(row, row), false);
 	emit m_owner->dataChanged(m_owner);
 }
 
@@ -1273,15 +1170,12 @@ void Column::Private::replaceValues(int first, const QVector<double>& new_values
 	
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
-	if (first+1-rowCount() > 1)
-		m_validity.setValue(Interval<int>(rowCount(), first-1), true);
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
 
 	double * ptr = static_cast< QVector<double>* >(m_data)->data();
 	for(int i=0; i<num_rows; i++)
 		ptr[first+i] = new_values.at(i);
-	m_validity.setValue(Interval<int>(first, first+num_rows-1), false);
 	emit m_owner->dataChanged(m_owner);
 }
 

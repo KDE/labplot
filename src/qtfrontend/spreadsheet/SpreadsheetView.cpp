@@ -1417,8 +1417,7 @@ void SpreadsheetView::clearSelectedRows()
 				if (isRowSelected(row, false))
 				{
 					if (row < col_ptr->rowCount()) {
-						col_ptr->asStringColumn()->setTextAt(row, "");
-						col_ptr->setInvalid(row);
+						col_ptr->asStringColumn()->setTextAt(row, QString());
 					}
 				}
 		}
@@ -1463,10 +1462,8 @@ void SpreadsheetView::clearSelectedCells()
 			for (int row=last; row>=first; row--)
 				if (isCellSelected(row, col))
 				{
-					if (row < col_ptr->rowCount()) {
-						col_ptr->asStringColumn()->setTextAt(row, "");
-						col_ptr->setInvalid(row);
-					}
+					if (row < col_ptr->rowCount())
+						col_ptr->asStringColumn()->setTextAt(row, QString());
 				}
 		}
 	}

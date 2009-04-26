@@ -41,7 +41,7 @@ class Column::Private
 	public:
 		Private(Column * owner, SciDAVis::ColumnMode mode);
 		~Private();
-		Private(Column * owner, SciDAVis::ColumnMode mode, void * data, IntervalAttribute<bool> validity);
+		Private(Column * owner, SciDAVis::ColumnMode mode, void * data);
 
 		SciDAVis::ColumnMode columnMode() const;
 		void setColumnMode(SciDAVis::ColumnMode mode);
@@ -63,24 +63,17 @@ class Column::Private
 		AbstractSimpleFilter* inputFilter() const;
 		AbstractSimpleFilter* outputFilter() const;
 		void replaceModeData(SciDAVis::ColumnMode mode, void * data, AbstractSimpleFilter *in_filter,
-				AbstractSimpleFilter *out_filter, IntervalAttribute<bool> validity);
-		void replaceData(void * data, IntervalAttribute<bool> validity);
-		IntervalAttribute<bool> validityAttribute() const;
+				AbstractSimpleFilter *out_filter);
+		void replaceData(void * data);
 		IntervalAttribute<bool> maskingAttribute() const;
 		void replaceMasking(IntervalAttribute<bool> masking); 
 		IntervalAttribute<QString> formulaAttribute() const;
 		void replaceFormulas(IntervalAttribute<QString> formulas); 
 
-		bool isInvalid(int row) const;
-		bool isInvalid(Interval<int> i) const;
-		QList< Interval<int> > invalidIntervals() const;
 		bool isMasked(int row) const;
 		bool isMasked(Interval<int> i) const;
 		QList< Interval<int> > maskedIntervals() const;
-		void clearValidity();
 		void clearMasks();
-		void setInvalid(Interval<int> i, bool invalid = true);
-		void setInvalid(int row, bool invalid = true);
 		void setMasked(Interval<int> i, bool mask = true);
 		void setMasked(int row, bool mask = true);
 
@@ -109,7 +102,6 @@ class Column::Private
 		void * m_data;
 		AbstractSimpleFilter* m_input_filter;
 		AbstractSimpleFilter* m_output_filter;
-		IntervalAttribute<bool> m_validity;
 		IntervalAttribute<bool> m_masking;
 		IntervalAttribute<QString> m_formulas;
 		SciDAVis::PlotDesignation m_plot_designation;

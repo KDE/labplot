@@ -63,16 +63,11 @@ class AbstractColumn : public AbstractAspect
 		virtual void setPlotDesignation(SciDAVis::PlotDesignation pd);
 		virtual void clear();
 
-		virtual bool isInvalid(int row) const;
-		virtual bool isInvalid(Interval<int> i) const;
-		virtual QList< Interval<int> > invalidIntervals() const;
+		bool isValid(int row) const;
 		virtual bool isMasked(int row) const;
 		virtual bool isMasked(Interval<int> i) const;
 		virtual QList< Interval<int> > maskedIntervals() const;
-		virtual void clearValidity();
 		virtual void clearMasks();
-		virtual void setInvalid(Interval<int> i, bool invalid = true);
-		virtual void setInvalid(int row, bool invalid = true);
 		virtual void setMasked(Interval<int> i, bool mask = true);
 		virtual void setMasked(int row, bool mask = true);
 

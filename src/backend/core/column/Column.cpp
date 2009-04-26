@@ -43,7 +43,7 @@
  * This class represents a column, i.e., (mathematically) a 1D vector of 
  * values with a header. It provides a public reading and (undo aware) writing 
  * interface as defined in AbstractColumn. It manages special attributes
- * of column rows such as masking and a validity flag. A column
+ * of column rows such as masking. A column
  * can have one of currently three data types: double, QString, or
  * QDateTime. The string representation of the values can differ depending
  * on the mode of the column.
@@ -76,12 +76,11 @@ Column::Column(const QString& name, SciDAVis::ColumnMode mode)
  *
  * \param name the column name (= aspect name)
  * \param data initial data vector
- * \param validity a list of invalid intervals (optional)
  */
-Column::Column(const QString& name, QVector<double> data, IntervalAttribute<bool> validity)
+Column::Column(const QString& name, QVector<double> data)
  : AbstractColumn(name)
 {
-	m_column_private = new Private(this, SciDAVis::Numeric, new QVector<double>(data), validity);
+	m_column_private = new Private(this, SciDAVis::Numeric, new QVector<double>(data));
 	init();
 }
 
@@ -90,12 +89,11 @@ Column::Column(const QString& name, QVector<double> data, IntervalAttribute<bool
  *
  * \param name the column name (= aspect name)
  * \param data initial data vector
- * \param validity a list of invalid intervals (optional)
  */
-Column::Column(const QString& name, QStringList data, IntervalAttribute<bool> validity)
+Column::Column(const QString& name, QStringList data)
  : AbstractColumn(name)
 {
-	m_column_private = new Private(this, SciDAVis::Text, new QStringList(data), validity);
+	m_column_private = new Private(this, SciDAVis::Text, new QStringList(data));
 	init();
 }
 
@@ -104,12 +102,11 @@ Column::Column(const QString& name, QStringList data, IntervalAttribute<bool> va
  *
  * \param name the column name (= aspect name)
  * \param data initial data vector
- * \param validity a list of invalid intervals (optional)
  */
-Column::Column(const QString& name, QList<QDateTime> data, IntervalAttribute<bool> validity)
+Column::Column(const QString& name, QList<QDateTime> data)
  : AbstractColumn(name)
 {
-	m_column_private = new Private(this, SciDAVis::DateTime, new QList<QDateTime>(data), validity);
+	m_column_private = new Private(this, SciDAVis::DateTime, new QList<QDateTime>(data));
 	init();
 }
 
@@ -170,7 +167,6 @@ void Column::setColumnMode(SciDAVis::ColumnMode mode)
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * The validity information for the rows is also copied.
  * Use a filter to convert a column to another type.
  */
 bool Column::copy(const AbstractColumn * other)
@@ -186,7 +182,6 @@ bool Column::copy(const AbstractColumn * other)
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * The validity information for the rows is also copied.
  * \param other pointer to the column to copy
  * \param src_start first row to copy in the column to copy
  * \param dest_start first row to copy in
@@ -253,38 +248,11 @@ void Column::clear()
 }
 
 /**
- * \brief Clear all validity information
- */
-void Column::clearValidity()
-{
-	exec(new ColumnClearValidityCmd(m_column_private));
-}
-
-/**
  * \brief Clear all masking information
  */
 void Column::clearMasks()
 {
 	exec(new ColumnClearMasksCmd(m_column_private));
-}
-
-/**
- * \brief Set an interval invalid or valid
- *
- * \param i the interval
- * \param invalid true: set invalid, false: set valid
- */ 
-void Column::setInvalid(Interval<int> i, bool invalid)
-{
-	exec(new ColumnSetInvalidCmd(m_column_private, i, invalid));
-}
-
-/**
- * \brief Overloaded function for convenience
- */
-void Column::setInvalid(int row, bool invalid)
-{
-	setInvalid(Interval<int>(row,row), invalid);
 }
 
 /**
@@ -547,7 +515,6 @@ void Column::save(QXmlStreamWriter * writer) const
 			{
 				writer->writeStartElement("row");
 				writer->writeAttribute("index", QString::number(i));
-				writer->writeAttribute("invalid", isInvalid(i) ? "yes" : "no");
 				writer->writeCharacters(QString::number(valueAt(i), 'e', 16));
 				writer->writeEndElement();
 			}
@@ -557,7 +524,6 @@ void Column::save(QXmlStreamWriter * writer) const
 			{
 				writer->writeStartElement("row");
 				writer->writeAttribute("index", QString::number(i));
-				writer->writeAttribute("invalid", isInvalid(i) ? "yes" : "no");
 				writer->writeCharacters(textAt(i));
 				writer->writeEndElement();
 			}
@@ -570,7 +536,6 @@ void Column::save(QXmlStreamWriter * writer) const
 			{
 				writer->writeStartElement("row");
 				writer->writeAttribute("index", QString::number(i));
-				writer->writeAttribute("invalid", isInvalid(i) ? "yes" : "no");
 #if QT_VERSION < 0x040400  // avoid a bug in Qt < 4.4
 				QString str = dateTimeAt(i).toString("yyyy-dd-MM hh:mm:ss:zzz");
 				int should_be_length = 4;
@@ -641,7 +606,6 @@ bool Column::load(XmlStreamReader * reader)
 		setComment("");
 		if (rowCount() > 0)
 			removeRows(0, rowCount());		
-		clearValidity();
 		clearMasks();
 		clearFormulas();
 		// read child elements
@@ -769,9 +733,6 @@ bool Column::XmlReadRow(XmlStreamReader * reader)
 		return false;
 	}
 
-	str = attribs.value(reader->namespaceUri().toString(), "invalid").toString();
-	if(str == "yes") setInvalid(index);
-
 	str = reader->readElementText();
 	switch(columnMode()) {
 		case SciDAVis::Numeric:
@@ -858,30 +819,6 @@ ColumnStringIO *Column::asStringColumn() const {
 //! \name IntervalAttribute related functions
 //@{
 ////////////////////////////////////////////////////////////////////////////////
-
-/**
- * \brief Return whether a certain row contains an invalid value 	 
- */
-bool Column::isInvalid(int row) const 
-{ 
-	return m_column_private->isInvalid(row); 
-}
-
-/**
- * \brief Return whether a certain interval of rows contains only invalid values 	 
- */
-bool Column::isInvalid(Interval<int> i) const 
-{ 
-	return m_column_private->isInvalid(i); 
-}
-
-/**
- * \brief Return all intervals of invalid rows
- */
-QList< Interval<int> > Column::invalidIntervals() const 
-{ 
-	return m_column_private->invalidIntervals(); 
-}
 
 /**
  * \brief Return whether a certain row is masked 	 

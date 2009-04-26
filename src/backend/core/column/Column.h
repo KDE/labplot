@@ -49,9 +49,9 @@ class Column : public AbstractColumn
 		static void staticInit();
 
 		Column(const QString& name, SciDAVis::ColumnMode mode);
-		Column(const QString& name, QVector<double> data, IntervalAttribute<bool> validity = IntervalAttribute<bool>());
-		Column(const QString& name, QStringList data, IntervalAttribute<bool> validity = IntervalAttribute<bool>()); 
-		Column(const QString& name, QList<QDateTime> data, IntervalAttribute<bool> validity = IntervalAttribute<bool>());
+		Column(const QString& name, QVector<double> data);
+		Column(const QString& name, QStringList data); 
+		Column(const QString& name, QList<QDateTime> data);
 		void init();
 		~Column();
 
@@ -73,16 +73,10 @@ class Column : public AbstractColumn
 		AbstractSimpleFilter *outputFilter() const;
 		ColumnStringIO *asStringColumn() const;
 
-		bool isInvalid(int row) const;
-		bool isInvalid(Interval<int> i) const;
-		QList< Interval<int> > invalidIntervals() const;
 		bool isMasked(int row) const;
 		bool isMasked(Interval<int> i) const;
 		QList< Interval<int> > maskedIntervals() const;
-		void clearValidity();
 		void clearMasks();
-		void setInvalid(Interval<int> i, bool invalid = true);
-		void setInvalid(int row, bool invalid = true);
 		void setMasked(Interval<int> i, bool mask = true);
 		void setMasked(int row, bool mask = true);
 
@@ -140,12 +134,6 @@ class ColumnStringIO : public AbstractColumn
 		virtual int rowCount() const { return m_owner->rowCount(); }
 		virtual QString textAt(int row) const;
 		virtual void setTextAt(int row, const QString &value);
-		virtual bool isInvalid(int row) const {
-			if (m_setting)
-				return false;
-			else
-				return m_owner->isInvalid(row);
-		}
 
 	private:
 		Column * m_owner;

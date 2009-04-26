@@ -36,6 +36,7 @@
 #include <QTime>
 #include "lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
+#include <math.h>
 
 //! Conversion filter double -> QDateTime, interpreting the input numbers as (fractional) Julian days.
 class Double2DateTimeFilter : public AbstractSimpleFilter
@@ -45,14 +46,17 @@ class Double2DateTimeFilter : public AbstractSimpleFilter
 	public:
 		virtual QDate dateAt(int row) const {
 			if (!m_inputs.value(0)) return QDate();
-			return QDate::fromJulianDay(qRound(m_inputs.value(0)->valueAt(row)));
+			double inputValue = m_inputs.value(0)->valueAt(row);
+			if (isnan(inputValue)) return QDate();
+			return QDate::fromJulianDay(qRound(inputValue));
 		}
 		virtual QTime timeAt(int row) const {
 			if (!m_inputs.value(0)) return QTime();
-			double input_value = m_inputs.value(0)->valueAt(row);
+			double inputValue = m_inputs.value(0)->valueAt(row);
+			if (isnan(inputValue)) return QTime();
 			// we only want the digits behind the dot and 
 			// convert them from fraction of day to milliseconds
-			return QTime(12,0,0,0).addMSecs(int( (input_value - int(input_value)) * 86400000.0 ));
+			return QTime(12,0,0,0).addMSecs(int( (inputValue - int(inputValue)) * 86400000.0 ));
 		}
 		virtual QDateTime dateTimeAt(int row) const {
 			return QDateTime(dateAt(row), timeAt(row));

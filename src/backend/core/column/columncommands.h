@@ -58,8 +58,6 @@ private:
 	AbstractSimpleFilter* m_new_out_filter;
 	AbstractSimpleFilter* m_old_in_filter;
 	AbstractSimpleFilter* m_old_out_filter;
-	IntervalAttribute<bool> m_old_validity;
-	IntervalAttribute<bool> m_new_validity;
 	bool m_undone;
 	bool m_executed;
 };
@@ -101,7 +99,6 @@ private:
 	int m_dest_start;
 	int m_num_rows;
 	int m_old_row_count;
-	IntervalAttribute<bool> m_old_validity;
 };
 
 class ColumnInsertEmptyRowsCmd : public QUndoCommand
@@ -183,25 +180,7 @@ private:
 	Column::Private * m_col;
 	void * m_data;
 	void * m_empty_data;
-	IntervalAttribute<bool> m_validity;
-	IntervalAttribute<bool> m_new_validity;
 	bool m_undone;
-
-};
-
-class ColumnClearValidityCmd : public QUndoCommand
-{
-public:
-	ColumnClearValidityCmd(Column::Private * col, QUndoCommand * parent = 0 );
-	~ColumnClearValidityCmd();
-
-	virtual void redo();
-	virtual void undo();
-
-private:
-	Column::Private * m_col;
-	IntervalAttribute<bool> m_validity;
-	bool m_copied;
 
 };
 
@@ -217,24 +196,6 @@ public:
 private:
 	Column::Private * m_col;
 	IntervalAttribute<bool> m_masking;
-	bool m_copied;
-
-};
-
-class ColumnSetInvalidCmd : public QUndoCommand
-{
-public:
-	ColumnSetInvalidCmd(Column::Private * col, Interval<int> interval, bool invalid, QUndoCommand * parent = 0 );
-	~ColumnSetInvalidCmd();
-
-	virtual void redo();
-	virtual void undo();
-
-private:
-	Column::Private * m_col;
-	Interval<int> m_interval;
-	bool m_invalid;
-	IntervalAttribute<bool> m_validity;
 	bool m_copied;
 
 };
@@ -306,8 +267,6 @@ private:
 	QString m_new_value;
 	QString m_old_value;
 	int m_row_count;
-	IntervalAttribute<bool> m_validity;
-
 };
 
 class ColumnSetValueCmd : public QUndoCommand
@@ -325,8 +284,6 @@ private:
 	double m_new_value;
 	double m_old_value;
 	int m_row_count;
-	IntervalAttribute<bool> m_validity;
-
 };
 
 class ColumnSetDateTimeCmd : public QUndoCommand
@@ -344,8 +301,6 @@ private:
 	QDateTime m_new_value;
 	QDateTime m_old_value;
 	int m_row_count;
-	IntervalAttribute<bool> m_validity;
-
 };
 
 class ColumnReplaceTextsCmd : public QUndoCommand
@@ -364,8 +319,6 @@ private:
 	QStringList m_old_values;
 	bool m_copied;
 	int m_row_count;
-	IntervalAttribute<bool> m_validity;
-
 };
 
 class ColumnReplaceValuesCmd : public QUndoCommand
@@ -384,8 +337,6 @@ private:
 	QVector<double> m_old_values;
 	bool m_copied;
 	int m_row_count;
-	IntervalAttribute<bool> m_validity;
-
 };
 
 class ColumnReplaceDateTimesCmd : public QUndoCommand
@@ -404,8 +355,6 @@ private:
 	QList<QDateTime> m_old_values;
 	bool m_copied;
 	int m_row_count;
-	IntervalAttribute<bool> m_validity;
-
 };
 
 #endif

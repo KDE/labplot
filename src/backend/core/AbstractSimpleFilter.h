@@ -65,10 +65,6 @@ class AbstractSimpleFilter : public AbstractFilter
 		virtual void setMasked(Interval<int> i, bool mask = true);
 		virtual void setMasked(int row, bool mask = true);
 
-		virtual bool isInvalid(int row) const;
-		virtual bool isInvalid(Interval<int> i) const;
-		virtual QList< Interval<int> > invalidIntervals() const;
-
 		virtual void save(QXmlStreamWriter * writer) const;
 		virtual bool load(XmlStreamReader * reader);
 		virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
@@ -101,9 +97,6 @@ class SimpleFilterColumn : public AbstractColumn
 		virtual SciDAVis::ColumnMode columnMode() const;
 		virtual int rowCount() const { return m_owner->rowCount(); }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
-		virtual bool isInvalid(int row) const { return m_owner->isInvalid(row); }
-		virtual bool isInvalid(Interval<int> i) const { return m_owner->isInvalid(i); }
-		virtual QList< Interval<int> > invalidIntervals() const { return m_owner->invalidIntervals(); }
 		virtual bool isMasked(int row) const { return m_owner->isMasked(row); }
 		virtual bool isMasked(Interval<int> i) const { return m_owner->isMasked(i); }
 		virtual QList< Interval<int> > maskedIntervals() const { return m_owner->maskedIntervals(); }

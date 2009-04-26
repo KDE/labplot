@@ -32,6 +32,7 @@
 #include "../AbstractSimpleFilter.h"
 #include <QLocale>
 #include <QChar>
+#include <math.h>
 
 //! Locale-aware conversion filter double -> QString.
 class Double2StringFilter : public AbstractSimpleFilter
@@ -75,8 +76,9 @@ class Double2StringFilter : public AbstractSimpleFilter
 		virtual QString textAt(int row) const {
 			if (!m_inputs.value(0)) return QString();
 			if (m_inputs.value(0)->rowCount() <= row) return QString();
-			if (m_inputs.value(0)->isInvalid(row)) return QString();
-			return QLocale().toString(m_inputs.value(0)->valueAt(row), m_format, m_digits);
+			double inputValue = m_inputs.value(0)->valueAt(row);
+			if (isnan(inputValue)) return QString();
+			return QLocale().toString(inputValue, m_format, m_digits);
 		}
 
 	protected:

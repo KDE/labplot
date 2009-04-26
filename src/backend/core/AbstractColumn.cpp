@@ -99,7 +99,6 @@ void AbstractColumn::setColumnMode(SciDAVis::ColumnMode) {}
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * The validity information for the rows is also copied.
  * Use a filter to convert a column to another type.
  */
 bool AbstractColumn::copy(const AbstractColumn *other) {
@@ -112,7 +111,6 @@ bool AbstractColumn::copy(const AbstractColumn *other) {
  *
  * This function will return false if the data type
  * of 'other' is not the same as the type of 'this'.
- * The validity information for the rows is also copied.
  * \param source pointer to the column to copy
  * \param source_start first row to copy in the column to copy
  * \param destination_start first row to copy in
@@ -132,7 +130,7 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
  */
 
 /**
- * \brief Insert some empty (or initialized with zero) rows
+ * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {
 	Q_UNUSED(before) Q_UNUSED(count)
@@ -162,31 +160,26 @@ void AbstractColumn::setPlotDesignation(SciDAVis::PlotDesignation pd) {
  */
 void AbstractColumn::clear() {}
 
+/**
+ * \brief Convenience method for mode-inpedpendent testing of validity
+ */
+bool AbstractColumn::isValid(int row) const {
+	switch (columnMode()) {
+		case SciDAVis::Numeric:
+			return !isnan(valueAt(row));
+		case SciDAVis::Text:
+			return !textAt(row).isNull();
+		case SciDAVis::DateTime:
+		case SciDAVis::Month:
+		case SciDAVis::Day:
+			return dateTimeAt(row).isValid();
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \name IntervalAttribute related functions
 //@{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * \brief Return whether a certain row contains an invalid value
- */
-bool AbstractColumn::isInvalid(int row) const {
-	return !Interval<int>(0, rowCount()-1).contains(row);
-}
-
-/**
- * \brief Return whether a certain interval of rows contains only invalid values
- */
-bool AbstractColumn::isInvalid(Interval<int> i) const {
-	return !Interval<int>(0, rowCount()-1).contains(i);
-}
-
-/**
- * \brief Return all intervals of invalid rows
- */
-QList< Interval<int> > AbstractColumn::invalidIntervals() const {
-	return QList< Interval<int> >();
-}
 
 /**
  * \brief Return whether a certain row is masked 	 
@@ -212,32 +205,9 @@ QList< Interval<int> > AbstractColumn::maskedIntervals() const {
 }
 
 /**
- * \brief Clear all validity information
- */
-void AbstractColumn::clearValidity() {};
-
-/**
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {};
-
-/**
- * \brief Set an interval invalid or valid
- *
- * \param i the interval
- * \param invalid true: set invalid, false: set valid
- */ 
-void AbstractColumn::setInvalid(Interval<int> i, bool invalid) {
-	Q_UNUSED(i)
-	Q_UNUSED(invalid)
-};
-
-/**
- * \brief Overloaded function for convenience
- */
-void AbstractColumn::setInvalid(int row, bool invalid) {
-	Q_UNUSED(row) Q_UNUSED(invalid)
-}
 
 /**
  * \brief Set an interval masked
@@ -482,7 +452,7 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
 
 /**
  * \fn void AbstractColumn::dataAboutToChange(const AbstractColumn *source)
- * \brief Data (including validity) of the column will be changed
+ * \brief Data of the column will be changed
  *
  * 'source' is always the this pointer of the column that
  * emitted this signal. This way it's easier to use
@@ -491,7 +461,7 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
 
 /**
  * \fn void AbstractColumn::dataChanged(const AbstractColumn *source)
- * \brief Data (including validity) of the column has changed
+ * \brief Data of the column has changed
  *
  * Important: When data has changed also the number
  * of rows in the column may have changed without

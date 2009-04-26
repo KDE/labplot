@@ -516,8 +516,6 @@ QString Spreadsheet::text(int row, int col) const
 	Column * col_ptr = column(col);
 	if(!col_ptr)
 		return QString();
-	if(col_ptr->isInvalid(row))
-		return QString();
 
 	return col_ptr->asStringColumn()->textAt(row);
 }

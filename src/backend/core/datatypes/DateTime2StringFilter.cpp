@@ -55,8 +55,7 @@ void DateTime2StringFilter::setFormat(const QString& format)
 QString DateTime2StringFilter::textAt(int row) const {
 	if (!m_inputs.value(0)) return QString();
 	QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
-	if(!input_value.date().isValid() && input_value.time().isValid())
-		input_value.setDate(QDate(1900,1,1));
+	if (!input_value.isValid()) return QString();
 #if QT_VERSION < 0x040302 // the bug seems to be fixed in Qt 4.3.2
 	// QDate::toString produces shortened year numbers for "yyyy"
 	// in violation of ISO 8601 and ambiguous with respect to "yy" format

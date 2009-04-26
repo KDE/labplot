@@ -36,6 +36,7 @@
 #include <QTime>
 #include "lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
+#include <math.h>
 
 //! Conversion filter QDateTime -> double (using Julian day).
 class DateTime2DoubleFilter : public AbstractSimpleFilter
@@ -44,8 +45,9 @@ class DateTime2DoubleFilter : public AbstractSimpleFilter
 
 	public:
 		virtual double valueAt(int row) const {
-			if (!m_inputs.value(0)) return 0;
+			if (!m_inputs.value(0)) return NAN;
 			QDateTime input_value = m_inputs.value(0)->dateTimeAt(row);
+			if (!input_value.isValid()) return NAN;
 			return double(input_value.date().toJulianDay()) +
 				double( -input_value.time().msecsTo(QTime(12,0,0,0)) ) / 86400000.0;
 		}

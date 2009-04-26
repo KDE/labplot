@@ -296,27 +296,6 @@ void AbstractSimpleFilter::setMasked(int row, bool mask) {
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * \brief Return whether a certain row contains an invalid value 	 
- */
-bool AbstractSimpleFilter::isInvalid(int row) const {
-	return m_inputs.value(0) ? m_inputs.at(0)->isInvalid(row) : false;
-}
-
-/**
- * \brief Return whether a certain interval of rows contains only invalid values 	 
- */
-bool AbstractSimpleFilter::isInvalid(Interval<int> i) const {
-	return m_inputs.value(0) ? m_inputs.at(0)->isInvalid(i) : false;
-}
-
-/**
- * \brief Return all intervals of invalid rows
- */
-QList< Interval<int> > AbstractSimpleFilter::invalidIntervals() const {
-	return m_inputs.value(0) ? m_inputs.at(0)->invalidIntervals() : QList< Interval<int> >(); 
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //!\name signal handlers
 //@{

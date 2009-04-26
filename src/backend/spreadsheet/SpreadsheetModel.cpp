@@ -88,23 +88,23 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 		case Qt::ToolTipRole:
 				if(col_ptr->isMasked(row))
 					postfix = " " + tr("(masked)");
-				if(col_ptr->isInvalid(row))
+				if(!col_ptr->isValid(row))
 					return QVariant(tr("invalid cell (ignored in all operations)","tooltip string for invalid rows") + postfix);
 		case Qt::EditRole:
-				if(!m_formula_mode && col_ptr->isInvalid(row))
+				if(!m_formula_mode && !col_ptr->isValid(row))
 					return QVariant();
 		case Qt::DisplayRole:
 			{
 				if(m_formula_mode)
 					return QVariant(col_ptr->formula(row));
-				if(col_ptr->isInvalid(row))
+				if(!col_ptr->isValid(row))
 					return QVariant(tr("-","string for invalid cells"));
 				
 				return QVariant(col_ptr->asStringColumn()->textAt(row) + postfix);
 			}
 		case Qt::ForegroundRole:
 			{
-				if(col_ptr->isInvalid(index.row()))
+				if(!col_ptr->isValid(index.row()))
 					return QVariant(QBrush(QColor(0xff,0,0))); // invalid -> red letters
 				else
 					return QVariant(QBrush(QColor(0,0,0)));

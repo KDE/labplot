@@ -33,6 +33,7 @@
 #include <QLocale>
 #include "lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
+#include <math.h>
 
 //! Locale-aware conversion filter QString -> double.
 class String2DoubleFilter : public AbstractSimpleFilter
@@ -46,43 +47,16 @@ class String2DoubleFilter : public AbstractSimpleFilter
 
 		virtual double valueAt(int row) const {
 			if (!m_inputs.value(0)) return 0;
+			double result;
+			bool valid;
 			if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
-				return QLocale().toDouble(m_inputs.value(0)->textAt(row));
-			return m_numeric_locale.toDouble(m_inputs.value(0)->textAt(row));
-		}
-		virtual bool isInvalid(int row) const { 
-			if (!m_inputs.value(0)) return false;
-			bool ok;
-			if (m_use_default_locale)
-				QLocale().toDouble(m_inputs.value(0)->textAt(row), &ok);
+				result = QLocale().toDouble(m_inputs.value(0)->textAt(row), &valid);
+			result = m_numeric_locale.toDouble(m_inputs.value(0)->textAt(row), &valid);
+			if (valid)
+				return result;
 			else
-				m_numeric_locale.toDouble(m_inputs.value(0)->textAt(row), &ok);
-			return !ok;
+				return NAN;
 		}
-		virtual bool isInvalid(Interval<int> i) const {
-			if (!m_inputs.value(0)) return false;
-			QLocale locale;
-			if (!m_use_default_locale)
-				locale = m_numeric_locale;
-			for (int row = i.start(); row <= i.end(); row++) {
-				bool ok;
-				locale.toDouble(m_inputs.value(0)->textAt(row), &ok);
-				if (ok)
-					return false;
-			}
-			return true;
-		}
-		virtual QList< Interval<int> > invalidIntervals() const 
-		{
-			IntervalAttribute<bool> validity;
-			if (m_inputs.value(0)) {
-				int rows = m_inputs.value(0)->rowCount();
-				for (int i=0; i<rows; i++) 
-					validity.setValue(i, isInvalid(i));
-			}
-			return validity.intervals();
-		}
-
 
 		//! Return the data type of the column
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }

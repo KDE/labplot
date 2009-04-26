@@ -34,6 +34,7 @@
 #include <QDateTime>
 #include "lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
+#include <math.h>
 
 /**
  * \brief Conversion filter QDateTime -> double, translating dates into months (January -> 1).
@@ -46,8 +47,10 @@ class Month2DoubleFilter : public AbstractSimpleFilter
 
 	public:
 		virtual double valueAt(int row) const {
-			if (!m_inputs.value(0)) return 0;
-			return double(m_inputs.value(0)->dateAt(row).month());
+			if (!m_inputs.value(0)) return NAN;
+			QDate inputValue = m_inputs.value(0)->dateAt(row);
+			if (!inputValue.isValid()) return NAN;
+			return double(inputValue.month());
 		}
 
 		//! Return the data type of the column

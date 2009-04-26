@@ -49,7 +49,6 @@ AbstractAspect * AsciiSpreadsheetImportFilter::importAspect(QIODevice * input)
 	// This is more efficient than it looks. The string lists are handed as-is to Column's
 	// constructor, and thanks to implicit sharing the actual data is not copied.
 	QList<QStringList> data;
-	QList< IntervalAttribute<bool> > invalid_cells;
 
 	// skip ignored lines
 	for (i=0; i<m_ignored_lines; i++)
@@ -64,10 +63,8 @@ AbstractAspect * AsciiSpreadsheetImportFilter::importAspect(QIODevice * input)
 		row = stream.readLine().split(m_separator);
 
 	// initialize data and determine column names
-	for (int i=0; i<row.size(); i++) {
+	for (int i=0; i<row.size(); i++)
 		data << QStringList();
-		invalid_cells << IntervalAttribute<bool>();
-	}
 	if (m_first_row_names_columns)
 		column_names = row;
 	else
@@ -88,10 +85,8 @@ AbstractAspect * AsciiSpreadsheetImportFilter::importAspect(QIODevice * input)
 		for (i=0; i<row.size() && i<data.size(); ++i)
 			data[i] << row[i];
 		// some rows might have too few columns (re-use value of i from above loop)
-		for (; i<data.size(); ++i) {
-			invalid_cells[i].setValue(data[i].size(), true);
-			data[i] << "";
-		}
+		for (; i<data.size(); ++i)
+			data[i] << QString();
 	}
 
 	// build a Spreadsheet from the gathered data
@@ -101,7 +96,7 @@ AbstractAspect * AsciiSpreadsheetImportFilter::importAspect(QIODevice * input)
 	{
 		Column *new_col;
 		if (m_convert_to_numeric) {
-			Column * string_col = new Column(column_names[i], data[i], invalid_cells[i]);
+			Column * string_col = new Column(column_names[i], data[i]);
 			String2DoubleFilter * filter = new String2DoubleFilter;
 			filter->setNumericLocale(m_numeric_locale);
 			filter->input(0, string_col);
@@ -110,7 +105,7 @@ AbstractAspect * AsciiSpreadsheetImportFilter::importAspect(QIODevice * input)
 			delete filter;
 			delete string_col;
 		} else
-			new_col = new Column(column_names[i], data[i], invalid_cells[i]);
+			new_col = new Column(column_names[i], data[i]);
 		if (i == 0) 
 			new_col->setPlotDesignation(SciDAVis::X);
 		else
