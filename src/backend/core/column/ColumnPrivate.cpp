@@ -47,7 +47,64 @@
 #include <QStringList>
 #include <QtDebug>
 
+/**
+ * \class Column::Private
+ * \brief Private data class of Column
+ *
+ * The writing interface defined here is only to be used by column commands and Column contructors.
+ */
 
+/**
+ * \var Column::Private::m_data_type
+ * \brief Data type string
+ *
+ * double, QString, or QDateTime
+ */ 
+
+/**
+ * \var Column::Private::m_column_mode
+ * \brief The column mode
+ *
+ * The column mode specifies how to interpret 
+ * the values in the column additional to the data type.
+ */
+
+/**
+ * \var Column::Private::m_data
+ * \brief Pointer to the data vector
+ *
+ * This will point to a QVector<double>, QStringList or
+ * QList<QDateTime> depending on the stored data type.
+ */
+
+/**
+ * \var Column::Private::m_input_filter
+ * \brief The input filter (for string -> data type conversion)
+ */
+
+/**
+ * \var Column::Private::m_output_filter
+ * \brief The output filter (for data type -> string conversion)
+ */
+
+/**
+ * \var Column::Private::m_plot_designation
+ * \brief The plot designation
+ */
+
+/**
+ * \var Column::Private::m_width
+ * \brief Width to be used by views
+ */
+
+/**
+ * \var Column::Private::m_owner
+ * \brief The owner column
+ */
+
+/**
+ * \brief Ctor
+ */
 Column::Private::Private(Column * owner, SciDAVis::ColumnMode mode)
  : m_owner(owner)
 {
@@ -103,6 +160,9 @@ Column::Private::Private(Column * owner, SciDAVis::ColumnMode mode)
 	m_output_filter->setName("OutputFilter");
 }
 
+/**
+ * \brief Special ctor (to be called from Column only!)
+ */
 Column::Private::Private(Column * owner, SciDAVis::ColumnDataType type, SciDAVis::ColumnMode mode, 
 	void * data, IntervalAttribute<bool> validity) 
 	: m_owner(owner)
@@ -151,6 +211,9 @@ Column::Private::Private(Column * owner, SciDAVis::ColumnDataType type, SciDAVis
 	m_output_filter->setName("OutputFilter");
 }
 
+/**
+ * \brief Dtor
+ */
 Column::Private::~Private()
 {
 	if (!m_data) return;
@@ -171,6 +234,30 @@ Column::Private::~Private()
 	} // switch(m_data_type)
 }
 
+//! Return the data type of the column
+SciDAVis::ColumnDataType Column::Private::dataType() const {
+	return m_data_type;
+}
+
+/**
+ * \brief Return the column mode
+ *
+ * This function is most used by spreadsheets but can also be used
+ * by plots. The column mode specifies how to interpret 
+ * the values in the column additional to the data type.
+ */ 
+SciDAVis::ColumnMode Column::Private::columnMode() const {
+	return m_column_mode;
+}
+
+/**
+ * \brief Set the column mode
+ *
+ * This sets the column mode and, if
+ * necessary, converts it to another datatype.
+ * Remark: setting the mode back to undefined (the 
+ * initial value) is not supported.
+ */
 void Column::Private::setColumnMode(SciDAVis::ColumnMode mode)
 {
 	if (mode == m_column_mode) return;
@@ -345,6 +432,11 @@ void Column::Private::setColumnMode(SciDAVis::ColumnMode mode)
 	emit m_owner->modeChanged(m_owner);
 }
 
+/**
+ * \brief Replace all mode related members
+ *
+ * Replace column mode, data type, data pointer, validity and filters directly 
+ */
 void Column::Private::replaceModeData(SciDAVis::ColumnMode mode, SciDAVis::ColumnDataType type, void * data, 
 	AbstractSimpleFilter * in_filter, AbstractSimpleFilter * out_filter, IntervalAttribute<bool> validity)
 {
@@ -398,6 +490,9 @@ void Column::Private::replaceModeData(SciDAVis::ColumnMode mode, SciDAVis::Colum
 	emit m_owner->modeChanged(m_owner);
 }
 
+/**
+ * \brief Replace data pointer and validity
+ */
 void Column::Private::replaceData(void * data, IntervalAttribute<bool> validity)
 {
 	emit m_owner->dataAboutToChange(m_owner);
@@ -406,6 +501,28 @@ void Column::Private::replaceData(void * data, IntervalAttribute<bool> validity)
 	emit m_owner->dataChanged(m_owner);
 }
 
+/**
+ * \brief Return the validity interval attribute
+ */
+IntervalAttribute<bool> Column::Private::validityAttribute() const {
+	return m_validity;
+}
+
+/**
+ * \brief Return the masking interval attribute
+ */
+IntervalAttribute<bool> Column::Private::makingAttribute() const {
+	return m_masking;
+}
+
+/**
+ * \brief Copy another column of the same type
+ *
+ * This function will return false if the data type
+ * of 'other' is not the same as the type of 'this'.
+ * The validity information for the rows is also copied.
+ * Use a filter to convert a column to another type.
+ */
 bool Column::Private::copy(const AbstractColumn * other)
 {
 	if (other->dataType() != dataType()) return false;
@@ -445,6 +562,17 @@ bool Column::Private::copy(const AbstractColumn * other)
 	return true;
 }
 
+/**
+ * \brief Copies a part of another column of the same type
+ *
+ * This function will return false if the data type
+ * of 'other' is not the same as the type of 'this'.
+ * The validity information for the rows is also copied.
+ * \param other pointer to the column to copy
+ * \param src_start first row to copy in the column to copy
+ * \param dest_start first row to copy in
+ * \param num_rows the number of rows to copy
+ */ 
 bool Column::Private::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows)
 {
 	if (source->dataType() != dataType()) return false;
@@ -484,6 +612,14 @@ bool Column::Private::copy(const AbstractColumn * source, int source_start, int 
 	return true;
 }
 
+/**
+ * \brief Copy another column of the same type
+ *
+ * This function will return false if the data type
+ * of 'other' is not the same as the type of 'this'.
+ * The validity information for the rows is also copied.
+ * Use a filter to convert a column to another type.
+ */
 bool Column::Private::copy(const Private * other)
 {
 	if (other->dataType() != dataType()) return false;
@@ -523,6 +659,17 @@ bool Column::Private::copy(const Private * other)
 	return true;
 }
 
+/**
+ * \brief Copies a part of another column of the same type
+ *
+ * This function will return false if the data type
+ * of 'other' is not the same as the type of 'this'.
+ * The validity information for the rows is also copied.
+ * \param other pointer to the column to copy
+ * \param src_start first row to copy in the column to copy
+ * \param dest_start first row to copy in
+ * \param num_rows the number of rows to copy
+ */ 
 bool Column::Private::copy(const Private * source, int source_start, int dest_start, int num_rows)
 {
 	if (source->dataType() != dataType()) return false;
@@ -562,6 +709,13 @@ bool Column::Private::copy(const Private * source, int source_start, int dest_st
 	return true;
 }
 
+/**
+ * \brief Return the data vector size
+ *
+ * This returns the number of rows that actually contain data. 
+ * Rows beyond this can be masked etc. but should be ignored by filters,
+ * plots etc.
+ */
 int Column::Private::rowCount() const
 {
 	switch(m_data_type)
@@ -577,6 +731,16 @@ int Column::Private::rowCount() const
 	return 0;
 }
 
+/**
+ * \brief Resize the vector to the specified number of rows
+ *
+ * Since selecting and masking rows higher than the
+ * real internal number of rows is supported, this
+ * does not change the interval attributes. Also
+ * no signal is emitted. If the new rows are filled
+ * with values AbstractColumn::dataChanged()
+ * must be emitted.
+ */
 void Column::Private::resizeTo(int new_size)
 {
 	int old_size = rowCount();
@@ -620,6 +784,9 @@ void Column::Private::resizeTo(int new_size)
 	}
 }
 
+/**
+ * \brief Insert some empty (or initialized with zero) rows
+ */
 void Column::Private::insertRows(int before, int count)
 {
 	if (count == 0) return;
@@ -650,6 +817,9 @@ void Column::Private::insertRows(int before, int count)
 	emit m_owner->rowsInserted(m_owner, before, count);
 }
 
+/**
+ * \brief Remove 'count' rows starting from row 'first'
+ */
 void Column::Private::removeRows(int first, int count)
 {
 	if (count == 0) return;
@@ -683,6 +853,21 @@ void Column::Private::removeRows(int first, int count)
 	emit m_owner->rowsRemoved(m_owner, first, count);
 }
 
+//! Return the column name
+QString Column::Private::name() const {
+	return m_owner->name();
+}
+
+/**
+ * \brief Return the column plot designation
+ */
+SciDAVis::PlotDesignation Column::Private::plotDesignation() const {
+	return m_plot_designation;
+}
+
+/**
+ * \brief Set the column plot designation
+ */
 void Column::Private::setPlotDesignation(SciDAVis::PlotDesignation pd)
 {
 	emit m_owner->plotDesignationAboutToChange(m_owner);
@@ -690,6 +875,16 @@ void Column::Private::setPlotDesignation(SciDAVis::PlotDesignation pd)
 	emit m_owner->plotDesignationChanged(m_owner);
 }
 
+/**
+ * \brief Get width
+ */
+int Column::Private::width() const {
+	return m_width;
+}
+
+/**
+ * \brief Set width
+ */
 void Column::Private::setWidth(int value)
 {
 	emit m_owner->widthAboutToChange(m_owner);
@@ -697,6 +892,77 @@ void Column::Private::setWidth(int value)
 	emit m_owner->widthChanged(m_owner);
 }
 
+/**
+ * \brief Return the data pointer
+ */
+void *Column::Private::dataPointer() const {
+	return m_data;
+}
+
+/**
+ * \brief Return the input filter (for string -> data type conversion)
+ */
+AbstractSimpleFilter *Column::Private::inputFilter() const {
+	return m_input_filter;
+}
+
+/**
+ * \brief Return the output filter (for data type -> string  conversion)
+ */
+AbstractSimpleFilter *Column::Private::outputFilter() const {
+	return m_output_filter;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//! \name IntervalAttribute related functions
+//@{
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * \brief Return whether a certain row contains an invalid value 	 
+ */
+bool Column::Private::isInvalid(int row) const {
+	return m_validity.isSet(row);
+}
+
+/**
+ * \brief Return whether a certain interval of rows contains only invalid values 	 
+ */
+bool Column::Private::isInvalid(Interval<int> i) const {
+	return m_validity.isSet(i);
+}
+
+/**
+ * \brief Return all intervals of invalid rows
+ */
+QList< Interval<int> > Column::Private::invalidIntervals() const {
+	return m_validity.intervals();
+}
+
+/**
+ * \brief Return whether a certain row is masked
+ */
+bool Column::Private::isMasked(int row) const {
+	return m_masking.isSet(row);
+}
+
+/**
+ * \brief Return whether a certain interval of rows rows is fully masked 	 
+ */
+bool Column::Private::isMasked(Interval<int> i) const {
+	return m_masking.isSet(i);
+}
+
+/**
+ * \brief Return all intervals of masked rows
+ */
+QList< Interval<int> > Column::Private::maskedIntervals() const {
+	return m_masking.intervals();
+}
+	
+/**
+ * \brief Clear all validity information
+ */
 void Column::Private::clearValidity()
 {
 	emit m_owner->dataAboutToChange(m_owner);	
@@ -704,6 +970,9 @@ void Column::Private::clearValidity()
 	emit m_owner->dataChanged(m_owner);	
 }
 
+/**
+ * \brief Clear all masking information
+ */
 void Column::Private::clearMasks()
 {
 	emit m_owner->maskingAboutToChange(m_owner);	
@@ -711,6 +980,12 @@ void Column::Private::clearMasks()
 	emit m_owner->maskingChanged(m_owner);	
 }
 
+/**
+ * \brief Set an interval invalid or valid
+ *
+ * \param i the interval
+ * \param invalid true: set invalid, false: set valid
+ */ 
 void Column::Private::setInvalid(Interval<int> i, bool invalid)
 {
 	emit m_owner->dataAboutToChange(m_owner);	
@@ -718,11 +993,20 @@ void Column::Private::setInvalid(Interval<int> i, bool invalid)
 	emit m_owner->dataChanged(m_owner);	
 }
 
+/**
+ * \brief Overloaded function for convenience
+ */
 void Column::Private::setInvalid(int row, bool invalid)
 {
 	setInvalid(Interval<int>(row,row), invalid);
 }
 
+/**
+ * \brief Set an interval masked
+ *
+ * \param i the interval
+ * \param mask true: mask, false: unmask
+ */ 
 void Column::Private::setMasked(Interval<int> i, bool mask)
 {
 		emit m_owner->maskingAboutToChange(m_owner);	
@@ -730,54 +1014,136 @@ void Column::Private::setMasked(Interval<int> i, bool mask)
 		emit m_owner->maskingChanged(m_owner);	
 }
 
+/**
+ * \brief Overloaded function for convenience
+ */
 void Column::Private::setMasked(int row, bool mask)
 {
 	setMasked(Interval<int>(row,row), mask);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//@}
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//! \name Formula related functions
+//@{
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * \brief Return the formula associated with row 'row' 	 
+ */
+QString Column::Private::formula(int row) const {
+	return m_formulas.value(row);
+}
+
+/**
+ * \brief Return the intervals that have associated formulas
+ *
+ * This can be used to make a list of formulas with their intervals.
+ * Here is some example code:
+ *
+ * \code
+ * QStringList list;
+ * QList< Interval<int> > intervals = my_column.formulaIntervals();
+ * foreach(Interval<int> interval, intervals)
+ * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
+ * \endcode
+ */
+QList< Interval<int> > Column::Private::formulaIntervals() const {
+	return m_formulas.intervals();
+}
+
+/**
+ * \brief Set a formula string for an interval of rows
+ */
 void Column::Private::setFormula(Interval<int> i, QString formula)
 {
 	m_formulas.setValue(i, formula);
 }
 
+/**
+ * \brief Overloaded function for convenience
+ */
 void Column::Private::setFormula(int row, QString formula)
 {
 	setFormula(Interval<int>(row,row), formula);
 }
 
+/**
+ * \brief Clear all formulas
+ */
 void Column::Private::clearFormulas()
 {
 	m_formulas.clear();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//@}
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//! \name type specific functions
+//@{
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * \brief Return the content of row 'row'.
+ *
+ * Use this only when dataType() is QString
+ */
 QString Column::Private::textAt(int row) const
 {
 	if (m_data_type != SciDAVis::TypeQString) return QString();
 	return static_cast< QStringList* >(m_data)->value(row);
 }
 
+/**
+ * \brief Return the date part of row 'row'
+ *
+ * Use this only when dataType() is QDateTime
+ */
 QDate Column::Private::dateAt(int row) const
 {
 	return dateTimeAt(row).date();
 }
 
+/**
+ * \brief Return the time part of row 'row'
+ *
+ * Use this only when dataType() is QDateTime
+ */
 QTime Column::Private::timeAt(int row) const
 {
 	return dateTimeAt(row).time();
 }
 
+/**
+ * \brief Return the QDateTime in row 'row'
+ *
+ * Use this only when dataType() is QDateTime
+ */
 QDateTime Column::Private::dateTimeAt(int row) const
 {
 	if (m_data_type != SciDAVis::TypeQDateTime) return QDateTime();
 	return static_cast< QList<QDateTime>* >(m_data)->value(row);
 }
 
+/**
+ * \brief Return the double value in row 'row'
+ */
 double Column::Private::valueAt(int row) const
 {
 	if (m_data_type != SciDAVis::TypeDouble) return 0.0;
 	return static_cast< QVector<double>* >(m_data)->value(row);
 }
 
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when dataType() is QString
+ */
 void Column::Private::setTextAt(int row, const QString& new_value)
 {
 	if (m_data_type != SciDAVis::TypeQString) return;
@@ -795,6 +1161,11 @@ void Column::Private::setTextAt(int row, const QString& new_value)
 	emit m_owner->dataChanged(m_owner);
 }
 
+/**
+ * \brief Replace a range of values 
+ *
+ * Use this only when dataType() is QString
+ */
 void Column::Private::replaceTexts(int first, const QStringList& new_values)
 {
 	if (m_data_type != SciDAVis::TypeQString) return;
@@ -812,6 +1183,11 @@ void Column::Private::replaceTexts(int first, const QStringList& new_values)
 	emit m_owner->dataChanged(m_owner);
 }
 
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when dataType() is QDateTime
+ */
 void Column::Private::setDateAt(int row, const QDate& new_value)
 {
 	if (m_data_type != SciDAVis::TypeQDateTime) return;
@@ -819,6 +1195,11 @@ void Column::Private::setDateAt(int row, const QDate& new_value)
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when dataType() is QDateTime
+ */
 void Column::Private::setTimeAt(int row, const QTime& new_value)
 {
 	if (m_data_type != SciDAVis::TypeQDateTime) return;
@@ -826,6 +1207,11 @@ void Column::Private::setTimeAt(int row, const QTime& new_value)
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
 
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when dataType() is QDateTime
+ */
 void Column::Private::setDateTimeAt(int row, const QDateTime& new_value)
 {
 	if (m_data_type != SciDAVis::TypeQDateTime) return;
@@ -843,6 +1229,11 @@ void Column::Private::setDateTimeAt(int row, const QDateTime& new_value)
 	emit m_owner->dataChanged(m_owner);
 }
 
+/**
+ * \brief Replace a range of values 
+ *
+ * Use this only when dataType() is QDateTime
+ */
 void Column::Private::replaceDateTimes(int first, const QList<QDateTime>& new_values)
 {
 	if (m_data_type != SciDAVis::TypeQDateTime) return;
@@ -861,6 +1252,11 @@ void Column::Private::replaceDateTimes(int first, const QList<QDateTime>& new_va
 	emit m_owner->dataChanged(m_owner);
 }
 
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when dataType() is double
+ */
 void Column::Private::setValueAt(int row, double new_value)
 {
 	if (m_data_type != SciDAVis::TypeDouble) return;
@@ -878,6 +1274,11 @@ void Column::Private::setValueAt(int row, double new_value)
 	emit m_owner->dataChanged(m_owner);
 }
 
+/**
+ * \brief Replace a range of values 
+ *
+ * Use this only when dataType() is double
+ */
 void Column::Private::replaceValues(int first, const QVector<double>& new_values)
 {
 	if (m_data_type != SciDAVis::TypeDouble) return;
@@ -896,6 +1297,13 @@ void Column::Private::replaceValues(int first, const QVector<double>& new_values
 	emit m_owner->dataChanged(m_owner);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//@}
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * \brief Replace the list of intervals of masked rows
+ */
 void Column::Private::replaceMasking(IntervalAttribute<bool> masking)
 {
 	emit m_owner->maskingAboutToChange(m_owner);
@@ -903,6 +1311,16 @@ void Column::Private::replaceMasking(IntervalAttribute<bool> masking)
 	emit m_owner->maskingChanged(m_owner);
 }
 
+/**
+ * \brief Return the interval attribute representing the formula strings
+ */
+IntervalAttribute<QString> Column::Private::formulaAttribute() const {
+	return m_formulas;
+}
+
+/**
+ * \brief Replace the interval attribute for the formula strings
+ */
 void Column::Private::replaceFormulas(IntervalAttribute<QString> formulas)
 {
 	m_formulas = formulas;

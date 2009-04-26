@@ -30,9 +30,89 @@
 #include "ColumnPrivate.h"
 #include "columncommands.h"
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetModeCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnSetModeCmd
+ * \brief Set the column mode 
+ ** ***************************************************************************/
+
+/**
+ * \var ColumnSetModeCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_old_mode
+ * \brief The previous mode
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_mode
+ * \brief The new mode
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_old_type
+ * \brief The old data type
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_new_type
+ * \brief The new data type
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_old_data
+ * \brief Pointer to old data
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_new_data
+ * \brief Pointer to new data
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_new_in_filter
+ * \brief The new input filter
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_new_out_filter
+ * \brief The new output filter
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_old_in_filter
+ * \brief The old input filter
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_old_out_filter
+ * \brief The old output filter
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_old_validity
+ * \brief The old validity information
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_new_validity
+ * \brief The new validity information
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_undone
+ * \brief Flag indicating whether this command has been undone (and not redone).
+ */
+
+/**
+ * \var ColumnSetModeCmd::m_excecuted
+ * \brief Flag indicating whether the command has been executed at least once.
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetModeCmd::ColumnSetModeCmd(Column::Private * col, SciDAVis::ColumnMode mode, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_mode(mode)
 {
@@ -41,6 +121,9 @@ ColumnSetModeCmd::ColumnSetModeCmd(Column::Private * col, SciDAVis::ColumnMode m
 	m_executed = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetModeCmd::~ColumnSetModeCmd()
 {
 	if(m_undone)
@@ -70,6 +153,9 @@ ColumnSetModeCmd::~ColumnSetModeCmd()
 
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetModeCmd::redo()
 {
 	if(!m_executed)
@@ -101,6 +187,9 @@ void ColumnSetModeCmd::redo()
 	m_undone = false;
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetModeCmd::undo()
 {
 	// reset to old values
@@ -109,25 +198,56 @@ void ColumnSetModeCmd::undo()
 	m_undone = true;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetModeCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnFullCopyCmd
+ * \brief Copy a complete column 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnFullCopyCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnFullCopyCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnFullCopyCmd::m_src
+ * \brief The column to copy
+ */
+
+/**
+ * \var ColumnFullCopyCmd::m_backup
+ * \brief A backup column
+ */
+
+/**
+ * \var ColumnFullCopyCmd::m_backup_owner
+ * \brief A dummy owner for the backup column
+ *
+ * This is needed because a Column::Private must have an owner. We want access
+ * to the Column::Private object to access its data pointer for fast data
+ * replacement without too much copying.
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnFullCopyCmd::ColumnFullCopyCmd(Column::Private * col, const AbstractColumn * src, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_src(src), m_backup(0), m_backup_owner(0)
 {
 	setText(QObject::tr("%1: change cell value(s)").arg(col->name()));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnFullCopyCmd::~ColumnFullCopyCmd()
 {
 	delete m_backup;
 	delete m_backup_owner;
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnFullCopyCmd::redo()
 {
 	if(m_backup == 0)
@@ -147,6 +267,9 @@ void ColumnFullCopyCmd::redo()
 	}
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnFullCopyCmd::undo()
 {
 	// swap data + validity of orig. column and backup
@@ -156,19 +279,86 @@ void ColumnFullCopyCmd::undo()
 	m_backup->replaceData(data_temp, val_temp);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnFullCopyCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnPartialCopyCmd
+ * \brief Copy parts of a column
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnPartialCopyCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnPartialCopyCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_src
+ * \brief The column to copy
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_col_backup
+ * \brief A backup of the original column
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_src_backup
+ * \brief A backup of the source column
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_col_backup_owner
+ * \brief A dummy owner for the backup column
+ *
+ * This is needed because a Column::Private must have an owner and
+ * we must have a Column::Private object as backup.
+ * Using a Column object as backup would lead to an inifinite loop.
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_src_backup_owner
+ * \brief A dummy owner for the source backup column
+ *
+ * This is needed because a Column::Private must have an owner and
+ * we must have a Column::Private object as backup.
+ * Using a Column object as backup would lead to an inifinite loop.
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_src_start
+ * \brief Start index in source column
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_dest_start
+ * \brief Start index in destination column
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_num_rows
+ * \brief Number of rows to copy
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_old_row_count
+ * \brief Previous number of rows in the destination column
+ */
+
+/**
+ * \var ColumnPartialCopyCmd::m_old_validity
+ * \brief The old validity information
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnPartialCopyCmd::ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_src(src), m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows), m_col_backup(0), m_src_backup(0), m_col_backup_owner(0), m_src_backup_owner(0)
 {
 	setText(QObject::tr("%1: change cell value(s)").arg(col->name()));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnPartialCopyCmd::~ColumnPartialCopyCmd()
 {
 	delete m_src_backup;
@@ -177,6 +367,9 @@ ColumnPartialCopyCmd::~ColumnPartialCopyCmd()
 	delete m_col_backup_owner;
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnPartialCopyCmd::redo()
 {
 	if(m_src_backup == 0)
@@ -194,6 +387,9 @@ void ColumnPartialCopyCmd::redo()
 	m_col->copy(m_src_backup, 0, m_dest_start, m_num_rows);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnPartialCopyCmd::undo()
 {
 	m_col->copy(m_col_backup, 0, m_dest_start, m_num_rows);
@@ -201,53 +397,133 @@ void ColumnPartialCopyCmd::undo()
 	m_col->replaceData(m_col->dataPointer(), m_old_validity);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnPartialCopyCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnInsertEmptyRowsCmd
+ * \brief Insert empty rows 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnInsertEmptyRowsCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnInsertEmptyRowsCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnInsertEmptyRowsCmd::m_before
+ * \brief Row to insert before
+ */
+
+/**
+ * \var ColumnInsertEmptyRowsCmd::m_count
+ * \brief Number of rows to insert
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnInsertEmptyRowsCmd::ColumnInsertEmptyRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_before(before), m_count(count)
 {
 	setText(QObject::tr("%1: insert %2 row(s)").arg(col->name()).arg(count));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnInsertEmptyRowsCmd::~ColumnInsertEmptyRowsCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnInsertEmptyRowsCmd::redo()
 {
 	m_col->insertRows(m_before, m_count);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnInsertEmptyRowsCmd::undo()
 {
 	m_col->removeRows(m_before, m_count);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnInsertEmptyRowsCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnRemoveRowsCmd
+ * \brief Remove consecutive rows from a column
+ ** ***************************************************************************/
 
+/**
+ * \var ColumnRemoveRowsCmd::m_col
+ * \brief The private column data to modify
+ */
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnRemoveRowsCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnRemoveRowsCmd::m_first
+ * \brief The first row
+ */
+
+/**
+ * \var ColumnRemoveRowsCmd::m_count
+ * \brief The number of rows to be removed
+ */
+
+/**
+ * \var ColumnRemoveRowsCmd::m_data_row_count
+ * \brief Number of removed rows actually containing data
+ */
+
+/**
+ * \var ColumnRemoveRowsCmd::m_old_size
+ * \brief The number of rows before the removal
+ */
+
+/**
+ * \var ColumnRemoveRowsCmd::m_backup
+ * \brief Column saving the removed rows
+ */
+
+/**
+ * \var ColumnRemoveRowsCmd::m_backup_owner
+ * \brief A dummy owner for the backup column
+ *
+ * This is needed because a Column::Private must have an owner. We want access
+ * to the Column::Private object to access its data pointer for fast data
+ * replacement without too much copying.
+ */
+
+/**
+ * \var ColumnRmeoveRowsCmd::m_masking
+ * \brief Backup of the masking attribute
+ */
+
+/**
+ * \var ColumnRemoveRowsCmd::m_formulas
+ * \brief Backup of the formula attribute
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnRemoveRowsCmd::ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_first(first), m_count(count), m_backup(0)
 {
 	setText(QObject::tr("%1: remove %2 row(s)").arg(col->name()).arg(count));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnRemoveRowsCmd::~ColumnRemoveRowsCmd()
 {
 	delete m_backup;
 	delete m_backup_owner;
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnRemoveRowsCmd::redo()
 {
 	if(m_backup == 0)
@@ -269,6 +545,9 @@ void ColumnRemoveRowsCmd::redo()
 	m_col->removeRows(m_first, m_count);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnRemoveRowsCmd::undo()
 {
 	m_col->insertRows(m_first, m_count);
@@ -278,51 +557,88 @@ void ColumnRemoveRowsCmd::undo()
 	m_col->replaceFormulas(m_formulas);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnRemoveRowsCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnSetPlotDesignationCmd
+ * \brief Sets a column's plot designation
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetPlotDesignationCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnSetPlotDesignationCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnSetPlotDesignation::m_new_pd
+ * \brief New plot designation
+ */
+
+/**
+ * \var ColumnSetPlotDesignation::m_old_pd
+ * \brief Old plot designation
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetPlotDesignationCmd::ColumnSetPlotDesignationCmd( Column::Private * col, SciDAVis::PlotDesignation pd , QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_new_pd(pd)
 {
 	setText(QObject::tr("%1: set plot designation").arg(col->name()));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetPlotDesignationCmd::~ColumnSetPlotDesignationCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetPlotDesignationCmd::redo()
 {
 	m_old_pd = m_col->plotDesignation();
 	m_col->setPlotDesignation(m_new_pd);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetPlotDesignationCmd::undo()
 {
 	m_col->setPlotDesignation(m_old_pd);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetPlotDesignationCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnSetWidthCmd
+ * \brief Sets a column's width
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetWidthCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnSetWidthCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetWidthCmd::ColumnSetWidthCmd( Column::Private * col, int new_value , QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_other_value(new_value)
 {
 	setText(QObject::tr("%1: set width").arg(col->name()));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetWidthCmd::~ColumnSetWidthCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetWidthCmd::redo()
 {
 	int tmp = m_col->width();
@@ -330,18 +646,57 @@ void ColumnSetWidthCmd::redo()
 	m_other_value = tmp;
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetWidthCmd::undo()
 {
 	redo();
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetWidthCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnClearCmd
+ * \brief Clear the column 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnClearCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnClearCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnClearCmd::m_type
+ * \brief The column's data type
+ */
+
+/**
+ * \var ColumnClearCmd::m_data
+ * \brief Pointer to the old data pointer
+ */
+
+/**
+ * \var ColumnClearCmd::m_empty_data
+ * \brief Pointer to an empty data vector
+ */
+
+/**
+ * \var ColumnClearCmd::m_validity
+ * \brief The old validity
+ */
+
+/**
+ * \var ColumnClearCmd::m_new_validity
+ * \brief The new validity
+ */
+
+/**
+ * \var ColumnClearCmd::m_undone
+ * \brief Status flag
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnClearCmd::ColumnClearCmd(Column::Private * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
@@ -350,6 +705,9 @@ ColumnClearCmd::ColumnClearCmd(Column::Private * col, QUndoCommand * parent )
 	m_undone = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnClearCmd::~ColumnClearCmd()
 {
 	if(m_undone)
@@ -372,6 +730,9 @@ ColumnClearCmd::~ColumnClearCmd()
 	}
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnClearCmd::redo()
 {
 	if(!m_empty_data)
@@ -403,19 +764,38 @@ void ColumnClearCmd::redo()
 	m_undone = false;
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnClearCmd::undo()
 {
 	m_col->replaceData(m_data, m_validity);
 	m_undone = true;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnClearCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnClearValidityCmd
+ * \brief Clear validity information 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnClearValidityCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnClearValidityCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnClearValidityCmd::m_validity
+ * \brief The old validity
+ */
+
+/**
+ * \var ColumnClearValidityCmd::m_copied
+ * \brief A status flag
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnClearValidityCmd::ColumnClearValidityCmd(Column::Private * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
@@ -423,10 +803,16 @@ ColumnClearValidityCmd::ColumnClearValidityCmd(Column::Private * col, QUndoComma
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnClearValidityCmd::~ColumnClearValidityCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnClearValidityCmd::redo()
 {
 	if(!m_copied)
@@ -437,18 +823,37 @@ void ColumnClearValidityCmd::redo()
 	m_col->clearValidity();
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnClearValidityCmd::undo()
 {
 	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnClearValidityCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnClearMasksCmd
+ * \brief Clear masking information 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnClearMasksCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnClearMasksCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnClearMasksCmd::m_masking
+ * \brief The old masks
+ */
+
+/**
+ * \var ColumnClearMasksCmd::m_copied
+ * \brief A status flag
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnClearMasksCmd::ColumnClearMasksCmd(Column::Private * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
@@ -456,10 +861,16 @@ ColumnClearMasksCmd::ColumnClearMasksCmd(Column::Private * col, QUndoCommand * p
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnClearMasksCmd::~ColumnClearMasksCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnClearMasksCmd::redo()
 {
 	if(!m_copied)
@@ -470,18 +881,47 @@ void ColumnClearMasksCmd::redo()
 	m_col->clearMasks();
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnClearMasksCmd::undo()
 {
 	m_col->replaceMasking(m_masking);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnClearMasksCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnSetInvalidCmd
+ * \brief Mark an interval of rows as invalid 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetInvalidCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnSetInvalidCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnSetInvalidCmd::m_interval
+ * \brief The interval
+ */
+
+/**
+ * \var ColumnSetInvalidCmd::m_invalid
+ * \brief Valid/invalid flag
+ */
+
+/**
+ * \var ColumnSetInvalidCmd::m_validity
+ * \brief Interval attribute backup
+ */
+
+/**
+ * \var ColumnSetInvalidCmd::m_copied
+ * \brief A status flag
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetInvalidCmd::ColumnSetInvalidCmd(Column::Private * col, Interval<int> interval, bool invalid, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_invalid(invalid)
 {
@@ -492,10 +932,16 @@ ColumnSetInvalidCmd::ColumnSetInvalidCmd(Column::Private * col, Interval<int> in
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetInvalidCmd::~ColumnSetInvalidCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetInvalidCmd::redo()
 {
 	if(!m_copied)
@@ -506,18 +952,47 @@ void ColumnSetInvalidCmd::redo()
 	m_col->setInvalid(m_interval, m_invalid);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetInvalidCmd::undo()
 {
 	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetInvalidCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnSetMaskedCmd
+ * \brief Mark an interval of rows as masked
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetMaskedCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnSetMaskedCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnSetMaskedCmd::m_interval
+ * \brief The interval
+ */
+
+/**
+ * \var ColumnSetMaskedCmd::m_masked
+ * \brief Mask/unmask flag
+ */
+
+/**
+ * \var ColumnSetMaskedCmd::m_masking
+ * \brief Interval attribute backup
+ */
+
+/**
+ * \var ColumnSetMaskedCmd::m_copied
+ * \brief A status flag
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetMaskedCmd::ColumnSetMaskedCmd(Column::Private * col, Interval<int> interval, bool masked, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_masked(masked)
 {
@@ -528,10 +1003,16 @@ ColumnSetMaskedCmd::ColumnSetMaskedCmd(Column::Private * col, Interval<int> inte
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetMaskedCmd::~ColumnSetMaskedCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetMaskedCmd::redo()
 {
 	if(!m_copied)
@@ -542,18 +1023,47 @@ void ColumnSetMaskedCmd::redo()
 	m_col->setMasked(m_interval, m_masked);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetMaskedCmd::undo()
 {
 	m_col->replaceMasking(m_masking);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetMaskedCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumSetFormulaCmd
+ * \brief Set the formula for a given interval
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetFormulaCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnSetFormulaCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnSetFormulaCmd::m_interval
+ * \brief The interval
+ */
+
+/**
+ * \var ColumnSetFormulaCmd::m_formula
+ * \brief The new formula
+ */
+
+/**
+ * \var ColumnSetFormulaCmd::m_formulas
+ * \brief Interval attribute backup
+ */
+
+/**
+ * \var ColumnSetFormulaCmd::m_copied
+ * \brief A status flag
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_formula(formula)
 {
@@ -561,10 +1071,16 @@ ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private * col, Interval<int> in
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetFormulaCmd::~ColumnSetFormulaCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetFormulaCmd::redo()
 {
 	if(!m_copied)
@@ -575,18 +1091,37 @@ void ColumnSetFormulaCmd::redo()
 	m_col->setFormula(m_interval, m_formula);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetFormulaCmd::undo()
 {
 	m_col->replaceFormulas(m_formulas);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetFormulaCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnClearFormulasCmd
+ * \brief Clear all associated formulas 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnClearFormulasCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumClearFormulasCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnClearFormulasCmd::m_formulas
+ * \brief The old formulas
+ */
+
+/**
+ * \var ColumnClearFormulasCmd::m_copied
+ * \brief A status flag
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnClearFormulasCmd::ColumnClearFormulasCmd(Column::Private * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
@@ -594,10 +1129,16 @@ ColumnClearFormulasCmd::ColumnClearFormulasCmd(Column::Private * col, QUndoComma
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnClearFormulasCmd::~ColumnClearFormulasCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnClearFormulasCmd::redo()
 {
 	if(!m_copied)
@@ -608,28 +1149,68 @@ void ColumnClearFormulasCmd::redo()
 	m_col->clearFormulas();
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnClearFormulasCmd::undo()
 {
 	m_col->replaceFormulas(m_formulas);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnClearFormulasCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnSetTextCmd
+ * \brief Set the text for a string cell 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetTextCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnSetTextCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnSetTextCmd::m_row
+ * \brief The row to modify
+ */
+
+/**
+ * \var ColumnSetTextCmd::m_new_value
+ * \brief The new value
+ */
+
+/**
+ * \var ColumnSetTextCmd::m_old_value
+ * \brief The old value
+ */
+
+/**
+ * \var ColumnSetTextCmd::m_row_count
+ * \brief The old number of rows
+ */
+
+/**
+ * \var ColumnSetTextCmd::m_validity
+ * \brief The old validity
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetTextCmd::ColumnSetTextCmd(Column::Private * col, int row, const QString& new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
 	setText(QObject::tr("%1: set text for row %2").arg(col->name()).arg(row));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetTextCmd::~ColumnSetTextCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetTextCmd::redo()
 {
 	m_old_value = m_col->textAt(m_row);
@@ -638,6 +1219,9 @@ void ColumnSetTextCmd::redo()
 	m_col->setTextAt(m_row, m_new_value);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetTextCmd::undo()
 {
 	m_col->setTextAt(m_row, m_old_value);
@@ -645,23 +1229,60 @@ void ColumnSetTextCmd::undo()
 	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetTextCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnSetValueCmd
+ * \brief Set the value for a double cell 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetValueCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnSetValueCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnSetValueCmd::m_row
+ * \brief The row to modify
+ */
+
+/**
+ * \var ColumnSetValueCmd::m_new_value
+ * \brief The new value
+ */
+
+/**
+ * \var ColumnSetValueCmd::m_old_value
+ * \brief The old value
+ */
+
+/**
+ * \var ColumnSetValueCmd::m_row_count
+ * \brief The old number of rows
+ */
+
+/**
+ * \var ColumnSetValueCmd::m_validity
+ * \brief The old validity
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetValueCmd::ColumnSetValueCmd(Column::Private * col, int row, double new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
 	setText(QObject::tr("%1: set value for row %2").arg(col->name()).arg(row));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetValueCmd::~ColumnSetValueCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetValueCmd::redo()
 {
 	m_old_value = m_col->valueAt(m_row);
@@ -670,6 +1291,9 @@ void ColumnSetValueCmd::redo()
 	m_col->setValueAt(m_row, m_new_value);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetValueCmd::undo()
 {
 	m_col->setValueAt(m_row, m_old_value);
@@ -677,23 +1301,60 @@ void ColumnSetValueCmd::undo()
 	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetValueCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnSetDataTimeCmd
+ * \brief Set the value of a date-time cell 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnSetDateTimeCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnSetDateTimeCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnSetDateTimeCmd::m_row
+ * \brief The row to modify
+ */
+
+/**
+ * \var ColumnSetDateTimeCmd::m_new_value
+ * \brief The new value
+ */
+
+/**
+ * \var ColumnSetDateTimeCmd::m_old_value
+ * \brief The old value
+ */
+
+/**
+ * \var ColumnSetDateTimeCmd::m_row_count
+ * \brief The old number of rows
+ */
+
+/**
+ * \var ColumnSetDateTimeCmd::m_validity
+ * \brief The old validity
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(Column::Private * col, int row, const QDateTime& new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
 	setText(QObject::tr("%1: set value for row %2").arg(col->name()).arg(row));
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnSetDateTimeCmd::~ColumnSetDateTimeCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnSetDateTimeCmd::redo()
 {
 	m_old_value = m_col->dateTimeAt(m_row);
@@ -702,6 +1363,9 @@ void ColumnSetDateTimeCmd::redo()
 	m_col->setDateTimeAt(m_row, m_new_value);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnSetDateTimeCmd::undo()
 {
 	m_col->setDateTimeAt(m_row, m_old_value);
@@ -709,13 +1373,49 @@ void ColumnSetDateTimeCmd::undo()
 	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnSetDateTimeCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnReplaceTextsCmd
+ * \brief Replace a range of strings in a string column 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnReplaceTextsCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnReplaceTextsCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnReplaceTextsCmd::m_first
+ * \brief The first row to replace
+ */
+
+/**
+ * \var ColumnReplaceTextsCmd::m_new_values
+ * \brief The new values
+ */
+
+/**
+ * \var ColumnReplaceTextsCmd::m_old_values
+ * \brief The old values
+ */
+
+/**
+ * \var ColumnReplaceTextsCmd::m_copied
+ * \brief Status flag
+ */
+
+/**
+ * \var ColumnReplaceTextsCmd::m_row_count
+ * \brief The old number of rows
+ */
+
+/**
+ * \var ColumnReplaceTextsCmd::m_validity
+ * \brief The old validity
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(Column::Private * col, int first, const QStringList& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
@@ -723,10 +1423,16 @@ ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(Column::Private * col, int first, c
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnReplaceTextsCmd::~ColumnReplaceTextsCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnReplaceTextsCmd::redo()
 {
 	if(!m_copied)
@@ -739,6 +1445,9 @@ void ColumnReplaceTextsCmd::redo()
 	m_col->replaceTexts(m_first, m_new_values);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnReplaceTextsCmd::undo()
 {
 	m_col->replaceTexts(m_first, m_old_values);
@@ -746,13 +1455,49 @@ void ColumnReplaceTextsCmd::undo()
 	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnReplaceTextsCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnReplaceValuesCmd
+ * \brief Replace a range of doubles in a double column 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnReplaceValuesCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnReplaceValuesCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnReplaceValuesCmd::m_first
+ * \brief The first row to replace
+ */
+
+/**
+ * \var ColumnReplaceValuesCmd::m_new_values
+ * \brief The new values
+ */
+
+/**
+ * \var ColumnReplaceValuesCmd::m_old_values
+ * \brief The old values
+ */
+
+/**
+ * \var ColumnReplaceValuesCmd::m_copied
+ * \brief Status flag
+ */
+
+/**
+ * \var ColumnReplaceValuesCmd::m_row_count
+ * \brief The old number of rows
+ */
+
+/**
+ * \var ColumnReplaceValuesCmd::m_validity
+ * \brief The old validity
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(Column::Private * col, int first, const QVector<double>& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
@@ -760,10 +1505,16 @@ ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(Column::Private * col, int first,
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnReplaceValuesCmd::~ColumnReplaceValuesCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnReplaceValuesCmd::redo()
 {
 	if(!m_copied)
@@ -776,6 +1527,9 @@ void ColumnReplaceValuesCmd::redo()
 	m_col->replaceValues(m_first, m_new_values);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnReplaceValuesCmd::undo()
 {
 	m_col->replaceValues(m_first, m_old_values);
@@ -783,13 +1537,49 @@ void ColumnReplaceValuesCmd::undo()
 	m_col->replaceData(m_col->dataPointer(), m_validity);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnReplaceValuesCmd
-///////////////////////////////////////////////////////////////////////////
+/** ***************************************************************************
+ * \class ColumnReplaceDateTimesCmd
+ * \brief Replace a range of date-times in a date-time column 
+ ** ***************************************************************************/
 
-///////////////////////////////////////////////////////////////////////////
-// class ColumnReplaceDateTimesCmd
-///////////////////////////////////////////////////////////////////////////
+/**
+ * \var ColumnReplaceDateTimesCmd::m_col
+ * \brief The private column data to modify
+ */
+
+/**
+ * \var ColumnReplaceDateTimesCmd::m_first
+ * \brief The first row to replace
+ */
+
+/**
+ * \var ColumnReplaceDateTimesCmd::m_new_values
+ * \brief The new values
+ */
+
+/**
+ * \var ColumnReplaceDateTimesCmd::m_old_values
+ * \brief The old values
+ */
+
+/**
+ * \var ColumnReplaceDateTimesCmd::m_copied
+ * \brief Status flag
+ */
+
+/**
+ * \var ColumnReplaceDateTimesCmd::m_row_count
+ * \brief The old number of rows
+ */
+
+/**
+ * \var ColumnReplaceDateTimesCmd::m_validity
+ * \brief The old validity
+ */
+
+/**
+ * \brief Ctor
+ */
 ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(Column::Private * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
@@ -797,10 +1587,16 @@ ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(Column::Private * col, int 
 	m_copied = false;
 }
 
+/**
+ * \brief Dtor
+ */
 ColumnReplaceDateTimesCmd::~ColumnReplaceDateTimesCmd()
 {
 }
 
+/**
+ * \brief Execute the command
+ */
 void ColumnReplaceDateTimesCmd::redo()
 {
 	if(!m_copied)
@@ -813,16 +1609,13 @@ void ColumnReplaceDateTimesCmd::redo()
 	m_col->replaceDateTimes(m_first, m_new_values);
 }
 
+/**
+ * \brief Undo the command
+ */
 void ColumnReplaceDateTimesCmd::undo()
 {
 	m_col->replaceDateTimes(m_first, m_old_values);
 	m_col->replaceData(m_col->dataPointer(), m_validity);
 	m_col->resizeTo(m_row_count);
 }
-
-///////////////////////////////////////////////////////////////////////////
-// end of class ColumnReplaceDateTimesCmd
-///////////////////////////////////////////////////////////////////////////
-
-
 
