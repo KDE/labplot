@@ -162,13 +162,6 @@ void AbstractColumn::setPlotDesignation(SciDAVis::PlotDesignation pd) {
  */
 void AbstractColumn::clear() {}
 
-/**
- * \brief This must be called before the column is replaced by another
- */
-void AbstractColumn::notifyReplacement(const AbstractColumn *replacement) {
-	emit aboutToBeReplaced(this, replacement);
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \name IntervalAttribute related functions
 //@{
@@ -504,20 +497,6 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
  * of rows in the column may have changed without
  * any other signal emission.
  * 'source' is always the this pointer of the column that
- * emitted this signal. This way it's easier to use
- * one handler for lots of columns.
- */
-
-/**
- * \fn void AbstractColumn::aboutToBeReplaced(const AbstractColumn *source, const AbstractColumn *new_col)
- * \brief The column will be replaced
- *
- * This is used then a column is replaced by another
- * column, possibly of another type. 
- *
- * \param new_col Pointer to the column this one is to be replaced with.
- *
- * \param source is always a pointer to the column that
  * emitted this signal. This way it's easier to use
  * one handler for lots of columns.
  */

@@ -70,7 +70,6 @@ class Column : public AbstractColumn
 		int width() const;
 		void setWidth(int value);
 		void clear();
-		void notifyReplacement(const AbstractColumn* replacement);
 		AbstractSimpleFilter *outputFilter() const;
 		ColumnStringIO *asStringColumn() const;
 

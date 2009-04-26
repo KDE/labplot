@@ -71,7 +71,6 @@ class AbstractFilter : public AbstractAspect
 		virtual void inputModeChanged(const AbstractColumn * source);
 		virtual void inputDataAboutToChange(const AbstractColumn * source);
 		virtual void inputDataChanged(const AbstractColumn * source);
-		virtual void inputAboutToBeReplaced(const AbstractColumn * source, const AbstractColumn* replacement);
 
 		virtual void inputRowsAboutToBeInserted(const AbstractColumn * source, int before, int count) {
 			Q_UNUSED(source); Q_UNUSED(before); Q_UNUSED(count);

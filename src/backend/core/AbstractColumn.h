@@ -62,7 +62,6 @@ class AbstractColumn : public AbstractAspect
 		virtual SciDAVis::PlotDesignation plotDesignation() const = 0;
 		virtual void setPlotDesignation(SciDAVis::PlotDesignation pd);
 		virtual void clear();
-		virtual void notifyReplacement(const AbstractColumn *replacement);
 
 		virtual bool isInvalid(int row) const;
 		virtual bool isInvalid(Interval<int> i) const;
@@ -104,7 +103,6 @@ class AbstractColumn : public AbstractAspect
 		void modeChanged(const AbstractColumn * source); 
 		void dataAboutToChange(const AbstractColumn * source); 
 		void dataChanged(const AbstractColumn * source); 
-		void aboutToBeReplaced(const AbstractColumn * source, const AbstractColumn* new_col); 
 		void rowsAboutToBeInserted(const AbstractColumn * source, int before, int count); 
 		void rowsInserted(const AbstractColumn * source, int before, int count); 
 		void rowsAboutToBeRemoved(const AbstractColumn * source, int first, int count); 

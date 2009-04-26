@@ -158,8 +158,6 @@ bool AbstractFilter::input(int port, const AbstractColumn* source)
 				this, SLOT(inputDataAboutToChange(const AbstractColumn *)));
 		QObject::connect(source, SIGNAL(dataChanged(const AbstractColumn *)),
 				this, SLOT(inputDataChanged(const AbstractColumn *)));
-		QObject::connect(source, SIGNAL(aboutToBeReplaced(const AbstractColumn *,const AbstractColumn*)),
-				this, SLOT(inputAboutToBeReplaced(const AbstractColumn *,const AbstractColumn*)));
 		QObject::connect(source, 
 			SIGNAL(rowsAboutToBeInserted(const AbstractColumn *,int,int)),
 			this, SLOT(inputRowsAboutToBeInserted(const AbstractColumn *,int,int)));
@@ -353,23 +351,6 @@ void AbstractFilter::inputDataAboutToChange(const AbstractColumn * source) {
  */
 void AbstractFilter::inputDataChanged(const AbstractColumn * source) {
 	Q_UNUSED(source);
-}
-
-/**
- * \brief An input is about to be replaced.
- *
- * This signal is handled by AbstractFilter and mapped to input(int,AbstractColumn*),
- * which calls inputDescriptionAboutToChange(), inputPlotDesignationAboutToChange(),
- * inputDataAboutToChange(), inputMaskingAboutToChange(), 
- * inputDescripionChanged(), inputMaskingChanged()
- * inputPlotDesignationChanged() and inputDataChanged().
- * inputModeAboutToChange() and inputModeChanged() are
- * called if the new column has a different mode (and thereby possibly data type).
- * Thus, filter implementations won't have to bother with it most of the time.
- */
-void AbstractFilter::inputAboutToBeReplaced(const AbstractColumn * source, const AbstractColumn* replacement)
-{
-	input(portIndexOf(source), replacement);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

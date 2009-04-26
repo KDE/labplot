@@ -253,14 +253,6 @@ void Column::clear()
 }
 
 /**
- * \brief This must be called before the column is replaced by another
- */
-void Column::notifyReplacement(const AbstractColumn* replacement)
-{
-	emit aboutToBeReplaced(this, replacement); 
-}
-
-/**
  * \brief Clear all validity information
  */
 void Column::clearValidity()
