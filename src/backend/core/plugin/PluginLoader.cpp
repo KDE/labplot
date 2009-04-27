@@ -106,5 +106,7 @@ bool PluginLoader::unload() {
 	m_loader = NULL;
 	m_status = NotYetLoaded;
 	m_statusString = tr("Not yet loaded.");
+
+	return true;
 }
 

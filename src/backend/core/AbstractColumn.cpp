@@ -161,7 +161,7 @@ void AbstractColumn::setPlotDesignation(SciDAVis::PlotDesignation pd) {
 void AbstractColumn::clear() {}
 
 /**
- * \brief Convenience method for mode-inpedpendent testing of validity
+ * \brief Convenience method for mode-independent testing of validity
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
@@ -174,6 +174,8 @@ bool AbstractColumn::isValid(int row) const {
 		case SciDAVis::Day:
 			return dateTimeAt(row).isValid();
 	}
+
+	return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
