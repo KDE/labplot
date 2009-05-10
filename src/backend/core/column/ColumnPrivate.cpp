@@ -698,7 +698,7 @@ void Column::Private::resizeTo(int new_size)
 		case SciDAVis::Numeric:
 			{
 				QVector<double> *numeric_data = static_cast< QVector<double>* >(m_data);
-				numeric_data->insert(numeric_data->begin(), new_size-old_size, NAN);
+				numeric_data->insert(numeric_data->end(), new_size-old_size, NAN);
 				break;
 			}
 		case SciDAVis::DateTime:

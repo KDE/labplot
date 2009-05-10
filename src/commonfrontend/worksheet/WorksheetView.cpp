@@ -35,12 +35,15 @@
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
 #include "worksheet/LinearAxis.h"
+#include "worksheet/LineSymbolCurve.h"
 #include "lib/ActionManager.h"
+#include "core/column/Column.h"
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QWheelEvent>
 #include <QtGlobal>
 #include <QShortcut>
+#include <QDebug>
 
 #define SHADOW_SIZE 80
 
@@ -193,9 +196,9 @@ void WorksheetView::startTestCode() {
 	DecorationPlot *plot = new DecorationPlot("plot1");
 	m_worksheet->addChild(plot);
 	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords1");
-	coordSys->setPosition(QPointF(pageRect.width() / 2, pageRect.height() / 2));
-	coordSys->setScaleX(4.0);
-	coordSys->setScaleY(-0.25);
+	coordSys->setPosition(QPointF(pageRect.width() * 0.2, pageRect.height() * 0.8));
+	coordSys->setScaleX(0.1);
+	coordSys->setScaleY(-0.1);
 	plot->addChild(coordSys);
 	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
 	rect->setRect(QRectF(0, 0, 40, 30));
@@ -241,6 +244,19 @@ void WorksheetView::startTestCode() {
 	yAxis3->setMajorTickCount(9);
 	coordSys->addChild(yAxis3);
 	coordSys->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
+
+	Column *xc = new Column("xc", SciDAVis::Numeric);
+	Column *yc = new Column("yc", SciDAVis::Numeric);
+	for (int i=0; i<20; i++)	{
+		xc->setValueAt(i, i*0.25);
+		yc->setValueAt(i, i*i*0.01);
+	}
+
+	LineSymbolCurve *curve1 = new LineSymbolCurve("curve 1");
+	curve1->setXColumn(xc);
+	curve1->setYColumn(yc);
+
+	coordSys->addChild(curve1);
 }
 
 void WorksheetView::createActions() {

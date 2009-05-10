@@ -32,11 +32,13 @@
 
 #include <QUndoCommand>
 
+#include "lib/Loki/TypeTraits.h"
+
 template <class target_class, typename value_type>
 class StandardSetterCmd: public QUndoCommand {
 	public:
 		StandardSetterCmd(target_class *target, value_type target_class:: *field, 
-				const value_type &newValue, const QString &description) // use tr("%1: ...") for last arg
+				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use tr("%1: ...") for last arg
 			: m_target(target), m_field(field), m_otherValue(newValue)  {
 				setText(description.arg(m_target->name()));
 			}
@@ -63,8 +65,8 @@ class StandardSetterCmd: public QUndoCommand {
 template <class target_class, typename value_type>
 class StandardSwapMethodSetterCmd: public QUndoCommand {
 	public:
-		StandardSwapMethodSetterCmd(target_class *target, value_type (target_class::*method)(const value_type &), 
-				const value_type &newValue, const QString &description) // use tr("%1: ...") for last arg
+		StandardSwapMethodSetterCmd(target_class *target, value_type (target_class::*method)(typename Loki::TypeTraits<value_type>::ParameterType), 
+				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use tr("%1: ...") for last arg
 			: m_target(target), m_method(method), m_otherValue(newValue) {
 				setText(description.arg(m_target->name()));
 			}
@@ -82,7 +84,7 @@ class StandardSwapMethodSetterCmd: public QUndoCommand {
 
 	protected:
 		target_class *m_target;
-		value_type (target_class:: *m_method)(const value_type &);
+		value_type (target_class:: *m_method)(typename Loki::TypeTraits<value_type>::ParameterType);
 		value_type m_otherValue;
 };
 

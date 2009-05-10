@@ -1,4 +1,12 @@
 /**
+ * \class TypeSelect
+ * \brief Template which results in a const reference for non-basic template parameter types.
+ *
+ * E.g., "TypeSelect<MyClass>" will expand to "const MyClass &" at compile time while 
+ * "TypeSelect<int>" will expand to "int".
+ */
+
+/**
  * \class StandardSetterCmd
  * \brief Template for simple setter undo commands.
  *
@@ -6,8 +14,8 @@
  * \code
 class MyClassSetMyValueCmd: public StandardClassSetterCmd<MyClass::Private, TheValueTypeOrClass> {
 	public:
-		MyClassSetMyValueCmd(MyClass::Private *target, const TheValueTypeOrClass &newValue, const QString &description)
-			: StandardSetterCmd<MyClass::Private, TheValueTypeOrClass>(target, &MyClass::Private::myValue, newValue, description) {}
+		MyClassSetMyValueCmd(MyClass::Private *target, TypeSelect<TheValueOrClasse>::ParamType newValue, const QString &description)
+			: StandardSetterCmd<MyClass::Private, TypeSelect<TheValueOrClasse>::ParamType>(target, &MyClass::Private::myValue, newValue, description) {}
 		virtual void initialize() { emit m_target->q->myValueAboutToChange(); }
 		virtual void finalize() { emit m_target->q->myValueChanged(); }
 };
@@ -42,13 +50,12 @@ void MyClass::setMyValue(int value) {
  * This template is very similar to StandardSetterCmd but it takes a method address
  * instead of a field address. The method must be a setter function which returns the
  * old value. Example: \code
-qreal MyClass::Private::setZValue(const qreal &z) {
+qreal MyClass::Private::setZValue(qreal z) {
 	qreal oldZ = calculateMyZValue();
 	myZValue = z;
 	setZValueForAllChildren(z);
 	return oldZ;
 }
  * \endcode
- * For simplicity, the argument to the function is always a const reference, even for basic data types.
  */
 

@@ -28,6 +28,7 @@ HEADERS += \
 	AbstractCoordinateSystem.h \
 	CartesianCoordinateSystem.h \
 	LinearAxis.h \
+	LineSymbolCurve.h \
 	
 SOURCES += \
 	WorksheetModule.cpp \
@@ -44,4 +45,5 @@ SOURCES += \
 	AbstractCoordinateSystem.cpp \
 	CartesianCoordinateSystem.cpp \
 	LinearAxis.cpp \
+	LineSymbolCurve.cpp \
 

@@ -78,6 +78,10 @@
 		return d->var; \
 	}
 
+#define POINTER_D_ACCESSOR_DECL(type, method, Method) \
+	type *method() const; \
+	void set ## Method(type *ptr);
+
 #define FLAG_D_ACCESSOR_DECL(Method) \
 	bool is ## Method() const; \
 	bool has ## Method() const; \
@@ -102,21 +106,20 @@
 		return d->var; \
 	}
 
-
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 
 #define STD_SETTER_CMD_IMPL(class_name, cmd_name, value_type, field_name) \
 class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
 	public: \
-		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
 };
 
 #define STD_SETTER_CMD_IMPL_F(class_name, cmd_name, value_type, field_name, finalize_method) \
 class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
 	public: \
-		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
 		virtual void finalize() { m_target->finalize_method(); } \
 };
@@ -124,7 +127,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 #define STD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, field_name, init_method) \
 class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
 	public: \
-		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
 		virtual void initialize() { m_target->init_method(); } \
 };
@@ -132,7 +135,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 #define STD_SETTER_CMD_IMPL_IF(class_name, cmd_name, value_type, field_name, init_method, finalize_method) \
 class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
 	public: \
-		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
 		virtual void initialize() { m_target->init_method(); } \
 		virtual void finalize() { m_target->finalize_method(); } \
@@ -141,14 +144,14 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL(class_name, cmd_name, value_type, method_name) \
 class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_name::Private, value_type> { \
 	public: \
-		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {} \
 };
 
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL_F(class_name, cmd_name, value_type, method_name, finalize_method) \
 class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_name::Private, value_type> { \
 	public: \
-		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {} \
 		virtual void finalize() { m_target->finalize_method(); } \
 };
@@ -156,7 +159,7 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, method_name, init_method) \
 class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_name::Private, value_type> { \
 	public: \
-		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {} \
 		virtual void initialize() { m_target->init_method(); } \
 };
@@ -164,7 +167,7 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL_IF(class_name, cmd_name, value_type, method_name, init_method, finalize_method) \
 class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_name::Private, value_type> { \
 	public: \
-		class_name ## cmd_name ## Cmd(class_name::Private *target, const value_type &newValue, const QString &description) \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {} \
 		virtual void initialize() { m_target->init_method(); } \
 		virtual void finalize() { m_target->finalize_method(); } \

@@ -77,8 +77,8 @@ class LinearAxis::Private {
 		void retransform() const;
 		void retransformTicks() const;
 		void retransformTicks(const AbstractCoordinateSystem *cSystem) const;
-		qreal setZValue(const qreal &z);
-		bool setVisible(const bool &on);
+		qreal setZValue(qreal z);
+		bool setVisible(bool on);
 
 		LinearAxis * const q;
 };
@@ -254,7 +254,7 @@ QList<QGraphicsItem *> LinearAxis::graphicsItems() const {
 	return QList<QGraphicsItem *>() << &(d->itemGroup);
 }
 
-qreal LinearAxis::Private::setZValue(const qreal &z) {
+qreal LinearAxis::Private::setZValue(qreal z) {
 	qreal oldZ = itemGroup.zValue();
 	itemGroup.setZValue(z);
 	foreach(QGraphicsLineItem *item, majorTickItems)
@@ -283,7 +283,7 @@ bool LinearAxis::contains(const QPointF &position) const {
 	return false;
 }
 
-bool LinearAxis::Private::setVisible(const bool &on) {
+bool LinearAxis::Private::setVisible(bool on) {
 	bool oldValue = itemGroup.isVisible();
 	itemGroup.setVisible(on);
 	return oldValue;
