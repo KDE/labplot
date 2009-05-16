@@ -41,7 +41,7 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 		WorksheetRectangleElement(const QString &name, const QRectF &rect);
 		virtual ~WorksheetRectangleElement();
 
-		virtual QList<QGraphicsItem *> graphicsItems() const;
+		virtual QGraphicsItem *graphicsItem() const;
 
 		virtual void setZValue(qreal z);
 		virtual qreal zValue() const;
@@ -67,7 +67,7 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 		QRectF rect() const;
 
 	public slots:
-		virtual void retransform() const;
+		virtual void retransform();
 
 	private:
 		mutable QGraphicsRectItem m_item;

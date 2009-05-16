@@ -45,8 +45,9 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
 }
 
 /**
- * \fn QList<QGraphicsItem *> AbstractWorksheetElement::graphicsItems() const
- * \brief Return all graphics items owned by this element.
+ * \fn QGraphicsItem *AbstractWorksheetElement::graphicsItem() const
+ * \brief Return the graphics item representing this element.
+ *
  *
  */
 
@@ -72,6 +73,7 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
  * \see setZValue()
  */
 
+#if 0
 /**
  * \fn QRectF AbstractWorksheetElement::boundingRect() const
  * \brief Return the bounding rect in scene coodinates.
@@ -83,6 +85,7 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
  * \brief Return whether the given position is inside the element.
  *
  */
+#endif
 
 /**
  * \fn void AbstractWorksheetElement::setVisible(bool on)
@@ -101,16 +104,16 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
  *
  * The standard implementation returns isVisible().
  */
-bool AbstractWorksheetElement::isFullVisible() const {
+bool AbstractWorksheetElement::isFullyVisible() const {
 	return isVisible();
 }
 		
 /**
- * \fn void AbstractWorksheetElement::retransform() const
+ * \fn void AbstractWorksheetElement::retransform()
  * \brief Tell the element to newly transform its graphics item into its coordinate system.
  *
- * This method is const as it is not allowed to change the data of the element, only
- * the graphics item which should be declared as "mutable".
+ * This method must not change the undo-aware data of the element, only
+ * the graphics item which represents the item is to be updated.
  */
 		
 /**

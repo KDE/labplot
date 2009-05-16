@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : CrossCurveSymbol.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Cross-shaped curve symbol.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,70 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#include "worksheet/symbols/CrossCurveSymbol.h"
+#include "worksheet/AbstractStandardCurveSymbolPrivate.h"
+#include <QPainter>
 
 /**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
+ * \class CrossCurveSymbol
+ * \brief Cross-shaped curve symbol.
  *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
+ * 
  */
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
+class CrossCurveSymbolPrivate: public AbstractStandardCurveSymbolPrivate {
+};
+ 
+CrossCurveSymbol::CrossCurveSymbol()
+    : AbstractStandardCurveSymbol(new CrossCurveSymbolPrivate) {
+}
+ 
+CrossCurveSymbol::CrossCurveSymbol(CrossCurveSymbolPrivate *dd)
+    : AbstractStandardCurveSymbol(dd) {
+}
+ 
+CrossCurveSymbol::~CrossCurveSymbol() {
+}
+ 
+QRectF CrossCurveSymbol::boundingRect () const
+{
+    Q_D(const CrossCurveSymbol);
+
+	// TODO: support for rotation
+
+    qreal penWidth = d->pen.widthF();
+	qreal xSize = d->size ;
+	qreal ySize = d->size / d->aspectRatio;
+
+	return QRectF((- xSize - penWidth) / 2, (-ySize - penWidth) / 2,
+			xSize + penWidth, ySize + penWidth);
 }
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+void CrossCurveSymbol::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                                 QWidget *widget) {
+    Q_D(CrossCurveSymbol);
+    Q_UNUSED(widget);
+    Q_UNUSED(option);
 
-WorksheetElementGroup::~WorksheetElementGroup() {
+    painter->setPen(d->pen);
+    painter->setBrush(d->brush);
+
+	qreal xSize = d->size ;
+	qreal ySize = d->size / d->aspectRatio;
+	QRectF rect(-xSize / 2, -ySize / 2, xSize, ySize);
+
+	QLineF line1(0, -ySize / 2, 0, ySize / 2);
+ 	painter->drawLine(line1);
+	QLineF line2(-xSize / 2, 0, xSize / 2, 0);
+ 	painter->drawLine(line2);
+}
+		
+AbstractCurveSymbol *CrossCurveSymbol::clone() const
+{
+    Q_D(const CrossCurveSymbol);
+
+	CrossCurveSymbol *twin = new CrossCurveSymbol();
+	twin->d_ptr->cloneHelper(d);
+	return twin;
 }
 

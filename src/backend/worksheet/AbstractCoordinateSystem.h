@@ -41,6 +41,9 @@ class AbstractCoordinateSystem: public WorksheetElementContainer {
 
 		virtual QPointF mapLogicalToScene(const QPointF &point) const = 0;
 		virtual QPointF mapSceneToLogical(const QPointF &point) const = 0;
+
+	protected:
+		AbstractCoordinateSystem(const QString &name, WorksheetElementContainerPrivate *dd);
 };
 
 #endif

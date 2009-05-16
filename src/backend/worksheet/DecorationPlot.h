@@ -38,6 +38,9 @@ class DecorationPlot: public AbstractPlot {
 	public:
 		DecorationPlot(const QString &name);
 		~DecorationPlot();
+
+	protected:
+		DecorationPlot(const QString &name, WorksheetElementContainerPrivate *dd);
 };
 
 #endif

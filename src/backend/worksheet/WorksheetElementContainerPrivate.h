@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : WorksheetElementContainerPrivate.h
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Private members of WorksheetElementContainer.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#ifndef WORKSHEETELEMENTCONTAINERPRIVATE_H
+#define WORKSHEETELEMENTCONTAINERPRIVATE_H
 
-/**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
- *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
- */
+#include <QGraphicsItemGroup>
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
-}
+class WorksheetElementContainerPrivate: public QGraphicsItemGroup {
+	public:
+		virtual ~WorksheetElementContainerPrivate() {}
+};
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+#endif
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
 

@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : StandardCurveSymbolFactory.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Factory of built-in curve symbols.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,57 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
+#include "worksheet/StandardCurveSymbolFactory.h"
+#include "worksheet/symbols/CrossCurveSymbol.h"
+#ifndef QT_STATICPLUGIN
+#define QT_STATICPLUGIN
+#endif
 #include <QtGlobal>
 
 /**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
+ * \class StandardCurveSymbolFactory
+ * \brief Factory of built-in curve symbols.
  *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
+ * 
  */
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
+StandardCurveSymbolFactory::~StandardCurveSymbolFactory() {
+	qDeleteAll(m_prototypes);
 }
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
+void StandardCurveSymbolFactory::init() {
+	m_prototypes.append(new CrossCurveSymbol());
 }
 
-WorksheetElementGroup::~WorksheetElementGroup() {
+QList<const AbstractCurveSymbol *> StandardCurveSymbolFactory::prototypes() {
+	if (m_prototypes.isEmpty())
+		init();
+
+	return m_prototypes;
+}
+		
+QStringList StandardCurveSymbolFactory::ids() {
+	if (m_prototypes.isEmpty())
+		init();
+
+	QStringList result;
+	foreach (const AbstractCurveSymbol *prototype, m_prototypes)
+		result.append(prototype->id());
+
+	return result;
 }
 
+const AbstractCurveSymbol *StandardCurveSymbolFactory::prototype(const QString &id)
+{
+	if (m_prototypes.isEmpty())
+		init();
+
+	foreach (const AbstractCurveSymbol *prototype, m_prototypes) {
+		if (id == prototype->id())
+			return prototype;
+	}
+	return NULL;
+}
+
+Q_EXPORT_PLUGIN2(scidavis_standardcurvesymbolfactory, StandardCurveSymbolFactory)
+Q_IMPORT_PLUGIN(scidavis_standardcurvesymbolfactory)

@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : CrossCurveSymbol.h
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Cross-shaped curve symbol.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#ifndef CROSSCURVESYMBOL_H
+#define CROSSCURVESYMBOL_H
 
-/**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
- *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
- */
+#include "worksheet/AbstractStandardCurveSymbol.h"
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
-}
+class CrossCurveSymbolPrivate;
+class CrossCurveSymbol: public AbstractStandardCurveSymbol  {
+	Q_OBJECT
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+	public:
+		CrossCurveSymbol();
+		virtual ~CrossCurveSymbol();
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+		QString id() const { return "cross"; }
+		virtual AbstractCurveSymbol *clone() const;
+    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+		QRectF boundingRect () const;
+
+	protected:
+		CrossCurveSymbol(CrossCurveSymbolPrivate *dd);
+		
+	private:
+    	Q_DECLARE_PRIVATE(CrossCurveSymbol)
+};
+
+#endif
+
+
 

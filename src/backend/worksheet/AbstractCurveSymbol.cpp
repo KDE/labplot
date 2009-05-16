@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : AbstractCurveSymbol.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Abstract base class for curve symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,67 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#include "worksheet/AbstractCurveSymbol.h"
 
 /**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
+ * \class AbstractCurveSymbol
+ * \brief Abstract base class for curve symbols.
  *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
+ * 
  */
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
+AbstractCurveSymbol::AbstractCurveSymbol()
+	: QGraphicsItem(0) {
 }
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
-
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+/**
+ * \fn QString AbstractCurveSymbol::getId() const;
+ * \brief Get the ID string of the symbol.
+ */
+/**
+ * \fn void AbstractCurveSymbol::setSize(qreal size);
+ * \brief Set the symbol size.
+ */
+/**
+ * \fn qreal AbstractCurveSymbol::size() const;
+ * \brief Get the symbol size.
+ */
+/**
+ * \fn void AbstractCurveSymbol::setAspectRatio(qreal aspectRatio);
+ * \brief Set the symbol aspect ratio (horizontal/vertical size).
+ */
+/**
+ * \fn qreal AbstractCurveSymbol::aspectRatio() const;
+ * \brief Get the symbol aspect ratio (horizontal/vertical size).
+ */
+/**
+ * \fn void AbstractCurveSymbol::setRotationAngle(qreal angle);
+ * \brief Set the rotation angle in degrees.
+ */
+/**
+ * \fn qreal AbstractCurveSymbol::rotationAngle() const;
+ * \brief Get the rotation angle in degrees.
+ */
+/**
+ * \fn void AbstractCurveSymbol::setBrush (const QBrush &brush);
+ * \brief Set the background brush.
+ *
+ * Use QBrush(Qt::NoBrush) to deactivate symbol filling.
+ */
+/**
+ * \fn QBrush AbstractCurveSymbol::brush() const;
+ * \brief Get the background brush.
+ */
+/**
+ * \fn void AbstractCurveSymbol::setPen(const QPen &pen);
+ * \brief Set the border pen.
+ */
+/**
+ * \fn QPen AbstractCurveSymbol::pen() const;
+ * \brief Get the border pen.
+ */
+/**
+ * \fn AbstractCurveSymbol *clone() const;
+ * \brief Get a copy of the symbol.
+ */
 

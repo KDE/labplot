@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "worksheet/AbstractCoordinateSystem.h"
+#include "worksheet/WorksheetElementContainerPrivate.h"
 
 /**
  * \class AbstractCoordinateSystem
@@ -39,6 +40,10 @@
 
 AbstractCoordinateSystem::AbstractCoordinateSystem(const QString &name) 
 	: WorksheetElementContainer(name) {
+}
+
+AbstractCoordinateSystem::AbstractCoordinateSystem(const QString &name, WorksheetElementContainerPrivate *dd)
+	: WorksheetElementContainer(name, dd) {
 }
 
 AbstractCoordinateSystem::~AbstractCoordinateSystem() {

@@ -39,6 +39,8 @@ class WorksheetElementGroup: public WorksheetElementContainer {
 		WorksheetElementGroup(const QString &name);
 		~WorksheetElementGroup();
 
+	protected:
+		WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd);
 };
 
 #endif

@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : StandardCurveSymbolFactory.h
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Factory of built-in curve symbols.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#ifndef STANDARDCURVESYMBOLFACTORY_H
+#define STANDARDCURVESYMBOLFACTORY_H
 
-/**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
- *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
- */
+#include <QObject>
+#include <QList>
+#include <QStringList>
+#include "worksheet/interfaces.h"
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
-}
+class StandardCurveSymbolFactory: public QObject, public CurveSymbolFactory {
+	Q_OBJECT
+	Q_INTERFACES(CurveSymbolFactory)
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+	public:
+		virtual ~StandardCurveSymbolFactory();
+		virtual QList<const AbstractCurveSymbol *> prototypes();
+		virtual const AbstractCurveSymbol *prototype(const QString &id);
+		virtual QStringList ids();
+	
+	private:
+		QList<const AbstractCurveSymbol *> m_prototypes;
+		void init();
+};
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+#endif
+
 

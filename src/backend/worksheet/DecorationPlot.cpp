@@ -41,8 +41,13 @@ DecorationPlot::DecorationPlot(const QString &name)
 // TODO
 }
 
-DecorationPlot::~DecorationPlot() {
+DecorationPlot::DecorationPlot(const QString &name, WorksheetElementContainerPrivate *dd)
+	: AbstractPlot(name, dd) {
 // TODO
 }
 
+
+DecorationPlot::~DecorationPlot() {
+// TODO
+}
 

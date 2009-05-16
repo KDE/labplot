@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : EllipseCurveSymbol.h
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Elliptic curve symbol.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#ifndef ELLIPSECURVESYMBOL_H
+#define ELLIPSECURVESYMBOL_H
 
-/**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
- *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
- */
+#include "worksheet/AbstractStandardCurveSymbol.h"
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
-}
+class EllipseCurveSymbolPrivate;
+class EllipseCurveSymbol: public AbstractStandardCurveSymbol  {
+	Q_OBJECT
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+	public:
+		EllipseCurveSymbol();
+		virtual ~EllipseCurveSymbol();
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+		QString id() const { return "ellipse"; }
+		virtual AbstractCurveSymbol *clone() const;
+    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+		QRectF boundingRect () const;
+
+		static const EllipseCurveSymbol *staticPrototype();
+
+	protected:
+		EllipseCurveSymbol(EllipseCurveSymbolPrivate *dd);
+		
+	private:
+    	Q_DECLARE_PRIVATE(EllipseCurveSymbol)
+		static EllipseCurveSymbol *m_staticPrototype;
+};
+
+#endif
+
 

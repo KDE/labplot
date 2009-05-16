@@ -43,6 +43,7 @@
 #include <QWheelEvent>
 #include <QtGlobal>
 #include <QShortcut>
+#include <QTimer>
 #include <QDebug>
 
 #define SHADOW_SIZE 80
@@ -185,10 +186,10 @@ void WorksheetView::init() {
 // TODO
 
 	// TODO: remove test code
-	m_model->scene()->addRect(QRectF(100,100,50,20), QPen(QColor(Qt::red)));
-
 	QShortcut * start_test = new QShortcut(QKeySequence(tr("Ctrl+Shift+T")), m_view_widget);
 	connect(start_test, SIGNAL(activated()), this, SLOT(startTestCode()));
+
+	QTimer::singleShot(0, this, SLOT(startTestCode()));
 }
 
 void WorksheetView::startTestCode() {
@@ -199,7 +200,7 @@ void WorksheetView::startTestCode() {
 	coordSys->setPosition(QPointF(pageRect.width() * 0.2, pageRect.height() * 0.8));
 	coordSys->setScaleX(0.1);
 	coordSys->setScaleY(-0.1);
-	plot->addChild(coordSys);
+//	plot->addChild(coordSys);
 	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
 	rect->setRect(QRectF(0, 0, 40, 30));
 //	coordSys->addChild(rect);
@@ -217,9 +218,9 @@ void WorksheetView::startTestCode() {
 	coordSys->addChild(group1);
 
 	LinearAxis *xAxis1 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
-	plot->addChild(xAxis1);
+//	plot->addChild(xAxis1);
 	LinearAxis *yAxis1 = new LinearAxis("y axis 1", LinearAxis::axisLeft);
-	plot->addChild(yAxis1);
+//	plot->addChild(yAxis1);
 
 	LinearAxis *xAxis2 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
 	coordSys->addChild(xAxis2);
@@ -257,6 +258,8 @@ void WorksheetView::startTestCode() {
 	curve1->setYColumn(yc);
 
 	coordSys->addChild(curve1);
+
+	plot->addChild(coordSys);
 }
 
 void WorksheetView::createActions() {

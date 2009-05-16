@@ -120,6 +120,13 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
+	${BACKEND_DIR}/worksheet/LineSymbolCurve.cpp
+	${BACKEND_DIR}/worksheet/AbstractCurveSymbol.cpp
+	${BACKEND_DIR}/worksheet/AbstractStandardCurveSymbol.cpp
+	${BACKEND_DIR}/worksheet/symbols/EllipseCurveSymbol.cpp
+	${BACKEND_DIR}/worksheet/StandardCurveSymbolFactory.cpp
+	${BACKEND_DIR}/worksheet/symbols/CrossCurveSymbol.cpp
+	${BACKEND_DIR}/worksheet/AbstractWorksheetDecorationElement.cpp
 )
 
 set(QTFRONTEND_SOURCES

@@ -55,8 +55,8 @@ WorksheetRectangleElement::WorksheetRectangleElement(const QString &name, const 
 WorksheetRectangleElement::~WorksheetRectangleElement() {
 }
 
-QList<QGraphicsItem *> WorksheetRectangleElement::graphicsItems() const {
-	return QList<QGraphicsItem *>() << &m_item;
+QGraphicsItem *WorksheetRectangleElement::graphicsItem() const {
+	return &m_item;
 }
 
 void WorksheetRectangleElement::setZValue(qreal z) {
@@ -131,7 +131,7 @@ QRectF WorksheetRectangleElement::rect() const {
 	return m_rect;
 }
 
-void WorksheetRectangleElement::retransform() const {
+void WorksheetRectangleElement::retransform() {
 	AbstractCoordinateSystem *system = coordinateSystem();
 	if (system) {
 		QPointF topLeft = system->mapLogicalToScene(m_rect.topLeft());

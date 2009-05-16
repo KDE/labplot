@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : AbstractStandardCurveSymbol.h
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Implements several methods used by many curve symbols.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
+#ifndef ABSTRACTSTANDARDCURVESYMBOL_H
+#define ABSTRACTSTANDARDCURVESYMBOL_H
+
 #include <QtGlobal>
+#include "worksheet/AbstractCurveSymbol.h"
 
-/**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
- *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
- */
+class AbstractStandardCurveSymbolPrivate;
+class AbstractStandardCurveSymbol: public QObject, public AbstractCurveSymbol  {
+	Q_OBJECT
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
-}
+	public:
+		AbstractStandardCurveSymbol();
+		virtual ~AbstractStandardCurveSymbol() {}
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+		virtual void setSize(qreal size);
+		virtual qreal size() const;
+		virtual void setAspectRatio(qreal aspectRatio);
+		virtual qreal aspectRatio() const;
+		virtual void setRotationAngle(qreal angle);
+		virtual qreal rotationAngle() const;
+		virtual void setBrush (const QBrush &brush);
+		virtual QBrush brush() const;
+		virtual void setPen(const QPen &pen);
+		virtual QPen pen() const;
+	protected:
+		AbstractStandardCurveSymbolPrivate * const d_ptr;
+		AbstractStandardCurveSymbol(AbstractStandardCurveSymbolPrivate *dd);
+		
+	private:
+    	Q_DECLARE_PRIVATE(AbstractStandardCurveSymbol)
+};
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+#endif
 

@@ -41,7 +41,7 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 		LineSymbolCurve(const QString &name);
 		virtual ~LineSymbolCurve();
 
-		virtual QList<QGraphicsItem *> graphicsItems() const;
+		virtual QGraphicsItem *graphicsItem() const;
 
 		virtual void setZValue(qreal z);
 		virtual qreal zValue() const;
@@ -54,14 +54,16 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 		//TODO: all style related stuff (line widths, color, symbol size, etc...)
 		//TODO: signal/slot connections with columns
 
+#if 0
     	virtual QRectF boundingRect() const;
 		virtual bool contains(const QPointF &position) const;
+#endif
 
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 
 	public slots:
-		virtual void retransform() const;
+		virtual void retransform();
 
 	public:
 		class Private;

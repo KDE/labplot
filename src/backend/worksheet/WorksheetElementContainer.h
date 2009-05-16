@@ -31,16 +31,18 @@
 #define WORKSHEETELEMENTCONTAINER_H
 
 #include "worksheet/AbstractWorksheetElement.h"
+#include <QtGlobal>
 class AbstractCoordinateSystem;
 
+class WorksheetElementContainerPrivate;
 class WorksheetElementContainer: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
 		WorksheetElementContainer(const QString &name);
-		~WorksheetElementContainer();
+		virtual ~WorksheetElementContainer();
 
-		virtual QList<QGraphicsItem *> graphicsItems() const;
+		virtual QGraphicsItem *graphicsItem() const;
 
 		virtual void setZValue(qreal z);
 		virtual qreal zValue() const;
@@ -48,14 +50,27 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		virtual qreal zValueMin() const ;
 		virtual qreal zValueMax() const ;
 
+#if 0
     	virtual QRectF boundingRect() const;
 		virtual bool contains(const QPointF &position) const;
+#endif
 
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
-		virtual bool isFullVisible() const;
+		virtual bool isFullyVisible() const;
 
-		virtual void retransform() const;
+		virtual void retransform();
+	
+	protected:
+		WorksheetElementContainerPrivate * const d_ptr;
+		WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd);
+
+	protected slots:
+		virtual void handleAspectAdded(const AbstractAspect *handleAspect);
+		virtual void handleAspectAboutToBeRemoved(const AbstractAspect *handleAspect);
+
+	private:
+    	Q_DECLARE_PRIVATE(WorksheetElementContainer)
 };
 
 #endif

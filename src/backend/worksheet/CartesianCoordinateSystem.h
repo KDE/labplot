@@ -34,6 +34,7 @@
 #include "lib/macros.h"
 #include <QObject>
 
+class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 	Q_OBJECT
 
@@ -44,16 +45,21 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		QPointF mapLogicalToScene(const QPointF &point) const;
 		QPointF mapSceneToLogical(const QPointF &point) const;
 
+		virtual QGraphicsItem *graphicsItem() const;
+
 		CLASS_D_ACCESSOR_DECL(QPointF, position, Position);
 		BASIC_D_ACCESSOR_DECL(qreal, scaleX, ScaleX);
 		BASIC_D_ACCESSOR_DECL(qreal, scaleY, ScaleY);
 		int xDirection() const;
 		int yDirection() const;
 
-		class Private;
+		typedef CartesianCoordinateSystemPrivate Private;
+	protected:
+		CartesianCoordinateSystem(const QString &name, CartesianCoordinateSystemPrivate *dd);
+
 	private:
-		friend class Private;
-		Private * const d;
+    	Q_DECLARE_PRIVATE(CartesianCoordinateSystem)
+		void init();
 };
 
 #endif

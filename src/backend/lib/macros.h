@@ -58,6 +58,13 @@
 		return d->var; \
 	}
 
+#define BASIC_SHARED_D_READER_IMPL(classname, type, method, var) \
+	type classname::method() const \
+	{ \
+		Q_D(const classname); \
+		return d->var; \
+	}
+
 #define CLASS_D_ACCESSOR_DECL(type, method, Method) \
 	type method() const; \
 	void set ## Method(const type & value);
@@ -75,6 +82,13 @@
 #define CLASS_D_READER_IMPL(classname, type, method, var) \
 	type classname::method() const \
 	{ \
+		return d->var; \
+	}
+
+#define CLASS_SHARED_D_READER_IMPL(classname, type, method, var) \
+	type classname::method() const \
+	{ \
+		Q_D(const classname); \
 		return d->var; \
 	}
 

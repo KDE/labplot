@@ -41,22 +41,22 @@ class AbstractWorksheetElement: public AbstractAspect {
 		AbstractWorksheetElement(const QString &name);
 		virtual ~AbstractWorksheetElement();
 
-		virtual QList<QGraphicsItem *> graphicsItems() const = 0;
+		virtual QGraphicsItem *graphicsItem() const = 0;
 
 		virtual void setZValue(qreal z) = 0;
 		virtual qreal zValue() const = 0;
 
-    	virtual QRectF boundingRect() const = 0;
-		virtual bool contains(const QPointF &position) const = 0;
+//    	virtual QRectF boundingRect() const = 0;
+//		virtual bool contains(const QPointF &position) const = 0;
 
 		virtual void setVisible(bool on) = 0;
 		virtual bool isVisible() const = 0;
-		virtual bool isFullVisible() const;
+		virtual bool isFullyVisible() const;
 
 		virtual AbstractCoordinateSystem *coordinateSystem() const;
 
 	public slots:
-		virtual void retransform() const = 0;
+		virtual void retransform() = 0;
 };
 
 #endif

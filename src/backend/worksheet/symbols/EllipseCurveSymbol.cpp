@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : EllipseCurveSymbol.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Elliptic curve symbol.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,72 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#include "worksheet/symbols/EllipseCurveSymbol.h"
+#include "worksheet/AbstractStandardCurveSymbolPrivate.h"
+#include <QPainter>
 
 /**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
+ * \class EllipseCurveSymbol
+ * \brief Elliptic curve symbol.
  *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
+ * 
  */
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
+class EllipseCurveSymbolPrivate: public AbstractStandardCurveSymbolPrivate {
+};
+ 
+EllipseCurveSymbol::EllipseCurveSymbol()
+    : AbstractStandardCurveSymbol(new EllipseCurveSymbolPrivate) {
+}
+ 
+EllipseCurveSymbol::EllipseCurveSymbol(EllipseCurveSymbolPrivate *dd)
+    : AbstractStandardCurveSymbol(dd) {
+}
+ 
+EllipseCurveSymbol::~EllipseCurveSymbol() {
+}
+ 
+EllipseCurveSymbol *EllipseCurveSymbol::m_staticPrototype = new EllipseCurveSymbol();
+
+const EllipseCurveSymbol *EllipseCurveSymbol::staticPrototype() {
+	return m_staticPrototype;
 }
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
+QRectF EllipseCurveSymbol::boundingRect () const
+{
+    Q_D(const EllipseCurveSymbol);
+
+	// TODO: support for rotation
+
+    qreal penWidth = d->pen.widthF();
+	qreal xSize = d->size ;
+	qreal ySize = d->size / d->aspectRatio;
+
+	return QRectF((- xSize - penWidth) / 2, (-ySize - penWidth) / 2,
+			xSize + penWidth, ySize + penWidth);
 }
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+void EllipseCurveSymbol::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                                 QWidget *widget) {
+    Q_D(EllipseCurveSymbol);
+    Q_UNUSED(widget);
+    Q_UNUSED(option);
 
+    painter->setPen(d->pen);
+    painter->setBrush(d->brush);
+
+	qreal xSize = d->size ;
+	qreal ySize = d->size / d->aspectRatio;
+	QRectF rect(-xSize / 2, -ySize / 2, xSize, ySize);
+
+    painter->drawEllipse(rect);
+}
+		
+AbstractCurveSymbol *EllipseCurveSymbol::clone() const
+{
+    Q_D(const EllipseCurveSymbol);
+
+	EllipseCurveSymbol *twin = new EllipseCurveSymbol();
+	twin->d_ptr->cloneHelper(d);
+	return twin;
+}

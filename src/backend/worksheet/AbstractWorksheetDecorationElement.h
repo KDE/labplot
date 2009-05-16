@@ -32,7 +32,7 @@
 
 #include "worksheet/AbstractWorksheetElement.h"
 
-class AbstractWorksheetDecorationElement {
+class AbstractWorksheetDecorationElement: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:

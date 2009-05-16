@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : AbstractCurveSymbol.h
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Abstract base class for curve symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#ifndef ABSTRACTCURVESYMBOL_H
+#define ABSTRACTCURVESYMBOL_H
 
-/**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
- *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
- */
+#include <QGraphicsItem>
+#include <QPen>
+#include <QBrush>
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
-}
+class AbstractCurveSymbol: public QGraphicsItem  {
+	public:
+		AbstractCurveSymbol();
+		virtual ~AbstractCurveSymbol() {}
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+		virtual QString id() const = 0;
+		virtual void setSize(qreal size) = 0;
+		virtual qreal size() const = 0;
+		virtual void setAspectRatio(qreal aspectRatio) = 0;
+		virtual qreal aspectRatio() const = 0;
+		virtual void setRotationAngle(qreal angle) = 0;
+		virtual qreal rotationAngle() const = 0;
+		virtual void setBrush (const QBrush &brush) = 0;
+		virtual QBrush brush() const = 0;
+		virtual void setPen(const QPen &pen) = 0;
+		virtual QPen pen() const = 0;
+		virtual AbstractCurveSymbol *clone() const = 0;
+};
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+#endif
+
 

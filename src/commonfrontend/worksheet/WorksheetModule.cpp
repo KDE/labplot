@@ -79,7 +79,7 @@ AbstractPart * WorksheetModule::makePart() {
 
 QAction * WorksheetModule::makeAction(QObject *parent) {
 	QAction *new_worksheet = new QAction(tr("New &Worksheet"), parent);
-// TODO:	new_worksheet->setShortcut(tr("...", "new worksheet shortcut"));
+	new_worksheet->setShortcut(tr("Ctrl+Shift+W", "new worksheet shortcut"));
 	new_worksheet->setIcon(QIcon(QPixmap(":/graph.xpm")));
 	WorksheetView::actionManager()->addAction(new_worksheet, "new_worksheet");
 	return new_worksheet;

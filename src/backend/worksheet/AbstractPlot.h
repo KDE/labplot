@@ -40,6 +40,9 @@ class AbstractPlot: public WorksheetElementContainer {
 		~AbstractPlot();
 
 		// TODO add abstract methods interface (such as transform(...))
+
+	protected:
+		AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd);
 };
 
 

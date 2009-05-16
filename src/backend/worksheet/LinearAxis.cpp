@@ -44,7 +44,7 @@
 
 // TODO: decide whether it makes sense to move some of the functionality into a class AbstractAxis
 
-class LinearAxis::Private {
+class LinearAxis::Private: public QGraphicsItemGroup {
 	public:
 		Private(LinearAxis *owner) : q(owner) {
 		}
@@ -69,16 +69,15 @@ class LinearAxis::Private {
 		TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 		TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
 
-		mutable QGraphicsItemGroup itemGroup;
 		mutable QGraphicsLineItem *axisLineItem;
 		mutable QList<QGraphicsLineItem *> majorTickItems;
 		mutable QList<QGraphicsLineItem *> minorTickItems;
 
-		void retransform() const;
-		void retransformTicks() const;
-		void retransformTicks(const AbstractCoordinateSystem *cSystem) const;
-		qreal setZValue(qreal z);
-		bool setVisible(bool on);
+		void retransform();
+		void retransformTicks();
+		void retransformTicks(const AbstractCoordinateSystem *cSystem);
+		qreal swapZValue(qreal z);
+		bool swapVisible(bool on);
 
 		LinearAxis * const q;
 };
@@ -98,7 +97,7 @@ LinearAxis::LinearAxis(const QString &name, const AxisOrientation &orientation)
 	d->majorTicksDirection = ticksOut;
 	d->minorTicksDirection = ticksOut;
 	d->axisLineItem = new QGraphicsLineItem();
-	d->itemGroup.addToGroup(d->axisLineItem);
+	d->addToGroup(d->axisLineItem);
 	retransform();
 }
 
@@ -250,13 +249,13 @@ void LinearAxis::setMinorTicksDirection(const TicksDirection &minorTicksDirectio
 
 /* ============================ other methods ================= */
 
-QList<QGraphicsItem *> LinearAxis::graphicsItems() const {
-	return QList<QGraphicsItem *>() << &(d->itemGroup);
+QGraphicsItem *LinearAxis::graphicsItem() const {
+	return d;
 }
 
-qreal LinearAxis::Private::setZValue(qreal z) {
-	qreal oldZ = itemGroup.zValue();
-	itemGroup.setZValue(z);
+qreal LinearAxis::Private::swapZValue(qreal z) {
+	qreal oldZ = zValue();
+	setZValue(z);
 	foreach(QGraphicsLineItem *item, majorTickItems)
 		item->setZValue(z);
 	foreach(QGraphicsLineItem *item, minorTickItems)
@@ -264,45 +263,47 @@ qreal LinearAxis::Private::setZValue(qreal z) {
 	return oldZ;
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetZ, qreal, setZValue);
+STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetZ, qreal, swapZValue);
 void LinearAxis::setZValue(qreal z) {
 	if (zValue() != z)
 		exec(new LinearAxisSetZCmd(d, z, tr("%1: set z value")));
 }
 
 qreal LinearAxis::zValue () const {
-	return d->itemGroup.zValue();;
+	return d->zValue();
 }
 
+#if 0
 QRectF LinearAxis::boundingRect() const {
-	return d->itemGroup.boundingRect();
+	return d->boundingRect();
 }
 
 bool LinearAxis::contains(const QPointF &position) const {
 	// TODO
 	return false;
 }
+#endif
 
-bool LinearAxis::Private::setVisible(bool on) {
-	bool oldValue = itemGroup.isVisible();
-	itemGroup.setVisible(on);
+bool LinearAxis::Private::swapVisible(bool on) {
+	bool oldValue = isVisible();
+	setVisible(on);
 	return oldValue;
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetVisible, bool, setVisible);
+STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetVisible, bool, swapVisible);
 void LinearAxis::setVisible(bool on) {
 	exec(new LinearAxisSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
 }
 
 bool LinearAxis::isVisible() const {
-	return d->itemGroup.isVisible();
+	return d->isVisible();
 }
 
-void LinearAxis::retransform() const {
+void LinearAxis::retransform() {
 	d->retransform();
 }
 
-void LinearAxis::Private::retransform() const {
+void LinearAxis::Private::retransform() {
 	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
 
 	QPointF startPoint;
@@ -328,33 +329,33 @@ void LinearAxis::Private::retransform() const {
 	retransformTicks(cSystem);
 }
 
-void LinearAxis::Private::retransformTicks() const {
+void LinearAxis::Private::retransformTicks() {
 	retransformTicks(q->coordinateSystem());
 }
 
-void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem) const {
+void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 	if (noTicks == majorTicksDirection) {
 		foreach(QGraphicsLineItem *item, majorTickItems)
-			itemGroup.removeFromGroup(item);
+			removeFromGroup(item);
 		while (majorTickItems.size() > majorTickCount)
 			delete majorTickItems.takeLast();
 	} else {
 		while (majorTickItems.size() > majorTickCount) {
 			QGraphicsLineItem *item = majorTickItems.takeLast();
-			itemGroup.removeFromGroup(item);
+			removeFromGroup(item);
 			delete item;
 		}
 	}
 
 	if (noTicks == minorTicksDirection || majorTickCount <= 1) {
 		foreach(QGraphicsLineItem *item, minorTickItems)
-			itemGroup.removeFromGroup(item);
+			removeFromGroup(item);
 		while (minorTickItems.size() > minorTickCount)
 			delete minorTickItems.takeLast();
 	} else {
 		while (minorTickItems.size() > minorTickCount) {
 			QGraphicsLineItem *item = minorTickItems.takeLast();
-			itemGroup.removeFromGroup(item);
+			removeFromGroup(item);
 			delete item;
 		}
 	}
@@ -413,9 +414,9 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 
 			if (majorTickItems.size() <= iMajor) {
 				QGraphicsLineItem *majorTick = new QGraphicsLineItem(QLineF(startPoint, endPoint));
-				majorTick->setZValue(itemGroup.zValue());
+				majorTick->setZValue(zValue());
 				majorTickItems.append(majorTick);
-				itemGroup.addToGroup(majorTick);
+				addToGroup(majorTick);
 			} else
 				majorTickItems.at(iMajor)->setLine(QLineF(startPoint, endPoint));
 		}
@@ -464,9 +465,9 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 
 				if (minorTickItems.size() <= (iMajor * minorTickCount + iMinor)) {
 					QGraphicsLineItem *minorTick = new QGraphicsLineItem(QLineF(startPoint, endPoint));
-					minorTick->setZValue(itemGroup.zValue());
+					minorTick->setZValue(zValue());
 					minorTickItems.append(minorTick);
-					itemGroup.addToGroup(minorTick);
+					addToGroup(minorTick);
 				} else
 					minorTickItems.at(iMajor * minorTickCount + iMinor)->setLine(QLineF(startPoint, endPoint));
 			}

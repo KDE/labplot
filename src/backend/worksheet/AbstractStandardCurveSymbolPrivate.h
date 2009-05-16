@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : AbstractStandardCurveSymbolPrivate.h
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Private class for AbstractStandardCurveSymbol and derived classes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#ifndef ABSTRACTSTANDARDCURVESYMBOLPRIVATE_H
+#define ABSTRACTSTANDARDCURVESYMBOLPRIVATE_H
 
-/**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
- *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
- */
+class AbstractStandardCurveSymbolPrivate {
+	public:
+    	AbstractStandardCurveSymbolPrivate();
+    	virtual ~AbstractStandardCurveSymbolPrivate();
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
-}
+		qreal size;
+		qreal aspectRatio;
+		qreal rotationAngle;
+		QBrush brush;
+		QPen pen;
+		void cloneHelper(const AbstractStandardCurveSymbolPrivate *other);
+};
+ 
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+#endif
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
 

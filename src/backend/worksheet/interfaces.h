@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorksheetElementGroup.cpp
+    File                 : interfaces.h
     Project              : LabPlot/SciDAVis
-    Description          : Groups worksheet elements for collective operations.
+    Description          : Worksheet related interfaces for plugins
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,25 +27,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#ifndef WORKSHEET_INTERFACES_H
+#define WORKSHEET_INTERFACES_H
 
-/**
- * \class WorksheetElementGroup
- * \brief Groups worksheet elements for collective operations.
- *
- * The role of this class is similar to object groups in a vector drawing program. 
- *
- */
+#include <QtPlugin>
+#include <QList>
+#include <QString>
+#include <QStringList>
+#include "worksheet/AbstractCurveSymbol.h"
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name) 
-	: WorksheetElementContainer(name) {
-}
+class CurveSymbolFactory
+{
+	public:
+		virtual ~CurveSymbolFactory() {}
+		virtual QList<const AbstractCurveSymbol *> prototypes() = 0;
+		virtual const AbstractCurveSymbol *prototype(const QString &id) = 0;
+		virtual QStringList ids() = 0;
+};
 
-WorksheetElementGroup::WorksheetElementGroup(const QString &name, WorksheetElementContainerPrivate *dd) 
-	: WorksheetElementContainer(name, dd) {
-}
+Q_DECLARE_INTERFACE(CurveSymbolFactory, "net.sf.scidavis.worksheet.curvesymbolfactory/0.1")
 
-WorksheetElementGroup::~WorksheetElementGroup() {
-}
+#endif
+
 

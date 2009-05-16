@@ -42,6 +42,11 @@ AbstractPlot::AbstractPlot(const QString &name)
 // TODO
 }
 
+AbstractPlot::AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd)
+	: WorksheetElementContainer(name, dd) {
+// TODO
+}
+
 AbstractPlot::~AbstractPlot() {
 // TODO
 }
