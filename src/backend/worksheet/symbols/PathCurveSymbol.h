@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : CrossCurveSymbol.h
+    File                 : PathCurveSymbol.h
     Project              : LabPlot/SciDAVis
-    Description          : Cross-shaped curve symbol.
+    Description          : A standard curve symbol defined by a painter path and a string id.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,32 +27,47 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CROSSCURVESYMBOL_H
-#define CROSSCURVESYMBOL_H
+#ifndef PATHCURVESYMBOL_H
+#define PATHCURVESYMBOL_H
 
-#include "worksheet/AbstractStandardCurveSymbol.h"
+#include <QtGlobal>
+#include "worksheet/AbstractCurveSymbol.h"
 
-class CrossCurveSymbolPrivate;
-class CrossCurveSymbol: public AbstractStandardCurveSymbol  {
+class PathCurveSymbolPrivate;
+class PathCurveSymbol: public QObject, public AbstractCurveSymbol  {
 	Q_OBJECT
 
 	public:
-		CrossCurveSymbol();
-		virtual ~CrossCurveSymbol();
+		PathCurveSymbol(const QString& symbolId);
+		virtual ~PathCurveSymbol();
 
-		QString id() const { return "cross"; }
+		virtual QString id() const;
+		virtual void setSize(qreal size);
+		virtual qreal size() const;
+		virtual void setAspectRatio(qreal aspectRatio);
+		virtual qreal aspectRatio() const;
+		virtual void setRotationAngle(qreal angle);
+		virtual qreal rotationAngle() const;
+		virtual void setBrush (const QBrush &brush);
+		virtual QBrush brush() const;
+		virtual void setPen(const QPen &pen);
+		virtual QPen pen() const;
+		virtual void setPath(const QPainterPath &path);
+		virtual QPainterPath path() const;
+
 		virtual AbstractCurveSymbol *clone() const;
-    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
-		QRectF boundingRect () const;
+
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0);
+		virtual QRectF boundingRect() const;
+		virtual QPainterPath shape() const;
 
 	protected:
-		CrossCurveSymbol(CrossCurveSymbolPrivate *dd);
+		PathCurveSymbolPrivate * const d_ptr;
+		PathCurveSymbol(PathCurveSymbolPrivate *dd);
 		
 	private:
-    	Q_DECLARE_PRIVATE(CrossCurveSymbol)
+    	Q_DECLARE_PRIVATE(PathCurveSymbol)
 };
 
 #endif
-
-
 

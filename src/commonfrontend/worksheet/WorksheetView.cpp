@@ -36,6 +36,7 @@
 #include "worksheet/WorksheetRectangleElement.h"
 #include "worksheet/LinearAxis.h"
 #include "worksheet/LineSymbolCurve.h"
+#include "worksheet/PlotArea.h"
 #include "lib/ActionManager.h"
 #include "core/column/Column.h"
 #include <QHBoxLayout>
@@ -192,15 +193,23 @@ void WorksheetView::init() {
 	QTimer::singleShot(0, this, SLOT(startTestCode()));
 }
 
+#include "worksheet/PlotAreaPrivate.h"
+
 void WorksheetView::startTestCode() {
 	QRectF pageRect = m_model->scene()->sceneRect();
+
 	DecorationPlot *plot = new DecorationPlot("plot1");
 	m_worksheet->addChild(plot);
 	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords1");
 	coordSys->setPosition(QPointF(pageRect.width() * 0.2, pageRect.height() * 0.8));
 	coordSys->setScaleX(0.1);
 	coordSys->setScaleY(-0.1);
-//	plot->addChild(coordSys);
+	plot->addChild(coordSys);
+	PlotArea *plotArea = new PlotArea("plot area");
+	plotArea->setRect(QRectF(0, 0, 10, 10));
+	plotArea->setClippingEnabled(true);
+	coordSys->addChild(plotArea);
+	
 	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
 	rect->setRect(QRectF(0, 0, 40, 30));
 //	coordSys->addChild(rect);
@@ -215,7 +224,7 @@ void WorksheetView::startTestCode() {
 //	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 5, 20, 20)));
 //	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(4, 5, 25, 15)));
 //	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 3, 26, 25)));
-	coordSys->addChild(group1);
+	plotArea->addChild(group1);
 
 	LinearAxis *xAxis1 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
 //	plot->addChild(xAxis1);
@@ -244,22 +253,54 @@ void WorksheetView::startTestCode() {
 	yAxis3->setTickEnd(9.5);
 	yAxis3->setMajorTickCount(9);
 	coordSys->addChild(yAxis3);
-	coordSys->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
+//	plotArea->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
 
 	Column *xc = new Column("xc", SciDAVis::Numeric);
 	Column *yc = new Column("yc", SciDAVis::Numeric);
 	for (int i=0; i<20; i++)	{
 		xc->setValueAt(i, i*0.25);
-		yc->setValueAt(i, i*i*0.01);
+		yc->setValueAt(i, i*i*0.01+1);
 	}
 
 	LineSymbolCurve *curve1 = new LineSymbolCurve("curve 1");
 	curve1->setXColumn(xc);
 	curve1->setYColumn(yc);
 
-	coordSys->addChild(curve1);
+	Column *xc2 = new Column("xc", SciDAVis::Numeric);
+	Column *yc2 = new Column("yc", SciDAVis::Numeric);
+	for (int i=0; i<20; i++)	{
+		xc2->setValueAt(i, i*0.25);
+		yc2->setValueAt(i, i*i*0.01/2+2);
+	}
+	LineSymbolCurve *curve2 = new LineSymbolCurve("curve 2");
+	curve2->setXColumn(xc2);
+	curve2->setYColumn(yc2);
 
-	plot->addChild(coordSys);
+	Column *xc3 = new Column("xc", SciDAVis::Numeric);
+	Column *yc3 = new Column("yc", SciDAVis::Numeric);
+	for (int i=0; i<20; i++)	{
+		xc3->setValueAt(i, i*0.25);
+		yc3->setValueAt(i, i*i*0.01*2+3);
+	}
+	LineSymbolCurve *curve3 = new LineSymbolCurve("curve 3");
+	curve3->setXColumn(xc3);
+	curve3->setYColumn(yc3);
+
+	WorksheetElementContainer *group2 = new WorksheetElementContainer("some more items");
+	group2->addChild(curve3);
+	plotArea->addChild(group2);
+
+
+	plotArea->addChild(curve2);
+	plotArea->addChild(curve1);
+	
+	WorksheetRectangleElement *bigRect = new WorksheetRectangleElement("bigRect");
+	bigRect->setRect(QRectF(0, 0, 200, 200));
+//	plotArea->addChild(bigRect);
+	bigRect->m_item.setBrush(QBrush(Qt::blue));
+
+//	coordSys->addChild(plotArea);
+//	plot->addChild(coordSys);
 }
 
 void WorksheetView::createActions() {

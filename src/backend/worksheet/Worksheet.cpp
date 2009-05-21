@@ -113,11 +113,9 @@ void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 	if (addedElement) {
 		const_cast<AbstractWorksheetElement *>(addedElement)->retransform();
 
-		QList<AbstractWorksheetElement *> children = addedElement->children<AbstractWorksheetElement>(IncludeHidden | Recursive | Compress);
-		children.append(const_cast<AbstractWorksheetElement *>(addedElement));
-
-		foreach(AbstractWorksheetElement *elem, children) {
-			QGraphicsItem *item = elem->graphicsItem();
+		if (aspect->parentAspect() == this)
+		{
+			QGraphicsItem *item = addedElement->graphicsItem();
 			if (item)
 				m_scene->addItem(item);
 		}
@@ -126,15 +124,10 @@ void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 	const AbstractWorksheetElement *removedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
-	if (removedElement) {
-		QList<AbstractWorksheetElement *> children = removedElement->children<AbstractWorksheetElement>(IncludeHidden | Recursive | Compress);
-		children.append(const_cast<AbstractWorksheetElement *>(removedElement));
-
-		foreach(AbstractWorksheetElement *elem, children) {
-			QGraphicsItem *item = elem->graphicsItem();
-			if (item)
-				m_scene->removeItem(item);
-		}
+	if (removedElement && (aspect->parentAspect() == this)) {
+		QGraphicsItem *item = removedElement->graphicsItem();
+		if (item)
+			m_scene->removeItem(item);
 	}
 }
 

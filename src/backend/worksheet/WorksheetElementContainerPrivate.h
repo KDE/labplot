@@ -30,11 +30,19 @@
 #ifndef WORKSHEETELEMENTCONTAINERPRIVATE_H
 #define WORKSHEETELEMENTCONTAINERPRIVATE_H
 
-#include <QGraphicsItemGroup>
+#include <QGraphicsItem>
+#include <QPainter>
 
-class WorksheetElementContainerPrivate: public QGraphicsItemGroup {
+class WorksheetElementContainer;
+class WorksheetElementContainerPrivate: public QGraphicsItem {
 	public:
-		virtual ~WorksheetElementContainerPrivate() {}
+		WorksheetElementContainerPrivate(WorksheetElementContainer *owner);
+		virtual ~WorksheetElementContainerPrivate();
+    
+		virtual QRectF boundingRect() const;
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+		WorksheetElementContainer *q;
 };
 
 #endif

@@ -70,6 +70,7 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 		virtual void retransform();
 
 	private:
+	public:
 		mutable QGraphicsRectItem m_item;
 		QRectF m_rect;
 };

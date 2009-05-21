@@ -80,11 +80,6 @@ class LinearAxis: public AbstractWorksheetElement {
 
 		//TODO: all style related stuff (line widths, color, ...)
 
-#if 0
-    	virtual QRectF boundingRect() const;
-		virtual bool contains(const QPointF &position) const;
-#endif
-
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 

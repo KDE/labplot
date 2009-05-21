@@ -34,10 +34,10 @@
 #include <QPen>
 #include <QBrush>
 
-class AbstractCurveSymbol: public QGraphicsItem  {
+class AbstractCurveSymbol  {
 	public:
 		AbstractCurveSymbol();
-		virtual ~AbstractCurveSymbol() {}
+		virtual ~AbstractCurveSymbol();
 
 		virtual QString id() const = 0;
 		virtual void setSize(qreal size) = 0;
@@ -51,6 +51,10 @@ class AbstractCurveSymbol: public QGraphicsItem  {
 		virtual void setPen(const QPen &pen) = 0;
 		virtual QPen pen() const = 0;
 		virtual AbstractCurveSymbol *clone() const = 0;
+
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0) = 0;
+		virtual QRectF boundingRect() const = 0;
+		virtual QPainterPath shape() const = 0;
 };
 
 #endif

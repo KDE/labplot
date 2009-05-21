@@ -43,7 +43,8 @@
 
 class CartesianCoordinateSystemPrivate: public WorksheetElementContainerPrivate {
 	public:
-		CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner) : q(owner) {
+		CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner) 
+			: WorksheetElementContainerPrivate(owner) {
 		}
 
 		~CartesianCoordinateSystemPrivate() {
@@ -56,8 +57,6 @@ class CartesianCoordinateSystemPrivate: public WorksheetElementContainerPrivate 
 		QPointF position; //!< scene position of the origin
 		qreal scaleX; //!< X ratio logical units / scene units
 		qreal scaleY; //!< Y ratio logical units / scene units
-
-		CartesianCoordinateSystem * const q;
 };
 
 CartesianCoordinateSystem::CartesianCoordinateSystem(const QString &name) 
@@ -159,49 +158,7 @@ int CartesianCoordinateSystem::yDirection() const {
 	return scaleY() < 0 ? -1 : 1;
 }
 
-class TestItemGroup : public QGraphicsItemGroup {
-
-	public:
-		QRectF rect;
-
-		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                                 QWidget *widget) { }
-
-		virtual QRectF boundingRect () const { return rect; }
-		virtual QPainterPath shape () const { QPainterPath path; path.addRect(rect); return path; }
-};
-
 QGraphicsItem *CartesianCoordinateSystem::graphicsItem() const {
 	return d_ptr;
-#if 0
-//	QGraphicsRectItem *clipRect = new QGraphicsRectItem(QRectF(mapLogicalToScene(QPointF(0, 0)), mapLogicalToScene(QPointF(3, 3))));
-//	qDebug() << clipRect->rect();
-	TestItemGroup *clipRect = new TestItemGroup();
-	clipRect->rect = QRectF(mapLogicalToScene(QPointF(0, 0)), mapLogicalToScene(QPointF(6, 6)));
-
-	QList<QGraphicsItem *> itemList;
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const AbstractWorksheetElement *elem, childList)
-	{
-		itemList << elem->graphicsItems();
-	}
-
-	foreach(QGraphicsItem *item, itemList)
-	{
-		clipRect->addToGroup(item);
-//		item->setParentItem(clipRect);
-	}
-	clipRect->setFlag(QGraphicsItem::ItemClipsChildrenToShape);
-//	clipRect->setPen(QPen(Qt::green));
-
-	QGraphicsRectItem *rect2 = new QGraphicsRectItem(QRectF(mapLogicalToScene(QPointF(1, 1)), mapLogicalToScene(QPointF(4, 4))));
-//	QGraphicsItemGroup *gr1 = new QGraphicsItemGroup();
-//	gr1->addToGroup(rect2);
-//	gr1->setParentItem(clipRect);
-	clipRect->addToGroup(rect2);
-
-//	return itemList;
-	return QList<QGraphicsItem *>() << clipRect;
-#endif
 }
 

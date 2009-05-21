@@ -46,14 +46,13 @@ class AbstractWorksheetElement: public AbstractAspect {
 		virtual void setZValue(qreal z) = 0;
 		virtual qreal zValue() const = 0;
 
-//    	virtual QRectF boundingRect() const = 0;
-//		virtual bool contains(const QPointF &position) const = 0;
-
 		virtual void setVisible(bool on) = 0;
 		virtual bool isVisible() const = 0;
 		virtual bool isFullyVisible() const;
 
 		virtual AbstractCoordinateSystem *coordinateSystem() const;
+
+		static QPainterPath shapeFromPath(const QPainterPath &path, const QPen &pen);
 
 	public slots:
 		virtual void retransform() = 0;

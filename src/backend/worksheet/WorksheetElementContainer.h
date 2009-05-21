@@ -49,12 +49,6 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		virtual void setZValueRange(qreal minZ, qreal maxZ);
 		virtual qreal zValueMin() const ;
 		virtual qreal zValueMax() const ;
-
-#if 0
-    	virtual QRectF boundingRect() const;
-		virtual bool contains(const QPointF &position) const;
-#endif
-
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual bool isFullyVisible() const;

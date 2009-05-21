@@ -31,6 +31,10 @@
 #include "worksheet/AbstractWorksheetElement.h"
 #include "worksheet/AbstractCoordinateSystem.h"
 
+#include <QPen>
+#include <QPainterPath>
+#include <QPainterPathStroker>
+
 /**
  * \class AbstractWorksheetElement
  * \brief Base class for all Worksheet children.
@@ -136,5 +140,29 @@ AbstractCoordinateSystem *AbstractWorksheetElement::coordinateSystem() const {
 		parent = parent->parentAspect();
 	}
 	return NULL;
+}
+
+/**
+    This does exactly what Qt internally does to creates a shape from a painter path.
+*/
+QPainterPath AbstractWorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen)
+{
+    // We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
+    // if we pass a value of 0.0 to QPainterPathStroker::setWidth()
+    const qreal penWidthZero = qreal(0.00000001);
+
+    if (path == QPainterPath())
+        return path;
+    QPainterPathStroker ps;
+    ps.setCapStyle(pen.capStyle());
+    if (pen.widthF() <= 0.0)
+        ps.setWidth(penWidthZero);
+    else
+        ps.setWidth(pen.widthF());
+    ps.setJoinStyle(pen.joinStyle());
+    ps.setMiterLimit(pen.miterLimit());
+    QPainterPath p = ps.createStroke(path);
+    p.addPath(path);
+    return p;
 }
 

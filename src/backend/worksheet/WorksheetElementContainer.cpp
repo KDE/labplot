@@ -29,6 +29,7 @@
 
 #include "worksheet/WorksheetElementContainer.h"
 #include "worksheet/WorksheetElementContainerPrivate.h"
+#include <QtDebug>
 
 /**
  * \class WorksheetElementContainer
@@ -39,12 +40,27 @@
  *
  */
 
+WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
+	: q(owner) {
+}
+
+WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate() {
+}
+
 WorksheetElementContainer::WorksheetElementContainer(const QString &name) 
-	: AbstractWorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate()) {
+	: AbstractWorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
+	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
+		this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd)
     : AbstractWorksheetElement(name), d_ptr(dd) {
+	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
+		this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 }
 
 WorksheetElementContainer::~WorksheetElementContainer() {
@@ -123,24 +139,19 @@ qreal WorksheetElementContainer::zValueMax() const {
 	return max;
 }
 
-#if 0
-QRectF WorksheetElementContainer::boundingRect() const {
+QRectF WorksheetElementContainerPrivate::boundingRect() const {
 	QRectF rect;
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	QList<AbstractWorksheetElement *> childList = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(const AbstractWorksheetElement *elem, childList)
-		rect |= elem->boundingRect();
+		rect |= elem->graphicsItem()->boundingRect();
 	return rect;
 }
-
-bool WorksheetElementContainer::contains(const QPointF &position) const {
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const AbstractWorksheetElement *elem, childList) {
-		if (elem->contains(position))
-			return true;
-	}
-	return false;
+    
+void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+	Q_UNUSED(painter)
+	Q_UNUSED(option)
+	Q_UNUSED(widget)
 }
-#endif
 
 void WorksheetElementContainer::setVisible(bool on) {
 	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
@@ -179,18 +190,16 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 	if (elem && (elem->parentAspect() == this)) {
 		QGraphicsItem *item = elem->graphicsItem();
 		if (item)
-			d->addToGroup(item);
+			item->setParentItem(d);			
 	}
 }
 
 void WorksheetElementContainer::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
-	Q_D(WorksheetElementContainer);
-
 	const AbstractWorksheetElement *elem = qobject_cast<const AbstractWorksheetElement*>(aspect);
 	if (elem && (elem->parentAspect() == this)) {
 		QGraphicsItem *item = elem->graphicsItem();
 		if (item)
-			d->removeFromGroup(item);
+			item->setParentItem(NULL);			
 	}
 }
 

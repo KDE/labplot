@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : AbstractStandardCurveSymbol.h
+    File                 : PathCurveSymbolPrivate.h
     Project              : LabPlot/SciDAVis
-    Description          : Implements several methods used by many curve symbols.
+    Description          : Private class for PathCurveSymbol and derived classes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,37 +27,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTSTANDARDCURVESYMBOL_H
-#define ABSTRACTSTANDARDCURVESYMBOL_H
+#ifndef PATHCURVESYMBOLPRIVATE_H
+#define PATHCURVESYMBOLPRIVATE_H
 
-#include <QtGlobal>
-#include "worksheet/AbstractCurveSymbol.h"
-
-class AbstractStandardCurveSymbolPrivate;
-class AbstractStandardCurveSymbol: public QObject, public AbstractCurveSymbol  {
-	Q_OBJECT
-
+class PathCurveSymbolPrivate {
 	public:
-		AbstractStandardCurveSymbol();
-		virtual ~AbstractStandardCurveSymbol() {}
+    	PathCurveSymbolPrivate(const QString &symbolId);
+    	virtual ~PathCurveSymbolPrivate();
 
-		virtual void setSize(qreal size);
-		virtual qreal size() const;
-		virtual void setAspectRatio(qreal aspectRatio);
-		virtual qreal aspectRatio() const;
-		virtual void setRotationAngle(qreal angle);
-		virtual qreal rotationAngle() const;
-		virtual void setBrush (const QBrush &brush);
-		virtual QBrush brush() const;
-		virtual void setPen(const QPen &pen);
-		virtual QPen pen() const;
-	protected:
-		AbstractStandardCurveSymbolPrivate * const d_ptr;
-		AbstractStandardCurveSymbol(AbstractStandardCurveSymbolPrivate *dd);
-		
-	private:
-    	Q_DECLARE_PRIVATE(AbstractStandardCurveSymbol)
+		qreal size;
+		qreal aspectRatio;
+		qreal rotationAngle;
+		QBrush brush;
+		QPen pen;
+		QPainterPath path;
+		mutable QRectF boundingRect;
+		QString id;
+		void cloneHelper(const PathCurveSymbolPrivate *other);
 };
+ 
 
 #endif
+
 

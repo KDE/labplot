@@ -122,11 +122,11 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
 	${BACKEND_DIR}/worksheet/LineSymbolCurve.cpp
 	${BACKEND_DIR}/worksheet/AbstractCurveSymbol.cpp
-	${BACKEND_DIR}/worksheet/AbstractStandardCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/symbols/EllipseCurveSymbol.cpp
+	${BACKEND_DIR}/worksheet/symbols/PathCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/StandardCurveSymbolFactory.cpp
-	${BACKEND_DIR}/worksheet/symbols/CrossCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/AbstractWorksheetDecorationElement.cpp
+	${BACKEND_DIR}/worksheet/PlotArea.cpp
 )
 
 set(QTFRONTEND_SOURCES

@@ -28,7 +28,7 @@
  ***************************************************************************/
 
 #include "worksheet/StandardCurveSymbolFactory.h"
-#include "worksheet/symbols/CrossCurveSymbol.h"
+#include "worksheet/symbols/PathCurveSymbol.h"
 #ifndef QT_STATICPLUGIN
 #define QT_STATICPLUGIN
 #endif
@@ -46,7 +46,25 @@ StandardCurveSymbolFactory::~StandardCurveSymbolFactory() {
 }
 
 void StandardCurveSymbolFactory::init() {
-	m_prototypes.append(new CrossCurveSymbol());
+	QPainterPath path;
+	PathCurveSymbol *symbol = NULL;
+
+	path = QPainterPath(QPointF(0, -0.5));
+	path.lineTo(0, 0.5);
+	path.moveTo(-0.5, 0);
+	path.lineTo(0.5, 0);
+	symbol = new PathCurveSymbol("cross");
+	symbol->setPath(path);
+	m_prototypes.append(symbol);
+
+	path = QPainterPath(QPointF(0, -0.5));
+	path.lineTo(0.5, 0);
+	path.lineTo(0, 0.5);
+	path.lineTo(-0.5, 0);
+	path.lineTo(0, -0.5);
+	symbol = new PathCurveSymbol("diamond");
+	symbol->setPath(path);
+	m_prototypes.append(symbol);
 }
 
 QList<const AbstractCurveSymbol *> StandardCurveSymbolFactory::prototypes() {

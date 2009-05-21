@@ -44,7 +44,7 @@
 
 // TODO: decide whether it makes sense to move some of the functionality into a class AbstractAxis
 
-class LinearAxis::Private: public QGraphicsItemGroup {
+class LinearAxis::Private: public QGraphicsItem {
 	public:
 		Private(LinearAxis *owner) : q(owner) {
 		}
@@ -68,6 +68,9 @@ class LinearAxis::Private: public QGraphicsItemGroup {
 		qreal minorTicksLength; //!< minor tick length (in page units!)
 		TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 		TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
+
+		virtual QRectF boundingRect() const { return QRectF(); }
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) { }
 
 		mutable QGraphicsLineItem *axisLineItem;
 		mutable QList<QGraphicsLineItem *> majorTickItems;
@@ -97,7 +100,7 @@ LinearAxis::LinearAxis(const QString &name, const AxisOrientation &orientation)
 	d->majorTicksDirection = ticksOut;
 	d->minorTicksDirection = ticksOut;
 	d->axisLineItem = new QGraphicsLineItem();
-	d->addToGroup(d->axisLineItem);
+	d->axisLineItem->setParentItem(d);
 	retransform();
 }
 
@@ -273,17 +276,6 @@ qreal LinearAxis::zValue () const {
 	return d->zValue();
 }
 
-#if 0
-QRectF LinearAxis::boundingRect() const {
-	return d->boundingRect();
-}
-
-bool LinearAxis::contains(const QPointF &position) const {
-	// TODO
-	return false;
-}
-#endif
-
 bool LinearAxis::Private::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
@@ -336,26 +328,26 @@ void LinearAxis::Private::retransformTicks() {
 void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 	if (noTicks == majorTicksDirection) {
 		foreach(QGraphicsLineItem *item, majorTickItems)
-			removeFromGroup(item);
+			item->setParentItem(NULL);
 		while (majorTickItems.size() > majorTickCount)
 			delete majorTickItems.takeLast();
 	} else {
 		while (majorTickItems.size() > majorTickCount) {
 			QGraphicsLineItem *item = majorTickItems.takeLast();
-			removeFromGroup(item);
+			item->setParentItem(NULL);
 			delete item;
 		}
 	}
 
 	if (noTicks == minorTicksDirection || majorTickCount <= 1) {
 		foreach(QGraphicsLineItem *item, minorTickItems)
-			removeFromGroup(item);
+			item->setParentItem(NULL);
 		while (minorTickItems.size() > minorTickCount)
 			delete minorTickItems.takeLast();
 	} else {
 		while (minorTickItems.size() > minorTickCount) {
 			QGraphicsLineItem *item = minorTickItems.takeLast();
-			removeFromGroup(item);
+			item->setParentItem(NULL);
 			delete item;
 		}
 	}
@@ -416,7 +408,7 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 				QGraphicsLineItem *majorTick = new QGraphicsLineItem(QLineF(startPoint, endPoint));
 				majorTick->setZValue(zValue());
 				majorTickItems.append(majorTick);
-				addToGroup(majorTick);
+				majorTick->setParentItem(this);
 			} else
 				majorTickItems.at(iMajor)->setLine(QLineF(startPoint, endPoint));
 		}
@@ -467,7 +459,7 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 					QGraphicsLineItem *minorTick = new QGraphicsLineItem(QLineF(startPoint, endPoint));
 					minorTick->setZValue(zValue());
 					minorTickItems.append(minorTick);
-					addToGroup(minorTick);
+					minorTick->setParentItem(this);
 				} else
 					minorTickItems.at(iMajor * minorTickCount + iMinor)->setLine(QLineF(startPoint, endPoint));
 			}

@@ -36,8 +36,10 @@
  * 
  */
 
-AbstractCurveSymbol::AbstractCurveSymbol()
-	: QGraphicsItem(0) {
+AbstractCurveSymbol::AbstractCurveSymbol() {
+}
+
+AbstractCurveSymbol::~AbstractCurveSymbol() {
 }
 
 /**
@@ -89,5 +91,18 @@ AbstractCurveSymbol::AbstractCurveSymbol()
 /**
  * \fn AbstractCurveSymbol *clone() const;
  * \brief Get a copy of the symbol.
+ */
+
+/**
+  \fn void AbstractCurveSymbol::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0) = 0;
+  \brief same as QGraphicsItem::paint()
+ */
+/**
+  \fn QRectF AbstractCurveSymbol::boundingRect() const = 0;
+  \brief same as QGraphicsItem::boundingRect()
+ */
+/**
+  \fn QPainterPath AbstractCurveSymbol::shape() const = 0;
+  \brief same as QGraphicsItem::shape()
  */
 

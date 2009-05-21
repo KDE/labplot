@@ -31,13 +31,14 @@ HEADERS += \
 	LinearAxis.h \
 	LineSymbolCurve.h \
 	AbstractCurveSymbol.h \
-	AbstractStandardCurveSymbol.h \
 	interfaces.h \
 	symbols/EllipseCurveSymbol.h \
 	StandardCurveSymbolFactory.h \
-	symbols/CrossCurveSymbol.h \
-	AbstractStandardCurveSymbolPrivate.h \
+	symbols/PathCurveSymbol.h \
+	symbols/PathCurveSymbolPrivate.h \
 	AbstractWorksheetDecorationElement.h \
+	PlotArea.h \
+	PlotAreaPrivate.h \
 	
 SOURCES += \
 	WorksheetModule.cpp \
@@ -56,9 +57,9 @@ SOURCES += \
 	LinearAxis.cpp \
 	LineSymbolCurve.cpp \
 	AbstractCurveSymbol.cpp \
-	AbstractStandardCurveSymbol.cpp \
 	symbols/EllipseCurveSymbol.cpp \
 	StandardCurveSymbolFactory.cpp \
-	symbols/CrossCurveSymbol.cpp \
+	symbols/PathCurveSymbol.cpp \
 	AbstractWorksheetDecorationElement.cpp \ 
+	PlotArea.cpp \
 

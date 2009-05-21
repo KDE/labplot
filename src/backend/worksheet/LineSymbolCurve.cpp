@@ -98,7 +98,7 @@ class LineSymbolCurve::Private: public QGraphicsItem {
 LineSymbolCurve::Private::Private(LineSymbolCurve *owner): q(owner) {
 	lineVisible = true;
 	symbolsVisible = true;
-	symbolTypeId = "ellipse";
+	symbolTypeId = "diamond";
 	xColumn = NULL;
 	yColumn = NULL;
 	symbolRotationAngle = 0;
@@ -144,19 +144,19 @@ LineSymbolCurve::~LineSymbolCurve() {
 /* ============================ accessor documentation ================= */
 /**
   \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
-  \brief Set the line visible/invisible.
+  \brief Set/get whether the line is visible/invisible.
 */
 /**
   \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
-  \brief Set the symbols visible/invisible.
+  \brief Set/get whether the symbols are visible/invisible.
 */
 /**
   \fn   LineSymbolCurve::POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
-  \brief Set the pointer to the X column.
+  \brief Set/get the pointer to the X column.
 */
 /**
   \fn   LineSymbolCurve::POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
-  \brief Set the pointer to the Y column.
+  \brief Set/get the pointer to the Y column.
 */
 
 /* ============================ getter methods ================= */
@@ -212,17 +212,6 @@ void LineSymbolCurve::setZValue(qreal z) {
 qreal LineSymbolCurve::zValue () const {
 	return d->zValue();
 }
-
-#if 0
-QRectF LineSymbolCurve::boundingRect() const {
-	return d->boundingRect();
-}
-
-bool LineSymbolCurve::contains(const QPointF &position) const {
-	// TODO
-	return false;
-}
-#endif
 
 bool LineSymbolCurve::Private::swapVisible(bool on) {
 	bool oldValue = isVisible();
@@ -388,10 +377,12 @@ void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphi
 		painter->drawPath(linePath);
 
 	if (symbolsVisible)
+	{
 		foreach(QPointF point, symbolPoints) {
 			painter->translate(point);
 			symbolPrototype->paint(painter, option, widget);
 			painter->translate(-point);
 		}
+	}
 }
 

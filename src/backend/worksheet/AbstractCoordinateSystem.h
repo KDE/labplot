@@ -39,8 +39,13 @@ class AbstractCoordinateSystem: public WorksheetElementContainer {
 		AbstractCoordinateSystem(const QString &name);
 		virtual ~AbstractCoordinateSystem();
 
-		virtual QPointF mapLogicalToScene(const QPointF &point) const = 0;
-		virtual QPointF mapSceneToLogical(const QPointF &point) const = 0;
+		virtual QPointF mapLogicalToScene(const QPointF &points) const = 0;
+		virtual QPointF mapSceneToLogical(const QPointF &points) const = 0;
+		// TODO:
+//		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points) const = 0;
+//		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points) const = 0;
+//		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines) const = 0;
+//		virtual QList<QLineF> mapSceneToLogical(const QList<QLineF> &lines) const = 0;
 
 	protected:
 		AbstractCoordinateSystem(const QString &name, WorksheetElementContainerPrivate *dd);

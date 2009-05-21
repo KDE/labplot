@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : AbstractStandardCurveSymbolPrivate.h
+    File                 : PlotArea.h
     Project              : LabPlot/SciDAVis
-    Description          : Private class for AbstractStandardCurveSymbol and derived classes.
+    Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,22 +27,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTSTANDARDCURVESYMBOLPRIVATE_H
-#define ABSTRACTSTANDARDCURVESYMBOLPRIVATE_H
+#ifndef PLOTAREA_H
+#define PLOTAREA_H
 
-class AbstractStandardCurveSymbolPrivate {
+#include "worksheet/WorksheetElementContainer.h"
+#include "lib/macros.h"
+#include <QObject>
+
+class PlotAreaPrivate;
+class PlotArea: public WorksheetElementContainer {
+	Q_OBJECT
+
 	public:
-    	AbstractStandardCurveSymbolPrivate();
-    	virtual ~AbstractStandardCurveSymbolPrivate();
+		PlotArea(const QString &name);
+		virtual ~PlotArea();
 
-		qreal size;
-		qreal aspectRatio;
-		qreal rotationAngle;
-		QBrush brush;
-		QPen pen;
-		void cloneHelper(const AbstractStandardCurveSymbolPrivate *other);
+		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled);
+		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect);
+
+		virtual void retransform();
+
+		typedef PlotAreaPrivate Private;
+
+	protected:
+		PlotArea(const QString &name, PlotAreaPrivate *dd);
+
+	private:
+    	Q_DECLARE_PRIVATE(PlotArea)
 };
- 
 
 #endif
 

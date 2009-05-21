@@ -30,28 +30,18 @@
 #ifndef ELLIPSECURVESYMBOL_H
 #define ELLIPSECURVESYMBOL_H
 
-#include "worksheet/AbstractStandardCurveSymbol.h"
+#include "worksheet/symbols/PathCurveSymbol.h"
 
-class EllipseCurveSymbolPrivate;
-class EllipseCurveSymbol: public AbstractStandardCurveSymbol  {
+class EllipseCurveSymbol: public PathCurveSymbol  {
 	Q_OBJECT
 
 	public:
 		EllipseCurveSymbol();
 		virtual ~EllipseCurveSymbol();
 
-		QString id() const { return "ellipse"; }
-		virtual AbstractCurveSymbol *clone() const;
-    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
-		QRectF boundingRect () const;
-
 		static const EllipseCurveSymbol *staticPrototype();
 
-	protected:
-		EllipseCurveSymbol(EllipseCurveSymbolPrivate *dd);
-		
 	private:
-    	Q_DECLARE_PRIVATE(EllipseCurveSymbol)
 		static EllipseCurveSymbol *m_staticPrototype;
 };
 

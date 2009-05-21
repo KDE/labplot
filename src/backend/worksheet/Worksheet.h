@@ -56,6 +56,7 @@ class Worksheet: public AbstractPart, public scripted {
 		void handleAspectAboutToBeRemoved(const AbstractAspect *handleAspect);
 
 	private:
+	public:
 		mutable QWidget *m_view;
 		WorksheetGraphicsScene *m_scene;
 		WorksheetGraphicsScene *scene() const;
