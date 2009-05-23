@@ -34,6 +34,7 @@
 #include <QPen>
 #include <QPainterPath>
 #include <QPainterPathStroker>
+#include <QMenu>
 
 /**
  * \class AbstractWorksheetElement
@@ -43,9 +44,23 @@
 
 AbstractWorksheetElement::AbstractWorksheetElement(const QString &name)
 		: AbstractAspect(name) {
+	
+	m_drawingOrderMenu = new QMenu(tr("Drawing &order"));
+	m_moveBehindMenu = new QMenu(tr("Move &behind"));
+	m_moveInFrontOfMenu = new QMenu(tr("Move in &front of"));
+	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
+	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
+
+	connect(m_moveBehindMenu, SIGNAL(aboutToShow()), this, SLOT(prepareMoveBehindMenu()));
+	connect(m_moveInFrontOfMenu, SIGNAL(aboutToShow()), this, SLOT(prepareMoveInFrontOfMenu()));
+	connect(m_moveBehindMenu, SIGNAL(triggered(QAction*)), this, SLOT(execMoveBehind(QAction*)));
+	connect(m_moveInFrontOfMenu, SIGNAL(triggered(QAction*)), this, SLOT(execMoveInFrontOf(QAction*)));
 }
 
 AbstractWorksheetElement::~AbstractWorksheetElement() {
+	delete m_moveBehindMenu;
+	delete m_moveInFrontOfMenu;
+	delete m_drawingOrderMenu;
 }
 
 /**
@@ -54,42 +69,6 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
  *
  *
  */
-
-/**
- * \fn void AbstractWorksheetElement::setZValue(qreal z)
- * \brief Set the Z value for the drawing order.
- *
- * An element of high Z-value will be drawn on top of all elements in the worksheet with a lower Z-value.
- * Contrary to a QGraphicsItem's Z-value, the parent-child relation does not matter here. Using this
- * function on worksheet element containers is mostly not what you want, 
- * use WorksheetElementContainer::setZValueRange() instead.
- *
- * \see void AbstractWorksheetElement::setZValueRange(qreal minZ, qreal maxZ)
- */
-
-/**
- * \fn qreal AbstractWorksheetElement::zValue () const
- * \brief Return the Z value for the drawing order.
- *
- * Using this function on worksheet element containers is mostly not what you want, 
- * use WorksheetElementContainer::zValueMin() and WorksheetElementContainer::zValueMax() instead.
- *
- * \see setZValue()
- */
-
-#if 0
-/**
- * \fn QRectF AbstractWorksheetElement::boundingRect() const
- * \brief Return the bounding rect in scene coodinates.
- *
- */
-
-/**
- * \fn bool AbstractWorksheetElement::contains(const QPointF &position) const
- * \brief Return whether the given position is inside the element.
- *
- */
-#endif
 
 /**
  * \fn void AbstractWorksheetElement::setVisible(bool on)
@@ -145,8 +124,7 @@ AbstractCoordinateSystem *AbstractWorksheetElement::coordinateSystem() const {
 /**
     This does exactly what Qt internally does to creates a shape from a painter path.
 */
-QPainterPath AbstractWorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen)
-{
+QPainterPath AbstractWorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen) {
     // We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
     // if we pass a value of 0.0 to QPainterPathStroker::setWidth()
     const qreal penWidthZero = qreal(0.00000001);
@@ -164,5 +142,70 @@ QPainterPath AbstractWorksheetElement::shapeFromPath(const QPainterPath &path, c
     QPainterPath p = ps.createStroke(path);
     p.addPath(path);
     return p;
+}
+
+QMenu *AbstractWorksheetElement::createContextMenu() {
+	QMenu *menu = AbstractAspect::createContextMenu();
+    
+	menu->addSeparator();
+	menu->addMenu(m_drawingOrderMenu);
+	menu->addSeparator();
+
+	return menu;
+}
+
+void AbstractWorksheetElement::prepareMoveBehindMenu() {
+	m_moveBehindMenu->clear();
+	AbstractAspect *parent = parentAspect();
+	if (parent) {
+		QList<AbstractWorksheetElement *> childElements = parent->children<AbstractWorksheetElement>();
+		foreach(AbstractWorksheetElement *elem, childElements) {
+			if (elem != this) {
+				QAction *action = m_moveBehindMenu->addAction(elem->name());
+				action->setData(parent->indexOfChild<AbstractWorksheetElement>(elem));
+			}	
+		}
+	}
+}
+
+void AbstractWorksheetElement::prepareMoveInFrontOfMenu() {
+	m_moveInFrontOfMenu->clear();
+	AbstractAspect *parent = parentAspect();
+	if (parent) {
+		QList<AbstractWorksheetElement *> childElements = parent->children<AbstractWorksheetElement>();
+		foreach(AbstractWorksheetElement *elem, childElements) {
+			if (elem != this) {
+				QAction *action = m_moveInFrontOfMenu->addAction(elem->name());
+				action->setData(parent->indexOfChild<AbstractWorksheetElement>(elem));
+			}	
+		}
+	}
+}
+
+void AbstractWorksheetElement::execMoveBehind(QAction *action) {
+	Q_ASSERT(action != NULL);
+	AbstractAspect *parent = parentAspect();
+	if (parent) {
+		int index = action->data().toInt();
+		AbstractAspect *sibling1 = parent->child<AbstractWorksheetElement>(index);
+		beginMacro(tr("%1: move behind %2.").arg(name()).arg(sibling1->name()));
+		remove();
+		AbstractAspect *sibling2 = parent->child<AbstractWorksheetElement>(index + 1);
+		parent->insertChildBefore(this, sibling2);
+		endMacro();
+	}
+}
+
+void AbstractWorksheetElement::execMoveInFrontOf(QAction *action) {
+	Q_ASSERT(action != NULL);
+	AbstractAspect *parent = parentAspect();
+	if (parent) {
+		int index = action->data().toInt();
+		AbstractAspect *sibling = parent->child<AbstractWorksheetElement>(index);
+		beginMacro(tr("%1: move in front of %2.").arg(name()).arg(sibling->name()));
+		remove();
+		parent->insertChildBefore(this, sibling);
+		endMacro();
+	}
 }
 

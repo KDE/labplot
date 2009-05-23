@@ -44,11 +44,6 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 
 		virtual QGraphicsItem *graphicsItem() const;
 
-		virtual void setZValue(qreal z);
-		virtual qreal zValue() const;
-		virtual void setZValueRange(qreal minZ, qreal maxZ);
-		virtual qreal zValueMin() const ;
-		virtual qreal zValueMax() const ;
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual bool isFullyVisible() const;

@@ -59,15 +59,6 @@ QGraphicsItem *WorksheetRectangleElement::graphicsItem() const {
 	return &m_item;
 }
 
-void WorksheetRectangleElement::setZValue(qreal z) {
-	// TODO: undo cmd
-	m_item.setZValue(z);
-}
-
-qreal WorksheetRectangleElement::zValue() const { 
-	return m_item.zValue();
-}
-
 void WorksheetRectangleElement::setXScale(qreal xScale, bool keepAspectRatio) {
 	// TODO
 }

@@ -116,18 +116,24 @@ void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 		if (aspect->parentAspect() == this)
 		{
 			QGraphicsItem *item = addedElement->graphicsItem();
-			if (item)
-				m_scene->addItem(item);
+			Q_ASSERT(item != NULL);
+			m_scene->addItem(item);
+
+			qreal zVal = 0;
+			QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+			foreach(AbstractWorksheetElement *elem, childElements) {
+				elem->graphicsItem()->setZValue(zVal++);
+			}
 		}
 	}
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 	const AbstractWorksheetElement *removedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
-	if (removedElement && (aspect->parentAspect() == this)) {
+	if (removedElement) {
 		QGraphicsItem *item = removedElement->graphicsItem();
-		if (item)
-			m_scene->removeItem(item);
+		Q_ASSERT(item != NULL);
+		m_scene->removeItem(item);
 	}
 }
 

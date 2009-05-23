@@ -71,74 +71,6 @@ QGraphicsItem *WorksheetElementContainer::graphicsItem() const {
 	return const_cast<QGraphicsItem *>(static_cast<const QGraphicsItem *>(d_ptr));
 }
 
-void WorksheetElementContainer::setZValue(qreal z) {
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(AbstractWorksheetElement *elem, childList)
-		elem->setZValue(z);
-}
-
-qreal WorksheetElementContainer::zValue () const {
-	return zValueMin();
-}
-
-/**
- * \brief Set the maximum and minimum Z value of the child elements keeping their drawing order.
- */
-void WorksheetElementContainer::setZValueRange(qreal minZ, qreal maxZ) {
-	if (maxZ < minZ)
-		qSwap(minZ, maxZ);
-	qreal oldMinZ = zValueMin();
-	qreal oldMaxZ = zValueMax();
-	qreal oldZDiff = oldMaxZ - oldMinZ;
-	qreal zDiff = maxZ - minZ;
-	if (0.0 == oldZDiff) // avoid division by zero
-		setZValue(minZ);
-
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(AbstractWorksheetElement *elem, childList) {
-		WorksheetElementContainer *container = qobject_cast<WorksheetElementContainer *>(elem);
-		if (container) {
-			qreal containerMinZ = minZ + (container->zValueMin() - oldMinZ) / oldZDiff * zDiff;
-			qreal containerMaxZ = minZ + (container->zValueMax() - oldMinZ) / oldZDiff * zDiff;
-			container->setZValueRange(containerMinZ, containerMaxZ);
-		} else {
-			elem->setZValue(minZ + (elem->zValue() - oldMinZ) / oldZDiff * zDiff);
-		}
-	}
-}
-
-/**
- * \brief Return the minmum Z value of all child element Z values.
- */
-qreal WorksheetElementContainer::zValueMin() const {
-	qreal min = 0.0;
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	if (!childList.isEmpty()) {
-		min = childList.at(0)->zValue();
-		foreach(const AbstractWorksheetElement *elem, childList) {
-			if (elem->zValue() < min) 
-				min = elem->zValue();
-		}
-	}
-	return min;
-}
-
-/**
- * \brief Return the maximum Z value of all child element Z values.
- */
-qreal WorksheetElementContainer::zValueMax() const {
-	qreal max = 0.0;
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	if (!childList.isEmpty()) {
-		max = childList.at(0)->zValue();
-		foreach(const AbstractWorksheetElement *elem, childList) {
-			if (elem->zValue() > max) 
-				max = elem->zValue();
-		}
-	}
-	return max;
-}
-
 QRectF WorksheetElementContainerPrivate::boundingRect() const {
 	QRectF rect;
 	QList<AbstractWorksheetElement *> childList = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
@@ -186,21 +118,26 @@ void WorksheetElementContainer::retransform() {
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) {
 	Q_D(WorksheetElementContainer);
 
-	const AbstractWorksheetElement *elem = qobject_cast<const AbstractWorksheetElement*>(aspect);
-	if (elem && (elem->parentAspect() == this)) {
-		QGraphicsItem *item = elem->graphicsItem();
-		if (item)
-			item->setParentItem(d);			
+	const AbstractWorksheetElement *addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
+	if (addedElement && (aspect->parentAspect() == this)) {
+		QGraphicsItem *item = addedElement->graphicsItem();
+		Q_ASSERT(item != NULL);
+		item->setParentItem(d);			
+
+		qreal zVal = 0;
+		QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+		foreach(AbstractWorksheetElement *elem, childElements) {
+			elem->graphicsItem()->setZValue(zVal++);
+		}
 	}
 }
 
 void WorksheetElementContainer::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
-	const AbstractWorksheetElement *elem = qobject_cast<const AbstractWorksheetElement*>(aspect);
-	if (elem && (elem->parentAspect() == this)) {
-		QGraphicsItem *item = elem->graphicsItem();
-		if (item)
-			item->setParentItem(NULL);			
+	const AbstractWorksheetElement *removedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
+	if (removedElement && (aspect->parentAspect() == this)) {
+		QGraphicsItem *item = removedElement->graphicsItem();
+		Q_ASSERT(item != NULL);
+		item->setParentItem(NULL);			
 	}
 }
-
 

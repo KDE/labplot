@@ -79,7 +79,6 @@ class LinearAxis::Private: public QGraphicsItem {
 		void retransform();
 		void retransformTicks();
 		void retransformTicks(const AbstractCoordinateSystem *cSystem);
-		qreal swapZValue(qreal z);
 		bool swapVisible(bool on);
 
 		LinearAxis * const q;
@@ -256,26 +255,6 @@ QGraphicsItem *LinearAxis::graphicsItem() const {
 	return d;
 }
 
-qreal LinearAxis::Private::swapZValue(qreal z) {
-	qreal oldZ = zValue();
-	setZValue(z);
-	foreach(QGraphicsLineItem *item, majorTickItems)
-		item->setZValue(z);
-	foreach(QGraphicsLineItem *item, minorTickItems)
-		item->setZValue(z);
-	return oldZ;
-}
-
-STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetZ, qreal, swapZValue);
-void LinearAxis::setZValue(qreal z) {
-	if (zValue() != z)
-		exec(new LinearAxisSetZCmd(d, z, tr("%1: set z value")));
-}
-
-qreal LinearAxis::zValue () const {
-	return d->zValue();
-}
-
 bool LinearAxis::Private::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
@@ -406,7 +385,6 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 
 			if (majorTickItems.size() <= iMajor) {
 				QGraphicsLineItem *majorTick = new QGraphicsLineItem(QLineF(startPoint, endPoint));
-				majorTick->setZValue(zValue());
 				majorTickItems.append(majorTick);
 				majorTick->setParentItem(this);
 			} else
@@ -457,7 +435,6 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 
 				if (minorTickItems.size() <= (iMajor * minorTickCount + iMinor)) {
 					QGraphicsLineItem *minorTick = new QGraphicsLineItem(QLineF(startPoint, endPoint));
-					minorTick->setZValue(zValue());
 					minorTickItems.append(minorTick);
 					minorTick->setParentItem(this);
 				} else

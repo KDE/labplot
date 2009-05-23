@@ -33,6 +33,7 @@
 #include "core/AbstractAspect.h"
 #include <QGraphicsItem>
 class AbstractCoordinateSystem;
+class QAction;
 
 class AbstractWorksheetElement: public AbstractAspect {
 	Q_OBJECT
@@ -43,19 +44,29 @@ class AbstractWorksheetElement: public AbstractAspect {
 
 		virtual QGraphicsItem *graphicsItem() const = 0;
 
-		virtual void setZValue(qreal z) = 0;
-		virtual qreal zValue() const = 0;
-
 		virtual void setVisible(bool on) = 0;
 		virtual bool isVisible() const = 0;
 		virtual bool isFullyVisible() const;
 
 		virtual AbstractCoordinateSystem *coordinateSystem() const;
 
+		virtual QMenu *createContextMenu();
+
 		static QPainterPath shapeFromPath(const QPainterPath &path, const QPen &pen);
 
 	public slots:
 		virtual void retransform() = 0;
+
+	private:
+		QMenu *m_drawingOrderMenu;
+		QMenu *m_moveBehindMenu;
+		QMenu *m_moveInFrontOfMenu;
+	
+	private slots:
+		void prepareMoveBehindMenu();
+		void prepareMoveInFrontOfMenu();
+		void execMoveBehind(QAction *action);
+		void execMoveInFrontOf(QAction *action);
 };
 
 #endif

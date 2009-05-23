@@ -62,9 +62,6 @@ class LinearAxis: public AbstractWorksheetElement {
 
 		virtual QGraphicsItem *graphicsItem() const;
 
-		virtual void setZValue(qreal z);
-		virtual qreal zValue() const;
-
 		CLASS_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
 		BASIC_D_ACCESSOR_DECL(qreal, offset, Offset);
 		BASIC_D_ACCESSOR_DECL(qreal, start, Start);

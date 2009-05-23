@@ -43,9 +43,6 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 
 		virtual QGraphicsItem *graphicsItem() const;
 
-		virtual void setZValue(qreal z);
-		virtual qreal zValue() const;
-
 		virtual void setXScale(qreal xScale, bool keepAspectRatio=false);
 		virtual void setYScale(qreal yScale, bool keepAspectRatio=false);
 		virtual qreal xScale() const;

@@ -83,7 +83,6 @@ class LineSymbolCurve::Private: public QGraphicsItem {
 		void retransform();
 		void retransformSymbols(const AbstractCoordinateSystem *cSystem);
 		void updateVisibility();
-		qreal swapZValue(qreal z);
 		bool swapVisible(bool on);
 
 		virtual QRectF boundingRect() const { return boundingRectangle; }
@@ -195,22 +194,6 @@ void LineSymbolCurve::setYColumn(const AbstractColumn *yColumn) {
 
 QGraphicsItem *LineSymbolCurve::graphicsItem() const {
 	return d;
-}
-
-qreal LineSymbolCurve::Private::swapZValue(qreal z) {
-	qreal oldZ = zValue();
-	setZValue(z);
-	return oldZ;
-}
-
-STD_SWAP_METHOD_SETTER_CMD_IMPL(LineSymbolCurve, SetZ, qreal, swapZValue);
-void LineSymbolCurve::setZValue(qreal z) {
-	if (zValue() != z)
-		exec(new LineSymbolCurveSetZCmd(d, z, tr("%1: set z value")));
-}
-
-qreal LineSymbolCurve::zValue () const {
-	return d->zValue();
 }
 
 bool LineSymbolCurve::Private::swapVisible(bool on) {

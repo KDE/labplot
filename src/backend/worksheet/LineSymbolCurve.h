@@ -43,9 +43,6 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 
 		virtual QGraphicsItem *graphicsItem() const;
 
-		virtual void setZValue(qreal z);
-		virtual qreal zValue() const;
-
 		BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
 		BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
