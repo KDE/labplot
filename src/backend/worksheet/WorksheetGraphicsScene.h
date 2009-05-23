@@ -31,6 +31,8 @@
 #define WORKSHEETGRAPHICSSCENE_H
 
 #include <QGraphicsScene>
+class QGraphicsItem;
+class QPainter;
 
 class WorksheetGraphicsScene: public QGraphicsScene {
 	Q_OBJECT
@@ -38,6 +40,9 @@ class WorksheetGraphicsScene: public QGraphicsScene {
 	public:
 		WorksheetGraphicsScene();
 		~WorksheetGraphicsScene();
+	
+	protected:
+		virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], const QStyleOptionGraphicsItem options[], QWidget *widget = 0);
 };
 
 #endif

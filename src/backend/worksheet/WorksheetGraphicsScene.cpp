@@ -28,6 +28,8 @@
  ***************************************************************************/
 
 #include "worksheet/WorksheetGraphicsScene.h"
+#include <QGraphicsItem>
+#include <QPainter>
 
 /**
  * \class WorksheetGraphicsScene
@@ -43,3 +45,9 @@ WorksheetGraphicsScene::WorksheetGraphicsScene()
 WorksheetGraphicsScene::~WorksheetGraphicsScene() {
 }
 
+void WorksheetGraphicsScene::drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], 
+		const QStyleOptionGraphicsItem options[], QWidget *widget) {
+	
+	painter->setClipRect(sceneRect());
+	QGraphicsScene::drawItems(painter, numItems, items, options, widget);
+}

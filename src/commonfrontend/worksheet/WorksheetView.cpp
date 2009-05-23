@@ -211,8 +211,8 @@ void WorksheetView::startTestCode() {
 	coordSys->addChild(plotArea);
 	
 	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
-	rect->setRect(QRectF(0, 0, 40, 30));
-//	coordSys->addChild(rect);
+	rect->setRect(QRectF(12, 12, 300, 3));
+	coordSys->addChild(rect);
 	WorksheetRectangleElement *rect2 = new WorksheetRectangleElement("rect2");
 	rect2->setRect(QRectF(0, 0, 40, 30));
 //	m_worksheet->addChild(rect2);
