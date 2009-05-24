@@ -115,7 +115,7 @@ void PlotArea::setRect(const QRectF &newRect) {
 QRectF PlotAreaPrivate::swapRect(const QRectF &newRect) {
 	QRectF oldRect = rect;
 	prepareGeometryChange();
-	rect = newRect;
+	rect = newRect.normalized();
 	return oldRect;
 }
 
@@ -139,13 +139,24 @@ QPainterPath PlotAreaPrivate::shape() const {
 void PlotArea::retransform() {
 	Q_D(PlotArea);
 
+	Worksheet *worksheet = ancestor<Worksheet>();
+	QRectF pageRect;
+	if (worksheet)
+		pageRect = worksheet->pageRect();
+
 	AbstractCoordinateSystem *system = coordinateSystem();
 	if (system) {
-		QPointF topLeft = system->mapLogicalToScene(d->rect.topLeft());
-		QPointF bottomRight = system->mapLogicalToScene(d->rect.bottomRight());
-		d->transformedRect = QRectF(topLeft, bottomRight);
-	}
-	else
+		QList<QPointF> points;
+		points.append(d->rect.topLeft());
+		points.append(d->rect.bottomRight());
+		points = system->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
+		if (points.count() != 2) // invalid coordinates ?
+			d->transformedRect = pageRect; // fallback to page rect
+		else if (!pageRect.isNull())
+			d->transformedRect = QRectF(points.at(0), points.at(1)).normalized().intersected(pageRect);
+		else
+			d->transformedRect = QRectF(points.at(0), points.at(1)).normalized();
+	} else
 		d->transformedRect = d->rect;
 
 	WorksheetElementContainer::retransform();

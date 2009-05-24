@@ -78,14 +78,19 @@ class LineSymbolCurve::Private: public QGraphicsItem {
 		QPainterPath linePath;
 		AbstractCurveSymbol *symbolPrototype;
 		QRectF boundingRectangle;
+		QPainterPath curveShape;
 		QList<QPointF> symbolPoints;
 
+		QBrush symbolsBrush;
+		QPen symbolsPen;
+		QPen linePen;
+
 		void retransform();
-		void retransformSymbols(const AbstractCoordinateSystem *cSystem);
 		void updateVisibility();
 		bool swapVisible(bool on);
 
 		virtual QRectF boundingRect() const { return boundingRectangle; }
+		QPainterPath shape() const { return curveShape; }
     	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 
 		LineSymbolCurve * const q;
@@ -121,10 +126,14 @@ LineSymbolCurve::Private::Private(LineSymbolCurve *owner): q(owner) {
 	if (!symbolPrototype) // safety fallback
 		symbolPrototype = EllipseCurveSymbol::staticPrototype()->clone();
 
+	// TODO: remove this temporary code later
 	symbolSize = 2.5;
+	symbolPrototype->setBrush(QBrush(Qt::red));
+
 	symbolPrototype->setSize(symbolSize);
 	symbolPrototype->setAspectRatio(symbolAspectRatio);
-	symbolPrototype->setBrush(QBrush(Qt::red));
+//TODO	symbolPrototype->setBrush(symbolsBrush);
+//TODO	symbolPrototype->setPen(symbolsPen);
 
 	retransform();
 }
@@ -218,8 +227,11 @@ void LineSymbolCurve::retransform() {
 void LineSymbolCurve::Private::retransform() {
 	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
 
+	prepareGeometryChange();
 	linePath = QPainterPath();
+	curveShape = QPainterPath();
 	boundingRectangle = QRect();
+	symbolPoints.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) )
 		return;
@@ -229,8 +241,7 @@ void LineSymbolCurve::Private::retransform() {
 	int startRow = 0;
 	int endRow = xColumn->rowCount() - 1;
 
-	int count = 0;
-	QPointF tempPoint;
+	QList<QLineF> lines;
 
 	SciDAVis::ColumnMode xColMode = xColumn->columnMode();
 	SciDAVis::ColumnMode yColMode = yColumn->columnMode();
@@ -239,6 +250,7 @@ void LineSymbolCurve::Private::retransform() {
 
 		if ( xColumn->isValid(row) && yColumn->isValid(row) 
 			&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
+			QPointF tempPoint;
 
 			switch(xColMode) {
 				case SciDAVis::Numeric:
@@ -269,98 +281,61 @@ void LineSymbolCurve::Private::retransform() {
 				default:
 					break;
 			}
-
-			if (cSystem) {
-				tempPoint = cSystem->mapLogicalToScene(tempPoint);
-			}
-			if (count == 0)
-				linePath.moveTo(tempPoint);
-			else
-				linePath.lineTo(tempPoint);
-
-			count++;
+			symbolPoints.append(tempPoint);
 		}
 	}
 
+	if (symbolPoints.count() > 1) {
+		 QListIterator<QPointF> p1Iter(symbolPoints);
+		 QListIterator<QPointF> p2Iter(symbolPoints);
+		 p2Iter.next();
+		 while (p2Iter.hasNext())
+			lines.append(QLineF(p1Iter.next(), p2Iter.next()));
+	}
+
+	if (cSystem) {
+		symbolPoints = cSystem->mapLogicalToScene(symbolPoints);
+		lines = cSystem->mapLogicalToScene(lines);
+	}
+
+	foreach (QLineF line, lines) {
+		linePath.moveTo(line.p1());
+		linePath.lineTo(line.p2());
+	}
 	boundingRectangle = linePath.boundingRect();
-	retransformSymbols(cSystem);
-}
-
-void LineSymbolCurve::Private::retransformSymbols(const AbstractCoordinateSystem *cSystem) {
-	symbolPoints.clear();
-
-	int startRow = 0;
-	int endRow = xColumn->rowCount() - 1;
-	QPointF tempPoint;
 
 	QRectF prototypeBoundingRect = symbolPrototype->boundingRect();
-
-	SciDAVis::ColumnMode xColMode = xColumn->columnMode();
-	SciDAVis::ColumnMode yColMode = yColumn->columnMode();
-
-	for (int row = startRow; row <= endRow; row++ ) {
-
-		if ( xColumn->isValid(row) && yColumn->isValid(row) 
-			&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
-
-			switch(xColMode) {
-				case SciDAVis::Numeric:
-					tempPoint.setX(xColumn->valueAt(row));
-					break;
-				case SciDAVis::Text:
-					//TODO
-				case SciDAVis::DateTime:
-				case SciDAVis::Month:
-				case SciDAVis::Day:
-					//TODO
-					break;
-				default:
-					break;
-			}
-
-			switch(yColMode) {
-				case SciDAVis::Numeric:
-					tempPoint.setY(yColumn->valueAt(row));
-					break;
-				case SciDAVis::Text:
-					//TODO
-				case SciDAVis::DateTime:
-				case SciDAVis::Month:
-				case SciDAVis::Day:
-					//TODO
-					break;
-				default:
-					break;
-			}
-
-			if (cSystem) {
-				tempPoint = cSystem->mapLogicalToScene(tempPoint);
-			}
-			
-			symbolPoints.append(tempPoint);
-
-			prototypeBoundingRect.moveCenter(tempPoint); 
-			boundingRectangle |= prototypeBoundingRect;
-		}
+	QPainterPath symbolsPath;
+	foreach (QPointF point, symbolPoints) {
+		prototypeBoundingRect.moveCenter(point); 
+		boundingRectangle |= prototypeBoundingRect;
+		symbolsPath.addEllipse(prototypeBoundingRect);
 	}
-}
 
+	boundingRectangle = boundingRectangle.normalized();
+
+	curveShape = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
+	curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
+}
 
 void LineSymbolCurve::Private::updateVisibility() {
 	// TODO
 }
 
-
 void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget)
 {
-	// TODO: set pen and brush
 	// symbols first/last option
-	
-	if (lineVisible)
+		
+	if (lineVisible) {
+		painter->setPen(linePen);
+		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(linePath);
+	}
 
 	if (symbolsVisible)
 	{
+		symbolPrototype->setPen(symbolsPen);
+		symbolPrototype->setBrush(symbolsBrush);
 		foreach(QPointF point, symbolPoints) {
 			painter->translate(point);
 			symbolPrototype->paint(painter, option, widget);

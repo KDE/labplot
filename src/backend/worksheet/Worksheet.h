@@ -35,6 +35,7 @@
 class QGraphicsScene;
 class WorksheetGraphicsScene;
 #include "worksheet/WorksheetModel.h"
+class QRectF;
 
 class Worksheet: public AbstractPart, public scripted {
 	Q_OBJECT
@@ -50,15 +51,21 @@ class Worksheet: public AbstractPart, public scripted {
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
+
+		QRectF pageRect() const;
+		void setPageRect(const QRectF &rect);
 		
 	private slots:
 		void handleAspectAdded(const AbstractAspect *handleAspect);
 		void handleAspectAboutToBeRemoved(const AbstractAspect *handleAspect);
 
-	private:
 	public:
+		class Private;
+	private:
+		friend class Private;
+		Private * const d;
+
 		mutable QWidget *m_view;
-		WorksheetGraphicsScene *m_scene;
 		WorksheetGraphicsScene *scene() const;
 		friend QGraphicsScene *WorksheetModel::scene() const;
 };

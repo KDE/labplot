@@ -29,6 +29,7 @@
 
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetElementContainerPrivate.h"
+#include "worksheet/Worksheet.h"
 #include "lib/commandtemplates.h"
 #include <QPen>
 #include <QtDebug>
@@ -80,21 +81,83 @@ void CartesianCoordinateSystem::init() {
 CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 }
 
-QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF &point) const {
+
+// TODO: support for axes/coordinate breaks
+
+QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
 	Q_D(const CartesianCoordinateSystem);
 
-	QPointF result = point;
-	result.setX(result.x() / d->scaleX + d->position.x());
-	result.setY(result.y() / d->scaleY + d->position.y());
+	Worksheet *worksheet = ancestor<Worksheet>();
+	QRectF pageRect;
+	if (worksheet)
+		pageRect = worksheet->pageRect();
+
+	QList<QPointF> result;
+
+	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+
+	foreach(QPointF point, points) {
+		point.setX(point.x() / d->scaleX + d->position.x());
+		point.setY(point.y() / d->scaleY + d->position.y());
+		if (noPageClipping || pageRect.contains(point))
+			result.append(point);
+	}
+
 	return result;
 }
 
-QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF &point) const {
+QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const {
 	Q_D(const CartesianCoordinateSystem);
 
-	QPointF result = point;
-	result.setX((result.x() - d->position.x()) * d->scaleX);
-	result.setY((result.y() - d->position.y()) * d->scaleY);
+	Worksheet *worksheet = ancestor<Worksheet>();
+	QRectF pageRect;
+	if (worksheet)
+		pageRect = worksheet->pageRect();
+
+	QList<QPointF> result;
+	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+
+	foreach(QPointF point, points) {
+		if (noPageClipping || pageRect.contains(point)) {
+			point.setX((point.x() - d->position.x()) * d->scaleX);
+			point.setY((point.y() - d->position.y()) * d->scaleY);
+			result.append(point);
+		}
+	}
+
+	return result;
+}
+
+QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags) const {
+	Q_D(const CartesianCoordinateSystem);
+
+	Worksheet *worksheet = ancestor<Worksheet>();
+	QRectF pageRect;
+	if (worksheet)
+		pageRect = worksheet->pageRect();
+
+	QList<QLineF> result;
+
+	bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
+
+	foreach(QLineF line, lines) {
+		QPointF p1 = line.p1();
+		QPointF p2 = line.p2();
+			
+		p1.setX(p1.x() / d->scaleX + d->position.x());
+		p1.setY(p1.y() / d->scaleY + d->position.y());
+		p2.setX(p2.x() / d->scaleX + d->position.x());
+		p2.setY(p2.y() / d->scaleY + d->position.y());
+
+		QLineF newLine(p1, p2);
+		if (doPageClipping) {
+			if (AbstractCoordinateSystem::clipLineToRect(&newLine, pageRect))
+				result.append(newLine);
+		}
+		else
+			result.append(newLine);
+	}
+
 	return result;
 }
 

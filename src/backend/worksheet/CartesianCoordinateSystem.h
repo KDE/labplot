@@ -42,8 +42,10 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		CartesianCoordinateSystem(const QString &name);
 		virtual ~CartesianCoordinateSystem();
 
-		QPointF mapLogicalToScene(const QPointF &point) const;
-		QPointF mapSceneToLogical(const QPointF &point) const;
+		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
+		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
+		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const;
+
 
 		virtual QGraphicsItem *graphicsItem() const;
 

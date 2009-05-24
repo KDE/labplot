@@ -31,6 +31,8 @@
 #include "worksheet/AbstractWorksheetElement.h"
 #include "worksheet/WorksheetView.h"
 #include "worksheet/WorksheetGraphicsScene.h"
+#include "lib/commandtemplates.h"
+#include "lib/macros.h"
 #include <QIcon>
 #include <QWidget>
 /**
@@ -40,11 +42,37 @@
  * Top-level container for WorksheetElements. 
  *
  */
-		
-Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
-		: AbstractPart(name), scripted(engine), m_view(NULL) {
+	
+class Worksheet::Private {
+	public:
+
+		Private(Worksheet *owner);
+		~Private();
+
+		QString name() const {
+			return q->name();
+		}
+
+		WorksheetGraphicsScene *m_scene;
+		QRectF swapPageRect(const QRectF& rect);
+
+		Worksheet * const q;
+};
+
+Worksheet::Private::Private(Worksheet *owner) 
+	: q(owner) {
+
 	m_scene = new WorksheetGraphicsScene();
-	m_scene->setSceneRect(0, 0, 210, 297); // A4  // TODO make this variable
+	m_scene->setSceneRect(0, 0, 210, 297); // A4
+}
+		
+Worksheet::Private::~Private() {
+	delete m_scene;
+}
+
+Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
+		: AbstractPart(name), scripted(engine), d(new Private(this)), m_view(NULL) {
+
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -52,7 +80,7 @@ Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
 }
 
 Worksheet::~Worksheet() {
-	delete m_scene;
+	delete d;
 }
 
 //! Return an icon to be used for decorating my views.
@@ -117,7 +145,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 		{
 			QGraphicsItem *item = addedElement->graphicsItem();
 			Q_ASSERT(item != NULL);
-			m_scene->addItem(item);
+			d->m_scene->addItem(item);
 
 			qreal zVal = 0;
 			QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
@@ -133,11 +161,29 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 	if (removedElement) {
 		QGraphicsItem *item = removedElement->graphicsItem();
 		Q_ASSERT(item != NULL);
-		m_scene->removeItem(item);
+		d->m_scene->removeItem(item);
 	}
 }
 
 WorksheetGraphicsScene *Worksheet::scene() const {
-	return m_scene;
+	return d->m_scene;
+}
+
+
+QRectF Worksheet::pageRect() const {
+	return d->m_scene->sceneRect();
+}
+
+QRectF Worksheet::Private::swapPageRect(const QRectF &rect) {
+	QRectF oldRect = m_scene->sceneRect();
+	m_scene->setSceneRect(rect.normalized());
+	// TODO: notify page size change
+	return oldRect;
+}
+
+STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect);
+void Worksheet::setPageRect(const QRectF &rect) {
+	if (rect != d->m_scene->sceneRect())
+		exec(new WorksheetSetPageRectCmd(d, rect, tr("%1: set page size")));
 }
 

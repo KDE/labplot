@@ -59,6 +59,7 @@ WorksheetGraphicsView::WorksheetGraphicsView(QWidget * parent)
 	// TODO: make these global options
 	horizontal_screen_dpi = 96;
 	vertical_screen_dpi = 96;
+	setRenderHint(QPainter::Antialiasing);
 }
 
 WorksheetGraphicsView::~WorksheetGraphicsView() {
@@ -71,25 +72,27 @@ void WorksheetGraphicsView::setScene(QGraphicsScene * scene) {
 }
 
 void WorksheetGraphicsView::drawBackground(QPainter * painter, const QRectF & rect) {
-	// TODO: paint in rect only
 	painter->save();
 	painter->setRenderHint(QPainter::Antialiasing);
+    QRectF scene_rect = sceneRect();
+
 	// background
-	painter->fillRect(rect, Qt::lightGray);
+	if (!scene_rect.contains(rect))
+		painter->fillRect(rect, Qt::lightGray);
 
 	// shadow
-    QRectF scene_rect = sceneRect();
     QRectF right_shadow(scene_rect.right(), scene_rect.top() + SHADOW_SIZE/vertical_screen_dpi/m_scale_factor, 
 		SHADOW_SIZE/horizontal_screen_dpi/m_scale_factor, scene_rect.height());
     QRectF bottom_shadow(scene_rect.left() + SHADOW_SIZE/horizontal_screen_dpi/m_scale_factor, scene_rect.bottom(), 
 		scene_rect.width(), SHADOW_SIZE/vertical_screen_dpi/m_scale_factor);
-    if (right_shadow.intersects(rect) || right_shadow.contains(rect))
-		painter->fillRect(right_shadow, Qt::black);
-    if (bottom_shadow.intersects(rect) || bottom_shadow.contains(rect))
-		painter->fillRect(bottom_shadow, Qt::black);
+//    if (right_shadow.intersects(rect) || right_shadow.contains(rect))
+
+	painter->fillRect(right_shadow.intersected(rect), Qt::black);
+//    if (bottom_shadow.intersects(rect) || bottom_shadow.contains(rect))
+	painter->fillRect(bottom_shadow.intersected(rect), Qt::black);
 
 	// canvas
-	painter->fillRect(scene_rect, Qt::white);
+	painter->fillRect(scene_rect.intersected(rect), Qt::white);
 
 	painter->restore();
 }
@@ -99,6 +102,7 @@ void WorksheetGraphicsView::wheelEvent(QWheelEvent *event) {
 		setScaleFactor(scaleFactor() * 2.0);
 	else if (event->delta() < 0)
 		setScaleFactor(scaleFactor() / 2.0);
+	// update();
 }
 
 void WorksheetGraphicsView::setScaleFactor(qreal factor) {
@@ -294,11 +298,6 @@ void WorksheetView::startTestCode() {
 	plotArea->addChild(curve2);
 	plotArea->addChild(curve1);
 	
-	WorksheetRectangleElement *bigRect = new WorksheetRectangleElement("bigRect");
-	bigRect->setRect(QRectF(0, 0, 200, 200));
-//	plotArea->addChild(bigRect);
-	bigRect->m_item.setBrush(QBrush(Qt::blue));
-
 //	coordSys->addChild(plotArea);
 //	plot->addChild(coordSys);
 }

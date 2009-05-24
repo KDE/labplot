@@ -35,13 +35,12 @@
  * \brief Rectangle worksheet (decoration) element.
  *
  *
- * This element will be a rectangle in all coordinate systems, even if it is
- * a polar coordinate system or other "curved" coordinate system. Only the 
- * top-left and bottom-right points will be transformed.
+ * This element will be a rectangle after transformation depends on the coordinate system.
  * 
  */
 
 
+// TODO: Move as much stuff as possible into a common decoration element base class
 // TODO: undo cmds
 
 
@@ -49,7 +48,7 @@ WorksheetRectangleElement::WorksheetRectangleElement(const QString &name)
 		: AbstractWorksheetElement(name) {
 }
 WorksheetRectangleElement::WorksheetRectangleElement(const QString &name, const QRectF &rect)
-		: AbstractWorksheetElement(name), m_rect(rect) {
+		: AbstractWorksheetElement(name), m_rect(rect.normalized()) {
 }
 
 WorksheetRectangleElement::~WorksheetRectangleElement() {
@@ -114,7 +113,7 @@ bool WorksheetRectangleElement::isVisible() const {
 }
 
 void WorksheetRectangleElement::setRect(const QRectF &rect) {
-	m_rect = rect;
+	m_rect = rect.normalized();
 	retransform();
 }
 
@@ -124,12 +123,25 @@ QRectF WorksheetRectangleElement::rect() const {
 
 void WorksheetRectangleElement::retransform() {
 	AbstractCoordinateSystem *system = coordinateSystem();
+
+	QPainterPath path;
+
 	if (system) {
-		QPointF topLeft = system->mapLogicalToScene(m_rect.topLeft());
-		QPointF bottomRight = system->mapLogicalToScene(m_rect.bottomRight());
-		m_item.setRect(QRectF(topLeft, bottomRight));
+		QList<QLineF> lines;
+		lines.append(QLineF(m_rect.topLeft(), m_rect.topRight()));
+		lines.append(QLineF(m_rect.topRight(), m_rect.bottomRight()));
+		lines.append(QLineF(m_rect.bottomRight(), m_rect.bottomLeft()));
+		lines.append(QLineF(m_rect.bottomLeft(), m_rect.topLeft()));
+		lines = system->mapLogicalToScene(lines);	
+		
+		foreach (QLineF line, lines) {
+			path.moveTo(line.p1());
+			path.lineTo(line.p2());
+		}
 	}
 	else
-		m_item.setRect(m_rect);
+		path.addRect(m_rect);
+	
+	m_item.setPath(path);
 }
 

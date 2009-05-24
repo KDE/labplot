@@ -64,6 +64,16 @@ class AbstractAspect : public QObject
 		virtual ~AbstractAspect();
 
 		AbstractAspect * parentAspect() const;
+		template < class T > T *ancestor() const {
+			AbstractAspect *parent = parentAspect();
+			while (parent) {
+				T *ancestorAspect = qobject_cast<T *>(parent);
+				if (ancestorAspect)
+					return ancestorAspect;
+				parent = parent->parentAspect();
+			}
+			return NULL;
+		}
 		Folder * folder();
 		bool isDescendantOf(AbstractAspect *other);
 

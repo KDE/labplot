@@ -34,6 +34,9 @@
 #include <QGraphicsItem>
 #include <QGraphicsItemGroup>
 #include <QGraphicsLineItem>
+#include <QBrush>
+#include <QPen>
+#include <QPainter>
 
 /**
  * \class LinearAxis
@@ -69,12 +72,18 @@ class LinearAxis::Private: public QGraphicsItem {
 		TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 		TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
 
-		virtual QRectF boundingRect() const { return QRectF(); }
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) { }
+		QPainterPath linePath;
+		QPainterPath majorTicksPath;
+		QPainterPath minorTicksPath;
+		QRectF boundingRectangle;
+		QPainterPath axisShape;
 
-		mutable QGraphicsLineItem *axisLineItem;
-		mutable QList<QGraphicsLineItem *> majorTickItems;
-		mutable QList<QGraphicsLineItem *> minorTickItems;
+		QBrush brush;
+		QPen pen;
+
+		virtual QRectF boundingRect() const { return boundingRectangle; }
+		QPainterPath shape() const { return axisShape; }
+    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 
 		void retransform();
 		void retransformTicks();
@@ -82,6 +91,9 @@ class LinearAxis::Private: public QGraphicsItem {
 		bool swapVisible(bool on);
 
 		LinearAxis * const q;
+
+	private:
+		inline bool transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint);
 };
 
 LinearAxis::LinearAxis(const QString &name, const AxisOrientation &orientation)
@@ -98,8 +110,6 @@ LinearAxis::LinearAxis(const QString &name, const AxisOrientation &orientation)
 	d->minorTicksLength = 0.25;
 	d->majorTicksDirection = ticksOut;
 	d->minorTicksDirection = ticksOut;
-	d->axisLineItem = new QGraphicsLineItem();
-	d->axisLineItem->setParentItem(d);
 	retransform();
 }
 
@@ -277,6 +287,10 @@ void LinearAxis::retransform() {
 void LinearAxis::Private::retransform() {
 	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
 
+	prepareGeometryChange();
+	linePath = QPainterPath();
+
+	QList<QLineF> lines;
 	QPointF startPoint;
 	QPointF endPoint;
 
@@ -291,104 +305,93 @@ void LinearAxis::Private::retransform() {
 		endPoint.setX(offset);
 		endPoint.setY(end);
 	}
+
+	lines.append(QLineF(startPoint, endPoint));
 	if (cSystem) {
-		startPoint = cSystem->mapLogicalToScene(startPoint);
-		endPoint = cSystem->mapLogicalToScene(endPoint);
+		lines = cSystem->mapLogicalToScene(lines);
 	} 
-	axisLineItem->setLine(QLineF(startPoint, endPoint));
+
+	foreach (QLineF line, lines) {
+		linePath.moveTo(line.p1());
+		linePath.lineTo(line.p2());
+	}
 
 	retransformTicks(cSystem);
 }
 
 void LinearAxis::Private::retransformTicks() {
+	prepareGeometryChange();
 	retransformTicks(q->coordinateSystem());
 }
 
-void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem) {
-	if (noTicks == majorTicksDirection) {
-		foreach(QGraphicsLineItem *item, majorTickItems)
-			item->setParentItem(NULL);
-		while (majorTickItems.size() > majorTickCount)
-			delete majorTickItems.takeLast();
-	} else {
-		while (majorTickItems.size() > majorTickCount) {
-			QGraphicsLineItem *item = majorTickItems.takeLast();
-			item->setParentItem(NULL);
-			delete item;
-		}
+//! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
+inline bool LinearAxis::Private::transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint) {
+	if (cSystem) {
+		QList<QPointF> points;
+		points.append(*anchorPoint);
+		points = cSystem->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
+		if (points.count() != 1) // point is not mappable or in a coordinate gap
+			return false;
+		else
+			*anchorPoint = points.at(0);
 	}
+	return true;
+}
 
-	if (noTicks == minorTicksDirection || majorTickCount <= 1) {
-		foreach(QGraphicsLineItem *item, minorTickItems)
-			item->setParentItem(NULL);
-		while (minorTickItems.size() > minorTickCount)
-			delete minorTickItems.takeLast();
-	} else {
-		while (minorTickItems.size() > minorTickCount) {
-			QGraphicsLineItem *item = minorTickItems.takeLast();
-			item->setParentItem(NULL);
-			delete item;
-		}
-	}
+void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem) {
+	const CartesianCoordinateSystem *cCSystem = qobject_cast<const CartesianCoordinateSystem *>(cSystem);
+
+	majorTicksPath = QPainterPath();
+	minorTicksPath = QPainterPath();
+	axisShape = QPainterPath();
+	boundingRectangle = QRect();
 
 	int xDirection = 1;
 	int yDirection = 1;
-	const CartesianCoordinateSystem *cCSystem = qobject_cast<const CartesianCoordinateSystem *>(cSystem);
 	if (cCSystem) {
 		xDirection = cCSystem->xDirection();
 		yDirection = cCSystem->yDirection();
 	}
 
+	QList<QLineF> majorLines;
+	QList<QLineF> minorLines;
+
 	for (int iMajor = 0; iMajor < majorTickCount; iMajor++) {
+		QPointF anchorPoint;
 		QPointF startPoint;
 		QPointF endPoint;
 		
 		qreal majorTickPos = tickStart + (majorTickCount > 1 ? (tickEnd - tickStart) * (qreal)iMajor / ((qreal)(majorTickCount - 1)) : 0);
 		if (noTicks != majorTicksDirection) {
 			if (orientation & LinearAxis::axisHorizontal) {
-				startPoint.setX(majorTickPos);
-				endPoint.setX(majorTickPos);
-				startPoint.setY(offset);
-				endPoint.setY(offset);
+				anchorPoint.setX(majorTickPos);
+				anchorPoint.setY(offset);
 
-				if (cSystem) {
-					startPoint = cSystem->mapLogicalToScene(startPoint);
-					endPoint = cSystem->mapLogicalToScene(endPoint);
-				}
-
-				if (orientation & axisNormalTicks) {
-					startPoint += QPointF(0, (majorTicksDirection & ticksIn) ? yDirection * majorTicksLength : 0);
-					endPoint += QPointF(0, (majorTicksDirection & ticksOut) ? -yDirection * majorTicksLength : 0);
-				} else {
-					startPoint += QPointF(0, (majorTicksDirection & ticksOut) ? yDirection * majorTicksLength : 0);
-					endPoint += QPointF(0, (majorTicksDirection & ticksIn) ? -yDirection * majorTicksLength : 0);
+				if (transformAnchor(cSystem, &anchorPoint)) {
+					if (orientation & axisNormalTicks) {
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & ticksIn)  ? yDirection * majorTicksLength  : 0);
+						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & ticksOut) ? -yDirection * majorTicksLength : 0);
+					} else {
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & ticksOut) ? yDirection * majorTicksLength  : 0);
+						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & ticksIn)  ? -yDirection * majorTicksLength : 0);
+					}
+					majorLines.append(QLineF(startPoint, endPoint));
 				}
 			} else { // vertical
-				startPoint.setY(majorTickPos);
-				endPoint.setY(majorTickPos);
-				startPoint.setX(offset);
-				endPoint.setX(offset);
+				anchorPoint.setY(majorTickPos);
+				anchorPoint.setX(offset);
 
-				if (cSystem) {
-					startPoint = cSystem->mapLogicalToScene(startPoint);
-					endPoint = cSystem->mapLogicalToScene(endPoint);
-				}
-
-				if (orientation & axisNormalTicks) {
-					startPoint += QPointF((majorTicksDirection & ticksIn) ? xDirection * majorTicksLength : 0, 0);
-					endPoint += QPointF((majorTicksDirection & ticksOut) ? -xDirection * majorTicksLength : 0, 0);
-				} else {
-					startPoint += QPointF((majorTicksDirection & ticksOut) ? xDirection * majorTicksLength : 0, 0);
-					endPoint += QPointF((majorTicksDirection & ticksIn) ? -xDirection * majorTicksLength : 0, 0);
+				if (transformAnchor(cSystem, &anchorPoint)) {
+					if (orientation & axisNormalTicks) {
+						startPoint = anchorPoint + QPointF((majorTicksDirection & ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
+						endPoint   = anchorPoint + QPointF((majorTicksDirection & ticksOut) ? -xDirection * majorTicksLength : 0, 0);
+					} else {
+						startPoint = anchorPoint + QPointF((majorTicksDirection & ticksOut) ? xDirection * majorTicksLength  : 0, 0);
+						endPoint   = anchorPoint + QPointF((majorTicksDirection & ticksIn)  ? -xDirection * majorTicksLength : 0, 0);
+					}
+					majorLines.append(QLineF(startPoint, endPoint));
 				}
 			}
-
-			if (majorTickItems.size() <= iMajor) {
-				QGraphicsLineItem *majorTick = new QGraphicsLineItem(QLineF(startPoint, endPoint));
-				majorTickItems.append(majorTick);
-				majorTick->setParentItem(this);
-			} else
-				majorTickItems.at(iMajor)->setLine(QLineF(startPoint, endPoint));
 		}
 
 		if ((noTicks != minorTicksDirection) && (majorTickCount > 1) && (minorTickCount > 0) && (iMajor < majorTickCount - 1)) {
@@ -396,52 +399,70 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 				qreal minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (tickEnd - tickStart) \
 						/ (qreal)(majorTickCount - 1) / (qreal)(minorTickCount + 1);
 				if (orientation & LinearAxis::axisHorizontal) {
-					startPoint.setX(minorTickPos);
-					endPoint.setX(minorTickPos);
-					startPoint.setY(offset);
-					endPoint.setY(offset);
+					anchorPoint.setX(minorTickPos);
+					anchorPoint.setY(offset);
 
-					if (cSystem) {
-						startPoint = cSystem->mapLogicalToScene(startPoint);
-						endPoint = cSystem->mapLogicalToScene(endPoint);
-					}
-
-					if (orientation & axisNormalTicks) {
-						startPoint += QPointF(0, (minorTicksDirection & ticksIn) ? yDirection * minorTicksLength : 0);
-						endPoint += QPointF(0, (minorTicksDirection & ticksOut) ? -yDirection * minorTicksLength : 0);
-					} else {
-						startPoint += QPointF(0, (minorTicksDirection & ticksOut) ? yDirection * minorTicksLength : 0);
-						endPoint += QPointF(0, (minorTicksDirection & ticksIn) ? -yDirection * minorTicksLength : 0);
+					if (transformAnchor(cSystem, &anchorPoint)) {
+						if (orientation & axisNormalTicks) {
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & ticksIn)  ? yDirection * minorTicksLength  : 0);
+							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & ticksOut) ? -yDirection * minorTicksLength : 0);
+						} else {
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & ticksOut) ? yDirection * minorTicksLength  : 0);
+							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & ticksIn)  ? -yDirection * minorTicksLength : 0);
+						}
+						minorLines.append(QLineF(startPoint, endPoint));
 					}
 				} else { // vertical
-					startPoint.setY(minorTickPos);
-					endPoint.setY(minorTickPos);
-					startPoint.setX(offset);
-					endPoint.setX(offset);
+					anchorPoint.setY(minorTickPos);
+					anchorPoint.setX(offset);
 
-					if (cSystem) {
-						startPoint = cSystem->mapLogicalToScene(startPoint);
-						endPoint = cSystem->mapLogicalToScene(endPoint);
-					}
-
-					if (orientation & axisNormalTicks) {
-						startPoint += QPointF((minorTicksDirection & ticksIn) ? xDirection * minorTicksLength : 0, 0);
-						endPoint += QPointF((minorTicksDirection & ticksOut) ? -xDirection * minorTicksLength : 0, 0);
-					} else {
-						startPoint += QPointF((minorTicksDirection & ticksOut) ? xDirection * minorTicksLength : 0, 0);
-						endPoint += QPointF((minorTicksDirection & ticksIn) ? -xDirection * minorTicksLength : 0, 0);
+					if (transformAnchor(cSystem, &anchorPoint)) {
+						if (orientation & axisNormalTicks) {
+							startPoint = anchorPoint + QPointF((minorTicksDirection & ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
+							endPoint   = anchorPoint + QPointF((minorTicksDirection & ticksOut) ? -xDirection * minorTicksLength : 0, 0);
+						} else {
+							startPoint = anchorPoint + QPointF((minorTicksDirection & ticksOut) ? xDirection * minorTicksLength  : 0, 0);
+							endPoint   = anchorPoint + QPointF((minorTicksDirection & ticksIn)  ? -xDirection * minorTicksLength : 0, 0);
+						}
+						minorLines.append(QLineF(startPoint, endPoint));
 					}
 				}
-
-				if (minorTickItems.size() <= (iMajor * minorTickCount + iMinor)) {
-					QGraphicsLineItem *minorTick = new QGraphicsLineItem(QLineF(startPoint, endPoint));
-					minorTickItems.append(minorTick);
-					minorTick->setParentItem(this);
-				} else
-					minorTickItems.at(iMajor * minorTickCount + iMinor)->setLine(QLineF(startPoint, endPoint));
 			}
 		}
 	}
+
+	foreach (QLineF line, majorLines) {
+		majorTicksPath.moveTo(line.p1());
+		majorTicksPath.lineTo(line.p2());
+	}
+
+	foreach (QLineF line, minorLines) {
+		minorTicksPath.moveTo(line.p1());
+		minorTicksPath.lineTo(line.p2());
+	}
+
+	boundingRectangle = linePath.boundingRect();
+	boundingRectangle |= majorTicksPath.boundingRect();
+	boundingRectangle |= minorTicksPath.boundingRect();
+
+	boundingRectangle = boundingRectangle.normalized();
+
+	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, pen);
+	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
+	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
+}
+
+void LinearAxis::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget)
+{
+	Q_UNUSED(option)
+	Q_UNUSED(widget)
+
+	painter->setPen(pen);
+	painter->setBrush(brush);
+	
+	painter->drawPath(linePath);
+	painter->drawPath(minorTicksPath);
+	painter->drawPath(majorTicksPath);
 }
 
 

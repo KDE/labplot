@@ -36,16 +36,20 @@ class AbstractCoordinateSystem: public WorksheetElementContainer {
 	Q_OBJECT
 
 	public:
+		enum MappingFlag {
+			DefaultMapping = 0x00,
+			SuppressPageClipping = 0x01,
+		};
+		Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
+
 		AbstractCoordinateSystem(const QString &name);
 		virtual ~AbstractCoordinateSystem();
 
-		virtual QPointF mapLogicalToScene(const QPointF &points) const = 0;
-		virtual QPointF mapSceneToLogical(const QPointF &points) const = 0;
-		// TODO:
-//		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points) const = 0;
-//		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points) const = 0;
-//		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines) const = 0;
-//		virtual QList<QLineF> mapSceneToLogical(const QList<QLineF> &lines) const = 0;
+		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const = 0;
+
+		static bool clipLineToRect(QLineF *line, const QRectF &rect);
 
 	protected:
 		AbstractCoordinateSystem(const QString &name, WorksheetElementContainerPrivate *dd);

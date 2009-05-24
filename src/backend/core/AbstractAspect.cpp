@@ -329,6 +329,11 @@ AbstractAspect * AbstractAspect::parentAspect() const
 }
 
 /**
+ * \fn template < class T > T *AbstractAspect::ancestor() const
+ * \brief Return the closest ancestor of class T (or NULL if none found).
+ */
+
+/**
  * \brief Add the given Aspect to my list of children.
  */
 void AbstractAspect::addChild(AbstractAspect* child)

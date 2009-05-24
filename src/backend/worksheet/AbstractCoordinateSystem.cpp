@@ -50,12 +50,114 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem() {
 }
 
 /**
- * \fn QPointF AbstractCoordinateSystem::mapLogicalToScene(const QPointF &point) const = 0;
- * \brief Map a point in logical coordinates into graphics scene (page) coordinates.
+ * \fn QList<QPointF> AbstractCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
+ * \brief Map a list of points in logical coordinates into graphics scene (page) coordinates.
+ *
+ * The list of returned points may have less points than the input list if some points have
+ * unsupported coordinates or lie in excluded areas such as coordinate gaps or outside the page rectangle.
+ * 
+ * \param points The points to map.
+ * \param flags Flags to influence the mapping behavior.
  */
 
 /**
- * \fn QPointF AbstractCoordinateSystem::mapSceneToLogical(const QPointF &point) const = 0;
- * \brief Map a point in scene coordinates into logical coordinates.
+ * \fn QList<QPointF> AbstractCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
+ * \brief Map a list of points in scene coordinates into logical coordinates.
+ *
+ * The list of returned points may have less points than the input list if some point lie in
+ * areas not possible to map by the coordinate system.
+ * 
+ * \param points The points to map.
+ * \param flags Flags to influence the mapping behavior.
  */
+
+/**
+ * \fn QList<QLineF> AbstractCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const;
+ * \brief Map a list of lines in logical coordinates into graphics scene (page) coordinates.
+ *
+ * Lines may be clipped at coordinate gaps or completely be removed if outside the supported areas.
+ *
+ * \param lines The lines to map.
+ * \param flags Flags to influence the mapping behavior.
+ */
+
+/**
+ * \brief Line clipping using the Cohen-Sutherland algorithm.
+ *
+ * This is a slightly modified version of clipLine() from Qt 4.5's qpaintengine_x11.cpp.
+ *
+ * \return false if line is completely outside, otherwise true
+ */
+bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect)
+{
+    qreal x1 = line->x1();
+    qreal x2 = line->x2();
+    qreal y1 = line->y1();
+    qreal y2 = line->y2();
+
+	QRectF normalizedRect = rect.normalized();
+    qreal left = normalizedRect.x();
+    qreal right = normalizedRect.x() + normalizedRect.width() - 1;
+    qreal top = normalizedRect.y();
+    qreal bottom = normalizedRect.y() + normalizedRect.height() - 1;
+
+    enum { Left, Right, Top, Bottom };
+    // clip the lines, after cohen-sutherland, see e.g. http://www.nondot.org/~sabre/graphpro/line6.html
+    int p1 = ((x1 < left) << Left)
+             | ((x1 > right) << Right)
+             | ((y1 < top) << Top)
+             | ((y1 > bottom) << Bottom);
+    int p2 = ((x2 < left) << Left)
+             | ((x2 > right) << Right)
+             | ((y2 < top) << Top)
+             | ((y2 > bottom) << Bottom);
+
+    if (p1 & p2)
+        // completely outside
+        return false;
+
+    if (p1 | p2) {
+        qreal dx = x2 - x1;
+        qreal dy = y2 - y1;
+
+        // clip x coordinates
+        if (x1 < left) {
+            y1 += dy/dx * (left - x1);
+            x1 = left;
+        } else if (x1 > right) {
+            y1 -= dy/dx * (x1 - right);
+            x1 = right;
+        }
+        if (x2 < left) {
+            y2 += dy/dx * (left - x2);
+            x2 = left;
+        } else if (x2 > right) {
+            y2 -= dy/dx * (x2 - right);
+            x2 = right;
+        }
+        p1 = ((y1 < top) << Top)
+             | ((y1 > bottom) << Bottom);
+        p2 = ((y2 < top) << Top)
+             | ((y2 > bottom) << Bottom);
+        if (p1 & p2)
+            return false;
+        // clip y coordinates
+        if (y1 < top) {
+            x1 += dx/dy * (top - y1);
+            y1 = top;
+        } else if (y1 > bottom) {
+            x1 -= dx/dy * (y1 - bottom);
+            y1 = bottom;
+        }
+        if (y2 < top) {
+            x2 += dx/dy * (top - y2);
+            y2 = top;
+        } else if (y2 > bottom) {
+            x2 -= dx/dy * (y2 - bottom);
+            y2 = bottom;
+        }
+        *line = QLineF(QPointF(x1, y1), QPointF(x2, y2));
+    }
+    return true;
+}
 
