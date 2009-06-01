@@ -32,13 +32,50 @@
 
 #include "worksheet/AbstractCoordinateSystem.h"
 #include "lib/macros.h"
+#include "lib/Interval.h"
 #include <QObject>
 
 class CartesianCoordinateSystemPrivate;
+class CartesianCoordinateSystemSetScalePropertiesCmd;
 class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 	Q_OBJECT
 
 	public:
+		class Scale {
+			public:
+				static const double LIMIT_MAX = 1e15;
+				static const double LIMIT_MIN = -1e15;
+
+				virtual ~Scale();
+				enum ScaleType {
+					ScaleLinear,
+					ScaleLog,
+				};
+				
+				static Scale *createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
+				static Scale *createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd, 
+					double logicalStart, double logicalEnd);
+				static Scale *createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd, 
+					double logicalStart, double logicalEnd, double base);
+
+				virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL, 
+						double *a = NULL, double *b = NULL, double *c = NULL) const;
+
+				virtual bool map(double *value) const = 0;
+				virtual bool inverseMap(double *value) const = 0;
+				virtual int direction() const = 0;
+			
+				// changing properties is done via this command:
+				friend class CartesianCoordinateSystemSetScalePropertiesCmd;
+			protected:
+				Scale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
+				ScaleType m_type;
+				Interval<double> m_interval;
+				double m_a;
+				double m_b;
+				double m_c;
+		};
+
 		CartesianCoordinateSystem(const QString &name);
 		virtual ~CartesianCoordinateSystem();
 
@@ -46,19 +83,19 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
 		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const;
 
-
 		virtual QGraphicsItem *graphicsItem() const;
 
-		CLASS_D_ACCESSOR_DECL(QPointF, position, Position);
-		BASIC_D_ACCESSOR_DECL(qreal, scaleX, ScaleX);
-		BASIC_D_ACCESSOR_DECL(qreal, scaleY, ScaleY);
 		int xDirection() const;
 		int yDirection() const;
+		bool setXScales(const QList<Scale *> &scales);
+		QList<Scale *> xScales() const;
+		bool setYScales(const QList<Scale *> &scales);
+		QList<Scale *> yScales() const;
 
 		typedef CartesianCoordinateSystemPrivate Private;
+
 	protected:
 		CartesianCoordinateSystem(const QString &name, CartesianCoordinateSystemPrivate *dd);
-
 	private:
     	Q_DECLARE_PRIVATE(CartesianCoordinateSystem)
 		void init();

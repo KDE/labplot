@@ -84,11 +84,15 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem() {
 /**
  * \brief Line clipping using the Cohen-Sutherland algorithm.
  *
- * This is a slightly modified version of clipLine() from Qt 4.5's qpaintengine_x11.cpp.
+ * This is a modified version of clipLine() from Qt 4.5's qpaintengine_x11.cpp.
+ *
+ * \param line The line to clip.
+ * \param rect The rect to clip to.
+ * \param clipResult Pointer to an object describing which parts where clipped (may be NULL).
  *
  * \return false if line is completely outside, otherwise true
  */
-bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect)
+bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult)
 {
     qreal x1 = line->x1();
     qreal x2 = line->x2();
@@ -96,10 +100,14 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect)
     qreal y2 = line->y2();
 
 	QRectF normalizedRect = rect.normalized();
-    qreal left = normalizedRect.x();
-    qreal right = normalizedRect.x() + normalizedRect.width() - 1;
-    qreal top = normalizedRect.y();
-    qreal bottom = normalizedRect.y() + normalizedRect.height() - 1;
+    qreal left;
+    qreal right;
+    qreal top;
+    qreal bottom;
+	rect.getCoords(&left, &top, &right, &bottom);
+
+	if (clipResult)
+		clipResult->reset();
 
     enum { Left, Right, Top, Bottom };
     // clip the lines, after cohen-sutherland, see e.g. http://www.nondot.org/~sabre/graphpro/line6.html
@@ -124,16 +132,24 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect)
         if (x1 < left) {
             y1 += dy/dx * (left - x1);
             x1 = left;
+			if (clipResult)
+				clipResult->xClippedLeft[0] = true;
         } else if (x1 > right) {
             y1 -= dy/dx * (x1 - right);
             x1 = right;
+			if (clipResult)
+				clipResult->xClippedRight[0] = true;
         }
         if (x2 < left) {
             y2 += dy/dx * (left - x2);
             x2 = left;
+			if (clipResult)
+				clipResult->xClippedLeft[1] = true;
         } else if (x2 > right) {
             y2 -= dy/dx * (x2 - right);
             x2 = right;
+			if (clipResult)
+				clipResult->xClippedRight[1] = true;
         }
         p1 = ((y1 < top) << Top)
              | ((y1 > bottom) << Bottom);
@@ -145,16 +161,36 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect)
         if (y1 < top) {
             x1 += dx/dy * (top - y1);
             y1 = top;
+			if (clipResult) {
+				clipResult->xClippedRight[0] = false;
+				clipResult->xClippedLeft[0] = false;
+				clipResult->yClippedTop[0] = true;
+			}
         } else if (y1 > bottom) {
             x1 -= dx/dy * (y1 - bottom);
             y1 = bottom;
+			if (clipResult) {
+				clipResult->xClippedRight[0] = false;
+				clipResult->xClippedLeft[0] = false;
+				clipResult->yClippedBottom[0] = true;
+			}
         }
         if (y2 < top) {
             x2 += dx/dy * (top - y2);
             y2 = top;
+			if (clipResult) {
+				clipResult->xClippedRight[1] = false;
+				clipResult->xClippedLeft[1] = false;
+				clipResult->yClippedTop[1] = true;
+			}
         } else if (y2 > bottom) {
             x2 -= dx/dy * (y2 - bottom);
             y2 = bottom;
+			if (clipResult) {
+				clipResult->xClippedRight[1] = false;
+				clipResult->xClippedLeft[1] = false;
+				clipResult->yClippedBottom[1] = true;
+			}
         }
         *line = QLineF(QPointF(x1, y1), QPointF(x2, y2));
     }

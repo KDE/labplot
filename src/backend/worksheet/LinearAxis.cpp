@@ -308,7 +308,7 @@ void LinearAxis::Private::retransform() {
 
 	lines.append(QLineF(startPoint, endPoint));
 	if (cSystem) {
-		lines = cSystem->mapLogicalToScene(lines);
+		lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
 	} 
 
 	foreach (QLineF line, lines) {

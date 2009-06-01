@@ -227,6 +227,7 @@ template<class T> class Interval : public IntervalBase<T>
 };
 
 template<> class Interval<float> : public IntervalBase<float> {
+	public:
 		Interval() {}
 		Interval(float start, float end) : IntervalBase<float>(start, end) {}
 		Interval(const Interval<float>& other) : IntervalBase<float>(other) {}
@@ -239,6 +240,7 @@ template<> class Interval<float> : public IntervalBase<float> {
 };
 
 template<> class Interval<double> : public IntervalBase<double> {
+	public:
 		Interval() {}
 		Interval(double start, double end) : IntervalBase<double>(start, end) {}
 		Interval(const Interval<double>& other) : IntervalBase<double>(other) {}
@@ -251,6 +253,7 @@ template<> class Interval<double> : public IntervalBase<double> {
 };
 
 template<> class Interval<long double> : public IntervalBase<long double> {
+	public:
 		Interval() {}
 		Interval(long double start, long double end) : IntervalBase<long double>(start, end) {}
 		Interval(const Interval<long double>& other) : IntervalBase<long double>(other) {}

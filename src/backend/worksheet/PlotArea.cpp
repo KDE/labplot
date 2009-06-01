@@ -121,9 +121,13 @@ QRectF PlotAreaPrivate::swapRect(const QRectF &newRect) {
 
 void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		QWidget *widget) {
-	Q_UNUSED(painter)
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
+
+	// TODO: make the background customizable
+	painter->setPen(Qt::NoPen);
+	painter->setBrush(QBrush(QColor(0xf0, 0xf0, 0xf0)));
+	painter->drawRect(transformedRect);
 }
 
 QRectF PlotAreaPrivate::boundingRect () const {

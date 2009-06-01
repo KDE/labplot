@@ -31,6 +31,7 @@
 #define ABSTRACTCOORDINATESYSTEM_H
 
 #include "worksheet/WorksheetElementContainer.h"
+#include <QVector>
 
 class AbstractCoordinateSystem: public WorksheetElementContainer {
 	Q_OBJECT
@@ -39,6 +40,7 @@ class AbstractCoordinateSystem: public WorksheetElementContainer {
 		enum MappingFlag {
 			DefaultMapping = 0x00,
 			SuppressPageClipping = 0x01,
+			MarkGaps = 0x02,
 		};
 		Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
 
@@ -49,7 +51,26 @@ class AbstractCoordinateSystem: public WorksheetElementContainer {
 		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const = 0;
 		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const = 0;
 
-		static bool clipLineToRect(QLineF *line, const QRectF &rect);
+		class LineClipResult {
+			public:
+				LineClipResult() {
+					reset();
+				}
+				inline void reset() {
+					for (int i=0; i<2; i++) {
+						xClippedRight[i] = false;
+						xClippedLeft[i] = false;
+						yClippedTop[i] = false;
+						yClippedBottom[i] = false;
+					}
+				}
+				bool xClippedRight[2];
+				bool xClippedLeft[2];
+				bool yClippedTop[2];
+				bool yClippedBottom[2];
+		};
+
+		static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = NULL);
 
 	protected:
 		AbstractCoordinateSystem(const QString &name, WorksheetElementContainerPrivate *dd);

@@ -34,6 +34,11 @@
 #include <QPen>
 #include <QtDebug>
 #include <QGraphicsItemGroup>
+#include <cmath>
+#include <QUndoCommand>
+#include <QtGlobal>
+#include <limits>
+
 /**
  * \class CartesianCoordinateSystem
  * \brief Cartesian coordinate system for plots.
@@ -41,6 +46,170 @@
  * 
  */
 
+/**
+ * \class CartesianCoordinateSystem::Scale
+ * \brief Base class for cartesian coordinate system scales.
+ *
+ * 
+ */
+
+/* ============================================================================ */
+/* =================================== scales ================================= */
+/* ============================================================================ */
+CartesianCoordinateSystem::Scale::Scale(ScaleType type, const Interval<double> &interval, double a, double b, double c)
+	: m_type(type), m_interval(interval), m_a(a), m_b(b), m_c(c) {
+}
+
+CartesianCoordinateSystem::Scale::~Scale() {}
+
+void CartesianCoordinateSystem::Scale::getProperties(ScaleType *type, Interval<double> *interval, 
+		double *a, double *b, double *c) const {
+	if (type)
+		*type = m_type;
+	if (interval)
+		*interval = m_interval;
+	if (a)
+		*a = m_a;
+	if (b)
+		*b = m_b;
+	if (c)
+		*c = m_c;
+}
+
+class CartesianCoordinateSystemSetScalePropertiesCmd : public QUndoCommand {
+	public:
+		CartesianCoordinateSystemSetScalePropertiesCmd(CartesianCoordinateSystem::Scale *target, 
+				const Interval<double> &interval, double a, double b, double c) 
+			: m_target(target), m_interval(interval), m_a(a), m_b(b), m_c(c) {
+				// use in macro only
+			}
+
+		template <typename T> void swap(T *a, T *b) {
+			T temp = *a;
+			*a = *b;
+			*b = temp;
+		}
+
+		virtual void redo() {
+			swap< Interval<double> >(&m_interval, &m_target->m_interval);
+			swap< double >(&m_a, &m_target->m_a);
+			swap< double >(&m_b, &m_target->m_b);
+			swap< double >(&m_c, &m_target->m_c);
+		}
+
+		virtual void undo() { redo(); }
+
+	private:
+		CartesianCoordinateSystem::Scale *m_target;
+		Interval<double> m_interval;
+		double m_a;
+		double m_b;
+		double m_c;
+};
+
+
+class LinearScale: public CartesianCoordinateSystem::Scale {
+	public:
+		virtual ~LinearScale() {}
+		LinearScale(const Interval<double> &interval, double offset, double gradient) 
+			: CartesianCoordinateSystem::Scale(ScaleLinear, interval, offset, gradient, 0) { Q_ASSERT(gradient != 0.0); }
+
+		virtual bool map(double *value) const {
+			*value = *value * m_b + m_a;
+			return true;
+		}
+
+		virtual bool inverseMap(double *value) const {
+			if (m_a == 0.0)
+				return false;
+			*value = (*value - m_a) / m_b;
+			return true;
+		}
+		virtual int direction() const {
+			return m_b < 0 ? -1 : 1;
+		}
+};
+
+class LogScale: public CartesianCoordinateSystem::Scale {
+	public:
+		virtual ~LogScale() {}
+		LogScale(const Interval<double> &interval, double offset, double scaleFactor, double base) 
+			: CartesianCoordinateSystem::Scale(ScaleLog, interval, offset, scaleFactor, base) { 
+				Q_ASSERT(scaleFactor != 0.0);
+				Q_ASSERT(base > 0.0);
+		}
+
+		virtual bool map(double *value) const {
+			if (*value > 0.0)
+				*value = log(*value)/log(m_c) * m_b + m_a;
+			else
+				return false;
+			
+			return true;
+		}
+
+		virtual bool inverseMap(double *value) const {
+			if (m_a == 0.0)
+				return false;
+			if (m_c <= 0.0)
+				return false;
+
+			*value = pow(m_c, (*value - m_a) / m_b);
+			return true;
+		}
+		virtual int direction() const {
+			return m_b < 0 ? -1 : 1;
+		}
+};
+
+
+CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c) {
+	switch (type) {
+		case ScaleLinear:
+			return new LinearScale(interval, a, b);
+		case ScaleLog:
+			return new LogScale(interval, a, b, c);
+		default:
+			return NULL;
+	}
+}
+
+CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLinearScale(const Interval<double> &interval, 
+		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
+
+	double lDiff = logicalEnd - logicalStart;
+	if (qFuzzyCompare(1 + lDiff, 1))
+		return NULL;
+
+	double b = (sceneEnd - sceneStart) / lDiff;
+	double a = sceneStart - b * logicalStart;
+
+	return new LinearScale(interval, a, b);
+}
+
+CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLogScale(const Interval<double> &interval, 
+		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, double base) {
+
+	if (base < 0.0 || qFuzzyCompare(1 + base, 1))
+		return NULL;
+	if (logicalStart < 0.0 || qFuzzyCompare(1 + logicalStart, 1))
+		return NULL;
+	if (logicalEnd < 0.0 || qFuzzyCompare(1 + logicalEnd, 1))
+		return NULL;
+
+	double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
+	if (qFuzzyCompare(1 + lDiff, 1))
+		return NULL;
+
+	double b = (sceneEnd - sceneStart) / lDiff;
+	double a = sceneStart - b * log(logicalStart)/log(base);
+
+	return new LogScale(interval, a, b, base);
+}
+
+/* ============================================================================ */
+/* ========================= coordinate system ================================ */
+/* ============================================================================ */
 
 class CartesianCoordinateSystemPrivate: public WorksheetElementContainerPrivate {
 	public:
@@ -55,9 +224,8 @@ class CartesianCoordinateSystemPrivate: public WorksheetElementContainerPrivate 
 			return q->name();
 		}
 
-		QPointF position; //!< scene position of the origin
-		qreal scaleX; //!< X ratio logical units / scene units
-		qreal scaleY; //!< Y ratio logical units / scene units
+		QList<CartesianCoordinateSystem::Scale *> xScales;
+		QList<CartesianCoordinateSystem::Scale *> yScales;
 };
 
 CartesianCoordinateSystem::CartesianCoordinateSystem(const QString &name) 
@@ -71,18 +239,11 @@ CartesianCoordinateSystem::CartesianCoordinateSystem(const QString &name, Cartes
 }
 
 void CartesianCoordinateSystem::init() {
-	Q_D(CartesianCoordinateSystem);
-
-	d->position = QPointF(0, 0); 
-	d->scaleX = 1.0;
-	d->scaleY = -1.0;
+	// TODO: set some standard scales
 }
 
 CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 }
-
-
-// TODO: support for axes/coordinate breaks
 
 QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
 	Q_D(const CartesianCoordinateSystem);
@@ -96,11 +257,36 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach(QPointF point, points) {
-		point.setX(point.x() / d->scaleX + d->position.x());
-		point.setY(point.y() / d->scaleY + d->position.y());
-		if (noPageClipping || pageRect.contains(point))
-			result.append(point);
+	foreach (Scale *xScale, d->xScales) {
+		Interval<double> xInterval;
+		xScale->getProperties(NULL, &xInterval);
+
+		foreach (Scale *yScale, d->yScales) {
+			Interval<double> yInterval;
+			yScale->getProperties(NULL, &yInterval);
+			
+			foreach(QPointF point, points) {
+				bool valid = true;
+
+				double x = point.x();
+				double y = point.y();
+
+				if (!(xInterval.contains(x) && yInterval.contains(y)))
+					continue;
+
+				valid = xScale->map(&x);
+				if (!valid)
+					continue;
+
+				valid = yScale->map(&y);
+				if (!valid)
+					continue;
+
+				QPointF mappedPoint(x, y);
+				if (noPageClipping || pageRect.contains(mappedPoint))
+					result.append(mappedPoint);
+			}
+		}
 	}
 
 	return result;
@@ -119,9 +305,40 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 
 	foreach(QPointF point, points) {
 		if (noPageClipping || pageRect.contains(point)) {
-			point.setX((point.x() - d->position.x()) * d->scaleX);
-			point.setY((point.y() - d->position.y()) * d->scaleY);
-			result.append(point);
+			bool found = false;
+
+			double x = point.x();
+			double y = point.y();
+			
+			foreach (Scale *xScale, d->xScales) {
+				if (found) break;
+
+				Interval<double> xInterval;
+				xScale->getProperties(NULL, &xInterval);
+
+				foreach (Scale *yScale, d->yScales) {
+					if (found) break;
+
+					Interval<double> yInterval;
+					yScale->getProperties(NULL, &yInterval);
+
+					bool valid = true;
+
+					valid = xScale->inverseMap(&x);
+					if (!valid)
+						continue;
+
+					valid = yScale->inverseMap(&y);
+					if (!valid)
+						continue;
+
+					if (!(xInterval.contains(x) && yInterval.contains(y)))
+						continue;
+
+					result.append(QPointF(x, y));
+					found = true;
+				}
+			}
 		}
 	}
 
@@ -140,65 +357,166 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 
 	bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
 
-	foreach(QLineF line, lines) {
-		QPointF p1 = line.p1();
-		QPointF p2 = line.p2();
-			
-		p1.setX(p1.x() / d->scaleX + d->position.x());
-		p1.setY(p1.y() / d->scaleY + d->position.y());
-		p2.setX(p2.x() / d->scaleX + d->position.x());
-		p2.setY(p2.y() / d->scaleY + d->position.y());
+	double xGapBefore = NAN;
+	double xGapAfter = NAN;
+	double yGapBefore = NAN;
+	double yGapAfter = NAN;
 
-		QLineF newLine(p1, p2);
-		if (doPageClipping) {
-			if (AbstractCoordinateSystem::clipLineToRect(&newLine, pageRect))
-				result.append(newLine);
+ 	QListIterator<Scale *> xIterator(d->xScales);
+	while (xIterator.hasNext()) {
+		Scale *xScale = xIterator.next();
+		Interval<double> xInterval;
+		xScale->getProperties(NULL, &xInterval);
+		
+		xGapBefore = xGapAfter;
+		if (xIterator.hasNext()) {
+			Scale *nextXScale = xIterator.peekNext();
+			Interval<double> nextXInterval;
+			nextXScale->getProperties(NULL, &nextXInterval);
+			double x1 = xInterval.end();
+			double x2 = nextXInterval.start();
+			bool valid = true;
+			valid = xScale->map(&x1);
+			if (valid)
+				valid = nextXScale->map(&x2);
+			if (valid)
+				xGapAfter = x2 - x1;
+			else
+				xGapAfter = NAN;
+		} else
+			xGapAfter = NAN;
+
+		QListIterator<Scale *> yIterator(d->yScales);
+		while (yIterator.hasNext()) {
+			Scale *yScale = yIterator.next();
+			Interval<double> yInterval;
+			yScale->getProperties(NULL, &yInterval);
+
+			yGapBefore = yGapAfter;
+			if (yIterator.hasNext()) {
+				Scale *nextYScale = yIterator.peekNext();
+				Interval<double> nextYInterval;
+				nextYScale->getProperties(NULL, &nextYInterval);
+				double y1 = yInterval.end();
+				double y2 = nextYInterval.start();
+				bool valid = true;
+				valid = yScale->map(&y1);
+				if (valid)
+					valid = nextYScale->map(&y2);
+				if (valid)
+					yGapAfter = y2 - y1;
+				else
+					yGapAfter = NAN;
+			} else
+				yGapAfter = NAN;
+
+			QRectF scaleRect = QRectF(xInterval.start(), yInterval.start(), 
+					xInterval.end() - xInterval.start(), yInterval.end() - yInterval.start()).normalized();
+
+			foreach(QLineF line, lines) {
+
+				LineClipResult clipResult;
+				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
+					continue;
+
+				double x1 = line.x1();
+				double x2 = line.x2();
+				double y1 = line.y1();
+				double y2 = line.y2();
+
+				bool valid = true;
+
+				valid = xScale->map(&x1);
+				if (!valid)
+					continue;
+
+				valid = xScale->map(&x2);
+				if (!valid)
+					continue;
+
+				valid = yScale->map(&y1);
+				if (!valid)
+					continue;
+
+				valid = yScale->map(&y2);
+				if (!valid)
+					continue;
+	
+
+				if (flags & MarkGaps) {
+					if (!isnan(xGapBefore)) {
+						if (clipResult.xClippedLeft[0]) {
+							QLineF gapMarker(QPointF(x1 + xGapBefore / 4, y1 - xGapBefore / 2), 
+									QPointF(x1 - xGapBefore / 4, y1 + xGapBefore / 2));
+							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+								result.append(gapMarker);
+						}
+						if (clipResult.xClippedLeft[1]) {
+							QLineF gapMarker(QPointF(x2 + xGapBefore / 4, y2 - xGapBefore / 2), 
+									QPointF(x2 - xGapBefore / 4, y2 + xGapBefore / 2));
+							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+								result.append(gapMarker);
+						}
+					}
+
+					if (!isnan(xGapAfter)) {
+						if (clipResult.xClippedRight[0]) {
+							QLineF gapMarker(QPointF(x1 + xGapAfter / 4, y1 - xGapAfter / 2), 
+									QPointF(x1 - xGapAfter / 4, y1 + xGapAfter / 2));
+							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+								result.append(gapMarker);
+						}
+						if (clipResult.xClippedRight[1]) {
+							QLineF gapMarker(QPointF(x2 + xGapAfter / 4, y2 - xGapAfter / 2), 
+									QPointF(x2 - xGapAfter / 4, y2 + xGapAfter / 2));
+							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+								result.append(gapMarker);
+						}
+					}
+
+					if (!isnan(yGapBefore)) {
+						if (clipResult.yClippedTop[0]) {
+							QLineF gapMarker(QPointF(x1 + yGapBefore / 2, y1 - yGapBefore / 4), 
+									QPointF(x1 - yGapBefore / 2, y1 + yGapBefore / 4));
+							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+								result.append(gapMarker);
+						}
+						if (clipResult.yClippedTop[1]) {
+							QLineF gapMarker(QPointF(x2 + yGapBefore / 2, y2 - yGapBefore / 4), 
+									QPointF(x2 - yGapBefore / 2, y2 + yGapBefore / 4));
+							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+								result.append(gapMarker);
+						}
+					}
+
+					if (!isnan(yGapAfter)) {
+						if (clipResult.yClippedBottom[0]) {
+							QLineF gapMarker(QPointF(x1 + yGapAfter / 2, y1 - yGapAfter / 4), 
+									QPointF(x1 - yGapAfter / 2, y1 + yGapAfter / 4));
+							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+								result.append(gapMarker);
+						}
+						if (clipResult.yClippedBottom[1]) {
+							QLineF gapMarker(QPointF(x2 + yGapAfter / 2, y2 - yGapAfter / 4), 
+									QPointF(x2 - yGapAfter / 2, y2 + yGapAfter / 4));
+							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+								result.append(gapMarker);
+						}
+					}
+				}
+
+				QLineF mappedLine(QPointF(x1, y1), QPointF(x2, y2));
+				if (doPageClipping) {
+					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect))
+						continue;
+				}
+
+				result.append(mappedLine);
+			}
 		}
-		else
-			result.append(newLine);
 	}
 
 	return result;
-}
-
-/**
- * \fn CartesianCoordinateSystem::CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
- * \brief Get/set the position of the coordinate system origin on the page.
- */
-
-CLASS_SHARED_D_READER_IMPL(CartesianCoordinateSystem, QPointF, position, position);
-STD_SETTER_CMD_IMPL_F(CartesianCoordinateSystem, SetPosition, QPointF, position, q->retransform);
-void CartesianCoordinateSystem::setPosition(const QPointF &position) {
-	Q_D(CartesianCoordinateSystem);
-	exec(new CartesianCoordinateSystemSetPositionCmd(d, position, tr("%1: move")));
-}
-
-
-/**
- * \fn CartesianCoordinateSystem::BASIC_D_ACCESSOR_DECL(qreal, scaleX, ScaleX)
- * \brief Get/set the X coordinate logical unit / scene unit ratio.
- */
-
-BASIC_SHARED_D_READER_IMPL(CartesianCoordinateSystem, qreal, scaleX, scaleX);
-STD_SETTER_CMD_IMPL_F(CartesianCoordinateSystem, SetScaleX, qreal, scaleX, q->retransform);
-void CartesianCoordinateSystem::setScaleX(qreal scale) {
-	Q_D(CartesianCoordinateSystem);
-	if (scale != 0.0) // no proper fp comparison needed, just avoid division by zero in mapping functions
-		exec(new CartesianCoordinateSystemSetScaleXCmd(d, scale, tr("%1: set X scale")));
-}
-
-
-/**
- * \fn CartesianCoordinateSystem::BASIC_D_ACCESSOR_DECL(qreal, scaleY, ScaleY)
- * \brief Get/set the Y coordinate logical unit / scene unit ratio.
- */
-
-BASIC_SHARED_D_READER_IMPL(CartesianCoordinateSystem, qreal, scaleY, scaleY);
-STD_SETTER_CMD_IMPL_F(CartesianCoordinateSystem, SetScaleY, qreal, scaleY, q->retransform);
-void CartesianCoordinateSystem::setScaleY(qreal scale) {
-	Q_D(CartesianCoordinateSystem);
-	if (scale != 0.0) // no proper fp comparison needed, just avoid division by zero in mapping functions
-		exec(new CartesianCoordinateSystemSetScaleYCmd(d, scale, tr("%1: set Y scale")));
 }
 
 /**
@@ -208,7 +526,11 @@ void CartesianCoordinateSystem::setScaleY(qreal scale) {
  * \return 1 or -1
  */
 int CartesianCoordinateSystem::xDirection() const {
-	return scaleX() < 0 ? -1 : 1;
+	Q_D(const CartesianCoordinateSystem);
+	if (d->xScales.isEmpty())
+		return 1;
+
+	return d->xScales.at(0)->direction();
 }
 
 /**
@@ -218,10 +540,38 @@ int CartesianCoordinateSystem::xDirection() const {
  * \return 1 or -1
  */
 int CartesianCoordinateSystem::yDirection() const {
-	return scaleY() < 0 ? -1 : 1;
+	Q_D(const CartesianCoordinateSystem);
+	if (d->yScales.isEmpty())
+		return 1;
+
+	return d->yScales.at(0)->direction();
 }
 
 QGraphicsItem *CartesianCoordinateSystem::graphicsItem() const {
 	return d_ptr;
+}
+
+// TODO: design elegant, flexible and undo-avare API for changing scales
+bool CartesianCoordinateSystem::setXScales(const QList<Scale *> &scales) {
+	Q_D(CartesianCoordinateSystem);
+
+	d->xScales = scales;
+	return true; // TODO: check scales validity
+}
+
+QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::xScales() const {
+	Q_D(const CartesianCoordinateSystem);
+	return d->xScales; // TODO: should rather return a copy of the scales here
+}
+
+bool CartesianCoordinateSystem::setYScales(const QList<Scale *> &scales) {
+	Q_D(CartesianCoordinateSystem);
+	d->yScales = scales;
+	return true; // TODO: check scales validity
+}
+
+QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::yScales() const {
+	Q_D(const CartesianCoordinateSystem);
+	return d->yScales; // TODO: should rather return a copy of the scales here
 }
 
