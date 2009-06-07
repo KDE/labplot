@@ -29,6 +29,9 @@ HEADERS += \
 	AbstractCoordinateSystem.h \
 	CartesianCoordinateSystem.h \
 	LinearAxis.h \
+	LinearAxisPrivate.h \
+	LogAxis.h \
+	LogAxisPrivate.h \
 	LineSymbolCurve.h \
 	AbstractCurveSymbol.h \
 	interfaces.h \
@@ -55,6 +58,7 @@ SOURCES += \
 	AbstractCoordinateSystem.cpp \
 	CartesianCoordinateSystem.cpp \
 	LinearAxis.cpp \
+	LogAxis.cpp \
 	LineSymbolCurve.cpp \
 	AbstractCurveSymbol.cpp \
 	symbols/EllipseCurveSymbol.cpp \

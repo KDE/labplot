@@ -33,6 +33,7 @@
 #include "worksheet/AbstractWorksheetElement.h"
 #include "lib/macros.h"
 
+class LinearAxisPrivate;
 class LinearAxis: public AbstractWorksheetElement {
 	Q_OBJECT
 
@@ -80,14 +81,18 @@ class LinearAxis: public AbstractWorksheetElement {
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 
+		typedef LinearAxisPrivate Private;
+
 	public slots:
 		virtual void retransform();
 
-	public:
-		class Private;
+	protected:
+		LinearAxisPrivate * const d_ptr;
+		LinearAxis(const QString &name, const AxisOrientation &orientation, LinearAxisPrivate *dd);
+
 	private:
-		friend class Private;
-		Private * const d;
+    	Q_DECLARE_PRIVATE(LinearAxis)
+		void init();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LinearAxis::AxisOrientation)

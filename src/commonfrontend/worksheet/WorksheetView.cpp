@@ -35,6 +35,7 @@
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
 #include "worksheet/LinearAxis.h"
+#include "worksheet/LogAxis.h"
 #include "worksheet/LineSymbolCurve.h"
 #include "worksheet/PlotArea.h"
 #include "lib/ActionManager.h"
@@ -353,7 +354,6 @@ void WorksheetView::startTestCode() {
 		coordSys->setXScales(scales);
 		scales.clear();
 		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.4, ph * 0.2, 1, 1000, 10);
-//		scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(8, SCALE_MAX), ph * 0.65 - 5, ph * 0.5, 8, 10);
 		coordSys->setYScales(scales);
 
 		plot->addChild(coordSys);
@@ -363,14 +363,16 @@ void WorksheetView::startTestCode() {
 		coordSys->addChild(plotArea);
 
 		LinearAxis *xAxis2 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
+		xAxis2->setOffset(1);
 		coordSys->addChild(xAxis2);
 		xAxis2->setMajorTicksLength(3);
 		xAxis2->setMinorTicksLength(1);
 		xAxis2->setMinorTickCount(3);
-		LinearAxis *yAxis2 = new LinearAxis("y axis 1", LinearAxis::axisLeft);
-		yAxis2->setMajorTicksLength(3);
-		yAxis2->setMinorTicksLength(1);
-		yAxis2->setMinorTickCount(4);
+		LogAxis *yAxis2 = new LogAxis("y axis 1", LinearAxis::axisLeft, 10);
+		yAxis2->setMajorTicksLength(5);
+		yAxis2->setMinorTicksLength(3);
+		yAxis2->setMinorTickCount(9);
+		yAxis2->setMajorTickCount(4);
 		yAxis2->setStart(1);
 		yAxis2->setEnd(1000);
 		yAxis2->setTickStart(1);
@@ -378,17 +380,20 @@ void WorksheetView::startTestCode() {
 		coordSys->addChild(yAxis2);
 
 		LinearAxis *xAxis3 = new LinearAxis("x axis 2", LinearAxis::axisTop);
-		xAxis3->setOffset(10);
+		xAxis3->setOffset(1);
 		coordSys->addChild(xAxis3);
 		LinearAxis *yAxis3 = new LinearAxis("y axis 2", LinearAxis::axisRight);
 		yAxis3->setOffset(10);
+		yAxis3->setMajorTicksLength(5);
+		yAxis3->setMinorTicksLength(3);
 		yAxis3->setMajorTicksDirection(LinearAxis::ticksBoth);
 		yAxis3->setMinorTicksDirection(LinearAxis::ticksBoth);
 		yAxis3->setStart(1);
 		yAxis3->setEnd(1000);
 		yAxis3->setTickStart(1);
 		yAxis3->setTickEnd(1000);
-		yAxis3->setMajorTickCount(9);
+		yAxis3->setMinorTickCount(9);
+		yAxis3->setMajorTickCount(4);
 		coordSys->addChild(yAxis3);
 
 		Column *xc = new Column("xc", SciDAVis::Numeric);

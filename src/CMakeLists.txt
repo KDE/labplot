@@ -116,6 +116,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/AbstractPlot.cpp
 	${BACKEND_DIR}/worksheet/LinearAxis.cpp
+	${BACKEND_DIR}/worksheet/LogAxis.cpp
 	${BACKEND_DIR}/worksheet/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp

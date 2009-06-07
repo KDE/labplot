@@ -28,12 +28,10 @@
  ***************************************************************************/
 
 #include "worksheet/LinearAxis.h"
+#include "worksheet/LinearAxisPrivate.h"
 #include "worksheet/AbstractCoordinateSystem.h"
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "lib/commandtemplates.h"
-#include <QGraphicsItem>
-#include <QGraphicsItemGroup>
-#include <QGraphicsLineItem>
 #include <QBrush>
 #include <QPen>
 #include <QPainter>
@@ -47,58 +45,21 @@
 
 // TODO: decide whether it makes sense to move some of the functionality into a class AbstractAxis
 
-class LinearAxis::Private: public QGraphicsItem {
-	public:
-		Private(LinearAxis *owner) : q(owner) {
-		}
-
-		~Private() {
-		}
-
-		QString name() const {
-			return q->name();
-		}
-
-		AxisOrientation orientation; //!< left, right, bottom, or top (usually not changed after creation)
-		qreal offset; //!< offset from zero in the directin perpendicular to the axis
-		qreal start; //!< start coordinate of the axis line
-		qreal end; //!< end coordinate of the axis line
-		qreal tickStart; //!< coordinate of the first tick (typically ==0 or ==start)
-		qreal tickEnd; //!< coordinate of the last tick (typically ==end)
-		int majorTickCount; //!< number of major ticks
-		int minorTickCount; //!< number of minor ticks (between each two major ticks)
-		qreal majorTicksLength; //!< major tick length (in page units!)
-		qreal minorTicksLength; //!< minor tick length (in page units!)
-		TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
-		TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
-
-		QPainterPath linePath;
-		QPainterPath majorTicksPath;
-		QPainterPath minorTicksPath;
-		QRectF boundingRectangle;
-		QPainterPath axisShape;
-
-		QBrush brush;
-		QPen pen;
-
-		virtual QRectF boundingRect() const { return boundingRectangle; }
-		QPainterPath shape() const { return axisShape; }
-    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
-
-		void retransform();
-		void retransformTicks();
-		void retransformTicks(const AbstractCoordinateSystem *cSystem);
-		bool swapVisible(bool on);
-
-		LinearAxis * const q;
-
-	private:
-		inline bool transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint);
-};
-
 LinearAxis::LinearAxis(const QString &name, const AxisOrientation &orientation)
-		: AbstractWorksheetElement(name), d(new Private(this)) {
-	d->orientation = orientation;
+		: AbstractWorksheetElement(name), d_ptr(new LinearAxisPrivate(this)) {
+	d_ptr->orientation = orientation;
+	init();
+}
+
+LinearAxis::LinearAxis(const QString &name, const AxisOrientation &orientation, LinearAxisPrivate *dd)
+		: AbstractWorksheetElement(name), d_ptr(dd) {
+	d_ptr->orientation = orientation;
+	init();
+}
+
+void LinearAxis::init() {
+	Q_D(LinearAxis);
+
 	d->offset = 0;
 	d->start = 0;
 	d->end = 10;
@@ -114,7 +75,7 @@ LinearAxis::LinearAxis(const QString &name, const AxisOrientation &orientation)
 }
 
 LinearAxis::~LinearAxis() {
-	delete d;
+	delete d_ptr;
 }
 
 /* ============================ accessor documentation ================= */
@@ -172,89 +133,101 @@ LinearAxis::~LinearAxis() {
  */
 
 /* ============================ getter methods ================= */
-CLASS_D_READER_IMPL(LinearAxis, LinearAxis::AxisOrientation, orientation, orientation);
-BASIC_D_READER_IMPL(LinearAxis, qreal, offset, offset);
-BASIC_D_READER_IMPL(LinearAxis, qreal, start, start);
-BASIC_D_READER_IMPL(LinearAxis, qreal, end, end);
-BASIC_D_READER_IMPL(LinearAxis, qreal, tickStart, tickStart);
-BASIC_D_READER_IMPL(LinearAxis, qreal, tickEnd, tickEnd);
-BASIC_D_READER_IMPL(LinearAxis, int, majorTickCount, majorTickCount);
-BASIC_D_READER_IMPL(LinearAxis, int, minorTickCount, minorTickCount);
-BASIC_D_READER_IMPL(LinearAxis, qreal, majorTicksLength, majorTicksLength);
-BASIC_D_READER_IMPL(LinearAxis, qreal, minorTicksLength, minorTicksLength);
-CLASS_D_READER_IMPL(LinearAxis, LinearAxis::TicksDirection, majorTicksDirection, majorTicksDirection);
-CLASS_D_READER_IMPL(LinearAxis, LinearAxis::TicksDirection, minorTicksDirection, minorTicksDirection);
+CLASS_SHARED_D_READER_IMPL(LinearAxis, LinearAxis::AxisOrientation, orientation, orientation);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, offset, offset);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, start, start);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, end, end);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, tickStart, tickStart);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, tickEnd, tickEnd);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, int, majorTickCount, majorTickCount);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, int, minorTickCount, minorTickCount);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, majorTicksLength, majorTicksLength);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, minorTicksLength, minorTicksLength);
+CLASS_SHARED_D_READER_IMPL(LinearAxis, LinearAxis::TicksDirection, majorTicksDirection, majorTicksDirection);
+CLASS_SHARED_D_READER_IMPL(LinearAxis, LinearAxis::TicksDirection, minorTicksDirection, minorTicksDirection);
 
 /* ============================ setter methods and undo commands ================= */
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetOrientation, LinearAxis::AxisOrientation, orientation, retransform);
 void LinearAxis::setOrientation(const AxisOrientation &orientation) {
+	Q_D(LinearAxis);
 	if (orientation != d->orientation)
 		exec(new LinearAxisSetOrientationCmd(d, orientation, tr("%1: set axis orientation")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetOffset, qreal, offset, retransform);
 void LinearAxis::setOffset(qreal offset) {
+	Q_D(LinearAxis);
 	if (offset != d->offset)
 		exec(new LinearAxisSetOffsetCmd(d, offset, tr("%1: set axis offset")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetStart, qreal, start, retransform);
 void LinearAxis::setStart(qreal start) {
+	Q_D(LinearAxis);
 	if (start != d->start)
 		exec(new LinearAxisSetStartCmd(d, start, tr("%1: set axis start")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetEnd, qreal, end, retransform);
 void LinearAxis::setEnd(qreal end) {
+	Q_D(LinearAxis);
 	if (end != d->end)
 		exec(new LinearAxisSetEndCmd(d, end, tr("%1: set axis end")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetTickStart, qreal, tickStart, retransformTicks);
 void LinearAxis::setTickStart(qreal tickStart) {
+	Q_D(LinearAxis);
 	if (tickStart != d->tickStart)
 		exec(new LinearAxisSetTickStartCmd(d, tickStart, tr("%1: set first tick")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetTickEnd, qreal, tickEnd, retransformTicks);
 void LinearAxis::setTickEnd(qreal tickEnd) {
+	Q_D(LinearAxis);
 	if (tickEnd != d->tickEnd)
 		exec(new LinearAxisSetTickEndCmd(d, tickEnd, tr("%1: set axis end")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMajorTickCount, int, majorTickCount, retransformTicks);
 void LinearAxis::setMajorTickCount(int majorTickCount) {
+	Q_D(LinearAxis);
 	if (majorTickCount != d->majorTickCount)
 		exec(new LinearAxisSetMajorTickCountCmd(d, majorTickCount, tr("%1: set major tick count")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMinorTickCount, int, minorTickCount, retransformTicks);
 void LinearAxis::setMinorTickCount(int minorTickCount) {
+	Q_D(LinearAxis);
 	if (minorTickCount != d->minorTickCount)
 		exec(new LinearAxisSetMinorTickCountCmd(d, minorTickCount, tr("%1: set minor tick count")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMajorTicksLength, qreal, majorTicksLength, retransformTicks);
 void LinearAxis::setMajorTicksLength(qreal majorTicksLength) {
+	Q_D(LinearAxis);
 	if (majorTicksLength != d->majorTicksLength)
 		exec(new LinearAxisSetMajorTicksLengthCmd(d, majorTicksLength, tr("%1: set major ticks length")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMinorTicksLength, qreal, minorTicksLength, retransformTicks);
 void LinearAxis::setMinorTicksLength(qreal minorTicksLength) {
+	Q_D(LinearAxis);
 	if (minorTicksLength != d->minorTicksLength)
 		exec(new LinearAxisSetMinorTicksLengthCmd(d, minorTicksLength, tr("%1: set minor ticks length")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMajorTicksDirection, LinearAxis::TicksDirection, majorTicksDirection, retransformTicks);
 void LinearAxis::setMajorTicksDirection(const TicksDirection &majorTicksDirection) {
+	Q_D(LinearAxis);
 	if (majorTicksDirection != d->majorTicksDirection)
 		exec(new LinearAxisSetMajorTicksDirectionCmd(d, majorTicksDirection, tr("%1: set major ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F(LinearAxis, SetMinorTicksDirection, LinearAxis::TicksDirection, minorTicksDirection, retransformTicks);
 void LinearAxis::setMinorTicksDirection(const TicksDirection &minorTicksDirection) {
+	Q_D(LinearAxis);
 	if (minorTicksDirection != d->minorTicksDirection)
 		exec(new LinearAxisSetMinorTicksDirectionCmd(d, minorTicksDirection, tr("%1: set minor ticks direction")));
 }
@@ -262,7 +235,7 @@ void LinearAxis::setMinorTicksDirection(const TicksDirection &minorTicksDirectio
 /* ============================ other methods ================= */
 
 QGraphicsItem *LinearAxis::graphicsItem() const {
-	return d;
+	return d_ptr;
 }
 
 bool LinearAxis::Private::swapVisible(bool on) {
@@ -273,14 +246,17 @@ bool LinearAxis::Private::swapVisible(bool on) {
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetVisible, bool, swapVisible);
 void LinearAxis::setVisible(bool on) {
+	Q_D(LinearAxis);
 	exec(new LinearAxisSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
 }
 
 bool LinearAxis::isVisible() const {
+	Q_D(const LinearAxis);
 	return d->isVisible();
 }
 
 void LinearAxis::retransform() {
+	Q_D(LinearAxis);
 	d->retransform();
 }
 
@@ -325,7 +301,7 @@ void LinearAxis::Private::retransformTicks() {
 }
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
-inline bool LinearAxis::Private::transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint) {
+bool LinearAxis::Private::transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint) {
 	if (cSystem) {
 		QList<QPointF> points;
 		points.append(*anchorPoint);
@@ -356,24 +332,25 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 	QList<QLineF> majorLines;
 	QList<QLineF> minorLines;
 
+	const double majorTickSpacing = majorTickCount > 1 ? (tickEnd - tickStart) / ((qreal)(majorTickCount - 1)) : 0;
 	for (int iMajor = 0; iMajor < majorTickCount; iMajor++) {
 		QPointF anchorPoint;
 		QPointF startPoint;
 		QPointF endPoint;
 		
-		qreal majorTickPos = tickStart + (majorTickCount > 1 ? (tickEnd - tickStart) * (qreal)iMajor / ((qreal)(majorTickCount - 1)) : 0);
-		if (noTicks != majorTicksDirection) {
+		qreal majorTickPos = tickStart + majorTickSpacing * (qreal)iMajor;
+		if (LinearAxis::noTicks != majorTicksDirection) {
 			if (orientation & LinearAxis::axisHorizontal) {
 				anchorPoint.setX(majorTickPos);
 				anchorPoint.setY(offset);
 
 				if (transformAnchor(cSystem, &anchorPoint)) {
-					if (orientation & axisNormalTicks) {
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & ticksIn)  ? yDirection * majorTicksLength  : 0);
-						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & ticksOut) ? -yDirection * majorTicksLength : 0);
+					if (orientation & LinearAxis::axisNormalTicks) {
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksIn)  ? yDirection * majorTicksLength  : 0);
+						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksOut) ? -yDirection * majorTicksLength : 0);
 					} else {
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & ticksOut) ? yDirection * majorTicksLength  : 0);
-						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & ticksIn)  ? -yDirection * majorTicksLength : 0);
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksOut) ? yDirection * majorTicksLength  : 0);
+						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksIn)  ? -yDirection * majorTicksLength : 0);
 					}
 					majorLines.append(QLineF(startPoint, endPoint));
 				}
@@ -382,33 +359,32 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 				anchorPoint.setX(offset);
 
 				if (transformAnchor(cSystem, &anchorPoint)) {
-					if (orientation & axisNormalTicks) {
-						startPoint = anchorPoint + QPointF((majorTicksDirection & ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
-						endPoint   = anchorPoint + QPointF((majorTicksDirection & ticksOut) ? -xDirection * majorTicksLength : 0, 0);
+					if (orientation & LinearAxis::axisNormalTicks) {
+						startPoint = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
+						endPoint   = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
 					} else {
-						startPoint = anchorPoint + QPointF((majorTicksDirection & ticksOut) ? xDirection * majorTicksLength  : 0, 0);
-						endPoint   = anchorPoint + QPointF((majorTicksDirection & ticksIn)  ? -xDirection * majorTicksLength : 0, 0);
+						startPoint = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksOut) ? xDirection * majorTicksLength  : 0, 0);
+						endPoint   = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksIn)  ? -xDirection * majorTicksLength : 0, 0);
 					}
 					majorLines.append(QLineF(startPoint, endPoint));
 				}
 			}
 		}
 
-		if ((noTicks != minorTicksDirection) && (majorTickCount > 1) && (minorTickCount > 0) && (iMajor < majorTickCount - 1)) {
+		if ((LinearAxis::noTicks != minorTicksDirection) && (majorTickCount > 1) && (minorTickCount > 0) && (iMajor < majorTickCount - 1)) {
 			for (int iMinor = 0; iMinor < minorTickCount; iMinor++) {
-				qreal minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (tickEnd - tickStart) \
-						/ (qreal)(majorTickCount - 1) / (qreal)(minorTickCount + 1);
+				qreal minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTickSpacing / (qreal)(minorTickCount + 1);
 				if (orientation & LinearAxis::axisHorizontal) {
 					anchorPoint.setX(minorTickPos);
 					anchorPoint.setY(offset);
 
 					if (transformAnchor(cSystem, &anchorPoint)) {
-						if (orientation & axisNormalTicks) {
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & ticksIn)  ? yDirection * minorTicksLength  : 0);
-							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & ticksOut) ? -yDirection * minorTicksLength : 0);
+						if (orientation & LinearAxis::axisNormalTicks) {
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & LinearAxis::ticksIn)  ? yDirection * minorTicksLength  : 0);
+							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & LinearAxis::ticksOut) ? -yDirection * minorTicksLength : 0);
 						} else {
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & ticksOut) ? yDirection * minorTicksLength  : 0);
-							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & ticksIn)  ? -yDirection * minorTicksLength : 0);
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & LinearAxis::ticksOut) ? yDirection * minorTicksLength  : 0);
+							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & LinearAxis::ticksIn)  ? -yDirection * minorTicksLength : 0);
 						}
 						minorLines.append(QLineF(startPoint, endPoint));
 					}
@@ -417,12 +393,12 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 					anchorPoint.setX(offset);
 
 					if (transformAnchor(cSystem, &anchorPoint)) {
-						if (orientation & axisNormalTicks) {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
-							endPoint   = anchorPoint + QPointF((minorTicksDirection & ticksOut) ? -xDirection * minorTicksLength : 0, 0);
+						if (orientation & LinearAxis::axisNormalTicks) {
+							startPoint = anchorPoint + QPointF((minorTicksDirection & LinearAxis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
+							endPoint   = anchorPoint + QPointF((minorTicksDirection & LinearAxis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
 						} else {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & ticksOut) ? xDirection * minorTicksLength  : 0, 0);
-							endPoint   = anchorPoint + QPointF((minorTicksDirection & ticksIn)  ? -xDirection * minorTicksLength : 0, 0);
+							startPoint = anchorPoint + QPointF((minorTicksDirection & LinearAxis::ticksOut) ? xDirection * minorTicksLength  : 0, 0);
+							endPoint   = anchorPoint + QPointF((minorTicksDirection & LinearAxis::ticksIn)  ? -xDirection * minorTicksLength : 0, 0);
 						}
 						minorLines.append(QLineF(startPoint, endPoint));
 					}
