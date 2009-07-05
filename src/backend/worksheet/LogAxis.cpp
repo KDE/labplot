@@ -81,6 +81,8 @@ void LogAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem)
 	minorTicksPath = QPainterPath();
 	axisShape = QPainterPath();
 	boundingRectangle = QRect();
+	qDeleteAll(labels);
+	labels.clear();
 
 	int xDirection = 1;
 	int yDirection = 1;
@@ -89,16 +91,14 @@ void LogAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem)
 		yDirection = cCSystem->yDirection();
 	}
 
-	QList<QLineF> majorLines;
-	QList<QLineF> minorLines;
-
 	const double majorTickSpacing = majorTickCount > 1 ? (log(tickEnd) - log(tickStart))/log(base) / ((qreal)(majorTickCount - 1)) : 0;
 	for (int iMajor = 0; iMajor < majorTickCount; iMajor++) {
 		QPointF anchorPoint;
 		QPointF startPoint;
 		QPointF endPoint;
+		QPointF textPos;
 		
-		qreal majorTickPos = tickStart + pow(base, majorTickSpacing * (qreal)iMajor);
+		qreal majorTickPos = pow(base, log(tickStart)/log(base) + majorTickSpacing * (qreal)iMajor);
 		if (LinearAxis::noTicks != majorTicksDirection) {
 			if (orientation & LinearAxis::axisHorizontal) {
 				anchorPoint.setX(majorTickPos);
@@ -108,11 +108,15 @@ void LogAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem)
 					if (orientation & LinearAxis::axisNormalTicks) {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksOut) ? -yDirection * majorTicksLength : 0);
+						textPos = endPoint;
 					} else {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksOut) ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksIn)  ? -yDirection * majorTicksLength : 0);
+						textPos = startPoint;
 					}
-					majorLines.append(QLineF(startPoint, endPoint));
+					majorTicksPath.moveTo(startPoint);
+					majorTicksPath.lineTo(endPoint);
+					addTextLabel(QLocale().toString(majorTickPos, numericFormat, displayedDigits), textPos);
 				}
 			} else { // vertical
 				anchorPoint.setY(majorTickPos);
@@ -122,11 +126,15 @@ void LogAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem)
 					if (orientation & LinearAxis::axisNormalTicks) {
 						startPoint = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 						endPoint   = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
+						textPos = endPoint;
 					} else {
 						startPoint = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksOut) ? xDirection * majorTicksLength  : 0, 0);
 						endPoint   = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksIn)  ? -xDirection * majorTicksLength : 0, 0);
+						textPos = startPoint;
 					}
-					majorLines.append(QLineF(startPoint, endPoint));
+					majorTicksPath.moveTo(startPoint);
+					majorTicksPath.lineTo(endPoint);
+					addTextLabel(QLocale().toString(majorTickPos, numericFormat, displayedDigits), textPos);
 				}
 			}
 		}
@@ -147,7 +155,8 @@ void LogAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem)
 							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & LinearAxis::ticksOut) ? yDirection * minorTicksLength  : 0);
 							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & LinearAxis::ticksIn)  ? -yDirection * minorTicksLength : 0);
 						}
-						minorLines.append(QLineF(startPoint, endPoint));
+						minorTicksPath.moveTo(startPoint);
+						minorTicksPath.lineTo(endPoint);
 					}
 				} else { // vertical
 					anchorPoint.setY(minorTickPos);
@@ -161,21 +170,12 @@ void LogAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem)
 							startPoint = anchorPoint + QPointF((minorTicksDirection & LinearAxis::ticksOut) ? xDirection * minorTicksLength  : 0, 0);
 							endPoint   = anchorPoint + QPointF((minorTicksDirection & LinearAxis::ticksIn)  ? -xDirection * minorTicksLength : 0, 0);
 						}
-						minorLines.append(QLineF(startPoint, endPoint));
+						minorTicksPath.moveTo(startPoint);
+						minorTicksPath.lineTo(endPoint);
 					}
 				}
 			}
 		}
-	}
-
-	foreach (QLineF line, majorLines) {
-		majorTicksPath.moveTo(line.p1());
-		majorTicksPath.lineTo(line.p2());
-	}
-
-	foreach (QLineF line, minorLines) {
-		minorTicksPath.moveTo(line.p1());
-		minorTicksPath.lineTo(line.p2());
 	}
 
 	boundingRectangle = linePath.boundingRect();
@@ -187,5 +187,9 @@ void LogAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem)
 	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, pen);
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
+
+	// TODO: labels shape
+	
+	restyleLabels();
 }
 

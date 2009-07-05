@@ -42,6 +42,7 @@ HEADERS += \
 	AbstractWorksheetDecorationElement.h \
 	PlotArea.h \
 	PlotAreaPrivate.h \
+	ScalableTextLabel.h \
 	
 SOURCES += \
 	WorksheetModule.cpp \
@@ -66,4 +67,6 @@ SOURCES += \
 	symbols/PathCurveSymbol.cpp \
 	AbstractWorksheetDecorationElement.cpp \ 
 	PlotArea.cpp \
+	ScalableTextLabel.cpp \
+
 

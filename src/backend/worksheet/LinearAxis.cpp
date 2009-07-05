@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "worksheet/LinearAxis.h"
+#include "worksheet/ScalableTextLabel.h"
 #include "worksheet/LinearAxisPrivate.h"
 #include "worksheet/AbstractCoordinateSystem.h"
 #include "worksheet/CartesianCoordinateSystem.h"
@@ -35,6 +36,9 @@
 #include <QBrush>
 #include <QPen>
 #include <QPainter>
+#include <QLocale>
+#include <QFontMetricsF>
+#include <QtDebug>
 
 /**
  * \class LinearAxis
@@ -65,12 +69,17 @@ void LinearAxis::init() {
 	d->end = 10;
 	d->tickStart = 0;
 	d->tickEnd = 10;
-	d->majorTickCount = 10;
+	d->majorTickCount = 11;
 	d->minorTickCount = 1;
 	d->majorTicksLength = 0.5;
 	d->minorTicksLength = 0.25;
 	d->majorTicksDirection = ticksOut;
 	d->minorTicksDirection = ticksOut;
+	d->numericFormat = 'f';
+	d->displayedDigits = 1;
+	d->labelColor = QColor(Qt::black);
+	d->labelFontSize = 2;
+	d->labelRotationAngle = 0;
 	retransform();
 }
 
@@ -131,6 +140,26 @@ LinearAxis::~LinearAxis() {
    \fn LinearAxis::CLASS_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection);
    \brief Get/set the minor ticks direction: inwards, outwards, both, or none.
  */
+/**
+   \fn LinearAxis::BASIC_D_ACCESSOR_DECL(qreal, labelRotationAngle, LabelRotationAngle);
+   \brief Get/set the rotation angle of the tick labels.
+ */
+/**
+   \fn LinearAxis::BASIC_D_ACCESSOR_DECL(qreal, labelFontSize, LabelFontSize);
+   \brief Get/set the font size of the tick labels.
+ */
+/**
+   \fn LinearAxis::CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor);
+   \brief Get/set the color of the tick labels.
+ */
+/**
+   \fn LinearAxis::CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont);
+   \brief Get/set the font of the tick labels (size of the QFont will be ignored).
+ */
+/**
+   \fn LinearAxis::CLASS_D_ACCESSOR_DECL(QPointF, labelOffset, LabelOffset);
+   \brief Get/set the position offset of the tick labels relative to the end of the tick line.
+ */
 
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(LinearAxis, LinearAxis::AxisOrientation, orientation, orientation);
@@ -145,6 +174,11 @@ BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, majorTicksLength, majorTicksLength
 BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, minorTicksLength, minorTicksLength);
 CLASS_SHARED_D_READER_IMPL(LinearAxis, LinearAxis::TicksDirection, majorTicksDirection, majorTicksDirection);
 CLASS_SHARED_D_READER_IMPL(LinearAxis, LinearAxis::TicksDirection, minorTicksDirection, minorTicksDirection);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, labelRotationAngle, labelRotationAngle);
+BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, labelFontSize, labelFontSize);
+CLASS_SHARED_D_READER_IMPL(LinearAxis, QColor, labelColor, labelColor);
+CLASS_SHARED_D_READER_IMPL(LinearAxis, QFont, labelFont, labelFont);
+CLASS_SHARED_D_READER_IMPL(LinearAxis, QPointF, labelOffset, labelOffset);
 
 /* ============================ setter methods and undo commands ================= */
 
@@ -232,16 +266,39 @@ void LinearAxis::setMinorTicksDirection(const TicksDirection &minorTicksDirectio
 		exec(new LinearAxisSetMinorTicksDirectionCmd(d, minorTicksDirection, tr("%1: set minor ticks direction")));
 }
 
-/* ============================ other methods ================= */
-
-QGraphicsItem *LinearAxis::graphicsItem() const {
-	return d_ptr;
+STD_SETTER_CMD_IMPL_F(LinearAxis, SetLabelRotationAngle, qreal, labelRotationAngle, restyleLabels);
+void LinearAxis::setLabelRotationAngle(qreal angle) {
+	Q_D(LinearAxis);
+	if (angle != d->labelRotationAngle)
+		exec(new LinearAxisSetLabelRotationAngleCmd(d, angle, tr("%1: set label rotation angle")));
 }
 
-bool LinearAxis::Private::swapVisible(bool on) {
-	bool oldValue = isVisible();
-	setVisible(on);
-	return oldValue;
+STD_SETTER_CMD_IMPL_F(LinearAxis, SetLabelFontSize, qreal, labelFontSize, restyleLabels);
+void LinearAxis::setLabelFontSize(qreal size) {
+	Q_D(LinearAxis);
+	if (size != d->labelFontSize)
+		exec(new LinearAxisSetLabelFontSizeCmd(d, size, tr("%1: set label font size")));
+}
+
+STD_SETTER_CMD_IMPL_F(LinearAxis, SetLabelColor, QColor, labelColor, restyleLabels);
+void LinearAxis::setLabelColor(const QColor &color) {
+	Q_D(LinearAxis);
+	if (color != d->labelColor)
+		exec(new LinearAxisSetLabelColorCmd(d, color, tr("%1: set label color")));
+}
+
+STD_SETTER_CMD_IMPL_F(LinearAxis, SetLabelFont, QFont, labelFont, restyleLabels);
+void LinearAxis::setLabelFont(const QFont &font) {
+	Q_D(LinearAxis);
+	if (font != d->labelFont)
+		exec(new LinearAxisSetLabelFontCmd(d, font, tr("%1: set label font")));
+}
+
+STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetLabelOffset, QPointF, swapLabelOffset);
+void LinearAxis::setLabelOffset(const QPointF &newOffset) {
+	Q_D(LinearAxis);
+	if (newOffset != d->labelOffset)
+		exec(new LinearAxisSetLabelOffsetCmd(d, newOffset, tr("%1: set label offset")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(LinearAxis, SetVisible, bool, swapVisible);
@@ -254,6 +311,27 @@ bool LinearAxis::isVisible() const {
 	Q_D(const LinearAxis);
 	return d->isVisible();
 }
+
+
+/* ============================ other methods ================= */
+
+QGraphicsItem *LinearAxis::graphicsItem() const {
+	return d_ptr;
+}
+
+bool LinearAxis::Private::swapVisible(bool on) {
+	bool oldValue = isVisible();
+	setVisible(on);
+	return oldValue;
+}
+
+QPointF LinearAxis::Private::swapLabelOffset(const QPointF &newOffset)
+{
+	QPointF oldOffset = labelOffset;
+	labelOffset = newOffset;
+	return oldOffset;
+}
+
 
 void LinearAxis::retransform() {
 	Q_D(LinearAxis);
@@ -314,6 +392,7 @@ bool LinearAxis::Private::transformAnchor(const AbstractCoordinateSystem *cSyste
 	return true;
 }
 
+// TODO: make this more generic to share more code with LogAxis
 void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 	const CartesianCoordinateSystem *cCSystem = qobject_cast<const CartesianCoordinateSystem *>(cSystem);
 
@@ -321,6 +400,8 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 	minorTicksPath = QPainterPath();
 	axisShape = QPainterPath();
 	boundingRectangle = QRect();
+	qDeleteAll(labels);
+	labels.clear();
 
 	int xDirection = 1;
 	int yDirection = 1;
@@ -328,15 +409,13 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 		xDirection = cCSystem->xDirection();
 		yDirection = cCSystem->yDirection();
 	}
-
-	QList<QLineF> majorLines;
-	QList<QLineF> minorLines;
-
+				
 	const double majorTickSpacing = majorTickCount > 1 ? (tickEnd - tickStart) / ((qreal)(majorTickCount - 1)) : 0;
 	for (int iMajor = 0; iMajor < majorTickCount; iMajor++) {
 		QPointF anchorPoint;
 		QPointF startPoint;
 		QPointF endPoint;
+		QPointF textPos;
 		
 		qreal majorTickPos = tickStart + majorTickSpacing * (qreal)iMajor;
 		if (LinearAxis::noTicks != majorTicksDirection) {
@@ -348,11 +427,15 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 					if (orientation & LinearAxis::axisNormalTicks) {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksOut) ? -yDirection * majorTicksLength : 0);
+						textPos = endPoint;
 					} else {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksOut) ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & LinearAxis::ticksIn)  ? -yDirection * majorTicksLength : 0);
+						textPos = startPoint;
 					}
-					majorLines.append(QLineF(startPoint, endPoint));
+					majorTicksPath.moveTo(startPoint);
+					majorTicksPath.lineTo(endPoint);
+					addTextLabel(QLocale().toString(majorTickPos, numericFormat, displayedDigits), textPos);
 				}
 			} else { // vertical
 				anchorPoint.setY(majorTickPos);
@@ -362,11 +445,15 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 					if (orientation & LinearAxis::axisNormalTicks) {
 						startPoint = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 						endPoint   = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
+						textPos = endPoint;
 					} else {
 						startPoint = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksOut) ? xDirection * majorTicksLength  : 0, 0);
 						endPoint   = anchorPoint + QPointF((majorTicksDirection & LinearAxis::ticksIn)  ? -xDirection * majorTicksLength : 0, 0);
+						textPos = startPoint;
 					}
-					majorLines.append(QLineF(startPoint, endPoint));
+					majorTicksPath.moveTo(startPoint);
+					majorTicksPath.lineTo(endPoint);
+					addTextLabel(QLocale().toString(majorTickPos, numericFormat, displayedDigits), textPos);
 				}
 			}
 		}
@@ -386,7 +473,8 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & LinearAxis::ticksOut) ? yDirection * minorTicksLength  : 0);
 							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & LinearAxis::ticksIn)  ? -yDirection * minorTicksLength : 0);
 						}
-						minorLines.append(QLineF(startPoint, endPoint));
+						minorTicksPath.moveTo(startPoint);
+						minorTicksPath.lineTo(endPoint);
 					}
 				} else { // vertical
 					anchorPoint.setY(minorTickPos);
@@ -400,21 +488,12 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 							startPoint = anchorPoint + QPointF((minorTicksDirection & LinearAxis::ticksOut) ? xDirection * minorTicksLength  : 0, 0);
 							endPoint   = anchorPoint + QPointF((minorTicksDirection & LinearAxis::ticksIn)  ? -xDirection * minorTicksLength : 0, 0);
 						}
-						minorLines.append(QLineF(startPoint, endPoint));
+						minorTicksPath.moveTo(startPoint);
+						minorTicksPath.lineTo(endPoint);
 					}
 				}
 			}
 		}
-	}
-
-	foreach (QLineF line, majorLines) {
-		majorTicksPath.moveTo(line.p1());
-		majorTicksPath.lineTo(line.p2());
-	}
-
-	foreach (QLineF line, minorLines) {
-		minorTicksPath.moveTo(line.p1());
-		minorTicksPath.lineTo(line.p2());
 	}
 
 	boundingRectangle = linePath.boundingRect();
@@ -426,10 +505,13 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, pen);
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
+
+	// TODO: labels shape
+	
+	restyleLabels();
 }
 
-void LinearAxis::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget)
-{
+void LinearAxis::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -439,7 +521,59 @@ void LinearAxis::Private::paint(QPainter *painter, const QStyleOptionGraphicsIte
 	painter->drawPath(linePath);
 	painter->drawPath(minorTicksPath);
 	painter->drawPath(majorTicksPath);
+
+	painter->translate(labelOffset);
+
+	foreach (ScalableTextLabel *textLabel, labels)
+		textLabel->paint(painter);
+
+	painter->translate(-labelOffset);
 }
 
 
+void LinearAxisPrivate::addTextLabel(const QString &text, const QPointF &pos) {
+	ScalableTextLabel *label = new ScalableTextLabel();
+	label->setText(text);
+	label->setPosition(pos);
+
+	ScalableTextLabel::HorizontalAlignment hAlign = ScalableTextLabel::hAlignCenter;
+	ScalableTextLabel::VerticalAlignment vAlign = ScalableTextLabel::vAlignCenter;
+	if (orientation & LinearAxis::axisHorizontal) {
+		if (qFuzzyCompare(1, 1 + labelRotationAngle)) {
+			if (orientation & LinearAxis::axisNormalTicks)
+				vAlign = ScalableTextLabel::vAlignTop;
+			else
+				vAlign = ScalableTextLabel::vAlignBottom;
+		} else {
+			if (orientation & LinearAxis::axisNormalTicks) {
+				if (labelRotationAngle < 0)
+					hAlign = ScalableTextLabel::hAlignRight;
+				else
+					hAlign = ScalableTextLabel::hAlignLeft;
+			} else {
+				if (labelRotationAngle < 0)
+					hAlign = ScalableTextLabel::hAlignLeft;
+				else
+					hAlign = ScalableTextLabel::hAlignRight;
+			}
+		}
+	} else {
+		if (orientation & LinearAxis::axisNormalTicks)
+			hAlign = ScalableTextLabel::hAlignRight;
+		else
+			hAlign = ScalableTextLabel::hAlignLeft;
+	}
+	label->setAlignment(hAlign, vAlign);
+
+	labels.append(label);
+}
+
+void LinearAxisPrivate::restyleLabels() {
+	foreach(ScalableTextLabel *label, labels) {
+		label->setFontSize(labelFontSize);
+		label->setRotationAngle(labelRotationAngle);
+		label->setFont(labelFont);
+		label->setTextColor(labelColor);
+	}
+}
 

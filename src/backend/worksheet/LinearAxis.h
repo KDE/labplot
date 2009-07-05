@@ -75,6 +75,11 @@ class LinearAxis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength);
 		CLASS_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection);
 		CLASS_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection);
+		BASIC_D_ACCESSOR_DECL(qreal, labelRotationAngle, LabelRotationAngle);
+		BASIC_D_ACCESSOR_DECL(qreal, labelFontSize, LabelFontSize);
+		CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor);
+		CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont);
+		CLASS_D_ACCESSOR_DECL(QPointF, labelOffset, LabelOffset);
 
 		//TODO: all style related stuff (line widths, color, ...)
 

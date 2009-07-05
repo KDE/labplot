@@ -128,6 +128,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/StandardCurveSymbolFactory.cpp
 	${BACKEND_DIR}/worksheet/AbstractWorksheetDecorationElement.cpp
 	${BACKEND_DIR}/worksheet/PlotArea.cpp
+	${BACKEND_DIR}/worksheet/ScalableTextLabel.cpp
 )
 
 set(QTFRONTEND_SOURCES

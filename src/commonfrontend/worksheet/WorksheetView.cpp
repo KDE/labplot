@@ -380,7 +380,7 @@ void WorksheetView::startTestCode() {
 		coordSys->addChild(yAxis2);
 
 		LinearAxis *xAxis3 = new LinearAxis("x axis 2", LinearAxis::axisTop);
-		xAxis3->setOffset(1);
+		xAxis3->setOffset(1000);
 		coordSys->addChild(xAxis3);
 		LinearAxis *yAxis3 = new LinearAxis("y axis 2", LinearAxis::axisRight);
 		yAxis3->setOffset(10);

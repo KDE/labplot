@@ -33,6 +33,8 @@
 #include <QGraphicsItem>
 #include <QBrush>
 #include <QPen>
+#include <QFont>
+#include "worksheet/ScalableTextLabel.h"
 
 class LinearAxisPrivate: public QGraphicsItem {
 	public:
@@ -58,15 +60,25 @@ class LinearAxisPrivate: public QGraphicsItem {
 		qreal minorTicksLength; //!< minor tick length (in page units!)
 		LinearAxis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 		LinearAxis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
+		qreal labelFontSize;
+		qreal labelRotationAngle;
 
 		QPainterPath linePath;
 		QPainterPath majorTicksPath;
 		QPainterPath minorTicksPath;
+		QList<ScalableTextLabel *> labels;
 		QRectF boundingRectangle;
 		QPainterPath axisShape;
 
 		QBrush brush;
 		QPen pen;
+		QColor labelColor;
+		QFont labelFont;
+		QPointF labelOffset;
+
+		char numericFormat;
+		int displayedDigits;
+		// TODO support for date/time and string labels
 
 		virtual QRectF boundingRect() const { return boundingRectangle; }
 		virtual QPainterPath shape() const { return axisShape; }
@@ -74,8 +86,11 @@ class LinearAxisPrivate: public QGraphicsItem {
 
 		virtual void retransform();
 		virtual void retransformTicks();
+		virtual void restyleLabels();
 		virtual void retransformTicks(const AbstractCoordinateSystem *cSystem);
 		bool swapVisible(bool on);
+		QPointF swapLabelOffset(const QPointF &newOffset);
+		virtual void addTextLabel(const QString &text, const QPointF &pos);
 
 		LinearAxis * const q;
 
