@@ -73,7 +73,7 @@ QString DateTime2StringFilter::textAt(int row) const {
 }
 
 bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn *source) {
-	return source->columnMode() == SciDAVis::Numeric;
+	return source->columnMode() == SciDAVis::DateTime;
 }
 
 DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format)
