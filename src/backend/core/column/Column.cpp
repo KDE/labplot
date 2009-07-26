@@ -3,7 +3,7 @@
     Project              : SciDAVis
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -31,6 +31,8 @@
 #include "core/column/ColumnPrivate.h"
 #include "core/column/columncommands.h"
 #include "lib/XmlStreamReader.h"
+#include "core/datatypes/String2DateTimeFilter.h"
+#include "core/datatypes/DateTime2StringFilter.h"
 #include <QIcon>
 #include <QXmlStreamWriter>
 #include <QtDebug>
@@ -870,8 +872,14 @@ QList< Interval<int> > Column::formulaIntervals() const
 	return m_column_private->formulaIntervals(); 
 }
 
-void Column::notifyDisplayChange()
+void Column::handleFormatChange()
 {
+	if (columnMode() == SciDAVis::DateTime) {		
+		String2DateTimeFilter *input_filter = static_cast<String2DateTimeFilter*>(m_column_private->inputFilter());
+		DateTime2StringFilter *output_filter = static_cast<DateTime2StringFilter*>(m_column_private->outputFilter());
+		input_filter->setFormat(output_filter->format());
+	}
+
 	emit dataChanged(this); // all cells must be repainted
 	emit aspectDescriptionChanged(this); // the icon for the type changed
 }
@@ -896,3 +904,26 @@ QString ColumnStringIO::textAt(int row) const
 	else
 		return m_owner->m_column_private->outputFilter()->output(0)->textAt(row);
 }
+
+bool ColumnStringIO::copy(const AbstractColumn *other) {
+	if (other->columnMode() != SciDAVis::Text) return false;
+	m_owner->m_column_private->inputFilter()->input(0,other);
+	m_owner->copy(m_owner->m_column_private->inputFilter()->output(0));
+	m_owner->m_column_private->inputFilter()->input(0,this);
+	return true;
+}
+
+bool ColumnStringIO::copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows) {
+	if (source->columnMode() != SciDAVis::Text) return false;
+	m_owner->m_column_private->inputFilter()->input(0,source);
+	m_owner->copy(m_owner->m_column_private->inputFilter()->output(0), source_start, dest_start, num_rows);
+	m_owner->m_column_private->inputFilter()->input(0,this);
+	return true;
+}
+
+void ColumnStringIO::replaceTexts(int start_row, const QStringList &texts) {
+	Column tmp("tmp", texts);
+	copy(&tmp, 0, start_row, texts.size());
+}
+
+

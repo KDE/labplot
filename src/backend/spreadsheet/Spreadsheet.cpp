@@ -255,16 +255,28 @@ int Spreadsheet::colX(int col)
 int Spreadsheet::colY(int col)
 {
 	int cols = columnCount();
-	// look to the right first
-	for(int i=col+1; i<cols; i++)
-	{
-		if (column(i)->plotDesignation() == SciDAVis::Y)
-			return i;
-	}
-	for(int i=col-1; i>=0; i--)
-	{
-		if (column(i)->plotDesignation() == SciDAVis::Y)
-			return i;
+
+	if (column(col)->plotDesignation() == SciDAVis::xErr || 
+			column(col)->plotDesignation() == SciDAVis::yErr) {
+		// look to the left first
+		for(int i=col-1; i>=0; i--) {
+			if (column(i)->plotDesignation() == SciDAVis::Y)
+				return i;
+		}
+		for(int i=col+1; i<cols; i++) {
+			if (column(i)->plotDesignation() == SciDAVis::Y)
+				return i;
+		}
+	} else {
+		// look to the right first
+		for(int i=col+1; i<cols; i++) {
+			if (column(i)->plotDesignation() == SciDAVis::Y)
+				return i;
+		}
+		for(int i=col-1; i>=0; i--) {
+			if (column(i)->plotDesignation() == SciDAVis::Y)
+				return i;
+		}
 	}
 	return -1;
 }

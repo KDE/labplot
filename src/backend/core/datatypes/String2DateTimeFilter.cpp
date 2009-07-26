@@ -123,9 +123,11 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const
 			break;
 	}
 
-	if(!date_result.isValid() && time_result.isValid())
-		date_result.setDate(1900,1,1);	// this is what QDateTime does e.g. for
-													// QDateTime::fromString("00:00","hh:mm");
+	if (!date_result.isValid() && time_result.isValid())
+		date_result.setDate(1900,1,1);	// this is what QDateTime does e.g. for QDateTime::fromString("00:00","hh:mm");
+	else if (date_result.isValid() && !time_result.isValid())
+		time_result = QTime(0, 0, 0, 0);
+
 	return QDateTime(date_result, time_result);
 }
 

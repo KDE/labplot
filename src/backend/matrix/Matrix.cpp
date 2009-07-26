@@ -1109,6 +1109,7 @@ bool Matrix::load(XmlStreamReader * reader)
 			reader->raiseError(tr("invalid row or column count"));
 			return false;
 		}
+		d_matrix_private->blockChangeSignals(true);
 		setDimensions(rows, cols);
 
 		// read child elements
@@ -1143,6 +1144,7 @@ bool Matrix::load(XmlStreamReader * reader)
 				if(!ret_val) return false;
 			} 
 		}
+		d_matrix_private->blockChangeSignals(false);
 	}
 	else // no matrix element
 		reader->raiseError(tr("no matrix element found"));

@@ -3,7 +3,7 @@
     Project              : SciDAVis
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -114,7 +114,7 @@ class Column : public AbstractColumn
 		void widthChanged(const Column*);
 
 	private slots:
-		void notifyDisplayChange();
+		void handleFormatChange();
 
 	private:
 		Private * m_column_private;
@@ -134,6 +134,15 @@ class ColumnStringIO : public AbstractColumn
 		virtual int rowCount() const { return m_owner->rowCount(); }
 		virtual QString textAt(int row) const;
 		virtual void setTextAt(int row, const QString &value);
+		virtual bool isValid(int row) const {
+			if (m_setting)
+				return true;
+			else
+				return m_owner->isValid(row);
+		}
+		virtual bool copy(const AbstractColumn *other);
+		virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
+		virtual void replaceTexts(int start_row, const QStringList &texts);
 
 	private:
 		Column * m_owner;
