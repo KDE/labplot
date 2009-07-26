@@ -562,15 +562,14 @@ void SpreadsheetView::applyType()
 	switch(mode)
 	{
 		case SciDAVis::Numeric:
-			foreach(Column* col, list)
-			{
+			foreach(Column* col, list) {
+                col->beginMacro(QObject::tr("%1: change column type").arg(col->name()));
 				col->setColumnMode(mode);
 				Double2StringFilter * filter = static_cast<Double2StringFilter*>(col->outputFilter());
 				int digits = ui.digits_box->value(); // setNumericFormat causes digits_box to be modified...
 				filter->setNumericFormat(ui.format_box->itemData(format_index).toChar().toLatin1());
 				filter->setNumDigits(digits);
-				// TODO: make sure this is done by a signal from the filter to the column on to the spreadsheet
-	//			m_model->emitColumnChanged(col); 
+                col->endMacro();
 				}
 			break;
 		case SciDAVis::Text:
@@ -580,13 +579,13 @@ void SpreadsheetView::applyType()
 		case SciDAVis::Month:
 		case SciDAVis::Day:
 		case SciDAVis::DateTime:
-			foreach(Column* col, list)
-			{
+			foreach(Column* col, list) {
+                col->beginMacro(QObject::tr("%1: change column type").arg(col->name()));
 				col->setColumnMode(mode);
+				QString format = ui.format_box->itemData(format_index).toString();
 				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-				filter->setFormat(ui.format_box->itemData(format_index).toString());
-				// TODO: make sure this is done by a signal from the filter to the column on to the spreadsheet
-	//			m_model->emitColumnChanged(col); 
+				filter->setFormat(format);
+                col->endMacro();
 			}
 			break;
 	}
@@ -702,6 +701,15 @@ bool SpreadsheetView::isCellSelected(int row, int col)
 	if (row < 0 || col < 0 || row >= m_spreadsheet->rowCount() || col >= m_spreadsheet->columnCount()) return false;
 
 	return m_view_widget->selectionModel()->isSelected(m_model->index(row, col));
+}
+
+IntervalAttribute<bool> SpreadsheetView::selectedRows(bool full) {
+	IntervalAttribute<bool> result;
+	int rows = m_spreadsheet->rowCount();
+	for (int i=0; i<rows; i++)
+		if (isRowSelected(i, full))
+			result.setValue(i, true);
+	return result;
 }
 
 void SpreadsheetView::setCellSelected(int row, int col, bool select)
@@ -995,14 +1003,14 @@ void SpreadsheetView::pasteIntoSelection()
 
 	if (mime_data->hasFormat("text/plain"))
 	{
-		QString input_str = QString(mime_data->data("text/plain"));
+		QString input_str = QString(mime_data->data("text/plain")).trimmed();
 		QList< QStringList > cell_texts;
 		QStringList input_rows(input_str.split("\n"));
 		input_row_count = input_rows.count();
 		input_col_count = 0;
 		for (int i=0; i<input_row_count; i++)
 		{
-			cell_texts.append(input_rows.at(i).split("\t"));
+			cell_texts.append(input_rows.at(i).trimmed().split(QRegExp("\\s+")));
 			if (cell_texts.at(i).count() > input_col_count) input_col_count = cell_texts.at(i).count();
 		}
 
@@ -1118,13 +1126,33 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers()
 	
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(tr("%1: fill cells with row numbers").arg(m_spreadsheet->name()));
-	QList<Column*> list = selectedColumns();
-	foreach(Column * col_ptr, list)
-	{
+	foreach(Column * col_ptr, selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-		for (int row=first; row<=last; row++)
-			if (isCellSelected(row, col)) 
-				col_ptr->asStringColumn()->setTextAt(row, QString::number(row+1));
+
+		switch (col_ptr->columnMode()) {
+			case SciDAVis::Numeric:
+				{
+					QVector<double> results(last-first+1);
+					for (int row=first; row<=last; row++)
+						if(isCellSelected(row, col)) 
+							results[row-first] = row+1;
+						else
+							results[row-first] = col_ptr->valueAt(row);
+					col_ptr->replaceValues(first, results);
+					break;
+				}
+			case SciDAVis::Text:
+				{
+					QStringList results;
+					for (int row=first; row<=last; row++)
+						if (isCellSelected(row, col))
+							results << QString::number(row+1);
+						else
+							results << col_ptr->textAt(row);
+					col_ptr->replaceTexts(first, results);
+					break;
+				}
+		}
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1140,31 +1168,50 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers()
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(tr("%1: fill cells with random values").arg(m_spreadsheet->name()));
 	qsrand(QTime::currentTime().msec());
-	QList<Column*> list = selectedColumns();
-	foreach(Column * col_ptr, list)
-	{
+	foreach(Column *col_ptr, selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-		for (int row=first; row<=last; row++)
-			if (isCellSelected(row, col)) 
-				switch (col_ptr->columnMode()) {
-					case SciDAVis::Numeric:
-						col_ptr->setValueAt(row, double(qrand())/double(RAND_MAX));
-						break;
-					case SciDAVis::DateTime:
-					case SciDAVis::Month:
-					case SciDAVis::Day:
-						{
-							QDate date(1,1,1);
-							QTime time(0,0,0,0);
-							int days = (int)( (double)date.daysTo(QDate(2999,12,31)) * double(qrand())/double(RAND_MAX) );
-							qint64 msecs = (qint64)(double(qrand())/double(RAND_MAX) * 1000.0 * 60.0 * 60.0 * 24.0);
-							col_ptr->setDateTimeAt(row, QDateTime(date.addDays(days), time.addMSecs(msecs)));
-							break;
-						}
-					case SciDAVis::Text:
-						col_ptr->setTextAt(row, QString::number(double(qrand())/double(RAND_MAX)));
-						break;
+		switch (col_ptr->columnMode()) {
+			case SciDAVis::Numeric:
+				{
+					QVector<double> results(last-first+1);
+					for (int row=first; row<=last; row++)
+						if (isCellSelected(row, col))
+							results[row-first] = double(qrand())/double(RAND_MAX);
+						else
+							results[row-first] = col_ptr->valueAt(row);
+					col_ptr->replaceValues(first, results);
+					break;
 				}
+			case SciDAVis::Text:
+				{
+					QStringList results;
+					for (int row=first; row<=last; row++)
+						if (isCellSelected(row, col))
+							results << QString::number(double(qrand())/double(RAND_MAX));
+						else
+							results << col_ptr->textAt(row);
+					col_ptr->replaceTexts(first, results);
+					break;
+				}
+			case SciDAVis::DateTime:
+			case SciDAVis::Month:
+			case SciDAVis::Day:
+				{
+					QList<QDateTime> results;
+					QDate earliestDate(1,1,1);
+					QDate latestDate(2999,12,31);
+					QTime midnight(0,0,0,0);
+					for (int row=first; row<=last; row++)
+						if (isCellSelected(row, col))
+							results << QDateTime(
+									earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)),
+									midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
+						else
+							results << col_ptr->dateTimeAt(row);
+					col_ptr->replaceDateTimes(first, results);
+					break;
+				}
+		}
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1380,46 +1427,39 @@ void SpreadsheetView::insertEmptyRows()
 
 void SpreadsheetView::removeSelectedRows()
 {
-	int first = firstSelectedRow();
-	int last = lastSelectedRow();
-	if ( first < 0 ) return;
+	if ( firstSelectedRow() < 0 ) return;
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(QObject::tr("%1: remove selected rows(s)").arg(m_spreadsheet->name()));
-	for (int i=last; i>=first; i--)
-		if (isRowSelected(i, false)) m_spreadsheet->removeRows(i, 1);
+	foreach(Interval<int> i, selectedRows().intervals())
+		m_spreadsheet->removeRows(i.start(), i.size());
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
 
 void SpreadsheetView::clearSelectedRows()
 {
-	int first = firstSelectedRow();
-	int last = lastSelectedRow();
-	if ( first < 0 ) return;
+	if ( firstSelectedRow() < 0 ) return;
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(QObject::tr("%1: clear selected rows(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
-		if (formulaModeActive())
-		{
-			for (int row=last; row>=first; row--)
-				if (isRowSelected(row, false))
-				{
-					col_ptr->setFormula(row, "");  
+		if (formulaModeActive()) {
+			foreach(Interval<int> i, selectedRows().intervals())
+				col_ptr->setFormula(i, "");
+		} else {
+			foreach(Interval<int> i, selectedRows().intervals()) {
+				if (i.end() == col_ptr->rowCount()-1)
+					col_ptr->removeRows(i.start(), i.size());
+				else {
+					QStringList empties;
+					for (int j=0; j<i.size(); j++)
+						empties << QString();
+					col_ptr->asStringColumn()->replaceTexts(i.start(), empties);
 				}
-		}
-		else
-		{
-			for (int row=last; row>=first; row--)
-				if (isRowSelected(row, false))
-				{
-					if (row < col_ptr->rowCount()) {
-						col_ptr->asStringColumn()->setTextAt(row, QString());
-					}
-				}
+			}
 		}
 	}
 	m_spreadsheet->endMacro();

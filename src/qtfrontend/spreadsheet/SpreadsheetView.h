@@ -50,6 +50,7 @@
 #include "ui_controltabs.h"
 #include <QtDebug>
 #include "core/globals.h"
+#include "lib/IntervalAttribute.h"
 
 class Column;
 class Spreadsheet;
@@ -156,6 +157,8 @@ class SpreadsheetView : public QWidget
 		 * selected rows.
 		 */
 		int lastSelectedRow(bool full = false);
+		//! Get the complete set of selected rows.
+		IntervalAttribute<bool> selectedRows(bool full = false);
 		//! Return whether a cell is selected
 		bool isCellSelected(int row, int col);
 		//! Select/Deselect a cell
