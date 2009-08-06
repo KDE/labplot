@@ -40,6 +40,7 @@
 #include <QPainter>
 #include <cmath>
 #include <QtDebug>
+#include <QLocale>
 
 /**
  * \class LogAxis
