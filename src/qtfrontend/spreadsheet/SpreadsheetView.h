@@ -47,7 +47,7 @@
 #include <QComboBox>
 #include <QSpinBox> 
 #include <QScrollArea>
-#include "ui_controltabs.h"
+#include "ui_SpreadsheetControlTabs.h"
 #include <QtDebug>
 #include "core/globals.h"
 #include "lib/IntervalAttribute.h"
