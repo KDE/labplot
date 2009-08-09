@@ -1,0 +1,42 @@
+/*!
+  \defgroup backend Backend
+  This group contains backend classes.
+ */
+
+/*!
+  \defgroup analysis Analysis
+  \ingroup backend
+*/
+
+/*!
+  \defgroup core Core
+  \ingroup backend
+*/
+
+/*!
+  \defgroup datasources Data source
+  \ingroup backend
+*/
+
+/*!
+  \defgroup lib Libraries
+  \ingroup backend
+*/
+
+/*!
+  \defgroup matrix Matrix
+  \ingroup backend
+  Contains classes relevant for the \c Matrix.
+*/
+
+/*!
+  \defgroup spreadsheet Spreadsheet
+  \ingroup backend
+  Contains classes relevant for the \c Spreadsheet.
+*/
+
+/*!
+  \defgroup worksheet Worksheet
+  \ingroup backend
+  Contains classes relevant for the \c Worksheet.
+*/

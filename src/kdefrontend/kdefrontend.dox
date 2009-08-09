@@ -1,0 +1,4 @@
+/*!
+  \defgroup kdefrontend KDE4 frontend
+  Contains classes for the KDE4-version of the GUI
+ */

@@ -1,0 +1,4 @@
+/*!
+  \defgroup qtfrontend Qt frontend
+  Contains classes for the "Qt-only"-version of the GUI.
+ */
