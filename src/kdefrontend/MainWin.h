@@ -106,6 +106,7 @@ private slots:
 	void importDialog();
 	void projectDialog();
 	void settingsDialog();
+	void axesDialog();
 	void newPlotActionTriggered(QAction*);
 	void functionPlotActionTriggered(QAction*);
 	void dataPlotActionTriggered(QAction*);

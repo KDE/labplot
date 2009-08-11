@@ -59,7 +59,9 @@
 	</Menu>
 </Menu>
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
-<Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
+<Menu name="worksheet"><text>&amp;Worksheet</text>
+	<Action name="axes" />
+</Menu>
 <Menu name="view"><text>&amp;View</text></Menu>
 <Menu name="analysis"><text>&amp;Analysis</text></Menu>
 <Menu name="drawing"><text>&amp;Drawing</text></Menu>

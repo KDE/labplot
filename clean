@@ -5,7 +5,7 @@ rm -f src/LabPlot_automoc.cpp src/LabPlot_automoc.cpp.files src/cmake_install.cm
 rm -f src/LabPlot src/LabPlot.shell src/moc_* src/ui_* src/Makefile
 
 rm -rf src/tmp/ src/qtfrontend/tmp/ liborigin/opj2dat opjfile.log
-
+rmdir lib/
 rm -f src/qtfrontend/libscidavis_worksheet.so ./src/qtfrontend/libscidavis_spreadsheet.so
 
 cd src/qtfrontend/

@@ -1,33 +1,11 @@
-TODO file of LabPlot:
+TODO file of LabPlot 2:
 ***********************
-##############################################################################################################
-* Translations :
-	en/de	: Stefan Gerlach			English/Deutsch			English/German
-	fr	: Pascal Pirotte			Fran&ccedil;ais			French
-	sv	: Peter Landgren			Svenska				Swedisch
-	it	: Gabriele Modena, Davide Setti		Italiano			Italian
-	pl	: Monika Olasek				Polski				Polish
-	br	: Narcizo Marques			Portugu&ecirc;s-Brasileiro	Portuguese-Brazilian
-	es	: José Antonio Lorenzo Fernandez	EspaÃ±ol			Spanish
-	nl	: Rinse de Vries			Nederlands			Dutch
-	lt	: Andrius ¦tikonas			Lietuvi				Lithuanian
-	zh	: Roy Hu								Traditional Chinese
-	ru	: <unmaintained>
-##############################################################################################################
-RELEASE :
-	* update LabPlot.spec, build-LabPlot.sh, BUGFIXES
-	* README/FEATURES/CHANGES
-	* po/ Update
-	* doxygen	->	doc/html/
-	* doc/en/index.docbook	(Handbook)
--------------------------------------------------------------------------------------
-##############################################################################################################
-LabPlot 2.0.0:	(see also WISHLIST)
-*************
+(see also WISHLIST)
+
 BUGS:
 	V Application crashes when main window is closed (X)
 	V Application crashes when saving project
-	V Import dialog : not resized if options hidden
+	V Import dialog : not resized if options are hidden
 	V CRASH : using spreadsheet-> edit function
 	Import dialog : compressed data shows no progress
 	Spreadsheet : column selection doesn't work when CTRL is pressed (extended selection)

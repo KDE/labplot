@@ -36,6 +36,7 @@
 #include "ImportDialog.h"
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
+#include "AxesDialog.h"
 
 #include <KApplication>
 #include <KActionCollection>
@@ -226,6 +227,12 @@ void MainWin::setupActions() {
 	// Analysis
 	// Drawing
 	// Script
+
+	// worksheet menu
+	action = new KAction (KIcon(QIcon(project_xpm)),i18n("Axes Settings"), this);
+	//action->setShortcut();
+	actionCollection()->addAction("axes", action);
+	connect(action, SIGNAL(triggered()),SLOT(axesDialog()));
 
 	//Windows
 	action  = new KAction(i18n("Cl&ose"), this);
@@ -579,6 +586,7 @@ Worksheet* MainWin::activeWorksheet() const{
 /******************** dialogs *****************************/
 void MainWin::importDialog() { (new ImportDialog(this))->show(); }
 void MainWin::projectDialog() { (new ProjectDialog(this))->show(); m_project->setChanged(true); }
+void MainWin::axesDialog() { (new AxesDialog(this))->show(); }
 
 
 /*!
