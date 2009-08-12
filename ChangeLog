@@ -1,4 +1,11 @@
-2009-02-14,sg	fixed bug in orksheet menu
+LabPlot 2/SciDAVis Changelog
+-----------------------------
+
+only for relevant changes (releases, etc.)
+detailed changes can be viewed in the SVN repo.
+
+
+2009-02-14,sg	fixed bug in Worksheet menu
 		moved AspectTreeModel from qtfrontend/core to backend/core
 		cleaned up TODO list
 2009-02-13,sg	fixed issue with new hdf5-1.8 API
