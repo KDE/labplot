@@ -513,14 +513,13 @@ void Column::save(QXmlStreamWriter * writer) const
 	int i;
 	switch(columnMode()) {
 		case SciDAVis::Numeric:
-			for(i=0; i<rowCount(); i++)
 			{
-				writer->writeStartElement("row");
-				writer->writeAttribute("index", QString::number(i));
-				writer->writeCharacters(QString::number(valueAt(i), 'e', 16));
-				writer->writeEndElement();
+				const char * data = reinterpret_cast<const char*>(
+						static_cast< QVector<double>* >(m_column_private->dataPointer())->constData());
+				int size = m_column_private->rowCount()*sizeof(double);
+				writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
+				break;
 			}
-			break;
 		case SciDAVis::Text:
 			for(i=0; i<rowCount(); i++)
 			{
@@ -640,6 +639,13 @@ bool Column::load(XmlStreamReader * reader)
 				if(!ret_val)
 					return false;
 			} 
+			QString content = reader->text().toString().trimmed();
+			if (!content.isEmpty() && columnMode() == SciDAVis::Numeric) {
+				QByteArray bytes = QByteArray::fromBase64(content.toAscii());
+				QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
+				memcpy(data->data(), bytes.data(), (bytes.size()/sizeof(double))*sizeof(double));
+				m_column_private->replaceData(data);
+			}
 		}
 	}
 	else // no column element
