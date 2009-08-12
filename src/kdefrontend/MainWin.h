@@ -33,7 +33,6 @@
 #include <KXmlGuiWindow>
 #include <KAction>
 #include "core/PartMdiView.h"
-// #include "elements/Set.h" //TODO remove
 #include "plots/Plot.h"
 
 class AbstractAspect;
@@ -43,60 +42,65 @@ class Project;
 class Worksheet;
 class Spreadsheet;
 
-class MainWin : public KXmlGuiWindow
-{
+class MainWin : public KXmlGuiWindow{
 	Q_OBJECT
+
 public:
 	MainWin(QWidget *   parent = 0, const QString& filename=0);
 	~MainWin();
 
-	QMdiArea* getMdi() const { return m_mdi_area; }
-	Spreadsheet* activeSpreadsheet() const;			//!< get active spreadsheet
-	Worksheet* activeWorksheet() const;			//!< get active worksheet
-	Project* getProject() const { return m_project; }
-	void setProject(Project *p) { m_project=p; }
-	void updateGUI();		//!< update GUI of main window
-	void updateSheetList();		//!< update dynamic sheet list menu
-	void updateSetList();		//!< update dynamic set list menu
-	void openXML(QIODevice *file);	//!< do the actual opening
-	void saveXML(QIODevice *file);	//!< do the actual saving
+	Spreadsheet* activeSpreadsheet() const;
+	Worksheet* activeWorksheet() const;
+
+//	TODO are these functions realy needed?
+// 	Project* getProject() const { return m_project; }
+// 	void setProject(Project *p) { m_project=p; }
+// 	QMdiArea* getMdi() const { return m_mdi_area; }
 
 private:
 	QMdiArea *m_mdi_area;
 	Project *m_project;
+	ProjectExplorer * m_project_explorer;
+	QDockWidget * m_project_explorer_dock;
+	AbstractAspect * m_current_aspect;
+	Folder * m_current_folder;
+	QString m_fileName; //name of the file to be opened (command line argument)
+	QString m_undoViewEmptyLabel;
+
 	KAction *m_newFolderAction;
 	KAction *m_newSpreadsheetAction;
+	KAction *m_newMatrixAction;
 	KAction *m_newWorksheetAction;
+	KAction *m_newScriptAction;
+	KAction *m_newProjectAction;
 	KAction *m_historyAction;
 	KAction *m_undoAction;
 	KAction *m_redoAction;
+
+	void updateGUI();
+	void openXML(QIODevice *file);
+	void saveXML(QIODevice *file);
+
 	void setupActions();
 	void initProjectExplorer();
 	bool warnModified();
 	void ensureSheet();
 	bool hasSheet(const QModelIndex & index) const;
-// 	void addSet(Set s, const int sheet, const Plot::PlotType ptype);//TODO remove?
-	AbstractAspect * m_current_aspect;
-	Folder * m_current_folder;
-	ProjectExplorer * m_project_explorer;
-	QDockWidget * m_project_explorer_dock;
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
-	QString m_fileName; //name of the file to be opened (command line argument)
-	QString m_undoViewEmptyLabel;
 
 public slots:
 	Spreadsheet* newSpreadsheet();
 	Folder* newFolder();
 	Worksheet* newWorksheet();
-	void save(QString filename=0);	//!< save project (.lml format)
-	void open(QString filename);	//!< open project (.lml format)
-	void saveAs();	//!< save as different file name (.lml format)
+	void newScript();
+	void saveProject(QString filename=0);
+	void openProject(QString filename);
+	void saveProjectAs();
 	void showHistory();
 	void createContextMenu(QMenu * menu) const;
 	void createFolderContextMenu(const Folder * folder, QMenu * menu) const;
 	void undo();
 	void redo();
-	//! Show/hide mdi windows depending on the currend folder
 	void updateMdiWindowVisibility();
 
 private slots:
@@ -106,10 +110,13 @@ private slots:
 	void importDialog();
 	void projectDialog();
 	void settingsDialog();
+	void newFileDataSourceActionTriggered(QAction*);
+	void newSqlDataSourceActionTriggered(QAction*);
 	void axesDialog();
 	void newPlotActionTriggered(QAction*);
 	void functionPlotActionTriggered(QAction*);
 	void dataPlotActionTriggered(QAction*);
+	void projectChanged();
 
 signals:
 	void partActivated(AbstractPart*);

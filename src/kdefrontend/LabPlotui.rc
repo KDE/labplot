@@ -19,8 +19,55 @@
 </ToolBar>
 
 <MenuBar>
-<Menu name="file" >
-<text>&amp;File</text>
+<Menu name="file" ><text>&amp;File</text>
+<Menu name="new"><text>&amp;New</text>
+	<Action name="new_spreadsheet" />
+	<Action name="new_worksheet" />
+	<Action name="new_folder" />
+	<Separator/>
+	<Menu name="new_file_datasource"><text>New File Data Source</text>
+		<Action name="new_file_vector_datasource" />
+		<Action name="new_file_matrix_datasource" />
+		<Action name="new_file_image_datasource" />
+		<Action name="new_file_sound_datasource" />
+	</Menu>
+	<Menu name="new_database_datasource"><text>New Database Source</text>
+		<Action name="new_database_vector_datasource" />
+		<Action name="new_database_matrix_datasource" />
+		<Action name="new_database_image_datasource" />
+		<Action name="new_database_sound_datasource" />
+	</Menu>
+<!--	<Menu name="new_dir_datasource"><text>New Directory Data Source</text>
+		<Action name="new_dir_vector_datasource" />
+		<Action name="new_dir_matrix_datasource" />
+		<Action name="new_dir_image_datasource" />
+		<Action name="new_dir_sound_datasource" />
+	</Menu>-->
+	<Separator/>
+	<Menu name="new_plot"><text>New Plot</text>
+		<Action name="new_2D_plot" />
+		<Action name="new_2D_surface_plot" />
+		<Action name="new_2D_polar_plot" />
+		 <Separator/>
+		 <Action name="new_3D_plot" />
+	</Menu>
+	<Menu name="new_function_plot"><text>New Function Plot</text>
+		<Action name="new_2D_function_plot" />
+		<Action name="new_2D_surface_function_plot" />
+		<Action name="new_2D_polar_function_plot" />
+		 <Separator/>
+		 <Action name="new_3D_function_plot" />
+	</Menu>
+		<Menu name="new_data_plot"><text>New Data Plot</text>
+		<Action name="new_2D_data_plot" />
+		<Action name="new_2D_surface_data_plot" />
+		<Action name="new_2D_polar_data_plot" />
+		 <Separator/>
+		 <Action name="new_3D_data_plot" />
+	</Menu>
+	<Separator/>
+	<Action name="new_project" />
+</Menu>
 <Action name="import" />
 <Action name="project" />
 </Menu>
@@ -28,35 +75,6 @@
 	<Action name="undo" />
 	<Action name="redo" />
 	<Action name="history" />
-	<Separator/>
-	<Action name="new spreadsheet" />
-	<Action name="new worksheet" />
-	<Action name="new folder" />
-	<Separator/>
-	<Menu name="new_plot">
-		<text>New Plot</text>
-		<Action name="new_2D_plot" />
-		<Action name="new_2D_surface_plot" />
-		<Action name="new_2D_polar_plot" />
-		 <Separator/>
-		 <Action name="new_3D_plot" />
-	</Menu>
-	<Menu name="new_function_plot">
-		<text>New Function Plot</text>
-		<Action name="new_2D_function_plot" />
-		<Action name="new_2D_surface_function_plot" />
-		<Action name="new_2D_polar_function_plot" />
-		 <Separator/>
-		 <Action name="new_3D_function_plot" />
-	</Menu>
-		<Menu name="new_data_plot">
-		<text>New Data Plot</text>
-		<Action name="new_2D_data_plot" />
-		<Action name="new_2D_surface_data_plot" />
-		<Action name="new_2D_polar_data_plot" />
-		 <Separator/>
-		 <Action name="new_3D_data_plot" />
-	</Menu>
 </Menu>
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
 <Menu name="worksheet"><text>&amp;Worksheet</text>

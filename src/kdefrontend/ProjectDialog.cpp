@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : dialog for project settings
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,31 +26,41 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-//LabPlot : ProjectDialog.cc
 
 #include <KDebug>
 #include "ProjectDialog.h"
-#include "MainWin.h"
 #include "core/Project.h"
 
-ProjectDialog::ProjectDialog(MainWin *mw) : KDialog(mw) {
-	kDebug()<<endl;
-	setCaption(i18n("Project settings"));
-	project = mw->getProject();
+/*!
+	\class ProjectDialog
+ 	\brief Provides a dialog for editing the general information about the project (Name, author etc.) .
+ 	 \ingroup kdefrontend
+ */
 
-	setupGUI();
-}
+ProjectDialog::ProjectDialog(QWidget* parent, Project* p) : KDialog(parent) {
 
-void ProjectDialog::setupGUI() {
-	kDebug()<<endl;
 	QWidget *widget = new QWidget(this);
 	ui.setupUi(widget);
 	setMainWidget(widget);
-
 	setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
-	connect(this,SIGNAL(applyClicked()),SLOT(apply()));
-	connect(this,SIGNAL(okClicked()),SLOT(apply()));
 
+	connect(ui.leTitle, SIGNAL( textChanged(const QString&) ), this, SLOT( dataChanged() ) );
+	connect(ui.leAuthor, SIGNAL( textChanged(const QString&) ), this, SLOT( dataChanged() ) );
+	connect(ui.tbNotes, SIGNAL( textChanged() ), this, SLOT( dataChanged() ) );
+	connect(this,SIGNAL(applyClicked()),SLOT(apply()));
+	connect(this,SIGNAL(okClicked()),SLOT(ok()));
+
+ 	setCaption( i18n("Project info") );
+	setWindowIcon( KIcon("help-about") );
+	resize( QSize(100,200) );
+
+	project =p;
+ 	showProjectInfo();
+	m_dataChanged=false;
+	enableButtonApply( false );
+}
+
+void ProjectDialog::showProjectInfo() const{
 	ui.lFileName->setText(project->fileName());
 	ui.lProjectVersion->setText(QString::number(project->version()));
 	ui.lLabPlotVersion->setText(project->labPlot());
@@ -59,17 +69,28 @@ void ProjectDialog::setupGUI() {
 	ui.dtwCreated->setDateTime(project->creationTime());
 	ui.dtwModified->setDateTime(project->modificationTime());
 	ui.tbNotes->setText(project->comment());
-	ui.tbNotes->setReadOnly(false);
-//	noteste->setTextFormat( Qt::PlainText );
 }
 
+//SLOTS
 void ProjectDialog::apply() {
-	kDebug()<<endl;
 	project->setName(ui.leTitle->text());
 	project->setAuthor(ui.leAuthor->text());
 	project->setComment(ui.tbNotes->toPlainText());
+
 	// not changable
 //	project->setCreated(created->dateTime());
 //	project->setModified(created->dateTime());
+
+	m_dataChanged=false;
+	enableButtonApply( false );
 }
 
+void ProjectDialog::ok(){
+	if (m_dataChanged)
+		apply();
+}
+
+void ProjectDialog::dataChanged(){
+	m_dataChanged=true;
+	enableButtonApply( true );
+}

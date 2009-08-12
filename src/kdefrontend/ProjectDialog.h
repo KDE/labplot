@@ -5,7 +5,7 @@
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : dialog for project settings
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,24 +31,25 @@
 #define PROJECTDIALOG_H
 
 #include <KDialog>
-#include <QtGui>
 #include "ui_projectdialog.h"
-class MainWin;
 class Project;
 
-/**
- * @brief Provides a dialog for editing project settings.
- */
 class ProjectDialog: public KDialog {
 	Q_OBJECT
+
 public:
-	ProjectDialog(MainWin *mw);
+	ProjectDialog(QWidget*, Project* p);
+
 private:
 	Ui::ProjectDialog ui;
 	Project *project;
-	void setupGUI();
+	bool m_dataChanged;
+	void showProjectInfo() const;
+
 private slots:
 	void apply();
+	void ok();
+	void dataChanged();
 };
 
 #endif //PROJECTDIALOG_H
