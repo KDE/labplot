@@ -1,6 +1,10 @@
 LabPlot WISHLIST:
 #################
 
+TODO: put all Features into list at 
+	https://sourceforge.net/apps/mediawiki/labplot/index.php?title=Feature_List
+     if still relevant.
+
 Planned Features:
 	* independent/different y axes
 		* option to disconnect y2,x2 axes ?
@@ -263,7 +267,6 @@ drawing/ data manipulation :
 			* X/YCoordinate
 			* partRanges
 		* period or comma as decimal point (configure LabPlot)
-		* broken axes
 		* gradient plot / graph background, fill
 			-> use QBrush of Qt 4.0 ?
 		* zoom-plot (extra plot as zoom of another plot)

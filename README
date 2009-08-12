@@ -1,10 +1,15 @@
-LabPlot 2.0
------------
+LabPlot 2 & SciDAVis
+--------------------
 
-complete rewrite of LabPlot 1.X.
-ported to Qt/KDE 4.
+In Sep. 2008, the LabPlot project and the SciDAVis project (scidavis.sourceforge.net) started a close collaboration. 
+The plan is to share a common backend with two frontends: KDE based (LabPlot) and Qt-only (SciDAVis).
 
-Compiling :
+LabPlot 2 is a complete rewrite of LabPlot 1.X.
+
+###############
+
+Building LabPlot (KDE frontend):
+--------------------------------
 
 # ./build
 # make install
@@ -12,23 +17,10 @@ Compiling :
 Clean-up:
 # ./clean
 
-#############
-TableView/Model vs. TableWidget:
 
-import data :
-data		time TV	memory TV	time TW	memory TW
-3x99731	ASCII	4s	17m		7s	41m
-2x10^6	ASCII	27s	90m		50s	262m
-2x10^6 binary	23s	114m		45s	285m
+Building SciDAvis (Qt frontend):
+--------------------------------
 
-###############
-
-In Sep. 2008, the LabPlot project and the SciDAVis project (scidavis.sourceforge.net) started a close collaboration. 
-The plan is to share a common backend with two frontends: KDE based (LabPlot) and Qt-only (SciDAVis).
-
-###############
-
-Building the Qt frontend:
 # cd src/qtfrontend
 # qmake-qt4 scidavis.pro
 # make
@@ -38,28 +30,8 @@ If the Qt frontend is build any other way, make sure that ACTIVATE_SCIDAVIS_SPEC
 
 ###############
 
-I would be better for Spreadsheet not depend on MainWin at all.
-But if you really need it, this is the "SciDAVis way" of getting a pointer to the main window: - Tilman
-
-if (m_table->project() == NULL) return;
-MainWin * mw = static_cast<MainWin *>(m_table->project()->view());
-
-################
-
-Remarks about the Labplot/SciDAVis integration of class Project:
-- save/open: the stream based XML reading and writing is faster than using DOM.
-  If you want, you can of course use DOM instead. - Tilman
-- QString m_filename: now d->file_name
-- int m_version: now d->version
-- QString m_labPlot: now d->labPlot
-- QString m_title: use AbstractAspect::name()
-- QString m_author: now d->author
-- QDateTime m_created: use AbstractAspect::creationTime()
-- QDateTime m_modified: now d->modification_time
-- QString m_notes: use AbstractAspect::comment()
-- bool m_changed: now d->changed
-
-###############
+This project is currently under active development.
+See https://sourceforge.net/apps/mediawiki/labplot/index.php?title=Main_Page for more informations.
 
 SciDAVis introduces an abstraction of the application design called "aspect framework" or "5 layer model". 
 Very short description:
