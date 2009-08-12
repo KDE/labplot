@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : LineSymbolCurve.h
+    File                 : DropLineCurve.h
     Project              : LabPlot/SciDAVis
-    Description          : A curve drawn as line and/or symbols
+    Description          : A curve drawn as drop lines and/or symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,45 +27,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LINESYMBOLCURVE_H
-#define LINESYMBOLCURVE_H
+#ifndef DROPLINECURVE_H
+#define DROPLINECURVE_H
 
-#include "worksheet/AbstractWorksheetElement.h"
+#include "worksheet/LineSymbolCurve.h"
 #include "lib/macros.h"
 #include "core/AbstractColumn.h"
 
-class LineSymbolCurvePrivate;
-class LineSymbolCurve: public AbstractWorksheetElement {
+class DropLineCurvePrivate;
+class DropLineCurve: public LineSymbolCurve {
 	Q_OBJECT
 
 	public:
-		LineSymbolCurve(const QString &name);
-		virtual ~LineSymbolCurve();
+		DropLineCurve(const QString &name);
+		virtual ~DropLineCurve();
 
-		virtual QGraphicsItem *graphicsItem() const;
-
-		BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
-		BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
-
-		//TODO: all style related stuff (line widths, color, symbol size, etc...)
-		//TODO: signal/slot connections with columns
-
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-
-		typedef LineSymbolCurvePrivate Private;
-
-	public slots:
-		virtual void retransform();
+	typedef DropLineCurvePrivate Private;
 
 	protected:
-		LineSymbolCurve(const QString &name, LineSymbolCurvePrivate *dd);
-		LineSymbolCurvePrivate * const d_ptr;
+		DropLineCurve(const QString &name, DropLineCurvePrivate *dd);
 
 	private:
-    	Q_DECLARE_PRIVATE(LineSymbolCurve)
+    	Q_DECLARE_PRIVATE(DropLineCurve)
 };
 
 #endif

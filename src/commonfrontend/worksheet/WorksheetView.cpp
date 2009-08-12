@@ -37,6 +37,7 @@
 #include "worksheet/LinearAxis.h"
 #include "worksheet/LogAxis.h"
 #include "worksheet/LineSymbolCurve.h"
+#include "worksheet/DropLineCurve.h"
 #include "worksheet/PlotArea.h"
 #include "lib/ActionManager.h"
 #include "core/column/Column.h"
@@ -326,7 +327,7 @@ void WorksheetView::startTestCode() {
 			xc3->setValueAt(i, i*0.25);
 			yc3->setValueAt(i, i*i*0.01*2+3);
 		}
-		LineSymbolCurve *curve3 = new LineSymbolCurve("curve 3");
+		DropLineCurve *curve3 = new DropLineCurve("curve 3");
 		curve3->setXColumn(xc3);
 		curve3->setYColumn(yc3);
 

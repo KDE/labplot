@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : LineSymbolCurve.h
+    File                 : LineSymbolCurvePrivate.h
     Project              : LabPlot/SciDAVis
-    Description          : A curve drawn as line and/or symbols
+    Description          : Private members of LineSymbolCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
@@ -27,46 +27,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LINESYMBOLCURVE_H
-#define LINESYMBOLCURVE_H
+#ifndef LINESYMBOLCURVEPRIVATE_H
+#define LINESYMBOLCURVEPRIVATE_H
 
-#include "worksheet/AbstractWorksheetElement.h"
-#include "lib/macros.h"
-#include "core/AbstractColumn.h"
+#include "worksheet/AbstractCurveSymbol.h"
 
-class LineSymbolCurvePrivate;
-class LineSymbolCurve: public AbstractWorksheetElement {
-	Q_OBJECT
-
+class LineSymbolCurvePrivate: public QGraphicsItem {
 	public:
-		LineSymbolCurve(const QString &name);
-		virtual ~LineSymbolCurve();
+		LineSymbolCurvePrivate(LineSymbolCurve *owner);
+		~LineSymbolCurvePrivate();
 
-		virtual QGraphicsItem *graphicsItem() const;
+		QString name() const {
+			return q->name();
+		}
 
-		BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
-		BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
+		bool lineVisible; //!< show/hide line
+		bool symbolsVisible; //! show/hide symbols
+		qreal symbolRotationAngle;
+		qreal symbolSize;
+		qreal symbolAspectRatio;
+		QString symbolTypeId;
+		const AbstractColumn *xColumn; //!< Pointer to X column
+		const AbstractColumn *yColumn; //!< Pointer to Y column
+	
+		QPainterPath linePath;
+		AbstractCurveSymbol *symbolPrototype;
+		QRectF boundingRectangle;
+		QPainterPath curveShape;
+		QList<QPointF> symbolPoints;
 
-		//TODO: all style related stuff (line widths, color, symbol size, etc...)
-		//TODO: signal/slot connections with columns
+		QBrush symbolsBrush;
+		QPen symbolsPen;
+		QPen linePen;
 
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-
-		typedef LineSymbolCurvePrivate Private;
-
-	public slots:
 		virtual void retransform();
+		void updateVisibility();
+		bool swapVisible(bool on);
 
-	protected:
-		LineSymbolCurve(const QString &name, LineSymbolCurvePrivate *dd);
-		LineSymbolCurvePrivate * const d_ptr;
+		virtual QRectF boundingRect() const { return boundingRectangle; }
+		QPainterPath shape() const { return curveShape; }
+    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 
-	private:
-    	Q_DECLARE_PRIVATE(LineSymbolCurve)
+		LineSymbolCurve * const q;
+
+		// TODO: make other attributes adjustable
+		// add pens and brush
 };
+
 
 #endif
 

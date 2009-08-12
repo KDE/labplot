@@ -314,6 +314,7 @@ class SpreadsheetView : public QWidget
 		void advanceCell();
 		void handleHorizontalSectionMoved(int index, int from, int to);
 		void handleHorizontalHeaderDoubleClicked(int index);
+		void handleFormatLineEditChange();
 		void updateTypeInfo();
 		void updateFormatBox();
 		void handleHeaderDataChanged(Qt::Orientation orientation, int first, int last);

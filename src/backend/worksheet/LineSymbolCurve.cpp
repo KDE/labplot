@@ -35,6 +35,7 @@
  */
 
 #include "worksheet/LineSymbolCurve.h"
+#include "worksheet/LineSymbolCurvePrivate.h"
 #include "worksheet/AbstractCoordinateSystem.h"
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "lib/commandtemplates.h"
@@ -50,56 +51,7 @@
 #include <QPainter>
 #include <QtDebug>
 
-/**
- * \class LineSymbolCurve
- * \brief Linear axis for cartesian coordinate systems.
- *
- *  
- */
-
-class LineSymbolCurve::Private: public QGraphicsItem {
-	public:
-		Private(LineSymbolCurve *owner);
-		~Private();
-
-		QString name() const {
-			return q->name();
-		}
-
-		bool lineVisible; //!< show/hide line
-		bool symbolsVisible; //! show/hide symbols
-		qreal symbolRotationAngle;
-		qreal symbolSize;
-		qreal symbolAspectRatio;
-		QString symbolTypeId;
-		const AbstractColumn *xColumn; //!< Pointer to X column
-		const AbstractColumn *yColumn; //!< Pointer to Y column
-	
-		QPainterPath linePath;
-		AbstractCurveSymbol *symbolPrototype;
-		QRectF boundingRectangle;
-		QPainterPath curveShape;
-		QList<QPointF> symbolPoints;
-
-		QBrush symbolsBrush;
-		QPen symbolsPen;
-		QPen linePen;
-
-		void retransform();
-		void updateVisibility();
-		bool swapVisible(bool on);
-
-		virtual QRectF boundingRect() const { return boundingRectangle; }
-		QPainterPath shape() const { return curveShape; }
-    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
-
-		LineSymbolCurve * const q;
-
-		// TODO: make other attributes adjustable
-		// add pens and brush
-};
-
-LineSymbolCurve::Private::Private(LineSymbolCurve *owner): q(owner) {
+LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner) {
 	lineVisible = true;
 	symbolsVisible = true;
 	symbolTypeId = "diamond";
@@ -134,19 +86,23 @@ LineSymbolCurve::Private::Private(LineSymbolCurve *owner): q(owner) {
 	symbolPrototype->setAspectRatio(symbolAspectRatio);
 //TODO	symbolPrototype->setBrush(symbolsBrush);
 //TODO	symbolPrototype->setPen(symbolsPen);
-
-	retransform();
 }
 
-LineSymbolCurve::Private::~Private() {
+LineSymbolCurvePrivate::~LineSymbolCurvePrivate() {
 }
 
 LineSymbolCurve::LineSymbolCurve(const QString &name)
-		: AbstractWorksheetElement(name), d(new Private(this)) {
+		: AbstractWorksheetElement(name), d_ptr(new LineSymbolCurvePrivate(this)) {
+
+	d_ptr->retransform();
+}
+
+LineSymbolCurve::LineSymbolCurve(const QString &name, LineSymbolCurvePrivate *dd)
+		: AbstractWorksheetElement(name), d_ptr(dd) {
 }
 
 LineSymbolCurve::~LineSymbolCurve() {
-	delete d;
+	delete d_ptr;
 }
 
 /* ============================ accessor documentation ================= */
@@ -168,33 +124,37 @@ LineSymbolCurve::~LineSymbolCurve() {
 */
 
 /* ============================ getter methods ================= */
-BASIC_D_READER_IMPL(LineSymbolCurve, bool, lineVisible, lineVisible);
-BASIC_D_READER_IMPL(LineSymbolCurve, bool, symbolsVisible, symbolsVisible);
-BASIC_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, xColumn, xColumn);
-BASIC_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, yColumn, yColumn);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, lineVisible, lineVisible);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, symbolsVisible, symbolsVisible);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, xColumn, xColumn);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, yColumn, yColumn);
 
 /* ============================ setter methods and undo commands ================= */
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLineVisible, bool, lineVisible, updateVisibility);
 void LineSymbolCurve::setLineVisible(bool visible) {
+	Q_D(LineSymbolCurve);
 	if (visible != d->lineVisible)
 		exec(new LineSymbolCurveSetLineVisibleCmd(d, visible, visible ? tr("%1: set line visible") : tr("%1: set line invisible")));
 }
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsVisible, bool, symbolsVisible, updateVisibility);
 void LineSymbolCurve::setSymbolsVisible(bool visible) {
+	Q_D(LineSymbolCurve);
 	if (visible != d->symbolsVisible)
 		exec(new LineSymbolCurveSetSymbolsVisibleCmd(d, visible, visible ? tr("%1: set symbols visible") : tr("%1: set symbols invisible")));
 }
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetXColumn, const AbstractColumn *, xColumn, retransform);
 void LineSymbolCurve::setXColumn(const AbstractColumn *xColumn) {
+	Q_D(LineSymbolCurve);
 	if (xColumn != d->xColumn)
 		exec(new LineSymbolCurveSetXColumnCmd(d, xColumn, tr("%1: assign x values")));
 }
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetYColumn, const AbstractColumn *, yColumn, retransform);
 void LineSymbolCurve::setYColumn(const AbstractColumn *yColumn) {
+	Q_D(LineSymbolCurve);
 	if (yColumn != d->yColumn)
 		exec(new LineSymbolCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
 }
@@ -202,7 +162,7 @@ void LineSymbolCurve::setYColumn(const AbstractColumn *yColumn) {
 /* ============================ other methods ================= */
 
 QGraphicsItem *LineSymbolCurve::graphicsItem() const {
-	return d;
+	return d_ptr;
 }
 
 bool LineSymbolCurve::Private::swapVisible(bool on) {
@@ -213,15 +173,17 @@ bool LineSymbolCurve::Private::swapVisible(bool on) {
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(LineSymbolCurve, SetVisible, bool, swapVisible);
 void LineSymbolCurve::setVisible(bool on) {
+	Q_D(LineSymbolCurve);
 	exec(new LineSymbolCurveSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
 }
 
 bool LineSymbolCurve::isVisible() const {
+	Q_D(const LineSymbolCurve);
 	return d->isVisible();
 }
 
 void LineSymbolCurve::retransform() {
-	d->retransform();
+	d_ptr->retransform();
 }
 
 void LineSymbolCurve::Private::retransform() {

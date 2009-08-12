@@ -43,6 +43,7 @@ HEADERS += \
 	PlotArea.h \
 	PlotAreaPrivate.h \
 	ScalableTextLabel.h \
+	DropLineCurve.h \
 	
 SOURCES += \
 	WorksheetModule.cpp \
@@ -68,5 +69,6 @@ SOURCES += \
 	AbstractWorksheetDecorationElement.cpp \ 
 	PlotArea.cpp \
 	ScalableTextLabel.cpp \
+	DropLineCurve.cpp \
 
 
