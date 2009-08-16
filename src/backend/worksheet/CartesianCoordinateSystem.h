@@ -64,6 +64,8 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 				virtual bool map(double *value) const = 0;
 				virtual bool inverseMap(double *value) const = 0;
 				virtual int direction() const = 0;
+				virtual void getPropertiesOnResize(double ratio, 
+					ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const = 0;
 			
 				// changing properties is done via this command:
 				friend class CartesianCoordinateSystemSetScalePropertiesCmd;
@@ -92,7 +94,11 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		bool setYScales(const QList<Scale *> &scales);
 		QList<Scale *> yScales() const;
 
+		typedef AbstractCoordinateSystem BaseClass;
 		typedef CartesianCoordinateSystemPrivate Private;
+
+	public slots:
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
 		CartesianCoordinateSystem(const QString &name, CartesianCoordinateSystemPrivate *dd);

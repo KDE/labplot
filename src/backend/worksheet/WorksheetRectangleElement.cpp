@@ -144,4 +144,10 @@ void WorksheetRectangleElement::retransform() {
 	
 	m_item.setPath(path);
 }
+		
+void WorksheetRectangleElement::handlePageResize(double horizontalRatio, double verticalRatio) {
+	// TODO: rescale line width
+	
+	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+}
 

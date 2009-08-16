@@ -160,6 +160,10 @@ LinearAxis::~LinearAxis() {
    \fn LinearAxis::CLASS_D_ACCESSOR_DECL(QPointF, labelOffset, LabelOffset);
    \brief Get/set the position offset of the tick labels relative to the end of the tick line.
  */
+/**
+   \fn LinearAxis::CLASS_D_ACCESSOR_DECL(QPen, pen, Pen);
+   \brief Get/set the pen for the lines.
+ */
 
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(LinearAxis, LinearAxis::AxisOrientation, orientation, orientation);
@@ -179,6 +183,7 @@ BASIC_SHARED_D_READER_IMPL(LinearAxis, qreal, labelFontSize, labelFontSize);
 CLASS_SHARED_D_READER_IMPL(LinearAxis, QColor, labelColor, labelColor);
 CLASS_SHARED_D_READER_IMPL(LinearAxis, QFont, labelFont, labelFont);
 CLASS_SHARED_D_READER_IMPL(LinearAxis, QPointF, labelOffset, labelOffset);
+CLASS_SHARED_D_READER_IMPL(LinearAxis, QPen, pen, pen);
 
 /* ============================ setter methods and undo commands ================= */
 
@@ -307,6 +312,13 @@ void LinearAxis::setVisible(bool on) {
 	exec(new LinearAxisSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
 }
 
+STD_SETTER_CMD_IMPL_F(LinearAxis, SetPen, QPen, pen, recalcShapeAndBoundingRect);
+void LinearAxis::setPen(const QPen &pen) {
+	Q_D(LinearAxis);
+	if (pen != d->pen)
+		exec(new LinearAxisSetPenCmd(d, pen, tr("%1: set line style")));
+}
+
 bool LinearAxis::isVisible() const {
 	Q_D(const LinearAxis);
 	return d->isVisible();
@@ -329,6 +341,7 @@ QPointF LinearAxis::Private::swapLabelOffset(const QPointF &newOffset)
 {
 	QPointF oldOffset = labelOffset;
 	labelOffset = newOffset;
+	recalcShapeAndBoundingRect();
 	return oldOffset;
 }
 
@@ -341,7 +354,6 @@ void LinearAxis::retransform() {
 void LinearAxis::Private::retransform() {
 	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
 
-	prepareGeometryChange();
 	linePath = QPainterPath();
 
 	QList<QLineF> lines;
@@ -374,7 +386,6 @@ void LinearAxis::Private::retransform() {
 }
 
 void LinearAxis::Private::retransformTicks() {
-	prepareGeometryChange();
 	retransformTicks(q->coordinateSystem());
 }
 
@@ -496,6 +507,12 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 		}
 	}
 
+	restyleLabels(); // this calls recalcShapeAndBoundingRect()
+}
+
+void LinearAxis::Private::recalcShapeAndBoundingRect() {
+	prepareGeometryChange();
+
 	boundingRectangle = linePath.boundingRect();
 	boundingRectangle |= majorTicksPath.boundingRect();
 	boundingRectangle |= minorTicksPath.boundingRect();
@@ -506,9 +523,14 @@ void LinearAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSyst
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
 
-	// TODO: labels shape
+	foreach (ScalableTextLabel *textLabel, labels) {
+		QRectF rect = textLabel->boundingRect();
+		rect.translate(labelOffset);
+		boundingRectangle |= rect;
+		axisShape.addRect(rect);
+	}
 	
-	restyleLabels();
+	update();
 }
 
 void LinearAxis::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
@@ -516,7 +538,6 @@ void LinearAxis::Private::paint(QPainter *painter, const QStyleOptionGraphicsIte
 	Q_UNUSED(widget)
 
 	painter->setPen(pen);
-	painter->setBrush(brush);
 	
 	painter->drawPath(linePath);
 	painter->drawPath(minorTicksPath);
@@ -575,5 +596,28 @@ void LinearAxisPrivate::restyleLabels() {
 		label->setFont(labelFont);
 		label->setTextColor(labelColor);
 	}
+	recalcShapeAndBoundingRect();
+}
+
+void LinearAxis::handlePageResize(double horizontalRatio, double verticalRatio) {
+	Q_D(LinearAxis);
+
+	QPen pen = d->pen;
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	setPen(pen);
+
+	if (d->orientation & LinearAxis::axisHorizontal) {
+		setMajorTicksLength(d->majorTicksLength * verticalRatio); // ticks are perpendicular to axis line -> verticalRatio relevant
+		setMinorTicksLength(d->minorTicksLength * verticalRatio);
+		setLabelFontSize(d->labelFontSize * verticalRatio);
+	} else {
+		setMajorTicksLength(d->majorTicksLength * horizontalRatio);
+		setMinorTicksLength(d->minorTicksLength * horizontalRatio);
+		setLabelFontSize(d->labelFontSize * verticalRatio); // this is not perfectly correct for rotated labels 
+															// when the page aspect ratio changes, but should not matter
+	}
+	setLabelOffset(QPointF(d->labelOffset.x() * horizontalRatio, d->labelOffset.y() * verticalRatio));
+
+	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
 

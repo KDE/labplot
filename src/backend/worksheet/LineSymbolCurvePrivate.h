@@ -61,8 +61,10 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		QPen linePen;
 
 		virtual void retransform();
-		void updateVisibility();
 		bool swapVisible(bool on);
+		QString swapSymbolTypeId(const QString &id);
+		virtual void recalcShapeAndBoundingRect();
+		void updateSymbolPrototype();
 
 		virtual QRectF boundingRect() const { return boundingRectangle; }
 		QPainterPath shape() const { return curveShape; }

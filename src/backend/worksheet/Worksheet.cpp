@@ -177,13 +177,28 @@ QRectF Worksheet::pageRect() const {
 QRectF Worksheet::Private::swapPageRect(const QRectF &rect) {
 	QRectF oldRect = m_scene->sceneRect();
 	m_scene->setSceneRect(rect.normalized());
-	// TODO: notify page size change
+
 	return oldRect;
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect);
 void Worksheet::setPageRect(const QRectF &rect) {
-	if (rect != d->m_scene->sceneRect())
-		exec(new WorksheetSetPageRectCmd(d, rect, tr("%1: set page size")));
+	if (qFuzzyCompare(rect.width() + 1, 1) || qFuzzyCompare(rect.height() + 1, 1))
+		return;
+	if (rect != d->m_scene->sceneRect()) {
+		QString title = tr("%1: set page size");
+		QRectF oldRect = d->m_scene->sceneRect();
+		beginMacro(title.arg(name()));
+		exec(new WorksheetSetPageRectCmd(d, rect, title));
+
+		qreal horizontalRatio = rect.width() / oldRect.normalized().width();
+		qreal verticalRatio = rect.height() / oldRect.normalized().height();
+
+		QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+		foreach(AbstractWorksheetElement *elem, childElements) {
+			elem->handlePageResize(horizontalRatio, verticalRatio);
+		}
+		endMacro();
+	}
 }
 

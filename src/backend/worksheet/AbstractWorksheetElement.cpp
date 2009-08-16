@@ -209,3 +209,19 @@ void AbstractWorksheetElement::execMoveInFrontOf(QAction *action) {
 	}
 }
 
+/**
+ * This function is called every time the page is resized.
+ *
+ * \param horizontalRatio New page width divided by old page width.
+ * \param verticalRatio   New page height divided by old page height.
+ *
+ * Override this function with a handler which rescales all properties 
+ * which are in page coodrinates (such as line widths). Don't forget 
+ * to call the base class's handler in the overridden version.
+ */
+void AbstractWorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio)
+{
+	Q_UNUSED(horizontalRatio);
+	Q_UNUSED(verticalRatio);
+}
+

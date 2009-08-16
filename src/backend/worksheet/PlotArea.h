@@ -45,9 +45,12 @@ class PlotArea: public WorksheetElementContainer {
 		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled);
 		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect);
 
-		virtual void retransform();
-
+		typedef WorksheetElementContainer BaseClass;
 		typedef PlotAreaPrivate Private;
+
+	public slots:
+		virtual void retransform();
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
 		PlotArea(const QString &name, PlotAreaPrivate *dd);

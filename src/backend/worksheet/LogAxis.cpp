@@ -179,18 +179,6 @@ void LogAxis::Private::retransformTicks(const AbstractCoordinateSystem *cSystem)
 		}
 	}
 
-	boundingRectangle = linePath.boundingRect();
-	boundingRectangle |= majorTicksPath.boundingRect();
-	boundingRectangle |= minorTicksPath.boundingRect();
-
-	boundingRectangle = boundingRectangle.normalized();
-
-	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, pen);
-	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
-	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
-
-	// TODO: labels shape
-	
-	restyleLabels();
+	restyleLabels(); // this calls recalcShapeAndBoundingRect()
 }
 

@@ -115,6 +115,12 @@ void WorksheetElementContainer::retransform() {
 		elem->retransform();
 }
 
+void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
+	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(AbstractWorksheetElement *elem, childList)
+		elem->handlePageResize(horizontalRatio, verticalRatio);
+}
+
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) {
 	Q_D(WorksheetElementContainer);
 

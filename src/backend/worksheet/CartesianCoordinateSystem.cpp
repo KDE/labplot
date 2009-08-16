@@ -128,6 +128,15 @@ class LinearScale: public CartesianCoordinateSystem::Scale {
 		virtual int direction() const {
 			return m_b < 0 ? -1 : 1;
 		}
+		virtual void getPropertiesOnResize(double ratio,
+				ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const {
+				*type = m_type;
+				*interval = Interval<double>(m_interval.start() * ratio, m_interval.end() * ratio);
+				*a = m_a * ratio;
+				*b = m_b * ratio;
+				*c = m_c;
+
+		}
 };
 
 class LogScale: public CartesianCoordinateSystem::Scale {
@@ -159,6 +168,15 @@ class LogScale: public CartesianCoordinateSystem::Scale {
 		}
 		virtual int direction() const {
 			return m_b < 0 ? -1 : 1;
+		}
+		virtual void getPropertiesOnResize(double ratio,
+				ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const {
+				*type = m_type;
+				*interval = Interval<double>(m_interval.start() * ratio, m_interval.end() * ratio);
+				*a = m_a * ratio;
+				*b = m_b * ratio;
+				*c = m_c;
+
 		}
 };
 
@@ -575,3 +593,24 @@ QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::yScales() c
 	return d->yScales; // TODO: should rather return a copy of the scales here
 }
 
+void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double verticalRatio) {
+	Q_D(CartesianCoordinateSystem);
+
+	Scale::ScaleType type;
+	Interval<double> interval;
+	double a, b, c;
+
+	beginMacro(tr("%1: adjust to page size").arg(name()));
+	foreach (Scale *xScale, d->xScales) {
+		xScale->getPropertiesOnResize(horizontalRatio, &type, &interval, &a, &b, &c);
+		exec(new CartesianCoordinateSystemSetScalePropertiesCmd(xScale, interval, a, b, c));
+	}
+
+	foreach (Scale *yScale, d->yScales) {
+		yScale->getPropertiesOnResize(verticalRatio, &type, &interval, &a, &b, &c);
+		exec(new CartesianCoordinateSystemSetScalePropertiesCmd(yScale, interval, a, b, c));
+	}
+	endMacro();
+	
+	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+}

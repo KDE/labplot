@@ -56,6 +56,7 @@ class AbstractWorksheetElement: public AbstractAspect {
 
 	public slots:
 		virtual void retransform() = 0;
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	private:
 		QMenu *m_drawingOrderMenu;

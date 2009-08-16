@@ -80,16 +80,17 @@ class LinearAxis: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor);
 		CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont);
 		CLASS_D_ACCESSOR_DECL(QPointF, labelOffset, LabelOffset);
-
-		//TODO: all style related stuff (line widths, color, ...)
+		CLASS_D_ACCESSOR_DECL(QPen, pen, Pen);
 
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 
+		typedef AbstractWorksheetElement BaseClass;
 		typedef LinearAxisPrivate Private;
 
 	public slots:
 		virtual void retransform();
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
 		LinearAxisPrivate * const d_ptr;

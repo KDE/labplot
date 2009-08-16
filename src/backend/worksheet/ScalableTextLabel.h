@@ -68,6 +68,8 @@ class ScalableTextLabel: public QObject {
 		VerticalAlignment verticalAlignment() const;
 		void setAlignment(HorizontalAlignment hAlign, VerticalAlignment vAlign);
 
+		QRectF boundingRect();
+
 		typedef ScalableTextLabelPrivate Private;
 
     	void paint(QPainter *painter);

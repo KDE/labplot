@@ -48,17 +48,25 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
+		BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle);
+		BASIC_D_ACCESSOR_DECL(qreal, symbolSize, SymbolSize);
+		BASIC_D_ACCESSOR_DECL(qreal, symbolAspectRatio, SymbolAspectRatio);
+		CLASS_D_ACCESSOR_DECL(QString, symbolTypeId, SymbolTypeId);
+		CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush);
+		CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen);
+		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
 
-		//TODO: all style related stuff (line widths, color, symbol size, etc...)
 		//TODO: signal/slot connections with columns
 
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 
+		typedef AbstractWorksheetElement BaseClass;
 		typedef LineSymbolCurvePrivate Private;
 
 	public slots:
 		virtual void retransform();
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
 		LineSymbolCurve(const QString &name, LineSymbolCurvePrivate *dd);

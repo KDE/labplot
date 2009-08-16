@@ -31,7 +31,6 @@
 #define LINEARAXISPRIVATE_H
 
 #include <QGraphicsItem>
-#include <QBrush>
 #include <QPen>
 #include <QFont>
 #include "worksheet/ScalableTextLabel.h"
@@ -70,7 +69,6 @@ class LinearAxisPrivate: public QGraphicsItem {
 		QRectF boundingRectangle;
 		QPainterPath axisShape;
 
-		QBrush brush;
 		QPen pen;
 		QColor labelColor;
 		QFont labelFont;
@@ -88,6 +86,7 @@ class LinearAxisPrivate: public QGraphicsItem {
 		virtual void retransformTicks();
 		virtual void restyleLabels();
 		virtual void retransformTicks(const AbstractCoordinateSystem *cSystem);
+		virtual void recalcShapeAndBoundingRect();
 		bool swapVisible(bool on);
 		QPointF swapLabelOffset(const QPointF &newOffset);
 		virtual void addTextLabel(const QString &text, const QPointF &pos);

@@ -54,7 +54,6 @@
 LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner) {
 	lineVisible = true;
 	symbolsVisible = true;
-	symbolTypeId = "diamond";
 	xColumn = NULL;
 	yColumn = NULL;
 	symbolRotationAngle = 0;
@@ -62,30 +61,11 @@ LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner)
 	symbolAspectRatio = 1;
 
 	symbolPrototype = NULL;
-	if (symbolTypeId != "ellipse") {
-		foreach(QObject *plugin, PluginManager::plugins()) {
-			CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
-			if (factory) {
-				const AbstractCurveSymbol *prototype = factory->prototype(symbolTypeId);
-				if (prototype)
-				{
-					symbolPrototype = prototype->clone();
-					break;
-				}
-			}
-		}
-	}
-	if (!symbolPrototype) // safety fallback
-		symbolPrototype = EllipseCurveSymbol::staticPrototype()->clone();
+	swapSymbolTypeId("diamond");
 
 	// TODO: remove this temporary code later
 	symbolSize = 2.5;
 	symbolPrototype->setBrush(QBrush(Qt::red));
-
-	symbolPrototype->setSize(symbolSize);
-	symbolPrototype->setAspectRatio(symbolAspectRatio);
-//TODO	symbolPrototype->setBrush(symbolsBrush);
-//TODO	symbolPrototype->setPen(symbolsPen);
 }
 
 LineSymbolCurvePrivate::~LineSymbolCurvePrivate() {
@@ -123,22 +103,59 @@ LineSymbolCurve::~LineSymbolCurve() {
   \brief Set/get the pointer to the Y column.
 */
 
+/**
+  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle);
+  \brief Set/get the rotation angle of the symbols.
+*/
+/**
+  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolSize, SymbolSize);
+  \brief Set/get the (horizontal) size of the symbols.
+*/
+/**
+  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolAspectRatio, SymbolAspectRatio);
+  \brief Set/get the ratio between the width and height of the symbols.
+*/
+/**
+  \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(QString, symbolTypeId, SymbolTypeId);
+  \brief Set/get the symbol type.
+*/
+/**
+  \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush);
+  \brief Get/set the symbol filling brush.
+*/
+/**
+  \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen);
+  \brief Get/set the symbol outline pen.
+*/
+/**
+  \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
+  \brief Get/set the line pen.
+*/
+
+
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, lineVisible, lineVisible);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, symbolsVisible, symbolsVisible);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, xColumn, xColumn);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, yColumn, yColumn);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolRotationAngle, symbolRotationAngle);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolSize, symbolSize);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolAspectRatio, symbolAspectRatio);
+CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QString, symbolTypeId, symbolTypeId);
+CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QBrush, symbolsBrush, symbolsBrush);
+CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, symbolsPen, symbolsPen);
+CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, linePen, linePen);
 
 /* ============================ setter methods and undo commands ================= */
 
-STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLineVisible, bool, lineVisible, updateVisibility);
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLineVisible, bool, lineVisible, recalcShapeAndBoundingRect);
 void LineSymbolCurve::setLineVisible(bool visible) {
 	Q_D(LineSymbolCurve);
 	if (visible != d->lineVisible)
 		exec(new LineSymbolCurveSetLineVisibleCmd(d, visible, visible ? tr("%1: set line visible") : tr("%1: set line invisible")));
 }
 
-STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsVisible, bool, symbolsVisible, updateVisibility);
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsVisible, bool, symbolsVisible, recalcShapeAndBoundingRect);
 void LineSymbolCurve::setSymbolsVisible(bool visible) {
 	Q_D(LineSymbolCurve);
 	if (visible != d->symbolsVisible)
@@ -157,6 +174,55 @@ void LineSymbolCurve::setYColumn(const AbstractColumn *yColumn) {
 	Q_D(LineSymbolCurve);
 	if (yColumn != d->yColumn)
 		exec(new LineSymbolCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
+}
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolRotationAngle, qreal, symbolRotationAngle, updateSymbolPrototype);
+void LineSymbolCurve::setSymbolRotationAngle(qreal angle) {
+	Q_D(LineSymbolCurve);
+	if (!qFuzzyCompare(1 + angle, 1 + d->symbolRotationAngle))
+		exec(new LineSymbolCurveSetSymbolRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
+}
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolSize, qreal, symbolSize, updateSymbolPrototype);
+void LineSymbolCurve::setSymbolSize(qreal size) {
+	Q_D(LineSymbolCurve);
+	if (!qFuzzyCompare(1 + size, 1 + d->symbolSize))
+		exec(new LineSymbolCurveSetSymbolSizeCmd(d, size, tr("%1: set symbol size")));
+}
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolAspectRatio, qreal, symbolAspectRatio, updateSymbolPrototype);
+void LineSymbolCurve::setSymbolAspectRatio(qreal ratio) {
+	Q_D(LineSymbolCurve);
+	if (!qFuzzyCompare(1 + ratio, 1 + d->symbolAspectRatio))
+		exec(new LineSymbolCurveSetSymbolAspectRatioCmd(d, ratio, tr("%1: set symbol aspect ratio")));
+}
+
+STD_SWAP_METHOD_SETTER_CMD_IMPL(LineSymbolCurve, SetSymbolTypeId, QString, swapSymbolTypeId);
+void LineSymbolCurve::setSymbolTypeId(const QString &id) {
+	Q_D(LineSymbolCurve);
+	if (id != d->symbolTypeId)
+		exec(new LineSymbolCurveSetSymbolTypeIdCmd(d, id, tr("%1: set symbol type")));
+}
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsBrush, QBrush, symbolsBrush, updateSymbolPrototype);
+void LineSymbolCurve::setSymbolsBrush(const QBrush &brush) {
+	Q_D(LineSymbolCurve);
+	if (brush != d->symbolsBrush)
+		exec(new LineSymbolCurveSetSymbolsBrushCmd(d, brush, tr("%1: set symbol filling")));
+}
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsPen, QPen, symbolsPen, updateSymbolPrototype);
+void LineSymbolCurve::setSymbolsPen(const QPen &pen) {
+	Q_D(LineSymbolCurve);
+	if (pen != d->symbolsPen)
+		exec(new LineSymbolCurveSetSymbolsPenCmd(d, pen, tr("%1: set symbol outline style")));
+}
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect);
+void LineSymbolCurve::setLinePen(const QPen &pen) {
+	Q_D(LineSymbolCurve);
+	if (pen != d->linePen)
+		exec(new LineSymbolCurveSetLinePenCmd(d, pen, tr("%1: set line style")));
 }
 
 /* ============================ other methods ================= */
@@ -189,7 +255,6 @@ void LineSymbolCurve::retransform() {
 void LineSymbolCurve::Private::retransform() {
 	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
 
-	prepareGeometryChange();
 	linePath = QPainterPath();
 	curveShape = QPainterPath();
 	boundingRectangle = QRect();
@@ -264,24 +329,74 @@ void LineSymbolCurve::Private::retransform() {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
-	boundingRectangle = linePath.boundingRect();
 
-	QRectF prototypeBoundingRect = symbolPrototype->boundingRect();
+	recalcShapeAndBoundingRect();
+}
+
+void LineSymbolCurve::Private::recalcShapeAndBoundingRect() {
+	prepareGeometryChange();
+
+	boundingRectangle = QRectF();
+
+	if (lineVisible)
+		boundingRectangle |= linePath.boundingRect();
+
 	QPainterPath symbolsPath;
-	foreach (QPointF point, symbolPoints) {
-		prototypeBoundingRect.moveCenter(point); 
-		boundingRectangle |= prototypeBoundingRect;
-		symbolsPath.addEllipse(prototypeBoundingRect);
+	if (symbolsVisible) {
+		QRectF prototypeBoundingRect = symbolPrototype->boundingRect();
+		foreach (QPointF point, symbolPoints) {
+			prototypeBoundingRect.moveCenter(point); 
+			boundingRectangle |= prototypeBoundingRect;
+			symbolsPath.addEllipse(prototypeBoundingRect);
+		}
 	}
 
 	boundingRectangle = boundingRectangle.normalized();
 
-	curveShape = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
-	curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
+	curveShape = QPainterPath();
+	if (lineVisible)
+		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(linePath, linePen));
+	if (symbolsVisible)
+		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
+
+	update();
 }
 
-void LineSymbolCurve::Private::updateVisibility() {
-	// TODO
+QString LineSymbolCurve::Private::swapSymbolTypeId(const QString &id) {
+	QString oldId = symbolTypeId;
+	if (id != symbolTypeId)
+	{
+		symbolTypeId = id;
+		delete symbolPrototype;
+		symbolPrototype = NULL;
+		if (symbolTypeId != "ellipse") {
+			foreach(QObject *plugin, PluginManager::plugins()) {
+				CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
+				if (factory) {
+					const AbstractCurveSymbol *prototype = factory->prototype(symbolTypeId);
+					if (prototype)
+					{
+						symbolPrototype = prototype->clone();
+						break;
+					}
+				}
+			}
+		}
+	}
+	if (!symbolPrototype) // safety fallback
+		symbolPrototype = EllipseCurveSymbol::staticPrototype()->clone();
+
+	symbolPrototype->setSize(symbolSize);
+	symbolPrototype->setAspectRatio(symbolAspectRatio);
+	symbolPrototype->setBrush(symbolsBrush);
+	symbolPrototype->setPen(symbolsPen);
+	symbolPrototype->setRotationAngle(symbolRotationAngle);
+	recalcShapeAndBoundingRect();
+	return oldId;
+}
+
+void LineSymbolCurve::Private::updateSymbolPrototype() {
+	swapSymbolTypeId(symbolTypeId);
 }
 
 void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget)
@@ -294,15 +409,27 @@ void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphi
 		painter->drawPath(linePath);
 	}
 
-	if (symbolsVisible)
-	{
-		symbolPrototype->setPen(symbolsPen);
-		symbolPrototype->setBrush(symbolsBrush);
+	if (symbolsVisible) {
 		foreach(QPointF point, symbolPoints) {
 			painter->translate(point);
 			symbolPrototype->paint(painter, option, widget);
 			painter->translate(-point);
 		}
 	}
+}
+
+void LineSymbolCurve::handlePageResize(double horizontalRatio, double verticalRatio) {
+	Q_D(const LineSymbolCurve);
+	
+	setSymbolSize(d->symbolSize * horizontalRatio);
+	setSymbolAspectRatio(d->symbolAspectRatio * horizontalRatio / verticalRatio);
+	QPen pen = d->symbolsPen;
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	setSymbolsPen(pen);
+	pen = d->linePen;
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	setLinePen(pen);
+
+	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
 

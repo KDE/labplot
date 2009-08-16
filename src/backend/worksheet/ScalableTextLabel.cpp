@@ -58,6 +58,7 @@ class ScalableTextLabelPrivate {
 		ScalableTextLabel::VerticalAlignment verticalAlignment;
 
 		QTextLayout *layout;
+		QRectF boundingRectangle;
 
 		ScalableTextLabel * const q;
 };
@@ -98,12 +99,15 @@ void ScalableTextLabel::setFontSize(qreal size) {
 	Q_D(ScalableTextLabel);
 	
 	d->fontSize = size;
+	d->boundingRectangle = QRectF();
+	
 }
 
 void ScalableTextLabel::setRotationAngle(qreal angle) {
 	Q_D(ScalableTextLabel);
 
 	d->rotationAngle = angle;
+	d->boundingRectangle = QRectF();
 }
 
 void ScalableTextLabel::setFont(const QFont &font) {
@@ -117,6 +121,7 @@ void ScalableTextLabel::setFont(const QFont &font) {
 
 		delete d->layout;
 		d->layout = NULL;
+		d->boundingRectangle = QRectF();
 	}
 }
 
@@ -134,6 +139,7 @@ void ScalableTextLabel::setText(const QString &text) {
 
 		delete d->layout;
 		d->layout = NULL;
+		d->boundingRectangle = QRectF();
 	}
 }
 
@@ -141,6 +147,7 @@ void ScalableTextLabel::setPosition(const QPointF &pos) {
 	Q_D(ScalableTextLabel);
 
 	d->position = pos;
+	d->boundingRectangle = QRectF();
 }
 
 ScalableTextLabel::HorizontalAlignment ScalableTextLabel::horizontalAlignment() const {
@@ -160,6 +167,7 @@ void ScalableTextLabel::setAlignment(HorizontalAlignment hAlign, VerticalAlignme
 
 	d->horizontalAlignment = hAlign;
 	d->verticalAlignment = vAlign;
+	d->boundingRectangle = QRectF();
 }
 
 void ScalableTextLabel::paint(QPainter *painter) {
@@ -176,7 +184,7 @@ void ScalableTextLabel::paint(QPainter *painter) {
 	painter->setPen(QPen(d->textColor));
 
 	qreal scaleFactor = d->fontSize / 1000.0;
-    painter->scale(scaleFactor, scaleFactor);
+	painter->scale(scaleFactor, scaleFactor);
 
 	painter->rotate(d->rotationAngle);
 
@@ -216,19 +224,71 @@ void ScalableTextLabel::paint(QPainter *painter) {
 void ScalableTextLabel::createTextLayout() {
 	Q_D(ScalableTextLabel);
 
-    delete d->layout;
-    d->layout = new QTextLayout(d->text, d->font);
-    d->layout->setCacheEnabled(true);
+	delete d->layout;
+	d->layout = new QTextLayout(d->text, d->font);
+	d->layout->setCacheEnabled(true);
 
-    QTextOption option;
-    option.setUseDesignMetrics(true);
+	QTextOption option;
+	option.setUseDesignMetrics(true);
 
-    d->layout->setTextOption(option);
-    d->layout->beginLayout();
-    d->layout->createLine();
-    d->layout->endLayout();
+	d->layout->setTextOption(option);
+	d->layout->beginLayout();
+	d->layout->createLine();
+	d->layout->endLayout();
 }
 
+QRectF ScalableTextLabel::boundingRect() {
+	Q_D(ScalableTextLabel);
 
+	if (d->text.isEmpty())
+		return QRectF();
 
+	if (d->boundingRectangle.isNull()) {
+		if (d->layout == NULL)
+			createTextLayout();
+
+		QTextLine line = d->layout->lineAt(0);
+		QRectF textRect = line.naturalTextRect();
+		QPointF pos;
+
+		switch (d->horizontalAlignment) {
+			case hAlignLeft:
+				pos.setX(textRect.left());
+				break;
+			case hAlignCenter:
+				pos.setX(textRect.center().x());
+				break;
+			case hAlignRight:
+				pos.setX(textRect.right());
+				break;
+		}
+
+		switch (d->verticalAlignment) {
+			case vAlignTop:
+				pos.setY(textRect.top());
+				break;
+			case vAlignCenter:
+				pos.setY(textRect.center().y());
+				break;
+			case vAlignBottom:
+				pos.setY(textRect.bottom());
+				break;
+		}
+
+		textRect.translate(-pos);
+
+		qreal scaleFactor = d->fontSize / 1000.0;
+		textRect.setTopLeft(textRect.topLeft() * scaleFactor);
+		textRect.setBottomRight(textRect.bottomRight() * scaleFactor);
+
+		QMatrix matrix;
+		matrix.rotate(d->rotationAngle);
+		textRect = matrix.mapRect(textRect);
+		textRect.translate(d->position);
+
+		d->boundingRectangle = textRect;
+	}
+
+	return d->boundingRectangle;
+}
 

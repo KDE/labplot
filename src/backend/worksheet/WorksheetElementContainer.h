@@ -48,7 +48,9 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		virtual bool isVisible() const;
 		virtual bool isFullyVisible() const;
 
+	public slots:
 		virtual void retransform();
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 	
 	protected:
 		WorksheetElementContainerPrivate * const d_ptr;

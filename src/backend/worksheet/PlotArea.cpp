@@ -166,4 +166,10 @@ void PlotArea::retransform() {
 	WorksheetElementContainer::retransform();
 }
 
+void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio) {
+	// TODO: scale line width
+	
+	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+}
+
 

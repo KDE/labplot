@@ -63,8 +63,11 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 		void setRect(const QRectF &rect);
 		QRectF rect() const;
 
+		typedef AbstractWorksheetElement BaseClass;
+
 	public slots:
 		virtual void retransform();
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	private:
 		mutable QGraphicsPathItem m_item;
