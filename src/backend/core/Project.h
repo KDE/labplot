@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -37,8 +37,6 @@
 class QString;
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 class ProjectWindow;
-#else
-class MainWin;
 #endif
 class QAction;
 class AbstractScriptingEngine;
@@ -72,11 +70,7 @@ class Project : public Folder
 		};
 
 	public:
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		Project();
-#else
-		Project(MainWin * mainWin);
-#endif
 		~Project();
 
 		virtual const Project *project() const { return this; }
@@ -96,16 +90,16 @@ class Project : public Folder
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		CLASS_D_ACCESSOR_DECL(QString, labPlot, LabPlot)
 #endif
-		CLASS_D_ACCESSOR_DECL(QString, author, Author)  
+		CLASS_D_ACCESSOR_DECL(QString, author, Author)
 		CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 		FLAG_D_ACCESSOR_DECL(Changed)
-	
+
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		static ConfigPageWidget * makeConfigPage();
 		static QString configPageLabel();
 #endif
 		static void staticInit();
-	
+
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 

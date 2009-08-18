@@ -54,7 +54,7 @@
 /**
  * \class Project
  * \brief Represents a SciDAVis project.
- *
+ *  \ingroup core
  * Project manages an undo stack and is responsible for creating ProjectWindow instances
  * as views on itself.
  */
@@ -79,17 +79,9 @@
 class Project::Private
 {
 	public:
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		Private() :
-#else
-		Private(MainWin * mainWin) :
-#endif
 			mdi_window_visibility(static_cast<MdiWindowVisibility>(Project::global("default_mdi_window_visibility").toInt())),
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 			primary_view(0),
-#else
-			primary_view(mainWin),
-#endif
 			scripting_engine(0),
 		 	file_name(QString()),
 
@@ -122,13 +114,8 @@ class Project::Private
 		bool changed;
 };
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 Project::Project()
 	: Folder(tr("Unnamed")), d(new Private())
-#else
-Project::Project(MainWin * mainWin)
-	: Folder(tr("Unnamed")), d(new Private(mainWin))
-#endif
 {
 #ifndef SUPPRESS_SCRIPTING_INIT
 	// TODO: intelligent engine choosing

@@ -31,7 +31,7 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 #include <KXmlGuiWindow>
-#include <KAction>
+#include <KRecentFilesAction>
 #include "core/PartMdiView.h"
 #include "plots/Plot.h"
 
@@ -67,6 +67,14 @@ private:
 	QString m_fileName; //name of the file to be opened (command line argument)
 	QString m_undoViewEmptyLabel;
 
+	KRecentFilesAction* m_recentProjectsAction;
+	KAction* m_saveAction;
+	KAction* m_saveAsAction;
+	KAction* m_printAction;
+	KAction* m_printPreviewAction;
+	KAction* m_importAction;
+	KAction* m_projectInfoAction;
+	KAction* m_closeAction;
 	KAction *m_newFolderAction;
 	KAction *m_newSpreadsheetAction;
 	KAction *m_newMatrixAction;
@@ -105,9 +113,11 @@ public slots:
 
 private slots:
 	void initObject();
-	void openNew();
+	void newProject();
+	void openProject();
+	void closeProject();
 	void print();
-	void importDialog();
+	void importFileDialog();
 	void projectDialog();
 	void settingsDialog();
 	void newFileDataSourceActionTriggered(QAction*);
