@@ -5,8 +5,8 @@
 <ToolBar name="mainToolBar" >
 <text>Main Toolbar</text>
 <Action name="import" />
-<Action name="new spreadsheet" />
-<Action name="new worksheet" />
+<Action name="new_spreadsheet" />
+<Action name="new_worksheet" />
 <!--<Menu name="new_function_plot">
 	<text>New Function Plot</text>
 	<Action name="new_2D_function_plot" />

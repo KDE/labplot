@@ -34,7 +34,7 @@
 //****** GUI **************
 #include "FunctionPlotDialog.h"
 #include "DataPlotDialog.h"
-#include "ImportFileDialog.h"
+//#include "ImportFileDialog.h"
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
 #include "AxesDialog.h"
