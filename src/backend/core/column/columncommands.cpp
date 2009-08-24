@@ -325,7 +325,7 @@ void ColumnFullCopyCmd::undo()
  * \brief Ctor
  */
 ColumnPartialCopyCmd::ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_src(src), m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows), m_col_backup(0), m_src_backup(0), m_col_backup_owner(0), m_src_backup_owner(0)
+: QUndoCommand( parent ), m_col(col), m_src(src), m_col_backup(0), m_src_backup(0), m_col_backup_owner(0), m_src_backup_owner(0), m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows)
 {
 	setText(QObject::tr("%1: change cell value(s)").arg(col->name()));
 }

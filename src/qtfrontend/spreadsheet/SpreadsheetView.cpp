@@ -75,7 +75,7 @@
 #include <QDateTime>
 
 SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet)
- : m_plot_menu(0), m_spreadsheet(spreadsheet)
+ : m_spreadsheet(spreadsheet), m_plot_menu(0)
 {
 	m_model = new SpreadsheetModel(spreadsheet);
 	init();
@@ -1196,6 +1196,8 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers()
 					col_ptr->replaceTexts(first, results);
 					break;
 				}
+			//TODO: handle other modes
+			default: break;
 		}
 	}
 	m_spreadsheet->endMacro();

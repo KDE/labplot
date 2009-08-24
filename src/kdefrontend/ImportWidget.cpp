@@ -307,7 +307,8 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *sp
 	kDebug()<<"number of datasets = "<<hdf5.numSets()<<endl;
 
 	// add attributes as project comments
-	Project* project=0;
+	// TODO: mainWin->getProject() not available anymore
+/*	Project* project=0;
 	QString notes;
 	if(hdf5.numAttributes()>0) {
 		project = mainWin->getProject();
@@ -319,7 +320,7 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *sp
 	}
 	if(hdf5.numAttributes()>0)
 		project->setComment(notes);
-
+*/
 	// read data
 	for (int i=0;i<hdf5.numSets();i++) {
 		if(i>0) spreadsheet = mainWin->newSpreadsheet();

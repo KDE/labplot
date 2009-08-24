@@ -39,7 +39,7 @@
  */
 
 AbstractScript::AbstractScript(AbstractScriptingEngine *engine, const QString &code, QObject *context, const QString &name)
-	: m_engine(engine), m_code(code), m_name(name), m_compiled(notCompiled), m_context(context), m_emit_errors(true)
+	: m_engine(engine), m_code(code), m_name(name), m_context(context), m_compiled(notCompiled), m_emit_errors(true)
 {
 	m_engine->incref();
 }
