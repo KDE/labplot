@@ -590,8 +590,11 @@ void SpreadsheetView::applyDescription()
 	int index = sel_model->currentIndex().column();
 	if (index >= 0)
 	{
+		// changing the name triggers an update of the UI, which also resets the content of the
+		// comment box => need to cache it so name and comment can be changed simultaneously
+		QString comment = ui.comment_box->document()->toPlainText();
 		m_spreadsheet->column(index)->setName(ui.name_edit->text());
-		m_spreadsheet->column(index)->setComment(ui.comment_box->document()->toPlainText());
+		m_spreadsheet->column(index)->setComment(comment);
 	}
 }
 
