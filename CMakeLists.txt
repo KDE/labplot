@@ -9,6 +9,7 @@ include_directories( ${KDE4_INCLUDES} )
 add_definitions( ${KDE4_DEFINITIONS} )
 add_definitions ('-DLVERSION=\"2.0.0.alpha2\"')
 add_definitions(-D QT_STATICPLUGIN )
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 FIND_PROGRAM(YACC_EXECUTABLE
 	NAMES yacc bison
