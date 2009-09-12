@@ -43,6 +43,8 @@ HEADERS += \
 	aspectcommands.h \
 	AspectPrivate.h \
 	AbstractColumn.h \
+	AbstractColumnPrivate.h \
+	abstractcolumncommands.h \
 	Column.h \
 	ColumnPrivate.h \
 	columncommands.h \
@@ -98,6 +100,8 @@ SOURCES += \
 	AbstractAspect.cpp \
 	AspectPrivate.cpp \
 	AbstractColumn.cpp \
+	AbstractColumnPrivate.cpp \
+	abstractcolumncommands.cpp \
 	globals.cpp \
 	AbstractFilter.cpp \
 	AbstractSimpleFilter.cpp \

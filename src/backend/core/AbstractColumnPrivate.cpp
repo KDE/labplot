@@ -1,11 +1,11 @@
 /***************************************************************************
-    File                 : SimpleCopyThroughFilter.h
-    Project              : SciDAVis
+    File                 : AbstractColumnPrivate.cpp
+    Project              : SciDAVis/LabPlot
+    Description          : Private data class of AbstractColumn
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
-    Description          : Filter which copies the provided input unaltered
-                           to the output
+    Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net),
+	                                      Knut Franke (knut.franke*gmx.de)
+                           (replace * with @ in the email addresses) 
 
  ***************************************************************************/
 
@@ -27,34 +27,39 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef SIMPLE_COPY_THROUGH_FILTER_H
-#define SIMPLE_COPY_THROUGH_FILTER_H
 
-#include "core/AbstractSimpleFilter.h"
-#include "lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
+#include "AbstractColumnPrivate.h"
 
 /**
- * \brief Filter which copies the provided input unaltered to the output
- *
- * Most of the necessary methods for this filter are already implemented
- * in AbstractSimpleFilter.
- *
- * The difference between this filter and CopyThroughFilter is that
- * this inherits AbstractColumn and thus can be directly used
- * as input for other filters and plot functions. 
+ * \class AbstractColumn::Private
+ * \brief Private data class of AbstractColumn
  */
-class SimpleCopyThroughFilter : public AbstractSimpleFilter
-{
-	Q_OBJECT
 
-	protected:
-		//! All types are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *) 
-		{
-			return true;
-		}
-};
+/**
+ * \brief Ctor
+ */
+AbstractColumn::Private::Private(AbstractColumn *owner) : m_owner(owner) {
+	Q_CHECK_PTR(m_owner);
+}
 
-#endif // ifndef SIMPLE_COPY_THROUGH_FILTER_H
+/**
+ * \brief Return the constant masking interval attribute
+ */
+const IntervalAttribute<bool> &AbstractColumn::Private::masking() const {
+	return m_masking;
+}
+
+/**
+ * \brief Return the masking interval attribute
+ */
+IntervalAttribute<bool> &AbstractColumn::Private::masking() {
+	return m_masking;
+}
+
+/**
+ * \brief Replace the list of intervals of masked rows
+ */
+void AbstractColumn::Private::replaceMasking(IntervalAttribute<bool> masking) {
+	m_masking = masking;
+}
 

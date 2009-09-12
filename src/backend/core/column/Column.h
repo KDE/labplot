@@ -73,13 +73,6 @@ class Column : public AbstractColumn
 		AbstractSimpleFilter *outputFilter() const;
 		ColumnStringIO *asStringColumn() const;
 
-		bool isMasked(int row) const;
-		bool isMasked(Interval<int> i) const;
-		QList< Interval<int> > maskedIntervals() const;
-		void clearMasks();
-		void setMasked(Interval<int> i, bool mask = true);
-		void setMasked(int row, bool mask = true);
-
 		QString formula(int row) const;
 		QList< Interval<int> > formulaIntervals() const;
 		void setFormula(Interval<int> i, QString formula);
@@ -105,7 +98,6 @@ class Column : public AbstractColumn
 	private:
 		bool XmlReadInputFilter(XmlStreamReader * reader);
 		bool XmlReadOutputFilter(XmlStreamReader * reader);
-		bool XmlReadMask(XmlStreamReader * reader);
 		bool XmlReadFormula(XmlStreamReader * reader);
 		bool XmlReadRow(XmlStreamReader * reader);
 

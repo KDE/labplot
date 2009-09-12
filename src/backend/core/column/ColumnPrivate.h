@@ -30,9 +30,9 @@
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
-#include <QObject>
 #include "lib/IntervalAttribute.h"
 #include "core/column/Column.h"
+
 class AbstractSimpleFilter;
 class QString;
 
@@ -42,6 +42,8 @@ class Column::Private
 		Private(Column * owner, SciDAVis::ColumnMode mode);
 		~Private();
 		Private(Column * owner, SciDAVis::ColumnMode mode, void * data);
+
+		Column *owner() { return m_owner; }
 
 		SciDAVis::ColumnMode columnMode() const;
 		void setColumnMode(SciDAVis::ColumnMode mode);
@@ -65,17 +67,8 @@ class Column::Private
 		void replaceModeData(SciDAVis::ColumnMode mode, void * data, AbstractSimpleFilter *in_filter,
 				AbstractSimpleFilter *out_filter);
 		void replaceData(void * data);
-		IntervalAttribute<bool> maskingAttribute() const;
-		void replaceMasking(IntervalAttribute<bool> masking); 
 		IntervalAttribute<QString> formulaAttribute() const;
 		void replaceFormulas(IntervalAttribute<QString> formulas); 
-
-		bool isMasked(int row) const;
-		bool isMasked(Interval<int> i) const;
-		QList< Interval<int> > maskedIntervals() const;
-		void clearMasks();
-		void setMasked(Interval<int> i, bool mask = true);
-		void setMasked(int row, bool mask = true);
 
 		QString formula(int row) const;
 		QList< Interval<int> > formulaIntervals() const;
@@ -102,7 +95,6 @@ class Column::Private
 		void * m_data;
 		AbstractSimpleFilter* m_input_filter;
 		AbstractSimpleFilter* m_output_filter;
-		IntervalAttribute<bool> m_masking;
 		IntervalAttribute<QString> m_formulas;
 		SciDAVis::PlotDesignation m_plot_designation;
 		int m_width;

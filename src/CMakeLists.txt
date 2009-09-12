@@ -88,6 +88,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AspectPrivate.cpp
 	${BACKEND_DIR}/core/globals.cpp
 	${BACKEND_DIR}/core/AbstractColumn.cpp
+	${BACKEND_DIR}/core/AbstractColumnPrivate.cpp
+	${BACKEND_DIR}/core/abstractcolumncommands.cpp
 	${BACKEND_DIR}/core/AbstractFilter.cpp
 	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
 	${BACKEND_DIR}/core/column/Column.cpp

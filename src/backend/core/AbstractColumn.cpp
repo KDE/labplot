@@ -28,7 +28,12 @@
  ***************************************************************************/
 
 #include "AbstractColumn.h"
+#include "AbstractColumnPrivate.h"
+#include "abstractcolumncommands.h"
+#include "lib/Interval.h"
+#include "lib/XmlStreamReader.h"
 
+#include <QtXml/QXmlStreamWriter>
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 #include <QtCore/QDate>
@@ -71,6 +76,15 @@
  * make deriving a read-only class very easy without bothering about the
  * writing interface. 
  */
+
+/**
+ * \brief Ctor
+ *
+ * \param name the column name (= aspect name)
+ */
+AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name) {
+	m_abstract_column_private = new Private(this);
+}
 
 /**
  * \fn bool AbstractColumn::isReadOnly() const
@@ -133,14 +147,14 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {
-	Q_UNUSED(before) Q_UNUSED(count)
+	exec(new AbstractColumnInsertRowsCmd(this, before, count));
 }
 
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
 void AbstractColumn::removeRows(int first, int count) {
-	Q_UNUSED(first) Q_UNUSED(count)
+	exec(new AbstractColumnRemoveRowsCmd(this, first, count));
 }
 
 /**
@@ -187,29 +201,29 @@ bool AbstractColumn::isValid(int row) const {
  * \brief Return whether a certain row is masked 	 
  */
 bool AbstractColumn::isMasked(int row) const {
-	Q_UNUSED(row);
-	return false;
+	return m_abstract_column_private->masking().isSet(row); 
 }
 
 /**
  * \brief Return whether a certain interval of rows rows is fully masked 	 
  */
 bool AbstractColumn::isMasked(Interval<int> i) const {
-	Q_UNUSED(i);
-	return false;
+	return m_abstract_column_private->masking().isSet(i); 
 }
 
 /**
  * \brief Return all intervals of masked rows
  */
 QList< Interval<int> > AbstractColumn::maskedIntervals() const {
-	return QList< Interval<int> >();
+	return m_abstract_column_private->masking().intervals(); 
 }
 
 /**
  * \brief Clear all masking information
  */
-void AbstractColumn::clearMasks() {};
+void AbstractColumn::clearMasks() {
+	exec(new AbstractColumnClearMasksCmd(m_abstract_column_private));
+}
 
 /**
  * \brief Set an interval masked
@@ -218,14 +232,14 @@ void AbstractColumn::clearMasks() {};
  * \param mask true: mask, false: unmask
  */ 
 void AbstractColumn::setMasked(Interval<int> i, bool mask) {
-	Q_UNUSED(i) Q_UNUSED(mask)
+	exec(new AbstractColumnSetMaskedCmd(m_abstract_column_private, i, mask));
 }
 
 /**
  * \brief Overloaded function for convenience
  */
 void AbstractColumn::setMasked(int row, bool mask) {
-	Q_UNUSED(row) Q_UNUSED(mask)
+	setMasked(Interval<int>(row,row), mask);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -527,3 +541,36 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
  *
  * This is needed by AbstractFilter. 
  */
+
+/**
+ * \brief Read XML mask element
+ */
+bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
+	Q_ASSERT(reader->isStartElement() && reader->name() == "mask");
+
+	bool ok1, ok2;
+	int start, end;
+	start = reader->readAttributeInt("start_row", &ok1);
+	end = reader->readAttributeInt("end_row", &ok2);
+	if(!ok1 || !ok2) {
+		reader->raiseError(tr("invalid or missing start or end row"));
+		return false;
+	}
+	setMasked(Interval<int>(start,end));
+	if (!reader->skipToEndElement()) return false;
+
+	return true;
+}
+
+/**
+ * \brief Write XML mask element
+ */
+void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
+	foreach(Interval<int> interval, maskedIntervals()) {
+		writer->writeStartElement("mask");
+		writer->writeAttribute("start_row", QString::number(interval.start()));
+		writer->writeAttribute("end_row", QString::number(interval.end()));
+		writer->writeEndElement();
+	}
+}
+

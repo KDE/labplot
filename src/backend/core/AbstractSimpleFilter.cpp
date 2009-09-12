@@ -237,66 +237,6 @@ QList< Interval<int> > AbstractSimpleFilter::dependentRows(Interval<int> inputRa
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//!\name Masking
-//@{
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * \brief Return whether a certain row is masked
- */
-bool AbstractSimpleFilter::isMasked(int row) const {
-	return m_masking.isSet(row);
-}
-
-/**
- * \brief Return whether a certain interval of rows rows is fully masked
- */
-bool AbstractSimpleFilter::isMasked(Interval<int> i) const {
-	return m_masking.isSet(i);
-}
-
-/**
- * \brief Return all intervals of masked rows
- */
-QList< Interval<int> > AbstractSimpleFilter::maskedIntervals() const {
-	return m_masking.intervals();
-}
-
-/**
- * \brief Clear all masking information
- */
-void AbstractSimpleFilter::clearMasks()
-{
-	emit m_output_column->maskingAboutToChange(m_output_column);
-	m_masking.clear();
-	emit m_output_column->maskingChanged(m_output_column);
-}
-
-/**
- * \brief Set an interval masked
- *
- * \param i the interval
- * \param mask true: mask, false: unmask
- */ 
-void AbstractSimpleFilter::setMasked(Interval<int> i, bool mask)
-{
-	emit m_output_column->maskingAboutToChange(m_output_column);
-	m_masking.setValue(i, mask);
-	emit m_output_column->maskingChanged(m_output_column);
-}
-
-/**
- * \brief Overloaded function for convenience
- */
-void AbstractSimpleFilter::setMasked(int row, bool mask) {
-	setMasked(Interval<int>(row,row), mask);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//@}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 //!\name signal handlers
 //@{
 ////////////////////////////////////////////////////////////////////////////////////////////////////

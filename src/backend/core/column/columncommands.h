@@ -30,14 +30,15 @@
 #ifndef COLUMNCOMMANDS_H
 #define COLUMNCOMMANDS_H
 
+#include "lib/IntervalAttribute.h"
+#include "core/abstractcolumncommands.h"
+#include "core/column/Column.h"
+
 #include <QUndoCommand>
 #include <QStringList>
-#include "Column.h"
-#include "core/AbstractSimpleFilter.h"
-#include "lib/IntervalAttribute.h"
 #include <QDateTime>
-#include <QDate>
-#include <QTime>
+
+class AbstractSimpleFilter;
 
 class ColumnSetModeCmd : public QUndoCommand
 {
@@ -101,40 +102,34 @@ private:
 	int m_old_row_count;
 };
 
-class ColumnInsertEmptyRowsCmd : public QUndoCommand
+class ColumnInsertRowsCmd : public AbstractColumnInsertRowsCmd
 {
 public:
-	ColumnInsertEmptyRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent = 0 );
-	~ColumnInsertEmptyRowsCmd();
+	ColumnInsertRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent = 0 );
+	~ColumnInsertRowsCmd();
 
-	virtual void redo();
-	virtual void undo();
+	virtual void primaryRedo();
+	virtual void primaryUndo();
 
 private:
 	Column::Private * m_col;
-	int m_before;
-	int m_count;
-
 };
 
-class ColumnRemoveRowsCmd : public QUndoCommand 
+class ColumnRemoveRowsCmd : public AbstractColumnRemoveRowsCmd
 {
 public:
 	ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent = 0 );
 	~ColumnRemoveRowsCmd();
 
-	virtual void redo();
-	virtual void undo();
+	virtual void primaryRedo();
+	virtual void primaryUndo();
 
 private:
 	Column::Private * m_col;
-	int m_first;
-	int m_count;
 	int m_data_row_count;
 	int m_old_size;
 	Column::Private * m_backup;
 	Column * m_backup_owner;
-	IntervalAttribute<bool> m_masking;
 	IntervalAttribute<QString> m_formulas;
 };
 
@@ -181,40 +176,6 @@ private:
 	void * m_data;
 	void * m_empty_data;
 	bool m_undone;
-
-};
-
-class ColumnClearMasksCmd : public QUndoCommand
-{
-public:
-	ColumnClearMasksCmd(Column::Private * col, QUndoCommand * parent = 0 );
-	~ColumnClearMasksCmd();
-
-	virtual void redo();
-	virtual void undo();
-
-private:
-	Column::Private * m_col;
-	IntervalAttribute<bool> m_masking;
-	bool m_copied;
-
-};
-
-class ColumnSetMaskedCmd : public QUndoCommand
-{
-public:
-	ColumnSetMaskedCmd(Column::Private * col, Interval<int> interval, bool masked, QUndoCommand * parent = 0 );
-	~ColumnSetMaskedCmd();
-
-	virtual void redo();
-	virtual void undo();
-
-private:
-	Column::Private * m_col;
-	Interval<int> m_interval;
-	bool m_masked;
-	IntervalAttribute<bool> m_masking;
-	bool m_copied;
 
 };
 

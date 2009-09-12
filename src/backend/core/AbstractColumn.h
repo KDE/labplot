@@ -30,7 +30,6 @@
 #ifndef ABSTRACTCOLUMN_H
 #define ABSTRACTCOLUMN_H
 
-#include "lib/Interval.h"
 #include "core/globals.h"
 #include "core/AbstractAspect.h"
 
@@ -41,35 +40,41 @@ class QDateTime;
 class QDate;
 class QTime;
 template<class T> class QList;
+template<class T> class Interval;
 
 class AbstractColumn : public AbstractAspect
 {
 	Q_OBJECT
 
 	public:
-		AbstractColumn(const QString& name) : AbstractAspect(name) {}
+		class Private;
+		friend class Private;
+
+		AbstractColumn(const QString& name);
 		virtual ~AbstractColumn() { aboutToBeDestroyed(this);}
 
 		virtual bool isReadOnly() const { return true; };
 		virtual SciDAVis::ColumnMode columnMode() const = 0;
 		virtual void setColumnMode(SciDAVis::ColumnMode mode);
-		virtual bool copy(const AbstractColumn *other);
-		virtual bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
+		virtual SciDAVis::PlotDesignation plotDesignation() const = 0;
+		virtual void setPlotDesignation(SciDAVis::PlotDesignation pd);
+
+		virtual bool copy(const AbstractColumn *source);
+		virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
 
 		virtual int rowCount() const = 0;
 		virtual void insertRows(int before, int count);
 		virtual void removeRows(int first, int count);
-		virtual SciDAVis::PlotDesignation plotDesignation() const = 0;
-		virtual void setPlotDesignation(SciDAVis::PlotDesignation pd);
 		virtual void clear();
 
 		bool isValid(int row) const;
-		virtual bool isMasked(int row) const;
-		virtual bool isMasked(Interval<int> i) const;
-		virtual QList< Interval<int> > maskedIntervals() const;
-		virtual void clearMasks();
-		virtual void setMasked(Interval<int> i, bool mask = true);
-		virtual void setMasked(int row, bool mask = true);
+
+		bool isMasked(int row) const;
+		bool isMasked(Interval<int> i) const;
+		QList< Interval<int> > maskedIntervals() const;
+		void clearMasks();
+		void setMasked(Interval<int> i, bool mask = true);
+		void setMasked(int row, bool mask = true);
 
 		virtual QString formula(int row) const;
 		virtual QList< Interval<int> > formulaIntervals() const;
@@ -106,9 +111,17 @@ class AbstractColumn : public AbstractAspect
 		void maskingChanged(const AbstractColumn * source); 
 		void aboutToBeDestroyed(const AbstractColumn * source);
 
-		friend class ColumnPrivate;
-		friend class AbstractSimpleFilter;
-		friend class SimpleCopyThroughFilter;
+	protected:
+		bool XmlReadMask(XmlStreamReader *reader);
+		void XmlWriteMask(QXmlStreamWriter *writer) const;
+
+	private:
+		Private *m_abstract_column_private;
+
+		friend class AbstractColumnRemoveRowsCmd;
+		friend class AbstractColumnInsertRowsCmd;
+		friend class AbstractColumnClearMasksCmd;
+		friend class AbstractColumnSetMaskedCmd;
 };
 
 #endif

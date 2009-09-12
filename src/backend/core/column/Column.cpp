@@ -44,8 +44,7 @@
  *
  * This class represents a column, i.e., (mathematically) a 1D vector of 
  * values with a header. It provides a public reading and (undo aware) writing 
- * interface as defined in AbstractColumn. It manages special attributes
- * of column rows such as masking. A column
+ * interface as defined in AbstractColumn. A column
  * can have one of currently three data types: double, QString, or
  * QDateTime. The string representation of the values can differ depending
  * on the mode of the column.
@@ -202,8 +201,7 @@ bool Column::copy(const AbstractColumn * source, int source_start, int dest_star
  */
 void Column::insertRows(int before, int count)
 {
-	if(count > 0)
-		exec(new ColumnInsertEmptyRowsCmd(m_column_private, before, count));
+	exec(new ColumnInsertRowsCmd(m_column_private, before, count));
 }
 
 /**
@@ -211,8 +209,7 @@ void Column::insertRows(int before, int count)
  */
 void Column::removeRows(int first, int count)
 {
-	if(count > 0)
-		exec(new ColumnRemoveRowsCmd(m_column_private, first, count));
+	exec(new ColumnRemoveRowsCmd(m_column_private, first, count));
 }
 
 /**
@@ -247,33 +244,6 @@ void Column::setWidth(int value)
 void Column::clear()
 {
 	exec(new ColumnClearCmd(m_column_private));
-}
-
-/**
- * \brief Clear all masking information
- */
-void Column::clearMasks()
-{
-	exec(new ColumnClearMasksCmd(m_column_private));
-}
-
-/**
- * \brief Set an interval masked
- *
- * \param i the interval
- * \param mask true: mask, false: unmask
- */ 
-void Column::setMasked(Interval<int> i, bool mask)
-{
-	exec(new ColumnSetMaskedCmd(m_column_private, i, mask));
-}
-
-/**
- * \brief Overloaded function for convenience
- */
-void Column::setMasked(int row, bool mask)
-{
-	setMasked(Interval<int>(row,row), mask);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -493,14 +463,7 @@ void Column::save(QXmlStreamWriter * writer) const
 	writer->writeStartElement("output_filter");
 	m_column_private->outputFilter()->save(writer);
 	writer->writeEndElement();
-	QList< Interval<int> > masks = maskedIntervals();
-	foreach(Interval<int> interval, masks)
-	{
-		writer->writeStartElement("mask");
-		writer->writeAttribute("start_row", QString::number(interval.start()));
-		writer->writeAttribute("end_row", QString::number(interval.end()));
-		writer->writeEndElement();
-	}
+	XmlWriteMask(writer);
 	QList< Interval<int> > formulas = formulaIntervals();
 	foreach(Interval<int> interval, formulas)
 	{
@@ -681,28 +644,6 @@ bool Column::XmlReadOutputFilter(XmlStreamReader * reader)
 }
 
 /**
- * \brief Read XML mask element
- */
-bool Column::XmlReadMask(XmlStreamReader * reader)
-{
-	Q_ASSERT(reader->isStartElement() && reader->name() == "mask");
-
-	bool ok1, ok2;
-	int start, end;
-	start = reader->readAttributeInt("start_row", &ok1);
-	end = reader->readAttributeInt("end_row", &ok2);
-	if(!ok1 || !ok2) 
-	{
-		reader->raiseError(tr("invalid or missing start or end row"));
-		return false;
-	}
-	setMasked(Interval<int>(start,end));
-	if (!reader->skipToEndElement()) return false;
-
-	return true;
-}
-
-/**
  * \brief Read XML formula element
  */
 bool Column::XmlReadFormula(XmlStreamReader * reader)
@@ -827,30 +768,6 @@ ColumnStringIO *Column::asStringColumn() const {
 //! \name IntervalAttribute related functions
 //@{
 ////////////////////////////////////////////////////////////////////////////////
-
-/**
- * \brief Return whether a certain row is masked 	 
- */
-bool Column::isMasked(int row) const 
-{ 
-	return m_column_private->isMasked(row); 
-}
-
-/**
- * \brief Return whether a certain interval of rows is fully masked 	 
- */
-bool Column::isMasked(Interval<int> i) const 
-{ 
-	return m_column_private->isMasked(i); 
-}
-
-/**
- * \brief Return all intervals of masked rows
- */
-QList< Interval<int> > Column::maskedIntervals() const 
-{ 
-	return m_column_private->maskedIntervals(); 
-}
 
 /**
  * \brief Return the formula associated with row 'row' 	 

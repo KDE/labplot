@@ -371,54 +371,45 @@ void ColumnPartialCopyCmd::undo()
 }
 
 /** ***************************************************************************
- * \class ColumnInsertEmptyRowsCmd
+ * \class ColumnInsertRowsCmd
  * \brief Insert empty rows 
  ** ***************************************************************************/
 
 /**
- * \var ColumnInsertEmptyRowsCmd::m_col
+ * \var ColumnInsertRowsCmd::m_col
  * \brief The private column data to modify
- */
-
-/**
- * \var ColumnInsertEmptyRowsCmd::m_before
- * \brief Row to insert before
- */
-
-/**
- * \var ColumnInsertEmptyRowsCmd::m_count
- * \brief Number of rows to insert
  */
 
 /**
  * \brief Ctor
  */
-ColumnInsertEmptyRowsCmd::ColumnInsertEmptyRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_before(before), m_count(count)
+ColumnInsertRowsCmd::ColumnInsertRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent )
+: AbstractColumnInsertRowsCmd(col->owner(), before, count, parent), m_col(col)
 {
-	setText(QObject::tr("%1: insert %2 row(s)").arg(col->name()).arg(count));
 }
 
 /**
  * \brief Dtor
  */
-ColumnInsertEmptyRowsCmd::~ColumnInsertEmptyRowsCmd()
+ColumnInsertRowsCmd::~ColumnInsertRowsCmd()
 {
 }
 
 /**
  * \brief Execute the command
  */
-void ColumnInsertEmptyRowsCmd::redo()
+void ColumnInsertRowsCmd::primaryRedo()
 {
 	m_col->insertRows(m_before, m_count);
+	AbstractColumnInsertRowsCmd::primaryRedo();
 }
 
 /**
  * \brief Undo the command
  */
-void ColumnInsertEmptyRowsCmd::undo()
+void ColumnInsertRowsCmd::primaryUndo()
 {
+	AbstractColumnInsertRowsCmd::primaryUndo();
 	m_col->removeRows(m_before, m_count);
 }
 
@@ -430,16 +421,6 @@ void ColumnInsertEmptyRowsCmd::undo()
 /**
  * \var ColumnRemoveRowsCmd::m_col
  * \brief The private column data to modify
- */
-
-/**
- * \var ColumnRemoveRowsCmd::m_first
- * \brief The first row
- */
-
-/**
- * \var ColumnRemoveRowsCmd::m_count
- * \brief The number of rows to be removed
  */
 
 /**
@@ -467,11 +448,6 @@ void ColumnInsertEmptyRowsCmd::undo()
  */
 
 /**
- * \var ColumnRmeoveRowsCmd::m_masking
- * \brief Backup of the masking attribute
- */
-
-/**
  * \var ColumnRemoveRowsCmd::m_formulas
  * \brief Backup of the formula attribute
  */
@@ -480,9 +456,8 @@ void ColumnInsertEmptyRowsCmd::undo()
  * \brief Ctor
  */
 ColumnRemoveRowsCmd::ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_first(first), m_count(count), m_backup(0)
+: AbstractColumnRemoveRowsCmd(col->owner(), first, count, parent), m_col(col), m_backup(0)
 {
-	setText(QObject::tr("%1: remove %2 row(s)").arg(col->name()).arg(count));
 }
 
 /**
@@ -497,7 +472,7 @@ ColumnRemoveRowsCmd::~ColumnRemoveRowsCmd()
 /**
  * \brief Execute the command
  */
-void ColumnRemoveRowsCmd::redo()
+void ColumnRemoveRowsCmd::primaryRedo()
 {
 	if(m_backup == 0)
 	{
@@ -512,21 +487,21 @@ void ColumnRemoveRowsCmd::redo()
 		m_backup_owner = new Column("temp", m_col->columnMode());
 		m_backup = new Column::Private(m_backup_owner, m_col->columnMode()); 
 		m_backup->copy(m_col, m_first, 0, m_data_row_count);
-		m_masking = m_col->maskingAttribute();
 		m_formulas = m_col->formulaAttribute();
 	}
 	m_col->removeRows(m_first, m_count);
+	AbstractColumnRemoveRowsCmd::primaryRedo();
 }
 
 /**
  * \brief Undo the command
  */
-void ColumnRemoveRowsCmd::undo()
+void ColumnRemoveRowsCmd::primaryUndo()
 {
+	AbstractColumnRemoveRowsCmd::primaryUndo();
 	m_col->insertRows(m_first, m_count);
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);
-	m_col->replaceMasking(m_masking);
 	m_col->replaceFormulas(m_formulas);
 }
 
@@ -741,134 +716,6 @@ void ColumnClearCmd::undo()
 	m_undone = true;
 }
 
-/** ***************************************************************************
- * \class ColumnClearMasksCmd
- * \brief Clear masking information 
- ** ***************************************************************************/
-
-/**
- * \var ColumnClearMasksCmd::m_col
- * \brief The private column data to modify
- */
-
-/**
- * \var ColumnClearMasksCmd::m_masking
- * \brief The old masks
- */
-
-/**
- * \var ColumnClearMasksCmd::m_copied
- * \brief A status flag
- */
-
-/**
- * \brief Ctor
- */
-ColumnClearMasksCmd::ColumnClearMasksCmd(Column::Private * col, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col)
-{
-	setText(QObject::tr("%1: clear masks").arg(col->name()));
-	m_copied = false;
-}
-
-/**
- * \brief Dtor
- */
-ColumnClearMasksCmd::~ColumnClearMasksCmd()
-{
-}
-
-/**
- * \brief Execute the command
- */
-void ColumnClearMasksCmd::redo()
-{
-	if(!m_copied)
-	{
-		m_masking = m_col->maskingAttribute();
-		m_copied = true;
-	}
-	m_col->clearMasks();
-}
-
-/**
- * \brief Undo the command
- */
-void ColumnClearMasksCmd::undo()
-{
-	m_col->replaceMasking(m_masking);
-}
-
-/** ***************************************************************************
- * \class ColumnSetMaskedCmd
- * \brief Mark an interval of rows as masked
- ** ***************************************************************************/
-
-/**
- * \var ColumnSetMaskedCmd::m_col
- * \brief The private column data to modify
- */
-
-/**
- * \var ColumnSetMaskedCmd::m_interval
- * \brief The interval
- */
-
-/**
- * \var ColumnSetMaskedCmd::m_masked
- * \brief Mask/unmask flag
- */
-
-/**
- * \var ColumnSetMaskedCmd::m_masking
- * \brief Interval attribute backup
- */
-
-/**
- * \var ColumnSetMaskedCmd::m_copied
- * \brief A status flag
- */
-
-/**
- * \brief Ctor
- */
-ColumnSetMaskedCmd::ColumnSetMaskedCmd(Column::Private * col, Interval<int> interval, bool masked, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_interval(interval), m_masked(masked)
-{
-	if(masked)
-		setText(QObject::tr("%1: mask cells").arg(col->name()));
-	else
-		setText(QObject::tr("%1: unmask cells").arg(col->name()));
-	m_copied = false;
-}
-
-/**
- * \brief Dtor
- */
-ColumnSetMaskedCmd::~ColumnSetMaskedCmd()
-{
-}
-
-/**
- * \brief Execute the command
- */
-void ColumnSetMaskedCmd::redo()
-{
-	if(!m_copied)
-	{
-		m_masking = m_col->maskingAttribute();
-		m_copied = true;
-	}
-	m_col->setMasked(m_interval, m_masked);
-}
-
-/**
- * \brief Undo the command
- */
-void ColumnSetMaskedCmd::undo()
-{
-	m_col->replaceMasking(m_masking);
-}
 
 /** ***************************************************************************
  * \class ColumSetFormulaCmd

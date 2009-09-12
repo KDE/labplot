@@ -470,13 +470,6 @@ void Column::Private::replaceData(void * data)
 }
 
 /**
- * \brief Return the masking interval attribute
- */
-IntervalAttribute<bool> Column::Private::maskingAttribute() const {
-	return m_masking;
-}
-
-/**
  * \brief Copy another column of the same type
  *
  * This function will return false if the data type
@@ -737,8 +730,6 @@ void Column::Private::insertRows(int before, int count)
 {
 	if (count == 0) return;
 
-	emit m_owner->rowsAboutToBeInserted(m_owner, before, count);
-	m_masking.insertRows(before, count);
 	m_formulas.insertRows(before, count);
 
 	if (before <= rowCount()) {
@@ -758,7 +749,6 @@ void Column::Private::insertRows(int before, int count)
 				break;
 		}
 	}
-	emit m_owner->rowsInserted(m_owner, before, count);
 }
 
 /**
@@ -768,8 +758,6 @@ void Column::Private::removeRows(int first, int count)
 {
 	if (count == 0) return;
 
-	emit m_owner->rowsAboutToBeRemoved(m_owner, first, count);
-	m_masking.removeRows(first, count);
 	m_formulas.removeRows(first, count);
 
 	if (first < rowCount()) 
@@ -794,7 +782,6 @@ void Column::Private::removeRows(int first, int count)
 				break;
 		}
 	}
-	emit m_owner->rowsRemoved(m_owner, first, count);
 }
 
 //! Return the column name
@@ -856,67 +843,6 @@ AbstractSimpleFilter *Column::Private::inputFilter() const {
 AbstractSimpleFilter *Column::Private::outputFilter() const {
 	return m_output_filter;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-//! \name IntervalAttribute related functions
-//@{
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * \brief Return whether a certain row is masked
- */
-bool Column::Private::isMasked(int row) const {
-	return m_masking.isSet(row);
-}
-
-/**
- * \brief Return whether a certain interval of rows rows is fully masked 	 
- */
-bool Column::Private::isMasked(Interval<int> i) const {
-	return m_masking.isSet(i);
-}
-
-/**
- * \brief Return all intervals of masked rows
- */
-QList< Interval<int> > Column::Private::maskedIntervals() const {
-	return m_masking.intervals();
-}
-	
-/**
- * \brief Clear all masking information
- */
-void Column::Private::clearMasks()
-{
-	emit m_owner->maskingAboutToChange(m_owner);	
-	m_masking.clear();
-	emit m_owner->maskingChanged(m_owner);	
-}
-
-/**
- * \brief Set an interval masked
- *
- * \param i the interval
- * \param mask true: mask, false: unmask
- */ 
-void Column::Private::setMasked(Interval<int> i, bool mask)
-{
-		emit m_owner->maskingAboutToChange(m_owner);	
-		m_masking.setValue(i, mask);
-		emit m_owner->maskingChanged(m_owner);	
-}
-
-/**
- * \brief Overloaded function for convenience
- */
-void Column::Private::setMasked(int row, bool mask)
-{
-	setMasked(Interval<int>(row,row), mask);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//@}
-////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 //! \name Formula related functions
@@ -1182,16 +1108,6 @@ void Column::Private::replaceValues(int first, const QVector<double>& new_values
 ////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////
-
-/**
- * \brief Replace the list of intervals of masked rows
- */
-void Column::Private::replaceMasking(IntervalAttribute<bool> masking)
-{
-	emit m_owner->maskingAboutToChange(m_owner);
-	m_masking = masking;
-	emit m_owner->maskingChanged(m_owner);
-}
 
 /**
  * \brief Return the interval attribute representing the formula strings

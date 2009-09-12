@@ -58,20 +58,11 @@ class AbstractSimpleFilter : public AbstractFilter
 		virtual int rowCount() const;
 		virtual QList< Interval<int> > dependentRows(Interval<int> inputRange) const;
 
-		virtual bool isMasked(int row) const;
-		virtual bool isMasked(Interval<int> i) const;
-		virtual QList< Interval<int> > maskedIntervals() const;
-		virtual void clearMasks();
-		virtual void setMasked(Interval<int> i, bool mask = true);
-		virtual void setMasked(int row, bool mask = true);
-
 		virtual void save(QXmlStreamWriter * writer) const;
 		virtual bool load(XmlStreamReader * reader);
 		virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
 
 	protected:
-		IntervalAttribute<bool> m_masking;
-
 		virtual void inputPlotDesignationAboutToChange(const AbstractColumn*);
 		virtual void inputPlotDesignationChanged(const AbstractColumn*);
 		virtual void inputModeAboutToChange(const AbstractColumn*);
@@ -97,10 +88,6 @@ class SimpleFilterColumn : public AbstractColumn
 		virtual SciDAVis::ColumnMode columnMode() const;
 		virtual int rowCount() const { return m_owner->rowCount(); }
 		virtual SciDAVis::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
-		virtual bool isMasked(int row) const { return m_owner->isMasked(row); }
-		virtual bool isMasked(Interval<int> i) const { return m_owner->isMasked(i); }
-		virtual QList< Interval<int> > maskedIntervals() const { return m_owner->maskedIntervals(); }
-		virtual void clearMasks() { m_owner->clearMasks(); }
 		virtual QString textAt(int row) const;
 		virtual QDate dateAt(int row) const;
 		virtual QTime timeAt(int row) const;
