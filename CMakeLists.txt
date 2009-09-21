@@ -5,11 +5,18 @@ find_package(KDE4 REQUIRED)
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-include_directories( ${KDE4_INCLUDES} )
-add_definitions( ${KDE4_DEFINITIONS} )
-add_definitions ('-DLVERSION=\"2.0.0.alpha2\"')
+include_directories(${KDE4_INCLUDES})
+add_definitions(${KDE4_DEFINITIONS})
+add_definitions (-DLVERSION='\"2.0.0.alpha2\"')
+# needed for qt_plugin_instance_scidavis_standardcurvesymbolfactory()
 add_definitions(-D QT_STATICPLUGIN )
+add_definitions(-DSUPPRESS_SCRIPTING_INIT)
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+# useful for debugging
+#set(CMAKE_VERBOSE_MAKEFILE true)
+set(BUILD_SHARED_LIBS true)
+# needed for shared libs
+add_definitions(-fvisibility=default)
 
 FIND_PROGRAM(YACC_EXECUTABLE
 	NAMES yacc bison
@@ -47,14 +54,14 @@ ENDIF (GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_INCLUDE_DIR)
 
 IF (GSL_FOUND)
 	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_VERSION}: ${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES}")
-	add_definitions ('-DHAVE_GSL=1')
+	add_definitions (-DHAVE_GSL=1)
 	# TODO : set version ?
-	add_definitions ('-DGSL_VERSION='GSL_VERSION)
+	add_definitions (-DGSL_VERSION=GSL_VERSION)
 ELSE (GSL_FOUND)
 	MESSAGE (STATUS "GNU Scientific Library not found. "
 			"LabPlot will be build without GSL suppot.")
-	SET (GSL_LIBRARIES "" )
-	SET (GSL_CBLAS_LIBRARIES "" )
+	SET (GSL_LIBRARIES "")
+	SET (GSL_CBLAS_LIBRARIES "")
 ENDIF (GSL_FOUND)
 
 ### HDF5 #####################################
@@ -62,12 +69,12 @@ FIND_LIBRARY(HDF5_LIBRARY
   NAMES hdf5
 )
 IF(HDF5_LIBRARY)
-MESSAGE ("-- Found HDF5 library: ${HDF5_LIBRARY}" )
-add_definitions ('-DHAVE_HDF5=1')
+MESSAGE ("-- Found HDF5 library: ${HDF5_LIBRARY}")
+add_definitions (-DHAVE_HDF5=1)
 ###### version 1.8 has different API
-add_definitions ('-DH5_USE_16_API=1')
+add_definitions (-DH5_USE_16_API=1)
 ELSE(HDF5_LIBRARY)
-MESSAGE ("-- HDF5 library NOT FOUND!" )
+MESSAGE ("-- HDF5 library NOT FOUND!")
 SET(HDF5_LIBRARY "")
 ENDIF(HDF5_LIBRARY)
  
@@ -76,10 +83,10 @@ FIND_LIBRARY(NETCDF_LIBRARY
   NAMES netcdf
 )
 IF(NETCDF_LIBRARY)
-MESSAGE ("-- Found NETCDF library: ${NETCDF_LIBRARY}" )
-add_definitions ('-DHAVE_NETCDF=1')
+MESSAGE ("-- Found NETCDF library: ${NETCDF_LIBRARY}")
+add_definitions (-DHAVE_NETCDF=1)
 ELSE(NETCDF_LIBRARY)
-MESSAGE ("-- NETCDF library NOT FOUND!" )
+MESSAGE ("-- NETCDF library NOT FOUND!")
 SET(NETCDF_LIBRARY "")
 ENDIF(NETCDF_LIBRARY)
  
@@ -88,10 +95,10 @@ FIND_LIBRARY(CDF_LIBRARY
   NAMES cdf
 )
 IF(CDF_LIBRARY)
-MESSAGE ("-- Found CDF library: ${CDF_LIBRARY}" )
-add_definitions ('-DHAVE_CDF=1')
+MESSAGE ("-- Found CDF library: ${CDF_LIBRARY}")
+add_definitions (-DHAVE_CDF=1)
 ELSE(CDF_LIBRARY)
-MESSAGE ("-- CDF library NOT FOUND!" )
+MESSAGE ("-- CDF library NOT FOUND!")
 SET(CDF_LIBRARY "")
 ENDIF(CDF_LIBRARY)
 
@@ -100,15 +107,17 @@ FIND_LIBRARY(OPJ_LIBRARY
   NAMES origin
 )
 IF(OPJ_LIBRARY)
-MESSAGE ("-- Found liborigin library: ${OPJ_LIBRARY}" )
+MESSAGE ("-- Found liborigin library: ${OPJ_LIBRARY}")
 ELSE(OPJ_LIBRARY)
-MESSAGE ("-- System OPJ library not found! Using included version." )
+MESSAGE ("-- System OPJ library not found! Using included version.")
 add_subdirectory(liborigin)
-SET(OPJ_LIBRARY "-L../lib -lorigin")
+SET(OPJ_LIBRARY "-llabplot_origin")
+# for FilterOPJ to find OPJFile.h
+INCLUDE_DIRECTORIES(liborigin)
 ENDIF(OPJ_LIBRARY)
 ##############################################
 
 
 add_subdirectory(src)
 
-install( FILES src/kdefrontend/LabPlotui.rc src/kdefrontend/labplot.png DESTINATION  ${DATA_INSTALL_DIR}/LabPlot )
+install(FILES src/kdefrontend/LabPlotui.rc src/kdefrontend/labplot.png DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)

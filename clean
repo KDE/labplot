@@ -1,8 +1,11 @@
 make clean
-rm -rf CMakeFiles CMakeTmp src/CMakeFiles liborigin/CMakeFiles liborigin/cmake_install.cmake liborigin/Makefile
-rm -f Makefile CMakeCache.txt cmake_install.cmake cmake_uninstall.cmake install_manifest.txt
-rm -f src/LabPlot_automoc.cpp src/LabPlot_automoc.cpp.files src/cmake_install.cmake
-rm -f src/LabPlot src/LabPlot.shell src/moc_* src/ui_* src/Makefile
+rm -rf CMakeFiles CMakeTmp src/CMakeFiles src/filter/CMakeFiles src/elements/CMakeFiles liborigin/CMakeFiles
+rm -f cmake_install.cmake src/cmake_install.cmake src/filter/cmake_install.cmake src/elements/cmake_install.cmake liborigin/cmake_install.cmake
+rm -f Makefile src/Makefile src/filter/Makefile src/elements/Makefile liborigin/Makefile
+rm -f CMakeCache.txt cmake_uninstall.cmake install_manifest.txt
+rm -f src/labplot_automoc.cpp src/labplot_automoc.cpp.files src/commonfrontend_automoc.cpp.files
+rm -f src/elements_automoc.cpp.files src/backend_automoc.cpp src/commonfrontend_automoc.cpp src/backend_automoc.cpp.files
+rm -f src/labplot src/labplot.shell src/moc_* src/ui_*
 
 rm -rf src/tmp/ src/qtfrontend/tmp/ liborigin/opj2dat opjfile.log
 rmdir lib/

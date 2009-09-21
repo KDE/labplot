@@ -1,4 +1,11 @@
 set(KDEFRONTEND_DIR kdefrontend)
+set(BACKEND_DIR backend)
+set(QTFRONTEND_DIR qtfrontend)
+set(COMMONFRONTEND_DIR commonfrontend)
+
+ADD_SUBDIRECTORY(elements)
+ADD_SUBDIRECTORY(filter)
+
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/AxesDialog.cpp
 	${KDEFRONTEND_DIR}/AxesWidget.cpp
@@ -26,39 +33,12 @@ set(GUI_SOURCES
   	${KDEFRONTEND_DIR}/SpreadsheetView.cpp
 	${KDEFRONTEND_DIR}/TitleDialog.cpp
 	${KDEFRONTEND_DIR}/ValuesWidget.cpp
-#  	${KDEFRONTEND_DIR}/Worksheet.cpp
-#	${KDEFRONTEND_DIR}/WorksheetView.cpp
-)
-
-set(ELEMENTS_SOURCES
-  elements/Axis.cpp
-  elements/Label.cpp
-  elements/Legend.cpp
-  elements/Point.cpp
-  elements/Point3D.cpp
-  elements/Range.cpp
-  elements/Set.cpp
-  elements/Style.cpp
-  elements/Symbol.cpp
-)
-
-set(FILTER_SOURCES
-  filter/FilterCDF.cpp
-  filter/FilterHDF5.cpp
-  filter/FilterNETCDF.cpp
-  filter/FilterOPJ.cpp
 )
 
 set(PLOTS_SOURCES
-  plots/Plot.cpp
-  plots/Plot2D.cpp
-  plots/Plot2DSimple.cpp
-)
-
-set(LabPlot_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} ${ELEMENTS_SOURCES} ${FILTER_SOURCES}
-  parser/parser.tab.c
-  tools/TexRenderer.cpp
-  tools/ColorMapRenderer.cpp
+	plots/Plot.cpp
+	plots/Plot2D.cpp
+	plots/Plot2DSimple.cpp
 )
 
 set(UI_SOURCES
@@ -76,11 +56,6 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/valueswidget.ui
 )
-
-set(BACKEND_DIR backend)
-set(QTFRONTEND_DIR qtfrontend)
-set(COMMONFRONTEND_DIR commonfrontend)
-INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} ${COMMONFRONTEND_DIR} .)
 
 set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/Folder.cpp
@@ -137,7 +112,7 @@ set(BACKEND_SOURCES
 set(QTFRONTEND_SOURCES
 	${QTFRONTEND_DIR}/core/ProjectExplorer.cpp
 	${QTFRONTEND_DIR}/core/PartMdiView.cpp
-	${QTFRONTEND_DIR}//lib/ActionManager.cpp
+	${QTFRONTEND_DIR}/lib/ActionManager.cpp
 )
 
 set(COMMONFRONTEND_SOURCES
@@ -157,19 +132,22 @@ set(QTMOC_HDRS
 	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
 )
 
+
 qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
-
-add_definitions(-DSUPPRESS_SCRIPTING_INIT)
-
-kde4_add_ui_files(LabPlot_SRCS ${UI_SOURCES})
-kde4_add_executable(LabPlot ${LabPlot_SRCS} ${BACKEND_SOURCES} ${QTFRONTEND_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTMOC_HDRS})
-
-INCLUDE_DIRECTORIES(../liborigin)
-target_link_libraries(LabPlot ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${CDF_LIBRARY} ${OPJ_LIBRARY})
 
 add_custom_command (OUTPUT parser/parser.tab.c
                    COMMAND ${YACC_EXECUTABLE} ARGS -b parser parser.y
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
+##############################################################################
+INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} ${COMMONFRONTEND_DIR} .)
+set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
 
-install(TARGETS LabPlot DESTINATION ${BIN_INSTALL_DIR})
+kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
+kde4_add_executable(labplot ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
+target_link_libraries(labplot labplot_elements labplot_filter ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} 
+${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${OPJ_LIBRARY})
+
+############## installation ################################
+
+install(TARGETS labplot DESTINATION ${BIN_INSTALL_DIR})
 # install(FILES LabPlotui.rc DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)
