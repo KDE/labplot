@@ -1,0 +1,26 @@
+/*!
+  \class AbstractFileFilter
+  \brief Interface for the input/output file filters.
+  
+  \ingroup datasources
+*/
+
+/*!
+  \fn read(const QString& fileName, FileDataSource* dataSource);
+  \brief Reads the file \c fileName to the data source \c dataSource.
+*/
+
+/*!
+  \fn write(const QString& fileName, FileDataSource* dataSource);
+  \brief Writes the data source \c dataSource to the file \c fileName.
+*/
+
+/*!
+  \fn loadFilterSettings(const QString& filterName);
+  \brief Loads the settings \c filterName and makes them current.
+*/
+
+/*!
+  \fn saveFilterSettings(const QString& filterName) const;
+  \brief Saves the current filter settings under the name \c filterName.
+*/
