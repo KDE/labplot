@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : FileInfoDialog.cpp
+    File                 : ImportFileWidget.h
     Project              : LabPlot
-    Description          : import file data dialog
+    Description          : import file data widget
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
+    Copyright            : (C) 2009 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
 
  ***************************************************************************/
@@ -26,51 +26,39 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef IMPORTFILEWIDGET_H
+#define IMPORTFILEWIDGET_H
 
-#include "FileInfoDialog.h"
-#include "datasources/FileDataSource.h"
+#include "ui_importfilewidget.h"
+#include "AsciiOptionsWidget.h"
+#include "BinaryOptionsWidget.h"
 
-#include <KDebug>
-#include <KLocale>
-#include <KFilterDev>
-#include <QFileInfo>
-#include <QProcess>
+class FileDataSource;
 
- /*!
-	\class ImportWidget
-	\brief Provides a dialog containing the information about the files to be imported.
+class ImportFileWidget : public QWidget{
+    Q_OBJECT
 
-	\ingroup kdefrontend
- */
+public:
+	ImportFileWidget(QWidget*);
+	~ImportFileWidget();
 
-FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
+ 	bool toggleOptions();
+	void saveSettings(FileDataSource*) const;
 
-	textEditWidget.setReadOnly(true);
-	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
-	setMainWidget( &textEditWidget );
- 	setButtons( KDialog::Ok);
- 	setWindowIcon(KIcon("help-about"));
-	setCaption(i18n("File info"));
- 	resize( QSize(500,300) );
-}
+private:
+	Ui::ImportFileWidget ui;
+	Ui::AsciiOptionsWidget asciiOptionsWidget;
+	Ui::BinaryOptionsWidget binaryOptionsWidget;
 
+private slots:
+	void fileNameChanged(const QString&);
+	void fileTypeChanged(int);
+	void saveFilter();
+	void manageFilters();
+	void filterChanged(int);
+	void headerChanged(int);
+	void selectFile();
+ 	void fileInfoDialog();
+};
 
-void FileInfoDialog::setFiles(QStringList& files){
-	QString fileName;
-	QString infoString;
-	QFileInfo fileInfo;
-	QString fileTypeString;
-
-	 for ( int i=0; i<files.size(); i++ ) {
-		fileName = files.at(i);
-		if(fileName.isEmpty())
-			continue;
-
-        if (infoString!="")
-            infoString += "<br><br><br>";
-
-        infoString += FileDataSource::fileInfoString(fileName);
-	}
-
-	textEditWidget.document()->setHtml(infoString);
-}
+#endif

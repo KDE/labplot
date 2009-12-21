@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : FileInfoDialog.h
     Project              : LabPlot
+    Description          : file info dialog
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
-				   alexander.semke*web.de
-    Description          : file info dialog
+    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de alexander.semke*web.de
 
  ***************************************************************************/
 

@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : FileInfoDialog.cpp
+    File                 : ImportDialog.cc
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
@@ -27,50 +27,46 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "FileInfoDialog.h"
-#include "datasources/FileDataSource.h"
-
-#include <KDebug>
-#include <KLocale>
-#include <KFilterDev>
-#include <QFileInfo>
-#include <QProcess>
+#include "ImportFileDialog.h"
+#include "ImportFileWidget.h"
+#include "backend/datasources/FileDataSource.h"
 
  /*!
-	\class ImportWidget
-	\brief Provides a dialog containing the information about the files to be imported.
+	\class ImportFileDialog
+	\brief Dialog for importing data from a file. Embeddes \c ImportFileWidget and provides the standard buttons.
 
 	\ingroup kdefrontend
  */
+ 
+ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
+	importFileWidget = new ImportFileWidget( this );
+	setMainWidget( importFileWidget );
 
-FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
+    setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+	setButtonText(KDialog::User1,i18n("Show Options"));
 
-	textEditWidget.setReadOnly(true);
-	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
-	setMainWidget( &textEditWidget );
- 	setButtons( KDialog::Ok);
- 	setWindowIcon(KIcon("help-about"));
-	setCaption(i18n("File info"));
- 	resize( QSize(500,300) );
+    //connect(this,SIGNAL(applyClicked()),SLOT(apply()));
+// 	connect(this,SIGNAL(okClicked()),SLOT(apply()));
+// 	connect(this,SIGNAL(user1Clicked()),importWidget,SLOT(save()));
+	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	
+	setCaption(i18n("Import Data"));
+	setWindowIcon(KIcon("document-import-database"));
+	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
 
+void ImportFileDialog::saveSettings(FileDataSource* source) const{
+	importFileWidget->saveSettings(source);
+}
 
-void FileInfoDialog::setFiles(QStringList& files){
-	QString fileName;
-	QString infoString;
-	QFileInfo fileInfo;
-	QString fileTypeString;
-
-	 for ( int i=0; i<files.size(); i++ ) {
-		fileName = files.at(i);
-		if(fileName.isEmpty())
-			continue;
-
-        if (infoString!="")
-            infoString += "<br><br><br>";
-
-        infoString += FileDataSource::fileInfoString(fileName);
+void ImportFileDialog::toggleOptions(){
+	if (importFileWidget->toggleOptions()){
+		setButtonText(KDialog::User1,i18n("Hide Options"));
+	}else{
+		setButtonText(KDialog::User1,i18n("Show Options"));
 	}
 
-	textEditWidget.document()->setHtml(infoString);
+	//resize the dialog
+	layout()->activate();
+	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }

@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : FileInfoDialog.cpp
+    File                 : ImportFileDialog.h
     Project              : LabPlot
-    Description          : import file data dialog
+    Description          : import data dialog
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
@@ -27,50 +27,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "FileInfoDialog.h"
-#include "datasources/FileDataSource.h"
+#ifndef IMPORTFILEDIALOG_H
+#define IMPORTFILEDIALOG_H
 
-#include <KDebug>
-#include <KLocale>
-#include <KFilterDev>
-#include <QFileInfo>
-#include <QProcess>
+#include <KDialog>
+class ImportFileWidget;
+class FileDataSource;
 
- /*!
-	\class ImportWidget
-	\brief Provides a dialog containing the information about the files to be imported.
+class ImportFileDialog: public KDialog {
+  Q_OBJECT
 
-	\ingroup kdefrontend
- */
+  public:
+	ImportFileDialog(QWidget*);
+	void saveSettings(FileDataSource*) const;
 
-FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
+  private:
+	ImportFileWidget *importFileWidget;
 
-	textEditWidget.setReadOnly(true);
-	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
-	setMainWidget( &textEditWidget );
- 	setButtons( KDialog::Ok);
- 	setWindowIcon(KIcon("help-about"));
-	setCaption(i18n("File info"));
- 	resize( QSize(500,300) );
-}
+  private slots:
+	void toggleOptions();
+};
 
-
-void FileInfoDialog::setFiles(QStringList& files){
-	QString fileName;
-	QString infoString;
-	QFileInfo fileInfo;
-	QString fileTypeString;
-
-	 for ( int i=0; i<files.size(); i++ ) {
-		fileName = files.at(i);
-		if(fileName.isEmpty())
-			continue;
-
-        if (infoString!="")
-            infoString += "<br><br><br>";
-
-        infoString += FileDataSource::fileInfoString(fileName);
-	}
-
-	textEditWidget.document()->setHtml(infoString);
-}
+#endif //IMPORTFILEDIALOG_H

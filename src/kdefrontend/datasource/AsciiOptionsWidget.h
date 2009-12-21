@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : FileInfoDialog.cpp
-    Project              : LabPlot
-    Description          : import file data dialog
+    File                 : AsciiOptionsWidget.h
+    Project            : LabPlot
+    Description      : widget providing options for the import of ascii data
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
+    Copyright            : (C) 2009 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
 
  ***************************************************************************/
@@ -26,51 +26,20 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef ASCIIOPTIONSWIDGET_H
+#define ASCIIOPTIONSWIDGET_H
 
-#include "FileInfoDialog.h"
-#include "datasources/FileDataSource.h"
+#include "ui_asciioptionswidget.h"
 
-#include <KDebug>
-#include <KLocale>
-#include <KFilterDev>
-#include <QFileInfo>
-#include <QProcess>
+class AsciiOptionsWidget : public QWidget{
+    Q_OBJECT
 
- /*!
-	\class ImportWidget
-	\brief Provides a dialog containing the information about the files to be imported.
+public:
+	AsciiOptionsWidget(QWidget*);
+	~AsciiOptionsWidget();
 
-	\ingroup kdefrontend
- */
+private:
+	Ui::AsciiOptionsWidget ui;
+};
 
-FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
-
-	textEditWidget.setReadOnly(true);
-	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
-	setMainWidget( &textEditWidget );
- 	setButtons( KDialog::Ok);
- 	setWindowIcon(KIcon("help-about"));
-	setCaption(i18n("File info"));
- 	resize( QSize(500,300) );
-}
-
-
-void FileInfoDialog::setFiles(QStringList& files){
-	QString fileName;
-	QString infoString;
-	QFileInfo fileInfo;
-	QString fileTypeString;
-
-	 for ( int i=0; i<files.size(); i++ ) {
-		fileName = files.at(i);
-		if(fileName.isEmpty())
-			continue;
-
-        if (infoString!="")
-            infoString += "<br><br><br>";
-
-        infoString += FileDataSource::fileInfoString(fileName);
-	}
-
-	textEditWidget.document()->setHtml(infoString);
-}
+#endif
