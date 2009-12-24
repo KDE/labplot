@@ -30,9 +30,11 @@
 #ifndef IMPORTFILEDIALOG_H
 #define IMPORTFILEDIALOG_H
 
+#include <QtGui>
 #include <KDialog>
 class ImportFileWidget;
 class FileDataSource;
+class TreeViewComboBox;
 
 class ImportFileDialog: public KDialog {
   Q_OBJECT
@@ -40,10 +42,16 @@ class ImportFileDialog: public KDialog {
   public:
 	ImportFileDialog(QWidget*);
 	void saveSettings(FileDataSource*) const;
-
+	void setModel(QAbstractItemModel * model);
+	void setCurrentIndex(const QModelIndex&);
+	
   private:
+	QVBoxLayout* vLayout;
 	ImportFileWidget *importFileWidget;
-
+	QFrame* frameAddTo;
+	TreeViewComboBox* cbAddTo;
+	QWidget* mainWidget;
+	
   private slots:
 	void toggleOptions();
 };

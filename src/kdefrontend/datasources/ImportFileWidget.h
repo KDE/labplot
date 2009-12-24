@@ -44,7 +44,8 @@ public:
 
  	bool toggleOptions();
 	void saveSettings(FileDataSource*) const;
-
+	void hideDataSource() const;
+	
 private:
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;

@@ -30,6 +30,7 @@
 #include "ImportFileDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/datasources/FileDataSource.h"
+#include "backend/widgets/TreeViewComboBox.h"
 
  /*!
 	\class ImportFileDialog
@@ -39,9 +40,16 @@
  */
  
 ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
-	importFileWidget = new ImportFileWidget( this );
-	setMainWidget( importFileWidget );
-
+	mainWidget = new QWidget(this);
+	vLayout = new QVBoxLayout(mainWidget);
+	vLayout->setSpacing(1);
+	vLayout->setContentsMargins(0,0,0,0);
+	
+	importFileWidget = new ImportFileWidget( mainWidget );
+	vLayout->addWidget(importFileWidget);
+	
+	setMainWidget( mainWidget );
+	
     setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 	setButtonText(KDialog::User1,i18n("Show Options"));
 
@@ -53,6 +61,27 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
 	setCaption(i18n("Import Data"));
 	setWindowIcon(KIcon("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
+}
+
+void ImportFileDialog::setModel(QAbstractItemModel * model){
+  //Frame for the "Add To"-Stuff
+  frameAddTo = new QFrame(this);
+  QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
+  hLayout->addWidget( new QLabel(i18n("Import data to"),  frameAddTo) );
+  
+  cbAddTo = new TreeViewComboBox(frameAddTo);
+  hLayout->addWidget( cbAddTo);
+  vLayout->addWidget(frameAddTo);
+  
+  cbAddTo->setModel(model);
+  
+  //hide the data-source related widgets
+  importFileWidget->hideDataSource();
+}
+
+
+void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
+  cbAddTo->setCurrentIndex(index);
 }
 
 void ImportFileDialog::saveSettings(FileDataSource* source) const{
@@ -67,6 +96,10 @@ void ImportFileDialog::toggleOptions(){
 	}
 
 	//resize the dialog
+	mainWidget->resize(layout()->minimumSize());
+// 	vLayout->update();
 	layout()->activate();
-	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+ 	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+//  	resize( QSize(this->width(),0) );
+// 	resize(layout()->minimumSize());
 }

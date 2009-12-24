@@ -71,9 +71,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     ui.bManageFilters->setIcon( KIcon("configure") );
 	ui.bSaveFilter->setIcon( KIcon("document-save") );
 
-    KConfigGroup conf(KSharedConfig::openConfig(),"Import");
-    ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
-
     connect( ui.kleFileName, SIGNAL(textChanged (const QString&)), SLOT(fileNameChanged(const QString&)) );
     connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
     connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
@@ -82,6 +79,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     connect( ui.cbFileType, SIGNAL(activated(int)), SLOT(fileTypeChanged(int)) );
     connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
     connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
+	
+	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -90,6 +90,12 @@ ImportFileWidget::~ImportFileWidget() {
     conf.writeEntry("LastImportedFile", ui.kleFileName->text());
 }
 
+void ImportFileWidget::hideDataSource() const{
+  ui.lSourceName->hide();
+  ui.kleSourceName->hide();
+  ui.chbWatchFile->hide();
+  ui.chbLinkFile->hide();
+}
 
 /*!
 	toggles the filter options. Returns \c true on "on" and \c false on "off".
