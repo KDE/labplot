@@ -66,7 +66,12 @@ QStringList FileDataSource::fileTypes(){
                         << tr("ASCII matrix data")
                         << tr("BINARY matrix data")
                         << tr("Image")
-                        << tr("Sound") );
+                        << tr("Sound")
+                        << "FITS"
+                        << "NetCDF"
+                        << "HDF"
+                        << "CDF"
+                        );
 }
 
 void FileDataSource::setFileName(const QString& name){
