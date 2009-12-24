@@ -52,11 +52,6 @@ public:
 	Spreadsheet* activeSpreadsheet() const;
 	Worksheet* activeWorksheet() const;
 
-//	TODO are these functions realy needed?
-// 	Project* getProject() const { return m_project; }
-// 	void setProject(Project *p) { m_project=p; }
-// 	QMdiArea* getMdi() const { return m_mdi_area; }
-
 private:
 	QMdiArea *m_mdi_area;
 	Project *m_project;
@@ -79,6 +74,8 @@ private:
 	KAction *m_newSpreadsheetAction;
 	KAction *m_newMatrixAction;
 	KAction *m_newWorksheetAction;
+	KAction *m_newFileDataSourceAction;
+	KAction *m_newSqlDataSourceAction;
 	KAction *m_newScriptAction;
 	KAction *m_newProjectAction;
 	KAction *m_historyAction;
@@ -95,6 +92,7 @@ private:
 	void ensureSheet();
 	bool hasSheet(const QModelIndex & index) const;
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
+	void addAspectToProject(AbstractAspect* aspect);
 
 public slots:
 	Spreadsheet* newSpreadsheet();
@@ -120,8 +118,8 @@ private slots:
 	void importFileDialog();
 	void projectDialog();
 	void settingsDialog();
-	void newFileDataSourceActionTriggered(QAction*);
-	void newSqlDataSourceActionTriggered(QAction*);
+	void newFileDataSourceActionTriggered();
+	void newSqlDataSourceActionTriggered();
 	void axesDialog();
 	void newPlotActionTriggered(QAction*);
 	void functionPlotActionTriggered(QAction*);

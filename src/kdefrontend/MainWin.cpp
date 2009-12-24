@@ -34,7 +34,8 @@
 //****** GUI **************
 #include "FunctionPlotDialog.h"
 #include "DataPlotDialog.h"
-//#include "ImportFileDialog.h"
+#include "datasources/ImportFileDialog.h"
+#include "ImportDialog.h"
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
 #include "AxesDialog.h"
@@ -60,7 +61,7 @@
 #include "spreadsheet/Spreadsheet.h"
 #include "worksheet/Worksheet.h"
 #include "worksheet/WorksheetView.h"
-// #include "datasources/FileDataSource.h"
+#include "datasources/FileDataSource.h"
 
  /*!
 	\class MainWin
@@ -88,8 +89,10 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 }
 
 MainWin::~MainWin() {
+	kDebug()<<"write settings"<<endl;
 	//write settings
-	//TODO m_recentProjectsAction->saveEntries( KGlobal::config()->group("Recent Files") );
+	//TODO
+	m_recentProjectsAction->saveEntries( KGlobal::config()->group("Recent Files") );
 	//etc...
 	 KGlobal::config()->sync();
 
@@ -101,7 +104,8 @@ MainWin::~MainWin() {
 }
 
 void MainWin::initObject(){
-//TODO 	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
+  	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
+	m_recentProjectsAction->setEnabled(true);
 
 	if ( !m_fileName.isEmpty() )
 		openProject(m_fileName);
@@ -118,7 +122,7 @@ void MainWin::setupActions() {
 		//add some standard actions
  	action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
 	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
-  	KRecentFilesAction* m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject()),actionCollection());
+  	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject()),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	m_saveAction = KStandardAction::save(this, SLOT(save()),actionCollection());
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveAs()),actionCollection());
@@ -136,6 +140,7 @@ void MainWin::setupActions() {
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
+	//TODO add KDE-icon
 	m_newWorksheetAction= new KAction(KIcon(QIcon(worksheet_xpm)),i18n("New Worksheet"),this);
 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
@@ -150,61 +155,33 @@ void MainWin::setupActions() {
 	connect(m_newFolderAction, SIGNAL(triggered()),SLOT(newFolder()));
 
 	//"New file datasources"
-	QActionGroup* newFileDataSourceActions = new QActionGroup(this);
-	action = new KAction(KIcon("application-octet-stream"),i18n("New Vector Data Source "),this);
-	actionCollection()->addAction("new_file_vector_datasource", action);
-	newFileDataSourceActions->addAction(action);
-
-	action = new KAction(KIcon("table"),i18n("New Matrix Data Source "),this);
-	actionCollection()->addAction("new_file_matrix_datasource", action);
-	newFileDataSourceActions->addAction(action);
-
-	action = new KAction(KIcon("image-x-generic"),i18n("New Image Data Source "),this);
-	actionCollection()->addAction("new_file_image_datasource", action);
-	newFileDataSourceActions->addAction(action);
-
-	action = new KAction(KIcon("audio basic"),i18n("New Sound Data Source "),this);
-	actionCollection()->addAction("new_file_sound_datasource", action);
-	newFileDataSourceActions->addAction(action);
-
-	connect(newFileDataSourceActions, SIGNAL(triggered(QAction*)), this, SLOT(newFileDataSourceActionTriggered(QAction*)));
+	m_newFileDataSourceAction = new KAction(KIcon("application-octet-stream"),i18n("New File Data Source "),this);
+	actionCollection()->addAction("new_file_datasource", m_newFileDataSourceAction);
+	connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
 
 	//"New database datasources"
-	QActionGroup* newSqlDataSourceActions = new QActionGroup(this);
-	action = new KAction(KIcon("application-octet-stream"),i18n("New Vector Data Source "),this);
-	actionCollection()->addAction("new_database_vector_datasource", action);
-	newSqlDataSourceActions->addAction(action);
-
-	action = new KAction(KIcon("table"),i18n("New Matrix Data Source "),this);
-	actionCollection()->addAction("new_database_matrix_datasource", action);
-	newSqlDataSourceActions->addAction(action);
-
-	action = new KAction(KIcon("image-x-generic"),i18n("New Image Data Source "),this);
-	actionCollection()->addAction("new_database_image_datasource", action);
-	newSqlDataSourceActions->addAction(action);
-
-	action = new KAction(KIcon("audio basic"),i18n("New Sound Data Source "),this);
-	actionCollection()->addAction("new_database_sound_datasource", action);
-	newSqlDataSourceActions->addAction(action);
-
-	connect(newFileDataSourceActions, SIGNAL(triggered(QAction*)), this, SLOT(newFileDataSourceActionTriggered(QAction*)));
+	m_newSqlDataSourceAction = new KAction(KIcon("server-database"),i18n("New SQL Data Source "),this);
+	actionCollection()->addAction("new_database_datasource", m_newSqlDataSourceAction);
+	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
 
 	//"New plots"
 	QActionGroup* newPlotActions = new QActionGroup(this);
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Plot"),this);
+	//TODO add KDE-icon
+// 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Plot"),this);
+	action = new KAction(KIcon(),i18n("New 2D Plot"),this);
 	actionCollection()->addAction("new_2D_plot", action);
 	newPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Plot"),this);
+	action = new KAction(i18n("New 2D Surface Plot"),this);
 	actionCollection()->addAction("new_2D_surface_plot", action);
 	newPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Plot"),this);
+	action = new KAction(i18n("New 2D Polar Plot"),this);
 	actionCollection()->addAction("new_2D_polar_plot", action);
 	newPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Plot"),this);
+	action = new KAction(i18n("New 3D Plot"),this);
 	actionCollection()->addAction("new_3D_plot", action);
 	newPlotActions->addAction(action);
 
@@ -212,19 +189,19 @@ void MainWin::setupActions() {
 
 	//Function plots
    QActionGroup* functionPlotActions = new QActionGroup(this);
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Function Plot"),this);
+	action = new KAction(i18n("New 2D Function Plot"),this);
 	actionCollection()->addAction("new_2D_function_plot", action);
 	functionPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Function Plot"),this);
+	action = new KAction(i18n("New 2D Surface Function Plot"),this);
 	actionCollection()->addAction("new_2D_surface_function_plot", action);
 	functionPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Function Plot"),this);
+	action = new KAction(i18n("New 2D Polar Function Plot"),this);
 	actionCollection()->addAction("new_2D_polar_function_plot", action);
 	functionPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Function Plot"),this);
+	action = new KAction(i18n("New 3D Function Plot"),this);
 	actionCollection()->addAction("new_3D_function_plot", action);
 	functionPlotActions->addAction(action);
 
@@ -232,19 +209,19 @@ void MainWin::setupActions() {
 
 	//"New data plots"
 	QActionGroup* dataPlotActions = new QActionGroup(this);
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Data Plot"),this);
+	action = new KAction(i18n("New 2D Data Plot"),this);
 	actionCollection()->addAction("new_2D_data_plot", action);
 	dataPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Surface Data Plot"),this);
+	action = new KAction(i18n("New 2D Surface Data Plot"),this);
 	actionCollection()->addAction("new_2D_surface_data_plot", action);
 	dataPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Polar Data Plot"),this);
+	action = new KAction(i18n("New 2D Polar Data Plot"),this);
 	actionCollection()->addAction("new_2D_polar_data_plot", action);
 	dataPlotActions->addAction(action);
 
-	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 3D Data Plot"),this);
+	action = new KAction(i18n("New 3D Data Plot"),this);
 	actionCollection()->addAction("new_3D_data_plot", action);
 	dataPlotActions->addAction(action);
 
@@ -279,7 +256,8 @@ void MainWin::setupActions() {
 	// Script
 
 	// worksheet menu
-	action = new KAction (KIcon(QIcon(project_xpm)),i18n("Axes Settings"), this);
+	//TODO add icon
+	action = new KAction (KIcon(),i18n("Axes Settings"), this);
 	actionCollection()->addAction("axes", action);
 	connect(action, SIGNAL(triggered()),SLOT(axesDialog()));
 
@@ -321,7 +299,6 @@ void MainWin::setupActions() {
 }
 
 bool MainWin::warnModified() {
-// 	if(m_mdi_area->subWindowList().size() > 0 && m_project->hasChanged()) {
 	if(m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
 			i18n("The current project has been modified.\nDo you want to save it?"),
@@ -386,7 +363,7 @@ void MainWin::updateGUI() {
 	}
 
 
-	KActionCollection* collection=this->actionCollection();
+// 	KActionCollection* collection=this->actionCollection();
 
 	//Handle the Worksheet-object
 	Worksheet* w=this->activeWorksheet();
@@ -483,19 +460,6 @@ void MainWin::newProject(){
  	setCaption("LabPlot "  + QString(LVERSION) + "  " + i18n("Project") + " " + m_project->name());
 	handleAspectDescriptionChanged(m_project);
 	kDebug()<<"new project created"<<endl;
-
-		//TODO
-// /*	gvpart=0;
-// 	defining_region=0;
-// 	defining_line=0;
-// 	defining_rect=0;
-// 	defining_ellipse=0;
-// 	defining_label=false;
-// 	defining_image=false;
-// 	defining_baseline=false;
-// 	defining_maglens=0;
-// 	defining_panzoom=0;
-// */
 }
 
 void MainWin::openProject(){
@@ -710,47 +674,18 @@ Worksheet* MainWin::activeWorksheet() const{
 	return w;
 }
 
-//TODO remove?
-// SpreadsheetView* MainWin::getSpreadsheet(QString name) const{
-// // TODO: port to use aspects
-// 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
-// 	for (int i=0; i<wlist.size(); i++)
-// 		if(wlist.at(i)->windowTitle() == name)
-// 			return (SpreadsheetView *)wlist.at(i);
-// 	return 0;
-// }
-
-
-//TODO remove?
-// Worksheet* MainWin::getWorksheet(QString name) const {
-// TODO: port to use aspects
-// 	QList<QMdiSubWindow *> wlist = m_mdi_area->subWindowList();
-// 	for (int i=0; i<wlist.size(); i++)
-// 		if(wlist.at(i)->windowTitle() == name)
-// 			return (Worksheet *)wlist.at(i);
-//  	return 0;
-// }
-
 
 /******************** dialogs *****************************/
 void MainWin::importFileDialog(){
-// 	ImportFileDialog* dlg = new ImportFileDialog(this);
-// 	if ( dlg->exec() == QDialog::Accepted ) {
-//   		FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1").arg(1));
-// // 		dlg->saveSettings(dataSource);
-// // 		dataSource->read();
-//
-// 		QModelIndex index = m_project_explorer->currentIndex();
-// 		if(!index.isValid())
-// 			m_project->addChild(dataSource);
-// 		else {
-// 			AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
-// 			Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
-// 			parent_aspect->folder()->addChild(dataSource);
-// 		}
-//
-// 		kDebug()<<"new file data source created"<<endl;
-// 	}
+	ImportFileDialog* dlg = new ImportFileDialog(this);
+	AspectTreeModel* model=new AspectTreeModel(m_project, this);
+	model->setFolderSelectable(false);
+	dlg->setModel( model );
+	dlg->setCurrentIndex( m_project_explorer->currentIndex());
+	
+	if ( dlg->exec() == QDialog::Accepted ){
+
+	}
 }
 
 void MainWin::axesDialog() { (new AxesDialog(this))->show(); }
@@ -786,15 +721,37 @@ bool MainWin::hasSheet(const QModelIndex & index) const{
 /*!
 	adds a new file data source to the current project.
 */
-void MainWin::newFileDataSourceActionTriggered(QAction* action){
-	//TODO
+void MainWin::newFileDataSourceActionTriggered(){
+  ImportFileDialog* dlg = new ImportFileDialog(this);
+  if ( dlg->exec() == QDialog::Accepted ) {
+	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1").arg(1));
+	  dlg->saveSettings(dataSource);
+	  dataSource->read();
+	  this->addAspectToProject(dataSource);
+	  kDebug()<<"new file data source created"<<endl;
+  }
+  delete dlg;
 }
 
 /*!
-	adds a new file data source to the current project.
+  adds a new SQL data source to the current project.
 */
-void MainWin::newSqlDataSourceActionTriggered(QAction* action){
-	//TODO
+void MainWin::newSqlDataSourceActionTriggered(){
+  //TODO
+}
+
+
+void MainWin::addAspectToProject(AbstractAspect* aspect){
+	QModelIndex index = m_project_explorer->currentIndex();
+	if(!index.isValid())
+		m_project->addChild(aspect);
+	else {
+		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
+        // every aspect contained in the project should have a folder
+        Q_ASSERT(parent_aspect->folder());
+		parent_aspect->folder()->addChild(aspect);
+	}
+	kDebug()<<"new file data source created"<<endl;
 }
 
 
@@ -964,6 +921,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect)
 */
 void MainWin::initProjectExplorer(){
 	m_project_explorer_dock = new QDockWidget(this);
+    m_project_explorer_dock->setObjectName("projectexplorer");
 	m_project_explorer_dock->setWindowTitle(tr("Project Explorer"));
 	m_project_explorer = new ProjectExplorer(m_project_explorer_dock);
 // 	m_project_explorer->setModel(new AspectTreeModel(m_project, this));
@@ -1065,12 +1023,13 @@ void MainWin::showHistory()
 /*!
 	this is called on a right click on the root folder in the project explorer
 */
-void MainWin::createContextMenu(QMenu * menu) const
-{
-	kDebug()<<"ffffffffffff";
+void MainWin::createContextMenu(QMenu * menu) const{
 	menu->addAction(m_newFolderAction);
 	menu->addAction(m_newSpreadsheetAction);
 	menu->addAction(m_newWorksheetAction);
+	menu->addSeparator();
+	menu->addAction(m_newFileDataSourceAction);
+	menu->addAction(m_newSqlDataSourceAction);
 }
 
 /*!
@@ -1084,6 +1043,9 @@ void MainWin::createFolderContextMenu(const Folder * folder, QMenu * menu) const
 	menu->addAction(m_newFolderAction);
 	menu->addAction(m_newSpreadsheetAction);
 	menu->addAction(m_newWorksheetAction);
+	menu->addSeparator();
+	menu->addAction(m_newFileDataSourceAction);
+	menu->addAction(m_newSqlDataSourceAction);
 }
 
 void MainWin::undo(){
