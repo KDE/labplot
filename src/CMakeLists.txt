@@ -2,6 +2,7 @@ set(KDEFRONTEND_DIR kdefrontend)
 set(BACKEND_DIR backend)
 set(QTFRONTEND_DIR qtfrontend)
 set(COMMONFRONTEND_DIR commonfrontend)
+set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 
 ADD_SUBDIRECTORY(elements)
 ADD_SUBDIRECTORY(filter)
@@ -55,6 +56,9 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/valueswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 )
 
 set(BACKEND_SOURCES
@@ -107,6 +111,17 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/PlotArea.cpp
 	${BACKEND_DIR}/worksheet/ScalableTextLabel.cpp
 	${BACKEND_DIR}/worksheet/DropLineCurve.cpp
+	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
+	${BACKEND_DIR}/datasources/FileDataSource.cpp
+	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
+)
+
+set(DATASOURCES_SOURCES
+	${DATASOURCES_DIR}/AsciiOptionsWidget.cpp
+	${DATASOURCES_DIR}/BinaryOptionsWidget.cpp
+	${DATASOURCES_DIR}/ImportFileWidget.cpp
+	${DATASOURCES_DIR}/ImportFileDialog.cpp
+	${DATASOURCES_DIR}/FileInfoDialog.cpp
 )
 
 set(QTFRONTEND_SOURCES
@@ -143,7 +158,7 @@ INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} ${COMMONFRONTEND_DIR} .)
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
 
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
-kde4_add_executable(labplot ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
+kde4_add_executable(labplot ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
 target_link_libraries(labplot labplot_elements labplot_filter ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} 
 ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${OPJ_LIBRARY})
 

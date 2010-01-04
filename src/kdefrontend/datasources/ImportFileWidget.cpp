@@ -31,7 +31,7 @@
 #include "FileInfoDialog.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/filters/BinaryFilter.h"
+//#include "backend/datasources/filters/BinaryFilter.h"
 
 #include <QtGui>
 #include <KUrlCompletion>
