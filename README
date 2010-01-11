@@ -41,7 +41,7 @@ layer 0: data
 layer 1: undo commands
 layer 2: public API
 layer 3: Qt models
-lyeer 4: GUI (including Qt views), scripting
+layer 4: GUI (including Qt views), scripting
 Long description: see src/qtfrontend/doc/aspect-framework.dox 
 (or generate Doxygen docs by "doxygen Doxyfile" in the qtfrontend dir)
 
