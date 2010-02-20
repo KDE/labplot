@@ -48,6 +48,9 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent)
 	m_firstPopup=true;
 }
 
+void TreeViewComboBox::setTopLevelClasses(QList<const char *> list){
+  m_topLevelClasses=list;
+}
 
 TreeViewComboBox::~TreeViewComboBox()
 {

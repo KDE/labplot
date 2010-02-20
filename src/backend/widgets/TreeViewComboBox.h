@@ -43,6 +43,7 @@ public:
 
  	void setModel(QAbstractItemModel *model);
 	void setCurrentIndex(const QModelIndex&);
+	void setTopLevelClasses(QList<const char *>);
 	QModelIndex currentIndex() const;
 	virtual void showPopup();
 
