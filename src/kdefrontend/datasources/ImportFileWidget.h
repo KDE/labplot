@@ -34,6 +34,7 @@
 #include "BinaryOptionsWidget.h"
 
 class FileDataSource;
+class AbstractFileFilter;
 
 class ImportFileWidget : public QWidget{
     Q_OBJECT
@@ -44,13 +45,15 @@ public:
 
  	bool toggleOptions();
 	void saveSettings(FileDataSource*) const;
+	AbstractFileFilter* currentFileFilter() const;
+	QString fileName() const;
 	void hideDataSource() const;
 	
 private:
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
-
+	
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);

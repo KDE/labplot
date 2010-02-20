@@ -676,6 +676,10 @@ Worksheet* MainWin::activeWorksheet() const{
 
 
 /******************** dialogs *****************************/
+
+/*!
+  Opens the dialog to import data to the selected spreadsheet
+*/
 void MainWin::importFileDialog(){
 	ImportFileDialog* dlg = new ImportFileDialog(this);
 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
@@ -684,7 +688,8 @@ void MainWin::importFileDialog(){
 	dlg->setCurrentIndex( m_project_explorer->currentIndex());
 	
 	if ( dlg->exec() == QDialog::Accepted ){
-
+	  dlg->importToSpreadsheet();
+	  kDebug()<<"data imported to the spreadsheet"<<endl;
 	}
 }
 
@@ -725,8 +730,7 @@ void MainWin::newFileDataSourceActionTriggered(){
   ImportFileDialog* dlg = new ImportFileDialog(this);
   if ( dlg->exec() == QDialog::Accepted ) {
 	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1").arg(1));
-	  dlg->saveSettings(dataSource);
-	  dataSource->read();
+	  dlg->importToFileDataSource(dataSource);
 	  this->addAspectToProject(dataSource);
 	  kDebug()<<"new file data source created"<<endl;
   }

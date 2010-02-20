@@ -41,7 +41,8 @@ class ImportFileDialog: public KDialog {
 
   public:
 	ImportFileDialog(QWidget*);
-	void saveSettings(FileDataSource*) const;
+	void importToFileDataSource(FileDataSource*) const;
+	void importToSpreadsheet() const;
 	void setModel(QAbstractItemModel * model);
 	void setCurrentIndex(const QModelIndex&);
 	
@@ -50,6 +51,7 @@ class ImportFileDialog: public KDialog {
 	ImportFileWidget *importFileWidget;
 	QFrame* frameAddTo;
 	TreeViewComboBox* cbAddTo;
+	QComboBox* cbPosition;
 	QWidget* mainWidget;
 	
   private slots:

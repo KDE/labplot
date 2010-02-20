@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
-    Description          : import data widget
+    Description          : import file widget
 
  ***************************************************************************/
 
@@ -49,6 +49,7 @@ public:
 
 private:
 	Ui::ImportWidget ui;
+
 	bool binaryMode;
 	void updateBinaryMode();
 	int startRow() const;

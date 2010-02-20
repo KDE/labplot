@@ -112,6 +112,9 @@ bool ImportFileWidget::toggleOptions() {
     }
 }
 
+QString ImportFileWidget::fileName() const{
+  return ui.kleFileName->text();
+}
 /*!
 	saves the settings to the data source \c source.
 */
@@ -125,32 +128,40 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 	source->setFileType(fileType);
-	
-    //save the filter settings
+	source->setFilter(this->currentFileFilter());	
+}
+
+/*!
+  returns the currently used filter.
+*/
+AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
+    FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
     if ( fileType==FileDataSource::AsciiVector ) {
         AsciiFilter* filter = new AsciiFilter();
         if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
-            filter->setAutoModeEnabled(true);
+		  filter->setAutoModeEnabled(true);
         } else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
-            filter->setAutoModeEnabled(false);
-            filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
-            filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
-            filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
-            filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
-            filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
-            filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
+		  filter->setAutoModeEnabled(false);
+		  filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
+		  filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
+		  filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
+		  filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
+		  filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
+		  filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
         } else {
-            filter->loadFilterSettings( ui.cbFilter->currentText() );
+		  filter->loadFilterSettings( ui.cbFilter->currentText() );
         }
 
         //save the data portion to import
         filter->setStartRow( ui.sbStartRow->value() );
-        filter->setEndRow( ui.sbEndRow->value() );
-        filter->setStartColumn( ui.sbStartColumn->value() );
-        filter->setEndColumn( ui.sbEndColumn->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value() );
+		filter->setEndColumn( ui.sbEndColumn->value() );
 
-        source->setFilter(filter);
+		return filter;
+//         source->setFilter(filter);
 	}else if ( fileType==FileDataSource::BinaryVector ) {
+	  //TODO
 // 		BinaryFilter filter;
 // 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 // 			filter.setAutoMode(true);

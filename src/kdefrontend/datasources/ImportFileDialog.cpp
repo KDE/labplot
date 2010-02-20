@@ -31,7 +31,7 @@
 #include "ImportFileWidget.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/widgets/TreeViewComboBox.h"
-
+#include "backend/spreadsheet/Spreadsheet.h"
  /*!
 	\class ImportFileDialog
 	\brief Dialog for importing data from a file. Embeddes \c ImportFileWidget and provides the standard buttons.
@@ -70,9 +70,25 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
   hLayout->addWidget( new QLabel(i18n("Import data to"),  frameAddTo) );
   
   cbAddTo = new TreeViewComboBox(frameAddTo);
+  cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+  QList<const char *> list;
+  list<<"Folder"<<"Spreadsheet";
+  cbAddTo->setTopLevelClasses(list);
   hLayout->addWidget( cbAddTo);
-  vLayout->addWidget(frameAddTo);
   
+  hLayout->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
+  hLayout->addWidget( new QLabel(i18n("Position"),  frameAddTo) );
+  cbPosition = new QComboBox(frameAddTo);
+  
+  //TODO place these strings somewhere in AbstractFileFilter and implement this in the filters.
+  cbPosition->addItem(i18n("Replace"));
+  cbPosition->addItem(i18n("Append"));
+  cbPosition->addItem(i18n("Prepend"));
+  
+  cbPosition->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+  hLayout->addWidget( cbPosition);
+  
+  vLayout->addWidget(frameAddTo);
   cbAddTo->setModel(model);
   
   //hide the data-source related widgets
@@ -84,9 +100,28 @@ void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
   cbAddTo->setCurrentIndex(index);
 }
 
-void ImportFileDialog::saveSettings(FileDataSource* source) const{
+
+/*!
+  triggers data import to the file data source \c source
+*/
+void ImportFileDialog::importToFileDataSource(FileDataSource* source) const{
 	importFileWidget->saveSettings(source);
+	source->read();
 }
+
+/*!
+  triggers data import to the currently selected spreadsheet
+*/
+void ImportFileDialog::importToSpreadsheet() const{
+  AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentIndex().internalPointer());
+  qDebug()<<aspect->name();
+  Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
+  QString fileName = importFileWidget->fileName();
+  AbstractFileFilter* filter = importFileWidget->currentFileFilter();
+  filter->read(fileName, sheet);
+  delete filter;
+}
+  
 
 void ImportFileDialog::toggleOptions(){
 	if (importFileWidget->toggleOptions()){
@@ -97,9 +132,6 @@ void ImportFileDialog::toggleOptions(){
 
 	//resize the dialog
 	mainWidget->resize(layout()->minimumSize());
-// 	vLayout->update();
 	layout()->activate();
  	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
-//  	resize( QSize(this->width(),0) );
-// 	resize(layout()->minimumSize());
 }
