@@ -34,6 +34,9 @@ set(GUI_SOURCES
   	${KDEFRONTEND_DIR}/SpreadsheetView.cpp
 	${KDEFRONTEND_DIR}/TitleDialog.cpp
 	${KDEFRONTEND_DIR}/ValuesWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 )
 
 set(PLOTS_SOURCES
@@ -85,6 +88,10 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
+	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
+	${BACKEND_DIR}/datasources/FileDataSource.cpp
+	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
+	#${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -111,9 +118,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/PlotArea.cpp
 	${BACKEND_DIR}/worksheet/ScalableTextLabel.cpp
 	${BACKEND_DIR}/worksheet/DropLineCurve.cpp
-	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
-	${BACKEND_DIR}/datasources/FileDataSource.cpp
-	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 )
 
 set(DATASOURCES_SOURCES
