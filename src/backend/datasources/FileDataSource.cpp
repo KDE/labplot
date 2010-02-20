@@ -39,6 +39,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 
 #else
 #include <KIcon>
+#include <kdirwatch.h>
 #endif
 
 /*!
@@ -49,12 +50,24 @@ Email (use @ for *)  	: alexander.semke*web.de
 */
 
 FileDataSource::FileDataSource(AbstractScriptingEngine *engine, const QString& name)
-	: AbstractDataSource(engine, name){
+     : AbstractDataSource(engine, name){
 
 }
 
 
 FileDataSource::~FileDataSource(){
+  if (m_filter)
+	delete m_filter;
+}
+
+QWidget *FileDataSource::view() const{
+  //TODO 
+//   if (!m_view)
+//   {
+// 	m_view = new FileDataSourceView(this);
+//   }
+//   return m_view;
+  return 0;
 }
 
 /*!
@@ -107,7 +120,7 @@ bool FileDataSource::isFileWatched() const{
 }
   
 /*!
-  sets whether only a link to  the link to the file is saved in the project file (\c b=true)
+  sets whether only a link to the file is saved in the project file (\c b=true)
   or the whole content of the file (\c b=false).
 */
 void FileDataSource::setFileLinked(const bool b){
@@ -153,6 +166,10 @@ void FileDataSource::read(){
 	return;
 
   m_filter->read(m_fileName, this);
+  
+  //watch the file upon reading for changes if required
+//   if (m_fileWatched)
+// 	this->watchFile();
 }
 
 /*!
@@ -242,3 +259,15 @@ QString FileDataSource::fileInfoString(const QString &name){
 
     return infoString;
 }
+/*
+FileDataSource::watchFile(){
+  KDirWatch dirWatch;
+  dirWatch->addFile(m_fileName);
+  connect(dirWatch, dirty(const QString&), this, fileChanged(const QString&) );
+  
+}*/
+/*
+
+FileDataSource::fileChanged(){
+  
+}*/

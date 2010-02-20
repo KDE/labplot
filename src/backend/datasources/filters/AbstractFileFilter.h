@@ -30,14 +30,14 @@
 #define ABSTRACTFILEFILTER_H
 
 #include <QtPlugin>
-class FileDataSource;
+class AbstractDataSource;
 
 class AbstractFileFilter{
 	public:
 		virtual ~AbstractFileFilter() {}
 
-		virtual void read(const QString& fileName, FileDataSource* dataSource) = 0;
-		virtual void write(const QString& fileName, FileDataSource* dataSource) = 0;
+		virtual void read(const QString& fileName, AbstractDataSource* dataSource) = 0;
+		virtual void write(const QString& fileName, AbstractDataSource* dataSource) = 0;
 
 		virtual void loadFilterSettings(const QString& filterName) = 0;
 		virtual void saveFilterSettings(const QString& filterName) const = 0;

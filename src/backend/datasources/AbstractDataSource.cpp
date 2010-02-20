@@ -36,13 +36,6 @@ Email (use @ for *)		: alexander.semke*web.de
 */
 
 AbstractDataSource::AbstractDataSource(AbstractScriptingEngine *engine, const QString& name):
-	AbstractAspect(name), scripted(engine){
+	AbstractPart(name), scripted(engine){
 
 }
-/*
-AbstractDataSource::~AbstractDataSource(){
-
-}*/
-
-
-void AbstractDataSource::read(){}

@@ -29,16 +29,14 @@
 #ifndef ABSTRACTDATASOURCE_H
 #define ABSTRACTDATASOURCE_H
 
-#include "../core/AbstractAspect.h"
+#include "core/AbstractPart.h"
 #include "core/AbstractScriptingEngine.h"
 
-class AbstractDataSource : public AbstractAspect, public scripted{
-	Q_OBJECT
+class AbstractDataSource : public AbstractPart, public scripted{
 
 	public:
-  		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
+   		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
 		virtual ~AbstractDataSource() {};
-		virtual void read();
 };
 
 #endif // ifndef ABSTRACTDATASOURCE_H

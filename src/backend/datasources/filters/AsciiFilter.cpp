@@ -28,6 +28,7 @@ Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
 ***************************************************************************/
 #include "AsciiFilter.h"
 #include "AsciiFilterPrivate.h"
+#include "datasources/FileDataSource.h"
 #include "core/column/Column.h"
 
 #include <QApplication>
@@ -54,7 +55,7 @@ AsciiFilter::~AsciiFilter(){
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void AsciiFilter::read(const QString & fileName, FileDataSource* dataSource){
+void AsciiFilter::read(const QString & fileName, AbstractDataSource* dataSource){
   d->read(fileName, dataSource);
 }
 
@@ -62,7 +63,7 @@ void AsciiFilter::read(const QString & fileName, FileDataSource* dataSource){
 /*!
 writes the content of the data source \c dataSource to the file \c fileName. 
 */
-void AsciiFilter::write(const QString & fileName, FileDataSource* dataSource){
+void AsciiFilter::write(const QString & fileName, AbstractDataSource* dataSource){
  	d->write(fileName, dataSource);
 // 	emit()
 }
@@ -273,11 +274,13 @@ AsciiFilterPrivate::~AsciiFilterPrivate(){
     Uses the settings defined in the data source.
 */
 //TODO remove QProgressDialog and use QProgressBar in the main window instead
-void AsciiFilterPrivate::read(const QString & fileName, FileDataSource* dataSource){
+void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource){
     //clear all childs (columns/vectors) in the data source first.
     //Usefull, if the vectors are reread.
-    foreach(Column * col, dataSource->children<Column>())
-	  delete col;
+	//TODO 
+//     foreach(Column * col, dataSource->children<Column>())
+// 	  delete col;
+// or use // 	dataSource->removeAllChildren() instead
 
 	int currentRow=0; //indexes the position in the vector(column)
 	QString line;
@@ -432,7 +435,7 @@ void AsciiFilterPrivate::read(const QString & fileName, FileDataSource* dataSour
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void AsciiFilterPrivate::write(const QString & fileName, FileDataSource* dataSource){
+void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource){
 
 }
 

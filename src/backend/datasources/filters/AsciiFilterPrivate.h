@@ -29,7 +29,7 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPPRIVATE_H
 
-#include <datasources/FileDataSource.h>
+class AbstractDataSource;
 
 class AsciiFilterPrivate {
   
@@ -37,8 +37,8 @@ class AsciiFilterPrivate {
     AsciiFilterPrivate();
     ~AsciiFilterPrivate();
 
-    void read(const QString & fileName, FileDataSource* dataSource);
-    void write(const QString & fileName, FileDataSource* dataSource);
+    void read(const QString & fileName, AbstractDataSource* dataSource);
+    void write(const QString & fileName, AbstractDataSource* dataSource);
 
     QString commentCharacter;
     QString separatingCharacter;

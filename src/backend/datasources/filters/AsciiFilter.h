@@ -29,9 +29,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #define ASCIIFILTER_H
 
 #include <QStringList>
-
 #include "datasources/filters/AbstractFileFilter.h"
-#include "datasources/FileDataSource.h"
 
 class AsciiFilterPrivate;
 class AsciiFilter : public QObject, public AbstractFileFilter{
@@ -49,8 +47,8 @@ class AsciiFilter : public QObject, public AbstractFileFilter{
 	static int columnNumber(const QString & fileName);
 	static long lineNumber(const QString & fileName);
 
-	void read(const QString & fileName, FileDataSource* dataSource);
-	void write(const QString & fileName, FileDataSource* dataSource);
+	void read(const QString & fileName, AbstractDataSource* dataSource);
+	void write(const QString & fileName, AbstractDataSource* dataSource);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;

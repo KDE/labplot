@@ -31,10 +31,9 @@
 
 #include "AbstractDataSource.h"
 #include "filters/AbstractFileFilter.h"
-#include "lib/macros.h"
 #include <QString>
 
-class FileDataSource	: public AbstractDataSource {
+class FileDataSource	:  public AbstractDataSource {
     Q_OBJECT
 
   public:
@@ -60,10 +59,11 @@ class FileDataSource	: public AbstractDataSource {
 	void setFileName(const QString &);
 	QString fileName() const;
 
-	void setFilter( AbstractFileFilter*);
+	void setFilter(AbstractFileFilter*);
 	QIcon icon() const;
 	QMenu *createContextMenu() const;
-
+	virtual QWidget *view() const;
+	
   private:
 	QString m_fileName;
 	FileType m_fileType;

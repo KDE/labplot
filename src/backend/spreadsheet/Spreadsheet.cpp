@@ -40,9 +40,29 @@
 #include <QApplication>
 #include <QDateTime>
 
+/*!
+  \class Spreadsheet
+  \brief Aspect providing a spreadsheet table with column logic.
+
+  Spreadsheet is a container object for columns with no data of its own. By definition, it's columns
+  are all of its children inheriting from class Column. Thus, the basic API is already defined
+  by AbstractAspect (managing the list of columns, notification of column insertion/removal)
+  and Column (changing and monitoring state of the actual data).
+
+  Spreadsheet stores a pointer to its primary view of class SpreadsheetView. SpreadsheetView calls the Spreadsheet
+  API but Spreadsheet only notifies SpreadsheetView by signals without calling its API directly. This ensures a
+  maximum independence of UI and backend. SpreadsheetView can be easily replaced by a different class.
+  User interaction is completely handled in SpreadsheetView and translated into
+  Spreadsheet API calls (e.g., when a user edits a cell this will be handled by the delegate of
+  SpreadsheetView and Spreadsheet will not know whether a script or a user changed the data.). All actions,
+  menus etc. for the user interaction are handled SpreadsheetView, e.g., via a context menu.
+  Selections are also handled by SpreadsheetView. The view itself is created by the first call to view();
+  
+  \ingroup backend
+*/
+
 Spreadsheet::Spreadsheet(AbstractScriptingEngine *engine, int rows, int columns, const QString& name)
-	: AbstractPart(name), scripted(engine)
-{
+  : AbstractDataSource(engine, name){
 	// set initial number of rows and columns
 	for(int i=0; i<columns; i++)
 	{
@@ -59,6 +79,10 @@ Spreadsheet::~Spreadsheet()
 {
 }
 
+/*! Constructs a primary view on me.
+  This method may be called multiple times during the life time of an Aspect, or it might not get
+  called at all. Aspects must not depend on the existence of a view for their operation.
+*/
 QWidget *Spreadsheet::view() const
 {
 	if (!m_view)
@@ -68,6 +92,9 @@ QWidget *Spreadsheet::view() const
 	return m_view;
 }
 
+/*!
+  Returns the total number of rows in the spreadsheet.
+ */
 int Spreadsheet::rowCount() const
 {
 	int col_rows, result=0;
@@ -99,6 +126,25 @@ void Spreadsheet::insertRows(int before, int count)
 	RESET_CURSOR;
 }
 
+void Spreadsheet::appendRows(int count){
+  insertRows(rowCount(), count);
+}
+
+void Spreadsheet::appendRow(){
+  insertRows(rowCount(), 1);
+}
+
+void Spreadsheet::appendColumns(int count){
+  insertColumns(columnCount(), count);
+}
+
+void Spreadsheet::appendColumn(){
+  insertColumns(columnCount(), 1);
+}
+
+/*!
+  Sets the number of rows of the spreadsheet to \c new_size
+*/
 void Spreadsheet::setRowCount(int new_size)
 {
 	int current_size = rowCount();
@@ -108,6 +154,32 @@ void Spreadsheet::setRowCount(int new_size)
 		removeRows(new_size, current_size-new_size);
 }
 
+/*!
+  Returns the column with the number \c index.
+  Shallow wrapper around \sa AbstractAspect::child() - see there for caveat.
+*/
+Column* Spreadsheet::column(int index) const{
+  return child<Column>(index);
+}
+
+
+/*!
+  Returns the column with the name \c name.
+*/
+Column* Spreadsheet::column(const QString &name) const{
+  return child<Column>(name);
+}
+
+/*!
+  Returns the total number of columns in the spreadsheet.
+*/
+int Spreadsheet::columnCount() const{
+  return childCount<Column>();
+}
+
+/*!
+  Returns the number of columns matching the given designation.
+ */
 int Spreadsheet::columnCount(SciDAVis::PlotDesignation pd) const
 {
 	int count = 0;
@@ -143,7 +215,9 @@ void Spreadsheet::insertColumns(int before, int count)
 	endMacro();
 	RESET_CURSOR;
 }
-
+/*!
+  Sets the number of columns to \c new_size
+*/
 void Spreadsheet::setColumnCount(int new_size)
 {
 	int old_size = columnCount();
@@ -156,6 +230,9 @@ void Spreadsheet::setColumnCount(int new_size)
 		insertColumns(old_size, new_size-old_size);
 }
 
+/*!
+  Clears the whole spreadsheet.
+*/
 void Spreadsheet::clear()
 {
 	WAIT_CURSOR;
@@ -166,6 +243,9 @@ void Spreadsheet::clear()
 	RESET_CURSOR;
 }
 
+/*!
+  Clears all mask in the spreadsheet.
+*/
 void Spreadsheet::clearMasks()
 {
 	WAIT_CURSOR;
@@ -176,6 +256,9 @@ void Spreadsheet::clearMasks()
 	RESET_CURSOR;
 }
 
+/*!
+  Returns a new context menu. The caller takes ownership of the menu.
+*/
 QMenu *Spreadsheet::createContextMenu()
 {
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -188,6 +271,10 @@ QMenu *Spreadsheet::createContextMenu()
 #endif
 }
 
+/*!
+  Fills the part specific menu for the main window including setting the title.
+  \return true on success, otherwise false (e.g. part has no actions).
+*/
 bool Spreadsheet::fillProjectMenu(QMenu * menu)
 {
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -236,6 +323,10 @@ void Spreadsheet::copy(Spreadsheet * other)
 	RESET_CURSOR;
 }
 
+// FIXME: replace index-based API with Column*-based one
+/*!
+  Determines the corresponding X column.
+*/
 int Spreadsheet::colX(int col)
 {
 	for(int i=col-1; i>=0; i--)
@@ -252,6 +343,9 @@ int Spreadsheet::colX(int col)
 	return -1;
 }
 
+/*!
+  Determines the corresponding Y column.
+*/
 int Spreadsheet::colY(int col)
 {
 	int cols = columnCount();
@@ -281,6 +375,9 @@ int Spreadsheet::colY(int col)
 	return -1;
 }
 
+/*! Sorts the given list of column.
+  If 'leading' is a null pointer, each column is sorted separately.
+*/
 void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascending)
 {
 	if(cols.isEmpty()) return;
@@ -509,7 +606,9 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 	RESET_CURSOR;
 } // end of sortColumns()
 
-
+/*!
+  Returns an icon to be used for decorating my views.
+  */
 QIcon Spreadsheet::icon() const
 {
 	QIcon ico;
@@ -523,6 +622,9 @@ QIcon Spreadsheet::icon() const
 	return ico;
 }
 
+/*!
+  Returns the text displayed in the given cell.
+*/
 QString Spreadsheet::text(int row, int col) const
 {
 	Column * col_ptr = column(col);
@@ -533,6 +635,9 @@ QString Spreadsheet::text(int row, int col) const
 }
 /* ========== loading and saving ============ */
 
+/*!
+  Saves as XML.
+ */
 void Spreadsheet::save(QXmlStreamWriter * writer) const
 {
 	writer->writeStartElement("spreadsheet");
@@ -544,6 +649,9 @@ void Spreadsheet::save(QXmlStreamWriter * writer) const
 	writer->writeEndElement(); // "spreadsheet"
 }
 
+/*!
+  Loads from XML.
+*/
 bool Spreadsheet::load(XmlStreamReader * reader)
 {
 	if(reader->isStartElement() && reader->name() == "spreadsheet")
