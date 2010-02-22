@@ -33,10 +33,10 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QProcess>
 #include <QDir>
 
-#include "filters/AsciiFilter.h";
+#include "filters/AsciiFilter.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-
+#include <QIcon>
 #else
 #include <KIcon>
 #include <kdirwatch.h>

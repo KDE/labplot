@@ -81,6 +81,11 @@ HEADERS += \
 	ProjectConfigPage.h \
 	PluginManager.h \
 	PluginLoader.h \
+	datasources/AbstractDataSource.h \
+	datasources/FileDataSource.h \
+	datasources/filters/AbstractFileFilter.h \
+	datasources/filters/AsciiFilter.h \
+	datasources/filters/AsciiFilterPrivate.h \
 	# TODO: port or delete the following files
 	#PreferencesDialog.h \
 	#CopyThroughFilter.h \
@@ -127,6 +132,9 @@ SOURCES += \
 	ProjectConfigPage.cpp \
 	PluginManager.cpp \
 	PluginLoader.cpp \
+	datasources/AbstractDataSource.cpp \
+	datasources/FileDataSource.cpp \
+	datasources/filters/AsciiFilter.cpp \
 	# TODO: port or delete the following files
 	#PreferencesDialog.cpp \
 	#CurveRangeDialog.cpp \
