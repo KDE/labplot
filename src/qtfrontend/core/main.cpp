@@ -122,6 +122,8 @@ int main( int argc, char ** argv )
 	}
 
 	// module initialization
+	AbstractAspect::staticInit();
+	AbstractColumn::staticInit();
 	Project::staticInit();
 	Column::staticInit();
 	foreach(QObject *plugin, PluginManager::plugins()) 

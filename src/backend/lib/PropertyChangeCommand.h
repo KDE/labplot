@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : AspectPrivate.h
-    Project              : SciDAVis
+    File                 : PropertyChangeCommand.h
+    Project              : SciDAVis / LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
-    Description          : Private data managed by AbstractAspect.
+    Copyright            : (C) 2010 Knut Franke
+    Email (use @ for *)  : Knut.Franke*gmx.net
+    Description          : Generic undo command changing a single variable.
 
  ***************************************************************************/
 
@@ -26,44 +26,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef ASPECT_PRIVATE_H
-#define ASPECT_PRIVATE_H
 
-#include "AbstractAspect.h"
+#ifndef PROPERTY_CHANGE_COMMAND_H
+#define PROPERTY_CHANGE_COMMAND_H
 
-#include <QString>
-#include <QDateTime>
-#include <QList>
-#include <QSettings>
-#include <QHash>
+#include <QUndoCommand>
 
-class AbstractAspect::Private
+template<class T> class PropertyChangeCommand : public QUndoCommand
 {
 	public:
-		Private(AbstractAspect * owner, const QString &name);
-		~Private();
+		PropertyChangeCommand(const QString &text, T *property, const T &new_value)
+			: m_property(property), m_other_value(new_value) {
+				setText(text);
+			}
 
-		void insertChild(int index, AbstractAspect* child);
-		int indexOfChild(const AbstractAspect *child) const;
-		int removeChild(AbstractAspect* child);
+		virtual void redo() {
+			T tmp = *m_property;
+			*m_property = m_other_value;
+			m_other_value = tmp;
+		}
 
-		QString caption() const;
-
-		QString uniqueNameFor(const QString &current_name) const;
-
-	public:
-		static QSettings * g_settings;
-		static QHash<QString, QVariant> g_defaults;
-	
-		QList< AbstractAspect* > m_children;
-		QString m_name, m_comment, m_caption_spec;
-		QDateTime m_creation_time;
-		bool m_hidden;
-		AbstractAspect * m_owner;
-		AbstractAspect * m_parent;
+		virtual void undo() { redo(); }
 
 	private:
-		static int indexOfMatchingBrace(const QString &str, int start);
+		T *m_property;
+		T m_other_value;
 };
 
-#endif // ifndef ASPECT_PRIVATE_H
+#endif // ifndef PROPERTY_CHANGE_COMMAND_H

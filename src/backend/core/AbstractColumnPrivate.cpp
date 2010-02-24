@@ -42,24 +42,3 @@ AbstractColumn::Private::Private(AbstractColumn *owner) : m_owner(owner) {
 	Q_CHECK_PTR(m_owner);
 }
 
-/**
- * \brief Return the constant masking interval attribute
- */
-const IntervalAttribute<bool> &AbstractColumn::Private::masking() const {
-	return m_masking;
-}
-
-/**
- * \brief Return the masking interval attribute
- */
-IntervalAttribute<bool> &AbstractColumn::Private::masking() {
-	return m_masking;
-}
-
-/**
- * \brief Replace the list of intervals of masked rows
- */
-void AbstractColumn::Private::replaceMasking(IntervalAttribute<bool> masking) {
-	m_masking = masking;
-}
-

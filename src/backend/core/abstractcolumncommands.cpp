@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net),
 	                                      Knut Franke (knut.franke*gmx.de)
+	 								(C) 2010 by Knut Franke
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -74,12 +75,10 @@ void AbstractColumnClearMasksCmd::redo()
 {
 	if(!m_copied)
 	{
-		m_masking = m_col->masking();
+		m_masking = m_col->m_masking;
 		m_copied = true;
 	}
-	emit m_col->owner()->maskingAboutToChange(m_col->owner());
-	m_col->masking().clear();
-	emit m_col->owner()->maskingChanged(m_col->owner());
+	m_col->m_masking.clear();
 }
 
 /**
@@ -87,9 +86,7 @@ void AbstractColumnClearMasksCmd::redo()
  */
 void AbstractColumnClearMasksCmd::undo()
 {
-	emit m_col->owner()->maskingAboutToChange(m_col->owner());
-	m_col->replaceMasking(m_masking);
-	emit m_col->owner()->maskingChanged(m_col->owner());
+	m_col->m_masking = m_masking;
 }
 
 /** ***************************************************************************
@@ -149,12 +146,10 @@ void AbstractColumnSetMaskedCmd::redo()
 {
 	if(!m_copied)
 	{
-		m_masking = m_col->masking();
+		m_masking = m_col->m_masking;
 		m_copied = true;
 	}
-	emit m_col->owner()->maskingAboutToChange(m_col->owner());
-	m_col->masking().setValue(m_interval, m_masked);
-	emit m_col->owner()->maskingChanged(m_col->owner());
+	m_col->m_masking.setValue(m_interval, m_masked);
 }
 
 /**
@@ -162,31 +157,12 @@ void AbstractColumnSetMaskedCmd::redo()
  */
 void AbstractColumnSetMaskedCmd::undo()
 {
-	emit m_col->owner()->maskingAboutToChange(m_col->owner());
-	m_col->replaceMasking(m_masking);
-	emit m_col->owner()->maskingChanged(m_col->owner());
+	m_col->m_masking = m_masking;
 }
 
 /** ***************************************************************************
  * \class AbstractColumnInsertRowsCmd
  * \brief Insert empty rows into a column
- *
- * When inserting new rows, the following things should happen:
- *
- *   - emitting AbstractColumn::rowsAboutToBeInserted()
- *   - updating internal state of AbstractColumn
- *   - updating internal state of subclasses
- *   - emitting AbstractColumn::rowsInserted()
- *
- * Since this needs to happen on every undo/redo of the command, the following approach is taken:
- * AbstractColumnInsertRowsCmd::redo() is responsible for emmitting the signals and dispatching
- * the state updates to primaryRedo(). If a subclass of AbstractColumn needs to update its state
- * when rows are inserted, it must provide a subclass of AbstractColumnInsertRowsCmd which
- * reimplements primaryRedo(). The reimplementation must call the superclasses' version at some
- * point in order to allow all classes in the inheritance chain to update their internal state.
- * undo() and primaryUndo() work completely analogously. AbstractColumn::insertRows() must be also
- * reimplemented to execute an instance of the appropriate subclass instead of
- * AbstractColumnInsertRowsCmd.
  ** ***************************************************************************/
 
 /**
@@ -213,7 +189,6 @@ AbstractColumnInsertRowsCmd::AbstractColumnInsertRowsCmd(AbstractColumn *col, in
 	m_col(col->m_abstract_column_private),
 	m_before(before),
 	m_count(count) {
-	setText(QObject::tr("%1: insert %2 row(s)").arg(col->name()).arg(count));
 }
 
 /**
@@ -222,32 +197,12 @@ AbstractColumnInsertRowsCmd::AbstractColumnInsertRowsCmd(AbstractColumn *col, in
 AbstractColumnInsertRowsCmd::~AbstractColumnInsertRowsCmd() {
 }
 
-/**
- * \brief Execute command - don't override in subclasses, use primaryRedo() instead.
- *
- */
 void AbstractColumnInsertRowsCmd::redo() {
-	emit m_col->owner()->rowsAboutToBeInserted(m_col->owner(), m_before, m_count);
-	primaryRedo();
-	emit m_col->owner()->rowsInserted(m_col->owner(), m_before, m_count);
+	m_col->m_masking.insertRows(m_before, m_count);
 }
 
-/**
- * \brief Undo command - don't override in subclasses, use primaryUndo() instead.
- *
- */
 void AbstractColumnInsertRowsCmd::undo() {
-	emit m_col->owner()->rowsAboutToBeRemoved(m_col->owner(), m_before, m_count);
-	primaryUndo();
-	emit m_col->owner()->rowsRemoved(m_col->owner(), m_before, m_count);
-}
-
-void AbstractColumnInsertRowsCmd::primaryRedo() {
-	m_col->masking().insertRows(m_before, m_count);
-}
-
-void AbstractColumnInsertRowsCmd::primaryUndo() {
-	m_col->masking().removeRows(m_before, m_count);
+	m_col->m_masking.removeRows(m_before, m_count);
 }
 
 /** ***************************************************************************
@@ -281,7 +236,6 @@ AbstractColumnRemoveRowsCmd::AbstractColumnRemoveRowsCmd(AbstractColumn *col, in
 	m_col(col->m_abstract_column_private),
 	m_first(first),
 	m_count(count) {
-	setText(QObject::tr("%1: remove %2 row(s)").arg(col->name()).arg(count));
 }
 
 /**
@@ -290,32 +244,12 @@ AbstractColumnRemoveRowsCmd::AbstractColumnRemoveRowsCmd(AbstractColumn *col, in
 AbstractColumnRemoveRowsCmd::~AbstractColumnRemoveRowsCmd() {
 }
 
-/**
- * \brief Execute command - don't override in subclasses, use primaryRedo() instead.
- *
- */
 void AbstractColumnRemoveRowsCmd::redo() {
-	emit m_col->owner()->rowsAboutToBeRemoved(m_col->owner(), m_first, m_count);
-	primaryRedo();
-	emit m_col->owner()->rowsRemoved(m_col->owner(), m_first, m_count);
+	m_masking = m_col->m_masking;
+	m_col->m_masking.removeRows(m_first, m_count);
 }
 
-/**
- * \brief Undo command - don't override in subclasses, use primaryUndo() instead.
- *
- */
 void AbstractColumnRemoveRowsCmd::undo() {
-	emit m_col->owner()->rowsAboutToBeInserted(m_col->owner(), m_first, m_count);
-	primaryUndo();
-	emit m_col->owner()->rowsInserted(m_col->owner(), m_first, m_count);
-}
-
-void AbstractColumnRemoveRowsCmd::primaryRedo() {
-	m_masking = m_col->masking();
-	m_col->masking().removeRows(m_first, m_count);
-}
-
-void AbstractColumnRemoveRowsCmd::primaryUndo() {
-	m_col->replaceMasking(m_masking);
+	m_col->m_masking = m_masking;
 }
 

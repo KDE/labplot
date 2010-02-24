@@ -4,6 +4,7 @@
     Description          : Commands to be called by Column to modify Column::Private
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
+                           (C) 2010 by Knut Franke
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -31,7 +32,6 @@
 #define COLUMNCOMMANDS_H
 
 #include "lib/IntervalAttribute.h"
-#include "core/abstractcolumncommands.h"
 #include "core/column/Column.h"
 
 #include <QUndoCommand>
@@ -102,30 +102,32 @@ private:
 	int m_old_row_count;
 };
 
-class ColumnInsertRowsCmd : public AbstractColumnInsertRowsCmd
+class ColumnInsertRowsCmd : public QUndoCommand
 {
 public:
 	ColumnInsertRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent = 0 );
 	~ColumnInsertRowsCmd();
 
-	virtual void primaryRedo();
-	virtual void primaryUndo();
+	virtual void redo();
+	virtual void undo();
 
 private:
 	Column::Private * m_col;
+	int m_before, m_count;
 };
 
-class ColumnRemoveRowsCmd : public AbstractColumnRemoveRowsCmd
+class ColumnRemoveRowsCmd : public QUndoCommand
 {
 public:
 	ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent = 0 );
 	~ColumnRemoveRowsCmd();
 
-	virtual void primaryRedo();
-	virtual void primaryUndo();
+	virtual void redo();
+	virtual void undo();
 
 private:
 	Column::Private * m_col;
+	int m_first, m_count;
 	int m_data_row_count;
 	int m_old_size;
 	Column::Private * m_backup;

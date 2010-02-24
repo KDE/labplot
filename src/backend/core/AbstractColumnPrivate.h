@@ -39,13 +39,9 @@ class AbstractColumn::Private {
 		Private(AbstractColumn *owner);
 		AbstractColumn *owner() { return m_owner; }
 
-		const IntervalAttribute<bool> &masking() const;
-		IntervalAttribute<bool> &masking();
-		void replaceMasking(IntervalAttribute<bool> masking); 
-
 		QString name() const { return m_owner->name(); }
 
-	private:
+	public:
 		AbstractColumn *m_owner;
 		IntervalAttribute<bool> m_masking;
 };

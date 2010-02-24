@@ -156,12 +156,13 @@ SOURCES += \
 	../lib/TextDialog.cpp \
 	../lib/TextFormatButtons.cpp \
 	../lib/ImageExportDialog.cpp \
-    ../lib/ShortcutsDialogModel.cpp \
-    ../lib/RecordShortcutDelegate.cpp \
-    ../lib/ActionManager.cpp \
-    ../lib/ShortcutsDialog.cpp \
-    ../lib/ConfigPageWidget.cpp \
+	../lib/ShortcutsDialogModel.cpp \
+	../lib/RecordShortcutDelegate.cpp \
+	../lib/ActionManager.cpp \
+	../lib/ShortcutsDialog.cpp \
+	../lib/ConfigPageWidget.cpp \
 	../lib/XmlStreamReader.cpp \
+	../lib/SignallingUndoCommand.cpp \
 
 HEADERS += \
 	../lib/ColorBox.h \
@@ -174,10 +175,12 @@ HEADERS += \
 	../lib/TextDialog.h \
 	../lib/TextFormatButtons.h \
 	../lib/ImageExportDialog.h \
-    ../lib/ShortcutsDialogModel.h \
-    ../lib/RecordShortcutDelegate.h \
-    ../lib/ActionManager.h \
-    ../lib/ShortcutsDialog.h \
-    ../lib/ConfigPageWidget.h \
+	../lib/ShortcutsDialogModel.h \
+	../lib/RecordShortcutDelegate.h \
+	../lib/ActionManager.h \
+	../lib/ShortcutsDialog.h \
+	../lib/ConfigPageWidget.h \
 	../lib/XmlStreamReader.h \
+	../lib/SignallingUndoCommand.h \
+	../lib/PropertyChangeCommand.h \
 

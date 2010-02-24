@@ -3,6 +3,7 @@
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
+                           (C) 2010 by Knut Franke
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Base class for all persistent objects in a Project.
 
@@ -32,6 +33,8 @@
 #include "core/Folder.h"
 #include "core/Project.h"
 #include "lib/XmlStreamReader.h"
+#include "lib/SignallingUndoCommand.h"
+#include "lib/PropertyChangeCommand.h"
 
 #include <QIcon>
 #include <QMenu>
@@ -206,6 +209,11 @@
 // start of AbstractAspect implementation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void AbstractAspect::staticInit() {
+	// needed in order to have the signals triggered by SignallingUndoCommand
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+}
+
 AbstractAspect::AbstractAspect(const QString &name)
 	: m_aspect_private(new Private(this, name))
 {
@@ -324,7 +332,7 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader * reader)
  */
 AbstractAspect * AbstractAspect::parentAspect() const
 {
-	return m_aspect_private->parent();
+	return m_aspect_private->m_parent;
 }
 
 /**
@@ -344,7 +352,11 @@ void AbstractAspect::addChild(AbstractAspect* child)
 		info(tr("Renaming \"%1\" to \"%2\" in order to avoid name collision.").arg(child->name()).arg(new_name));
 		child->setName(new_name);
 	}
-	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->childCount()));
+	exec(new SignallingUndoCommand("change signal", this, "aspectAboutToBeAdded", "aspectRemoved",
+			Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,0), Q_ARG(const AbstractAspect*,child)));
+	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->m_children.count()));
+	exec(new SignallingUndoCommand("change signal", child, "aspectAdded", "aspectAboutToBeRemoved",
+				Q_ARG(const AbstractAspect*,child)));
 	endMacro();
 }
 
@@ -361,8 +373,12 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 		child->setName(new_name);
 	}
 	int index = m_aspect_private->indexOfChild(before);
-	if (index == -1) index = m_aspect_private->childCount();
+	if (index == -1) index = m_aspect_private->m_children.count();
+	exec(new SignallingUndoCommand("change signal", this, "aspectAboutToBeAdded", "aspectRemoved",
+			Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,before), Q_ARG(const AbstractAspect*,child)));
 	exec(new AspectChildAddCmd(m_aspect_private, child, index));
+	exec(new SignallingUndoCommand("change signal", child, "aspectAdded", "aspectAboutToBeRemoved",
+				Q_ARG(const AbstractAspect*,child)));
 	endMacro();
 }
 
@@ -376,8 +392,13 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 void AbstractAspect::removeChild(AbstractAspect* child)
 {
 	Q_ASSERT(child->parentAspect() == this);
+	AbstractAspect *nextSibling = m_aspect_private->m_children.at(m_aspect_private->indexOfChild(child) + 1);
 	beginMacro(tr("%1: remove %2.").arg(name()).arg(child->name()));
+	exec(new SignallingUndoCommand("change signal", child, "aspectAboutToBeRemoved", "aspectAdded",
+				Q_ARG(const AbstractAspect*,child)));
 	exec(new AspectChildRemoveCmd(m_aspect_private, child));
+	exec(new SignallingUndoCommand("change signal", this, "aspectRemoved", "aspectAboutToBeAdded",
+			Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,nextSibling), Q_ARG(const AbstractAspect*,child)));
 	endMacro();
 }
 
@@ -392,14 +413,27 @@ void AbstractAspect::reparent(AbstractAspect * new_parent, int new_index)
 	if (new_index == -1)
 		new_index = max_index;
 	Q_ASSERT(new_index >= 0 && new_index <= max_index);
-	beginMacro(tr("%1: move from %2 to %3").arg(name()).arg(parentAspect()->name()).arg(new_parent->name()));
+	AbstractAspect * old_parent = parentAspect();
+	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
+	AbstractAspect *old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
+	AbstractAspect *new_sibling = new_parent->child<AbstractAspect>(new_index, IncludeHidden);
+	beginMacro(tr("%1: move from %2 to %3").arg(name()).arg(old_parent->name()).arg(new_parent->name()));
+	exec(new SignallingUndoCommand("change signal (child)", this, "aspectAboutToBeRemoved", "aspectAdded",
+				Q_ARG(const AbstractAspect*,this)));
+	exec(new SignallingUndoCommand("change signal (new parent)", new_parent, "aspectAboutToBeAdded", "aspectRemoved",
+				Q_ARG(const AbstractAspect*,new_parent), Q_ARG(const AbstractAspect*,new_sibling),
+				Q_ARG(const AbstractAspect*,this)));
 	exec(new AspectChildReparentCmd(parentAspect()->m_aspect_private, new_parent->m_aspect_private, this, new_index));
+	exec(new SignallingUndoCommand("change signal (old parent)", old_parent, "aspectRemoved", "aspectAboutToBeAdded",
+				Q_ARG(const AbstractAspect*,old_parent), Q_ARG(const AbstractAspect*,old_sibling), Q_ARG(const AbstractAspect*,this)));
+	exec(new SignallingUndoCommand("change signal (child)", this, "aspectAdded", "aspectAboutToBeRemoved",
+				Q_ARG(const AbstractAspect*,this)));
 	endMacro();
 }
 
 const QList< AbstractAspect* > AbstractAspect::rawChildren() const
 {
-    return m_aspect_private->children();
+    return m_aspect_private->m_children;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -435,6 +469,35 @@ void AbstractAspect::exec(QUndoCommand *cmd)
 }
 
 /**
+ * \brief Execute command and arrange for signals to be sent before/after it is redone or undone.
+ *
+ * \arg \c command The command to be executed.
+ * \arg \c preChangeSignal The name of the signal to be triggered before re-/undoing the command.
+ * \arg \c postChangeSignal The name of the signal to be triggered after re-/undoing the command.
+ * \arg <tt>val0,val1,val2,val3</tt> Arguments to the signals; to be given using Q_ARG().
+ *
+ * Signal arguments are given using the macro Q_ARG(typename, const value&). Since
+ * the variable given as "value" will likely be out of scope when the signals are emitted, a copy
+ * needs to be created. This uses QMetaType, which means that (non-trivial) argument types need to
+ * be registered using qRegisterMetaType() before giving them to exec() (in particular, this also
+ * goes for pointers to custom data types).
+ *
+ * \sa SignallingUndoCommand
+ */
+void AbstractAspect::exec(QUndoCommand *command,
+		const char *preChangeSignal, const char *postChangeSignal,
+		QGenericArgument val0, QGenericArgument val1, QGenericArgument val2, QGenericArgument val3) {
+	beginMacro(command->text());
+	exec(new SignallingUndoCommand("change signal", this,
+				preChangeSignal, postChangeSignal, val0, val1, val2, val3));
+	exec(command);
+	exec(new SignallingUndoCommand("change signal", this,
+				postChangeSignal, preChangeSignal, val0, val1, val2, val3));
+	endMacro();
+}
+
+
+/**
  * \brief Begin an undo stack macro (series of commands)
  */
 void AbstractAspect::beginMacro(const QString& text)
@@ -460,7 +523,7 @@ void AbstractAspect::endMacro()
 
 QString AbstractAspect::name() const
 {
-	return m_aspect_private->name();
+	return m_aspect_private->m_name;
 }
 
 void AbstractAspect::setName(const QString &value)
@@ -469,25 +532,30 @@ void AbstractAspect::setName(const QString &value)
 		setName("1");
 		return;
 	}
-	if (value == m_aspect_private->name()) return;
-	if (m_aspect_private->parent()) {
-		QString new_name = m_aspect_private->parent()->uniqueNameFor(value);
+	if (value == m_aspect_private->m_name) return;
+	QString new_name;
+	if (m_aspect_private->m_parent) {
+		new_name = m_aspect_private->m_parent->uniqueNameFor(value);
 		if (new_name != value)
 			info(tr("Intended name \"%1\" diverted to \"%2\" in order to avoid name collision.").arg(value).arg(new_name));
-		exec(new AspectNameChangeCmd(m_aspect_private, new_name));
 	} else
-		exec(new AspectNameChangeCmd(m_aspect_private, value));
+		new_name = value;
+	exec(new PropertyChangeCommand<QString>(tr("%1: rename to %2").arg(m_aspect_private->m_name).arg(new_name),
+				&m_aspect_private->m_name, new_name),
+			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
 }
 
 QString AbstractAspect::comment() const
 {
-	return m_aspect_private->comment();
+	return m_aspect_private->m_comment;
 }
 
 void AbstractAspect::setComment(const QString &value)
 {
-	if (value == m_aspect_private->comment()) return;
-	exec(new AspectCommentChangeCmd(m_aspect_private, value));
+	if (value == m_aspect_private->m_comment) return;
+	exec(new PropertyChangeCommand<QString>(tr("%1: change comment").arg(m_aspect_private->m_name),
+				&m_aspect_private->m_comment, value),
+			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
 }
 
 /**
@@ -497,7 +565,7 @@ void AbstractAspect::setComment(const QString &value)
  */
 QString AbstractAspect::captionSpec() const
 {
-	return m_aspect_private->captionSpec();
+	return m_aspect_private->m_caption_spec;
 }
 
 /**
@@ -516,8 +584,10 @@ QString AbstractAspect::captionSpec() const
  */
 void AbstractAspect::setCaptionSpec(const QString &value)
 {
-	if (value == m_aspect_private->captionSpec()) return;
-	exec(new AspectCaptionSpecChangeCmd(m_aspect_private, value));
+	if (value == m_aspect_private->m_caption_spec) return;
+	exec(new PropertyChangeCommand<QString>(tr("%1: change caption").arg(m_aspect_private->m_name),
+				&m_aspect_private->m_caption_spec, value),
+			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
 }
 
 /**
@@ -529,13 +599,14 @@ void AbstractAspect::setCaptionSpec(const QString &value)
  */
 void AbstractAspect::setCreationTime(const QDateTime& time)
 {
-	if (time == m_aspect_private->creationTime()) return;
-	exec(new AspectCreationTimeChangeCmd(m_aspect_private, time));
+	if (time == m_aspect_private->m_creation_time) return;
+	exec(new PropertyChangeCommand<QDateTime>(tr("%1: set creation time").arg(m_aspect_private->m_name),
+				&m_aspect_private->m_creation_time, time));
 }
 
 QDateTime AbstractAspect::creationTime() const
 {
-	return m_aspect_private->creationTime();
+	return m_aspect_private->m_creation_time;
 }
 
 QString AbstractAspect::caption() const
@@ -545,7 +616,7 @@ QString AbstractAspect::caption() const
 
 bool AbstractAspect::hidden() const
 {
-    return m_aspect_private->hidden();
+    return m_aspect_private->m_hidden;
 }
 
 /**
@@ -553,8 +624,10 @@ bool AbstractAspect::hidden() const
  */
 void AbstractAspect::setHidden(bool value)
 {
-    if (value == m_aspect_private->hidden()) return;
-    exec(new AspectHiddenChangeCmd(m_aspect_private, value));
+    if (value == m_aspect_private->m_hidden) return;
+    exec(new PropertyChangeCommand<bool>(tr("%1: change hidden status").arg(m_aspect_private->m_name),
+				 &m_aspect_private->m_hidden, value),
+			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
 }
 
 /**
@@ -628,8 +701,29 @@ QString AbstractAspect::uniqueNameFor(const QString &current_name) const
 void AbstractAspect::removeAllChildren()
 {
 	beginMacro(tr("%1: remove all children.").arg(name()));
-	foreach(AbstractAspect * child, rawChildren())
-		exec(new AspectChildRemoveCmd(m_aspect_private, child));
+
+	QList<AbstractAspect*> children = rawChildren();
+	QList<AbstractAspect*>::iterator i = children.begin();
+	AbstractAspect *current = 0, *nextSibling = 0;
+	if (i != children.end())
+		current = *i;
+	if (++i != children.end())
+		nextSibling = *i;
+
+	while (current) {
+		exec(new SignallingUndoCommand("change signal", current, "aspectAboutToBeRemoved", "aspectAdded",
+					Q_ARG(const AbstractAspect*,current)));
+		exec(new AspectChildRemoveCmd(m_aspect_private, current));
+		exec(new SignallingUndoCommand("change signal", this, "aspectRemoved", "aspectAboutToBeAdded",
+					Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,nextSibling), Q_ARG(const AbstractAspect*,current)));
+
+		current = nextSibling;
+		if (++i != children.end())
+			nextSibling = *i;
+		else
+			nextSibling = 0;
+	}
+
 	endMacro();
 }
 

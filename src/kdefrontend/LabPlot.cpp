@@ -102,6 +102,8 @@ int main (int argc, char *argv[]) {
 //#endif
 
 	// init global defaults
+	AbstractAspect::staticInit();
+	AbstractColumn::staticInit();
 	Project::staticInit();
 	Column::staticInit();
 	Spreadsheet::setGlobalDefault("default_comment_visibility", false);

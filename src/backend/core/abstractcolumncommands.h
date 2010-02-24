@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net),
 	                                      Knut Franke (knut.franke*gmx.de)
+	 								(C) 2010 by Knut Franke
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -77,9 +78,6 @@ public:
 	virtual void undo();
 
 protected:
-	virtual void primaryRedo();
-	virtual void primaryUndo();
-
 	AbstractColumn::Private * m_col;
 	int m_before;
 	int m_count;
@@ -95,9 +93,6 @@ public:
 	virtual void undo();
 
 protected:
-	virtual void primaryRedo();
-	virtual void primaryUndo();
-
 	AbstractColumn::Private * m_col;
 	int m_first;
 	int m_count;

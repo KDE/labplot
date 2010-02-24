@@ -3,6 +3,7 @@
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
+                           (C) 2010 by Knut Franke
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Base class for all persistent objects in a Project.
 
@@ -65,7 +66,8 @@ class AbstractAspect : public QObject
 		Q_DECLARE_FLAGS(ChildIndexFlags, ChildIndexFlag)
 
 		class Private;
-		friend class Private;
+
+		static void staticInit();
 
 		AbstractAspect(const QString &name);
 		virtual ~AbstractAspect();
@@ -157,6 +159,9 @@ class AbstractAspect : public QObject
 
 		virtual QUndoStack *undoStack() const { return parentAspect() ? parentAspect()->undoStack() : 0; }
 		void exec(QUndoCommand *command);
+		void exec(QUndoCommand *command, const char *preChangeSignal, const char *postChangeSignal,
+				QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),
+				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());
 		void beginMacro(const QString& text);
 		void endMacro();
 

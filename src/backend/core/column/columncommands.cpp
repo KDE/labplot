@@ -4,6 +4,7 @@
     Description          : Commands to be called by Column to modify Column::Private
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
+	 								(C) 2010 by Knut Franke
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -384,7 +385,7 @@ void ColumnPartialCopyCmd::undo()
  * \brief Ctor
  */
 ColumnInsertRowsCmd::ColumnInsertRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent )
-: AbstractColumnInsertRowsCmd(col->owner(), before, count, parent), m_col(col)
+: QUndoCommand(parent), m_col(col), m_before(before), m_count(count)
 {
 }
 
@@ -398,18 +399,16 @@ ColumnInsertRowsCmd::~ColumnInsertRowsCmd()
 /**
  * \brief Execute the command
  */
-void ColumnInsertRowsCmd::primaryRedo()
+void ColumnInsertRowsCmd::redo()
 {
 	m_col->insertRows(m_before, m_count);
-	AbstractColumnInsertRowsCmd::primaryRedo();
 }
 
 /**
  * \brief Undo the command
  */
-void ColumnInsertRowsCmd::primaryUndo()
+void ColumnInsertRowsCmd::undo()
 {
-	AbstractColumnInsertRowsCmd::primaryUndo();
 	m_col->removeRows(m_before, m_count);
 }
 
@@ -456,7 +455,7 @@ void ColumnInsertRowsCmd::primaryUndo()
  * \brief Ctor
  */
 ColumnRemoveRowsCmd::ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent )
-: AbstractColumnRemoveRowsCmd(col->owner(), first, count, parent), m_col(col), m_backup(0)
+: QUndoCommand(parent), m_col(col), m_first(first), m_count(count), m_backup(0)
 {
 }
 
@@ -472,7 +471,7 @@ ColumnRemoveRowsCmd::~ColumnRemoveRowsCmd()
 /**
  * \brief Execute the command
  */
-void ColumnRemoveRowsCmd::primaryRedo()
+void ColumnRemoveRowsCmd::redo()
 {
 	if(m_backup == 0)
 	{
@@ -490,15 +489,13 @@ void ColumnRemoveRowsCmd::primaryRedo()
 		m_formulas = m_col->formulaAttribute();
 	}
 	m_col->removeRows(m_first, m_count);
-	AbstractColumnRemoveRowsCmd::primaryRedo();
 }
 
 /**
  * \brief Undo the command
  */
-void ColumnRemoveRowsCmd::primaryUndo()
+void ColumnRemoveRowsCmd::undo()
 {
-	AbstractColumnRemoveRowsCmd::primaryUndo();
 	m_col->insertRows(m_first, m_count);
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);

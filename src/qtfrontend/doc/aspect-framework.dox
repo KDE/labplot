@@ -1,6 +1,6 @@
 /**\page aspect The Aspect Framework
 
-The notion of what we call Aspects pervades and unifies the internal representation of SciDAVis
+The notion of what we call Aspects pervades and unifies the internal representation of SciDAVis / LabPLot
 projects. Basically, every line in the project explorer corresponds to an Aspect, although Aspects
 which the user normally does not need to know about are hidden by default. Also, note that Aspects
 are internal in the sense that they do not interact directly with the user. The latter task is done
@@ -8,6 +8,14 @@ by views. Most Aspects have a primary view with which they have a 1:1 relationsh
 its primary view is closed, an Aspect gets removed. However, Aspects also can have multiple views on
 them or no views at all. Aspects organize themselves into trees, usually with a Project at the top.
 They can also be used standalone, although in that case some features (especially undo) do not work.
+
+The Aspect framework provides the following features:
+  - Utilities and guidelines which make implementation of undo-aware changes relatively painless.
+  - Organization of object trees with multi-level undo for all changes and powerful
+    features like object hiding and querying trees based on the object's class and hidden status.
+  - XML (de-)serialization of (partial) trees
+  - Common attributes like name or comment, also with full undo support.
+  - Easy access to global settings via global() and setGlobal().
 
 Every Aspect is internally divided into three layers: private %data, undo commands and public API.
 Additionally, two more layers are built on top of Aspects.
@@ -17,14 +25,21 @@ Additionally, two more layers are built on top of Aspects.
 Every Aspect class has an internal class called Private, which manages its persistent %data. The fact
 that it is internal implies that it cannot inherit from QObject (or any of its descendants);
 usually, Private will not inherit from any class. %Note that since most classes in the inheritance
-chain of an Aspect _class_ have their own Private _classes_, Aspect _objects_ in general have
-multiple Private _objects_ associated to them. Every Private object knows its owning Aspect and can
-use its inherited public API (layer 2) to talk to the other Private objects of the same Aspect
-object.
+chain of an Aspect _class_ have their own private _classes_, Aspect _objects_ in general have
+multiple private _objects_ associated to them. Every private object knows its owning Aspect and can
+use its inherited public API (layer 2) to talk to the other private objects of the same Aspect
+object. The technique of introducing a separate class which hides the content of an object is known
+variously as "Pimpl idiom", "Cheshire Cat", "D-Pointer" etc.; one of the main advantages is that it
+makes it easier to change the implementation of a class without breaking binary compatibility (i.e.,
+plugins don't need to be recompiled). Also, in the context of this framework, the indirection
+involved in accessing layer 0 from layer 2 (the API class) serves as a reminder that changes to the
+%data must be routed through layer 1 (i.e. instantiating a command).
 
-When their %data is changed, Private objects cause their Aspect to send signals to views and
-other Aspects so they can update themselves if necessary. Apart from the raw %data and accessor
-methods, Private classes usually provide functionality common to multiple undo commands (layer 1).
+Since encapsulation of an Aspect is already provided by layer 2, private classes can be pretty
+promiscous with their member variables; responsibility for maintaining a coherent state is shared
+with layers 1 and 2 (this is necessary in cases where a single action needs to change %data
+contained in multiple private objects). In addition to the member variables, private classes usually
+provide functionality common to multiple undo commands (layer 1).
 These methods must only operate on the internal %data, since write calls into layer 2 usually cause
 undo commands to be pushed onto the undo stack (which must not happen within another undo command).
 Purely internal Aspects which are not part of the hierarchy of the Aspect in question (e.g.,
@@ -32,17 +47,28 @@ temporary filters or columns) count as internal %data and can of course be modif
 
 \section layer1 Layer 1 (undo commands)
 
-Every undo command is associated to exactly one Aspect class and only accesses %data and methods of
-this classe's Private object. Undo commands belonging to an Aspect class MyAspect are named
-MyAspect*Cmd and gathered into source files myaspectcommands.cpp and myaspectcommands.h in order to
-reflect this association. Read access to other Private objects of the same Aspect is done via the
-Aspect's inherited public API. Undo commands recieve a pointer to their Private object in their
-constructor; a pointer to the Aspect can be obtained from the Private object if necessary.
+Every undo command instance is associated with exactly one private object and accesses only %data
+and methods of this object. For common cases, generic undo commands (like PropertyChangeCommand or
+SignallingUndoCommand) can be used; more involved cases require undo commands written specifically
+for one Aspect class (say, MyAspect). The latter follow the naming convention MyAspect*Cmd and are
+gathered into source files myaspectcommands.cpp and myaspectcommands.h in order to reflect their
+association. Read access to other private objects of the same Aspect is done via the Aspect's
+inherited public API. If write access to multiple private objects is necessary, separate undo
+commands are created and instantiated within a command macro (compare e.g.
+AbstractColumn::removeRows()).
 
-Usually, undo commands will rely on implementation details of their Private class; they even may
-require a call protocol, that is, make assumptions about the context of their employment. Since
-undo commands are internal to an Aspect and often only used in one place, this is not a big
-problem. Still, it makes sense to document such assumptions to ease future changes to the code.
+Undo commands are also responsible for triggering signals that are part of the public API of an
+Aspect (i.e. change notifications which allow views and other Aspects to update themselves if
+necessary). Usually this can be accomplished by using
+AbstractAspect::exec(QUndoCommand*,const char*,const char*,QGenericArgument,QGenericArgument,QGenericArgument,QGenericArgument)
+or SignallingUndoCommand.
+
+Undo commands specific to one Aspect class will usually rely on implementation details of its
+private class; they even may require a call protocol, that is, make assumptions about the context
+of their employment. Since undo commands are internal to an Aspect and often only used in one place,
+this is not a big problem. Still, it makes sense to document such assumptions to ease future changes
+to the code.
+
 
 \section layer2 Layer 2 (public API)
 
@@ -53,8 +79,43 @@ instantiations of appropriate undo commands (layer 1). Actions that require chan
 Private objects are a bit more subtle, since they require multiple undo commands to be
 instantiated and packaged into a macro; possibly with some simple logic to connect them.
 As opposed to layers 0 and 1, layer 2 may also use the public API of other Aspects in the hierarchy
-without restrictions. Part of the public API are also signals sent to views and other Aspects in
-order to notify them of changes in the %data.
+without restrictions.
+
+In the simplest case, an Aspect's private object MyAspect::Private has a public member variable
+(say, QString m_tag) which doesn't have to be coordinated with anything else. In that case,
+no custom undo command needs to be written and MyAspect could use a setter method like this:
+\code
+01  void MyAspect::setTag(const QString &value) {
+02    if (value == m_my_private->m_tag) return; // don't create superfluous commands
+03    exec(new PropertyChangeCommand<QString>(tr("%1: change tag").arg(name()),
+04        &m_my_private->m_tag, value));
+05  }
+\endcode
+Line 2 is a short check which is supposed to prevent creation of command instances that do not
+actually change anything. Lines 3 and 4 instantiate a PropertyChangeCommand (which changes a
+single variable) and hand it to AbstractAspect::exec(). The PropertyChangeCommand receives a
+short user-visible description, a pointer to the variable to be changed and the new value of the
+variable. It takes care of creating a backup of the current value and switching between the old
+and the new value on undo/redo. AbstractAspect::exec() makes sure that the command is executed at
+least once and, if the MyAspect instance is part of a Project, saves the command for later
+undo/redo.
+
+Part of the public API are also signals sent to views and other Aspects in order to notify them of
+changes in the %data. While this is the responsibility of layer 2, convenience methods are provided
+so that also in this case, no custom undo command needs to be written. If MyAspect wishes to send
+the signals "void tagAboutToChange(const MyAspect*)" and "void tagChanged(const MyAspect*)" before
+and after its tag property changes, this can be accomplished by adding a single line to the above
+example:
+\code
+01  void MyAspect::setTag(const QString &value) {
+02    if (value == m_my_private->m_tag) return; // don't create superfluous commands
+03    exec(new PropertyChangeCommand<QString>(tr("%1: change tag").arg(name()),
+04        &m_my_private->m_tag, value),
+05      "tagAboutToChange", "tagChanged", Q_ARG(const MyAspect*,this));
+06  }
+\endcode
+This calls an overloaded version of exec() which creates a command macro and two instances of
+SignallingUndoCommand behind the scenes.
 
 \section layer3 Layer 3 (Qt models)
 

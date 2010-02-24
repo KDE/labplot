@@ -32,6 +32,7 @@
 #include "abstractcolumncommands.h"
 #include "lib/Interval.h"
 #include "lib/XmlStreamReader.h"
+#include "lib/SignallingUndoCommand.h"
 
 #include <QtXml/QXmlStreamWriter>
 #include <QtCore/QString>
@@ -39,6 +40,7 @@
 #include <QtCore/QDate>
 #include <QtCore/QTime>
 #include <math.h>
+#include <QMetaType>
 
 /**
  * \class AbstractColumn
@@ -76,6 +78,11 @@
  * make deriving a read-only class very easy without bothering about the
  * writing interface. 
  */
+
+void AbstractColumn::staticInit() {
+	// needed in order to have the signals triggered by SignallingUndoCommand
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+}
 
 /**
  * \brief Ctor
@@ -147,6 +154,18 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {
+	beginMacro(tr("%1: insert %2 row(s)").arg(name()).arg(count));
+	exec(new SignallingUndoCommand("pre-signal", this, "rowsAboutToBeInserted", "rowsRemoved",
+				Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
+
+	handleRowInsertion(before, count);
+
+	exec(new SignallingUndoCommand("post-signal", this, "rowsInserted", "rowsAboutToBeRemoved",
+				Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
+	endMacro();
+}
+
+void AbstractColumn::handleRowInsertion(int before, int count) {
 	exec(new AbstractColumnInsertRowsCmd(this, before, count));
 }
 
@@ -154,6 +173,18 @@ void AbstractColumn::insertRows(int before, int count) {
  * \brief Remove 'count' rows starting from row 'first'
  */
 void AbstractColumn::removeRows(int first, int count) {
+	beginMacro(tr("%1: remove %2 row(s)").arg(name()).arg(count));
+	exec(new SignallingUndoCommand("change signal", this, "rowsAboutToBeRemoved", "rowsInserted",
+				Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
+
+	handleRowRemoval(first, count);
+
+	exec(new SignallingUndoCommand("change signal", this, "rowsRemoved", "rowsAboutToBeInserted",
+				Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
+	endMacro();
+}
+
+void AbstractColumn::handleRowRemoval(int first, int count) {
 	exec(new AbstractColumnRemoveRowsCmd(this, first, count));
 }
 
@@ -201,28 +232,29 @@ bool AbstractColumn::isValid(int row) const {
  * \brief Return whether a certain row is masked 	 
  */
 bool AbstractColumn::isMasked(int row) const {
-	return m_abstract_column_private->masking().isSet(row); 
+	return m_abstract_column_private->m_masking.isSet(row); 
 }
 
 /**
  * \brief Return whether a certain interval of rows rows is fully masked 	 
  */
 bool AbstractColumn::isMasked(Interval<int> i) const {
-	return m_abstract_column_private->masking().isSet(i); 
+	return m_abstract_column_private->m_masking.isSet(i); 
 }
 
 /**
  * \brief Return all intervals of masked rows
  */
 QList< Interval<int> > AbstractColumn::maskedIntervals() const {
-	return m_abstract_column_private->masking().intervals(); 
+	return m_abstract_column_private->m_masking.intervals(); 
 }
 
 /**
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {
-	exec(new AbstractColumnClearMasksCmd(m_abstract_column_private));
+	exec(new AbstractColumnClearMasksCmd(m_abstract_column_private),
+			"maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
 }
 
 /**
@@ -232,7 +264,8 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */ 
 void AbstractColumn::setMasked(Interval<int> i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(m_abstract_column_private, i, mask));
+	exec(new AbstractColumnSetMaskedCmd(m_abstract_column_private, i, mask),
+			"maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
 }
 
 /**

@@ -61,14 +61,8 @@ AbstractAspect::Private::~Private()
 		delete child;
 }
 
-void AbstractAspect::Private::addChild(AbstractAspect* child)
-{
-	insertChild(m_children.count(), child);
-}
-
 void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)
 {
-	emit m_owner->aspectAboutToBeAdded(m_owner, m_children.value(index), child);
 	m_children.insert(index, child);
 	// Always remove from any previous parent before adding to a new one!
 	// Can't handle this case here since two undo commands have to be created.
@@ -92,7 +86,6 @@ void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)
 			m_owner, SIGNAL(aspectHiddenChanged(const AbstractAspect*)));
 	connect(child, SIGNAL(statusInfo(const QString&)),
 			m_owner, SIGNAL(statusInfo(const QString&)));
-	emit child->aspectAdded(child);
 }
 
 int AbstractAspect::Private::indexOfChild(const AbstractAspect *child) const
@@ -106,76 +99,10 @@ int AbstractAspect::Private::removeChild(AbstractAspect* child)
 {
 	int index = indexOfChild(child);
 	Q_ASSERT(index != -1);
-	emit child->aspectAboutToBeRemoved(child);
 	m_children.removeAll(child);
 	QObject::disconnect(child, 0, m_owner, 0);
 	child->m_aspect_private->m_parent = 0;
-	emit m_owner->aspectRemoved(m_owner, m_children.value(index), child);
 	return index;
-}
-
-int AbstractAspect::Private::childCount() const
-{
-	return m_children.count();
-}
-
-AbstractAspect* AbstractAspect::Private::child(int index)
-{
-	Q_ASSERT(index >= 0 && index <= childCount());
-	return m_children.at(index);
-}
-
-QString AbstractAspect::Private::name() const
-{
-	return m_name;
-}
-
-void AbstractAspect::Private::setName(const QString &value)
-{
-	emit m_owner->aspectDescriptionAboutToChange(m_owner);
-	m_name = value;
-	emit m_owner->aspectDescriptionChanged(m_owner);
-}
-
-QString AbstractAspect::Private::comment() const
-{
-	return m_comment;
-}
-
-void AbstractAspect::Private::setComment(const QString &value)
-{
-	emit m_owner->aspectDescriptionAboutToChange(m_owner);
-	m_comment = value;
-	emit m_owner->aspectDescriptionChanged(m_owner);
-}
-
-QString AbstractAspect::Private::captionSpec() const
-{
-	return m_caption_spec;
-}
-
-void AbstractAspect::Private::setCaptionSpec(const QString &value)
-{
-	emit m_owner->aspectDescriptionAboutToChange(m_owner);
-	m_caption_spec = value;
-	emit m_owner->aspectDescriptionChanged(m_owner);
-}
-
-void AbstractAspect::Private::setCreationTime(const QDateTime &time)
-{
-	m_creation_time = time;
-}
-
-bool AbstractAspect::Private::hidden() const
-{
-    return m_hidden;
-}
-
-void AbstractAspect::Private::setHidden(bool value)
-{
-    emit m_owner->aspectHiddenAboutToChange(m_owner);
-    m_hidden = value;
-    emit m_owner->aspectHiddenChanged(m_owner);
 }
 
 int AbstractAspect::Private::indexOfMatchingBrace(const QString &str, int start)
@@ -206,11 +133,6 @@ QString AbstractAspect::Private::caption() const
 		pos += replacement.size();
 	}
 	return result;
-}
-
-QDateTime AbstractAspect::Private::creationTime() const
-{
-	return m_creation_time;
 }
 
 QString AbstractAspect::Private::uniqueNameFor(const QString &current_name) const

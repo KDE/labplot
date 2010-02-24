@@ -3,6 +3,7 @@
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
+                           (C) 2010 by Knut Franke
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Undo commands used by AbstractAspect.
                            Only meant to be used within AbstractAspect.cpp
@@ -32,117 +33,12 @@
 
 #include <QUndoCommand>
 
-class AspectNameChangeCmd : public QUndoCommand
-{
-	public:
-		AspectNameChangeCmd(AbstractAspect::Private *target, const QString &new_name)
-			: m_target(target), m_other_name(new_name) {
-				setText(QObject::tr("%1: rename to %2").arg(m_target->name()).arg(new_name));
-			}
-
-		virtual void redo() {
-			QString tmp = m_target->name();
-			m_target->setName(m_other_name);
-			m_other_name = tmp;
-		}
-
-		virtual void undo() { redo(); }
-
-	private:
-		AbstractAspect::Private *m_target;
-		QString m_other_name;
-};
-
-class AspectCommentChangeCmd : public QUndoCommand
-{
-	public:
-		AspectCommentChangeCmd(AbstractAspect::Private *target, const QString &new_comment)
-			: m_target(target), m_other_comment(new_comment) {
-				setText(QObject::tr("%1: change comment").arg(m_target->name()));
-			}
-
-		virtual void redo() {
-			QString tmp = m_target->comment();
-			m_target->setComment(m_other_comment);
-			m_other_comment = tmp;
-		}
-
-		virtual void undo() { redo(); }
-
-	private:
-		AbstractAspect::Private *m_target;
-		QString m_other_comment;
-};
-
-class AspectCaptionSpecChangeCmd : public QUndoCommand
-{
-	public:
-		AspectCaptionSpecChangeCmd(AbstractAspect::Private *target, const QString &new_caption_spec)
-			: m_target(target), m_other_caption_spec(new_caption_spec) {
-				setText(QObject::tr("%1: change caption").arg(m_target->name()));
-			}
-
-		virtual void redo() {
-			QString tmp = m_target->captionSpec();
-			m_target->setCaptionSpec(m_other_caption_spec);
-			m_other_caption_spec = tmp;
-		}
-
-		virtual void undo() { redo(); }
-
-	private:
-		AbstractAspect::Private *m_target;
-		QString m_other_caption_spec;
-};
-
-
-class AspectCreationTimeChangeCmd : public QUndoCommand
-{
-	public:
-		AspectCreationTimeChangeCmd(AbstractAspect::Private *target, const QDateTime &new_creation_time)
-			: m_target(target), m_other_creation_time(new_creation_time) {
-				setText(QObject::tr("%1: set creation time").arg(m_target->name()));
-			}
-
-		virtual void redo() {
-			QDateTime tmp = m_target->creationTime();
-			m_target->setCreationTime(m_other_creation_time);
-			m_other_creation_time = tmp;
-		}
-
-		virtual void undo() { redo(); }
-
-	private:
-		AbstractAspect::Private *m_target;
-		QDateTime m_other_creation_time;
-};
-
-class AspectHiddenChangeCmd : public QUndoCommand
-{
-    public:
-	AspectHiddenChangeCmd(AbstractAspect::Private *target, bool new_status)
-		: m_target(target), m_other_status(new_status) {
-	    setText(QObject::tr("%1: change hidden status").arg(m_target->name()));
-	}
-	virtual void redo() {
-	    bool tmp = m_target->hidden();
-	    m_target->setHidden(m_other_status);
-	    m_other_status = tmp;
-	}
-	virtual void undo() { redo(); }
-
-    private:
-	AbstractAspect::Private * m_target;
-	bool m_other_status;
-};
-
-
 class AspectChildRemoveCmd : public QUndoCommand
 {
 	public:
 		AspectChildRemoveCmd(AbstractAspect::Private * target, AbstractAspect* child)
 			: m_target(target), m_child(child), m_index(-1), m_removed(false) {
-				setText(QObject::tr("%1: remove %2").arg(m_target->name()).arg(m_child->name()));
+				setText(QObject::tr("%1: remove %2").arg(m_target->m_name).arg(m_child->name()));
 			}
 		~AspectChildRemoveCmd() {
 			if (m_removed)			
@@ -157,7 +53,7 @@ class AspectChildRemoveCmd : public QUndoCommand
 
 		// calling undo transfers ownership of m_child back to its parent aspect
 		virtual void undo() {
-			Q_ASSERT(m_index != -1); // m_child must be a child of m_target->owner()
+			Q_ASSERT(m_index != -1); // m_child must be a child of m_target->m_owner
 			m_target->insertChild(m_index, m_child);
 			m_removed = false;
 		}
@@ -174,8 +70,9 @@ class AspectChildAddCmd : public AspectChildRemoveCmd
 	public:
 		AspectChildAddCmd(AbstractAspect::Private * target, AbstractAspect* child, int index)
 			: AspectChildRemoveCmd(target, child) {
-				setText(QObject::tr("%1: add %2").arg(m_target->name()).arg(m_child->name()));
+				setText(QObject::tr("%1: add %2").arg(m_target->m_name).arg(m_child->name()));
 				m_index = index;
+				m_removed = true;
 			}
 
 		virtual void redo() { AspectChildRemoveCmd::undo(); }
@@ -190,7 +87,7 @@ class AspectChildReparentCmd : public QUndoCommand
 				AbstractAspect* child, int new_index)
 			: m_target(target), m_new_parent(new_parent), m_child(child), m_index(-1), m_new_index(new_index)
 		{
-			setText(QObject::tr("%1: move %2 to %3.").arg(m_target->name()).arg(m_child->name()).arg(m_new_parent->name()));
+			setText(QObject::tr("%1: move %2 to %3.").arg(m_target->m_name).arg(m_child->name()).arg(m_new_parent->m_name));
 		}
 		~AspectChildReparentCmd() {}
 

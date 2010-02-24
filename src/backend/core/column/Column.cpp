@@ -199,16 +199,18 @@ bool Column::copy(const AbstractColumn * source, int source_start, int dest_star
 /**
  * \brief Insert some empty (or initialized with zero) rows
  */
-void Column::insertRows(int before, int count)
+void Column::handleRowInsertion(int before, int count)
 {
+	AbstractColumn::handleRowInsertion(before, count);
 	exec(new ColumnInsertRowsCmd(m_column_private, before, count));
 }
 
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void Column::removeRows(int first, int count)
+void Column::handleRowRemoval(int first, int count)
 {
+	AbstractColumn::handleRowRemoval(first, count);
 	exec(new ColumnRemoveRowsCmd(m_column_private, first, count));
 }
 

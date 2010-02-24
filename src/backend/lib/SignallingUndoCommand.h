@@ -1,10 +1,11 @@
 /***************************************************************************
-    File                 : AspectPrivate.h
-    Project              : SciDAVis
+    File                 : SignallingUndoCommand.h
+    Project              : SciDAVis / LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
-    Description          : Private data managed by AbstractAspect.
+    Copyright            : (C) 2010 Knut Franke
+    Email (use @ for *)  : Knut.Franke*gmx.net
+    Description          : An undo command calling a method/signal/slot on a
+                           QObject on redo/undo.
 
  ***************************************************************************/
 
@@ -26,44 +27,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef ASPECT_PRIVATE_H
-#define ASPECT_PRIVATE_H
 
-#include "AbstractAspect.h"
+#ifndef SIGNALLING_UNDO_COMMAND_H
+#define SIGNALLING_UNDO_COMMAND_H
 
-#include <QString>
-#include <QDateTime>
-#include <QList>
-#include <QSettings>
-#include <QHash>
+#include <QUndoCommand>
+#include <QByteArray>
 
-class AbstractAspect::Private
+class SignallingUndoCommand : public QUndoCommand
 {
 	public:
-		Private(AbstractAspect * owner, const QString &name);
-		~Private();
+		SignallingUndoCommand(const QString &text, QObject *receiver, const char *redoMethod, const char *undoMethod,
+				QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),
+				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());
+		~SignallingUndoCommand();
 
-		void insertChild(int index, AbstractAspect* child);
-		int indexOfChild(const AbstractAspect *child) const;
-		int removeChild(AbstractAspect* child);
-
-		QString caption() const;
-
-		QString uniqueNameFor(const QString &current_name) const;
-
-	public:
-		static QSettings * g_settings;
-		static QHash<QString, QVariant> g_defaults;
-	
-		QList< AbstractAspect* > m_children;
-		QString m_name, m_comment, m_caption_spec;
-		QDateTime m_creation_time;
-		bool m_hidden;
-		AbstractAspect * m_owner;
-		AbstractAspect * m_parent;
+		virtual void redo();
+		virtual void undo();
 
 	private:
-		static int indexOfMatchingBrace(const QString &str, int start);
+		QGenericArgument arg(int index);
+		QByteArray m_redo, m_undo;
+		QObject *m_receiver;
+		int m_argument_count;
+		int *m_argument_types;
+		void **m_argument_data;
 };
 
-#endif // ifndef ASPECT_PRIVATE_H
+#endif // ifndef SIGNALLING_UNDO_COMMAND_H

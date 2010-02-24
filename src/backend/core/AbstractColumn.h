@@ -48,7 +48,8 @@ class AbstractColumn : public AbstractAspect
 
 	public:
 		class Private;
-		friend class Private;
+
+		static void staticInit();
 
 		AbstractColumn(const QString& name);
 		virtual ~AbstractColumn() { aboutToBeDestroyed(this);}
@@ -63,8 +64,8 @@ class AbstractColumn : public AbstractAspect
 		virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
 
 		virtual int rowCount() const = 0;
-		virtual void insertRows(int before, int count);
-		virtual void removeRows(int first, int count);
+		void insertRows(int before, int count);
+		void removeRows(int first, int count);
 		virtual void clear();
 
 		bool isValid(int row) const;
@@ -114,6 +115,9 @@ class AbstractColumn : public AbstractAspect
 	protected:
 		bool XmlReadMask(XmlStreamReader *reader);
 		void XmlWriteMask(QXmlStreamWriter *writer) const;
+
+		virtual void handleRowInsertion(int before, int count);
+		virtual void handleRowRemoval(int first, int count);
 
 	private:
 		Private *m_abstract_column_private;

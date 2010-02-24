@@ -118,6 +118,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/PlotArea.cpp
 	${BACKEND_DIR}/worksheet/ScalableTextLabel.cpp
 	${BACKEND_DIR}/worksheet/DropLineCurve.cpp
+	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
 
 set(DATASOURCES_SOURCES

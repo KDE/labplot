@@ -63,8 +63,6 @@ class Column : public AbstractColumn
 		bool copy(const AbstractColumn * other);
 		bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
 		int rowCount() const;
-		void insertRows(int before, int count);
-		void removeRows(int first, int count);
 		SciDAVis::PlotDesignation plotDesignation() const;
 		void setPlotDesignation(SciDAVis::PlotDesignation pd);
 		int width() const;
@@ -100,6 +98,9 @@ class Column : public AbstractColumn
 		bool XmlReadOutputFilter(XmlStreamReader * reader);
 		bool XmlReadFormula(XmlStreamReader * reader);
 		bool XmlReadRow(XmlStreamReader * reader);
+
+		void handleRowInsertion(int before, int count);
+		void handleRowRemoval(int first, int count);
 
 	signals:
 		void widthAboutToChange(const Column*);
