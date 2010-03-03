@@ -30,7 +30,7 @@
 
 #include "SignallingUndoCommand.h"
 #include <QMetaObject>
-#include <QMetaMethod>
+#include <QMetaType>
 
 /**
  * \class SignallingUndoCommand
@@ -90,16 +90,6 @@ SignallingUndoCommand::SignallingUndoCommand(const QString &text, QObject *recei
 	void *argument_data[] = { val0.data(), val1.data(), val2.data(), val3.data() };
 	for (m_argument_count=0; qstrlen(type_names[m_argument_count]) > 0; m_argument_count++);
 
-	// add signature to redo/undo method names (inferred from arguments)
-	QByteArray signature = "(";
-	for (int i=0; i<m_argument_count; i++) {
-		signature += type_names[i];
-		signature += ",";
-	}
-	signature[signature.size()-1] = ')';
-	m_redo = QMetaObject::normalizedSignature(m_redo + signature);
-	m_undo = QMetaObject::normalizedSignature(m_undo + signature);
-
 	// copy arguments (Q_ARG references will often go out of scope before redo/undo are called)
 	m_argument_types = new int[m_argument_count];
 	Q_CHECK_PTR(m_argument_types);
@@ -132,15 +122,13 @@ QGenericArgument SignallingUndoCommand::arg(int index) {
 
 void SignallingUndoCommand::redo() {
 	const QMetaObject *mo = m_receiver->metaObject();
-	QMetaMethod method = mo->method(mo->indexOfMethod(m_redo));
-	if (!method.invoke(m_receiver, arg(0), arg(1), arg(2), arg(3)))
+	if (!mo->invokeMethod(m_receiver, m_redo, arg(0), arg(1), arg(2), arg(3)))
 		qWarning("FAILED to invoke %s on %s\n", m_redo.constData(), mo->className());
 }
 
 void SignallingUndoCommand::undo() {
 	const QMetaObject *mo = m_receiver->metaObject();
-	QMetaMethod method = mo->method(mo->indexOfMethod(m_undo));
-	if (!method.invoke(m_receiver, arg(0), arg(1), arg(2), arg(3)))
+	if (!mo->invokeMethod(m_receiver, m_undo, arg(0), arg(1), arg(2), arg(3)))
 		qWarning("FAILED to invoke %s on %s\n", m_undo.constData(), mo->className());
 }
 

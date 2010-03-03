@@ -705,10 +705,11 @@ void AbstractAspect::removeAllChildren()
 	QList<AbstractAspect*> children = rawChildren();
 	QList<AbstractAspect*>::iterator i = children.begin();
 	AbstractAspect *current = 0, *nextSibling = 0;
-	if (i != children.end())
+	if (i != children.end()) {
 		current = *i;
-	if (++i != children.end())
-		nextSibling = *i;
+		if (++i != children.end())
+			nextSibling = *i;
+	}
 
 	while (current) {
 		exec(new SignallingUndoCommand("change signal", current, "aspectAboutToBeRemoved", "aspectAdded",
@@ -718,7 +719,7 @@ void AbstractAspect::removeAllChildren()
 					Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,nextSibling), Q_ARG(const AbstractAspect*,current)));
 
 		current = nextSibling;
-		if (++i != children.end())
+		if (i != children.end() && ++i != children.end())
 			nextSibling = *i;
 		else
 			nextSibling = 0;
