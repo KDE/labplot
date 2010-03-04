@@ -4,6 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -30,89 +31,106 @@
 #ifndef WORKSHEETVIEW_H
 #define WORKSHEETVIEW_H
 
-#include <QWidget>
-#include <QGraphicsView>
+#include <QtGui>
 class Worksheet;
-class QGraphicsView;
 class WorksheetModel;
-class QToolButton;
-class QHBoxLayout;
-class QMenu;
 class ActionManager;
-
-class WorksheetGraphicsView;
-
-class WorksheetView: public QWidget {
-	Q_OBJECT
-
-	public:
-		WorksheetView(Worksheet *worksheet);
-		virtual ~WorksheetView();
-
-	protected:
-		void init();
-		void retranslateStrings();
-
-	private:
-		Worksheet *m_worksheet;
-		WorksheetGraphicsView *m_view_widget;
-		WorksheetModel *m_model;
-		QWidget *m_control_tabs;
-// TODO		Ui::ControlTabs ui;
-		QToolButton *m_hide_button;
-		QHBoxLayout *m_main_layout;
-
-		void createActions();
-		void connectActions();
-
-		void createContextMenu(QMenu *menu);
-		void fillProjectMenu(QMenu *menu, bool *rc);
-
-	public slots:
-		void toggleControlTabBar();
-
-	signals:
-		void statusInfo(const QString &text);
-
-	private slots:
-		void handleScaleFactorChange(qreal factor);
-		void startTestCode(); // TODO: remove later
-
-	public:
-		static ActionManager *actionManager();
-		static void initActionManager();
-	private:
-		static ActionManager *action_manager;
-		WorksheetView();
-};
-
-class WorksheetGraphicsView : public QGraphicsView
-{
-	Q_OBJECT
-
-	public:
-		WorksheetGraphicsView(QWidget * parent = 0);
-		~WorksheetGraphicsView();
-
-		void setScene(QGraphicsScene * scene);
-
-		void setScaleFactor(qreal factor);
-		qreal scaleFactor() const;
-
-	protected:
-		virtual void drawBackground(QPainter *painter, const QRectF &rect);
-		virtual void wheelEvent(QWheelEvent *event);
-
-	signals:
-		void scaleFactorChanged(qreal factor);
-
-	private:
-		qreal m_scale_factor;
-		qreal horizontal_screen_dpi;
-		qreal vertical_screen_dpi;
-};
-
-
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+class KAction;
 #endif
 
+class WorksheetView : public QGraphicsView{
+	Q_OBJECT
 
+  public:
+	WorksheetView(Worksheet *worksheet);
+	virtual ~WorksheetView();
+
+	enum MouseMode{NavigationMode, ZoomMode, SelectionMode};
+
+	void createMenu(QMenu* menu=0) const;
+	void setScene(QGraphicsScene * scene);
+
+	static ActionManager *actionManager();
+	static void initActionManager();
+
+  private:
+	void createActions();
+
+	void contextMenuEvent(QContextMenuEvent *);
+	void createContextMenu(QMenu *menu);
+	void fillProjectMenu(QMenu *menu, bool *rc);
+
+	void wheelEvent(QWheelEvent *event);
+	void mouseReleaseEvent (QMouseEvent * event);
+
+	void drawBackground(QPainter *painter, const QRectF &rect);
+	void setScaleFactor(qreal factor);
+	
+	Worksheet *m_worksheet;
+	WorksheetModel *m_model;
+	MouseMode m_currentMouseMode;
+
+	static ActionManager *action_manager;
+	WorksheetView();
+
+	qreal m_scaleFactor;
+	qreal m_scaleFactorUpperLimit;
+	qreal m_scaleFactorLowerLimit;
+
+	//Actions
+	#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	QAction* zoomInAction;
+	QAction* zoomOutAction;
+	QAction* zoomOriginAction;
+	QAction* zoomFitPageHeightAction;
+	QAction* zoomFitPageWidthAction;
+	
+	QAction* navigationModeAction;
+	QAction* zoomModeAction;
+	QAction* selectionModeAction;
+	
+	QAction* verticalLayoutAction;
+	QAction* horizontalLayoutAction;
+	QAction* gridLayoutAction;
+	QAction* breakLayoutAction;
+	#else
+	KAction* zoomInAction;
+	KAction* zoomOutAction;
+	KAction* zoomOriginAction;
+	KAction* zoomFitPageHeightAction;
+	KAction* zoomFitPageWidthAction;
+
+	KAction* navigationModeAction;
+	KAction* zoomModeAction;
+	KAction* selectionModeAction;
+
+	KAction* verticalLayoutAction;
+	KAction* horizontalLayoutAction;
+	KAction* gridLayoutAction;
+	KAction* breakLayoutAction;
+	#endif
+
+  public slots:
+	void zoomIn();
+	void zoomOut();
+	void zoomOrigin();
+	void zoomFitPageWidth();
+	void zoomFitPageHeight();
+
+	void enableNavigationMode();
+	void enableZoomMode();
+	void enableSelectionMode();
+
+	void layout(QAction*);
+
+  private slots:
+	void handleScaleFactorChange(qreal factor);
+	void startTestCode();
+	
+  signals:
+	void statusInfo(const QString &text);
+	void scaleFactorChanged(qreal factor);
+};
+
+#endif
