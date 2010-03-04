@@ -34,9 +34,6 @@ set(GUI_SOURCES
   	${KDEFRONTEND_DIR}/SpreadsheetView.cpp
 	${KDEFRONTEND_DIR}/TitleDialog.cpp
 	${KDEFRONTEND_DIR}/ValuesWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
-	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
-	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 )
 
 set(PLOTS_SOURCES
