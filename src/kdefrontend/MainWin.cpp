@@ -257,9 +257,9 @@ void MainWin::setupActions() {
 
 	// worksheet menu
 	//TODO add icon
-	action = new KAction (KIcon(),i18n("Axes Settings"), this);
-	actionCollection()->addAction("axes", action);
-	connect(action, SIGNAL(triggered()),SLOT(axesDialog()));
+// 	action = new KAction (KIcon(),i18n("Axes Settings"), this);
+// 	actionCollection()->addAction("axes", action);
+// 	connect(action, SIGNAL(triggered()),SLOT(axesDialog()));
 
 	//Windows
 	action  = new KAction(i18n("Cl&ose"), this);
@@ -332,13 +332,14 @@ void MainWin::updateGUI() {
 		m_printPreviewAction->setEnabled(false);
 		m_importAction->setEnabled(false);
 		m_projectInfoAction->setEnabled(false);
+		m_newSpreadsheetAction->setEnabled(false);
+		m_newWorksheetAction->setEnabled(false);
 		m_closeAction->setEnabled(false);
 		factory->container("new", this)->setEnabled(false);
 		factory->container("edit", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("analysis", this)->setEnabled(false);
- 		factory->container("worksheet_view", this)->setEnabled(false);
  		factory->container("script", this)->setEnabled(false);
 		factory->container("windows", this)->setEnabled(false);
 		factory->container("drawing", this)->setEnabled(false);
@@ -350,13 +351,14 @@ void MainWin::updateGUI() {
 		m_printPreviewAction->setEnabled(true);
 		m_importAction->setEnabled(true);
 		m_projectInfoAction->setEnabled(true);
+		m_newSpreadsheetAction->setEnabled(true);
+		m_newWorksheetAction->setEnabled(true);
 		m_closeAction->setEnabled(true);
 		factory->container("new", this)->setEnabled(true);
 		factory->container("edit", this)->setEnabled(true);
 		factory->container("spreadsheet", this)->setEnabled(true);
 		factory->container("worksheet", this)->setEnabled(true);
 		factory->container("analysis", this)->setEnabled(true);
- 		factory->container("worksheet_view", this)->setEnabled(true);
  		factory->container("script", this)->setEnabled(true);
 		factory->container("windows", this)->setEnabled(true);
 		factory->container("drawing", this)->setEnabled(true);
@@ -370,7 +372,6 @@ void MainWin::updateGUI() {
 	if (w==0){
 		//no worksheet selected -> deactivate worksheet related menus
 		factory->container("worksheet", this)->setEnabled(false);
- 		factory->container("worksheet_view", this)->setEnabled(false);
  		factory->container("drawing", this)->setEnabled(false);
 
 		//Handle the Spreadsheet-object
@@ -391,14 +392,13 @@ void MainWin::updateGUI() {
 	}else{
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
-		factory->container("worksheet_view", this)->setEnabled(true);
 		factory->container("drawing", this)->setEnabled(true);
 		factory->container("analysis", this)->setEnabled(true);
 
 		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
-		//view->createMenu(menu);
+		view->createMenu(menu);
 
 		//disable spreadsheet related menus
 		factory->container("analysis", this)->setEnabled(false);

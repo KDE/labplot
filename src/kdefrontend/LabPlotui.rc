@@ -7,14 +7,6 @@
 <Action name="import" />
 <Action name="new_spreadsheet" />
 <Action name="new_worksheet" />
-<!--<Menu name="new_function_plot">
-	<text>New Function Plot</text>
-	<Action name="new_2D_function_plot" />
-	<Action name="new_2D_surface_function_plot" />
-	<Action name="new_2D_polar_function_plot" />
-		<Separator/>
-		<Action name="new_3D_function_plot" />
-</Menu>-->
 <ActionList name="dynamicActionlist" />
 </ToolBar>
 
@@ -66,7 +58,6 @@
 <Menu name="worksheet"><text>&amp;Worksheet</text>
 	<Action name="axes" />
 </Menu>
-<Menu name="worksheet_view"><text>&amp;View</text></Menu>
 <Menu name="analysis"><text>&amp;Analysis</text></Menu>
 <Menu name="drawing"><text>&amp;Drawing</text></Menu>
 <Menu name="script"><text>&amp;Script</text></Menu>
