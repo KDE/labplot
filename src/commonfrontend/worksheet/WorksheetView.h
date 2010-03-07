@@ -65,7 +65,6 @@ class WorksheetView : public QGraphicsView{
 	void mouseReleaseEvent (QMouseEvent * event);
 
 	void drawBackground(QPainter *painter, const QRectF &rect);
-	void setScaleFactor(qreal factor);
 	
 	Worksheet *m_worksheet;
 	WorksheetModel *m_model;
@@ -73,10 +72,6 @@ class WorksheetView : public QGraphicsView{
 
 	static ActionManager *action_manager;
 	WorksheetView();
-
-	qreal m_scaleFactor;
-	qreal m_scaleFactorUpperLimit;
-	qreal m_scaleFactorLowerLimit;
 
 	//Actions
 	#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -125,12 +120,10 @@ class WorksheetView : public QGraphicsView{
 	void layout(QAction*);
 
   private slots:
-	void handleScaleFactorChange(qreal factor);
 	void startTestCode();
 	
   signals:
 	void statusInfo(const QString &text);
-	void scaleFactorChanged(qreal factor);
 };
 
 #endif

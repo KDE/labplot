@@ -60,15 +60,11 @@
   Creates a view for the Worksheet \c worksheet and initializes the internal model.
 */
 WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
-, m_worksheet(worksheet), m_scaleFactor(1.0){
+, m_worksheet(worksheet) {
   
   m_model = new WorksheetModel(worksheet);
 
-  m_scaleFactorUpperLimit = 100;
-  m_scaleFactorLowerLimit = 0.1;
-
   setScene(m_model->scene());
-  connect(this, SIGNAL(scaleFactorChanged(qreal)), this, SLOT(handleScaleFactorChange(qreal)));
 
   setRenderHint(QPainter::Antialiasing);
   setInteractive(true);
@@ -266,8 +262,8 @@ void WorksheetView::startTestCode() {
   #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
   #define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
   
-  const double pw = 210/25.4*QApplication::desktop()->physicalDpiX();
-  const double ph = 297/25.4*QApplication::desktop()->physicalDpiY();
+  const double pw = 210;
+  const double ph = 297;
   
   {
 	DecorationPlot *plot = new DecorationPlot("plot1");
@@ -504,11 +500,6 @@ void WorksheetView::startTestCode() {
   
 }
 
-void WorksheetView::handleScaleFactorChange(qreal factor) {
-	qreal percent = factor*100.0;
-	emit statusInfo(tr("Scale: %1%").arg(qRound(percent)));
-}
-
 /* ========================= static methods ======================= */
 ActionManager *WorksheetView::action_manager = 0;
 
@@ -531,7 +522,7 @@ void WorksheetView::initActionManager(){
 void WorksheetView::setScene(QGraphicsScene * scene) {
   QGraphicsView::setScene(scene);
   setSceneRect(scene->sceneRect());
-  setScaleFactor(1.0);
+  setTransform(QTransform());
   
 //   connect(scene, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(itemSelected(QGraphicsItem*)));
 }
@@ -561,30 +552,13 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 }
 
 
-void WorksheetView::setScaleFactor(qreal factor) {
-  if (m_scaleFactor < m_scaleFactorLowerLimit){
-	m_scaleFactor = m_scaleFactorLowerLimit;
-	return;
-  }
-
-  if (m_scaleFactor > m_scaleFactorUpperLimit){
-	m_scaleFactor = m_scaleFactorUpperLimit;
-	return;
-  }
-	
-  m_scaleFactor = factor;
-  setTransform(QTransform(QMatrix().scale(m_scaleFactor, m_scaleFactor)));
-  emit scaleFactorChanged(factor);
-}
-
-
 //#################### EVENTS #################
 void WorksheetView::wheelEvent(QWheelEvent *event) {
   if (m_currentMouseMode == ZoomMode){
 	if (event->delta() > 0)
-	  setScaleFactor(m_scaleFactor * 1.2);
+		scale(1.2, 1.2);
 	else if (event->delta() < 0)
-	  setScaleFactor(m_scaleFactor / 1.2);
+		scale(1.0/1.2, 1.0/1.2);
   }else{
 	QGraphicsView::wheelEvent(event);
   }
@@ -607,41 +581,26 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 
 //###################### SLOTS #################
 void WorksheetView::zoomIn(){
-  setScaleFactor(m_scaleFactor*1.2);
-  
-  if (m_scaleFactor == m_scaleFactorUpperLimit){
-	zoomInAction->setEnabled(false);
-  }else{
-	zoomInAction->setEnabled(true);
-	zoomOutAction->setEnabled(true);
-  }
+	scale(1.2, 1.2);
 }
 
 void WorksheetView::zoomOut(){
-  setScaleFactor(m_scaleFactor/1.2);
-  
-  if (m_scaleFactor == m_scaleFactorLowerLimit){
-	zoomOutAction->setEnabled(false);
-  }else{
-	zoomOutAction->setEnabled(true);
-	zoomInAction->setEnabled(true);
-  }
+	scale(1.0/1.2, 1.0/1.2);
 }
 
 void WorksheetView::zoomOrigin(){
-  setScaleFactor(1.0);
-  zoomInAction->setEnabled(true);
-  zoomOutAction->setEnabled(true);
+  setTransform(QTransform::fromScale(QApplication::desktop()->physicalDpiX()/25.4,
+			  QApplication::desktop()->physicalDpiY()/25.4));
 }
 
 void WorksheetView::zoomFitPageWidth(){
   float scaleFactor = viewport()->width()/m_model->scene()->sceneRect().width();
-  setScaleFactor(scaleFactor);
+  setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 }
 
 void WorksheetView::zoomFitPageHeight(){
   float scaleFactor = viewport()->height()/m_model->scene()->sceneRect().height();
-  setScaleFactor(scaleFactor);
+  setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 }
 
 void WorksheetView::enableNavigationMode(){
