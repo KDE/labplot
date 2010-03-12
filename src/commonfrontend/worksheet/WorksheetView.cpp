@@ -262,8 +262,8 @@ void WorksheetView::startTestCode() {
   #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
   #define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
   
-  const double pw = 210;
-  const double ph = 297;
+  const double pw = pageRect.width();
+  const double ph = pageRect.height();
   
   {
 	DecorationPlot *plot = new DecorationPlot("plot1");
@@ -409,8 +409,6 @@ void WorksheetView::startTestCode() {
 	m_worksheet->addChild(plot);
 	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords2");
 	
-// 	const double pw = 210;
-// 	const double ph = 297;
 	QList<CartesianCoordinateSystem::Scale *> scales;
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.3, pw * 0.7, -2, 10);
 	coordSys->setXScales(scales);
@@ -521,7 +519,6 @@ void WorksheetView::initActionManager(){
 
 void WorksheetView::setScene(QGraphicsScene * scene) {
   QGraphicsView::setScene(scene);
-  setSceneRect(scene->sceneRect());
   setTransform(QTransform());
   
 //   connect(scene, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(itemSelected(QGraphicsItem*)));
