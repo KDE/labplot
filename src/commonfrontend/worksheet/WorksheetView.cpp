@@ -27,6 +27,12 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#include <QApplication>
+#include <QMenu>
+#include <QDesktopWidget>
+#include <QTimer> //TODO: remove this later
+#include <QWheelEvent>
+#include <QDebug>
 
 #include "worksheet/WorksheetView.h"
 #include "worksheet/Worksheet.h"
@@ -81,9 +87,11 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   
   createActions();
   navigationModeAction->setChecked(true);
-
+  
+  connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
+  
   // TODO: remove the test code later
-  QTimer::singleShot(0, this, SLOT(startTestCode()));
+   QTimer::singleShot(0, this, SLOT(startTestCode()));
  }
 
 WorksheetView::~WorksheetView(){
@@ -117,6 +125,9 @@ void WorksheetView::createActions() {
  
  zoomFitPageWidthAction = new QAction(tr("Fit to width"), this);
  connect(zoomFitPageWidthAction, SIGNAL(triggered()), SLOT(zoomFitPageWidth()));
+
+ zoomFitSelectionAction = new QAction(tr("Fit to selection"), this);
+ connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
  
  // Mouse mode actions 
  QActionGroup* mouseModeActionGroup = new QActionGroup(this);
@@ -176,6 +187,9 @@ void WorksheetView::createActions() {
 
   zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), this);
   connect(zoomFitPageWidthAction, SIGNAL(triggered()), SLOT(zoomFitPageWidth()));
+  
+  zoomFitSelectionAction = new KAction(i18n("Fit to selection"), this);
+  connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
 
   // Mouse mode actions 
   QActionGroup* mouseModeActionGroup = new QActionGroup(this);
@@ -231,6 +245,7 @@ void WorksheetView::createMenu(QMenu *menu) const{
   menu->addAction(zoomOriginAction);
   menu->addAction(zoomFitPageHeightAction);
   menu->addAction(zoomFitPageWidthAction);
+  menu->addAction(zoomFitSelectionAction);
   
   //Mouse mode actions
   menu->addSeparator();//->setText( i18n("Mouse mode") );
@@ -247,16 +262,29 @@ void WorksheetView::createMenu(QMenu *menu) const{
 }
 
 void WorksheetView::createContextMenu(QMenu *menu) {
+  Q_UNUSED(menu);
 // TODO
 //   menu->addItem("Zoom");
 }
 
 void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
+  Q_UNUSED(menu);
+  Q_UNUSED(rc);
 // TODO
 }
 
 
 void WorksheetView::startTestCode() {
+//   QGraphicsRectItem *rect = scene()->addRect(QRectF(0, 0, 50, 50));
+// 		rect->setFlag(QGraphicsItem::ItemIsMovable, true);
+// rect->setFlag(QGraphicsItem::ItemIsSelectable, true);
+// 
+//   QGraphicsRectItem *rect2 = scene()->addRect(QRectF(50, 50, 50, 50));
+// 		rect2->setFlag(QGraphicsItem::ItemIsMovable, true);
+// rect2->setFlag(QGraphicsItem::ItemIsSelectable, true);
+//  
+// //  return;
+
   QRectF pageRect = m_model->scene()->sceneRect();
   
   #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
@@ -267,7 +295,14 @@ void WorksheetView::startTestCode() {
   
   {
 	DecorationPlot *plot = new DecorationPlot("plot1");
+// 		d_ptr->setFlag(QGraphicsItem::ItemIsMovable, true);
+// 	d_ptr->setFlag(QGraphicsItem::ItemIsSelectable, true);
+	plot->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	plot->graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	m_worksheet->addChild(plot);
+// 	plot->graphicsItem()->setSelected(true);
+	
+	
 	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords1");
 	
 	QList<CartesianCoordinateSystem::Scale *> scales;
@@ -282,11 +317,13 @@ void WorksheetView::startTestCode() {
 	
 	plot->addChild(coordSys);
 	
+	
 	PlotArea *plotArea = new PlotArea("plot area");
 	plotArea->setRect(QRectF(-2, 0, 12, 10));
 	plotArea->setClippingEnabled(true);
 	coordSys->addChild(plotArea);
 	
+	/*
 	WorksheetRectangleElement *rect = new WorksheetRectangleElement("rect1");
 	rect->setRect(QRectF(12, 12, 300, 3));
 	coordSys->addChild(rect);
@@ -298,16 +335,17 @@ void WorksheetView::startTestCode() {
 	m_worksheet->addChild(rect3);
 	
 	WorksheetElementGroup *group1 = new WorksheetElementGroup("some items");
-	//	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 5, 20, 20)));
-	//	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(4, 5, 25, 15)));
-	//	group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 3, 26, 25)));
+		group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 5, 20, 20)));
+		group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(4, 5, 25, 15)));
+		group1->addChild(new WorksheetRectangleElement("rect 1", QRectF(5, 3, 26, 25)));
 	plotArea->addChild(group1);
-	
+	*/
+	/*
 	LinearAxis *xAxis1 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
 	plot->addChild(xAxis1);
 	LinearAxis *yAxis1 = new LinearAxis("y axis 1", LinearAxis::axisLeft);
 	plot->addChild(yAxis1);
-	
+	*/
 	LinearAxis *xAxis2 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
 	coordSys->addChild(xAxis2);
 	xAxis2->setMajorTicksLength(3);
@@ -357,7 +395,8 @@ void WorksheetView::startTestCode() {
 	yAxis3->setTickStart(0);
 	yAxis3->setTickEnd(10);
 	coordSys->addChild(yAxis3);
-		plotArea->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
+	
+	plotArea->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
 	
 	Column *xc = new Column("xc", SciDAVis::Numeric);
 	Column *yc = new Column("yc", SciDAVis::Numeric);
@@ -407,6 +446,9 @@ void WorksheetView::startTestCode() {
   {
 	DecorationPlot *plot = new DecorationPlot("plot2");
 	m_worksheet->addChild(plot);
+	plot->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	plot->graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
+	
 	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords2");
 	
 	QList<CartesianCoordinateSystem::Scale *> scales;
@@ -520,13 +562,12 @@ void WorksheetView::initActionManager(){
 void WorksheetView::setScene(QGraphicsScene * scene) {
   QGraphicsView::setScene(scene);
   setTransform(QTransform());
-  
-//   connect(scene, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(itemSelected(QGraphicsItem*)));
 }
 
 void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
   painter->save();
   painter->setRenderHint(QPainter::Antialiasing);
+//   QRectF scene_rect = mapFromScene(sceneRect()).boundingRect();
   QRectF scene_rect = sceneRect();
 
   // background
@@ -562,6 +603,7 @@ void WorksheetView::wheelEvent(QWheelEvent *event) {
 }
 
 void WorksheetView::mouseReleaseEvent (QMouseEvent * event){
+//   qDebug()<<scene()->selectedItems();
   if (m_currentMouseMode == ZoomMode){
 	fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
   }
@@ -600,6 +642,12 @@ void WorksheetView::zoomFitPageHeight(){
   setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 }
 
+void WorksheetView::zoomFitSelection(){
+  qDebug()<<scene()->selectionArea().boundingRect();
+	qDebug()<<scene()->selectedItems();
+	fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
+}
+
 void WorksheetView::enableNavigationMode(){
   m_currentMouseMode = NavigationMode;
   setDragMode(QGraphicsView::ScrollHandDrag);
@@ -618,7 +666,6 @@ void WorksheetView::enableSelectionMode(){
 void WorksheetView::layout(QAction* action){
   QString name = action->objectName();
   if (name == "breakLayoutAction"){
-	qDebug()<<"breakLayoutAction";
 	verticalLayoutAction->setEnabled(true);
 	verticalLayoutAction->setChecked(false);
 	
@@ -661,4 +708,14 @@ void WorksheetView::layout(QAction* action){
 // 	  QGraphicsGridLayout* layout = new QGraphicsGridLayout();
 	}
   }
+}
+
+
+void WorksheetView::selectItem(QGraphicsItem* item){
+  qDebug()<<"view slot"<<item;
+	scene()->clearSelection();
+	item->setSelected(true);
+// QPainterPath path;
+// path.addRect(item->boundingRect());
+//   scene()->setSelectionArea(path, QTransform());
 }

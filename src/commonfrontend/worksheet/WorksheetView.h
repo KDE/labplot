@@ -31,7 +31,11 @@
 #ifndef WORKSHEETVIEW_H
 #define WORKSHEETVIEW_H
 
-#include <QtGui>
+#include <QGraphicsView>
+
+class QMenu;
+class QWheelEvent;
+
 class Worksheet;
 class WorksheetModel;
 class ActionManager;
@@ -80,6 +84,7 @@ class WorksheetView : public QGraphicsView{
 	QAction* zoomOriginAction;
 	QAction* zoomFitPageHeightAction;
 	QAction* zoomFitPageWidthAction;
+	QAction* zoomFitSelectionAction;
 	
 	QAction* navigationModeAction;
 	QAction* zoomModeAction;
@@ -95,6 +100,7 @@ class WorksheetView : public QGraphicsView{
 	KAction* zoomOriginAction;
 	KAction* zoomFitPageHeightAction;
 	KAction* zoomFitPageWidthAction;
+	KAction* zoomFitSelectionAction;
 
 	KAction* navigationModeAction;
 	KAction* zoomModeAction;
@@ -112,6 +118,7 @@ class WorksheetView : public QGraphicsView{
 	void zoomOrigin();
 	void zoomFitPageWidth();
 	void zoomFitPageHeight();
+	void zoomFitSelection();
 
 	void enableNavigationMode();
 	void enableZoomMode();
@@ -121,6 +128,7 @@ class WorksheetView : public QGraphicsView{
 
   private slots:
 	void startTestCode();
+	void selectItem(QGraphicsItem *);
 	
   signals:
 	void statusInfo(const QString &text);
