@@ -39,7 +39,7 @@
 
 #include <QApplication>
 #include <QDateTime>
-
+#include <QDebug>
 /*!
   \class Spreadsheet
   \brief Aspect providing a spreadsheet table with column logic.
@@ -633,6 +633,15 @@ QString Spreadsheet::text(int row, int col) const
 
 	return col_ptr->asStringColumn()->textAt(row);
 }
+
+void Spreadsheet::childSelected(){
+ Column* column=qobject_cast<Column*>(QObject::sender());
+ if (column){
+  int index = indexOfChild<Column>(column);
+  emit columnSelected(index);
+ }  
+}
+
 /* ========== loading and saving ============ */
 
 /*!

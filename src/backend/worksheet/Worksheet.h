@@ -32,9 +32,11 @@
 
 #include "core/AbstractPart.h"
 #include "core/AbstractScriptingEngine.h"
-class QGraphicsScene;
-class WorksheetGraphicsScene;
 #include "worksheet/WorksheetModel.h"
+
+class QGraphicsScene;
+class QGraphicsItem;
+class WorksheetGraphicsScene;
 class QRectF;
 
 class Worksheet: public AbstractPart, public scripted {
@@ -55,12 +57,8 @@ class Worksheet: public AbstractPart, public scripted {
 		QRectF pageRect() const;
 		void setPageRect(const QRectF &rect);
 		
-	private slots:
-		void handleAspectAdded(const AbstractAspect *handleAspect);
-		void handleAspectAboutToBeRemoved(const AbstractAspect *handleAspect);
-
-	public:
 		class Private;
+		
 	private:
 		friend class Private;
 		Private * const d;
@@ -68,8 +66,14 @@ class Worksheet: public AbstractPart, public scripted {
 		mutable QWidget *m_view;
 		WorksheetGraphicsScene *scene() const;
 		friend QGraphicsScene *WorksheetModel::scene() const;
+		
+	 private slots:
+		void handleAspectAdded(const AbstractAspect *handleAspect);
+		void handleAspectAboutToBeRemoved(const AbstractAspect *handleAspect);
+		void childSelected();
+		
+	 signals:
+		void itemSelected(QGraphicsItem*);
 };
 
-
 #endif
-

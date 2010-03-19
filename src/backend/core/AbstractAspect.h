@@ -86,6 +86,7 @@ class AbstractAspect : public QObject
 		Folder * folder();
 		bool isDescendantOf(AbstractAspect *other);
 
+		void select() { emit selected(); }
 		void addChild(AbstractAspect* child);
 		void insertChildBefore(AbstractAspect *child, AbstractAspect *before);
 		void removeChild(AbstractAspect* child);
@@ -184,7 +185,10 @@ class AbstractAspect : public QObject
 		void setHidden(bool value);
 		virtual void remove() { if(parentAspect()) parentAspect()->removeChild(this); }
 		QString uniqueNameFor(const QString &current_name) const;
-
+		
+	protected slots:
+		virtual void childSelected(){}
+		
 	signals:
 		void aspectDescriptionAboutToChange(const AbstractAspect *aspect);
 		void aspectDescriptionChanged(const AbstractAspect *aspect);
@@ -195,7 +199,8 @@ class AbstractAspect : public QObject
 		void aspectHiddenAboutToChange(const AbstractAspect *aspect);
 		void aspectHiddenChanged(const AbstractAspect *aspect);
 		void statusInfo(const QString &text);
-
+		void selected();
+		
 	protected:
 		void setCreationTime(const QDateTime& time);
 		void info(const QString &text) { emit statusInfo(text); }

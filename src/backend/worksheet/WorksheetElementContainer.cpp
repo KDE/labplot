@@ -30,11 +30,14 @@
 #include "worksheet/WorksheetElementContainer.h"
 #include "worksheet/WorksheetElementContainerPrivate.h"
 #include <QtDebug>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QMenu>
 
 /**
  * \class WorksheetElementContainer
  * \brief Generic AbstractWorksheetElement container.
- *
+ * \ingroup datasources
  * This class combines functionality of worksheet element containers
  * such as groups, plots, coordinate systems, etc.
  *
@@ -47,8 +50,38 @@ WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElem
 WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate() {
 }
 
+ void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
+     scene()->clearSelection();
+     setSelected(true);
+     QMenu* menu = q->createContextMenu();
+     menu->exec(event->screenPos());
+ }
+ 
+ 
+//  QVariant WorksheetElementContainerPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
+//    /*
+//      if (change == ItemPositionChange && scene()) {
+//          // value is the new position.
+//          QPointF newPos = value.toPointF();
+//          QRectF rect = scene()->sceneRect();
+//          if (!rect.contains(newPos)) {
+//              // Keep the item inside the scene rect.
+//              newPos.setX(qMin(rect.right(), qMax(newPos.x(), rect.left())));
+//              newPos.setY(qMin(rect.bottom(), qMax(newPos.y(), rect.top())));
+//              return newPos;
+//          }
+//      }
+//      */
+//     if (change == QGraphicsItem::ItemSelectedHasChanged)
+//         emit selectedChange(this);
+// //     return value;
+// 	
+//      return QGraphicsItem::itemChange(change, value);
+//  }
+ 
 WorksheetElementContainer::WorksheetElementContainer(const QString &name) 
 	: AbstractWorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
+	  
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -57,6 +90,7 @@ WorksheetElementContainer::WorksheetElementContainer(const QString &name)
 
 WorksheetElementContainer::WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd)
     : AbstractWorksheetElement(name), d_ptr(dd) {
+      
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -80,6 +114,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 }
     
 void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+//   QGraphicsItem::paint(painter,option, widget);
 	Q_UNUSED(painter)
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
@@ -146,4 +181,3 @@ void WorksheetElementContainer::handleAspectAboutToBeRemoved(const AbstractAspec
 		item->setParentItem(NULL);			
 	}
 }
-

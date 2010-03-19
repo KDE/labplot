@@ -81,13 +81,17 @@ class Spreadsheet : public AbstractDataSource{
 
 		void moveColumn(int from, int to);
 		void sortColumns(Column * leading, QList<Column*> cols, bool ascending);
+		
+	 private slots:
+		void childSelected();
 
 	signals:
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		void requestProjectMenu(QMenu *menu, bool *rc);
 		void requestProjectContextMenu(QMenu *menu);
 #endif
-
+		void columnSelected(int);
+		
 	private:
 		mutable QWidget *m_view;
 };

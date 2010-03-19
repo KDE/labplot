@@ -358,6 +358,7 @@ void AbstractAspect::addChild(AbstractAspect* child)
 	exec(new SignallingUndoCommand("change signal", child, "aspectAdded", "aspectAboutToBeRemoved",
 				Q_ARG(const AbstractAspect*,child)));
 	endMacro();
+ 	connect(child, SIGNAL(selected()), this, SLOT(childSelected()));
 }
 
 /**

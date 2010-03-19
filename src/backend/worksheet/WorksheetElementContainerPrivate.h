@@ -32,6 +32,8 @@
 
 #include <QGraphicsItem>
 #include <QPainter>
+#include <QGraphicsSceneContextMenuEvent>
+
 
 class WorksheetElementContainer;
 class WorksheetElementContainerPrivate: public QGraphicsItem {
@@ -43,6 +45,10 @@ class WorksheetElementContainerPrivate: public QGraphicsItem {
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 		WorksheetElementContainer *q;
+		void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+		
+signals:
+    void selectedChange(QGraphicsItem *item);
 };
 
 #endif
