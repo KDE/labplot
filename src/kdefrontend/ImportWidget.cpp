@@ -247,7 +247,7 @@ void ImportWidget::apply(MainWin *mainWin) {
 			spreadsheet=mainWin->activeSpreadsheet();
 		}
 		if(!spreadsheet)
-			spreadsheet=mainWin->newSpreadsheet();
+//TODO this slot in mainwin was made private		spreadsheet=mainWin->newSpreadsheet();
 		if(!spreadsheet) {
 			kDebug()<<"ERROR : Couldn't create spreadsheet!"<<endl;
 			continue;

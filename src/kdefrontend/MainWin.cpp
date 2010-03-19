@@ -51,7 +51,7 @@
 #include <KDebug>
 #include <KFilterDev>
 
-#include "pixmaps/pixmap.h" //TODO remove this. Use Qt's resource system instead.
+// #include "pixmaps/pixmap.h" //TODO remove this. Use Qt's resource system instead.
 
 //****** Backend **************
 #include "core/Project.h"
@@ -124,8 +124,8 @@ void MainWin::setupActions() {
 	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
   	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject()),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
-	m_saveAction = KStandardAction::save(this, SLOT(save()),actionCollection());
-	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveAs()),actionCollection());
+	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
+	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
 	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
 
@@ -141,7 +141,7 @@ void MainWin::setupActions() {
 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
 	//TODO add KDE-icon
-	m_newWorksheetAction= new KAction(KIcon(QIcon(worksheet_xpm)),i18n("New Worksheet"),this);
+	m_newWorksheetAction= new KAction(KIcon(),i18n("New Worksheet"),this);
 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
@@ -449,7 +449,7 @@ void MainWin::newProject(){
 			statusBar(), SLOT(showMessage(const QString&)));
 
 	//TODO the signal in Project is not implemented yet.
-	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
+// 	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
 
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*, QMenu*)), this, SLOT(createFolderContextMenu(const Folder*, QMenu*)));
@@ -491,6 +491,10 @@ void MainWin::openProject(QString filename){
 	kDebug()<<"Project "<<filename<<" opened"<<endl;
 }
 
+void MainWin::openRecentProject(){
+  //TODO
+}  
+  
 void MainWin::openXML(QIODevice *file) {
 	kDebug()<<"	reading ..."<<endl;
 	XmlStreamReader reader(file);
@@ -602,12 +606,16 @@ void MainWin::saveProjectAs() {
 	prints the current Worksheet
 */
   //TODO
-void MainWin::print() {
+void MainWin::print(){
 //  Worksheet *w = activeWorksheet();
 //   if (w)
 // 	  w->print();
 
 // 	statusBar()->showMessage(i18n("Printed worksheet"));
+}
+
+void MainWin::printPreview(){
+  
 }
 
 /*!
@@ -928,30 +936,32 @@ void MainWin::initProjectExplorer(){
     m_project_explorer_dock->setObjectName("projectexplorer");
 	m_project_explorer_dock->setWindowTitle(tr("Project Explorer"));
 	m_project_explorer = new ProjectExplorer(m_project_explorer_dock);
-// 	m_project_explorer->setModel(new AspectTreeModel(m_project, this));
 	m_project_explorer_dock->setWidget(m_project_explorer);
-	addDockWidget(Qt::BottomDockWidgetArea, m_project_explorer_dock);
+	addDockWidget(Qt::LeftDockWidgetArea, m_project_explorer_dock);
 	connect(m_project_explorer, SIGNAL(currentAspectChanged(AbstractAspect *)),
 		this, SLOT(handleCurrentAspectChanged(AbstractAspect *)));
-// 	m_project_explorer->setCurrentAspect(m_project);
 }
 
-void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect)
-{
-	if(!aspect) aspect = m_project; // should never happen, just in case
-	if(aspect->folder() != m_current_folder)
-	{
+/*!
+  called when the current aspect in the tree of the project explorer was changed.
+  Selects the new aspect.
+*/
+void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
+	if (!aspect)
+	  aspect = m_project; // should never happen, just in case
+	  
+	if(aspect->folder() != m_current_folder)	{
 		m_current_folder = aspect->folder();
 		updateMdiWindowVisibility();
 	}
-//  	if(aspect != m_current_aspect)
-//  	{
- 		m_current_aspect = aspect;
-		AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
-		if (part)
-			m_mdi_area->setActiveSubWindow(part->mdiSubWindow());
-//   	}
-//  	m_current_aspect = aspect;
+
+	m_current_aspect = aspect;
+	AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
+	if (part)
+		m_mdi_area->setActiveSubWindow(part->mdiSubWindow());
+
+	m_current_aspect->select();
+	
 	kDebug()<<"current aspect  "<<m_current_aspect->name()<<endl;
 }
 
@@ -963,29 +973,27 @@ void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWi
 	}
 }
 
-void MainWin::setMdiWindowVisibility(QAction * action)
-{
-	// TODO: write a KAction based version of this
-#if 0
-	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
-#endif
+// TODO: write a KAction based version of this
+void MainWin::setMdiWindowVisibility(QAction * action){
+  Q_UNUSED(action);
+// 	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
 }
 
 void MainWin::newScript(){
 	//TODO
 }
 
+void MainWin::newMatrix(){
+	//TODO
+}
+
 Folder* MainWin::newFolder() {
-	kDebug()<<endl;
-
 	Folder * folder = new Folder(tr("Folder %1").arg(1));
-
 	QModelIndex index = m_project_explorer->currentIndex();
 
-	if(!index.isValid())
+	if(!index.isValid()){
 		m_project->addChild(folder);
-	else
-	{
+	}else{
 		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
 		parent_aspect->folder()->addChild(folder);
@@ -999,8 +1007,7 @@ Folder* MainWin::newFolder() {
 /*!
 	shows the dialog with the Undo-history.
 */
-void MainWin::showHistory()
-{
+void MainWin::showHistory() const{
 	if (!m_project->undoStack())
 		 return;
 

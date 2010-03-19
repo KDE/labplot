@@ -33,7 +33,7 @@
 #include <KXmlGuiWindow>
 #include <KRecentFilesAction>
 #include "core/PartMdiView.h"
-#include "plots/Plot.h"
+#include <QModelIndex>
 
 class AbstractAspect;
 class Folder;
@@ -94,42 +94,43 @@ private:
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	void addAspectToProject(AbstractAspect* aspect);
 
-public slots:
-	Spreadsheet* newSpreadsheet();
-	Folder* newFolder();
-	Worksheet* newWorksheet();
-	void newScript();
-	void saveProject(QString filename=0);
-	void openProject(QString filename);
-	void saveProjectAs();
-	void showHistory();
-	void createContextMenu(QMenu * menu) const;
-	void createFolderContextMenu(const Folder * folder, QMenu * menu) const;
-	void undo();
-	void redo();
-	void updateMdiWindowVisibility();
-
 private slots:
 	void initObject();
+	void undo();
+	void redo();
+	
 	void newProject();
 	void openProject();
+	void openProject(QString filename);
+	void openRecentProject();
 	void closeProject();
+	void saveProject(QString filename=0);
+	void saveProjectAs();
+	
 	void print();
+	void printPreview();
+	
+	void showHistory() const;
 	void importFileDialog();
 	void projectDialog();
 	void settingsDialog();
-	void newFileDataSourceActionTriggered();
-	void newSqlDataSourceActionTriggered();
 	void axesDialog();
 	void newPlotActionTriggered(QAction*);
 	void functionPlotActionTriggered(QAction*);
 	void dataPlotActionTriggered(QAction*);
 	void projectChanged();
 
-signals:
-	void partActivated(AbstractPart*);
-
-private slots:
+	Spreadsheet* newSpreadsheet();
+	Folder* newFolder();
+	Worksheet* newWorksheet();
+	void newScript();
+	void newMatrix();
+	void newFileDataSourceActionTriggered();
+	void newSqlDataSourceActionTriggered();
+	
+	void createContextMenu(QMenu * menu) const;
+	void createFolderContextMenu(const Folder * folder, QMenu * menu) const;
+	
 	void handleAspectAdded(const AbstractAspect *aspect);
 	void handleAspectAboutToBeRemoved(const AbstractAspect *aspect);
 	void handleAspectRemoved(const AbstractAspect *parent);
@@ -137,7 +138,12 @@ private slots:
 	void handleCurrentAspectChanged(AbstractAspect *aspect);
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
+	
 	void setMdiWindowVisibility(QAction * action);
+	void updateMdiWindowVisibility();
+	
+signals:
+	void partActivated(AbstractPart*);
 };
 
 #endif

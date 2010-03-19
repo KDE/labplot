@@ -33,6 +33,7 @@
 #include <KSplashScreen>
 #include <KDebug>
 #include <KMessageBox>
+#include <QFile>
 
 #include "MainWin.h"
 #include "core/Project.h"
