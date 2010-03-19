@@ -62,6 +62,8 @@ SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet)
 	m_type = SPREADSHEET;
 	m_model = new SpreadsheetModel(spreadsheet);
 	init();
+	
+	connect(m_spreadsheet, SIGNAL(columnSelected(int)), m_view_widget, SLOT(selectColumn(int)) ); 
 }
 
 SpreadsheetView::~SpreadsheetView() {
