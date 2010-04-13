@@ -73,7 +73,7 @@ class AbstractAspect : public QObject
 		virtual ~AbstractAspect();
 
 		AbstractAspect * parentAspect() const;
-		template < class T > T *ancestor() const {
+		template < class T > T * ancestor() const{
 			AbstractAspect *parent = parentAspect();
 			while (parent) {
 				T *ancestorAspect = qobject_cast<T *>(parent);
@@ -86,7 +86,8 @@ class AbstractAspect : public QObject
 		Folder * folder();
 		bool isDescendantOf(AbstractAspect *other);
 
-		void select() { emit selected(); }
+		void setSelectedInProject(bool);
+		
 		void addChild(AbstractAspect* child);
 		void insertChildBefore(AbstractAspect *child, AbstractAspect *before);
 		void removeChild(AbstractAspect* child);
@@ -188,6 +189,7 @@ class AbstractAspect : public QObject
 		
 	protected slots:
 		virtual void childSelected(){}
+		virtual void childDeselected(){}
 		
 	signals:
 		void aspectDescriptionAboutToChange(const AbstractAspect *aspect);
@@ -199,7 +201,11 @@ class AbstractAspect : public QObject
 		void aspectHiddenAboutToChange(const AbstractAspect *aspect);
 		void aspectHiddenChanged(const AbstractAspect *aspect);
 		void statusInfo(const QString &text);
-		void selected();
+		
+		void selectedInProject();
+		void deselectedInProject();
+		void childAspectSelectedInView(const AbstractAspect*);
+		void childAspectDeselectedInView(const AbstractAspect*);
 		
 	protected:
 		void setCreationTime(const QDateTime& time);

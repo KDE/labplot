@@ -129,6 +129,8 @@ class WorksheetView : public QGraphicsView{
   private slots:
 	void startTestCode();
 	void selectItem(QGraphicsItem *);
+	void deselectItem(QGraphicsItem*);
+	void selectionChanged();
 	
   signals:
 	void statusInfo(const QString &text);

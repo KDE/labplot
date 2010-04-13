@@ -31,10 +31,11 @@
 #define ASPECT_TREE_MODEL_H
 
 #include <QAbstractItemModel>
-#include "core/AbstractAspect.h"
+#include <QItemSelection>
 
-class AspectTreeModel : public QAbstractItemModel
-{
+class AbstractAspect;
+
+class AspectTreeModel : public QAbstractItemModel{
 	Q_OBJECT
 
 	public:
@@ -54,14 +55,11 @@ class AspectTreeModel : public QAbstractItemModel
 		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 		Qt::ItemFlags flags(const QModelIndex &index) const;
 		void setFolderSelectable(const bool);
+		QModelIndex modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const;
 
-		QModelIndex modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const
-		{
-			AbstractAspect * parent = aspect->parentAspect();
-			return createIndex(parent ? parent->indexOfChild<AbstractAspect>(aspect) : 0,
-							   column, const_cast<AbstractAspect*>(aspect));
-		}
-
+	public slots:
+		void selectionChanged(const QItemSelection&, const QItemSelection&);
+		
 	private slots:
 		void aspectDescriptionChanged(const AbstractAspect *aspect);
 		void aspectAboutToBeAdded(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect *child);
@@ -70,10 +68,16 @@ class AspectTreeModel : public QAbstractItemModel
 		void aspectRemoved();
 		void aspectHiddenAboutToChange(const AbstractAspect * aspect);
 		void aspectHiddenChanged(const AbstractAspect *aspect);
-
+		void aspectSelectedInView(const AbstractAspect* aspect);
+		void aspectDeselectedInView(const AbstractAspect* aspect);
+		
 	private:
 		AbstractAspect* m_root;
 		bool m_folderSelectable;
+		
+	signals:
+	  void indexSelected(const QModelIndex&);
+	  void indexDeselected(const QModelIndex&);
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H

@@ -27,10 +27,13 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#include "core/AbstractAspect.h"
+
 #include "AspectTreeModel.h"
 #include <QDateTime>
 #include <QIcon>
 #include <QMenu>
+#include <QDebug>
 
 /**
  * \class AspectTreeModel
@@ -210,6 +213,9 @@ void AspectTreeModel::aspectAdded(const AbstractAspect *aspect)
 	endInsertRows();
 	AbstractAspect * parent = aspect->parentAspect();
 	emit dataChanged(modelIndexOfAspect(parent), modelIndexOfAspect(parent, 3));
+	
+	connect(aspect, SIGNAL(childAspectSelectedInView(const AbstractAspect*)), this, SLOT(aspectSelectedInView(const AbstractAspect*)));
+	connect(aspect, SIGNAL(childAspectDeselectedInView(const AbstractAspect*)), this, SLOT(aspectDeselectedInView(const AbstractAspect*)));
 }
 
 void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect *aspect)
@@ -262,4 +268,45 @@ bool AspectTreeModel::setData(const QModelIndex &index, const QVariant &value, i
 	}
 	emit dataChanged(index, index);
 	return true;
+}
+
+QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect *aspect, int column) const{
+  AbstractAspect * parent = aspect->parentAspect();
+  return createIndex(parent ? parent->indexOfChild<AbstractAspect>(aspect) : 0,
+					  column, const_cast<AbstractAspect*>(aspect));
+}
+
+
+//######################## SLOTs ############################
+
+void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect){
+  qDebug()<<"aspectSelectedInView()";
+//   AbstractAspect* aspect = qobject_cast<AbstractAspect*>(QObject::sender());
+  emit indexSelected(modelIndexOfAspect(aspect));
+}
+
+
+void AspectTreeModel::aspectDeselectedInView(const AbstractAspect* aspect){
+  qDebug()<<"aspectDeselectedInView()";
+//   AbstractAspect* aspect = qobject_cast<AbstractAspect*>(QObject::sender());
+  emit indexDeselected(modelIndexOfAspect(aspect));
+}
+
+ void AspectTreeModel::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
+  QModelIndex index;
+  QModelIndexList items;
+  AbstractAspect* aspect=0;
+
+  items = selected.indexes();
+
+  foreach (index, items) {
+	aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	aspect->setSelectedInProject(true);
+  }
+
+  items = deselected.indexes();
+  foreach (index, items){
+	aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	aspect->setSelectedInProject(false);
+  }
 }

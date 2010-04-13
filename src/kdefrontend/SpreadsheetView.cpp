@@ -63,7 +63,10 @@ SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet)
 	m_model = new SpreadsheetModel(spreadsheet);
 	init();
 	
-	connect(m_spreadsheet, SIGNAL(columnSelected(int)), m_view_widget, SLOT(selectColumn(int)) ); 
+// 	connect(m_spreadsheet, SIGNAL(columnSelected(int)), m_view_widget, SLOT(selectColumn(int)) );
+	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) ); 
+	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) ); 
+	connect(m_view_widget->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
 }
 
 SpreadsheetView::~SpreadsheetView() {
@@ -1299,3 +1302,29 @@ void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSi
 	inside = false;
 }
 
+/*!
+  selects the column \c column in the speadsheet view .
+*/
+void SpreadsheetView::selectColumn(int column){
+  QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount()-1, column) );
+  m_view_widget->selectionModel()->select(selection, QItemSelectionModel::Select);
+}
+
+/*!
+  deselects the column \c column in the speadsheet view .
+*/
+void SpreadsheetView::deselectColumn(int column){
+  QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount()-1, column) );
+  m_view_widget->selectionModel()->select(selection, QItemSelectionModel::Deselect);
+}
+
+/*!
+  called when a column in the speadsheet view was clicked (click in the header).
+  Propagates the selection of the columnt to the selection change to the \c Spreadsheet object
+  (a click in the header always selects the column).
+*/
+void SpreadsheetView::columnClicked(int column){
+//   bool selected = m_view_widget->selectionModel()->isColumnSelected(column, QModelIndex());
+   qDebug()<<"selected column in view:  "<<column;
+   m_spreadsheet->setColumnSelectedInView(column, true);
+}

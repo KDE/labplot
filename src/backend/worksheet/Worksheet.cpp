@@ -204,7 +204,7 @@ void Worksheet::setPageRect(const QRectF &rect) {
 }
 
 void Worksheet::childSelected(){
-  qDebug()<<"worksheet slot";
+//   qDebug()<<"worksheet slot";
  AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
  if (element)
   emit itemSelected(element->graphicsItem());

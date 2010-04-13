@@ -115,6 +115,25 @@ void MainWin::initObject(){
  	updateGUI();
 }
 
+
+/*!
+	Initialises the  project explorer and the corresponding dock widget.
+*/
+void MainWin::initProjectExplorer(){
+	m_project_explorer_dock = new QDockWidget(this);
+    m_project_explorer_dock->setObjectName("projectexplorer");
+	m_project_explorer_dock->setWindowTitle(tr("Project Explorer"));
+	addDockWidget(Qt::LeftDockWidgetArea, m_project_explorer_dock);
+	
+	m_project_explorer = new ProjectExplorer(m_project_explorer_dock);
+	m_project_explorer->setModel(new AspectTreeModel(m_project, this));
+	m_project_explorer->setCurrentAspect(m_project);
+	m_project_explorer_dock->setWidget(m_project_explorer);
+					
+	connect(m_project_explorer, SIGNAL(currentAspectChanged(AbstractAspect *)),
+		this, SLOT(handleCurrentAspectChanged(AbstractAspect *)));
+}
+
 void MainWin::setupActions() {
 	KAction *action;
 
@@ -429,8 +448,6 @@ void MainWin::newProject(){
 	//newProject is called for the first time, there is no project explorer yet -> create one.
 	if ( m_project_explorer==0 ){
 		initProjectExplorer();
-		m_project_explorer->setModel(new AspectTreeModel(m_project, this));
-		m_project_explorer->setCurrentAspect(m_project);
 	}
 	m_project_explorer_dock->show();
 	updateGUI();
@@ -929,20 +946,6 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect)
 }
 
 /*!
-	Initialises the  project explorer and the corresponding dock widget.
-*/
-void MainWin::initProjectExplorer(){
-	m_project_explorer_dock = new QDockWidget(this);
-    m_project_explorer_dock->setObjectName("projectexplorer");
-	m_project_explorer_dock->setWindowTitle(tr("Project Explorer"));
-	m_project_explorer = new ProjectExplorer(m_project_explorer_dock);
-	m_project_explorer_dock->setWidget(m_project_explorer);
-	addDockWidget(Qt::LeftDockWidgetArea, m_project_explorer_dock);
-	connect(m_project_explorer, SIGNAL(currentAspectChanged(AbstractAspect *)),
-		this, SLOT(handleCurrentAspectChanged(AbstractAspect *)));
-}
-
-/*!
   called when the current aspect in the tree of the project explorer was changed.
   Selects the new aspect.
 */
@@ -959,8 +962,6 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
 	AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
 	if (part)
 		m_mdi_area->setActiveSubWindow(part->mdiSubWindow());
-
-	m_current_aspect->select();
 	
 	kDebug()<<"current aspect  "<<m_current_aspect->name()<<endl;
 }

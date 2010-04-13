@@ -42,6 +42,7 @@
 #include <QStyle>
 #include <QApplication>
 #include <QXmlStreamWriter>
+#include <QDebug>
 
 /**
  * \class AbstractAspect 
@@ -358,7 +359,9 @@ void AbstractAspect::addChild(AbstractAspect* child)
 	exec(new SignallingUndoCommand("change signal", child, "aspectAdded", "aspectAboutToBeRemoved",
 				Q_ARG(const AbstractAspect*,child)));
 	endMacro();
- 	connect(child, SIGNAL(selected()), this, SLOT(childSelected()));
+	
+ 	connect(child, SIGNAL(selectedInProject()), this, SLOT(childSelected()));
+	connect(child, SIGNAL(deselectedInProject()), this, SLOT(childDeselected()));
 }
 
 /**
@@ -629,6 +632,14 @@ void AbstractAspect::setHidden(bool value)
     exec(new PropertyChangeCommand<bool>(tr("%1: change hidden status").arg(m_aspect_private->m_name),
 				 &m_aspect_private->m_hidden, value),
 			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
+}
+
+
+void AbstractAspect::setSelectedInProject(bool s){
+  if (s)
+	emit selectedInProject();
+  else
+	emit deselectedInProject();
 }
 
 /**

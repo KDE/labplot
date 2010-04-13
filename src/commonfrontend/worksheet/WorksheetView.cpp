@@ -89,6 +89,8 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   navigationModeAction->setChecked(true);
   
   connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
+  connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) ); 
+  connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
   
   // TODO: remove the test code later
    QTimer::singleShot(0, this, SLOT(startTestCode()));
@@ -719,3 +721,14 @@ void WorksheetView::selectItem(QGraphicsItem* item){
 // path.addRect(item->boundingRect());
 //   scene()->setSelectionArea(path, QTransform());
 }
+
+
+void WorksheetView::deselectItem(QGraphicsItem* item){
+	item->setSelected(false);
+}
+
+//TODO
+void WorksheetView::selectionChanged(){
+//  QList<QGraphicsItem *> selected= scene()->selectedItems();
+}
+

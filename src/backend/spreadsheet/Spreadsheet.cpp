@@ -642,6 +642,21 @@ void Spreadsheet::childSelected(){
  }  
 }
 
+void Spreadsheet::childDeselected(){
+ Column* column=qobject_cast<Column*>(QObject::sender());
+ if (column){
+  int index = indexOfChild<Column>(column);
+  emit columnDeselected(index);
+ }  
+}
+
+void Spreadsheet::setColumnSelectedInView(int index, bool selected){
+  if (selected)
+	emit childAspectSelectedInView(child<Column>(index));
+  else
+	emit childAspectDeselectedInView(child<Column>(index));
+}
+
 /* ========== loading and saving ============ */
 
 /*!

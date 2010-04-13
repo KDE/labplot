@@ -33,39 +33,32 @@
 #define PROJECT_EXPLORER_H
 
 #include <QTreeView>
-#include "core/AbstractAspect.h"
 
-//! A tree view for displaying and editing an AspectTreeModel.
-/**
- * Currently, the only functionality provided in addition to that of QTreeView
- * is usage of the context menus provided by AspectTreeModel.
- */
-class ProjectExplorer : public QTreeView
-{
+class AbstractAspect;
+
+class ProjectExplorer : public QTreeView{
 	Q_OBJECT
 
 	public:
 		ProjectExplorer(QWidget *parent = 0);
 
 		void setCurrentAspect(const AbstractAspect * aspect);
-		virtual void setModel(QAbstractItemModel * model);
+		void setModel(QAbstractItemModel * model);
 
 	private:
+	  	void contextMenuEvent(QContextMenuEvent *event);
 		bool eventFilter(QObject*, QEvent*);
 		int m_contextMenuColumn;
 
 	private slots:
-		void hideColumnSlot();
-		void showColumnSlot(QAction*);
-
-	protected slots:
-		virtual void currentChanged(const QModelIndex & current, const QModelIndex & previous);
-
+		void hideColumn();
+		void showColumn(QAction*);
+		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
+		void selectIndex(const QModelIndex&);
+		void deselectIndex(const QModelIndex&);
+		
 	signals:
 		void currentAspectChanged(AbstractAspect * aspect);
-
-	protected:
-		virtual void contextMenuEvent(QContextMenuEvent *event);
 };
 
 #endif // ifndef PROJECT_EXPLORER_H

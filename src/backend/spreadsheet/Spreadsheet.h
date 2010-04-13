@@ -67,6 +67,8 @@ class Spreadsheet : public AbstractDataSource{
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 		
+		void setColumnSelectedInView(int index, bool selected);
+		
 	public slots:		
 		void appendRows(int count);
 		void appendRow();
@@ -84,6 +86,7 @@ class Spreadsheet : public AbstractDataSource{
 		
 	 private slots:
 		void childSelected();
+		void childDeselected();
 
 	signals:
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -91,6 +94,7 @@ class Spreadsheet : public AbstractDataSource{
 		void requestProjectContextMenu(QMenu *menu);
 #endif
 		void columnSelected(int);
+		void columnDeselected(int);
 		
 	private:
 		mutable QWidget *m_view;

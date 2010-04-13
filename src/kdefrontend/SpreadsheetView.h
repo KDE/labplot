@@ -101,13 +101,17 @@ public slots:
 		SciDAVis::ColumnMode format=SciDAVis::Numeric);
 
 private slots:
-	void plot();		//!< create a plot from the selected data
-	void exportData();	//!< export selected data (ExportDialog)
-	void editFunction();
-	void setColumnValues();	//!< set colum  values (ColumnValuesDialog)
-	void deleteSelectedColumns();
-	void deleteSelectedRows();
-
+		void plot();		//!< create a plot from the selected data
+		void exportData();	//!< export selected data (ExportDialog)
+		void editFunction();
+		void setColumnValues();	//!< set colum  values (ColumnValuesDialog)
+		void deleteSelectedColumns();
+		void deleteSelectedRows();
+			
+		void selectColumn(int);
+		void deselectColumn(int);
+		void columnClicked(int);
+		
 		//! \name selection related functions
 		//@{
 		//! Return how many columns are selected
@@ -234,7 +238,7 @@ private slots:
 		void handleAspectAdded(const AbstractAspect * aspect);
 		void handleAspectAboutToBeRemoved(const AbstractAspect * aspect);
 		void updateSectionSize(const Column* col);
-
+		
 	protected:
 		//! Pointer to the current underlying model
 		SpreadsheetModel * m_model;
