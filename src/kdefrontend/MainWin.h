@@ -94,6 +94,8 @@ private:
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	void addAspectToProject(AbstractAspect* aspect);
 
+public slots:
+	Spreadsheet* newSpreadsheet();
 private slots:
 	void initObject();
 	void undo();
@@ -120,7 +122,6 @@ private slots:
 	void dataPlotActionTriggered(QAction*);
 	void projectChanged();
 
-	Spreadsheet* newSpreadsheet();
 	Folder* newFolder();
 	Worksheet* newWorksheet();
 	void newScript();
