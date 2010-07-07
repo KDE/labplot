@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : SpreadsheetDock.h
+    File                 : WorksheetDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-   Copyright            : (C) 2010 by Alexander Semke
+    Copyright            : (C) 2010 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
-    Description          : widget for column properties
+    Description          : widget for worksheet properties
                            
  ***************************************************************************/
 
@@ -27,31 +27,20 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SPREADSHEETDOCK_H
-#define SPREADSHEETDOCK_H
+#include "WorksheetDock.h"
+#include "worksheet/Worksheet.h"
 
-#include <QList>
-#include "ui_spreadsheetdock.h"
-class Spreadsheet;
+/*!
+  \class GuiObserver
+  \brief  Provides a widget for editing the properties of the worksheets currently selected in the project explorer.
 
+  \ingroup kdefrontend
+*/
 
-class SpreadsheetDock: public QWidget{
-  Q_OBJECT
-	  
-  public:
-	  SpreadsheetDock(QWidget *parent);
-	  void setSpreadsheets(QList<Spreadsheet*>);
-	  
-  private:
-	  Ui::SpreadsheetDock ui;
-	  QList<Spreadsheet*> m_spreadsheets;
-	  
-  private slots:
-	  void nameChanged();
-	  void commentChanged();
-	  void rowCountChanged(int);
-	  void columnCountChanged(int);
-	  void commentsShownChanged(int);
-};
+WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
+	ui.setupUi(this);
+}
 
-#endif // SPREADSHEETDOCK_H
+void WorksheetDock::setWorksheets(QList<Worksheet*> list){
+
+}

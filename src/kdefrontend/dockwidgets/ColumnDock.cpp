@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : SpreadsheetDock.h
+    File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-   Copyright            : (C) 2010 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2008 by Stefan Gerlach
+    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : widget for column properties
                            
  ***************************************************************************/
@@ -27,31 +27,72 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SPREADSHEETDOCK_H
-#define SPREADSHEETDOCK_H
-
-#include <QList>
-#include "ui_spreadsheetdock.h"
-class Spreadsheet;
+#include "ColumnDock.h"
+#include "core/column/Column.h"
 
 
-class SpreadsheetDock: public QWidget{
-  Q_OBJECT
-	  
-  public:
-	  SpreadsheetDock(QWidget *parent);
-	  void setSpreadsheets(QList<Spreadsheet*>);
-	  
-  private:
-	  Ui::SpreadsheetDock ui;
-	  QList<Spreadsheet*> m_spreadsheets;
-	  
-  private slots:
-	  void nameChanged();
-	  void commentChanged();
-	  void rowCountChanged(int);
-	  void columnCountChanged(int);
-	  void commentsShownChanged(int);
-};
+ /*!
+  \class SpreadsheetDock
+  \brief Provides a widget for editing the properties of the spreadsheet columns currently selected in the project explorer.
 
-#endif // SPREADSHEETDOCK_H
+  \ingroup kdefrontend
+*/
+
+ColumnDock::ColumnDock(QWidget *parent): QWidget(parent){
+	ui.setupUi(this);
+
+	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(columnTypeChanged(int)));
+	
+	// column type
+	int i=0, j=0;
+	do {
+		QString item = SciDAVis::enumValueToString(j++, "ColumnMode");
+		if(! item.isEmpty())
+			ui.cbType->insertItem(i++,item);
+	} while (i<5);
+	
+	// plot designation
+	i=0, j=0;
+	do{
+		QString item = SciDAVis::enumValueToString(j++, "PlotDesignation");
+		if(! item.isEmpty())
+			ui.cbPlotDesignation->insertItem(i++,item);
+	} while (i<6);
+}
+
+void ColumnDock::setColumns(QList<Column*> list){
+  
+}
+
+// SLOTS 
+
+void ColumnDock::columnTypeChanged(int index){
+  ui.cbFormat->clear();
+  
+  switch (index){
+	case 0:{
+		  ui.cbFormat->addItem( QObject::tr( "Default" ) );
+		  ui.cbFormat->addItem( QObject::tr( "Decimal: 1000" ) );
+		  ui.cbFormat->addItem( QObject::tr( "Scientific: 1E3" ) );
+		  
+		  ui.cbFormat->setEditable( false );
+	  }
+	  //TODO borrow the code from scidavis
+  }
+		
+	if (index==0){
+	  ui.lPrecision->show();
+	  ui.sbPrecision->show();
+	}else{
+	  ui.lPrecision->hide();
+	  ui.sbPrecision->hide();
+	}
+	
+	if (index==1){
+	  ui.lFormat->hide();
+	  ui.cbFormat->hide();
+	}else{
+	  ui.lFormat->show();
+	  ui.cbFormat->show();
+	}
+}

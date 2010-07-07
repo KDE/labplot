@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : SpreadsheetDock.h
+    File                 : ColumnDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-   Copyright            : (C) 2010 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2008 by Stefan Gerlach
+    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : widget for column properties
                            
  ***************************************************************************/
@@ -27,31 +27,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SPREADSHEETDOCK_H
-#define SPREADSHEETDOCK_H
+#ifndef COLUMNDOCK_H
+#define COLUMNDOCK_H
 
 #include <QList>
-#include "ui_spreadsheetdock.h"
-class Spreadsheet;
+#include "ui_columndock.h"
+class Column;
 
-
-class SpreadsheetDock: public QWidget{
-  Q_OBJECT
-	  
+class ColumnDock: public QWidget{
+	Q_OBJECT
+	
   public:
-	  SpreadsheetDock(QWidget *parent);
-	  void setSpreadsheets(QList<Spreadsheet*>);
+	  ColumnDock(QWidget *parent);
+	  void setColumns(QList<Column*>);
 	  
   private:
-	  Ui::SpreadsheetDock ui;
-	  QList<Spreadsheet*> m_spreadsheets;
+	  Ui::ColumnDock ui;
+	  QList<Column*> m_columnList;
 	  
-  private slots:
-	  void nameChanged();
-	  void commentChanged();
-	  void rowCountChanged(int);
-	  void columnCountChanged(int);
-	  void commentsShownChanged(int);
+  public slots:
+	  void columnTypeChanged(int);
 };
 
-#endif // SPREADSHEETDOCK_H
+#endif // COLUMNDOCK_H

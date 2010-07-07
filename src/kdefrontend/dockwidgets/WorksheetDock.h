@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : SpreadsheetDock.h
+    File                 : WorksheetDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-   Copyright            : (C) 2010 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
-    Description          : widget for column properties
+    Copyright            : (C) 2008 by Stefan Gerlach
+    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
+    Description          : widget for worksheet properties
                            
  ***************************************************************************/
 
@@ -27,31 +27,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SPREADSHEETDOCK_H
-#define SPREADSHEETDOCK_H
+#ifndef WORKSHEETDOCK_H
+#define WORKSHEETDOCK_H
 
 #include <QList>
-#include "ui_spreadsheetdock.h"
-class Spreadsheet;
+#include "ui_worksheetdock.h"
+class Worksheet;
 
-
-class SpreadsheetDock: public QWidget{
-  Q_OBJECT
-	  
-  public:
-	  SpreadsheetDock(QWidget *parent);
-	  void setSpreadsheets(QList<Spreadsheet*>);
-	  
-  private:
-	  Ui::SpreadsheetDock ui;
-	  QList<Spreadsheet*> m_spreadsheets;
-	  
-  private slots:
-	  void nameChanged();
-	  void commentChanged();
-	  void rowCountChanged(int);
-	  void columnCountChanged(int);
-	  void commentsShownChanged(int);
+class WorksheetDock: public QWidget{
+	Q_OBJECT
+	
+public:
+	WorksheetDock(QWidget *parent);
+	void setWorksheets(QList<Worksheet*>);
+	
+private:
+	Ui::WorksheetDock ui;
+	QList<Worksheet*> m_worksheetList;
+	
+private slots:
 };
 
-#endif // SPREADSHEETDOCK_H
+#endif // WORKSHEETDOCK_H
