@@ -39,7 +39,15 @@
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
 #include "AxesDialog.h"
-#include "SpreadsheetView.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+// #include "SpreadsheetView.h"
+#include "GuiObserver.h"
+
+#include <QDockWidget>
+#include <QStackedWidget>
+#include "dockwidgets/ColumnDock.h"
+#include "dockwidgets/SpreadsheetDock.h"
+#include "dockwidgets/WorksheetDock.h"
 
 #include <KApplication>
 #include <KActionCollection>
@@ -84,8 +92,11 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	m_fileName=filename;
   	m_project = 0;
   	m_project_explorer = 0;
-
-	QTimer::singleShot( 0, this, SLOT(initObject()) );
+	spreadsheetDock=0;
+	columnDock=0;
+	worksheetDock=0;
+	
+	QTimer::singleShot( 0, this, SLOT(initGUI()) );
 }
 
 MainWin::~MainWin() {
@@ -103,7 +114,7 @@ MainWin::~MainWin() {
 	}
 }
 
-void MainWin::initObject(){
+void MainWin::initGUI(){
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
 	m_recentProjectsAction->setEnabled(true);
 
@@ -117,21 +128,34 @@ void MainWin::initObject(){
 
 
 /*!
-	Initialises the  project explorer and the corresponding dock widget.
+	Initialises the  project explorer, the GUI-observer and the dock widgets.
 */
-void MainWin::initProjectExplorer(){
+void MainWin::initProject(){
 	m_project_explorer_dock = new QDockWidget(this);
     m_project_explorer_dock->setObjectName("projectexplorer");
 	m_project_explorer_dock->setWindowTitle(tr("Project Explorer"));
 	addDockWidget(Qt::LeftDockWidgetArea, m_project_explorer_dock);
 	
+	m_aspectTreeModel = new AspectTreeModel(m_project, this);
 	m_project_explorer = new ProjectExplorer(m_project_explorer_dock);
-	m_project_explorer->setModel(new AspectTreeModel(m_project, this));
+	m_project_explorer->setModel(m_aspectTreeModel);
 	m_project_explorer->setCurrentAspect(m_project);
 	m_project_explorer_dock->setWidget(m_project_explorer);
 					
 	connect(m_project_explorer, SIGNAL(currentAspectChanged(AbstractAspect *)),
 		this, SLOT(handleCurrentAspectChanged(AbstractAspect *)));
+		
+	//Properties dock
+	m_propertiesDock = new QDockWidget(this);
+	m_propertiesDock->setObjectName("aspect_properties_dock");
+	m_propertiesDock->setWindowTitle(tr("Properties"));
+	addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
+	
+	stackedWidget = new QStackedWidget(m_propertiesDock);
+	m_propertiesDock->setWidget(stackedWidget);
+	
+	//GUI-observer;
+	m_guiObserver = new GuiObserver(this);
 }
 
 void MainWin::setupActions() {
@@ -402,7 +426,7 @@ void MainWin::updateGUI() {
 
 			SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
 			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
-			view->createMenu(menu);
+			//TODO view->createMenu(menu);
 		}else{
 			//no spreadsheet selected -> deactivate spreadsheet related menus
 			factory->container("analysis", this)->setEnabled(false);
@@ -447,9 +471,10 @@ void MainWin::newProject(){
 
 	//newProject is called for the first time, there is no project explorer yet -> create one.
 	if ( m_project_explorer==0 ){
-		initProjectExplorer();
+		initProject();
 	}
 	m_project_explorer_dock->show();
+	m_propertiesDock->show();
 	updateGUI();
 
 		connect(m_mdi_area, SIGNAL(subWindowActivated(QMdiSubWindow*)),
@@ -950,6 +975,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect)
   Selects the new aspect.
 */
 void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
+  qDebug()<<aspect;
 	if (!aspect)
 	  aspect = m_project; // should never happen, just in case
 	  

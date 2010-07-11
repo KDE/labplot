@@ -353,9 +353,9 @@ void SpreadsheetView::setProperties(QString label,
 	SciDAVis::PlotDesignation type, SciDAVis::ColumnMode format) {
 	kDebug()<<label<<type<<format<<endl;
 
-	if(label.isEmpty())
-		(new ColumnDialog(this,this))->show();
-	else {
+	if(label.isEmpty()){
+// 		(new ColumnDialog(this,this))->show();
+	}else {
 		setColumnName(currentColumn(),label);
 		setColumnType(currentColumn(),type);
 		setColumnFormat(currentColumn(),format);

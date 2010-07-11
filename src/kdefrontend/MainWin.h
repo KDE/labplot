@@ -36,11 +36,18 @@
 #include <QModelIndex>
 
 class AbstractAspect;
+class AspectTreeModel;
 class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
 class Spreadsheet;
+class GuiObserver;
+class QDockWidget;
+class QStackedWidget;
+class ColumnDock;
+class SpreadsheetDock;
+class WorksheetDock;
 
 class MainWin : public KXmlGuiWindow{
 	Q_OBJECT
@@ -55,8 +62,10 @@ public:
 private:
 	QMdiArea *m_mdi_area;
 	Project *m_project;
+	AspectTreeModel* m_aspectTreeModel;
 	ProjectExplorer * m_project_explorer;
 	QDockWidget * m_project_explorer_dock;
+	QDockWidget* m_propertiesDock;
 	AbstractAspect * m_current_aspect;
 	Folder * m_current_folder;
 	QString m_fileName; //name of the file to be opened (command line argument)
@@ -82,22 +91,30 @@ private:
 	KAction *m_undoAction;
 	KAction *m_redoAction;
 
+	//docks
+	QStackedWidget* stackedWidget;
+	SpreadsheetDock* spreadsheetDock;
+	ColumnDock* columnDock;
+	WorksheetDock* worksheetDock;
+	
+	
 	void updateGUI();
 	void openXML(QIODevice *file);
 	void saveXML(QIODevice *file);
 
 	void setupActions();
-	void initProjectExplorer();
+	void initProject();
 	bool warnModified();
 	void ensureSheet();
 	bool hasSheet(const QModelIndex & index) const;
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	void addAspectToProject(AbstractAspect* aspect);
 
-public slots:
-	Spreadsheet* newSpreadsheet();
+	friend class GuiObserver;
+	GuiObserver* m_guiObserver;
+	
 private slots:
-	void initObject();
+	void initGUI();
 	void undo();
 	void redo();
 	
@@ -122,6 +139,7 @@ private slots:
 	void dataPlotActionTriggered(QAction*);
 	void projectChanged();
 
+	Spreadsheet* newSpreadsheet();
 	Folder* newFolder();
 	Worksheet* newWorksheet();
 	void newScript();

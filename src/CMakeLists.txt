@@ -11,12 +11,12 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/AxesDialog.cpp
 	${KDEFRONTEND_DIR}/AxesWidget.cpp
 	${KDEFRONTEND_DIR}/ColorMapPreview.cpp
-   	${KDEFRONTEND_DIR}/ColumnDialog.cpp
 	${KDEFRONTEND_DIR}/DataPlotDialog.cpp
 	${KDEFRONTEND_DIR}/ExportDialog.cpp
 	${KDEFRONTEND_DIR}/ExportWidget.cpp
 	${KDEFRONTEND_DIR}/FunctionPlotDialog.cpp
   	${KDEFRONTEND_DIR}/FunctionWidget.cpp
+  	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/ImportDialog.cpp
 	${KDEFRONTEND_DIR}/ImportWidget.cpp
 	${KDEFRONTEND_DIR}/LabelWidget.cpp
@@ -31,9 +31,12 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
-  	${KDEFRONTEND_DIR}/SpreadsheetView.cpp
+#   	${KDEFRONTEND_DIR}/SpreadsheetView.cpp
 	${KDEFRONTEND_DIR}/TitleDialog.cpp
 	${KDEFRONTEND_DIR}/ValuesWidget.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 )
 
 set(PLOTS_SOURCES
@@ -59,6 +62,9 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 )
 
 set(BACKEND_SOURCES
@@ -133,6 +139,11 @@ set(QTFRONTEND_SOURCES
 )
 
 set(COMMONFRONTEND_SOURCES
+	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
+	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetDoubleHeaderView.cpp
+	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
+# 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetModule.cpp
+	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 )
 
