@@ -78,6 +78,7 @@ class AspectTreeModel : public QAbstractItemModel{
 	signals:
 	  void indexSelected(const QModelIndex&);
 	  void indexDeselected(const QModelIndex&);
+	 void selectedItemsChanged(const QItemSelection &);
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H
