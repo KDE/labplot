@@ -30,8 +30,8 @@
 #include "SpreadsheetView.h"
 #include "spreadsheet/SpreadsheetModel.h"
 #include "spreadsheet/Spreadsheet.h"
-#include "SpreadsheetItemDelegate.h"
-#include "SpreadsheetDoubleHeaderView.h"
+#include "commonfrontend/spreadsheet/SpreadsheetItemDelegate.h"
+#include "commonfrontend/spreadsheet/SpreadsheetDoubleHeaderView.h"
 
 #include "lib/ActionManager.h"
 #include "lib/macros.h"
@@ -57,8 +57,8 @@
 
 	\ingroup commonfrontend
  */
-SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet)
-  : m_spreadsheet(spreadsheet){
+SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QTableView(),
+  m_spreadsheet(spreadsheet){
 	m_model = new SpreadsheetModel(spreadsheet);
 	init();
 }
@@ -71,36 +71,34 @@ void SpreadsheetView::init(){
 //TODO 	createActions();
 
 	setModel(m_model);
-	
+  
+	// horizontal header
 	m_horizontalHeader = new SpreadsheetDoubleHeaderView();
     m_horizontalHeader->setClickable(true);
     m_horizontalHeader->setHighlightSections(true);
 	setHorizontalHeader(m_horizontalHeader);
-
+	m_horizontalHeader->setResizeMode(QHeaderView::Interactive);
+	m_horizontalHeader->setMovable(true);
+	m_horizontalHeader->setDefaultSectionSize(defaultColumnWidth());
+	m_horizontalHeader->installEventFilter(this);
+	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
+	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
+	connect(m_horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
+	
+	// vertical header
+	QHeaderView * v_header = verticalHeader();
+	v_header->setResizeMode(QHeaderView::ResizeToContents);
+	v_header->setMovable(false);
+	v_header->installEventFilter(this);	
+	
 	m_delegate = new SpreadsheetItemDelegate(this);
 	setItemDelegate(m_delegate);
 
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
-	setCornerButtonEnabled(true);
 	setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-	QHeaderView * v_header = verticalHeader();
-	// Remark: ResizeToContents works in Qt 4.2.3 but is broken in 4.3.0
-	// Should be fixed in 4.3.1 though, see:
-	// http://trolltech.com/developer/task-tracker/index_html?method=entry&id=165567
-	v_header->setResizeMode(QHeaderView::ResizeToContents);
-	v_header->setMovable(false);
-	m_horizontalHeader->setResizeMode(QHeaderView::Interactive);
-	m_horizontalHeader->setMovable(true);
-	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
-	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
-	connect(m_horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
-	
-	m_horizontalHeader->setDefaultSectionSize(defaultColumnWidth());
 
-	v_header->installEventFilter(this);
-	m_horizontalHeader->installEventFilter(this);
 	installEventFilter(this);
 
 	connect(m_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, 
@@ -112,13 +110,6 @@ void SpreadsheetView::init(){
 	foreach(Column * col, m_spreadsheet->children<Column>())
 		m_horizontalHeader->resizeSection(i++, col->width());
 
-
-	QItemSelectionModel * sel_model = selectionModel();
-
-	connect(sel_model, SIGNAL(currentColumnChanged(const QModelIndex&, const QModelIndex&)), 
-		this, SLOT(currentColumnChanged(const QModelIndex&, const QModelIndex&)));
-	connect(sel_model, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)),
-		this, SLOT(selectionChanged(const QItemSelection&,const QItemSelection&)));
 	
 //TODO 	connectActions();
 	showComments(defaultCommentVisibility());
@@ -129,9 +120,21 @@ void SpreadsheetView::init(){
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(requestProjectMenu(QMenu*,bool*)), this, SLOT(fillProjectMenu(QMenu*,bool*)));
 	connect(m_spreadsheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+
 	
+	//selection relevant connections
+	QItemSelectionModel * sel_model = selectionModel();
+
+	connect(sel_model, SIGNAL(currentColumnChanged(const QModelIndex&, const QModelIndex&)), 
+		this, SLOT(currentColumnChanged(const QModelIndex&, const QModelIndex&)));
+	connect(sel_model, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)),
+		this, SLOT(selectionChanged(const QItemSelection&,const QItemSelection&)));
+	connect(sel_model, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), 
+			this, SLOT(selectionChanged(const QItemSelection&, const QItemSelection&) ) );
+			
 	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) ); 
 	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) ); 
+	connect(horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
 }
 
 //! Private ctor for initActionManager() only
@@ -250,10 +253,6 @@ void SpreadsheetView::currentColumnChanged(const QModelIndex & current, const QM
 	  return;
 }
 
-void SpreadsheetView::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected){
-	Q_UNUSED(selected);
-	Q_UNUSED(deselected);
-}
 
 //TODO		
 void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int first, int last){
@@ -1161,11 +1160,21 @@ void SpreadsheetView::deselectColumn(int column){
 
 /*!
   called when a column in the speadsheet view was clicked (click in the header).
-  Propagates the selection of the columnt to the selection change to the \c Spreadsheet object
+  Propagates the selection of the column to the \c Spreadsheet object
   (a click in the header always selects the column).
 */
 void SpreadsheetView::columnClicked(int column){
-//   bool selected = m_view_widget->selectionModel()->isColumnSelected(column, QModelIndex());
-//    qDebug()<<"selected column in view:  "<<column;
    m_spreadsheet->setColumnSelectedInView(column, true);
+}
+
+/*!
+  called on selections changes. Propagates the selection/deselection of columns to the \c Spreadsheet object.
+*/
+ void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
+  Q_UNUSED(selected);
+  Q_UNUSED(deselected);
+  QItemSelectionModel* selModel=selectionModel();
+  for (int i=0; i<m_spreadsheet->columnCount(); i++){
+	m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i, QModelIndex()));
+  }
 }

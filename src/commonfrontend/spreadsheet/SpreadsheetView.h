@@ -144,7 +144,6 @@ class SpreadsheetView : public QTableView{
 		void handleHorizontalHeaderDoubleClicked(int index);
 		void handleHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 		void currentColumnChanged(const QModelIndex & current, const QModelIndex & previous);
-		void selectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
 		void handleAspectAdded(const AbstractAspect * aspect);
 		void handleAspectAboutToBeRemoved(const AbstractAspect * aspect);
 		void updateSectionSize(const Column* col);
@@ -153,6 +152,7 @@ class SpreadsheetView : public QTableView{
 		void selectColumn(int);
 		void deselectColumn(int);
 		void columnClicked(int);
+		void selectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
 };
 
 #endif
