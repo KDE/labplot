@@ -56,9 +56,6 @@ class AspectTreeModel : public QAbstractItemModel{
 		Qt::ItemFlags flags(const QModelIndex &index) const;
 		void setFolderSelectable(const bool);
 		QModelIndex modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const;
-
-	public slots:
-		void selectionChanged(const QItemSelection&, const QItemSelection&);
 		
 	private slots:
 		void aspectDescriptionChanged(const AbstractAspect *aspect);
@@ -78,7 +75,6 @@ class AspectTreeModel : public QAbstractItemModel{
 	signals:
 	  void indexSelected(const QModelIndex&);
 	  void indexDeselected(const QModelIndex&);
-	 void selectedItemsChanged(const QItemSelection &);
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H

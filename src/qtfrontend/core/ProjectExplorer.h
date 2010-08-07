@@ -56,9 +56,11 @@ class ProjectExplorer : public QTreeView{
 		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 		void selectIndex(const QModelIndex&);
 		void deselectIndex(const QModelIndex&);
+		void selectionChanged(const QItemSelection&, const QItemSelection&);
 		
 	signals:
-		void currentAspectChanged(AbstractAspect * aspect);
+		void currentAspectChanged(AbstractAspect*);
+		void selectedAspectsChanged(QList<AbstractAspect*>&);
 };
 
 #endif // ifndef PROJECT_EXPLORER_H

@@ -32,6 +32,7 @@
 #include <QModelIndex>
 #include <QItemSelection>
 class MainWin;
+class AbstractAspect;
 
 class GuiObserver:public QObject{
   Q_OBJECT
@@ -44,8 +45,7 @@ class GuiObserver:public QObject{
 	MainWin* mainWindow;
 	
   private slots:
-	void indexSelected(const QModelIndex&);
-	void selectedItemsChanged(const QItemSelection &);
+	void selectedAspectsChanged(QList<AbstractAspect*>&);
 };
 
 #endif

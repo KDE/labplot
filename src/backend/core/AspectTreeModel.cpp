@@ -280,32 +280,12 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect *aspect, in
 //######################## SLOTs ############################
 
 void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect){
-  qDebug()<<"aspectSelectedInView()";
+//   qDebug()<<"aspectSelectedInView()";
   emit indexSelected(modelIndexOfAspect(aspect));
 }
 
 
 void AspectTreeModel::aspectDeselectedInView(const AbstractAspect* aspect){
-  qDebug()<<"aspectDeselectedInView()";
+//   qDebug()<<"aspectDeselectedInView()";
   emit indexDeselected(modelIndexOfAspect(aspect));
-}
-
- void AspectTreeModel::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
-  QModelIndex index;
-  QModelIndexList items;
-  AbstractAspect* aspect=0;
-
-  items = selected.indexes();
-
-  foreach (index, items) {
-	aspect = static_cast<AbstractAspect *>(index.internalPointer());
-	aspect->setSelectedInProject(true);
-  }
-  emit selectedItemsChanged(selected);
-  
-  items = deselected.indexes();
-  foreach (index, items){
-	aspect = static_cast<AbstractAspect *>(index.internalPointer());
-	aspect->setSelectedInProject(false);
-  }
 }

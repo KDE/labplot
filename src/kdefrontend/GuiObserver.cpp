@@ -30,10 +30,14 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "GuiObserver.h"
 #include "core/AspectTreeModel.h"
 #include "core/AbstractAspect.h"
+#include "spreadsheet/Spreadsheet.h"
+#include "worksheet/Worksheet.h"
+#include "core/ProjectExplorer.h"
 #include "MainWin.h"
 
 #include <QDockWidget>
 #include <QStackedWidget>
+#include "dockwidgets/AxisDock.h"
 #include "dockwidgets/ColumnDock.h"
 #include "dockwidgets/SpreadsheetDock.h"
 #include "dockwidgets/WorksheetDock.h"
@@ -47,10 +51,8 @@ Email (use @ for *)  	: alexander.semke*web.de
 */
 
 GuiObserver::GuiObserver(MainWin* mainWin){
-  
-	connect(mainWin-> m_aspectTreeModel, SIGNAL(indexSelected(const QModelIndex&)), this, SLOT(indexSelected(const QModelIndex&) ));
-	connect(mainWin-> m_aspectTreeModel, SIGNAL(selectedItemsChanged(const QItemSelection&)), 
-					this, SLOT(selectedItemsChanged(const QItemSelection&) ) );
+	connect(mainWin-> m_project_explorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)), 
+					this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&) ) );
 	
 	mainWindow=mainWin;
 }
@@ -60,31 +62,13 @@ GuiObserver::~GuiObserver(){
 }
 
 
-void GuiObserver::indexSelected(const QModelIndex &  index){
-//   qDebug()<<"GUIObserver selectIndex "<<index;
-   	AbstractAspect* aspect = static_cast<AbstractAspect *>(index.internalPointer());
-	if (!aspect)
-	  return;
-	
-	if (aspect->inherits("Spreadsheet"))
-	  mainWindow->stackedWidget->setCurrentWidget(mainWindow->spreadsheetDock);
-	else if (aspect->inherits("Column"))
-	  mainWindow->stackedWidget->setCurrentWidget(mainWindow->columnDock);
-	else if (aspect->inherits("Worksheet"))
-	 mainWindow-> stackedWidget->setCurrentWidget(mainWindow->worksheetDock);
-	else
-	 mainWindow-> stackedWidget->currentWidget()->hide();
-}
-
 /*!
   called on selection changes in the project explorer.
   Determines the type of the currently selected objects (aspects)
   and activates the corresponding dockwidgets, toolbars etc.
 */
- void GuiObserver::selectedItemsChanged(const QItemSelection &selected){
-  QModelIndexList items= selected.indexes();
-  
-  if (items.size()==0){
+ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects){
+  if (selectedAspects.size()==0){
 	if (mainWindow->stackedWidget->currentWidget())
 		mainWindow->stackedWidget->currentWidget()->hide();
 	
@@ -95,7 +79,7 @@ void GuiObserver::indexSelected(const QModelIndex &  index){
   AbstractAspect* aspect=0;
   
   //determine the class name of the first aspect
-  aspect = static_cast<AbstractAspect *>(items.first().internalPointer());
+  aspect = static_cast<AbstractAspect *>(selectedAspects.first());
     if (!aspect){
 	  if (mainWindow->stackedWidget->currentWidget())
 		mainWindow->stackedWidget->currentWidget()->hide();
@@ -105,11 +89,9 @@ void GuiObserver::indexSelected(const QModelIndex &  index){
   }
   
   QString className=aspect->metaObject()->className();
-  QModelIndex index;
+//   qDebug()<<className;
   
-  for (int i=0; i<items.size()/4; ++i){
-	index=items.at(i*4);
-	aspect = static_cast<AbstractAspect *>(index.internalPointer());
+  foreach(aspect, selectedAspects){
 	  if (aspect->metaObject()->className() != className){
 		if (mainWindow->stackedWidget->currentWidget())
 		  mainWindow->stackedWidget->currentWidget()->hide();
@@ -130,12 +112,9 @@ void GuiObserver::indexSelected(const QModelIndex &  index){
 	  mainWindow->stackedWidget->addWidget(mainWindow->spreadsheetDock);
 	}
 
-	//there are for model indeces in each row ->devide by 4 to obtain the number of selected aspects.
-	//TODO find out a solution which is not explicitely dependent on the current number of columns.
 	QList<Spreadsheet*> list;
-	for (int i=0; i<items.size()/4; ++i){
-	  index=items.at(i*4);
-	  list<<static_cast<Spreadsheet *>(index.internalPointer());
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<Spreadsheet *>(aspect);
 	}
 	mainWindow->spreadsheetDock->setSpreadsheets(list);
 	
@@ -149,9 +128,8 @@ void GuiObserver::indexSelected(const QModelIndex &  index){
 	}
 	
 	QList<Column*> list;
-	for (int i=0; i<items.size()/4; ++i){
-	  index=items.at(i*4);
-	  list<<static_cast<Column *>(index.internalPointer());
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<Column *>(aspect);
 	}
 	mainWindow->columnDock->setColumns(list);
 	
@@ -165,13 +143,20 @@ void GuiObserver::indexSelected(const QModelIndex &  index){
 	}
 	
 	QList<Worksheet*> list;
-	for (int i=0; i<items.size()/4; ++i){
-	  index=items.at(i*4);
-	  list<<static_cast<Worksheet *>(index.internalPointer());
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<Worksheet *>(aspect);
 	}
 	mainWindow->worksheetDock->setWorksheets(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->worksheetDock);
+  }else if (className=="LinearAxis"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis properties"));
+	
+	if (!mainWindow->axisDock){
+	  mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
+	  mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
+	}
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);	
   }else{
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 	if (mainWindow->stackedWidget->currentWidget())

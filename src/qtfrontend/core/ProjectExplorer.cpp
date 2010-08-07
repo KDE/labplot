@@ -88,7 +88,7 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	connect(treeModel, SIGNAL(indexSelected(const QModelIndex&)), this, SLOT(selectIndex(const QModelIndex&) ));
 	connect(treeModel, SIGNAL(indexDeselected(const QModelIndex&)), this, SLOT(deselectIndex(const QModelIndex&) ));
 	connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), 
-					treeModel, SLOT(selectionChanged(const QItemSelection&, const QItemSelection&) ) );
+					this, SLOT(selectionChanged(const QItemSelection&, const QItemSelection&) ) );
 }
 
 
@@ -123,7 +123,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 			for (int i=0; i<model()->columnCount(); i++){
 				if ( h->isSectionHidden(i) ){
 					action = new QAction(model()->headerData(i, Qt::Horizontal).toString(), menu);
-					action->setShortcut(0);
+// 					action->setShortcut(0);
 					showMenu->addAction(action);
 					showActions->addAction( action );
 				}
@@ -133,6 +133,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 
 		menu->exec(e->globalPos());
 		return true;
+	}else{
+	  return false;
 	}
 }
 
@@ -162,11 +164,44 @@ void ProjectExplorer::showColumn(QAction* action) {
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex &  index){
-  qDebug()<<"selectIndex "<<index;
+  qDebug()<<"ProjectExplorer::selectIndex "<<index;
   selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
  
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
-  qDebug()<<"deselectIndex "<<index;
+  qDebug()<<"ProjectExplorer::deselectIndex "<<index;
   selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
+}
+
+//TODO optimize
+ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
+  QModelIndex index;
+  QModelIndexList items;
+  AbstractAspect* aspect=0;
+
+  //there are four model indeces in each row ->divide by 4 to obtain the number of selected aspects.
+  //TODO find out a solution which is not explicitely dependent on the current number of columns.
+  items = selected.indexes();
+  for (int i=0; i<items.size()/4; ++i){
+	index=items.at(i*4);
+	aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	aspect->setSelectedInProject(true);
+  }
+  
+  items = deselected.indexes();
+  for (int i=0; i<items.size()/4; ++i){
+	index=items.at(i*4);
+	aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	aspect->setSelectedInProject(false);
+  }
+  
+  items = selectionModel()->selectedRows();
+  QList<AbstractAspect*> selectedAspects;
+  foreach(index,items){
+	aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	selectedAspects<<aspect;
+  }
+  
+  qDebug()<<"ProjectExplorer::selectionChanged, selected aspects"<<selectedAspects.size();
+  emit selectedAspectsChanged(selectedAspects);
 }

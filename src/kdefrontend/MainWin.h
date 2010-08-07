@@ -45,6 +45,7 @@ class Spreadsheet;
 class GuiObserver;
 class QDockWidget;
 class QStackedWidget;
+class AxisDock;
 class ColumnDock;
 class SpreadsheetDock;
 class WorksheetDock;
@@ -93,6 +94,7 @@ private:
 
 	//docks
 	QStackedWidget* stackedWidget;
+	AxisDock* axisDock;
 	SpreadsheetDock* spreadsheetDock;
 	ColumnDock* columnDock;
 	WorksheetDock* worksheetDock;
