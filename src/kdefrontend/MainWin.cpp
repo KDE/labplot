@@ -45,10 +45,6 @@
 
 #include <QDockWidget>
 #include <QStackedWidget>
-// #include "dockwidgets/AxisDock.h"
-// #include "dockwidgets/ColumnDock.h"
-// #include "dockwidgets/SpreadsheetDock.h"
-// #include "dockwidgets/WorksheetDock.h"
 
 #include <KApplication>
 #include <KActionCollection>
@@ -97,6 +93,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	columnDock=0;
 	worksheetDock=0;
 	axisDock=0;
+	lineSymbolCurveDock=0;
 	
 	QTimer::singleShot( 0, this, SLOT(initGUI()) );
 }

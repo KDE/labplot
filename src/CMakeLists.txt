@@ -37,6 +37,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/LineSymbolCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 )
 
@@ -65,6 +66,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/linesymbolcurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 )
@@ -173,11 +175,11 @@ INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} ${COMMONFRONTEND_DIR} .)
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
 
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
-kde4_add_executable(labplot ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot labplot_elements labplot_filter ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} 
+kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
+target_link_libraries(labplot2 labplot_elements labplot_filter ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} 
 ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${OPJ_LIBRARY})
 
 ############## installation ################################
 
-install(TARGETS labplot DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR})
 # install(FILES LabPlotui.rc DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)

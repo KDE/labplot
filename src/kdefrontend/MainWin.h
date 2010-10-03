@@ -47,6 +47,7 @@ class QDockWidget;
 class QStackedWidget;
 class AxisDock;
 class ColumnDock;
+class LineSymbolCurveDock;
 class SpreadsheetDock;
 class WorksheetDock;
 
@@ -98,6 +99,7 @@ private:
 	SpreadsheetDock* spreadsheetDock;
 	ColumnDock* columnDock;
 	WorksheetDock* worksheetDock;
+	LineSymbolCurveDock* lineSymbolCurveDock;
 	
 	
 	void updateGUI();

@@ -32,6 +32,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "core/AbstractAspect.h"
 #include "spreadsheet/Spreadsheet.h"
 #include "worksheet/Worksheet.h"
+#include "worksheet/LineSymbolCurve.h"
 #include "core/ProjectExplorer.h"
 #include "MainWin.h"
 
@@ -39,6 +40,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QStackedWidget>
 #include "dockwidgets/AxisDock.h"
 #include "dockwidgets/ColumnDock.h"
+#include "dockwidgets/LineSymbolCurveDock.h"
 #include "dockwidgets/SpreadsheetDock.h"
 #include "dockwidgets/WorksheetDock.h"
 #include <QDebug>
@@ -156,7 +158,28 @@ GuiObserver::~GuiObserver(){
 	  mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
 	  mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
 	}
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);	
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
+  }else if (className=="LineSymbolCurve"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Line properties"));
+	
+	if (!mainWindow->lineSymbolCurveDock){
+	  mainWindow->lineSymbolCurveDock = new LineSymbolCurveDock(mainWindow->stackedWidget);
+	  mainWindow->stackedWidget->addWidget(mainWindow->lineSymbolCurveDock);
+	}
+	
+	//TODO make onle the columns and their parents (spreadsheets and file data sources) available in the model 
+// 	AspectTreeModel* model=new AspectTreeModel(mainWindow->m_aspectTreeModel);
+// 	model->setFolderSelectable(false);
+	mainWindow->lineSymbolCurveDock->setModel( mainWindow->m_aspectTreeModel );
+	
+		
+	QList<LineSymbolCurve*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<LineSymbolCurve *>(aspect);
+	}
+	mainWindow->lineSymbolCurveDock->setCurves(list);
+	
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->lineSymbolCurveDock);
   }else{
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 	if (mainWindow->stackedWidget->currentWidget())
