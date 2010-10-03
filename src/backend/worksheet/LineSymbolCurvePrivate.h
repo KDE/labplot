@@ -43,6 +43,7 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 
 		bool lineVisible; //!< show/hide line
 		bool symbolsVisible; //! show/hide symbols
+		qreal symbolsOpacity;
 		qreal symbolRotationAngle;
 		qreal symbolSize;
 		qreal symbolAspectRatio;
@@ -68,7 +69,7 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 
 		virtual QRectF boundingRect() const { return boundingRectangle; }
 		QPainterPath shape() const { return curveShape; }
-    	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 
 		LineSymbolCurve * const q;
 
@@ -76,7 +77,4 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		// add pens and brush
 };
 
-
 #endif
-
-

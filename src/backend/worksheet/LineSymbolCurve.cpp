@@ -54,6 +54,7 @@
 LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner) {
 	lineVisible = true;
 	symbolsVisible = true;
+	symbolsOpacity = 1.0;
 	xColumn = NULL;
 	yColumn = NULL;
 	symbolRotationAngle = 0;
@@ -93,6 +94,10 @@ LineSymbolCurve::~LineSymbolCurve() {
 /**
   \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
   \brief Set/get whether the symbols are visible/invisible.
+*/
+/**
+  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsOpacity, SymbolsOpacity);
+  \brief Set/get the opacity of the symbols. The opacity ranges from 0.0 to 1.0, where 0.0 is fully transparent and 1.0 is fully opaque.
 */
 /**
   \fn   LineSymbolCurve::POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
@@ -136,6 +141,7 @@ LineSymbolCurve::~LineSymbolCurve() {
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, lineVisible, lineVisible);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, symbolsVisible, symbolsVisible);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolsOpacity, symbolsOpacity);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, xColumn, xColumn);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, yColumn, yColumn);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolRotationAngle, symbolRotationAngle);
@@ -160,6 +166,13 @@ void LineSymbolCurve::setSymbolsVisible(bool visible) {
 	Q_D(LineSymbolCurve);
 	if (visible != d->symbolsVisible)
 		exec(new LineSymbolCurveSetSymbolsVisibleCmd(d, visible, visible ? tr("%1: set symbols visible") : tr("%1: set symbols invisible")));
+}
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsOpacity, qreal, symbolsOpacity, recalcShapeAndBoundingRect);
+void LineSymbolCurve::setSymbolsOpacity(qreal opacity) {
+	Q_D(LineSymbolCurve);
+	if (opacity != d->symbolsOpacity)
+		exec(new LineSymbolCurveSetSymbolsOpacityCmd(d, opacity, tr("%1: set symbols opacity")));
 }
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetXColumn, const AbstractColumn *, xColumn, retransform);
@@ -409,12 +422,15 @@ void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphi
 		painter->drawPath(linePath);
 	}
 
-	if (symbolsVisible) {
+	if (symbolsVisible){
+		qreal opacity=painter->opacity();
+		painter->setOpacity(symbolsOpacity);
 		foreach(QPointF point, symbolPoints) {
 			painter->translate(point);
 			symbolPrototype->paint(painter, option, widget);
 			painter->translate(-point);
 		}
+		painter->setOpacity(opacity);
 	}
 }
 

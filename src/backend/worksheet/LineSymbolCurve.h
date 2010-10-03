@@ -46,6 +46,7 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 
 		BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
 		BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
+		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
 		BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle);
