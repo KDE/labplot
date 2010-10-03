@@ -182,6 +182,24 @@ void PathCurveSymbol::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	painter->restore();
 }
 
+void PathCurveSymbol::paint(QPainter *painter) {
+	Q_D(PathCurveSymbol);
+
+	painter->save();
+
+	painter->setBrush(d->brush);
+	painter->setPen(d->pen);
+
+	qreal xSize = d->size ;
+	qreal ySize = d->size / d->aspectRatio;
+	painter->scale(xSize, ySize);
+	painter->rotate(d->rotationAngle);		
+
+	painter->drawPath(d->path);
+
+	painter->restore();
+}
+
 QRectF PathCurveSymbol::boundingRect() const {
 	Q_D(const PathCurveSymbol);
 
