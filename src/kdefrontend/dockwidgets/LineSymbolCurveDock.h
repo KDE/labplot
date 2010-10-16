@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright         : (C) 2010 Alexander Semke (alexander.semke*web.de)
 							(replace * with @ in the email addresses)
-    Description      : widget for worksheet properties
+    Description      : widget for curve properties
                            
  ***************************************************************************/
 
@@ -37,13 +37,14 @@ class QTextEdit;
 class LineSymbolCurve;
 class TreeViewComboBox;
 class CurveSymbolFactory;
+class AspectTreeModel;
 
 class LineSymbolCurveDock: public QWidget{
 	Q_OBJECT
 	
 public:
 	LineSymbolCurveDock(QWidget *parent);
-	void setModel(QAbstractItemModel * model);
+	void setModel(AspectTreeModel* model);
 	void setCurves(QList<LineSymbolCurve*>);
 	
 private:

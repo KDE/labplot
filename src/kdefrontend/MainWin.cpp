@@ -364,6 +364,7 @@ bool MainWin::warnModified() {
 	disables/enables menu items etc. depending on the currently selected Aspect.
 */
 void MainWin::updateGUI() {
+  return;
 	KXMLGUIFactory* factory=this->guiFactory();
 
 	//disable all menus if there is no project
@@ -732,7 +733,7 @@ Worksheet* MainWin::activeWorksheet() const{
 void MainWin::importFileDialog(){
 	ImportFileDialog* dlg = new ImportFileDialog(this);
 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
-	model->setFolderSelectable(false);
+//TODO	model->setFolderSelectable(false);
 	dlg->setModel( model );
 	dlg->setCurrentIndex( m_project_explorer->currentIndex());
 	
@@ -852,7 +853,7 @@ void MainWin::functionPlotActionTriggered(QAction* action){
 
 	FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
-	model->setFolderSelectable(false);
+//TODO	model->setFolderSelectable(false);
 	dlg->setModel( model );
  	dlg->setCurrentIndex( m_project_explorer->currentIndex());
 
@@ -890,7 +891,7 @@ void MainWin::dataPlotActionTriggered(QAction* action){
 
 	DataPlotDialog* dlg = new DataPlotDialog(this, type);
 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
-	model->setFolderSelectable(false);
+	//TODO model->setFolderSelectable(false);
 	dlg->setModel( model );
 	dlg->setCurrentIndex( m_project_explorer->currentIndex());
 

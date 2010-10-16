@@ -29,6 +29,7 @@
 
 #include "LineSymbolCurveDock.h"
 #include "worksheet/LineSymbolCurve.h"
+#include "core/AspectTreeModel.h"
 #include "core/plugin/PluginManager.h"
 #include "worksheet/StandardCurveSymbolFactory.h"
 #include "widgets/TreeViewComboBox.h"
@@ -135,7 +136,15 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	retranslateUi();
 }
 
-void LineSymbolCurveDock::setModel(QAbstractItemModel * model){
+void LineSymbolCurveDock::setModel(AspectTreeModel* model){
+	QList<const char *>  list;
+	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+	cbXColumn->setTopLevelClasses(list);
+	cbYColumn->setTopLevelClasses(list);
+	
+ 	list.clear();
+	list<<"Column";
+	model->setSelectableAspects(list);
   	cbXColumn->setModel(model);
 	cbYColumn->setModel(model);
 }
@@ -212,10 +221,10 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 
 void LineSymbolCurveDock::resizeEvent(QResizeEvent * event){
   Q_UNUSED(event);
-  
+/*  
 	this->updateSymbolBorderStyles();
 // 	this->initAreaFillingStyles();
-	this->updateSymbolFillingStyles();
+	this->updateSymbolFillingStyles();*/
 }
 
 /*!

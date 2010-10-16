@@ -33,6 +33,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "spreadsheet/Spreadsheet.h"
 #include "worksheet/Worksheet.h"
 #include "worksheet/LineSymbolCurve.h"
+#include "core/Project.h"
 #include "core/ProjectExplorer.h"
 #include "MainWin.h"
 
@@ -167,12 +168,10 @@ GuiObserver::~GuiObserver(){
 	  mainWindow->stackedWidget->addWidget(mainWindow->lineSymbolCurveDock);
 	}
 	
-	//TODO make onle the columns and their parents (spreadsheets and file data sources) available in the model 
-// 	AspectTreeModel* model=new AspectTreeModel(mainWindow->m_aspectTreeModel);
-// 	model->setFolderSelectable(false);
-	mainWindow->lineSymbolCurveDock->setModel( mainWindow->m_aspectTreeModel );
+	//TODO who deletes the new model?
+	AspectTreeModel* model=new AspectTreeModel(mainWindow->m_project);
+ 	mainWindow->lineSymbolCurveDock->setModel( model );
 	
-		
 	QList<LineSymbolCurve*> list;
 	foreach(aspect, selectedAspects){
 	  list<<qobject_cast<LineSymbolCurve *>(aspect);
