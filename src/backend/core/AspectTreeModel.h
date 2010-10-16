@@ -54,7 +54,7 @@ class AspectTreeModel : public QAbstractItemModel{
 		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 		Qt::ItemFlags flags(const QModelIndex &index) const;
-		void setFolderSelectable(const bool);
+		void setSelectableAspects(QList<const char*>);
 		QModelIndex modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const;
 		
 	private slots:
@@ -71,6 +71,7 @@ class AspectTreeModel : public QAbstractItemModel{
 	private:
 		AbstractAspect* m_root;
 		bool m_folderSelectable;
+		QList<const char*> m_selectableAspects;
 		
 	signals:
 	  void indexSelected(const QModelIndex&);

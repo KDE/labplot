@@ -92,9 +92,12 @@ AspectTreeModel::~AspectTreeModel()
 	disconnect(m_root,0,this,0);
 }
 
-void AspectTreeModel::setFolderSelectable(const bool b)
-{
-	m_folderSelectable = b;
+
+/*!
+  \c list contains the class names of the aspects, which can be selected in the corresponding model view.
+*/
+void AspectTreeModel::setSelectableAspects(QList<const char*> list){
+	m_selectableAspects=list;
 }
 
 QModelIndex AspectTreeModel::index(int row, int column, const QModelIndex &parent) const
@@ -188,11 +191,21 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const
  	Qt::ItemFlags result = Qt::ItemIsEnabled;
 	AbstractAspect *aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
-	if (m_folderSelectable || !aspect->inherits("Folder"))
-		result |= Qt::ItemIsSelectable;
-
+	if (m_selectableAspects.size()!=0){
+		foreach(const char * classString, m_selectableAspects){
+			if (aspect->inherits(classString)){
+			  result |= Qt::ItemIsSelectable;
+			  break;
+			}
+		}
+	}else{
+	  //default case: the list for the selectable aspects is empty -> all aspects are selectable
+	  result |= Qt::ItemIsSelectable;
+	}
+	  
 	if (index.column() == 0 || index.column() == 3)
 		result |= Qt::ItemIsEditable;
+	
 	return result;
 }
 
