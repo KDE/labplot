@@ -27,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "spreadsheet/SpreadsheetDoubleHeaderView.h"
-#include "spreadsheet/SpreadsheetCommentsHeaderModel.h"
+#include "SpreadsheetDoubleHeaderView.h"
+#include "SpreadsheetCommentsHeaderModel.h"
 #include <QApplication>
 #include <QEvent>
 #include <QLayout>
