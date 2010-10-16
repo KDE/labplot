@@ -2,7 +2,7 @@
     File                 : TreeViewComboBox.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008-2010 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses)
     Description          : Provides a QTreeView in a QComboBox
@@ -29,8 +29,7 @@
  ***************************************************************************/
 
 #include "TreeViewComboBox.h"
-#include "../core/Folder.h"
-#include <KDebug>
+#include "core/AbstractAspect.h"
 
 /*!
     \class TreeViewComboBox
@@ -39,11 +38,11 @@
     \ingroup backend/widgets
  */
 
-TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent)
-{
+TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
 	m_treeView.header()->hide();
 	m_treeView.setSelectionMode(QAbstractItemView::SingleSelection);
  	setView(&m_treeView);
+	
 	m_topLevelClasses << "Folder" << "Spreadsheet" << "Worksheet";
 	m_firstPopup=true;
 }
@@ -52,8 +51,7 @@ void TreeViewComboBox::setTopLevelClasses(QList<const char *> list){
   m_topLevelClasses=list;
 }
 
-TreeViewComboBox::~TreeViewComboBox()
-{
+TreeViewComboBox::~TreeViewComboBox(){
 }
 
 /*!
@@ -61,14 +59,17 @@ TreeViewComboBox::~TreeViewComboBox()
 */
 void TreeViewComboBox::setModel(QAbstractItemModel *model){
  	QComboBox::setModel(model);
-	m_treeView.hideColumn(1);
-	m_treeView.hideColumn(2);
-	m_treeView.hideColumn(3);
+	
+	//show only the first column in the combo box
+	for (int i=1; i<model->columnCount(); i++){
+	  m_treeView.hideColumn(i);
+	}
+
+	m_firstPopup=true;
 }
 
 /*!
 	Sets the current item to be the item at \a index and selects it.
-
 	\sa currentIndex()
 */
 void TreeViewComboBox::setCurrentIndex(const QModelIndex& index){
@@ -93,8 +94,10 @@ QModelIndex TreeViewComboBox::currentIndex() const{
 	Triggers showTopLevelOnly() to show toplevel items only.
 	Expands the complete tree on the first call of this function.
 */
-void TreeViewComboBox::showPopup()
-{
+void TreeViewComboBox::showPopup(){
+  if (!model()->hasChildren())
+	return;
+  
 	if (m_firstPopup){
 		m_treeView.expandAll();
 		m_firstPopup=false;
@@ -108,8 +111,7 @@ void TreeViewComboBox::showPopup()
 /*!
 	Hides the non-toplevel items of the model used in the tree view.
 */
-void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index)
-{
+void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index){
 	int rows = index.model()->rowCount(index);
 	AbstractAspect *aspect;
 	QModelIndex currentChild;
