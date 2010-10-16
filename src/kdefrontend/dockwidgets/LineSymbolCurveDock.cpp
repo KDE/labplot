@@ -2,8 +2,8 @@
     File                 : LineSymbolCurveDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
     Description          : widget for curve properties
                            
  ***************************************************************************/
@@ -211,6 +211,8 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 
 
 void LineSymbolCurveDock::resizeEvent(QResizeEvent * event){
+  Q_UNUSED(event);
+  
 	this->updateSymbolBorderStyles();
 // 	this->initAreaFillingStyles();
 	this->updateSymbolFillingStyles();
@@ -223,7 +225,6 @@ void LineSymbolCurveDock::updateSymbolStyles(){
 	ui.cbSymbolStyle->addItem("none");
 	
 	QPainter painter;
-	int offset=5;
 	int size=20; 	//TODO size of the icon depending on the actuall height of the combobox?
 	QPixmap pm( size, size );
  	ui.cbSymbolStyle->setIconSize( QSize(size, size) );
@@ -231,22 +232,23 @@ void LineSymbolCurveDock::updateSymbolStyles(){
   //TODO redesign the PluginManager and adjust this part here (load only symbol plugins and not everything!!!)
 	foreach(QObject *plugin, PluginManager::plugins()) {
 		CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
-		if (factory) {
-			AbstractCurveSymbol* symbol;
-			foreach (const AbstractCurveSymbol* symbolPrototype, factory->prototypes()){
-			  if (symbolPrototype){
-				symbol= symbolPrototype->clone();
-				symbol->setSize(15);
+		if (factory){
+		  symbolFactory=factory;
+		  AbstractCurveSymbol* symbol;
+		  foreach (const AbstractCurveSymbol* symbolPrototype, factory->prototypes()){
+			if (symbolPrototype){
+			  symbol= symbolPrototype->clone();
+			  symbol->setSize(15);
 // 				symbol->setColor(Qt::black);
-				
-				pm.fill(Qt::transparent);
-				painter.begin( &pm );
-				painter.setRenderHint(QPainter::Antialiasing);
-				painter.translate(size/2,size/2);
-				symbol->paint(&painter);
-				painter.end();
-				ui.cbSymbolStyle->addItem(QIcon(pm), symbol->id());
-			  }
+			  
+			  pm.fill(Qt::transparent);
+			  painter.begin( &pm );
+			  painter.setRenderHint(QPainter::Antialiasing);
+			  painter.translate(size/2,size/2);
+			  symbol->paint(&painter);
+			  painter.end();
+			  ui.cbSymbolStyle->addItem(QIcon(pm), symbol->id());
+			}
 		  }
 		}
 	}
@@ -371,35 +373,37 @@ void LineSymbolCurveDock::retranslateUi(){
 }
 
 /*!
-	called if the symbol type was changed.
+	called if the symbol style was changed.
 */
 void LineSymbolCurveDock::symbolStyleChanged(int index){
-  bool fillingEnabled=true; //TODO make the option "filling enabled" available in the symbol.
+  Q_UNUSED(index);
+  
+  QString currentSymbolTypeId = ui.cbSymbolStyle->currentText();
+  bool fillingEnabled = symbolFactory->prototype(currentSymbolTypeId)->fillingEnabled();
+	
+  //enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
+  if (fillingEnabled){
+	ui.lSymbolFilling->setEnabled(true);
+	ui.lSymbolFillingColor->setEnabled(true);
+	ui.kcbSymbolFillingColor->setEnabled(true);
+	ui.lSymbolFillingStyle->setEnabled(true);
+	ui.cbSymbolFillingStyle->setEnabled(true);
+  }else{
+	ui.lSymbolFilling->setEnabled(false);
+	ui.lSymbolFillingColor->setEnabled(false);
+	ui.kcbSymbolFillingColor->setEnabled(false);
+	ui.lSymbolFillingStyle->setEnabled(false);
+	ui.cbSymbolFillingStyle->setEnabled(false);
+  }
 
-	//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-	if (fillingEnabled){
-	  ui.lSymbolFilling->setEnabled(true);
-	  ui.lSymbolFillingColor->setEnabled(true);
-	  ui.kcbSymbolFillingColor->setEnabled(true);
-	  ui.lSymbolFillingStyle->setEnabled(true);
-	  ui.cbSymbolFillingStyle->setEnabled(true);
-	}else{
-	  ui.lSymbolFilling->setEnabled(false);
-	  ui.lSymbolFillingColor->setEnabled(false);
-	  ui.kcbSymbolFillingColor->setEnabled(false);
-	  ui.lSymbolFillingStyle->setEnabled(false);
-	  ui.cbSymbolFillingStyle->setEnabled(false);
-	}
-	
-	if (m_initializing)
-	  return;
-	
-	QString currentSymbolTypeId=ui.cbSymbolStyle->currentText();
-	LineSymbolCurve* curve;
-	foreach(curve, m_curvesList)
-	  curve->setSymbolTypeId(currentSymbolTypeId);
-	
-	m_initializing=false;
+  if (m_initializing)
+	return;
+
+  LineSymbolCurve* curve;
+  foreach(curve, m_curvesList)
+	curve->setSymbolTypeId(currentSymbolTypeId);
+
+  m_initializing=false;
 }
 
 

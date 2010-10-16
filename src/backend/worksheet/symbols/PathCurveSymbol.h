@@ -54,7 +54,9 @@ class PathCurveSymbol: public QObject, public AbstractCurveSymbol  {
 		virtual QPen pen() const;
 		virtual void setPath(const QPainterPath &path);
 		virtual QPainterPath path() const;
-
+		virtual bool fillingEnabled() const;
+		virtual void setFillingEnabled(bool);
+		
 		virtual AbstractCurveSymbol *clone() const;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0);

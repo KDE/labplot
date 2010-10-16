@@ -4,6 +4,7 @@
     Description          : Abstract base class for curve symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -51,7 +52,9 @@ class AbstractCurveSymbol  {
 		virtual void setPen(const QPen &pen) = 0;
 		virtual QPen pen() const = 0;
 		virtual AbstractCurveSymbol *clone() const = 0;
-
+		virtual bool fillingEnabled() const = 0;
+		virtual void setFillingEnabled(bool) = 0;
+		
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0) = 0;
 		virtual void paint(QPainter *painter) = 0;
 		virtual QRectF boundingRect() const = 0;

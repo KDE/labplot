@@ -43,6 +43,7 @@ class PathCurveSymbolPrivate {
 		QPainterPath path;
 		mutable QRectF boundingRect;
 		QString id;
+		bool fillingEnabled;
 		void cloneHelper(const PathCurveSymbolPrivate *other);
 };
  

@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : LineSymbolCurveDock.h
-    Project              : LabPlot
+    Project            : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
-    Description          : widget for worksheet properties
+    Copyright         : (C) 2010 Alexander Semke (alexander.semke*web.de)
+							(replace * with @ in the email addresses)
+    Description      : widget for worksheet properties
                            
  ***************************************************************************/
 
@@ -36,6 +36,7 @@
 class QTextEdit;
 class LineSymbolCurve;
 class TreeViewComboBox;
+class CurveSymbolFactory;
 
 class LineSymbolCurveDock: public QWidget{
 	Q_OBJECT
@@ -60,6 +61,8 @@ private:
 	QLabel* lYColumn;
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbYColumn;
+	
+	CurveSymbolFactory *symbolFactory;
 	
 	void updateSymbolStyles();
 	void updateSymbolFillingStyles();

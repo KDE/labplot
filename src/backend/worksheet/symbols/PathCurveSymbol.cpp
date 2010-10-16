@@ -4,6 +4,7 @@
     Description          : A standard curve symbol defined by a painter path and a string id.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -55,6 +56,7 @@ PathCurveSymbolPrivate::PathCurveSymbolPrivate(const QString &symbolId)
 	size = 1;
 	aspectRatio = 1;
 	rotationAngle = 0;
+	fillingEnabled = true;
 }
 
 PathCurveSymbol::~PathCurveSymbol() {
@@ -151,6 +153,18 @@ QPen PathCurveSymbol::pen() const {
 	return d->pen;
 }
 		
+void PathCurveSymbol::setFillingEnabled(bool b){
+	Q_D(PathCurveSymbol);
+
+	d->fillingEnabled=b;
+}
+
+bool PathCurveSymbol::fillingEnabled() const{
+	Q_D(const PathCurveSymbol);
+
+	return d->fillingEnabled;
+}
+
 void PathCurveSymbolPrivate::cloneHelper(const PathCurveSymbolPrivate *other) {
 	size = other->size;
 	aspectRatio = other->aspectRatio;
@@ -160,6 +174,7 @@ void PathCurveSymbolPrivate::cloneHelper(const PathCurveSymbolPrivate *other) {
 	path = other->path;
 	id = other->id;
 	boundingRect = other->boundingRect;
+	fillingEnabled = other->fillingEnabled;
 }
 
 void PathCurveSymbol::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {

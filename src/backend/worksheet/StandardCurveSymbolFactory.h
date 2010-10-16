@@ -4,6 +4,7 @@
     Description          : Factory of built-in curve symbols.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
