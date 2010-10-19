@@ -393,10 +393,14 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
  * i.e., the aspect is deleted by the undo command.
  * \sa reparent()
  */
-void AbstractAspect::removeChild(AbstractAspect* child)
-{
+void AbstractAspect::removeChild(AbstractAspect* child){
 	Q_ASSERT(child->parentAspect() == this);
-	AbstractAspect *nextSibling = m_aspect_private->m_children.at(m_aspect_private->indexOfChild(child) + 1);
+	AbstractAspect *nextSibling;
+	if (m_aspect_private->m_children.size()==1)
+	  nextSibling=0;
+	else
+	  nextSibling = m_aspect_private->m_children.at(m_aspect_private->indexOfChild(child) + 1);
+	
 	beginMacro(tr("%1: remove %2.").arg(name()).arg(child->name()));
 	exec(new SignallingUndoCommand("change signal", child, "aspectAboutToBeRemoved", "aspectAdded",
 				Q_ARG(const AbstractAspect*,child)));
