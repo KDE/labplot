@@ -55,6 +55,10 @@ void StandardCurveSymbolFactory::init(){
 	PathCurveSymbol *symbol = NULL;
 	QPolygonF polygon;
 	
+	symbol = new PathCurveSymbol("none");
+	symbol->setFillingEnabled(false);
+	m_prototypes.append(symbol);
+	
 	path = QPainterPath();
 	path.addEllipse(QPoint(0,0), 0.5, 0.5);
 	symbol = new PathCurveSymbol("circle");
