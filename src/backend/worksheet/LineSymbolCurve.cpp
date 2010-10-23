@@ -491,11 +491,11 @@ void LineSymbolCurve::Private::recalcShapeAndBoundingRect() {
 
 	boundingRectangle = QRectF();
 
-	if (lineVisible)
+	if (linePen.style() != Qt::NoPen)
 		boundingRectangle |= linePath.boundingRect();
 
 	QPainterPath symbolsPath;
-	if (symbolsVisible) {
+	if (symbolPrototype->id()!="none"){
 		QRectF prototypeBoundingRect = symbolPrototype->boundingRect();
 		foreach (QPointF point, symbolPoints) {
 			prototypeBoundingRect.moveCenter(point); 
@@ -507,9 +507,10 @@ void LineSymbolCurve::Private::recalcShapeAndBoundingRect() {
 	boundingRectangle = boundingRectangle.normalized();
 
 	curveShape = QPainterPath();
-	if (lineVisible)
+	if (linePen.style() != Qt::NoPen)
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(linePath, linePen));
-	if (symbolsVisible)
+	
+	if (symbolPrototype->id()!="none")
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
 
 	update();
