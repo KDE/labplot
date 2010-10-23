@@ -4,7 +4,8 @@
     Description          : A curve drawn as line and/or symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+							  (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 
@@ -51,16 +52,19 @@
 #include <QPainter>
 #include <QtDebug>
 
-LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner) {
-	lineVisible = true;
-	symbolsVisible = true;
-	symbolsOpacity = 1.0;
-	xColumn = NULL;
+LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner){
+  	xColumn = NULL;
 	yColumn = NULL;
+	
+	lineType==LineSymbolCurve::Line;
+// 	lineVisible = true;
+	lineOpacity = 1.0;	
+	
+// 	symbolsVisible = true;
+	symbolsOpacity = 1.0;
 	symbolRotationAngle = 0;
 	symbolSize = 1;
 	symbolAspectRatio = 1;
-
 	symbolPrototype = NULL;
 	swapSymbolTypeId("diamond");
 
@@ -70,6 +74,26 @@ LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner)
 }
 
 LineSymbolCurvePrivate::~LineSymbolCurvePrivate() {
+}
+
+QString LineSymbolCurvePrivate::name() const{
+  return q->name();
+}
+
+QRectF LineSymbolCurvePrivate::boundingRect() const{
+  return boundingRectangle;
+}
+
+QPainterPath LineSymbolCurvePrivate::shape() const{
+  return curveShape;
+}
+		
+QStringList LineSymbolCurve::lineTypes(){
+  //TODO add i18n-Version
+  return ( QStringList()<<tr("line")
+								<<tr("steps left")<<tr("steps right")
+								<<tr("drop lines vertically")<<tr("drop lines horizontally")
+								<<tr("2-segments")<<tr("3-segments") )   ;
 }
 
 LineSymbolCurve::LineSymbolCurve(const QString &name)
@@ -87,19 +111,7 @@ LineSymbolCurve::~LineSymbolCurve() {
 }
 
 /* ============================ accessor documentation ================= */
-/**
-  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
-  \brief Set/get whether the line is visible/invisible.
-*/
-/**
-  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
-  \brief Set/get whether the symbols are visible/invisible.
-*/
-/**
-  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsOpacity, SymbolsOpacity);
-  \brief Set/get the opacity of the symbols. The opacity ranges from 0.0 to 1.0, where 0.0 is fully transparent and 1.0 is fully opaque.
-*/
-/**
+                                                                           /**
   \fn   LineSymbolCurve::POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
   \brief Set/get the pointer to the X column.
 */
@@ -108,6 +120,28 @@ LineSymbolCurve::~LineSymbolCurve() {
   \brief Set/get the pointer to the Y column.
 */
 
+/**
+  \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(LineSymbolCurve::LineType, lineType , LineType);
+  \brief Set/get the line type.
+*/
+/**
+  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
+  \brief Set/get whether the line is visible/invisible.
+*/
+/**
+  \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
+  \brief Get/set the line pen.
+*/
+
+
+/**
+  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
+  \brief Set/get whether the symbols are visible/invisible.
+*/
+/**
+  \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsOpacity, SymbolsOpacity);
+  \brief Set/get the opacity of the symbols. The opacity ranges from 0.0 to 1.0, where 0.0 is fully transparent and 1.0 is fully opaque.
+*/
 /**
   \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle);
   \brief Set/get the rotation angle of the symbols.
@@ -132,48 +166,29 @@ LineSymbolCurve::~LineSymbolCurve() {
   \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen);
   \brief Get/set the symbol outline pen.
 */
-/**
-  \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
-  \brief Get/set the line pen.
-*/
 
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, lineVisible, lineVisible);
-BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, symbolsVisible, symbolsVisible);
-BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolsOpacity, symbolsOpacity);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, xColumn, xColumn);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, yColumn, yColumn);
+
+// BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, lineVisible, lineVisible);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, LineSymbolCurve::LineType, lineType, lineType);
+CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, linePen, linePen);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, lineOpacity, symbolsOpacity);
+
+// BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, bool, symbolsVisible, symbolsVisible);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolsOpacity, symbolsOpacity);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolRotationAngle, symbolRotationAngle);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolSize, symbolSize);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolAspectRatio, symbolAspectRatio);
 CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QString, symbolTypeId, symbolTypeId);
 CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QBrush, symbolsBrush, symbolsBrush);
 CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, symbolsPen, symbolsPen);
-CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, linePen, linePen);
 
 /* ============================ setter methods and undo commands ================= */
 
-STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLineVisible, bool, lineVisible, recalcShapeAndBoundingRect);
-void LineSymbolCurve::setLineVisible(bool visible) {
-	Q_D(LineSymbolCurve);
-	if (visible != d->lineVisible)
-		exec(new LineSymbolCurveSetLineVisibleCmd(d, visible, visible ? tr("%1: set line visible") : tr("%1: set line invisible")));
-}
-
-STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsVisible, bool, symbolsVisible, recalcShapeAndBoundingRect);
-void LineSymbolCurve::setSymbolsVisible(bool visible) {
-	Q_D(LineSymbolCurve);
-	if (visible != d->symbolsVisible)
-		exec(new LineSymbolCurveSetSymbolsVisibleCmd(d, visible, visible ? tr("%1: set symbols visible") : tr("%1: set symbols invisible")));
-}
-
-STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsOpacity, qreal, symbolsOpacity, recalcShapeAndBoundingRect);
-void LineSymbolCurve::setSymbolsOpacity(qreal opacity) {
-	Q_D(LineSymbolCurve);
-	if (opacity != d->symbolsOpacity)
-		exec(new LineSymbolCurveSetSymbolsOpacityCmd(d, opacity, tr("%1: set symbols opacity")));
-}
+//Line 
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetXColumn, const AbstractColumn *, xColumn, retransform);
 void LineSymbolCurve::setXColumn(const AbstractColumn *xColumn) {
@@ -188,6 +203,51 @@ void LineSymbolCurve::setYColumn(const AbstractColumn *yColumn) {
 	if (yColumn != d->yColumn)
 		exec(new LineSymbolCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
 }
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLineType, LineSymbolCurve::LineType, lineType, retransform);
+void LineSymbolCurve::setLineType(LineType type) {
+	Q_D(LineSymbolCurve);
+	if (type != d->lineType)
+		exec(new LineSymbolCurveSetLineTypeCmd(d, type, tr("%1: line type changed")));
+}
+
+// STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLineVisible, bool, lineVisible, recalcShapeAndBoundingRect);
+// void LineSymbolCurve::setLineVisible(bool visible) {
+// 	Q_D(LineSymbolCurve);
+// 	if (visible != d->lineVisible)
+//  		exec(new LineSymbolCurveSetLineVisibleCmd(d, visible, visible ? tr("%1: set line visible") : tr("%1: set line invisible")));
+// }
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect);
+void LineSymbolCurve::setLinePen(const QPen &pen) {
+	Q_D(LineSymbolCurve);
+	if (pen != d->linePen)
+		exec(new LineSymbolCurveSetLinePenCmd(d, pen, tr("%1: set line style")));
+}
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLineOpacity, qreal, lineOpacity, recalcShapeAndBoundingRect);
+void LineSymbolCurve::setLineOpacity(qreal opacity) {
+	Q_D(LineSymbolCurve);
+	if (opacity != d->lineOpacity)
+		exec(new LineSymbolCurveSetLineOpacityCmd(d, opacity, tr("%1: set line opacity")));
+}
+
+// Symbols 
+
+// STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsVisible, bool, symbolsVisible, recalcShapeAndBoundingRect);
+// void LineSymbolCurve::setSymbolsVisible(bool visible) {
+// 	Q_D(LineSymbolCurve);
+// 	if (visible != d->symbolsVisible)
+// 		exec(new LineSymbolCurveSetSymbolsVisibleCmd(d, visible, visible ? tr("%1: set symbols visible") : tr("%1: set symbols invisible")));
+// }
+
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolsOpacity, qreal, symbolsOpacity, updateSymbolPrototype);
+void LineSymbolCurve::setSymbolsOpacity(qreal opacity) {
+	Q_D(LineSymbolCurve);
+	if (opacity != d->symbolsOpacity)
+		exec(new LineSymbolCurveSetSymbolsOpacityCmd(d, opacity, tr("%1: set symbols opacity")));
+}
+
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetSymbolRotationAngle, qreal, symbolRotationAngle, updateSymbolPrototype);
 void LineSymbolCurve::setSymbolRotationAngle(qreal angle) {
@@ -231,12 +291,6 @@ void LineSymbolCurve::setSymbolsPen(const QPen &pen) {
 		exec(new LineSymbolCurveSetSymbolsPenCmd(d, pen, tr("%1: set symbol outline style")));
 }
 
-STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect);
-void LineSymbolCurve::setLinePen(const QPen &pen) {
-	Q_D(LineSymbolCurve);
-	if (pen != d->linePen)
-		exec(new LineSymbolCurveSetLinePenCmd(d, pen, tr("%1: set line style")));
-}
 
 /* ============================ other methods ================= */
 
@@ -265,6 +319,22 @@ void LineSymbolCurve::retransform() {
 	d_ptr->retransform();
 }
 
+void LineSymbolCurve::handlePageResize(double horizontalRatio, double verticalRatio) {
+	Q_D(const LineSymbolCurve);
+	
+	setSymbolSize(d->symbolSize * horizontalRatio);
+	setSymbolAspectRatio(d->symbolAspectRatio * horizontalRatio / verticalRatio);
+	QPen pen = d->symbolsPen;
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	setSymbolsPen(pen);
+	pen = d->linePen;
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	setLinePen(pen);
+
+	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+}
+
+//############ private-implementation #################
 void LineSymbolCurve::Private::retransform() {
 	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
 
@@ -282,15 +352,14 @@ void LineSymbolCurve::Private::retransform() {
 	int endRow = xColumn->rowCount() - 1;
 
 	QList<QLineF> lines;
+	QPointF tempPoint;
 
 	SciDAVis::ColumnMode xColMode = xColumn->columnMode();
 	SciDAVis::ColumnMode yColMode = yColumn->columnMode();
 
-	for (int row = startRow; row <= endRow; row++ ) {
-
+	for (int row = startRow; row <= endRow; row++ ){
 		if ( xColumn->isValid(row) && yColumn->isValid(row) 
 			&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
-			QPointF tempPoint;
 
 			switch(xColMode) {
 				case SciDAVis::Numeric:
@@ -325,18 +394,88 @@ void LineSymbolCurve::Private::retransform() {
 		}
 	}
 
-	if (symbolPoints.count() > 1) {
-		 QListIterator<QPointF> p1Iter(symbolPoints);
-		 QListIterator<QPointF> p2Iter(symbolPoints);
-		 p2Iter.next();
-		 while (p2Iter.hasNext())
-			lines.append(QLineF(p1Iter.next(), p2Iter.next()));
+	int count=symbolPoints.count();
+	switch(lineType){
+	  case LineSymbolCurve::Line:{
+		for (int i=0; i<count; i++){
+			if (i!=count-1)
+			  lines.append(QLineF(symbolPoints.at(i), symbolPoints.at(i+1)));
+		}
+		break;
+	  }
+	  case LineSymbolCurve::StepsLeft:{
+		for (int i=0; i<count; i++){
+			if (i!=count-1){
+			  tempPoint=QPointF(symbolPoints.at(i+1).x(), symbolPoints.at(i).y());
+			  lines.append(QLineF(symbolPoints.at(i), tempPoint));
+			  lines.append(QLineF(tempPoint,symbolPoints.at(i+1)));
+			}
+		}
+		break;
+	  }
+	  case LineSymbolCurve::StepsRight:{
+		for (int i=0; i<count; i++){
+		  if (i!=count-1){
+			tempPoint=QPointF(symbolPoints.at(i).x(), symbolPoints.at(i+1).y());
+			lines.append(QLineF(symbolPoints.at(i), tempPoint));
+			lines.append(QLineF(tempPoint,symbolPoints.at(i+1)));
+		  }
+		}
+		break;
+	  }
+	  case LineSymbolCurve::DropLineVertical:{
+		for (int i=0; i<count; i++){
+			if (i!=count-1)
+			  lines.append(QLineF(symbolPoints.at(i), QPointF(symbolPoints.at(i).x(), 0)));
+		}
+		break;
+	  }
+	  case LineSymbolCurve::DropLineHorizontal:{
+		for (int i=0; i<count; i++){
+			if (i!=count-1)
+			  lines.append(QLineF(symbolPoints.at(i), QPointF(0, symbolPoints.at(i).y())));
+		}
+		break;
+	  }
+	  case LineSymbolCurve::Segments2:{
+		int skip=0;
+		for (int i=0; i<count; i++){
+		  if (skip!=1){
+			if (i!=count-1){
+			  lines.append(QLineF(symbolPoints.at(i), symbolPoints.at(i+1)));
+			  skip++;
+			}
+		  }else{
+			skip=0;
+		  }
+		}
+		break;
+	  }
+	  case LineSymbolCurve::Segments3:{
+		int skip=0;
+		int count=symbolPoints.count();
+		for (int i=0; i<count; i++){
+		  if (skip!=2){
+			if (i!=count-1){
+			  lines.append(QLineF(symbolPoints.at(i), symbolPoints.at(i+1)));
+			  skip++;
+			}
+		  }else{
+			skip=0;
+		  }
+		}
+		break;
+	  }
+	  default:
+		lines.clear();
+		break;
 	}
-
+	
 	if (cSystem) {
 		symbolPoints = cSystem->mapLogicalToScene(symbolPoints);
 		lines = cSystem->mapLogicalToScene(lines);
 	}
+
 
 	foreach (QLineF line, lines) {
 		linePath.moveTo(line.p1());
@@ -347,6 +486,7 @@ void LineSymbolCurve::Private::retransform() {
 }
 
 void LineSymbolCurve::Private::recalcShapeAndBoundingRect() {
+  
 	prepareGeometryChange();
 
 	boundingRectangle = QRectF();
@@ -376,6 +516,7 @@ void LineSymbolCurve::Private::recalcShapeAndBoundingRect() {
 }
 
 QString LineSymbolCurve::Private::swapSymbolTypeId(const QString &id) {
+  
 	QString oldId = symbolTypeId;
 	if (id != symbolTypeId)
 	{
@@ -408,44 +549,31 @@ QString LineSymbolCurve::Private::swapSymbolTypeId(const QString &id) {
 	return oldId;
 }
 
-void LineSymbolCurve::Private::updateSymbolPrototype() {
+void LineSymbolCurve::Private::updateSymbolPrototype(){
 	swapSymbolTypeId(symbolTypeId);
 }
 
-void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget)
-{
-	// symbols first/last option
-		
-	if (lineVisible) {
-		painter->setPen(linePen);
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(linePath);
-	}
+void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
+  if (!isVisible())
+	return;
+  
+  // symbols first/last option
+	  
+  qreal opacity=painter->opacity();
+  if (linePen.style() != Qt::NoPen){
+	painter->setOpacity(lineOpacity);
+	painter->setPen(linePen);
+	painter->setBrush(Qt::NoBrush);
+	painter->drawPath(linePath);
+  }
 
-	if (symbolsVisible){
-		qreal opacity=painter->opacity();
-		painter->setOpacity(symbolsOpacity);
-		foreach(QPointF point, symbolPoints) {
-			painter->translate(point);
-			symbolPrototype->paint(painter, option, widget);
-			painter->translate(-point);
-		}
-		painter->setOpacity(opacity);
-	}
+  if (symbolPrototype->id()!="none"){
+	  painter->setOpacity(symbolsOpacity);
+	  foreach(QPointF point, symbolPoints) {
+		  painter->translate(point);
+		  symbolPrototype->paint(painter, option, widget);
+		  painter->translate(-point);
+	  }
+  }
+  painter->setOpacity(opacity);
 }
-
-void LineSymbolCurve::handlePageResize(double horizontalRatio, double verticalRatio) {
-	Q_D(const LineSymbolCurve);
-	
-	setSymbolSize(d->symbolSize * horizontalRatio);
-	setSymbolAspectRatio(d->symbolAspectRatio * horizontalRatio / verticalRatio);
-	QPen pen = d->symbolsPen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
-	setSymbolsPen(pen);
-	pen = d->linePen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
-	setLinePen(pen);
-
-	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
-}
-

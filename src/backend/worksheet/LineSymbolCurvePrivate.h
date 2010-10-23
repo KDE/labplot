@@ -4,7 +4,8 @@
     Description          : Private members of LineSymbolCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+							  (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 
@@ -31,25 +32,41 @@
 #define LINESYMBOLCURVEPRIVATE_H
 
 #include "worksheet/AbstractCurveSymbol.h"
+#include "worksheet/LineSymbolCurve.h"
 
 class LineSymbolCurvePrivate: public QGraphicsItem {
 	public:
 		LineSymbolCurvePrivate(LineSymbolCurve *owner);
 		~LineSymbolCurvePrivate();
 
-		QString name() const {
-			return q->name();
-		}
+		QString name() const;
+		virtual QRectF boundingRect() const;
+		QPainterPath shape() const;
+		
+		virtual void retransform();
+		bool swapVisible(bool on);
+		QString swapSymbolTypeId(const QString &id);
+		virtual void recalcShapeAndBoundingRect();
+		void updateSymbolPrototype();
 
-		bool lineVisible; //!< show/hide line
-		bool symbolsVisible; //! show/hide symbols
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+		
+		const AbstractColumn *xColumn;
+		const AbstractColumn *yColumn;
+		
+		LineSymbolCurve::LineType lineType;
+		QPen linePen;
+// 		bool lineVisible;
+		qreal lineOpacity;
+		
+// 		bool symbolsVisible;
+		QBrush symbolsBrush;
+		QPen symbolsPen;
 		qreal symbolsOpacity;
 		qreal symbolRotationAngle;
 		qreal symbolSize;
 		qreal symbolAspectRatio;
 		QString symbolTypeId;
-		const AbstractColumn *xColumn; //!< Pointer to X column
-		const AbstractColumn *yColumn; //!< Pointer to Y column
 	
 		QPainterPath linePath;
 		AbstractCurveSymbol *symbolPrototype;
@@ -57,24 +74,7 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		QPainterPath curveShape;
 		QList<QPointF> symbolPoints;
 
-		QBrush symbolsBrush;
-		QPen symbolsPen;
-		QPen linePen;
-
-		virtual void retransform();
-		bool swapVisible(bool on);
-		QString swapSymbolTypeId(const QString &id);
-		virtual void recalcShapeAndBoundingRect();
-		void updateSymbolPrototype();
-
-		virtual QRectF boundingRect() const { return boundingRectangle; }
-		QPainterPath shape() const { return curveShape; }
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
-
 		LineSymbolCurve * const q;
-
-		// TODO: make other attributes adjustable
-		// add pens and brush
 };
 
 #endif

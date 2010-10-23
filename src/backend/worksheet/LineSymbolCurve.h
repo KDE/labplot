@@ -4,7 +4,8 @@
     Description          : A curve drawn as line and/or symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+								(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 
@@ -39,23 +40,31 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
+		enum LineType {Line, StepsLeft, StepsRight, DropLineVertical, DropLineHorizontal, Segments2, Segments3};
+		static QStringList lineTypes();
+		
 		LineSymbolCurve(const QString &name);
 		virtual ~LineSymbolCurve();
 
 		virtual QGraphicsItem *graphicsItem() const;
 
-		BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
-		BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
-		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
+		
+// 		BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
+		BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType);
+		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
+		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity);
+		
+// 		BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
+		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity);
 		BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle);
 		BASIC_D_ACCESSOR_DECL(qreal, symbolSize, SymbolSize);
 		BASIC_D_ACCESSOR_DECL(qreal, symbolAspectRatio, SymbolAspectRatio);
 		CLASS_D_ACCESSOR_DECL(QString, symbolTypeId, SymbolTypeId);
 		CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush);
 		CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen);
-		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
+		
 
 		//TODO: signal/slot connections with columns
 
@@ -78,5 +87,3 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 };
 
 #endif
-
-
