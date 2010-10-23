@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
-    Description          : widget for curve properties
+    Description          : widget for LineSymbolCurve properties
                            
  ***************************************************************************/
 
@@ -30,10 +30,12 @@
 #include "LineSymbolCurveDock.h"
 #include "worksheet/LineSymbolCurve.h"
 #include "core/AspectTreeModel.h"
+#include "core/AbstractColumn.h"
 #include "core/plugin/PluginManager.h"
 #include "worksheet/StandardCurveSymbolFactory.h"
 #include "widgets/TreeViewComboBox.h"
 #include <QTextEdit>
+#include <QCheckBox>
 #include <QPainter>
 #include <QBrush>
 #include <QPen>
@@ -84,40 +86,50 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	teComment->setMaximumSize(QSize(16777215, 50));
 
 	gridLayout->addWidget(teComment, 1, 1, 1, 1);
-
+	
+	chkVisible = new QCheckBox(ui.tabGeneral);
+	gridLayout->addWidget(chkVisible, 2, 0, 1, 1);
 	
 	lXColumn= new QLabel(ui.tabGeneral);
-	gridLayout->addWidget(lXColumn, 2, 0, 1, 1);
+	gridLayout->addWidget(lXColumn, 3, 0, 1, 1);
 	
 	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbXColumn, 2, 1, 1, 1);
+	gridLayout->addWidget(cbXColumn, 3, 1, 1, 1);
 	
 	lYColumn= new QLabel(ui.tabGeneral);
-	gridLayout->addWidget(lYColumn, 3, 0, 1, 1);
+	gridLayout->addWidget(lYColumn, 4, 0, 1, 1);
 	
 	cbYColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbYColumn, 3, 1, 1, 1);
+	gridLayout->addWidget(cbYColumn, 4, 1, 1, 1);
 	
 	verticalSpacer = new QSpacerItem(24, 320, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	gridLayout->addItem(verticalSpacer, 4, 0, 1, 1);
+	gridLayout->addItem(verticalSpacer, 5, 0, 1, 1);
 	
 
 	
 	//Line
-// 	QStringList stylelist;
-// 	stylelist<<i18n("Lines")<<i18n("Steps")<<i18n("Boxes")<<i18n("Impulses")<<i18n("Y Boxes");
-// 	ui.cbLineType->insertItems(-1, stylelist);
-// 	ui.kcbSymbolBorderColor->setColor(Qt::black);
-// 	this->initLineStyles();
-// 	ui.cbSymbolBorderStyle->setCurrentIndex(0);
-
-	this->updateSymbolStyles();
-// 	this->updateSymbolFillingStyles();
-// 	this->updateSymbolBorderStyles();
+	ui.cbLineType->addItems(LineSymbolCurve::lineTypes());
+	this->updatePenStyles(ui.cbLineStyle, Qt::black);
+	this->updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
+	this->fillSymbolStyles();
+ 	this->updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
 
 
 	//Slots
-	// 	connect( ui.sbLineWidth, SIGNAL(valueChanged(int)), this, SLOT(initLineStyles()) );
+	
+	//General
+	connect( leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	//TODO signal-slot for teComment
+	connect( chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( cbXColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(xColumnChanged(int)) );
+	connect( cbYColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(yColumnChanged(int)) );
+	
+	//Lines
+	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
+	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
+	connect( ui.kcbLineColor, SIGNAL(changed (const QColor &)), this, SLOT(lineColorChanged(const QColor&)) );
+	connect( ui.sbLineWidth, SIGNAL(valueChanged(int)), this, SLOT(lineWidthChanged(int)) );
+	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );
 	
 	//Symbol
 	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolStyleChanged(int)) );
@@ -145,8 +157,13 @@ void LineSymbolCurveDock::setModel(AspectTreeModel* model){
  	list.clear();
 	list<<"Column";
 	model->setSelectableAspects(list);
+	
+	m_initializing=true;
   	cbXColumn->setModel(model);
 	cbYColumn->setModel(model);
+	
+	m_aspectTreeModel=model;
+	m_initializing=false;
 }
 
 void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
@@ -184,17 +201,22 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   }
   
   //show the properties of the first curve
-  //TODO select the columns in the ComboBoxes
   
-  //LineStyle
-  //TODO
-
-  //Symbol
-  if (curve->symbolsVisible())
-	ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(curve->symbolTypeId()) );
-  else
-	ui.cbSymbolStyle->setCurrentIndex(0);
-
+  //General-tab
+  chkVisible->setChecked(curve->isVisible());
+  cbXColumn->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
+  cbYColumn->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yColumn()) );
+  
+  //Line-tab
+  ui.cbLineType->setCurrentIndex( curve->lineType() );
+  ui.cbLineStyle->setCurrentIndex( curve->linePen().style() );
+  ui.kcbLineColor->setColor( curve->linePen().color() );
+  ui.sbLineWidth->setValue( curve->linePen().width() );
+  ui.sbLineOpacity->setValue( curve->lineOpacity()*100 );
+  this->updatePenStyles(ui.cbLineStyle, curve->linePen().color() );
+  
+  //Symbol-tab
+  ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(curve->symbolTypeId()) );
   ui.sbSymbolSize->setValue( curve->symbolSize() );
   ui.sbSymbolRotation->setValue( curve->symbolRotationAngle() );
   ui.sbSymbolOpacity->setValue( curve->symbolsOpacity()*100 );
@@ -204,12 +226,15 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   ui.cbSymbolBorderStyle->setCurrentIndex( curve->symbolsPen().style() );
   ui.kcbSymbolBorderColor->setColor( curve->symbolsPen().color() );
   ui.sbSymbolBorderWidth->setValue( curve->symbolsPen().width() );
-// qDebug()<<"pen width "<<curve->symbolsPen().width();
-  this->updateSymbolBorderStyles();
-  this->updateSymbolFillingStyles();
+
+  this->updatePenStyles(ui.cbSymbolBorderStyle, curve->symbolsPen().color() );
+  this->updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
   
-// 	//Area filling
-//TODO
+
+  //TODO
+  //Values
+  //Area filling
+  //Error bars
 
 
   m_curvesList=list;
@@ -217,11 +242,10 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 }
 
 
-
-
 void LineSymbolCurveDock::resizeEvent(QResizeEvent * event){
   Q_UNUSED(event);
-/*  
+  
+/* TODO  
 	this->updateSymbolBorderStyles();
 // 	this->initAreaFillingStyles();
 	this->updateSymbolFillingStyles();*/
@@ -230,9 +254,7 @@ void LineSymbolCurveDock::resizeEvent(QResizeEvent * event){
 /*!
 	fills the ComboBox for the symbol style with all possible styles in the style factory.
 */
-void LineSymbolCurveDock::updateSymbolStyles(){
-	ui.cbSymbolStyle->addItem("none");
-	
+void LineSymbolCurveDock::fillSymbolStyles(){
 	QPainter painter;
 	int size=20; 	//TODO size of the icon depending on the actuall height of the combobox?
 	QPixmap pm( size, size );
@@ -248,7 +270,6 @@ void LineSymbolCurveDock::updateSymbolStyles(){
 			if (symbolPrototype){
 			  symbol= symbolPrototype->clone();
 			  symbol->setSize(15);
-// 				symbol->setColor(Qt::black);
 			  
 			  pm.fill(Qt::transparent);
 			  painter.begin( &pm );
@@ -264,60 +285,21 @@ void LineSymbolCurveDock::updateSymbolStyles(){
 }
 
 
-
 /*!
-	fills the ComboBox for the symbol filling patterns with the 14 possible Qt::BrushStyles.
+	fills the ComboBox \c combobox with the six possible Qt::PenStyles, the color \c color is used.
 */
-void LineSymbolCurveDock::updateSymbolFillingStyles(){
-	int index=ui.cbSymbolFillingStyle->currentIndex();
-	ui.cbSymbolFillingStyle->clear();
-	ui.cbSymbolFillingStyle->addItem("none");
+void LineSymbolCurveDock::updatePenStyles(QComboBox* comboBox, const QColor& color){
+	int index=comboBox->currentIndex();
+	comboBox->clear();
+	comboBox->addItem("none");
 
 	QPainter pa;
 	int offset=2;
-	int w=ui.cbSymbolFillingStyle->width() - 2*offset;
-	qDebug()<<"cbwidth "<<w;
-// 	int h=ui.cbSymbolFillingStyle->height() - 2*offset;
-	int h=20 - 2*offset;
-	QPixmap pm( w, h );
-	ui.cbSymbolFillingStyle->setIconSize( QSize(w,h) );
-
-	QPen pen(Qt::SolidPattern, 1);
- 	pa.setPen( pen );
-	QColor color = ui.kcbSymbolFillingColor->color();
-	
-	//loop over 14 possible Qt-BrushStyles
-	for (int i=1;i<15;i++) {
-		pm.fill(Qt::transparent);
-		pa.begin( &pm );
-		pa.setRenderHint(QPainter::Antialiasing);
- 		pa.setBrush( QBrush(color, (Qt::BrushStyle)i) );
-		pa.drawRect( offset, offset, w - 2*offset, h - 2*offset);
-		pa.end();
-		ui.cbSymbolFillingStyle->addItem( QIcon(pm), "" );
-	}
-
-	ui.cbSymbolFillingStyle->setCurrentIndex(index);
-}
-
-
-/*!
-	fills the ComboBox for the symbol border styles with the six possible Qt::PenStyles.
-*/
-void LineSymbolCurveDock::updateSymbolBorderStyles(){
-	int index=ui.cbSymbolBorderStyle->currentIndex();
-	ui.cbSymbolBorderStyle->clear();
-	ui.cbSymbolBorderStyle->addItem("none");
-
-	QPainter pa;
-	int offset=2;
-	int w=ui.cbSymbolBorderStyle->width()-2*offset;
+	int w=comboBox->width()-2*offset;
 	int h=10;
 	QPixmap pm( w, h );
-	ui.cbSymbolBorderStyle->setIconSize( QSize(w,h) );
+	comboBox->setIconSize( QSize(w,h) );
 	
-	QColor color = ui.kcbSymbolBorderColor->color();
-
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
 	for (int i=1;i<6;i++) {
 		pm.fill(Qt::transparent);
@@ -326,105 +308,252 @@ void LineSymbolCurveDock::updateSymbolBorderStyles(){
 		pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
 		pa.drawLine( offset, h/2, w-offset, h/2);
 		pa.end();
-		ui.cbSymbolBorderStyle->addItem( QIcon(pm), "" );
+		comboBox->addItem( QIcon(pm), "" );
 	}
-	ui.cbSymbolBorderStyle->setCurrentIndex(index);
+	comboBox->setCurrentIndex(index);
 }
 
 
 /*!
-	fills the ComboBox for the area filling with the 14 possible Qt::BrushStyles.
+	fills the ComboBox for the symbol filling patterns with the 14 possible Qt::BrushStyles.
 */
-/*
-void LineSymbolCurveDock::fillAreaFillingPatternBox() {
-	int index=ui.cbFillBrushStyle->currentIndex();
-	ui.cbFillBrushStyle->clear();
+void LineSymbolCurveDock::updateBrushStyles(QComboBox* comboBox, const QColor& color){
+  	int index=comboBox->currentIndex();
+	comboBox->clear();
+	comboBox->addItem( i18n("none") );
 
 	QPainter pa;
-	int offset=5;
-	int w=ui.cbFillBrushStyle->width() - 2*offset;
-	int h=ui.cbFillBrushStyle->height() - 2*offset;
+	int offset=2;
+	int w=comboBox->width() - 2*offset;
+	qDebug()<<"cbwidth "<<w;
+// 	int h=ui.cbSymbolFillingStyle->height() - 2*offset;
+	int h=20 - 2*offset;
 	QPixmap pm( w, h );
-	ui.cbFillBrushStyle->setIconSize( QSize(w,h) );
+	comboBox->setIconSize( QSize(w,h) );
 
- 	QColor penColor = ui.kcbAreaFillingColor->color();
 	QPen pen(Qt::SolidPattern, 1);
  	pa.setPen( pen );
-
-	//loop over 14 possible Qt::BrushStyles
+	
 	for (int i=1;i<15;i++) {
 		pm.fill(Qt::transparent);
 		pa.begin( &pm );
-//  		pa.setRenderHint(QPainter::Antialiasing);
- 		pa.setBrush( QBrush(penColor, (Qt::BrushStyle)i) );
-		pa.drawRect( offset, offset, w-2*offset, h-2*offset);
+		pa.setRenderHint(QPainter::Antialiasing);
+ 		pa.setBrush( QBrush(color, (Qt::BrushStyle)i) );
+		pa.drawRect( offset, offset, w - 2*offset, h - 2*offset);
 		pa.end();
-		ui.cbFillBrushStyle->addItem( QIcon(pm), "" );
+		comboBox->addItem( QIcon(pm), "" );
 	}
 
-	ui.cbFillBrushStyle->setCurrentIndex(index);
+	comboBox->setCurrentIndex(index);
 }
-*/
 
 
 //************************************************************
 //****************** SLOTS ********************************
 //************************************************************
 void LineSymbolCurveDock::retranslateUi(){
-	lName->setText(i18n("Name:", 0));
-	lComment->setText(i18n("Comment:", 0));
+	lName->setText(i18n("Name:"));
+	lComment->setText(i18n("Comment:"));
+	chkVisible->setText(i18n("Visible"));
 	lXColumn->setText(i18n("x-data:"));
 	lYColumn->setText(i18n("y-data:"));
 	
-	ui.cbSymbolStyle->setItemText(0, i18n("none"));
+// 	ui.cbSymbolStyle->setItemText(0, i18n("none"));
 	ui.cbSymbolFillingStyle->setItemText(0, i18n("none"));
 	ui.cbSymbolBorderStyle->setItemText(0, i18n("none"));
 }
 
-/*!
-	called if the symbol style was changed.
-*/
+// "General"-tab
+void LineSymbolCurveDock::nameChanged(){
+    m_curvesList.first()->setName(leName->text());
+}
+
+
+void LineSymbolCurveDock::commentChanged(){
+  
+}
+
+void LineSymbolCurveDock::xColumnChanged(int index){
+  if (m_initializing)
+	return;
+  
+  AbstractColumn* column= static_cast<AbstractColumn*>(cbXColumn->currentIndex().internalPointer());
+  LineSymbolCurve* curve;
+  foreach(curve, m_curvesList){
+	curve->setXColumn(column);
+  }
+}
+
+void LineSymbolCurveDock::yColumnChanged(int index){
+  if (m_initializing)
+  return;
+  
+  AbstractColumn* column= static_cast<AbstractColumn*>(cbXColumn->currentIndex().internalPointer());
+  LineSymbolCurve* curve;
+  foreach(curve, m_curvesList){
+	curve->setYColumn(column);
+  }
+}
+
+void LineSymbolCurveDock::visibilityChanged(int state){
+  if (m_initializing)
+	return;
+  
+  bool b;
+  if (state==Qt::Checked)
+	b=true;
+  else
+	b=false;
+
+  LineSymbolCurve* curve;
+  foreach(curve, m_curvesList){
+	curve->setVisible(b);
+  }
+}
+
+// "Line"-tab
+void LineSymbolCurveDock::lineTypeChanged(int index){
+  if (m_initializing)
+	return;
+  
+  LineSymbolCurve::LineType lineType = LineSymbolCurve::LineType(index);
+  LineSymbolCurve* curve;
+  foreach(curve, m_curvesList){
+	curve->setLineType(lineType);
+  }
+}
+
+
+void LineSymbolCurveDock::lineStyleChanged(int index){
+  Qt::PenStyle penStyle=Qt::PenStyle(index);
+  
+  if ( penStyle == Qt::NoPen ){
+	ui.kcbLineColor->setEnabled(false);
+	ui.sbLineWidth->setEnabled(false);
+	ui.sbLineOpacity->setEnabled(false);
+  }else{
+	ui.kcbLineColor->setEnabled(true);
+	ui.sbLineWidth->setEnabled(true);
+	ui.sbLineOpacity->setEnabled(true);
+  }
+  
+   if (m_initializing)
+	return;
+	
+  LineSymbolCurve* curve;
+  QPen pen;
+  foreach(curve, m_curvesList){
+	pen=curve->linePen();
+	pen.setStyle(penStyle);
+	curve->setLinePen(pen);
+  }
+}
+
+void LineSymbolCurveDock::lineColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
+
+  LineSymbolCurve* curve;
+  QPen pen;
+  foreach(curve, m_curvesList){
+	pen=curve->linePen();
+	pen.setColor(color);
+	curve->setLinePen(pen);
+  }  
+
+  this->updatePenStyles(ui.cbLineStyle, color);
+}
+
+void LineSymbolCurveDock::lineWidthChanged(int value){
+  if (m_initializing)
+	return;
+  
+  LineSymbolCurve* curve;
+  QPen pen;
+  foreach(curve, m_curvesList){
+	pen=curve->linePen();
+	pen.setWidth(value);
+	curve->setLinePen(pen);
+  }  
+}
+
+void LineSymbolCurveDock::lineOpacityChanged(int value){
+  if (m_initializing)
+	return;
+		
+  LineSymbolCurve* curve;
+  qreal opacity = (float)value/100;
+  foreach(curve, m_curvesList)
+	curve->setLineOpacity(opacity);
+	
+}
+
+//"Symbol"-tab
 void LineSymbolCurveDock::symbolStyleChanged(int index){
   Q_UNUSED(index);
-  
   QString currentSymbolTypeId = ui.cbSymbolStyle->currentText();
   bool fillingEnabled = symbolFactory->prototype(currentSymbolTypeId)->fillingEnabled();
+  
+  if (currentSymbolTypeId=="none"){
+	ui.sbSymbolSize->setEnabled(false);
+	ui.sbSymbolRotation->setEnabled(false);
+	ui.sbSymbolOpacity->setEnabled(false);
 	
-  //enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-  if (fillingEnabled){
-	ui.lSymbolFilling->setEnabled(true);
-	ui.lSymbolFillingColor->setEnabled(true);
-	ui.kcbSymbolFillingColor->setEnabled(true);
-	ui.lSymbolFillingStyle->setEnabled(true);
-	ui.cbSymbolFillingStyle->setEnabled(true);
-  }else{
 	ui.lSymbolFilling->setEnabled(false);
 	ui.lSymbolFillingColor->setEnabled(false);
 	ui.kcbSymbolFillingColor->setEnabled(false);
 	ui.lSymbolFillingStyle->setEnabled(false);
 	ui.cbSymbolFillingStyle->setEnabled(false);
+	
+	ui.lSymbolBorder->setEnabled(false);
+	ui.cbSymbolBorderStyle->setEnabled(false);
+	ui.kcbSymbolBorderColor->setEnabled(false);
+	ui.sbSymbolBorderWidth->setEnabled(false);
+  }else{
+	ui.sbSymbolSize->setEnabled(true);
+	ui.sbSymbolRotation->setEnabled(true);
+	ui.sbSymbolOpacity->setEnabled(true);
+	
+	//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
+	if (fillingEnabled){
+	  ui.lSymbolFilling->setEnabled(true);
+	  ui.lSymbolFillingColor->setEnabled(true);
+	  ui.kcbSymbolFillingColor->setEnabled(true);
+	  ui.lSymbolFillingStyle->setEnabled(true);
+	  ui.cbSymbolFillingStyle->setEnabled(true);
+	}else{
+	  ui.lSymbolFilling->setEnabled(false);
+	  ui.lSymbolFillingColor->setEnabled(false);
+	  ui.kcbSymbolFillingColor->setEnabled(false);
+	  ui.lSymbolFillingStyle->setEnabled(false);
+	  ui.cbSymbolFillingStyle->setEnabled(false);
+	}
+	
+	ui.lSymbolBorder->setEnabled(true);
+	ui.cbSymbolBorderStyle->setEnabled(true);
+	ui.kcbSymbolBorderColor->setEnabled(true);
+	ui.sbSymbolBorderWidth->setEnabled(true);
   }
 
   if (m_initializing)
 	return;
 
   LineSymbolCurve* curve;
-  foreach(curve, m_curvesList)
+  foreach(curve, m_curvesList){
 	curve->setSymbolTypeId(currentSymbolTypeId);
+  }
 
-  m_initializing=false;
 }
 
 
 void LineSymbolCurveDock::symbolSizeChanged(int value){
-	if (m_initializing)
-	  return;
-	  
-  	LineSymbolCurve* curve;
-	foreach(curve, m_curvesList)
-	  curve->setSymbolSize(value);
+  if (m_initializing)
+	return;
 	
-	m_initializing=false;
+  LineSymbolCurve* curve;
+  foreach(curve, m_curvesList)
+	curve->setSymbolSize(value);
+  
 }
 
 void LineSymbolCurveDock::symbolRotationChanged(int value){
@@ -435,7 +564,6 @@ void LineSymbolCurveDock::symbolRotationChanged(int value){
   foreach(curve, m_curvesList)
 	curve->setSymbolRotationAngle(value);
 
-  m_initializing=false;
 }
 
 void LineSymbolCurveDock::symbolOpacityChanged(int value){
@@ -447,7 +575,6 @@ void LineSymbolCurveDock::symbolOpacityChanged(int value){
   foreach(curve, m_curvesList)
 	curve->setSymbolsOpacity(opacity);
 	
-  m_initializing=false;
 }
 
 void LineSymbolCurveDock::symbolFillingStyleChanged(int index){
@@ -461,8 +588,6 @@ void LineSymbolCurveDock::symbolFillingStyleChanged(int index){
 	brush.setStyle(Qt::BrushStyle(index));
 	curve->setSymbolsBrush(brush);
   }
-	
-  m_initializing=false;
 }
 
 void LineSymbolCurveDock::symbolFillingColorChanged(const QColor& color){
@@ -477,52 +602,46 @@ void LineSymbolCurveDock::symbolFillingColorChanged(const QColor& color){
 	curve->setSymbolsBrush(brush);
   }
 
-  this->updateSymbolFillingStyles();
-  m_initializing=false;
+  this->updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
 }
 
 void LineSymbolCurveDock::symbolBorderStyleChanged(int index){
-	if (m_initializing)
-	  return;
-	  
-    LineSymbolCurve* curve;
-	QPen pen;
-	foreach(curve, m_curvesList){
-	  pen=curve->symbolsPen();
-	  pen.setStyle(Qt::PenStyle(index));
-	  curve->setSymbolsPen(pen);
-	}
+  if (m_initializing)
+	return;
 	
-	m_initializing=false;
+  LineSymbolCurve* curve;
+  QPen pen;
+  foreach(curve, m_curvesList){
+	pen=curve->symbolsPen();
+	pen.setStyle(Qt::PenStyle(index));
+	curve->setSymbolsPen(pen);
+  }
 }
 
 void LineSymbolCurveDock::symbolBorderColorChanged(const QColor& color){
-  	if (m_initializing)
-	  return;
-	
-    LineSymbolCurve* curve;
-	QPen pen;
-	foreach(curve, m_curvesList){
-	  pen=curve->symbolsPen();
-	  pen.setColor(color);
-	  curve->setSymbolsPen(pen);
-	}  
-	
-	this->updateSymbolBorderStyles();
-	m_initializing=false;
+  if (m_initializing)
+	return;
+  
+  LineSymbolCurve* curve;
+  QPen pen;
+  foreach(curve, m_curvesList){
+	pen=curve->symbolsPen();
+	pen.setColor(color);
+	curve->setSymbolsPen(pen);
+  }  
+  
+  this->updatePenStyles(ui.cbSymbolBorderStyle, color);
 }
 
 void LineSymbolCurveDock::symbolBorderWidthChanged(int value){
-  	if (m_initializing)
-	  return;
-	
-    LineSymbolCurve* curve;
-	QPen pen;
-	foreach(curve, m_curvesList){
-	  pen=curve->symbolsPen();
-	  pen.setWidth(value);
-	  curve->setSymbolsPen(pen);
-	}  
-	
-	m_initializing=false;
+  if (m_initializing)
+	return;
+  
+  LineSymbolCurve* curve;
+  QPen pen;
+  foreach(curve, m_curvesList){
+	pen=curve->symbolsPen();
+	pen.setWidth(value);
+	curve->setSymbolsPen(pen);
+  }  
 }

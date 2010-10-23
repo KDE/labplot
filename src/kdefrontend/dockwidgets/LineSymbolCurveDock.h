@@ -34,6 +34,7 @@
 #include "ui_linesymbolcurvedock.h"
 
 class QTextEdit;
+class QCheckBox;
 class LineSymbolCurve;
 class TreeViewComboBox;
 class CurveSymbolFactory;
@@ -50,6 +51,7 @@ public:
 private:
 	Ui::LineSymbolCurveDock ui;
 	QList<LineSymbolCurve*> m_curvesList;
+	AspectTreeModel* m_aspectTreeModel;
 	bool m_initializing;
 	
 	QGridLayout *gridLayout;
@@ -57,6 +59,7 @@ private:
     QLineEdit *leName;
     QLabel *lComment;
     QTextEdit *teComment;
+	QCheckBox* chkVisible;
     QSpacerItem *verticalSpacer;
 	QLabel* lXColumn;
 	QLabel* lYColumn;
@@ -65,13 +68,25 @@ private:
 	
 	CurveSymbolFactory *symbolFactory;
 	
-	void updateSymbolStyles();
-	void updateSymbolFillingStyles();
-	void updateSymbolBorderStyles();
+	void fillSymbolStyles();
+	void updateBrushStyles(QComboBox*, const QColor&);
+	void updatePenStyles(QComboBox*, const QColor&);
 	
 	void resizeEvent(QResizeEvent *);
 	
 private slots:
+	void nameChanged();
+	void commentChanged();
+	void xColumnChanged(int);
+	void yColumnChanged(int);
+	void visibilityChanged(int);
+	
+	void lineTypeChanged(int);
+  	void lineStyleChanged(int);
+	void lineColorChanged(const QColor&);
+	void lineWidthChanged(int);
+	void lineOpacityChanged(int);
+	
   	void symbolStyleChanged(int);
 	void symbolSizeChanged(int);
 	void symbolRotationChanged(int);
