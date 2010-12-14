@@ -364,7 +364,6 @@ bool MainWin::warnModified() {
 	disables/enables menu items etc. depending on the currently selected Aspect.
 */
 void MainWin::updateGUI() {
-  return;
 	KXMLGUIFactory* factory=this->guiFactory();
 
 	//disable all menus if there is no project
@@ -663,40 +662,17 @@ void MainWin::printPreview(){
 /*!
 	adds a new Table (Spreadsheet) to the project.
 */
-Spreadsheet* MainWin::newSpreadsheet() {
+void  MainWin::newSpreadsheet() {
 	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, i18n("Spreadsheet %1").arg(1));
-
-	QModelIndex index = m_project_explorer->currentIndex();
-
-	if(!index.isValid())
-		m_project->addChild(spreadsheet);
-	else {
-		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
-		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
-		parent_aspect->folder()->addChild(spreadsheet);
-	}
-
-	kDebug()<<"new spreadsheet created"<<endl;
-    return spreadsheet;
+	this->addAspectToProject(spreadsheet);
 }
 
 /*!
 	adds a new Worksheet to the project.
 */
-Worksheet* MainWin::newWorksheet() {
+void MainWin::newWorksheet() {
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet %1").arg(1));
-	QModelIndex index = m_project_explorer->currentIndex();
-
-	if(!index.isValid())
-		m_project->addChild(worksheet);
-	else {
-		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
-		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
-		parent_aspect->folder()->addChild(worksheet);
-	}
-
-	kDebug()<<"new worksheet created"<<endl;
-    return worksheet;
+	this->addAspectToProject(worksheet);
 }
 
 
@@ -805,9 +781,18 @@ void MainWin::addAspectToProject(AbstractAspect* aspect){
         Q_ASSERT(parent_aspect->folder());
 		parent_aspect->folder()->addChild(aspect);
 	}
-	kDebug()<<"new file data source created"<<endl;
+	
+	//expand the aspect and all its children in the tree view of the project explorer
+	this->expandAspect(aspect);
 }
 
+//TODO put this to ProjectExplorer
+void MainWin::expandAspect(const AbstractAspect* aspect) const{
+	m_project_explorer->setExpanded(m_aspectTreeModel->modelIndexOfAspect(aspect), true);
+	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
+	  this->expandAspect(child);
+	}
+}
 
 /*!
 	adds a new plot to the current worksheet.
@@ -1014,21 +999,10 @@ void MainWin::newMatrix(){
 	//TODO
 }
 
-Folder* MainWin::newFolder() {
+void MainWin::newFolder() {
 	Folder * folder = new Folder(tr("Folder %1").arg(1));
-	QModelIndex index = m_project_explorer->currentIndex();
-
-	if(!index.isValid()){
-		m_project->addChild(folder);
-	}else{
-		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
-		Q_ASSERT(parent_aspect->folder()); // every aspect contained in the project should have a folder
-		parent_aspect->folder()->addChild(folder);
-	}
-
-	updateGUI();
-
-    return folder;
+	this->addAspectToProject(folder);
+// 	updateGUI();
 }
 
 /*!

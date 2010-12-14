@@ -143,9 +143,9 @@ private slots:
 	void dataPlotActionTriggered(QAction*);
 	void projectChanged();
 
-	Spreadsheet* newSpreadsheet();
-	Folder* newFolder();
-	Worksheet* newWorksheet();
+	void newSpreadsheet();
+	void newFolder();
+	void newWorksheet();
 	void newScript();
 	void newMatrix();
 	void newFileDataSourceActionTriggered();
@@ -164,6 +164,8 @@ private slots:
 	
 	void setMdiWindowVisibility(QAction * action);
 	void updateMdiWindowVisibility();
+	
+	void expandAspect(const AbstractAspect*) const;
 	
 signals:
 	void partActivated(AbstractPart*);
