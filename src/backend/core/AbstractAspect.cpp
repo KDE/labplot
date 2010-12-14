@@ -396,8 +396,8 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 void AbstractAspect::removeChild(AbstractAspect* child){
 	Q_ASSERT(child->parentAspect() == this);
 	AbstractAspect *nextSibling;
-	if (m_aspect_private->m_children.size()==1)
-	  nextSibling=0;
+ 	if (child==m_aspect_private->m_children.last())
+ 	  nextSibling=0;
 	else
 	  nextSibling = m_aspect_private->m_children.at(m_aspect_private->indexOfChild(child) + 1);
 	
