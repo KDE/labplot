@@ -34,14 +34,23 @@
 #include "worksheet/AbstractWorksheetElement.h"
 #include "lib/macros.h"
 #include "core/AbstractColumn.h"
+#include <QFont>
 
 class LineSymbolCurvePrivate;
 class LineSymbolCurve: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
-		enum LineType {Line, StepsLeft, StepsRight, DropLineVertical, DropLineHorizontal, Segments2, Segments3};
-		static QStringList lineTypes();
+		enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3, 
+									  SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic};
+		enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY};
+		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
+		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
+		
+		static QStringList lineTypeStrings();
+		static QStringList dropLineTypeStrings();
+		static QStringList valuesTypeStrings();
+		static QStringList valuesPositionStrings();
 		
 		LineSymbolCurve(const QString &name);
 		virtual ~LineSymbolCurve();
@@ -51,12 +60,15 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
 		
-// 		BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
 		BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType);
+		BASIC_D_ACCESSOR_DECL(int, lineInterpolationPointsCount, LineInterpolationPointsCount);
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity);
 		
-// 		BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
+		BASIC_D_ACCESSOR_DECL(DropLineType, dropLineType, DropLineType);
+		CLASS_D_ACCESSOR_DECL(QPen, dropLinePen, DropLinePen);
+		BASIC_D_ACCESSOR_DECL(qreal, dropLineOpacity, DropLineOpacity);
+		
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity);
 		BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle);
 		BASIC_D_ACCESSOR_DECL(qreal, symbolSize, SymbolSize);
@@ -65,6 +77,16 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush);
 		CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen);
 		
+		BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn);
+		BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition);
+		BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance);
+		BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle);
+		BASIC_D_ACCESSOR_DECL(qreal, valuesOpacity, ValuesOpacity);
+		CLASS_D_ACCESSOR_DECL(QString, valuesPrefix, ValuesPrefix);
+		CLASS_D_ACCESSOR_DECL(QString, valuesSuffix, ValuesSuffix);
+		CLASS_D_ACCESSOR_DECL(QPen, valuesPen, ValuesPen);
+		CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont);
 
 		//TODO: signal/slot connections with columns
 

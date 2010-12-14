@@ -44,10 +44,13 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		QPainterPath shape() const;
 		
 		virtual void retransform();
+		void updateLines();
+		void updateDropLines();
+		void updateValues();
+		void updateSymbol();
 		bool swapVisible(bool on);
 		QString swapSymbolTypeId(const QString &id);
-		virtual void recalcShapeAndBoundingRect();
-		void updateSymbolPrototype();
+		void recalcShapeAndBoundingRect();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 		
@@ -55,11 +58,14 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		const AbstractColumn *yColumn;
 		
 		LineSymbolCurve::LineType lineType;
+		int lineInterpolationPointsCount;
 		QPen linePen;
-// 		bool lineVisible;
 		qreal lineOpacity;
 		
-// 		bool symbolsVisible;
+		LineSymbolCurve::DropLineType dropLineType;
+		QPen dropLinePen;
+		qreal dropLineOpacity;
+		
 		QBrush symbolsBrush;
 		QPen symbolsPen;
 		qreal symbolsOpacity;
@@ -68,11 +74,27 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		qreal symbolAspectRatio;
 		QString symbolTypeId;
 	
+		LineSymbolCurve::ValuesType valuesType;
+		const AbstractColumn *valuesColumn;
+		LineSymbolCurve::ValuesPosition valuesPosition;
+		qreal valuesDistance;
+		qreal valuesRotationAngle;
+		qreal valuesOpacity;
+		QString valuesPrefix;
+		QString valuesSuffix;		
+		QFont valuesFont;
+		QPen valuesPen;
+		
 		QPainterPath linePath;
+		QPainterPath dropLinePath;
+		QPainterPath valuesPath;
 		AbstractCurveSymbol *symbolPrototype;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
+		QList<QPointF> symbolPointsLogical;
 		QList<QPointF> symbolPoints;
+		QList<QPointF> valuesPoints;
+		QList<QString> valuesStrings;
 
 		LineSymbolCurve * const q;
 };
