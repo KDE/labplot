@@ -65,6 +65,7 @@ private:
 	QLabel* lYColumn;
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbYColumn;
+	TreeViewComboBox* cbValuesColumn;
 	
 	CurveSymbolFactory *symbolFactory;
 	
@@ -72,21 +73,31 @@ private:
 	void updateBrushStyles(QComboBox*, const QColor&);
 	void updatePenStyles(QComboBox*, const QColor&);
 	
-	void resizeEvent(QResizeEvent *);
-	
 private slots:
+	void init();
+	void retranslateUi();
+  
 	void nameChanged();
 	void commentChanged();
 	void xColumnChanged(int);
 	void yColumnChanged(int);
 	void visibilityChanged(int);
 	
+	//Line-Tab
 	void lineTypeChanged(int);
+	void lineInterpolationPointsCountChanged(int);
   	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(int);
 	void lineOpacityChanged(int);
 	
+	void dropLineTypeChanged(int);
+  	void dropLineStyleChanged(int);
+	void dropLineColorChanged(const QColor&);
+	void dropLineWidthChanged(int);
+	void dropLineOpacityChanged(int);
+	
+	//Symbol-tab
   	void symbolStyleChanged(int);
 	void symbolSizeChanged(int);
 	void symbolRotationChanged(int);
@@ -97,7 +108,16 @@ private slots:
 	void symbolBorderColorChanged(const QColor&);
 	void symbolBorderWidthChanged(int);
 	
-	void retranslateUi();
+	//Values-Tab
+	void valuesTypeChanged(int);
+	void valuesPositionChanged(int);
+	void valuesDistanceChanged(int);
+	void valuesRotationChanged(int);
+	void valuesOpacityChanged(int);
+	void valuesPrefixChanged();
+	void valuesSuffixChanged();
+	void valuesFontChanged(const QFont&);
+	void valuesFontColorChanged(const QColor&);
 };
 
 #endif

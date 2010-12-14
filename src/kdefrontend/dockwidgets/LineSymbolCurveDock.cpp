@@ -104,17 +104,26 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	
 	verticalSpacer = new QSpacerItem(24, 320, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	gridLayout->addItem(verticalSpacer, 5, 0, 1, 1);
-	
 
 	
-	//Line
-	ui.cbLineType->addItems(LineSymbolCurve::lineTypes());
-	this->updatePenStyles(ui.cbLineStyle, Qt::black);
-	this->updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-	this->fillSymbolStyles();
- 	this->updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
-
-
+	//Tab "Values"
+	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
+	qobject_cast<QGridLayout*>(ui.tabValues->layout())->addWidget(cbValuesColumn, 2, 2, 1, 1);
+	
+	
+	//adjust layouts in the tabs
+	QGridLayout* layout;
+	for (int i=0; i<ui.tabWidget->count(); ++i){
+	  layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	  if (!layout)
+		continue;
+	  
+	  layout->setContentsMargins(2,2,2,2);
+	  layout->setHorizontalSpacing(2);
+	  layout->setVerticalSpacing(2);
+	}
+	
+	
 	//Slots
 	
 	//General
@@ -126,10 +135,17 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	
 	//Lines
 	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
+	connect( ui.sbLineInterpolationPointsCount, SIGNAL(valueChanged(int)), this, SLOT(lineInterpolationPointsCountChanged(int)) );
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
 	connect( ui.kcbLineColor, SIGNAL(changed (const QColor &)), this, SLOT(lineColorChanged(const QColor&)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(int)), this, SLOT(lineWidthChanged(int)) );
 	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );
+
+	connect( ui.cbDropLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(dropLineTypeChanged(int)) );
+	connect( ui.cbDropLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(dropLineStyleChanged(int)) );
+	connect( ui.kcbDropLineColor, SIGNAL(changed (const QColor &)), this, SLOT(dropLineColorChanged(const QColor&)) );
+	connect( ui.sbDropLineWidth, SIGNAL(valueChanged(int)), this, SLOT(dropLineWidthChanged(int)) );
+	connect( ui.sbDropLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(dropLineOpacityChanged(int)) );
 	
 	//Symbol
 	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolStyleChanged(int)) );
@@ -144,8 +160,156 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.kcbSymbolBorderColor, SIGNAL(changed (const QColor &)), this, SLOT(symbolBorderColorChanged(const QColor&)) );
 	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(int)), this, SLOT(symbolBorderWidthChanged(int)) );
 
-
+	//Values
+	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
+	connect( ui.cbValuesPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesPositionChanged(int)) );
+	connect( ui.sbValuesDistance, SIGNAL(valueChanged(int)), this, SLOT(valuesDistanceChanged(int)) );
+	connect( ui.sbValuesRotation, SIGNAL(valueChanged(int)), this, SLOT(valuesRotationChanged(int)) );
+	connect( ui.sbValuesOpacity, SIGNAL(valueChanged(int)), this, SLOT(valuesOpacityChanged(int)) );
+	
+	connect( ui.leValuesPrefix, SIGNAL(returnPressed()), this, SLOT(valuesPrefixChanged()) );
+	connect( ui.leValuesSuffix, SIGNAL(returnPressed()), this, SLOT(valuesSuffixChanged()) );
+	connect( ui.kfrValuesFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(valuesFontChanged(const QFont&)) );
+	connect( ui.kcbValuesFontColor, SIGNAL(changed (const QColor &)), this, SLOT(valuesFontColorChanged(const QColor&)) );
+	
 	retranslateUi();
+	
+	QTimer::singleShot(0, this, SLOT(init()));
+}
+
+void LineSymbolCurveDock::init(){
+  	//Line
+	ui.cbLineType->addItems(LineSymbolCurve::lineTypeStrings());
+	QPainter pa;
+	QPixmap pm( 20, 20 );
+	ui.cbLineType->setIconSize( QSize(20,20) );
+
+	QPen pen(Qt::SolidPattern, 0);
+ 	pa.setPen( pen );
+	
+	//no line
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.end();
+	ui.cbLineType->setItemIcon(0, pm);
+	
+	//line
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,17,17);
+	pa.end();
+	ui.cbLineType->setItemIcon(1, pm);
+	
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,17,3);
+	pa.drawLine(17,3,17,17);
+	pa.end();
+	ui.cbLineType->setItemIcon(2, pm);
+	
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,3,17);
+	pa.drawLine(3,17,17,17);
+	pa.end();
+	ui.cbLineType->setItemIcon(3, pm);
+	
+	//horizontal midpoint
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,10,3);
+	pa.drawLine(10,3,10,17);
+	pa.drawLine(10,17,17,17);
+	pa.end();
+	ui.cbLineType->setItemIcon(4, pm);
+	
+	//vertical midpoint
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,3,10);
+	pa.drawLine(3,10,17,10);
+	pa.drawLine(17,10,17,17);
+	pa.end();
+	ui.cbLineType->setItemIcon(5, pm);
+	
+	//2-segments
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 8,8,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,10,10);
+	pa.end();
+	ui.cbLineType->setItemIcon(6, pm);
+	
+	//3-segments
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 8,8,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,17,17);
+	pa.end();
+	ui.cbLineType->setItemIcon(7, pm);
+	
+	//natural spline
+// 	pm.fill(Qt::transparent);
+// 	pa.begin( &pm );
+// 	pa.setRenderHint(QPainter::Antialiasing);
+// 	pa.setBrush(Qt::SolidPattern);
+//  	pa.rotate(-45);
+// 	pa.drawEllipse( 1,1,4,4);
+// 	pa.drawEllipse( 1,15*sqrt(2),4,4);
+// // 	pa.drawArc(3,15,14,12, 30*16, 120*16);
+// 	pa.end();
+// 	ui.cbLineType->setItemIcon(8, pm);
+// 	ui.cbLineType->setItemIcon(9, pm);
+// 	ui.cbLineType->setItemIcon(10, pm);
+// 	ui.cbLineType->setItemIcon(11, pm);
+	
+	
+	this->updatePenStyles(ui.cbLineStyle, Qt::black);
+	
+	//Drop lines
+	ui.cbDropLineType->addItems(LineSymbolCurve::dropLineTypeStrings());
+	this->updatePenStyles(ui.cbDropLineStyle, Qt::black);
+	
+	//Symbols
+	this->updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
+	this->fillSymbolStyles();
+ 	this->updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
+	
+	//Values
+	ui.cbValuesType->addItems(LineSymbolCurve::valuesTypeStrings());
+	ui.cbValuesPosition->addItems(LineSymbolCurve::valuesPositionStrings());
 }
 
 void LineSymbolCurveDock::setModel(AspectTreeModel* model){
@@ -153,6 +317,7 @@ void LineSymbolCurveDock::setModel(AspectTreeModel* model){
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	cbXColumn->setTopLevelClasses(list);
 	cbYColumn->setTopLevelClasses(list);
+	cbValuesColumn->setTopLevelClasses(list);
 	
  	list.clear();
 	list<<"Column";
@@ -161,6 +326,7 @@ void LineSymbolCurveDock::setModel(AspectTreeModel* model){
 	m_initializing=true;
   	cbXColumn->setModel(model);
 	cbYColumn->setModel(model);
+	cbValuesColumn->setModel(model);
 	
 	m_aspectTreeModel=model;
 	m_initializing=false;
@@ -181,6 +347,7 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 	cbXColumn->setEnabled(true);
 	lYColumn->setEnabled(true);
 	cbYColumn->setEnabled(true);
+	ui.lValuesColumn->setEnabled(true);
 	
 	leName->setText(curve->name());
 	teComment->setText(curve->comment());
@@ -193,11 +360,13 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 	cbXColumn->setEnabled(false);
 	lYColumn->setEnabled(false);
 	cbYColumn->setEnabled(false);	
+	ui.lValuesColumn->setEnabled(false);
 	
 	leName->setText("");
 	teComment->setText("");
 	cbXColumn->setCurrentIndex(QModelIndex());
 	cbYColumn->setCurrentIndex(QModelIndex());
+	cbValuesColumn->setCurrentIndex(QModelIndex());
   }
   
   //show the properties of the first curve
@@ -209,11 +378,20 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   
   //Line-tab
   ui.cbLineType->setCurrentIndex( curve->lineType() );
+  ui.sbLineInterpolationPointsCount->setValue( curve->lineInterpolationPointsCount() );
   ui.cbLineStyle->setCurrentIndex( curve->linePen().style() );
   ui.kcbLineColor->setColor( curve->linePen().color() );
   ui.sbLineWidth->setValue( curve->linePen().width() );
   ui.sbLineOpacity->setValue( curve->lineOpacity()*100 );
   this->updatePenStyles(ui.cbLineStyle, curve->linePen().color() );
+  
+  ui.cbDropLineType->setCurrentIndex( curve->dropLineType() );
+  ui.cbDropLineStyle->setCurrentIndex( curve->dropLinePen().style() );
+  ui.kcbDropLineColor->setColor( curve->dropLinePen().color() );
+  ui.sbDropLineWidth->setValue( curve->dropLinePen().width() );
+  ui.sbDropLineOpacity->setValue( curve->dropLineOpacity()*100 );
+  this->updatePenStyles(ui.cbDropLineStyle, curve->dropLinePen().color() );
+  
   
   //Symbol-tab
   ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(curve->symbolTypeId()) );
@@ -230,26 +408,24 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   this->updatePenStyles(ui.cbSymbolBorderStyle, curve->symbolsPen().color() );
   this->updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
   
+  //Values-tab
+  ui.cbValuesPosition->setCurrentIndex( curve->valuesPosition() );
+  ui.sbValuesRotation->setValue( curve->valuesRotationAngle() );
+  ui.sbValuesDistance->setValue( curve->valuesDistance() );
+  ui.sbValuesOpacity->setValue( curve->valuesOpacity()*100 );
+  ui.leValuesPrefix->setText( curve->valuesPrefix() );
+  ui.leValuesSuffix->setText( curve->valuesSuffix() );
+  ui.kfrValuesFont->setFont( curve->valuesFont() );
+  ui.kcbValuesFontColor->setColor( curve->valuesPen().color() );
 
   //TODO
-  //Values
   //Area filling
   //Error bars
-
 
   m_curvesList=list;
   m_initializing=false;
 }
 
-
-void LineSymbolCurveDock::resizeEvent(QResizeEvent * event){
-  Q_UNUSED(event);
-  
-/* TODO  
-	this->updateSymbolBorderStyles();
-// 	this->initAreaFillingStyles();
-	this->updateSymbolFillingStyles();*/
-}
 
 /*!
 	fills the ComboBox for the symbol style with all possible styles in the style factory.
@@ -291,24 +467,23 @@ void LineSymbolCurveDock::fillSymbolStyles(){
 void LineSymbolCurveDock::updatePenStyles(QComboBox* comboBox, const QColor& color){
 	int index=comboBox->currentIndex();
 	comboBox->clear();
-	comboBox->addItem("none");
 
 	QPainter pa;
 	int offset=2;
-	int w=comboBox->width()-2*offset;
+	int w=50;
 	int h=10;
 	QPixmap pm( w, h );
 	comboBox->setIconSize( QSize(w,h) );
 	
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	for (int i=1;i<6;i++) {
+	QStringList list=QStringList()<<"no line"<<"solid line"<<"dash line"<<"dot line"<<"dash-dot line"<<"dash-dot-dot line";
+	for (int i=0;i<6;i++){
 		pm.fill(Qt::transparent);
 		pa.begin( &pm );
-// 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
 		pa.drawLine( offset, h/2, w-offset, h/2);
 		pa.end();
-		comboBox->addItem( QIcon(pm), "" );
+ 		comboBox->addItem( QIcon(pm), list.at(i) );
 	}
 	comboBox->setCurrentIndex(index);
 }
@@ -320,28 +495,30 @@ void LineSymbolCurveDock::updatePenStyles(QComboBox* comboBox, const QColor& col
 void LineSymbolCurveDock::updateBrushStyles(QComboBox* comboBox, const QColor& color){
   	int index=comboBox->currentIndex();
 	comboBox->clear();
-	comboBox->addItem( i18n("none") );
 
 	QPainter pa;
 	int offset=2;
-	int w=comboBox->width() - 2*offset;
-	qDebug()<<"cbwidth "<<w;
-// 	int h=ui.cbSymbolFillingStyle->height() - 2*offset;
-	int h=20 - 2*offset;
+	int w=50;
+	int h=20;
 	QPixmap pm( w, h );
 	comboBox->setIconSize( QSize(w,h) );
 
 	QPen pen(Qt::SolidPattern, 1);
  	pa.setPen( pen );
 	
-	for (int i=1;i<15;i++) {
+	QStringList list=QStringList()<<"none"<<"uniform"<<"extremely dense"<<"very dense"
+														<<"somewhat dense"<<"half dense"<<"somewhat sparce"
+														 <<"very sparce"<<"extremely sparce"<<"horiz. lines"
+														 <<"vert. lines"<<"crossing lines"<<"backward diag. lines"
+														 <<"forward diag. lines"<<"crossing diag. lines";
+	for (int i=0;i<15;i++) {
 		pm.fill(Qt::transparent);
 		pa.begin( &pm );
 		pa.setRenderHint(QPainter::Antialiasing);
  		pa.setBrush( QBrush(color, (Qt::BrushStyle)i) );
 		pa.drawRect( offset, offset, w - 2*offset, h - 2*offset);
 		pa.end();
-		comboBox->addItem( QIcon(pm), "" );
+		comboBox->addItem( QIcon(pm), list.at(i) );
 	}
 
 	comboBox->setCurrentIndex(index);
@@ -357,10 +534,6 @@ void LineSymbolCurveDock::retranslateUi(){
 	chkVisible->setText(i18n("Visible"));
 	lXColumn->setText(i18n("x-data:"));
 	lYColumn->setText(i18n("y-data:"));
-	
-// 	ui.cbSymbolStyle->setItemText(0, i18n("none"));
-	ui.cbSymbolFillingStyle->setItemText(0, i18n("none"));
-	ui.cbSymbolBorderStyle->setItemText(0, i18n("none"));
 }
 
 // "General"-tab
@@ -370,7 +543,7 @@ void LineSymbolCurveDock::nameChanged(){
 
 
 void LineSymbolCurveDock::commentChanged(){
-  
+  m_curvesList.first()->setComment(teComment->toPlainText());
 }
 
 void LineSymbolCurveDock::xColumnChanged(int index){
@@ -378,19 +551,17 @@ void LineSymbolCurveDock::xColumnChanged(int index){
 	return;
   
   AbstractColumn* column= static_cast<AbstractColumn*>(cbXColumn->currentIndex().internalPointer());
-  LineSymbolCurve* curve;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setXColumn(column);
   }
 }
 
 void LineSymbolCurveDock::yColumnChanged(int index){
   if (m_initializing)
-  return;
+	return;
   
   AbstractColumn* column= static_cast<AbstractColumn*>(cbXColumn->currentIndex().internalPointer());
-  LineSymbolCurve* curve;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setYColumn(column);
   }
 }
@@ -405,44 +576,63 @@ void LineSymbolCurveDock::visibilityChanged(int state){
   else
 	b=false;
 
-  LineSymbolCurve* curve;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setVisible(b);
   }
 }
 
 // "Line"-tab
 void LineSymbolCurveDock::lineTypeChanged(int index){
+  LineSymbolCurve::LineType lineType = LineSymbolCurve::LineType(index);
+  
+  if ( lineType == LineSymbolCurve::NoLine){
+	ui.cbLineStyle->setEnabled(false);
+	ui.kcbLineColor->setEnabled(false);
+	ui.sbLineWidth->setEnabled(false);
+	ui.sbLineOpacity->setEnabled(false);
+	ui.lLineInterpolationPointsCount->hide();
+	ui.sbLineInterpolationPointsCount->hide();
+  }else{
+	ui.cbLineStyle->setEnabled(true);	
+	ui.kcbLineColor->setEnabled(true);
+	ui.sbLineWidth->setEnabled(true);
+	ui.sbLineOpacity->setEnabled(true);
+	
+	if (lineType==LineSymbolCurve::SplineCubicNatural || lineType==LineSymbolCurve::SplineCubicPeriodic
+	  || lineType==LineSymbolCurve::SplineAkimaNatural || lineType==LineSymbolCurve::SplineAkimaPeriodic){
+	  ui.lLineInterpolationPointsCount->show();
+	  ui.sbLineInterpolationPointsCount->show();
+	}else{
+	  ui.lLineInterpolationPointsCount->hide();
+	  ui.sbLineInterpolationPointsCount->hide();
+	 }
+  }
+  
   if (m_initializing)
 	return;
   
-  LineSymbolCurve::LineType lineType = LineSymbolCurve::LineType(index);
-  LineSymbolCurve* curve;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setLineType(lineType);
   }
 }
 
 
-void LineSymbolCurveDock::lineStyleChanged(int index){
-  Qt::PenStyle penStyle=Qt::PenStyle(index);
-  
-  if ( penStyle == Qt::NoPen ){
-	ui.kcbLineColor->setEnabled(false);
-	ui.sbLineWidth->setEnabled(false);
-	ui.sbLineOpacity->setEnabled(false);
-  }else{
-	ui.kcbLineColor->setEnabled(true);
-	ui.sbLineWidth->setEnabled(true);
-	ui.sbLineOpacity->setEnabled(true);
-  }
-  
+void LineSymbolCurveDock::lineInterpolationPointsCountChanged(int count){
    if (m_initializing)
 	return;
-	
-  LineSymbolCurve* curve;
+
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setLineInterpolationPointsCount(count);
+  }
+}
+
+void LineSymbolCurveDock::lineStyleChanged(int index){
+   if (m_initializing)
+	return;
+
+  Qt::PenStyle penStyle=Qt::PenStyle(index);
   QPen pen;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	pen=curve->linePen();
 	pen.setStyle(penStyle);
 	curve->setLinePen(pen);
@@ -453,9 +643,8 @@ void LineSymbolCurveDock::lineColorChanged(const QColor& color){
   if (m_initializing)
 	return;
 
-  LineSymbolCurve* curve;
   QPen pen;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	pen=curve->linePen();
 	pen.setColor(color);
 	curve->setLinePen(pen);
@@ -468,9 +657,8 @@ void LineSymbolCurveDock::lineWidthChanged(int value){
   if (m_initializing)
 	return;
   
-  LineSymbolCurve* curve;
   QPen pen;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	pen=curve->linePen();
 	pen.setWidth(value);
 	curve->setLinePen(pen);
@@ -481,10 +669,82 @@ void LineSymbolCurveDock::lineOpacityChanged(int value){
   if (m_initializing)
 	return;
 		
-  LineSymbolCurve* curve;
   qreal opacity = (float)value/100;
-  foreach(curve, m_curvesList)
+  foreach(LineSymbolCurve* curve, m_curvesList)
 	curve->setLineOpacity(opacity);
+	
+}
+
+void LineSymbolCurveDock::dropLineTypeChanged(int index){
+  LineSymbolCurve::DropLineType dropLineType = LineSymbolCurve::DropLineType(index);
+  
+  if ( dropLineType == LineSymbolCurve::NoDropLine){
+	ui.cbDropLineStyle->setEnabled(false);
+	ui.kcbDropLineColor->setEnabled(false);
+	ui.sbDropLineWidth->setEnabled(false);
+	ui.sbDropLineOpacity->setEnabled(false);
+  }else{
+	ui.cbDropLineStyle->setEnabled(true);
+	ui.kcbDropLineColor->setEnabled(true);
+	ui.sbDropLineWidth->setEnabled(true);
+	ui.sbDropLineOpacity->setEnabled(true);
+  }
+  
+  if (m_initializing)
+	return;
+  
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setDropLineType(dropLineType);
+  }
+}
+
+
+void LineSymbolCurveDock::dropLineStyleChanged(int index){
+   if (m_initializing)
+	return;
+
+  Qt::PenStyle penStyle=Qt::PenStyle(index);
+  QPen pen;
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	pen=curve->dropLinePen();
+	pen.setStyle(penStyle);
+	curve->setDropLinePen(pen);
+  }
+}
+
+void LineSymbolCurveDock::dropLineColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
+
+  QPen pen;
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	pen=curve->dropLinePen();
+	pen.setColor(color);
+	curve->setDropLinePen(pen);
+  }  
+
+  this->updatePenStyles(ui.cbDropLineStyle, color);
+}
+
+void LineSymbolCurveDock::dropLineWidthChanged(int value){
+  if (m_initializing)
+	return;
+  
+  QPen pen;
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	pen=curve->dropLinePen();
+	pen.setWidth(value);
+	curve->setDropLinePen(pen);
+  }  
+}
+
+void LineSymbolCurveDock::dropLineOpacityChanged(int value){
+  if (m_initializing)
+	return;
+		
+  qreal opacity = (float)value/100;
+  foreach(LineSymbolCurve* curve, m_curvesList)
+	curve->setDropLineOpacity(opacity);
 	
 }
 
@@ -492,20 +752,16 @@ void LineSymbolCurveDock::lineOpacityChanged(int value){
 void LineSymbolCurveDock::symbolStyleChanged(int index){
   Q_UNUSED(index);
   QString currentSymbolTypeId = ui.cbSymbolStyle->currentText();
-  bool fillingEnabled = symbolFactory->prototype(currentSymbolTypeId)->fillingEnabled();
   
   if (currentSymbolTypeId=="none"){
 	ui.sbSymbolSize->setEnabled(false);
 	ui.sbSymbolRotation->setEnabled(false);
 	ui.sbSymbolOpacity->setEnabled(false);
 	
-	ui.lSymbolFilling->setEnabled(false);
-	ui.lSymbolFillingColor->setEnabled(false);
 	ui.kcbSymbolFillingColor->setEnabled(false);
 	ui.lSymbolFillingStyle->setEnabled(false);
 	ui.cbSymbolFillingStyle->setEnabled(false);
 	
-	ui.lSymbolBorder->setEnabled(false);
 	ui.cbSymbolBorderStyle->setEnabled(false);
 	ui.kcbSymbolBorderColor->setEnabled(false);
 	ui.sbSymbolBorderWidth->setEnabled(false);
@@ -515,21 +771,15 @@ void LineSymbolCurveDock::symbolStyleChanged(int index){
 	ui.sbSymbolOpacity->setEnabled(true);
 	
 	//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-	if (fillingEnabled){
-	  ui.lSymbolFilling->setEnabled(true);
-	  ui.lSymbolFillingColor->setEnabled(true);
+	if ( symbolFactory->prototype(currentSymbolTypeId)->fillingEnabled() ){
 	  ui.kcbSymbolFillingColor->setEnabled(true);
 	  ui.lSymbolFillingStyle->setEnabled(true);
 	  ui.cbSymbolFillingStyle->setEnabled(true);
 	}else{
-	  ui.lSymbolFilling->setEnabled(false);
-	  ui.lSymbolFillingColor->setEnabled(false);
 	  ui.kcbSymbolFillingColor->setEnabled(false);
-	  ui.lSymbolFillingStyle->setEnabled(false);
 	  ui.cbSymbolFillingStyle->setEnabled(false);
 	}
 	
-	ui.lSymbolBorder->setEnabled(true);
 	ui.cbSymbolBorderStyle->setEnabled(true);
 	ui.kcbSymbolBorderColor->setEnabled(true);
 	ui.sbSymbolBorderWidth->setEnabled(true);
@@ -538,8 +788,7 @@ void LineSymbolCurveDock::symbolStyleChanged(int index){
   if (m_initializing)
 	return;
 
-  LineSymbolCurve* curve;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setSymbolTypeId(currentSymbolTypeId);
   }
 
@@ -550,42 +799,47 @@ void LineSymbolCurveDock::symbolSizeChanged(int value){
   if (m_initializing)
 	return;
 	
-  LineSymbolCurve* curve;
-  foreach(curve, m_curvesList)
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setSymbolSize(value);
-  
+  }
 }
 
 void LineSymbolCurveDock::symbolRotationChanged(int value){
   if (m_initializing)
 	return;
 	
-  LineSymbolCurve* curve;
-  foreach(curve, m_curvesList)
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setSymbolRotationAngle(value);
-
+  }
 }
 
 void LineSymbolCurveDock::symbolOpacityChanged(int value){
   if (m_initializing)
 	return;
 		
-  LineSymbolCurve* curve;
   qreal opacity = (float)value/100;
-  foreach(curve, m_curvesList)
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setSymbolsOpacity(opacity);
-	
+  }
 }
 
 void LineSymbolCurveDock::symbolFillingStyleChanged(int index){
+  Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
+  if (brushStyle == Qt::NoBrush){
+	ui.lSymbolFillingColor->setEnabled(false);
+	ui.kcbSymbolFillingColor->setEnabled(false);
+  }else{
+	ui.lSymbolFillingColor->setEnabled(true);
+	ui.kcbSymbolFillingColor->setEnabled(true);
+  }
+  
   if (m_initializing)
 	return;
 
-  LineSymbolCurve* curve;
   QBrush brush;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	brush=curve->symbolsBrush();
-	brush.setStyle(Qt::BrushStyle(index));
+	brush.setStyle(brushStyle);
 	curve->setSymbolsBrush(brush);
   }
 }
@@ -594,26 +848,34 @@ void LineSymbolCurveDock::symbolFillingColorChanged(const QColor& color){
   if (m_initializing)
 	return;
 	
-  LineSymbolCurve* curve;
   QBrush brush;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	brush=curve->symbolsBrush();
 	brush.setColor(color);
 	curve->setSymbolsBrush(brush);
   }
 
-  this->updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
+  this->updateBrushStyles(ui.cbSymbolFillingStyle, color );
 }
 
 void LineSymbolCurveDock::symbolBorderStyleChanged(int index){
+  Qt::PenStyle penStyle=Qt::PenStyle(index);
+  
+  if ( penStyle == Qt::NoPen ){
+	ui.kcbSymbolBorderColor->setEnabled(false);
+	ui.sbSymbolBorderWidth->setEnabled(false);
+  }else{
+	ui.kcbSymbolBorderColor->setEnabled(true);
+	ui.sbSymbolBorderWidth->setEnabled(true);
+  }
+
   if (m_initializing)
 	return;
-	
-  LineSymbolCurve* curve;
+  
   QPen pen;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
-	pen.setStyle(Qt::PenStyle(index));
+	pen.setStyle(penStyle);
 	curve->setSymbolsPen(pen);
   }
 }
@@ -622,9 +884,8 @@ void LineSymbolCurveDock::symbolBorderColorChanged(const QColor& color){
   if (m_initializing)
 	return;
   
-  LineSymbolCurve* curve;
   QPen pen;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
 	pen.setColor(color);
 	curve->setSymbolsPen(pen);
@@ -637,11 +898,136 @@ void LineSymbolCurveDock::symbolBorderWidthChanged(int value){
   if (m_initializing)
 	return;
   
-  LineSymbolCurve* curve;
   QPen pen;
-  foreach(curve, m_curvesList){
+  foreach(LineSymbolCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
 	pen.setWidth(value);
 	curve->setSymbolsPen(pen);
+  }
+}
+
+//Values-tab
+void LineSymbolCurveDock::valuesTypeChanged(int index){
+  if (m_initializing)
+	return;
+
+  LineSymbolCurve::ValuesType valuesType = LineSymbolCurve::ValuesType(index);
+  
+  if (valuesType==LineSymbolCurve::NoValues){
+	ui.cbValuesPosition->setEnabled(false);
+	ui.lValuesColumn->hide();
+	cbValuesColumn->hide();
+	ui.sbValuesDistance->setEnabled(false);
+	ui.sbValuesRotation->setEnabled(false);	
+	ui.sbValuesOpacity->setEnabled(false);
+	ui.cbValuesColumnFormat->setEnabled(false);
+	ui.cbValuesColumnFormat->setEnabled(false);
+	//TODO precision/datetime format
+	ui.leValuesPrefix->setEnabled(false);
+	ui.leValuesSuffix->setEnabled(false);
+	ui.kfrValuesFont->setEnabled(false);
+	ui.kcbValuesFontColor->setEnabled(false);
+  }else{
+	ui.cbValuesPosition->setEnabled(true);
+	ui.sbValuesDistance->setEnabled(true);
+	ui.sbValuesRotation->setEnabled(true);	
+	ui.sbValuesOpacity->setEnabled(true);
+	ui.cbValuesColumnFormat->setEnabled(true);
+	ui.cbValuesColumnFormat->setEnabled(true);
+	//TODO precision/datetime format
+	ui.leValuesPrefix->setEnabled(true);
+	ui.leValuesSuffix->setEnabled(true);
+	ui.kfrValuesFont->setEnabled(true);
+	ui.kcbValuesFontColor->setEnabled(true);	
+	
+	if (valuesType==LineSymbolCurve::ValuesCustomColumn){
+	  ui.lValuesColumn->show();
+	  cbValuesColumn->show();
+	}else{
+	  ui.lValuesColumn->hide();
+	  cbValuesColumn->hide();
+	}
+  }
+	
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setValuesType(valuesType);
+  }
+}
+
+void LineSymbolCurveDock::valuesPositionChanged(int index){
+  if (m_initializing)
+	return;
+	
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setValuesPosition(LineSymbolCurve::ValuesPosition(index));
+  }
+}
+
+void LineSymbolCurveDock::valuesDistanceChanged(int value){
+  if (m_initializing)
+	return;
+		
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setValuesDistance(value);
+  }
+}
+
+void LineSymbolCurveDock::valuesRotationChanged(int value){
+  if (m_initializing)
+	return;
+		
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setValuesRotationAngle(value);
+  }
+}
+
+void LineSymbolCurveDock::valuesOpacityChanged(int value){
+  if (m_initializing)
+	return;
+		
+  qreal opacity = (float)value/100;
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setValuesOpacity(opacity);
+  }
+}
+
+void LineSymbolCurveDock::valuesPrefixChanged(){
+  if (m_initializing)
+	return;
+		
+  QString prefix = ui.leValuesPrefix->text();
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setValuesPrefix(prefix);
+  }
+}
+
+void LineSymbolCurveDock::valuesSuffixChanged(){
+  if (m_initializing)
+	return;
+		
+  QString suffix = ui.leValuesSuffix->text();
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setValuesSuffix(suffix);
+  }
+}
+
+void LineSymbolCurveDock::valuesFontChanged(const QFont& font){
+  if (m_initializing)
+	return;
+	
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	curve->setValuesFont(font);
+  }
+}
+
+void LineSymbolCurveDock::valuesFontColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
+  
+  QPen pen;
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	pen=curve->valuesPen();
+	pen.setColor(color);
+	curve->setValuesPen(pen);
   }  
 }
