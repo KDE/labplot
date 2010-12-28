@@ -44,7 +44,6 @@
 #include "worksheet/LinearAxis.h"
 #include "worksheet/LogAxis.h"
 #include "worksheet/LineSymbolCurve.h"
-#include "worksheet/DropLineCurve.h"
 #include "worksheet/PlotArea.h"
 #include "lib/ActionManager.h"
 #include "core/column/Column.h"
