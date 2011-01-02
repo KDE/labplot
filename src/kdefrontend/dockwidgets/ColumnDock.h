@@ -2,8 +2,8 @@
     File                 : ColumnDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
+    Copyright            : (C) 2011 Alexander Semke
+    Email (use @ for *)  : alexander.semke*web.de
     Description          : widget for column properties
                            
  ***************************************************************************/
@@ -43,10 +43,19 @@ class ColumnDock: public QWidget{
 	  
   private:
 	  Ui::ColumnDock ui;
-	  QList<Column*> m_columnList;
+	  QList<Column*> m_columnsList;
+	  bool m_initializing;
+	  void updateFormat();
 	  
-  public slots:
-	  void columnTypeChanged(int);
+  private slots:
+	void retranslateUi();
+	
+	void nameChanged();
+	void commentChanged();
+	void typeChanged(int);
+	void formatChanged(int);
+	void precisionChanged(int);
+	void plotDesignationChanged(int);
 };
 
 #endif // COLUMNDOCK_H
