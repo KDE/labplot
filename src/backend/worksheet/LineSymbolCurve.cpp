@@ -1,11 +1,11 @@
 /***************************************************************************
     File                 : LineSymbolCurve.cpp
     Project              : LabPlot/SciDAVis
-    Description          : A curve drawn as line and/or symbols
+    Description          : A 2D-curve.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
-							  (replace * with @ in the email addresses) 
+								  (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 
@@ -28,12 +28,12 @@
  *                                                                         *
  ***************************************************************************/
 
-/**
- * \class LineSymbolCurve
- * \brief A curve drawn as line and/or symbols
- *
- * 
- */
+/*!
+  \class LineSymbolCurve
+  \brief A 2D-curve, provides an interface for editing many properties of the the curve.
+ 
+  \ingroup kdefrontend
+*/
 
 #include "worksheet/LineSymbolCurve.h"
 #include "worksheet/LineSymbolCurvePrivate.h"
@@ -50,7 +50,7 @@
 #include <QGraphicsEllipseItem>
 #include <QPainterPath>
 #include <QPainter>
-#include <QtDebug>
+// #include <QtDebug>
 
 #include <gsl/gsl_spline.h>
 #include <math.h>
@@ -59,7 +59,6 @@
 LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner){
   	xColumn = NULL;
 	yColumn = NULL;
-	valuesColumn = NULL;
 	
 	lineType = LineSymbolCurve::NoLine;
 	lineInterpolationPointsCount = 1;
@@ -75,8 +74,10 @@ LineSymbolCurvePrivate::LineSymbolCurvePrivate(LineSymbolCurve *owner): q(owner)
 	swapSymbolTypeId("diamond");
 
 	valuesType = LineSymbolCurve::NoValues;
+	valuesColumn = NULL;	
 	valuesPosition = LineSymbolCurve::ValuesAbove;
 	valuesDistance = 1.0;
+	valuesRotationAngle = 0;
 	valuesOpacity = 1.0;
 	
  	// TODO: remove this temporary code later
@@ -120,7 +121,9 @@ LineSymbolCurve::~LineSymbolCurve() {
 
 
 /* ============================ accessor documentation ================= */
-                                                                           /**
+//TODO provide a proper documentation for all functions implemented with the help of the macros
+
+/**
   \fn   LineSymbolCurve::POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
   \brief Set/get the pointer to the X column.
 */
@@ -129,6 +132,7 @@ LineSymbolCurve::~LineSymbolCurve() {
   \brief Set/get the pointer to the Y column.
 */
 
+//line
 /**
   \fn   LineSymbolCurve::CLASS_D_ACCESSOR_DECL(LineSymbolCurve::LineType, lineType , LineType);
   \brief Set/get the line type.
@@ -142,7 +146,7 @@ LineSymbolCurve::~LineSymbolCurve() {
   \brief Get/set the line pen.
 */
 
-
+//symbols
 /**
   \fn   LineSymbolCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
   \brief Set/get whether the symbols are visible/invisible.
@@ -176,20 +180,24 @@ LineSymbolCurve::~LineSymbolCurve() {
   \brief Get/set the symbol outline pen.
 */
 
+//values
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, xColumn, xColumn);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, yColumn, yColumn);
 
+//line
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, LineSymbolCurve::LineType, lineType, lineType);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, int, lineInterpolationPointsCount, lineInterpolationPointsCount);
 CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, linePen, linePen);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, lineOpacity, lineOpacity);
 
+//droplines
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, LineSymbolCurve::DropLineType, dropLineType, dropLineType);
 CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, dropLinePen, dropLinePen);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, dropLineOpacity, dropLineOpacity);
 
+//symbols
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolsOpacity, symbolsOpacity);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolRotationAngle, symbolRotationAngle);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, symbolSize, symbolSize);
@@ -198,6 +206,9 @@ CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QString, symbolTypeId, symbolTypeId)
 CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QBrush, symbolsBrush, symbolsBrush);
 CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, symbolsPen, symbolsPen);
 
+//values
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, LineSymbolCurve::ValuesType, valuesType, valuesType);
+BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, const AbstractColumn *, valuesColumn, valuesColumn);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, LineSymbolCurve::ValuesPosition, valuesPosition, valuesPosition);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, valuesDistance, valuesDistance);
 BASIC_SHARED_D_READER_IMPL(LineSymbolCurve, qreal, valuesRotationAngle, valuesRotationAngle);
@@ -208,8 +219,6 @@ CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QPen, valuesPen, valuesPen);
 CLASS_SHARED_D_READER_IMPL(LineSymbolCurve, QFont, valuesFont, valuesFont);
 
 /* ============================ setter methods and undo commands ================= */
-
-//Line 
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetXColumn, const AbstractColumn *, xColumn, retransform);
 void LineSymbolCurve::setXColumn(const AbstractColumn *xColumn) {
@@ -237,7 +246,7 @@ STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLineInterpolationPointsCount, int, lin
 void LineSymbolCurve::setLineInterpolationPointsCount(int count) {
 	Q_D(LineSymbolCurve);
 	if (count != d->lineInterpolationPointsCount)
-		exec(new LineSymbolCurveSetLineInterpolationPointsCountCmd(d, count, tr("%1: set interpolation points")));
+		exec(new LineSymbolCurveSetLineInterpolationPointsCountCmd(d, count, tr("%1: set the number of interpolation points")));
 }
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect);
@@ -336,6 +345,13 @@ void LineSymbolCurve::setValuesType(ValuesType type) {
 		exec(new LineSymbolCurveSetValuesTypeCmd(d, type, tr("%1: set values type")));
 }
 
+STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetValuesColumn, const AbstractColumn *, valuesColumn, updateValues	);
+void LineSymbolCurve::setValuesColumn(const AbstractColumn *valuesColumn) {
+	Q_D(LineSymbolCurve);
+	if (valuesColumn != d->valuesColumn)
+		exec(new LineSymbolCurveSetValuesColumnCmd(d, valuesColumn, tr("%1: set values column")));
+}
+
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetValuesPosition, LineSymbolCurve::ValuesPosition, valuesPosition, updateValues);
 void LineSymbolCurve::setValuesPosition(ValuesPosition position) {
 	Q_D(LineSymbolCurve);
@@ -361,7 +377,7 @@ STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetValuesRotationAngle, qreal, valuesRota
 void LineSymbolCurve::setValuesRotationAngle(qreal angle) {
 	Q_D(LineSymbolCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->valuesRotationAngle))
-		exec(new LineSymbolCurveSetValuesRotationAngleCmd(d, angle, tr("%1: rotate valuess")));
+		exec(new LineSymbolCurveSetValuesRotationAngleCmd(d, angle, tr("%1: rotate values")));
 }
 
 STD_SETTER_CMD_IMPL_F(LineSymbolCurve, SetValuesPrefix, QString, valuesPrefix, updateValues);
@@ -447,7 +463,6 @@ void LineSymbolCurve::retransform() {
 }
 
 void LineSymbolCurve::handlePageResize(double horizontalRatio, double verticalRatio) {
-  qDebug()<<"hadlePageResize";
   //TODO
 /*	Q_D(const LineSymbolCurve);
 	
@@ -471,6 +486,11 @@ void LineSymbolCurve::handlePageResize(double horizontalRatio, double verticalRa
 }
 
 //############ private-implementation #################
+
+/*!
+  recalculates the position of the points to be drawn. Called when the data was changed.
+  Triggers the update of lines, drop lines, symbols etc.
+*/
 void LineSymbolCurve::Private::retransform() {
 	symbolPointsLogical.clear();
 
@@ -524,9 +544,9 @@ void LineSymbolCurve::Private::retransform() {
 	}
 
 
-	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
-	if (cSystem)
-	  symbolPoints = cSystem->mapLogicalToScene(symbolPointsLogical);
+  const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
+  if (cSystem)
+	symbolPoints = cSystem->mapLogicalToScene(symbolPointsLogical);
 	
   updateLines();
   updateDropLines();
@@ -746,6 +766,9 @@ void LineSymbolCurve::Private::updateDropLines(){
 	recalcShapeAndBoundingRect();
 }
 
+/*!
+  recreates the value strings to be shown and recalculates their draw position.
+*/
 void LineSymbolCurve::Private::updateValues(){
   	valuesPath = QPainterPath();
 	valuesPoints.clear();
@@ -783,17 +806,40 @@ void LineSymbolCurve::Private::updateValues(){
 		break;
 	  }
 	  case LineSymbolCurve::ValuesCustomColumn:{
-		//TODO
-// 		if (!valuesColumn){
-// 		  recalcShapeAndBoundingRect();
-// 		  return;
-// 		}
-		recalcShapeAndBoundingRect();
-		return;
+		if (!valuesColumn){
+		  recalcShapeAndBoundingRect();
+		  return;
+		}
+
+		int endRow;
+		if (symbolPointsLogical.size()>valuesColumn->rowCount())
+		  endRow =  valuesColumn->rowCount();
+		else
+		  endRow = symbolPointsLogical.size();
+
+		SciDAVis::ColumnMode xColMode = valuesColumn->columnMode();
+		for (int row=0; row<endRow; row++){
+		  if ( !valuesColumn->isValid(row) || valuesColumn->isMasked(row) )
+			continue;
+
+		  switch (xColMode){
+				case SciDAVis::Numeric:
+				  valuesStrings << valuesPrefix + QString().setNum(valuesColumn->valueAt(row)) + valuesSuffix;
+					break;
+				case SciDAVis::Text:
+					valuesStrings << valuesPrefix + valuesColumn->textAt(row) + valuesSuffix;
+				case SciDAVis::DateTime:
+				case SciDAVis::Month:
+				case SciDAVis::Day:
+					//TODO
+					break;
+				default:
+					break;
+			}
+		}
+
 	  }
 	}
-	qDebug()<<valuesStrings;
-		
 	//determine the value strings for points only that are visible on the coordinate system
 // 	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
 // 	if (cSystem)
@@ -801,14 +847,15 @@ void LineSymbolCurve::Private::updateValues(){
 // 	  valuesStrings = cSystem->mapLogicalToScene(symbolPointsLogical, valuesStrings);	
 // 
 	
-	//calculate the coordinates where to paint the value strings	
+	//Calculate the coordinates where to paint the value strings.
+	//The coordinates depend on the actual size of the string.
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
 	qreal w;
 	qreal h=fm.ascent();
 	switch(valuesPosition){
 	  case LineSymbolCurve::ValuesAbove:{
-		for (int i=0; i<symbolPoints.size(); i++){
+		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
 		  tempPoint.setX( symbolPoints.at(i).x() - w/2);
 		  tempPoint.setY( symbolPoints.at(i).y() - valuesDistance );
@@ -817,7 +864,7 @@ void LineSymbolCurve::Private::updateValues(){
 		  break;
 		}
 	  case LineSymbolCurve::ValuesUnder:{
-		for (int i=0; i<symbolPoints.size(); i++){
+		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
 		  tempPoint.setX( symbolPoints.at(i).x() -w/2 );
 		  tempPoint.setY( symbolPoints.at(i).y() + valuesDistance + h/2);
@@ -826,7 +873,7 @@ void LineSymbolCurve::Private::updateValues(){
 		break;
 	  }
 	  case LineSymbolCurve::ValuesLeft:{
-		for (int i=0; i<symbolPoints.size(); i++){
+		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
 		  tempPoint.setX( symbolPoints.at(i).x() - valuesDistance - w - 1 );
 		  tempPoint.setY( symbolPoints.at(i).y());
@@ -835,7 +882,7 @@ void LineSymbolCurve::Private::updateValues(){
 		break;
 	  }
 	  case LineSymbolCurve::ValuesRight:{
-		for (int i=0; i<symbolPoints.size(); i++){
+		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
 		  tempPoint.setX( symbolPoints.at(i).x() + valuesDistance - 1 );
 		  tempPoint.setY( symbolPoints.at(i).y() );
@@ -850,6 +897,9 @@ void LineSymbolCurve::Private::updateValues(){
 	recalcShapeAndBoundingRect();
 }
 
+/*!
+  recalculates the outer bounds and the shape of the curve.
+*/
 void LineSymbolCurve::Private::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	boundingRectangle = QRectF();
@@ -878,7 +928,7 @@ void LineSymbolCurve::Private::recalcShapeAndBoundingRect() {
 	}
 
 	if (valuesPosition != LineSymbolCurve::NoValues){
-	  	for (int i=0; i<symbolPoints.size(); i++){
+	  	for (int i=0; i<valuesPoints.size(); i++){
 		  valuesPath.addText( valuesPoints.at(i), valuesFont, valuesStrings.at(i) );
 		}
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, valuesPen));
@@ -927,12 +977,17 @@ void LineSymbolCurve::Private::updateSymbol(){
 	swapSymbolTypeId(symbolTypeId);
 }
 
+/*!
+  Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
+  \sa QGraphicsItem::paint().
+*/
 void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
   if (!isVisible())
 	return;
   
-  //draw lines
   qreal opacity=painter->opacity();
+  
+  //draw lines
   if (lineType != LineSymbolCurve::NoLine){
 	painter->setOpacity(lineOpacity);
 	painter->setPen(linePen);
@@ -951,6 +1006,7 @@ void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphi
   //draw symbols
   if (symbolPrototype->id()!="none"){
 	  painter->setOpacity(symbolsOpacity);
+	  //TODO move the symbol properties from the Symbol-Class to LineSymbolCurve?
 // 	  painter->setPen(symbolsPen);
 // 	  painter->setBrush(symbolsBrush);
 // 	  painter->rotate(symbolRotationAngle);
@@ -966,16 +1022,16 @@ void LineSymbolCurve::Private::paint(QPainter *painter, const QStyleOptionGraphi
 	painter->setOpacity(valuesOpacity);
  	painter->setPen(valuesPen);	
 	painter->setBrush(Qt::NoBrush);
-// 	painter->rotate(valuesRotationAngle);
 	painter->setFont(valuesFont);
-	for (int i=0; i<symbolPoints.size(); i++){
-// 	painter->save();
-// 	  painter->rotate(valuesRotationAngle);
-	  painter->drawText(valuesPoints.at(i), valuesStrings.at(i) );
-// 	  painter->restore();
+	for (int i=0; i<valuesPoints.size(); i++){
+	  painter->translate(valuesPoints.at(i));
+	  painter->save();
+	  painter->rotate(-valuesRotationAngle);
+ 	  painter->drawText(QPoint(0,0), valuesStrings.at(i) );
+ 	  painter->restore();
+	  painter->translate(-valuesPoints.at(i));
 	}
   }
-// 	painter->rotate(-valuesRotationAngle);
   
   painter->setOpacity(opacity);
 }
