@@ -323,7 +323,8 @@ int ImportWidget::importHDF5(MainWin *mainWin, QString filename, Spreadsheet *sp
 */
 	// read data
 	for (int i=0;i<hdf5.numSets();i++) {
-		if(i>0) spreadsheet = mainWin->newSpreadsheet();
+		// TODO: create new spread if i>0
+		//if(i>0) spreadsheet = mainWin->newSpreadsheet();
 
 		int rows = hdf5.Rows(i);
 		int cols = hdf5.Cols(i);

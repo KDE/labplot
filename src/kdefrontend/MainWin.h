@@ -60,6 +60,7 @@ public:
 
 	Spreadsheet* activeSpreadsheet() const;
 	Worksheet* activeWorksheet() const;
+	void newSpreadsheet();
 
 private:
 	QMdiArea *m_mdi_area;
@@ -143,7 +144,6 @@ private slots:
 	void dataPlotActionTriggered(QAction*);
 	void projectChanged();
 
-	void newSpreadsheet();
 	void newFolder();
 	void newWorksheet();
 	void newScript();
