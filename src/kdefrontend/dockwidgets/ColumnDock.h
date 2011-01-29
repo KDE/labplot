@@ -30,6 +30,7 @@
 #ifndef COLUMNDOCK_H
 #define COLUMNDOCK_H
 
+#include "core/column/Column.h"
 #include <QList>
 #include "ui_columndock.h"
 class Column;
@@ -45,7 +46,10 @@ class ColumnDock: public QWidget{
 	  Ui::ColumnDock ui;
 	  QList<Column*> m_columnsList;
 	  bool m_initializing;
-	  void updateFormat();
+	  QStringList dateStrings;
+	  QStringList timeStrings;
+	  
+	  void updateFormatWidgets(const SciDAVis::ColumnMode);
 	  
   private slots:
 	void retranslateUi();
