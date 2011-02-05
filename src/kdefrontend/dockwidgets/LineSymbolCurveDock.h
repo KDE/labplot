@@ -31,6 +31,8 @@
 #define LINESYMBOLCURVEDOCK_H
 
 #include <QList>
+
+#include "core/globals.h"
 #include "ui_linesymbolcurvedock.h"
 
 class QTextEdit;
@@ -39,6 +41,7 @@ class LineSymbolCurve;
 class TreeViewComboBox;
 class CurveSymbolFactory;
 class AspectTreeModel;
+class Column;
 
 class LineSymbolCurveDock: public QWidget{
 	Q_OBJECT
@@ -53,7 +56,9 @@ private:
 	QList<LineSymbolCurve*> m_curvesList;
 	AspectTreeModel* m_aspectTreeModel;
 	bool m_initializing;
-	
+	QStringList dateStrings;
+	QStringList timeStrings;
+	  
 	QGridLayout *gridLayout;
     QLabel *lName;
     QLineEdit *leName;
@@ -72,6 +77,8 @@ private:
 	void fillSymbolStyles();
 	void updateBrushStyles(QComboBox*, const QColor&);
 	void updatePenStyles(QComboBox*, const QColor&);
+	void updateValuesFormatWidgets(const SciDAVis::ColumnMode);
+	void showValuesColumnFormat(const Column*);
 	
 private slots:
 	void init();
@@ -110,6 +117,7 @@ private slots:
 	
 	//Values-Tab
 	void valuesTypeChanged(int);
+	void valuesColumnChanged(int);
 	void valuesPositionChanged(int);
 	void valuesDistanceChanged(int);
 	void valuesRotationChanged(int);

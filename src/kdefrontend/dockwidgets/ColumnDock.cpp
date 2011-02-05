@@ -309,7 +309,6 @@ void ColumnDock::formatChanged(int index){
 		foreach(Column* col, m_columnsList) {
 		  filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		  filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
-		  qDebug()<<"format changed, numeric format "<<filter->numericFormat();
 		}
 		break;
 	  }

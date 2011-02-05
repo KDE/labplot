@@ -30,10 +30,18 @@
 #include "LineSymbolCurveDock.h"
 #include "worksheet/LineSymbolCurve.h"
 #include "core/AspectTreeModel.h"
-#include "core/AbstractColumn.h"
+#include "core/column/Column.h"
 #include "core/plugin/PluginManager.h"
 #include "worksheet/StandardCurveSymbolFactory.h"
 #include "widgets/TreeViewComboBox.h"
+
+#include "core/AbstractFilter.h"
+#include "core/datatypes/SimpleCopyThroughFilter.h"
+#include "core/datatypes/Double2StringFilter.h"
+#include "core/datatypes/String2DoubleFilter.h"
+#include "core/datatypes/DateTime2StringFilter.h"
+#include "core/datatypes/String2DateTimeFilter.h"
+
 #include <QTextEdit>
 #include <QCheckBox>
 #include <QPainter>
@@ -43,7 +51,10 @@
 
 /*!
   \class GuiObserver
-  \brief  Provides a widget for editing the properties of the worksheets currently selected in the project explorer.
+  \brief  Provides a widget for editing the properties of the LineSymbolCurves (2D-curves) currently selected in the project explorer.
+  
+  If more then one curves are set, the properties of the first column are shown. The changes of the properties are applied to all curves.
+  The exclusions are the name, the comment and the datasets (columns) of the curves  - these properties can only be changed if there is only one single curve.
 
   \ingroup kdefrontend
 */
@@ -162,11 +173,13 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
+	connect( cbValuesColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesColumnChanged(int)) );
 	connect( ui.cbValuesPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesPositionChanged(int)) );
 	connect( ui.sbValuesDistance, SIGNAL(valueChanged(int)), this, SLOT(valuesDistanceChanged(int)) );
 	connect( ui.sbValuesRotation, SIGNAL(valueChanged(int)), this, SLOT(valuesRotationChanged(int)) );
 	connect( ui.sbValuesOpacity, SIGNAL(valueChanged(int)), this, SLOT(valuesOpacityChanged(int)) );
 	
+	connect( ui.cbValuesFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesColumnFormatChanged(int)) );
 	connect( ui.leValuesPrefix, SIGNAL(returnPressed()), this, SLOT(valuesPrefixChanged()) );
 	connect( ui.leValuesSuffix, SIGNAL(returnPressed()), this, SLOT(valuesSuffixChanged()) );
 	connect( ui.kfrValuesFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(valuesFontChanged(const QFont&)) );
@@ -178,6 +191,27 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 }
 
 void LineSymbolCurveDock::init(){
+  	dateStrings<<"yyyy-MM-dd";
+	dateStrings<<"yyyy/MM/dd";
+	dateStrings<<"dd/MM/yyyy"; 
+	dateStrings<<"dd/MM/yy";
+	dateStrings<<"dd.MM.yyyy";
+	dateStrings<<"dd.MM.yy";
+	dateStrings<<"MM/yyyy";
+	dateStrings<<"dd.MM."; 
+	dateStrings<<"yyyyMMdd";
+
+	timeStrings<<"hh";
+	timeStrings<<"hh ap";
+	timeStrings<<"hh:mm";
+	timeStrings<<"hh:mm ap";
+	timeStrings<<"hh:mm:ss";
+	timeStrings<<"hh:mm:ss.zzz";
+	timeStrings<<"hh:mm:ss:zzz";
+	timeStrings<<"mm:ss.zzz";
+	timeStrings<<"hhmmss";
+	
+	
   	//Line
 	ui.cbLineType->addItems(LineSymbolCurve::lineTypeStrings());
 	QPainter pa;
@@ -281,19 +315,20 @@ void LineSymbolCurveDock::init(){
 	ui.cbLineType->setItemIcon(7, pm);
 	
 	//natural spline
-// 	pm.fill(Qt::transparent);
-// 	pa.begin( &pm );
-// 	pa.setRenderHint(QPainter::Antialiasing);
-// 	pa.setBrush(Qt::SolidPattern);
-//  	pa.rotate(-45);
-// 	pa.drawEllipse( 1,1,4,4);
-// 	pa.drawEllipse( 1,15*sqrt(2),4,4);
-// // 	pa.drawArc(3,15,14,12, 30*16, 120*16);
-// 	pa.end();
-// 	ui.cbLineType->setItemIcon(8, pm);
-// 	ui.cbLineType->setItemIcon(9, pm);
-// 	ui.cbLineType->setItemIcon(10, pm);
-// 	ui.cbLineType->setItemIcon(11, pm);
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.rotate(45);
+  	pa.drawArc(2*sqrt(2),-4,17*sqrt(2),20,30*16,120*16);
+	
+	pa.end();
+	ui.cbLineType->setItemIcon(8, pm);
+	ui.cbLineType->setItemIcon(9, pm);
+	ui.cbLineType->setItemIcon(10, pm);
+	ui.cbLineType->setItemIcon(11, pm);
 	
 	
 	this->updatePenStyles(ui.cbLineStyle, Qt::black);
@@ -332,9 +367,12 @@ void LineSymbolCurveDock::setModel(AspectTreeModel* model){
 	m_initializing=false;
 }
 
+/*!
+  sets the curves. The properties of the curves in the list \c list can be edited in this widget.
+*/
 void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   m_initializing=true;
-  
+  m_curvesList=list;
   LineSymbolCurve* curve=list.first();
   
   //if there are more then one curve in the list, disable the tab "general"
@@ -347,7 +385,6 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 	cbXColumn->setEnabled(true);
 	lYColumn->setEnabled(true);
 	cbYColumn->setEnabled(true);
-	ui.lValuesColumn->setEnabled(true);
 	
 	leName->setText(curve->name());
 	teComment->setText(curve->comment());
@@ -360,7 +397,6 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 	cbXColumn->setEnabled(false);
 	lYColumn->setEnabled(false);
 	cbYColumn->setEnabled(false);	
-	ui.lValuesColumn->setEnabled(false);
 	
 	leName->setText("");
 	teComment->setText("");
@@ -409,6 +445,8 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   this->updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
   
   //Values-tab
+  ui.cbValuesType->setCurrentIndex( curve->valuesType() );
+
   ui.cbValuesPosition->setCurrentIndex( curve->valuesPosition() );
   ui.sbValuesRotation->setValue( curve->valuesRotationAngle() );
   ui.sbValuesDistance->setValue( curve->valuesDistance() );
@@ -422,7 +460,9 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   //Area filling
   //Error bars
 
-  m_curvesList=list;
+
+//TODO connect the signals of the first column with the slots of this class.
+
   m_initializing=false;
 }
 
@@ -476,7 +516,8 @@ void LineSymbolCurveDock::updatePenStyles(QComboBox* comboBox, const QColor& col
 	comboBox->setIconSize( QSize(w,h) );
 	
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	QStringList list=QStringList()<<"no line"<<"solid line"<<"dash line"<<"dot line"<<"dash-dot line"<<"dash-dot-dot line";
+	QStringList list=QStringList()<<i18n("no line")<<i18n("solid line")<<i18n("dash line")<<i18n("dot line")
+														<<i18n("dash-dot line")<<i18n("dash-dot-dot line");
 	for (int i=0;i<6;i++){
 		pm.fill(Qt::transparent);
 		pa.begin( &pm );
@@ -506,11 +547,11 @@ void LineSymbolCurveDock::updateBrushStyles(QComboBox* comboBox, const QColor& c
 	QPen pen(Qt::SolidPattern, 1);
  	pa.setPen( pen );
 	
-	QStringList list=QStringList()<<"none"<<"uniform"<<"extremely dense"<<"very dense"
-														<<"somewhat dense"<<"half dense"<<"somewhat sparce"
-														 <<"very sparce"<<"extremely sparce"<<"horiz. lines"
-														 <<"vert. lines"<<"crossing lines"<<"backward diag. lines"
-														 <<"forward diag. lines"<<"crossing diag. lines";
+	QStringList list=QStringList()<<i18n("none")<<i18n("uniform")<<i18n("extremely dense")<<i18n("very dense")
+														<<i18n("somewhat dense")<<i18n("half dense")<<i18n("somewhat sparce")
+														 <<i18n("very sparce")<<i18n("extremely sparce")<<i18n("horiz. lines")
+														 <<i18n("vert. lines")<<i18n("crossing lines")<<i18n("backward diag. lines")
+														 <<i18n("forward diag. lines")<<i18n("crossing diag. lines");
 	for (int i=0;i<15;i++) {
 		pm.fill(Qt::transparent);
 		pa.begin( &pm );
@@ -524,6 +565,127 @@ void LineSymbolCurveDock::updateBrushStyles(QComboBox* comboBox, const QColor& c
 	comboBox->setCurrentIndex(index);
 }
 
+/*!
+  depending on the currently selected values column type (column mode) updates the widgets for the values column format, 
+  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
+  Called when the values column was changed.
+  
+  synchronize this function with ColumnDock::updateFormat.
+*/
+void LineSymbolCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode columnMode){
+  ui.cbValuesFormat->clear();
+  LineSymbolCurve::ValuesType valuesType = LineSymbolCurve::ValuesType(ui.cbValuesType->currentIndex());
+
+  switch (columnMode){
+	case SciDAVis::Numeric:
+	  ui.cbValuesFormat->addItem(tr("Decimal"), QVariant('f'));
+	  ui.cbValuesFormat->addItem(tr("Scientific (e)"), QVariant('e'));
+	  ui.cbValuesFormat->addItem(tr("Scientific (E)"), QVariant('E'));
+	  ui.cbValuesFormat->addItem(tr("Automatic (e)"), QVariant('g'));
+	  ui.cbValuesFormat->addItem(tr("Automatic (E)"), QVariant('G'));
+	  break;
+	case SciDAVis::Text:
+	  ui.cbValuesFormat->addItem(tr("Text"), QVariant());
+	  break;
+	case SciDAVis::Month:
+	  ui.cbValuesFormat->addItem(tr("Number without leading zero"), QVariant("M"));
+	  ui.cbValuesFormat->addItem(tr("Number with leading zero"), QVariant("MM"));
+	  ui.cbValuesFormat->addItem(tr("Abbreviated month name"), QVariant("MMM"));
+	  ui.cbValuesFormat->addItem(tr("Full month name"), QVariant("MMMM"));
+	  break;
+	case SciDAVis::Day:
+	  ui.cbValuesFormat->addItem(tr("Number without leading zero"), QVariant("d"));
+	  ui.cbValuesFormat->addItem(tr("Number with leading zero"), QVariant("dd"));
+	  ui.cbValuesFormat->addItem(tr("Abbreviated day name"), QVariant("ddd"));
+	  ui.cbValuesFormat->addItem(tr("Full day name"), QVariant("dddd"));
+	  break;
+	case SciDAVis::DateTime:{
+	  foreach(QString s, dateStrings)
+		ui.cbValuesFormat->addItem(s, QVariant(s));
+	  
+	  foreach(QString s, timeStrings)
+		ui.cbValuesFormat->addItem(s, QVariant(s));
+	  
+	  foreach(QString s1, dateStrings){
+		foreach(QString s2, timeStrings)
+		  ui.cbValuesFormat->addItem(s1 + " " + s2, QVariant(s1 + " " + s2));
+	  }
+	  
+	  break;
+	}
+	default:
+		break;
+  }
+  
+  ui.cbValuesFormat->setCurrentIndex(0);
+  
+  if (columnMode == SciDAVis::Numeric){
+	ui.lValuesPrecision->show();
+	ui.sbValuesPrecision->show();
+  }else{
+	ui.lValuesPrecision->hide();
+	ui.sbValuesPrecision->hide();
+  }
+  
+  if (columnMode == SciDAVis::Text){
+	ui.lValuesFormatTop->hide();
+	ui.lValuesFormat->hide();
+	ui.cbValuesFormat->hide();
+  }else{
+	ui.lValuesFormatTop->show();
+	ui.lValuesFormat->show();
+	ui.cbValuesFormat->show();
+	ui.cbValuesFormat->setCurrentIndex(0);
+  }
+  
+  if (columnMode == SciDAVis::DateTime){
+	ui.cbValuesFormat->setEditable( true );
+  }else{
+	ui.cbValuesFormat->setEditable( false );
+  }
+}
+
+/*!
+  shows the formating properties of the column \c column. 
+  Called, when a new column for the values was selected - either by changing the type of the values (none, x, y, etc.) or 
+  by selecting a new custom column for the values.
+*/
+void LineSymbolCurveDock::showValuesColumnFormat(const Column* column){
+  if (!column){
+	// no valid column is available 
+	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
+	m_initializing = true;
+	this->updateValuesFormatWidgets(SciDAVis::Text);
+	m_initializing = false;
+  }else{
+	SciDAVis::ColumnMode columnMode = column->columnMode();
+	
+	//update the format widgets for the new column mode
+	m_initializing = true;
+	this->updateValuesFormatWidgets(columnMode);
+	m_initializing = false;
+	  
+	 //show the actuall formating properties
+	switch(columnMode) {
+		case SciDAVis::Numeric:{
+		  Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
+		  ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
+		  ui.sbValuesPrecision->setValue(filter->numDigits());
+		  break;
+		}
+		case SciDAVis::Month:
+		case SciDAVis::Day:
+		case SciDAVis::DateTime: {
+				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
+				break;
+			}
+		default:
+			break;
+	}
+  }
+}
+
 
 //************************************************************
 //****************** SLOTS ********************************
@@ -534,15 +696,23 @@ void LineSymbolCurveDock::retranslateUi(){
 	chkVisible->setText(i18n("Visible"));
 	lXColumn->setText(i18n("x-data:"));
 	lYColumn->setText(i18n("y-data:"));
+	
+	//TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
 
 // "General"-tab
 void LineSymbolCurveDock::nameChanged(){
-    m_curvesList.first()->setName(leName->text());
+  if (m_initializing)
+	return;
+  
+  m_curvesList.first()->setName(leName->text());
 }
 
 
 void LineSymbolCurveDock::commentChanged(){
+  if (m_initializing)
+	return;
+  
   m_curvesList.first()->setComment(teComment->toPlainText());
 }
 
@@ -560,7 +730,7 @@ void LineSymbolCurveDock::yColumnChanged(int index){
   if (m_initializing)
 	return;
   
-  AbstractColumn* column= static_cast<AbstractColumn*>(cbXColumn->currentIndex().internalPointer());
+  AbstractColumn* column= static_cast<AbstractColumn*>(cbYColumn->currentIndex().internalPointer());
   foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setYColumn(column);
   }
@@ -907,22 +1077,24 @@ void LineSymbolCurveDock::symbolBorderWidthChanged(int value){
 }
 
 //Values-tab
-void LineSymbolCurveDock::valuesTypeChanged(int index){
-  if (m_initializing)
-	return;
 
+/*!
+  called when the type of the values (none, x, y, (x,y) etc.) was changed.
+*/
+void LineSymbolCurveDock::valuesTypeChanged(int index){
   LineSymbolCurve::ValuesType valuesType = LineSymbolCurve::ValuesType(index);
   
   if (valuesType==LineSymbolCurve::NoValues){
+	//no values are to paint -> deactivate all the pertinent widgets
 	ui.cbValuesPosition->setEnabled(false);
 	ui.lValuesColumn->hide();
 	cbValuesColumn->hide();
 	ui.sbValuesDistance->setEnabled(false);
 	ui.sbValuesRotation->setEnabled(false);	
 	ui.sbValuesOpacity->setEnabled(false);
-	ui.cbValuesColumnFormat->setEnabled(false);
-	ui.cbValuesColumnFormat->setEnabled(false);
-	//TODO precision/datetime format
+	ui.cbValuesFormat->setEnabled(false);
+	ui.cbValuesFormat->setEnabled(false);
+	ui.sbValuesPrecision->setEnabled(false);
 	ui.leValuesPrefix->setEnabled(false);
 	ui.leValuesSuffix->setEnabled(false);
 	ui.kfrValuesFont->setEnabled(false);
@@ -932,25 +1104,54 @@ void LineSymbolCurveDock::valuesTypeChanged(int index){
 	ui.sbValuesDistance->setEnabled(true);
 	ui.sbValuesRotation->setEnabled(true);	
 	ui.sbValuesOpacity->setEnabled(true);
-	ui.cbValuesColumnFormat->setEnabled(true);
-	ui.cbValuesColumnFormat->setEnabled(true);
-	//TODO precision/datetime format
+	ui.cbValuesFormat->setEnabled(true);
+	ui.sbValuesPrecision->setEnabled(true);
 	ui.leValuesPrefix->setEnabled(true);
 	ui.leValuesSuffix->setEnabled(true);
 	ui.kfrValuesFont->setEnabled(true);
 	ui.kcbValuesFontColor->setEnabled(true);	
 	
+	const Column* column;
 	if (valuesType==LineSymbolCurve::ValuesCustomColumn){
 	  ui.lValuesColumn->show();
 	  cbValuesColumn->show();
+	  
+	  column= static_cast<Column*>(cbValuesColumn->currentIndex().internalPointer());
 	}else{
 	  ui.lValuesColumn->hide();
 	  cbValuesColumn->hide();
+	  
+	  if (valuesType==LineSymbolCurve::ValuesY){
+		column = static_cast<const Column*>(m_curvesList.first()->yColumn());
+	  }else{
+		column = static_cast<const Column*>(m_curvesList.first()->xColumn());
+	  }
 	}
+	this->showValuesColumnFormat(column);
   }
+
 	
+  if (m_initializing)
+	return;
+
   foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setValuesType(valuesType);
+  }
+}
+
+/*!
+  called when the custom column for the values was changed.
+*/
+void LineSymbolCurveDock::valuesColumnChanged(int index){
+  if (m_initializing)
+	return;
+
+  Column* column= static_cast<Column*>(cbValuesColumn->currentIndex().internalPointer());
+  this->showValuesColumnFormat(column);
+  
+  foreach(LineSymbolCurve* curve, m_curvesList){
+	//TODO save also the format of the currently selected column for the values (precision etc.)
+	curve->setValuesColumn(column);
   }
 }
 
