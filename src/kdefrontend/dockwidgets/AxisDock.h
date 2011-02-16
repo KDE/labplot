@@ -2,7 +2,7 @@
     File                 : AxisDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
+    Copyright            : (C) 2011 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : axes widget class
                            
@@ -32,6 +32,7 @@
 #include "ui_axisdock.h"
 
 class LabelWidget;
+class Axis;
 
 class AxisDock : public QWidget{
     Q_OBJECT
@@ -40,49 +41,63 @@ public:
     AxisDock(QWidget*);
     ~AxisDock();
 
-// 	void setAxes( QList<Axis>*, const int axisNumber=0);
-// 	void saveAxes(QList<Axis>*);
-// 	void setPlotType(const Plot::PlotType& );
+	void setAxes(QList<Axis*>);
 
 private:
 	Ui::AxisDock ui;
+	QList<Axis*> m_axesList;
+	
 	LabelWidget* labelWidget	;
-// 	QList<Axis> listAxes;
-// 	Plot::PlotType plotType;
-// 	int currentAxis;
 	bool m_dataChanged;
-	bool initializing;
-// 	void showAxis(const short);
-// 	void saveAxis(const short);
-	void resizeEvent(QResizeEvent *);
+	bool m_initializing;
 
-signals:
-	void dataChanged(bool);
-
-public slots:
-// 	void restoreDefaults();
-
-private slots:
-// 	void currentAxisChanged(int);
+  private slots:
+  void init();
 
 	//"General"-tab
-	void axisStateChanged(int);
-	void scaleTypeChanged(int);
+	void nameChanged();
+	void commentChanged();
+	void visibilityChanged(int);
+	void orientationChanged(int);
 	void positionChanged(int);
+	void positionOffsetChanged();
+	void scaleChanged(int);
+	void startChanged();
+	void endChanged();
 
-	//"Ticks"-tab
-	void ticksTypeChanged(int);
-	void majorTicksNumberTypeChanged(int);
-	void minorTicksNumberTypeChanged(int);
-
+	//Line-Tab
+  	void lineStyleChanged(int);
+	void lineColorChanged(const QColor&);
+	void lineWidthChanged(int);
+	void lineOpacityChanged(int);
+	
+	//"Major ticks"-tab
+	void majorTicksDirectionChanged(int);
+	void majorTicksTypeChanged(int);
+ 	void majorTicksNumberChanged();
+	void majorTicksLineStyleChanged(int);
+	void majorTicksColorChanged(const QColor&);
+	void majorTicksWidthChanged(int);
+	void majorTicksLengthChanged(int);
+	void majorTicksOpacityChanged(int);
+	
+	//"Minor ticks"-tab
+	void minorTicksDirectionChanged(int);
+	void minorTicksTypeChanged(int);
+ 	void minorTicksNumberChanged();
+	void minorTicksLineStyleChanged(int);
+	void minorTicksColorChanged(const QColor&);
+	void minorTicksWidthChanged(int);
+	void minorTicksLengthChanged(int);
+	void minorTicksOpacityChanged(int);
+	
+	//"Extra ticks"-tab
+	
 	//"Tick labels"-tab
-	void labelFormatChanged(const QString&);
 
 	//"Grid"-tab
-	void createMajorGridStyles();
-	void createMinorGridStyles();
 
-	void slotDataChanged();
+
 };
 
 #endif

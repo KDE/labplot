@@ -2,7 +2,7 @@
     File                 : AxisDock.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
+    Copyright            : (C) 20011 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : axes widget class
 
@@ -27,116 +27,88 @@
  *                                                                         *
  ***************************************************************************/
 #include "AxisDock.h"
+#include "worksheet/Axis.h"
 #include "kdefrontend/LabelWidget.h"
+#include "kdefrontend/GuiTools.h"
 #include <KDebug>
 #include <KMessageBox>
 #include <QPainter>
+#include <QTimer>
 
 
  /*!
   \class AxisDock
-  \brief Provides a widget for editing the properties of the linear axes currently selected in the project explorer.
+  \brief Provides a widget for editing the properties of the axes currently selected in the project explorer.
 
   \ingroup kdefrontend
 */
  
 AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 
-	ui.setupUi(this);
-// 	plotType=Plot::PLOT2D;
-	initializing=false;
-	m_dataChanged=false;
+  ui.setupUi(this);
 
-	//create a LabelWidget in the "Title"-tab
-    QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
-	labelWidget=new LabelWidget(ui.tabTitle);
-    hboxLayout->addWidget(labelWidget);
-
-	//Validators
-	ui.lePositionOffset->setValidator( new QDoubleValidator(ui.lePositionOffset) );
-	ui.leLowerLimit->setValidator( new QDoubleValidator(ui.leLowerLimit) );
-	ui.leUpperLimit->setValidator( new QDoubleValidator(ui.leUpperLimit) );
-	ui.leZeroOffset->setValidator( new QDoubleValidator(ui.leZeroOffset) );
-	ui.leScaleFactor->setValidator( new QDoubleValidator(ui.leScaleFactor) );
-	ui.leMajorTicksNumber->setValidator( new QIntValidator(ui.leMajorTicksNumber) );
-	ui.leMajorTicksLength->setValidator( new QDoubleValidator(ui.leMajorTicksLength) );
-	ui.leMinorTicksNumber->setValidator( new QIntValidator(ui.leMinorTicksNumber) );
-	ui.leMinorTicksLength->setValidator( new QDoubleValidator(ui.leMinorTicksLength) );
-	ui.leLabelsRotation->setValidator( new QIntValidator(ui.leLabelsRotation) );
-
-	//TODO move this stuff to retranslateUI()
-	ui.cbScaleType->addItem( i18n("linear") );
-	ui.cbScaleType->addItem( i18n("log 10") );
-	ui.cbScaleType->addItem( i18n("log 2") );
-	ui.cbScaleType->addItem( i18n("log e") );
-	ui.cbScaleType->addItem( i18n("sqrt") );
-	ui.cbScaleType->addItem( i18n("x^2") );
-
-	ui.cbPosition->addItem( i18n("normal") );
-	ui.cbPosition->addItem( i18n("center") );
-	ui.cbPosition->addItem( i18n("custom") );
-
-	ui.cbTicksPosition->addItem( i18n("in") );
-	ui.cbTicksPosition->addItem( i18n("out") );
-	ui.cbTicksPosition->addItem( i18n("in and out") );
-	ui.cbTicksPosition->addItem( i18n("none") );
-
-	//Tick labels format
-	 ui.cbLabelsFormat->addItem( i18n("automatic") );
-	 ui.cbLabelsFormat->addItem( i18n("normal") );
-	 ui.cbLabelsFormat->addItem( i18n("scientific") );
-	 ui.cbLabelsFormat->addItem( i18n("power of 10") );
-	 ui.cbLabelsFormat->addItem( i18n("power of 2") );
-	 ui.cbLabelsFormat->addItem( i18n("power of e") );
-	 ui.cbLabelsFormat->addItem( i18n("sqrt") );
-	 ui.cbLabelsFormat->addItem( i18n("time") );
-	 ui.cbLabelsFormat->addItem( i18n("date") );
-	 ui.cbLabelsFormat->addItem( i18n("datetime") );
-	 ui.cbLabelsFormat->addItem( i18n("degree") );
-
-	//Grid
-	 ui.kcbMajorGridColor->setColor(Qt::black);
-	 this->createMajorGridStyles();
-	 ui.kcbMinorGridColor->setColor(Qt::black);
-	 this->createMinorGridStyles();
+  //adjust layouts in the tabs
+  QGridLayout* layout;
+  for (int i=0; i<ui.tabWidget->count(); ++i){
+	layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	if (!layout)
+	  continue;
+	
+	layout->setContentsMargins(2,2,2,2);
+	layout->setHorizontalSpacing(2);
+	layout->setVerticalSpacing(2);
+  }
 
 	//**********************************  Slots **********************************************
 
 	//"General"-tab
-	connect( ui.chbAxis, SIGNAL(stateChanged(int)), this, SLOT(axisStateChanged(int)) );
-	connect( ui.cbScaleType, SIGNAL(currentIndexChanged(int)), this, SLOT(scaleTypeChanged(int)) );
+	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	//TODO signal-slot for teComment
+	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	
+	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
-	connect( ui.lePositionOffset, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-
-	connect( ui.leLowerLimit, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-	connect( ui.leUpperLimit, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-	connect( ui.leZeroOffset, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-	connect( ui.leScaleFactor, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-
-	connect( ui.chbBorder, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.kcbBorderColor, SIGNAL(changed(const QColor& )), this, SLOT(slotDataChanged()) );
-	connect( ui.sbBorderWidth, SIGNAL(valueChanged(int)), this, SLOT(slotDataChanged()) );
+	connect( ui.lePositionOffset, SIGNAL(returnPressed()), this, SLOT(positionOffsetChanged()) );
+	connect( ui.cbScale, SIGNAL(currentIndexChanged(int)), this, SLOT(scaleChanged(int)) );
+	
+	connect( ui.leStart, SIGNAL(returnPressed()), this, SLOT(startChanged()) );
+	connect( ui.leEnd, SIGNAL(returnPressed()), this, SLOT(endChanged()) );
+	connect( ui.leZeroOffset, SIGNAL(returnPressed()), this, SLOT(zeroOffsetChanged()) );
+	connect( ui.leScalingFactor, SIGNAL(returnPressed()), this, SLOT(scalingFactorChanged()) );
+	
+	//"Line"-tab
+	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
+	connect( ui.kcbLineColor, SIGNAL(changed (const QColor &)), this, SLOT(lineColorChanged(const QColor&)) );
+	connect( ui.sbLineWidth, SIGNAL(valueChanged(int)), this, SLOT(lineWidthChanged(int)) );
+	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );	
+	
 
 	//"Title"-tab
-	connect( labelWidget, SIGNAL(dataChanged(bool)), this, SLOT(slotDataChanged()) );
+//	connect( labelWidget, SIGNAL(dataChanged(bool)), this, SLOT(slotDataChanged()) );
 
-	//"Ticks"-tab
-	connect( ui.cbTicksPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.cbTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(ticksTypeChanged(int)) );
-	connect( ui.kcbTicksColor, SIGNAL(changed(const QColor& )), this, SLOT(slotDataChanged()) );
+	//"Major ticks"-tab
+	connect( ui.cbMajorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksDirectionChanged(int)) );
+	connect( ui.cbMajorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksTypeChanged(int)) );
+ 	connect( ui.leMajorTicksNumber, SIGNAL(returnPressed()), this, SLOT(majorTicksNumberChanged()) );
+	connect( ui.cbMajorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksLineStyleChanged(int)) );
+	connect( ui.kcbMajorTicksColor, SIGNAL(changed (const QColor &)), this, SLOT(majorTicksColorChanged(const QColor&)) );
+	connect( ui.sbMajorTicksWidth, SIGNAL(valueChanged(int)), this, SLOT(majorTicksWidthChanged(int)) );
+	connect( ui.sbMajorTicksLength, SIGNAL(valueChanged(int)), this, SLOT(majorTicksLengthChanged(int)) );
+	connect( ui.sbMajorTicksOpacity, SIGNAL(valueChanged(int)), this, SLOT(majorTicksOpacityChanged(int)) );
 
-	connect( ui.chbMajorTicks, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.cbMajorTicksNumberType, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksNumberTypeChanged(int)) );
-	connect( ui.leMajorTicksNumber, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-	connect( ui.sbMajorTicksWidth, SIGNAL(valueChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.leMajorTicksLength, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-
-	connect( ui.chbMinorTicks, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.cbMinorTicksNumberType, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksNumberTypeChanged(int)) );
-	connect( ui.leMinorTicksNumber, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-	connect( ui.sbMinorTicksWidth, SIGNAL(valueChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.leMinorTicksLength, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-
+	//"Minor ticks"-tab
+	connect( ui.cbMinorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksDirectionChanged(int)) );
+	connect( ui.cbMinorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksTypeChanged(int)) );
+ 	connect( ui.leMinorTicksNumber, SIGNAL(returnPressed()), this, SLOT(minorTicksNumberChanged()) );
+	connect( ui.cbMinorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksLineStyleChanged(int)) );
+	connect( ui.kcbMinorTicksColor, SIGNAL(changed (const QColor &)), this, SLOT(minorTicksColorChanged(const QColor&)) );
+	connect( ui.sbMinorTicksWidth, SIGNAL(valueChanged(int)), this, SLOT(minorTicksWidthChanged(int)) );
+	connect( ui.sbMinorTicksLength, SIGNAL(valueChanged(int)), this, SLOT(minorTicksLengthChanged(int)) );
+	connect( ui.sbMinorTicksOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorTicksOpacityChanged(int)) );
+	
+	//"Extra ticks"-tab
+	
+/*
 	//"Tick labels"-tab
 	connect( ui.chbLabels, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
 	connect( ui.sbLabelsPosition, SIGNAL(valueChanged(int)), this, SLOT(slotDataChanged()) );
@@ -161,107 +133,147 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	connect( ui.cbMinorGridStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDataChanged()) );
 	connect( ui.kcbMinorGridColor, SIGNAL(changed (const QColor &)), this, SLOT(createMinorGridStyles()) );
 	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(int)), this, SLOT(createMinorGridStyles()) );
+	*/
+	QTimer::singleShot(0, this, SLOT(init()));
 }
 
 AxisDock::~AxisDock(){}
 
-void AxisDock::resizeEvent(QResizeEvent * event){
-	this->createMajorGridStyles();
-	this->createMinorGridStyles();
+void AxisDock::init(){
+	m_initializing=true;
+
+// 	//create a LabelWidget in the "Title"-tab
+//     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+// 	labelWidget=new LabelWidget(ui.tabTitle);
+//     hboxLayout->addWidget(labelWidget);
+
+	//Validators
+	ui.lePositionOffset->setValidator( new QDoubleValidator(ui.lePositionOffset) );
+	ui.leStart->setValidator( new QDoubleValidator(ui.leStart) );
+	ui.leEnd->setValidator( new QDoubleValidator(ui.leEnd) );
+	ui.leZeroOffset->setValidator( new QDoubleValidator(ui.leZeroOffset) );
+	ui.leScalingFactor->setValidator( new QDoubleValidator(ui.leScalingFactor) );
+	ui.leMajorTicksNumber->setValidator( new QDoubleValidator(ui.leMajorTicksNumber) );
+// 	ui.leMajorTicksLength->setValidator( new QDoubleValidator(ui.leMajorTicksLength) );
+	ui.leMinorTicksNumber->setValidator( new QDoubleValidator(ui.leMinorTicksNumber) );
+// 	ui.leMinorTicksLength->setValidator( new QDoubleValidator(ui.leMinorTicksLength) );
+// 	ui.leLabelsRotation->setValidator( new QIntValidator(ui.leLabelsRotation) );
+
+	//TODO move this stuff to retranslateUI()
+	ui.cbScale->addItem( i18n("linear") );
+	ui.cbScale->addItem( i18n("log(x)") );
+	ui.cbScale->addItem( i18n("log2(x)") );
+	ui.cbScale->addItem( i18n("ln(x)") );
+	ui.cbScale->addItem( i18n("sqrt(x)") );
+	ui.cbScale->addItem( i18n("x^2") );
+
+	ui.cbOrientation->addItem( i18n("horizontal") );
+	ui.cbOrientation->addItem( i18n("vertical") );
+	
+	ui.cbMajorTicksDirection->addItem( i18n("none") );
+	ui.cbMajorTicksDirection->addItem( i18n("in") );
+	ui.cbMajorTicksDirection->addItem( i18n("out") );
+	ui.cbMajorTicksDirection->addItem( i18n("in and out") );
+
+	ui.cbMinorTicksDirection->addItem( i18n("none") );
+	ui.cbMinorTicksDirection->addItem( i18n("in") );
+	ui.cbMinorTicksDirection->addItem( i18n("out") );
+	ui.cbMinorTicksDirection->addItem( i18n("in and out") );
+	
+	//Tick labels format
+// 	 ui.cbLabelsFormat->addItem( i18n("automatic") );
+// 	 ui.cbLabelsFormat->addItem( i18n("normal") );
+// 	 ui.cbLabelsFormat->addItem( i18n("scientific") );
+// 	 ui.cbLabelsFormat->addItem( i18n("power of 10") );
+// 	 ui.cbLabelsFormat->addItem( i18n("power of 2") );
+// 	 ui.cbLabelsFormat->addItem( i18n("power of e") );
+// 	 ui.cbLabelsFormat->addItem( i18n("sqrt") );
+// 	 ui.cbLabelsFormat->addItem( i18n("time") );
+// 	 ui.cbLabelsFormat->addItem( i18n("date") );
+// 	 ui.cbLabelsFormat->addItem( i18n("datetime") );
+// 	 ui.cbLabelsFormat->addItem( i18n("degree") );
+
+	//Grid
+// 	 ui.kcbMajorGridColor->setColor(Qt::black);
+// 	 this->createMajorGridStyles();
+// 	 ui.kcbMinorGridColor->setColor(Qt::black);
+// 	 this->createMinorGridStyles();
+  m_initializing=false;
 }
 
-/*!
-	sets the current plot type for the axes to be edited in this widget.
-	Adjusts the appearance of the widget depending on the current plot type.
-*/
-// void AxisDock::setPlotType(const Plot::PlotType& type){
-// 	kDebug()<<"PlotType "<<type<<endl;
-// 	QStringList list;
-// 	if (type == Plot::PLOT2D || type == Plot::PLOTSURFACE) {
-// 		list<<QString("x")<<QString("y")<<QString("x2")<<QString("y2");
-// 	}else if (type == Plot::PLOT3D || type == Plot::PLOTQWT3D){
-// 		//TODO change the ordering
-// 		list<<QString("x")<<QString("y")<<QString("z")<<QString("x2")<<QString("x3")<<QString("x4");
-// 		list<<QString("y4")<<QString("y3")<<QString("y2")<<QString("z2")<<QString("z4")<<QString("z3");
-// 	}else if (type == Plot::PLOTPOLAR) {
-// 		list<<QString("phi")<<QString("r");
-// 	}else if (type == Plot::PLOTTERNARY || type == Plot::PLOTPIE) {
-// 		list<<QString("a");
-// 	}
-// 
-// 	initializing=true;
-// 	ui.cbAxes->clear();
-//   	ui.cbAxes->insertItems( -1, list );
-// 	initializing=false;
-// 
-// 	plotType=type;
-// }
 
 /*!
-	sets the pointer \c axes to list containing all the axes. \c axisNumber is the number of the axis to be edited.<br>
+  sets the axiss. The properties of the axiss in the list \c list can be edited in this widget.
 */
-// void AxisDock::setAxes(QList<Axis>* axes, const int axis){
-// 	kDebug()<<"";
-// 	//Create a local working copy of the axes list
-// 	for (int i = 0; i < axes->size(); ++i)
-//   		listAxes<<axes->at(i);
-// 
-// 	//Show the settings for the current axis
-// 	currentAxis=axis;
-// 	initializing=true;
-// 	this->showAxis(axis);
-// 	initializing=false;
-// }
+void AxisDock::setAxes(QList<Axis*> list){
+  m_initializing=true;
+  m_axesList=list;
+  Axis* axis=list.first();
+  
+  //if there are more then one axis in the list, disable the tab "general"
+  if (list.size()==1){
+	ui.lName->setEnabled(true);
+	ui.leName->setEnabled(true);
+	ui.lComment->setEnabled(true);
+	ui.teComment->setEnabled(true);
+	ui.leName->setText(axis->name());
+	ui.teComment->setText(axis->comment());
+  }else{
+	ui.lName->setEnabled(false);
+	ui.leName->setEnabled(false);
+	ui.lComment->setEnabled(false);
+	ui.teComment->setEnabled(false);
+	ui.leName->setText("");
+	ui.teComment->setText("");	
+  }
 
-/*!
-	shows the properties of the axis with index \c axisIndex in the UI.
-*/
-// void AxisDock::showAxis(const short axisIndex){
-// 	const Axis* axis=&listAxes.at(axisIndex);
-// 
-// 	//*************************  "General"-tab  ************************************
-// 	ui.chbAxis->setChecked( axis->isEnabled() );
-// 	ui.cbScaleType->setCurrentIndex( axis->scaleType() );
+  //show the properties of the first axis
+  
+ 	//"General"-tab
+  ui.chkVisible->setChecked(axis->isVisible());
+	//orientation
 // 	ui.cbPosition->setCurrentIndex( axis->position() );
-// 
-// 	ui.leLowerLimit->setText( QString::number(axis->lowerLimit()) );
-// 	ui.leUpperLimit->setText( QString::number(axis->upperLimit()) );
+	ui.cbScale->setCurrentIndex( axis->scale() );
+	ui.leStart->setText( QString::number(axis->start()) );
+	ui.leEnd->setText( QString::number(axis->end()) );
 // 	ui.leZeroOffset->setText( QString::number(axis->offset()) );
-// 	ui.leScaleFactor->setText( QString::number(axis->scaleFactor()) );
-// 
-// 	ui.chbBorder->setChecked( axis->hasBorder() );
-// 	ui.kcbBorderColor->setColor( axis->borderColor() );
-// 	ui.sbBorderWidth->setValue( axis->borderWidth() );
-// 
+// 	ui.leScalingFactor->setText( QString::number(axis->scaleFactor()) );
+
+ 
 // 	//*******************   "Title"-tab  *************************************
 //  	labelWidget->setLabel( const_cast<Axis*>(axis)->label() );
-// 
-// 
-// 	//*******************   "Ticks"-tab  *************************************
-// 	ui.cbTicksPosition->setCurrentIndex( axis->ticksPosition() );
-// 	ui.cbTicksType->setCurrentIndex( axis->ticksType() );
-// 	ui.kcbTicksColor->setColor( axis->ticksColor() );
-// 
-// 	ui.chbMajorTicks->setChecked( axis->hasMajorTicks() );
-// 	ui.leMajorTicksNumber->setText( QString::number(axis->majorTicksNumber()) );
-// 	if (axis->majorTicksNumberType()==Axis::TICKSNUMBERTYPE_AUTO)
-// 		ui.cbMajorTicksNumberType->setCurrentIndex(0);
-// 	else
-// 		ui.cbMajorTicksNumberType->setCurrentIndex(1);
-// 
-// 	ui.sbMajorTicksWidth->setValue( axis->majorTicksWidth() );
-// 	ui.leMajorTicksLength->setText( QString().setNum(axis->majorTicksLength()) );
-// 
-// 	ui.chbMinorTicks->setChecked( axis->hasMinorTicks() );
-// 	ui.leMinorTicksNumber->setText( QString::number(axis->minorTicksNumber()) );
-// 	if (axis->minorTicksNumberType()==Axis::TICKSNUMBERTYPE_AUTO)
-// 		ui.cbMinorTicksNumberType->setCurrentIndex(0);
-// 	else
-// 		ui.cbMinorTicksNumberType->setCurrentIndex(1);
-// 
-// 	ui.sbMinorTicksWidth->setValue( axis->minorTicksWidth() );
-// 	ui.leMinorTicksLength->setText( QString().setNum(axis->minorTicksLength()) );
-// 
+
+  //Line-tab
+  ui.cbLineStyle->setCurrentIndex( axis->linePen().style() );
+  ui.kcbLineColor->setColor( axis->linePen().color() );
+  ui.sbLineWidth->setValue( axis->linePen().width() );
+  ui.sbLineOpacity->setValue( axis->lineOpacity()*100 );
+  GuiTools::updatePenStyles(ui.cbLineStyle, axis->linePen().color() );
+  
+	//"Major ticks"-tab
+ 	ui.cbMajorTicksDirection->setCurrentIndex( axis->majorTicksDirection() );
+	ui.cbMajorTicksType->setCurrentIndex( axis->majorTicksType() );
+	ui.leMajorTicksNumber->setText(QString::number(axis->majorTicksNumber()));
+	ui.cbMajorTicksLineStyle->setCurrentIndex( axis->majorTicksPen().style() );
+	ui.kcbMajorTicksColor->setColor( axis->majorTicksPen().color() );
+	ui.sbMajorTicksWidth->setValue( axis->majorTicksPen().width() );
+	ui.sbMajorTicksLength->setValue( axis->majorTicksLength() );
+	ui.sbMajorTicksOpacity->setValue( axis->majorTicksOpacity()*100 );
+	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, axis->majorTicksPen().color() );
+
+	//"Minor ticks"-tab
+ 	ui.cbMinorTicksDirection->setCurrentIndex( axis->minorTicksDirection() );
+	ui.cbMinorTicksType->setCurrentIndex( axis->minorTicksType() );
+	ui.leMinorTicksNumber->setText(QString::number(axis->minorTicksNumber()));
+	ui.cbMinorTicksLineStyle->setCurrentIndex( axis->minorTicksPen().style() );
+	ui.kcbMinorTicksColor->setColor( axis->minorTicksPen().color() );
+	ui.sbMinorTicksWidth->setValue( axis->minorTicksPen().width() );
+	ui.sbMinorTicksLength->setValue( axis->minorTicksLength() );
+	ui.sbMinorTicksOpacity->setValue( axis->minorTicksOpacity()*100 );
+	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, axis->minorTicksPen().color() );
+	
+	//"Extra ticks"-tab
+	
 // 
 // 	//*******************   "Tick labels"-tab  ************************************
 // 	ui.chbLabels->setChecked( axis->hasLabels() );
@@ -288,389 +300,414 @@ void AxisDock::resizeEvent(QResizeEvent * event){
 // 	ui.cbMinorGridStyle->setCurrentIndex( axis->minorGridStyle()-1 );
 // 	ui.kcbMinorGridColor->setColor( axis->minorGridColor() );
 // 	ui.sbMinorGridWidth->setValue( axis->minorGridWidth() );
-// }
 
-/*!
-	saves the localy/temporaly used axes to the QList* \c axes.
-*/
-// void AxisDock::saveAxes(QList<Axis>* axes){
-// 	kDebug()<<"";
-// 	//save the data, if changed in the UI
-// 	if (m_dataChanged){
-// 		this->saveAxis(currentAxis);
-// 	}
-// 
-// 	//copy all axes from the own local axes list to the axis list of the plot.
-// 	//TODO Copy only if there were changes!!!
-// 	axes->clear();
-// 	for (int i = 0; i < listAxes.size(); ++i)
-// 		axes->append( listAxes[i] );
-// 
-// 	if ( ui.chbUseAsDefault->isChecked() ){
-// 		if (KMessageBox::warningYesNo(this,
-// 														i18n("Default settings will be overwritten by the current values. Do you want to continue?"),
-// 														i18n("Save default axes values")) == KMessageBox::Yes){
-// 
-// 			//TODO
-// 			KMessageBox::sorry(this, i18n("Not yet implemented. Sorry."), i18n("Save default axes values"));
-// 		}
-// 	}
-// }
+  m_initializing = false;
+}
 
-/*!
-	saves the data in the UI to the axis with the index \c axisIndex.
-*/
-// void AxisDock::saveAxis(const short axisIndex){
-// 	Axis::ScaleType scaleType=(Axis::ScaleType)ui.cbScaleType->currentIndex();
-// 	float lowerLimit=ui.leLowerLimit->text().toDouble();
-// 
-// 	//check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set default value.
-// 	if (scaleType==Axis::SCALETYPE_LOG10 || scaleType==Axis::SCALETYPE_LOG2 || scaleType==Axis::SCALETYPE_LN){
-// 		if(lowerLimit <= 0) {
-// 			KMessageBox::sorry(this,
-// 											i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
-// 											i18n("Wrong lower limit value") );
-// 			ui.leLowerLimit->setText( "0.01" );
-// 		}
-// 	}else if (scaleType==Axis::SCALETYPE_SQRT){
-// 		if(lowerLimit < 0) {
-// 			KMessageBox::sorry(this,
-// 											i18n("The axes lower limit has a negative value. Default minimal value will be used."),
-// 											i18n("Wrong lower limit value") );
-// 			ui.leLowerLimit->setText( "0" );
-// 		}
-// 	}
-// 
-// 
-// 	Axis* axisSave=&listAxes[axisIndex];
-// 
-// 	//*************************  "General"-tab  ************************************
-// 	axisSave->setEnabled( ui.chbAxis->isChecked()  );
-// 	axisSave->setScaleType( (Axis::ScaleType)ui.cbScaleType->currentIndex()  );
-// 	axisSave->setPosition( (Axis::Position)ui.cbPosition->currentIndex()  );
-// 	axisSave->setPositionOffset( ui.lePositionOffset->text().toDouble() );
-// 
-// 	axisSave->setLowerLimit( ui.leLowerLimit->text().toDouble() );
-// 	axisSave->setUpperLimit( ui.leUpperLimit->text().toDouble() );
-// 	axisSave->setOffset( ui.leZeroOffset->text().toDouble() );
-// 	axisSave->setScaleFactor( ui.leScaleFactor->text().toDouble() );
-// 
-// 	axisSave->enableBorder( ui.chbBorder->isChecked()  );
-// 	axisSave->setBorderColor( ui.kcbBorderColor->color()  );
-// 	axisSave->setBorderWidth( ui.sbBorderWidth->value()  );
-// 
-// 
-// 	//*******************   "Title"-tab  *************************************
-// 	labelWidget->saveLabel( axisSave->label() );
-// 
-// 
-// 	//*******************   "Ticks"-tab  *************************************
-// 	axisSave->setTicksPosition( (Axis::TicksPosition)ui.cbTicksPosition->currentIndex()  );
-// 	axisSave->setTicksType( (Axis::TicksType)ui.cbTicksType->currentIndex()  );
-// 	axisSave->setTicksColor( ui.kcbTicksColor->color()  );
-// 
-// 	axisSave->enableMajorTicks( ui.chbMajorTicks->isChecked() );
-// 	axisSave->setMajorTicksNumberType( (Axis::TicksNumberType)ui.cbMajorTicksNumberType->currentIndex() );
-// 	axisSave->setMajorTicksNumber( ui.leMajorTicksNumber->text().toInt() );
-// 	axisSave->setMajorTicksWidth( ui.sbMajorTicksWidth->value() );
-// 	axisSave->setMajorTicksLength( ui.leMajorTicksLength->text().toDouble() );
-// 
-// 	axisSave->enableMinorTicks( ui.chbMinorTicks->isChecked() );
-// 	axisSave->setMinorTicksNumberType( (Axis::TicksNumberType)ui.cbMinorTicksNumberType->currentIndex() );
-// 	axisSave->setMinorTicksNumber( ui.leMinorTicksNumber->text().toInt() );
-// 	axisSave->setMinorTicksWidth( ui.sbMinorTicksWidth->value() );
-// 	axisSave->setMinorTicksLength( ui.leMinorTicksLength->text().toDouble() );
-// 
-// 
-// 	//*******************   "Tick labels"-tab  ************************************
-// 	axisSave->enableLabels( ui.chbLabels->isChecked() );
-// 	axisSave->setLabelsPosition( ui.sbLabelsPosition->value() );
-// 	axisSave->setLabelsRotation( ui.leLabelsRotation->text().toDouble() );
-// 
-// 	axisSave->setLabelsPrecision( ui.sbLabelsPrecision->value()  );
-// 	axisSave->setLabelsFormat( (Axis::LabelsFormat)ui.cbLabelsFormat->currentIndex()  );
-// 	axisSave->setLabelsDateFormat( ui.leLabelsDateFormat->text() );
-// 
-// 	axisSave->setLabelsFont( ui.kfrLabelsFont->font() );
-// 	axisSave->setLabelsColor( ui.kcbLabelsColor->color() );
-// 	axisSave->setLabelsPrefix( ui.leLabelsPrefix->text() );
-// 	axisSave->setLabelsSuffix( ui.leLabelsSuffix->text() );
-// 
-// 
-// 	//*******************   "Grid"-tab  ************************************
-// 	axisSave->enableMajorGrid( ui.chbMajorGrid->isChecked() );
-// 	axisSave->setMajorGridStyle( Qt::PenStyle(ui.cbMajorGridStyle->currentIndex()+1) );
-// 	axisSave->setMajorGridColor( ui.kcbMajorGridColor->color() );
-// 	axisSave->setMajorGridWidth( ui.sbMajorGridWidth->value() );
-// 
-// 	axisSave->enableMinorGrid( ui.chbMinorGrid->isChecked() );
-// 	axisSave->setMinorGridStyle( Qt::PenStyle(ui.cbMinorGridStyle->currentIndex()+1) );
-// 	axisSave->setMinorGridColor( ui.kcbMinorGridColor->color() );
-// 	axisSave->setMinorGridWidth( ui.sbMinorGridWidth->value() );
-// }
+
 
 
 /*!
 	restores/shows default axis properties in the UI.
 */
-// void AxisDock::restoreDefaults(){
-// 	if (KMessageBox::warningYesNo(this,
-// 																i18n("All settings will be reset to the default values. Do you want to continue?"),
-// 																i18n("Restore default axes values")) ==  KMessageBox::Yes){
-// 
-// 		//TODO
-// 		KMessageBox::sorry(this,  i18n("Not yet implemented. Sorry."), i18n("Restore default axes values") );
-// 	}
-// }
+/*
+void AxisDock::restoreDefaults(){
+	if (KMessageBox::warningYesNo(this,
+																i18n("All settings will be reset to the default values. Do you want to continue?"),
+																i18n("Restore default axes values")) ==  KMessageBox::Yes){
 
-
-//**********************************************************
-//****************** SLOTS *********************************
-//**********************************************************
-/*!
- 	Is called when the user changes the current axis in the coresponding ComboBox.
-	Triggers the functions to save the properties of the previosly shown axis (if needed)
-	and to show the properties of the newly selected axis with the index \c index.
-*/
-// void AxisDock::currentAxisChanged(int index){
-// 	if (initializing)
-// 		return;
-// 
-// 	//current axis was changed
-// 	//->save the data of the previos selected axis if changed
-// 	if (m_dataChanged){
-// 		this->saveAxis(currentAxis);
-// 	}
-// 
-// 	//make the selected axis to the new current axis
-// 	//and show the data of the new current axis
-// 	currentAxis=index;
-// 	initializing=true;
-// 	this->showAxis(currentAxis);
-// 	initializing=false;
-// }
-
-
-void AxisDock::slotDataChanged(){
-	if (initializing)
-		return;
-
-	m_dataChanged=true;
-	emit dataChanged(true);
+		//TODO
+		KMessageBox::sorry(this,  i18n("Not yet implemented. Sorry."), i18n("Restore default axes values") );
+	}
 }
+*/
+
+//**********************************************************
+//****************** SLOTS *******************************
+//**********************************************************
+
 
 //"General"-tab
-void AxisDock::axisStateChanged(int state){
-	if (state==Qt::Checked)
-		ui.chbBorder->setChecked(true);
+void AxisDock::nameChanged(){
+  if (m_initializing)
+	return;
+  
+  m_axesList.first()->setName(ui.leName->text());
+}
 
-	this->slotDataChanged();
+
+void AxisDock::commentChanged(){
+  if (m_initializing)
+	return;
+  
+  m_axesList.first()->setComment(ui.teComment->toPlainText());
+}
+
+void AxisDock::visibilityChanged(int state){
+  if (m_initializing)
+	return;
+  
+  bool b;
+  if (state==Qt::Checked)
+	b=true;
+  else
+	b=false;
+
+  foreach(Axis* axis, m_axesList){
+	axis->setVisible(b);
+  }
 }
 
 /*!
-	called if the scale type of the current axis is changed.
+	called if the orientation (horizontal or vertical) of the current axis is changed.
 	Updates the number of minor ticks.
 */
-void AxisDock::scaleTypeChanged(int index) {
-// 	if( index == Axis::SCALETYPE_LINEAR)
-// 		ui.leMinorTicksNumber->setText( "3" );
-// 	else if (index == Axis::SCALETYPE_LOG10)
-// 		ui.leMinorTicksNumber->setText( "8");
-// 	else
-// 		ui.leMinorTicksNumber->setText( "0" );
-// 
-// 	this->slotDataChanged();
+
+void AxisDock::orientationChanged(int index){
+  if (m_initializing)
+	return;
+
+  int oldIndex = ui.cbPosition->currentIndex();
+  ui.cbPosition->clear();
+  if (index==0){//horizontal
+	ui.cbPosition->addItem( i18n("bottom") );
+	ui.cbPosition->addItem( i18n("top") );
+  }else{//vertical
+	ui.cbPosition->addItem( i18n("left") );
+	ui.cbPosition->addItem( i18n("right") );
+  }
+  ui.cbPosition->addItem( i18n("custom") );	  
+  ui.cbPosition->setCurrentIndex(oldIndex);
+  
+//   Axis::AxisScaling scaling = (Axis::AxisScaling)index;
+//   foreach(Axis* axis, m_axesList){
+// 	axis->setScaling(scaling);
+//   }
 }
 
 void AxisDock::positionChanged(int index){
-// 	if (index==Axis::POSITION_CUSTOM){
-// 		ui.lPositionOffset->setEnabled(true);
-// 		ui.lePositionOffset->setEnabled(true);
-// 	}else{
-// 		ui.lPositionOffset->setEnabled(false);
-// 		ui.lePositionOffset->setEnabled(false);
-// 	}
-// 
-// 	this->slotDataChanged();
+  if (m_initializing)
+	return;
+
+  	if (index==3){
+		ui.lPositionOffset->show();
+		ui.lePositionOffset->show();
+	}else{
+		ui.lPositionOffset->hide();
+		ui.lePositionOffset->hide();
+	}
+
+//   Axis::AxisScaling scaling = (Axis::AxisScaling)index;
+//   foreach(Axis* axis, m_axesList){
+// 	axis->setScaling(scaling);
+//   }
 }
 
-//"Ticks"-tab
+void AxisDock::positionOffsetChanged(){
+  if (m_initializing)
+	return;
+  
+  double offset = ui.lePositionOffset->text().toDouble();
+  foreach(Axis* axis, m_axesList){
+	axis->setOffset(offset);
+  }
+}
+
+void AxisDock::scaleChanged(int index){
+  if (m_initializing)
+	return;
+
+  Axis::AxisScale scale = (Axis::AxisScale)index;
+  foreach(Axis* axis, m_axesList){
+	axis->setScale(scale);
+  }
+}
+
+void AxisDock::startChanged(){
+  if (m_initializing)
+	return;
+  
+  double value = ui.leStart->text().toDouble();
+
+  //check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
+  Axis::AxisScale scale = Axis::AxisScale(ui.cbScale->currentIndex());
+  if (scale==Axis::ScaleLog10|| scale==Axis::ScaleLog2|| scale==Axis::ScaleLn){
+	  if(value <= 0){
+		  KMessageBox::sorry(this,
+										  i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
+										  i18n("Wrong lower limit value") );
+		  ui.leStart->setText( "0.01" );
+		  value=0.01;
+	  }
+  }else if (scale==Axis::ScaleSqrt){
+	  if(value < 0){
+		  KMessageBox::sorry(this,
+										  i18n("The axes lower limit has a negative value. Default minimal value will be used."),
+										  i18n("Wrong lower limit value") );
+		  ui.leStart->setText( "0" );
+		  value=0;
+	  }
+  }
+
+  foreach(Axis* axis, m_axesList){
+	axis->setStart(value);
+  }
+}
+
+void AxisDock::endChanged(){
+  if (m_initializing)
+	return;
+
+  double value = ui.leEnd->text().toDouble();
+  foreach(Axis* axis, m_axesList){
+	axis->setEnd(value);
+  }
+}
+
+
+// "Line"-tab
+void AxisDock::lineStyleChanged(int index){
+   if (m_initializing)
+	return;
+
+  Qt::PenStyle penStyle=Qt::PenStyle(index);
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->linePen();
+	pen.setStyle(penStyle);
+	axis->setLinePen(pen);
+  }
+}
+
+void AxisDock::lineColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
+
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->linePen();
+	pen.setColor(color);
+	axis->setLinePen(pen);
+  }  
+
+  GuiTools::updatePenStyles(ui.cbLineStyle, color);
+}
+
+void AxisDock::lineWidthChanged(int value){
+  if (m_initializing)
+	return;
+  
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->linePen();
+	pen.setWidth(value);
+	axis->setLinePen(pen);
+  }  
+}
+
+void AxisDock::lineOpacityChanged(int value){
+  if (m_initializing)
+	return;
+		
+  qreal opacity = (float)value/100;
+  foreach(Axis* axis, m_axesList)
+	axis->setLineOpacity(opacity);
+}
+
+//"Major ticks" tab
+void AxisDock::majorTicksDirectionChanged(int index){
+  if (m_initializing)
+	return;
+
+  Axis::TicksDirection direction = Axis::TicksDirection(index);
+  foreach(Axis* axis, m_axesList)
+	axis->setMajorTicksDirection(direction);
+}
+
 /*!
 	called if the current style of the ticks (Number or Increment) is changed.
 	Adjusts the names of the corresponding labels in UI.
 */
-void AxisDock::ticksTypeChanged(int index){
-	if (index==0){
-		ui.lMajorTicksNumber->setText( i18n("Number") );
-		ui.lMinorTicksNumber->setText( i18n("Number") );
-	}else{
-		ui.lMajorTicksNumber->setText( i18n("Increment") );
-		ui.lMinorTicksNumber->setText( i18n("Increment") );
-	}
-
-	this->slotDataChanged();
+void AxisDock::majorTicksTypeChanged(int index){
+  Axis::TicksType type = Axis::TicksType(index);
+  if ( type == Axis::TicksTotalNumber){
+	  ui.lMajorTicksNumber->setText( i18n("Number") );
+	  ui.leMajorTicksNumber->setText( QString::number(m_axesList.first()->majorTicksNumber()) );
+  }else{
+	  ui.lMajorTicksNumber->setText( i18n("Increment") );
+	  ui.leMajorTicksNumber->setText( QString::number(m_axesList.first()->majorTicksIncrement()) );
+  }
+  
+  if (m_initializing)
+	return;
+		
+  foreach(Axis* axis, m_axesList){
+	axis->setMajorTicksType(type);
+  }
 }
 
-/*!
-	called if the Number-Style (auto or custom) for the major ticks  is changed in the corresponding ComboBox.
-	Enables/disables the text field for the number of major ticks if custom/auto is selected.
-*/
-void AxisDock::majorTicksNumberTypeChanged(int index){
-	ui.leMajorTicksNumber->setEnabled((bool)index);
-	this->slotDataChanged();
+void AxisDock::majorTicksNumberChanged(){
+  if (m_initializing)
+	return;
+
+  double value = ui.leMajorTicksNumber->text().toDouble();
+  foreach(Axis* axis, m_axesList){
+	axis->setMajorTicksNumber(value);
+  }
 }
 
+void AxisDock::majorTicksLineStyleChanged(int index){
+   if (m_initializing)
+	return;
 
-/*!
-	called if the Number-Style (auto or custom) for the minor ticks is changed in the corresponding ComboBox.
-	Enables/disables the textfield for the number of minor ticks if custom/auto is selected.
-*/
-void AxisDock::minorTicksNumberTypeChanged(int index){
-	ui.leMinorTicksNumber->setEnabled((bool)index);
-	this->slotDataChanged();
+  Qt::PenStyle penStyle=Qt::PenStyle(index);
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->majorTicksPen();
+	pen.setStyle(penStyle);
+	axis->setMajorTicksPen(pen);
+  }
+}
+
+void AxisDock::majorTicksColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
+
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->majorTicksPen();
+	pen.setColor(color);
+	axis->setMajorTicksPen(pen);
+  }  
+
+  GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, color);
+}
+
+void AxisDock::majorTicksWidthChanged(int value){
+  if (m_initializing)
+	return;
+  
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->majorTicksPen();
+	pen.setWidth(value);
+	axis->setMajorTicksPen(pen);
+  }  
+}
+
+void AxisDock::majorTicksLengthChanged(int value){
+  if (m_initializing)
+	return;
+  
+  foreach(Axis* axis, m_axesList){
+	axis->setMajorTicksLength(value);
+  }  
+}
+
+void AxisDock::majorTicksOpacityChanged(int value){
+  if (m_initializing)
+	return;
+		
+  qreal opacity = (float)value/100;
+  foreach(Axis* axis, m_axesList)
+	axis->setMajorTicksOpacity(opacity);
+	
+}
+
+//"Minor ticks" tab
+void AxisDock::minorTicksDirectionChanged(int index){
+  if (m_initializing)
+	return;
+
+  Axis::TicksDirection direction = Axis::TicksDirection(index);
+  foreach(Axis* axis, m_axesList)
+	axis->setMinorTicksDirection(direction);  
+}
+
+void AxisDock::minorTicksTypeChanged(int index){
+  Axis::TicksType type = Axis::TicksType(index);
+  if ( type == Axis::TicksTotalNumber){
+	  ui.lMinorTicksNumber->setText( i18n("Number") );
+	  ui.leMinorTicksNumber->setText( QString::number(m_axesList.first()->minorTicksNumber()) );
+  }else{
+	  ui.lMinorTicksNumber->setText( i18n("Increment") );
+	  ui.leMinorTicksNumber->setText( QString::number(m_axesList.first()->minorTicksIncrement()) );
+  }
+  
+  if (m_initializing)
+	return;
+		
+  foreach(Axis* axis, m_axesList){
+	axis->setMinorTicksType(type);
+  }
+}
+
+void AxisDock::minorTicksNumberChanged(){
+  if (m_initializing)
+	return;
+
+  double value = ui.leMajorTicksNumber->text().toDouble();
+  foreach(Axis* axis, m_axesList){
+	axis->setMinorTicksNumber(value);
+  }  
+}
+
+void AxisDock::minorTicksLineStyleChanged(int index){
+   if (m_initializing)
+	return;
+
+  Qt::PenStyle penStyle=Qt::PenStyle(index);
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->minorTicksPen();
+	pen.setStyle(penStyle);
+	axis->setMinorTicksPen(pen);
+  }
+}
+
+void AxisDock::minorTicksColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
+
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->minorTicksPen();
+	pen.setColor(color);
+	axis->setMinorTicksPen(pen);
+  }  
+
+  GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, color);
+}
+
+void AxisDock::minorTicksWidthChanged(int value){
+  if (m_initializing)
+	return;
+  
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->minorTicksPen();
+	pen.setWidth(value);
+	axis->setMinorTicksPen(pen);
+  }  
+}
+
+void AxisDock::minorTicksLengthChanged(int value){
+  if (m_initializing)
+	return;
+  
+  foreach(Axis* axis, m_axesList){
+	axis->setMinorTicksLength(value);
+  }  
+}
+
+void AxisDock::minorTicksOpacityChanged(int value){
+  if (m_initializing)
+	return;
+		
+  qreal opacity = (float)value/100;
+  foreach(Axis* axis, m_axesList){
+	axis->setMinorTicksOpacity(opacity);
+  }
 }
 
 //"Tick labels"-tab
-/*!
-	called if the ticks format is changed in the corresponding ComboBox.
-	Enables an additional text field for "Date-Format" if time/date/datetime selected,
-	disables this field otherwise.
-*/
-void AxisDock::labelFormatChanged(const QString& text){
-	if ( text != i18n("time") && text != i18n("date") && text != i18n("datetime") )
-		ui.leLabelsDateFormat->setEnabled(false);
-	else
-		ui.leLabelsDateFormat->setEnabled(true);
-
-	this->slotDataChanged();
-}
-
-
-//TODO was macht diese Funktion?
-//! called when axis tic format is changed : update format line edit & ranges
-/*
-void AxesDialog::update_timeformat() {
-	int item = axescb->currentItem();
-	kdDebug()<<"ATLF = "<<atlfcb->currentText()<<endl;
-	if (atlfcb->currentText() == i18n("time") || atlfcb->currentText() == i18n("date")
-		|| atlfcb->currentText() == i18n("datetime") )
-		timeformat->setEnabled("true");
-	else
-		timeformat->setDisabled("true");
-
-	// update range here
-	TFormat atlf = (TFormat) atlfcb->currentItem();
-	// dont use richtext formats here
-	if(atlf==POWER10 || atlf == POWER2 || atlf == POWERE || atlf == FSQRT)
-		atlf = AUTO;
-	QString dtf;
-	if(atlf == TIME)
-		dtf = QString("hh:mm:ss");
-	else if (atlf == DATE)
-		dtf = QString("yyyy-MM-dd");
-	else if (atlf == DATETIME)
-		dtf = QString("yyyy-MM-ddThh:mm:ss");
-	int prec = tlpni->value();
-
-	double rmin=0, rmax=1;
-	if (type == P2D || type == PSURFACE || type == PPOLAR) {
-		if(item == 0 || item == 3) {
-			rmin = plot->ActRanges()[0].rMin();
-			rmax = plot->ActRanges()[0].rMax();
-		}
-		else if (item == 1 || item == 2) {
-			rmin = plot->ActRanges()[1].rMin();
-			rmax = plot->ActRanges()[1].rMax();
-		}
-	}
-	else if (type == P3D || type == PQWT3D){
-		if(item == 0 || item == 3 || item == 6 || item == 9) {
-			rmin = plot->ActRanges()[0].rMin();
-			rmax = plot->ActRanges()[0].rMax();
-		}
-		else if (item == 1 || item == 4 || item == 7 || item == 10) {
-			rmin = plot->ActRanges()[1].rMin();
-			rmax = plot->ActRanges()[1].rMax();
-		}
-		else if (item == 2 || item == 5 || item == 8 || item == 11) {
-			rmin = plot->ActRanges()[2].rMin();
-			rmax = plot->ActRanges()[2].rMax();
-		}
-	}
-
-	QString mintext = plot->TicLabel(atlf,prec,dtf,rmin);
-	QString maxtext = plot->TicLabel(atlf,prec,dtf,rmax);
-
-	minle->setText(mintext);
-	maxle->setText(maxtext);
-}
-*/
-
-
-//"Grid"-tab
-/*!
-	inserts five possible Qt pen styles for the major grid.<br>
-	The pixmaps where the styles are painted on have the current width of the coresponding ComboBox.
-*/
-void AxisDock::createMajorGridStyles(){
-	int index=ui.cbMajorGridStyle->currentIndex();
-	ui.cbMajorGridStyle->clear();
-
-	//TODO
-	//It's not possible to insert a QPixmap-Object with the true pixmap size.
-	//using QIcon scales down the size of the pixmap. So playing around with setIconSize is needed
-	//It' not so nice. Look for another possiblity (rewrite combobox and use QIconView to show the pixmaps?)
-	QPainter painter;
-	int w=ui.cbMajorGridStyle->width()-50;
-	int h=10;
-	int offset=5;
-	QPixmap pm( w, h );
-	ui.cbMajorGridStyle->setIconSize( QSize(w,h) );
- 	QColor penColor = ui.kcbMajorGridColor->color();
-	int penWidth = ui.sbMajorGridWidth->value();
-
-	//loop over six possible PenStyles, draw on the pixmap and insert it
-	for (int i=1;i<6;i++) {
-		pm.fill(Qt::transparent);
-		painter.begin( &pm );
-		painter.setPen( QPen( penColor, penWidth, (Qt::PenStyle)i ) );
-		painter.drawLine( offset, h/2, w-offset, h/2);
-		painter.end();
-		ui.cbMajorGridStyle->addItem( QIcon(pm), "" );
-	}
-	ui.cbMajorGridStyle->setCurrentIndex(index);
-
-	kDebug()<<"major grid styles updated"<<endl;
-}
-
-/*!
-	inserts five possible Qt pen styles for the minor grid.<br>
-	The pixmaps where the styles are painted on have the current width of the coresponding ComboBox.
-*/
-void AxisDock::createMinorGridStyles(){
-	int index=ui.cbMajorGridStyle->currentIndex();
-	ui.cbMinorGridStyle->clear();
-
-	QPainter painter;
-	int w=ui.cbMinorGridStyle->width()-50;
-	int h=10;
-	int offset=5;
-	QPixmap pm( w, h );
-	ui.cbMinorGridStyle->setIconSize( QSize(w,h) );
-
-	QColor penColor = ui.kcbMinorGridColor->color();
- 	int penWidth = ui.sbMinorGridWidth->value();
-
-	//loop over six possible PenStyles, draw on the pixmap and insert it
-	for (int i=1;i<6;i++) {
-		pm.fill(Qt::transparent);
-		painter.begin( &pm );
-		painter.setPen( QPen( penColor, penWidth, (Qt::PenStyle)i ) );
-		painter.drawLine( offset, h/2, w-offset, h/2);
-		painter.end();
-		ui.cbMinorGridStyle->addItem( QIcon(pm), "" );
-	}
-	ui.cbMajorGridStyle->setCurrentIndex(index);
-
-	kDebug()<<"minor grid styles updated"<<endl;
-}
