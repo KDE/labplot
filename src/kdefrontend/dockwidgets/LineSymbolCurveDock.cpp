@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "LineSymbolCurveDock.h"
+#include "kdefrontend/GuiTools.h"
 #include "worksheet/LineSymbolCurve.h"
 #include "core/AspectTreeModel.h"
 #include "core/column/Column.h"
@@ -331,16 +332,16 @@ void LineSymbolCurveDock::init(){
 	ui.cbLineType->setItemIcon(11, pm);
 	
 	
-	this->updatePenStyles(ui.cbLineStyle, Qt::black);
+	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
 	
 	//Drop lines
 	ui.cbDropLineType->addItems(LineSymbolCurve::dropLineTypeStrings());
-	this->updatePenStyles(ui.cbDropLineStyle, Qt::black);
+	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
 	
 	//Symbols
-	this->updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
+	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
 	this->fillSymbolStyles();
- 	this->updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
+ 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
 	
 	//Values
 	ui.cbValuesType->addItems(LineSymbolCurve::valuesTypeStrings());
@@ -419,14 +420,14 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   ui.kcbLineColor->setColor( curve->linePen().color() );
   ui.sbLineWidth->setValue( curve->linePen().width() );
   ui.sbLineOpacity->setValue( curve->lineOpacity()*100 );
-  this->updatePenStyles(ui.cbLineStyle, curve->linePen().color() );
+  GuiTools::updatePenStyles(ui.cbLineStyle, curve->linePen().color() );
   
   ui.cbDropLineType->setCurrentIndex( curve->dropLineType() );
   ui.cbDropLineStyle->setCurrentIndex( curve->dropLinePen().style() );
   ui.kcbDropLineColor->setColor( curve->dropLinePen().color() );
   ui.sbDropLineWidth->setValue( curve->dropLinePen().width() );
   ui.sbDropLineOpacity->setValue( curve->dropLineOpacity()*100 );
-  this->updatePenStyles(ui.cbDropLineStyle, curve->dropLinePen().color() );
+  GuiTools::updatePenStyles(ui.cbDropLineStyle, curve->dropLinePen().color() );
   
   
   //Symbol-tab
@@ -441,8 +442,8 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
   ui.kcbSymbolBorderColor->setColor( curve->symbolsPen().color() );
   ui.sbSymbolBorderWidth->setValue( curve->symbolsPen().width() );
 
-  this->updatePenStyles(ui.cbSymbolBorderStyle, curve->symbolsPen().color() );
-  this->updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
+  GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, curve->symbolsPen().color() );
+  GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
   
   //Values-tab
   ui.cbValuesType->setCurrentIndex( curve->valuesType() );
@@ -500,70 +501,6 @@ void LineSymbolCurveDock::fillSymbolStyles(){
 	}
 }
 
-
-/*!
-	fills the ComboBox \c combobox with the six possible Qt::PenStyles, the color \c color is used.
-*/
-void LineSymbolCurveDock::updatePenStyles(QComboBox* comboBox, const QColor& color){
-	int index=comboBox->currentIndex();
-	comboBox->clear();
-
-	QPainter pa;
-	int offset=2;
-	int w=50;
-	int h=10;
-	QPixmap pm( w, h );
-	comboBox->setIconSize( QSize(w,h) );
-	
-	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	QStringList list=QStringList()<<i18n("no line")<<i18n("solid line")<<i18n("dash line")<<i18n("dot line")
-														<<i18n("dash-dot line")<<i18n("dash-dot-dot line");
-	for (int i=0;i<6;i++){
-		pm.fill(Qt::transparent);
-		pa.begin( &pm );
-		pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
-		pa.drawLine( offset, h/2, w-offset, h/2);
-		pa.end();
- 		comboBox->addItem( QIcon(pm), list.at(i) );
-	}
-	comboBox->setCurrentIndex(index);
-}
-
-
-/*!
-	fills the ComboBox for the symbol filling patterns with the 14 possible Qt::BrushStyles.
-*/
-void LineSymbolCurveDock::updateBrushStyles(QComboBox* comboBox, const QColor& color){
-  	int index=comboBox->currentIndex();
-	comboBox->clear();
-
-	QPainter pa;
-	int offset=2;
-	int w=50;
-	int h=20;
-	QPixmap pm( w, h );
-	comboBox->setIconSize( QSize(w,h) );
-
-	QPen pen(Qt::SolidPattern, 1);
- 	pa.setPen( pen );
-	
-	QStringList list=QStringList()<<i18n("none")<<i18n("uniform")<<i18n("extremely dense")<<i18n("very dense")
-														<<i18n("somewhat dense")<<i18n("half dense")<<i18n("somewhat sparce")
-														 <<i18n("very sparce")<<i18n("extremely sparce")<<i18n("horiz. lines")
-														 <<i18n("vert. lines")<<i18n("crossing lines")<<i18n("backward diag. lines")
-														 <<i18n("forward diag. lines")<<i18n("crossing diag. lines");
-	for (int i=0;i<15;i++) {
-		pm.fill(Qt::transparent);
-		pa.begin( &pm );
-		pa.setRenderHint(QPainter::Antialiasing);
- 		pa.setBrush( QBrush(color, (Qt::BrushStyle)i) );
-		pa.drawRect( offset, offset, w - 2*offset, h - 2*offset);
-		pa.end();
-		comboBox->addItem( QIcon(pm), list.at(i) );
-	}
-
-	comboBox->setCurrentIndex(index);
-}
 
 /*!
   depending on the currently selected values column type (column mode) updates the widgets for the values column format, 
@@ -820,7 +757,7 @@ void LineSymbolCurveDock::lineColorChanged(const QColor& color){
 	curve->setLinePen(pen);
   }  
 
-  this->updatePenStyles(ui.cbLineStyle, color);
+  GuiTools::updatePenStyles(ui.cbLineStyle, color);
 }
 
 void LineSymbolCurveDock::lineWidthChanged(int value){
@@ -893,7 +830,7 @@ void LineSymbolCurveDock::dropLineColorChanged(const QColor& color){
 	curve->setDropLinePen(pen);
   }  
 
-  this->updatePenStyles(ui.cbDropLineStyle, color);
+  GuiTools::updatePenStyles(ui.cbDropLineStyle, color);
 }
 
 void LineSymbolCurveDock::dropLineWidthChanged(int value){
@@ -1025,7 +962,7 @@ void LineSymbolCurveDock::symbolFillingColorChanged(const QColor& color){
 	curve->setSymbolsBrush(brush);
   }
 
-  this->updateBrushStyles(ui.cbSymbolFillingStyle, color );
+  GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
 }
 
 void LineSymbolCurveDock::symbolBorderStyleChanged(int index){
@@ -1061,7 +998,7 @@ void LineSymbolCurveDock::symbolBorderColorChanged(const QColor& color){
 	curve->setSymbolsPen(pen);
   }  
   
-  this->updatePenStyles(ui.cbSymbolBorderStyle, color);
+  GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
 }
 
 void LineSymbolCurveDock::symbolBorderWidthChanged(int value){

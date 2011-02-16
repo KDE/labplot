@@ -75,8 +75,6 @@ private:
 	CurveSymbolFactory *symbolFactory;
 	
 	void fillSymbolStyles();
-	void updateBrushStyles(QComboBox*, const QColor&);
-	void updatePenStyles(QComboBox*, const QColor&);
 	void updateValuesFormatWidgets(const SciDAVis::ColumnMode);
 	void showValuesColumnFormat(const Column*);
 	
