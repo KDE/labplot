@@ -32,13 +32,12 @@
 #include "MainWin.h"
 
 //****** GUI **************
-#include "FunctionPlotDialog.h"
-#include "DataPlotDialog.h"
+// #include "FunctionPlotDialog.h"
+// #include "DataPlotDialog.h"
 #include "datasources/ImportFileDialog.h"
 #include "ImportDialog.h"
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
-#include "AxesDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 // #include "SpreadsheetView.h"
 #include "GuiObserver.h"
@@ -114,6 +113,10 @@ MainWin::~MainWin() {
 }
 
 void MainWin::initGUI(){
+  //TODO make the tabbed view optional and/or accessible via the menu
+  	m_mdi_area->setViewMode(QMdiArea::TabbedView);
+	m_mdi_area->setTabPosition(QTabWidget::South);
+
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
 	m_recentProjectsAction->setEnabled(true);
 
@@ -719,8 +722,6 @@ void MainWin::importFileDialog(){
 	}
 }
 
-void MainWin::axesDialog() { (new AxesDialog(this))->show(); }
-
 void MainWin::projectDialog(){
 	ProjectDialog* dlg = new ProjectDialog(this, m_project);
 	dlg->show();
@@ -798,24 +799,24 @@ void MainWin::expandAspect(const AbstractAspect* aspect) const{
 	adds a new plot to the current worksheet.
 */
 void MainWin::newPlotActionTriggered(QAction* action){
-	Plot::PlotType type;
-	QString name=action->objectName();
-	kDebug()<<name<<endl;
-	if (name == "new_2D_plot")
-		type=Plot::PLOT2D;
-	else if (name == "new_2D_surface_plot")
-		type=Plot::PLOTSURFACE;
-	else if (name == "new_2D_polar_plot")
-		type=Plot::PLOTPOLAR;
-	else
-		type=Plot::PLOT3D;
-
-	this->ensureSheet();
-	Worksheet* w=activeWorksheet();
-	if (w){
-		//w->createPlot(type);
-		this->updateGUI();
-	}
+// 	Plot::PlotType type;
+// 	QString name=action->objectName();
+// 	kDebug()<<name<<endl;
+// 	if (name == "new_2D_plot")
+// 		type=Plot::PLOT2D;
+// 	else if (name == "new_2D_surface_plot")
+// 		type=Plot::PLOTSURFACE;
+// 	else if (name == "new_2D_polar_plot")
+// 		type=Plot::PLOTPOLAR;
+// 	else
+// 		type=Plot::PLOT3D;
+// 
+// 	this->ensureSheet();
+// 	Worksheet* w=activeWorksheet();
+// 	if (w){
+// 		//w->createPlot(type);
+// 		this->updateGUI();
+// 	}
 }
 
 /*!
@@ -823,66 +824,66 @@ void MainWin::newPlotActionTriggered(QAction* action){
 	Creates a data set from a function and adds it to the current Worksheet or Spreadsheet.
 */
 void MainWin::functionPlotActionTriggered(QAction* action){
-	Plot::PlotType type;
-	QString name=action->objectName();
-	if (name == "new_2D_function_plot")
-		type=Plot::PLOT2D;
-	else if (name == "new_2D_surface_function_plot")
-		type=Plot::PLOTSURFACE;
-	else if (name == "new_2D_polar_function_plot")
-		type=Plot::PLOTPOLAR;
-	else
-		type=Plot::PLOT3D;
-
-	this->ensureSheet();
-
-	FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
-	AspectTreeModel* model=new AspectTreeModel(m_project, this);
-//TODO	model->setFolderSelectable(false);
-	dlg->setModel( model );
- 	dlg->setCurrentIndex( m_project_explorer->currentIndex());
-
-	if ( dlg->exec() == QDialog::Accepted ) {
-		Set set(Set::SET2D);
-		dlg->saveSet(&set);
-		QModelIndex index=dlg->currentIndex();
-		AbstractAspect * aspect = static_cast<AbstractAspect *>(index.internalPointer());
-		Worksheet* w=0;
-		w=qobject_cast<Worksheet*>(aspect);
-		if (w!=0){
-			//w->addSet(set, type);
-		}else{
-			//TODO
-// 			Spreadsheet* t=0;
-// 			if (t!=0){
-// 				t->addSet(set, type);
-		}
-	}
+// 	Plot::PlotType type;
+// 	QString name=action->objectName();
+// 	if (name == "new_2D_function_plot")
+// 		type=Plot::PLOT2D;
+// 	else if (name == "new_2D_surface_function_plot")
+// 		type=Plot::PLOTSURFACE;
+// 	else if (name == "new_2D_polar_function_plot")
+// 		type=Plot::PLOTPOLAR;
+// 	else
+// 		type=Plot::PLOT3D;
+// 
+// 	this->ensureSheet();
+// 
+// 	FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
+// 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
+// //TODO	model->setFolderSelectable(false);
+// 	dlg->setModel( model );
+//  	dlg->setCurrentIndex( m_project_explorer->currentIndex());
+// 
+// 	if ( dlg->exec() == QDialog::Accepted ) {
+// 		Set set(Set::SET2D);
+// 		dlg->saveSet(&set);
+// 		QModelIndex index=dlg->currentIndex();
+// 		AbstractAspect * aspect = static_cast<AbstractAspect *>(index.internalPointer());
+// 		Worksheet* w=0;
+// 		w=qobject_cast<Worksheet*>(aspect);
+// 		if (w!=0){
+// 			//w->addSet(set, type);
+// 		}else{
+// 			//TODO
+// // 			Spreadsheet* t=0;
+// // 			if (t!=0){
+// // 				t->addSet(set, type);
+// 		}
+// 	}
 }
 
 void MainWin::dataPlotActionTriggered(QAction* action){
-	Plot::PlotType type;
-	QString name=action->objectName();
-	if (name == "new_2D_data_plot")
-		type=Plot::PLOT2D;
-	else if (name == "new_2D_surface_data_plot")
-		type=Plot::PLOTSURFACE;
-	else if (name == "new_2D_polar_data_plot")
-		type=Plot::PLOTPOLAR;
-	else
-		type=Plot::PLOT3D;
-
-	this->ensureSheet();
-
-	DataPlotDialog* dlg = new DataPlotDialog(this, type);
-	AspectTreeModel* model=new AspectTreeModel(m_project, this);
-	//TODO model->setFolderSelectable(false);
-	dlg->setModel( model );
-	dlg->setCurrentIndex( m_project_explorer->currentIndex());
-
-	if ( dlg->exec() == QDialog::Accepted ) {
-		//TODO
-	}
+// 	Plot::PlotType type;
+// 	QString name=action->objectName();
+// 	if (name == "new_2D_data_plot")
+// 		type=Plot::PLOT2D;
+// 	else if (name == "new_2D_surface_data_plot")
+// 		type=Plot::PLOTSURFACE;
+// 	else if (name == "new_2D_polar_data_plot")
+// 		type=Plot::PLOTPOLAR;
+// 	else
+// 		type=Plot::PLOT3D;
+// 
+// 	this->ensureSheet();
+// 
+// 	DataPlotDialog* dlg = new DataPlotDialog(this, type);
+// 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
+// 	//TODO model->setFolderSelectable(false);
+// 	dlg->setModel( model );
+// 	dlg->setCurrentIndex( m_project_explorer->currentIndex());
+// 
+// 	if ( dlg->exec() == QDialog::Accepted ) {
+// 		//TODO
+// 	}
 }
 
 void MainWin::settingsDialog(){

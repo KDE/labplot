@@ -4,28 +4,29 @@ set(QTFRONTEND_DIR qtfrontend)
 set(COMMONFRONTEND_DIR commonfrontend)
 set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 
-ADD_SUBDIRECTORY(elements)
+# ADD_SUBDIRECTORY(elements)
 ADD_SUBDIRECTORY(filter)
 
 set(GUI_SOURCES
-	${KDEFRONTEND_DIR}/AxesDialog.cpp
-	${KDEFRONTEND_DIR}/AxesWidget.cpp
-	${KDEFRONTEND_DIR}/ColorMapPreview.cpp
-	${KDEFRONTEND_DIR}/DataPlotDialog.cpp
+# 	${KDEFRONTEND_DIR}/AxesDialog.cpp
+# 	${KDEFRONTEND_DIR}/AxesWidget.cpp
+# 	${KDEFRONTEND_DIR}/ColorMapPreview.cpp
+# 	${KDEFRONTEND_DIR}/DataPlotDialog.cpp
 	${KDEFRONTEND_DIR}/ExportDialog.cpp
 	${KDEFRONTEND_DIR}/ExportWidget.cpp
-	${KDEFRONTEND_DIR}/FunctionPlotDialog.cpp
-  	${KDEFRONTEND_DIR}/FunctionWidget.cpp
+# 	${KDEFRONTEND_DIR}/FunctionPlotDialog.cpp
+#   	${KDEFRONTEND_DIR}/FunctionWidget.cpp
   	${KDEFRONTEND_DIR}/GuiObserver.cpp
+	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/ImportDialog.cpp
 	${KDEFRONTEND_DIR}/ImportWidget.cpp
 	${KDEFRONTEND_DIR}/LabelWidget.cpp
  	${KDEFRONTEND_DIR}/LabPlot.cpp
-	${KDEFRONTEND_DIR}/LegendDialog.cpp
-	${KDEFRONTEND_DIR}/LegendWidget.cpp
+# 	${KDEFRONTEND_DIR}/LegendDialog.cpp
+# 	${KDEFRONTEND_DIR}/LegendWidget.cpp
   	${KDEFRONTEND_DIR}/MainWin.cpp
-  	${KDEFRONTEND_DIR}/PlotStyleWidget.cpp
- 	${KDEFRONTEND_DIR}/PlotSurfaceStyleWidget.cpp
+#   	${KDEFRONTEND_DIR}/PlotStyleWidget.cpp
+#  	${KDEFRONTEND_DIR}/PlotSurfaceStyleWidget.cpp
 	${KDEFRONTEND_DIR}/ProjectDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
@@ -41,11 +42,11 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 )
 
-set(PLOTS_SOURCES
-	plots/Plot.cpp
-	plots/Plot2D.cpp
-	plots/Plot2DSimple.cpp
-)
+# set(PLOTS_SOURCES
+# 	plots/Plot.cpp
+# 	plots/Plot2D.cpp
+# 	plots/Plot2DSimple.cpp
+# )
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/axeswidget.ui
@@ -110,8 +111,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/WorksheetRectangleElement.cpp
 	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/AbstractPlot.cpp
-	${BACKEND_DIR}/worksheet/LinearAxis.cpp
-	${BACKEND_DIR}/worksheet/LogAxis.cpp
+	${BACKEND_DIR}/worksheet/Axis.cpp
+# 	${BACKEND_DIR}/worksheet/LinearAxis.cpp
+# 	${BACKEND_DIR}/worksheet/LogAxis.cpp
 	${BACKEND_DIR}/worksheet/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp

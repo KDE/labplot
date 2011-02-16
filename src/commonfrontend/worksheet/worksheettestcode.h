@@ -65,54 +65,54 @@ void WorksheetView::startTestCode() {
 	plotArea->addChild(group1);
 	*/
 	/*
-	LinearAxis *xAxis1 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
+	Axis *xAxis1 = new Axis("x axis 1", Axis::axisBottom);
 	plot->addChild(xAxis1);
-	LinearAxis *yAxis1 = new LinearAxis("y axis 1", LinearAxis::axisLeft);
+	Axis *yAxis1 = new Axis("y axis 1", Axis::axisLeft);
 	plot->addChild(yAxis1);
 	*/
-	LinearAxis *xAxis2 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
+	Axis *xAxis2 = new Axis("x axis 1", Axis::axisBottom);
 	coordSys->addChild(xAxis2);
 	xAxis2->setMajorTicksLength(3);
 	xAxis2->setMinorTicksLength(1);
-	xAxis2->setMinorTickCount(3);
-	xAxis2->setMajorTickCount(13);
+	xAxis2->setMinorTicksNumber(3);
+	xAxis2->setMajorTicksNumber(13);
 	xAxis2->setStart(-2);
 	xAxis2->setEnd(10);
 	xAxis2->setTickStart(-2);
 	xAxis2->setTickEnd(10);
 	
-	LinearAxis *yAxis2 = new LinearAxis("y axis 1", LinearAxis::axisLeft);
+	Axis *yAxis2 = new Axis("y axis 1", Axis::axisLeft);
 	yAxis2->setMajorTicksLength(3);
 	yAxis2->setMinorTicksLength(1);
-	yAxis2->setMinorTickCount(4);
+	yAxis2->setMinorTicksNumber(4);
 	yAxis2->setStart(0);
 	yAxis2->setEnd(10);
 	yAxis2->setTickStart(0);
 	yAxis2->setTickEnd(10);
-	yAxis2->setMajorTickCount(11);
+	yAxis2->setMajorTicksNumber(11);
 	coordSys->addChild(yAxis2);
 	
-	LinearAxis *xAxis3 = new LinearAxis("x axis 2", LinearAxis::axisTop);
+	Axis *xAxis3 = new Axis("x axis 2", Axis::axisTop);
 	xAxis3->setOffset(10);
 	xAxis3->setStart(-2);
 	xAxis3->setEnd(10);
 	xAxis3->setTickStart(-2);
 	xAxis3->setTickEnd(10);
-	xAxis3->setMajorTickCount(13);
+	xAxis3->setMajorTicksNumber(13);
 	coordSys->addChild(xAxis3);
-	LinearAxis *yAxis3 = new LinearAxis("y axis 2", LinearAxis::axisRight);
+	Axis *yAxis3 = new Axis("y axis 2", Axis::axisRight);
 	yAxis3->setOffset(10);
 	yAxis3->setStart(0);
 	yAxis3->setEnd(10);
 	yAxis3->setTickStart(0);
 	yAxis3->setTickEnd(10);
-	yAxis3->setMajorTickCount(11);
-	yAxis3->setMajorTicksDirection(LinearAxis::ticksBoth);
-	yAxis3->setMinorTicksDirection(LinearAxis::ticksBoth);
+	yAxis3->setMajorTicksNumber(11);
+	yAxis3->setMajorTicksDirection(Axis::ticksBoth);
+	yAxis3->setMinorTicksDirection(Axis::ticksBoth);
 	#if 0
 	yAxis3->setTickStart(0.5);
 	yAxis3->setTickEnd(9.5);
-	yAxis3->setMajorTickCount(9);
+	yAxis3->setMajorTicksNumber(9);
 	#endif
 	yAxis3->setStart(0);
 	yAxis3->setEnd(10);
@@ -190,38 +190,39 @@ void WorksheetView::startTestCode() {
 	plotArea->setClippingEnabled(true);
 	coordSys->addChild(plotArea);
 	
-	LinearAxis *xAxis2 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
+	Axis *xAxis2 = new Axis("x axis 1", Axis::axisBottom);
 	xAxis2->setOffset(1);
 	coordSys->addChild(xAxis2);
 	xAxis2->setMajorTicksLength(3);
 	xAxis2->setMinorTicksLength(1);
-	xAxis2->setMinorTickCount(3);
-	LogAxis *yAxis2 = new LogAxis("y axis 1", LinearAxis::axisLeft, 10);
+	xAxis2->setMinorTicksNumber(3);
+	Axis *yAxis2 = new Axis("y axis 1", Axis::axisLeft);
+	yAxis2->setScale(Axis::ScaleLog10);
 	yAxis2->setMajorTicksLength(5);
 	yAxis2->setMinorTicksLength(3);
-	yAxis2->setMinorTickCount(9);
-	yAxis2->setMajorTickCount(4);
+	yAxis2->setMinorTicksNumber(9);
+	yAxis2->setMajorTicksNumber(4);
 	yAxis2->setStart(1);
 	yAxis2->setEnd(1000);
 	yAxis2->setTickStart(1);
 	yAxis2->setTickEnd(1000);
 	coordSys->addChild(yAxis2);
 	
-	LinearAxis *xAxis3 = new LinearAxis("x axis 2", LinearAxis::axisTop);
+	Axis *xAxis3 = new Axis("x axis 2", Axis::axisTop);
 	xAxis3->setOffset(1000);
 	coordSys->addChild(xAxis3);
-	LinearAxis *yAxis3 = new LinearAxis("y axis 2", LinearAxis::axisRight);
+	Axis *yAxis3 = new Axis("y axis 2", Axis::axisRight);
 	yAxis3->setOffset(10);
 	yAxis3->setMajorTicksLength(5);
 	yAxis3->setMinorTicksLength(3);
-	yAxis3->setMajorTicksDirection(LinearAxis::ticksBoth);
-	yAxis3->setMinorTicksDirection(LinearAxis::ticksBoth);
+	yAxis3->setMajorTicksDirection(Axis::ticksBoth);
+	yAxis3->setMinorTicksDirection(Axis::ticksBoth);
 	yAxis3->setStart(1);
 	yAxis3->setEnd(1000);
 	yAxis3->setTickStart(1);
 	yAxis3->setTickEnd(1000);
-	yAxis3->setMinorTickCount(9);
-	yAxis3->setMajorTickCount(4);
+	yAxis3->setMinorTicksNumber(9);
+	yAxis3->setMajorTicksNumber(4);
 	coordSys->addChild(yAxis3);
 	
 	Column *xc = new Column("xc", SciDAVis::Numeric);
@@ -296,95 +297,4 @@ void WorksheetView::startTestCode() {
   plotArea->addChild(curve2);
   plotArea->addChild(curve1);
   }
-  
-  /*
-{
-	DecorationPlot *plot = new DecorationPlot("plot3");
-	m_worksheet->addChild(plot);
-	plot->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-	plot->graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	
-	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords3");
-	
-	QList<CartesianCoordinateSystem::Scale *> scales;
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.3, pw * 0.7, -10, 10);
-	coordSys->setXScales(scales);
-	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.3, pw * 0.7, -10, 10);
-	coordSys->setYScales(scales);
-	
-	plot->addChild(coordSys);
-	PlotArea *plotArea = new PlotArea("plot area");
-	plotArea->setRect(QRectF(-2, 1, 10, 10));
-	plotArea->setClippingEnabled(true);
-	coordSys->addChild(plotArea);
-	
-	LinearAxis *xAxis2 = new LinearAxis("x axis 1", LinearAxis::axisBottom);
-	xAxis2->setOffset(1);
-	coordSys->addChild(xAxis2);
-	xAxis2->setMajorTicksLength(3);
-	xAxis2->setMinorTicksLength(1);
-	xAxis2->setMinorTickCount(3);
-
-	
-// 	LinearAxis *xAxis3 = new LinearAxis("x axis 2", LinearAxis::axisTop);
-// 	xAxis3->setOffset(1000);
-// 	coordSys->addChild(xAxis3);
-	
-	
-	LinearAxis *yAxis3 = new LinearAxis("y axis 2", LinearAxis::axisRight);
-	yAxis3->setOffset(10);
-	yAxis3->setMajorTicksLength(5);
-	yAxis3->setMinorTicksLength(3);
-	yAxis3->setMajorTicksDirection(LinearAxis::ticksBoth);
-	yAxis3->setMinorTicksDirection(LinearAxis::ticksBoth);
-	yAxis3->setStart(-10);
-	yAxis3->setEnd(10);
-	yAxis3->setTickStart(-10);
-	yAxis3->setTickEnd(10);
-	yAxis3->setMinorTickCount(9);
-	yAxis3->setMajorTickCount(4);
-	coordSys->addChild(yAxis3);
-	return;
-	
-	Column *xc = new Column("xc", SciDAVis::Numeric);
-	Column *yc = new Column("yc", SciDAVis::Numeric);
-	for (int i=0; i<20; i++)	{
-	  xc->setValueAt(i, i*0.25);
-	  yc->setValueAt(i, i*i*2+1);
-  }
-  
-  LineSymbolCurve *curve1 = new LineSymbolCurve("curve 1");
-  curve1->setXColumn(xc);
-  curve1->setYColumn(yc);
-  
-  Column *xc2 = new Column("xc", SciDAVis::Numeric);
-  Column *yc2 = new Column("yc", SciDAVis::Numeric);
-  for (int i=0; i<40; i++)	{
-	  xc2->setValueAt(i, (i-20)*0.25);
-	  yc2->setValueAt(i, (i-20)*(i-20)+2);
-  }
-  LineSymbolCurve *curve2 = new LineSymbolCurve("curve 2");
-  curve2->setXColumn(xc2);
-  curve2->setYColumn(yc2);
-  
-  Column *xc3 = new Column("xc", SciDAVis::Numeric);
-  Column *yc3 = new Column("yc", SciDAVis::Numeric);
-  for (int i=0; i<20; i++)	{
-	  xc3->setValueAt(i, i*0.25);
-	  yc3->setValueAt(i, i*i*6+3);
-  }
-  LineSymbolCurve *curve3 = new LineSymbolCurve("curve 3");
-  curve3->setXColumn(xc3);
-  curve3->setYColumn(yc3);
-  
-  WorksheetElementContainer *group2 = new WorksheetElementContainer("some more items");
-  group2->addChild(curve3);
-  plotArea->addChild(group2);
-  
-  
-  plotArea->addChild(curve2);
-  plotArea->addChild(curve1);
-  }  
-  */
 }

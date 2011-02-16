@@ -33,6 +33,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "spreadsheet/Spreadsheet.h"
 #include "worksheet/Worksheet.h"
 #include "worksheet/LineSymbolCurve.h"
+#include "worksheet/Axis.h"
 #include "core/Project.h"
 #include "core/ProjectExplorer.h"
 #include "MainWin.h"
@@ -92,14 +93,16 @@ GuiObserver::~GuiObserver(){
   }
   
   QString className=aspect->metaObject()->className();
-//   qDebug()<<className;
+//    qDebug()<<className;
   
+  //check, whether objects of different  type where selected -> hide the dock in this case.
   foreach(aspect, selectedAspects){
 	  if (aspect->metaObject()->className() != className){
 		if (mainWindow->stackedWidget->currentWidget())
 		  mainWindow->stackedWidget->currentWidget()->hide();
 
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
+		this->updateGui("");
 		return;
 	  }
 	}
@@ -152,13 +155,20 @@ GuiObserver::~GuiObserver(){
 	mainWindow->worksheetDock->setWorksheets(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->worksheetDock);
-  }else if (className=="LinearAxis"){
+  }else if (className=="Axis"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis properties"));
 	
 	if (!mainWindow->axisDock){
 	  mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
 	  mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
 	}
+	
+	QList<Axis*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<Axis *>(aspect);
+	}
+	mainWindow->axisDock->setAxes(list);
+	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
   }else if (className=="LineSymbolCurve"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Line properties"));
@@ -184,4 +194,92 @@ GuiObserver::~GuiObserver(){
 	if (mainWindow->stackedWidget->currentWidget())
 	  mainWindow->stackedWidget->currentWidget()->hide();
   }
+  
+  this->updateGui(className);
 }
+
+/*!
+  udpates the GUI in MainWin.
+  Depending on the currently selected object(s), identified by \c className, activates/diactivates the corresponding toolbars and menus.
+*/
+void GuiObserver::updateGui(const QString& className ){
+/*
+  if (className == ""){
+	//no object or objects of different kind (e.g. a spreadsheet and a worksheet) were selected.
+	
+  }else if (className=="Spreadsheet"){
+	
+  }else if (className == "Worksheet"){
+	if (!worksheetActionCreated)
+	  this->createWorksheetActions();
+	
+	//TODO connect the worksheet actions with the first (or with all?) selected worksheet
+  }
+ */ 
+}
+
+/*
+void GuiObserver::createWoksheetActions(){
+    //Zoom actions
+  worksheetZoomInAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), this);
+  worksheetZoomInAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
+//   connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
+
+  zoomOutAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), this);
+  zoomOutAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
+  connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
+
+  zoomOriginAction = new KAction(KIcon("zoom-original"), i18n("Original size"), this);
+  zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
+  connect(zoomOriginAction, SIGNAL(triggered()), SLOT(zoomOrigin()));
+
+  zoomFitPageHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Fit to height"), this);
+  connect(zoomFitPageHeightAction, SIGNAL(triggered()), SLOT(zoomFitPageHeight()));
+
+  zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), this);
+  connect(zoomFitPageWidthAction, SIGNAL(triggered()), SLOT(zoomFitPageWidth()));
+  
+  zoomFitSelectionAction = new KAction(i18n("Fit to selection"), this);
+  connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
+
+  // Mouse mode actions 
+  QActionGroup* mouseModeActionGroup = new QActionGroup(this);
+  navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigation"), this);
+  navigationModeAction->setCheckable(true);
+  mouseModeActionGroup->addAction(navigationModeAction);
+  connect(navigationModeAction, SIGNAL(triggered()), SLOT(enableNavigationMode()));
+
+  zoomModeAction = new KAction(KIcon("page-zoom"), i18n("Zoom"), this);
+  zoomModeAction->setCheckable(true);
+  mouseModeActionGroup->addAction(zoomModeAction);
+  connect(zoomModeAction, SIGNAL(triggered()), SLOT(enableZoomMode()));
+
+  selectionModeAction = new KAction(KIcon("select-rectangular"), i18n("Selection"), this);
+  selectionModeAction->setCheckable(true);
+  mouseModeActionGroup->addAction(selectionModeAction);
+  connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
+
+  //Layout actions
+  QActionGroup* layoutActionGroup = new QActionGroup(this);
+
+  verticalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Vertical layout"), this);
+  verticalLayoutAction->setObjectName("verticalLayoutAction");
+  verticalLayoutAction->setCheckable(true);
+  layoutActionGroup->addAction(verticalLayoutAction);
+
+  horizontalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Horizontal layout"), this);
+  horizontalLayoutAction->setObjectName("horizontalLayoutAction");
+  horizontalLayoutAction->setCheckable(true);
+  layoutActionGroup->addAction(horizontalLayoutAction);
+
+  gridLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Grid layout"), this);
+  gridLayoutAction->setObjectName("gridLayoutAction");
+  gridLayoutAction->setCheckable(true);
+  layoutActionGroup->addAction(gridLayoutAction);
+
+  breakLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Break layout"), this);
+  breakLayoutAction->setObjectName("breakLayoutAction");
+  breakLayoutAction->setEnabled(false);
+  layoutActionGroup->addAction(breakLayoutAction);
+}
+*/

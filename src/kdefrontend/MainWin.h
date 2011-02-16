@@ -82,6 +82,8 @@ private:
 	KAction* m_importAction;
 	KAction* m_projectInfoAction;
 	KAction* m_closeAction;
+	KAction* m_toggleProjectExplorerDock;
+	KAction* m_togglePropertiesDock;
 	KAction *m_newFolderAction;
 	KAction *m_newSpreadsheetAction;
 	KAction *m_newMatrixAction;
@@ -94,6 +96,23 @@ private:
 	KAction *m_undoAction;
 	KAction *m_redoAction;
 
+	//worksheet actions 
+	KAction* worksheetZoomInAction;
+	KAction* worksheetZoomOutAction;
+	KAction* worksheetZoomOriginAction;
+	KAction* worksheetZoomFitPageHeightAction;
+	KAction* worksheetZoomFitPageWidthAction;
+	KAction* worksheetZoomFitSelectionAction;
+
+	KAction* worksheetNavigationModeAction;
+	KAction* worksheetZoomModeAction;
+	KAction* worksheetSelectionModeAction;
+
+	KAction* worksheetVerticalLayoutAction;
+	KAction* worksheetHorizontalLayoutAction;
+	KAction* worksheetGridLayoutAction;
+	KAction* worksheetBreakLayoutAction;
+	
 	//docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
@@ -138,7 +157,6 @@ private slots:
 	void importFileDialog();
 	void projectDialog();
 	void settingsDialog();
-	void axesDialog();
 	void newPlotActionTriggered(QAction*);
 	void functionPlotActionTriggered(QAction*);
 	void dataPlotActionTriggered(QAction*);
