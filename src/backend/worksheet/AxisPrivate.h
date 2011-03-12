@@ -35,6 +35,7 @@
 #include <QPen>
 #include <QFont>
 #include "worksheet/ScalableTextLabel.h"
+#include "Axis.h"
 
 class AxisPrivate: public QGraphicsItem {
 	public:
@@ -53,12 +54,12 @@ class AxisPrivate: public QGraphicsItem {
 		qreal offset; //!< offset from zero in the direction perpendicular to the axis
 		qreal start; //!< start coordinate of the axis line
 		qreal end; //!< end coordinate of the axis line
+		qreal scalingFactor;
+		qreal zeroOffset;
 		
 		QPen linePen;
 		qreal lineOpacity;
-		
-		qreal tickStart; //!< coordinate of the first tick (typically ==0 or ==start)
-		qreal tickEnd; //!< coordinate of the last tick (typically ==end)
+
 		Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 		Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 		int majorTicksNumber; //!< number of major ticks
@@ -73,11 +74,21 @@ class AxisPrivate: public QGraphicsItem {
 		qreal minorTicksIncrement; //!< increment (step) for the minor ticks
 		qreal minorTicksLength; //!< minor tick length (in page units!)
 		QPen minorTicksPen;
-		qreal minorTicksOpacity;		
+		qreal minorTicksOpacity;	
 		
-		qreal labelFontSize;
-		qreal labelRotationAngle;
-
+		Axis::LabelsPosition labelsPosition;
+		qreal labelsFontSize;
+		qreal labelsRotationAngle;
+		QColor labelsColor;
+		QFont labelsFont;
+		QPointF labelsOffset;
+		qreal labelsOpacity;	
+		char numericFormat;
+		int displayedDigits;
+		// TODO support for date/time and string labels
+		QString labelsPrefix;
+		QString labelsSuffix;
+		
 		QPainterPath linePath;
 		QPainterPath majorTicksPath;
 		QPainterPath minorTicksPath;
@@ -86,13 +97,6 @@ class AxisPrivate: public QGraphicsItem {
 		QPainterPath axisShape;
 
 		QPen pen;
-		QColor labelColor;
-		QFont labelFont;
-		QPointF labelOffset;
-
-		char numericFormat;
-		int displayedDigits;
-		// TODO support for date/time and string labels
 
 		virtual QRectF boundingRect() const { return boundingRectangle; }
 		virtual QPainterPath shape() const { return axisShape; }

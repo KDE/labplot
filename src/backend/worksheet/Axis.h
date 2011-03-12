@@ -39,19 +39,9 @@ class Axis: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
-		enum AxisFlags {
-			axisHorizontal = 0x01,
-			axisVertical = 0x02,
-			axisNormalTicks = 0x04,
-			axisInvertedTicks = 0x08,
-			axisCustom = 0x10,
-			axisLeft = axisVertical | axisNormalTicks,
-			axisRight = axisVertical | axisInvertedTicks,
-			axisBottom = axisHorizontal | axisNormalTicks,
-			axisTop = axisHorizontal | axisInvertedTicks,
-		};
-		Q_DECLARE_FLAGS(AxisOrientation, AxisFlags)
-
+		enum AxisOrientation {AxisHorizontal, AxisVertical};
+// 		enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCustom};
+		
 		enum TicksFlags {
 			noTicks = 0x00,
 			ticksIn = 0x01,
@@ -61,24 +51,24 @@ class Axis: public AbstractWorksheetElement {
 		Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 		
 		enum TicksType {TicksTotalNumber, TicksIncrement};
-		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt};
+		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
+		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 		
 		Axis(const QString &name, const AxisOrientation &orientation);
 		virtual ~Axis();
 
 		virtual QGraphicsItem *graphicsItem() const;
 
-		CLASS_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
+		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
 		BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale);
 		BASIC_D_ACCESSOR_DECL(qreal, offset, Offset);
 		BASIC_D_ACCESSOR_DECL(qreal, start, Start);
 		BASIC_D_ACCESSOR_DECL(qreal, end, End);
+		BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor);
+		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset);
 		
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity);
-		
-		BASIC_D_ACCESSOR_DECL(qreal, tickStart, TickStart);
-		BASIC_D_ACCESSOR_DECL(qreal, tickEnd, TickEnd);
 		
 		CLASS_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection);
 		CLASS_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType);
@@ -96,12 +86,16 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength);
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity);
 		
-		BASIC_D_ACCESSOR_DECL(qreal, labelRotationAngle, LabelRotationAngle);
-		BASIC_D_ACCESSOR_DECL(qreal, labelFontSize, LabelFontSize);
-		CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor);
-		CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont);
-		CLASS_D_ACCESSOR_DECL(QPointF, labelOffset, LabelOffset);
-
+		CLASS_D_ACCESSOR_DECL(LabelsPosition, labelsPosition, LabelsPosition);
+		CLASS_D_ACCESSOR_DECL(QPointF, labelsOffset, LabelsOffset);		
+		BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle);
+		BASIC_D_ACCESSOR_DECL(qreal, labelsFontSize, LabelsFontSize);
+		CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor);
+		CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont);
+		CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix);
+		CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix);
+		BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity);
+		
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 
@@ -121,7 +115,6 @@ class Axis: public AbstractWorksheetElement {
 		void init();
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::AxisOrientation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)
 
 #endif
