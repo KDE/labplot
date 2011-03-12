@@ -64,37 +64,53 @@ private:
 	void scaleChanged(int);
 	void startChanged();
 	void endChanged();
+	void zeroOffsetChanged();
+	void scalingFactorChanged();
 
 	//Line-Tab
   	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
-	void lineWidthChanged(int);
+	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
 	
 	//"Major ticks"-tab
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
- 	void majorTicksNumberChanged();
+ 	void majorTicksNumberChanged(int);
+	void majorTicksIncrementChanged();
 	void majorTicksLineStyleChanged(int);
 	void majorTicksColorChanged(const QColor&);
 	void majorTicksWidthChanged(int);
 	void majorTicksLengthChanged(int);
 	void majorTicksOpacityChanged(int);
+	void setMajorTicksWidgetsEnabled(bool);
 	
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
- 	void minorTicksNumberChanged();
+ 	void minorTicksNumberChanged(int);
+	void minorTicksIncrementChanged();
 	void minorTicksLineStyleChanged(int);
 	void minorTicksColorChanged(const QColor&);
 	void minorTicksWidthChanged(int);
 	void minorTicksLengthChanged(int);
 	void minorTicksOpacityChanged(int);
+	void setMinorTicksWidgetsEnabled(bool);
 	
 	//"Extra ticks"-tab
 	
 	//"Tick labels"-tab
-
+	void labelsPositionChanged(int);
+	void labelsOffsetChanged(int);
+	void labelsRotationChanged(int);
+	void labelsFontChanged(const QFont&);
+	void labelsFontColorChanged(const QColor&);	
+	void labelsPrefixChanged();
+	void labelsSuffixChanged();
+	void labelsOpacityChanged(int);
+	void setLabelsWidgetsEnabled(bool);
+	
+	
 	//"Grid"-tab
 
 
