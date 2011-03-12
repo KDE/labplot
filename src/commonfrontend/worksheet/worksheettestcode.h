@@ -1,16 +1,6 @@
 #include <math.h>
 
 void WorksheetView::startTestCode() {
-//   QGraphicsRectItem *rect = scene()->addRect(QRectF(0, 0, 50, 50));
-// 		rect->setFlag(QGraphicsItem::ItemIsMovable, true);
-// rect->setFlag(QGraphicsItem::ItemIsSelectable, true);
-// 
-//   QGraphicsRectItem *rect2 = scene()->addRect(QRectF(50, 50, 50, 50));
-// 		rect2->setFlag(QGraphicsItem::ItemIsMovable, true);
-// rect2->setFlag(QGraphicsItem::ItemIsSelectable, true);
-//  
-// //  return;
-
   QRectF pageRect = m_model->scene()->sceneRect();
   
   #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
@@ -70,7 +60,7 @@ void WorksheetView::startTestCode() {
 	Axis *yAxis1 = new Axis("y axis 1", Axis::axisLeft);
 	plot->addChild(yAxis1);
 	*/
-	Axis *xAxis2 = new Axis("x axis 1", Axis::axisBottom);
+	Axis *xAxis2 = new Axis("x axis 1", Axis::AxisHorizontal);
 	coordSys->addChild(xAxis2);
 	xAxis2->setMajorTicksLength(3);
 	xAxis2->setMinorTicksLength(1);
@@ -78,34 +68,26 @@ void WorksheetView::startTestCode() {
 	xAxis2->setMajorTicksNumber(13);
 	xAxis2->setStart(-2);
 	xAxis2->setEnd(10);
-	xAxis2->setTickStart(-2);
-	xAxis2->setTickEnd(10);
 	
-	Axis *yAxis2 = new Axis("y axis 1", Axis::axisLeft);
+	Axis *yAxis2 = new Axis("y axis 1",  Axis::AxisVertical);
 	yAxis2->setMajorTicksLength(3);
 	yAxis2->setMinorTicksLength(1);
 	yAxis2->setMinorTicksNumber(4);
 	yAxis2->setStart(0);
 	yAxis2->setEnd(10);
-	yAxis2->setTickStart(0);
-	yAxis2->setTickEnd(10);
 	yAxis2->setMajorTicksNumber(11);
 	coordSys->addChild(yAxis2);
 	
-	Axis *xAxis3 = new Axis("x axis 2", Axis::axisTop);
+	Axis *xAxis3 = new Axis("x axis 2", Axis::AxisHorizontal);
 	xAxis3->setOffset(10);
 	xAxis3->setStart(-2);
 	xAxis3->setEnd(10);
-	xAxis3->setTickStart(-2);
-	xAxis3->setTickEnd(10);
 	xAxis3->setMajorTicksNumber(13);
 	coordSys->addChild(xAxis3);
-	Axis *yAxis3 = new Axis("y axis 2", Axis::axisRight);
+	Axis *yAxis3 = new Axis("y axis 2",  Axis::AxisVertical);
 	yAxis3->setOffset(10);
 	yAxis3->setStart(0);
 	yAxis3->setEnd(10);
-	yAxis3->setTickStart(0);
-	yAxis3->setTickEnd(10);
 	yAxis3->setMajorTicksNumber(11);
 	yAxis3->setMajorTicksDirection(Axis::ticksBoth);
 	yAxis3->setMinorTicksDirection(Axis::ticksBoth);
@@ -116,11 +98,10 @@ void WorksheetView::startTestCode() {
 	#endif
 	yAxis3->setStart(0);
 	yAxis3->setEnd(10);
-	yAxis3->setTickStart(0);
-	yAxis3->setTickEnd(10);
+	yAxis3->setLabelsPosition(Axis::LabelsIn);
 	coordSys->addChild(yAxis3);
 	
-// 	plotArea->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
+	plotArea->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
 	
 	Column *xc = new Column("xc", SciDAVis::Numeric);
 	Column *yc = new Column("yc", SciDAVis::Numeric);
@@ -178,7 +159,7 @@ void WorksheetView::startTestCode() {
 	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords2");
 	
 	QList<CartesianCoordinateSystem::Scale *> scales;
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.3, pw * 0.7, -2, 10);
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.5, pw * 0.85, -2, 10);
 	coordSys->setXScales(scales);
 	scales.clear();
 	scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.4, ph * 0.2, 1, 1000, 10);
@@ -190,13 +171,13 @@ void WorksheetView::startTestCode() {
 	plotArea->setClippingEnabled(true);
 	coordSys->addChild(plotArea);
 	
-	Axis *xAxis2 = new Axis("x axis 1", Axis::axisBottom);
+	Axis *xAxis2 = new Axis("x axis 1", Axis::AxisHorizontal);
 	xAxis2->setOffset(1);
 	coordSys->addChild(xAxis2);
 	xAxis2->setMajorTicksLength(3);
 	xAxis2->setMinorTicksLength(1);
 	xAxis2->setMinorTicksNumber(3);
-	Axis *yAxis2 = new Axis("y axis 1", Axis::axisLeft);
+	Axis *yAxis2 = new Axis("y axis 1", Axis::AxisVertical);
 	yAxis2->setScale(Axis::ScaleLog10);
 	yAxis2->setMajorTicksLength(5);
 	yAxis2->setMinorTicksLength(3);
@@ -204,14 +185,12 @@ void WorksheetView::startTestCode() {
 	yAxis2->setMajorTicksNumber(4);
 	yAxis2->setStart(1);
 	yAxis2->setEnd(1000);
-	yAxis2->setTickStart(1);
-	yAxis2->setTickEnd(1000);
 	coordSys->addChild(yAxis2);
 	
-	Axis *xAxis3 = new Axis("x axis 2", Axis::axisTop);
+	Axis *xAxis3 = new Axis("x axis 2", Axis::AxisHorizontal);
 	xAxis3->setOffset(1000);
 	coordSys->addChild(xAxis3);
-	Axis *yAxis3 = new Axis("y axis 2", Axis::axisRight);
+	Axis *yAxis3 = new Axis("y axis 2", Axis::AxisVertical);
 	yAxis3->setOffset(10);
 	yAxis3->setMajorTicksLength(5);
 	yAxis3->setMinorTicksLength(3);
@@ -219,10 +198,9 @@ void WorksheetView::startTestCode() {
 	yAxis3->setMinorTicksDirection(Axis::ticksBoth);
 	yAxis3->setStart(1);
 	yAxis3->setEnd(1000);
-	yAxis3->setTickStart(1);
-	yAxis3->setTickEnd(1000);
 	yAxis3->setMinorTicksNumber(9);
 	yAxis3->setMajorTicksNumber(4);
+	yAxis3->setLabelsPosition(Axis::LabelsIn);
 	coordSys->addChild(yAxis3);
 	
 	Column *xc = new Column("xc", SciDAVis::Numeric);
@@ -297,4 +275,88 @@ void WorksheetView::startTestCode() {
   plotArea->addChild(curve2);
   plotArea->addChild(curve1);
   }
+  
+  {
+	DecorationPlot *plot = new DecorationPlot("plot3");
+	m_worksheet->addChild(plot);
+	plot->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	plot->graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
+	
+	CartesianCoordinateSystem *coordSys = new CartesianCoordinateSystem("coords2");
+	
+	QList<CartesianCoordinateSystem::Scale *> scales;
+// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.3, pw * 0.7, -2, 10);
+// 	coordSys->setXScales(scales);
+// 	scales.clear();
+// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.4, ph * 0.2, 1, 10);
+// 	coordSys->setYScales(scales);
+		scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.02, pw * 0.42, -2, 10);
+	coordSys->setXScales(scales);
+	scales.clear();
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.4, ph * 0.2, 1, 10);
+	coordSys->setYScales(scales);
+	
+	plot->addChild(coordSys);
+	PlotArea *plotArea = new PlotArea("plot area");
+	plotArea->setRect(QRectF(-2, -2, 14, 14));
+	plotArea->setClippingEnabled(true);
+	coordSys->addChild(plotArea);
+	
+	Axis *xAxis2 = new Axis("x axis 1", Axis::AxisHorizontal);
+	coordSys->addChild(xAxis2);
+	xAxis2->setMajorTicksLength(3);
+	xAxis2->setMinorTicksLength(1);
+	xAxis2->setMinorTicksNumber(3);
+	Axis *yAxis2 = new Axis("y axis 1", Axis::AxisVertical);
+	yAxis2->setMajorTicksLength(3);
+	yAxis2->setMinorTicksLength(1);
+	yAxis2->setMinorTicksNumber(3);
+	yAxis2->setMajorTicksNumber(6);
+	yAxis2->setStart(0);
+	yAxis2->setEnd(10);
+	coordSys->addChild(yAxis2);
+	
+	Axis *xAxis3 = new Axis("x axis 2", Axis::AxisHorizontal);
+	xAxis3->setOffset(10);
+	coordSys->addChild(xAxis3);
+	Axis *yAxis3 = new Axis("y axis 2", Axis::AxisVertical);
+	yAxis3->setOffset(10);
+	yAxis3->setMajorTicksLength(3);
+	yAxis3->setMinorTicksLength(1);
+	yAxis3->setMajorTicksDirection(Axis::ticksBoth);
+	yAxis3->setMinorTicksDirection(Axis::ticksBoth);
+	yAxis3->setStart(0);
+	yAxis3->setEnd(10);
+	yAxis3->setMinorTicksNumber(9);
+	yAxis3->setMajorTicksNumber(4);
+	yAxis3->setLabelsPosition(Axis::LabelsIn);
+	coordSys->addChild(yAxis3);
+	
+	Column *xc = new Column("xc", SciDAVis::Numeric);
+	Column *yc = new Column("yc", SciDAVis::Numeric);
+	for (int i=0; i<4; i++)	{
+	  xc->setValueAt(i, i);
+	  yc->setValueAt(i, sqrt(i));
+	}
+  
+  LineSymbolCurve *curve1 = new LineSymbolCurve("sqrt(x)");
+  curve1->setXColumn(xc);
+  curve1->setYColumn(yc);
+  
+  plotArea->addChild(curve1);
+  
+  	Column *xc2 = new Column("xc", SciDAVis::Numeric);
+	Column *yc2 = new Column("yc", SciDAVis::Numeric);
+	for (int i=0; i<4; i++)	{
+	  xc2->setValueAt(i, i);
+	  yc2->setValueAt(i, i*i);
+  }
+  
+  LineSymbolCurve *curve2 = new LineSymbolCurve("x^2");
+  curve2->setXColumn(xc2);
+  curve2->setYColumn(yc2);
+  
+  plotArea->addChild(curve2);
+  }
+  
 }
