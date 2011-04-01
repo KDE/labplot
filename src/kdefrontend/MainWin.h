@@ -147,7 +147,7 @@ private slots:
 	void openProject(QString filename);
 	void openRecentProject();
 	void closeProject();
-	void saveProject(QString filename=0);
+	void saveProject(QString filename = QString::null);
 	void saveProjectAs();
 	
 	void print();
