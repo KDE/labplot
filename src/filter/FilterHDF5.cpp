@@ -635,7 +635,7 @@ int FilterHDF5::exportFile(MainWin *mw, bool all, int datatype, int order, int s
 
 	return H5Fclose(file);
 */
-	
+	return 0;	
 #else
 	return -1;
 #endif

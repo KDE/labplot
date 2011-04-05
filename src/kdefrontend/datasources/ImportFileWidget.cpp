@@ -175,6 +175,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
     }else{
 	  
 	}
+	return 0;
 }
 
 

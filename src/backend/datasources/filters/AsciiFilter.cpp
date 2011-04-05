@@ -87,7 +87,7 @@ void AsciiFilter::saveFilterSettings(const QString& filterName) const{
   (system wide or user defined) filter settings.
 */
 QStringList AsciiFilter::predefinedFilters(){
-
+	return QStringList();
 }
 
 /*!
