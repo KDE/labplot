@@ -4,12 +4,9 @@ set(QTFRONTEND_DIR qtfrontend)
 set(COMMONFRONTEND_DIR commonfrontend)
 set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 
-# ADD_SUBDIRECTORY(elements)
 ADD_SUBDIRECTORY(filter)
 
 set(GUI_SOURCES
-# 	${KDEFRONTEND_DIR}/AxesDialog.cpp
-# 	${KDEFRONTEND_DIR}/AxesWidget.cpp
 # 	${KDEFRONTEND_DIR}/ColorMapPreview.cpp
 # 	${KDEFRONTEND_DIR}/DataPlotDialog.cpp
 	${KDEFRONTEND_DIR}/ExportDialog.cpp
@@ -34,7 +31,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
 #   	${KDEFRONTEND_DIR}/SpreadsheetView.cpp
 	${KDEFRONTEND_DIR}/TitleDialog.cpp
-	${KDEFRONTEND_DIR}/ValuesWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
@@ -42,14 +38,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 )
 
-# set(PLOTS_SOURCES
-# 	plots/Plot.cpp
-# 	plots/Plot2D.cpp
-# 	plots/Plot2DSimple.cpp
-# )
-
 set(UI_SOURCES
-	${KDEFRONTEND_DIR}/ui/axeswidget.ui
 	${KDEFRONTEND_DIR}/ui/columndialog.ui
 	${KDEFRONTEND_DIR}/ui/exportwidget.ui
 	${KDEFRONTEND_DIR}/ui/functionwidget.ui
@@ -61,7 +50,6 @@ set(UI_SOURCES
  	${KDEFRONTEND_DIR}/ui/projectdialog.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
-	${KDEFRONTEND_DIR}/ui/valueswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
@@ -112,8 +100,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/AbstractPlot.cpp
 	${BACKEND_DIR}/worksheet/Axis.cpp
-# 	${BACKEND_DIR}/worksheet/LinearAxis.cpp
-# 	${BACKEND_DIR}/worksheet/LogAxis.cpp
 	${BACKEND_DIR}/worksheet/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
@@ -173,7 +159,8 @@ add_custom_command (OUTPUT parser/parser.tab.c
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
 ##############################################################################
 INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} ${COMMONFRONTEND_DIR} .)
-set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
+# set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
+set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
 kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
