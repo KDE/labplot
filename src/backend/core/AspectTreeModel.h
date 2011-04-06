@@ -1,12 +1,13 @@
 /***************************************************************************
-    File                 : AspectTreeModel.h
+    File                 		: AspectTreeModel.h
     Project              : SciDAVis
+    Description      : Represents a tree of AbstractAspect objects as a
+								Qt item model.    
     --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
-    Description          : Represents a tree of AbstractAspect objects as a
-                           Qt item model.
-
+	Copyright            : (C) 2007-2009 by Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2007-2009 by Tilman Benkert (thzs*gmx.net)
+	Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+								(replace * with @ in the email addresses)
  ***************************************************************************/
 
 /***************************************************************************
@@ -57,6 +58,10 @@ class AspectTreeModel : public QAbstractItemModel{
 		void setSelectableAspects(QList<const char*>);
 		QModelIndex modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const;
 		
+		void setFilterString(const QString&);
+		void setFilterCaseSensitivity(Qt::CaseSensitivity);
+		void setFilterMatchCompleteWord(bool);
+
 	private slots:
 		void aspectDescriptionChanged(const AbstractAspect *aspect);
 		void aspectAboutToBeAdded(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect *child);
@@ -73,6 +78,11 @@ class AspectTreeModel : public QAbstractItemModel{
 		bool m_folderSelectable;
 		QList<const char*> m_selectableAspects;
 		
+		QString m_filterString;
+		Qt::CaseSensitivity m_filterCaseSensitivity;
+		bool m_matchCompleteWord;
+		bool containsFilterString(const AbstractAspect*) const;
+	
 	signals:
 	  void indexSelected(const QModelIndex&);
 	  void indexDeselected(const QModelIndex&);
