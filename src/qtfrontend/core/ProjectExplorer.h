@@ -1,14 +1,12 @@
 /***************************************************************************
-    File                 : ProjectExplorer.h
-    Project              : SciDAVis
+    File                		: ProjectExplorer.cpp
+    Project              	: SciDAVis/Labplot2
+    Description       	: A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de
-    Copyright            : (C) 2007-2008 by Tilman Benkert
-    Email (use @ for *)  : thzs*gmx.net
-    Description          : A tree view for displaying and editing an
-                           AspectTreeModel.
-
+    Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2007-2008 by Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+									(replace * with @ in the email addresses)
  ***************************************************************************/
 
 /***************************************************************************
@@ -35,8 +33,11 @@
 #include <QTreeView>
 
 class AbstractAspect;
+class QPushButton;
+class QLabel;
+class QSignalMapper;
 
-class ProjectExplorer : public QTreeView{
+class ProjectExplorer : public QWidget{
 	Q_OBJECT
 
 	public:
@@ -44,15 +45,43 @@ class ProjectExplorer : public QTreeView{
 
 		void setCurrentAspect(const AbstractAspect * aspect);
 		void setModel(QAbstractItemModel * model);
-
+		QModelIndex currentIndex() const;
+		QAbstractItemModel * model() const;
+		void setExpanded ( const QModelIndex & index, bool expanded );
+		
 	private:
+		void createActions();
 	  	void contextMenuEvent(QContextMenuEvent *event);
 		bool eventFilter(QObject*, QEvent*);
-		int m_contextMenuColumn;
-
+		int m_columnToHide;
+		QTreeView* m_treeView;
+		
+		QAction* caseSensitiveAction;
+		QAction* matchCompleteWordAction;
+		QAction* expandTreeAction;
+		QAction* collapseTreeAction;
+		QAction* toggleFilterAction;
+		QAction* showAllColumnsAction;
+		QList<QAction*> list_showColumnActions;
+		QSignalMapper* showColumnsSignalMapper;
+		
+		QFrame* frameFilter;
+		QLabel* lFilter;
+		QLineEdit *leFilter;
+		QPushButton *bClearFilter;
+		QPushButton *bFilterOptions;
+	
 	private slots:
 		void hideColumn();
 		void showColumn(QAction*);
+		void toggleColumn(int);
+		void showAllColumns();
+		void filterTextChanged(const QString& );
+		void toggleFilterCaseSensitivity();
+		void toggleFilterMatchCompleteWord();
+		void toggleFilterWidgets();
+		void toggleFilterOptionsMenu(bool);
+		
 		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 		void selectIndex(const QModelIndex&);
 		void deselectIndex(const QModelIndex&);
