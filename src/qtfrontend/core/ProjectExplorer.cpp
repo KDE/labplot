@@ -235,95 +235,29 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	if (obj!=h)
 	  return QObject::eventFilter(obj, event);
 	
-	if (event->type() == QEvent::ContextMenu){
-		//determine the column to hide
-		QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
-		m_columnToHide=h->logicalIndexAt(e->pos());
-
-		QMenu *menu = new QMenu(h);
-		QAction* action=0;
-
-		//allow column hiding only if there are more than one column visible
-		if ( m_treeView->model()->columnCount()-h->hiddenSectionCount()>1 ){
-			action=menu->addAction( tr("Hide column %1").arg(model()->headerData(m_columnToHide, Qt::Horizontal).toString() ) );
-			connect( action, SIGNAL(triggered()), SLOT(hideColumn()) );
-		}
-
-		//"Show-column"-menu is only visible, if there are hidden columns
-		//"Show-column"-submenu lists only hidden columns
-		if (h->hiddenSectionCount()>0){
-			QMenu* showMenu = menu->addMenu( tr("Show column") );
-			QActionGroup* showActions = new QActionGroup(this);
-			for (int i=0; i<m_treeView->model()->columnCount(); i++){
-				if ( h->isSectionHidden(i) ){
-					action = new QAction(m_treeView->model()->headerData(i, Qt::Horizontal).toString(), menu);
-					showMenu->addAction(action);
-					showActions->addAction( action );
-				}
-			}
-			connect(showActions, SIGNAL(triggered(QAction*)), SLOT(showColumn(QAction*)));
-			
-			menu->exec(e->globalPos());
-			delete menu;
-			//TODO when to delete these objects?
-// 	 		delete showMenu;
-// 			delete showActions;
-		}else{
-			menu->exec(e->globalPos());
-			delete menu;
-		}
-		return true;
-	}else{
-	  return false;
-	}
+	if (event->type() != QEvent::ContextMenu)
+		return QObject::eventFilter(obj, event);
+	
+	QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
+	
+	//Menu for showing/hiding the columns in the tree view
+	QMenu* columnsMenu = new QMenu(h);
+	//TODO add a caption/title for the menu, e.g. "Columns"
+	columnsMenu->addAction(showAllColumnsAction);
+	columnsMenu->addSeparator();
+	for (int i=0; i<list_showColumnActions.size(); i++)
+	   columnsMenu->addAction(list_showColumnActions.at(i));
+	
+	columnsMenu->exec(e->globalPos());
+	delete columnsMenu;	
+	
+	return true;
 }
 
 
 //########### SLOTs ################
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){
 	emit currentAspectChanged(static_cast<AbstractAspect *>(current.internalPointer()));
-}
-
-/*!
-	hides the column for which the context menu in the header of the tree view was called.
-	The index of the column, \c \m_columnToHide, is determined in \c eventFilter().
-*/
-void ProjectExplorer::hideColumn(){
-	m_treeView->hideColumn(m_columnToHide);
-	list_showColumnActions[m_columnToHide]->setChecked(false);
-	showAllColumnsAction->setEnabled(true);
-	showAllColumnsAction->setChecked(false);
-}
-
-/*!
-  Shows the column in the header of the tree view.
-  The index of the column is determined with the help 
-  of the text of the corresponding \c action in the context menu of the header.
-*/
-void ProjectExplorer::showColumn(QAction* action){
-	QString name=action->text().remove("&");
-	for (int i=0; i<m_treeView->model()->columnCount(); i++){
-		if (m_treeView->model()->headerData(i, Qt::Horizontal).toString()==name){
-		  m_treeView->showColumn(i);
-		  m_treeView->header()->resizeSection(0,0 );
-		  m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
-		  
-		  list_showColumnActions[i]->setChecked(true);
-		}
-	}
-	
-	//determine the total number of checked column actions
-	int checked = 0;  
-	foreach(QAction* action, list_showColumnActions){
-		if (action->isChecked())
-			checked++;
-	}
-
-	//deactivate the "show all column"-action, if all actions are checked
-	if ( checked == list_showColumnActions.size() ){
-		showAllColumnsAction->setEnabled(false);
-		showAllColumnsAction->setChecked(true);
-	}
 }
 
 void ProjectExplorer::toggleColumn(int index){

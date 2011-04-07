@@ -72,8 +72,6 @@ class ProjectExplorer : public QWidget{
 		QPushButton *bFilterOptions;
 	
 	private slots:
-		void hideColumn();
-		void showColumn(QAction*);
 		void toggleColumn(int);
 		void showAllColumns();
 		void filterTextChanged(const QString& );
