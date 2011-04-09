@@ -46,6 +46,7 @@
 #else
 #include <KLineEdit>
 #include <KLocale>
+#include <KMenu>
 #endif
 
 /*!
@@ -143,8 +144,9 @@ void ProjectExplorer::createActions(){
 void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 	if(!m_treeView->model())
 	  return;
-	
-	QVariant menu_value = m_treeView->model()->data(m_treeView->indexAt(event->pos()), AspectTreeModel::ContextMenuRole);
+
+	QModelIndex index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
+	QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
 	QMenu *menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
 
 	if (!menu)
@@ -188,7 +190,7 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	
 	connect(treeModel, SIGNAL(indexSelected(const QModelIndex&)), this, SLOT(selectIndex(const QModelIndex&) ));
 	connect(treeModel, SIGNAL(indexDeselected(const QModelIndex&)), this, SLOT(deselectIndex(const QModelIndex&) ));
-	connect(m_treeView, SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+	connect(m_treeView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
 							this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)) );
 	connect(m_treeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), 
 					this, SLOT(selectionChanged(const QItemSelection&, const QItemSelection&) ) );
@@ -241,8 +243,15 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
 	
 	//Menu for showing/hiding the columns in the tree view
-	QMenu* columnsMenu = new QMenu(h);
-	//TODO add a caption/title for the menu, e.g. "Columns"
+	QMenu* columnsMenu;
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	columnsMenu = new QMenu(h);
+	//TODO how to add a caption/title for the QMenu, when used as a context menu?
+#else
+	columnsMenu = new KMenu(h);
+	(qobject_cast<KMenu*>(columnsMenu))->addTitle(i18n("Columns"));
+#endif	
+	
 	columnsMenu->addAction(showAllColumnsAction);
 	columnsMenu->addSeparator();
 	for (int i=0; i<list_showColumnActions.size(); i++)
@@ -250,13 +259,14 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	
 	columnsMenu->exec(e->globalPos());
 	delete columnsMenu;	
-	
+
 	return true;
 }
 
 
 //########### SLOTs ################
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){
+	Q_UNUSED(previous);
 	emit currentAspectChanged(static_cast<AbstractAspect *>(current.internalPointer()));
 }
 
