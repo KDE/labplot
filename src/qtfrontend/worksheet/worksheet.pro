@@ -28,10 +28,8 @@ HEADERS += \
 	WorksheetRectangleElement.h \
 	AbstractCoordinateSystem.h \
 	CartesianCoordinateSystem.h \
-	LinearAxis.h \
-	LinearAxisPrivate.h \
-	LogAxis.h \
-	LogAxisPrivate.h \
+	Axis.h \
+	AxisPrivate.h \
 	LineSymbolCurve.h \
 	AbstractCurveSymbol.h \
 	interfaces.h \
@@ -43,7 +41,6 @@ HEADERS += \
 	PlotArea.h \
 	PlotAreaPrivate.h \
 	ScalableTextLabel.h \
-	DropLineCurve.h \
 	
 SOURCES += \
 	WorksheetModule.cpp \
@@ -59,8 +56,7 @@ SOURCES += \
 	WorksheetRectangleElement.cpp \
 	AbstractCoordinateSystem.cpp \
 	CartesianCoordinateSystem.cpp \
-	LinearAxis.cpp \
-	LogAxis.cpp \
+	Axis.cpp \
 	LineSymbolCurve.cpp \
 	AbstractCurveSymbol.cpp \
 	symbols/EllipseCurveSymbol.cpp \
@@ -69,6 +65,4 @@ SOURCES += \
 	AbstractWorksheetDecorationElement.cpp \ 
 	PlotArea.cpp \
 	ScalableTextLabel.cpp \
-	DropLineCurve.cpp \
-
 
