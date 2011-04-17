@@ -51,11 +51,15 @@ class ImportFileDialog: public KDialog {
 	ImportFileWidget *importFileWidget;
 	QFrame* frameAddTo;
 	TreeViewComboBox* cbAddTo;
+	QLabel* lPosition;
 	QComboBox* cbPosition;
 	QWidget* mainWidget;
+    QPushButton* bNewSpreadsheet;
 	
   private slots:
 	void toggleOptions();
+	void currentAddToIndexChanged(int);
+	void newSpreadsheet();
 };
 
 #endif //IMPORTFILEDIALOG_H

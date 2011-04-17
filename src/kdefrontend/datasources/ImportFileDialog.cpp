@@ -32,7 +32,10 @@
 #include "backend/datasources/FileDataSource.h"
 #include "backend/widgets/TreeViewComboBox.h"
 #include "backend/spreadsheet/Spreadsheet.h"
- /*!
+
+#include <kmessagebox.h>
+
+/*!
 	\class ImportFileDialog
 	\brief Dialog for importing data from a file. Embeddes \c ImportFileWidget and provides the standard buttons.
 
@@ -42,7 +45,7 @@
 ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
 	mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
-	vLayout->setSpacing(1);
+	vLayout->setSpacing(0);
 	vLayout->setContentsMargins(0,0,0,0);
 	
 	importFileWidget = new ImportFileWidget( mainWidget );
@@ -52,34 +55,48 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
 	
     setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 	setButtonText(KDialog::User1,i18n("Show Options"));
-
-    //connect(this,SIGNAL(applyClicked()),SLOT(apply()));
-// 	connect(this,SIGNAL(okClicked()),SLOT(apply()));
-// 	connect(this,SIGNAL(user1Clicked()),importWidget,SLOT(save()));
-	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	enableButtonOk(false);
 	
-	setCaption(i18n("Import Data"));
+	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+
+	setCaption(i18n("Import data to spreadsheet/matrix"));
 	setWindowIcon(KIcon("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
 
+/*!
+	creates widgets for the frame "Add-To" and sets the current model in the combobox to \c model.
+ */
 void ImportFileDialog::setModel(QAbstractItemModel * model){
   //Frame for the "Add To"-Stuff
   frameAddTo = new QFrame(this);
   QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
   hLayout->addWidget( new QLabel(i18n("Import data to"),  frameAddTo) );
-  
+  hLayout->setSpacing(0);
+  hLayout->setContentsMargins(0,0,0,0);
+	
   cbAddTo = new TreeViewComboBox(frameAddTo);
   cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
   QList<const char *> list;
   list<<"Folder"<<"Spreadsheet";
   cbAddTo->setTopLevelClasses(list);
   hLayout->addWidget( cbAddTo);
+  connect( cbAddTo, SIGNAL(currentIndexChanged(int)), this, SLOT(currentAddToIndexChanged(int)) );
+  
+  bNewSpreadsheet = new QPushButton(frameAddTo);
+  bNewSpreadsheet->setIcon(KIcon("insert-table"));
+  bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
+  hLayout->addWidget( bNewSpreadsheet);
+  connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
   
   hLayout->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
-  hLayout->addWidget( new QLabel(i18n("Position"),  frameAddTo) );
-  cbPosition = new QComboBox(frameAddTo);
   
+  lPosition = new QLabel(i18n("Position"),  frameAddTo);
+  lPosition->setEnabled(false);
+  hLayout->addWidget(lPosition);
+  
+  cbPosition = new QComboBox(frameAddTo);
+  cbPosition->setEnabled(false);
   //TODO place these strings somewhere in AbstractFileFilter and implement this in the filters.
   cbPosition->addItem(i18n("Replace"));
   cbPosition->addItem(i18n("Append"));
@@ -114,7 +131,6 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source) const{
 */
 void ImportFileDialog::importToSpreadsheet() const{
   AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentIndex().internalPointer());
-  qDebug()<<aspect->name();
   Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
   QString fileName = importFileWidget->fileName();
   AbstractFileFilter* filter = importFileWidget->currentFileFilter();
@@ -134,4 +150,27 @@ void ImportFileDialog::toggleOptions(){
 	mainWidget->resize(layout()->minimumSize());
 	layout()->activate();
  	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+}
+
+void ImportFileDialog::currentAddToIndexChanged(int index){
+	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentIndex().internalPointer());
+	if (!aspect)
+		return;
+	
+	 if ( aspect->inherits("Spreadsheet") ){
+		 lPosition->setEnabled(true);
+		 cbPosition->setEnabled(true);
+		 bNewSpreadsheet->setEnabled(false);
+		 enableButtonOk(true);
+	 }else{
+		 lPosition->setEnabled(false);
+		 cbPosition->setEnabled(false);
+		 bNewSpreadsheet->setEnabled(true);
+		 enableButtonOk(false);
+	 }
+}
+
+void ImportFileDialog::newSpreadsheet(){
+	KMessageBox::information(this, i18n("Not implemented yet. Please create a new spreadsheet in the main window."), 
+							 i18n("Not implemented yet"));
 }
