@@ -5,6 +5,7 @@ set(COMMONFRONTEND_DIR commonfrontend)
 set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 
 ADD_SUBDIRECTORY(filter)
+ADD_SUBDIRECTORY(elements)
 
 set(GUI_SOURCES
 # 	${KDEFRONTEND_DIR}/ColorMapPreview.cpp
