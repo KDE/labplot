@@ -40,14 +40,12 @@
  
 SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
+	m_initializing = false;
 	
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
-  //connect(ui.leName, SIGNAL(lostFocus()), this, SLOT(nameChanged()));
-  //TODO add slot for the ui.teComment
-	
+	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
-	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(columnRowChanged(int)));
-	
+	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 	connect(ui.cbShowComments, SIGNAL(stateChanged(int)), this, SLOT(commentsShownChanged(int)));
 }
 
@@ -57,23 +55,24 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
   Spreadsheet* spreadsheet;
   spreadsheet=list.first();
-//   qDebug()<<"size"<<list.size();
 
   Q_ASSERT(spreadsheet);
   
+  m_initializing = true;
+  
   if (list.size()==1){
 	ui.leName->setEnabled(true);
-	ui.teComment->setEnabled(true);
+	ui.leComment->setEnabled(true);
 	
   ui.leName->setText(spreadsheet->name());
-  ui.teComment->setText(spreadsheet->comment());
+  ui.leComment->setText(spreadsheet->comment());
   }else{
 	//disable the fields "Name" and "Comment" if there are >1 Spreadsheets
 	ui.leName->setEnabled(false);
-	ui.teComment->setEnabled(false);
+	ui.leComment->setEnabled(false);
 	
 	ui.leName->setText("");
-	ui.teComment->setText("");
+	ui.leComment->setText("");
   }
   
   //show the properties of the first Spreadsheet in the list, if there are >1 spreadsheets
@@ -83,18 +82,24 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
   ui.cbShowComments->setChecked(view->areCommentsShown());
   
   m_spreadsheets=list;
+  m_initializing = false;
 }
 
 // ###### SLOTS  ##############
 
-//TODO
 void SpreadsheetDock::nameChanged(){
+  if (m_initializing)
+	return;
   
+  m_spreadsheets.first()->setName(ui.leName->text());
 }
 
 
 void SpreadsheetDock::commentChanged(){
+  if (m_initializing)
+	return;
   
+  m_spreadsheets.first()->setComment(ui.leComment->text());
 }
 
 void SpreadsheetDock::rowCountChanged(int c){

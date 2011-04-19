@@ -68,6 +68,8 @@ ColumnDock::ColumnDock(QWidget *parent): QWidget(parent){
 	timeStrings<<"mm:ss.zzz";
 	timeStrings<<"hhmmss";
 	
+	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
+	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
 	connect( ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)) );
@@ -86,18 +88,18 @@ void ColumnDock::setColumns(QList<Column*> list){
 	ui.lName->setEnabled(true);
 	ui.leName->setEnabled(true);
 	ui.lComment->setEnabled(true);
-	ui.teComment->setEnabled(true);
+	ui.leComment->setEnabled(true);
 	
 	ui.leName->setText(column->name());
-	ui.teComment->setText(column->comment());
+	ui.leComment->setText(column->comment());
   }else{
 	ui.lName->setEnabled(false);
 	ui.leName->setEnabled(false);
 	ui.lComment->setEnabled(false);
-	ui.teComment->setEnabled(false);
+	ui.leComment->setEnabled(false);
 	
 	ui.leName->setText("");
-	ui.teComment->setText("");
+	ui.leComment->setText("");
   }
   
   //show the properties of the first column
@@ -237,7 +239,7 @@ void ColumnDock::commentChanged(){
   if (m_initializing)
 	return;
   
-  m_columnsList.first()->setComment(ui.teComment->toPlainText());
+  m_columnsList.first()->setComment(ui.leComment->text());
 }
 
 /*!

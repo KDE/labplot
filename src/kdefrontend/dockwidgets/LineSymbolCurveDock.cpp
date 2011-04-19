@@ -88,16 +88,16 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 
 	gridLayout->addWidget(lComment, 1, 0, 1, 1);
 
-	teComment = new QTextEdit(ui.tabGeneral);
-	teComment->setObjectName(QString::fromUtf8("teComment"));
+	leComment = new QLineEdit(ui.tabGeneral);
+	leComment->setObjectName(QString::fromUtf8("leComment"));
 	QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	sizePolicy1.setHorizontalStretch(0);
 	sizePolicy1.setVerticalStretch(0);
-	sizePolicy1.setHeightForWidth(teComment->sizePolicy().hasHeightForWidth());
-	teComment->setSizePolicy(sizePolicy1);
-	teComment->setMaximumSize(QSize(16777215, 50));
+	sizePolicy1.setHeightForWidth(leComment->sizePolicy().hasHeightForWidth());
+	leComment->setSizePolicy(sizePolicy1);
+	leComment->setMaximumSize(QSize(16777215, 50));
 
-	gridLayout->addWidget(teComment, 1, 1, 1, 1);
+	gridLayout->addWidget(leComment, 1, 1, 1, 1);
 	
 	chkVisible = new QCheckBox(ui.tabGeneral);
 	gridLayout->addWidget(chkVisible, 2, 0, 1, 1);
@@ -140,7 +140,7 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	
 	//General
 	connect( leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	//TODO signal-slot for teComment
+	connect( leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
 	connect( cbXColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(xColumnChanged(int)) );
 	connect( cbYColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(yColumnChanged(int)) );
@@ -381,26 +381,26 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 	lName->setEnabled(true);
 	leName->setEnabled(true);
 	lComment->setEnabled(true);
-	teComment->setEnabled(true);
+	leComment->setEnabled(true);
 	lXColumn->setEnabled(true);
 	cbXColumn->setEnabled(true);
 	lYColumn->setEnabled(true);
 	cbYColumn->setEnabled(true);
 	
 	leName->setText(curve->name());
-	teComment->setText(curve->comment());
+	leComment->setText(curve->comment());
   }else{
 	lName->setEnabled(false);
 	leName->setEnabled(false);
 	lComment->setEnabled(false);
-	teComment->setEnabled(false);
+	leComment->setEnabled(false);
 	lXColumn->setEnabled(false);
 	cbXColumn->setEnabled(false);
 	lYColumn->setEnabled(false);
 	cbYColumn->setEnabled(false);	
 	
 	leName->setText("");
-	teComment->setText("");
+	leComment->setText("");
 	cbXColumn->setCurrentIndex(QModelIndex());
 	cbYColumn->setCurrentIndex(QModelIndex());
 	cbValuesColumn->setCurrentIndex(QModelIndex());
@@ -511,7 +511,6 @@ void LineSymbolCurveDock::fillSymbolStyles(){
 */
 void LineSymbolCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode columnMode){
   ui.cbValuesFormat->clear();
-  LineSymbolCurve::ValuesType valuesType = LineSymbolCurve::ValuesType(ui.cbValuesType->currentIndex());
 
   switch (columnMode){
 	case SciDAVis::Numeric:
@@ -628,11 +627,11 @@ void LineSymbolCurveDock::showValuesColumnFormat(const Column* column){
 //****************** SLOTS ********************************
 //************************************************************
 void LineSymbolCurveDock::retranslateUi(){
-	lName->setText(i18n("Name:"));
-	lComment->setText(i18n("Comment:"));
+	lName->setText(i18n("Name"));
+	lComment->setText(i18n("Comment"));
 	chkVisible->setText(i18n("Visible"));
-	lXColumn->setText(i18n("x-data:"));
-	lYColumn->setText(i18n("y-data:"));
+	lXColumn->setText(i18n("x-data"));
+	lYColumn->setText(i18n("y-data"));
 	
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
@@ -650,10 +649,11 @@ void LineSymbolCurveDock::commentChanged(){
   if (m_initializing)
 	return;
   
-  m_curvesList.first()->setComment(teComment->toPlainText());
+  m_curvesList.first()->setComment(leComment->text());
 }
 
 void LineSymbolCurveDock::xColumnChanged(int index){
+	Q_UNUSED(index);
   if (m_initializing)
 	return;
   
@@ -664,6 +664,7 @@ void LineSymbolCurveDock::xColumnChanged(int index){
 }
 
 void LineSymbolCurveDock::yColumnChanged(int index){
+	Q_UNUSED(index);
   if (m_initializing)
 	return;
   
@@ -1080,6 +1081,7 @@ void LineSymbolCurveDock::valuesTypeChanged(int index){
   called when the custom column for the values was changed.
 */
 void LineSymbolCurveDock::valuesColumnChanged(int index){
+	Q_UNUSED(index);
   if (m_initializing)
 	return;
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>346</width>
-    <height>403</height>
+    <width>241</width>
+    <height>336</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,64 +17,58 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="text">
-      <string>Name:</string>
+      <string>Name</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="2">
+   <item row="0" column="1">
     <widget class="QLineEdit" name="leName"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Comment:</string>
+      <string>Comment</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="2">
-    <widget class="QTextEdit" name="teComment">
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="leComment">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>50</height>
-      </size>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lType">
      <property name="text">
-      <string>Type:</string>
+      <string>Type</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
+   <item row="2" column="1">
     <widget class="KComboBox" name="cbType"/>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="lFormat">
      <property name="text">
-      <string>Format:</string>
+      <string>Format</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" colspan="2">
+   <item row="3" column="1">
     <widget class="KComboBox" name="cbFormat"/>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="lPrecision">
      <property name="text">
-      <string>Precision:</string>
+      <string>Precision</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="2">
+   <item row="4" column="1">
     <widget class="QSpinBox" name="sbPrecision">
      <property name="maximum">
       <number>16</number>
@@ -100,11 +94,11 @@
    <item row="6" column="0">
     <widget class="QLabel" name="lPlotDesignation">
      <property name="text">
-      <string>Plot designation:</string>
+      <string>Plot designation</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="1" colspan="2">
+   <item row="6" column="1">
     <widget class="QComboBox" name="cbPlotDesignation"/>
    </item>
    <item row="7" column="0">

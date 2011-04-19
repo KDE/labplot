@@ -45,6 +45,7 @@ class SpreadsheetDock: public QWidget{
   private:
 	  Ui::SpreadsheetDock ui;
 	  QList<Spreadsheet*> m_spreadsheets;
+	  bool m_initializing;
 	  
   private slots:
 	  void nameChanged();

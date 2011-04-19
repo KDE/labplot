@@ -63,7 +63,7 @@ private:
     QLabel *lName;
     QLineEdit *leName;
     QLabel *lComment;
-    QTextEdit *teComment;
+    QLineEdit* leComment;
 	QCheckBox* chkVisible;
     QSpacerItem *verticalSpacer;
 	QLabel* lXColumn;
@@ -73,6 +73,7 @@ private:
 	TreeViewComboBox* cbValuesColumn;
 	
 	CurveSymbolFactory *symbolFactory;
+
 	
 	void fillSymbolStyles();
 	void updateValuesFormatWidgets(const SciDAVis::ColumnMode);
