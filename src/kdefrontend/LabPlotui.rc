@@ -7,7 +7,10 @@
 <Action name="import" />
 <Action name="new_spreadsheet" />
 <Action name="new_worksheet" />
-<ActionList name="dynamicActionlist" />
+<!-- <ActionList name="dynamicActionlist" /> -->
+<Separator/>
+<Action name="toggle_project_explorer_dock"/>
+<Action name="toggle_properties_explorer_dock"/>
 </ToolBar>
 
 <MenuBar>
@@ -22,7 +25,7 @@
 	<Action name="new_file_datasource" />
 	<Action name="new_database_datasource" />
 	<Separator/>
-	<Menu name="new_plot"><text>New Plot</text>
+<!--	<Menu name="new_plot"><text>New Plot</text>
 		<Action name="new_2D_plot" />
 		<Action name="new_2D_surface_plot" />
 		<Action name="new_2D_polar_plot" />
@@ -43,7 +46,7 @@
 		 <Separator/>
 		 <Action name="new_3D_data_plot" />
 	</Menu>
-	<Separator/>
+	<Separator/>-->
 	<Action name="new_project" />
 </Menu>
 <Action name="import" />

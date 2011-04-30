@@ -55,7 +55,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 */
 
 GuiObserver::GuiObserver(MainWin* mainWin){
-	connect(mainWin-> m_project_explorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)), 
+	connect(mainWin->m_projectExplorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)), 
 					this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&) ) );
 	
 	mainWindow=mainWin;

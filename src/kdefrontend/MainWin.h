@@ -2,6 +2,7 @@
     File                 : MainWin.h
     Project              : LabPlot
     --------------------------------------------------------------------
+    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2007-2008 Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
@@ -60,17 +61,16 @@ public:
 
 	Spreadsheet* activeSpreadsheet() const;
 	Worksheet* activeWorksheet() const;
-	void newSpreadsheet();
 
 private:
-	QMdiArea *m_mdi_area;
+	QMdiArea *m_mdiArea;
 	Project *m_project;
 	AspectTreeModel* m_aspectTreeModel;
-	ProjectExplorer * m_project_explorer;
-	QDockWidget * m_project_explorer_dock;
+	ProjectExplorer * m_projectExplorer;
+	QDockWidget * m_projectExplorerDock;
 	QDockWidget* m_propertiesDock;
-	AbstractAspect * m_current_aspect;
-	Folder * m_current_folder;
+	AbstractAspect * m_currentAspect;
+	Folder * m_currentFolder;
 	QString m_fileName; //name of the file to be opened (command line argument)
 	QString m_undoViewEmptyLabel;
 
@@ -82,8 +82,6 @@ private:
 	KAction* m_importAction;
 	KAction* m_projectInfoAction;
 	KAction* m_closeAction;
-	KAction* m_toggleProjectExplorerDock;
-	KAction* m_togglePropertiesDock;
 	KAction *m_newFolderAction;
 	KAction *m_newSpreadsheetAction;
 	KAction *m_newMatrixAction;
@@ -96,6 +94,10 @@ private:
 	KAction *m_undoAction;
 	KAction *m_redoAction;
 
+	//toggling doch widgets
+	KAction* m_toggleProjectExplorerDockAction;
+	KAction* m_togglePropertiesDockAction;
+	
 	//worksheet actions 
 	KAction* worksheetZoomInAction;
 	KAction* worksheetZoomOutAction;
@@ -113,7 +115,15 @@ private:
 	KAction* worksheetGridLayoutAction;
 	KAction* worksheetBreakLayoutAction;
 	
-	//docks
+	KAction* m_visibilityFolderAction;
+	KAction* m_visibilitySubfolderAction;
+	KAction* m_visibilityAllAction;
+	
+	//Menus
+	QMenu* m_visibilityMenu;
+	QMenu* m_newMenu;
+	
+	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
 	SpreadsheetDock* spreadsheetDock;
@@ -121,15 +131,14 @@ private:
 	WorksheetDock* worksheetDock;
 	LineSymbolCurveDock* lineSymbolCurveDock;
 	
-	
 	void updateGUI();
 	void openXML(QIODevice *file);
-	void saveXML(QIODevice *file);
 
-	void setupActions();
+	void initActions();
+	void initMenus();
 	void initProject();
 	bool warnModified();
-	void ensureSheet();
+// 	void ensureSheet();
 	bool hasSheet(const QModelIndex & index) const;
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	void addAspectToProject(AbstractAspect* aspect);
@@ -147,7 +156,7 @@ private slots:
 	void openProject(QString filename);
 	void openRecentProject();
 	void closeProject();
-	void saveProject(QString filename = QString::null);
+	void saveProject();
 	void saveProjectAs();
 	
 	void print();
@@ -163,6 +172,7 @@ private slots:
 	void projectChanged();
 
 	void newFolder();
+	void newSpreadsheet();
 	void newWorksheet();
 	void newScript();
 	void newMatrix();
@@ -175,14 +185,13 @@ private slots:
 	void handleAspectAdded(const AbstractAspect *aspect);
 	void handleAspectAboutToBeRemoved(const AbstractAspect *aspect);
 	void handleAspectRemoved(const AbstractAspect *parent);
-	void handleAspectDescriptionChanged(const AbstractAspect *aspect);
 	void handleCurrentAspectChanged(AbstractAspect *aspect);
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
 	
-	void setMdiWindowVisibility(QAction * action);
+	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility();
-	
+	void toggleDockWidget(QAction*) const;
 	void expandAspect(const AbstractAspect*) const;
 	
 signals:
