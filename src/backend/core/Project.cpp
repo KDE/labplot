@@ -3,6 +3,7 @@
     Project              : SciDAVis
     Description          : Represents a SciDAVis project.
     --------------------------------------------------------------------
+    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses)
@@ -196,7 +197,17 @@ CLASS_D_ACCESSOR_IMPL(Project, QString, labPlot, LabPlot, labPlot)
 // TODO: add support for these in the SciDAVis UI
 CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modification_time)
-FLAG_D_ACCESSOR_IMPL(Project, Changed, changed)
+
+void Project ::setChanged(const bool value){
+	if ( value && !d->changed )
+		emit changed();
+	
+	d->changed = value;
+}
+
+bool Project ::hasChanged() const{
+	return d->changed ;
+} 
 
 ////////////////////////////////////////////////////////////////////////////////
 //! \name serialize/deserialize

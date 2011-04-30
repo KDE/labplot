@@ -3,6 +3,7 @@
     Project              : SciDAVis
     Description          : Represents a SciDAVis project.
     --------------------------------------------------------------------
+    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses)
@@ -92,7 +93,9 @@ class Project : public Folder
 #endif
 		CLASS_D_ACCESSOR_DECL(QString, author, Author)
 		CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
-		FLAG_D_ACCESSOR_DECL(Changed)
+
+		void setChanged(const bool  value=true);
+		bool hasChanged() const;
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		static ConfigPageWidget * makeConfigPage();
@@ -107,7 +110,8 @@ class Project : public Folder
 		void requestProjectContextMenu(QMenu*);
 		void requestFolderContextMenu(const Folder * folder, QMenu * menu);
 		void mdiWindowVisibilityChanged();
-
+		void changed();
+		
 	private:
 		class Private;
 		Private *d;
