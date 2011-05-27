@@ -52,7 +52,6 @@
 #include <KLocale>
 #endif
 
-#include "worksheettestcode.h"
 
 /**
  * \class WorksheetView
@@ -91,10 +90,6 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
   connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) ); 
   connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
-  
-  // TODO: remove the test code later
-//    QTimer::singleShot(0, this, SLOT(startTestCode()));
-// startTestCode();
  }
 
 WorksheetView::~WorksheetView(){
