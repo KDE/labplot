@@ -94,7 +94,7 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   
   // TODO: remove the test code later
 //    QTimer::singleShot(0, this, SLOT(startTestCode()));
-startTestCode();
+// startTestCode();
  }
 
 WorksheetView::~WorksheetView(){
@@ -265,15 +265,12 @@ void WorksheetView::createMenu(QMenu *menu) const{
 }
 
 void WorksheetView::createContextMenu(QMenu *menu) {
-  Q_UNUSED(menu);
-// TODO
-//   menu->addItem("Zoom");
+	this->createMenu(menu);
 }
 
 void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
-  Q_UNUSED(menu);
   Q_UNUSED(rc);
-// TODO
+	this->createMenu(menu);
 }
 
 
@@ -420,11 +417,13 @@ void WorksheetView::layout(QAction* action){
 	breakLayoutAction->setEnabled(true);
 	
 	
+		   	  QList<QGraphicsItem *>   items=this->scene()->items();
+		  qDebug()<<"number of items to layout "<< items.size();
 	// 	QGraphicsLayout* layout;
 	if (name == "verticalLayoutAction"){
 // 	  QGraphicsLinearLayout* layout=new QGraphicsLinearLayout(Qt::Vertical);
 	  
-	  // 	  QList<QGraphicsItem *>   items=m_viewWidget->scene()->items();
+
 	  // 	  for (int i=0; i<items.size(); i++){
  //  		layout->addItem(items[1]);
  // 	  }
