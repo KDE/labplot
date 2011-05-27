@@ -68,6 +68,8 @@
 #include "worksheet/WorksheetView.h"
 #include "datasources/FileDataSource.h"
 
+
+#include "projecttestcode.h"
  /*!
 	\class MainWin
 	\brief Main application window.
@@ -557,6 +559,8 @@ void MainWin::newProject(){
  	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
  	setCaption(m_project->name());
 	kDebug()<<"new project created"<<endl;
+	
+	startTestCode();
 }
 
 void MainWin::openProject(){

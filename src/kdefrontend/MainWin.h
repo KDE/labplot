@@ -194,6 +194,8 @@ private slots:
 	void toggleDockWidget(QAction*) const;
 	void expandAspect(const AbstractAspect*) const;
 	
+	void startTestCode();
+	
 signals:
 	void partActivated(AbstractPart*);
 };
