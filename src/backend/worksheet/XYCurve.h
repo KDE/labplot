@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : LineSymbolCurve.h
+    File                 : XYCurve.h
     Project              : LabPlot/SciDAVis
     Description          : A curve drawn as line and/or symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2011 Alexander Semke (alexander.semke*web.de)
 								(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -28,16 +28,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LINESYMBOLCURVE_H
-#define LINESYMBOLCURVE_H
+#ifndef XYCURVE_H
+#define XYCURVE_H
 
 #include "worksheet/AbstractWorksheetElement.h"
 #include "lib/macros.h"
 #include "core/AbstractColumn.h"
 #include <QFont>
 
-class LineSymbolCurvePrivate;
-class LineSymbolCurve: public AbstractWorksheetElement {
+class XYCurvePrivate;
+class XYCurve: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -52,8 +52,8 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 		static QStringList valuesTypeStrings();
 		static QStringList valuesPositionStrings();
 		
-		LineSymbolCurve(const QString &name);
-		virtual ~LineSymbolCurve();
+		XYCurve(const QString &name);
+		virtual ~XYCurve();
 
 		virtual QGraphicsItem *graphicsItem() const;
 
@@ -94,18 +94,18 @@ class LineSymbolCurve: public AbstractWorksheetElement {
 		virtual bool isVisible() const;
 
 		typedef AbstractWorksheetElement BaseClass;
-		typedef LineSymbolCurvePrivate Private;
+		typedef XYCurvePrivate Private;
 
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
-		LineSymbolCurve(const QString &name, LineSymbolCurvePrivate *dd);
-		LineSymbolCurvePrivate * const d_ptr;
+		XYCurve(const QString &name, XYCurvePrivate *dd);
+		XYCurvePrivate * const d_ptr;
 
 	private:
-    	Q_DECLARE_PRIVATE(LineSymbolCurve)
+    	Q_DECLARE_PRIVATE(XYCurve)
 };
 
 #endif

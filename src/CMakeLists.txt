@@ -35,7 +35,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
-	${KDEFRONTEND_DIR}/dockwidgets/LineSymbolCurveDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 )
 
@@ -56,7 +56,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
-	${KDEFRONTEND_DIR}/ui/dockwidgets/linesymbolcurvedock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 )
@@ -105,7 +105,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
-	${BACKEND_DIR}/worksheet/LineSymbolCurve.cpp
+	${BACKEND_DIR}/worksheet/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/AbstractCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/symbols/EllipseCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/symbols/PathCurveSymbol.cpp

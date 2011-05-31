@@ -30,7 +30,7 @@ HEADERS += \
 	CartesianCoordinateSystem.h \
 	Axis.h \
 	AxisPrivate.h \
-	LineSymbolCurve.h \
+	XYCurve.h \
 	AbstractCurveSymbol.h \
 	interfaces.h \
 	symbols/EllipseCurveSymbol.h \
@@ -57,7 +57,7 @@ SOURCES += \
 	AbstractCoordinateSystem.cpp \
 	CartesianCoordinateSystem.cpp \
 	Axis.cpp \
-	LineSymbolCurve.cpp \
+	XYCurve.cpp \
 	AbstractCurveSymbol.cpp \
 	symbols/EllipseCurveSymbol.cpp \
 	StandardCurveSymbolFactory.cpp \

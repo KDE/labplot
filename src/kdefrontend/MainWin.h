@@ -48,7 +48,7 @@ class QDockWidget;
 class QStackedWidget;
 class AxisDock;
 class ColumnDock;
-class LineSymbolCurveDock;
+class XYCurveDock;
 class SpreadsheetDock;
 class WorksheetDock;
 
@@ -129,7 +129,7 @@ private:
 	SpreadsheetDock* spreadsheetDock;
 	ColumnDock* columnDock;
 	WorksheetDock* worksheetDock;
-	LineSymbolCurveDock* lineSymbolCurveDock;
+	XYCurveDock* lineSymbolCurveDock;
 	
 	void updateGUI();
 	void openXML(QIODevice *file);

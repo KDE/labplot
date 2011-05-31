@@ -5,7 +5,7 @@
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
 #include "worksheet/Axis.h"
-#include "worksheet/LineSymbolCurve.h"
+#include "worksheet/XYCurve.h"
 #include "worksheet/PlotArea.h"
 #include "lib/ActionManager.h"
 #include "core/column/Column.h"
@@ -197,7 +197,7 @@ void MainWin::startTestCode(){
 	
 	plotArea->addChild(new WorksheetRectangleElement("rect 1", QRectF(2, 2, 2, 2)));
 	
-	LineSymbolCurve *curve1 = new LineSymbolCurve("curve 1");
+	XYCurve *curve1 = new XYCurve("curve 1");
 	curve1->setXColumn(spreadsheet1->column(0));
 	curve1->setYColumn(spreadsheet1->column(1));
 	plotArea->addChild(curve1);
@@ -208,7 +208,7 @@ void MainWin::startTestCode(){
 	  xc2->setValueAt(i, (i-20)*0.25);
 	  yc2->setValueAt(i, (i-20)*(i-20)*0.01/2+2);
 	}
-	LineSymbolCurve *curve2 = new LineSymbolCurve("curve 2");
+	XYCurve *curve2 = new XYCurve("curve 2");
 	curve2->setXColumn(xc2);
 	curve2->setYColumn(yc2);
 	plotArea->addChild(curve2);
@@ -291,28 +291,28 @@ void MainWin::startTestCode(){
 	coordSys->addChild(yAxis3);
 	
  
-  LineSymbolCurve *curve1 = new LineSymbolCurve("curve 1");
+  XYCurve *curve1 = new XYCurve("curve 1");
   curve1->setXColumn(spreadsheet2->column(0));
   curve1->setYColumn(spreadsheet2->column(1));
 
-  LineSymbolCurve *curve2 = new LineSymbolCurve("curve 2");
+  XYCurve *curve2 = new XYCurve("curve 2");
   curve2->setXColumn(spreadsheet3->column(0));
   curve2->setYColumn(spreadsheet3->column(1));
 
 
-  LineSymbolCurve *curve3 = new LineSymbolCurve("curve 3");
+  XYCurve *curve3 = new XYCurve("curve 3");
   curve3->setXColumn(spreadsheet4->column(0));
   curve3->setYColumn(spreadsheet4->column(1));
 
   //test for natural spline
-  LineSymbolCurve *curve4 = new LineSymbolCurve("curve 4");
+  XYCurve *curve4 = new XYCurve("curve 4");
   curve4->setXColumn(spreadsheet5->column(0));
   curve4->setYColumn(spreadsheet5->column(1));
   plotArea->addChild(curve4);	
 	
 	
     //test for periodic spline
-  LineSymbolCurve *curve5 = new LineSymbolCurve("curve 5");
+  XYCurve *curve5 = new XYCurve("curve 5");
   curve5->setXColumn(spreadsheet5->column(2));
   curve5->setYColumn(spreadsheet5->column(3));
   plotArea->addChild(curve5);	
@@ -383,13 +383,13 @@ void MainWin::startTestCode(){
 	yAxis3->setLabelsPosition(Axis::LabelsIn);
 	coordSys->addChild(yAxis3);
 	
-  LineSymbolCurve *curve1 = new LineSymbolCurve("sqrt(x)");
+  XYCurve *curve1 = new XYCurve("sqrt(x)");
   curve1->setXColumn(spreadsheet6->column(0));
   curve1->setYColumn(spreadsheet6->column(1));
   
   plotArea->addChild(curve1);
   
-  LineSymbolCurve *curve2 = new LineSymbolCurve("x^2");
+  XYCurve *curve2 = new XYCurve("x^2");
   curve2->setXColumn(spreadsheet6->column(0));
   curve2->setYColumn(spreadsheet6->column(2));
   

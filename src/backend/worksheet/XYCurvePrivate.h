@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : LineSymbolCurvePrivate.h
+    File                 : XYCurvePrivate.h
     Project              : LabPlot/SciDAVis
-    Description          : Private members of LineSymbolCurve
+    Description          : Private members of XYCurvePrivate
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
@@ -28,16 +28,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LINESYMBOLCURVEPRIVATE_H
-#define LINESYMBOLCURVEPRIVATE_H
+#ifndef XYCURVEPRIVATE_H
+#define XYCURVEPRIVATE_H
 
 #include "worksheet/AbstractCurveSymbol.h"
-#include "worksheet/LineSymbolCurve.h"
+#include "worksheet/XYCurvePrivate.h"
 
-class LineSymbolCurvePrivate: public QGraphicsItem {
+class XYCurvePrivate: public QGraphicsItem {
 	public:
-		LineSymbolCurvePrivate(LineSymbolCurve *owner);
-		~LineSymbolCurvePrivate();
+		XYCurvePrivate(XYCurve *owner);
+		~XYCurvePrivate();
 
 		QString name() const;
 		virtual QRectF boundingRect() const;
@@ -57,12 +57,12 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		const AbstractColumn *xColumn;
 		const AbstractColumn *yColumn;
 		
-		LineSymbolCurve::LineType lineType;
+		XYCurve::LineType lineType;
 		int lineInterpolationPointsCount;
 		QPen linePen;
 		qreal lineOpacity;
 		
-		LineSymbolCurve::DropLineType dropLineType;
+		XYCurve::DropLineType dropLineType;
 		QPen dropLinePen;
 		qreal dropLineOpacity;
 		
@@ -74,9 +74,9 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		qreal symbolAspectRatio;
 		QString symbolTypeId;
 	
-		LineSymbolCurve::ValuesType valuesType;
+		XYCurve::ValuesType valuesType;
 		const AbstractColumn *valuesColumn;
-		LineSymbolCurve::ValuesPosition valuesPosition;
+		XYCurve::ValuesPosition valuesPosition;
 		qreal valuesDistance;
 		qreal valuesRotationAngle;
 		qreal valuesOpacity;
@@ -96,7 +96,7 @@ class LineSymbolCurvePrivate: public QGraphicsItem {
 		QList<QPointF> valuesPoints;
 		QList<QString> valuesStrings;
 
-		LineSymbolCurve * const q;
+		XYCurve * const q;
 };
 
 #endif

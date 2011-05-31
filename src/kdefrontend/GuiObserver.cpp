@@ -32,7 +32,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "core/AbstractAspect.h"
 #include "spreadsheet/Spreadsheet.h"
 #include "worksheet/Worksheet.h"
-#include "worksheet/LineSymbolCurve.h"
+#include "worksheet/XYCurve.h"
 #include "worksheet/Axis.h"
 #include "core/Project.h"
 #include "core/ProjectExplorer.h"
@@ -42,7 +42,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QStackedWidget>
 #include "dockwidgets/AxisDock.h"
 #include "dockwidgets/ColumnDock.h"
-#include "dockwidgets/LineSymbolCurveDock.h"
+#include "dockwidgets/XYCurveDock.h"
 #include "dockwidgets/SpreadsheetDock.h"
 #include "dockwidgets/WorksheetDock.h"
 #include <QDebug>
@@ -170,11 +170,11 @@ GuiObserver::~GuiObserver(){
 	mainWindow->axisDock->setAxes(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
-  }else if (className=="LineSymbolCurve"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Line properties"));
+  }else if (className=="XYCurve"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-curve properties"));
 	
 	if (!mainWindow->lineSymbolCurveDock){
-	  mainWindow->lineSymbolCurveDock = new LineSymbolCurveDock(mainWindow->stackedWidget);
+	  mainWindow->lineSymbolCurveDock = new XYCurveDock(mainWindow->stackedWidget);
 	  mainWindow->stackedWidget->addWidget(mainWindow->lineSymbolCurveDock);
 	}
 	
@@ -182,9 +182,9 @@ GuiObserver::~GuiObserver(){
 	AspectTreeModel* model=new AspectTreeModel(mainWindow->m_project);
  	mainWindow->lineSymbolCurveDock->setModel( model );
 	
-	QList<LineSymbolCurve*> list;
+	QList<XYCurve*> list;
 	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<LineSymbolCurve *>(aspect);
+	  list<<qobject_cast<XYCurve *>(aspect);
 	}
 	mainWindow->lineSymbolCurveDock->setCurves(list);
 	

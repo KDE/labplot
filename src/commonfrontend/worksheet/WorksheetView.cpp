@@ -42,7 +42,7 @@
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
 #include "worksheet/Axis.h"
-#include "worksheet/LineSymbolCurve.h"
+#include "worksheet/XYCurve.h"
 #include "worksheet/PlotArea.h"
 #include "lib/ActionManager.h"
 #include "core/column/Column.h"
