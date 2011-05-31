@@ -2,7 +2,7 @@
     File                 : TreeViewComboBox.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2010 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008-2011 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses)
     Description          : Provides a QTreeView in a QComboBox
@@ -33,8 +33,9 @@
 
 #include <QtGui>
 
-class TreeViewComboBox : public QComboBox
-{
+class AbstractAspect;
+
+class TreeViewComboBox : public QComboBox{
 Q_OBJECT
 
 public:
@@ -42,16 +43,22 @@ public:
     ~TreeViewComboBox();
 
  	void setModel(QAbstractItemModel *model);
-	void setCurrentIndex(const QModelIndex&);
+	void setCurrentModelIndex(const QModelIndex&);
 	void setTopLevelClasses(QList<const char *>);
-	QModelIndex currentIndex() const;
+	QModelIndex currentModelIndex() const;
 	virtual void showPopup();
 
 private:
 	QTreeView m_treeView;
 	QList<const char *> m_topLevelClasses;
 	void showTopLevelOnly(const QModelIndex & index);
-	bool m_firstPopup;
+	bool eventFilter(QObject *obj, QEvent *event);
+
+private slots:
+	void treeViewIndexActivated(const QModelIndex&);
+	
+signals:
+	void currentModelIndexChanged(const QModelIndex&);
 };
 
 #endif

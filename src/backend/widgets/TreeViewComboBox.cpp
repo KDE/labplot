@@ -2,7 +2,7 @@
     File                 : TreeViewComboBox.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2010 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008-2011 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses)
     Description          : Provides a QTreeView in a QComboBox
@@ -30,21 +30,33 @@
 
 #include "TreeViewComboBox.h"
 #include "core/AbstractAspect.h"
+#include "core/AspectTreeModel.h"
 
 /*!
     \class TreeViewComboBox
-    \brief Provides a QTreeView in a QComboBox
+    \brief Provides a QTreeView in a QComboBox.
 
     \ingroup backend/widgets
+    
  */
 
+//FIX an model item without the flag IsSelectable can still be selected.
+
 TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
+// 	m_topLevelClasses << "Folder" << "Spreadsheet" << "Worksheet";
 	m_treeView.header()->hide();
 	m_treeView.setSelectionMode(QAbstractItemView::SingleSelection);
- 	setView(&m_treeView);
+	m_treeView.setUniformRowHeights(true);
+
+//  	setView(&m_treeView);
 	
-	m_topLevelClasses << "Folder" << "Spreadsheet" << "Worksheet";
-	m_firstPopup=true;
+	m_treeView.hide();
+	m_treeView.setParent(parent, Qt::Popup);
+	m_treeView.installEventFilter(this);
+	addItem("");
+	setCurrentIndex(0);
+	
+	connect(&m_treeView, SIGNAL(activated(const QModelIndex&)), this, SLOT(treeViewIndexActivated(const QModelIndex&) ) );
 }
 
 void TreeViewComboBox::setTopLevelClasses(QList<const char *> list){
@@ -58,55 +70,57 @@ TreeViewComboBox::~TreeViewComboBox(){
 	Sets the \a model for the view to present.
 */
 void TreeViewComboBox::setModel(QAbstractItemModel *model){
- 	QComboBox::setModel(model);
+// 	QComboBox::setModel(model);
+	m_treeView.setModel(model);
 	
 	//show only the first column in the combo box
 	for (int i=1; i<model->columnCount(); i++){
 	  m_treeView.hideColumn(i);
 	}
 
-	m_firstPopup=true;
+	//Expand the complete tree in order to see everything in the first popup.
+	m_treeView.expandAll();
 }
 
 /*!
 	Sets the current item to be the item at \a index and selects it.
 	\sa currentIndex()
 */
-void TreeViewComboBox::setCurrentIndex(const QModelIndex& index){
-	//TODO selection of the current index doesn't work if treeview is used.
+void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index){
+// 	view()->setCurrentIndex(index);
 	m_treeView.setCurrentIndex(index);
-// 	view()->selectionModel()->select(index, QItemSelectionModel::Select);
-	m_treeView.setExpanded(index, true);
+	QComboBox::setItemText(0, index.data().toString());
 }
-
 
 /*!
 	Returns the model index of the current item.
 
-	\sa setCurrentIndex()
+	\sa setCurrentModelIndex()
 */
-QModelIndex TreeViewComboBox::currentIndex() const{
+QModelIndex TreeViewComboBox::currentModelIndex() const{
 	return m_treeView.currentIndex();
 }
 
 /*!
 	Displays the tree view of items in the combobox.
 	Triggers showTopLevelOnly() to show toplevel items only.
-	Expands the complete tree on the first call of this function.
 */
 void TreeViewComboBox::showPopup(){
-  if (!model()->hasChildren())
-	return;
-  
-	if (m_firstPopup){
-		m_treeView.expandAll();
-		m_firstPopup=false;
-	}
+	if (!m_treeView.model()->hasChildren())
+		return;
 
-	QModelIndex root = model()->index(0,0);
+// 	QModelIndex root = model()->index(0,0);
+	QModelIndex root = m_treeView.model()->index(0,0);
 	showTopLevelOnly(root);
-	QComboBox::showPopup();
+
+	//QComboBox::showPopup();
+
+	m_treeView.resize(this->width(), 150);
+	m_treeView.move(mapToGlobal( this->rect().bottomLeft() ));
+	m_treeView.setFocus();
+	m_treeView.show();
 }
+
 
 /*!
 	Hides the non-toplevel items of the model used in the tree view.
@@ -127,4 +141,24 @@ void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index){
 
 		m_treeView.setRowHidden(i, index, !isTopLevel);
 	}
+}
+
+/*!
+	catches the MouseButtonPress-event and hides the tree view on mouse clicking.
+*/
+bool TreeViewComboBox::eventFilter(QObject *object, QEvent *event){
+	if (object==&m_treeView && event->type()==QEvent::MouseButtonPress){
+		m_treeView.hide();
+		this->setFocus();
+		return true;
+	}
+	return false;
+}
+
+//SLOTs
+
+void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
+	QComboBox::setItemText(0, index.data().toString());
+	m_treeView.hide();
+	emit currentModelIndexChanged(index);
 }

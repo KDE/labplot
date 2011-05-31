@@ -136,7 +136,7 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
     FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-    if ( fileType==FileDataSource::AsciiVector ) {
+	 if ( fileType==FileDataSource::AsciiVector ) {
         AsciiFilter* filter = new AsciiFilter();
         if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
 		  filter->setAutoModeEnabled(true);

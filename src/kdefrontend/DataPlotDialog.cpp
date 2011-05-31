@@ -103,7 +103,7 @@ void DataPlotDialog::setModel(QAbstractItemModel * model){
 }
 
 void DataPlotDialog::setCurrentIndex(const QModelIndex& index){
-	cbAddTo->setCurrentIndex(index);
+	cbAddTo->setCurrentModelIndex(index);
 }
 
 QModelIndex DataPlotDialog::currentIndex() const{

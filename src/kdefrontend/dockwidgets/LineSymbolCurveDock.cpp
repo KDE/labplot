@@ -142,8 +142,8 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	connect( leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
-	connect( cbXColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(xColumnChanged(int)) );
-	connect( cbYColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(yColumnChanged(int)) );
+	connect( cbXColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(xColumnChanged(const QModelIndex&)) );
+	connect( cbYColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yColumnChanged(const QModelIndex&)) );
 	
 	//Lines
 	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
@@ -180,7 +180,7 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbValuesRotation, SIGNAL(valueChanged(int)), this, SLOT(valuesRotationChanged(int)) );
 	connect( ui.sbValuesOpacity, SIGNAL(valueChanged(int)), this, SLOT(valuesOpacityChanged(int)) );
 	
-	connect( ui.cbValuesFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesColumnFormatChanged(int)) );
+	//TODO connect( ui.cbValuesFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesColumnFormatChanged(int)) );
 	connect( ui.leValuesPrefix, SIGNAL(returnPressed()), this, SLOT(valuesPrefixChanged()) );
 	connect( ui.leValuesSuffix, SIGNAL(returnPressed()), this, SLOT(valuesSuffixChanged()) );
 	connect( ui.kfrValuesFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(valuesFontChanged(const QFont&)) );
@@ -331,7 +331,7 @@ void LineSymbolCurveDock::init(){
 	ui.cbLineType->setItemIcon(10, pm);
 	ui.cbLineType->setItemIcon(11, pm);
 	
-	
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
 	
 	//Drop lines
@@ -342,6 +342,7 @@ void LineSymbolCurveDock::init(){
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
 	this->fillSymbolStyles();
  	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
+	m_initializing = false;
 	
 	//Values
 	ui.cbValuesType->addItems(LineSymbolCurve::valuesTypeStrings());
@@ -401,17 +402,17 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 	
 	leName->setText("");
 	leComment->setText("");
-	cbXColumn->setCurrentIndex(QModelIndex());
-	cbYColumn->setCurrentIndex(QModelIndex());
-	cbValuesColumn->setCurrentIndex(QModelIndex());
+	cbXColumn->setCurrentModelIndex(QModelIndex());
+	cbYColumn->setCurrentModelIndex(QModelIndex());
+	cbValuesColumn->setCurrentModelIndex(QModelIndex());
   }
   
   //show the properties of the first curve
   
   //General-tab
   chkVisible->setChecked(curve->isVisible());
-  cbXColumn->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
-  cbYColumn->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yColumn()) );
+  cbXColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
+  cbYColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yColumn()) );
   
   //Line-tab
   ui.cbLineType->setCurrentIndex( curve->lineType() );
@@ -652,26 +653,26 @@ void LineSymbolCurveDock::commentChanged(){
   m_curvesList.first()->setComment(leComment->text());
 }
 
-void LineSymbolCurveDock::xColumnChanged(int index){
+void LineSymbolCurveDock::xColumnChanged(const QModelIndex& index){
 	Q_UNUSED(index);
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
   
-  AbstractColumn* column= static_cast<AbstractColumn*>(cbXColumn->currentIndex().internalPointer());
-  foreach(LineSymbolCurve* curve, m_curvesList){
+	AbstractColumn* column= static_cast<AbstractColumn*>(index.internalPointer());
+	foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setXColumn(column);
-  }
+	}
 }
 
-void LineSymbolCurveDock::yColumnChanged(int index){
+void LineSymbolCurveDock::yColumnChanged(const QModelIndex& index){
 	Q_UNUSED(index);
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
   
-  AbstractColumn* column= static_cast<AbstractColumn*>(cbYColumn->currentIndex().internalPointer());
-  foreach(LineSymbolCurve* curve, m_curvesList){
+	AbstractColumn* column= static_cast<AbstractColumn*>(index.internalPointer());
+	foreach(LineSymbolCurve* curve, m_curvesList){
 	curve->setYColumn(column);
-  }
+	}
 }
 
 void LineSymbolCurveDock::visibilityChanged(int state){
@@ -1054,7 +1055,7 @@ void LineSymbolCurveDock::valuesTypeChanged(int index){
 	  ui.lValuesColumn->show();
 	  cbValuesColumn->show();
 	  
-	  column= static_cast<Column*>(cbValuesColumn->currentIndex().internalPointer());
+	  column= static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
 	}else{
 	  ui.lValuesColumn->hide();
 	  cbValuesColumn->hide();
@@ -1085,7 +1086,7 @@ void LineSymbolCurveDock::valuesColumnChanged(int index){
   if (m_initializing)
 	return;
 
-  Column* column= static_cast<Column*>(cbValuesColumn->currentIndex().internalPointer());
+  Column* column= static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
   this->showValuesColumnFormat(column);
   
   foreach(LineSymbolCurve* curve, m_curvesList){

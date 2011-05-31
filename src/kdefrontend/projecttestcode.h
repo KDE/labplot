@@ -91,13 +91,6 @@ void MainWin::startTestCode(){
 	  yc2->setValueAt(i, 1.25*i*i);
 	}
 	
-	qDebug()<<"in test code   "<<yc2;
-	qDebug()<<"in test code   "<< m_aspectTreeModel->modelIndexOfAspect(yc2);
-	
-	
-	
-	m_projectExplorer->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_project));
-	
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet %1").arg(1));
 	this->addAspectToProject(worksheet);
    
@@ -403,5 +396,5 @@ void MainWin::startTestCode(){
   plotArea->addChild(curve2);
   }
 	
-	
+	m_projectExplorer->setCurrentAspect(worksheet);
 }

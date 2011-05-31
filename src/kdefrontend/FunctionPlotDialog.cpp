@@ -141,7 +141,7 @@ void FunctionPlotDialog::saveSet(Set* set) const{
 }
 
 void FunctionPlotDialog::setCurrentIndex(const QModelIndex& index){
-	cbAddTo->setCurrentIndex(index);
+	cbAddTo->setCurrentModelIndex(index);
 }
 
 QModelIndex FunctionPlotDialog::currentIndex() const{

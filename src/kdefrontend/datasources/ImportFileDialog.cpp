@@ -114,7 +114,7 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
 
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
-  cbAddTo->setCurrentIndex(index);
+  cbAddTo->setCurrentModelIndex(index);
 }
 
 
@@ -130,7 +130,7 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source) const{
   triggers data import to the currently selected spreadsheet
 */
 void ImportFileDialog::importToSpreadsheet() const{
-  AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentIndex().internalPointer());
+  AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
   Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
   QString fileName = importFileWidget->fileName();
   AbstractFileFilter* filter = importFileWidget->currentFileFilter();
@@ -153,7 +153,7 @@ void ImportFileDialog::toggleOptions(){
 }
 
 void ImportFileDialog::currentAddToIndexChanged(int index){
-	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentIndex().internalPointer());
+	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect)
 		return;
 	
