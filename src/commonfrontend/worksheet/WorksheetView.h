@@ -51,7 +51,16 @@ class WorksheetView : public QGraphicsView{
 	virtual ~WorksheetView();
 
 	enum MouseMode{NavigationMode, ZoomMode, SelectionMode};
+	enum GridStyle{NoGrid, LineGrid, DotGrid};
 
+	struct GridSettings {
+		GridStyle style;
+		QColor color;
+		int horizontalSpacing;
+		int verticalSpacing;
+		float opacity;
+	};
+	
 	void createMenu(QMenu* menu=0) const;
 	void setScene(QGraphicsScene * scene);
 
@@ -59,10 +68,11 @@ class WorksheetView : public QGraphicsView{
 	static void initActionManager();
 
   private:
-	void createActions();
-
+	void initActions();
+	void initMenus();
+	
 	void contextMenuEvent(QContextMenuEvent *);
-	void createContextMenu(QMenu *menu);
+	QMenu* createContextMenu();
 	void fillProjectMenu(QMenu *menu, bool *rc);
 
 	void wheelEvent(QWheelEvent *event);
@@ -73,10 +83,17 @@ class WorksheetView : public QGraphicsView{
 	Worksheet *m_worksheet;
 	WorksheetModel *m_model;
 	MouseMode m_currentMouseMode;
-
+	
+	GridSettings m_gridSettings;
+	
 	static ActionManager *action_manager;
 	WorksheetView();
 
+	//Menus
+	QMenu* m_zoomMenu;
+	QMenu* m_layoutMenu;
+	QMenu* m_gridMenu;
+	
 	//Actions
 	#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* zoomInAction;
@@ -94,6 +111,14 @@ class WorksheetView : public QGraphicsView{
 	QAction* horizontalLayoutAction;
 	QAction* gridLayoutAction;
 	QAction* breakLayoutAction;
+	
+	QAction* noGridAction;
+	QAction* denseLineGridAction;
+	QAction* sparseLineGridAction;
+	QAction* denseDotGridAction;
+	QAction* sparseDotGridAction;
+	QAction* customGridAction;	
+	QAction* snapToGridAction;	
 	#else
 	KAction* zoomInAction;
 	KAction* zoomOutAction;
@@ -110,6 +135,14 @@ class WorksheetView : public QGraphicsView{
 	KAction* horizontalLayoutAction;
 	KAction* gridLayoutAction;
 	KAction* breakLayoutAction;
+	
+	KAction* noGridAction;
+	KAction* denseLineGridAction;
+	KAction* sparseLineGridAction;
+	KAction* denseDotGridAction;
+	KAction* sparseDotGridAction;
+	KAction* customGridAction;
+	KAction* snapToGridAction;
 	#endif
 
   public slots:
@@ -124,7 +157,8 @@ class WorksheetView : public QGraphicsView{
 	void enableZoomMode();
 	void enableSelectionMode();
 
-	void layout(QAction*);
+	void changeLayout(QAction*);
+	void changeGrid(QAction*);
 
   private slots:
 	void selectItem(QGraphicsItem *);

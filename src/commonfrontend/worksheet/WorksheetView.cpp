@@ -30,7 +30,6 @@
 #include <QApplication>
 #include <QMenu>
 #include <QDesktopWidget>
-#include <QTimer> //TODO: remove this later
 #include <QWheelEvent>
 #include <QDebug>
 
@@ -50,6 +49,7 @@
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KAction>
 #include <KLocale>
+#include "kdefrontend/GridDialog.h"
 #endif
 
 
@@ -78,13 +78,16 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   setResizeAnchor(QGraphicsView::AnchorViewCenter);
   setMinimumSize(16, 16);
   setFocusPolicy(Qt::StrongFocus);
-//   setFocus();
 
   viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
   viewport()->setAttribute( Qt::WA_NoSystemBackground );
   setAcceptDrops( true );
+  setCacheMode(QGraphicsView::CacheBackground);
   
-  createActions();
+  m_gridSettings.style = WorksheetView::NoGrid;
+  
+  initActions();
+  initMenus();
   navigationModeAction->setChecked(true);
   
   connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
@@ -99,11 +102,16 @@ WorksheetView::~WorksheetView(){
 //! Private ctor for initActionManager() only
 WorksheetView::WorksheetView(){
 	m_model = NULL;
-	createActions();
+	initActions();
 }
 
 
-void WorksheetView::createActions() {
+void WorksheetView::initActions(){
+	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
+	QActionGroup* layoutActionGroup = new QActionGroup(this);
+	QActionGroup * gridActionGroup = new QActionGroup(this);
+	gridActionGroup->setExclusive(true);
+	
  #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
  //Zoom actions
  zoomInAction = new QAction(tr("Zoom in"), this);
@@ -128,44 +136,34 @@ void WorksheetView::createActions() {
  connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
  
  // Mouse mode actions 
- QActionGroup* mouseModeActionGroup = new QActionGroup(this);
- navigationModeAction = new QAction(tr("Navigation"), this);
+ navigationModeAction = new QAction(tr("Navigation"), navigationModeAction);
  navigationModeAction->setCheckable(true);
- mouseModeActionGroup->addAction(navigationModeAction);
  connect(navigationModeAction, SIGNAL(triggered()), SLOT(enableNavigationMode()));
  
- zoomModeAction = new QAction(tr("Zoom"), this);
+ zoomModeAction = new QAction(tr("Zoom"), navigationModeAction);
  zoomModeAction->setCheckable(true);
- mouseModeActionGroup->addAction(zoomModeAction);
  connect(zoomModeAction, SIGNAL(triggered()), SLOT(enableZoomMode()));
  
- selectionModeAction = new QAction(tr("Selection"), this);
+ selectionModeAction = new QAction(tr("Selection"), navigationModeAction);
  selectionModeAction->setCheckable(true);
- mouseModeActionGroup->addAction(selectionModeAction);
  connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
  
  //Layout actions
- QActionGroup* layoutActionGroup = new QActionGroup(this);
- 
- verticalLayoutAction = new QAction(tr("Vertical layout"), this);
+ verticalLayoutAction = new QAction(tr("Vertical layout"), layoutActionGroup);
  verticalLayoutAction->setObjectName("verticalLayoutAction");
  verticalLayoutAction->setCheckable(true);
- layoutActionGroup->addAction(verticalLayoutAction);
  
- horizontalLayoutAction = new QAction(tr("Horizontal layout"), this);
+ horizontalLayoutAction = new QAction(tr("Horizontal layout"), layoutActionGroup);
  horizontalLayoutAction->setObjectName("horizontalLayoutAction");
  horizontalLayoutAction->setCheckable(true);
- layoutActionGroup->addAction(horizontalLayoutAction);
  
- gridLayoutAction = new QAction(tr("Grid layout"), this);
+ gridLayoutAction = new QAction(tr("Grid layout"), layoutActionGroup);
  gridLayoutAction->setObjectName("gridLayoutAction");
  gridLayoutAction->setCheckable(true);
- layoutActionGroup->addAction(gridLayoutAction);
  
- breakLayoutAction = new QAction(tr("Break layout"), this);
+ breakLayoutAction = new QAction(tr("Break layout"), layoutActionGroup);
  breakLayoutAction->setObjectName("breakLayoutAction");
  breakLayoutAction->setEnabled(false);
- layoutActionGroup->addAction(breakLayoutAction);
 #else
   //Zoom actions
   zoomInAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), this);
@@ -190,60 +188,105 @@ void WorksheetView::createActions() {
   connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
 
   // Mouse mode actions 
-  QActionGroup* mouseModeActionGroup = new QActionGroup(this);
-  navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigation"), this);
+  navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigation"), mouseModeActionGroup);
   navigationModeAction->setCheckable(true);
-  mouseModeActionGroup->addAction(navigationModeAction);
   connect(navigationModeAction, SIGNAL(triggered()), SLOT(enableNavigationMode()));
 
-  zoomModeAction = new KAction(KIcon("page-zoom"), i18n("Zoom"), this);
+  zoomModeAction = new KAction(KIcon("page-zoom"), i18n("Zoom"), mouseModeActionGroup);
   zoomModeAction->setCheckable(true);
-  mouseModeActionGroup->addAction(zoomModeAction);
   connect(zoomModeAction, SIGNAL(triggered()), SLOT(enableZoomMode()));
 
-  selectionModeAction = new KAction(KIcon("select-rectangular"), i18n("Selection"), this);
+  selectionModeAction = new KAction(KIcon("select-rectangular"), i18n("Selection"), mouseModeActionGroup);
   selectionModeAction->setCheckable(true);
-  mouseModeActionGroup->addAction(selectionModeAction);
   connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
 
   //Layout actions
-  QActionGroup* layoutActionGroup = new QActionGroup(this);
-
-  verticalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Vertical layout"), this);
+  verticalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Vertical layout"), layoutActionGroup);
   verticalLayoutAction->setObjectName("verticalLayoutAction");
   verticalLayoutAction->setCheckable(true);
-  layoutActionGroup->addAction(verticalLayoutAction);
 
-  horizontalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Horizontal layout"), this);
+  horizontalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Horizontal layout"), layoutActionGroup);
   horizontalLayoutAction->setObjectName("horizontalLayoutAction");
   horizontalLayoutAction->setCheckable(true);
-  layoutActionGroup->addAction(horizontalLayoutAction);
 
-  gridLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Grid layout"), this);
+  gridLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Grid layout"), layoutActionGroup);
   gridLayoutAction->setObjectName("gridLayoutAction");
   gridLayoutAction->setCheckable(true);
-  layoutActionGroup->addAction(gridLayoutAction);
 
-  breakLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Break layout"), this);
+  breakLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Break layout"), layoutActionGroup);
   breakLayoutAction->setObjectName("breakLayoutAction");
   breakLayoutAction->setEnabled(false);
-  layoutActionGroup->addAction(breakLayoutAction);
-  #endif
+  
+   //Grid actions
+	noGridAction = new KAction(KIcon(""), i18n("no grid"), gridActionGroup);
+	noGridAction->setObjectName("noGridAction");
+	noGridAction->setCheckable(true);
+	noGridAction->setChecked(true);
+	noGridAction->setData(WorksheetView::NoGrid);
+	
+	denseLineGridAction = new KAction(KIcon(""), i18n("dense line grid"), gridActionGroup);
+	denseLineGridAction->setObjectName("denseLineGridAction");
+	denseLineGridAction->setCheckable(true);
+	
+	sparseLineGridAction = new KAction(KIcon(""), i18n("sparse line grid"), gridActionGroup);
+	sparseLineGridAction->setObjectName("sparseLineGridAction");
+	sparseLineGridAction->setCheckable(true);
 
-  connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(layout(QAction*)));
+	denseDotGridAction = new KAction(KIcon(""), i18n("dense dot grid"), gridActionGroup);
+	denseDotGridAction->setObjectName("denseDotGridAction");
+	denseDotGridAction->setCheckable(true);
+	
+	sparseDotGridAction = new KAction(KIcon(""), i18n("sparse dot grid"), gridActionGroup);
+	sparseDotGridAction->setObjectName("sparseDotGridAction");
+	sparseDotGridAction->setCheckable(true);
+	
+	customGridAction = new KAction(KIcon(""), i18n("custom grid"), gridActionGroup);
+	customGridAction->setObjectName("customGridAction");
+	customGridAction->setCheckable(true);
+	
+	snapToGridAction = new KAction(KIcon(""), i18n("snap to grid"), this);
+	//TODO slot
+	snapToGridAction->setCheckable(true);
+#endif
+
+  connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
+  connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
+}
+
+void WorksheetView::initMenus(){
+	//TODO add i18n
+	m_zoomMenu = new QMenu(tr("Zoom"));
+	m_zoomMenu->addAction(zoomInAction);
+	m_zoomMenu->addAction(zoomOutAction);
+	m_zoomMenu->addAction(zoomOriginAction);
+	m_zoomMenu->addAction(zoomFitPageHeightAction);
+	m_zoomMenu->addAction(zoomFitPageWidthAction);
+	m_zoomMenu->addAction(zoomFitSelectionAction);
+  
+	m_layoutMenu = new QMenu(tr("Layout"));
+	m_layoutMenu->addAction(verticalLayoutAction);
+	m_layoutMenu->addAction(horizontalLayoutAction);
+	m_layoutMenu->addAction(gridLayoutAction); 
+	m_layoutMenu->addSeparator();
+	m_layoutMenu->addAction(breakLayoutAction);
+	
+	m_gridMenu = new QMenu(tr("Grid"));
+	m_gridMenu->addAction(noGridAction);
+	m_gridMenu->addSeparator();
+	m_gridMenu->addAction(sparseLineGridAction);
+	m_gridMenu->addAction(denseLineGridAction);
+	m_gridMenu->addSeparator();
+	m_gridMenu->addAction(sparseDotGridAction);
+	m_gridMenu->addAction(denseDotGridAction);
+	m_gridMenu->addSeparator();
+	m_gridMenu->addAction(customGridAction);
+	m_gridMenu->addSeparator();
+	m_gridMenu->addAction(snapToGridAction);
 }
 
 void WorksheetView::createMenu(QMenu *menu) const{
   if (!menu)
 	menu=new QMenu();
-  
-  //Zoom actions
-  menu->addAction(zoomInAction);
-  menu->addAction(zoomOutAction);
-  menu->addAction(zoomOriginAction);
-  menu->addAction(zoomFitPageHeightAction);
-  menu->addAction(zoomFitPageWidthAction);
-  menu->addAction(zoomFitSelectionAction);
   
   //Mouse mode actions
   menu->addSeparator();//->setText( i18n("Mouse mode") );
@@ -251,16 +294,18 @@ void WorksheetView::createMenu(QMenu *menu) const{
   menu->addAction(zoomModeAction);
   menu->addAction(selectionModeAction);
   
-  //Layout actions
-  menu->addSeparator();//->setText( i18n("Layout") );
-  menu->addAction(verticalLayoutAction);
-  menu->addAction(horizontalLayoutAction);
-  menu->addAction(gridLayoutAction);  
-  menu->addAction(breakLayoutAction);
+  menu->addSeparator();
+  menu->addMenu(m_zoomMenu);
+  menu->addSeparator();
+  menu->addMenu(m_layoutMenu);
+  menu->addSeparator();
+  menu->addMenu(m_gridMenu);
 }
 
-void WorksheetView::createContextMenu(QMenu *menu) {
+QMenu* WorksheetView::createContextMenu() {
+	QMenu* menu = new QMenu();
 	this->createMenu(menu);
+	return menu;
 }
 
 void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
@@ -295,8 +340,7 @@ void WorksheetView::setScene(QGraphicsScene * scene) {
 
 void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
   painter->save();
-  painter->setRenderHint(QPainter::Antialiasing);
-//   QRectF scene_rect = mapFromScene(sceneRect()).boundingRect();
+//   painter->setRenderHint(QPainter::Antialiasing);
   QRectF scene_rect = sceneRect();
 
   // background
@@ -304,7 +348,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 	painter->fillRect(rect, Qt::lightGray);
 
   //shadow
-  int shadowSize = scene_rect.width()*0.01; 	
+  int shadowSize = scene_rect.width()*0.02;
   QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize,
 									  shadowSize, scene_rect.height());
   QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(),
@@ -315,9 +359,60 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 
   // canvas
   painter->fillRect(scene_rect.intersected(rect), Qt::white);
-  painter->restore();
-}
+  
+  //grid
+	if (m_gridSettings.style == WorksheetView::NoGrid){
+		painter->restore();
+		return;
+	}else{
+		QColor c=m_gridSettings.color;
+ 		c.setAlphaF(m_gridSettings.opacity);
+		painter->setPen(c);
 
+		qreal x, y;
+// 		qreal left = rect.left();
+// 		qreal right = rect.right();
+// 		qreal top = rect.top();
+// 		qreal bottom = rect.bottom();
+		qreal left = scene_rect.left();
+		qreal right = scene_rect.right();
+		qreal top = scene_rect.top();
+		qreal bottom = scene_rect.bottom();
+		
+		if (m_gridSettings.style==WorksheetView::LineGrid){
+			QLineF line;
+			
+			//horizontal lines
+			y = top + m_gridSettings.verticalSpacing;
+			while (y < bottom){
+			line.setLine( left, y,  right, y );
+			painter->drawLine(line);
+			y += m_gridSettings.verticalSpacing;
+			}
+			
+			//vertical lines
+			x = left + m_gridSettings.horizontalSpacing;
+			while (x < right) {
+			line.setLine( x, top,  x, bottom );
+			painter->drawLine(line);
+			x += m_gridSettings.horizontalSpacing;
+			}
+		}else{ //DotGrid
+			y = top + m_gridSettings.verticalSpacing;
+			while (y < bottom){
+				x = left;// + m_gridSettings.horizontalSpacing;
+				while (x < right){
+					x += m_gridSettings.horizontalSpacing;
+					painter->drawPoint(x, y);
+				}
+				y += m_gridSettings.verticalSpacing;
+			}
+		}
+	}
+	
+	invalidateScene(rect, QGraphicsScene::BackgroundLayer);
+	painter->restore();	
+}
 
 //#################### EVENTS #################
 void WorksheetView::wheelEvent(QWheelEvent *event) {
@@ -332,7 +427,6 @@ void WorksheetView::wheelEvent(QWheelEvent *event) {
 }
 
 void WorksheetView::mouseReleaseEvent (QMouseEvent * event){
-//   qDebug()<<scene()->selectedItems();
   if (m_currentMouseMode == ZoomMode){
 	fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
   }
@@ -392,7 +486,7 @@ void WorksheetView::enableSelectionMode(){
   setDragMode(QGraphicsView::RubberBandDrag);
 }
 
-void WorksheetView::layout(QAction* action){
+void WorksheetView::changeLayout(QAction* action){
   QString name = action->objectName();
   if (name == "breakLayoutAction"){
 	verticalLayoutAction->setEnabled(true);
@@ -441,14 +535,60 @@ void WorksheetView::layout(QAction* action){
   }
 }
 
+void WorksheetView::changeGrid(QAction* action){
+	QString name = action->objectName();
+	
+	if (name == "noGridAction"){
+		m_gridSettings.style = WorksheetView::NoGrid;
+		snapToGridAction->setEnabled(false);
+	}else if (name == "sparseLineGridAction"){
+		m_gridSettings.style = WorksheetView::LineGrid;
+		m_gridSettings.color = Qt::gray;
+		m_gridSettings.opacity = 0.7;
+		m_gridSettings.horizontalSpacing = 15;
+		m_gridSettings.verticalSpacing = 15;
+	}else if (name == "denseLineGridAction"){
+		m_gridSettings.style = WorksheetView::LineGrid;
+		m_gridSettings.color = Qt::gray;
+		m_gridSettings.opacity = 0.7;
+		m_gridSettings.horizontalSpacing = 5;
+		m_gridSettings.verticalSpacing = 5;
+	}else if (name == "denseDotGridAction"){
+		m_gridSettings.style = WorksheetView::DotGrid;
+		m_gridSettings.color = Qt::black;
+		m_gridSettings.opacity = 0.7;
+		m_gridSettings.horizontalSpacing = 5;
+		m_gridSettings.verticalSpacing = 5;
+	}else if (name == "sparseDotGridAction"){
+		m_gridSettings.style = WorksheetView::DotGrid;
+		m_gridSettings.color = Qt::black;
+		m_gridSettings.opacity = 0.7;
+		m_gridSettings.horizontalSpacing = 15;
+		m_gridSettings.verticalSpacing = 15;
+	}else if (name == "customGridAction"){
+ #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE		
+		//TODO
+#else
+		GridDialog* dlg = new GridDialog(this);
+		if (dlg->exec() == QDialog::Accepted)
+			dlg->save(m_gridSettings);
+		else
+			return;
+#endif
+	}
+
+	if (m_gridSettings.style == WorksheetView::NoGrid)
+		snapToGridAction->setEnabled(false);
+	else
+		snapToGridAction->setEnabled(true);
+
+	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
+}
 
 void WorksheetView::selectItem(QGraphicsItem* item){
-  qDebug()<<"view slot"<<item;
+//   qDebug()<<"view slot"<<item;
 	scene()->clearSelection();
 	item->setSelected(true);
-// QPainterPath path;
-// path.addRect(item->boundingRect());
-//   scene()->setSelectionArea(path, QTransform());
 }
 
 

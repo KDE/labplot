@@ -12,6 +12,7 @@ set(GUI_SOURCES
 # 	${KDEFRONTEND_DIR}/DataPlotDialog.cpp
 	${KDEFRONTEND_DIR}/ExportDialog.cpp
 	${KDEFRONTEND_DIR}/ExportWidget.cpp
+	${KDEFRONTEND_DIR}/GridDialog.cpp
 # 	${KDEFRONTEND_DIR}/FunctionPlotDialog.cpp
 #   	${KDEFRONTEND_DIR}/FunctionWidget.cpp
   	${KDEFRONTEND_DIR}/GuiObserver.cpp
