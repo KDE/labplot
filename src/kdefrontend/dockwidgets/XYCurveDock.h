@@ -1,8 +1,8 @@
 /***************************************************************************
-    File                 : LineSymbolCurveDock.h
+    File                 : XYCurveDock.h
     Project            : LabPlot
     --------------------------------------------------------------------
-    Copyright         : (C) 2010 Alexander Semke (alexander.semke*web.de)
+    Copyright         : (C) 2010-2011 Alexander Semke (alexander.semke*web.de)
 							(replace * with @ in the email addresses)
     Description      : widget for curve properties
                            
@@ -27,33 +27,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef LINESYMBOLCURVEDOCK_H
-#define LINESYMBOLCURVEDOCK_H
+#ifndef XYCURVEDOCK_H
+#define XYCURVEDOCK_H
 
 #include <QList>
 
 #include "core/globals.h"
-#include "ui_linesymbolcurvedock.h"
+#include "ui_xycurvedock.h"
 
 class QTextEdit;
 class QCheckBox;
-class LineSymbolCurve;
+class XYCurve;
 class TreeViewComboBox;
 class CurveSymbolFactory;
 class AspectTreeModel;
 class Column;
 
-class LineSymbolCurveDock: public QWidget{
+class XYCurveDock: public QWidget{
 	Q_OBJECT
 	
 public:
-	LineSymbolCurveDock(QWidget *parent);
+	XYCurveDock(QWidget *parent);
 	void setModel(AspectTreeModel* model);
-	void setCurves(QList<LineSymbolCurve*>);
+	void setCurves(QList<XYCurve*>);
 	
 private:
-	Ui::LineSymbolCurveDock ui;
-	QList<LineSymbolCurve*> m_curvesList;
+	Ui::XYCurveDock ui;
+	QList<XYCurve*> m_curvesList;
 	AspectTreeModel* m_aspectTreeModel;
 	bool m_initializing;
 	QStringList dateStrings;
@@ -74,7 +74,6 @@ private:
 	
 	CurveSymbolFactory *symbolFactory;
 
-	
 	void fillSymbolStyles();
 	void updateValuesFormatWidgets(const SciDAVis::ColumnMode);
 	void showValuesColumnFormat(const Column*);

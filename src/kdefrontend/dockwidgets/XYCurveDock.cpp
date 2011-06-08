@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : LineSymbolCurveDock.cpp
+    File                 : XYCurveDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2011 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
-    Description          : widget for LineSymbolCurve properties
+    Description          : widget for XYCurve properties
                            
  ***************************************************************************/
 
@@ -27,9 +27,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "LineSymbolCurveDock.h"
+#include "XYCurveDock.h"
 #include "kdefrontend/GuiTools.h"
-#include "worksheet/LineSymbolCurve.h"
+#include "worksheet/XYCurve.h"
 #include "core/AspectTreeModel.h"
 #include "core/column/Column.h"
 #include "core/plugin/PluginManager.h"
@@ -52,7 +52,7 @@
 
 /*!
   \class GuiObserver
-  \brief  Provides a widget for editing the properties of the LineSymbolCurves (2D-curves) currently selected in the project explorer.
+  \brief  Provides a widget for editing the properties of the XYCurves (2D-curves) currently selected in the project explorer.
   
   If more then one curves are set, the properties of the first column are shown. The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of the curves  - these properties can only be changed if there is only one single curve.
@@ -60,7 +60,7 @@
   \ingroup kdefrontend
 */
 
-LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
+XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
 	// Tab "General"
@@ -191,7 +191,7 @@ LineSymbolCurveDock::LineSymbolCurveDock(QWidget *parent): QWidget(parent){
 	QTimer::singleShot(0, this, SLOT(init()));
 }
 
-void LineSymbolCurveDock::init(){
+void XYCurveDock::init(){
   	dateStrings<<"yyyy-MM-dd";
 	dateStrings<<"yyyy/MM/dd";
 	dateStrings<<"dd/MM/yyyy"; 
@@ -214,7 +214,7 @@ void LineSymbolCurveDock::init(){
 	
 	
   	//Line
-	ui.cbLineType->addItems(LineSymbolCurve::lineTypeStrings());
+	ui.cbLineType->addItems(XYCurve::lineTypeStrings());
 	QPainter pa;
 	QPixmap pm( 20, 20 );
 	ui.cbLineType->setIconSize( QSize(20,20) );
@@ -335,7 +335,7 @@ void LineSymbolCurveDock::init(){
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
 	
 	//Drop lines
-	ui.cbDropLineType->addItems(LineSymbolCurve::dropLineTypeStrings());
+	ui.cbDropLineType->addItems(XYCurve::dropLineTypeStrings());
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
 	
 	//Symbols
@@ -345,11 +345,11 @@ void LineSymbolCurveDock::init(){
 	m_initializing = false;
 	
 	//Values
-	ui.cbValuesType->addItems(LineSymbolCurve::valuesTypeStrings());
-	ui.cbValuesPosition->addItems(LineSymbolCurve::valuesPositionStrings());
+	ui.cbValuesType->addItems(XYCurve::valuesTypeStrings());
+	ui.cbValuesPosition->addItems(XYCurve::valuesPositionStrings());
 }
 
-void LineSymbolCurveDock::setModel(AspectTreeModel* model){
+void XYCurveDock::setModel(AspectTreeModel* model){
 	QList<const char *>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	cbXColumn->setTopLevelClasses(list);
@@ -372,10 +372,10 @@ void LineSymbolCurveDock::setModel(AspectTreeModel* model){
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
-void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
+void XYCurveDock::setCurves(QList<XYCurve*> list){
   m_initializing=true;
   m_curvesList=list;
-  LineSymbolCurve* curve=list.first();
+  XYCurve* curve=list.first();
   
   //if there are more then one curve in the list, disable the tab "general"
   if (list.size()==1){
@@ -472,7 +472,7 @@ void LineSymbolCurveDock::setCurves(QList<LineSymbolCurve*> list){
 /*!
 	fills the ComboBox for the symbol style with all possible styles in the style factory.
 */
-void LineSymbolCurveDock::fillSymbolStyles(){
+void XYCurveDock::fillSymbolStyles(){
 	QPainter painter;
 	int size=20; 	//TODO size of the icon depending on the actuall height of the combobox?
 	QPixmap pm( size, size );
@@ -510,7 +510,7 @@ void LineSymbolCurveDock::fillSymbolStyles(){
   
   synchronize this function with ColumnDock::updateFormat.
 */
-void LineSymbolCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode columnMode){
+void XYCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode columnMode){
   ui.cbValuesFormat->clear();
 
   switch (columnMode){
@@ -587,7 +587,7 @@ void LineSymbolCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode c
   Called, when a new column for the values was selected - either by changing the type of the values (none, x, y, etc.) or 
   by selecting a new custom column for the values.
 */
-void LineSymbolCurveDock::showValuesColumnFormat(const Column* column){
+void XYCurveDock::showValuesColumnFormat(const Column* column){
   if (!column){
 	// no valid column is available 
 	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
@@ -627,7 +627,7 @@ void LineSymbolCurveDock::showValuesColumnFormat(const Column* column){
 //************************************************************
 //****************** SLOTS ********************************
 //************************************************************
-void LineSymbolCurveDock::retranslateUi(){
+void XYCurveDock::retranslateUi(){
 	lName->setText(i18n("Name"));
 	lComment->setText(i18n("Comment"));
 	chkVisible->setText(i18n("Visible"));
@@ -638,7 +638,7 @@ void LineSymbolCurveDock::retranslateUi(){
 }
 
 // "General"-tab
-void LineSymbolCurveDock::nameChanged(){
+void XYCurveDock::nameChanged(){
   if (m_initializing)
 	return;
   
@@ -646,36 +646,36 @@ void LineSymbolCurveDock::nameChanged(){
 }
 
 
-void LineSymbolCurveDock::commentChanged(){
+void XYCurveDock::commentChanged(){
   if (m_initializing)
 	return;
   
   m_curvesList.first()->setComment(leComment->text());
 }
 
-void LineSymbolCurveDock::xColumnChanged(const QModelIndex& index){
+void XYCurveDock::xColumnChanged(const QModelIndex& index){
 	Q_UNUSED(index);
 	if (m_initializing)
 		return;
   
 	AbstractColumn* column= static_cast<AbstractColumn*>(index.internalPointer());
-	foreach(LineSymbolCurve* curve, m_curvesList){
+	foreach(XYCurve* curve, m_curvesList){
 	curve->setXColumn(column);
 	}
 }
 
-void LineSymbolCurveDock::yColumnChanged(const QModelIndex& index){
+void XYCurveDock::yColumnChanged(const QModelIndex& index){
 	Q_UNUSED(index);
 	if (m_initializing)
 		return;
   
 	AbstractColumn* column= static_cast<AbstractColumn*>(index.internalPointer());
-	foreach(LineSymbolCurve* curve, m_curvesList){
+	foreach(XYCurve* curve, m_curvesList){
 	curve->setYColumn(column);
 	}
 }
 
-void LineSymbolCurveDock::visibilityChanged(int state){
+void XYCurveDock::visibilityChanged(int state){
   if (m_initializing)
 	return;
   
@@ -685,16 +685,16 @@ void LineSymbolCurveDock::visibilityChanged(int state){
   else
 	b=false;
 
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setVisible(b);
   }
 }
 
 // "Line"-tab
-void LineSymbolCurveDock::lineTypeChanged(int index){
-  LineSymbolCurve::LineType lineType = LineSymbolCurve::LineType(index);
+void XYCurveDock::lineTypeChanged(int index){
+  XYCurve::LineType lineType = XYCurve::LineType(index);
   
-  if ( lineType == LineSymbolCurve::NoLine){
+  if ( lineType == XYCurve::NoLine){
 	ui.cbLineStyle->setEnabled(false);
 	ui.kcbLineColor->setEnabled(false);
 	ui.sbLineWidth->setEnabled(false);
@@ -707,8 +707,8 @@ void LineSymbolCurveDock::lineTypeChanged(int index){
 	ui.sbLineWidth->setEnabled(true);
 	ui.sbLineOpacity->setEnabled(true);
 	
-	if (lineType==LineSymbolCurve::SplineCubicNatural || lineType==LineSymbolCurve::SplineCubicPeriodic
-	  || lineType==LineSymbolCurve::SplineAkimaNatural || lineType==LineSymbolCurve::SplineAkimaPeriodic){
+	if (lineType==XYCurve::SplineCubicNatural || lineType==XYCurve::SplineCubicPeriodic
+	  || lineType==XYCurve::SplineAkimaNatural || lineType==XYCurve::SplineAkimaPeriodic){
 	  ui.lLineInterpolationPointsCount->show();
 	  ui.sbLineInterpolationPointsCount->show();
 	}else{
@@ -720,40 +720,40 @@ void LineSymbolCurveDock::lineTypeChanged(int index){
   if (m_initializing)
 	return;
   
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setLineType(lineType);
   }
 }
 
 
-void LineSymbolCurveDock::lineInterpolationPointsCountChanged(int count){
+void XYCurveDock::lineInterpolationPointsCountChanged(int count){
    if (m_initializing)
 	return;
 
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setLineInterpolationPointsCount(count);
   }
 }
 
-void LineSymbolCurveDock::lineStyleChanged(int index){
+void XYCurveDock::lineStyleChanged(int index){
    if (m_initializing)
 	return;
 
   Qt::PenStyle penStyle=Qt::PenStyle(index);
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->linePen();
 	pen.setStyle(penStyle);
 	curve->setLinePen(pen);
   }
 }
 
-void LineSymbolCurveDock::lineColorChanged(const QColor& color){
+void XYCurveDock::lineColorChanged(const QColor& color){
   if (m_initializing)
 	return;
 
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->linePen();
 	pen.setColor(color);
 	curve->setLinePen(pen);
@@ -762,32 +762,32 @@ void LineSymbolCurveDock::lineColorChanged(const QColor& color){
   GuiTools::updatePenStyles(ui.cbLineStyle, color);
 }
 
-void LineSymbolCurveDock::lineWidthChanged(int value){
+void XYCurveDock::lineWidthChanged(int value){
   if (m_initializing)
 	return;
   
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->linePen();
 	pen.setWidth(value);
 	curve->setLinePen(pen);
   }  
 }
 
-void LineSymbolCurveDock::lineOpacityChanged(int value){
+void XYCurveDock::lineOpacityChanged(int value){
   if (m_initializing)
 	return;
 		
   qreal opacity = (float)value/100;
-  foreach(LineSymbolCurve* curve, m_curvesList)
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setLineOpacity(opacity);
 	
 }
 
-void LineSymbolCurveDock::dropLineTypeChanged(int index){
-  LineSymbolCurve::DropLineType dropLineType = LineSymbolCurve::DropLineType(index);
+void XYCurveDock::dropLineTypeChanged(int index){
+  XYCurve::DropLineType dropLineType = XYCurve::DropLineType(index);
   
-  if ( dropLineType == LineSymbolCurve::NoDropLine){
+  if ( dropLineType == XYCurve::NoDropLine){
 	ui.cbDropLineStyle->setEnabled(false);
 	ui.kcbDropLineColor->setEnabled(false);
 	ui.sbDropLineWidth->setEnabled(false);
@@ -802,31 +802,31 @@ void LineSymbolCurveDock::dropLineTypeChanged(int index){
   if (m_initializing)
 	return;
   
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setDropLineType(dropLineType);
   }
 }
 
 
-void LineSymbolCurveDock::dropLineStyleChanged(int index){
+void XYCurveDock::dropLineStyleChanged(int index){
    if (m_initializing)
 	return;
 
   Qt::PenStyle penStyle=Qt::PenStyle(index);
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->dropLinePen();
 	pen.setStyle(penStyle);
 	curve->setDropLinePen(pen);
   }
 }
 
-void LineSymbolCurveDock::dropLineColorChanged(const QColor& color){
+void XYCurveDock::dropLineColorChanged(const QColor& color){
   if (m_initializing)
 	return;
 
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->dropLinePen();
 	pen.setColor(color);
 	curve->setDropLinePen(pen);
@@ -835,30 +835,30 @@ void LineSymbolCurveDock::dropLineColorChanged(const QColor& color){
   GuiTools::updatePenStyles(ui.cbDropLineStyle, color);
 }
 
-void LineSymbolCurveDock::dropLineWidthChanged(int value){
+void XYCurveDock::dropLineWidthChanged(int value){
   if (m_initializing)
 	return;
   
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->dropLinePen();
 	pen.setWidth(value);
 	curve->setDropLinePen(pen);
   }  
 }
 
-void LineSymbolCurveDock::dropLineOpacityChanged(int value){
+void XYCurveDock::dropLineOpacityChanged(int value){
   if (m_initializing)
 	return;
 		
   qreal opacity = (float)value/100;
-  foreach(LineSymbolCurve* curve, m_curvesList)
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setDropLineOpacity(opacity);
 	
 }
 
 //"Symbol"-tab
-void LineSymbolCurveDock::symbolStyleChanged(int index){
+void XYCurveDock::symbolStyleChanged(int index){
   Q_UNUSED(index);
   QString currentSymbolTypeId = ui.cbSymbolStyle->currentText();
   
@@ -897,42 +897,42 @@ void LineSymbolCurveDock::symbolStyleChanged(int index){
   if (m_initializing)
 	return;
 
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setSymbolTypeId(currentSymbolTypeId);
   }
 
 }
 
 
-void LineSymbolCurveDock::symbolSizeChanged(int value){
+void XYCurveDock::symbolSizeChanged(int value){
   if (m_initializing)
 	return;
 	
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setSymbolSize(value);
   }
 }
 
-void LineSymbolCurveDock::symbolRotationChanged(int value){
+void XYCurveDock::symbolRotationChanged(int value){
   if (m_initializing)
 	return;
 	
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setSymbolRotationAngle(value);
   }
 }
 
-void LineSymbolCurveDock::symbolOpacityChanged(int value){
+void XYCurveDock::symbolOpacityChanged(int value){
   if (m_initializing)
 	return;
 		
   qreal opacity = (float)value/100;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setSymbolsOpacity(opacity);
   }
 }
 
-void LineSymbolCurveDock::symbolFillingStyleChanged(int index){
+void XYCurveDock::symbolFillingStyleChanged(int index){
   Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
   if (brushStyle == Qt::NoBrush){
 	ui.lSymbolFillingColor->setEnabled(false);
@@ -946,19 +946,19 @@ void LineSymbolCurveDock::symbolFillingStyleChanged(int index){
 	return;
 
   QBrush brush;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	brush=curve->symbolsBrush();
 	brush.setStyle(brushStyle);
 	curve->setSymbolsBrush(brush);
   }
 }
 
-void LineSymbolCurveDock::symbolFillingColorChanged(const QColor& color){
+void XYCurveDock::symbolFillingColorChanged(const QColor& color){
   if (m_initializing)
 	return;
 	
   QBrush brush;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	brush=curve->symbolsBrush();
 	brush.setColor(color);
 	curve->setSymbolsBrush(brush);
@@ -967,7 +967,7 @@ void LineSymbolCurveDock::symbolFillingColorChanged(const QColor& color){
   GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
 }
 
-void LineSymbolCurveDock::symbolBorderStyleChanged(int index){
+void XYCurveDock::symbolBorderStyleChanged(int index){
   Qt::PenStyle penStyle=Qt::PenStyle(index);
   
   if ( penStyle == Qt::NoPen ){
@@ -982,19 +982,19 @@ void LineSymbolCurveDock::symbolBorderStyleChanged(int index){
 	return;
   
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
 	pen.setStyle(penStyle);
 	curve->setSymbolsPen(pen);
   }
 }
 
-void LineSymbolCurveDock::symbolBorderColorChanged(const QColor& color){
+void XYCurveDock::symbolBorderColorChanged(const QColor& color){
   if (m_initializing)
 	return;
   
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
 	pen.setColor(color);
 	curve->setSymbolsPen(pen);
@@ -1003,12 +1003,12 @@ void LineSymbolCurveDock::symbolBorderColorChanged(const QColor& color){
   GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
 }
 
-void LineSymbolCurveDock::symbolBorderWidthChanged(int value){
+void XYCurveDock::symbolBorderWidthChanged(int value){
   if (m_initializing)
 	return;
   
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
 	pen.setWidth(value);
 	curve->setSymbolsPen(pen);
@@ -1020,10 +1020,10 @@ void LineSymbolCurveDock::symbolBorderWidthChanged(int value){
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
-void LineSymbolCurveDock::valuesTypeChanged(int index){
-  LineSymbolCurve::ValuesType valuesType = LineSymbolCurve::ValuesType(index);
+void XYCurveDock::valuesTypeChanged(int index){
+  XYCurve::ValuesType valuesType = XYCurve::ValuesType(index);
   
-  if (valuesType==LineSymbolCurve::NoValues){
+  if (valuesType==XYCurve::NoValues){
 	//no values are to paint -> deactivate all the pertinent widgets
 	ui.cbValuesPosition->setEnabled(false);
 	ui.lValuesColumn->hide();
@@ -1051,7 +1051,7 @@ void LineSymbolCurveDock::valuesTypeChanged(int index){
 	ui.kcbValuesFontColor->setEnabled(true);	
 	
 	const Column* column;
-	if (valuesType==LineSymbolCurve::ValuesCustomColumn){
+	if (valuesType==XYCurve::ValuesCustomColumn){
 	  ui.lValuesColumn->show();
 	  cbValuesColumn->show();
 	  
@@ -1060,7 +1060,7 @@ void LineSymbolCurveDock::valuesTypeChanged(int index){
 	  ui.lValuesColumn->hide();
 	  cbValuesColumn->hide();
 	  
-	  if (valuesType==LineSymbolCurve::ValuesY){
+	  if (valuesType==XYCurve::ValuesY){
 		column = static_cast<const Column*>(m_curvesList.first()->yColumn());
 	  }else{
 		column = static_cast<const Column*>(m_curvesList.first()->xColumn());
@@ -1073,7 +1073,7 @@ void LineSymbolCurveDock::valuesTypeChanged(int index){
   if (m_initializing)
 	return;
 
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setValuesType(valuesType);
   }
 }
@@ -1081,7 +1081,7 @@ void LineSymbolCurveDock::valuesTypeChanged(int index){
 /*!
   called when the custom column for the values was changed.
 */
-void LineSymbolCurveDock::valuesColumnChanged(int index){
+void XYCurveDock::valuesColumnChanged(int index){
 	Q_UNUSED(index);
   if (m_initializing)
 	return;
@@ -1089,84 +1089,84 @@ void LineSymbolCurveDock::valuesColumnChanged(int index){
   Column* column= static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
   this->showValuesColumnFormat(column);
   
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	//TODO save also the format of the currently selected column for the values (precision etc.)
 	curve->setValuesColumn(column);
   }
 }
 
-void LineSymbolCurveDock::valuesPositionChanged(int index){
+void XYCurveDock::valuesPositionChanged(int index){
   if (m_initializing)
 	return;
 	
-  foreach(LineSymbolCurve* curve, m_curvesList){
-	curve->setValuesPosition(LineSymbolCurve::ValuesPosition(index));
+  foreach(XYCurve* curve, m_curvesList){
+	curve->setValuesPosition(XYCurve::ValuesPosition(index));
   }
 }
 
-void LineSymbolCurveDock::valuesDistanceChanged(int value){
+void XYCurveDock::valuesDistanceChanged(int value){
   if (m_initializing)
 	return;
 		
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setValuesDistance(value);
   }
 }
 
-void LineSymbolCurveDock::valuesRotationChanged(int value){
+void XYCurveDock::valuesRotationChanged(int value){
   if (m_initializing)
 	return;
 		
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setValuesRotationAngle(value);
   }
 }
 
-void LineSymbolCurveDock::valuesOpacityChanged(int value){
+void XYCurveDock::valuesOpacityChanged(int value){
   if (m_initializing)
 	return;
 		
   qreal opacity = (float)value/100;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setValuesOpacity(opacity);
   }
 }
 
-void LineSymbolCurveDock::valuesPrefixChanged(){
+void XYCurveDock::valuesPrefixChanged(){
   if (m_initializing)
 	return;
 		
   QString prefix = ui.leValuesPrefix->text();
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setValuesPrefix(prefix);
   }
 }
 
-void LineSymbolCurveDock::valuesSuffixChanged(){
+void XYCurveDock::valuesSuffixChanged(){
   if (m_initializing)
 	return;
 		
   QString suffix = ui.leValuesSuffix->text();
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setValuesSuffix(suffix);
   }
 }
 
-void LineSymbolCurveDock::valuesFontChanged(const QFont& font){
+void XYCurveDock::valuesFontChanged(const QFont& font){
   if (m_initializing)
 	return;
 	
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	curve->setValuesFont(font);
   }
 }
 
-void LineSymbolCurveDock::valuesFontColorChanged(const QColor& color){
+void XYCurveDock::valuesFontColorChanged(const QColor& color){
   if (m_initializing)
 	return;
   
   QPen pen;
-  foreach(LineSymbolCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList){
 	pen=curve->valuesPen();
 	pen.setColor(color);
 	curve->setValuesPen(pen);
