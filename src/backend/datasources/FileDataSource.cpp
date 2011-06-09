@@ -154,7 +154,7 @@ QIcon FileDataSource::icon() const{
 }
 
 // TODO
-QMenu* FileDataSource::createContextMenu() const{
+QMenu* FileDataSource::createContextMenu(){
 	return 0;
 }
 

@@ -61,7 +61,7 @@ class FileDataSource	:  public AbstractDataSource {
 
 	void setFilter(AbstractFileFilter*);
 	QIcon icon() const;
-	QMenu *createContextMenu() const;
+	QMenu *createContextMenu();
 	virtual QWidget *view() const;
 	
   private:
