@@ -4,6 +4,7 @@
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -33,7 +34,7 @@
 #include "commonfrontend/spreadsheet/SpreadsheetItemDelegate.h"
 #include "commonfrontend/spreadsheet/SpreadsheetDoubleHeaderView.h"
 
-#include "lib/ActionManager.h"
+// #include "lib/ActionManager.h"
 #include "lib/macros.h"
 
 #include "core/column/Column.h"
@@ -50,6 +51,15 @@
 #include <QInputDialog>
 #include <QDate>
 #include <QApplication>
+#include <QMenu>
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include "spreadsheetview_qactions.h"
+#else
+#include <KAction>
+#include <KLocale>
+#include "spreadsheetview_kactions.h"
+#endif
 
  /*!
 	\class SpreahsheetView
@@ -60,6 +70,7 @@
 SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QTableView(),
   m_spreadsheet(spreadsheet){
 	m_model = new SpreadsheetModel(spreadsheet);
+// 	m_plotMenu = 0;
 	init();
 }
 
@@ -68,8 +79,9 @@ SpreadsheetView::~SpreadsheetView(){
 }
 
 void SpreadsheetView::init(){
-//TODO 	createActions();
-
+// 	initActions();
+// 	initMenus();
+	
 	setModel(m_model);
   
 	// horizontal header
@@ -111,7 +123,7 @@ void SpreadsheetView::init(){
 		m_horizontalHeader->resizeSection(i++, col->width());
 
 	
-//TODO 	connectActions();
+// 	connectActions();
 	showComments(defaultCommentVisibility());
 
 	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
@@ -140,7 +152,7 @@ void SpreadsheetView::init(){
 //! Private ctor for initActionManager() only
 SpreadsheetView::SpreadsheetView(){
 	m_model = NULL;
-// 	TODO createActions();
+// 	initActions();
 }
 
 void SpreadsheetView::handleAspectAdded(const AbstractAspect * aspect){
@@ -239,6 +251,11 @@ bool SpreadsheetView::areCommentsShown() const{
 */
 void SpreadsheetView::toggleComments(){
 	showComments(!areCommentsShown());
+	//TODO
+// 	if(areCommentsShown()) 
+// 		action_toggle_comments->setText(tr("Hide Comments"));
+// 	else
+// 		action_toggle_comments->setText(tr("Show Comments"));
 }
 
 //! Shows (\c on=true) or hides (\c on=false) the column comments in the horizontal header
@@ -443,15 +460,14 @@ void SpreadsheetView::getCurrentCell(int * row, int * col){
 	}
 }
 
-//TODO
 bool SpreadsheetView::eventFilter(QObject * watched, QEvent * event){
 	QHeaderView * v_header = verticalHeader();
 
 	if (event->type() == QEvent::ContextMenu){
 		QContextMenuEvent *cm_event = static_cast<QContextMenuEvent *>(event);
 		QPoint global_pos = cm_event->globalPos();
-		if (watched == v_header){	
-// TODO			showSpreadsheetViewRowContextMenu(global_pos);
+		if (watched == v_header){
+			m_rowMenu->exec(global_pos);
 		}else if (watched == m_horizontalHeader) {	
 			int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 			if (!isColumnSelected(col, true)) {
@@ -461,9 +477,9 @@ bool SpreadsheetView::eventFilter(QObject * watched, QEvent * event){
 							m_model->index(m_model->rowCount()-1, col, QModelIndex())),
 						QItemSelectionModel::Select);
 			}
-//TODO			showSpreadsheetViewColumnContextMenu(global_pos);
+			m_columnMenu->exec(global_pos);
 		}else if (watched == this){
-//TODO			showSpreadsheetViewContextMenu(global_pos);
+			m_spreadsheetMenu->exec(global_pos);
 		}else{
 			return QWidget::eventFilter(watched, event);
 		}
@@ -477,8 +493,7 @@ bool SpreadsheetView::formulaModeActive() const{
 	return m_model->formulaModeActive(); 
 }
 
-void SpreadsheetView::activateFormulaMode(bool on) 
-{ 
+void SpreadsheetView::activateFormulaMode(bool on){ 
 	m_model->activateFormulaMode(on); 
 }
 
@@ -505,6 +520,107 @@ void SpreadsheetView::goToPreviousColumn(){
 	setCurrentIndex(idx.sibling(idx.row(), col));
 }
 
+/*! Create a menu with selection related operations
+	\param menu if a pointer to a QMenu is passed to the function, 
+	the actions are appended to it instead of the creation of a new menu.
+*/
+// QMenu * SpreadsheetView::createSelectionMenu(QMenu* menu){
+
+// }
+
+void SpreadsheetView::initMenus(){
+	//Selection menu
+// 	m_selectionMenu = new QMenu();
+// 	
+// 	QMenu * submenu = new QMenu(tr("Fi&ll Selection with"));
+// 	submenu->addAction(action_fill_row_numbers);
+// 	submenu->addAction(action_fill_random);
+// 	m_selectionMenu ->addMenu(submenu);
+// 	m_selectionMenu ->addSeparator();
+// 
+// 	m_selectionMenu ->addAction(action_cut_selection);
+// 	m_selectionMenu ->addAction(action_copy_selection);
+// 	m_selectionMenu ->addAction(action_paste_into_selection);
+// 	m_selectionMenu ->addAction(action_clear_selection);
+// 	m_selectionMenu ->addSeparator();
+// 	m_selectionMenu ->addAction(action_mask_selection);
+// 	m_selectionMenu ->addAction(action_unmask_selection);
+// 	m_selectionMenu ->addSeparator();
+// 	m_selectionMenu ->addAction(action_normalize_selection);
+// 	m_selectionMenu ->addSeparator();
+// 	m_selectionMenu ->addAction(action_set_formula);
+// 	m_selectionMenu ->addAction(action_recalculate);
+
+
+	//TODO add plot menu to spreadsheet- and column-menu, like in scidavis, origin etc.
+	// Column menu
+// 	m_columnMenu = new QMenu();
+// 
+// 	QMenu * submenu = new QMenu(tr("S&et Column(s) As"));
+// 	submenu->addAction(action_set_as_x);
+// 	submenu->addAction(action_set_as_y);
+// 	submenu->addAction(action_set_as_z);
+// 	submenu->addSeparator();
+// 	submenu->addAction(action_set_as_xerr);
+// 	submenu->addAction(action_set_as_yerr);
+// 	submenu->addSeparator();
+// 	submenu->addAction(action_set_as_none);
+// 	m_columnMenu->addMenu(submenu);
+// 	m_columnMenu->addSeparator();
+// 
+// 	submenu = new QMenu(tr("Fi&ll Selection with"));
+// 	submenu->addAction(action_fill_row_numbers);
+// 	submenu->addAction(action_fill_random);
+// 	m_columnMenu->addMenu(submenu);
+// 	m_columnMenu->addSeparator();
+// 
+// 	m_columnMenu->addAction(action_insert_columns);
+// 	m_columnMenu->addAction(action_remove_columns);
+// 	m_columnMenu->addAction(action_clear_columns);
+// 	m_columnMenu->addAction(action_add_columns);
+// 	m_columnMenu->addSeparator();
+// 	
+// 	m_columnMenu->addAction(action_normalize_columns);
+// 	m_columnMenu->addAction(action_sort_columns);
+// 	m_columnMenu->addSeparator();
+// 
+// 	m_columnMenu->addAction(action_toggle_comments);
+// 	m_columnMenu->addSeparator();
+// 
+// 	m_columnMenu->addAction(action_statistics_columns);
+
+	
+// 	//Spreadsheet menu
+// 	m_spreadsheetMenu = new QMenu();
+//	m_spreadsheetMenu->addMenu(m_selectionMenu);
+// 	m_spreadsheetMenu->addAction(action_toggle_comments);
+// 	m_spreadsheetMenu->addSeparator();
+// 	m_spreadsheetMenu->addAction(action_select_all);
+// 	m_spreadsheetMenu->addAction(action_clear_spreadsheet);
+// 	m_spreadsheetMenu->addAction(action_clear_masks);
+// 	m_spreadsheetMenu->addAction(action_sort_spreadsheet);
+// 	m_spreadsheetMenu->addSeparator();
+// 	m_spreadsheetMenu->addAction(action_add_column);
+// 	m_spreadsheetMenu->addSeparator();
+// 	m_spreadsheetMenu->addAction(action_go_to_cell);
+// 
+// 	
+	//Row menu
+	m_rowMenu = new QMenu();
+
+	m_rowMenu->addAction(action_insert_rows);
+	m_rowMenu->addAction(action_remove_rows);
+	m_rowMenu->addAction(action_clear_rows);
+	m_rowMenu->addAction(action_add_rows);
+	m_rowMenu->addSeparator();
+	
+	QMenu* submenu = new QMenu(tr("Fi&ll Selection with"));
+	submenu->addAction(action_fill_row_numbers);
+	submenu->addAction(action_fill_random);
+	m_rowMenu->addMenu(submenu);
+	m_rowMenu->addSeparator();
+	m_rowMenu->addAction(action_statistics_rows);
+}
 
 void SpreadsheetView::cutSelection(){
 	int first = firstSelectedRow();
@@ -574,16 +690,15 @@ void SpreadsheetView::pasteIntoSelection(){
 	m_spreadsheet->beginMacro(tr("%1: paste from clipboard").arg(m_spreadsheet->name()));
 	const QMimeData * mime_data = QApplication::clipboard()->mimeData();
 
-	int first_col = firstSelectedColumn(false);
-	int last_col = lastSelectedColumn(false);
-	int first_row = firstSelectedRow(false);
-	int last_row = lastSelectedRow(false);
-	int input_row_count = 0;
-	int input_col_count = 0;
-	int rows, cols;
-
-	if (mime_data->hasFormat("text/plain"))
-	{
+	if (mime_data->hasFormat("text/plain")){
+		int first_col = firstSelectedColumn(false);
+		int last_col = lastSelectedColumn(false);
+		int first_row = firstSelectedRow(false);
+		int last_row = lastSelectedRow(false);
+		int input_row_count = 0;
+		int input_col_count = 0;
+		int rows, cols;
+	
 		QString input_str = QString(mime_data->data("text/plain")).trimmed();
 		QList< QStringList > cell_texts;
 		QStringList input_rows(input_str.split("\n"));
@@ -790,6 +905,14 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 }
 
 /*!
+	Open the sort dialog for all columns.
+*/
+void SpreadsheetView::sortSpreadsheet(){
+	sortDialog(m_spreadsheet->children<Column>());
+}
+
+
+/*!
   Insert columns depending on the selection.
  */
 void SpreadsheetView::insertEmptyColumns(){
@@ -936,6 +1059,11 @@ void SpreadsheetView::normalizeSelection(){
 	RESET_CURSOR;
 }
 
+void SpreadsheetView::sortSelectedColumns(){
+	QList< Column* > cols = selectedColumns();
+	sortDialog(cols);
+}
+
 
 void SpreadsheetView::statisticsOnSelectedColumns(){
 	// TODO
@@ -1046,6 +1174,121 @@ void SpreadsheetView::clearSelectedCells(){
 	RESET_CURSOR;
 }
 
+
+//! Fill the part specific menu for the main window including setting the title
+/**
+	* \param menu the menu to append the actions to
+	* \param rc return code: true on success, otherwise false (e.g. part has no actions).
+	*/
+void SpreadsheetView::fillProjectMenu(QMenu * menu, bool * rc){
+// 	menu->setTitle(tr("&Spreadsheet"));
+// 
+// 	QMenu * submenu = new QMenu(tr("S&et Column(s) As"));
+// 	submenu->addAction(action_set_as_x);
+// 	submenu->addAction(action_set_as_y);
+// 	submenu->addAction(action_set_as_z);
+// 	submenu->addSeparator();
+// 	submenu->addAction(action_set_as_xerr);
+// 	submenu->addAction(action_set_as_yerr);
+// 	submenu->addSeparator();
+// 	submenu->addAction(action_set_as_none);
+// 	menu->addMenu(submenu);
+// 	menu->addSeparator();
+// 
+// 	submenu = new QMenu(tr("Fi&ll Selection with"));
+// 	submenu->addAction(action_fill_row_numbers);
+// 	submenu->addAction(action_fill_random);
+// 	menu->addMenu(submenu);
+// 	menu->addSeparator();
+// //TODO
+// // 	connect(menu, SIGNAL(aboutToShow()), this, SLOT(adjustActionNames()));
+// // 	menu->addAction(action_toggle_comments);
+// // 	menu->addAction(action_toggle_tabbar);
+// // 	menu->addAction(action_formula_mode);
+// // 	menu->addAction(action_edit_description);
+// // 	menu->addAction(action_type_format);
+// // 	menu->addSeparator();
+// 	menu->addAction(action_clear_spreadsheet);
+// #ifndef LEGACY_CODE_0_2_x
+// 	menu->addAction(action_clear_masks);
+// #endif
+// 	menu->addAction(action_sort_spreadsheet);
+// 	menu->addSeparator();
+// 	menu->addAction(action_set_formula);
+// 	menu->addAction(action_recalculate);
+// 	menu->addSeparator();
+// 	menu->addAction(action_add_column);
+// 	menu->addAction(action_dimensions_dialog);
+// 	menu->addSeparator();
+// 	menu->addAction(action_go_to_cell);
+
+	if (rc) *rc = true;
+
+	// TODO:
+	// Convert to Matrix
+	// Export 
+}
+
+//! Return a new context menu.
+/**
+* The caller takes ownership of the menu.
+*/
+void SpreadsheetView::createContextMenu(QMenu * menu){
+	menu->addSeparator();
+	
+	// TODO
+	// Export to ASCII
+	// Print --> maybe should go to AbstractPart::createContextMenu()
+	// ----
+	// Rename --> AbstractAspect::createContextMenu(); maybe call this "Properties" and include changing comment/caption spec
+	// Duplicate --> AbstractPart::createContextMenu()
+	// Hide/Show --> Do we need hiding of views (in addition to minimizing)? How do we avoid confusion with hiding of Aspects?
+	// Activate ?
+	// Resize --> AbstractPart::createContextMenu()
+}
+
+void SpreadsheetView::connectActions(){
+// 	connect(action_cut_selection, SIGNAL(triggered()), this, SLOT(cutSelection()));
+// 	connect(action_copy_selection, SIGNAL(triggered()), this, SLOT(copySelection()));
+// 	connect(action_paste_into_selection, SIGNAL(triggered()), this, SLOT(pasteIntoSelection()));
+// 	connect(action_mask_selection, SIGNAL(triggered()), this, SLOT(maskSelection()));
+// 	connect(action_unmask_selection, SIGNAL(triggered()), this, SLOT(unmaskSelection()));
+// // 	connect(action_set_formula, SIGNAL(triggered()), this, SLOT(setFormulaForSelection()));
+// 	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
+// 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
+// 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
+// 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
+// 	connect(action_select_all, SIGNAL(triggered()), this, SLOT(selectAll()));
+// 	connect(action_add_column, SIGNAL(triggered()), m_spreadsheet, SLOT(appendColumn()));
+// 	connect(action_clear_spreadsheet, SIGNAL(triggered()), m_spreadsheet, SLOT(clear()));
+// 	connect(action_clear_masks, SIGNAL(triggered()), m_spreadsheet, SLOT(clearMasks()));
+// 	connect(action_sort_spreadsheet, SIGNAL(triggered()), this, SLOT(sortSpreadsheet()));
+// 	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
+// // 	connect(action_dimensions_dialog, SIGNAL(triggered()), this, SLOT(dimensionsDialog()));
+// 	connect(action_insert_columns, SIGNAL(triggered()), this, SLOT(insertEmptyColumns()));
+// 	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
+// 	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
+// 	connect(action_add_columns, SIGNAL(triggered()), this, SLOT(addColumns()));
+// 	connect(action_set_as_x, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsX()));
+// 	connect(action_set_as_y, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsY()));
+// 	connect(action_set_as_z, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsZ()));
+// 	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsXError()));
+// 	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsYError()));
+// 	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
+// 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
+// 	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
+// 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
+// 	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedColumns()));
+// // 	connect(action_type_format, SIGNAL(triggered()), this, SLOT(editTypeAndFormatOfSelectedColumns()));
+// // 	connect(action_edit_description, SIGNAL(triggered()), this, SLOT(editDescriptionOfCurrentColumn()));
+// 	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
+// 	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
+// 	connect(action_clear_rows, SIGNAL(triggered()), this, SLOT(clearSelectedRows()));
+// 	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
+// 	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedRows()));
+// 	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
+}
+
 void SpreadsheetView::goToCell(){
 	bool ok;
 
@@ -1058,6 +1301,24 @@ void SpreadsheetView::goToCell(){
 	if ( !ok ) return;
 
 	goToCell(row-1, col-1);
+}
+
+/*!
+	Set a plot menu. The spreadsheet takes ownership of the menu.
+*/
+// void SpreadsheetView::setPlotMenu(QMenu * menu){
+// 	m_plotMenu = menu;
+// }
+
+//! Open the sort dialog for the given columns
+void SpreadsheetView::sortDialog(QList<Column*> cols){
+	if (cols.isEmpty()) return;
+//TODO
+// 	SortDialog *sortd = new SortDialog();
+// 	sortd->setAttribute(Qt::WA_DeleteOnClose);
+// 	connect(sortd, SIGNAL(sort(Column*,QList<Column*>,bool)), this, SLOT(sortColumns(Column*,QList<Column*>,bool)));
+// 	sortd->setColumnsList(cols);
+// 	sortd->exec();
 }
 
 /*!
@@ -1076,23 +1337,23 @@ void SpreadsheetView::addRows(){
 
 
 /* ========================= static methods ======================= */
-ActionManager * SpreadsheetView::action_manager = 0;
-
-ActionManager * SpreadsheetView::actionManager(){
-	if (!action_manager)
-		initActionManager();
-	
-	return action_manager;
-}
-
-void SpreadsheetView::initActionManager(){
-	if (!action_manager)
-		action_manager = new ActionManager();
-
-	action_manager->setTitle(tr("Spreadsheet"));
-	volatile SpreadsheetView * action_creator = new SpreadsheetView(); // initialize the action texts
-	delete action_creator;
-}
+// ActionManager * SpreadsheetView::action_manager = 0;
+// 
+// ActionManager * SpreadsheetView::actionManager(){
+// 	if (!action_manager)
+// 		initActionManager();
+// 	
+// 	return action_manager;
+// }
+// 
+// void SpreadsheetView::initActionManager(){
+// 	if (!action_manager)
+// 		action_manager = new ActionManager();
+// 
+// 	action_manager->setTitle(tr("Spreadsheet"));
+// 	volatile SpreadsheetView * action_creator = new SpreadsheetView(); // initialize the action texts
+// 	delete action_creator;
+// }
 
 int SpreadsheetView::defaultColumnWidth() { 
 	return Column::global("default_width").toInt();
