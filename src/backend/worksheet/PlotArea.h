@@ -4,6 +4,7 @@
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -41,10 +42,29 @@ class PlotArea: public WorksheetElementContainer {
 	public:
 		PlotArea(const QString &name);
 		virtual ~PlotArea();
+		
+		enum BackgroundType{Color, Image};
+		enum BackgroundColorStyle{SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
+																TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
+																RadialGradient};
+		enum BackgroundImageStyle{Scaled, Tiled};
+		
+
+		BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity);
+		
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType);
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle);
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle);
+		CLASS_D_ACCESSOR_DECL(QBrush, backgroundBrush, BackgroundBrush);
+		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor);
+		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor);
+		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName);
+		
+		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen);
 
 		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled);
 		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect);
-
+		
 		typedef WorksheetElementContainer BaseClass;
 		typedef PlotAreaPrivate Private;
 
@@ -60,5 +80,3 @@ class PlotArea: public WorksheetElementContainer {
 };
 
 #endif
-
-

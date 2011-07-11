@@ -4,6 +4,7 @@
     Description          : Private members of PlotArea.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -51,6 +52,17 @@ class PlotAreaPrivate: public WorksheetElementContainerPrivate {
 
 		QRectF rect;
 		QRectF transformedRect;
+		
+		qreal opacity;
+		PlotArea::BackgroundType backgroundType;
+		PlotArea::BackgroundColorStyle backgroundColorStyle;
+		PlotArea::BackgroundImageStyle backgroundImageStyle;
+		QBrush backgroundBrush;
+		QColor backgroundFirstColor;
+		QColor backgroundSecondColor;
+		QString backgroundFileName;
+		
+		QPen borderPen;
 };
 
 #endif

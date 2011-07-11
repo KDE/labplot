@@ -4,6 +4,7 @@
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -42,7 +43,7 @@
  * \class PlotArea
  * \brief Plot area (for background filling and clipping).
  *
- * 
+ * \ingroup worksheet
  */
 
 PlotArea::PlotArea(const QString &name) 
@@ -60,6 +61,14 @@ PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner)
 	: WorksheetElementContainerPrivate(owner) {
 	rect = QRectF(0, 0, 10, 10);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	
+	opacity = 1.0;
+	backgroundType = PlotArea::Color;
+	backgroundColorStyle = PlotArea::SingleColor;
+	backgroundFirstColor = Qt::white;
+	backgroundSecondColor = Qt::black;
+	backgroundImageStyle = PlotArea::Scaled;
+	backgroundFileName = "";
 }
 
 PlotAreaPrivate::~PlotAreaPrivate() {
@@ -84,6 +93,20 @@ QString PlotAreaPrivate::name() const {
 BASIC_SHARED_D_READER_IMPL(PlotArea, bool, clippingEnabled, clippingEnabled());
 CLASS_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect);
 
+BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, opacity, opacity);
+
+BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundType, backgroundType, backgroundType);
+BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle);
+BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle);
+CLASS_SHARED_D_READER_IMPL(PlotArea, QBrush, backgroundBrush, backgroundBrush);
+CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor);
+CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor);
+CLASS_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName);
+
+CLASS_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen);
+
+
+
 /* ============================ setter methods and undo commands ================= */
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetClippingEnabled, bool, toggleClipping);
@@ -93,6 +116,82 @@ void PlotArea::setClippingEnabled(bool on) {
 	if (d->clippingEnabled() != on)
 		exec(new PlotAreaSetClippingEnabledCmd(d, on, tr("%1: toggle clipping")));
 }
+
+STD_SWAP_METHOD_SETTER_CMD_IMPL_F(PlotArea, SetRect, QRectF, swapRect, q->retransform);
+void PlotArea::setRect(const QRectF &newRect) {
+	Q_D(PlotArea);
+
+	if (d->rect != newRect)
+		exec(new PlotAreaSetRectCmd(d, newRect, tr("%1: set plot rectangle")));
+}
+
+STD_SETTER_CMD_IMPL_F(PlotArea, SetOpacity, qreal, opacity, update);
+void PlotArea::setOpacity(qreal opacity) {
+	Q_D(PlotArea);
+	if (opacity != d->opacity)
+		exec(new PlotAreaSetOpacityCmd(d, opacity, tr("%1: set plot area opacity")));
+}
+
+//Background
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update);
+void PlotArea::setBackgroundType(BackgroundType type) {
+	Q_D(PlotArea);
+	if (type != d->backgroundType)
+		exec(new PlotAreaSetBackgroundTypeCmd(d, type, tr("%1: background type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update);
+void PlotArea::setBackgroundColorStyle(BackgroundColorStyle style) {
+	Q_D(PlotArea);
+	if (style != d->backgroundColorStyle)
+		exec(new PlotAreaSetBackgroundColorStyleCmd(d, style, tr("%1: background color style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update);
+void PlotArea::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
+	Q_D(PlotArea);
+	if (style != d->backgroundImageStyle)
+		exec(new PlotAreaSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update);
+void PlotArea::setBackgroundFirstColor(const QColor &color) {
+	Q_D(PlotArea);
+	if (color!= d->backgroundFirstColor)
+		exec(new PlotAreaSetBackgroundFirstColorCmd(d, color, tr("%1: set background first color")));
+}
+
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundSecondColor, QColor, backgroundSecondColor, update);
+void PlotArea::setBackgroundSecondColor(const QColor &color) {
+	Q_D(PlotArea);
+	if (color!= d->backgroundSecondColor)
+		exec(new PlotAreaSetBackgroundSecondColorCmd(d, color, tr("%1: set background second color")));
+}
+
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFileName, QString, backgroundFileName, update);
+void PlotArea::setBackgroundFileName(const QString& fileName) {
+	Q_D(PlotArea);
+	if (fileName!= d->backgroundFileName)
+		exec(new PlotAreaSetBackgroundFileNameCmd(d, fileName, tr("%1: set background image")));
+}
+
+//Border
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderPen, QPen, borderPen, update);
+void PlotArea::setBorderPen(const QPen &pen) {
+	Q_D(PlotArea);
+	if (pen != d->borderPen)
+		exec(new PlotAreaSetBorderPenCmd(d, pen, tr("%1: set border style")));
+}
+
+
+
+void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio) {
+	// TODO: scale line width
+	
+	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+}
+
+//############ private-implementation #################
 
 bool PlotAreaPrivate::clippingEnabled() const {
 	return (flags() & QGraphicsItem::ItemClipsChildrenToShape);
@@ -104,13 +203,6 @@ bool PlotAreaPrivate::toggleClipping(bool on) {
 	return oldValue;
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(PlotArea, SetRect, QRectF, swapRect, q->retransform);
-void PlotArea::setRect(const QRectF &newRect) {
-	Q_D(PlotArea);
-
-	if (d->rect != newRect)
-		exec(new PlotAreaSetRectCmd(d, newRect, tr("%1: set plot rectangle")));
-}
 
 QRectF PlotAreaPrivate::swapRect(const QRectF &newRect) {
 	QRectF oldRect = rect;
@@ -119,14 +211,73 @@ QRectF PlotAreaPrivate::swapRect(const QRectF &newRect) {
 	return oldRect;
 }
 
-void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-		QWidget *widget) {
+void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
-
-	// TODO: make the background customizable
-	painter->setPen(Qt::NoPen);
-	painter->setBrush(QBrush(QColor(0xf0, 0xf0, 0xf0)));
+	
+	painter->setOpacity(opacity);
+	painter->setPen(borderPen);
+	QRectF rect = boundingRect();
+	if (backgroundType == PlotArea::Color){
+		switch (backgroundColorStyle){
+			case PlotArea::SingleColor:{
+				painter->setBrush(QBrush(backgroundFirstColor));
+				break;
+			}
+			case PlotArea::HorizontalLinearGradient:{
+				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
+				linearGrad.setColorAt(0, backgroundFirstColor);
+				linearGrad.setColorAt(1, backgroundSecondColor);
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::VerticalLinearGradient:{
+				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
+				linearGrad.setColorAt(0, backgroundFirstColor);
+				linearGrad.setColorAt(1, backgroundSecondColor);
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::TopLeftDiagonalLinearGradient:{
+				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
+				linearGrad.setColorAt(0, backgroundFirstColor);
+				linearGrad.setColorAt(1, backgroundSecondColor);
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::BottomLeftDiagonalLinearGradient:{
+				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
+				linearGrad.setColorAt(0, backgroundFirstColor);
+				linearGrad.setColorAt(1, backgroundSecondColor);
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::RadialGradient:{
+				QRadialGradient radialGrad(rect.center(), transformedRect.width()/2);
+				radialGrad.setColorAt(0, backgroundFirstColor);
+				radialGrad.setColorAt(1, backgroundSecondColor);
+				painter->setBrush(QBrush(radialGrad));
+				break;
+			}			
+			default:
+				painter->setBrush(QBrush(backgroundFirstColor));
+		}
+	}else if (backgroundType == PlotArea::Image){
+		QPixmap pix;
+		//TODO implement a couple of other styles (scaled with KeepAspectRation, scaled and croped, centered etc.)
+		switch (backgroundImageStyle){
+			case PlotArea::Scaled:
+				pix = QPixmap(backgroundFileName).scaled(rect.width(), rect.height());
+				break;
+			case PlotArea::Tiled:
+				pix = QPixmap(backgroundFileName);
+				break;
+			default:
+				pix = QPixmap(backgroundFileName);
+		}
+		painter->setBrush(QBrush(pix));
+	}
+	
 	painter->drawRect(transformedRect);
 }
 
@@ -165,11 +316,3 @@ void PlotArea::retransform() {
 
 	WorksheetElementContainer::retransform();
 }
-
-void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio) {
-	// TODO: scale line width
-	
-	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
-}
-
-
