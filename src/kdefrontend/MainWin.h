@@ -47,6 +47,7 @@ class GuiObserver;
 class QDockWidget;
 class QStackedWidget;
 class AxisDock;
+class PlotAreaDock;
 class ColumnDock;
 class XYCurveDock;
 class SpreadsheetDock;
@@ -80,6 +81,7 @@ private:
 	KAction* m_printAction;
 	KAction* m_printPreviewAction;
 	KAction* m_importAction;
+	KAction* m_exportAction;
 	KAction* m_projectInfoAction;
 	KAction* m_closeAction;
 	KAction *m_newFolderAction;
@@ -126,6 +128,7 @@ private:
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
+	PlotAreaDock* plotAreaDock;
 	SpreadsheetDock* spreadsheetDock;
 	ColumnDock* columnDock;
 	WorksheetDock* worksheetDock;
@@ -138,7 +141,6 @@ private:
 	void initMenus();
 	void initProject();
 	bool warnModified();
-// 	void ensureSheet();
 	bool hasSheet(const QModelIndex & index) const;
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	void addAspectToProject(AbstractAspect* aspect);
@@ -164,6 +166,7 @@ private slots:
 	
 	void showHistory() const;
 	void importFileDialog();
+	void exportDialog();
 	void projectDialog();
 	void settingsDialog();
 	void newPlotActionTriggered(QAction*);
@@ -195,7 +198,7 @@ private slots:
 	void expandAspect(const AbstractAspect*) const;
 	
 	void startTestCode();
-	
+
 signals:
 	void partActivated(AbstractPart*);
 };

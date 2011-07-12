@@ -94,6 +94,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	spreadsheetDock=0;
 	columnDock=0;
 	worksheetDock=0;
+	plotAreaDock=0;
 	axisDock=0;
 	lineSymbolCurveDock=0;
 	
@@ -112,6 +113,7 @@ MainWin::~MainWin() {
 		m_mdiArea->closeAllSubWindows();
 		disconnect(m_project, 0, this, 0);
 		delete m_project;
+		delete m_aspectTreeModel;
 	}
 }
 
@@ -280,6 +282,10 @@ void MainWin::initActions() {
 	m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_L);
 	actionCollection()->addAction("import", m_importAction);
 	connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
+	
+	m_exportAction = new KAction(KIcon("document-export-database"), i18n("Export"), this);
+	actionCollection()->addAction("export", m_exportAction);
+	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
 
 	m_projectInfoAction = new KAction (KIcon("help-about"),i18n("Project &Info"), this);
 	actionCollection()->addAction("project", m_projectInfoAction);
@@ -433,6 +439,7 @@ void MainWin::updateGUI() {
 		m_printAction->setEnabled(false);
 		m_printPreviewAction->setEnabled(false);
 		m_importAction->setEnabled(false);
+		m_exportAction->setEnabled(false);
 		m_projectInfoAction->setEnabled(false);
 		m_newSpreadsheetAction->setEnabled(false);
 		m_newWorksheetAction->setEnabled(false);
@@ -454,6 +461,7 @@ void MainWin::updateGUI() {
 		m_printAction->setEnabled(true);
 		m_printPreviewAction->setEnabled(true);
 		m_importAction->setEnabled(true);
+		m_exportAction->setEnabled(true);
 		m_projectInfoAction->setEnabled(true);
 		m_newSpreadsheetAction->setEnabled(true);
 		m_newWorksheetAction->setEnabled(true);
@@ -528,6 +536,7 @@ void MainWin::newProject(){
 		delete m_project;
 	}
 
+//TODO delete the old project and the old tree model?
 	m_project = new Project();
 	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
   	m_currentAspect = m_project;
@@ -559,7 +568,7 @@ void MainWin::newProject(){
  	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
  	setCaption(m_project->name());
 	kDebug()<<"new project created"<<endl;
-	
+	 
 	startTestCode();
 }
 
@@ -584,9 +593,11 @@ void MainWin::openProject(QString filename){
 	
 	newProject();
 	openXML(file);
+	//TODO delete file;
 	m_project->setFileName(filename);
  	m_project->setChanged(false);
 	m_undoViewEmptyLabel = i18n("Project %1 opened").arg(m_project->name());
+	//TODO new model? delete the old model?
 	m_projectExplorer->setModel(new AspectTreeModel(m_project, this));
 	m_projectExplorer->setCurrentAspect(m_project);
 	m_recentProjectsAction->addUrl( KUrl(filename) );
@@ -671,6 +682,9 @@ void MainWin::saveProject(){
 	}else{
 		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));	
 	}
+	
+	if (file != 0)
+		delete file;
 }
 
 void MainWin::saveProjectAs() {
@@ -1140,4 +1154,12 @@ void MainWin::toggleDockWidget(QAction* action) const{
 		else
 			m_propertiesDock->show();
 	}
+}
+
+void MainWin::exportDialog(){
+/*    QString path=QFileDialog::getOpenFileName(this, i18n("Select the file data source"));
+    if (path=="")
+        return;*/
+// 	WorksheetView* view = qobject_cast<WorksheetView*>(activeWorksheet()->view());
+// 	view->exportToFile();
 }

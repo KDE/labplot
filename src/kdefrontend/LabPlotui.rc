@@ -5,6 +5,7 @@
 <ToolBar name="mainToolBar" >
 <text>Main Toolbar</text>
 <Action name="import" />
+<Action name="export" />
 <Action name="new_spreadsheet" />
 <Action name="new_worksheet" />
 <!-- <ActionList name="dynamicActionlist" /> -->
@@ -50,6 +51,7 @@
 	<Action name="new_project" />
 </Menu>
 <Action name="import" />
+<Action name="export" />
 <Action name="project" />
 </Menu>
 <Menu name="edit"><text>&amp;Editklj</text>
