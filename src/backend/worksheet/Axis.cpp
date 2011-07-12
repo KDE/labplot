@@ -67,6 +67,8 @@ Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate 
 void Axis::init() {
 	Q_D(Axis);
 
+	//TODO d_ptr->setFlag(QGraphicsItem::ItemIsSelectable, true);
+	
 	d->scale = ScaleLinear;
 	d->offset = 0;
 	d->start = 0;
@@ -237,7 +239,6 @@ void Axis::setOrientation( AxisOrientation orientation) {
 STD_SETTER_CMD_IMPL_F(Axis, SetScaling, Axis::AxisScale, scale, retransform);
 void Axis::setScale(AxisScale scale) {
 	Q_D(Axis);
-	qDebug()<<"in axis";
 	if (scale != d->scale)
 		exec(new AxisSetScalingCmd(d, scale, tr("%1: set axis scale")));
 }

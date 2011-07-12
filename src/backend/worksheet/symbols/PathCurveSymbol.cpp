@@ -186,7 +186,6 @@ void PathCurveSymbol::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
 	painter->setBrush(d->brush);
 	painter->setPen(d->pen);
-
 	qreal xSize = d->size ;
 	qreal ySize = d->size / d->aspectRatio;
 	painter->scale(xSize, ySize);
