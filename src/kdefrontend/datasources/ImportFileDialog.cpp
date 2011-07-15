@@ -69,11 +69,10 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
  */
 void ImportFileDialog::setModel(QAbstractItemModel * model){
   //Frame for the "Add To"-Stuff
-  frameAddTo = new QFrame(this);
+  frameAddTo = new QGroupBox(this);
+  frameAddTo->setTitle(i18n("Import  to"));
   QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
-  hLayout->addWidget( new QLabel(i18n("Import data to"),  frameAddTo) );
-  hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0,0,0,0);
+  hLayout->addWidget( new QLabel(i18n("Spreadsheet"),  frameAddTo) );
 	
   cbAddTo = new TreeViewComboBox(frameAddTo);
   cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
@@ -81,7 +80,7 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
   list<<"Folder"<<"Spreadsheet";
   cbAddTo->setTopLevelClasses(list);
   hLayout->addWidget( cbAddTo);
-  connect( cbAddTo, SIGNAL(currentIndexChanged(int)), this, SLOT(currentAddToIndexChanged(int)) );
+  connect( cbAddTo, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(currentAddToIndexChanged(const QModelIndex&)) );
   
   bNewSpreadsheet = new QPushButton(frameAddTo);
   bNewSpreadsheet->setIcon(KIcon("insert-table"));
@@ -97,7 +96,6 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
   
   cbPosition = new QComboBox(frameAddTo);
   cbPosition->setEnabled(false);
-  //TODO place these strings somewhere in AbstractFileFilter and implement this in the filters.
   cbPosition->addItem(i18n("Replace"));
   cbPosition->addItem(i18n("Append"));
   cbPosition->addItem(i18n("Prepend"));
@@ -115,6 +113,7 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
   cbAddTo->setCurrentModelIndex(index);
+  this->currentAddToIndexChanged(index);
 }
 
 
@@ -134,7 +133,9 @@ void ImportFileDialog::importToSpreadsheet() const{
   Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
   QString fileName = importFileWidget->fileName();
   AbstractFileFilter* filter = importFileWidget->currentFileFilter();
-  filter->read(fileName, sheet);
+  AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
+  
+  filter->read(fileName, sheet, mode);
   delete filter;
 }
   
@@ -152,8 +153,8 @@ void ImportFileDialog::toggleOptions(){
  	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
 
-void ImportFileDialog::currentAddToIndexChanged(int index){
-	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
+void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
+	AbstractAspect * aspect = static_cast<AbstractAspect *>(index.internalPointer());
 	if (!aspect)
 		return;
 	

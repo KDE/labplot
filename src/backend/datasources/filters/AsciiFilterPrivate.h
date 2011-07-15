@@ -37,7 +37,7 @@ class AsciiFilterPrivate {
     AsciiFilterPrivate();
     ~AsciiFilterPrivate();
 
-    void read(const QString & fileName, AbstractDataSource* dataSource);
+    void read(const QString & fileName, AbstractDataSource* dataSource,  AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     void write(const QString & fileName, AbstractDataSource* dataSource);
 
     QString commentCharacter;

@@ -49,7 +49,7 @@ class ImportFileDialog: public KDialog {
   private:
 	QVBoxLayout* vLayout;
 	ImportFileWidget *importFileWidget;
-	QFrame* frameAddTo;
+	QGroupBox* frameAddTo;
 	TreeViewComboBox* cbAddTo;
 	QLabel* lPosition;
 	QComboBox* cbPosition;
@@ -58,7 +58,7 @@ class ImportFileDialog: public KDialog {
 	
   private slots:
 	void toggleOptions();
-	void currentAddToIndexChanged(int);
+	void currentAddToIndexChanged(QModelIndex);
 	void newSpreadsheet();
 };
 

@@ -55,8 +55,8 @@ AsciiFilter::~AsciiFilter(){
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void AsciiFilter::read(const QString & fileName, AbstractDataSource* dataSource){
-  d->read(fileName, dataSource);
+void AsciiFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
+  d->read(fileName, dataSource, importMode);
 }
 
 
@@ -274,7 +274,7 @@ AsciiFilterPrivate::~AsciiFilterPrivate(){
     Uses the settings defined in the data source.
 */
 //TODO remove QProgressDialog and use QProgressBar in the main window instead
-void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource){
+void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
     //clear all childs (columns/vectors) in the data source first.
     //Usefull, if the vectors are reread.
 	//TODO 
