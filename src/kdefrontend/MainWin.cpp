@@ -768,12 +768,13 @@ void MainWin::importFileDialog(){
 	ImportFileDialog* dlg = new ImportFileDialog(this);
 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
 	dlg->setModel( model );
-	dlg->setCurrentIndex( m_projectExplorer->currentIndex());
 	
-	if ( dlg->exec() == QDialog::Accepted ){
+	//TODO add Matrix here in future.
+	 if ( m_currentAspect->inherits("Spreadsheet") )
+		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
+	
+	if ( dlg->exec() == QDialog::Accepted )
 	  dlg->importToSpreadsheet();
-	  kDebug()<<"data imported to the spreadsheet"<<endl;
-	}
 }
 
 void MainWin::projectDialog(){
@@ -1160,6 +1161,6 @@ void MainWin::exportDialog(){
 /*    QString path=QFileDialog::getOpenFileName(this, i18n("Select the file data source"));
     if (path=="")
         return;*/
-// 	WorksheetView* view = qobject_cast<WorksheetView*>(activeWorksheet()->view());
-// 	view->exportToFile();
+	WorksheetView* view = qobject_cast<WorksheetView*>(activeWorksheet()->view());
+	view->exportToFile();
 }
