@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>310</width>
-    <height>281</height>
+    <width>297</width>
+    <height>248</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Comment character:</string>
+      <string>Comment character</string>
      </property>
     </widget>
    </item>
@@ -44,7 +44,7 @@
    <item row="1" column="0" colspan="4">
     <widget class="QLabel" name="lSeparatingCharacter">
      <property name="text">
-      <string>Separating character:</string>
+      <string>Separating character</string>
      </property>
     </widget>
    </item>
