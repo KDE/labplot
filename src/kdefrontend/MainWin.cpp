@@ -112,8 +112,8 @@ MainWin::~MainWin() {
 	 if (m_project!=0){
 		m_mdiArea->closeAllSubWindows();
 		disconnect(m_project, 0, this, 0);
-		delete m_project;
 		delete m_aspectTreeModel;
+		delete m_project;
 	}
 }
 
@@ -133,38 +133,6 @@ void MainWin::initGUI(){
 	//TODO There is no file to open -> create a new project or open the last used project.
 	// Make this selection - new or last used - optional in the settings.
  	updateGUI();
-}
-
-
-/*!
-	Initialises the  project explorer, the GUI-observer and the dock widgets.
-*/
-void MainWin::initProject(){
-	m_projectExplorerDock = new QDockWidget(this);
-    m_projectExplorerDock->setObjectName("projectexplorer");
-	m_projectExplorerDock->setWindowTitle(tr("Project Explorer"));
-	addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
-	
-	m_aspectTreeModel = new AspectTreeModel(m_project, this);
-	m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
-	m_projectExplorer->setModel(m_aspectTreeModel);
-	m_projectExplorer->setCurrentAspect(m_project);
-	m_projectExplorerDock->setWidget(m_projectExplorer);
-					
-	connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect *)),
-		this, SLOT(handleCurrentAspectChanged(AbstractAspect *)));
-		
-	//Properties dock
-	m_propertiesDock = new QDockWidget(this);
-	m_propertiesDock->setObjectName("aspect_properties_dock");
-	m_propertiesDock->setWindowTitle(tr("Properties"));
-	addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
-	
-	stackedWidget = new QStackedWidget(m_propertiesDock);
-	m_propertiesDock->setWidget(stackedWidget);
-	
-	//GUI-observer;
-	m_guiObserver = new GuiObserver(this);
 }
 
 void MainWin::initActions() {
@@ -409,7 +377,7 @@ void MainWin::initMenus(){
 bool MainWin::warnModified() {
 	if(m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
-			i18n("The current project has been modified.\nDo you want to save it?"),
+			i18n("The current project %1 has been modified. Do you want to save it?").arg(m_project->name()),
 			i18n("Save Project"));
 		switch (want_save) {
 		case KMessageBox::Yes:
@@ -523,29 +491,49 @@ void MainWin::updateGUI() {
 }
 
 /*!
-	creates a new empty project, initialises the project explorer if called for the first time.
+	creates a new empty project. Returns \c true, if a new project was created.
 */
-void MainWin::newProject(){
+bool MainWin::newProject(){
 	//close the current project, if available
-	if (m_project!=0){
-		if(warnModified())
-			return;
-
- 		m_mdiArea->closeAllSubWindows();
-		m_project->disconnect();
-		delete m_project;
-	}
-
-//TODO delete the old project and the old tree model?
+	if (!closeProject())
+		return false;
+	
 	m_project = new Project();
-	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
   	m_currentAspect = m_project;
  	m_currentFolder = m_project;
 
-	//newProject is called for the first time, there is no project explorer yet -> create one.
+	m_aspectTreeModel = new AspectTreeModel(m_project, this);
+		
+	//newProject is called for the first time, there is no project explorer yet 
+	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
 	if ( m_projectExplorer==0 ){
-		initProject();
+		m_projectExplorerDock = new QDockWidget(this);
+		m_projectExplorerDock->setObjectName("projectexplorer");
+		m_projectExplorerDock->setWindowTitle(tr("Project Explorer"));
+		addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
+		
+		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
+		m_projectExplorerDock->setWidget(m_projectExplorer);
+						
+		connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect *)),
+			this, SLOT(handleCurrentAspectChanged(AbstractAspect *)));
+			
+		//Properties dock
+		m_propertiesDock = new QDockWidget(this);
+		m_propertiesDock->setObjectName("aspect_properties_dock");
+		m_propertiesDock->setWindowTitle(tr("Properties"));
+		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
+		
+		stackedWidget = new QStackedWidget(m_propertiesDock);
+		m_propertiesDock->setWidget(stackedWidget);
+		
+		//GUI-observer;
+		m_guiObserver = new GuiObserver(this);
 	}
+	
+	m_projectExplorer->setModel(m_aspectTreeModel);
+	m_projectExplorer->setCurrentAspect(m_project);
+	
 	m_projectExplorerDock->show();
 	m_propertiesDock->show();
 	updateGUI();
@@ -558,52 +546,54 @@ void MainWin::newProject(){
 		this, SLOT(handleAspectRemoved(const AbstractAspect *)));
 	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)),
 		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect *)));
-	connect(m_project, SIGNAL(statusInfo(const QString&)),
-			statusBar(), SLOT(showMessage(const QString&)));
-
+	connect(m_project, SIGNAL(statusInfo(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
+	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*, QMenu*)), this, SLOT(createFolderContextMenu(const Folder*, QMenu*)));
 	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
 
  	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
  	setCaption(m_project->name());
-	kDebug()<<"new project created"<<endl;
 	 
 	startTestCode();
+	return true;
 }
 
 void MainWin::openProject(){
 	QString fileName = QFileDialog::getOpenFileName(this,i18n("Open project"),QString::null,
 			i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
-	this->openProject(fileName);
+
+	if (!fileName.isEmpty())
+		this->openProject(fileName);
 }
 
 void MainWin::openProject(QString filename){
 	if(filename.isEmpty())
 		return;
-
+	
+	if (!newProject())
+		return;
+	
 	QIODevice *file = KFilterDev::deviceForFile(filename,QString::null,true);
 	if (file==0)
 		file = new QFile(filename);
-	
+
 	if ( file->open( QIODevice::ReadOnly | QFile::Text) == 0) {
 		KMessageBox::error(this, i18n("Sorry. Could not open file for reading!"));
 		return;
 	}
-	
-	newProject();
+
 	openXML(file);
-	//TODO delete file;
+	file->close();
+	delete file;
+
 	m_project->setFileName(filename);
  	m_project->setChanged(false);
+	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("Project %1 opened").arg(m_project->name());
-	//TODO new model? delete the old model?
-	m_projectExplorer->setModel(new AspectTreeModel(m_project, this));
 	m_projectExplorer->setCurrentAspect(m_project);
 	m_recentProjectsAction->addUrl( KUrl(filename) );
-
-	setCaption("LabPlot "  + QString(LVERSION) + "  " + i18n("Project") + " " + m_project->name());
-	kDebug()<<"Project "<<filename<<" opened"<<endl;
+	setCaption(m_project->name());
 }
 
 void MainWin::openRecentProject(){
@@ -611,7 +601,6 @@ void MainWin::openRecentProject(){
 }  
   
 void MainWin::openXML(QIODevice *file) {
-	kDebug()<<"	reading ..."<<endl;
 	XmlStreamReader reader(file);
 	if (m_project->load(&reader) == false) {
 		kDebug()<<"ERROR: reading file content"<<endl;
@@ -628,20 +617,27 @@ void MainWin::openXML(QIODevice *file) {
 		KMessageBox::error(this, msg_text, i18n("Project loading partly failed"));
 		statusBar()->showMessage(msg_text);
 	}
-	file->close();
 }
 
 /*!
-	Closes the current project, if available.
+	Closes the current project, if available. Return \c true, if the project was closed.
 */
-void MainWin::closeProject(){
-	if (m_project==0)
-		return;
-
+bool MainWin::closeProject(){
+	if (m_project==0){
+		return true; //nothing to close
+	}else{
+		int b = KMessageBox::warningYesNo( this,
+																			i18n("The current project %1 will be closed. Do you want to continue?").arg(m_project->name()),
+																			i18n("Close Project"));
+		if (b==KMessageBox::No)
+			return false;
+	}
+	
 	if(warnModified())
-		return;
+		return false;
 
 	m_mdiArea->closeAllSubWindows();
+	delete m_aspectTreeModel;
 	m_project->disconnect();
 	delete m_project;
 
@@ -651,6 +647,7 @@ void MainWin::closeProject(){
 	m_currentFolder=0;
  	m_project=0;
  	updateGUI();
+	return true;
 }
 
 /*!

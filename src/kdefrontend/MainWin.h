@@ -139,7 +139,6 @@ private:
 
 	void initActions();
 	void initMenus();
-	void initProject();
 	bool warnModified();
 	bool hasSheet(const QModelIndex & index) const;
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
@@ -153,11 +152,11 @@ private slots:
 	void undo();
 	void redo();
 	
-	void newProject();
+	bool newProject();
 	void openProject();
 	void openProject(QString filename);
 	void openRecentProject();
-	void closeProject();
+	bool closeProject();
 	void saveProject();
 	void saveProjectAs();
 	
