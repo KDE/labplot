@@ -66,6 +66,7 @@ class WorksheetView : public QGraphicsView{
 
 	static ActionManager *actionManager();
 	static void initActionManager();
+	void exportToFile();
 
   private:
 	void initActions();

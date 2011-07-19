@@ -414,6 +414,10 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 	painter->restore();	
 }
 
+void WorksheetView::exportToFile() {
+	//TODO
+}
+
 //#################### EVENTS #################
 void WorksheetView::wheelEvent(QWheelEvent *event) {
   if (m_currentMouseMode == ZoomMode){
