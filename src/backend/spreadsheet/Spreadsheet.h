@@ -96,7 +96,7 @@ class Spreadsheet : public AbstractDataSource{
 		void columnSelected(int);
 		void columnDeselected(int);
 		
-	private:
+	protected:
 		mutable QWidget *m_view;
 };
 

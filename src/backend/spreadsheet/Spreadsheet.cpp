@@ -29,16 +29,16 @@
  *                                                                         *
  ***************************************************************************/
 #include "spreadsheet/Spreadsheet.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include "spreadsheet/SpreadsheetView.h"
 #else
 #include <KIcon>
-#include "kdefrontend/SpreadsheetView.h"
 #endif
 
 #include <QApplication>
 #include <QDateTime>
+#include<QMenu>
 #include <QDebug>
 /*!
   \class Spreadsheet
