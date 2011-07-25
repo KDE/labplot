@@ -3,7 +3,7 @@ File                 : FileDataSource.cpp
 Project              : LabPlot/SciDAVis
 Description 		: Represents file data source
 --------------------------------------------------------------------
-Copyright            		: (C) 2009 Alexander Semke
+Copyright            		: (C) 2009-2011 Alexander Semke
 Email (use @ for *)  	: alexander.semke*web.de
 
 ***************************************************************************/
@@ -34,6 +34,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QDir>
 
 #include "filters/AsciiFilter.h"
+#include "commonfrontend/spreadsheet//SpreadsheetView.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -50,7 +51,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 */
 
 FileDataSource::FileDataSource(AbstractScriptingEngine *engine, const QString& name)
-     : AbstractDataSource(engine, name){
+     : Spreadsheet(engine, 0, 0, name){
 
 }
 
@@ -60,14 +61,12 @@ FileDataSource::~FileDataSource(){
 	delete m_filter;
 }
 
+//TODO make the view customizable (show as a spreadsheet or as a pure text file in an editor)
 QWidget *FileDataSource::view() const{
-  //TODO 
-//   if (!m_view)
-//   {
-// 	m_view = new FileDataSourceView(this);
-//   }
-//   return m_view;
-  return 0;
+	if (!m_view){
+		m_view = new SpreadsheetView(const_cast<FileDataSource*>(this));
+	}
+	return m_view;
 }
 
 /*!

@@ -3,7 +3,7 @@
     Project              : LabPlot/SciDAVis
     Description 		: Represents file data source
     --------------------------------------------------------------------
-    Copyright		            : (C) 2009 Alexander Semke
+    Copyright		            : (C) 2009-2011 Alexander Semke
     Email (use @ for *) 	: alexander.semke*web.de
 
  ***************************************************************************/
@@ -29,11 +29,11 @@
 #ifndef ASCIIDATASOURCE_H
 #define ASCIIDATASOURCE_H
 
-#include "AbstractDataSource.h"
+#include "spreadsheet/Spreadsheet.h"
 #include "filters/AbstractFileFilter.h"
 #include <QString>
 
-class FileDataSource	:  public AbstractDataSource {
+class FileDataSource : public Spreadsheet{
     Q_OBJECT
 
   public:
