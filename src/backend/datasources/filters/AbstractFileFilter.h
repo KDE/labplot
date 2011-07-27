@@ -35,7 +35,7 @@ class AbstractDataSource;
 class AbstractFileFilter{
 	public:
 		virtual ~AbstractFileFilter() {}
-		enum ImportMode {Replace, Append, Prepend};
+		enum ImportMode {Append, Prepend, Replace};
 		
 		virtual void read(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode = Replace) = 0;
 		virtual void write(const QString& fileName, AbstractDataSource* dataSource) = 0;

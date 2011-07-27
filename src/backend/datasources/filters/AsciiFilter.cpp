@@ -147,7 +147,6 @@ long AsciiFilter::lineNumber(const QString & fileName){
 	  rows++;
   }
 
-  rows--;
   return rows;
 }
 
@@ -273,16 +272,12 @@ AsciiFilterPrivate::~AsciiFilterPrivate(){
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
+//TODO : read strings (comments) or datetime too
 //TODO remove QProgressDialog and use QProgressBar in the main window instead
+//TODO the terms vector and column are used synonymously, straighten the notation
 void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-    //clear all childs (columns/vectors) in the data source first.
-    //Usefull, if the vectors are reread.
-	//TODO 
-//     foreach(Column * col, dataSource->children<Column>())
-// 	  delete col;
-// or use // 	dataSource->removeAllChildren() instead
-
 	int currentRow=0; //indexes the position in the vector(column)
+	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 	QString line;
 	QStringList lineStringList;
 
@@ -329,7 +324,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	if( simplifyWhitespacesEnabled)
 		line = line.simplified();
 
-//     qDebug()<<"separator before"<<separatingCharacter;
 	if( separatingCharacter == "auto" ){
 	  lineStringList = line.split( QRegExp("\\s+"), (QString::SplitBehavior)emptyLinesEnabled );
     }else{
@@ -340,55 +334,112 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	  lineStringList = line.split( separatingCharacter, (QString::SplitBehavior)emptyLinesEnabled );
     }
 
-	Column * newColumn;
-    if (endColumn==-1)
-        endColumn=lineStringList.size()-1;
-	
+	if (endColumn==-1)
+		endColumn=lineStringList.size()-1;
+
+	QStringList vectorNameList;
 	if ( headerEnabled ){
-		for ( int n=startColumn; n<=endColumn; n++ ){
-		  newColumn = new Column(lineStringList.at(n), SciDAVis::Numeric);
-		  dataSource->addChild(newColumn);
-		}
-	  }else{
-		QStringList vectorNameList;
+		vectorNameList = lineStringList;
+	}else{
 		//create vector names out of the vectorNames-string, if not empty
 		if (vectorNames != ""){
-		  vectorNameList = vectorNames.split( QRegExp("\\s+") );
+			vectorNameList = vectorNames.split( QRegExp("\\s+") );
 		}
 
 		//if there were no (or not enough) strings provided, add the default descriptions for the columns/vectors
 		if (vectorNameList.size()<=endColumn-startColumn){
-		  int size=vectorNameList.size();
-		  for (int k=0; k<=endColumn-startColumn-size; k++ )
-			vectorNameList.append( "Vector" + QString::number(size+k) );
+			int size=vectorNameList.size();
+			for (int k=0; k<=endColumn-startColumn-size; k++ )
+				vectorNameList.append( "Column " + QString::number(size+k) );
 		}
-		
-		for ( int n=startColumn; n<=endColumn; n++ ){
-		 newColumn = new Column(vectorNameList.at(n), SciDAVis::Numeric);
-		
-		// TODO : read strings (comments) or datetime too
-		 newColumn->setValueAt(0, lineStringList.at(n).toDouble());
-		 dataSource->addChild(newColumn);
-		 currentRow++;
-	  }
 	}
 
 
-	//first line in the file is parsed. Read the remainder of the file.
+	//make sure we have enough columns in the data source.
+	//we need in total (endColumn-startColumn) columns.
+	//Create new columns, if needed.
+	Column * newColumn;
+	dataSource->beginMacro( QObject::tr("Import from %1").arg(fileName) );
+	if (mode==AbstractFileFilter::Append){
+		columnOffset=dataSource->childCount<Column>();
+		for ( int n=startColumn; n<=endColumn; n++ ){
+			newColumn = new Column(vectorNameList.at(n), SciDAVis::Numeric);
+			dataSource->addChild(newColumn);
+		}			
+	}else if (mode==AbstractFileFilter::Prepend){
+		Column* firstColumn = dataSource->child<Column>(0);
+		for ( int n=startColumn; n<=endColumn; n++ ){
+			newColumn = new Column(vectorNameList.at(n), SciDAVis::Numeric);
+			dataSource->insertChildBefore(newColumn, firstColumn);
+		}
+	}else if (mode==AbstractFileFilter::Replace){
+		//replace completely the previous content of the data source with the content to be imported.
+		int columns = dataSource->childCount<Column>();
+		if (columns>(endColumn-startColumn)){
+			//there're more columns in the data source then required
+			//-> remove the superfluous columns
+			for(int i=0;i<columns-(endColumn-startColumn)-1;i++){
+				dataSource->removeChild(dataSource->child<Column>(0));
+			}
+			
+			//rename the columns, that are already available
+			for (int i=0; i<=endColumn-startColumn; i++){
+				dataSource->child<Column>(i)->setColumnMode( SciDAVis::Numeric);
+				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
+			}
+		}else{
+			//there're are not sufficient columns in the data source
+			//rename the columns, that are already available
+			for (int i=0; i<columns; i++){
+				dataSource->child<Column>(i)->setColumnMode( SciDAVis::Numeric);
+				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
+			}
+			
+			//create additional columns
+			for(int i=0;i<=(endColumn - startColumn - columns);i++){
+				newColumn = new Column(vectorNameList.at(columns+startColumn+i), SciDAVis::Numeric);
+				dataSource->addChild(newColumn);
+			}
+		}
+	}
+
+
 	progressDialog.setMinimum(0);
 	int numLines=AsciiFilter::lineNumber(fileName);
-	progressDialog.setMaximum( numLines );
 	
 	if (endRow == -1)
-		endRow=numLines-1;
+		endRow=numLines;
 	
 	if (endRow >numLines)
-	  endRow=numLines-1;
+	  endRow=numLines;
 
-	for (int i=0; i<endRow-startRow; i++){
-// 		if (in.atEnd())
-// 			break;
+	if (headerEnabled)
+		numLines = endRow-startRow-1;
+	else
+		numLines = endRow-startRow;
 
+	progressDialog.setMaximum( numLines );
+	
+	//resize the spreadsheet
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (mode==AbstractFileFilter::Replace){
+		spreadsheet->clear();
+		spreadsheet->setRowCount(numLines);
+	}else{
+		if (spreadsheet->rowCount()<numLines)
+			spreadsheet->setRowCount(numLines);
+	}
+	
+	//import the values in the first line, if they were not used as the header (as the names for the columns)
+	if (!headerEnabled){
+		for ( int n=startColumn; n<=endColumn; n++ ){
+		 spreadsheet->column(columnOffset+n-startColumn)->setValueAt(0, lineStringList.at(n).toDouble());
+	  }
+	  currentRow++;
+	}
+
+	//first line in the file is parsed. Read the remainder of the file.
+	for (int i=0; i<numLines; i++){
 		line = in.readLine();
 
 		if( simplifyWhitespacesEnabled )
@@ -398,7 +449,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			currentRow++;
 			continue;
 		}
-
 
 		if( separatingCharacter == "auto" )
 			lineStringList = line.split( QRegExp("\\s+"), (QString::SplitBehavior)emptyLinesEnabled );
@@ -411,7 +461,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 
 		// TODO : read strings (comments) or datetime too
 		for ( int n=startColumn; n<=endColumn; n++ ){
-			dataSource->child<Column>(n-startColumn)->setValueAt(currentRow, lineStringList.at(n).toDouble());
+			dataSource->child<Column>(columnOffset+n-startColumn)->setValueAt(currentRow, lineStringList.at(n).toDouble());
 		}
 		
 		progressDialog.setValue( currentRow );
@@ -425,10 +475,17 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
     
     //set the comments for each of the columns
     //TODO: generalize to different data types
-    QString comment = "numerical data, " + QString::number(currentRow) + " elements";
-	foreach(Column * col, dataSource->children<Column>())
-	  col->setComment(comment);
+    QString comment;
+	if (headerEnabled)
+		comment = "numerical data, " + QString::number(currentRow-1) + " elements";
+	else
+		comment = "numerical data, " + QString::number(currentRow) + " elements";
 	
+	for ( int n=startColumn; n<endColumn; n++ ){
+		spreadsheet->column(columnOffset+n-startColumn)->setComment(comment);
+	}
+
+	spreadsheet->endMacro();
 	QApplication::restoreOverrideCursor();
 }
 
