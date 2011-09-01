@@ -64,13 +64,11 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	
 	setMainWidget( mainWidget );
 	
-    setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 	setButtonText(KDialog::User1,i18n("Options") + ">>");
 	
 	connect( ui.cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
-    connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-// 	connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()) );
-	connect(button(KDialog::Ok), SIGNAL(clicked()), this, SLOT(okClicked()) );
+	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Export worksheet"));
@@ -100,13 +98,20 @@ WorksheetView::ExportArea ExportWorksheetDialog::exportArea() const{
 	return WorksheetView::ExportArea(ui.cbExportArea->currentIndex());
 }
 
+void ExportWorksheetDialog::slotButtonClicked(int button) {
+	if (button == KDialog::Ok)
+		okClicked();
+	else
+		KDialog::slotButtonClicked(button);
+}
+
 //SLOTS
- void ExportWorksheetDialog::okClicked(){
+void ExportWorksheetDialog::okClicked(){
 	if ( QFile::exists(ui.kleFileName->text()) ){
 		int r=KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (r==KMessageBox::No)
+		if (r==KMessageBox::No) {
 			return;
-		//TODO the dialog is closed when "No" was selected. This shouldn't be, fix this.
+		}
 	}
 
 	accept();

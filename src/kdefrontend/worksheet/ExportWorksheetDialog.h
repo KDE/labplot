@@ -49,6 +49,7 @@ class ExportWorksheetDialog: public KDialog{
 	Ui::ExportWorksheetWidget ui;
 
   private slots:
+	void slotButtonClicked(int);
 	void okClicked();
 	void toggleOptions();
 	void selectFile();
