@@ -82,6 +82,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
+	
+	filterChanged(0);
 }
 
 ImportFileWidget::~ImportFileWidget() {

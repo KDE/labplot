@@ -55,7 +55,7 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
 	
     setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 	setButtonText(KDialog::User1,i18n("Show Options"));
-	enableButtonOk(false);
+// 	enableButtonOk(false);
 	
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
@@ -96,10 +96,10 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
   
   cbPosition = new QComboBox(frameAddTo);
   cbPosition->setEnabled(false);
-  cbPosition->addItem(i18n("Replace"));
   cbPosition->addItem(i18n("Append"));
   cbPosition->addItem(i18n("Prepend"));
-  
+  cbPosition->addItem(i18n("Replace"));
+
   cbPosition->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
   hLayout->addWidget( cbPosition);
   
