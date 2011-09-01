@@ -102,6 +102,7 @@ void Axis::init() {
 	d->labelsOpacity = 1.0;
 	
 	retransform();
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 Axis::~Axis() {
@@ -809,6 +810,12 @@ void Axis::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 	  textLabel->paint(painter);
 	
 	painter->translate(-labelsOffset);
+  }
+  
+   if (isSelected()){
+	QPainterPath path = shape();  
+	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+	painter->drawPath(path);
   }
 }
 

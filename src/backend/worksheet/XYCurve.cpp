@@ -109,10 +109,12 @@ XYCurve::XYCurve(const QString &name)
 		: AbstractWorksheetElement(name), d_ptr(new XYCurvePrivate(this)) {
 
 	d_ptr->retransform();
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 XYCurve::XYCurve(const QString &name, XYCurvePrivate *dd)
 		: AbstractWorksheetElement(name), d_ptr(dd) {
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 XYCurve::~XYCurve() {
@@ -982,7 +984,7 @@ void XYCurve::Private::updateSymbol(){
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
 */
-void XYCurve::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
+void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
   if (!isVisible())
 	return;
   
@@ -1035,4 +1037,10 @@ void XYCurve::Private::paint(QPainter *painter, const QStyleOptionGraphicsItem *
   }
   
   painter->setOpacity(opacity);
+  
+  if (isSelected()){
+	QPainterPath path = shape();  
+	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+	painter->drawPath(path);
+  }
 }

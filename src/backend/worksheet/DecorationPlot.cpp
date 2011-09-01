@@ -38,11 +38,13 @@
 
 DecorationPlot::DecorationPlot(const QString &name) 
 	: AbstractPlot(name) {
+		graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 // TODO
 }
 
 DecorationPlot::DecorationPlot(const QString &name, WorksheetElementContainerPrivate *dd)
 	: AbstractPlot(name, dd) {
+		graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 // TODO
 }
 

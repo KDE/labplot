@@ -48,6 +48,7 @@
 
 PlotArea::PlotArea(const QString &name) 
 	: WorksheetElementContainer(name, new PlotAreaPrivate(this)) {
+		
 }
 
 PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
@@ -61,6 +62,7 @@ PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner)
 	: WorksheetElementContainerPrivate(owner) {
 	rect = QRectF(0, 0, 10, 10);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	
 	opacity = 1.0;
 	backgroundType = PlotArea::Color;
@@ -279,6 +281,12 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	}
 	
 	painter->drawRect(transformedRect);
+	
+	if (isSelected()){
+	QPainterPath path = shape();  
+	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+	painter->drawPath(path);
+	}	
 }
 
 QRectF PlotAreaPrivate::boundingRect () const {
