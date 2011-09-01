@@ -43,7 +43,7 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 // #include "SpreadsheetView.h"
 #include "GuiObserver.h"
-
+ #include "worksheet/ExportWorksheetDialog.h"
 #include <QDockWidget>
 #include <QStackedWidget>
 
@@ -1154,10 +1154,25 @@ void MainWin::toggleDockWidget(QAction* action) const{
 	}
 }
 
+
+/*!
+	opens the dialog for the export of the currently active worksheet/spreadsheet.
+ */
 void MainWin::exportDialog(){
-/*    QString path=QFileDialog::getOpenFileName(this, i18n("Select the file data source"));
-    if (path=="")
-        return;*/
-	WorksheetView* view = qobject_cast<WorksheetView*>(activeWorksheet()->view());
-	view->exportToFile();
+	//determine first, whether we want to export a worksheet or a spreadsheet
+	Worksheet* w=this->activeWorksheet();
+	if (w!=0){ //worksheet
+		ExportWorksheetDialog* dlg = new ExportWorksheetDialog(this);
+		dlg->setFileName(w->name());
+		if (dlg->exec()==QDialog::Accepted){
+			QString path = dlg->path();
+			WorksheetView::ExportFormat format = dlg->exportFormat();
+			WorksheetView::ExportArea area = dlg->exportArea();
+			
+			WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
+			view->exportToFile(path, format, area);
+		}
+	}else{//Spreadsheet
+		//TODO
+	}
 }

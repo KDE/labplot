@@ -31,6 +31,7 @@
 #include <QMenu>
 #include <QDesktopWidget>
 #include <QWheelEvent>
+#include <QPrinter>
 #include <QDebug>
 
 #include "worksheet/WorksheetView.h"
@@ -69,6 +70,10 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   
   m_model = new WorksheetModel(worksheet);
 
+  	connect(worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
+	connect(worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
+	
+	
   setScene(m_model->scene());
 
   setRenderHint(QPainter::Antialiasing);
@@ -254,23 +259,30 @@ void WorksheetView::initActions(){
 }
 
 void WorksheetView::initMenus(){
-	//TODO add i18n
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	m_zoomMenu = new QMenu(tr("Zoom"));
+	m_layoutMenu = new QMenu(tr("Layout"));
+	m_gridMenu = new QMenu(tr("Grid"));
+#else
+	m_zoomMenu = new QMenu(i18n("Zoom"));
+	m_layoutMenu = new QMenu(i18n("Layout"));
+	m_gridMenu = new QMenu(i18n("Grid"));
+	m_gridMenu->setIcon(QIcon(KIcon("view-grid")));
+#endif
+	
 	m_zoomMenu->addAction(zoomInAction);
 	m_zoomMenu->addAction(zoomOutAction);
 	m_zoomMenu->addAction(zoomOriginAction);
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
-  
-	m_layoutMenu = new QMenu(tr("Layout"));
+
 	m_layoutMenu->addAction(verticalLayoutAction);
 	m_layoutMenu->addAction(horizontalLayoutAction);
 	m_layoutMenu->addAction(gridLayoutAction); 
 	m_layoutMenu->addSeparator();
 	m_layoutMenu->addAction(breakLayoutAction);
-	
-	m_gridMenu = new QMenu(tr("Grid"));
+
 	m_gridMenu->addAction(noGridAction);
 	m_gridMenu->addSeparator();
 	m_gridMenu->addAction(sparseLineGridAction);
@@ -412,10 +424,6 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 	
 	invalidateScene(rect, QGraphicsScene::BackgroundLayer);
 	painter->restore();	
-}
-
-void WorksheetView::exportToFile() {
-	//TODO
 }
 
 //#################### EVENTS #################
@@ -591,8 +599,9 @@ void WorksheetView::changeGrid(QAction* action){
 
 void WorksheetView::selectItem(QGraphicsItem* item){
 //   qDebug()<<"view slot"<<item;
-	scene()->clearSelection();
+// 	item->setZValue(100);
 	item->setSelected(true);
+// 	scene()->update();
 }
 
 
@@ -602,6 +611,70 @@ void WorksheetView::deselectItem(QGraphicsItem* item){
 
 //TODO
 void WorksheetView::selectionChanged(){
-//  QList<QGraphicsItem *> selected= scene()->selectedItems();
+	qDebug()<<"selection changed";
+// 	qDebug()<<"selection "<<scene()->selectionArea().boundingRect();
+ QList<QGraphicsItem *> items = scene()->selectedItems();
+ qDebug()<<items;
+	
+ //trave
+//  QGraphicsItem* item = items.first();
+// //  m_worksheet->children<AbstractWorksheetElement*>()
+//  foreach(const AbstractAspect * child, aspect->children<AbstractAspect>());
+//  
+//  child->graphicsItem() != item;
+//  
+//  this->hasGraphicsItem(child, item)
 }
 
+void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area) const{
+	QRectF rect;
+
+	if (area==WorksheetView::ExportBoundingBox){
+//TODO QRectF rect =scene()->itemsBoundingRect();
+		rect =scene()->sceneRect();
+	}else if (area==WorksheetView::ExportSelection){
+		//TODO  	QRectF rect = scene()->selectionArea().boundingRect();
+		
+		// 	QList<QGraphicsItem *> items = scene()->selectedItems();
+		// 	QGraphicsItem* item = items.first();
+		// 	QRectF rect = item->boundingRect();
+		
+		rect =scene()->sceneRect();
+	}else{
+		rect =scene()->sceneRect();
+	}
+
+	if (format==WorksheetView::Pdf || format==WorksheetView::Eps){
+		QPrinter printer(QPrinter::HighResolution);
+		if (format==WorksheetView::Pdf)
+			printer.setOutputFormat(QPrinter::PdfFormat);
+		else
+			printer.setOutputFormat(QPrinter::PostScriptFormat);
+		
+		printer.setOutputFileName(path);
+		printer.setPaperSize( QSizeF(rect.width(), rect.height()), QPrinter::Millimeter);
+		printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
+		printer.setPrintRange(QPrinter::PageRange);
+		
+		QPainter painter(&printer);
+		painter. setRenderHint(QPainter::Antialiasing);
+		
+		double xscale = printer.pageRect().width()/double(rect.width());
+		double yscale = printer.pageRect().height()/double(rect.height());
+		double scale = qMin(xscale, yscale);
+		painter.scale(scale, scale);
+// 		painter.translate(printer.paperRect().x() + printer.pageRect().width()/2,
+// 						printer.paperRect().y() + printer.pageRect().height()/2);
+// 		painter.translate(-width()/2, -height()/2);
+
+		scene()->render(&painter, rect);
+	// 	render(&painter, rect);
+	}else{
+		
+	}
+}
+
+//TODO
+void WorksheetView::print() const{
+
+}

@@ -1,3 +1,4 @@
+set(KDE_FRONTEND true)
 set(KDEFRONTEND_DIR kdefrontend)
 set(BACKEND_DIR backend)
 set(QTFRONTEND_DIR qtfrontend)
@@ -39,6 +40,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
+	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
 )
 
 set(UI_SOURCES
@@ -62,6 +64,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
+	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 )
 
 set(BACKEND_SOURCES

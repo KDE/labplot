@@ -52,6 +52,8 @@ class WorksheetView : public QGraphicsView{
 
 	enum MouseMode{NavigationMode, ZoomMode, SelectionMode};
 	enum GridStyle{NoGrid, LineGrid, DotGrid};
+	enum ExportFormat{Pdf, Eps, Svg, Png};
+	enum ExportArea{ExportBoundingBox, ExportSelection, ExportWorksheet};
 
 	struct GridSettings {
 		GridStyle style;
@@ -63,10 +65,11 @@ class WorksheetView : public QGraphicsView{
 	
 	void createMenu(QMenu* menu=0) const;
 	void setScene(QGraphicsScene * scene);
+	void exportToFile(const QString&, const ExportFormat format, const ExportArea area) const;
+	void print() const;
 
 	static ActionManager *actionManager();
 	static void initActionManager();
-	void exportToFile();
 
   private:
 	void initActions();
