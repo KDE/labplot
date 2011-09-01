@@ -32,6 +32,8 @@
 #include <QDesktopWidget>
 #include <QWheelEvent>
 #include <QPrinter>
+#include <QSvgGenerator>
+#include <QImage>
 #include <QDebug>
 
 #include "worksheet/WorksheetView.h"
@@ -663,14 +665,35 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		double yscale = printer.pageRect().height()/double(rect.height());
 		double scale = qMin(xscale, yscale);
 		painter.scale(scale, scale);
-// 		painter.translate(printer.paperRect().x() + printer.pageRect().width()/2,
-// 						printer.paperRect().y() + printer.pageRect().height()/2);
-// 		painter.translate(-width()/2, -height()/2);
 
+		painter.begin(&printer);
 		scene()->render(&painter, rect);
-	// 	render(&painter, rect);
+		painter.end();
+	}else if (format==WorksheetView::Svg){
+		QSvgGenerator generator;
+		generator.setFileName(path);
+		generator.setSize(QSize(rect.width(), rect.height()));
+		generator.setViewBox(rect);
+
+		QPainter painter;
+		painter.begin(&generator);
+		scene()->render(&painter, rect);
+		painter.end();
 	}else{
+		//PNG
+		//TODO add all formats supported by Qt in QImage
+		//TODO make the size of the image customizable by the user in the ExportWorksheetDialog
+		int w = rect.width()*QApplication::desktop()->physicalDpiX()/25.4;
+		int h = rect.height()*QApplication::desktop()->physicalDpiY()/25.4;
+		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
 		
+		QPainter painter;
+		painter.begin(&image);
+		painter.scale(QApplication::desktop()->physicalDpiX()/25.4,QApplication::desktop()->physicalDpiY()/25.4);
+		scene()->render(&painter, rect);
+		painter.end();
+
+		 image.save(path, "png");
 	}
 }
 
