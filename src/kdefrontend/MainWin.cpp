@@ -699,19 +699,38 @@ void MainWin::saveProjectAs() {
 }
 
 /*!
-	prints the current Worksheet
+	prints the current sheet (worksheet or spreadsheet)
 */
-  //TODO
 void MainWin::print(){
-//  Worksheet *w = activeWorksheet();
-//   if (w)
-// 	  w->print();
-
-// 	statusBar()->showMessage(i18n("Printed worksheet"));
+	QPrinter printer;
+	
+	//determine first, whether we want to export a worksheet or a spreadsheet
+	Worksheet* w=this->activeWorksheet();
+	if (w!=0){ //worksheet
+		QPrintDialog *dialog = new QPrintDialog(&printer, this);
+		dialog->setWindowTitle(tr("Print worksheet"));
+		if (dialog->exec() != QDialog::Accepted)
+			return;
+	 
+		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
+		view->print(&printer);
+		statusBar()->showMessage(i18n("Worksheet printed"));
+	}else{
+		//TODO
+		statusBar()->showMessage(i18n("Spreadsheet printed"));
+	}
 }
 
 void MainWin::printPreview(){
-  
+	Worksheet* w=this->activeWorksheet();
+	if (w!=0){ //worksheet
+		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
+		QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
+		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+		dialog->exec();
+	}else{
+		//Spreadsheet
+	}
 }
 
 /*!

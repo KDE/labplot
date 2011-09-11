@@ -4,7 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2009-2011 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
 
  ***************************************************************************/
@@ -697,7 +697,16 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}
 }
 
-//TODO
-void WorksheetView::print() const{
+void WorksheetView::print(QPrinter* printer) const{
+	QRectF rect =scene()->sceneRect();
+		
+	QPainter painter(printer);
+	painter. setRenderHint(QPainter::Antialiasing);
+	
+	double xscale = printer->pageRect().width()/double(rect.width());
+	double yscale = printer->pageRect().height()/double(rect.height());
+	double scale = qMin(xscale, yscale);
+	painter.scale(scale, scale);
 
+	scene()->render(&painter, rect);
 }

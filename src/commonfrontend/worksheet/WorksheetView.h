@@ -4,7 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2009-2011 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -66,7 +66,6 @@ class WorksheetView : public QGraphicsView{
 	void createMenu(QMenu* menu=0) const;
 	void setScene(QGraphicsScene * scene);
 	void exportToFile(const QString&, const ExportFormat format, const ExportArea area) const;
-	void print() const;
 
 	static ActionManager *actionManager();
 	static void initActionManager();
@@ -163,6 +162,8 @@ class WorksheetView : public QGraphicsView{
 
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);
+
+	void print(QPrinter*) const;
 
   private slots:
 	void selectItem(QGraphicsItem *);
