@@ -5,35 +5,17 @@ set(QTFRONTEND_DIR qtfrontend)
 set(COMMONFRONTEND_DIR commonfrontend)
 set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 
-ADD_SUBDIRECTORY(filter)
-ADD_SUBDIRECTORY(elements)
-
 set(GUI_SOURCES
-# 	${KDEFRONTEND_DIR}/ColorMapPreview.cpp
-# 	${KDEFRONTEND_DIR}/DataPlotDialog.cpp
-	${KDEFRONTEND_DIR}/ExportDialog.cpp
-	${KDEFRONTEND_DIR}/ExportWidget.cpp
 	${KDEFRONTEND_DIR}/GridDialog.cpp
-# 	${KDEFRONTEND_DIR}/FunctionPlotDialog.cpp
-#   	${KDEFRONTEND_DIR}/FunctionWidget.cpp
   	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
-	${KDEFRONTEND_DIR}/ImportDialog.cpp
-	${KDEFRONTEND_DIR}/ImportWidget.cpp
-	${KDEFRONTEND_DIR}/LabelWidget.cpp
- 	${KDEFRONTEND_DIR}/LabPlot.cpp
-# 	${KDEFRONTEND_DIR}/LegendDialog.cpp
-# 	${KDEFRONTEND_DIR}/LegendWidget.cpp
+	${KDEFRONTEND_DIR}/LabPlot.cpp
   	${KDEFRONTEND_DIR}/MainWin.cpp
-#   	${KDEFRONTEND_DIR}/PlotStyleWidget.cpp
-#  	${KDEFRONTEND_DIR}/PlotSurfaceStyleWidget.cpp
 	${KDEFRONTEND_DIR}/ProjectDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
-#   	${KDEFRONTEND_DIR}/SpreadsheetView.cpp
-	${KDEFRONTEND_DIR}/TitleDialog.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/PlotAreaDock.cpp
