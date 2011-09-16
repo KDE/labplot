@@ -86,7 +86,7 @@ class PartMdiView : public QMdiSubWindow
 		 * and then appends a context menu from the aspect to it.
 		 * Then the context menu is presented to the user.
 		 */
-		virtual void contextMenuEvent(QContextMenuEvent *event);
+// 		virtual void contextMenuEvent(QContextMenuEvent *event);
 
 	private:
 		//! The aspect that owns the view

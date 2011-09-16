@@ -47,13 +47,16 @@ PartMdiView::PartMdiView(AbstractPart *part, QWidget * embedded_view)
 	setWidget(embedded_view);
 }
 
-void PartMdiView::contextMenuEvent(QContextMenuEvent *event)
-{
-	QMenu *menu = m_part->createContextMenu();
-	Q_ASSERT(menu);
-	menu->exec(event->globalPos());
-	delete menu;
-}
+//TODO deactivated this feature because of the crash in worksheetview.
+//decide later whether we really need a customised contextmenu for the mdi-subwindow bar.
+
+// void PartMdiView::contextMenuEvent(QContextMenuEvent *event)
+// {
+// 	QMenu *menu = m_part->createContextMenu();
+// 	Q_ASSERT(menu);
+// 	menu->exec(event->globalPos());
+// 	delete menu;
+// }
 
 PartMdiView::~PartMdiView()
 {
