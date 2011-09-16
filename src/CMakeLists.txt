@@ -6,7 +6,7 @@ set(COMMONFRONTEND_DIR commonfrontend)
 set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 
 set(GUI_SOURCES
-	${KDEFRONTEND_DIR}/legacy/GridDialog.cpp
+	${KDEFRONTEND_DIR}/GridDialog.cpp
   	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/LabPlot.cpp
