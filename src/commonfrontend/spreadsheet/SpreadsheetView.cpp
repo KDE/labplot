@@ -53,6 +53,7 @@
 #include <QApplication>
 #include <QMenu>
 #include <QPainter>
+#include <QPrinter>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "spreadsheetview_qactions.h"

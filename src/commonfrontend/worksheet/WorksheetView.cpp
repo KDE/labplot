@@ -52,7 +52,7 @@
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KAction>
 #include <KLocale>
-#include "kdefrontend/GridDialog.h"
+#include "kdefrontend/legacy/GridDialog.h"
 #endif
 
 
