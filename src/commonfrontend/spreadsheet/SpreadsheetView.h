@@ -263,7 +263,9 @@ class SpreadsheetView : public QTableView{
 		void createContextMenu(QMenu * menu);
 		void fillProjectMenu(QMenu * menu, bool * rc);
 		void sortDialog(QList<Column*> cols);
-		
+
+		void print(QPrinter*) const;
+
 	private  slots:
 		void advanceCell();
 		void handleHorizontalSectionMoved(int index, int from, int to);

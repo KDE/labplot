@@ -37,7 +37,7 @@
 // #include "FunctionPlotDialog.h"
 // #include "DataPlotDialog.h"
 #include "datasources/ImportFileDialog.h"
-#include "ImportDialog.h"
+// #include "ImportDialog.h"
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -716,7 +716,16 @@ void MainWin::print(){
 		view->print(&printer);
 		statusBar()->showMessage(i18n("Worksheet printed"));
 	}else{
-		//TODO
+		//Spreadsheet
+		Spreadsheet* s=this->activeSpreadsheet();
+		QPrintDialog *dialog = new QPrintDialog(&printer, this);
+		dialog->setWindowTitle(tr("Print spreadsheet"));
+		if (dialog->exec() != QDialog::Accepted)
+			return;
+	 
+		SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
+		view->print(&printer);
+		
 		statusBar()->showMessage(i18n("Spreadsheet printed"));
 	}
 }
@@ -730,6 +739,13 @@ void MainWin::printPreview(){
 		dialog->exec();
 	}else{
 		//Spreadsheet
+		Spreadsheet* s=this->activeSpreadsheet();
+		if (s!=0){
+			SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
+			QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
+			connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+			dialog->exec();
+		}
 	}
 }
 

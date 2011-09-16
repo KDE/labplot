@@ -52,6 +52,7 @@
 #include <QDate>
 #include <QApplication>
 #include <QMenu>
+#include <QPainter>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "spreadsheetview_qactions.h"
@@ -79,7 +80,7 @@ SpreadsheetView::~SpreadsheetView(){
 }
 
 void SpreadsheetView::init(){
-// 	initActions();
+	initActions();
 // 	initMenus();
 	
 	setModel(m_model);
@@ -700,14 +701,14 @@ void SpreadsheetView::pasteIntoSelection(){
 		int rows, cols;
 	
 		QString input_str = QString(mime_data->data("text/plain")).trimmed();
-		QList< QStringList > cell_texts;
+		QList< QStringList > cellTexts;
 		QStringList input_rows(input_str.split("\n"));
 		input_row_count = input_rows.count();
 		input_col_count = 0;
 		for (int i=0; i<input_row_count; i++)
 		{
-			cell_texts.append(input_rows.at(i).trimmed().split(QRegExp("\\s+")));
-			if (cell_texts.at(i).count() > input_col_count) input_col_count = cell_texts.at(i).count();
+			cellTexts.append(input_rows.at(i).trimmed().split(QRegExp("\\s+")));
+			if (cellTexts.at(i).count() > input_col_count) input_col_count = cellTexts.at(i).count();
 		}
 
 		if ( (first_col == -1 || first_row == -1) ||
@@ -747,15 +748,15 @@ void SpreadsheetView::pasteIntoSelection(){
 		{
 			for (int c=0; c<cols && c<input_col_count; c++)
 			{
-				if (isCellSelected(first_row + r, first_col + c) && (c < cell_texts.at(r).count()) )
+				if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) )
 				{
 					Column * col_ptr = m_spreadsheet->column(first_col + c);
 					if (formulaModeActive())
 					{
-						col_ptr->setFormula(first_row + r, cell_texts.at(r).at(c));  
+						col_ptr->setFormula(first_row + r, cellTexts.at(r).at(c));  
 					}
 					else
-						col_ptr->asStringColumn()->setTextAt(first_row+r, cell_texts.at(r).at(c));
+						col_ptr->asStringColumn()->setTextAt(first_row+r, cellTexts.at(r).at(c));
 				}
 			}
 		}
@@ -1438,4 +1439,91 @@ void SpreadsheetView::columnClicked(int column){
   for (int i=0; i<m_spreadsheet->columnCount(); i++){
 	m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i, QModelIndex()));
   }
+}
+
+/*! 
+  prints the complete spreadsheet to \c printer.
+ */
+void SpreadsheetView::print(QPrinter* printer) const{
+	QPainter painter (printer);
+
+	int dpiy = printer->logicalDpiY();
+	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
+
+	QHeaderView *hHeader = horizontalHeader();
+	QHeaderView *vHeader = verticalHeader();
+
+	int rows = m_spreadsheet->rowCount();
+	int cols = m_spreadsheet->columnCount();
+	int height = margin;
+	int i;
+	int vertHeaderWidth = vHeader->width();
+	int right = margin + vertHeaderWidth;
+
+	//Paint the horizontal header first
+	painter.setFont(hHeader->font());
+	QString headerString = model()->headerData(0, Qt::Horizontal).toString();
+	QRect br = painter.boundingRect(br, Qt::AlignCenter, headerString);
+	painter.drawLine(right, height, right, height+br.height());
+	QRect tr(br);
+
+	int w;
+	for (i=0;i<cols;i++){
+		headerString = model()->headerData(i, Qt::Horizontal).toString();
+		w = columnWidth(i);
+		tr.setTopLeft(QPoint(right,height));
+		tr.setWidth(w);
+		tr.setHeight(br.height());
+		
+ 		painter.drawText(tr, Qt::AlignCenter, headerString);
+		right += w;
+		painter.drawLine(right, height, right, height+tr.height());
+
+		if (right >= printer->pageRect().width()-2*margin )
+			break;
+	}
+
+	painter.drawLine(margin + vertHeaderWidth, height, right-1, height);//first horizontal line
+	height += tr.height();
+	painter.drawLine(margin, height, right-1, height);
+
+	
+	// print table values
+	QString cellText;
+	for (i=0;i<rows;i++){
+		right = margin;
+		cellText = model()->headerData(i, Qt::Vertical).toString()+"\t";
+		tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
+		painter.drawLine(right, height, right, height+tr.height());
+
+		br.setTopLeft(QPoint(right,height));
+		br.setWidth(vertHeaderWidth);
+		br.setHeight(tr.height());
+		painter.drawText(br, Qt::AlignCenter, cellText);
+		right += vertHeaderWidth;
+		painter.drawLine(right, height, right, height+tr.height());
+
+		for(int j=0;j<cols;j++){
+			int w = columnWidth (j);
+			cellText = m_spreadsheet->text(i,j)+"\t";
+			tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
+			br.setTopLeft(QPoint(right,height));
+			br.setWidth(w);
+			br.setHeight(tr.height());
+			painter.drawText(br, Qt::AlignCenter, cellText);
+			right += w;
+			painter.drawLine(right, height, right, height+tr.height());
+
+			if (right >= printer->width()-2*margin )
+				break;
+		}
+		height += br.height();
+		painter.drawLine(margin, height, right-1, height);
+
+		if (height >= printer->height()-margin ){
+			printer->newPage();
+			height = margin;
+			painter.drawLine(margin, height, right, height);
+		}
+	}
 }
