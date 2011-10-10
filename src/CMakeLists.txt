@@ -153,8 +153,9 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
 kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTFRONTEND_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot2 labplot_elements labplot_filter ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} 
-${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${OPJ_LIBRARY})
+target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} 
+${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+# ${OPJ_LIBRARY}
 
 ############## installation ################################
 
