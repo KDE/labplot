@@ -35,6 +35,7 @@
 #include "lib/macros.h"
 #include <QIcon>
 #include <QWidget>
+#include <QDebug>
 /**
  * \class Worksheet
  * \brief The plotting part. 
@@ -109,8 +110,10 @@ bool Worksheet::fillProjectMenu(QMenu * menu) {
  * The caller takes ownership of the menu.
  */
 QMenu *Worksheet::createContextMenu() {
-	// TODO
-	return NULL;
+	QMenu *menu = AbstractPart::createContextMenu();
+	Q_ASSERT(menu);
+	emit requestProjectContextMenu(menu);
+	return menu;
 }
 
 //! Construct a primary view on me.
@@ -204,7 +207,7 @@ void Worksheet::setPageRect(const QRectF &rect) {
 }
 
 void Worksheet::childSelected(){
-//   qDebug()<<"worksheet slot";
+  qDebug()<<"worksheet slot";
  AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
  if (element)
   emit itemSelected(element->graphicsItem());

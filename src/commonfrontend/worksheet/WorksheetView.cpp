@@ -97,6 +97,8 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   initMenus();
   navigationModeAction->setChecked(true);
   
+  // 	connect(m_worksheet, SIGNAL(requestProjectMenu(QMenu*,bool*)), this, SLOT(fillProjectMenu(QMenu*,bool*)));
+	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
   connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
   connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) ); 
   connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
@@ -262,16 +264,20 @@ void WorksheetView::initActions(){
 
 void WorksheetView::initMenus(){
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	m_plotMenu = new QMenu(tr("add plot"));
 	m_zoomMenu = new QMenu(tr("Zoom"));
 	m_layoutMenu = new QMenu(tr("Layout"));
 	m_gridMenu = new QMenu(tr("Grid"));
 #else
+	m_plotMenu = new QMenu(i18n("add plot"));
 	m_zoomMenu = new QMenu(i18n("Zoom"));
 	m_layoutMenu = new QMenu(i18n("Layout"));
 	m_gridMenu = new QMenu(i18n("Grid"));
 	m_gridMenu->setIcon(QIcon(KIcon("view-grid")));
 #endif
-	
+
+	m_plotMenu->addAction("xy-plot");
+		
 	m_zoomMenu->addAction(zoomInAction);
 	m_zoomMenu->addAction(zoomOutAction);
 	m_zoomMenu->addAction(zoomOriginAction);
@@ -298,16 +304,20 @@ void WorksheetView::initMenus(){
 	m_gridMenu->addAction(snapToGridAction);
 }
 
-void WorksheetView::createMenu(QMenu *menu) const{
+void WorksheetView::createContextMenu(QMenu* menu){
   if (!menu)
 	menu=new QMenu();
-  
+  else
+	  menu->addSeparator()->setText(tr("Mouse mode"));
+
   //Mouse mode actions
-  menu->addSeparator();//->setText( i18n("Mouse mode") );
+  menu->addSeparator();
   menu->addAction(navigationModeAction);
   menu->addAction(zoomModeAction);
   menu->addAction(selectionModeAction);
   
+  menu->addSeparator();
+  menu->addMenu(m_plotMenu);
   menu->addSeparator();
   menu->addMenu(m_zoomMenu);
   menu->addSeparator();
@@ -316,15 +326,9 @@ void WorksheetView::createMenu(QMenu *menu) const{
   menu->addMenu(m_gridMenu);
 }
 
-QMenu* WorksheetView::createContextMenu() {
-	QMenu* menu = new QMenu();
-	this->createMenu(menu);
-	return menu;
-}
-
 void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
   Q_UNUSED(rc);
-	this->createMenu(menu);
+	this->createContextMenu(menu);
 }
 
 
@@ -450,7 +454,7 @@ void WorksheetView::mouseReleaseEvent (QMouseEvent * event){
 void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
   Q_UNUSED(e)
   QMenu *menu = new QMenu(this);
-  this->createMenu(menu);
+  this->createContextMenu(menu);
   menu->exec(QCursor::pos());
 }
 

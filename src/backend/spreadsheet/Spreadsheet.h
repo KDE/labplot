@@ -34,6 +34,7 @@
 #include "datasources/AbstractDataSource.h"
 #include "core/column/Column.h"
 #include <QList>
+#include <QPrinter>
 
 class Spreadsheet : public AbstractDataSource{
 	Q_OBJECT
@@ -69,12 +70,13 @@ class Spreadsheet : public AbstractDataSource{
 		
 		void setColumnSelectedInView(int index, bool selected);
 		
-	public slots:		
+	public slots:
 		void appendRows(int count);
 		void appendRow();
 		void appendColumns(int count);
 		void appendColumn();
-
+		void prependColumns(int count);
+		
 		void setColumnCount(int new_size);
 		void setRowCount(int new_size);
 
@@ -83,16 +85,14 @@ class Spreadsheet : public AbstractDataSource{
 
 		void moveColumn(int from, int to);
 		void sortColumns(Column * leading, QList<Column*> cols, bool ascending);
-		
+
 	 private slots:
 		void childSelected();
 		void childDeselected();
 
 	signals:
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		void requestProjectMenu(QMenu *menu, bool *rc);
 		void requestProjectContextMenu(QMenu *menu);
-#endif
 		void columnSelected(int);
 		void columnDeselected(int);
 		

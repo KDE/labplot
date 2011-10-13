@@ -63,7 +63,6 @@ class WorksheetView : public QGraphicsView{
 		float opacity;
 	};
 	
-	void createMenu(QMenu* menu=0) const;
 	void setScene(QGraphicsScene * scene);
 	void exportToFile(const QString&, const ExportFormat format, const ExportArea area) const;
 
@@ -75,9 +74,6 @@ class WorksheetView : public QGraphicsView{
 	void initMenus();
 	
 	void contextMenuEvent(QContextMenuEvent *);
-	QMenu* createContextMenu();
-	void fillProjectMenu(QMenu *menu, bool *rc);
-
 	void wheelEvent(QWheelEvent *event);
 	void mouseReleaseEvent (QMouseEvent * event);
 
@@ -93,6 +89,7 @@ class WorksheetView : public QGraphicsView{
 	WorksheetView();
 
 	//Menus
+	QMenu* m_plotMenu;
 	QMenu* m_zoomMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
@@ -149,6 +146,9 @@ class WorksheetView : public QGraphicsView{
 	#endif
 
   public slots:
+	void createContextMenu(QMenu * menu);
+	void fillProjectMenu(QMenu *menu, bool *rc);
+
 	void zoomIn();
 	void zoomOut();
 	void zoomOrigin();

@@ -73,6 +73,7 @@ class Worksheet: public AbstractPart, public scripted {
 		void childSelected();
 		
 	 signals:
+		void requestProjectContextMenu(QMenu *menu);
 		void itemSelected(QGraphicsItem*);
 };
 

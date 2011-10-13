@@ -149,26 +149,27 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 	QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
 	QMenu *menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
 
-	if (!menu)
-	  menu = new QMenu();
-	
-	menu->addSeparator()->setText(tr("Tree options"));
-	menu->addAction(expandTreeAction);
-	menu->addAction(collapseTreeAction);
-	menu->addSeparator();
-	menu->addAction(toggleFilterAction);
-	
-	//Menu for showing/hiding the columns in the tree view
-	QMenu* columnsMenu = menu->addMenu(tr("show/hide columns"));
-	columnsMenu->addAction(showAllColumnsAction);
-	columnsMenu->addSeparator();
-	for (int i=0; i<list_showColumnActions.size(); i++)
-	   columnsMenu->addAction(list_showColumnActions.at(i));
+	if (!menu){
+		menu = new QMenu();
 
-	//Menu for showing/hiding the top-level aspects (Workseeht, Spreadhsheet, etc) in the tree view
-	QMenu* objectsMenu = menu->addMenu(tr("show/hide objects"));
-	//TODO
-	
+		menu->addSeparator()->setText(tr("Tree options"));
+		menu->addAction(expandTreeAction);
+		menu->addAction(collapseTreeAction);
+		menu->addSeparator();
+		menu->addAction(toggleFilterAction);
+
+		//Menu for showing/hiding the columns in the tree view
+		QMenu* columnsMenu = menu->addMenu(tr("show/hide columns"));
+		columnsMenu->addAction(showAllColumnsAction);
+		columnsMenu->addSeparator();
+		for (int i=0; i<list_showColumnActions.size(); i++)
+		columnsMenu->addAction(list_showColumnActions.at(i));
+
+		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
+		QMenu* objectsMenu = menu->addMenu(tr("show/hide objects"));
+		//TODO
+	}
+
 	menu->exec(event->globalPos());
 	delete menu;
 }

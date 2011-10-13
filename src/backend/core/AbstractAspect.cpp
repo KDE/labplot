@@ -44,6 +44,11 @@
 #include <QXmlStreamWriter>
 #include <QDebug>
 
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include <KIcon>
+#include <KAction>
+#include <KStandardAction>
+#endif
 /**
  * \class AbstractAspect 
  * \brief Base class of all persistent objects in a Project.
@@ -659,16 +664,22 @@ QIcon AbstractAspect::icon() const
  *
  * The caller takes ownership of the menu.
  */
-QMenu *AbstractAspect::createContextMenu()
-{
+QMenu *AbstractAspect::createContextMenu(){
 	QMenu * menu = new QMenu();
-    
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	QAction *action;
 	const QStyle *widget_style = qApp->style();
-	QAction *action_temp;
-
-	action_temp = menu->addAction(QObject::tr("&Remove"), this, SLOT(remove()));
+	action = menu->addAction(QObject::tr("&Remove"), this, SLOT(remove()));
 	action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
-
+#else
+	menu->addAction( KStandardAction::cut(this) );
+	menu->addAction(KStandardAction::copy(this));
+	menu->addAction(KStandardAction::paste(this));
+	menu->addSeparator();
+	menu->addAction(QIcon(KIcon("edit-rename")), QObject::tr("Rename"));
+	menu->addAction(QIcon(KIcon("edit-delete")), QObject::tr("Delete"), this, SLOT(remove()));
+#endif
+	
 	return menu;
 }
 

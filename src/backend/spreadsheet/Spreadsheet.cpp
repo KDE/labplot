@@ -142,6 +142,10 @@ void Spreadsheet::appendColumn(){
   insertColumns(columnCount(), 1);
 }
 
+void Spreadsheet::prependColumns(int count){
+  insertColumns(0, count);
+}
+
 /*!
   Sets the number of rows of the spreadsheet to \c new_size
 */
@@ -259,31 +263,21 @@ void Spreadsheet::clearMasks()
 /*!
   Returns a new context menu. The caller takes ownership of the menu.
 */
-QMenu *Spreadsheet::createContextMenu()
-{
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+QMenu *Spreadsheet::createContextMenu(){
 	QMenu *menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
 	emit requestProjectContextMenu(menu);
 	return menu;
-#else
-	return new QMenu(0);
-#endif
 }
 
 /*!
   Fills the part specific menu for the main window including setting the title.
   \return true on success, otherwise false (e.g. part has no actions).
 */
-bool Spreadsheet::fillProjectMenu(QMenu * menu)
-{
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+bool Spreadsheet::fillProjectMenu(QMenu * menu){
 	bool rc = false;
 	emit requestProjectMenu(menu, &rc);
 	return rc;
-#else
-	return false;
-#endif
 }
 
 

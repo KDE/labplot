@@ -82,7 +82,7 @@ SpreadsheetView::~SpreadsheetView(){
 
 void SpreadsheetView::init(){
 	initActions();
-// 	initMenus();
+	initMenus();
 	
 	setModel(m_model);
   
@@ -125,7 +125,7 @@ void SpreadsheetView::init(){
 		m_horizontalHeader->resizeSection(i++, col->width());
 
 	
-// 	connectActions();
+	connectActions();
 	showComments(defaultCommentVisibility());
 
 	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
@@ -522,91 +522,84 @@ void SpreadsheetView::goToPreviousColumn(){
 	setCurrentIndex(idx.sibling(idx.row(), col));
 }
 
-/*! Create a menu with selection related operations
-	\param menu if a pointer to a QMenu is passed to the function, 
-	the actions are appended to it instead of the creation of a new menu.
-*/
-// QMenu * SpreadsheetView::createSelectionMenu(QMenu* menu){
-
-// }
-
 void SpreadsheetView::initMenus(){
 	//Selection menu
-// 	m_selectionMenu = new QMenu();
-// 	
-// 	QMenu * submenu = new QMenu(tr("Fi&ll Selection with"));
-// 	submenu->addAction(action_fill_row_numbers);
-// 	submenu->addAction(action_fill_random);
-// 	m_selectionMenu ->addMenu(submenu);
-// 	m_selectionMenu ->addSeparator();
-// 
-// 	m_selectionMenu ->addAction(action_cut_selection);
-// 	m_selectionMenu ->addAction(action_copy_selection);
-// 	m_selectionMenu ->addAction(action_paste_into_selection);
-// 	m_selectionMenu ->addAction(action_clear_selection);
-// 	m_selectionMenu ->addSeparator();
-// 	m_selectionMenu ->addAction(action_mask_selection);
-// 	m_selectionMenu ->addAction(action_unmask_selection);
-// 	m_selectionMenu ->addSeparator();
-// 	m_selectionMenu ->addAction(action_normalize_selection);
-// 	m_selectionMenu ->addSeparator();
-// 	m_selectionMenu ->addAction(action_set_formula);
-// 	m_selectionMenu ->addAction(action_recalculate);
+	m_selectionMenu = new QMenu(tr("Selection"));
+	
+	QMenu * submenu = new QMenu(tr("Fi&ll Selection with"));
+	submenu->addAction(action_fill_row_numbers);
+	submenu->addAction(action_fill_random);
+	m_selectionMenu ->addMenu(submenu);
+	m_selectionMenu ->addSeparator();
+
+	m_selectionMenu ->addAction(action_cut_selection);
+	m_selectionMenu ->addAction(action_copy_selection);
+	m_selectionMenu ->addAction(action_paste_into_selection);
+	m_selectionMenu ->addAction(action_clear_selection);
+	m_selectionMenu ->addSeparator();
+	m_selectionMenu ->addAction(action_mask_selection);
+	m_selectionMenu ->addAction(action_unmask_selection);
+	m_selectionMenu ->addSeparator();
+	m_selectionMenu ->addAction(action_normalize_selection);
+	m_selectionMenu ->addSeparator();
+	m_selectionMenu ->addAction(action_set_formula);
+	m_selectionMenu ->addAction(action_recalculate);
 
 
 	//TODO add plot menu to spreadsheet- and column-menu, like in scidavis, origin etc.
+	
 	// Column menu
-// 	m_columnMenu = new QMenu();
-// 
-// 	QMenu * submenu = new QMenu(tr("S&et Column(s) As"));
-// 	submenu->addAction(action_set_as_x);
-// 	submenu->addAction(action_set_as_y);
-// 	submenu->addAction(action_set_as_z);
-// 	submenu->addSeparator();
-// 	submenu->addAction(action_set_as_xerr);
-// 	submenu->addAction(action_set_as_yerr);
-// 	submenu->addSeparator();
-// 	submenu->addAction(action_set_as_none);
-// 	m_columnMenu->addMenu(submenu);
-// 	m_columnMenu->addSeparator();
-// 
-// 	submenu = new QMenu(tr("Fi&ll Selection with"));
-// 	submenu->addAction(action_fill_row_numbers);
-// 	submenu->addAction(action_fill_random);
-// 	m_columnMenu->addMenu(submenu);
-// 	m_columnMenu->addSeparator();
-// 
-// 	m_columnMenu->addAction(action_insert_columns);
-// 	m_columnMenu->addAction(action_remove_columns);
-// 	m_columnMenu->addAction(action_clear_columns);
-// 	m_columnMenu->addAction(action_add_columns);
-// 	m_columnMenu->addSeparator();
-// 	
-// 	m_columnMenu->addAction(action_normalize_columns);
-// 	m_columnMenu->addAction(action_sort_columns);
-// 	m_columnMenu->addSeparator();
-// 
-// 	m_columnMenu->addAction(action_toggle_comments);
-// 	m_columnMenu->addSeparator();
-// 
-// 	m_columnMenu->addAction(action_statistics_columns);
+	m_columnMenu = new QMenu();
+
+	submenu = new QMenu(tr("S&et Column(s) As"));
+	submenu->addAction(action_set_as_x);
+	submenu->addAction(action_set_as_y);
+	submenu->addAction(action_set_as_z);
+	submenu->addSeparator();
+	submenu->addAction(action_set_as_xerr);
+	submenu->addAction(action_set_as_yerr);
+	submenu->addSeparator();
+	submenu->addAction(action_set_as_none);
+	m_columnMenu->addMenu(submenu);
+	m_columnMenu->addSeparator();
+
+	submenu = new QMenu(tr("Fi&ll Selection with"));
+	submenu->addAction(action_fill_row_numbers);
+	submenu->addAction(action_fill_random);
+	m_columnMenu->addMenu(submenu);
+	m_columnMenu->addSeparator();
+
+	m_columnMenu->addAction(action_insert_columns);
+	m_columnMenu->addAction(action_remove_columns);
+	m_columnMenu->addAction(action_clear_columns);
+	m_columnMenu->addAction(action_add_columns);
+	m_columnMenu->addSeparator();
+	
+	m_columnMenu->addAction(action_normalize_columns);
+	m_columnMenu->addAction(action_sort_columns);
+	m_columnMenu->addSeparator();
+
+	m_columnMenu->addAction(action_toggle_comments);
+	m_columnMenu->addSeparator();
+
+	m_columnMenu->addAction(action_statistics_columns);
 
 	
-// 	//Spreadsheet menu
-// 	m_spreadsheetMenu = new QMenu();
-//	m_spreadsheetMenu->addMenu(m_selectionMenu);
-// 	m_spreadsheetMenu->addAction(action_toggle_comments);
-// 	m_spreadsheetMenu->addSeparator();
-// 	m_spreadsheetMenu->addAction(action_select_all);
-// 	m_spreadsheetMenu->addAction(action_clear_spreadsheet);
-// 	m_spreadsheetMenu->addAction(action_clear_masks);
-// 	m_spreadsheetMenu->addAction(action_sort_spreadsheet);
-// 	m_spreadsheetMenu->addSeparator();
-// 	m_spreadsheetMenu->addAction(action_add_column);
-// 	m_spreadsheetMenu->addSeparator();
-// 	m_spreadsheetMenu->addAction(action_go_to_cell);
-// 
-// 	
+	//Spreadsheet menu
+	m_spreadsheetMenu = new QMenu();
+	m_spreadsheetMenu->addMenu(m_selectionMenu);
+	m_spreadsheetMenu->addAction(action_toggle_comments);
+	m_spreadsheetMenu->addSeparator();
+	m_spreadsheetMenu->addAction(action_select_all);
+	m_spreadsheetMenu->addAction(action_clear_spreadsheet);
+	m_spreadsheetMenu->addAction(action_clear_masks);
+	m_spreadsheetMenu->addAction(action_sort_spreadsheet);
+	m_spreadsheetMenu->addSeparator();
+	m_spreadsheetMenu->addAction(action_add_column);
+	m_spreadsheetMenu->addSeparator();
+	m_spreadsheetMenu->addAction(action_go_to_cell);
+
+	
 	//Row menu
 	m_rowMenu = new QMenu();
 
@@ -616,7 +609,7 @@ void SpreadsheetView::initMenus(){
 	m_rowMenu->addAction(action_add_rows);
 	m_rowMenu->addSeparator();
 	
-	QMenu* submenu = new QMenu(tr("Fi&ll Selection with"));
+	submenu = new QMenu(tr("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
 	m_rowMenu->addMenu(submenu);
@@ -1236,59 +1229,67 @@ void SpreadsheetView::fillProjectMenu(QMenu * menu, bool * rc){
 * The caller takes ownership of the menu.
 */
 void SpreadsheetView::createContextMenu(QMenu * menu){
+	if (!menu)
+		menu=new QMenu();
+  else
+	  menu->addSeparator();
+	
+	menu->addMenu(m_selectionMenu);
+	menu->addAction(action_toggle_comments);
 	menu->addSeparator();
+	menu->addAction(action_select_all);
+	menu->addAction(action_clear_spreadsheet);
+	menu->addAction(action_clear_masks);
+	menu->addAction(action_sort_spreadsheet);
+	menu->addSeparator();
+	menu->addAction(action_add_column);
+	menu->addSeparator();
+	menu->addAction(action_go_to_cell);
 	
 	// TODO
 	// Export to ASCII
-	// Print --> maybe should go to AbstractPart::createContextMenu()
-	// ----
-	// Rename --> AbstractAspect::createContextMenu(); maybe call this "Properties" and include changing comment/caption spec
-	// Duplicate --> AbstractPart::createContextMenu()
-	// Hide/Show --> Do we need hiding of views (in addition to minimizing)? How do we avoid confusion with hiding of Aspects?
-	// Activate ?
-	// Resize --> AbstractPart::createContextMenu()
+	//Export to latex
 }
 
 void SpreadsheetView::connectActions(){
-// 	connect(action_cut_selection, SIGNAL(triggered()), this, SLOT(cutSelection()));
-// 	connect(action_copy_selection, SIGNAL(triggered()), this, SLOT(copySelection()));
-// 	connect(action_paste_into_selection, SIGNAL(triggered()), this, SLOT(pasteIntoSelection()));
-// 	connect(action_mask_selection, SIGNAL(triggered()), this, SLOT(maskSelection()));
-// 	connect(action_unmask_selection, SIGNAL(triggered()), this, SLOT(unmaskSelection()));
-// // 	connect(action_set_formula, SIGNAL(triggered()), this, SLOT(setFormulaForSelection()));
-// 	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
-// 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
-// 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
-// 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
-// 	connect(action_select_all, SIGNAL(triggered()), this, SLOT(selectAll()));
-// 	connect(action_add_column, SIGNAL(triggered()), m_spreadsheet, SLOT(appendColumn()));
-// 	connect(action_clear_spreadsheet, SIGNAL(triggered()), m_spreadsheet, SLOT(clear()));
-// 	connect(action_clear_masks, SIGNAL(triggered()), m_spreadsheet, SLOT(clearMasks()));
-// 	connect(action_sort_spreadsheet, SIGNAL(triggered()), this, SLOT(sortSpreadsheet()));
-// 	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
-// // 	connect(action_dimensions_dialog, SIGNAL(triggered()), this, SLOT(dimensionsDialog()));
-// 	connect(action_insert_columns, SIGNAL(triggered()), this, SLOT(insertEmptyColumns()));
-// 	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
-// 	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
-// 	connect(action_add_columns, SIGNAL(triggered()), this, SLOT(addColumns()));
-// 	connect(action_set_as_x, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsX()));
-// 	connect(action_set_as_y, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsY()));
-// 	connect(action_set_as_z, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsZ()));
-// 	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsXError()));
-// 	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsYError()));
-// 	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
-// 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
-// 	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
-// 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
-// 	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedColumns()));
-// // 	connect(action_type_format, SIGNAL(triggered()), this, SLOT(editTypeAndFormatOfSelectedColumns()));
-// // 	connect(action_edit_description, SIGNAL(triggered()), this, SLOT(editDescriptionOfCurrentColumn()));
-// 	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
-// 	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
-// 	connect(action_clear_rows, SIGNAL(triggered()), this, SLOT(clearSelectedRows()));
-// 	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
-// 	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedRows()));
-// 	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
+	connect(action_cut_selection, SIGNAL(triggered()), this, SLOT(cutSelection()));
+	connect(action_copy_selection, SIGNAL(triggered()), this, SLOT(copySelection()));
+	connect(action_paste_into_selection, SIGNAL(triggered()), this, SLOT(pasteIntoSelection()));
+	connect(action_mask_selection, SIGNAL(triggered()), this, SLOT(maskSelection()));
+	connect(action_unmask_selection, SIGNAL(triggered()), this, SLOT(unmaskSelection()));
+
+	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
+	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
+	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
+	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
+	connect(action_select_all, SIGNAL(triggered()), this, SLOT(selectAll()));
+	connect(action_add_column, SIGNAL(triggered()), m_spreadsheet, SLOT(appendColumn()));
+	connect(action_clear_spreadsheet, SIGNAL(triggered()), m_spreadsheet, SLOT(clear()));
+	connect(action_clear_masks, SIGNAL(triggered()), m_spreadsheet, SLOT(clearMasks()));
+	connect(action_sort_spreadsheet, SIGNAL(triggered()), this, SLOT(sortSpreadsheet()));
+	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
+
+	connect(action_insert_columns, SIGNAL(triggered()), this, SLOT(insertEmptyColumns()));
+	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
+	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
+	connect(action_add_columns, SIGNAL(triggered()), this, SLOT(addColumns()));
+	connect(action_set_as_x, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsX()));
+	connect(action_set_as_y, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsY()));
+	connect(action_set_as_z, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsZ()));
+	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsXError()));
+	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsYError()));
+	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
+	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
+	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
+	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
+	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedColumns()));
+
+	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
+	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
+	connect(action_clear_rows, SIGNAL(triggered()), this, SLOT(clearSelectedRows()));
+	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
+	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedRows()));
+	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
 }
 
 void SpreadsheetView::goToCell(){

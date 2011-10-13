@@ -480,7 +480,7 @@ void MainWin::updateGUI() {
 		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
-		view->createMenu(menu);
+		view->createContextMenu(menu);
 
 		//disable spreadsheet related menus
 		factory->container("analysis", this)->setEnabled(false);
