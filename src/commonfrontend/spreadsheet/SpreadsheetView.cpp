@@ -57,13 +57,15 @@
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "spreadsheetview_qactions.h"
+#include "qtfrontend/spreadsheet/SortDialog.h"
 #else
 #include <KAction>
 #include <KLocale>
 #include "spreadsheetview_kactions.h"
+#include "kdefrontend/spreadsheet/SortDialog.h"
 #endif
 
- /*!
+/*!
 	\class SpreahsheetView
 	\brief View class for Spreadsheet
 
@@ -479,6 +481,17 @@ bool SpreadsheetView::eventFilter(QObject * watched, QEvent * event){
 							m_model->index(m_model->rowCount()-1, col, QModelIndex())),
 						QItemSelectionModel::Select);
 			}
+			
+			if (selectedColumns().size()==1){
+				action_sort_columns->setVisible(false);
+				action_sort_asc_column->setVisible(true);
+				action_sort_desc_column->setVisible(true);
+			}else{
+				action_sort_columns->setVisible(true);
+				action_sort_asc_column->setVisible(false);
+				action_sort_desc_column->setVisible(false);
+			}
+
 			m_columnMenu->exec(global_pos);
 		}else if (watched == this){
 			m_spreadsheetMenu->exec(global_pos);
@@ -576,7 +589,12 @@ void SpreadsheetView::initMenus(){
 	m_columnMenu->addSeparator();
 	
 	m_columnMenu->addAction(action_normalize_columns);
-	m_columnMenu->addAction(action_sort_columns);
+	
+	submenu = new QMenu(tr("Sort"));
+	submenu->addAction(action_sort_asc_column);
+	submenu->addAction(action_sort_desc_column);
+	submenu->addAction(action_sort_columns);
+	m_columnMenu->addMenu(submenu);
 	m_columnMenu->addSeparator();
 
 	m_columnMenu->addAction(action_toggle_comments);
@@ -1282,6 +1300,8 @@ void SpreadsheetView::connectActions(){
 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
 	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
+	connect(action_sort_asc_column, SIGNAL(triggered()), this, SLOT(sortColumnAscending()));
+	connect(action_sort_desc_column, SIGNAL(triggered()), this, SLOT(sortColumnDescending()));
 	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedColumns()));
 
 	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
@@ -1316,12 +1336,22 @@ void SpreadsheetView::goToCell(){
 //! Open the sort dialog for the given columns
 void SpreadsheetView::sortDialog(QList<Column*> cols){
 	if (cols.isEmpty()) return;
-//TODO
-// 	SortDialog *sortd = new SortDialog();
-// 	sortd->setAttribute(Qt::WA_DeleteOnClose);
-// 	connect(sortd, SIGNAL(sort(Column*,QList<Column*>,bool)), this, SLOT(sortColumns(Column*,QList<Column*>,bool)));
-// 	sortd->setColumnsList(cols);
-// 	sortd->exec();
+
+	SortDialog* dlg = new SortDialog();
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	connect(dlg, SIGNAL(sort(Column*,QList<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QList<Column*>,bool)));
+	dlg->setColumnsList(cols);
+	dlg->exec();
+}
+
+void SpreadsheetView::sortColumnAscending(){
+	QList< Column* > cols = selectedColumns();
+	m_spreadsheet->sortColumns(cols.first(), cols, true);
+}
+
+void SpreadsheetView::sortColumnDescending(){
+	QList< Column* > cols = selectedColumns();
+	m_spreadsheet->sortColumns(cols.first(), cols, false);
 }
 
 /*!

@@ -19,8 +19,8 @@ void SpreadsheetView::initActions(){
 	action_add_column = new KAction(KIcon("edit-table-insert-column-left"), tr("&Add Column"), this);
 	action_clear_spreadsheet = new KAction(KIcon("edit-clear"), tr("Clear Spreadsheet"), this);
 	action_clear_masks = new KAction(KIcon(""), tr("Clear Masks"), this);
-	action_sort_spreadsheet = new KAction(KIcon(""), tr("&Sort Spreadsheet"), this);
-	action_go_to_cell = new KAction(KIcon(""), tr("&Go to Cell"), this);
+	action_sort_spreadsheet = new KAction(KIcon("view-sort-ascending"), tr("&Sort Spreadsheet"), this);
+	action_go_to_cell = new KAction(KIcon("go-jump"), tr("&Go to Cell"), this);
 	action_dimensions_dialog = new KAction(KIcon(""), tr("&Dimensions", "spreadsheet size"), this);
 
 	// column related actions
@@ -36,7 +36,9 @@ void SpreadsheetView::initActions(){
 	action_set_as_none = new KAction(KIcon(""), tr("None","plot designation"), this);
 	action_normalize_columns = new KAction(KIcon(""), tr("&Normalize Columns"), this);
 	action_normalize_selection = new KAction(KIcon(""), tr("&Normalize Selection"), this);
-	action_sort_columns = new KAction(KIcon(""), tr("&Sort Columns"), this);
+	action_sort_columns = new KAction(KIcon(""), tr("&Selected Columns"), this);
+	action_sort_asc_column = new KAction(KIcon("view-sort-ascending"), tr("&Ascending"), this);
+	action_sort_desc_column = new KAction(KIcon("view-sort-descending"), tr("&Descending"), this);
 	action_statistics_columns = new KAction(KIcon(""), tr("Column Statisti&cs"), this);
 
 	// row related actions

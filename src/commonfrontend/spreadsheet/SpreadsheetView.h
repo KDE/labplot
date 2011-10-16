@@ -148,6 +148,8 @@ class SpreadsheetView : public QTableView{
 		QAction * action_normalize_columns;
 		QAction * action_normalize_selection;
 		QAction * action_sort_columns;
+		QAction * action_sort_asc_column;
+		QAction * action_sort_desc_column;
 		QAction * action_statistics_columns;
 		QAction * action_type_format;
 		QAction * action_edit_description;
@@ -197,6 +199,8 @@ class SpreadsheetView : public QTableView{
 		KAction * action_normalize_columns;
 		KAction * action_normalize_selection;
 		KAction * action_sort_columns;
+		KAction * action_sort_asc_column;
+		KAction * action_sort_desc_column;
 		KAction * action_statistics_columns;
 
 		//row related actions
@@ -248,6 +252,8 @@ class SpreadsheetView : public QTableView{
 		void normalizeSelectedColumns();
 		void normalizeSelection();
 		void sortSelectedColumns();
+		void sortColumnAscending();
+		void sortColumnDescending();
 		void statisticsOnSelectedColumns();
 		void statisticsOnSelectedRows();
 		void insertEmptyRows();
