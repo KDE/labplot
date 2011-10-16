@@ -6,7 +6,6 @@ set(COMMONFRONTEND_DIR commonfrontend)
 set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 
 set(GUI_SOURCES
-	${KDEFRONTEND_DIR}/GridDialog.cpp
   	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/LabPlot.cpp
@@ -24,6 +23,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
+	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 )
 
 set(UI_SOURCES
