@@ -38,19 +38,21 @@
  */
 
 CartesianPlot::CartesianPlot(const QString &name): AbstractPlot(name) {
+	init();
 }
 
 CartesianPlot::CartesianPlot(const QString &name, WorksheetElementContainerPrivate *dd)
 	: AbstractPlot(name, dd) {
+	init();
 }
 
 void CartesianPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	m_coordinateSystem = new CartesianCoordinateSystem(name + "coordinate system");
-//TODO 	addChild(m_coordinateSystem);
+	m_coordinateSystem = new CartesianCoordinateSystem(name() + "coordinate system");
+	addChild(m_coordinateSystem);
 	m_coordinateSystem->setHidden(true);
 	
-	m_plotArea = new PlotArea(name + " plot area");
+	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
 	m_plotArea->setHidden(true);
 	m_plotArea->setClippingEnabled(true);

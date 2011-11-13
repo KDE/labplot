@@ -40,11 +40,16 @@
 
 AbstractPlot::AbstractPlot(const QString &name) 
 	: WorksheetElementContainer(name) {
+		
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 // TODO
 }
 
 AbstractPlot::AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd)
 	: WorksheetElementContainer(name, dd) {
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 // TODO
 }
 

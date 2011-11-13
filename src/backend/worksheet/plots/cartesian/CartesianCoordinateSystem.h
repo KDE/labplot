@@ -30,7 +30,7 @@
 #ifndef CARTESIANCOORDINATESYSTEM_H
 #define CARTESIANCOORDINATESYSTEM_H
 
-#include "worksheet/AbstractCoordinateSystem.h"
+#include "worksheet/plots/AbstractCoordinateSystem.h"
 #include "lib/macros.h"
 #include "lib/Interval.h"
 #include <QObject>

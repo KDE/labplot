@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/CartesianCoordinateSystem.h"
+#include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetElementContainerPrivate.h"
 #include "worksheet/Worksheet.h"
 #include "lib/commandtemplates.h"
