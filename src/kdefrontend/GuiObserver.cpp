@@ -31,10 +31,10 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "core/AspectTreeModel.h"
 #include "core/AbstractAspect.h"
 #include "spreadsheet/Spreadsheet.h"
-#include "worksheet/PlotArea.h"
+#include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/Worksheet.h"
 #include "worksheet/XYCurve.h"
-#include "worksheet/Axis.h"
+#include "worksheet/plots/cartesian/Axis.h"
 #include "core/Project.h"
 #include "core/ProjectExplorer.h"
 #include "MainWin.h"
@@ -42,7 +42,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QDockWidget>
 #include <QStackedWidget>
 #include "dockwidgets/AxisDock.h"
-#include "dockwidgets/PlotAreaDock.h"
+#include "dockwidgets/CartesianPlotDock.h"
 #include "dockwidgets/ColumnDock.h"
 #include "dockwidgets/XYCurveDock.h"
 #include "dockwidgets/SpreadsheetDock.h"
@@ -157,6 +157,21 @@ GuiObserver::~GuiObserver(){
 	mainWindow->worksheetDock->setWorksheets(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->worksheetDock);
+  }else if (className=="CartesianPlot"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot properties"));
+	
+	if (!mainWindow->cartesianPlotDock){
+	  mainWindow->cartesianPlotDock = new CartesianPlotDock(mainWindow->stackedWidget);
+	  mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
+	}
+	
+	QList<CartesianPlot*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<CartesianPlot *>(aspect);
+	}
+	mainWindow->cartesianPlotDock->setPlots(list);
+	
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
   }else if (className=="Axis"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis properties"));
 	
@@ -172,21 +187,6 @@ GuiObserver::~GuiObserver(){
 	mainWindow->axisDock->setAxes(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
-  }else if (className=="PlotArea"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Plot area properties"));
-	
-	if (!mainWindow->plotAreaDock){
-	  mainWindow->plotAreaDock = new PlotAreaDock(mainWindow->stackedWidget);
-	  mainWindow->stackedWidget->addWidget(mainWindow->plotAreaDock);
-	}
-	
-	QList<PlotArea*> list;
-	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<PlotArea *>(aspect);
-	}
-	mainWindow->plotAreaDock->setPlotAreas(list);
-	
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->plotAreaDock);
   }else if (className=="XYCurve"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-curve properties"));
 	

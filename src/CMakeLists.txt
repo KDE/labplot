@@ -16,6 +16,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/PlotAreaDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
@@ -42,6 +43,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/plotareadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
@@ -82,26 +84,26 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/widgets/TreeViewComboBox.cpp
+	${BACKEND_DIR}/worksheet/AbstractCurveSymbol.cpp
+	${BACKEND_DIR}/worksheet/AbstractWorksheetDecorationElement.cpp
+	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
+	${BACKEND_DIR}/worksheet/ScalableTextLabel.cpp
+	${BACKEND_DIR}/worksheet/StandardCurveSymbolFactory.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
 	${BACKEND_DIR}/worksheet/WorksheetModel.cpp
 	${BACKEND_DIR}/worksheet/WorksheetGraphicsScene.cpp
-	${BACKEND_DIR}/worksheet/DecorationPlot.cpp
 	${BACKEND_DIR}/worksheet/WorksheetRectangleElement.cpp
-	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
-	${BACKEND_DIR}/worksheet/AbstractPlot.cpp
-	${BACKEND_DIR}/worksheet/Axis.cpp
-	${BACKEND_DIR}/worksheet/AbstractCoordinateSystem.cpp
-	${BACKEND_DIR}/worksheet/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
-	${BACKEND_DIR}/worksheet/XYCurve.cpp
-	${BACKEND_DIR}/worksheet/AbstractCurveSymbol.cpp
+	${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
+	${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
+	${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/symbols/EllipseCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/symbols/PathCurveSymbol.cpp
-	${BACKEND_DIR}/worksheet/StandardCurveSymbolFactory.cpp
-	${BACKEND_DIR}/worksheet/AbstractWorksheetDecorationElement.cpp
-	${BACKEND_DIR}/worksheet/PlotArea.cpp
-	${BACKEND_DIR}/worksheet/ScalableTextLabel.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
 

@@ -94,7 +94,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	spreadsheetDock=0;
 	columnDock=0;
 	worksheetDock=0;
-	plotAreaDock=0;
+	cartesianPlotDock=0;
 	axisDock=0;
 	lineSymbolCurveDock=0;
 	

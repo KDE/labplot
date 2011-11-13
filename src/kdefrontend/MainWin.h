@@ -47,7 +47,7 @@ class GuiObserver;
 class QDockWidget;
 class QStackedWidget;
 class AxisDock;
-class PlotAreaDock;
+class CartesianPlotDock;
 class ColumnDock;
 class XYCurveDock;
 class SpreadsheetDock;
@@ -128,7 +128,7 @@ private:
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
-	PlotAreaDock* plotAreaDock;
+	CartesianPlotDock* cartesianPlotDock;
 	SpreadsheetDock* spreadsheetDock;
 	ColumnDock* columnDock;
 	WorksheetDock* worksheetDock;
