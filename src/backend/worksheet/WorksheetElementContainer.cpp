@@ -81,7 +81,7 @@ WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate() {
  
 WorksheetElementContainer::WorksheetElementContainer(const QString &name) 
 	: AbstractWorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
-	  
+
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -90,7 +90,7 @@ WorksheetElementContainer::WorksheetElementContainer(const QString &name)
 
 WorksheetElementContainer::WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd)
     : AbstractWorksheetElement(name), d_ptr(dd) {
-      
+
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -118,6 +118,13 @@ void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOpti
 	Q_UNUSED(painter)
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
+	
+	painter->drawRect(boundingRect());
+	if (isSelected()){
+	QPainterPath path = shape();  
+	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+	painter->drawPath(path);
+  }
 }
 
 void WorksheetElementContainer::setVisible(bool on) {
