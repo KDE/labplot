@@ -44,8 +44,27 @@ public:
 private:
 	Ui::WorksheetDock ui;
 	QList<Worksheet*> m_worksheetList;
-	
+	bool m_initializing;
+
 private slots:
+	void retranslateUi();
+  
+	//"General"-tab
+	void nameChanged();
+	void commentChanged();
+	void sizeChanged(int);
+	void sizeChanged();
+	void orientationChanged(int);
+	
+	//"Background"-tab
+  	void backgroundTypeChanged(int);
+	void backgroundColorStyleChanged(int);
+	void backgroundImageStyleChanged(int);
+	void backgroundFirstColorChanged(const QColor&);
+	void backgroundSecondColorChanged(const QColor&);
+	void selectFile();
+	void fileNameChanged();
+	void opacityChanged(int);
 };
 
 #endif // WORKSHEETDOCK_H
