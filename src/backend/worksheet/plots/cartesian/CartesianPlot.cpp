@@ -4,6 +4,7 @@
     Description          : A plot containing decoration elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -30,6 +31,14 @@
 #include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "worksheet/plots/PlotArea.h"
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include <QIcon>
+#else
+#include "KIcon"
+#endif
+
+
 /**
  * \class CartesianPlot
  * \brief A xy-plot.
@@ -61,4 +70,17 @@ void CartesianPlot::init(){
 
 CartesianPlot::~CartesianPlot() {
 // TODO
+}
+
+/*!
+	Returns an icon to be used in the project explorer.
+*/
+QIcon CartesianPlot::icon() const{
+	QIcon ico;
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	ico.addPixmap(QPixmap(":/graph.xpm"));
+#else
+	ico = KIcon("office-chart-line");
+#endif
+	return ico;
 }

@@ -55,7 +55,7 @@ class Worksheet: public AbstractPart, public scripted {
 		virtual bool load(XmlStreamReader *);
 
 		QRectF pageRect() const;
-		void setPageRect(const QRectF &rect);
+		void setPageRect(const QRectF &rect, const bool scaleContent=false);
 		
 		class Private;
 		

@@ -38,6 +38,7 @@ class CartesianPlot:public AbstractPlot{
 	public:
 		CartesianPlot(const QString &name);
 		~CartesianPlot();
+		virtual QIcon icon() const;
 
 	private:
 		void init();

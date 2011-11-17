@@ -4,6 +4,7 @@
     Description          : Worksheet (2D visualization) part
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+	Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -33,9 +34,15 @@
 #include "worksheet/WorksheetGraphicsScene.h"
 #include "lib/commandtemplates.h"
 #include "lib/macros.h"
-#include <QIcon>
+
 #include <QWidget>
-#include <QDebug>
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include <QIcon>
+#else
+#include "KIcon"
+#endif
+	
 /**
  * \class Worksheet
  * \brief The plotting part. 
@@ -64,8 +71,8 @@ Worksheet::Private::Private(Worksheet *owner)
 	: q(owner) {
 
 	m_scene = new WorksheetGraphicsScene();
-	
- 	m_scene->setSceneRect(0, 0, 210, 297); // A4
+//  	m_scene->setSceneRect(0, 0, 210, 297); // A4
+	m_scene->setSceneRect(0, 0, 150, 150); // A4
 }
 		
 Worksheet::Private::~Private() {
@@ -88,11 +95,11 @@ Worksheet::~Worksheet() {
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
 	QIcon ico;
-//#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	ico.addPixmap(QPixmap(":/graph.xpm"));
-//#else
-//	ico = KIcon(QIcon(worksheet_xpm));
-//#endif
+#else
+	ico = KIcon("office-chart-area");
+#endif
 	return ico;
 }
 
@@ -186,7 +193,7 @@ QRectF Worksheet::Private::swapPageRect(const QRectF &rect) {
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect);
-void Worksheet::setPageRect(const QRectF &rect) {
+void Worksheet::setPageRect(const QRectF &rect, bool scaleContent) {
 	if (qFuzzyCompare(rect.width() + 1, 1) || qFuzzyCompare(rect.height() + 1, 1))
 		return;
 	if (rect != d->m_scene->sceneRect()) {
@@ -199,15 +206,16 @@ void Worksheet::setPageRect(const QRectF &rect) {
 		qreal verticalRatio = rect.height() / oldRect.normalized().height();
 
 		QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-		foreach(AbstractWorksheetElement *elem, childElements) {
-			elem->handlePageResize(horizontalRatio, verticalRatio);
+		if (scaleContent){
+			foreach(AbstractWorksheetElement *elem, childElements) {
+				elem->handlePageResize(horizontalRatio, verticalRatio);
+			}
 		}
 		endMacro();
 	}
 }
 
 void Worksheet::childSelected(){
-  qDebug()<<"worksheet slot";
  AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
  if (element)
   emit itemSelected(element->graphicsItem());

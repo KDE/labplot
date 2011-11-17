@@ -102,7 +102,7 @@ void MainWin::startTestCode(){
 	QRectF pageRect = view->scene()->sceneRect();
 	const double pw = pageRect.width();
 	const double ph = pageRect.height();
-  
+  /*
 	  {
 	CartesianPlot *plot = new CartesianPlot("plot1");
 	worksheet->addChild(plot);
@@ -179,8 +179,9 @@ void MainWin::startTestCode(){
 	curve1->setXColumn(spreadsheet1->column(0));
 	curve1->setYColumn(spreadsheet1->column(1));
   }
+  */
   
-  
+  /*
 	  {
 	CartesianPlot *plot = new CartesianPlot("plot2");
 	worksheet->addChild(plot);
@@ -262,7 +263,7 @@ void MainWin::startTestCode(){
 // 	group2->addChild(curve3);
 // 	plotArea->addChild(group2);
   }
-
+*/
 	
 	 {
 	CartesianPlot *plot = new CartesianPlot("plot3");
@@ -270,12 +271,12 @@ void MainWin::startTestCode(){
 
 	CartesianCoordinateSystem *cSystem = qobject_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale *> scales;
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.02, pw * 0.42, -2, 10);
-// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.02, pw * 0.42, 0, 10);
+// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.02, pw * 0.42, -2, 10);
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.2, pw * 0.8, 0, 10);
 	cSystem ->setXScales(scales);
 	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.4, ph * 0.2, 1, 10);
-// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.6, ph * 0.2, 0, 10);
+// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.4, ph * 0.2, 1, 10);
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.8, ph * 0.2, 0, 10);
 	cSystem ->setYScales(scales);
 	
 // 	plot->plotArea()->setRect(QRectF(-2, -2, 14, 14));

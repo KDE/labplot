@@ -295,8 +295,9 @@ void WorksheetDock::sizeChanged(int i){
 		h=qt_paperSizes[index][0];
 	}
 	
+	bool scaleContent = ui.chScaleContent->isChecked();
 	foreach(Worksheet* worksheet, m_worksheetList){
-		worksheet->setPageRect(QRect(0,0,w,h));
+		worksheet->setPageRect(QRect(0,0,w,h), scaleContent);
 	}
 	
 	m_initializing = true;
@@ -311,8 +312,9 @@ void WorksheetDock::sizeChanged(){
 
 	int w=ui.sbWidth->value()*10;
 	int h=ui.sbHeight->value()*10;
+	bool scaleContent = ui.chScaleContent->isChecked();
 	foreach(Worksheet* worksheet, m_worksheetList){
-		worksheet->setPageRect(QRect(0,0,w,h));
+		worksheet->setPageRect(QRect(0,0,w,h), scaleContent);
 	}
 }
 
