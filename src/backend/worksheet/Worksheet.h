@@ -46,6 +46,10 @@ class Worksheet: public AbstractPart, public scripted {
 		Worksheet(AbstractScriptingEngine *engine, const QString &name);
 		~Worksheet();
 
+		enum Unit {Millimeter, Centimeter, Inch, Point};
+		static float convertToMillimeter(const float value, const Worksheet::Unit unit);
+		static float convertFromMillimeter(const float value, const Worksheet::Unit unit);
+		
 		virtual QIcon icon() const;
 		virtual bool fillProjectMenu(QMenu *menu);
 		virtual QMenu *createContextMenu();

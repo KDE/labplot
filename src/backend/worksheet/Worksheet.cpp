@@ -92,6 +92,34 @@ Worksheet::~Worksheet() {
 	delete d;
 }
 
+float Worksheet::convertToMillimeter(const float value, const Worksheet::Unit unit){
+	switch (unit){
+    case Worksheet::Millimeter:
+		return value;
+	case Worksheet::Centimeter:
+		return value*10;
+	case Worksheet::Inch:
+		return value*25.4;
+	case Worksheet::Point:
+		return value*25.4/72;
+	}
+	return value;
+}
+
+float Worksheet::convertFromMillimeter(const float value, const Worksheet::Unit unit){
+	switch (unit){
+    case Worksheet::Millimeter:
+		return value;
+	case Worksheet::Centimeter:
+		return value/10;
+	case Worksheet::Inch:
+		return value/25.4;
+	case Worksheet::Point:
+		return value/25.4*72;
+	}
+	return value;
+}
+
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
 	QIcon ico;
