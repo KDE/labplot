@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>307</width>
-    <height>623</height>
+    <width>338</width>
+    <height>497</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -302,14 +302,17 @@
        </item>
        <item row="2" column="2">
         <widget class="QDoubleSpinBox" name="sbLineWidth">
+         <property name="suffix">
+          <string>pt</string>
+         </property>
          <property name="decimals">
-          <number>1</number>
+          <number>2</number>
          </property>
          <property name="maximum">
-          <double>10.000000000000000</double>
+          <double>100.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>0.100000000000000</double>
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -331,6 +334,12 @@
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
+         <property name="prefix">
+          <string/>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -342,19 +351,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QLabel" name="lLineOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -435,7 +431,7 @@
        <item row="2" column="2">
         <widget class="QSpinBox" name="sbMajorTicksNumber"/>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item row="3" column="0">
         <widget class="QLabel" name="lMajorTicksIncrement">
          <property name="text">
           <string>Increment</string>
@@ -503,21 +499,12 @@
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="QSpinBox" name="sbMajorTicksWidth">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbMajorTicksWidth">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-         <property name="value">
-          <number>1</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -529,21 +516,12 @@
         </widget>
        </item>
        <item row="8" column="2">
-        <widget class="QSpinBox" name="sbMajorTicksLength">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbMajorTicksLength">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-         <property name="value">
-          <number>1</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -565,6 +543,12 @@
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
+         <property name="prefix">
+          <string/>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -576,19 +560,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="3">
-        <widget class="QLabel" name="lMajorTicksOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -669,7 +640,7 @@
        <item row="2" column="2">
         <widget class="QSpinBox" name="sbMinorTicksNumber"/>
        </item>
-       <item row="3" column="0" colspan="2">
+       <item row="3" column="0">
         <widget class="QLabel" name="lMinorTicksIncrement">
          <property name="text">
           <string>Increment</string>
@@ -737,21 +708,12 @@
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="QSpinBox" name="sbMinorTicksWidth">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbMinorTicksWidth">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-         <property name="value">
-          <number>1</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -763,21 +725,12 @@
         </widget>
        </item>
        <item row="8" column="2">
-        <widget class="QSpinBox" name="sbMinorTicksLength">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbMinorTicksLength">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-         <property name="value">
-          <number>1</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -799,6 +752,9 @@
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -810,19 +766,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="3">
-        <widget class="QLabel" name="lMinorTicksOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -885,12 +828,12 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QSpinBox" name="sbLabelsOffset">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbLabelsOffset">
+         <property name="suffix">
+          <string>pt</string>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -912,6 +855,9 @@
          <property name="toolTip">
           <string/>
          </property>
+         <property name="suffix">
+          <string>°</string>
+         </property>
          <property name="minimum">
           <number>-360</number>
          </property>
@@ -923,13 +869,6 @@
          </property>
          <property name="value">
           <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3" colspan="2">
-        <widget class="QLabel" name="lLabelsRotationGrad">
-         <property name="text">
-          <string>°</string>
          </property>
         </widget>
        </item>
@@ -994,7 +933,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="2" colspan="2">
+       <item row="7" column="2">
         <widget class="QSpinBox" name="sbLabelsOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1004,6 +943,9 @@
          </property>
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
+         </property>
+         <property name="suffix">
+          <string>%</string>
          </property>
          <property name="minimum">
           <number>0</number>
@@ -1016,19 +958,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="4">
-        <widget class="QLabel" name="lLabelsOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -1123,12 +1052,12 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QSpinBox" name="sbMajorGridWidth">
-         <property name="minimum">
-          <number>1</number>
+        <widget class="QDoubleSpinBox" name="sbMajorGridWidth">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="maximum">
-          <number>10</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -1150,6 +1079,9 @@
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -1161,19 +1093,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3" colspan="2">
-        <widget class="QLabel" name="lMajorGridOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -1241,12 +1160,12 @@
         </widget>
        </item>
        <item row="11" column="2">
-        <widget class="QSpinBox" name="sbMinorGridWidth">
-         <property name="minimum">
-          <number>1</number>
+        <widget class="QDoubleSpinBox" name="sbMinorGridWidth">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="maximum">
-          <number>10</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -1257,7 +1176,7 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="2" colspan="2">
+       <item row="12" column="2">
         <widget class="QSpinBox" name="sbMinorGridOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1267,6 +1186,9 @@
          </property>
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
+         </property>
+         <property name="suffix">
+          <string>%</string>
          </property>
          <property name="minimum">
           <number>0</number>
@@ -1279,19 +1201,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="4">
-        <widget class="QLabel" name="lMinorGridOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -1316,14 +1225,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KFontRequester</class>
-   <extends>QWidget</extends>
-   <header>kfontrequester.h</header>
-  </customwidget>
-  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

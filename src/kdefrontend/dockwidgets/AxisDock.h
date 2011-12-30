@@ -80,10 +80,9 @@ private:
 	void majorTicksIncrementChanged();
 	void majorTicksLineStyleChanged(int);
 	void majorTicksColorChanged(const QColor&);
-	void majorTicksWidthChanged(int);
-	void majorTicksLengthChanged(int);
+	void majorTicksWidthChanged(double);
+	void majorTicksLengthChanged(double);
 	void majorTicksOpacityChanged(int);
-	void setMajorTicksWidgetsEnabled(bool);
 	
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
@@ -92,27 +91,23 @@ private:
 	void minorTicksIncrementChanged();
 	void minorTicksLineStyleChanged(int);
 	void minorTicksColorChanged(const QColor&);
-	void minorTicksWidthChanged(int);
-	void minorTicksLengthChanged(int);
+	void minorTicksWidthChanged(double);
+	void minorTicksLengthChanged(double);
 	void minorTicksOpacityChanged(int);
-	void setMinorTicksWidgetsEnabled(bool);
 	
 	//"Extra ticks"-tab
 	
 	//"Tick labels"-tab
 	void labelsPositionChanged(int);
-	void labelsOffsetChanged(int);
+	void labelsOffsetChanged(double);
 	void labelsRotationChanged(int);
 	void labelsFontChanged(const QFont&);
 	void labelsFontColorChanged(const QColor&);	
 	void labelsPrefixChanged();
 	void labelsSuffixChanged();
 	void labelsOpacityChanged(int);
-	void setLabelsWidgetsEnabled(bool);
-	
 	
 	//"Grid"-tab
-
 
 };
 
