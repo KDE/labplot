@@ -31,29 +31,29 @@
 #ifndef PLOTAREAPRIVATE_H
 #define PLOTAREAPRIVATE_H
 
-#include "worksheet/WorksheetElementContainerPrivate.h"
+#include <QGraphicsItem>
+#include <QBrush>
+#include <QPen>
 
 class PlotArea;
-class PlotAreaPrivate: public WorksheetElementContainerPrivate {
+class PlotAreaPrivate: public QGraphicsItem{
 	public:
 		PlotAreaPrivate(PlotArea *owner);
 		virtual ~PlotAreaPrivate();
 
-		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-				QWidget *widget);
+		QString name() const;
 		virtual QRectF boundingRect() const;
 		virtual QPainterPath shape() const;
-
-		QString name() const;
-
+		bool swapVisible(bool on);
 		bool toggleClipping(bool on);
 		bool clippingEnabled() const;
 		QRectF swapRect(const QRectF &newRect);
 
+		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		
 		QRectF rect;
 		QRectF transformedRect;
 		
-		qreal opacity;
 		PlotArea::BackgroundType backgroundType;
 		PlotArea::BackgroundColorStyle backgroundColorStyle;
 		PlotArea::BackgroundImageStyle backgroundImageStyle;
@@ -61,8 +61,11 @@ class PlotAreaPrivate: public WorksheetElementContainerPrivate {
 		QColor backgroundFirstColor;
 		QColor backgroundSecondColor;
 		QString backgroundFileName;
-		
+		qreal backgroundOpacity;
 		QPen borderPen;
+		qreal borderOpacity;
+		
+		PlotArea * const q;
 };
 
 #endif

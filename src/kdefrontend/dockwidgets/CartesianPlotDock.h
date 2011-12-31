@@ -54,8 +54,8 @@ private slots:
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
-	void opacityChanged(int);
-	
+	void visibilityChanged(int);
+
 	//"Background"-tab
   	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
@@ -64,11 +64,13 @@ private slots:
 	void backgroundSecondColorChanged(const QColor&);
 	void selectFile();
 	void fileNameChanged();
-	
+	void backgroundOpacityChanged(int);
+
 	//"Border"-tab
   	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
-	void borderWidthChanged(int);
+	void borderWidthChanged(double value);
+	void borderOpacityChanged(int);
 };
 
 #endif

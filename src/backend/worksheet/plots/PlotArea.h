@@ -36,7 +36,7 @@
 
 class PlotAreaPrivate;
 
-class PlotArea: public WorksheetElementContainer {
+class PlotArea: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -49,8 +49,9 @@ class PlotArea: public WorksheetElementContainer {
 																RadialGradient};
 		enum BackgroundImageStyle{Scaled, Tiled};
 		
-
-		BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity);
+		virtual QGraphicsItem *graphicsItem() const;
+		virtual void setVisible(bool on);
+		virtual bool isVisible() const;
 		
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType);
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle);
@@ -59,13 +60,15 @@ class PlotArea: public WorksheetElementContainer {
 		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor);
 		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor);
 		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName);
-		
+		BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity);
+
 		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen);
+		BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity);
 
 		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled);
 		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect);
-		
-		typedef WorksheetElementContainer BaseClass;
+
+		typedef AbstractWorksheetElement BaseClass;
 		typedef PlotAreaPrivate Private;
 
 	public slots:
@@ -74,6 +77,7 @@ class PlotArea: public WorksheetElementContainer {
 
 	protected:
 		PlotArea(const QString &name, PlotAreaPrivate *dd);
+		PlotAreaPrivate* const d_ptr;
 
 	private:
     	Q_DECLARE_PRIVATE(PlotArea)

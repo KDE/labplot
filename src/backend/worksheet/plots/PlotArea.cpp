@@ -36,8 +36,6 @@
 #include "lib/commandtemplates.h"
 #include "lib/macros.h"
 #include <QPainter>
-#include <QPen>
-#include <QtDebug>
 
 /**
  * \class PlotArea
@@ -46,13 +44,13 @@
  * \ingroup worksheet
  */
 
-PlotArea::PlotArea(const QString &name) 
-	: WorksheetElementContainer(name, new PlotAreaPrivate(this)) {
+PlotArea::PlotArea(const QString &name):AbstractWorksheetElement(name),
+		d_ptr(new PlotAreaPrivate(this)){
 	init();
 }
 
 PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
-    : WorksheetElementContainer(name, dd){
+    : AbstractWorksheetElement(name), d_ptr(dd){
 	init();
 }
 
@@ -63,24 +61,39 @@ void PlotArea::init(){
 	Q_D(PlotArea);
 	
 	d->rect = QRectF(0, 0, 1, 1);
-	d->opacity = 1.0;
+	d->backgroundOpacity = 1.0;
 	d->backgroundType = PlotArea::Color;
 	d->backgroundColorStyle = PlotArea::SingleColor;
 	d->backgroundFirstColor = Qt::white;
 	d->backgroundSecondColor = Qt::black;
 	d->backgroundImageStyle = PlotArea::Scaled;
 	d->backgroundFileName = "";
-	
-	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
+	d->borderOpacity = 1.0;
 }
 
-void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio) {
+QGraphicsItem *PlotArea::graphicsItem() const{
+	return d_ptr;
+}
+
+STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetVisible, bool, swapVisible);
+void PlotArea::setVisible(bool on){
+	Q_D(PlotArea);
+	exec(new PlotAreaSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
+}
+
+bool PlotArea::isVisible() const{
+	Q_D(const PlotArea);
+	return d->isVisible();
+}
+
+void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio){
+// 	Q_D(PlotArea);
+	retransform();
 	// TODO: scale line width
 	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
 
-void PlotArea::retransform() {
+void PlotArea::retransform(){
 	Q_D(PlotArea);
 
 	Worksheet *worksheet = ancestor<Worksheet>();
@@ -106,8 +119,6 @@ void PlotArea::retransform() {
 			d->transformedRect = QRectF(points.at(0), points.at(1)).normalized();
 	} else
 		d->transformedRect = d->rect;
-
-	WorksheetElementContainer::retransform();
 }
 
 
@@ -125,8 +136,6 @@ void PlotArea::retransform() {
 BASIC_SHARED_D_READER_IMPL(PlotArea, bool, clippingEnabled, clippingEnabled());
 CLASS_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect);
 
-BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, opacity, opacity);
-
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundType, backgroundType, backgroundType);
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle);
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle);
@@ -134,9 +143,10 @@ CLASS_SHARED_D_READER_IMPL(PlotArea, QBrush, backgroundBrush, backgroundBrush);
 CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor);
 CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor);
 CLASS_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName);
+BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, backgroundOpacity, backgroundOpacity);
 
 CLASS_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen);
-
+BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderOpacity, borderOpacity);
 
 
 /* ============================ setter methods and undo commands ================= */
@@ -155,13 +165,6 @@ void PlotArea::setRect(const QRectF &newRect) {
 
 	if (d->rect != newRect)
 		exec(new PlotAreaSetRectCmd(d, newRect, tr("%1: set plot rectangle")));
-}
-
-STD_SETTER_CMD_IMPL_F(PlotArea, SetOpacity, qreal, opacity, update);
-void PlotArea::setOpacity(qreal opacity) {
-	Q_D(PlotArea);
-	if (opacity != d->opacity)
-		exec(new PlotAreaSetOpacityCmd(d, opacity, tr("%1: set plot area opacity")));
 }
 
 //Background
@@ -207,22 +210,32 @@ void PlotArea::setBackgroundFileName(const QString& fileName) {
 		exec(new PlotAreaSetBackgroundFileNameCmd(d, fileName, tr("%1: set background image")));
 }
 
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundOpacity, qreal, backgroundOpacity, update);
+void PlotArea::setBackgroundOpacity(qreal opacity) {
+	Q_D(PlotArea);
+	if (opacity != d->backgroundOpacity)
+		exec(new PlotAreaSetBackgroundOpacityCmd(d, opacity, tr("%1: set plot area opacity")));
+}
+
 //Border
 STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderPen, QPen, borderPen, update);
 void PlotArea::setBorderPen(const QPen &pen) {
 	Q_D(PlotArea);
 	if (pen != d->borderPen)
-		exec(new PlotAreaSetBorderPenCmd(d, pen, tr("%1: set border style")));
+		exec(new PlotAreaSetBorderPenCmd(d, pen, tr("%1: set plot area border style")));
 }
 
-
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderOpacity, qreal, borderOpacity, update);
+void PlotArea::setBorderOpacity(qreal opacity) {
+	Q_D(PlotArea);
+	if (opacity != d->borderOpacity)
+		exec(new PlotAreaSetBorderOpacityCmd(d, opacity, tr("%1: set plot area border opacity")));
+}
 
 //################################################################
 //################### Private implementation ##########################
 //################################################################
-
-PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner)
-	: WorksheetElementContainerPrivate(owner) {
+PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner):q(owner){
 }
 
 PlotAreaPrivate::~PlotAreaPrivate() {
@@ -231,6 +244,7 @@ PlotAreaPrivate::~PlotAreaPrivate() {
 QString PlotAreaPrivate::name() const {
 	return q->name();
 }
+
 bool PlotAreaPrivate::clippingEnabled() const {
 	return (flags() & QGraphicsItem::ItemClipsChildrenToShape);
 }
@@ -249,12 +263,30 @@ QRectF PlotAreaPrivate::swapRect(const QRectF &newRect) {
 	return oldRect;
 }
 
+bool PlotAreaPrivate::swapVisible(bool on){
+	bool oldValue = isVisible();
+	setVisible(on);
+	return oldValue;
+}
+
+QRectF PlotAreaPrivate::boundingRect () const{
+	return transformedRect; 
+}
+
+QPainterPath PlotAreaPrivate::shape() const{
+	QPainterPath path;
+	path.addRect(transformedRect);
+	return path;
+}
+
 void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
-	
-	painter->setOpacity(opacity);
-	painter->setPen(borderPen);
+
+	if (!isVisible())
+		return;
+
+	painter->setOpacity(backgroundOpacity);
 	QRectF rect = boundingRect();
 	if (backgroundType == PlotArea::Color){
 		switch (backgroundColorStyle){
@@ -315,22 +347,16 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		}
 		painter->setBrush(QBrush(pix));
 	}
-	
-	painter->drawRect(transformedRect);
+	painter->drawRect(rect);
+
+	painter->setPen(borderPen);
+	painter->setBrush(Qt::NoBrush);
+	painter->setOpacity(borderOpacity);
+	painter->drawRect(rect);
 	
 	if (isSelected()){
-	QPainterPath path = shape();  
-	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-	painter->drawPath(path);
-	}	
-}
-
-QRectF PlotAreaPrivate::boundingRect () const {
-	return transformedRect; 
-}
-
-QPainterPath PlotAreaPrivate::shape() const {
-	QPainterPath path;
-	path.addRect(transformedRect);
-	return path;
+		QPainterPath path = shape();  
+		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->drawPath(path);
+	}
 }

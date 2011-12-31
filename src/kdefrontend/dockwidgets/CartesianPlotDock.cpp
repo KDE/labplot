@@ -30,6 +30,7 @@
 #include "CartesianPlotDock.h"
 #include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/plots/PlotArea.h"
+#include "worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
 #include <QTimer>
 #include <KUrlCompletion>
@@ -50,10 +51,24 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	KUrlCompletion *comp = new KUrlCompletion();
     ui.kleBackgroundFileName->setCompletionObject(comp);
 
+	//adjust layouts in the tabs
+	QGridLayout* layout;
+	for (int i=0; i<ui.tabWidget->count(); ++i){
+		layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!layout)
+		continue;
+		
+		layout->setContentsMargins(2,2,2,2);
+		layout->setHorizontalSpacing(2);
+		layout->setVerticalSpacing(2);
+  }
+  
+	//SIGNAL/SLOT
+
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );	
-	connect( ui.sbOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
+	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
 	
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -65,11 +80,13 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 // 	connect( ui.kleBackgroundFileName, SIGNAL(textChanged (const QString&)), SLOT(fileNameChanged(const QString&)) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
+	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
 	
 	//Border 
 	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
 	connect( ui.kcbBorderColor, SIGNAL(changed (const QColor &)), this, SLOT(borderColorChanged(const QColor&)) );
-	connect( ui.sbBorderWidth, SIGNAL(valueChanged(int)), this, SLOT(borderWidthChanged(int)) );
+	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
+	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
 	QTimer::singleShot(0, this, SLOT(init()));
 }
@@ -106,7 +123,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	//show the properties of the first curve
   
 	//General-tab
-	ui.sbOpacity->setValue( plot->plotArea()->opacity()*100 );
+	ui.chkVisible->setChecked(plot->isVisible());
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( plot->plotArea()->backgroundType() );
@@ -115,13 +132,15 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	ui.kleBackgroundFileName->setText( plot->plotArea()->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( plot->plotArea()->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( plot->plotArea()->backgroundSecondColor() );
+	ui.sbBackgroundOpacity->setValue( plot->plotArea()->backgroundOpacity()*100 );
 
 	//Border-tab
 	ui.kcbBorderColor->setColor( plot->plotArea()->borderPen().color() );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, plot->plotArea()->borderPen().color());
 	ui.cbBorderStyle->setCurrentIndex( plot->plotArea()->borderPen().style() );
-	ui.sbBorderWidth->setValue( plot->plotArea()->borderPen().width() );
-
+	ui.sbBorderWidth->setValue( Worksheet::convertFromMillimeter(plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderOpacity->setValue( plot->plotArea()->borderOpacity()*100 );
+	
 	m_initializing = false;
 }
 
@@ -166,13 +185,13 @@ void CartesianPlotDock::commentChanged(){
   m_plotList.first()->setComment(ui.leComment->text());
 }
 
-void CartesianPlotDock::opacityChanged(int value){
+void CartesianPlotDock::visibilityChanged(int state){
   if (m_initializing)
 	return;
-
-  qreal opacity = (float)value/100;
+  
+  bool b = (state==Qt::Checked);
   foreach(CartesianPlot* plot, m_plotList){
-	plot->plotArea()->setOpacity(opacity);
+	plot->setVisible(b);
   }
 }
 
@@ -297,6 +316,16 @@ void CartesianPlotDock::fileNameChanged(){
   } 
 }
 
+void CartesianPlotDock::backgroundOpacityChanged(int value){
+  if (m_initializing)
+	return;
+
+  qreal opacity = (float)value/100;
+  foreach(CartesianPlot* plot, m_plotList){
+	plot->plotArea()->setBackgroundOpacity(opacity);
+  }
+}
+
 // "Border"-tab
 void CartesianPlotDock::borderStyleChanged(int index){
    if (m_initializing)
@@ -325,14 +354,24 @@ void CartesianPlotDock::borderColorChanged(const QColor& color){
   GuiTools::updatePenStyles(ui.cbBorderStyle, color);
 }
 
-void CartesianPlotDock::borderWidthChanged(int value){
+void CartesianPlotDock::borderWidthChanged(double value){
   if (m_initializing)
 	return;
   
   QPen pen;
   foreach(CartesianPlot* plot, m_plotList){
 	pen=plot->plotArea()->borderPen();
-	pen.setWidth(value);
+	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
 	plot->plotArea()->setBorderPen(pen);
   }  
+}
+
+void CartesianPlotDock::borderOpacityChanged(int value){
+  if (m_initializing)
+	return;
+
+  qreal opacity = (float)value/100;
+  foreach(CartesianPlot* plot, m_plotList){
+	plot->plotArea()->setBorderOpacity(opacity);
+  }
 }
