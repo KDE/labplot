@@ -135,7 +135,8 @@ class tree {
             typedef T*                              pointer;
             typedef T&                              reference;
             typedef size_t                          size_type;
-            typedef ptrdiff_t                       difference_type;
+// not available with gcc-4.6
+//            typedef ptrdiff_t                       difference_type;
             typedef std::bidirectional_iterator_tag iterator_category;
 
             iterator_base();
