@@ -30,6 +30,7 @@
 #include "XYCurveDock.h"
 #include "kdefrontend/GuiTools.h"
 #include "worksheet/XYCurve.h"
+#include "worksheet/Worksheet.h"
 #include "core/AspectTreeModel.h"
 #include "core/column/Column.h"
 #include "core/plugin/PluginManager.h"
@@ -150,18 +151,18 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbLineInterpolationPointsCount, SIGNAL(valueChanged(int)), this, SLOT(lineInterpolationPointsCountChanged(int)) );
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
 	connect( ui.kcbLineColor, SIGNAL(changed (const QColor &)), this, SLOT(lineColorChanged(const QColor&)) );
-	connect( ui.sbLineWidth, SIGNAL(valueChanged(int)), this, SLOT(lineWidthChanged(int)) );
+	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
 	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );
 
 	connect( ui.cbDropLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(dropLineTypeChanged(int)) );
 	connect( ui.cbDropLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(dropLineStyleChanged(int)) );
 	connect( ui.kcbDropLineColor, SIGNAL(changed (const QColor &)), this, SLOT(dropLineColorChanged(const QColor&)) );
-	connect( ui.sbDropLineWidth, SIGNAL(valueChanged(int)), this, SLOT(dropLineWidthChanged(int)) );
+	connect( ui.sbDropLineWidth, SIGNAL(valueChanged(double)), this, SLOT(dropLineWidthChanged(double)) );
 	connect( ui.sbDropLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(dropLineOpacityChanged(int)) );
 	
 	//Symbol
 	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolStyleChanged(int)) );
-	connect( ui.sbSymbolSize, SIGNAL(valueChanged(int)), this, SLOT(symbolSizeChanged(int)) );
+	connect( ui.sbSymbolSize, SIGNAL(valueChanged(double)), this, SLOT(symbolSizeChanged(double)) );
 	connect( ui.sbSymbolRotation, SIGNAL(valueChanged(int)), this, SLOT(symbolRotationChanged(int)) );
 	connect( ui.sbSymbolOpacity, SIGNAL(valueChanged(int)), this, SLOT(symbolOpacityChanged(int)) );
 	
@@ -170,13 +171,13 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 
 	connect( ui.cbSymbolBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolBorderStyleChanged(int)) );
 	connect( ui.kcbSymbolBorderColor, SIGNAL(changed (const QColor &)), this, SLOT(symbolBorderColorChanged(const QColor&)) );
-	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(int)), this, SLOT(symbolBorderWidthChanged(int)) );
+	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolBorderWidthChanged(double)) );
 
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
 	connect( cbValuesColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesColumnChanged(int)) );
 	connect( ui.cbValuesPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesPositionChanged(int)) );
-	connect( ui.sbValuesDistance, SIGNAL(valueChanged(int)), this, SLOT(valuesDistanceChanged(int)) );
+	connect( ui.sbValuesDistance, SIGNAL(valueChanged(double)), this, SLOT(valuesDistanceChanged(double)) );
 	connect( ui.sbValuesRotation, SIGNAL(valueChanged(int)), this, SLOT(valuesRotationChanged(int)) );
 	connect( ui.sbValuesOpacity, SIGNAL(valueChanged(int)), this, SLOT(valuesOpacityChanged(int)) );
 	
@@ -419,21 +420,21 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
   ui.sbLineInterpolationPointsCount->setValue( curve->lineInterpolationPointsCount() );
   ui.cbLineStyle->setCurrentIndex( curve->linePen().style() );
   ui.kcbLineColor->setColor( curve->linePen().color() );
-  ui.sbLineWidth->setValue( curve->linePen().width() );
+  ui.sbLineWidth->setValue( Worksheet::convertFromMillimeter(curve->linePen().widthF(), Worksheet::Point) );
   ui.sbLineOpacity->setValue( curve->lineOpacity()*100 );
   GuiTools::updatePenStyles(ui.cbLineStyle, curve->linePen().color() );
   
   ui.cbDropLineType->setCurrentIndex( curve->dropLineType() );
   ui.cbDropLineStyle->setCurrentIndex( curve->dropLinePen().style() );
   ui.kcbDropLineColor->setColor( curve->dropLinePen().color() );
-  ui.sbDropLineWidth->setValue( curve->dropLinePen().width() );
+  ui.sbDropLineWidth->setValue( Worksheet::convertFromMillimeter(curve->dropLinePen().widthF(), Worksheet::Point) );
   ui.sbDropLineOpacity->setValue( curve->dropLineOpacity()*100 );
   GuiTools::updatePenStyles(ui.cbDropLineStyle, curve->dropLinePen().color() );
   
   
   //Symbol-tab
   ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(curve->symbolTypeId()) );
-  ui.sbSymbolSize->setValue( curve->symbolSize() );
+  ui.sbSymbolSize->setValue( Worksheet::convertFromMillimeter(curve->symbolSize(), Worksheet::Point) );
   ui.sbSymbolRotation->setValue( curve->symbolRotationAngle() );
   ui.sbSymbolOpacity->setValue( curve->symbolsOpacity()*100 );
   ui.cbSymbolFillingStyle->setCurrentIndex( curve->symbolsBrush().style() );
@@ -441,7 +442,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 
   ui.cbSymbolBorderStyle->setCurrentIndex( curve->symbolsPen().style() );
   ui.kcbSymbolBorderColor->setColor( curve->symbolsPen().color() );
-  ui.sbSymbolBorderWidth->setValue( curve->symbolsPen().width() );
+  ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromMillimeter(curve->symbolsPen().widthF(), Worksheet::Point) );
 
   GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, curve->symbolsPen().color() );
   GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
@@ -451,7 +452,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 
   ui.cbValuesPosition->setCurrentIndex( curve->valuesPosition() );
   ui.sbValuesRotation->setValue( curve->valuesRotationAngle() );
-  ui.sbValuesDistance->setValue( curve->valuesDistance() );
+  ui.sbValuesDistance->setValue( Worksheet::convertFromMillimeter(curve->valuesDistance(), Worksheet::Point) );
   ui.sbValuesOpacity->setValue( curve->valuesOpacity()*100 );
   ui.leValuesPrefix->setText( curve->valuesPrefix() );
   ui.leValuesSuffix->setText( curve->valuesSuffix() );
@@ -762,14 +763,14 @@ void XYCurveDock::lineColorChanged(const QColor& color){
   GuiTools::updatePenStyles(ui.cbLineStyle, color);
 }
 
-void XYCurveDock::lineWidthChanged(int value){
+void XYCurveDock::lineWidthChanged(double value){
   if (m_initializing)
 	return;
   
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->linePen();
-	pen.setWidth(value);
+	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
 	curve->setLinePen(pen);
   }  
 }
@@ -835,14 +836,14 @@ void XYCurveDock::dropLineColorChanged(const QColor& color){
   GuiTools::updatePenStyles(ui.cbDropLineStyle, color);
 }
 
-void XYCurveDock::dropLineWidthChanged(int value){
+void XYCurveDock::dropLineWidthChanged(double value){
   if (m_initializing)
 	return;
   
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->dropLinePen();
-	pen.setWidth(value);
+	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
 	curve->setDropLinePen(pen);
   }  
 }
@@ -904,12 +905,12 @@ void XYCurveDock::symbolStyleChanged(int index){
 }
 
 
-void XYCurveDock::symbolSizeChanged(int value){
+void XYCurveDock::symbolSizeChanged(double value){
   if (m_initializing)
 	return;
 	
   foreach(XYCurve* curve, m_curvesList){
-	curve->setSymbolSize(value);
+	curve->setSymbolSize( Worksheet::convertToMillimeter(value, Worksheet::Point) );
   }
 }
 
@@ -1003,14 +1004,14 @@ void XYCurveDock::symbolBorderColorChanged(const QColor& color){
   GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
 }
 
-void XYCurveDock::symbolBorderWidthChanged(int value){
+void XYCurveDock::symbolBorderWidthChanged(double value){
   if (m_initializing)
 	return;
   
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
-	pen.setWidth(value);
+	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
 	curve->setSymbolsPen(pen);
   }
 }
@@ -1104,12 +1105,12 @@ void XYCurveDock::valuesPositionChanged(int index){
   }
 }
 
-void XYCurveDock::valuesDistanceChanged(int value){
+void XYCurveDock::valuesDistanceChanged(double  value){
   if (m_initializing)
 	return;
 		
   foreach(XYCurve* curve, m_curvesList){
-	curve->setValuesDistance(value);
+	curve->setValuesDistance( Worksheet::convertToMillimeter(value, Worksheet::Point) );
   }
 }
 

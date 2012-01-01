@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>313</width>
+    <width>328</width>
     <height>595</height>
    </rect>
   </property>
@@ -130,21 +130,12 @@
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="QSpinBox" name="sbLineWidth">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbLineWidth">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-         <property name="value">
-          <number>1</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -166,6 +157,9 @@
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -177,19 +171,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="3">
-        <widget class="QLabel" name="lLineOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -274,21 +255,12 @@
         </widget>
        </item>
        <item row="12" column="2">
-        <widget class="QSpinBox" name="sbDropLineWidth">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbDropLineWidth">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-         <property name="value">
-          <number>1</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -310,6 +282,9 @@
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -321,19 +296,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="3">
-        <widget class="QLabel" name="lDropLineOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -357,22 +319,6 @@
        <string>Symbol</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lSymbol">
          <property name="font">
@@ -392,6 +338,22 @@
           <string>Type</string>
          </property>
         </widget>
+       </item>
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="1" column="2">
         <widget class="QFrame" name="frame">
@@ -453,21 +415,15 @@
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QSpinBox" name="sbSymbolSize">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbSymbolSize">
+         <property name="prefix">
+          <string/>
          </property>
-         <property name="minimum">
-          <number>1</number>
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-         <property name="value">
-          <number>1</number>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -489,6 +445,9 @@
          <property name="toolTip">
           <string/>
          </property>
+         <property name="suffix">
+          <string>°</string>
+         </property>
          <property name="minimum">
           <number>-360</number>
          </property>
@@ -500,19 +459,6 @@
          </property>
          <property name="value">
           <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3">
-        <widget class="QLabel" name="lSymbolRotationDegree">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>°</string>
          </property>
         </widget>
        </item>
@@ -534,6 +480,9 @@
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -548,18 +497,21 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="3">
-        <widget class="QLabel" name="lSymbolOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="6" column="0">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="text">
-          <string>%</string>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>72</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="lSymbolFilling">
@@ -581,14 +533,17 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="8" column="2">
+        <widget class="QComboBox" name="cbSymbolFillingStyle"/>
+       </item>
+       <item row="9" column="0">
         <widget class="QLabel" name="lSymbolFillingColor">
          <property name="text">
           <string>Color</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="2">
+       <item row="9" column="2">
         <widget class="KColorButton" name="kcbSymbolFillingColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -598,86 +553,7 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="lSymbolBorder">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Border:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lSymbolBorderStyle">
-         <property name="text">
-          <string>Style</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lSymbolBorderColor">
-         <property name="text">
-          <string>Color</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="2">
-        <widget class="KColorButton" name="kcbSymbolBorderColor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="2">
-        <widget class="QSpinBox" name="sbSymbolBorderWidth">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-         <property name="value">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="lSymbolBorderWidth">
-         <property name="text">
-          <string>Width</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>72</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="11" column="0">
+       <item row="10" column="0">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -693,7 +569,64 @@
          </property>
         </spacer>
        </item>
-       <item row="17" column="0">
+       <item row="11" column="0">
+        <widget class="QLabel" name="lSymbolBorder">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Border:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="lSymbolBorderStyle">
+         <property name="text">
+          <string>Style</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2">
+        <widget class="QComboBox" name="cbSymbolBorderStyle"/>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="lSymbolBorderColor">
+         <property name="text">
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="KColorButton" name="kcbSymbolBorderColor">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="lSymbolBorderWidth">
+         <property name="text">
+          <string>Width</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2">
+        <widget class="QDoubleSpinBox" name="sbSymbolBorderWidth">
+         <property name="suffix">
+          <string>pt</string>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -706,12 +639,6 @@
          </property>
         </spacer>
        </item>
-       <item row="8" column="2">
-        <widget class="QComboBox" name="cbSymbolFillingStyle"/>
-       </item>
-       <item row="13" column="2">
-        <widget class="QComboBox" name="cbSymbolBorderStyle"/>
-       </item>
       </layout>
       <zorder>lSymbol</zorder>
       <zorder>lSymbolStyle_2</zorder>
@@ -719,13 +646,10 @@
       <zorder>lSymbolStyle</zorder>
       <zorder>cbSymbolStyle</zorder>
       <zorder>lSymbolSize</zorder>
-      <zorder>sbSymbolSize</zorder>
       <zorder>lSymbolRotation</zorder>
       <zorder>sbSymbolRotation</zorder>
-      <zorder>lSymbolRotationDegree</zorder>
       <zorder>lSymbolOpacity</zorder>
       <zorder>sbSymbolOpacity</zorder>
-      <zorder>lSymbolOpacityPercent</zorder>
       <zorder>lSymbolFilling</zorder>
       <zorder>lSymbolFillingStyle</zorder>
       <zorder>lSymbolFillingColor</zorder>
@@ -734,13 +658,14 @@
       <zorder>lSymbolBorderStyle</zorder>
       <zorder>lSymbolBorderColor</zorder>
       <zorder>kcbSymbolBorderColor</zorder>
-      <zorder>sbSymbolBorderWidth</zorder>
       <zorder>lSymbolBorderWidth</zorder>
       <zorder>verticalSpacer_2</zorder>
       <zorder>verticalSpacer_3</zorder>
       <zorder>verticalSpacer_4</zorder>
       <zorder>cbSymbolFillingStyle</zorder>
       <zorder>cbSymbolBorderStyle</zorder>
+      <zorder>sbSymbolSize</zorder>
+      <zorder>sbSymbolBorderWidth</zorder>
      </widget>
      <widget class="QWidget" name="tabValues">
       <attribute name="title">
@@ -821,15 +746,12 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QSpinBox" name="sbValuesDistance">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QDoubleSpinBox" name="sbValuesDistance">
+         <property name="suffix">
+          <string>pt</string>
          </property>
-         <property name="toolTip">
-          <string>Distanceto the line</string>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -848,6 +770,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="suffix">
+          <string>°</string>
+         </property>
          <property name="minimum">
           <number>-360</number>
          </property>
@@ -856,19 +781,6 @@
          </property>
          <property name="singleStep">
           <number>10</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3">
-        <widget class="QLabel" name="lValuesRotationDegree">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>°</string>
          </property>
         </widget>
        </item>
@@ -890,6 +802,9 @@
          <property name="toolTip">
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
+         <property name="suffix">
+          <string>%</string>
+         </property>
          <property name="minimum">
           <number>0</number>
          </property>
@@ -901,19 +816,6 @@
          </property>
          <property name="value">
           <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="3">
-        <widget class="QLabel" name="lValuesOpacityPercent">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>%</string>
          </property>
         </widget>
        </item>
@@ -1055,18 +957,12 @@
        <item row="15" column="2">
         <widget class="KFontRequester" name="kfrValuesFont"/>
        </item>
-       <item row="18" column="0">
-        <spacer name="verticalSpacer_8">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="16" column="0">
+        <widget class="QLabel" name="lValuesColor">
+         <property name="text">
+          <string>Color</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>28</width>
-           <height>47</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
        <item row="16" column="2">
         <widget class="KColorButton" name="kcbValuesFontColor">
@@ -1078,12 +974,18 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="lValuesColor">
-         <property name="text">
-          <string>Color</string>
+       <item row="17" column="0">
+        <spacer name="verticalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>28</width>
+           <height>47</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -1103,14 +1005,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KFontRequester</class>
-   <extends>QWidget</extends>
-   <header>kfontrequester.h</header>
-  </customwidget>
-  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

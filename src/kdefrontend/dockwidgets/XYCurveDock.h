@@ -93,31 +93,31 @@ private slots:
 	void lineInterpolationPointsCountChanged(int);
   	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
-	void lineWidthChanged(int);
+	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
 	
 	void dropLineTypeChanged(int);
   	void dropLineStyleChanged(int);
 	void dropLineColorChanged(const QColor&);
-	void dropLineWidthChanged(int);
+	void dropLineWidthChanged(double);
 	void dropLineOpacityChanged(int);
 	
 	//Symbol-tab
   	void symbolStyleChanged(int);
-	void symbolSizeChanged(int);
+	void symbolSizeChanged(double);
 	void symbolRotationChanged(int);
 	void symbolOpacityChanged(int);
 	void symbolFillingStyleChanged(int);
 	void symbolFillingColorChanged(const QColor&);
 	void symbolBorderStyleChanged(int);
 	void symbolBorderColorChanged(const QColor&);
-	void symbolBorderWidthChanged(int);
+	void symbolBorderWidthChanged(double);
 	
 	//Values-Tab
 	void valuesTypeChanged(int);
 	void valuesColumnChanged(int);
 	void valuesPositionChanged(int);
-	void valuesDistanceChanged(int);
+	void valuesDistanceChanged(double);
 	void valuesRotationChanged(int);
 	void valuesOpacityChanged(int);
 	void valuesPrefixChanged();
