@@ -47,7 +47,7 @@ class PlotArea: public AbstractWorksheetElement {
 		enum BackgroundColorStyle{SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
 																TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
 																RadialGradient};
-		enum BackgroundImageStyle{Scaled, Tiled};
+		enum BackgroundImageStyle{ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 		
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void setVisible(bool on);

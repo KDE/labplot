@@ -244,9 +244,12 @@ void WorksheetDock::retranslateUi(){
 	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
 // 		//TODO ui.cbBackgroundColorStyle->addItem(i18n("custom gradient"));
 // 
+	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
+	ui.cbBackgroundImageStyle->addItem(i18n("scaled, keep proportions"));
+	ui.cbBackgroundImageStyle->addItem(i18n("centered"));
 	ui.cbBackgroundImageStyle->addItem(i18n("tiled"));
-	//TODO etc.
+	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
 
 	m_initializing = false;
 }
