@@ -1,15 +1,1 @@
-make clean
-rm -rf CMakeFiles CMakeTmp src/CMakeFiles src/filter/CMakeFiles src/elements/CMakeFiles liborigin/CMakeFiles
-rm -f cmake_install.cmake src/cmake_install.cmake src/filter/cmake_install.cmake src/elements/cmake_install.cmake liborigin/cmake_install.cmake
-rm -f Makefile src/Makefile src/filter/Makefile src/elements/Makefile liborigin/Makefile
-rm -f CMakeCache.txt cmake_uninstall.cmake install_manifest.txt
-rm -f src/labplot_automoc.cpp src/labplot_automoc.cpp.files src/commonfrontend_automoc.cpp.files
-rm -f src/elements_automoc.cpp.files src/backend_automoc.cpp src/commonfrontend_automoc.cpp src/backend_automoc.cpp.files src/labplot2_automoc.cpp.files
-rm -f src/labplot src/labplot.shell src/moc_* src/ui_*
-
-rm -rf src/tmp/ src/qtfrontend/tmp/ liborigin/opj2dat opjfile.log
-rmdir lib/
-rm -f src/qtfrontend/libscidavis_worksheet.so ./src/qtfrontend/libscidavis_spreadsheet.so
-
-cd src/qtfrontend/
-make distclean
+rm -rf build

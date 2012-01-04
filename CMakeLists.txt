@@ -3,7 +3,8 @@ project(LabPlot)
 find_package(KDE4 REQUIRED)
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
-include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+# build/src for finding ui_* in out-of-source build
+include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} build/src)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 include_directories(${KDE4_INCLUDES})
 add_definitions(${KDE4_DEFINITIONS})
@@ -116,8 +117,6 @@ SET(OPJ_LIBRARY "-llabplot_origin")
 INCLUDE_DIRECTORIES(liborigin)
 ENDIF(OPJ_LIBRARY)
 ##############################################
-
-
 add_subdirectory(src)
 
 install(FILES src/kdefrontend/LabPlotui.rc src/kdefrontend/labplot.png DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)

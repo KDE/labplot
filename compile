@@ -1,0 +1,13 @@
+# for building KDE4 frontend (LabPlot) just use 
+
+if [ -d build ]; then
+	echo "directory build/ exists! Please remove it."
+	exit
+fi
+
+mkdir build
+cd build && cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make -j 2
+
+# for building Qt Frontend (SciDAVis) use
+
+# cd src/qtfrontend && qmake scidavis.pro && make
