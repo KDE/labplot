@@ -265,19 +265,32 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
-		QPixmap pix;
-		//TODO implement a couple of other styles (scaled with KeepAspectRation, scaled and croped, centered etc.)
+		QPixmap pix(backgroundFileName);
 		switch (backgroundImageStyle){
+			case PlotArea::ScaledCropped:
+				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+				painter->drawPixmap(rect.topLeft(),pix);
+				break;
 			case PlotArea::Scaled:
-				pix = QPixmap(backgroundFileName).scaled(rect.width(), rect.height());
+				pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+				painter->drawPixmap(rect.topLeft(),pix);
+				break;
+			case PlotArea::ScaledAspectRatio:
+				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				painter->drawPixmap(rect.topLeft(),pix);
+				break;
+			case PlotArea::Centered:
+				painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
 				break;
 			case PlotArea::Tiled:
-				pix = QPixmap(backgroundFileName);
+				painter->drawTiledPixmap(rect,pix);
+				break;
+			case PlotArea::CenterTiled:
+				painter->drawTiledPixmap(rect,pix,rect.center());
 				break;
 			default:
-				pix = QPixmap(backgroundFileName);
+				painter->drawPixmap(rect.topLeft(),pix);
 		}
-		painter->setBrush(QBrush(pix));
 	}
 	
 	painter->drawRect(transformedRect);

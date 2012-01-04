@@ -47,7 +47,7 @@ class PlotArea: public WorksheetElementContainer {
 		enum BackgroundColorStyle{SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
 																TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
 																RadialGradient};
-		enum BackgroundImageStyle{Scaled, Tiled};
+		enum BackgroundImageStyle{ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 		
 
 		BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity);
