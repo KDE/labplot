@@ -286,6 +286,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				painter->drawTiledPixmap(rect,pix);
 				break;
 			case PlotArea::CenterTiled:
+				painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
 				painter->drawTiledPixmap(rect,pix,rect.center());
 				break;
 			default:
