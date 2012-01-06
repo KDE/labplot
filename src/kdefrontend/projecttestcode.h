@@ -299,6 +299,8 @@ void MainWin::startTestCode(){
 
 	Axis *xAxis3 = new Axis("x axis 2", Axis::AxisHorizontal);
 	plot->addChild(xAxis3);
+	xAxis3->setMajorTicksLength(20);
+	xAxis3->setMinorTicksLength(7);
 	xAxis3->setOffset(10);
 	Axis *yAxis3 = new Axis("y axis 2", Axis::AxisVertical);
 	plot->addChild(yAxis3);
