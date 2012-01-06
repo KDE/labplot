@@ -70,13 +70,12 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
 , m_worksheet(worksheet) {
   
   m_model = new WorksheetModel(worksheet);
-
+  setScene(m_model->scene());
+  
   	connect(worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
 	connect(worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
-	
-	
-  setScene(m_model->scene());
-
+	connect(worksheet, SIGNAL(requestUpdate()), this, SLOT(invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer)));
+  
   setRenderHint(QPainter::Antialiasing);
   setInteractive(true);
   setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
@@ -375,7 +374,8 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
   painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
 
   // canvas
-  painter->fillRect(scene_rect.intersected(rect), Qt::white);
+  //TODO add the code PlotArea::paint() that handels the different background options
+  painter->fillRect(scene_rect.intersected(rect), m_worksheet->backgroundFirstColor());
   
   //grid
 	if (m_gridSettings.style == WorksheetView::NoGrid){
@@ -616,10 +616,10 @@ void WorksheetView::deselectItem(QGraphicsItem* item){
 
 //TODO
 void WorksheetView::selectionChanged(){
-	qDebug()<<"selection changed";
+// 	qDebug()<<"selection changed";
 // 	qDebug()<<"selection "<<scene()->selectionArea().boundingRect();
  QList<QGraphicsItem *> items = scene()->selectedItems();
- qDebug()<<items;
+//  qDebug()<<items;
 	
  //trave
 //  QGraphicsItem* item = items.first();
