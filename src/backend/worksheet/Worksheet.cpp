@@ -29,6 +29,7 @@
  ***************************************************************************/
 
 #include "worksheet/Worksheet.h"
+#include "worksheet/WorksheetPrivate.h"
 #include "worksheet/AbstractWorksheetElement.h"
 #include "worksheet/WorksheetView.h"
 #include "worksheet/WorksheetGraphicsScene.h"
@@ -49,38 +50,12 @@
  *
  * Top-level container for WorksheetElements. 
  *
+ * * \ingroup worksheet
  */
 	
-class Worksheet::Private {
-	public:
-
-		Private(Worksheet *owner);
-		~Private();
-
-		QString name() const {
-			return q->name();
-		}
-
-		WorksheetGraphicsScene *m_scene;
-		QRectF swapPageRect(const QRectF& rect);
-
-		Worksheet * const q;
-};
-
-Worksheet::Private::Private(Worksheet *owner) 
-	: q(owner) {
-
-	m_scene = new WorksheetGraphicsScene();
-//  	m_scene->setSceneRect(0, 0, 210, 297); // A4
-	m_scene->setSceneRect(0, 0, 1000, 1000);
-}
-		
-Worksheet::Private::~Private() {
-	delete m_scene;
-}
 
 Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
-		: AbstractPart(name), scripted(engine), d(new Private(this)), m_view(NULL) {
+		: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)){
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -157,11 +132,11 @@ QMenu *Worksheet::createContextMenu() {
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
 QWidget *Worksheet::view() const {
-	if (!m_view) {
-		m_view = new WorksheetView(const_cast<Worksheet *>(this));
-		connect(m_view, SIGNAL(statusInfo(const QString&)), this, SIGNAL(statusInfo(const QString&)));
+	if (!d->m_view) {
+		d->m_view = new WorksheetView(const_cast<Worksheet *>(this));
+		connect(d->m_view, SIGNAL(statusInfo(const QString&)), this, SIGNAL(statusInfo(const QString&)));
 	}
-	return m_view;
+	return d->m_view;
 }
 
 //! Save as XML
@@ -180,8 +155,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 	if (addedElement) {
 		const_cast<AbstractWorksheetElement *>(addedElement)->retransform();
 
-		if (aspect->parentAspect() == this)
-		{
+		if (aspect->parentAspect() == this){
 			QGraphicsItem *item = addedElement->graphicsItem();
 			Q_ASSERT(item != NULL);
 			d->m_scene->addItem(item);
@@ -213,17 +187,76 @@ QRectF Worksheet::pageRect() const {
 	return d->m_scene->sceneRect();
 }
 
-QRectF Worksheet::Private::swapPageRect(const QRectF &rect) {
-	QRectF oldRect = m_scene->sceneRect();
-	m_scene->setSceneRect(rect.normalized());
-
-	return oldRect;
+void Worksheet::childSelected(){
+	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
+	if (element)
+		emit itemSelected(element->graphicsItem());
 }
+
+void Worksheet::update(){
+	emit requestUpdate();
+}
+
+/* ============================ getter methods for background options ================= */
+BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundType, backgroundType, backgroundType);
+BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle);
+BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle);
+CLASS_D_READER_IMPL(Worksheet, QBrush, backgroundBrush, backgroundBrush);
+CLASS_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor);
+CLASS_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor);
+CLASS_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName);
+BASIC_D_READER_IMPL(Worksheet, qreal, backgroundOpacity, backgroundOpacity);
+
+
+/* ============================ setter methods and undo commands  for background options  ================= */
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update);
+void Worksheet::setBackgroundType(PlotArea::BackgroundType type) {
+	if (type != d->backgroundType)
+		exec(new WorksheetSetBackgroundTypeCmd(d, type, tr("%1: background type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update);
+void Worksheet::setBackgroundColorStyle(PlotArea::BackgroundColorStyle style) {
+	if (style != d->backgroundColorStyle)
+		exec(new WorksheetSetBackgroundColorStyleCmd(d, style, tr("%1: background color style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update);
+void Worksheet::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
+	if (style != d->backgroundImageStyle)
+		exec(new WorksheetSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFirstColor, QColor, backgroundFirstColor, update);
+void Worksheet::setBackgroundFirstColor(const QColor &color) {
+	if (color!= d->backgroundFirstColor)
+		exec(new WorksheetSetBackgroundFirstColorCmd(d, color, tr("%1: set background first color")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundSecondColor, QColor, backgroundSecondColor, update);
+void Worksheet::setBackgroundSecondColor(const QColor &color) {
+	if (color!= d->backgroundSecondColor)
+		exec(new WorksheetSetBackgroundSecondColorCmd(d, color, tr("%1: set background second color")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFileName, QString, backgroundFileName, update);
+void Worksheet::setBackgroundFileName(const QString& fileName) {
+	if (fileName!= d->backgroundFileName)
+		exec(new WorksheetSetBackgroundFileNameCmd(d, fileName, tr("%1: set background image")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundOpacity, qreal, backgroundOpacity, update);
+void Worksheet::setBackgroundOpacity(qreal opacity) {
+	if (opacity != d->backgroundOpacity)
+		exec(new WorksheetSetBackgroundOpacityCmd(d, opacity, tr("%1: set opacity")));
+}
+
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect);
 void Worksheet::setPageRect(const QRectF &rect, bool scaleContent) {
 	if (qFuzzyCompare(rect.width() + 1, 1) || qFuzzyCompare(rect.height() + 1, 1))
 		return;
+
 	if (rect != d->m_scene->sceneRect()) {
 		QString title = tr("%1: set page size");
 		QRectF oldRect = d->m_scene->sceneRect();
@@ -243,8 +276,30 @@ void Worksheet::setPageRect(const QRectF &rect, bool scaleContent) {
 	}
 }
 
-void Worksheet::childSelected(){
- AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
- if (element)
-  emit itemSelected(element->graphicsItem());
+//################################################################
+//################### Private implementation ##########################
+//################################################################
+WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner), m_view(NULL){
+	m_scene = new WorksheetGraphicsScene();
+// 	m_scene->setSceneRect(0, 0, 150, 150); //15cm x 15cm
+	m_scene->setSceneRect(0, 0, 1000, 1000);
+}
+
+QString WorksheetPrivate::name() const{
+	return q->name();
+}
+
+QRectF WorksheetPrivate::swapPageRect(const QRectF &rect) {
+	QRectF oldRect = m_scene->sceneRect();
+	m_scene->setSceneRect(rect.normalized());
+
+	return oldRect;
+}
+
+void WorksheetPrivate::update(){
+	q->update();
+}
+
+WorksheetPrivate::~WorksheetPrivate(){
+	delete m_scene;
 }
