@@ -72,7 +72,7 @@ Worksheet::Private::Private(Worksheet *owner)
 
 	m_scene = new WorksheetGraphicsScene();
 //  	m_scene->setSceneRect(0, 0, 210, 297); // A4
-	m_scene->setSceneRect(0, 0, 150, 150); // A4
+	m_scene->setSceneRect(0, 0, 1000, 1000);
 }
 		
 Worksheet::Private::~Private() {

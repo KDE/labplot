@@ -81,7 +81,7 @@ void XYCurve::init(){
 	
 	d->symbolsOpacity = 1.0;
 	d->symbolRotationAngle = 0;
-	d->symbolSize = 1;
+	d->symbolSize = 5;
 	d->symbolAspectRatio = 1;
 	d->symbolPrototype = NULL;
 	d->swapSymbolTypeId("diamond");

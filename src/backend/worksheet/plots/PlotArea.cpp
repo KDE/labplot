@@ -36,6 +36,7 @@
 #include "lib/commandtemplates.h"
 #include "lib/macros.h"
 #include <QPainter>
+#include <QDebug>
 
 /**
  * \class PlotArea
@@ -288,6 +289,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
 	painter->setOpacity(backgroundOpacity);
 	QRectF rect = boundingRect();
+	qDebug()<<rect.width()<<' '<<rect.height()<<endl;
 	if (backgroundType == PlotArea::Color){
 		switch (backgroundColorStyle){
 			case PlotArea::SingleColor:{

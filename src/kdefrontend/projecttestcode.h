@@ -285,13 +285,13 @@ void MainWin::startTestCode(){
 	
 	Axis *xAxis2 = new Axis("x axis 1", Axis::AxisHorizontal);
 	plot->addChild(xAxis2);
-	xAxis2->setMajorTicksLength(3);
-	xAxis2->setMinorTicksLength(1);
+	xAxis2->setMajorTicksLength(20);
+	xAxis2->setMinorTicksLength(7);
 	xAxis2->setMinorTicksNumber(3);
 	Axis *yAxis2 = new Axis("y axis 1", Axis::AxisVertical);
 	plot->addChild(yAxis2);
-	yAxis2->setMajorTicksLength(3);
-	yAxis2->setMinorTicksLength(1);
+	yAxis2->setMajorTicksLength(20);
+	yAxis2->setMinorTicksLength(7);
 	yAxis2->setMinorTicksNumber(3);
 	yAxis2->setMajorTicksNumber(6);
 	yAxis2->setStart(0);
@@ -303,8 +303,8 @@ void MainWin::startTestCode(){
 	Axis *yAxis3 = new Axis("y axis 2", Axis::AxisVertical);
 	plot->addChild(yAxis3);
 	yAxis3->setOffset(10);
-	yAxis3->setMajorTicksLength(3);
-	yAxis3->setMinorTicksLength(1);
+	yAxis3->setMajorTicksLength(20);
+	yAxis3->setMinorTicksLength(7);
 	yAxis3->setMajorTicksDirection(Axis::ticksBoth);
 	yAxis3->setMinorTicksDirection(Axis::ticksBoth);
 	yAxis3->setStart(0);

@@ -96,7 +96,7 @@ void Axis::init() {
 	
 	d->labelsPosition = LabelsOut;
 	d->labelsColor = QColor(Qt::black);
-	d->labelsFontSize = 2;
+	d->labelsFontSize = 10;
 	d->labelsRotationAngle = 0;
 	d->labelsOpacity = 1.0;
 	
