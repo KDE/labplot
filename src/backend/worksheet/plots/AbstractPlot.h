@@ -4,6 +4,7 @@
     Description          : Second level container in a Worksheet for logical grouping
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -45,6 +46,9 @@ class AbstractPlot: public WorksheetElementContainer {
 		AbstractCoordinateSystem* coordinateSystem() const;
 		PlotArea* plotArea();
 		// TODO add abstract methods interface (such as transform(...))
+
+	public slots:
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
 		AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd);

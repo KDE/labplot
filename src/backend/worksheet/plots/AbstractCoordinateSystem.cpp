@@ -4,6 +4,7 @@
     Description          : Base class of all worksheet coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -27,26 +28,20 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/AbstractCoordinateSystem.h"
-#include "worksheet/WorksheetElementContainerPrivate.h"
+#include "worksheet/plots/AbstractCoordinateSystem.h"
+#include "worksheet/plots/AbstractPlot.h"
 
 /**
  * \class AbstractCoordinateSystem
  * \brief Base class of all worksheet coordinate systems.
  *
- * 
+ *  \ingroup backend\worksheet
  */
 
-
-AbstractCoordinateSystem::AbstractCoordinateSystem(const QString &name) 
-	: WorksheetElementContainer(name) {
+AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot* plot){
 }
 
-AbstractCoordinateSystem::AbstractCoordinateSystem(const QString &name, WorksheetElementContainerPrivate *dd)
-	: WorksheetElementContainer(name, dd) {
-}
-
-AbstractCoordinateSystem::~AbstractCoordinateSystem() {
+AbstractCoordinateSystem::~AbstractCoordinateSystem(){
 }
 
 /**
@@ -195,4 +190,3 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
     }
     return true;
 }
-

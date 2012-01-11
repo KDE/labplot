@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -42,7 +42,7 @@ class CartesianPlot:public AbstractPlot{
 
 	private:
 		void init();
-	
+
 	protected:
 		CartesianPlot(const QString &name, WorksheetElementContainerPrivate *dd);
 };

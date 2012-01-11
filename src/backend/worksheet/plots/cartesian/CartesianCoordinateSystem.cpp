@@ -4,6 +4,7 @@
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -28,12 +29,8 @@
  ***************************************************************************/
 
 #include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "worksheet/WorksheetElementContainerPrivate.h"
 #include "worksheet/Worksheet.h"
-#include "lib/commandtemplates.h"
-#include <QPen>
-#include <QtDebug>
-#include <QGraphicsItemGroup>
+#include "core/AbstractAspect.h"
 #include <cmath>
 #include <QUndoCommand>
 #include <QtGlobal>
@@ -228,46 +225,31 @@ CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLogSca
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
 /* ============================================================================ */
+class CartesianCoordinateSystemPrivate{
+public:
+		CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
+		~CartesianCoordinateSystemPrivate();
 
-class CartesianCoordinateSystemPrivate: public WorksheetElementContainerPrivate {
-	public:
-		CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner) 
-			: WorksheetElementContainerPrivate(owner) {
-		}
-
-		~CartesianCoordinateSystemPrivate() {
-		}
-
-		QString name() const {
-			return q->name();
-		}
-
+		CartesianCoordinateSystem* const q;
+		AbstractPlot* plot;
 		QList<CartesianCoordinateSystem::Scale *> xScales;
 		QList<CartesianCoordinateSystem::Scale *> yScales;
 };
 
-CartesianCoordinateSystem::CartesianCoordinateSystem(const QString &name) 
-		: AbstractCoordinateSystem(name, new CartesianCoordinateSystemPrivate(this)) {
-	init();
-}
-
-CartesianCoordinateSystem::CartesianCoordinateSystem(const QString &name, CartesianCoordinateSystemPrivate *dd)
-    : AbstractCoordinateSystem(name, dd) {
-	init();
-}
-
-void CartesianCoordinateSystem::init() {
+CartesianCoordinateSystem::CartesianCoordinateSystem(AbstractPlot* plot) 
+		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)){
+			d->plot=plot;
 	// TODO: set some standard scales
 }
 
-CartesianCoordinateSystem::~CartesianCoordinateSystem() {
+
+CartesianCoordinateSystem::~CartesianCoordinateSystem(){
+	delete d;
 }
 
 QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
-	Q_D(const CartesianCoordinateSystem);
-
-	Worksheet *worksheet = ancestor<Worksheet>();
 	QRectF pageRect;
+	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
 	if (worksheet)
 		pageRect = worksheet->pageRect();
 
@@ -310,14 +292,12 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 	return result;
 }
 
-QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const {
-	Q_D(const CartesianCoordinateSystem);
-
-	Worksheet *worksheet = ancestor<Worksheet>();
+QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
 	QRectF pageRect;
+	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
 	if (worksheet)
 		pageRect = worksheet->pageRect();
-
+	
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -363,16 +343,13 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 	return result;
 }
 
-QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags) const {
-	Q_D(const CartesianCoordinateSystem);
-
-	Worksheet *worksheet = ancestor<Worksheet>();
+QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags) const{
 	QRectF pageRect;
+	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
 	if (worksheet)
 		pageRect = worksheet->pageRect();
 
 	QList<QLineF> result;
-
 	bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
 
 	double xGapBefore = NAN;
@@ -544,7 +521,6 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
  * \return 1 or -1
  */
 int CartesianCoordinateSystem::xDirection() const {
-	Q_D(const CartesianCoordinateSystem);
 	if (d->xScales.isEmpty())
 		return 1;
 
@@ -557,60 +533,54 @@ int CartesianCoordinateSystem::xDirection() const {
  * This function is needed for untransformed lengths such as axis tick length.
  * \return 1 or -1
  */
-int CartesianCoordinateSystem::yDirection() const {
-	Q_D(const CartesianCoordinateSystem);
+int CartesianCoordinateSystem::yDirection() const{
 	if (d->yScales.isEmpty())
 		return 1;
 
 	return d->yScales.at(0)->direction();
 }
 
-QGraphicsItem *CartesianCoordinateSystem::graphicsItem() const {
-	return d_ptr;
-}
-
 // TODO: design elegant, flexible and undo-avare API for changing scales
 bool CartesianCoordinateSystem::setXScales(const QList<Scale *> &scales) {
-	Q_D(CartesianCoordinateSystem);
-
 	d->xScales = scales;
 	return true; // TODO: check scales validity
 }
 
 QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::xScales() const {
-	Q_D(const CartesianCoordinateSystem);
 	return d->xScales; // TODO: should rather return a copy of the scales here
 }
 
 bool CartesianCoordinateSystem::setYScales(const QList<Scale *> &scales) {
-	Q_D(CartesianCoordinateSystem);
 	d->yScales = scales;
 	return true; // TODO: check scales validity
 }
 
 QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::yScales() const {
-	Q_D(const CartesianCoordinateSystem);
 	return d->yScales; // TODO: should rather return a copy of the scales here
 }
 
 void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double verticalRatio) {
-	Q_D(CartesianCoordinateSystem);
-
 	Scale::ScaleType type;
 	Interval<double> interval;
 	double a, b, c;
 
-	beginMacro(tr("%1: adjust to page size").arg(name()));
+	d->plot->beginMacro(QObject::tr("adjust to page size"));
 	foreach (Scale *xScale, d->xScales) {
 		xScale->getPropertiesOnResize(horizontalRatio, &type, &interval, &a, &b, &c);
-		exec(new CartesianCoordinateSystemSetScalePropertiesCmd(xScale, interval, a, b, c));
+		d->plot->exec(new CartesianCoordinateSystemSetScalePropertiesCmd(xScale, interval, a, b, c));	
 	}
 
 	foreach (Scale *yScale, d->yScales) {
 		yScale->getPropertiesOnResize(verticalRatio, &type, &interval, &a, &b, &c);
-		exec(new CartesianCoordinateSystemSetScalePropertiesCmd(yScale, interval, a, b, c));
+		d->plot->exec(new CartesianCoordinateSystemSetScalePropertiesCmd(yScale, interval, a, b, c));
 	}
-	endMacro();
-	
-	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+	d->plot->endMacro();
+}
+
+//############ private-implementation #################
+CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner)
+	:q(owner){
+}
+
+CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate(){
 }

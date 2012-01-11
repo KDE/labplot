@@ -136,6 +136,7 @@ void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
 	}
 	setLabelsOffset(QPointF(d->labelsOffset.x() * horizontalRatio, d->labelsOffset.y() * verticalRatio));
 
+	retransform();
 	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
 
@@ -579,7 +580,7 @@ bool AxisPrivate::transformAnchor(const AbstractCoordinateSystem *cSystem, QPoin
 }
 
 void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
-	const CartesianCoordinateSystem *cCSystem = qobject_cast<const CartesianCoordinateSystem *>(cSystem);
+	const CartesianCoordinateSystem *cCSystem = dynamic_cast<const CartesianCoordinateSystem *>(cSystem);
 
 	majorTicksPath = QPainterPath();
 	minorTicksPath = QPainterPath();

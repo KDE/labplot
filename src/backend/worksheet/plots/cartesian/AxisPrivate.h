@@ -34,8 +34,10 @@
 #include <QGraphicsItem>
 #include <QPen>
 #include <QFont>
-#include "worksheet/ScalableTextLabel.h"
+// #include "worksheet/ScalableTextLabel.h"
 #include "Axis.h"
+
+class AbstractCoordinateSystem;
 
 class AxisPrivate: public QGraphicsItem {
 	public:

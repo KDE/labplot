@@ -4,6 +4,7 @@
     Description          : Generic WorksheetElement container.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -114,32 +115,37 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 }
     
 void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-//   QGraphicsItem::paint(painter,option, widget);
-	Q_UNUSED(painter)
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 	
+	if (!isVisible())
+		return;
+
+	//TODO remove this later
 	painter->drawRect(boundingRect());
 	if (isSelected()){
-	QPainterPath path = shape();  
-	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-	painter->drawPath(path);
+		QPainterPath path = shape();  
+		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->drawPath(path);
   }
 }
 
-void WorksheetElementContainer::setVisible(bool on) {
+void WorksheetElementContainer::setVisible(bool on){
+	Q_D(WorksheetElementContainer);
+	
+	//change the visibility of the containter itself
+	d->setVisible(on);
+	
+	//change also the visibility of all children
 	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(AbstractWorksheetElement *elem, childList)
+	foreach(AbstractWorksheetElement *elem, childList){
 		elem->setVisible(on);
+	}
 }
 
 bool WorksheetElementContainer::isVisible() const {
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const AbstractWorksheetElement *elem, childList) {
-		if (elem->isVisible()) 
-			return true;
-	}
-	return false;
+	Q_D(const WorksheetElementContainer);
+	return d->isVisible();
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
@@ -170,7 +176,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 	if (addedElement && (aspect->parentAspect() == this)) {
 		QGraphicsItem *item = addedElement->graphicsItem();
 		Q_ASSERT(item != NULL);
-		item->setParentItem(d);			
+		item->setParentItem(d);
 
 		qreal zVal = 0;
 		QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
@@ -185,6 +191,6 @@ void WorksheetElementContainer::handleAspectAboutToBeRemoved(const AbstractAspec
 	if (removedElement && (aspect->parentAspect() == this)) {
 		QGraphicsItem *item = removedElement->graphicsItem();
 		Q_ASSERT(item != NULL);
-		item->setParentItem(NULL);			
+		item->setParentItem(NULL);	
 	}
 }

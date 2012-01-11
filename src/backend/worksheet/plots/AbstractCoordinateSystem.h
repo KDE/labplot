@@ -4,6 +4,7 @@
     Description          : Base class of all worksheet coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -30,12 +31,13 @@
 #ifndef ABSTRACTCOORDINATESYSTEM_H
 #define ABSTRACTCOORDINATESYSTEM_H
 
-#include "worksheet/WorksheetElementContainer.h"
-#include <QVector>
+#include "worksheet/plots/AbstractPlot.h"
+#include <QString>
+#include <QList>
+#include <QLine>
+#include <QRectF>
 
-class AbstractCoordinateSystem: public WorksheetElementContainer {
-	Q_OBJECT
-
+class AbstractCoordinateSystem{
 	public:
 		enum MappingFlag {
 			DefaultMapping = 0x00,
@@ -44,12 +46,14 @@ class AbstractCoordinateSystem: public WorksheetElementContainer {
 		};
 		Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
 
-		AbstractCoordinateSystem(const QString &name);
+		AbstractCoordinateSystem(AbstractPlot*);
 		virtual ~AbstractCoordinateSystem();
 
 		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const = 0;
 		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const = 0;
 		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const = 0;
+
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio) = 0;
 
 		class LineClipResult {
 			public:
@@ -71,11 +75,5 @@ class AbstractCoordinateSystem: public WorksheetElementContainer {
 		};
 
 		static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = NULL);
-
-	protected:
-		AbstractCoordinateSystem(const QString &name, WorksheetElementContainerPrivate *dd);
 };
-
 #endif
-
-

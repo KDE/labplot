@@ -4,7 +4,7 @@
     Description          : A plot containing decoration elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -31,13 +31,13 @@
 #include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "worksheet/plots/PlotArea.h"
+#include "worksheet/Worksheet.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
 #else
 #include "KIcon"
 #endif
-
 
 /**
  * \class CartesianPlot
@@ -57,9 +57,7 @@ CartesianPlot::CartesianPlot(const QString &name, WorksheetElementContainerPriva
 
 void CartesianPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	m_coordinateSystem = new CartesianCoordinateSystem(name() + "coordinate system");
-	addChild(m_coordinateSystem);
-	m_coordinateSystem->setHidden(true);
+	m_coordinateSystem = new CartesianCoordinateSystem(this);
 	
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);

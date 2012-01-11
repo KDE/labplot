@@ -4,6 +4,7 @@
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -33,12 +34,10 @@
 #include "worksheet/plots/AbstractCoordinateSystem.h"
 #include "lib/macros.h"
 #include "lib/Interval.h"
-#include <QObject>
 
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 class CartesianCoordinateSystem: public AbstractCoordinateSystem {
-	Q_OBJECT
 
 	public:
 		class Scale {
@@ -78,14 +77,14 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 				double m_c;
 		};
 
-		CartesianCoordinateSystem(const QString &name);
+		CartesianCoordinateSystem(AbstractPlot*);
 		virtual ~CartesianCoordinateSystem();
 
 		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
 		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
 		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const;
 
-		virtual QGraphicsItem *graphicsItem() const;
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 		int xDirection() const;
 		int yDirection() const;
@@ -94,19 +93,9 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		bool setYScales(const QList<Scale *> &scales);
 		QList<Scale *> yScales() const;
 
-		typedef AbstractCoordinateSystem BaseClass;
-		typedef CartesianCoordinateSystemPrivate Private;
-
-	public slots:
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-
-	protected:
-		CartesianCoordinateSystem(const QString &name, CartesianCoordinateSystemPrivate *dd);
 	private:
-    	Q_DECLARE_PRIVATE(CartesianCoordinateSystem)
 		void init();
+		CartesianCoordinateSystemPrivate* d;
 };
 
 #endif
-
-

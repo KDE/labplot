@@ -30,6 +30,7 @@
 #include "worksheet/plots/AbstractPlot.h"
 #include "worksheet/plots/PlotArea.h"
 #include "worksheet/plots/AbstractCoordinateSystem.h"
+#include <QDebug>
 /**
  * \class AbstractPlot
  * \brief Second level container in a Worksheet for logical grouping
@@ -42,6 +43,7 @@ AbstractPlot::AbstractPlot(const QString &name)
 	: WorksheetElementContainer(name) {
 		
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 // TODO
 }
@@ -49,6 +51,7 @@ AbstractPlot::AbstractPlot(const QString &name)
 AbstractPlot::AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd)
 	: WorksheetElementContainer(name, dd) {
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 // TODO
 }
@@ -63,4 +66,10 @@ PlotArea* AbstractPlot::plotArea(){
 
 AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const{
 	return m_coordinateSystem;
+}
+
+void AbstractPlot::handlePageResize(double horizontalRatio, double verticalRatio){
+	m_coordinateSystem->handlePageResize(horizontalRatio, verticalRatio);
+	m_plotArea->handlePageResize(horizontalRatio, verticalRatio);
+	WorksheetElementContainer::handlePageResize(horizontalRatio, verticalRatio);
 }

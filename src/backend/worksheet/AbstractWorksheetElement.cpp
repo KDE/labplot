@@ -4,6 +4,7 @@
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -107,20 +108,6 @@ bool AbstractWorksheetElement::isFullyVisible() const {
  * inherits AbstractCoordinateSystem.
  */
 
-AbstractCoordinateSystem *AbstractWorksheetElement::coordinateSystem() const {
-	AbstractAspect * parent = parentAspect();
-	while (parent) {
-		AbstractCoordinateSystem *system = qobject_cast<AbstractCoordinateSystem *>(parent);
-		if (system)
-			return system;
-		Worksheet *worksheet = qobject_cast<Worksheet *>(parent);
-		if (worksheet)
-			return NULL;
-		parent = parent->parentAspect();
-	}
-	return NULL;
-}
-
 /**
     This does exactly what Qt internally does to creates a shape from a painter path.
 */
@@ -219,9 +206,7 @@ void AbstractWorksheetElement::execMoveInFrontOf(QAction *action) {
  * which are in page coodrinates (such as line widths). Don't forget 
  * to call the base class's handler in the overridden version.
  */
-void AbstractWorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio)
-{
+void AbstractWorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio){
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
 }
-

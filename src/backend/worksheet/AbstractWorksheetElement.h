@@ -4,6 +4,7 @@
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -32,7 +33,6 @@
 
 #include "core/AbstractAspect.h"
 #include <QGraphicsItem>
-class AbstractCoordinateSystem;
 class QAction;
 
 class AbstractWorksheetElement: public AbstractAspect {
@@ -47,8 +47,6 @@ class AbstractWorksheetElement: public AbstractAspect {
 		virtual void setVisible(bool on) = 0;
 		virtual bool isVisible() const = 0;
 		virtual bool isFullyVisible() const;
-
-		virtual AbstractCoordinateSystem *coordinateSystem() const;
 
 		virtual QMenu *createContextMenu();
 
@@ -71,4 +69,3 @@ class AbstractWorksheetElement: public AbstractAspect {
 };
 
 #endif
-
