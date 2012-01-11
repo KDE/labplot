@@ -174,6 +174,7 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 	setValuesFont(font);
 	
 	BaseClass::handlePageResize(horizontalRatio, verticalRatio);*/
+	retransform();
 }
 
 
