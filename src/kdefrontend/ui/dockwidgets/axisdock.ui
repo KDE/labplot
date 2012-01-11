@@ -135,7 +135,7 @@
           <bool>true</bool>
          </property>
          <property name="toolTip">
-          <string>Position of the axis  in the direction perpendicular to the axis</string>
+          <string>Position of the axis in the direction perpendicular to the axis in logical units.</string>
          </property>
          <property name="text">
           <string>Position</string>
@@ -148,7 +148,7 @@
           <bool>true</bool>
          </property>
          <property name="toolTip">
-          <string>Position of the axis  in the direction perpendicular to the axis</string>
+          <string>Position of the axis in the direction perpendicular to the axis in logical units.</string>
          </property>
         </widget>
        </item>
