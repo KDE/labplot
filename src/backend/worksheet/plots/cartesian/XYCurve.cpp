@@ -4,7 +4,7 @@
     Description          : A 2D-curve.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2012 Alexander Semke (alexander.semke*web.de)
 								  (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -155,7 +155,7 @@ void XYCurve::retransform(){
 
 void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
   //TODO
-/*	Q_D(const XYCurve);
+	Q_D(const XYCurve);
 	
 	setSymbolSize(d->symbolSize * horizontalRatio);
 	setSymbolAspectRatio(d->symbolAspectRatio * horizontalRatio / verticalRatio);
@@ -173,7 +173,6 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 	font.setPointSizeF(font.pointSizeF()*horizontalRatio);
 	setValuesFont(font);
 	
-	BaseClass::handlePageResize(horizontalRatio, verticalRatio);*/
 	retransform();
 }
 
@@ -668,7 +667,7 @@ void XYCurvePrivate::updateLines(){
 	  case XYCurve::SplineAkimaPeriodic:{
 		//TODO: optimize! try to ommit the copying from the column to the arrays of doubles.
 		gsl_interp_accel *acc  = gsl_interp_accel_alloc();
-		gsl_spline *spline;
+		gsl_spline *spline=0;
 		  
 		double x[count],  y[count];
 		for (int i=0; i<count; i++){
@@ -704,7 +703,7 @@ void XYCurvePrivate::updateLines(){
 		  }
 		}
 		
-		for (int i=0; i<xinterp.size()-1; i++){
+		for (unsigned int i=0; i<xinterp.size()-1; i++){
 		  lines.append(QLineF(xinterp[i], yinterp[i], xinterp[i+1], yinterp[i+1]));
 		}
 		
@@ -796,6 +795,7 @@ void XYCurvePrivate::updateValues(){
 	
 	//determine the value string for all points
 	switch (valuesType){
+	  case XYCurve::NoValues:
 	  case XYCurve::ValuesX:{
 		foreach(QPointF point, symbolPointsLogical){
  			valuesStrings << valuesPrefix + QString().setNum(point.x()) + valuesSuffix;
@@ -942,7 +942,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	  curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
 	}
 
-	if (valuesPosition != XYCurve::NoValues){
+	if (valuesType != XYCurve::NoValues){
 	  	for (int i=0; i<valuesPoints.size(); i++){
 		  valuesPath.addText( valuesPoints.at(i), valuesFont, valuesStrings.at(i) );
 		}
