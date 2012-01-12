@@ -122,27 +122,28 @@ QRectF WorksheetRectangleElement::rect() const {
 }
 
 void WorksheetRectangleElement::retransform() {
-	AbstractCoordinateSystem *system = coordinateSystem();
-
-	QPainterPath path;
-
-	if (system) {
-		QList<QLineF> lines;
-		lines.append(QLineF(m_rect.topLeft(), m_rect.topRight()));
-		lines.append(QLineF(m_rect.topRight(), m_rect.bottomRight()));
-		lines.append(QLineF(m_rect.bottomRight(), m_rect.bottomLeft()));
-		lines.append(QLineF(m_rect.bottomLeft(), m_rect.topLeft()));
-		lines = system->mapLogicalToScene(lines);	
-		
-		foreach (QLineF line, lines) {
-			path.moveTo(line.p1());
-			path.lineTo(line.p2());
-		}
-	}
-	else
-		path.addRect(m_rect);
-	
-	m_item.setPath(path);
+	//TODO get the coordinate system from the parent plot
+// 	AbstractCoordinateSystem *system = coordinateSystem();
+// 
+// 	QPainterPath path;
+// 
+// 	if (system) {
+// 		QList<QLineF> lines;
+// 		lines.append(QLineF(m_rect.topLeft(), m_rect.topRight()));
+// 		lines.append(QLineF(m_rect.topRight(), m_rect.bottomRight()));
+// 		lines.append(QLineF(m_rect.bottomRight(), m_rect.bottomLeft()));
+// 		lines.append(QLineF(m_rect.bottomLeft(), m_rect.topLeft()));
+// 		lines = system->mapLogicalToScene(lines);	
+// 		
+// 		foreach (QLineF line, lines) {
+// 			path.moveTo(line.p1());
+// 			path.lineTo(line.p2());
+// 		}
+// 	}
+// 	else
+// 		path.addRect(m_rect);
+// 	
+// 	m_item.setPath(path);
 }
 		
 void WorksheetRectangleElement::handlePageResize(double horizontalRatio, double verticalRatio) {

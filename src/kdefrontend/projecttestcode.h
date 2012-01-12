@@ -92,6 +92,7 @@ void MainWin::startTestCode(){
 	}
 	
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet %1").arg(1));
+	worksheet->setBackgroundFirstColor(Qt::white);
 	this->addAspectToProject(worksheet);
    
 
@@ -269,7 +270,7 @@ void MainWin::startTestCode(){
 	CartesianPlot *plot = new CartesianPlot("plot3");
 	worksheet->addChild(plot);
 
-	CartesianCoordinateSystem *cSystem = qobject_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
+	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale *> scales;
 // 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.02, pw * 0.42, -2, 10);
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.2, pw * 0.8, 0, 10);
