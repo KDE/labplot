@@ -29,11 +29,12 @@
  *                                                                         *
  ***************************************************************************/
 #include "core/AbstractAspect.h"
-
+#include "worksheet/AbstractWorksheetElement.h"
 #include "AspectTreeModel.h"
 #include <QDateTime>
 #include <QIcon>
 #include <QMenu>
+#include <QApplication>
 // #include <QDebug>
 
 /**
@@ -186,6 +187,14 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const{
 			return index.column() == 0 ? aspect->icon() : QIcon();
 		case ContextMenuRole:
 			return QVariant::fromValue(static_cast<QWidget*>(aspect->createContextMenu()));
+		case Qt::ForegroundRole:{
+			const AbstractWorksheetElement* we = qobject_cast<AbstractWorksheetElement*>(aspect);
+			if (we){
+				if (!we->isVisible())
+					return QVariant(  QApplication::palette().color(QPalette::Disabled,QPalette::Text ) );
+			}
+			return QVariant( QApplication::palette().color(QPalette::Active,QPalette::Text ) );
+		}
 		default:
 			return QVariant();
 	}
