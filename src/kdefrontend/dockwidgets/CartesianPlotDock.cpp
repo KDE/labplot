@@ -138,7 +138,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	ui.kcbBorderColor->setColor( plot->plotArea()->borderPen().color() );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, plot->plotArea()->borderPen().color());
 	ui.cbBorderStyle->setCurrentIndex( plot->plotArea()->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromMillimeter(plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
 	ui.sbBorderOpacity->setValue( plot->plotArea()->borderOpacity()*100 );
 	
 	m_initializing = false;
@@ -364,7 +364,7 @@ void CartesianPlotDock::borderWidthChanged(double value){
   QPen pen;
   foreach(CartesianPlot* plot, m_plotList){
 	pen=plot->plotArea()->borderPen();
-	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	plot->plotArea()->setBorderPen(pen);
   }  
 }

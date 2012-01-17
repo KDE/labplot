@@ -33,9 +33,9 @@
 #include <QTimer>
 #include <QPrinter>
 #include <KUrlCompletion>
-#include <QDebug>
+#include <QFileDialog>
 
-//taken from qprinter.cpp
+// a couple of standard sizes in mm, taken from qprinter.cpp
 static const float qt_paperSizes[][2] = {
     {210, 297}, // A4
     {176, 250}, // B5
@@ -151,14 +151,16 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	//show the properties of the first worksheet
   
  	//General-tab
- 	float w=worksheet->pageRect().width();
-	float h=worksheet->pageRect().height();
-	ui.sbWidth->setValue(worksheet->pageRect().width()/10);
-	ui.sbHeight->setValue(worksheet->pageRect().height()/10);
+ 	float w=Worksheet::convertFromSceneUnits(worksheet->pageRect().width(), Worksheet::Centimeter);
+	float h=Worksheet::convertFromSceneUnits(worksheet->pageRect().height(), Worksheet::Centimeter);
+	ui.sbWidth->setValue(w);
+	ui.sbHeight->setValue(h);
 	
 	
 	//Check, whether the size is one of the QPrinter::PaperSize
 	int i=0;
+	w=w/10;
+	h=h/10;
 	
 	//check the portrait-orientation first
 	while ( !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) && i<30 ){
@@ -186,15 +188,14 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 		}
 	}
 	
-// TODO
-// 	//Background-tab
-// 	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
-// 	ui.cbBackgroundColorStyle->setCurrentIndex( worksheet->backgroundColorStyle() );
-// 	ui.cbBackgroundImageStyle->setCurrentIndex( worksheet->backgroundImageStyle() );
-// 	ui.kleBackgroundFileName->setText( worksheet->backgroundFileName() );
-// 	ui.kcbBackgroundFirstColor->setColor( worksheet->backgroundFirstColor() );
-// 	ui.kcbBackgroundSecondColor->setColor( worksheet->backgroundSecondColor() );
-// 	ui.sbOpacity->setValue(worksheet->opacity()*100 );
+	//Background-tab
+	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
+	ui.cbBackgroundColorStyle->setCurrentIndex( worksheet->backgroundColorStyle() );
+	ui.cbBackgroundImageStyle->setCurrentIndex( worksheet->backgroundImageStyle() );
+	ui.kleBackgroundFileName->setText( worksheet->backgroundFileName() );
+	ui.kcbBackgroundFirstColor->setColor( worksheet->backgroundFirstColor() );
+	ui.kcbBackgroundSecondColor->setColor( worksheet->backgroundSecondColor() );
+	ui.sbOpacity->setValue(worksheet->backgroundOpacity()*100 );
 
 	m_initializing = false;
 }
@@ -311,6 +312,8 @@ void WorksheetDock::sizeChanged(int i){
 	}
 	
 	bool scaleContent = ui.chScaleContent->isChecked();
+	w = Worksheet::convertToSceneUnits(w, Worksheet::Millimeter);
+	h = Worksheet::convertToSceneUnits(h, Worksheet::Millimeter);
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setPageRect(QRect(0,0,w,h), scaleContent);
 	}
@@ -325,8 +328,8 @@ void WorksheetDock::sizeChanged(){
   if (m_initializing)
 	return;
 
-	int w=ui.sbWidth->value()*10;
-	int h=ui.sbHeight->value()*10;
+  	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
+	int h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
 	bool scaleContent = ui.chScaleContent->isChecked();
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setPageRect(QRect(0,0,w,h), scaleContent);
@@ -337,7 +340,7 @@ void WorksheetDock::orientationChanged(int index){
   if (m_initializing)
 	return;
 
-  this->sizeChanged(ui.cbSize->currentIndex());
+  this->sizeChanged(index);
 }
 
 // "Background"-tab
@@ -345,10 +348,10 @@ void WorksheetDock::opacityChanged(int value){
   if (m_initializing)
 	return;
 
-  qreal opacity = (float)value/100;
-//   foreach(CartesianPlot* plot, m_worksheetList){
-// 	plot->plotArea()->setOpacity(opacity);
-//   }
+	qreal opacity = (float)value/100;
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundOpacity(opacity);
+	}
 }
 
 void WorksheetDock::backgroundTypeChanged(int index){
@@ -393,9 +396,9 @@ void WorksheetDock::backgroundTypeChanged(int index){
 	if (m_initializing)
 		return;
    
-// 	foreach(CartesianPlot* plot, m_worksheetList){
-// 		plot->plotArea()->setBackgroundType(type);
-//   }  
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundType(type);
+  }
 }
 
 void WorksheetDock::backgroundColorStyleChanged(int index){
@@ -412,9 +415,9 @@ void WorksheetDock::backgroundColorStyleChanged(int index){
 	if (m_initializing)
 		return;
    
-// 	foreach(CartesianPlot* plot, m_worksheetList){
-// 		plot->plotArea()->setBackgroundColorStyle(style);
-//   }  
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundColorStyle(style);
+  }  
 }
 
 void WorksheetDock::backgroundImageStyleChanged(int index){
@@ -422,18 +425,18 @@ void WorksheetDock::backgroundImageStyleChanged(int index){
 		return;
 
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
-// 	foreach(CartesianPlot* plot, m_worksheetList){
-// 		plot->plotArea()->setBackgroundImageStyle(style);
-//   }  
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundImageStyle(style);
+	}  
 }
 
 void WorksheetDock::backgroundFirstColorChanged(const QColor& c){
   if (m_initializing)
 	return;
 
-//   foreach(CartesianPlot* plot, m_worksheetList){
-// 	plot->plotArea()->setBackgroundFirstColor(c);
-//   }  
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundFirstColor(c);
+	}
 }
 
 
@@ -441,32 +444,32 @@ void WorksheetDock::backgroundSecondColorChanged(const QColor& c){
   if (m_initializing)
 	return;
 
-//   foreach(CartesianPlot* plot, m_worksheetList){
-// 	plot->plotArea()->setBackgroundSecondColor(c);
-//   }  
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundFirstColor(c);
+	}
 }
 
 /*!
 	opens a file dialog and lets the user select the image file.
 */
 void WorksheetDock::selectFile() {
-//     QString path=QFileDialog::getOpenFileName(this, i18n("Select the image file"));
-//     if (path=="")
-//         return;
-// 
-//     ui.kleBackgroundFileName->setText( path );
+    QString path=QFileDialog::getOpenFileName(this, i18n("Select the image file"));
+    if (path=="")
+        return;
 
-// 	foreach(CartesianPlot* plot, m_worksheetList){
-// 		plot->plotArea()->setBackgroundFileName(path);
-//   }  
+    ui.kleBackgroundFileName->setText( path );
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundFileName(path);
+  }  
 }
 
 void WorksheetDock::fileNameChanged(){
 	if (m_initializing)
 		return;
 	
-// 	QString fileName = ui.kleBackgroundFileName->text();
-// 	foreach(CartesianPlot* plot, m_worksheetList){
-// 		plot->plotArea()->setBackgroundFileName(fileName);
-// 	} 
+	QString fileName = ui.kleBackgroundFileName->text();
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundFileName(fileName);
+  } 
 }

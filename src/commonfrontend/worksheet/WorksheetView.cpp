@@ -4,7 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009-2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
 
  ***************************************************************************/
@@ -74,7 +74,7 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   
   	connect(worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
 	connect(worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
-	connect(worksheet, SIGNAL(requestUpdate()), this, SLOT(invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer)));
+	connect(worksheet, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
   
   setRenderHint(QPainter::Antialiasing);
   setInteractive(true);
@@ -94,7 +94,8 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   initActions();
   initMenus();
   navigationModeAction->setChecked(true);
-  
+  zoomFitPageHeight();
+
   // 	connect(m_worksheet, SIGNAL(requestProjectMenu(QMenu*,bool*)), this, SLOT(fillProjectMenu(QMenu*,bool*)));
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
   connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
@@ -468,8 +469,9 @@ void WorksheetView::zoomOut(){
 }
 
 void WorksheetView::zoomOrigin(){
-  setTransform(QTransform::fromScale(QApplication::desktop()->physicalDpiX()/25.4,
-			  QApplication::desktop()->physicalDpiY()/25.4));
+	float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+	float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+  setTransform(QTransform::fromScale(hscale, vscale));
 }
 
 void WorksheetView::zoomFitPageWidth(){
@@ -712,4 +714,8 @@ void WorksheetView::print(QPrinter* printer) const{
 	painter.scale(scale, scale);
 
 	scene()->render(&painter, rect);
+}
+
+void WorksheetView::updateBackground(){
+	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
 }

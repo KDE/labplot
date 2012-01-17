@@ -420,21 +420,21 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
   ui.sbLineInterpolationPointsCount->setValue( curve->lineInterpolationPointsCount() );
   ui.cbLineStyle->setCurrentIndex( curve->linePen().style() );
   ui.kcbLineColor->setColor( curve->linePen().color() );
-  ui.sbLineWidth->setValue( Worksheet::convertFromMillimeter(curve->linePen().widthF(), Worksheet::Point) );
+  ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(curve->linePen().widthF(), Worksheet::Point) );
   ui.sbLineOpacity->setValue( curve->lineOpacity()*100 );
   GuiTools::updatePenStyles(ui.cbLineStyle, curve->linePen().color() );
   
   ui.cbDropLineType->setCurrentIndex( curve->dropLineType() );
   ui.cbDropLineStyle->setCurrentIndex( curve->dropLinePen().style() );
   ui.kcbDropLineColor->setColor( curve->dropLinePen().color() );
-  ui.sbDropLineWidth->setValue( Worksheet::convertFromMillimeter(curve->dropLinePen().widthF(), Worksheet::Point) );
+  ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(curve->dropLinePen().widthF(), Worksheet::Point) );
   ui.sbDropLineOpacity->setValue( curve->dropLineOpacity()*100 );
   GuiTools::updatePenStyles(ui.cbDropLineStyle, curve->dropLinePen().color() );
   
   
   //Symbol-tab
   ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(curve->symbolTypeId()) );
-  ui.sbSymbolSize->setValue( Worksheet::convertFromMillimeter(curve->symbolSize(), Worksheet::Point) );
+  ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(curve->symbolSize(), Worksheet::Point) );
   ui.sbSymbolRotation->setValue( curve->symbolRotationAngle() );
   ui.sbSymbolOpacity->setValue( curve->symbolsOpacity()*100 );
   ui.cbSymbolFillingStyle->setCurrentIndex( curve->symbolsBrush().style() );
@@ -442,7 +442,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 
   ui.cbSymbolBorderStyle->setCurrentIndex( curve->symbolsPen().style() );
   ui.kcbSymbolBorderColor->setColor( curve->symbolsPen().color() );
-  ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromMillimeter(curve->symbolsPen().widthF(), Worksheet::Point) );
+  ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(curve->symbolsPen().widthF(), Worksheet::Point) );
 
   GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, curve->symbolsPen().color() );
   GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
@@ -452,7 +452,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 
   ui.cbValuesPosition->setCurrentIndex( curve->valuesPosition() );
   ui.sbValuesRotation->setValue( curve->valuesRotationAngle() );
-  ui.sbValuesDistance->setValue( Worksheet::convertFromMillimeter(curve->valuesDistance(), Worksheet::Point) );
+  ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(curve->valuesDistance(), Worksheet::Point) );
   ui.sbValuesOpacity->setValue( curve->valuesOpacity()*100 );
   ui.leValuesPrefix->setText( curve->valuesPrefix() );
   ui.leValuesSuffix->setText( curve->valuesSuffix() );
@@ -770,7 +770,7 @@ void XYCurveDock::lineWidthChanged(double value){
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->linePen();
-	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	curve->setLinePen(pen);
   }  
 }
@@ -843,7 +843,7 @@ void XYCurveDock::dropLineWidthChanged(double value){
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->dropLinePen();
-	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	curve->setDropLinePen(pen);
   }  
 }
@@ -910,7 +910,7 @@ void XYCurveDock::symbolSizeChanged(double value){
 	return;
 	
   foreach(XYCurve* curve, m_curvesList){
-	curve->setSymbolSize( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	curve->setSymbolSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
   }
 }
 
@@ -1011,7 +1011,7 @@ void XYCurveDock::symbolBorderWidthChanged(double value){
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
-	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	curve->setSymbolsPen(pen);
   }
 }
@@ -1110,7 +1110,7 @@ void XYCurveDock::valuesDistanceChanged(double  value){
 	return;
 		
   foreach(XYCurve* curve, m_curvesList){
-	curve->setValuesDistance( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
   }
 }
 

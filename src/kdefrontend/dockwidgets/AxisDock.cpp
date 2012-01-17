@@ -243,7 +243,7 @@ void AxisDock::setAxes(QList<Axis*> list){
   //Line-tab
   ui.cbLineStyle->setCurrentIndex( axis->linePen().style() );
   ui.kcbLineColor->setColor( axis->linePen().color() );
-  ui.sbLineWidth->setValue( Worksheet::convertFromMillimeter(axis->linePen().widthF(), Worksheet::Point) );
+  ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(axis->linePen().widthF(), Worksheet::Point) );
   ui.sbLineOpacity->setValue( axis->lineOpacity()*100 );
   GuiTools::updatePenStyles(ui.cbLineStyle, axis->linePen().color() );
   
@@ -255,8 +255,8 @@ void AxisDock::setAxes(QList<Axis*> list){
 	ui.leMajorTicksIncrement->setText(QString::number(axis->majorTicksIncrement()));
 	ui.cbMajorTicksLineStyle->setCurrentIndex( axis->majorTicksPen().style() );
 	ui.kcbMajorTicksColor->setColor( axis->majorTicksPen().color() );
-	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromMillimeter(axis->majorTicksPen().widthF(), Worksheet::Point) );
-	ui.sbMajorTicksLength->setValue( Worksheet::convertFromMillimeter(axis->majorTicksLength(), Worksheet::Point) );
+	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(axis->majorTicksPen().widthF(), Worksheet::Point) );
+	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(axis->majorTicksLength(), Worksheet::Point) );
 	ui.sbMajorTicksOpacity->setValue( axis->majorTicksOpacity()*100 );
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, axis->majorTicksPen().color() );
 
@@ -268,8 +268,8 @@ void AxisDock::setAxes(QList<Axis*> list){
 	ui.leMinorTicksIncrement->setText(QString::number(axis->minorTicksIncrement()));
 	ui.cbMinorTicksLineStyle->setCurrentIndex( axis->minorTicksPen().style() );
 	ui.kcbMinorTicksColor->setColor( axis->minorTicksPen().color() );
-	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromMillimeter(axis->minorTicksPen().widthF(), Worksheet::Point) );
-	ui.sbMinorTicksLength->setValue( Worksheet::convertFromMillimeter(axis->minorTicksLength(), Worksheet::Point) );
+	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(axis->minorTicksPen().widthF(), Worksheet::Point) );
+	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(axis->minorTicksLength(), Worksheet::Point) );
 	ui.sbMinorTicksOpacity->setValue( axis->minorTicksOpacity()*100 );
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, axis->minorTicksPen().color() );
 	
@@ -525,7 +525,7 @@ void AxisDock::lineWidthChanged(double  value){
   QPen pen;
   foreach(Axis* axis, m_axesList){
 	pen=axis->linePen();
-	pen.setWidthF(Worksheet::convertToMillimeter(value, Worksheet::Point));
+	pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
 	axis->setLinePen(pen);
   }  
 }
@@ -666,7 +666,7 @@ void AxisDock::majorTicksWidthChanged(double value){
   QPen pen;
   foreach(Axis* axis, m_axesList){
 	pen=axis->majorTicksPen();
-	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	axis->setMajorTicksPen(pen);
   }  
 }
@@ -676,7 +676,7 @@ void AxisDock::majorTicksLengthChanged(double value){
 	return;
   
   foreach(Axis* axis, m_axesList){
-	axis->setMajorTicksLength( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	axis->setMajorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
   }  
 }
 
@@ -813,7 +813,7 @@ void AxisDock::minorTicksWidthChanged(double value){
   QPen pen;
   foreach(Axis* axis, m_axesList){
 	pen=axis->minorTicksPen();
-	pen.setWidthF( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	axis->setMinorTicksPen(pen);
   }  
 }
@@ -823,7 +823,7 @@ void AxisDock::minorTicksLengthChanged(double value){
 	return;
   
   foreach(Axis* axis, m_axesList){
-	axis->setMinorTicksLength( Worksheet::convertToMillimeter(value, Worksheet::Point) );
+	axis->setMinorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
   }  
 }
 

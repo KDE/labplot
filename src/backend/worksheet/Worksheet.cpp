@@ -67,30 +67,36 @@ Worksheet::~Worksheet() {
 	delete d;
 }
 
-float Worksheet::convertToMillimeter(const float value, const Worksheet::Unit unit){
+/*!
+	converts from \c unit to the scene units. At the moment, 1 scene unit corresponds to 1/10 mm.
+ */
+float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit unit){
 	switch (unit){
     case Worksheet::Millimeter:
-		return value;
+		return value*10.0;
 	case Worksheet::Centimeter:
-		return value*10;
+		return value*100.0;
 	case Worksheet::Inch:
-		return value*25.4;
+		return value*25.4*10;
 	case Worksheet::Point:
-		return value*25.4/72;
+		return value*25.4/72*10;
 	}
 	return value;
 }
 
-float Worksheet::convertFromMillimeter(const float value, const Worksheet::Unit unit){
+/*!
+	converts from the scene units to \c unit . At the moment, 1 scene unit corresponds to 1/10 mm.
+ */
+float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit unit){
 	switch (unit){
     case Worksheet::Millimeter:
-		return value;
+		return value/10.0;
 	case Worksheet::Centimeter:
-		return value/10;
+		return value/100.0;
 	case Worksheet::Inch:
-		return value/25.4;
+		return value/2.54;
 	case Worksheet::Point:
-		return value/25.4*72;
+		return value/2.54*72;
 	}
 	return value;
 }
@@ -281,8 +287,7 @@ void Worksheet::setPageRect(const QRectF &rect, bool scaleContent) {
 //################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner), m_view(NULL){
 	m_scene = new WorksheetGraphicsScene();
-// 	m_scene->setSceneRect(0, 0, 150, 150); //15cm x 15cm
-	m_scene->setSceneRect(0, 0, 1000, 1000);
+	m_scene->setSceneRect(0, 0, 1500, 1500);
 }
 
 QString WorksheetPrivate::name() const{
