@@ -268,7 +268,8 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+		PlotArea::BackgroundColorStyle style = 
+			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
@@ -436,4 +437,12 @@ void CartesianPlotDock::saveDefaults(){
 	kWarning()<<"TODO";
 	KConfig config;
 	KConfigGroup group = config.group( "CartesianPlot" );
+	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
+	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
+	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
+	group.writeEntry("BackgroundFileName", ui.kleBackgroundFileName->text());
+	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
+	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
+	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
+	config.sync();
 }

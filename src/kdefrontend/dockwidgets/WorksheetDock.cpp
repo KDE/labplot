@@ -122,7 +122,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
-	connect( ui.sbOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
+	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
 	
 	this->retranslateUi();
 }
@@ -198,7 +198,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	ui.kleBackgroundFileName->setText( worksheet->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( worksheet->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( worksheet->backgroundSecondColor() );
-	ui.sbOpacity->setValue(worksheet->backgroundOpacity()*100 );
+	ui.sbBackgroundOpacity->setValue(worksheet->backgroundOpacity()*100 );
 	// this at last since others emmit backgroundColorStyleChanges
 	// and enables SecondColor button, etc.!
 	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
@@ -486,11 +486,12 @@ void WorksheetDock::saveDefaults(){
 	KConfig config;
 	KConfigGroup group = config.group( "Worksheet" );
 	group.writeEntry("BackgroundType",ui.cbBackgroundType->currentIndex());
-	group.writeEntry("BackgroundColorStyle",ui.cbBackgroundColorStyle->currentIndex());
-	group.writeEntry("BackgroundImageStyle",ui.cbBackgroundImageStyle->currentIndex());
-	group.writeEntry("BackgroundFirstColor",ui.kcbBackgroundFirstColor->color());
-	group.writeEntry("BackgroundSecondColor",ui.kcbBackgroundSecondColor->color());
-	group.writeEntry("BackgroundOpacity",ui.sbOpacity->value()/100.0);
+	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
+	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
+	group.writeEntry("BackgroundFileName", ui.kleBackgroundFileName->text());
+	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
+	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
+	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
 	config.sync();
 }
 	

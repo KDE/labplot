@@ -77,9 +77,9 @@ void Worksheet::init() {
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", 0);
 	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", 0);
 	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", 0);
+	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
-	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 }
 
