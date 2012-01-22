@@ -36,7 +36,6 @@
 #include "lib/commandtemplates.h"
 #include "lib/macros.h"
 
-
 #include <QWidget>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -73,11 +72,15 @@ Worksheet::~Worksheet() {
 }
 
 void Worksheet::init() {
-	kWarning()<<"TODO";
 	KConfig config;
 	KConfigGroup group = config.group( "Worksheet" );
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry( "BackgroundType",0);	
-
+	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", 0);
+	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", 0);
+	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", 0);
+	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
+	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
+	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
+	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 0.0);
 }
 
 /*!

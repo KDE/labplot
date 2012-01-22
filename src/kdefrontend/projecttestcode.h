@@ -92,7 +92,7 @@ void MainWin::startTestCode(){
 	}
 	
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet %1").arg(1));
-	worksheet->setBackgroundFirstColor(Qt::white);
+	//worksheet->setBackgroundFirstColor(Qt::white);
 	this->addAspectToProject(worksheet);
    
 

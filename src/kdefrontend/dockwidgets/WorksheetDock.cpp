@@ -193,13 +193,15 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	}
 	
 	//Background-tab
-	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
 	ui.cbBackgroundColorStyle->setCurrentIndex( worksheet->backgroundColorStyle() );
 	ui.cbBackgroundImageStyle->setCurrentIndex( worksheet->backgroundImageStyle() );
 	ui.kleBackgroundFileName->setText( worksheet->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( worksheet->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( worksheet->backgroundSecondColor() );
 	ui.sbOpacity->setValue(worksheet->backgroundOpacity()*100 );
+	// this at last since others emmit backgroundColorStyleChanges
+	// and enables SecondColor button, etc.!
+	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
 
 	m_initializing = false;
 }
@@ -375,7 +377,8 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+		PlotArea::BackgroundColorStyle style = 
+			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
@@ -384,6 +387,11 @@ void WorksheetDock::backgroundTypeChanged(int index){
 			ui.kcbBackgroundSecondColor->show();
 		}
 	}else if(type == PlotArea::Image){
+		ui.lBackgroundFirstColor->hide();
+		ui.kcbBackgroundFirstColor->hide();
+		ui.lBackgroundSecondColor->hide();
+		ui.kcbBackgroundSecondColor->hide();
+
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->show();
@@ -391,11 +399,6 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		ui.lBackgroundFileName->show();
 		ui.kleBackgroundFileName->show();
 		ui.bOpen->show();
-
-		ui.lBackgroundFirstColor->hide();
-		ui.kcbBackgroundFirstColor->hide();
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
 	}
 
 	if (m_initializing)
@@ -480,10 +483,14 @@ void WorksheetDock::fileNameChanged(){
 }
 
 void WorksheetDock::saveDefaults(){
-	kWarning()<<"TODO";
 	KConfig config;
 	KConfigGroup group = config.group( "Worksheet" );
 	group.writeEntry("BackgroundType",ui.cbBackgroundType->currentIndex());
+	group.writeEntry("BackgroundColorStyle",ui.cbBackgroundColorStyle->currentIndex());
+	group.writeEntry("BackgroundImageStyle",ui.cbBackgroundImageStyle->currentIndex());
+	group.writeEntry("BackgroundFirstColor",ui.kcbBackgroundFirstColor->color());
+	group.writeEntry("BackgroundSecondColor",ui.kcbBackgroundSecondColor->color());
+	group.writeEntry("BackgroundOpacity",ui.sbOpacity->value()/100.0);
 	config.sync();
 }
 	
