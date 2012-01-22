@@ -80,7 +80,7 @@ void Worksheet::init() {
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
-	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 0.0);
+	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 }
 
 /*!
