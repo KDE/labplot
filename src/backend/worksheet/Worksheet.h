@@ -80,6 +80,7 @@ class Worksheet: public AbstractPart, public scripted{
 		typedef WorksheetPrivate Private;
 
 	private:
+		void init();
 		WorksheetPrivate* const d;
 
 	 private slots:

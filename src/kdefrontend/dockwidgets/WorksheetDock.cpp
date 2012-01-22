@@ -36,6 +36,7 @@
 #include <QFileDialog>
 
 #include <kdebug.h>
+#include <KConfig>
 
 // a couple of standard sizes in mm, taken from qprinter.cpp
 static const float qt_paperSizes[][2] = {
@@ -110,7 +111,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
-	connect( ui.pbSave, SIGNAL(clicked()), this, SLOT(saveDefault()) );
+	connect( ui.pbSave, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 	
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -478,6 +479,11 @@ void WorksheetDock::fileNameChanged(){
   } 
 }
 
-void WorksheetDock::saveDefault(){
+void WorksheetDock::saveDefaults(){
 	kWarning()<<"TODO";
+	KConfig config;
+	KConfigGroup group = config.group( "Worksheet" );
+	group.writeEntry("BackgroundType",ui.cbBackgroundType->currentIndex());
+	config.sync();
 }
+	

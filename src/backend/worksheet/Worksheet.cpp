@@ -36,12 +36,16 @@
 #include "lib/commandtemplates.h"
 #include "lib/macros.h"
 
+
 #include <QWidget>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
 #else
 #include "KIcon"
+#include <kdebug.h>
+#include <KConfig>
+#include <KConfigGroup>
 #endif
 	
 /**
@@ -61,10 +65,19 @@ Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+	init();
 }
 
 Worksheet::~Worksheet() {
 	delete d;
+}
+
+void Worksheet::init() {
+	kWarning()<<"TODO";
+	KConfig config;
+	KConfigGroup group = config.group( "Worksheet" );
+	d->backgroundType = (PlotArea::BackgroundType) group.readEntry( "BackgroundType",0);	
+
 }
 
 /*!

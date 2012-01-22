@@ -66,7 +66,7 @@ private slots:
 	void fileNameChanged();
 	void opacityChanged(int);
 
-	void saveDefault();
+	void saveDefaults();
 };
 
 #endif // WORKSHEETDOCK_H
