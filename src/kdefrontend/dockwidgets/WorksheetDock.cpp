@@ -82,6 +82,12 @@ static const float qt_paperSizes[][2] = {
 WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 
+	ui.pbLoad->setIcon(KIcon("document-open"));
+	ui.pbSave->setIcon(KIcon("document-save"));
+	ui.pbSaveDefault->setIcon(KIcon("document-save-as"));
+	ui.pbCopy->setIcon(KIcon("edit-copy"));
+	ui.pbPaste->setIcon(KIcon("edit-paste"));
+
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleBackgroundFileName->setClearButtonShown(true);
