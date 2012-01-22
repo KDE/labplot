@@ -337,10 +337,11 @@ void WorksheetDock::sizeChanged(){
 }
 
 void WorksheetDock::orientationChanged(int index){
+	Q_UNUSED(index);
   if (m_initializing)
 	return;
 
-  this->sizeChanged(index);
+  this->sizeChanged(ui.cbSize->currentIndex());
 }
 
 // "Background"-tab
