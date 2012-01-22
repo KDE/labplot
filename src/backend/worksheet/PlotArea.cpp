@@ -63,7 +63,8 @@ PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner)
 	rect = QRectF(0, 0, 10, 10);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
-	
+
+	//TODO: see plots/PlotArea.cpp
 	opacity = 1.0;
 	backgroundType = PlotArea::Color;
 	backgroundColorStyle = PlotArea::SingleColor;

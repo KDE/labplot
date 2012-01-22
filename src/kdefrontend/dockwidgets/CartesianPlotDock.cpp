@@ -434,9 +434,10 @@ void CartesianPlotDock::borderOpacityChanged(int value){
 }
 
 void CartesianPlotDock::saveDefaults(){
-	kWarning()<<"TODO";
 	KConfig config;
-	KConfigGroup group = config.group( "CartesianPlot" );
+
+	KConfigGroup group = config.group( "PlotArea" );
+	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
@@ -444,5 +445,11 @@ void CartesianPlotDock::saveDefaults(){
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
+	//Border
+	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
+	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
+	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
+	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
+
 	config.sync();
 }

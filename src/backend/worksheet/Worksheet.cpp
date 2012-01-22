@@ -74,9 +74,9 @@ Worksheet::~Worksheet() {
 void Worksheet::init() {
 	KConfig config;
 	KConfigGroup group = config.group( "Worksheet" );
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", 0);
-	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", 0);
-	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", 0);
+	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
+	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
+	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
@@ -93,9 +93,9 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
 	case Worksheet::Centimeter:
 		return value*100.0;
 	case Worksheet::Inch:
-		return value*25.4*10;
+		return value*25.4*10.;
 	case Worksheet::Point:
-		return value*25.4/72*10;
+		return value*25.4/72.*10.;
 	}
 	return value;
 }
@@ -110,9 +110,9 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 	case Worksheet::Centimeter:
 		return value/100.0;
 	case Worksheet::Inch:
-		return value/2.54;
+		return value/25.4/10.;
 	case Worksheet::Point:
-		return value/2.54*72;
+		return value/25.4/10.*72.;
 	}
 	return value;
 }

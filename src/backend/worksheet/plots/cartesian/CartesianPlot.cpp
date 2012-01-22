@@ -63,7 +63,6 @@ void CartesianPlot::init(){
 	addChild(m_plotArea);
 	m_plotArea->setHidden(true);
 	m_plotArea->setClippingEnabled(true);
-	// TODO: read initial values
 }
 
 CartesianPlot::~CartesianPlot() {

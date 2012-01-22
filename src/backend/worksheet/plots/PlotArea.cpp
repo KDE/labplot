@@ -37,6 +37,8 @@
 #include "lib/macros.h"
 #include <QPainter>
 #include <QDebug>
+#include <KConfig>
+#include <KConfigGroup>
 
 /**
  * \class PlotArea
@@ -62,14 +64,22 @@ void PlotArea::init(){
 	Q_D(PlotArea);
 	
 	d->rect = QRectF(0, 0, 1, 1);
-	d->backgroundOpacity = 1.0;
-	d->backgroundType = PlotArea::Color;
-	d->backgroundColorStyle = PlotArea::SingleColor;
-	d->backgroundFirstColor = Qt::white;
-	d->backgroundSecondColor = Qt::black;
-	d->backgroundImageStyle = PlotArea::Scaled;
-	d->backgroundFileName = "";
-	d->borderOpacity = 1.0;
+
+	KConfig config;
+	KConfigGroup group = config.group( "PlotArea" );
+	//Background
+	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int)PlotArea::Color);
+	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
+	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
+	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
+	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
+	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
+	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
+	//Border
+	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)), 
+			group.readEntry("BorderWidth", 0.0), 
+			(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 }
 
 QGraphicsItem *PlotArea::graphicsItem() const{
