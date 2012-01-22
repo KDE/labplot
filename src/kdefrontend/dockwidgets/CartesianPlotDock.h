@@ -56,7 +56,11 @@ private slots:
 	void commentChanged();
 	void visibilityChanged(int);
 
-	//"Background"-tab
+	//"Coordinate system"-tab
+	void toggleXBreak(int);
+	void toggleYBreak(int);
+	
+	//"Plot area"-tab
   	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
 	void backgroundImageStyleChanged(int);
@@ -65,8 +69,6 @@ private slots:
 	void selectFile();
 	void fileNameChanged();
 	void backgroundOpacityChanged(int);
-
-	//"Border"-tab
   	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double value);

@@ -44,10 +44,22 @@
 
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
+	
+	//"Coordinate system"-tab
+	ui.bAddXBreak->setIcon( KIcon("list-add") );
+	ui.bRemoveXBreak->setIcon( KIcon("list-remove") );
+	ui.cbXBreakNumber->addItem("1");
+	this->toggleXBreak(Qt::Unchecked);
+
+	ui.bAddYBreak->setIcon( KIcon("list-add") );
+	ui.bRemoveYBreak->setIcon( KIcon("list-remove") );
+	ui.cbYBreakNumber->addItem("1");
+	this->toggleYBreak(Qt::Unchecked);
+
+	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
-
 	ui.bOpen->setIcon( KIcon("document-open") );
-
+	
 	KUrlCompletion *comp = new KUrlCompletion();
     ui.kleBackgroundFileName->setCompletionObject(comp);
 
@@ -69,6 +81,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	
+	//Coordinate system
+	connect( ui.chkXBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleXBreak(int)) );
+	connect( ui.chkYBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleYBreak(int)) );
 	
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -198,7 +214,40 @@ void CartesianPlotDock::visibilityChanged(int state){
   }
 }
 
-// "Background"-tab
+// "Coordinate system"-tab
+void CartesianPlotDock::toggleXBreak(int state){
+	if (m_initializing)
+		return;
+  
+	bool b = (state==Qt::Checked);
+	ui.frameXBreakEdit->setVisible(b);
+	ui.lXBreakStart->setVisible(b);
+	ui.leXBreakStart->setVisible(b);
+	ui.lXBreakEnd->setVisible(b);
+	ui.leXBreakEnd->setVisible(b);
+    ui.lXBreakPosition->setVisible(b);
+	ui.sbXBreakPosition->setVisible(b);
+    ui.lXBreakStyle->setVisible(b);
+	ui.cbXBreakStyle->setVisible(b);
+}
+
+void CartesianPlotDock::toggleYBreak(int state){
+	if (m_initializing)
+		return;
+  
+	bool b = (state==Qt::Checked);
+	ui.frameYBreakEdit->setVisible(b);
+	ui.lYBreakStart->setVisible(b);
+	ui.leYBreakStart->setVisible(b);
+	ui.lYBreakEnd->setVisible(b);
+	ui.leYBreakEnd->setVisible(b);
+    ui.lYBreakPosition->setVisible(b);
+	ui.sbYBreakPosition->setVisible(b);
+    ui.lYBreakStyle->setVisible(b);
+	ui.cbYBreakStyle->setVisible(b);
+}
+
+// "Plot area"-tab
 void CartesianPlotDock::backgroundTypeChanged(int index){
 	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
 
