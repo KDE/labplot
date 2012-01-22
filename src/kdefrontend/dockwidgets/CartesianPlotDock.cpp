@@ -35,6 +35,8 @@
 #include <QTimer>
 #include <KUrlCompletion>
 
+#include <kdebug.h>
+
 /*!
   \class GuiObserver
   \brief  Provides a widget for editing the properties of the plot areas currently selected in the project explorer.
@@ -103,6 +105,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	connect( ui.kcbBorderColor, SIGNAL(changed (const QColor &)), this, SLOT(borderColorChanged(const QColor&)) );
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
+
+	connect( ui.pbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 
 	QTimer::singleShot(0, this, SLOT(init()));
 }
@@ -426,4 +430,10 @@ void CartesianPlotDock::borderOpacityChanged(int value){
   foreach(CartesianPlot* plot, m_plotList){
 	plot->plotArea()->setBorderOpacity(opacity);
   }
+}
+
+void CartesianPlotDock::saveDefaults(){
+	kWarning()<<"TODO";
+	KConfig config;
+	KConfigGroup group = config.group( "CartesianPlot" );
 }

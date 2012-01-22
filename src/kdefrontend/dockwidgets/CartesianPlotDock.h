@@ -73,6 +73,8 @@ private slots:
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double value);
 	void borderOpacityChanged(int);
+
+	void saveDefaults();
 };
 
 #endif
