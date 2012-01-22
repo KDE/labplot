@@ -35,6 +35,8 @@
 #include <KUrlCompletion>
 #include <QFileDialog>
 
+#include <kdebug.h>
+
 // a couple of standard sizes in mm, taken from qprinter.cpp
 static const float qt_paperSizes[][2] = {
     {210, 297}, // A4
@@ -108,6 +110,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
+	connect( ui.pbSave, SIGNAL(clicked()), this, SLOT(saveDefault()) );
 	
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -473,4 +476,8 @@ void WorksheetDock::fileNameChanged(){
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setBackgroundFileName(fileName);
   } 
+}
+
+void WorksheetDock::saveDefault(){
+	kWarning()<<"TODO";
 }

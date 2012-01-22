@@ -376,7 +376,8 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 
   // canvas
   //TODO add the code PlotArea::paint() that handels the different background options
-  painter->fillRect(scene_rect.intersected(rect), m_worksheet->backgroundFirstColor());
+  painter->fillRect(scene_rect.intersected(rect), Qt::white);
+//  painter->fillRect(scene_rect.intersected(rect), m_worksheet->backgroundFirstColor());
   
   //grid
 	if (m_gridSettings.style == WorksheetView::NoGrid){
