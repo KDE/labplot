@@ -42,6 +42,7 @@
 
 PlotAreaDock::PlotAreaDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
+
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 
 	ui.bOpen->setIcon( KIcon("document-open") );

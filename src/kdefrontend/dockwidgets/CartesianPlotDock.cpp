@@ -47,6 +47,12 @@
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
+	ui.pbLoad->setIcon(KIcon("document-open"));
+	ui.pbSave->setIcon(KIcon("document-save"));
+	ui.pbSaveDefault->setIcon(KIcon("document-save-as"));
+	ui.pbCopy->setIcon(KIcon("edit-copy"));
+	ui.pbPaste->setIcon(KIcon("edit-paste"));
+
 	//"Coordinate system"-tab
 	ui.bAddXBreak->setIcon( KIcon("list-add") );
 	ui.bRemoveXBreak->setIcon( KIcon("list-remove") );
