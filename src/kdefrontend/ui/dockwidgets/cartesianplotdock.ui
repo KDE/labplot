@@ -987,9 +987,6 @@
      </item>
      <item>
       <widget class="QToolButton" name="pbSave">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="toolTip">
         <string>Save properties as a template</string>
        </property>

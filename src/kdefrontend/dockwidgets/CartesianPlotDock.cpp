@@ -112,6 +112,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
+	connect( ui.pbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
 	connect( ui.pbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 
 	QTimer::singleShot(0, this, SLOT(init()));
@@ -439,9 +440,24 @@ void CartesianPlotDock::borderOpacityChanged(int value){
   }
 }
 
+void CartesianPlotDock::saveSettings(){
+    	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the settings file"),
+			"LabPlotrc", i18n("KDE resource files (*rc)"));
+    	if (filename=="")
+        	return;
+
+	KConfig config(filename, KConfig::SimpleConfig );
+	save(config);
+	config.sync();
+}
+
 void CartesianPlotDock::saveDefaults(){
 	KConfig config;
+	save(config);
+	config.sync();
+}
 
+void CartesianPlotDock::save(const KConfig& config){
 	KConfigGroup group = config.group( "PlotArea" );
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
@@ -456,6 +472,4 @@ void CartesianPlotDock::saveDefaults(){
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
-
-	config.sync();
 }
