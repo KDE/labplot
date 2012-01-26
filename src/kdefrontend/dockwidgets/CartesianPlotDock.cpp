@@ -2,8 +2,9 @@
     File                 : CartesianPlotDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    							(use @ for *)
     Description          : widget for cartesian plot properties
                            
  ***************************************************************************/
@@ -112,6 +113,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
+	connect( ui.pbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
 	connect( ui.pbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
 	connect( ui.pbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 
@@ -128,7 +130,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 
 	CartesianPlot* plot=list.first();
   
-  //if there are more then one curve in the list, disable the tab "general"
+  //if there is more then one curve in the list, disable the tab "general"
   if (list.size()==1){
 	ui.lName->setEnabled(true);
 	ui.leName->setEnabled(true);
@@ -440,8 +442,34 @@ void CartesianPlotDock::borderOpacityChanged(int value){
   }
 }
 
+void CartesianPlotDock::loadSettings(){
+    	QString filename=QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
+			"LabPlotrc", i18n("KDE resource files (*rc)"));
+    	if (filename=="")
+        	return;
+
+	KConfig config(filename, KConfig::SimpleConfig);
+	KConfigGroup group = config.group( "PlotArea" );
+
+	//Background-tab
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int)PlotArea::Color) );
+	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor) );
+	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled) );
+	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", QString()) );
+	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", QColor(Qt::white)) );
+	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", QColor(Qt::black)) );
+	ui.sbBackgroundOpacity->setValue( group.readEntry("BackgroundOpacity", 1.0)*100 );
+
+	//Border-tab
+	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", QColor(Qt::black)) );
+	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", QColor(Qt::black)));
+	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int)Qt::SolidLine) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", 0.0), Worksheet::Point) );
+	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", 1.0)*100 );
+}
+
 void CartesianPlotDock::saveSettings(){
-    	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the settings file"),
+    	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
 			"LabPlotrc", i18n("KDE resource files (*rc)"));
     	if (filename=="")
         	return;

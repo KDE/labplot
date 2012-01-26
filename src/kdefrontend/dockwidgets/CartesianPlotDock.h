@@ -74,6 +74,7 @@ private slots:
 	void borderWidthChanged(double value);
 	void borderOpacityChanged(int);
 
+	void loadSettings();
 	void saveSettings();
 	void saveDefaults();
 	void save(const KConfig&);
