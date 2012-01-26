@@ -549,6 +549,9 @@ Otherwise resize the canvas only.</string>
      </item>
      <item>
       <widget class="QToolButton" name="pbCopy">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="toolTip">
         <string>Copy properties</string>
        </property>
@@ -559,6 +562,9 @@ Otherwise resize the canvas only.</string>
      </item>
      <item>
       <widget class="QToolButton" name="pbPaste">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="toolTip">
         <string>Paste properties</string>
        </property>

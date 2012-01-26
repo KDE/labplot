@@ -2,8 +2,9 @@
     File                 : WorksheetDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    							(use @ for *)
     Description          : widget for worksheet properties
                            
  ***************************************************************************/
@@ -117,7 +118,6 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
-	connect( ui.pbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 	
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -130,6 +130,10 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
 	
+	connect( ui.pbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
+	connect( ui.pbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	connect( ui.pbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+
 	this->retranslateUi();
 }
 
@@ -206,7 +210,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	ui.kcbBackgroundSecondColor->setColor( worksheet->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue(worksheet->backgroundOpacity()*100 );
 	// this at last since others emmit backgroundColorStyleChanges
-	// and enables SecondColor button, etc.!
+	// and enable SecondColor button, etc.!
 	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
 
 	m_initializing = false;
@@ -488,8 +492,46 @@ void WorksheetDock::fileNameChanged(){
   } 
 }
 
+void WorksheetDock::loadSettings(){
+    	QString filename=QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
+			"LabPlotrc", i18n("KDE resource files (*rc)"));
+    	if (filename=="")
+        	return;
+
+	KConfig config(filename, KConfig::SimpleConfig);
+	KConfigGroup group = config.group( "Worksheet" );
+
+	//Background-tab
+	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor) );
+	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled) );
+	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", QString()) );
+	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", QColor(Qt::white)) );
+	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", QColor(Qt::black)) );
+	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", 1.0)*100 );
+	// this at last since others emmit backgroundColorStyleChanges
+	// and enable SecondColor button, etc.!
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) PlotArea::Color) );
+
+}
+
+void WorksheetDock::saveSettings(){
+    	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
+			"LabPlotrc", i18n("KDE resource files (*rc)"));
+    	if (filename=="")
+        	return;
+
+	KConfig config(filename, KConfig::SimpleConfig );
+	save(config);
+	config.sync();
+}
+
 void WorksheetDock::saveDefaults(){
 	KConfig config;
+	save(config);
+	config.sync();
+}
+
+void WorksheetDock::save(const KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
 	group.writeEntry("BackgroundType",ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
@@ -498,6 +540,5 @@ void WorksheetDock::saveDefaults(){
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
-	config.sync();
 }
 	

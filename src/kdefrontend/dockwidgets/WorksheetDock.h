@@ -66,7 +66,10 @@ private slots:
 	void fileNameChanged();
 	void opacityChanged(int);
 
+	void loadSettings();
+	void saveSettings();
 	void saveDefaults();
+	void save(const KConfig&);
 };
 
 #endif // WORKSHEETDOCK_H
