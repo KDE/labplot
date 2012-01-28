@@ -64,6 +64,12 @@
 XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
+	ui.tbLoad->setIcon(KIcon("document-open"));
+	ui.tbSave->setIcon(KIcon("document-save"));
+	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
+	ui.tbCopy->setIcon(KIcon("edit-copy"));
+	ui.tbPaste->setIcon(KIcon("edit-paste"));
+
 	// Tab "General"
 	gridLayout = new QGridLayout(ui.tabGeneral);
 	gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
@@ -187,6 +193,10 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.kfrValuesFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(valuesFontChanged(const QFont&)) );
 	connect( ui.kcbValuesFontColor, SIGNAL(changed (const QColor &)), this, SLOT(valuesFontColorChanged(const QColor&)) );
 	
+	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
+	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+
 	retranslateUi();
 	
 	QTimer::singleShot(0, this, SLOT(init()));
@@ -1173,3 +1183,41 @@ void XYCurveDock::valuesFontColorChanged(const QColor& color){
 	curve->setValuesPen(pen);
   }  
 }
+
+/* Settings */
+
+void XYCurveDock::loadSettings(){
+    	QString filename=QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
+			"LabPlotrc", i18n("KDE resource files (*rc)"));
+    	if (filename=="")
+        	return;
+
+	KConfig config(filename, KConfig::SimpleConfig);
+	KConfigGroup group = config.group( "XYCurve" );
+
+  	//TODO
+}
+
+void XYCurveDock::saveSettings(){
+     	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
+			"LabPlotrc", i18n("KDE resource files (*rc)"));
+    	if (filename=="")
+        	return;
+
+	KConfig config(filename, KConfig::SimpleConfig );
+	save(config);
+	config.sync();
+}
+
+void XYCurveDock::saveDefaults(){
+	KConfig config;
+	save(config);
+	config.sync();
+}
+
+void XYCurveDock::save(const KConfig& config){
+	KConfigGroup group = config.group( "XYCurve" );
+
+	//TODO
+}
+

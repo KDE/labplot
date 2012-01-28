@@ -78,6 +78,8 @@ private:
 	void updateValuesFormatWidgets(const SciDAVis::ColumnMode);
 	void showValuesColumnFormat(const Column*);
 	
+	void save(const KConfig&);
+	
 private slots:
 	void init();
 	void retranslateUi();
@@ -124,6 +126,11 @@ private slots:
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
 	void valuesFontColorChanged(const QColor&);
+
+	//Settings
+	void loadSettings();
+	void saveSettings();
+	void saveDefaults();
 };
 
 #endif
