@@ -1196,27 +1196,44 @@ void XYCurveDock::loadSettings(){
 	KConfig config(filename, KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "XYCurve" );
 
+  	XYCurve* curve=m_curvesList.first();
+
   	//General
   	chkVisible->setChecked(group.readEntry("Visible", TRUE));
 	cbXColumn->setCurrentIndex( group.readEntry("XColumn", 1) );
 	cbYColumn->setCurrentIndex( group.readEntry("YColumn", 2) );
 
   	//Line
-	cbLineType->setCurrentIndex( group.readEntry("LineType", 1) );
-	sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", 1) );
-	cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", 1) );
-	kcbLineColor->setColor( group.readEntry("LineColor", QColor(Qt::black)) );
-	sbLineWidth->setValue( group.readEntry("LineWidth", 0) );
-	sbLineOpacity->setValue( group.readEntry("LineOpacity", 1.0)*100 );
+	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", 1) );
+	ui.sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", 1) );
+	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", 1) );
+	ui.kcbLineColor->setColor( group.readEntry("LineColor", QColor(Qt::black)) );
+  	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("LineColor", QColor(Qt::black)) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", curve->linePen().widthF()), Worksheet::Point) );
+	ui.sbLineOpacity->setValue( group.readEntry("LineOpacity", 1.0)*100 );
 	//Drop Line
-	cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", 1) );
-	cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", 1) );
-	kcbDropLineColor->setColor( group.readEntry("DropLineColor", QColor(Qt::black)) );
-	sbDropLineWidth->setValue( group.readEntry("DropLineWidth", 0) );
-	sbDropLineOpacity->setValue( group.readEntry("DropLineOpacity", 1.0)*100 );
+	ui.cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", 1) );
+	ui.cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", 1) );
+	ui.kcbDropLineColor->setColor( group.readEntry("DropLineColor", QColor(Qt::black)) );
+  	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("DropLineColor", QColor(Qt::black)) );
+	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", curve->dropLinePen().widthF()),Worksheet::Point) );
+	ui.sbDropLineOpacity->setValue( group.readEntry("DropLineOpacity", 1.0)*100 );
 
 	//Symbol
-	//TODO
+	//TODO: character
+	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", 1) );
+  	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", curve->symbolSize()), Worksheet::Point) );
+	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", 0) );
+	ui.sbSymbolOpacity->setValue( group.readEntry("SymbolOpacity", 1.0)*100 );
+
+  	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle",1) );
+  	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
+	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
+	
+  	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle",1) );
+  	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
+	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
+  	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",curve->symbolsPen().widthF()), Worksheet::Point) );
 
 	//Values
 	//TODO
