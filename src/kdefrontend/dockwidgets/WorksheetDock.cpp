@@ -192,8 +192,7 @@ void WorksheetDock::updatePaperSize() {
 	int i=0;
 	int w=ui.sbWidth->value();
 	int h=ui.sbHeight->value();
-	kWarning()<<"w="<<w<<", h="<<h;
-	
+
 	//check the portrait-orientation first
 	while ( !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) && i<30 ){
 		i++;
@@ -525,6 +524,12 @@ void WorksheetDock::loadSettings(){
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) PlotArea::Color) );
 	
 	// Layout
+	ui.leTopMargin->setText(group.readEntry("TopMargin",QString()));
+	ui.leBottomMargin->setText(group.readEntry("BottomMargin",QString()));
+	ui.leLeftMargin->setText(group.readEntry("LeftMargin",QString()));
+	ui.leRightMargin->setText(group.readEntry("RightMargin",QString()));
+	ui.leHorizontalSpacing->setText(group.readEntry("HorizontalSpacing",QString()));
+	ui.leVerticalSpacing->setText(group.readEntry("VerticalSpacing",QString()));
 }
 
 void WorksheetDock::saveSettings(){
@@ -558,5 +563,12 @@ void WorksheetDock::save(const KConfig& config){
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
+
+	group.writeEntry("TopMargin", ui.leTopMargin->text());
+	group.writeEntry("BottomMargin", ui.leBottomMargin->text());
+	group.writeEntry("LeftMargin", ui.leLeftMargin->text());
+	group.writeEntry("RightMargin", ui.leRightMargin->text());
+	group.writeEntry("HorizontalSpacing", ui.leHorizontalSpacing->text());
+	group.writeEntry("VerticalSpacing", ui.leVerticalSpacing->text());
 }
 

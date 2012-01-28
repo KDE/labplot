@@ -464,7 +464,7 @@ Otherwise resize the canvas only.</string>
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QLineEdit" name="leHorizontalSpacing_2"/>
+        <widget class="QLineEdit" name="leVerticalSpacing"/>
        </item>
        <item row="7" column="0">
         <spacer name="verticalSpacer_4">
