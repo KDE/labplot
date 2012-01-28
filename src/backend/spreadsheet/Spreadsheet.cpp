@@ -34,6 +34,8 @@
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #else
 #include <KIcon>
+#include <KConfig>
+#include <KConfigGroup>
 #endif
 
 #include <QApplication>
@@ -73,10 +75,22 @@ Spreadsheet::Spreadsheet(AbstractScriptingEngine *engine, int rows, int columns,
 	setRowCount(rows);
 
 	m_view = NULL;
+	
+	init();
 }
 
 Spreadsheet::~Spreadsheet()
 {
+}
+
+void Spreadsheet::init() {
+	KConfig config;
+	KConfigGroup group = config.group( "Spreadsheet" );
+
+	// dont use default values for rows and cols. They are already defined.
+
+	if (m_view)
+		((SpreadsheetView*) m_view)->showComments(group.readEntry("ShowComments", FALSE));
 }
 
 /*! Constructs a primary view on me.

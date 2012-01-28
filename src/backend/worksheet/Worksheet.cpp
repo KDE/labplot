@@ -42,7 +42,7 @@
 #include <QIcon>
 #else
 #include "KIcon"
-#include <kdebug.h>
+//#include <kdebug.h>
 #include <KConfig>
 #include <KConfigGroup>
 #endif

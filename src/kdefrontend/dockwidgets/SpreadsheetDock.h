@@ -39,20 +39,26 @@ class SpreadsheetDock: public QWidget{
   Q_OBJECT
 	  
   public:
-	  SpreadsheetDock(QWidget *parent);
-	  void setSpreadsheets(QList<Spreadsheet*>);
+	SpreadsheetDock(QWidget *parent);
+	void setSpreadsheets(QList<Spreadsheet*>);
 	  
   private:
-	  Ui::SpreadsheetDock ui;
-	  QList<Spreadsheet*> m_spreadsheets;
-	  bool m_initializing;
+	Ui::SpreadsheetDock ui;
+	QList<Spreadsheet*> m_spreadsheets;
+	bool m_initializing;
 	  
+	void save(const KConfig&);
+
   private slots:
-	  void nameChanged();
-	  void commentChanged();
-	  void rowCountChanged(int);
-	  void columnCountChanged(int);
-	  void commentsShownChanged(int);
+	void nameChanged();
+	void commentChanged();
+	void rowCountChanged(int);
+	void columnCountChanged(int);
+	void commentsShownChanged(int);
+
+	void loadSettings();
+	void saveSettings();
+	void saveDefaults();
 };
 
 #endif // SPREADSHEETDOCK_H

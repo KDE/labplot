@@ -85,6 +85,8 @@ class Spreadsheet : public AbstractDataSource{
 
 		void moveColumn(int from, int to);
 		void sortColumns(Column * leading, QList<Column*> cols, bool ascending);
+	private:
+		void init();
 
 	 private slots:
 		void childSelected();

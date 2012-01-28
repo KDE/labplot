@@ -47,6 +47,8 @@ private:
 	bool m_initializing;
 
 	void updatePaperSize();
+	void save(const KConfig&);
+
 private slots:
 	void retranslateUi();
   
@@ -70,7 +72,6 @@ private slots:
 	void loadSettings();
 	void saveSettings();
 	void saveDefaults();
-	void save(const KConfig&);
 };
 
 #endif // WORKSHEETDOCK_H

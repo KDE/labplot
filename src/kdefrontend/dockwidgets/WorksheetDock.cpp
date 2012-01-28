@@ -36,9 +36,6 @@
 #include <KUrlCompletion>
 #include <QFileDialog>
 
-#include <kdebug.h>
-#include <KConfig>
-
 // a couple of standard sizes in mm, taken from qprinter.cpp
 static const float qt_paperSizes[][2] = {
     {210, 297}, // A4
@@ -511,7 +508,7 @@ void WorksheetDock::loadSettings(){
 	KConfigGroup group = config.group( "Worksheet" );
 	
 	// Geometry
-	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", 0));
+	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", FALSE));
 	Worksheet* worksheet=m_worksheetList.first();
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width",worksheet->pageRect().width()), Worksheet::Centimeter));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height",worksheet->pageRect().height()), Worksheet::Centimeter));
