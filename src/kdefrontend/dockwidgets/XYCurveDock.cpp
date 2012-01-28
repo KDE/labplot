@@ -3,7 +3,8 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2011 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2012 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    							(use @ for *)
     Description          : widget for XYCurve properties
                            
  ***************************************************************************/
@@ -1195,7 +1196,36 @@ void XYCurveDock::loadSettings(){
 	KConfig config(filename, KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "XYCurve" );
 
-  	//TODO
+  	//General
+  	chkVisible->setChecked(group.readEntry("Visible", TRUE));
+	cbXColumn->setCurrentIndex( group.readEntry("XColumn", 1) );
+	cbYColumn->setCurrentIndex( group.readEntry("YColumn", 2) );
+
+  	//Line
+	cbLineType->setCurrentIndex( group.readEntry("LineType", 1) );
+	sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", 1) );
+	cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", 1) );
+	kcbLineColor->setColor( group.readEntry("LineColor", QColor(Qt::black)) );
+	sbLineWidth->setValue( group.readEntry("LineWidth", 0) );
+	sbLineOpacity->setValue( group.readEntry("LineOpacity", 1.0)*100 );
+	//Drop Line
+	cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", 1) );
+	cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", 1) );
+	kcbDropLineColor->setColor( group.readEntry("DropLineColor", QColor(Qt::black)) );
+	sbDropLineWidth->setValue( group.readEntry("DropLineWidth", 0) );
+	sbDropLineOpacity->setValue( group.readEntry("DropLineOpacity", 1.0)*100 );
+
+	//Symbol
+	//TODO
+
+	//Values
+	//TODO
+
+	//Area Filling
+	//TODO
+
+	//Error Bars
+	//TODO
 }
 
 void XYCurveDock::saveSettings(){
