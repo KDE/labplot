@@ -42,6 +42,12 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	m_initializing = false;
 	
+	ui.tbLoad->setIcon(KIcon("document-open"));
+	ui.tbSave->setIcon(KIcon("document-save"));
+	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
+	ui.tbCopy->setIcon(KIcon("edit-copy"));
+	ui.tbPaste->setIcon(KIcon("edit-paste"));
+
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
