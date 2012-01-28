@@ -186,12 +186,16 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	m_initializing = false;
 }
 
-// update Size and Orientation checkbox when width/height changes
-void WorksheetDock::updatePaperSize() {
-	//Check, whether the size is one of the QPrinter::PaperSize
+/*!
+	Checks whether the size is one of the QPrinter::PaperSize and
+	updates Size and Orientation checkbox when width/height changes.
+*/
+void WorksheetDock::updatePaperSize(){
 	int i=0;
-	int w=ui.sbWidth->value();
-	int h=ui.sbHeight->value();
+	
+	//In UI we use cm, so we need to convert to mm first before we check with qt_paperSizes
+	int w=(float)ui.sbWidth->value()*10;
+	int h=(float)ui.sbHeight->value()*10;
 
 	//check the portrait-orientation first
 	while ( !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) && i<30 ){
@@ -331,17 +335,18 @@ void WorksheetDock::sizeChanged(int i){
 		h=qt_paperSizes[index][0];
 	}
 	
+	m_initializing = true;
+	//w and h from qt_paperSizes above are in mm, in UI we show everything in cm
+	ui.sbWidth->setValue(w/10);
+	ui.sbHeight->setValue(h/10);
+	m_initializing=false;
+	
 	bool scaleContent = ui.chScaleContent->isChecked();
 	w = Worksheet::convertToSceneUnits(w, Worksheet::Millimeter);
 	h = Worksheet::convertToSceneUnits(h, Worksheet::Millimeter);
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setPageRect(QRect(0,0,w,h), scaleContent);
 	}
-	
-	m_initializing = true;
-	ui.sbWidth->setValue(w/10);
-	ui.sbHeight->setValue(h/10);
-	m_initializing=false;
 }
 
 void WorksheetDock::sizeChanged(){
