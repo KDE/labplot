@@ -46,6 +46,7 @@ private:
 	QList<Worksheet*> m_worksheetList;
 	bool m_initializing;
 
+	void updatePaperSize();
 private slots:
 	void retranslateUi();
   

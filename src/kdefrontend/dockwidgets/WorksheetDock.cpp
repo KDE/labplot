@@ -170,11 +170,29 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	ui.sbWidth->setValue(w);
 	ui.sbHeight->setValue(h);
 	
+	updatePaperSize();
 	
+	//Background-tab
+	ui.cbBackgroundColorStyle->setCurrentIndex( worksheet->backgroundColorStyle() );
+	ui.cbBackgroundImageStyle->setCurrentIndex( worksheet->backgroundImageStyle() );
+	ui.kleBackgroundFileName->setText( worksheet->backgroundFileName() );
+	ui.kcbBackgroundFirstColor->setColor( worksheet->backgroundFirstColor() );
+	ui.kcbBackgroundSecondColor->setColor( worksheet->backgroundSecondColor() );
+	ui.sbBackgroundOpacity->setValue(worksheet->backgroundOpacity()*100 );
+	// this at last since others emmit backgroundColorStyleChanges
+	// and enable SecondColor button, etc.!
+	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
+
+	m_initializing = false;
+}
+
+// update Size and Orientation checkbox when width/height changes
+void WorksheetDock::updatePaperSize() {
 	//Check, whether the size is one of the QPrinter::PaperSize
 	int i=0;
-	w=w/10;
-	h=h/10;
+	int w=ui.sbWidth->value();
+	int h=ui.sbHeight->value();
+	kWarning()<<"w="<<w<<", h="<<h;
 	
 	//check the portrait-orientation first
 	while ( !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) && i<30 ){
@@ -201,19 +219,6 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 			break;
 		}
 	}
-	
-	//Background-tab
-	ui.cbBackgroundColorStyle->setCurrentIndex( worksheet->backgroundColorStyle() );
-	ui.cbBackgroundImageStyle->setCurrentIndex( worksheet->backgroundImageStyle() );
-	ui.kleBackgroundFileName->setText( worksheet->backgroundFileName() );
-	ui.kcbBackgroundFirstColor->setColor( worksheet->backgroundFirstColor() );
-	ui.kcbBackgroundSecondColor->setColor( worksheet->backgroundSecondColor() );
-	ui.sbBackgroundOpacity->setValue(worksheet->backgroundOpacity()*100 );
-	// this at last since others emmit backgroundColorStyleChanges
-	// and enable SecondColor button, etc.!
-	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
-
-	m_initializing = false;
 }
 
 //************************************************************
@@ -500,8 +505,15 @@ void WorksheetDock::loadSettings(){
 
 	KConfig config(filename, KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "Worksheet" );
+	
+	// Geometry
+	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", 0));
+	Worksheet* worksheet=m_worksheetList.first();
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width",worksheet->pageRect().width()), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height",worksheet->pageRect().height()), Worksheet::Centimeter));
+	updatePaperSize();
 
-	//Background-tab
+	// Background-tab
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled) );
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", QString()) );
@@ -511,7 +523,8 @@ void WorksheetDock::loadSettings(){
 	// this at last since others emmit backgroundColorStyleChanges
 	// and enable SecondColor button, etc.!
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) PlotArea::Color) );
-
+	
+	// Layout
 }
 
 void WorksheetDock::saveSettings(){
@@ -533,6 +546,11 @@ void WorksheetDock::saveDefaults(){
 
 void WorksheetDock::save(const KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
+
+	group.writeEntry("ScaleContent",ui.chScaleContent->isChecked());
+	group.writeEntry("Width",Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
+	group.writeEntry("Height",Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
+
 	group.writeEntry("BackgroundType",ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
@@ -541,4 +559,4 @@ void WorksheetDock::save(const KConfig& config){
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
 }
-	
+
