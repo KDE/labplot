@@ -150,26 +150,9 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
   }
   
 	//show the properties of the first curve
+	KConfig config("", KConfig::SimpleConfig);
+	load(config);
   
-	//General-tab
-	ui.chkVisible->setChecked(plot->isVisible());
-
-	//Background-tab
-	ui.cbBackgroundType->setCurrentIndex( plot->plotArea()->backgroundType() );
-	ui.cbBackgroundColorStyle->setCurrentIndex( plot->plotArea()->backgroundColorStyle() );
-	ui.cbBackgroundImageStyle->setCurrentIndex( plot->plotArea()->backgroundImageStyle() );
-	ui.kleBackgroundFileName->setText( plot->plotArea()->backgroundFileName() );
-	ui.kcbBackgroundFirstColor->setColor( plot->plotArea()->backgroundFirstColor() );
-	ui.kcbBackgroundSecondColor->setColor( plot->plotArea()->backgroundSecondColor() );
-	ui.sbBackgroundOpacity->setValue( plot->plotArea()->backgroundOpacity()*100 );
-
-	//Border-tab
-	ui.kcbBorderColor->setColor( plot->plotArea()->borderPen().color() );
-	GuiTools::updatePenStyles(ui.cbBorderStyle, plot->plotArea()->borderPen().color());
-	ui.cbBorderStyle->setCurrentIndex( plot->plotArea()->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
-	ui.sbBorderOpacity->setValue( plot->plotArea()->borderOpacity()*100 );
-	
 	m_initializing = false;
 }
 
@@ -449,23 +432,31 @@ void CartesianPlotDock::loadSettings(){
         	return;
 
 	KConfig config(filename, KConfig::SimpleConfig);
+	load(config);
+}
+
+void CartesianPlotDock::load(const KConfig& config){
 	KConfigGroup group = config.group( "PlotArea" );
+	CartesianPlot* plot=m_plotList.first();
+
+	//General-tab
+	ui.chkVisible->setChecked( group.readEntry("Visible", plot->isVisible()) );
 
 	//Background-tab
-	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int)PlotArea::Color) );
-	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor) );
-	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled) );
-	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", QString()) );
-	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", QColor(Qt::white)) );
-	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", QColor(Qt::black)) );
-	ui.sbBackgroundOpacity->setValue( group.readEntry("BackgroundOpacity", 1.0)*100 );
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) plot->plotArea()->backgroundType()) );
+	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) plot->plotArea()->backgroundColorStyle()) );
+	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) plot->plotArea()->backgroundImageStyle()) );
+	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", plot->plotArea()->backgroundFileName()) );
+	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", plot->plotArea()->backgroundFirstColor()) );
+	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", plot->plotArea()->backgroundSecondColor()) );
+	ui.sbBackgroundOpacity->setValue( group.readEntry("BackgroundOpacity", plot->plotArea()->backgroundOpacity())*100 );
 
 	//Border-tab
-	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", QColor(Qt::black)) );
-	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", QColor(Qt::black)));
-	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int)Qt::SolidLine) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", 0.0), Worksheet::Point) );
-	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", 1.0)*100 );
+	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", plot->plotArea()->borderPen().color()) );
+	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", plot->plotArea()->borderPen().color()));
+	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) plot->plotArea()->borderPen().style()) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", plot->plotArea()->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", plot->plotArea()->borderOpacity())*100 );
 }
 
 void CartesianPlotDock::saveSettings(){
@@ -487,6 +478,8 @@ void CartesianPlotDock::saveDefaults(){
 
 void CartesianPlotDock::save(const KConfig& config){
 	KConfigGroup group = config.group( "PlotArea" );
+
+	group.writeEntry("Visible", ui.chkVisible->isChecked());
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());

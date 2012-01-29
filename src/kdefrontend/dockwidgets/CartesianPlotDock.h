@@ -46,6 +46,9 @@ private:
 	Ui::CartesianPlotDock ui;
 	QList<CartesianPlot*> m_plotList;
 	bool m_initializing;
+	
+	void load(const KConfig&);
+	void save(const KConfig&);
 
 private slots:
 	void init();
@@ -77,7 +80,6 @@ private slots:
 	void loadSettings();
 	void saveSettings();
 	void saveDefaults();
-	void save(const KConfig&);
 };
 
 #endif
