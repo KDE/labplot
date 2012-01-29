@@ -47,6 +47,7 @@ class SpreadsheetDock: public QWidget{
 	QList<Spreadsheet*> m_spreadsheets;
 	bool m_initializing;
 	  
+	void load(const KConfig&);
 	void save(const KConfig&);
 
   private slots:

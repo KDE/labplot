@@ -71,6 +71,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 
   Q_ASSERT(spreadsheet);
   
+  m_spreadsheets=list;
   m_initializing = true;
   
   if (list.size()==1){
@@ -89,12 +90,13 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
   }
   
   //show the properties of the first Spreadsheet in the list, if there are >1 spreadsheets
-  ui.sbColumnCount->setValue(spreadsheet->columnCount());
+	KConfig config("", KConfig::SimpleConfig);
+	load(config);
+/*  ui.sbColumnCount->setValue(spreadsheet->columnCount());
   ui.sbRowCount->setValue(spreadsheet->rowCount());
   SpreadsheetView* view= qobject_cast<SpreadsheetView*>(spreadsheet->view());
   ui.cbShowComments->setChecked(view->areCommentsShown());
-  
-  m_spreadsheets=list;
+  */
   m_initializing = false;
 }
 
@@ -139,11 +141,17 @@ void SpreadsheetDock::loadSettings(){
         	return;
 
 	KConfig config(filename, KConfig::SimpleConfig);
+	load(config);
+}
+
+void SpreadsheetDock::load(const KConfig& config){
 	KConfigGroup group = config.group( "Spreadsheet" );
 
-  	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", 2));
-  	ui.sbRowCount->setValue(group.readEntry("RowCount", 100));
-  	ui.cbShowComments->setChecked(group.readEntry("ShowComments", FALSE));
+  	Spreadsheet* spreadsheet=m_spreadsheets.first();
+  	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", spreadsheet->columnCount()));
+  	ui.sbRowCount->setValue(group.readEntry("RowCount", spreadsheet->rowCount()));
+	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(spreadsheet->view());
+  	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }
 
 void SpreadsheetDock::saveSettings(){
