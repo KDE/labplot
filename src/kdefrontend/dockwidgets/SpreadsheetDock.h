@@ -44,7 +44,7 @@ class SpreadsheetDock: public QWidget{
 	  
   private:
 	Ui::SpreadsheetDock ui;
-	QList<Spreadsheet*> m_spreadsheets;
+	QList<Spreadsheet*> m_spreadsheetList;
 	bool m_initializing;
 	  
 	void load(const KConfig&);

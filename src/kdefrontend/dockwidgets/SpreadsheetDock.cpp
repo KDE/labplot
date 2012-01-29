@@ -66,12 +66,11 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
   
 */
 void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
-  Spreadsheet* spreadsheet;
-  spreadsheet=list.first();
+  Spreadsheet* spreadsheet = list.first();
 
   Q_ASSERT(spreadsheet);
   
-  m_spreadsheets=list;
+  m_spreadsheetList=list;
   m_initializing = true;
   
   if (list.size()==1){
@@ -102,7 +101,7 @@ void SpreadsheetDock::nameChanged(){
   if (m_initializing)
 	return;
   
-  m_spreadsheets.first()->setName(ui.leName->text());
+  m_spreadsheetList.first()->setName(ui.leName->text());
 }
 
 
@@ -110,7 +109,7 @@ void SpreadsheetDock::commentChanged(){
   if (m_initializing)
 	return;
   
-  m_spreadsheets.first()->setComment(ui.leComment->text());
+  m_spreadsheetList.first()->setComment(ui.leComment->text());
 }
 
 void SpreadsheetDock::rowCountChanged(int c){
@@ -126,7 +125,7 @@ void SpreadsheetDock::columnCountChanged(int c){
 */
 void SpreadsheetDock::commentsShownChanged(int state){
   Spreadsheet* spreadsheet;
-  foreach(spreadsheet, m_spreadsheets)
+  foreach(spreadsheet, m_spreadsheetList)
 	qobject_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
 }
 
@@ -143,7 +142,7 @@ void SpreadsheetDock::loadSettings(){
 void SpreadsheetDock::load(const KConfig& config){
 	KConfigGroup group = config.group( "Spreadsheet" );
 
-  	Spreadsheet* spreadsheet=m_spreadsheets.first();
+  	Spreadsheet* spreadsheet=m_spreadsheetList.first();
   	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", spreadsheet->columnCount()));
   	ui.sbRowCount->setValue(group.readEntry("RowCount", spreadsheet->rowCount()));
 	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(spreadsheet->view());
