@@ -51,6 +51,9 @@ private:
 	bool m_dataChanged;
 	bool m_initializing;
 
+	void load(const KConfig&);
+	void save(const KConfig&);
+	
   private slots:
   void init();
 
@@ -109,6 +112,9 @@ private:
 	
 	//"Grid"-tab
 
+	void loadSettings();
+	void saveSettings();
+	void saveDefaults();
 };
 
 #endif

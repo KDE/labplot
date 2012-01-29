@@ -128,7 +128,6 @@ private slots:
 	void valuesFontChanged(const QFont&);
 	void valuesFontColorChanged(const QColor&);
 
-	//Settings
 	void loadSettings();
 	void saveSettings();
 	void saveDefaults();

@@ -42,8 +42,13 @@
 */
  
 AxisDock::AxisDock(QWidget* parent):QWidget(parent){
+	ui.setupUi(this);
 
-  ui.setupUi(this);
+	ui.tbLoad->setIcon(KIcon("document-open"));
+	ui.tbSave->setIcon(KIcon("document-save"));
+	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
+	ui.tbCopy->setIcon(KIcon("edit-copy"));
+	ui.tbPaste->setIcon(KIcon("edit-paste"));
 
   //TODO
   ui.lPosition->hide();
@@ -142,6 +147,11 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 
 //TODO cbMajorTicksDirection is empty when the axes are set
 	//QTimer::singleShot(0, this, SLOT(init()));
+
+	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
+	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+
 	init();
 }
 
@@ -224,8 +234,12 @@ void AxisDock::setAxes(QList<Axis*> list){
 	ui.leComment->setText("");	
   }
 
-  //show the properties of the first axis
+  	//show the properties of the first axis
+	KConfig config("", KConfig::SimpleConfig);
+	load(config);
   
+	//TODO: merge with load();
+
  	//"General"-tab
   ui.chkVisible->setChecked(axis->isVisible());
   ui.cbOrientation->setCurrentIndex( axis->orientation() );
@@ -931,3 +945,51 @@ void AxisDock::labelsOpacityChanged(int value){
 	axis->setLabelsOpacity(opacity);
   }  
 }
+
+
+/* Settings */
+
+void AxisDock::loadSettings(){
+	QString filename;
+	if (filename.isEmpty()) {
+    		filename = QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
+			"LabPlotrc", i18n("KDE resource files (*rc)"));
+    		if (filename=="")
+        		return;
+	}
+
+	KConfig config(filename, KConfig::SimpleConfig);
+	load(config);
+}
+
+void AxisDock::load(const KConfig& config){
+	KConfigGroup group = config.group( "Axis" );
+
+  	Axis* axis=m_axesList.first();
+
+	//TODO
+}
+
+void AxisDock::saveSettings(){
+     	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
+			"LabPlotrc", i18n("KDE resource files (*rc)"));
+    	if (filename=="")
+        	return;
+
+	KConfig config(filename, KConfig::SimpleConfig );
+	save(config);
+	config.sync();
+}
+
+void AxisDock::saveDefaults(){
+	KConfig config;
+	save(config);
+	config.sync();
+}
+
+void AxisDock::save(const KConfig& config){
+	KConfigGroup group = config.group( "Axis" );
+
+	//TODO
+}
+
