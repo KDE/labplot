@@ -78,6 +78,7 @@ private:
 	void updateValuesFormatWidgets(const SciDAVis::ColumnMode);
 	void showValuesColumnFormat(const Column*);
 	
+	void load(const KConfig&);
 	void save(const KConfig&);
 	
 private slots:

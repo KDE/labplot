@@ -420,62 +420,10 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
   }
   
   //show the properties of the first curve
-  
-  //General-tab
-  chkVisible->setChecked(curve->isVisible());
-  cbXColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
-  cbYColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yColumn()) );
-  
-  //Line-tab
-  ui.cbLineType->setCurrentIndex( curve->lineType() );
-  ui.sbLineInterpolationPointsCount->setValue( curve->lineInterpolationPointsCount() );
-  ui.cbLineStyle->setCurrentIndex( curve->linePen().style() );
-  ui.kcbLineColor->setColor( curve->linePen().color() );
-  ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(curve->linePen().widthF(), Worksheet::Point) );
-  ui.sbLineOpacity->setValue( curve->lineOpacity()*100 );
-  GuiTools::updatePenStyles(ui.cbLineStyle, curve->linePen().color() );
-  
-  ui.cbDropLineType->setCurrentIndex( curve->dropLineType() );
-  ui.cbDropLineStyle->setCurrentIndex( curve->dropLinePen().style() );
-  ui.kcbDropLineColor->setColor( curve->dropLinePen().color() );
-  ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(curve->dropLinePen().widthF(), Worksheet::Point) );
-  ui.sbDropLineOpacity->setValue( curve->dropLineOpacity()*100 );
-  GuiTools::updatePenStyles(ui.cbDropLineStyle, curve->dropLinePen().color() );
-  
-  
-  //Symbol-tab
-  ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(curve->symbolTypeId()) );
-  ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(curve->symbolSize(), Worksheet::Point) );
-  ui.sbSymbolRotation->setValue( curve->symbolRotationAngle() );
-  ui.sbSymbolOpacity->setValue( curve->symbolsOpacity()*100 );
-  ui.cbSymbolFillingStyle->setCurrentIndex( curve->symbolsBrush().style() );
-  ui.kcbSymbolFillingColor->setColor( curve->symbolsBrush().color() );
+	KConfig config("", KConfig::SimpleConfig);
+	load(config);
 
-  ui.cbSymbolBorderStyle->setCurrentIndex( curve->symbolsPen().style() );
-  ui.kcbSymbolBorderColor->setColor( curve->symbolsPen().color() );
-  ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(curve->symbolsPen().widthF(), Worksheet::Point) );
-
-  GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, curve->symbolsPen().color() );
-  GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, curve->symbolsBrush().color() );
-  
-  //Values-tab
-  ui.cbValuesType->setCurrentIndex( curve->valuesType() );
-
-  ui.cbValuesPosition->setCurrentIndex( curve->valuesPosition() );
-  ui.sbValuesRotation->setValue( curve->valuesRotationAngle() );
-  ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(curve->valuesDistance(), Worksheet::Point) );
-  ui.sbValuesOpacity->setValue( curve->valuesOpacity()*100 );
-  ui.leValuesPrefix->setText( curve->valuesPrefix() );
-  ui.leValuesSuffix->setText( curve->valuesSuffix() );
-  ui.kfrValuesFont->setFont( curve->valuesFont() );
-  ui.kcbValuesFontColor->setColor( curve->valuesPen().color() );
-
-  //TODO
-  //Area filling
-  //Error bars
-
-
-//TODO connect the signals of the first column with the slots of this class.
+	//TODO connect the signals of the first column with the slots of this class.
 
   m_initializing=false;
 }
@@ -1188,55 +1136,73 @@ void XYCurveDock::valuesFontColorChanged(const QColor& color){
 /* Settings */
 
 void XYCurveDock::loadSettings(){
-    	QString filename=QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
+	QString filename;
+	if (filename.isEmpty()) {
+    		filename = QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
 			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
+    		if (filename=="")
+        		return;
+	}
 
 	KConfig config(filename, KConfig::SimpleConfig);
+	load(config);
+}
+
+void XYCurveDock::load(const KConfig& config){
 	KConfigGroup group = config.group( "XYCurve" );
 
   	XYCurve* curve=m_curvesList.first();
 
   	//General
-  	chkVisible->setChecked(group.readEntry("Visible", TRUE));
-	cbXColumn->setCurrentIndex( group.readEntry("XColumn", 1) );
-	cbYColumn->setCurrentIndex( group.readEntry("YColumn", 2) );
+  	chkVisible->setChecked(group.readEntry("Visible", curve->isVisible()));
+	//TODO: how to load QModelIndex?
+  	cbXColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
+  	cbYColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yColumn()) );
+	//cbXColumn->setCurrentModelIndex( group.readEntry("XColumn", (int) m_aspectTreeModel->modelIndexOfAspect(curve->xColumn())) );
+	//cbYColumn->setCurrentModelIndex( group.readEntry("YColumn", m_aspectTreeModel->modelIndexOfAspect(curve->yColumn())) );
 
   	//Line
-	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", 1) );
-	ui.sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", 1) );
-	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", 1) );
-	ui.kcbLineColor->setColor( group.readEntry("LineColor", QColor(Qt::black)) );
-  	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("LineColor", QColor(Qt::black)) );
+	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", (int) curve->lineType()) );
+	ui.sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", curve->lineInterpolationPointsCount()) );
+	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) curve->linePen().style()) );
+	ui.kcbLineColor->setColor( group.readEntry("LineColor", curve->linePen().color()) );
+  	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("LineColor", curve->linePen().color()) );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", curve->linePen().widthF()), Worksheet::Point) );
-	ui.sbLineOpacity->setValue( group.readEntry("LineOpacity", 1.0)*100 );
-	//Drop Line
-	ui.cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", 1) );
-	ui.cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", 1) );
-	ui.kcbDropLineColor->setColor( group.readEntry("DropLineColor", QColor(Qt::black)) );
-  	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("DropLineColor", QColor(Qt::black)) );
+	ui.sbLineOpacity->setValue( group.readEntry("LineOpacity", curve->lineOpacity())*100 );
+	//Drop 
+	ui.cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", (int) curve->dropLineType()) );
+	ui.cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", (int) curve->dropLinePen().style()) );
+	ui.kcbDropLineColor->setColor( group.readEntry("DropLineColor", curve->dropLinePen().color()) );
+  	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("DropLineColor", curve->dropLinePen().color()) );
 	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", curve->dropLinePen().widthF()),Worksheet::Point) );
-	ui.sbDropLineOpacity->setValue( group.readEntry("DropLineOpacity", 1.0)*100 );
+	ui.sbDropLineOpacity->setValue( group.readEntry("DropLineOpacity", curve->dropLineOpacity())*100 );
 
 	//Symbol
 	//TODO: character
-	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", 1) );
+	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", ui.cbSymbolStyle->findText(curve->symbolTypeId())) );
   	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", curve->symbolSize()), Worksheet::Point) );
-	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", 0) );
-	ui.sbSymbolOpacity->setValue( group.readEntry("SymbolOpacity", 1.0)*100 );
+	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", curve->symbolRotationAngle()) );
+	ui.sbSymbolOpacity->setValue( group.readEntry("SymbolOpacity", curve->symbolsOpacity())*100 );
 
-  	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle",1) );
-  	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
+  	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) curve->symbolsBrush().style()) );
+  	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", curve->symbolsBrush().color()) );
+	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, group.readEntry("SymbolFillingColor", curve->symbolsBrush().color()) );
 	
-  	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle",1) );
-  	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
+  	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) curve->symbolsPen().style()) );
+  	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", curve->symbolsPen().color()) );
+	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, group.readEntry("SymbolBorderColor", curve->symbolsPen().color()) );
   	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",curve->symbolsPen().widthF()), Worksheet::Point) );
 
 	//Values
-	//TODO
+  	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) curve->valuesType()) );
+  	ui.cbValuesPosition->setCurrentIndex( group.readEntry("ValuesPosition", (int) curve->valuesPosition()) );
+  	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", curve->valuesDistance()), Worksheet::Point) );
+	ui.sbValuesRotation->setValue( group.readEntry("ValuesRotation", curve->valuesRotationAngle()) );
+	ui.sbValuesOpacity->setValue( group.readEntry("ValuesOpacity",curve->valuesOpacity())*100 );
+  	ui.leValuesPrefix->setText( group.readEntry("ValuesPrefix", curve->valuesPrefix()) );
+  	ui.leValuesSuffix->setText( group.readEntry("ValuesSuffix", curve->valuesSuffix()) );
+  	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", curve->valuesFont()) );
+  	ui.kcbValuesFontColor->setColor( group.readEntry("ValuesFontColor", curve->valuesPen().color()) );
 
 	//Area Filling
 	//TODO
