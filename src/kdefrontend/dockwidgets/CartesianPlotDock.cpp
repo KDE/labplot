@@ -90,6 +90,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.sbLeft, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	
 	//Coordinate system
 	connect( ui.chkXBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleXBreak(int)) );
@@ -151,8 +155,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
   
 	//show the properties of the first curve
 	KConfig config("", KConfig::SimpleConfig);
-	load(config);
-  
+  	load(config);
+
 	m_initializing = false;
 }
 
@@ -184,7 +188,6 @@ void CartesianPlotDock::retranslateUi(){
 	m_initializing = false;
 }
 
-
 // "General"-tab
 void CartesianPlotDock::nameChanged(){
   if (m_initializing)
@@ -208,6 +211,19 @@ void CartesianPlotDock::visibilityChanged(int state){
   foreach(CartesianPlot* plot, m_plotList){
 	plot->setVisible(b);
   }
+}
+
+void CartesianPlotDock::geometryChanged(){
+	if (m_initializing)
+		return;
+
+	float x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), Worksheet::Centimeter);
+	float y = Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter);
+	float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
+	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
+	
+	QRectF rect(x,y,w,h);
+	m_plotList.first()->setRect(rect);
 }
 
 // "Coordinate system"-tab
@@ -441,6 +457,10 @@ void CartesianPlotDock::load(const KConfig& config){
 
 	//General-tab
 	ui.chkVisible->setChecked( group.readEntry("Visible", plot->isVisible()) );
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Left", plot->rect().x()), Worksheet::Centimeter));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Top", plot->rect().y()), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", plot->rect().width()), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", plot->rect().height()), Worksheet::Centimeter));
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) plot->plotArea()->backgroundType()) );
@@ -479,7 +499,13 @@ void CartesianPlotDock::saveDefaults(){
 void CartesianPlotDock::save(const KConfig& config){
 	KConfigGroup group = config.group( "PlotArea" );
 
+	//General-tab
 	group.writeEntry("Visible", ui.chkVisible->isChecked());
+	group.writeEntry("Left", Worksheet::convertToSceneUnits(ui.sbLeft->value(), Worksheet::Centimeter));
+	group.writeEntry("Top", Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter));
+	group.writeEntry("Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
+	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
+
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());

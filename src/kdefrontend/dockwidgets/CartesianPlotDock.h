@@ -58,6 +58,7 @@ private slots:
 	void nameChanged();
 	void commentChanged();
 	void visibilityChanged(int);
+	void geometryChanged();
 
 	//"Coordinate system"-tab
 	void toggleXBreak(int);
