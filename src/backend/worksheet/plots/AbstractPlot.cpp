@@ -39,21 +39,24 @@
  *
  */ 
 
-AbstractPlot::AbstractPlot(const QString &name) 
-	: WorksheetElementContainer(name) {
-		
+AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name){
+	init();
+}
+
+AbstractPlot::AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd)
+	: WorksheetElementContainer(name, dd){
+	init();
+}
+
+void AbstractPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 // TODO
 }
 
-AbstractPlot::AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd)
-	: WorksheetElementContainer(name, dd) {
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-// TODO
+QRectF AbstractPlot::rect() const{
+	return m_rect;
 }
 
 AbstractPlot::~AbstractPlot() {

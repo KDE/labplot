@@ -35,6 +35,7 @@
 
 class AbstractCoordinateSystem;
 class PlotArea;
+class AbstractPlotPrivate;
 
 class AbstractPlot: public WorksheetElementContainer {
 	Q_OBJECT
@@ -45,7 +46,9 @@ class AbstractPlot: public WorksheetElementContainer {
 
 		AbstractCoordinateSystem* coordinateSystem() const;
 		PlotArea* plotArea();
-		// TODO add abstract methods interface (such as transform(...))
+		
+		QRectF rect() const;
+		virtual void setRect(const QRectF&) = 0;
 
 	public slots:
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
@@ -54,6 +57,10 @@ class AbstractPlot: public WorksheetElementContainer {
 		AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd);
 		AbstractCoordinateSystem* m_coordinateSystem;
 		PlotArea* m_plotArea;
+		QRectF m_rect;
+
+	private:
+		void init();
 };
 
 

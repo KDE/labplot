@@ -39,6 +39,9 @@
 #include "KIcon"
 #endif
 
+#define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
+#define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
+
 /**
  * \class CartesianPlot
  * \brief A xy-plot.
@@ -80,4 +83,30 @@ QIcon CartesianPlot::icon() const{
 	ico = KIcon("office-chart-line");
 #endif
 	return ico;
+}
+
+void CartesianPlot::setRect(const QRectF& r){
+	m_rect=r;
+
+	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
+	QList<CartesianCoordinateSystem::Scale *> scales;
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.x(), r.x()+r.width(), 0, 10);
+	cSystem ->setXScales(scales);
+	scales.clear();
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.y()+r.height(), r.y(), 1, 10);
+	cSystem ->setYScales(scales);
+	
+	m_plotArea->retransform();
+	retransform();
+	graphicsItem()->update();
+	
+	//TODO trigger an update of the view
+// 	AbstractAspect * parent = parentAspect();
+// 	while (parent) {
+// 		Worksheet *worksheet = qobject_cast<Worksheet *>(parent);
+// 		if (worksheet)
+// 			orksheet->requestUpdate();
+// 
+// 		parent = parent->parentAspect();
+// 	}
 }
