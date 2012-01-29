@@ -1177,8 +1177,7 @@ void XYCurveDock::load(const KConfig& config){
 	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", curve->dropLinePen().widthF()),Worksheet::Point) );
 	ui.sbDropLineOpacity->setValue( group.readEntry("DropLineOpacity", curve->dropLineOpacity())*100 );
 
-	//Symbol
-	//TODO: character
+	//Symbol (TODO: character)
 	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", ui.cbSymbolStyle->findText(curve->symbolTypeId())) );
   	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", curve->symbolSize()), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", curve->symbolRotationAngle()) );
@@ -1204,11 +1203,7 @@ void XYCurveDock::load(const KConfig& config){
   	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", curve->valuesFont()) );
   	ui.kcbValuesFontColor->setColor( group.readEntry("ValuesFontColor", curve->valuesPen().color()) );
 
-	//Area Filling
-	//TODO
-
-	//Error Bars
-	//TODO
+	//TODO: Area Filling, Error Bars
 }
 
 void XYCurveDock::saveSettings(){
@@ -1231,6 +1226,46 @@ void XYCurveDock::saveDefaults(){
 void XYCurveDock::save(const KConfig& config){
 	KConfigGroup group = config.group( "XYCurve" );
 
-	//TODO
+	group.writeEntry("Visible", chkVisible->isChecked());
+	//TODO: how to save QModelIndex?
+	//group.writeEntry("XColumn", cbXColumn->currentModelIndex() );
+	//group.writeEntry("YColumn", cbYColumn->currentModelIndex() );
+
+	group.writeEntry("LineType", ui.cbLineType->currentIndex());
+	group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value() );
+	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
+	group.writeEntry("LineColor", ui.kcbLineColor->color());
+	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(),Worksheet::Point) );
+	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100 );
+	//Drop Line
+	group.writeEntry("DropLineType", ui.cbDropLineType->currentIndex());
+	group.writeEntry("DropLineStyle", ui.cbDropLineStyle->currentIndex());
+	group.writeEntry("DropLineColor", ui.kcbDropLineColor->color());
+	group.writeEntry("DropLineWidth", Worksheet::convertToSceneUnits(ui.sbDropLineWidth->value(),Worksheet::Point) );
+	group.writeEntry("DropLineOpacity", ui.sbDropLineOpacity->value()/100 );
+
+	//Symbol (TODO: character)
+	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentIndex());
+	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Point));
+	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
+	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100 );
+	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
+	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
+	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
+	group.writeEntry("SymbolBorderColor", ui.kcbSymbolBorderColor->color());
+	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(),Worksheet::Point));
+
+	//Values
+	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());
+	group.writeEntry("ValuesPosition", ui.cbValuesPosition->currentIndex());
+	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(),Worksheet::Point));
+	group.writeEntry("ValuesRotation", ui.sbValuesRotation->value());
+	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100);
+	group.writeEntry("ValuesPrefix", ui.leValuesPrefix->text());
+	group.writeEntry("ValuesSuffix", ui.leValuesSuffix->text());
+	group.writeEntry("ValuesFont", ui.kfrValuesFont->font());
+	group.writeEntry("ValuesFontColor", ui.kcbValuesFontColor->color());
+
+	//TODO: Area Filling, Error Bars
 }
 
