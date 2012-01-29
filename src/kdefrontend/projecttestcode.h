@@ -269,16 +269,19 @@ void MainWin::startTestCode(){
 	 {
 	CartesianPlot *plot = new CartesianPlot("plot3");
 	worksheet->addChild(plot);
-
-	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
-	QList<CartesianCoordinateSystem::Scale *> scales;
-// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.02, pw * 0.42, -2, 10);
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.2, pw * 0.8, 0, 10);
-	cSystem ->setXScales(scales);
-	scales.clear();
-// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.4, ph * 0.2, 1, 10);
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.8, ph * 0.2, 0, 10);
-	cSystem ->setYScales(scales);
+	plot->setRect(QRectF(pw * 0.2, ph * 0.2, pw * 0.6, ph * 0.6));
+	
+	
+// 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
+// 	QList<CartesianCoordinateSystem::Scale *> scales;
+// // 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.02, pw * 0.42, -2, 10);
+// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), pw * 0.2, pw * 0.8, 0, 10);
+// // 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), 0, pw, 0, 10);
+// 	cSystem ->setXScales(scales);
+// 	scales.clear();
+// 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph * 0.8, ph * 0.2, 1, 10);
+// // 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), ph, 0, 0, 10);
+// 	cSystem ->setYScales(scales);
 	
 // 	plot->plotArea()->setRect(QRectF(-2, -2, 14, 14));
 	plot->plotArea()->setRect(QRectF(0,0,10, 10));
