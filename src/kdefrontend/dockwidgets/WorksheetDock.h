@@ -47,6 +47,8 @@ private:
 	bool m_initializing;
 
 	void updatePaperSize();
+
+	void load(const KConfig&);
 	void save(const KConfig&);
 
 private slots:

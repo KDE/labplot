@@ -89,15 +89,11 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 	ui.leComment->setText("");
   }
   
-  //show the properties of the first Spreadsheet in the list, if there are >1 spreadsheets
+  	//show the properties of the first Spreadsheet in the list, if there are >1 spreadsheets
 	KConfig config("", KConfig::SimpleConfig);
 	load(config);
-/*  ui.sbColumnCount->setValue(spreadsheet->columnCount());
-  ui.sbRowCount->setValue(spreadsheet->rowCount());
-  SpreadsheetView* view= qobject_cast<SpreadsheetView*>(spreadsheet->view());
-  ui.cbShowComments->setChecked(view->areCommentsShown());
-  */
-  m_initializing = false;
+  
+	m_initializing = false;
 }
 
 // ###### SLOTS  ##############

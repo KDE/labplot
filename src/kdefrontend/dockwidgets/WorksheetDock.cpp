@@ -160,26 +160,9 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
   }
   
 	//show the properties of the first worksheet
+	KConfig config("", KConfig::SimpleConfig);
+  	load(config);
   
- 	//General-tab
- 	float w=Worksheet::convertFromSceneUnits(worksheet->pageRect().width(), Worksheet::Centimeter);
-	float h=Worksheet::convertFromSceneUnits(worksheet->pageRect().height(), Worksheet::Centimeter);
-	ui.sbWidth->setValue(w);
-	ui.sbHeight->setValue(h);
-	
-	updatePaperSize();
-	
-	//Background-tab
-	ui.cbBackgroundColorStyle->setCurrentIndex( worksheet->backgroundColorStyle() );
-	ui.cbBackgroundImageStyle->setCurrentIndex( worksheet->backgroundImageStyle() );
-	ui.kleBackgroundFileName->setText( worksheet->backgroundFileName() );
-	ui.kcbBackgroundFirstColor->setColor( worksheet->backgroundFirstColor() );
-	ui.kcbBackgroundSecondColor->setColor( worksheet->backgroundSecondColor() );
-	ui.sbBackgroundOpacity->setValue(worksheet->backgroundOpacity()*100 );
-	// this at last since others emmit backgroundColorStyleChanges
-	// and enable SecondColor button, etc.!
-	ui.cbBackgroundType->setCurrentIndex(worksheet->backgroundType() );
-
 	m_initializing = false;
 }
 
@@ -505,6 +488,10 @@ void WorksheetDock::loadSettings(){
         	return;
 
 	KConfig config(filename, KConfig::SimpleConfig);
+	load(config);
+}
+
+void WorksheetDock::load(const KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
 	
 	// Geometry
@@ -515,15 +502,15 @@ void WorksheetDock::loadSettings(){
 	updatePaperSize();
 
 	// Background-tab
-	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor) );
-	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled) );
-	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", QString()) );
-	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", QColor(Qt::white)) );
-	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", QColor(Qt::black)) );
-	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", 1.0)*100 );
+	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) worksheet->backgroundColorStyle()) );
+	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) worksheet->backgroundImageStyle()) );
+	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", worksheet->backgroundFileName()) );
+	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", worksheet->backgroundFirstColor()) );
+	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", worksheet->backgroundSecondColor()) );
+	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", worksheet->backgroundOpacity())*100 );
 	// this at last since others emmit backgroundColorStyleChanges
 	// and enable SecondColor button, etc.!
-	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) PlotArea::Color) );
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) worksheet->backgroundType()) );
 	
 	// Layout
 	ui.leTopMargin->setText(group.readEntry("TopMargin",QString()));
