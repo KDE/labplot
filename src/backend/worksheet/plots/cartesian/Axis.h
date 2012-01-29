@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
-									(replace * with @ in the email addresses) 
+				(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 

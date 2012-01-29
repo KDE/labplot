@@ -43,6 +43,7 @@
 
 #include <math.h>
 
+
 /**
  * \class Axis
  * \brief Axis for cartesian coordinate systems.

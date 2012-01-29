@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
-										(replace * with @ in the email addresses) 
+					(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 
@@ -44,6 +44,11 @@
 
 #include <math.h>
 
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include <KConfig>
+#include <KConfigGroup>
+#endif
+
 /**
  * \class Axis
  * \brief Axis for cartesian coordinate systems.
@@ -68,37 +73,43 @@ Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate 
 void Axis::init() {
 	Q_D(Axis);
 
-	d->scale = ScaleLinear;
-	d->offset = 0;
-	d->start = 0;
-	d->end = 10;
-	d->scalingFactor = 1.0;
-	d->zeroOffset = 0;
+	KConfig config;
+	KConfigGroup group = config.group( "Axis" );
+	//TODO: add missing settings (see AxisDock::load())
+
+	d->scale = (Axis::AxisScale) group.readEntry("Scale", (int) Axis::ScaleLinear);
+	d->offset = group.readEntry("PositionOffset", 0);
+	d->start = group.readEntry("Start", 0);
+	d->end = group.readEntry("End", 10);
+	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
+	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	
-	d->lineOpacity = 1.0;
+	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 	
-	d->majorTicksDirection = ticksOut;
-	d->majorTicksType = TicksTotalNumber;
-	d->majorTicksNumber = 11;
-	d->majorTicksIncrement = 1.0;
-	d->majorTicksLength = 0.5;
-	d->majorTicksOpacity = 1.0;
+	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
+	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
+	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
+	d->majorTicksIncrement = group.readEntry("MajorTicksIncrement", 1.0);
+	d->majorTicksLength = group.readEntry("MajorTicksLength", 0.5);
+	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
 	
-	d->minorTicksDirection = ticksOut;
-	d->minorTicksType = TicksTotalNumber;
-	d->minorTicksNumber = 1;
-	d->minorTicksIncrement = 0.5;
-	d->minorTicksLength = 0.25;
-	d->minorTicksOpacity = 1.0;
+	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
+	d->minorTicksType = (Axis::TicksType) group.readEntry("MinorTicksType", (int) Axis::TicksTotalNumber);
+	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
+	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.5);
+	d->minorTicksLength = group.readEntry("MinorTicksLength", 0.25);
+	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
 	
+	//TODO: read from config
 	d->numericFormat = 'f';
 	d->displayedDigits = 1;
 	
-	d->labelsPosition = LabelsOut;
-	d->labelsColor = QColor(Qt::black);
+	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
+	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
+	//TODO: axis->labelsFont()
 	d->labelsFontSize = 10;
-	d->labelsRotationAngle = 0;
-	d->labelsOpacity = 1.0;
+	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
+	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
 	
 	retransform();
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
