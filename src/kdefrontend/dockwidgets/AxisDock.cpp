@@ -213,9 +213,9 @@ void AxisDock::init(){
   sets the axes. The properties of the axes in the list \c list can be edited in this widget.
 */
 void AxisDock::setAxes(QList<Axis*> list){
-  m_initializing=true;
-  m_axesList=list;
-  Axis* axis=list.first();
+  	m_initializing=true;
+  	m_axesList=list;
+  	Axis* axis=list.first();
   
   //if there are more then one axis in the list, disable the tab "general"
   if (list.size()==1){
@@ -238,78 +238,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 	KConfig config("", KConfig::SimpleConfig);
 	load(config);
   
-	//TODO: merge with load();
-
- 	//"General"-tab
-  ui.chkVisible->setChecked(axis->isVisible());
-  ui.cbOrientation->setCurrentIndex( axis->orientation() );
-// TODO	ui.cbPosition->setCurrentIndex( axis->position() );
-  ui.lePositionOffset->setText( QString::number(axis->offset()) );
-  ui.cbScale->setCurrentIndex( axis->scale() );
-  ui.leStart->setText( QString::number(axis->start()) );
-  ui.leEnd->setText( QString::number(axis->end()) );
-  ui.leZeroOffset->setText( QString::number(axis->zeroOffset()) );
-  ui.leScalingFactor->setText( QString::number(axis->scalingFactor()) );
-
- 
-  //   "Title"-tab
-
-  //Line-tab
-  ui.cbLineStyle->setCurrentIndex( axis->linePen().style() );
-  ui.kcbLineColor->setColor( axis->linePen().color() );
-  ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(axis->linePen().widthF(), Worksheet::Point) );
-  ui.sbLineOpacity->setValue( axis->lineOpacity()*100 );
-  GuiTools::updatePenStyles(ui.cbLineStyle, axis->linePen().color() );
-  
-	//"Major ticks"-tab
- 	ui.cbMajorTicksDirection->setCurrentIndex( axis->majorTicksDirection() );
-	ui.cbMajorTicksType->setCurrentIndex( axis->majorTicksType() );
-	this->majorTicksTypeChanged(axis->majorTicksType());
-	ui.sbMajorTicksNumber->setValue(axis->majorTicksNumber());
-	ui.leMajorTicksIncrement->setText(QString::number(axis->majorTicksIncrement()));
-	ui.cbMajorTicksLineStyle->setCurrentIndex( axis->majorTicksPen().style() );
-	ui.kcbMajorTicksColor->setColor( axis->majorTicksPen().color() );
-	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(axis->majorTicksPen().widthF(), Worksheet::Point) );
-	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(axis->majorTicksLength(), Worksheet::Point) );
-	ui.sbMajorTicksOpacity->setValue( axis->majorTicksOpacity()*100 );
-	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, axis->majorTicksPen().color() );
-
-	//"Minor ticks"-tab
- 	ui.cbMinorTicksDirection->setCurrentIndex( axis->minorTicksDirection() );
-	ui.cbMinorTicksType->setCurrentIndex( axis->minorTicksType() );
-	this->minorTicksTypeChanged(axis->minorTicksType());
-	ui.sbMinorTicksNumber->setValue(axis->minorTicksNumber());
-	ui.leMinorTicksIncrement->setText(QString::number(axis->minorTicksIncrement()));
-	ui.cbMinorTicksLineStyle->setCurrentIndex( axis->minorTicksPen().style() );
-	ui.kcbMinorTicksColor->setColor( axis->minorTicksPen().color() );
-	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(axis->minorTicksPen().widthF(), Worksheet::Point) );
-	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(axis->minorTicksLength(), Worksheet::Point) );
-	ui.sbMinorTicksOpacity->setValue( axis->minorTicksOpacity()*100 );
-	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, axis->minorTicksPen().color() );
-	
-	//"Extra ticks"-tab
-	
- 	//"Tick labels"-tab
-	ui.cbLabelsPosition->setCurrentIndex( axis->labelsPosition() );
-	ui.sbLabelsRotation->setValue( axis->labelsRotationAngle() );
-	ui.kfrLabelsFont->setFont( axis->labelsFont() );
-	ui.kcbLabelsFontColor->setColor( axis->labelsColor() );
-	ui.leLabelsPrefix->setText( axis->labelsPrefix() );
-	ui.leLabelsSuffix->setText( axis->labelsSuffix() );
-	ui.sbLabelsOpacity->setValue( axis->labelsOpacity()*100 );
-	
-	// 	//*******************   "Grid"-tab  ************************************
-// 	ui.chbMajorGrid->setChecked( axis->hasMajorGrid() );
-// 	ui.cbMajorGridStyle->setCurrentIndex( axis->majorGridStyle()-1 );
-// 	ui.kcbMajorGridColor->setColor( axis->majorGridColor() );
-// 	ui.sbMajorGridWidth->setValue( axis->majorGridWidth() );
-// 
-// 	ui.chbMinorGrid->setChecked( axis->hasMinorGrid() );
-// 	ui.cbMinorGridStyle->setCurrentIndex( axis->minorGridStyle()-1 );
-// 	ui.kcbMinorGridColor->setColor( axis->minorGridColor() );
-// 	ui.sbMinorGridWidth->setValue( axis->minorGridWidth() );
-
-  m_initializing = false;
+  	m_initializing = false;
 }
 
 //**********************************************************
@@ -967,7 +896,75 @@ void AxisDock::load(const KConfig& config){
 
   	Axis* axis=m_axesList.first();
 
-	//TODO
+	//General
+  	ui.chkVisible->setChecked(group.readEntry("Visible", axis->isVisible()));
+	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int) axis->orientation()) );
+	// TODO	ui.cbPosition->setCurrentIndex( axis->position() );
+  	ui.lePositionOffset->setText( QString::number( group.readEntry("PositionOffset", axis->offset())) );
+	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) axis->scale()) );
+  	ui.leStart->setText( QString::number( group.readEntry("Start", axis->start())) );
+  	ui.leEnd->setText( QString::number( group.readEntry("End", axis->end())) );
+  	ui.leZeroOffset->setText( QString::number( group.readEntry("ZeroOffset", axis->zeroOffset())) );
+  	ui.leScalingFactor->setText( QString::number( group.readEntry("ScalingFactor", axis->scalingFactor())) );
+
+	//Title
+
+	//Line
+	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) axis->linePen().style()) );
+	ui.kcbLineColor->setColor( group.readEntry("LineColor", axis->linePen().color()) );
+	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("LineColor", axis->linePen().color()) );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", axis->linePen().widthF()),Worksheet::Point) );
+	ui.sbLineOpacity->setValue( group.readEntry("LineOpacity", axis->lineOpacity())*100 );
+
+	//Major ticks
+	ui.cbMajorTicksDirection->setCurrentIndex( group.readEntry("MajorTicksDirection", (int) axis->majorTicksDirection()) );
+	ui.cbMajorTicksType->setCurrentIndex( group.readEntry("MajorTicksType", (int) axis->majorTicksType()) );
+	this->majorTicksTypeChanged( group.readEntry("MajorTicksType", (int) axis->majorTicksType()) );
+	ui.sbMajorTicksNumber->setValue( group.readEntry("MajorTicksNumber", axis->majorTicksNumber()) );
+  	ui.leMajorTicksIncrement->setText( QString::number( group.readEntry("MajorTicksIncrement", axis->majorTicksIncrement())) );
+	ui.cbMajorTicksLineStyle->setCurrentIndex( group.readEntry("MajorTicksLineStyle", (int) axis->majorTicksPen().style()) );
+	ui.kcbMajorTicksColor->setColor( group.readEntry("MajorTicksColor", axis->majorTicksPen().color()) );
+	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksWidth", axis->majorTicksPen().widthF()),Worksheet::Point) );
+	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksLength", axis->majorTicksLength()),Worksheet::Point) );
+	ui.sbMajorTicksOpacity->setValue( group.readEntry("MajorTicksOpacity", axis->majorTicksOpacity())*100 );
+	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, group.readEntry("MajorTicksColor", axis->majorTicksPen().color()) );
+	
+	//Minor ticks
+	ui.cbMinorTicksDirection->setCurrentIndex( group.readEntry("MinorTicksDirection", (int) axis->minorTicksDirection()) );
+	ui.cbMinorTicksType->setCurrentIndex( group.readEntry("MinorTicksType", (int) axis->minorTicksType()) );
+	this->minorTicksTypeChanged( group.readEntry("MinorTicksType", (int) axis->minorTicksType()) );
+	ui.sbMinorTicksNumber->setValue( group.readEntry("MinorTicksNumber", axis->minorTicksNumber()) );
+  	ui.leMinorTicksIncrement->setText( QString::number( group.readEntry("MinorTicksIncrement", axis->minorTicksIncrement())) );
+	ui.cbMinorTicksLineStyle->setCurrentIndex( group.readEntry("MinorTicksLineStyle", (int) axis->minorTicksPen().style()) );
+	ui.kcbMinorTicksColor->setColor( group.readEntry("MinorTicksColor", axis->minorTicksPen().color()) );
+	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksWidth", axis->minorTicksPen().widthF()),Worksheet::Point) );
+	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", axis->minorTicksLength()),Worksheet::Point) );
+	ui.sbMinorTicksOpacity->setValue( group.readEntry("MinorTicksOpacity", axis->minorTicksOpacity())*100 );
+	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, group.readEntry("MinorTicksColor", axis->minorTicksPen().color()) );
+
+	//Extra ticks
+
+	// Tick label
+	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) axis->labelsPosition()) );
+	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", axis->labelsRotationAngle()) );
+	ui.kfrLabelsFont->setFont( group.readEntry("LabelsFont", axis->labelsFont()) );
+	ui.kcbLabelsFontColor->setColor( group.readEntry("LabelsFontColor", axis->labelsColor()) );
+	ui.leLabelsPrefix->setText( group.readEntry("LabelsPrefix", axis->labelsPrefix()) );
+	ui.leLabelsSuffix->setText( group.readEntry("LabelsSuffix", axis->labelsSuffix()) );
+	ui.sbLabelsOpacity->setValue( group.readEntry("LabelsOpacity", axis->labelsOpacity())*100 );
+
+	//Grid TODO
+// 	ui.chbMajorGridVisible->setChecked( axis->hasMajorGrid() );
+// 	ui.cbMajorGridStyle->setCurrentIndex( axis->majorGridStyle()-1 );
+// 	ui.kcbMajorGridColor->setColor( axis->majorGridColor() );
+// 	ui.sbMajorGridWidth->setValue( axis->majorGridWidth() );
+// 	sbMajorGridOpacity->setValue( axis->majorGridOpacity() );
+// 
+// 	ui.chbMinorGrid->setChecked( axis->hasMinorGrid() );
+// 	ui.cbMinorGridStyle->setCurrentIndex( axis->minorGridStyle()-1 );
+// 	ui.kcbMinorGridColor->setColor( axis->minorGridColor() );
+// 	ui.sbMinorGridWidth->setValue( axis->minorGridWidth() );
+// 	sbMinroGridOpacity->setValue( axis->minorGridOpacity() );
 }
 
 void AxisDock::saveSettings(){
@@ -990,6 +987,58 @@ void AxisDock::saveDefaults(){
 void AxisDock::save(const KConfig& config){
 	KConfigGroup group = config.group( "Axis" );
 
-	//TODO
+	//General
+	group.writeEntry("Visible", ui.chkVisible->isChecked());
+	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
+	//ui.cbPosition
+	group.writeEntry("PositionOffset", ui.lePositionOffset->text());
+	group.writeEntry("Scale", ui.cbScale->currentIndex());
+	group.writeEntry("Start", ui.leStart->text());
+	group.writeEntry("End", ui.leEnd->text());
+	group.writeEntry("ZeroOffset", ui.leZeroOffset->text());
+	group.writeEntry("ScalingFactor", ui.leScalingFactor->text());
+
+	//Title
+
+	//Line
+	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
+	group.writeEntry("LineColor", ui.kcbLineColor->color());
+	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Point));
+	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100);
+
+	//Major ticks
+	group.writeEntry("MajorTicksDirection", ui.cbMajorTicksDirection->currentIndex());
+	group.writeEntry("MajorTicksType", ui.cbMajorTicksType->currentIndex());
+	group.writeEntry("MajorTicksNumber", ui.sbMajorTicksNumber->value());
+	group.writeEntry("MajorTicksIncrement", ui.leMajorTicksIncrement->text());
+	group.writeEntry("MajorTicksLineStyle", ui.cbMajorTicksLineStyle->currentIndex());
+	group.writeEntry("MajorTicksColor", ui.kcbMajorTicksColor->color());
+	group.writeEntry("MajorTicksWidth", Worksheet::convertFromSceneUnits(ui.sbMajorTicksWidth->value(),Worksheet::Point));
+	group.writeEntry("MajorTicksLength", Worksheet::convertFromSceneUnits(ui.sbMajorTicksLength->value(),Worksheet::Point));
+	group.writeEntry("MajorTicksOpacity", ui.sbMajorTicksOpacity->value()/100);
+
+	//Minor ticks
+	group.writeEntry("MinorTicksDirection", ui.cbMinorTicksDirection->currentIndex());
+	group.writeEntry("MinorTicksType", ui.cbMinorTicksType->currentIndex());
+	group.writeEntry("MinorTicksNumber", ui.sbMinorTicksNumber->value());
+	group.writeEntry("MinorTicksIncrement", ui.leMinorTicksIncrement->text());
+	group.writeEntry("MinorTicksLineStyle", ui.cbMinorTicksLineStyle->currentIndex());
+	group.writeEntry("MinorTicksColor", ui.kcbMinorTicksColor->color());
+	group.writeEntry("MinorTicksWidth", Worksheet::convertFromSceneUnits(ui.sbMinorTicksWidth->value(),Worksheet::Point));
+	group.writeEntry("MinorTicksLength", Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(),Worksheet::Point));
+	group.writeEntry("MinorTicksOpacity", ui.sbMinorTicksOpacity->value()/100);
+
+	//Extra ticks
+
+	// Tick label
+	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
+	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
+	group.writeEntry("LabelsFont", ui.kfrLabelsFont->font());
+	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());
+	group.writeEntry("LabelsPrefix", ui.leLabelsPrefix->text());
+	group.writeEntry("LabelsSuffix", ui.leLabelsSuffix->text());
+	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value()/100);
+
+	//Grid: TODO (see load())	
 }
 
