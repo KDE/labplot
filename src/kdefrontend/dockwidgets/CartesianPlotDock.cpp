@@ -48,11 +48,11 @@
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
-	ui.pbLoad->setIcon(KIcon("document-open"));
-	ui.pbSave->setIcon(KIcon("document-save"));
-	ui.pbSaveDefault->setIcon(KIcon("document-save-as"));
-	ui.pbCopy->setIcon(KIcon("edit-copy"));
-	ui.pbPaste->setIcon(KIcon("edit-paste"));
+	ui.tbLoad->setIcon(KIcon("document-open"));
+	ui.tbSave->setIcon(KIcon("document-save"));
+	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
+	ui.tbCopy->setIcon(KIcon("edit-copy"));
+	ui.tbPaste->setIcon(KIcon("edit-paste"));
 
 	//"Coordinate system"-tab
 	ui.bAddXBreak->setIcon( KIcon("list-add") );
@@ -113,9 +113,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
-	connect( ui.pbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
-	connect( ui.pbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
-	connect( ui.pbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
+	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 
 	QTimer::singleShot(0, this, SLOT(init()));
 }

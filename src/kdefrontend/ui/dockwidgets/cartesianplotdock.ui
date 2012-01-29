@@ -973,7 +973,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="pbLoad">
+      <widget class="QToolButton" name="tbLoad">
        <property name="toolTip">
         <string>Load properties from a template</string>
        </property>
@@ -983,7 +983,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="pbSave">
+      <widget class="QToolButton" name="tbSave">
        <property name="toolTip">
         <string>Save properties as a template</string>
        </property>
@@ -993,7 +993,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="pbSaveDefault">
+      <widget class="QToolButton" name="tbSaveDefault">
        <property name="toolTip">
         <string>Save properties as default</string>
        </property>
@@ -1019,7 +1019,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="pbCopy">
+      <widget class="QToolButton" name="tbCopy">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -1032,7 +1032,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="pbPaste">
+      <widget class="QToolButton" name="tbPaste">
        <property name="enabled">
         <bool>false</bool>
        </property>
