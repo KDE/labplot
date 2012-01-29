@@ -80,11 +80,11 @@ static const float qt_paperSizes[][2] = {
 WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 
-	ui.pbLoad->setIcon(KIcon("document-open"));
-	ui.pbSave->setIcon(KIcon("document-save"));
-	ui.pbSaveDefault->setIcon(KIcon("document-save-as"));
-	ui.pbCopy->setIcon(KIcon("edit-copy"));
-	ui.pbPaste->setIcon(KIcon("edit-paste"));
+	ui.tbLoad->setIcon(KIcon("document-open"));
+	ui.tbSave->setIcon(KIcon("document-save"));
+	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
+	ui.tbCopy->setIcon(KIcon("edit-copy"));
+	ui.tbPaste->setIcon(KIcon("edit-paste"));
 
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -127,9 +127,9 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
 	
-	connect( ui.pbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
-	connect( ui.pbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
-	connect( ui.pbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
+	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 
 	this->retranslateUi();
 }
