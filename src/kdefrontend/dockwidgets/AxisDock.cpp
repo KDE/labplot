@@ -2,8 +2,9 @@
     File                 : AxisDock.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 20011 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    							(use @ for *)
     Description          : axes widget class
 
  ***************************************************************************/
@@ -898,6 +899,7 @@ void AxisDock::load(const KConfig& config){
 
 	//General
   	ui.chkVisible->setChecked(group.readEntry("Visible", axis->isVisible()));
+	// TODO:see save()
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int) axis->orientation()) );
 	// TODO	ui.cbPosition->setCurrentIndex( axis->position() );
   	ui.lePositionOffset->setText( QString::number( group.readEntry("PositionOffset", axis->offset())) );
@@ -989,6 +991,7 @@ void AxisDock::save(const KConfig& config){
 
 	//General
 	group.writeEntry("Visible", ui.chkVisible->isChecked());
+	// TODO:not sure if this should be saved
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 	//ui.cbPosition
 	group.writeEntry("PositionOffset", ui.lePositionOffset->text());
