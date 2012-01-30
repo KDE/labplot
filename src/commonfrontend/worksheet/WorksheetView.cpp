@@ -43,6 +43,7 @@
 #include "worksheet/DecorationPlot.h"
 #include "worksheet/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
+#include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/plots/cartesian/Axis.h"
 #include "worksheet/plots/cartesian/XYCurve.h"
 #include "lib/ActionManager.h"
@@ -208,6 +209,10 @@ void WorksheetView::initActions(){
   selectionModeAction->setCheckable(true);
   connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
 
+  //Plot related actions
+  addPlotAction = new KAction(KIcon("office-chart-line"), i18n("xy-plot"), this);
+  connect(addPlotAction, SIGNAL(triggered()), SLOT(addPlot()));
+  
   //Layout actions
   verticalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Vertical layout"), layoutActionGroup);
   verticalLayoutAction->setObjectName("verticalLayoutAction");
@@ -268,14 +273,14 @@ void WorksheetView::initMenus(){
 	m_layoutMenu = new QMenu(tr("Layout"));
 	m_gridMenu = new QMenu(tr("Grid"));
 #else
-	m_plotMenu = new QMenu(i18n("add plot"));
+	m_plotMenu = new QMenu(i18n("Add plot"));
 	m_zoomMenu = new QMenu(i18n("Zoom"));
 	m_layoutMenu = new QMenu(i18n("Layout"));
 	m_gridMenu = new QMenu(i18n("Grid"));
 	m_gridMenu->setIcon(QIcon(KIcon("view-grid")));
 #endif
 
-	m_plotMenu->addAction("xy-plot");
+	m_plotMenu->addAction(addPlotAction);
 		
 	m_zoomMenu->addAction(zoomInAction);
 	m_zoomMenu->addAction(zoomOutAction);
@@ -504,6 +509,13 @@ void WorksheetView::enableSelectionMode(){
   m_currentMouseMode = SelectionMode;
   setDragMode(QGraphicsView::RubberBandDrag);
 }
+
+//Plot related slots
+void WorksheetView::addPlot(){
+	CartesianPlot *plot = new CartesianPlot("xy-plot");
+	m_worksheet->addChild(plot);
+}
+
 
 void WorksheetView::changeLayout(QAction* action){
   QString name = action->objectName();

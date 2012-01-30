@@ -131,6 +131,8 @@ class WorksheetView : public QGraphicsView{
 	KAction* zoomModeAction;
 	KAction* selectionModeAction;
 
+	KAction* addPlotAction;
+
 	KAction* verticalLayoutAction;
 	KAction* horizontalLayoutAction;
 	KAction* gridLayoutAction;
@@ -159,6 +161,8 @@ class WorksheetView : public QGraphicsView{
 	void enableNavigationMode();
 	void enableZoomMode();
 	void enableSelectionMode();
+
+	void addPlot();
 
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);
