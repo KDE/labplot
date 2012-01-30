@@ -63,7 +63,9 @@ PlotArea::~PlotArea() {
 void PlotArea::init(){
 	Q_D(PlotArea);
 	
+	setHidden(true);//we don't show PlotArea aspect in the model view.
 	d->rect = QRectF(0, 0, 1, 1);
+	d->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 
 	KConfig config;
 	KConfigGroup group = config.group( "PlotArea" );
