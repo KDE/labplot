@@ -30,6 +30,7 @@
 
 #include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "worksheet/plots/cartesian/Axis.h"
 #include "worksheet/plots/PlotArea.h"
 #include "worksheet/Worksheet.h"
 
@@ -61,11 +62,69 @@ CartesianPlot::CartesianPlot(const QString &name, WorksheetElementContainerPriva
 void CartesianPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
+
+	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
+	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	m_rect.setX(x);
+	m_rect.setY(y);
+	m_rect.setWidth(w);
+	m_rect.setHeight(h);
+	
+	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
+	QList<CartesianCoordinateSystem::Scale *> scales;
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), x, x+w, 0, 1);
+	cSystem ->setXScales(scales);
+	scales.clear();
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), y+h, y, 0, 1);
+	cSystem ->setYScales(scales);
 	
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
-	m_plotArea->setHidden(true);
-	m_plotArea->setClippingEnabled(true);
+// 	m_plotArea->setRect(QRectF(-0.05,-0.05,1.1, 1.1));
+	m_plotArea->setRect(QRectF(0, 0, 1, 1));
+
+	Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+	addChild(axis);
+	axis->setStart(0);
+	axis->setEnd(1);
+	axis->setMajorTicksDirection(Axis::ticksIn);
+	axis->setMajorTicksNumber(6);
+	axis->setMinorTicksDirection(Axis::ticksIn);
+	axis->setMinorTicksNumber(1);
+	
+	axis = new Axis("x axis 2", Axis::AxisHorizontal);
+	addChild(axis);
+	axis->setOffset(1);
+	axis->setStart(0);
+	axis->setEnd(1);
+	axis->setMajorTicksDirection(Axis::ticksIn);
+	axis->setMajorTicksNumber(6);
+	axis->setMinorTicksDirection(Axis::ticksIn);
+	axis->setMinorTicksNumber(1);
+	axis->setLabelsPosition(Axis::NoLabels);
+	
+	axis = new Axis("y axis 1", Axis::AxisVertical);
+	addChild(axis);
+	axis->setStart(0);
+	axis->setEnd(1);
+	axis->setMajorTicksDirection(Axis::ticksIn);
+	axis->setMajorTicksNumber(6);
+	axis->setMinorTicksDirection(Axis::ticksIn);
+	axis->setMinorTicksNumber(1);
+	
+	axis = new Axis("y axis 2", Axis::AxisVertical);
+	addChild(axis);
+	axis->setStart(0);
+	axis->setEnd(1);
+	axis->setOffset(1);
+	axis->setMajorTicksDirection(Axis::ticksIn);
+	axis->setMajorTicksNumber(6);
+	axis->setMinorTicksDirection(Axis::ticksIn);
+	axis->setMinorTicksNumber(1);
+	axis->setLabelsPosition(Axis::NoLabels);
 }
 
 CartesianPlot::~CartesianPlot() {
@@ -90,10 +149,10 @@ void CartesianPlot::setRect(const QRectF& r){
 
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
 	QList<CartesianCoordinateSystem::Scale *> scales;
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.x(), r.x()+r.width(), 0, 10);
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.x(), r.x()+r.width(), 0, 1);
 	cSystem ->setXScales(scales);
 	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.y()+r.height(), r.y(), 1, 10);
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.y()+r.height(), r.y(), 0, 1);
 	cSystem ->setYScales(scales);
 	
 	m_plotArea->retransform();
