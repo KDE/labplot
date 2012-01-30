@@ -2,7 +2,7 @@
     File                 : MainWin.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2007-2008 Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
@@ -271,7 +271,7 @@ void MainWin::initActions() {
 
 	m_historyAction = new KAction(KIcon("view-history"), i18n("Undo/Redo History"),this);
 	actionCollection()->addAction("history", m_historyAction);
-	connect(m_historyAction, SIGNAL(triggered()),SLOT(showHistory()));
+	connect(m_historyAction, SIGNAL(triggered()),SLOT(historyDialog()));
 
 	// Appearance
 	// Analysis
@@ -555,7 +555,7 @@ bool MainWin::newProject(){
  	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
  	setCaption(m_project->name());
 	 
-	startTestCode();
+// 	startTestCode();
 	return true;
 }
 
@@ -790,8 +790,220 @@ Worksheet* MainWin::activeWorksheet() const{
 	return w;
 }
 
+/*!
+	called if there were changes on the the projects.
+	Adds "changed" to the window caption and activates the save-Action.
+*/
+void MainWin::projectChanged(){
+	setCaption(m_project->name() + "    [" + i18n("Changed") + "]" );
+	m_saveAction->setEnabled(true);
+	m_saveAsAction->setEnabled(true);
+	return;
+}
 
-/******************** dialogs *****************************/
+void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
+	PartMdiView *view = qobject_cast<PartMdiView*>(win);
+	if (!view) return;
+	emit partActivated(view->part());
+	m_projectExplorer->setCurrentAspect(view->part());
+	updateGUI();
+}
+
+void MainWin::handleAspectAdded(const AbstractAspect *aspect){
+	handleAspectAddedInternal(aspect);
+	updateMdiWindowVisibility();
+	handleCurrentSubWindowChanged(m_mdiArea->currentSubWindow());
+}
+
+void MainWin::handleAspectAddedInternal(const AbstractAspect * aspect){
+	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>())
+		handleAspectAddedInternal(child);
+
+	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
+	if (part){
+		PartMdiView *win = part->mdiSubWindow();
+		Q_ASSERT(win);
+		m_mdiArea->addSubWindow(win);
+		connect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
+				this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
+	}
+}
+
+void MainWin::handleAspectRemoved(const AbstractAspect *parent){
+	m_projectExplorer->setCurrentAspect(parent);
+}
+
+void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
+	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
+	if (!part) return;
+	PartMdiView *win = part->mdiSubWindow();
+	Q_ASSERT(win);
+	disconnect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
+		this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
+	m_mdiArea->removeSubWindow(win);
+	updateGUI();
+}
+
+/*!
+  called when the current aspect in the tree of the project explorer was changed.
+  Selects the new aspect.
+*/
+void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
+	if (!aspect)
+	  aspect = m_project; // should never happen, just in case
+	  
+	if(aspect->folder() != m_currentFolder)	{
+		m_currentFolder = aspect->folder();
+		updateMdiWindowVisibility();
+	}
+
+	m_currentAspect = aspect;
+	AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
+	if (part)
+		m_mdiArea->setActiveSubWindow(part->mdiSubWindow());
+	
+	kDebug()<<"current aspect  "<<m_currentAspect->name()<<endl;
+}
+
+void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to){
+	Q_UNUSED(from);
+	Q_UNUSED(to);
+	if (view == m_mdiArea->currentSubWindow()) {
+		updateGUI();
+	}
+}
+
+void MainWin::setMdiWindowVisibility(QAction * action){
+	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
+}
+
+void MainWin::newScript(){
+	//TODO
+}
+
+void MainWin::newMatrix(){
+	//TODO
+}
+
+void MainWin::newFolder() {
+	Folder * folder = new Folder(tr("Folder %1").arg(1));
+	this->addAspectToProject(folder);
+// 	updateGUI();
+}
+
+
+
+/*!
+	this is called on a right click on the root folder in the project explorer
+*/
+void MainWin::createContextMenu(QMenu * menu) const{
+	menu->addMenu(m_newMenu);
+	menu->addMenu(m_visibilityMenu);
+}
+
+/*!
+	this is called on a right click on a non-root folder in the project explorer
+*/
+void MainWin::createFolderContextMenu(const Folder * folder, QMenu * menu) const{
+	Q_UNUSED(folder);
+
+	//Folder provides it's own context menu. Add a separator befor adding additional actions.
+	menu->addSeparator();
+	menu->addMenu(m_newMenu);
+	menu->addMenu(m_visibilityMenu);
+}
+
+void MainWin::undo(){
+	WAIT_CURSOR;
+	m_project->undoStack()->undo();
+	RESET_CURSOR;
+}
+
+void MainWin::redo(){
+	WAIT_CURSOR;
+	m_project->undoStack()->redo();
+	RESET_CURSOR;
+}
+
+/*!
+	Shows/hides mdi sub-windows depending on the currend visibility policy.
+*/
+void MainWin::updateMdiWindowVisibility(){
+	QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
+	PartMdiView * part_view;
+	switch(m_project->mdiWindowVisibility()){
+		case Project::allMdiWindows:
+			foreach(QMdiSubWindow *window, windows){
+				part_view = qobject_cast<PartMdiView *>(window);
+				Q_ASSERT(part_view);
+				part_view->show();
+			}
+			break;
+		case Project::folderOnly:
+			foreach(QMdiSubWindow *window, windows){
+				part_view = qobject_cast<PartMdiView *>(window);
+				Q_ASSERT(part_view);
+				if(part_view->part()->folder() == m_currentFolder)
+					part_view->show();
+				else
+					part_view->hide();
+			}
+			break;
+		case Project::folderAndSubfolders:
+			foreach(QMdiSubWindow *window, windows){
+				part_view = qobject_cast<PartMdiView *>(window);
+				if(part_view->part()->isDescendantOf(m_currentFolder))
+					part_view->show();
+				else
+					part_view->hide();
+			}
+			break;
+	}
+}
+
+void MainWin::toggleDockWidget(QAction* action) const{
+	if (action->objectName() == "toggle_project_explorer_dock"){
+		if (m_projectExplorerDock->isVisible())
+			m_projectExplorerDock->hide();
+		else
+			m_projectExplorerDock->show();
+	}else if (action->objectName() == "toggle_properties_explorer_dock"){
+		if (m_propertiesDock->isVisible())
+			m_propertiesDock->hide();
+		else
+			m_propertiesDock->show();
+	}
+}
+
+/***************************************************************************************/
+/************************************** dialogs ***************************************/
+/***************************************************************************************/
+/*!
+	shows the dialog with the Undo-history.
+*/
+void MainWin::historyDialog() const{
+	if (!m_project->undoStack())
+		 return;
+
+	KDialog dialog;
+	dialog.setWindowIcon( KIcon("view-history") );
+	dialog.setWindowTitle(i18n("Undo/Redo History"));
+	dialog.setButtons( KDialog::Ok | KDialog::Cancel );
+
+	int index = m_project->undoStack()->index();
+	QUndoView undo_view(m_project->undoStack());
+	undo_view.setCleanIcon( KIcon("edit-clear-history") );
+ 	undo_view.setEmptyLabel(m_undoViewEmptyLabel);
+	undo_view.setMinimumWidth(350);
+	undo_view.setWhatsThis(i18n("List of all performed steps/actions.")+"\n"
+			 + i18n("Select an item in the list to navigate to the corresponding step."));
+	dialog.setMainWidget(&undo_view);
+
+	if (dialog.exec() == QDialog::Accepted)
+		return;
+
+	m_project->undoStack()->setIndex(index);
+}
 
 /*!
   Opens the dialog to import data to the selected spreadsheet
@@ -814,15 +1026,27 @@ void MainWin::projectDialog(){
 	dlg->show();
 }
 
-
 /*!
-	creates a new worksheet if there are no sheets (worksheet or spreadsheet) in the model at all.
-	TODO: dirty hack. redesign and remove this function and hasSheet().
-*/
-// void MainWin::ensureSheet(){
-// 	if (this->hasSheet(m_projectExplorer->model()->index(0,0))==false)
-// 		this->newWorksheet();
-// }
+	opens the dialog for the export of the currently active worksheet/spreadsheet.
+ */
+void MainWin::exportDialog(){
+	//determine first, whether we want to export a worksheet or a spreadsheet
+	Worksheet* w=this->activeWorksheet();
+	if (w!=0){ //worksheet
+		ExportWorksheetDialog* dlg = new ExportWorksheetDialog(this);
+		dlg->setFileName(w->name());
+		if (dlg->exec()==QDialog::Accepted){
+			QString path = dlg->path();
+			WorksheetView::ExportFormat format = dlg->exportFormat();
+			WorksheetView::ExportArea area = dlg->exportArea();
+			
+			WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
+			view->exportToFile(path, format, area);
+		}
+	}else{//Spreadsheet
+		//TODO
+	}
+}
 
 bool MainWin::hasSheet(const QModelIndex & index) const{
 	int rows = index.model()->rowCount(index);
@@ -857,7 +1081,6 @@ void MainWin::newFileDataSourceActionTriggered(){
 void MainWin::newSqlDataSourceActionTriggered(){
   //TODO
 }
-
 
 void MainWin::addAspectToProject(AbstractAspect* aspect){
 	QModelIndex index = m_projectExplorer->currentIndex();
@@ -976,238 +1199,4 @@ void MainWin::dataPlotActionTriggered(QAction* action){
 void MainWin::settingsDialog(){
 	//TODO
 	(new SettingsDialog(this))->show();
-}
-/******************** dialogs end *****************************/
-
-/*!
-	called if there were changes on the the projects.
-	Adds "changed" to the window caption and activates the save-Action.
-*/
-void MainWin::projectChanged(){
-	setCaption(m_project->name() + "    [" + i18n("Changed") + "]" );
-	m_saveAction->setEnabled(true);
-	m_saveAsAction->setEnabled(true);
-	return;
-}
-
-void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
-	PartMdiView *view = qobject_cast<PartMdiView*>(win);
-	if (!view) return;
-	emit partActivated(view->part());
-	m_projectExplorer->setCurrentAspect(view->part());
-	updateGUI();
-}
-
-void MainWin::handleAspectAdded(const AbstractAspect *aspect){
-	handleAspectAddedInternal(aspect);
-	updateMdiWindowVisibility();
-	handleCurrentSubWindowChanged(m_mdiArea->currentSubWindow());
-}
-
-void MainWin::handleAspectAddedInternal(const AbstractAspect * aspect){
-	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>())
-		handleAspectAddedInternal(child);
-
-	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
-	if (part){
-		PartMdiView *win = part->mdiSubWindow();
-		Q_ASSERT(win);
-		m_mdiArea->addSubWindow(win);
-		connect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
-				this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
-	}
-}
-
-void MainWin::handleAspectRemoved(const AbstractAspect *parent){
-	m_projectExplorer->setCurrentAspect(parent);
-}
-
-void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
-	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
-	if (!part) return;
-	PartMdiView *win = part->mdiSubWindow();
-	Q_ASSERT(win);
-	disconnect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
-		this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
-	m_mdiArea->removeSubWindow(win);
-	updateGUI();
-}
-
-/*!
-  called when the current aspect in the tree of the project explorer was changed.
-  Selects the new aspect.
-*/
-void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
-	if (!aspect)
-	  aspect = m_project; // should never happen, just in case
-	  
-	if(aspect->folder() != m_currentFolder)	{
-		m_currentFolder = aspect->folder();
-		updateMdiWindowVisibility();
-	}
-
-	m_currentAspect = aspect;
-	AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
-	if (part)
-		m_mdiArea->setActiveSubWindow(part->mdiSubWindow());
-	
-	kDebug()<<"current aspect  "<<m_currentAspect->name()<<endl;
-}
-
-void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to){
-	Q_UNUSED(from);
-	Q_UNUSED(to);
-	if (view == m_mdiArea->currentSubWindow()) {
-		updateGUI();
-	}
-}
-
-void MainWin::setMdiWindowVisibility(QAction * action){
-	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
-}
-
-void MainWin::newScript(){
-	//TODO
-}
-
-void MainWin::newMatrix(){
-	//TODO
-}
-
-void MainWin::newFolder() {
-	Folder * folder = new Folder(tr("Folder %1").arg(1));
-	this->addAspectToProject(folder);
-// 	updateGUI();
-}
-
-/*!
-	shows the dialog with the Undo-history.
-*/
-void MainWin::showHistory() const{
-	if (!m_project->undoStack())
-		 return;
-
-	KDialog dialog;
-	dialog.setWindowIcon( KIcon("view-history") );
-	dialog.setWindowTitle(i18n("Undo/Redo History"));
-	dialog.setButtons( KDialog::Ok | KDialog::Cancel );
-
-	int index = m_project->undoStack()->index();
-	QUndoView undo_view(m_project->undoStack());
-	undo_view.setCleanIcon( KIcon("edit-clear-history") );
- 	undo_view.setEmptyLabel(m_undoViewEmptyLabel);
-	undo_view.setMinimumWidth(350);
-	undo_view.setWhatsThis(i18n("List of all performed steps/actions.")+"\n"
-			 + i18n("Select an item in the list to navigate to the corresponding step."));
-	dialog.setMainWidget(&undo_view);
-
-	if (dialog.exec() == QDialog::Accepted)
-		return;
-
-	m_project->undoStack()->setIndex(index);
-}
-
-/*!
-	this is called on a right click on the root folder in the project explorer
-*/
-void MainWin::createContextMenu(QMenu * menu) const{
-	menu->addMenu(m_newMenu);
-	menu->addMenu(m_visibilityMenu);
-}
-
-/*!
-	this is called on a right click on a non-root folder in the project explorer
-*/
-void MainWin::createFolderContextMenu(const Folder * folder, QMenu * menu) const{
-	Q_UNUSED(folder);
-
-	//Folder provides it's own context menu. Add a separator befor adding additional actions.
-	menu->addSeparator();
-	menu->addMenu(m_newMenu);
-	menu->addMenu(m_visibilityMenu);
-}
-
-void MainWin::undo(){
-	WAIT_CURSOR;
-	m_project->undoStack()->undo();
-	RESET_CURSOR;
-}
-
-void MainWin::redo(){
-	WAIT_CURSOR;
-	m_project->undoStack()->redo();
-	RESET_CURSOR;
-}
-
-/*!
-	Shows/hides mdi sub-windows depending on the currend visibility policy.
-*/
-void MainWin::updateMdiWindowVisibility(){
-	QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
-	PartMdiView * part_view;
-	switch(m_project->mdiWindowVisibility()){
-		case Project::allMdiWindows:
-			foreach(QMdiSubWindow *window, windows){
-				part_view = qobject_cast<PartMdiView *>(window);
-				Q_ASSERT(part_view);
-				part_view->show();
-			}
-			break;
-		case Project::folderOnly:
-			foreach(QMdiSubWindow *window, windows){
-				part_view = qobject_cast<PartMdiView *>(window);
-				Q_ASSERT(part_view);
-				if(part_view->part()->folder() == m_currentFolder)
-					part_view->show();
-				else
-					part_view->hide();
-			}
-			break;
-		case Project::folderAndSubfolders:
-			foreach(QMdiSubWindow *window, windows){
-				part_view = qobject_cast<PartMdiView *>(window);
-				if(part_view->part()->isDescendantOf(m_currentFolder))
-					part_view->show();
-				else
-					part_view->hide();
-			}
-			break;
-	}
-}
-
-void MainWin::toggleDockWidget(QAction* action) const{
-	if (action->objectName() == "toggle_project_explorer_dock"){
-		if (m_projectExplorerDock->isVisible())
-			m_projectExplorerDock->hide();
-		else
-			m_projectExplorerDock->show();
-	}else if (action->objectName() == "toggle_properties_explorer_dock"){
-		if (m_propertiesDock->isVisible())
-			m_propertiesDock->hide();
-		else
-			m_propertiesDock->show();
-	}
-}
-
-
-/*!
-	opens the dialog for the export of the currently active worksheet/spreadsheet.
- */
-void MainWin::exportDialog(){
-	//determine first, whether we want to export a worksheet or a spreadsheet
-	Worksheet* w=this->activeWorksheet();
-	if (w!=0){ //worksheet
-		ExportWorksheetDialog* dlg = new ExportWorksheetDialog(this);
-		dlg->setFileName(w->name());
-		if (dlg->exec()==QDialog::Accepted){
-			QString path = dlg->path();
-			WorksheetView::ExportFormat format = dlg->exportFormat();
-			WorksheetView::ExportArea area = dlg->exportArea();
-			
-			WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
-			view->exportToFile(path, format, area);
-		}
-	}else{//Spreadsheet
-		//TODO
-	}
 }

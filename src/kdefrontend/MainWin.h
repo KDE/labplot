@@ -163,7 +163,7 @@ private slots:
 	void print();
 	void printPreview();
 	
-	void showHistory() const;
+	void historyDialog() const;
 	void importFileDialog();
 	void exportDialog();
 	void projectDialog();
