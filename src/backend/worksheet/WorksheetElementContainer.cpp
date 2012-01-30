@@ -122,7 +122,7 @@ void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOpti
 		return;
 
 	//TODO remove this later
-	painter->drawRect(boundingRect());
+// 	painter->drawRect(boundingRect());
 	if (isSelected()){
 		QPainterPath path = shape();  
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
