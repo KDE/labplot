@@ -30,7 +30,6 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/columndialog.ui
 	${KDEFRONTEND_DIR}/ui/exportwidget.ui
 	${KDEFRONTEND_DIR}/ui/functionwidget.ui
-	${KDEFRONTEND_DIR}/ui/importwidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/legendwidget.ui
 	${KDEFRONTEND_DIR}/ui/plotstylewidget.ui
