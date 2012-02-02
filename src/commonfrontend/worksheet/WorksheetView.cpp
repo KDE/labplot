@@ -518,51 +518,35 @@ void WorksheetView::addPlot(){
 
 
 void WorksheetView::changeLayout(QAction* action){
-  QString name = action->objectName();
-  if (name == "breakLayoutAction"){
-	verticalLayoutAction->setEnabled(true);
-	verticalLayoutAction->setChecked(false);
-	
-	horizontalLayoutAction->setEnabled(true);
-	horizontalLayoutAction->setChecked(false);
-	
-	gridLayoutAction->setEnabled(true);
-	gridLayoutAction->setChecked(false);
-	
-	breakLayoutAction->setEnabled(false);
-  }else{
-	verticalLayoutAction->setEnabled(false);
-	horizontalLayoutAction->setEnabled(false);
-	gridLayoutAction->setEnabled(false);
-	breakLayoutAction->setEnabled(true);
-	
-	
-		   	  QList<QGraphicsItem *>   items=this->scene()->items();
-		  qDebug()<<"number of items to layout "<< items.size();
-	// 	QGraphicsLayout* layout;
-	if (name == "verticalLayoutAction"){
-// 	  QGraphicsLinearLayout* layout=new QGraphicsLinearLayout(Qt::Vertical);
-	  
-
-	  // 	  for (int i=0; i<items.size(); i++){
- //  		layout->addItem(items[1]);
- // 	  }
- 
-// 	QGraphicsWidget *textEdit = scene()->addWidget(new QTextEdit);
-// 	QGraphicsWidget *pushButton = scene()->addWidget(new QPushButton);
-// 	
-// 	layout->addItem(textEdit);
-// 	layout->addItem(pushButton);
-// 	
-// 	
-// 	QGraphicsWidget *form = new QGraphicsWidget;
-// 	form->setLayout(layout);
-// 	scene()->addItem(form);
-	}else if (name == "horizontalLayoutAction"){
-// 	  QGraphicsLinearLayout* layout = new QGraphicsLinearLayout(Qt::l);
+	if (action==breakLayoutAction){
+		verticalLayoutAction->setEnabled(true);
+		verticalLayoutAction->setChecked(false);
+		
+		horizontalLayoutAction->setEnabled(true);
+		horizontalLayoutAction->setChecked(false);
+		
+		gridLayoutAction->setEnabled(true);
+		gridLayoutAction->setChecked(false);
+		
+		breakLayoutAction->setEnabled(false);
+		
+		m_worksheet->breakLayout();
 	}else{
-// 	  QGraphicsGridLayout* layout = new QGraphicsGridLayout();
-	}
+		verticalLayoutAction->setEnabled(false);
+		horizontalLayoutAction->setEnabled(false);
+		gridLayoutAction->setEnabled(false);
+		breakLayoutAction->setEnabled(true);
+
+		if (action == verticalLayoutAction){
+			verticalLayoutAction->setChecked(true);
+			m_worksheet->layout(Worksheet::VerticalLayout);
+		}else if (action == horizontalLayoutAction){
+			horizontalLayoutAction->setChecked(true);
+			m_worksheet->layout(Worksheet::HorizontalLayout);
+		}else{
+			gridLayoutAction->setChecked(true);
+			m_worksheet->layout(Worksheet::GridLayout);
+		}
   }
 }
 
@@ -674,7 +658,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		printer.setPaperSize( QSizeF(rect.width(), rect.height()), QPrinter::Millimeter);
 		printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
-		
+//TODO		printer.setCreator("LabPlot "+LVERSION);
+
 		QPainter painter(&printer);
 		painter. setRenderHint(QPainter::Antialiasing);
 		
