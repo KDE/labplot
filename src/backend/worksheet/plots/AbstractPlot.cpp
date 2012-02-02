@@ -30,6 +30,7 @@
 #include "worksheet/plots/AbstractPlot.h"
 #include "worksheet/plots/PlotArea.h"
 #include "worksheet/plots/AbstractCoordinateSystem.h"
+#include "worksheet/WorksheetElementContainerPrivate.h"
 #include <QDebug>
 /**
  * \class AbstractPlot
@@ -55,9 +56,6 @@ void AbstractPlot::init(){
 // TODO
 }
 
-QRectF AbstractPlot::rect() const{
-	return m_rect;
-}
 
 AbstractPlot::~AbstractPlot() {
 // TODO
@@ -76,3 +74,8 @@ void AbstractPlot::handlePageResize(double horizontalRatio, double verticalRatio
 	m_plotArea->handlePageResize(horizontalRatio, verticalRatio);
 	WorksheetElementContainer::handlePageResize(horizontalRatio, verticalRatio);
 }
+
+//################################################################
+//################### Private implementation ##########################
+//################################################################
+

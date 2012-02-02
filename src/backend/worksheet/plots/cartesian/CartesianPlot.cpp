@@ -50,16 +50,20 @@
  * 
  */
 
+class CartesianPlotPrivate:public AbstractPlotPrivate{
+};
+
 CartesianPlot::CartesianPlot(const QString &name): AbstractPlot(name) {
 	init();
 }
 
-CartesianPlot::CartesianPlot(const QString &name, WorksheetElementContainerPrivate *dd)
+CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
 	: AbstractPlot(name, dd) {
 	init();
 }
 
 void CartesianPlot::init(){
+	Q_D(CartesianPlot);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
 
@@ -68,10 +72,10 @@ void CartesianPlot::init(){
 	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
 	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
-	m_rect.setX(x);
-	m_rect.setY(y);
-	m_rect.setWidth(w);
-	m_rect.setHeight(h);
+	d->rect.setX(x);
+	d->rect.setY(y);
+	d->rect.setWidth(w);
+	d->rect.setHeight(h);
 	
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
 	QList<CartesianCoordinateSystem::Scale *> scales;
@@ -145,7 +149,8 @@ QIcon CartesianPlot::icon() const{
 }
 
 void CartesianPlot::setRect(const QRectF& r){
-	m_rect=r;
+	Q_D(CartesianPlot);
+	d->rect=r;
 
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
 	QList<CartesianCoordinateSystem::Scale *> scales;
@@ -169,3 +174,7 @@ void CartesianPlot::setRect(const QRectF& r){
 // 		parent = parent->parentAspect();
 // 	}
 }
+
+//################################################################
+//################### Private implementation ##########################
+//################################################################

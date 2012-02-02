@@ -57,6 +57,17 @@ class WorksheetPrivate{
 		QColor backgroundSecondColor;
 		QString backgroundFileName;
 		qreal backgroundOpacity;
+		
+		bool layoutActive;
+		Worksheet::Layout layout;
+		float layoutTopMargin;
+		float layoutBottomMargin;
+		float layoutLeftMargin;
+		float layoutRightMargin;
+		float layoutVerticalSpacing;
+		float layoutHorizontalSpacing;
+		float layoutColumnsCount;
+		float layoutRowsCount;
 
 		Worksheet * const q;
 };

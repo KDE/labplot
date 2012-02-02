@@ -36,21 +36,21 @@
 
 
 class WorksheetElementContainer;
-class WorksheetElementContainerPrivate: public QGraphicsItem {
+class WorksheetElementContainerPrivate:  public QGraphicsItem{
 	public:
 		WorksheetElementContainerPrivate(WorksheetElementContainer *owner);
 		virtual ~WorksheetElementContainerPrivate();
-    
+
 		virtual QRectF boundingRect() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
 		WorksheetElementContainer *q;
 		void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-		
+
+		QRectF rect;
+
 signals:
     void selectedChange(QGraphicsItem *item);
 };
 
 #endif
-
-

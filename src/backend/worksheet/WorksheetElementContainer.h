@@ -4,7 +4,8 @@
     Description          : Generic WorksheetElement container.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+	Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
                            
  ***************************************************************************/
 
@@ -31,10 +32,9 @@
 #define WORKSHEETELEMENTCONTAINER_H
 
 #include "worksheet/AbstractWorksheetElement.h"
-#include <QtGlobal>
-class AbstractCoordinateSystem;
 
 class WorksheetElementContainerPrivate;
+
 class WorksheetElementContainer: public AbstractWorksheetElement {
 	Q_OBJECT
 
@@ -47,6 +47,9 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual bool isFullyVisible() const;
+
+		QRectF rect() const;
+		virtual void setRect(const QRectF&) = 0;
 
 	public slots:
 		virtual void retransform();
@@ -65,4 +68,3 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 };
 
 #endif
-

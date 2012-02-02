@@ -42,7 +42,6 @@
 #include <QIcon>
 #else
 #include "KIcon"
-//#include <kdebug.h>
 #include <KConfig>
 #include <KConfigGroup>
 #endif
@@ -81,6 +80,15 @@ void Worksheet::init() {
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
+	
+	d->layoutActive=false;
+	d->layout=Worksheet::VerticalLayout;
+	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", convertToSceneUnits(1, Centimeter));
+	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(1, Centimeter));
+	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(1, Centimeter));
+	d->layoutRightMargin = group.readEntry("LayoutRightMargin", convertToSceneUnits(1, Centimeter));
+	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", convertToSceneUnits(1, Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(1, Centimeter));
 }
 
 /*!
@@ -189,6 +197,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 			}
 		}
 	}
+	if (d->layoutActive)
+		this->layout(d->layout);
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
@@ -198,6 +208,8 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 		Q_ASSERT(item != NULL);
 		d->m_scene->removeItem(item);
 	}
+	if (d->layoutActive)
+		this->layout(d->layout);
 }
 
 WorksheetGraphicsScene *Worksheet::scene() const {
@@ -217,6 +229,47 @@ void Worksheet::childSelected(){
 
 void Worksheet::update(){
 	emit requestUpdate();
+}
+
+void Worksheet::layout(const Worksheet::Layout& layout){
+	QList<WorksheetElementContainer*> list = children<WorksheetElementContainer>();
+	float x=d->layoutLeftMargin;
+	float y=d->layoutTopMargin;
+	float w, h;
+	int count=list.count();
+	if (layout == VerticalLayout){
+		w= d->m_scene->sceneRect().width() - d->layoutLeftMargin - d->layoutRightMargin;
+		h=(d->m_scene->sceneRect().height()-d->layoutTopMargin-d->layoutBottomMargin- (count-1)*d->layoutVerticalSpacing)/count;
+		foreach(WorksheetElementContainer* elem, list){
+			elem->setRect(QRectF(x,y,w,h));
+			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			y+=h + d->layoutVerticalSpacing;
+		}
+	}else if (layout==HorizontalLayout){
+		w=(d->m_scene->sceneRect().height()-d->layoutLeftMargin-d->layoutRightMargin- (count-1)*d->layoutHorizontalSpacing)/count;
+		h= d->m_scene->sceneRect().height() - d->layoutTopMargin - d->layoutBottomMargin;
+		foreach(WorksheetElementContainer* elem, list){
+			elem->setRect(QRectF(x,y,w,h));
+			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			x+=w + d->layoutHorizontalSpacing;
+		}		
+	}else{ //GridLayout
+		//TODO
+	}
+	d->layoutActive=true;
+	d->layout=layout;
+	requestUpdate();
+}
+
+void Worksheet::breakLayout(){
+	foreach(WorksheetElementContainer* elem, children<WorksheetElementContainer>()){
+		elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	}
+	d->layoutActive=false;
+}
+
+bool Worksheet::isLayoutActive() const{
+	return d->layoutActive;
 }
 
 /* ============================ getter methods for background options ================= */

@@ -52,6 +52,7 @@ class Worksheet: public AbstractPart, public scripted{
 		~Worksheet();
 
 		enum Unit {Millimeter, Centimeter, Inch, Point};
+		enum Layout {VerticalLayout, HorizontalLayout, GridLayout};
 		static float convertToSceneUnits(const float value, const Worksheet::Unit unit);
 		static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
 
@@ -67,6 +68,10 @@ class Worksheet: public AbstractPart, public scripted{
 		void setPageRect(const QRectF &rect, const bool scaleContent=false);
 		WorksheetGraphicsScene *scene() const;
 		void update();
+
+		void layout(const Worksheet::Layout&);
+		void breakLayout();
+		bool isLayoutActive() const;
 
 		BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity);
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType);

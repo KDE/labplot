@@ -38,48 +38,12 @@
 /**
  * \class WorksheetElementContainer
  * \brief Generic AbstractWorksheetElement container.
- * \ingroup datasources
+ * \ingroup worksheet
  * This class combines functionality of worksheet element containers
- * such as groups, plots, coordinate systems, etc.
+ * such as groups, plots etc.
  *
  */
 
-WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
-	: q(owner) {
-}
-
-WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate() {
-}
-
- void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
-     scene()->clearSelection();
-     setSelected(true);
-     QMenu* menu = q->createContextMenu();
-     menu->exec(event->screenPos());
- }
- 
- 
-//  QVariant WorksheetElementContainerPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
-//    /*
-//      if (change == ItemPositionChange && scene()) {
-//          // value is the new position.
-//          QPointF newPos = value.toPointF();
-//          QRectF rect = scene()->sceneRect();
-//          if (!rect.contains(newPos)) {
-//              // Keep the item inside the scene rect.
-//              newPos.setX(qMin(rect.right(), qMax(newPos.x(), rect.left())));
-//              newPos.setY(qMin(rect.bottom(), qMax(newPos.y(), rect.top())));
-//              return newPos;
-//          }
-//      }
-//      */
-//     if (change == QGraphicsItem::ItemSelectedHasChanged)
-//         emit selectedChange(this);
-// //     return value;
-// 	
-//      return QGraphicsItem::itemChange(change, value);
-//  }
- 
 WorksheetElementContainer::WorksheetElementContainer(const QString &name) 
 	: AbstractWorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
 
@@ -106,28 +70,9 @@ QGraphicsItem *WorksheetElementContainer::graphicsItem() const {
 	return const_cast<QGraphicsItem *>(static_cast<const QGraphicsItem *>(d_ptr));
 }
 
-QRectF WorksheetElementContainerPrivate::boundingRect() const {
-	QRectF rect;
-	QList<AbstractWorksheetElement *> childList = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const AbstractWorksheetElement *elem, childList)
-		rect |= elem->graphicsItem()->boundingRect();
-	return rect;
-}
-    
-void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-	
-	if (!isVisible())
-		return;
-
-	//TODO remove this later
-// 	painter->drawRect(boundingRect());
-	if (isSelected()){
-		QPainterPath path = shape();  
-		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-		painter->drawPath(path);
-  }
+QRectF WorksheetElementContainer::rect() const{
+	Q_D(const WorksheetElementContainer);
+	return d->rect;
 }
 
 void WorksheetElementContainer::setVisible(bool on){
@@ -194,3 +139,68 @@ void WorksheetElementContainer::handleAspectAboutToBeRemoved(const AbstractAspec
 		item->setParentItem(NULL);	
 	}
 }
+
+//################################################################
+//################### Private implementation ##########################
+//################################################################
+WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
+	: q(owner) {
+}
+
+WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate() {
+}
+
+ void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
+     scene()->clearSelection();
+     setSelected(true);
+     QMenu* menu = q->createContextMenu();
+     menu->exec(event->screenPos());
+ }
+ 
+// Inherited from QGraphicsItem
+ QRectF WorksheetElementContainerPrivate::boundingRect() const {
+	QRectF rect;
+	QList<AbstractWorksheetElement *> childList = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(const AbstractWorksheetElement *elem, childList)
+		rect |= elem->graphicsItem()->boundingRect();
+	return rect;
+}
+ 
+// Inherited from QGraphicsItem
+void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+	Q_UNUSED(option)
+	Q_UNUSED(widget)
+	
+	if (!isVisible())
+		return;
+
+	//TODO remove this later
+// 	painter->drawRect(boundingRect());
+	if (isSelected()){
+		QPainterPath path = shape();  
+		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->drawPath(path);
+  }
+}
+
+//  QVariant WorksheetElementContainerPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
+//    /*
+//      if (change == ItemPositionChange && scene()) {
+//          // value is the new position.
+//          QPointF newPos = value.toPointF();
+//          QRectF rect = scene()->sceneRect();
+//          if (!rect.contains(newPos)) {
+//              // Keep the item inside the scene rect.
+//              newPos.setX(qMin(rect.right(), qMax(newPos.x(), rect.left())));
+//              newPos.setY(qMin(rect.bottom(), qMax(newPos.y(), rect.top())));
+//              return newPos;
+//          }
+//      }
+//      */
+//     if (change == QGraphicsItem::ItemSelectedHasChanged)
+//         emit selectedChange(this);
+// //     return value;
+// 	
+//      return QGraphicsItem::itemChange(change, value);
+//  }
+ 

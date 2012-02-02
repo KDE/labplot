@@ -31,6 +31,7 @@
 #define CARTESIANPLOT_H
 
 #include "worksheet/plots/AbstractPlot.h"
+class CartesianPlotPrivate;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -38,13 +39,15 @@ class CartesianPlot:public AbstractPlot{
 	public:
 		CartesianPlot(const QString &name);
 		~CartesianPlot();
-		virtual QIcon icon() const;
+		QIcon icon() const;
 		void setRect(const QRectF&);
+
 	private:
 		void init();
+		Q_DECLARE_PRIVATE(CartesianPlot)
 
 	protected:
-		CartesianPlot(const QString &name, WorksheetElementContainerPrivate *dd);
+		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 };
 
 #endif
