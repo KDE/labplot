@@ -530,7 +530,7 @@ void WorksheetView::changeLayout(QAction* action){
 		
 		breakLayoutAction->setEnabled(false);
 		
-		m_worksheet->breakLayout();
+		m_worksheet->setLayout(Worksheet::NoLayout);
 	}else{
 		verticalLayoutAction->setEnabled(false);
 		horizontalLayoutAction->setEnabled(false);
@@ -539,13 +539,13 @@ void WorksheetView::changeLayout(QAction* action){
 
 		if (action == verticalLayoutAction){
 			verticalLayoutAction->setChecked(true);
-			m_worksheet->layout(Worksheet::VerticalLayout);
+			m_worksheet->setLayout(Worksheet::VerticalLayout);
 		}else if (action == horizontalLayoutAction){
 			horizontalLayoutAction->setChecked(true);
-			m_worksheet->layout(Worksheet::HorizontalLayout);
+			m_worksheet->setLayout(Worksheet::HorizontalLayout);
 		}else{
 			gridLayoutAction->setChecked(true);
-			m_worksheet->layout(Worksheet::GridLayout);
+			m_worksheet->setLayout(Worksheet::GridLayout);
 		}
   }
 }

@@ -4,7 +4,7 @@
     Description          : Worksheet (2D visualization) part
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-	Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
+	Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -81,14 +81,15 @@ void Worksheet::init() {
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 	
-	d->layoutActive=false;
-	d->layout=Worksheet::VerticalLayout;
+	d->layout = (Worksheet::Layout) group.readEntry("Layout", (int) Worksheet::NoLayout);
 	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", convertToSceneUnits(1, Centimeter));
 	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(1, Centimeter));
 	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(1, Centimeter));
 	d->layoutRightMargin = group.readEntry("LayoutRightMargin", convertToSceneUnits(1, Centimeter));
 	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", convertToSceneUnits(1, Centimeter));
 	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(1, Centimeter));
+	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
+	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
 }
 
 /*!
@@ -197,8 +198,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 			}
 		}
 	}
-	if (d->layoutActive)
-		this->layout(d->layout);
+	if (d->layout != Worksheet::NoLayout)
+		d->updateLayout();
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
@@ -208,14 +209,13 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 		Q_ASSERT(item != NULL);
 		d->m_scene->removeItem(item);
 	}
-	if (d->layoutActive)
-		this->layout(d->layout);
+	if (d->layout != Worksheet::NoLayout)
+		d->updateLayout();
 }
 
 WorksheetGraphicsScene *Worksheet::scene() const {
 	return d->m_scene;
 }
-
 
 QRectF Worksheet::pageRect() const {
 	return d->m_scene->sceneRect();
@@ -231,48 +231,7 @@ void Worksheet::update(){
 	emit requestUpdate();
 }
 
-void Worksheet::layout(const Worksheet::Layout& layout){
-	QList<WorksheetElementContainer*> list = children<WorksheetElementContainer>();
-	float x=d->layoutLeftMargin;
-	float y=d->layoutTopMargin;
-	float w, h;
-	int count=list.count();
-	if (layout == VerticalLayout){
-		w= d->m_scene->sceneRect().width() - d->layoutLeftMargin - d->layoutRightMargin;
-		h=(d->m_scene->sceneRect().height()-d->layoutTopMargin-d->layoutBottomMargin- (count-1)*d->layoutVerticalSpacing)/count;
-		foreach(WorksheetElementContainer* elem, list){
-			elem->setRect(QRectF(x,y,w,h));
-			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-			y+=h + d->layoutVerticalSpacing;
-		}
-	}else if (layout==HorizontalLayout){
-		w=(d->m_scene->sceneRect().height()-d->layoutLeftMargin-d->layoutRightMargin- (count-1)*d->layoutHorizontalSpacing)/count;
-		h= d->m_scene->sceneRect().height() - d->layoutTopMargin - d->layoutBottomMargin;
-		foreach(WorksheetElementContainer* elem, list){
-			elem->setRect(QRectF(x,y,w,h));
-			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-			x+=w + d->layoutHorizontalSpacing;
-		}		
-	}else{ //GridLayout
-		//TODO
-	}
-	d->layoutActive=true;
-	d->layout=layout;
-	requestUpdate();
-}
-
-void Worksheet::breakLayout(){
-	foreach(WorksheetElementContainer* elem, children<WorksheetElementContainer>()){
-		elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-	}
-	d->layoutActive=false;
-}
-
-bool Worksheet::isLayoutActive() const{
-	return d->layoutActive;
-}
-
-/* ============================ getter methods for background options ================= */
+/* =============================== getter methods for background options ================================= */
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundType, backgroundType, backgroundType);
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle);
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle);
@@ -281,6 +240,17 @@ CLASS_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColo
 CLASS_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor);
 CLASS_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName);
 BASIC_D_READER_IMPL(Worksheet, qreal, backgroundOpacity, backgroundOpacity);
+
+/* =============================== getter methods for layout options ====================================== */
+BASIC_D_READER_IMPL(Worksheet, Worksheet::Layout, layout, layout);
+BASIC_D_READER_IMPL(Worksheet, float, layoutTopMargin, layoutTopMargin);
+BASIC_D_READER_IMPL(Worksheet, float, layoutBottomMargin, layoutBottomMargin);
+BASIC_D_READER_IMPL(Worksheet, float, layoutLeftMargin, layoutLeftMargin);
+BASIC_D_READER_IMPL(Worksheet, float, layoutRightMargin, layoutRightMargin);
+BASIC_D_READER_IMPL(Worksheet, float, layoutHorizontalSpacing, layoutHorizontalSpacing);
+BASIC_D_READER_IMPL(Worksheet, float, layoutVerticalSpacing, layoutVerticalSpacing);
+BASIC_D_READER_IMPL(Worksheet, int, layoutRowCount, layoutRowCount);
+BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount);
 
 
 /* ============================ setter methods and undo commands  for background options  ================= */
@@ -326,9 +296,65 @@ void Worksheet::setBackgroundOpacity(qreal opacity) {
 		exec(new WorksheetSetBackgroundOpacityCmd(d, opacity, tr("%1: set opacity")));
 }
 
+/* ============================ setter methods and undo commands  for layout options  ================= */
+//TODO make this undo/redo-aware
+void Worksheet::setLayout(Worksheet::Layout layout){
+	if (layout != d->layout){
+		d->layout = layout;
+		d->updateLayout();
+	}
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout);
+void Worksheet::setLayoutTopMargin(float margin){
+	if (margin != d->layoutTopMargin)
+		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, tr("%1: set layout top margin")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutBottomMargin, float, layoutBottomMargin, updateLayout);
+void Worksheet::setLayoutBottomMargin(float margin){
+	if (margin != d->layoutBottomMargin)
+		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, tr("%1: set layout bottom margin")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargin, updateLayout);
+void Worksheet::setLayoutLeftMargin(float margin){
+	if (margin != d->layoutLeftMargin)
+		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, tr("%1: set layout left margin")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutRightMargin, float, layoutRightMargin, updateLayout);
+void Worksheet::setLayoutRightMargin(float margin){
+	if (margin != d->layoutRightMargin)
+		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, tr("%1: set layout right margin")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, updateLayout);
+void Worksheet::setLayoutVerticalSpacing(float spacing){
+	if (spacing != d->layoutVerticalSpacing)
+		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, tr("%1: set layout vertical spacing")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, updateLayout);
+void Worksheet::setLayoutHorizontalSpacing(float spacing){
+	if (spacing != d->layoutHorizontalSpacing)
+		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, tr("%1: set layout horizontal spacing")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout);
+void Worksheet::setLayoutRowCount(int count){
+	if (count != d->layoutRowCount)
+		exec(new WorksheetSetLayoutRowCountCmd(d, count, tr("%1: set layout row count")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout);
+void Worksheet::setLayoutColumnCount(int count){
+	if (count != d->layoutColumnCount)
+		exec(new WorksheetSetLayoutColumnCountCmd(d, count, tr("%1: set layout column count")));
+}
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect);
-void Worksheet::setPageRect(const QRectF &rect, bool scaleContent) {
+void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 	if (qFuzzyCompare(rect.width() + 1, 1) || qFuzzyCompare(rect.height() + 1, 1))
 		return;
 
@@ -376,4 +402,39 @@ void WorksheetPrivate::update(){
 
 WorksheetPrivate::~WorksheetPrivate(){
 	delete m_scene;
+}
+
+void WorksheetPrivate::updateLayout(){
+	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
+	if (layout==Worksheet::NoLayout){
+		foreach(WorksheetElementContainer* elem, q->children<WorksheetElementContainer>()){
+			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+		}
+		return;
+	}
+
+	float x=layoutLeftMargin;
+	float y=layoutTopMargin;
+	float w, h;
+	int count=list.count();
+	if (layout == Worksheet::VerticalLayout){
+		w= m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
+		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
+		foreach(WorksheetElementContainer* elem, list){
+			elem->setRect(QRectF(x,y,w,h));
+			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			y+=h + layoutVerticalSpacing;
+		}
+	}else if (layout == Worksheet::HorizontalLayout){
+		w=(m_scene->sceneRect().height()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
+		h= m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
+		foreach(WorksheetElementContainer* elem, list){
+			elem->setRect(QRectF(x,y,w,h));
+			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			x+=w + layoutHorizontalSpacing;
+		}		
+	}else{ //GridLayout
+		//TODO
+	}
+	q->update();
 }

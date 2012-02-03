@@ -46,9 +46,10 @@ class WorksheetPrivate{
 
 		QString name() const;
 		QRectF swapRect(const QRectF &newRect);
-		
+		void setLayout(const Worksheet::Layout&);
 		void update();
-		
+		void updateLayout();
+
 		PlotArea::BackgroundType backgroundType;
 		PlotArea::BackgroundColorStyle backgroundColorStyle;
 		PlotArea::BackgroundImageStyle backgroundImageStyle;
@@ -57,8 +58,7 @@ class WorksheetPrivate{
 		QColor backgroundSecondColor;
 		QString backgroundFileName;
 		qreal backgroundOpacity;
-		
-		bool layoutActive;
+
 		Worksheet::Layout layout;
 		float layoutTopMargin;
 		float layoutBottomMargin;
@@ -66,8 +66,8 @@ class WorksheetPrivate{
 		float layoutRightMargin;
 		float layoutVerticalSpacing;
 		float layoutHorizontalSpacing;
-		float layoutColumnsCount;
-		float layoutRowsCount;
+		int layoutColumnCount;
+		int layoutRowCount;
 
 		Worksheet * const q;
 };
