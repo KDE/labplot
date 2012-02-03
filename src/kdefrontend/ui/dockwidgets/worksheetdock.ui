@@ -381,7 +381,7 @@ Otherwise resize the canvas only.</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="0" column="2">
         <spacer name="horizontalSpacer_4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -397,8 +397,15 @@ Otherwise resize the canvas only.</string>
          </property>
         </spacer>
        </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="leTopMargin"/>
+       <item row="0" column="3">
+        <widget class="QDoubleSpinBox" name="sbLayoutTopMargin">
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lBottomMargin">
@@ -407,8 +414,15 @@ Otherwise resize the canvas only.</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="leBottomMargin"/>
+       <item row="1" column="3">
+        <widget class="QDoubleSpinBox" name="sbLayoutBottomMargin">
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="lLeftMargin">
@@ -417,8 +431,15 @@ Otherwise resize the canvas only.</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="QLineEdit" name="leLeftMargin"/>
+       <item row="2" column="3">
+        <widget class="QDoubleSpinBox" name="sbLayoutLeftMargin">
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lRightMargin">
@@ -427,8 +448,15 @@ Otherwise resize the canvas only.</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="QLineEdit" name="leRightMargin"/>
+       <item row="3" column="3">
+        <widget class="QDoubleSpinBox" name="sbLayoutRightMargin">
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="4" column="0">
         <spacer name="horizontalSpacer_6">
@@ -453,8 +481,15 @@ Otherwise resize the canvas only.</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
-        <widget class="QLineEdit" name="leHorizontalSpacing"/>
+       <item row="5" column="3">
+        <widget class="QDoubleSpinBox" name="sbLayoutHorizontalSpacing">
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="6" column="0">
         <widget class="QLabel" name="lVerticalSpacing">
@@ -463,10 +498,53 @@ Otherwise resize the canvas only.</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
-        <widget class="QLineEdit" name="leVerticalSpacing"/>
+       <item row="6" column="3">
+        <widget class="QDoubleSpinBox" name="sbLayoutVerticalSpacing">
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="7" column="0">
+        <spacer name="horizontalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>23</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lRowCount">
+         <property name="text">
+          <string>Rows</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="3">
+        <widget class="QSpinBox" name="sbLayoutRowCount"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lColumnCount">
+         <property name="text">
+          <string>Columns</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
+        <widget class="QSpinBox" name="sbLayoutColumnCount"/>
+       </item>
+       <item row="10" column="1">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

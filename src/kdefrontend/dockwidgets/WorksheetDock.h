@@ -71,6 +71,14 @@ private slots:
 	void fileNameChanged();
 	void opacityChanged(int);
 
+	//"Layout"-tab
+	void layoutTopMarginChanged(double);
+	void layoutBottomMarginChanged(double);
+	void layoutRightMarginChanged(double);
+	void layoutLeftMarginChanged(double);
+	void layoutHorizontalSpacingChanged(double);
+	void layoutVerticalSpacingChanged(double);
+	
 	void loadSettings();
 	void saveSettings();
 	void saveDefaults();

@@ -131,6 +131,14 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
 	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 
+	//Layout
+	connect( ui.sbLayoutTopMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutTopMarginChanged(double)) );
+	connect( ui.sbLayoutBottomMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutBottomMarginChanged(double)) );
+	connect( ui.sbLayoutLeftMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutLeftMarginChanged(double)) );
+	connect( ui.sbLayoutRightMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutRightMarginChanged(double)) );
+	connect( ui.sbLayoutHorizontalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutHorizontalSpacingChanged(double)) );
+	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
+	
 	this->retranslateUi();
 }
 
@@ -267,6 +275,14 @@ void WorksheetDock::retranslateUi(){
 	ui.cbBackgroundImageStyle->addItem(i18n("centered"));
 	ui.cbBackgroundImageStyle->addItem(i18n("tiled"));
 	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
+
+	//layout
+	ui.sbLayoutTopMargin->setSuffix(i18n("cm"));
+	ui.sbLayoutBottomMargin->setSuffix(i18n("cm"));
+	ui.sbLayoutLeftMargin->setSuffix(i18n("cm"));
+	ui.sbLayoutRightMargin->setSuffix(i18n("cm"));
+	ui.sbLayoutHorizontalSpacing->setSuffix(i18n("cm"));
+	ui.sbLayoutVerticalSpacing->setSuffix(i18n("cm"));
 
 	m_initializing = false;
 }
@@ -456,6 +472,63 @@ void WorksheetDock::backgroundSecondColorChanged(const QColor& c){
 	}
 }
 
+//"Layout"-tab
+void WorksheetDock::layoutTopMarginChanged(double margin){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+	}
+}
+
+void WorksheetDock::layoutBottomMarginChanged(double margin){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+	}
+}
+
+void WorksheetDock::layoutLeftMarginChanged(double margin){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+	}
+}
+
+void WorksheetDock::layoutRightMarginChanged(double margin){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+	}
+}
+
+void WorksheetDock::layoutHorizontalSpacingChanged(double spacing){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
+	}
+}
+
+
+void WorksheetDock::layoutVerticalSpacingChanged(double spacing){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
+	}
+}
+
+
 /*!
 	opens a file dialog and lets the user select the image file.
 */
@@ -513,12 +586,21 @@ void WorksheetDock::load(const KConfig& config){
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) worksheet->backgroundType()) );
 	
 	// Layout
-	ui.leTopMargin->setText(group.readEntry("TopMargin",QString()));
-	ui.leBottomMargin->setText(group.readEntry("BottomMargin",QString()));
-	ui.leLeftMargin->setText(group.readEntry("LeftMargin",QString()));
-	ui.leRightMargin->setText(group.readEntry("RightMargin",QString()));
-	ui.leHorizontalSpacing->setText(group.readEntry("HorizontalSpacing",QString()));
-	ui.leVerticalSpacing->setText(group.readEntry("VerticalSpacing",QString()));
+	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", 
+												   Worksheet::convertFromSceneUnits(worksheet->layoutTopMargin(), Worksheet::Centimeter)) );
+	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin",
+													   Worksheet::convertFromSceneUnits(worksheet->layoutBottomMargin(), Worksheet::Centimeter)) );
+	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin",
+													 Worksheet::convertFromSceneUnits(worksheet->layoutLeftMargin(), Worksheet::Centimeter)) );
+	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin",
+													  Worksheet::convertFromSceneUnits(worksheet->layoutRightMargin(), Worksheet::Centimeter)) );
+	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing",
+														    Worksheet::convertFromSceneUnits(worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
+	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing",
+														  Worksheet::convertFromSceneUnits(worksheet->layoutVerticalSpacing(), Worksheet::Centimeter)) );
+	
+	ui.sbLayoutRowCount->setValue(group.readEntry("LayoutRowCount",worksheet->layoutRowCount()));
+	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount",worksheet->layoutColumnCount()));
 }
 
 void WorksheetDock::saveSettings(){
@@ -541,10 +623,12 @@ void WorksheetDock::saveDefaults(){
 void WorksheetDock::save(const KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
 
+	//General
 	group.writeEntry("ScaleContent",ui.chScaleContent->isChecked());
 	group.writeEntry("Width",Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
 	group.writeEntry("Height",Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
 
+	//Background
 	group.writeEntry("BackgroundType",ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
@@ -553,11 +637,13 @@ void WorksheetDock::save(const KConfig& config){
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
 
-	group.writeEntry("TopMargin", ui.leTopMargin->text());
-	group.writeEntry("BottomMargin", ui.leBottomMargin->text());
-	group.writeEntry("LeftMargin", ui.leLeftMargin->text());
-	group.writeEntry("RightMargin", ui.leRightMargin->text());
-	group.writeEntry("HorizontalSpacing", ui.leHorizontalSpacing->text());
-	group.writeEntry("VerticalSpacing", ui.leVerticalSpacing->text());
+	//Layout
+	group.writeEntry("LayoutTopMargin",Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutBottomMargin",Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutLeftMargin",Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutRightMargin",Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutRowCount", ui.sbLayoutRowCount->value());
+	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
 }
-
