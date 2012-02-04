@@ -706,22 +706,24 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 		  majorTickPos = start + majorTicksSpacing * (qreal)iMajor; 
 	  }
   
+	  int direction=1;
+	  if(offset>0.5) direction=-1;
 	  if (majorTicksDirection != Axis::noTicks ){
 		  if (orientation == Axis::AxisHorizontal){
 			  anchorPoint.setX(majorTickPos);
 			  anchorPoint.setY(offset);
 			  
 			  if (transformAnchor(cSystem, &anchorPoint)){
-				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
-				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
+				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * direction * majorTicksLength  : 0);
+				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * direction * majorTicksLength : 0);
 			}
 		  }else{ // vertical
 			  anchorPoint.setY(majorTickPos);
 			  anchorPoint.setX(offset);
 
 			  if (transformAnchor(cSystem, &anchorPoint)){
-				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
-				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
+				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * direction * majorTicksLength  : 0, 0);
+				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * direction * majorTicksLength : 0, 0);
 			  }
 		  }
 		  
@@ -774,16 +776,16 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 			  anchorPoint.setY(offset);
 
 				if (transformAnchor(cSystem, &anchorPoint)){
-				  startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
-				  endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
+				  startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * direction * minorTicksLength  : 0);
+				  endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * direction * minorTicksLength : 0);
 				}
 			}else{ // vertical
 				anchorPoint.setY(minorTickPos);
 				anchorPoint.setX(offset);
 
 				if (transformAnchor(cSystem, &anchorPoint)){
-				  startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
-				  endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
+				  startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * direction * minorTicksLength  : 0, 0);
+				  endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * direction * minorTicksLength : 0, 0);
 				}
 			}
 			
