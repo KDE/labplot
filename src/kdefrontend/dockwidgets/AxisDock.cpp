@@ -120,7 +120,8 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	
 	//"Tick labels"-tab
 	connect( ui.cbLabelsPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsPositionChanged(int)) );
-	connect( ui.sbLabelsOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsOffsetChanged(double)) );
+	connect( ui.sbLabelsXOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsXOffsetChanged(double)) );
+	connect( ui.sbLabelsYOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsYOffsetChanged(double)) );
 	connect( ui.sbLabelsRotation, SIGNAL(valueChanged(int)), this, SLOT(labelsRotationChanged(int)) );
 	connect( ui.kfrLabelsFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(labelsFontChanged(const QFont&)) );
 	connect( ui.kcbLabelsFontColor, SIGNAL(changed (const QColor &)), this, SLOT(labelsFontColorChanged(const QColor&)) );
@@ -790,7 +791,8 @@ void AxisDock::labelsPositionChanged(int index){
   
 	bool b = (position != Axis::NoLabels);
 	ui.lLabelsOffset->setEnabled(b);
-	ui.sbLabelsOffset->setEnabled(b);
+	ui.sbLabelsXOffset->setEnabled(b);
+	ui.sbLabelsYOffset->setEnabled(b);
 	ui.lLabelsRotation->setEnabled(b);
 	ui.sbLabelsRotation->setEnabled(b);
 	ui.lLabelsFont->setEnabled(b);
@@ -809,15 +811,28 @@ void AxisDock::labelsPositionChanged(int index){
 	}
 }
 
-void AxisDock::labelsOffsetChanged(double  value){
+void AxisDock::labelsXOffsetChanged(double value){
   if (m_initializing)
 	return;
 	
-  //TODO
-//   foreach(Axis* axis, m_axesList){
-// 	axis->setLabelsOffset(value);
-//   }  
+	double xvalue = Worksheet::convertToSceneUnits(value,Worksheet::Point);
+	double yvalue = Worksheet::convertToSceneUnits(ui.sbLabelsYOffset->value(),Worksheet::Point);
+	foreach(Axis* axis, m_axesList){
+ 		axis->setLabelsOffset(QPointF(xvalue,yvalue));
+	}
 }
+
+void AxisDock::labelsYOffsetChanged(double value){
+  if (m_initializing)
+	return;
+	
+	double xvalue = Worksheet::convertToSceneUnits(ui.sbLabelsXOffset->value(),Worksheet::Point);
+	double yvalue = Worksheet::convertToSceneUnits(value,Worksheet::Point);
+	foreach(Axis* axis, m_axesList){
+ 		axis->setLabelsOffset(QPointF(xvalue,yvalue));
+	}
+}
+
 
 void AxisDock::labelsRotationChanged(int value){
   if (m_initializing)
@@ -948,6 +963,8 @@ void AxisDock::load(const KConfig& config){
 
 	// Tick label
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) axis->labelsPosition()) );
+	ui.sbLabelsXOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsXOffset", axis->labelsOffset().x()),Worksheet::Point) );
+	ui.sbLabelsYOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsYOffset", axis->labelsOffset().y()),Worksheet::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", axis->labelsRotationAngle()) );
 	ui.kfrLabelsFont->setFont( group.readEntry("LabelsFont", axis->labelsFont()) );
 	ui.kcbLabelsFontColor->setColor( group.readEntry("LabelsFontColor", axis->labelsColor()) );
@@ -1016,8 +1033,8 @@ void AxisDock::save(const KConfig& config){
 	group.writeEntry("MajorTicksIncrement", ui.leMajorTicksIncrement->text());
 	group.writeEntry("MajorTicksLineStyle", ui.cbMajorTicksLineStyle->currentIndex());
 	group.writeEntry("MajorTicksColor", ui.kcbMajorTicksColor->color());
-	group.writeEntry("MajorTicksWidth", Worksheet::convertFromSceneUnits(ui.sbMajorTicksWidth->value(),Worksheet::Point));
-	group.writeEntry("MajorTicksLength", Worksheet::convertFromSceneUnits(ui.sbMajorTicksLength->value(),Worksheet::Point));
+	group.writeEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(ui.sbMajorTicksWidth->value(),Worksheet::Point));
+	group.writeEntry("MajorTicksLength", Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(),Worksheet::Point));
 	group.writeEntry("MajorTicksOpacity", ui.sbMajorTicksOpacity->value()/100);
 
 	//Minor ticks
@@ -1035,6 +1052,8 @@ void AxisDock::save(const KConfig& config){
 
 	// Tick label
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
+	group.writeEntry("LabelsXOffset", Worksheet::convertToSceneUnits(ui.sbLabelsXOffset->value(),Worksheet::Point));
+	group.writeEntry("LabelsYOffset", Worksheet::convertToSceneUnits(ui.sbLabelsYOffset->value(),Worksheet::Point));
 	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
 	group.writeEntry("LabelsFont", ui.kfrLabelsFont->font());
 	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());

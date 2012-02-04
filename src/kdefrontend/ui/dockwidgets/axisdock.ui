@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -827,16 +827,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QDoubleSpinBox" name="sbLabelsOffset">
-         <property name="suffix">
-          <string>pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="lLabelsRotation">
          <property name="text">
@@ -973,6 +963,62 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>x</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="sbLabelsXOffset">
+           <property name="suffix">
+            <string>pt</string>
+           </property>
+           <property name="minimum">
+            <double>-99.989999999999995</double>
+           </property>
+           <property name="singleStep">
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>y</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="sbLabelsYOffset">
+           <property name="suffix">
+            <string>pt</string>
+           </property>
+           <property name="minimum">
+            <double>-99.989999999999995</double>
+           </property>
+           <property name="singleStep">
+            <double>0.500000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

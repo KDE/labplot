@@ -107,6 +107,7 @@ void Axis::init() {
 	
 	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
+	//TODO: axis->labelsOffset()
 	//TODO: axis->labelsFont()
 	d->labelsFontSize = 24;
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);

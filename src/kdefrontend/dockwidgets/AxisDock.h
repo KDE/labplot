@@ -102,7 +102,8 @@ private:
 	
 	//"Tick labels"-tab
 	void labelsPositionChanged(int);
-	void labelsOffsetChanged(double);
+	void labelsXOffsetChanged(double);
+	void labelsYOffsetChanged(double);
 	void labelsRotationChanged(int);
 	void labelsFontChanged(const QFont&);
 	void labelsFontColorChanged(const QColor&);	
