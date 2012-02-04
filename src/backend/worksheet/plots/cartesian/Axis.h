@@ -95,6 +95,8 @@ class Axis: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix);
 		CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix);
 		BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity);
+
+		//TODO: grid settings
 		
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;

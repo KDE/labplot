@@ -55,6 +55,7 @@ class AxisPrivate: public QGraphicsItem {
 		QPen linePen;
 		qreal lineOpacity;
 
+		// Ticks
 		Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 		Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 		int majorTicksNumber; //!< number of major ticks
@@ -71,6 +72,7 @@ class AxisPrivate: public QGraphicsItem {
 		QPen minorTicksPen;
 		qreal minorTicksOpacity;	
 		
+		// Tick Label
 		Axis::LabelsPosition labelsPosition;
 		qreal labelsFontSize;
 		qreal labelsRotationAngle;
@@ -83,6 +85,8 @@ class AxisPrivate: public QGraphicsItem {
 		// TODO support for date/time and string labels
 		QString labelsPrefix;
 		QString labelsSuffix;
+
+		//TODO: Grid
 		
 		QPainterPath linePath;
 		QPainterPath majorTicksPath;

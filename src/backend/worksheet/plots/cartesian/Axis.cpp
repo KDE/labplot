@@ -74,6 +74,7 @@ Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate 
 void Axis::init() {
 	Q_D(Axis);
 
+	// only settings general to all axes
 	KConfig config;
 	KConfigGroup group = config.group( "Axis" );
 	//TODO: add missing settings (see AxisDock::load())
@@ -107,7 +108,6 @@ void Axis::init() {
 	
 	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
-	//TODO: axis->labelsOffset()
 	//TODO: axis->labelsFont()
 	d->labelsFontSize = 24;
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
@@ -890,7 +890,6 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	painter->drawPath(path);
   }
 }
-
 
 void AxisPrivate::addTextLabel(const QString &text, const QPointF &pos) {
   ScalableTextLabel *label = new ScalableTextLabel();
