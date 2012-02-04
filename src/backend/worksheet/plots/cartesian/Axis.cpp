@@ -28,6 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "worksheet/Worksheet.h"
 #include "worksheet/plots/cartesian/Axis.h"
 #include "worksheet/ScalableTextLabel.h"
 #include "worksheet/plots/cartesian/AxisPrivate.h"
@@ -90,14 +91,14 @@ void Axis::init() {
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
 	d->majorTicksIncrement = group.readEntry("MajorTicksIncrement", 1.0);
-	d->majorTicksLength = group.readEntry("MajorTicksLength", 0.5);
+	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Point));
 	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
 	
 	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
 	d->minorTicksType = (Axis::TicksType) group.readEntry("MinorTicksType", (int) Axis::TicksTotalNumber);
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
 	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.5);
-	d->minorTicksLength = group.readEntry("MinorTicksLength", 0.25);
+	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Point));
 	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
 	
 	//TODO: read from config
@@ -107,7 +108,7 @@ void Axis::init() {
 	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
 	//TODO: axis->labelsFont()
-	d->labelsFontSize = 10;
+	d->labelsFontSize = 24;
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
 	
