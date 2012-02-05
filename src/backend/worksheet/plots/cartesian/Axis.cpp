@@ -875,6 +875,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	painter->drawPath(minorTicksPath);
   }
   
+  // draw tick label
   if (labelsPosition != Axis::NoLabels){
 	painter->setOpacity(labelsOpacity);
 	painter->translate(labelsOffset);
@@ -883,6 +884,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	
 	painter->translate(-labelsOffset);
   }
+
+  //TODO: draw grid
   
    if (isSelected()){
 	QPainterPath path = shape();  

@@ -33,6 +33,10 @@
 #include "spreadsheet/Spreadsheet.h"
 
 #include <QFileDialog>
+#include <QMenu>
+#include <QWidgetAction>
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
  /*!
   \class SpreadsheetDock
@@ -57,8 +61,10 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 	connect(ui.cbShowComments, SIGNAL(stateChanged(int)), this, SLOT(commentsShownChanged(int)));
 
-	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
-	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	//OLD: connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
+	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadTemplateMenu()));
+	//OLD: connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveTemplateMenu()));
 	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 }
 
@@ -129,13 +135,29 @@ void SpreadsheetDock::commentsShownChanged(int state){
 	qobject_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
 }
 
-void SpreadsheetDock::loadSettings(){
+/*void SpreadsheetDock::loadSettings(){
     	QString filename=QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
 			"LabPlotrc", i18n("KDE resource files (*rc)"));
     	if (filename=="")
         	return;
 
 	KConfig config(filename, KConfig::SimpleConfig);
+	load(config);
+}*/
+void SpreadsheetDock::loadTemplateMenu(){
+	QMenu menu;
+	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/*");
+	for (int i = 0; i < list.size(); ++i) {
+			QFileInfo fileinfo(list.at(i));
+			QAction* action = menu.addAction(fileinfo.fileName());
+			action->setData(QVariant(list.at(i)));
+	}
+	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(loadTemplateMenuSelected(QAction*)));
+	menu.exec(ui.tbLoad->mapToGlobal(QPoint(0,0)));
+}
+
+void SpreadsheetDock::loadTemplateMenuSelected(QAction* action){
+	KConfig config(action->data().toString(), KConfig::SimpleConfig);
 	load(config);
 }
 
@@ -149,13 +171,40 @@ void SpreadsheetDock::load(const KConfig& config){
   	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }
 
-void SpreadsheetDock::saveSettings(){
+/*void SpreadsheetDock::saveSettings(){
     	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
 			"LabPlotrc", i18n("KDE resource files (*rc)"));
     	if (filename=="")
         	return;
 
 	KConfig config(filename, KConfig::SimpleConfig );
+	save(config);
+	config.sync();
+}*/
+
+void SpreadsheetDock::saveTemplateMenu(){
+	QMenu menu;
+	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/*");
+	for (int i = 0; i < list.size(); ++i) {
+			QFileInfo fileinfo(list.at(i));
+			QAction* action = menu.addAction(fileinfo.fileName());
+			action->setData(QVariant(fileinfo.path()));
+	}
+	// add editable action
+	// TODO: not working
+	QWidgetAction *widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(new QLineEdit(""));
+	kWarning()<<KGlobal::dirs()->locateLocal("appdata", "templates")+'/';
+	menu.addAction(widgetAction);
+	widgetAction->setData(QVariant(KGlobal::dirs()->locateLocal("appdata", "templates")));
+
+	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(saveTemplateMenuSelected(QAction*)));
+	menu.exec(ui.tbSave->mapToGlobal(QPoint(0,0)));
+}
+
+void SpreadsheetDock::saveTemplateMenuSelected(QAction* action){
+	kWarning()<<action->text();
+	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
 	save(config);
 	config.sync();
 }
