@@ -138,6 +138,8 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbLayoutRightMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutRightMarginChanged(double)) );
 	connect( ui.sbLayoutHorizontalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutHorizontalSpacingChanged(double)) );
 	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
+	connect( ui.sbLayoutRowCount, SIGNAL(valueChanged(int)), this, SLOT(layoutRowCountChanged(int)) );
+	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 	
 	this->retranslateUi();
 }
@@ -528,6 +530,23 @@ void WorksheetDock::layoutVerticalSpacingChanged(double spacing){
 	}
 }
 
+void WorksheetDock::layoutRowCountChanged(int count){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setLayoutRowCount(count);
+	}
+}
+
+void WorksheetDock::layoutColumnCountChanged(int count){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setLayoutColumnCount(count);
+	}
+}
 
 /*!
 	opens a file dialog and lets the user select the image file.

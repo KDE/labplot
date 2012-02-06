@@ -78,7 +78,9 @@ private slots:
 	void layoutLeftMarginChanged(double);
 	void layoutHorizontalSpacingChanged(double);
 	void layoutVerticalSpacingChanged(double);
-	
+	void layoutRowCountChanged(int);
+	void layoutColumnCountChanged(int);
+
 	void loadSettings();
 	void saveSettings();
 	void saveDefaults();
