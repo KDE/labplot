@@ -38,15 +38,12 @@ class WorksheetPrivate{
 		WorksheetPrivate(Worksheet *owner);
 		virtual ~WorksheetPrivate();
 
+		Worksheet * const q;
 		WorksheetGraphicsScene *m_scene;
 		QRectF swapPageRect(const QRectF& rect);
 		mutable QWidget *m_view;
-		WorksheetGraphicsScene *scene() const;
-		friend QGraphicsScene *WorksheetModel::scene() const;
 
 		QString name() const;
-		QRectF swapRect(const QRectF &newRect);
-		void setLayout(const Worksheet::Layout&);
 		void update();
 		void updateLayout();
 
@@ -68,8 +65,6 @@ class WorksheetPrivate{
 		float layoutHorizontalSpacing;
 		int layoutColumnCount;
 		int layoutRowCount;
-
-		Worksheet * const q;
 };
 
 #endif
