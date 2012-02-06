@@ -434,7 +434,27 @@ void WorksheetPrivate::updateLayout(){
 			x+=w + layoutHorizontalSpacing;
 		}		
 	}else{ //GridLayout
-		//TODO
+		//add new rows, if not sufficient
+		if (count>layoutRowCount*layoutColumnCount)
+			layoutRowCount = count/layoutColumnCount;
+		
+		w=(m_scene->sceneRect().height()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
+		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
+		WorksheetElementContainer* elem;
+		int c=0;
+		for (int r=0; r<layoutRowCount; r++){
+			if (r*layoutColumnCount + c>count)
+				break;
+
+			x=layoutLeftMargin;
+			for (c=0; c<layoutColumnCount; c++){
+				elem=list[r*layoutColumnCount + c];
+				elem->setRect(QRectF(x,y,w,h));
+				elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+				x+=w + layoutHorizontalSpacing;
+			}
+			y+=h + layoutVerticalSpacing;
+		}
 	}
 	q->update();
 }
