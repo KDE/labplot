@@ -37,6 +37,7 @@
 #include <QWidgetAction>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <klineedit.h>
 
  /*!
   \class SpreadsheetDock
@@ -135,15 +136,6 @@ void SpreadsheetDock::commentsShownChanged(int state){
 	qobject_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
 }
 
-/*void SpreadsheetDock::loadSettings(){
-    	QString filename=QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
-
-	KConfig config(filename, KConfig::SimpleConfig);
-	load(config);
-}*/
 void SpreadsheetDock::loadTemplateMenu(){
 	QMenu menu;
 	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/*");
@@ -171,17 +163,6 @@ void SpreadsheetDock::load(const KConfig& config){
   	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }
 
-/*void SpreadsheetDock::saveSettings(){
-    	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
-
-	KConfig config(filename, KConfig::SimpleConfig );
-	save(config);
-	config.sync();
-}*/
-
 void SpreadsheetDock::saveTemplateMenu(){
 	QMenu menu;
 	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/*");
@@ -190,20 +171,28 @@ void SpreadsheetDock::saveTemplateMenu(){
 			QAction* action = menu.addAction(fileinfo.fileName());
 			action->setData(QVariant(fileinfo.path()));
 	}
-	// add editable action
-	// TODO: not working
-	QWidgetAction *widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(new QLineEdit(""));
-	kWarning()<<KGlobal::dirs()->locateLocal("appdata", "templates")+'/';
-	menu.addAction(widgetAction);
-	widgetAction->setData(QVariant(KGlobal::dirs()->locateLocal("appdata", "templates")));
-
 	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(saveTemplateMenuSelected(QAction*)));
+
+	// add editable action
+	QWidgetAction *widgetAction = new QWidgetAction(this);
+	KLineEdit *leFilename = new KLineEdit("");
+	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewTemplateSelected(QString)));
+	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
+	widgetAction->setDefaultWidget(leFilename);
+	menu.addAction(widgetAction);
+
 	menu.exec(ui.tbSave->mapToGlobal(QPoint(0,0)));
 }
 
+void SpreadsheetDock::saveNewTemplateSelected(QString filename){
+//	kWarning()<<filename;
+	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+'/'+filename, KConfig::SimpleConfig);
+	save(config);
+	config.sync();
+}
+
 void SpreadsheetDock::saveTemplateMenuSelected(QAction* action){
-	kWarning()<<action->text();
+//	kWarning()<<action->text();
 	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
 	save(config);
 	config.sync();

@@ -57,13 +57,11 @@ class SpreadsheetDock: public QWidget{
 	void columnCountChanged(int);
 	void commentsShownChanged(int);
 
-	//void loadSettings();
-	//void toggleLoadTemplateMenu(bool);
 	void loadTemplateMenu();
 	void loadTemplateMenuSelected(QAction*);
-	//void saveSettings();
 	void saveTemplateMenu();
 	void saveTemplateMenuSelected(QAction*);
+	void saveNewTemplateSelected(QString filename);
 	void saveDefaults();
 };
 
