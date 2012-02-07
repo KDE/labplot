@@ -138,7 +138,7 @@ void SpreadsheetDock::commentsShownChanged(int state){
 
 void SpreadsheetDock::loadTemplateMenu(){
 	QMenu menu;
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/*");
+	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/spreadsheet/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
@@ -165,7 +165,7 @@ void SpreadsheetDock::load(const KConfig& config){
 
 void SpreadsheetDock::saveTemplateMenu(){
 	QMenu menu;
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/*");
+	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/spreadsheet/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
@@ -186,7 +186,7 @@ void SpreadsheetDock::saveTemplateMenu(){
 
 void SpreadsheetDock::saveNewTemplateSelected(QString filename){
 //	kWarning()<<filename;
-	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+'/'+filename, KConfig::SimpleConfig);
+	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+"/spreadsheet/"+filename, KConfig::SimpleConfig);
 	save(config);
 	config.sync();
 }
