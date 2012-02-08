@@ -15,6 +15,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
+	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp

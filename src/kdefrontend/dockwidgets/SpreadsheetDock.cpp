@@ -4,6 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+														   Alexander Semke (alexander.semke*web.de)
     							(use @ for *)
     Description          : widget for spreadsheet properties
                            
@@ -29,15 +30,9 @@
  ***************************************************************************/
 
 #include "SpreadsheetDock.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "spreadsheet/Spreadsheet.h"
-
-#include <QFileDialog>
-#include <QMenu>
-#include <QWidgetAction>
-#include <kstandarddirs.h>
-#include <kdebug.h>
-#include <klineedit.h>
+#include "../../commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "../../backend/spreadsheet/Spreadsheet.h"
+#include "../TemplateHandler.h"
 
  /*!
   \class SpreadsheetDock
@@ -49,12 +44,6 @@
 SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	m_initializing = false;
-	
-	ui.tbLoad->setIcon(KIcon("document-open"));
-	ui.tbSave->setIcon(KIcon("document-save"));
-	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
-	ui.tbCopy->setIcon(KIcon("edit-copy"));
-	ui.tbPaste->setIcon(KIcon("edit-paste"));
 
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
@@ -62,11 +51,11 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 	connect(ui.cbShowComments, SIGNAL(stateChanged(int)), this, SLOT(commentsShownChanged(int)));
 
-	//OLD: connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
-	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadTemplateMenu()));
-	//OLD: connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
-	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveTemplateMenu()));
-	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
+	ui.gridLayout->addWidget(templateHandler, 6, 0, 1, 3);
+	templateHandler->show();
+	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 }
 
 /*!
@@ -97,7 +86,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
   
   	//show the properties of the first Spreadsheet in the list, if there are >1 spreadsheets
 	KConfig config("", KConfig::SimpleConfig);
-	load(config);
+	loadConfig(config);
   
 	m_initializing = false;
 }
@@ -120,11 +109,11 @@ void SpreadsheetDock::commentChanged(){
 }
 
 void SpreadsheetDock::rowCountChanged(int c){
-  
+  Q_UNUSED(c);
 }
 
 void SpreadsheetDock::columnCountChanged(int c){
-  
+  Q_UNUSED(c);
 }
 
 /*!
@@ -136,24 +125,10 @@ void SpreadsheetDock::commentsShownChanged(int state){
 	qobject_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
 }
 
-void SpreadsheetDock::loadTemplateMenu(){
-	QMenu menu;
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/spreadsheet/*");
-	for (int i = 0; i < list.size(); ++i) {
-			QFileInfo fileinfo(list.at(i));
-			QAction* action = menu.addAction(fileinfo.fileName());
-			action->setData(QVariant(list.at(i)));
-	}
-	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(loadTemplateMenuSelected(QAction*)));
-	menu.exec(ui.tbLoad->mapToGlobal(QPoint(0,0)));
-}
-
-void SpreadsheetDock::loadTemplateMenuSelected(QAction* action){
-	KConfig config(action->data().toString(), KConfig::SimpleConfig);
-	load(config);
-}
-
-void SpreadsheetDock::load(const KConfig& config){
+/*!
+	loads saved spreadsheet properties from \c config.
+ */
+void SpreadsheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Spreadsheet" );
 
   	Spreadsheet* spreadsheet=m_spreadsheetList.first();
@@ -163,52 +138,13 @@ void SpreadsheetDock::load(const KConfig& config){
   	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }
 
-void SpreadsheetDock::saveTemplateMenu(){
-	QMenu menu;
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/spreadsheet/*");
-	for (int i = 0; i < list.size(); ++i) {
-			QFileInfo fileinfo(list.at(i));
-			QAction* action = menu.addAction(fileinfo.fileName());
-			action->setData(QVariant(fileinfo.path()));
-	}
-	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(saveTemplateMenuSelected(QAction*)));
-
-	// add editable action
-	QWidgetAction *widgetAction = new QWidgetAction(this);
-	KLineEdit *leFilename = new KLineEdit("");
-	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewTemplateSelected(QString)));
-	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
-	widgetAction->setDefaultWidget(leFilename);
-	menu.addAction(widgetAction);
-
-	menu.exec(ui.tbSave->mapToGlobal(QPoint(0,0)));
-}
-
-void SpreadsheetDock::saveNewTemplateSelected(QString filename){
-//	kWarning()<<filename;
-	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+"/spreadsheet/"+filename, KConfig::SimpleConfig);
-	save(config);
-	config.sync();
-}
-
-void SpreadsheetDock::saveTemplateMenuSelected(QAction* action){
-//	kWarning()<<action->text();
-	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
-	save(config);
-	config.sync();
-}
-
-void SpreadsheetDock::saveDefaults(){
-	KConfig config;
-	save(config);
-	config.sync();
-}
-
-void SpreadsheetDock::save(const KConfig& config){
+/*!
+	saves spreadsheet properties to \c config.
+ */
+void SpreadsheetDock::saveConfig(KConfig& config){
 	KConfigGroup group = config.group( "Spreadsheet" );
-
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 	group.writeEntry("RowCount", ui.sbRowCount->value());
 	group.writeEntry("ShowComments",ui.cbShowComments->isChecked());
+	config.sync();
 }
-

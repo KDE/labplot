@@ -2,9 +2,11 @@
     File                 : SpreadsheetDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-   Copyright            : (C) 2010 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
-    Description          : widget for column properties
+    Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+														   Alexander Semke (alexander.semke*web.de)
+    							(use @ for *)
+    Description          : widget for spreadsheet properties
                            
  ***************************************************************************/
 
@@ -30,39 +32,34 @@
 #ifndef SPREADSHEETDOCK_H
 #define SPREADSHEETDOCK_H
 
-#include <QList>
+#include <QtGui/QWidget>
+#include <QtCore/QList>
+#include <kconfig.h>
 #include "ui_spreadsheetdock.h"
+
 class Spreadsheet;
 
-
 class SpreadsheetDock: public QWidget{
-  Q_OBJECT
+	Q_OBJECT
 	  
-  public:
-	SpreadsheetDock(QWidget *parent);
-	void setSpreadsheets(QList<Spreadsheet*>);
+	public:
+		SpreadsheetDock(QWidget *parent);
+		void setSpreadsheets(QList<Spreadsheet*>);
 	  
-  private:
-	Ui::SpreadsheetDock ui;
-	QList<Spreadsheet*> m_spreadsheetList;
-	bool m_initializing;
-	  
-	void load(const KConfig&);
-	void save(const KConfig&);
+	private:
+		Ui::SpreadsheetDock ui;
+		QList<Spreadsheet*> m_spreadsheetList;
+		bool m_initializing;
+		
+	private slots:
+		void nameChanged();
+		void commentChanged();
+		void rowCountChanged(int);
+		void columnCountChanged(int);
+		void commentsShownChanged(int);
 
-  private slots:
-	void nameChanged();
-	void commentChanged();
-	void rowCountChanged(int);
-	void columnCountChanged(int);
-	void commentsShownChanged(int);
-
-	void loadTemplateMenu();
-	void loadTemplateMenuSelected(QAction*);
-	void saveTemplateMenu();
-	void saveTemplateMenuSelected(QAction*);
-	void saveNewTemplateSelected(QString filename);
-	void saveDefaults();
+		void loadConfig(KConfig&);
+		void saveConfig(KConfig&);
 };
 
 #endif // SPREADSHEETDOCK_H
