@@ -106,7 +106,9 @@ void TemplateHandler::loadMenu(){
 			action->setData(QVariant(list.at(i)));
 	}
 	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(loadMenuSelected(QAction*)));
-	menu.exec(tbLoad->mapToGlobal(QPoint(0,0)));
+
+	QPoint pos(-menu.sizeHint().width()+tbLoad->width(),-menu.sizeHint().height());
+	menu.exec(tbLoad->mapToGlobal(pos));
 }
 
 void TemplateHandler::loadMenuSelected(QAction* action){
@@ -132,7 +134,8 @@ void TemplateHandler::saveMenu(){
 	widgetAction->setDefaultWidget(leFilename);
 	menu.addAction(widgetAction);
 
-	menu.exec(tbSave->mapToGlobal(QPoint(0,0)));
+	QPoint pos(-menu.sizeHint().width()+tbSave->width(),-menu.sizeHint().height());
+	menu.exec(tbSave->mapToGlobal(pos));
 }
 
 /*!
@@ -147,7 +150,6 @@ void TemplateHandler::saveNewSelected(QString filename){
 	the reciever of the signal hat to config.sync().
  */
 void TemplateHandler::saveMenuSelected(QAction* action){
-//	kWarning()<<action->text();
 	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
 }
