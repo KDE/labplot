@@ -32,6 +32,7 @@
 
 #include <QList>
 #include "ui_worksheetdock.h"
+
 class Worksheet;
 
 class WorksheetDock: public QWidget{
@@ -47,9 +48,6 @@ private:
 	bool m_initializing;
 
 	void updatePaperSize();
-
-	void load(const KConfig&);
-	void save(const KConfig&);
 
 private slots:
 	void retranslateUi();
@@ -81,9 +79,8 @@ private slots:
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 
-	void loadSettings();
-	void saveSettings();
-	void saveDefaults();
+	void loadConfig(KConfig&);
+	void saveConfig(KConfig&);
 };
 
 #endif // WORKSHEETDOCK_H

@@ -40,9 +40,9 @@
 
  /*!
   \class TemplateHandler
-  \brief Provides a widget with buttons  sand loading of templates.
+  \brief Provides a widget with buttons for saving and loading of templates.
   
-  Emits \c loadCongid() and \c saveConfig() signals that have to be connected to the appropriate slots in the ui (mostly in the dock widgets)
+  Emits \c loadConfig() and \c saveConfig() signals that have to be connected to the appropriate slots in the ui (mostly in the dock widgets)
 
   \ingroup kdefrontend
 */
@@ -139,7 +139,7 @@ void TemplateHandler::saveMenu(){
 }
 
 /*!
-	the reciever of the signal hat to config.sync().
+	the receiver of the signal had to config.sync().
  */
 void TemplateHandler::saveNewSelected(QString filename){
 	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+"/" + dirNames.at(className) + "/"+filename, KConfig::SimpleConfig);
@@ -147,7 +147,7 @@ void TemplateHandler::saveNewSelected(QString filename){
 }
 
 /*!
-	the reciever of the signal hat to config.sync().
+	the receiver of the signal had to config.sync().
  */
 void TemplateHandler::saveMenuSelected(QAction* action){
 	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
@@ -155,7 +155,7 @@ void TemplateHandler::saveMenuSelected(QAction* action){
 }
 
 /*!
-	the reciever of the signal hat to config.sync().
+	the receiver of the signal had to config.sync().
  */
 void TemplateHandler::saveDefaults(){
 	KConfig config;

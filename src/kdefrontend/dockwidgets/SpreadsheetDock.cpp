@@ -2,10 +2,9 @@
     File                 : SpreadsheetDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010,2012 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-														   Alexander Semke (alexander.semke*web.de)
-    							(use @ for *)
+					(use @ for *)
     Description          : widget for spreadsheet properties
                            
  ***************************************************************************/

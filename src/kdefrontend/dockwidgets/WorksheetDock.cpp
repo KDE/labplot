@@ -31,10 +31,11 @@
 #include "WorksheetDock.h"
 #include "worksheet/Worksheet.h"
 #include "worksheet/plots/PlotArea.h"
+#include "../TemplateHandler.h"
 #include <QTimer>
 #include <QPrinter>
-#include <KUrlCompletion>
 #include <QFileDialog>
+#include <KUrlCompletion>
 
 // a couple of standard sizes in mm, taken from qprinter.cpp
 static const float qt_paperSizes[][2] = {
@@ -80,19 +81,13 @@ static const float qt_paperSizes[][2] = {
 WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 
-	ui.tbLoad->setIcon(KIcon("document-open"));
-	ui.tbSave->setIcon(KIcon("document-save"));
-	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
-	ui.tbCopy->setIcon(KIcon("edit-copy"));
-	ui.tbPaste->setIcon(KIcon("edit-paste"));
-
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( KIcon("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
-    ui.kleBackgroundFileName->setCompletionObject(comp);
+	ui.kleBackgroundFileName->setCompletionObject(comp);
 
 	  //adjust layouts in the tabs
 	QGridLayout* layout;
@@ -126,10 +121,6 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
-	
-	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
-	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
-	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 
 	//Layout
 	connect( ui.sbLayoutTopMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutTopMarginChanged(double)) );
@@ -141,6 +132,12 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbLayoutRowCount, SIGNAL(valueChanged(int)), this, SLOT(layoutRowCountChanged(int)) );
 	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 	
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
+	ui.verticalLayout->addWidget(templateHandler, 0, 0);
+	templateHandler->show();
+	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+
 	this->retranslateUi();
 }
 
@@ -171,7 +168,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
   
 	//show the properties of the first worksheet
 	KConfig config("", KConfig::SimpleConfig);
-  	load(config);
+  	loadConfig(config);
   
 	m_initializing = false;
 }
@@ -573,17 +570,7 @@ void WorksheetDock::fileNameChanged(){
   } 
 }
 
-void WorksheetDock::loadSettings(){
-    	QString filename=QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
-
-	KConfig config(filename, KConfig::SimpleConfig);
-	load(config);
-}
-
-void WorksheetDock::load(const KConfig& config){
+void WorksheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
 	
 	// Geometry
@@ -622,24 +609,7 @@ void WorksheetDock::load(const KConfig& config){
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount",worksheet->layoutColumnCount()));
 }
 
-void WorksheetDock::saveSettings(){
-    	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
-
-	KConfig config(filename, KConfig::SimpleConfig );
-	save(config);
-	config.sync();
-}
-
-void WorksheetDock::saveDefaults(){
-	KConfig config;
-	save(config);
-	config.sync();
-}
-
-void WorksheetDock::save(const KConfig& config){
+void WorksheetDock::saveConfig(KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
 
 	//General
@@ -665,4 +635,5 @@ void WorksheetDock::save(const KConfig& config){
 	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), Worksheet::Centimeter));
 	group.writeEntry("LayoutRowCount", ui.sbLayoutRowCount->value());
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
+	config.sync();
 }
