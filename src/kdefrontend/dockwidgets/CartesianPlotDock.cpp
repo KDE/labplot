@@ -33,6 +33,7 @@
 #include "worksheet/plots/PlotArea.h"
 #include "worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
+#include "../TemplateHandler.h"
 #include <QTimer>
 #include <KUrlCompletion>
 
@@ -48,12 +49,6 @@
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
-	ui.tbLoad->setIcon(KIcon("document-open"));
-	ui.tbSave->setIcon(KIcon("document-save"));
-	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
-	ui.tbCopy->setIcon(KIcon("edit-copy"));
-	ui.tbPaste->setIcon(KIcon("edit-paste"));
-
 	//"Coordinate system"-tab
 	ui.bAddXBreak->setIcon( KIcon("list-add") );
 	ui.bRemoveXBreak->setIcon( KIcon("list-remove") );
@@ -117,9 +112,11 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
-	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
-	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
-	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
+	ui.verticalLayout->addWidget(templateHandler, 0, 0);
+	templateHandler->show();
+	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 
 	QTimer::singleShot(0, this, SLOT(init()));
 }
@@ -152,10 +149,10 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	ui.leName->setText("");
 	ui.leComment->setText("");
   }
-  
+
 	//show the properties of the first curve
 	KConfig config("", KConfig::SimpleConfig);
-  	load(config);
+  	loadConfig(config);
 
 	m_initializing = false;
 }
@@ -441,17 +438,7 @@ void CartesianPlotDock::borderOpacityChanged(int value){
   }
 }
 
-void CartesianPlotDock::loadSettings(){
-    	QString filename=QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
-
-	KConfig config(filename, KConfig::SimpleConfig);
-	load(config);
-}
-
-void CartesianPlotDock::load(const KConfig& config){
+void CartesianPlotDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "PlotArea" );
 	CartesianPlot* plot=m_plotList.first();
 
@@ -479,24 +466,7 @@ void CartesianPlotDock::load(const KConfig& config){
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", plot->plotArea()->borderOpacity())*100 );
 }
 
-void CartesianPlotDock::saveSettings(){
-    	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
-
-	KConfig config(filename, KConfig::SimpleConfig );
-	save(config);
-	config.sync();
-}
-
-void CartesianPlotDock::saveDefaults(){
-	KConfig config;
-	save(config);
-	config.sync();
-}
-
-void CartesianPlotDock::save(const KConfig& config){
+void CartesianPlotDock::saveConfig(KConfig& config){
 	KConfigGroup group = config.group( "PlotArea" );
 
 	//General-tab
@@ -519,4 +489,6 @@ void CartesianPlotDock::save(const KConfig& config){
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
+
+	config.sync();
 }

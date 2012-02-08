@@ -37,6 +37,7 @@
 #include "core/plugin/PluginManager.h"
 #include "worksheet/StandardCurveSymbolFactory.h"
 #include "widgets/TreeViewComboBox.h"
+#include "../TemplateHandler.h"
 
 #include "core/AbstractFilter.h"
 #include "core/datatypes/SimpleCopyThroughFilter.h"
@@ -65,12 +66,6 @@
 XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
-	ui.tbLoad->setIcon(KIcon("document-open"));
-	ui.tbSave->setIcon(KIcon("document-save"));
-	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
-	ui.tbCopy->setIcon(KIcon("edit-copy"));
-	ui.tbPaste->setIcon(KIcon("edit-paste"));
-
 	// Tab "General"
 	gridLayout = new QGridLayout(ui.tabGeneral);
 	gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
@@ -194,9 +189,11 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.kfrValuesFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(valuesFontChanged(const QFont&)) );
 	connect( ui.kcbValuesFontColor, SIGNAL(changed (const QColor &)), this, SLOT(valuesFontColorChanged(const QColor&)) );
 	
-	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
-	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
-	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
+	ui.gridLayout_2->addWidget(templateHandler, 0, 0);
+	templateHandler->show();
+	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 
 	retranslateUi();
 	
@@ -421,7 +418,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
   
   //show the properties of the first curve
 	KConfig config("", KConfig::SimpleConfig);
-	load(config);
+	loadConfig(config);
 
 	//TODO connect the signals of the first column with the slots of this class.
 
@@ -1135,20 +1132,7 @@ void XYCurveDock::valuesFontColorChanged(const QColor& color){
 
 /* Settings */
 
-void XYCurveDock::loadSettings(){
-	QString filename;
-	if (filename.isEmpty()) {
-    		filename = QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    		if (filename=="")
-        		return;
-	}
-
-	KConfig config(filename, KConfig::SimpleConfig);
-	load(config);
-}
-
-void XYCurveDock::load(const KConfig& config){
+void XYCurveDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "XYCurve" );
 
   	XYCurve* curve=m_curvesList.first();
@@ -1206,24 +1190,7 @@ void XYCurveDock::load(const KConfig& config){
 	//TODO: Area Filling, Error Bars
 }
 
-void XYCurveDock::saveSettings(){
-     	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
-
-	KConfig config(filename, KConfig::SimpleConfig );
-	save(config);
-	config.sync();
-}
-
-void XYCurveDock::saveDefaults(){
-	KConfig config;
-	save(config);
-	config.sync();
-}
-
-void XYCurveDock::save(const KConfig& config){
+void XYCurveDock::saveConfig(KConfig& config){
 	KConfigGroup group = config.group( "XYCurve" );
 
 	group.writeEntry("Visible", chkVisible->isChecked());
@@ -1267,5 +1234,7 @@ void XYCurveDock::save(const KConfig& config){
 	group.writeEntry("ValuesFontColor", ui.kcbValuesFontColor->color());
 
 	//TODO: Area Filling, Error Bars
+
+	config.sync();
 }
 

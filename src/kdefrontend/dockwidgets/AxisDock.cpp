@@ -30,10 +30,11 @@
 #include "AxisDock.h"
 #include "worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/GuiTools.h"
+#include "../TemplateHandler.h"
+#include "worksheet/Worksheet.h"
 #include <KMessageBox>
 #include <QTimer>
 
-#include "worksheet/Worksheet.h"
 
  /*!
   \class AxisDock
@@ -44,12 +45,6 @@
  
 AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	ui.setupUi(this);
-
-	ui.tbLoad->setIcon(KIcon("document-open"));
-	ui.tbSave->setIcon(KIcon("document-save"));
-	ui.tbSaveDefault->setIcon(KIcon("document-save-as"));
-	ui.tbCopy->setIcon(KIcon("edit-copy"));
-	ui.tbPaste->setIcon(KIcon("edit-paste"));
 
   //TODO
   ui.lPosition->hide();
@@ -150,9 +145,11 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 //TODO cbMajorTicksDirection is empty when the axes are set
 	//QTimer::singleShot(0, this, SLOT(init()));
 
-	connect( ui.tbLoad, SIGNAL(clicked()), this, SLOT(loadSettings()));
-	connect( ui.tbSave, SIGNAL(clicked()), this, SLOT(saveSettings()));
-	connect( ui.tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
+	ui.gridLayout_5->addWidget(templateHandler, 0, 0);
+	templateHandler->show();
+	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 
 	init();
 }
@@ -238,7 +235,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 
   	//show the properties of the first axis
 	KConfig config("", KConfig::SimpleConfig);
-	load(config);
+	loadConfig(config);
   
   	m_initializing = false;
 }
@@ -894,20 +891,7 @@ void AxisDock::labelsOpacityChanged(int value){
 
 /* Settings */
 
-void AxisDock::loadSettings(){
-	QString filename;
-	if (filename.isEmpty()) {
-    		filename = QFileDialog::getOpenFileName(this, i18n("Select the file to load settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    		if (filename=="")
-        		return;
-	}
-
-	KConfig config(filename, KConfig::SimpleConfig);
-	load(config);
-}
-
-void AxisDock::load(const KConfig& config){
+void AxisDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Axis" );
 
   	Axis* axis=m_axesList.first();
@@ -986,24 +970,7 @@ void AxisDock::load(const KConfig& config){
 // 	sbMinroGridOpacity->setValue( axis->minorGridOpacity() );
 }
 
-void AxisDock::saveSettings(){
-     	QString filename=QFileDialog::getSaveFileName(this, i18n("Select the file to save settings"),
-			"LabPlotrc", i18n("KDE resource files (*rc)"));
-    	if (filename=="")
-        	return;
-
-	KConfig config(filename, KConfig::SimpleConfig );
-	save(config);
-	config.sync();
-}
-
-void AxisDock::saveDefaults(){
-	KConfig config;
-	save(config);
-	config.sync();
-}
-
-void AxisDock::save(const KConfig& config){
+void AxisDock::saveConfig(KConfig& config){
 	KConfigGroup group = config.group( "Axis" );
 
 	//General
@@ -1062,5 +1029,7 @@ void AxisDock::save(const KConfig& config){
 	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value()/100);
 
 	//Grid: TODO (see load())	
+
+	config.sync();
 }
 

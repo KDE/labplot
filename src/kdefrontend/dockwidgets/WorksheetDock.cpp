@@ -635,5 +635,6 @@ void WorksheetDock::saveConfig(KConfig& config){
 	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), Worksheet::Centimeter));
 	group.writeEntry("LayoutRowCount", ui.sbLayoutRowCount->value());
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
+
 	config.sync();
 }

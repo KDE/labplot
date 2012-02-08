@@ -90,7 +90,7 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	className = name;
 	
 	//synchronize this with the ordering in TemplateHandler::ClassName
-	dirNames<<"spreadsheet"<<"worksheet";
+	dirNames<<"spreadsheet"<<"worksheet"<<"cartesianplot"<<"xycurve"<<"axis";
 	
 	this->retranslateUi();
 }

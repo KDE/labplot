@@ -47,9 +47,6 @@ private:
 	QList<CartesianPlot*> m_plotList;
 	bool m_initializing;
 	
-	void load(const KConfig&);
-	void save(const KConfig&);
-
 private slots:
 	void init();
 	void retranslateUi();
@@ -78,9 +75,8 @@ private slots:
 	void borderWidthChanged(double value);
 	void borderOpacityChanged(int);
 
-	void loadSettings();
-	void saveSettings();
-	void saveDefaults();
+	void loadConfig(KConfig&);
+	void saveConfig(KConfig&);
 };
 
 #endif
