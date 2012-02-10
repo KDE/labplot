@@ -46,22 +46,22 @@ WorksheetGraphicsScene::WorksheetGraphicsScene()
 WorksheetGraphicsScene::~WorksheetGraphicsScene() {
 }
 
-void WorksheetGraphicsScene::drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], 
-		const QStyleOptionGraphicsItem options[], QWidget *widget) {
-	
-	painter->setClipRect(sceneRect());
-	QGraphicsScene::drawItems(painter, numItems, items, options, widget);
-}
+// void WorksheetGraphicsScene::drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], 
+// 		const QStyleOptionGraphicsItem options[], QWidget *widget) {
+// 	
+// 	painter->setClipRect(sceneRect());
+// 	QGraphicsScene::drawItems(painter, numItems, items, options, widget);
+// }
 
 
-void WorksheetGraphicsScene::addItem(QGraphicsItem* item){
+// void WorksheetGraphicsScene::addItem(QGraphicsItem* item){
 //   WorksheetElementContainerPrivate* containerItem = qobject_cast<WorksheetElementContainerPrivate*>(item);
 //   if (containerItem)
 // 	connect(item, SIGNAL(selectedChange(QGraphicsItem*)),
 //                     this, SIGNAL(itemSelected(QGraphicsItem*)));
 
-QGraphicsScene::addItem(item);
-}
+// QGraphicsScene::addItem(item);
+// }
 
 /*
  void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)

@@ -40,15 +40,15 @@ class WorksheetGraphicsScene: public QGraphicsScene {
 	public:
 		WorksheetGraphicsScene();
 		~WorksheetGraphicsScene();
-	void addItem(QGraphicsItem*);
+// 	void addItem(QGraphicsItem*);
 	
 	protected:
-		virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], const QStyleOptionGraphicsItem options[], QWidget *widget = 0);
+// 		virtual void drawItems(QPainter *painter, int numItems, QGraphicsItem *items[], const QStyleOptionGraphicsItem options[], QWidget *widget = 0);
 		
 signals:
 //      void itemInserted(DiagramItem *item);
 //      void textInserted(QGraphicsTextItem *item);
-     void itemSelected(QGraphicsItem *item);
+//      void itemSelected(QGraphicsItem *item);
 
  protected:
 //      void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
