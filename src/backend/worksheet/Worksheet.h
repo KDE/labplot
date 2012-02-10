@@ -37,7 +37,7 @@
 #include "worksheet/plots/PlotArea.h"
 #include "lib/macros.h"
 
-class QGraphicsScene;
+// class QGraphicsScene;
 class QGraphicsItem;
 class WorksheetGraphicsScene;
 class QRectF;
