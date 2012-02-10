@@ -65,8 +65,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
 void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-// TODO: crashes application when enabled: Why?
-//	m_coordinateSystem = new CartesianCoordinateSystem(this);
+	m_coordinateSystem = new CartesianCoordinateSystem(this);
 
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
 	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
@@ -78,8 +77,7 @@ void CartesianPlot::init(){
 	d->rect.setWidth(w);
 	d->rect.setHeight(h);
 
-// TODO: disabled until m_coordinateSystem can be used again
-/*	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
+	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
 	QList<CartesianCoordinateSystem::Scale *> scales;
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), x, x+w, 0, 1);
 	cSystem ->setXScales(scales);
@@ -135,7 +133,6 @@ void CartesianPlot::init(){
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
 	axis->setLabelsOffset(QPointF(Worksheet::convertToSceneUnits(5.0, Worksheet::Point),0));
-*/
 }
 
 CartesianPlot::~CartesianPlot() {

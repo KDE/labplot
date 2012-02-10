@@ -33,7 +33,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "spreadsheet/Spreadsheet.h"
 #include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/Worksheet.h"
-#include "worksheet/XYCurve.h"
+#include "worksheet/plots/cartesian/XYCurve.h"
 #include "worksheet/plots/cartesian/Axis.h"
 #include "core/Project.h"
 #include "core/ProjectExplorer.h"

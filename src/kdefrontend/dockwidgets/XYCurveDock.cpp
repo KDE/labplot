@@ -30,7 +30,7 @@
 
 #include "XYCurveDock.h"
 #include "kdefrontend/GuiTools.h"
-#include "worksheet/XYCurve.h"
+#include "worksheet/plots/cartesian/XYCurve.h"
 #include "worksheet/Worksheet.h"
 #include "core/AspectTreeModel.h"
 #include "core/column/Column.h"
