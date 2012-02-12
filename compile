@@ -2,10 +2,10 @@
 
 if [ -d build ]; then
 	echo "directory build/ exists! Please remove it."
-	exit
+else
+	mkdir build
 fi
 
-mkdir build
 cd build && cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make -j 2
 
 # for building Qt Frontend (SciDAVis) use

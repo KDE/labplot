@@ -148,6 +148,8 @@ qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
 add_custom_command (OUTPUT parser/parser.tab.c
                    COMMAND ${YACC_EXECUTABLE} ARGS -b parser parser.y
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
+
+add_subdirectory( pics )
 ##############################################################################
 INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} ${COMMONFRONTEND_DIR} .)
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
