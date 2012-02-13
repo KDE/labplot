@@ -214,19 +214,19 @@ void WorksheetView::initActions(){
   connect(addPlotAction, SIGNAL(triggered()), SLOT(addPlot()));
   
   //Layout actions
-  verticalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Vertical layout"), layoutActionGroup);
+  verticalLayoutAction = new KAction(KIcon("editvlayout"), i18n("Vertical layout"), layoutActionGroup);
   verticalLayoutAction->setObjectName("verticalLayoutAction");
   verticalLayoutAction->setCheckable(true);
 
-  horizontalLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Horizontal layout"), layoutActionGroup);
+  horizontalLayoutAction = new KAction(KIcon("edithlayout"), i18n("Horizontal layout"), layoutActionGroup);
   horizontalLayoutAction->setObjectName("horizontalLayoutAction");
   horizontalLayoutAction->setCheckable(true);
 
-  gridLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Grid layout"), layoutActionGroup);
+  gridLayoutAction = new KAction(KIcon("editgrid"), i18n("Grid layout"), layoutActionGroup);
   gridLayoutAction->setObjectName("gridLayoutAction");
   gridLayoutAction->setCheckable(true);
 
-  breakLayoutAction = new KAction(KIcon("select-rectangular"), i18n("Break layout"), layoutActionGroup);
+  breakLayoutAction = new KAction(KIcon("editbreaklayout"), i18n("Break layout"), layoutActionGroup);
   breakLayoutAction->setObjectName("breakLayoutAction");
   breakLayoutAction->setEnabled(false);
   
