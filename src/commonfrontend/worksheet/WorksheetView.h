@@ -34,6 +34,8 @@
 #include <QGraphicsView>
 
 class QMenu;
+class QToolBar;
+class QToolButton;
 class QWheelEvent;
 
 class Worksheet;
@@ -93,7 +95,10 @@ class WorksheetView : public QGraphicsView{
 	QMenu* m_zoomMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
-	
+
+	QToolButton* tbZoom;
+	QAction* currentZoomAction;
+
 	//Actions
 	#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* zoomInAction;
@@ -150,13 +155,7 @@ class WorksheetView : public QGraphicsView{
   public slots:
 	void createContextMenu(QMenu * menu);
 	void fillProjectMenu(QMenu *menu, bool *rc);
-
-	void zoomIn();
-	void zoomOut();
-	void zoomOrigin();
-	void zoomFitPageWidth();
-	void zoomFitPageHeight();
-	void zoomFitSelection();
+	void fillToolBar(QToolBar*);
 
 	void enableNavigationMode();
 	void enableZoomMode();
@@ -164,6 +163,7 @@ class WorksheetView : public QGraphicsView{
 
 	void addPlot();
 
+	void changeZoom(QAction*);
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);
 

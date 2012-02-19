@@ -29,18 +29,19 @@
  ***************************************************************************/
 #include <QApplication>
 #include <QMenu>
+#include <QToolBar>
 #include <QDesktopWidget>
 #include <QWheelEvent>
 #include <QPrinter>
 #include <QSvgGenerator>
 #include <QImage>
+#include <QToolButton>
 #include <QDebug>
 
 #include "worksheet/WorksheetView.h"
 #include "worksheet/Worksheet.h"
 #include "worksheet/WorksheetModel.h"
 #include "worksheet/WorksheetElementGroup.h"
-//#include "worksheet/DecorationPlot.h"
 #include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "worksheet/WorksheetRectangleElement.h"
 #include "worksheet/plots/cartesian/CartesianPlot.h"
@@ -95,10 +96,12 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   initActions();
   initMenus();
   navigationModeAction->setChecked(true);
-  zoomFitPageHeight();
+  
+  tbZoom=0;
+  changeZoom(zoomFitPageHeightAction);
+  currentZoomAction=zoomInAction;
 
-  // 	connect(m_worksheet, SIGNAL(requestProjectMenu(QMenu*,bool*)), this, SLOT(fillProjectMenu(QMenu*,bool*)));
-	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+  connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
   connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
   connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) ); 
   connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
@@ -116,6 +119,7 @@ WorksheetView::WorksheetView(){
 
 
 void WorksheetView::initActions(){
+	QActionGroup* zoomActionGroup = new QActionGroup(this);
 	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
 	QActionGroup* layoutActionGroup = new QActionGroup(this);
 	QActionGroup * gridActionGroup = new QActionGroup(this);
@@ -175,26 +179,26 @@ void WorksheetView::initActions(){
  breakLayoutAction->setEnabled(false);
 #else
   //Zoom actions
-  zoomInAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), this);
+  zoomInAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
   zoomInAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
-  connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
+//   connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
 
-  zoomOutAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), this);
+  zoomOutAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), zoomActionGroup);
   zoomOutAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
-  connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
+//   connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
 
-  zoomOriginAction = new KAction(KIcon("zoom-original"), i18n("Original size"), this);
+  zoomOriginAction = new KAction(KIcon("zoom-original"), i18n("Original size"), zoomActionGroup);
   zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
-  connect(zoomOriginAction, SIGNAL(triggered()), SLOT(zoomOrigin()));
+//   connect(zoomOriginAction, SIGNAL(triggered()), SLOT(zoomOrigin()));
 
-  zoomFitPageHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Fit to height"), this);
-  connect(zoomFitPageHeightAction, SIGNAL(triggered()), SLOT(zoomFitPageHeight()));
+  zoomFitPageHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
+//   connect(zoomFitPageHeightAction, SIGNAL(triggered()), SLOT(zoomFitPageHeight()));
 
-  zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), this);
-  connect(zoomFitPageWidthAction, SIGNAL(triggered()), SLOT(zoomFitPageWidth()));
+  zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
+//   connect(zoomFitPageWidthAction, SIGNAL(triggered()), SLOT(zoomFitPageWidth()));
   
-  zoomFitSelectionAction = new KAction(i18n("Fit to selection"), this);
-  connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
+  zoomFitSelectionAction = new KAction(i18n("Fit to selection"), zoomActionGroup);
+//   connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
 
   // Mouse mode actions 
   navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigation"), mouseModeActionGroup);
@@ -261,9 +265,10 @@ void WorksheetView::initActions(){
 	//TODO slot
 	snapToGridAction->setCheckable(true);
 #endif
-
-  connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
-  connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
+	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
+	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
+	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
+	qDebug()<<"actions done";
 }
 
 void WorksheetView::initMenus(){
@@ -333,6 +338,32 @@ void WorksheetView::createContextMenu(QMenu* menu){
 void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
   Q_UNUSED(rc);
 	this->createContextMenu(menu);
+}
+
+void WorksheetView::fillToolBar(QToolBar* toolBar){
+	toolBar->clear();
+	
+	toolBar->addSeparator();
+	toolBar->addAction(navigationModeAction);
+	toolBar->addAction(zoomModeAction);
+	toolBar->addAction(selectionModeAction);
+	
+	toolBar->addSeparator();
+	toolBar->addAction(addPlotAction);
+	
+	toolBar->addSeparator();
+	toolBar->addAction(verticalLayoutAction);
+	toolBar->addAction(horizontalLayoutAction);
+	toolBar->addAction(gridLayoutAction);
+	toolBar->addAction(breakLayoutAction);
+	
+	toolBar->addSeparator();
+	QToolButton* b = new QToolButton(toolBar);
+	b->setPopupMode(QToolButton::MenuButtonPopup);
+	b->setMenu(m_zoomMenu);
+	b->setDefaultAction(currentZoomAction);
+	toolBar->addWidget(b);
+	tbZoom=b;
 }
 
 
@@ -465,34 +496,27 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 
 
 //###################### SLOTS #################
-void WorksheetView::zoomIn(){
-	scale(1.2, 1.2);
-}
-
-void WorksheetView::zoomOut(){
-	scale(1.0/1.2, 1.0/1.2);
-}
-
-void WorksheetView::zoomOrigin(){
-	float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-	float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-  setTransform(QTransform::fromScale(hscale, vscale));
-}
-
-void WorksheetView::zoomFitPageWidth(){
-  float scaleFactor = viewport()->width()/m_model->scene()->sceneRect().width();
-  setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-}
-
-void WorksheetView::zoomFitPageHeight(){
-  float scaleFactor = viewport()->height()/m_model->scene()->sceneRect().height();
-  setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-}
-
-void WorksheetView::zoomFitSelection(){
-  qDebug()<<scene()->selectionArea().boundingRect();
-	qDebug()<<scene()->selectedItems();
-	fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
+void WorksheetView::changeZoom(QAction* action){
+	if (action==zoomInAction){
+		scale(1.2, 1.2);
+	}else if (action==zoomOutAction){
+		scale(1.0/1.2, 1.0/1.2);
+	}else if (action==zoomOriginAction){
+		float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+		float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+		setTransform(QTransform::fromScale(hscale, vscale));
+	}else if (action==zoomFitPageWidthAction){
+		float scaleFactor = viewport()->width()/m_model->scene()->sceneRect().width();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+	}else if (action==zoomFitPageHeightAction){
+		float scaleFactor = viewport()->height()/m_model->scene()->sceneRect().height();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+	}else if (action==zoomFitSelectionAction){
+		fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
+	}
+	currentZoomAction=action;
+	if (tbZoom)
+			tbZoom->setDefaultAction(action);
 }
 
 void WorksheetView::enableNavigationMode(){
