@@ -51,6 +51,7 @@ class SpreadsheetDoubleHeaderView;
 class AbstractAspect;
 
 class QMenu;
+class QToolBar;
 
 class SpreadsheetView : public QTableView{
     Q_OBJECT
@@ -130,7 +131,6 @@ class SpreadsheetView : public QTableView{
 		QAction * action_clear_masks;
 		QAction * action_sort_spreadsheet;
 		QAction * action_go_to_cell;
-		QAction * action_dimensions_dialog;
 		QAction * action_formula_mode;
 		//@}
 		//! \name column related actions
@@ -183,7 +183,6 @@ class SpreadsheetView : public QTableView{
 		KAction * action_clear_masks;
 		KAction * action_sort_spreadsheet;
 		KAction * action_go_to_cell;
-		KAction * action_dimensions_dialog;
 
 		//column related actions
 		KAction * action_insert_columns;
@@ -268,6 +267,7 @@ class SpreadsheetView : public QTableView{
 
 		void createContextMenu(QMenu * menu);
 		void fillProjectMenu(QMenu * menu, bool * rc);
+		void fillToolBar(QToolBar*);
 		void sortDialog(QList<Column*> cols);
 
 		void print(QPrinter*) const;
@@ -275,7 +275,7 @@ class SpreadsheetView : public QTableView{
 	private  slots:
 		void advanceCell();
 		void handleHorizontalSectionMoved(int index, int from, int to);
-		void handleHorizontalHeaderDoubleClicked(int index);
+// 		void handleHorizontalHeaderDoubleClicked(int index);
 		void handleHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 		void currentColumnChanged(const QModelIndex & current, const QModelIndex & previous);
 		void handleAspectAdded(const AbstractAspect * aspect);
