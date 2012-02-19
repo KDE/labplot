@@ -2,7 +2,7 @@
     File                 : MainWin.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Copyright            : (C) 2007-2008 Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
@@ -34,14 +34,10 @@
 #include "MainWin.h"
 
 //****** GUI **************
-// #include "FunctionPlotDialog.h"
-// #include "DataPlotDialog.h"
 #include "datasources/ImportFileDialog.h"
-// #include "ImportDialog.h"
 #include "ProjectDialog.h"
 #include "SettingsDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
-// #include "SpreadsheetView.h"
 #include "GuiObserver.h"
  #include "worksheet/ExportWorksheetDialog.h"
 #include <QDockWidget>
@@ -69,7 +65,8 @@
 #include "datasources/FileDataSource.h"
 
 
-#include "projecttestcode.h"
+// #include "projecttestcode.h"
+
  /*!
 	\class MainWin
 	\brief Main application window.
@@ -97,6 +94,10 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	cartesianPlotDock=0;
 	axisDock=0;
 	lineSymbolCurveDock=0;
+	
+// 	connect (m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)), this, SLOT(subWindowChanged(QMdiSubWindow *)));
+	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
+			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 	
 	QTimer::singleShot( 0, this, SLOT(initGUI()) );
 }
@@ -324,12 +325,12 @@ void MainWin::initActions() {
 	QActionGroup * windowVisibilityActions = new QActionGroup(this);
 	windowVisibilityActions->setExclusive(true);
 	
-	m_visibilityFolderAction = new KAction(tr("Current &Folder Only"), windowVisibilityActions);
+	m_visibilityFolderAction = new KAction(KIcon("folder"), tr("Current &Folder Only"), windowVisibilityActions);
 	m_visibilityFolderAction->setCheckable(true);
 	m_visibilityFolderAction->setChecked(true);
 	m_visibilityFolderAction->setData(Project::folderOnly);
 	
-	m_visibilitySubfolderAction = new KAction(tr("Current Folder and &Subfolders"), windowVisibilityActions);
+	m_visibilitySubfolderAction = new KAction(KIcon("folder-documents"), tr("Current Folder and &Subfolders"), windowVisibilityActions);
 	m_visibilitySubfolderAction->setCheckable(true);
 	m_visibilitySubfolderAction->setData(Project::folderAndSubfolders);
 	
@@ -359,7 +360,7 @@ void MainWin::initActions() {
 void MainWin::initMenus(){
 	//menu for adding new aspects
 	m_newMenu = new QMenu(i18n("Add new"));
-	m_newMenu->setIcon(QIcon(KIcon("document-new")));
+	m_newMenu->setIcon(KIcon("document-new"));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newSpreadsheetAction);
 	m_newMenu->addAction(m_newWorksheetAction);
@@ -369,6 +370,7 @@ void MainWin::initMenus(){
 	
 	//menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window visibility policy"));
+	m_visibilityMenu->setIcon(KIcon("window-duplicate"));
 	m_visibilityMenu ->addAction(m_visibilityFolderAction);
 	m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu ->addAction(m_visibilityAllAction);
@@ -418,10 +420,10 @@ void MainWin::updateGUI() {
 		factory->container("edit", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("worksheet", this)->setEnabled(false);
-		factory->container("analysis", this)->setEnabled(false);
- 		factory->container("script", this)->setEnabled(false);
+// 		factory->container("analysis", this)->setEnabled(false);
+//  	factory->container("script", this)->setEnabled(false);
+// 		factory->container("drawing", this)->setEnabled(false);
 		factory->container("windows", this)->setEnabled(false);
-		factory->container("drawing", this)->setEnabled(false);
 		return;
 	}else{
 		m_saveAction->setEnabled(true);
@@ -440,54 +442,65 @@ void MainWin::updateGUI() {
 		factory->container("edit", this)->setEnabled(true);
 		factory->container("spreadsheet", this)->setEnabled(true);
 		factory->container("worksheet", this)->setEnabled(true);
-		factory->container("analysis", this)->setEnabled(true);
- 		factory->container("script", this)->setEnabled(true);
+// 		factory->container("analysis", this)->setEnabled(true);
+//  		factory->container("script", this)->setEnabled(true);
+// 		factory->container("drawing", this)->setEnabled(true);
 		factory->container("windows", this)->setEnabled(true);
-		factory->container("drawing", this)->setEnabled(true);
 	}
 
 
-// 	KActionCollection* collection=this->actionCollection();
-
-	//Handle the Worksheet-object
-	Worksheet* w=this->activeWorksheet();
-	if (w==0){
-		//no worksheet selected -> deactivate worksheet related menus
-		factory->container("worksheet", this)->setEnabled(false);
- 		factory->container("drawing", this)->setEnabled(false);
-
-		//Handle the Spreadsheet-object
-		Spreadsheet* spreadsheet=activeSpreadsheet();
-		if (spreadsheet){
-			//enable spreadsheet related menus
-			factory->container("analysis", this)->setEnabled(true);
-			factory->container("spreadsheet", this)->setEnabled(true);
-
-			SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
-			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
-			//TODO view->createMenu(menu);
-		}else{
-			//no spreadsheet selected -> deactivate spreadsheet related menus
-			factory->container("analysis", this)->setEnabled(false);
-			factory->container("spreadsheet", this)->setEnabled(false);
-		}
-	}else{
+	//Activate/deactivate menus and toolbar depending on the currently active window (worksheet or spreadsheet).
+	Worksheet* w = this->activeWorksheet();
+	if (w!=0){
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
-		factory->container("drawing", this)->setEnabled(true);
-		factory->container("analysis", this)->setEnabled(true);
+// 		factory->container("drawing", this)->setEnabled(true);
 
+		//disable spreadsheet related menus
+		factory->container("spreadsheet", this)->setEnabled(false);
+// 		factory->container("analysis", this)->setEnabled(false);
+		
 		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
 		view->createContextMenu(menu);
+		
+		//populate worksheet-toolbar
+		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
+		toolbar->setVisible(true);
+		view->fillToolBar(toolbar);
+		
+		//hide the spreadsheet toolbar
+		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+	}else{
+		//no worksheet selected -> deactivate worksheet related menus and the toolbar
+		factory->container("worksheet", this)->setEnabled(false);
+//  		factory->container("drawing", this)->setEnabled(false);
+		factory->container("worksheet_toolbar", this)->setVisible(false);
 
-		//disable spreadsheet related menus
-		factory->container("analysis", this)->setEnabled(false);
-		factory->container("spreadsheet", this)->setEnabled(false);
+		//Handle the Spreadsheet-object
+		Spreadsheet* spreadsheet = this->activeSpreadsheet();
+		if (spreadsheet){
+			//enable spreadsheet related menus
+// 			factory->container("analysis", this)->setEnabled(true);
+			factory->container("spreadsheet", this)->setEnabled(true);
+
+			//populate spreadsheet-menu
+			SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
+			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
+			view->createContextMenu(menu);
+			
+			//populate spreadsheet-toolbar
+			QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
+			toolbar->setVisible(true);
+			view->fillToolBar(toolbar);
+		}else{
+			//no spreadsheet selected -> deactivate spreadsheet related menus
+// 			factory->container("analysis", this)->setEnabled(false);
+			factory->container("spreadsheet", this)->setEnabled(false);
+			factory->container("spreadsheet_toolbar", this)->setVisible(false);
+		}
 	}
-
-	kDebug()<<"GUI updated"<<endl;
 }
 
 /*!
@@ -538,8 +551,6 @@ bool MainWin::newProject(){
 	m_propertiesDock->show();
 	updateGUI();
 
-	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
-			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *)),
 		this, SLOT(handleAspectAdded(const AbstractAspect *)));
 	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
@@ -767,27 +778,29 @@ void MainWin::newWorksheet() {
 
 
 /*!
-	returns a pointer to a Spreadsheet-object, if the currently active/selected Aspect is of type \a Spreadsheet.
+	returns a pointer to a Spreadsheet-object, if the currently active Mdi-Subwindow is \a SpreadsheetView.
 	Otherwise returns \a 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const{
-	Spreadsheet* t=0;
-	if ( m_currentAspect )
-  		t=qobject_cast<Spreadsheet*>(m_currentAspect);
-
-	return t;
+	QMdiSubWindow* win =  m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
+	
+	AbstractPart* part = qobject_cast<PartMdiView*>(win)->part();
+	return  qobject_cast<Spreadsheet*>(part);
 }
 
 /*!
-	returns a pointer to a Worksheet-object, if the currently active/selected Aspect is of type \a Worksheet.
+	returns a pointer to a Spreadsheet-object, if the currently active Mdi-Subwindow is \a WorksheetView
 	Otherwise returns \a 0.
 */
 Worksheet* MainWin::activeWorksheet() const{
-	Worksheet* w=0;
-	if ( m_currentAspect )
-  		w=qobject_cast<Worksheet*>(m_currentAspect);
-
-	return w;
+	QMdiSubWindow* win =  m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
+	
+	AbstractPart* part = qobject_cast<PartMdiView*>(win)->part();
+	return  qobject_cast<Worksheet*>(part);
 }
 
 /*!
@@ -803,10 +816,11 @@ void MainWin::projectChanged(){
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 	PartMdiView *view = qobject_cast<PartMdiView*>(win);
-	if (!view) return;
-	emit partActivated(view->part());
-	m_projectExplorer->setCurrentAspect(view->part());
+	if (!view)
+		return;
+
 	updateGUI();
+	m_projectExplorer->setCurrentAspect(view->part());
 }
 
 void MainWin::handleAspectAdded(const AbstractAspect *aspect){
@@ -888,7 +902,6 @@ void MainWin::newMatrix(){
 void MainWin::newFolder() {
 	Folder * folder = new Folder(tr("Folder %1").arg(1));
 	this->addAspectToProject(folder);
-// 	updateGUI();
 }
 
 
@@ -1048,18 +1061,18 @@ void MainWin::exportDialog(){
 	}
 }
 
-bool MainWin::hasSheet(const QModelIndex & index) const{
-	int rows = index.model()->rowCount(index);
-	AbstractAspect *aspect;
-	for (int i=0; i<rows; i++) {
-		QModelIndex currentChild = index.child(i, 0);
-		hasSheet(currentChild);
-		aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
-		if (aspect->inherits("Worksheet") || aspect->inherits("Spreadsheet"))
-				return true;
-	}
-	return false;
-}
+// bool MainWin::hasSheet(const QModelIndex & index) const{
+// 	int rows = index.model()->rowCount(index);
+// 	AbstractAspect *aspect;
+// 	for (int i=0; i<rows; i++) {
+// 		QModelIndex currentChild = index.child(i, 0);
+// 		hasSheet(currentChild);
+// 		aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
+// 		if (aspect->inherits("Worksheet") || aspect->inherits("Spreadsheet"))
+// 				return true;
+// 	}
+// 	return false;
+// }
 
 /*!
 	adds a new file data source to the current project.
@@ -1103,97 +1116,6 @@ void MainWin::expandAspect(const AbstractAspect* aspect) const{
 	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
 	  this->expandAspect(child);
 	}
-}
-
-/*!
-	adds a new plot to the current worksheet.
-*/
-void MainWin::newPlotActionTriggered(QAction* action){
-// 	Plot::PlotType type;
-// 	QString name=action->objectName();
-// 	kDebug()<<name<<endl;
-// 	if (name == "new_2D_plot")
-// 		type=Plot::PLOT2D;
-// 	else if (name == "new_2D_surface_plot")
-// 		type=Plot::PLOTSURFACE;
-// 	else if (name == "new_2D_polar_plot")
-// 		type=Plot::PLOTPOLAR;
-// 	else
-// 		type=Plot::PLOT3D;
-// 
-// 	this->ensureSheet();
-// 	Worksheet* w=activeWorksheet();
-// 	if (w){
-// 		//w->createPlot(type);
-// 		this->updateGUI();
-// 	}
-}
-
-/*!
-	shows the \a FunctionPlotDialog.
-	Creates a data set from a function and adds it to the current Worksheet or Spreadsheet.
-*/
-void MainWin::functionPlotActionTriggered(QAction* action){
-// 	Plot::PlotType type;
-// 	QString name=action->objectName();
-// 	if (name == "new_2D_function_plot")
-// 		type=Plot::PLOT2D;
-// 	else if (name == "new_2D_surface_function_plot")
-// 		type=Plot::PLOTSURFACE;
-// 	else if (name == "new_2D_polar_function_plot")
-// 		type=Plot::PLOTPOLAR;
-// 	else
-// 		type=Plot::PLOT3D;
-// 
-// 	this->ensureSheet();
-// 
-// 	FunctionPlotDialog* dlg = new FunctionPlotDialog(this, type);
-// 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
-// //TODO	model->setFolderSelectable(false);
-// 	dlg->setModel( model );
-//  	dlg->setCurrentIndex( m_projectExplorer->currentIndex());
-// 
-// 	if ( dlg->exec() == QDialog::Accepted ) {
-// 		Set set(Set::SET2D);
-// 		dlg->saveSet(&set);
-// 		QModelIndex index=dlg->currentIndex();
-// 		AbstractAspect * aspect = static_cast<AbstractAspect *>(index.internalPointer());
-// 		Worksheet* w=0;
-// 		w=qobject_cast<Worksheet*>(aspect);
-// 		if (w!=0){
-// 			//w->addSet(set, type);
-// 		}else{
-// 			//TODO
-// // 			Spreadsheet* t=0;
-// // 			if (t!=0){
-// // 				t->addSet(set, type);
-// 		}
-// 	}
-}
-
-void MainWin::dataPlotActionTriggered(QAction* action){
-// 	Plot::PlotType type;
-// 	QString name=action->objectName();
-// 	if (name == "new_2D_data_plot")
-// 		type=Plot::PLOT2D;
-// 	else if (name == "new_2D_surface_data_plot")
-// 		type=Plot::PLOTSURFACE;
-// 	else if (name == "new_2D_polar_data_plot")
-// 		type=Plot::PLOTPOLAR;
-// 	else
-// 		type=Plot::PLOT3D;
-// 
-// 	this->ensureSheet();
-// 
-// 	DataPlotDialog* dlg = new DataPlotDialog(this, type);
-// 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
-// 	//TODO model->setFolderSelectable(false);
-// 	dlg->setModel( model );
-// 	dlg->setCurrentIndex( m_projectExplorer->currentIndex());
-// 
-// 	if ( dlg->exec() == QDialog::Accepted ) {
-// 		//TODO
-// 	}
 }
 
 void MainWin::settingsDialog(){

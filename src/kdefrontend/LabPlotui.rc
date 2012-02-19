@@ -14,6 +14,9 @@
 <Action name="toggle_properties_explorer_dock"/>
 </ToolBar>
 
+<ToolBar name="worksheet_toolbar" ></ToolBar>
+<ToolBar name="spreadsheet_toolbar" ></ToolBar>
+
 <MenuBar>
 <Menu name="file" ><text>&amp;File</text>
 <Menu name="new"><text>&amp;New</text>
@@ -26,28 +29,6 @@
 	<Action name="new_file_datasource" />
 	<Action name="new_database_datasource" />
 	<Separator/>
-<!--	<Menu name="new_plot"><text>New Plot</text>
-		<Action name="new_2D_plot" />
-		<Action name="new_2D_surface_plot" />
-		<Action name="new_2D_polar_plot" />
-		 <Separator/>
-		 <Action name="new_3D_plot" />
-	</Menu>
-	<Menu name="new_function_plot"><text>New Function Plot</text>
-		<Action name="new_2D_function_plot" />
-		<Action name="new_2D_surface_function_plot" />
-		<Action name="new_2D_polar_function_plot" />
-		 <Separator/>
-		 <Action name="new_3D_function_plot" />
-	</Menu>
-		<Menu name="new_data_plot"><text>New Data Plot</text>
-		<Action name="new_2D_data_plot" />
-		<Action name="new_2D_surface_data_plot" />
-		<Action name="new_2D_polar_data_plot" />
-		 <Separator/>
-		 <Action name="new_3D_data_plot" />
-	</Menu>
-	<Separator/>-->
 	<Action name="new_project" />
 </Menu>
 <Action name="import" />
@@ -60,12 +41,10 @@
 	<Action name="history" />
 </Menu>
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
-<Menu name="worksheet"><text>&amp;Worksheet</text>
-	<Action name="axes" />
-</Menu>
-<Menu name="analysis"><text>&amp;Analysis</text></Menu>
-<Menu name="drawing"><text>&amp;Drawing</text></Menu>
-<Menu name="script"><text>&amp;Script</text></Menu>
+<Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
+<!-- <Menu name="analysis"><text>&amp;Analysis</text></Menu> -->
+<!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
+<!-- <Menu name="script"><text>&amp;Script</text></Menu> -->
 <Menu name="windows"><text>&amp;Windows</text>
 <Action name="close window" />
 <Action name="close all windows" />

@@ -34,7 +34,6 @@
 #include <KXmlGuiWindow>
 #include <KRecentFilesAction>
 #include "core/PartMdiView.h"
-#include <QModelIndex>
 
 class AbstractAspect;
 class AspectTreeModel;
@@ -60,9 +59,6 @@ public:
 	MainWin(QWidget *   parent = 0, const QString& filename=0);
 	~MainWin();
 
-	Spreadsheet* activeSpreadsheet() const;
-	Worksheet* activeWorksheet() const;
-
 private:
 	QMdiArea *m_mdiArea;
 	Project *m_project;
@@ -72,7 +68,7 @@ private:
 	QDockWidget* m_propertiesDock;
 	AbstractAspect * m_currentAspect;
 	Folder * m_currentFolder;
-	QString m_fileName; //name of the file to be opened (command line argument)
+	QString m_fileName;
 	QString m_undoViewEmptyLabel;
 
 	KRecentFilesAction* m_recentProjectsAction;
@@ -140,9 +136,11 @@ private:
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	bool hasSheet(const QModelIndex & index) const;
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	void addAspectToProject(AbstractAspect* aspect);
+
+	Spreadsheet* activeSpreadsheet() const;
+	Worksheet* activeWorksheet() const;
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
@@ -168,9 +166,6 @@ private slots:
 	void exportDialog();
 	void projectDialog();
 	void settingsDialog();
-	void newPlotActionTriggered(QAction*);
-	void functionPlotActionTriggered(QAction*);
-	void dataPlotActionTriggered(QAction*);
 	void projectChanged();
 
 	void newFolder();
@@ -195,11 +190,6 @@ private slots:
 	void updateMdiWindowVisibility();
 	void toggleDockWidget(QAction*) const;
 	void expandAspect(const AbstractAspect*) const;
-	
-	void startTestCode();
-
-signals:
-	void partActivated(AbstractPart*);
 };
 
 #endif
