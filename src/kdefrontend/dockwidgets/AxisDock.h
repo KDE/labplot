@@ -47,7 +47,7 @@ private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
 	
-	LabelWidget* labelWidget	;
+	LabelWidget* labelWidget;
 	bool m_dataChanged;
 	bool m_initializing;
 
