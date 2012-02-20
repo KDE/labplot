@@ -146,8 +146,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	//QTimer::singleShot(0, this, SLOT(init()));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
-	ui.gridLayout_5->addWidget(templateHandler, 0, 0);
-	templateHandler->show();
+	ui.gridLayout_5->addWidget(templateHandler, 1, 1, 1, 1);
 	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
 	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 
