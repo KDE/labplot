@@ -46,6 +46,11 @@ private:
 	Ui::LabelWidget ui;
 	ScalableTextLabel *m_label;
 
+signals:
+	void dataChanged(bool);
+
+private slots:
+	void slotDataChanged();
 };
 
 #endif //LABELWIDGET_H

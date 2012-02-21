@@ -88,7 +88,10 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	
 
 	//"Title"-tab
-//	connect( labelWidget, SIGNAL(dataChanged(bool)), this, SLOT(slotDataChanged()) );
+	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+ 	labelWidget=new LabelWidget(ui.tabTitle);
+	hboxLayout->addWidget(labelWidget);
+	connect( labelWidget, SIGNAL(dataChanged(bool)), this, SLOT(titleChanged()) );
 
 	//"Major ticks"-tab
 	connect( ui.cbMajorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksDirectionChanged(int)) );
@@ -158,11 +161,6 @@ AxisDock::~AxisDock(){}
 
 void AxisDock::init(){
 	m_initializing=true;
-
-	//create a LabelWidget in the "Title"-tab
-	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
- 	labelWidget=new LabelWidget(ui.tabTitle);
-	hboxLayout->addWidget(labelWidget);
 
 	//Validators
 	ui.lePositionOffset->setValidator( new QDoubleValidator(ui.lePositionOffset) );
@@ -419,6 +417,14 @@ void AxisDock::scalingFactorChanged(){
   foreach(Axis* axis, m_axesList){
 	axis->setScalingFactor(scalingFactor);
   }
+}
+
+// "Title"-tab
+void AxisDock::titleChanged(){
+  if (m_initializing)
+	return;
+  
+	//TODO
 }
 
 // "Line"-tab

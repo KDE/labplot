@@ -31,8 +31,8 @@
 
 #include "ui_axisdock.h"
 
-class LabelWidget;
 class Axis;
+class LabelWidget;
 
 class AxisDock : public QWidget{
     Q_OBJECT
@@ -66,6 +66,9 @@ private slots:
 	void endChanged();
 	void zeroOffsetChanged();
 	void scalingFactorChanged();
+
+	//"Title"-tab
+	void titleChanged();
 
 	//Line-Tab
   	void lineStyleChanged(int);

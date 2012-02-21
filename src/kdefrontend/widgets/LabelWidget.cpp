@@ -2,8 +2,9 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2008 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+                                    (replace * with @ in the email addresses)
     Description          : label settings widget
 
  ***************************************************************************/
@@ -27,6 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "LabelWidget.h"
+#include "backend/worksheet/ScalableTextLabel.h"
 #include <KDebug>
 
 /*!
@@ -39,6 +41,8 @@
 // see legacy/LabelWidget.cpp
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
+	
+	connect( ui.leRotation, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
 }
 
 LabelWidget::~LabelWidget() {}
@@ -48,7 +52,10 @@ void LabelWidget::setLabel(ScalableTextLabel *label) {
 
 	//TODO: set ui elements
 	// alignment
+	ui.leRotation->setText( QString::number(label->rotationAngle()) );
+
 	// background
+	
 	//text
 
 }
@@ -58,3 +65,7 @@ void LabelWidget::setLabel(ScalableTextLabel *label) {
 //**********************************************************
 
 //TODO
+
+void LabelWidget::slotDataChanged(){
+	emit dataChanged(true);
+}
