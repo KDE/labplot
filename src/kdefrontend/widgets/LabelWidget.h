@@ -30,16 +30,21 @@
 #define LABELWIDGET_H
 
 #include "ui_labelwidget.h"
+
 class Label;
+class ScalableTextLabel;
 
 class LabelWidget: public QWidget{
 	Q_OBJECT
 
 public:
-	LabelWidget(QWidget *parent);
+	LabelWidget(QWidget *);
 	~LabelWidget();
+	void setLabel(ScalableTextLabel *);
+
 private:
 	Ui::LabelWidget ui;
+	ScalableTextLabel *m_label;
 
 };
 

@@ -31,13 +31,30 @@
 
 /*!
 	\class LabelWidget
- 	\brief Widget for editing the properties of a Label object.
+ 	\brief Widget for editing the properties of a Scalable Text Label object.
 
  	\ingroup kdefrontend
  */
+
+// see legacy/LabelWidget.cpp
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 }
 
 LabelWidget::~LabelWidget() {}
 
+void LabelWidget::setLabel(ScalableTextLabel *label) {
+	m_label = label;
+
+	//TODO: set ui elements
+	// alignment
+	// background
+	//text
+
+}
+
+//**********************************************************
+//****************** SLOTS *******************************
+//**********************************************************
+
+//TODO
