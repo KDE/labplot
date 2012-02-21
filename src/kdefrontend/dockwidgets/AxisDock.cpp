@@ -32,6 +32,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "../TemplateHandler.h"
 #include "worksheet/Worksheet.h"
+#include "kdefrontend/widgets/LabelWidget.h"
 #include <KMessageBox>
 #include <QTimer>
 
@@ -158,10 +159,10 @@ AxisDock::~AxisDock(){}
 void AxisDock::init(){
 	m_initializing=true;
 
-// 	//create a LabelWidget in the "Title"-tab
-//     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
-// 	labelWidget=new LabelWidget(ui.tabTitle);
-//     hboxLayout->addWidget(labelWidget);
+	//create a LabelWidget in the "Title"-tab
+	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+ 	labelWidget=new LabelWidget(ui.tabTitle);
+	hboxLayout->addWidget(labelWidget);
 
 	//Validators
 	ui.lePositionOffset->setValidator( new QDoubleValidator(ui.lePositionOffset) );

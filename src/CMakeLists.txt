@@ -29,14 +29,14 @@ set(GUI_SOURCES
 )
 
 set(UI_SOURCES
-	${KDEFRONTEND_DIR}/ui/columndialog.ui
-	${KDEFRONTEND_DIR}/ui/exportwidget.ui
-	${KDEFRONTEND_DIR}/ui/functionwidget.ui
+#	${KDEFRONTEND_DIR}/ui/columndialog.ui
+#	${KDEFRONTEND_DIR}/ui/exportwidget.ui
+#	${KDEFRONTEND_DIR}/ui/functionwidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
-	${KDEFRONTEND_DIR}/ui/legendwidget.ui
-	${KDEFRONTEND_DIR}/ui/plotstylewidget.ui
- 	${KDEFRONTEND_DIR}/ui/plotsurfacestylewidget.ui
- 	${KDEFRONTEND_DIR}/ui/projectdialog.ui
+#	${KDEFRONTEND_DIR}/ui/legendwidget.ui
+#	${KDEFRONTEND_DIR}/ui/plotstylewidget.ui
+#	${KDEFRONTEND_DIR}/ui/plotsurfacestylewidget.ui
+	${KDEFRONTEND_DIR}/ui/projectdialog.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
@@ -45,7 +45,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
-	${KDEFRONTEND_DIR}/ui/dockwidgets/plotareadock.ui
+#	${KDEFRONTEND_DIR}/ui/dockwidgets/plotareadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
