@@ -1,70 +1,68 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>LabelWidget</class>
- <widget class="QWidget" name="LabelWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="LabelWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>427</width>
+    <width>525</width>
     <height>448</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QGroupBox" name="gbAlignment" >
-     <property name="title" >
+    <widget class="QGroupBox" name="gbAlignment">
+     <property name="title">
       <string>Alignment</string>
      </property>
-     <layout class="QGridLayout" >
-      <property name="horizontalSpacing" >
+     <layout class="QGridLayout">
+      <property name="spacing">
        <number>3</number>
       </property>
-      <property name="verticalSpacing" >
-       <number>3</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="lPosition" >
-        <property name="text" >
+      <item row="0" column="0">
+       <widget class="QLabel" name="lPosition">
+        <property name="text">
          <string>Position</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2" >
-       <widget class="QComboBox" name="cbPosition" >
+      <item row="0" column="1" colspan="2">
+       <widget class="QComboBox" name="cbPosition">
         <item>
-         <property name="text" >
+         <property name="text">
           <string>left</string>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string>center</string>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string>right</string>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string>custom</string>
          </property>
         </item>
        </widget>
       </item>
-      <item row="0" column="3" >
+      <item row="0" column="3">
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType" >
+        <property name="sizeType">
          <enum>QSizePolicy::Fixed</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
           <height>20</height>
@@ -72,35 +70,35 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="4" >
-       <widget class="QLabel" name="lPositionX" >
-        <property name="text" >
+      <item row="0" column="4">
+       <widget class="QLabel" name="lPositionX">
+        <property name="text">
          <string>x:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="5" >
-       <widget class="QLineEdit" name="lePositionX" >
-        <property name="enabled" >
+      <item row="0" column="5">
+       <widget class="QLineEdit" name="lePositionX">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="0" column="6" >
+      <item row="0" column="6">
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType" >
+        <property name="sizeType">
          <enum>QSizePolicy::Fixed</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>16</width>
           <height>20</height>
@@ -108,40 +106,43 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="7" >
-       <widget class="QLabel" name="lPositionY" >
-        <property name="text" >
+      <item row="0" column="7">
+       <widget class="QLabel" name="lPositionY">
+        <property name="text">
          <string>y:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="8" >
-       <widget class="QLineEdit" name="lePositionY" >
-        <property name="enabled" >
+      <item row="0" column="8">
+       <widget class="QLineEdit" name="lePositionY">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="lRotation" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="lRotation">
+        <property name="text">
          <string>Rotation</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QLineEdit" name="leRotation" />
-      </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="lDegree" >
-        <property name="text" >
+      <item row="1" column="1" colspan="2">
+       <widget class="QSpinBox" name="sbRotation">
+        <property name="suffix">
          <string>°</string>
+        </property>
+        <property name="maximum">
+         <number>360</number>
+        </property>
+        <property name="singleStep">
+         <number>5</number>
         </property>
        </widget>
       </item>
@@ -149,24 +150,27 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="gbBackground" >
-     <property name="title" >
+    <widget class="QGroupBox" name="gbBackground">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
       <string>Background</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="lFilling" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lFilling">
+        <property name="text">
          <string>Filling</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
+      <item row="0" column="1">
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>41</width>
           <height>20</height>
@@ -174,36 +178,36 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="2" >
-       <widget class="QRadioButton" name="rbFilling0" >
-        <property name="text" >
+      <item row="0" column="2">
+       <widget class="QRadioButton" name="rbFilling0">
+        <property name="text">
          <string>transparent</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" >
-       <widget class="QRadioButton" name="rbFilling1" >
-        <property name="text" >
+      <item row="0" column="3">
+       <widget class="QRadioButton" name="rbFilling1">
+        <property name="text">
          <string>color</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="4" >
-       <widget class="KColorButton" name="kcbFillingColor" >
-        <property name="enabled" >
+      <item row="0" column="4">
+       <widget class="KColorButton" name="kcbFillingColor">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="color" >
+        <property name="color">
          <color>
           <red>255</red>
           <green>255</green>
           <blue>255</blue>
          </color>
         </property>
-        <property name="defaultColor" >
+        <property name="defaultColor">
          <color>
           <red>255</red>
           <green>255</green>
@@ -212,16 +216,16 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QCheckBox" name="chbBox" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="chbBox">
+        <property name="text">
          <string>Bounding box</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QCheckBox" name="chbShadow" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="chbShadow">
+        <property name="text">
          <string>Shadow</string>
         </property>
        </widget>
@@ -230,44 +234,47 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="gbText" >
-     <property name="title" >
+    <widget class="QGroupBox" name="gbText">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
       <string>Text</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="lFont" >
-        <property name="text" >
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lFont">
+        <property name="text">
          <string>Font</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2" >
-       <widget class="KFontRequester" name="kfontRequester" />
+      <item row="0" column="1" colspan="2">
+       <widget class="KFontRequester" name="kfontRequester"/>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="lFontColor" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="lFontColor">
+        <property name="text">
          <string>Color</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2" >
-       <widget class="KColorButton" name="kcbTextColor" />
+      <item row="1" column="1" colspan="2">
+       <widget class="KColorButton" name="kcbTextColor"/>
       </item>
-      <item row="2" column="0" >
-       <widget class="QCheckBox" name="chbTex" >
-        <property name="text" >
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="chbTex">
+        <property name="text">
          <string>Tex-syntax</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
+      <item row="2" column="1">
        <spacer>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
           <height>20</height>
@@ -275,100 +282,91 @@
         </property>
        </spacer>
       </item>
-      <item row="2" column="2" >
-       <widget class="QFrame" name="frameFontOptions" >
-        <property name="frameShape" >
+      <item row="2" column="2">
+       <widget class="QFrame" name="frameFontOptions">
+        <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="frameShadow" >
+        <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>0</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin">
           <number>0</number>
          </property>
          <item>
-          <widget class="QPushButton" name="bFontBold" >
-           <property name="minimumSize" >
+          <widget class="QPushButton" name="bFontBold">
+           <property name="minimumSize">
             <size>
              <width>0</width>
              <height>30</height>
             </size>
            </property>
-           <property name="maximumSize" >
+           <property name="maximumSize">
             <size>
              <width>30</width>
              <height>30</height>
             </size>
            </property>
-           <property name="font" >
+           <property name="font">
             <font>
              <weight>75</weight>
              <bold>true</bold>
             </font>
            </property>
-           <property name="checkable" >
+           <property name="checkable">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="bFontItalic" >
-           <property name="maximumSize" >
+          <widget class="QPushButton" name="bFontItalic">
+           <property name="maximumSize">
             <size>
              <width>30</width>
              <height>30</height>
             </size>
            </property>
-           <property name="font" >
+           <property name="font">
             <font>
              <italic>true</italic>
             </font>
            </property>
-           <property name="checkable" >
+           <property name="checkable">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="bFontUnderline" >
-           <property name="maximumSize" >
+          <widget class="QPushButton" name="bFontUnderline">
+           <property name="maximumSize">
             <size>
              <width>30</width>
              <height>30</height>
             </size>
            </property>
-           <property name="font" >
+           <property name="font">
             <font>
              <underline>true</underline>
             </font>
            </property>
-           <property name="checkable" >
+           <property name="checkable">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
           <spacer>
-           <property name="orientation" >
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeType" >
+           <property name="sizeType">
             <enum>QSizePolicy::Fixed</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>15</width>
              <height>18</height>
@@ -377,40 +375,40 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="bFontSuperscript" >
-           <property name="maximumSize" >
+          <widget class="QPushButton" name="bFontSuperscript">
+           <property name="maximumSize">
             <size>
              <width>30</width>
              <height>30</height>
             </size>
            </property>
-           <property name="checkable" >
+           <property name="checkable">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="bFontSubscript" >
-           <property name="maximumSize" >
+          <widget class="QPushButton" name="bFontSubscript">
+           <property name="maximumSize">
             <size>
              <width>30</width>
              <height>30</height>
             </size>
            </property>
-           <property name="checkable" >
+           <property name="checkable">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
           <spacer>
-           <property name="orientation" >
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeType" >
+           <property name="sizeType">
             <enum>QSizePolicy::Fixed</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>15</width>
              <height>18</height>
@@ -419,8 +417,8 @@
           </spacer>
          </item>
          <item>
-          <widget class="QComboBox" name="cbSmallGreekLetters" >
-           <property name="maximumSize" >
+          <widget class="QComboBox" name="cbSmallGreekLetters">
+           <property name="maximumSize">
             <size>
              <width>70</width>
              <height>16777215</height>
@@ -429,8 +427,8 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbBigGreekLetters" >
-           <property name="maximumSize" >
+          <widget class="QComboBox" name="cbBigGreekLetters">
+           <property name="maximumSize">
             <size>
              <width>70</width>
              <height>16777215</height>
@@ -439,8 +437,8 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbSymbolLetters" >
-           <property name="maximumSize" >
+          <widget class="QComboBox" name="cbSymbolLetters">
+           <property name="maximumSize">
             <size>
              <width>70</width>
              <height>16777215</height>
@@ -451,8 +449,8 @@
         </layout>
        </widget>
       </item>
-      <item row="3" column="0" colspan="3" >
-       <widget class="QTextEdit" name="teLabel" />
+      <item row="3" column="0" colspan="3">
+       <widget class="QTextEdit" name="teLabel"/>
       </item>
      </layout>
     </widget>

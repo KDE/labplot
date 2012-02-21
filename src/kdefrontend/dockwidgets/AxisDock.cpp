@@ -214,6 +214,8 @@ void AxisDock::setAxes(QList<Axis*> list){
   	m_axesList=list;
   	Axis* axis=list.first();
   
+	labelWidget->setLabel(axis->title());
+
   //if there are more then one axis in the list, disable the tab "general"
   if (list.size()==1){
 	ui.lName->setEnabled(true);
@@ -894,8 +896,9 @@ void AxisDock::labelsOpacityChanged(int value){
   }  
 }
 
-
-/* Settings */
+/**************************************************/
+/********* Settings *******************************/
+/**************************************************/
 
 void AxisDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Axis" );
@@ -915,6 +918,7 @@ void AxisDock::loadConfig(KConfig& config){
   	ui.leScalingFactor->setText( QString::number( group.readEntry("ScalingFactor", axis->scalingFactor())) );
 
 	//Title
+	labelWidget->loadConfig(group);	
 
 	//Line
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) axis->linePen().style()) );
@@ -950,6 +954,7 @@ void AxisDock::loadConfig(KConfig& config){
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, group.readEntry("MinorTicksColor", axis->minorTicksPen().color()) );
 
 	//Extra ticks
+	//TODO
 
 	// Tick label
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) axis->labelsPosition()) );
@@ -992,6 +997,7 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("ScalingFactor", ui.leScalingFactor->text());
 
 	//Title
+	labelWidget->saveConfig(group);	
 
 	//Line
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
@@ -1022,6 +1028,7 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("MinorTicksOpacity", ui.sbMinorTicksOpacity->value()/100);
 
 	//Extra ticks
+	// TODO
 
 	// Tick label
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
@@ -1034,7 +1041,8 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("LabelsSuffix", ui.leLabelsSuffix->text());
 	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value()/100);
 
-	//Grid: TODO (see load())	
+	//Grid
+	// TODO (see load())	
 
 	config.sync();
 }

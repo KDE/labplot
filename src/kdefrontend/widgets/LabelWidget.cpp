@@ -42,7 +42,7 @@
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
-	connect( ui.leRotation, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
+	connect( ui.sbRotation, SIGNAL(valueChanged(const QString&)), this, SLOT(slotDataChanged()) );
 }
 
 LabelWidget::~LabelWidget() {}
@@ -52,7 +52,7 @@ void LabelWidget::setLabel(ScalableTextLabel *label) {
 
 	//TODO: set ui elements
 	// alignment
-	ui.leRotation->setText( QString::number(label->rotationAngle()) );
+	ui.sbRotation->setValue( label->rotationAngle() );
 
 	// background
 	
@@ -61,11 +61,27 @@ void LabelWidget::setLabel(ScalableTextLabel *label) {
 }
 
 //**********************************************************
-//****************** SLOTS *******************************
+//******************** SLOTS *******************************
 //**********************************************************
 
 //TODO
 
 void LabelWidget::slotDataChanged(){
 	emit dataChanged(true);
+}
+
+//**********************************************************
+//******************** SETTINGS ****************************
+//**********************************************************
+
+void LabelWidget::loadConfig(KConfigGroup &group) {
+	if (m_label == NULL)
+		return;
+	//TODO
+	ui.sbRotation->setValue( group.readEntry("TitleRotation", m_label->rotationAngle()) );
+}
+
+void LabelWidget::saveConfig(KConfigGroup &group) {
+	//TODO
+	group.writeEntry("TitleRotation", ui.sbRotation->value());
 }

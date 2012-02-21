@@ -44,7 +44,7 @@ int main (int argc, char *argv[]) {
 			ki18n("LabPlot"), LVERSION,
 			ki18n("An application for plotting and analysis of 2d and 3d functions and data."),
 			KAboutData::License_GPL,
-			ki18n("(c) 2007-2010") );
+			ki18n("(c) 2007-2012") );
 	aboutData.addAuthor(ki18n("Stefan Gerlach"), ki18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
 	aboutData.addAuthor(ki18n("Alexander Semke"), ki18n("developer"), "alexander.semke@web.de", 0);
 

@@ -87,6 +87,9 @@ void Axis::init() {
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
+
+	d->title = new ScalableTextLabel();
+//TODO	d->title->loadConfig(group);
 	
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
@@ -119,6 +122,7 @@ void Axis::init() {
 
 Axis::~Axis() {
 	delete d_ptr;
+//	delete d->title;
 }
 
 QGraphicsItem *Axis::graphicsItem() const {
@@ -231,6 +235,8 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, start, start);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, end, end);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset);
+
+CLASS_SHARED_D_READER_IMPL(Axis, ScalableTextLabel*, title, title);
 
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity);

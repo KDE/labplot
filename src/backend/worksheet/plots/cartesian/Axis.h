@@ -33,6 +33,7 @@
 
 #include "worksheet/AbstractWorksheetElement.h"
 #include "lib/macros.h"
+class ScalableTextLabel;
 
 class AxisPrivate;
 class Axis: public AbstractWorksheetElement {
@@ -66,6 +67,8 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, end, End);
 		BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor);
 		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset);
+
+		POINTER_D_ACCESSOR_DECL(ScalableTextLabel, title, Title);
 		
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity);

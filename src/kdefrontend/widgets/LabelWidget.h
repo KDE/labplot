@@ -41,6 +41,8 @@ public:
 	LabelWidget(QWidget *);
 	~LabelWidget();
 	void setLabel(ScalableTextLabel *);
+	void loadConfig(KConfigGroup&);
+	void saveConfig(KConfigGroup&);
 
 private:
 	Ui::LabelWidget ui;
