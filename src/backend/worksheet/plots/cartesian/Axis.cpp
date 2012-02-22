@@ -28,14 +28,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/Worksheet.h"
-#include "worksheet/plots/cartesian/Axis.h"
-#include "worksheet/ScalableTextLabel.h"
-#include "worksheet/plots/cartesian/AxisPrivate.h"
-#include "worksheet/plots/AbstractCoordinateSystem.h"
-#include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "worksheet/plots/AbstractPlot.h"
-#include "lib/commandtemplates.h"
+#include "../../Worksheet.h"
+#include "Axis.h"
+#include "../../ScalableTextLabel.h"
+#include "AxisPrivate.h"
+#include "../AbstractCoordinateSystem.h"
+#include "CartesianCoordinateSystem.h"
+#include "../AbstractPlot.h"
+#include "../../../lib/commandtemplates.h"
 #include <QBrush>
 #include <QPen>
 #include <QPainter>
@@ -840,13 +840,18 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
 
+	QRectF rect;
 	foreach (ScalableTextLabel *textLabel, labels) {
-		QRectF rect = textLabel->boundingRect();
+		rect = textLabel->boundingRect();
 		rect.translate(labelsOffset);
 		boundingRectangle |= rect;
 		axisShape.addRect(rect);
 	}
 	
+	rect = title->boundingRect();
+	boundingRectangle |= rect;
+	axisShape.addRect(rect);
+		
 	update();
 }
 
@@ -857,6 +862,9 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
   if (!isVisible())
 	return;
   
+  //draw the axis title
+	title->paint(painter);
+
   //draw the line
   if (linePen.style() != Qt::NoPen){
 	painter->setOpacity(lineOpacity);
