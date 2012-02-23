@@ -29,11 +29,13 @@
  ***************************************************************************/
 
 #include "CartesianPlotDock.h"
-#include "worksheet/plots/cartesian/CartesianPlot.h"
-#include "worksheet/plots/PlotArea.h"
-#include "worksheet/Worksheet.h"
-#include "kdefrontend/GuiTools.h"
+#include "../../backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "../../backend/worksheet/plots/PlotArea.h"
+#include "../../backend/worksheet/Worksheet.h"
+#include "../widgets/LabelWidget.h"
+#include "../GuiTools.h"
 #include "../TemplateHandler.h"
+
 #include <QTimer>
 #include <KUrlCompletion>
 
@@ -66,6 +68,12 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	
 	KUrlCompletion *comp = new KUrlCompletion();
     ui.kleBackgroundFileName->setCompletionObject(comp);
+	
+	//"Title"-tab
+	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+ 	labelWidget=new LabelWidget(ui.tabTitle);
+	hboxLayout->addWidget(labelWidget);
+	connect( labelWidget, SIGNAL(dataChanged(bool)), this, SLOT(titleChanged()) );
 
 	//adjust layouts in the tabs
 	QGridLayout* layout;

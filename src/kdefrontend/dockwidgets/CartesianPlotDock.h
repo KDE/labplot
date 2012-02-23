@@ -34,6 +34,7 @@
 #include "ui_cartesianplotdock.h"
 
 class CartesianPlot;
+class LabelWidget;
 
 class CartesianPlotDock: public QWidget{
 	Q_OBJECT
@@ -45,6 +46,7 @@ public:
 private:
 	Ui::CartesianPlotDock ui;
 	QList<CartesianPlot*> m_plotList;
+	LabelWidget* labelWidget;
 	bool m_initializing;
 	
 private slots:
