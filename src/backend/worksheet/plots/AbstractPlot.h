@@ -36,6 +36,7 @@
 
 class AbstractCoordinateSystem;
 class PlotArea;
+class ScalableTextLabel;
 
 class AbstractPlotPrivate:public WorksheetElementContainerPrivate{
 };
@@ -49,6 +50,7 @@ class AbstractPlot: public WorksheetElementContainer {
 
 		AbstractCoordinateSystem* coordinateSystem() const;
 		PlotArea* plotArea();
+		ScalableTextLabel* title();
 
 	public slots:
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
@@ -57,6 +59,7 @@ class AbstractPlot: public WorksheetElementContainer {
 		AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd);
 		AbstractCoordinateSystem* m_coordinateSystem;
 		PlotArea* m_plotArea;
+		ScalableTextLabel *m_title;
 
 	private:
 		void init();

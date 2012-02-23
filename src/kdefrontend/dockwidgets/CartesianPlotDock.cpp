@@ -138,6 +138,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	m_plotList = list;
 
 	CartesianPlot* plot=list.first();
+	
+	labelWidget->setLabel(plot->title());
   
   //if there is more then one curve in the list, disable the tab "general"
   if (list.size()==1){
@@ -465,6 +467,9 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", plot->rect().width()), Worksheet::Centimeter));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", plot->rect().height()), Worksheet::Centimeter));
 
+	//Title
+	labelWidget->loadConfig(group);	
+
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) plot->plotArea()->backgroundType()) );
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) plot->plotArea()->backgroundColorStyle()) );
@@ -491,6 +496,9 @@ void CartesianPlotDock::saveConfig(KConfig& config){
 	group.writeEntry("Top", Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter));
 	group.writeEntry("Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
 	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
+
+	//Title
+	labelWidget->saveConfig(group);	
 
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());

@@ -69,6 +69,10 @@ AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const{
 	return m_coordinateSystem;
 }
 
+ScalableTextLabel* AbstractPlot::title(){
+	return m_title;
+}
+
 void AbstractPlot::handlePageResize(double horizontalRatio, double verticalRatio){
 	m_coordinateSystem->handlePageResize(horizontalRatio, verticalRatio);
 	m_plotArea->handlePageResize(horizontalRatio, verticalRatio);

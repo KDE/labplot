@@ -28,6 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "LabelWidget.h"
+#include "worksheet/Worksheet.h"
 #include "../../backend/worksheet/ScalableTextLabel.h"
 #include <KDebug>
 #include <QMenu>
@@ -67,7 +68,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontSuperscript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubscript->setIcon( KIcon("format-text-subscript") );
 	
-	//Alignment
+	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
 	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(const QString&)), this, SLOT(slotDataChanged()) );
@@ -129,13 +130,35 @@ void LabelWidget::slotDataChanged(){
 //**********************************************************
 
 void LabelWidget::loadConfig(KConfigGroup &group) {
-	if (m_label == NULL)
+	if(m_label == NULL)
 		return;
+
+	//Text
 	//TODO
+
+	// Geometry
+	//TODO: saved in ScalableTextLabel ?
+//	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->position()) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("TitlePositionXValue", m_label->position().x()),Worksheet::Centimeter) );
+//	ui.cbPositionY->setCurrentIndex( group.readEntry("TitlePositionY", (int) m_label->positionY()) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("TitlePositionYValue", m_label->position().y()),Worksheet::Centimeter) );
+	//group.writeEntry("TitleOffset", ui.sbOffset->value());
+	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("TitleHorizontalAlignment", (int) m_label->horizontalAlignment()) );
+	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("TitleVerticalAlignment", (int) m_label->verticalAlignment()) );
 	ui.sbRotation->setValue( group.readEntry("TitleRotation", m_label->rotationAngle()) );
 }
 
 void LabelWidget::saveConfig(KConfigGroup &group) {
+	//Text
 	//TODO
+
+	// Geometry
+	group.writeEntry("TitlePositionX", ui.cbPositionX->currentIndex());
+	group.writeEntry("TitlePositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("TitlePositionY", ui.cbPositionY->currentIndex());
+	group.writeEntry("TitlePositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+	//group.writeEntry("TitleOffset", ui.sbOffset->value());
+	group.writeEntry("TitleHorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
+	group.writeEntry("TitleVerticalAlignment", ui.cbVerticalAlignment->currentIndex());
 	group.writeEntry("TitleRotation", ui.sbRotation->value());
 }

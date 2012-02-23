@@ -33,6 +33,7 @@
 #include "worksheet/plots/cartesian/Axis.h"
 #include "worksheet/plots/PlotArea.h"
 #include "worksheet/Worksheet.h"
+#include "../../ScalableTextLabel.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -65,6 +66,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
 void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
+	m_title = new ScalableTextLabel();
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
 
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
