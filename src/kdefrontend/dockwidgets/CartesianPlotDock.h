@@ -59,6 +59,9 @@ private slots:
 	void visibilityChanged(int);
 	void geometryChanged();
 
+	//"Title"-tab
+	void titleChanged();
+
 	//"Coordinate system"-tab
 	void toggleXBreak(int);
 	void toggleYBreak(int);

@@ -231,6 +231,14 @@ void CartesianPlotDock::geometryChanged(){
 	m_plotList.first()->setRect(rect);
 }
 
+// "Title"-tab
+void CartesianPlotDock::titleChanged(){
+	  if (m_initializing)
+		          return;
+
+	          //TODO
+}
+
 // "Coordinate system"-tab
 void CartesianPlotDock::toggleXBreak(int state){
 	if (m_initializing)
