@@ -52,6 +52,8 @@ signals:
 	void dataChanged(bool);
 
 private slots:
+	void positionXChanged(int);
+	void positionYChanged(int);
 	void slotDataChanged();
 };
 

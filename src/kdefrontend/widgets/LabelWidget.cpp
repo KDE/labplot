@@ -28,8 +28,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "LabelWidget.h"
-#include "backend/worksheet/ScalableTextLabel.h"
+#include "../../backend/worksheet/ScalableTextLabel.h"
 #include <KDebug>
+#include <QMenu>
+
 
 /*!
 	\class LabelWidget
@@ -42,7 +44,39 @@
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
+	QGridLayout* layout =static_cast<QGridLayout*>(this->layout());
+  	layout->setContentsMargins(2,2,2,2);
+	layout->setHorizontalSpacing(2);
+	layout->setVerticalSpacing(2);
+
+
+		//Populate the menus //TODO
+	QMenu* menu = new QMenu(this);
+	QFont symbol("Symbol", 12, QFont::Bold);
+ 	menu->setFont(symbol);
+	for(int i=97;i<122;i++)
+		menu->addAction( QChar(i) );
+	
+	ui.tbSmallGreekLetters->setMenu(menu);
+	ui.tbSmallGreekLetters->setDefaultAction(menu->menuAction());
+
+	//Icons
+	ui.tbFontBold->setIcon( KIcon("format-text-bold") );
+	ui.tbFontItalic->setIcon( KIcon("format-text-italic") );
+	ui.tbFontUnderline->setIcon( KIcon("format-text-underline") );
+	ui.tbFontSuperscript->setIcon( KIcon("format-text-superscript") );
+	ui.tbFontSubscript->setIcon( KIcon("format-text-subscript") );
+	
+	//Alignment
+	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
+	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(const QString&)), this, SLOT(slotDataChanged()) );
+	
+	//TODO remove later
+	ui.cbPositionX->setCurrentIndex(0);
+	ui.cbPositionY->setCurrentIndex(0);
+	ui.lOffset->hide();
+	ui.sbOffset->hide();	
 }
 
 LabelWidget::~LabelWidget() {}
@@ -57,14 +91,34 @@ void LabelWidget::setLabel(ScalableTextLabel *label) {
 	// background
 	
 	//text
-
 }
 
 //**********************************************************
 //******************** SLOTS *******************************
 //**********************************************************
-
 //TODO
+
+/*!
+	called if the current position of the title is changed in the combobox.
+	Enables/disables the lineedits for x- and y-coordinates if the "custom"-item is selected/deselected
+*/
+void LabelWidget::positionXChanged(int index){
+	if (index == ui.cbPositionX->count()-1 ){
+		ui.sbPositionX->setEnabled(true);
+	}else{
+		ui.sbPositionX->setEnabled(false);
+	}
+	emit dataChanged(true);
+}
+
+void LabelWidget::positionYChanged(int index){
+	if (index == ui.cbPositionY->count()-1 ){
+		ui.sbPositionY->setEnabled(true);
+	}else{
+		ui.sbPositionY->setEnabled(false);
+	}
+	emit dataChanged(true);
+}
 
 void LabelWidget::slotDataChanged(){
 	emit dataChanged(true);
