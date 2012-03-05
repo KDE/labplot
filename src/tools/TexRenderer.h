@@ -34,7 +34,8 @@
 class TexRenderer{
 
 public:
-  static bool createImage( const QString&, QImage& );
+  static bool renderImageLaTeX( const QString&, QImage& );
+  static bool renderImageTeXvc( const QString&, QImage& );
 
 };
 

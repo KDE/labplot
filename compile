@@ -6,7 +6,12 @@ else
 	mkdir build
 fi
 
-cd build && cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make -j 2
+cd build
+
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make -j 2
+
+# optional:
+#make install
 
 # for building Qt Frontend (SciDAVis) use
 

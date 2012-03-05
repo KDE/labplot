@@ -33,9 +33,22 @@
 #include <KDebug>
 #include <QDir>
 
+// use latex to render LaTeX text
+// see tex2im, etc.
+bool TexRenderer::renderImageLaTeX( const QString& texString, QImage& image){
+	//TODO
+	// create tmp dir
+	// create latex skel
+	// latex -interaction=batchmode out.tex > /dev/null
+	// dvips -o $tmpdir/out.eps -E $tmpdir/out.dvi 2> /dev/null
+	// convert .. $tmpdir/out.eps $tmpdir/out.png
+	// read png file
+	// clean up
+}
 
+// using texvc to render LaTeX text
 //TODO make this function using Qt only?
-bool TexRenderer::createImage( const QString& texString, QImage& image){
+bool TexRenderer::renderImageTeXvc( const QString& texString, QImage& image){
 	kDebug()<<""<<endl;
 	KTempDir *tmpDir = new KTempDir();
 	QString dirName = tmpDir->name();
