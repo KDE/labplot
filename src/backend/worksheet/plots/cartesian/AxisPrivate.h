@@ -56,7 +56,7 @@ class AxisPrivate: public QGraphicsItem {
 		qreal lineOpacity;
 
 		// Title
-		ScalableTextLabel* title;
+		TextLabel* title;
 
 		// Ticks
 		Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
@@ -98,7 +98,7 @@ class AxisPrivate: public QGraphicsItem {
 		QPainterPath axisShape;
 
 		// extra tick label
-		QList<ScalableTextLabel *> labels;
+		QList<TextLabel *> labels;
 
 		QPen pen;
 

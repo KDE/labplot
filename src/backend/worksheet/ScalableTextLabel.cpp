@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ScalableTextLabel.cpp
+    File                 : TextLabel.cpp
     Project              : LabPlot/SciDAVis
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
@@ -28,6 +28,7 @@
  ***************************************************************************/
 
 #include "worksheet/ScalableTextLabel.h"
+#include "Worksheet.h"
 
 #include <QFontMetricsF>
 #include <QTextLayout>
@@ -37,15 +38,15 @@
 
 
 /**
- * \class ScalableTextLabel
+ * \class TextLabel
  * \brief A one-line text label supporting floating point font sizes.
  *
  * 
  */
 
-class ScalableTextLabelPrivate {
+class TextLabelPrivate {
 	public:
-		ScalableTextLabelPrivate(ScalableTextLabel *owner) : q(owner) {
+		TextLabelPrivate(TextLabel *owner) : q(owner) {
 		}
 
 		qreal fontSize;
@@ -54,64 +55,64 @@ class ScalableTextLabelPrivate {
 		QColor textColor;
 		QString text;
 		QPointF position;
-		ScalableTextLabel::HorizontalAlignment horizontalAlignment;
-		ScalableTextLabel::VerticalAlignment verticalAlignment;
+		TextLabel::HorizontalAlignment horizontalAlignment;
+		TextLabel::VerticalAlignment verticalAlignment;
 
 		QTextLayout *layout;
 		QRectF boundingRectangle;
 
-		ScalableTextLabel * const q;
+		TextLabel * const q;
 };
 
-ScalableTextLabel::ScalableTextLabel()
-		: d_ptr(new ScalableTextLabelPrivate(this)) {
+TextLabel::TextLabel()
+		: d_ptr(new TextLabelPrivate(this)) {
 	init();
 }
 
-ScalableTextLabel::ScalableTextLabel(ScalableTextLabelPrivate *dd)
+TextLabel::TextLabel(TextLabelPrivate *dd)
 		: d_ptr(dd) {
 	init();
 }
 
-void ScalableTextLabel::init() {
-	Q_D(ScalableTextLabel);
+void TextLabel::init() {
+	Q_D(TextLabel);
 
 	d->rotationAngle = 0;
-	d->fontSize = 10;
+	d->fontSize = Worksheet::convertToSceneUnits(10.0, Worksheet::Point);
 	d->textColor = QColor(Qt::black);
 	d->font.setPointSizeF(1000);
 
 	d->layout = NULL;
 }
 
-ScalableTextLabel::~ScalableTextLabel() {
+TextLabel::~TextLabel() {
 	delete d_ptr;
 }
 
-BASIC_SHARED_D_READER_IMPL(ScalableTextLabel, qreal, fontSize, fontSize);
-BASIC_SHARED_D_READER_IMPL(ScalableTextLabel, qreal, rotationAngle, rotationAngle);
-CLASS_SHARED_D_READER_IMPL(ScalableTextLabel, QFont, font, font);
-CLASS_SHARED_D_READER_IMPL(ScalableTextLabel, QColor, textColor, textColor);
-CLASS_SHARED_D_READER_IMPL(ScalableTextLabel, QString, text, text);
-CLASS_SHARED_D_READER_IMPL(ScalableTextLabel, QPointF, position, position);
+BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, fontSize, fontSize);
+BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QFont, font, font);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, textColor, textColor);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QString, text, text);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QPointF, position, position);
 
-void ScalableTextLabel::setFontSize(qreal size) {
-	Q_D(ScalableTextLabel);
+void TextLabel::setFontSize(qreal size) {
+	Q_D(TextLabel);
 	
 	d->fontSize = size;
 	d->boundingRectangle = QRectF();
 	
 }
 
-void ScalableTextLabel::setRotationAngle(qreal angle) {
-	Q_D(ScalableTextLabel);
+void TextLabel::setRotationAngle(qreal angle) {
+	Q_D(TextLabel);
 
 	d->rotationAngle = angle;
 	d->boundingRectangle = QRectF();
 }
 
-void ScalableTextLabel::setFont(const QFont &font) {
-	Q_D(ScalableTextLabel);
+void TextLabel::setFont(const QFont &font) {
+	Q_D(TextLabel);
 
 	QFont fontCopy = font;
 	fontCopy.setPointSizeF(1000);
@@ -125,14 +126,14 @@ void ScalableTextLabel::setFont(const QFont &font) {
 	}
 }
 
-void ScalableTextLabel::setTextColor(const QColor &color) {
-	Q_D(ScalableTextLabel);
+void TextLabel::setTextColor(const QColor &color) {
+	Q_D(TextLabel);
 
 	d->textColor = color;
 }
 
-void ScalableTextLabel::setText(const QString &text) {
-	Q_D(ScalableTextLabel);
+void TextLabel::setText(const QString &text) {
+	Q_D(TextLabel);
 
 	if (text != d->text) {
 		d->text = text;
@@ -143,35 +144,35 @@ void ScalableTextLabel::setText(const QString &text) {
 	}
 }
 
-void ScalableTextLabel::setPosition(const QPointF &pos) {
-	Q_D(ScalableTextLabel);
+void TextLabel::setPosition(const QPointF &pos) {
+	Q_D(TextLabel);
 
 	d->position = pos;
 	d->boundingRectangle = QRectF();
 }
 
-ScalableTextLabel::HorizontalAlignment ScalableTextLabel::horizontalAlignment() const {
-	Q_D(const ScalableTextLabel);
+TextLabel::HorizontalAlignment TextLabel::horizontalAlignment() const {
+	Q_D(const TextLabel);
 
 	return d->horizontalAlignment;
 }
 
-ScalableTextLabel::VerticalAlignment ScalableTextLabel::verticalAlignment() const {
-	Q_D(const ScalableTextLabel);
+TextLabel::VerticalAlignment TextLabel::verticalAlignment() const {
+	Q_D(const TextLabel);
 
 	return d->verticalAlignment;
 }
 
-void ScalableTextLabel::setAlignment(HorizontalAlignment hAlign, VerticalAlignment vAlign) {
-	Q_D(ScalableTextLabel);
+void TextLabel::setAlignment(HorizontalAlignment hAlign, VerticalAlignment vAlign) {
+	Q_D(TextLabel);
 
 	d->horizontalAlignment = hAlign;
 	d->verticalAlignment = vAlign;
 	d->boundingRectangle = QRectF();
 }
 
-void ScalableTextLabel::paint(QPainter *painter) {
-	Q_D(ScalableTextLabel);
+void TextLabel::paint(QPainter *painter) {
+	Q_D(TextLabel);
 
 	if (d->layout == NULL)
 		createTextLayout();
@@ -221,8 +222,8 @@ void ScalableTextLabel::paint(QPainter *painter) {
 	painter->restore();
 }
 
-void ScalableTextLabel::createTextLayout() {
-	Q_D(ScalableTextLabel);
+void TextLabel::createTextLayout() {
+	Q_D(TextLabel);
 
 	delete d->layout;
 	d->layout = new QTextLayout(d->text, d->font);
@@ -237,8 +238,8 @@ void ScalableTextLabel::createTextLayout() {
 	d->layout->endLayout();
 }
 
-QRectF ScalableTextLabel::boundingRect() {
-	Q_D(ScalableTextLabel);
+QRectF TextLabel::boundingRect() {
+	Q_D(TextLabel);
 
 	if (d->text.isEmpty())
 		return QRectF();

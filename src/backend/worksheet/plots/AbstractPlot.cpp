@@ -69,7 +69,7 @@ AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const{
 	return m_coordinateSystem;
 }
 
-ScalableTextLabel* AbstractPlot::title(){
+TextLabel* AbstractPlot::title(){
 	return m_title;
 }
 

@@ -37,7 +37,7 @@
 #include "lib/macros.h"
 
 #include <QWidget>
-
+#include <QDebug>
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
 #else
@@ -142,6 +142,7 @@ QIcon Worksheet::icon() const {
  * \return true on success, otherwise false (e.g. part has no actions).
  */
 bool Worksheet::fillProjectMenu(QMenu * menu) {
+	Q_UNUSED(menu);
 	// TODO
 	return false;
 }
@@ -438,6 +439,9 @@ void WorksheetPrivate::updateLayout(){
 		if (count>layoutRowCount*layoutColumnCount)
 			layoutRowCount = count/layoutColumnCount;
 		
+		qDebug()<<m_scene;
+		qDebug()<<m_scene->sceneRect();
+		qDebug()<<m_scene->sceneRect().height();
 		w=(m_scene->sceneRect().height()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
 		WorksheetElementContainer* elem;

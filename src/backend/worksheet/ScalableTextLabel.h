@@ -27,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ScalableTextLabel_h
-#define ScalableTextLabel_h
+#ifndef TEXTLABEL_H
+#define TEXTLABEL_H
 
 #include <QObject>
 #include <QFont>
@@ -36,13 +36,13 @@
 #include <QPen>
 #include "lib/macros.h"
 
-class ScalableTextLabelPrivate;
-class ScalableTextLabel: public QObject {
+class TextLabelPrivate;
+class TextLabel: public QObject {
 	Q_OBJECT
 
 	public:
-		ScalableTextLabel();
-		~ScalableTextLabel();
+		TextLabel();
+		~TextLabel();
 
 		enum HorizontalAlignmentFlags {
 			hAlignLeft = 0x01,
@@ -70,20 +70,18 @@ class ScalableTextLabel: public QObject {
 
 		QRectF boundingRect();
 
-		typedef ScalableTextLabelPrivate Private;
+		typedef TextLabelPrivate Private;
 
     	void paint(QPainter *painter);
 
 	protected:
-		ScalableTextLabelPrivate * const d_ptr;
-		ScalableTextLabel(ScalableTextLabelPrivate *dd);
+		TextLabelPrivate * const d_ptr;
+		TextLabel(TextLabelPrivate *dd);
 
 	private:
-    	Q_DECLARE_PRIVATE(ScalableTextLabel)
+    	Q_DECLARE_PRIVATE(TextLabel)
 		void init();
 		void createTextLayout();
 };
 
 #endif
-
-

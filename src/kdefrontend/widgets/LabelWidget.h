@@ -32,7 +32,7 @@
 #include "ui_labelwidget.h"
 
 class Label;
-class ScalableTextLabel;
+class TextLabel;
 
 class LabelWidget: public QWidget{
 	Q_OBJECT
@@ -40,13 +40,13 @@ class LabelWidget: public QWidget{
 public:
 	LabelWidget(QWidget *);
 	~LabelWidget();
-	void setLabel(ScalableTextLabel *);
+	void setLabel(TextLabel *);
 	void loadConfig(KConfigGroup&);
 	void saveConfig(KConfigGroup&);
 
 private:
 	Ui::LabelWidget ui;
-	ScalableTextLabel *m_label;
+	TextLabel *m_label;
 
 signals:
 	void dataChanged(bool);

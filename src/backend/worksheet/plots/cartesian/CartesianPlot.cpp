@@ -66,7 +66,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
 void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	m_title = new ScalableTextLabel();
+	m_title = new TextLabel();
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
 
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system

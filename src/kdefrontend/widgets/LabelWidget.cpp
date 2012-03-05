@@ -82,7 +82,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 
 LabelWidget::~LabelWidget() {}
 
-void LabelWidget::setLabel(ScalableTextLabel *label) {
+void LabelWidget::setLabel(TextLabel *label) {
 	m_label = label;
 
 	//TODO: set ui elements

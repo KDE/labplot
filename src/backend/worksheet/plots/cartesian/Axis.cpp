@@ -88,7 +88,8 @@ void Axis::init() {
 	
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
-	d->title = new ScalableTextLabel();
+	d->title = new TextLabel();
+	d->title->setText(this->name());
 //TODO	d->title->loadConfig(group);
 	
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
@@ -236,7 +237,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, end, end);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset);
 
-CLASS_SHARED_D_READER_IMPL(Axis, ScalableTextLabel*, title, title);
+CLASS_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title);
 
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity);
@@ -841,7 +842,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
 
 	QRectF rect;
-	foreach (ScalableTextLabel *textLabel, labels) {
+	foreach (TextLabel *textLabel, labels) {
 		rect = textLabel->boundingRect();
 		rect.translate(labelsOffset);
 		boundingRectangle |= rect;
@@ -893,7 +894,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
   if (labelsPosition != Axis::NoLabels){
 	painter->setOpacity(labelsOpacity);
 	painter->translate(labelsOffset);
-	foreach (ScalableTextLabel *textLabel, labels)
+	foreach (TextLabel *textLabel, labels)
 	  textLabel->paint(painter);
 	
 	painter->translate(-labelsOffset);
@@ -909,23 +910,23 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 }
 
 void AxisPrivate::addTextLabel(const QString &text, const QPointF &pos) {
-  ScalableTextLabel *label = new ScalableTextLabel();
+  TextLabel *label = new TextLabel();
   label->setText(text);
   label->setPosition(pos);
 
-  ScalableTextLabel::HorizontalAlignment hAlign = ScalableTextLabel::hAlignCenter;
-  ScalableTextLabel::VerticalAlignment vAlign = ScalableTextLabel::vAlignCenter;
+  TextLabel::HorizontalAlignment hAlign = TextLabel::hAlignCenter;
+  TextLabel::VerticalAlignment vAlign = TextLabel::vAlignCenter;
 
   if (orientation == Axis::AxisHorizontal){
 	  if (labelsPosition == Axis::LabelsOut)
-		vAlign =  ScalableTextLabel::vAlignTop;
+		vAlign =  TextLabel::vAlignTop;
 	  else
-		vAlign =  ScalableTextLabel::vAlignBottom;
+		vAlign =  TextLabel::vAlignBottom;
   }else{
 	  if (labelsPosition == Axis::LabelsOut)
-		hAlign =  ScalableTextLabel::hAlignRight;
+		hAlign =  TextLabel::hAlignRight;
 	  else
-		hAlign =  ScalableTextLabel::hAlignLeft;
+		hAlign =  TextLabel::hAlignLeft;
   }
   
   label->setAlignment(hAlign, vAlign);
@@ -933,7 +934,7 @@ void AxisPrivate::addTextLabel(const QString &text, const QPointF &pos) {
 }
 
 void AxisPrivate::restyleLabels() {
-	foreach(ScalableTextLabel *label, labels) {
+	foreach(TextLabel *label, labels) {
 		label->setFontSize(labelsFontSize);
 		label->setRotationAngle(labelsRotationAngle);
 		label->setFont(labelsFont);
