@@ -35,13 +35,32 @@
 
 // use latex to render LaTeX text
 // see tex2im, etc.
-bool TexRenderer::renderImageLaTeX( const QString& texString, QImage& image){
+bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
 	//TODO
-	// create tmp dir
+
+	// create tmp file
+	QTemporaryFile file("labplot_XXXXXX.tex");
+	if(! file.open()) 
+		return false;
+
 	// create latex skel
+	QTextStream out(&file);
+	out<<"\documentclass[12pt]{article}\n\usepackage{color}\n\usepackage[dvips]{graphicx}\n\pagestyle{empty}\n";
+	out<<teXString;
+	out<<"\end{document}";	
+
 	// latex -interaction=batchmode out.tex > /dev/null
-	// dvips -o $tmpdir/out.eps -E $tmpdir/out.dvi 2> /dev/null
-	// convert .. $tmpdir/out.eps $tmpdir/out.png
+       	// file.fileName() returns the unique file name
+	QProcess latexProcess;
+	// TODO: arguments
+	latexProcess.start("latex", QStringList() << "-a -r -g -s");
+	if (!latexProcess.waitForStarted())
+		return false;
+	if (!latexProcess.waitForFinished())
+		return false;
+
+	// "dvips -o out.eps -E out.dvi 2> /dev/null"
+	// "convert .. out.eps out.png"
 	// read png file
 	// clean up
 }
