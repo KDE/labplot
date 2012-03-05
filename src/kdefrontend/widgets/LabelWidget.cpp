@@ -28,8 +28,8 @@
  *                                                                         *
  ***************************************************************************/
 #include "LabelWidget.h"
-#include "worksheet/Worksheet.h"
-#include "../../backend/worksheet/ScalableTextLabel.h"
+#include "../../backend/worksheet/Worksheet.h"
+#include "../../backend/worksheet/TextLabel.h"
 #include <KDebug>
 #include <QMenu>
 

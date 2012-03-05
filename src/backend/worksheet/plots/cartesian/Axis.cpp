@@ -30,7 +30,7 @@
 
 #include "../../Worksheet.h"
 #include "Axis.h"
-#include "../../ScalableTextLabel.h"
+#include "../../TextLabel.h"
 #include "AxisPrivate.h"
 #include "../AbstractCoordinateSystem.h"
 #include "CartesianCoordinateSystem.h"

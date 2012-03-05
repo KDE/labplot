@@ -33,7 +33,7 @@
 #include "worksheet/plots/cartesian/Axis.h"
 #include "worksheet/plots/PlotArea.h"
 #include "worksheet/Worksheet.h"
-#include "../../ScalableTextLabel.h"
+#include "../../TextLabel.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>

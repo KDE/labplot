@@ -87,7 +87,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/AbstractCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/AbstractWorksheetDecorationElement.cpp
 	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
-	${BACKEND_DIR}/worksheet/ScalableTextLabel.cpp
+	${BACKEND_DIR}/worksheet/TextLabel.cpp
 	${BACKEND_DIR}/worksheet/StandardCurveSymbolFactory.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
 	${BACKEND_DIR}/worksheet/WorksheetModel.cpp

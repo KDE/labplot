@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/ScalableTextLabel.h"
+#include "worksheet/TextLabel.h"
 #include "Worksheet.h"
 
 #include <QFontMetricsF>
