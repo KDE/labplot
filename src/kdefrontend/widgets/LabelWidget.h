@@ -54,6 +54,7 @@ signals:
 private slots:
 	void positionXChanged(int);
 	void positionYChanged(int);
+	void texChanged(bool);
 	void slotDataChanged();
 };
 

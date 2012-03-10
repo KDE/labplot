@@ -32,37 +32,61 @@
 #include <KProcess>
 #include <KDebug>
 #include <QDir>
+#include <QTemporaryFile>
 
 // use latex to render LaTeX text
 // see tex2im, etc.
 bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
-	//TODO
-
-	// create tmp file
 	QTemporaryFile file("labplot_XXXXXX.tex");
+	// for debugging
+	//file.setAutoRemove(false);
 	if(! file.open()) 
 		return false;
 
 	// create latex skel
 	QTextStream out(&file);
-	out<<"\documentclass[12pt]{article}\n\usepackage{color}\n\usepackage[dvips]{graphicx}\n\pagestyle{empty}\n";
+	out<<"\\documentclass[12pt]{article}\n\\usepackage{color}\n\\usepackage[dvips]{graphicx}\n\\pagestyle{empty}\n\\begin{document}\n";
 	out<<teXString;
-	out<<"\end{document}";	
+	out<<"\n\\end{document}";
+	out.flush();
 
-	// latex -interaction=batchmode out.tex > /dev/null
-       	// file.fileName() returns the unique file name
+	// latex: TeX -> DVI
 	QProcess latexProcess;
-	// TODO: arguments
-	latexProcess.start("latex", QStringList() << "-a -r -g -s");
+	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForStarted())
 		return false;
 	if (!latexProcess.waitForFinished())
 		return false;
 
-	// "dvips -o out.eps -E out.dvi 2> /dev/null"
-	// "convert .. out.eps out.png"
+	// dvips: DVI -> PS
+	QProcess dvipsProcess;
+	QFileInfo fi(file.fileName());
+	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
+	if (!dvipsProcess.waitForStarted())
+		return false;
+	if (!dvipsProcess.waitForFinished())
+		return false;
+
+	// convert: PS -> PNG
+	QProcess convertProcess;
+	convertProcess.start("convert", QStringList() << "-density" << "150x150" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
+	if (!convertProcess.waitForStarted())
+		return false;
+	if (!convertProcess.waitForFinished())
+		return false;
+
 	// read png file
-	// clean up
+	image.load(fi.completeBaseName()+".png");
+
+	//clean up
+	QFile::remove(fi.completeBaseName()+".png");
+	// also possible: latexmf -C
+	QFile::remove(fi.completeBaseName()+".aux");
+	QFile::remove(fi.completeBaseName()+".log");
+	QFile::remove(fi.completeBaseName()+".dvi");
+	QFile::remove(fi.completeBaseName()+".ps");
+
+	return true;
 }
 
 // using texvc to render LaTeX text

@@ -30,6 +30,7 @@
 #include "LabelWidget.h"
 #include "../../backend/worksheet/Worksheet.h"
 #include "../../backend/worksheet/TextLabel.h"
+#include "tools/TexRenderer.h"
 #include <KDebug>
 #include <QMenu>
 
@@ -73,11 +74,14 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(const QString&)), this, SLOT(slotDataChanged()) );
 	
+	connect( ui.chbTex, SIGNAL(clicked(bool)), this, SLOT(texChanged(bool)) );
+	
 	//TODO remove later
 	ui.cbPositionX->setCurrentIndex(0);
 	ui.cbPositionY->setCurrentIndex(0);
 	ui.lOffset->hide();
-	ui.sbOffset->hide();	
+	ui.sbOffset->hide();
+
 }
 
 LabelWidget::~LabelWidget() {}
@@ -121,6 +125,15 @@ void LabelWidget::positionYChanged(int index){
 	emit dataChanged(true);
 }
 
+void LabelWidget::texChanged(bool checked){
+	if(checked) {
+		// TODO: only for testing
+		QString test("\\frac{\\pi^2}{6}");
+		QImage image;
+		bool status = TexRenderer::renderImageLaTeX(test,image);
+	}
+}
+
 void LabelWidget::slotDataChanged(){
 	emit dataChanged(true);
 }
@@ -137,7 +150,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	//TODO
 
 	// Geometry
-	//TODO: saved in ScalableTextLabel ?
+	//TODO: saved in TextLabel ?
 //	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->position()) );
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("TitlePositionXValue", m_label->position().x()),Worksheet::Centimeter) );
 //	ui.cbPositionY->setCurrentIndex( group.readEntry("TitlePositionY", (int) m_label->positionY()) );
