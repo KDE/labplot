@@ -2,8 +2,9 @@
     File                 : TexRenderer.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    					(use @ for *)
     Description          : TeX renderer class
                            
  ***************************************************************************/
