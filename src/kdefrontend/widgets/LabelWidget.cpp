@@ -30,14 +30,16 @@
 #include "LabelWidget.h"
 #include "../../backend/worksheet/Worksheet.h"
 #include "../../backend/worksheet/TextLabel.h"
-#include "tools/TexRenderer.h"
-#include <KDebug>
+#include "../../tools/TexRenderer.h"
 #include <QMenu>
 
 
 /*!
 	\class LabelWidget
- 	\brief Widget for editing the properties of a Scalable Text Label object.
+ 	\brief Widget for editing the properties of a TextLabel object, mostly used in an an appropriate dock widget.
+ 	
+ 	In order the properties of the label to be shown, \c loadConfig() has to be called with the correspondig KConfigGroup
+ 	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
 
  	\ingroup kdefrontend
  */
@@ -69,88 +71,115 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontSuperscript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubscript->setIcon( KIcon("format-text-subscript") );
 	
+	
+	//SLOTS
+	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
+	
 	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
 	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
-	connect( ui.sbRotation, SIGNAL(valueChanged(const QString&)), this, SLOT(slotDataChanged()) );
+	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
+	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
+	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
 	
-	connect( ui.chbTex, SIGNAL(clicked(bool)), this, SLOT(texChanged(bool)) );
+	connect( ui.chbTex, SIGNAL(clicked(bool)), this, SLOT(texUsedChanged(bool)) );
 	
 	//TODO remove later
-	ui.cbPositionX->setCurrentIndex(0);
-	ui.cbPositionY->setCurrentIndex(0);
 	ui.lOffset->hide();
 	ui.sbOffset->hide();
-
 }
 
 LabelWidget::~LabelWidget() {}
 
-void LabelWidget::setLabel(TextLabel *label) {
+/*!
+	sets the label to be edited to \c label.
+*/
+void LabelWidget::setLabel(TextLabel *label){
 	m_label = label;
-
-	//TODO: set ui elements
-	// alignment
-	ui.sbRotation->setValue( label->rotationAngle() );
-
-	// background
-	
-	//text
 }
 
 //**********************************************************
 //******************** SLOTS *******************************
 //**********************************************************
-//TODO
+void LabelWidget::textChanged(){
+	if (m_initializing)
+		return;
+	
+	m_label->setText(ui.teLabel->toPlainText());
+}
+
+void LabelWidget::texUsedChanged(bool checked){
+	if (m_initializing)
+		return;
+
+	//TODO m_label->setTexIsUsed(checked);
+}
 
 /*!
 	called if the current position of the title is changed in the combobox.
 	Enables/disables the lineedits for x- and y-coordinates if the "custom"-item is selected/deselected
 */
 void LabelWidget::positionXChanged(int index){
+	if (m_initializing)
+		return;
+
 	if (index == ui.cbPositionX->count()-1 ){
 		ui.sbPositionX->setEnabled(true);
 	}else{
 		ui.sbPositionX->setEnabled(false);
 	}
-	emit dataChanged(true);
 }
 
 void LabelWidget::positionYChanged(int index){
+	if (m_initializing)
+		return;
+
 	if (index == ui.cbPositionY->count()-1 ){
 		ui.sbPositionY->setEnabled(true);
 	}else{
 		ui.sbPositionY->setEnabled(false);
 	}
-	emit dataChanged(true);
 }
 
-void LabelWidget::texChanged(bool checked){
-	if(checked) {
-		// TODO: only for testing
-		QString test("\\frac{\\pi^2}{6}");
-		QImage image;
-		bool status = TexRenderer::renderImageLaTeX(test,image);
-	}
+void LabelWidget::customPositionXChanged(double value){
+	if (m_initializing)
+		return;
+
+	QPointF pos = m_label->position();
+	pos.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	m_label->setPosition(pos);
 }
 
-void LabelWidget::slotDataChanged(){
-	emit dataChanged(true);
+void LabelWidget::customPositionYChanged(double value){
+	if (m_initializing)
+		return;
+
+	QPointF pos = m_label->position();
+	pos.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	m_label->setPosition(pos);
+}
+
+void LabelWidget::rotationChanged(int value){
+	if (m_initializing)
+		return;
+
+	m_label->setRotationAngle(value);
 }
 
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
-
+//TODO
 void LabelWidget::loadConfig(KConfigGroup &group) {
 	if(m_label == NULL)
 		return;
 
+	m_initializing = true;
+
 	//Text
-	//TODO
+	ui.teLabel->setPlainText(group.readEntry("LabelText", m_label->text()));
 
 	// Geometry
-	//TODO: saved in TextLabel ?
 //	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->position()) );
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("TitlePositionXValue", m_label->position().x()),Worksheet::Centimeter) );
 //	ui.cbPositionY->setCurrentIndex( group.readEntry("TitlePositionY", (int) m_label->positionY()) );
@@ -159,11 +188,14 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("TitleHorizontalAlignment", (int) m_label->horizontalAlignment()) );
 	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("TitleVerticalAlignment", (int) m_label->verticalAlignment()) );
 	ui.sbRotation->setValue( group.readEntry("TitleRotation", m_label->rotationAngle()) );
+	
+	m_initializing = false;
 }
 
+//TODO
 void LabelWidget::saveConfig(KConfigGroup &group) {
 	//Text
-	//TODO
+	group.writeEntry("LabelText", ui.teLabel->toPlainText());
 
 	// Geometry
 	group.writeEntry("TitlePositionX", ui.cbPositionX->currentIndex());

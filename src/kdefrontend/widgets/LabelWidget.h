@@ -47,15 +47,20 @@ public:
 private:
 	Ui::LabelWidget ui;
 	TextLabel *m_label;
+	bool m_initializing;
 
 signals:
 	void dataChanged(bool);
 
 private slots:
+	void textChanged();
+	void texUsedChanged(bool);
+	
 	void positionXChanged(int);
 	void positionYChanged(int);
-	void texChanged(bool);
-	void slotDataChanged();
+	void customPositionXChanged(double);
+	void customPositionYChanged(double);
+	void rotationChanged(int);
 };
 
 #endif //LABELWIDGET_H
