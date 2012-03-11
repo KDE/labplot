@@ -73,7 +73,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
  	labelWidget=new LabelWidget(ui.tabTitle);
 	hboxLayout->addWidget(labelWidget);
-	connect( labelWidget, SIGNAL(dataChanged(bool)), this, SLOT(titleChanged()) );
 
 	//adjust layouts in the tabs
 	QGridLayout* layout;
@@ -138,9 +137,13 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	m_plotList = list;
 
 	CartesianPlot* plot=list.first();
-	
-	labelWidget->setLabel(plot->title());
   
+	//TODO: decide whether we want to edit multiple label at once.
+	//User selects multiple plots, which are edited in this dock. 
+	//By allowing multiple labels in LabelWidget we can changed e.g. the position (centered etc.) for several title labels very quickly.
+	//Provide LabelWidget::setLabels(QList<TextLabel>) if we want to have this feature.
+	labelWidget->setLabel(plot->title());
+	
   //if there is more then one curve in the list, disable the tab "general"
   if (list.size()==1){
 	ui.lName->setEnabled(true);
@@ -231,14 +234,6 @@ void CartesianPlotDock::geometryChanged(){
 	
 	QRectF rect(x,y,w,h);
 	m_plotList.first()->setRect(rect);
-}
-
-// "Title"-tab
-void CartesianPlotDock::titleChanged(){
-	  if (m_initializing)
-		          return;
-
-	          //TODO
 }
 
 // "Coordinate system"-tab
