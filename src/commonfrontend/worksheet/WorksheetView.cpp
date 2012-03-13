@@ -283,9 +283,9 @@ void WorksheetView::initMenus(){
 	m_layoutMenu = new QMenu(i18n("Layout"));
 	m_gridMenu = new QMenu(i18n("Grid"));
 	m_gridMenu->setIcon(QIcon(KIcon("view-grid")));
-#endif
 
 	m_plotMenu->addAction(addPlotAction);
+#endif
 		
 	m_zoomMenu->addAction(zoomInAction);
 	m_zoomMenu->addAction(zoomOutAction);
@@ -348,9 +348,11 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addAction(zoomModeAction);
 	toolBar->addAction(selectionModeAction);
 	
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	toolBar->addSeparator();
 	toolBar->addAction(addPlotAction);
-	
+#endif
+
 	toolBar->addSeparator();
 	toolBar->addAction(verticalLayoutAction);
 	toolBar->addAction(horizontalLayoutAction);

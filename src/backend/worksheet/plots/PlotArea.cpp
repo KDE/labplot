@@ -37,8 +37,10 @@
 #include "lib/macros.h"
 #include <QPainter>
 #include <QDebug>
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KConfig>
 #include <KConfigGroup>
+#endif
 
 /**
  * \class PlotArea
@@ -67,6 +69,7 @@ void PlotArea::init(){
 	d->rect = QRectF(0, 0, 1, 1);
 	d->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KConfig config;
 	KConfigGroup group = config.group( "PlotArea" );
 	//Background
@@ -82,6 +85,7 @@ void PlotArea::init(){
 			group.readEntry("BorderWidth", 0.0), 
 			(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
+#endif
 }
 
 QGraphicsItem *PlotArea::graphicsItem() const{

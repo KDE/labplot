@@ -34,7 +34,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QDir>
 
 #include "filters/AsciiFilter.h"
-#include "commonfrontend/spreadsheet//SpreadsheetView.h"
+#include "../../commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>

@@ -74,6 +74,7 @@ Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate 
 void Axis::init() {
 	Q_D(Axis);
 
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	// only settings general to all axes
 	KConfig config;
 	KConfigGroup group = config.group( "Axis" );
@@ -116,6 +117,7 @@ void Axis::init() {
 	d->labelsFontSize = 24;
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
+#endif
 	
 	retransform();
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);

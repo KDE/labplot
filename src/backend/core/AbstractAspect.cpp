@@ -670,7 +670,7 @@ QMenu *AbstractAspect::createContextMenu(){
 	QAction *action;
 	const QStyle *widget_style = qApp->style();
 	action = menu->addAction(QObject::tr("&Remove"), this, SLOT(remove()));
-	action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
+	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
 #else
 	menu->addAction( KStandardAction::cut(this) );
 	menu->addAction(KStandardAction::copy(this));

@@ -4,7 +4,7 @@ CONFIG += plugin static
 DEPENDPATH += . .. ../../backend ../../commonfrontend ../../commonfrontend/worksheet ../../backend/worksheet ../core ../../backend/core
 INCLUDEPATH += .. ../../backend ../../commonfrontend
 TARGET = ../$$qtLibraryTarget(scidavis_worksheet)
-QT += xml
+QT += xml svg
 
 debug {
 	CONFIG -= static
@@ -49,20 +49,20 @@ SOURCES += \
 	WorksheetModel.cpp \
 	WorksheetGraphicsScene.cpp \
 	AbstractWorksheetElement.cpp \
-	AbstractPlot.cpp \
-	DecorationPlot.cpp \
+	plots/AbstractPlot.cpp \
+#	DecorationPlot.cpp \
 	WorksheetElementContainer.cpp \
 	WorksheetElementGroup.cpp \
 	WorksheetRectangleElement.cpp \
 	AbstractCoordinateSystem.cpp \
-	CartesianCoordinateSystem.cpp \
-	Axis.cpp \
-	XYCurve.cpp \
+	plots/cartesian/CartesianCoordinateSystem.cpp \
+	plots/cartesian/Axis.cpp \
+	plots/cartesian/XYCurve.cpp \
 	AbstractCurveSymbol.cpp \
 	symbols/EllipseCurveSymbol.cpp \
 	StandardCurveSymbolFactory.cpp \
 	symbols/PathCurveSymbol.cpp \
 	AbstractWorksheetDecorationElement.cpp \ 
-	PlotArea.cpp \
-	ScalableTextLabel.cpp \
+	plots/PlotArea.cpp \
+	TextLabel.cpp \
 

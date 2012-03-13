@@ -29,10 +29,9 @@
  *                                                                         *
  ***************************************************************************/
 #include "spreadsheet/Spreadsheet.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "../../commonfrontend/spreadsheet/SpreadsheetView.h"
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#else
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
@@ -40,7 +39,7 @@
 
 #include <QApplication>
 #include <QDateTime>
-#include<QMenu>
+#include <QMenu>
 #include <QDebug>
 /*!
   \class Spreadsheet
@@ -84,6 +83,7 @@ Spreadsheet::~Spreadsheet()
 }
 
 void Spreadsheet::init() {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KConfig config;
 	KConfigGroup group = config.group( "Spreadsheet" );
 
@@ -91,6 +91,7 @@ void Spreadsheet::init() {
 
 	if (m_view)
 		((SpreadsheetView*) m_view)->showComments(group.readEntry("ShowComments", FALSE));
+#endif
 }
 
 /*! Constructs a primary view on me.

@@ -71,6 +71,7 @@ Worksheet::~Worksheet() {
 }
 
 void Worksheet::init() {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KConfig config;
 	KConfigGroup group = config.group( "Worksheet" );
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
@@ -90,6 +91,7 @@ void Worksheet::init() {
 	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(1, Centimeter));
 	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
+#endif
 }
 
 /*!
