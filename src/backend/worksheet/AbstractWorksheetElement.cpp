@@ -133,10 +133,11 @@ QPainterPath AbstractWorksheetElement::shapeFromPath(const QPainterPath &path, c
 
 QMenu *AbstractWorksheetElement::createContextMenu() {
 	QMenu *menu = AbstractAspect::createContextMenu();
-    
-	menu->addSeparator();
-	menu->addMenu(m_drawingOrderMenu);
-	menu->addSeparator();
+    if (parentAspect()->childCount<AbstractWorksheetElement>()>1){
+		menu->addSeparator();
+		menu->addMenu(m_drawingOrderMenu);
+		menu->addSeparator();
+	}
 
 	return menu;
 }
