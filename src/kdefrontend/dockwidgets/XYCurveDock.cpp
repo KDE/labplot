@@ -2,7 +2,7 @@
     File                 : XYCurveDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2012 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for XYCurve properties
@@ -399,6 +399,21 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	
 	leName->setText(curve->name());
 	leComment->setText(curve->comment());
+	
+	if (curve->xColumn())
+		cbXColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
+	else
+		cbXColumn->setCurrentModelIndex(QModelIndex());
+	
+	if (curve->yColumn())
+		cbYColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yColumn()) );
+	else
+		cbYColumn->setCurrentModelIndex(QModelIndex());
+	
+	if (curve->valuesColumn())
+		cbValuesColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->valuesColumn()) );
+	else
+		cbValuesColumn->setCurrentModelIndex(QModelIndex());
   }else{
 	lName->setEnabled(false);
 	leName->setEnabled(false);
@@ -418,7 +433,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 
   //show the properties of the first curve
 	KConfig config("", KConfig::SimpleConfig);
-// 	loadConfig(config);
+	loadConfig(config);
 
 	//TODO connect the signals of the first column with the slots of this class.
 
@@ -1138,12 +1153,9 @@ void XYCurveDock::loadConfig(KConfig& config){
   	XYCurve* curve=m_curvesList.first();
 
   	//General
-  	chkVisible->setChecked(group.readEntry("Visible", curve->isVisible()));
-	//TODO: how to load QModelIndex?
-  	cbXColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
-  	cbYColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yColumn()) );
-	//cbXColumn->setCurrentModelIndex( group.readEntry("XColumn", (int) m_aspectTreeModel->modelIndexOfAspect(curve->xColumn())) );
-	//cbYColumn->setCurrentModelIndex( group.readEntry("YColumn", m_aspectTreeModel->modelIndexOfAspect(curve->yColumn())) );
+	//we don't load/save the settings in the general-tab, since they are not style related.
+	//It doesn't make sense to load/save them in the template.
+	//This data is read in XYCurveDock::setCurves().
 
   	//Line
 	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", (int) curve->lineType()) );
@@ -1193,10 +1205,9 @@ void XYCurveDock::loadConfig(KConfig& config){
 void XYCurveDock::saveConfig(KConfig& config){
 	KConfigGroup group = config.group( "XYCurve" );
 
-	group.writeEntry("Visible", chkVisible->isChecked());
-	//TODO: how to save QModelIndex?
-	//group.writeEntry("XColumn", cbXColumn->currentModelIndex() );
-	//group.writeEntry("YColumn", cbYColumn->currentModelIndex() );
+  	//General
+	//we don't load/save the settings in the general-tab, since they are not style related.
+	//It doesn't make sense to load/save them in the template.
 
 	group.writeEntry("LineType", ui.cbLineType->currentIndex());
 	group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value() );
