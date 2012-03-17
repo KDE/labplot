@@ -30,7 +30,10 @@
 #ifndef CARTESIANPLOT_H
 #define CARTESIANPLOT_H
 
-#include "worksheet/plots/AbstractPlot.h"
+#include "../AbstractPlot.h"
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+class KAction;
+#endif
 class CartesianPlotPrivate;
 
 class CartesianPlot:public AbstractPlot{
@@ -39,13 +42,33 @@ class CartesianPlot:public AbstractPlot{
 	public:
 		CartesianPlot(const QString &name);
 		~CartesianPlot();
+		
 		QIcon icon() const;
+		QMenu* createContextMenu();
 		void setRect(const QRectF&);
 
 	private:
 		void init();
-		Q_DECLARE_PRIVATE(CartesianPlot)
+		void initActions();
+		void initMenus();
 
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		QAction* addCurveAction;
+		QAction* addHorizontalAxisAction;
+		QAction* addVerticalAxisAction;
+#else
+		KAction* addCurveAction;
+		KAction* addHorizontalAxisAction;
+		KAction* addVerticalAxisAction;
+#endif
+		
+		QMenu* addNewMenu;
+
+		Q_DECLARE_PRIVATE(CartesianPlot)
+	
+	private slots:
+		void addCurve();
+	
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 };

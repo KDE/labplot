@@ -28,17 +28,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/plots/cartesian/CartesianPlot.h"
-#include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "worksheet/plots/cartesian/Axis.h"
-#include "worksheet/plots/PlotArea.h"
-#include "worksheet/Worksheet.h"
+#include "CartesianPlot.h"
+#include "CartesianCoordinateSystem.h"
+#include "Axis.h"
+#include "XYCurve.h"
+#include "../PlotArea.h"
+#include "../../Worksheet.h"
 #include "../../TextLabel.h"
+#include <QDebug>
+#include <QMenu>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
 #else
-#include "KIcon"
+#include <KIcon>
+#include <KAction>
+#include <KLocale>
 #endif
 
 #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
@@ -63,12 +68,19 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
 	init();
 }
 
+CartesianPlot::~CartesianPlot(){
+	delete d_ptr;
+	//TODO delete  children?
+// 	delete m_title;
+// 	delete m_coordinateSystem;
+// 	delete m_plotArea;
+}
+
 void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	m_title = new TextLabel();
-	m_coordinateSystem = new CartesianCoordinateSystem(this);
-
+	
+	//Geometry
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
 	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
@@ -79,6 +91,13 @@ void CartesianPlot::init(){
 	d->rect.setWidth(w);
 	d->rect.setHeight(h);
 
+	//Plot title
+	m_title = new TextLabel();
+	m_title->setText(this->name());
+	addChild(m_title);
+
+	//Coordinate system
+	m_coordinateSystem = new CartesianCoordinateSystem(this);
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
 	QList<CartesianCoordinateSystem::Scale *> scales;
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), x, x+w, 0, 1);
@@ -86,12 +105,14 @@ void CartesianPlot::init(){
 	scales.clear();
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), y+h, y, 0, 1);
 	cSystem ->setYScales(scales);
-	
+
+	//Plot area
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
 // 	m_plotArea->setRect(QRectF(-0.05,-0.05,1.1, 1.1));
 	m_plotArea->setRect(QRectF(0, 0, 1, 1));
 
+	//Axes
 	Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 	addChild(axis);
 	axis->setStart(0);
@@ -135,12 +156,41 @@ void CartesianPlot::init(){
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
 	axis->setLabelsOffset(QPointF(Worksheet::convertToSceneUnits(5.0, Worksheet::Point),0));
+
+	initActions();
+	initMenus();
 }
 
-CartesianPlot::~CartesianPlot() {
-// TODO
+void CartesianPlot::initActions(){
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	addCurveAction = new QAction(tr("xy-curve"), this);
+	addHorizontalAxisAction = new QAction(tr("horizontal axis"), this);
+	addVerticalAxisAction = new QAction(tr("vertical axis"), this);
+#else
+	addCurveAction = new KAction(i18n("xy-curve"), this);
+	addHorizontalAxisAction = new KAction(tr("horizontal axis"), this);
+	addVerticalAxisAction = new KAction(tr("vertical axis"), this);
+#endif
+	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 }
 
+void CartesianPlot::initMenus(){
+	addNewMenu = new QMenu(tr("Add new"));
+	addNewMenu->addAction(addCurveAction);
+	addNewMenu->addSeparator();
+	addNewMenu->addAction(addHorizontalAxisAction);
+	addNewMenu->addAction(addVerticalAxisAction);
+}
+
+QMenu *CartesianPlot::createContextMenu(){
+	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+
+	QAction* firstAction = menu->actions().first();
+	menu->insertMenu(firstAction, addNewMenu);
+	menu->insertSeparator(firstAction);
+
+	return menu;
+}
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -182,5 +232,8 @@ void CartesianPlot::setRect(const QRectF& r){
 }
 
 //################################################################
-//################### Private implementation ##########################
+//################### Slots ##########################
 //################################################################
+void CartesianPlot::addCurve(){
+	this->addChild(new XYCurve("xy-curve"));
+}
