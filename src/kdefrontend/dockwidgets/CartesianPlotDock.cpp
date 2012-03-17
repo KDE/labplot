@@ -120,7 +120,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
-	ui.verticalLayout->addWidget(templateHandler, 0, 0);
+	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
 	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
@@ -452,7 +452,7 @@ void CartesianPlotDock::borderOpacityChanged(int value){
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config){
-	KConfigGroup group = config.group( "PlotArea" );
+	KConfigGroup group = config.group( "CartesianPlot" );
 	CartesianPlot* plot=m_plotList.first();
 
 	//General-tab
@@ -463,7 +463,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", plot->rect().height()), Worksheet::Centimeter));
 
 	//Title
-	labelWidget->loadConfig(group);	
+	labelWidget->loadConfig(group);
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) plot->plotArea()->backgroundType()) );
@@ -483,7 +483,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 }
 
 void CartesianPlotDock::saveConfig(KConfig& config){
-	KConfigGroup group = config.group( "PlotArea" );
+	KConfigGroup group = config.group( "CartesianPlot" );
 
 	//General-tab
 	group.writeEntry("Visible", ui.chkVisible->isChecked());

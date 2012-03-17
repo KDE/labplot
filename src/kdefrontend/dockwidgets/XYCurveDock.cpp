@@ -190,7 +190,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.kcbValuesFontColor, SIGNAL(changed (const QColor &)), this, SLOT(valuesFontColorChanged(const QColor&)) );
 	
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
-	ui.gridLayout_2->addWidget(templateHandler, 0, 0);
+	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
 	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
@@ -415,10 +415,10 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	cbYColumn->setCurrentModelIndex(QModelIndex());
 	cbValuesColumn->setCurrentModelIndex(QModelIndex());
   }
-  
+
   //show the properties of the first curve
 	KConfig config("", KConfig::SimpleConfig);
-	loadConfig(config);
+// 	loadConfig(config);
 
 	//TODO connect the signals of the first column with the slots of this class.
 
