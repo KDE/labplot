@@ -39,6 +39,7 @@
  */
 
 AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot* plot){
+    Q_UNUSED(plot)
 }
 
 AbstractCoordinateSystem::~AbstractCoordinateSystem(){
@@ -93,7 +94,7 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
     qreal y1 = line->y1();
     qreal y2 = line->y2();
 
-	QRectF normalizedRect = rect.normalized();
+//	QRectF normalizedRect = rect.normalized();
     qreal left;
     qreal right;
     qreal top;

@@ -125,7 +125,7 @@ void Axis::init() {
 
 Axis::~Axis() {
 	delete d_ptr;
-//	delete d->title;
+//TODO:	delete d->title;
 }
 
 QGraphicsItem *Axis::graphicsItem() const {
