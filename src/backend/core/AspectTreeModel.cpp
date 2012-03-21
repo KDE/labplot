@@ -239,7 +239,8 @@ void AspectTreeModel::aspectDescriptionChanged(const AbstractAspect *aspect){
 }
 
 void AspectTreeModel::aspectAboutToBeAdded(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect *child){
-	int index = parent->indexOfChild<AbstractAspect>(before);
+    Q_UNUSED(child);
+        int index = parent->indexOfChild<AbstractAspect>(before);
 	if (index == -1)
 	  index = parent->childCount<AbstractAspect>();
 	

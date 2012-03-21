@@ -72,14 +72,14 @@ void AsciiFilter::write(const QString & fileName, AbstractDataSource* dataSource
   loads the predefined filter settings for \c filterName
 */
 void AsciiFilter::loadFilterSettings(const QString& filterName){
-
+    Q_UNUSED(filterName);
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
 void AsciiFilter::saveFilterSettings(const QString& filterName) const{
-
+    Q_UNUSED(filterName);
 }
 
 /*!
@@ -493,7 +493,8 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
     writes the content of \c dataSource to the file \c fileName.
 */
 void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource){
-
+    Q_UNUSED(fileName);
+    Q_UNUSED(dataSource);
 }
 
 Q_EXPORT_PLUGIN2(ioasciifilter, AsciiFilter)
