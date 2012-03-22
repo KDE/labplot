@@ -62,6 +62,7 @@
 */
 
 ProjectExplorer::ProjectExplorer(QWidget *parent){
+    Q_UNUSED(parent);
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);

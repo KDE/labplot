@@ -311,7 +311,8 @@ void SpreadsheetView::connectActions(){
 	* \param rc return code: true on success, otherwise false (e.g. part has no actions).
 	*/
 void SpreadsheetView::fillProjectMenu(QMenu * menu, bool * rc){
-	//TODO
+    Q_UNUSED(menu);
+        //TODO
 	if (rc) *rc = true;
 }
 
@@ -429,7 +430,7 @@ void SpreadsheetView::deselectAll(){
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to){
-	static bool inside = false;
+        static bool inside = false;
 	if (inside) return;
 
 	Q_ASSERT(index == from);

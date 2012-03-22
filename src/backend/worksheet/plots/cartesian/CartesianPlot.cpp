@@ -94,7 +94,7 @@ void CartesianPlot::init(){
 	//Plot title
 	m_title = new TextLabel();
 	m_title->setText(this->name());
-	addChild(m_title);
+//	addChild(m_title);
 
 	//Coordinate system
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
