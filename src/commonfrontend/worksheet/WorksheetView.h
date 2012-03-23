@@ -91,7 +91,7 @@ class WorksheetView : public QGraphicsView{
 	WorksheetView();
 
 	//Menus
-	QMenu* m_plotMenu;
+	QMenu* m_addNewMenu;
 	QMenu* m_zoomMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
@@ -111,6 +111,9 @@ class WorksheetView : public QGraphicsView{
 	QAction* navigationModeAction;
 	QAction* zoomModeAction;
 	QAction* selectionModeAction;
+	
+	QAction* addPlotAction;
+	QAction* addTextLabelAction;
 	
 	QAction* verticalLayoutAction;
 	QAction* horizontalLayoutAction;
@@ -137,6 +140,7 @@ class WorksheetView : public QGraphicsView{
 	KAction* selectionModeAction;
 
 	KAction* addPlotAction;
+	KAction* addTextLabelAction;
 
 	KAction* verticalLayoutAction;
 	KAction* horizontalLayoutAction;
@@ -161,7 +165,7 @@ class WorksheetView : public QGraphicsView{
 	void enableZoomMode();
 	void enableSelectionMode();
 
-	void addPlot();
+	void addNew(QAction*);
 
 	void changeZoom(QAction*);
 	void changeLayout(QAction*);

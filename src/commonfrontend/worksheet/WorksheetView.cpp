@@ -37,6 +37,7 @@
 #include <QImage>
 #include <QToolButton>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "worksheet/WorksheetView.h"
 #include "worksheet/Worksheet.h"
@@ -119,6 +120,7 @@ WorksheetView::WorksheetView(){
 
 
 void WorksheetView::initActions(){
+	QActionGroup* addNewActionGroup = new QActionGroup(this);
 	QActionGroup* zoomActionGroup = new QActionGroup(this);
 	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
 	QActionGroup* layoutActionGroup = new QActionGroup(this);
@@ -129,24 +131,18 @@ void WorksheetView::initActions(){
  //Zoom actions
  zoomInAction = new QAction(tr("Zoom in"), this);
  zoomInAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
- connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
  
  zoomOutAction = new QAction(tr("Zoom out"), this);
  zoomOutAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
- connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
  
  zoomOriginAction = new QAction(tr("Original size"), this);
  zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
- connect(zoomOriginAction, SIGNAL(triggered()), SLOT(zoomOrigin()));
  
  zoomFitPageHeightAction = new QAction(tr("Fit to height"), this);
- connect(zoomFitPageHeightAction, SIGNAL(triggered()), SLOT(zoomFitPageHeight()));
  
  zoomFitPageWidthAction = new QAction(tr("Fit to width"), this);
- connect(zoomFitPageWidthAction, SIGNAL(triggered()), SLOT(zoomFitPageWidth()));
 
  zoomFitSelectionAction = new QAction(tr("Fit to selection"), this);
- connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
  
  // Mouse mode actions 
  navigationModeAction = new QAction(tr("Navigation"), navigationModeAction);
@@ -181,24 +177,18 @@ void WorksheetView::initActions(){
   //Zoom actions
   zoomInAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
   zoomInAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
-//   connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
 
   zoomOutAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), zoomActionGroup);
   zoomOutAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
-//   connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
 
   zoomOriginAction = new KAction(KIcon("zoom-original"), i18n("Original size"), zoomActionGroup);
   zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
-//   connect(zoomOriginAction, SIGNAL(triggered()), SLOT(zoomOrigin()));
 
   zoomFitPageHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
-//   connect(zoomFitPageHeightAction, SIGNAL(triggered()), SLOT(zoomFitPageHeight()));
 
   zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
-//   connect(zoomFitPageWidthAction, SIGNAL(triggered()), SLOT(zoomFitPageWidth()));
   
   zoomFitSelectionAction = new KAction(i18n("Fit to selection"), zoomActionGroup);
-//   connect(zoomFitSelectionAction, SIGNAL(triggered()), SLOT(zoomFitSelection()));
 
   // Mouse mode actions 
   navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigation"), mouseModeActionGroup);
@@ -213,9 +203,9 @@ void WorksheetView::initActions(){
   selectionModeAction->setCheckable(true);
   connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
 
-  //Plot related actions
-  addPlotAction = new KAction(KIcon("office-chart-line"), i18n("xy-plot"), this);
-  connect(addPlotAction, SIGNAL(triggered()), SLOT(addPlot()));
+  //"Add new" related actions
+  addPlotAction = new KAction(KIcon("office-chart-line"), i18n("xy-plot"), addNewActionGroup);
+  addTextLabelAction = new KAction(KIcon("draw-text"), i18n("text label"), addNewActionGroup);
   
   //Layout actions
   verticalLayoutAction = new KAction(KIcon("editvlayout"), i18n("Vertical layout"), layoutActionGroup);
@@ -265,6 +255,7 @@ void WorksheetView::initActions(){
 	//TODO slot
 	snapToGridAction->setCheckable(true);
 #endif
+	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
 	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
 	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
@@ -273,20 +264,22 @@ void WorksheetView::initActions(){
 
 void WorksheetView::initMenus(){
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	m_plotMenu = new QMenu(tr("add plot"));
+	m_addNewMenu = new QMenu(tr("Add new"));
 	m_zoomMenu = new QMenu(tr("Zoom"));
 	m_layoutMenu = new QMenu(tr("Layout"));
 	m_gridMenu = new QMenu(tr("Grid"));
 #else
-	m_plotMenu = new QMenu(i18n("Add plot"));
+	m_addNewMenu = new QMenu(i18n("Add new"));
 	m_zoomMenu = new QMenu(i18n("Zoom"));
 	m_layoutMenu = new QMenu(i18n("Layout"));
 	m_gridMenu = new QMenu(i18n("Grid"));
 	m_gridMenu->setIcon(QIcon(KIcon("view-grid")));
-
-	m_plotMenu->addAction(addPlotAction);
 #endif
-		
+
+	m_addNewMenu->addAction(addTextLabelAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addPlotAction);
+	
 	m_zoomMenu->addAction(zoomInAction);
 	m_zoomMenu->addAction(zoomOutAction);
 	m_zoomMenu->addAction(zoomOriginAction);
@@ -317,22 +310,24 @@ void WorksheetView::createContextMenu(QMenu* menu){
   if (!menu)
 	menu=new QMenu();
   else
-	  menu->addSeparator()->setText(tr("Mouse mode"));
+	menu->addSeparator()->setText(tr("Mouse mode"));
 
-  //Mouse mode actions
-  menu->addSeparator();
-  menu->addAction(navigationModeAction);
-  menu->addAction(zoomModeAction);
-  menu->addAction(selectionModeAction);
+	QAction* firstAction = menu->actions().first();
+	menu->insertMenu(firstAction, m_addNewMenu);
+	menu->insertSeparator(firstAction);
   
-  menu->addSeparator();
-  menu->addMenu(m_plotMenu);
-  menu->addSeparator();
-  menu->addMenu(m_zoomMenu);
-  menu->addSeparator();
-  menu->addMenu(m_layoutMenu);
-  menu->addSeparator();
-  menu->addMenu(m_gridMenu);
+	//Mouse mode actions
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, navigationModeAction);
+	menu->insertAction(firstAction, zoomModeAction);
+	menu->insertAction(firstAction, selectionModeAction);
+
+	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_zoomMenu);
+	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_layoutMenu);
+	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_gridMenu);
 }
 
 void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
@@ -536,10 +531,17 @@ void WorksheetView::enableSelectionMode(){
   setDragMode(QGraphicsView::RubberBandDrag);
 }
 
-//Plot related slots
-void WorksheetView::addPlot(){
-	CartesianPlot *plot = new CartesianPlot("xy-plot");
-	m_worksheet->addChild(plot);
+//"Add new" related slots
+void WorksheetView::addNew(QAction* action){
+	AbstractAspect* aspect;
+	if ( action == addPlotAction ){
+		aspect = new CartesianPlot("xy-plot");
+	}else if ( action == addTextLabelAction ){
+		QMessageBox::warning(this, "Add text label", "Not implemented yet");
+		return;
+	}
+
+	m_worksheet->addChild(aspect);
 }
 
 
