@@ -563,8 +563,6 @@ void XYCurvePrivate::retransform(){
   updateLines();
   updateDropLines();
   updateValues();
-  
-  recalcShapeAndBoundingRect();
 }
 
 /*!
