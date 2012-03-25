@@ -35,15 +35,16 @@
   \ingroup kdefrontend
 */
 
-#include "worksheet/plots/cartesian/XYCurve.h"
-#include "worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "worksheet/plots/AbstractCoordinateSystem.h"
-#include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "worksheet/plots/AbstractPlot.h"
-#include "lib/commandtemplates.h"
-#include "core/plugin/PluginManager.h"
-#include "worksheet/symbols/EllipseCurveSymbol.h"
-#include "worksheet/interfaces.h"
+#include "XYCurve.h"
+#include "XYCurvePrivate.h"
+#include "../AbstractCoordinateSystem.h"
+#include "CartesianCoordinateSystem.h"
+#include "../AbstractPlot.h"
+#include "../../../lib/commandtemplates.h"
+#include "./../../../core/plugin/PluginManager.h"
+#include "../../symbols/EllipseCurveSymbol.h"
+#include "../../interfaces.h"
+#include "../../Worksheet.h"
 
 #include <QGraphicsItem>
 #include <QGraphicsItemGroup>
@@ -81,7 +82,7 @@ void XYCurve::init(){
 	
 	d->symbolsOpacity = 1.0;
 	d->symbolRotationAngle = 0;
-	d->symbolSize = 5;
+	d->symbolSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
 	d->symbolAspectRatio = 1;
 	d->symbolPrototype = NULL;
 	d->swapSymbolTypeId("diamond");
@@ -89,12 +90,12 @@ void XYCurve::init(){
 	d->valuesType = XYCurve::NoValues;
 	d->valuesColumn = NULL;	
 	d->valuesPosition = XYCurve::ValuesAbove;
-	d->valuesDistance = 1.0;
+	d->valuesDistance =  Worksheet::convertToSceneUnits( 5, Worksheet::Point );
 	d->valuesRotationAngle = 0;
 	d->valuesOpacity = 1.0;
+	d->valuesFont.setPointSizeF( Worksheet::convertToSceneUnits( 10, Worksheet::Point ) );
 	
  	// TODO: remove this temporary code later
-	d->symbolSize = 1;
 	d->symbolPrototype->setBrush(QBrush(Qt::red));
 	
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);

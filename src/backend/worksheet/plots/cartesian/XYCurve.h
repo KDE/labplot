@@ -4,7 +4,7 @@
     Description          : A curve drawn as line and/or symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010-2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2012 Alexander Semke (alexander.semke*web.de)
 								(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -31,9 +31,9 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
-#include "worksheet/AbstractWorksheetElement.h"
-#include "lib/macros.h"
-#include "core/AbstractColumn.h"
+#include "../../AbstractWorksheetElement.h"
+#include "../.././../lib/macros.h"
+#include "../../../core/AbstractColumn.h"
 #include <QFont>
 
 class XYCurvePrivate;

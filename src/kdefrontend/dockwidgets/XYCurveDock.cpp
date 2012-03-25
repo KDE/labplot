@@ -431,7 +431,8 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	cbValuesColumn->setCurrentModelIndex(QModelIndex());
   }
 
-  //show the properties of the first curve
+	//show the properties of the first curve
+	chkVisible->setChecked( curve->isVisible() );
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
@@ -1128,9 +1129,11 @@ void XYCurveDock::valuesFontChanged(const QFont& font){
   if (m_initializing)
 	return;
 	
-  foreach(XYCurve* curve, m_curvesList){
-	curve->setValuesFont(font);
-  }
+	QFont valuesFont = font;
+	valuesFont.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	foreach(XYCurve* curve, m_curvesList){
+	curve->setValuesFont(valuesFont);
+	}
 }
 
 void XYCurveDock::valuesFontColorChanged(const QColor& color){
@@ -1196,7 +1199,9 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.sbValuesOpacity->setValue( group.readEntry("ValuesOpacity",curve->valuesOpacity())*100 );
   	ui.leValuesPrefix->setText( group.readEntry("ValuesPrefix", curve->valuesPrefix()) );
   	ui.leValuesSuffix->setText( group.readEntry("ValuesSuffix", curve->valuesSuffix()) );
-  	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", curve->valuesFont()) );
+	QFont valuesFont = curve->valuesFont();
+	valuesFont.setPointSizeF( Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Point) );
+  	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
   	ui.kcbValuesFontColor->setColor( group.readEntry("ValuesFontColor", curve->valuesPen().color()) );
 
 	//TODO: Area Filling, Error Bars
@@ -1241,7 +1246,9 @@ void XYCurveDock::saveConfig(KConfig& config){
 	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100);
 	group.writeEntry("ValuesPrefix", ui.leValuesPrefix->text());
 	group.writeEntry("ValuesSuffix", ui.leValuesSuffix->text());
-	group.writeEntry("ValuesFont", ui.kfrValuesFont->font());
+	QFont valuesFont =ui.kfrValuesFont->font();
+	valuesFont.setPointSizeF( Worksheet::convertToSceneUnits(valuesFont.pointSizeF(), Worksheet::Point) );
+	group.writeEntry("ValuesFont", valuesFont);
 	group.writeEntry("ValuesFontColor", ui.kcbValuesFontColor->color());
 
 	//TODO: Area Filling, Error Bars
