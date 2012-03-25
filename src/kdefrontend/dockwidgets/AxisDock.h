@@ -102,8 +102,7 @@ private slots:
 	
 	//"Tick labels"-tab
 	void labelsPositionChanged(int);
-	void labelsXOffsetChanged(double);
-	void labelsYOffsetChanged(double);
+	void labelsOffsetChanged(double);
 	void labelsRotationChanged(int);
 	void labelsFontChanged(const QFont&);
 	void labelsFontColorChanged(const QColor&);	

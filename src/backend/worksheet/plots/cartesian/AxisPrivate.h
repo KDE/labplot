@@ -4,7 +4,7 @@
     Description          : Private members of Axis.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
 								  (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -34,7 +34,6 @@
 #include <QGraphicsItem>
 #include <QPen>
 #include <QFont>
-// #include "worksheet/ScalableTextLabel.h"
 #include "Axis.h"
 
 class AbstractCoordinateSystem;
@@ -56,7 +55,7 @@ class AxisPrivate: public QGraphicsItem {
 		qreal lineOpacity;
 
 		// Title
-		TextLabel* title;
+		//TODO
 
 		// Ticks
 		Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
@@ -81,14 +80,17 @@ class AxisPrivate: public QGraphicsItem {
 		qreal labelsRotationAngle;
 		QColor labelsColor;
 		QFont labelsFont;
-		QPointF labelsOffset;
+		float labelsOffset; //!< offset, distance to the end of the tick line (in page units)
 		qreal labelsOpacity;	
 		char numericFormat;
 		int displayedDigits;
 		// TODO support for date/time and string labels
 		QString labelsPrefix;
 		QString labelsSuffix;
-
+		QList<QPointF> tickPoints;//!< position of the major ticks  on the axis.
+		QList<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
+		QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
+		
 		//TODO: Grid
 		
 		QPainterPath linePath;
@@ -97,7 +99,7 @@ class AxisPrivate: public QGraphicsItem {
 		QRectF boundingRectangle;
 		QPainterPath axisShape;
 
-		// extra tick label
+		//TODO extra tick label
 		QList<TextLabel *> labels;
 
 		QPen pen;
@@ -109,12 +111,10 @@ class AxisPrivate: public QGraphicsItem {
 
 		virtual void retransform();
 		virtual void retransformTicks();
-		virtual void restyleLabels();
+		virtual void retransformTickLabels();
 		virtual void retransformTicks(const AbstractCoordinateSystem *cSystem);
 		virtual void recalcShapeAndBoundingRect();
 		bool swapVisible(bool on);
-		QPointF swapLabelOffset(const QPointF &newOffset);
-		virtual void addTextLabel(const QString &text, const QPointF &pos);
 
 		Axis * const q;
 

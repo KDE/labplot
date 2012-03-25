@@ -119,8 +119,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	
 	//"Tick labels"-tab
 	connect( ui.cbLabelsPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsPositionChanged(int)) );
-	connect( ui.sbLabelsXOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsXOffsetChanged(double)) );
-	connect( ui.sbLabelsYOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsYOffsetChanged(double)) );
+	connect( ui.sbLabelsOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsOffsetChanged(double)) );
 	connect( ui.sbLabelsRotation, SIGNAL(valueChanged(int)), this, SLOT(labelsRotationChanged(int)) );
 	connect( ui.kfrLabelsFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(labelsFontChanged(const QFont&)) );
 	connect( ui.kcbLabelsFontColor, SIGNAL(changed (const QColor &)), this, SLOT(labelsFontColorChanged(const QColor&)) );
@@ -214,7 +213,7 @@ void AxisDock::setAxes(QList<Axis*> list){
   	m_axesList=list;
   	Axis* axis=list.first();
   
-	labelWidget->setLabel(axis->title());
+//TODO	labelWidget->setLabel(axis->title());
 
   //if there are more then one axis in the list, disable the tab "general"
   if (list.size()==1){
@@ -311,6 +310,7 @@ void AxisDock::orientationChanged(int index){
 
 //TODO
 void AxisDock::positionChanged(int index){
+	Q_UNUSED(index)
 //   if (m_initializing)
 // 	return;
 // 
@@ -796,8 +796,7 @@ void AxisDock::labelsPositionChanged(int index){
   
 	bool b = (position != Axis::NoLabels);
 	ui.lLabelsOffset->setEnabled(b);
-	ui.sbLabelsXOffset->setEnabled(b);
-	ui.sbLabelsYOffset->setEnabled(b);
+	ui.sbLabelsOffset->setEnabled(b);
 	ui.lLabelsRotation->setEnabled(b);
 	ui.sbLabelsRotation->setEnabled(b);
 	ui.lLabelsFont->setEnabled(b);
@@ -816,28 +815,14 @@ void AxisDock::labelsPositionChanged(int index){
 	}
 }
 
-void AxisDock::labelsXOffsetChanged(double value){
+void AxisDock::labelsOffsetChanged(double value){
   if (m_initializing)
 	return;
-	
-	double xvalue = Worksheet::convertToSceneUnits(value,Worksheet::Point);
-	double yvalue = Worksheet::convertToSceneUnits(ui.sbLabelsYOffset->value(),Worksheet::Point);
+
 	foreach(Axis* axis, m_axesList){
- 		axis->setLabelsOffset(QPointF(xvalue,yvalue));
+		axis->setLabelsOffset( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	}
 }
-
-void AxisDock::labelsYOffsetChanged(double value){
-  if (m_initializing)
-	return;
-	
-	double xvalue = Worksheet::convertToSceneUnits(ui.sbLabelsXOffset->value(),Worksheet::Point);
-	double yvalue = Worksheet::convertToSceneUnits(value,Worksheet::Point);
-	foreach(Axis* axis, m_axesList){
- 		axis->setLabelsOffset(QPointF(xvalue,yvalue));
-	}
-}
-
 
 void AxisDock::labelsRotationChanged(int value){
   if (m_initializing)
@@ -872,9 +857,11 @@ void AxisDock::labelsFontChanged(const QFont& font){
   if (m_initializing)
 	return;
 	
-  foreach(Axis* axis, m_axesList){
-	axis->setLabelsFont(font);
-  }
+  	QFont labelsFont = font;
+	labelsFont.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	foreach(Axis* axis, m_axesList){
+		axis->setLabelsFont( labelsFont );
+	}
 }
 
 void AxisDock::labelsFontColorChanged(const QColor& color){
@@ -918,7 +905,7 @@ void AxisDock::loadConfig(KConfig& config){
   	ui.leScalingFactor->setText( QString::number( group.readEntry("ScalingFactor", axis->scalingFactor())) );
 
 	//Title
-	labelWidget->loadConfig(group);	
+	//TODO labelWidget->loadConfig(group);
 
 	//Line
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) axis->linePen().style()) );
@@ -958,10 +945,11 @@ void AxisDock::loadConfig(KConfig& config){
 
 	// Tick label
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) axis->labelsPosition()) );
-	ui.sbLabelsXOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsXOffset", axis->labelsOffset().x()),Worksheet::Point) );
-	ui.sbLabelsYOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsYOffset", axis->labelsOffset().y()),Worksheet::Point) );
+	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", axis->labelsOffset()), Worksheet::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", axis->labelsRotationAngle()) );
-	ui.kfrLabelsFont->setFont( group.readEntry("LabelsFont", axis->labelsFont()) );
+	QFont font = axis->labelsFont();
+	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	ui.kfrLabelsFont->setFont( group.readEntry("LabelsFont", font) );
 	ui.kcbLabelsFontColor->setColor( group.readEntry("LabelsFontColor", axis->labelsColor()) );
 	ui.leLabelsPrefix->setText( group.readEntry("LabelsPrefix", axis->labelsPrefix()) );
 	ui.leLabelsSuffix->setText( group.readEntry("LabelsSuffix", axis->labelsSuffix()) );
@@ -997,7 +985,7 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("ScalingFactor", ui.leScalingFactor->text());
 
 	//Title
-	labelWidget->saveConfig(group);	
+	//TODO labelWidget->saveConfig(group);
 
 	//Line
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
@@ -1032,10 +1020,11 @@ void AxisDock::saveConfig(KConfig& config){
 
 	// Tick label
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
-	group.writeEntry("LabelsXOffset", Worksheet::convertToSceneUnits(ui.sbLabelsXOffset->value(),Worksheet::Point));
-	group.writeEntry("LabelsYOffset", Worksheet::convertToSceneUnits(ui.sbLabelsYOffset->value(),Worksheet::Point));
+	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Point));
 	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
-	group.writeEntry("LabelsFont", ui.kfrLabelsFont->font());
+	QFont font =ui.kfrLabelsFont->font();
+	font.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	group.writeEntry("LabelsFont", font);
 	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());
 	group.writeEntry("LabelsPrefix", ui.leLabelsPrefix->text());
 	group.writeEntry("LabelsSuffix", ui.leLabelsSuffix->text());
@@ -1046,4 +1035,3 @@ void AxisDock::saveConfig(KConfig& config){
 
 	config.sync();
 }
-

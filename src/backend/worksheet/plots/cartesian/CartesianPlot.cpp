@@ -92,8 +92,8 @@ void CartesianPlot::init(){
 	d->rect.setHeight(h);
 
 	//Plot title
-	m_title = new TextLabel();
-	m_title->setText(this->name());
+// 	m_title = new TextLabel();
+// 	m_title->setText(this->name());
 //	addChild(m_title);
 
 	//Coordinate system
@@ -121,7 +121,6 @@ void CartesianPlot::init(){
 	axis->setMajorTicksNumber(6);
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
-	axis->setLabelsOffset(QPointF(0,Worksheet::convertToSceneUnits(5.0, Worksheet::Point)));
 
 	axis = new Axis("x axis 2", Axis::AxisHorizontal);
 	addChild(axis);
@@ -133,7 +132,6 @@ void CartesianPlot::init(){
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
-	axis->setLabelsOffset(QPointF(0,Worksheet::convertToSceneUnits(-5.0, Worksheet::Point)));
 	
 	axis = new Axis("y axis 1", Axis::AxisVertical);
 	addChild(axis);
@@ -143,7 +141,6 @@ void CartesianPlot::init(){
 	axis->setMajorTicksNumber(6);
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
-	axis->setLabelsOffset(QPointF(Worksheet::convertToSceneUnits(-5.0, Worksheet::Point),0));
 	
 	axis = new Axis("y axis 2", Axis::AxisVertical);
 	addChild(axis);
@@ -155,8 +152,12 @@ void CartesianPlot::init(){
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
-	axis->setLabelsOffset(QPointF(Worksheet::convertToSceneUnits(5.0, Worksheet::Point),0));
 
+	//Plot title
+// 	m_title = new TextLabel();
+// 	m_title->setText(this->name());
+// 	addChild(m_title);
+	
 	initActions();
 	initMenus();
 }

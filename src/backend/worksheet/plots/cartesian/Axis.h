@@ -90,7 +90,7 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity);
 		
 		CLASS_D_ACCESSOR_DECL(LabelsPosition, labelsPosition, LabelsPosition);
-		CLASS_D_ACCESSOR_DECL(QPointF, labelsOffset, LabelsOffset);		
+		BASIC_D_ACCESSOR_DECL(float, labelsOffset, LabelsOffset);
 		BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle);
 		BASIC_D_ACCESSOR_DECL(qreal, labelsFontSize, LabelsFontSize);
 		CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor);
