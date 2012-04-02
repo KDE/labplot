@@ -119,7 +119,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	
 	//"Tick labels"-tab
 	connect( ui.cbLabelsPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsPositionChanged(int)) );
-	connect( ui.sbLabelsOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsOffsetChanged(double)) );
+	//connect( ui.sbLabelsOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsOffsetChanged(double)) );
 	connect( ui.sbLabelsRotation, SIGNAL(valueChanged(int)), this, SLOT(labelsRotationChanged(int)) );
 	connect( ui.kfrLabelsFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(labelsFontChanged(const QFont&)) );
 	connect( ui.kcbLabelsFontColor, SIGNAL(changed (const QColor &)), this, SLOT(labelsFontColorChanged(const QColor&)) );
@@ -796,7 +796,7 @@ void AxisDock::labelsPositionChanged(int index){
   
 	bool b = (position != Axis::NoLabels);
 	ui.lLabelsOffset->setEnabled(b);
-	ui.sbLabelsOffset->setEnabled(b);
+	//ui.sbLabelsOffset->setEnabled(b);
 	ui.lLabelsRotation->setEnabled(b);
 	ui.sbLabelsRotation->setEnabled(b);
 	ui.lLabelsFont->setEnabled(b);
@@ -945,7 +945,7 @@ void AxisDock::loadConfig(KConfig& config){
 
 	// Tick label
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) axis->labelsPosition()) );
-	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", axis->labelsOffset()), Worksheet::Point) );
+	//ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", axis->labelsOffset()), Worksheet::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", axis->labelsRotationAngle()) );
 	QFont font = axis->labelsFont();
 	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
@@ -1020,7 +1020,7 @@ void AxisDock::saveConfig(KConfig& config){
 
 	// Tick label
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
-	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Point));
+	//group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Point));
 	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
 	QFont font =ui.kfrLabelsFont->font();
 	font.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
