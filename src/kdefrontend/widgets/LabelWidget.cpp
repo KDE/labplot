@@ -32,6 +32,7 @@
 #include "../../backend/worksheet/TextLabel.h"
 #include "../../tools/TexRenderer.h"
 #include <QMenu>
+#include <kdebug.h>
 
 
 /*!
