@@ -4,6 +4,7 @@
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)    
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -34,54 +35,51 @@
 #include <QFont>
 #include <QBrush>
 #include <QPen>
-#include "lib/macros.h"
+#include "../lib/macros.h"
+#include "../../tools/TexRenderer.h"
+#include "AbstractWorksheetElement.h"
 
 class TextLabelPrivate;
-class TextLabel: public QObject {
+class TextLabel : public AbstractWorksheetElement{
 	Q_OBJECT
 
 	public:
-		TextLabel();
+		enum HorizontalPosition {HorizontalLeft, HorizontalCenter, HorizontalRight, HorizontalCustom};
+		enum VerticalPosition {VerticalTop, VerticalCenter, VerticalBottom, VerticalCustom};
+		
+		enum HorizontalAlignment {hAlignLeft, 	hAlignCenter, hAlignRight};
+		enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
+
+		TextLabel(const QString &name);
 		~TextLabel();
+		
+		virtual QGraphicsItem *graphicsItem() const;
 
-		enum HorizontalAlignmentFlags {
-			hAlignLeft = 0x01,
-			hAlignCenter = 0x02,
-			hAlignRight = 0x04,
-		};
-		Q_DECLARE_FLAGS(HorizontalAlignment, HorizontalAlignmentFlags)
-
-		enum VerticalAlignmentFlags {
-			vAlignTop = 0x10,
-			vAlignCenter = 0x20,
-			vAlignBottom = 0x40,
-		};
-		Q_DECLARE_FLAGS(VerticalAlignment, VerticalAlignmentFlags)
-
-		BASIC_D_ACCESSOR_DECL(qreal, fontSize, FontSize);
-		BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle);
-		CLASS_D_ACCESSOR_DECL(QFont, font, Font);
-		CLASS_D_ACCESSOR_DECL(QColor, textColor, TextColor);
 		CLASS_D_ACCESSOR_DECL(QString, text, Text);
+		BASIC_D_ACCESSOR_DECL(bool, texUsed, TexUsed);
 		CLASS_D_ACCESSOR_DECL(QPointF, position, Position);
-		HorizontalAlignment horizontalAlignment() const;
-		VerticalAlignment verticalAlignment() const;
-		void setAlignment(HorizontalAlignment hAlign, VerticalAlignment vAlign);
+		BASIC_D_ACCESSOR_DECL(HorizontalPosition, horizontalPosition, HorizontalPosition);
+		BASIC_D_ACCESSOR_DECL(VerticalPosition, verticalPosition, VerticalPosition);
+		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment);
+		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment);
+		BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle);
 
-		QRectF boundingRect();
+		virtual void setVisible(bool on);
+		virtual bool isVisible() const;
 
 		typedef TextLabelPrivate Private;
 
-    	void paint(QPainter *painter);
+	public slots:
+		virtual void retransform();
+		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
 		TextLabelPrivate * const d_ptr;
-		TextLabel(TextLabelPrivate *dd);
+		TextLabel(const QString &name, TextLabelPrivate *dd);
 
 	private:
     	Q_DECLARE_PRIVATE(TextLabel)
 		void init();
-		void createTextLayout();
 };
 
 #endif

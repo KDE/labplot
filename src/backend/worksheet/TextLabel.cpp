@@ -4,6 +4,7 @@
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -27,269 +28,285 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/TextLabel.h"
+#include "TextLabel.h"
 #include "Worksheet.h"
+#include "TextLabelPrivate.h"
+#include "../lib/commandtemplates.h"
 
-#include <QFontMetricsF>
-#include <QTextLayout>
-#include <QTextLine>
 #include <QPainter>
-#include <QtDebug>
-
+#include <QDebug>
 
 /**
  * \class TextLabel
- * \brief A one-line text label supporting floating point font sizes.
- *
+ * \brief A label supporting rendering of hml- and tex-formated textes.
  * 
  */
 
-class TextLabelPrivate {
-	public:
-		TextLabelPrivate(TextLabel *owner) : q(owner) {
-		}
 
-		qreal fontSize;
-		qreal rotationAngle;
-		QFont font;
-		QColor textColor;
-		QString text;
-		QPointF position;
-		TextLabel::HorizontalAlignment horizontalAlignment;
-		TextLabel::VerticalAlignment verticalAlignment;
-
-		QTextLayout *layout;
-		QRectF boundingRectangle;
-
-		TextLabel * const q;
-};
-
-TextLabel::TextLabel()
-		: d_ptr(new TextLabelPrivate(this)) {
+TextLabel::TextLabel(const QString &name):AbstractWorksheetElement(name), d_ptr(new TextLabelPrivate(this)){
 	init();
 }
 
-TextLabel::TextLabel(TextLabelPrivate *dd)
-		: d_ptr(dd) {
+TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd):AbstractWorksheetElement(name), d_ptr(dd) {
 	init();
 }
 
 void TextLabel::init() {
 	Q_D(TextLabel);
 
-	d->rotationAngle = 0;
-	d->fontSize = Worksheet::convertToSceneUnits(10.0, Worksheet::Point);
-	d->textColor = QColor(Qt::black);
-	d->font.setPointSizeF(1000);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
 
-	d->layout = NULL;
+	d->horizontalPosition = TextLabel::HorizontalCenter;
+	d->verticalPosition = TextLabel::VerticalCenter;
+	d->texUsed = false;
+	d->rotationAngle = 0.0;
+	d->position.setX(100);
+	d->position.setY(100);
+	d->positionOffset.setX(0);
+	d->positionOffset.setY(0);
+	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
+	d->staticText.setTextFormat(Qt::RichText);
 }
 
 TextLabel::~TextLabel() {
 	delete d_ptr;
 }
 
-BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, fontSize, fontSize);
-BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
-CLASS_SHARED_D_READER_IMPL(TextLabel, QFont, font, font);
-CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, textColor, textColor);
+QGraphicsItem* TextLabel::graphicsItem() const{
+	return d_ptr;
+}
+
+void TextLabel::retransform(){
+	Q_D(TextLabel);
+	d->retransform();
+}
+
+void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
+	Q_D(TextLabel);
+	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
+}
+
+/* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, QString, text, text);
+CLASS_SHARED_D_READER_IMPL(TextLabel, bool, texUsed, texUsed);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QPointF, position, position);
+BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
+BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlignment, verticalAlignment);
+BASIC_SHARED_D_READER_IMPL(TextLabel, float, rotationAngle, rotationAngle);
 
-void TextLabel::setFontSize(qreal size) {
-	Q_D(TextLabel);
-	
-	d->fontSize = size;
-	d->boundingRectangle = QRectF();
-	
-}
-
-void TextLabel::setRotationAngle(qreal angle) {
-	Q_D(TextLabel);
-
-	d->rotationAngle = angle;
-	d->boundingRectangle = QRectF();
-}
-
-void TextLabel::setFont(const QFont &font) {
-	Q_D(TextLabel);
-
-	QFont fontCopy = font;
-	fontCopy.setPointSizeF(1000);
-
-	if (fontCopy != d->font) {
-		d->font = fontCopy;
-
-		delete d->layout;
-		d->layout = NULL;
-		d->boundingRectangle = QRectF();
-	}
-}
-
-void TextLabel::setTextColor(const QColor &color) {
-	Q_D(TextLabel);
-
-	d->textColor = color;
-}
-
+/* ============================ setter methods and undo commands ================= */
+STD_SETTER_CMD_IMPL_F(TextLabel, SetText, QString, text, retransform);
 void TextLabel::setText(const QString &text) {
 	Q_D(TextLabel);
-
-	if (text != d->text) {
-		d->text = text;
-
-		delete d->layout;
-		d->layout = NULL;
-		d->boundingRectangle = QRectF();
-	}
+	if (text != d->text)
+		exec(new TextLabelSetTextCmd(d, text, tr("%1: set label text")));
 }
 
-void TextLabel::setPosition(const QPointF &pos) {
+STD_SETTER_CMD_IMPL_F(TextLabel, SetTexUsed, bool, texUsed, updateTexImage);
+void TextLabel::setTexUsed(const bool tex) {
 	Q_D(TextLabel);
-
-	d->position = pos;
-	d->boundingRectangle = QRectF();
+	if (tex != d->texUsed)
+		exec(new TextLabelSetTexUsedCmd(d, tex, tr("%1: set use tex syntax")));
 }
 
-TextLabel::HorizontalAlignment TextLabel::horizontalAlignment() const {
+STD_SETTER_CMD_IMPL_F(TextLabel, SetPosition, QPointF, position, retransform);
+void TextLabel::setPosition(const QPointF& pos) {
+	Q_D(TextLabel);
+	if (pos != d->position)
+		exec(new TextLabelSetPositionCmd(d, pos, tr("%1: set position")));
+}
+
+STD_SETTER_CMD_IMPL_F(TextLabel, SetHorizontalPosition, TextLabel::HorizontalPosition, horizontalPosition, updatePosition);
+void TextLabel::setHorizontalPosition(const TextLabel::HorizontalPosition hPos){
+	Q_D(TextLabel);
+	if (hPos != d->horizontalPosition)
+		exec(new TextLabelSetHorizontalPositionCmd(d, hPos, tr("%1: set horizontal position")));
+}
+
+STD_SETTER_CMD_IMPL_F(TextLabel, SetVerticalPosition, TextLabel::VerticalPosition, verticalPosition, updatePosition);
+void TextLabel::setVerticalPosition(const TextLabel::VerticalPosition vPos){
+	Q_D(TextLabel);
+	if (vPos != d->verticalPosition)
+		exec(new TextLabelSetVerticalPositionCmd(d, vPos, tr("%1: set vertical position")));
+}
+
+STD_SETTER_CMD_IMPL_F(TextLabel, SetRotationAngle, float, rotationAngle, recalcShapeAndBoundingRect);
+void TextLabel::setRotationAngle(float angle) {
+	Q_D(TextLabel);
+	if (angle != d->rotationAngle)
+		exec(new TextLabelSetRotationAngleCmd(d, angle, tr("%1: set rotation angle")));
+}
+
+STD_SETTER_CMD_IMPL_F(TextLabel, SetHorizontalAlignment, TextLabel::HorizontalAlignment, horizontalAlignment, retransform);
+void TextLabel::setHorizontalAlignment(const TextLabel::HorizontalAlignment hAlign){
+	Q_D(TextLabel);
+	if (hAlign != d->horizontalAlignment)
+		exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, tr("%1: set horizontal alignment")));
+}
+
+STD_SETTER_CMD_IMPL_F(TextLabel, SetVerticalAlignment, TextLabel::VerticalAlignment, verticalAlignment, retransform);
+void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign){
+	Q_D(TextLabel);
+	if (vAlign != d->verticalAlignment)
+		exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, tr("%1: set vertical alignment")));
+}
+
+STD_SWAP_METHOD_SETTER_CMD_IMPL(TextLabel, SetVisible, bool, swapVisible);
+void TextLabel::setVisible(bool on) {
+	Q_D(TextLabel);
+	exec(new TextLabelSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
+}
+
+bool TextLabel::isVisible() const {
 	Q_D(const TextLabel);
-
-	return d->horizontalAlignment;
+	return d->isVisible();
 }
 
-TextLabel::VerticalAlignment TextLabel::verticalAlignment() const {
-	Q_D(const TextLabel);
-
-	return d->verticalAlignment;
+//################################################################
+//################### Private implementation ##########################
+//################################################################
+TextLabelPrivate::TextLabelPrivate(TextLabel *owner) : q(owner){
 }
 
-void TextLabel::setAlignment(HorizontalAlignment hAlign, VerticalAlignment vAlign) {
-	Q_D(TextLabel);
-
-	d->horizontalAlignment = hAlign;
-	d->verticalAlignment = vAlign;
-	d->boundingRectangle = QRectF();
+QString TextLabelPrivate::name() const{
+	return q->name();
 }
 
-void TextLabel::paint(QPainter *painter) {
-	Q_D(TextLabel);
+void TextLabelPrivate::retransform(){
+	staticText.setText(text);
+	
+	//TODO
+// 			switch (horizontalAlignment) {
+// 			case TextLabel::hAlignLeft:
+// 				pos.setX(textRect.left());
+// 				break;
+// 			case TextLabel::hAlignCenter:
+// 				pos.setX(textRect.center().x());
+// 				break;
+// 			case TextLabel::hAlignRight:
+// 				pos.setX(textRect.right());
+// 				break;
+// 		}
+// 
+// 		switch (verticalAlignment) {
+// 			case TextLabel::vAlignTop:
+// 				pos.setY(textRect.top());
+// 				break;
+// 			case TextLabel::vAlignCenter:
+// 				pos.setY(textRect.center().y());
+// 				break;
+// 			case TextLabel::vAlignBottom:
+// 				pos.setY(textRect.bottom());
+// 				break;
+// 		}
+		
+	positionOffset.setX(0);
+	positionOffset.setY(0);
+	
+	boundingRectangle.setX(position.x());
+	boundingRectangle.setY(position.y());
+	boundingRectangle.setWidth(staticText.size().width()*scaleFactor);
+	boundingRectangle.setHeight(staticText.size().height()*scaleFactor);
+	
+	recalcShapeAndBoundingRect();
+}
 
-	if (d->layout == NULL)
-		createTextLayout();
+//TODO
+void TextLabelPrivate::updatePosition(){
+	//determine the current position
+// 	float x,y;
+// 	QGraphicsItem* parent = dynamic_cast<AbstractWorksheetElement*>(q->parentAspect())->graphicsItem();
+// 	if (!parent)
+// 		return;
+// 
+// 	if (horizontalPosition == TextLabel::HorizontalLeft)
+// 		x = parent->boundingRect().x();
+// 	else if (horizontalPosition == TextLabel::HorizontalCenter)
+// 		x = parent->boundingRect().width()/2;
+// 		else if (horizontalPosition == TextLabel::HorizontalRight)
+// 		x = parent->boundingRect().x() + parent->boundingRect().width();
+// 	
+// 	if (verticalPosition == TextLabel::VerticalTop)
+// 		y = parent->boundingRect().y();
+// 	else if (verticalPosition == TextLabel::VerticalCenter)
+// 		y = (parent->boundingRect().y() + parent->boundingRect().height())/2;
+// 	else if (verticalPosition == TextLabel::VerticalBottom)
+// 		y = parent->boundingRect().y() + parent->boundingRect().height();
+// 	
+// 	position.setX(x);
+// 	position.setY(y);
+// 	
+// 	update();
+}
+
+//TODO
+void TextLabelPrivate::updateTexImage(){
+	bool status = TexRenderer::renderImageLaTeX(text, texImage);
+	if (status)
+		qDebug()<<"tex image created";
+	else
+		qDebug()<<"tex image not created";
+}
+
+bool TextLabelPrivate::swapVisible(bool on){
+	bool oldValue = isVisible();
+	setVisible(on);
+	return oldValue;
+}
+
+/*!
+	Returns the outer bounds of the item as a rectangle.
+ */
+QRectF TextLabelPrivate::boundingRect() const{
+	return transformedBoundingRectangle;
+}
+
+/*!
+	Returns the shape of this item as a QPainterPath in local coordinates.
+*/
+QPainterPath TextLabelPrivate::shape() const{
+	return labelShape;
+}
+
+/*!
+  recalculates the outer bounds and the shape of the curve.
+*/
+void TextLabelPrivate::recalcShapeAndBoundingRect(){
+	prepareGeometryChange();
+
+	QMatrix matrix;
+	matrix.rotate(rotationAngle);
+	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
+		
+	labelShape = QPainterPath();
+	labelShape.addRect(boundingRectangle);
+	labelShape = matrix.map(labelShape);
+	
+	update();
+}
+
+void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
+	Q_UNUSED(option)
+	Q_UNUSED(widget)
 
 	painter->save();
+	painter->translate(position);
 
-	painter->translate(d->position);
+	if (texUsed){
+		QRectF rect = texImage.rect();
+		painter->drawImage(rect, texImage, rect);
+		return;
+	}
 
-	painter->setFont(d->font);
-	painter->setPen(QPen(d->textColor));
-
-	qreal scaleFactor = d->fontSize / 1000.0;
 	painter->scale(scaleFactor, scaleFactor);
-
-	painter->rotate(d->rotationAngle);
-
-	QTextLine line = d->layout->lineAt(0);
-    QRectF textRect = line.naturalTextRect();
-	QPointF pos;
-
-	switch (d->horizontalAlignment) {
-		case hAlignLeft:
-			pos.setX(textRect.left());
-			break;
-		case hAlignCenter:
-			pos.setX(textRect.center().x());
-			break;
-		case hAlignRight:
-			pos.setX(textRect.right());
-			break;
-	}
-
-	switch (d->verticalAlignment) {
-		case vAlignTop:
-			pos.setY(textRect.top());
-			break;
-		case vAlignCenter:
-			pos.setY(textRect.center().y());
-			break;
-		case vAlignBottom:
-			pos.setY(textRect.bottom());
-			break;
-	}
-
-	line.draw(painter, -pos);
-
+	painter->rotate(rotationAngle);
+ 	painter->drawStaticText(positionOffset, staticText);
+	
+	if (isSelected()){
+		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->drawPath(labelShape);
+  }
+  
 	painter->restore();
 }
-
-void TextLabel::createTextLayout() {
-	Q_D(TextLabel);
-
-	delete d->layout;
-	d->layout = new QTextLayout(d->text, d->font);
-	d->layout->setCacheEnabled(true);
-
-	QTextOption option;
-	option.setUseDesignMetrics(true);
-
-	d->layout->setTextOption(option);
-	d->layout->beginLayout();
-	d->layout->createLine();
-	d->layout->endLayout();
-}
-
-QRectF TextLabel::boundingRect() {
-	Q_D(TextLabel);
-
-	if (d->text.isEmpty())
-		return QRectF();
-
-	if (d->boundingRectangle.isNull()) {
-		if (d->layout == NULL)
-			createTextLayout();
-
-		QTextLine line = d->layout->lineAt(0);
-		QRectF textRect = line.naturalTextRect();
-		QPointF pos;
-
-		switch (d->horizontalAlignment) {
-			case hAlignLeft:
-				pos.setX(textRect.left());
-				break;
-			case hAlignCenter:
-				pos.setX(textRect.center().x());
-				break;
-			case hAlignRight:
-				pos.setX(textRect.right());
-				break;
-		}
-
-		switch (d->verticalAlignment) {
-			case vAlignTop:
-				pos.setY(textRect.top());
-				break;
-			case vAlignCenter:
-				pos.setY(textRect.center().y());
-				break;
-			case vAlignBottom:
-				pos.setY(textRect.bottom());
-				break;
-		}
-
-		textRect.translate(-pos);
-
-		qreal scaleFactor = d->fontSize / 1000.0;
-		textRect.setTopLeft(textRect.topLeft() * scaleFactor);
-		textRect.setBottomRight(textRect.bottomRight() * scaleFactor);
-
-		QMatrix matrix;
-		matrix.rotate(d->rotationAngle);
-		textRect = matrix.mapRect(textRect);
-		textRect.translate(d->position);
-
-		d->boundingRectangle = textRect;
-	}
-
-	return d->boundingRectangle;
-}
-
