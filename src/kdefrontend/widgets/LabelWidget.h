@@ -41,6 +41,7 @@ public:
 	LabelWidget(QWidget *);
 	~LabelWidget();
 	void setLabel(TextLabel *);
+	void setLabels(QList<TextLabel*>);
 	void loadConfig(KConfigGroup&);
 	void saveConfig(KConfigGroup&);
 

@@ -34,7 +34,6 @@
 #include <QMenu>
 #include <kdebug.h>
 
-
 /*!
 	\class LabelWidget
  	\brief Widget for editing the properties of a TextLabel object, mostly used in an an appropriate dock widget.
@@ -108,13 +107,21 @@ void LabelWidget::setLabel(TextLabel *label){
 	ui.teLabel->setText("test label");
 }
 
+//TODO
+void LabelWidget::setLabels(QList<TextLabel*> labels){
+	m_label = labels.first();
+	KConfig config("", KConfig::SimpleConfig);
+	KConfigGroup group = config.group( "TextLabel" );
+  	loadConfig(group);
+}
+
 //**********************************************************
 //******************** SLOTS *******************************
 //**********************************************************
 void LabelWidget::textChanged(){
 	if (m_initializing)
 		return;
-	
+
 	if(!m_label) {
 		kWarning()<<"m_label not defined";
 		return;
@@ -146,7 +153,7 @@ void LabelWidget::texUsedChanged(bool checked){
 	if (m_initializing)
 		return;
 
-	//TODO m_label->setTexIsUsed(checked);
+	//TODO activate again m_label->setTexUsed(checked);
 }
 
 void LabelWidget::fontBoldChanged(bool checked){
@@ -226,25 +233,29 @@ void LabelWidget::fontStrikeOutChanged(bool checked){
 	Enables/disables the lineedits for x- and y-coordinates if the "custom"-item is selected/deselected
 */
 void LabelWidget::positionXChanged(int index){
-	if (m_initializing)
-		return;
-
 	if (index == ui.cbPositionX->count()-1 ){
 		ui.sbPositionX->setEnabled(true);
 	}else{
 		ui.sbPositionX->setEnabled(false);
 	}
+	
+	if (m_initializing)
+		return;
+	
+	m_label->setHorizontalPosition(TextLabel::HorizontalPosition(index));
 }
 
 void LabelWidget::positionYChanged(int index){
-	if (m_initializing)
-		return;
-
 	if (index == ui.cbPositionY->count()-1 ){
 		ui.sbPositionY->setEnabled(true);
 	}else{
 		ui.sbPositionY->setEnabled(false);
 	}
+	
+	if (m_initializing)
+		return;
+
+	m_label->setVerticalPosition(TextLabel::VerticalPosition(index));
 }
 
 void LabelWidget::customPositionXChanged(double value){
