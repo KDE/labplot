@@ -169,14 +169,10 @@ void LabelWidget::fontBoldChanged(bool checked){
 	if (m_initializing)
 		return;
 
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
-	if (checked)
-		format.setFontWeight(QFont::Bold);
-	else 
-		format.setFontWeight(QFont::Normal);
-	
-	QTextCursor cursor = ui.teLabel->textCursor();
-	cursor.setCharFormat(format);
+	if(checked)
+		ui.teLabel->setFontWeight(QFont::Bold);
+	else
+		ui.teLabel->setFontWeight(QFont::Normal);
 }
 
 void LabelWidget::fontItalicChanged(bool checked){
@@ -201,7 +197,7 @@ void LabelWidget::fontSuperScriptChanged(bool checked){
 	if (checked)
 		format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
 	else 
-		format.setFontWeight(QTextCharFormat::AlignNormal);
+		format.setVerticalAlignment(QTextCharFormat::AlignNormal);
 	
 	QTextCursor cursor = ui.teLabel->textCursor();
 	cursor.setCharFormat(format);
@@ -215,7 +211,7 @@ void LabelWidget::fontSubScriptChanged(bool checked){
 	if (checked)
 		format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
 	else 
-		format.setFontWeight(QTextCharFormat::AlignNormal);
+		format.setVerticalAlignment(QTextCharFormat::AlignNormal);
 	
 	QTextCursor cursor = ui.teLabel->textCursor();
 	cursor.setCharFormat(format);
