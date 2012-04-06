@@ -77,8 +77,8 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontStrikeOut, SIGNAL(clicked(bool)), this, SLOT(fontStrikeOutChanged(bool)));
 	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
-	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
 	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
+	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
 	
 	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
@@ -233,7 +233,11 @@ void LabelWidget::fontChanged(QFont font){
 	if (m_initializing)
 		return;
 
-	ui.teLabel->setCurrentFont(font);
+	// underline and strike-out not included
+	ui.teLabel->setFontFamily(font.family());
+	ui.teLabel->setFontPointSize(font.pointSize());
+	ui.teLabel->setFontItalic(font.italic());
+	ui.teLabel->setFontWeight(font.weight());
 }
 
 void LabelWidget::charMenu(){
