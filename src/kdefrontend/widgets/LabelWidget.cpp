@@ -129,11 +129,15 @@ void LabelWidget::textChanged(){
 		kWarning()<<"m_label not defined";
 		return;
 	}
-		
+
+	// TODO: use rich text
 	m_label->setText(ui.teLabel->toPlainText());
 }
 
 void LabelWidget::charFormatChanged(QTextCharFormat format){
+	if (m_initializing)
+		return;
+
 	// update button state
 	if(format.fontWeight() == QFont::Bold)
 		ui.tbFontBold->setChecked(true);
@@ -162,6 +166,9 @@ void LabelWidget::texUsedChanged(bool checked){
 }
 
 void LabelWidget::textColorChanged(QColor color){
+	if (m_initializing)
+		return;
+
 	ui.teLabel->setTextColor(color);
 }
 
@@ -228,6 +235,9 @@ void LabelWidget::fontStrikeOutChanged(bool checked){
 }
 
 void LabelWidget::fontChanged(QFont font){
+	if (m_initializing)
+		return;
+
 	ui.teLabel->setCurrentFont(font);
 }
 
