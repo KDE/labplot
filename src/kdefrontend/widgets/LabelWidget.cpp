@@ -82,6 +82,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
 	connect(ui.tbFontStrikeOut, SIGNAL(clicked(bool)), this, SLOT(fontStrikeOutChanged(bool)));
+	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
 	
 	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
@@ -106,8 +107,7 @@ void LabelWidget::setLabel(TextLabel *label){
 	m_label = label;
 	//TODO: set ui.teLabel text
 	ui.teLabel->setText("test label");
-	//ui.kcbTextColor->setColor(m_label->color());
-	ui.kcbTextColor->setColor(Qt::black);
+	//TODO: ui.kcbTextColor->setColor(m_label->color());
 }
 
 //TODO
@@ -150,7 +150,7 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 	else
 		ui.tbFontSubScript->setChecked(false);
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
-	// multiple colors possible?
+	// multiple colors and fonts possible?
 	//ui.kcbTextColor->setColor(format.foreground().color());
 }
 
@@ -235,6 +235,10 @@ void LabelWidget::fontStrikeOutChanged(bool checked){
 	format.setFontStrikeOut(checked);
 	QTextCursor cursor = ui.teLabel->textCursor();
 	cursor.setCharFormat(format);
+}
+
+void LabelWidget::fontChanged(QFont font){
+	ui.teLabel->setCurrentFont(font);
 }
 
 /*!
