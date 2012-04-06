@@ -35,6 +35,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "worksheet/Worksheet.h"
 #include "worksheet/plots/cartesian/XYCurve.h"
 #include "worksheet/plots/cartesian/Axis.h"
+#include "worksheet/TextLabel.h"
 #include "core/Project.h"
 #include "core/ProjectExplorer.h"
 #include "MainWin.h"
@@ -47,6 +48,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "dockwidgets/XYCurveDock.h"
 #include "dockwidgets/SpreadsheetDock.h"
 #include "dockwidgets/WorksheetDock.h"
+#include "widgets/LabelWidget.h"
 #include <QDebug>
 /*!
   \class GuiObserver
@@ -189,7 +191,7 @@ GuiObserver::~GuiObserver(){
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
   }else if (className=="XYCurve"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-curve properties"));
-	
+
 	if (!mainWindow->lineSymbolCurveDock){
 	  mainWindow->lineSymbolCurveDock = new XYCurveDock(mainWindow->stackedWidget);
 	  mainWindow->stackedWidget->addWidget(mainWindow->lineSymbolCurveDock);
@@ -206,6 +208,21 @@ GuiObserver::~GuiObserver(){
 	mainWindow->lineSymbolCurveDock->setCurves(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->lineSymbolCurveDock);
+  }else if (className=="TextLabel"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
+	
+	if (!mainWindow->axisDock){
+	  mainWindow->textLabelDock = new LabelWidget(mainWindow->stackedWidget);
+	  mainWindow->stackedWidget->addWidget(mainWindow->textLabelDock);
+	}
+	
+	QList<TextLabel*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<TextLabel*>(aspect);
+	}
+	mainWindow->textLabelDock->setLabels(list);
+	
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
   }else{
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 	if (mainWindow->stackedWidget->currentWidget())

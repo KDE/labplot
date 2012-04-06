@@ -51,6 +51,7 @@ class ColumnDock;
 class XYCurveDock;
 class SpreadsheetDock;
 class WorksheetDock;
+class LabelWidget;
 
 class MainWin : public KXmlGuiWindow{
 	Q_OBJECT
@@ -129,6 +130,7 @@ private:
 	ColumnDock* columnDock;
 	WorksheetDock* worksheetDock;
 	XYCurveDock* lineSymbolCurveDock;
+	LabelWidget* textLabelDock;
 	
 	void updateGUI();
 	void openXML(QIODevice *file);
@@ -149,7 +151,7 @@ private slots:
 	void initGUI();
 	void undo();
 	void redo();
-	
+
 	bool newProject();
 	void openProject();
 	void openProject(QString filename);

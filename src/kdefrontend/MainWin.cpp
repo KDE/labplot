@@ -65,8 +65,6 @@
 #include "datasources/FileDataSource.h"
 
 
-// #include "projecttestcode.h"
-
  /*!
 	\class MainWin
 	\brief Main application window.
