@@ -65,7 +65,8 @@ private slots:
 	void fontSubScriptChanged(bool);
 	void fontStrikeOutChanged(bool);
 	void fontChanged(QFont);
-	void symbolMenu();
+	void charMenu();
+	void insertChar(QChar);
 	
 	void positionXChanged(int);
 	void positionYChanged(int);

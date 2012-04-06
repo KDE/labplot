@@ -34,6 +34,8 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <kdebug.h>
+#include <kcharselect.h>
+#include <kactioncollection.h>
 
 /*!
 	\class LabelWidget
@@ -53,15 +55,6 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
   	layout->setContentsMargins(2,2,2,2);
 	layout->setHorizontalSpacing(2);
 	layout->setVerticalSpacing(2);
-
-	//TODO: Populate the symbol menu
-	//QMenu* menu = new QMenu(this);
-	//QFont symbol("Symbol", 12, QFont::Bold);
- 	//menu->setFont(symbol);
-	//for(int i=97;i<122;i++)
-	//	menu->addAction( QChar(i) );
-	//ui.tbSymbols->setMenu(menu);
-	//ui.tbSymbols->setDefaultAction(menu->menuAction());
 
 	//Icons
 	ui.tbFontBold->setIcon( KIcon("format-text-bold") );
@@ -85,7 +78,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
 	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
-	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(symbolMenu()));
+	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
 	
 	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
@@ -241,20 +234,23 @@ void LabelWidget::fontChanged(QFont font){
 	ui.teLabel->setCurrentFont(font);
 }
 
-void LabelWidget::symbolMenu(){
+void LabelWidget::charMenu(){
 	QMenu menu;
+	KCharSelect selection(this,0,KCharSelect::SearchLine | KCharSelect::CharacterTable | KCharSelect::BlockCombos | KCharSelect::HistoryButtons);
+	selection.setCurrentFont(ui.teLabel->currentFont());
+	connect(&selection, SIGNAL(charSelected(QChar)), this, SLOT(insertChar(QChar)));
+	connect(&selection, SIGNAL(charSelected(QChar)), &menu, SLOT(close()));
 
-	//TODO
-	QTabWidget tabwidget;
-	QWidget smallgreektab;
-	tabwidget.addTab(&smallgreektab,"greek");
-	
 	QWidgetAction *widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(&tabwidget);
+	widgetAction->setDefaultWidget(&selection);
 	menu.addAction(widgetAction);
-
+	
 	QPoint pos(-menu.sizeHint().width()+ui.tbSymbols->width(),-menu.sizeHint().height());
 	menu.exec(ui.tbSymbols->mapToGlobal(pos));
+}
+
+void LabelWidget::insertChar(QChar c) {
+	ui.teLabel->insertPlainText(QString(c));
 }
 
 /*!
