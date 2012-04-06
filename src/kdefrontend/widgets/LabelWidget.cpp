@@ -183,20 +183,14 @@ void LabelWidget::fontItalicChanged(bool checked){
 	if (m_initializing)
 		return;
 
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
-	format.setFontItalic(checked);
-	QTextCursor cursor = ui.teLabel->textCursor();
-	cursor.setCharFormat(format);
+	ui.teLabel->setFontItalic(checked);
 }
 
 void LabelWidget::fontUnderlineChanged(bool checked){
 	if (m_initializing)
 		return;
 
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
-	format.setFontUnderline(checked);
-	QTextCursor cursor = ui.teLabel->textCursor();
-	cursor.setCharFormat(format);
+	ui.teLabel->setFontUnderline(checked);
 }
 
 void LabelWidget::fontSuperScriptChanged(bool checked){
