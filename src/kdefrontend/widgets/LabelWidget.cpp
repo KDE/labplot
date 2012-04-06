@@ -79,9 +79,9 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
 	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
 	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
+	connect(ui.tbFontStrikeOut, SIGNAL(clicked(bool)), this, SLOT(fontStrikeOutChanged(bool)));
 	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
-	connect(ui.tbFontStrikeOut, SIGNAL(clicked(bool)), this, SLOT(fontStrikeOutChanged(bool)));
 	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
 	
 	// Geometry
@@ -196,6 +196,15 @@ void LabelWidget::fontUnderlineChanged(bool checked){
 	ui.teLabel->setFontUnderline(checked);
 }
 
+void LabelWidget::fontStrikeOutChanged(bool checked){
+	if (m_initializing)
+		return;
+
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	format.setFontStrikeOut(checked);
+	ui.teLabel->setCurrentCharFormat(format);
+}
+
 void LabelWidget::fontSuperScriptChanged(bool checked){
 	if (m_initializing)
 		return;
@@ -206,8 +215,7 @@ void LabelWidget::fontSuperScriptChanged(bool checked){
 	else 
 		format.setVerticalAlignment(QTextCharFormat::AlignNormal);
 	
-	QTextCursor cursor = ui.teLabel->textCursor();
-	cursor.setCharFormat(format);
+	ui.teLabel->setCurrentCharFormat(format);
 }
 
 void LabelWidget::fontSubScriptChanged(bool checked){
@@ -220,18 +228,7 @@ void LabelWidget::fontSubScriptChanged(bool checked){
 	else 
 		format.setVerticalAlignment(QTextCharFormat::AlignNormal);
 	
-	QTextCursor cursor = ui.teLabel->textCursor();
-	cursor.setCharFormat(format);
-}
-
-void LabelWidget::fontStrikeOutChanged(bool checked){
-	if (m_initializing)
-		return;
-
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
-	format.setFontStrikeOut(checked);
-	QTextCursor cursor = ui.teLabel->textCursor();
-	cursor.setCharFormat(format);
+	ui.teLabel->setCurrentCharFormat(format);
 }
 
 void LabelWidget::fontChanged(QFont font){
