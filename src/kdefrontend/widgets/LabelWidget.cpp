@@ -35,7 +35,6 @@
 #include <QWidgetAction>
 #include <kdebug.h>
 #include <kcharselect.h>
-#include <kactioncollection.h>
 
 /*!
 	\class LabelWidget
@@ -100,10 +99,11 @@ LabelWidget::~LabelWidget() {}
 	sets the label to be edited to \c label.
 */
 void LabelWidget::setLabel(TextLabel *label){
+	if(!label)
+		return;
 	m_label = label;
-	//TODO: set ui.teLabel text
-	ui.teLabel->setText("test label");
-	//TODO: ui.kcbTextColor->setColor(m_label->color());
+
+	ui.teLabel->setText(m_label->text());
 }
 
 //TODO
@@ -112,6 +112,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
+	ui.teLabel->setText(m_label->text());
 }
 
 //**********************************************************
@@ -126,8 +127,7 @@ void LabelWidget::textChanged(){
 		return;
 	}
 
-	// TODO: use rich text
-	m_label->setText(ui.teLabel->toPlainText());
+	m_label->setText(ui.teLabel->toHtml());
 }
 
 void LabelWidget::charFormatChanged(QTextCharFormat format){
