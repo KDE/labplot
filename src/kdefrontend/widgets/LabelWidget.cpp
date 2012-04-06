@@ -54,6 +54,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
   	layout->setContentsMargins(2,2,2,2);
 	layout->setHorizontalSpacing(2);
 	layout->setVerticalSpacing(2);
+	ui.kcbTextColor->setColor(Qt::black); // default color
 
 	//Icons
 	ui.tbFontBold->setIcon( KIcon("format-text-bold") );
@@ -150,8 +151,9 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 	else
 		ui.tbFontSubScript->setChecked(false);
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
-	// multiple colors and fonts possible?
-	//ui.kcbTextColor->setColor(format.foreground().color());
+
+	ui.kcbTextColor->setColor(format.foreground().color());
+	ui.kfontRequester->setFont(format.font());
 }
 
 void LabelWidget::texUsedChanged(bool checked){
