@@ -53,8 +53,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	layout->setHorizontalSpacing(2);
 	layout->setVerticalSpacing(2);
 
-
-		//Populate the menus //TODO
+	//Populate the menus //TODO
 	QMenu* menu = new QMenu(this);
 	QFont symbol("Symbol", 12, QFont::Bold);
  	menu->setFont(symbol);
@@ -105,6 +104,11 @@ void LabelWidget::textChanged(){
 	if (m_initializing)
 		return;
 	
+	if(!m_label) {
+		kWarning()<<"m_label not defined";
+		return;
+	}
+		
 	m_label->setText(ui.teLabel->toPlainText());
 }
 
