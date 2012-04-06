@@ -69,6 +69,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontUnderline->setIcon( KIcon("format-text-underline") );
 	ui.tbFontSuperScript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
+	ui.tbFontStrikeOut->setIcon( KIcon("format-text-strikethrough") );
 	
 	//SLOTS
 	// text properties
@@ -80,6 +81,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
 	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
+	connect(ui.tbFontStrikeOut, SIGNAL(clicked(bool)), this, SLOT(fontStrikeOutChanged(bool)));
 	
 	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
@@ -137,6 +139,7 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 		ui.tbFontSubScript->setChecked(true);
 	else
 		ui.tbFontSubScript->setChecked(false);
+	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
 }
 
 void LabelWidget::texUsedChanged(bool checked){
@@ -204,6 +207,16 @@ void LabelWidget::fontSubScriptChanged(bool checked){
 	else 
 		format.setFontWeight(QTextCharFormat::AlignNormal);
 	
+	QTextCursor cursor = ui.teLabel->textCursor();
+	cursor.setCharFormat(format);
+}
+
+void LabelWidget::fontStrikeOutChanged(bool checked){
+	if (m_initializing)
+		return;
+
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	format.setFontStrikeOut(checked);
 	QTextCursor cursor = ui.teLabel->textCursor();
 	cursor.setCharFormat(format);
 }
