@@ -57,6 +57,7 @@ private slots:
 	void textChanged();
 	void charFormatChanged(QTextCharFormat format);
 	void texUsedChanged(bool);
+	void textColorChanged(QColor);
 	void fontBoldChanged(bool);
 	void fontItalicChanged(bool);
 	void fontUnderlineChanged(bool);

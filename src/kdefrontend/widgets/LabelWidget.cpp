@@ -75,6 +75,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
 	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)), 
 			this, SLOT(charFormatChanged(QTextCharFormat)));
+	connect(ui.kcbTextColor, SIGNAL(changed(QColor)), this, SLOT(textColorChanged(QColor)));
 	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
 	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
 	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
@@ -105,6 +106,8 @@ void LabelWidget::setLabel(TextLabel *label){
 	m_label = label;
 	//TODO: set ui.teLabel text
 	ui.teLabel->setText("test label");
+	//ui.kcbTextColor->setColor(m_label->color());
+	ui.kcbTextColor->setColor(Qt::black);
 }
 
 //TODO
@@ -147,6 +150,8 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 	else
 		ui.tbFontSubScript->setChecked(false);
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	// multiple colors possible?
+	//ui.kcbTextColor->setColor(format.foreground().color());
 }
 
 void LabelWidget::texUsedChanged(bool checked){
@@ -154,6 +159,10 @@ void LabelWidget::texUsedChanged(bool checked){
 		return;
 
 	//TODO activate again m_label->setTexUsed(checked);
+}
+
+void LabelWidget::textColorChanged(QColor color){
+	ui.teLabel->setTextColor(color);
 }
 
 void LabelWidget::fontBoldChanged(bool checked){
