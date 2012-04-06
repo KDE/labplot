@@ -112,16 +112,22 @@
        </spacer>
       </item>
       <item row="0" column="6">
-       <widget class="QToolButton" name="tbFontSuperscript">
+       <widget class="QToolButton" name="tbFontSuperScript">
         <property name="text">
          <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="0" column="7">
-       <widget class="QToolButton" name="tbFontSubscript">
+       <widget class="QToolButton" name="tbFontSubScript">
         <property name="text">
          <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

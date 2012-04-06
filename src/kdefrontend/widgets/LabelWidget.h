@@ -59,6 +59,8 @@ private slots:
 	void fontBoldChanged(bool);
 	void fontItalicChanged(bool);
 	void fontUnderlineChanged(bool);
+	void fontSuperScriptChanged(bool);
+	void fontSubScriptChanged(bool);
 	
 	void positionXChanged(int);
 	void positionYChanged(int);

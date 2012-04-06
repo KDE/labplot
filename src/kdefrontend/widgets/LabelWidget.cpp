@@ -67,17 +67,19 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontBold->setIcon( KIcon("format-text-bold") );
 	ui.tbFontItalic->setIcon( KIcon("format-text-italic") );
 	ui.tbFontUnderline->setIcon( KIcon("format-text-underline") );
-	ui.tbFontSuperscript->setIcon( KIcon("format-text-superscript") );
-	ui.tbFontSubscript->setIcon( KIcon("format-text-subscript") );
-	
+	ui.tbFontSuperScript->setIcon( KIcon("format-text-superscript") );
+	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
 	
 	//SLOTS
+	// text properties
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
 	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)), 
 			this, SLOT(charFormatChanged(QTextCharFormat)));
 	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
 	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
 	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
+	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
+	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
 	
 	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
@@ -127,6 +129,14 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 		ui.tbFontBold->setChecked(false);
 	ui.tbFontItalic->setChecked(format.fontItalic());
 	ui.tbFontUnderline->setChecked(format.fontUnderline());
+	if(format.verticalAlignment() == QTextCharFormat::AlignSuperScript)
+		ui.tbFontSuperScript->setChecked(true);
+	else
+		ui.tbFontSuperScript->setChecked(false);
+	if(format.verticalAlignment() == QTextCharFormat::AlignSubScript)
+		ui.tbFontSubScript->setChecked(true);
+	else
+		ui.tbFontSubScript->setChecked(false);
 }
 
 void LabelWidget::texUsedChanged(bool checked){
@@ -166,6 +176,34 @@ void LabelWidget::fontUnderlineChanged(bool checked){
 
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	format.setFontUnderline(checked);
+	QTextCursor cursor = ui.teLabel->textCursor();
+	cursor.setCharFormat(format);
+}
+
+void LabelWidget::fontSuperScriptChanged(bool checked){
+	if (m_initializing)
+		return;
+
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	if (checked)
+		format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+	else 
+		format.setFontWeight(QTextCharFormat::AlignNormal);
+	
+	QTextCursor cursor = ui.teLabel->textCursor();
+	cursor.setCharFormat(format);
+}
+
+void LabelWidget::fontSubScriptChanged(bool checked){
+	if (m_initializing)
+		return;
+
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	if (checked)
+		format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+	else 
+		format.setFontWeight(QTextCharFormat::AlignNormal);
+	
 	QTextCursor cursor = ui.teLabel->textCursor();
 	cursor.setCharFormat(format);
 }
