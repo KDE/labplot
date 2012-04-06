@@ -50,6 +50,7 @@
 #include "worksheet/plots/cartesian/XYCurve.h"
 #include "lib/ActionManager.h"
 #include "core/column/Column.h"
+#include "../../backend/worksheet/TextLabel.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KAction>
@@ -533,11 +534,13 @@ void WorksheetView::enableSelectionMode(){
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action){
-	AbstractAspect* aspect;
+	AbstractAspect* aspect = 0;
 	if ( action == addPlotAction ){
 		aspect = new CartesianPlot("xy-plot");
 	}else if ( action == addTextLabelAction ){
-		QMessageBox::warning(this, "Add text label", "Not implemented yet");
+		TextLabel* l = new TextLabel("text label");
+		l->setText("text label");
+		m_worksheet->addChild(l);
 		return;
 	}
 
