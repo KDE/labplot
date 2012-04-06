@@ -32,6 +32,7 @@
 #include "../../backend/worksheet/TextLabel.h"
 #include "../../tools/TexRenderer.h"
 #include <QMenu>
+#include <QWidgetAction>
 #include <kdebug.h>
 
 /*!
@@ -66,9 +67,10 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontBold->setIcon( KIcon("format-text-bold") );
 	ui.tbFontItalic->setIcon( KIcon("format-text-italic") );
 	ui.tbFontUnderline->setIcon( KIcon("format-text-underline") );
+	ui.tbFontStrikeOut->setIcon( KIcon("format-text-strikethrough") );
 	ui.tbFontSuperScript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
-	ui.tbFontStrikeOut->setIcon( KIcon("format-text-strikethrough") );
+	ui.tbSymbols->setIcon( KIcon("applications-education-mathematics") );
 	
 	//SLOTS
 	// text properties
@@ -83,6 +85,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
 	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
+	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(symbolMenu()));
 	
 	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
@@ -236,6 +239,22 @@ void LabelWidget::fontChanged(QFont font){
 		return;
 
 	ui.teLabel->setCurrentFont(font);
+}
+
+void LabelWidget::symbolMenu(){
+	QMenu menu;
+
+	//TODO
+	QTabWidget tabwidget;
+	QWidget smallgreektab;
+	tabwidget.addTab(&smallgreektab,"greek");
+	
+	QWidgetAction *widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(&tabwidget);
+	menu.addAction(widgetAction);
+
+	QPoint pos(-menu.sizeHint().width()+ui.tbSymbols->width(),-menu.sizeHint().height());
+	menu.exec(ui.tbSymbols->mapToGlobal(pos));
 }
 
 /*!
