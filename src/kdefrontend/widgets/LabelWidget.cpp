@@ -70,12 +70,14 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontSuperscript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubscript->setIcon( KIcon("format-text-subscript") );
 	
-	//TODO remove later
-	ui.lOffset->hide();
-	ui.sbOffset->hide();
 	
 	//SLOTS
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
+	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)), 
+			this, SLOT(charFormatChanged(QTextCharFormat)));
+	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
+	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
+	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
 	
 	// Geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
@@ -98,6 +100,8 @@ LabelWidget::~LabelWidget() {}
 */
 void LabelWidget::setLabel(TextLabel *label){
 	m_label = label;
+	//TODO: set ui.teLabel text
+	ui.teLabel->setText("test label");
 }
 
 //**********************************************************
@@ -115,11 +119,55 @@ void LabelWidget::textChanged(){
 	m_label->setText(ui.teLabel->toPlainText());
 }
 
+void LabelWidget::charFormatChanged(QTextCharFormat format){
+	// update button state
+	if(format.fontWeight() == QFont::Bold)
+		ui.tbFontBold->setChecked(true);
+	else
+		ui.tbFontBold->setChecked(false);
+	ui.tbFontItalic->setChecked(format.fontItalic());
+	ui.tbFontUnderline->setChecked(format.fontUnderline());
+}
+
 void LabelWidget::texUsedChanged(bool checked){
 	if (m_initializing)
 		return;
 
 	//TODO m_label->setTexIsUsed(checked);
+}
+
+void LabelWidget::fontBoldChanged(bool checked){
+	if (m_initializing)
+		return;
+
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	if (checked)
+		format.setFontWeight(QFont::Bold);
+	else 
+		format.setFontWeight(QFont::Normal);
+	
+	QTextCursor cursor = ui.teLabel->textCursor();
+	cursor.setCharFormat(format);
+}
+
+void LabelWidget::fontItalicChanged(bool checked){
+	if (m_initializing)
+		return;
+
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	format.setFontItalic(checked);
+	QTextCursor cursor = ui.teLabel->textCursor();
+	cursor.setCharFormat(format);
+}
+
+void LabelWidget::fontUnderlineChanged(bool checked){
+	if (m_initializing)
+		return;
+
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	format.setFontUnderline(checked);
+	QTextCursor cursor = ui.teLabel->textCursor();
+	cursor.setCharFormat(format);
 }
 
 /*!

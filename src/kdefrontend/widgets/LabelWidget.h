@@ -54,7 +54,11 @@ signals:
 
 private slots:
 	void textChanged();
+	void charFormatChanged(QTextCharFormat format);
 	void texUsedChanged(bool);
+	void fontBoldChanged(bool);
+	void fontItalicChanged(bool);
+	void fontUnderlineChanged(bool);
 	
 	void positionXChanged(int);
 	void positionYChanged(int);
