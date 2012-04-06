@@ -54,15 +54,14 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	layout->setHorizontalSpacing(2);
 	layout->setVerticalSpacing(2);
 
-	//Populate the menus //TODO
-	QMenu* menu = new QMenu(this);
-	QFont symbol("Symbol", 12, QFont::Bold);
- 	menu->setFont(symbol);
-	for(int i=97;i<122;i++)
-		menu->addAction( QChar(i) );
-	
-	ui.tbSmallGreekLetters->setMenu(menu);
-	ui.tbSmallGreekLetters->setDefaultAction(menu->menuAction());
+	//TODO: Populate the symbol menu
+	//QMenu* menu = new QMenu(this);
+	//QFont symbol("Symbol", 12, QFont::Bold);
+ 	//menu->setFont(symbol);
+	//for(int i=97;i<122;i++)
+	//	menu->addAction( QChar(i) );
+	//ui.tbSymbols->setMenu(menu);
+	//ui.tbSymbols->setDefaultAction(menu->menuAction());
 
 	//Icons
 	ui.tbFontBold->setIcon( KIcon("format-text-bold") );
@@ -71,6 +70,9 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontSuperscript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubscript->setIcon( KIcon("format-text-subscript") );
 	
+	//TODO remove later
+	ui.lOffset->hide();
+	ui.sbOffset->hide();
 	
 	//SLOTS
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));

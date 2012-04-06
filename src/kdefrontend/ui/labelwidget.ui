@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>361</width>
+    <width>391</width>
     <height>512</height>
    </rect>
   </property>
@@ -45,7 +45,7 @@
       <item row="0" column="0">
        <widget class="QCheckBox" name="chbTex">
         <property name="text">
-         <string>Tex</string>
+         <string>TeX</string>
         </property>
        </widget>
       </item>
@@ -55,7 +55,7 @@
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::MinimumExpanding</enum>
+         <enum>QSizePolicy::Minimum</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -92,7 +92,7 @@
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
+         <enum>QSizePolicy::Minimum</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -116,44 +116,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="8">
-       <spacer>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>5</width>
-          <height>18</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="9">
-       <widget class="QToolButton" name="tbSmallGreekLetters">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="10">
-       <widget class="QToolButton" name="tbBigGreekLetters">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="11">
-       <widget class="QToolButton" name="tbSymbolLetters">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="12">
+      <item row="1" column="0" colspan="13">
        <widget class="QTextEdit" name="teLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -168,6 +131,29 @@
          </size>
         </property>
        </widget>
+      </item>
+      <item row="0" column="9">
+       <widget class="QToolButton" name="tbSymbols">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="8">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>5</width>
+          <height>18</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>
