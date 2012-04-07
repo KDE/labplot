@@ -66,6 +66,8 @@ class TextLabel : public AbstractWorksheetElement{
 
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
+		
+		void updateTexImage();
 
 		typedef TextLabelPrivate Private;
 

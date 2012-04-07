@@ -163,6 +163,11 @@ bool TextLabel::isVisible() const {
 	return d->isVisible();
 }
 
+void TextLabel::updateTexImage(){
+	Q_D(TextLabel);
+	d->updateTexImage();
+}
+
 //################################################################
 //################### Private implementation ##########################
 //################################################################
@@ -240,13 +245,13 @@ void TextLabelPrivate::updatePosition(){
 // 	update();
 }
 
-//TODO
 void TextLabelPrivate::updateTexImage(){
 	bool status = TexRenderer::renderImageLaTeX(text, texImage);
 	if (status)
 		qDebug()<<"tex image created";
 	else
 		qDebug()<<"tex image not created";
+	update();
 }
 
 bool TextLabelPrivate::swapVisible(bool on){

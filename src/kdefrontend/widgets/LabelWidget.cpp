@@ -67,6 +67,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	
 	//SLOTS
 	// text properties
+	connect(ui.chbTex, SIGNAL(clicked(bool)), this, SLOT(texUsedChanged(bool)) );
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
 	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)), 
 			this, SLOT(charFormatChanged(QTextCharFormat)));
@@ -80,18 +81,12 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
 	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
 	
-	// Geometry
+	// geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
 	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
 	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
 	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
-	
-	connect( ui.chbTex, SIGNAL(clicked(bool)), this, SLOT(texUsedChanged(bool)) );
-	
-	//TODO remove later
-	ui.lOffset->hide();
-	ui.sbOffset->hide();
 }
 
 LabelWidget::~LabelWidget() {}
@@ -128,7 +123,12 @@ void LabelWidget::textChanged(){
 		return;
 	}
 
-	m_label->setText(ui.teLabel->toHtml());
+	if (ui.chbTex->isChecked()) {
+		m_label->setText(ui.teLabel->toPlainText());
+		m_label->updateTexImage();
+	}
+	else
+		m_label->setText(ui.teLabel->toHtml());
 }
 
 void LabelWidget::charFormatChanged(QTextCharFormat format){
@@ -160,7 +160,32 @@ void LabelWidget::texUsedChanged(bool checked){
 	if (m_initializing)
 		return;
 
-	//TODO activate again m_label->setTexUsed(checked);
+	if(checked) {
+		m_label->setText(ui.teLabel->toPlainText());
+		//disable ui elements
+		ui.kcbTextColor->setEnabled(false);
+		ui.tbFontBold->setEnabled(false);
+		ui.tbFontItalic->setEnabled(false);
+		ui.tbFontUnderline->setEnabled(false);
+		ui.tbFontSuperScript->setEnabled(false);
+		ui.tbFontSubScript->setEnabled(false);
+		ui.tbFontStrikeOut->setEnabled(false);
+		ui.tbSymbols->setEnabled(false);
+		ui.kfontRequester->setEnabled(false);
+	}
+	else {
+		m_label->setText(ui.teLabel->toHtml());
+		ui.kcbTextColor->setEnabled(true);
+		ui.tbFontBold->setEnabled(true);
+		ui.tbFontItalic->setEnabled(true);
+		ui.tbFontUnderline->setEnabled(true);
+		ui.tbFontSuperScript->setEnabled(true);
+		ui.tbFontSubScript->setEnabled(true);
+		ui.tbFontStrikeOut->setEnabled(true);
+		ui.tbSymbols->setEnabled(true);
+		ui.kfontRequester->setEnabled(true);
+	}
+	m_label->setTexUsed(checked);
 }
 
 void LabelWidget::textColorChanged(QColor color){
