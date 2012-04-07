@@ -251,10 +251,8 @@ void TextLabelPrivate::updatePosition(){
 
 void TextLabelPrivate::updateTexImage(){
 	bool status = TexRenderer::renderImageLaTeX(text, texImage);
-	if (status)
-		qDebug()<<"tex image created";
-	else
-		qDebug()<<"tex image not created";
+	if (!status)
+		qDebug()<<"TeX image not created";
 	retransform();
 }
 

@@ -161,7 +161,6 @@ void LabelWidget::texUsedChanged(bool checked){
 		return;
 
 	if(checked) {
-		m_label->setText(ui.teLabel->toPlainText());
 		//disable ui elements
 		ui.kcbTextColor->setEnabled(false);
 		ui.tbFontBold->setEnabled(false);
@@ -174,7 +173,6 @@ void LabelWidget::texUsedChanged(bool checked){
 		ui.kfontRequester->setEnabled(false);
 	}
 	else {
-		m_label->setText(ui.teLabel->toHtml());
 		ui.kcbTextColor->setEnabled(true);
 		ui.tbFontBold->setEnabled(true);
 		ui.tbFontItalic->setEnabled(true);
@@ -185,6 +183,17 @@ void LabelWidget::texUsedChanged(bool checked){
 		ui.tbSymbols->setEnabled(true);
 		ui.kfontRequester->setEnabled(true);
 	}
+
+	if(!m_label) {
+		kWarning()<<"m_label not defined";
+		return;
+	}
+
+	if(checked)
+		m_label->setText(ui.teLabel->toPlainText());
+	else
+		m_label->setText(ui.teLabel->toHtml());
+
 	m_label->setTexUsed(checked);
 }
 
