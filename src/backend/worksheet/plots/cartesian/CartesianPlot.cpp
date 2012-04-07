@@ -71,7 +71,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
 CartesianPlot::~CartesianPlot(){
 	delete d_ptr;
 	//TODO delete  children?
-// 	delete m_title;
+ 	delete m_title;
 // 	delete m_coordinateSystem;
 // 	delete m_plotArea;
 }
@@ -90,11 +90,6 @@ void CartesianPlot::init(){
 	d->rect.setY(y);
 	d->rect.setWidth(w);
 	d->rect.setHeight(h);
-
-	//Plot title
-// 	m_title = new TextLabel();
-// 	m_title->setText(this->name());
-//	addChild(m_title);
 
 	//Coordinate system
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
@@ -154,8 +149,7 @@ void CartesianPlot::init(){
 	axis->setLabelsPosition(Axis::NoLabels);
 
 	//Plot title
-// 	m_title = new TextLabel();
-// 	m_title->setText(this->name());
+ 	m_title = new TextLabel(this->name());
 // 	addChild(m_title);
 	
 	initActions();

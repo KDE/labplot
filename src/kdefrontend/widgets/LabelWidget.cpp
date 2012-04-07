@@ -98,8 +98,10 @@ void LabelWidget::setLabel(TextLabel *label){
 	if(!label)
 		return;
 	m_label = label;
+	qDebug()<<label->text();
 
-	ui.teLabel->setText(m_label->text());
+	if(!m_label->text().isEmpty())
+		ui.teLabel->setText(m_label->text());
 }
 
 //TODO
@@ -108,7 +110,8 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
-	ui.teLabel->setText(m_label->text());
+	if(!m_label->text().isEmpty())
+		ui.teLabel->setText(m_label->text());
 }
 
 //**********************************************************

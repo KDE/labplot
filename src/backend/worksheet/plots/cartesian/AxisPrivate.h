@@ -37,6 +37,7 @@
 #include "Axis.h"
 
 class AbstractCoordinateSystem;
+class TextLabel;
 
 class AxisPrivate: public QGraphicsItem {
 	public:
@@ -55,7 +56,7 @@ class AxisPrivate: public QGraphicsItem {
 		qreal lineOpacity;
 
 		// Title
-		//TODO
+		TextLabel *title;
 
 		// Ticks
 		Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none

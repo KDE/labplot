@@ -31,6 +31,7 @@
 #include "../../Worksheet.h"
 #include "Axis.h"
 #include "AxisPrivate.h"
+#include "../../TextLabel.h"
 #include "../AbstractCoordinateSystem.h"
 #include "CartesianCoordinateSystem.h"
 #include "../AbstractPlot.h"
@@ -88,10 +89,9 @@ void Axis::init() {
 	
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
-	//TODO
-// 	d->title = new TextLabel();
-// 	d->title->setText(this->name());
-//	d->title->loadConfig(group);
+	// axis title
+ 	d->title = new TextLabel(this->name());
+//TODO	d->title->loadConfig(group);
 	
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
@@ -924,6 +924,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	return;
   
   //draw the axis title
+	//TODO
 
   //draw the line
   if (linePen.style() != Qt::NoPen){
