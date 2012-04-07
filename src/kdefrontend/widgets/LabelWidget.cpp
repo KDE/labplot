@@ -328,7 +328,7 @@ void LabelWidget::customPositionXChanged(double value){
 		return;
 
 	QPointF pos = m_label->position();
-	pos.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	pos.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 	m_label->setPosition(pos);
 }
 
