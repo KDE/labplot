@@ -180,7 +180,6 @@ QString TextLabelPrivate::name() const{
 
 void TextLabelPrivate::retransform(){
 	staticText.setText(text);
-	
 	//TODO
 // 			switch (horizontalAlignment) {
 // 			case TextLabel::hAlignLeft:
@@ -211,9 +210,14 @@ void TextLabelPrivate::retransform(){
 	
 	boundingRectangle.setX(position.x());
 	boundingRectangle.setY(position.y());
-	boundingRectangle.setWidth(staticText.size().width()*scaleFactor);
-	boundingRectangle.setHeight(staticText.size().height()*scaleFactor);
-	
+	if (texUsed){
+		boundingRectangle.setWidth(texImage.width()*scaleFactor);
+		boundingRectangle.setHeight(texImage.height()*scaleFactor);
+	}
+	else {
+		boundingRectangle.setWidth(staticText.size().width()*scaleFactor);
+		boundingRectangle.setHeight(staticText.size().height()*scaleFactor);
+	}
 	recalcShapeAndBoundingRect();
 }
 
@@ -251,7 +255,7 @@ void TextLabelPrivate::updateTexImage(){
 		qDebug()<<"tex image created";
 	else
 		qDebug()<<"tex image not created";
-	update();
+	retransform();
 }
 
 bool TextLabelPrivate::swapVisible(bool on){
@@ -303,15 +307,15 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 		painter->drawImage(rect, texImage, rect);
 		return;
 	}
-
+	
 	painter->scale(scaleFactor, scaleFactor);
 	painter->rotate(rotationAngle);
  	painter->drawStaticText(positionOffset, staticText);
-	
+
 	if (isSelected()){
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
 		painter->drawPath(labelShape);
-  }
+	}
   
 	painter->restore();
 }
