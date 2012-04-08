@@ -376,7 +376,6 @@ void LabelWidget::rotationChanged(int value){
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
-//TODO
 void LabelWidget::loadConfig(KConfigGroup &group) {
 	if(m_label == NULL)
 		return;
@@ -387,11 +386,11 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	ui.teLabel->setPlainText(group.readEntry("LabelText", m_label->text()));
 
 	// Geometry
-//	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->position()) );
+	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->horizontalPosition()) );
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("TitlePositionXValue", m_label->position().x()),Worksheet::Centimeter) );
-//	ui.cbPositionY->setCurrentIndex( group.readEntry("TitlePositionY", (int) m_label->positionY()) );
+	ui.cbPositionY->setCurrentIndex( group.readEntry("TitlePositionY", (int) m_label->verticalPosition()) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("TitlePositionYValue", m_label->position().y()),Worksheet::Centimeter) );
-	//group.writeEntry("TitleOffset", ui.sbOffset->value());
+	//TODO group.writeEntry("TitleOffset", ui.sbOffset->value());
 	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("TitleHorizontalAlignment", (int) m_label->horizontalAlignment()) );
 	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("TitleVerticalAlignment", (int) m_label->verticalAlignment()) );
 	ui.sbRotation->setValue( group.readEntry("TitleRotation", m_label->rotationAngle()) );
@@ -399,7 +398,6 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	m_initializing = false;
 }
 
-//TODO
 void LabelWidget::saveConfig(KConfigGroup &group) {
 	//Text
 	group.writeEntry("LabelText", ui.teLabel->toPlainText());
@@ -409,7 +407,7 @@ void LabelWidget::saveConfig(KConfigGroup &group) {
 	group.writeEntry("TitlePositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
 	group.writeEntry("TitlePositionY", ui.cbPositionY->currentIndex());
 	group.writeEntry("TitlePositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
-	//group.writeEntry("TitleOffset", ui.sbOffset->value());
+	//TODO group.writeEntry("TitleOffset", ui.sbOffset->value());
 	group.writeEntry("TitleHorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
 	group.writeEntry("TitleVerticalAlignment", ui.cbVerticalAlignment->currentIndex());
 	group.writeEntry("TitleRotation", ui.sbRotation->value());

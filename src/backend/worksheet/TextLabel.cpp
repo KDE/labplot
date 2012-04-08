@@ -93,6 +93,8 @@ void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, QString, text, text);
 CLASS_SHARED_D_READER_IMPL(TextLabel, bool, texUsed, texUsed);
+BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalPosition, horizontalPosition, horizontalPosition);
+BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalPosition, verticalPosition, verticalPosition);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QPointF, position, position);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlignment, verticalAlignment);
