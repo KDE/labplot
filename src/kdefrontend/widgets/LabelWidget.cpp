@@ -135,6 +135,9 @@ void LabelWidget::textChanged(){
 
 	if (ui.chbTex->isChecked()) {
 		m_label->setText(ui.teLabel->toPlainText());
+		// TODO: this uses format of current selection only
+		QTextCharFormat format = ui.teLabel->currentCharFormat();
+		m_label->setTexFontSize(format.fontPointSize());
 		m_label->updateTexImage();
 	}
 	else
@@ -181,7 +184,6 @@ void LabelWidget::texUsedChanged(bool checked){
 		ui.tbFontSubScript->setEnabled(false);
 		ui.tbFontStrikeOut->setEnabled(false);
 		ui.tbSymbols->setEnabled(false);
-		ui.kfontRequester->setEnabled(false);
 	}
 	else {
 		ui.kcbTextColor->setEnabled(true);
@@ -192,7 +194,6 @@ void LabelWidget::texUsedChanged(bool checked){
 		ui.tbFontSubScript->setEnabled(true);
 		ui.tbFontStrikeOut->setEnabled(true);
 		ui.tbSymbols->setEnabled(true);
-		ui.kfontRequester->setEnabled(true);
 	}
 
 	if(!m_label) {

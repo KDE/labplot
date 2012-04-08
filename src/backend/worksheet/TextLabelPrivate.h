@@ -40,7 +40,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		float scaleFactor;
 		QString text;
 		bool texUsed;
-		QImage texImage;
+		qreal texFontSize;
 		
 		QPointF position;
 		QPointF alignedPosition;
@@ -67,6 +67,9 @@ class TextLabelPrivate: public QGraphicsItem{
 		virtual QRectF boundingRect() const;
  		virtual QPainterPath shape() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+
+	private:
+		QImage texImage;
 };
 
 #endif

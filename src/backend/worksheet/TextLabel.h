@@ -57,6 +57,7 @@ class TextLabel : public AbstractWorksheetElement{
 
 		CLASS_D_ACCESSOR_DECL(QString, text, Text);
 		BASIC_D_ACCESSOR_DECL(bool, texUsed, TexUsed);
+		BASIC_D_ACCESSOR_DECL(qreal, texFontSize, TexFontSize);
 		CLASS_D_ACCESSOR_DECL(QPointF, position, Position);
 		BASIC_D_ACCESSOR_DECL(HorizontalPosition, horizontalPosition, HorizontalPosition);
 		BASIC_D_ACCESSOR_DECL(VerticalPosition, verticalPosition, VerticalPosition);

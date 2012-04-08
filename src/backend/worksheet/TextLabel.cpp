@@ -108,11 +108,11 @@ void TextLabel::setText(const QString &text) {
 		exec(new TextLabelSetTextCmd(d, text, tr("%1: set label text")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetTexUsed, bool, texUsed, updateTexImage);
-void TextLabel::setTexUsed(const bool tex) {
+STD_SETTER_CMD_IMPL_F(TextLabel, SetTexFontSize, qreal, texFontSize, updateTexImage);
+void TextLabel::setTexFontSize(const qreal fontSize) {
 	Q_D(TextLabel);
-	if (tex != d->texUsed)
-		exec(new TextLabelSetTexUsedCmd(d, tex, tr("%1: set use tex syntax")));
+	if (fontSize != d->texFontSize)
+		exec(new TextLabelSetTexFontSizeCmd(d, fontSize, tr("%1: set tex font size")));
 }
 
 STD_SETTER_CMD_IMPL_F(TextLabel, SetPosition, QPointF, position, retransform);
@@ -263,7 +263,7 @@ void TextLabelPrivate::updatePosition(){
 
 void TextLabelPrivate::updateTexImage(){
 	qDebug()<<"updateTexImage()";
-	bool status = TexRenderer::renderImageLaTeX(text, texImage);
+	bool status = TexRenderer::renderImageLaTeX(text, texImage, texFontSize);
 	if (!status)
 		qDebug()<<"TeX image not created";
 	retransform();

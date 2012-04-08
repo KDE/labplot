@@ -38,7 +38,7 @@
 // use latex to render LaTeX text
 // see tex2im, etc.
 // TODO: color, font size
-bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
+bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize){
 	kWarning()<<teXString<<endl;
 	QTemporaryFile file("labplot_XXXXXX.tex");
 	// for debugging *.tex file
@@ -48,6 +48,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
 
 	// create latex skel
 	QTextStream out(&file);
+	//TODO: use fontSize (or later in convert process)
 	out<<"\\documentclass[12pt]{article}\n\\usepackage{color}\n\\usepackage[dvips]{graphicx}\n\\pagestyle{empty}\n\\begin{document}\n";
 	out<<teXString;
 	out<<"\n\\end{document}";
