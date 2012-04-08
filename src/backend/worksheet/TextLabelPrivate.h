@@ -43,7 +43,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		QImage texImage;
 		
 		QPointF position;
-		QPointF positionOffset;
+		QPointF alignedPosition;
 		TextLabel::HorizontalPosition horizontalPosition;
 		TextLabel::VerticalPosition verticalPosition;
 		

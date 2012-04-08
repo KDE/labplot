@@ -44,10 +44,10 @@ class TextLabel : public AbstractWorksheetElement{
 	Q_OBJECT
 
 	public:
-		enum HorizontalPosition {HorizontalLeft, HorizontalCenter, HorizontalRight, HorizontalCustom};
-		enum VerticalPosition {VerticalTop, VerticalCenter, VerticalBottom, VerticalCustom};
+		enum HorizontalPosition {hPositionlLeft, hPositionCenter, hPositionRight, hPositionCustom};
+		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
 		
-		enum HorizontalAlignment {hAlignLeft, 	hAlignCenter, hAlignRight};
+		enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
 		enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
 
 		TextLabel(const QString &name);

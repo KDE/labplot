@@ -38,7 +38,7 @@
 
 /**
  * \class TextLabel
- * \brief A label supporting rendering of hml- and tex-formated textes.
+ * \brief A label supporting rendering of html- and tex-formated textes.
  * 
  */
 
@@ -57,16 +57,19 @@ void TextLabel::init() {
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
 
-	d->horizontalPosition = TextLabel::HorizontalCenter;
-	d->verticalPosition = TextLabel::VerticalCenter;
 	d->texUsed = false;
-	d->rotationAngle = 0.0;
-	d->position.setX(100);
-	d->position.setY(100);
-	d->positionOffset.setX(0);
-	d->positionOffset.setY(0);
-	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
 	d->staticText.setTextFormat(Qt::RichText);
+
+	d->horizontalPosition = TextLabel::hPositionCustom;
+	d->verticalPosition = TextLabel::vPositionCustom;
+	d->position.setX( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
+	d->position.setY( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
+	
+	d->horizontalAlignment= TextLabel::hAlignRight;
+	d->verticalAlignment= TextLabel::vAlignTop;
+
+	d->rotationAngle = 0.0;
+	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
 }
 
 TextLabel::~TextLabel() {
@@ -178,36 +181,13 @@ QString TextLabelPrivate::name() const{
 	return q->name();
 }
 
+/*!
+	calculates the position and the bounding box of the label. Called on geometry or text changes.
+ */
 void TextLabelPrivate::retransform(){
 	staticText.setText(text);
-	//TODO
-// 			switch (horizontalAlignment) {
-// 			case TextLabel::hAlignLeft:
-// 				pos.setX(textRect.left());
-// 				break;
-// 			case TextLabel::hAlignCenter:
-// 				pos.setX(textRect.center().x());
-// 				break;
-// 			case TextLabel::hAlignRight:
-// 				pos.setX(textRect.right());
-// 				break;
-// 		}
-// 
-// 		switch (verticalAlignment) {
-// 			case TextLabel::vAlignTop:
-// 				pos.setY(textRect.top());
-// 				break;
-// 			case TextLabel::vAlignCenter:
-// 				pos.setY(textRect.center().y());
-// 				break;
-// 			case TextLabel::vAlignBottom:
-// 				pos.setY(textRect.bottom());
-// 				break;
-// 		}
-		
-	positionOffset.setX(0);
-	positionOffset.setY(0);
 	
+	//bounding rectangle
 	boundingRectangle.setX(position.x());
 	boundingRectangle.setY(position.y());
 	if (texUsed){
@@ -218,6 +198,36 @@ void TextLabelPrivate::retransform(){
 		boundingRectangle.setWidth(staticText.size().width()*scaleFactor);
 		boundingRectangle.setHeight(staticText.size().height()*scaleFactor);
 	}
+	
+	//depending on the alignment, calculate the new position
+	switch (horizontalAlignment) {
+		case TextLabel::hAlignLeft:
+			alignedPosition.setX(boundingRectangle.x() - boundingRectangle.width());
+			break;
+		case TextLabel::hAlignCenter:
+			alignedPosition.setX(boundingRectangle.x() - boundingRectangle.width()/2);
+			break;
+		case TextLabel::hAlignRight:
+			alignedPosition.setX(boundingRectangle.x());
+			break;
+	}
+
+	switch (verticalAlignment) {
+		case TextLabel::vAlignTop:
+			alignedPosition.setY(boundingRectangle.y() - boundingRectangle.height());
+			break;
+		case TextLabel::vAlignCenter:
+			alignedPosition.setY(boundingRectangle.y() - boundingRectangle.height()/2);
+			break;
+		case TextLabel::vAlignBottom:
+			alignedPosition.setY(boundingRectangle.y());
+			break;
+	}
+		
+	// new bounding rect
+	boundingRectangle.setX(alignedPosition.x());
+	boundingRectangle.setY(alignedPosition.y());
+
 	recalcShapeAndBoundingRect();
 }
 
@@ -298,7 +308,8 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	Q_UNUSED(widget)
 
 	painter->save();
-	painter->translate(position);
+	painter->drawEllipse(position.x(), position.y(), 10, 10); //draw the position point. TODO: remove this later
+	painter->translate(alignedPosition);
 
 	if (texUsed){
 		QRectF rect = texImage.rect();
@@ -308,7 +319,7 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	
 	painter->scale(scaleFactor, scaleFactor);
 	painter->rotate(rotationAngle);
- 	painter->drawStaticText(positionOffset, staticText);
+ 	painter->drawStaticText(QPoint(0,0), staticText);
 
 	if (isSelected()){
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
