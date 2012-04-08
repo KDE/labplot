@@ -49,7 +49,6 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
 	// create latex skel
 	QTextStream out(&file);
 	out<<"\\documentclass[12pt]{article}\n\\usepackage{color}\n\\usepackage[dvips]{graphicx}\n\\pagestyle{empty}\n\\begin{document}\n";
-	out<<"\\bf\n";
 	out<<teXString;
 	out<<"\n\\end{document}";
 	out.flush();
@@ -73,7 +72,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
 
 	// convert: PS -> PNG
 	QProcess convertProcess;
-	convertProcess.start("convert", QStringList() << "+antialias" << "-density" << "150x150" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
+	convertProcess.start("convert", QStringList() << "-scale"<< "50%" << "-density" << "200x200" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
 	if (!convertProcess.waitForStarted())
 		return false;
 	if (!convertProcess.waitForFinished())
