@@ -381,9 +381,9 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 		return;
 
 	m_initializing = true;
-
+	
 	//Text
-	ui.teLabel->setPlainText(group.readEntry("LabelText", m_label->text()));
+	//TODO font, color etc.
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->horizontalPosition()) );
@@ -400,7 +400,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 
 void LabelWidget::saveConfig(KConfigGroup &group) {
 	//Text
-	group.writeEntry("LabelText", ui.teLabel->toPlainText());
+	//TODO font, color etc.
 
 	// Geometry
 	group.writeEntry("TitlePositionX", ui.cbPositionX->currentIndex());
