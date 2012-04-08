@@ -108,6 +108,13 @@ void TextLabel::setText(const QString &text) {
 		exec(new TextLabelSetTextCmd(d, text, tr("%1: set label text")));
 }
 
+STD_SETTER_CMD_IMPL_F(TextLabel, SetTexUsed, bool, texUsed, updateTexImage);
+void TextLabel::setTexUsed(const bool tex) {
+	Q_D(TextLabel);
+	if (tex != d->texUsed)
+		exec(new TextLabelSetTexUsedCmd(d, tex, tr("%1: set use tex syntax")));
+}
+
 STD_SETTER_CMD_IMPL_F(TextLabel, SetTexFontSize, qreal, texFontSize, updateTexImage);
 void TextLabel::setTexFontSize(const qreal fontSize) {
 	Q_D(TextLabel);
