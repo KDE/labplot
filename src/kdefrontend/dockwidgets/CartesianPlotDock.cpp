@@ -32,6 +32,7 @@
 #include "../../backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "../../backend/worksheet/plots/PlotArea.h"
 #include "../../backend/worksheet/Worksheet.h"
+#include "../../backend/worksheet/TextLabel.h"
 #include "../widgets/LabelWidget.h"
 #include "../GuiTools.h"
 #include "../TemplateHandler.h"

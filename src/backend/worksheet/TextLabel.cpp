@@ -262,10 +262,12 @@ void TextLabelPrivate::updatePosition(){
 }
 
 void TextLabelPrivate::updateTexImage(){
+	qDebug()<<"updateTexImage()";
 	bool status = TexRenderer::renderImageLaTeX(text, texImage);
 	if (!status)
 		qDebug()<<"TeX image not created";
 	retransform();
+//	update();
 }
 
 bool TextLabelPrivate::swapVisible(bool on){
@@ -312,16 +314,15 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	painter->save();
 	painter->drawEllipse(position.x(), position.y(), 10, 10); //draw the position point. TODO: remove this later
 	painter->translate(alignedPosition);
+	painter->scale(scaleFactor, scaleFactor);
+	painter->rotate(rotationAngle);
 
 	if (texUsed){
 		QRectF rect = texImage.rect();
 		painter->drawImage(rect, texImage, rect);
-		return;
 	}
-	
-	painter->scale(scaleFactor, scaleFactor);
-	painter->rotate(rotationAngle);
- 	painter->drawStaticText(QPoint(0,0), staticText);
+	else
+ 		painter->drawStaticText(QPoint(0,0), staticText);
 
 	if (isSelected()){
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));

@@ -39,6 +39,7 @@
 // see tex2im, etc.
 // TODO: color, font size
 bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
+	kWarning()<<teXString<<endl;
 	QTemporaryFile file("labplot_XXXXXX.tex");
 	// for debugging *.tex file
 	//file.setAutoRemove(false);
@@ -72,7 +73,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
 
 	// convert: PS -> PNG
 	QProcess convertProcess;
-	convertProcess.start("convert", QStringList() <<"-resize"<<"200%" << "+antialias" << "-density" << "150x150" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
+	convertProcess.start("convert", QStringList() << "+antialias" << "-density" << "150x150" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
 	if (!convertProcess.waitForStarted())
 		return false;
 	if (!convertProcess.waitForFinished())
@@ -95,7 +96,6 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image){
 // using texvc to render LaTeX text
 //TODO make this function using Qt only?
 bool TexRenderer::renderImageTeXvc( const QString& texString, QImage& image){
-	kDebug()<<""<<endl;
 	KTempDir *tmpDir = new KTempDir();
 	QString dirName = tmpDir->name();
 // 	kDebug()<<"temporary directory "<<dirName<<" is used"<<endl;

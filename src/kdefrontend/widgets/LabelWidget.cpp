@@ -101,7 +101,9 @@ void LabelWidget::setLabel(TextLabel *label){
 		return;
 	m_label = label;
 	qDebug()<<label->text();
-
+	
+	qDebug()<<Qt::mightBeRichText(m_label->text());
+	// TODO: does not work correctly: shows html source
 	if(!m_label->text().isEmpty())
 		ui.teLabel->setText(m_label->text());
 }
@@ -165,6 +167,7 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 }
 
 void LabelWidget::texUsedChanged(bool checked){
+	qDebug()<<"texUsedChanged()";
 	if (m_initializing)
 		return;
 
@@ -201,7 +204,6 @@ void LabelWidget::texUsedChanged(bool checked){
 		m_label->setText(ui.teLabel->toPlainText());
 	else
 		m_label->setText(ui.teLabel->toHtml());
-
 	m_label->setTexUsed(checked);
 }
 

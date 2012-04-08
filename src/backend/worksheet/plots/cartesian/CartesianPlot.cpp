@@ -71,7 +71,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
 CartesianPlot::~CartesianPlot(){
 	delete d_ptr;
 	//TODO delete  children?
- 	delete m_title;
+	delete m_title;
 // 	delete m_coordinateSystem;
 // 	delete m_plotArea;
 }
