@@ -86,6 +86,8 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
 	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
 	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
+	connect( ui.cbHorizontalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(horizontalAlignmentChanged(int)) );
+	connect( ui.cbVerticalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(verticalAlignmentChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
 }
 
@@ -117,6 +119,9 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 //**********************************************************
 //******************** SLOTS *******************************
 //**********************************************************
+
+// text formating slots
+
 void LabelWidget::textChanged(){
 	if (m_initializing)
 		return;
@@ -296,6 +301,8 @@ void LabelWidget::insertChar(QChar c) {
 	ui.teLabel->insertPlainText(QString(c));
 }
 
+// geometry slots
+
 /*!
 	called if the current position of the title is changed in the combobox.
 	Enables/disables the lineedits for x- and y-coordinates if the "custom"-item is selected/deselected
@@ -342,6 +349,21 @@ void LabelWidget::customPositionYChanged(double value){
 	QPointF pos = m_label->position();
 	pos.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 	m_label->setPosition(pos);
+}
+
+
+void LabelWidget::horizontalAlignmentChanged(int index){
+	if (m_initializing)
+		return;
+
+	m_label->setHorizontalAlignment(TextLabel::HorizontalAlignment(index));
+}
+
+void LabelWidget::verticalAlignmentChanged(int index){
+	if (m_initializing)
+		return;
+
+	m_label->setVerticalAlignment(TextLabel::VerticalAlignment(index));
 }
 
 void LabelWidget::rotationChanged(int value){

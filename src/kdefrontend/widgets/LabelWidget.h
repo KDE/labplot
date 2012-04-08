@@ -72,6 +72,8 @@ private slots:
 	void positionYChanged(int);
 	void customPositionXChanged(double);
 	void customPositionYChanged(double);
+	void horizontalAlignmentChanged(int);
+	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
 };
 
