@@ -307,10 +307,10 @@ void LabelWidget::insertChar(QChar c) {
 // geometry slots
 
 /*!
-	called if the current position of the title is changed in the combobox.
-	Enables/disables the lineedits for x- and y-coordinates if the "custom"-item is selected/deselected
+	called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
 void LabelWidget::positionXChanged(int index){
+	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
 	if (index == ui.cbPositionX->count()-1 ){
 		ui.sbPositionX->setEnabled(true);
 	}else{
@@ -321,9 +321,20 @@ void LabelWidget::positionXChanged(int index){
 		return;
 	
 	m_label->setHorizontalPosition(TextLabel::HorizontalPosition(index));
+	
+	//show the new y-postion if changed (calculated in TextLabel, if not custom position was specified)
+	if (index != ui.cbPositionX->count()-1 ){
+		m_initializing = true;
+		ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().x(), Worksheet::Centimeter) );
+		m_initializing = false;
+	}
 }
 
+/*!
+	called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
+*/
 void LabelWidget::positionYChanged(int index){
+	//Enable/disable the spinbox for the y- oordinates if the "custom position"-item is selected/deselected
 	if (index == ui.cbPositionY->count()-1 ){
 		ui.sbPositionY->setEnabled(true);
 	}else{
@@ -334,6 +345,13 @@ void LabelWidget::positionYChanged(int index){
 		return;
 
 	m_label->setVerticalPosition(TextLabel::VerticalPosition(index));
+
+	//show the new y-postion if changed (calculated in TextLabel, if not custom position was specified)
+	if (index != ui.cbPositionX->count()-1 ){
+		m_initializing = true;
+		ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().y(), Worksheet::Centimeter) );
+		m_initializing = false;
+	}
 }
 
 void LabelWidget::customPositionXChanged(double value){

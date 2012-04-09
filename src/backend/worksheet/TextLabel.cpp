@@ -196,76 +196,91 @@ QString TextLabelPrivate::name() const{
 void TextLabelPrivate::retransform(){
 	staticText.setText(text);
 	
-	//bounding rectangle
-	boundingRectangle.setX(position.x());
-	boundingRectangle.setY(position.y());
+	float x = position.x();
+	float y = position.y();
+	float w, h;
+
 	if (texUsed){
-		boundingRectangle.setWidth(texImage.width()*scaleFactor);
-		boundingRectangle.setHeight(texImage.height()*scaleFactor);
+		w = texImage.width()*scaleFactor;
+		h= texImage.height()*scaleFactor;
 	}
 	else {
-		boundingRectangle.setWidth(staticText.size().width()*scaleFactor);
-		boundingRectangle.setHeight(staticText.size().height()*scaleFactor);
+		w = staticText.size().width()*scaleFactor;
+		h = staticText.size().height()*scaleFactor;
 	}
 	
 	//depending on the alignment, calculate the new position
 	switch (horizontalAlignment) {
 		case TextLabel::hAlignLeft:
-			alignedPosition.setX(boundingRectangle.x() - boundingRectangle.width());
+			alignedPosition.setX( x - w );
 			break;
 		case TextLabel::hAlignCenter:
-			alignedPosition.setX(boundingRectangle.x() - boundingRectangle.width()/2);
+			alignedPosition.setX( x - w/2 );
 			break;
 		case TextLabel::hAlignRight:
-			alignedPosition.setX(boundingRectangle.x());
+			alignedPosition.setX( x );
 			break;
 	}
 
 	switch (verticalAlignment) {
 		case TextLabel::vAlignTop:
-			alignedPosition.setY(boundingRectangle.y() - boundingRectangle.height());
+			alignedPosition.setY( y - h );
 			break;
 		case TextLabel::vAlignCenter:
-			alignedPosition.setY(boundingRectangle.y() - boundingRectangle.height()/2);
+			alignedPosition.setY( y - h/2 );
 			break;
 		case TextLabel::vAlignBottom:
-			alignedPosition.setY(boundingRectangle.y());
+			alignedPosition.setY( y );
 			break;
 	}
 		
-	// new bounding rect
+	// bounding rect
 	boundingRectangle.setX(alignedPosition.x());
 	boundingRectangle.setY(alignedPosition.y());
+	boundingRectangle.setWidth(w);
+	boundingRectangle.setHeight(h);
 
 	recalcShapeAndBoundingRect();
 }
 
-//TODO
+/*!
+	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
+*/
 void TextLabelPrivate::updatePosition(){
-	//determine the current position
-// 	float x,y;
-// 	QGraphicsItem* parent = dynamic_cast<AbstractWorksheetElement*>(q->parentAspect())->graphicsItem();
-// 	if (!parent)
-// 		return;
-// 
-// 	if (horizontalPosition == TextLabel::HorizontalLeft)
-// 		x = parent->boundingRect().x();
-// 	else if (horizontalPosition == TextLabel::HorizontalCenter)
-// 		x = parent->boundingRect().width()/2;
-// 		else if (horizontalPosition == TextLabel::HorizontalRight)
-// 		x = parent->boundingRect().x() + parent->boundingRect().width();
-// 	
-// 	if (verticalPosition == TextLabel::VerticalTop)
-// 		y = parent->boundingRect().y();
-// 	else if (verticalPosition == TextLabel::VerticalCenter)
-// 		y = (parent->boundingRect().y() + parent->boundingRect().height())/2;
-// 	else if (verticalPosition == TextLabel::VerticalBottom)
-// 		y = parent->boundingRect().y() + parent->boundingRect().height();
-// 	
-// 	position.setX(x);
-// 	position.setY(y);
-// 	
-// 	update();
+	//determine the parent (either a worksheet or a worksheet element)
+	QRectF parentRect;
+	Worksheet* w = dynamic_cast<Worksheet*>(q->parentAspect());
+	if (w){
+		parentRect = w->pageRect();
+	}else{
+		AbstractWorksheetElement* parent = dynamic_cast<AbstractWorksheetElement*>(q->parentAspect());
+		if (!parent)
+			return;
+
+		parentRect = parent->graphicsItem()->boundingRect();
+	}
+
+	if (horizontalPosition != TextLabel::hPositionCustom){
+		if (horizontalPosition == TextLabel::hPositionlLeft)
+			position.setX( parentRect.x() );
+		else if (horizontalPosition == TextLabel::hPositionCenter)
+			position.setX( parentRect.width()/2 );
+		else if (horizontalPosition == TextLabel::hPositionRight)
+			position.setX( parentRect.x() + parentRect.width() );
+	}
+
+	if (verticalPosition != TextLabel::vPositionCustom){
+		if (verticalPosition == TextLabel::vPositionTop)
+			position.setY( parentRect.y() );
+		else if (verticalPosition == TextLabel::vPositionCenter)
+			position.setY( (parentRect.y() + parentRect.height())/2 );
+		else if (verticalPosition == TextLabel::vPositionBottom)
+			position.setY( parentRect.y() + parentRect.height() );
+	}
+	
+	//retransform the label if either  horiz. or vert. positions were changed
+	if (horizontalPosition!=TextLabel::hPositionCustom || verticalPosition!=TextLabel::vPositionCustom)
+		retransform();
 }
 
 void TextLabelPrivate::updateTexImage(){
@@ -319,6 +334,13 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	Q_UNUSED(widget)
 
 	painter->save();
+
+	//draw the selection box before scaling and tranlating
+	if (isSelected()){
+		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->drawPath(labelShape);
+	}
+
 	painter->drawEllipse(position.x(), position.y(), 10, 10); //draw the position point. TODO: remove this later
 	painter->translate(alignedPosition);
 	painter->scale(scaleFactor, scaleFactor);
@@ -331,10 +353,5 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	else
  		painter->drawStaticText(QPoint(0,0), staticText);
 
-	if (isSelected()){
-		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-		painter->drawPath(labelShape);
-	}
-  
 	painter->restore();
 }
