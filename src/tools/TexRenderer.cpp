@@ -29,17 +29,23 @@
  ***************************************************************************/
 #include "TexRenderer.h"
 
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KTempDir>
 #include <KProcess>
 #include <KDebug>
+#endif
 #include <QDir>
 #include <QTemporaryFile>
+#include <QTextStream>
+#include <QProcess>
 
 // use latex to render LaTeX text
 // see tex2im, etc.
 // TODO: color, font size
 bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize){
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	kWarning()<<teXString<<endl;
+#endif
 	QTemporaryFile file("labplot_XXXXXX.tex");
 	// for debugging *.tex file
 	//file.setAutoRemove(false);
@@ -96,6 +102,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 // using texvc to render LaTeX text
 //TODO make this function using Qt only?
 bool TexRenderer::renderImageTeXvc( const QString& texString, QImage& image){
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KTempDir *tmpDir = new KTempDir();
 	QString dirName = tmpDir->name();
 // 	kDebug()<<"temporary directory "<<dirName<<" is used"<<endl;
@@ -132,5 +139,6 @@ bool TexRenderer::renderImageTeXvc( const QString& texString, QImage& image){
 
  	tmpDir->unlink();
 	kDebug()<<"image created."<<endl;
+#endif
 	return true;
 }

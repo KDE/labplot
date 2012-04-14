@@ -30,7 +30,7 @@
 
 #include "worksheet/Worksheet.h"
 #include "worksheet/AbstractWorksheetElement.h"
-#include "worksheet/AbstractCoordinateSystem.h"
+#include "worksheet/plots/AbstractCoordinateSystem.h"
 
 #include <QPen>
 #include <QPainterPath>

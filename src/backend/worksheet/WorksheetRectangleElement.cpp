@@ -28,7 +28,7 @@
  ***************************************************************************/
 
 #include "worksheet/WorksheetRectangleElement.h"
-#include "worksheet/AbstractCoordinateSystem.h"
+#include "worksheet/plots/AbstractCoordinateSystem.h"
 
 /**
  * \class WorksheetRectangleElement
