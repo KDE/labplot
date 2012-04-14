@@ -71,7 +71,7 @@
   Creates a view for the Worksheet \c worksheet and initializes the internal model.
 */
 WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
-, m_worksheet(worksheet) {
+, m_worksheet(worksheet), m_currentMouseMode(NavigationMode) {
   
   m_model = new WorksheetModel(worksheet);
   setScene(m_model->scene());
@@ -87,6 +87,7 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   setResizeAnchor(QGraphicsView::AnchorViewCenter);
   setMinimumSize(16, 16);
   setFocusPolicy(Qt::StrongFocus);
+  
 
   viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
   viewport()->setAttribute( Qt::WA_NoSystemBackground );
@@ -100,7 +101,7 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
   navigationModeAction->setChecked(true);
   
   tbZoom=0;
-  changeZoom(zoomFitPageHeightAction);
+  changeZoom(zoomOriginAction);
   currentZoomAction=zoomInAction;
 
   connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
