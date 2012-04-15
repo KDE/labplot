@@ -75,6 +75,8 @@ private slots:
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
+	
+	void labelPostionChanged(QPointF&);
 };
 
 #endif //LABELWIDGET_H

@@ -100,12 +100,8 @@ void LabelWidget::setLabel(TextLabel *label){
 	if(!label)
 		return;
 	m_label = label;
-	qDebug()<<label->text();
-	
-	qDebug()<<Qt::mightBeRichText(m_label->text());
-	// TODO: does not work correctly: shows html source
-	if(!m_label->text().isEmpty())
-		ui.teLabel->setText(m_label->text());
+
+	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
 }
 
 //TODO
@@ -114,8 +110,9 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
-	if(!m_label->text().isEmpty())
-		ui.teLabel->setText(m_label->text());
+// 	if(!m_label->text().isEmpty())
+// 		ui.teLabel->setText(m_label->text());
+	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
 }
 
 //**********************************************************
@@ -392,6 +389,14 @@ void LabelWidget::rotationChanged(int value){
 		return;
 
 	m_label->setRotationAngle(value);
+}
+
+
+void LabelWidget::labelPostionChanged(QPointF& point){
+	m_initializing = true;
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(point.x(), Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(point.y(), Worksheet::Centimeter) );
+	m_initializing = false;
 }
 
 //**********************************************************

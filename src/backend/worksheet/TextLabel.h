@@ -83,6 +83,9 @@ class TextLabel : public AbstractWorksheetElement{
 	private:
     	Q_DECLARE_PRIVATE(TextLabel)
 		void init();
+
+	signals:
+		void positionChanged(QPointF&);
 };
 
 #endif

@@ -67,6 +67,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		virtual QRectF boundingRect() const;
  		virtual QPainterPath shape() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 	private:
 		QImage texImage;

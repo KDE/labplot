@@ -56,6 +56,7 @@ void TextLabel::init() {
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
+	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 
 	d->texUsed = false;
 	d->staticText.setTextFormat(Qt::RichText);
@@ -196,8 +197,9 @@ QString TextLabelPrivate::name() const{
 void TextLabelPrivate::retransform(){
 	staticText.setText(text);
 	
-	float x = position.x();
-	float y = position.y();
+	QPointF localPosition = mapFromScene(position);
+	float x = localPosition.x();
+	float y = localPosition.y();
 	float w, h;
 
 	if (texUsed){
@@ -289,7 +291,6 @@ void TextLabelPrivate::updateTexImage(){
 	if (!status)
 		qDebug()<<"TeX image not created";
 	retransform();
-//	update();
 }
 
 bool TextLabelPrivate::swapVisible(bool on){
@@ -321,27 +322,22 @@ void TextLabelPrivate::recalcShapeAndBoundingRect(){
 	QMatrix matrix;
 	matrix.rotate(rotationAngle);
 	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
-		
+
 	labelShape = QPainterPath();
 	labelShape.addRect(boundingRectangle);
 	labelShape = matrix.map(labelShape);
-	
-	update();
 }
 
 void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-	painter->save();
-
-	//draw the selection box before scaling and tranlating
+	//draw the selection box before scaling and translating
 	if (isSelected()){
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
 		painter->drawPath(labelShape);
 	}
-
-	painter->drawEllipse(position.x(), position.y(), 10, 10); //draw the position point. TODO: remove this later
+	
 	painter->translate(alignedPosition);
 	painter->scale(scaleFactor, scaleFactor);
 	painter->rotate(rotationAngle);
@@ -352,6 +348,16 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	}
 	else
  		painter->drawStaticText(QPoint(0,0), staticText);
-
-	painter->restore();
 }
+
+QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
+	if (change == ItemPositionChange) {
+		QPointF newPos = scenePos();
+// 				qDebug()<<"new pos "<<newPos;
+		//take alignment into account
+		 emit q->positionChanged(newPos);
+     }
+
+	return QGraphicsItem::itemChange(change, value);
+ }
+ 
