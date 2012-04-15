@@ -2,7 +2,7 @@
     File                 : AxisDock.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : axes widget class
@@ -191,6 +191,10 @@ void AxisDock::init(){
 	ui.cbMinorTicksDirection->addItem( i18n("in") );
 	ui.cbMinorTicksDirection->addItem( i18n("out") );
 	ui.cbMinorTicksDirection->addItem( i18n("in and out") );
+	
+	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
+	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, QColor(Qt::black));
+	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
 	
 	//TODO: Tick labels format
 
@@ -431,10 +435,7 @@ void AxisDock::titleChanged(){
 
 // "Line"-tab
 void AxisDock::lineStyleChanged(int index){
-   if (m_initializing)
-	return;
-
-  Qt::PenStyle penStyle=Qt::PenStyle(index);
+	Qt::PenStyle penStyle=Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
 	ui.lLineColor->setEnabled(b);
@@ -444,6 +445,9 @@ void AxisDock::lineStyleChanged(int index){
 	ui.lLineOpacity->setEnabled(b);
 	ui.sbLineOpacity->setEnabled(b);
   
+	if (m_initializing)
+		return;
+
 	QPen pen;
 	foreach(Axis* axis, m_axesList){
 		pen=axis->linePen();
@@ -491,9 +495,6 @@ void AxisDock::lineOpacityChanged(int value){
 
 //"Major ticks" tab
 void AxisDock::majorTicksDirectionChanged(int index){
-	if (m_initializing)
-	return;
-
 	Axis::TicksDirection direction = Axis::TicksDirection(index);
   
 	bool b = (direction != Axis::noTicks);
@@ -520,8 +521,11 @@ void AxisDock::majorTicksDirectionChanged(int index){
 	ui.lMajorTicksOpacity->setEnabled(b);
 	ui.sbMajorTicksOpacity->setEnabled(b);  
   
-  foreach(Axis* axis, m_axesList)
-	axis->setMajorTicksDirection(direction);
+	if (m_initializing)
+		return;
+
+	foreach(Axis* axis, m_axesList)
+		axis->setMajorTicksDirection(direction);
 }
 
 /*!
@@ -570,11 +574,8 @@ void AxisDock::majorTicksIncrementChanged(){
 }
 
 void AxisDock::majorTicksLineStyleChanged(int index){
-	if (m_initializing)
-	return;
-
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
-	
+
 	bool b=(penStyle != Qt::NoPen);
 	ui.lMajorTicksColor->setEnabled(b);
 	ui.kcbMajorTicksColor->setEnabled(b);
@@ -584,6 +585,9 @@ void AxisDock::majorTicksLineStyleChanged(int index){
 	ui.sbMajorTicksLength->setEnabled(b);
 	ui.lMajorTicksOpacity->setEnabled(b);
 	ui.sbMajorTicksOpacity->setEnabled(b);
+
+	if (m_initializing)
+		return;
 
 	QPen pen;
 	foreach(Axis* axis, m_axesList){
@@ -642,9 +646,6 @@ void AxisDock::majorTicksOpacityChanged(int value){
 
 //"Minor ticks" tab
 void AxisDock::minorTicksDirectionChanged(int index){
-	if (m_initializing)
-	return;
-
 	Axis::TicksDirection direction = Axis::TicksDirection(index);
 	bool b = (direction != Axis::noTicks);
 	ui.lMinorTicksType->setEnabled(b);
@@ -670,8 +671,11 @@ void AxisDock::minorTicksDirectionChanged(int index){
 	ui.lMinorTicksOpacity->setEnabled(b);
 	ui.sbMinorTicksOpacity->setEnabled(b);  
   
-  foreach(Axis* axis, m_axesList){
-	axis->setMinorTicksDirection(direction);  
+	if (m_initializing)
+		return;
+
+	foreach(Axis* axis, m_axesList){
+		axis->setMinorTicksDirection(direction);  
   }
 }
 
@@ -717,9 +721,6 @@ void AxisDock::minorTicksIncrementChanged(){
 }
 
 void AxisDock::minorTicksLineStyleChanged(int index){
-	if (m_initializing)
-	return;
-
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
   
 	bool b=(penStyle != Qt::NoPen);
@@ -731,7 +732,10 @@ void AxisDock::minorTicksLineStyleChanged(int index){
 	ui.sbMinorTicksLength->setEnabled(b);
 	ui.lMinorTicksOpacity->setEnabled(b);
 	ui.sbMinorTicksOpacity->setEnabled(b);
-	
+
+	if (m_initializing)
+		return;
+
 	QPen pen;
 	foreach(Axis* axis, m_axesList){
 		pen=axis->minorTicksPen();
@@ -789,11 +793,8 @@ void AxisDock::minorTicksOpacityChanged(int value){
 
 //"Tick labels"-tab
 void AxisDock::labelsPositionChanged(int index){
-  if (m_initializing)
-	return;
-  
-  Axis::LabelsPosition position = Axis::LabelsPosition(index);
-  
+	Axis::LabelsPosition position = Axis::LabelsPosition(index);
+
 	bool b = (position != Axis::NoLabels);
 	ui.lLabelsOffset->setEnabled(b);
 	ui.sbLabelsOffset->setEnabled(b);
@@ -810,6 +811,9 @@ void AxisDock::labelsPositionChanged(int index){
 	ui.lLabelsOpacity->setEnabled(b);
 	ui.sbLabelsOpacity->setEnabled(b);  
 	
+	  if (m_initializing)
+		return;
+
 	foreach(Axis* axis, m_axesList){
 		axis->setLabelsPosition(position);
 	}
