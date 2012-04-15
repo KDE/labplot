@@ -10,19 +10,22 @@ LabPlot 2 is a complete rewrite of LabPlot 1.X.
 
 Building LabPlot (KDE frontend):
 --------------------------------
+# ./compile
 
-# ./build
+Installation:
+-------------
+# cd build
 # make install
 
 Clean-up:
-# ./clean
-
+---------
+# rm -rf build
 
 Building SciDAvis (Qt frontend):
 --------------------------------
 
 # cd src/qtfrontend
-# qmake-qt4 scidavis.pro
+# qmake scidavis.pro
 # make
 # make install (optional, not needed for most development tasks)
 
