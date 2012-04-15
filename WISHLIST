@@ -1,91 +1,47 @@
-LabPlot WISHLIST:
-#################
+OLD LabPlot WISHLIST:
+#####################
 
-TODO: put all Features into list at 
-	https://sourceforge.net/apps/mediawiki/labplot/index.php?title=Feature_List
-     if still relevant.
+TODO: put Features (if still relevant) into list at 
+	https://sourceforge.net/apps/mediawiki/labplot/index.php?title=Upcoming_Feature_List
 
 Planned Features:
 	* independent/different y axes
 		* option to disconnect y2,x2 axes ?
 	* Categorical x-axis (also y-axis ?)	-> see mails
-	* custom ticks (position & label)
 	* parametric plot 
 		* (XY(t)). ( using scripting ? )
 		* from function  (y(t) vs x(t))
 	* multiple regions
 		* shown/ not shown in print
 		* with background color
-	* contraints for fit parameter
-		-> fix values in iteration loop or use ool ? : see msg00411
-	* data dialog has the same functions as the import dialog
-		-> merge into import dialog
 	* mask matrix data :
 			* mask single points
 			* check plotting from spreadsheet
 			* 2d surface plot
 			* mask data with mouse (maskPlot)
 			* check mask in graphlist
-	* connect to octave/scilab, etc.
-		* It will help enormously if one could drive Labplot from Octave (or
-		other numerical language) and interact with Labplot using some form of
-		RPC. I know that Labplot supports Qt scripting interface. Has anyone
-		created Labplot bindings for Octave or similar packages??
 	* One thing i just missed is a search field for headers from a spreadsheet as
 		data source when adding a new graph.
 		I created a new empty graph/ 2D plot and started adding data to plot. Because
 		there are so many columns, it would help a lot if there would be some search
 		field to filter the columns with data to plot.
 		-> filter for spreadsheet column names in AddGraphDialog.cc
-	* improve graph list
-		* set all line styles to same style
-		* set all symbols to same symbol
-		* set line/symbol width/size for all graphs
 	* limit drawing of symbols in legend to legend box
 	* data mode
 		* jump in data point steps (configure steps)
 			Worksheet::keyPressEvent()
 		* select plot for data mode
-	* support new liborigin features	-> see qtiplot/importOPJ.cpp
-		* import graphs
-			* axes
-				* tic format & style
-				* axes label style
-			* import function
-			* texts (special label)
-			* use opj.curveLineConnect(g,l,c)
-			* legend
 
 GUI/Application:
 ****************
-	* GUI improvement
-		* better dialogs : -> use designer *.ui files ? (ste)
-			* usr/lib/qt3/bin/uic set_dlg.ui -o set_dlg.h
-			* /usr/lib/qt3/bin/uic set_dlg.ui -i set_dlg.h -o set_dlg.cpp
-	* use context menu in worksheet ?
-		* analysis, appearance, drawing, etc. ?
-	* LabPlot API
-		* KOffice integration :
-			* John : koshell
-			* better KPart/create Koffice Part ?
-		* example programs ?	(linking to libLabPlot.so, etc.)
-	F "Dialogs are in-efficient, since kde based ones support preview, bookmarking etc."
-			* open/save dialogs	-> preview file
 	* use/save predefined functions (in function dialog)
 		* load from Origin projects
 	* use QLabel::setBuddy() for accels
 	* Q_CHECK_PTR() for all pointer ?
-	* browse on the fly (Daniel)
 	* configure :
 		(* save data in project as link (yes/no))
 		(* open new Plot in active Worksheet or in new Worksheet)
 		* graphs (link to data !)
-	* Scripting :
-		* MainWin : print, ... -> KPrintDialog ?
-		* ConfigureDialog
-		(* define analysis plugins)
-		(* define fit functions)
-		* type "Legend" ? (use in LegendDialog)
 	* Spreadsheet
 		* save last used formula for each column.
 		U Am besten den horizontalen Scrollbereich der Scrollleiste erhöhen, so
@@ -109,46 +65,9 @@ GUI/Application:
 	* animations
 I/O:
 ****
-	* wenn man LabPlot eigenständig verwenden will, wäre eine Aktualisierungsroutine 
-		(zeitgesteuert oder bei Änderung der externen Daten) sinnvoll.
-		* in Spreadsheet
-			* Spreadsheet::datafile
-			MainWin : watch all files (Spreads and Worksheets)
-				* connect to datafile and reimport in necessary ?
-		* in plot : connect graph to data file ?
-		* check for changes and reimport if necessary
-		(* real time data import)
-		(* Sync\ between\ Real\ Data\ and\ plots)
-			check() {
-				time = QDateTime::current().toTime_t();
-				filetime = lastModified(filename).toTime_t();
-				if(time-filetime < checkinterval)
-					rereadData();
-			}
-		* connect data to spreadsheet ?
-			update plot when data changes in spreadsheet
-	* performance improvements : check and test large datasets, big values
-		"LabPlot and large data sets"
-	* move magic and audiofile into ascii section (else)
-		-> see ImportDialog.cc
-	* R : 
-		- ability to retrieve data from R data objects for rendering in LabPlot
-			-> call R scripts and work on this data	
-			* import different formats using R (package foreign; R Data Import/Export)
-			* export different formats using R (package foreign; R Data Import/Export)
-		- use of labplot as an interactive graphical plotting front-end for R
-			* call R plotting routines with data ?
-	* GraphIMAGE : 
-		(* use KImageIO::pattern	(filter for all image files when opening) )
-		(* ImageDialog : add more methods (see ImageListDialog.cc) )
-	* GRAPH2DL, GRAPH3DL
-		-> x-y-label, x-y-z-label
-		* use for 2d annotate label
-	* set cbi->currentItem with re-read data dialog
 	* reading multiple files from data dialog
 		-> also "same x column"
 	F support "indexed" matrix format
-	F import Bes3T data format
 	* SAVE/OPEN :
 		* save data file externally ? (separate from project file)
 			* saving a data file name in a project file instead of the data itself (hotlink data)
@@ -156,7 +75,6 @@ I/O:
 		* XML -> OASIS format (John)
 	* transparent background when exporting to SVG ?
 		* svg export option "transparent background" ?
-	* g3data import feature
 	* IMPORT/EXPORT
 		* hdf5 IMPORT (see /sw/hdf5-1.6.1/doc/html/)
 			* import
@@ -165,73 +83,11 @@ I/O:
 				* data type	time
 			-> examples : sp_Diagrams_20070626_093808.hdf,DAMARIS_data_pool_small.h5
 			* read other data types (string in compound, time, array)
-		* import PostgreSQL connection
-			* fix import problems :
-			> When I try to import data from the DB, I open the import dialog
-			> and select the "PostgreSQL, mySQL, etc" filter. I then select
-			> the PostgreSQL driver, add the neccessary connection information
-			> (hostname, username, password) and LabPlot indeed shows all
-			> databases installed on this DB server. I then select the database
-			> I'm interested in and LabPlot shows a dialog to select the
-			> table - but the list of tables is empty so I can not select the
-			> table containig my measurement values!
-			> In the PostgreSQL logs I see the following messages related to this:
-			>
-			> [...]
-			> ERROR:  relation "kexi__db" does not exist
-			> ERROR:  relation "kexi__objects" does not exist
-			> [...]
-			a) Possibility to "connect" LabPlot to a free hand database
-			~   query like
-			
-			~   SELECT ts AS x, pv AS y
-			~     FROM t_mv
-			~    WHERE zr=502 AND ts BETWEEN '2005-06-01 00:00:00'
-			~                            AND '2005-06-02 00:00:00';
-			
-			b) Possibility to store the query (not the data) inside the
-			~   LabPlot project ("by reference"). That way it would be
-			~   possible to get any updated data very easily and the project
-			~   file would be quite small even for large datasets. Of course
-			~   it should also be possible to store the dataset "by value"
-			
-			c) Possibility to assign properties to the columns returned
-			~   by the database query (like axis, domain, etc.). It would
-			~   also be nice if LabPlot could automatically determine those
-			~   properties in a more or less intelligent way from the database
-			~   metadata.
-			
-			d) Support for advanced features like SQL arrays. If column
-			~   pv of paragraph a) was an array, this would automatically
-			~   lead to a 3-dimensional dataset (ts=x, row in the array=y,
-			~   value of each element in the array=z)
-			
-			e) Possibility to connect some of the where clauses of the
-			~   query to a list of elements, possibly connected to some
-			~   other table in the database, and let the user iterate
-			~   through the list. That would add just another dimension
-			~   to the evaluations.
 		* read date format "2000/12/24" ("Temperatur.dat")
-		U import/export data to/from openoffice/kspread formats : filter ?
 		* ignore columns
 		* multiple column files (NXY)	-> XYYYYY... / YYYYYYYY, X-index
-		* netcdf/cdf
-			* read/dump matrix data from/to netcdf/cdf (also images)
-			* netcdf header not imported correct (simple.nc)
 		* progress when exporting data
 		* only export selected region
-		* export to audio
-			* option : 8/16 bit
-			* option : sample format
-		* binary data	:
-			* Filter "LeCroy binary" -> too complicated
-			* "HP binary"
-		* other data file support -> examples/fileformats/
-			* piolib, boomerang and blast (see kst)
-			* zip, rar,... compressed data
-	* import project files ?
-		* grace, kst, kpl, qtiplot
-		* sigmaplot, kaleidagraph, flexpro, axum, igor, ...
 
 drawing/ data manipulation :
 *******************************
@@ -245,9 +101,6 @@ drawing/ data manipulation :
 		* (x/y/x,y) values as symbol
 	* move marker with mouse
 	* image profiling (vertical/horizontal profiles)
-	* audio file data editing like normal audio programs	-> Analysis
-		* fade in / fade out
-		* ...
 	* Spreadsheet
 		* a function that generate a sequence of number in a specific column 
 		(if you know excel: you can write 1 2 3 in a column and then drag & drop to extend the sequence).
