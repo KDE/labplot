@@ -441,25 +441,19 @@ void WorksheetPrivate::updateLayout(){
 		if (count>layoutRowCount*layoutColumnCount)
 			layoutRowCount = count/layoutColumnCount;
 		
-		qDebug()<<m_scene;
-		qDebug()<<m_scene->sceneRect();
-		qDebug()<<m_scene->sceneRect().height();
 		w=(m_scene->sceneRect().height()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
-		WorksheetElementContainer* elem;
-		int c=0;
-		for (int r=0; r<layoutRowCount; r++){
-			if (r*layoutColumnCount + c>count)
-				break;
-
-			x=layoutLeftMargin;
-			for (c=0; c<layoutColumnCount; c++){
-				elem=list[r*layoutColumnCount + c];
-				elem->setRect(QRectF(x,y,w,h));
-				elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-				x+=w + layoutHorizontalSpacing;
+		int columnIndex=0; //counts the columns in a row
+		foreach(WorksheetElementContainer* elem, list){
+			elem->setRect(QRectF(x,y,w,h));
+			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			x+=w + layoutHorizontalSpacing;
+			columnIndex++;
+			if (columnIndex==layoutColumnCount){
+				columnIndex=0;
+				x=layoutLeftMargin;
+				y+=h + layoutVerticalSpacing;
 			}
-			y+=h + layoutVerticalSpacing;
 		}
 	}
 	q->update();
