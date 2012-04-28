@@ -57,6 +57,8 @@
  */
 
 class CartesianPlotPrivate:public AbstractPlotPrivate{
+public:
+	void setRect(const QRectF& r);
 };
 
 CartesianPlot::CartesianPlot(const QString &name): AbstractPlot(name) {
@@ -70,10 +72,9 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
 
 CartesianPlot::~CartesianPlot(){
 	delete d_ptr;
-	//TODO delete  children?
 	delete m_title;
-// 	delete m_coordinateSystem;
-// 	delete m_plotArea;
+	delete m_coordinateSystem;
+	delete m_plotArea;
 }
 
 void CartesianPlot::init(){
@@ -147,10 +148,9 @@ void CartesianPlot::init(){
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
-
+	
 	//Plot title
  	m_title = new TextLabel(this->name());
-// 	addChild(m_title);
 	
 	initActions();
 	initMenus();
@@ -201,29 +201,7 @@ QIcon CartesianPlot::icon() const{
 
 void CartesianPlot::setRect(const QRectF& r){
 	Q_D(CartesianPlot);
-	d->rect=r;
-
-	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
-	QList<CartesianCoordinateSystem::Scale *> scales;
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.x(), r.x()+r.width(), 0, 1);
-	cSystem ->setXScales(scales);
-	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.y()+r.height(), r.y(), 0, 1);
-	cSystem ->setYScales(scales);
-	
-	m_plotArea->retransform();
-	retransform();
-	graphicsItem()->update();
-	
-	//TODO trigger an update of the view
-// 	AbstractAspect * parent = parentAspect();
-// 	while (parent) {
-// 		Worksheet *worksheet = qobject_cast<Worksheet *>(parent);
-// 		if (worksheet)
-// 			orksheet->requestUpdate();
-// 
-// 		parent = parent->parentAspect();
-// 	}
+	d->setRect(r);
 }
 
 //################################################################
@@ -231,4 +209,21 @@ void CartesianPlot::setRect(const QRectF& r){
 //################################################################
 void CartesianPlot::addCurve(){
 	this->addChild(new XYCurve("xy-curve"));
+}
+
+void CartesianPlotPrivate::setRect(const QRectF& r){
+	prepareGeometryChange();
+	
+	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
+	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
+	QList<CartesianCoordinateSystem::Scale *> scales;
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.x(), r.x()+r.width(), 0, 1);
+	cSystem ->setXScales(scales);
+	scales.clear();
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.y()+r.height(), r.y(), 0, 1);
+	cSystem ->setYScales(scales);
+	
+	plot->plotArea()->retransform();
+	q->retransform();
+	rect = r;
 }
