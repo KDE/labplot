@@ -168,6 +168,18 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	KConfig config("", KConfig::SimpleConfig);
   	loadConfig(config);
 
+	//Deactivate the geometry related widgets, if the worksheet layout is active.
+	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
+	//TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
+	Worksheet* w = dynamic_cast<Worksheet*>(plot->parentAspect());
+	if (w){
+		bool b = (w->layout()==Worksheet::NoLayout);
+		ui.sbTop->setEnabled(b);
+		ui.sbLeft->setEnabled(b);
+		ui.sbWidth->setEnabled(b);
+		ui.sbHeight->setEnabled(b);
+	}
+
 	m_initializing = false;
 }
 
@@ -464,7 +476,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", plot->rect().height()), Worksheet::Centimeter));
 
 	//Title
-	labelWidget->loadConfig(group);
+// 	labelWidget->loadConfig(group);
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) plot->plotArea()->backgroundType()) );
@@ -494,7 +506,7 @@ void CartesianPlotDock::saveConfig(KConfig& config){
 	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
 
 	//Title
-	labelWidget->saveConfig(group);	
+	labelWidget->saveConfig(group);
 
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
