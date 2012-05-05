@@ -40,6 +40,8 @@
  * \class TextLabel
  * \brief A label supporting rendering of html- and tex-formated textes.
  * 
+ * The label is aligned relative to the specified position. The position can be either specified by providing the x- and y- coordinates 
+ * in parent's coordinate system, or by specifing one of the predefined position flags (\ca HorizontalPosition, \ca VerticalPosition).
  */
 
 
@@ -66,11 +68,13 @@ void TextLabel::init() {
 	d->position.setX( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
 	d->position.setY( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
 	
-	d->horizontalAlignment= TextLabel::hAlignRight;
-	d->verticalAlignment= TextLabel::vAlignTop;
+	d->horizontalAlignment= TextLabel::hAlignCenter;
+	d->verticalAlignment= TextLabel::vAlignCenter;
 
 	d->rotationAngle = 0.0;
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
+	
+	d->cancelItemChangeEvent = false;
 }
 
 TextLabel::~TextLabel() {
@@ -102,7 +106,7 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlig
 BASIC_SHARED_D_READER_IMPL(TextLabel, float, rotationAngle, rotationAngle);
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F(TextLabel, SetText, QString, text, retransform);
+STD_SETTER_CMD_IMPL_F(TextLabel, SetText, QString, text, updateText);
 void TextLabel::setText(const QString &text) {
 	Q_D(TextLabel);
 	if (text != d->text)
@@ -195,50 +199,51 @@ QString TextLabelPrivate::name() const{
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void TextLabelPrivate::retransform(){
-	staticText.setText(text);
-	
-	QPointF localPosition = mapFromScene(position);
-	float x = localPosition.x();
-	float y = localPosition.y();
+	float x = position.x();
+	float y = position.y();
 	float w, h;
 
 	if (texUsed){
 		w = texImage.width()*scaleFactor;
-		h= texImage.height()*scaleFactor;
+		h = texImage.height()*scaleFactor;
 	}
 	else {
 		w = staticText.size().width()*scaleFactor;
 		h = staticText.size().height()*scaleFactor;
 	}
 	
-	//depending on the alignment, calculate the new position
+	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
+	QPointF itemPos;
 	switch (horizontalAlignment) {
 		case TextLabel::hAlignLeft:
-			alignedPosition.setX( x - w );
+			itemPos.setX( x - w/2 );
 			break;
 		case TextLabel::hAlignCenter:
-			alignedPosition.setX( x - w/2 );
+			itemPos.setX( x );
 			break;
 		case TextLabel::hAlignRight:
-			alignedPosition.setX( x );
+			itemPos.setX( x +w/2);
 			break;
 	}
 
 	switch (verticalAlignment) {
 		case TextLabel::vAlignTop:
-			alignedPosition.setY( y - h );
+			itemPos.setY( y - h/2 );
 			break;
 		case TextLabel::vAlignCenter:
-			alignedPosition.setY( y - h/2 );
+			itemPos.setY( y );
 			break;
 		case TextLabel::vAlignBottom:
-			alignedPosition.setY( y );
+			itemPos.setY( y + h/2 );
 			break;
 	}
-		
-	// bounding rect
-	boundingRectangle.setX(alignedPosition.x());
-	boundingRectangle.setY(alignedPosition.y());
+
+	cancelItemChangeEvent=true;
+	setPos(itemPos);
+	cancelItemChangeEvent=false;
+
+	boundingRectangle.setX(-w/2);
+	boundingRectangle.setY(-h/2);
 	boundingRectangle.setWidth(w);
 	boundingRectangle.setHeight(h);
 
@@ -285,11 +290,24 @@ void TextLabelPrivate::updatePosition(){
 		retransform();
 }
 
+/*!
+	updates the static text.
+ */
+void TextLabelPrivate::updateText(){
+	staticText.setText(text);
+	
+	//the size of the label was most probably changed.
+	//call retransform() to recalculate the position and the bounding box of the label
+	retransform();
+}
+
 void TextLabelPrivate::updateTexImage(){
-	qDebug()<<"updateTexImage()";
 	bool status = TexRenderer::renderImageLaTeX(text, texImage, texFontSize);
 	if (!status)
 		qDebug()<<"TeX image not created";
+	
+	//the size of the tex image was most probably changed.
+	//call retransform() to recalculate the position and the bounding box of the label
 	retransform();
 }
 
@@ -314,7 +332,7 @@ QPainterPath TextLabelPrivate::shape() const{
 }
 
 /*!
-  recalculates the outer bounds and the shape of the curve.
+  recalculates the outer bounds and the shape of the label.
 */
 void TextLabelPrivate::recalcShapeAndBoundingRect(){
 	prepareGeometryChange();
@@ -332,30 +350,78 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-	//draw the selection box before scaling and translating
+	//draw the selection box before scaling since it already has the proper size.
 	if (isSelected()){
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
 		painter->drawPath(labelShape);
 	}
 	
-	painter->translate(alignedPosition);
 	painter->scale(scaleFactor, scaleFactor);
 	painter->rotate(rotationAngle);
 
+	float w,h;
 	if (texUsed){
+		w = texImage.width();
+		h = texImage.height();
+		painter->translate(-w/2,-h/2);
 		QRectF rect = texImage.rect();
 		painter->drawImage(rect, texImage, rect);
+	}	else{
+		w = staticText.size().width();
+		h = staticText.size().height();
+ 		painter->drawStaticText(QPoint(-w/2,-h/2), staticText);
 	}
-	else
- 		painter->drawStaticText(QPoint(0,0), staticText);
 }
 
 QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
-	if (change == ItemPositionChange) {
-		QPointF newPos = scenePos();
-// 				qDebug()<<"new pos "<<newPos;
-		//take alignment into account
-		 emit q->positionChanged(newPos);
+	if (cancelItemChangeEvent)
+		return value;
+	
+	if (change == QGraphicsItem::ItemPositionChange) {
+		QPointF itemPos = value.toPointF();//item's center point in parent's coordinates
+		float x = itemPos.x();
+		float y = itemPos.y();
+		
+		float w, h;
+		if (texUsed){
+			w = texImage.width()*scaleFactor;
+			h = texImage.height()*scaleFactor;
+		}
+		else {
+			w = staticText.size().width()*scaleFactor;
+			h = staticText.size().height()*scaleFactor;
+		}
+
+		//depending on the alignment, calculate the new position
+		switch (horizontalAlignment) {
+			case TextLabel::hAlignLeft:
+				position.setX( x + w/2 );
+				break;
+			case TextLabel::hAlignCenter:
+				position.setX( x );
+				break;
+			case TextLabel::hAlignRight:
+				position.setX( x - w/2 );
+				break;
+		}
+
+		switch (verticalAlignment) {
+			case TextLabel::vAlignTop:
+				position.setY( y + h/2 );
+				break;
+			case TextLabel::vAlignCenter:
+				position.setY( y );
+				break;
+			case TextLabel::vAlignBottom:
+				position.setY( y - h/2 );
+				break;
+		}
+
+		//item was moved -> change the position flag to "custom"
+		horizontalPosition = TextLabel::hPositionCustom;
+		verticalPosition = TextLabel::vPositionCustom;
+
+		 emit q->positionChanged(position);
      }
 
 	return QGraphicsItem::itemChange(change, value);
