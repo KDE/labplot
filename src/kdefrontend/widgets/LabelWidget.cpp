@@ -110,8 +110,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
-// 	if(!m_label->text().isEmpty())
-// 		ui.teLabel->setText(m_label->text());
+	ui.teLabel->setText(m_label->text());
 	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
 }
 
@@ -396,6 +395,8 @@ void LabelWidget::labelPostionChanged(QPointF& point){
 	m_initializing = true;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(point.x(), Worksheet::Centimeter) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(point.y(), Worksheet::Centimeter) );
+	ui.cbPositionX->setCurrentIndex( TextLabel::hPositionCustom );
+	ui.cbPositionY->setCurrentIndex( TextLabel::vPositionCustom );
 	m_initializing = false;
 }
 
