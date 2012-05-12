@@ -34,6 +34,7 @@
 #include "../lib/commandtemplates.h"
 
 #include <QPainter>
+ #include <QGraphicsScene>
 #include <QDebug>
 
 /**
@@ -254,17 +255,16 @@ void TextLabelPrivate::retransform(){
 	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
 */
 void TextLabelPrivate::updatePosition(){
-	//determine the parent (either a worksheet or a worksheet element)
+	//determine the parent item
 	QRectF parentRect;
-	Worksheet* w = dynamic_cast<Worksheet*>(q->parentAspect());
-	if (w){
-		parentRect = w->pageRect();
+	QGraphicsItem* parent = parentItem();
+	if (parent){
+		parentRect = mapRectFromParent( parent->boundingRect() );
 	}else{
-		AbstractWorksheetElement* parent = dynamic_cast<AbstractWorksheetElement*>(q->parentAspect());
-		if (!parent)
+		if (!scene())
 			return;
 
-		parentRect = parent->graphicsItem()->boundingRect();
+		parentRect = scene()->sceneRect();
 	}
 
 	if (horizontalPosition != TextLabel::hPositionCustom){
