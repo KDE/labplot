@@ -99,8 +99,13 @@ LabelWidget::~LabelWidget() {}
 void LabelWidget::setLabel(TextLabel *label){
 	if(!label)
 		return;
-	m_label = label;
 
+	m_label = label;
+	KConfig config("", KConfig::SimpleConfig);
+	KConfigGroup group = config.group( "TextLabel" );
+  	loadConfig(group);
+	ui.teLabel->setText(m_label->text());
+	
 	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
 }
 
