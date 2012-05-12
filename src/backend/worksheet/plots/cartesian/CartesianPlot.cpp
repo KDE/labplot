@@ -151,7 +151,14 @@ void CartesianPlot::init(){
 	
 	//Plot title
  	m_title = new TextLabel(this->name());
-	
+	m_title->setText(this->name());
+	m_title->setHidden(true);
+	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem()); //set the parent befor doing any positioning
+	m_title->setHorizontalPosition(TextLabel::hPositionCenter);
+	m_title->setVerticalPosition(TextLabel::vPositionTop);
+	m_title->setHorizontalAlignment(TextLabel::hAlignCenter);
+	m_title->setVerticalAlignment(TextLabel::vAlignBottom);
+
 	initActions();
 	initMenus();
 }
@@ -163,8 +170,8 @@ void CartesianPlot::initActions(){
 	addVerticalAxisAction = new QAction(tr("vertical axis"), this);
 #else
 	addCurveAction = new KAction(i18n("xy-curve"), this);
-	addHorizontalAxisAction = new KAction(tr("horizontal axis"), this);
-	addVerticalAxisAction = new KAction(tr("vertical axis"), this);
+	addHorizontalAxisAction = new KAction(i18n("horizontal axis"), this);
+	addVerticalAxisAction = new KAction(i18n("vertical axis"), this);
 #endif
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 }
