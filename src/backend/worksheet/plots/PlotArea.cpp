@@ -4,7 +4,7 @@
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -136,6 +136,8 @@ void PlotArea::retransform(){
 			d->transformedRect = QRectF(points.at(0), points.at(1)).normalized();
 	} else
 		d->transformedRect = d->rect;
+	
+	d->setTransformedRect(d->transformedRect);
 }
 
 
@@ -286,6 +288,11 @@ bool PlotAreaPrivate::swapVisible(bool on){
 	return oldValue;
 }
 
+void PlotAreaPrivate::setTransformedRect(const QRectF& r){
+	prepareGeometryChange();
+	transformedRect = r;
+}
+
 QRectF PlotAreaPrivate::boundingRect () const{
 	return transformedRect; 
 }
@@ -303,7 +310,9 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	if (!isVisible())
 		return;
 
+	//draw the area
 	painter->setOpacity(backgroundOpacity);
+	painter->setPen(Qt::NoPen);
 	QRectF rect = boundingRect();
 	if (backgroundType == PlotArea::Color){
 		switch (backgroundColorStyle){
@@ -379,14 +388,11 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	}
 	painter->drawRect(rect);
 
-	painter->setPen(borderPen);
-	painter->setBrush(Qt::NoBrush);
-	painter->setOpacity(borderOpacity);
-	painter->drawRect(rect);
-	
-	if (isSelected()){
-		QPainterPath path = shape();  
-		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-		painter->drawPath(path);
+	//draw the border
+	if (borderPen.style() != Qt::NoPen){
+		painter->setPen(borderPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->setOpacity(borderOpacity);
+		painter->drawRect(rect);
 	}
 }

@@ -42,14 +42,16 @@ class PlotAreaPrivate: public QGraphicsItem{
 		virtual ~PlotAreaPrivate();
 
 		QString name() const;
-		virtual QRectF boundingRect() const;
-		virtual QPainterPath shape() const;
 		bool swapVisible(bool on);
 		bool toggleClipping(bool on);
 		bool clippingEnabled() const;
 		QRectF swapRect(const QRectF &newRect);
-
-		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		void setTransformedRect(const QRectF&);
+		
+		//QGraphicsItem's virtual functions
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		virtual QRectF boundingRect() const;
+		virtual QPainterPath shape() const;
 		
 		QRectF rect;
 		QRectF transformedRect;
