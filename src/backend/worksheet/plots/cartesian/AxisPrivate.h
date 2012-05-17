@@ -42,7 +42,6 @@ class TextLabel;
 class AxisPrivate: public QGraphicsItem {
 	public:
 		AxisPrivate(Axis *owner);
-		virtual ~AxisPrivate();
 
 		Axis::AxisOrientation orientation; //!< left, right, bottom, or top (usually not changed after creation)
 		Axis::AxisScale scale;
@@ -106,8 +105,8 @@ class AxisPrivate: public QGraphicsItem {
 		QPen pen;
 
 		QString name() const;
-		virtual QRectF boundingRect() const { return boundingRectangle; }
-		virtual QPainterPath shape() const { return axisShape; }
+		virtual QRectF boundingRect() const;
+		virtual QPainterPath shape() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 
 		virtual void retransform();

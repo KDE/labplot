@@ -87,10 +87,17 @@ void Axis::init() {
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	
+// 	d->linePen.setStyle(Qt::SolidLine);
+	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
 	// axis title
  	d->title = new TextLabel(this->name());
+	addChild(d->title);
+	d->title->setHidden(true);
+	d->title->setText(this->name());
+	d->title->setHorizontalPosition( TextLabel::hPositionCenter );
+	d->title->setVerticalPosition( TextLabel::vPositionCenter );
 //TODO	d->title->loadConfig(group);
 	
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
@@ -236,7 +243,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, end, end);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset);
 
-//TODO CLASS_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title);
+BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title);
 
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity);
@@ -448,7 +455,7 @@ void Axis::setMinorTicksOpacity(qreal opacity){
 
 
 //Labels
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTicks);
+STD_SETTER_CMD_IMPL_F(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabels);
 void Axis::setLabelsPosition(const LabelsPosition & labelsPosition) {
 	Q_D(Axis);
 	if (labelsPosition != d->labelsPosition)
@@ -511,9 +518,6 @@ void Axis::setLabelsOpacity(qreal opacity){
 AxisPrivate::AxisPrivate(Axis *owner) : q(owner){
 }
 
-AxisPrivate::~AxisPrivate(){
-}
-
 QString AxisPrivate::name() const{
 	return q->name();
 }
@@ -522,6 +526,17 @@ bool AxisPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
 	return oldValue;
+}
+
+QRectF AxisPrivate::boundingRect() const{
+	return boundingRectangle;
+}
+
+/*!
+  Returns the shape of the XYCurve as a QPainterPath in local coordinates
+*/
+QPainterPath AxisPrivate::shape() const{
+	return axisShape;
 }
 
 /*!
@@ -817,8 +832,10 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
  */
 //TODO optimize
 void AxisPrivate::retransformTickLabels() {
-	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::NoLabels)
+	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::NoLabels){
+		recalcShapeAndBoundingRect();
 		return;
+	}
 
 	QFontMetrics fm(labelsFont);
 	float width = 0;
@@ -890,26 +907,32 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = linePath.boundingRect();
 	boundingRectangle |= majorTicksPath.boundingRect();
 	boundingRectangle |= minorTicksPath.boundingRect();
+// 	boundingRectangle |= title->graphicsItem()->boundingRect();
 	boundingRectangle = boundingRectangle.normalized();
 
 	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, pen);
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
-
+// 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->shape(), pen));
+	
 	  if (labelsPosition != Axis::NoLabels){
-// 		QMatrix mat;
-//TODO 		mat.rotate(labelsRotationAngle);
+		QTransform trafo;
 		QPainterPath  tickLabelsPath = QPainterPath();
+		QPainterPath tempPath;
 	  	for (int i=0; i<tickLabelPoints.size(); i++){
-		  tickLabelsPath.addText( tickLabelPoints.at(i), labelsFont, tickLabelStrings.at(i) );
+			tempPath = QPainterPath();
+			tempPath.addText( QPoint(0,0), labelsFont, tickLabelStrings.at(i) );
+
+			trafo.reset();
+			trafo.translate( tickLabelPoints.at(i).x(), tickLabelPoints.at(i).y() );
+			trafo.rotate( -labelsRotationAngle );	
+			tempPath = trafo.map(tempPath);
+
+			tickLabelsPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, pen));
 		}
 		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 		boundingRectangle = boundingRectangle.united(tickLabelsPath.boundingRect());
 	}
-	
-	//TODO add axis title
-
-	update();
 }
 
 /*!
@@ -968,8 +991,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
   //TODO: draw grid
   
    if (isSelected()){
-	QPainterPath path = shape();  
 	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-	painter->drawPath(path);
+	painter->drawPath(shape());
   }
 }
