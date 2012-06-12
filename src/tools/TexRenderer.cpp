@@ -39,12 +39,12 @@
 #include <QTextStream>
 #include <QProcess>
 
-// use latex to render LaTeX text
-// see tex2im, etc.
+// use latex to render LaTeX text (see tex2im, etc.)
+// TODO: test convert to svg and render to qimage
 // TODO: color, font size
 bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	kWarning()<<teXString<<endl;
+	// kWarning()<<teXString<<endl;
 #endif
 	QTemporaryFile file("/dev/shm/labplot_XXXXXX.tex");
 	// for debugging *.tex file
@@ -52,7 +52,10 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	if(file.open()) {
 		QDir::setCurrent("/dev/shm");
 	}
-	else {	// try /tmp if /dev/shm fails
+	else {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		kWarning()<<"/dev/shm failed. using /tmp"<<endl;
+#endif
 		file.setFileTemplate("/tmp/labplot_XXXXXX.tex");
 		if(file.open())
 			QDir::setCurrent("/tmp");
@@ -68,28 +71,57 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	out<<"\n\\end{document}";
 	out.flush();
 
+	// latex: TeX -> PDF
+	QFileInfo fi(file.fileName());
+	QProcess latexProcess, convertProcess;
+	latexProcess.start("pdflatex", QStringList() << "-interaction=batchmode" << file.fileName());
+
+	if (latexProcess.waitForFinished()) { 
+		// crop PDF
+		QProcess cropProcess;
+		cropProcess.start("pdfcrop", QStringList() << fi.completeBaseName()+".pdf");
+		if (!cropProcess.waitForFinished()) {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		kWarning()<<"pdfcrop failed. using latex"<<endl;
+#endif
+		}
+		else {
+			// convert: PDF -> PNG
+			convertProcess.start("convert", QStringList() << "-density" << "1200x1200" << "-scale"<< "15%" << fi.completeBaseName()+"-crop.pdf" << fi.completeBaseName()+".png");
+			if (convertProcess.waitForFinished()) {
+				// read png file
+				image.load(fi.completeBaseName()+".png");
+	
+				// clean up
+				QFile::remove(fi.completeBaseName()+".pdf");
+				QFile::remove(fi.completeBaseName()+"-crop.pdf");
+				QFile::remove(fi.completeBaseName()+".png");
+				// also possible: latexmf -C
+				QFile::remove(fi.completeBaseName()+".aux");
+				QFile::remove(fi.completeBaseName()+".log");
+				return true;
+			}
+		}
+	}
+	else {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		kWarning()<<"pdflatex failed. using latex"<<endl;
+#endif
+	}
+
 	// latex: TeX -> DVI
-	QProcess latexProcess;
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
-	if (!latexProcess.waitForStarted())
-		return false;
 	if (!latexProcess.waitForFinished())
 		return false;
 
 	// dvips: DVI -> PS
 	QProcess dvipsProcess;
-	QFileInfo fi(file.fileName());
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
-	if (!dvipsProcess.waitForStarted())
-		return false;
 	if (!dvipsProcess.waitForFinished())
 		return false;
 
 	// convert: PS -> PNG
-	QProcess convertProcess;
-	convertProcess.start("convert", QStringList() << "-scale"<< "50%" << "-density" << "200x200" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
-	if (!convertProcess.waitForStarted())
-		return false;
+	convertProcess.start("convert", QStringList() << "-scale"<< "15%" << "-density" << "1200x1200" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
 	if (!convertProcess.waitForFinished())
 		return false;
 
@@ -98,11 +130,11 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 
 	//clean up
 	QFile::remove(fi.completeBaseName()+".png");
+	QFile::remove(fi.completeBaseName()+".dvi");
+	QFile::remove(fi.completeBaseName()+".ps");
 	// also possible: latexmf -C
 	QFile::remove(fi.completeBaseName()+".aux");
 	QFile::remove(fi.completeBaseName()+".log");
-	QFile::remove(fi.completeBaseName()+".dvi");
-	QFile::remove(fi.completeBaseName()+".ps");
 
 	return true;
 }
