@@ -46,11 +46,15 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	kWarning()<<teXString<<endl;
 #endif
-	QTemporaryFile file("labplot_XXXXXX.tex");
+	QTemporaryFile file("/dev/shm/labplot_XXXXXX.tex");
 	// for debugging *.tex file
 	//file.setAutoRemove(false);
-	if(! file.open()) 
-		return false;
+	if(! file.open()) {	
+		// try /tmp
+		file.setFileTemplate("/tmp/labplot_XXXXXX.tex");
+		if(! file.open())
+			return false;
+	}
 
 	// create latex skel
 	QTextStream out(&file);
@@ -89,7 +93,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	image.load(fi.completeBaseName()+".png");
 
 	//clean up
-	QFile::remove(fi.completeBaseName()+".png");
+	//QFile::remove(fi.completeBaseName()+".png");
 	// also possible: latexmf -C
 	QFile::remove(fi.completeBaseName()+".aux");
 	QFile::remove(fi.completeBaseName()+".log");
@@ -99,7 +103,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	return true;
 }
 
-// using texvc to render LaTeX text
+// old method using texvc to render LaTeX text
 //TODO make this function using Qt only?
 bool TexRenderer::renderImageTeXvc( const QString& texString, QImage& image){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
