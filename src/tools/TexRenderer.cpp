@@ -49,10 +49,14 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	QTemporaryFile file("/dev/shm/labplot_XXXXXX.tex");
 	// for debugging *.tex file
 	//file.setAutoRemove(false);
-	if(! file.open()) {	
-		// try /tmp
+	if(file.open()) {
+		QDir::setCurrent("/dev/shm");
+	}
+	else {	// try /tmp if /dev/shm fails
 		file.setFileTemplate("/tmp/labplot_XXXXXX.tex");
-		if(! file.open())
+		if(file.open())
+			QDir::setCurrent("/tmp");
+		else
 			return false;
 	}
 
@@ -93,7 +97,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	image.load(fi.completeBaseName()+".png");
 
 	//clean up
-	//QFile::remove(fi.completeBaseName()+".png");
+	QFile::remove(fi.completeBaseName()+".png");
 	// also possible: latexmf -C
 	QFile::remove(fi.completeBaseName()+".aux");
 	QFile::remove(fi.completeBaseName()+".log");
