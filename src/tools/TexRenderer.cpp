@@ -41,6 +41,7 @@
 
 // use latex to render LaTeX text (see tex2im, etc.)
 // TODO: test convert to svg and render to qimage
+// TODO: test dvipng
 // TODO: color, font size
 bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -86,12 +87,12 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 #endif
 		}
 		else {
-			// convert: PDF -> PNG
-			convertProcess.start("convert", QStringList() << "-density" << "1200x1200" << "-scale"<< "15%" << fi.completeBaseName()+"-crop.pdf" << fi.completeBaseName()+".png");
+			// convert: PDF -> PNG (1200x1200, 15%)
+			convertProcess.start("convert", QStringList() << "-density" << "300x300" << fi.completeBaseName()+"-crop.pdf" << fi.completeBaseName()+".png");
 			if (convertProcess.waitForFinished()) {
 				// read png file
 				image.load(fi.completeBaseName()+".png");
-	
+
 				// clean up
 				QFile::remove(fi.completeBaseName()+".pdf");
 				QFile::remove(fi.completeBaseName()+"-crop.pdf");
@@ -121,7 +122,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 		return false;
 
 	// convert: PS -> PNG
-	convertProcess.start("convert", QStringList() << "-scale"<< "15%" << "-density" << "1200x1200" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
+	convertProcess.start("convert", QStringList() << "-density" << "300x300" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
 	if (!convertProcess.waitForFinished())
 		return false;
 
@@ -130,7 +131,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 
 	//clean up
 	QFile::remove(fi.completeBaseName()+".png");
-	QFile::remove(fi.completeBaseName()+".dvi");
+	//QFile::remove(fi.completeBaseName()+".dvi");
 	QFile::remove(fi.completeBaseName()+".ps");
 	// also possible: latexmf -C
 	QFile::remove(fi.completeBaseName()+".aux");

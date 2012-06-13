@@ -361,12 +361,15 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
 	float w,h;
 	if (texUsed){
+		//painter->scale(.5,.5);
 		w = texImage.width();
 		h = texImage.height();
 		painter->translate(-w/2,-h/2);
 		QRectF rect = texImage.rect();
+		painter->setRenderHint(QPainter::SmoothPixmapTransform);
 		painter->drawImage(rect, texImage, rect);
-	}	else{
+		//painter->scale(2,2);
+	}else{
 		w = staticText.size().width();
 		h = staticText.size().height();
  		painter->drawStaticText(QPoint(-w/2,-h/2), staticText);
