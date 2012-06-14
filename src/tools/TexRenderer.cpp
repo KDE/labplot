@@ -40,8 +40,7 @@
 #include <QProcess>
 
 // use latex to render LaTeX text (see tex2im, etc.)
-// TODO: test convert to svg and render to qimage
-// TODO: test dvipng
+// TODO: test convert to svg and render to qimage, test dvipng
 // TODO: color, font size
 bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -72,12 +71,16 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	out<<"\n\\end{document}";
 	out.flush();
 
-	// latex: TeX -> PDF
-	QFileInfo fi(file.fileName());
+	// pdflatex: TeX -> PDF
 	QProcess latexProcess, convertProcess;
 	latexProcess.start("pdflatex", QStringList() << "-interaction=batchmode" << file.fileName());
 
-	if (latexProcess.waitForFinished()) { 
+	QFileInfo fi(file.fileName());
+	if (latexProcess.waitForFinished()) { 	// pdflatex finished
+		//qDebug()<<latexProcess.exitCode();
+		if(latexProcess.exitCode() != 0)	// skip if pdflatex failed
+			return false;
+
 		// crop PDF
 		QProcess cropProcess;
 		cropProcess.start("pdfcrop", QStringList() << fi.completeBaseName()+".pdf");
@@ -113,6 +116,8 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	// latex: TeX -> DVI
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished())
+		return false;
+	if(latexProcess.exitCode() != 0)	// skip if latex failed
 		return false;
 
 	// dvips: DVI -> PS

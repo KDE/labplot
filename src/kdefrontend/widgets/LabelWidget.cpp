@@ -139,6 +139,7 @@ void LabelWidget::textChanged(){
 		// TODO: this uses format of current selection only
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
 		m_label->setTexFontSize(format.fontPointSize());
+		//TODO: use optimized update method (only after 3 sec not changed ?)
 		m_label->updateTexImage();
 	}
 	else
