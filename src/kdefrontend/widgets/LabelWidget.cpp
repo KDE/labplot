@@ -105,6 +105,7 @@ void LabelWidget::setLabel(TextLabel *label){
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
 	ui.teLabel->setText(m_label->text());
+	ui.chbTex->setChecked(m_label->texUsed());
 	
 	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
 }
@@ -417,6 +418,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	
 	//Text
 	//TODO font, color etc.
+	ui.chbTex->setChecked(group.readEntry("TexUsed", (bool) m_label->texUsed()));
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->horizontalPosition()) );
@@ -434,6 +436,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 void LabelWidget::saveConfig(KConfigGroup &group) {
 	//Text
 	//TODO font, color etc.
+	group.writeEntry("TexUsed", ui.chbTex->isChecked());
 
 	// Geometry
 	group.writeEntry("TitlePositionX", ui.cbPositionX->currentIndex());
