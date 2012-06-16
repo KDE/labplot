@@ -6,9 +6,9 @@ The plan is to share a common backend with two frontends: KDE based (LabPlot) an
 
 LabPlot 2 is a complete rewrite of LabPlot 1.X.
 
-###############
+###########################################################
 
-Building LabPlot (KDE frontend):
+A. Building LabPlot (KDE frontend):
 --------------------------------
 # ./compile
 
@@ -21,8 +21,10 @@ Clean-up:
 ---------
 # rm -rf build
 
-Building SciDAvis (Qt frontend):
+B. Building SciDAvis (Qt frontend):
 --------------------------------
+The Qt frontend is currently unsupported and not functional.
+If you still want to compile it use:
 
 # cd src/qtfrontend
 # qmake scidavis.pro
