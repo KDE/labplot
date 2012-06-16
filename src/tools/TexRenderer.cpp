@@ -39,10 +39,12 @@
 #include <QTextStream>
 #include <QProcess>
 
-// use latex to render LaTeX text (see tex2im, etc.)
+// use (pdf)latex to render LaTeX text (see tex2im, etc.)
 // TODO: test convert to svg and render to qimage, test dvipng
-// TODO: color, font size
-bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize){
+// TODO: color (only in dvips mode?)
+// TODO: font size
+
+bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize, QColor fontColor){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	// kWarning()<<teXString<<endl;
 #endif
@@ -65,10 +67,12 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 
 	// create latex skel
 	QTextStream out(&file);
-	//TODO: use fontSize (or later in convert process)
-	out<<"\\documentclass[12pt]{article}\n\\usepackage{color}\n\\usepackage[dvips]{graphicx}\n\\pagestyle{empty}\n\\begin{document}\n";
+	//TODO: use font size (or later in convert process)
+	//TODO: use fontColor for \color{black}
+	// \\usepackage[dvips]{graphicx}
+	out<<"\\documentclass[12pt]{article}\n\\usepackage[dvipsnames]{color}\n\\pagestyle{empty}\n\\pagecolor{white}\n\\begin{document}\n{\\color{black}\n";
 	out<<teXString;
-	out<<"\n\\end{document}";
+	out<<"\n}\n\\end{document}";
 	out.flush();
 
 	// pdflatex: TeX -> PDF
@@ -90,7 +94,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 #endif
 		}
 		else {
-			// convert: PDF -> PNG (1200x1200, 15%)
+			// convert: PDF -> PNG
 			convertProcess.start("convert", QStringList() << "-density" << "300x300" << fi.completeBaseName()+"-crop.pdf" << fi.completeBaseName()+".png");
 			if (convertProcess.waitForFinished()) {
 				// read png file
@@ -136,7 +140,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 
 	//clean up
 	QFile::remove(fi.completeBaseName()+".png");
-	//QFile::remove(fi.completeBaseName()+".dvi");
+	QFile::remove(fi.completeBaseName()+".dvi");
 	QFile::remove(fi.completeBaseName()+".ps");
 	// also possible: latexmf -C
 	QFile::remove(fi.completeBaseName()+".aux");

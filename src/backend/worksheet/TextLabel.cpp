@@ -302,7 +302,8 @@ void TextLabelPrivate::updateText(){
 }
 
 void TextLabelPrivate::updateTexImage(){
-	bool status = TexRenderer::renderImageLaTeX(text, texImage, texFontSize);
+	// TODO: use font color
+	bool status = TexRenderer::renderImageLaTeX(text, texImage, texFontSize, Qt::black);
 	if (!status)
 		qDebug()<<"TeX image not created";
 	

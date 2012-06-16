@@ -30,11 +30,12 @@
 #define TEXRENDERER_H
 
 #include <QImage>
+#include <QColor>
 
 class TexRenderer{
 
 public:
-  static bool renderImageLaTeX( const QString&, QImage&, int fontSize);
+  static bool renderImageLaTeX( const QString&, QImage&, int fontSize, QColor fontColor);
   static bool renderImageTeXvc( const QString&, QImage& );
 
 };
