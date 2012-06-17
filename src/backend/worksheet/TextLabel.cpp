@@ -61,7 +61,7 @@ void TextLabel::init() {
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 
-	d->texUsed = false;
+	d->teXUsed = false;
 	d->staticText.setTextFormat(Qt::RichText);
 
 	d->horizontalPosition = TextLabel::hPositionCustom;
@@ -98,7 +98,7 @@ void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
 
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, QString, text, text);
-CLASS_SHARED_D_READER_IMPL(TextLabel, bool, texUsed, texUsed);
+CLASS_SHARED_D_READER_IMPL(TextLabel, bool, teXUsed, teXUsed);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalPosition, horizontalPosition, horizontalPosition);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalPosition, verticalPosition, verticalPosition);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QPointF, position, position);
@@ -114,18 +114,18 @@ void TextLabel::setText(const QString &text) {
 		exec(new TextLabelSetTextCmd(d, text, tr("%1: set label text")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetTexUsed, bool, texUsed, updateTexImage);
-void TextLabel::setTexUsed(const bool tex) {
+STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXUsed, bool, teXUsed, updateTeXImage);
+void TextLabel::setTeXUsed(const bool tex) {
 	Q_D(TextLabel);
-	if (tex != d->texUsed)
-		exec(new TextLabelSetTexUsedCmd(d, tex, tr("%1: set use tex syntax")));
+	if (tex != d->teXUsed)
+		exec(new TextLabelSetTeXUsedCmd(d, tex, tr("%1: use TeX syntax")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetTexFontSize, qreal, texFontSize, updateTexImage);
-void TextLabel::setTexFontSize(const qreal fontSize) {
+STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXFontSize, qreal, teXFontSize, updateTeXImage);
+void TextLabel::setTeXFontSize(const qreal fontSize) {
 	Q_D(TextLabel);
-	if (fontSize != d->texFontSize)
-		exec(new TextLabelSetTexFontSizeCmd(d, fontSize, tr("%1: set tex font size")));
+	if (fontSize != d->teXFontSize)
+		exec(new TextLabelSetTeXFontSizeCmd(d, fontSize, tr("%1: set TeX font size")));
 }
 
 STD_SETTER_CMD_IMPL_F(TextLabel, SetPosition, QPointF, position, retransform);
@@ -181,9 +181,9 @@ bool TextLabel::isVisible() const {
 	return d->isVisible();
 }
 
-void TextLabel::updateTexImage(){
+void TextLabel::updateTeXImage(){
 	Q_D(TextLabel);
-	d->updateTexImage();
+	d->updateTeXImage();
 }
 
 //################################################################
@@ -204,9 +204,9 @@ void TextLabelPrivate::retransform(){
 	float y = position.y();
 	float w, h;
 
-	if (texUsed){
-		w = texImage.width()*scaleFactor;
-		h = texImage.height()*scaleFactor;
+	if (teXUsed){
+		w = teXImage.width()*scaleFactor;
+		h = teXImage.height()*scaleFactor;
 	}
 	else {
 		w = staticText.size().width()*scaleFactor;
@@ -301,9 +301,9 @@ void TextLabelPrivate::updateText(){
 	retransform();
 }
 
-void TextLabelPrivate::updateTexImage(){
+void TextLabelPrivate::updateTeXImage(){
 	// TODO: use font color
-	bool status = TexRenderer::renderImageLaTeX(text, texImage, texFontSize, Qt::black);
+	bool status = TeXRenderer::renderImageLaTeX(text, teXImage, teXFontSize, Qt::black);
 	if (!status)
 		qDebug()<<"TeX image not created";
 	
@@ -361,14 +361,14 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	painter->rotate(rotationAngle);
 
 	float w,h;
-	if (texUsed){
+	if (teXUsed){
 		//painter->scale(.5,.5);
-		w = texImage.width();
-		h = texImage.height();
+		w = teXImage.width();
+		h = teXImage.height();
 		painter->translate(-w/2,-h/2);
-		QRectF rect = texImage.rect();
+		QRectF rect = teXImage.rect();
 		painter->setRenderHint(QPainter::SmoothPixmapTransform);
-		painter->drawImage(rect, texImage, rect);
+		painter->drawImage(rect, teXImage, rect);
 		//painter->scale(2,2);
 	}else{
 		w = staticText.size().width();
@@ -387,9 +387,9 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		float y = itemPos.y();
 		
 		float w, h;
-		if (texUsed){
-			w = texImage.width()*scaleFactor;
-			h = texImage.height()*scaleFactor;
+		if (teXUsed){
+			w = teXImage.width()*scaleFactor;
+			h = teXImage.height()*scaleFactor;
 		}
 		else {
 			w = staticText.size().width()*scaleFactor;

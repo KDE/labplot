@@ -30,7 +30,7 @@
 #include "LabelWidget.h"
 #include "../../backend/worksheet/Worksheet.h"
 #include "../../backend/worksheet/TextLabel.h"
-#include "../../tools/TexRenderer.h"
+#include "../../tools/TeXRenderer.h"
 #include <QMenu>
 #include <QWidgetAction>
 #include <kdebug.h>
@@ -67,7 +67,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	
 	//SLOTS
 	// text properties
-	connect(ui.chbTex, SIGNAL(clicked(bool)), this, SLOT(texUsedChanged(bool)) );
+	connect(ui.chbTeX, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
 	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)), 
 			this, SLOT(charFormatChanged(QTextCharFormat)));
@@ -105,7 +105,7 @@ void LabelWidget::setLabel(TextLabel *label){
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
 	ui.teLabel->setText(m_label->text());
-	ui.chbTex->setChecked(m_label->texUsed());
+	ui.chbTeX->setChecked(m_label->teXUsed());
 	
 	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
 }
@@ -135,13 +135,13 @@ void LabelWidget::textChanged(){
 		return;
 	}
 
-	if (ui.chbTex->isChecked()) {
+	if (ui.chbTeX->isChecked()) {
 		m_label->setText(ui.teLabel->toPlainText());
 		// TODO: this uses format of current selection only
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
-		m_label->setTexFontSize(format.fontPointSize());
+		m_label->setTeXFontSize(format.fontPointSize());
 		//TODO: use optimized update method (only after 3 sec not changed ?)
-		m_label->updateTexImage();
+		m_label->updateTeXImage();
 	}
 	else
 		m_label->setText(ui.teLabel->toHtml());
@@ -172,8 +172,8 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 	ui.kfontRequester->setFont(format.font());
 }
 
-void LabelWidget::texUsedChanged(bool checked){
-	qDebug()<<"texUsedChanged()";
+void LabelWidget::teXUsedChanged(bool checked){
+	//qDebug()<<"teXUsedChanged()";
 	if (m_initializing)
 		return;
 
@@ -208,7 +208,7 @@ void LabelWidget::texUsedChanged(bool checked){
 		m_label->setText(ui.teLabel->toPlainText());
 	else
 		m_label->setText(ui.teLabel->toHtml());
-	m_label->setTexUsed(checked);
+	m_label->setTeXUsed(checked);
 }
 
 void LabelWidget::textColorChanged(QColor color){
@@ -418,7 +418,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	
 	//Text
 	//TODO font, color etc.
-	ui.chbTex->setChecked(group.readEntry("TexUsed", (bool) m_label->texUsed()));
+	ui.chbTeX->setChecked(group.readEntry("TexUsed", (bool) m_label->teXUsed()));
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->horizontalPosition()) );
@@ -436,7 +436,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 void LabelWidget::saveConfig(KConfigGroup &group) {
 	//Text
 	//TODO font, color etc.
-	group.writeEntry("TexUsed", ui.chbTex->isChecked());
+	group.writeEntry("TeXUsed", ui.chbTeX->isChecked());
 
 	// Geometry
 	group.writeEntry("TitlePositionX", ui.cbPositionX->currentIndex());

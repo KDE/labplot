@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : TexRenderer.h
+    File                 : TeXRenderer.h
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Alexander Semke
@@ -32,7 +32,7 @@
 #include <QImage>
 #include <QColor>
 
-class TexRenderer{
+class TeXRenderer{
 
 public:
   static bool renderImageLaTeX( const QString&, QImage&, int fontSize, QColor fontColor);

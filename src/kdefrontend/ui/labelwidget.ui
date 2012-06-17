@@ -451,7 +451,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QCheckBox" name="chbTex">
+       <widget class="QCheckBox" name="chbTeX">
         <property name="text">
          <string>TeX</string>
         </property>

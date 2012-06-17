@@ -39,8 +39,8 @@ class TextLabelPrivate: public QGraphicsItem{
 		float rotationAngle;
 		float scaleFactor;
 		QString text;
-		bool texUsed;
-		qreal texFontSize;
+		bool teXUsed;
+		qreal teXFontSize;
 		
 		QPointF position;//point in parent's coordinate system, the label gets aligned around this point.
 		TextLabel::HorizontalPosition horizontalPosition;
@@ -56,7 +56,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		virtual void recalcShapeAndBoundingRect();
 		void updatePosition();
 		void updateText();
-		void updateTexImage();
+		void updateTeXImage();
 		QStaticText staticText;
 		bool cancelItemChangeEvent;
 
@@ -71,7 +71,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 	private:
-		QImage texImage;
+		QImage teXImage;
 };
 
 #endif

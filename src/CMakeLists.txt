@@ -132,7 +132,7 @@ set(COMMONFRONTEND_SOURCES
 )
 
 set(TOOLS_SOURCES
-	${TOOLS_DIR}/TexRenderer.cpp
+	${TOOLS_DIR}/TeXRenderer.cpp
 )
 
 set(QTMOC_HDRS

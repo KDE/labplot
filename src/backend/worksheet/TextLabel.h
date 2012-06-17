@@ -36,7 +36,7 @@
 #include <QBrush>
 #include <QPen>
 #include "../lib/macros.h"
-#include "../../tools/TexRenderer.h"
+#include "../../tools/TeXRenderer.h"
 #include "AbstractWorksheetElement.h"
 
 class TextLabelPrivate;
@@ -56,8 +56,8 @@ class TextLabel : public AbstractWorksheetElement{
 		virtual QGraphicsItem *graphicsItem() const;
 
 		CLASS_D_ACCESSOR_DECL(QString, text, Text);
-		BASIC_D_ACCESSOR_DECL(bool, texUsed, TexUsed);
-		BASIC_D_ACCESSOR_DECL(qreal, texFontSize, TexFontSize);
+		BASIC_D_ACCESSOR_DECL(bool, teXUsed, TeXUsed);
+		BASIC_D_ACCESSOR_DECL(qreal, teXFontSize, TeXFontSize);
 		CLASS_D_ACCESSOR_DECL(QPointF, position, Position);
 		BASIC_D_ACCESSOR_DECL(HorizontalPosition, horizontalPosition, HorizontalPosition);
 		BASIC_D_ACCESSOR_DECL(VerticalPosition, verticalPosition, VerticalPosition);
@@ -68,7 +68,7 @@ class TextLabel : public AbstractWorksheetElement{
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		
-		void updateTexImage();
+		void updateTeXImage();
 
 		typedef TextLabelPrivate Private;
 

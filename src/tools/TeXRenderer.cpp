@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : TexRenderer.cc
+    File                 : TeXRenderer.cc
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
@@ -27,7 +27,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "TexRenderer.h"
+#include "TeXRenderer.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KTempDir>
@@ -44,7 +44,7 @@
 // TODO: color (only in dvips mode?)
 // TODO: font size
 
-bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize, QColor fontColor){
+bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize, QColor fontColor){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	// kWarning()<<teXString<<endl;
 #endif
@@ -151,7 +151,7 @@ bool TexRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 
 // old method using texvc to render LaTeX text
 //TODO make this function using Qt only?
-bool TexRenderer::renderImageTeXvc( const QString& texString, QImage& image){
+bool TeXRenderer::renderImageTeXvc( const QString& texString, QImage& image){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KTempDir *tmpDir = new KTempDir();
 	QString dirName = tmpDir->name();
