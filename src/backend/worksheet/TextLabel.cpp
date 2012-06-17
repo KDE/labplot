@@ -99,6 +99,8 @@ void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, QString, text, text);
 CLASS_SHARED_D_READER_IMPL(TextLabel, bool, teXUsed, teXUsed);
+CLASS_SHARED_D_READER_IMPL(TextLabel, qreal, teXFontSize, teXFontSize);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXFontColor, teXFontColor);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalPosition, horizontalPosition, horizontalPosition);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalPosition, verticalPosition, verticalPosition);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QPointF, position, position);
@@ -126,6 +128,13 @@ void TextLabel::setTeXFontSize(const qreal fontSize) {
 	Q_D(TextLabel);
 	if (fontSize != d->teXFontSize)
 		exec(new TextLabelSetTeXFontSizeCmd(d, fontSize, tr("%1: set TeX font size")));
+}
+
+STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateTeXImage);
+void TextLabel::setTeXFontColor(const QColor fontColor) {
+	Q_D(TextLabel);
+	if (fontColor != d->teXFontColor)
+		exec(new TextLabelSetTeXFontColorCmd(d, fontColor, tr("%1: set TeX font color")));
 }
 
 STD_SETTER_CMD_IMPL_F(TextLabel, SetPosition, QPointF, position, retransform);
@@ -302,8 +311,7 @@ void TextLabelPrivate::updateText(){
 }
 
 void TextLabelPrivate::updateTeXImage(){
-	// TODO: use font color
-	bool status = TeXRenderer::renderImageLaTeX(text, teXImage, teXFontSize, Qt::black);
+	bool status = TeXRenderer::renderImageLaTeX(text, teXImage, teXFontSize, teXFontColor);
 	if (!status)
 		qDebug()<<"TeX image not created";
 	

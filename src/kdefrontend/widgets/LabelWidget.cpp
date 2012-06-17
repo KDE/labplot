@@ -106,7 +106,9 @@ void LabelWidget::setLabel(TextLabel *label){
   	loadConfig(group);
 	ui.teLabel->setText(m_label->text());
 	ui.chbTeX->setChecked(m_label->teXUsed());
-	
+	if(m_label->teXUsed())
+		ui.kcbTextColor->setColor(m_label->teXFontColor());
+
 	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
 }
 
@@ -168,7 +170,8 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 		ui.tbFontSubScript->setChecked(false);
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
 
-	ui.kcbTextColor->setColor(format.foreground().color());
+	if(! m_label->teXUsed())
+		ui.kcbTextColor->setColor(format.foreground().color());
 	ui.kfontRequester->setFont(format.font());
 }
 
@@ -179,7 +182,6 @@ void LabelWidget::teXUsedChanged(bool checked){
 
 	if(checked) {
 		//disable ui elements
-		ui.kcbTextColor->setEnabled(false);
 		ui.tbFontBold->setEnabled(false);
 		ui.tbFontItalic->setEnabled(false);
 		ui.tbFontUnderline->setEnabled(false);
@@ -189,7 +191,6 @@ void LabelWidget::teXUsedChanged(bool checked){
 		ui.tbSymbols->setEnabled(false);
 	}
 	else {
-		ui.kcbTextColor->setEnabled(true);
 		ui.tbFontBold->setEnabled(true);
 		ui.tbFontItalic->setEnabled(true);
 		ui.tbFontUnderline->setEnabled(true);
@@ -216,6 +217,7 @@ void LabelWidget::textColorChanged(QColor color){
 		return;
 
 	ui.teLabel->setTextColor(color);
+	m_label->setTeXFontColor(color);
 }
 
 void LabelWidget::fontBoldChanged(bool checked){
@@ -418,7 +420,9 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	
 	//Text
 	//TODO font, color etc.
-	ui.chbTeX->setChecked(group.readEntry("TexUsed", (bool) m_label->teXUsed()));
+	ui.chbTeX->setChecked(group.readEntry("TeXUsed", (bool) m_label->teXUsed()));
+	if(m_label->teXUsed())
+		ui.kcbTextColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->horizontalPosition()) );
@@ -437,6 +441,7 @@ void LabelWidget::saveConfig(KConfigGroup &group) {
 	//Text
 	//TODO font, color etc.
 	group.writeEntry("TeXUsed", ui.chbTeX->isChecked());
+	group.writeEntry("TeXFontColor", ui.kcbTextColor->color());
 
 	// Geometry
 	group.writeEntry("TitlePositionX", ui.cbPositionX->currentIndex());

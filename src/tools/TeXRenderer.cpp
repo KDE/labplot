@@ -41,7 +41,6 @@
 
 // use (pdf)latex to render LaTeX text (see tex2im, etc.)
 // TODO: test convert to svg and render to qimage, test dvipng
-// TODO: color (only in dvips mode?)
 // TODO: font size
 
 bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize, QColor fontColor){
@@ -65,12 +64,13 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 			return false;
 	}
 
-	// create latex skel
+	// create latex code
 	QTextStream out(&file);
 	//TODO: use font size (or later in convert process)
-	//TODO: use fontColor for \color{black}
-	// \\usepackage[dvips]{graphicx}
-	out<<"\\documentclass[12pt]{article}\n\\usepackage[dvipsnames]{color}\n\\pagestyle{empty}\n\\pagecolor{white}\n\\begin{document}\n{\\color{black}\n";
+	out<<"\\documentclass[12pt]{article}\n\\usepackage[dvipsnames]{color}\n";
+	out<<"\\pagestyle{empty}\n\\pagecolor{white}\n\\begin{document}\n";
+	out<<"\\definecolor{fontcolor}{rgb}{"<<fontColor.redF()<<','<<fontColor.greenF()<<','<<fontColor.blueF()<<"}\n";
+	out<<"{\\color{fontcolor}\n";
 	out<<teXString;
 	out<<"\n}\n\\end{document}";
 	out.flush();

@@ -41,6 +41,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		QString text;
 		bool teXUsed;
 		qreal teXFontSize;
+		QColor teXFontColor;
 		
 		QPointF position;//point in parent's coordinate system, the label gets aligned around this point.
 		TextLabel::HorizontalPosition horizontalPosition;
