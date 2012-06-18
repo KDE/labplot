@@ -117,7 +117,6 @@ set(DATASOURCES_SOURCES
 )
 
 set(QTFRONTEND_SOURCES
-	${QTFRONTEND_DIR}/core/ProjectExplorer.cpp
 	${QTFRONTEND_DIR}/core/PartMdiView.cpp
 	${QTFRONTEND_DIR}/lib/ActionManager.cpp
 )
@@ -129,6 +128,7 @@ set(COMMONFRONTEND_SOURCES
 # 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetModule.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
+	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 )
 
 set(TOOLS_SOURCES

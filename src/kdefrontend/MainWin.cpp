@@ -39,7 +39,8 @@
 #include "SettingsDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "GuiObserver.h"
- #include "worksheet/ExportWorksheetDialog.h"
+#include "worksheet/ExportWorksheetDialog.h"
+#include "ProjectExplorer.h"
 #include <QDockWidget>
 #include <QStackedWidget>
 
@@ -57,7 +58,6 @@
 //****** Backend **************
 #include "core/Project.h"
 #include "core/Folder.h"
-#include "core/ProjectExplorer.h"
 #include "core/AspectTreeModel.h"
 #include "spreadsheet/Spreadsheet.h"
 #include "worksheet/Worksheet.h"

@@ -37,7 +37,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "worksheet/plots/cartesian/Axis.h"
 #include "worksheet/TextLabel.h"
 #include "core/Project.h"
-#include "core/ProjectExplorer.h"
+#include "ProjectExplorer.h"
 #include "MainWin.h"
 
 #include <QDockWidget>
