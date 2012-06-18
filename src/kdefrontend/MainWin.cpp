@@ -1105,15 +1105,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect){
 	}
 	
 	//expand the aspect and all its children in the tree view of the project explorer
-	this->expandAspect(aspect);
-}
-
-//TODO put this to ProjectExplorer
-void MainWin::expandAspect(const AbstractAspect* aspect) const{
-	m_projectExplorer->setExpanded(m_aspectTreeModel->modelIndexOfAspect(aspect), true);
-	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
-	  this->expandAspect(child);
-	}
+	m_projectExplorer->expandAspect(aspect);
 }
 
 void MainWin::settingsDialog(){

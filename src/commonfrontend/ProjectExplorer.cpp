@@ -181,6 +181,14 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect * aspect){
 	  m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
 }
 
+void ProjectExplorer::expandAspect(const AbstractAspect* aspect){
+	AspectTreeModel * tree_model = qobject_cast<AspectTreeModel *>(m_treeView->model());
+	this->setExpanded(tree_model->modelIndexOfAspect(aspect), true);
+	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
+		this->expandAspect(child);
+	}
+}
+
 /*!
   Sets the \c model for the tree view to present.
 */

@@ -191,7 +191,6 @@ private slots:
 	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility();
 	void toggleDockWidget(QAction*) const;
-	void expandAspect(const AbstractAspect*) const;
 };
 
 #endif
