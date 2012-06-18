@@ -311,6 +311,7 @@ void TextLabelPrivate::updateText(){
 }
 
 void TextLabelPrivate::updateTeXImage(){
+	//TODO: render in background and dont block UI
 	bool status = TeXRenderer::renderImageLaTeX(text, teXImage, teXFontSize, teXFontColor);
 	if (!status)
 		qDebug()<<"TeX image not created";

@@ -33,6 +33,7 @@
 #include "../../tools/TeXRenderer.h"
 #include <QMenu>
 #include <QWidgetAction>
+#include <QTimer>
 #include <kdebug.h>
 #include <kcharselect.h>
 
@@ -49,6 +50,7 @@
 // see legacy/LabelWidget.cpp
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
+	m_updatelock=false;
 	
 	QGridLayout* layout =static_cast<QGridLayout*>(this->layout());
   	layout->setContentsMargins(2,2,2,2);
@@ -142,8 +144,11 @@ void LabelWidget::textChanged(){
 		// TODO: this uses format of current selection only
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
 		m_label->setTeXFontSize(format.fontPointSize());
-		//TODO: use optimized update method (only after 3 sec not changed ?)
-		m_label->updateTeXImage();
+		// only update every 3 seconds
+		if(! m_updatelock) {
+			m_updatelock=true;
+			QTimer::singleShot(3000, this, SLOT(updateTeXImage()));
+		}
 	}
 	else
 		m_label->setText(ui.teLabel->toHtml());
@@ -407,6 +412,12 @@ void LabelWidget::labelPostionChanged(QPointF& point){
 	ui.cbPositionX->setCurrentIndex( TextLabel::hPositionCustom );
 	ui.cbPositionY->setCurrentIndex( TextLabel::vPositionCustom );
 	m_initializing = false;
+}
+
+// slot for TeX image update timer
+void LabelWidget::updateTeXImage() {
+	m_label->updateTeXImage();
+	m_updatelock=false;
 }
 
 //**********************************************************

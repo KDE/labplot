@@ -49,6 +49,7 @@ private:
 	Ui::LabelWidget ui;
 	TextLabel *m_label;
 	bool m_initializing;
+	bool m_updatelock;
 
 signals:
 	void dataChanged(bool);
@@ -77,6 +78,7 @@ private slots:
 	void rotationChanged(int);
 	
 	void labelPostionChanged(QPointF&);
+	void updateTeXImage();
 };
 
 #endif //LABELWIDGET_H
