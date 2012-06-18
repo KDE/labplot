@@ -2,7 +2,6 @@
 
 SciDAVis is a free application for _Sci_entific _D_ata _A_nalysis and _Vis_ualization.
 
-
 === License ===
 
 This program is free software; you can redistribute it and/or modify
@@ -25,6 +24,7 @@ possibly also on other platforms like *BSD.
 === Installation ===
 
 See INSTALL.html
+Please consider that SciDAVis in the LabPlot repo is not working at all at the moment.
 
 
 === Web site ===
