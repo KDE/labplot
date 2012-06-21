@@ -45,8 +45,7 @@ class PlotAreaPrivate: public QGraphicsItem{
 		bool swapVisible(bool on);
 		bool toggleClipping(bool on);
 		bool clippingEnabled() const;
-		QRectF swapRect(const QRectF &newRect);
-		void setTransformedRect(const QRectF&);
+		void setRect(const QRectF&);
 		
 		//QGraphicsItem's virtual functions
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -54,8 +53,6 @@ class PlotAreaPrivate: public QGraphicsItem{
 		virtual QPainterPath shape() const;
 		
 		QRectF rect;
-		QRectF transformedRect;
-		
 		PlotArea::BackgroundType backgroundType;
 		PlotArea::BackgroundColorStyle backgroundColorStyle;
 		PlotArea::BackgroundImageStyle backgroundImageStyle;
@@ -71,5 +68,3 @@ class PlotAreaPrivate: public QGraphicsItem{
 };
 
 #endif
-
-

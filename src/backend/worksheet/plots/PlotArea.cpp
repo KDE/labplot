@@ -82,8 +82,8 @@ void PlotArea::init(){
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 	//Border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)), 
-			group.readEntry("BorderWidth", 0.0), 
-			(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+											group.readEntry("BorderWidth", 0.0), 
+											(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 #endif
 }
@@ -104,40 +104,18 @@ bool PlotArea::isVisible() const{
 }
 
 void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio){
-// 	Q_D(PlotArea);
-	retransform();
+	Q_D(PlotArea);
+
+	//TODO: doesn't work properly
+	d->rect.setWidth(d->rect.width()*horizontalRatio);
+	d->rect.setHeight(d->rect.height()*verticalRatio);
+	
 	// TODO: scale line width
 	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
 
 void PlotArea::retransform(){
-	Q_D(PlotArea);
 
-	Worksheet *worksheet = ancestor<Worksheet>();
-	QRectF pageRect;
-	if (worksheet)
-		pageRect = worksheet->pageRect();
-
-	AbstractPlot *plot = qobject_cast<AbstractPlot*>(parentAspect());
-	if (!plot)
-		return;
-
-	const AbstractCoordinateSystem *system = plot->coordinateSystem();
-	if (system) {
-		QList<QPointF> points;
-		points.append(d->rect.topLeft());
-		points.append(d->rect.bottomRight());
-		points = system->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
-		if (points.count() != 2) // invalid coordinates ?
-			d->transformedRect = pageRect; // fallback to page rect
-		else if (!pageRect.isNull())
-			d->transformedRect = QRectF(points.at(0), points.at(1)).normalized().intersected(pageRect);
-		else
-			d->transformedRect = QRectF(points.at(0), points.at(1)).normalized();
-	} else
-		d->transformedRect = d->rect;
-	
-	d->setTransformedRect(d->transformedRect);
 }
 
 
@@ -178,12 +156,11 @@ void PlotArea::setClippingEnabled(bool on) {
 		exec(new PlotAreaSetClippingEnabledCmd(d, on, tr("%1: toggle clipping")));
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(PlotArea, SetRect, QRectF, swapRect, q->retransform);
 void PlotArea::setRect(const QRectF &newRect) {
 	Q_D(PlotArea);
 
 	if (d->rect != newRect)
-		exec(new PlotAreaSetRectCmd(d, newRect, tr("%1: set plot rectangle")));
+		d->setRect(newRect);
 }
 
 //Background
@@ -274,32 +251,24 @@ bool PlotAreaPrivate::toggleClipping(bool on) {
 	return oldValue;
 }
 
-
-QRectF PlotAreaPrivate::swapRect(const QRectF &newRect) {
-	QRectF oldRect = rect;
-	prepareGeometryChange();
-	rect = newRect.normalized();
-	return oldRect;
-}
-
 bool PlotAreaPrivate::swapVisible(bool on){
 	bool oldValue = isVisible();
 	setVisible(on);
 	return oldValue;
 }
 
-void PlotAreaPrivate::setTransformedRect(const QRectF& r){
+void PlotAreaPrivate::setRect(const QRectF& r){
 	prepareGeometryChange();
-	transformedRect = r;
+	rect = r;
 }
 
 QRectF PlotAreaPrivate::boundingRect () const{
-	return transformedRect; 
+	return rect; 
 }
 
 QPainterPath PlotAreaPrivate::shape() const{
 	QPainterPath path;
-	path.addRect(transformedRect);
+	path.addRect(rect);
 	return path;
 }
 
@@ -313,7 +282,6 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
 	painter->setPen(Qt::NoPen);
-	QRectF rect = boundingRect();
 	if (backgroundType == PlotArea::Color){
 		switch (backgroundColorStyle){
 			case PlotArea::SingleColor:{
@@ -349,7 +317,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				break;
 			}
 			case PlotArea::RadialGradient:{
-				QRadialGradient radialGrad(rect.center(), transformedRect.width()/2);
+				QRadialGradient radialGrad(rect.center(), rect.width()/2);
 				radialGrad.setColorAt(0, backgroundFirstColor);
 				radialGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(radialGrad));

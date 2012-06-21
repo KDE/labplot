@@ -81,33 +81,18 @@ void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	
+	m_coordinateSystem = new CartesianCoordinateSystem(this);
+	m_plotArea = new PlotArea(name() + " plot area");
+	addChild(m_plotArea);
+	
 	//Geometry
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
 	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
 	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
-	d->rect.setX(x);
-	d->rect.setY(y);
-	d->rect.setWidth(w);
-	d->rect.setHeight(h);
-
-	//Coordinate system
-	m_coordinateSystem = new CartesianCoordinateSystem(this);
-	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
-	QList<CartesianCoordinateSystem::Scale *> scales;
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), x, x+w, 0, 1);
-	cSystem ->setXScales(scales);
-	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), y+h, y, 0, 1);
-	cSystem ->setYScales(scales);
-
-	//Plot area
-	m_plotArea = new PlotArea(name() + " plot area");
-	addChild(m_plotArea);
-// 	m_plotArea->setRect(QRectF(-0.05,-0.05,1.1, 1.1));
-	m_plotArea->setRect(QRectF(0, 0, 1, 1));
-
+	d->setRect(QRectF(x,y,w,h));
+	
 	//Axes
 	Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 	addChild(axis);
@@ -117,6 +102,8 @@ void CartesianPlot::init(){
 	axis->setMajorTicksNumber(6);
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
+// 	axis->title()->setText(axis->name());
+// 	axis->title()->setPosition( QPointF(50, 5) );
 
 	axis = new Axis("x axis 2", Axis::AxisHorizontal);
 	addChild(axis);
@@ -152,7 +139,7 @@ void CartesianPlot::init(){
 	//Plot title
  	m_title = new TextLabel(this->name());
 	m_title->setText(this->name());
-	m_title->setHidden(true);
+// 	m_title->setHidden(true);
 	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem()); //set the parent befor doing any positioning
 	m_title->setHorizontalPosition(TextLabel::hPositionCenter);
 	m_title->setVerticalPosition(TextLabel::vPositionTop);
@@ -206,6 +193,9 @@ QIcon CartesianPlot::icon() const{
 	return ico;
 }
 
+/*!
+	set the rectangular, defined in scene coordinates
+ */
 void CartesianPlot::setRect(const QRectF& r){
 	Q_D(CartesianPlot);
 	d->setRect(r);
@@ -218,19 +208,33 @@ void CartesianPlot::addCurve(){
 	this->addChild(new XYCurve("xy-curve"));
 }
 
+/*!
+	sets the rectangular of the plot in scene coordinates to \c r.
+	The size of the plot corresponds to the size of the plot area, the area which is filled with the background color etc.
+	and which can pose the parent item for several sub-items (like TextLabel).
+	Note, the size of the area used to define the coordinate system doesn't need to be equal to this plot area.
+	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
+ */
 void CartesianPlotPrivate::setRect(const QRectF& r){
 	prepareGeometryChange();
+	rect = r;
+	
+	//offset between the plot area and the area defining the coodinate system, in scene units.
+	//TODO: make this variables private, add getter/setter and provide a comfortable way to change this setting in the UI (don't allow negative values).
+	float vertOffset = Worksheet::convertToSceneUnits(1, Worksheet::Centimeter);
+	float horizOffset = Worksheet::convertToSceneUnits(1, Worksheet::Centimeter);
 	
 	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale *> scales;
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.x(), r.x()+r.width(), 0, 1);
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), rect.x() + horizOffset, rect.x()+rect.width() - horizOffset, 0, 1);
 	cSystem ->setXScales(scales);
 	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), r.y()+r.height(), r.y(), 0, 1);
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), rect.y()+rect.height() - 1*vertOffset, rect.y() + vertOffset, 0, 1);
 	cSystem ->setYScales(scales);
 	
-	plot->plotArea()->retransform();
+	//TODO: calculate the new GraphicsItem's position for plotArea
+	plot->plotArea()->setRect(rect);
+	
 	q->retransform();
-	rect = r;
 }
