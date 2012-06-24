@@ -32,6 +32,7 @@
 #include "ui_labelwidget.h"
 
 class Label;
+class Axis;
 class TextLabel;
 
 class LabelWidget: public QWidget{
@@ -40,16 +41,20 @@ class LabelWidget: public QWidget{
 public:
 	LabelWidget(QWidget *);
 	~LabelWidget();
-	void setLabel(TextLabel *);
 	void setLabels(QList<TextLabel*>);
+	void setAxes(QList<Axis*>);
 	void loadConfig(KConfigGroup&);
 	void saveConfig(KConfigGroup&);
 
 private:
 	Ui::LabelWidget ui;
 	TextLabel *m_label;
+	QList<TextLabel*> m_labelsList;
+	QList<Axis*> m_axesList;
 	bool m_initializing;
 	bool m_updatelock;
+
+	void setFixedLabelMode(const bool);
 
 signals:
 	void dataChanged(bool);
@@ -76,6 +81,7 @@ private slots:
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
+	void offsetChanged(double);
 	
 	void labelPostionChanged(QPointF&);
 	void updateTeXImage();

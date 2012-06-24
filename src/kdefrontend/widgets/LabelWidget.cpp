@@ -30,6 +30,7 @@
 #include "LabelWidget.h"
 #include "../../backend/worksheet/Worksheet.h"
 #include "../../backend/worksheet/TextLabel.h"
+#include "../../backend/worksheet/plots/cartesian/Axis.h"
 #include "../../tools/TeXRenderer.h"
 #include <QMenu>
 #include <QWidgetAction>
@@ -91,37 +92,50 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect( ui.cbHorizontalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(horizontalAlignmentChanged(int)) );
 	connect( ui.cbVerticalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(verticalAlignmentChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
+	connect( ui.sbOffset, SIGNAL(valueChanged(double)), this, SLOT(offsetChanged(double)) );
 }
 
 LabelWidget::~LabelWidget() {}
 
-/*!
-	sets the label to be edited to \c label.
-*/
-void LabelWidget::setLabel(TextLabel *label){
-	if(!label)
-		return;
-
-	m_label = label;
-	KConfig config("", KConfig::SimpleConfig);
-	KConfigGroup group = config.group( "TextLabel" );
-  	loadConfig(group);
-	ui.teLabel->setText(m_label->text());
-	ui.chbTeX->setChecked(m_label->teXUsed());
-	if(m_label->teXUsed())
-		ui.kcbTextColor->setColor(m_label->teXFontColor());
-
-	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
-}
-
-//TODO
 void LabelWidget::setLabels(QList<TextLabel*> labels){
+	m_labelsList = labels;
 	m_label = labels.first();
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
 	ui.teLabel->setText(m_label->text());
 	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
+	this->setFixedLabelMode(false);
+}
+
+void LabelWidget::setAxes(QList<Axis*> axes){
+	m_labelsList.clear();
+	foreach(Axis* axis, axes)
+		m_labelsList.append(axis->title());
+	
+	m_axesList = axes;
+	m_label = m_labelsList.first();
+	KConfig config("", KConfig::SimpleConfig);
+	KConfigGroup group = config.group( "TextLabel" );
+  	loadConfig(group);
+	ui.teLabel->setText(m_label->text());
+	ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(axes.first()->titleOffset(), Worksheet::Point) );
+	this->setFixedLabelMode(true);
+}
+
+void LabelWidget::setFixedLabelMode(const bool b){
+	ui.lPositionX->setVisible(!b);
+	ui.cbPositionX->setVisible(!b);
+	ui.sbPositionX->setVisible(!b);
+	ui.lPositionY->setVisible(!b);
+	ui.cbPositionY->setVisible(!b);
+	ui.sbPositionY->setVisible(!b);
+	ui.lHorizontalAlignment->setVisible(!b);
+	ui.cbHorizontalAlignment->setVisible(!b);
+	ui.lVerticalAlignment->setVisible(!b);
+	ui.cbVerticalAlignment->setVisible(!b);	
+	ui.lOffset->setVisible(b);
+	ui.sbOffset->setVisible(b);
 }
 
 //**********************************************************
@@ -140,18 +154,21 @@ void LabelWidget::textChanged(){
 	}
 
 	if (ui.chbTeX->isChecked()) {
-		m_label->setText(ui.teLabel->toPlainText());
-		// TODO: this uses format of current selection only
-		QTextCharFormat format = ui.teLabel->currentCharFormat();
-		m_label->setTeXFontSize(format.fontPointSize());
+		foreach(TextLabel* label, m_labelsList){
+			label->setText(ui.teLabel->toPlainText());
+			// TODO: this uses format of current selection only
+			QTextCharFormat format = ui.teLabel->currentCharFormat();
+			label->setTeXFontSize(format.fontPointSize());
+		}
 		// only update every 3 seconds
 		if(! m_updatelock) {
 			m_updatelock=true;
 			QTimer::singleShot(3000, this, SLOT(updateTeXImage()));
 		}
+	}else{
+		foreach(TextLabel* label, m_labelsList)
+			m_label->setText(ui.teLabel->toHtml());
 	}
-	else
-		m_label->setText(ui.teLabel->toHtml());
 }
 
 void LabelWidget::charFormatChanged(QTextCharFormat format){
@@ -205,16 +222,15 @@ void LabelWidget::teXUsedChanged(bool checked){
 		ui.tbSymbols->setEnabled(true);
 	}
 
-	if(!m_label) {
-		kWarning()<<"m_label not defined";
-		return;
+	if(checked){
+		foreach(TextLabel* label, m_labelsList)
+			label->setText(ui.teLabel->toPlainText());
+	}else{
+		foreach(TextLabel* label, m_labelsList){
+			m_label->setText(ui.teLabel->toHtml());
+			m_label->setTeXUsed(checked);
+		}
 	}
-
-	if(checked)
-		m_label->setText(ui.teLabel->toPlainText());
-	else
-		m_label->setText(ui.teLabel->toHtml());
-	m_label->setTeXUsed(checked);
 }
 
 void LabelWidget::textColorChanged(QColor color){
@@ -222,7 +238,8 @@ void LabelWidget::textColorChanged(QColor color){
 		return;
 
 	ui.teLabel->setTextColor(color);
-	m_label->setTeXFontColor(color);
+	foreach(TextLabel* label, m_labelsList)
+		label->setTeXFontColor(color);
 }
 
 void LabelWidget::fontBoldChanged(bool checked){
@@ -330,7 +347,8 @@ void LabelWidget::positionXChanged(int index){
 	if (m_initializing)
 		return;
 	
-	m_label->setHorizontalPosition(TextLabel::HorizontalPosition(index));
+	foreach(TextLabel* label, m_labelsList)
+		label->setHorizontalPosition(TextLabel::HorizontalPosition(index));
 	
 	//show the new y-postion if changed (calculated in TextLabel, if not custom position was specified)
 	if (index != ui.cbPositionX->count()-1 ){
@@ -354,7 +372,8 @@ void LabelWidget::positionYChanged(int index){
 	if (m_initializing)
 		return;
 
-	m_label->setVerticalPosition(TextLabel::VerticalPosition(index));
+	foreach(TextLabel* label, m_labelsList)
+		label->setVerticalPosition(TextLabel::VerticalPosition(index));
 
 	//show the new y-postion if changed (calculated in TextLabel, if not custom position was specified)
 	if (index != ui.cbPositionX->count()-1 ){
@@ -370,7 +389,8 @@ void LabelWidget::customPositionXChanged(double value){
 
 	QPointF pos = m_label->position();
 	pos.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-	m_label->setPosition(pos);
+	foreach(TextLabel* label, m_labelsList)
+		label->setPosition(pos);
 }
 
 void LabelWidget::customPositionYChanged(double value){
@@ -379,7 +399,8 @@ void LabelWidget::customPositionYChanged(double value){
 
 	QPointF pos = m_label->position();
 	pos.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-	m_label->setPosition(pos);
+	foreach(TextLabel* label, m_labelsList)
+		label->setPosition(pos);
 }
 
 
@@ -387,23 +408,33 @@ void LabelWidget::horizontalAlignmentChanged(int index){
 	if (m_initializing)
 		return;
 
-	m_label->setHorizontalAlignment(TextLabel::HorizontalAlignment(index));
+	foreach(TextLabel* label, m_labelsList)
+		label->setHorizontalAlignment(TextLabel::HorizontalAlignment(index));
 }
 
 void LabelWidget::verticalAlignmentChanged(int index){
 	if (m_initializing)
 		return;
 
-	m_label->setVerticalAlignment(TextLabel::VerticalAlignment(index));
+	foreach(TextLabel* label, m_labelsList)
+		label->setVerticalAlignment(TextLabel::VerticalAlignment(index));
 }
 
 void LabelWidget::rotationChanged(int value){
 	if (m_initializing)
 		return;
 
-	m_label->setRotationAngle(value);
+	foreach(TextLabel* label, m_labelsList)
+		label->setRotationAngle(value);
 }
 
+void LabelWidget::offsetChanged(double value){
+	if (m_initializing)
+		return;
+
+	foreach(Axis* axis, m_axesList)
+		axis->setTitleOffset( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+}
 
 void LabelWidget::labelPostionChanged(QPointF& point){
 	m_initializing = true;
@@ -416,7 +447,9 @@ void LabelWidget::labelPostionChanged(QPointF& point){
 
 // slot for TeX image update timer
 void LabelWidget::updateTeXImage() {
-	m_label->updateTeXImage();
+	foreach(TextLabel* label, m_labelsList)
+		label->updateTeXImage();
+	
 	m_updatelock=false;
 }
 

@@ -217,8 +217,7 @@ void AxisDock::setAxes(QList<Axis*> list){
   	m_axesList=list;
   	Axis* axis=list.first();
   
-//TODO	
-	labelWidget->setLabel(axis->title());
+	labelWidget->setAxes(list);
 
   //if there are more then one axis in the list, disable the tab "general"
   if (list.size()==1){

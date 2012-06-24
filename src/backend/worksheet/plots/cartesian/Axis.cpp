@@ -102,7 +102,7 @@ void Axis::init() {
 	d->title->setText(this->name());
 	if ( d->orientation == AxisVertical )
 		d->title->setRotationAngle(270);
-	d->titleOffset = Worksheet::convertToSceneUnits(1, Worksheet::Centimeter); //distance to the axis line
+	d->titleOffset = Worksheet::convertToSceneUnits(30, Worksheet::Point); //distance to the axis line
 
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);

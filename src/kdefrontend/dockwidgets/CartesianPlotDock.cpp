@@ -139,11 +139,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 
 	CartesianPlot* plot=list.first();
   
-	//TODO: decide whether we want to edit multiple label at once.
-	//User selects multiple plots, which are edited in this dock. 
-	//By allowing multiple labels in LabelWidget we can changed e.g. the position (centered etc.) for several title labels very quickly.
-	//Provide LabelWidget::setLabels(QList<TextLabel>) if we want to have this feature.
-	labelWidget->setLabel(plot->title());
+	QList<TextLabel*> labels;
+	foreach(CartesianPlot* plot, list)
+		labels.append(plot->title());
+	
+	labelWidget->setLabels(labels);
 	
   //if there is more then one curve in the list, disable the tab "general"
   if (list.size()==1){
