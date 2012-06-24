@@ -249,10 +249,10 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem(){
 
 QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
 	QRectF pageRect;
-	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
-	if (worksheet)
-		pageRect = worksheet->pageRect();
-
+// 	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
+// 	if (worksheet)
+// 		pageRect = worksheet->pageRect();
+pageRect=d->plot->graphicsItem()->boundingRect();
 	QList<QPointF> result;
 
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
@@ -294,10 +294,10 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 
 QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
 	QRectF pageRect;
-	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
-	if (worksheet)
-		pageRect = worksheet->pageRect();
-	
+// 	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
+// 	if (worksheet)
+// 		pageRect = worksheet->pageRect();
+	pageRect = d->plot->graphicsItem()->boundingRect();
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -345,10 +345,10 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 
 QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags) const{
 	QRectF pageRect;
-	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
-	if (worksheet)
-		pageRect = worksheet->pageRect();
-
+// 	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
+// 	if (worksheet)
+// 		pageRect = worksheet->pageRect();
+pageRect = d->plot->graphicsItem()->boundingRect();
 	QList<QLineF> result;
 	bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
 

@@ -44,7 +44,7 @@ class TextLabel : public AbstractWorksheetElement{
 	Q_OBJECT
 
 	public:
-		enum HorizontalPosition {hPositionlLeft, hPositionCenter, hPositionRight, hPositionCustom};
+		enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
 		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
 		
 		enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
@@ -65,7 +65,7 @@ class TextLabel : public AbstractWorksheetElement{
 		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment);
 		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment);
 		BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle);
-
+		
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		
@@ -87,6 +87,7 @@ class TextLabel : public AbstractWorksheetElement{
 
 	signals:
 		void positionChanged(QPointF&);
+		void changed();
 };
 
 #endif

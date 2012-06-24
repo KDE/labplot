@@ -162,7 +162,7 @@ WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate() {
 	QRectF rect;
 	QList<AbstractWorksheetElement *> childList = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(const AbstractWorksheetElement *elem, childList)
-		rect |= elem->graphicsItem()->boundingRect();
+		rect |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
 	return rect;
 }
  
@@ -181,25 +181,3 @@ void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOpti
 		painter->drawPath(path);
   }
 }
-
-//  QVariant WorksheetElementContainerPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
-//    /*
-//      if (change == ItemPositionChange && scene()) {
-//          // value is the new position.
-//          QPointF newPos = value.toPointF();
-//          QRectF rect = scene()->sceneRect();
-//          if (!rect.contains(newPos)) {
-//              // Keep the item inside the scene rect.
-//              newPos.setX(qMin(rect.right(), qMax(newPos.x(), rect.left())));
-//              newPos.setY(qMin(rect.bottom(), qMax(newPos.y(), rect.top())));
-//              return newPos;
-//          }
-//      }
-//      */
-//     if (change == QGraphicsItem::ItemSelectedHasChanged)
-//         emit selectedChange(this);
-// //     return value;
-// 	
-//      return QGraphicsItem::itemChange(change, value);
-//  }
- 

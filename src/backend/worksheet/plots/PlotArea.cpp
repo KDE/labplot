@@ -156,11 +156,12 @@ void PlotArea::setClippingEnabled(bool on) {
 		exec(new PlotAreaSetClippingEnabledCmd(d, on, tr("%1: toggle clipping")));
 }
 
+/*!
+ * sets plot area rect in scene coordinates.
+ */
 void PlotArea::setRect(const QRectF &newRect) {
 	Q_D(PlotArea);
-
-	if (d->rect != newRect)
-		d->setRect(newRect);
+	d->setRect(newRect);
 }
 
 //Background
@@ -259,7 +260,7 @@ bool PlotAreaPrivate::swapVisible(bool on){
 
 void PlotAreaPrivate::setRect(const QRectF& r){
 	prepareGeometryChange();
-	rect = r;
+	rect = mapRectFromScene(r);
 }
 
 QRectF PlotAreaPrivate::boundingRect () const{

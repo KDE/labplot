@@ -37,7 +37,7 @@
 #include "../../TextLabel.h"
 #include <QDebug>
 #include <QMenu>
-
+ 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
 #else
@@ -59,6 +59,7 @@
 class CartesianPlotPrivate:public AbstractPlotPrivate{
 public:
 	void setRect(const QRectF& r);
+	QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 };
 
 CartesianPlot::CartesianPlot(const QString &name): AbstractPlot(name) {
@@ -80,19 +81,20 @@ CartesianPlot::~CartesianPlot(){
 void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
+	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
 	
-	//Geometry
+	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
 	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
 	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
-	d->setRect(QRectF(x,y,w,h));
-	
+
 	//Axes
 	Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 	addChild(axis);
@@ -102,8 +104,6 @@ void CartesianPlot::init(){
 	axis->setMajorTicksNumber(6);
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
-// 	axis->title()->setText(axis->name());
-// 	axis->title()->setPosition( QPointF(50, 5) );
 
 	axis = new Axis("x axis 2", Axis::AxisHorizontal);
 	addChild(axis);
@@ -115,7 +115,8 @@ void CartesianPlot::init(){
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
-	
+	axis->title()->setText("");
+
 	axis = new Axis("y axis 1", Axis::AxisVertical);
 	addChild(axis);
 	axis->setStart(0);
@@ -135,6 +136,7 @@ void CartesianPlot::init(){
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
+	axis->title()->setText("");
 	
 	//Plot title
  	m_title = new TextLabel(this->name());
@@ -145,7 +147,10 @@ void CartesianPlot::init(){
 	m_title->setVerticalPosition(TextLabel::vPositionTop);
 	m_title->setHorizontalAlignment(TextLabel::hAlignCenter);
 	m_title->setVerticalAlignment(TextLabel::vAlignBottom);
-
+	
+	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
+	d->setRect(QRectF(x,y,w,h));
+		
 	initActions();
 	initMenus();
 }
@@ -217,24 +222,53 @@ void CartesianPlot::addCurve(){
  */
 void CartesianPlotPrivate::setRect(const QRectF& r){
 	prepareGeometryChange();
+	setPos( r.x()+r.width()/2, r.y()+r.height()/2);
 	rect = r;
 	
 	//offset between the plot area and the area defining the coodinate system, in scene units.
 	//TODO: make this variables private, add getter/setter and provide a comfortable way to change this setting in the UI (don't allow negative values).
-	float vertOffset = Worksheet::convertToSceneUnits(1, Worksheet::Centimeter);
-	float horizOffset = Worksheet::convertToSceneUnits(1, Worksheet::Centimeter);
+	float vertOffset = Worksheet::convertToSceneUnits(0, Worksheet::Centimeter);
+	float horizOffset = Worksheet::convertToSceneUnits(0, Worksheet::Centimeter);
 	
 	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale *> scales;
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), rect.x() + horizOffset, rect.x()+rect.width() - horizOffset, 0, 1);
+	
+	//perform the mapping from the scene coordinates to the plot's coordinates here.
+	QRectF itemRect= mapRectFromScene( rect );
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																															itemRect.x()+horizOffset, itemRect.x()+itemRect.width()-horizOffset, 0, 1);
 	cSystem ->setXScales(scales);
 	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX), rect.y()+rect.height() - 1*vertOffset, rect.y() + vertOffset, 0, 1);
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																															itemRect.y()+itemRect.height()-vertOffset, itemRect.y()+vertOffset, 0, 1);
 	cSystem ->setYScales(scales);
 	
-	//TODO: calculate the new GraphicsItem's position for plotArea
+	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	plot->plotArea()->setRect(rect);
+
+	//call retransform() for the title:
+	//when a predefined title position (Left, Centered etc.) is used, 
+	//the actual title position needs to be updated on plot's geometry changes.
+	plot->title()->retransform();
 	
 	q->retransform();
 }
+
+//TODO gets never called?!?
+QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
+// 	if (cancelItemChangeEvent)
+// 		return value;
+	qDebug()<<"plot change";
+	if (change == QGraphicsItem::ItemPositionChange) {
+		QPointF itemPos = value.toPointF();//item's center point in parent's coordinates;
+		float x = itemPos.x();
+		float y = itemPos.y();
+		qDebug()<<"new position: "<<x<<"   "<<y;
+
+// 		 emit q->positionChanged(position);
+     }
+
+	return QGraphicsItem::itemChange(change, value);
+ }
+ 

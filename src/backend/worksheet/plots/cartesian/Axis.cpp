@@ -93,13 +93,17 @@ void Axis::init() {
 
 	// axis title
  	d->title = new TextLabel(this->name());
-	addChild(d->title);
+	connect( d->title, SIGNAL(changed()), this, SLOT(labelChanged()) );
+// 	addChild(d->title);
+	d->title->setHidden(true);
+	d->title->graphicsItem()->setParentItem(graphicsItem());
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	d->title->setHidden(true);
 	d->title->setText(this->name());
-	d->title->setHorizontalPosition( TextLabel::hPositionCenter );
-	d->title->setVerticalPosition( TextLabel::vPositionCenter );
-//TODO	d->title->loadConfig(group);
-	
+	if ( d->orientation == AxisVertical )
+		d->title->setRotationAngle(270);
+	d->titleOffset = Worksheet::convertToSceneUnits(1, Worksheet::Centimeter); //distance to the axis line
+
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
@@ -166,6 +170,11 @@ void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
 
 	retransform();
 	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
+}
+
+void Axis::labelChanged(){
+	Q_D(Axis);
+	d->recalcShapeAndBoundingRect();
 }
 
 /* ============================ accessor documentation ================= */
@@ -244,6 +253,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset);
 
 BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title);
+BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffset, titleOffset);
 
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity);
@@ -336,6 +346,13 @@ void Axis::setZeroOffset(qreal zeroOffset) {
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, tr("%1: set axis zero offset")));
 }
 
+//Title
+STD_SETTER_CMD_IMPL_F(Axis, SetTitleOffset, float, titleOffset, retransform);
+void Axis::setTitleOffset(float offset) {
+	Q_D(Axis);
+	if (offset != d->titleOffset)
+		exec(new AxisSetTitleOffsetCmd(d, offset, tr("%1: set title offset")));
+}
 
 //Line
 STD_SETTER_CMD_IMPL_F(Axis, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect);
@@ -577,6 +594,17 @@ void AxisPrivate::retransform() {
 		linePath.lineTo(line.p2());
 	}
 
+	//determine the new position of the title label, if available
+	if ( title->isVisible() && title->text()!="" ){
+		if ( !lines.empty() ){
+			QLineF firstLine = lines.first();
+			QLineF lastLine = lines.last();
+			if (orientation == Axis::AxisHorizontal)
+				title->setPosition( QPointF( (firstLine.p1().y() - lastLine.p2().x())/2, firstLine.p1().y() + titleOffset ) );
+			else
+				title->setPosition( QPointF( firstLine.p1().x() - titleOffset, (firstLine.p1().y()+firstLine.p2().y())/2 ) );
+		}
+	}
 	retransformTicks(cSystem);
 }
 
@@ -907,13 +935,17 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = linePath.boundingRect();
 	boundingRectangle |= majorTicksPath.boundingRect();
 	boundingRectangle |= minorTicksPath.boundingRect();
-// 	boundingRectangle |= title->graphicsItem()->boundingRect();
-	boundingRectangle = boundingRectangle.normalized();
 
 	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, pen);
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
-// 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->shape(), pen));
+	
+	//add title label, if available
+	if ( title->isVisible() && title->text()!="" ){
+		boundingRectangle |=mapRectFromItem( title->graphicsItem(), title->graphicsItem()->boundingRect() );
+		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), pen));
+	}
+	boundingRectangle = boundingRectangle.normalized();
 	
 	  if (labelsPosition != Axis::NoLabels){
 		QTransform trafo;

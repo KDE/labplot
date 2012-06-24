@@ -144,14 +144,14 @@ void TextLabel::setPosition(const QPointF& pos) {
 		exec(new TextLabelSetPositionCmd(d, pos, tr("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetHorizontalPosition, TextLabel::HorizontalPosition, horizontalPosition, updatePosition);
+STD_SETTER_CMD_IMPL_F(TextLabel, SetHorizontalPosition, TextLabel::HorizontalPosition, horizontalPosition, retransform);
 void TextLabel::setHorizontalPosition(const TextLabel::HorizontalPosition hPos){
 	Q_D(TextLabel);
 	if (hPos != d->horizontalPosition)
 		exec(new TextLabelSetHorizontalPositionCmd(d, hPos, tr("%1: set horizontal position")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetVerticalPosition, TextLabel::VerticalPosition, verticalPosition, updatePosition);
+STD_SETTER_CMD_IMPL_F(TextLabel, SetVerticalPosition, TextLabel::VerticalPosition, verticalPosition, retransform);
 void TextLabel::setVerticalPosition(const TextLabel::VerticalPosition vPos){
 	Q_D(TextLabel);
 	if (vPos != d->verticalPosition)
@@ -209,8 +209,12 @@ QString TextLabelPrivate::name() const{
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void TextLabelPrivate::retransform(){
+	if (horizontalPosition != TextLabel::hPositionCustom || verticalPosition != TextLabel::vPositionCustom)
+		updatePosition();
+	
 	float x = position.x();
 	float y = position.y();
+
 	float w, h;
 
 	if (teXUsed){
@@ -258,6 +262,8 @@ void TextLabelPrivate::retransform(){
 	boundingRectangle.setHeight(h);
 
 	recalcShapeAndBoundingRect();
+
+	emit(q->changed());
 }
 
 /*!
@@ -268,7 +274,7 @@ void TextLabelPrivate::updatePosition(){
 	QRectF parentRect;
 	QGraphicsItem* parent = parentItem();
 	if (parent){
-		parentRect = mapRectFromParent( parent->boundingRect() );
+		parentRect = parent->boundingRect();
 	}else{
 		if (!scene())
 			return;
@@ -277,10 +283,10 @@ void TextLabelPrivate::updatePosition(){
 	}
 
 	if (horizontalPosition != TextLabel::hPositionCustom){
-		if (horizontalPosition == TextLabel::hPositionlLeft)
+		if (horizontalPosition == TextLabel::hPositionLeft)
 			position.setX( parentRect.x() );
 		else if (horizontalPosition == TextLabel::hPositionCenter)
-			position.setX( parentRect.width()/2 );
+			position.setX( parentRect.x() + parentRect.width()/2 );
 		else if (horizontalPosition == TextLabel::hPositionRight)
 			position.setX( parentRect.x() + parentRect.width() );
 	}
@@ -289,14 +295,10 @@ void TextLabelPrivate::updatePosition(){
 		if (verticalPosition == TextLabel::vPositionTop)
 			position.setY( parentRect.y() );
 		else if (verticalPosition == TextLabel::vPositionCenter)
-			position.setY( (parentRect.y() + parentRect.height())/2 );
+			position.setY( parentRect.y() + parentRect.height()/2 );
 		else if (verticalPosition == TextLabel::vPositionBottom)
 			position.setY( parentRect.y() + parentRect.height() );
 	}
-	
-	//retransform the label if either  horiz. or vert. positions were changed
-	if (horizontalPosition!=TextLabel::hPositionCustom || verticalPosition!=TextLabel::vPositionCustom)
-		retransform();
 }
 
 /*!
@@ -393,7 +395,6 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		QPointF itemPos = value.toPointF();//item's center point in parent's coordinates
 		float x = itemPos.x();
 		float y = itemPos.y();
-		
 		float w, h;
 		if (teXUsed){
 			w = teXImage.width()*scaleFactor;

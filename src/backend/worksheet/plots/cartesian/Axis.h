@@ -69,6 +69,7 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset);
 
 		POINTER_D_ACCESSOR_DECL(TextLabel, title, Title);
+		BASIC_D_ACCESSOR_DECL(float, titleOffset, TitleOffset);
 		
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity);
@@ -118,6 +119,9 @@ class Axis: public AbstractWorksheetElement {
 	private:
     	Q_DECLARE_PRIVATE(Axis)
 		void init();
+		
+	private slots:
+			void labelChanged();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)
