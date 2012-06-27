@@ -28,13 +28,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetPrivate.h"
-#include "worksheet/AbstractWorksheetElement.h"
-#include "worksheet/WorksheetView.h"
-#include "worksheet/WorksheetGraphicsScene.h"
-#include "lib/commandtemplates.h"
-#include "lib/macros.h"
+#include "Worksheet.h"
+#include "WorksheetPrivate.h"
+#include "AbstractWorksheetElement.h"
+#include "../../commonfrontend/worksheet/WorksheetView.h"
+#include "WorksheetGraphicsScene.h"
+#include "../lib/commandtemplates.h"
+#include "../lib/macros.h"
 
 #include <QWidget>
 #include <QDebug>
@@ -224,10 +224,26 @@ QRectF Worksheet::pageRect() const {
 	return d->m_scene->sceneRect();
 }
 
+/*!
+	this slot is called when a worksheet element is selected in the project explorer.
+	emits \c itemSelected() which forwards this event to the WorksheetView 
+	in order to select the corresponding QGraphicsItem.
+ */
 void Worksheet::childSelected(){
 	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
 	if (element)
 		emit itemSelected(element->graphicsItem());
+}
+
+/*!
+	this slot is called when a worksheet element is deselected in the project explorer.
+	emits \c itemDeselected() which forwards this event to the WorksheetView 
+	in order to deselect the corresponding QGraphicsItem.
+ */
+void Worksheet::childDeselected(){
+	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
+	if (element)
+		emit itemDeselected(element->graphicsItem());
 }
 
 void Worksheet::update(){
