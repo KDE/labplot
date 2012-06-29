@@ -198,39 +198,26 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 }
 
 void LabelWidget::teXUsedChanged(bool checked){
-	//qDebug()<<"teXUsedChanged()";
 	if (m_initializing)
 		return;
 
-	if(checked) {
-		//disable ui elements
-		ui.tbFontBold->setEnabled(false);
-		ui.tbFontItalic->setEnabled(false);
-		ui.tbFontUnderline->setEnabled(false);
-		ui.tbFontSuperScript->setEnabled(false);
-		ui.tbFontSubScript->setEnabled(false);
-		ui.tbFontStrikeOut->setEnabled(false);
-		ui.tbSymbols->setEnabled(false);
-	}
-	else {
-		ui.tbFontBold->setEnabled(true);
-		ui.tbFontItalic->setEnabled(true);
-		ui.tbFontUnderline->setEnabled(true);
-		ui.tbFontSuperScript->setEnabled(true);
-		ui.tbFontSubScript->setEnabled(true);
-		ui.tbFontStrikeOut->setEnabled(true);
-		ui.tbSymbols->setEnabled(true);
-	}
+	//disable text editing elements if Tex-option is used
+	ui.tbFontBold->setEnabled(!checked);
+	ui.tbFontItalic->setEnabled(!checked);
+	ui.tbFontUnderline->setEnabled(!checked);
+	ui.tbFontSuperScript->setEnabled(!checked);
+	ui.tbFontSubScript->setEnabled(!checked);
+	ui.tbFontStrikeOut->setEnabled(!checked);
+	ui.tbSymbols->setEnabled(!checked);
 
 	if(checked){
 		foreach(TextLabel* label, m_labelsList)
 			label->setText(ui.teLabel->toPlainText());
 	}else{
-		foreach(TextLabel* label, m_labelsList){
+		foreach(TextLabel* label, m_labelsList)
 			m_label->setText(ui.teLabel->toHtml());
-			m_label->setTeXUsed(checked);
-		}
 	}
+	m_label->setTeXUsed(checked);
 }
 
 void LabelWidget::textColorChanged(QColor color){
