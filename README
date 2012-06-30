@@ -10,6 +10,8 @@ LabPlot 2 is a complete rewrite of LabPlot 1.X.
 
 A. Building LabPlot (KDE frontend):
 --------------------------------
+LabPlot requires Qt version 4.7 or newer. Please update your Qt installation if necessary.
+
 # ./compile
 
 Installation:
