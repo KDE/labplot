@@ -41,15 +41,11 @@
 
 // use (pdf)latex to render LaTeX text (see tex2im, etc.)
 // TODO: test convert to svg and render to qimage, test dvipng
-// TODO: font size
-
-bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int fontSize, QColor fontColor){
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	// kWarning()<<teXString<<endl;
-#endif
+/*!
+ * use latex to render LaTeX text (see tex2im, etc.)
+ */
+bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, const QColor& fontColor, const int fontSize, const int dpi){
 	QTemporaryFile file("/dev/shm/labplot_XXXXXX.tex");
-	// for debugging *.tex file
-	//file.setAutoRemove(false);
 	if(file.open()) {
 		QDir::setCurrent("/dev/shm");
 	}
@@ -66,13 +62,13 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 
 	// create latex code
 	QTextStream out(&file);
-	//TODO: use font size (or later in convert process)
-	out<<"\\documentclass[12pt]{article}\n\\usepackage[dvipsnames]{color}\n";
-	out<<"\\pagestyle{empty}\n\\pagecolor{white}\n\\begin{document}\n";
-	out<<"\\definecolor{fontcolor}{rgb}{"<<fontColor.redF()<<','<<fontColor.greenF()<<','<<fontColor.blueF()<<"}\n";
-	out<<"{\\color{fontcolor}\n";
-	out<<teXString;
-	out<<"\n}\n\\end{document}";
+	out << "\\documentclass[" << fontSize <<  "]{article}\n";
+	out << "\\usepackage{color}\n\\usepackage[active,displaymath,textmath,tightpage]{preview}\n";
+	out << "\\begin{document}\n";
+	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ','<<fontColor.blueF() << "}\n";
+	out << "{\\color{fontcolor}\n";
+	out << "$" << teXString << "$";
+	out << "\n}\n\\end{document}";
 	out.flush();
 
 	// pdflatex: TeX -> PDF
@@ -81,42 +77,44 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 
 	QFileInfo fi(file.fileName());
 	if (latexProcess.waitForFinished()) { 	// pdflatex finished
-		//qDebug()<<latexProcess.exitCode();
 		if(latexProcess.exitCode() != 0)	// skip if pdflatex failed
 			return false;
 
-		// crop PDF
-		QProcess cropProcess;
-		cropProcess.start("pdfcrop", QStringList() << fi.completeBaseName()+".pdf");
-		if (!cropProcess.waitForFinished()) {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		kWarning()<<"pdfcrop failed. using latex"<<endl;
-#endif
-		}
-		else {
-			// convert: PDF -> PNG
-			convertProcess.start("convert", QStringList() << "-density" << "300x300" << fi.completeBaseName()+"-crop.pdf" << fi.completeBaseName()+".png");
-			if (convertProcess.waitForFinished()) {
-				// read png file
-				image.load(fi.completeBaseName()+".png");
+		// convert: PDF -> PNG
+		convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + "x" + QString::number(dpi)
+																<< fi.completeBaseName() + ".pdf"
+																<< fi.completeBaseName() + ".png");
+		//gs doesn't work here. Why?
+// 		convertProcess.start("gs", QStringList() << "-sDEVICE=png16m -dTextAlphaBits=4 -r" + QString::number(dpi) + " -dGraphicsAlphaBits=4 -dSAFER -q -dNOPAUSE"
+// 																		<< "-sOutputFile=" <<  fi.completeBaseName() + ".png"
+// 																		<< fi.completeBaseName() + ".pdf");
 
-				// clean up
-				QFile::remove(fi.completeBaseName()+".pdf");
-				QFile::remove(fi.completeBaseName()+"-crop.pdf");
-				QFile::remove(fi.completeBaseName()+".png");
-				// also possible: latexmf -C
-				QFile::remove(fi.completeBaseName()+".aux");
-				QFile::remove(fi.completeBaseName()+".log");
-				return true;
-			}
+		if (convertProcess.waitForFinished()) {
+			// read png file
+			image.load(fi.completeBaseName()+".png");
+			
+			// clean up
+			QFile::remove(fi.completeBaseName()+".pdf");
+			QFile::remove(fi.completeBaseName()+".png");
+			QFile::remove(fi.completeBaseName()+".aux");
+			QFile::remove(fi.completeBaseName()+".log");
+			
+			return true;
+		}else{
+			// clean up
+			QFile::remove(fi.completeBaseName()+".pdf");
+			QFile::remove(fi.completeBaseName()+".aux");
+			QFile::remove(fi.completeBaseName()+".log");
+			
+			return false;
 		}
-	}
-	else {
+	}else{
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		kWarning()<<"pdflatex failed. using latex"<<endl;
+		kWarning()<<"pdflatex failed."<<endl;
 #endif
+		return false;
 	}
-
+/*
 	// latex: TeX -> DVI
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished())
@@ -147,10 +145,12 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, int
 	QFile::remove(fi.completeBaseName()+".log");
 
 	return true;
+	*/
 }
 
 // old method using texvc to render LaTeX text
 //TODO make this function using Qt only?
+/*
 bool TeXRenderer::renderImageTeXvc( const QString& texString, QImage& image){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KTempDir *tmpDir = new KTempDir();
@@ -192,3 +192,4 @@ bool TeXRenderer::renderImageTeXvc( const QString& texString, QImage& image){
 #endif
 	return true;
 }
+*/

@@ -35,9 +35,8 @@
 class TeXRenderer{
 
 public:
-  static bool renderImageLaTeX( const QString&, QImage&, int fontSize, QColor fontColor);
-  static bool renderImageTeXvc( const QString&, QImage& );
-
+  static bool renderImageLaTeX( const QString&, QImage&, const QColor& fontColor, const int fontSize=12,  const int dpi=300);
+//   static bool renderImageTeXvc( const QString&, QImage& );
 };
 
 #endif
