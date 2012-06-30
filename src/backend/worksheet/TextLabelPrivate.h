@@ -38,6 +38,8 @@ class TextLabelPrivate: public QGraphicsItem{
 	
 		float rotationAngle;
 		float scaleFactor;
+		int teXImageResolution;
+		float teXImageScaleFactor;
 		QString text;
 		bool teXUsed;
 		qreal teXFontSize;

@@ -33,6 +33,8 @@
 #include "TextLabelPrivate.h"
 #include "../lib/commandtemplates.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QPainter>
  #include <QGraphicsScene>
 #include <QDebug>
@@ -62,6 +64,8 @@ void TextLabel::init() {
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 
 	d->teXUsed = false;
+	d->teXFontSize = 12;
+	d->teXFontColor = Qt::black;
 	d->staticText.setTextFormat(Qt::RichText);
 
 	d->horizontalPosition = TextLabel::hPositionCustom;
@@ -73,7 +77,14 @@ void TextLabel::init() {
 	d->verticalAlignment= TextLabel::vAlignCenter;
 
 	d->rotationAngle = 0.0;
+	
+	//scaling:
+	//we need to scale from the font size specified in points to scene units.
+	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
+	// -> take this into account
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
+	d->teXImageResolution = 300;
+	d->teXImageScaleFactor = QApplication::desktop()->physicalDpiX()/float(d->teXImageResolution)*d->scaleFactor;
 	
 	d->cancelItemChangeEvent = false;
 }
@@ -215,11 +226,11 @@ void TextLabelPrivate::retransform(){
 	float x = position.x();
 	float y = position.y();
 
+	//determine the size of the label in scene units.
 	float w, h;
-
 	if (teXUsed){
-		w = teXImage.width()*scaleFactor;
-		h = teXImage.height()*scaleFactor;
+		w = teXImage.width()*teXImageScaleFactor;
+		h = teXImage.height()*teXImageScaleFactor;
 	}
 	else {
 		w = staticText.size().width()*scaleFactor;
@@ -313,10 +324,10 @@ void TextLabelPrivate::updateText(){
 }
 
 void TextLabelPrivate::updateTeXImage(){
-	bool status = TeXRenderer::renderImageLaTeX(text, teXImage, teXFontSize, teXFontColor);
+	bool status = TeXRenderer::renderImageLaTeX(text, teXImage, teXFontColor, teXFontSize, teXImageResolution);
 	if (!status)
 		qDebug()<<"TeX image not created";
-	
+
 	//the size of the tex image was most probably changed.
 	//call retransform() to recalculate the position and the bounding box of the label
 	retransform();
@@ -367,22 +378,20 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 		painter->drawPath(labelShape);
 	}
 	
-	painter->scale(scaleFactor, scaleFactor);
 	painter->rotate(rotationAngle);
 
-	float w,h;
 	if (teXUsed){
-		//painter->scale(.5,.5);
-		w = teXImage.width();
-		h = teXImage.height();
+		painter->scale(teXImageScaleFactor, teXImageScaleFactor);
+		float w = teXImage.width();
+		float h = teXImage.height();
 		painter->translate(-w/2,-h/2);
-		QRectF rect = teXImage.rect();
 		painter->setRenderHint(QPainter::SmoothPixmapTransform);
+		QRectF rect = teXImage.rect();
 		painter->drawImage(rect, teXImage, rect);
-		//painter->scale(2,2);
 	}else{
-		w = staticText.size().width();
-		h = staticText.size().height();
+		painter->scale(scaleFactor, scaleFactor);
+		float w = staticText.size().width();
+		float h = staticText.size().height();
  		painter->drawStaticText(QPoint(-w/2,-h/2), staticText);
 	}
 }
