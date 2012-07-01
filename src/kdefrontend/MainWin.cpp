@@ -543,6 +543,7 @@ bool MainWin::newProject(){
 	}
 	
 	m_projectExplorer->setModel(m_aspectTreeModel);
+	m_projectExplorer->setProject(m_project);
 	m_projectExplorer->setCurrentAspect(m_project);
 	
 	m_projectExplorerDock->show();
@@ -1103,9 +1104,6 @@ void MainWin::addAspectToProject(AbstractAspect* aspect){
         Q_ASSERT(parent_aspect->folder());
 		parent_aspect->folder()->addChild(aspect);
 	}
-	
-	//expand the aspect and all its children in the tree view of the project explorer
-	m_projectExplorer->expandAspect(aspect);
 }
 
 void MainWin::settingsDialog(){

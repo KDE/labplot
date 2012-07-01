@@ -28,8 +28,9 @@
  *                                                                         *
  ***************************************************************************/
 #include "ProjectExplorer.h"
-#include "core/AspectTreeModel.h"
-#include "core/AbstractAspect.h"
+#include "../backend/core/AspectTreeModel.h"
+#include "../backend/core/AbstractAspect.h"
+#include "../backend/core/Project.h"
 
 #include <QContextMenuEvent>
 #include <QMenu>
@@ -181,14 +182,6 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect * aspect){
 	  m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
 }
 
-void ProjectExplorer::expandAspect(const AbstractAspect* aspect){
-	AspectTreeModel * tree_model = qobject_cast<AspectTreeModel *>(m_treeView->model());
-	this->setExpanded(tree_model->modelIndexOfAspect(aspect), true);
-	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
-		this->expandAspect(child);
-	}
-}
-
 /*!
   Sets the \c model for the tree view to present.
 */
@@ -221,6 +214,10 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	 connect(showColumnsSignalMapper, SIGNAL(mapped(int)), this, SLOT(toggleColumn(int)));	
 }
 
+void ProjectExplorer::setProject ( const Project* project){
+	connect(project, SIGNAL(aspectAdded(const AbstractAspect *)), this, SLOT(expandAspect(const AbstractAspect *)));
+}
+
 QModelIndex ProjectExplorer::currentIndex() const{
   return m_treeView->currentIndex();
 }
@@ -231,10 +228,6 @@ QModelIndex ProjectExplorer::currentIndex() const{
 */
 QAbstractItemModel* ProjectExplorer::model() const{
 	return m_treeView->model();
-}
-
-void ProjectExplorer::setExpanded( const QModelIndex & index, bool expanded ){
-	m_treeView->setExpanded(index, expanded);
 }
 
 /*!
@@ -275,6 +268,20 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 
 
 //########### SLOTs ################
+/*!
+  expand the aspect \c aspect (the tree index corresponding to it) in the tree view and makes it visible.
+  Called when a new aspect is added to the project.
+ */
+void ProjectExplorer::expandAspect(const AbstractAspect* aspect){
+	AspectTreeModel * tree_model = qobject_cast<AspectTreeModel *>(m_treeView->model());
+	const QModelIndex& index =  tree_model->modelIndexOfAspect(aspect);
+	m_treeView->setExpanded(index, true);
+	m_treeView->scrollTo(index);
+	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
+		this->expandAspect(child);
+	}
+}
+
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){
 	Q_UNUSED(previous);
 	emit currentAspectChanged(static_cast<AbstractAspect *>(current.internalPointer()));
@@ -415,9 +422,11 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index){
   //there are four model indices in each row ->divide by 4 to obtain the number of selected aspects.
   //TODO find out a solution which is not explicitely dependent on the current number of columns.
   items = selected.indexes();
+//   qDebug()<<"selected items "<<items;
   for (int i=0; i<items.size()/4; ++i){
 	index=items.at(i*4);
 	aspect = static_cast<AbstractAspect *>(index.internalPointer());
+// 	qDebug()<<aspect->name();
 	aspect->setSelectedInProject(true);
   }
   

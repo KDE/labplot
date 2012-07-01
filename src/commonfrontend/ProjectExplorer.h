@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
 									(replace * with @ in the email addresses)
  ***************************************************************************/
 
@@ -36,6 +36,7 @@ class AbstractAspect;
 class QPushButton;
 class QLabel;
 class QSignalMapper;
+class Project;
 
 class ProjectExplorer : public QWidget{
 	Q_OBJECT
@@ -44,11 +45,10 @@ class ProjectExplorer : public QWidget{
 		ProjectExplorer(QWidget *parent = 0);
 
 		void setCurrentAspect(const AbstractAspect * aspect);
-		void expandAspect(const AbstractAspect * aspect);
 		void setModel(QAbstractItemModel * model);
+		void setProject(const Project*);
 		QModelIndex currentIndex() const;
 		QAbstractItemModel * model() const;
-		void setExpanded ( const QModelIndex & index, bool expanded );
 		
 	private:
 		void createActions();
@@ -73,6 +73,7 @@ class ProjectExplorer : public QWidget{
 		QPushButton *bFilterOptions;
 	
 	private slots:
+		void expandAspect(const AbstractAspect * aspect);
 		void toggleColumn(int);
 		void showAllColumns();
 		void filterTextChanged(const QString& );
