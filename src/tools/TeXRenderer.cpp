@@ -67,7 +67,7 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 	out << "\\begin{document}\n";
 	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ','<<fontColor.blueF() << "}\n";
 	out << "{\\color{fontcolor}\n";
-	out << "$" << teXString << "$";
+	out << "$\\rm " << teXString << "$";
 	out << "\n}\n\\end{document}";
 	out.flush();
 
