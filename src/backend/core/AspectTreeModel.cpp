@@ -215,9 +215,10 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const{
 			}
 		}
 	}else{
-	  //default case: the list for the selectable aspects is empty
-	  //-> all aspects are selectable, if no filter was set
-	  if (m_filterString != ""){
+	  //default case: the list for the selectable aspects is empty and all aspects are selectable.
+	  // Apply filter, if available. Indices, that don't match the filter are not selectable.
+	  //Don't apply any filter to the very first index in the model  - this top index corresponds to the project item.
+	  if (index!=this->index(0,0,QModelIndex()) &&  m_filterString != ""){
 		  if (this->containsFilterString(aspect))
 			  result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 		  else
@@ -312,6 +313,10 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect *aspect, in
 
 void AspectTreeModel::setFilterString(const QString & s){
     m_filterString=s;
+
+	QModelIndex  topLeft = this->index(0,0, QModelIndex());
+	QModelIndex  bottomRight =  this->index(this->rowCount()-1,3, QModelIndex());
+	emit dataChanged(topLeft, bottomRight);
 }
 
 void AspectTreeModel::setFilterCaseSensitivity(Qt::CaseSensitivity cs){
