@@ -54,6 +54,7 @@ class TextLabel : public AbstractWorksheetElement{
 		~TextLabel();
 		
 		virtual QGraphicsItem *graphicsItem() const;
+		virtual QIcon icon() const;
 
 		CLASS_D_ACCESSOR_DECL(QString, text, Text);
 		BASIC_D_ACCESSOR_DECL(bool, teXUsed, TeXUsed);

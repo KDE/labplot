@@ -39,6 +39,10 @@
  #include <QGraphicsScene>
 #include <QDebug>
 
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include <KIcon>
+#endif
+
 /**
  * \class TextLabel
  * \brief A label supporting rendering of html- and tex-formated textes.
@@ -105,6 +109,15 @@ void TextLabel::retransform(){
 void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
 	Q_D(TextLabel);
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
+}
+
+/*!
+	Returns an icon to be used in the project explorer.
+*/
+QIcon TextLabel::icon() const{
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	return  KIcon("draw-text");
+#endif
 }
 
 /* ============================ getter methods ================= */
