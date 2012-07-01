@@ -166,8 +166,15 @@ void LabelWidget::textChanged(){
 			QTimer::singleShot(3000, this, SLOT(updateTeXImage()));
 		}
 	}else{
+		//save an empty string instead of a html-string with empty body, if no text available in QTextEdit
+		QString text;
+		if (ui.teLabel->toPlainText() == "")
+			text = "";
+		else
+			text = ui.teLabel->toHtml();
+			
 		foreach(TextLabel* label, m_labelsList)
-			m_label->setText(ui.teLabel->toHtml());
+			m_label->setText(text);
 	}
 }
 
