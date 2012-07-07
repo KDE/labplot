@@ -643,6 +643,10 @@ QString Spreadsheet::text(int row, int col) const
 	return col_ptr->asStringColumn()->textAt(row);
 }
 
+/*!
+ * This slot is, indirectly, called when a child of \c Spreadsheet (i.e. column) was selected in \c ProjectExplorer.
+ * Emits the signal \c columnSelected that is handled in \c SpreadsheetView.
+ */
 void Spreadsheet::childSelected(){
  Column* column=qobject_cast<Column*>(QObject::sender());
  if (column){
@@ -651,6 +655,10 @@ void Spreadsheet::childSelected(){
  }  
 }
 
+/*!
+ * This slot is, indirectly, called when a child of \c Spreadsheet (i.e. column) was deselected in \c ProjectExplorer.
+ * Emits the signal \c columnDeselected that is handled in \c SpreadsheetView.
+ */
 void Spreadsheet::childDeselected(){
  Column* column=qobject_cast<Column*>(QObject::sender());
  if (column){
@@ -659,11 +667,22 @@ void Spreadsheet::childDeselected(){
  }  
 }
 
+/*!
+ *  Emits the signal to select or to deselect the column number \c index in the project explorer, 
+ *  if \c selected=true or \c selected=false, respectively.
+ *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
+ * This function is called in \c SpreadsheetView upon selection changes.
+ */
 void Spreadsheet::setColumnSelectedInView(int index, bool selected){
-  if (selected)
+  if (selected){
 	emit childAspectSelectedInView(child<Column>(index));
-  else
+	
+	//deselect the spreadsheet in the project explorer, if a child (column) was selected.
+	//prevents unwanted multiple selection with spreadsheet (if it was selected before).
+	emit childAspectDeselectedInView(this);
+  }else{
 	emit childAspectDeselectedInView(child<Column>(index));
+  }
 }
 
 /* ========== loading and saving ============ */
