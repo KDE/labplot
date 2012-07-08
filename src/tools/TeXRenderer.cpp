@@ -80,6 +80,8 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 
 	QFileInfo fi(file.fileName());
 	if (latexProcess.waitForFinished()) { 	// pdflatex finished
+		QFile::remove(fi.completeBaseName()+".aux");
+		QFile::remove(fi.completeBaseName()+".log");
 		if(latexProcess.exitCode() != 0)	// skip if pdflatex failed
 			return false;
 
@@ -92,62 +94,70 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 // 																		<< "-sOutputFile=" <<  fi.completeBaseName() + ".png"
 // 																		<< fi.completeBaseName() + ".pdf");
 
+		// clean up and read png file
 		if (convertProcess.waitForFinished()) {
-			// read png file
-			image.load(fi.completeBaseName()+".png");
-			
-			// clean up
 			QFile::remove(fi.completeBaseName()+".pdf");
+
+			image.load(fi.completeBaseName()+".png");
 			QFile::remove(fi.completeBaseName()+".png");
-			QFile::remove(fi.completeBaseName()+".aux");
-			QFile::remove(fi.completeBaseName()+".log");
 			
 			return true;
 		}else{
-			// clean up
 			QFile::remove(fi.completeBaseName()+".pdf");
-			QFile::remove(fi.completeBaseName()+".aux");
-			QFile::remove(fi.completeBaseName()+".log");
-			
 			return false;
 		}
 	}else{
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		kWarning()<<"pdflatex failed."<<endl;
 #endif
-		return false;
 	}
 
-	// fallback if pdflatex fails
+	//////////// fallback if pdflatex fails ///////////////
 
 	// latex: TeX -> DVI
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
-	if (!latexProcess.waitForFinished())
+	// also possible: latexmf -C
+	if (!latexProcess.waitForFinished()) {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		kWarning()<<"latex failed."<<endl;
+#endif
+		QFile::remove(fi.completeBaseName()+".aux");
+		QFile::remove(fi.completeBaseName()+".log");
 		return false;
+	}
 	if(latexProcess.exitCode() != 0)	// skip if latex failed
 		return false;
 
 	// dvips: DVI -> PS
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
-	if (!dvipsProcess.waitForFinished())
+	if (!dvipsProcess.waitForFinished()) {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		kWarning()<<"dvips failed."<<endl;
+#endif
+		QFile::remove(fi.completeBaseName()+".dvi");
 		return false;
+	}
 
 	// convert: PS -> PNG
-	convertProcess.start("convert", QStringList() << "-density" << "300x300" << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
-	if (!convertProcess.waitForFinished())
+	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + "x" + QString::number(dpi)  << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
+	if (!convertProcess.waitForFinished()) {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		kWarning()<<"convert failed."<<endl;
+#endif
+		QFile::remove(fi.completeBaseName()+".ps");
 		return false;
+	}
 
 	// read png file
 	image.load(fi.completeBaseName()+".png");
 
 	//clean up
 	QFile::remove(fi.completeBaseName()+".png");
-	QFile::remove(fi.completeBaseName()+".dvi");
-	QFile::remove(fi.completeBaseName()+".ps");
-	// also possible: latexmf -C
 	QFile::remove(fi.completeBaseName()+".aux");
 	QFile::remove(fi.completeBaseName()+".log");
+	QFile::remove(fi.completeBaseName()+".dvi");
+	QFile::remove(fi.completeBaseName()+".ps");
 
 	return true;
 }
