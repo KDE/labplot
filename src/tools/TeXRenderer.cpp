@@ -46,6 +46,7 @@
  */
 bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, const QColor& fontColor, const int fontSize, const int dpi){
 	QTemporaryFile file("/dev/shm/labplot_XXXXXX.tex");
+	//file.setAutoRemove(false);
 	if(file.open()) {
 		QDir::setCurrent("/dev/shm");
 	}
@@ -66,9 +67,11 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 	out << "\\usepackage{color}\n\\usepackage[active,displaymath,textmath,tightpage]{preview}\n";
 	out << "\\begin{document}\n";
 	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ','<<fontColor.blueF() << "}\n";
+	out << "\\begin{preview}\n";
 	out << "{\\color{fontcolor}\n";
-	out << "$\\rm " << teXString << "$";
-	out << "\n}\n\\end{document}";
+	out << teXString;
+	out << "\n}\n\\end{preview}\n";
+	out << "\\end{document}";
 	out.flush();
 
 	// pdflatex: TeX -> PDF
@@ -114,7 +117,9 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 #endif
 		return false;
 	}
-/*
+
+	// fallback if pdflatex fails
+
 	// latex: TeX -> DVI
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished())
@@ -145,7 +150,6 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 	QFile::remove(fi.completeBaseName()+".log");
 
 	return true;
-	*/
 }
 
 // old method using texvc to render LaTeX text
