@@ -45,8 +45,9 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "dockwidgets/AxisDock.h"
 #include "dockwidgets/CartesianPlotDock.h"
 #include "dockwidgets/ColumnDock.h"
-#include "dockwidgets/XYCurveDock.h"
+#include "dockwidgets/ProjectDock.h"
 #include "dockwidgets/SpreadsheetDock.h"
+#include "dockwidgets/XYCurveDock.h"
 #include "dockwidgets/WorksheetDock.h"
 #include "widgets/LabelWidget.h"
 #include <QDebug>
@@ -97,7 +98,7 @@ GuiObserver::~GuiObserver(){
   }
   
   QString className=aspect->metaObject()->className();
-//    qDebug()<<className;
+    //qDebug()<<className;
   
   //check, whether objects of different  type where selected -> hide the dock in this case.
   foreach(aspect, selectedAspects){
@@ -223,6 +224,17 @@ GuiObserver::~GuiObserver(){
 	mainWindow->textLabelDock->setLabels(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
+  }else if (className=="Project"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Project properties"));
+	
+	if (!mainWindow->projectDock){
+	  mainWindow->projectDock = new ProjectDock(mainWindow->stackedWidget);
+	  mainWindow->stackedWidget->addWidget(mainWindow->projectDock);
+	}
+	
+	//TODO: mainWindow->projectDock->setProject();
+	
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
   }else{
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 	if (mainWindow->stackedWidget->currentWidget())

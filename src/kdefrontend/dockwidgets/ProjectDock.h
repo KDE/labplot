@@ -29,6 +29,7 @@
 #ifndef PROJECTDOCK_H
 #define PROJECTDOCK_H
 
+#include <QList>
 #include "ui_projectdock.h"
 
 //class Worksheet;

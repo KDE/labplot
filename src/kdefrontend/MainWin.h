@@ -48,8 +48,9 @@ class QStackedWidget;
 class AxisDock;
 class CartesianPlotDock;
 class ColumnDock;
-class XYCurveDock;
+class ProjectDock;
 class SpreadsheetDock;
+class XYCurveDock;
 class WorksheetDock;
 class LabelWidget;
 
@@ -126,10 +127,11 @@ private:
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
 	CartesianPlotDock* cartesianPlotDock;
-	SpreadsheetDock* spreadsheetDock;
 	ColumnDock* columnDock;
-	WorksheetDock* worksheetDock;
+	SpreadsheetDock* spreadsheetDock;
+	ProjectDock* projectDock;
 	XYCurveDock* lineSymbolCurveDock;
+	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	
 	void updateGUI();

@@ -49,8 +49,8 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
 #	${KDEFRONTEND_DIR}/ui/dockwidgets/plotareadock.ui
-	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 )

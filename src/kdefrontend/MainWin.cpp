@@ -86,13 +86,14 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	m_fileName=filename;
   	m_project = 0;
   	m_projectExplorer = 0;
-	spreadsheetDock=0;
-	columnDock=0;
-	worksheetDock=0;
-	cartesianPlotDock=0;
 	axisDock=0;
+	cartesianPlotDock=0;
+	columnDock=0;
 	lineSymbolCurveDock=0;
-	
+	projectDock=0;
+	spreadsheetDock=0;
+	worksheetDock=0;
+
 // 	connect (m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)), this, SLOT(subWindowChanged(QMdiSubWindow *)));
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
 			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));

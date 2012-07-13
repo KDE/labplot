@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>ProjectDialog</class>
- <widget class="QWidget" name="ProjectDock" >
+ <widget class="QWidget" name="ProjectDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>
