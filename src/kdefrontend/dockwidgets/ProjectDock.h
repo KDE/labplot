@@ -29,8 +29,8 @@
 #ifndef PROJECTDOCK_H
 #define PROJECTDOCK_H
 
-#include <QList>
 #include "ui_projectdock.h"
+class Project;
 
 //class Worksheet;
 
@@ -39,13 +39,17 @@ class ProjectDock: public QWidget{
 	
 public:
 	ProjectDock(QWidget *parent);
+	void setProject(Project* project);
 	
 private:
 	Ui::ProjectDock ui;
+	Project *m_project;
 	bool m_initializing;
 
 private slots:
 	void retranslateUi();
+
+	void titleChanged(const QString&);
   
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);

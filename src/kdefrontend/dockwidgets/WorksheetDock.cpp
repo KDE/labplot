@@ -570,6 +570,8 @@ void WorksheetDock::fileNameChanged(){
   } 
 }
 
+/*********************************************************/
+
 void WorksheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
 	

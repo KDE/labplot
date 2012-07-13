@@ -232,7 +232,7 @@ GuiObserver::~GuiObserver(){
 	  mainWindow->stackedWidget->addWidget(mainWindow->projectDock);
 	}
 	
-	//TODO: mainWindow->projectDock->setProject();
+	mainWindow->projectDock->setProject(mainWindow->m_project);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
   }else{
