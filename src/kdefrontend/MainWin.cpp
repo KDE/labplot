@@ -764,7 +764,7 @@ void MainWin::printPreview(){
 	adds a new Table (Spreadsheet) to the project.
 */
 void  MainWin::newSpreadsheet() {
-	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, i18n("Spreadsheet %1").arg(1));
+	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, i18n("Spreadsheet"));
 	this->addAspectToProject(spreadsheet);
 }
 
@@ -772,7 +772,7 @@ void  MainWin::newSpreadsheet() {
 	adds a new Worksheet to the project.
 */
 void MainWin::newWorksheet() {
-	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet %1").arg(1));
+	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
 	this->addAspectToProject(worksheet);
 }
 
