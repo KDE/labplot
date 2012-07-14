@@ -94,6 +94,7 @@ class Worksheet: public AbstractPart, public scripted{
 
 	private:
 		void init();
+		AbstractWorksheetElement* aspectFromGraphicsItem(const AbstractWorksheetElement*, const QGraphicsItem*) const;
 		WorksheetPrivate* const d;
 
 	 private slots:

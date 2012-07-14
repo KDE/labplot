@@ -257,18 +257,41 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 	//determine the corresponding aspect
 	const AbstractAspect* aspect = 0;
 	foreach( const AbstractWorksheetElement* child, children<AbstractWorksheetElement>() ){
-		if ( child->graphicsItem() == item )
-			aspect = child;
+		aspect = this->aspectFromGraphicsItem(child, item);
+		if (aspect)
+			break;
 	}
+
+	//no aspect were found.
+	//TODO
+	if (!aspect)
+		return;
 
 	if (b){
 		emit childAspectSelectedInView(aspect);
-		
 		//deselect the worksheet in the project explorer, if a child was selected.
 		//prevents unwanted multiple selection with worksheet (if it was selected before).
 		emit childAspectDeselectedInView(this);
 	}else{
 		emit childAspectDeselectedInView(aspect);
+	}
+}
+
+/*!
+ * helper function:  checks whether \c aspect or one of its children has the \c GraphicsItem \c item
+ * Returns a pointer to \c AbstractWorksheetElement having this item.
+ */
+AbstractWorksheetElement* Worksheet::aspectFromGraphicsItem(const AbstractWorksheetElement* aspect, const QGraphicsItem* item) const{
+	if ( aspect->graphicsItem() == item ){
+		return const_cast<AbstractWorksheetElement*>(aspect);
+	}else{
+		AbstractWorksheetElement* a = 0;
+		foreach( const AbstractWorksheetElement* child, aspect->children<AbstractWorksheetElement>() ){
+			a = this->aspectFromGraphicsItem(child, item);
+			if (a)
+				return a;
+		}
+		return 0;
 	}
 }
 
