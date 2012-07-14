@@ -354,11 +354,13 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const{
 
 void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect){
 //   qDebug()<<"aspectSelectedInView()";
-  emit indexSelected(modelIndexOfAspect(aspect));
+	if (aspect)
+		emit indexSelected(modelIndexOfAspect(aspect));
 }
 
 
 void AspectTreeModel::aspectDeselectedInView(const AbstractAspect* aspect){
 //   qDebug()<<"aspectDeselectedInView()";
-  emit indexDeselected(modelIndexOfAspect(aspect));
+	if (aspect)
+		emit indexDeselected(modelIndexOfAspect(aspect));
 }
