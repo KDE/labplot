@@ -84,24 +84,17 @@ class SpreadsheetView : public QTableView{
 
 		static void setDefaultCommentVisibility(bool visible);
 		static bool defaultCommentVisibility();
-		
-// 		static ActionManager * actionManager();
-// 		static void initActionManager();
-
-// 		void setPlotMenu(QMenu * menu);
-		
+	
 	private:
 	  	 void init();
 		Spreadsheet * m_spreadsheet;
 		SpreadsheetItemDelegate * m_delegate;
 		SpreadsheetModel * m_model;
 		SpreadsheetDoubleHeaderView * m_horizontalHeader;
+		bool m_suppressSelectionChangedEvent;
 		
 		bool eventFilter( QObject * watched, QEvent * event);
 		void keyPressEvent(QKeyEvent * event);
-		
-// 		static ActionManager * action_manager;
-		SpreadsheetView();
 		
 		void initActions();
 		void initMenus();
@@ -210,7 +203,6 @@ class SpreadsheetView : public QTableView{
 		KAction * action_statistics_rows;
 #endif
 
-// 		QMenu * m_plotMenu;
 		QMenu* m_selectionMenu;
 		QMenu* m_columnMenu;
 		QMenu* m_rowMenu;
@@ -275,7 +267,7 @@ class SpreadsheetView : public QTableView{
 	private  slots:
 		void advanceCell();
 		void handleHorizontalSectionMoved(int index, int from, int to);
-// 		void handleHorizontalHeaderDoubleClicked(int index);
+		void handleHorizontalHeaderDoubleClicked(int index);
 		void handleHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 		void currentColumnChanged(const QModelIndex & current, const QModelIndex & previous);
 		void handleAspectAdded(const AbstractAspect * aspect);

@@ -71,20 +71,14 @@
 	\ingroup commonfrontend
  */
 SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QTableView(),
-  m_spreadsheet(spreadsheet){
+  m_spreadsheet(spreadsheet),  m_suppressSelectionChangedEvent(false){
+
 	m_model = new SpreadsheetModel(spreadsheet);
-// 	m_plotMenu = 0;
 	init();
 }
 
 SpreadsheetView::~SpreadsheetView(){
 	delete m_model;
-}
-
-//! Private ctor for initActionManager() only
-SpreadsheetView::SpreadsheetView(){
-	m_model = NULL;
-// 	initActions();
 }
 
 void SpreadsheetView::init(){
@@ -103,7 +97,7 @@ void SpreadsheetView::init(){
 	m_horizontalHeader->setDefaultSectionSize(defaultColumnWidth());
 	m_horizontalHeader->installEventFilter(this);
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
-// 	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
+	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
 	connect(m_horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
 	
 	// vertical header
@@ -441,10 +435,10 @@ void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to){
 	m_spreadsheet->moveColumn(from, to);
 }
 
-//TODO unused at the moment
-// void SpreadsheetView::handleHorizontalHeaderDoubleClicked(int index){
-// 	Q_UNUSED(index);
-// }
+//TODO Implement the "change of the column name"-mode  upon a double click
+void SpreadsheetView::handleHorizontalHeaderDoubleClicked(int index){
+	Q_UNUSED(index);
+}
 
 /*!
   Returns whether comments are show currently or not.
@@ -477,7 +471,6 @@ void SpreadsheetView::currentColumnChanged(const QModelIndex & current, const QM
 	  return;
 }
 
-
 //TODO		
 void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int first, int last){
 	if (orientation != Qt::Horizontal) return;
@@ -486,7 +479,6 @@ void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int f
 
 	int col = sel_model->currentIndex().column();
 	if (col < first || col > last) return;
-// 	TODO setColumnForControlTabs(col);
 }
 
 /*!
@@ -513,7 +505,6 @@ int SpreadsheetView::selectedColumnCount(SciDAVis::PlotDesignation pd){
 	return count;
 }
 
-
 /*!
   Returns \c true if column \param col is selected, otherwise returns \c false.
   If \param full is \c true, this function only returns true if the whole column is selected.
@@ -524,7 +515,6 @@ bool SpreadsheetView::isColumnSelected(int col, bool full){
 	else
 		return selectionModel()->columnIntersectsSelection(col, QModelIndex());
 }
-
 
 /*!
   Returns all selected columns.
@@ -1027,7 +1017,6 @@ void SpreadsheetView::sortSpreadsheet(){
 	sortDialog(m_spreadsheet->children<Column>());
 }
 
-
 /*!
   Insert columns depending on the selection.
  */
@@ -1304,13 +1293,6 @@ void SpreadsheetView::goToCell(){
 	goToCell(row-1, col-1);
 }
 
-/*!
-	Set a plot menu. The spreadsheet takes ownership of the menu.
-*/
-// void SpreadsheetView::setPlotMenu(QMenu * menu){
-// 	m_plotMenu = menu;
-// }
-
 //! Open the sort dialog for the given columns
 void SpreadsheetView::sortDialog(QList<Column*> cols){
 	if (cols.isEmpty()) return;
@@ -1345,26 +1327,6 @@ void SpreadsheetView::addColumns(){
 void SpreadsheetView::addRows(){
 	m_spreadsheet->appendRows(selectedRowCount(false));
 }
-
-
-/* ========================= static methods ======================= */
-// ActionManager * SpreadsheetView::action_manager = 0;
-// 
-// ActionManager * SpreadsheetView::actionManager(){
-// 	if (!action_manager)
-// 		initActionManager();
-// 	
-// 	return action_manager;
-// }
-// 
-// void SpreadsheetView::initActionManager(){
-// 	if (!action_manager)
-// 		action_manager = new ActionManager();
-// 
-// 	action_manager->setTitle(tr("Spreadsheet"));
-// 	volatile SpreadsheetView * action_creator = new SpreadsheetView(); // initialize the action texts
-// 	delete action_creator;
-// }
 
 int SpreadsheetView::defaultColumnWidth() { 
 	return Column::global("default_width").toInt();
@@ -1419,7 +1381,9 @@ void SpreadsheetView::keyPressEvent(QKeyEvent * event){
 */
 void SpreadsheetView::selectColumn(int column){
   QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount()-1, column) );
+  m_suppressSelectionChangedEvent = true;
   selectionModel()->select(selection, QItemSelectionModel::Select);
+  m_suppressSelectionChangedEvent = false;
 }
 
 /*!
@@ -1427,7 +1391,9 @@ void SpreadsheetView::selectColumn(int column){
 */
 void SpreadsheetView::deselectColumn(int column){
   QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount()-1, column) );
+  m_suppressSelectionChangedEvent = true;
   selectionModel()->select(selection, QItemSelectionModel::Deselect);
+  m_suppressSelectionChangedEvent = false;
 }
 
 /*!
@@ -1445,6 +1411,10 @@ void SpreadsheetView::columnClicked(int column){
  void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
   Q_UNUSED(selected);
   Q_UNUSED(deselected);
+
+  if (m_suppressSelectionChangedEvent)
+	  return;
+
   QItemSelectionModel* selModel=selectionModel();
   for (int i=0; i<m_spreadsheet->columnCount(); i++){
 	m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i, QModelIndex()));
