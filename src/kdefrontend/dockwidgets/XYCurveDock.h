@@ -86,7 +86,7 @@ private slots:
 	void commentChanged();
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
-	void visibilityChanged(int);
+	void visibilityChanged(bool);
 	
 	//Line-Tab
 	void lineTypeChanged(int);

@@ -102,24 +102,24 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 
 	gridLayout->addWidget(leComment, 1, 1, 1, 1);
 	
-	chkVisible = new QCheckBox(ui.tabGeneral);
-	gridLayout->addWidget(chkVisible, 2, 0, 1, 1);
 	
 	lXColumn= new QLabel(ui.tabGeneral);
-	gridLayout->addWidget(lXColumn, 3, 0, 1, 1);
+	gridLayout->addWidget(lXColumn, 2, 0, 1, 1);
 	
 	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbXColumn, 3, 1, 1, 1);
+	gridLayout->addWidget(cbXColumn, 2, 1, 1, 1);
 	
 	lYColumn= new QLabel(ui.tabGeneral);
-	gridLayout->addWidget(lYColumn, 4, 0, 1, 1);
+	gridLayout->addWidget(lYColumn, 3, 0, 1, 1);
 	
 	cbYColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbYColumn, 4, 1, 1, 1);
+	gridLayout->addWidget(cbYColumn, 3, 1, 1, 1);
 	
 	verticalSpacer = new QSpacerItem(24, 320, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	gridLayout->addItem(verticalSpacer, 5, 0, 1, 1);
+	gridLayout->addItem(verticalSpacer, 4, 0, 1, 1);
 
+	chkVisible = new QCheckBox(ui.tabGeneral);
+	gridLayout->addWidget(chkVisible, 5, 0, 1, 1);
 	
 	//Tab "Values"
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
@@ -144,7 +144,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	//General
 	connect( leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( chkVisible, SIGNAL(checked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(xColumnChanged(const QModelIndex&)) );
 	connect( cbYColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yColumnChanged(const QModelIndex&)) );
 	
@@ -648,18 +648,12 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index){
 	}
 }
 
-void XYCurveDock::visibilityChanged(int state){
+void XYCurveDock::visibilityChanged(bool state){
   if (m_initializing)
 	return;
   
-  bool b;
-  if (state==Qt::Checked)
-	b=true;
-  else
-	b=false;
-
   foreach(XYCurve* curve, m_curvesList){
-	curve->setVisible(b);
+	curve->setVisible(state);
   }
 }
 
