@@ -50,6 +50,8 @@ private slots:
 	void retranslateUi();
 
 	void titleChanged(const QString&);
+	void authorChanged(const QString&);
+	void commentChanged();
   
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);

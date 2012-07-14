@@ -72,7 +72,7 @@ static const float qt_paperSizes[][2] = {
 };
 
 /*!
-  \class GuiObserver
+  \class WorksheetDock
   \brief  Provides a widget for editing the properties of the worksheets currently selected in the project explorer.
 
   \ingroup kdefrontend

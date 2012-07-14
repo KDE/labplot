@@ -32,7 +32,7 @@
 #include "../TemplateHandler.h"
 
 /*!
-  \class GuiObserver
+  \class ProjectDock
   \brief  Provides a widget for editing the properties of a project
 
   \ingroup kdefrontend
@@ -41,8 +41,16 @@
 ProjectDock::ProjectDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 
-	//TODO: SLOTS
+	// SLOTS
 	connect(ui.leTitle, SIGNAL( textChanged(const QString&) ), this, SLOT( titleChanged(const QString&) ) );
+	connect(ui.leAuthor, SIGNAL( textChanged(const QString&) ), this, SLOT( authorChanged(const QString&) ) );
+	connect(ui.tbComment, SIGNAL( textChanged() ), this, SLOT( commentChanged() ) );
+
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
+	ui.verticalLayout->addWidget(templateHandler, 0, 0);
+	templateHandler->show();
+	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 
 	this->retranslateUi();
 }
@@ -57,21 +65,20 @@ void ProjectDock::setProject(Project *project) {
 	ui.leAuthor->setText(project->author());
 	ui.dtwCreated->setDateTime(project->creationTime());
 	ui.dtwModified->setDateTime(project->modificationTime());
-	ui.tbNotes->setText(project->comment());
+	ui.tbComment->setText(project->comment());
+
+        //show default properties of a project
+	KConfig config("", KConfig::SimpleConfig);
+	loadConfig(config);
+
 }
 
 //************************************************************
 //****************** SLOTS ********************************
 //************************************************************
 void ProjectDock::retranslateUi(){
-	m_initializing = true;
-
-	//TODO
-	
-	m_initializing = false;
 }
 
-//TODO: slots for changing properties (see WorksheetDock)
 void ProjectDock::titleChanged(const QString& title){
 	if (m_initializing)
 		return;
@@ -79,16 +86,34 @@ void ProjectDock::titleChanged(const QString& title){
 	m_project->setName(title);
 }
 
+void ProjectDock::authorChanged(const QString& author){
+	if (m_initializing)
+		return;
+
+	m_project->setAuthor(author);
+}
+
+void ProjectDock::commentChanged(){
+	if (m_initializing)
+		return;
+
+	m_project->setComment(ui.tbComment->toPlainText());
+}
+
 /*************************************************************/
 
 void ProjectDock::loadConfig(KConfig& config){
-//	KConfigGroup group = config.group( "Project" );
-	//TODO
-	
+	KConfigGroup group = config.group( "Project" );
+
+	ui.leTitle->setText( group.readEntry("Title", m_project->name()) );
+	ui.leAuthor->setText( group.readEntry("Author", m_project->author()) );
+	ui.tbComment->setText( group.readEntry("Comment", m_project->comment()) );
 }
 
 void ProjectDock::saveConfig(KConfig& config){
-//	KConfigGroup group = config.group( "Project" );
-	//TODO
+	KConfigGroup group = config.group( "Project" );
 
+	group.writeEntry("Title", ui.leTitle->text());
+	group.writeEntry("Author", ui.leAuthor->text());
+	group.writeEntry("Comment", ui.tbComment->toPlainText());
 }

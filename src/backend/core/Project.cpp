@@ -92,7 +92,7 @@ class Project::Private
 			version(0),
 			labPlot(QString(LVERSION)),
 #endif
-			author(QString()),
+			author(QString(getenv("USER"))),
 			modification_time(QDateTime::currentDateTime()),
 			changed(false)
 			{}
@@ -116,7 +116,7 @@ class Project::Private
 };
 
 Project::Project()
-	: Folder(tr("Unnamed")), d(new Private())
+	: Folder(tr("Project")), d(new Private())
 {
 #ifndef SUPPRESS_SCRIPTING_INIT
 	// TODO: intelligent engine choosing
