@@ -70,8 +70,10 @@
   Constructur of the class.
   Creates a view for the Worksheet \c worksheet and initializes the internal model.
 */
-WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView()
-, m_worksheet(worksheet), m_currentMouseMode(NavigationMode) {
+WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
+	m_worksheet(worksheet),
+	m_currentMouseMode(NavigationMode), 
+	m_suppressSelectionChangedEvent(false) {
   
   m_model = new WorksheetModel(worksheet);
   setScene(m_model->scene());
@@ -365,26 +367,6 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	tbZoom=b;
 }
 
-
-/* ========================= static methods ======================= */
-ActionManager *WorksheetView::action_manager = 0;
-
-ActionManager *WorksheetView::actionManager(){
-	if (!action_manager)
-		initActionManager();
-
-	return action_manager;
-}
-
-void WorksheetView::initActionManager(){
-	if (!action_manager)
-		action_manager = new ActionManager();
-
-	action_manager->setTitle(tr("Worksheet"));
-	volatile WorksheetView *action_creator = new WorksheetView(); // initialize the action texts
-	delete action_creator;
-}
-
 void WorksheetView::setScene(QGraphicsScene * scene) {
   QGraphicsView::setScene(scene);
   setTransform(QTransform());
@@ -632,33 +614,48 @@ void WorksheetView::changeGrid(QAction* action){
 	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
 }
 
+/*!
+ *  Selects the QGraphicsItem \c item in \c WorksheetView.
+ * 	The selection in \c ProjectExplorer is forwarded to  \c Worksheet 
+ *  and is finally handled here.
+ */
 void WorksheetView::selectItem(QGraphicsItem* item){
-//   qDebug()<<"view slot"<<item;
-// 	item->setZValue(100);
+	m_suppressSelectionChangedEvent = true;
 	item->setSelected(true);
-// 	scene()->update();
+	m_suppressSelectionChangedEvent = false;
 }
 
-
+/*!
+ *  Deselects the \c QGraphicsItem \c item in \c WorksheetView.
+ * 	The deselection in \c ProjectExplorer is forwarded to \c Worksheet 
+ *  and is finally handled here.
+ */
 void WorksheetView::deselectItem(QGraphicsItem* item){
+	m_suppressSelectionChangedEvent = true;
 	item->setSelected(false);
+	m_suppressSelectionChangedEvent = false;
 }
 
-//TODO
+/*!
+ *  Called on selection changes in the view.
+ *   Determines which items were selected and deselected
+ *  and forwards these changes to \c Worksheet
+ */
 void WorksheetView::selectionChanged(){
-// 	qDebug()<<"selection changed";
-// 	qDebug()<<"selection "<<scene()->selectionArea().boundingRect();
- QList<QGraphicsItem *> items = scene()->selectedItems();
-//  qDebug()<<items;
+	if (m_suppressSelectionChangedEvent)
+		return;
 	
- //trave
-//  QGraphicsItem* item = items.first();
-// //  m_worksheet->children<AbstractWorksheetElement*>()
-//  foreach(const AbstractAspect * child, aspect->children<AbstractAspect>());
-//  
-//  child->graphicsItem() != item;
-//  
-//  this->hasGraphicsItem(child, item)
+	//select 
+	QList<QGraphicsItem *> items = scene()->selectedItems();
+	foreach ( const QGraphicsItem* item , items )
+		m_worksheet->setItemSelectedInView( item, true );
+	
+	//check, whether the previously selected items were deselected now.
+	foreach ( QGraphicsItem* item , m_selectedItems ){
+		if ( items.indexOf(item) == -1 )
+			m_worksheet->setItemSelectedInView( item, false );	
+	}
+	m_selectedItems = items;
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area) const{

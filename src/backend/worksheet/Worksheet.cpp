@@ -226,8 +226,8 @@ QRectF Worksheet::pageRect() const {
 
 /*!
 	this slot is called when a worksheet element is selected in the project explorer.
-	emits \c itemSelected() which forwards this event to the WorksheetView 
-	in order to select the corresponding QGraphicsItem.
+	emits \c itemSelected() which forwards this event to the \c WorksheetView 
+	in order to select the corresponding \c QGraphicsItem.
  */
 void Worksheet::childSelected(){
 	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
@@ -237,13 +237,39 @@ void Worksheet::childSelected(){
 
 /*!
 	this slot is called when a worksheet element is deselected in the project explorer.
-	emits \c itemDeselected() which forwards this event to the WorksheetView 
-	in order to deselect the corresponding QGraphicsItem.
+	emits \c itemDeselected() which forwards this event to \c WorksheetView 
+	in order to deselect the corresponding \c QGraphicsItem.
  */
 void Worksheet::childDeselected(){
 	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
 	if (element)
 		emit itemDeselected(element->graphicsItem());
+}
+
+
+/*!
+ *  Emits the signal to select or to deselect the aspect corresponding to \c QGraphicsItem \c item in the project explorer, 
+ *  if \c selected=true or \c selected=false, respectively.
+ *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
+ * This function is called in \c WorksheetView upon selection changes.
+ */
+void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
+	//determine the corresponding aspect
+	const AbstractAspect* aspect = 0;
+	foreach( const AbstractWorksheetElement* child, children<AbstractWorksheetElement>() ){
+		if ( child->graphicsItem() == item )
+			aspect = child;
+	}
+
+	if (b){
+		emit childAspectSelectedInView(aspect);
+		
+		//deselect the worksheet in the project explorer, if a child was selected.
+		//prevents unwanted multiple selection with worksheet (if it was selected before).
+		emit childAspectDeselectedInView(this);
+	}else{
+		emit childAspectDeselectedInView(aspect);
+	}
 }
 
 void Worksheet::update(){

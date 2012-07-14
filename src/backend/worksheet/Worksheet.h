@@ -69,6 +69,8 @@ class Worksheet: public AbstractPart, public scripted{
 		WorksheetGraphicsScene *scene() const;
 		void update();
 
+		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
+				
 		BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity);
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType);
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle);

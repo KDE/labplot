@@ -84,10 +84,10 @@ class WorksheetView : public QGraphicsView{
 	Worksheet *m_worksheet;
 	WorksheetModel *m_model;
 	MouseMode m_currentMouseMode;
-	
 	GridSettings m_gridSettings;
+	QList<QGraphicsItem*> m_selectedItems;
+	bool m_suppressSelectionChangedEvent;
 	
-	static ActionManager *action_manager;
 	WorksheetView();
 
 	//Menus
