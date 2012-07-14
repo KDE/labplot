@@ -93,6 +93,8 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect( ui.cbVerticalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(verticalAlignmentChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
 	connect( ui.sbOffset, SIGNAL(valueChanged(double)), this, SLOT(offsetChanged(double)) );
+
+	connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 }
 
 LabelWidget::~LabelWidget() {}
@@ -100,6 +102,8 @@ LabelWidget::~LabelWidget() {}
 void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_labelsList = labels;
 	m_label = labels.first();
+	
+	ui.chbVisible->setChecked( m_label->isVisible() );
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
@@ -115,6 +119,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	
 	m_axesList = axes;
 	m_label = m_labelsList.first();
+
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
@@ -446,6 +451,14 @@ void LabelWidget::updateTeXImage() {
 	
 	m_updatelock=false;
 }
+
+void LabelWidget::visibilityChanged(bool state){
+	if (m_initializing)
+		return;
+
+	m_label->setVisible(state);
+}
+
 
 //**********************************************************
 //******************** SETTINGS ****************************

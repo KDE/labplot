@@ -85,6 +85,8 @@ private slots:
 	
 	void labelPostionChanged(QPointF&);
 	void updateTeXImage();
+
+	void visibilityChanged(bool);
 };
 
 #endif //LABELWIDGET_H
