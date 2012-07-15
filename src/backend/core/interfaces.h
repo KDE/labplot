@@ -29,7 +29,9 @@
 #ifndef INTERFACES_H
 #define INTERFACES_H
 
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "lib/ConfigPageWidget.h"
+#endif
 #include "core/AbstractAspect.h"
 #include "lib/XmlStreamReader.h"
 

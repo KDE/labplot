@@ -126,7 +126,6 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
-	${COMMONFRONTEND_DIR}/lib/ActionManager.cpp
 )
 
 set(TOOLS_SOURCES

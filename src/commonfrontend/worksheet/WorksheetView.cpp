@@ -48,11 +48,12 @@
 #include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/plots/cartesian/Axis.h"
 #include "worksheet/plots/cartesian/XYCurve.h"
-#include "lib/ActionManager.h"
 #include "core/column/Column.h"
 #include "../../backend/worksheet/TextLabel.h"
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include "lib/ActionManager.h"
+#else
 #include <KAction>
 #include <KLocale>
 #include "kdefrontend/worksheet/GridDialog.h"
