@@ -1,7 +1,6 @@
 set(KDE_FRONTEND true)
 set(KDEFRONTEND_DIR kdefrontend)
 set(BACKEND_DIR backend)
-set(QTFRONTEND_DIR qtfrontend)
 set(COMMONFRONTEND_DIR commonfrontend)
 set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 set(TOOLS_DIR tools)
@@ -118,11 +117,6 @@ set(DATASOURCES_SOURCES
 	${DATASOURCES_DIR}/FileInfoDialog.cpp
 )
 
-set(QTFRONTEND_SOURCES
-	${QTFRONTEND_DIR}/core/PartMdiView.cpp
-	${QTFRONTEND_DIR}/lib/ActionManager.cpp
-)
-
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetDoubleHeaderView.cpp
@@ -131,6 +125,8 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
+	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
+	${COMMONFRONTEND_DIR}/lib/ActionManager.cpp
 )
 
 set(TOOLS_SOURCES
@@ -159,12 +155,12 @@ add_custom_command (OUTPUT parser/parser.tab.c
 
 add_subdirectory( pics )
 ##############################################################################
-INCLUDE_DIRECTORIES(${BACKEND_DIR} ${QTFRONTEND_DIR} ${COMMONFRONTEND_DIR} .)
+INCLUDE_DIRECTORIES(${BACKEND_DIR} ${COMMONFRONTEND_DIR} .)
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
-kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${QTFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
+kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
 target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} 
 ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 # ${OPJ_LIBRARY}
