@@ -3,19 +3,22 @@
 <gui name="LabPlot" version="1">
 
 <ToolBar name="mainToolBar" >
-<text>Main Toolbar</text>
+<text>Main</text>
 <Action name="import" />
 <Action name="export" />
 <Action name="new_spreadsheet" />
 <Action name="new_worksheet" />
-<!-- <ActionList name="dynamicActionlist" /> -->
 <Separator/>
 <Action name="toggle_project_explorer_dock"/>
 <Action name="toggle_properties_explorer_dock"/>
 </ToolBar>
 
-<ToolBar name="worksheet_toolbar" ></ToolBar>
-<ToolBar name="spreadsheet_toolbar" ></ToolBar>
+<ToolBar name="worksheet_toolbar" >
+<text>Worksheet</text>
+</ToolBar>
+<ToolBar name="spreadsheet_toolbar" >
+<text>Spreadsheet</text>
+</ToolBar>
 
 <MenuBar>
 <Menu name="file" ><text>&amp;File</text>
