@@ -54,7 +54,7 @@
 #include <QDebug>
 
 /*!
-  \class GuiObserver
+  \class XYCurveDock
   \brief  Provides a widget for editing the properties of the XYCurves (2D-curves) currently selected in the project explorer.
   
   If more then one curves are set, the properties of the first column are shown. The changes of the properties are applied to all curves.
@@ -67,59 +67,11 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 	
 	// Tab "General"
-	gridLayout = new QGridLayout(ui.tabGeneral);
-	gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-	lName = new QLabel(ui.tabGeneral);
-	lName->setObjectName(QString::fromUtf8("lName"));
-	QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-	sizePolicy.setHorizontalStretch(0);
-	sizePolicy.setVerticalStretch(0);
-	sizePolicy.setHeightForWidth(lName->sizePolicy().hasHeightForWidth());
-	lName->setSizePolicy(sizePolicy);
-
-	gridLayout->addWidget(lName, 0, 0, 1, 1);
-
-	leName = new QLineEdit(ui.tabGeneral);
-	leName->setObjectName(QString::fromUtf8("leName"));
-
-	gridLayout->addWidget(leName, 0, 1, 1, 1);
-
-	lComment = new QLabel(ui.tabGeneral);
-	lComment->setObjectName(QString::fromUtf8("lComment"));
-	sizePolicy.setHeightForWidth(lComment->sizePolicy().hasHeightForWidth());
-	lComment->setSizePolicy(sizePolicy);
-
-	gridLayout->addWidget(lComment, 1, 0, 1, 1);
-
-	leComment = new QLineEdit(ui.tabGeneral);
-	leComment->setObjectName(QString::fromUtf8("leComment"));
-	QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	sizePolicy1.setHorizontalStretch(0);
-	sizePolicy1.setVerticalStretch(0);
-	sizePolicy1.setHeightForWidth(leComment->sizePolicy().hasHeightForWidth());
-	leComment->setSizePolicy(sizePolicy1);
-	leComment->setMaximumSize(QSize(16777215, 50));
-
-	gridLayout->addWidget(leComment, 1, 1, 1, 1);
-	
-	
-	lXColumn= new QLabel(ui.tabGeneral);
-	gridLayout->addWidget(lXColumn, 2, 0, 1, 1);
-	
 	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbXColumn, 2, 1, 1, 1);
-	
-	lYColumn= new QLabel(ui.tabGeneral);
-	gridLayout->addWidget(lYColumn, 3, 0, 1, 1);
+	ui.gridLayoutGeneral->addWidget(cbXColumn, 2, 1, 1, 1);
 	
 	cbYColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbYColumn, 3, 1, 1, 1);
-	
-	verticalSpacer = new QSpacerItem(24, 320, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	gridLayout->addItem(verticalSpacer, 4, 0, 1, 1);
-
-	chkVisible = new QCheckBox(ui.tabGeneral);
-	gridLayout->addWidget(chkVisible, 5, 0, 1, 1);
+	ui.gridLayoutGeneral->addWidget(cbYColumn, 3, 1, 1, 1);
 	
 	//Tab "Values"
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
@@ -142,9 +94,9 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	//Slots
 	
 	//General
-	connect( leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( chkVisible, SIGNAL(checked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(xColumnChanged(const QModelIndex&)) );
 	connect( cbYColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yColumnChanged(const QModelIndex&)) );
 	
@@ -388,17 +340,17 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
   
   //if there are more then one curve in the list, disable the tab "general"
   if (list.size()==1){
-	lName->setEnabled(true);
-	leName->setEnabled(true);
-	lComment->setEnabled(true);
-	leComment->setEnabled(true);
-	lXColumn->setEnabled(true);
+	ui.lName->setEnabled(true);
+	ui.leName->setEnabled(true);
+	ui.lComment->setEnabled(true);
+	ui.leComment->setEnabled(true);
+	ui.lXColumn->setEnabled(true);
 	cbXColumn->setEnabled(true);
-	lYColumn->setEnabled(true);
+	ui.lYColumn->setEnabled(true);
 	cbYColumn->setEnabled(true);
 	
-	leName->setText(curve->name());
-	leComment->setText(curve->comment());
+	ui.leName->setText(curve->name());
+	ui.leComment->setText(curve->comment());
 	
 	if (curve->xColumn())
 		cbXColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
@@ -415,24 +367,24 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	else
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
   }else{
-	lName->setEnabled(false);
-	leName->setEnabled(false);
-	lComment->setEnabled(false);
-	leComment->setEnabled(false);
-	lXColumn->setEnabled(false);
+	ui.lName->setEnabled(false);
+	ui.leName->setEnabled(false);
+	ui.lComment->setEnabled(false);
+	ui.leComment->setEnabled(false);
+	ui.lXColumn->setEnabled(false);
 	cbXColumn->setEnabled(false);
-	lYColumn->setEnabled(false);
+	ui.lYColumn->setEnabled(false);
 	cbYColumn->setEnabled(false);	
 	
-	leName->setText("");
-	leComment->setText("");
+	ui.leName->setText("");
+	ui.leComment->setText("");
 	cbXColumn->setCurrentModelIndex(QModelIndex());
 	cbYColumn->setCurrentModelIndex(QModelIndex());
 	cbValuesColumn->setCurrentModelIndex(QModelIndex());
   }
 
 	//show the properties of the first curve
-	chkVisible->setChecked( curve->isVisible() );
+	ui.chkVisible->setChecked( curve->isVisible() );
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
@@ -601,11 +553,11 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 //****************** SLOTS ********************************
 //************************************************************
 void XYCurveDock::retranslateUi(){
-	lName->setText(i18n("Name"));
-	lComment->setText(i18n("Comment"));
-	chkVisible->setText(i18n("Visible"));
-	lXColumn->setText(i18n("x-data"));
-	lYColumn->setText(i18n("y-data"));
+	ui.lName->setText(i18n("Name"));
+	ui.lComment->setText(i18n("Comment"));
+	ui.chkVisible->setText(i18n("Visible"));
+	ui.lXColumn->setText(i18n("x-data"));
+	ui.lYColumn->setText(i18n("y-data"));
 	
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
