@@ -86,6 +86,7 @@ class AspectTreeModel : public QAbstractItemModel{
 	signals:
 	  void indexSelected(const QModelIndex&);
 	  void indexDeselected(const QModelIndex&);
+	  void hiddenAspectSelected(const AbstractAspect*);
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H

@@ -42,6 +42,7 @@ public:
     ~AxisDock();
 
 	void setAxes(QList<Axis*>);
+	void activateTitleTab();
 
 private:
 	Ui::AxisDock ui;

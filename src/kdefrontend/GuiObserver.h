@@ -47,6 +47,7 @@ class GuiObserver:public QObject{
 	
   private slots:
 	void selectedAspectsChanged(QList<AbstractAspect*>&);
+	void hiddenAspectSelected(const AbstractAspect*);
 };
 
 #endif

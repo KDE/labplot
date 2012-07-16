@@ -183,6 +183,10 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	m_initializing = false;
 }
 
+void CartesianPlotDock::activateTitleTab(){
+	ui.tabWidget->setCurrentWidget(ui.tabTitle);
+}
+
 //************************************************************
 //****************** SLOTS ********************************
 //************************************************************

@@ -90,6 +90,7 @@ class ProjectExplorer : public QWidget{
 	signals:
 		void currentAspectChanged(AbstractAspect*);
 		void selectedAspectsChanged(QList<AbstractAspect*>&);
+		void hiddenAspectSelected(const AbstractAspect*);
 };
 
 #endif // ifndef PROJECT_EXPLORER_H

@@ -243,6 +243,10 @@ void AxisDock::setAxes(QList<Axis*> list){
   	m_initializing = false;
 }
 
+void AxisDock::activateTitleTab(){
+	ui.tabWidget->setCurrentWidget(ui.tabTitle);
+}
+
 //**********************************************************
 //****************** SLOTS *******************************
 //**********************************************************

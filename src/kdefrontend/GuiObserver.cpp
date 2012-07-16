@@ -62,7 +62,8 @@ Email (use @ for *)  	: alexander.semke*web.de
 GuiObserver::GuiObserver(MainWin* mainWin){
 	connect(mainWin->m_projectExplorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)), 
 					this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&) ) );
-	
+	connect(mainWin->m_projectExplorer, SIGNAL(hiddenAspectSelected(const AbstractAspect*)), 
+					this, SLOT(hiddenAspectSelected(const AbstractAspect*) ) );	
 	mainWindow=mainWin;
 }
 
@@ -242,6 +243,36 @@ GuiObserver::~GuiObserver(){
   }
   
   this->updateGui(className);
+}
+
+/*!
+	handles the selection of a hidden aspect \c aspect in the view (relevant for WorksheetView only at the moment).
+	Currently, a hidden aspect can only be a plot title lable or an axi label.
+	-> Activate the corresponding DockWidget and make the title tab current.
+ */
+void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
+	const AbstractAspect* parent = aspect->parentAspect();
+	if (!parent)
+		return;
+	
+	QString className = parent->metaObject()->className();
+	//TODO Axis class name has a blank, we need to trimm. Why?
+	//TODO actually, the parent aspect should be already selected at this point
+	//and there is no need to activate the corresponding dock widget,
+	//s.a. AspectTreeModel::aspectSelectedInView(). But this doesn't seem to be the case.
+	if (className.trimmed() == "Axis"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis properties"));
+	
+		if (!mainWindow->axisDock){
+		mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
+		mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
+		}
+	
+		mainWindow->axisDock->activateTitleTab();
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
+	}else if (className.trimmed() == "CartesianPlot")
+		mainWindow->cartesianPlotDock->activateTitleTab();
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
 }
 
 /*!

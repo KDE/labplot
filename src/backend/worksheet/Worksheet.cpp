@@ -264,8 +264,10 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 
 	//no aspect were found.
 	//TODO
-	if (!aspect)
+	if (!aspect){
+		qDebug() << "not an  aspect selected";
 		return;
+	}
 
 	if (b){
 		emit childAspectSelectedInView(aspect);
@@ -286,7 +288,7 @@ AbstractWorksheetElement* Worksheet::aspectFromGraphicsItem(const AbstractWorksh
 		return const_cast<AbstractWorksheetElement*>(aspect);
 	}else{
 		AbstractWorksheetElement* a = 0;
-		foreach( const AbstractWorksheetElement* child, aspect->children<AbstractWorksheetElement>() ){
+		foreach( const AbstractWorksheetElement* child, aspect->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden) ){
 			a = this->aspectFromGraphicsItem(child, item);
 			if (a)
 				return a;

@@ -40,7 +40,6 @@
 #include <QLabel>
 #include <QHeaderView>
 #include <QSignalMapper>
-#include <QDebug>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QLineEdit>
@@ -193,6 +192,8 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	
 	connect(treeModel, SIGNAL(indexSelected(const QModelIndex&)), this, SLOT(selectIndex(const QModelIndex&) ));
 	connect(treeModel, SIGNAL(indexDeselected(const QModelIndex&)), this, SLOT(deselectIndex(const QModelIndex&) ));
+	connect(treeModel, SIGNAL(hiddenAspectSelected(const AbstractAspect*)), this, SIGNAL(hiddenAspectSelected(const AbstractAspect*)));
+	
 	connect(m_treeView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
 							this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)) );
 	connect(m_treeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), 
@@ -275,11 +276,13 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 void ProjectExplorer::expandAspect(const AbstractAspect* aspect){
 	AspectTreeModel * tree_model = qobject_cast<AspectTreeModel *>(m_treeView->model());
 	const QModelIndex& index =  tree_model->modelIndexOfAspect(aspect);
+
 	m_treeView->setExpanded(index, true);
 	m_treeView->scrollTo(index);
-	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
-		this->expandAspect(child);
-	}
+	m_treeView->setCurrentIndex(index);
+	
+	//TODO this doesn't work!
+	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){

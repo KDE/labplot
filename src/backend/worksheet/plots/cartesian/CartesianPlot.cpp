@@ -141,7 +141,8 @@ void CartesianPlot::init(){
 	//Plot title
  	m_title = new TextLabel(this->name());
 	m_title->setText(this->name());
-// 	m_title->setHidden(true);
+	addChild(m_title);
+	m_title->setHidden(true);
 	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem()); //set the parent befor doing any positioning
 	m_title->setHorizontalPosition(TextLabel::hPositionCenter);
 	m_title->setVerticalPosition(TextLabel::vPositionTop);
@@ -227,8 +228,8 @@ void CartesianPlotPrivate::setRect(const QRectF& r){
 	
 	//offset between the plot area and the area defining the coodinate system, in scene units.
 	//TODO: make this variables private, add getter/setter and provide a comfortable way to change this setting in the UI (don't allow negative values).
-	float vertOffset = Worksheet::convertToSceneUnits(0, Worksheet::Centimeter);
-	float horizOffset = Worksheet::convertToSceneUnits(0, Worksheet::Centimeter);
+	float vertOffset = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	float horizOffset = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	
 	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());

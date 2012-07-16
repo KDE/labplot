@@ -35,7 +35,6 @@
 #include <QIcon>
 #include <QMenu>
 #include <QApplication>
-// #include <QDebug>
 
 /**
  * \class AspectTreeModel
@@ -351,12 +350,27 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const{
 }
 
 //######################## SLOTs ############################
-
 void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect){
+	if (aspect->hidden()){
+		//a hidden aspect was selected in the view (e.g. plot title in WorksheetView)
+		//select the parent aspect first, if available
+		AbstractAspect* parent = aspect->parentAspect();
+		if (parent)
+			emit indexSelected(modelIndexOfAspect(parent));
+		
+		//emit also this signal, so the GUI can handle this selection.
+		emit hiddenAspectSelected(aspect);
+	}else{
 		emit indexSelected(modelIndexOfAspect(aspect));
+	}
 }
 
-
 void AspectTreeModel::aspectDeselectedInView(const AbstractAspect* aspect){
+	if (aspect->hidden()){
+		AbstractAspect* parent = aspect->parentAspect();
+		if (parent)
+			emit indexDeselected(modelIndexOfAspect(parent));
+	}else{
 		emit indexDeselected(modelIndexOfAspect(aspect));
+	}	
 }

@@ -42,6 +42,7 @@ class CartesianPlotDock: public QWidget{
 public:
 	CartesianPlotDock(QWidget *parent);
 	void setPlots(QList<CartesianPlot*>);
+	void activateTitleTab();
 	
 private:
 	Ui::CartesianPlotDock ui;

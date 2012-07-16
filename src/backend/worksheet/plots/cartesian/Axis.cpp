@@ -94,7 +94,7 @@ void Axis::init() {
 	// axis title
  	d->title = new TextLabel(this->name());
 	connect( d->title, SIGNAL(changed()), this, SLOT(labelChanged()) );
-// 	addChild(d->title);
+	addChild(d->title);
 	d->title->setHidden(true);
 	d->title->graphicsItem()->setParentItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
@@ -136,8 +136,9 @@ void Axis::init() {
 }
 
 Axis::~Axis() {
+	Q_D(Axis);
+	delete d->title;
 	delete d_ptr;
-//TODO:	delete d->title;
 }
 
 QGraphicsItem *Axis::graphicsItem() const {
