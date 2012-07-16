@@ -49,19 +49,19 @@
   \ingroup kdefrontend
 */
 
-CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
+CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
+	m_initializing(false){
+
 	ui.setupUi(this);
 	
 	//"Coordinate system"-tab
 	ui.bAddXBreak->setIcon( KIcon("list-add") );
 	ui.bRemoveXBreak->setIcon( KIcon("list-remove") );
 	ui.cbXBreakNumber->addItem("1");
-	this->toggleXBreak(Qt::Unchecked);
 
 	ui.bAddYBreak->setIcon( KIcon("list-add") );
 	ui.bRemoveYBreak->setIcon( KIcon("list-remove") );
 	ui.cbYBreakNumber->addItem("1");
-	this->toggleYBreak(Qt::Unchecked);
 
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
@@ -131,6 +131,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent){
 
 void CartesianPlotDock::init(){
 	this->retranslateUi();
+	this->toggleXBreak(Qt::Unchecked);
+	this->toggleYBreak(Qt::Unchecked);
 }
 
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
