@@ -10,7 +10,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/LabPlot.cpp
   	${KDEFRONTEND_DIR}/MainWin.cpp
-	${KDEFRONTEND_DIR}/ProjectDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.cpp

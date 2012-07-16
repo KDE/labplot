@@ -80,7 +80,6 @@ private:
 	KAction* m_printPreviewAction;
 	KAction* m_importAction;
 	KAction* m_exportAction;
-	KAction* m_projectInfoAction;
 	KAction* m_closeAction;
 	KAction *m_newFolderAction;
 	KAction *m_newSpreadsheetAction;
@@ -168,7 +167,6 @@ private slots:
 	void historyDialog() const;
 	void importFileDialog();
 	void exportDialog();
-	void projectDialog();
 	void settingsDialog();
 	void projectChanged();
 

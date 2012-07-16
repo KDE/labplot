@@ -35,7 +35,6 @@
 
 //****** GUI **************
 #include "datasources/ImportFileDialog.h"
-#include "ProjectDialog.h"
 #include "SettingsDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "GuiObserver.h"
@@ -255,10 +254,6 @@ void MainWin::initActions() {
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
 
-	m_projectInfoAction = new KAction (KIcon("help-about"),i18n("Project &Info"), this);
-	actionCollection()->addAction("project", m_projectInfoAction);
-	connect(m_projectInfoAction, SIGNAL(triggered()),SLOT(projectDialog()));
-
 	// Edit
 	//Undo/Redo-stuff
 	m_undoAction = new KAction(KIcon("edit-undo"),i18n("Undo"),this);
@@ -409,7 +404,6 @@ void MainWin::updateGUI() {
 		m_printPreviewAction->setEnabled(false);
 		m_importAction->setEnabled(false);
 		m_exportAction->setEnabled(false);
-		m_projectInfoAction->setEnabled(false);
 		m_newSpreadsheetAction->setEnabled(false);
 		m_newWorksheetAction->setEnabled(false);
 		m_closeAction->setEnabled(false);
@@ -431,7 +425,6 @@ void MainWin::updateGUI() {
 		m_printPreviewAction->setEnabled(true);
 		m_importAction->setEnabled(true);
 		m_exportAction->setEnabled(true);
-		m_projectInfoAction->setEnabled(true);
 		m_newSpreadsheetAction->setEnabled(true);
 		m_newWorksheetAction->setEnabled(true);
 		m_closeAction->setEnabled(true);
@@ -1032,11 +1025,6 @@ void MainWin::importFileDialog(){
 	
 	if ( dlg->exec() == QDialog::Accepted )
 	  dlg->importToSpreadsheet();
-}
-
-void MainWin::projectDialog(){
-	ProjectDialog* dlg = new ProjectDialog(this, m_project);
-	dlg->show();
 }
 
 /*!
