@@ -63,6 +63,8 @@ Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+	connect(this, SIGNAL( aspectRemoved(const AbstractAspect*, const AbstractAspect* , const AbstractAspect*)),
+		this, SLOT(handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)) );
 	init();
 }
 
@@ -212,8 +214,15 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 		Q_ASSERT(item != NULL);
 		d->m_scene->removeItem(item);
 	}
+}
+
+void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child){
+	Q_UNUSED(parent);
+	Q_UNUSED(before);
+	Q_UNUSED(child);
+
 	if (d->layout != Worksheet::NoLayout)
-		d->updateLayout();
+		d->updateLayout();	
 }
 
 WorksheetGraphicsScene *Worksheet::scene() const {

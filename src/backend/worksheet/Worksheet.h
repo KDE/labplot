@@ -98,8 +98,9 @@ class Worksheet: public AbstractPart, public scripted{
 		WorksheetPrivate* const d;
 
 	 private slots:
-		void handleAspectAdded(const AbstractAspect *handleAspect);
-		void handleAspectAboutToBeRemoved(const AbstractAspect *handleAspect);
+		void handleAspectAdded(const AbstractAspect*);
+		void handleAspectAboutToBeRemoved(const AbstractAspect*);
+		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 		void childSelected();
 		void childDeselected();
 
