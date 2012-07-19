@@ -63,8 +63,8 @@ void ProjectDock::setProject(Project *project) {
 	ui.lLabPlotVersion->setText(project->labPlot());
 	ui.leTitle->setText(project->name());
 	ui.leAuthor->setText(project->author());
-	ui.dtwCreated->setDateTime(project->creationTime());
-	ui.dtwModified->setDateTime(project->modificationTime());
+	ui.lCreated->setText(project->creationTime().toString());
+	ui.lModified->setText(project->modificationTime().toString());
 	ui.tbComment->setText(project->comment());
 
         //show default properties of a project
