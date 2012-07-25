@@ -261,24 +261,17 @@ AbstractAspect::~AbstractAspect()
 /**
  * \brief Save the comment to XML
  */
-void AbstractAspect::writeCommentElement(QXmlStreamWriter * writer) const
-{
+void AbstractAspect::writeCommentElement(QXmlStreamWriter * writer) const{
 	writer->writeStartElement("comment");
-	QString temp = comment();
-	temp.replace("\n", "\\n");
-	writer->writeCDATA(temp);
+	writer->writeCharacters(comment());
 	writer->writeEndElement();
 }
 
 /**
  * \brief Load comment from an XML element
  */
-bool AbstractAspect::readCommentElement(XmlStreamReader * reader)
-{
-	Q_ASSERT(reader->isStartElement() && reader->name() == "comment");
-	QString temp = reader->readElementText();
-	temp.replace("\\n", "\n");
-	setComment(temp);
+bool AbstractAspect::readCommentElement(XmlStreamReader * reader){
+	setComment(reader->readElementText());
 	return true;
 }
 

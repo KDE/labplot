@@ -61,7 +61,7 @@ class AbstractAspect : public QObject
 		enum ChildIndexFlag {
 			IncludeHidden = 0x01,
 			Recursive = 0x02,
-			Compress = 0x04,
+			Compress = 0x04
 		};
 		Q_DECLARE_FLAGS(ChildIndexFlags, ChildIndexFlag)
 
@@ -171,8 +171,8 @@ class AbstractAspect : public QObject
 		static void setGlobal(const QString &key, const QVariant &value);
 		static void setGlobalDefault(const QString &key, const QVariant &value);
 
-		virtual void save(QXmlStreamWriter *) const {};
-		virtual bool load(XmlStreamReader *) { return false; };
+		virtual void save(QXmlStreamWriter *) const {}
+		virtual bool load(XmlStreamReader *) { return false; }
 	protected:
 		bool readBasicAttributes(XmlStreamReader * reader);
 		void writeBasicAttributes(QXmlStreamWriter * writer) const;

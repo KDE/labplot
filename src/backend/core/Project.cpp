@@ -219,6 +219,7 @@ bool Project ::hasChanged() const{
  */
 void Project::save(QXmlStreamWriter * writer) const
 {
+    writer->setAutoFormatting(true);
 	writer->writeStartDocument();
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	writer->writeDTD("<!DOCTYPE SciDAVisProject>");

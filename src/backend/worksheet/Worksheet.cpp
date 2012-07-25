@@ -33,8 +33,11 @@
 #include "AbstractWorksheetElement.h"
 #include "../../commonfrontend/worksheet/WorksheetView.h"
 #include "WorksheetGraphicsScene.h"
+#include "worksheet/plots/cartesian/CartesianPlot.h"
+#include "worksheet/TextLabel.h"
 #include "../lib/commandtemplates.h"
-#include "../lib/macros.h"
+#include "lib/macros.h"
+#include "lib/XmlStreamReader.h"
 
 #include <QWidget>
 #include <QDebug>
@@ -175,17 +178,6 @@ QWidget *Worksheet::view() const {
 	return d->m_view;
 }
 
-//! Save as XML
-void Worksheet::save(QXmlStreamWriter *) const {
-	// TODO
-}
-
-//! Load from XML
-bool Worksheet::load(XmlStreamReader *) {
-	// TODO
-	return false;
-}
-
 void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 	const AbstractWorksheetElement *addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
 	if (addedElement) {
@@ -311,65 +303,65 @@ void Worksheet::update(){
 }
 
 /* =============================== getter methods for background options ================================= */
-BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundType, backgroundType, backgroundType);
-BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle);
-BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle);
-CLASS_D_READER_IMPL(Worksheet, QBrush, backgroundBrush, backgroundBrush);
-CLASS_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor);
-CLASS_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor);
-CLASS_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName);
-BASIC_D_READER_IMPL(Worksheet, qreal, backgroundOpacity, backgroundOpacity);
+BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundType, backgroundType, backgroundType)
+BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
+BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
+CLASS_D_READER_IMPL(Worksheet, QBrush, backgroundBrush, backgroundBrush)
+CLASS_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor)
+CLASS_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor)
+CLASS_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName)
+BASIC_D_READER_IMPL(Worksheet, qreal, backgroundOpacity, backgroundOpacity)
 
 /* =============================== getter methods for layout options ====================================== */
-BASIC_D_READER_IMPL(Worksheet, Worksheet::Layout, layout, layout);
-BASIC_D_READER_IMPL(Worksheet, float, layoutTopMargin, layoutTopMargin);
-BASIC_D_READER_IMPL(Worksheet, float, layoutBottomMargin, layoutBottomMargin);
-BASIC_D_READER_IMPL(Worksheet, float, layoutLeftMargin, layoutLeftMargin);
-BASIC_D_READER_IMPL(Worksheet, float, layoutRightMargin, layoutRightMargin);
-BASIC_D_READER_IMPL(Worksheet, float, layoutHorizontalSpacing, layoutHorizontalSpacing);
-BASIC_D_READER_IMPL(Worksheet, float, layoutVerticalSpacing, layoutVerticalSpacing);
-BASIC_D_READER_IMPL(Worksheet, int, layoutRowCount, layoutRowCount);
-BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount);
+BASIC_D_READER_IMPL(Worksheet, Worksheet::Layout, layout, layout)
+BASIC_D_READER_IMPL(Worksheet, float, layoutTopMargin, layoutTopMargin)
+BASIC_D_READER_IMPL(Worksheet, float, layoutBottomMargin, layoutBottomMargin)
+BASIC_D_READER_IMPL(Worksheet, float, layoutLeftMargin, layoutLeftMargin)
+BASIC_D_READER_IMPL(Worksheet, float, layoutRightMargin, layoutRightMargin)
+BASIC_D_READER_IMPL(Worksheet, float, layoutHorizontalSpacing, layoutHorizontalSpacing)
+BASIC_D_READER_IMPL(Worksheet, float, layoutVerticalSpacing, layoutVerticalSpacing)
+BASIC_D_READER_IMPL(Worksheet, int, layoutRowCount, layoutRowCount)
+BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount)
 
 
 /* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
 void Worksheet::setBackgroundType(PlotArea::BackgroundType type) {
 	if (type != d->backgroundType)
 		exec(new WorksheetSetBackgroundTypeCmd(d, type, tr("%1: background type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
 void Worksheet::setBackgroundColorStyle(PlotArea::BackgroundColorStyle style) {
 	if (style != d->backgroundColorStyle)
 		exec(new WorksheetSetBackgroundColorStyleCmd(d, style, tr("%1: background color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
 void Worksheet::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	if (style != d->backgroundImageStyle)
 		exec(new WorksheetSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFirstColor, QColor, backgroundFirstColor, update);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
 void Worksheet::setBackgroundFirstColor(const QColor &color) {
 	if (color!= d->backgroundFirstColor)
 		exec(new WorksheetSetBackgroundFirstColorCmd(d, color, tr("%1: set background first color")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundSecondColor, QColor, backgroundSecondColor, update);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
 void Worksheet::setBackgroundSecondColor(const QColor &color) {
 	if (color!= d->backgroundSecondColor)
 		exec(new WorksheetSetBackgroundSecondColorCmd(d, color, tr("%1: set background second color")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFileName, QString, backgroundFileName, update);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFileName, QString, backgroundFileName, update)
 void Worksheet::setBackgroundFileName(const QString& fileName) {
 	if (fileName!= d->backgroundFileName)
 		exec(new WorksheetSetBackgroundFileNameCmd(d, fileName, tr("%1: set background image")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundOpacity, qreal, backgroundOpacity, update);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundOpacity, qreal, backgroundOpacity, update)
 void Worksheet::setBackgroundOpacity(qreal opacity) {
 	if (opacity != d->backgroundOpacity)
 		exec(new WorksheetSetBackgroundOpacityCmd(d, opacity, tr("%1: set opacity")));
@@ -384,55 +376,55 @@ void Worksheet::setLayout(Worksheet::Layout layout){
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout)
 void Worksheet::setLayoutTopMargin(float margin){
 	if (margin != d->layoutTopMargin)
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, tr("%1: set layout top margin")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutBottomMargin, float, layoutBottomMargin, updateLayout);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutBottomMargin, float, layoutBottomMargin, updateLayout)
 void Worksheet::setLayoutBottomMargin(float margin){
 	if (margin != d->layoutBottomMargin)
 		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, tr("%1: set layout bottom margin")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargin, updateLayout);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargin, updateLayout)
 void Worksheet::setLayoutLeftMargin(float margin){
 	if (margin != d->layoutLeftMargin)
 		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, tr("%1: set layout left margin")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutRightMargin, float, layoutRightMargin, updateLayout);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutRightMargin, float, layoutRightMargin, updateLayout)
 void Worksheet::setLayoutRightMargin(float margin){
 	if (margin != d->layoutRightMargin)
 		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, tr("%1: set layout right margin")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, updateLayout);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, updateLayout)
 void Worksheet::setLayoutVerticalSpacing(float spacing){
 	if (spacing != d->layoutVerticalSpacing)
 		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, tr("%1: set layout vertical spacing")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, updateLayout);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, updateLayout)
 void Worksheet::setLayoutHorizontalSpacing(float spacing){
 	if (spacing != d->layoutHorizontalSpacing)
 		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, tr("%1: set layout horizontal spacing")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout)
 void Worksheet::setLayoutRowCount(int count){
 	if (count != d->layoutRowCount)
 		exec(new WorksheetSetLayoutRowCountCmd(d, count, tr("%1: set layout row count")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout);
+STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout)
 void Worksheet::setLayoutColumnCount(int count){
 	if (count != d->layoutColumnCount)
 		exec(new WorksheetSetLayoutColumnCountCmd(d, count, tr("%1: set layout column count")));
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect);
+STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect)
 void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 	if (qFuzzyCompare(rect.width() + 1, 1) || qFuzzyCompare(rect.height() + 1, 1))
 		return;
@@ -455,10 +447,9 @@ void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 		endMacro();
 	}
 }
-
-//################################################################
-//################### Private implementation ##########################
-//################################################################
+//##############################################################################
+//######################  Private implementation ###############################
+//##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner), m_view(NULL){
 	m_scene = new WorksheetGraphicsScene();
 	m_scene->setSceneRect(0, 0, 1500, 1500);
@@ -533,4 +524,269 @@ void WorksheetPrivate::updateLayout(){
 		}
 	}
 	q->update();
+}
+
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+
+//! Save as XML
+void Worksheet::save(QXmlStreamWriter* writer) const{
+    writer->writeStartElement( "worksheet" );
+    writeBasicAttributes(writer);
+    writeCommentElement(writer);
+
+    //geometry
+    writer->writeStartElement( "geometry" );
+    QRectF rect = d->m_scene->sceneRect();
+    writer->writeAttribute( "x", QString::number(rect.x()) );
+    writer->writeAttribute( "y", QString::number(rect.y()) );
+    writer->writeAttribute( "width", QString::number(rect.width()) );
+    writer->writeAttribute( "height", QString::number(rect.height()) );
+    writer->writeEndElement();
+
+    //TODO window state and position
+
+    //layout
+    writer->writeStartElement( "layout" );
+    writer->writeAttribute( "layout", QString::number(d->layout) );
+    writer->writeAttribute( "topMargin", QString::number(d->layoutTopMargin) );
+    writer->writeAttribute( "bottomMargin", QString::number(d->layoutBottomMargin) );
+    writer->writeAttribute( "leftMargin", QString::number(d->layoutLeftMargin) );
+    writer->writeAttribute( "rightMargin", QString::number(d->layoutRightMargin) );
+    writer->writeAttribute( "verticalSpacing", QString::number(d->layoutVerticalSpacing) );
+    writer->writeAttribute( "horizontalSpacing", QString::number(d->layoutHorizontalSpacing) );
+    writer->writeAttribute( "columnCount", QString::number(d->layoutColumnCount) );
+    writer->writeAttribute( "rowCount", QString::number(d->layoutRowCount) );
+    writer->writeEndElement();
+
+    //background properties
+    writer->writeStartElement( "background" );
+    writer->writeAttribute( "type", QString::number(d->backgroundType) );
+    writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
+    writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
+    writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrush.style()) );
+    writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
+    writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
+    writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
+    writer->writeAttribute( "secondColor_r", QString::number(d->backgroundSecondColor.red()) );
+    writer->writeAttribute( "secondColor_g", QString::number(d->backgroundSecondColor.green()) );
+    writer->writeAttribute( "secondColor_b", QString::number(d->backgroundSecondColor.blue()) );
+    writer->writeAttribute( "fileName", d->backgroundFileName );
+    writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
+    writer->writeEndElement();
+
+    //serialize all children
+    QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+    foreach(AbstractWorksheetElement *elem, childElements)
+        elem->save(writer);
+
+    writer->writeEndElement(); // close "worksheet" section
+}
+
+//! Load from XML
+bool Worksheet::load(XmlStreamReader* reader){
+    if(!reader->isStartElement() || reader->name() != "worksheet"){
+        reader->raiseError(tr("no worksheet element found"));
+        return false;
+    }
+
+    if (!readBasicAttributes(reader))
+        return false;
+
+//    QString elementWarning = tr("Element '%1' not found, default values are used");
+    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+    QRectF rect;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "worksheet")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+        if (reader->name() == "comment"){
+            if (!readCommentElement(reader)) return false;
+        }else if (reader->name() == "geometry"){
+            attribs = reader->attributes();
+
+            str = attribs.value("x").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'x'"));
+            else
+                rect.setX(str.toDouble());
+
+            str = attribs.value("y").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'y'"));
+            else
+                rect.setY(str.toDouble());
+
+            str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                rect.setWidth(str.toDouble());
+
+            str = attribs.value("height").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'height'"));
+            else
+                rect.setHeight(str.toDouble());
+        }else if (reader->name() == "layout"){
+            attribs = reader->attributes();
+
+            str = attribs.value("layout").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("layout"));
+            else
+                d->layout = Worksheet::Layout(str.toInt());
+
+            str = attribs.value("topMargin").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("topMargin"));
+            else
+                d->layoutTopMargin = str.toDouble();
+
+            str = attribs.value("bottomMargin").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("bottomMargin"));
+            else
+                d->layoutBottomMargin = str.toDouble();
+
+            str = attribs.value("leftMargin").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("leftMargin"));
+            else
+                d->layoutLeftMargin = str.toDouble();
+
+            str = attribs.value("rightMargin").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("rightMargin"));
+            else
+                d->layoutRightMargin = str.toDouble();
+
+            str = attribs.value("verticalSpacing").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("verticalSpacing"));
+            else
+                d->layoutVerticalSpacing = str.toDouble();
+
+            str = attribs.value("horizontalSpacing").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("horizontalSpacing"));
+            else
+                d->layoutHorizontalSpacing = str.toDouble();
+
+            str = attribs.value("columnCount").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("columnCount"));
+            else
+                d->layoutColumnCount = str.toInt();
+
+            str = attribs.value("rowCount").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("rowCount"));
+            else
+                d->layoutRowCount = str.toInt();
+        }else if (reader->name() == "background"){
+            attribs = reader->attributes();
+
+            str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("type"));
+            else
+                d->backgroundType = PlotArea::BackgroundType(str.toInt());
+
+            str = attribs.value("colorStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("colorStyle"));
+            else
+                d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
+
+            str = attribs.value("imageStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("imageStyle"));
+            else
+                d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
+
+            str = attribs.value("brushStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("brushStyle"));
+            else
+                d->backgroundBrush.setStyle(Qt::BrushStyle(str.toInt()));
+
+            str = attribs.value("firstColor_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+            else
+                d->backgroundFirstColor.setRed(str.toInt());
+
+            str = attribs.value("firstColor_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+            else
+                d->backgroundFirstColor.setGreen(str.toInt());
+
+            str = attribs.value("firstColor_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+            else
+                d->backgroundFirstColor.setBlue(str.toInt());
+
+            str = attribs.value("secondColor_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+            else
+                d->backgroundSecondColor.setRed(str.toInt());
+
+            str = attribs.value("secondColor_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+            else
+                d->backgroundSecondColor.setGreen(str.toInt());
+
+            str = attribs.value("secondColor_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+            else
+                d->backgroundSecondColor.setBlue(str.toInt());
+
+            str = attribs.value("fileName").toString();
+            d->backgroundFileName = str;
+
+            str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("opacity"));
+            else
+                d->backgroundOpacity = str.toDouble();
+        }else if(reader->name() == "cartesianPlot"){
+            CartesianPlot* plot = new CartesianPlot("");
+            if (!plot->load(reader)){
+                delete plot;
+                return false;
+            }else{
+                addChild(plot);
+            }
+        }else if(reader->name() == "textLabel"){
+            TextLabel* label = new TextLabel("");
+            if (!label->load(reader)){
+                delete label;
+                return false;
+            }else{
+                addChild(label);
+            }
+        }else{ // unknown element
+            reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+            if (!reader->skipToEndElement()) return false;
+        }
+    }
+
+    d->m_scene->setSceneRect(rect);
+
+    return true;
 }

@@ -28,9 +28,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "core/Project.h"
-#include "core/Folder.h"
+#include "Folder.h"
 #include "lib/XmlStreamReader.h"
 #include "core/column/Column.h"
+#include "worksheet/Worksheet.h"
 
 #include <QIcon>
 #include <QApplication>
@@ -163,7 +164,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 	QString element_name = reader->name().toString();
 	if (element_name == "folder")
 	{
-		Folder * folder = new Folder(tr("Folder %1").arg(1));
+		Folder * folder = new Folder("");
 		if (!folder->load(reader))
 		{
 			delete folder;
@@ -174,7 +175,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 	}
 	else if (element_name == "column")
 	{
-		Column * column = new Column(tr("Column %1").arg(1), SciDAVis::Text);
+		Column * column = new Column("", SciDAVis::Text);
 		if (!column->load(reader))
 		{
 			delete column;
@@ -214,15 +215,23 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 #else
 	else if (element_name == "spreadsheet")
 	{
-		Spreadsheet * spreadsheet = new Spreadsheet(0, 0, 0, tr("Spreadsheet %1").arg(1));
-		if (!spreadsheet->load(reader))
-		{
+		Spreadsheet * spreadsheet = new Spreadsheet(0, 0, 0, "");
+		if (!spreadsheet->load(reader)){
 			delete spreadsheet;
 			return false;
 		}
 		addChild(spreadsheet);
 		loaded = true;
+	}else if (element_name == "worksheet"){
+		Worksheet * worksheet = new Worksheet(0, "");
+		if (!worksheet->load(reader)){
+			delete worksheet;
+			return false;
+		}
+		addChild(worksheet);
+		loaded = true;
 	}
+
 	if (!loaded)
 	{
 		reader->raiseWarning(i18n("unknown element '%1' found").arg(element_name));
