@@ -392,9 +392,81 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
   painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
   painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
 
-  // canvas
-  //TODO add the code PlotArea::paint() that handels the different background options
-  painter->fillRect(scene_rect.intersected(rect), m_worksheet->backgroundFirstColor());
+	// canvas
+	painter->setOpacity(m_worksheet->backgroundOpacity());
+	if (m_worksheet->backgroundType() == PlotArea::Color){
+		switch (m_worksheet->backgroundColorStyle()){
+			case PlotArea::SingleColor:{
+				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
+				break;
+			}
+			case PlotArea::HorizontalLinearGradient:{
+				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
+				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::VerticalLinearGradient:{
+				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
+				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::TopLeftDiagonalLinearGradient:{
+				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
+				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::BottomLeftDiagonalLinearGradient:{
+				QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
+				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::RadialGradient:{
+				QRadialGradient radialGrad(scene_rect.center(), scene_rect.width()/2);
+				radialGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(radialGrad));
+				break;
+			}			
+			default:
+				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
+		}
+		painter->drawRect(scene_rect);
+	}else if (m_worksheet->backgroundType() == PlotArea::Image){
+		QPixmap pix(m_worksheet->backgroundFileName());
+		switch (m_worksheet->backgroundImageStyle()){
+			case PlotArea::ScaledCropped:
+				pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+				painter->drawPixmap(scene_rect.topLeft(),pix);
+				break;
+			case PlotArea::Scaled:
+				pix = pix.scaled(scene_rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+				painter->drawPixmap(scene_rect.topLeft(),pix);
+				break;
+			case PlotArea::ScaledAspectRatio:
+				pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				painter->drawPixmap(scene_rect.topLeft(),pix);
+				break;
+			case PlotArea::Centered:
+				painter->drawPixmap(QPointF(scene_rect.center().x()-pix.size().width()/2,scene_rect.center().y()-pix.size().height()/2),pix);
+				break;
+			case PlotArea::Tiled:
+				painter->drawTiledPixmap(scene_rect,pix);
+				break;
+			case PlotArea::CenterTiled:
+				painter->drawTiledPixmap(scene_rect,pix,QPoint(scene_rect.size().width()/2,scene_rect.size().height()/2));
+				break;
+			default:
+				painter->drawPixmap(scene_rect.topLeft(),pix);
+		}
+	}
   
   //grid
 	if (m_gridSettings.style == WorksheetView::NoGrid){
@@ -406,10 +478,6 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 		painter->setPen(c);
 
 		qreal x, y;
-// 		qreal left = rect.left();
-// 		qreal right = rect.right();
-// 		qreal top = rect.top();
-// 		qreal bottom = rect.bottom();
 		qreal left = scene_rect.left();
 		qreal right = scene_rect.right();
 		qreal top = scene_rect.top();
