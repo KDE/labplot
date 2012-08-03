@@ -732,6 +732,7 @@ bool Spreadsheet::load(XmlStreamReader * reader)
 					Column * column = new Column(tr("Column %1").arg(1), SciDAVis::Text);
 					if (!column->load(reader))
 					{
+                        delete column;
 						setColumnCount(0);
 						return false;
 					}
