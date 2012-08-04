@@ -31,6 +31,8 @@
 #define CARTESIANPLOT_H
 
 #include "../AbstractPlot.h"
+#include "lib/macros.h"
+
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 class KAction;
 #endif
