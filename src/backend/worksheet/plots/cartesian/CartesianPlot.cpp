@@ -35,7 +35,7 @@
 #include "../PlotArea.h"
 #include "../../Worksheet.h"
 #include "../../TextLabel.h"
-#include "../AbstractPlotPrivate.h"
+// #include "../AbstractPlotPrivate.h"
 #include "lib/commandtemplates.h"
 #include <QDebug>
 #include <QMenu>
