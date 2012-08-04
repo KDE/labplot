@@ -714,10 +714,19 @@ void WorksheetView::selectionChanged(){
 	if (m_suppressSelectionChangedEvent)
 		return;
 	
-	//select 
+	//select
 	QList<QGraphicsItem *> items = scene()->selectedItems();
-	foreach ( const QGraphicsItem* item , items )
-		m_worksheet->setItemSelectedInView( item, true );
+	if (items.size() == 0){
+		//no items selected -> select the worksheet again.
+		m_worksheet->setSelectedInView(true);
+	}else{
+		foreach ( const QGraphicsItem* item , items )
+			m_worksheet->setItemSelectedInView( item, true );
+		
+		//items selected -> deselect the worksheet in the project explorer
+		//prevents unwanted multiple selection with worksheet (if it was selected before)
+		m_worksheet->setSelectedInView(false);
+	}
 	
 	//check, whether the previously selected items were deselected now.
 	foreach ( QGraphicsItem* item , m_selectedItems ){

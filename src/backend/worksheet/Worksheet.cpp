@@ -270,14 +270,10 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 		return;
 	}
 
-	if (b){
+	if (b)
 		emit childAspectSelectedInView(aspect);
-		//deselect the worksheet in the project explorer, if a child was selected.
-		//prevents unwanted multiple selection with worksheet (if it was selected before).
-		emit childAspectDeselectedInView(this);
-	}else{
+	else
 		emit childAspectDeselectedInView(aspect);
-	}
 }
 
 /*!
@@ -296,6 +292,19 @@ AbstractWorksheetElement* Worksheet::aspectFromGraphicsItem(const AbstractWorksh
 		}
 		return 0;
 	}
+}
+
+/*!
+	Selects or deselects the worksheet in the project explorer.
+	This function is called in \c WorksheetView.
+	The worksheet gets deselected if there are selected items in the view,
+	and selected if there are no selected items in the view.
+*/
+void Worksheet::setSelectedInView(const bool b){
+	if (b)
+		emit childAspectSelectedInView(this);
+	else
+		emit childAspectDeselectedInView(this);
 }
 
 void Worksheet::update(){
