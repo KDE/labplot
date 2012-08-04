@@ -77,7 +77,9 @@ private slots:
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double value);
 	void borderOpacityChanged(int);
-
+	void horizontalPaddingChanged(double);
+	void verticalPaddingChanged(double);
+	
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
 };

@@ -35,6 +35,8 @@
 #include "../PlotArea.h"
 #include "../../Worksheet.h"
 #include "../../TextLabel.h"
+#include "../AbstractPlotPrivate.h"
+#include "lib/commandtemplates.h"
 #include <QDebug>
 #include <QMenu>
  
@@ -57,9 +59,17 @@
  */
 
 class CartesianPlotPrivate:public AbstractPlotPrivate{
-public:
-	void setRect(const QRectF& r);
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    public:
+		QString name() const;
+		void setRect(const QRectF& r);
+		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		void retransform();
+		
+		float horizontalPadding; //horiz. offset between the plot area and the area defining the coodinate system, in scene units
+		float verticalPadding; //vert. offset between the plot area and the area defining the coodinate system, in scene units
+
+    private:
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 };
 
 CartesianPlot::CartesianPlot(const QString &name): AbstractPlot(name) {
@@ -83,6 +93,7 @@ void CartesianPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
 
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
 	m_plotArea = new PlotArea(name() + " plot area");
@@ -94,6 +105,10 @@ void CartesianPlot::init(){
 	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
 	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+
+	//offset between the plot area and the area defining the coodinate system, in scene units.
+	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 
 	//Axes
 	Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
@@ -186,6 +201,7 @@ QMenu *CartesianPlot::createContextMenu(){
 
 	return menu;
 }
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -207,11 +223,37 @@ void CartesianPlot::setRect(const QRectF& r){
 	d->setRect(r);
 }
 
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, horizontalPadding, horizontalPadding)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, verticalPadding, verticalPadding)
+
+/* ============================ setter methods and undo commands ================= */
+STD_SETTER_CMD_IMPL_F(CartesianPlot, SetHorizontalPadding, float, horizontalPadding, retransform)
+void CartesianPlot::setHorizontalPadding(float padding) {
+	Q_D(CartesianPlot);
+	if (padding != d->horizontalPadding)
+		exec(new CartesianPlotSetHorizontalPaddingCmd(d, padding, tr("%1: set horizontal padding")));
+}
+
+STD_SETTER_CMD_IMPL_F(CartesianPlot, SetVerticalPadding, float, verticalPadding, retransform)
+void CartesianPlot::setVerticalPadding(float padding) {
+	Q_D(CartesianPlot);
+	if (padding != d->verticalPadding)
+		exec(new CartesianPlotSetVerticalPaddingCmd(d, padding, tr("%1: set vertical padding")));
+}
+
 //################################################################
 //################### Slots ##########################
 //################################################################
 void CartesianPlot::addCurve(){
 	this->addChild(new XYCurve("xy-curve"));
+}
+
+
+//#####################################################################
+//################### Private implementation ##########################
+//#####################################################################
+QString CartesianPlotPrivate::name() const{
+	return q->name();
 }
 
 /*!
@@ -225,12 +267,10 @@ void CartesianPlotPrivate::setRect(const QRectF& r){
 	prepareGeometryChange();
 	setPos( r.x()+r.width()/2, r.y()+r.height()/2);
 	rect = r;
-	
-	//offset between the plot area and the area defining the coodinate system, in scene units.
-	//TODO: make this variables private, add getter/setter and provide a comfortable way to change this setting in the UI (don't allow negative values).
-	float vertOffset = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
-	float horizOffset = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
-	
+	retransform();
+}
+
+void CartesianPlotPrivate::retransform(){
 	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale *> scales;
@@ -238,11 +278,15 @@ void CartesianPlotPrivate::setRect(const QRectF& r){
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
 	QRectF itemRect= mapRectFromScene( rect );
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																															itemRect.x()+horizOffset, itemRect.x()+itemRect.width()-horizOffset, 0, 1);
+																  itemRect.x()+horizontalPadding,
+																  itemRect.x()+itemRect.width()-horizontalPadding,
+																  0, 1);
 	cSystem ->setXScales(scales);
 	scales.clear();
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																															itemRect.y()+itemRect.height()-vertOffset, itemRect.y()+vertOffset, 0, 1);
+																  itemRect.y()+itemRect.height()-verticalPadding,
+																  itemRect.y()+verticalPadding, 
+																  0, 1);
 	cSystem ->setYScales(scales);
 	
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
@@ -273,3 +317,7 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 	return QGraphicsItem::itemChange(change, value);
  }
  
+void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
+    qDebug()<<"in event";
+    q->createContextMenu()->exec(event->screenPos());
+}

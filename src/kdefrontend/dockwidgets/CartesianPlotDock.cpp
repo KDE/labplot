@@ -109,7 +109,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect(ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
-// 	connect( ui.kleBackgroundFileName, SIGNAL(textChanged (const QString&)), SLOT(fileNameChanged(const QString&)) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
@@ -120,6 +119,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
+	//Padding
+	connect( ui.sbPaddingHorizontal, SIGNAL(valueChanged(double)), this, SLOT(horizontalPaddingChanged(double)) );
+	connect( ui.sbPaddingVertical, SIGNAL(valueChanged(double)), this, SLOT(verticalPaddingChanged(double)) );
+	
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
@@ -470,6 +473,22 @@ void CartesianPlotDock::borderOpacityChanged(int value){
   }
 }
 
+void CartesianPlotDock::horizontalPaddingChanged(double value){
+  if (m_initializing)
+	return;
+
+  foreach(CartesianPlot* plot, m_plotList)
+	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+}
+
+void CartesianPlotDock::verticalPaddingChanged(double value){
+  if (m_initializing)
+	return;
+
+  foreach(CartesianPlot* plot, m_plotList)
+	plot->setVerticalPadding(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+}
+
 void CartesianPlotDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "CartesianPlot" );
 	CartesianPlot* plot=m_plotList.first();
@@ -492,6 +511,8 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", plot->plotArea()->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", plot->plotArea()->backgroundSecondColor()) );
 	ui.sbBackgroundOpacity->setValue( group.readEntry("BackgroundOpacity", plot->plotArea()->backgroundOpacity())*100 );
+	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", plot->horizontalPadding()), Worksheet::Centimeter));
+	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", plot->verticalPadding()), Worksheet::Centimeter));
 
 	//Border-tab
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", plot->plotArea()->borderPen().color()) );
@@ -522,6 +543,9 @@ void CartesianPlotDock::saveConfig(KConfig& config){
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
+	group.writeEntry("HorizontalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingHorizontal->value(), Worksheet::Centimeter));
+	group.writeEntry("VerticalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingVertical->value(), Worksheet::Centimeter));
+
 	//Border
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());

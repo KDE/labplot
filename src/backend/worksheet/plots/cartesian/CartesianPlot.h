@@ -46,6 +46,12 @@ class CartesianPlot:public AbstractPlot{
 		QIcon icon() const;
 		QMenu* createContextMenu();
 		void setRect(const QRectF&);
+		
+		BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
+		BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
+
+		typedef CartesianPlot BaseClass;
+		typedef CartesianPlotPrivate Private;
 
 	private:
 		void init();
@@ -65,7 +71,7 @@ class CartesianPlot:public AbstractPlot{
 		QMenu* addNewMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
-	
+
 	private slots:
 		void addCurve();
 	
