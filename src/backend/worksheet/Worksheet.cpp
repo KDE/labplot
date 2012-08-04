@@ -373,6 +373,7 @@ void Worksheet::setLayout(Worksheet::Layout layout){
 	if (layout != d->layout){
 		d->layout = layout;
 		d->updateLayout();
+		emit layoutChanged(layout);
 	}
 }
 

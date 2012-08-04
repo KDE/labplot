@@ -108,6 +108,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void itemSelected(QGraphicsItem*);
 		void itemDeselected(QGraphicsItem*);
 		void requestUpdate();
+		void layoutChanged(Worksheet::Layout);
 };
 
 #endif

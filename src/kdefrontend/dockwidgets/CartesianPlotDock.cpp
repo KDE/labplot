@@ -183,6 +183,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 		ui.sbLeft->setEnabled(b);
 		ui.sbWidth->setEnabled(b);
 		ui.sbHeight->setEnabled(b);
+		connect(w, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)));
 	}
 
 	m_initializing = false;
@@ -256,6 +257,31 @@ void CartesianPlotDock::geometryChanged(){
 	
 	QRectF rect(x,y,w,h);
 	m_plotList.first()->setRect(rect);
+}
+
+/*!
+	Called when the layout in the worksheet gets changed.
+	Enables/disables the geometry widgets if the layout was deactivated/activated.
+	Shows the new geometry values of the first plot if the layout was activated.
+ */
+void CartesianPlotDock::layoutChanged(Worksheet::Layout layout){
+	bool b = (layout == Worksheet::NoLayout);
+	ui.sbTop->setEnabled(b);
+	ui.sbLeft->setEnabled(b);
+	ui.sbWidth->setEnabled(b);
+	ui.sbHeight->setEnabled(b);
+	if (!b){
+		CartesianPlot* plot = m_plotList.first();
+		if (!plot)
+			return;
+
+		m_initializing = true;
+		ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(plot->rect().x(), Worksheet::Centimeter));
+		ui.sbTop->setValue(Worksheet::convertFromSceneUnits(plot->rect().y(), Worksheet::Centimeter));
+		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Centimeter));
+		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Centimeter));		
+		m_initializing = false;
+	}
 }
 
 // "Coordinate system"-tab

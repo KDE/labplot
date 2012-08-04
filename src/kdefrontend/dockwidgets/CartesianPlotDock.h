@@ -32,6 +32,7 @@
 
 #include <QList>
 #include "ui_cartesianplotdock.h"
+#include "backend/worksheet/Worksheet.h"
 
 class CartesianPlot;
 class LabelWidget;
@@ -59,6 +60,7 @@ private slots:
 	void commentChanged();
 	void visibilityChanged(int);
 	void geometryChanged();
+	void layoutChanged(Worksheet::Layout);
 
 	//"Coordinate system"-tab
 	void toggleXBreak(int);
