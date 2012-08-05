@@ -78,9 +78,9 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color){
  	pa.setPen( pen );
 	
 	QStringList list=QStringList()<<i18n("none")<<i18n("uniform")<<i18n("extremely dense")<<i18n("very dense")
-														<<i18n("somewhat dense")<<i18n("half dense")<<i18n("somewhat sparce")
-														 <<i18n("very sparce")<<i18n("extremely sparce")<<i18n("horiz. lines")
-														 <<i18n("vert. lines")<<i18n("crossing lines")<<i18n("backward diag. lines")
+		<<i18n("somewhat dense")<<i18n("half dense")<<i18n("somewhat sparse")
+		<<i18n("very sparse")<<i18n("extremely sparse")<<i18n("horiz. lines")
+		<<i18n("vert. lines")<<i18n("crossing lines")<<i18n("backward diag. lines")
 														 <<i18n("forward diag. lines")<<i18n("crossing diag. lines");
 	for (int i=0;i<15;i++) {
 		pm.fill(Qt::transparent);

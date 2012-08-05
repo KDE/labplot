@@ -83,6 +83,7 @@ void Worksheet::init() {
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
 	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
 	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
+	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
@@ -316,7 +317,7 @@ void Worksheet::update(){
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundType, backgroundType, backgroundType)
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
-CLASS_D_READER_IMPL(Worksheet, QBrush, backgroundBrush, backgroundBrush)
+BASIC_D_READER_IMPL(Worksheet, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
 CLASS_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor)
 CLASS_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor)
 CLASS_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName)
@@ -351,6 +352,12 @@ STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundImageStyle, PlotArea::BackgroundIm
 void Worksheet::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	if (style != d->backgroundImageStyle)
 		exec(new WorksheetSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
+void Worksheet::setBackgroundBrushStyle(Qt::BrushStyle style) {
+	if (style != d->backgroundBrushStyle)
+		exec(new WorksheetSetBackgroundBrushStyleCmd(d, style, tr("%1: background brush style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
@@ -577,7 +584,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "type", QString::number(d->backgroundType) );
     writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
     writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
-    writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrush.style()) );
+    writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
     writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
     writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
     writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
@@ -729,7 +736,7 @@ bool Worksheet::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("brushStyle"));
             else
-                d->backgroundBrush.setStyle(Qt::BrushStyle(str.toInt()));
+                d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
 
             str = attribs.value("firstColor_r").toString();
             if(str.isEmpty())

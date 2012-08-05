@@ -52,7 +52,7 @@ class WorksheetPrivate{
 		PlotArea::BackgroundType backgroundType;
 		PlotArea::BackgroundColorStyle backgroundColorStyle;
 		PlotArea::BackgroundImageStyle backgroundImageStyle;
-		QBrush backgroundBrush;
+		Qt::BrushStyle backgroundBrushStyle;
 		QColor backgroundFirstColor;
 		QColor backgroundSecondColor;
 		QString backgroundFileName;

@@ -29,7 +29,7 @@
 
 #include "worksheet/WorksheetModel.h"
 #include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetGraphicsScene.h"
+//#include "worksheet/WorksheetGraphicsScene.h"
 
 /**
  * \class WorksheetModel

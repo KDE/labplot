@@ -32,6 +32,7 @@
 #include "worksheet/Worksheet.h"
 #include "worksheet/plots/PlotArea.h"
 #include "../TemplateHandler.h"
+#include "../GuiTools.h"
 #include <QTimer>
 #include <QPrinter>
 #include <QFileDialog>
@@ -115,6 +116,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
 	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
 	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
+	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
 	connect(ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
@@ -274,6 +276,7 @@ void WorksheetDock::retranslateUi(){
 	ui.cbBackgroundImageStyle->addItem(i18n("centered"));
 	ui.cbBackgroundImageStyle->addItem(i18n("tiled"));
 	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
+	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
 	//layout
 	ui.sbLayoutTopMargin->setSuffix(i18n("cm"));
@@ -396,9 +399,13 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		if (style == PlotArea::SingleColor){
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
+			ui.lBackgroundBrushStyle->show();
+			ui.cbBackgroundBrushStyle->show();
 		}else{
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
+			ui.lBackgroundBrushStyle->hide();
+			ui.cbBackgroundBrushStyle->hide();
 		}
 	}else if(type == PlotArea::Image){
 		ui.lBackgroundFirstColor->hide();
@@ -410,6 +417,8 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->show();
 		ui.cbBackgroundImageStyle->show();
+		ui.lBackgroundBrushStyle->hide();
+		ui.cbBackgroundBrushStyle->hide();
 		ui.lBackgroundFileName->show();
 		ui.kleBackgroundFileName->show();
 		ui.bOpen->show();
@@ -429,9 +438,13 @@ void WorksheetDock::backgroundColorStyleChanged(int index){
 	if (style == PlotArea::SingleColor){
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
+		ui.lBackgroundBrushStyle->show();
+		ui.cbBackgroundBrushStyle->show();
 	}else{
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
+		ui.lBackgroundBrushStyle->hide();
+		ui.cbBackgroundBrushStyle->hide();
 	}
 
 	if (m_initializing)
@@ -449,6 +462,16 @@ void WorksheetDock::backgroundImageStyleChanged(int index){
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setBackgroundImageStyle(style);
+	}  
+}
+
+void WorksheetDock::backgroundBrushStyleChanged(int index){
+	if (m_initializing)
+		return;
+
+	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	foreach(Worksheet* worksheet, m_worksheetList){
+		worksheet->setBackgroundBrushStyle(style);
 	}  
 }
 
@@ -585,6 +608,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	// Background-tab
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) worksheet->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) worksheet->backgroundImageStyle()) );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) worksheet->backgroundBrushStyle()) );
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", worksheet->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", worksheet->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", worksheet->backgroundSecondColor()) );
@@ -623,6 +647,7 @@ void WorksheetDock::saveConfig(KConfig& config){
 	group.writeEntry("BackgroundType",ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
+	group.writeEntry("BackgroundBrushStyle", ui.cbBackgroundBrushStyle->currentIndex());
 	group.writeEntry("BackgroundFileName", ui.kleBackgroundFileName->text());
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());

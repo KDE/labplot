@@ -328,9 +328,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
 		ui.cbBackgroundImageStyle->hide();
-		ui.lBackgroundBrushStyle->show();
-		ui.cbBackgroundBrushStyle->show();
-		
+
 		ui.lBackgroundFileName->hide();
 		ui.kleBackgroundFileName->hide();
 		ui.bOpen->hide();

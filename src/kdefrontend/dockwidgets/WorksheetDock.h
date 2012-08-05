@@ -63,6 +63,7 @@ private slots:
   	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
 	void backgroundImageStyleChanged(int);
+	void backgroundBrushStyleChanged(int);
 	void backgroundFirstColorChanged(const QColor&);
 	void backgroundSecondColorChanged(const QColor&);
 	void selectFile();
