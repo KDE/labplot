@@ -65,6 +65,7 @@ PlotAreaDock::PlotAreaDock(QWidget *parent): QWidget(parent){
 // 	connect( ui.kleBackgroundFileName, SIGNAL(textChanged (const QString&)), SLOT(fileNameChanged(const QString&)) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
+	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
 	
 	//Border 
 	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
@@ -115,6 +116,8 @@ void PlotAreaDock::setPlotAreas(QList<PlotArea*> list){
 	ui.kleBackgroundFileName->setText( area->backgroundFileName() );
 	ui.kcbBackgroundFirstColor->setColor( area->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( area->backgroundSecondColor() );
+	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, area->backgroundBrushStyle());
+	ui.cbBackgroundBrushStyle->setCurrentIndex( area->backgroundBrushStyle() );
 
 	//Border-tab
 	ui.kcbBorderColor->setColor( area->borderPen().color() );

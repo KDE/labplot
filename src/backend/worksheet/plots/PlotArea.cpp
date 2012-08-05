@@ -72,10 +72,12 @@ void PlotArea::init(){
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KConfig config;
 	KConfigGroup group = config.group( "PlotArea" );
+
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int)PlotArea::Color);
 	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
 	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
+	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
@@ -136,7 +138,7 @@ CLASS_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect);
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundType, backgroundType, backgroundType);
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle);
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle);
-CLASS_SHARED_D_READER_IMPL(PlotArea, QBrush, backgroundBrush, backgroundBrush);
+CLASS_SHARED_D_READER_IMPL(PlotArea, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle);
 CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor);
 CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor);
 CLASS_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName);
@@ -184,6 +186,13 @@ void PlotArea::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundImageStyle)
 		exec(new PlotAreaSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update);
+void PlotArea::setBackgroundBrushStyle(Qt::BrushStyle style) {
+	Q_D(PlotArea);
+	if (style != d->backgroundBrushStyle)
+		exec(new PlotAreaSetBackgroundBrushStyleCmd(d, style, tr("%1: background brush style changed")));
 }
 
 STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update);
@@ -286,7 +295,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	if (backgroundType == PlotArea::Color){
 		switch (backgroundColorStyle){
 			case PlotArea::SingleColor:{
-				painter->setBrush(QBrush(backgroundFirstColor));
+				painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 				break;
 			}
 			case PlotArea::HorizontalLinearGradient:{
@@ -325,7 +334,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				break;
 			}			
 			default:
-				painter->setBrush(QBrush(backgroundFirstColor));
+				painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 		}
 	}else if (backgroundType == PlotArea::Image){
 		QPixmap pix(backgroundFileName);

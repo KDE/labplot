@@ -106,6 +106,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
 	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
 	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
+	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
 	connect(ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
@@ -218,6 +219,7 @@ void CartesianPlotDock::retranslateUi(){
 	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
 
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
+	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 	m_initializing = false;
 }
 
@@ -326,6 +328,8 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
 		ui.cbBackgroundImageStyle->hide();
+		ui.lBackgroundBrushStyle->show();
+		ui.cbBackgroundBrushStyle->show();
 		
 		ui.lBackgroundFileName->hide();
 		ui.kleBackgroundFileName->hide();
@@ -339,15 +343,21 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 		if (style == PlotArea::SingleColor){
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
+			ui.lBackgroundBrushStyle->show();
+			ui.cbBackgroundBrushStyle->show();
 		}else{
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
+			ui.lBackgroundBrushStyle->hide();
+			ui.cbBackgroundBrushStyle->hide();
 		}
 	}else if(type == PlotArea::Image){
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->show();
 		ui.cbBackgroundImageStyle->show();
+		ui.lBackgroundBrushStyle->hide();
+		ui.cbBackgroundBrushStyle->hide();
 		ui.lBackgroundFileName->show();
 		ui.kleBackgroundFileName->show();
 		ui.bOpen->show();
@@ -372,9 +382,13 @@ void CartesianPlotDock::backgroundColorStyleChanged(int index){
 	if (style == PlotArea::SingleColor){
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
+		ui.lBackgroundBrushStyle->show();
+		ui.cbBackgroundBrushStyle->show();
 	}else{
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
+		ui.lBackgroundBrushStyle->hide();
+		ui.cbBackgroundBrushStyle->hide();
 	}
 
 	if (m_initializing)
@@ -392,6 +406,16 @@ void CartesianPlotDock::backgroundImageStyleChanged(int index){
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
 	foreach(CartesianPlot* plot, m_plotList){
 		plot->plotArea()->setBackgroundImageStyle(style);
+  }  
+}
+
+void CartesianPlotDock::backgroundBrushStyleChanged(int index){
+	if (m_initializing)
+		return;
+
+	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	foreach(CartesianPlot* plot, m_plotList){
+		plot->plotArea()->setBackgroundBrushStyle(style);
   }  
 }
 
@@ -515,6 +539,8 @@ void CartesianPlotDock::verticalPaddingChanged(double value){
 	plot->setVerticalPadding(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 }
 
+//////////////////////////////////////////////////////////
+
 void CartesianPlotDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "CartesianPlot" );
 	CartesianPlot* plot=m_plotList.first();
@@ -533,6 +559,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) plot->plotArea()->backgroundType()) );
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) plot->plotArea()->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) plot->plotArea()->backgroundImageStyle()) );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) plot->plotArea()->backgroundBrushStyle()) );
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", plot->plotArea()->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", plot->plotArea()->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", plot->plotArea()->backgroundSecondColor()) );
@@ -565,6 +592,7 @@ void CartesianPlotDock::saveConfig(KConfig& config){
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
+	group.writeEntry("BackgroundBrushStyle", ui.cbBackgroundBrushStyle->currentIndex());
 	group.writeEntry("BackgroundFileName", ui.kleBackgroundFileName->text());
 	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
 	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());

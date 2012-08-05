@@ -56,7 +56,7 @@ class PlotArea: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType);
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle);
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle);
-		CLASS_D_ACCESSOR_DECL(QBrush, backgroundBrush, BackgroundBrush);
+		BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle);
 		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor);
 		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor);
 		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName);
