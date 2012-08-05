@@ -92,7 +92,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/StandardCurveSymbolFactory.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
 	${BACKEND_DIR}/worksheet/WorksheetModel.cpp
-	${BACKEND_DIR}/worksheet/WorksheetGraphicsScene.cpp
 	${BACKEND_DIR}/worksheet/WorksheetRectangleElement.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp

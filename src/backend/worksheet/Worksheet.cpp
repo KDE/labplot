@@ -32,13 +32,14 @@
 #include "WorksheetPrivate.h"
 #include "AbstractWorksheetElement.h"
 #include "../../commonfrontend/worksheet/WorksheetView.h"
-#include "WorksheetGraphicsScene.h"
+// #include "WorksheetGraphicsScene.h"
 #include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/TextLabel.h"
 #include "../lib/commandtemplates.h"
 #include "lib/macros.h"
 #include "lib/XmlStreamReader.h"
 
+#include <QGraphicsScene>
 #include <QWidget>
 #include <QDebug>
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -217,7 +218,7 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const Abstract
 		d->updateLayout();	
 }
 
-WorksheetGraphicsScene *Worksheet::scene() const {
+QGraphicsScene *Worksheet::scene() const {
 	return d->m_scene;
 }
 
@@ -461,7 +462,7 @@ void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 //######################  Private implementation ###############################
 //##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner), m_view(NULL){
-	m_scene = new WorksheetGraphicsScene();
+	m_scene = new QGraphicsScene();
 	m_scene->setSceneRect(0, 0, 1500, 1500);
 }
 

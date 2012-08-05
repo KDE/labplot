@@ -38,7 +38,6 @@
 #include "lib/macros.h"
 
 class QGraphicsItem;
-class WorksheetGraphicsScene;
 class QRectF;
 
 class WorksheetPrivate;
@@ -65,7 +64,7 @@ class Worksheet: public AbstractPart, public scripted{
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF &rect, const bool scaleContent=false);
-		WorksheetGraphicsScene *scene() const;
+		QGraphicsScene *scene() const;
 		void update();
 
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);

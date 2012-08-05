@@ -33,13 +33,15 @@
 #include <QBrush>
 
 class Worksheet;
+class QGraphicsScene;
+
 class WorksheetPrivate{
 	public:
 		WorksheetPrivate(Worksheet *owner);
 		virtual ~WorksheetPrivate();
 
 		Worksheet * const q;
-		WorksheetGraphicsScene *m_scene;
+		QGraphicsScene* m_scene;
 		QRectF swapPageRect(const QRectF& rect);
 		mutable QWidget *m_view;
 
