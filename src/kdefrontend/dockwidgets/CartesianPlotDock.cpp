@@ -173,6 +173,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	//show the properties of the first curve
 	KConfig config("", KConfig::SimpleConfig);
   	loadConfig(config);
+	//update active widgets
+	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
 	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
@@ -202,6 +204,7 @@ void CartesianPlotDock::retranslateUi(){
 	
 	ui.cbBackgroundType->addItem(i18n("color"));
 	ui.cbBackgroundType->addItem(i18n("image"));
+	ui.cbBackgroundType->addItem(i18n("pattern"));
 
 	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
 	ui.cbBackgroundColorStyle->addItem(i18n("horizontal linear gradient"));
@@ -220,6 +223,7 @@ void CartesianPlotDock::retranslateUi(){
 
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
+
 	m_initializing = false;
 }
 
@@ -328,6 +332,8 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
 		ui.cbBackgroundImageStyle->hide();
+		ui.lBackgroundBrushStyle->hide();
+		ui.cbBackgroundBrushStyle->hide();
 
 		ui.lBackgroundFileName->hide();
 		ui.kleBackgroundFileName->hide();
@@ -339,15 +345,13 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 		PlotArea::BackgroundColorStyle style = 
 			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
+			ui.lBackgroundFirstColor->setText("Color");
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
-			ui.lBackgroundBrushStyle->show();
-			ui.cbBackgroundBrushStyle->show();
 		}else{
+			ui.lBackgroundFirstColor->setText("First Color");
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
-			ui.lBackgroundBrushStyle->hide();
-			ui.cbBackgroundBrushStyle->hide();
 		}
 	}else if(type == PlotArea::Image){
 		ui.lBackgroundColorStyle->hide();
@@ -364,6 +368,22 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
+	}else if(type == PlotArea::Pattern) {
+		ui.lBackgroundFirstColor->setText("Color");
+		ui.lBackgroundColorStyle->hide();
+		ui.cbBackgroundColorStyle->hide();
+		ui.lBackgroundImageStyle->hide();
+		ui.cbBackgroundImageStyle->hide();
+		ui.lBackgroundBrushStyle->show();
+		ui.cbBackgroundBrushStyle->show();
+		ui.lBackgroundFileName->hide();
+		ui.kleBackgroundFileName->hide();
+		ui.bOpen->hide();
+
+		ui.lBackgroundFirstColor->show();
+		ui.kcbBackgroundFirstColor->show();
+		ui.lBackgroundSecondColor->hide();
+		ui.kcbBackgroundSecondColor->hide();
 	}
 
 	if (m_initializing)
@@ -378,11 +398,13 @@ void CartesianPlotDock::backgroundColorStyleChanged(int index){
 	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor){
+		ui.lBackgroundFirstColor->setText("Color");
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
 		ui.lBackgroundBrushStyle->show();
 		ui.cbBackgroundBrushStyle->show();
 	}else{
+		ui.lBackgroundFirstColor->setText("First Color");
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
 		ui.lBackgroundBrushStyle->hide();

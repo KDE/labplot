@@ -43,7 +43,7 @@ class PlotArea: public AbstractWorksheetElement {
 		PlotArea(const QString &name);
 		virtual ~PlotArea();
 		
-		enum BackgroundType{Color, Image};
+		enum BackgroundType{Color, Image, Pattern};
 		enum BackgroundColorStyle{SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
 																TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
 																RadialGradient};

@@ -261,6 +261,7 @@ void WorksheetDock::retranslateUi(){
 	//Background
 	ui.cbBackgroundType->addItem(i18n("color"));
 	ui.cbBackgroundType->addItem(i18n("image"));
+	ui.cbBackgroundType->addItem(i18n("pattern"));
 
 	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
 	ui.cbBackgroundColorStyle->addItem(i18n("horizontal linear gradient"));
@@ -386,6 +387,8 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
 		ui.cbBackgroundImageStyle->hide();
+		ui.lBackgroundBrushStyle->hide();
+		ui.cbBackgroundBrushStyle->hide();
 		
 		ui.lBackgroundFileName->hide();
 		ui.kleBackgroundFileName->hide();
@@ -397,15 +400,13 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		PlotArea::BackgroundColorStyle style = 
 			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
+			ui.lBackgroundFirstColor->setText("Color");
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
-			ui.lBackgroundBrushStyle->show();
-			ui.cbBackgroundBrushStyle->show();
 		}else{
+			ui.lBackgroundFirstColor->setText("First Color");
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
-			ui.lBackgroundBrushStyle->hide();
-			ui.cbBackgroundBrushStyle->hide();
 		}
 	}else if(type == PlotArea::Image){
 		ui.lBackgroundFirstColor->hide();
@@ -422,6 +423,22 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		ui.lBackgroundFileName->show();
 		ui.kleBackgroundFileName->show();
 		ui.bOpen->show();
+	}else if(type == PlotArea::Pattern){
+		ui.lBackgroundFirstColor->setText("Color");
+		ui.lBackgroundFirstColor->show();
+		ui.kcbBackgroundFirstColor->show();
+		ui.lBackgroundSecondColor->hide();
+		ui.kcbBackgroundSecondColor->hide();
+
+		ui.lBackgroundColorStyle->hide();
+		ui.cbBackgroundColorStyle->hide();
+		ui.lBackgroundImageStyle->hide();
+		ui.cbBackgroundImageStyle->hide();
+		ui.lBackgroundBrushStyle->show();
+		ui.cbBackgroundBrushStyle->show();
+		ui.lBackgroundFileName->hide();
+		ui.kleBackgroundFileName->hide();
+		ui.bOpen->hide();
 	}
 
 	if (m_initializing)
@@ -436,15 +453,13 @@ void WorksheetDock::backgroundColorStyleChanged(int index){
 	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor){
+		ui.lBackgroundFirstColor->setText("Color");
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
-		ui.lBackgroundBrushStyle->show();
-		ui.cbBackgroundBrushStyle->show();
 	}else{
+		ui.lBackgroundFirstColor->setText("First Color");
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
 	}
 
 	if (m_initializing)

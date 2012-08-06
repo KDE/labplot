@@ -295,7 +295,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	if (backgroundType == PlotArea::Color){
 		switch (backgroundColorStyle){
 			case PlotArea::SingleColor:{
-				painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
+				painter->setBrush(QBrush(backgroundFirstColor));
 				break;
 			}
 			case PlotArea::HorizontalLinearGradient:{
@@ -334,7 +334,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				break;
 			}			
 			default:
-				painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
+				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
 		QPixmap pix(backgroundFileName);
@@ -363,6 +363,8 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 			default:
 				painter->drawPixmap(rect.topLeft(),pix);
 		}
+	} else if (backgroundType == PlotArea::Pattern){
+			painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
 	painter->drawRect(rect);
 

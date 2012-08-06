@@ -397,7 +397,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 	if (m_worksheet->backgroundType() == PlotArea::Color){
 		switch (m_worksheet->backgroundColorStyle()){
 			case PlotArea::SingleColor:{
-				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
+				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 				break;
 			}
 			case PlotArea::HorizontalLinearGradient:{
@@ -436,7 +436,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 				break;
 			}			
 			default:
-				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
+				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
 		painter->drawRect(scene_rect);
 	}else if (m_worksheet->backgroundType() == PlotArea::Image){
@@ -466,6 +466,9 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 			default:
 				painter->drawPixmap(scene_rect.topLeft(),pix);
 		}
+	}else if (m_worksheet->backgroundType() == PlotArea::Pattern){
+		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
+		painter->drawRect(scene_rect);
 	}
   
   //grid

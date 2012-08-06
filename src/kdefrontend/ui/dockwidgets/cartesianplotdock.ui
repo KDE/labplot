@@ -1024,7 +1024,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lBackgroundBrushStyle">
          <property name="text">
-          <string>Brush Style</string>
+          <string>Style</string>
          </property>
         </widget>
        </item>
