@@ -33,15 +33,14 @@
 
 #include "worksheet/WorksheetElementContainer.h"
 #include "worksheet/WorksheetElementContainerPrivate.h"
+#include "lib/macros.h"
 
 class AbstractCoordinateSystem;
 class PlotArea;
 class TextLabel;
+class AbstractPlotPrivate;
 
-class AbstractPlotPrivate:public WorksheetElementContainerPrivate{
-};
-
-class AbstractPlot: public WorksheetElementContainer {
+class AbstractPlot:public WorksheetElementContainer{
 	Q_OBJECT
 
 	public:
@@ -52,11 +51,17 @@ class AbstractPlot: public WorksheetElementContainer {
 		PlotArea* plotArea();
 		TextLabel* title();
 
+		BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
+		BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
+		
+		typedef AbstractPlot BaseClass;
+		typedef AbstractPlotPrivate Private;
+		
 	public slots:
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
-		AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd);
+		AbstractPlot(const QString &name, AbstractPlotPrivate *dd);
 		AbstractCoordinateSystem* m_coordinateSystem;
 		PlotArea* m_plotArea;
 		TextLabel *m_title;
@@ -66,6 +71,4 @@ class AbstractPlot: public WorksheetElementContainer {
     	Q_DECLARE_PRIVATE(AbstractPlot)
 };
 
-
 #endif
-

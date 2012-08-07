@@ -28,10 +28,12 @@
  ***************************************************************************/
 
 #include "worksheet/plots/AbstractPlot.h"
+#include "AbstractPlotPrivate.h"
 #include "worksheet/plots/PlotArea.h"
 #include "worksheet/plots/AbstractCoordinateSystem.h"
 #include "worksheet/WorksheetElementContainerPrivate.h"
-#include <QDebug>
+#include "lib/commandtemplates.h"
+
 /**
  * \class AbstractPlot
  * \brief Second level container in a Worksheet for logical grouping
@@ -44,7 +46,7 @@ AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name){
 	init();
 }
 
-AbstractPlot::AbstractPlot(const QString &name, WorksheetElementContainerPrivate *dd)
+AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd)
 	: WorksheetElementContainer(name, dd){
 	init();
 }
@@ -79,7 +81,27 @@ void AbstractPlot::handlePageResize(double horizontalRatio, double verticalRatio
 	WorksheetElementContainer::handlePageResize(horizontalRatio, verticalRatio);
 }
 
-//################################################################
-//################### Private implementation ##########################
-//################################################################
+BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, horizontalPadding, horizontalPadding)
+BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, verticalPadding, verticalPadding)
 
+/* ============================ setter methods and undo commands ================= */
+STD_SETTER_CMD_IMPL_F(AbstractPlot, SetHorizontalPadding, float, horizontalPadding, retransform)
+void AbstractPlot::setHorizontalPadding(float padding) {
+	Q_D(AbstractPlot);
+	if (padding != d->horizontalPadding)
+		exec(new AbstractPlotSetHorizontalPaddingCmd(d, padding, tr("%1: set horizontal padding")));
+}
+
+STD_SETTER_CMD_IMPL_F(AbstractPlot, SetVerticalPadding, float, verticalPadding, retransform)
+void AbstractPlot::setVerticalPadding(float padding) {
+	Q_D(AbstractPlot);
+	if (padding != d->verticalPadding)
+		exec(new AbstractPlotSetVerticalPaddingCmd(d, padding, tr("%1: set vertical padding")));
+}
+
+//################################################################
+//################### Private implementation #####################
+//################################################################
+AbstractPlotPrivate::AbstractPlotPrivate(AbstractPlot *owner)
+	:WorksheetElementContainerPrivate(owner){
+}

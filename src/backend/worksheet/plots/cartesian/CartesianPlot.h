@@ -31,7 +31,6 @@
 #define CARTESIANPLOT_H
 
 #include "../AbstractPlot.h"
-#include "lib/macros.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 class KAction;
@@ -49,9 +48,9 @@ class CartesianPlot:public AbstractPlot{
 		QMenu* createContextMenu();
 		void setRect(const QRectF&);
 		
-		BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
-		BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
-
+		virtual void save(QXmlStreamWriter *) const;
+		virtual bool load(XmlStreamReader *);
+		
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;
 

@@ -33,10 +33,11 @@
 #include "Axis.h"
 #include "XYCurve.h"
 #include "../PlotArea.h"
+#include "../AbstractPlotPrivate.h"
 #include "../../Worksheet.h"
 #include "../../TextLabel.h"
-// #include "../AbstractPlotPrivate.h"
-#include "lib/commandtemplates.h"
+
+#include "lib/XmlStreamReader.h"
 #include <QDebug>
 #include <QMenu>
  
@@ -60,24 +61,21 @@
 
 class CartesianPlotPrivate:public AbstractPlotPrivate{
     public:
+		CartesianPlotPrivate(CartesianPlot *owner);
 		QString name() const;
 		void setRect(const QRectF& r);
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-		void retransform();
-		
-		float horizontalPadding; //horiz. offset between the plot area and the area defining the coodinate system, in scene units
-		float verticalPadding; //vert. offset between the plot area and the area defining the coodinate system, in scene units
+		virtual void retransform();
 
     private:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 };
 
-CartesianPlot::CartesianPlot(const QString &name): AbstractPlot(name) {
+CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)){
 	init();
 }
 
-CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd)
-	: AbstractPlot(name, dd) {
+CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):AbstractPlot(name, dd){
 	init();
 }
 
@@ -98,7 +96,7 @@ void CartesianPlot::init(){
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
-	
+
 	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
 	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
@@ -223,24 +221,6 @@ void CartesianPlot::setRect(const QRectF& r){
 	d->setRect(r);
 }
 
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, horizontalPadding, horizontalPadding)
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, verticalPadding, verticalPadding)
-
-/* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F(CartesianPlot, SetHorizontalPadding, float, horizontalPadding, retransform)
-void CartesianPlot::setHorizontalPadding(float padding) {
-	Q_D(CartesianPlot);
-	if (padding != d->horizontalPadding)
-		exec(new CartesianPlotSetHorizontalPaddingCmd(d, padding, tr("%1: set horizontal padding")));
-}
-
-STD_SETTER_CMD_IMPL_F(CartesianPlot, SetVerticalPadding, float, verticalPadding, retransform)
-void CartesianPlot::setVerticalPadding(float padding) {
-	Q_D(CartesianPlot);
-	if (padding != d->verticalPadding)
-		exec(new CartesianPlotSetVerticalPaddingCmd(d, padding, tr("%1: set vertical padding")));
-}
-
 //################################################################
 //################### Slots ##########################
 //################################################################
@@ -252,6 +232,9 @@ void CartesianPlot::addCurve(){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
+CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) : AbstractPlotPrivate(owner){
+}
+
 QString CartesianPlotPrivate::name() const{
 	return q->name();
 }
@@ -267,7 +250,7 @@ void CartesianPlotPrivate::setRect(const QRectF& r){
 	prepareGeometryChange();
 	setPos( r.x()+r.width()/2, r.y()+r.height()/2);
 	rect = r;
-	retransform();
+	this->retransform();
 }
 
 void CartesianPlotPrivate::retransform(){
@@ -288,7 +271,7 @@ void CartesianPlotPrivate::retransform(){
 																  itemRect.y()+verticalPadding, 
 																  0, 1);
 	cSystem ->setYScales(scales);
-	
+
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	plot->plotArea()->setRect(rect);
 
@@ -296,7 +279,7 @@ void CartesianPlotPrivate::retransform(){
 	//when a predefined title position (Left, Centered etc.) is used, 
 	//the actual title position needs to be updated on plot's geometry changes.
 	plot->title()->retransform();
-	
+
 	q->retransform();
 }
 
@@ -320,4 +303,61 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
     qDebug()<<"in event";
     q->createContextMenu()->exec(event->screenPos());
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+
+//! Save as XML
+void CartesianPlot::save(QXmlStreamWriter* writer) const{
+	Q_D(const CartesianPlot);
+
+    writer->writeStartElement( "cartesianPlot" );
+    writeBasicAttributes(writer);
+    writeCommentElement(writer);
+
+	//TODO
+	
+    //serialize all children
+    QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+    foreach(AbstractWorksheetElement *elem, childElements)
+        elem->save(writer);
+
+    writer->writeEndElement(); // close "cartesianPlot" section
+}
+
+
+//! Load from XML
+bool CartesianPlot::load(XmlStreamReader* reader){
+    if(!reader->isStartElement() || reader->name() != "cartesianPlot"){
+        reader->raiseError(tr("no cartesianPlot element found"));
+        return false;
+    }
+
+    if (!readBasicAttributes(reader))
+        return false;
+
+    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+    QRectF rect;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "cartesianPlot")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+        if (reader->name() == "comment"){
+            if (!readCommentElement(reader)) return false;
+        }else{ // unknown element
+            reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+            if (!reader->skipToEndElement()) return false;
+        }
+    }
+
+    return true;
 }
