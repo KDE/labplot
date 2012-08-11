@@ -37,6 +37,8 @@ class GuiTools{
 	
 	static void updateBrushStyles(QComboBox*, const QColor&);
 	static void updatePenStyles(QComboBox*, const QColor&);
+	static void updatePenStyles(QMenu*, QActionGroup*, const QColor&);
+	static void fillColorMenu(QMenu*, QActionGroup*);
 };
 
 #endif // GUITOOLS_H

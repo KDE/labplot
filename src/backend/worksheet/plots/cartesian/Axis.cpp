@@ -36,18 +36,21 @@
 #include "CartesianCoordinateSystem.h"
 #include "../AbstractPlot.h"
 #include "../../../lib/commandtemplates.h"
+#include "kdefrontend/GuiTools.h"
 #include <QBrush>
 #include <QPen>
 #include <QPainter>
-#include <QLocale>
 #include <QFontMetricsF>
-#include <QtDebug>
+// #include <QtDebug>
 
 #include <math.h>
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KConfig>
 #include <KConfigGroup>
+#include <KIcon>
+#include <KAction>
+#include <KLocale>
 #endif
 
 /**
@@ -133,12 +136,83 @@ void Axis::init() {
 	
 	retransform();
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	
+	this->initActions();
+	this->initMenus();
+}
+
+void Axis::initActions(){
+	//Orientation 
+	orientationActionGroup = new QActionGroup(this);
+	orientationActionGroup->setExclusive(true);
+	
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	orientationHorizontalAction = new KAction(i18n("horizontal"), orientationActionGroup);
+	orientationHorizontalAction->setCheckable(true);
+	orientationVerticalAction = new KAction(i18n("vertical"), orientationActionGroup);
+	orientationVerticalAction->setCheckable(true);
+#endif
+	connect(orientationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(orientationChanged(QAction*)));
+	
+	//Line 
+	lineStyleActionGroup = new QActionGroup(this);
+	lineStyleActionGroup->setExclusive(true);
+	//no need to create actions here, they are created in GuiTools::updatePenStyles
+	connect(lineStyleActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(lineStyleChanged(QAction*)));
+	
+	lineColorActionGroup = new QActionGroup(this);
+	lineColorActionGroup->setExclusive(true);
+	connect(lineColorActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(lineColorChanged(QAction*)));
+	
+	//Ticks 
+	//TODO
+}
+
+void Axis::initMenus(){
+	//Orientation
+	orientationMenu = new QMenu(tr("Orientation"));
+	orientationMenu->addAction(orientationHorizontalAction);
+	orientationMenu->addAction(orientationVerticalAction);
+	
+	//Line
+	lineMenu = new QMenu(tr("Line"));
+	lineStyleMenu = new QMenu(tr("style"), lineMenu);
+	lineMenu->addMenu( lineStyleMenu );
+	lineColorMenu = new QMenu(tr("color"), lineMenu);
+	lineMenu->addMenu( lineColorMenu );
+}
+
+QMenu* Axis::createContextMenu(){
+	Q_D(Axis);
+	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+	QAction* firstAction = menu->actions().first();
+	
+	//Orientation
+	if ( d->orientation == AxisHorizontal )
+		orientationHorizontalAction->setChecked(true);
+	else
+		orientationVerticalAction->setChecked(true);
+	
+	menu->insertMenu(firstAction, orientationMenu);
+
+	//Line styles
+	GuiTools::updatePenStyles( lineStyleMenu, lineStyleActionGroup, d->linePen.color() );
+	//TODO select the action corresponding to the current pen style
+	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
+	menu->insertMenu(firstAction, lineMenu);
+	
+	menu->insertSeparator(firstAction);
+
+	return menu;
 }
 
 Axis::~Axis() {
 	Q_D(Axis);
 	delete d->title;
 	delete d_ptr;
+	delete orientationMenu;
+	delete lineMenu;
 }
 
 QGraphicsItem *Axis::graphicsItem() const {
@@ -530,9 +604,25 @@ void Axis::setLabelsOpacity(qreal opacity){
 }
 
 
-//################################################################
+/* ================================ SLOTS =========================== */
+void Axis::orientationChanged(QAction* action){
+	if (action == orientationHorizontalAction)
+		this->setOrientation(AxisHorizontal);
+	else
+		this->setOrientation(AxisVertical);
+	
+	emit orientationChanged();
+}
+
+void Axis::lineStyleChanged(QAction* action){
+
+	
+	emit lineStyleChanged();
+}
+
+//#####################################################################
 //################### Private implementation ##########################
-//################################################################
+//#####################################################################
 AxisPrivate::AxisPrivate(Axis *owner) : q(owner){
 }
 
@@ -1027,4 +1117,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
 	painter->drawPath(shape());
   }
+}
+
+void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
+    q->createContextMenu()->exec(event->screenPos());
 }

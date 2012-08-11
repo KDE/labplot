@@ -59,16 +59,10 @@ class CartesianPlot:public AbstractPlot{
 		void initActions();
 		void initMenus();
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		QAction* addCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
-#else
-		KAction* addCurveAction;
-		KAction* addHorizontalAxisAction;
-		KAction* addVerticalAxisAction;
-#endif
-		
+ 		
 		QMenu* addNewMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)

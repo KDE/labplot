@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
 				(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -28,14 +28,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef  AXISNEW_H
+#ifndef AXISNEW_H
 #define AXISNEW_H
 
 #include "worksheet/AbstractWorksheetElement.h"
 #include "lib/macros.h"
-class TextLabel;
+#include <QActionGroup>
 
+class TextLabel;
 class AxisPrivate;
+
 class Axis: public AbstractWorksheetElement {
 	Q_OBJECT
 
@@ -58,6 +60,7 @@ class Axis: public AbstractWorksheetElement {
 		Axis(const QString &name, const AxisOrientation &orientation);
 		virtual ~Axis();
 
+		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
 
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
@@ -119,9 +122,29 @@ class Axis: public AbstractWorksheetElement {
 	private:
     	Q_DECLARE_PRIVATE(Axis)
 		void init();
+		void initActions();
+		void initMenus();
+
+		QAction* orientationHorizontalAction;
+		QAction* orientationVerticalAction;
+		
+		QActionGroup* orientationActionGroup;
+		QActionGroup* lineStyleActionGroup;
+		QActionGroup* lineColorActionGroup;
+		
+		QMenu* orientationMenu;
+		QMenu* lineMenu;
+		QMenu* lineStyleMenu;
+		QMenu* lineColorMenu;
 		
 	private slots:
-			void labelChanged();
+		void labelChanged();
+		void orientationChanged(QAction*);
+		void lineStyleChanged(QAction* action);
+		
+	signals:
+		void orientationChanged();
+		void lineStyleChanged();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

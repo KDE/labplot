@@ -119,6 +119,9 @@ class AxisPrivate: public QGraphicsItem {
 
 		Axis * const q;
 
+	private:
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+
 	protected:
 		bool transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint);
 };

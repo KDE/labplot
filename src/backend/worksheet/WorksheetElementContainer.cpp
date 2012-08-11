@@ -63,7 +63,7 @@ WorksheetElementContainer::WorksheetElementContainer(const QString &name, Worksh
 }
 
 WorksheetElementContainer::~WorksheetElementContainer() {
-	delete d_ptr;
+// 	delete d_ptr;
 }
 
 QGraphicsItem *WorksheetElementContainer::graphicsItem() const {
