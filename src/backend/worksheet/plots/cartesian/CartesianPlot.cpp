@@ -66,9 +66,6 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		void setRect(const QRectF& r);
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void retransform();
-
-    private:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 };
 
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)){
@@ -299,11 +296,6 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 
 	return QGraphicsItem::itemChange(change, value);
  }
- 
-void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
-    qDebug()<<"in event";
-    q->createContextMenu()->exec(event->screenPos());
-}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

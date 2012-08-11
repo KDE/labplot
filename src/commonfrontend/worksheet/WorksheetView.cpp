@@ -541,10 +541,15 @@ void WorksheetView::mouseReleaseEvent (QMouseEvent * event){
 }
 
 void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
-  Q_UNUSED(e)
-  QMenu *menu = new QMenu(this);
-  this->createContextMenu(menu);
-  menu->exec(QCursor::pos());
+	if ( !itemAt(e->pos()) ){
+		//no item under the cursor -> show the context menu for the worksheet
+		QMenu *menu = new QMenu(this);
+		this->createContextMenu(menu);
+		menu->exec(QCursor::pos());
+	}else{
+		//propagate the event to the scene and graphics items
+		QGraphicsView::contextMenuEvent(e);
+	}
 }
 
 
