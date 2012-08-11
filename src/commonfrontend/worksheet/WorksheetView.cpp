@@ -117,13 +117,6 @@ WorksheetView::~WorksheetView(){
 	delete m_model;
 }
 
-//! Private ctor for initActionManager() only
-WorksheetView::WorksheetView(){
-	m_model = NULL;
-	initActions();
-}
-
-
 void WorksheetView::initActions(){
 	QActionGroup* addNewActionGroup = new QActionGroup(this);
 	QActionGroup* zoomActionGroup = new QActionGroup(this);
@@ -230,41 +223,40 @@ void WorksheetView::initActions(){
   breakLayoutAction->setEnabled(false);
   
    //Grid actions
-	noGridAction = new KAction(KIcon(""), i18n("no grid"), gridActionGroup);
+	noGridAction = new KAction(i18n("no grid"), gridActionGroup);
 	noGridAction->setObjectName("noGridAction");
 	noGridAction->setCheckable(true);
 	noGridAction->setChecked(true);
 	noGridAction->setData(WorksheetView::NoGrid);
 	
-	denseLineGridAction = new KAction(KIcon(""), i18n("dense line grid"), gridActionGroup);
+	denseLineGridAction = new KAction(i18n("dense line grid"), gridActionGroup);
 	denseLineGridAction->setObjectName("denseLineGridAction");
 	denseLineGridAction->setCheckable(true);
 	
-	sparseLineGridAction = new KAction(KIcon(""), i18n("sparse line grid"), gridActionGroup);
+	sparseLineGridAction = new KAction(i18n("sparse line grid"), gridActionGroup);
 	sparseLineGridAction->setObjectName("sparseLineGridAction");
 	sparseLineGridAction->setCheckable(true);
 
-	denseDotGridAction = new KAction(KIcon(""), i18n("dense dot grid"), gridActionGroup);
+	denseDotGridAction = new KAction(i18n("dense dot grid"), gridActionGroup);
 	denseDotGridAction->setObjectName("denseDotGridAction");
 	denseDotGridAction->setCheckable(true);
 	
-	sparseDotGridAction = new KAction(KIcon(""), i18n("sparse dot grid"), gridActionGroup);
+	sparseDotGridAction = new KAction(i18n("sparse dot grid"), gridActionGroup);
 	sparseDotGridAction->setObjectName("sparseDotGridAction");
 	sparseDotGridAction->setCheckable(true);
 	
-	customGridAction = new KAction(KIcon(""), i18n("custom grid"), gridActionGroup);
+	customGridAction = new KAction(i18n("custom grid"), gridActionGroup);
 	customGridAction->setObjectName("customGridAction");
 	customGridAction->setCheckable(true);
 	
-	snapToGridAction = new KAction(KIcon(""), i18n("snap to grid"), this);
-	//TODO slot
+	snapToGridAction = new KAction(i18n("snap to grid"), this);
 	snapToGridAction->setCheckable(true);
 #endif
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
 	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
 	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
-	qDebug()<<"actions done";
+	connect(snapToGridAction, SIGNAL(triggered()), this, SLOT(changeSnapToGrid()));
 }
 
 void WorksheetView::initMenus(){
@@ -607,7 +599,6 @@ void WorksheetView::addNew(QAction* action){
 	m_worksheet->addChild(aspect);
 }
 
-
 void WorksheetView::changeLayout(QAction* action){
 	if (action==breakLayoutAction){
 		verticalLayoutAction->setEnabled(true);
@@ -672,15 +663,11 @@ void WorksheetView::changeGrid(QAction* action){
 		m_gridSettings.horizontalSpacing = 15;
 		m_gridSettings.verticalSpacing = 15;
 	}else if (name == "customGridAction"){
- #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE		
-		//TODO
-#else
 		GridDialog* dlg = new GridDialog(this);
 		if (dlg->exec() == QDialog::Accepted)
 			dlg->save(m_gridSettings);
 		else
 			return;
-#endif
 	}
 
 	if (m_gridSettings.style == WorksheetView::NoGrid)
@@ -689,6 +676,11 @@ void WorksheetView::changeGrid(QAction* action){
 		snapToGridAction->setEnabled(true);
 
 	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
+}
+
+//TODO
+void WorksheetView::changeSnapToGrid(){
+	
 }
 
 /*!

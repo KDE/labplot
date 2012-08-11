@@ -40,10 +40,6 @@ class QWheelEvent;
 
 class Worksheet;
 class WorksheetModel;
-class ActionManager;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-class KAction;
-#endif
 
 class WorksheetView : public QGraphicsView{
 	Q_OBJECT
@@ -67,9 +63,7 @@ class WorksheetView : public QGraphicsView{
 	
 	void setScene(QGraphicsScene * scene);
 	void exportToFile(const QString&, const ExportFormat format, const ExportArea area) const;
-
-	static ActionManager *actionManager();
-	static void initActionManager();
+	void print(QPrinter*) const;
 
   private:
 	void initActions();
@@ -80,7 +74,7 @@ class WorksheetView : public QGraphicsView{
 	void mouseReleaseEvent (QMouseEvent * event);
 
 	void drawBackground(QPainter *painter, const QRectF &rect);
-	
+
 	Worksheet *m_worksheet;
 	WorksheetModel *m_model;
 	MouseMode m_currentMouseMode;
@@ -88,8 +82,6 @@ class WorksheetView : public QGraphicsView{
 	QList<QGraphicsItem*> m_selectedItems;
 	bool m_suppressSelectionChangedEvent;
 	
-	WorksheetView();
-
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_zoomMenu;
@@ -100,7 +92,6 @@ class WorksheetView : public QGraphicsView{
 	QAction* currentZoomAction;
 
 	//Actions
-	#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* zoomInAction;
 	QAction* zoomOutAction;
 	QAction* zoomOriginAction;
@@ -127,40 +118,13 @@ class WorksheetView : public QGraphicsView{
 	QAction* sparseDotGridAction;
 	QAction* customGridAction;	
 	QAction* snapToGridAction;	
-	#else
-	KAction* zoomInAction;
-	KAction* zoomOutAction;
-	KAction* zoomOriginAction;
-	KAction* zoomFitPageHeightAction;
-	KAction* zoomFitPageWidthAction;
-	KAction* zoomFitSelectionAction;
-
-	KAction* navigationModeAction;
-	KAction* zoomModeAction;
-	KAction* selectionModeAction;
-
-	KAction* addPlotAction;
-	KAction* addTextLabelAction;
-
-	KAction* verticalLayoutAction;
-	KAction* horizontalLayoutAction;
-	KAction* gridLayoutAction;
-	KAction* breakLayoutAction;
-	
-	KAction* noGridAction;
-	KAction* denseLineGridAction;
-	KAction* sparseLineGridAction;
-	KAction* denseDotGridAction;
-	KAction* sparseDotGridAction;
-	KAction* customGridAction;
-	KAction* snapToGridAction;
-	#endif
 
   public slots:
 	void createContextMenu(QMenu * menu);
 	void fillProjectMenu(QMenu *menu, bool *rc);
 	void fillToolBar(QToolBar*);
 
+  private slots:
 	void enableNavigationMode();
 	void enableZoomMode();
 	void enableSelectionMode();
@@ -170,10 +134,8 @@ class WorksheetView : public QGraphicsView{
 	void changeZoom(QAction*);
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);
+	void changeSnapToGrid();
 
-	void print(QPrinter*) const;
-
-  private slots:
 	void selectItem(QGraphicsItem *);
 	void deselectItem(QGraphicsItem*);
 	void selectionChanged();
