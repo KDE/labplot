@@ -207,6 +207,21 @@ QMenu* Axis::createContextMenu(){
 	return menu;
 }
 
+/*!
+	Returns an icon to be used in the project explorer.
+*/
+QIcon Axis::icon() const{
+	Q_D(const Axis);
+	QIcon ico;
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	if (d->orientation == Axis::AxisHorizontal)
+		ico = KIcon("axis-horizontal");
+	else
+		ico = KIcon("axis-vertical");
+#endif
+	return ico;
+}
+
 Axis::~Axis() {
 	Q_D(Axis);
 	delete d->title;

@@ -60,6 +60,7 @@ class Axis: public AbstractWorksheetElement {
 		Axis(const QString &name, const AxisOrientation &orientation);
 		virtual ~Axis();
 
+		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
 

@@ -174,8 +174,8 @@ void CartesianPlot::initActions(){
 	addVerticalAxisAction = new QAction(tr("vertical axis"), this);
 #else
 	addCurveAction = new KAction(i18n("xy-curve"), this);
-	addHorizontalAxisAction = new KAction(i18n("horizontal axis"), this);
-	addVerticalAxisAction = new KAction(i18n("vertical axis"), this);
+	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
+	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
 #endif
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 }
