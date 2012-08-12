@@ -72,6 +72,9 @@ class CartesianPlot:public AbstractPlot{
 	
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
+	
+	signals:
+		void positionChanged();		
 };
 
 #endif

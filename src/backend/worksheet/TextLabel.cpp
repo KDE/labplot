@@ -94,7 +94,7 @@ void TextLabel::init() {
 }
 
 TextLabel::~TextLabel() {
-	delete d_ptr;
+// 	delete d_ptr;
 }
 
 QGraphicsItem* TextLabel::graphicsItem() const{
@@ -121,7 +121,7 @@ QIcon TextLabel::icon() const{
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(TextLabel, QString, text, text);
+CLASS_SHARED_D_READER_IMPL(TextLabel, QString, text, text)
 CLASS_SHARED_D_READER_IMPL(TextLabel, bool, teXUsed, teXUsed);
 CLASS_SHARED_D_READER_IMPL(TextLabel, qreal, teXFontSize, teXFontSize);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXFontColor, teXFontColor);
@@ -249,7 +249,7 @@ void TextLabelPrivate::retransform(){
 		w = staticText.size().width()*scaleFactor;
 		h = staticText.size().height()*scaleFactor;
 	}
-	
+
 	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
 	QPointF itemPos;
 	switch (horizontalAlignment) {

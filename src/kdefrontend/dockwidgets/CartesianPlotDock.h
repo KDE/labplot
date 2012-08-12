@@ -48,6 +48,7 @@ public:
 private:
 	Ui::CartesianPlotDock ui;
 	QList<CartesianPlot*> m_plotList;
+	CartesianPlot* m_plot;
 	LabelWidget* labelWidget;
 	bool m_initializing;
 	
@@ -55,6 +56,7 @@ private slots:
 	void init();
 	void retranslateUi();
   
+	//SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
@@ -83,6 +85,10 @@ private slots:
 	void horizontalPaddingChanged(double);
 	void verticalPaddingChanged(double);
 	
+	//SLOTs for changes triggered in CartesianPlot
+	void plotPositionChanged();
+	
+	//save/load
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
 };

@@ -143,7 +143,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	m_initializing = true;
 	m_plotList = list;
 
-	CartesianPlot* plot=list.first();
+	m_plot=list.first();
   
 	QList<TextLabel*> labels;
 	foreach(CartesianPlot* plot, list)
@@ -158,8 +158,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	ui.lComment->setEnabled(true);
 	ui.leComment->setEnabled(true);
 
-	ui.leName->setText(plot->name());
-	ui.leComment->setText(plot->comment());
+	ui.leName->setText(m_plot->name());
+	ui.leComment->setText(m_plot->comment());
   }else{
 	ui.lName->setEnabled(false);
 	ui.leName->setEnabled(false);
@@ -179,7 +179,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
 	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
 	//TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
-	Worksheet* w = dynamic_cast<Worksheet*>(plot->parentAspect());
+	Worksheet* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
 	if (w){
 		bool b = (w->layout()==Worksheet::NoLayout);
 		ui.sbTop->setEnabled(b);
@@ -189,6 +189,9 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 		connect(w, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)));
 	}
 
+	//SIGNALs/SLOTs
+	connect( m_plot, SIGNAL(positionChanged()), this, SLOT(plotPositionChanged()) );
+	
 	m_initializing = false;
 }
 
@@ -197,7 +200,7 @@ void CartesianPlotDock::activateTitleTab(){
 }
 
 //************************************************************
-//****************** SLOTS ********************************
+//**** SLOTs for changes triggered in CartesianPlotDock ******
 //************************************************************
 void CartesianPlotDock::retranslateUi(){
 	m_initializing = true;
@@ -212,7 +215,6 @@ void CartesianPlotDock::retranslateUi(){
 	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
-// 		//TODO ui.cbBackgroundColorStyle->addItem(i18n("custom gradient"));
 
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
@@ -559,40 +561,53 @@ void CartesianPlotDock::verticalPaddingChanged(double value){
 	plot->setVerticalPadding(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 }
 
-//////////////////////////////////////////////////////////
+//*************************************************************
+//****** SLOTs for changes triggered in CartesianPlot *********
+//*************************************************************
+void CartesianPlotDock::plotPositionChanged(){
+	m_initializing = true;
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+//*************************************************************
+//******************** SETTINGS *******************************
+//*************************************************************
 
 void CartesianPlotDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "CartesianPlot" );
-	CartesianPlot* plot=m_plotList.first();
 
 	//General-tab
-	ui.chkVisible->setChecked( group.readEntry("Visible", plot->isVisible()) );
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Left", plot->rect().x()), Worksheet::Centimeter));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Top", plot->rect().y()), Worksheet::Centimeter));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", plot->rect().width()), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", plot->rect().height()), Worksheet::Centimeter));
+	ui.chkVisible->setChecked( group.readEntry("Visible", m_plot->isVisible()) );
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Left", m_plot->rect().x()), Worksheet::Centimeter));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Top", m_plot->rect().y()), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_plot->rect().width()), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_plot->rect().height()), Worksheet::Centimeter));
 
 	//Title
 // 	labelWidget->loadConfig(group);
 
 	//Background-tab
-	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) plot->plotArea()->backgroundType()) );
-	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) plot->plotArea()->backgroundColorStyle()) );
-	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) plot->plotArea()->backgroundImageStyle()) );
-	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) plot->plotArea()->backgroundBrushStyle()) );
-	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", plot->plotArea()->backgroundFileName()) );
-	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", plot->plotArea()->backgroundFirstColor()) );
-	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", plot->plotArea()->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( group.readEntry("BackgroundOpacity", plot->plotArea()->backgroundOpacity())*100 );
-	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", plot->horizontalPadding()), Worksheet::Centimeter));
-	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", plot->verticalPadding()), Worksheet::Centimeter));
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_plot->plotArea()->backgroundType()) );
+	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_plot->plotArea()->backgroundColorStyle()) );
+	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_plot->plotArea()->backgroundImageStyle()) );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) m_plot->plotArea()->backgroundBrushStyle()) );
+	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_plot->plotArea()->backgroundFileName()) );
+	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_plot->plotArea()->backgroundFirstColor()) );
+	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_plot->plotArea()->backgroundSecondColor()) );
+	ui.sbBackgroundOpacity->setValue( group.readEntry("BackgroundOpacity", m_plot->plotArea()->backgroundOpacity())*100 );
+	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), Worksheet::Centimeter));
+	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), Worksheet::Centimeter));
 
 	//Border-tab
-	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", plot->plotArea()->borderPen().color()) );
-	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", plot->plotArea()->borderPen().color()));
-	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) plot->plotArea()->borderPen().style()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", plot->plotArea()->borderPen().widthF()), Worksheet::Point) );
-	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", plot->plotArea()->borderOpacity())*100 );
+	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()) );
+	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()));
+	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_plot->plotArea()->borderPen().style()) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_plot->plotArea()->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_plot->plotArea()->borderOpacity())*100 );
 }
 
 void CartesianPlotDock::saveConfig(KConfig& config){

@@ -81,6 +81,7 @@ CartesianPlot::~CartesianPlot(){
 	delete m_title;
 	delete m_coordinateSystem;
 	delete m_plotArea;
+	delete addNewMenu;
 }
 
 void CartesianPlot::init(){
@@ -280,22 +281,26 @@ void CartesianPlotPrivate::retransform(){
 	q->retransform();
 }
 
-//TODO gets never called?!?
+/*!
+ * Reimplemented from QGraphicsItem.
+ */
 QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
-// 	if (cancelItemChangeEvent)
-// 		return value;
-	qDebug()<<"plot change";
 	if (change == QGraphicsItem::ItemPositionChange) {
 		QPointF itemPos = value.toPointF();//item's center point in parent's coordinates;
 		float x = itemPos.x();
 		float y = itemPos.y();
-		qDebug()<<"new position: "<<x<<"   "<<y;
-
-// 		 emit q->positionChanged(position);
+		
+		//update rect
+		float w = rect.width();
+		float h = rect.height();
+		rect.setX(x-w/2);
+		rect.setY(y-h/2);
+		rect.setWidth(w);
+		rect.setHeight(h);
+		emit dynamic_cast<CartesianPlot*>(q)->positionChanged();
      }
-
 	return QGraphicsItem::itemChange(change, value);
- }
+}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
