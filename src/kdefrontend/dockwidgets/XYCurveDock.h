@@ -59,15 +59,6 @@ private:
 	QStringList dateStrings;
 	QStringList timeStrings;
 	  
-	QGridLayout *gridLayout;
-    QLabel *lName;
-    QLineEdit *leName;
-    QLabel *lComment;
-    QLineEdit* leComment;
-	QCheckBox* chkVisible;
-    QSpacerItem *verticalSpacer;
-	QLabel* lXColumn;
-	QLabel* lYColumn;
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbYColumn;
 	TreeViewComboBox* cbValuesColumn;

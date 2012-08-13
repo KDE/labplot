@@ -567,15 +567,15 @@ void XYCurveDock::nameChanged(){
   if (m_initializing)
 	return;
   
-  m_curvesList.first()->setName(leName->text());
+  m_curvesList.first()->setName(ui.leName->text());
 }
 
 
 void XYCurveDock::commentChanged(){
   if (m_initializing)
 	return;
-  
-  m_curvesList.first()->setComment(leComment->text());
+
+  m_curvesList.first()->setComment(ui.leComment->text());
 }
 
 void XYCurveDock::xColumnChanged(const QModelIndex& index){
