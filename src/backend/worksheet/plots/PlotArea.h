@@ -68,6 +68,9 @@ class PlotArea: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled);
 		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect);
 
+		virtual void save(QXmlStreamWriter *) const;
+		virtual bool load(XmlStreamReader *);
+		
 		typedef AbstractWorksheetElement BaseClass;
 		typedef PlotAreaPrivate Private;
 

@@ -35,6 +35,7 @@
 #include "worksheet/plots/AbstractPlot.h"
 #include "lib/commandtemplates.h"
 #include "lib/macros.h"
+#include "lib/XmlStreamReader.h"
 #include <QPainter>
 #include <QDebug>
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -376,3 +377,141 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		painter->drawRect(rect);
 	}
 }
+
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+
+//! Save as XML
+void PlotArea::save(QXmlStreamWriter* writer) const{
+	Q_D(const PlotArea);
+
+	writer->writeStartElement("plotArea");
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+	
+    writer->writeStartElement( "background" );
+    writer->writeAttribute( "type", QString::number(d->backgroundType) );
+    writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
+    writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
+    writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
+    writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
+    writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
+    writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
+    writer->writeAttribute( "secondColor_r", QString::number(d->backgroundSecondColor.red()) );
+    writer->writeAttribute( "secondColor_g", QString::number(d->backgroundSecondColor.green()) );
+    writer->writeAttribute( "secondColor_b", QString::number(d->backgroundSecondColor.blue()) );
+    writer->writeAttribute( "fileName", d->backgroundFileName );
+    writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
+    writer->writeEndElement();
+	
+	writer->writeEndElement();
+}
+
+//! Load from XML
+bool PlotArea::load(XmlStreamReader* reader){
+	Q_D(PlotArea);
+	
+    if(!reader->isStartElement() || reader->name() != "plotArea"){
+        reader->raiseError(tr("no plot area element found"));
+        return false;
+    }
+
+    if (!readBasicAttributes(reader))
+        return false;
+
+    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "plotArea")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+        if (reader->name() == "comment"){
+            if (!readCommentElement(reader)) return false;
+        }else if (reader->name() == "background"){
+            attribs = reader->attributes();
+
+            str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("type"));
+            else
+                d->backgroundType = PlotArea::BackgroundType(str.toInt());
+
+            str = attribs.value("colorStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("colorStyle"));
+            else
+                d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
+
+            str = attribs.value("imageStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("imageStyle"));
+            else
+                d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
+
+            str = attribs.value("brushStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("brushStyle"));
+            else
+                d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
+
+            str = attribs.value("firstColor_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+            else
+                d->backgroundFirstColor.setRed(str.toInt());
+
+            str = attribs.value("firstColor_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+            else
+                d->backgroundFirstColor.setGreen(str.toInt());
+
+            str = attribs.value("firstColor_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+            else
+                d->backgroundFirstColor.setBlue(str.toInt());
+
+            str = attribs.value("secondColor_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+            else
+                d->backgroundSecondColor.setRed(str.toInt());
+
+            str = attribs.value("secondColor_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+            else
+                d->backgroundSecondColor.setGreen(str.toInt());
+
+            str = attribs.value("secondColor_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+            else
+                d->backgroundSecondColor.setBlue(str.toInt());
+
+            str = attribs.value("fileName").toString();
+            d->backgroundFileName = str;
+
+            str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("opacity"));
+            else
+                d->backgroundOpacity = str.toDouble();
+        }else{ // unknown element
+            reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+            if (!reader->skipToEndElement()) return false;
+        }
+    }
+
+    return true;
+}
+
