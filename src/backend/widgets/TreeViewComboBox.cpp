@@ -2,7 +2,7 @@
     File                 : TreeViewComboBox.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2011 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008-2012 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses)
     Description          : Provides a QTreeView in a QComboBox
@@ -37,19 +37,14 @@
     \brief Provides a QTreeView in a QComboBox.
 
     \ingroup backend/widgets
-    
- */
+*/
 
-//FIX an model item without the flag IsSelectable can still be selected.
 
 TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
-// 	m_topLevelClasses << "Folder" << "Spreadsheet" << "Worksheet";
 	m_treeView.header()->hide();
 	m_treeView.setSelectionMode(QAbstractItemView::SingleSelection);
 	m_treeView.setUniformRowHeights(true);
 
-//  	setView(&m_treeView);
-	
 	m_treeView.hide();
 	m_treeView.setParent(parent, Qt::Popup);
 	m_treeView.installEventFilter(this);
@@ -70,7 +65,6 @@ TreeViewComboBox::~TreeViewComboBox(){
 	Sets the \a model for the view to present.
 */
 void TreeViewComboBox::setModel(QAbstractItemModel *model){
-// 	QComboBox::setModel(model);
 	m_treeView.setModel(model);
 	
 	//show only the first column in the combo box
@@ -109,11 +103,8 @@ void TreeViewComboBox::showPopup(){
 	if (!m_treeView.model()->hasChildren())
 		return;
 
-// 	QModelIndex root = model()->index(0,0);
 	QModelIndex root = m_treeView.model()->index(0,0);
 	showTopLevelOnly(root);
-
-	//QComboBox::showPopup();
 
 	m_treeView.resize(this->width(), 150);
 	m_treeView.move(mapToGlobal( this->rect().bottomLeft() ));
@@ -160,5 +151,13 @@ bool TreeViewComboBox::eventFilter(QObject *object, QEvent *event){
 void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
 	QComboBox::setItemText(0, index.data().toString());
 	m_treeView.hide();
-	emit currentModelIndexChanged(index);
+	
+	//workaround hack.
+	//TODO: make the non-column objects nonselectable (disabled).
+	//FIX: an model item without the flags IsSelectable and IsEnabled can still be selected.
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	foreach(const char * classString, m_topLevelClasses){
+		if (aspect->inherits("Column"))
+			emit currentModelIndexChanged(index);
+	}
 }
