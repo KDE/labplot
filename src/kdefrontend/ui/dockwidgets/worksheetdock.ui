@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -413,7 +413,7 @@ Otherwise resize the canvas only.</string>
           <double>1000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>0.500000000000000</double>
+          <double>0.100000000000000</double>
          </property>
         </widget>
        </item>
@@ -430,7 +430,7 @@ Otherwise resize the canvas only.</string>
           <double>1000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>0.500000000000000</double>
+          <double>0.100000000000000</double>
          </property>
         </widget>
        </item>
@@ -447,7 +447,7 @@ Otherwise resize the canvas only.</string>
           <double>1000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>0.500000000000000</double>
+          <double>0.100000000000000</double>
          </property>
         </widget>
        </item>
@@ -464,7 +464,7 @@ Otherwise resize the canvas only.</string>
           <double>1000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>0.500000000000000</double>
+          <double>0.100000000000000</double>
          </property>
         </widget>
        </item>
@@ -497,7 +497,7 @@ Otherwise resize the canvas only.</string>
           <double>1000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>0.500000000000000</double>
+          <double>0.100000000000000</double>
          </property>
         </widget>
        </item>
@@ -514,7 +514,7 @@ Otherwise resize the canvas only.</string>
           <double>1000.000000000000000</double>
          </property>
          <property name="singleStep">
-          <double>0.500000000000000</double>
+          <double>0.100000000000000</double>
          </property>
         </widget>
        </item>

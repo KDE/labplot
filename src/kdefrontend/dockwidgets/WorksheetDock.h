@@ -52,6 +52,7 @@ private:
 private slots:
 	void retranslateUi();
   
+	//SLOTs for changes triggered in WorksheetDock
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
@@ -80,6 +81,10 @@ private slots:
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 
+	//SLOTs for changes triggered in Worksheet
+	void worksheetLayoutRowCountChanged(int);
+	
+	//saving/loading
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
 };

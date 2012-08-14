@@ -38,6 +38,7 @@
 #include "../lib/commandtemplates.h"
 #include "lib/macros.h"
 #include "lib/XmlStreamReader.h"
+#include <math.h>
 
 #include <QGraphicsScene>
 #include <QWidget>
@@ -523,8 +524,10 @@ void WorksheetPrivate::updateLayout(){
 		}		
 	}else{ //GridLayout
 		//add new rows, if not sufficient
-		if (count>layoutRowCount*layoutColumnCount)
-			layoutRowCount = count/layoutColumnCount;
+		if (count>layoutRowCount*layoutColumnCount){
+			layoutRowCount = floor( (float)count/layoutColumnCount + 0.5);
+			emit q->layoutRowCountChanged(layoutRowCount);
+		}
 		
 		w=(m_scene->sceneRect().height()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;

@@ -95,6 +95,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void init();
 		AbstractWorksheetElement* aspectFromGraphicsItem(const AbstractWorksheetElement*, const QGraphicsItem*) const;
 		WorksheetPrivate* const d;
+		friend class WorksheetPrivate;
 
 	 private slots:
 		void handleAspectAdded(const AbstractAspect*);
@@ -109,6 +110,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void itemDeselected(QGraphicsItem*);
 		void requestUpdate();
 		void layoutChanged(Worksheet::Layout);
+		void layoutRowCountChanged(int);
 };
 
 #endif

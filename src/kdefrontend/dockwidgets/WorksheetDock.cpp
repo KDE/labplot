@@ -117,7 +117,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
 	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
 	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
-	connect(ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
+	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
@@ -172,6 +172,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	KConfig config("", KConfig::SimpleConfig);
   	loadConfig(config);
   
+	connect(worksheet, SIGNAL(layoutRowCountChanged(int)), this, SLOT(worksheetLayoutRowCountChanged(int)));
 	m_initializing = false;
 }
 
@@ -213,9 +214,10 @@ void WorksheetDock::updatePaperSize(){
 	}
 }
 
-//************************************************************
-//****************** SLOTS ********************************
-//************************************************************
+
+//*************************************************************
+//****** SLOTs for changes triggered in WorksheetDock *********
+//*************************************************************
 void WorksheetDock::retranslateUi(){
 	m_initializing = true;
 	
@@ -269,8 +271,7 @@ void WorksheetDock::retranslateUi(){
 	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
-// 		//TODO ui.cbBackgroundColorStyle->addItem(i18n("custom gradient"));
-// 
+ 
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled, keep proportions"));
@@ -608,7 +609,19 @@ void WorksheetDock::fileNameChanged(){
   } 
 }
 
-/*********************************************************/
+//*************************************************************
+//******** SLOTs for changes triggered in Worksheet ***********
+//*************************************************************
+void WorksheetDock::worksheetLayoutRowCountChanged(int value){
+	m_initializing = true;
+	ui.sbLayoutRowCount->setValue(value);
+	m_initializing = false;
+}
+
+
+//*************************************************************
+//******************** SETTINGS *******************************
+//*************************************************************
 
 void WorksheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
