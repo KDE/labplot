@@ -32,6 +32,7 @@
 #include "Worksheet.h"
 #include "TextLabelPrivate.h"
 #include "../lib/commandtemplates.h"
+#include "lib/XmlStreamReader.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -462,3 +463,148 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 	return QGraphicsItem::itemChange(change, value);
  }
  
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void TextLabel::save(QXmlStreamWriter* writer) const{
+	Q_D(const TextLabel);
+
+    writer->writeStartElement( "textLabel" );
+    writeBasicAttributes(writer);
+    writeCommentElement(writer);
+
+	//geometry
+    writer->writeStartElement( "geometry" );
+    writer->writeAttribute( "x", QString::number(d->position.x()) );
+    writer->writeAttribute( "y", QString::number(d->position.y()) );
+    writer->writeAttribute( "horizontalPosition", QString::number(d->horizontalPosition) );
+	writer->writeAttribute( "verticalPosition", QString::number(d->verticalPosition) );
+	writer->writeAttribute( "horizontalAlignment", QString::number(d->horizontalAlignment) );
+	writer->writeAttribute( "verticalAlignment", QString::number(d->verticalAlignment) );
+	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
+    writer->writeEndElement();
+	
+	writer->writeStartElement( "text" );
+	writer->writeCharacters( d->text );
+	writer->writeEndElement();
+	
+	writer->writeStartElement( "format" );
+    writer->writeAttribute( "teXUsed", QString::number(d->teXUsed) );
+	writer->writeAttribute( "teXFontSize", QString::number(d->teXFontSize) );
+	writer->writeAttribute( "teXFontColor_r", QString::number(d->teXFontColor.red()) );
+	writer->writeAttribute( "teXFontColor_g", QString::number(d->teXFontColor.green()) );
+	writer->writeAttribute( "teXFontColor_b", QString::number(d->teXFontColor.blue()) );
+	writer->writeEndElement();
+	
+    writer->writeEndElement(); // close "textLabel" section
+}
+
+//! Load from XML
+bool TextLabel::load(XmlStreamReader* reader){
+	Q_D(TextLabel);
+
+    if(!reader->isStartElement() || reader->name() != "textLabel"){
+        reader->raiseError(tr("no textLabel element found"));
+        return false;
+    }
+
+    if (!readBasicAttributes(reader))
+        return false;
+
+    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+    QRectF rect;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "textLabel")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+        if (reader->name() == "comment"){
+            if (!readCommentElement(reader)) return false;
+		}else if (reader->name() == "geometry"){
+            attribs = reader->attributes();
+
+            str = attribs.value("x").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'x'"));
+            else
+                d->position.setX(str.toDouble());
+
+            str = attribs.value("y").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'y'"));
+            else
+                d->position.setY(str.toDouble());
+
+            str = attribs.value("horizontalPosition").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'horizontalPosition'"));
+            else
+                d->horizontalPosition = (TextLabel::HorizontalPosition)str.toInt();
+
+            str = attribs.value("verticalPosition").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'verticalPosition'"));
+            else
+                d->verticalPosition = (TextLabel::VerticalPosition)str.toInt();
+
+			str = attribs.value("horizontalAlignment").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'horizontalAlignment'"));
+            else
+                d->horizontalAlignment = (TextLabel::HorizontalAlignment)str.toInt();
+
+            str = attribs.value("verticalAlignment").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'verticalAlignment'"));
+            else
+                d->verticalAlignment = (TextLabel::VerticalAlignment)str.toInt();
+		}else if (reader->name() == "text"){
+			d->text = reader->readElementText();
+		}else if (reader->name() == "format"){
+			attribs = reader->attributes();
+
+			str = attribs.value("teXUsed").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'teXUsed'"));
+            else
+                d->teXUsed = str.toInt();
+			
+			str = attribs.value("teXFontSize").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'teXFontSize'"));
+            else
+                d->teXFontSize = str.toInt();
+			
+			str = attribs.value("teXFontColor_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'teXFontColor_r'"));
+            else
+                d->teXFontColor.setRed( str.toInt() );
+
+			str = attribs.value("teXFontColor_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'teXFontColor_g'"));
+            else
+                d->teXFontColor.setGreen( str.toInt() );
+			
+			str = attribs.value("teXFontColor_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'teXFontColor_b'"));
+            else
+                d->teXFontColor.setBlue( str.toInt() );			
+        }else{ // unknown element
+            reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+            if (!reader->skipToEndElement()) return false;
+        }
+    }
+
+	//TODO we need to call retransform() or updateText() here, but these functions don't properly behave yet.
+    return true;
+}
