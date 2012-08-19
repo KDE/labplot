@@ -35,6 +35,7 @@
 
 //****** GUI **************
 #include "datasources/ImportFileDialog.h"
+#include "HistoryDialog.h"
 #include "SettingsDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "GuiObserver.h"
@@ -503,6 +504,9 @@ bool MainWin::newProject(){
 	if (!closeProject())
 		return false;
 	
+	if (m_project)
+		delete m_project;
+
 	m_project = new Project();
   	m_currentAspect = m_project;
  	m_currentFolder = m_project;
@@ -559,7 +563,6 @@ bool MainWin::newProject(){
  	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
  	setCaption(m_project->name());
 	 
-// 	startTestCode();
 	return true;
 }
 
@@ -784,7 +787,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 }
 
 /*!
-	returns a pointer to a Spreadsheet-object, if the currently active Mdi-Subwindow is \a WorksheetView
+	returns a pointer to a Worksheet-object, if the currently active Mdi-Subwindow is \a WorksheetView
 	Otherwise returns \a 0.
 */
 Worksheet* MainWin::activeWorksheet() const{
@@ -987,28 +990,14 @@ void MainWin::toggleDockWidget(QAction* action) const{
 /*!
 	shows the dialog with the Undo-history.
 */
-void MainWin::historyDialog() const{
+void MainWin::historyDialog(){
 	if (!m_project->undoStack())
 		 return;
 
-	KDialog dialog;
-	dialog.setWindowIcon( KIcon("view-history") );
-	dialog.setWindowTitle(i18n("Undo/Redo History"));
-	dialog.setButtons( KDialog::Ok | KDialog::Cancel );
-
+	HistoryDialog* dialog = new HistoryDialog(this, m_project->undoStack(), m_undoViewEmptyLabel);
 	int index = m_project->undoStack()->index();
-	QUndoView undo_view(m_project->undoStack());
-	undo_view.setCleanIcon( KIcon("edit-clear-history") );
- 	undo_view.setEmptyLabel(m_undoViewEmptyLabel);
-	undo_view.setMinimumWidth(350);
-	undo_view.setWhatsThis(i18n("List of all performed steps/actions.")+"\n"
-			 + i18n("Select an item in the list to navigate to the corresponding step."));
-	dialog.setMainWidget(&undo_view);
-
-	if (dialog.exec() == QDialog::Accepted)
-		return;
-
-	m_project->undoStack()->setIndex(index);
+	if (dialog->exec() != QDialog::Accepted)
+		m_project->undoStack()->setIndex(index);
 }
 
 /*!
