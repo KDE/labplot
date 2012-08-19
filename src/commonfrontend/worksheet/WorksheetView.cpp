@@ -333,8 +333,6 @@ void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
 }
 
 void WorksheetView::fillToolBar(QToolBar* toolBar){
-	toolBar->clear();
-	
 	toolBar->addSeparator();
 	toolBar->addAction(navigationModeAction);
 	toolBar->addAction(zoomModeAction);

@@ -456,11 +456,13 @@ void MainWin::updateGUI() {
 		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
+		menu->clear();
 		view->createContextMenu(menu);
 		
 		//populate worksheet-toolbar
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
 		toolbar->setVisible(true);
+		toolbar->clear();
 		view->fillToolBar(toolbar);
 		
 		//hide the spreadsheet toolbar
@@ -481,11 +483,13 @@ void MainWin::updateGUI() {
 			//populate spreadsheet-menu
 			SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
 			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
+			menu->clear();
 			view->createContextMenu(menu);
 			
 			//populate spreadsheet-toolbar
 			QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
 			toolbar->setVisible(true);
+			toolbar->clear();
 			view->fillToolBar(toolbar);
 		}else{
 			//no spreadsheet selected -> deactivate spreadsheet related menus

@@ -311,8 +311,6 @@ void SpreadsheetView::fillProjectMenu(QMenu * menu, bool * rc){
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar){
-	toolBar->clear();
-
 	toolBar->addAction(action_insert_rows);
 	toolBar->addAction(action_add_rows);
 	toolBar->addAction(action_remove_rows);
