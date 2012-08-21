@@ -42,12 +42,14 @@
  *
  */ 
 
-AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name){
+AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name),
+	m_coordinateSystem(0), m_plotArea(0), m_title(0){
 	init();
 }
 
 AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd)
-	: WorksheetElementContainer(name, dd){
+	: WorksheetElementContainer(name, dd),
+	m_coordinateSystem(0), m_plotArea(0), m_title(0){
 	init();
 }
 
@@ -55,9 +57,9 @@ void AbstractPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-// TODO
+	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
 }
-
 
 AbstractPlot::~AbstractPlot() {
 // TODO

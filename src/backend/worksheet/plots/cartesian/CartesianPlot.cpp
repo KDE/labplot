@@ -85,12 +85,13 @@ CartesianPlot::~CartesianPlot(){
 }
 
 void CartesianPlot::init(){
-	Q_D(CartesianPlot);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	initActions();
+	initMenus();
+}
 
+void CartesianPlot::initDefault(){
+	Q_D(CartesianPlot);
+	
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
@@ -162,9 +163,6 @@ void CartesianPlot::init(){
 	
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->setRect(QRectF(x,y,w,h));
-		
-	initActions();
-	initMenus();
 }
 
 void CartesianPlot::initActions(){
@@ -314,6 +312,15 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
     writeBasicAttributes(writer);
     writeCommentElement(writer);
 
+	//geometry
+    writer->writeStartElement( "geometry" );
+    writer->writeAttribute( "x", QString::number(d->rect.x()) );
+    writer->writeAttribute( "y", QString::number(d->rect.y()) );
+    writer->writeAttribute( "width", QString::number(d->rect.width()) );
+    writer->writeAttribute( "height", QString::number(d->rect.height()) );
+    writer->writeEndElement();
+	
+	//coordinate system
 	//TODO
 	
     //serialize all children
@@ -350,6 +357,25 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 
         if (reader->name() == "comment"){
             if (!readCommentElement(reader)) return false;
+        }else if(reader->name() == "textLabel"){
+            m_title = new TextLabel("");
+            if (!m_title->load(reader)){
+                delete m_title;
+				m_title=0;
+                return false;
+            }else{
+                addChild(m_title);
+            }
+		}else if(reader->name() == "plotArea"){
+			
+		}else if(reader->name() == "axis"){
+            Axis* axis = new Axis("");
+            if (!axis->load(reader)){
+                delete axis;
+                return false;
+            }else{
+                addChild(axis);
+            }            
         }else{ // unknown element
             reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;

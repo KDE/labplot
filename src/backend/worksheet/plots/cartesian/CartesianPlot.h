@@ -44,6 +44,7 @@ class CartesianPlot:public AbstractPlot{
 		CartesianPlot(const QString &name);
 		~CartesianPlot();
 		
+		void initDefault();
 		QIcon icon() const;
 		QMenu* createContextMenu();
 		void setRect(const QRectF&);

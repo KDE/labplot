@@ -587,6 +587,7 @@ void WorksheetView::addNew(QAction* action){
 	AbstractAspect* aspect = 0;
 	if ( action == addPlotAction ){
 		aspect = new CartesianPlot("xy-plot");
+		dynamic_cast<CartesianPlot*>(aspect)->initDefault();
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel("text label");
 		l->setText("text label");

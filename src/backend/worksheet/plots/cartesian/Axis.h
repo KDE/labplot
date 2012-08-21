@@ -57,12 +57,15 @@ class Axis: public AbstractWorksheetElement {
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 		
-		Axis(const QString &name, const AxisOrientation &orientation);
+		Axis(const QString &name, const AxisOrientation &orientation = AxisHorizontal);
 		virtual ~Axis();
 
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
+		
+		virtual void save(QXmlStreamWriter *) const;
+		virtual bool load(XmlStreamReader *);
 
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
 		BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale);
@@ -97,7 +100,6 @@ class Axis: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(LabelsPosition, labelsPosition, LabelsPosition);
 		BASIC_D_ACCESSOR_DECL(float, labelsOffset, LabelsOffset);
 		BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle);
-		BASIC_D_ACCESSOR_DECL(qreal, labelsFontSize, LabelsFontSize);
 		CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor);
 		CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont);
 		CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix);

@@ -36,6 +36,8 @@
 #include "CartesianCoordinateSystem.h"
 #include "../AbstractPlot.h"
 #include "../../../lib/commandtemplates.h"
+#include "lib/XmlStreamReader.h"
+
 #include "kdefrontend/GuiTools.h"
 #include <QBrush>
 #include <QPen>
@@ -635,6 +637,12 @@ void Axis::lineStyleChanged(QAction* action){
 	emit lineStyleChanged();
 }
 
+// void Axis::lineColorChanged(QAction* action){
+// 
+// 	
+// 	emit lineColorChanged();
+// }
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -671,6 +679,8 @@ void AxisPrivate::retransform() {
 		return;
 
 	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
+	if (!cSystem)
+		return;
 
 	linePath = QPainterPath();
 
@@ -1042,14 +1052,14 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle |= majorTicksPath.boundingRect();
 	boundingRectangle |= minorTicksPath.boundingRect();
 
-	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, pen);
-	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, pen));
-	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, pen));
+	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
+	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
+	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 	
 	//add title label, if available
 	if ( title->isVisible() && title->text()!="" ){
 		boundingRectangle |=mapRectFromItem( title->graphicsItem(), title->graphicsItem()->boundingRect() );
-		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), pen));
+		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 	boundingRectangle = boundingRectangle.normalized();
 	
@@ -1066,7 +1076,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			trafo.rotate( -labelsRotationAngle );	
 			tempPath = trafo.map(tempPath);
 
-			tickLabelsPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, pen));
+			tickLabelsPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, linePen));
 		}
 		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 		boundingRectangle = boundingRectangle.united(tickLabelsPath.boundingRect());
@@ -1137,3 +1147,418 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
     q->createContextMenu()->exec(event->screenPos());
 }
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void Axis::save(QXmlStreamWriter* writer) const{
+	Q_D(const Axis);
+
+    writer->writeStartElement( "axis" );
+    writeBasicAttributes( writer );
+    writeCommentElement( writer );
+
+	//general
+    writer->writeStartElement( "general" );
+	writer->writeAttribute( "orientation", QString::number(d->orientation) );
+	writer->writeAttribute( "scale", QString::number(d->scale) );
+	writer->writeAttribute( "offset", QString::number(d->offset) );
+	writer->writeAttribute( "start", QString::number(d->start) );
+	writer->writeAttribute( "end", QString::number(d->end) );
+	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
+	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
+	writer->writeEndElement();
+	
+	//label
+	d->title->save( writer );
+	
+	//line
+	writer->writeStartElement( "line" );
+	writer->writeAttribute( "style", QString::number(d->linePen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->linePen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->linePen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->linePen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->linePen.width()) );
+	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
+	writer->writeEndElement();
+	
+	//major ticks
+	writer->writeStartElement( "majorTicks" );
+	writer->writeAttribute( "direction", QString::number(d->majorTicksDirection) );
+	writer->writeAttribute( "type", QString::number(d->majorTicksType) );
+	writer->writeAttribute( "number", QString::number(d->majorTicksNumber) );
+	writer->writeAttribute( "length", QString::number(d->majorTicksLength) );
+	writer->writeAttribute( "style", QString::number(d->majorTicksPen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->majorTicksPen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->majorTicksPen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->majorTicksPen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->majorTicksPen.widthF()) );
+	writer->writeAttribute( "opacity", QString::number(d->majorTicksOpacity) );
+	writer->writeEndElement();
+
+	//minor ticks
+	writer->writeStartElement( "minorTicks" );
+	writer->writeAttribute( "direction", QString::number(d->minorTicksDirection) );
+	writer->writeAttribute( "type", QString::number(d->minorTicksType) );
+	writer->writeAttribute( "number", QString::number(d->minorTicksNumber) );
+	writer->writeAttribute( "length", QString::number(d->minorTicksLength) );
+	writer->writeAttribute( "style", QString::number(d->minorTicksPen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->minorTicksPen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->minorTicksPen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->minorTicksPen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->minorTicksPen.widthF()) );
+	writer->writeAttribute( "opacity", QString::number(d->minorTicksOpacity) );
+	writer->writeEndElement();
+	
+	//extra ticks
+
+	//labels
+	writer->writeStartElement( "labels" );
+	writer->writeAttribute( "position", QString::number(d->labelsPosition) );
+	writer->writeAttribute( "offset", QString::number(d->labelsOffset) );
+	writer->writeAttribute( "rotation", QString::number(d->labelsRotationAngle) );
+	writer->writeAttribute( "color_r", QString::number(d->labelsColor.red()) );
+	writer->writeAttribute( "color_g", QString::number(d->labelsColor.green()) );
+	writer->writeAttribute( "color_b", QString::number(d->labelsColor.blue()) );
+	writer->writeAttribute( "fontFamily", d->labelsFont.family() );
+	writer->writeAttribute( "fontSize", QString::number(d->labelsFont.pointSize()) );
+	writer->writeAttribute( "fontWeight", QString::number(d->labelsFont.weight()) );
+	writer->writeAttribute( "fontItalic", QString::number(d->labelsFont.italic()) );
+	writer->writeAttribute( "prefix", d->labelsPrefix );
+	writer->writeAttribute( "suffix", d->labelsSuffix );
+	writer->writeAttribute( "opacity", QString::number(d->labelsOpacity) );
+	writer->writeEndElement();
+	
+	//grid
+	
+    writer->writeEndElement(); // close "axis" section
+}
+
+//! Load from XML
+bool Axis::load(XmlStreamReader* reader){
+	Q_D(Axis);
+
+    if(!reader->isStartElement() || reader->name() != "axis"){
+        reader->raiseError(tr("no axis element found"));
+        return false;
+    }
+
+    if (!readBasicAttributes(reader))
+        return false;
+
+    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+    QRectF rect;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "axis")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+        if (reader->name() == "comment"){
+            if (!readCommentElement(reader)) return false;
+		}else if (reader->name() == "general"){
+            attribs = reader->attributes();
+	
+            str = attribs.value("orientation").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'x'"));
+            else
+                d->orientation = (Axis::AxisOrientation)str.toInt();
+
+            str = attribs.value("scale").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'scale'"));
+            else
+                d->scale = (Axis::AxisScale)str.toInt();
+
+            str = attribs.value("offset").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'offset'"));
+            else
+                d->offset = str.toDouble();
+
+            str = attribs.value("start").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'start'"));
+            else
+                d->start = str.toDouble();
+
+			str = attribs.value("end").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'end'"));
+            else
+                d->end = str.toDouble();
+			
+            str = attribs.value("scalingFactor").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'scalingFactor'"));
+            else
+                d->scalingFactor = str.toDouble();
+			
+			str = attribs.value("zeroOffset").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'zeroOffset'"));
+            else
+                d->zeroOffset = str.toDouble();
+		}else if (reader->name() == "textLabel"){
+			d->title->load(reader);
+		}else if (reader->name() == "line"){
+			attribs = reader->attributes();
+	
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->linePen.setStyle( (Qt::PenStyle)str.toInt() );
+			
+			QColor color;
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                color.setGreen( str.toInt() );
+			
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                color.setBlue( str.toInt() );
+			
+			d->linePen.setColor(color);
+			
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->linePen.setWidthF( str.toDouble() );
+			
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->lineOpacity = str.toInt();
+		}else if (reader->name() == "majorTicks"){
+			attribs = reader->attributes();
+	
+			str = attribs.value("direction").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'direction'"));
+            else
+                d->majorTicksDirection = (Axis::TicksDirection)str.toInt();
+			
+			str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'type'"));
+            else
+                d->majorTicksType = (Axis::TicksType)str.toInt();
+			
+			str = attribs.value("number").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'number'"));
+            else
+                d->majorTicksNumber = str.toInt();
+
+			str = attribs.value("length").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'length'"));
+            else
+                d->majorTicksLength = str.toInt();
+			
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->majorTicksPen.setStyle( (Qt::PenStyle)str.toInt() );
+
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                d->majorTicksPen.color().setRed( str.toInt() );
+			
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                d->majorTicksPen.color().setGreen( str.toInt() );
+			
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                d->majorTicksPen.color().setBlue( str.toInt() );
+			
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->majorTicksPen.setWidthF( str.toDouble() );
+			
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->majorTicksOpacity = str.toInt();
+		}else if (reader->name() == "minorTicks"){
+			attribs = reader->attributes();
+	
+			str = attribs.value("direction").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'direction'"));
+            else
+                d->minorTicksDirection = (Axis::TicksDirection)str.toInt();
+			
+			str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'type'"));
+            else
+                d->minorTicksType = (Axis::TicksType)str.toInt();
+			
+			str = attribs.value("number").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'number'"));
+            else
+                d->minorTicksNumber = str.toInt();
+
+			str = attribs.value("length").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'length'"));
+            else
+                d->minorTicksLength = str.toInt();
+			
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->minorTicksPen.setStyle( (Qt::PenStyle)str.toInt() );
+
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                d->minorTicksPen.color().setRed( str.toInt() );
+			
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                d->minorTicksPen.color().setGreen( str.toInt() );
+			
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                d->minorTicksPen.color().setBlue( str.toInt() );
+			
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->minorTicksPen.setWidthF( str.toDouble() );
+			
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->minorTicksOpacity = str.toInt();
+		}else if (reader->name() == "minorTicks"){
+			attribs = reader->attributes();
+
+			str = attribs.value("position").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'position'"));
+            else
+                d->labelsPosition = (Axis::LabelsPosition)str.toInt();
+			
+			str = attribs.value("offset").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'offset'"));
+            else
+                d->labelsOffset = str.toDouble();
+			
+			str = attribs.value("rotation").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rotation'"));
+            else
+                d->labelsRotationAngle = str.toDouble();
+			
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                d->labelsColor.setRed( str.toInt() );
+			
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                d->labelsColor.setGreen( str.toInt() );
+			
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                d->labelsColor.setBlue( str.toInt() );
+			
+			str = attribs.value("fontFamily").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fontFamily'"));
+            else
+                d->labelsFont.setFamily( str );
+			
+			str = attribs.value("fontSize").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fontSize'"));
+            else
+                d->labelsFont.setPointSize( str.toInt() );
+			
+			str = attribs.value("fontWeight").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fontWeight'"));
+            else
+                d->labelsFont.setWeight( str.toInt() );
+			
+			str = attribs.value("fontItalic").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fontItalic'"));
+            else
+                d->labelsFont.setItalic( str.toInt() );
+
+			str = attribs.value("prefix").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'prefix'"));
+            else
+                d->labelsPrefix = str;
+
+			str = attribs.value("suffix").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'suffix'"));
+            else
+                d->labelsSuffix = str;
+
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->labelsOpacity = str.toInt();
+        }else{ // unknown element
+            reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+            if (!reader->skipToEndElement()) return false;
+        }
+    }
+
+    return true;
+}
+

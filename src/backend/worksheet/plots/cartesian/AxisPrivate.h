@@ -83,8 +83,8 @@ class AxisPrivate: public QGraphicsItem {
 		QFont labelsFont;
 		float labelsOffset; //!< offset, distance to the end of the tick line (in page units)
 		qreal labelsOpacity;	
-		char numericFormat;
-		int displayedDigits;
+		char numericFormat; //TODO
+		int displayedDigits; //TODO
 		// TODO support for date/time and string labels
 		QString labelsPrefix;
 		QString labelsSuffix;
@@ -101,9 +101,7 @@ class AxisPrivate: public QGraphicsItem {
 		QPainterPath axisShape;
 
 		//TODO extra tick label
-		QList<TextLabel *> labels;
-
-		QPen pen;
+// 		QList<TextLabel *> labels;
 
 		QString name() const;
 		virtual QRectF boundingRect() const;
