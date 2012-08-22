@@ -76,7 +76,7 @@ Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate 
 	init();
 }
 
-void Axis::init() {
+void Axis::init(){
 	Q_D(Axis);
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -139,9 +139,10 @@ void Axis::init() {
 	retransform();
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
-	
+
 	this->initActions();
 	this->initMenus();
+
 }
 
 void Axis::initActions(){

@@ -84,29 +84,31 @@ CartesianPlot::~CartesianPlot(){
 	delete addNewMenu;
 }
 
+/*!
+	initializes all member variables of \c CartesianPlot
+ */
 void CartesianPlot::init(){
-	initActions();
-	initMenus();
-}
-
-void CartesianPlot::initDefault(){
 	Q_D(CartesianPlot);
-	
+
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
 
-	//Geometry, specify the plot rect in scene coordinates.
-	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
-	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
-	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
-	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
-	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
-
 	//offset between the plot area and the area defining the coodinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+	
+	initActions();
+	initMenus();
+}
 
+/*!
+	initializes all children of \c CartesianPlot and 
+	setups a default plot with for axes and plot title.
+ */
+void CartesianPlot::initDefault(){
+	Q_D(CartesianPlot);
+	
 	//Axes
 	Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 	addChild(axis);
@@ -161,6 +163,13 @@ void CartesianPlot::initDefault(){
 	m_title->setHorizontalAlignment(TextLabel::hAlignCenter);
 	m_title->setVerticalAlignment(TextLabel::vAlignBottom);
 	
+	//Geometry, specify the plot rect in scene coordinates.
+	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
+	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->setRect(QRectF(x,y,w,h));
 }
@@ -176,6 +185,8 @@ void CartesianPlot::initActions(){
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
 #endif
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
+	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 }
 
 void CartesianPlot::initMenus(){
@@ -218,8 +229,15 @@ void CartesianPlot::setRect(const QRectF& r){
 }
 
 //################################################################
-//################### Slots ##########################
+//########################## Slots ###############################
 //################################################################
+void CartesianPlot::addAxis(){
+	if (QObject::sender() == addHorizontalAxisAction)
+		addChild(new Axis("x-axis", Axis::AxisHorizontal));
+	else
+		addChild(new Axis("y-axis", Axis::AxisVertical));
+}
+
 void CartesianPlot::addCurve(){
 	this->addChild(new XYCurve("xy-curve"));
 }

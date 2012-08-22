@@ -69,6 +69,7 @@ class CartesianPlot:public AbstractPlot{
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
 	private slots:
+		void addAxis();
 		void addCurve();
 	
 	protected:
