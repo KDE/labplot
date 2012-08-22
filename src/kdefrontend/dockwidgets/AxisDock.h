@@ -2,7 +2,7 @@
     File                 : AxisDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke
+    Copyright            : (C) 2011-2012 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : axes widget class
                            
@@ -47,7 +47,7 @@ public:
 private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
-	
+	Axis* m_axis;
 	LabelWidget* labelWidget;
 	bool m_dataChanged;
 	bool m_initializing;
@@ -55,6 +55,7 @@ private:
 private slots:
 	void init();
 
+	//SLOTs for changes triggered in AxisDock
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
@@ -112,7 +113,12 @@ private slots:
 	void labelsOpacityChanged(int);
 	
 	//"Grid"-tab
+	//TODO
+	
+	//SLOTs for changes triggered in Axis
+	void axisOrientationChanged();
 
+	//save/load
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
 };
