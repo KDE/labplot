@@ -350,6 +350,7 @@ void TextLabelPrivate::updateTeXImage(){
 bool TextLabelPrivate::swapVisible(bool on){
 	bool oldValue = isVisible();
 	setVisible(on);
+	emit(q->changed());
 	return oldValue;
 }
 

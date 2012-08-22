@@ -101,8 +101,13 @@ LabelWidget::~LabelWidget() {}
 
 void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_labelsList = labels;
-	m_label = labels.first();
 	
+	//TODO: labplot craches sporadicaly when a new TextLabel is created upon a plot was already created.
+	//The list is (sporadicaly) empty. This shouldn't happen!
+	if (labels.isEmpty())
+		return;
+	
+	m_label = labels.first();
 	ui.chbVisible->setChecked( m_label->isVisible() );
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
@@ -119,7 +124,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	
 	m_axesList = axes;
 	m_label = m_labelsList.first();
-
+	ui.chbVisible->setChecked( m_label->isVisible() );
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
@@ -144,7 +149,7 @@ void LabelWidget::setFixedLabelMode(const bool b){
 }
 
 //**********************************************************
-//******************** SLOTS *******************************
+//****** SLOTs for changes triggered in LabelWidget*********
 //**********************************************************
 
 // text formating slots
@@ -402,7 +407,6 @@ void LabelWidget::customPositionYChanged(double value){
 		label->setPosition(pos);
 }
 
-
 void LabelWidget::horizontalAlignmentChanged(int index){
 	if (m_initializing)
 		return;
@@ -435,15 +439,6 @@ void LabelWidget::offsetChanged(double value){
 		axis->setTitleOffset( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
-void LabelWidget::labelPostionChanged(QPointF& point){
-	m_initializing = true;
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(point.x(), Worksheet::Centimeter) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(point.y(), Worksheet::Centimeter) );
-	ui.cbPositionX->setCurrentIndex( TextLabel::hPositionCustom );
-	ui.cbPositionY->setCurrentIndex( TextLabel::vPositionCustom );
-	m_initializing = false;
-}
-
 // slot for TeX image update timer
 void LabelWidget::updateTeXImage() {
 	foreach(TextLabel* label, m_labelsList)
@@ -456,9 +451,21 @@ void LabelWidget::visibilityChanged(bool state){
 	if (m_initializing)
 		return;
 
-	m_label->setVisible(state);
+	foreach(TextLabel* label, m_labelsList)
+		m_label->setVisible(state);
 }
 
+//*********************************************************
+//****** SLOTs for changes triggered in TextLabel *********
+//*********************************************************
+void LabelWidget::labelPostionChanged(QPointF& point){
+	m_initializing = true;
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(point.x(), Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(point.y(), Worksheet::Centimeter) );
+	ui.cbPositionX->setCurrentIndex( TextLabel::hPositionCustom );
+	ui.cbPositionY->setCurrentIndex( TextLabel::vPositionCustom );
+	m_initializing = false;
+}
 
 //**********************************************************
 //******************** SETTINGS ****************************

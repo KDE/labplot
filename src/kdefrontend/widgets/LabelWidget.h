@@ -60,6 +60,7 @@ signals:
 	void dataChanged(bool);
 
 private slots:
+	//SLOTs for changes triggered in LabelWidget
 	void textChanged();
 	void charFormatChanged(QTextCharFormat format);
 	void teXUsedChanged(bool);
@@ -83,10 +84,11 @@ private slots:
 	void rotationChanged(int);
 	void offsetChanged(double);
 	
-	void labelPostionChanged(QPointF&);
 	void updateTeXImage();
-
 	void visibilityChanged(bool);
+	
+	//SLOTs for changes triggered in TextLabel
+	void labelPostionChanged(QPointF&);
 };
 
 #endif //LABELWIDGET_H
