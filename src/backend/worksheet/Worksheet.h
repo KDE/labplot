@@ -102,7 +102,9 @@ class Worksheet: public AbstractPart, public scripted{
 		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 		void childSelected();
+		void childSelected(const AbstractAspect*);
 		void childDeselected();
+		void childDeselected(const AbstractAspect*);
 
 	 signals:
 		void requestProjectContextMenu(QMenu *menu);

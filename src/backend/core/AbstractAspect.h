@@ -86,7 +86,7 @@ class AbstractAspect : public QObject
 		Folder * folder();
 		bool isDescendantOf(AbstractAspect *other);
 
-		void setSelectedInProject(bool);
+		void setSelected(bool);
 		
 		void addChild(AbstractAspect* child);
 		void insertChildBefore(AbstractAspect *child, AbstractAspect *before);
@@ -188,8 +188,14 @@ class AbstractAspect : public QObject
 		QString uniqueNameFor(const QString &current_name) const;
 		
 	protected slots:
+		//!called when a child aspect was selected in the model
 		virtual void childSelected(){}
+		//!called when a child's child aspect was selected in the model
+		virtual void childSelected(const AbstractAspect*){}
+		//!called when a child aspect was deselected in the model
 		virtual void childDeselected(){}
+		//!called when a child's child aspect was deselected in the model
+		virtual void childDeselected(const AbstractAspect*){}
 		
 	signals:
 		void aspectDescriptionAboutToChange(const AbstractAspect *aspect);
@@ -202,8 +208,13 @@ class AbstractAspect : public QObject
 		void aspectHiddenChanged(const AbstractAspect *aspect);
 		void statusInfo(const QString &text);
 		
-		void selectedInProject();
-		void deselectedInProject();
+		//selection/deselection in model (project explorer)
+		void selected();
+		void selected(const AbstractAspect*);
+		void deselected();
+		void deselected(const AbstractAspect*);
+		
+		//selection/deselection in view
 		void childAspectSelectedInView(const AbstractAspect*);
 		void childAspectDeselectedInView(const AbstractAspect*);
 		

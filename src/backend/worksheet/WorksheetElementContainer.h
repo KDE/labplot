@@ -62,6 +62,8 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 	protected slots:
 		virtual void handleAspectAdded(const AbstractAspect *handleAspect);
 		virtual void handleAspectAboutToBeRemoved(const AbstractAspect *handleAspect);
+		void childSelected();
+		void childDeselected();
 
 	private:
     	Q_DECLARE_PRIVATE(WorksheetElementContainer)

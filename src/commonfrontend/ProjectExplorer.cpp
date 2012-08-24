@@ -425,19 +425,17 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index){
   //there are four model indices in each row ->divide by 4 to obtain the number of selected aspects.
   //TODO find out a solution which is not explicitely dependent on the current number of columns.
   items = selected.indexes();
-//   qDebug()<<"selected items "<<items;
   for (int i=0; i<items.size()/4; ++i){
 	index=items.at(i*4);
 	aspect = static_cast<AbstractAspect *>(index.internalPointer());
-// 	qDebug()<<aspect->name();
-	aspect->setSelectedInProject(true);
+	aspect->setSelected(true);
   }
   
   items = deselected.indexes();
   for (int i=0; i<items.size()/4; ++i){
 	index=items.at(i*4);
 	aspect = static_cast<AbstractAspect *>(index.internalPointer());
-	aspect->setSelectedInProject(false);
+	aspect->setSelected(false);
   }
   
   items = m_treeView->selectionModel()->selectedRows();
@@ -447,6 +445,5 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index){
 	selectedAspects<<aspect;
   }
   
-//   qDebug()<<"ProjectExplorer::selectionChanged, selected aspects"<<selectedAspects.size();
   emit selectedAspectsChanged(selectedAspects);
 }

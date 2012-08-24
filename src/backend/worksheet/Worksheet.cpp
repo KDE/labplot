@@ -239,6 +239,12 @@ void Worksheet::childSelected(){
 		emit itemSelected(element->graphicsItem());
 }
 
+void Worksheet::childSelected(const AbstractAspect* aspect){
+	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+	if (element)
+		emit itemSelected(element->graphicsItem());
+}
+
 /*!
 	this slot is called when a worksheet element is deselected in the project explorer.
 	emits \c itemDeselected() which forwards this event to \c WorksheetView 
@@ -250,6 +256,11 @@ void Worksheet::childDeselected(){
 		emit itemDeselected(element->graphicsItem());
 }
 
+void Worksheet::childDeselected(const AbstractAspect* aspect){
+	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+	if (element)
+		emit itemDeselected(element->graphicsItem());
+}
 
 /*!
  *  Emits the signal to select or to deselect the aspect corresponding to \c QGraphicsItem \c item in the project explorer, 

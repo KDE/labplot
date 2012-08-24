@@ -358,8 +358,10 @@ void AbstractAspect::addChild(AbstractAspect* child)
 				Q_ARG(const AbstractAspect*,child)));
 	endMacro();
 	
- 	connect(child, SIGNAL(selectedInProject()), this, SLOT(childSelected()));
-	connect(child, SIGNAL(deselectedInProject()), this, SLOT(childDeselected()));
+ 	connect(child, SIGNAL(selected()), this, SLOT(childSelected()));
+	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
+	connect(child, SIGNAL(deselected()), this, SLOT(childDeselected()));
+	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
 }
 
 /**
@@ -637,11 +639,11 @@ void AbstractAspect::setHidden(bool value)
 }
 
 
-void AbstractAspect::setSelectedInProject(bool s){
+void AbstractAspect::setSelected(bool s){
   if (s)
-	emit selectedInProject();
+	emit selected();
   else
-	emit deselectedInProject();
+	emit deselected();
 }
 
 /**
