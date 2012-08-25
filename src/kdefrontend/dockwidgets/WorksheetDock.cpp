@@ -500,13 +500,12 @@ void WorksheetDock::backgroundFirstColorChanged(const QColor& c){
 	}
 }
 
-
 void WorksheetDock::backgroundSecondColorChanged(const QColor& c){
   if (m_initializing)
 	return;
 
 	foreach(Worksheet* worksheet, m_worksheetList){
-		worksheet->setBackgroundFirstColor(c);
+		worksheet->setBackgroundSecondColor(c);
 	}
 }
 

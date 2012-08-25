@@ -690,6 +690,7 @@ void WorksheetView::changeSnapToGrid(){
 void WorksheetView::selectItem(QGraphicsItem* item){
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(true);
+	m_selectedItems<<item;
 	m_suppressSelectionChangedEvent = false;
 }
 
