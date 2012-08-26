@@ -107,7 +107,7 @@ void Axis::init(){
 	d->title->setText(this->name());
 	if ( d->orientation == AxisVertical )
 		d->title->setRotationAngle(270);
-	d->titleOffset = Worksheet::convertToSceneUnits(30, Worksheet::Point); //distance to the axis line
+	d->titleOffset = Worksheet::convertToSceneUnits(5, Worksheet::Point); //distance to the axis tick labels
 
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
@@ -711,17 +711,6 @@ void AxisPrivate::retransform() {
 		linePath.lineTo(line.p2());
 	}
 
-	//determine the new position of the title label, if available
-	if ( title->isVisible() && title->text()!="" ){
-		if ( !lines.empty() ){
-			QLineF firstLine = lines.first();
-			QLineF lastLine = lines.last();
-			if (orientation == Axis::AxisHorizontal)
-				title->setPosition( QPointF( (firstLine.p1().y() - lastLine.p2().x())/2, firstLine.p1().y() + titleOffset ) );
-			else
-				title->setPosition( QPointF( firstLine.p1().x() - titleOffset, (firstLine.p1().y()+firstLine.p2().y())/2 ) );
-		}
-	}
 	retransformTicks(cSystem);
 }
 
@@ -1046,6 +1035,7 @@ void AxisPrivate::retransformTickLabels() {
 	recalcShapeAndBoundingRect();
 }
 
+
 void AxisPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
@@ -1057,16 +1047,9 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 	
-	//add title label, if available
-	if ( title->isVisible() && title->text()!="" ){
-		boundingRectangle |=mapRectFromItem( title->graphicsItem(), title->graphicsItem()->boundingRect() );
-		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
-	}
-	boundingRectangle = boundingRectangle.normalized();
-	
-	  if (labelsPosition != Axis::NoLabels){
+	QPainterPath  tickLabelsPath = QPainterPath();
+	if (labelsPosition != Axis::NoLabels){
 		QTransform trafo;
-		QPainterPath  tickLabelsPath = QPainterPath();
 		QPainterPath tempPath;
 	  	for (int i=0; i<tickLabelPoints.size(); i++){
 			tempPath = QPainterPath();
@@ -1082,6 +1065,27 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 		boundingRectangle = boundingRectangle.united(tickLabelsPath.boundingRect());
 	}
+	
+	//add title label, if available
+	if ( title->isVisible() && title->text()!="" ){
+		//determine the new position of the title label:
+		//we calculate the new position here and not in retranform(),
+		//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
+		QRectF rect=linePath.boundingRect();
+		float offset = titleOffset + labelsOffset; //the distance to the axis line
+		if (orientation == Axis::AxisHorizontal){
+			offset += title->graphicsItem()->boundingRect().height()/2 + tickLabelsPath.boundingRect().height();
+			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2, rect.bottomLeft().y() + offset ) );
+		}else{
+			offset += title->graphicsItem()->boundingRect().width()/2 + tickLabelsPath.boundingRect().width();
+			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ) );
+		}
+		
+		boundingRectangle |=mapRectFromItem( title->graphicsItem(), title->graphicsItem()->boundingRect() );
+		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
+	}
+	
+	boundingRectangle = boundingRectangle.normalized();
 }
 
 /*!
