@@ -107,6 +107,10 @@ class XYCurve: public AbstractWorksheetElement {
 	private:
     	Q_DECLARE_PRIVATE(XYCurve)
 		void init();
+	
+	signals:
+		void xDataChanged();
+		void yDataChanged();
 };
 
 #endif

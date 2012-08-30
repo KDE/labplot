@@ -31,6 +31,7 @@
 #include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "worksheet/Worksheet.h"
 #include "core/AbstractAspect.h"
+#include "lib/XmlStreamReader.h"
 #include <cmath>
 #include <QUndoCommand>
 #include <QtGlobal>
@@ -577,10 +578,24 @@ void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double 
 	d->plot->endMacro();
 }
 
-//############ private-implementation #################
+
+//##############################################################################
+//######################### Private implementation #############################
+//##############################################################################
 CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner)
 	:q(owner){
 }
 
 CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate(){
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+void CartesianCoordinateSystem::save(QXmlStreamWriter* writer) const{
+	
+}
+
+bool CartesianCoordinateSystem::load(XmlStreamReader* reader){
+	return true;
 }

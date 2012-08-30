@@ -92,6 +92,9 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		QList<Scale *> xScales() const;
 		bool setYScales(const QList<Scale *> &scales);
 		QList<Scale *> yScales() const;
+		
+		virtual void save(QXmlStreamWriter *) const;
+		virtual bool load(XmlStreamReader *);
 
 	private:
 		void init();

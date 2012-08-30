@@ -35,6 +35,7 @@
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 class KAction;
 #endif
+class QToolBar;
 class CartesianPlotPrivate;
 
 class CartesianPlot:public AbstractPlot{
@@ -47,10 +48,18 @@ class CartesianPlot:public AbstractPlot{
 		void initDefault();
 		QIcon icon() const;
 		QMenu* createContextMenu();
+		void fillToolBar(QToolBar*);
 		void setRect(const QRectF&);
 		
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
+		
+		BASIC_D_ACCESSOR_DECL(float, autoScaleX, AutoScaleX);
+		BASIC_D_ACCESSOR_DECL(float, autoScaleY, AutoScaleY);
+		BASIC_D_ACCESSOR_DECL(float, xMin, XMin);
+		BASIC_D_ACCESSOR_DECL(float, xMax, XMax);
+		BASIC_D_ACCESSOR_DECL(float, yMin, YMin);
+		BASIC_D_ACCESSOR_DECL(float, yMax, YMax);
 		
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;
@@ -64,6 +73,20 @@ class CartesianPlot:public AbstractPlot{
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		
+		QAction* scaleAutoXAction;
+		QAction* scaleAutoYAction;
+		QAction* scaleAutoAction;
+		QAction* zoomInAction;
+		QAction* zoomOutAction;
+		QAction* zoomInXAction;
+		QAction* zoomOutXAction;
+		QAction* zoomInYAction;
+		QAction* zoomOutYAction;
+		QAction* shiftLeftXAction;
+		QAction* shiftRightXAction;
+		QAction* shiftUpYAction;
+		QAction* shiftDownYAction;
+		
 		QMenu* addNewMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
@@ -71,6 +94,23 @@ class CartesianPlot:public AbstractPlot{
 	private slots:
 		void addAxis();
 		void addCurve();
+
+		void xDataChanged();
+		void yDataChanged();
+
+		void scaleAutoX();
+		void scaleAutoY();
+		void scaleAuto();
+		void zoomIn();
+		void zoomOut();
+		void zoomInX();
+		void zoomOutX();
+		void zoomInY();
+		void zoomOutY();
+		void shiftLeftX();
+		void shiftRightX();
+		void shiftUpY();
+		void shiftDownY();
 	
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);

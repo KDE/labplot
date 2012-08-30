@@ -66,6 +66,10 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		void setRect(const QRectF& r);
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void retransform();
+		void retransformScales();
+		
+		float xMin, xMax, yMin, yMax;
+		bool autoScaleX, autoScaleY;
 };
 
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)){
@@ -91,10 +95,17 @@ void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
+	d->xMin = 0;
+	d->xMax = 1;
+	d->yMin = 0;
+	d->yMax = 1;
+	d->autoScaleX = true;
+	d->autoScaleY = true;
+	
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
 
-	//offset between the plot area and the area defining the coodinate system, in scene units.
+	//offset between the plot area and the area defining the coordinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	
@@ -187,6 +198,8 @@ void CartesianPlot::initActions(){
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
+	
+	//TODO: zoom actions
 }
 
 void CartesianPlot::initMenus(){
@@ -207,6 +220,10 @@ QMenu *CartesianPlot::createContextMenu(){
 	return menu;
 }
 
+//TODO
+void CartesianPlot::fillToolBar(QToolBar* toolBar){
+	
+}
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -228,6 +245,21 @@ void CartesianPlot::setRect(const QRectF& r){
 	d->setRect(r);
 }
 
+/* ============================ getter methods ================= */
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMax, xMax)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMin, yMin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
+
+/* ============================ setter methods and undo commands ================= */
+
+// STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
+// void Axis::setVisible(bool on) {
+// 	Q_D(Axis);
+// 	exec(new AxisSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
+// }
+
+
 //################################################################
 //########################## Slots ###############################
 //################################################################
@@ -239,10 +271,147 @@ void CartesianPlot::addAxis(){
 }
 
 void CartesianPlot::addCurve(){
-	this->addChild(new XYCurve("xy-curve"));
+	XYCurve* curve = new XYCurve("xy-curve");
+	this->addChild(curve);
+	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
+	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
 }
 
+void CartesianPlot::xDataChanged(){
+	Q_D(CartesianPlot);
+	if (!d->autoScaleX)
+		return;
+	
+	XYCurve* curve = qobject_cast<XYCurve*>(QObject::sender());
+	if (!curve)
+		return;
+	//TODO
+// 	if (curve->xColumn()->maximum() > d->xMax){
+// 		d->xMax = curve->xColumn()->maximum();
+// 		d->retransformScales();
+// 	}
+}
 
+void CartesianPlot::yDataChanged(){
+	Q_D(CartesianPlot);
+	if (!d->autoScaleX)
+		return;
+	
+	XYCurve* curve = qobject_cast<XYCurve*>(QObject::sender());
+	if (!curve)
+		return;
+
+	//TODO
+}
+
+void CartesianPlot::scaleAutoX(){
+	//loop over all xy-curves and determine the maximum x-value
+}
+
+void CartesianPlot::scaleAutoY(){
+	
+}
+
+void CartesianPlot::scaleAuto(){
+	
+}
+		
+void CartesianPlot::zoomIn(){
+	Q_D(CartesianPlot);
+	float offset = (d->xMax-d->xMin)*0.1;
+	d->xMax += offset;
+	d->xMin -= offset;
+	offset = (d->yMax-d->yMin)*0.1;
+	d->yMax += offset;
+	d->yMin -= offset;
+	d->retransformScales();
+	retransform();
+}
+
+void CartesianPlot::zoomOut(){
+	Q_D(CartesianPlot);
+	float offset = (d->xMax-d->xMin)*0.1;
+	d->xMax -= offset;
+	d->xMin += offset;
+	offset = (d->yMax-d->yMin)*0.1;
+	d->yMax -= offset;
+	d->yMin += offset;
+	d->retransformScales();
+	retransform();	
+}
+
+void CartesianPlot::zoomInX(){
+	Q_D(CartesianPlot);
+	float offset = (d->xMax-d->xMin)*0.1;
+	d->xMax += offset;
+	d->xMin -= offset;
+	d->retransformScales();
+	retransform();
+}
+
+void CartesianPlot::zoomOutX(){
+	Q_D(CartesianPlot);
+	float offset = (d->xMax-d->xMin)*0.1;
+	d->xMax -= offset;
+	d->xMin += offset;
+	d->retransformScales();
+	retransform();
+}
+
+void CartesianPlot::zoomInY(){
+	Q_D(CartesianPlot);
+	float offset = (d->yMax-d->yMin)*0.1;
+	d->yMax += offset;
+	d->yMin -= offset;
+	d->retransformScales();
+	retransform();
+}
+
+void CartesianPlot::zoomOutY(){
+	Q_D(CartesianPlot);
+	float offset = (d->yMax-d->yMin)*0.1;
+	d->yMax -= offset;
+	d->yMin += offset;
+	d->retransformScales();
+	retransform();
+}
+
+void CartesianPlot::shiftLeftX(){
+	Q_D(CartesianPlot);
+	float offset = (d->yMax-d->yMin)*0.1;
+	d->xMax -= offset;
+	d->xMin -= offset;
+	d->retransformScales();
+	retransform();
+}
+
+void CartesianPlot::shiftRightX(){
+	Q_D(CartesianPlot);
+	float offset = (d->xMax-d->xMin)*0.1;
+	d->xMax += offset;
+	d->xMin += offset;
+	d->retransformScales();
+	retransform();
+}
+
+void CartesianPlot::shiftUpY(){
+	Q_D(CartesianPlot);
+	float offset = (d->yMax-d->yMin)*0.1;
+	d->yMax += offset;
+	d->yMin += offset;
+	d->retransformScales();
+	retransform();
+}
+
+void CartesianPlot::shiftDownY(){
+	Q_D(CartesianPlot);
+	float offset = (d->yMax-d->yMin)*0.1;
+	d->yMax -= offset;
+	d->yMin -= offset;
+	d->retransformScales();
+	retransform();
+}
+		
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -268,24 +437,10 @@ void CartesianPlotPrivate::setRect(const QRectF& r){
 }
 
 void CartesianPlotPrivate::retransform(){
-	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
-	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
-	QList<CartesianCoordinateSystem::Scale *> scales;
+	retransformScales();
 	
-	//perform the mapping from the scene coordinates to the plot's coordinates here.
-	QRectF itemRect= mapRectFromScene( rect );
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																  itemRect.x()+horizontalPadding,
-																  itemRect.x()+itemRect.width()-horizontalPadding,
-																  0, 1);
-	cSystem ->setXScales(scales);
-	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																  itemRect.y()+itemRect.height()-verticalPadding,
-																  itemRect.y()+verticalPadding, 
-																  0, 1);
-	cSystem ->setYScales(scales);
-
+	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
+	
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	plot->plotArea()->setRect(rect);
 
@@ -297,6 +452,26 @@ void CartesianPlotPrivate::retransform(){
 	q->retransform();
 }
 
+void CartesianPlotPrivate::retransformScales(){
+	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
+	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
+	QList<CartesianCoordinateSystem::Scale *> scales;
+	
+	//perform the mapping from the scene coordinates to the plot's coordinates here.
+	QRectF itemRect= mapRectFromScene( rect );
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																  itemRect.x()+horizontalPadding,
+																  itemRect.x()+itemRect.width()-horizontalPadding,
+																  xMin, xMax);
+
+	cSystem ->setXScales(scales);
+	scales.clear();
+	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																  itemRect.y()+itemRect.height()-verticalPadding,
+																  itemRect.y()+verticalPadding, 
+																  yMin, yMax);
+	cSystem ->setYScales(scales);
+}
 /*!
  * Reimplemented from QGraphicsItem.
  */
@@ -339,9 +514,9 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
     writer->writeEndElement();
 	
 	//coordinate system
-	//TODO
+// 	m_coordinateSystem->save(writer);
 	
-    //serialize all children
+    //serialize all children (plot area and axes)
     QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
     foreach(AbstractWorksheetElement *elem, childElements)
         elem->save(writer);
@@ -374,7 +549,10 @@ bool CartesianPlot::load(XmlStreamReader* reader){
             continue;
 
         if (reader->name() == "comment"){
-            if (!readCommentElement(reader)) return false;
+            if (!readCommentElement(reader))
+				return false;
+		}else if(reader->name() == "coordinateSystem"){
+// 			m_coordinateSystem->load(reader);
         }else if(reader->name() == "textLabel"){
             m_title = new TextLabel("");
             if (!m_title->load(reader)){
