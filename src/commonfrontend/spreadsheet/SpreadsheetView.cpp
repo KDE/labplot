@@ -60,7 +60,7 @@
 #else
 #include <KAction>
 #include <KLocale>
-#include "spreadsheetview_kactions.h"
+#include "commonfrontend/spreadsheet/spreadsheetview_kactions.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #endif
 
