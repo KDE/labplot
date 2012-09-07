@@ -459,6 +459,36 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
 	Q_UNUSED(first) Q_UNUSED(new_values)
 };
 
+
+double AbstractColumn::minimum() const{
+	double val;
+	double min = INFINITY;
+	double max = -INFINITY;
+	for (int row = 0; row < rowCount(); row++) {
+		val = valueAt(row);
+		if (isnan(val))
+			continue;
+		
+		if (val < min)
+			min = val;
+	}
+	return min;
+}
+
+double AbstractColumn::maximum() const{
+	double val;
+	double min = INFINITY;
+	double max = -INFINITY;
+	for (int row = 0; row < rowCount(); row++) {
+		val = valueAt(row);
+		if (isnan(val))
+			continue;
+		
+		if (val > max)
+			max = val;
+	}
+	return max;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////

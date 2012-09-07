@@ -67,6 +67,7 @@ class Axis: public AbstractWorksheetElement {
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 
+		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale);
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
 		BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale);
 		BASIC_D_ACCESSOR_DECL(qreal, offset, Offset);

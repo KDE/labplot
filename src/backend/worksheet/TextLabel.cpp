@@ -39,7 +39,7 @@
 #include <QPainter>
  #include <QGraphicsScene>
 #include <QDebug>
-
+//  #include <QGraphicsEffect>
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
 #endif
@@ -391,6 +391,7 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	if (isSelected()){
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
 		painter->drawPath(labelShape);
+// 			setGraphicsEffect(new QGraphicsDropShadowEffect());
 	}
 	
 	painter->rotate(rotationAngle);

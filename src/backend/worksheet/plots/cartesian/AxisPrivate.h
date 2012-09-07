@@ -43,6 +43,7 @@ class AxisPrivate: public QGraphicsItem {
 	public:
 		AxisPrivate(Axis *owner);
 
+		bool autoScale;
 		Axis::AxisOrientation orientation; //!< left, right, bottom, or top (usually not changed after creation)
 		Axis::AxisScale scale;
 		qreal offset; //!< offset from zero in the direction perpendicular to the axis

@@ -88,6 +88,7 @@ class CartesianPlot:public AbstractPlot{
 		QAction* shiftDownYAction;
 		
 		QMenu* addNewMenu;
+		QMenu* zoomMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
@@ -98,9 +99,9 @@ class CartesianPlot:public AbstractPlot{
 		void xDataChanged();
 		void yDataChanged();
 
+		void scaleAuto();
 		void scaleAutoX();
 		void scaleAutoY();
-		void scaleAuto();
 		void zoomIn();
 		void zoomOut();
 		void zoomInX();

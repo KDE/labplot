@@ -36,6 +36,8 @@
 #include "../AbstractPlotPrivate.h"
 #include "../../Worksheet.h"
 #include "../../TextLabel.h"
+#include "../../../../../liborigin-20080225/OPJFile.h"
+#include <math.h>
 
 #include "lib/XmlStreamReader.h"
 #include <QDebug>
@@ -190,16 +192,59 @@ void CartesianPlot::initActions(){
 	addCurveAction = new QAction(tr("xy-curve"), this);
 	addHorizontalAxisAction = new QAction(tr("horizontal axis"), this);
 	addVerticalAxisAction = new QAction(tr("vertical axis"), this);
+
+	scaleAutoAction = new QAction(i18n("auto scale"), this);
+	scaleAutoXAction = new QAction(i18n("auto scale X"), this);
+	scaleAutoYAction = new QAction(i18n("auto scale Y"), this);
+	zoomInAction = new QAction(i18n("zoom in"), this);
+	zoomOutAction = new QAction(i18n("zoom out"), this);
+	zoomInXAction = new QAction(i18n("zoom in X"), this);
+	zoomOutXAction = new QAction(i18n("zoom out X"), this);
+	zoomInYAction = new QAction(i18n("zoom in Y"), this);
+	zoomOutYAction = new QAction(i18n("zoom out Y"), this);
+    shiftLeftXAction = new QAction(i18n("shift left X"), this);
+	shiftRightXAction = new QAction(i18n("shift right X"), this);
+	shiftUpYAction = new QAction(i18n("shift up Y"), this);
+	shiftDownYAction = new QAction(i18n("shift down Y"), this);
 #else
 	addCurveAction = new KAction(i18n("xy-curve"), this);
 	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
+	
+	//TODO use icons from labplot1.6
+	scaleAutoAction = new KAction(i18n("auto scale"), this);
+	scaleAutoXAction = new KAction(i18n("auto scale X"), this);
+	scaleAutoYAction = new KAction(i18n("auto scale Y"), this);
+	zoomInAction = new KAction(i18n("zoom in"), this);
+	zoomOutAction = new KAction(i18n("zoom out"), this);
+	zoomInXAction = new KAction(i18n("zoom in X"), this);
+	zoomOutXAction = new KAction(i18n("zoom out X"), this);
+	zoomInYAction = new KAction(i18n("zoom in Y"), this);
+	zoomOutYAction = new KAction(i18n("zoom out Y"), this);
+    shiftLeftXAction = new KAction(i18n("shift left X"), this);
+	shiftRightXAction = new KAction(i18n("shift right X"), this);
+	shiftUpYAction = new KAction(i18n("shift up Y"), this);
+	shiftDownYAction = new KAction(i18n("shift down Y"), this);
 #endif
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 	
-	//TODO: zoom actions
+	//zoom actions
+	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
+	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
+	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
+	connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
+	connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
+	connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
+	connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
+	connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
+	connect(zoomOutYAction, SIGNAL(triggered()), SLOT(zoomOutY()));
+	connect(shiftLeftXAction, SIGNAL(triggered()), SLOT(shiftLeftX()));
+	connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
+	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
+	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
+	
 }
 
 void CartesianPlot::initMenus(){
@@ -208,6 +253,26 @@ void CartesianPlot::initMenus(){
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
 	addNewMenu->addAction(addVerticalAxisAction);
+	
+	zoomMenu = new QMenu(tr("Zoom"));
+	zoomMenu->addAction(scaleAutoAction);
+	zoomMenu->addAction(scaleAutoXAction);
+	zoomMenu->addAction(scaleAutoYAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(zoomInAction);
+	zoomMenu->addAction(zoomOutAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(zoomInXAction);
+	zoomMenu->addAction(zoomOutXAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(zoomInYAction);
+	zoomMenu->addAction(zoomOutYAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(shiftLeftXAction);
+	zoomMenu->addAction(shiftRightXAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(shiftUpYAction);
+	zoomMenu->addAction(shiftDownYAction);
 }
 
 QMenu *CartesianPlot::createContextMenu(){
@@ -215,6 +280,7 @@ QMenu *CartesianPlot::createContextMenu(){
 
 	QAction* firstAction = menu->actions().first();
 	menu->insertMenu(firstAction, addNewMenu);
+	menu->insertMenu(firstAction, zoomMenu);
 	menu->insertSeparator(firstAction);
 
 	return menu;
@@ -253,11 +319,6 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
 
 /* ============================ setter methods and undo commands ================= */
 
-// STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
-// void Axis::setVisible(bool on) {
-// 	Q_D(Axis);
-// 	exec(new AxisSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
-// }
 
 
 //################################################################
@@ -274,38 +335,107 @@ void CartesianPlot::addCurve(){
 	XYCurve* curve = new XYCurve("xy-curve");
 	this->addChild(curve);
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
+	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));		
 }
 
+/*!
+	called when in one of the curves the x-data was changed.
+	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
+*/
 void CartesianPlot::xDataChanged(){
 	Q_D(CartesianPlot);
 	if (!d->autoScaleX)
 		return;
 	
-	XYCurve* curve = qobject_cast<XYCurve*>(QObject::sender());
-	if (!curve)
-		return;
-	//TODO
-// 	if (curve->xColumn()->maximum() > d->xMax){
-// 		d->xMax = curve->xColumn()->maximum();
-// 		d->retransformScales();
-// 	}
+	double min = INFINITY;
+	double max = -INFINITY;
+	XYCurve* curve;
+	QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+    foreach(AbstractWorksheetElement *elem, childElements){
+		curve = qobject_cast<XYCurve*>(elem);
+		if (!curve)
+			continue;
+		
+		if (curve->xColumn()->minimum() != INFINITY){
+			if (curve->xColumn()->minimum() < min)
+				min = curve->yColumn()->minimum();
+		}
+		
+		if (curve->xColumn()->maximum() != -INFINITY){
+			if (curve->xColumn()->maximum() > max)
+				max = curve->xColumn()->maximum();
+		}
+	}
+	qDebug()<<"xmin "<<min<<" xmax "<<max;
+	bool update = false;
+	if (min != d->xMin){
+		d->xMin = min;
+		update = true;
+	}
+	
+	if (max != d->xMax){
+		d->xMax = max;
+		update = true;
+	}
+	
+	if(update){
+		d->retransformScales();
+		retransform();
+	}
 }
 
+/*!
+	called when in one of the curves the x-data was changed.
+	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
+*/
 void CartesianPlot::yDataChanged(){
 	Q_D(CartesianPlot);
 	if (!d->autoScaleX)
 		return;
 	
-	XYCurve* curve = qobject_cast<XYCurve*>(QObject::sender());
-	if (!curve)
-		return;
-
-	//TODO
+	double min = INFINITY;
+	double max = -INFINITY;
+	XYCurve* curve;
+	QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+    foreach(AbstractWorksheetElement *elem, childElements){
+		curve = qobject_cast<XYCurve*>(elem);
+		if (!curve)
+			continue;
+		
+		if (curve->yColumn()->minimum() != INFINITY){
+			if (curve->yColumn()->minimum() < min)
+				min = curve->yColumn()->minimum();
+		}
+		
+		if (curve->yColumn()->maximum() != -INFINITY){
+			if (curve->yColumn()->maximum() > max)
+				max = curve->yColumn()->maximum();
+		}
+	}
+// 	qDebug()<<"ymin "<<min<<" ymax "<<max;
+	bool update = false;
+	if (min != d->yMin){
+		d->yMin = min;
+		update = true;
+	}
+	
+	if (max != d->yMax){
+		d->yMax = max;
+		update = true;
+	}
+	
+	if(update){
+		d->retransformScales();
+		retransform();
+	}
 }
 
 void CartesianPlot::scaleAutoX(){
 	//loop over all xy-curves and determine the maximum x-value
+	float xMax, xMin;
+	
+	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
+	
 }
 
 void CartesianPlot::scaleAutoY(){
@@ -325,7 +455,7 @@ void CartesianPlot::zoomIn(){
 	d->yMax += offset;
 	d->yMin -= offset;
 	d->retransformScales();
-	retransform();
+// 	retransform();
 }
 
 void CartesianPlot::zoomOut(){
@@ -337,7 +467,7 @@ void CartesianPlot::zoomOut(){
 	d->yMax -= offset;
 	d->yMin += offset;
 	d->retransformScales();
-	retransform();	
+// 	retransform();	
 }
 
 void CartesianPlot::zoomInX(){
@@ -346,7 +476,7 @@ void CartesianPlot::zoomInX(){
 	d->xMax += offset;
 	d->xMin -= offset;
 	d->retransformScales();
-	retransform();
+// 	retransform();
 }
 
 void CartesianPlot::zoomOutX(){
@@ -355,7 +485,7 @@ void CartesianPlot::zoomOutX(){
 	d->xMax -= offset;
 	d->xMin += offset;
 	d->retransformScales();
-	retransform();
+// 	retransform();
 }
 
 void CartesianPlot::zoomInY(){
@@ -364,7 +494,7 @@ void CartesianPlot::zoomInY(){
 	d->yMax += offset;
 	d->yMin -= offset;
 	d->retransformScales();
-	retransform();
+// 	retransform();
 }
 
 void CartesianPlot::zoomOutY(){
@@ -373,7 +503,7 @@ void CartesianPlot::zoomOutY(){
 	d->yMax -= offset;
 	d->yMin += offset;
 	d->retransformScales();
-	retransform();
+// 	retransform();
 }
 
 void CartesianPlot::shiftLeftX(){
@@ -382,7 +512,7 @@ void CartesianPlot::shiftLeftX(){
 	d->xMax -= offset;
 	d->xMin -= offset;
 	d->retransformScales();
-	retransform();
+// 	d->retransform();
 }
 
 void CartesianPlot::shiftRightX(){
@@ -391,7 +521,7 @@ void CartesianPlot::shiftRightX(){
 	d->xMax += offset;
 	d->xMin += offset;
 	d->retransformScales();
-	retransform();
+// 	retransform();
 }
 
 void CartesianPlot::shiftUpY(){
@@ -455,10 +585,11 @@ void CartesianPlotPrivate::retransform(){
 void CartesianPlotPrivate::retransformScales(){
 	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
-	QList<CartesianCoordinateSystem::Scale *> scales;
+	QList<CartesianCoordinateSystem::Scale*> scales;
 	
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
 	QRectF itemRect= mapRectFromScene( rect );
+	qDebug()<<"x "<<itemRect.x()<<" y "<<itemRect.y()<<" xMin "<<xMin<<" xMax "<<xMax;
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
 																  itemRect.x()+horizontalPadding,
 																  itemRect.x()+itemRect.width()-horizontalPadding,
@@ -471,6 +602,9 @@ void CartesianPlotPrivate::retransformScales(){
 																  itemRect.y()+verticalPadding, 
 																  yMin, yMax);
 	cSystem ->setYScales(scales);
+	
+	//TODO: update auto-scale axes
+	
 }
 /*!
  * Reimplemented from QGraphicsItem.

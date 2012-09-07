@@ -99,7 +99,7 @@ GuiObserver::~GuiObserver(){
   }
   
   QString className=aspect->metaObject()->className();
-    //qDebug()<<className;
+    qDebug()<<className << "in selectedAspectsChanged";
   
   //check, whether objects of different  type where selected -> hide the dock in this case.
   foreach(aspect, selectedAspects){
@@ -256,23 +256,25 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
 		return;
 	
 	QString className = parent->metaObject()->className();
-	//TODO Axis class name has a blank, we need to trimm. Why?
 	//TODO actually, the parent aspect should be already selected at this point
 	//and there is no need to activate the corresponding dock widget,
 	//s.a. AspectTreeModel::aspectSelectedInView(). But this doesn't seem to be the case.
-	if (className.trimmed() == "Axis"){
+	if (className == "Axis"){
+		qDebug()<<"in if";
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis properties"));
-	
 		if (!mainWindow->axisDock){
-		mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
-		mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
+			qDebug()<<"no dock";
+			mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
 		}
 	
 		mainWindow->axisDock->activateTitleTab();
-		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
-	}else if (className.trimmed() == "CartesianPlot")
+// 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
+	}else if (className == "CartesianPlot"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot properties"));
 		mainWindow->cartesianPlotDock->activateTitleTab();
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
+// 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
+	}
 }
 
 /*!

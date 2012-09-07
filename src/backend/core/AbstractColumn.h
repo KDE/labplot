@@ -82,7 +82,10 @@ class AbstractColumn : public AbstractAspect
 		virtual void setFormula(Interval<int> i, QString formula);
 		virtual void setFormula(int row, QString formula);
 		virtual void clearFormulas();
-		
+
+		double minimum() const;
+		double maximum() const;
+
 		virtual QString textAt(int row) const;
 		virtual void setTextAt(int row, const QString& new_value);
 		virtual void replaceTexts(int first, const QStringList& new_values);
