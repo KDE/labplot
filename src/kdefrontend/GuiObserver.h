@@ -43,7 +43,7 @@ class GuiObserver:public QObject{
 
   private:
 	MainWin* mainWindow;
-	void updateGui(const QString&);
+	void updateGui(const QString&, const AbstractAspect*);
 	
   private slots:
 	void selectedAspectsChanged(QList<AbstractAspect*>&);

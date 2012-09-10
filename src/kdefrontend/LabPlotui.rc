@@ -16,8 +16,13 @@
 <ToolBar name="worksheet_toolbar" >
 <text>Worksheet</text>
 </ToolBar>
+
 <ToolBar name="spreadsheet_toolbar" >
 <text>Spreadsheet</text>
+</ToolBar>
+
+<ToolBar name="cartesian_plot_toolbar" >
+<text>CartesianPlot</text>
 </ToolBar>
 
 <MenuBar>

@@ -42,6 +42,7 @@
 #include "lib/XmlStreamReader.h"
 #include <QDebug>
 #include <QMenu>
+#include <QToolBar>
  
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -212,19 +213,19 @@ void CartesianPlot::initActions(){
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
 	
 	//TODO use icons from labplot1.6
-	scaleAutoAction = new KAction(i18n("auto scale"), this);
-	scaleAutoXAction = new KAction(i18n("auto scale X"), this);
-	scaleAutoYAction = new KAction(i18n("auto scale Y"), this);
-	zoomInAction = new KAction(i18n("zoom in"), this);
-	zoomOutAction = new KAction(i18n("zoom out"), this);
-	zoomInXAction = new KAction(i18n("zoom in X"), this);
-	zoomOutXAction = new KAction(i18n("zoom out X"), this);
-	zoomInYAction = new KAction(i18n("zoom in Y"), this);
-	zoomOutYAction = new KAction(i18n("zoom out Y"), this);
-    shiftLeftXAction = new KAction(i18n("shift left X"), this);
-	shiftRightXAction = new KAction(i18n("shift right X"), this);
-	shiftUpYAction = new KAction(i18n("shift up Y"), this);
-	shiftDownYAction = new KAction(i18n("shift down Y"), this);
+	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
+	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), this);
+	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
+	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), this);
+	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), this);
+	zoomInXAction = new KAction(KIcon("zoom-in-x"), i18n("zoom in X"), this);
+	zoomOutXAction = new KAction(KIcon("zoom-out-x"), i18n("zoom out X"), this);
+	zoomInYAction = new KAction(KIcon("zoom-in-y"), i18n("zoom in Y"), this);
+	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), this);
+    shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
+	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
+	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
+	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
 #endif
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
@@ -286,9 +287,25 @@ QMenu *CartesianPlot::createContextMenu(){
 	return menu;
 }
 
-//TODO
-void CartesianPlot::fillToolBar(QToolBar* toolBar){
+void CartesianPlot::fillToolBar(QToolBar* toolBar) const{
+	toolBar->addAction(addCurveAction);
+	toolBar->addSeparator();
+	toolBar->addAction(addHorizontalAxisAction);
+	toolBar->addAction(addVerticalAxisAction);
 	
+	toolBar->addAction(scaleAutoAction);
+	toolBar->addAction(scaleAutoXAction);
+	toolBar->addAction(scaleAutoYAction);
+	toolBar->addAction(zoomInAction);
+	toolBar->addAction(zoomOutAction);
+	toolBar->addAction(zoomInXAction);
+	toolBar->addAction(zoomOutXAction);
+	toolBar->addAction(zoomInYAction);
+	toolBar->addAction(zoomOutYAction);
+	toolBar->addAction(shiftLeftXAction);
+	toolBar->addAction(shiftRightXAction);
+	toolBar->addAction(shiftUpYAction);
+	toolBar->addAction(shiftDownYAction);	
 }
 /*!
 	Returns an icon to be used in the project explorer.
@@ -355,10 +372,13 @@ void CartesianPlot::xDataChanged(){
 		curve = qobject_cast<XYCurve*>(elem);
 		if (!curve)
 			continue;
-		
+
+		if (!curve->xColumn())
+			continue;
+
 		if (curve->xColumn()->minimum() != INFINITY){
 			if (curve->xColumn()->minimum() < min)
-				min = curve->yColumn()->minimum();
+				min = curve->xColumn()->minimum();
 		}
 		
 		if (curve->xColumn()->maximum() != -INFINITY){
@@ -380,7 +400,7 @@ void CartesianPlot::xDataChanged(){
 	
 	if(update){
 		d->retransformScales();
-		retransform();
+// 		retransform();
 	}
 }
 
@@ -400,6 +420,9 @@ void CartesianPlot::yDataChanged(){
     foreach(AbstractWorksheetElement *elem, childElements){
 		curve = qobject_cast<XYCurve*>(elem);
 		if (!curve)
+			continue;
+		
+		if (!curve->yColumn())
 			continue;
 		
 		if (curve->yColumn()->minimum() != INFINITY){
@@ -426,7 +449,7 @@ void CartesianPlot::yDataChanged(){
 	
 	if(update){
 		d->retransformScales();
-		retransform();
+// 		retransform();
 	}
 }
 
@@ -539,7 +562,7 @@ void CartesianPlot::shiftDownY(){
 	d->yMax -= offset;
 	d->yMin -= offset;
 	d->retransformScales();
-	retransform();
+// 	retransform();
 }
 		
 //#####################################################################
@@ -604,7 +627,25 @@ void CartesianPlotPrivate::retransformScales(){
 	cSystem ->setYScales(scales);
 	
 	//TODO: update auto-scale axes
-	
+	QList<AbstractWorksheetElement *> childElements = q->children<AbstractWorksheetElement>();
+    foreach(AbstractWorksheetElement *elem, childElements){
+		Axis* axis = qobject_cast<Axis*>(elem);
+		if (axis){
+			if (axis->autoScale()){
+				if (axis->orientation() == Axis::AxisHorizontal){
+					axis->setEnd(xMax);
+					axis->setStart(xMin);
+				}else{
+					axis->setEnd(yMax);
+					axis->setStart(yMin);
+				}
+			}
+		}else{
+			XYCurve* curve = qobject_cast<XYCurve*>(elem);
+			if (curve)
+				curve->retransform();
+		}
+	}
 }
 /*!
  * Reimplemented from QGraphicsItem.

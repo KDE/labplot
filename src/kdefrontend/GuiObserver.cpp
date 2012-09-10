@@ -38,10 +38,15 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "worksheet/TextLabel.h"
 #include "core/Project.h"
 #include "ProjectExplorer.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "MainWin.h"
+
+#include <kxmlguifactory.h>
 
 #include <QDockWidget>
 #include <QStackedWidget>
+#include <QToolBar>
+
 #include "dockwidgets/AxisDock.h"
 #include "dockwidgets/CartesianPlotDock.h"
 #include "dockwidgets/ColumnDock.h"
@@ -50,6 +55,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "dockwidgets/XYCurveDock.h"
 #include "dockwidgets/WorksheetDock.h"
 #include "widgets/LabelWidget.h"
+
 #include <QDebug>
 /*!
   \class GuiObserver
@@ -99,7 +105,7 @@ GuiObserver::~GuiObserver(){
   }
   
   QString className=aspect->metaObject()->className();
-    qDebug()<<className << "in selectedAspectsChanged";
+//     qDebug()<<className << "in selectedAspectsChanged";
   
   //check, whether objects of different  type where selected -> hide the dock in this case.
   foreach(aspect, selectedAspects){
@@ -108,7 +114,7 @@ GuiObserver::~GuiObserver(){
 		  mainWindow->stackedWidget->currentWidget()->hide();
 
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
-		this->updateGui("");
+		this->updateGui("", 0);
 		return;
 	  }
 	}
@@ -242,7 +248,7 @@ GuiObserver::~GuiObserver(){
 	  mainWindow->stackedWidget->currentWidget()->hide();
   }
   
-  this->updateGui(className);
+  this->updateGui(className, aspect);
 }
 
 /*!
@@ -281,18 +287,19 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
   udpates the GUI in MainWin.
   Depending on the currently selected object(s), identified by \c className, activates/diactivates the corresponding toolbars and menus.
 */
-void GuiObserver::updateGui(const QString& className ){
-/*
+void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspect){
   if (className == ""){
 	//no object or objects of different kind (e.g. a spreadsheet and a worksheet) were selected.
 	
-  }else if (className=="Spreadsheet"){
-	
-  }else if (className == "Worksheet"){
-	if (!worksheetActionCreated)
-	  this->createWorksheetActions();
-	
-	//TODO connect the worksheet actions with the first (or with all?) selected worksheet
+  }else if (className=="CartesianPlot"){
+	//populate worksheet-toolbar
+	QToolBar* toolbar=qobject_cast<QToolBar*>(mainWindow->guiFactory()->container("cartesian_plot_toolbar", mainWindow));
+	toolbar->setEnabled(true);
+	toolbar->clear();
+	const CartesianPlot* plot = qobject_cast<const CartesianPlot*>(aspect);
+	if (plot)
+		plot->fillToolBar(toolbar);
+	else
+		toolbar->setEnabled(false);	
   }
- */ 
 }

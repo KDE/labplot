@@ -48,7 +48,7 @@ class CartesianPlot:public AbstractPlot{
 		void initDefault();
 		QIcon icon() const;
 		QMenu* createContextMenu();
-		void fillToolBar(QToolBar*);
+		void fillToolBar(QToolBar*) const;
 		void setRect(const QRectF&);
 		
 		virtual void save(QXmlStreamWriter *) const;

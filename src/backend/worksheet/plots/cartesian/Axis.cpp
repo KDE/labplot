@@ -337,6 +337,7 @@ void Axis::labelChanged(){
  */
 
 /* ============================ getter methods ================= */
+BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale);
 CLASS_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation);
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, offset, offset);
@@ -377,6 +378,12 @@ CLASS_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity);
 
 /* ============================ setter methods and undo commands ================= */
+STD_SETTER_CMD_IMPL_F(Axis, SetAutoScale, bool, autoScale, retransform);
+void Axis::setAutoScale(bool autoScale) {
+	Q_D(Axis);
+	if (autoScale != d->autoScale)
+		exec(new AxisSetAutoScaleCmd(d, autoScale, tr("%1: set axis auto scaling")));
+}
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
 void Axis::setVisible(bool on) {
