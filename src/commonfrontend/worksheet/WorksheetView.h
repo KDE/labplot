@@ -63,7 +63,6 @@ class WorksheetView : public QGraphicsView{
 	
 	void setScene(QGraphicsScene * scene);
 	void exportToFile(const QString&, const ExportFormat format, const ExportArea area) const;
-	void print(QPrinter*) const;
 
   private:
 	void initActions();
@@ -123,6 +122,7 @@ class WorksheetView : public QGraphicsView{
 	void createContextMenu(QMenu * menu);
 	void fillProjectMenu(QMenu *menu, bool *rc);
 	void fillToolBar(QToolBar*);
+	void print(QPrinter*) const;
 
   private slots:
 	void enableNavigationMode();
