@@ -36,7 +36,6 @@
 #include "../AbstractPlotPrivate.h"
 #include "../../Worksheet.h"
 #include "../../TextLabel.h"
-#include "../../../../../liborigin-20080225/OPJFile.h"
 #include <math.h>
 
 #include "lib/XmlStreamReader.h"
@@ -69,7 +68,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		void setRect(const QRectF& r);
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void retransform();
-		void retransformScales();
+		void retransformScales(const float deltaX=0, const float deltaY=0);
 		
 		float xMin, xMax, yMin, yMax;
 		bool autoScaleX, autoScaleY;
@@ -126,6 +125,7 @@ void CartesianPlot::initDefault(){
 	//Axes
 	Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 	addChild(axis);
+	axis->setPosition(Axis::AxisBottom);
 	axis->setStart(0);
 	axis->setEnd(1);
 	axis->setMajorTicksDirection(Axis::ticksIn);
@@ -135,7 +135,7 @@ void CartesianPlot::initDefault(){
 
 	axis = new Axis("x axis 2", Axis::AxisHorizontal);
 	addChild(axis);
-	axis->setOffset(1);
+	axis->setPosition(Axis::AxisTop);
 	axis->setStart(0);
 	axis->setEnd(1);
 	axis->setMajorTicksDirection(Axis::ticksIn);
@@ -147,6 +147,7 @@ void CartesianPlot::initDefault(){
 
 	axis = new Axis("y axis 1", Axis::AxisVertical);
 	addChild(axis);
+	axis->setPosition(Axis::AxisLeft);
 	axis->setStart(0);
 	axis->setEnd(1);
 	axis->setMajorTicksDirection(Axis::ticksIn);
@@ -156,6 +157,7 @@ void CartesianPlot::initDefault(){
 	
 	axis = new Axis("y axis 2", Axis::AxisVertical);
 	addChild(axis);
+	axis->setPosition(Axis::AxisRight);
 	axis->setStart(0);
 	axis->setEnd(1);
 	axis->setOffset(1);
@@ -364,6 +366,25 @@ void CartesianPlot::xDataChanged(){
 	if (!d->autoScaleX)
 		return;
 	
+	this->scaleAutoX();
+}
+
+/*!
+	called when in one of the curves the x-data was changed.
+	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
+*/
+void CartesianPlot::yDataChanged(){
+	Q_D(CartesianPlot);
+	if (!d->autoScaleY)
+		return;
+	
+	this->scaleAutoY();
+}
+
+void CartesianPlot::scaleAutoX(){
+	Q_D(CartesianPlot);
+	
+	//loop over all xy-curves and determine the maximum x-value
 	double min = INFINITY;
 	double max = -INFINITY;
 	XYCurve* curve;
@@ -386,33 +407,27 @@ void CartesianPlot::xDataChanged(){
 				max = curve->xColumn()->maximum();
 		}
 	}
-	qDebug()<<"xmin "<<min<<" xmax "<<max;
+
 	bool update = false;
-	if (min != d->xMin){
+	if (min != d->xMin && min != INFINITY){
 		d->xMin = min;
 		update = true;
 	}
 	
-	if (max != d->xMax){
+	if (max != d->xMax && max != -INFINITY){
 		d->xMax = max;
 		update = true;
 	}
 	
-	if(update){
+	//TODO: calculate deltas for retransformScales()
+	if(update)
 		d->retransformScales();
-// 		retransform();
-	}
 }
 
-/*!
-	called when in one of the curves the x-data was changed.
-	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
-*/
-void CartesianPlot::yDataChanged(){
+void CartesianPlot::scaleAutoY(){
 	Q_D(CartesianPlot);
-	if (!d->autoScaleX)
-		return;
-	
+
+	//loop over all xy-curves and determine the maximum y-value
 	double min = INFINITY;
 	double max = -INFINITY;
 	XYCurve* curve;
@@ -435,134 +450,175 @@ void CartesianPlot::yDataChanged(){
 				max = curve->yColumn()->maximum();
 		}
 	}
-// 	qDebug()<<"ymin "<<min<<" ymax "<<max;
+
 	bool update = false;
-	if (min != d->yMin){
+	if (min != d->yMin && min != INFINITY){
 		d->yMin = min;
 		update = true;
 	}
 	
-	if (max != d->yMax){
+	if (max != d->yMax && max != -INFINITY){
 		d->yMax = max;
 		update = true;
 	}
 	
-	if(update){
+	//TODO: calculate deltas for retransformScales()
+	if(update)
 		d->retransformScales();
-// 		retransform();
-	}
-}
-
-void CartesianPlot::scaleAutoX(){
-	//loop over all xy-curves and determine the maximum x-value
-	float xMax, xMin;
-	
-	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(m_coordinateSystem);
-	
-}
-
-void CartesianPlot::scaleAutoY(){
-	
 }
 
 void CartesianPlot::scaleAuto(){
-	
+	Q_D(CartesianPlot);
+
+	//loop over all xy-curves and determine the maximum x-value
+	double xMin = INFINITY;
+	double xMax = -INFINITY;
+	double yMin = INFINITY;
+	double yMax = -INFINITY;
+	XYCurve* curve;
+	QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+    foreach(AbstractWorksheetElement *elem, childElements){
+		curve = qobject_cast<XYCurve*>(elem);
+		if (!curve)
+			continue;
+
+		if (!curve->xColumn())
+			continue;
+
+		if (curve->xColumn()->minimum() != INFINITY){
+			if (curve->xColumn()->minimum() < xMin)
+				xMin = curve->xColumn()->minimum();
+		}
+		
+		if (curve->xColumn()->maximum() != -INFINITY){
+			if (curve->xColumn()->maximum() > xMax)
+				xMax = curve->xColumn()->maximum();
+		}
+
+		if (!curve->yColumn())
+			continue;
+		
+		if (curve->yColumn()->minimum() != INFINITY){
+			if (curve->yColumn()->minimum() < yMin)
+				yMin = curve->yColumn()->minimum();
+		}
+		
+		if (curve->yColumn()->maximum() != -INFINITY){
+			if (curve->yColumn()->maximum() > yMax)
+				yMax = curve->yColumn()->maximum();
+		}		
+	}
+
+	bool update = false;
+	if (xMin != d->xMin && xMin != INFINITY){
+		d->xMin = xMin;
+		update = true;
+	}
+
+	if (xMax != d->xMax && xMax != -INFINITY){
+		d->xMax = xMax;
+		update = true;
+	}
+
+	if (yMin != d->yMin && yMin != INFINITY){
+		d->yMin = yMin;
+		update = true;
+	}
+
+	if (yMax != d->yMax && yMax != -INFINITY){
+		d->yMax = yMax;
+		update = true;
+	}
+
+	//TODO: calculate deltas for retransformScales()
+	if(update)
+		d->retransformScales();		
 }
 		
 void CartesianPlot::zoomIn(){
 	Q_D(CartesianPlot);
-	float offset = (d->xMax-d->xMin)*0.1;
-	d->xMax += offset;
-	d->xMin -= offset;
-	offset = (d->yMax-d->yMin)*0.1;
-	d->yMax += offset;
-	d->yMin -= offset;
-	d->retransformScales();
-// 	retransform();
+	float offsetX = (d->xMax-d->xMin)*0.1;
+	d->xMax -= offsetX;
+	d->xMin += offsetX;
+	float offsetY = (d->yMax-d->yMin)*0.1;
+	d->yMax -= offsetY;
+	d->yMin += offsetY;
+	d->retransformScales(offsetX, offsetY);	
 }
 
 void CartesianPlot::zoomOut(){
 	Q_D(CartesianPlot);
-	float offset = (d->xMax-d->xMin)*0.1;
-	d->xMax -= offset;
-	d->xMin += offset;
-	offset = (d->yMax-d->yMin)*0.1;
-	d->yMax -= offset;
-	d->yMin += offset;
-	d->retransformScales();
-// 	retransform();	
+	float offsetX = (d->xMax-d->xMin)*0.1;
+	d->xMax += offsetX;
+	d->xMin -= offsetX;
+	float offsetY = (d->yMax-d->yMin)*0.1;
+	d->yMax += offsetY;
+	d->yMin -= offsetY;
+	d->retransformScales(offsetX, offsetY);
 }
 
 void CartesianPlot::zoomInX(){
 	Q_D(CartesianPlot);
-	float offset = (d->xMax-d->xMin)*0.1;
-	d->xMax += offset;
-	d->xMin -= offset;
-	d->retransformScales();
-// 	retransform();
+	float offsetX = (d->xMax-d->xMin)*0.1;
+	d->xMax -= offsetX;
+	d->xMin += offsetX;
+	d->retransformScales(offsetX, 0);
 }
 
 void CartesianPlot::zoomOutX(){
 	Q_D(CartesianPlot);
-	float offset = (d->xMax-d->xMin)*0.1;
-	d->xMax -= offset;
-	d->xMin += offset;
-	d->retransformScales();
-// 	retransform();
+	float offsetX = (d->xMax-d->xMin)*0.1;
+	d->xMax += offsetX;
+	d->xMin -= offsetX;
+	d->retransformScales(offsetX, 0);
 }
 
 void CartesianPlot::zoomInY(){
 	Q_D(CartesianPlot);
-	float offset = (d->yMax-d->yMin)*0.1;
-	d->yMax += offset;
-	d->yMin -= offset;
-	d->retransformScales();
-// 	retransform();
+	float offsetY = (d->yMax-d->yMin)*0.1;
+	d->yMax -= offsetY;
+	d->yMin += offsetY;
+	d->retransformScales(0, offsetY);
 }
 
 void CartesianPlot::zoomOutY(){
 	Q_D(CartesianPlot);
-	float offset = (d->yMax-d->yMin)*0.1;
-	d->yMax -= offset;
-	d->yMin += offset;
-	d->retransformScales();
-// 	retransform();
+	float offsetY = (d->yMax-d->yMin)*0.1;
+	d->yMax += offsetY;
+	d->yMin -= offsetY;
+	d->retransformScales(0, offsetY);
 }
 
 void CartesianPlot::shiftLeftX(){
 	Q_D(CartesianPlot);
-	float offset = (d->yMax-d->yMin)*0.1;
-	d->xMax -= offset;
-	d->xMin -= offset;
-	d->retransformScales();
-// 	d->retransform();
+	float offsetX = (d->xMax-d->xMin)*0.1;
+	d->xMax -= offsetX;
+	d->xMin -= offsetX;
+	d->retransformScales(-offsetX, 0);
 }
 
 void CartesianPlot::shiftRightX(){
 	Q_D(CartesianPlot);
-	float offset = (d->xMax-d->xMin)*0.1;
-	d->xMax += offset;
-	d->xMin += offset;
-	d->retransformScales();
-// 	retransform();
+	float offsetX = (d->xMax-d->xMin)*0.1;
+	d->xMax += offsetX;
+	d->xMin += offsetX;
+	d->retransformScales(offsetX, 0);
 }
 
 void CartesianPlot::shiftUpY(){
 	Q_D(CartesianPlot);
-	float offset = (d->yMax-d->yMin)*0.1;
-	d->yMax += offset;
-	d->yMin += offset;
-	d->retransformScales();
-	retransform();
+	float offsetY = (d->yMax-d->yMin)*0.1;
+	d->yMax += offsetY;
+	d->yMin += offsetY;
+	d->retransformScales(0, offsetY);
 }
 
 void CartesianPlot::shiftDownY(){
 	Q_D(CartesianPlot);
-	float offset = (d->yMax-d->yMin)*0.1;
-	d->yMax -= offset;
-	d->yMin -= offset;
-	d->retransformScales();
-// 	retransform();
+	float offsetY = (d->yMax-d->yMin)*0.1;
+	d->yMax -= offsetY;
+	d->yMin -= offsetY;
+	d->retransformScales(0, -offsetY);
 }
 		
 //#####################################################################
@@ -605,14 +661,14 @@ void CartesianPlotPrivate::retransform(){
 	q->retransform();
 }
 
-void CartesianPlotPrivate::retransformScales(){
+void CartesianPlotPrivate::retransformScales(const float deltaX, float const deltaY){
 	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale*> scales;
 	
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
 	QRectF itemRect= mapRectFromScene( rect );
-	qDebug()<<"x "<<itemRect.x()<<" y "<<itemRect.y()<<" xMin "<<xMin<<" xMax "<<xMax;
+// 	qDebug()<<"x "<<itemRect.x()<<" y "<<itemRect.y()<<" xMin "<<xMin<<" xMax "<<xMax;
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
 																  itemRect.x()+horizontalPadding,
 																  itemRect.x()+itemRect.width()-horizontalPadding,
@@ -626,26 +682,30 @@ void CartesianPlotPrivate::retransformScales(){
 																  yMin, yMax);
 	cSystem ->setYScales(scales);
 	
-	//TODO: update auto-scale axes
+	//adjust auto-scale axes
 	QList<AbstractWorksheetElement *> childElements = q->children<AbstractWorksheetElement>();
     foreach(AbstractWorksheetElement *elem, childElements){
 		Axis* axis = qobject_cast<Axis*>(elem);
 		if (axis){
-			if (axis->autoScale()){
-				if (axis->orientation() == Axis::AxisHorizontal){
-					axis->setEnd(xMax);
-					axis->setStart(xMin);
-				}else{
-					axis->setEnd(yMax);
-					axis->setStart(yMin);
-				}
+			if (!axis->autoScale())
+				continue;
+			
+			if (axis->orientation() == Axis::AxisHorizontal){
+				axis->setEnd(xMax);
+				axis->setStart(xMin);
+				if (axis->position() == Axis::AxisCustom)
+					axis->setOffset(axis->offset() + deltaY);
+			}else{
+				axis->setEnd(yMax);
+				axis->setStart(yMin);
+				if (axis->position() == Axis::AxisCustom)
+					axis->setOffset(axis->offset() + deltaX);
 			}
-		}else{
-			XYCurve* curve = qobject_cast<XYCurve*>(elem);
-			if (curve)
-				curve->retransform();
 		}
 	}
+	
+	// call retransform() on the parent to trigger the update of all axes and curves
+	q->retransform();
 }
 /*!
  * Reimplemented from QGraphicsItem.

@@ -35,6 +35,7 @@
 #include "lib/macros.h"
 #include "lib/Interval.h"
 
+class CartesianPlot;
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 class CartesianCoordinateSystem: public AbstractCoordinateSystem {
@@ -77,7 +78,7 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 				double m_c;
 		};
 
-		CartesianCoordinateSystem(AbstractPlot*);
+		CartesianCoordinateSystem(CartesianPlot*);
 		virtual ~CartesianCoordinateSystem();
 
 		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;

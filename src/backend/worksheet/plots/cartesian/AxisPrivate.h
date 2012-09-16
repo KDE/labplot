@@ -44,7 +44,8 @@ class AxisPrivate: public QGraphicsItem {
 		AxisPrivate(Axis *owner);
 
 		bool autoScale;
-		Axis::AxisOrientation orientation; //!< left, right, bottom, or top (usually not changed after creation)
+		Axis::AxisOrientation orientation; //!< horizontal or vertical
+		Axis::AxisPosition position; //!< left, right, bottom, top or custom (usually not changed after creation)
 		Axis::AxisScale scale;
 		qreal offset; //!< offset from zero in the direction perpendicular to the axis
 		qreal start; //!< start coordinate of the axis line

@@ -34,6 +34,7 @@
 #include "../../TextLabel.h"
 #include "../AbstractCoordinateSystem.h"
 #include "CartesianCoordinateSystem.h"
+#include "CartesianPlot.h"
 #include "../AbstractPlot.h"
 #include "../../../lib/commandtemplates.h"
 #include "lib/XmlStreamReader.h"
@@ -85,6 +86,8 @@ void Axis::init(){
 	KConfigGroup group = config.group( "Axis" );
 	//TODO: add missing settings (see AxisDock::load())
 
+	d->autoScale = true;
+	d->position = Axis::AxisCustom;
 	d->scale = (Axis::AxisScale) group.readEntry("Scale", (int) Axis::ScaleLinear);
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->start = group.readEntry("Start", 0);
@@ -337,36 +340,37 @@ void Axis::labelChanged(){
  */
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale);
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation);
-BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, offset, offset);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, start, start);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, end, end);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset);
+BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
+CLASS_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation)
+CLASS_SHARED_D_READER_IMPL(Axis, Axis::AxisPosition, position, position)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, offset, offset)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, start, start)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, end, end)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
 
-BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title);
-BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffset, titleOffset);
+BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
+BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffset, titleOffset)
 
-CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity);
+CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity)
 
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majorTicksDirection);
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType);
-BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksIncrement, majorTicksIncrement);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength);
-CLASS_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity);
+CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majorTicksDirection)
+CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
+BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksIncrement, majorTicksIncrement)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
+CLASS_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
 
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection);
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType);
-BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksIncrement, minorTicksIncrement);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength);
-CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen);
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity);
+CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection)
+CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType)
+BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksIncrement, minorTicksIncrement)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
+CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
 
 CLASS_SHARED_D_READER_IMPL(Axis, Axis::LabelsPosition, labelsPosition, labelsPosition);
 CLASS_SHARED_D_READER_IMPL(Axis, float, labelsOffset, labelsOffset);
@@ -401,6 +405,13 @@ void Axis::setOrientation( AxisOrientation orientation) {
 	Q_D(Axis);
 	if (orientation != d->orientation)
 		exec(new AxisSetOrientationCmd(d, orientation, tr("%1: set axis orientation")));
+}
+
+STD_SETTER_CMD_IMPL_F(Axis, SetPosition, Axis::AxisPosition, position, retransform);
+void Axis::setPosition( AxisPosition position) {
+	Q_D(Axis);
+	if (position != d->position)
+		exec(new AxisSetPositionCmd(d, position, tr("%1: set axis position")));
 }
 
 STD_SETTER_CMD_IMPL_F(Axis, SetScaling, Axis::AxisScale, scale, retransform);
@@ -682,7 +693,7 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the postition of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
-	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
+	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
 	if (!plot)
 		return;
 
@@ -696,16 +707,26 @@ void AxisPrivate::retransform() {
 	QPointF startPoint;
 	QPointF endPoint;
 
-	if (orientation == Axis::AxisHorizontal) {
+	if (orientation == Axis::AxisHorizontal){
+		if (position == Axis::AxisTop)
+			offset = plot->yMax();
+		else if (position == Axis::AxisBottom)
+			offset = plot->yMin();
+
 		startPoint.setX(start);
 		startPoint.setY(offset);
 		endPoint.setX(end);
 		endPoint.setY(offset);
 	} else { // vertical
+		if (position == Axis::AxisLeft)
+			offset = plot->xMin();
+		else if (position == Axis::AxisRight)
+			offset = plot->xMax();
+		
 		startPoint.setX(offset);
 		startPoint.setY(start);
-		endPoint.setX(offset);
 		endPoint.setY(end);
+		endPoint.setX(offset);
 	}
 
 	lines.append(QLineF(startPoint, endPoint));

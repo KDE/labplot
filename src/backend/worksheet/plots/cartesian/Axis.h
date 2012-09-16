@@ -43,8 +43,8 @@ class Axis: public AbstractWorksheetElement {
 
 	public:
 		enum AxisOrientation {AxisHorizontal, AxisVertical};
-// 		enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCustom};
-		
+		enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCustom};
+
 		enum TicksFlags {
 			noTicks = 0x00,
 			ticksIn = 0x01,
@@ -52,7 +52,7 @@ class Axis: public AbstractWorksheetElement {
 			ticksBoth = 0x03,
 		};
 		Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
-		
+
 		enum TicksType {TicksTotalNumber, TicksIncrement};
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
@@ -69,6 +69,7 @@ class Axis: public AbstractWorksheetElement {
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale);
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
+		BASIC_D_ACCESSOR_DECL(AxisPosition, position, Position);
 		BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale);
 		BASIC_D_ACCESSOR_DECL(qreal, offset, Offset);
 		BASIC_D_ACCESSOR_DECL(qreal, start, Start);

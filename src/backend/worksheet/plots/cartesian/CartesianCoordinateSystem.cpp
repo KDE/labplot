@@ -29,12 +29,14 @@
  ***************************************************************************/
 
 #include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "worksheet/plots/cartesian/CartesianPlot.h"
 #include "worksheet/Worksheet.h"
 #include "core/AbstractAspect.h"
 #include "lib/XmlStreamReader.h"
 #include <cmath>
 #include <QUndoCommand>
 #include <QtGlobal>
+#include <QDebug>
 #include <limits>
 
 /**
@@ -232,12 +234,12 @@ public:
 		~CartesianCoordinateSystemPrivate();
 
 		CartesianCoordinateSystem* const q;
-		AbstractPlot* plot;
+		CartesianPlot* plot;
 		QList<CartesianCoordinateSystem::Scale *> xScales;
 		QList<CartesianCoordinateSystem::Scale *> yScales;
 };
 
-CartesianCoordinateSystem::CartesianCoordinateSystem(AbstractPlot* plot) 
+CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot) 
 		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)){
 			d->plot=plot;
 	// TODO: set some standard scales
@@ -249,13 +251,13 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem(){
 }
 
 QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
-	QRectF pageRect;
-// 	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
-// 	if (worksheet)
-// 		pageRect = worksheet->pageRect();
-pageRect=d->plot->graphicsItem()->boundingRect();
+	QRectF pageRect = d->plot->graphicsItem()->boundingRect();
+// 	QRectF pageRect = d->plot->rect();
+	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
+	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
+	pageRect.setWidth(pageRect.width()-2*d->plot->horizontalPadding());
+	pageRect.setHeight(pageRect.height()-2*d->plot->verticalPadding());	
 	QList<QPointF> result;
-
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
 	foreach (Scale *xScale, d->xScales) {
@@ -271,6 +273,9 @@ pageRect=d->plot->graphicsItem()->boundingRect();
 
 				double x = point.x();
 				double y = point.y();
+// 				qDebug()<<"point "<<x << " " << d->plot->xMax() << " " << x << " " << d->plot->xMin() << " " << y <<" "<< d->plot->yMax() <<" "<< y <<" "<< d->plot->yMin();
+// 				if (x > d->plot->xMax() || x < d->plot->xMin() || y > d->plot->yMax() || y < d->plot->yMin() )
+// 					continue;
 
 				if (!(xInterval.contains(x) && yInterval.contains(y)))
 					continue;
@@ -294,11 +299,13 @@ pageRect=d->plot->graphicsItem()->boundingRect();
 }
 
 QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
-	QRectF pageRect;
-// 	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
-// 	if (worksheet)
-// 		pageRect = worksheet->pageRect();
-	pageRect = d->plot->graphicsItem()->boundingRect();
+	QRectF pageRect = d->plot->graphicsItem()->boundingRect();
+// 	QRectF pageRect = d->plot->rect();
+	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
+	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
+	pageRect.setWidth(pageRect.width()-2*d->plot->horizontalPadding());
+	pageRect.setHeight(pageRect.height()-2*d->plot->verticalPadding());	
+	
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -345,11 +352,13 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 }
 
 QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags) const{
-	QRectF pageRect;
-// 	Worksheet *worksheet = d->plot->ancestor<Worksheet>();
-// 	if (worksheet)
-// 		pageRect = worksheet->pageRect();
-pageRect = d->plot->graphicsItem()->boundingRect();
+	QRectF pageRect = d->plot->graphicsItem()->boundingRect();
+// 	QRectF pageRect = d->plot->rect();
+// 	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
+// 	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
+// 	pageRect.setWidth(pageRect.width()-2*d->plot->horizontalPadding());
+// 	pageRect.setHeight(pageRect.height()-2*d->plot->verticalPadding());
+	
 	QList<QLineF> result;
 	bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
 
