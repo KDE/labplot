@@ -146,6 +146,7 @@ class Axis: public AbstractWorksheetElement {
 		void labelChanged();
 		void orientationChanged(QAction*);
 		void lineStyleChanged(QAction* action);
+		void lineColorChanged(QAction* action);
 		
 	signals:
 		void orientationChanged();

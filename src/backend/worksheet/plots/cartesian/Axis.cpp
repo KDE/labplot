@@ -106,7 +106,6 @@ void Axis::init(){
 	d->title->setHidden(true);
 	d->title->graphicsItem()->setParentItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-	d->title->setHidden(true);
 	d->title->setText(this->name());
 	if ( d->orientation == AxisVertical )
 		d->title->setRotationAngle(270);
@@ -656,11 +655,11 @@ void Axis::lineStyleChanged(QAction* action){
 	emit lineStyleChanged();
 }
 
-// void Axis::lineColorChanged(QAction* action){
-// 
-// 	
+void Axis::lineColorChanged(QAction* action){
+
+	
 // 	emit lineColorChanged();
-// }
+}
 
 //#####################################################################
 //################### Private implementation ##########################
@@ -993,7 +992,8 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 	Called when the geometry related properties (position, offset, font size, suffix, prefix) of the labels are changed.
  */
 //TODO optimize
-void AxisPrivate::retransformTickLabels() {
+void AxisPrivate::retransformTickLabels(){
+	tickLabelPoints.clear();
 	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::NoLabels){
 		recalcShapeAndBoundingRect();
 		return;
@@ -1018,7 +1018,6 @@ void AxisPrivate::retransformTickLabels() {
 	QPointF startPoint, endPoint, anchorPoint;
 
 	//TODO optimize this loop
-	tickLabelPoints.clear();
 	for ( int i=0; i<tickPoints.size(); i++ ){
 		label = labelsPrefix + tickLabelStrings.at(i) + labelsSuffix;
 		width = fm.width( label );
@@ -1194,7 +1193,9 @@ void Axis::save(QXmlStreamWriter* writer) const{
 
 	//general
     writer->writeStartElement( "general" );
+	writer->writeAttribute( "autoScale", QString::number(d->autoScale) );
 	writer->writeAttribute( "orientation", QString::number(d->orientation) );
+	writer->writeAttribute( "position", QString::number(d->position) );
 	writer->writeAttribute( "scale", QString::number(d->scale) );
 	writer->writeAttribute( "offset", QString::number(d->offset) );
 	writer->writeAttribute( "start", QString::number(d->start) );
@@ -1297,12 +1298,24 @@ bool Axis::load(XmlStreamReader* reader){
             if (!readCommentElement(reader)) return false;
 		}else if (reader->name() == "general"){
             attribs = reader->attributes();
-	
+
+			str = attribs.value("autoScale").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'autoScale'"));
+            else
+                d->autoScale = (bool)str.toInt();
+
             str = attribs.value("orientation").toString();
             if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'x'"));
+                reader->raiseWarning(attributeWarning.arg("'orientation'"));
             else
                 d->orientation = (Axis::AxisOrientation)str.toInt();
+
+            str = attribs.value("position").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'position'"));
+            else
+                d->position = (Axis::AxisPosition)str.toInt();
 
             str = attribs.value("scale").toString();
             if(str.isEmpty())
@@ -1407,7 +1420,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'length'"));
             else
-                d->majorTicksLength = str.toInt();
+                d->majorTicksLength = str.toDouble();
 			
 			str = attribs.value("style").toString();
             if(str.isEmpty())
@@ -1469,7 +1482,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'length'"));
             else
-                d->minorTicksLength = str.toInt();
+                d->minorTicksLength = str.toDouble();
 			
 			str = attribs.value("style").toString();
             if(str.isEmpty())
@@ -1506,7 +1519,7 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
                 d->minorTicksOpacity = str.toInt();
-		}else if (reader->name() == "minorTicks"){
+		}else if (reader->name() == "labels"){
 			attribs = reader->attributes();
 
 			str = attribs.value("position").toString();
@@ -1569,17 +1582,9 @@ bool Axis::load(XmlStreamReader* reader){
             else
                 d->labelsFont.setItalic( str.toInt() );
 
-			str = attribs.value("prefix").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'prefix'"));
-            else
-                d->labelsPrefix = str;
-
-			str = attribs.value("suffix").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'suffix'"));
-            else
-                d->labelsSuffix = str;
+			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
+			d->labelsPrefix = attribs.value("prefix").toString();
+			d->labelsSuffix = attribs.value("suffix").toString();
 
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
@@ -1594,4 +1599,3 @@ bool Axis::load(XmlStreamReader* reader){
 
     return true;
 }
-
