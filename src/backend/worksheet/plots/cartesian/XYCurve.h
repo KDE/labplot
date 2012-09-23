@@ -56,6 +56,8 @@ class XYCurve: public AbstractWorksheetElement {
 		virtual ~XYCurve();
 
 		virtual QGraphicsItem *graphicsItem() const;
+		virtual void save(QXmlStreamWriter *) const;
+		virtual bool load(XmlStreamReader *);
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);

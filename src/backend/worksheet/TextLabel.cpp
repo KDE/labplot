@@ -567,6 +567,12 @@ bool TextLabel::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'verticalAlignment'"));
             else
                 d->verticalAlignment = (TextLabel::VerticalAlignment)str.toInt();
+			
+            str = attribs.value("rotationAngle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rotationAngle'"));
+            else
+                d->rotationAngle = str.toInt();
 		}else if (reader->name() == "text"){
 			d->text = reader->readElementText();
 		}else if (reader->name() == "format"){
@@ -607,6 +613,10 @@ bool TextLabel::load(XmlStreamReader* reader){
         }
     }
 
-	//TODO we need to call retransform() or updateText() here, but these functions don't properly behave yet.
+	if ( d->teXUsed )
+		d->updateTeXImage();
+	else
+		d->updateText();
+
     return true;
 }

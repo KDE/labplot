@@ -748,10 +748,18 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "height", QString::number(d->rect.height()) );
     writer->writeEndElement();
 	
-	//coordinate system
-// 	m_coordinateSystem->save(writer);
+	//coordinate system and padding
+// 	m_coordinateSystem->save(writer); //TODO save scales
+	writer->writeStartElement( "coordinateSystem" );
+    writer->writeAttribute( "xMin", QString::number(d->xMin) );
+	writer->writeAttribute( "xMax", QString::number(d->xMax) );
+	writer->writeAttribute( "yMin", QString::number(d->yMin) );
+	writer->writeAttribute( "yMax", QString::number(d->yMax) );
+	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
+	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
+	writer->writeEndElement();
 	
-    //serialize all children (plot area and axes)
+    //serialize all children (plot area, title text label, axes and curves)
     QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
     foreach(AbstractWorksheetElement *elem, childElements)
         elem->save(writer);
@@ -762,6 +770,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 
 //! Load from XML
 bool CartesianPlot::load(XmlStreamReader* reader){
+	Q_D(CartesianPlot);
+
     if(!reader->isStartElement() || reader->name() != "cartesianPlot"){
         reader->raiseError(tr("no cartesianPlot element found"));
         return false;
@@ -773,7 +783,7 @@ bool CartesianPlot::load(XmlStreamReader* reader){
     QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;
-    QRectF rect;
+    QRectF sceneRect;
 
     while (!reader->atEnd()){
         reader->readNext();
@@ -786,8 +796,71 @@ bool CartesianPlot::load(XmlStreamReader* reader){
         if (reader->name() == "comment"){
             if (!readCommentElement(reader))
 				return false;
+		}else if(reader->name() == "geometry"){
+            attribs = reader->attributes();
+	
+            str = attribs.value("x").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'x'"));
+            else
+                sceneRect.setX( str.toDouble() );
+
+			str = attribs.value("y").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'y'"));
+            else
+                sceneRect.setY( str.toDouble() );
+			
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                sceneRect.setWidth( str.toDouble() );
+			
+			str = attribs.value("height").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'height'"));
+            else
+                sceneRect.setHeight( str.toDouble() );
 		}else if(reader->name() == "coordinateSystem"){
-// 			m_coordinateSystem->load(reader);
+// 			m_coordinateSystem->load(reader); //TODO read scales
+            attribs = reader->attributes();
+	
+            str = attribs.value("xMin").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'xMin'"));
+            else
+                d->xMin = str.toDouble();
+
+            str = attribs.value("xMax").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'xMax'"));
+            else
+                d->xMax = str.toDouble();
+			
+            str = attribs.value("yMin").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'yMin'"));
+            else
+                d->yMin = str.toDouble();
+			
+            str = attribs.value("yMax").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'yMax'"));
+            else
+                d->yMax = str.toDouble();
+			
+            str = attribs.value("horizontalPadding").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
+            else
+                d->horizontalPadding = str.toDouble();
+			
+            str = attribs.value("verticalPadding").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
+            else
+                d->verticalPadding = str.toDouble();	
         }else if(reader->name() == "textLabel"){
             m_title = new TextLabel("");
             if (!m_title->load(reader)){
@@ -798,7 +871,7 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 addChild(m_title);
             }
 		}else if(reader->name() == "plotArea"){
-			
+			m_plotArea->load(reader);
 		}else if(reader->name() == "axis"){
             Axis* axis = new Axis("");
             if (!axis->load(reader)){
@@ -806,12 +879,26 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 return false;
             }else{
                 addChild(axis);
-            }            
+            }
+		}else if(reader->name() == "xyCurve"){
+            XYCurve* curve = new XYCurve("");
+            if (!curve->load(reader)){
+                delete curve;
+                return false;
+            }else{
+                addChild(curve);
+            }             
         }else{ // unknown element
-            reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+            reader->raiseWarning(tr("unknown cartesianPlot element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }
     }
+
+	d->setRect(sceneRect);
+	m_title->setHidden(true);
+	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
+	d->retransformScales();
+	retransform();
 
     return true;
 }

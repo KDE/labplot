@@ -45,6 +45,7 @@
 #include "../../symbols/EllipseCurveSymbol.h"
 #include "../../interfaces.h"
 #include "../../Worksheet.h"
+#include "lib/XmlStreamReader.h"
 
 #include <QGraphicsItem>
 #include <QGraphicsItemGroup>
@@ -475,10 +476,9 @@ void XYCurve::setValuesPen(const QPen &pen) {
 		exec(new XYCurveSetValuesPenCmd(d, pen, tr("%1: set values style")));
 }
 
-
-//################################################################
-//################### Private implementation ##########################
-//################################################################
+//##############################################################################
+//######################### Private implementation #############################
+//##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve *owner): q(owner){
 }
 
@@ -1060,4 +1060,54 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
 	painter->drawPath(path);
   }
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void XYCurve::save(QXmlStreamWriter* writer) const{
+	Q_D(const XYCurve);
+
+    writer->writeStartElement( "xyCurve" );
+    writeBasicAttributes( writer );
+    writeCommentElement( writer );
+
+	//general
+	//TODO
+	
+	writer->writeEndElement(); //close "xyCurve" section
+}
+
+//! Load from XML
+bool XYCurve::load(XmlStreamReader* reader){
+	Q_D(XYCurve);
+
+    if(!reader->isStartElement() || reader->name() != "xyCurve"){
+        reader->raiseError(tr("no axis element found"));
+        return false;
+    }
+
+    if (!readBasicAttributes(reader))
+        return false;
+
+    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "xyCurve")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+        if (reader->name() == "comment"){
+            if (!readCommentElement(reader)) return false;
+		}else if (reader->name() == "general"){
+			//TODO
+		}
+	}
+	return true;
 }
