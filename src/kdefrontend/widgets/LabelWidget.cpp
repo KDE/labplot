@@ -108,11 +108,16 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 		return;
 	
 	m_label = labels.first();
-	ui.chbVisible->setChecked( m_label->isVisible() );
+
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
+
+	m_initializing = true;
+	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText(m_label->text());
+	m_initializing = false;
+
 	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
 	this->setFixedLabelMode(false);
 }
@@ -124,12 +129,18 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	
 	m_axesList = axes;
 	m_label = m_labelsList.first();
-	ui.chbVisible->setChecked( m_label->isVisible() );
+
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
+
+	m_initializing = true;
+	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText(m_label->text());
+	//TODO save the offset value in KConfigGroup? (available only for the axis labels)
 	ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(axes.first()->titleOffset(), Worksheet::Point) );
+	m_initializing = false;
+
 	this->setFixedLabelMode(true);
 }
 
