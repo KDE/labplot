@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>335</width>
+    <width>391</width>
     <height>430</height>
    </rect>
   </property>
@@ -42,21 +42,14 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Filename :</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="QLabel" name="lFileName">
-        <property name="text">
-         <string/>
+         <string>File name</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Project Version :</string>
+         <string>Project version</string>
         </property>
        </widget>
       </item>
@@ -70,7 +63,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>LabPlot version :</string>
+         <string>LabPlot version</string>
         </property>
        </widget>
       </item>
@@ -100,7 +93,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Title :</string>
+         <string>Title</string>
         </property>
        </widget>
       </item>
@@ -120,7 +113,7 @@
       <item row="5" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Author :</string>
+         <string>Author</string>
         </property>
        </widget>
       </item>
@@ -130,21 +123,21 @@
       <item row="6" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Created :</string>
+         <string>Created</string>
         </property>
        </widget>
       </item>
       <item row="7" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Last modified :</string>
+         <string>Last modified</string>
         </property>
        </widget>
       </item>
       <item row="8" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>Notes :</string>
+         <string>Notes</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -162,6 +155,22 @@
        <widget class="QLabel" name="lModified">
         <property name="text">
          <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="leFileName">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

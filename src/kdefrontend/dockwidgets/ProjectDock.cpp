@@ -58,7 +58,7 @@ ProjectDock::ProjectDock(QWidget *parent): QWidget(parent){
 void ProjectDock::setProject(Project *project) {
 	m_project = project;
 
-	ui.lFileName->setText(project->fileName());
+	ui.leFileName->setText(project->fileName());
 	ui.lProjectVersion->setText(QString::number(project->version()));
 	ui.lLabPlotVersion->setText(project->labPlot());
 	ui.leTitle->setText(project->name());
