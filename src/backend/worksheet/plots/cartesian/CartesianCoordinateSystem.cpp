@@ -251,12 +251,13 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem(){
 }
 
 QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
-	QRectF pageRect = d->plot->graphicsItem()->boundingRect();
-// 	QRectF pageRect = d->plot->rect();
+	//determine the plot rect in local coordinates
+	QRectF pageRect = d->plot->graphicsItem()->mapFromScene( d->plot->rect() ).boundingRect();
 	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
 	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
-	pageRect.setWidth(pageRect.width()-2*d->plot->horizontalPadding());
-	pageRect.setHeight(pageRect.height()-2*d->plot->verticalPadding());	
+	pageRect.setWidth(pageRect.width()-d->plot->horizontalPadding());
+	pageRect.setHeight(pageRect.height()-d->plot->verticalPadding());
+
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -299,13 +300,7 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 }
 
 QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
-	QRectF pageRect = d->plot->graphicsItem()->boundingRect();
-// 	QRectF pageRect = d->plot->rect();
-	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
-	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
-	pageRect.setWidth(pageRect.width()-2*d->plot->horizontalPadding());
-	pageRect.setHeight(pageRect.height()-2*d->plot->verticalPadding());	
-	
+	QRectF pageRect = d->plot->rect();
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -352,12 +347,12 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 }
 
 QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags) const{
-	QRectF pageRect = d->plot->graphicsItem()->boundingRect();
-// 	QRectF pageRect = d->plot->rect();
-// 	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
-// 	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
-// 	pageRect.setWidth(pageRect.width()-2*d->plot->horizontalPadding());
-// 	pageRect.setHeight(pageRect.height()-2*d->plot->verticalPadding());
+	//determine the plot rect in local coordinates
+	QRectF pageRect = d->plot->graphicsItem()->mapFromScene( d->plot->rect() ).boundingRect();
+	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
+	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
+	pageRect.setWidth(pageRect.width() - d->plot->horizontalPadding());
+	pageRect.setHeight(pageRect.height() - d->plot->verticalPadding());
 	
 	QList<QLineF> result;
 	bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
