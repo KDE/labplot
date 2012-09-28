@@ -47,21 +47,20 @@
 AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	ui.setupUi(this);
 
-  //TODO
-  ui.lPosition->hide();
-  ui.cbPosition->hide();
-  
-  //adjust layouts in the tabs
-  QGridLayout* layout;
-  for (int i=0; i<ui.tabWidget->count(); ++i){
+	//TODO hide extra ticks
+	ui.tabWidget->widget(4)->hide();
+	
+	//adjust layouts in the tabs
+	QGridLayout* layout;
+	for (int i=0; i<ui.tabWidget->count(); ++i){
 	layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 	if (!layout)
-	  continue;
-	
+		continue;
+
 	layout->setContentsMargins(2,2,2,2);
 	layout->setHorizontalSpacing(2);
 	layout->setVerticalSpacing(2);
-  }
+	}
 
 	//**********************************  Slots **********************************************
 
@@ -72,7 +71,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
-	connect( ui.lePositionOffset, SIGNAL(returnPressed()), this, SLOT(positionOffsetChanged()) );
+	connect( ui.lePosition, SIGNAL(returnPressed()), this, SLOT(positionChanged()) );
 	connect( ui.cbScale, SIGNAL(currentIndexChanged(int)), this, SLOT(scaleChanged(int)) );
 	
 	connect( ui.leStart, SIGNAL(returnPressed()), this, SLOT(startChanged()) );
@@ -162,7 +161,7 @@ void AxisDock::init(){
 	m_initializing=true;
 
 	//Validators
-	ui.lePositionOffset->setValidator( new QDoubleValidator(ui.lePositionOffset) );
+	ui.lePosition->setValidator( new QDoubleValidator(ui.lePosition) );
 	ui.leStart->setValidator( new QDoubleValidator(ui.leStart) );
 	ui.leEnd->setValidator( new QDoubleValidator(ui.leEnd) );
 	ui.leZeroOffset->setValidator( new QDoubleValidator(ui.leZeroOffset) );
@@ -293,8 +292,8 @@ void AxisDock::orientationChanged(int index){
   ui.cbLabelsPosition->clear();
   ui.cbLabelsPosition->addItem(i18n("no labels"));
   if (orientation == Axis::AxisHorizontal){
-	ui.cbPosition->addItem( i18n("bottom") );
 	ui.cbPosition->addItem( i18n("top") );
+	ui.cbPosition->addItem( i18n("bottom") );
 	ui.cbLabelsPosition->addItem( i18n("top") );
 	ui.cbLabelsPosition->addItem( i18n("bottom") );	
   }else{//vertical
@@ -303,7 +302,10 @@ void AxisDock::orientationChanged(int index){
 	ui.cbLabelsPosition->addItem( i18n("right") );
 	ui.cbLabelsPosition->addItem( i18n("left") );
   }
-  ui.cbPosition->addItem( i18n("custom") );	  
+  ui.cbPosition->addItem( i18n("custom") );
+  
+  //TODO: orientation was changed 
+  //-> update also the properties of axis and not only the ComboBoxes for the position and labels position.
   ui.cbPosition->setCurrentIndex(oldIndex);
   ui.cbLabelsPosition->setCurrentIndex(oldLabelsIndex);
   
@@ -314,43 +316,43 @@ void AxisDock::orientationChanged(int index){
 	axis->setOrientation(orientation);
 }
 
-//TODO
+/*!
+	called if one of the predefined axis positions
+	(top, bottom, left, right or custom) was changed.
+*/
 void AxisDock::positionChanged(int index){
-	Q_UNUSED(index)
-//   if (m_initializing)
-// 	return;
-// 
-// 	double offset;
-// 	if (index==1){//under or left
-// 	  ofset=0;
-// 	  ui.lPositionOffset->hide();
-// 	  ui.lePositionOffset->hide();
-// 	  
-// 	Axis::AxisPosition position;
-//   	if (index==2){ //custom position
-// 		ui.lPositionOffset->show();
-// 		ui.lePositionOffset->show();
-// 		position = Axis::AxisCustom;
-// 	}else{
-// 		ui.lPositionOffset->hide();
-// 		ui.lePositionOffset->hide();
-// 		
-// 		if ( m_axesList->first()->orientation() == Axis::AxisHorizontal)
-// 		  postion = Axis::AxisPosition(index);
-// 		else
-// 		  postion = Axis::AxisPosition(index+2);
-// 	}
-// 
-//   foreach(Axis* axis, m_axesList){
-// 	axis->setPosition(position);
-//   }
+	if ( index==2 ){
+		ui.lePosition->setVisible(true);
+		ui.lePosition->setText( QString::number(m_axis->offset()) );
+	}else{
+		ui.lePosition->setVisible(false);
+	}
+
+	if (m_initializing)
+		return;
+
+	Axis::AxisPosition position;
+	if (index==2){
+		position = Axis::AxisCustom;
+	}else{
+		if ( m_axis->orientation() == Axis::AxisHorizontal)
+			position = Axis::AxisPosition(index);
+		else
+			position = Axis::AxisPosition(index+2);		
+	}
+	
+	foreach(Axis* axis, m_axesList)
+		axis->setPosition(position);
 }
 
-void AxisDock::positionOffsetChanged(){
+/*!
+	called when the custom position of the axis in the corresponding LineEdit is changed.
+*/
+void AxisDock::positionChanged(){
   if (m_initializing)
 	return;
   
-  double offset = ui.lePositionOffset->text().toDouble();
+  double offset = ui.lePosition->text().toDouble();
   foreach(Axis* axis, m_axesList)
 	axis->setOffset(offset);
 }
@@ -883,10 +885,15 @@ void AxisDock::loadConfig(KConfig& config){
 
 	//General
   	ui.chkVisible->setChecked(group.readEntry("Visible", m_axis->isVisible()));
-	// TODO:see save()
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int) m_axis->orientation()) );
-	// TODO	ui.cbPosition->setCurrentIndex( axis->position() );
-  	ui.lePositionOffset->setText( QString::number( group.readEntry("PositionOffset", m_axis->offset())) );
+	
+	int index = group.readEntry("Position", (int) m_axis->position());
+	if (index > 1)
+		ui.cbPosition->setCurrentIndex(index-2);
+	else
+		ui.cbPosition->setCurrentIndex(index);
+	
+  	ui.lePosition->setText( QString::number( group.readEntry("PositionOffset", m_axis->offset())) );
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
   	ui.leStart->setText( QString::number( group.readEntry("Start", m_axis->start())) );
   	ui.leEnd->setText( QString::number( group.readEntry("End", m_axis->end())) );
@@ -963,10 +970,18 @@ void AxisDock::saveConfig(KConfig& config){
 
 	//General
 	group.writeEntry("Visible", ui.chkVisible->isChecked());
-	// TODO:not sure if this should be saved
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
-	//ui.cbPosition
-	group.writeEntry("PositionOffset", ui.lePositionOffset->text());
+
+	if (ui.cbPosition->currentIndex()==2){
+		group.writeEntry("Position", (int)Axis::AxisCustom);
+	}else{
+		if ( ui.cbOrientation->currentIndex() == Axis::AxisHorizontal )
+			group.writeEntry("Position", ui.cbPosition->currentIndex());
+		else
+			group.writeEntry("Position", ui.cbPosition->currentIndex()+2);
+	}
+
+	group.writeEntry("PositionOffset", ui.lePosition->text());
 	group.writeEntry("Scale", ui.cbScale->currentIndex());
 	group.writeEntry("Start", ui.leStart->text());
 	group.writeEntry("End", ui.leEnd->text());

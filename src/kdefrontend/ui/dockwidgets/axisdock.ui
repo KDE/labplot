@@ -134,31 +134,11 @@
        <item row="4" column="2">
         <widget class="QComboBox" name="cbOrientation"/>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lPosition">
-         <property name="text">
-          <string>Position</string>
-         </property>
-        </widget>
-       </item>
        <item row="5" column="2">
         <widget class="QComboBox" name="cbPosition"/>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lPositionOffset">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string>Position of the axis in the direction perpendicular to the axis in logical units.</string>
-         </property>
-         <property name="text">
-          <string>Position</string>
-         </property>
-        </widget>
-       </item>
        <item row="6" column="2">
-        <widget class="QLineEdit" name="lePositionOffset">
+        <widget class="QLineEdit" name="lePosition">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -234,6 +214,13 @@
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>visible</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" rowspan="2">
+        <widget class="QLabel" name="lPosition">
+         <property name="text">
+          <string>Position</string>
          </property>
         </widget>
        </item>

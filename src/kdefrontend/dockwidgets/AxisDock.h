@@ -62,7 +62,7 @@ private slots:
 	void visibilityChanged(int);
 	void orientationChanged(int);
 	void positionChanged(int);
-	void positionOffsetChanged();
+	void positionChanged();
 	void scaleChanged(int);
 	void startChanged();
 	void endChanged();
