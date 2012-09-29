@@ -35,6 +35,7 @@
 #include <QIcon>
 #include <QMenu>
 #include <QApplication>
+#include <QDebug>
 
 /**
  * \class AspectTreeModel
@@ -211,6 +212,8 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const{
 			if (aspect->inherits(classString)){
 			  result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 			  break;
+			}else{
+				result &= ~Qt::ItemIsEnabled;
 			}
 		}
 	}else{
@@ -355,8 +358,10 @@ void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect){
 		//a hidden aspect was selected in the view (e.g. plot title in WorksheetView)
 		//select the parent aspect first, if available
 		AbstractAspect* parent = aspect->parentAspect();
-		if (parent)
+		if (parent){
+			qDebug()<<"parent "<<parent->name();
 			emit indexSelected(modelIndexOfAspect(parent));
+		}
 		
 		//emit also this signal, so the GUI can handle this selection.
 		emit hiddenAspectSelected(aspect);

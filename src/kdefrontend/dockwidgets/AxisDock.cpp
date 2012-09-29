@@ -74,6 +74,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	connect( ui.lePosition, SIGNAL(returnPressed()), this, SLOT(positionChanged()) );
 	connect( ui.cbScale, SIGNAL(currentIndexChanged(int)), this, SLOT(scaleChanged(int)) );
 	
+	connect( ui.chkAutoScale, SIGNAL(stateChanged(int)), this, SLOT(autoScaleChanged(int)) );
 	connect( ui.leStart, SIGNAL(returnPressed()), this, SLOT(startChanged()) );
 	connect( ui.leEnd, SIGNAL(returnPressed()), this, SLOT(endChanged()) );
 	connect( ui.leZeroOffset, SIGNAL(returnPressed()), this, SLOT(zeroOffsetChanged()) );
@@ -240,6 +241,8 @@ void AxisDock::setAxes(QList<Axis*> list){
 	loadConfig(config);
   
 	connect(m_axis, SIGNAL(orientationChanged()), this, SLOT(axisOrientationChanged()));
+	connect(m_axis, SIGNAL(startChanged(float)), this, SLOT(axisStartChanged(float)));
+	connect(m_axis, SIGNAL(endChanged(float)), this, SLOT(axisEndChanged(float)));
   	m_initializing = false;
 }
 
@@ -364,6 +367,18 @@ void AxisDock::scaleChanged(int index){
   Axis::AxisScale scale = (Axis::AxisScale)index;
   foreach(Axis* axis, m_axesList)
 	axis->setScale(scale);
+}
+
+void AxisDock::autoScaleChanged(int index){
+	bool autoScale = index==Qt::Checked;
+	ui.leStart->setEnabled(!autoScale);
+	ui.leEnd->setEnabled(!autoScale);
+
+	if (m_initializing)
+		return;
+
+	foreach(Axis* axis, m_axesList)
+		axis->setAutoScale(autoScale);
 }
 
 void AxisDock::startChanged(){
@@ -875,6 +890,24 @@ void AxisDock::axisOrientationChanged(){
 	m_initializing = false;
 }
 
+void AxisDock::axisPositionChanged(float value){
+	m_initializing = true;
+	ui.lePosition->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void AxisDock::axisStartChanged(float value){
+	m_initializing = true;
+	ui.leStart->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+
+void AxisDock::axisEndChanged(float value){
+	m_initializing = true;
+	ui.leEnd->setText( QString::number(value) );
+	m_initializing = false;
+}
 
 /**************************************************/
 /********* Settings *******************************/
@@ -895,6 +928,7 @@ void AxisDock::loadConfig(KConfig& config){
 	
   	ui.lePosition->setText( QString::number( group.readEntry("PositionOffset", m_axis->offset())) );
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
+	ui.chkAutoScale->setChecked(group.readEntry("AutoScale", m_axis->autoScale()));
   	ui.leStart->setText( QString::number( group.readEntry("Start", m_axis->start())) );
   	ui.leEnd->setText( QString::number( group.readEntry("End", m_axis->end())) );
   	ui.leZeroOffset->setText( QString::number( group.readEntry("ZeroOffset", m_axis->zeroOffset())) );

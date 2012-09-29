@@ -384,8 +384,27 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity);
 STD_SETTER_CMD_IMPL_F(Axis, SetAutoScale, bool, autoScale, retransform);
 void Axis::setAutoScale(bool autoScale) {
 	Q_D(Axis);
-	if (autoScale != d->autoScale)
+	if (autoScale != d->autoScale){
 		exec(new AxisSetAutoScaleCmd(d, autoScale, tr("%1: set axis auto scaling")));
+		
+		//TODO changing of end and start is not undoable at the moment
+		if (autoScale){
+			CartesianPlot *plot = qobject_cast<CartesianPlot*>(parentAspect());
+			if (!plot)
+				return;
+			
+			if (d->orientation == Axis::AxisHorizontal){
+				d->end = plot->xMax();
+				d->start = plot->xMin();
+			}else{
+				d->end = plot->yMax();
+				d->start = plot->yMin();
+			}
+			retransform();
+			emit endChanged(d->end);
+			emit startChanged(d->start);
+		}
+	}
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
@@ -423,22 +442,28 @@ void Axis::setScale(AxisScale scale) {
 STD_SETTER_CMD_IMPL_F(Axis, SetOffset, qreal, offset, retransform);
 void Axis::setOffset(qreal offset) {
 	Q_D(Axis);
-	if (offset != d->offset)
+	if (offset != d->offset){
 		exec(new AxisSetOffsetCmd(d, offset, tr("%1: set axis offset")));
+		emit positionChanged(offset);
+	}
 }
 
 STD_SETTER_CMD_IMPL_F(Axis, SetStart, qreal, start, retransform);
 void Axis::setStart(qreal start) {
 	Q_D(Axis);
-	if (start != d->start)
+	if (start != d->start){
 		exec(new AxisSetStartCmd(d, start, tr("%1: set axis start")));
+		emit startChanged(start);
+	}
 }
 
 STD_SETTER_CMD_IMPL_F(Axis, SetEnd, qreal, end, retransform);
 void Axis::setEnd(qreal end) {
 	Q_D(Axis);
-	if (end != d->end)
+	if (end != d->end){
 		exec(new AxisSetEndCmd(d, end, tr("%1: set axis end")));
+		emit endChanged(end);
+	}
 }
 
 //TODO undo-functions

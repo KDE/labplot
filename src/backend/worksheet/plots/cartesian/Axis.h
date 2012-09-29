@@ -150,6 +150,9 @@ class Axis: public AbstractWorksheetElement {
 		
 	signals:
 		void orientationChanged();
+		void startChanged(float);
+		void endChanged(float);
+		void positionChanged(float);
 		void lineStyleChanged();
 };
 

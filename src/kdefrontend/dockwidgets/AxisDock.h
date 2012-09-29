@@ -64,6 +64,7 @@ private slots:
 	void positionChanged(int);
 	void positionChanged();
 	void scaleChanged(int);
+	void autoScaleChanged(int);
 	void startChanged();
 	void endChanged();
 	void zeroOffsetChanged();
@@ -117,6 +118,9 @@ private slots:
 	
 	//SLOTs for changes triggered in Axis
 	void axisOrientationChanged();
+	void axisPositionChanged(float);
+	void axisStartChanged(float);
+	void axisEndChanged(float);
 
 	//save/load
 	void loadConfig(KConfig&);
