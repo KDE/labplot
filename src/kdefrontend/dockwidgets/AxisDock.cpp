@@ -47,9 +47,6 @@
 AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	ui.setupUi(this);
 
-	//TODO hide extra ticks
-	ui.tabWidget->widget(4)->hide();
-	
 	//adjust layouts in the tabs
 	QGridLayout* layout;
 	for (int i=0; i<ui.tabWidget->count(); ++i){

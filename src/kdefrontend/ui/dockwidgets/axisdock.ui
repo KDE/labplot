@@ -810,11 +810,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabExtraTicks">
-      <attribute name="title">
-       <string>Extra ticks</string>
-      </attribute>
-     </widget>
      <widget class="QWidget" name="tabLabels">
       <attribute name="title">
        <string>Labels</string>
