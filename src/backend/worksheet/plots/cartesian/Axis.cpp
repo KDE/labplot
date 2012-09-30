@@ -343,9 +343,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
 CLASS_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation)
 CLASS_SHARED_D_READER_IMPL(Axis, Axis::AxisPosition, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, offset, offset)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, start, start)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, end, end)
+BASIC_SHARED_D_READER_IMPL(Axis, float, offset, offset)
+BASIC_SHARED_D_READER_IMPL(Axis, float, start, start)
+BASIC_SHARED_D_READER_IMPL(Axis, float, end, end)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
 
@@ -439,29 +439,42 @@ void Axis::setScale(AxisScale scale) {
 		exec(new AxisSetScalingCmd(d, scale, tr("%1: set axis scale")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetOffset, qreal, offset, retransform);
-void Axis::setOffset(qreal offset) {
+STD_SETTER_CMD_IMPL_F(Axis, SetOffset, float, offset, retransform);
+void Axis::setOffset(float offset, bool undo) {
 	Q_D(Axis);
 	if (offset != d->offset){
-		exec(new AxisSetOffsetCmd(d, offset, tr("%1: set axis offset")));
+		if (undo){
+			exec(new AxisSetOffsetCmd(d, offset, tr("%1: set axis offset")));
+		}else{
+			d->offset = offset;
+			//don't need to call retransform() afterward 
+			//since the only usage of this call is in CartesianPlot, where retransform is called for all children anyway.
+		}
 		emit positionChanged(offset);
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetStart, qreal, start, retransform);
-void Axis::setStart(qreal start) {
+STD_SETTER_CMD_IMPL_F(Axis, SetStart, float, start, retransform);
+void Axis::setStart(float start, bool undo) {
 	Q_D(Axis);
 	if (start != d->start){
-		exec(new AxisSetStartCmd(d, start, tr("%1: set axis start")));
+		if (undo)
+			exec(new AxisSetStartCmd(d, start, tr("%1: set axis start")));
+		else
+			d->start = start;
+			
 		emit startChanged(start);
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetEnd, qreal, end, retransform);
-void Axis::setEnd(qreal end) {
+STD_SETTER_CMD_IMPL_F(Axis, SetEnd, float, end, retransform);
+void Axis::setEnd(float end, bool undo) {
 	Q_D(Axis);
 	if (end != d->end){
-		exec(new AxisSetEndCmd(d, end, tr("%1: set axis end")));
+		if (undo)
+			exec(new AxisSetEndCmd(d, end, tr("%1: set axis end")));
+		else
+			d->end = end;
 		emit endChanged(end);
 	}
 }
@@ -1127,10 +1140,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		float offset = titleOffset + labelsOffset; //the distance to the axis line
 		if (orientation == Axis::AxisHorizontal){
 			offset += title->graphicsItem()->boundingRect().height()/2 + tickLabelsPath.boundingRect().height();
-			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2, rect.bottomLeft().y() + offset ) );
+			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2, rect.bottomLeft().y() + offset ), false );
 		}else{
 			offset += title->graphicsItem()->boundingRect().width()/2 + tickLabelsPath.boundingRect().width();
-			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ) );
+			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ), false );
 		}
 		
 		boundingRectangle |=mapRectFromItem( title->graphicsItem(), title->graphicsItem()->boundingRect() );

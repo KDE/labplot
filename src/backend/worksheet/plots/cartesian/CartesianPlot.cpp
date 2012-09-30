@@ -83,11 +83,11 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):Abst
 }
 
 CartesianPlot::~CartesianPlot(){
-	delete d_ptr;
-	delete m_title;
-	delete m_coordinateSystem;
-	delete m_plotArea;
-	delete addNewMenu;
+// 	delete d_ptr;
+// 	delete m_title;
+// 	delete m_coordinateSystem;
+// 	delete m_plotArea;
+// 	delete addNewMenu;
 }
 
 /*!
@@ -691,15 +691,15 @@ void CartesianPlotPrivate::retransformScales(const float deltaX, float const del
 				continue;
 			
 			if (axis->orientation() == Axis::AxisHorizontal){
-				axis->setEnd(xMax);
-				axis->setStart(xMin);
+				axis->setEnd(xMax, false);
+				axis->setStart(xMin, false);
 				if (axis->position() == Axis::AxisCustom)
-					axis->setOffset(axis->offset() + deltaY);
+					axis->setOffset(axis->offset() + deltaY, false);
 			}else{
-				axis->setEnd(yMax);
-				axis->setStart(yMin);
+				axis->setEnd(yMax, false);
+				axis->setStart(yMin, false);
 				if (axis->position() == Axis::AxisCustom)
-					axis->setOffset(axis->offset() + deltaX);
+					axis->setOffset(axis->offset() + deltaX, false);
 			}
 		}
 	}

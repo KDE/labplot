@@ -163,10 +163,16 @@ void TextLabel::setTeXFontColor(const QColor fontColor) {
 }
 
 STD_SETTER_CMD_IMPL_F(TextLabel, SetPosition, QPointF, position, retransform);
-void TextLabel::setPosition(const QPointF& pos) {
+void TextLabel::setPosition(const QPointF& pos, const bool undo) {
 	Q_D(TextLabel);
-	if (pos != d->position)
-		exec(new TextLabelSetPositionCmd(d, pos, tr("%1: set position")));
+	if (pos != d->position){
+		if (undo){
+			exec(new TextLabelSetPositionCmd(d, pos, tr("%1: set position")));
+		}else{
+			d->position = pos;
+			retransform();
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_F(TextLabel, SetHorizontalPosition, TextLabel::HorizontalPosition, horizontalPosition, retransform);
