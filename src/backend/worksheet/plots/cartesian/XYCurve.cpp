@@ -82,11 +82,11 @@ void XYCurve::init(){
 	d->dropLineOpacity = 1.0;
 	
 	d->symbolsOpacity = 1.0;
-	d->symbolRotationAngle = 0;
-	d->symbolSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
-	d->symbolAspectRatio = 1;
-	d->symbolPrototype = NULL;
-	d->swapSymbolTypeId("diamond");
+	d->symbolsRotationAngle = 0;
+	d->symbolsSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
+	d->symbolsAspectRatio = 1;
+	d->symbolsPrototype = NULL;
+	d->swapSymbolsTypeId("diamond");
 
 	d->valuesType = XYCurve::NoValues;
 	d->valuesColumn = NULL;	
@@ -96,11 +96,7 @@ void XYCurve::init(){
 	d->valuesOpacity = 1.0;
 	d->valuesFont.setPointSizeF( Worksheet::convertToSceneUnits( 10, Worksheet::Point ) );
 	
- 	// TODO: remove this temporary code later
-	d->symbolPrototype->setBrush(QBrush(Qt::red));
-	
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	retransform();
 }
 
 XYCurve::~XYCurve() {
@@ -140,7 +136,7 @@ QGraphicsItem *XYCurve::graphicsItem() const{
 }
 
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetVisible, bool, swapVisible);
+STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetVisible, bool, swapVisible)
 void XYCurve::setVisible(bool on){
 	Q_D(XYCurve);
 	exec(new XYCurveSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
@@ -159,8 +155,8 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
   //TODO
 	Q_D(const XYCurve);
 	
-	setSymbolSize(d->symbolSize * horizontalRatio);
-	setSymbolAspectRatio(d->symbolAspectRatio * horizontalRatio / verticalRatio);
+	setSymbolsSize(d->symbolsSize * horizontalRatio);
+	setSymbolsAspectRatio(d->symbolsAspectRatio * horizontalRatio / verticalRatio);
 	
 	QPen pen = d->symbolsPen;
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
@@ -177,8 +173,6 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 	
 	retransform();
 }
-
-
 
 /* ============================ accessor documentation ================= */
 //TODO provide a proper documentation for all functions implemented with the help of the macros
@@ -216,19 +210,19 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
   \brief Set/get the opacity of the symbols. The opacity ranges from 0.0 to 1.0, where 0.0 is fully transparent and 1.0 is fully opaque.
 */
 /**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle);
+  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolRotationAngle);
   \brief Set/get the rotation angle of the symbols.
 */
 /**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolSize, SymbolSize);
+  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolSize);
   \brief Set/get the (horizontal) size of the symbols.
 */
 /**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolAspectRatio, SymbolAspectRatio);
+  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolsAspectRatio, SymbolAspectRatio);
   \brief Set/get the ratio between the width and height of the symbols.
 */
 /**
-  \fn   XYCurve::CLASS_D_ACCESSOR_DECL(QString, symbolTypeId, SymbolTypeId);
+  \fn   XYCurve::CLASS_D_ACCESSOR_DECL(QString, symbolsTypeId, SymbolTypeId);
   \brief Set/get the symbol type.
 */
 /**
@@ -241,46 +235,47 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 */
 
 //values
+//TODO documentation for value-functions
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn);
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn);
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
 
 //line
-BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType);
-BASIC_SHARED_D_READER_IMPL(XYCurve, int, lineInterpolationPointsCount, lineInterpolationPointsCount);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, linePen, linePen);
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, lineOpacity, lineOpacity);
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, int, lineInterpolationPointsCount, lineInterpolationPointsCount)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, linePen, linePen)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, lineOpacity, lineOpacity)
 
 //droplines
-BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::DropLineType, dropLineType, dropLineType);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, dropLinePen, dropLinePen);
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, dropLineOpacity, dropLineOpacity);
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::DropLineType, dropLineType, dropLineType)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, dropLinePen, dropLinePen)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, dropLineOpacity, dropLineOpacity)
 
 //symbols
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsOpacity, symbolsOpacity);
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolRotationAngle, symbolRotationAngle);
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolSize, symbolSize);
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolAspectRatio, symbolAspectRatio);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, symbolTypeId, symbolTypeId);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QBrush, symbolsBrush, symbolsBrush);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen);
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsOpacity, symbolsOpacity)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsRotationAngle, symbolsRotationAngle)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsSize, symbolsSize)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsAspectRatio, symbolsAspectRatio)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, symbolsTypeId, symbolsTypeId)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QBrush, symbolsBrush, symbolsBrush)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 
 //values
-BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType);
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn);
-BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition);
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance);
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle);
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesOpacity, valuesOpacity);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, valuesPen, valuesPen);
-CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont);
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesOpacity, valuesOpacity)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, valuesPen, valuesPen)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 
 /* ============================ setter methods and undo commands ================= */
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetXColumn, const AbstractColumn *, xColumn, retransform);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetXColumn, const AbstractColumn *, xColumn, retransform)
 void XYCurve::setXColumn(const AbstractColumn *xColumn) {
 	Q_D(XYCurve);
 	if (xColumn != d->xColumn){
@@ -291,7 +286,7 @@ void XYCurve::setXColumn(const AbstractColumn *xColumn) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetYColumn, const AbstractColumn *, yColumn, retransform);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetYColumn, const AbstractColumn *, yColumn, retransform)
 void XYCurve::setYColumn(const AbstractColumn *yColumn) {
 	Q_D(XYCurve);
 	if (yColumn != d->yColumn){
@@ -303,21 +298,21 @@ void XYCurve::setYColumn(const AbstractColumn *yColumn) {
 }
 
 //Line
-STD_SETTER_CMD_IMPL_F(XYCurve, SetLineType, XYCurve::LineType, lineType, updateLines);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetLineType, XYCurve::LineType, lineType, updateLines)
 void XYCurve::setLineType(LineType type) {
 	Q_D(XYCurve);
 	if (type != d->lineType)
 		exec(new XYCurveSetLineTypeCmd(d, type, tr("%1: line type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetLineInterpolationPointsCount, int, lineInterpolationPointsCount, updateLines);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetLineInterpolationPointsCount, int, lineInterpolationPointsCount, updateLines)
 void XYCurve::setLineInterpolationPointsCount(int count) {
 	Q_D(XYCurve);
 	if (count != d->lineInterpolationPointsCount)
 		exec(new XYCurveSetLineInterpolationPointsCountCmd(d, count, tr("%1: set the number of interpolation points")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
 void XYCurve::setLinePen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->linePen)
@@ -332,21 +327,21 @@ void XYCurve::setLineOpacity(qreal opacity) {
 }
 
 //Drop lines
-STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLineType, XYCurve::DropLineType, dropLineType, updateDropLines);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLineType, XYCurve::DropLineType, dropLineType, updateDropLines)
 void XYCurve::setDropLineType(DropLineType type) {
 	Q_D(XYCurve);
 	if (type != d->dropLineType)
 		exec(new XYCurveSetDropLineTypeCmd(d, type, tr("%1: drop line type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLinePen, QPen, dropLinePen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLinePen, QPen, dropLinePen, recalcShapeAndBoundingRect)
 void XYCurve::setDropLinePen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->dropLinePen)
 		exec(new XYCurveSetDropLinePenCmd(d, pen, tr("%1: set drop line style")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLineOpacity, qreal, dropLineOpacity, update);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLineOpacity, qreal, dropLineOpacity, update)
 void XYCurve::setDropLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->dropLineOpacity)
@@ -354,7 +349,7 @@ void XYCurve::setDropLineOpacity(qreal opacity) {
 }
 
 // Symbols 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, update);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, update)
 void XYCurve::setSymbolsOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->symbolsOpacity)
@@ -362,43 +357,43 @@ void XYCurve::setSymbolsOpacity(qreal opacity) {
 }
 
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolRotationAngle, qreal, symbolRotationAngle,updateSymbol);
-void XYCurve::setSymbolRotationAngle(qreal angle) {
+STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsRotationAngle, qreal, symbolsRotationAngle,updateSymbol)
+void XYCurve::setSymbolsRotationAngle(qreal angle) {
 	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + angle, 1 + d->symbolRotationAngle))
-		exec(new XYCurveSetSymbolRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
+	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
+		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolSize, qreal, symbolSize, updateSymbol);
-void XYCurve::setSymbolSize(qreal size) {
+STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsSize, qreal, symbolsSize, updateSymbol)
+void XYCurve::setSymbolsSize(qreal size) {
 	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + size, 1 + d->symbolSize))
-		exec(new XYCurveSetSymbolSizeCmd(d, size, tr("%1: set symbol size")));
+	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
+		exec(new XYCurveSetSymbolsSizeCmd(d, size, tr("%1: set symbol size")));
 }
 
 //TODO ???
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolAspectRatio, qreal, symbolAspectRatio, updateSymbol);
-void XYCurve::setSymbolAspectRatio(qreal ratio) {
+STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsAspectRatio, qreal, symbolsAspectRatio, updateSymbol)
+void XYCurve::setSymbolsAspectRatio(qreal ratio) {
 	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + ratio, 1 + d->symbolAspectRatio))
-		exec(new XYCurveSetSymbolAspectRatioCmd(d, ratio, tr("%1: set symbol aspect ratio")));
+	if (!qFuzzyCompare(1 + ratio, 1 + d->symbolsAspectRatio))
+		exec(new XYCurveSetSymbolsAspectRatioCmd(d, ratio, tr("%1: set symbol aspect ratio")));
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetSymbolTypeId, QString, swapSymbolTypeId);
-void XYCurve::setSymbolTypeId(const QString &id) {
+STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetSymbolsTypeId, QString, swapSymbolsTypeId)
+void XYCurve::setSymbolsTypeId(const QString &id) {
 	Q_D(XYCurve);
-	if (id != d->symbolTypeId)
-		exec(new XYCurveSetSymbolTypeIdCmd(d, id, tr("%1: set symbol type")));
+	if (id != d->symbolsTypeId)
+		exec(new XYCurveSetSymbolsTypeIdCmd(d, id, tr("%1: set symbol type")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, update);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, updateSymbol)
 void XYCurve::setSymbolsBrush(const QBrush &brush) {
 	Q_D(XYCurve);
 	if (brush != d->symbolsBrush)
 		exec(new XYCurveSetSymbolsBrushCmd(d, brush, tr("%1: set symbol filling")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsPen, QPen, symbolsPen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsPen, QPen, symbolsPen, updateSymbol)
 void XYCurve::setSymbolsPen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->symbolsPen)
@@ -406,70 +401,70 @@ void XYCurve::setSymbolsPen(const QPen &pen) {
 }
 
 //Values
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesType, XYCurve::ValuesType, valuesType, updateValues);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesType, XYCurve::ValuesType, valuesType, updateValues)
 void XYCurve::setValuesType(XYCurve::ValuesType type) {
 	Q_D(XYCurve);
 	if (type != d->valuesType)
 		exec(new XYCurveSetValuesTypeCmd(d, type, tr("%1: set values type")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesColumn, const AbstractColumn *, valuesColumn, updateValues	);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesColumn, const AbstractColumn *, valuesColumn, updateValues)
 void XYCurve::setValuesColumn(const AbstractColumn *valuesColumn) {
 	Q_D(XYCurve);
 	if (valuesColumn != d->valuesColumn)
 		exec(new XYCurveSetValuesColumnCmd(d, valuesColumn, tr("%1: set values column")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, valuesPosition, updateValues);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, valuesPosition, updateValues)
 void XYCurve::setValuesPosition(ValuesPosition position) {
 	Q_D(XYCurve);
 	if (position != d->valuesPosition)
 		exec(new XYCurveSetValuesPositionCmd(d, position, tr("%1: set values position")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesDistance, qreal, valuesDistance, updateValues);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesDistance, qreal, valuesDistance, updateValues)
 void XYCurve::setValuesDistance(qreal distance) {
 	Q_D(XYCurve);
 	if (distance != d->valuesDistance)
 		exec(new XYCurveSetValuesDistanceCmd(d, distance, tr("%1: set values distance")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesOpacity, qreal, valuesOpacity, update);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesOpacity, qreal, valuesOpacity, update)
 void XYCurve::setValuesOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->valuesOpacity)
 		exec(new XYCurveSetValuesOpacityCmd(d, opacity, tr("%1: set values opacity")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesRotationAngle, qreal, valuesRotationAngle,update);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesRotationAngle, qreal, valuesRotationAngle,update)
 void XYCurve::setValuesRotationAngle(qreal angle) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->valuesRotationAngle))
 		exec(new XYCurveSetValuesRotationAngleCmd(d, angle, tr("%1: rotate values")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPrefix, QString, valuesPrefix, updateValues);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPrefix, QString, valuesPrefix, updateValues)
 void XYCurve::setValuesPrefix(const QString& prefix) {
 	Q_D(XYCurve);
 	if (prefix!= d->valuesPrefix)
 		exec(new XYCurveSetValuesPrefixCmd(d, prefix, tr("%1: set values prefix")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesSuffix, QString, valuesSuffix, updateValues);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesSuffix, QString, valuesSuffix, updateValues)
 void XYCurve::setValuesSuffix(const QString& suffix) {
 	Q_D(XYCurve);
 	if (suffix!= d->valuesSuffix)
 		exec(new XYCurveSetValuesSuffixCmd(d, suffix, tr("%1: set values suffix")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesFont, QFont, valuesFont, updateValues);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesFont, QFont, valuesFont, updateValues)
 void XYCurve::setValuesFont(const QFont& font) {
 	Q_D(XYCurve);
 	if (font!= d->valuesFont)
 		exec(new XYCurveSetValuesFontCmd(d, font, tr("%1: set values font")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPen, QPen, valuesPen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPen, QPen, valuesPen, recalcShapeAndBoundingRect)
 void XYCurve::setValuesPen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->valuesPen)
@@ -512,12 +507,11 @@ bool XYCurvePrivate::swapVisible(bool on){
 */
 void XYCurvePrivate::retransform(){
 	symbolPointsLogical.clear();
+	symbolPoints.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) )
 		return;
 	
-	// TODO: add start row/end row attributes
-
 	int startRow = 0;
 	int endRow = xColumn->rowCount() - 1;
 	QPointF tempPoint;
@@ -525,6 +519,7 @@ void XYCurvePrivate::retransform(){
 	SciDAVis::ColumnMode xColMode = xColumn->columnMode();
 	SciDAVis::ColumnMode yColMode = yColumn->columnMode();
 
+	//take over only valid and non masked points.
 	for (int row = startRow; row <= endRow; row++ ){
 		if ( xColumn->isValid(row) && yColumn->isValid(row) 
 			&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
@@ -562,15 +557,15 @@ void XYCurvePrivate::retransform(){
 		}
 	}
 
-
+	//calculate the scene coordinates
 	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
 	if (cSystem)
 		symbolPoints = cSystem->mapLogicalToScene(symbolPointsLogical);
 	
-  updateLines();
-  updateDropLines();
-  updateValues();
+	updateLines();
+	updateDropLines();
+	updateValues();
 }
 
 /*!
@@ -585,11 +580,14 @@ void XYCurvePrivate::updateLines(){
 	}
 	
 	int count=symbolPointsLogical.count();
+	
+	//nothing to do, if no data points available
 	if (count<=1){
 	  	recalcShapeAndBoundingRect();
 		return;
 	}
 	
+	//calculate the lines connecting the data points
 	QList<QLineF> lines;
 	QPointF tempPoint1, tempPoint2;
 	QPointF curPoint, nextPoint;
@@ -722,12 +720,14 @@ void XYCurvePrivate::updateLines(){
 		break;
 	}
 	
+	//map the lines to scene coordinates
 	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
 	if (cSystem)
 	  lines = cSystem->mapLogicalToScene(lines);
 	
-	foreach (QLineF line, lines) {
+	//new line path
+	foreach (QLineF line, lines){
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -746,6 +746,7 @@ void XYCurvePrivate::updateDropLines(){
 	  return;
 	}
 	
+	//calculate drop lines
 	QList<QLineF> lines;
 	QPointF tempPoint;
 	int count=symbolPointsLogical.count();
@@ -773,12 +774,14 @@ void XYCurvePrivate::updateDropLines(){
 		break;
 	}
 	
+	//map the drop lines to scene coordinates
 	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
 	if (cSystem)
 	  lines = cSystem->mapLogicalToScene(lines);
 	
-	foreach (QLineF line, lines) {
+	//new painter path for the drop lines
+	foreach (QLineF line, lines){
 		dropLinePath.moveTo(line.p1());
 		dropLinePath.lineTo(line.p2());
 	}
@@ -790,7 +793,6 @@ void XYCurvePrivate::updateDropLines(){
   recreates the value strings to be shown and recalculates their draw position.
 */
 void XYCurvePrivate::updateValues(){
-//   return;
   	valuesPath = QPainterPath();
 	valuesPoints.clear();
 	valuesStrings.clear();
@@ -938,12 +940,14 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		boundingRectangle = boundingRectangle.united(dropLinePath.boundingRect());
 	}
 	
-	if (symbolPrototype->id() !=" none"){
+	if (symbolsPrototype->id() !="none"){
 	  QPainterPath symbolsPath;
-	  QRectF prototypeBoundingRect = symbolPrototype->boundingRect();
+	  QRectF prototypeBoundingRect = symbolsPrototype->boundingRect();
 	  foreach (QPointF point, symbolPoints) {
 		  prototypeBoundingRect.moveCenter(point); 
 		  boundingRectangle |= prototypeBoundingRect;
+		  //TODO ellipse or the actual bounding rect of the current symbol?
+		  //TODO tack possible rotation into account
 		  symbolsPath.addEllipse(prototypeBoundingRect);
 	  }
 	  curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
@@ -956,23 +960,21 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, valuesPen));
 		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
 	}
-	
-	update();
 }
 
-QString XYCurvePrivate::swapSymbolTypeId(const QString &id) {
-	QString oldId = symbolTypeId;
-	if (id != symbolTypeId)	{
-		symbolTypeId = id;
-		delete symbolPrototype;
-		symbolPrototype = NULL;
-		if (symbolTypeId != "ellipse") {
+QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
+	QString oldId = symbolsTypeId;
+	if (id != symbolsTypeId)	{
+		symbolsTypeId = id;
+		delete symbolsPrototype;
+		symbolsPrototype = NULL;
+		if (symbolsTypeId != "ellipse") {
 			foreach(QObject *plugin, PluginManager::plugins()) {
 				CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
 				if (factory) {
-					const AbstractCurveSymbol *prototype = factory->prototype(symbolTypeId);
+					const AbstractCurveSymbol *prototype = factory->prototype(symbolsTypeId);
 					if (prototype)					{
-						symbolPrototype = prototype->clone();
+						symbolsPrototype = prototype->clone();
 						break;
 					}
 				}
@@ -980,21 +982,20 @@ QString XYCurvePrivate::swapSymbolTypeId(const QString &id) {
 		}
 	}
 
-	if (!symbolPrototype) // safety fallback
-		symbolPrototype = EllipseCurveSymbol::staticPrototype()->clone();
+	if (!symbolsPrototype) // safety fallback
+		symbolsPrototype = EllipseCurveSymbol::staticPrototype()->clone();
 
-	symbolPrototype->setSize(symbolSize);
-	symbolPrototype->setAspectRatio(symbolAspectRatio);
-	symbolPrototype->setBrush(symbolsBrush);
-	symbolPrototype->setPen(symbolsPen);
-	symbolPrototype->setRotationAngle(symbolRotationAngle);
+	symbolsPrototype->setSize(symbolsSize);
+	symbolsPrototype->setAspectRatio(symbolsAspectRatio);
+	symbolsPrototype->setBrush(symbolsBrush);
+	symbolsPrototype->setPen(symbolsPen);
+	symbolsPrototype->setRotationAngle(symbolsRotationAngle);
 	recalcShapeAndBoundingRect();
 	return oldId;
-	
 }
 
 void XYCurve::Private::updateSymbol(){
-	swapSymbolTypeId(symbolTypeId);
+	swapSymbolsTypeId(symbolsTypeId);
 }
 
 /*!
@@ -1024,15 +1025,15 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   }
   
   //draw symbols
-  if (symbolPrototype->id()!="none"){
+  if (symbolsPrototype->id()!="none"){
 	  painter->setOpacity(symbolsOpacity);
 	  //TODO move the symbol properties from the Symbol-Class to XYCurve?
 // 	  painter->setPen(symbolsPen);
 // 	  painter->setBrush(symbolsBrush);
-// 	  painter->rotate(symbolRotationAngle);
+// 	  painter->rotate(symbolsRotationAngle);
 	  foreach(QPointF point, symbolPoints){
 		  painter->translate(point);
-		  symbolPrototype->paint(painter, option, widget);
+		  symbolsPrototype->paint(painter, option, widget);
 		  painter->translate(-point);
 	  }
   }
@@ -1074,8 +1075,74 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
     writeCommentElement( writer );
 
 	//general
-	//TODO
+	//TODO xColumn, yColumn
 	
+	//Line
+    writer->writeStartElement( "lines" );
+	writer->writeAttribute( "type", QString::number(d->lineType) );
+	writer->writeAttribute( "interpolationPointsCount", QString::number(d->lineInterpolationPointsCount) );
+	writer->writeAttribute( "style", QString::number(d->linePen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->linePen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->linePen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->linePen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->linePen.width()) );
+	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
+	writer->writeEndElement();
+	
+	//Drop lines
+	writer->writeStartElement( "dropLines" );
+	writer->writeAttribute( "type", QString::number(d->dropLineType) );
+	writer->writeAttribute( "style", QString::number(d->dropLinePen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->dropLinePen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->dropLinePen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->dropLinePen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->dropLinePen.width()) );
+	writer->writeAttribute( "opacity", QString::number(d->dropLineOpacity) );
+	writer->writeEndElement();
+	
+	//Symbols
+	writer->writeStartElement( "symbols" );
+	writer->writeAttribute( "opacity", QString::number(d->symbolsOpacity) );
+	writer->writeAttribute( "rotation", QString::number(d->symbolsRotationAngle) );
+	writer->writeAttribute( "size", QString::number(d->symbolsSize) );
+	writer->writeAttribute( "ratio", QString::number(d->symbolsAspectRatio) );
+	writer->writeAttribute( "id", d->symbolsTypeId );
+	//brush
+	writer->writeAttribute( "brush_style", QString::number(d->symbolsBrush.style()) );
+	writer->writeAttribute( "brush_color_r", QString::number(d->symbolsBrush.color().red()) );
+	writer->writeAttribute( "brush_color_g", QString::number(d->symbolsBrush.color().green()) );
+	writer->writeAttribute( "brush_color_b", QString::number(d->symbolsBrush.color().blue()) );
+	//pen
+	writer->writeAttribute( "style", QString::number(d->symbolsPen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->symbolsPen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->symbolsPen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->symbolsPen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->symbolsPen.width()) );
+	writer->writeEndElement();
+	
+	//Values
+	writer->writeStartElement( "values" );
+	writer->writeAttribute( "type", QString::number(d->valuesType) );
+	//TODO values column
+	writer->writeAttribute( "position", QString::number(d->valuesPosition) );
+	writer->writeAttribute( "distance", QString::number(d->valuesDistance) );
+	writer->writeAttribute( "rotation", QString::number(d->valuesRotationAngle) );
+	writer->writeAttribute( "opacity", QString::number(d->valuesOpacity) );
+	writer->writeAttribute( "prefix", d->valuesPrefix );
+	writer->writeAttribute( "suffix", d->valuesSuffix );
+	//pen
+	writer->writeAttribute( "style", QString::number(d->valuesPen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->valuesPen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->valuesPen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->valuesPen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->valuesPen.width()) );
+	//font
+	writer->writeAttribute( "fontFamily", d->valuesFont.family() );
+	writer->writeAttribute( "fontSize", QString::number(d->valuesFont.pointSize()) );
+	writer->writeAttribute( "fontWeight", QString::number(d->valuesFont.weight()) );
+	writer->writeAttribute( "fontItalic", QString::number(d->valuesFont.italic()) );
+	writer->writeEndElement();
+
 	writer->writeEndElement(); //close "xyCurve" section
 }
 
@@ -1107,6 +1174,296 @@ bool XYCurve::load(XmlStreamReader* reader){
             if (!readCommentElement(reader)) return false;
 		}else if (reader->name() == "general"){
 			//TODO
+		}else if (reader->name() == "lines"){	
+			attribs = reader->attributes();
+	
+			str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'type'"));
+            else
+                d->lineType = (XYCurve::LineType)str.toInt();
+
+			str = attribs.value("interpolationPointsCount").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'interpolationPointsCount'"));
+            else
+                d->lineInterpolationPointsCount = str.toInt();
+
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->linePen.setStyle( (Qt::PenStyle)str.toInt() );
+			
+			QColor color;
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                color.setGreen( str.toInt() );
+			
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                color.setBlue( str.toInt() );
+			
+			d->linePen.setColor(color);
+			
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->linePen.setWidthF( str.toDouble() );
+			
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->lineOpacity = str.toInt();
+		}else if (reader->name() == "dropLines"){	
+			attribs = reader->attributes();
+	
+			str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'type'"));
+            else
+                d->dropLineType = (XYCurve::DropLineType)str.toInt();
+
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->dropLinePen.setStyle( (Qt::PenStyle)str.toInt() );
+			
+			QColor color;
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                color.setGreen( str.toInt() );
+			
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                color.setBlue( str.toInt() );
+			
+			d->dropLinePen.setColor(color);
+			
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->dropLinePen.setWidthF( str.toDouble() );
+			
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->dropLineOpacity = str.toInt();	
+		}else if (reader->name() == "symbols"){	
+			attribs = reader->attributes();
+
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->symbolsOpacity = str.toInt();
+			
+			str = attribs.value("rotation").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rotation'"));
+            else
+                d->symbolsRotationAngle = str.toDouble();
+
+			str = attribs.value("size").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'size'"));
+            else
+                d->symbolsSize = str.toInt();
+			
+			str = attribs.value("ratio").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'ratio'"));
+            else
+                d->symbolsAspectRatio = str.toInt();
+			
+			str = attribs.value("id").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'id'"));
+            else
+                d->symbolsTypeId = str;
+
+			//brush
+			str = attribs.value("brush_style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'brush_style'"));
+            else
+                d->symbolsBrush.setStyle( (Qt::BrushStyle)str.toInt() );
+			
+			QColor color;
+			str = attribs.value("brush_color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'brush_color_r'"));
+            else
+                color.setRed( str.toInt() );
+
+			str = attribs.value("brush_color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'brush_color_g'"));
+            else
+                color.setGreen( str.toInt() );
+			
+			str = attribs.value("brush_color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'brush_color_b'"));
+            else
+                color.setBlue( str.toInt() );
+			
+			d->symbolsBrush.setColor(color);
+			
+			//pen
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->symbolsPen.setStyle( (Qt::PenStyle)str.toInt() );
+			
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                color.setGreen( str.toInt() );
+			
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                color.setBlue( str.toInt() );
+			
+			d->symbolsPen.setColor(color);
+			
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->symbolsPen.setWidthF( str.toDouble() );
+		}else if (reader->name() == "values"){
+			attribs = reader->attributes();
+			
+			str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'type'"));
+            else
+                d->valuesType = (XYCurve::ValuesType)str.toInt();
+
+			//TODO values column
+			
+			str = attribs.value("position").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'position'"));
+            else
+                d->valuesPosition = (XYCurve::ValuesPosition)str.toInt();
+
+			str = attribs.value("distance").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'distance'"));
+            else
+                d->valuesDistance = str.toDouble();
+
+			str = attribs.value("rotation").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rotation'"));
+            else
+                d->valuesRotationAngle = str.toDouble();
+
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->valuesOpacity = str.toInt();
+
+			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
+			d->valuesPrefix = attribs.value("prefix").toString();
+			d->valuesSuffix = attribs.value("suffix").toString();
+
+			//pen
+			QColor color;
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->symbolsPen.setStyle( (Qt::PenStyle)str.toInt() );
+
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                color.setGreen( str.toInt() );
+			
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                color.setBlue( str.toInt() );
+			
+			d->symbolsPen.setColor(color);
+			
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->symbolsPen.setWidthF( str.toDouble() );
+			
+			//font
+			str = attribs.value("fontFamily").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fontFamily'"));
+            else
+                d->valuesFont.setFamily( str );
+			
+			str = attribs.value("fontSize").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fontSize'"));
+            else
+                d->valuesFont.setPointSize( str.toInt() );
+			
+			str = attribs.value("fontWeight").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fontWeight'"));
+            else
+                d->valuesFont.setWeight( str.toInt() );
+			
+			str = attribs.value("fontItalic").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fontItalic'"));
+            else
+                d->valuesFont.setItalic( str.toInt() );			
 		}
 	}
 	return true;

@@ -49,7 +49,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		void updateValues();
 		void updateSymbol();
 		bool swapVisible(bool on);
-		QString swapSymbolTypeId(const QString &id);
+		QString swapSymbolsTypeId(const QString &id);
 		void recalcShapeAndBoundingRect();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
@@ -69,10 +69,10 @@ class XYCurvePrivate: public QGraphicsItem {
 		QBrush symbolsBrush;
 		QPen symbolsPen;
 		qreal symbolsOpacity;
-		qreal symbolRotationAngle;
-		qreal symbolSize;
-		qreal symbolAspectRatio;
-		QString symbolTypeId;
+		qreal symbolsRotationAngle;
+		qreal symbolsSize;
+		qreal symbolsAspectRatio;
+		QString symbolsTypeId;
 	
 		XYCurve::ValuesType valuesType;
 		const AbstractColumn *valuesColumn;
@@ -88,7 +88,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		QPainterPath linePath;
 		QPainterPath dropLinePath;
 		QPainterPath valuesPath;
-		AbstractCurveSymbol *symbolPrototype;
+		AbstractCurveSymbol *symbolsPrototype;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
 		QList<QPointF> symbolPointsLogical;

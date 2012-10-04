@@ -94,15 +94,15 @@ private slots:
 	void dropLineOpacityChanged(int);
 	
 	//Symbol-tab
-  	void symbolStyleChanged(int);
-	void symbolSizeChanged(double);
-	void symbolRotationChanged(int);
-	void symbolOpacityChanged(int);
-	void symbolFillingStyleChanged(int);
-	void symbolFillingColorChanged(const QColor&);
-	void symbolBorderStyleChanged(int);
-	void symbolBorderColorChanged(const QColor&);
-	void symbolBorderWidthChanged(double);
+  	void symbolsStyleChanged(int);
+	void symbolsSizeChanged(double);
+	void symbolsRotationChanged(int);
+	void symbolsOpacityChanged(int);
+	void symbolsFillingStyleChanged(int);
+	void symbolsFillingColorChanged(const QColor&);
+	void symbolsBorderStyleChanged(int);
+	void symbolsBorderColorChanged(const QColor&);
+	void symbolsBorderWidthChanged(double);
 	
 	//Values-Tab
 	void valuesTypeChanged(int);
