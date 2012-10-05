@@ -31,12 +31,12 @@
 #ifndef PLOTAREA_H
 #define PLOTAREA_H
 
-#include "worksheet/WorksheetElementContainer.h"
-#include "lib/macros.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/lib/macros.h"
 
 class PlotAreaPrivate;
 
-class PlotArea: public AbstractWorksheetElement {
+class PlotArea: public AbstractWorksheetElement{
 	Q_OBJECT
 
 	public:
@@ -53,20 +53,20 @@ class PlotArea: public AbstractWorksheetElement {
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType);
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle);
-		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle);
-		BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle);
-		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor);
-		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor);
-		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName);
-		BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity);
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
+		BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
+		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
+		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
+		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
+		BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity)
 
-		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen);
-		BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity);
+		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
+		BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
-		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled);
-		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect);
+		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled)
+		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect)
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);

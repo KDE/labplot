@@ -28,14 +28,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/Worksheet.h"
-#include "worksheet/plots/PlotArea.h"
-#include "worksheet/plots/PlotAreaPrivate.h"
-#include "worksheet/plots/AbstractCoordinateSystem.h"
-#include "worksheet/plots/AbstractPlot.h"
-#include "lib/commandtemplates.h"
-#include "lib/macros.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/PlotAreaPrivate.h"
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
+#include "backend/lib/XmlStreamReader.h"
+
 #include <QPainter>
 #include <QDebug>
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -83,9 +84,10 @@ void PlotArea::init(){
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
+
 	//Border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)), 
-											group.readEntry("BorderWidth", 0.0), 
+											group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
 											(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 #endif
@@ -95,7 +97,7 @@ QGraphicsItem *PlotArea::graphicsItem() const{
 	return d_ptr;
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetVisible, bool, swapVisible);
+STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetVisible, bool, swapVisible)
 void PlotArea::setVisible(bool on){
 	Q_D(PlotArea);
 	exec(new PlotAreaSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
@@ -133,20 +135,20 @@ void PlotArea::retransform(){
 */
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(PlotArea, bool, clippingEnabled, clippingEnabled());
-CLASS_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect);
+BASIC_SHARED_D_READER_IMPL(PlotArea, bool, clippingEnabled, clippingEnabled())
+CLASS_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect)
 
-BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundType, backgroundType, backgroundType);
-BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle);
-BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle);
-CLASS_SHARED_D_READER_IMPL(PlotArea, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle);
-CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor);
-CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor);
-CLASS_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName);
-BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, backgroundOpacity, backgroundOpacity);
+BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundType, backgroundType, backgroundType)
+BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
+BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
+CLASS_SHARED_D_READER_IMPL(PlotArea, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
+CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor)
+CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor)
+CLASS_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName)
+BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, backgroundOpacity, backgroundOpacity)
 
-CLASS_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen);
-BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderOpacity, borderOpacity);
+CLASS_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderOpacity, borderOpacity)
 
 
 /* ============================ setter methods and undo commands ================= */
@@ -168,56 +170,56 @@ void PlotArea::setRect(const QRectF &newRect) {
 }
 
 //Background
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
 void PlotArea::setBackgroundType(BackgroundType type) {
 	Q_D(PlotArea);
 	if (type != d->backgroundType)
 		exec(new PlotAreaSetBackgroundTypeCmd(d, type, tr("%1: background type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
 void PlotArea::setBackgroundColorStyle(BackgroundColorStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundColorStyle)
 		exec(new PlotAreaSetBackgroundColorStyleCmd(d, style, tr("%1: background color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
 void PlotArea::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundImageStyle)
 		exec(new PlotAreaSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
 void PlotArea::setBackgroundBrushStyle(Qt::BrushStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundBrushStyle)
 		exec(new PlotAreaSetBackgroundBrushStyleCmd(d, style, tr("%1: background brush style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
 void PlotArea::setBackgroundFirstColor(const QColor &color) {
 	Q_D(PlotArea);
 	if (color!= d->backgroundFirstColor)
 		exec(new PlotAreaSetBackgroundFirstColorCmd(d, color, tr("%1: set background first color")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundSecondColor, QColor, backgroundSecondColor, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
 void PlotArea::setBackgroundSecondColor(const QColor &color) {
 	Q_D(PlotArea);
 	if (color!= d->backgroundSecondColor)
 		exec(new PlotAreaSetBackgroundSecondColorCmd(d, color, tr("%1: set background second color")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFileName, QString, backgroundFileName, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFileName, QString, backgroundFileName, update)
 void PlotArea::setBackgroundFileName(const QString& fileName) {
 	Q_D(PlotArea);
 	if (fileName!= d->backgroundFileName)
 		exec(new PlotAreaSetBackgroundFileNameCmd(d, fileName, tr("%1: set background image")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundOpacity, qreal, backgroundOpacity, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundOpacity, qreal, backgroundOpacity, update)
 void PlotArea::setBackgroundOpacity(qreal opacity) {
 	Q_D(PlotArea);
 	if (opacity != d->backgroundOpacity)
@@ -225,14 +227,14 @@ void PlotArea::setBackgroundOpacity(qreal opacity) {
 }
 
 //Border
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderPen, QPen, borderPen, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderPen, QPen, borderPen, update)
 void PlotArea::setBorderPen(const QPen &pen) {
 	Q_D(PlotArea);
 	if (pen != d->borderPen)
 		exec(new PlotAreaSetBorderPenCmd(d, pen, tr("%1: set plot area border style")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderOpacity, qreal, borderOpacity, update);
+STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderOpacity, qreal, borderOpacity, update)
 void PlotArea::setBorderOpacity(qreal opacity) {
 	Q_D(PlotArea);
 	if (opacity != d->borderOpacity)
@@ -274,7 +276,11 @@ void PlotAreaPrivate::setRect(const QRectF& r){
 }
 
 QRectF PlotAreaPrivate::boundingRect () const{
-	return rect; 
+	float width = rect.width();
+	float height = rect.height();
+	float penWidth = borderPen.width();
+	return QRectF(-width/2 - penWidth/2, -height/2 - penWidth/2,
+                   width + penWidth, height + penWidth);
 }
 
 QPainterPath PlotAreaPrivate::shape() const{
