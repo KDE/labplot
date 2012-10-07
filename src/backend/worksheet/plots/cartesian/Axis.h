@@ -31,8 +31,8 @@
 #ifndef AXISNEW_H
 #define AXISNEW_H
 
-#include "worksheet/AbstractWorksheetElement.h"
-#include "lib/macros.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/lib/macros.h"
 #include <QActionGroup>
 
 class TextLabel;
@@ -44,7 +44,7 @@ class Axis: public AbstractWorksheetElement {
 	public:
 		enum AxisOrientation {AxisHorizontal, AxisVertical};
 		enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCustom};
-
+		enum LabelsFormat {FormatDecimal, FormatScientificE};
 		enum TicksFlags {
 			noTicks = 0x00,
 			ticksIn = 0x01,
@@ -67,49 +67,52 @@ class Axis: public AbstractWorksheetElement {
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 
-		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale);
-		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
-		BASIC_D_ACCESSOR_DECL(AxisPosition, position, Position);
-		BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale);
+		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
+		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
+		BASIC_D_ACCESSOR_DECL(AxisPosition, position, Position)
+		BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale)
 		void setOffset(const float, const bool=true);
 		float offset() const;
 		void setStart(const float, const bool=true);
 		float start() const;
 		void setEnd(const float, const bool=true);
 		float end() const;		
-		BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor);
-		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset);
+		BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor)
+		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset)
 
-		POINTER_D_ACCESSOR_DECL(TextLabel, title, Title);
-		BASIC_D_ACCESSOR_DECL(float, titleOffset, TitleOffset);
+		POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
+		BASIC_D_ACCESSOR_DECL(float, titleOffset, TitleOffset)
 		
-		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
-		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity);
+		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
+		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
 		
-		CLASS_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection);
-		CLASS_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType);
-		BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber);
-		BASIC_D_ACCESSOR_DECL(qreal, majorTicksIncrement, MajorTicksIncrement);
-		CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen);
-		BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength);
-		BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity);
+		BASIC_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection)
+		BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
+		BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber)
+		BASIC_D_ACCESSOR_DECL(qreal, majorTicksIncrement, MajorTicksIncrement)
+		CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
+		BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
+		BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity)
 		
-		CLASS_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection);
-		CLASS_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType);
-		BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber);
-		BASIC_D_ACCESSOR_DECL(qreal, minorTicksIncrement, MinorTicksIncrement);
-		CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen);
-		BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength);
-		BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity);
+		BASIC_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection)
+		BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
+		BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
+		BASIC_D_ACCESSOR_DECL(qreal, minorTicksIncrement, MinorTicksIncrement)
+		CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
+		BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
+		BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
 		
-		CLASS_D_ACCESSOR_DECL(LabelsPosition, labelsPosition, LabelsPosition);
-		BASIC_D_ACCESSOR_DECL(float, labelsOffset, LabelsOffset);
-		BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle);
-		CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor);
-		CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont);
-		CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix);
-		CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix);
-		BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity);
+		BASIC_D_ACCESSOR_DECL(LabelsFormat, labelsFormat, LabelsFormat)
+		BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
+		BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
+		BASIC_D_ACCESSOR_DECL(LabelsPosition, labelsPosition, LabelsPosition)
+		BASIC_D_ACCESSOR_DECL(float, labelsOffset, LabelsOffset)
+		BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle)
+		CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)
+		CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
+		CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix)
+		CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
+		BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
 
 		//TODO: grid settings
 		

@@ -104,6 +104,8 @@ private slots:
 	//"Extra ticks"-tab
 	
 	//"Tick labels"-tab
+	void labelsFormatChanged(int);
+	void labelsPrecisionChanged();
 	void labelsPositionChanged(int);
 	void labelsOffsetChanged(double);
 	void labelsRotationChanged(int);

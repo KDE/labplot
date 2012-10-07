@@ -78,6 +78,9 @@ class AxisPrivate: public QGraphicsItem {
 		qreal minorTicksOpacity;	
 		
 		// Tick Label
+		Axis::LabelsFormat labelsFormat;
+		int labelsPrecision;
+		bool labelsAutoPrecision;
 		Axis::LabelsPosition labelsPosition;
 		qreal labelsFontSize;
 		qreal labelsRotationAngle;
@@ -85,13 +88,12 @@ class AxisPrivate: public QGraphicsItem {
 		QFont labelsFont;
 		float labelsOffset; //!< offset, distance to the end of the tick line (in page units)
 		qreal labelsOpacity;	
-		char numericFormat; //TODO
-		int displayedDigits; //TODO
 		// TODO support for date/time and string labels
 		QString labelsPrefix;
 		QString labelsSuffix;
 		QList<QPointF> tickPoints;//!< position of the major ticks  on the axis.
 		QList<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
+		QList<float> tickLabelValues; //!< major tick labels values
 		QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
 		
 		//TODO: Grid
@@ -113,6 +115,7 @@ class AxisPrivate: public QGraphicsItem {
 		virtual void retransform();
 		virtual void retransformTicks();
 		virtual void retransformTickLabels();
+		void retransformTickLabelStrings();
 		virtual void retransformTicks(const AbstractCoordinateSystem *cSystem);
 		virtual void recalcShapeAndBoundingRect();
 		bool swapVisible(bool on);

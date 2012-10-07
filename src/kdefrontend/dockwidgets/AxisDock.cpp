@@ -28,10 +28,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "AxisDock.h"
-#include "worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/GuiTools.h"
-#include "../TemplateHandler.h"
-#include "worksheet/Worksheet.h"
+#include "kdefrontend/TemplateHandler.h"
+#include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include <KMessageBox>
 #include <QTimer>
@@ -115,6 +115,8 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	//"Extra ticks"-tab
 	
 	//"Tick labels"-tab
+	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsFormatChanged(int)) );
+	connect( ui.leLabelsPrecision, SIGNAL(returnPressed()), this, SLOT(labelsPrecisionChanged()) );
 	connect( ui.cbLabelsPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsPositionChanged(int)) );
 	connect( ui.sbLabelsOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsOffsetChanged(double)) );
 	connect( ui.sbLabelsRotation, SIGNAL(valueChanged(int)), this, SLOT(labelsRotationChanged(int)) );
@@ -168,6 +170,8 @@ void AxisDock::init(){
 	ui.leMajorTicksIncrement->setValidator( new QDoubleValidator(ui.leMajorTicksIncrement) );
 	ui.leMinorTicksIncrement->setValidator( new QDoubleValidator(ui.leMinorTicksIncrement) );
 
+	ui.leLabelsPrecision->setValidator( new QIntValidator(ui.leLabelsPrecision) );
+	
 	//TODO move this stuff to retranslateUI()
 	ui.cbScale->addItem( i18n("linear") );
 	ui.cbScale->addItem( i18n("log(x)") );
@@ -193,7 +197,9 @@ void AxisDock::init(){
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
 	
-	//TODO: Tick labels format
+	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
+	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
+	ui.leLabelsPrecision->setPlaceholderText( i18n("Auto") );
 
 	//Grid
 	//TODO: remove this later
@@ -791,6 +797,30 @@ void AxisDock::minorTicksOpacityChanged(int value){
 }
 
 //"Tick labels"-tab
+void AxisDock::labelsFormatChanged(int index){
+	if (m_initializing)
+		return;
+
+	foreach(Axis* axis, m_axesList)
+		axis->setLabelsFormat(Axis::LabelsFormat(index));
+}
+
+void AxisDock::labelsPrecisionChanged(){
+	if (m_initializing)
+		return;
+
+	if (ui.leLabelsPrecision->text().isEmpty()){
+		foreach(Axis* axis, m_axesList)
+			axis->setLabelsAutoPrecision(true);
+	}else{
+		int precision = ui.leLabelsPrecision->text().toInt();
+		foreach(Axis* axis, m_axesList){
+			axis->setLabelsAutoPrecision(false);
+			axis->setLabelsPrecision(precision);
+		}
+	}
+}
+
 void AxisDock::labelsPositionChanged(int index){
 	Axis::LabelsPosition position = Axis::LabelsPosition(index);
 
@@ -971,6 +1001,11 @@ void AxisDock::loadConfig(KConfig& config){
 	//TODO
 
 	// Tick label
+	ui.cbLabelsFormat->setCurrentIndex( group.readEntry("LabelsFormat", (int) m_axis->labelsFormat()) );
+	if ( group.readEntry("LabelsAutoPrecision", (int) m_axis->labelsAutoPrecision()) )
+		ui.leLabelsPrecision->setText("");
+	else
+		ui.leLabelsPrecision->setText( group.readEntry("LabelsPrecision", QString::number(m_axis->labelsPrecision())) );
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) m_axis->labelsPosition()) );
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", m_axis->labelsRotationAngle()) );
@@ -1054,6 +1089,11 @@ void AxisDock::saveConfig(KConfig& config){
 	// TODO
 
 	// Tick label
+	group.writeEntry("LabelsFormat", ui.cbLabelsFormat->currentIndex());
+	if (ui.leLabelsPrecision->text() == "")
+		group.writeEntry("LabelsAutoPrecision", true);
+	else
+		group.writeEntry("LabelsPrecision", ui.leLabelsPrecision->text().toInt());
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
 	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Point));
 	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());

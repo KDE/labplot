@@ -28,16 +28,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "../../Worksheet.h"
-#include "Axis.h"
-#include "AxisPrivate.h"
-#include "../../TextLabel.h"
-#include "../AbstractCoordinateSystem.h"
-#include "CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/AxisPrivate.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "CartesianPlot.h"
-#include "../AbstractPlot.h"
-#include "../../../lib/commandtemplates.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include "kdefrontend/GuiTools.h"
 #include <QBrush>
@@ -95,7 +95,7 @@ void Axis::init(){
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	
-// 	d->linePen.setStyle(Qt::SolidLine);
+	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
@@ -125,10 +125,10 @@ void Axis::init(){
 	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Point));
 	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
 	
-	//TODO: read from config
-	d->numericFormat = 'f';
-	d->displayedDigits = 1;
-	
+	//Labels
+	d->labelsFormat = (Axis::LabelsFormat) group.readEntry("LabelsFormat", (int)Axis::FormatDecimal);
+	d->labelsAutoPrecision = group.readEntry("LabelsAutoPrecision", true);
+	d->labelsPrecision = group.readEntry("LabelsPrecision", 1);
 	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
 	d->labelsOffset= group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Point ));
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
@@ -340,8 +340,8 @@ void Axis::labelChanged(){
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation)
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::AxisPosition, position, position)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisPosition, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, float, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, float, start, start)
@@ -355,24 +355,27 @@ BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffset, titleOffset)
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity)
 
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majorTicksDirection)
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majorTicksDirection)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksIncrement, majorTicksIncrement)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
 
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection)
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksIncrement, minorTicksIncrement)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
 
-CLASS_SHARED_D_READER_IMPL(Axis, Axis::LabelsPosition, labelsPosition, labelsPosition);
-CLASS_SHARED_D_READER_IMPL(Axis, float, labelsOffset, labelsOffset);
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsFormat, labelsFormat, labelsFormat);
+BASIC_SHARED_D_READER_IMPL(Axis, bool, labelsAutoPrecision, labelsAutoPrecision);
+BASIC_SHARED_D_READER_IMPL(Axis, int, labelsPrecision, labelsPrecision);
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsPosition, labelsPosition, labelsPosition);
+BASIC_SHARED_D_READER_IMPL(Axis, float, labelsOffset, labelsOffset);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle);
 CLASS_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor);
 CLASS_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont);
@@ -519,14 +522,14 @@ void Axis::setLineOpacity(qreal opacity){
 
 //Major ticks
 STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksDirection, Axis::TicksDirection, majorTicksDirection, retransformTicks);
-void Axis::setMajorTicksDirection(const TicksDirection &majorTicksDirection) {
+void Axis::setMajorTicksDirection(const TicksDirection majorTicksDirection) {
 	Q_D(Axis);
 	if (majorTicksDirection != d->majorTicksDirection)
 		exec(new AxisSetMajorTicksDirectionCmd(d, majorTicksDirection, tr("%1: set major ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksType, Axis::TicksType, majorTicksType, retransformTicks);
-void Axis::setMajorTicksType(const TicksType &majorTicksType) {
+void Axis::setMajorTicksType(const TicksType majorTicksType) {
 	Q_D(Axis);
 	if (majorTicksType!= d->majorTicksType)
 		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, tr("%1: set major ticks type")));
@@ -567,17 +570,16 @@ void Axis::setMajorTicksOpacity(qreal opacity){
 		exec(new AxisSetMajorTicksOpacityCmd(d, opacity, tr("%1: set major ticks opacity")));
 }
 
-
 //Minor ticks
 STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksDirection, Axis::TicksDirection, minorTicksDirection, retransformTicks);
-void Axis::setMinorTicksDirection(const TicksDirection &minorTicksDirection) {
+void Axis::setMinorTicksDirection(const TicksDirection minorTicksDirection) {
 	Q_D(Axis);
 	if (minorTicksDirection != d->minorTicksDirection)
 		exec(new AxisSetMinorTicksDirectionCmd(d, minorTicksDirection, tr("%1: set minor ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksType, Axis::TicksType, minorTicksType, retransformTicks);
-void Axis::setMinorTicksType(const TicksType &minorTicksType) {
+void Axis::setMinorTicksType(const TicksType minorTicksType) {
 	Q_D(Axis);
 	if (minorTicksType!= d->minorTicksType)
 		exec(new AxisSetMinorTicksTypeCmd(d, minorTicksType, tr("%1: set minor ticks type")));
@@ -618,10 +620,30 @@ void Axis::setMinorTicksOpacity(qreal opacity){
 		exec(new AxisSetMinorTicksOpacityCmd(d, opacity, tr("%1: set minor ticks opacity")));
 }
 
-
 //Labels
+STD_SETTER_CMD_IMPL_F(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat, retransformTicks);
+void Axis::setLabelsFormat(const LabelsFormat labelsFormat){
+	Q_D(Axis);
+	if (labelsFormat != d->labelsFormat)
+		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, tr("%1: set labels format")));
+}
+
+STD_SETTER_CMD_IMPL_F(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings);
+void Axis::setLabelsAutoPrecision(const bool labelsAutoPrecision){
+	Q_D(Axis);
+	if (labelsAutoPrecision != d->labelsAutoPrecision)
+		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, tr("%1: set labels precision")));
+}
+
+STD_SETTER_CMD_IMPL_F(Axis, SetLabelsPrecision, int, labelsPrecision, retransformTickLabelStrings);
+void Axis::setLabelsPrecision(const int labelsPrecision){
+	Q_D(Axis);
+	if (labelsPrecision != d->labelsPrecision)
+		exec(new AxisSetLabelsPrecisionCmd(d, labelsPrecision, tr("%1: set labels precision")));
+}
+
 STD_SETTER_CMD_IMPL_F(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabels);
-void Axis::setLabelsPosition(const LabelsPosition & labelsPosition) {
+void Axis::setLabelsPosition(const LabelsPosition labelsPosition) {
 	Q_D(Axis);
 	if (labelsPosition != d->labelsPosition)
 		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, tr("%1: set labels position")));
@@ -749,7 +771,7 @@ void AxisPrivate::retransform() {
 			offset = plot->yMax();
 		else if (position == Axis::AxisBottom)
 			offset = plot->yMin();
-
+qDebug()<<"hor. offset "<<offset;
 		startPoint.setX(start);
 		startPoint.setY(offset);
 		endPoint.setX(end);
@@ -759,7 +781,7 @@ void AxisPrivate::retransform() {
 			offset = plot->xMin();
 		else if (position == Axis::AxisRight)
 			offset = plot->xMax();
-		
+qDebug()<<"hor. offset "<<offset;		
 		startPoint.setX(offset);
 		startPoint.setY(start);
 		endPoint.setY(end);
@@ -808,7 +830,8 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 	majorTicksPath = QPainterPath();
 	minorTicksPath = QPainterPath();
 	tickPoints.clear();
-	tickLabelStrings.clear();
+// 	tickLabelStrings.clear();
+	tickLabelValues.clear();
   
   if (majorTicksNumber<1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ){
 	retransformTickLabels(); //this calls recalcShapeAndBoundingRect()
@@ -951,7 +974,8 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 		  
 		 //Tick-labels
 		tickPoints << anchorPoint;
-		tickLabelStrings << QString::number(scalingFactor*majorTickPos+zeroOffset, numericFormat, displayedDigits);
+// 		tickLabelStrings << QString::number(scalingFactor*majorTickPos+zeroOffset, numericFormat, displayedDigits);
+		tickLabelValues<< scalingFactor*majorTickPos+zeroOffset;
 	  }
 
 	  //minor ticks
@@ -1021,9 +1045,25 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 	  }
 	}
 
-	retransformTickLabels(); // this calls recalcShapeAndBoundingRect()
+	retransformTickLabelStrings();
 }
 
+void AxisPrivate::retransformTickLabelStrings(){
+	tickLabelStrings.clear();
+	char format;
+	if (labelsFormat == Axis::FormatDecimal)
+		format = 'f';
+	else
+		format = 'e';
+
+	//TODO determine the number of digits, if "auto precision" is active
+// 	if (labelsAutoPrecision)
+		
+	foreach(float value, tickLabelValues)
+		tickLabelStrings << QString::number(value, format, labelsPrecision);
+	
+	retransformTickLabels();
+}
 
 /*!
 	recalculates the postion of the tick labels.
