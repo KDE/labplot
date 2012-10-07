@@ -1144,9 +1144,20 @@ void AxisPrivate::retransformTickLabels(){
 void AxisPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	boundingRectangle = linePath.boundingRect();
-	boundingRectangle |= majorTicksPath.boundingRect();
-	boundingRectangle |= minorTicksPath.boundingRect();
+	float w = linePath.boundingRect().width();
+	float h = linePath.boundingRect().height();
+	float penWidth = linePen.width();
+	boundingRectangle = QRectF(-w/2 - penWidth/2, -h/2 - penWidth/2, w + penWidth, h + penWidth);
+	
+	w = majorTicksPath.boundingRect().width();
+	h = majorTicksPath.boundingRect().height();
+	penWidth = majorTicksPen.width();
+	boundingRectangle |=  QRectF(-w/2 - penWidth/2, -h/2 - penWidth/2, w + penWidth, h + penWidth);
+	
+	w = minorTicksPath.boundingRect().width();
+	h = minorTicksPath.boundingRect().height();
+	penWidth = minorTicksPen.width();
+	boundingRectangle |= QRectF(-w/2 - penWidth/2, -h/2 - penWidth/2, w + penWidth, h + penWidth);
 
 	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
