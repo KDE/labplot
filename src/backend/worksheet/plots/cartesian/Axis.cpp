@@ -771,7 +771,7 @@ void AxisPrivate::retransform() {
 			offset = plot->yMax();
 		else if (position == Axis::AxisBottom)
 			offset = plot->yMin();
-qDebug()<<"hor. offset "<<offset;
+
 		startPoint.setX(start);
 		startPoint.setY(offset);
 		endPoint.setX(end);
@@ -781,7 +781,7 @@ qDebug()<<"hor. offset "<<offset;
 			offset = plot->xMin();
 		else if (position == Axis::AxisRight)
 			offset = plot->xMax();
-qDebug()<<"hor. offset "<<offset;		
+
 		startPoint.setX(offset);
 		startPoint.setY(start);
 		endPoint.setY(end);
@@ -830,7 +830,6 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 	majorTicksPath = QPainterPath();
 	minorTicksPath = QPainterPath();
 	tickPoints.clear();
-// 	tickLabelStrings.clear();
 	tickLabelValues.clear();
   
   if (majorTicksNumber<1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ){
@@ -974,7 +973,6 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 		  
 		 //Tick-labels
 		tickPoints << anchorPoint;
-// 		tickLabelStrings << QString::number(scalingFactor*majorTickPos+zeroOffset, numericFormat, displayedDigits);
 		tickLabelValues<< scalingFactor*majorTickPos+zeroOffset;
 	  }
 
@@ -1048,21 +1046,86 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 	retransformTickLabelStrings();
 }
 
+/*!
+	creates the tick label strings starting with the most optimal
+	(=the smallest possible number of float digits) precision for the floats
+*/
 void AxisPrivate::retransformTickLabelStrings(){
-	tickLabelStrings.clear();
+	if (labelsAutoPrecision){
+		//check, whether we need to increase the current precision
+		int newPrecision = upperLabelsPrecision(labelsPrecision);
+		if (newPrecision!= labelsPrecision){
+			labelsPrecision = newPrecision;
+		}else{
+			//check, whether we can reduce the current precision
+			newPrecision = lowerLabelsPrecision(labelsPrecision);
+			if (newPrecision!= labelsPrecision)
+				labelsPrecision = newPrecision;
+		}
+	}
+	
 	char format;
 	if (labelsFormat == Axis::FormatDecimal)
 		format = 'f';
 	else
 		format = 'e';
 
-	//TODO determine the number of digits, if "auto precision" is active
-// 	if (labelsAutoPrecision)
-		
+	tickLabelStrings.clear();
 	foreach(float value, tickLabelValues)
-		tickLabelStrings << QString::number(value, format, labelsPrecision);
+		tickLabelStrings << QString::number(value, format, labelsPrecision);	
 	
 	retransformTickLabels();
+}
+
+/*!
+	returns the smalles upper limit for the precision
+	were no duplicates for the tick label float occur.
+ */
+int AxisPrivate::upperLabelsPrecision(int precision){
+	//round float to the current precision and look for duplicates.
+	//if there are duplicates, increase the precision.
+	QList<float> tempValues;
+	for (int i=0; i<tickLabelValues.size(); ++i){
+		tempValues.append( round(tickLabelValues[i], precision) );
+	}
+	
+	for (int i=0; i<tempValues.size(); ++i){
+		if (tempValues.count(tempValues[i]) > 1){
+			//duplicate for the current precision found, increase the precision and check again
+			return upperLabelsPrecision(precision+1);
+		}
+	}
+	
+	//no duplicates for the current precision found, return the current value
+	return precision;
+}
+
+/*!
+	returns highest lower limit for the precision
+	were no duplicates for the tick label float occur.
+*/
+int AxisPrivate::lowerLabelsPrecision(int precision){
+	//round float to the current precision and look for duplicates.
+	//if there are duplicates, decrease the precision.
+	QList<float> tempValues;
+	for (int i=0; i<tickLabelValues.size(); ++i){
+		tempValues.append( round(tickLabelValues[i], precision-1) );
+	}
+	
+	for (int i=0; i<tempValues.size(); ++i){
+		if (tempValues.count(tempValues[i]) > 1){
+			//duplicate found for the reduced precision
+			//-> current precision cannot be reduced, return the current value
+			return precision;
+		}
+	}
+	
+	//no duplicates found, reduce further, and check again
+	return lowerLabelsPrecision(precision-1);
+}
+
+float AxisPrivate::round(float value, int precision){
+	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
 }
 
 /*!

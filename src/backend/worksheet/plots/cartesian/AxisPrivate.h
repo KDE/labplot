@@ -116,6 +116,9 @@ class AxisPrivate: public QGraphicsItem {
 		virtual void retransformTicks();
 		virtual void retransformTickLabels();
 		void retransformTickLabelStrings();
+		int upperLabelsPrecision(int precision);
+		int lowerLabelsPrecision(int precision);
+		float round(float value, int precision);
 		virtual void retransformTicks(const AbstractCoordinateSystem *cSystem);
 		virtual void recalcShapeAndBoundingRect();
 		bool swapVisible(bool on);
