@@ -160,6 +160,7 @@ class Axis: public AbstractWorksheetElement {
 		void endChanged(float);
 		void positionChanged(float);
 		void lineStyleChanged();
+		void labelsPrecisionChanged(int);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)
