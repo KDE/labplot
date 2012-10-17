@@ -50,13 +50,13 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	//adjust layouts in the tabs
 	QGridLayout* layout;
 	for (int i=0; i<ui.tabWidget->count(); ++i){
-	layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
-	if (!layout)
-		continue;
+		layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!layout)
+			continue;
 
-	layout->setContentsMargins(2,2,2,2);
-	layout->setHorizontalSpacing(2);
-	layout->setVerticalSpacing(2);
+		layout->setContentsMargins(2,2,2,2);
+		layout->setHorizontalSpacing(2);
+		layout->setVerticalSpacing(2);
 	}
 
 	//**********************************  Slots **********************************************
@@ -116,7 +116,8 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	
 	//"Tick labels"-tab
 	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsFormatChanged(int)) );
-	connect( ui.leLabelsPrecision, SIGNAL(returnPressed()), this, SLOT(labelsPrecisionChanged()) );
+	connect( ui.sbLabelsPrecision, SIGNAL(valueChanged(int)), this, SLOT(labelsPrecisionChanged(int)) );
+	connect( ui.chkLabelsAutoPrecision, SIGNAL(stateChanged(int)), this, SLOT(labelsAutoPrecisionChanged(int)) );
 	connect( ui.cbLabelsPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsPositionChanged(int)) );
 	connect( ui.sbLabelsOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsOffsetChanged(double)) );
 	connect( ui.sbLabelsRotation, SIGNAL(valueChanged(int)), this, SLOT(labelsRotationChanged(int)) );
@@ -170,8 +171,6 @@ void AxisDock::init(){
 	ui.leMajorTicksIncrement->setValidator( new QDoubleValidator(ui.leMajorTicksIncrement) );
 	ui.leMinorTicksIncrement->setValidator( new QDoubleValidator(ui.leMinorTicksIncrement) );
 
-	ui.leLabelsPrecision->setValidator( new QIntValidator(ui.leLabelsPrecision) );
-	
 	//TODO move this stuff to retranslateUI()
 	ui.cbScale->addItem( i18n("linear") );
 	ui.cbScale->addItem( i18n("log(x)") );
@@ -199,7 +198,6 @@ void AxisDock::init(){
 	
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
 	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
-	ui.leLabelsPrecision->setPlaceholderText( i18n("Auto") );
 
 	//Grid
 	//TODO: remove this later
@@ -246,6 +244,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(orientationChanged()), this, SLOT(axisOrientationChanged()));
 	connect(m_axis, SIGNAL(startChanged(float)), this, SLOT(axisStartChanged(float)));
 	connect(m_axis, SIGNAL(endChanged(float)), this, SLOT(axisEndChanged(float)));
+	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
   	m_initializing = false;
 }
 
@@ -805,20 +804,24 @@ void AxisDock::labelsFormatChanged(int index){
 		axis->setLabelsFormat(Axis::LabelsFormat(index));
 }
 
-void AxisDock::labelsPrecisionChanged(){
+void AxisDock::labelsPrecisionChanged(int value){
 	if (m_initializing)
 		return;
 
-	if (ui.leLabelsPrecision->text().isEmpty()){
-		foreach(Axis* axis, m_axesList)
-			axis->setLabelsAutoPrecision(true);
-	}else{
-		int precision = ui.leLabelsPrecision->text().toInt();
-		foreach(Axis* axis, m_axesList){
-			axis->setLabelsAutoPrecision(false);
-			axis->setLabelsPrecision(precision);
-		}
-	}
+	foreach(Axis* axis, m_axesList)
+		axis->setLabelsPrecision(value);
+}
+
+
+void AxisDock::labelsAutoPrecisionChanged(int state){
+	bool checked = (state==Qt::Checked);
+	ui.sbLabelsPrecision->setEnabled(!checked);
+
+	if (m_initializing)
+		return;
+
+	foreach(Axis* axis, m_axesList)
+		axis->setLabelsAutoPrecision(checked);
 }
 
 void AxisDock::labelsPositionChanged(int index){
@@ -936,6 +939,12 @@ void AxisDock::axisEndChanged(float value){
 	m_initializing = false;
 }
 
+void AxisDock::axisLabelsPrecisionChanged(int value){
+	m_initializing = true;
+	ui.sbLabelsPrecision->setValue( value );
+	m_initializing = false;
+}
+
 /**************************************************/
 /********* Settings *******************************/
 /**************************************************/
@@ -1002,10 +1011,8 @@ void AxisDock::loadConfig(KConfig& config){
 
 	// Tick label
 	ui.cbLabelsFormat->setCurrentIndex( group.readEntry("LabelsFormat", (int) m_axis->labelsFormat()) );
-	if ( group.readEntry("LabelsAutoPrecision", (int) m_axis->labelsAutoPrecision()) )
-		ui.leLabelsPrecision->setText("");
-	else
-		ui.leLabelsPrecision->setText( group.readEntry("LabelsPrecision", QString::number(m_axis->labelsPrecision())) );
+	ui.chkLabelsAutoPrecision->setChecked( group.readEntry("LabelsAutoPrecision", (int) m_axis->labelsAutoPrecision()) );
+	ui.sbLabelsPrecision->setValue( group.readEntry("LabelsPrecision", (int)m_axis->labelsPrecision()) );
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) m_axis->labelsPosition()) );
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", m_axis->labelsRotationAngle()) );
@@ -1090,10 +1097,8 @@ void AxisDock::saveConfig(KConfig& config){
 
 	// Tick label
 	group.writeEntry("LabelsFormat", ui.cbLabelsFormat->currentIndex());
-	if (ui.leLabelsPrecision->text() == "")
-		group.writeEntry("LabelsAutoPrecision", true);
-	else
-		group.writeEntry("LabelsPrecision", ui.leLabelsPrecision->text().toInt());
+	group.writeEntry("LabelsAutoPrecision", ui.chkLabelsAutoPrecision->isChecked());
+	group.writeEntry("LabelsPrecision", ui.sbLabelsPrecision->value());
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
 	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Point));
 	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());

@@ -1056,11 +1056,14 @@ void AxisPrivate::retransformTickLabelStrings(){
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
 		if (newPrecision!= labelsPrecision){
 			labelsPrecision = newPrecision;
+			emit q->labelsPrecisionChanged(labelsPrecision);
 		}else{
 			//check, whether we can reduce the current precision
 			newPrecision = lowerLabelsPrecision(labelsPrecision);
-			if (newPrecision!= labelsPrecision)
+			if (newPrecision!= labelsPrecision){
 				labelsPrecision = newPrecision;
+				emit q->labelsPrecisionChanged(labelsPrecision);
+			}
 		}
 	}
 	

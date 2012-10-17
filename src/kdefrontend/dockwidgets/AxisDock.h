@@ -105,7 +105,8 @@ private slots:
 	
 	//"Tick labels"-tab
 	void labelsFormatChanged(int);
-	void labelsPrecisionChanged();
+	void labelsPrecisionChanged(int);
+	void labelsAutoPrecisionChanged(int);
 	void labelsPositionChanged(int);
 	void labelsOffsetChanged(double);
 	void labelsRotationChanged(int);
@@ -123,6 +124,7 @@ private slots:
 	void axisPositionChanged(float);
 	void axisStartChanged(float);
 	void axisEndChanged(float);
+	void axisLabelsPrecisionChanged(int);
 
 	//save/load
 	void loadConfig(KConfig&);
