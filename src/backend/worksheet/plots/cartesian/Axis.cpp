@@ -1066,7 +1066,7 @@ void AxisPrivate::retransformTickLabelStrings(){
 			}
 		}
 	}
-	
+
 	char format;
 	if (labelsFormat == Axis::FormatDecimal)
 		format = 'f';
@@ -1108,6 +1108,9 @@ int AxisPrivate::upperLabelsPrecision(int precision){
 	were no duplicates for the tick label float occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision){
+	if (precision == 0)
+		return 0;
+
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QList<float> tempValues;
