@@ -32,13 +32,14 @@
 #include "CartesianCoordinateSystem.h"
 #include "Axis.h"
 #include "XYCurve.h"
-#include "../PlotArea.h"
-#include "../AbstractPlotPrivate.h"
-#include "../../Worksheet.h"
-#include "../../TextLabel.h"
+#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/AbstractPlotPrivate.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/TextLabel.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
 #include <math.h>
 
-#include "lib/XmlStreamReader.h"
 #include <QDebug>
 #include <QMenu>
 #include <QToolBar>
@@ -68,9 +69,11 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		void setRect(const QRectF& r);
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void retransform();
-		void retransformScales(const float deltaX=0, const float deltaY=0);
-		
+		void retransformScales();
+		float round(float value, int precision);
+
 		float xMin, xMax, yMin, yMax;
+		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
 		bool autoScaleX, autoScaleY;
 };
 
@@ -83,6 +86,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):Abst
 }
 
 CartesianPlot::~CartesianPlot(){
+	//TODO
 // 	delete d_ptr;
 // 	delete m_title;
 // 	delete m_coordinateSystem;
@@ -101,6 +105,10 @@ void CartesianPlot::init(){
 	d->xMax = 1;
 	d->yMin = 0;
 	d->yMax = 1;
+	d->xMinPrev = d->xMin;
+	d->xMaxPrev = d->xMax;
+	d->yMinPrev = d->yMin;
+	d->yMaxPrev = d->yMax;
 	d->autoScaleX = true;
 	d->autoScaleY = true;
 	
@@ -214,7 +222,6 @@ void CartesianPlot::initActions(){
 	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
 	
-	//TODO use icons from labplot1.6
 	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
 	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), this);
 	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
@@ -330,15 +337,66 @@ void CartesianPlot::setRect(const QRectF& r){
 	d->setRect(r);
 }
 
-/* ============================ getter methods ================= */
+/* =================================== getter methods ============================ */
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMax, xMax)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMin, yMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
 
 /* ============================ setter methods and undo commands ================= */
+//TODO: provide an undo-aware version
+// STD_SETTER_CMD_IMPL_F(CartesianPlot, SetAutoScaleX, bool, autoScaleX, retransformScales)
+void CartesianPlot::setAutoScaleX(bool autoScaleX){
+	Q_D(CartesianPlot);
+	if (autoScaleX != d->autoScaleX){
+// 		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX, tr("%1: change auto scale x")));
+		d->autoScaleX = autoScaleX;
+		if (autoScaleX)
+			this->scaleAutoX();
+	}
+}
 
+STD_SETTER_CMD_IMPL_F(CartesianPlot, SetXMin, float, xMin, retransformScales)
+void CartesianPlot::setXMin(float xMin){
+	Q_D(CartesianPlot);
+	if (xMin != d->xMin)
+		exec(new CartesianPlotSetXMinCmd(d, xMin, tr("%1: set min x")));
+}
 
+STD_SETTER_CMD_IMPL_F(CartesianPlot, SetXMax, float, xMax, retransformScales);
+void CartesianPlot::setXMax(float xMax){
+	Q_D(CartesianPlot);
+	if (xMax != d->xMax)
+		exec(new CartesianPlotSetXMaxCmd(d, xMax, tr("%1: set max x")));
+}
+
+//TODO: provide an undo-aware version
+// STD_SETTER_CMD_IMPL_F(CartesianPlot, SetAutoScaleY, bool, autoScaleY, retransformScales)
+void CartesianPlot::setAutoScaleY(bool autoScaleY){
+	Q_D(CartesianPlot);
+	if (autoScaleY != d->autoScaleY){
+// 		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY, tr("%1: change auto scale y")));
+		d->autoScaleY = autoScaleY;
+		if (autoScaleY)
+			this->scaleAutoY();
+	}
+}
+
+STD_SETTER_CMD_IMPL_F(CartesianPlot, SetYMin, float, yMin, retransformScales);
+void CartesianPlot::setYMin(float yMin){
+	Q_D(CartesianPlot);
+	if (yMin != d->yMin)
+		exec(new CartesianPlotSetYMinCmd(d, yMin, tr("%1: set min y")));
+}
+
+STD_SETTER_CMD_IMPL_F(CartesianPlot, SetYMax, float, yMax, retransformScales);
+void CartesianPlot::setYMax(float yMax){
+	Q_D(CartesianPlot);
+	if (yMax != d->yMax)
+		exec(new CartesianPlotSetYMaxCmd(d, yMax, tr("%1: set max y")));
+}
 
 //################################################################
 //########################## Slots ###############################
@@ -419,9 +477,8 @@ void CartesianPlot::scaleAutoX(){
 		update = true;
 	}
 	
-	//TODO: calculate deltas for retransformScales()
 	if(update)
-		d->retransformScales();
+		d->retransformScales();		
 }
 
 void CartesianPlot::scaleAutoY(){
@@ -462,7 +519,6 @@ void CartesianPlot::scaleAutoY(){
 		update = true;
 	}
 	
-	//TODO: calculate deltas for retransformScales()
 	if(update)
 		d->retransformScales();
 }
@@ -530,7 +586,6 @@ void CartesianPlot::scaleAuto(){
 		update = true;
 	}
 
-	//TODO: calculate deltas for retransformScales()
 	if(update)
 		d->retransformScales();		
 }
@@ -543,7 +598,7 @@ void CartesianPlot::zoomIn(){
 	float offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax -= offsetY;
 	d->yMin += offsetY;
-	d->retransformScales(offsetX, offsetY);	
+	d->retransformScales();
 }
 
 void CartesianPlot::zoomOut(){
@@ -554,7 +609,7 @@ void CartesianPlot::zoomOut(){
 	float offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax += offsetY;
 	d->yMin -= offsetY;
-	d->retransformScales(offsetX, offsetY);
+	d->retransformScales();
 }
 
 void CartesianPlot::zoomInX(){
@@ -562,7 +617,7 @@ void CartesianPlot::zoomInX(){
 	float offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax -= offsetX;
 	d->xMin += offsetX;
-	d->retransformScales(offsetX, 0);
+	d->retransformScales();
 }
 
 void CartesianPlot::zoomOutX(){
@@ -570,7 +625,7 @@ void CartesianPlot::zoomOutX(){
 	float offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax += offsetX;
 	d->xMin -= offsetX;
-	d->retransformScales(offsetX, 0);
+	d->retransformScales();
 }
 
 void CartesianPlot::zoomInY(){
@@ -578,7 +633,7 @@ void CartesianPlot::zoomInY(){
 	float offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax -= offsetY;
 	d->yMin += offsetY;
-	d->retransformScales(0, offsetY);
+	d->retransformScales();
 }
 
 void CartesianPlot::zoomOutY(){
@@ -586,7 +641,7 @@ void CartesianPlot::zoomOutY(){
 	float offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax += offsetY;
 	d->yMin -= offsetY;
-	d->retransformScales(0, offsetY);
+	d->retransformScales();
 }
 
 void CartesianPlot::shiftLeftX(){
@@ -594,7 +649,7 @@ void CartesianPlot::shiftLeftX(){
 	float offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax -= offsetX;
 	d->xMin -= offsetX;
-	d->retransformScales(-offsetX, 0);
+	d->retransformScales();
 }
 
 void CartesianPlot::shiftRightX(){
@@ -602,7 +657,7 @@ void CartesianPlot::shiftRightX(){
 	float offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax += offsetX;
 	d->xMin += offsetX;
-	d->retransformScales(offsetX, 0);
+	d->retransformScales();
 }
 
 void CartesianPlot::shiftUpY(){
@@ -610,7 +665,7 @@ void CartesianPlot::shiftUpY(){
 	float offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax += offsetY;
 	d->yMin += offsetY;
-	d->retransformScales(0, offsetY);
+	d->retransformScales();
 }
 
 void CartesianPlot::shiftDownY(){
@@ -618,7 +673,7 @@ void CartesianPlot::shiftDownY(){
 	float offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax -= offsetY;
 	d->yMin -= offsetY;
-	d->retransformScales(0, -offsetY);
+	d->retransformScales();
 }
 		
 //#####################################################################
@@ -661,14 +716,38 @@ void CartesianPlotPrivate::retransform(){
 	q->retransform();
 }
 
-void CartesianPlotPrivate::retransformScales(const float deltaX, float const deltaY){
-	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
+void CartesianPlotPrivate::retransformScales(){
+	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale*> scales;
 	
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
-	QRectF itemRect= mapRectFromScene( rect );
-// 	qDebug()<<"x "<<itemRect.x()<<" y "<<itemRect.y()<<" xMin "<<xMin<<" xMax "<<xMax;
+	QRectF itemRect = mapRectFromScene( rect );
+
+	float deltaX = 0;
+	float deltaY = 0;
+
+	if (xMin!=xMinPrev){
+		deltaX = xMin - xMinPrev;
+		emit plot->xMinChanged(xMin);
+	}
+
+	if (xMax!=xMaxPrev)
+		emit plot->xMaxChanged(xMax);
+
+	if (yMin!=yMinPrev){
+		deltaY = yMin - yMinPrev;
+		emit plot->yMinChanged(yMin);
+	}
+
+	if (yMax!=yMaxPrev)
+		emit plot->yMaxChanged(yMax);
+	
+	xMinPrev = xMin;
+	xMaxPrev = xMax;
+	yMinPrev = yMin;
+	yMaxPrev = yMax;
+
 	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
 																  itemRect.x()+horizontalPadding,
 																  itemRect.x()+itemRect.width()-horizontalPadding,
@@ -693,13 +772,17 @@ void CartesianPlotPrivate::retransformScales(const float deltaX, float const del
 			if (axis->orientation() == Axis::AxisHorizontal){
 				axis->setEnd(xMax, false);
 				axis->setStart(xMin, false);
-				if (axis->position() == Axis::AxisCustom)
+				if (axis->position() == Axis::AxisCustom){
 					axis->setOffset(axis->offset() + deltaY, false);
+// 					qDebug()<<" new offset "<<axis->offset() + deltaY;
+				}
 			}else{
 				axis->setEnd(yMax, false);
 				axis->setStart(yMin, false);
-				if (axis->position() == Axis::AxisCustom)
+				if (axis->position() == Axis::AxisCustom){
 					axis->setOffset(axis->offset() + deltaX, false);
+// 					qDebug()<<" new offset "<<axis->offset() + deltaX;
+				}
 			}
 		}
 	}
@@ -707,6 +790,11 @@ void CartesianPlotPrivate::retransformScales(const float deltaX, float const del
 	// call retransform() on the parent to trigger the update of all axes and curves
 	q->retransform();
 }
+
+float CartesianPlotPrivate::round(float value, int precision){
+	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
+}
+
 /*!
  * Reimplemented from QGraphicsItem.
  */

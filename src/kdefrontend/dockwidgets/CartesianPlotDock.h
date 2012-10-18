@@ -65,9 +65,15 @@ private slots:
 	void layoutChanged(Worksheet::Layout);
 
 	//"Coordinate system"-tab
+	void autoScaleXChanged(int);
+	void xMinChanged();
+	void xMaxChanged();
 	void toggleXBreak(int);
+	void autoScaleYChanged(int);
+	void yMinChanged();
+	void yMaxChanged();
 	void toggleYBreak(int);
-	
+
 	//"Plot area"-tab
   	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
@@ -87,6 +93,10 @@ private slots:
 	
 	//SLOTs for changes triggered in CartesianPlot
 	void plotPositionChanged();
+	void plotXMinChanged(float);
+	void plotXMaxChanged(float);
+	void plotYMinChanged(float);
+	void plotYMaxChanged(float);
 	
 	//save/load
 	void loadConfig(KConfig&);

@@ -29,13 +29,13 @@
  ***************************************************************************/
 
 #include "CartesianPlotDock.h"
-#include "../../backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "../../backend/worksheet/plots/PlotArea.h"
-#include "../../backend/worksheet/Worksheet.h"
-#include "../../backend/worksheet/TextLabel.h"
-#include "../widgets/LabelWidget.h"
-#include "../GuiTools.h"
-#include "../TemplateHandler.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/TextLabel.h"
+#include "kdefrontend/widgets/LabelWidget.h"
+#include "kdefrontend/GuiTools.h"
+#include "kdefrontend/TemplateHandler.h"
 
 #include <QTimer>
 #include <KUrlCompletion>
@@ -99,8 +99,14 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	
 	//Coordinate system
+	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
+	connect( ui.kleXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
+	connect( ui.kleXMax, SIGNAL(returnPressed()), this, SLOT(xMaxChanged()) );
 	connect( ui.chkXBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleXBreak(int)) );
 	connect( ui.chkYBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleYBreak(int)) );
+	connect( ui.chkAutoScaleY, SIGNAL(stateChanged(int)), this, SLOT(autoScaleYChanged(int)) );
+	connect( ui.kleYMin, SIGNAL(returnPressed()), this, SLOT(yMinChanged()) );
+	connect( ui.kleYMax, SIGNAL(returnPressed()), this, SLOT(yMaxChanged()) );
 	
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -191,6 +197,10 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 
 	//SIGNALs/SLOTs
 	connect( m_plot, SIGNAL(positionChanged()), this, SLOT(plotPositionChanged()) );
+	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
+	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
+	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
+	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	
 	m_initializing = false;
 }
@@ -290,6 +300,67 @@ void CartesianPlotDock::layoutChanged(Worksheet::Layout layout){
 		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Centimeter));		
 		m_initializing = false;
 	}
+}
+
+
+void CartesianPlotDock::autoScaleXChanged(int state){
+	bool checked = (state==Qt::Checked);
+	ui.kleXMin->setEnabled(!checked);
+	ui.kleXMax->setEnabled(!checked);
+
+	if (m_initializing)
+		return;
+
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setAutoScaleX(checked);
+}
+
+void CartesianPlotDock::xMinChanged(){
+	if (m_initializing)
+		return;
+
+	float value = ui.kleXMin->text().toDouble();
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setXMin(value);
+}
+
+void CartesianPlotDock::xMaxChanged(){
+	if (m_initializing)
+		return;
+
+	float value = ui.kleXMax->text().toDouble();
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setXMax(value);
+}
+
+void CartesianPlotDock::autoScaleYChanged(int state){
+	bool checked = (state==Qt::Checked);
+	ui.kleYMin->setEnabled(!checked);
+	ui.kleYMax->setEnabled(!checked);
+
+	if (m_initializing)
+		return;
+
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setAutoScaleY(checked);
+}
+
+void CartesianPlotDock::yMinChanged(){
+	if (m_initializing)
+		return;
+
+	float value = ui.kleYMin->text().toDouble();
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setYMin(value);
+}
+
+void CartesianPlotDock::yMaxChanged(){
+	if (m_initializing)
+		return;
+
+	float value = ui.kleYMax->text().toDouble();
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setYMax(value);
 }
 
 // "Coordinate system"-tab
@@ -573,6 +644,30 @@ void CartesianPlotDock::plotPositionChanged(){
 	m_initializing = false;
 }
 
+void CartesianPlotDock::plotXMinChanged(float value){
+	m_initializing = true;
+	ui.kleXMin->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotXMaxChanged(float value){
+	m_initializing = true;
+	ui.kleXMax->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotYMinChanged(float value){
+	m_initializing = true;
+	ui.kleYMin->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotYMaxChanged(float value){
+	m_initializing = true;
+	ui.kleYMax->setText( QString::number(value) );
+	m_initializing = false;
+}
+
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -590,6 +685,14 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	//Title
 // 	labelWidget->loadConfig(group);
 
+	//Coordinate system
+	ui.chkAutoScaleX->setChecked(group.readEntry("AutoScaleX", m_plot->autoScaleX()));
+  	ui.kleXMin->setText( QString::number( group.readEntry("xMin", m_plot->xMin())) );
+	ui.kleXMax->setText( QString::number( group.readEntry("xMax", m_plot->xMax())) );
+	ui.chkAutoScaleY->setChecked(group.readEntry("AutoScaleY", m_plot->autoScaleY()));
+  	ui.kleYMin->setText( QString::number( group.readEntry("yMin", m_plot->yMin())) );
+	ui.kleYMax->setText( QString::number( group.readEntry("yMax", m_plot->yMax())) );
+	
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_plot->plotArea()->backgroundType()) );
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_plot->plotArea()->backgroundColorStyle()) );
@@ -623,6 +726,14 @@ void CartesianPlotDock::saveConfig(KConfig& config){
 	//Title
 	labelWidget->saveConfig(group);
 
+	//Coordinate system
+	group.writeEntry("AutoScaleX", ui.chkAutoScaleX->isChecked());
+	group.writeEntry("xMin", ui.kleXMin->text());
+	group.writeEntry("xMax", ui.kleXMax->text());
+	group.writeEntry("AutoScaleY", ui.chkAutoScaleY->isChecked());
+	group.writeEntry("yMin", ui.kleYMin->text());
+	group.writeEntry("yMax", ui.kleYMax->text());
+	
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
