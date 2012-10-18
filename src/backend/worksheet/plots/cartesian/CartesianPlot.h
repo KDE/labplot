@@ -30,7 +30,7 @@
 #ifndef CARTESIANPLOT_H
 #define CARTESIANPLOT_H
 
-#include "../AbstractPlot.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 class KAction;
@@ -54,12 +54,12 @@ class CartesianPlot:public AbstractPlot{
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 		
-		BASIC_D_ACCESSOR_DECL(float, autoScaleX, AutoScaleX);
-		BASIC_D_ACCESSOR_DECL(float, autoScaleY, AutoScaleY);
-		BASIC_D_ACCESSOR_DECL(float, xMin, XMin);
-		BASIC_D_ACCESSOR_DECL(float, xMax, XMax);
-		BASIC_D_ACCESSOR_DECL(float, yMin, YMin);
-		BASIC_D_ACCESSOR_DECL(float, yMax, YMax);
+		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
+		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
+		BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
+		BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
+		BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
+		BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 		
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;
@@ -89,7 +89,7 @@ class CartesianPlot:public AbstractPlot{
 		
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
-
+		
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
 	private slots:
@@ -115,9 +115,13 @@ class CartesianPlot:public AbstractPlot{
 	
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
-	
+
 	signals:
-		void positionChanged();		
+		void positionChanged();
+		void xMinChanged(float);
+		void xMaxChanged(float);
+		void yMinChanged(float);
+		void yMaxChanged(float);
 };
 
 #endif
