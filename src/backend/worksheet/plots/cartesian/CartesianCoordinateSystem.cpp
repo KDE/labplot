@@ -28,11 +28,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "worksheet/plots/cartesian/CartesianPlot.h"
-#include "worksheet/Worksheet.h"
-#include "core/AbstractAspect.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/lib/XmlStreamReader.h"
 #include <cmath>
 #include <QUndoCommand>
 #include <QtGlobal>
@@ -268,7 +268,7 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 		foreach (Scale *yScale, d->yScales) {
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
-			
+
 			foreach(QPointF point, points) {
 				bool valid = true;
 
@@ -298,6 +298,60 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 
 	return result;
 }
+
+/*!
+	Maps the points in logical coordinates from \c points and fills the \c restrictedPoints with the points in logical coordinates restricted to the current intervals.
+	\param logicalPoints List of points in logical coordinates
+	\param scenePoints List for the points in scene coordinates
+	\param restrictedLogicalPoints List for the logical coordinates restricted to the current region of the coordinate system
+	\param flags
+ */
+void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints,
+												  QList<QPointF>& restrictedLogicalPoints, const MappingFlags& flags) const{
+	//determine the plot rect in local coordinates
+	QRectF pageRect = d->plot->graphicsItem()->mapFromScene( d->plot->rect() ).boundingRect();
+	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
+	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
+	pageRect.setWidth(pageRect.width()-d->plot->horizontalPadding());
+	pageRect.setHeight(pageRect.height()-d->plot->verticalPadding());
+
+	QList<QPointF> result;
+	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+	bool valid = true;
+
+	foreach (Scale *xScale, d->xScales){
+		Interval<double> xInterval;
+		xScale->getProperties(NULL, &xInterval);
+
+		foreach (Scale *yScale, d->yScales){
+			Interval<double> yInterval;
+			yScale->getProperties(NULL, &yInterval);
+
+			foreach(QPointF point, logicalPoints){
+				double x = point.x();
+				double y = point.y();
+
+				if (!(xInterval.contains(x) && yInterval.contains(y)))
+					continue;
+
+				valid = xScale->map(&x);
+				if (!valid)
+					continue;
+
+				valid = yScale->map(&y);
+				if (!valid)
+					continue;
+
+				QPointF mappedPoint(x, y);
+				if (noPageClipping || pageRect.contains(mappedPoint)){
+					scenePoints.append(mappedPoint);
+					restrictedLogicalPoints.append(point);
+				}
+			}
+		}
+	}
+}
+
 
 QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
 	QRectF pageRect = d->plot->rect();

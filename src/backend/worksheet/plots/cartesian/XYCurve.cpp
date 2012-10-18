@@ -37,15 +37,15 @@
 
 #include "XYCurve.h"
 #include "XYCurvePrivate.h"
-#include "../AbstractCoordinateSystem.h"
-#include "CartesianCoordinateSystem.h"
-#include "../AbstractPlot.h"
-#include "../../../lib/commandtemplates.h"
-#include "./../../../core/plugin/PluginManager.h"
-#include "../../symbols/EllipseCurveSymbol.h"
-#include "../../interfaces.h"
-#include "../../Worksheet.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots//AbstractPlot.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/core/plugin/PluginManager.h"
+#include "backend/worksheet/symbols/EllipseCurveSymbol.h"
+#include "backend/worksheet/interfaces.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <QGraphicsItem>
 #include <QGraphicsItemGroup>
@@ -94,7 +94,7 @@ void XYCurve::init(){
 	d->valuesDistance =  Worksheet::convertToSceneUnits( 5, Worksheet::Point );
 	d->valuesRotationAngle = 0;
 	d->valuesOpacity = 1.0;
-	d->valuesFont.setPointSizeF( Worksheet::convertToSceneUnits( 10, Worksheet::Point ) );
+	d->valuesFont.setPointSizeF( Worksheet::convertToSceneUnits( 6, Worksheet::Point ) );
 	
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -508,6 +508,7 @@ bool XYCurvePrivate::swapVisible(bool on){
 void XYCurvePrivate::retransform(){
 	symbolPointsLogical.clear();
 	symbolPoints.clear();
+	symbolPointsLogicalRestricted.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) )
 		return;
@@ -559,9 +560,9 @@ void XYCurvePrivate::retransform(){
 
 	//calculate the scene coordinates
 	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
+	const CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
 	if (cSystem)
-		symbolPoints = cSystem->mapLogicalToScene(symbolPointsLogical);
+		 cSystem->mapLogicalToScene(symbolPointsLogical, symbolPoints, symbolPointsLogicalRestricted);
 	
 	updateLines();
 	updateDropLines();
@@ -798,34 +799,34 @@ void XYCurvePrivate::updateValues(){
 	valuesStrings.clear();
 	
 	if (valuesType== XYCurve::NoValues){
-	  recalcShapeAndBoundingRect();
-	  return;
+		recalcShapeAndBoundingRect();
+		return;
 	}
-	
-	//determine the value string for all points
+
+	//determine the value string for all points that are currently visible in the plot
 	switch (valuesType){
 	  case XYCurve::NoValues:
 	  case XYCurve::ValuesX:{
-		foreach(QPointF point, symbolPointsLogical){
- 			valuesStrings << valuesPrefix + QString().setNum(point.x()) + valuesSuffix;
+		foreach(QPointF point, symbolPointsLogicalRestricted){
+ 			valuesStrings << valuesPrefix + QString::number(point.x()) + valuesSuffix;
 		}
 	  break;
 	  }
 	  case XYCurve::ValuesY:{
-		foreach(QPointF point, symbolPointsLogical){
- 			valuesStrings << valuesPrefix + QString().setNum(point.y()) + valuesSuffix;
+		foreach(QPointF point, symbolPointsLogicalRestricted){
+ 			valuesStrings << valuesPrefix + QString::number(point.y()) + valuesSuffix;
 		}
 		break;
 	  }
 	  case XYCurve::ValuesXY:{
-		foreach(QPointF point, symbolPointsLogical){
-			valuesStrings << valuesPrefix + QString().setNum(point.x()) + "," + QString().setNum(point.y()) + valuesSuffix;
+		foreach(QPointF point, symbolPointsLogicalRestricted){
+			valuesStrings << valuesPrefix + QString::number(point.x()) + "," + QString::number(point.y()) + valuesSuffix;
 		}
 		break;
 	  }
 	  case XYCurve::ValuesXYBracketed:{
-		foreach(QPointF point, symbolPointsLogical){
-			valuesStrings <<  valuesPrefix + "(" + QString().setNum(point.x()) + "," + QString().setNum(point.y()) +")" + valuesSuffix;
+		foreach(QPointF point, symbolPointsLogicalRestricted){
+			valuesStrings <<  valuesPrefix + "(" + QString::number(point.x()) + "," + QString::number(point.y()) +")" + valuesSuffix;
 		}
 		break;
 	  }
@@ -835,41 +836,36 @@ void XYCurvePrivate::updateValues(){
 		  return;
 		}
 
-		int endRow;
-		if (symbolPointsLogical.size()>valuesColumn->rowCount())
-		  endRow =  valuesColumn->rowCount();
-		else
-		  endRow = symbolPointsLogical.size();
-
-		SciDAVis::ColumnMode xColMode = valuesColumn->columnMode();
-		for (int row=0; row<endRow; row++){
-		  if ( !valuesColumn->isValid(row) || valuesColumn->isMasked(row) )
-			continue;
-
-		  switch (xColMode){
-				case SciDAVis::Numeric:
-				  valuesStrings << valuesPrefix + QString().setNum(valuesColumn->valueAt(row)) + valuesSuffix;
-					break;
-				case SciDAVis::Text:
-					valuesStrings << valuesPrefix + valuesColumn->textAt(row) + valuesSuffix;
-				case SciDAVis::DateTime:
-				case SciDAVis::Month:
-				case SciDAVis::Day:
-					//TODO
-					break;
-				default:
-					break;
-			}
-		}
-
+		//TODO from the custom column containing the value textes we need to determine only those rows
+		//that correspond to the currently visible points in the plot. Redesign the commented code part below.
+// 		int endRow;
+// 		if (symbolPointsLogical.size()>valuesColumn->rowCount())
+// 		  endRow =  valuesColumn->rowCount();
+// 		else
+// 		  endRow = symbolPointsLogical.size();
+// 
+// 		SciDAVis::ColumnMode xColMode = valuesColumn->columnMode();
+// 		for (int row=0; row<endRow; row++){
+// 		  if ( !valuesColumn->isValid(row) || valuesColumn->isMasked(row) )
+// 			continue;
+// 
+// 		  switch (xColMode){
+// 				case SciDAVis::Numeric:
+// 				  valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(row)) + valuesSuffix;
+// 					break;
+// 				case SciDAVis::Text:
+// 					valuesStrings << valuesPrefix + valuesColumn->textAt(row) + valuesSuffix;
+// 				case SciDAVis::DateTime:
+// 				case SciDAVis::Month:
+// 				case SciDAVis::Day:
+// 					//TODO
+// 					break;
+// 				default:
+// 					break;
+// 			}
+// 		}
 	  }
 	}
-	//determine the value strings for points only that are visible on the coordinate system
-// 	const AbstractCoordinateSystem *cSystem = q->coordinateSystem();
-// 	if (cSystem)
-	  //TODO: implement this function
-// 	  valuesStrings = cSystem->mapLogicalToScene(symbolPointsLogical, valuesStrings);	
-// 
 	
 	//Calculate the coordinates where to paint the value strings.
 	//The coordinates depend on the actual size of the string.
@@ -877,6 +873,7 @@ void XYCurvePrivate::updateValues(){
 	QFontMetrics fm(valuesFont);
 	qreal w;
 	qreal h=fm.ascent();
+
 	switch(valuesPosition){
 	  case XYCurve::ValuesAbove:{
 		for (int i=0; i<valuesStrings.size(); i++){

@@ -31,9 +31,10 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
-#include "../../AbstractWorksheetElement.h"
-#include "../.././../lib/macros.h"
-#include "../../../core/AbstractColumn.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/lib/macros.h"
+#include "backend/core/AbstractColumn.h"
+
 #include <QFont>
 
 class XYCurvePrivate;

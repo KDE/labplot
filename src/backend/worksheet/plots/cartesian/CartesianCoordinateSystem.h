@@ -31,9 +31,9 @@
 #ifndef CARTESIANCOORDINATESYSTEM_H
 #define CARTESIANCOORDINATESYSTEM_H
 
-#include "worksheet/plots/AbstractCoordinateSystem.h"
-#include "lib/macros.h"
-#include "lib/Interval.h"
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
+#include "backend/lib/macros.h"
+#include "backend/lib/Interval.h"
 
 class CartesianPlot;
 class CartesianCoordinateSystemPrivate;
@@ -82,6 +82,7 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		virtual ~CartesianCoordinateSystem();
 
 		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
+		void mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints, QList<QPointF>& restrictedLogicalPoints, const MappingFlags &flags = DefaultMapping) const;
 		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
 		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const;
 

@@ -31,8 +31,8 @@
 #ifndef XYCURVEPRIVATE_H
 #define XYCURVEPRIVATE_H
 
-#include "worksheet/AbstractCurveSymbol.h"
-#include "worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/AbstractCurveSymbol.h"
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 
 class XYCurvePrivate: public QGraphicsItem {
 	public:
@@ -91,8 +91,9 @@ class XYCurvePrivate: public QGraphicsItem {
 		AbstractCurveSymbol *symbolsPrototype;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
-		QList<QPointF> symbolPointsLogical;
-		QList<QPointF> symbolPoints;
+		QList<QPointF> symbolPointsLogical; 			//points in logical coordinates
+		QList<QPointF> symbolPoints;					//points in scene coordinates
+		QList<QPointF> symbolPointsLogicalRestricted; 	//points in logical coordinates restricted to the currently visible area in the plot
 		QList<QPointF> valuesPoints;
 		QList<QString> valuesStrings;
 
