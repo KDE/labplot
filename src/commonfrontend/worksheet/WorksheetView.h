@@ -40,6 +40,7 @@ class QWheelEvent;
 
 class Worksheet;
 class WorksheetModel;
+class AbstractWorksheetElement;
 
 class WorksheetView : public QGraphicsView{
 	Q_OBJECT
@@ -80,6 +81,7 @@ class WorksheetView : public QGraphicsView{
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
 	bool m_suppressSelectionChangedEvent;
+	AbstractWorksheetElement* lastAddedWorksheetElement;
 	
 	//Menus
 	QMenu* m_addNewMenu;
@@ -140,7 +142,9 @@ class WorksheetView : public QGraphicsView{
 	void deselectItem(QGraphicsItem*);
 	void selectionChanged();
 	void updateBackground();
-	
+
+	void animate(qreal);
+
   signals:
 	void statusInfo(const QString &text);
 };

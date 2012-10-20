@@ -38,18 +38,20 @@
 #include <QToolButton>
 #include <QDebug>
 #include <QMessageBox>
+#include <QGraphicsOpacityEffect>
+#include <QTimeLine>
 
-#include "worksheet/WorksheetView.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/WorksheetElementGroup.h"
-#include "worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "worksheet/WorksheetRectangleElement.h"
-#include "worksheet/plots/cartesian/CartesianPlot.h"
-#include "worksheet/plots/cartesian/Axis.h"
-#include "worksheet/plots/cartesian/XYCurve.h"
-#include "core/column/Column.h"
-#include "../../backend/worksheet/TextLabel.h"
+#include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/WorksheetModel.h"
+#include "backend/worksheet/WorksheetElementGroup.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/WorksheetRectangleElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/core/column/Column.h"
+#include "backend/worksheet/TextLabel.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "lib/ActionManager.h"
@@ -58,7 +60,6 @@
 #include <KLocale>
 #include "kdefrontend/worksheet/GridDialog.h"
 #endif
-
 
 /**
  * \class WorksheetView
@@ -584,7 +585,7 @@ void WorksheetView::enableSelectionMode(){
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action){
-	AbstractAspect* aspect = 0;
+	AbstractWorksheetElement* aspect = 0;
 	if ( action == addPlotAction ){
 		aspect = new CartesianPlot("xy-plot");
 		dynamic_cast<CartesianPlot*>(aspect)->initDefault();
@@ -596,8 +597,33 @@ void WorksheetView::addNew(QAction* action){
 	}
 
 	m_worksheet->addChild(aspect);
+	
+	lastAddedWorksheetElement = aspect;
+	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+	effect->setOpacity(0);
+// 	QGraphicsBlurEffect* effect = new QGraphicsBlurEffect();
+// 	effect->setBlurRadius( 10);
+	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
+	
+	QTimeLine* timeLine = new QTimeLine(1000, this);
+	timeLine->setFrameRange(0, 100);
+	connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate(qreal)));
+	timeLine->start();
 }
 
+/*!
+	animates the appearence of the newly added worksheet elements
+ */
+void WorksheetView::animate(qreal value){
+	if (!lastAddedWorksheetElement)
+		return;
+
+	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+	effect->setOpacity( value );
+// 	QGraphicsBlurEffect* effect = new QGraphicsBlurEffect();
+// 	effect->setBlurRadius( 10 - value*10 );
+	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
+}
 void WorksheetView::changeLayout(QAction* action){
 	if (action==breakLayoutAction){
 		verticalLayoutAction->setEnabled(true);
@@ -765,7 +791,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		printer.setPaperSize( QSizeF(rect.width(), rect.height()), QPrinter::Millimeter);
 		printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
-//TODO		printer.setCreator("LabPlot "+LVERSION);
+		printer.setCreator( QString("LabPlot ") + LVERSION );
 
 		QPainter painter(&printer);
 		painter. setRenderHint(QPainter::Antialiasing);
