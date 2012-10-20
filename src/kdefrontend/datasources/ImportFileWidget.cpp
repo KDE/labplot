@@ -2,8 +2,9 @@
     File                 : ImportFileWidget.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
     Description          : import file data widget
 
  ***************************************************************************/
@@ -70,6 +71,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     ui.bFileInfo->setIcon( KIcon("help-about") );
     ui.bManageFilters->setIcon( KIcon("configure") );
 	ui.bSaveFilter->setIcon( KIcon("document-save") );
+	ui.bRefreshPreview->setIcon( KIcon("view-refresh") );
 
     connect( ui.kleFileName, SIGNAL(textChanged (const QString&)), SLOT(fileNameChanged(const QString&)) );
     connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -78,6 +80,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
     connect( ui.cbFileType, SIGNAL(activated(int)), SLOT(fileTypeChanged(int)) );
     connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
+	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
     connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 	
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
@@ -219,18 +222,20 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
         fileName=QDir::homePath() + QDir::separator() + fileName;
     }
 
-    if ( !QFile::exists(fileName) ) {
-        ui.gbOptions->setEnabled(false);
-        ui.bFileInfo->setEnabled(false);
-        ui.cbFileType->setEnabled(false);
-        ui.cbFilter->setEnabled(false);
-        ui.bManageFilters->setEnabled(false);
-        ui.kleSourceName->setEnabled(false);
-        ui.chbWatchFile->setEnabled(false);
-        ui.chbLinkFile->setEnabled(false);
-        return;
-    }
+    bool fileExists = QFile::exists(fileName);
+	ui.gbOptions->setEnabled(fileExists);
+	ui.bFileInfo->setEnabled(fileExists);
+	ui.cbFileType->setEnabled(fileExists);
+	ui.cbFilter->setEnabled(fileExists);
+	ui.bManageFilters->setEnabled(fileExists);
+	ui.kleSourceName->setEnabled(fileExists);
+	ui.chbWatchFile->setEnabled(fileExists);
+	ui.chbLinkFile->setEnabled(fileExists);
+		
+    if ( !fileExists )
+		return;
 
+	//check, whether the file has ascii or binary contant
     QProcess *proc = new QProcess(this);
     QStringList args;
     args<<"-b"<<ui.kleFileName->text();
@@ -248,15 +253,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
             this->fileTypeChanged(2);
         }
     }
-
-    ui.gbOptions->setEnabled(true);
-    ui.bFileInfo->setEnabled(true);
-    ui.cbFileType->setEnabled(true);
-    ui.cbFilter->setEnabled(true);
-    ui.bManageFilters->setEnabled(true);
-    ui.kleSourceName->setEnabled(true);
-    ui.chbWatchFile->setEnabled(true);
-    ui.chbLinkFile->setEnabled(true);
 }
 
 /*!
@@ -340,4 +336,26 @@ void ImportFileWidget::headerChanged(int state) {
         asciiOptionsWidget.kleVectorNames->setEnabled(true);
 		asciiOptionsWidget.lVectorNames->setEnabled(true);
 	}
+}
+
+void ImportFileWidget::refreshPreview(){
+	QString fileName = ui.kleFileName->text();
+    if ( fileName.left(1) != QDir::separator() )
+        fileName = QDir::homePath() + QDir::separator() + fileName;
+
+	QFile file(fileName);
+	QString importedText;
+	if ( file.open(QFile::ReadOnly)){
+		QTextStream stream(&file);
+		int lines = ui.sbPreviewLines->value();
+		for (int i=0; i<lines; ++i){
+			if( stream.atEnd() )
+				break;
+			
+			importedText += stream.readLine();
+			importedText += "\n";
+		}
+	}
+
+	ui.tePreview->setPlainText(importedText);
 }

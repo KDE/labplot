@@ -3,8 +3,9 @@
     Project              : LabPlot
     Description          : import file data widget
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -63,6 +64,7 @@ private slots:
 	void headerChanged(int);
 	void selectFile();
  	void fileInfoDialog();
+	void refreshPreview();
 };
 
 #endif
