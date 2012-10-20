@@ -83,6 +83,7 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
   	connect(worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
 	connect(worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
 	connect(worksheet, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
+	connect(worksheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
   
   setRenderHint(QPainter::Antialiasing);
   setInteractive(true);
@@ -592,9 +593,11 @@ void WorksheetView::addNew(QAction* action){
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel("text label");
 		l->setText("text label");
-		m_worksheet->addChild(l);
-		return;
+		aspect = l;
 	}
+
+	if (!aspect)
+		return;
 
 	m_worksheet->addChild(aspect);
 	
@@ -607,14 +610,24 @@ void WorksheetView::addNew(QAction* action){
 	
 	QTimeLine* timeLine = new QTimeLine(1000, this);
 	timeLine->setFrameRange(0, 100);
-	connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate(qreal)));
+	connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeIn(qreal)));
 	timeLine->start();
 }
 
+void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
+	lastAddedWorksheetElement = dynamic_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+	if ( lastAddedWorksheetElement){
+		QTimeLine* timeLine = new QTimeLine(1000, this);
+		timeLine->setFrameRange(0, 100);
+		connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeOut(qreal)));
+		timeLine->start();
+	}
+}
+
 /*!
-	animates the appearence of the newly added worksheet elements
+	animates the appearance of the newly added worksheet elements
  */
-void WorksheetView::animate(qreal value){
+void WorksheetView::fadeIn(qreal value){
 	if (!lastAddedWorksheetElement)
 		return;
 
@@ -624,6 +637,20 @@ void WorksheetView::animate(qreal value){
 // 	effect->setBlurRadius( 10 - value*10 );
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
+
+/*!
+	animates the disappearance of the worksheet elements
+ */
+//TODO doesn't work
+void WorksheetView::fadeOut(qreal value){
+	if (!lastAddedWorksheetElement)
+		return;
+
+	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+	effect->setOpacity( 1-value );
+	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
+}
+
 void WorksheetView::changeLayout(QAction* action){
 	if (action==breakLayoutAction){
 		verticalLayoutAction->setEnabled(true);

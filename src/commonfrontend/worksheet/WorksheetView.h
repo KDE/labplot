@@ -40,6 +40,7 @@ class QWheelEvent;
 
 class Worksheet;
 class WorksheetModel;
+class AbstractAspect;
 class AbstractWorksheetElement;
 
 class WorksheetView : public QGraphicsView{
@@ -132,6 +133,7 @@ class WorksheetView : public QGraphicsView{
 	void enableSelectionMode();
 
 	void addNew(QAction*);
+	void aspectAboutToBeRemoved(const AbstractAspect*);
 
 	void changeZoom(QAction*);
 	void changeLayout(QAction*);
@@ -143,7 +145,8 @@ class WorksheetView : public QGraphicsView{
 	void selectionChanged();
 	void updateBackground();
 
-	void animate(qreal);
+	void fadeIn(qreal);
+	void fadeOut(qreal);
 
   signals:
 	void statusInfo(const QString &text);
