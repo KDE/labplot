@@ -75,6 +75,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		float xMin, xMax, yMin, yMax;
 		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
 		bool autoScaleX, autoScaleY;
+		float autoScaleOffsetFactor;
 		CartesianPlot::Scale xScale, yScale;
 };
 
@@ -114,6 +115,14 @@ void CartesianPlot::init(){
 	d->autoScaleY = true;
 	d->xScale = ScaleLinear;
 	d->yScale = ScaleLinear;
+
+	//the following factor determines the size of the offset between the min/max points of the curves
+	//and the coordinate system ranges, when doing auto scaling
+	//Factor 1 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
+	d->autoScaleOffsetFactor = 0.05; 
+
+	//TODO: make this factor optional.
+	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 	
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
@@ -497,8 +506,13 @@ void CartesianPlot::scaleAutoX(){
 		update = true;
 	}
 
-	if(update)
+	if(update){
+		float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
+		d->xMin -= offset;
+		d->xMax += offset;
 		d->retransformScales();
+	}
+		
 }
 
 void CartesianPlot::scaleAutoY(){
@@ -539,8 +553,12 @@ void CartesianPlot::scaleAutoY(){
 		update = true;
 	}
 	
-	if(update)
+	if(update){
+		float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
+		d->yMin -= offset;
+		d->yMax += offset;
 		d->retransformScales();
+	}
 }
 
 void CartesianPlot::scaleAuto(){
@@ -585,29 +603,41 @@ void CartesianPlot::scaleAuto(){
 		}		
 	}
 
-	bool update = false;
+	bool updateX = false;
+	bool updateY = false;
 	if (xMin != d->xMin && xMin != INFINITY){
 		d->xMin = xMin;
-		update = true;
+		updateX = true;
 	}
 
 	if (xMax != d->xMax && xMax != -INFINITY){
 		d->xMax = xMax;
-		update = true;
+		updateX = true;
 	}
 
 	if (yMin != d->yMin && yMin != INFINITY){
 		d->yMin = yMin;
-		update = true;
+		updateY = true;
 	}
 
 	if (yMax != d->yMax && yMax != -INFINITY){
 		d->yMax = yMax;
-		update = true;
+		updateY = true;
 	}
 
-	if(update)
-		d->retransformScales();		
+	if(updateX || updateY){
+		if (updateX){
+			float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
+			d->xMin -= offset;
+			d->xMax += offset;
+		}
+		if (updateY){
+			float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
+			d->yMin -= offset;
+			d->yMax += offset;
+		}
+		d->retransformScales();
+	}
 }
 		
 void CartesianPlot::zoomIn(){
@@ -743,10 +773,6 @@ void CartesianPlotPrivate::retransformScales(){
 	
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
 	QRectF itemRect = mapRectFromScene( rect );
-
-// 	float offset = (xMax - xMin)*0.05;
-// 	xMin -= offset;
-// 	xMax += offset;
 
 	//create x-scales
 	//TODO: for negative values of xMin and yMin use a value smaller that xMax/yMax and not 0.1
