@@ -97,16 +97,20 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
-	
-	//Coordinate system
+
 	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
 	connect( ui.kleXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
 	connect( ui.kleXMax, SIGNAL(returnPressed()), this, SLOT(xMaxChanged()) );
-	connect( ui.chkXBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleXBreak(int)) );
-	connect( ui.chkYBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleYBreak(int)) );
+	connect( ui.cbXScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged(int)) );
+
 	connect( ui.chkAutoScaleY, SIGNAL(stateChanged(int)), this, SLOT(autoScaleYChanged(int)) );
 	connect( ui.kleYMin, SIGNAL(returnPressed()), this, SLOT(yMinChanged()) );
 	connect( ui.kleYMax, SIGNAL(returnPressed()), this, SLOT(yMaxChanged()) );
+	connect( ui.cbYScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(yScaleChanged(int)) );
+
+	//Scale breakings
+	connect( ui.chkXBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleXBreak(int)) );
+	connect( ui.chkYBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleYBreak(int)) );
 	
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -214,7 +218,17 @@ void CartesianPlotDock::activateTitleTab(){
 //************************************************************
 void CartesianPlotDock::retranslateUi(){
 	m_initializing = true;
-	
+
+	ui.cbXScaling->addItem( i18n("linear") );
+	ui.cbXScaling->addItem( i18n("log(x)") );
+	ui.cbXScaling->addItem( i18n("log2(x)") );
+	ui.cbXScaling->addItem( i18n("ln(x)") );
+
+	ui.cbYScaling->addItem( i18n("linear") );
+	ui.cbYScaling->addItem( i18n("log(y)") );
+	ui.cbYScaling->addItem( i18n("log2(y)") );
+	ui.cbYScaling->addItem( i18n("ln(y)") );
+
 	ui.cbBackgroundType->addItem(i18n("color"));
 	ui.cbBackgroundType->addItem(i18n("image"));
 	ui.cbBackgroundType->addItem(i18n("pattern"));
@@ -333,6 +347,18 @@ void CartesianPlotDock::xMaxChanged(){
 		plot->setXMax(value);
 }
 
+/*!
+	called on scale changes (linear, log) for the x-axis
+ */
+void CartesianPlotDock::xScaleChanged(int index){
+  if (m_initializing)
+	return;
+
+  CartesianPlot::Scale scale = (CartesianPlot::Scale)index;
+  foreach(CartesianPlot* plot, m_plotList)
+	plot->setXScale(scale);
+}
+
 void CartesianPlotDock::autoScaleYChanged(int state){
 	bool checked = (state==Qt::Checked);
 	ui.kleYMin->setEnabled(!checked);
@@ -363,7 +389,19 @@ void CartesianPlotDock::yMaxChanged(){
 		plot->setYMax(value);
 }
 
-// "Coordinate system"-tab
+/*!
+	called on scale changes (linear, log) for the y-axis
+ */
+void CartesianPlotDock::yScaleChanged(int index){
+  if (m_initializing)
+	return;
+
+  CartesianPlot::Scale scale = (CartesianPlot::Scale)index;
+  foreach(CartesianPlot* plot, m_plotList)
+	plot->setYScale(scale);
+}
+
+// "Scale Breakings"-tab
 void CartesianPlotDock::toggleXBreak(int state){
 	if (m_initializing)
 		return;
@@ -682,16 +720,21 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_plot->rect().width()), Worksheet::Centimeter));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_plot->rect().height()), Worksheet::Centimeter));
 
-	//Title
-// 	labelWidget->loadConfig(group);
-
-	//Coordinate system
 	ui.chkAutoScaleX->setChecked(group.readEntry("AutoScaleX", m_plot->autoScaleX()));
   	ui.kleXMin->setText( QString::number( group.readEntry("xMin", m_plot->xMin())) );
 	ui.kleXMax->setText( QString::number( group.readEntry("xMax", m_plot->xMax())) );
+	ui.cbXScaling->setCurrentIndex( group.readEntry("xScale", (int) m_plot->xScale()) );
+
 	ui.chkAutoScaleY->setChecked(group.readEntry("AutoScaleY", m_plot->autoScaleY()));
   	ui.kleYMin->setText( QString::number( group.readEntry("yMin", m_plot->yMin())) );
 	ui.kleYMax->setText( QString::number( group.readEntry("yMax", m_plot->yMax())) );
+	ui.cbYScaling->setCurrentIndex( group.readEntry("yScale", (int) m_plot->yScale()) );
+
+	//Title
+	labelWidget->loadConfig(group);
+
+	//Scale breakings
+	//TODO
 	
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_plot->plotArea()->backgroundType()) );
@@ -723,17 +766,22 @@ void CartesianPlotDock::saveConfig(KConfig& config){
 	group.writeEntry("Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
 	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
 
-	//Title
-	labelWidget->saveConfig(group);
-
-	//Coordinate system
 	group.writeEntry("AutoScaleX", ui.chkAutoScaleX->isChecked());
 	group.writeEntry("xMin", ui.kleXMin->text());
 	group.writeEntry("xMax", ui.kleXMax->text());
+	group.writeEntry("xScale", ui.cbXScaling->currentIndex());
+	
 	group.writeEntry("AutoScaleY", ui.chkAutoScaleY->isChecked());
 	group.writeEntry("yMin", ui.kleYMin->text());
 	group.writeEntry("yMax", ui.kleYMax->text());
+	group.writeEntry("yScale", ui.cbYScaling->currentIndex());
 	
+	//Title
+	labelWidget->saveConfig(group);
+
+	//Scale breakings
+	//TODO
+
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());

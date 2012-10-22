@@ -44,7 +44,9 @@ class CartesianPlot:public AbstractPlot{
 	public:
 		CartesianPlot(const QString &name);
 		~CartesianPlot();
-		
+
+		enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
+
 		void initDefault();
 		QIcon icon() const;
 		QMenu* createContextMenu();
@@ -60,6 +62,8 @@ class CartesianPlot:public AbstractPlot{
 		BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
 		BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
 		BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
+		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
+		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
 		
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;

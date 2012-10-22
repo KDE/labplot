@@ -377,7 +377,7 @@
         </widget>
        </item>
        <item row="19" column="2">
-        <widget class="QComboBox" name="cbXScaling_2"/>
+        <widget class="QComboBox" name="cbYScaling"/>
        </item>
       </layout>
      </widget>

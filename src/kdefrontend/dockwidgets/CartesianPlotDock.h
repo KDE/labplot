@@ -64,14 +64,18 @@ private slots:
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);
 
-	//"Coordinate system"-tab
 	void autoScaleXChanged(int);
 	void xMinChanged();
 	void xMaxChanged();
-	void toggleXBreak(int);
+	void xScaleChanged(int);
+
 	void autoScaleYChanged(int);
 	void yMinChanged();
 	void yMaxChanged();
+	void yScaleChanged(int);
+
+	//"Scale breaking"-tab
+	void toggleXBreak(int);
 	void toggleYBreak(int);
 
 	//"Plot area"-tab

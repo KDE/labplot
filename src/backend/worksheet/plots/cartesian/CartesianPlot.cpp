@@ -75,6 +75,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		float xMin, xMax, yMin, yMax;
 		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
 		bool autoScaleX, autoScaleY;
+		CartesianPlot::Scale xScale, yScale;
 };
 
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)){
@@ -111,6 +112,8 @@ void CartesianPlot::init(){
 	d->yMaxPrev = d->yMax;
 	d->autoScaleX = true;
 	d->autoScaleY = true;
+	d->xScale = ScaleLinear;
+	d->yScale = ScaleLinear;
 	
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
@@ -181,7 +184,7 @@ void CartesianPlot::initDefault(){
 	m_title->setText(this->name());
 	addChild(m_title);
 	m_title->setHidden(true);
-	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem()); //set the parent befor doing any positioning
+	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem()); //set the parent before doing any positioning
 	m_title->setHorizontalPosition(TextLabel::hPositionCenter);
 	m_title->setVerticalPosition(TextLabel::vPositionTop);
 	m_title->setHorizontalAlignment(TextLabel::hAlignCenter);
@@ -341,9 +344,12 @@ void CartesianPlot::setRect(const QRectF& r){
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMax, xMax)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, xScale, xScale)
+
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMin, yMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
 
 /* ============================ setter methods and undo commands ================= */
 //TODO: provide an undo-aware version
@@ -372,6 +378,13 @@ void CartesianPlot::setXMax(float xMax){
 		exec(new CartesianPlotSetXMaxCmd(d, xMax, tr("%1: set max x")));
 }
 
+STD_SETTER_CMD_IMPL_F(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales);
+void CartesianPlot::setXScale(Scale scale){
+	Q_D(CartesianPlot);
+	if (scale != d->xScale)
+		exec(new CartesianPlotSetXScaleCmd(d, scale, tr("%1: set x scale")));
+}
+
 //TODO: provide an undo-aware version
 // STD_SETTER_CMD_IMPL_F(CartesianPlot, SetAutoScaleY, bool, autoScaleY, retransformScales)
 void CartesianPlot::setAutoScaleY(bool autoScaleY){
@@ -396,6 +409,13 @@ void CartesianPlot::setYMax(float yMax){
 	Q_D(CartesianPlot);
 	if (yMax != d->yMax)
 		exec(new CartesianPlotSetYMaxCmd(d, yMax, tr("%1: set max y")));
+}
+
+STD_SETTER_CMD_IMPL_F(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales);
+void CartesianPlot::setYScale(Scale scale){
+	Q_D(CartesianPlot);
+	if (scale != d->yScale)
+		exec(new CartesianPlotSetYScaleCmd(d, scale, tr("%1: set y scale")));
 }
 
 //################################################################
@@ -476,9 +496,9 @@ void CartesianPlot::scaleAutoX(){
 		d->xMax = max;
 		update = true;
 	}
-	
+
 	if(update)
-		d->retransformScales();		
+		d->retransformScales();
 }
 
 void CartesianPlot::scaleAutoY(){
@@ -724,6 +744,70 @@ void CartesianPlotPrivate::retransformScales(){
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
 	QRectF itemRect = mapRectFromScene( rect );
 
+// 	float offset = (xMax - xMin)*0.05;
+// 	xMin -= offset;
+// 	xMax += offset;
+
+	//create x-scales
+	//TODO: for negative values of xMin and yMin use a value smaller that xMax/yMax and not 0.1
+	if (xScale == CartesianPlot::ScaleLinear){
+		scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																	itemRect.x()+horizontalPadding,
+																	itemRect.x()+itemRect.width()-horizontalPadding,
+																	xMin, xMax);
+	}else if (xScale == CartesianPlot::ScaleLog10){
+		if (xMin<=0) xMin=0.1;
+		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																	itemRect.x()+horizontalPadding,
+																	itemRect.x()+itemRect.width()-horizontalPadding,
+																	xMin, xMax, 10.0);
+	}else if (xScale == CartesianPlot::ScaleLog2){
+		if (xMin<=0) xMin=0.1;
+		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																	itemRect.x()+horizontalPadding,
+																	itemRect.x()+itemRect.width()-horizontalPadding,
+																	xMin, xMax, 2.0);
+// 	}else if (xScale == CartesianPlot::ScaleLn){
+	}else{
+		if (xMin<=0) xMin=0.1;
+		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																	itemRect.x()+horizontalPadding,
+																	itemRect.x()+itemRect.width()-horizontalPadding,
+																	xMin, xMax, 2.71828);
+	}
+
+	cSystem ->setXScales(scales);
+
+	//create y-scales
+	scales.clear();
+	if (yScale == CartesianPlot::ScaleLinear){
+		scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																	itemRect.y()+itemRect.height()-verticalPadding,
+																	itemRect.y()+verticalPadding, 
+																	yMin, yMax);
+	}else if (yScale == CartesianPlot::ScaleLog10){
+		if (yMin<=0) yMin=0.1;
+		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																	itemRect.y()+itemRect.height()-verticalPadding,
+																	itemRect.y()+verticalPadding, 
+																	yMin, yMax, 10.0);
+	}else if (yScale == CartesianPlot::ScaleLog2){
+		if (yMin<=0) yMin=0.1;
+		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																	itemRect.y()+itemRect.height()-verticalPadding,
+																	itemRect.y()+verticalPadding,
+																	yMin, yMax, 2.0);
+	}else{
+		if (yMin<=0) yMin=0.1;
+		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
+																	itemRect.y()+itemRect.height()-verticalPadding,
+																	itemRect.y()+verticalPadding,
+																	yMin, yMax, 2.71828);
+	}
+	
+	cSystem ->setYScales(scales);
+
+	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
 	float deltaX = 0;
 	float deltaY = 0;
 
@@ -748,19 +832,6 @@ void CartesianPlotPrivate::retransformScales(){
 	yMinPrev = yMin;
 	yMaxPrev = yMax;
 
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																  itemRect.x()+horizontalPadding,
-																  itemRect.x()+itemRect.width()-horizontalPadding,
-																  xMin, xMax);
-
-	cSystem ->setXScales(scales);
-	scales.clear();
-	scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																  itemRect.y()+itemRect.height()-verticalPadding,
-																  itemRect.y()+verticalPadding, 
-																  yMin, yMax);
-	cSystem ->setYScales(scales);
-	
 	//adjust auto-scale axes
 	QList<AbstractWorksheetElement *> childElements = q->children<AbstractWorksheetElement>();
     foreach(AbstractWorksheetElement *elem, childElements){
