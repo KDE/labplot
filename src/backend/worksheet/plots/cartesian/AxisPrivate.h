@@ -96,11 +96,17 @@ class AxisPrivate: public QGraphicsItem {
 		QList<float> tickLabelValues; //!< major tick labels values
 		QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
 		
-		//TODO: Grid
+		//Grid
+		QPen majorGridPen;
+		qreal majorGridOpacity;
+		QPen minorGridPen;
+		qreal minorGridOpacity;
 		
 		QPainterPath linePath;
 		QPainterPath majorTicksPath;
 		QPainterPath minorTicksPath;
+		QPainterPath majorGridPath;
+		QPainterPath minorGridPath;
 		QRectF boundingRectangle;
 		QPainterPath axisShape;
 

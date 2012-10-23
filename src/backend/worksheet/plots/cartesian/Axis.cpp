@@ -383,6 +383,11 @@ CLASS_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix);
 CLASS_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity);
 
+CLASS_SHARED_D_READER_IMPL(Axis, QPen, majorGridPen, majorGridPen)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorGridOpacity, majorGridOpacity)
+CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorGridPen, minorGridPen)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
+
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F(Axis, SetAutoScale, bool, autoScale, retransform);
 void Axis::setAutoScale(bool autoScale) {
@@ -698,6 +703,35 @@ void Axis::setLabelsOpacity(qreal opacity){
 		exec(new AxisSetLabelsOpacityCmd(d, opacity, tr("%1: set labels opacity")));
 }
 
+//Major grid
+STD_SETTER_CMD_IMPL_F(Axis, SetMajorGridPen, QPen, majorGridPen, recalcShapeAndBoundingRect);
+void Axis::setMajorGridPen(const QPen &pen) {
+	Q_D(Axis);
+	if (pen != d->majorGridPen)
+		exec(new AxisSetMajorGridPenCmd(d, pen, tr("%1: set major grid style")));
+}
+
+STD_SETTER_CMD_IMPL_F(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, update);
+void Axis::setMajorGridOpacity(qreal opacity){
+	Q_D(Axis);
+	if (opacity != d->majorGridOpacity)
+		exec(new AxisSetMajorGridOpacityCmd(d, opacity, tr("%1: set major grid opacity")));
+}
+
+//Minor grid
+STD_SETTER_CMD_IMPL_F(Axis, SetMinorGridPen, QPen, minorGridPen, recalcShapeAndBoundingRect);
+void Axis::setMinorGridPen(const QPen &pen) {
+	Q_D(Axis);
+	if (pen != d->minorGridPen)
+		exec(new AxisSetMinorGridPenCmd(d, pen, tr("%1: set minor grid style")));
+}
+
+STD_SETTER_CMD_IMPL_F(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, update);
+void Axis::setMinorGridOpacity(qreal opacity){
+	Q_D(Axis);
+	if (opacity != d->minorGridOpacity)
+		exec(new AxisSetMinorGridOpacityCmd(d, opacity, tr("%1: set minor grid opacity")));
+}
 
 /* ================================ SLOTS =========================== */
 void Axis::orientationChanged(QAction* action){
@@ -786,6 +820,7 @@ void AxisPrivate::retransform() {
 		startPoint.setY(start);
 		endPoint.setY(end);
 		endPoint.setX(offset);
+		qDebug()<<"offset "<<offset;
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
@@ -1270,7 +1305,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 	
-	boundingRectangle = boundingRectangle.normalized();
+// 	boundingRectangle = boundingRectangle.normalized();
 }
 
 /*!

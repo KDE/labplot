@@ -132,18 +132,17 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	connect( ui.sbLabelsPrecision, SIGNAL(valueChanged(int)), this, SLOT(slotDataChanged()) );
 	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(labelFormatChanged(const QString&)) );
 	connect( ui.leLabelsDateFormat, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
-
+*/
 	//"Grid"-tab
-	connect( ui.chbMajorGrid, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.cbMajorGridStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.kcbMajorGridColor, SIGNAL(changed (const QColor &)), this, SLOT(createMajorGridStyles()) );
-	connect( ui.sbMajorGridWidth, SIGNAL(valueChanged(int)), this, SLOT(createMajorGridStyles()) );
+	connect( ui.cbMajorGridStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(majorGridStyleChanged(int)) );
+	connect( ui.kcbMajorGridColor, SIGNAL(changed (const QColor &)), this, SLOT(majorGridColorChanged(const QColor&)) );
+	connect( ui.sbMajorGridWidth, SIGNAL(valueChanged(double)), this, SLOT(majorGridWidthChanged(double)) );
+	connect( ui.sbMajorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(majorGridOpacityChanged(int)) );
 
-	connect( ui.chbMinorGrid, SIGNAL(stateChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.cbMinorGridStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.kcbMinorGridColor, SIGNAL(changed (const QColor &)), this, SLOT(createMinorGridStyles()) );
-	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(int)), this, SLOT(createMinorGridStyles()) );
-	*/
+	connect( ui.cbMinorGridStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(minorGridStyleChanged(int)) );
+	connect( ui.kcbMinorGridColor, SIGNAL(changed (const QColor &)), this, SLOT(minorGridColorChanged(const QColor&)) );
+	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(double)), this, SLOT(minorGridWidthChanged(double)) );
+	connect( ui.sbMinorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorGridOpacityChanged(int)) );
 
 //TODO cbMajorTicksDirection is empty when the axes are set
 	//QTimer::singleShot(0, this, SLOT(init()));
@@ -911,6 +910,127 @@ void AxisDock::labelsOpacityChanged(int value){
 	axis->setLabelsOpacity(opacity);
 }
 
+// "Grid"-tab
+//major grid
+void AxisDock::majorGridStyleChanged(int index){
+	Qt::PenStyle penStyle=Qt::PenStyle(index);
+
+	bool b = (penStyle != Qt::NoPen);
+	ui.lMajorGridColor->setEnabled(b);
+	ui.kcbMajorGridColor->setEnabled(b);
+	ui.lMajorGridWidth->setEnabled(b);
+	ui.sbMajorGridWidth->setEnabled(b);
+	ui.lMajorGridOpacity->setEnabled(b);
+	ui.sbMajorGridOpacity->setEnabled(b);
+
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	foreach(Axis* axis, m_axesList){
+		pen=axis->majorGridPen();
+		pen.setStyle(penStyle);
+		axis->setMajorGridPen(pen);
+  }
+}
+
+void AxisDock::majorGridColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
+
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->majorGridPen();
+	pen.setColor(color);
+	axis->setMajorGridPen(pen);
+  }
+
+  m_initializing=true;
+  GuiTools::updatePenStyles(ui.cbMajorGridStyle, color);
+  m_initializing=false;
+}
+
+void AxisDock::majorGridWidthChanged(double  value){
+  if (m_initializing)
+	return;
+
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->majorGridPen();
+	pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
+	axis->setMajorGridPen(pen);
+  }
+}
+
+void AxisDock::majorGridOpacityChanged(int value){
+  if (m_initializing)
+	return;
+
+  qreal opacity = (float)value/100;
+  foreach(Axis* axis, m_axesList)
+	axis->setMajorGridOpacity(opacity);
+}
+
+//minor grid
+void AxisDock::minorGridStyleChanged(int index){
+	Qt::PenStyle penStyle=Qt::PenStyle(index);
+
+	bool b = (penStyle != Qt::NoPen);
+	ui.lMinorGridColor->setEnabled(b);
+	ui.kcbMinorGridColor->setEnabled(b);
+	ui.lMinorGridWidth->setEnabled(b);
+	ui.sbMinorGridWidth->setEnabled(b);
+	ui.lMinorGridOpacity->setEnabled(b);
+	ui.sbMinorGridOpacity->setEnabled(b);
+
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	foreach(Axis* axis, m_axesList){
+		pen=axis->minorGridPen();
+		pen.setStyle(penStyle);
+		axis->setMinorGridPen(pen);
+  }
+}
+
+void AxisDock::minorGridColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
+
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->minorGridPen();
+	pen.setColor(color);
+	axis->setMinorGridPen(pen);
+  }
+
+  m_initializing=true;
+  GuiTools::updatePenStyles(ui.cbMinorGridStyle, color);
+  m_initializing=false;
+}
+
+void AxisDock::minorGridWidthChanged(double  value){
+  if (m_initializing)
+	return;
+
+  QPen pen;
+  foreach(Axis* axis, m_axesList){
+	pen=axis->minorGridPen();
+	pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
+	axis->setMinorGridPen(pen);
+  }
+}
+
+void AxisDock::minorGridOpacityChanged(int value){
+  if (m_initializing)
+	return;
+
+  qreal opacity = (float)value/100;
+  foreach(Axis* axis, m_axesList)
+	axis->setMinorGridOpacity(opacity);
+}
+
 //*************************************************************
 //************ SLOTs for changes triggered in Axis ************
 //*************************************************************
@@ -1024,18 +1144,18 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.leLabelsSuffix->setText( group.readEntry("LabelsSuffix", m_axis->labelsSuffix()) );
 	ui.sbLabelsOpacity->setValue( group.readEntry("LabelsOpacity", m_axis->labelsOpacity())*100 );
 
-	//Grid TODO
-// 	ui.chbMajorGridVisible->setChecked( axis->hasMajorGrid() );
-// 	ui.cbMajorGridStyle->setCurrentIndex( axis->majorGridStyle()-1 );
-// 	ui.kcbMajorGridColor->setColor( axis->majorGridColor() );
-// 	ui.sbMajorGridWidth->setValue( axis->majorGridWidth() );
-// 	sbMajorGridOpacity->setValue( axis->majorGridOpacity() );
-// 
-// 	ui.chbMinorGrid->setChecked( axis->hasMinorGrid() );
-// 	ui.cbMinorGridStyle->setCurrentIndex( axis->minorGridStyle()-1 );
-// 	ui.kcbMinorGridColor->setColor( axis->minorGridColor() );
-// 	ui.sbMinorGridWidth->setValue( axis->minorGridWidth() );
-// 	sbMinroGridOpacity->setValue( axis->minorGridOpacity() );
+	//Grid
+	ui.cbMajorGridStyle->setCurrentIndex( group.readEntry("MajorGridStyle", (int) m_axis->majorGridPen().style()) );
+	ui.kcbMajorGridColor->setColor( group.readEntry("MajorGridColor", m_axis->majorGridPen().color()) );
+	GuiTools::updatePenStyles(ui.cbMajorGridStyle, group.readEntry("MajorGridColor", m_axis->majorGridPen().color()) );
+	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorGridWidth", m_axis->majorGridPen().widthF()),Worksheet::Point) );
+	ui.sbMajorGridOpacity->setValue( group.readEntry("MajorGridOpacity", m_axis->majorGridOpacity())*100 );
+
+	ui.cbMinorGridStyle->setCurrentIndex( group.readEntry("MinorGridStyle", (int) m_axis->minorGridPen().style()) );
+	ui.kcbMinorGridColor->setColor( group.readEntry("MinorGridColor", m_axis->minorGridPen().color()) );
+	GuiTools::updatePenStyles(ui.cbMinorGridStyle, group.readEntry("MinorGridColor", m_axis->minorGridPen().color()) );
+	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorGridWidth", m_axis->minorGridPen().widthF()),Worksheet::Point) );
+	ui.sbMinorGridOpacity->setValue( group.readEntry("MinorGridOpacity", m_axis->minorGridOpacity())*100 );
 }
 
 void AxisDock::saveConfig(KConfig& config){
@@ -1111,7 +1231,14 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value()/100);
 
 	//Grid
-	// TODO (see load())	
+	group.writeEntry("MajorGridStyle", ui.cbMajorGridStyle->currentIndex());
+	group.writeEntry("MajorGridColor", ui.kcbMajorGridColor->color());
+	group.writeEntry("MajorGridWidth", Worksheet::convertToSceneUnits(ui.sbMajorGridWidth->value(), Worksheet::Point));
+	group.writeEntry("MajorGridOpacity", ui.sbMajorGridOpacity->value()/100);
 
+	group.writeEntry("MinorGridStyle", ui.cbMinorGridStyle->currentIndex());
+	group.writeEntry("MinorGridColor", ui.kcbMinorGridColor->color());
+	group.writeEntry("MinorGridWidth", Worksheet::convertToSceneUnits(ui.sbMinorGridWidth->value(), Worksheet::Point));
+	group.writeEntry("MinorGridOpacity", ui.sbMinorGridOpacity->value()/100);
 	config.sync();
 }

@@ -117,8 +117,16 @@ private slots:
 	void labelsOpacityChanged(int);
 	
 	//"Grid"-tab
-	//TODO
-	
+  	void majorGridStyleChanged(int);
+	void majorGridColorChanged(const QColor&);
+	void majorGridWidthChanged(double);
+	void majorGridOpacityChanged(int);
+
+  	void minorGridStyleChanged(int);
+	void minorGridColorChanged(const QColor&);
+	void minorGridWidthChanged(double);
+	void minorGridOpacityChanged(int);
+
 	//SLOTs for changes triggered in Axis
 	void axisOrientationChanged();
 	void axisPositionChanged(float);
