@@ -770,7 +770,7 @@ void Axis::lineColorChanged(QAction* action){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : q(owner){
+AxisPrivate::AxisPrivate(Axis *owner) : q(owner), m_plot(0), m_cSystem(0){
 }
 
 QString AxisPrivate::name() const{
@@ -798,19 +798,19 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform(){
+	m_plot = qobject_cast<CartesianPlot*>(q->parentAspect());
+	if (!m_plot)
+		return;
+
+	m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem());
+	if (!m_cSystem)
+		return;
+	
 	retransformLine();
 	retransformTicks();
 }
 
 void AxisPrivate::retransformLine(){
-	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	if (!plot)
-		return;
-
-	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
-	if (!cSystem)
-		return;
-
 	linePath = QPainterPath();
 
 	QList<QLineF> lines;
@@ -819,9 +819,9 @@ void AxisPrivate::retransformLine(){
 
 	if (orientation == Axis::AxisHorizontal){
 		if (position == Axis::AxisTop)
-			offset = plot->yMax();
+			offset = m_plot->yMax();
 		else if (position == Axis::AxisBottom)
-			offset = plot->yMin();
+			offset = m_plot->yMin();
 
 		startPoint.setX(start);
 		startPoint.setY(offset);
@@ -829,20 +829,18 @@ void AxisPrivate::retransformLine(){
 		endPoint.setY(offset);
 	} else { // vertical
 		if (position == Axis::AxisLeft)
-			offset = plot->xMin();
+			offset = m_plot->xMin();
 		else if (position == Axis::AxisRight)
-			offset = plot->xMax();
+			offset = m_plot->xMax();
 
 		startPoint.setX(offset);
 		startPoint.setY(start);
 		endPoint.setY(end);
 		endPoint.setX(offset);
-		qDebug()<<"offset "<<offset;
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
-	if (cSystem)
-		lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
 
 	foreach (QLineF line, lines) {
 		linePath.moveTo(line.p1());
@@ -852,13 +850,11 @@ void AxisPrivate::retransformLine(){
 
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
+//TODO refactor this function, coordinate system should provide a function to map a single point
 bool AxisPrivate::transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint) {
-	if (!cSystem)
-		return false;
-	
 	QList<QPointF> points;
 	points.append(*anchorPoint);
-	points = cSystem->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
+	points = m_cSystem->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
 	if (points.count() != 1){ // point is not mappable or in a coordinate gap
 		return false;
 	}else{
@@ -871,14 +867,6 @@ bool AxisPrivate::transformAnchor(const AbstractCoordinateSystem *cSystem, QPoin
 	recalculates the position of the axis ticks.
  */ 
 void AxisPrivate::retransformTicks(){
-	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
-	if (!plot)
-		return;
-
-		const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
-	if (!cSystem)
-		return;
-
 	majorTicksPath = QPainterPath();
 	minorTicksPath = QPainterPath();
 	majorTickPoints.clear();
@@ -958,13 +946,8 @@ void AxisPrivate::retransformTicks(){
 	qreal majorTickPos;
 	qreal minorTickPos;
 	qreal nextMajorTickPos;
-	const CartesianCoordinateSystem *cCSystem = dynamic_cast<const CartesianCoordinateSystem *>(cSystem);
-	int xDirection = 1;
-	int yDirection = 1;
-	if (cCSystem) {
-		xDirection = cCSystem->xDirection();
-		yDirection = cCSystem->yDirection();
-	}
+	int xDirection = m_cSystem->xDirection();;
+	int yDirection = m_cSystem->yDirection();
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++){
 	  switch (scale){
@@ -995,7 +978,7 @@ void AxisPrivate::retransformTicks(){
 			  anchorPoint.setX(majorTickPos);
 			  anchorPoint.setY(offset);
 			  
-			  if (transformAnchor(cSystem, &anchorPoint)){
+			  if (transformAnchor(m_cSystem, &anchorPoint)){
 				if(offset < 0.5) {
 					startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 					endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
@@ -1009,7 +992,7 @@ void AxisPrivate::retransformTicks(){
 			  anchorPoint.setY(majorTickPos);
 			  anchorPoint.setX(offset);
 
-			  if (transformAnchor(cSystem, &anchorPoint)){
+			  if (transformAnchor(m_cSystem, &anchorPoint)){
 				if(offset < 0.5) {
 					startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 					endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
@@ -1064,7 +1047,7 @@ void AxisPrivate::retransformTicks(){
 			  anchorPoint.setX(minorTickPos);
 			  anchorPoint.setY(offset);
 
-				if (transformAnchor(cSystem, &anchorPoint)){
+				if (transformAnchor(m_cSystem, &anchorPoint)){
 				if(offset < 0.5) {
 					startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
 				  	endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
@@ -1078,7 +1061,7 @@ void AxisPrivate::retransformTicks(){
 				anchorPoint.setY(minorTickPos);
 				anchorPoint.setX(offset);
 
-				if (transformAnchor(cSystem, &anchorPoint)){
+				if (transformAnchor(m_cSystem, &anchorPoint)){
 				if(offset < 0.5) {
 					startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
 				  	endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
@@ -1209,15 +1192,8 @@ void AxisPrivate::retransformTickLabels(){
 	QString label;
 	QPointF pos;
 
-	int xDirection = 1;
-	int yDirection = 1;
-	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
-	const CartesianCoordinateSystem *cCSystem = dynamic_cast<const CartesianCoordinateSystem *>(cSystem);
-	if ( cCSystem ) {
-		xDirection = cCSystem->xDirection();
-		yDirection =  cCSystem->yDirection();
-	}
+	int xDirection = m_cSystem->xDirection();
+	int yDirection = m_cSystem->yDirection();
 
 	QPointF startPoint, endPoint, anchorPoint;
 
@@ -1273,21 +1249,13 @@ void AxisPrivate::retransformMajorGrid(){
 		return;
 	}
 
-	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	if (!plot)
-		return;
-	
-	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
-	if (!cSystem)
-		return;	
-
 	//major tick points are already in scene coordinates, convert them back to logical...
-	QList<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal){ //horizontal axis
-		float yMin = plot->yMin();
-		float yMax = plot->yMax();
+		float yMin = m_plot->yMin();
+		float yMax = m_plot->yMax();
 
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i=1; i<logicalMajorTickPoints.size()-1; ++i){
@@ -1295,8 +1263,8 @@ void AxisPrivate::retransformMajorGrid(){
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 		}
 	}else{ //vertical axis
-		float xMin = plot->xMin();
-		float xMax = plot->xMax();
+		float xMin = m_plot->xMin();
+		float xMax = m_plot->xMax();
 
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i=1; i<logicalMajorTickPoints.size()-1; ++i){
@@ -1305,7 +1273,7 @@ void AxisPrivate::retransformMajorGrid(){
 		}
 	}
 	
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
 	foreach (QLineF line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1321,29 +1289,21 @@ void AxisPrivate::retransformMinorGrid(){
 		return;
 	}
 
-	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	if (!plot)
-		return;
-
-	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
-	if (!cSystem)
-		return;
-
 	//minor tick points are already in scene coordinates, convert them back to logical...
-	QList<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal){ //horizontal axis
-		float yMin = plot->yMin();
-		float yMax = plot->yMax();
+		float yMin = m_plot->yMin();
+		float yMax = m_plot->yMax();
 
 		for (int i=0; i<logicalMinorTickPoints.size(); ++i){
 			const QPointF& point = logicalMinorTickPoints.at(i);
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 		}
 	}else{ //vertical axis
-		float xMin = plot->xMin();
-		float xMax = plot->xMax();
+		float xMin = m_plot->xMin();
+		float xMax = m_plot->xMax();
 
 		for (int i=0; i<logicalMinorTickPoints.size(); ++i){
 			const QPointF& point = logicalMinorTickPoints.at(i);
@@ -1351,7 +1311,7 @@ void AxisPrivate::retransformMinorGrid(){
 		}
 	}
 
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
 	foreach (QLineF line, lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());

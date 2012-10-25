@@ -36,13 +36,19 @@
 #include <QFont>
 #include "Axis.h"
 
+class CartesianPlot;
 class AbstractCoordinateSystem;
+class CartesianCoordinateSystem;
 class TextLabel;
 
 class AxisPrivate: public QGraphicsItem {
 	public:
 		AxisPrivate(Axis *owner);
 
+		const CartesianPlot* m_plot;
+		const CartesianCoordinateSystem* m_cSystem;
+
+		//general
 		bool autoScale;
 		Axis::AxisOrientation orientation; //!< horizontal or vertical
 		Axis::AxisPosition position; //!< left, right, bottom, top or custom (usually not changed after creation)
@@ -52,7 +58,8 @@ class AxisPrivate: public QGraphicsItem {
 		float end; //!< end coordinate of the axis line
 		qreal scalingFactor;
 		qreal zeroOffset;
-		
+
+		//line
 		QPen linePen;
 		qreal lineOpacity;
 
