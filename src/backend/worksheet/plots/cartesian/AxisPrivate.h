@@ -91,7 +91,8 @@ class AxisPrivate: public QGraphicsItem {
 		// TODO support for date/time and string labels
 		QString labelsPrefix;
 		QString labelsSuffix;
-		QList<QPointF> tickPoints;//!< position of the major ticks  on the axis.
+		QList<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
+		QList<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
 		QList<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
 		QList<float> tickLabelValues; //!< major tick labels values
 		QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
@@ -119,13 +120,15 @@ class AxisPrivate: public QGraphicsItem {
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 
 		virtual void retransform();
-		virtual void retransformTicks();
-		virtual void retransformTickLabels();
+		void retransformLine();
+		void retransformTicks();
+		void retransformTickLabels();
 		void retransformTickLabelStrings();
+		void retransformMinorGrid();
+		void retransformMajorGrid();
 		int upperLabelsPrecision(int precision);
 		int lowerLabelsPrecision(int precision);
 		float round(float value, int precision);
-		virtual void retransformTicks(const AbstractCoordinateSystem *cSystem);
 		virtual void recalcShapeAndBoundingRect();
 		bool swapVisible(bool on);
 

@@ -136,6 +136,18 @@ void Axis::init(){
 	d->labelsFont.setPointSizeF( Worksheet::convertToSceneUnits( 8.0, Worksheet::Point ) );
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
+
+	//major grid
+	d->majorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MajorGridStyle", (int) Qt::NoPen) );
+	d->majorGridPen.setColor(Qt::gray);//TODO
+	d->majorGridPen.setWidthF( group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
+	d->majorGridOpacity = group.readEntry("MajorGridOpacity", 1.0);
+
+	//minor grid
+	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::NoPen) );
+	d->minorGridPen.setColor(Qt::gray);//TODO
+	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
+	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
 #endif
 	
 	retransform();
@@ -704,7 +716,7 @@ void Axis::setLabelsOpacity(qreal opacity){
 }
 
 //Major grid
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorGridPen, QPen, majorGridPen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F(Axis, SetMajorGridPen, QPen, majorGridPen, retransformMajorGrid);
 void Axis::setMajorGridPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->majorGridPen)
@@ -719,8 +731,8 @@ void Axis::setMajorGridOpacity(qreal opacity){
 }
 
 //Minor grid
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorGridPen, QPen, minorGridPen, recalcShapeAndBoundingRect);
-void Axis::setMinorGridPen(const QPen &pen) {
+STD_SETTER_CMD_IMPL_F(Axis, SetMinorGridPen, QPen, minorGridPen, retransformMinorGrid);
+void Axis::setMinorGridPen(const QPen &pen){
 	Q_D(Axis);
 	if (pen != d->minorGridPen)
 		exec(new AxisSetMinorGridPenCmd(d, pen, tr("%1: set minor grid style")));
@@ -783,9 +795,14 @@ QPainterPath AxisPrivate::shape() const{
 }
 
 /*!
-	recalculates the postition of the axis on the worksheet
+	recalculates the position of the axis on the worksheet
  */
-void AxisPrivate::retransform() {
+void AxisPrivate::retransform(){
+	retransformLine();
+	retransformTicks();
+}
+
+void AxisPrivate::retransformLine(){
 	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
 	if (!plot)
 		return;
@@ -824,23 +841,15 @@ void AxisPrivate::retransform() {
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
-	if (cSystem) {
+	if (cSystem)
 		lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-	} 
 
 	foreach (QLineF line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
-
-	retransformTicks(cSystem);
 }
 
-void AxisPrivate::retransformTicks(){
-	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
-	retransformTicks(cSystem);
-}
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
 bool AxisPrivate::transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint) {
@@ -861,10 +870,19 @@ bool AxisPrivate::transformAnchor(const AbstractCoordinateSystem *cSystem, QPoin
 /*!
 	recalculates the position of the axis ticks.
  */ 
-void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
+void AxisPrivate::retransformTicks(){
+	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
+	if (!plot)
+		return;
+
+		const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
+	if (!cSystem)
+		return;
+
 	majorTicksPath = QPainterPath();
 	minorTicksPath = QPainterPath();
-	tickPoints.clear();
+	majorTickPoints.clear();
+	minorTickPoints.clear();
 	tickLabelValues.clear();
   
   if (majorTicksNumber<1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ){
@@ -1003,11 +1021,11 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 			  }
 		  }
 		  
-		  majorTicksPath.moveTo(startPoint);
-		  majorTicksPath.lineTo(endPoint);
-		  
-		 //Tick-labels
-		tickPoints << anchorPoint;
+		majorTicksPath.moveTo(startPoint);
+		majorTicksPath.lineTo(endPoint);
+		majorTickPoints << anchorPoint;
+		
+		//Tick-labels
 		tickLabelValues<< scalingFactor*majorTickPos+zeroOffset;
 	  }
 
@@ -1074,11 +1092,15 @@ void AxisPrivate::retransformTicks(const AbstractCoordinateSystem *cSystem) {
 			
 			minorTicksPath.moveTo(startPoint);
 			minorTicksPath.lineTo(endPoint);
+			minorTickPoints << anchorPoint;
 		  }
 	  }
 	}
 
+	//tick positions where changed -> update the position of the tick labels and grid lines
 	retransformTickLabelStrings();
+	retransformMajorGrid();
+	retransformMinorGrid();
 }
 
 /*!
@@ -1117,7 +1139,7 @@ void AxisPrivate::retransformTickLabelStrings(){
 
 /*!
 	returns the smalles upper limit for the precision
-	were no duplicates for the tick label float occur.
+	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision){
 	//round float to the current precision and look for duplicates.
@@ -1140,7 +1162,7 @@ int AxisPrivate::upperLabelsPrecision(int precision){
 
 /*!
 	returns highest lower limit for the precision
-	were no duplicates for the tick label float occur.
+	where no duplicates for the tick label float occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision){
 	if (precision == 0)
@@ -1200,10 +1222,10 @@ void AxisPrivate::retransformTickLabels(){
 	QPointF startPoint, endPoint, anchorPoint;
 
 	//TODO optimize this loop
-	for ( int i=0; i<tickPoints.size(); i++ ){
+	for ( int i=0; i<majorTickPoints.size(); i++ ){
 		label = labelsPrefix + tickLabelStrings.at(i) + labelsSuffix;
 		width = fm.width( label );
-		anchorPoint = tickPoints.at(i);
+		anchorPoint = majorTickPoints.at(i);
 		  
 		//center align all labels with respect to the end point of the tick line
 		if (orientation == Axis::AxisHorizontal){
@@ -1244,6 +1266,99 @@ void AxisPrivate::retransformTickLabels(){
 	recalcShapeAndBoundingRect();
 }
 
+void AxisPrivate::retransformMajorGrid(){
+	majorGridPath = QPainterPath();
+	if (majorGridPen.style() == Qt::NoPen){
+		update();
+		return;
+	}
+
+	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
+	if (!plot)
+		return;
+	
+	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
+	if (!cSystem)
+		return;	
+
+	//major tick points are already in scene coordinates, convert them back to logical...
+	QList<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+
+	QList<QLineF> lines;
+	if (orientation == Axis::AxisHorizontal){ //horizontal axis
+		float yMin = plot->yMin();
+		float yMax = plot->yMax();
+
+		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
+		for (int i=1; i<logicalMajorTickPoints.size()-1; ++i){
+			const QPointF& point = logicalMajorTickPoints.at(i);
+			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
+		}
+	}else{ //vertical axis
+		float xMin = plot->xMin();
+		float xMax = plot->xMax();
+
+		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
+		for (int i=1; i<logicalMajorTickPoints.size()-1; ++i){
+			const QPointF& point = logicalMajorTickPoints.at(i);
+			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
+		}
+	}
+	
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	foreach (QLineF line, lines) {
+		majorGridPath.moveTo(line.p1());
+		majorGridPath.lineTo(line.p2());
+	}
+
+	update();
+}
+
+void AxisPrivate::retransformMinorGrid(){
+	minorGridPath = QPainterPath();
+	if (minorGridPen.style() == Qt::NoPen){
+		update();
+		return;
+	}
+
+	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
+	if (!plot)
+		return;
+
+	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
+	if (!cSystem)
+		return;
+
+	//minor tick points are already in scene coordinates, convert them back to logical...
+	QList<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+
+	QList<QLineF> lines;
+	if (orientation == Axis::AxisHorizontal){ //horizontal axis
+		float yMin = plot->yMin();
+		float yMax = plot->yMax();
+
+		for (int i=0; i<logicalMinorTickPoints.size(); ++i){
+			const QPointF& point = logicalMinorTickPoints.at(i);
+			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
+		}
+	}else{ //vertical axis
+		float xMin = plot->xMin();
+		float xMax = plot->xMax();
+
+		for (int i=0; i<logicalMinorTickPoints.size(); ++i){
+			const QPointF& point = logicalMinorTickPoints.at(i);
+			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
+		}
+	}
+
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	foreach (QLineF line, lines) {
+		minorGridPath.moveTo(line.p1());
+		minorGridPath.lineTo(line.p2());
+	}
+
+	update();
+}
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
@@ -1345,7 +1460,23 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	painter->setBrush(Qt::NoBrush);
 	painter->drawPath(minorTicksPath);
   }
-  
+
+  	//draw major grid
+	if (majorGridPen.style() != Qt::NoPen){
+		painter->setOpacity(majorGridOpacity);
+		painter->setPen(majorGridPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(majorGridPath);
+	}
+
+	//draw minor grid
+	if (minorGridPen.style() != Qt::NoPen){
+		painter->setOpacity(minorGridOpacity);
+		painter->setPen(minorGridPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(minorGridPath);
+	}
+	
   // draw tick labels
   if (labelsPosition != Axis::NoLabels){
 	painter->setOpacity(labelsOpacity);
@@ -1361,7 +1492,6 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	}
   }
 
-  //TODO: draw grid
   
    if (isSelected()){
 	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
@@ -1458,7 +1588,24 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 	
 	//grid
-	
+	writer->writeStartElement( "majorGrid" );
+	writer->writeAttribute( "style", QString::number(d->majorGridPen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->majorGridPen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->majorGridPen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->majorGridPen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->majorGridPen.width()) );
+	writer->writeAttribute( "opacity", QString::number(d->majorGridOpacity) );
+	writer->writeEndElement();
+
+	writer->writeStartElement( "minorGrid" );
+	writer->writeAttribute( "style", QString::number(d->minorGridPen.style()) );
+	writer->writeAttribute( "color_r", QString::number(d->minorGridPen.color().red()) );
+	writer->writeAttribute( "color_g", QString::number(d->minorGridPen.color().green()) );
+	writer->writeAttribute( "color_b", QString::number(d->minorGridPen.color().blue()) );
+	writer->writeAttribute( "width", QString::number(d->minorGridPen.width()) );
+	writer->writeAttribute( "opacity", QString::number(d->minorGridOpacity) );
+	writer->writeEndElement();
+
     writer->writeEndElement(); // close "axis" section
 }
 
@@ -1784,6 +1931,88 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
                 d->labelsOpacity = str.toInt();
+		}else if (reader->name() == "majorGrid"){
+			attribs = reader->attributes();
+
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->majorGridPen.setStyle( (Qt::PenStyle)str.toInt() );
+
+			QColor color;
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                color.setGreen( str.toInt() );
+
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                color.setBlue( str.toInt() );
+
+			d->majorGridPen.setColor(color);
+
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->majorGridPen.setWidthF( str.toDouble() );
+
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->majorGridOpacity = str.toInt();
+		}else if (reader->name() == "minorGrid"){
+			attribs = reader->attributes();
+
+			str = attribs.value("style").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'style'"));
+            else
+                d->minorGridPen.setStyle( (Qt::PenStyle)str.toInt() );
+
+			QColor color;
+			str = attribs.value("color_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_r'"));
+            else
+                color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_g'"));
+            else
+                color.setGreen( str.toInt() );
+
+			str = attribs.value("color_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+            else
+                color.setBlue( str.toInt() );
+
+			d->minorGridPen.setColor(color);
+
+			str = attribs.value("width").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'width'"));
+            else
+                d->minorGridPen.setWidthF( str.toDouble() );
+
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->minorGridOpacity = str.toInt();
         }else{ // unknown element
             reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
