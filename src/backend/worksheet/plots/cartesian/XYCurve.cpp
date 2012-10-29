@@ -55,6 +55,10 @@
 #include <QPainter>
 #include <QtDebug>
 
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include <KIcon>
+#endif
+
 #include <gsl/gsl_spline.h>
 #include <math.h>
 #include <vector>
@@ -101,6 +105,18 @@ void XYCurve::init(){
 
 XYCurve::~XYCurve() {
 	delete d_ptr;
+}
+
+
+/*!
+	Returns an icon to be used in the project explorer.
+*/
+QIcon XYCurve::icon() const{
+	QIcon icon;
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		icon = KIcon("xy-curve");
+#endif
+	return icon;
 }
 
 QStringList XYCurve::lineTypeStrings(){

@@ -230,7 +230,7 @@ void CartesianPlot::initActions(){
 	shiftUpYAction = new QAction(i18n("shift up Y"), this);
 	shiftDownYAction = new QAction(i18n("shift down Y"), this);
 #else
-	addCurveAction = new KAction(i18n("xy-curve"), this);
+	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
 	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
 	
