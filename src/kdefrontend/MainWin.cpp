@@ -33,37 +33,35 @@
 
 #include "MainWin.h"
 
-//****** GUI **************
-#include "datasources/ImportFileDialog.h"
-#include "HistoryDialog.h"
-#include "SettingsDialog.h"
+#include "backend/core/Project.h"
+#include "backend/core/Folder.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/datasources/FileDataSource.h"
+
+#include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "GuiObserver.h"
-#include "worksheet/ExportWorksheetDialog.h"
-#include "ProjectExplorer.h"
+#include "commonfrontend/worksheet/WorksheetView.h"
+
+#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/HistoryDialog.h"
+#include "kdefrontend/SettingsDialog.h"
+#include "kdefrontend/GuiObserver.h"
+
 #include <QDockWidget>
 #include <QStackedWidget>
 
 #include <KApplication>
 #include <KActionCollection>
 #include <KStandardAction>
- #include <kxmlguifactory.h>
+#include <kxmlguifactory.h>
 #include <KMessageBox>
 #include <KStatusBar>
 #include <KLocale>
 #include <KDebug>
 #include <KFilterDev>
-
-
-//****** Backend **************
-#include "core/Project.h"
-#include "core/Folder.h"
-#include "core/AspectTreeModel.h"
-#include "spreadsheet/Spreadsheet.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/WorksheetView.h"
-#include "datasources/FileDataSource.h"
-
 
  /*!
 	\class MainWin
@@ -73,7 +71,26 @@
  */
 
 MainWin::MainWin(QWidget *parent, const QString& filename)
-	: KXmlGuiWindow(parent){
+	: KXmlGuiWindow(parent),
+	m_currentSubWindow(0),
+	m_project(0),
+	m_aspectTreeModel(0),
+	m_projectExplorer(0),
+	m_projectExplorerDock(0),
+	m_propertiesDock(0),
+	m_currentAspect(0),
+	m_currentFolder(0),
+	m_fileName(filename),
+	m_visibilityMenu(0),
+	m_newMenu(0),
+	axisDock(0),
+	cartesianPlotDock(0),
+	columnDock(0),
+	spreadsheetDock(0),
+	projectDock(0),
+	lineSymbolCurveDock(0),
+	worksheetDock(0),
+	textLabelDock(0){
 
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
@@ -83,19 +100,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	setupGUI();
 	setAttribute( Qt::WA_DeleteOnClose );
 
-	m_fileName=filename;
-  	m_project = 0;
-  	m_projectExplorer = 0;
-	axisDock=0;
-	cartesianPlotDock=0;
-	columnDock=0;
-	lineSymbolCurveDock=0;
-	projectDock=0;
-	spreadsheetDock=0;
-	worksheetDock=0;
-
-// 	connect (m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)), this, SLOT(subWindowChanged(QMdiSubWindow *)));
-	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
+	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), 
 			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 	
 	QTimer::singleShot( 0, this, SLOT(initGUI()) );
@@ -273,12 +278,6 @@ void MainWin::initActions() {
 	// Analysis
 	// Drawing
 	// Script
-
-	// worksheet menu
-	//TODO add icon
-// 	action = new KAction (KIcon(),i18n("Axes Settings"), this);
-// 	actionCollection()->addAction("axes", action);
-// 	connect(action, SIGNAL(triggered()),SLOT(axesDialog()));
 
 	//Windows
 	action  = new KAction(i18n("Cl&ose"), this);
@@ -638,8 +637,8 @@ bool MainWin::closeProject(){
 		return true; //nothing to close
 	}else{
 		int b = KMessageBox::warningYesNo( this,
-																			i18n("The current project %1 will be closed. Do you want to continue?").arg(m_project->name()),
-																			i18n("Close Project"));
+											i18n("The current project %1 will be closed. Do you want to continue?").arg(m_project->name()),
+											i18n("Close Project"));
 		if (b==KMessageBox::No)
 			return false;
 	}
@@ -649,6 +648,7 @@ bool MainWin::closeProject(){
 
 	m_mdiArea->closeAllSubWindows();
 	delete m_aspectTreeModel;
+// 	m_project->undoStack()->clear();
 	m_project->disconnect();
 	delete m_project;
 
@@ -745,6 +745,10 @@ void MainWin::printPreview(){
 	Worksheet* w=this->activeWorksheet();
 	if (w!=0){ //worksheet
 		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
+		if (view)
+			qDebug()<<" view gefunden";
+		else
+			qDebug()<<" view nicht gefunden";
 		QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
 		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
 		dialog->exec();
@@ -819,6 +823,15 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 	if (!view)
 		return;
 
+	if (view == m_currentSubWindow){
+		//do nothing, if the current sub-window gets selected again.
+		//This event happens, when labplot loses the focus (modal window is opened or the user switches to another application)
+		//and gets it back (modal window is closed or the user switches back to labplot).
+		return;
+	}else{
+		m_currentSubWindow = view;
+	}
+
 	updateGUI();
 	m_projectExplorer->setCurrentAspect(view->part());
 }
@@ -826,7 +839,10 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 void MainWin::handleAspectAdded(const AbstractAspect *aspect){
 	handleAspectAddedInternal(aspect);
 	updateMdiWindowVisibility();
-	handleCurrentSubWindowChanged(m_mdiArea->currentSubWindow());
+
+	//TODO: don't call this function here, since it makes the part (aspect corresponding to the subwindow )
+	//current in the project explorer. This prevents the selection of the newly added aspect in project explorer.
+// 	handleCurrentSubWindowChanged(m_mdiArea->currentSubWindow());
 }
 
 void MainWin::handleAspectAddedInternal(const AbstractAspect * aspect){

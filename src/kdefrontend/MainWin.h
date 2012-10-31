@@ -33,7 +33,7 @@
 #define MAINWIN_H
 #include <KXmlGuiWindow>
 #include <KRecentFilesAction>
-#include "core/PartMdiView.h"
+#include "commonfrontend/core/PartMdiView.h"
 
 class AbstractAspect;
 class AspectTreeModel;
@@ -63,6 +63,7 @@ public:
 
 private:
 	QMdiArea *m_mdiArea;
+	QMdiSubWindow* m_currentSubWindow;
 	Project *m_project;
 	AspectTreeModel* m_aspectTreeModel;
 	ProjectExplorer * m_projectExplorer;
