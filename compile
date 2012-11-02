@@ -9,7 +9,9 @@ fi
 
 cd build
 
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make -j 2
+#cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && make -j 2
+# or
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=DebugFull && make -j 2
 
 # optional:
 #make install
