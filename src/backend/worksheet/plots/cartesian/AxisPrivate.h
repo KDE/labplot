@@ -145,7 +145,7 @@ class AxisPrivate: public QGraphicsItem {
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 
 	protected:
-		bool transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint);
+		bool transformAnchor(QPointF *anchorPoint);
 };
 
 #endif

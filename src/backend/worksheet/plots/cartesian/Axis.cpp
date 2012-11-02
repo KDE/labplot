@@ -139,13 +139,13 @@ void Axis::init(){
 
 	//major grid
 	d->majorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MajorGridStyle", (int) Qt::NoPen) );
-	d->majorGridPen.setColor(Qt::gray);//TODO
+	d->majorGridPen.setColor(Qt::gray);//TODO load from config
 	d->majorGridPen.setWidthF( group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->majorGridOpacity = group.readEntry("MajorGridOpacity", 1.0);
 
 	//minor grid
 	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::NoPen) );
-	d->minorGridPen.setColor(Qt::gray);//TODO
+	d->minorGridPen.setColor(Qt::gray);//TODO load from config
 	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
 #endif
@@ -156,7 +156,6 @@ void Axis::init(){
 
 	this->initActions();
 	this->initMenus();
-
 }
 
 void Axis::initActions(){
@@ -851,7 +850,7 @@ void AxisPrivate::retransformLine(){
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
 //TODO refactor this function, coordinate system should provide a function to map a single point
-bool AxisPrivate::transformAnchor(const AbstractCoordinateSystem *cSystem, QPointF *anchorPoint) {
+bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 	QList<QPointF> points;
 	points.append(*anchorPoint);
 	points = m_cSystem->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
@@ -946,8 +945,10 @@ void AxisPrivate::retransformTicks(){
 	qreal majorTickPos;
 	qreal minorTickPos;
 	qreal nextMajorTickPos;
-	int xDirection = m_cSystem->xDirection();;
+	int xDirection = m_cSystem->xDirection();
 	int yDirection = m_cSystem->yDirection();
+	float middleX = (m_plot->xMax() - m_plot->xMin())/2;
+	float middleY = (m_plot->yMax() - m_plot->yMin())/2;
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++){
 	  switch (scale){
@@ -978,8 +979,8 @@ void AxisPrivate::retransformTicks(){
 			  anchorPoint.setX(majorTickPos);
 			  anchorPoint.setY(offset);
 			  
-			  if (transformAnchor(m_cSystem, &anchorPoint)){
-				if(offset < 0.5) {
+			  if (transformAnchor(&anchorPoint)){
+				if(offset < middleY) {
 					startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 					endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
 				}
@@ -992,8 +993,8 @@ void AxisPrivate::retransformTicks(){
 			  anchorPoint.setY(majorTickPos);
 			  anchorPoint.setX(offset);
 
-			  if (transformAnchor(m_cSystem, &anchorPoint)){
-				if(offset < 0.5) {
+			  if (transformAnchor(&anchorPoint)){
+				if(offset < middleX) {
 					startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 					endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
 				  }
@@ -1044,25 +1045,25 @@ void AxisPrivate::retransformTicks(){
 			}
 			  
 			if (orientation == Axis::AxisHorizontal){
-			  anchorPoint.setX(minorTickPos);
-			  anchorPoint.setY(offset);
+				anchorPoint.setX(minorTickPos);
+				anchorPoint.setY(offset);
 
-				if (transformAnchor(m_cSystem, &anchorPoint)){
-				if(offset < 0.5) {
-					startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
-				  	endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
-				}
-				else {
-					startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut)  ? yDirection * minorTicksLength  : 0);
-				  	endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
-				}
+				if (transformAnchor(&anchorPoint)){
+					if(offset < middleY) {
+						startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
+						endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
+					}
+					else {
+						startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut)  ? yDirection * minorTicksLength  : 0);
+						endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
+					}
 				}
 			}else{ // vertical
 				anchorPoint.setY(minorTickPos);
 				anchorPoint.setX(offset);
 
-				if (transformAnchor(m_cSystem, &anchorPoint)){
-				if(offset < 0.5) {
+				if (transformAnchor(&anchorPoint)){
+				if(offset < middleX) {
 					startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
 				  	endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
 				}
