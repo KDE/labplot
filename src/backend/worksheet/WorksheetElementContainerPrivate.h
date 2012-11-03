@@ -39,7 +39,7 @@ class WorksheetElementContainer;
 class WorksheetElementContainerPrivate:  public QGraphicsItem{
 	public:
 		WorksheetElementContainerPrivate(WorksheetElementContainer *owner);
-		virtual ~WorksheetElementContainerPrivate();
+		virtual ~WorksheetElementContainerPrivate(){}
 
 		virtual QRectF boundingRect() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);

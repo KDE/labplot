@@ -31,9 +31,9 @@
 #ifndef ABSTRACTPLOT_H
 #define ABSTRACTPLOT_H
 
-#include "worksheet/WorksheetElementContainer.h"
-#include "worksheet/WorksheetElementContainerPrivate.h"
-#include "lib/macros.h"
+#include "backend/worksheet/WorksheetElementContainer.h"
+#include "backend/worksheet/WorksheetElementContainerPrivate.h"
+#include "backend/lib/macros.h"
 
 class AbstractCoordinateSystem;
 class PlotArea;
@@ -45,7 +45,6 @@ class AbstractPlot:public WorksheetElementContainer{
 
 	public:
 		AbstractPlot(const QString &name);
-		~AbstractPlot();
 
 		AbstractCoordinateSystem* coordinateSystem() const;
 		PlotArea* plotArea();

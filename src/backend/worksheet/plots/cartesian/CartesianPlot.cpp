@@ -65,7 +65,6 @@
 class CartesianPlotPrivate:public AbstractPlotPrivate{
     public:
 		CartesianPlotPrivate(CartesianPlot *owner);
-		QString name() const;
 		void setRect(const QRectF& r);
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void retransform();
@@ -91,9 +90,9 @@ CartesianPlot::~CartesianPlot(){
 	//TODO
 // 	delete d_ptr;
 // 	delete m_title;
-// 	delete m_coordinateSystem;
+	delete m_coordinateSystem;
 // 	delete m_plotArea;
-// 	delete addNewMenu;
+	delete addNewMenu;
 }
 
 /*!
@@ -732,10 +731,6 @@ void CartesianPlot::shiftDownY(){
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) : AbstractPlotPrivate(owner){
 }
 
-QString CartesianPlotPrivate::name() const{
-	return q->name();
-}
-
 /*!
 	sets the rectangular of the plot in scene coordinates to \c r.
 	The size of the plot corresponds to the size of the plot area, the area which is filled with the background color etc.
@@ -862,24 +857,28 @@ void CartesianPlotPrivate::retransformScales(){
 	QList<AbstractWorksheetElement *> childElements = q->children<AbstractWorksheetElement>();
     foreach(AbstractWorksheetElement *elem, childElements){
 		Axis* axis = qobject_cast<Axis*>(elem);
-		if (axis){
-			if (!axis->autoScale())
-				continue;
+		if (!axis)
+			continue;
+		if (!axis->autoScale())
+			continue;
 			
-			if (axis->orientation() == Axis::AxisHorizontal){
+		if (axis->orientation() == Axis::AxisHorizontal){
+			if (deltaX!=0){
 				axis->setEnd(xMax, false);
 				axis->setStart(xMin, false);
-				if (axis->position() == Axis::AxisCustom){
-					axis->setOffset(axis->offset() + deltaY, false);
+			}
+			if (axis->position() == Axis::AxisCustom && deltaY != 0){
+				axis->setOffset(axis->offset() + deltaY, false);
 // 					qDebug()<<" new offset "<<axis->offset() + deltaY;
-				}
-			}else{
+			}
+		}else{
+			if (deltaY!=0){
 				axis->setEnd(yMax, false);
 				axis->setStart(yMin, false);
-				if (axis->position() == Axis::AxisCustom){
-					axis->setOffset(axis->offset() + deltaX, false);
+			}
+			if (axis->position() == Axis::AxisCustom && deltaX != 0){
+				axis->setOffset(axis->offset() + deltaX, false);
 // 					qDebug()<<" new offset "<<axis->offset() + deltaX;
-				}
 			}
 		}
 	}

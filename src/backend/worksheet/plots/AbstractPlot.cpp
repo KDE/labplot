@@ -27,12 +27,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/plots/AbstractPlot.h"
-#include "AbstractPlotPrivate.h"
-#include "worksheet/plots/PlotArea.h"
-#include "worksheet/plots/AbstractCoordinateSystem.h"
-#include "worksheet/WorksheetElementContainerPrivate.h"
-#include "lib/commandtemplates.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/worksheet/plots/AbstractPlotPrivate.h"
+#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
+#include "backend/worksheet/WorksheetElementContainerPrivate.h"
+#include "backend/lib/commandtemplates.h"
 
 /**
  * \class AbstractPlot
@@ -42,7 +42,7 @@
  *
  */ 
 
-AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name),
+AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name, new AbstractPlotPrivate(this)),
 	m_coordinateSystem(0), m_plotArea(0), m_title(0){
 	init();
 }
@@ -59,10 +59,6 @@ void AbstractPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
     graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
-}
-
-AbstractPlot::~AbstractPlot() {
-// TODO
 }
 
 PlotArea* AbstractPlot::plotArea(){
@@ -106,4 +102,8 @@ void AbstractPlot::setVerticalPadding(float padding) {
 //################################################################
 AbstractPlotPrivate::AbstractPlotPrivate(AbstractPlot *owner)
 	:WorksheetElementContainerPrivate(owner){
+}
+
+QString AbstractPlotPrivate::name() const{
+	return q->name();
 }

@@ -28,8 +28,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementContainer.h"
-#include "worksheet/WorksheetElementContainerPrivate.h"
+#include "backend/worksheet/WorksheetElementContainer.h"
+#include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include <QtDebug>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -62,8 +62,8 @@ WorksheetElementContainer::WorksheetElementContainer(const QString &name, Worksh
 		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 }
 
-WorksheetElementContainer::~WorksheetElementContainer() {
-// 	delete d_ptr;
+WorksheetElementContainer::~WorksheetElementContainer(){
+	delete d_ptr;
 }
 
 QGraphicsItem *WorksheetElementContainer::graphicsItem() const {
@@ -169,8 +169,8 @@ WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElem
 	: q(owner) {
 }
 
-WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate() {
-}
+// WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate(){
+// }
 
  void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
      scene()->clearSelection();

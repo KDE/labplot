@@ -31,7 +31,7 @@
 #ifndef WORKSHEETELEMENTCONTAINER_H
 #define WORKSHEETELEMENTCONTAINER_H
 
-#include "worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
 
 class WorksheetElementContainerPrivate;
 
@@ -40,7 +40,7 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 
 	public:
 		WorksheetElementContainer(const QString &name);
-		virtual ~WorksheetElementContainer();
+		~WorksheetElementContainer();
 
 		virtual QGraphicsItem *graphicsItem() const;
 
