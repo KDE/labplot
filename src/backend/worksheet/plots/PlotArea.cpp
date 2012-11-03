@@ -61,7 +61,8 @@ PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
 	init();
 }
 
-PlotArea::~PlotArea() {
+PlotArea::~PlotArea(){
+	delete d_ptr;
 }
 
 void PlotArea::init(){

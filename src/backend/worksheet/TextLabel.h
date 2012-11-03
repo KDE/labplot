@@ -35,9 +35,9 @@
 #include <QFont>
 #include <QBrush>
 #include <QPen>
-#include "../lib/macros.h"
-#include "../../tools/TeXRenderer.h"
-#include "AbstractWorksheetElement.h"
+#include "backend/lib/macros.h"
+#include "tools/TeXRenderer.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
 
 class TextLabelPrivate;
 class TextLabel : public AbstractWorksheetElement{

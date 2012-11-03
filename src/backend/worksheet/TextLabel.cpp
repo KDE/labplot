@@ -31,8 +31,8 @@
 #include "TextLabel.h"
 #include "Worksheet.h"
 #include "TextLabelPrivate.h"
-#include "../lib/commandtemplates.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -95,7 +95,7 @@ void TextLabel::init() {
 }
 
 TextLabel::~TextLabel() {
-// 	delete d_ptr;
+	delete d_ptr;
 }
 
 QGraphicsItem* TextLabel::graphicsItem() const{
