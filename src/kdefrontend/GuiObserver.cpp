@@ -27,36 +27,34 @@ Email (use @ for *)  	: alexander.semke*web.de
 *                                                                         *
 ***************************************************************************/
 
-#include "GuiObserver.h"
-#include "core/AspectTreeModel.h"
-#include "core/AbstractAspect.h"
-#include "spreadsheet/Spreadsheet.h"
-#include "worksheet/plots/cartesian/CartesianPlot.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/plots/cartesian/XYCurve.h"
-#include "worksheet/plots/cartesian/Axis.h"
-#include "worksheet/TextLabel.h"
-#include "core/Project.h"
-#include "ProjectExplorer.h"
+#include "kdefrontend/GuiObserver.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "MainWin.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/TextLabel.h"
+#include "backend/core/Project.h"
+#include "commonfrontend/ProjectExplorer.h"
+#include "kdefrontend/MainWin.h"
+#include "kdefrontend/dockwidgets/AxisDock.h"
+#include "kdefrontend/dockwidgets/CartesianPlotDock.h"
+#include "kdefrontend/dockwidgets/ColumnDock.h"
+#include "kdefrontend/dockwidgets/ProjectDock.h"
+#include "kdefrontend/dockwidgets/SpreadsheetDock.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/WorksheetDock.h"
+#include "kdefrontend/widgets/LabelWidget.h"
 
 #include <kxmlguifactory.h>
 
 #include <QDockWidget>
 #include <QStackedWidget>
 #include <QToolBar>
-
-#include "dockwidgets/AxisDock.h"
-#include "dockwidgets/CartesianPlotDock.h"
-#include "dockwidgets/ColumnDock.h"
-#include "dockwidgets/ProjectDock.h"
-#include "dockwidgets/SpreadsheetDock.h"
-#include "dockwidgets/XYCurveDock.h"
-#include "dockwidgets/WorksheetDock.h"
-#include "widgets/LabelWidget.h"
-
 #include <QDebug>
+
 /*!
   \class GuiObserver
   \brief The GUI observer looks for the selection changes in the main window and shows/hides the correspondings dock widgets, toolbars etc.
@@ -76,7 +74,6 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 
 GuiObserver::~GuiObserver(){
 }
-
 
 /*!
   called on selection changes in the project explorer.
@@ -105,7 +102,6 @@ GuiObserver::~GuiObserver(){
   }
   
   QString className=aspect->metaObject()->className();
-//     qDebug()<<className << "in selectedAspectsChanged";
   
   //check, whether objects of different  type where selected -> hide the dock in this case.
   foreach(aspect, selectedAspects){
@@ -253,7 +249,7 @@ GuiObserver::~GuiObserver(){
 
 /*!
 	handles the selection of a hidden aspect \c aspect in the view (relevant for WorksheetView only at the moment).
-	Currently, a hidden aspect can only be a plot title lable or an axi label.
+	Currently, a hidden aspect can only be a plot title lable or an axis label.
 	-> Activate the corresponding DockWidget and make the title tab current.
  */
 void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
@@ -262,25 +258,10 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
 		return;
 	
 	QString className = parent->metaObject()->className();
-	//TODO actually, the parent aspect should be already selected at this point
-	//and there is no need to activate the corresponding dock widget,
-	//s.a. AspectTreeModel::aspectSelectedInView(). But this doesn't seem to be the case.
-	if (className == "Axis"){
-		qDebug()<<"in if";
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis properties"));
-		if (!mainWindow->axisDock){
-			qDebug()<<"no dock";
-			mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
-			mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
-		}
-	
+	if (className == "Axis")
 		mainWindow->axisDock->activateTitleTab();
-// 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
-	}else if (className == "CartesianPlot"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot properties"));
+	else if (className == "CartesianPlot")
 		mainWindow->cartesianPlotDock->activateTitleTab();
-// 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
-	}
 }
 
 /*!

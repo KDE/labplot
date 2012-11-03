@@ -53,9 +53,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/TextLabel.h"
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include "lib/ActionManager.h"
-#else
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KAction>
 #include <KLocale>
 #include "kdefrontend/worksheet/GridDialog.h"
@@ -612,6 +610,11 @@ void WorksheetView::addNew(QAction* action){
 	timeLine->setFrameRange(0, 100);
 	connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeIn(qreal)));
 	timeLine->start();
+
+
+	//select the newly added item in the view
+	m_worksheet->setSelectedInView(false);
+	this->selectItem(aspect->graphicsItem());
 }
 
 void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
@@ -767,8 +770,17 @@ void WorksheetView::selectionChanged(){
 	if (m_suppressSelectionChangedEvent)
 		return;
 	
-	//select
 	QList<QGraphicsItem *> items = scene()->selectedItems();
+	
+	//check, whether the previously selected items were deselected now.
+	//Forward the deselection prior to the selection of new items
+	//in order to avoid the unwanted multiple selection in project explorer
+	foreach ( QGraphicsItem* item , m_selectedItems ){
+		if ( items.indexOf(item) == -1 )
+			m_worksheet->setItemSelectedInView( item, false );
+	}
+
+	//select new items
 	if (items.size() == 0){
 		//no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
@@ -781,11 +793,6 @@ void WorksheetView::selectionChanged(){
 		m_worksheet->setSelectedInView(false);
 	}
 	
-	//check, whether the previously selected items were deselected now.
-	foreach ( QGraphicsItem* item , m_selectedItems ){
-		if ( items.indexOf(item) == -1 )
-			m_worksheet->setItemSelectedInView( item, false );	
-	}
 	m_selectedItems = items;
 }
 

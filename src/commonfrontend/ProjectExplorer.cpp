@@ -28,9 +28,9 @@
  *                                                                         *
  ***************************************************************************/
 #include "ProjectExplorer.h"
-#include "../backend/core/AspectTreeModel.h"
-#include "../backend/core/AbstractAspect.h"
-#include "../backend/core/Project.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/core/Project.h"
 
 #include <QContextMenuEvent>
 #include <QMenu>
@@ -281,7 +281,6 @@ void ProjectExplorer::expandAspect(const AbstractAspect* aspect){
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
 	
-	//TODO this doesn't work!
 	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
 
