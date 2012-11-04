@@ -30,13 +30,7 @@ set(GUI_SOURCES
 )
 
 set(UI_SOURCES
-#	${KDEFRONTEND_DIR}/ui/columndialog.ui
-#	${KDEFRONTEND_DIR}/ui/exportwidget.ui
-#	${KDEFRONTEND_DIR}/ui/functionwidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
-#	${KDEFRONTEND_DIR}/ui/legendwidget.ui
-#	${KDEFRONTEND_DIR}/ui/plotstylewidget.ui
-#	${KDEFRONTEND_DIR}/ui/plotsurfacestylewidget.ui
 	${KDEFRONTEND_DIR}/ui/projectdialog.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
@@ -47,7 +41,6 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
-#	${KDEFRONTEND_DIR}/ui/dockwidgets/plotareadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
@@ -120,7 +113,6 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetDoubleHeaderView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
-# 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetModule.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp

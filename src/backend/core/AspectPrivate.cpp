@@ -26,8 +26,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "core/AbstractAspect.h"
-#include "core/AspectPrivate.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/core/AspectPrivate.h"
 #include <QRegExp>
 #include <QStringList>
 
@@ -58,7 +58,7 @@ AbstractAspect::Private::Private(AbstractAspect * owner, const QString& name)
 AbstractAspect::Private::~Private()
 {
 	foreach(AbstractAspect * child, m_children)
-		delete child;
+			delete child;
 }
 
 void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)

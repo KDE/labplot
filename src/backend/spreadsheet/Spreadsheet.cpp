@@ -28,8 +28,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "spreadsheet/Spreadsheet.h"
-#include "../../commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
@@ -40,6 +40,7 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QMenu>
+#include <QPrinter>
 #include <QDebug>
 /*!
   \class Spreadsheet
@@ -90,7 +91,7 @@ void Spreadsheet::init() {
 	// dont use default values for rows and cols. They are already defined.
 
 	if (m_view)
-		((SpreadsheetView*) m_view)->showComments(group.readEntry("ShowComments", FALSE));
+		reinterpret_cast<SpreadsheetView*>(m_view)->showComments(group.readEntry("ShowComments", FALSE));
 #endif
 }
 

@@ -40,7 +40,7 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 
 	public:
 		WorksheetElementContainer(const QString &name);
-		~WorksheetElementContainer();
+		virtual ~WorksheetElementContainer();
 
 		virtual QGraphicsItem *graphicsItem() const;
 

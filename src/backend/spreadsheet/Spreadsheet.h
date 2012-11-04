@@ -31,10 +31,9 @@
 #ifndef SPREADSHEET_H
 #define SPREADSHEET_H
 
-#include "datasources/AbstractDataSource.h"
-#include "core/column/Column.h"
+#include "backend/datasources/AbstractDataSource.h"
+#include "backend/core/column/Column.h"
 #include <QList>
-#include <QPrinter>
 
 class Spreadsheet : public AbstractDataSource{
 	Q_OBJECT

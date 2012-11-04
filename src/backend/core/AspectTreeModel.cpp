@@ -28,9 +28,10 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "core/AbstractAspect.h"
-#include "worksheet/AbstractWorksheetElement.h"
-#include "AspectTreeModel.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/core/AspectTreeModel.h"
+
 #include <QDateTime>
 #include <QIcon>
 #include <QMenu>
@@ -312,7 +313,6 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect *aspect, in
 					  column, const_cast<AbstractAspect*>(aspect));
 }
 
-
 void AspectTreeModel::setFilterString(const QString & s){
     m_filterString=s;
 
@@ -359,7 +359,6 @@ void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect){
 		//select the parent aspect first, if available
 		AbstractAspect* parent = aspect->parentAspect();
 		if (parent){
-			qDebug()<<"parent "<<parent->name();
 			emit indexSelected(modelIndexOfAspect(parent));
 		}
 		

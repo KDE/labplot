@@ -27,12 +27,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "AbstractColumn.h"
-#include "AbstractColumnPrivate.h"
-#include "abstractcolumncommands.h"
-#include "lib/Interval.h"
-#include "lib/XmlStreamReader.h"
-#include "lib/SignallingUndoCommand.h"
+#include "backend/core/AbstractColumn.h"
+#include "backend/core/AbstractColumnPrivate.h"
+#include "backend/core/abstractcolumncommands.h"
+#include "backend/lib/Interval.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/SignallingUndoCommand.h"
 
 #include <QtXml/QXmlStreamWriter>
 #include <QtCore/QString>
@@ -463,7 +463,6 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
 double AbstractColumn::minimum() const{
 	double val;
 	double min = INFINITY;
-	double max = -INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
 		val = valueAt(row);
 		if (isnan(val))
@@ -477,7 +476,6 @@ double AbstractColumn::minimum() const{
 
 double AbstractColumn::maximum() const{
 	double val;
-	double min = INFINITY;
 	double max = -INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
 		val = valueAt(row);

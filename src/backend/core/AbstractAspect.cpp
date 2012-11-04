@@ -27,14 +27,14 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "core/AbstractAspect.h"
-#include "core/AspectPrivate.h"
-#include "core/aspectcommands.h"
-#include "core/Folder.h"
-#include "core/Project.h"
-#include "lib/XmlStreamReader.h"
-#include "lib/SignallingUndoCommand.h"
-#include "lib/PropertyChangeCommand.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/core/AspectPrivate.h"
+#include "backend/core/aspectcommands.h"
+#include "backend/core/Folder.h"
+#include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/SignallingUndoCommand.h"
+#include "backend/lib/PropertyChangeCommand.h"
 
 #include <QIcon>
 #include <QMenu>

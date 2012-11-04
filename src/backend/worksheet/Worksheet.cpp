@@ -31,13 +31,12 @@
 #include "Worksheet.h"
 #include "WorksheetPrivate.h"
 #include "AbstractWorksheetElement.h"
-#include "../../commonfrontend/worksheet/WorksheetView.h"
-// #include "WorksheetGraphicsScene.h"
-#include "worksheet/plots/cartesian/CartesianPlot.h"
-#include "worksheet/TextLabel.h"
-#include "../lib/commandtemplates.h"
-#include "lib/macros.h"
-#include "lib/XmlStreamReader.h"
+#include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/TextLabel.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
+#include "backend/lib/XmlStreamReader.h"
 #include <math.h>
 
 #include <QGraphicsScene>

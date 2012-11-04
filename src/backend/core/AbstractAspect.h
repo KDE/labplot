@@ -33,7 +33,6 @@
 #include <QObject>
 #include <QList>
 
-class AspectPrivate;
 class Project;
 class QUndoStack;
 class QString;
@@ -66,7 +65,6 @@ class AbstractAspect : public QObject
 		Q_DECLARE_FLAGS(ChildIndexFlags, ChildIndexFlag)
 
 		class Private;
-
 		static void staticInit();
 
 		AbstractAspect(const QString &name);

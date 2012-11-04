@@ -30,10 +30,10 @@
 #ifndef COLUMN_H
 #define COLUMN_H
 
-#include "core/AbstractAspect.h"
-#include "core/AbstractSimpleFilter.h"
-#include "lib/IntervalAttribute.h"
-#include "lib/XmlStreamReader.h"
+// #include "backend/core/AbstractColumn.h"
+#include "backend/core/AbstractSimpleFilter.h"
+// #include "lib/IntervalAttribute.h"
+#include "backend/lib/XmlStreamReader.h"
 class QString;
 
 class ColumnStringIO;
@@ -76,7 +76,8 @@ class Column : public AbstractColumn
 		void setFormula(Interval<int> i, QString formula);
 		void setFormula(int row, QString formula);
 		void clearFormulas();
-		
+
+		void* data() const;
 		QString textAt(int row) const;
 		void setTextAt(int row, const QString& new_value);
 		void replaceTexts(int first, const QStringList& new_values);

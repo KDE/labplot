@@ -27,12 +27,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "core/column/Column.h"
-#include "core/column/ColumnPrivate.h"
-#include "core/column/columncommands.h"
-#include "lib/XmlStreamReader.h"
-#include "core/datatypes/String2DateTimeFilter.h"
-#include "core/datatypes/DateTime2StringFilter.h"
+#include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnPrivate.h"
+#include "backend/core/column/columncommands.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include <QIcon>
 #include <QXmlStreamWriter>
 #include <QtDebug>
@@ -373,6 +373,9 @@ void Column::replaceValues(int first, const QVector<double>& new_values)
 		exec(new ColumnReplaceValuesCmd(m_column_private, first, new_values));
 }
 
+void* Column::data() const{
+	return m_column_private->dataPointer();
+}
 /**
  * \brief Return the content of row 'row'.
  *

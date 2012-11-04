@@ -30,8 +30,8 @@
 #ifndef ABSTRACTCOLUMN_H
 #define ABSTRACTCOLUMN_H
 
-#include "core/globals.h"
-#include "core/AbstractAspect.h"
+#include "backend/core/globals.h"
+#include "backend/core/AbstractAspect.h"
 
 class AbstractSimpleFilter;
 class QStringList;

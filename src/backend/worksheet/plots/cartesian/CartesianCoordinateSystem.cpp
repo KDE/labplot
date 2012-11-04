@@ -641,7 +641,7 @@ void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double 
 //######################### Private implementation #############################
 //##############################################################################
 CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner)
-	:q(owner){
+	:q(owner), plot(0){
 }
 
 CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate(){

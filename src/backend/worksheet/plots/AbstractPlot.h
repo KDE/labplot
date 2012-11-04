@@ -45,7 +45,7 @@ class AbstractPlot:public WorksheetElementContainer{
 
 	public:
 		AbstractPlot(const QString &name);
-
+		virtual ~AbstractPlot(){}
 		AbstractCoordinateSystem* coordinateSystem() const;
 		PlotArea* plotArea();
 		TextLabel* title();
