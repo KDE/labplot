@@ -294,6 +294,7 @@ void TextLabelPrivate::retransform(){
 
 	recalcShapeAndBoundingRect();
 
+	// TODO: Crash (see bug  #3583420)
 	emit(q->changed());
 }
 

@@ -106,6 +106,7 @@ void Axis::init(){
 	d->title->setHidden(true);
 	d->title->graphicsItem()->setParentItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	// TODO: Crash (see bug  #3583420)
 	d->title->setText(this->name());
 	if ( d->orientation == AxisVertical )
 		d->title->setRotationAngle(270);
