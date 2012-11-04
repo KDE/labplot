@@ -144,7 +144,7 @@ QStringList XYCurve::valuesTypeStrings(){
 
 QStringList XYCurve::valuesPositionStrings(){
   //TODO add i18n-Version
-  return ( QStringList()<<tr("above")<<tr("under")<<tr("left")<<tr("right") );
+  return ( QStringList()<<tr("above")<<tr("below")<<tr("left")<<tr("right") );
 }
 
 QGraphicsItem *XYCurve::graphicsItem() const{
