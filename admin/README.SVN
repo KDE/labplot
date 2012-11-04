@@ -7,8 +7,15 @@ svn import -m "inital import" https://svn.sourceforge.net/svnroot/labplot/2.0 --
 Checkout:
 #########
 
+old:
 svn co https://labplot.svn.sourceforge.net/svnroot/labplot/2.0
 ( svn update )
+
+new(2012-11-05):
+read-write:
+svn co --username=<username> svn+ssh://<username>@svn.code.sf.net/p/labplot/code/2.0
+read-only:
+svn co svn://svn.code.sf.net/p/labplot/code/2.0
 
 Commit :
 ########
