@@ -39,7 +39,7 @@
 #include "XYCurvePrivate.h"
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots//AbstractPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/core/plugin/PluginManager.h"
 #include "backend/worksheet/symbols/EllipseCurveSymbol.h"
@@ -765,25 +765,31 @@ void XYCurvePrivate::updateDropLines(){
 	
 	//calculate drop lines
 	QList<QLineF> lines;
-	QPointF tempPoint;
-	int count=symbolPointsLogical.count();
+	float xMin = 0;
+	float yMin = 0;
+	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
+	if (!plot)
+		return;
+	
+	xMin = plot->xMin();
+	yMin = plot->yMin();
 	switch(dropLineType){
 	  case XYCurve::DropLineX:{
-		for (int i=0; i<count; i++){
-		  lines.append(QLineF(symbolPointsLogical.at(i), QPointF(symbolPointsLogical.at(i).x(), 0)));
+		foreach(QPointF point, symbolPointsLogicalRestricted){
+			lines.append(QLineF(point, QPointF(point.x(), yMin)));
 		}
 		break;
 	  }
 	  case XYCurve::DropLineY:{
-		for (int i=0; i<count; i++){
-		  lines.append(QLineF(symbolPointsLogical.at(i), QPointF(0, symbolPointsLogical.at(i).y())));
+		foreach(QPointF point, symbolPointsLogicalRestricted){
+			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
 	  }
 	  case XYCurve::DropLineXY:{
-		for (int i=0; i<count; i++){
-		  lines.append(QLineF(symbolPointsLogical.at(i), QPointF(symbolPointsLogical.at(i).x(), 0)));
-		  lines.append(QLineF(symbolPointsLogical.at(i), QPointF(0, symbolPointsLogical.at(i).y())));
+		foreach(QPointF point, symbolPointsLogicalRestricted){
+			lines.append(QLineF(point, QPointF(point.x(), yMin)));
+			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
 	  }
@@ -792,7 +798,6 @@ void XYCurvePrivate::updateDropLines(){
 	}
 	
 	//map the drop lines to scene coordinates
-	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
 	if (cSystem)
 	  lines = cSystem->mapLogicalToScene(lines);
