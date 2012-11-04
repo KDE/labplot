@@ -31,10 +31,8 @@
 #define WORKSHEETELEMENTCONTAINERPRIVATE_H
 
 #include <QGraphicsItem>
-#include <QPainter>
-#include <QGraphicsSceneContextMenuEvent>
 
-
+class QGraphicsSceneContextMenuEvent;
 class WorksheetElementContainer;
 class WorksheetElementContainerPrivate:  public QGraphicsItem{
 	public:

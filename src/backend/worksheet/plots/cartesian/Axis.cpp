@@ -769,7 +769,7 @@ void Axis::lineColorChanged(QAction* action){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : q(owner), m_plot(0), m_cSystem(0){
+AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), q(owner){
 }
 
 QString AxisPrivate::name() const{

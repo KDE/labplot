@@ -33,7 +33,9 @@
 #include <QtDebug>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
+#include <QPainter>
 
 /**
  * \class WorksheetElementContainer
@@ -140,37 +142,12 @@ void WorksheetElementContainer::handleAspectAboutToBeRemoved(const AbstractAspec
 	}
 }
 
-/*!
-	One of the container children was selected.
-	Reemit the signal with the selected child aspect as parameter
-	in order to propagate this event to \c Worksheet and \c WorksheetView
- */
-void WorksheetElementContainer::childSelected(){
-	const AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
-	if (element)
-		emit selected(element);
-}
-
-/*!
-	One of the container children was deselected.
-	Reemit the signal with the selected child aspect as parameter
-	in order to propagate this event to \c Worksheet and \c WorksheetView
- */
-void WorksheetElementContainer::childDeselected(){
-	const AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
-	if (element)
-		emit deselected(element);
-}
-
 //################################################################
 //################### Private implementation ##########################
 //################################################################
 WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
 	: q(owner) {
 }
-
-// WorksheetElementContainerPrivate::~WorksheetElementContainerPrivate(){
-// }
 
  void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
      scene()->clearSelection();
