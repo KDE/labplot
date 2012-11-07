@@ -924,7 +924,7 @@ void XYCurveDock::symbolsBorderColorChanged(const QColor& color){
 void XYCurveDock::symbolsBorderWidthChanged(double value){
   if (m_initializing)
 	return;
-  
+
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();

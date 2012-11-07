@@ -142,8 +142,10 @@ QBrush PathCurveSymbol::brush() const {
 
 void PathCurveSymbol::setPen(const QPen &pen) {
 	Q_D(PathCurveSymbol);
-
+	
 	d->pen = pen;
+
+	d->pen.setCosmetic(true);
 	d->boundingRect = QRectF();
 }
 
@@ -192,7 +194,7 @@ void PathCurveSymbol::paint(QPainter *painter) {
 	painter->setBrush(d->brush);
 	painter->setPen(d->pen);
 
-	qreal xSize = d->size ;
+	qreal xSize = d->size;
 	qreal ySize = d->size / d->aspectRatio;
 	painter->scale(xSize, ySize);
 	painter->rotate(d->rotationAngle);		

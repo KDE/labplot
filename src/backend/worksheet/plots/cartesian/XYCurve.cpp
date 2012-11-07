@@ -1135,6 +1135,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_r", QString::number(d->symbolsPen.color().red()) );
 	writer->writeAttribute( "color_g", QString::number(d->symbolsPen.color().green()) );
 	writer->writeAttribute( "color_b", QString::number(d->symbolsPen.color().blue()) );
+	//TODO: should use widthF()?
 	writer->writeAttribute( "width", QString::number(d->symbolsPen.width()) );
 	writer->writeEndElement();
 	
