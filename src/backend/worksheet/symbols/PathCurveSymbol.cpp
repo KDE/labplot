@@ -180,20 +180,8 @@ void PathCurveSymbolPrivate::cloneHelper(const PathCurveSymbolPrivate *other) {
 void PathCurveSymbol::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
-	Q_D(PathCurveSymbol);
 
-	painter->save();
-
-	painter->setBrush(d->brush);
-	painter->setPen(d->pen);
-	qreal xSize = d->size ;
-	qreal ySize = d->size / d->aspectRatio;
-	painter->scale(xSize, ySize);
-	painter->rotate(d->rotationAngle);		
-
-	painter->drawPath(d->path);
-
-	painter->restore();
+	paint(painter);
 }
 
 void PathCurveSymbol::paint(QPainter *painter) {
