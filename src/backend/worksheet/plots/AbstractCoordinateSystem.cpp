@@ -28,9 +28,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/plots/AbstractCoordinateSystem.h"
-#include "worksheet/plots/AbstractPlot.h"
-
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
+#include <math.h>
 /**
  * \class AbstractCoordinateSystem
  * \brief Base class of all worksheet coordinate systems.
@@ -88,13 +88,20 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem(){
  *
  * \return false if line is completely outside, otherwise true
  */
-bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult){
-    qreal x1 = line->x1();
-    qreal x2 = line->x2();
-    qreal y1 = line->y1();
-    qreal y2 = line->y2();
 
-//	QRectF normalizedRect = rect.normalized();
+float round(float value, int precision){
+	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
+}
+
+bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult){
+	//we usually clip on large rectangles, so we don't need high precision here -> round to one float digit
+	//this prevents some subtle float rounding artefacts that lead to disappearance
+	//of lines along the boundaries of the rect. (e.g. axis lines).
+    qreal x1 = round(line->x1(),1);
+    qreal x2 = round(line->x2(),1);
+    qreal y1 = round(line->y1(),1);
+    qreal y2 = round(line->y2(),1);
+
     qreal left;
     qreal right;
     qreal top;
