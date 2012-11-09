@@ -28,9 +28,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "TreeViewComboBox.h"
-#include "core/AbstractAspect.h"
-#include "core/AspectTreeModel.h"
+#include "backend/widgets/TreeViewComboBox.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/core/AspectTreeModel.h"
+#include <QHeaderView>
 
 /*!
     \class TreeViewComboBox
@@ -151,13 +152,5 @@ bool TreeViewComboBox::eventFilter(QObject *object, QEvent *event){
 void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
 	QComboBox::setItemText(0, index.data().toString());
 	m_treeView.hide();
-	
-	//workaround hack.
-	//TODO: make the non-column objects nonselectable (disabled).
-	//FIX: an model item without the flags IsSelectable and IsEnabled can still be selected.
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	foreach(const char * classString, m_topLevelClasses){
-		if (aspect->inherits("Column"))
-			emit currentModelIndexChanged(index);
-	}
+	emit currentModelIndexChanged(index);
 }

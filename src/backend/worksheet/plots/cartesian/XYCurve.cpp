@@ -526,8 +526,10 @@ void XYCurvePrivate::retransform(){
 	symbolPoints.clear();
 	symbolPointsLogicalRestricted.clear();
 
-	if ( (NULL == xColumn) || (NULL == yColumn) )
+	if ( (NULL == xColumn) || (NULL == yColumn) ){
+		recalcShapeAndBoundingRect();
 		return;
+	}
 	
 	int startRow = 0;
 	int endRow = xColumn->rowCount() - 1;

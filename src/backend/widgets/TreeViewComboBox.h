@@ -31,7 +31,9 @@
 #ifndef TREEVIEWCOMBOBOX_H
 #define TREEVIEWCOMBOBOX_H
 
-#include <QtGui>
+#include <QTreeView>
+#include <QComboBox>
+#include <QEvent>
 
 class AbstractAspect;
 

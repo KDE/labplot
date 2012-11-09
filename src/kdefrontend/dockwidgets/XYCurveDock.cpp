@@ -583,10 +583,13 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index){
 	if (m_initializing)
 		return;
   
-	AbstractColumn* column= static_cast<AbstractColumn*>(index.internalPointer());
-	foreach(XYCurve* curve, m_curvesList){
-	curve->setXColumn(column);
-	}
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	if (!column)
+		cbXColumn->setCurrentModelIndex(QModelIndex());
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setXColumn(column);
 }
 
 void XYCurveDock::yColumnChanged(const QModelIndex& index){
@@ -594,10 +597,13 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index){
 	if (m_initializing)
 		return;
   
-	AbstractColumn* column= static_cast<AbstractColumn*>(index.internalPointer());
-	foreach(XYCurve* curve, m_curvesList){
-	curve->setYColumn(column);
-	}
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	if (!column)
+		cbYColumn->setCurrentModelIndex(QModelIndex());
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setYColumn(column);
 }
 
 void XYCurveDock::visibilityChanged(bool state){
@@ -924,7 +930,7 @@ void XYCurveDock::symbolsBorderColorChanged(const QColor& color){
 void XYCurveDock::symbolsBorderWidthChanged(double value){
   if (m_initializing)
 	return;
-
+  
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();

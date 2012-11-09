@@ -55,7 +55,7 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
 	
     setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 	setButtonText(KDialog::User1,i18n("Show Options"));
-// 	enableButtonOk(false);
+	enableButtonOk(false);
 	
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
@@ -81,7 +81,7 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
   cbAddTo->setTopLevelClasses(list);
   hLayout->addWidget( cbAddTo);
   connect( cbAddTo, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(currentAddToIndexChanged(const QModelIndex&)) );
-  
+	
   bNewSpreadsheet = new QPushButton(frameAddTo);
   bNewSpreadsheet->setIcon(KIcon("insert-table"));
   bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
@@ -105,7 +105,7 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
   
   vLayout->addWidget(frameAddTo);
   cbAddTo->setModel(model);
-  
+
   //hide the data-source related widgets
   importFileWidget->hideDataSource();
 }
@@ -158,17 +158,16 @@ void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
 	if (!aspect)
 		return;
 	
-	 if ( aspect->inherits("Spreadsheet") ){
-		 lPosition->setEnabled(true);
-		 cbPosition->setEnabled(true);
-		 bNewSpreadsheet->setEnabled(false);
-		 enableButtonOk(true);
-	 }else{
-		 lPosition->setEnabled(false);
-		 cbPosition->setEnabled(false);
-		 bNewSpreadsheet->setEnabled(true);
-		 enableButtonOk(false);
-	 }
+	if ( aspect->inherits("Spreadsheet") ){
+		lPosition->setEnabled(true);
+		cbPosition->setEnabled(true);
+		enableButtonOk(true);
+	}else{
+		lPosition->setEnabled(false);
+		cbPosition->setEnabled(false);
+		enableButtonOk(false);
+		cbAddTo->setCurrentModelIndex(QModelIndex());
+	}
 }
 
 void ImportFileDialog::newSpreadsheet(){
