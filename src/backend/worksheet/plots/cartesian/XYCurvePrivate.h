@@ -32,7 +32,6 @@
 #define XYCURVEPRIVATE_H
 
 #include "backend/worksheet/AbstractCurveSymbol.h"
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 
 class XYCurvePrivate: public QGraphicsItem {
 	public:

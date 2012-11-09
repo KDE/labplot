@@ -452,7 +452,7 @@ void XYCurve::setValuesOpacity(qreal opacity) {
 		exec(new XYCurveSetValuesOpacityCmd(d, opacity, tr("%1: set values opacity")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesRotationAngle, qreal, valuesRotationAngle,update)
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesRotationAngle, qreal, valuesRotationAngle,updateValues)
 void XYCurve::setValuesRotationAngle(qreal angle) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->valuesRotationAngle))
@@ -949,7 +949,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = QRectF();
 	boundingRectangle = boundingRectangle.normalized();
 	curveShape = QPainterPath();
-	
+
 	if (lineType != XYCurve::NoLine){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(linePath, linePen));
 		boundingRectangle = boundingRectangle.united(linePath.boundingRect());
@@ -974,8 +974,18 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	}
 
 	if (valuesType != XYCurve::NoValues){
+		QTransform trafo;
+		QPainterPath tempPath;
 	  	for (int i=0; i<valuesPoints.size(); i++){
-		  valuesPath.addText( valuesPoints.at(i), valuesFont, valuesStrings.at(i) );
+			tempPath = QPainterPath();
+			tempPath.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
+
+			trafo.reset();
+			trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
+			trafo.rotate( -valuesRotationAngle );
+			tempPath = trafo.map(tempPath);
+
+			valuesPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, valuesPen));
 		}
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, valuesPen));
 		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
