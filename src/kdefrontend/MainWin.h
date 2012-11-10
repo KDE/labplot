@@ -53,6 +53,7 @@ class SpreadsheetDock;
 class XYCurveDock;
 class WorksheetDock;
 class LabelWidget;
+class ImportFileDialog;
 
 class MainWin : public KXmlGuiWindow{
 	Q_OBJECT
@@ -73,6 +74,7 @@ private:
 	Folder * m_currentFolder;
 	QString m_fileName;
 	QString m_undoViewEmptyLabel;
+	ImportFileDialog* m_importFileDialog;
 
 	KRecentFilesAction* m_recentProjectsAction;
 	KAction* m_saveAction;
@@ -173,6 +175,7 @@ private slots:
 
 	void newFolder();
 	void newSpreadsheet();
+	void newSpreadsheetForImportFileDialog(const QString&);
 	void newWorksheet();
 	void newScript();
 	void newMatrix();

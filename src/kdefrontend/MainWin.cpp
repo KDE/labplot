@@ -765,13 +765,31 @@ void MainWin::printPreview(){
 }
 
 /*!
-	adds a new Table (Spreadsheet) to the project.
+	adds a new Spreadsheet to the project.
 */
-void  MainWin::newSpreadsheet() {
+void MainWin::newSpreadsheet(){
 	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, i18n("Spreadsheet"));
 	this->addAspectToProject(spreadsheet);
 }
 
+/*!
+ * adds a new Spreadsheet to the project.
+ * this slot is only supposed to be called from ImportFileDialog
+ */
+void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
+	if (!m_importFileDialog)
+		return;
+
+	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, name);
+	this->addAspectToProject(spreadsheet);
+
+	AspectTreeModel* model=new AspectTreeModel(m_project, this);
+	m_importFileDialog->updateModel( model );
+
+	//TODO add Matrix here in future.
+	 if ( m_currentAspect->inherits("Spreadsheet") )
+		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
+}
 /*!
 	adds a new Worksheet to the project.
 */
@@ -1024,16 +1042,21 @@ void MainWin::historyDialog(){
   Opens the dialog to import data to the selected spreadsheet
 */
 void MainWin::importFileDialog(){
-	ImportFileDialog* dlg = new ImportFileDialog(this);
+	m_importFileDialog = new ImportFileDialog(this);
+	connect (m_importFileDialog, SIGNAL(newSpreadsheetRequested(const QString&)),
+			 this, SLOT(newSpreadsheetForImportFileDialog(const QString&)));
 	AspectTreeModel* model=new AspectTreeModel(m_project, this);
-	dlg->setModel( model );
+	m_importFileDialog->setModel( model );
 	
 	//TODO add Matrix here in future.
 	 if ( m_currentAspect->inherits("Spreadsheet") )
-		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
+		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
 	
-	if ( dlg->exec() == QDialog::Accepted )
-	  dlg->importToSpreadsheet();
+	if ( m_importFileDialog->exec() == QDialog::Accepted )
+		m_importFileDialog->importToSpreadsheet();
+
+	delete m_importFileDialog;
+	m_importFileDialog = 0;
 }
 
 /*!

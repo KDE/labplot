@@ -43,7 +43,8 @@ class ImportFileDialog: public KDialog {
 	ImportFileDialog(QWidget*);
 	void importToFileDataSource(FileDataSource*) const;
 	void importToSpreadsheet() const;
-	void setModel(QAbstractItemModel * model);
+	void setModel(QAbstractItemModel*);
+	void updateModel(QAbstractItemModel*);
 	void setCurrentIndex(const QModelIndex&);
 	
   private:
@@ -60,6 +61,9 @@ class ImportFileDialog: public KDialog {
 	void toggleOptions();
 	void currentAddToIndexChanged(QModelIndex);
 	void newSpreadsheet();
+
+	signals:
+		void newSpreadsheetRequested(const QString&);
 };
 
 #endif //IMPORTFILEDIALOG_H

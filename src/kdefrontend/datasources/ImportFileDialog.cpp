@@ -34,6 +34,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <kmessagebox.h>
+#include <KInputDialog>
 
 /*!
 	\class ImportFileDialog
@@ -110,6 +111,9 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
   importFileWidget->hideDataSource();
 }
 
+void ImportFileDialog::updateModel(QAbstractItemModel* model){
+	cbAddTo->setModel(model);
+}
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
   cbAddTo->setCurrentModelIndex(index);
@@ -138,7 +142,6 @@ void ImportFileDialog::importToSpreadsheet() const{
   filter->read(fileName, sheet, mode);
   delete filter;
 }
-  
 
 void ImportFileDialog::toggleOptions(){
 	if (importFileWidget->toggleOptions()){
@@ -171,6 +174,20 @@ void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
 }
 
 void ImportFileDialog::newSpreadsheet(){
-	KMessageBox::information(this, i18n("Not implemented yet. Please create a new spreadsheet in the main window."), 
-							 i18n("Not implemented yet"));
+	QString path = importFileWidget->fileName();
+	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+	
+	if (name.isEmpty())
+		name = i18n("new Spreadsheet");
+
+	bool ok;
+	//TODO: how to set the icon in QInputDialog or in KInputDialog?
+	QInputDialog* dlg = new QInputDialog(this);
+	dlg->setWindowIcon( QIcon(KIcon("insert-table")) );
+	name = dlg->getText(this, i18n("add new Spreadsheet"), i18n("Spreadsheet name"), QLineEdit::Normal, name, &ok);
+// 	name = KInputDialog::getText( i18n("add new Spreadsheet"), i18n("Spreadsheet name"), name, &ok);
+	if (ok)
+		emit newSpreadsheetRequested(name);
+
+	delete dlg;
 }
