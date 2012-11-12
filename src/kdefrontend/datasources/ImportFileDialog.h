@@ -32,6 +32,7 @@
 
 #include <QtGui>
 #include <KDialog>
+#include <memory>
 class ImportFileWidget;
 class FileDataSource;
 class TreeViewComboBox;
@@ -43,8 +44,8 @@ class ImportFileDialog: public KDialog {
 	ImportFileDialog(QWidget*);
 	void importToFileDataSource(FileDataSource*) const;
 	void importToSpreadsheet() const;
-	void setModel(QAbstractItemModel*);
-	void updateModel(QAbstractItemModel*);
+	void setModel(std::auto_ptr<QAbstractItemModel>);
+	void updateModel(std::auto_ptr<QAbstractItemModel>);
 	void setCurrentIndex(const QModelIndex&);
 	
   private:
@@ -56,6 +57,7 @@ class ImportFileDialog: public KDialog {
 	QComboBox* cbPosition;
 	QWidget* mainWidget;
     QPushButton* bNewSpreadsheet;
+	std::auto_ptr<QAbstractItemModel> m_model;
 	
   private slots:
 	void toggleOptions();

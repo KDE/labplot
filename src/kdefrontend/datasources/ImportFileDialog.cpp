@@ -68,7 +68,9 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
 /*!
 	creates widgets for the frame "Add-To" and sets the current model in the combobox to \c model.
  */
-void ImportFileDialog::setModel(QAbstractItemModel * model){
+void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
+	m_model = model;
+
   //Frame for the "Add To"-Stuff
   frameAddTo = new QGroupBox(this);
   frameAddTo->setTitle(i18n("Import  to"));
@@ -105,14 +107,15 @@ void ImportFileDialog::setModel(QAbstractItemModel * model){
   hLayout->addWidget( cbPosition);
   
   vLayout->addWidget(frameAddTo);
-  cbAddTo->setModel(model);
+  cbAddTo->setModel(m_model.get());
 
   //hide the data-source related widgets
   importFileWidget->hideDataSource();
 }
 
-void ImportFileDialog::updateModel(QAbstractItemModel* model){
-	cbAddTo->setModel(model);
+void ImportFileDialog::updateModel(std::auto_ptr<QAbstractItemModel> model){
+	m_model = model;
+	cbAddTo->setModel(m_model.get());
 }
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index){

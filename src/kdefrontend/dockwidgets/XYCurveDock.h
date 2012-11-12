@@ -32,8 +32,9 @@
 
 #include <QList>
 
-#include "core/globals.h"
+#include "backend/core/globals.h"
 #include "ui_xycurvedock.h"
+#include <memory>
 
 class QTextEdit;
 class QCheckBox;
@@ -48,13 +49,13 @@ class XYCurveDock: public QWidget{
 	
 public:
 	XYCurveDock(QWidget *parent);
-	void setModel(AspectTreeModel* model);
+	void setModel(std::auto_ptr<AspectTreeModel>);
 	void setCurves(QList<XYCurve*>);
 	
 private:
 	Ui::XYCurveDock ui;
 	QList<XYCurve*> m_curvesList;
-	AspectTreeModel* m_aspectTreeModel;
+	std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
 	bool m_initializing;
 	QStringList dateStrings;
 	QStringList timeStrings;

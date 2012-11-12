@@ -55,6 +55,8 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QToolBar>
 #include <QDebug>
 
+#include <memory>
+
 /*!
   \class GuiObserver
   \brief The GUI observer looks for the selection changes in the main window and shows/hides the correspondings dock widgets, toolbars etc.
@@ -71,9 +73,6 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	mainWindow=mainWin;
 }
 
-
-GuiObserver::~GuiObserver(){
-}
 
 /*!
   called on selection changes in the project explorer.
@@ -201,8 +200,7 @@ GuiObserver::~GuiObserver(){
 	  mainWindow->stackedWidget->addWidget(mainWindow->lineSymbolCurveDock);
 	}
 	
-	//TODO who deletes the new model?
-	AspectTreeModel* model=new AspectTreeModel(mainWindow->m_project);
+	std::auto_ptr<AspectTreeModel> model( new AspectTreeModel(mainWindow->m_project) );
  	mainWindow->lineSymbolCurveDock->setModel( model );
 	
 	QList<XYCurve*> list;

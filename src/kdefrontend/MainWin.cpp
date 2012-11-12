@@ -63,6 +63,8 @@
 #include <KDebug>
 #include <KFilterDev>
 
+#include <memory>
+
  /*!
 	\class MainWin
 	\brief Main application window.
@@ -783,7 +785,7 @@ void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
 	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, name);
 	this->addAspectToProject(spreadsheet);
 
-	AspectTreeModel* model=new AspectTreeModel(m_project, this);
+	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
 	m_importFileDialog->updateModel( model );
 
 	//TODO add Matrix here in future.
@@ -1045,7 +1047,7 @@ void MainWin::importFileDialog(){
 	m_importFileDialog = new ImportFileDialog(this);
 	connect (m_importFileDialog, SIGNAL(newSpreadsheetRequested(const QString&)),
 			 this, SLOT(newSpreadsheetForImportFileDialog(const QString&)));
-	AspectTreeModel* model=new AspectTreeModel(m_project, this);
+	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
 	m_importFileDialog->setModel( model );
 	
 	//TODO add Matrix here in future.

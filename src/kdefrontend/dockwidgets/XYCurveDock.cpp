@@ -310,7 +310,9 @@ void XYCurveDock::init(){
 	ui.cbValuesPosition->addItems(XYCurve::valuesPositionStrings());
 }
 
-void XYCurveDock::setModel(AspectTreeModel* model){
+void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
+	m_aspectTreeModel=model;
+
 	QList<const char *>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	cbXColumn->setTopLevelClasses(list);
@@ -319,14 +321,13 @@ void XYCurveDock::setModel(AspectTreeModel* model){
 	
  	list.clear();
 	list<<"Column";
-	model->setSelectableAspects(list);
+	m_aspectTreeModel->setSelectableAspects(list);
 	
 	m_initializing=true;
-  	cbXColumn->setModel(model);
-	cbYColumn->setModel(model);
-	cbValuesColumn->setModel(model);
+  	cbXColumn->setModel(m_aspectTreeModel.get());
+	cbYColumn->setModel(m_aspectTreeModel.get());
+	cbValuesColumn->setModel(m_aspectTreeModel.get());
 	
-	m_aspectTreeModel=model;
 	m_initializing=false;
 }
 
