@@ -28,8 +28,8 @@ Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
 ***************************************************************************/
 #include "AsciiFilter.h"
 #include "AsciiFilterPrivate.h"
-#include "datasources/FileDataSource.h"
-#include "core/column/Column.h"
+#include "backend/datasources/FileDataSource.h"
+#include "backend/core/column/Column.h"
 
 #include <QApplication>
 #include <QFile>
@@ -461,7 +461,11 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 
 		// TODO : read strings (comments) or datetime too
 		for ( int n=startColumn; n<=endColumn; n++ ){
-			dataSource->child<Column>(columnOffset+n-startColumn)->setValueAt(currentRow, lineStringList.at(n).toDouble());
+			Column* column = dataSource->child<Column>(columnOffset+n-startColumn);
+			if (n<lineStringList.size())
+				column->setValueAt(currentRow, lineStringList.at(n).toDouble());
+			else
+				column->asStringColumn()->setTextAt(currentRow, QString());
 		}
 		
 		progressDialog.setValue( currentRow );
