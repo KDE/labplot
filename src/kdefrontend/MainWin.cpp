@@ -83,6 +83,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	m_currentAspect(0),
 	m_currentFolder(0),
 	m_fileName(filename),
+	m_suppressCurrentSubWindowChangedEvent(false),
 	m_visibilityMenu(0),
 	m_newMenu(0),
 	axisDock(0),
@@ -853,7 +854,8 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 	}
 
 	updateGUI();
-	m_projectExplorer->setCurrentAspect(view->part());
+	if (!m_suppressCurrentSubWindowChangedEvent)
+		m_projectExplorer->setCurrentAspect(view->part());
 }
 
 void MainWin::handleAspectAdded(const AbstractAspect *aspect){
@@ -901,18 +903,34 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
 	if (!aspect)
 	  aspect = m_project; // should never happen, just in case
-	  
+
+	m_suppressCurrentSubWindowChangedEvent = true;
 	if(aspect->folder() != m_currentFolder)	{
 		m_currentFolder = aspect->folder();
 		updateMdiWindowVisibility();
 	}
 
 	m_currentAspect = aspect;
-	AbstractPart * part = qobject_cast<AbstractPart*>(aspect);
-	if (part)
-		m_mdiArea->setActiveSubWindow(part->mdiSubWindow());
+
+	//activate the corresponding MDI sub window for the current aspect
+	activateSubWindowForAspect(aspect);
+	m_suppressCurrentSubWindowChangedEvent = false;
 	
 	kDebug()<<"current aspect  "<<m_currentAspect->name()<<endl;
+}
+
+void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
+	const AbstractPart* part = qobject_cast<const AbstractPart*>(aspect);
+	if (part) {
+		m_mdiArea->setActiveSubWindow(part->mdiSubWindow());
+		return;
+	} else {
+		AbstractAspect* parent = aspect->parentAspect();
+		if (parent)
+			activateSubWindowForAspect(parent);
+		else
+			return;
+	}
 }
 
 void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to){

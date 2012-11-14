@@ -75,7 +75,8 @@ private:
 	QString m_fileName;
 	QString m_undoViewEmptyLabel;
 	ImportFileDialog* m_importFileDialog;
-
+	bool m_suppressCurrentSubWindowChangedEvent;
+	
 	KRecentFilesAction* m_recentProjectsAction;
 	KAction* m_saveAction;
 	KAction* m_saveAsAction;
@@ -144,6 +145,7 @@ private:
 	bool warnModified();
 	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	void addAspectToProject(AbstractAspect* aspect);
+	void activateSubWindowForAspect(const AbstractAspect*) const;
 
 	Spreadsheet* activeSpreadsheet() const;
 	Worksheet* activeWorksheet() const;
