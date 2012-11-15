@@ -799,21 +799,20 @@ void WorksheetView::selectionChanged(){
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area) const{
 	QRectF rect;
 
+	//determine the rectangular to print
 	if (area==WorksheetView::ExportBoundingBox){
-//TODO QRectF rect =scene()->itemsBoundingRect();
-		rect =scene()->sceneRect();
+		rect =scene()->itemsBoundingRect();
 	}else if (area==WorksheetView::ExportSelection){
-		//TODO  	QRectF rect = scene()->selectionArea().boundingRect();
-		
-		// 	QList<QGraphicsItem *> items = scene()->selectedItems();
-		// 	QGraphicsItem* item = items.first();
-		// 	QRectF rect = item->boundingRect();
-		
-		rect =scene()->sceneRect();
+		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
+		foreach(QGraphicsItem* item, m_selectedItems) {
+			QRectF r = item->mapToScene(item->boundingRect()).boundingRect();
+			rect = rect.united(r);
+		}
 	}else{
 		rect =scene()->sceneRect();
 	}
 
+	//print
 	if (format==WorksheetView::Pdf || format==WorksheetView::Eps){
 		QPrinter printer(QPrinter::HighResolution);
 		if (format==WorksheetView::Pdf)
@@ -829,14 +828,9 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 		QPainter painter(&printer);
 		painter. setRenderHint(QPainter::Antialiasing);
-		
-		double xscale = printer.pageRect().width()/double(rect.width());
-		double yscale = printer.pageRect().height()/double(rect.height());
-		double scale = qMin(xscale, yscale);
-		painter.scale(scale, scale);
 
 		painter.begin(&printer);
-		scene()->render(&painter, rect);
+		scene()->render(&painter, QRectF(), rect);
 		painter.end();
 	}else if (format==WorksheetView::Svg){
 		QSvgGenerator generator;
@@ -846,7 +840,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 		QPainter painter;
 		painter.begin(&generator);
-		scene()->render(&painter, rect);
+		scene()->render(&painter, QRectF(), rect);
 		painter.end();
 	}else{
 		//PNG
@@ -859,25 +853,17 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		QPainter painter;
 		painter.begin(&image);
 		painter.scale(QApplication::desktop()->physicalDpiX()/25.4,QApplication::desktop()->physicalDpiY()/25.4);
-		scene()->render(&painter, rect);
+		scene()->render(&painter, QRectF(), rect);
 		painter.end();
 
-		 image.save(path, "png");
+		image.save(path, "png");
 	}
 }
 
 void WorksheetView::print(QPrinter* printer) const{
-	QRectF rect =scene()->sceneRect();
-		
 	QPainter painter(printer);
-	painter. setRenderHint(QPainter::Antialiasing);
-	
-	double xscale = printer->pageRect().width()/double(rect.width());
-	double yscale = printer->pageRect().height()/double(rect.height());
-	double scale = qMin(xscale, yscale);
-	painter.scale(scale, scale);
-
-	scene()->render(&painter, rect);
+	painter.setRenderHint(QPainter::Antialiasing);
+	scene()->render(&painter);
 }
 
 void WorksheetView::updateBackground(){
