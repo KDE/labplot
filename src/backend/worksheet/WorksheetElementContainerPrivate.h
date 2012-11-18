@@ -41,11 +41,14 @@ class WorksheetElementContainerPrivate:  public QGraphicsItem{
 
 		virtual QRectF boundingRect() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+		virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
+		virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent * event);
 
 		WorksheetElementContainer *q;
 		void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
 		QRectF rect;
+		bool m_hovered;
 
 signals:
     void selectedChange(QGraphicsItem *item);

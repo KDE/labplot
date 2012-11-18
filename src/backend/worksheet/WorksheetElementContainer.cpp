@@ -169,17 +169,27 @@ void WorksheetElementContainer::childDeselected(){
 //################################################################
 WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
 	: q(owner) {
+	this->setAcceptHoverEvents(true);
 }
 
- void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
-     scene()->clearSelection();
-     setSelected(true);
-     QMenu* menu = q->createContextMenu();
-     menu->exec(event->screenPos());
- }
- 
+void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
+	scene()->clearSelection();
+	setSelected(true);
+	QMenu* menu = q->createContextMenu();
+	menu->exec(event->screenPos());
+}
+void WorksheetElementContainerPrivate::hoverLeaveEvent (QGraphicsSceneHoverEvent*) {
+	m_hovered = false;
+	update();
+}
+
+void WorksheetElementContainerPrivate::hoverEnterEvent ( QGraphicsSceneHoverEvent * ) {
+	m_hovered = true;
+	update();
+}
+
 // Inherited from QGraphicsItem
- QRectF WorksheetElementContainerPrivate::boundingRect() const {
+QRectF WorksheetElementContainerPrivate::boundingRect() const {
 	QRectF rect;
 	QList<AbstractWorksheetElement *> childList = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(const AbstractWorksheetElement *elem, childList)
@@ -195,10 +205,16 @@ void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOpti
 	if (!isVisible())
 		return;
 
+	if (m_hovered && !isSelected()){
+		QPainterPath path = shape();
+		painter->setPen(QPen(QColor(128,179,255), 10, Qt::SolidLine));
+		painter->drawPath(path);
+	}
+	
 	//TODO remove this later
 	if (isSelected()){
 		QPainterPath path = shape();  
-		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->setPen(QPen(Qt::blue, 10, Qt::SolidLine));
 		painter->drawPath(path);
   }
 }
