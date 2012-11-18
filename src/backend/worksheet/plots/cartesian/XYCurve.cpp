@@ -254,8 +254,31 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 //TODO documentation for value-functions
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
+// BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
+// BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
+const AbstractColumn* XYCurve::xColumn() const {
+	return d_ptr->xColumn;
+}
+
+const AbstractColumn* XYCurve::yColumn() const {
+	return d_ptr->yColumn;
+}
+
+QString& XYCurve::xColumnName() const {
+	return d_ptr->xColumnName;
+}
+
+QString& XYCurve::yColumnName() const {
+	return d_ptr->yColumnName;
+}
+
+QString& XYCurve::xColumnParentName() const {
+	return d_ptr->xColumnParentName;
+}
+
+QString& XYCurve::yColumnParentName() const {
+	return d_ptr->yColumnParentName;
+}
 
 //line
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
@@ -292,22 +315,30 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 /* ============================ setter methods and undo commands ================= */
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetXColumn, const AbstractColumn *, xColumn, retransform)
-void XYCurve::setXColumn(const AbstractColumn *xColumn) {
+void XYCurve::setXColumn(const AbstractColumn *xColumn, bool undo) {
 	Q_D(XYCurve);
 	if (xColumn != d->xColumn){
-		exec(new XYCurveSetXColumnCmd(d, xColumn, tr("%1: assign x values")));
-		emit xDataChanged();
+		if (undo) {
+			exec(new XYCurveSetXColumnCmd(d, xColumn, tr("%1: assign x values")));
+			emit xDataChanged();
+		} else {
+			d->xColumn = xColumn;
+		}
 		connect(xColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
 		//TODO: add disconnect in the undo-function
 	}
 }
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetYColumn, const AbstractColumn *, yColumn, retransform)
-void XYCurve::setYColumn(const AbstractColumn *yColumn) {
+void XYCurve::setYColumn(const AbstractColumn *yColumn, bool undo) {
 	Q_D(XYCurve);
 	if (yColumn != d->yColumn){
-		exec(new XYCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
-		emit yDataChanged();
+		if (undo) {
+			exec(new XYCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
+			emit yDataChanged();
+		} else {
+			d->yColumn = yColumn;
+		}
 		connect(yColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
 		//TODO: add disconnect in the undo-function
 	}
@@ -1105,8 +1136,17 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
     writeCommentElement( writer );
 
 	//general
-	//TODO xColumn, yColumn
-	
+	writer->writeStartElement( "general" );
+	if (d->xColumn){
+		writer->writeAttribute( "xColumn", d->xColumn->name() );
+		writer->writeAttribute( "xColumnParent", d->xColumn->parentAspect()->name() );
+	}
+	if (d->yColumn){
+		writer->writeAttribute( "yColumn", d->yColumn->name() );
+		writer->writeAttribute( "yColumnParent", d->yColumn->parentAspect()->name() );
+	}
+	writer->writeEndElement();
+
 	//Line
     writer->writeStartElement( "lines" );
 	writer->writeAttribute( "type", QString::number(d->lineType) );
@@ -1204,7 +1244,33 @@ bool XYCurve::load(XmlStreamReader* reader){
         if (reader->name() == "comment"){
             if (!readCommentElement(reader)) return false;
 		}else if (reader->name() == "general"){
-			//TODO
+			attribs = reader->attributes();
+
+			str = attribs.value("xColumn").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'xColumn'"));
+            else
+                d->xColumnName = str;
+
+			str = attribs.value("yColumn").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'yColumn'"));
+            else
+                d->xColumnName = str;
+
+			str = attribs.value("xColumnParent").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'xColumnParent'"));
+            else
+                d->xColumnParentName = str;
+
+			str = attribs.value("yColumnParent").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'yColumnParent'"));
+            else
+                d->yColumnParentName = str;
+			
+			//the actual pointers to the x- and y-columns are restored in Project::load()
 		}else if (reader->name() == "lines"){	
 			attribs = reader->attributes();
 	

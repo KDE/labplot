@@ -61,9 +61,15 @@ class XYCurve: public AbstractWorksheetElement {
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
-		
+		void setXColumn(const AbstractColumn*,  const bool=true);
+		const AbstractColumn* xColumn() const;
+		void setYColumn(const AbstractColumn*,  const bool=true);
+		const AbstractColumn* yColumn() const;
+		QString& xColumnName() const;
+		QString& yColumnName() const;
+		QString& xColumnParentName() const;
+		QString& yColumnParentName() const;
+
 		BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
 		BASIC_D_ACCESSOR_DECL(int, lineInterpolationPointsCount, LineInterpolationPointsCount)
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)

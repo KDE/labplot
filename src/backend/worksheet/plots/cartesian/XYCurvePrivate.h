@@ -55,6 +55,10 @@ class XYCurvePrivate: public QGraphicsItem {
 		
 		const AbstractColumn *xColumn;
 		const AbstractColumn *yColumn;
+		QString xColumnName;
+		QString yColumnName;
+		QString xColumnParentName;
+		QString yColumnParentName;
 		
 		XYCurve::LineType lineType;
 		int lineInterpolationPointsCount;
