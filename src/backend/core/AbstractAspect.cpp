@@ -439,9 +439,24 @@ void AbstractAspect::reparent(AbstractAspect * new_parent, int new_index)
 	endMacro();
 }
 
+QList<AbstractAspect*> AbstractAspect::children(const char* className, const ChildIndexFlags &flags) {
+	QList<AbstractAspect*> result;
+	foreach (AbstractAspect * child, rawChildren()) {
+		if (flags & IncludeHidden || !child->hidden()) {
+			if ( child->inherits(className) || !(flags & Compress)) {
+				result << child;
+				if (flags & Recursive){
+					result << child->children(className, flags);
+				}
+			}
+		}
+	}
+	return result;
+}
+
 const QList< AbstractAspect* > AbstractAspect::rawChildren() const
 {
-    return m_aspect_private->m_children;
+	return m_aspect_private->m_children;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

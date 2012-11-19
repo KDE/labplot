@@ -3,7 +3,7 @@
     Project              : SciDAVis
     Description          : Represents a SciDAVis project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses)
@@ -28,17 +28,21 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "core/Project.h"
-#include "core/ScriptingEngineManager.h"
-#include "core/interfaces.h"
-#include "core/globals.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/core/Project.h"
+#include "backend/core/ScriptingEngineManager.h"
+#include "backend/core/interfaces.h"
+#include "backend/core/globals.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include "core/ProjectWindow.h"
-#include "core/ProjectConfigPage.h"
+#include "backedn/core/ProjectWindow.h"
+#include "backedn/core/ProjectConfigPage.h"
 #else
 #include "kdefrontend/MainWin.h"
 #endif
+
 #include <QUndoStack>
 #include <QString>
 #include <QKeySequence>
@@ -49,8 +53,6 @@
 #include <QXmlStreamWriter>
 #include <QDateTime>
 #include <QtDebug>
-
-#define NOT_IMPL (QMessageBox::information(0, "info", "not yet implemented"))
 
 /**
  * \class Project
@@ -312,6 +314,46 @@ bool Project::load(XmlStreamReader * reader)
 					}
 				}
 			}
+
+			//everything is read now.
+			//restore the pointer to the data sets (columns) in xy-curves etc.
+			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
+			if (curves.size()!=0) {
+				QList<AbstractAspect*> spreadsheets = children("Spreadsheet", AbstractAspect::Recursive);
+				XYCurve* curve;
+				Spreadsheet* sheet;
+				QString name;
+				foreach (AbstractAspect* aspect, curves) {
+					curve = dynamic_cast<XYCurve*>(aspect);
+					if (!curve) continue;
+
+					//set the x-column
+					if (!curve->xColumnName().isEmpty()) {
+						name = curve->xColumnParentName();
+						foreach (AbstractAspect* aspect, spreadsheets) {
+							sheet = dynamic_cast<Spreadsheet*>(aspect);
+							if (!sheet) continue;
+							if (sheet->name() == name) {
+								curve->setXColumn(sheet->column(curve->xColumnName()));
+								break;
+							}
+						}
+					}
+
+					//set the y-column
+					if (!curve->yColumnName().isEmpty()) {
+						name = curve->yColumnParentName();
+						foreach (AbstractAspect* aspect, spreadsheets) {
+							sheet = dynamic_cast<Spreadsheet*>(aspect);
+							if (!sheet) continue;							
+							if (sheet->name() == name) {
+								curve->setYColumn(sheet->column(curve->yColumnName()));
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 		else // no project element
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -384,4 +426,3 @@ void Project::staticInit()
 	Project::setGlobalDefault("auto_search_updates", false);
 	Project::setGlobalDefault("locale_use_group_separator", false);
 }
-

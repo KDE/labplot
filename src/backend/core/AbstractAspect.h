@@ -32,6 +32,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QDebug>
 
 class Project;
 class QUndoStack;
@@ -89,6 +90,9 @@ class AbstractAspect : public QObject
 		void addChild(AbstractAspect* child);
 		void insertChildBefore(AbstractAspect *child, AbstractAspect *before);
 		void removeChild(AbstractAspect* child);
+		QList<AbstractAspect*> children(const char* className, const ChildIndexFlags &flags=0);
+
+		//TODO: recursive flag doesn't work! How should it work with templates?!?
 		template < class T > QList<T*> children(const ChildIndexFlags &flags=0) const {
 			QList<T*> result;
 			foreach (AbstractAspect * child, rawChildren()) {

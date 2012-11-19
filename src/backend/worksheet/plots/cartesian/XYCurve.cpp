@@ -254,15 +254,8 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 //TODO documentation for value-functions
 
 /* ============================ getter methods ================= */
-// BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
-// BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
-const AbstractColumn* XYCurve::xColumn() const {
-	return d_ptr->xColumn;
-}
-
-const AbstractColumn* XYCurve::yColumn() const {
-	return d_ptr->yColumn;
-}
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
 
 QString& XYCurve::xColumnName() const {
 	return d_ptr->xColumnName;
@@ -315,30 +308,22 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 /* ============================ setter methods and undo commands ================= */
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetXColumn, const AbstractColumn *, xColumn, retransform)
-void XYCurve::setXColumn(const AbstractColumn *xColumn, bool undo) {
+void XYCurve::setXColumn(const AbstractColumn *xColumn) {
 	Q_D(XYCurve);
-	if (xColumn != d->xColumn){
-		if (undo) {
-			exec(new XYCurveSetXColumnCmd(d, xColumn, tr("%1: assign x values")));
-			emit xDataChanged();
-		} else {
-			d->xColumn = xColumn;
-		}
+	if (xColumn != d->xColumn) {
+		exec(new XYCurveSetXColumnCmd(d, xColumn, tr("%1: assign x values")));
+		emit xDataChanged();
 		connect(xColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
 		//TODO: add disconnect in the undo-function
 	}
 }
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetYColumn, const AbstractColumn *, yColumn, retransform)
-void XYCurve::setYColumn(const AbstractColumn *yColumn, bool undo) {
+void XYCurve::setYColumn(const AbstractColumn *yColumn) {
 	Q_D(XYCurve);
-	if (yColumn != d->yColumn){
-		if (undo) {
-			exec(new XYCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
-			emit yDataChanged();
-		} else {
-			d->yColumn = yColumn;
-		}
+	if (yColumn != d->yColumn) {
+		exec(new XYCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
+		emit yDataChanged();
 		connect(yColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
 		//TODO: add disconnect in the undo-function
 	}
@@ -1256,7 +1241,7 @@ bool XYCurve::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'yColumn'"));
             else
-                d->xColumnName = str;
+                d->yColumnName = str;
 
 			str = attribs.value("xColumnParent").toString();
             if(str.isEmpty())

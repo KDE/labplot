@@ -63,8 +63,6 @@
 #include <KDebug>
 #include <KFilterDev>
 
-#include <memory>
-
  /*!
 	\class MainWin
 	\brief Main application window.

@@ -935,10 +935,14 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 	//coordinate system and padding
 // 	m_coordinateSystem->save(writer); //TODO save scales
 	writer->writeStartElement( "coordinateSystem" );
+	writer->writeAttribute( "autoScaleX", QString::number(d->autoScaleX) );
+	writer->writeAttribute( "autoScaleY", QString::number(d->autoScaleY) );
     writer->writeAttribute( "xMin", QString::number(d->xMin) );
 	writer->writeAttribute( "xMax", QString::number(d->xMax) );
 	writer->writeAttribute( "yMin", QString::number(d->yMin) );
 	writer->writeAttribute( "yMax", QString::number(d->yMax) );
+	writer->writeAttribute( "xScale", QString::number(d->xScale) );
+	writer->writeAttribute( "yScale", QString::number(d->yScale) );
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
 	writer->writeEndElement();
@@ -1009,31 +1013,63 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 		}else if(reader->name() == "coordinateSystem"){
 // 			m_coordinateSystem->load(reader); //TODO read scales
             attribs = reader->attributes();
-	
-            str = attribs.value("xMin").toString();
+
+			str = attribs.value("autoScaleX").toString();
             if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'xMin'"));
+                reader->raiseWarning(attributeWarning.arg("'autoScaleX'"));
             else
+                d->autoScaleX = bool(str.toInt());
+
+			str = attribs.value("autoScaleY").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'autoScaleY'"));
+            else
+                d->autoScaleY = bool(str.toInt());
+
+            str = attribs.value("xMin").toString();
+            if(str.isEmpty()) {
+                reader->raiseWarning(attributeWarning.arg("'xMin'"));
+			} else {
                 d->xMin = str.toDouble();
+				d->xMinPrev = d->xMin;
+			}
 
             str = attribs.value("xMax").toString();
-            if(str.isEmpty())
+            if(str.isEmpty()) {
                 reader->raiseWarning(attributeWarning.arg("'xMax'"));
-            else
+			} else {
                 d->xMax = str.toDouble();
-			
+				d->xMaxPrev = d->xMax;
+			}
+
             str = attribs.value("yMin").toString();
-            if(str.isEmpty())
+            if(str.isEmpty()) {
                 reader->raiseWarning(attributeWarning.arg("'yMin'"));
-            else
+			} else {
                 d->yMin = str.toDouble();
-			
+				d->yMinPrev = d->yMin;
+			}
+
             str = attribs.value("yMax").toString();
-            if(str.isEmpty())
+            if(str.isEmpty()) {
                 reader->raiseWarning(attributeWarning.arg("'yMax'"));
-            else
+			} else {
                 d->yMax = str.toDouble();
-			
+				d->yMaxPrev = d->yMax;
+			}
+
+			str = attribs.value("xScale").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'xScale'"));
+            else
+                d->xScale = CartesianPlot::Scale(str.toInt());
+
+			str = attribs.value("yScale").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'yScale'"));
+            else
+                d->yScale = CartesianPlot::Scale(str.toInt());
+
             str = attribs.value("horizontalPadding").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
