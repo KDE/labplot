@@ -308,7 +308,8 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 /* ============================ setter methods and undo commands ================= */
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetXColumn, const AbstractColumn *, xColumn, retransform)
-void XYCurve::setXColumn(const AbstractColumn *xColumn) {
+void XYCurve::setXColumn(const AbstractColumn *xColumn, bool enable) {
+	//TODO: use parameter enable
 	Q_D(XYCurve);
 	if (xColumn != d->xColumn) {
 		exec(new XYCurveSetXColumnCmd(d, xColumn, tr("%1: assign x values")));
@@ -319,7 +320,8 @@ void XYCurve::setXColumn(const AbstractColumn *xColumn) {
 }
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetYColumn, const AbstractColumn *, yColumn, retransform)
-void XYCurve::setYColumn(const AbstractColumn *yColumn) {
+void XYCurve::setYColumn(const AbstractColumn *yColumn, bool enable) {
+	//TODO: use parameter enable
 	Q_D(XYCurve);
 	if (yColumn != d->yColumn) {
 		exec(new XYCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
