@@ -367,6 +367,10 @@ void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect){
 	}else{
 		emit indexSelected(modelIndexOfAspect(aspect));
 	}
+
+	//deselect the root item when one of the children was selected in the view
+	//in order to avoid multiple selection with the project item (if selected) in the project explorer
+	emit indexDeselected(modelIndexOfAspect(m_root));
 }
 
 void AspectTreeModel::aspectDeselectedInView(const AbstractAspect* aspect){
