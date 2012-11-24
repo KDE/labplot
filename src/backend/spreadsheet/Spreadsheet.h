@@ -96,9 +96,6 @@ class Spreadsheet : public AbstractDataSource{
 		void requestProjectContextMenu(QMenu *menu);
 		void columnSelected(int);
 		void columnDeselected(int);
-		
-	protected:
-		mutable QWidget *m_view;
 };
 
 #endif

@@ -143,7 +143,6 @@ private:
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	void handleAspectAddedInternal(const AbstractAspect *aspect);
 	void addAspectToProject(AbstractAspect* aspect);
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 
@@ -187,7 +186,6 @@ private slots:
 	void createContextMenu(QMenu * menu) const;
 	void createFolderContextMenu(const Folder * folder, QMenu * menu) const;
 	
-	void handleAspectAdded(const AbstractAspect *aspect);
 	void handleAspectAboutToBeRemoved(const AbstractAspect *aspect);
 	void handleAspectRemoved(const AbstractAspect *parent);
 	void handleCurrentAspectChanged(AbstractAspect *aspect);
@@ -195,7 +193,7 @@ private slots:
 	void handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
 	
 	void setMdiWindowVisibility(QAction*);
-	void updateMdiWindowVisibility();
+	void updateMdiWindowVisibility() const;
 	void toggleDockWidget(QAction*) const;
 };
 

@@ -552,8 +552,6 @@ bool MainWin::newProject(){
 	m_propertiesDock->show();
 	updateGUI();
 
-	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect *)),
-		this, SLOT(handleAspectAdded(const AbstractAspect *)));
 	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
 		this, SLOT(handleAspectRemoved(const AbstractAspect *)));
 	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)),
@@ -649,8 +647,6 @@ bool MainWin::closeProject(){
 
 	m_mdiArea->closeAllSubWindows();
 	delete m_aspectTreeModel;
-// 	m_project->undoStack()->clear();
-	m_project->disconnect();
 	delete m_project;
 
 	m_projectExplorerDock->hide();
@@ -746,10 +742,6 @@ void MainWin::printPreview(){
 	Worksheet* w=this->activeWorksheet();
 	if (w!=0){ //worksheet
 		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
-		if (view)
-			qDebug()<<" view gefunden";
-		else
-			qDebug()<<" view nicht gefunden";
 		QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
 		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
 		dialog->exec();
@@ -856,29 +848,6 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 		m_projectExplorer->setCurrentAspect(view->part());
 }
 
-void MainWin::handleAspectAdded(const AbstractAspect *aspect){
-	handleAspectAddedInternal(aspect);
-	updateMdiWindowVisibility();
-
-	//TODO: don't call this function here, since it makes the part (aspect corresponding to the subwindow )
-	//current in the project explorer. This prevents the selection of the newly added aspect in project explorer.
-// 	handleCurrentSubWindowChanged(m_mdiArea->currentSubWindow());
-}
-
-void MainWin::handleAspectAddedInternal(const AbstractAspect * aspect){
-	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>())
-		handleAspectAddedInternal(child);
-
-	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
-	if (part){
-		PartMdiView *win = part->mdiSubWindow();
-		Q_ASSERT(win);
-		m_mdiArea->addSubWindow(win);
-		connect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
-				this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
-	}
-}
-
 void MainWin::handleAspectRemoved(const AbstractAspect *parent){
 	m_projectExplorer->setCurrentAspect(parent);
 }
@@ -913,22 +882,25 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
 	//activate the corresponding MDI sub window for the current aspect
 	activateSubWindowForAspect(aspect);
 	m_suppressCurrentSubWindowChangedEvent = false;
-	
-	kDebug()<<"current aspect  "<<m_currentAspect->name()<<endl;
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	const AbstractPart* part = qobject_cast<const AbstractPart*>(aspect);
 	if (part) {
-		m_mdiArea->setActiveSubWindow(part->mdiSubWindow());
-		return;
+		PartMdiView* win = part->mdiSubWindow();
+		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
+			m_mdiArea->addSubWindow(win);
+			connect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
+				this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
+		}
+		win->show();
+		m_mdiArea->setActiveSubWindow(win);
 	} else {
 		AbstractAspect* parent = aspect->parentAspect();
 		if (parent)
 			activateSubWindowForAspect(parent);
-		else
-			return;
 	}
+	return;
 }
 
 void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to){
@@ -955,8 +927,6 @@ void MainWin::newFolder() {
 	Folder * folder = new Folder(tr("Folder %1").arg(1));
 	this->addAspectToProject(folder);
 }
-
-
 
 /*!
 	this is called on a right click on the root folder in the project explorer
@@ -993,7 +963,7 @@ void MainWin::redo(){
 /*!
 	Shows/hides mdi sub-windows depending on the currend visibility policy.
 */
-void MainWin::updateMdiWindowVisibility(){
+void MainWin::updateMdiWindowVisibility() const{
 	QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
 	PartMdiView * part_view;
 	switch(m_project->mdiWindowVisibility()){
@@ -1007,6 +977,7 @@ void MainWin::updateMdiWindowVisibility(){
 		case Project::folderOnly:
 			foreach(QMdiSubWindow *window, windows){
 				part_view = qobject_cast<PartMdiView *>(window);
+				qDebug()<<"name "<<part_view->part()->name();
 				Q_ASSERT(part_view);
 				if(part_view->part()->folder() == m_currentFolder)
 					part_view->show();
@@ -1098,19 +1069,6 @@ void MainWin::exportDialog(){
 		//TODO
 	}
 }
-
-// bool MainWin::hasSheet(const QModelIndex & index) const{
-// 	int rows = index.model()->rowCount(index);
-// 	AbstractAspect *aspect;
-// 	for (int i=0; i<rows; i++) {
-// 		QModelIndex currentChild = index.child(i, 0);
-// 		hasSheet(currentChild);
-// 		aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
-// 		if (aspect->inherits("Worksheet") || aspect->inherits("Spreadsheet"))
-// 				return true;
-// 	}
-// 	return false;
-// }
 
 /*!
 	adds a new file data source to the current project.

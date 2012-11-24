@@ -43,7 +43,6 @@ class WorksheetPrivate{
 		Worksheet * const q;
 		QGraphicsScene* m_scene;
 		QRectF swapPageRect(const QRectF& rect);
-		mutable QWidget *m_view;
 
 		QString name() const;
 		void update();

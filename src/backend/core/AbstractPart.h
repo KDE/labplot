@@ -4,6 +4,7 @@
     Description          : Base class of Aspects with MDI windows as views.
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email address)
 
  ***************************************************************************/
@@ -34,14 +35,14 @@
 class PartMdiView;
 class QMenu;
 
-class AbstractPart : public AbstractAspect
-{
+class AbstractPart : public AbstractAspect {
 	Q_OBJECT
 
 	public:
-		AbstractPart(const QString &name) : AbstractAspect(name), m_mdi_window(0) {}
+		AbstractPart(const QString &name);
 		virtual ~AbstractPart() {}
 		virtual QWidget *view() const = 0;
+		void deleteView() const;
 		PartMdiView * mdiSubWindow() const;
 		virtual QMenu * createContextMenu();
 		virtual bool fillProjectMenu(QMenu * menu);
@@ -52,7 +53,10 @@ class AbstractPart : public AbstractAspect
 		virtual void editPaste();
 
 	private:
-		mutable PartMdiView *m_mdi_window;
+		mutable PartMdiView* m_mdiWindow;
+
+	protected:
+		mutable QWidget* m_view;
 };
 
 #endif // ifndef ABSTRACT_PART_H

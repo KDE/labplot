@@ -74,8 +74,6 @@ Spreadsheet::Spreadsheet(AbstractScriptingEngine *engine, int rows, int columns,
 	}
 	setRowCount(rows);
 
-	m_view = NULL;
-	
 	init();
 }
 

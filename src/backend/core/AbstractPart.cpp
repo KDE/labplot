@@ -4,6 +4,7 @@
     Description          : Base class of Aspects with MDI windows as views.
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Knut Franke (knut.franke*gmx.de)
+	Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email address)
 
  ***************************************************************************/
@@ -34,11 +35,11 @@
 
 /**
  * \class AbstractPart
- * \brief Base class of Aspects with MDI windows as views.
- *
- * SciDAVis's Parts are somewhat similar to KDE's KParts in that they are independent application
- * components running on top of a kernel (a bit like KOffice's shell).
+ * \brief Base class of Aspects with MDI windows as views (AspectParts).
  */
+AbstractPart::AbstractPart(const QString &name) : AbstractAspect(name),
+	m_mdiWindow(0), m_view(0) {
+}
 
 /**
  * \fn QWidget *AbstractPart::view() const
@@ -58,9 +59,17 @@
  */
 PartMdiView* AbstractPart::mdiSubWindow() const
 {
-	if (!m_mdi_window)
-		m_mdi_window = new PartMdiView(const_cast<AbstractPart*>(this), view());
-	return m_mdi_window;
+	if (!m_mdiWindow)
+		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this), view());
+	return m_mdiWindow;
+}
+
+void AbstractPart::deleteView() const {
+	if (m_view) {
+		delete m_view;
+		m_view = 0;
+		m_mdiWindow = 0;
+	}
 }
 
 /**
@@ -70,21 +79,21 @@ QMenu* AbstractPart::createContextMenu(){
 	QMenu * menu = AbstractAspect::createContextMenu();
 	Q_ASSERT(menu);
 	menu->addSeparator();
-	const QStyle *widget_style = m_mdi_window->style();
+	const QStyle *widget_style = m_mdiWindow->style();
    	
 	QAction *action_temp;
-	if(m_mdi_window->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized))	{
-		action_temp = menu->addAction(tr("&Restore"), m_mdi_window, SLOT(showNormal()));
+	if(m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized))	{
+		action_temp = menu->addAction(tr("&Restore"), m_mdiWindow, SLOT(showNormal()));
 		action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
 	}
 	
-	if(!(m_mdi_window->windowState() & Qt::WindowMinimized))	{
-		action_temp = menu->addAction(tr("Mi&nimize"), m_mdi_window, SLOT(showMinimized()));
+	if(!(m_mdiWindow->windowState() & Qt::WindowMinimized))	{
+		action_temp = menu->addAction(tr("Mi&nimize"), m_mdiWindow, SLOT(showMinimized()));
 		action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMinButton));
 	}
 	
-	if(!(m_mdi_window->windowState() & Qt::WindowMaximized))	{
-		action_temp = menu->addAction(tr("Ma&ximize"), m_mdi_window, SLOT(showMaximized()));
+	if(!(m_mdiWindow->windowState() & Qt::WindowMaximized))	{
+		action_temp = menu->addAction(tr("Ma&ximize"), m_mdiWindow, SLOT(showMaximized()));
 		action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
 	}
 
@@ -119,7 +128,7 @@ void AbstractPart::editCut() {}
 void AbstractPart::editPaste() {}
 
 /**
- * \var AbstractPart::m_mdi_window
+ * \var AbstractPart::m_mdiWindow
  * \brief The MDI sub-window that is wrapped around my primary view.
  */
 

@@ -39,15 +39,12 @@ class AbstractPart;
 
 //! MDI sub window that implements functions common to all aspect views
 /**
- * This class is to be subclassed for every aspect. Every aspect owns a
+ * This class is to be subclassed for every aspect. Every AspectPart owns a
  * view that is shown in the ProjectWindow's MDI area. In addition to the functionality provided
  * by QMdiSubWindow, this class automatically updates the window title when
- * AbstractAspect::caption() changes, removes the Aspect when the MDI window 
- * is closed (the user is asked then whether he wants to hide the window
- * or remove the aspect). It also provides access to the aspect's context menu.
+ * AbstractAspect::caption()
  */
-class PartMdiView : public QMdiSubWindow
-{
+class PartMdiView : public QMdiSubWindow {
 	Q_OBJECT
 
 	public:

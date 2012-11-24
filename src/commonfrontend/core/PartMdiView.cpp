@@ -35,6 +35,10 @@
 #include <QMenu>
 #include <QMdiArea>
 
+//TODO:currently, the only(?) purpose of this class is to change the name of the mdi sub window
+//when the aspect name was changed. This can also be handled in MainWin.
+//Check whether this class can be removed.
+
 PartMdiView::PartMdiView(AbstractPart *part, QWidget * embedded_view)
 	: QMdiSubWindow(0), m_part(part), m_closing(false), m_status(Closed)
 {
@@ -45,6 +49,7 @@ PartMdiView::PartMdiView(AbstractPart *part, QWidget * embedded_view)
 	connect(m_part, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	setWidget(embedded_view);
+	setAttribute(Qt::WA_DeleteOnClose);
 }
 
 //TODO deactivated this feature because of the crash in worksheetview.
@@ -80,7 +85,7 @@ void PartMdiView::closeEvent(QCloseEvent *event)
 {
 	if (!m_closing) {
 		m_closing = true;
-		m_part->remove();
+		m_part->deleteView();
 		event->accept();
 	}
 	m_closing = false;

@@ -133,6 +133,7 @@ void SpreadsheetDock::loadConfig(KConfig& config){
   	Spreadsheet* spreadsheet=m_spreadsheetList.first();
   	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", spreadsheet->columnCount()));
   	ui.sbRowCount->setValue(group.readEntry("RowCount", spreadsheet->rowCount()));
+
 	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(spreadsheet->view());
   	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }

@@ -173,11 +173,11 @@ QMenu *Worksheet::createContextMenu() {
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
 QWidget *Worksheet::view() const {
-	if (!d->m_view) {
-		d->m_view = new WorksheetView(const_cast<Worksheet *>(this));
-		connect(d->m_view, SIGNAL(statusInfo(const QString&)), this, SIGNAL(statusInfo(const QString&)));
+	if (!m_view) {
+		m_view = new WorksheetView(const_cast<Worksheet *>(this));
+		connect(m_view, SIGNAL(statusInfo(const QString&)), this, SIGNAL(statusInfo(const QString&)));
 	}
-	return d->m_view;
+	return m_view;
 }
 
 void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
@@ -479,7 +479,7 @@ void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner), m_view(NULL){
+WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner) {
 	m_scene = new QGraphicsScene();
 	m_scene->setSceneRect(0, 0, 1500, 1500);
 }
