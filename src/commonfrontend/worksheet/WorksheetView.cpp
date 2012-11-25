@@ -73,10 +73,11 @@
 WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	m_worksheet(worksheet),
 	m_currentMouseMode(NavigationMode), 
-	m_suppressSelectionChangedEvent(false) {
+	m_suppressSelectionChangedEvent(false),
+	m_model(new WorksheetModel(worksheet)),
+	tbZoom(0) {
   
-  m_model = new WorksheetModel(worksheet);
-  setScene(m_model->scene());
+	setScene(m_model->scene());
   
   	connect(worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
 	connect(worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
@@ -103,7 +104,6 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
   initMenus();
   navigationModeAction->setChecked(true);
   
-  tbZoom=0;
   changeZoom(zoomOriginAction);
   currentZoomAction=zoomInAction;
 
@@ -805,8 +805,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}else if (area==WorksheetView::ExportSelection){
 		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
 		foreach(QGraphicsItem* item, m_selectedItems) {
-			QRectF r = item->mapToScene(item->boundingRect()).boundingRect();
-			rect = rect.united(r);
+			rect = rect.united( item->mapToScene(item->boundingRect()).boundingRect() );
 		}
 	}else{
 		rect =scene()->sceneRect();
@@ -853,7 +852,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		QPainter painter;
 		painter.begin(&image);
 		painter.scale(QApplication::desktop()->physicalDpiX()/25.4,QApplication::desktop()->physicalDpiY()/25.4);
-		scene()->render(&painter, QRectF(), rect);
+		scene()->render(&painter, QRect(), rect);
 		painter.end();
 
 		image.save(path, "png");

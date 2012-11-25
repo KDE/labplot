@@ -31,7 +31,7 @@
 #ifndef ABSTRACTWORKSHEETELEMENT_H
 #define ABSTRACTWORKSHEETELEMENT_H
 
-#include "core/AbstractAspect.h"
+#include "backend/core/AbstractAspect.h"
 #include <QGraphicsItem>
 class QAction;
 

@@ -28,9 +28,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/Worksheet.h"
-#include "worksheet/AbstractWorksheetElement.h"
-#include "worksheet/plots/AbstractCoordinateSystem.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 
 #include <QPen>
 #include <QPainterPath>

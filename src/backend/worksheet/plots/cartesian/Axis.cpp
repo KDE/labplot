@@ -841,13 +841,11 @@ void AxisPrivate::retransformLine(){
 
 	lines.append(QLineF(startPoint, endPoint));
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-
 	foreach (QLineF line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
 }
-
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
 //TODO refactor this function, coordinate system should provide a function to map a single point
@@ -1438,7 +1436,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(minorGridPath);
 	}
-	
+
   // draw tick labels
   if (labelsPosition != Axis::NoLabels){
 	painter->setOpacity(labelsOpacity);
@@ -1453,7 +1451,6 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	  painter->translate(-tickLabelPoints.at(i));
 	}
   }
-
   
    if (isSelected()){
 	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
