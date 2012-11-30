@@ -95,6 +95,7 @@ void TextLabel::init() {
 }
 
 TextLabel::~TextLabel() {
+	qDebug()<<"destructor in textlabel";
 	delete d_ptr;
 }
 

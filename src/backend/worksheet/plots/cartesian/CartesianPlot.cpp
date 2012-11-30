@@ -87,12 +87,10 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):Abst
 }
 
 CartesianPlot::~CartesianPlot(){
-	//TODO
-// 	delete d_ptr;
-// 	delete m_title;
+	delete d_ptr;
 	delete m_coordinateSystem;
-// 	delete m_plotArea;
 	delete addNewMenu;
+	//don't need to delete objects added with addChild()
 }
 
 /*!

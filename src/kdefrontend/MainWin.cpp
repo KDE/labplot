@@ -418,28 +418,32 @@ void MainWin::updateGUI() {
 //  	factory->container("script", this)->setEnabled(false);
 // 		factory->container("drawing", this)->setEnabled(false);
 		factory->container("windows", this)->setEnabled(false);
+
+		factory->container("worksheet_toolbar", this)->hide();
+		factory->container("cartesian_plot_toolbar", this)->hide();
+		factory->container("spreadsheet_toolbar", this)->hide();
 		return;
-	}else{
-		m_saveAction->setEnabled(true);
-		m_saveAsAction->setEnabled(true);
-		m_printAction->setEnabled(true);
-		m_printPreviewAction->setEnabled(true);
-		m_importAction->setEnabled(true);
-		m_exportAction->setEnabled(true);
-		m_newSpreadsheetAction->setEnabled(true);
-		m_newWorksheetAction->setEnabled(true);
-		m_closeAction->setEnabled(true);
-		m_toggleProjectExplorerDockAction->setEnabled(true);
-		m_togglePropertiesDockAction->setEnabled(true);
-		factory->container("new", this)->setEnabled(true);
-		factory->container("edit", this)->setEnabled(true);
-		factory->container("spreadsheet", this)->setEnabled(true);
-		factory->container("worksheet", this)->setEnabled(true);
+	}
+
+	m_saveAction->setEnabled(true);
+	m_saveAsAction->setEnabled(true);
+	m_printAction->setEnabled(true);
+	m_printPreviewAction->setEnabled(true);
+	m_importAction->setEnabled(true);
+	m_exportAction->setEnabled(true);
+	m_newSpreadsheetAction->setEnabled(true);
+	m_newWorksheetAction->setEnabled(true);
+	m_closeAction->setEnabled(true);
+	m_toggleProjectExplorerDockAction->setEnabled(true);
+	m_togglePropertiesDockAction->setEnabled(true);
+	factory->container("new", this)->setEnabled(true);
+	factory->container("edit", this)->setEnabled(true);
+	factory->container("spreadsheet", this)->setEnabled(true);
+	factory->container("worksheet", this)->setEnabled(true);
 // 		factory->container("analysis", this)->setEnabled(true);
 //  		factory->container("script", this)->setEnabled(true);
 // 		factory->container("drawing", this)->setEnabled(true);
-		factory->container("windows", this)->setEnabled(true);
-	}
+	factory->container("windows", this)->setEnabled(true);
 
 
 	//Activate/deactivate menus and toolbar depending on the currently active window (worksheet or spreadsheet).
@@ -632,28 +636,28 @@ void MainWin::openXML(QIODevice *file) {
 	Closes the current project, if available. Return \c true, if the project was closed.
 */
 bool MainWin::closeProject(){
-	if (m_project==0){
+	if (m_project==0)
 		return true; //nothing to close
-	}else{
-		int b = KMessageBox::warningYesNo( this,
-											i18n("The current project %1 will be closed. Do you want to continue?").arg(m_project->name()),
-											i18n("Close Project"));
-		if (b==KMessageBox::No)
-			return false;
-	}
+
+	int b = KMessageBox::warningYesNo( this,
+										i18n("The current project %1 will be closed. Do you want to continue?").arg(m_project->name()),
+										i18n("Close Project"));
+	if (b==KMessageBox::No)
+		return false;
 	
 	if(warnModified())
 		return false;
 
 	m_mdiArea->closeAllSubWindows();
 	delete m_aspectTreeModel;
+	m_aspectTreeModel=0;
 	delete m_project;
+ 	m_project=0;
 
 	m_projectExplorerDock->hide();
 	m_propertiesDock->hide();
 	m_currentAspect=0;
 	m_currentFolder=0;
- 	m_project=0;
  	updateGUI();
 	return true;
 }

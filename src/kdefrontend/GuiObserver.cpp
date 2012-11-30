@@ -273,6 +273,7 @@ void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspe
   }else if (className=="CartesianPlot"){
 	//populate worksheet-toolbar
 	QToolBar* toolbar=qobject_cast<QToolBar*>(mainWindow->guiFactory()->container("cartesian_plot_toolbar", mainWindow));
+	toolbar->show();
 	toolbar->setEnabled(true);
 	toolbar->clear();
 	const CartesianPlot* plot = qobject_cast<const CartesianPlot*>(aspect);
