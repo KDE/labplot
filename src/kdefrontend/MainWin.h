@@ -143,8 +143,10 @@ private:
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	void addAspectToProject(AbstractAspect* aspect);
+	void addAspectToProject(AbstractAspect*);
 	void activateSubWindowForAspect(const AbstractAspect*) const;
+
+	void closeEvent(QCloseEvent*);
 
 	Spreadsheet* activeSpreadsheet() const;
 	Worksheet* activeWorksheet() const;
