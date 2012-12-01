@@ -107,6 +107,8 @@ class XYCurve: public AbstractWorksheetElement {
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		void xColumnAboutToBeRemoved();
+		void yColumnAboutToBeRemoved();
 
 	protected:
 		XYCurve(const QString &name, XYCurvePrivate *dd);

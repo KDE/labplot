@@ -203,6 +203,7 @@ void Column::handleRowInsertion(int before, int count)
 {
 	AbstractColumn::handleRowInsertion(before, count);
 	exec(new ColumnInsertRowsCmd(m_column_private, before, count));
+	emit dataChanged(this);
 }
 
 /**
@@ -212,6 +213,7 @@ void Column::handleRowRemoval(int first, int count)
 {
 	AbstractColumn::handleRowRemoval(first, count);
 	exec(new ColumnRemoveRowsCmd(m_column_private, first, count));
+	emit dataChanged(this);
 }
 
 /**

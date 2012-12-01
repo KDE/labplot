@@ -312,8 +312,14 @@ void XYCurve::setXColumn(const AbstractColumn *xColumn) {
 	Q_D(XYCurve);
 	if (xColumn != d->xColumn) {
 		exec(new XYCurveSetXColumnCmd(d, xColumn, tr("%1: assign x values")));
+
+		//emit xDataChanged() in order to notife the plot about the changes
 		emit xDataChanged();
 		connect(xColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
+
+		//update the curve itself on changes
+		connect(xColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
+		connect(xColumn, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(xColumnAboutToBeRemoved()));
 		//TODO: add disconnect in the undo-function
 	}
 }
@@ -323,8 +329,14 @@ void XYCurve::setYColumn(const AbstractColumn *yColumn) {
 	Q_D(XYCurve);
 	if (yColumn != d->yColumn) {
 		exec(new XYCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
+
+		//emit yDataChanged() in order to notife the plot about the changes
 		emit yDataChanged();
 		connect(yColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
+
+		//update the curve itself on changes
+		connect(yColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
+		connect(yColumn, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(yColumnAboutToBeRemoved()));
 		//TODO: add disconnect in the undo-function
 	}
 }
@@ -501,6 +513,21 @@ void XYCurve::setValuesPen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->valuesPen)
 		exec(new XYCurveSetValuesPenCmd(d, pen, tr("%1: set values style")));
+}
+
+//##############################################################################
+//#################################  SLOTS  ####################################
+//##############################################################################
+void XYCurve::xColumnAboutToBeRemoved() {
+	Q_D(XYCurve);
+	d->xColumn = 0;
+	d->retransform();
+}
+
+void XYCurve::yColumnAboutToBeRemoved() {
+	Q_D(XYCurve);
+	d->yColumn = 0;
+	d->retransform();
 }
 
 //##############################################################################
