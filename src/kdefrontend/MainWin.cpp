@@ -314,7 +314,7 @@ void MainWin::initActions() {
 
 	//"Standard actions"
 	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
-	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
+	KStandardAction::quit(this, SLOT(close()), actionCollection());
 
 	//Actions for window visibility
 	QActionGroup * windowVisibilityActions = new QActionGroup(this);
@@ -371,20 +371,24 @@ void MainWin::initMenus(){
 	m_visibilityMenu ->addAction(m_visibilityAllAction);
 }
 
+/*!
+	Asks to save the project if it was modified.
+	\return \c true if the project still needs to be saved ("cancel" clicked), \c false otherwise.
+ */
 bool MainWin::warnModified() {
 	if(m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
 			i18n("The current project %1 has been modified. Do you want to save it?").arg(m_project->name()),
 			i18n("Save Project"));
 		switch (want_save) {
-		case KMessageBox::Yes:
-			saveProject();
-			break;
-		case KMessageBox::No:
-			break;
-		case KMessageBox::Cancel:
-			return true;
-			break;
+			case KMessageBox::Yes:
+				return !saveProject();
+				break;
+			case KMessageBox::No:
+				break;
+			case KMessageBox::Cancel:
+				return true;
+				break;
 		}
 	}
 
@@ -665,17 +669,18 @@ bool MainWin::closeProject(){
 /*!
 	saves the project to the file \c filename
 */
-void MainWin::saveProject(){
+bool MainWin::saveProject(){
 	QString fileName = m_project->fileName();
-	if( fileName.isEmpty() ){
-		saveProjectAs();	// need a file name
-		return;
+	if(fileName.isEmpty()) {
+		if (!saveProjectAs())
+			return false; //cancel clicked in "save as"-dialog
 	}
 
 	QIODevice* file = KFilterDev::deviceForFile(fileName, QString::null, true);
 	if (file == 0)
 		file = new QFile(fileName);
-	
+
+	bool ok;
 	if(file->open(QIODevice::WriteOnly | QFile::Text)){
 		QXmlStreamWriter writer(file);
 		m_project->save(&writer);
@@ -688,26 +693,30 @@ void MainWin::saveProject(){
 		m_saveAction->setEnabled(false);
 		m_saveAsAction->setEnabled(false);
 		m_recentProjectsAction->addUrl( KUrl(fileName) );
+		ok = true;
 	}else{
-		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));	
+		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));
+		ok = false;
 	}
 	
 	if (file != 0)
 		delete file;
+	return ok;
 }
 
-void MainWin::saveProjectAs() {
+bool MainWin::saveProjectAs() {
 	QString fileName = QFileDialog::getSaveFileName(this, i18n("Save project as"),QString::null,
 		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
 
 	if( fileName.isEmpty() )// "Cancel" was clicked
-		return;
+		return false;
 
 	if( fileName.contains(QString(".lml"),Qt::CaseInsensitive) == false )
 		fileName.append(".lml");
 
 	m_project->setFileName(fileName);
 	saveProject();
+	return true;
 }
 
 /*!

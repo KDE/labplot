@@ -164,8 +164,8 @@ private slots:
 	void openProject(QString filename);
 	void openRecentProject();
 	bool closeProject();
-	void saveProject();
-	void saveProjectAs();
+	bool saveProject();
+	bool saveProjectAs();
 	
 	void print();
 	void printPreview();
