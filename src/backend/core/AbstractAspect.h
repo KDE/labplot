@@ -98,7 +98,7 @@ class AbstractAspect : public QObject
 			foreach (AbstractAspect * child, rawChildren()) {
 				if (flags & IncludeHidden || !child->hidden()) {
 					T * i = qobject_cast< T* >(child);
-					if ((NULL != i) || !(flags & Compress)) {
+					if (i) {
 						result << i;
 						if (flags & Recursive)
 							result << i->children<T>(flags);
