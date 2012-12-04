@@ -340,6 +340,7 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	toolBar->addSeparator();
+	toolBar->addAction(addTextLabelAction);
 	toolBar->addAction(addPlotAction);
 #endif
 
