@@ -467,10 +467,14 @@ void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 		qreal horizontalRatio = rect.width() / oldRect.normalized().width();
 		qreal verticalRatio = rect.height() / oldRect.normalized().height();
 
-		QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-		if (scaleContent){
-			foreach(AbstractWorksheetElement *elem, childElements) {
-				elem->handlePageResize(horizontalRatio, verticalRatio);
+		if (d->layout != Worksheet::NoLayout) {
+			d->updateLayout();
+		} else {
+			if (scaleContent) {
+				QList<AbstractWorksheetElement*> childElements = children<AbstractWorksheetElement>(IncludeHidden);
+				foreach(AbstractWorksheetElement *elem, childElements) {
+					elem->handlePageResize(horizontalRatio, verticalRatio);
+				}
 			}
 		}
 		endMacro();
@@ -506,7 +510,7 @@ WorksheetPrivate::~WorksheetPrivate(){
 void WorksheetPrivate::updateLayout(){
 	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
 	if (layout==Worksheet::NoLayout){
-		foreach(WorksheetElementContainer* elem, q->children<WorksheetElementContainer>()){
+		foreach(WorksheetElementContainer* elem, list) {
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 		}
 		return;
@@ -531,7 +535,7 @@ void WorksheetPrivate::updateLayout(){
 			elem->setRect(QRectF(x,y,w,h));
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 			x+=w + layoutHorizontalSpacing;
-		}		
+		}
 	}else{ //GridLayout
 		//add new rows, if not sufficient
 		if (count>layoutRowCount*layoutColumnCount){
