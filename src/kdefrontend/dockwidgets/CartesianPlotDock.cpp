@@ -40,8 +40,6 @@
 #include <QTimer>
 #include <KUrlCompletion>
 
-#include <kdebug.h>
-
 /*!
   \class GuiObserver
   \brief  Provides a widget for editing the properties of the plot areas currently selected in the project explorer.
@@ -97,7 +95,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
-
+	
 	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
 	connect( ui.kleXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
 	connect( ui.kleXMax, SIGNAL(returnPressed()), this, SLOT(xMaxChanged()) );
@@ -258,14 +256,14 @@ void CartesianPlotDock::nameChanged(){
   if (m_initializing)
 	return;
   
-  m_plotList.first()->setName(ui.leName->text());
+  m_plot->setName(ui.leName->text());
 }
 
 void CartesianPlotDock::commentChanged(){
   if (m_initializing)
 	return;
   
-  m_plotList.first()->setComment(ui.leComment->text());
+  m_plot->setComment(ui.leComment->text());
 }
 
 void CartesianPlotDock::visibilityChanged(int state){
@@ -286,9 +284,15 @@ void CartesianPlotDock::geometryChanged(){
 	float y = Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter);
 	float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
 	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
-	
+
 	QRectF rect(x,y,w,h);
-	m_plotList.first()->setRect(rect);
+
+	//setRect triggers emit Plot::positionChanged() and then plotPositionChanged() here.
+	//This leads to strange artifacts (position is changed when only the width was changed etc.)
+	//Avoid this by setting m_initializing=true;
+	m_initializing = true;
+	m_plot->setRect(rect);
+	m_initializing = false;
 }
 
 /*!
@@ -303,15 +307,11 @@ void CartesianPlotDock::layoutChanged(Worksheet::Layout layout){
 	ui.sbWidth->setEnabled(b);
 	ui.sbHeight->setEnabled(b);
 	if (!b){
-		CartesianPlot* plot = m_plotList.first();
-		if (!plot)
-			return;
-
 		m_initializing = true;
-		ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(plot->rect().x(), Worksheet::Centimeter));
-		ui.sbTop->setValue(Worksheet::convertFromSceneUnits(plot->rect().y(), Worksheet::Centimeter));
-		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Centimeter));
-		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Centimeter));		
+		ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
+		ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
+		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
+		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));		
 		m_initializing = false;
 	}
 }
@@ -559,7 +559,6 @@ void CartesianPlotDock::backgroundFirstColorChanged(const QColor& c){
   }  
 }
 
-
 void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c){
   if (m_initializing)
 	return;
@@ -674,6 +673,9 @@ void CartesianPlotDock::verticalPaddingChanged(double value){
 //****** SLOTs for changes triggered in CartesianPlot *********
 //*************************************************************
 void CartesianPlotDock::plotPositionChanged(){
+	if (m_initializing)
+		return;
+
 	m_initializing = true;
 	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
