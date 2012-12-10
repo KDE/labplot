@@ -1415,6 +1415,7 @@ bool XYCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'id'"));
             else
                 d->symbolsTypeId = str;
+			d->swapSymbolsTypeId(d->symbolsTypeId);
 
 			//brush
 			str = attribs.value("brush_style").toString();
