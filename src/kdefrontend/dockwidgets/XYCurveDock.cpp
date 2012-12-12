@@ -172,8 +172,9 @@ void XYCurveDock::init(){
 	timeStrings<<"hh:mm:ss:zzz";
 	timeStrings<<"mm:ss.zzz";
 	timeStrings<<"hhmmss";
-	
-	
+
+	m_initializing = true;
+
   	//Line
 	ui.cbLineType->addItems(XYCurve::lineTypeStrings());
 	QPainter pa;
@@ -292,7 +293,7 @@ void XYCurveDock::init(){
 	ui.cbLineType->setItemIcon(10, pm);
 	ui.cbLineType->setItemIcon(11, pm);
 	
-	m_initializing = true;
+
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
 	
 	//Drop lines
