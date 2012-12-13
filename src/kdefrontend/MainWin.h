@@ -162,7 +162,7 @@ private slots:
 	bool newProject();
 	void openProject();
 	void openProject(QString filename);
-	void openRecentProject();
+	void openRecentProject(const KUrl&);
 	bool closeProject();
 	bool saveProject();
 	bool saveProjectAs();

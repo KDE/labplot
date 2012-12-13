@@ -148,7 +148,7 @@ void MainWin::initActions() {
 		//add some standard actions
  	action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
 	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
-  	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject()),actionCollection());
+  	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(const KUrl&)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
@@ -587,16 +587,19 @@ void MainWin::openProject(){
 void MainWin::openProject(QString filename){
 	if(filename.isEmpty())
 		return;
-	
-	if (!newProject())
-		return;
-	
+
 	QIODevice *file = KFilterDev::deviceForFile(filename,QString::null,true);
 	if (file==0)
 		file = new QFile(filename);
 
 	if ( file->open( QIODevice::ReadOnly | QFile::Text) == 0) {
 		KMessageBox::error(this, i18n("Sorry. Could not open file for reading!"));
+		return;
+	}
+
+	if (!newProject()){
+		file->close();
+		delete file;
 		return;
 	}
 
@@ -613,9 +616,9 @@ void MainWin::openProject(QString filename){
 	setCaption(m_project->name());
 }
 
-void MainWin::openRecentProject(){
-  //TODO
-}  
+void MainWin::openRecentProject(const KUrl& url) {
+	this->openProject(url.path());
+}
   
 void MainWin::openXML(QIODevice *file) {
 	XmlStreamReader reader(file);
