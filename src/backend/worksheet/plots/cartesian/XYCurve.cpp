@@ -1152,10 +1152,17 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	if (d->xColumn){
 		writer->writeAttribute( "xColumn", d->xColumn->name() );
 		writer->writeAttribute( "xColumnParent", d->xColumn->parentAspect()->name() );
+	} else {
+		writer->writeAttribute( "xColumn", "" );
+		writer->writeAttribute( "xColumnParent", "" );
 	}
+
 	if (d->yColumn){
 		writer->writeAttribute( "yColumn", d->yColumn->name() );
 		writer->writeAttribute( "yColumnParent", d->yColumn->parentAspect()->name() );
+	} else {
+		writer->writeAttribute( "yColumn", "" );
+		writer->writeAttribute( "yColumnParent", "" );
 	}
 	writer->writeEndElement();
 
@@ -1167,7 +1174,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_r", QString::number(d->linePen.color().red()) );
 	writer->writeAttribute( "color_g", QString::number(d->linePen.color().green()) );
 	writer->writeAttribute( "color_b", QString::number(d->linePen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->linePen.width()) );
+	writer->writeAttribute( "width", QString::number(d->linePen.widthF()) );
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
 	writer->writeEndElement();
 	
@@ -1178,7 +1185,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_r", QString::number(d->dropLinePen.color().red()) );
 	writer->writeAttribute( "color_g", QString::number(d->dropLinePen.color().green()) );
 	writer->writeAttribute( "color_b", QString::number(d->dropLinePen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->dropLinePen.width()) );
+	writer->writeAttribute( "width", QString::number(d->dropLinePen.widthF()) );
 	writer->writeAttribute( "opacity", QString::number(d->dropLineOpacity) );
 	writer->writeEndElement();
 	
@@ -1200,7 +1207,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_g", QString::number(d->symbolsPen.color().green()) );
 	writer->writeAttribute( "color_b", QString::number(d->symbolsPen.color().blue()) );
 	//TODO: should use widthF()?
-	writer->writeAttribute( "width", QString::number(d->symbolsPen.width()) );
+	writer->writeAttribute( "width", QString::number(d->symbolsPen.widthF()) );
 	writer->writeEndElement();
 	
 	//Values
@@ -1218,7 +1225,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_r", QString::number(d->valuesPen.color().red()) );
 	writer->writeAttribute( "color_g", QString::number(d->valuesPen.color().green()) );
 	writer->writeAttribute( "color_b", QString::number(d->valuesPen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->valuesPen.width()) );
+	writer->writeAttribute( "width", QString::number(d->valuesPen.widthF()) );
 	//font
 	writer->writeAttribute( "fontFamily", d->valuesFont.family() );
 	writer->writeAttribute( "fontSize", QString::number(d->valuesFont.pointSize()) );
@@ -1258,29 +1265,18 @@ bool XYCurve::load(XmlStreamReader* reader){
 		}else if (reader->name() == "general"){
 			attribs = reader->attributes();
 
+			//column names can be empty in case no columns were used before save
 			str = attribs.value("xColumn").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'xColumn'"));
-            else
-                d->xColumnName = str;
+			d->xColumnName = str;
 
 			str = attribs.value("yColumn").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'yColumn'"));
-            else
-                d->yColumnName = str;
+            d->yColumnName = str;
 
 			str = attribs.value("xColumnParent").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'xColumnParent'"));
-            else
-                d->xColumnParentName = str;
+			d->xColumnParentName = str;
 
 			str = attribs.value("yColumnParent").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'yColumnParent'"));
-            else
-                d->yColumnParentName = str;
+            d->yColumnParentName = str;
 			
 			//the actual pointers to the x- and y-columns are restored in Project::load()
 		}else if (reader->name() == "lines"){	

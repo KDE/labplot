@@ -1484,6 +1484,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "end", QString::number(d->end) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
+	writer->writeAttribute( "titleOffset", QString::number(d->titleOffset) );
 	writer->writeEndElement();
 	
 	//label
@@ -1651,6 +1652,12 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'zeroOffset'"));
             else
                 d->zeroOffset = str.toDouble();
+
+			str = attribs.value("titleOffset").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'titleOffset'"));
+            else
+                d->titleOffset = str.toDouble();
 		}else if (reader->name() == "textLabel"){
 			d->title->load(reader);
 		}else if (reader->name() == "line"){

@@ -78,8 +78,8 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	tbZoom(0) {
   
 	setScene(m_model->scene());
-  
-  	connect(worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
+
+	connect(worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
 	connect(worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
 	connect(worksheet, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
 	connect(worksheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
@@ -111,7 +111,7 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
   connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
   connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) ); 
   connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
- }
+}
 
 WorksheetView::~WorksheetView(){
 	delete m_model;
@@ -252,6 +252,32 @@ void WorksheetView::initActions(){
 	snapToGridAction = new KAction(i18n("snap to grid"), this);
 	snapToGridAction->setCheckable(true);
 #endif
+	Worksheet::Layout layout = m_worksheet->layout();
+	if (layout==Worksheet::NoLayout){
+		verticalLayoutAction->setEnabled(true);
+		verticalLayoutAction->setChecked(false);
+
+		horizontalLayoutAction->setEnabled(true);
+		horizontalLayoutAction->setChecked(false);
+
+		gridLayoutAction->setEnabled(true);
+		gridLayoutAction->setChecked(false);
+
+		breakLayoutAction->setEnabled(false);
+	}else{
+		verticalLayoutAction->setEnabled(false);
+		horizontalLayoutAction->setEnabled(false);
+		gridLayoutAction->setEnabled(false);
+		breakLayoutAction->setEnabled(true);
+
+		if (layout==Worksheet::VerticalLayout)
+			verticalLayoutAction->setChecked(true);
+		else if (layout==Worksheet::HorizontalLayout)
+			horizontalLayoutAction->setChecked(true);
+		else
+			gridLayoutAction->setChecked(true);
+	}
+	
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
 	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
@@ -685,7 +711,7 @@ void WorksheetView::changeLayout(QAction* action){
 			gridLayoutAction->setChecked(true);
 			m_worksheet->setLayout(Worksheet::GridLayout);
 		}
-  }
+	}
 }
 
 void WorksheetView::changeGrid(QAction* action){

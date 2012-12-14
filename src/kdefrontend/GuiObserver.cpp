@@ -256,10 +256,19 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
 		return;
 	
 	QString className = parent->metaObject()->className();
-	if (className == "Axis")
+	if (className == "Axis") {
+		if (!mainWindow->axisDock) {
+			mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
+		}
 		mainWindow->axisDock->activateTitleTab();
-	else if (className == "CartesianPlot")
+	} else if (className == "CartesianPlot") {
+		if (!mainWindow->cartesianPlotDock) {
+			mainWindow->cartesianPlotDock = new CartesianPlotDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
+		}
 		mainWindow->cartesianPlotDock->activateTitleTab();
+	}
 }
 
 /*!
