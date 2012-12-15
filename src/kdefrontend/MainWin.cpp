@@ -402,53 +402,35 @@ void MainWin::updateGUI() {
 	KXMLGUIFactory* factory=this->guiFactory();
 
 	//disable all menus if there is no project
-	if ( m_project==0 ){
-		m_saveAction->setEnabled(false);
-		m_saveAsAction->setEnabled(false);
-		m_printAction->setEnabled(false);
-		m_printPreviewAction->setEnabled(false);
-		m_importAction->setEnabled(false);
-		m_exportAction->setEnabled(false);
-		m_newSpreadsheetAction->setEnabled(false);
-		m_newWorksheetAction->setEnabled(false);
-		m_closeAction->setEnabled(false);
-		m_toggleProjectExplorerDockAction->setEnabled(false);
-		m_togglePropertiesDockAction->setEnabled(false);
-		factory->container("new", this)->setEnabled(false);
-		factory->container("edit", this)->setEnabled(false);
-		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("worksheet", this)->setEnabled(false);
-// 		factory->container("analysis", this)->setEnabled(false);
-//  	factory->container("script", this)->setEnabled(false);
-// 		factory->container("drawing", this)->setEnabled(false);
-		factory->container("windows", this)->setEnabled(false);
+	bool b = (m_project==0);
+	m_saveAction->setEnabled(!b);
+	m_saveAsAction->setEnabled(!b);
+	m_printAction->setEnabled(!b);
+	m_printPreviewAction->setEnabled(!b);
+	m_importAction->setEnabled(!b);
+	m_exportAction->setEnabled(!b);
+	m_newSpreadsheetAction->setEnabled(!b);
+	m_newWorksheetAction->setEnabled(!b);
+	m_closeAction->setEnabled(!b);
+	m_toggleProjectExplorerDockAction->setEnabled(!b);
+	m_togglePropertiesDockAction->setEnabled(!b);
+	factory->container("new", this)->setEnabled(!b);
+	factory->container("edit", this)->setEnabled(!b);
+	factory->container("spreadsheet", this)->setEnabled(!b);
+	factory->container("worksheet", this)->setEnabled(!b);
+// 		factory->container("analysis", this)->setEnabled(!b);
+//  	factory->container("script", this)->setEnabled(!b);
+// 		factory->container("drawing", this)->setEnabled(!b);
+	factory->container("windows", this)->setEnabled(!b);
 
+	if (b) {
+		m_undoAction->setEnabled(false);
+		m_redoAction->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
 		return;
 	}
-
-	m_saveAction->setEnabled(true);
-	m_saveAsAction->setEnabled(true);
-	m_printAction->setEnabled(true);
-	m_printPreviewAction->setEnabled(true);
-	m_importAction->setEnabled(true);
-	m_exportAction->setEnabled(true);
-	m_newSpreadsheetAction->setEnabled(true);
-	m_newWorksheetAction->setEnabled(true);
-	m_closeAction->setEnabled(true);
-	m_toggleProjectExplorerDockAction->setEnabled(true);
-	m_togglePropertiesDockAction->setEnabled(true);
-	factory->container("new", this)->setEnabled(true);
-	factory->container("edit", this)->setEnabled(true);
-	factory->container("spreadsheet", this)->setEnabled(true);
-	factory->container("worksheet", this)->setEnabled(true);
-// 		factory->container("analysis", this)->setEnabled(true);
-//  		factory->container("script", this)->setEnabled(true);
-// 		factory->container("drawing", this)->setEnabled(true);
-	factory->container("windows", this)->setEnabled(true);
-
 
 	//Activate/deactivate menus and toolbar depending on the currently active window (worksheet or spreadsheet).
 	Worksheet* w = this->activeWorksheet();
@@ -842,6 +824,7 @@ void MainWin::projectChanged(){
 	setCaption(m_project->name() + "    [" + i18n("Changed") + "]" );
 	m_saveAction->setEnabled(true);
 	m_saveAsAction->setEnabled(true);
+	m_undoAction->setEnabled(true);
 	return;
 }
 
@@ -967,12 +950,21 @@ void MainWin::createFolderContextMenu(const Folder * folder, QMenu * menu) const
 void MainWin::undo(){
 	WAIT_CURSOR;
 	m_project->undoStack()->undo();
+	if (m_project->undoStack()->index()==0) {
+		setCaption(m_project->name());
+		m_saveAction->setEnabled(false);
+		m_saveAsAction->setEnabled(false);
+		m_undoAction->setEnabled(false);
+		m_project->setChanged(false);
+	}
+	m_redoAction->setEnabled(true);
 	RESET_CURSOR;
 }
 
 void MainWin::redo(){
 	WAIT_CURSOR;
 	m_project->undoStack()->redo();
+	projectChanged();
 	RESET_CURSOR;
 }
 

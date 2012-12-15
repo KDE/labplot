@@ -4,6 +4,9 @@
 
 <ToolBar name="mainToolBar" >
 <text>Main</text>
+<Action name="undo" />
+<Action name="redo" />
+<Separator/>
 <Action name="import" />
 <Action name="export" />
 <Action name="new_spreadsheet" />
