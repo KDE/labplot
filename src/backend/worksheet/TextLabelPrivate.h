@@ -31,6 +31,7 @@
 #define WORKSHEETPRIVATE_H
 
 #include <QStaticText>
+#include <QFutureWatcher>
 
 class TextLabelPrivate: public QGraphicsItem{
 	public:
@@ -40,11 +41,11 @@ class TextLabelPrivate: public QGraphicsItem{
 		float scaleFactor;
 		int teXImageResolution;
 		float teXImageScaleFactor;
-		QString text;
-		bool teXUsed;
+		TextLabel::TextWrapper textWrapper;
 		qreal teXFontSize;
 		QColor teXFontColor;
-		
+		QFutureWatcher<QImage> teXImageFutureWatcher;
+
 		QPointF position;//point in parent's coordinate system, the label gets aligned around this point.
 		TextLabel::HorizontalPosition horizontalPosition;
 		TextLabel::VerticalPosition verticalPosition;

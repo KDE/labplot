@@ -1362,7 +1362,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 	
 	//add title label, if available
-	if ( title->isVisible() && title->text()!="" ){
+	if ( title->isVisible() && title->text().text!="" ){
 		//determine the new position of the title label:
 		//we calculate the new position here and not in retransform(),
 		//since it depends on the size and position of the tick labels, tickLabelsPath, available here.

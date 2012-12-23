@@ -50,6 +50,15 @@ class TextLabel : public AbstractWorksheetElement{
 		enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
 		enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
 
+		struct TextWrapper{
+			TextWrapper(){ teXUsed=false; }
+			TextWrapper(const QString& t, bool b){ text=t; teXUsed=b; }
+			TextWrapper(const QString& t){ text=t; teXUsed=false; }
+
+			QString text;
+			bool teXUsed;
+		};
+
 		TextLabel(const QString &name);
 		~TextLabel();
 		
@@ -58,8 +67,7 @@ class TextLabel : public AbstractWorksheetElement{
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 		
-		CLASS_D_ACCESSOR_DECL(QString, text, Text);
-		BASIC_D_ACCESSOR_DECL(bool, teXUsed, TeXUsed);
+		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
 		BASIC_D_ACCESSOR_DECL(qreal, teXFontSize, TeXFontSize);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
 		void setPosition(const QPointF&, const bool=true);
@@ -72,14 +80,15 @@ class TextLabel : public AbstractWorksheetElement{
 		
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
-		
-		void updateTeXImage();
 
 		typedef TextLabelPrivate Private;
 
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+
+	private slots:
+		void updateTeXImage();
 
 	protected:
 		TextLabelPrivate * const d_ptr;

@@ -160,7 +160,7 @@ void CartesianPlot::initDefault(){
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
-	axis->title()->setText("");
+	axis->title()->setText(QString());
 
 	axis = new Axis("y axis 1", Axis::AxisVertical);
 	addChild(axis);
@@ -183,7 +183,7 @@ void CartesianPlot::initDefault(){
 	axis->setMinorTicksDirection(Axis::ticksIn);
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
-	axis->title()->setText("");
+	axis->title()->setText(QString());
 	
 	//Plot title
  	m_title = new TextLabel(this->name());

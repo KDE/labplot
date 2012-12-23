@@ -38,13 +38,14 @@
 #include <QTemporaryFile>
 #include <QTextStream>
 #include <QProcess>
+#include <QtConcurrentRun>
 
 // use (pdf)latex to render LaTeX text (see tex2im, etc.)
 // TODO: test convert to svg and render to qimage, test dvipng
 /*!
  * use latex to render LaTeX text (see tex2im, etc.)
  */
-bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, const QColor& fontColor, const int fontSize, const int dpi){
+QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fontColor, const int fontSize, const int dpi){
 	QTemporaryFile file("/dev/shm/labplot_XXXXXX.tex");
 	//file.setAutoRemove(false);
 	if(file.open()) {
@@ -58,7 +59,7 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 		if(file.open())
 			QDir::setCurrent("/tmp");
 		else
-			return false;
+			return QImage();
 	}
 
 	// create latex code
@@ -82,8 +83,10 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 	if (latexProcess.waitForFinished()) { 	// pdflatex finished
 		QFile::remove(fi.completeBaseName()+".aux");
 		QFile::remove(fi.completeBaseName()+".log");
-		if(latexProcess.exitCode() != 0)	// skip if pdflatex failed
-			return false;
+
+		//TODO: pdflatex doesn't come back with EX_OK
+// 		if(latexProcess.exitCode() != 0)	// skip if pdflatex failed
+// 			return QImage();
 
 		// convert: PDF -> PNG
 		convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + "x" + QString::number(dpi)
@@ -98,13 +101,14 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 		if (convertProcess.waitForFinished()) {
 			QFile::remove(fi.completeBaseName()+".pdf");
 
+			QImage image;
 			image.load(fi.completeBaseName()+".png");
 			QFile::remove(fi.completeBaseName()+".png");
 			
-			return true;
+			return image;
 		}else{
 			QFile::remove(fi.completeBaseName()+".pdf");
-			return false;
+			return QImage();
 		}
 	}else{
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -123,10 +127,10 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 #endif
 		QFile::remove(fi.completeBaseName()+".aux");
 		QFile::remove(fi.completeBaseName()+".log");
-		return false;
+		return QImage();
 	}
 	if(latexProcess.exitCode() != 0)	// skip if latex failed
-		return false;
+		return QImage();
 
 	// dvips: DVI -> PS
 	QProcess dvipsProcess;
@@ -136,7 +140,7 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 		kWarning()<<"dvips failed."<<endl;
 #endif
 		QFile::remove(fi.completeBaseName()+".dvi");
-		return false;
+		return QImage();
 	}
 
 	// convert: PS -> PNG
@@ -146,10 +150,11 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 		kWarning()<<"convert failed."<<endl;
 #endif
 		QFile::remove(fi.completeBaseName()+".ps");
-		return false;
+		return QImage();
 	}
 
 	// read png file
+	QImage image;
 	image.load(fi.completeBaseName()+".png");
 
 	//clean up
@@ -159,51 +164,5 @@ bool TeXRenderer::renderImageLaTeX( const QString& teXString, QImage& image, con
 	QFile::remove(fi.completeBaseName()+".dvi");
 	QFile::remove(fi.completeBaseName()+".ps");
 
-	return true;
+	return image;
 }
-
-// old method using texvc to render LaTeX text
-//TODO make this function using Qt only?
-/*
-bool TeXRenderer::renderImageTeXvc( const QString& texString, QImage& image){
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	KTempDir *tmpDir = new KTempDir();
-	QString dirName = tmpDir->name();
-// 	kDebug()<<"temporary directory "<<dirName<<" is used"<<endl;
-
-	KProcess *proc = new KProcess;
-	*proc<<"texvc";
-	*proc<<"/tmp"<<dirName<<texString;
-
-	int exitCode=proc->execute();
-	kDebug()<<"texvc's exit code "<<exitCode<<endl;
-	if( exitCode==-2 ) {
-		kDebug()<<"Couldn't find texvc."<<endl;
-		return false;
-	}else if (exitCode==-1){
-		kDebug()<<"Texvc crashed."<<endl;
-		return false;
-	}
-
-	// take resulting image and show it
- 	QDir d(dirName);
- 	if (d.count()!=3){
- 		kDebug()<<"No file created. Check the syntax."<<endl;
- 		return false;
-
-	}
-
- 	QString fileName = dirName+QString(d[2]);
-// 	kDebug()<<"file name "<<fileName<<" is used"<<endl;
-	if ( !image.load(fileName) ){
-		kDebug()<<"Error on loading the tex-image"<<endl;
-		tmpDir->unlink();
-		return false;
-	}
-
- 	tmpDir->unlink();
-	kDebug()<<"image created."<<endl;
-#endif
-	return true;
-}
-*/

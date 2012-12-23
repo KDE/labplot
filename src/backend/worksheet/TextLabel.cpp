@@ -35,6 +35,7 @@
 #include "backend/lib/XmlStreamReader.h"
 
 #include <QApplication>
+#include <QtCore>
 #include <QDesktopWidget>
 #include <QPainter>
  #include <QGraphicsScene>
@@ -68,7 +69,7 @@ void TextLabel::init() {
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 
-	d->teXUsed = false;
+	d->textWrapper.teXUsed = false;
 	d->teXFontSize = 12;
 	d->teXFontColor = Qt::black;
 	d->staticText.setTextFormat(Qt::RichText);
@@ -92,10 +93,11 @@ void TextLabel::init() {
 	d->teXImageScaleFactor = QApplication::desktop()->physicalDpiX()/float(d->teXImageResolution)*d->scaleFactor;
 	
 	d->cancelItemChangeEvent = false;
+
+	connect(&d->teXImageFutureWatcher, SIGNAL(finished()), this, SLOT(updateTeXImage()));
 }
 
 TextLabel::~TextLabel() {
-	qDebug()<<"destructor in textlabel";
 	delete d_ptr;
 }
 
@@ -123,8 +125,8 @@ QIcon TextLabel::icon() const{
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(TextLabel, QString, text, text)
-CLASS_SHARED_D_READER_IMPL(TextLabel, bool, teXUsed, teXUsed);
+CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
+// CLASS_SHARED_D_READER_IMPL(TextLabel, bool, teXUsed, teXUsed);
 CLASS_SHARED_D_READER_IMPL(TextLabel, qreal, teXFontSize, teXFontSize);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXFontColor, teXFontColor);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalPosition, horizontalPosition, horizontalPosition);
@@ -135,28 +137,21 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlig
 BASIC_SHARED_D_READER_IMPL(TextLabel, float, rotationAngle, rotationAngle);
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F(TextLabel, SetText, QString, text, updateText);
-void TextLabel::setText(const QString &text) {
+STD_SETTER_CMD_IMPL_F(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
+void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
-	if (text != d->text)
-		exec(new TextLabelSetTextCmd(d, text, tr("%1: set label text")));
+	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
+		exec(new TextLabelSetTextCmd(d, textWrapper, tr("%1: set label text")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXUsed, bool, teXUsed, updateTeXImage);
-void TextLabel::setTeXUsed(const bool tex) {
-	Q_D(TextLabel);
-	if (tex != d->teXUsed)
-		exec(new TextLabelSetTeXUsedCmd(d, tex, tr("%1: use TeX syntax")));
-}
-
-STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXFontSize, qreal, teXFontSize, updateTeXImage);
+STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXFontSize, qreal, teXFontSize, updateText);
 void TextLabel::setTeXFontSize(const qreal fontSize) {
 	Q_D(TextLabel);
 	if (fontSize != d->teXFontSize)
 		exec(new TextLabelSetTeXFontSizeCmd(d, fontSize, tr("%1: set TeX font size")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateTeXImage);
+STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateText);
 void TextLabel::setTeXFontColor(const QColor fontColor) {
 	Q_D(TextLabel);
 	if (fontColor != d->teXFontColor)
@@ -249,7 +244,7 @@ void TextLabelPrivate::retransform(){
 
 	//determine the size of the label in scene units.
 	float w, h;
-	if (teXUsed){
+	if (textWrapper.teXUsed){
 		w = teXImage.width()*teXImageScaleFactor;
 		h = teXImage.height()*teXImageScaleFactor;
 	}
@@ -338,17 +333,23 @@ void TextLabelPrivate::updatePosition(){
 	updates the static text.
  */
 void TextLabelPrivate::updateText(){
-	staticText.setText(text);
-	
-	//the size of the label was most probably changed.
-	//call retransform() to recalculate the position and the bounding box of the label
-	retransform();
+	if (textWrapper.teXUsed) {
+		QFuture<QImage> future = QtConcurrent::run(TeXRenderer::renderImageLaTeX, textWrapper.text, teXFontColor, teXFontSize, teXImageResolution);
+		teXImageFutureWatcher.setFuture(future);
+
+		//don't need to call retransorm() here since it is done in updateTeXImage
+		//when the asynchronous rendering of the image is finished.
+	} else {
+		staticText.setText(textWrapper.text);
+
+		//the size of the label was most probably changed.
+		//call retransform() to recalculate the position and the bounding box of the label
+		retransform();
+	}
 }
 
 void TextLabelPrivate::updateTeXImage(){
-	bool status = TeXRenderer::renderImageLaTeX(text, teXImage, teXFontColor, teXFontSize, teXImageResolution);
-	if (!status)
-		qDebug()<<"TeX image not created";
+	teXImage = teXImageFutureWatcher.result();
 
 	//the size of the tex image was most probably changed.
 	//call retransform() to recalculate the position and the bounding box of the label
@@ -404,7 +405,7 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	
 	painter->rotate(rotationAngle);
 
-	if (teXUsed){
+	if (textWrapper.teXUsed){
 		painter->scale(teXImageScaleFactor, teXImageScaleFactor);
 		float w = teXImage.width();
 		float h = teXImage.height();
@@ -429,7 +430,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		float x = itemPos.x();
 		float y = itemPos.y();
 		float w, h;
-		if (teXUsed){
+		if (textWrapper.teXUsed){
 			w = teXImage.width()*scaleFactor;
 			h = teXImage.height()*scaleFactor;
 		}
@@ -496,11 +497,11 @@ void TextLabel::save(QXmlStreamWriter* writer) const{
     writer->writeEndElement();
 	
 	writer->writeStartElement( "text" );
-	writer->writeCharacters( d->text );
+	writer->writeCharacters( d->textWrapper.text );
 	writer->writeEndElement();
 	
 	writer->writeStartElement( "format" );
-    writer->writeAttribute( "teXUsed", QString::number(d->teXUsed) );
+    writer->writeAttribute( "teXUsed", QString::number(d->textWrapper.teXUsed) );
 	writer->writeAttribute( "teXFontSize", QString::number(d->teXFontSize) );
 	writer->writeAttribute( "teXFontColor_r", QString::number(d->teXFontColor.red()) );
 	writer->writeAttribute( "teXFontColor_g", QString::number(d->teXFontColor.green()) );
@@ -582,7 +583,7 @@ bool TextLabel::load(XmlStreamReader* reader){
             else
                 d->rotationAngle = str.toInt();
 		}else if (reader->name() == "text"){
-			d->text = reader->readElementText();
+			d->textWrapper.text = reader->readElementText();
 		}else if (reader->name() == "format"){
 			attribs = reader->attributes();
 
@@ -590,7 +591,7 @@ bool TextLabel::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'teXUsed'"));
             else
-                d->teXUsed = str.toInt();
+                d->textWrapper.teXUsed = str.toInt();
 			
 			str = attribs.value("teXFontSize").toString();
             if(str.isEmpty())
@@ -621,10 +622,7 @@ bool TextLabel::load(XmlStreamReader* reader){
         }
     }
 
-	if ( d->teXUsed )
-		d->updateTeXImage();
-	else
-		d->updateText();
+	d->updateText();
 
     return true;
 }

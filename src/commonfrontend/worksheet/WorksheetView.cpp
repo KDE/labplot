@@ -617,7 +617,7 @@ void WorksheetView::addNew(QAction* action){
 		dynamic_cast<CartesianPlot*>(aspect)->initDefault();
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel("text label");
-		l->setText("text label");
+		l->setText(QString("text label"));
 		aspect = l;
 	}
 

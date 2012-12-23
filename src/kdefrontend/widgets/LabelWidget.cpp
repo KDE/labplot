@@ -115,7 +115,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
-	ui.teLabel->setText(m_label->text());
+	ui.teLabel->setText(m_label->text().text);
 	m_initializing = false;
 
 	connect( m_label, SIGNAL(positionChanged(QPointF&)), this, SLOT(labelPostionChanged(QPointF&)) );
@@ -136,7 +136,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
-	ui.teLabel->setText(m_label->text());
+	ui.teLabel->setText(m_label->text().text);
 	//TODO save the offset value in KConfigGroup? (available only for the axis labels)
 	ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(axes.first()->titleOffset(), Worksheet::Point) );
 	m_initializing = false;
@@ -169,22 +169,16 @@ void LabelWidget::textChanged(){
 	if (m_initializing)
 		return;
 
-	if(!m_label) {
-		kWarning()<<"m_label not defined";
-		return;
-	}
-
 	if (ui.chbTeX->isChecked()) {
+		QString text=ui.teLabel->toPlainText();
+		TextLabel::TextWrapper wrapper(text, true);
+
+		// TODO: this uses format of current selection only
+		QTextCharFormat format = ui.teLabel->currentCharFormat();
+
 		foreach(TextLabel* label, m_labelsList){
-			label->setText(ui.teLabel->toPlainText());
-			// TODO: this uses format of current selection only
-			QTextCharFormat format = ui.teLabel->currentCharFormat();
 			label->setTeXFontSize(format.fontPointSize());
-		}
-		// only update every 3 seconds
-		if(! m_updatelock) {
-			m_updatelock=true;
-			QTimer::singleShot(3000, this, SLOT(updateTeXImage()));
+			m_label->setText(wrapper);
 		}
 	}else{
 		//save an empty string instead of a html-string with empty body, if no text available in QTextEdit
@@ -193,9 +187,10 @@ void LabelWidget::textChanged(){
 			text = "";
 		else
 			text = ui.teLabel->toHtml();
-			
+
+		TextLabel::TextWrapper wrapper(text, false);
 		foreach(TextLabel* label, m_labelsList)
-			m_label->setText(text);
+			m_label->setText(wrapper);
 	}
 }
 
@@ -220,7 +215,7 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 		ui.tbFontSubScript->setChecked(false);
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
 
-	if(! m_label->teXUsed())
+	if(!m_label->text().teXUsed)
 		ui.kcbTextColor->setColor(format.foreground().color());
 	ui.kfontRequester->setFont(format.font());
 }
@@ -238,14 +233,10 @@ void LabelWidget::teXUsedChanged(bool checked){
 	ui.tbFontStrikeOut->setEnabled(!checked);
 	ui.tbSymbols->setEnabled(!checked);
 
-	if(checked){
-		foreach(TextLabel* label, m_labelsList)
-			label->setText(ui.teLabel->toPlainText());
-	}else{
-		foreach(TextLabel* label, m_labelsList)
-			m_label->setText(ui.teLabel->toHtml());
-	}
-	m_label->setTeXUsed(checked);
+	QString text = checked ? ui.teLabel->toPlainText() : ui.teLabel->toHtml();
+	TextLabel::TextWrapper wrapper(text, checked);
+	foreach(TextLabel* label, m_labelsList)
+		label->setText(wrapper);
 }
 
 void LabelWidget::textColorChanged(QColor color){
@@ -450,14 +441,6 @@ void LabelWidget::offsetChanged(double value){
 		axis->setTitleOffset( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
-// slot for TeX image update timer
-void LabelWidget::updateTeXImage() {
-	foreach(TextLabel* label, m_labelsList)
-		label->updateTeXImage();
-	
-	m_updatelock=false;
-}
-
 void LabelWidget::visibilityChanged(bool state){
 	if (m_initializing)
 		return;
@@ -489,8 +472,8 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	
 	//Text
 	//TODO font, color etc.
-	ui.chbTeX->setChecked(group.readEntry("TeXUsed", (bool) m_label->teXUsed()));
-	if(m_label->teXUsed())
+	ui.chbTeX->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
+	if(m_label->text().teXUsed)
 		ui.kcbTextColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
 	// Geometry
