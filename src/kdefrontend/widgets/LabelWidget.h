@@ -52,7 +52,6 @@ private:
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
 	bool m_initializing;
-	bool m_updatelock;
 
 	void setFixedLabelMode(const bool);
 
@@ -84,7 +83,6 @@ private slots:
 	void rotationChanged(int);
 	void offsetChanged(double);
 	
-	void updateTeXImage();
 	void visibilityChanged(bool);
 	
 	//SLOTs for changes triggered in TextLabel

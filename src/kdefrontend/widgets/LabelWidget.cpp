@@ -51,7 +51,6 @@
 // see legacy/LabelWidget.cpp
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
-	m_updatelock=false;
 	
 	QGridLayout* layout =static_cast<QGridLayout*>(this->layout());
   	layout->setContentsMargins(2,2,2,2);
