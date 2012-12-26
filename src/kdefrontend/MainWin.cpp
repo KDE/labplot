@@ -965,6 +965,8 @@ void MainWin::redo(){
 	WAIT_CURSOR;
 	m_project->undoStack()->redo();
 	projectChanged();
+	if (m_project->undoStack()->index() == m_project->undoStack()->count())
+		m_redoAction->setEnabled(false);
 	RESET_CURSOR;
 }
 
