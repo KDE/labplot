@@ -177,7 +177,7 @@ void LabelWidget::textChanged(){
 
 		foreach(TextLabel* label, m_labelsList){
 			label->setTeXFontSize(format.fontPointSize());
-			m_label->setText(wrapper);
+			label->setText(wrapper);
 		}
 	}else{
 		//save an empty string instead of a html-string with empty body, if no text available in QTextEdit
@@ -189,7 +189,7 @@ void LabelWidget::textChanged(){
 
 		TextLabel::TextWrapper wrapper(text, false);
 		foreach(TextLabel* label, m_labelsList)
-			m_label->setText(wrapper);
+			label->setText(wrapper);
 	}
 }
 
@@ -214,7 +214,7 @@ void LabelWidget::charFormatChanged(QTextCharFormat format){
 		ui.tbFontSubScript->setChecked(false);
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
 
-	if(!m_label->text().teXUsed)
+	if(!ui.chbTeX->isChecked())
 		ui.kcbTextColor->setColor(format.foreground().color());
 	ui.kfontRequester->setFont(format.font());
 }
@@ -445,7 +445,7 @@ void LabelWidget::visibilityChanged(bool state){
 		return;
 
 	foreach(TextLabel* label, m_labelsList)
-		m_label->setVisible(state);
+		label->setVisible(state);
 }
 
 //*********************************************************
