@@ -30,6 +30,7 @@
 #ifndef WORKSHEETDOCK_H
 #define WORKSHEETDOCK_H
 
+#include "backend/worksheet/plots/PlotArea.h"
 #include <QList>
 #include "ui_worksheetdock.h"
 
@@ -82,7 +83,22 @@ private slots:
 	void layoutColumnCountChanged(int);
 
 	//SLOTs for changes triggered in Worksheet
+	void worksheetBackgroundTypeChanged(PlotArea::BackgroundType);
+	void worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+	void worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void worksheetBackgroundBrushStyleChanged(Qt::BrushStyle);
+	void worksheetBackgroundFirstColorChanged(QColor&);
+	void worksheetBackgroundSecondColorChanged(QColor&);
+	void worksheetBackgroundFileNameChanged(QString&);
+	void worksheetBackgroundOpacityChanged(float);
+	void worksheetLayoutTopMarginChanged(float);
+	void worksheetLayoutBottomMarginChanged(float);
+	void worksheetLayoutLeftMarginChanged(float);
+	void worksheetLayoutRightMarginChanged(float);
+	void worksheetLayoutVerticalSpacingChanged(float);
+	void worksheetLayoutHorizontalSpacingChanged(float);
 	void worksheetLayoutRowCountChanged(int);
+	void worksheetLayoutColumnCountChanged(int);
 	
 	//saving/loading
 	void loadConfig(KConfig&);

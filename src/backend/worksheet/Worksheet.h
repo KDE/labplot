@@ -70,7 +70,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
 		void setSelectedInView(const bool);
 				
-        BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity)
+        BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
         BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
         BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
         BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
@@ -112,7 +112,39 @@ class Worksheet: public AbstractPart, public scripted{
 		void itemDeselected(QGraphicsItem*);
 		void requestUpdate();
 		void layoutChanged(Worksheet::Layout);
+
+		friend class WorksheetSetBackgroundTypeCmd;
+		friend class WorksheetSetBackgroundColorStyleCmd;
+		friend class WorksheetSetBackgroundImageStyleCmd;
+		friend class WorksheetSetBackgroundBrushStyleCmd;
+		friend class WorksheetSetBackgroundFirstColorCmd;
+		friend class WorksheetSetBackgroundSecondColorCmd;
+		friend class WorksheetSetBackgroundFileNameCmd;
+		friend class WorksheetSetBackgroundOpacityCmd;
+		friend class WorksheetSetLayoutTopMarginCmd;
+		friend class WorksheetSetLayoutBottomMarginCmd;
+		friend class WorksheetSetLayoutLeftMarginCmd;
+		friend class WorksheetSetLayoutRightMarginCmd;
+		friend class WorksheetSetLayoutVerticalSpacingCmd;
+		friend class WorksheetSetLayoutHorizontalSpacingCmd;
+		friend class WorksheetSetLayoutRowCountCmd;
+		friend class WorksheetSetLayoutColumnCountCmd;
+		void backgroundTypeChanged(PlotArea::BackgroundType);
+		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+		void backgroundBrushStyleChanged(Qt::BrushStyle);
+		void backgroundFirstColorChanged(QColor&);
+		void backgroundSecondColorChanged(QColor&);
+		void backgroundFileNameChanged(QString&);
+		void backgroundOpacityChanged(float);
+		void layoutTopMarginChanged(float);
+		void layoutBottomMarginChanged(float);
+		void layoutLeftMarginChanged(float);
+		void layoutRightMarginChanged(float);
+		void layoutVerticalSpacingChanged(float);
+		void layoutHorizontalSpacingChanged(float);
 		void layoutRowCountChanged(int);
+		void layoutColumnCountChanged(int);
 };
 
 #endif

@@ -332,7 +332,7 @@ BASIC_D_READER_IMPL(Worksheet, Qt::BrushStyle, backgroundBrushStyle, backgroundB
 CLASS_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor)
 CLASS_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor)
 CLASS_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName)
-BASIC_D_READER_IMPL(Worksheet, qreal, backgroundOpacity, backgroundOpacity)
+BASIC_D_READER_IMPL(Worksheet, float, backgroundOpacity, backgroundOpacity)
 
 /* =============================== getter methods for layout options ====================================== */
 BASIC_D_READER_IMPL(Worksheet, Worksheet::Layout, layout, layout)
@@ -347,50 +347,50 @@ BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount)
 
 
 /* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
 void Worksheet::setBackgroundType(PlotArea::BackgroundType type) {
 	if (type != d->backgroundType)
 		exec(new WorksheetSetBackgroundTypeCmd(d, type, tr("%1: background type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
 void Worksheet::setBackgroundColorStyle(PlotArea::BackgroundColorStyle style) {
 	if (style != d->backgroundColorStyle)
 		exec(new WorksheetSetBackgroundColorStyleCmd(d, style, tr("%1: background color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
 void Worksheet::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	if (style != d->backgroundImageStyle)
 		exec(new WorksheetSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
 void Worksheet::setBackgroundBrushStyle(Qt::BrushStyle style) {
 	if (style != d->backgroundBrushStyle)
 		exec(new WorksheetSetBackgroundBrushStyleCmd(d, style, tr("%1: background brush style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
 void Worksheet::setBackgroundFirstColor(const QColor &color) {
 	if (color!= d->backgroundFirstColor)
 		exec(new WorksheetSetBackgroundFirstColorCmd(d, color, tr("%1: set background first color")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
 void Worksheet::setBackgroundSecondColor(const QColor &color) {
 	if (color!= d->backgroundSecondColor)
 		exec(new WorksheetSetBackgroundSecondColorCmd(d, color, tr("%1: set background second color")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundFileName, QString, backgroundFileName, update)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundFileName, QString, backgroundFileName, update)
 void Worksheet::setBackgroundFileName(const QString& fileName) {
 	if (fileName!= d->backgroundFileName)
 		exec(new WorksheetSetBackgroundFileNameCmd(d, fileName, tr("%1: set background image")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetBackgroundOpacity, qreal, backgroundOpacity, update)
-void Worksheet::setBackgroundOpacity(qreal opacity) {
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundOpacity, float, backgroundOpacity, update)
+void Worksheet::setBackgroundOpacity(float opacity) {
 	if (opacity != d->backgroundOpacity)
 		exec(new WorksheetSetBackgroundOpacityCmd(d, opacity, tr("%1: set opacity")));
 }
@@ -405,54 +405,55 @@ void Worksheet::setLayout(Worksheet::Layout layout){
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout)
 void Worksheet::setLayoutTopMargin(float margin){
 	if (margin != d->layoutTopMargin)
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, tr("%1: set layout top margin")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutBottomMargin, float, layoutBottomMargin, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutBottomMargin, float, layoutBottomMargin, updateLayout)
 void Worksheet::setLayoutBottomMargin(float margin){
 	if (margin != d->layoutBottomMargin)
 		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, tr("%1: set layout bottom margin")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargin, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargin, updateLayout)
 void Worksheet::setLayoutLeftMargin(float margin){
 	if (margin != d->layoutLeftMargin)
 		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, tr("%1: set layout left margin")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutRightMargin, float, layoutRightMargin, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutRightMargin, float, layoutRightMargin, updateLayout)
 void Worksheet::setLayoutRightMargin(float margin){
 	if (margin != d->layoutRightMargin)
 		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, tr("%1: set layout right margin")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, updateLayout)
 void Worksheet::setLayoutVerticalSpacing(float spacing){
 	if (spacing != d->layoutVerticalSpacing)
 		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, tr("%1: set layout vertical spacing")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, updateLayout)
 void Worksheet::setLayoutHorizontalSpacing(float spacing){
 	if (spacing != d->layoutHorizontalSpacing)
 		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, tr("%1: set layout horizontal spacing")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout)
 void Worksheet::setLayoutRowCount(int count){
 	if (count != d->layoutRowCount)
 		exec(new WorksheetSetLayoutRowCountCmd(d, count, tr("%1: set layout row count")));
 }
 
-STD_SETTER_CMD_IMPL_F(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout)
 void Worksheet::setLayoutColumnCount(int count){
 	if (count != d->layoutColumnCount)
 		exec(new WorksheetSetLayoutColumnCountCmd(d, count, tr("%1: set layout column count")));
 }
 
+//TODO: this is not really undoable at the moment.
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect)
 void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 	if (qFuzzyCompare(rect.width() + 1, 1) || qFuzzyCompare(rect.height() + 1, 1))
@@ -472,14 +473,14 @@ void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 		} else {
 			if (scaleContent) {
 				QList<AbstractWorksheetElement*> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-				foreach(AbstractWorksheetElement *elem, childElements) {
+				foreach(AbstractWorksheetElement *elem, childElements)
 					elem->handlePageResize(horizontalRatio, verticalRatio);
-				}
 			}
 		}
 		endMacro();
 	}
 }
+
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################

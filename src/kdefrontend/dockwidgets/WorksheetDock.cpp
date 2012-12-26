@@ -2,7 +2,7 @@
     File                 : WorksheetDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2012 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for worksheet properties
@@ -29,11 +29,9 @@
  ***************************************************************************/
 
 #include "WorksheetDock.h"
-#include "worksheet/Worksheet.h"
-#include "worksheet/plots/PlotArea.h"
-#include "../TemplateHandler.h"
-#include "../GuiTools.h"
-#include <QTimer>
+#include "backend/worksheet/Worksheet.h"
+#include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/GuiTools.h"
 #include <QPrinter>
 #include <QFileDialog>
 #include <KUrlCompletion>
@@ -171,8 +169,25 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	//show the properties of the first worksheet
 	KConfig config("", KConfig::SimpleConfig);
   	loadConfig(config);
-  
-	connect(worksheet, SIGNAL(layoutRowCountChanged(int)), this, SLOT(worksheetLayoutRowCountChanged(int)));
+
+	connect(worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
+	connect(worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
+	connect(worksheet,SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)),this,SLOT(worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
+	connect(worksheet,SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)),this,SLOT(worksheetBackgroundBrushStyleChanged(Qt::BrushStyle)));
+	connect(worksheet,SIGNAL(backgroundFirstColorChanged(QColor&)),this,SLOT(worksheetBackgroundFirstColorChanged(QColor&)));
+	connect(worksheet,SIGNAL(backgroundSecondColorChanged(QColor&)),this,SLOT(worksheetBackgroundSecondColorChanged(QColor&)));
+	connect(worksheet,SIGNAL(backgroundFileNameChanged(QString&)),this,SLOT(worksheetBackgroundFileNameChanged(QString&)));
+	connect(worksheet,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(worksheetBackgroundOpacityChanged(float)));
+
+	connect(worksheet,SIGNAL(layoutTopMarginChanged(float)),this,SLOT(worksheetLayoutTopMarginChanged(float)));
+	connect(worksheet,SIGNAL(layoutBottomMarginChanged(float)),this,SLOT(worksheetLayoutBottomMarginChanged(float)));
+	connect(worksheet,SIGNAL(layoutLeftMarginChanged(float)),this,SLOT(worksheetLayoutLeftMarginChanged(float)));
+	connect(worksheet,SIGNAL(layoutRightMarginChanged(float)),this,SLOT(worksheetLayoutRightMarginChanged(float)));
+	connect(worksheet,SIGNAL(layoutVerticalSpacingChanged(float)),this,SLOT(worksheetLayoutVerticalSpacingChanged(float)));
+	connect(worksheet,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(worksheetLayoutHorizontalSpacingChanged(float)));
+	connect(worksheet,SIGNAL(layoutRowCountChanged(int)),this,SLOT(worksheetLayoutRowCountChanged(int)));
+	connect(worksheet,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(worksheetLayoutColumnCountChanged(int)));
+
 	m_initializing = false;
 }
 
@@ -555,7 +570,6 @@ void WorksheetDock::layoutHorizontalSpacingChanged(double spacing){
 	}
 }
 
-
 void WorksheetDock::layoutVerticalSpacingChanged(double spacing){
 	if (m_initializing)
 		return;
@@ -611,12 +625,101 @@ void WorksheetDock::fileNameChanged(){
 //*************************************************************
 //******** SLOTs for changes triggered in Worksheet ***********
 //*************************************************************
-void WorksheetDock::worksheetLayoutRowCountChanged(int value){
+void WorksheetDock::worksheetBackgroundTypeChanged(PlotArea::BackgroundType type) {
+	m_initializing = true;
+	ui.cbBackgroundType->setCurrentIndex(type);
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle style) {
+	m_initializing = true;
+	ui.cbBackgroundColorStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle style) {
+	m_initializing = true;
+	ui.cbBackgroundImageStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetBackgroundBrushStyleChanged(Qt::BrushStyle style) {
+	m_initializing = true;
+	ui.cbBackgroundBrushStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetBackgroundFirstColorChanged(QColor& color) {
+	m_initializing = true;
+	ui.kcbBackgroundFirstColor->setColor(color);
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetBackgroundSecondColorChanged(QColor& color) {
+	m_initializing = true;
+	ui.kcbBackgroundSecondColor->setColor(color);
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetBackgroundFileNameChanged(QString& name) {
+	m_initializing = true;
+	ui.kleBackgroundFileName->setText(name);
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetBackgroundOpacityChanged(float opacity) {
+	m_initializing = true;
+	ui.sbBackgroundOpacity->setValue(opacity*100);
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetLayoutTopMarginChanged(float value) {
+	m_initializing = true;
+	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetLayoutBottomMarginChanged(float value) {
+	m_initializing = true;
+	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetLayoutLeftMarginChanged(float value) {
+	m_initializing = true;
+	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetLayoutRightMarginChanged(float value) {
+	m_initializing = true;
+	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetLayoutVerticalSpacingChanged(float value) {
+	m_initializing = true;
+	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetLayoutHorizontalSpacingChanged(float value) {
+	m_initializing = true;
+	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void WorksheetDock::worksheetLayoutRowCountChanged(int value) {
 	m_initializing = true;
 	ui.sbLayoutRowCount->setValue(value);
 	m_initializing = false;
 }
 
+void WorksheetDock::worksheetLayoutColumnCountChanged(int value) {
+	m_initializing = true;
+	ui.sbLayoutColumnCount->setValue(value);
+	m_initializing = false;
+}
 
 //*************************************************************
 //******************** SETTINGS *******************************

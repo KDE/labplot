@@ -55,7 +55,7 @@ class WorksheetPrivate{
 		QColor backgroundFirstColor;
 		QColor backgroundSecondColor;
 		QString backgroundFileName;
-		qreal backgroundOpacity;
+		float backgroundOpacity;
 
 		Worksheet::Layout layout;
 		float layoutTopMargin;
