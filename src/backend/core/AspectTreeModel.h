@@ -72,7 +72,8 @@ class AspectTreeModel : public QAbstractItemModel{
 		void aspectHiddenChanged(const AbstractAspect *aspect);
 		void aspectSelectedInView(const AbstractAspect* aspect);
 		void aspectDeselectedInView(const AbstractAspect* aspect);
-		
+		void renameRequested();
+
 	private:
 		AbstractAspect* m_root;
 		bool m_folderSelectable;
@@ -84,9 +85,10 @@ class AspectTreeModel : public QAbstractItemModel{
 		bool containsFilterString(const AbstractAspect*) const;
 	
 	signals:
-	  void indexSelected(const QModelIndex&);
-	  void indexDeselected(const QModelIndex&);
-	  void hiddenAspectSelected(const AbstractAspect*);
+		void renameRequested(const QModelIndex&);
+		void indexSelected(const QModelIndex&);
+		void indexDeselected(const QModelIndex&);
+		void hiddenAspectSelected(const AbstractAspect*);
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H

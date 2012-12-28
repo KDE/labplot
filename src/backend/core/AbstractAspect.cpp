@@ -358,7 +358,7 @@ void AbstractAspect::addChild(AbstractAspect* child)
 	exec(new SignallingUndoCommand("change signal", child, "aspectAdded", "aspectAboutToBeRemoved",
 				Q_ARG(const AbstractAspect*,child)));
 	endMacro();
-	
+
  	connect(child, SIGNAL(selected()), this, SLOT(childSelected()));
 	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
 	connect(child, SIGNAL(deselected()), this, SLOT(childDeselected()));
@@ -687,7 +687,7 @@ QMenu *AbstractAspect::createContextMenu(){
 	menu->addAction(KStandardAction::copy(this));
 	menu->addAction(KStandardAction::paste(this));
 	menu->addSeparator();
-	menu->addAction(QIcon(KIcon("edit-rename")), QObject::tr("Rename"));
+	menu->addAction(QIcon(KIcon("edit-rename")), QObject::tr("Rename"), this, SIGNAL(renameRequested()));
 	menu->addAction(QIcon(KIcon("edit-delete")), QObject::tr("Delete"), this, SLOT(remove()));
 #endif
 	
@@ -794,4 +794,3 @@ void AbstractAspect::setGlobalDefault(const QString &key, const QVariant &value)
 {
 	Private::g_defaults[QString(staticMetaObject.className()) + "/" + key] = value;
 }
-

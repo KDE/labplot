@@ -255,6 +255,10 @@ void AspectTreeModel::aspectAdded(const AbstractAspect *aspect){
 	endInsertRows();
 	AbstractAspect * parent = aspect->parentAspect();
 	emit dataChanged(modelIndexOfAspect(parent), modelIndexOfAspect(parent, 3));
+
+	connect(aspect, SIGNAL(renameRequested()), this, SLOT(renameRequested()));
+	foreach(const AbstractAspect* child, aspect->children<AbstractAspect>())
+		connect(child, SIGNAL(renameRequested()), this, SLOT(renameRequested()));
 	
 	connect(aspect, SIGNAL(childAspectSelectedInView(const AbstractAspect*)), this, SLOT(aspectSelectedInView(const AbstractAspect*)));
 	connect(aspect, SIGNAL(childAspectDeselectedInView(const AbstractAspect*)), this, SLOT(aspectDeselectedInView(const AbstractAspect*)));
@@ -352,7 +356,15 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const{
 // 	}
 }
 
-//######################## SLOTs ############################
+//##############################################################################
+//#################################  SLOTS  ####################################
+//##############################################################################
+void AspectTreeModel::renameRequested() {
+	AbstractAspect* aspect = qobject_cast<AbstractAspect*>(QObject::sender());
+	if (aspect)
+		emit renameRequested(modelIndexOfAspect(aspect));
+}
+
 void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect){
 	if (aspect->hidden()){
 		//a hidden aspect was selected in the view (e.g. plot title in WorksheetView)

@@ -188,7 +188,7 @@ class AbstractAspect : public QObject
 		void setHidden(bool value);
 		virtual void remove() { if(parentAspect()) parentAspect()->removeChild(this); }
 		QString uniqueNameFor(const QString &current_name) const;
-		
+
 	protected slots:
 		//!called when a child aspect was selected in the model
 		virtual void childSelected(){}
@@ -209,6 +209,7 @@ class AbstractAspect : public QObject
 		void aspectHiddenAboutToChange(const AbstractAspect *aspect);
 		void aspectHiddenChanged(const AbstractAspect *aspect);
 		void statusInfo(const QString &text);
+		void renameRequested();
 		
 		//selection/deselection in model (project explorer)
 		void selected();

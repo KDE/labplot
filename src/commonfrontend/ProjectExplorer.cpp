@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
 									(replace * with @ in the email addresses)
  ***************************************************************************/
 
@@ -189,7 +189,8 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 	
 	AspectTreeModel* treeModel = qobject_cast<AspectTreeModel*>(model);
-	
+
+	connect(treeModel, SIGNAL(renameRequested(QModelIndex)), m_treeView, SLOT(edit(QModelIndex)));
 	connect(treeModel, SIGNAL(indexSelected(const QModelIndex&)), this, SLOT(selectIndex(const QModelIndex&) ));
 	connect(treeModel, SIGNAL(indexDeselected(const QModelIndex&)), this, SLOT(deselectIndex(const QModelIndex&) ));
 	connect(treeModel, SIGNAL(hiddenAspectSelected(const AbstractAspect*)), this, SIGNAL(hiddenAspectSelected(const AbstractAspect*)));
@@ -268,7 +269,9 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 }
 
 
-//########### SLOTs ################
+//##############################################################################
+//#################################  SLOTS  ####################################
+//##############################################################################
 /*!
   expand the aspect \c aspect (the tree index corresponding to it) in the tree view and makes it visible.
   Called when a new aspect is added to the project.
@@ -406,12 +409,10 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex &  index){
-//   qDebug()<<"ProjectExplorer::selectIndex "<<index;
   m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
  
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
-//   qDebug()<<"ProjectExplorer::deselectIndex "<<index;
   m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
 }
 
