@@ -333,7 +333,7 @@ void WorksheetView::createContextMenu(QMenu* menu){
   if (!menu)
 	menu=new QMenu();
   else
-	menu->addSeparator()->setText(tr("Mouse mode"));
+	menu->addSeparator();
 
 	QAction* firstAction = menu->actions().first();
 	menu->insertMenu(firstAction, m_addNewMenu);
@@ -347,10 +347,9 @@ void WorksheetView::createContextMenu(QMenu* menu){
 
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_zoomMenu);
-	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_layoutMenu);
-	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_gridMenu);
+	menu->insertSeparator(firstAction);
 }
 
 void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {

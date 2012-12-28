@@ -334,20 +334,22 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar){
 void SpreadsheetView::createContextMenu(QMenu * menu){
 	if (!menu)
 		menu=new QMenu();
-  else
-	  menu->addSeparator();
-	
-	menu->addMenu(m_selectionMenu);
-	menu->addAction(action_toggle_comments);
-	menu->addSeparator();
-	menu->addAction(action_select_all);
-	menu->addAction(action_clear_spreadsheet);
-	menu->addAction(action_clear_masks);
-	menu->addAction(action_sort_spreadsheet);
-	menu->addSeparator();
-	menu->addAction(action_add_column);
-	menu->addSeparator();
-	menu->addAction(action_go_to_cell);
+	else
+		menu->addSeparator();
+
+  	QAction* firstAction = menu->actions().first();
+	menu->insertMenu(firstAction, m_selectionMenu);
+	menu->insertAction(firstAction, action_toggle_comments);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_select_all);
+	menu->insertAction(firstAction, action_clear_spreadsheet);
+	menu->insertAction(firstAction, action_clear_masks);
+	menu->insertAction(firstAction, action_sort_spreadsheet);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_add_column);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_go_to_cell);
+	menu->insertSeparator(firstAction);
 	
 	// TODO
 	// Export to ASCII
