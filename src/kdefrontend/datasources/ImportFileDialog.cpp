@@ -186,6 +186,8 @@ void ImportFileDialog::newSpreadsheet(){
 	bool ok;
 	//TODO: how to set the icon in QInputDialog or in KInputDialog?
 	QInputDialog* dlg = new QInputDialog(this);
+
+//	this->setWindowIcon( QIcon(KIcon("insert-table")) );
 	dlg->setWindowIcon( QIcon(KIcon("insert-table")) );
 	name = dlg->getText(this, i18n("add new Spreadsheet"), i18n("Spreadsheet name"), QLineEdit::Normal, name, &ok);
 // 	name = KInputDialog::getText( i18n("add new Spreadsheet"), i18n("Spreadsheet name"), name, &ok);

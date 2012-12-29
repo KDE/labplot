@@ -126,6 +126,9 @@ class CartesianPlot:public AbstractPlot{
 		void xMaxChanged(float);
 		void yMinChanged(float);
 		void yMaxChanged(float);
+
+		friend class CartesianPlotSetXScaleCmd;
+		void xScaleChanged(int);
 };
 
 #endif

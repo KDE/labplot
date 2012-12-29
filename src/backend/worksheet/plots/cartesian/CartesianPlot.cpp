@@ -65,6 +65,7 @@
 class CartesianPlotPrivate:public AbstractPlotPrivate{
     public:
 		CartesianPlotPrivate(CartesianPlot *owner);
+		CartesianPlot * const q;
 		void setRect(const QRectF& r);
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void retransform();
@@ -384,7 +385,7 @@ void CartesianPlot::setXMax(float xMax){
 		exec(new CartesianPlotSetXMaxCmd(d, xMax, tr("%1: set max x")));
 }
 
-STD_SETTER_CMD_IMPL_F(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales);
 void CartesianPlot::setXScale(Scale scale){
 	Q_D(CartesianPlot);
 	if (scale != d->xScale)
@@ -726,7 +727,7 @@ void CartesianPlot::shiftDownY(){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) : AbstractPlotPrivate(owner){
+CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) : AbstractPlotPrivate(owner),q(owner){
 }
 
 /*!

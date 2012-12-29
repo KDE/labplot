@@ -33,6 +33,7 @@
 #include <QList>
 #include "ui_cartesianplotdock.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class CartesianPlot;
 class LabelWidget;
@@ -99,6 +100,7 @@ private slots:
 	void plotPositionChanged();
 	void plotXMinChanged(float);
 	void plotXMaxChanged(float);
+	void plotXScaleChanged(int);
 	void plotYMinChanged(float);
 	void plotYMaxChanged(float);
 	

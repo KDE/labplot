@@ -203,6 +203,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
+
+	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
 	
 	m_initializing = false;
 }
@@ -350,13 +352,12 @@ void CartesianPlotDock::xMaxChanged(){
 /*!
 	called on scale changes (linear, log) for the x-axis
  */
-void CartesianPlotDock::xScaleChanged(int index){
+void CartesianPlotDock::xScaleChanged(int scale){
   if (m_initializing)
 	return;
 
-  CartesianPlot::Scale scale = (CartesianPlot::Scale)index;
   foreach(CartesianPlot* plot, m_plotList)
-	plot->setXScale(scale);
+	plot->setXScale((CartesianPlot::Scale) scale);
 }
 
 void CartesianPlotDock::autoScaleYChanged(int state){
@@ -694,6 +695,13 @@ void CartesianPlotDock::plotXMaxChanged(float value){
 	m_initializing = true;
 	ui.kleXMax->setText( QString::number(value) );
 	m_initializing = false;
+}
+
+void CartesianPlotDock::plotXScaleChanged(int scale){
+	m_initializing = true;
+	ui.cbXScaling->setCurrentIndex( scale );
+	m_initializing = false;
+
 }
 
 void CartesianPlotDock::plotYMinChanged(float value){
