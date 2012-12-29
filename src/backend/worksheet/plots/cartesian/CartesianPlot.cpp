@@ -371,14 +371,14 @@ void CartesianPlot::setAutoScaleX(bool autoScaleX){
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(CartesianPlot, SetXMin, float, xMin, retransformScales)
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMin, float, xMin, retransformScales)
 void CartesianPlot::setXMin(float xMin){
 	Q_D(CartesianPlot);
 	if (xMin != d->xMin)
 		exec(new CartesianPlotSetXMinCmd(d, xMin, tr("%1: set min x")));
 }
 
-STD_SETTER_CMD_IMPL_F(CartesianPlot, SetXMax, float, xMax, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMax, float, xMax, retransformScales);
 void CartesianPlot::setXMax(float xMax){
 	Q_D(CartesianPlot);
 	if (xMax != d->xMax)
@@ -404,21 +404,21 @@ void CartesianPlot::setAutoScaleY(bool autoScaleY){
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(CartesianPlot, SetYMin, float, yMin, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMin, float, yMin, retransformScales);
 void CartesianPlot::setYMin(float yMin){
 	Q_D(CartesianPlot);
 	if (yMin != d->yMin)
 		exec(new CartesianPlotSetYMinCmd(d, yMin, tr("%1: set min y")));
 }
 
-STD_SETTER_CMD_IMPL_F(CartesianPlot, SetYMax, float, yMax, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMax, float, yMax, retransformScales);
 void CartesianPlot::setYMax(float yMax){
 	Q_D(CartesianPlot);
 	if (yMax != d->yMax)
 		exec(new CartesianPlotSetYMaxCmd(d, yMax, tr("%1: set max y")));
 }
 
-STD_SETTER_CMD_IMPL_F(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales);
 void CartesianPlot::setYScale(Scale scale){
 	Q_D(CartesianPlot);
 	if (scale != d->yScale)

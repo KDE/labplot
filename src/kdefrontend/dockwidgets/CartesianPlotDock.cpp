@@ -201,10 +201,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(positionChanged()), this, SLOT(plotPositionChanged()) );
 	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
 	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
+	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
+	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
 
-	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
 	
 	m_initializing = false;
 }
@@ -701,7 +702,6 @@ void CartesianPlotDock::plotXScaleChanged(int scale){
 	m_initializing = true;
 	ui.cbXScaling->setCurrentIndex( scale );
 	m_initializing = false;
-
 }
 
 void CartesianPlotDock::plotYMinChanged(float value){
@@ -713,6 +713,12 @@ void CartesianPlotDock::plotYMinChanged(float value){
 void CartesianPlotDock::plotYMaxChanged(float value){
 	m_initializing = true;
 	ui.kleYMax->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotYScaleChanged(int scale){
+	m_initializing = true;
+	ui.cbYScaling->setCurrentIndex( scale );
 	m_initializing = false;
 }
 

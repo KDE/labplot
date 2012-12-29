@@ -121,14 +121,21 @@ class CartesianPlot:public AbstractPlot{
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 
 	signals:
+
+		//friend class CartesianPlotSetPositionCmd;
+		friend class CartesianPlotSetXMinCmd;
+		friend class CartesianPlotSetXMaxCmd;
+		friend class CartesianPlotSetXScaleCmd;
+		friend class CartesianPlotSetYMinCmd;
+		friend class CartesianPlotSetYMaxCmd;
+		friend class CartesianPlotSetYScaleCmd;
 		void positionChanged();
 		void xMinChanged(float);
 		void xMaxChanged(float);
+		void xScaleChanged(int);
 		void yMinChanged(float);
 		void yMaxChanged(float);
-
-		friend class CartesianPlotSetXScaleCmd;
-		void xScaleChanged(int);
+		void yScaleChanged(int);
 };
 
 #endif

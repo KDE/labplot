@@ -97,12 +97,14 @@ private slots:
 	void verticalPaddingChanged(double);
 	
 	//SLOTs for changes triggered in CartesianPlot
+	//void plotShiftLeftX();
 	void plotPositionChanged();
 	void plotXMinChanged(float);
 	void plotXMaxChanged(float);
 	void plotXScaleChanged(int);
 	void plotYMinChanged(float);
 	void plotYMaxChanged(float);
+	void plotYScaleChanged(int);
 	
 	//save/load
 	void loadConfig(KConfig&);
