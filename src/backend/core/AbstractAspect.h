@@ -2,9 +2,10 @@
     File                 : AbstractAspect.h
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
-                           (C) 2010 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
+    Copyright            : (C) 2007-2009 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
+	Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
     Description          : Base class for all persistent objects in a Project.
 
  ***************************************************************************/
@@ -53,8 +54,7 @@ class QXmlStreamWriter;
 #endif
 class QAction;
 
-class AbstractAspect : public QObject
-{
+class AbstractAspect : public QObject {
 	Q_OBJECT
 
 	public:
@@ -68,7 +68,7 @@ class AbstractAspect : public QObject
 		class Private;
 		static void staticInit();
 
-		AbstractAspect(const QString &name);
+		AbstractAspect(const QString& name);
 		virtual ~AbstractAspect();
 
 		AbstractAspect * parentAspect() const;
@@ -82,14 +82,14 @@ class AbstractAspect : public QObject
 			}
 			return NULL;
 		}
-		Folder * folder();
-		bool isDescendantOf(AbstractAspect *other);
+		Folder* folder();
+		bool isDescendantOf(AbstractAspect* other);
 
 		void setSelected(bool);
 		
-		void addChild(AbstractAspect* child);
+		void addChild(AbstractAspect*);
 		void insertChildBefore(AbstractAspect *child, AbstractAspect *before);
-		void removeChild(AbstractAspect* child);
+		void removeChild(AbstractAspect*);
 		QList<AbstractAspect*> children(const char* className, const ChildIndexFlags &flags=0);
 
 		//TODO: recursive flag doesn't work! How should it work with templates?!?
@@ -143,16 +143,16 @@ class AbstractAspect : public QObject
 			}
 			return -1;
 		}
-		void reparent(AbstractAspect * new_parent, int new_index=-1);
+		void reparent(AbstractAspect* new_parent, int new_index=-1);
 
 		void removeAllChildren();
 
-		virtual const Project *project() const { return parentAspect() ? parentAspect()->project() : 0; }
-		virtual Project *project() { return parentAspect() ? parentAspect()->project() : 0; }
+		virtual const Project* project() const { return parentAspect() ? parentAspect()->project() : 0; }
+		virtual Project* project() { return parentAspect() ? parentAspect()->project() : 0; }
 		virtual QString path() const { return parentAspect() ? parentAspect()->path() + "/" + name() : "";  }
 
 		virtual QIcon icon() const;
-		virtual QMenu *createContextMenu();
+		virtual QMenu* createContextMenu();
 
 		QString name() const;
 		QString comment() const;
@@ -161,9 +161,9 @@ class AbstractAspect : public QObject
 		QString caption() const;
 		bool hidden() const;
 
-		virtual QUndoStack *undoStack() const { return parentAspect() ? parentAspect()->undoStack() : 0; }
-		void exec(QUndoCommand *command);
-		void exec(QUndoCommand *command, const char *preChangeSignal, const char *postChangeSignal,
+		virtual QUndoStack* undoStack() const { return parentAspect() ? parentAspect()->undoStack() : 0; }
+		void exec(QUndoCommand*);
+		void exec(QUndoCommand* command, const char *preChangeSignal, const char *postChangeSignal,
 				QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),
 				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());
 		void beginMacro(const QString& text);
@@ -173,42 +173,38 @@ class AbstractAspect : public QObject
 		static void setGlobal(const QString &key, const QVariant &value);
 		static void setGlobalDefault(const QString &key, const QVariant &value);
 
-		virtual void save(QXmlStreamWriter *) const {}
-		virtual bool load(XmlStreamReader *) { return false; }
+		virtual void save(QXmlStreamWriter*) const {}
+		virtual bool load(XmlStreamReader*) { return false; }
 	protected:
-		bool readBasicAttributes(XmlStreamReader * reader);
-		void writeBasicAttributes(QXmlStreamWriter * writer) const;
-		void writeCommentElement(QXmlStreamWriter * writer) const;
-		bool readCommentElement(XmlStreamReader * reader);
+		bool readBasicAttributes(XmlStreamReader*);
+		void writeBasicAttributes(QXmlStreamWriter*) const;
+		void writeCommentElement(QXmlStreamWriter*) const;
+		bool readCommentElement(XmlStreamReader*);
 
 	public slots:
-		void setName(const QString &value);
-		void setComment(const QString &value);
-		void setCaptionSpec(const QString &value);
-		void setHidden(bool value);
+		void setName(const QString&);
+		void setComment(const QString&);
+		void setCaptionSpec(const QString&);
+		void setHidden(bool);
 		virtual void remove() { if(parentAspect()) parentAspect()->removeChild(this); }
-		QString uniqueNameFor(const QString &current_name) const;
+		QString uniqueNameFor(const QString&) const;
 
 	protected slots:
-		//!called when a child aspect was selected in the model
 		virtual void childSelected(){}
-		//!called when a child's child aspect was selected in the model
 		virtual void childSelected(const AbstractAspect*){}
-		//!called when a child aspect was deselected in the model
 		virtual void childDeselected(){}
-		//!called when a child's child aspect was deselected in the model
 		virtual void childDeselected(const AbstractAspect*){}
 		
 	signals:
-		void aspectDescriptionAboutToChange(const AbstractAspect *aspect);
-		void aspectDescriptionChanged(const AbstractAspect *aspect);
-		void aspectAboutToBeAdded(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect * child);
-		void aspectAdded(const AbstractAspect *aspect);
-		void aspectAboutToBeRemoved(const AbstractAspect *aspect);
-		void aspectRemoved(const AbstractAspect *parent, const AbstractAspect * before, const AbstractAspect * child);
-		void aspectHiddenAboutToChange(const AbstractAspect *aspect);
-		void aspectHiddenChanged(const AbstractAspect *aspect);
-		void statusInfo(const QString &text);
+		void aspectDescriptionAboutToChange(const AbstractAspect*);
+		void aspectDescriptionChanged(const AbstractAspect*);
+		void aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+		void aspectAdded(const AbstractAspect*);
+		void aspectAboutToBeRemoved(const AbstractAspect*);
+		void aspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+		void aspectHiddenAboutToChange(const AbstractAspect*);
+		void aspectHiddenChanged(const AbstractAspect*);
+		void statusInfo(const QString&);
 		void renameRequested();
 		
 		//selection/deselection in model (project explorer)
@@ -222,11 +218,11 @@ class AbstractAspect : public QObject
 		void childAspectDeselectedInView(const AbstractAspect*);
 		
 	protected:
-		void setCreationTime(const QDateTime& time);
+		void setCreationTime(const QDateTime&);
 		void info(const QString &text) { emit statusInfo(text); }
 
 	private:
-		Private * m_aspect_private;
+		Private* m_aspect_private;
 		const QList< AbstractAspect* > rawChildren() const;
 };
 

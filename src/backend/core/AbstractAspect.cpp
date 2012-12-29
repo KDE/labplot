@@ -2,9 +2,10 @@
     File                 : AbstractAspect.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
-                           (C) 2010 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
+    Copyright            : (C) 2007-2009 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
+	Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
     Description          : Base class for all persistent objects in a Project.
 
  ***************************************************************************/
@@ -211,6 +212,26 @@
  * disturb the workflow.
  */
 
+/**
+ * \fn protected virtual void childSelected()
+ * \brief called when a child aspect was selected in the model
+ */
+
+/**
+ * \fn protected virtual void childSelected(const AbstractAspect*){}
+ * \brief called when a child's child aspect was selected in the model
+ */
+
+/**
+ * \fn protected virtual void childDeselected()
+ * \brief called when a child aspect was deselected in the model
+ */
+
+/**
+ * \fn protected virtual void childDeselected(const AbstractAspect*)
+ * \brief called when a child's child aspect was deselected in the model
+ */
+		
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // start of AbstractAspect implementation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
