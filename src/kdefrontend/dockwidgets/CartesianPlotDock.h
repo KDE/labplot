@@ -97,7 +97,7 @@ private slots:
 	void verticalPaddingChanged(double);
 	
 	//SLOTs for changes triggered in CartesianPlot
-	//void plotShiftLeftX();
+	void plotDescriptionChanged(const AbstractAspect*);
 	void plotPositionChanged();
 	void plotXMinChanged(float);
 	void plotXMaxChanged(float);

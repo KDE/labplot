@@ -205,8 +205,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
+	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
 
-	
 	m_initializing = false;
 }
 
@@ -674,6 +674,21 @@ void CartesianPlotDock::verticalPaddingChanged(double value){
 //*************************************************************
 //****** SLOTs for changes triggered in CartesianPlot *********
 //*************************************************************
+void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_plot != aspect)
+		return;
+
+	if (aspect->name() != ui.leName->text()) {
+		m_initializing = true;
+		ui.leName->setText(aspect->name());
+		m_initializing = false;
+	} else if (aspect->comment() != ui.leComment->text()) {
+		m_initializing = true;
+		ui.leComment->setText(aspect->comment());
+		m_initializing = false;
+	}
+}
+
 void CartesianPlotDock::plotPositionChanged(){
 	if (m_initializing)
 		return;
