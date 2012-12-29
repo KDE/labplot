@@ -46,6 +46,7 @@ public:
 private:
 	Ui::WorksheetDock ui;
 	QList<Worksheet*> m_worksheetList;
+	Worksheet* m_worksheet;
 	bool m_initializing;
 
 	void updatePaperSize();
@@ -83,6 +84,8 @@ private slots:
 	void layoutColumnCountChanged(int);
 
 	//SLOTs for changes triggered in Worksheet
+	void worksheetDescriptionChanged(const AbstractAspect*);
+
 	void worksheetBackgroundTypeChanged(PlotArea::BackgroundType);
 	void worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 	void worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

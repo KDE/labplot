@@ -145,18 +145,18 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	m_initializing = true;
 	m_worksheetList = list;
 
-	Worksheet* worksheet=list.first();
+	m_worksheet=list.first();
   
-  //if there are more then one worksheets in the list, disable the name and comment field in the tab "general"
-  if (list.size()==1){
+	//if there are more then one worksheets in the list, disable the name and comment field in the tab "general"
+	if (list.size()==1){
 	ui.lName->setEnabled(true);
 	ui.leName->setEnabled(true);
 	ui.lComment->setEnabled(true);
 	ui.leComment->setEnabled(true);
 
-	ui.leName->setText(worksheet->name());
-	ui.leComment->setText(worksheet->comment());
-  }else{
+	ui.leName->setText(m_worksheet->name());
+	ui.leComment->setText(m_worksheet->comment());
+	}else{
 	ui.lName->setEnabled(false);
 	ui.leName->setEnabled(false);
 	ui.lComment->setEnabled(false);
@@ -164,29 +164,31 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 
 	ui.leName->setText("");
 	ui.leComment->setText("");
-  }
+	}
   
 	//show the properties of the first worksheet
 	KConfig config("", KConfig::SimpleConfig);
   	loadConfig(config);
 
-	connect(worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
-	connect(worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
-	connect(worksheet,SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)),this,SLOT(worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
-	connect(worksheet,SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)),this,SLOT(worksheetBackgroundBrushStyleChanged(Qt::BrushStyle)));
-	connect(worksheet,SIGNAL(backgroundFirstColorChanged(QColor&)),this,SLOT(worksheetBackgroundFirstColorChanged(QColor&)));
-	connect(worksheet,SIGNAL(backgroundSecondColorChanged(QColor&)),this,SLOT(worksheetBackgroundSecondColorChanged(QColor&)));
-	connect(worksheet,SIGNAL(backgroundFileNameChanged(QString&)),this,SLOT(worksheetBackgroundFileNameChanged(QString&)));
-	connect(worksheet,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(worksheetBackgroundOpacityChanged(float)));
+	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
 
-	connect(worksheet,SIGNAL(layoutTopMarginChanged(float)),this,SLOT(worksheetLayoutTopMarginChanged(float)));
-	connect(worksheet,SIGNAL(layoutBottomMarginChanged(float)),this,SLOT(worksheetLayoutBottomMarginChanged(float)));
-	connect(worksheet,SIGNAL(layoutLeftMarginChanged(float)),this,SLOT(worksheetLayoutLeftMarginChanged(float)));
-	connect(worksheet,SIGNAL(layoutRightMarginChanged(float)),this,SLOT(worksheetLayoutRightMarginChanged(float)));
-	connect(worksheet,SIGNAL(layoutVerticalSpacingChanged(float)),this,SLOT(worksheetLayoutVerticalSpacingChanged(float)));
-	connect(worksheet,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(worksheetLayoutHorizontalSpacingChanged(float)));
-	connect(worksheet,SIGNAL(layoutRowCountChanged(int)),this,SLOT(worksheetLayoutRowCountChanged(int)));
-	connect(worksheet,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(worksheetLayoutColumnCountChanged(int)));
+	connect(m_worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
+	connect(m_worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
+	connect(m_worksheet,SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)),this,SLOT(worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
+	connect(m_worksheet,SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)),this,SLOT(worksheetBackgroundBrushStyleChanged(Qt::BrushStyle)));
+	connect(m_worksheet,SIGNAL(backgroundFirstColorChanged(QColor&)),this,SLOT(worksheetBackgroundFirstColorChanged(QColor&)));
+	connect(m_worksheet,SIGNAL(backgroundSecondColorChanged(QColor&)),this,SLOT(worksheetBackgroundSecondColorChanged(QColor&)));
+	connect(m_worksheet,SIGNAL(backgroundFileNameChanged(QString&)),this,SLOT(worksheetBackgroundFileNameChanged(QString&)));
+	connect(m_worksheet,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(worksheetBackgroundOpacityChanged(float)));
+
+	connect(m_worksheet,SIGNAL(layoutTopMarginChanged(float)),this,SLOT(worksheetLayoutTopMarginChanged(float)));
+	connect(m_worksheet,SIGNAL(layoutBottomMarginChanged(float)),this,SLOT(worksheetLayoutBottomMarginChanged(float)));
+	connect(m_worksheet,SIGNAL(layoutLeftMarginChanged(float)),this,SLOT(worksheetLayoutLeftMarginChanged(float)));
+	connect(m_worksheet,SIGNAL(layoutRightMarginChanged(float)),this,SLOT(worksheetLayoutRightMarginChanged(float)));
+	connect(m_worksheet,SIGNAL(layoutVerticalSpacingChanged(float)),this,SLOT(worksheetLayoutVerticalSpacingChanged(float)));
+	connect(m_worksheet,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(worksheetLayoutHorizontalSpacingChanged(float)));
+	connect(m_worksheet,SIGNAL(layoutRowCountChanged(int)),this,SLOT(worksheetLayoutRowCountChanged(int)));
+	connect(m_worksheet,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(worksheetLayoutColumnCountChanged(int)));
 
 	m_initializing = false;
 }
@@ -312,14 +314,14 @@ void WorksheetDock::nameChanged(){
   if (m_initializing)
 	return;
   
-  m_worksheetList.first()->setName(ui.leName->text());
+  m_worksheet->setName(ui.leName->text());
 }
 
 void WorksheetDock::commentChanged(){
   if (m_initializing)
 	return;
   
-  m_worksheetList.first()->setComment(ui.leComment->text());
+  m_worksheet->setComment(ui.leComment->text());
 }
 
 void WorksheetDock::sizeChanged(int i){
@@ -625,6 +627,21 @@ void WorksheetDock::fileNameChanged(){
 //*************************************************************
 //******** SLOTs for changes triggered in Worksheet ***********
 //*************************************************************
+void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_worksheet != aspect)
+		return;
+	
+	if (aspect->name() != ui.leName->text()) {
+		m_initializing = true;
+		ui.leName->setText(aspect->name());
+		m_initializing = false;
+	} else if (aspect->comment() != ui.leComment->text()) {
+		m_initializing = true;
+		ui.leComment->setText(aspect->comment());
+		m_initializing = false;
+	}
+}
+
 void WorksheetDock::worksheetBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
 	ui.cbBackgroundType->setCurrentIndex(type);
@@ -730,39 +747,38 @@ void WorksheetDock::loadConfig(KConfig& config){
 	
 	// Geometry
 	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", FALSE));
-	Worksheet* worksheet=m_worksheetList.first();
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width",worksheet->pageRect().width()), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height",worksheet->pageRect().height()), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_worksheet->pageRect().width()), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_worksheet->pageRect().height()), Worksheet::Centimeter));
 	updatePaperSize();
 
 	// Background-tab
-	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) worksheet->backgroundColorStyle()) );
-	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) worksheet->backgroundImageStyle()) );
-	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) worksheet->backgroundBrushStyle()) );
-	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", worksheet->backgroundFileName()) );
-	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", worksheet->backgroundFirstColor()) );
-	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", worksheet->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", worksheet->backgroundOpacity())*100 );
+	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_worksheet->backgroundColorStyle()) );
+	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_worksheet->backgroundImageStyle()) );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) m_worksheet->backgroundBrushStyle()) );
+	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_worksheet->backgroundFileName()) );
+	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_worksheet->backgroundFirstColor()) );
+	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_worksheet->backgroundSecondColor()) );
+	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100 );
 	// this at last since others emmit backgroundColorStyleChanges
 	// and enable SecondColor button, etc.!
-	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) worksheet->backgroundType()) );
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_worksheet->backgroundType()) );
 	
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", 
-												   Worksheet::convertFromSceneUnits(worksheet->layoutTopMargin(), Worksheet::Centimeter)) );
+												   Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );
 	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin",
-													   Worksheet::convertFromSceneUnits(worksheet->layoutBottomMargin(), Worksheet::Centimeter)) );
+													   Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter)) );
 	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin",
-													 Worksheet::convertFromSceneUnits(worksheet->layoutLeftMargin(), Worksheet::Centimeter)) );
+													 Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), Worksheet::Centimeter)) );
 	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin",
-													  Worksheet::convertFromSceneUnits(worksheet->layoutRightMargin(), Worksheet::Centimeter)) );
+													  Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), Worksheet::Centimeter)) );
 	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing",
-														    Worksheet::convertFromSceneUnits(worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
+														    Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
 	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing",
-														  Worksheet::convertFromSceneUnits(worksheet->layoutVerticalSpacing(), Worksheet::Centimeter)) );
+														  Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), Worksheet::Centimeter)) );
 	
-	ui.sbLayoutRowCount->setValue(group.readEntry("LayoutRowCount",worksheet->layoutRowCount()));
-	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount",worksheet->layoutColumnCount()));
+	ui.sbLayoutRowCount->setValue(group.readEntry("LayoutRowCount", m_worksheet->layoutRowCount()));
+	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_worksheet->layoutColumnCount()));
 }
 
 void WorksheetDock::saveConfig(KConfig& config){
