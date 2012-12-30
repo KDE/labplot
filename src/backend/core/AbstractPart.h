@@ -57,6 +57,12 @@ class AbstractPart : public AbstractAspect {
 
 	protected:
 		mutable QWidget* m_view;
+
+	signals:
+		void showRequested();
+		void exportRequested();
+		void printRequested();
+		void printPreviewRequested();
 };
 
 #endif // ifndef ABSTRACT_PART_H

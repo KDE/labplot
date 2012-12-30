@@ -33,6 +33,11 @@
 #include <QMenu>
 #include <QStyle>
 
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include <KIcon>
+#include <KLocale>
+#endif
+
 /**
  * \class AbstractPart
  * \brief Base class of Aspects with MDI windows as views (AspectParts).
@@ -59,8 +64,9 @@ AbstractPart::AbstractPart(const QString &name) : AbstractAspect(name),
  */
 PartMdiView* AbstractPart::mdiSubWindow() const
 {
-	if (!m_mdiWindow)
+	if (!m_mdiWindow){
 		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this), view());
+	}
 	return m_mdiWindow;
 }
 
@@ -79,26 +85,39 @@ QMenu* AbstractPart::createContextMenu(){
 	QMenu * menu = AbstractAspect::createContextMenu();
 	Q_ASSERT(menu);
 	menu->addSeparator();
-	const QStyle *widget_style = m_mdiWindow->style();
-   	
-	QAction *action_temp;
-	if(m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized))	{
-		action_temp = menu->addAction(tr("&Restore"), m_mdiWindow, SLOT(showNormal()));
-		action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
-	}
-	
-	if(!(m_mdiWindow->windowState() & Qt::WindowMinimized))	{
-		action_temp = menu->addAction(tr("Mi&nimize"), m_mdiWindow, SLOT(showMinimized()));
-		action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMinButton));
-	}
-	
-	if(!(m_mdiWindow->windowState() & Qt::WindowMaximized))	{
-		action_temp = menu->addAction(tr("Ma&ximize"), m_mdiWindow, SLOT(showMaximized()));
-		action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
+
+	if (m_mdiWindow) {
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+		menu->addAction(QIcon(KIcon("document-export-database")), i18n("Export"), this, SIGNAL(exportRequested()));
+		menu->addAction(QIcon(KIcon("document-print")), i18n("Print"), this, SIGNAL(printRequested()));
+		menu->addAction(QIcon(KIcon("document-print-preview")), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
+#else
+		menu->addAction(tr("Export"), this, SIGNAL(exportRequested()));
+		menu->addAction(tr("Print"), this, SIGNAL(printRequested()));
+		menu->addAction(tr("Print Preview"), this, SIGNAL(printPreviewRequested()));		
+#endif
+		menu->addSeparator();
+
+		const QStyle *widget_style = m_mdiWindow->style();
+		QAction *action_temp;
+		if(m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized))	{
+			action_temp = menu->addAction(tr("&Restore"), m_mdiWindow, SLOT(showNormal()));
+			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
+		}
+
+		if(!(m_mdiWindow->windowState() & Qt::WindowMinimized))	{
+			action_temp = menu->addAction(tr("Mi&nimize"), m_mdiWindow, SLOT(showMinimized()));
+			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMinButton));
+		}
+
+		if(!(m_mdiWindow->windowState() & Qt::WindowMaximized))	{
+			action_temp = menu->addAction(tr("Ma&ximize"), m_mdiWindow, SLOT(showMaximized()));
+			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
+		}
+	} else {
+		menu->addAction(tr("Show"), this, SIGNAL(showRequested()));
 	}
 
-	//TODO add print and print-preview actions
-	
 	return menu;
 }
 

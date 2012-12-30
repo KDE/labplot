@@ -59,7 +59,7 @@ class MainWin : public KXmlGuiWindow{
 	Q_OBJECT
 
 public:
-	MainWin(QWidget *   parent = 0, const QString& filename=0);
+	MainWin(QWidget* parent = 0, const QString& filename=0);
 	~MainWin();
 
 private:
@@ -138,7 +138,7 @@ private:
 	LabelWidget* textLabelDock;
 	
 	void updateGUI();
-	void openXML(QIODevice *file);
+	void openXML(QIODevice*);
 
 	void initActions();
 	void initMenus();
@@ -161,7 +161,7 @@ private slots:
 
 	bool newProject();
 	void openProject();
-	void openProject(QString filename);
+	void openProject(const QString&);
 	void openRecentProject(const KUrl&);
 	bool closeProject();
 	bool saveProject();
@@ -185,14 +185,15 @@ private slots:
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
 	
-	void createContextMenu(QMenu * menu) const;
-	void createFolderContextMenu(const Folder * folder, QMenu * menu) const;
+	void createContextMenu(QMenu*) const;
+	void createFolderContextMenu(const Folder*, QMenu*) const;
 	
-	void handleAspectAboutToBeRemoved(const AbstractAspect *aspect);
-	void handleAspectRemoved(const AbstractAspect *parent);
-	void handleCurrentAspectChanged(AbstractAspect *aspect);
+	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleAspectRemoved(const AbstractAspect* parent);
+	void handleCurrentAspectChanged(AbstractAspect* );
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
-	void handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
+	void handleSubWindowStatusChange(PartMdiView* view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
+	void handleShowSubWindowRequested();
 	
 	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility() const;

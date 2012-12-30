@@ -566,7 +566,7 @@ void MainWin::openProject(){
 		this->openProject(fileName);
 }
 
-void MainWin::openProject(QString filename){
+void MainWin::openProject(const QString& filename) {
 	if(filename.isEmpty())
 		return;
 
@@ -759,7 +759,11 @@ void MainWin::printPreview(){
 	adds a new Spreadsheet to the project.
 */
 void MainWin::newSpreadsheet(){
-	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, i18n("Spreadsheet"));
+	Spreadsheet* spreadsheet = new Spreadsheet(0, 100, 2, i18n("Spreadsheet"));
+	connect(spreadsheet, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
+	connect(spreadsheet, SIGNAL(printRequested()), this, SLOT(print()));
+	connect(spreadsheet, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
+	connect(spreadsheet, SIGNAL(showRequested()), this, SLOT(handleShowSubWindowRequested()));
 	this->addAspectToProject(spreadsheet);
 }
 
@@ -786,6 +790,10 @@ void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
 */
 void MainWin::newWorksheet() {
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
+	connect(worksheet, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
+	connect(worksheet, SIGNAL(printRequested()), this, SLOT(print()));
+	connect(worksheet, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
+	connect(worksheet, SIGNAL(showRequested()), this, SLOT(handleShowSubWindowRequested()));
 	this->addAspectToProject(worksheet);
 }
 
@@ -912,6 +920,15 @@ void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWi
 
 void MainWin::setMdiWindowVisibility(QAction * action){
 	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
+}
+
+/*!
+	shows the sub window of a worksheet or a spreadsheet.
+	Used if the window was closed before and the user asks to show
+	the window again via the context menu in the project explorer.
+*/
+void MainWin::handleShowSubWindowRequested() {
+	activateSubWindowForAspect(m_currentAspect);
 }
 
 void MainWin::newScript(){
