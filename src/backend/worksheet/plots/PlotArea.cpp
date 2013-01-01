@@ -171,49 +171,49 @@ void PlotArea::setRect(const QRectF &newRect) {
 }
 
 //Background
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
 void PlotArea::setBackgroundType(BackgroundType type) {
 	Q_D(PlotArea);
 	if (type != d->backgroundType)
 		exec(new PlotAreaSetBackgroundTypeCmd(d, type, tr("%1: background type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
 void PlotArea::setBackgroundColorStyle(BackgroundColorStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundColorStyle)
 		exec(new PlotAreaSetBackgroundColorStyleCmd(d, style, tr("%1: background color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
 void PlotArea::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundImageStyle)
 		exec(new PlotAreaSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
 void PlotArea::setBackgroundBrushStyle(Qt::BrushStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundBrushStyle)
 		exec(new PlotAreaSetBackgroundBrushStyleCmd(d, style, tr("%1: background brush style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
 void PlotArea::setBackgroundFirstColor(const QColor &color) {
 	Q_D(PlotArea);
 	if (color!= d->backgroundFirstColor)
 		exec(new PlotAreaSetBackgroundFirstColorCmd(d, color, tr("%1: set background first color")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
 void PlotArea::setBackgroundSecondColor(const QColor &color) {
 	Q_D(PlotArea);
 	if (color!= d->backgroundSecondColor)
 		exec(new PlotAreaSetBackgroundSecondColorCmd(d, color, tr("%1: set background second color")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundFileName, QString, backgroundFileName, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundFileName, QString, backgroundFileName, update)
 void PlotArea::setBackgroundFileName(const QString& fileName) {
 	Q_D(PlotArea);
 	if (fileName!= d->backgroundFileName)

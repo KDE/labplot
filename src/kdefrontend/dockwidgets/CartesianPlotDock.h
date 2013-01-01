@@ -106,6 +106,13 @@ private slots:
 	void plotYMinChanged(float);
 	void plotYMaxChanged(float);
 	void plotYScaleChanged(int);
+	void plotBackgroundTypeChanged(PlotArea::BackgroundType);
+	void plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+	void plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void plotBackgroundBrushStyleChanged(Qt::BrushStyle);
+	void plotBackgroundFirstColorChanged(QColor);
+	void plotBackgroundSecondColorChanged(QColor);
+	void plotBackgroundFileNameChanged(QString);
 	void plotBackgroundOpacityChanged(qreal);
 	void plotBorderPenChanged(QPen);
 	void plotBorderOpacityChanged(qreal);

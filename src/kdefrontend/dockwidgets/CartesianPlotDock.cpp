@@ -206,6 +206,14 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
+	//TODO: more undo stuff
+	connect( m_plot->plotArea(), SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)) );
+	connect( m_plot->plotArea(), SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)) );
+	connect( m_plot->plotArea(), SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)) );
+	connect( m_plot->plotArea(), SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)), this, SLOT(plotBackgroundBrushStyleChanged(Qt::BrushStyle)) );
+	connect( m_plot->plotArea(), SIGNAL(backgroundFirstColorChanged(QColor)), this, SLOT(plotBackgroundFirstColorChanged(QColor)) );
+	connect( m_plot->plotArea(), SIGNAL(backgroundSecondColorChanged(QColor)), this, SLOT(plotBackgroundSecondColorChanged(QColor)) );
+	connect( m_plot->plotArea(), SIGNAL(backgroundFileNameChanged(QString)), this, SLOT(plotBackgroundFileNameChanged(QString)) );
 	connect( m_plot->plotArea(), SIGNAL(backgroundOpacityChanged(qreal)), this, SLOT(plotBackgroundOpacityChanged(qreal)) );
 	connect( m_plot->plotArea(), SIGNAL(borderPenChanged(QPen)), this, SLOT(plotBorderPenChanged(QPen)) );
 	connect( m_plot->plotArea(), SIGNAL(borderOpacityChanged(qreal)), this, SLOT(plotBorderOpacityChanged(qreal)) );
@@ -743,6 +751,48 @@ void CartesianPlotDock::plotYScaleChanged(int scale){
 }
 
 //TODO: more slots
+void CartesianPlotDock::plotBackgroundTypeChanged(PlotArea::BackgroundType type){
+	m_initializing = true;
+	ui.cbBackgroundType->setCurrentIndex(type);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle style){
+	m_initializing = true;
+	ui.cbBackgroundColorStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle style){
+	m_initializing = true;
+	ui.cbBackgroundImageStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBackgroundBrushStyleChanged(Qt::BrushStyle style){
+	m_initializing = true;
+	ui.cbBackgroundBrushStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBackgroundFirstColorChanged(QColor color){
+	m_initializing = true;
+	ui.kcbBackgroundFirstColor->setColor(color);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBackgroundSecondColorChanged(QColor color){
+	m_initializing = true;
+	ui.kcbBackgroundSecondColor->setColor(color);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBackgroundFileNameChanged(QString filename){
+	m_initializing = true;
+	ui.kleBackgroundFileName->setText(filename);
+	m_initializing = false;
+}
+
 void CartesianPlotDock::plotBackgroundOpacityChanged(qreal value){
 	m_initializing = true;
 	float v = (float)value*100;

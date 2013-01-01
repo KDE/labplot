@@ -88,11 +88,25 @@ class PlotArea: public AbstractWorksheetElement{
 		void init();
 
 	signals:
+		friend class PlotAreaSetBackgroundTypeCmd;
+		friend class PlotAreaSetBackgroundColorStyleCmd;
+		friend class PlotAreaSetBackgroundImageStyleCmd;
+		friend class PlotAreaSetBackgroundBrushStyleCmd;
+		friend class PlotAreaSetBackgroundFirstColorCmd;
+		friend class PlotAreaSetBackgroundSecondColorCmd;
+		friend class PlotAreaSetBackgroundFileNameCmd;
 		friend class PlotAreaSetBackgroundOpacityCmd;
 		friend class PlotAreaSetBorderPenCmd;
 		friend class PlotAreaSetBorderOpacityCmd;
-		void borderPenChanged(QPen);
+		void backgroundTypeChanged(PlotArea::BackgroundType);
+		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+		void backgroundBrushStyleChanged(Qt::BrushStyle);
+		void backgroundFirstColorChanged(QColor);
+		void backgroundSecondColorChanged(QColor);
+		void backgroundFileNameChanged(QString);
 		void backgroundOpacityChanged(qreal);
+		void borderPenChanged(QPen);
 		void borderOpacityChanged(qreal);
 };
 
