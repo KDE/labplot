@@ -37,6 +37,7 @@ class KAction;
 #endif
 class QToolBar;
 class CartesianPlotPrivate;
+class CartesianPlotLegend;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -73,10 +74,13 @@ class CartesianPlot:public AbstractPlot{
 		void initActions();
 		void initMenus();
 
+		CartesianPlotLegend* m_legend;
+
 		QAction* addCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
- 		
+ 		QAction* addLegendAction;
+
 		QAction* scaleAutoXAction;
 		QAction* scaleAutoYAction;
 		QAction* scaleAutoAction;
@@ -93,12 +97,15 @@ class CartesianPlot:public AbstractPlot{
 		
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
-		
+
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
 	private slots:
 		void addAxis();
 		void addCurve();
+		void addLegend();
+		void updateLegend();
+		void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
 		void xDataChanged();
 		void yDataChanged();
@@ -116,7 +123,7 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
-	
+
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 

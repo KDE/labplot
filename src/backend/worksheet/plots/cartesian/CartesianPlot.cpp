@@ -32,6 +32,7 @@
 #include "CartesianCoordinateSystem.h"
 #include "Axis.h"
 #include "XYCurve.h"
+#include "CartesianPlotLegend.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
@@ -79,11 +80,13 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		CartesianPlot::Scale xScale, yScale;
 };
 
-CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)){
+CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
+	m_legend(0) {
 	init();
 }
 
-CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):AbstractPlot(name, dd){
+CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):AbstractPlot(name, dd),
+	m_legend(0) {
 	init();
 }
 
@@ -131,6 +134,9 @@ void CartesianPlot::init(){
 	
 	initActions();
 	initMenus();
+
+	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)),
+			this, SLOT(childRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)));
 }
 
 /*!
@@ -211,6 +217,7 @@ void CartesianPlot::initDefault(){
 void CartesianPlot::initActions(){
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	addCurveAction = new QAction(tr("xy-curve"), this);
+	addLegendAction = new QAction(tr("legend"), this);
 	addHorizontalAxisAction = new QAction(tr("horizontal axis"), this);
 	addVerticalAxisAction = new QAction(tr("vertical axis"), this);
 
@@ -229,6 +236,7 @@ void CartesianPlot::initActions(){
 	shiftDownYAction = new QAction(i18n("shift down Y"), this);
 #else
 	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
+	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
 	
@@ -247,6 +255,7 @@ void CartesianPlot::initActions(){
 	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
 #endif
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 	
@@ -270,6 +279,7 @@ void CartesianPlot::initActions(){
 void CartesianPlot::initMenus(){
 	addNewMenu = new QMenu(tr("Add new"));
 	addNewMenu->addAction(addCurveAction);
+	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
 	addNewMenu->addAction(addVerticalAxisAction);
@@ -308,6 +318,7 @@ QMenu *CartesianPlot::createContextMenu(){
 
 void CartesianPlot::fillToolBar(QToolBar* toolBar) const{
 	toolBar->addAction(addCurveAction);
+	toolBar->addAction(addLegendAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
 	toolBar->addAction(addVerticalAxisAction);
@@ -441,7 +452,46 @@ void CartesianPlot::addCurve(){
 	XYCurve* curve = new XYCurve("xy-curve");
 	this->addChild(curve);
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));		
+	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
+
+	//TODO:
+	//update the legend
+	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(linePenChanged(const QPen&)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(symbolTypeChanged()), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(symbolPenChanged(const QPen&)), this, SLOT(updateLegend()));
+
+	this->updateLegend();
+}
+
+void CartesianPlot::addLegend(){
+	m_legend = new CartesianPlotLegend(this, "legend");
+	this->addChild(m_legend);
+// 	connect(m_legend, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(legendRemoved(const AbstractAspect*)));
+
+	//only one legend is allowed -> disable the action
+	addLegendAction->setEnabled(false);
+}
+
+void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
+	Q_UNUSED(parent);
+	Q_UNUSED(before);
+	if (m_legend == child) {
+		addLegendAction->setEnabled(true);
+		m_legend = 0;
+	} else {
+		if (!m_legend)
+			return;
+
+		const XYCurve* curve = qobject_cast<const XYCurve*>(child);
+		if (curve)
+			m_legend->retransform();
+	}
+}
+
+void CartesianPlot::updateLegend() {
+	if (m_legend)
+		m_legend->retransform();
 }
 
 /*!
