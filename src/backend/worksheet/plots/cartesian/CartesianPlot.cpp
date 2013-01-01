@@ -459,7 +459,8 @@ void CartesianPlot::addCurve(){
 	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
 
 	//TODO:
-	//update the legend
+	//update the legend on changes of the name, line and symbol styles
+	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(linePenChanged(const QPen&)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolTypeChanged()), this, SLOT(updateLegend()));
@@ -527,13 +528,8 @@ void CartesianPlot::scaleAutoX(){
 	//loop over all xy-curves and determine the maximum x-value
 	double min = INFINITY;
 	double max = -INFINITY;
-	XYCurve* curve;
-	QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-    foreach(AbstractWorksheetElement *elem, childElements){
-		curve = qobject_cast<XYCurve*>(elem);
-		if (!curve)
-			continue;
-
+	QList<XYCurve*> children = this->children<XYCurve>();
+	foreach(XYCurve* curve, children) {
 		if (!curve->xColumn())
 			continue;
 
@@ -574,13 +570,8 @@ void CartesianPlot::scaleAutoY(){
 	//loop over all xy-curves and determine the maximum y-value
 	double min = INFINITY;
 	double max = -INFINITY;
-	XYCurve* curve;
-	QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-    foreach(AbstractWorksheetElement *elem, childElements){
-		curve = qobject_cast<XYCurve*>(elem);
-		if (!curve)
-			continue;
-		
+	QList<XYCurve*> children = this->children<XYCurve>();
+	foreach(XYCurve* curve, children) {
 		if (!curve->yColumn())
 			continue;
 		
@@ -622,13 +613,8 @@ void CartesianPlot::scaleAuto(){
 	double xMax = -INFINITY;
 	double yMin = INFINITY;
 	double yMax = -INFINITY;
-	XYCurve* curve;
-	QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-    foreach(AbstractWorksheetElement *elem, childElements){
-		curve = qobject_cast<XYCurve*>(elem);
-		if (!curve)
-			continue;
-
+	QList<XYCurve*> children = this->children<XYCurve>();
+	foreach(XYCurve* curve, children) {
 		if (!curve->xColumn())
 			continue;
 
