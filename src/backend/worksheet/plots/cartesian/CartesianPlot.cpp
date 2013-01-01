@@ -67,7 +67,6 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
     public:
 		CartesianPlotPrivate(CartesianPlot *owner);
 		CartesianPlot * const q;
-		void setRect(const QRectF& r);
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void retransform();
 		void retransformScales();
@@ -211,7 +210,8 @@ void CartesianPlot::initDefault(){
 	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
 	
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
-	d->setRect(QRectF(x,y,w,h));
+	d->rect = QRectF(x,y,w,h);
+	d->retransform();
 }
 
 void CartesianPlot::initActions(){
@@ -350,7 +350,9 @@ QIcon CartesianPlot::icon() const{
 	return ico;
 }
 
-/* =================================== getter methods ============================ */
+//##############################################################################
+//################################  getter methods  ############################
+//##############################################################################
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMax, xMax)
@@ -361,11 +363,13 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMin, yMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
 
-/* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRect, QRectF, rect, retransformScales)
+//##############################################################################
+//######################  setter methods and undo commands  ####################
+//##############################################################################
 /*!
 	set the rectangular, defined in scene coordinates
  */
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRect, QRectF, rect, retransform)
 void CartesianPlot::setRect(const QRectF& rect){
 	Q_D(CartesianPlot);
 	if (rect != d->rect)
@@ -467,7 +471,6 @@ void CartesianPlot::addCurve(){
 void CartesianPlot::addLegend(){
 	m_legend = new CartesianPlotLegend(this, "legend");
 	this->addChild(m_legend);
-// 	connect(m_legend, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(legendRemoved(const AbstractAspect*)));
 
 	//only one legend is allowed -> disable the action
 	addLegendAction->setEnabled(false);
@@ -783,20 +786,16 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) : AbstractPlotP
 }
 
 /*!
-	sets the rectangular of the plot in scene coordinates to \c r.
+	updates the position of plot rectangular in scene coordinates to \c r and recalculates the scales.
 	The size of the plot corresponds to the size of the plot area, the area which is filled with the background color etc.
 	and which can pose the parent item for several sub-items (like TextLabel).
 	Note, the size of the area used to define the coordinate system doesn't need to be equal to this plot area.
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
-void CartesianPlotPrivate::setRect(const QRectF& r){
-	prepareGeometryChange();
-	setPos( r.x()+r.width()/2, r.y()+r.height()/2);
-	rect = r;
-	this->retransform();
-}
-
 void CartesianPlotPrivate::retransform(){
+	prepareGeometryChange();
+	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
+	
 	retransformScales();
 	
 	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
@@ -1022,7 +1021,6 @@ bool CartesianPlot::load(XmlStreamReader* reader){
     QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;
-    QRectF sceneRect;
 
     while (!reader->atEnd()){
         reader->readNext();
@@ -1042,25 +1040,25 @@ bool CartesianPlot::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'x'"));
             else
-                sceneRect.setX( str.toDouble() );
+                d->rect.setX( str.toDouble() );
 
 			str = attribs.value("y").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'y'"));
             else
-                sceneRect.setY( str.toDouble() );
+                d->rect.setY( str.toDouble() );
 			
 			str = attribs.value("width").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'width'"));
             else
-                sceneRect.setWidth( str.toDouble() );
+                d->rect.setWidth( str.toDouble() );
 			
 			str = attribs.value("height").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'height'"));
             else
-                sceneRect.setHeight( str.toDouble() );
+                d->rect.setHeight( str.toDouble() );
 		}else if(reader->name() == "coordinateSystem"){
 // 			m_coordinateSystem->load(reader); //TODO read scales
             attribs = reader->attributes();
@@ -1165,11 +1163,9 @@ bool CartesianPlot::load(XmlStreamReader* reader){
         }
     }
 
-	d->setRect(sceneRect);
+	d->retransform();
 	m_title->setHidden(true);
 	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
-	d->retransformScales();
-	retransform();
 
     return true;
 }
