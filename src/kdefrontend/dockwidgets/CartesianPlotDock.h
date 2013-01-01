@@ -99,7 +99,7 @@ private slots:
 	
 	//SLOTs for changes triggered in CartesianPlot
 	void plotDescriptionChanged(const AbstractAspect*);
-	void plotPositionChanged();
+	void plotRectChanged(QRectF&);
 	void plotXMinChanged(float);
 	void plotXMaxChanged(float);
 	void plotXScaleChanged(int);

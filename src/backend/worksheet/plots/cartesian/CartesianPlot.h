@@ -122,14 +122,14 @@ class CartesianPlot:public AbstractPlot{
 
 	signals:
 
-		//friend class CartesianPlotSetPositionCmd;
+		friend class CartesianPlotSetRectCmd;
 		friend class CartesianPlotSetXMinCmd;
 		friend class CartesianPlotSetXMaxCmd;
 		friend class CartesianPlotSetXScaleCmd;
 		friend class CartesianPlotSetYMinCmd;
 		friend class CartesianPlotSetYMaxCmd;
 		friend class CartesianPlotSetYScaleCmd;
-		void positionChanged();
+		void rectChanged(QRectF&);
 		void xMinChanged(float);
 		void xMaxChanged(float);
 		void xScaleChanged(int);

@@ -339,14 +339,6 @@ QIcon CartesianPlot::icon() const{
 	return ico;
 }
 
-/*!
-	set the rectangular, defined in scene coordinates
- */
-void CartesianPlot::setRect(const QRectF& r){
-	Q_D(CartesianPlot);
-	d->setRect(r);
-}
-
 /* =================================== getter methods ============================ */
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
@@ -359,6 +351,16 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
 
 /* ============================ setter methods and undo commands ================= */
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRect, QRectF, rect, retransformScales)
+/*!
+	set the rectangular, defined in scene coordinates
+ */
+void CartesianPlot::setRect(const QRectF& rect){
+	Q_D(CartesianPlot);
+	if (rect != d->rect)
+		exec(new CartesianPlotSetRectCmd(d, rect, tr("%1: set geometry rect")));
+}
+
 //TODO: provide an undo-aware version
 // STD_SETTER_CMD_IMPL_F(CartesianPlot, SetAutoScaleX, bool, autoScaleX, retransformScales)
 void CartesianPlot::setAutoScaleX(bool autoScaleX){
@@ -906,7 +908,7 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 		rect.setY(y-h/2);
 		rect.setWidth(w);
 		rect.setHeight(h);
-		emit dynamic_cast<CartesianPlot*>(q)->positionChanged();
+		emit dynamic_cast<CartesianPlot*>(q)->rectChanged(rect);
      }
 	return QGraphicsItem::itemChange(change, value);
 }

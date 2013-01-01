@@ -199,7 +199,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 
 	//SIGNALs/SLOTs
 	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
-	connect( m_plot, SIGNAL(positionChanged()), this, SLOT(plotPositionChanged()) );
+	connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
 	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
 	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
 	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
@@ -302,13 +302,7 @@ void CartesianPlotDock::geometryChanged(){
 	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
 
 	QRectF rect(x,y,w,h);
-
-	//setRect triggers emit Plot::positionChanged() and then plotPositionChanged() here.
-	//This leads to strange artifacts (position is changed when only the width was changed etc.)
-	//Avoid this by setting m_initializing=true;
-	m_initializing = true;
 	m_plot->setRect(rect);
-	m_initializing = false;
 }
 
 /*!
@@ -702,15 +696,15 @@ void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotPositionChanged(){
+void CartesianPlotDock::plotRectChanged(QRectF& rect){
 	if (m_initializing)
 		return;
 
 	m_initializing = true;
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), Worksheet::Centimeter));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
 	m_initializing = false;
 }
 
