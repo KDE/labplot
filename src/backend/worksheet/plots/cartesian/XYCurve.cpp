@@ -1241,7 +1241,7 @@ bool XYCurve::load(XmlStreamReader* reader){
 	Q_D(XYCurve);
 
     if(!reader->isStartElement() || reader->name() != "xyCurve"){
-        reader->raiseError(tr("no axis element found"));
+        reader->raiseError(tr("no xy-curve element found"));
         return false;
     }
 
