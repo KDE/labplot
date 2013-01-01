@@ -60,12 +60,18 @@ class AbstractWorksheetElement: public AbstractAspect {
 		QMenu *m_drawingOrderMenu;
 		QMenu *m_moveBehindMenu;
 		QMenu *m_moveInFrontOfMenu;
-	
+
 	private slots:
 		void prepareMoveBehindMenu();
 		void prepareMoveInFrontOfMenu();
 		void execMoveBehind(QAction *action);
 		void execMoveInFrontOf(QAction *action);
+
+	signals:
+		friend class AbstractPlotSetHorizontalPaddingCmd;
+		friend class AbstractPlotSetVerticalPaddingCmd;
+		void horizontalPaddingChanged(float);
+		void verticalPaddingChanged(float);
 };
 
 #endif

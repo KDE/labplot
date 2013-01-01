@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -85,6 +86,14 @@ class PlotArea: public AbstractWorksheetElement{
 	private:
     	Q_DECLARE_PRIVATE(PlotArea)
 		void init();
+
+	signals:
+		friend class PlotAreaSetBackgroundOpacityCmd;
+		friend class PlotAreaSetBorderPenCmd;
+		friend class PlotAreaSetBorderOpacityCmd;
+		void borderPenChanged(QPen);
+		void backgroundOpacityChanged(qreal);
+		void borderOpacityChanged(qreal);
 };
 
 #endif

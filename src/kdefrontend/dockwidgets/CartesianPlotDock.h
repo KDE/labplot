@@ -2,8 +2,9 @@
     File                 : CartesianPlotDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    							(use @ for *)
     Description          : widget for cartesian plot properties
                            
  ***************************************************************************/
@@ -91,7 +92,7 @@ private slots:
 	void backgroundOpacityChanged(int);
   	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double value);
+	void borderWidthChanged(double);
 	void borderOpacityChanged(int);
 	void horizontalPaddingChanged(double);
 	void verticalPaddingChanged(double);
@@ -105,6 +106,11 @@ private slots:
 	void plotYMinChanged(float);
 	void plotYMaxChanged(float);
 	void plotYScaleChanged(int);
+	void plotBackgroundOpacityChanged(qreal);
+	void plotBorderPenChanged(QPen);
+	void plotBorderOpacityChanged(qreal);
+	void plotHorizontalPaddingChanged(float);
+	void plotVerticalPaddingChanged(float);
 	
 	//save/load
 	void loadConfig(KConfig&);

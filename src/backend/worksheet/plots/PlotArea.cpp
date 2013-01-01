@@ -220,7 +220,7 @@ void PlotArea::setBackgroundFileName(const QString& fileName) {
 		exec(new PlotAreaSetBackgroundFileNameCmd(d, fileName, tr("%1: set background image")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBackgroundOpacity, qreal, backgroundOpacity, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundOpacity, qreal, backgroundOpacity, update)
 void PlotArea::setBackgroundOpacity(qreal opacity) {
 	Q_D(PlotArea);
 	if (opacity != d->backgroundOpacity)
@@ -228,14 +228,14 @@ void PlotArea::setBackgroundOpacity(qreal opacity) {
 }
 
 //Border
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderPen, QPen, borderPen, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderPen, QPen, borderPen, update)
 void PlotArea::setBorderPen(const QPen &pen) {
 	Q_D(PlotArea);
 	if (pen != d->borderPen)
 		exec(new PlotAreaSetBorderPenCmd(d, pen, tr("%1: set plot area border style")));
 }
 
-STD_SETTER_CMD_IMPL_F(PlotArea, SetBorderOpacity, qreal, borderOpacity, update)
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderOpacity, qreal, borderOpacity, update)
 void PlotArea::setBorderOpacity(qreal opacity) {
 	Q_D(PlotArea);
 	if (opacity != d->borderOpacity)

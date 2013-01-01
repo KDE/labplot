@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for cartesian plot properties
                            
@@ -198,6 +198,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	}
 
 	//SIGNALs/SLOTs
+	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
 	connect( m_plot, SIGNAL(positionChanged()), this, SLOT(plotPositionChanged()) );
 	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
 	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
@@ -205,7 +206,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
-	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
+	connect( m_plot->plotArea(), SIGNAL(backgroundOpacityChanged(qreal)), this, SLOT(plotBackgroundOpacityChanged(qreal)) );
+	connect( m_plot->plotArea(), SIGNAL(borderPenChanged(QPen)), this, SLOT(plotBorderPenChanged(QPen)) );
+	connect( m_plot->plotArea(), SIGNAL(borderOpacityChanged(qreal)), this, SLOT(plotBorderOpacityChanged(qreal)) );
+	connect( m_plot, SIGNAL(horizontalPaddingChanged(float)), this, SLOT(plotHorizontalPaddingChanged(float)) );
+	connect( m_plot, SIGNAL(verticalPaddingChanged(float)), this, SLOT(plotVerticalPaddingChanged(float)) );
 
 	m_initializing = false;
 }
@@ -630,7 +635,9 @@ void CartesianPlotDock::borderColorChanged(const QColor& color){
 	plot->plotArea()->setBorderPen(pen);
   }  
 
+  m_initializing=true;
   GuiTools::updatePenStyles(ui.cbBorderStyle, color);
+  m_initializing=false;
 }
 
 void CartesianPlotDock::borderWidthChanged(double value){
@@ -678,15 +685,13 @@ void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_plot != aspect)
 		return;
 
+	m_initializing = true;
 	if (aspect->name() != ui.leName->text()) {
-		m_initializing = true;
 		ui.leName->setText(aspect->name());
-		m_initializing = false;
 	} else if (aspect->comment() != ui.leComment->text()) {
-		m_initializing = true;
 		ui.leComment->setText(aspect->comment());
-		m_initializing = false;
 	}
+	m_initializing = false;
 }
 
 void CartesianPlotDock::plotPositionChanged(){
@@ -734,6 +739,47 @@ void CartesianPlotDock::plotYMaxChanged(float value){
 void CartesianPlotDock::plotYScaleChanged(int scale){
 	m_initializing = true;
 	ui.cbYScaling->setCurrentIndex( scale );
+	m_initializing = false;
+}
+
+//TODO: more slots
+void CartesianPlotDock::plotBackgroundOpacityChanged(qreal value){
+	m_initializing = true;
+	float v = (float)value*100;
+	ui.sbBackgroundOpacity->setValue(v);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBorderPenChanged(QPen pen){
+	if (m_initializing)
+		return;
+
+	m_initializing = true;
+	if(ui.cbBorderStyle->currentIndex() != pen.style())
+		ui.cbBorderStyle->setCurrentIndex(pen.style());
+	if(ui.kcbBorderColor->color() != pen.color())
+		ui.kcbBorderColor->setColor(pen.color());
+	if(ui.sbBorderWidth->value() != pen.widthF())
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBorderOpacityChanged(qreal value){
+	m_initializing = true;
+	float v = (float)value*100;
+	ui.sbBorderOpacity->setValue(v);
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotHorizontalPaddingChanged(float value){
+	m_initializing = true;
+	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotVerticalPaddingChanged(float value){
+	m_initializing = true;
+	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
 	m_initializing = false;
 }
 

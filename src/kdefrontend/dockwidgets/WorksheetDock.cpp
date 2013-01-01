@@ -631,15 +631,13 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_worksheet != aspect)
 		return;
 	
+	m_initializing = true;
 	if (aspect->name() != ui.leName->text()) {
-		m_initializing = true;
 		ui.leName->setText(aspect->name());
-		m_initializing = false;
 	} else if (aspect->comment() != ui.leComment->text()) {
-		m_initializing = true;
 		ui.leComment->setText(aspect->comment());
-		m_initializing = false;
 	}
+	m_initializing = false;
 }
 
 void WorksheetDock::worksheetBackgroundTypeChanged(PlotArea::BackgroundType type) {

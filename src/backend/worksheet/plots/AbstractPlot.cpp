@@ -83,14 +83,14 @@ BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, horizontalPadding, horizontalPad
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, verticalPadding, verticalPadding)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F(AbstractPlot, SetHorizontalPadding, float, horizontalPadding, retransform)
+STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetHorizontalPadding, float, horizontalPadding, retransform)
 void AbstractPlot::setHorizontalPadding(float padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->horizontalPadding)
 		exec(new AbstractPlotSetHorizontalPaddingCmd(d, padding, tr("%1: set horizontal padding")));
 }
 
-STD_SETTER_CMD_IMPL_F(AbstractPlot, SetVerticalPadding, float, verticalPadding, retransform)
+STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetVerticalPadding, float, verticalPadding, retransform)
 void AbstractPlot::setVerticalPadding(float padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->verticalPadding)
