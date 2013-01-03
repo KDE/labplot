@@ -40,6 +40,9 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/core/plugin/PluginManager.h"
+#include "backend/worksheet/AbstractCurveSymbol.h"
+#include "backend/worksheet/interfaces.h"
 
 #include <QGraphicsItem>
 #include <QPainterPath>
@@ -70,6 +73,7 @@ void CartesianPlotLegend::init(){
 
 	d->labelFont.setPointSizeF( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
 	d->labelColor = Qt::black;
+	d->lineSymbolWidth =  group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter));
 
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
@@ -203,7 +207,7 @@ void CartesianPlotLegendPrivate::retransform() {
 		if (w>max)
 			max = w;
 	}
-	rect.setWidth(layoutLeftMargin + layoutRightMargin + max);
+	rect.setWidth(layoutLeftMargin + layoutRightMargin + lineSymbolWidth + layoutHorizontalSpacing + max);
 
 	//determine the height of the legend
 	int count = children.size();
@@ -307,14 +311,47 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 
 	//draw the curve names
 	painter->setFont(labelFont);
-	painter->setPen(QPen(labelColor));
+	
 	QList<XYCurve*> children = q->m_plot->children<XYCurve>();
 	QFontMetrics fm(labelFont);
+
+	CurveSymbolFactory* factory=0;
+	foreach(QObject *plugin, PluginManager::plugins())
+		factory = qobject_cast<CurveSymbolFactory*>(plugin);
+
 	float h=fm.ascent();
 	painter->save();
 	painter->translate(layoutLeftMargin, layoutTopMargin+h);
-	foreach (XYCurve* child, children) {
-		painter->drawText(QPoint(0,0), child->name());
+	foreach (XYCurve* curve, children) {
+		//curve's line
+		if (curve->lineType() != XYCurve::NoLine){
+			painter->setPen(curve->linePen());
+			painter->setOpacity(curve->lineOpacity());
+			painter->drawLine(0, -h/2, lineSymbolWidth, -h/2);
+		}
+
+		//curve's symbol
+		if (curve->symbolsTypeId()!="none"){
+			if (factory) {
+				painter->setOpacity(curve->symbolsOpacity());
+				AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
+
+				symbol->setSize(curve->symbolsSize());
+				symbol->setAspectRatio(curve->symbolsAspectRatio());
+				symbol->setBrush(curve->symbolsBrush());
+				symbol->setPen(curve->symbolsPen());
+				symbol->setRotationAngle(curve->symbolsRotationAngle());
+
+				painter->translate(QPointF(lineSymbolWidth/2, -h/2));
+				symbol->paint(painter, option, widget);
+				painter->translate(-QPointF(lineSymbolWidth/2, -h/2));
+			}
+		}
+  
+		//curve's name
+		painter->setPen(QPen(labelColor));
+		painter->setOpacity(1.0);
+		painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, 0), curve->name());
 		painter->translate(0,layoutVerticalSpacing+h);
 	}
 	painter->restore();

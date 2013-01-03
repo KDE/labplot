@@ -58,6 +58,7 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		QRectF rect;
 		QFont labelFont;
 		QColor labelColor;
+		float lineSymbolWidth;
 
 		//Background
 		PlotArea::BackgroundType backgroundType;
