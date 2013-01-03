@@ -2,7 +2,7 @@
     File                 : XYCurveDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for XYCurve properties
@@ -29,29 +29,17 @@
  ***************************************************************************/
 
 #include "XYCurveDock.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/core/column/Column.h"
+#include "backend/core/plugin/PluginManager.h"
+#include "backend/worksheet/StandardCurveSymbolFactory.h"
+#include "backend/widgets/TreeViewComboBox.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
-#include "worksheet/plots/cartesian/XYCurve.h"
-#include "worksheet/Worksheet.h"
-#include "core/AspectTreeModel.h"
-#include "core/column/Column.h"
-#include "core/plugin/PluginManager.h"
-#include "worksheet/StandardCurveSymbolFactory.h"
-#include "widgets/TreeViewComboBox.h"
-#include "../TemplateHandler.h"
-
-#include "core/AbstractFilter.h"
-#include "core/datatypes/SimpleCopyThroughFilter.h"
-#include "core/datatypes/Double2StringFilter.h"
-#include "core/datatypes/String2DoubleFilter.h"
-#include "core/datatypes/DateTime2StringFilter.h"
-#include "core/datatypes/String2DateTimeFilter.h"
-
-#include <QTextEdit>
-#include <QCheckBox>
-#include <QPainter>
-#include <QBrush>
-#include <QPen>
-#include <QDebug>
 
 /*!
   \class XYCurveDock
@@ -148,8 +136,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 
 	retranslateUi();
-	
-	QTimer::singleShot(0, this, SLOT(init()));
+	init();
 }
 
 void XYCurveDock::init(){
@@ -795,7 +782,6 @@ void XYCurveDock::symbolsStyleChanged(int index){
 	ui.sbSymbolOpacity->setEnabled(false);
 	
 	ui.kcbSymbolFillingColor->setEnabled(false);
-	ui.lSymbolFillingStyle->setEnabled(false);
 	ui.cbSymbolFillingStyle->setEnabled(false);
 	
 	ui.cbSymbolBorderStyle->setEnabled(false);
@@ -808,26 +794,25 @@ void XYCurveDock::symbolsStyleChanged(int index){
 	
 	//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
 	if ( symbolFactory->prototype(currentSymbolTypeId)->fillingEnabled() ){
-	  ui.kcbSymbolFillingColor->setEnabled(true);
-	  ui.lSymbolFillingStyle->setEnabled(true);
 	  ui.cbSymbolFillingStyle->setEnabled(true);
+	  bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex())==Qt::NoBrush);
+	  ui.kcbSymbolFillingColor->setEnabled(!noBrush);
 	}else{
 	  ui.kcbSymbolFillingColor->setEnabled(false);
 	  ui.cbSymbolFillingStyle->setEnabled(false);
 	}
 	
 	ui.cbSymbolBorderStyle->setEnabled(true);
-	ui.kcbSymbolBorderColor->setEnabled(true);
-	ui.sbSymbolBorderWidth->setEnabled(true);
+	bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex())== Qt::NoPen);
+	ui.kcbSymbolBorderColor->setEnabled(!noLine);
+	ui.sbSymbolBorderWidth->setEnabled(!noLine);
   }
 
   if (m_initializing)
 	return;
 
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setSymbolsTypeId(currentSymbolTypeId);
-  }
-
 }
 
 void XYCurveDock::symbolsSizeChanged(double value){
@@ -860,13 +845,7 @@ void XYCurveDock::symbolsOpacityChanged(int value){
 
 void XYCurveDock::symbolsFillingStyleChanged(int index){
   Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
-  if (brushStyle == Qt::NoBrush){
-	ui.lSymbolFillingColor->setEnabled(false);
-	ui.kcbSymbolFillingColor->setEnabled(false);
-  }else{
-	ui.lSymbolFillingColor->setEnabled(true);
-	ui.kcbSymbolFillingColor->setEnabled(true);
-  }
+  ui.kcbSymbolFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
   
   if (m_initializing)
 	return;
@@ -1210,4 +1189,3 @@ void XYCurveDock::saveConfig(KConfig& config){
 
 	config.sync();
 }
-

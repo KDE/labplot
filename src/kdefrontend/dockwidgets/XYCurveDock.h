@@ -2,7 +2,7 @@
     File                 : XYCurveDock.h
     Project            : LabPlot
     --------------------------------------------------------------------
-    Copyright         : (C) 2010-2011 Alexander Semke (alexander.semke*web.de)
+    Copyright         : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
 							(replace * with @ in the email addresses)
     Description      : widget for curve properties
                            
@@ -36,8 +36,6 @@
 #include "ui_xycurvedock.h"
 #include <memory>
 
-class QTextEdit;
-class QCheckBox;
 class XYCurve;
 class TreeViewComboBox;
 class CurveSymbolFactory;
@@ -64,7 +62,7 @@ private:
 	TreeViewComboBox* cbYColumn;
 	TreeViewComboBox* cbValuesColumn;
 	
-	CurveSymbolFactory *symbolFactory;
+	CurveSymbolFactory* symbolFactory;
 
 	void fillSymbolStyles();
 	void updateValuesFormatWidgets(const SciDAVis::ColumnMode);
