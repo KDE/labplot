@@ -3,8 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-														   Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for spreadsheet properties
                            
@@ -38,28 +37,34 @@
 #include "ui_spreadsheetdock.h"
 
 class Spreadsheet;
+class AbstractAspect;
 
 class SpreadsheetDock: public QWidget{
 	Q_OBJECT
 	  
-	public:
-		SpreadsheetDock(QWidget *parent);
-		void setSpreadsheets(QList<Spreadsheet*>);
-	  
-	private:
-		Ui::SpreadsheetDock ui;
-		QList<Spreadsheet*> m_spreadsheetList;
-		bool m_initializing;
-		
-	private slots:
-		void nameChanged();
-		void commentChanged();
-		void rowCountChanged(int);
-		void columnCountChanged(int);
-		void commentsShownChanged(int);
+public:
+	SpreadsheetDock(QWidget *parent);
+	void setSpreadsheets(QList<Spreadsheet*>);
+  
+private:
+	Ui::SpreadsheetDock ui;
+	QList<Spreadsheet*> m_spreadsheetList;
+	Spreadsheet* m_spreadsheet;
+	bool m_initializing;
 
-		void loadConfig(KConfig&);
-		void saveConfig(KConfig&);
+private slots:
+	//SLOTs for changes triggered in WorksheetDock
+	void nameChanged();
+	void commentChanged();
+	void rowCountChanged(int);
+	void columnCountChanged(int);
+	void commentsShownChanged(int);
+
+	//SLOTs for changes triggered in Worksheet
+	void spreadsheetDescriptionChanged(const AbstractAspect*);
+
+	void loadConfig(KConfig&);
+	void saveConfig(KConfig&);
 };
 
 #endif // SPREADSHEETDOCK_H

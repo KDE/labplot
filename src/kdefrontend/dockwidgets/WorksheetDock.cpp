@@ -144,28 +144,27 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	m_initializing = true;
 	m_worksheetList = list;
-
-	m_worksheet=list.first();
+	m_worksheet = list.first();
   
 	//if there are more then one worksheets in the list, disable the name and comment field in the tab "general"
 	if (list.size()==1){
-	ui.lName->setEnabled(true);
-	ui.leName->setEnabled(true);
-	ui.lComment->setEnabled(true);
-	ui.leComment->setEnabled(true);
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
 
-	ui.leName->setText(m_worksheet->name());
-	ui.leComment->setText(m_worksheet->comment());
+		ui.leName->setText(m_worksheet->name());
+		ui.leComment->setText(m_worksheet->comment());
 	}else{
-	ui.lName->setEnabled(false);
-	ui.leName->setEnabled(false);
-	ui.lComment->setEnabled(false);
-	ui.leComment->setEnabled(false);
+		ui.lName->setEnabled(false);
+		ui.leName->setEnabled(false);
+		ui.lComment->setEnabled(false);
+		ui.leComment->setEnabled(false);
 
-	ui.leName->setText("");
-	ui.leComment->setText("");
+		ui.leName->setText("");
+		ui.leComment->setText("");
 	}
-  
+
 	//show the properties of the first worksheet
 	KConfig config("", KConfig::SimpleConfig);
   	loadConfig(config);

@@ -3,8 +3,8 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2010,2012 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-					(use @ for *)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+						(use @ for *)
     Description          : widget for spreadsheet properties
                            
  ***************************************************************************/
@@ -61,68 +61,87 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
   
 */
 void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
-  Spreadsheet* spreadsheet = list.first();
+	m_initializing = true;
+	m_spreadsheetList = list;
+	m_spreadsheet = list.first();
 
-  Q_ASSERT(spreadsheet);
-  
-  m_spreadsheetList=list;
-  m_initializing = true;
-  
-  if (list.size()==1){
-	ui.leName->setEnabled(true);
-	ui.leComment->setEnabled(true);
+	if (list.size()==1){
+		ui.leName->setEnabled(true);
+		ui.leComment->setEnabled(true);
 	
-  ui.leName->setText(spreadsheet->name());
-  ui.leComment->setText(spreadsheet->comment());
-  }else{
-	//disable the fields "Name" and "Comment" if there are >1 Spreadsheets
-	ui.leName->setEnabled(false);
-	ui.leComment->setEnabled(false);
-	
-	ui.leName->setText("");
-	ui.leComment->setText("");
-  }
-  
+		ui.leName->setText(m_spreadsheet->name());
+		ui.leComment->setText(m_spreadsheet->comment());
+	}else{
+		//disable the fields "Name" and "Comment" if there are >1 Spreadsheets
+		ui.leName->setEnabled(false);
+		ui.leComment->setEnabled(false);
+
+		ui.leName->setText("");
+		ui.leComment->setText("");
+  	}
+ 
   	//show the properties of the first Spreadsheet in the list, if there are >1 spreadsheets
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
-  
+
+	//TODO: undo functions
+	connect(m_spreadsheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(spreadsheetDescriptionChanged(const AbstractAspect*)));
+
 	m_initializing = false;
 }
 
 // ###### SLOTS  ##############
 
 void SpreadsheetDock::nameChanged(){
-  if (m_initializing)
-	return;
-  
-  m_spreadsheetList.first()->setName(ui.leName->text());
+	if (m_initializing)
+		return;
+
+	m_spreadsheet->setName(ui.leName->text());
 }
 
-
 void SpreadsheetDock::commentChanged(){
-  if (m_initializing)
-	return;
-  
-  m_spreadsheetList.first()->setComment(ui.leComment->text());
+	if (m_initializing)
+		return;
+
+	m_spreadsheet->setComment(ui.leComment->text());
 }
 
 void SpreadsheetDock::rowCountChanged(int c){
-  Q_UNUSED(c);
+	Q_UNUSED(c);
 }
 
 void SpreadsheetDock::columnCountChanged(int c){
-  Q_UNUSED(c);
+	Q_UNUSED(c);
 }
 
 /*!
   switches on/off  the comment header in the views of the selected spreadsheets.
 */
 void SpreadsheetDock::commentsShownChanged(int state){
-  Spreadsheet* spreadsheet;
-  foreach(spreadsheet, m_spreadsheetList)
-	qobject_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
+	Spreadsheet* spreadsheet;
+	foreach(spreadsheet, m_spreadsheetList)
+		qobject_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
 }
+
+//*************************************************************
+//******** SLOTs for changes triggered in Worksheet ***********
+//*************************************************************
+void SpreadsheetDock::spreadsheetDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_spreadsheet != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text()) {
+		ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.leComment->text()) {
+		ui.leComment->setText(aspect->comment());
+	}
+	m_initializing = false;
+}
+
+//*************************************************************
+//******************** SETTINGS *******************************
+//*************************************************************
 
 /*!
 	loads saved spreadsheet properties from \c config.
@@ -130,11 +149,10 @@ void SpreadsheetDock::commentsShownChanged(int state){
 void SpreadsheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Spreadsheet" );
 
-  	Spreadsheet* spreadsheet=m_spreadsheetList.first();
-  	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", spreadsheet->columnCount()));
-  	ui.sbRowCount->setValue(group.readEntry("RowCount", spreadsheet->rowCount()));
+  	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_spreadsheet->columnCount()));
+  	ui.sbRowCount->setValue(group.readEntry("RowCount", m_spreadsheet->rowCount()));
 
-	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(spreadsheet->view());
+	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
   	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }
 
