@@ -47,6 +47,7 @@ class QDockWidget;
 class QStackedWidget;
 class AxisDock;
 class CartesianPlotDock;
+class CartesianPlotLegendDock;
 class ColumnDock;
 class ProjectDock;
 class SpreadsheetDock;
@@ -130,6 +131,7 @@ private:
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
 	CartesianPlotDock* cartesianPlotDock;
+	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;

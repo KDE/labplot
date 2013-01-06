@@ -1,11 +1,10 @@
 /***************************************************************************
-    File                 : CartesianPlotDock.h
+    File                 : CartesianPlotLegendDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2013 Alexander Semke (alexander.semke*web.de)
     							(use @ for *)
-    Description          : widget for cartesian plot properties
+    Description          : widget for cartesian legend legend properties
                            
  ***************************************************************************/
 
@@ -28,58 +27,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CARTESIANPLOTDOCK_H
-#define CARTESIANPLOTDOCK_H
+#ifndef CARTESIANPLOTLEGENDDOCK_H
+#define CARTESIANPLOTLEGENDDOCK_H
 
 #include <QList>
-#include "ui_cartesianplotdock.h"
-#include "backend/worksheet/Worksheet.h"
+#include "ui_cartesianplotlegenddock.h"
+#include "backend/worksheet/plots/PlotArea.h"
+class CartesianPlotLegend;
 
-class CartesianPlot;
-class LabelWidget;
-
-class CartesianPlotDock: public QWidget{
+class CartesianPlotLegendDock: public QWidget{
 	Q_OBJECT
 	
 public:
-	CartesianPlotDock(QWidget* parent);
-	void setPlots(QList<CartesianPlot*>);
-	void activateTitleTab();
+	CartesianPlotLegendDock(QWidget *parent);
+	void setLegends(QList<CartesianPlotLegend*>);
 	
 private:
-	Ui::CartesianPlotDock ui;
-	QList<CartesianPlot*> m_plotList;
-	CartesianPlot* m_plot;
-	LabelWidget* labelWidget;
+	Ui::CartesianPlotLegendDock ui;
+	QList<CartesianPlotLegend*> m_legendList;
+	CartesianPlotLegend* m_legend;
 	bool m_initializing;
 	
 private slots:
 	void init();
 	void retranslateUi();
   
-	//SLOTs for changes triggered in CartesianPlotDock
+	//SLOTs for changes triggered in CartesianPlotLegendDock
 	//"General"-tab
 	void nameChanged();
-	void commentChanged();
+	void commentChanged();	
 	void visibilityChanged(int);
-	void geometryChanged();
-	void layoutChanged(Worksheet::Layout);
 
-	void autoScaleXChanged(int);
-	void xMinChanged();
-	void xMaxChanged();
-	void xScaleChanged(int);
-
-	void autoScaleYChanged(int);
-	void yMinChanged();
-	void yMaxChanged();
-	void yScaleChanged(int);
-
-	//"Scale breaking"-tab
-	void toggleXBreak(int);
-	void toggleYBreak(int);
-
-	//"Plot area"-tab
+	//"Background"-tab
   	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
 	void backgroundImageStyleChanged(int);
@@ -93,30 +72,36 @@ private slots:
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
 	void borderOpacityChanged(int);
-	void horizontalPaddingChanged(double);
-	void verticalPaddingChanged(double);
 	
-	//SLOTs for changes triggered in CartesianPlot
-	void plotDescriptionChanged(const AbstractAspect*);
-	void plotRectChanged(QRectF&);
-	void plotXMinChanged(float);
-	void plotXMaxChanged(float);
-	void plotXScaleChanged(int);
-	void plotYMinChanged(float);
-	void plotYMaxChanged(float);
-	void plotYScaleChanged(int);
-	void plotBackgroundTypeChanged(PlotArea::BackgroundType);
-	void plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
-	void plotBackgroundBrushStyleChanged(Qt::BrushStyle);
-	void plotBackgroundFirstColorChanged(QColor&);
-	void plotBackgroundSecondColorChanged(QColor&);
-	void plotBackgroundFileNameChanged(QString&);
-	void plotBackgroundOpacityChanged(float);
-	void plotBorderPenChanged(QPen&);
-	void plotBorderOpacityChanged(float);
-	void plotHorizontalPaddingChanged(float);
-	void plotVerticalPaddingChanged(float);
+	//"Layout"-tab
+	void layoutTopMarginChanged(double);
+	void layoutBottomMarginChanged(double);
+	void layoutRightMarginChanged(double);
+	void layoutLeftMarginChanged(double);
+	void layoutHorizontalSpacingChanged(double);
+	void layoutVerticalSpacingChanged(double);
+	void layoutColumnCountChanged(int);
+	
+	//SLOTs for changes triggered in CartesianPlotLegend
+	void legendBackgroundTypeChanged(PlotArea::BackgroundType);
+	void legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+	void legendBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void legendBackgroundBrushStyleChanged(Qt::BrushStyle);
+	void legendBackgroundFirstColorChanged(QColor&);
+	void legendBackgroundSecondColorChanged(QColor&);
+	void legendBackgroundFileNameChanged(QString&);
+	void legendBackgroundOpacityChanged(float);
+
+	void legendBorderPenChanged(QPen&);
+	void legendBorderOpacityChanged(float);
+
+	void legendLayoutTopMarginChanged(float);
+	void legendLayoutBottomMarginChanged(float);
+	void legendLayoutLeftMarginChanged(float);
+	void legendLayoutRightMarginChanged(float);
+	void legendLayoutVerticalSpacingChanged(float);
+	void legendLayoutHorizontalSpacingChanged(float);
+	void legendLayoutColumnCountChanged(int);
 	
 	//save/load
 	void loadConfig(KConfig&);

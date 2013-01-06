@@ -473,10 +473,17 @@ void WorksheetDock::backgroundColorStyleChanged(int index){
 
 	if (m_initializing)
 		return;
-   
-	foreach(Worksheet* worksheet, m_worksheetList){
-		worksheet->setBackgroundColorStyle(style);
-  }  
+
+	int size = m_worksheetList.size();
+	if (size>1) {
+		m_worksheet->beginMacro(i18n("%1 worksheets: background color style changed").arg(size));
+		foreach(Worksheet* w, m_worksheetList) {
+			w->setBackgroundColorStyle(style);
+		}
+		m_worksheet->endMacro();
+	} else {
+		m_worksheet->setBackgroundColorStyle(style);
+	}
 }
 
 void WorksheetDock::backgroundImageStyleChanged(int index){
@@ -741,6 +748,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	updatePaperSize();
 
 	// Background-tab
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_worksheet->backgroundType()) );	
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_worksheet->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_worksheet->backgroundImageStyle()) );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) m_worksheet->backgroundBrushStyle()) );
@@ -748,9 +756,6 @@ void WorksheetDock::loadConfig(KConfig& config){
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_worksheet->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_worksheet->backgroundSecondColor()) );
 	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100 );
-	// this at last since others emmit backgroundColorStyleChanges
-	// and enable SecondColor button, etc.!
-	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_worksheet->backgroundType()) );
 	
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", 

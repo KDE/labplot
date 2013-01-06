@@ -33,6 +33,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/TextLabel.h"
@@ -41,6 +42,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
+#include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
@@ -177,6 +179,21 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	mainWindow->cartesianPlotDock->setPlots(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
+  }else if (className=="CartesianPlotLegend"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot legend properties"));
+
+	if (!mainWindow->cartesianPlotLegendDock){
+	  mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(mainWindow->stackedWidget);
+	  mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotLegendDock);
+	}
+
+	QList<CartesianPlotLegend*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<CartesianPlotLegend*>(aspect);
+	}
+	mainWindow->cartesianPlotLegendDock->setLegends(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotLegendDock);	
   }else if (className=="Axis"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis properties"));
 	

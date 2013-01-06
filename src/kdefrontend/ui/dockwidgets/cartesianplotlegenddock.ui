@@ -155,7 +155,7 @@
         </widget>
        </item>
        <item row="10" column="0">
-        <widget class="QCheckBox" name="checkBox">
+        <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>visible</string>
          </property>

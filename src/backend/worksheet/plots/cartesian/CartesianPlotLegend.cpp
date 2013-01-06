@@ -43,6 +43,7 @@
 #include "backend/core/plugin/PluginManager.h"
 #include "backend/worksheet/AbstractCurveSymbol.h"
 #include "backend/worksheet/interfaces.h"
+#include "backend/lib/commandtemplates.h"
 
 #include <QGraphicsItem>
 #include <QPainterPath>
@@ -87,8 +88,8 @@ void CartesianPlotLegend::init(){
 
 	//Border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-											group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
-											(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+										 group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
+										 (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 
 	//Layout
@@ -149,11 +150,155 @@ void CartesianPlotLegend::handlePageResize(double horizontalRatio, double vertic
 //##############################################################################
 //################################  getter methods  ############################
 //##############################################################################
+//Background
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, PlotArea::BackgroundType, backgroundType, backgroundType)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, backgroundFirstColor, backgroundFirstColor)
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, backgroundSecondColor, backgroundSecondColor)
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QString, backgroundFileName, backgroundFileName)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, backgroundOpacity, backgroundOpacity)
+
+//Border
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderOpacity, borderOpacity)
+
+//Layout
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutTopMargin, layoutTopMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutBottomMargin, layoutBottomMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutLeftMargin, layoutLeftMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutRightMargin, layoutRightMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutHorizontalSpacing, layoutHorizontalSpacing)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutVerticalSpacing, layoutVerticalSpacing)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, int, layoutColumnCount, layoutColumnCount)
 
 //##############################################################################
 //######################  setter methods and undo commands  ####################
 //##############################################################################
+//Background
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
+void CartesianPlotLegend::setBackgroundType(PlotArea::BackgroundType type) {
+	qDebug()<<"in slot";
+	Q_D(CartesianPlotLegend);
+	if (type != d->backgroundType)
+		exec(new CartesianPlotLegendSetBackgroundTypeCmd(d, type, tr("%1: background type changed")));
+}
 
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
+void CartesianPlotLegend::setBackgroundColorStyle(PlotArea::BackgroundColorStyle style) {
+	Q_D(CartesianPlotLegend);
+	if (style != d->backgroundColorStyle)
+		exec(new CartesianPlotLegendSetBackgroundColorStyleCmd(d, style, tr("%1: background color style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
+void CartesianPlotLegend::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
+	Q_D(CartesianPlotLegend);
+	if (style != d->backgroundImageStyle)
+		exec(new CartesianPlotLegendSetBackgroundImageStyleCmd(d, style, tr("%1: background image style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
+void CartesianPlotLegend::setBackgroundBrushStyle(Qt::BrushStyle style) {
+	Q_D(CartesianPlotLegend);
+	if (style != d->backgroundBrushStyle)
+		exec(new CartesianPlotLegendSetBackgroundBrushStyleCmd(d, style, tr("%1: background brush style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
+void CartesianPlotLegend::setBackgroundFirstColor(const QColor &color) {
+	Q_D(CartesianPlotLegend);
+	if (color!= d->backgroundFirstColor)
+		exec(new CartesianPlotLegendSetBackgroundFirstColorCmd(d, color, tr("%1: set background first color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
+void CartesianPlotLegend::setBackgroundSecondColor(const QColor &color) {
+	Q_D(CartesianPlotLegend);
+	if (color!= d->backgroundSecondColor)
+		exec(new CartesianPlotLegendSetBackgroundSecondColorCmd(d, color, tr("%1: set background second color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundFileName, QString, backgroundFileName, update)
+void CartesianPlotLegend::setBackgroundFileName(const QString& fileName) {
+	Q_D(CartesianPlotLegend);
+	if (fileName!= d->backgroundFileName)
+		exec(new CartesianPlotLegendSetBackgroundFileNameCmd(d, fileName, tr("%1: set background image")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundOpacity, float, backgroundOpacity, update)
+void CartesianPlotLegend::setBackgroundOpacity(float opacity) {
+	Q_D(CartesianPlotLegend);
+	if (opacity != d->backgroundOpacity)
+		exec(new CartesianPlotLegendSetBackgroundOpacityCmd(d, opacity, tr("%1: set opacity")));
+}
+
+
+//Border
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderPen, QPen, borderPen, update)
+void CartesianPlotLegend::setBorderPen(const QPen &pen) {
+	Q_D(CartesianPlotLegend);
+	if (pen != d->borderPen)
+		exec(new CartesianPlotLegendSetBorderPenCmd(d, pen, tr("%1: set border style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderOpacity, qreal, borderOpacity, update)
+void CartesianPlotLegend::setBorderOpacity(float opacity) {
+	Q_D(CartesianPlotLegend);
+	if (opacity != d->borderOpacity)
+		exec(new CartesianPlotLegendSetBorderOpacityCmd(d, opacity, tr("%1: set border opacity")));
+}
+
+//Layout
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutTopMargin, float, layoutTopMargin, retransform)
+void CartesianPlotLegend::setLayoutTopMargin(float margin) {
+	Q_D(CartesianPlotLegend);
+	if (margin != d->layoutTopMargin)
+		exec(new CartesianPlotLegendSetLayoutTopMarginCmd(d, margin, tr("%1: set layout top margin")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutBottomMargin, float, layoutBottomMargin, retransform)
+void CartesianPlotLegend::setLayoutBottomMargin(float margin) {
+	Q_D(CartesianPlotLegend);
+	if (margin != d->layoutBottomMargin)
+		exec(new CartesianPlotLegendSetLayoutBottomMarginCmd(d, margin, tr("%1: set layout bottom margin")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutLeftMargin, float, layoutLeftMargin, retransform)
+void CartesianPlotLegend::setLayoutLeftMargin(float margin) {
+	Q_D(CartesianPlotLegend);
+	if (margin != d->layoutLeftMargin)
+		exec(new CartesianPlotLegendSetLayoutLeftMarginCmd(d, margin, tr("%1: set layout left margin")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutRightMargin, float, layoutRightMargin, retransform)
+void CartesianPlotLegend::setLayoutRightMargin(float margin) {
+	Q_D(CartesianPlotLegend);
+	if (margin != d->layoutRightMargin)
+		exec(new CartesianPlotLegendSetLayoutRightMarginCmd(d, margin, tr("%1: set layout right margin")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, retransform)
+void CartesianPlotLegend::setLayoutVerticalSpacing(float spacing) {
+	Q_D(CartesianPlotLegend);
+	if (spacing != d->layoutVerticalSpacing)
+		exec(new CartesianPlotLegendSetLayoutVerticalSpacingCmd(d, spacing, tr("%1: set layout vertical spacing")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, retransform)
+void CartesianPlotLegend::setLayoutHorizontalSpacing(float spacing) {
+	Q_D(CartesianPlotLegend);
+	if (spacing != d->layoutHorizontalSpacing)
+		exec(new CartesianPlotLegendSetLayoutHorizontalSpacingCmd(d, spacing, tr("%1: set layout horizontal spacing")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutColumnCount, int, layoutColumnCount, retransform)
+void CartesianPlotLegend::setLayoutColumnCount(int count) {
+	Q_D(CartesianPlotLegend);
+	if (count != d->layoutColumnCount)
+		exec(new CartesianPlotLegendSetLayoutColumnCountCmd(d, count, tr("%1: set layout column count")));
+}
 
 //##############################################################################
 //#################################  SLOTS  ####################################

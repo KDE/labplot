@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
 	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-															Alexander Semke (alexander.semke*web.de)
+	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
                            
  ***************************************************************************/
@@ -29,14 +29,17 @@
  ***************************************************************************/
 
 #include "TemplateHandler.h"
-
-#include <QMenu>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QSpacerItem>
+#include <QtGui/QToolButton>
+#include <QtGui/QMenu>
 #include <QFileInfo>
 #include <QWidgetAction>
 #include <KLocale>
 #include <KStandardDirs>
 #include <KLineEdit>
 #include <KIcon>
+#include <KConfig>
 
  /*!
   \class TemplateHandler
@@ -46,13 +49,10 @@
 
   \ingroup kdefrontend
 */
- 
- 
+
 TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent){
 	horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
-	horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-	horizontalLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
 
 	horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer);
@@ -90,12 +90,10 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	className = name;
 	
 	//synchronize this with the ordering in TemplateHandler::ClassName
-	dirNames<<"spreadsheet"<<"worksheet"<<"cartesianplot"<<"xycurve"<<"axis";
+	dirNames<<"spreadsheet"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis";
 	
 	this->retranslateUi();
 }
-
-TemplateHandler::~TemplateHandler(){};
 
 void TemplateHandler::loadMenu(){
 	QMenu menu;
@@ -129,8 +127,8 @@ void TemplateHandler::saveMenu(){
 	// add editable action
 	QWidgetAction *widgetAction = new QWidgetAction(this);
 	KLineEdit *leFilename = new KLineEdit("");
-	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
-	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
+	connect(leFilename, SIGNAL(returnPressed(QString&)), this, SLOT(saveNewSelected(const QString&)));
+	connect(leFilename, SIGNAL(returnPressed(QString&)), &menu, SLOT(close()));
 	widgetAction->setDefaultWidget(leFilename);
 	menu.addAction(widgetAction);
 
@@ -141,7 +139,7 @@ void TemplateHandler::saveMenu(){
 /*!
 	the receiver of the signal had to config.sync().
  */
-void TemplateHandler::saveNewSelected(QString filename){
+void TemplateHandler::saveNewSelected(const QString& filename){
 	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+"/" + dirNames.at(className) + "/"+filename, KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
 }
@@ -161,7 +159,6 @@ void TemplateHandler::saveDefaults(){
 	KConfig config;
 	emit (saveConfigRequested(config));
 }
-
 
 void TemplateHandler::retranslateUi(){
 	tbLoad->setToolTip(i18n("Load properties from a template"));

@@ -32,9 +32,6 @@
 
 #include "backend/worksheet/plots/AbstractPlot.h"
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-class KAction;
-#endif
 class QToolBar;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;

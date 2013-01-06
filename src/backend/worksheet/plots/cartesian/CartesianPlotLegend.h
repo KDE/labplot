@@ -4,7 +4,7 @@
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
     Copyright            : (C) 2013 Alexander Semke (alexander.semke*web.de)
-								(replace * with @ in the email addresses) 
+						       (replace * with @ in the email addresses)
                            
  ***************************************************************************/
 
@@ -35,8 +35,8 @@
 #include "backend/lib/macros.h"
 
 class CartesianPlot;
-
 class CartesianPlotLegendPrivate;
+
 class CartesianPlotLegend: public AbstractWorksheetElement {
 	Q_OBJECT
 
@@ -80,13 +80,49 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
-		CartesianPlotLegend(CartesianPlot*, const QString &name, CartesianPlotLegendPrivate *dd);
-		CartesianPlotLegendPrivate * const d_ptr;
+		CartesianPlotLegend(CartesianPlot*, const QString &name, CartesianPlotLegendPrivate* dd);
+		CartesianPlotLegendPrivate* const d_ptr;
 
 	private:
     	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 		void init();
 		CartesianPlot* m_plot;
+
+	signals:
+		friend class CartesianPlotLegendSetBackgroundTypeCmd;
+		friend class CartesianPlotLegendSetBackgroundColorStyleCmd;
+		friend class CartesianPlotLegendSetBackgroundImageStyleCmd;
+		friend class CartesianPlotLegendSetBackgroundBrushStyleCmd;
+		friend class CartesianPlotLegendSetBackgroundFirstColorCmd;
+		friend class CartesianPlotLegendSetBackgroundSecondColorCmd;
+		friend class CartesianPlotLegendSetBackgroundFileNameCmd;
+		friend class CartesianPlotLegendSetBackgroundOpacityCmd;
+		friend class CartesianPlotLegendSetBorderPenCmd;
+		friend class CartesianPlotLegendSetBorderOpacityCmd;
+		friend class CartesianPlotLegendSetLayoutTopMarginCmd;
+		friend class CartesianPlotLegendSetLayoutBottomMarginCmd;
+		friend class CartesianPlotLegendSetLayoutLeftMarginCmd;
+		friend class CartesianPlotLegendSetLayoutRightMarginCmd;
+		friend class CartesianPlotLegendSetLayoutVerticalSpacingCmd;
+		friend class CartesianPlotLegendSetLayoutHorizontalSpacingCmd;
+		friend class CartesianPlotLegendSetLayoutColumnCountCmd;
+		void backgroundTypeChanged(PlotArea::BackgroundType);
+		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+		void backgroundBrushStyleChanged(Qt::BrushStyle);
+		void backgroundFirstColorChanged(QColor&);
+		void backgroundSecondColorChanged(QColor&);
+		void backgroundFileNameChanged(QString&);
+		void backgroundOpacityChanged(float);
+		void borderPenChanged(QPen&);
+		void borderOpacityChanged(float);
+		void layoutTopMarginChanged(float);
+		void layoutBottomMarginChanged(float);
+		void layoutLeftMarginChanged(float);
+		void layoutRightMarginChanged(float);
+		void layoutVerticalSpacingChanged(float);
+		void layoutHorizontalSpacingChanged(float);
+		void layoutColumnCountChanged(int);		
 };
 
 #endif

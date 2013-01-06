@@ -102,12 +102,12 @@ class PlotArea: public AbstractWorksheetElement{
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
 		void backgroundBrushStyleChanged(Qt::BrushStyle);
-		void backgroundFirstColorChanged(QColor);
-		void backgroundSecondColorChanged(QColor);
-		void backgroundFileNameChanged(QString);
-		void backgroundOpacityChanged(qreal);
-		void borderPenChanged(QPen);
-		void borderOpacityChanged(qreal);
+		void backgroundFirstColorChanged(QColor&);
+		void backgroundSecondColorChanged(QColor&);
+		void backgroundFileNameChanged(QString&);
+		void backgroundOpacityChanged(float);
+		void borderPenChanged(QPen&);
+		void borderOpacityChanged(float);
 };
 
 #endif

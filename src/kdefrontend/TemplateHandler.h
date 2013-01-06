@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
 	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-															Alexander Semke (alexander.semke*web.de)
+	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
                            
  ***************************************************************************/
@@ -31,20 +31,19 @@
 #ifndef TEMPLATEHANDLER_H
 #define TEMPLATEHANDLER_H
 
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QToolButton>
-
-#include <KConfig>
+#include <QtGui/QWidget>
+class QHBoxLayout;
+class QToolButton;
+class QSpacerItem;
+class KConfig;
 
 class TemplateHandler : public QWidget{
 	Q_OBJECT
 
 	public:
-		enum ClassName {Spreadsheet, Worksheet, CartesianPlot, XYCurve, Axis};
+		enum ClassName {Spreadsheet, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis};
 		
 		TemplateHandler(QWidget* parent, ClassName);
-		~TemplateHandler();
 		
 	private:
 		void retranslateUi();
@@ -66,7 +65,7 @@ class TemplateHandler : public QWidget{
 		void saveMenu();
 		void loadMenuSelected(QAction* action);
 		void saveMenuSelected(QAction* action);
-		void saveNewSelected(QString filename);
+		void saveNewSelected(const QString& filename);
 		void saveDefaults();
 
 	signals:

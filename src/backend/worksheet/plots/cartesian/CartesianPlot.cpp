@@ -32,7 +32,7 @@
 #include "CartesianCoordinateSystem.h"
 #include "Axis.h"
 #include "XYCurve.h"
-#include "CartesianPlotLegend.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"

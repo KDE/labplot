@@ -44,7 +44,6 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		CartesianPlotLegend* const q;
 
 		QString name() const;
-		void update();
 		bool swapVisible(bool on);
 
 		void recalcShapeAndBoundingRect();

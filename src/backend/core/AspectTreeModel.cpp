@@ -92,9 +92,6 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject *parent)
 		this, SLOT(aspectHiddenChanged(const AbstractAspect*)));
 }
 
-AspectTreeModel::~AspectTreeModel() {
-}
-
 /*!
   \c list contains the class names of the aspects, that can be selected in the corresponding model view.
 */
