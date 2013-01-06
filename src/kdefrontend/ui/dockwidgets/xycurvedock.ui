@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -194,7 +194,7 @@
        <item row="5" column="2">
         <widget class="QDoubleSpinBox" name="sbLineWidth">
          <property name="suffix">
-          <string>pt</string>
+          <string> pt</string>
          </property>
          <property name="singleStep">
           <double>0.500000000000000</double>
@@ -220,7 +220,7 @@
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
          <property name="suffix">
-          <string>%</string>
+          <string> %</string>
          </property>
          <property name="minimum">
           <number>0</number>
@@ -319,7 +319,7 @@
        <item row="12" column="2">
         <widget class="QDoubleSpinBox" name="sbDropLineWidth">
          <property name="suffix">
-          <string>pt</string>
+          <string> pt</string>
          </property>
          <property name="singleStep">
           <double>0.500000000000000</double>
@@ -345,7 +345,7 @@
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
          <property name="suffix">
-          <string>%</string>
+          <string> %</string>
          </property>
          <property name="minimum">
           <number>0</number>
@@ -578,7 +578,7 @@
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
          <property name="suffix">
-          <string>%</string>
+          <string> %</string>
          </property>
          <property name="minimum">
           <number>0</number>
@@ -687,7 +687,7 @@
           <string/>
          </property>
          <property name="suffix">
-          <string>pt</string>
+          <string> pt</string>
          </property>
          <property name="singleStep">
           <double>0.500000000000000</double>
@@ -697,7 +697,7 @@
        <item row="14" column="2">
         <widget class="QDoubleSpinBox" name="sbSymbolBorderWidth">
          <property name="suffix">
-          <string>pt</string>
+          <string> pt</string>
          </property>
          <property name="singleStep">
           <double>0.500000000000000</double>
@@ -787,7 +787,7 @@
        <item row="4" column="2">
         <widget class="QDoubleSpinBox" name="sbValuesDistance">
          <property name="suffix">
-          <string>pt</string>
+          <string> pt</string>
          </property>
          <property name="singleStep">
           <double>0.500000000000000</double>
@@ -842,7 +842,7 @@
           <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
          </property>
          <property name="suffix">
-          <string>%</string>
+          <string> %</string>
          </property>
          <property name="minimum">
           <number>0</number>

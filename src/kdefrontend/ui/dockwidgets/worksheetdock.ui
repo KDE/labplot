@@ -151,6 +151,9 @@ Otherwise resize the canvas only.</string>
        </item>
        <item row="7" column="2">
         <widget class="QDoubleSpinBox" name="sbWidth">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
          <property name="maximum">
           <double>1000.000000000000000</double>
          </property>
@@ -165,6 +168,9 @@ Otherwise resize the canvas only.</string>
        </item>
        <item row="8" column="2">
         <widget class="QDoubleSpinBox" name="sbHeight">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
          <property name="maximum">
           <double>1000.000000000000000</double>
          </property>
@@ -376,6 +382,9 @@ Otherwise resize the canvas only.</string>
        </item>
        <item row="1" column="2">
         <widget class="QDoubleSpinBox" name="sbLayoutTopMargin">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
          <property name="maximum">
           <double>1000.000000000000000</double>
          </property>
@@ -400,6 +409,9 @@ Otherwise resize the canvas only.</string>
        </item>
        <item row="2" column="2">
         <widget class="QDoubleSpinBox" name="sbLayoutBottomMargin">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
          <property name="maximum">
           <double>1000.000000000000000</double>
          </property>
@@ -417,6 +429,9 @@ Otherwise resize the canvas only.</string>
        </item>
        <item row="3" column="2">
         <widget class="QDoubleSpinBox" name="sbLayoutLeftMargin">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
          <property name="maximum">
           <double>1000.000000000000000</double>
          </property>
@@ -434,6 +449,9 @@ Otherwise resize the canvas only.</string>
        </item>
        <item row="4" column="2">
         <widget class="QDoubleSpinBox" name="sbLayoutRightMargin">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
          <property name="maximum">
           <double>1000.000000000000000</double>
          </property>
@@ -451,6 +469,9 @@ Otherwise resize the canvas only.</string>
        </item>
        <item row="6" column="2">
         <widget class="QDoubleSpinBox" name="sbLayoutHorizontalSpacing">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
          <property name="maximum">
           <double>1000.000000000000000</double>
          </property>
@@ -468,6 +489,9 @@ Otherwise resize the canvas only.</string>
        </item>
        <item row="7" column="2">
         <widget class="QDoubleSpinBox" name="sbLayoutVerticalSpacing">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
          <property name="maximum">
           <double>1000.000000000000000</double>
          </property>

@@ -274,9 +274,6 @@ void WorksheetDock::retranslateUi(){
     ui.cbSize->addItem(i18n("US Common #10 Envelope"), QPrinter::Comm10E);
 	ui.cbSize->addItem(i18n("Custom"), QPrinter::Custom);
 	
-	ui.sbWidth->setSuffix(i18n("cm"));
-	ui.sbHeight->setSuffix(i18n("cm"));
-	
 	//Background
 	ui.cbBackgroundType->addItem(i18n("color"));
 	ui.cbBackgroundType->addItem(i18n("image"));
@@ -298,12 +295,6 @@ void WorksheetDock::retranslateUi(){
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
 	//layout
-	ui.sbLayoutTopMargin->setSuffix(i18n("cm"));
-	ui.sbLayoutBottomMargin->setSuffix(i18n("cm"));
-	ui.sbLayoutLeftMargin->setSuffix(i18n("cm"));
-	ui.sbLayoutRightMargin->setSuffix(i18n("cm"));
-	ui.sbLayoutHorizontalSpacing->setSuffix(i18n("cm"));
-	ui.sbLayoutVerticalSpacing->setSuffix(i18n("cm"));
 
 	m_initializing = false;
 }
