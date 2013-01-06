@@ -2,8 +2,9 @@
     File                 : AxisDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2012 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+							(use @ for *)
     Description          : axes widget class
                            
  ***************************************************************************/
@@ -33,13 +34,14 @@
 
 class Axis;
 class LabelWidget;
+class AbstractAspect;
 
 class AxisDock : public QWidget{
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    AxisDock(QWidget*);
-    ~AxisDock();
+	AxisDock(QWidget*);
+	~AxisDock();
 
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
@@ -78,7 +80,7 @@ private slots:
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
-	
+
 	//"Major ticks"-tab
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
@@ -89,7 +91,7 @@ private slots:
 	void majorTicksWidthChanged(double);
 	void majorTicksLengthChanged(double);
 	void majorTicksOpacityChanged(int);
-	
+
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
@@ -100,9 +102,9 @@ private slots:
 	void minorTicksWidthChanged(double);
 	void minorTicksLengthChanged(double);
 	void minorTicksOpacityChanged(int);
-	
+
 	//"Extra ticks"-tab
-	
+
 	//"Tick labels"-tab
 	void labelsFormatChanged(int);
 	void labelsPrecisionChanged(int);
@@ -115,7 +117,7 @@ private slots:
 	void labelsPrefixChanged();
 	void labelsSuffixChanged();
 	void labelsOpacityChanged(int);
-	
+
 	//"Grid"-tab
   	void majorGridStyleChanged(int);
 	void majorGridColorChanged(const QColor&);
@@ -128,11 +130,15 @@ private slots:
 	void minorGridOpacityChanged(int);
 
 	//SLOTs for changes triggered in Axis
+	void axisDescriptionChanged(const AbstractAspect*);
+
 	void axisOrientationChanged();
 	void axisPositionChanged(float);
 	void axisStartChanged(float);
 	void axisEndChanged(float);
 	void axisLabelsPrecisionChanged(int);
+	void axisZeroOffsetChanged(qreal);
+	void axisScalingFactorChanged(qreal);
 
 	//save/load
 	void loadConfig(KConfig&);

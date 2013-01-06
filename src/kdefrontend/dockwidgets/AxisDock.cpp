@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : axes widget class
 
@@ -190,21 +190,21 @@ void AxisDock::init(){
 	ui.cbMinorTicksDirection->addItem( i18n("in") );
 	ui.cbMinorTicksDirection->addItem( i18n("out") );
 	ui.cbMinorTicksDirection->addItem( i18n("in and out") );
-	
+
 	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
-	
+
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
 	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
 
 	//Grid
 	//TODO: remove this later
-	 ui.kcbMajorGridColor->setColor(Qt::black);
-	 GuiTools::updatePenStyles(ui.cbMajorGridStyle, QColor(Qt::black));
-	 ui.kcbMinorGridColor->setColor(Qt::black);
-	 GuiTools::updatePenStyles(ui.cbMinorGridStyle, QColor(Qt::black));
-	 
+	ui.kcbMajorGridColor->setColor(Qt::black);
+	GuiTools::updatePenStyles(ui.cbMajorGridStyle, QColor(Qt::black));
+	ui.kcbMinorGridColor->setColor(Qt::black);
+	GuiTools::updatePenStyles(ui.cbMinorGridStyle, QColor(Qt::black));
+ 
 	m_initializing=false;
 }
 
@@ -219,31 +219,38 @@ void AxisDock::setAxes(QList<Axis*> list){
   
 	labelWidget->setAxes(list);
 
-  //if there are more then one axis in the list, disable the tab "general"
-  if (list.size()==1){
-	ui.lName->setEnabled(true);
-	ui.leName->setEnabled(true);
-	ui.lComment->setEnabled(true);
-	ui.leComment->setEnabled(true);
-	ui.leName->setText(m_axis->name());
-	ui.leComment->setText(m_axis->comment());
-  }else{
-	ui.lName->setEnabled(false);
-	ui.leName->setEnabled(false);
-	ui.lComment->setEnabled(false);
-	ui.leComment->setEnabled(false);
-	ui.leName->setText("");
-	ui.leComment->setText("");	
-  }
+	//if there are more then one axis in the list, disable the tab "general"
+	if (list.size()==1){
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
+		ui.leName->setText(m_axis->name());
+		ui.leComment->setText(m_axis->comment());
+	}else{
+		ui.lName->setEnabled(false);
+		ui.leName->setEnabled(false);
+		ui.lComment->setEnabled(false);
+		ui.leComment->setEnabled(false);
+		ui.leName->setText("");
+		ui.leComment->setText("");	
+	}
 
   	//show the properties of the first axis
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
-  
+	
+	connect(m_axis, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(axisDescriptionChanged(const AbstractAspect*)));
+
 	connect(m_axis, SIGNAL(orientationChanged()), this, SLOT(axisOrientationChanged()));
 	connect(m_axis, SIGNAL(startChanged(float)), this, SLOT(axisStartChanged(float)));
 	connect(m_axis, SIGNAL(endChanged(float)), this, SLOT(axisEndChanged(float)));
 	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
+	//TODO: more undo functions
+	connect(m_axis, SIGNAL(zeroOffsetChanged(qreal)), this, SLOT(axisZeroOffsetChanged(qreal)));
+	connect(m_axis, SIGNAL(scalingFactorChanged(qreal)), this, SLOT(axisScalingFactorChanged(qreal)));
+	//TODO: more undo functions
+
   	m_initializing = false;
 }
 
@@ -1034,6 +1041,19 @@ void AxisDock::minorGridOpacityChanged(int value){
 //*************************************************************
 //************ SLOTs for changes triggered in Axis ************
 //*************************************************************
+void AxisDock::axisDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_axis != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text()) {
+		ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.leComment->text()) {
+		ui.leComment->setText(aspect->comment());
+	}
+	m_initializing = false;
+}
+
 void AxisDock::axisOrientationChanged(){
 	m_initializing = true;
 	ui.cbOrientation->setCurrentIndex( (int)m_axis->orientation() );
@@ -1062,6 +1082,18 @@ void AxisDock::axisEndChanged(float value){
 void AxisDock::axisLabelsPrecisionChanged(int value){
 	m_initializing = true;
 	ui.sbLabelsPrecision->setValue( value );
+	m_initializing = false;
+}
+
+void AxisDock::axisZeroOffsetChanged(qreal value){
+	m_initializing = true;
+	ui.leZeroOffset->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void AxisDock::axisScalingFactorChanged(qreal value){
+	m_initializing = true;
+	ui.leScalingFactor->setText( QString::number(value) );
 	m_initializing = false;
 }
 

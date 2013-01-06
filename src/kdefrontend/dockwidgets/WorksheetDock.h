@@ -35,6 +35,7 @@
 #include "ui_worksheetdock.h"
 
 class Worksheet;
+class AbstractAspect;
 
 class WorksheetDock: public QWidget{
 	Q_OBJECT

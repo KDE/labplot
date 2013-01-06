@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
 				(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -164,6 +165,10 @@ class Axis: public AbstractWorksheetElement {
 		void positionChanged(float);
 		void lineStyleChanged();
 		void labelsPrecisionChanged(int);
+		friend class AxisSetZeroOffsetCmd;
+		friend class AxisSetScalingFactorCmd;
+		void zeroOffsetChanged(qreal);
+		void scalingFactorChanged(qreal);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

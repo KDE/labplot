@@ -401,6 +401,7 @@ CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorGridPen, minorGridPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
 
 /* ============================ setter methods and undo commands ================= */
+//TODO: make undo aware
 STD_SETTER_CMD_IMPL_F(Axis, SetAutoScale, bool, autoScale, retransform);
 void Axis::setAutoScale(bool autoScale) {
 	Q_D(Axis);
@@ -500,18 +501,18 @@ void Axis::setEnd(float end, bool undo) {
 }
 
 //TODO undo-functions
-STD_SETTER_CMD_IMPL_F(Axis, SetScalingFactor, qreal, scalingFactor, retransform);
-void Axis::setScalingFactor(qreal scalingFactor) {
-	Q_D(Axis);
-	if (scalingFactor != d->scalingFactor)
-		exec(new AxisSetScalingFactorCmd(d, scalingFactor, tr("%1: set axis scaling factor")));
-}
-
-STD_SETTER_CMD_IMPL_F(Axis, SetZeroOffset, qreal, zeroOffset, retransform);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform);
 void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
 	if (zeroOffset != d->zeroOffset)
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, tr("%1: set axis zero offset")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform);
+void Axis::setScalingFactor(qreal scalingFactor) {
+	Q_D(Axis);
+	if (scalingFactor != d->scalingFactor)
+		exec(new AxisSetScalingFactorCmd(d, scalingFactor, tr("%1: set axis scaling factor")));
 }
 
 //Title
