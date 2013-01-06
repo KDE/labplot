@@ -128,7 +128,7 @@
       <string>Horizontal position relative to label's parent</string>
      </property>
      <property name="suffix">
-      <string>cm</string>
+      <string> cm</string>
      </property>
      <property name="minimum">
       <double>-99.989999999999995</double>
@@ -193,7 +193,7 @@
       <string>Vertical position relative to label's parent</string>
      </property>
      <property name="suffix">
-      <string>cm</string>
+      <string> cm</string>
      </property>
      <property name="minimum">
       <double>-99.989999999999995</double>
@@ -219,7 +219,7 @@
       <string>Distance to the axis tick labels</string>
      </property>
      <property name="suffix">
-      <string>pt</string>
+      <string> pt</string>
      </property>
      <property name="minimum">
       <double>-99.989999999999995</double>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>333</width>
+    <width>470</width>
     <height>719</height>
    </rect>
   </property>
@@ -32,7 +32,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -387,7 +387,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Major ticks</string>
+          <string>Major ticks:</string>
          </property>
         </widget>
        </item>
@@ -605,7 +605,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Minor ticks</string>
+          <string>Minor ticks:</string>
          </property>
         </widget>
        </item>
@@ -1134,7 +1134,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Major grid</string>
+          <string>Major grid:</string>
          </property>
         </widget>
        </item>
@@ -1251,7 +1251,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Minor grid</string>
+          <string>Minor grid:</string>
          </property>
         </widget>
        </item>
