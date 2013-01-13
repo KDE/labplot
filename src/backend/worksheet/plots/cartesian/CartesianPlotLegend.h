@@ -122,7 +122,9 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		void layoutRightMarginChanged(float);
 		void layoutVerticalSpacingChanged(float);
 		void layoutHorizontalSpacingChanged(float);
-		void layoutColumnCountChanged(int);		
+		void layoutColumnCountChanged(int);
+
+		void positionChanged(QPointF&);
 };
 
 #endif

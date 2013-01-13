@@ -44,6 +44,7 @@
 #include "backend/worksheet/AbstractCurveSymbol.h"
 #include "backend/worksheet/interfaces.h"
 #include "backend/lib/commandtemplates.h"
+#include <math.h>
 
 #include <QGraphicsItem>
 #include <QPainterPath>
@@ -74,7 +75,9 @@ void CartesianPlotLegend::init(){
 
 	d->labelFont.setPointSizeF( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
 	d->labelColor = Qt::black;
-	d->lineSymbolWidth =  group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter));
+	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter));
+	d->rowCount = 0;
+	d->columnCount = 0;
 
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
@@ -121,11 +124,10 @@ QIcon CartesianPlotLegend::icon() const{
 	return icon;
 }
 
-//TODO
-// STD_SWAP_METHOD_SETTER_CMD_IMPL(CartesianPlotLegend, SetVisible, bool, swapVisible)
+STD_SWAP_METHOD_SETTER_CMD_IMPL(CartesianPlotLegend, SetVisible, bool, swapVisible)
 void CartesianPlotLegend::setVisible(bool on){
 	Q_D(CartesianPlotLegend);
-// 	exec(new CartesianPlotLegendSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
+	exec(new CartesianPlotLegendSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
 }
 
 bool CartesianPlotLegend::isVisible() const{
@@ -179,7 +181,6 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, int, layoutColumnCount, layoutCo
 //Background
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
 void CartesianPlotLegend::setBackgroundType(PlotArea::BackgroundType type) {
-	qDebug()<<"in slot";
 	Q_D(CartesianPlotLegend);
 	if (type != d->backgroundType)
 		exec(new CartesianPlotLegendSetBackgroundTypeCmd(d, type, tr("%1: background type changed")));
@@ -233,7 +234,6 @@ void CartesianPlotLegend::setBackgroundOpacity(float opacity) {
 	if (opacity != d->backgroundOpacity)
 		exec(new CartesianPlotLegendSetBackgroundOpacityCmd(d, opacity, tr("%1: set opacity")));
 }
-
 
 //Border
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderPen, QPen, borderPen, update)
@@ -341,24 +341,58 @@ void CartesianPlotLegendPrivate::retransform() {
 	prepareGeometryChange();
 
 	QList<XYCurve*> children = q->m_plot->children<XYCurve>();
+	int curveCount = children.size();
+	columnCount = (curveCount<layoutColumnCount) ? curveCount : layoutColumnCount;
+	rowCount = ceil(double(curveCount)/double(columnCount));
+	maxColumnTextWidths.clear();
 
 	//determine the width of the legend
-	float max=0;
 	QFontMetrics fm(labelFont);
 	float w;
 	float h=fm.ascent();
-	foreach (XYCurve* child, children) {
-		w = fm.width(child->name());
-		if (w>max)
-			max = w;
+
+	float maxTextWidth = 0;
+	float legendWidth = 0;
+	XYCurve* curve;
+	for (int c=0; c<columnCount; ++c) {
+		for (int r=0; r<rowCount; ++r) {
+			if ( c*rowCount + r >= curveCount )
+				break;
+
+			curve = children.at(c*rowCount + r);
+			if (curve) {
+				w = fm.width(curve->name());
+				if (w>maxTextWidth)
+					maxTextWidth = w;
+			}
+		}
+		maxColumnTextWidths.append(maxTextWidth);
+		legendWidth += maxTextWidth;
 	}
-	rect.setWidth(layoutLeftMargin + layoutRightMargin + lineSymbolWidth + layoutHorizontalSpacing + max);
+	legendWidth += layoutLeftMargin + layoutRightMargin; //margins
+	legendWidth += columnCount*lineSymbolWidth + layoutHorizontalSpacing; //width of the columns without the text
+	legendWidth += (columnCount-1)*2*layoutHorizontalSpacing; //spacings between the columns
+	rect.setWidth(legendWidth);
 
 	//determine the height of the legend
-	int count = children.size();
-	rect.setHeight(layoutTopMargin + layoutBottomMargin + (count-1)*layoutVerticalSpacing + count*h);
+	float legendHeight = layoutTopMargin + layoutBottomMargin; //margins
+	legendHeight += rowCount*h; //height of the rows
+	legendHeight += (rowCount-1)*layoutVerticalSpacing; //spacing between the rows
+	rect.setHeight(legendHeight);
 }
 
+QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
+// 	if (cancelItemChangeEvent)
+// 		return value;
+
+	if (change == QGraphicsItem::ItemPositionChange) {
+		QPointF itemPos = value.toPointF();//item's center point in parent's coordinates
+		 emit q->positionChanged(itemPos); //position
+     }
+
+	return QGraphicsItem::itemChange(change, value);
+ }
+ 
 /*!
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the legend.
   \sa QGraphicsItem::paint().
@@ -454,53 +488,73 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 		painter->drawRect(rect);
 	}
 
-	//draw the curve names
-	painter->setFont(labelFont);
-	
+	//draw curve's line+symbol and the names
 	QList<XYCurve*> children = q->m_plot->children<XYCurve>();
+	int curveCount = children.size();
 	QFontMetrics fm(labelFont);
+	float h=fm.ascent();
+	XYCurve* curve;
 
 	CurveSymbolFactory* factory=0;
 	foreach(QObject *plugin, PluginManager::plugins())
 		factory = qobject_cast<CurveSymbolFactory*>(plugin);
 
-	float h=fm.ascent();
+	painter->setFont(labelFont);
+	painter->translate(layoutLeftMargin, layoutTopMargin);
 	painter->save();
-	painter->translate(layoutLeftMargin, layoutTopMargin+h);
-	foreach (XYCurve* curve, children) {
-		//curve's line
-		if (curve->lineType() != XYCurve::NoLine){
-			painter->setPen(curve->linePen());
-			painter->setOpacity(curve->lineOpacity());
-			painter->drawLine(0, -h/2, lineSymbolWidth, -h/2);
-		}
 
-		//curve's symbol
-		if (curve->symbolsTypeId()!="none"){
-			if (factory) {
-				painter->setOpacity(curve->symbolsOpacity());
-				AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
+	for (int c=0; c<columnCount; ++c) {
+		for (int r=0; r<rowCount; ++r) {
+			if ( c*rowCount + r >= curveCount )
+				break;
 
-				symbol->setSize(curve->symbolsSize());
-				symbol->setAspectRatio(curve->symbolsAspectRatio());
-				symbol->setBrush(curve->symbolsBrush());
-				symbol->setPen(curve->symbolsPen());
-				symbol->setRotationAngle(curve->symbolsRotationAngle());
+			curve = children.at(c*rowCount + r);
+			if (!curve)
+				continue;
 
-				painter->translate(QPointF(lineSymbolWidth/2, -h/2));
-				symbol->paint(painter, option, widget);
-				painter->translate(-QPointF(lineSymbolWidth/2, -h/2));
+			//curve's line (painted at the half of the ascent size)
+			if (curve->lineType() != XYCurve::NoLine){
+				painter->setPen(curve->linePen());
+				painter->setOpacity(curve->lineOpacity());
+				painter->drawLine(0, h/2, lineSymbolWidth, h/2);
+				painter->drawLine(0, h, lineSymbolWidth, h);
 			}
+
+			//curve's symbol
+			if (curve->symbolsTypeId()!="none"){
+				if (factory) {
+					painter->setOpacity(curve->symbolsOpacity());
+					AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
+
+					symbol->setSize(curve->symbolsSize());
+					symbol->setAspectRatio(curve->symbolsAspectRatio());
+					symbol->setBrush(curve->symbolsBrush());
+					symbol->setPen(curve->symbolsPen());
+					symbol->setRotationAngle(curve->symbolsRotationAngle());
+
+					painter->translate(QPointF(lineSymbolWidth/2, h/2));
+					symbol->paint(painter, option, widget);
+					painter->translate(-QPointF(lineSymbolWidth/2, h/2));
+				}
+			}
+
+			//curve's name
+			painter->setPen(QPen(labelColor));
+			painter->setOpacity(1.0);
+			painter->drawText(QPoint(lineSymbolWidth+layoutHorizontalSpacing, h), curve->name());
+			painter->translate(0,layoutVerticalSpacing+h);
 		}
-  
-		//curve's name
-		painter->setPen(QPen(labelColor));
-		painter->setOpacity(1.0);
-		painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, 0), curve->name());
-		painter->translate(0,layoutVerticalSpacing+h);
+
+		//translate to the beginning of the next column
+		painter->restore();
+		int deltaX = lineSymbolWidth+layoutHorizontalSpacing+maxColumnTextWidths.at(c); //the width of the current columns
+		deltaX += 2*layoutHorizontalSpacing; //spacing between two columns
+		painter->translate(deltaX,0);
+		painter->save();
 	}
+
 	painter->restore();
-	
+
 	if (isSelected()){
 		QPainterPath path = shape();
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
