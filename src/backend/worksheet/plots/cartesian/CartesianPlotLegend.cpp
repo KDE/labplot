@@ -152,6 +152,9 @@ void CartesianPlotLegend::handlePageResize(double horizontalRatio, double vertic
 //##############################################################################
 //################################  getter methods  ############################
 //##############################################################################
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
+
 //Background
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, PlotArea::BackgroundType, backgroundType, backgroundType)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
@@ -178,6 +181,20 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, int, layoutColumnCount, layoutCo
 //##############################################################################
 //######################  setter methods and undo commands  ####################
 //##############################################################################
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelFont, QFont, labelFont, retransform)
+void CartesianPlotLegend::setLabelFont(const QFont& font) {
+	Q_D(CartesianPlotLegend);
+	if (font!= d->labelFont)
+		exec(new CartesianPlotLegendSetLabelFontCmd(d, font, tr("%1: set font")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelColor, QColor, labelColor, update)
+void CartesianPlotLegend::setLabelColor(const QColor& color) {
+	Q_D(CartesianPlotLegend);
+	if (color!= d->labelColor)
+		exec(new CartesianPlotLegendSetLabelColorCmd(d, color, tr("%1: set font color")));
+}
+
 //Background
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
 void CartesianPlotLegend::setBackgroundType(PlotArea::BackgroundType type) {

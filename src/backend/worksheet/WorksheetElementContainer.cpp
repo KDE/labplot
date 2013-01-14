@@ -111,9 +111,17 @@ void WorksheetElementContainer::retransform() {
 }
 
 void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(AbstractWorksheetElement *elem, childList)
-		elem->handlePageResize(horizontalRatio, verticalRatio);
+	qDebug()<<" in handlePageResize";
+	Q_D(WorksheetElementContainer);
+	QRectF rect(d->rect);
+	rect.setWidth(d->rect.width()*horizontalRatio);
+	rect.setHeight(d->rect.width()*verticalRatio);
+	setRect(rect);
+// 	emit rectChanged(d->rect);
+
+// 	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+// 	foreach(AbstractWorksheetElement *elem, childList)
+// 		elem->handlePageResize(horizontalRatio, verticalRatio);
 }
 
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) {

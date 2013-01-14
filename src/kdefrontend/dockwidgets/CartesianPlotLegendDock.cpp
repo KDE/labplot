@@ -73,6 +73,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.kfrLabelFont, SIGNAL(fontSelected(const QFont&)), this, SLOT(labelFontChanged(const QFont&)) );
+	connect( ui.kcbLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(labelColorChanged(const QColor&)) );
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -146,6 +148,10 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 
 	//SIGNALs/SLOTs
+	//General
+	connect( m_legend, SIGNAL(labelFontChanged(QFont&)), this, SLOT(legendLabelFontChanged(QFont&)) );
+	connect( m_legend, SIGNAL(labelColorChanged(QColor&)), this, SLOT(legendLabelColorChanged(QColor&)) );
+	
 	//background
 	connect( m_legend, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(legendBackgroundTypeChanged(PlotArea::BackgroundType)) );
 	connect( m_legend, SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)) );
@@ -196,6 +202,18 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbBackgroundImageStyle->addItem(i18n("tiled"));
 	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
 
+	ui.cbOrder->addItem(i18n("column major"));
+	ui.cbOrder->addItem(i18n("row major"));
+
+	ui.cbGeometryX->addItem(i18n("left"));
+	ui.cbGeometryX->addItem(i18n("center"));
+	ui.cbGeometryX->addItem(i18n("right"));
+	ui.cbGeometryX->addItem(i18n("custom"));
+	ui.cbGeometryY->addItem(i18n("top"));
+	ui.cbGeometryY->addItem(i18n("center"));
+	ui.cbGeometryY->addItem(i18n("bottom"));
+	ui.cbGeometryY->addItem(i18n("custom"));
+	
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
@@ -225,6 +243,26 @@ void CartesianPlotLegendDock::visibilityChanged(int state) {
 	foreach(CartesianPlotLegend* legend, m_legendList)
 		legend->setVisible(b);
 }
+
+//General
+void CartesianPlotLegendDock::labelFontChanged(const QFont& font){
+	if (m_initializing)
+		return;
+
+	QFont labelsFont = font;
+	labelsFont.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setLabelFont(labelsFont);
+}
+
+void CartesianPlotLegendDock::labelColorChanged(const QColor& color){
+	if (m_initializing)
+		return;
+
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setLabelColor(color);
+}
+
 
 // "Background"-tab
 void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
@@ -497,6 +535,21 @@ void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
 //*************************************************************
 //**** SLOTs for changes triggered in CartesianPlotLegend *****
 //*************************************************************
+//General
+void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
+	m_initializing = true;
+	QFont f(font);
+	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pointSizeF(), Worksheet::Point) );
+	ui.kfrLabelFont->setFont(f);
+	m_initializing = false;
+}
+
+void CartesianPlotLegendDock::legendLabelColorChanged(QColor& color) {
+	m_initializing = true;
+	ui.kcbLabelColor->setColor(color);
+	m_initializing = false;
+}
+
 //Background
 void CartesianPlotLegendDock::legendBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
@@ -620,6 +673,10 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 
 	//General-tab
 	ui.chkVisible->setChecked( group.readEntry("Visible", m_legend->isVisible()) );
+	QFont font = m_legend->labelFont();
+	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	ui.kfrLabelFont->setFont( group.readEntry("LabelFont", font) );
+	ui.kcbLabelColor->setColor( group.readEntry("LabelColor", m_legend->labelColor()) );
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_legend->backgroundType()) );
@@ -660,6 +717,11 @@ void CartesianPlotLegendDock::saveConfig(KConfig& config) {
 
 	//General-tab
 	group.writeEntry("Visible", ui.chkVisible->isChecked());
+	QFont font = m_legend->labelFont();
+	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	group.writeEntry("LabelFont", font);
+	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
+	group.writeEntry("Order", ui.cbOrder->currentIndex());
 
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
@@ -684,7 +746,6 @@ void CartesianPlotLegendDock::saveConfig(KConfig& config) {
 	group.writeEntry("LayoutRightMargin",Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), Worksheet::Centimeter));
 	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), Worksheet::Centimeter));
 	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutRowCount", ui.sbLayoutRowCount->value());
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
 
 	config.sync();
