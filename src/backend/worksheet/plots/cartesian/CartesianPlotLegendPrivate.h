@@ -57,6 +57,7 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		QRectF rect;
 		QFont labelFont;
 		QColor labelColor;
+		bool labelColumnMajor;
 		float lineSymbolWidth; //the width of line+symbol
 		QList<float> maxColumnTextWidths; //the maximal width of the text within each column
 		int columnCount; //the actual number of columns, can be smaller then the specified layoutColumnCount

@@ -59,6 +59,7 @@ private slots:
 	void visibilityChanged(int);
 	void labelFontChanged(const QFont&);
 	void labelColorChanged(const QColor&);
+	void labelOrderChanged(int);
 
 	//"Background"-tab
   	void backgroundTypeChanged(int);
@@ -87,7 +88,8 @@ private slots:
 	//SLOTs for changes triggered in CartesianPlotLegend
 	void legendLabelFontChanged(QFont&);
 	void legendLabelColorChanged(QColor&);
-	
+	void legendLabelOrderChanged(bool);
+
 	void legendBackgroundTypeChanged(PlotArea::BackgroundType);
 	void legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 	void legendBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

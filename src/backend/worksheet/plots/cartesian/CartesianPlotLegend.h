@@ -54,7 +54,8 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 
 		CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
 		CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
-		
+		BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
+
         BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
         BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
         BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
@@ -94,6 +95,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 	signals:
 		friend class CartesianPlotLegendSetLabelFontCmd;
 		friend class CartesianPlotLegendSetLabelColorCmd;
+		friend class CartesianPlotLegendSetLabelColumnMajorCmd;
 		friend class CartesianPlotLegendSetBackgroundTypeCmd;
 		friend class CartesianPlotLegendSetBackgroundColorStyleCmd;
 		friend class CartesianPlotLegendSetBackgroundImageStyleCmd;
@@ -113,6 +115,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		friend class CartesianPlotLegendSetLayoutColumnCountCmd;
 		void labelFontChanged(QFont&);
 		void labelColorChanged(QColor&);
+		void labelColumnMajorChanged(bool);
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

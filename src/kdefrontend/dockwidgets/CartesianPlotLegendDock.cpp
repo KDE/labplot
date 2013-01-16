@@ -75,6 +75,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
 	connect( ui.kfrLabelFont, SIGNAL(fontSelected(const QFont&)), this, SLOT(labelFontChanged(const QFont&)) );
 	connect( ui.kcbLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(labelColorChanged(const QColor&)) );
+	connect( ui.cbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(labelOrderChanged(int)) );
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -151,6 +152,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	//General
 	connect( m_legend, SIGNAL(labelFontChanged(QFont&)), this, SLOT(legendLabelFontChanged(QFont&)) );
 	connect( m_legend, SIGNAL(labelColorChanged(QColor&)), this, SLOT(legendLabelColorChanged(QColor&)) );
+	connect( m_legend, SIGNAL(labelColumnMajorChanged(bool)), this, SLOT(legendLabelOrderChanged(bool)) );
 	
 	//background
 	connect( m_legend, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(legendBackgroundTypeChanged(PlotArea::BackgroundType)) );
@@ -263,6 +265,14 @@ void CartesianPlotLegendDock::labelColorChanged(const QColor& color){
 		legend->setLabelColor(color);
 }
 
+void CartesianPlotLegendDock::labelOrderChanged(const int index){
+	if (m_initializing)
+		return;
+
+	bool columnMajor = (index==0);
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setLabelColumnMajor(columnMajor);
+}
 
 // "Background"-tab
 void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
@@ -550,6 +560,15 @@ void CartesianPlotLegendDock::legendLabelColorChanged(QColor& color) {
 	m_initializing = false;
 }
 
+void CartesianPlotLegendDock::legendLabelOrderChanged(bool b) {
+	m_initializing = true;
+	if (b)
+		ui.cbOrder->setCurrentIndex(0); //column major
+	else
+		ui.cbOrder->setCurrentIndex(1); //row major
+	m_initializing = false;
+}
+
 //Background
 void CartesianPlotLegendDock::legendBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
@@ -677,6 +696,11 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	ui.kfrLabelFont->setFont( group.readEntry("LabelFont", font) );
 	ui.kcbLabelColor->setColor( group.readEntry("LabelColor", m_legend->labelColor()) );
+	bool columnMajor = group.readEntry("LabelColumMajor", m_legend->labelColumnMajor());
+	if (columnMajor)
+		ui.cbOrder->setCurrentIndex(0); //column major
+	else
+		ui.cbOrder->setCurrentIndex(1); //row major
 
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_legend->backgroundType()) );
@@ -721,7 +745,7 @@ void CartesianPlotLegendDock::saveConfig(KConfig& config) {
 	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
-	group.writeEntry("Order", ui.cbOrder->currentIndex());
+	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex()==0);// true for "column major", false for "row major"
 
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());

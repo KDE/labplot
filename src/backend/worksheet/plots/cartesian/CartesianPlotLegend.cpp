@@ -75,6 +75,7 @@ void CartesianPlotLegend::init(){
 
 	d->labelFont.setPointSizeF( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
 	d->labelColor = Qt::black;
+	d->labelColumnMajor = true;
 	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter));
 	d->rowCount = 0;
 	d->columnCount = 0;
@@ -154,6 +155,7 @@ void CartesianPlotLegend::handlePageResize(double horizontalRatio, double vertic
 //##############################################################################
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
 
 //Background
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, PlotArea::BackgroundType, backgroundType, backgroundType)
@@ -193,6 +195,13 @@ void CartesianPlotLegend::setLabelColor(const QColor& color) {
 	Q_D(CartesianPlotLegend);
 	if (color!= d->labelColor)
 		exec(new CartesianPlotLegendSetLabelColorCmd(d, color, tr("%1: set font color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelColumnMajor, bool, labelColumnMajor, retransform)
+void CartesianPlotLegend::setLabelColumnMajor(bool columnMajor) {
+	Q_D(CartesianPlotLegend);
+	if (columnMajor != d->labelColumnMajor)
+		exec(new CartesianPlotLegendSetLabelColumnMajorCmd(d, columnMajor, tr("%1: change column order")));
 }
 
 //Background
@@ -371,12 +380,18 @@ void CartesianPlotLegendPrivate::retransform() {
 	float maxTextWidth = 0;
 	float legendWidth = 0;
 	XYCurve* curve;
+	int index;
 	for (int c=0; c<columnCount; ++c) {
 		for (int r=0; r<rowCount; ++r) {
-			if ( c*rowCount + r >= curveCount )
+			if (labelColumnMajor)
+				index = c*rowCount + r;
+			else
+				index = r*columnCount + c;
+
+			if ( index >= curveCount )			
 				break;
 
-			curve = children.at(c*rowCount + r);
+			curve = children.at(index);
 			if (curve) {
 				w = fm.width(curve->name());
 				if (w>maxTextWidth)
@@ -520,12 +535,18 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	painter->translate(layoutLeftMargin, layoutTopMargin);
 	painter->save();
 
+	int index;
 	for (int c=0; c<columnCount; ++c) {
 		for (int r=0; r<rowCount; ++r) {
-			if ( c*rowCount + r >= curveCount )
+			if (labelColumnMajor)
+				index = c*rowCount + r;
+			else
+				index = r*columnCount + c;
+			qDebug()<<"index "<<index;
+			if ( index >= curveCount )
 				break;
 
-			curve = children.at(c*rowCount + r);
+			curve = children.at(index);
 			if (!curve)
 				continue;
 
