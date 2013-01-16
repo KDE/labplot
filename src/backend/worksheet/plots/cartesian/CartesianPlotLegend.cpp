@@ -542,7 +542,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				index = c*rowCount + r;
 			else
 				index = r*columnCount + c;
-			qDebug()<<"index "<<index;
+
 			if ( index >= curveCount )
 				break;
 
