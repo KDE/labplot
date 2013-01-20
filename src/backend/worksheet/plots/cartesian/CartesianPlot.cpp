@@ -197,8 +197,10 @@ void CartesianPlot::initDefault(){
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem()); //set the parent before doing any positioning
-	m_title->setHorizontalPosition(TextLabel::hPositionCenter);
-	m_title->setVerticalPosition(TextLabel::vPositionTop);
+	TextLabel::PositionWrapper position;
+	position.horizontalPosition = TextLabel::hPositionCenter;
+	position.verticalPosition = TextLabel::vPositionTop;
+	m_title->setPosition(position);
 	m_title->setHorizontalAlignment(TextLabel::hAlignCenter);
 	m_title->setVerticalAlignment(TextLabel::vAlignBottom);
 	
