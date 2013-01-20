@@ -30,10 +30,10 @@
 #define LABELWIDGET_H
 
 #include "ui_labelwidget.h"
+#include "backend/worksheet/TextLabel.h"
 
 class Label;
 class Axis;
-class TextLabel;
 
 class LabelWidget: public QWidget{
 	Q_OBJECT
@@ -61,9 +61,9 @@ signals:
 private slots:
 	//SLOTs for changes triggered in LabelWidget
 	void textChanged();
-	void charFormatChanged(QTextCharFormat format);
+	void charFormatChanged(const QTextCharFormat& format);
 	void teXUsedChanged(bool);
-	void textColorChanged(QColor);
+	void textColorChanged(const QColor&);
 	void fontBoldChanged(bool);
 	void fontItalicChanged(bool);
 	void fontUnderlineChanged(bool);
@@ -72,7 +72,7 @@ private slots:
 	void fontSubScriptChanged(bool);
 	void charMenu();
 	void insertChar(QChar);
-	void fontChanged(QFont);
+	void fontChanged(const QFont&);
 	
 	void positionXChanged(int);
 	void positionYChanged(int);
@@ -86,7 +86,9 @@ private slots:
 	void visibilityChanged(bool);
 	
 	//SLOTs for changes triggered in TextLabel
-	void labelPostionChanged(QPointF&);
+	void labelPositionChanged(const TextLabel::PositionWrapper&);
+	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
+	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
 };
 
 #endif //LABELWIDGET_H

@@ -4,7 +4,7 @@
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -38,9 +38,9 @@
 #include <QtCore>
 #include <QDesktopWidget>
 #include <QPainter>
- #include <QGraphicsScene>
-#include <QDebug>
-//  #include <QGraphicsEffect>
+#include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
+
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
 #endif
@@ -49,8 +49,10 @@
  * \class TextLabel
  * \brief A label supporting rendering of html- and tex-formated textes.
  * 
- * The label is aligned relative to the specified position. The position can be either specified by providing the x- and y- coordinates 
- * in parent's coordinate system, or by specifing one of the predefined position flags (\ca HorizontalPosition, \ca VerticalPosition).
+ * The label is aligned relative to the specified position.
+ * The position can be either specified by providing the x- and y- coordinates
+ * in parent's coordinate system, or by specifing one of the predefined position
+ * flags (\ca HorizontalPosition, \ca VerticalPosition).
  */
 
 
@@ -74,10 +76,10 @@ void TextLabel::init() {
 	d->teXFontColor = Qt::black;
 	d->staticText.setTextFormat(Qt::RichText);
 
-	d->horizontalPosition = TextLabel::hPositionCustom;
-	d->verticalPosition = TextLabel::vPositionCustom;
-	d->position.setX( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
-	d->position.setY( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
+	d->position.horizontalPosition = TextLabel::hPositionCustom;
+	d->position.verticalPosition = TextLabel::vPositionCustom;
+	d->position.point.setX( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
+	d->position.point.setY( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
 	
 	d->horizontalAlignment= TextLabel::hAlignCenter;
 	d->verticalAlignment= TextLabel::vAlignCenter;
@@ -91,8 +93,9 @@ void TextLabel::init() {
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
 	d->teXImageResolution = 300;
 	d->teXImageScaleFactor = QApplication::desktop()->physicalDpiX()/float(d->teXImageResolution)*d->scaleFactor;
-	
-	d->cancelItemChangeEvent = false;
+
+	d->suppressRetransform = false;
+	d->suppressItemChangeEvent = false;
 
 	connect(&d->teXImageFutureWatcher, SIGNAL(finished()), this, SLOT(updateTeXImage()));
 }
@@ -126,12 +129,9 @@ QIcon TextLabel::icon() const{
 
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
-// CLASS_SHARED_D_READER_IMPL(TextLabel, bool, teXUsed, teXUsed);
 CLASS_SHARED_D_READER_IMPL(TextLabel, qreal, teXFontSize, teXFontSize);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXFontColor, teXFontColor);
-BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalPosition, horizontalPosition, horizontalPosition);
-BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalPosition, verticalPosition, verticalPosition);
-CLASS_SHARED_D_READER_IMPL(TextLabel, QPointF, position, position);
+CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlignment, verticalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, float, rotationAngle, rotationAngle);
@@ -158,31 +158,22 @@ void TextLabel::setTeXFontColor(const QColor fontColor) {
 		exec(new TextLabelSetTeXFontColorCmd(d, fontColor, tr("%1: set TeX font color")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetPosition, QPointF, position, retransform);
-void TextLabel::setPosition(const QPointF& pos, const bool undo) {
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPosition, TextLabel::PositionWrapper, position, retransform);
+void TextLabel::setPosition(const PositionWrapper& pos) {
 	Q_D(TextLabel);
-	if (pos != d->position){
-		if (undo){
-			exec(new TextLabelSetPositionCmd(d, pos, tr("%1: set position")));
-		}else{
-			d->position = pos;
-			retransform();
-		}
+	if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition || pos.verticalPosition!=d->position.verticalPosition)
+		exec(new TextLabelSetPositionCmd(d, pos, tr("%1: set position")));
+}
+
+/*!
+	sets the position without undo/redo-stuff-
+*/
+void TextLabel::setPosition(const QPointF& point) {
+	Q_D(TextLabel);
+	if (point != d->position.point){
+		d->position.point = point;
+		retransform();
 	}
-}
-
-STD_SETTER_CMD_IMPL_F(TextLabel, SetHorizontalPosition, TextLabel::HorizontalPosition, horizontalPosition, retransform);
-void TextLabel::setHorizontalPosition(const TextLabel::HorizontalPosition hPos){
-	Q_D(TextLabel);
-	if (hPos != d->horizontalPosition)
-		exec(new TextLabelSetHorizontalPositionCmd(d, hPos, tr("%1: set horizontal position")));
-}
-
-STD_SETTER_CMD_IMPL_F(TextLabel, SetVerticalPosition, TextLabel::VerticalPosition, verticalPosition, retransform);
-void TextLabel::setVerticalPosition(const TextLabel::VerticalPosition vPos){
-	Q_D(TextLabel);
-	if (vPos != d->verticalPosition)
-		exec(new TextLabelSetVerticalPositionCmd(d, vPos, tr("%1: set vertical position")));
 }
 
 STD_SETTER_CMD_IMPL_F(TextLabel, SetRotationAngle, float, rotationAngle, recalcShapeAndBoundingRect);
@@ -192,14 +183,14 @@ void TextLabel::setRotationAngle(float angle) {
 		exec(new TextLabelSetRotationAngleCmd(d, angle, tr("%1: set rotation angle")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetHorizontalAlignment, TextLabel::HorizontalAlignment, horizontalAlignment, retransform);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetHorizontalAlignment, TextLabel::HorizontalAlignment, horizontalAlignment, retransform);
 void TextLabel::setHorizontalAlignment(const TextLabel::HorizontalAlignment hAlign){
 	Q_D(TextLabel);
 	if (hAlign != d->horizontalAlignment)
 		exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, tr("%1: set horizontal alignment")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetVerticalAlignment, TextLabel::VerticalAlignment, verticalAlignment, retransform);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVerticalAlignment, TextLabel::VerticalAlignment, verticalAlignment, retransform);
 void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign){
 	Q_D(TextLabel);
 	if (vAlign != d->verticalAlignment)
@@ -236,11 +227,15 @@ QString TextLabelPrivate::name() const{
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void TextLabelPrivate::retransform(){
-	if (horizontalPosition != TextLabel::hPositionCustom || verticalPosition != TextLabel::vPositionCustom)
-		updatePosition();
+	if (suppressRetransform)
+		return;
 	
-	float x = position.x();
-	float y = position.y();
+	if (position.horizontalPosition != TextLabel::hPositionCustom
+		|| position.verticalPosition != TextLabel::vPositionCustom)
+		updatePosition();
+
+	float x = position.point.x();
+	float y = position.point.y();
 
 	//determine the size of the label in scene units.
 	float w, h;
@@ -279,9 +274,9 @@ void TextLabelPrivate::retransform(){
 			break;
 	}
 
-	cancelItemChangeEvent=true;
+	suppressItemChangeEvent=true;
 	setPos(itemPos);
-	cancelItemChangeEvent=false;
+	suppressItemChangeEvent=false;
 
 	boundingRectangle.setX(-w/2);
 	boundingRectangle.setY(-h/2);
@@ -310,23 +305,24 @@ void TextLabelPrivate::updatePosition(){
 		parentRect = scene()->sceneRect();
 	}
 
-	if (horizontalPosition != TextLabel::hPositionCustom){
-		if (horizontalPosition == TextLabel::hPositionLeft)
-			position.setX( parentRect.x() );
-		else if (horizontalPosition == TextLabel::hPositionCenter)
-			position.setX( parentRect.x() + parentRect.width()/2 );
-		else if (horizontalPosition == TextLabel::hPositionRight)
-			position.setX( parentRect.x() + parentRect.width() );
+	if (position.horizontalPosition != TextLabel::hPositionCustom){
+		if (position.horizontalPosition == TextLabel::hPositionLeft)
+			position.point.setX( parentRect.x() );
+		else if (position.horizontalPosition == TextLabel::hPositionCenter)
+			position.point.setX( parentRect.x() + parentRect.width()/2 );
+		else if (position.horizontalPosition == TextLabel::hPositionRight)
+			position.point.setX( parentRect.x() + parentRect.width() );
 	}
 
-	if (verticalPosition != TextLabel::vPositionCustom){
-		if (verticalPosition == TextLabel::vPositionTop)
-			position.setY( parentRect.y() );
-		else if (verticalPosition == TextLabel::vPositionCenter)
-			position.setY( parentRect.y() + parentRect.height()/2 );
-		else if (verticalPosition == TextLabel::vPositionBottom)
-			position.setY( parentRect.y() + parentRect.height() );
+	if (position.verticalPosition != TextLabel::vPositionCustom){
+		if (position.verticalPosition == TextLabel::vPositionTop)
+			position.point.setY( parentRect.y() );
+		else if (position.verticalPosition == TextLabel::vPositionCenter)
+			position.point.setY( parentRect.y() + parentRect.height()/2 );
+		else if (position.verticalPosition == TextLabel::vPositionBottom)
+			position.point.setY( parentRect.y() + parentRect.height() );
 	}
+	emit q->positionChanged(position);
 }
 
 /*!
@@ -422,58 +418,89 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 }
 
 QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
-	if (cancelItemChangeEvent)
+	if (suppressItemChangeEvent)
 		return value;
 	
 	if (change == QGraphicsItem::ItemPositionChange) {
-		QPointF itemPos = value.toPointF();//item's center point in parent's coordinates
-		float x = itemPos.x();
-		float y = itemPos.y();
-		float w, h;
-		if (textWrapper.teXUsed){
-			w = teXImage.width()*scaleFactor;
-			h = teXImage.height()*scaleFactor;
-		}
-		else {
-			w = staticText.size().width()*scaleFactor;
-			h = staticText.size().height()*scaleFactor;
-		}
-
-		//depending on the alignment, calculate the new position
-		switch (horizontalAlignment) {
-			case TextLabel::hAlignLeft:
-				position.setX( x + w/2 );
-				break;
-			case TextLabel::hAlignCenter:
-				position.setX( x );
-				break;
-			case TextLabel::hAlignRight:
-				position.setX( x - w/2 );
-				break;
-		}
-
-		switch (verticalAlignment) {
-			case TextLabel::vAlignTop:
-				position.setY( y + h/2 );
-				break;
-			case TextLabel::vAlignCenter:
-				position.setY( y );
-				break;
-			case TextLabel::vAlignBottom:
-				position.setY( y - h/2 );
-				break;
-		}
-
-		//item was moved -> change the position flag to "custom"
-		horizontalPosition = TextLabel::hPositionCustom;
-		verticalPosition = TextLabel::vPositionCustom;
-
-		 emit q->positionChanged(position);
+		//convert item's center point in parent's coordinates
+		TextLabel::PositionWrapper tempPosition{
+			positionFromItemPosition(value.toPointF()),
+			TextLabel::hPositionCustom,
+			TextLabel::vPositionCustom
+		};
+		
+		//emit the signals in order to notify the UI.
+		//we don't set the position related member variables during the mouse movements.
+		//this is done on mouse release events only.
+		emit q->positionChanged(tempPosition);
      }
 
 	return QGraphicsItem::itemChange(change, value);
- }
- 
+}
+
+void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	//convert position of the item in parent coordinates to label's position
+	QPointF point = positionFromItemPosition(pos());
+	if (point!=position.point) {
+		//position was changed -> set the position related member variables
+		suppressRetransform = true;
+		TextLabel::PositionWrapper tempPosition{
+			point,
+			TextLabel::hPositionCustom,
+			TextLabel::vPositionCustom
+		};
+		q->setPosition(tempPosition);
+		suppressRetransform = false;
+	}
+
+	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+/*!
+ *	converts label's position to GraphicsItem's position.
+ */
+QPointF TextLabelPrivate::positionFromItemPosition(const QPointF& itemPos) {
+	float x = itemPos.x();
+	float y = itemPos.y();
+	float w, h;
+	QPointF tmpPosition;
+	if (textWrapper.teXUsed){
+		w = teXImage.width()*scaleFactor;
+		h = teXImage.height()*scaleFactor;
+	}
+	else {
+		w = staticText.size().width()*scaleFactor;
+		h = staticText.size().height()*scaleFactor;
+	}
+
+	//depending on the alignment, calculate the new position
+	switch (horizontalAlignment) {
+		case TextLabel::hAlignLeft:
+			tmpPosition.setX( x + w/2 );
+			break;
+		case TextLabel::hAlignCenter:
+			tmpPosition.setX( x );
+			break;
+		case TextLabel::hAlignRight:
+			tmpPosition.setX( x - w/2 );
+			break;
+	}
+
+	switch (verticalAlignment) {
+		case TextLabel::vAlignTop:
+			tmpPosition.setY( y + h/2 );
+			break;
+		case TextLabel::vAlignCenter:
+			tmpPosition.setY( y );
+			break;
+		case TextLabel::vAlignBottom:
+			tmpPosition.setY( y - h/2 );
+			break;
+	}
+
+	return tmpPosition;
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -487,10 +514,10 @@ void TextLabel::save(QXmlStreamWriter* writer) const{
 
 	//geometry
     writer->writeStartElement( "geometry" );
-    writer->writeAttribute( "x", QString::number(d->position.x()) );
-    writer->writeAttribute( "y", QString::number(d->position.y()) );
-    writer->writeAttribute( "horizontalPosition", QString::number(d->horizontalPosition) );
-	writer->writeAttribute( "verticalPosition", QString::number(d->verticalPosition) );
+    writer->writeAttribute( "x", QString::number(d->position.point.x()) );
+    writer->writeAttribute( "y", QString::number(d->position.point.y()) );
+    writer->writeAttribute( "horizontalPosition", QString::number(d->position.horizontalPosition) );
+	writer->writeAttribute( "verticalPosition", QString::number(d->position.verticalPosition) );
 	writer->writeAttribute( "horizontalAlignment", QString::number(d->horizontalAlignment) );
 	writer->writeAttribute( "verticalAlignment", QString::number(d->verticalAlignment) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
@@ -545,25 +572,25 @@ bool TextLabel::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'x'"));
             else
-                d->position.setX(str.toDouble());
+                d->position.point.setX(str.toDouble());
 
             str = attribs.value("y").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'y'"));
             else
-                d->position.setY(str.toDouble());
+                d->position.point.setY(str.toDouble());
 
             str = attribs.value("horizontalPosition").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'horizontalPosition'"));
             else
-                d->horizontalPosition = (TextLabel::HorizontalPosition)str.toInt();
+                d->position.horizontalPosition = (TextLabel::HorizontalPosition)str.toInt();
 
             str = attribs.value("verticalPosition").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'verticalPosition'"));
             else
-                d->verticalPosition = (TextLabel::VerticalPosition)str.toInt();
+                d->position.verticalPosition = (TextLabel::VerticalPosition)str.toInt();
 
 			str = attribs.value("horizontalAlignment").toString();
             if(str.isEmpty())

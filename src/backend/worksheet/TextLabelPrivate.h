@@ -3,7 +3,7 @@
     Project              : LabPlot/SciDAVis
     Description          : Private members of Worksheet.
     --------------------------------------------------------------------
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -46,9 +46,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		QColor teXFontColor;
 		QFutureWatcher<QImage> teXImageFutureWatcher;
 
-		QPointF position;//point in parent's coordinate system, the label gets aligned around this point.
-		TextLabel::HorizontalPosition horizontalPosition;
-		TextLabel::VerticalPosition verticalPosition;
+		TextLabel::PositionWrapper position; //position in parent's coordinate system, the label gets aligned around this point.
 		
 		TextLabel::HorizontalAlignment horizontalAlignment;
 		TextLabel::VerticalAlignment verticalAlignment;
@@ -59,10 +57,13 @@ class TextLabelPrivate: public QGraphicsItem{
 		bool swapVisible(bool on);
 		virtual void recalcShapeAndBoundingRect();
 		void updatePosition();
+		QPointF positionFromItemPosition(const QPointF&);
 		void updateText();
 		void updateTeXImage();
 		QStaticText staticText;
-		bool cancelItemChangeEvent;
+
+		bool suppressItemChangeEvent;
+		bool suppressRetransform;
 
 		QRectF boundingRectangle; //bounding rectangle of the text
 		QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
@@ -72,7 +73,8 @@ class TextLabelPrivate: public QGraphicsItem{
 		virtual QRectF boundingRect() const;
  		virtual QPainterPath shape() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
-		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
 	private:
 		QImage teXImage;

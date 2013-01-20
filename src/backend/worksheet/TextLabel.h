@@ -4,7 +4,7 @@
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)    
+    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -59,6 +59,12 @@ class TextLabel : public AbstractWorksheetElement{
 			bool teXUsed;
 		};
 
+		struct PositionWrapper{
+			QPointF 		   point;
+			HorizontalPosition horizontalPosition;
+			VerticalPosition   verticalPosition;
+		};
+
 		TextLabel(const QString &name);
 		~TextLabel();
 		
@@ -70,8 +76,8 @@ class TextLabel : public AbstractWorksheetElement{
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
 		BASIC_D_ACCESSOR_DECL(qreal, teXFontSize, TeXFontSize);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
-		void setPosition(const QPointF&, const bool=true);
-		QPointF position() const;
+		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
+		void setPosition(const QPointF&);
 		BASIC_D_ACCESSOR_DECL(HorizontalPosition, horizontalPosition, HorizontalPosition);
 		BASIC_D_ACCESSOR_DECL(VerticalPosition, verticalPosition, VerticalPosition);
 		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment);
@@ -99,7 +105,13 @@ class TextLabel : public AbstractWorksheetElement{
 		void init();
 
 	signals:
-		void positionChanged(QPointF&);
+		friend class TextLabelSetPositionCmd;
+		friend class TextLabelSetHorizontalAlignmentCmd;
+		friend class TextLabelSetVerticalAlignmentCmd;
+		void positionChanged(const TextLabel::PositionWrapper&);
+		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
+		void verticalAlignmentChanged(TextLabel::VerticalAlignment);
+
 		void changed();
 };
 

@@ -1371,10 +1371,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		float offset = titleOffset + labelsOffset; //the distance to the axis line
 		if (orientation == Axis::AxisHorizontal){
 			offset += title->graphicsItem()->boundingRect().height()/2 + tickLabelsPath.boundingRect().height();
-			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2, rect.bottomLeft().y() + offset ), false );
+			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2, rect.bottomLeft().y() + offset ) );
 		}else{
 			offset += title->graphicsItem()->boundingRect().width()/2 + tickLabelsPath.boundingRect().width();
-			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ), false );
+			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ) );
 		}
 		
 		boundingRectangle |=mapRectFromItem( title->graphicsItem(), title->graphicsItem()->boundingRect() );
