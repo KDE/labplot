@@ -45,19 +45,25 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 
 		QString name() const;
 		bool swapVisible(bool on);
-
 		void retransform();
+		void updatePosition();
+		QPointF positionFromItemPosition(const QPointF&);
 
 		//QGraphicsItem's virtual functions
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 		virtual QRectF boundingRect() const;
 		virtual QPainterPath shape() const;
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);		
+
+		bool suppressItemChangeEvent;
+		bool suppressRetransform;
 
 		QRectF rect;
 		QFont labelFont;
 		QColor labelColor;
 		bool labelColumnMajor;
+		CartesianPlotLegend::PositionWrapper position; //position in parent's coordinate system
 		float lineSymbolWidth; //the width of line+symbol
 		QList<float> maxColumnTextWidths; //the maximal width of the text within each column
 		int columnCount; //the actual number of columns, can be smaller then the specified layoutColumnCount

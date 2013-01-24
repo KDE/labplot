@@ -28,9 +28,9 @@
  ***************************************************************************/
 
 #include "CartesianPlotLegendDock.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/Worksheet.h"
+#include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 
@@ -47,7 +47,12 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	m_initializing(false) {
 
 	ui.setupUi(this);
-	
+
+	//"Title"-tab
+	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tab1);
+ 	labelWidget=new LabelWidget(ui.tab1);
+	hboxLayout->addWidget(labelWidget);
+
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( KIcon("document-open") );
@@ -76,6 +81,12 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect( ui.kfrLabelFont, SIGNAL(fontSelected(const QFont&)), this, SLOT(labelFontChanged(const QFont&)) );
 	connect( ui.kcbLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(labelColorChanged(const QColor&)) );
 	connect( ui.cbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(labelOrderChanged(int)) );
+	connect( ui.sbLineSymbolWidth, SIGNAL(valueChanged(double)), this, SLOT(lineSymbolWidthChanged(double)) );
+
+	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
+	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
+	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
+	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -153,6 +164,9 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect( m_legend, SIGNAL(labelFontChanged(QFont&)), this, SLOT(legendLabelFontChanged(QFont&)) );
 	connect( m_legend, SIGNAL(labelColorChanged(QColor&)), this, SLOT(legendLabelColorChanged(QColor&)) );
 	connect( m_legend, SIGNAL(labelColumnMajorChanged(bool)), this, SLOT(legendLabelOrderChanged(bool)) );
+	connect( m_legend, SIGNAL(positionChanged(const CartesianPlotLegend::PositionWrapper&)),
+			 this, SLOT(legendPositionChanged(const CartesianPlotLegend::PositionWrapper&)) );
+	connect( m_legend, SIGNAL(lineSymbolWidthChanged(float)), this, SLOT(legendLineSymbolWidthChanged(float)) );
 	
 	//background
 	connect( m_legend, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(legendBackgroundTypeChanged(PlotArea::BackgroundType)) );
@@ -207,14 +221,14 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbOrder->addItem(i18n("column major"));
 	ui.cbOrder->addItem(i18n("row major"));
 
-	ui.cbGeometryX->addItem(i18n("left"));
-	ui.cbGeometryX->addItem(i18n("center"));
-	ui.cbGeometryX->addItem(i18n("right"));
-	ui.cbGeometryX->addItem(i18n("custom"));
-	ui.cbGeometryY->addItem(i18n("top"));
-	ui.cbGeometryY->addItem(i18n("center"));
-	ui.cbGeometryY->addItem(i18n("bottom"));
-	ui.cbGeometryY->addItem(i18n("custom"));
+	ui.cbPositionX->addItem(i18n("left"));
+	ui.cbPositionX->addItem(i18n("center"));
+	ui.cbPositionX->addItem(i18n("right"));
+	ui.cbPositionX->addItem(i18n("custom"));
+	ui.cbPositionY->addItem(i18n("top"));
+	ui.cbPositionY->addItem(i18n("center"));
+	ui.cbPositionY->addItem(i18n("bottom"));
+	ui.cbPositionY->addItem(i18n("custom"));
 	
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
@@ -272,6 +286,74 @@ void CartesianPlotLegendDock::labelOrderChanged(const int index){
 	bool columnMajor = (index==0);
 	foreach(CartesianPlotLegend* legend, m_legendList)
 		legend->setLabelColumnMajor(columnMajor);
+}
+
+void CartesianPlotLegendDock::lineSymbolWidthChanged(double value){
+	if (m_initializing)
+		return;
+
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setLineSymbolWidth(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+}
+
+/*!
+	called when legend's current horizontal position relative to its parent (left, center, right, custom ) is changed.
+*/
+void CartesianPlotLegendDock::positionXChanged(int index){
+	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
+	if (index == ui.cbPositionX->count()-1 ){
+		ui.sbPositionX->setEnabled(true);
+	}else{
+		ui.sbPositionX->setEnabled(false);
+	}
+
+	if (m_initializing)
+		return;
+
+	CartesianPlotLegend::PositionWrapper position = m_legend->position();
+	position.horizontalPosition = CartesianPlotLegend::HorizontalPosition(index);
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setPosition(position);
+}
+
+/*!
+	called when legend's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
+*/
+void CartesianPlotLegendDock::positionYChanged(int index){
+	//Enable/disable the spinbox for the y- oordinates if the "custom position"-item is selected/deselected
+	if (index == ui.cbPositionY->count()-1 ){
+		ui.sbPositionY->setEnabled(true);
+	}else{
+		ui.sbPositionY->setEnabled(false);
+	}
+
+	if (m_initializing)
+		return;
+
+	CartesianPlotLegend::PositionWrapper position = m_legend->position();
+	position.verticalPosition = CartesianPlotLegend::VerticalPosition(index);
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setPosition(position);
+}
+
+void CartesianPlotLegendDock::customPositionXChanged(double value){
+	if (m_initializing)
+		return;
+
+	CartesianPlotLegend::PositionWrapper position = m_legend->position();
+	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setPosition(position);
+}
+
+void CartesianPlotLegendDock::customPositionYChanged(double value){
+	if (m_initializing)
+		return;
+
+	CartesianPlotLegend::PositionWrapper position = m_legend->position();
+	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setPosition(position);
 }
 
 // "Background"-tab
@@ -569,6 +651,22 @@ void CartesianPlotLegendDock::legendLabelOrderChanged(bool b) {
 	m_initializing = false;
 }
 
+void CartesianPlotLegendDock::legendLineSymbolWidthChanged(float value) {
+	m_initializing = true;
+	ui.sbLineSymbolWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+
+void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position){
+	m_initializing = true;
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
+	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
+	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
+	m_initializing = false;
+}
+
 //Background
 void CartesianPlotLegendDock::legendBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
@@ -702,6 +800,12 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	else
 		ui.cbOrder->setCurrentIndex(1); //row major
 
+	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth",
+													Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter)) );
+
+	//Title
+	//TODO labelWidget->loadConfig(group);
+	
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_legend->backgroundType()) );
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_legend->backgroundColorStyle()) );
@@ -746,6 +850,10 @@ void CartesianPlotLegendDock::saveConfig(KConfig& config) {
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex()==0);// true for "column major", false for "row major"
+	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), Worksheet::Centimeter));
+
+	//Title
+	//TODO labelWidget->saveConfig(group);
 
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());

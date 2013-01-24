@@ -41,6 +41,15 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
+		enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
+		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
+
+		struct PositionWrapper{
+			QPointF 		   point;
+			HorizontalPosition horizontalPosition;
+			VerticalPosition   verticalPosition;
+		};
+
 		CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
 		virtual ~CartesianPlotLegend();
 
@@ -55,6 +64,8 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
 		CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
 		BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
+		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
+		BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
 
         BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
         BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
@@ -96,6 +107,8 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		friend class CartesianPlotLegendSetLabelFontCmd;
 		friend class CartesianPlotLegendSetLabelColorCmd;
 		friend class CartesianPlotLegendSetLabelColumnMajorCmd;
+		friend class CartesianPlotLegendSetLineSymbolWidthCmd;
+		friend class CartesianPlotLegendSetPositionCmd;
 		friend class CartesianPlotLegendSetBackgroundTypeCmd;
 		friend class CartesianPlotLegendSetBackgroundColorStyleCmd;
 		friend class CartesianPlotLegendSetBackgroundImageStyleCmd;
@@ -116,6 +129,8 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		void labelFontChanged(QFont&);
 		void labelColorChanged(QColor&);
 		void labelColumnMajorChanged(bool);
+		void lineSymbolWidthChanged(float);
+		void positionChanged(const CartesianPlotLegend::PositionWrapper&);
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

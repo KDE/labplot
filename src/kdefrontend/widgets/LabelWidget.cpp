@@ -368,7 +368,6 @@ void LabelWidget::positionXChanged(int index){
 */
 void LabelWidget::positionYChanged(int index){
 	//Enable/disable the spinbox for the y- oordinates if the "custom position"-item is selected/deselected
-	qDebug()<<"y index"<<index;
 	if (index == ui.cbPositionY->count()-1 ){
 		ui.sbPositionY->setEnabled(true);
 	}else{

@@ -145,8 +145,11 @@ void CartesianPlotLegend::retransform(){
 }
 
 void CartesianPlotLegend::handlePageResize(double horizontalRatio, double verticalRatio){
-	Q_D(const CartesianPlotLegend);
-  //TODO	
+	//TODO
+	Q_UNUSED(horizontalRatio);
+	Q_UNUSED(verticalRatio);
+// 	Q_D(const CartesianPlotLegend);
+
 	retransform();
 }
 
@@ -156,6 +159,8 @@ void CartesianPlotLegend::handlePageResize(double horizontalRatio, double vertic
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, CartesianPlotLegend::PositionWrapper, position, position)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, lineSymbolWidth, lineSymbolWidth)
 
 //Background
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, PlotArea::BackgroundType, backgroundType, backgroundType)
@@ -202,6 +207,20 @@ void CartesianPlotLegend::setLabelColumnMajor(bool columnMajor) {
 	Q_D(CartesianPlotLegend);
 	if (columnMajor != d->labelColumnMajor)
 		exec(new CartesianPlotLegendSetLabelColumnMajorCmd(d, columnMajor, tr("%1: change column order")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLineSymbolWidth, float, lineSymbolWidth, retransform)
+void CartesianPlotLegend::setLineSymbolWidth(float width) {
+	Q_D(CartesianPlotLegend);
+	if (width != d->lineSymbolWidth)
+		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, tr("%1: change line+symbol width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, CartesianPlotLegend::PositionWrapper, position, retransform);
+void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
+	Q_D(CartesianPlotLegend);
+	if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition || pos.verticalPosition!=d->position.verticalPosition)
+		exec(new CartesianPlotLegendSetPositionCmd(d, pos, tr("%1: set position")));
 }
 
 //Background
@@ -413,17 +432,35 @@ void CartesianPlotLegendPrivate::retransform() {
 	rect.setHeight(legendHeight);
 }
 
-QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
-// 	if (cancelItemChangeEvent)
-// 		return value;
+/*!
+	calculates the position of the legend, when the position relative to the parent was specified (left, right, etc.)
+*/
+void CartesianPlotLegendPrivate::updatePosition(){
+	//determine the parent item
+	QRectF parentRect;
+	QGraphicsItem* parent = parentItem();
+	if (!parent)
+		return;
 
-	if (change == QGraphicsItem::ItemPositionChange) {
-		QPointF itemPos = value.toPointF();//item's center point in parent's coordinates
-		 emit q->positionChanged(itemPos); //position
-     }
+	if (position.horizontalPosition != CartesianPlotLegend::hPositionCustom){
+		if (position.horizontalPosition == CartesianPlotLegend::hPositionLeft)
+			position.point.setX( parentRect.x() );
+		else if (position.horizontalPosition == CartesianPlotLegend::hPositionCenter)
+			position.point.setX( parentRect.x() + parentRect.width()/2 );
+		else if (position.horizontalPosition == CartesianPlotLegend::hPositionRight)
+			position.point.setX( parentRect.x() + parentRect.width() );
+	}
 
-	return QGraphicsItem::itemChange(change, value);
- }
+	if (position.verticalPosition != CartesianPlotLegend::vPositionCustom){
+		if (position.verticalPosition == CartesianPlotLegend::vPositionTop)
+			position.point.setY( parentRect.y() );
+		else if (position.verticalPosition == CartesianPlotLegend::vPositionCenter)
+			position.point.setY( parentRect.y() + parentRect.height()/2 );
+		else if (position.verticalPosition == CartesianPlotLegend::vPositionBottom)
+			position.point.setY( parentRect.y() + parentRect.height() );
+	}
+	emit q->positionChanged(position);
+}
  
 /*!
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the legend.
@@ -555,7 +592,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				painter->setPen(curve->linePen());
 				painter->setOpacity(curve->lineOpacity());
 				painter->drawLine(0, h/2, lineSymbolWidth, h/2);
-				painter->drawLine(0, h, lineSymbolWidth, h);
 			}
 
 			//curve's symbol
@@ -600,12 +636,101 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	}
 }
 
+
+QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
+	if (suppressItemChangeEvent)
+		return value;
+
+	if (change == QGraphicsItem::ItemPositionChange) {
+		//convert item's center point in parent's coordinates
+		CartesianPlotLegend::PositionWrapper tempPosition{
+// 			positionFromItemPosition(value.toPointF()),
+			value.toPointF(),
+			CartesianPlotLegend::hPositionCustom,
+			CartesianPlotLegend::vPositionCustom
+		};
+
+		//emit the signals in order to notify the UI.
+		//we don't set the position related member variables during the mouse movements.
+		//this is done on mouse release events only.
+		qDebug()<<tempPosition.point.x()<<"   "<<tempPosition.point.y();
+		emit q->positionChanged(tempPosition);
+     }
+
+	return QGraphicsItem::itemChange(change, value);
+}
+
+void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	//convert position of the item in parent coordinates to label's position
+// 	QPointF point = positionFromItemPosition(pos());
+	QPointF point = pos();
+	if (point!=position.point) {
+		//position was changed -> set the position related member variables
+		suppressRetransform = true;
+		CartesianPlotLegend::PositionWrapper tempPosition{
+			point,
+			CartesianPlotLegend::hPositionCustom,
+			CartesianPlotLegend::vPositionCustom
+		};
+		q->setPosition(tempPosition);
+		suppressRetransform = false;
+	}
+
+	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+/*!
+ *	converts label's position to GraphicsItem's position.
+ */
+QPointF CartesianPlotLegendPrivate::positionFromItemPosition(const QPointF& itemPos) {
+	float x = itemPos.x();
+	float y = itemPos.y();
+	float w, h;
+	QPointF tmpPosition;
+// 	if (textWrapper.teXUsed){
+// 		w = teXImage.width()*scaleFactor;
+// 		h = teXImage.height()*scaleFactor;
+// 	}
+// 	else {
+// 		w = staticText.size().width()*scaleFactor;
+// 		h = staticText.size().height()*scaleFactor;
+// 	}
+// 
+// 	//depending on the alignment, calculate the new position
+// 	switch (horizontalAlignment) {
+// 		case TextLabel::hAlignLeft:
+// 			tmpPosition.setX( x + w/2 );
+// 			break;
+// 		case TextLabel::hAlignCenter:
+// 			tmpPosition.setX( x );
+// 			break;
+// 		case TextLabel::hAlignRight:
+// 			tmpPosition.setX( x - w/2 );
+// 			break;
+// 	}
+// 
+// 	switch (verticalAlignment) {
+// 		case TextLabel::vAlignTop:
+// 			tmpPosition.setY( y + h/2 );
+// 			break;
+// 		case TextLabel::vAlignCenter:
+// 			tmpPosition.setY( y );
+// 			break;
+// 		case TextLabel::vAlignBottom:
+// 			tmpPosition.setY( y - h/2 );
+// 			break;
+// 	}
+
+
+	return tmpPosition;
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
 void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
-	Q_D(const CartesianPlotLegend);
+// 	Q_D(const CartesianPlotLegend);
 
     writer->writeStartElement( "cartesianPlotLegend" );
     writeBasicAttributes( writer );
@@ -616,7 +741,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool CartesianPlotLegend::load(XmlStreamReader* reader) {
-	Q_D(CartesianPlotLegend);
+// 	Q_D(CartesianPlotLegend);
 
     if(!reader->isStartElement() || reader->name() != "cartesianPlotLegend"){
         reader->raiseError(tr("no cartesian plot legend element found"));

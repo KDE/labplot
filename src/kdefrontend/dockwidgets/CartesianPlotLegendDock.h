@@ -33,7 +33,9 @@
 #include <QList>
 #include "ui_cartesianplotlegenddock.h"
 #include "backend/worksheet/plots/PlotArea.h"
-class CartesianPlotLegend;
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+
+class LabelWidget;
 
 class CartesianPlotLegendDock: public QWidget{
 	Q_OBJECT
@@ -46,6 +48,7 @@ private:
 	Ui::CartesianPlotLegendDock ui;
 	QList<CartesianPlotLegend*> m_legendList;
 	CartesianPlotLegend* m_legend;
+	LabelWidget* labelWidget;
 	bool m_initializing;
 	
 private slots:
@@ -60,6 +63,11 @@ private slots:
 	void labelFontChanged(const QFont&);
 	void labelColorChanged(const QColor&);
 	void labelOrderChanged(int);
+	void lineSymbolWidthChanged(double);
+	void positionXChanged(int);
+	void positionYChanged(int);
+	void customPositionXChanged(double);
+	void customPositionYChanged(double);	
 
 	//"Background"-tab
   	void backgroundTypeChanged(int);
@@ -89,6 +97,8 @@ private slots:
 	void legendLabelFontChanged(QFont&);
 	void legendLabelColorChanged(QColor&);
 	void legendLabelOrderChanged(bool);
+	void legendLineSymbolWidthChanged(float);
+	void legendPositionChanged(const CartesianPlotLegend::PositionWrapper&);
 
 	void legendBackgroundTypeChanged(PlotArea::BackgroundType);
 	void legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
