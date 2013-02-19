@@ -74,15 +74,15 @@ QWidget *FileDataSource::view() const{
 */
 QStringList FileDataSource::fileTypes(){
     return (QStringList()<< tr("ASCII vector data")
-                        << tr("BINARY vector data")
-                        << tr("ASCII matrix data")
-                        << tr("BINARY matrix data")
-                        << tr("Image")
-                        << tr("Sound")
-                        << "FITS"
-                        << "NetCDF"
-                        << "HDF"
-                        << "CDF"
+//                         << tr("BINARY vector data")
+//                         << tr("ASCII matrix data")
+//                         << tr("BINARY matrix data")
+//                         << tr("Image")
+//                         << tr("Sound")
+//                         << "FITS"
+//                         << "NetCDF"
+//                         << "HDF"
+//                         << "CDF"
                         );
 }
 
