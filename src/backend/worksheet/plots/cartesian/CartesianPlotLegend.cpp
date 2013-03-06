@@ -216,10 +216,12 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, tr("%1: change line+symbol width")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, CartesianPlotLegend::PositionWrapper, position, retransform);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, CartesianPlotLegend::PositionWrapper, position, updatePosition);
 void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
 	Q_D(CartesianPlotLegend);
-	if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition || pos.verticalPosition!=d->position.verticalPosition)
+	if (pos.point!=d->position.point
+		|| pos.horizontalPosition!=d->position.horizontalPosition
+		|| pos.verticalPosition!=d->position.verticalPosition)
 		exec(new CartesianPlotLegendSetPositionCmd(d, pos, tr("%1: set position")));
 }
 
@@ -423,13 +425,16 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendWidth += layoutLeftMargin + layoutRightMargin; //margins
 	legendWidth += columnCount*lineSymbolWidth + layoutHorizontalSpacing; //width of the columns without the text
 	legendWidth += (columnCount-1)*2*layoutHorizontalSpacing; //spacings between the columns
-	rect.setWidth(legendWidth);
 
 	//determine the height of the legend
 	float legendHeight = layoutTopMargin + layoutBottomMargin; //margins
 	legendHeight += rowCount*h; //height of the rows
 	legendHeight += (rowCount-1)*layoutVerticalSpacing; //spacing between the rows
-	rect.setHeight(legendHeight);
+	
+	rect.setX(-legendWidth/2);
+	rect.setY(-legendHeight/2);
+	rect.setWidth(legendWidth);
+	rect.setHeight(legendHeight);	
 }
 
 /*!
@@ -469,6 +474,8 @@ void CartesianPlotLegendPrivate::updatePosition(){
 void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
 	if (!isVisible())
 		return;
+
+	painter->save();
 
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
@@ -569,9 +576,11 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 		factory = qobject_cast<CurveSymbolFactory*>(plugin);
 
 	painter->setFont(labelFont);
-	painter->translate(layoutLeftMargin, layoutTopMargin);
+	
+	//translate to left upper conner of the bounding rect plus the layout offset
+	painter->translate(-rect.width()/2+layoutLeftMargin, -rect.height()/2+layoutTopMargin);
 	painter->save();
-
+	
 	int index;
 	for (int c=0; c<columnCount; ++c) {
 		for (int r=0; r<rowCount; ++r) {
@@ -627,6 +636,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 		painter->save();
 	}
 
+	painter->restore();
 	painter->restore();
 
 	if (isSelected()){
