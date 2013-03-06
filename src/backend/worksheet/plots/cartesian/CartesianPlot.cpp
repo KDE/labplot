@@ -365,6 +365,20 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMin, yMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
 
+/*!
+	return the actual bounding rectangular of the plot (plot's rectangular minus padding)
+	in plot's coordinates
+ */
+QRectF CartesianPlot::plotRect() {
+	Q_D(const CartesianPlot);
+	QRectF rect = d->mapFromScene(d->rect).boundingRect();
+	rect.setX(rect.x() + d->horizontalPadding);
+	rect.setY(rect.y() + d->verticalPadding);
+	rect.setWidth(rect.width() - d->horizontalPadding);
+	rect.setHeight(rect.height()-d->verticalPadding);	
+	return rect;
+}
+
 //##############################################################################
 //######################  setter methods and undo commands  ####################
 //##############################################################################
@@ -475,6 +489,11 @@ void CartesianPlot::addLegend(){
 	m_legend = new CartesianPlotLegend(this, "legend");
 	this->addChild(m_legend);
 
+	CartesianPlotLegend::PositionWrapper position;
+	position.horizontalPosition = CartesianPlotLegend::hPositionRight;
+	position.verticalPosition = CartesianPlotLegend::vPositionBottom;
+	m_legend->setPosition(position);
+	
 	//only one legend is allowed -> disable the action
 	addLegendAction->setEnabled(false);
 }

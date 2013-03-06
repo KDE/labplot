@@ -50,6 +50,7 @@ class CartesianPlot:public AbstractPlot{
 		QMenu* createContextMenu();
 		void fillToolBar(QToolBar*) const;
 		void setRect(const QRectF&);
+		QRectF plotRect();
 		
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);

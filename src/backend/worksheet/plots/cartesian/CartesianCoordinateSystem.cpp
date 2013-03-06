@@ -251,13 +251,7 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem(){
 }
 
 QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
-	//determine the plot rect in local coordinates
-	QRectF pageRect = d->plot->graphicsItem()->mapFromScene( d->plot->rect() ).boundingRect();
-	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
-	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
-	pageRect.setWidth(pageRect.width()-d->plot->horizontalPadding());
-	pageRect.setHeight(pageRect.height()-d->plot->verticalPadding());
-
+	const QRectF pageRect = d->plot->plotRect();
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
@@ -308,13 +302,7 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
  */
 void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints,
 												  QList<QPointF>& restrictedLogicalPoints, const MappingFlags& flags) const{
-	//determine the plot rect in local coordinates
-	QRectF pageRect = d->plot->graphicsItem()->mapFromScene( d->plot->rect() ).boundingRect();
-	pageRect.setX(pageRect.x() + d->plot->horizontalPadding());
-	pageRect.setY(pageRect.y() + d->plot->verticalPadding());
-	pageRect.setWidth(pageRect.width()-d->plot->horizontalPadding());
-	pageRect.setHeight(pageRect.height()-d->plot->verticalPadding());
-
+	const QRectF pageRect = d->plot->plotRect();
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 	bool valid = true;

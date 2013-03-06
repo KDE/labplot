@@ -441,29 +441,33 @@ void CartesianPlotLegendPrivate::retransform() {
 	calculates the position of the legend, when the position relative to the parent was specified (left, right, etc.)
 */
 void CartesianPlotLegendPrivate::updatePosition(){
-	//determine the parent item
-	QRectF parentRect;
-	QGraphicsItem* parent = parentItem();
-	if (!parent)
-		return;
-
+	//position the legend relative to the actual plot size minus small offset
+	//TODO: make the offset dependent on the size of axis ticks.
+	const QRectF parentRect = q->m_plot->plotRect();
+	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
+	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
+	
 	if (position.horizontalPosition != CartesianPlotLegend::hPositionCustom){
 		if (position.horizontalPosition == CartesianPlotLegend::hPositionLeft)
-			position.point.setX( parentRect.x() );
+			position.point.setX(parentRect.x() + rect.width()/2 + hOffset);
 		else if (position.horizontalPosition == CartesianPlotLegend::hPositionCenter)
-			position.point.setX( parentRect.x() + parentRect.width()/2 );
+			position.point.setX(parentRect.x() + parentRect.width()/2);
 		else if (position.horizontalPosition == CartesianPlotLegend::hPositionRight)
-			position.point.setX( parentRect.x() + parentRect.width() );
+			position.point.setX(parentRect.x() + parentRect.width() - rect.width()/2 - hOffset);
 	}
 
 	if (position.verticalPosition != CartesianPlotLegend::vPositionCustom){
 		if (position.verticalPosition == CartesianPlotLegend::vPositionTop)
-			position.point.setY( parentRect.y() );
+			position.point.setY(parentRect.y() + rect.height()/2 + vOffset);
 		else if (position.verticalPosition == CartesianPlotLegend::vPositionCenter)
-			position.point.setY( parentRect.y() + parentRect.height()/2 );
+			position.point.setY(parentRect.y() + parentRect.height()/2);
 		else if (position.verticalPosition == CartesianPlotLegend::vPositionBottom)
-			position.point.setY( parentRect.y() + parentRect.height() );
+			position.point.setY(parentRect.y() + parentRect.height() -  rect.height()/2 -vOffset);
 	}
+
+	suppressItemChangeEvent=true;
+	setPos(position.point);
+	suppressItemChangeEvent=false;	
 	emit q->positionChanged(position);
 }
  
