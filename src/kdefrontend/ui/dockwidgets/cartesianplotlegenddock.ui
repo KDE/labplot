@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>314</width>
+    <width>374</width>
     <height>511</height>
    </rect>
   </property>
@@ -225,8 +225,14 @@
          <property name="suffix">
           <string> cm</string>
          </property>
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
          <property name="maximum">
-          <double>1000.000000000000000</double>
+          <double>99.989999999999995</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -245,8 +251,14 @@
          <property name="suffix">
           <string> cm</string>
          </property>
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
          <property name="maximum">
-          <double>1000.000000000000000</double>
+          <double>99.989999999999995</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>

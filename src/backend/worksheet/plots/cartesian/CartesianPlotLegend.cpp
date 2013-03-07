@@ -434,7 +434,9 @@ void CartesianPlotLegendPrivate::retransform() {
 	rect.setX(-legendWidth/2);
 	rect.setY(-legendHeight/2);
 	rect.setWidth(legendWidth);
-	rect.setHeight(legendHeight);	
+	rect.setHeight(legendHeight);
+	
+	updatePosition();
 }
 
 /*!
@@ -676,7 +678,6 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 
 void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
-// 	QPointF point = positionFromItemPosition(pos());
 	QPointF point = pos();
 	if (point!=position.point) {
 		//position was changed -> set the position related member variables
@@ -691,52 +692,6 @@ void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* eve
 	}
 
 	QGraphicsItem::mouseReleaseEvent(event);
-}
-
-/*!
- *	converts label's position to GraphicsItem's position.
- */
-QPointF CartesianPlotLegendPrivate::positionFromItemPosition(const QPointF& itemPos) {
-	float x = itemPos.x();
-	float y = itemPos.y();
-	float w, h;
-	QPointF tmpPosition;
-// 	if (textWrapper.teXUsed){
-// 		w = teXImage.width()*scaleFactor;
-// 		h = teXImage.height()*scaleFactor;
-// 	}
-// 	else {
-// 		w = staticText.size().width()*scaleFactor;
-// 		h = staticText.size().height()*scaleFactor;
-// 	}
-// 
-// 	//depending on the alignment, calculate the new position
-// 	switch (horizontalAlignment) {
-// 		case TextLabel::hAlignLeft:
-// 			tmpPosition.setX( x + w/2 );
-// 			break;
-// 		case TextLabel::hAlignCenter:
-// 			tmpPosition.setX( x );
-// 			break;
-// 		case TextLabel::hAlignRight:
-// 			tmpPosition.setX( x - w/2 );
-// 			break;
-// 	}
-// 
-// 	switch (verticalAlignment) {
-// 		case TextLabel::vAlignTop:
-// 			tmpPosition.setY( y + h/2 );
-// 			break;
-// 		case TextLabel::vAlignCenter:
-// 			tmpPosition.setY( y );
-// 			break;
-// 		case TextLabel::vAlignBottom:
-// 			tmpPosition.setY( y - h/2 );
-// 			break;
-// 	}
-
-
-	return tmpPosition;
 }
 
 //##############################################################################

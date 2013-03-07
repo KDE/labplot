@@ -47,7 +47,6 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		bool swapVisible(bool on);
 		void retransform();
 		void updatePosition();
-		QPointF positionFromItemPosition(const QPointF&);
 
 		//QGraphicsItem's virtual functions
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

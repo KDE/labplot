@@ -98,7 +98,7 @@ CartesianPlot::~CartesianPlot(){
 
 /*!
 	initializes all member variables of \c CartesianPlot
- */
+*/
 void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 
@@ -141,7 +141,7 @@ void CartesianPlot::init(){
 /*!
 	initializes all children of \c CartesianPlot and 
 	setups a default plot with for axes and plot title.
- */
+*/
 void CartesianPlot::initDefault(){
 	Q_D(CartesianPlot);
 	
@@ -474,7 +474,6 @@ void CartesianPlot::addCurve(){
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
 	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
 
-	//TODO:
 	//update the legend on changes of the name, line and symbol styles
 	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
@@ -582,7 +581,6 @@ void CartesianPlot::scaleAutoX(){
 		d->xMax += offset;
 		d->retransformScales();
 	}
-		
 }
 
 void CartesianPlot::scaleAutoY(){
@@ -810,11 +808,13 @@ void CartesianPlotPrivate::retransform(){
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	plot->plotArea()->setRect(rect);
 
-	//call retransform() for the title:
-	//when a predefined title position (Left, Centered etc.) is used, 
-	//the actual title position needs to be updated on plot's geometry changes.
+	//call retransform() for the title and the legend (if available)
+	//when a predefined position relative to the (Left, Centered etc.) is used, 
+	//the actual position needs to be updated on plot's geometry changes.
 	plot->title()->retransform();
-
+	if (q->m_legend)
+		q->m_legend->retransform();
+	
 	q->retransform();
 }
 
