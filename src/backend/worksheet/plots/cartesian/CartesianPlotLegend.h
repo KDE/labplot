@@ -36,6 +36,7 @@
 
 class CartesianPlot;
 class CartesianPlotLegendPrivate;
+class TextLabel;
 
 class CartesianPlotLegend: public AbstractWorksheetElement {
 	Q_OBJECT
@@ -101,6 +102,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 	private:
     	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 		void init();
+		TextLabel *m_title;
 		CartesianPlot* m_plot;
 
 	signals:

@@ -42,6 +42,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/plugin/PluginManager.h"
 #include "backend/worksheet/AbstractCurveSymbol.h"
+#include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/interfaces.h"
 #include "backend/lib/commandtemplates.h"
 #include <math.h>
@@ -80,6 +81,19 @@ void CartesianPlotLegend::init(){
 	d->rowCount = 0;
 	d->columnCount = 0;
 
+	//Title
+ 	m_title = new TextLabel(this->name());
+	m_title->setText(this->name());
+	addChild(m_title);
+	m_title->setHidden(true);
+	m_title->graphicsItem()->setParentItem(graphicsItem()); //set the parent before doing any positioning
+	TextLabel::PositionWrapper position;
+	position.horizontalPosition = TextLabel::hPositionCenter;
+	position.verticalPosition = TextLabel::vPositionTop;
+	m_title->setPosition(position);
+	m_title->setHorizontalAlignment(TextLabel::hAlignCenter);
+	m_title->setVerticalAlignment(TextLabel::vAlignBottom);
+	
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
 	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
@@ -430,7 +444,9 @@ void CartesianPlotLegendPrivate::retransform() {
 	float legendHeight = layoutTopMargin + layoutBottomMargin; //margins
 	legendHeight += rowCount*h; //height of the rows
 	legendHeight += (rowCount-1)*layoutVerticalSpacing; //spacing between the rows
-	
+	if (q->m_title->isVisible() && q->m_title->text().text!="")
+		legendHeight += q->m_title->graphicsItem()->boundingRect().height(); //legend title
+
 	rect.setX(-legendWidth/2);
 	rect.setY(-legendHeight/2);
 	rect.setWidth(legendWidth);
@@ -469,8 +485,10 @@ void CartesianPlotLegendPrivate::updatePosition(){
 
 	suppressItemChangeEvent=true;
 	setPos(position.point);
-	suppressItemChangeEvent=false;	
+	suppressItemChangeEvent=false;
 	emit q->positionChanged(position);
+	
+	q->m_title->retransform();
 }
  
 /*!
@@ -583,8 +601,11 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 
 	painter->setFont(labelFont);
 	
-	//translate to left upper conner of the bounding rect plus the layout offset
+	//translate to left upper conner of the bounding rect plus the layout offset and the height of the title
 	painter->translate(-rect.width()/2+layoutLeftMargin, -rect.height()/2+layoutTopMargin);
+	if (q->m_title->isVisible() && q->m_title->text().text!="")
+		painter->translate(0, q->m_title->graphicsItem()->boundingRect().height());
+
 	painter->save();
 	
 	int index;
