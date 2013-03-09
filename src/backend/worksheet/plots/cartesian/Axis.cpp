@@ -1497,7 +1497,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_r", QString::number(d->linePen.color().red()) );
 	writer->writeAttribute( "color_g", QString::number(d->linePen.color().green()) );
 	writer->writeAttribute( "color_b", QString::number(d->linePen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->linePen.width()) );
+	writer->writeAttribute( "width", QString::number(d->linePen.widthF()) );
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
 	writer->writeEndElement();
 	
@@ -1540,7 +1540,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_g", QString::number(d->labelsColor.green()) );
 	writer->writeAttribute( "color_b", QString::number(d->labelsColor.blue()) );
 	writer->writeAttribute( "fontFamily", d->labelsFont.family() );
-	writer->writeAttribute( "fontSize", QString::number(d->labelsFont.pointSize()) );
+	writer->writeAttribute( "fontSize", QString::number(d->labelsFont.pointSizeF()) );
 	writer->writeAttribute( "fontWeight", QString::number(d->labelsFont.weight()) );
 	writer->writeAttribute( "fontItalic", QString::number(d->labelsFont.italic()) );
 	writer->writeAttribute( "prefix", d->labelsPrefix );
@@ -1554,7 +1554,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_r", QString::number(d->majorGridPen.color().red()) );
 	writer->writeAttribute( "color_g", QString::number(d->majorGridPen.color().green()) );
 	writer->writeAttribute( "color_b", QString::number(d->majorGridPen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->majorGridPen.width()) );
+	writer->writeAttribute( "width", QString::number(d->majorGridPen.widthF()) );
 	writer->writeAttribute( "opacity", QString::number(d->majorGridOpacity) );
 	writer->writeEndElement();
 
@@ -1563,7 +1563,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "color_r", QString::number(d->minorGridPen.color().red()) );
 	writer->writeAttribute( "color_g", QString::number(d->minorGridPen.color().green()) );
 	writer->writeAttribute( "color_b", QString::number(d->minorGridPen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->minorGridPen.width()) );
+	writer->writeAttribute( "width", QString::number(d->minorGridPen.widthF()) );
 	writer->writeAttribute( "opacity", QString::number(d->minorGridOpacity) );
 	writer->writeEndElement();
 
@@ -1875,7 +1875,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'fontSize'"));
             else
-                d->labelsFont.setPointSize( str.toInt() );
+                d->labelsFont.setPointSizeF( str.toDouble() );
 			
 			str = attribs.value("fontWeight").toString();
             if(str.isEmpty())

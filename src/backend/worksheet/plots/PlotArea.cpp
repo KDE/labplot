@@ -414,6 +414,16 @@ void PlotArea::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "fileName", d->backgroundFileName );
     writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
     writer->writeEndElement();
+
+	//border
+	writer->writeStartElement( "border" );
+	writer->writeAttribute( "borderStyle", QString::number(d->borderPen.style()) );
+	writer->writeAttribute( "borderColor_r", QString::number(d->borderPen.color().red()) );
+	writer->writeAttribute( "borderColor_g", QString::number(d->borderPen.color().green()) );
+	writer->writeAttribute( "borderColor_b", QString::number(d->borderPen.color().blue()) );
+	writer->writeAttribute( "borderWidth", QString::number(d->borderPen.widthF()) );
+    writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
+    writer->writeEndElement();
 	
 	writer->writeEndElement();
 }
@@ -515,6 +525,47 @@ bool PlotArea::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("opacity"));
             else
                 d->backgroundOpacity = str.toDouble();
+		}else if (reader->name() == "border"){
+			attribs = reader->attributes();
+
+            str = attribs.value("borderStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("borderStyle"));
+            else
+                d->borderPen.setStyle((Qt::PenStyle)str.toInt());
+
+			QColor borderColor;
+            str = attribs.value("borderColor_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("borderColor_r"));
+            else
+                borderColor.setRed(str.toInt());
+
+            str = attribs.value("borderColor_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("borderColor_g"));
+            else
+                borderColor.setGreen(str.toInt());
+
+            str = attribs.value("borderColor_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("borderColor_b"));
+            else
+                borderColor.setBlue(str.toInt());
+
+			d->borderPen.setColor(borderColor);
+
+			str = attribs.value("borderWidth").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("borderWidth"));
+            else
+                d->borderPen.setWidthF(str.toDouble());
+
+            str = attribs.value("borderOpacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("borderOpacity"));
+            else
+                d->borderOpacity = str.toDouble();
         }else{ // unknown element
             reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
