@@ -122,8 +122,6 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 			 this, SLOT(labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment)) );
 	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
 			 this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
-	
-	this->setFixedLabelMode(false);
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes){
@@ -144,10 +142,14 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	//TODO save the offset value in KConfigGroup? (available only for the axis labels)
 	ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(axes.first()->titleOffset(), Worksheet::Point) );
 	m_initializing = false;
-
-	this->setFixedLabelMode(true);
 }
 
+/*!
+ * enables/disables the "fixe label"-mode, used when displaying 
+ * the properties of axis' title label.
+ * In this mode, in the "geometry"-part only the offset (offset to the axis)
+ * and the rotation of the label are available.
+ */
 void LabelWidget::setFixedLabelMode(const bool b){
 	ui.lPositionX->setVisible(!b);
 	ui.cbPositionX->setVisible(!b);
@@ -161,6 +163,28 @@ void LabelWidget::setFixedLabelMode(const bool b){
 	ui.cbVerticalAlignment->setVisible(!b);	
 	ui.lOffset->setVisible(b);
 	ui.sbOffset->setVisible(b);
+}
+
+/*!
+ * enables/disables all geometry relevant widgets.
+ * Used when displaying legend's title label.
+ */
+void LabelWidget::setNoGeometryMode(const bool b) {
+	ui.lGeometry->setVisible(!b);
+	ui.lPositionX->setVisible(!b);
+	ui.cbPositionX->setVisible(!b);
+	ui.sbPositionX->setVisible(!b);
+	ui.lPositionY->setVisible(!b);
+	ui.cbPositionY->setVisible(!b);
+	ui.sbPositionY->setVisible(!b);
+	ui.lHorizontalAlignment->setVisible(!b);
+	ui.cbHorizontalAlignment->setVisible(!b);
+	ui.lVerticalAlignment->setVisible(!b);
+	ui.cbVerticalAlignment->setVisible(!b);
+	ui.lOffset->setVisible(!b);
+	ui.sbOffset->setVisible(!b);
+	ui.lRotation->setVisible(!b);
+	ui.sbRotation->setVisible(!b);
 }
 
 //**********************************************************

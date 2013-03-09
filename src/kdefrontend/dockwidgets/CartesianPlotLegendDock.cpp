@@ -51,6 +51,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tab1);
  	labelWidget=new LabelWidget(ui.tab1);
+	labelWidget->setNoGeometryMode(true);
 	hboxLayout->addWidget(labelWidget);
 
 	//"Background"-tab
@@ -156,6 +157,14 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	//show the properties of the first curve
 	KConfig config("", KConfig::SimpleConfig);
   	loadConfig(config);
+	
+	//legend title
+	QList<TextLabel*> labels;
+	foreach(CartesianPlotLegend* legend, list)
+		labels.append(legend->title());
+	
+	labelWidget->setLabels(labels);
+	
 	//update active widgets
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 

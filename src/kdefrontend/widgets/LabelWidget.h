@@ -45,6 +45,9 @@ public:
 	void setAxes(QList<Axis*>);
 	void loadConfig(KConfigGroup&);
 	void saveConfig(KConfigGroup&);
+	
+	void setNoGeometryMode(const bool);
+	void setFixedLabelMode(const bool);
 
 private:
 	Ui::LabelWidget ui;
@@ -52,8 +55,6 @@ private:
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
 	bool m_initializing;
-
-	void setFixedLabelMode(const bool);
 
 signals:
 	void dataChanged(bool);

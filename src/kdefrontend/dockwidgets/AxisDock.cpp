@@ -87,6 +87,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
  	labelWidget=new LabelWidget(ui.tabTitle);
+	labelWidget->setFixedLabelMode(true);
 	hboxLayout->addWidget(labelWidget);
 	connect( labelWidget, SIGNAL(dataChanged(bool)), this, SLOT(titleChanged()) );
 
@@ -216,7 +217,7 @@ void AxisDock::setAxes(QList<Axis*> list){
   	m_initializing=true;
   	m_axesList=list;
   	m_axis=list.first();
-  
+
 	labelWidget->setAxes(list);
 
 	//if there are more then one axis in the list, disable the tab "general"
@@ -239,7 +240,7 @@ void AxisDock::setAxes(QList<Axis*> list){
   	//show the properties of the first axis
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
-	
+
 	connect(m_axis, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(axisDescriptionChanged(const AbstractAspect*)));
 
 	connect(m_axis, SIGNAL(orientationChanged()), this, SLOT(axisOrientationChanged()));

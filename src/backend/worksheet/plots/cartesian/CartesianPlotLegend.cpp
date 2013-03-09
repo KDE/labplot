@@ -87,6 +87,7 @@ void CartesianPlotLegend::init(){
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->graphicsItem()->setParentItem(graphicsItem()); //set the parent before doing any positioning
+	m_title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	TextLabel::PositionWrapper position;
 	position.horizontalPosition = TextLabel::hPositionCenter;
 	position.verticalPosition = TextLabel::vPositionTop;
@@ -175,6 +176,11 @@ CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, CartesianPlotLegend::PositionWrapper, position, position)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, lineSymbolWidth, lineSymbolWidth)
+
+//Title
+TextLabel* CartesianPlotLegend::title(){
+	return m_title;
+}
 
 //Background
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, PlotArea::BackgroundType, backgroundType, backgroundType)

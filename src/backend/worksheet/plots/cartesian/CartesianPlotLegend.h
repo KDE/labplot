@@ -62,6 +62,8 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 
+		TextLabel* title();
+
 		CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
 		CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
 		BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
@@ -102,7 +104,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 	private:
     	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 		void init();
-		TextLabel *m_title;
+		TextLabel* m_title;
 		CartesianPlot* m_plot;
 
 	signals:
