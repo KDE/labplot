@@ -345,31 +345,33 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
-		QPixmap pix(backgroundFileName);
-		switch (backgroundImageStyle){
-			case PlotArea::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(),pix);
-				break;
-			case PlotArea::Scaled:
-				pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(),pix);
-				break;
-			case PlotArea::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(),pix);
-				break;
-			case PlotArea::Centered:
-				painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
-				break;
-			case PlotArea::Tiled:
-				painter->drawTiledPixmap(rect,pix);
-				break;
-			case PlotArea::CenterTiled:
-				painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
-				break;
-			default:
-				painter->drawPixmap(rect.topLeft(),pix);
+		if (backgroundFileName.trimmed() != "") {
+			QPixmap pix(backgroundFileName);
+			switch (backgroundImageStyle){
+				case PlotArea::ScaledCropped:
+					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+					painter->drawPixmap(rect.topLeft(),pix);
+					break;
+				case PlotArea::Scaled:
+					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+					painter->drawPixmap(rect.topLeft(),pix);
+					break;
+				case PlotArea::ScaledAspectRatio:
+					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+					painter->drawPixmap(rect.topLeft(),pix);
+					break;
+				case PlotArea::Centered:
+					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
+					break;
+				case PlotArea::Tiled:
+					painter->drawTiledPixmap(rect,pix);
+					break;
+				case PlotArea::CenterTiled:
+					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
+					break;
+				default:
+					painter->drawPixmap(rect.topLeft(),pix);
+			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
 			painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));

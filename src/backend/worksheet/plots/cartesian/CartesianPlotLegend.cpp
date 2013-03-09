@@ -94,6 +94,7 @@ void CartesianPlotLegend::init(){
 	m_title->setPosition(position);
 	m_title->setHorizontalAlignment(TextLabel::hAlignCenter);
 	m_title->setVerticalAlignment(TextLabel::vAlignBottom);
+	connect(m_title, SIGNAL(changed()), this, SLOT(retransform()));
 	
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
@@ -375,7 +376,8 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner):q(owner) {
+CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner):q(owner),
+	suppressItemChangeEvent(false), suppressRetransform(false) {
 }
 
 QString CartesianPlotLegendPrivate::name() const {
@@ -405,6 +407,9 @@ bool CartesianPlotLegendPrivate::swapVisible(bool on){
   recalculates the rectangular of the legend.
 */
 void CartesianPlotLegendPrivate::retransform() {
+	if (suppressRetransform)
+		return;
+
 	prepareGeometryChange();
 
 	QList<XYCurve*> children = q->m_plot->children<XYCurve>();
@@ -445,6 +450,11 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendWidth += layoutLeftMargin + layoutRightMargin; //margins
 	legendWidth += columnCount*lineSymbolWidth + layoutHorizontalSpacing; //width of the columns without the text
 	legendWidth += (columnCount-1)*2*layoutHorizontalSpacing; //spacings between the columns
+	if (q->m_title->isVisible() && q->m_title->text().text!="") {
+		float titleWidth = q->m_title->graphicsItem()->boundingRect().width();
+		if (titleWidth>legendWidth)
+			legendWidth = titleWidth;
+	}
 
 	//determine the height of the legend
 	float legendHeight = layoutTopMargin + layoutBottomMargin; //margins
@@ -494,7 +504,9 @@ void CartesianPlotLegendPrivate::updatePosition(){
 	suppressItemChangeEvent=false;
 	emit q->positionChanged(position);
 	
+	suppressRetransform = true;
 	q->m_title->retransform();
+	suppressRetransform = false;
 }
  
 /*!
@@ -555,31 +567,33 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
-		QPixmap pix(backgroundFileName);
-		switch (backgroundImageStyle){
-			case PlotArea::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(),pix);
-				break;
-			case PlotArea::Scaled:
-				pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(),pix);
-				break;
-			case PlotArea::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-				painter->drawPixmap(rect.topLeft(),pix);
-				break;
-			case PlotArea::Centered:
-				painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
-				break;
-			case PlotArea::Tiled:
-				painter->drawTiledPixmap(rect,pix);
-				break;
-			case PlotArea::CenterTiled:
-				painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
-				break;
-			default:
-				painter->drawPixmap(rect.topLeft(),pix);
+		if (backgroundFileName.trimmed() != "") {
+			QPixmap pix(backgroundFileName);
+			switch (backgroundImageStyle){
+				case PlotArea::ScaledCropped:
+					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+					painter->drawPixmap(rect.topLeft(),pix);
+					break;
+				case PlotArea::Scaled:
+					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+					painter->drawPixmap(rect.topLeft(),pix);
+					break;
+				case PlotArea::ScaledAspectRatio:
+					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+					painter->drawPixmap(rect.topLeft(),pix);
+					break;
+				case PlotArea::Centered:
+					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
+					break;
+				case PlotArea::Tiled:
+					painter->drawTiledPixmap(rect,pix);
+					break;
+				case PlotArea::CenterTiled:
+					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
+					break;
+				default:
+					painter->drawPixmap(rect.topLeft(),pix);
+			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
 			painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
@@ -679,7 +693,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	}
 }
 
-
 QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
 	if (suppressItemChangeEvent)
 		return value;
@@ -687,7 +700,6 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
 		CartesianPlotLegend::PositionWrapper tempPosition{
-// 			positionFromItemPosition(value.toPointF()),
 			value.toPointF(),
 			CartesianPlotLegend::hPositionCustom,
 			CartesianPlotLegend::vPositionCustom
@@ -696,7 +708,6 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
 		//this is done on mouse release events only.
-		qDebug()<<tempPosition.point.x()<<"   "<<tempPosition.point.y();
 		emit q->positionChanged(tempPosition);
      }
 

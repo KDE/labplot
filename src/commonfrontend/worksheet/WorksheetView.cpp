@@ -456,31 +456,34 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 		}
 		painter->drawRect(scene_rect);
 	}else if (m_worksheet->backgroundType() == PlotArea::Image){
-		QPixmap pix(m_worksheet->backgroundFileName());
-		switch (m_worksheet->backgroundImageStyle()){
-			case PlotArea::ScaledCropped:
-				pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-				painter->drawPixmap(scene_rect.topLeft(),pix);
-				break;
-			case PlotArea::Scaled:
-				pix = pix.scaled(scene_rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-				painter->drawPixmap(scene_rect.topLeft(),pix);
-				break;
-			case PlotArea::ScaledAspectRatio:
-				pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-				painter->drawPixmap(scene_rect.topLeft(),pix);
-				break;
-			case PlotArea::Centered:
-				painter->drawPixmap(QPointF(scene_rect.center().x()-pix.size().width()/2,scene_rect.center().y()-pix.size().height()/2),pix);
-				break;
-			case PlotArea::Tiled:
-				painter->drawTiledPixmap(scene_rect,pix);
-				break;
-			case PlotArea::CenterTiled:
-				painter->drawTiledPixmap(scene_rect,pix,QPoint(scene_rect.size().width()/2,scene_rect.size().height()/2));
-				break;
-			default:
-				painter->drawPixmap(scene_rect.topLeft(),pix);
+		const QString& backgroundFileName = m_worksheet->backgroundFileName().trimmed();
+		if ( backgroundFileName!= "") {
+			QPixmap pix(backgroundFileName);
+			switch (m_worksheet->backgroundImageStyle()){
+				case PlotArea::ScaledCropped:
+					pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+					painter->drawPixmap(scene_rect.topLeft(),pix);
+					break;
+				case PlotArea::Scaled:
+					pix = pix.scaled(scene_rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+					painter->drawPixmap(scene_rect.topLeft(),pix);
+					break;
+				case PlotArea::ScaledAspectRatio:
+					pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+					painter->drawPixmap(scene_rect.topLeft(),pix);
+					break;
+				case PlotArea::Centered:
+					painter->drawPixmap(QPointF(scene_rect.center().x()-pix.size().width()/2,scene_rect.center().y()-pix.size().height()/2),pix);
+					break;
+				case PlotArea::Tiled:
+					painter->drawTiledPixmap(scene_rect,pix);
+					break;
+				case PlotArea::CenterTiled:
+					painter->drawTiledPixmap(scene_rect,pix,QPoint(scene_rect.size().width()/2,scene_rect.size().height()/2));
+					break;
+				default:
+					painter->drawPixmap(scene_rect.topLeft(),pix);
+			}
 		}
 	}else if (m_worksheet->backgroundType() == PlotArea::Pattern){
 		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
