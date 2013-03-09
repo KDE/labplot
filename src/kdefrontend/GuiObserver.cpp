@@ -285,6 +285,12 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
 			mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
 		}
 		mainWindow->cartesianPlotDock->activateTitleTab();
+	} else if (className=="CartesianPlotLegend") {
+		if (!mainWindow->cartesianPlotLegendDock){
+			mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotLegendDock);
+		}
+		mainWindow->cartesianPlotLegendDock->activateTitleTab();
 	}
 }
 

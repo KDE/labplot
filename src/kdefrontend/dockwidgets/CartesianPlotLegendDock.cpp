@@ -49,8 +49,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	ui.setupUi(this);
 
 	//"Title"-tab
-	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tab1);
- 	labelWidget=new LabelWidget(ui.tab1);
+	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+ 	labelWidget=new LabelWidget(ui.tabTitle);
 	labelWidget->setNoGeometryMode(true);
 	hboxLayout->addWidget(labelWidget);
 
@@ -201,6 +201,10 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	//layout
 	
 	m_initializing = false;
+}
+
+void CartesianPlotLegendDock::activateTitleTab() const{
+	ui.tabWidget->setCurrentWidget(ui.tabTitle);
 }
 
 //************************************************************
