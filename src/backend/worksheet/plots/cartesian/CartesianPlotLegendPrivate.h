@@ -67,6 +67,7 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		QList<float> maxColumnTextWidths; //the maximal width of the text within each column
 		int columnCount; //the actual number of columns, can be smaller then the specified layoutColumnCount
 		int rowCount; //the number of rows in the legend, depends on the number of curves and on columnCount
+		TextLabel* title;
 
 		//Background
 		PlotArea::BackgroundType backgroundType;

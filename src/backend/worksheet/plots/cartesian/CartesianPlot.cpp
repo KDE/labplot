@@ -1163,7 +1163,15 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 return false;
             }else{
                 addChild(curve);
-            }             
+            }
+		}else if(reader->name() == "cartesianPlotLegend"){
+            m_legend = new CartesianPlotLegend(this, "");
+            if (!m_legend->load(reader)){
+                delete m_legend;
+                return false;
+            }else{
+                addChild(m_legend);
+            }            
         }else{ // unknown element
             reader->raiseWarning(tr("unknown cartesianPlot element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
@@ -1171,8 +1179,10 @@ bool CartesianPlot::load(XmlStreamReader* reader){
     }
 
 	d->retransform();
-	m_title->setHidden(true);
-	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
-
+	if (m_title) {
+		m_title->setHidden(true);
+		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
+	}
+	
     return true;
 }
