@@ -987,6 +987,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "y", QString::number(d->rect.y()) );
     writer->writeAttribute( "width", QString::number(d->rect.width()) );
     writer->writeAttribute( "height", QString::number(d->rect.height()) );
+	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
     writer->writeEndElement();
 	
 	//coordinate system and padding
@@ -1066,6 +1067,12 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'height'"));
             else
                 d->rect.setHeight( str.toDouble() );
+
+			str = attribs.value("visible").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'visible'"));
+            else
+                d->setVisible(str.toInt());			
 		}else if(reader->name() == "coordinateSystem"){
 // 			m_coordinateSystem->load(reader); //TODO read scales
             attribs = reader->attributes();

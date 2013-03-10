@@ -521,6 +521,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "horizontalAlignment", QString::number(d->horizontalAlignment) );
 	writer->writeAttribute( "verticalAlignment", QString::number(d->verticalAlignment) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
+	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
     writer->writeEndElement();
 	
 	writer->writeStartElement( "text" );
@@ -609,6 +610,12 @@ bool TextLabel::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'rotationAngle'"));
             else
                 d->rotationAngle = str.toInt();
+
+			str = attribs.value("visible").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'visible'"));
+            else
+                d->setVisible(str.toInt());				
 		}else if (reader->name() == "text"){
 			d->textWrapper.text = reader->readElementText();
 		}else if (reader->name() == "format"){
