@@ -107,7 +107,6 @@ XYCurve::~XYCurve() {
 	delete d_ptr;
 }
 
-
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -302,7 +301,7 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAn
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesOpacity, valuesOpacity)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, valuesPen, valuesPen)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, valuesColor, valuesColor)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 
 /* ============================ setter methods and undo commands ================= */
@@ -508,11 +507,11 @@ void XYCurve::setValuesFont(const QFont& font) {
 		exec(new XYCurveSetValuesFontCmd(d, font, tr("%1: set values font")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPen, QPen, valuesPen, recalcShapeAndBoundingRect)
-void XYCurve::setValuesPen(const QPen &pen) {
+STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesColor, QColor, valuesColor, update)
+void XYCurve::setValuesColor(const QColor& color) {
 	Q_D(XYCurve);
-	if (pen != d->valuesPen)
-		exec(new XYCurveSetValuesPenCmd(d, pen, tr("%1: set values style")));
+	if (color != d->valuesColor)
+		exec(new XYCurveSetValuesColorCmd(d, color, tr("%1: set values color")));
 }
 
 //##############################################################################
@@ -1028,9 +1027,9 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 			trafo.rotate( -valuesRotationAngle );
 			tempPath = trafo.map(tempPath);
 
-			valuesPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, valuesPen));
+			valuesPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, QPen()));
 		}
-		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, valuesPen));
+		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, QPen()));
 		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
 	}
 }
@@ -1114,7 +1113,7 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   //draw values
   if (valuesType != XYCurve::NoValues){
 	painter->setOpacity(valuesOpacity);
- 	painter->setPen(valuesPen);	
+ 	painter->setPen(valuesColor);	
 	painter->setBrush(Qt::NoBrush);
 	painter->setFont(valuesFont);
 	for (int i=0; i<valuesPoints.size(); i++){
@@ -1164,28 +1163,21 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 		writer->writeAttribute( "yColumn", "" );
 		writer->writeAttribute( "yColumnParent", "" );
 	}
+	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
 	//Line
     writer->writeStartElement( "lines" );
 	writer->writeAttribute( "type", QString::number(d->lineType) );
 	writer->writeAttribute( "interpolationPointsCount", QString::number(d->lineInterpolationPointsCount) );
-	writer->writeAttribute( "style", QString::number(d->linePen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->linePen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->linePen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->linePen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->linePen.widthF()) );
+	WRITE_QPEN(d->linePen);
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
 	writer->writeEndElement();
 	
 	//Drop lines
 	writer->writeStartElement( "dropLines" );
 	writer->writeAttribute( "type", QString::number(d->dropLineType) );
-	writer->writeAttribute( "style", QString::number(d->dropLinePen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->dropLinePen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->dropLinePen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->dropLinePen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->dropLinePen.widthF()) );
+	WRITE_QPEN(d->dropLinePen);
 	writer->writeAttribute( "opacity", QString::number(d->dropLineOpacity) );
 	writer->writeEndElement();
 	
@@ -1196,41 +1188,23 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "size", QString::number(d->symbolsSize) );
 	writer->writeAttribute( "ratio", QString::number(d->symbolsAspectRatio) );
 	writer->writeAttribute( "id", d->symbolsTypeId );
-	//brush
-	writer->writeAttribute( "brush_style", QString::number(d->symbolsBrush.style()) );
-	writer->writeAttribute( "brush_color_r", QString::number(d->symbolsBrush.color().red()) );
-	writer->writeAttribute( "brush_color_g", QString::number(d->symbolsBrush.color().green()) );
-	writer->writeAttribute( "brush_color_b", QString::number(d->symbolsBrush.color().blue()) );
-	//pen
-	writer->writeAttribute( "style", QString::number(d->symbolsPen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->symbolsPen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->symbolsPen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->symbolsPen.color().blue()) );
-	//TODO: should use widthF()?
-	writer->writeAttribute( "width", QString::number(d->symbolsPen.widthF()) );
+	WRITE_QBRUSH(d->symbolsBrush);
+	WRITE_QPEN(d->symbolsPen);
 	writer->writeEndElement();
 	
 	//Values
 	writer->writeStartElement( "values" );
 	writer->writeAttribute( "type", QString::number(d->valuesType) );
 	//TODO values column
+	//TODO values format and precision
 	writer->writeAttribute( "position", QString::number(d->valuesPosition) );
 	writer->writeAttribute( "distance", QString::number(d->valuesDistance) );
 	writer->writeAttribute( "rotation", QString::number(d->valuesRotationAngle) );
 	writer->writeAttribute( "opacity", QString::number(d->valuesOpacity) );
 	writer->writeAttribute( "prefix", d->valuesPrefix );
 	writer->writeAttribute( "suffix", d->valuesSuffix );
-	//pen
-	writer->writeAttribute( "style", QString::number(d->valuesPen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->valuesPen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->valuesPen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->valuesPen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->valuesPen.widthF()) );
-	//font
-	writer->writeAttribute( "fontFamily", d->valuesFont.family() );
-	writer->writeAttribute( "fontSize", QString::number(d->valuesFont.pointSize()) );
-	writer->writeAttribute( "fontWeight", QString::number(d->valuesFont.weight()) );
-	writer->writeAttribute( "fontItalic", QString::number(d->valuesFont.italic()) );
+	WRITE_QCOLOR(d->valuesColor);
+	WRITE_QFONT(d->valuesFont);
 	writer->writeEndElement();
 
 	writer->writeEndElement(); //close "xyCurve" section
@@ -1279,6 +1253,12 @@ bool XYCurve::load(XmlStreamReader* reader){
             d->yColumnParentName = str;
 			
 			//the actual pointers to the x- and y-columns are restored in Project::load()
+			
+			str = attribs.value("visible").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'visible'"));
+            else
+                d->setVisible(str.toInt());
 		}else if (reader->name() == "lines"){	
 			attribs = reader->attributes();
 	
@@ -1294,44 +1274,13 @@ bool XYCurve::load(XmlStreamReader* reader){
             else
                 d->lineInterpolationPointsCount = str.toInt();
 
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->linePen.setStyle( (Qt::PenStyle)str.toInt() );
-			
-			QColor color;
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                color.setRed( str.toInt() );
-
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                color.setGreen( str.toInt() );
-			
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                color.setBlue( str.toInt() );
-			
-			d->linePen.setColor(color);
-			
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->linePen.setWidthF( str.toDouble() );
+			READ_QPEN(d->linePen);
 			
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->lineOpacity = str.toInt();
+                d->lineOpacity = str.toDouble();
 		}else if (reader->name() == "dropLines"){	
 			attribs = reader->attributes();
 	
@@ -1341,44 +1290,13 @@ bool XYCurve::load(XmlStreamReader* reader){
             else
                 d->dropLineType = (XYCurve::DropLineType)str.toInt();
 
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->dropLinePen.setStyle( (Qt::PenStyle)str.toInt() );
-			
-			QColor color;
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                color.setRed( str.toInt() );
-
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                color.setGreen( str.toInt() );
-			
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                color.setBlue( str.toInt() );
-			
-			d->dropLinePen.setColor(color);
-			
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->dropLinePen.setWidthF( str.toDouble() );
+			READ_QPEN(d->dropLinePen);
 			
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->dropLineOpacity = str.toInt();	
+                d->dropLineOpacity = str.toDouble();	
 		}else if (reader->name() == "symbols"){	
 			attribs = reader->attributes();
 
@@ -1386,7 +1304,7 @@ bool XYCurve::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->symbolsOpacity = str.toInt();
+                d->symbolsOpacity = str.toDouble();
 			
 			str = attribs.value("rotation").toString();
             if(str.isEmpty())
@@ -1398,81 +1316,22 @@ bool XYCurve::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'size'"));
             else
-                d->symbolsSize = str.toInt();
+                d->symbolsSize = str.toDouble();
 			
 			str = attribs.value("ratio").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'ratio'"));
             else
-                d->symbolsAspectRatio = str.toInt();
+                d->symbolsAspectRatio = str.toDouble();
 			
 			str = attribs.value("id").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'id'"));
             else
                 d->symbolsTypeId = str;
-			d->swapSymbolsTypeId(d->symbolsTypeId);
 
-			//brush
-			str = attribs.value("brush_style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'brush_style'"));
-            else
-                d->symbolsBrush.setStyle( (Qt::BrushStyle)str.toInt() );
-			
-			QColor color;
-			str = attribs.value("brush_color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'brush_color_r'"));
-            else
-                color.setRed( str.toInt() );
-
-			str = attribs.value("brush_color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'brush_color_g'"));
-            else
-                color.setGreen( str.toInt() );
-			
-			str = attribs.value("brush_color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'brush_color_b'"));
-            else
-                color.setBlue( str.toInt() );
-			
-			d->symbolsBrush.setColor(color);
-			
-			//pen
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->symbolsPen.setStyle( (Qt::PenStyle)str.toInt() );
-			
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                color.setRed( str.toInt() );
-
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                color.setGreen( str.toInt() );
-			
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                color.setBlue( str.toInt() );
-			
-			d->symbolsPen.setColor(color);
-			
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->symbolsPen.setWidthF( str.toDouble() );
+			READ_QBRUSH(d->symbolsBrush);
+			READ_QPEN(d->symbolsPen);
 		}else if (reader->name() == "values"){
 			attribs = reader->attributes();
 			
@@ -1512,65 +1371,17 @@ bool XYCurve::load(XmlStreamReader* reader){
 			d->valuesPrefix = attribs.value("prefix").toString();
 			d->valuesSuffix = attribs.value("suffix").toString();
 
-			//pen
-			QColor color;
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->symbolsPen.setStyle( (Qt::PenStyle)str.toInt() );
-
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                color.setRed( str.toInt() );
-
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                color.setGreen( str.toInt() );
+			READ_QCOLOR(d->valuesColor);
+			READ_QFONT(d->valuesFont);
 			
-			str = attribs.value("color_b").toString();
+			str = attribs.value("opacity").toString();
             if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                color.setBlue( str.toInt() );
-			
-			d->symbolsPen.setColor(color);
-			
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->symbolsPen.setWidthF( str.toDouble() );
-			
-			//font
-			str = attribs.value("fontFamily").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontFamily'"));
-            else
-                d->valuesFont.setFamily( str );
-			
-			str = attribs.value("fontSize").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontSize'"));
-            else
-                d->valuesFont.setPointSize( str.toInt() );
-			
-			str = attribs.value("fontWeight").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontWeight'"));
-            else
-                d->valuesFont.setWeight( str.toInt() );
-			
-			str = attribs.value("fontItalic").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontItalic'"));
-            else
-                d->valuesFont.setItalic( str.toInt() );			
+                d->valuesOpacity = str.toDouble();			
 		}
 	}
+
+	d->swapSymbolsTypeId(d->symbolsTypeId);
 	return true;
 }

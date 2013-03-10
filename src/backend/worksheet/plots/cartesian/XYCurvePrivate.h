@@ -86,7 +86,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		QString valuesPrefix;
 		QString valuesSuffix;		
 		QFont valuesFont;
-		QPen valuesPen;
+		QColor valuesColor;
 		
 		QPainterPath linePath;
 		QPainterPath dropLinePath;

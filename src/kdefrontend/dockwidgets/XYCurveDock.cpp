@@ -1064,7 +1064,7 @@ void XYCurveDock::valuesFontChanged(const QFont& font){
 	QFont valuesFont = font;
 	valuesFont.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	foreach(XYCurve* curve, m_curvesList){
-	curve->setValuesFont(valuesFont);
+		curve->setValuesFont(valuesFont);
 	}
 }
 
@@ -1074,9 +1074,7 @@ void XYCurveDock::valuesFontColorChanged(const QColor& color){
   
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
-	pen=curve->valuesPen();
-	pen.setColor(color);
-	curve->setValuesPen(pen);
+	curve->setValuesColor(color);
   }  
 }
 
@@ -1136,7 +1134,7 @@ void XYCurveDock::loadConfig(KConfig& config){
 	QFont valuesFont = curve->valuesFont();
 	valuesFont.setPointSizeF( Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Point) );
   	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
-  	ui.kcbValuesFontColor->setColor( group.readEntry("ValuesFontColor", curve->valuesPen().color()) );
+  	ui.kcbValuesFontColor->setColor( group.readEntry("ValuesFontColor", curve->valuesColor()) );
 
 	//TODO: Area Filling, Error Bars
 }

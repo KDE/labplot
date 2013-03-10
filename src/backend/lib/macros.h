@@ -196,4 +196,156 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 		virtual void finalize() { m_target->finalize_method(); } \
 };
 
+
+//xml-serialization/deserialization
+//QColor
+#define WRITE_QCOLOR(color) 												\
+do { 																		\
+writer->writeAttribute( "color_r", QString::number(color.red()) );			\
+writer->writeAttribute( "color_g", QString::number(color.green()) ); 		\
+writer->writeAttribute( "color_b", QString::number(color.blue()) ); 		\
+} while (0)
+
+#define READ_QCOLOR(color) 													\
+do {																		\
+str = attribs.value("color_r").toString();									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'color_r'"));				\
+else																		\
+	color.setRed( str.toInt() );											\
+																			\
+str = attribs.value("color_g").toString();									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'color_g'"));				\
+else																		\
+	color.setGreen( str.toInt() );											\
+																			\
+str = attribs.value("color_b").toString();									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'color_b'"));				\
+else																		\
+	color.setBlue( str.toInt() );											\
+} while(0)
+
+//QPen
+#define WRITE_QPEN(pen) 													\
+do { 																		\
+writer->writeAttribute( "style", QString::number(pen.style()) ); 			\
+writer->writeAttribute( "color_r", QString::number(pen.color().red()) ); 	\
+writer->writeAttribute( "color_g", QString::number(pen.color().green()) ); 	\
+writer->writeAttribute( "color_b", QString::number(pen.color().blue()) ); 	\
+writer->writeAttribute( "width", QString::number(pen.widthF()) ); 			\
+} while (0)
+
+#define READ_QPEN(pen) 														\
+do {																		\
+str = attribs.value("style").toString(); 									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'style'"));					\
+else																		\
+	pen.setStyle( (Qt::PenStyle)str.toInt() );								\
+																			\
+QColor color;																\
+str = attribs.value("color_r").toString();									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'color_r'"));				\
+else																		\
+	color.setRed( str.toInt() );											\
+																			\
+str = attribs.value("color_g").toString();									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'color_g'"));				\
+else																		\
+	color.setGreen( str.toInt() );											\
+																			\
+str = attribs.value("color_b").toString();									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'color_b'"));				\
+else																		\
+	color.setBlue( str.toInt() );											\
+																			\
+pen.setColor(color);														\
+																			\
+str = attribs.value("width").toString();									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'width'"));					\
+else																		\
+	pen.setWidthF( str.toDouble() );										\
+} while(0)
+
+//QFont
+#define WRITE_QFONT(font) 													\
+do {																		\
+writer->writeAttribute( "fontFamily", font.family() );						\
+writer->writeAttribute( "fontSize", QString::number(font.pointSize()) );	\
+writer->writeAttribute( "fontWeight", QString::number(font.weight()) );		\
+writer->writeAttribute( "fontItalic", QString::number(font.italic()) );		\
+} while(0)
+
+#define READ_QFONT(font) 													\
+do {																		\
+str = attribs.value("fontFamily").toString();								\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'fontFamily'"));				\
+else																		\
+	font.setFamily( str );													\
+																			\
+str = attribs.value("fontSize").toString();									\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'fontSize'"));				\
+else																		\
+	font.setPointSize( str.toInt() );										\
+																			\
+str = attribs.value("fontWeight").toString();								\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'fontWeight'"));				\
+else																		\
+	font.setWeight( str.toInt() );											\
+																			\
+str = attribs.value("fontItalic").toString();								\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'fontItalic'"));				\
+else																		\
+	font.setItalic( str.toInt() );											\
+} while(0)
+
+//QBrush
+#define WRITE_QBRUSH(brush) 													\
+do {																			\
+writer->writeAttribute("brush_style", QString::number(brush.style()) );			\
+writer->writeAttribute("brush_color_r", QString::number(brush.color().red()));	\
+writer->writeAttribute("brush_color_g", QString::number(brush.color().green()));\
+writer->writeAttribute("brush_color_b", QString::number(brush.color().blue()));	\
+} while(0)
+
+#define READ_QBRUSH(brush) 													\
+do {																		\
+str = attribs.value("brush_style").toString();								\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'brush_style'"));			\
+else																		\
+	brush.setStyle( (Qt::BrushStyle)str.toInt() );							\
+																			\
+QColor color;																\
+str = attribs.value("brush_color_r").toString();							\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'brush_color_r'"));			\
+else																		\
+	color.setRed( str.toInt() );											\
+																			\
+str = attribs.value("brush_color_g").toString();							\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'brush_color_g'"));			\
+else																		\
+	color.setGreen( str.toInt() );											\
+																			\
+str = attribs.value("brush_color_b").toString();							\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'brush_color_b'"));			\
+else																		\
+	color.setBlue( str.toInt() );											\
+																			\
+brush.setColor(color);														\
+} while(0)
+
 #endif // MACROS_H

@@ -93,7 +93,7 @@ class XYCurve: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, valuesOpacity, ValuesOpacity)
 		CLASS_D_ACCESSOR_DECL(QString, valuesPrefix, ValuesPrefix)
 		CLASS_D_ACCESSOR_DECL(QString, valuesSuffix, ValuesSuffix)
-		CLASS_D_ACCESSOR_DECL(QPen, valuesPen, ValuesPen)
+		CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 		CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
 		//TODO: signal/slot connections with columns
