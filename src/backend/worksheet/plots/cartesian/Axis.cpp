@@ -1486,6 +1486,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
 	writer->writeAttribute( "titleOffset", QString::number(d->titleOffset) );
+	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 	
 	//label
@@ -1493,11 +1494,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	
 	//line
 	writer->writeStartElement( "line" );
-	writer->writeAttribute( "style", QString::number(d->linePen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->linePen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->linePen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->linePen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->linePen.widthF()) );
+	WRITE_QPEN(d->linePen);
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
 	writer->writeEndElement();
 	
@@ -1507,11 +1504,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "type", QString::number(d->majorTicksType) );
 	writer->writeAttribute( "number", QString::number(d->majorTicksNumber) );
 	writer->writeAttribute( "length", QString::number(d->majorTicksLength) );
-	writer->writeAttribute( "style", QString::number(d->majorTicksPen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->majorTicksPen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->majorTicksPen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->majorTicksPen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->majorTicksPen.widthF()) );
+	WRITE_QPEN(d->majorTicksPen);
 	writer->writeAttribute( "opacity", QString::number(d->majorTicksOpacity) );
 	writer->writeEndElement();
 
@@ -1521,11 +1514,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "type", QString::number(d->minorTicksType) );
 	writer->writeAttribute( "number", QString::number(d->minorTicksNumber) );
 	writer->writeAttribute( "length", QString::number(d->minorTicksLength) );
-	writer->writeAttribute( "style", QString::number(d->minorTicksPen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->minorTicksPen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->minorTicksPen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->minorTicksPen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->minorTicksPen.widthF()) );
+	WRITE_QPEN(d->minorTicksPen);
 	writer->writeAttribute( "opacity", QString::number(d->minorTicksOpacity) );
 	writer->writeEndElement();
 	
@@ -1536,13 +1525,8 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "position", QString::number(d->labelsPosition) );
 	writer->writeAttribute( "offset", QString::number(d->labelsOffset) );
 	writer->writeAttribute( "rotation", QString::number(d->labelsRotationAngle) );
-	writer->writeAttribute( "color_r", QString::number(d->labelsColor.red()) );
-	writer->writeAttribute( "color_g", QString::number(d->labelsColor.green()) );
-	writer->writeAttribute( "color_b", QString::number(d->labelsColor.blue()) );
-	writer->writeAttribute( "fontFamily", d->labelsFont.family() );
-	writer->writeAttribute( "fontSize", QString::number(d->labelsFont.pointSizeF()) );
-	writer->writeAttribute( "fontWeight", QString::number(d->labelsFont.weight()) );
-	writer->writeAttribute( "fontItalic", QString::number(d->labelsFont.italic()) );
+	WRITE_QCOLOR(d->labelsColor);
+	WRITE_QFONT(d->labelsFont);
 	writer->writeAttribute( "prefix", d->labelsPrefix );
 	writer->writeAttribute( "suffix", d->labelsSuffix );
 	writer->writeAttribute( "opacity", QString::number(d->labelsOpacity) );
@@ -1550,20 +1534,12 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	
 	//grid
 	writer->writeStartElement( "majorGrid" );
-	writer->writeAttribute( "style", QString::number(d->majorGridPen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->majorGridPen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->majorGridPen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->majorGridPen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->majorGridPen.widthF()) );
+	WRITE_QPEN(d->majorGridPen);
 	writer->writeAttribute( "opacity", QString::number(d->majorGridOpacity) );
 	writer->writeEndElement();
 
 	writer->writeStartElement( "minorGrid" );
-	writer->writeAttribute( "style", QString::number(d->minorGridPen.style()) );
-	writer->writeAttribute( "color_r", QString::number(d->minorGridPen.color().red()) );
-	writer->writeAttribute( "color_g", QString::number(d->minorGridPen.color().green()) );
-	writer->writeAttribute( "color_b", QString::number(d->minorGridPen.color().blue()) );
-	writer->writeAttribute( "width", QString::number(d->minorGridPen.widthF()) );
+	WRITE_QPEN(d->minorGridPen);
 	writer->writeAttribute( "opacity", QString::number(d->minorGridOpacity) );
 	writer->writeEndElement();
 
@@ -1659,44 +1635,19 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'titleOffset'"));
             else
                 d->titleOffset = str.toDouble();
+
+			str = attribs.value("visible").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'visible'"));
+            else
+                d->setVisible(str.toInt());
 		}else if (reader->name() == "textLabel"){
 			d->title->load(reader);
 		}else if (reader->name() == "line"){
 			attribs = reader->attributes();
-	
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->linePen.setStyle( (Qt::PenStyle)str.toInt() );
-			
-			QColor color;
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                color.setRed( str.toInt() );
 
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                color.setGreen( str.toInt() );
-			
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                color.setBlue( str.toInt() );
-			
-			d->linePen.setColor(color);
-			
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->linePen.setWidthF( str.toDouble() );
-			
+			READ_QPEN(d->linePen);
+
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
@@ -1728,37 +1679,9 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'length'"));
             else
                 d->majorTicksLength = str.toDouble();
-			
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->majorTicksPen.setStyle( (Qt::PenStyle)str.toInt() );
 
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                d->majorTicksPen.color().setRed( str.toInt() );
-			
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                d->majorTicksPen.color().setGreen( str.toInt() );
-			
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                d->majorTicksPen.color().setBlue( str.toInt() );
-			
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->majorTicksPen.setWidthF( str.toDouble() );
-			
+			READ_QPEN(d->majorTicksPen);
+
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
@@ -1791,35 +1714,7 @@ bool Axis::load(XmlStreamReader* reader){
             else
                 d->minorTicksLength = str.toDouble();
 			
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->minorTicksPen.setStyle( (Qt::PenStyle)str.toInt() );
-
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                d->minorTicksPen.color().setRed( str.toInt() );
-			
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                d->minorTicksPen.color().setGreen( str.toInt() );
-			
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                d->minorTicksPen.color().setBlue( str.toInt() );
-			
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->minorTicksPen.setWidthF( str.toDouble() );
+			READ_QPEN(d->minorTicksPen);
 			
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
@@ -1847,47 +1742,8 @@ bool Axis::load(XmlStreamReader* reader){
             else
                 d->labelsRotationAngle = str.toDouble();
 			
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                d->labelsColor.setRed( str.toInt() );
-			
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                d->labelsColor.setGreen( str.toInt() );
-			
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                d->labelsColor.setBlue( str.toInt() );
-			
-			str = attribs.value("fontFamily").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontFamily'"));
-            else
-                d->labelsFont.setFamily( str );
-			
-			str = attribs.value("fontSize").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontSize'"));
-            else
-                d->labelsFont.setPointSizeF( str.toDouble() );
-			
-			str = attribs.value("fontWeight").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontWeight'"));
-            else
-                d->labelsFont.setWeight( str.toInt() );
-			
-			str = attribs.value("fontItalic").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontItalic'"));
-            else
-                d->labelsFont.setItalic( str.toInt() );
+			READ_QCOLOR(d->labelsColor);
+			READ_QFONT(d->labelsFont);
 
 			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
 			d->labelsPrefix = attribs.value("prefix").toString();
@@ -1901,38 +1757,7 @@ bool Axis::load(XmlStreamReader* reader){
 		}else if (reader->name() == "majorGrid"){
 			attribs = reader->attributes();
 
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->majorGridPen.setStyle( (Qt::PenStyle)str.toInt() );
-
-			QColor color;
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                color.setRed( str.toInt() );
-
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                color.setGreen( str.toInt() );
-
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                color.setBlue( str.toInt() );
-
-			d->majorGridPen.setColor(color);
-
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->majorGridPen.setWidthF( str.toDouble() );
+			READ_QPEN(d->majorGridPen);
 
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
@@ -1942,38 +1767,7 @@ bool Axis::load(XmlStreamReader* reader){
 		}else if (reader->name() == "minorGrid"){
 			attribs = reader->attributes();
 
-			str = attribs.value("style").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'style'"));
-            else
-                d->minorGridPen.setStyle( (Qt::PenStyle)str.toInt() );
-
-			QColor color;
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                color.setRed( str.toInt() );
-
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                color.setGreen( str.toInt() );
-
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                color.setBlue( str.toInt() );
-
-			d->minorGridPen.setColor(color);
-
-			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->minorGridPen.setWidthF( str.toDouble() );
+			READ_QPEN(d->minorGridPen);
 
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())

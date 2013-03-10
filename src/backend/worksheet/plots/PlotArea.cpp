@@ -417,11 +417,7 @@ void PlotArea::save(QXmlStreamWriter* writer) const{
 
 	//border
 	writer->writeStartElement( "border" );
-	writer->writeAttribute( "borderStyle", QString::number(d->borderPen.style()) );
-	writer->writeAttribute( "borderColor_r", QString::number(d->borderPen.color().red()) );
-	writer->writeAttribute( "borderColor_g", QString::number(d->borderPen.color().green()) );
-	writer->writeAttribute( "borderColor_b", QString::number(d->borderPen.color().blue()) );
-	writer->writeAttribute( "borderWidth", QString::number(d->borderPen.widthF()) );
+	WRITE_QPEN(d->borderPen);
     writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
     writer->writeEndElement();
 	
@@ -528,38 +524,7 @@ bool PlotArea::load(XmlStreamReader* reader){
 		}else if (reader->name() == "border"){
 			attribs = reader->attributes();
 
-            str = attribs.value("borderStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderStyle"));
-            else
-                d->borderPen.setStyle((Qt::PenStyle)str.toInt());
-
-			QColor borderColor;
-            str = attribs.value("borderColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderColor_r"));
-            else
-                borderColor.setRed(str.toInt());
-
-            str = attribs.value("borderColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderColor_g"));
-            else
-                borderColor.setGreen(str.toInt());
-
-            str = attribs.value("borderColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderColor_b"));
-            else
-                borderColor.setBlue(str.toInt());
-
-			d->borderPen.setColor(borderColor);
-
-			str = attribs.value("borderWidth").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderWidth"));
-            else
-                d->borderPen.setWidthF(str.toDouble());
+			READ_QPEN(d->borderPen);
 
             str = attribs.value("borderOpacity").toString();
             if(str.isEmpty())
@@ -574,4 +539,3 @@ bool PlotArea::load(XmlStreamReader* reader){
 
     return true;
 }
-
