@@ -745,15 +745,11 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement( "general" );
-	writer->writeAttribute( "color_r", QString::number(d->labelColor.red()) );
-	writer->writeAttribute( "color_g", QString::number(d->labelColor.green()) );
-	writer->writeAttribute( "color_b", QString::number(d->labelColor.blue()) );
-	writer->writeAttribute( "fontFamily", d->labelFont.family() );
-	writer->writeAttribute( "fontSize", QString::number(d->labelFont.pointSizeF()) );
-	writer->writeAttribute( "fontWeight", QString::number(d->labelFont.weight()) );
-	writer->writeAttribute( "fontItalic", QString::number(d->labelFont.italic()) );
+	WRITE_QCOLOR(d->labelColor);
+	WRITE_QFONT(d->labelFont);
 	writer->writeAttribute( "columnMajor", QString::number(d->labelColumnMajor) );
 	writer->writeAttribute( "lineSymbolWidth", QString::number(d->lineSymbolWidth) );
+	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
 	//geometry
@@ -785,11 +781,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	
 	//border
 	writer->writeStartElement( "border" );
-	writer->writeAttribute( "borderStyle", QString::number(d->borderPen.style()) );
-	writer->writeAttribute( "borderColor_r", QString::number(d->borderPen.color().red()) );
-	writer->writeAttribute( "borderColor_g", QString::number(d->borderPen.color().green()) );
-	writer->writeAttribute( "borderColor_b", QString::number(d->borderPen.color().blue()) );
-	writer->writeAttribute( "borderWidth", QString::number(d->borderPen.widthF()) );
+	WRITE_QPEN(d->borderPen);
     writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
     writer->writeEndElement();
 		
@@ -804,7 +796,6 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
     writer->writeAttribute( "columnCount", QString::number(d->layoutColumnCount) );
     writer->writeEndElement();
 	
-	//TODO visible?
 	writer->writeEndElement(); // close "cartesianPlotLegend" section
 }
 
@@ -837,47 +828,8 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
 		}else if (reader->name() == "general"){
 			attribs = reader->attributes();
 
-			str = attribs.value("color_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_r'"));
-            else
-                d->labelColor.setRed( str.toInt() );
-			
-			str = attribs.value("color_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_g'"));
-            else
-                d->labelColor.setGreen( str.toInt() );
-			
-			str = attribs.value("color_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'color_b'"));
-            else
-                d->labelColor.setBlue( str.toInt() );
-			
-			str = attribs.value("fontFamily").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontFamily'"));
-            else
-                d->labelFont.setFamily( str );
-			
-			str = attribs.value("fontSize").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontSize'"));
-            else
-                d->labelFont.setPointSizeF( str.toDouble() );
-			
-			str = attribs.value("fontWeight").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontWeight'"));
-            else
-                d->labelFont.setWeight( str.toInt() );
-			
-			str = attribs.value("fontItalic").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fontItalic'"));
-            else
-                d->labelFont.setItalic( str.toInt() );
+			READ_QCOLOR(d->labelColor);
+			READ_QFONT(d->labelFont);
 			
 			str = attribs.value("columnMajor").toString();
             if(str.isEmpty())
@@ -890,6 +842,12 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
                 reader->raiseWarning(attributeWarning.arg("'lineSymbolWidth'"));
             else
                 d->lineSymbolWidth = str.toDouble();
+
+			str = attribs.value("visible").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'visible'"));
+            else
+                d->setVisible(str.toInt());
 		}else if (reader->name() == "geometry"){
             attribs = reader->attributes();
 
@@ -999,38 +957,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
 		}else if (reader->name() == "border"){
 			attribs = reader->attributes();
 
-            str = attribs.value("borderStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderStyle"));
-            else
-                d->borderPen.setStyle((Qt::PenStyle)str.toInt());
-
-			QColor borderColor;
-            str = attribs.value("borderColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderColor_r"));
-            else
-                borderColor.setRed(str.toInt());
-
-            str = attribs.value("borderColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderColor_g"));
-            else
-                borderColor.setGreen(str.toInt());
-
-            str = attribs.value("borderColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderColor_b"));
-            else
-                borderColor.setBlue(str.toInt());
-
-			d->borderPen.setColor(borderColor);
-
-			str = attribs.value("borderWidth").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderWidth"));
-            else
-                d->borderPen.setWidthF(str.toDouble());
+			READ_QPEN(d->borderPen);
 
             str = attribs.value("borderOpacity").toString();
             if(str.isEmpty())
