@@ -652,42 +652,12 @@ bool MainWin::closeProject(){
 	return true;
 }
 
-/*!
-	saves the project to the file \c filename
-*/
-bool MainWin::saveProject(){
-	QString fileName = m_project->fileName();
-	if(fileName.isEmpty()) {
-		if (!saveProjectAs())
-			return false; //cancel clicked in "save as"-dialog
-	}
-
-	QIODevice* file = KFilterDev::deviceForFile(fileName, QString::null, true);
-	if (file == 0)
-		file = new QFile(fileName);
-
-	bool ok;
-	if(file->open(QIODevice::WriteOnly | QFile::Text)){
-		QXmlStreamWriter writer(file);
-		m_project->save(&writer);
-		m_project->undoStack()->clear();
-		m_project->setChanged(false);
-		file->close();
-		
-		setCaption(m_project->name());
-		statusBar()->showMessage(i18n("Project saved"));	
-		m_saveAction->setEnabled(false);
-		m_saveAsAction->setEnabled(false);
-		m_recentProjectsAction->addUrl( KUrl(fileName) );
-		ok = true;
-	}else{
-		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));
-		ok = false;
-	}
-	
-	if (file != 0)
-		delete file;
-	return ok;
+bool MainWin::saveProject() {
+	const QString& fileName = m_project->fileName();
+	if(fileName.isEmpty())
+		return saveProjectAs();
+	else
+		return save(fileName);
 }
 
 bool MainWin::saveProjectAs() {
@@ -700,9 +670,40 @@ bool MainWin::saveProjectAs() {
 	if( fileName.contains(QString(".lml"),Qt::CaseInsensitive) == false )
 		fileName.append(".lml");
 
-	m_project->setFileName(fileName);
-	saveProject();
-	return true;
+	return save(fileName);
+}
+
+/*!
+ * auxilary function that does the actual saving of the project
+ */
+bool MainWin::save(const QString& fileName) {
+	QIODevice* file = KFilterDev::deviceForFile(fileName, QString::null, true);
+	if (file == 0)
+		file = new QFile(fileName);
+
+	bool ok;
+	if(file->open(QIODevice::WriteOnly | QIODevice::Text)){
+		m_project->setFileName(fileName);
+
+		QXmlStreamWriter writer(file);
+		m_project->save(&writer);
+		m_project->undoStack()->clear();
+		m_project->setChanged(false);
+		file->close();
+		
+		setCaption(m_project->name());
+		statusBar()->showMessage(i18n("Project saved"));	
+		m_saveAction->setEnabled(false);
+		m_recentProjectsAction->addUrl( KUrl(fileName) );
+		ok = true;
+	}else{
+		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));
+		ok = false;
+	}
+	
+	if (file != 0)
+		delete file;
+	return ok;	
 }
 
 /*!
@@ -832,7 +833,6 @@ Worksheet* MainWin::activeWorksheet() const{
 void MainWin::projectChanged(){
 	setCaption(m_project->name() + "    [" + i18n("Changed") + "]" );
 	m_saveAction->setEnabled(true);
-	m_saveAsAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
 	return;
 }

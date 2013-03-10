@@ -147,7 +147,7 @@ private:
 	bool warnModified();
 	void addAspectToProject(AbstractAspect*);
 	void activateSubWindowForAspect(const AbstractAspect*) const;
-
+	bool save(const QString&);
 	void closeEvent(QCloseEvent*);
 
 	Spreadsheet* activeSpreadsheet() const;
