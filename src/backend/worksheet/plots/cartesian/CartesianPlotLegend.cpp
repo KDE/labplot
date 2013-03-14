@@ -415,7 +415,11 @@ void CartesianPlotLegendPrivate::retransform() {
 	QList<XYCurve*> children = q->m_plot->children<XYCurve>();
 	int curveCount = children.size();
 	columnCount = (curveCount<layoutColumnCount) ? curveCount : layoutColumnCount;
-	rowCount = ceil(double(curveCount)/double(columnCount));
+	if (columnCount==0) //no curves available
+		rowCount = 0;
+	else
+		rowCount = ceil(double(curveCount)/double(columnCount));
+	
 	maxColumnTextWidths.clear();
 
 	//determine the width of the legend
@@ -875,13 +879,10 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
             else
                 d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();		
         }else if(reader->name() == "textLabel"){
-            d->title = new TextLabel("");
             if (!d->title->load(reader)){
                 delete d->title;
 				d->title=0;
                 return false;
-            }else{
-                addChild(d->title);
             }
 		}else if (reader->name() == "background"){
             attribs = reader->attributes();
@@ -1009,11 +1010,6 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
             else
                 d->layoutColumnCount = str.toInt();
 		}
-	}
-	
-	if (d->title) {
-		d->title->setHidden(true);
-		d->title->graphicsItem()->setParentItem(graphicsItem());
 	}
 
 	return true;
