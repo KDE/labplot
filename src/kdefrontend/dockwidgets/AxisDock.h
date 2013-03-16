@@ -2,7 +2,7 @@
     File                 : AxisDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
 							(use @ for *)
     Description          : axes widget class
@@ -31,8 +31,8 @@
 #define AXESDOCK_H
 
 #include "ui_axisdock.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 
-class Axis;
 class LabelWidget;
 class AbstractAspect;
 
@@ -130,9 +130,9 @@ private slots:
 	void minorGridOpacityChanged(int);
 
 	//SLOTs for changes triggered in Axis
+	//general
 	void axisDescriptionChanged(const AbstractAspect*);
-
-	void axisOrientationChanged();
+	void axisOrientationChanged(Axis::AxisOrientation);
 	void axisPositionChanged(float);
 	void axisStartChanged(float);
 	void axisEndChanged(float);
@@ -140,6 +140,16 @@ private slots:
 	void axisZeroOffsetChanged(qreal);
 	void axisScalingFactorChanged(qreal);
 
+	//line
+	void axisLinePenChanged(const QPen&);
+
+	//ticks
+	
+	//labels
+	
+	//grids
+	
+	
 	//save/load
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);

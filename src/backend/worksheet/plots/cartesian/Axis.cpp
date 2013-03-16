@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
 					(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -159,23 +159,25 @@ void Axis::init(){
 	this->initMenus();
 }
 
+/*!
+ * For the most frequently edited properties, create Actions and ActionGroups for the context menu.
+ * For some ActionGroups the actual actions are created in \c GuiTool, 
+ */
 void Axis::initActions(){
 	//Orientation 
 	orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
-	
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	orientationHorizontalAction = new KAction(i18n("horizontal"), orientationActionGroup);
-	orientationHorizontalAction->setCheckable(true);
-	orientationVerticalAction = new KAction(i18n("vertical"), orientationActionGroup);
-	orientationVerticalAction->setCheckable(true);
-#endif
 	connect(orientationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(orientationChanged(QAction*)));
+
+	orientationHorizontalAction = new QAction(tr("horizontal"), orientationActionGroup);
+	orientationHorizontalAction->setCheckable(true);
+	
+	orientationVerticalAction = new QAction(tr("vertical"), orientationActionGroup);
+	orientationVerticalAction->setCheckable(true);
 	
 	//Line 
 	lineStyleActionGroup = new QActionGroup(this);
 	lineStyleActionGroup->setExclusive(true);
-	//no need to create actions here, they are created in GuiTools::updatePenStyles
 	connect(lineStyleActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(lineStyleChanged(QAction*)));
 	
 	lineColorActionGroup = new QActionGroup(this);
@@ -196,7 +198,9 @@ void Axis::initMenus(){
 	lineMenu = new QMenu(tr("Line"));
 	lineStyleMenu = new QMenu(tr("style"), lineMenu);
 	lineMenu->addMenu( lineStyleMenu );
+
 	lineColorMenu = new QMenu(tr("color"), lineMenu);
+	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
 	lineMenu->addMenu( lineColorMenu );
 }
 
@@ -215,10 +219,11 @@ QMenu* Axis::createContextMenu(){
 
 	//Line styles
 	GuiTools::updatePenStyles( lineStyleMenu, lineStyleActionGroup, d->linePen.color() );
-	//TODO select the action corresponding to the current pen style
-	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
+	GuiTools::selectPenStyleAction(lineStyleActionGroup, d->linePen.style() );
+
+	GuiTools::selectColorAction(lineColorActionGroup, d->linePen.color() );
+
 	menu->insertMenu(firstAction, lineMenu);
-	
 	menu->insertSeparator(firstAction);
 
 	return menu;
@@ -439,7 +444,7 @@ bool Axis::isVisible() const {
 	return d->isVisible();
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetOrientation, Axis::AxisOrientation, orientation, retransform);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation, retransform);
 void Axis::setOrientation( AxisOrientation orientation) {
 	Q_D(Axis);
 	if (orientation != d->orientation)
@@ -524,7 +529,7 @@ void Axis::setTitleOffset(float offset) {
 }
 
 //Line
-STD_SETTER_CMD_IMPL_F(Axis, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect);
 void Axis::setLinePen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->linePen)
@@ -746,26 +751,28 @@ void Axis::setMinorGridOpacity(qreal opacity){
 		exec(new AxisSetMinorGridOpacityCmd(d, opacity, tr("%1: set minor grid opacity")));
 }
 
-/* ================================ SLOTS =========================== */
+//##############################################################################
+//######  SLOTs for changes triggered via QActions in the context menu  ########
+//##############################################################################
 void Axis::orientationChanged(QAction* action){
 	if (action == orientationHorizontalAction)
 		this->setOrientation(AxisHorizontal);
 	else
 		this->setOrientation(AxisVertical);
-	
-	emit orientationChanged();
 }
 
 void Axis::lineStyleChanged(QAction* action){
-
-	
-	emit lineStyleChanged();
+	Q_D(Axis);
+	QPen pen = d->linePen;
+	pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
+	this->setLinePen(pen);
 }
 
 void Axis::lineColorChanged(QAction* action){
-
-	
-// 	emit lineColorChanged();
+	Q_D(Axis);
+	QPen pen = d->linePen;
+	pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
+	this->setLinePen(pen);
 }
 
 //#####################################################################

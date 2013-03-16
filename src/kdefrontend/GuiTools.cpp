@@ -2,7 +2,7 @@
     File                 : GuiTools.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
     Description          :  constains several static functions which are used on frequently throughout the kde frontend.
                            
@@ -27,10 +27,21 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #include "GuiTools.h"
 #include <KLocale>
-// #include <KLocalizedString>
+
+static const int colorsCount = 26;
+static QColor colors[colorsCount] = {QColor(255,255,255), QColor(0,0,0),
+							QColor(192,0,0), QColor(255,0,0), QColor(255,192,192), //red
+							QColor(0,192,0), QColor(0,255,0), QColor(192,255,192), //green
+							QColor(0,0,192), QColor(0,0,255), QColor(192,192,255), //blue
+							QColor(192,192,0), QColor(255,255,0), QColor(255,255,192), //yellow
+							QColor(0,192,192), QColor(0,255,255), QColor(192,255,255), //cyan
+							QColor(192,0,192), QColor(255,0,255), QColor(255,192,255), //magenta
+							QColor(192,88,0), QColor(255,128,0), QColor(255,168,88), //orange
+							QColor(128,128,128), QColor(160,160,160), QColor(195,195,195) //grey
+							};
+
 /*!
 	fills the ComboBox \c combobox with the six possible Qt::PenStyles, the color \c color is used.
 */
@@ -104,6 +115,17 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 	}
 }
 
+void GuiTools::selectPenStyleAction(QActionGroup* actionGroup, Qt::PenStyle style) {
+	int index = (int)style;
+	Q_ASSERT(index < actionGroup->actions().size());
+	actionGroup->actions()[index]->setChecked(true);
+}
+
+Qt::PenStyle GuiTools::penStyleFromAction(QActionGroup* actionGroup, QAction* action) {
+	int index = actionGroup->actions().indexOf(action);
+	return Qt::PenStyle(index);
+}
+
 /*!
 	fills the ComboBox for the symbol filling patterns with the 14 possible Qt::BrushStyles.
 */
@@ -139,7 +161,53 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color){
 	comboBox->setCurrentIndex(index);
 }
 
-//TODO
 void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup){
+	static const QString colorNames[colorsCount] = {i18n("white"), i18n("black"),
+							i18n("dark red"), i18n("red"), i18n("light red"),
+							i18n("dark green"), i18n("green"), i18n("light green"),
+							i18n("dark blue"), i18n("blue"), i18n("light blue"),
+							i18n("dark yellow"), i18n("yellow"), i18n("light yellow"),
+							i18n("dark cyan"), i18n("cyan"), i18n("light cyan"),
+							i18n("dark magenta"), i18n("magenta"), i18n("light magenta"),
+							i18n("dark orange"), i18n("orange"), i18n("light orange"),
+							i18n("dark grey"), i18n("grey"), i18n("light grey")
+							};
+
+	QPixmap pix(16,16);
+	QPainter p(&pix);
 	
+	for (int i=0; i<colorsCount; ++i) {
+		p.fillRect(pix.rect(), colors[i]);
+		QAction* action = new QAction(QIcon(pix), colorNames[i], actionGroup);
+		action->setCheckable(true);
+		menu->addAction(action);
+	}
 }
+
+/*!
+ * Selects (checks) the action in the group \c actionGroup hat corresponds to the color \c color.
+ * Unchecks the previously checked action if the color
+ * was not found in the list of predefined colors.
+ */
+void GuiTools::selectColorAction(QActionGroup* actionGroup, const QColor& color) {
+	int index;
+	for (index=0; index<colorsCount; ++index) {
+		if (color==colors[index])
+			actionGroup->actions()[index]->setChecked(true);
+	}
+
+	if (index==colorsCount)
+		actionGroup->checkedAction()->setChecked(false);
+}
+
+QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
+	int index = actionGroup->actions().indexOf(action);
+	return colors[index];
+}
+
+// ComboBox with colors
+// 	QImage img(16,16,QImage::Format_RGB32);
+// 	QPainter p(&img);	
+// 	QRect rect = img.rect().adjusted(1,1,-1,-1);
+// 	p.fillRect(rect, Qt::red);
+// 	comboBox->setItemData(0, QPixmap::fromImage(img), Qt::DecorationRole);

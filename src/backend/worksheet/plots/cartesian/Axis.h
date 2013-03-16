@@ -154,16 +154,22 @@ class Axis: public AbstractWorksheetElement {
 		
 	private slots:
 		void labelChanged();
+		
+		//SLOTs for changes triggered via QActions in the context menu
 		void orientationChanged(QAction*);
-		void lineStyleChanged(QAction* action);
-		void lineColorChanged(QAction* action);
+		void lineStyleChanged(QAction*);
+		void lineColorChanged(QAction*);
 		
 	signals:
-		void orientationChanged();
+		friend class AxisSetOrientationCmd;
+		friend class AxisSetLinePenCmd;
+		void orientationChanged(Axis::AxisOrientation);
+		void linePenChanged(const QPen&);
+
 		void startChanged(float);
 		void endChanged(float);
 		void positionChanged(float);
-		void lineStyleChanged();
+
 		void labelsPrecisionChanged(int);
 		friend class AxisSetZeroOffsetCmd;
 		friend class AxisSetScalingFactorCmd;

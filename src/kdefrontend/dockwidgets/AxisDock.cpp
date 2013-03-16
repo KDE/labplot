@@ -28,7 +28,6 @@
  *                                                                         *
  ***************************************************************************/
 #include "AxisDock.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "backend/worksheet/Worksheet.h"
@@ -243,7 +242,9 @@ void AxisDock::setAxes(QList<Axis*> list){
 
 	connect(m_axis, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(axisDescriptionChanged(const AbstractAspect*)));
 
-	connect(m_axis, SIGNAL(orientationChanged()), this, SLOT(axisOrientationChanged()));
+	connect(m_axis, SIGNAL(orientationChanged(Axis::AxisOrientation)), this, SLOT(axisOrientationChanged(Axis::AxisOrientation)));
+	connect(m_axis, SIGNAL(linePenChanged(const QPen&)), this, SLOT(axisLinePenChanged(const QPen&)));
+
 	connect(m_axis, SIGNAL(startChanged(float)), this, SLOT(axisStartChanged(float)));
 	connect(m_axis, SIGNAL(endChanged(float)), this, SLOT(axisEndChanged(float)));
 	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
@@ -975,6 +976,7 @@ void AxisDock::majorGridOpacityChanged(int value){
 	return;
 
   qreal opacity = (float)value/100;
+  qDebug()<<"opacity "<<opacity;
   foreach(Axis* axis, m_axesList)
 	axis->setMajorGridOpacity(opacity);
 }
@@ -1055,9 +1057,9 @@ void AxisDock::axisDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void AxisDock::axisOrientationChanged(){
+void AxisDock::axisOrientationChanged(Axis::AxisOrientation orientation){
 	m_initializing = true;
-	ui.cbOrientation->setCurrentIndex( (int)m_axis->orientation() );
+	ui.cbOrientation->setCurrentIndex( (int)orientation );
 	m_initializing = false;
 }
 
@@ -1095,6 +1097,15 @@ void AxisDock::axisZeroOffsetChanged(qreal value){
 void AxisDock::axisScalingFactorChanged(qreal value){
 	m_initializing = true;
 	ui.leScalingFactor->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void AxisDock::axisLinePenChanged(const QPen& pen){
+	m_initializing = true;
+	ui.cbLineStyle->setCurrentIndex( pen.style() );
+	ui.kcbLineColor->setColor( pen.color() );
+	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color() );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point) );
 	m_initializing = false;
 }
 
@@ -1182,7 +1193,8 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.kcbMajorGridColor->setColor( group.readEntry("MajorGridColor", m_axis->majorGridPen().color()) );
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, group.readEntry("MajorGridColor", m_axis->majorGridPen().color()) );
 	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorGridWidth", m_axis->majorGridPen().widthF()),Worksheet::Point) );
-	ui.sbMajorGridOpacity->setValue( group.readEntry("MajorGridOpacity", m_axis->majorGridOpacity())*100 );
+	ui.sbMajorGridOpacity->setValue( (float)(group.readEntry("MajorGridOpacity", m_axis->majorGridOpacity())*100) );
+	qDebug()<<"in load "<<m_axis->majorGridOpacity()*100;
 
 	ui.cbMinorGridStyle->setCurrentIndex( group.readEntry("MinorGridStyle", (int) m_axis->minorGridPen().style()) );
 	ui.kcbMinorGridColor->setColor( group.readEntry("MinorGridColor", m_axis->minorGridPen().color()) );
