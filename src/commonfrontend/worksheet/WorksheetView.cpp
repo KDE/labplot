@@ -74,6 +74,9 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	m_worksheet(worksheet),
 	m_currentMouseMode(NavigationMode), 
 	m_suppressSelectionChangedEvent(false),
+	m_fadeInTimeLine(0),
+	m_fadeOutTimeLine(0),
+	lastAddedWorksheetElement(0),
 	m_model(new WorksheetModel(worksheet)),
 	tbZoom(0) {
   
@@ -106,7 +109,7 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
   
   changeZoom(zoomOriginAction);
   currentZoomAction=zoomInAction;
-
+	
   connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
   connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
   connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) ); 
@@ -610,7 +613,7 @@ void WorksheetView::enableSelectionMode(){
   m_currentMouseMode = SelectionMode;
   setDragMode(QGraphicsView::RubberBandDrag);
 }
-
+ 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action){
 	AbstractWorksheetElement* aspect = 0;
@@ -627,59 +630,57 @@ void WorksheetView::addNew(QAction* action){
 		return;
 
 	m_worksheet->addChild(aspect);
+
+	if (!m_fadeInTimeLine) {
+		m_fadeInTimeLine = new QTimeLine(1000, this);
+		m_fadeInTimeLine->setFrameRange(0, 100);
+		connect(m_fadeInTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeIn(qreal)));
+	}
 	
+	//if there is already an element fading in, stop the time line and show the element with the full opacity.
+	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
+		m_fadeInTimeLine->stop();
+		QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+		effect->setOpacity(1);
+		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);		
+	}
+	
+	//fade-in the newly added element
 	lastAddedWorksheetElement = aspect;
 	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
 	effect->setOpacity(0);
-// 	QGraphicsBlurEffect* effect = new QGraphicsBlurEffect();
-// 	effect->setBlurRadius( 10);
-	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
-	
-	QTimeLine* timeLine = new QTimeLine(1000, this);
-	timeLine->setFrameRange(0, 100);
-	connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeIn(qreal)));
-	timeLine->start();
-
-
-	//select the newly added item in the view
-	m_worksheet->setSelectedInView(false);
-	this->selectItem(aspect->graphicsItem());
+	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);	
+	m_fadeInTimeLine->start();
 }
-
+	
 void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
 	lastAddedWorksheetElement = dynamic_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
-	if ( lastAddedWorksheetElement){
-		QTimeLine* timeLine = new QTimeLine(1000, this);
-		timeLine->setFrameRange(0, 100);
-		connect(timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeOut(qreal)));
-		timeLine->start();
-	}
-}
-
-/*!
-	animates the appearance of the newly added worksheet elements
- */
-void WorksheetView::fadeIn(qreal value){
 	if (!lastAddedWorksheetElement)
 		return;
 
+	if (!m_fadeOutTimeLine) {
+		m_fadeOutTimeLine = new QTimeLine(1000, this);
+		m_fadeOutTimeLine->setFrameRange(0, 100);
+		connect(m_fadeOutTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeOut(qreal)));
+	}
+	
+	//if there is already an element fading out, stop the time line
+	if (m_fadeOutTimeLine->state() == QTimeLine::Running) 
+		m_fadeOutTimeLine->stop();
+
+	//FIXME: fading-out doesn't work
+	m_fadeOutTimeLine->start();
+}
+
+void WorksheetView::fadeIn(qreal value) {
 	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
-	effect->setOpacity( value );
-// 	QGraphicsBlurEffect* effect = new QGraphicsBlurEffect();
-// 	effect->setBlurRadius( 10 - value*10 );
+	effect->setOpacity(value);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
 
-/*!
-	animates the disappearance of the worksheet elements
- */
-//TODO doesn't work
-void WorksheetView::fadeOut(qreal value){
-	if (!lastAddedWorksheetElement)
-		return;
-
+void WorksheetView::fadeOut(qreal value) {
 	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
-	effect->setOpacity( 1-value );
+	effect->setOpacity(1-value);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
 

@@ -4,7 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2009-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -37,6 +37,7 @@ class QMenu;
 class QToolBar;
 class QToolButton;
 class QWheelEvent;
+class QTimeLine;
 
 class Worksheet;
 class WorksheetModel;
@@ -66,6 +67,7 @@ class WorksheetView : public QGraphicsView{
 	void setScene(QGraphicsScene * scene);
 	void exportToFile(const QString&, const ExportFormat format, const ExportArea area) const;
 
+
   private:
 	void initActions();
 	void initMenus();
@@ -83,7 +85,9 @@ class WorksheetView : public QGraphicsView{
 	QList<QGraphicsItem*> m_selectedItems;
 	bool m_suppressSelectionChangedEvent;
 	AbstractWorksheetElement* lastAddedWorksheetElement;
-	
+	QTimeLine* m_fadeInTimeLine;
+	QTimeLine* m_fadeOutTimeLine;
+
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_zoomMenu;
@@ -126,6 +130,7 @@ class WorksheetView : public QGraphicsView{
 	void fillProjectMenu(QMenu *menu, bool *rc);
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
+	void selectItem(QGraphicsItem*);
 
   private slots:
 	void enableNavigationMode();
@@ -140,7 +145,6 @@ class WorksheetView : public QGraphicsView{
 	void changeGrid(QAction*);
 	void changeSnapToGrid();
 
-	void selectItem(QGraphicsItem *);
 	void deselectItem(QGraphicsItem*);
 	void selectionChanged();
 	void updateBackground();
