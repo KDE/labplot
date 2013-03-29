@@ -658,6 +658,10 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
 	if (!lastAddedWorksheetElement)
 		return;
 
+	//FIXME: fading-out doesn't work
+	//also, the following code collides with undo/redo of the deletion
+	//of a worksheet element (after redoing the element is not shown with the full opacity
+/*
 	if (!m_fadeOutTimeLine) {
 		m_fadeOutTimeLine = new QTimeLine(1000, this);
 		m_fadeOutTimeLine->setFrameRange(0, 100);
@@ -668,8 +672,8 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
 	if (m_fadeOutTimeLine->state() == QTimeLine::Running) 
 		m_fadeOutTimeLine->stop();
 
-	//FIXME: fading-out doesn't work
 	m_fadeOutTimeLine->start();
+*/
 }
 
 void WorksheetView::fadeIn(qreal value) {
