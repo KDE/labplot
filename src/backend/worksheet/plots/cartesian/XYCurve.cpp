@@ -59,7 +59,9 @@
 #include <KIcon>
 #endif
 
+#ifdef HAVE_GSL
 #include <gsl/gsl_spline.h>
+#endif
 #include <math.h>
 #include <vector>
 
@@ -731,6 +733,7 @@ void XYCurvePrivate::updateLines(){
 	  case XYCurve::SplineCubicPeriodic:
 	  case XYCurve::SplineAkimaNatural:
 	  case XYCurve::SplineAkimaPeriodic:{
+#ifdef HAVE_GSL
 		//TODO: optimize! try to ommit the copying from the column to the arrays of doubles.
 		gsl_interp_accel *acc  = gsl_interp_accel_alloc();
 		gsl_spline *spline=0;
@@ -776,6 +779,7 @@ void XYCurvePrivate::updateLines(){
 		gsl_spline_free (spline);
         gsl_interp_accel_free (acc);
 		break;
+#endif
 	  }
 	  default:
 		break;
