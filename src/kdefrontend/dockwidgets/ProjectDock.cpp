@@ -38,7 +38,7 @@
   \ingroup kdefrontend
 */
 
-ProjectDock::ProjectDock(QWidget *parent): QWidget(parent){
+ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(0), m_initializing(false){
 	ui.setupUi(this);
 
 	// SLOTS
@@ -56,8 +56,8 @@ ProjectDock::ProjectDock(QWidget *parent): QWidget(parent){
 }
 
 void ProjectDock::setProject(Project *project) {
+	m_initializing=true;
 	m_project = project;
-
 	ui.leFileName->setText(project->fileName());
 	ui.lProjectVersion->setText(QString::number(project->version()));
 	ui.lLabPlotVersion->setText(project->labPlot());
@@ -70,7 +70,7 @@ void ProjectDock::setProject(Project *project) {
         //show default properties of a project
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
-
+	m_initializing = false;
 }
 
 //************************************************************
