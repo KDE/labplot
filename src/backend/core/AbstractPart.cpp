@@ -70,6 +70,21 @@ PartMdiView* AbstractPart::mdiSubWindow() const
 	return m_mdiWindow;
 }
 
+/*!
+ * this function is called in MainWin when an aspect is removed from the project.
+ * deletes the view and it's mdi-subwindow-wrapper
+ */
+void AbstractPart::deleteMdiSubWindow() {
+	deleteView();
+	delete m_mdiWindow;
+	m_mdiWindow = 0;
+}
+
+/*!
+ * this function is called when PartMdiView, the mdi-subwindow-wrapper of the actual view, 
+ * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
+ */
+//TODO: maybe this part needs to be redesigned. the view can be deleted in PartMdiView
 void AbstractPart::deleteView() const {
 	if (m_view) {
 		delete m_view;
