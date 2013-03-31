@@ -232,12 +232,6 @@ QRectF Worksheet::pageRect() const {
 	emits \c itemSelected() which forwards this event to the \c WorksheetView 
 	in order to select the corresponding \c QGraphicsItem.
  */
-void Worksheet::childSelected(){
-	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
-	if (element)
-		emit itemSelected(element->graphicsItem());
-}
-
 void Worksheet::childSelected(const AbstractAspect* aspect){
 	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
@@ -249,12 +243,6 @@ void Worksheet::childSelected(const AbstractAspect* aspect){
 	emits \c itemDeselected() which forwards this event to \c WorksheetView 
 	in order to deselect the corresponding \c QGraphicsItem.
  */
-void Worksheet::childDeselected(){
-	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(QObject::sender());
-	if (element)
-		emit itemDeselected(element->graphicsItem());
-}
-
 void Worksheet::childDeselected(const AbstractAspect* aspect){
 	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)

@@ -190,9 +190,7 @@ class AbstractAspect : public QObject {
 		QString uniqueNameFor(const QString&) const;
 
 	protected slots:
-		virtual void childSelected(){}
 		virtual void childSelected(const AbstractAspect*){}
-		virtual void childDeselected(){}
 		virtual void childDeselected(const AbstractAspect*){}
 		
 	signals:
@@ -208,9 +206,7 @@ class AbstractAspect : public QObject {
 		void renameRequested();
 		
 		//selection/deselection in model (project explorer)
-		void selected();
 		void selected(const AbstractAspect*);
-		void deselected();
 		void deselected(const AbstractAspect*);
 		
 		//selection/deselection in view

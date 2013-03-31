@@ -213,11 +213,6 @@
  */
 
 /**
- * \fn protected virtual void childSelected()
- * \brief called when a child aspect was selected in the model
- */
-
-/**
  * \fn protected virtual void childSelected(const AbstractAspect*){}
  * \brief called when a child's child aspect was selected in the model
  */
@@ -380,9 +375,7 @@ void AbstractAspect::addChild(AbstractAspect* child)
 				Q_ARG(const AbstractAspect*,child)));
 	endMacro();
 
- 	connect(child, SIGNAL(selected()), this, SLOT(childSelected()));
 	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
-	connect(child, SIGNAL(deselected()), this, SLOT(childDeselected()));
 	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
 }
 
@@ -678,9 +671,9 @@ void AbstractAspect::setHidden(bool value)
 
 void AbstractAspect::setSelected(bool s){
   if (s)
-	emit selected();
+	emit selected(this);
   else
-	emit deselected();
+	emit deselected(this);
 }
 
 /**

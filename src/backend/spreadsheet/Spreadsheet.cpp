@@ -646,24 +646,24 @@ QString Spreadsheet::text(int row, int col) const
  * This slot is, indirectly, called when a child of \c Spreadsheet (i.e. column) was selected in \c ProjectExplorer.
  * Emits the signal \c columnSelected that is handled in \c SpreadsheetView.
  */
-void Spreadsheet::childSelected(){
- Column* column=qobject_cast<Column*>(QObject::sender());
- if (column){
-  int index = indexOfChild<Column>(column);
-  emit columnSelected(index);
- }  
+void Spreadsheet::childSelected(const AbstractAspect* aspect){
+	const Column* column=qobject_cast<const Column*>(aspect);
+	if (column){
+		int index = indexOfChild<Column>(column);
+		emit columnSelected(index);
+	}  
 }
 
 /*!
  * This slot is, indirectly, called when a child of \c Spreadsheet (i.e. column) was deselected in \c ProjectExplorer.
  * Emits the signal \c columnDeselected that is handled in \c SpreadsheetView.
  */
-void Spreadsheet::childDeselected(){
- Column* column=qobject_cast<Column*>(QObject::sender());
- if (column){
-  int index = indexOfChild<Column>(column);
-  emit columnDeselected(index);
- }  
+void Spreadsheet::childDeselected(const AbstractAspect* aspect){
+	const Column* column=qobject_cast<const Column*>(aspect);
+	if (column){
+		int index = indexOfChild<Column>(column);
+		emit columnDeselected(index);
+	}  
 }
 
 /*!

@@ -88,8 +88,8 @@ class Spreadsheet : public AbstractDataSource{
 		void init();
 
 	 private slots:
-		void childSelected();
-		void childDeselected();
+		virtual void childSelected(const AbstractAspect*);
+		virtual void childDeselected(const AbstractAspect*);
 
 	signals:
 		void requestProjectMenu(QMenu *menu, bool *rc);
