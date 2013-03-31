@@ -72,12 +72,13 @@
 */
 WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	m_worksheet(worksheet),
+	m_model(new WorksheetModel(worksheet)),
 	m_currentMouseMode(NavigationMode), 
 	m_suppressSelectionChangedEvent(false),
+	lastAddedWorksheetElement(0),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
-	lastAddedWorksheetElement(0),
-	m_model(new WorksheetModel(worksheet)),
+
 	tbZoom(0) {
   
 	setScene(m_model->scene());

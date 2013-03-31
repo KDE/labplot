@@ -166,9 +166,10 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 		for (int i=0; i<list_showColumnActions.size(); i++)
 		columnsMenu->addAction(list_showColumnActions.at(i));
 
-		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
-		QMenu* objectsMenu = menu->addMenu(tr("show/hide objects"));
 		//TODO
+		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
+// 		QMenu* objectsMenu = menu->addMenu(tr("show/hide objects"));
+
 	}
 
 	menu->exec(event->globalPos());

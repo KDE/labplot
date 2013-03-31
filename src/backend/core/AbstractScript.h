@@ -51,7 +51,7 @@ class AbstractScript : public QObject
     const QString code() const;
     const QObject* context() const;
     const QString name() const;
-    const bool emitErrors() const;
+    bool emitErrors() const;
     virtual void addCode(const QString &code);
     virtual void setCode(const QString &code);
     virtual void setContext(QObject *context);

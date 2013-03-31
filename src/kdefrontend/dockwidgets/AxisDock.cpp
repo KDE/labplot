@@ -1194,7 +1194,6 @@ void AxisDock::loadConfig(KConfig& config){
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, group.readEntry("MajorGridColor", m_axis->majorGridPen().color()) );
 	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorGridWidth", m_axis->majorGridPen().widthF()),Worksheet::Point) );
 	ui.sbMajorGridOpacity->setValue( (float)(group.readEntry("MajorGridOpacity", m_axis->majorGridOpacity())*100) );
-	qDebug()<<"in load "<<m_axis->majorGridOpacity()*100;
 
 	ui.cbMinorGridStyle->setCurrentIndex( group.readEntry("MinorGridStyle", (int) m_axis->minorGridPen().style()) );
 	ui.kcbMinorGridColor->setColor( group.readEntry("MinorGridColor", m_axis->minorGridPen().color()) );

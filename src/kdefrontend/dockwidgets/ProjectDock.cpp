@@ -67,7 +67,7 @@ void ProjectDock::setProject(Project *project) {
 	ui.lModified->setText(project->modificationTime().toString());
 	ui.tbComment->setText(project->comment());
 
-        //show default properties of a project
+	//show default properties of a project
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 	m_initializing = false;

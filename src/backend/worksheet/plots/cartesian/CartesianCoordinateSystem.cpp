@@ -639,9 +639,10 @@ CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate(){
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 void CartesianCoordinateSystem::save(QXmlStreamWriter* writer) const{
-	
+	Q_UNUSED(writer);
 }
 
 bool CartesianCoordinateSystem::load(XmlStreamReader* reader){
+	Q_UNUSED(reader);
 	return true;
 }

@@ -73,7 +73,7 @@ const QString AbstractScript::name() const {
 /**
  * \brief Return whether errors / exceptions are to be emitted or silently ignored
  */
-const bool AbstractScript::emitErrors() const {
+bool AbstractScript::emitErrors() const {
 	return m_emit_errors;
 }
 
