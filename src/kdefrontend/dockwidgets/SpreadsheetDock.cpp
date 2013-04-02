@@ -85,13 +85,15 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 	loadConfig(config);
 
 	//TODO: undo functions
-	connect(m_spreadsheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(spreadsheetDescriptionChanged(const AbstractAspect*)));
+	connect(m_spreadsheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
+			this, SLOT(spreadsheetDescriptionChanged(const AbstractAspect*)));
 
 	m_initializing = false;
 }
 
-// ###### SLOTS  ##############
-
+//*************************************************************
+//****** SLOTs for changes triggered in SpreadsheetDock *******
+//*************************************************************
 void SpreadsheetDock::nameChanged(){
 	if (m_initializing)
 		return;
@@ -106,12 +108,20 @@ void SpreadsheetDock::commentChanged(){
 	m_spreadsheet->setComment(ui.leComment->text());
 }
 
-void SpreadsheetDock::rowCountChanged(int c){
-	Q_UNUSED(c);
+void SpreadsheetDock::rowCountChanged(int rows){
+	if (m_initializing)
+		return;
+
+	foreach(Spreadsheet* spreadsheet, m_spreadsheetList)
+		spreadsheet->setRowCount(rows);
 }
 
-void SpreadsheetDock::columnCountChanged(int c){
-	Q_UNUSED(c);
+void SpreadsheetDock::columnCountChanged(int columns){
+	if (m_initializing)
+		return;
+
+	foreach(Spreadsheet* spreadsheet, m_spreadsheetList)
+		spreadsheet->setColumnCount(columns);
 }
 
 /*!
@@ -124,7 +134,7 @@ void SpreadsheetDock::commentsShownChanged(int state){
 }
 
 //*************************************************************
-//******** SLOTs for changes triggered in Worksheet ***********
+//******** SLOTs for changes triggered in Spreadsheet *********
 //*************************************************************
 void SpreadsheetDock::spreadsheetDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_spreadsheet != aspect)
