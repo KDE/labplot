@@ -134,6 +134,7 @@ void CartesianPlot::init(){
 	initActions();
 	initMenus();
 
+	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)),
 			this, SLOT(childRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)));
 }
@@ -480,21 +481,20 @@ void CartesianPlot::addCurve(){
 	connect(curve, SIGNAL(linePenChanged(const QPen&)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolTypeChanged()), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolPenChanged(const QPen&)), this, SLOT(updateLegend()));
-
-	this->updateLegend();
 }
 
 void CartesianPlot::addLegend(){
 	m_legend = new CartesianPlotLegend(this, "legend");
 	this->addChild(m_legend);
 
-	CartesianPlotLegend::PositionWrapper position;
-	position.horizontalPosition = CartesianPlotLegend::hPositionRight;
-	position.verticalPosition = CartesianPlotLegend::vPositionBottom;
-	m_legend->setPosition(position);
-	
 	//only one legend is allowed -> disable the action
 	addLegendAction->setEnabled(false);
+}
+
+void CartesianPlot::childAdded(const AbstractAspect* child) {
+	const XYCurve* curve = qobject_cast<const XYCurve*>(child);
+	if (curve)
+		updateLegend();
 }
 
 void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
@@ -504,12 +504,9 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 		addLegendAction->setEnabled(true);
 		m_legend = 0;
 	} else {
-		if (!m_legend)
-			return;
-
 		const XYCurve* curve = qobject_cast<const XYCurve*>(child);
 		if (curve)
-			m_legend->retransform();
+			updateLegend();
 	}
 }
 

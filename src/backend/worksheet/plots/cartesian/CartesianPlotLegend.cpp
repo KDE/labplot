@@ -81,6 +81,9 @@ void CartesianPlotLegend::init(){
 	d->rowCount = 0;
 	d->columnCount = 0;
 
+	d->position.horizontalPosition = CartesianPlotLegend::hPositionRight;
+	d->position.verticalPosition = CartesianPlotLegend::vPositionBottom;
+
 	//Title
  	d->title = new TextLabel(this->name());
 	d->title->setText(this->name());

@@ -103,6 +103,7 @@ class CartesianPlot:public AbstractPlot{
 		void addCurve();
 		void addLegend();
 		void updateLegend();
+		void childAdded(const AbstractAspect*);
 		void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
 		void xDataChanged();
