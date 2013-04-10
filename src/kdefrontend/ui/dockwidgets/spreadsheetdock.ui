@@ -51,7 +51,7 @@
    <item row="2" column="2">
     <widget class="QSpinBox" name="sbRowCount">
      <property name="minimum">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="maximum">
       <number>16777215</number>
@@ -68,7 +68,7 @@
    <item row="3" column="2">
     <widget class="QSpinBox" name="sbColumnCount">
      <property name="minimum">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="maximum">
       <number>16777215</number>
