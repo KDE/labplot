@@ -37,7 +37,8 @@
 #include <KUrlCompletion>
 
 // a couple of standard sizes in mm, taken from qprinter.cpp
-static const float qt_paperSizes[][2] = {
+const int numOfPaperSizes = 30;
+const float qt_paperSizes[numOfPaperSizes][2] = {
     {210, 297}, // A4
     {176, 250}, // B5
     {215.9f, 279.4f}, // Letter
@@ -204,25 +205,25 @@ void WorksheetDock::updatePaperSize(){
 	int h=(float)ui.sbHeight->value()*10;
 
 	//check the portrait-orientation first
-	while ( !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) && i<30 ){
+	while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) ){
 		i++;
 	}
 	
-	if (i!=30){
+	if (i!=numOfPaperSizes) {
 		ui.cbOrientation->setCurrentIndex(0);  //a QPrinter::PaperSize  in portrait-orientation was found
 	}else{
 		//check for the landscape-orientation
 		i=0;
-		while ( !(w==qt_paperSizes[i][1] && h==qt_paperSizes[i][0]) && i<30 ){
+		while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][1] && h==qt_paperSizes[i][0]) ){
 			i++;
 		}
 		
-		if (i!=30)
+		if (i!=numOfPaperSizes)
 			ui.cbOrientation->setCurrentIndex(1); //a QPrinter::PaperSize  in landscape-orientation was found
 	}
 	
 	//determine the position of the QPrinter::PaperSize in the combobox
-	for (int index=0; index<31; index++){
+	for (int index=0; index<numOfPaperSizes+1; index++){
 		if (ui.cbSize->itemData(index).toInt() == i){
 			ui.cbSize->setCurrentIndex(index);
 			break;
