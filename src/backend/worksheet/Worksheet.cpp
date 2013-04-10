@@ -518,7 +518,7 @@ void WorksheetPrivate::updateLayout(){
 			y+=h + layoutVerticalSpacing;
 		}
 	}else if (layout == Worksheet::HorizontalLayout){
-		w=(m_scene->sceneRect().height()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
+		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
 		h= m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
 		foreach(WorksheetElementContainer* elem, list){
 			elem->setRect(QRectF(x,y,w,h));
