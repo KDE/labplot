@@ -51,7 +51,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 */
 
 FileDataSource::FileDataSource(AbstractScriptingEngine *engine, const QString& name)
-     : Spreadsheet(engine, 0, 0, name){
+     : Spreadsheet(engine, name){
 
 }
 

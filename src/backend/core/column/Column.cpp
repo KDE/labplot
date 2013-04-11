@@ -66,9 +66,8 @@ void Column::staticInit()
  * \param mode initial column mode
  */
 Column::Column(const QString& name, SciDAVis::ColumnMode mode)
- : AbstractColumn(name)
+ : AbstractColumn(name), m_column_private( new Private(this, mode) ) 
 {
-	m_column_private = new Private(this, mode);
 	init();
 }
 
@@ -79,9 +78,8 @@ Column::Column(const QString& name, SciDAVis::ColumnMode mode)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QVector<double> data)
- : AbstractColumn(name)
+ : AbstractColumn(name), m_column_private( new Private(this, SciDAVis::Numeric, new QVector<double>(data)) )
 {
-	m_column_private = new Private(this, SciDAVis::Numeric, new QVector<double>(data));
 	init();
 }
 
@@ -92,9 +90,8 @@ Column::Column(const QString& name, QVector<double> data)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QStringList data)
- : AbstractColumn(name)
+ : AbstractColumn(name), m_column_private( new Private(this, SciDAVis::Text, new QStringList(data)))
 {
-	m_column_private = new Private(this, SciDAVis::Text, new QStringList(data));
 	init();
 }
 
@@ -105,9 +102,8 @@ Column::Column(const QString& name, QStringList data)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QList<QDateTime> data)
- : AbstractColumn(name)
+ : AbstractColumn(name), m_column_private( new Private(this, SciDAVis::DateTime, new QList<QDateTime>(data)) )
 {
-	m_column_private = new Private(this, SciDAVis::DateTime, new QList<QDateTime>(data));
 	init();
 }
 
@@ -855,5 +851,3 @@ void ColumnStringIO::replaceTexts(int start_row, const QStringList &texts) {
 	Column tmp("tmp", texts);
 	copy(&tmp, 0, start_row, texts.size());
 }
-
-

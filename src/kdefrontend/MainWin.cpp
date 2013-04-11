@@ -761,7 +761,8 @@ void MainWin::printPreview(){
 	adds a new Spreadsheet to the project.
 */
 void MainWin::newSpreadsheet(){
-	Spreadsheet* spreadsheet = new Spreadsheet(0, 100, 2, i18n("Spreadsheet"));
+	Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+	spreadsheet->initDefault();
 	connect(spreadsheet, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
 	connect(spreadsheet, SIGNAL(printRequested()), this, SLOT(print()));
 	connect(spreadsheet, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
@@ -777,7 +778,8 @@ void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
 	if (!m_importFileDialog)
 		return;
 
-	Spreadsheet * spreadsheet = new Spreadsheet(0, 100, 2, name);
+	Spreadsheet* spreadsheet = new Spreadsheet(0, name);
+	spreadsheet->initDefault();
 	this->addAspectToProject(spreadsheet);
 
 	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));

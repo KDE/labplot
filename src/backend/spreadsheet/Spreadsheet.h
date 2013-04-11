@@ -39,14 +39,14 @@ class Spreadsheet : public AbstractDataSource{
 	Q_OBJECT
 
 	public:
-		Spreadsheet(AbstractScriptingEngine *engine, int rows, int columns, const QString &name);
-		~Spreadsheet();
+		Spreadsheet(AbstractScriptingEngine* engine, const QString &name);
 
 		virtual QIcon icon() const;
-		virtual bool fillProjectMenu(QMenu * menu);
+		virtual bool fillProjectMenu(QMenu* menu);
 		virtual QMenu *createContextMenu();
 		virtual QWidget *view() const;
 
+		void initDefault();
 		int columnCount() const;
 		int columnCount(SciDAVis::PlotDesignation pd) const;
 		Column* column(int index) const;

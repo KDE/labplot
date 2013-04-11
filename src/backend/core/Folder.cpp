@@ -215,7 +215,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 #else
 	else if (element_name == "spreadsheet")
 	{
-		Spreadsheet * spreadsheet = new Spreadsheet(0, 0, 0, "");
+		Spreadsheet * spreadsheet = new Spreadsheet(0, "");
 		if (!spreadsheet->load(reader)){
 			delete spreadsheet;
 			return false;
