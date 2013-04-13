@@ -271,6 +271,7 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 		return;
 	}
 
+	//forward selection/deselection to AbstractTreeModel
 	if (b)
 		emit childAspectSelectedInView(aspect);
 	else

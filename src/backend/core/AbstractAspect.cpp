@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
 	Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
     Description          : Base class for all persistent objects in a Project.
 
@@ -668,12 +668,27 @@ void AbstractAspect::setHidden(bool value)
 			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
 }
 
-
+/*!
+ * this function is called when the selection in ProjectExplorer was changed.
+ * forwards the selection/deselection to the parent aspect via emitting a signal.
+ */
 void AbstractAspect::setSelected(bool s){
   if (s)
 	emit selected(this);
   else
 	emit deselected(this);
+}
+
+void AbstractAspect::childSelected(const AbstractAspect* aspect) {
+	//forward the signal to the most possible level in the parent-child hierarchy
+	if (aspect->parentAspect() != 0)
+		emit aspect->parentAspect()->selected(aspect);
+}
+
+void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
+	//forward the signal to the most possible level in the parent-child hierarchy
+	if (aspect->parentAspect() != 0)
+		emit aspect->parentAspect()->deselected(aspect);	
 }
 
 /**

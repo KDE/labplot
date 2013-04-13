@@ -190,8 +190,8 @@ class AbstractAspect : public QObject {
 		QString uniqueNameFor(const QString&) const;
 
 	protected slots:
-		virtual void childSelected(const AbstractAspect*){}
-		virtual void childDeselected(const AbstractAspect*){}
+		virtual void childSelected(const AbstractAspect*);
+		virtual void childDeselected(const AbstractAspect*);
 		
 	signals:
 		void aspectDescriptionAboutToChange(const AbstractAspect*);
