@@ -157,7 +157,10 @@ class AbstractAspect : public QObject {
 
 		//undo/redo related functions
 		virtual QUndoStack* undoStack() const { return parentAspect() ? parentAspect()->undoStack() : 0; }
-		void exec(QUndoCommand*);		
+		void exec(QUndoCommand*);
+		void exec(QUndoCommand* command, const char *preChangeSignal, const char *postChangeSignal,
+				QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),
+				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());		
 		void beginMacro(const QString& text);
 		void endMacro();
 
