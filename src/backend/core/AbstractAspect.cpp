@@ -39,7 +39,6 @@
 
 #include <QIcon>
 #include <QMenu>
-#include <QMessageBox>
 #include <QStyle>
 #include <QApplication>
 #include <QXmlStreamWriter>
@@ -359,20 +358,19 @@ AbstractAspect * AbstractAspect::parentAspect() const
 /**
  * \brief Add the given Aspect to my list of children.
  */
-void AbstractAspect::addChild(AbstractAspect* child)
-{
+void AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
+
 	QString new_name = m_aspect_private->uniqueNameFor(child->name());
 	beginMacro(tr("%1: add %2.").arg(name()).arg(new_name));
 	if (new_name != child->name()) {
 		info(tr("Renaming \"%1\" to \"%2\" in order to avoid name collision.").arg(child->name()).arg(new_name));
 		child->setName(new_name);
 	}
-	exec(new SignallingUndoCommand("change signal", this, "aspectAboutToBeAdded", "aspectRemoved",
-			Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,0), Q_ARG(const AbstractAspect*,child)));
+
+	emit aspectAboutToBeAdded(this, 0, child);
 	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->m_children.count()));
-	exec(new SignallingUndoCommand("change signal", child, "aspectAdded", "aspectAboutToBeRemoved",
-				Q_ARG(const AbstractAspect*,child)));
+	emit aspectAdded(child);
 	endMacro();
 
 	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
@@ -382,9 +380,9 @@ void AbstractAspect::addChild(AbstractAspect* child)
 /**
  * \brief Insert the given Aspect at a specific position in my list of children.
  */
-void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before)
-{
+void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
 	Q_CHECK_PTR(child);
+
 	QString new_name = m_aspect_private->uniqueNameFor(child->name());
 	beginMacro(tr("%1: insert %2 before %3.").arg(name()).arg(new_name).arg(before ? before->name() : "end"));
 	if (new_name != child->name()) {
@@ -392,12 +390,12 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 		child->setName(new_name);
 	}
 	int index = m_aspect_private->indexOfChild(before);
-	if (index == -1) index = m_aspect_private->m_children.count();
-	exec(new SignallingUndoCommand("change signal", this, "aspectAboutToBeAdded", "aspectRemoved",
-			Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,before), Q_ARG(const AbstractAspect*,child)));
+	if (index == -1)
+		index = m_aspect_private->m_children.count();
+
+	emit aspectAboutToBeAdded(this, before, child);
 	exec(new AspectChildAddCmd(m_aspect_private, child, index));
-	exec(new SignallingUndoCommand("change signal", child, "aspectAdded", "aspectAboutToBeRemoved",
-				Q_ARG(const AbstractAspect*,child)));
+	emit aspectAdded(child);
 	endMacro();
 }
 
@@ -408,7 +406,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
  * i.e., the aspect is deleted by the undo command.
  * \sa reparent()
  */
-void AbstractAspect::removeChild(AbstractAspect* child){
+void AbstractAspect::removeChild(AbstractAspect* child) {
 	Q_ASSERT(child->parentAspect() == this);
 	AbstractAspect *nextSibling;
  	if (child==m_aspect_private->m_children.last())
@@ -417,40 +415,35 @@ void AbstractAspect::removeChild(AbstractAspect* child){
 	  nextSibling = m_aspect_private->m_children.at(m_aspect_private->indexOfChild(child) + 1);
 	
 	beginMacro(tr("%1: remove %2.").arg(name()).arg(child->name()));
-	exec(new SignallingUndoCommand("change signal", child, "aspectAboutToBeRemoved", "aspectAdded",
-				Q_ARG(const AbstractAspect*,child)));
+	emit aspectAboutToBeRemoved(child);
 	exec(new AspectChildRemoveCmd(m_aspect_private, child));
-	exec(new SignallingUndoCommand("change signal", this, "aspectRemoved", "aspectAboutToBeAdded",
-			Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,nextSibling), Q_ARG(const AbstractAspect*,child)));
+	emit aspectRemoved(this, nextSibling, child);
 	endMacro();
 }
 
 /**
  * \brief Move a child to another parent aspect and transfer ownership.
  */
-void AbstractAspect::reparent(AbstractAspect * new_parent, int new_index)
-{
+void AbstractAspect::reparent(AbstractAspect* new_parent, int new_index) {
 	Q_ASSERT(parentAspect() != NULL);
 	Q_ASSERT(new_parent != NULL);
 	int max_index = new_parent->childCount<AbstractAspect>(IncludeHidden);
 	if (new_index == -1)
 		new_index = max_index;
 	Q_ASSERT(new_index >= 0 && new_index <= max_index);
+	
 	AbstractAspect * old_parent = parentAspect();
 	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
-	AbstractAspect *old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
-	AbstractAspect *new_sibling = new_parent->child<AbstractAspect>(new_index, IncludeHidden);
-	beginMacro(tr("%1: move from %2 to %3").arg(name()).arg(old_parent->name()).arg(new_parent->name()));
-	exec(new SignallingUndoCommand("change signal (child)", this, "aspectAboutToBeRemoved", "aspectAdded",
-				Q_ARG(const AbstractAspect*,this)));
-	exec(new SignallingUndoCommand("change signal (new parent)", new_parent, "aspectAboutToBeAdded", "aspectRemoved",
-				Q_ARG(const AbstractAspect*,new_parent), Q_ARG(const AbstractAspect*,new_sibling),
-				Q_ARG(const AbstractAspect*,this)));
+	AbstractAspect* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
+	AbstractAspect* new_sibling = new_parent->child<AbstractAspect>(new_index, IncludeHidden);
+	
+	//TODO check/test this!
+	emit aspectAboutToBeRemoved(this);
+	emit new_parent->aspectAboutToBeAdded(new_parent, new_sibling, this);
 	exec(new AspectChildReparentCmd(parentAspect()->m_aspect_private, new_parent->m_aspect_private, this, new_index));
-	exec(new SignallingUndoCommand("change signal (old parent)", old_parent, "aspectRemoved", "aspectAboutToBeAdded",
-				Q_ARG(const AbstractAspect*,old_parent), Q_ARG(const AbstractAspect*,old_sibling), Q_ARG(const AbstractAspect*,this)));
-	exec(new SignallingUndoCommand("change signal (child)", this, "aspectAdded", "aspectAboutToBeRemoved",
-				Q_ARG(const AbstractAspect*,this)));
+	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
+	emit aspectAdded(this);
+
 	endMacro();
 }
 
@@ -538,8 +531,7 @@ void AbstractAspect::exec(QUndoCommand *command,
 /**
  * \brief Begin an undo stack macro (series of commands)
  */
-void AbstractAspect::beginMacro(const QString& text)
-{
+void AbstractAspect::beginMacro(const QString& text) {
 	QUndoStack *stack = undoStack();
 	if (stack)
 		stack->beginMacro(text);
@@ -548,8 +540,7 @@ void AbstractAspect::beginMacro(const QString& text)
 /**
  * \brief End the current undo stack macro
  */
-void AbstractAspect::endMacro()
-{
+void AbstractAspect::endMacro() {
 	QUndoStack *stack = undoStack();
 	if (stack)
 		stack->endMacro();
@@ -564,20 +555,24 @@ QString AbstractAspect::name() const
 	return m_aspect_private->m_name;
 }
 
-void AbstractAspect::setName(const QString &value)
-{
+void AbstractAspect::setName(const QString &value) {
 	if (value.isEmpty()) {
 		setName("1");
 		return;
 	}
-	if (value == m_aspect_private->m_name) return;
+
+	if (value == m_aspect_private->m_name)
+		return;
+	
 	QString new_name;
 	if (m_aspect_private->m_parent) {
 		new_name = m_aspect_private->m_parent->uniqueNameFor(value);
 		if (new_name != value)
 			info(tr("Intended name \"%1\" diverted to \"%2\" in order to avoid name collision.").arg(value).arg(new_name));
-	} else
+	} else {
 		new_name = value;
+	}
+	
 	exec(new PropertyChangeCommand<QString>(tr("%1: rename to %2").arg(m_aspect_private->m_name).arg(new_name),
 				&m_aspect_private->m_name, new_name),
 			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
@@ -779,11 +774,9 @@ void AbstractAspect::removeAllChildren()
 	}
 
 	while (current) {
-		exec(new SignallingUndoCommand("change signal", current, "aspectAboutToBeRemoved", "aspectAdded",
-					Q_ARG(const AbstractAspect*,current)));
+		emit aspectAboutToBeRemoved(current);
 		exec(new AspectChildRemoveCmd(m_aspect_private, current));
-		exec(new SignallingUndoCommand("change signal", this, "aspectRemoved", "aspectAboutToBeAdded",
-					Q_ARG(const AbstractAspect*,this), Q_ARG(const AbstractAspect*,nextSibling), Q_ARG(const AbstractAspect*,current)));
+		emit aspectRemoved(this, nextSibling, current);
 
 		current = nextSibling;
 		if (i != children.end() && ++i != children.end())

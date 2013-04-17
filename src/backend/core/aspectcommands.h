@@ -1,10 +1,11 @@
 /***************************************************************************
     File                 : aspectcommands.h
-    Project              : SciDAVis
+    Project              : LabPlot/SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 by Knut Franke, Tilman Benkert
-                           (C) 2010 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
+    Copyright            : (C) 2007-2010 by Knut Franke (knut.franke*gmx.de), 
+	Copyright            : (C) 2007-2009 Tilman Benkert(thzs*gmx.net)
+	Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
+							(replace * with @ in the email addresses)
     Description          : Undo commands used by AbstractAspect.
                            Only meant to be used within AbstractAspect.cpp
 
@@ -30,16 +31,15 @@
  ***************************************************************************/
 
 #include "AspectPrivate.h"
-
 #include <QUndoCommand>
 
-class AspectChildRemoveCmd : public QUndoCommand
-{
+class AspectChildRemoveCmd : public QUndoCommand {
 	public:
-		AspectChildRemoveCmd(AbstractAspect::Private * target, AbstractAspect* child)
+		AspectChildRemoveCmd(AbstractAspect::Private* target, AbstractAspect* child)
 			: m_target(target), m_child(child), m_index(-1), m_removed(false) {
 				setText(QObject::tr("%1: remove %2").arg(m_target->m_name).arg(m_child->name()));
 			}
+
 		~AspectChildRemoveCmd() {
 			if (m_removed)			
 				delete m_child;
@@ -47,14 +47,27 @@ class AspectChildRemoveCmd : public QUndoCommand
 
 		// calling redo transfers ownership of m_child to the undo command
 		virtual void redo() {
+			AbstractAspect *nextSibling;
+			if (m_child == m_target->m_children.last())
+				nextSibling = 0;
+			else
+				nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
+			
+			emit m_target->m_owner->aspectAboutToBeRemoved(m_child);
 			m_index = m_target->removeChild(m_child);
+			emit m_target->m_owner->aspectRemoved(m_target->m_owner, nextSibling, m_child);
+
 			m_removed = true;
 		}
 
 		// calling undo transfers ownership of m_child back to its parent aspect
 		virtual void undo() {
 			Q_ASSERT(m_index != -1); // m_child must be a child of m_target->m_owner
+
+			emit m_target->m_owner->aspectAboutToBeAdded(m_target->m_owner, 0, m_child);
 			m_target->insertChild(m_index, m_child);
+			emit m_target->m_owner->aspectAdded(m_child);
+
 			m_removed = false;
 		}
 
@@ -65,8 +78,7 @@ class AspectChildRemoveCmd : public QUndoCommand
 		bool m_removed;
 };
 
-class AspectChildAddCmd : public AspectChildRemoveCmd
-{
+class AspectChildAddCmd : public AspectChildRemoveCmd {
 	public:
 		AspectChildAddCmd(AbstractAspect::Private * target, AbstractAspect* child, int index)
 			: AspectChildRemoveCmd(target, child) {
@@ -80,8 +92,7 @@ class AspectChildAddCmd : public AspectChildRemoveCmd
 		virtual void undo() { AspectChildRemoveCmd::redo(); }
 };
 
-class AspectChildReparentCmd : public QUndoCommand
-{
+class AspectChildReparentCmd : public QUndoCommand {
 	public:
 		AspectChildReparentCmd(AbstractAspect::Private * target, AbstractAspect::Private * new_parent, 
 				AbstractAspect* child, int new_index)
@@ -113,4 +124,3 @@ class AspectChildReparentCmd : public QUndoCommand
 		int m_index;
 		int m_new_index;
 };
-

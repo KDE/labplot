@@ -33,26 +33,16 @@
 
 #include <QObject>
 #include <QList>
-#include <QDebug>
 
 class Project;
 class QUndoStack;
-class QString;
 class QDateTime;
 class QUndoCommand;
 class QIcon;
 class QMenu;
 class Folder;
 class XmlStreamReader;
-#ifdef Q_OS_MAC32
-// A hack in Qt 4.4 and later forces us to include QXmlStream* headers on MacOS instead of simple
-// forward declarations. See
-// http://lists.trolltech.com/qt-interest/2008-07/thread00798-0.html
-#include <QXmlStreamWriter>
-#else
 class QXmlStreamWriter;
-#endif
-class QAction;
 
 class AbstractAspect : public QObject {
 	Q_OBJECT
@@ -66,6 +56,9 @@ class AbstractAspect : public QObject {
 		Q_DECLARE_FLAGS(ChildIndexFlags, ChildIndexFlag)
 
 		class Private;
+		friend class AspectChildAddCmd;
+		friend class AspectChildRemoveCmd;
+		
 		static void staticInit();
 
 		AbstractAspect(const QString& name);
@@ -82,6 +75,7 @@ class AbstractAspect : public QObject {
 			}
 			return NULL;
 		}
+		
 		Folder* folder();
 		bool isDescendantOf(AbstractAspect* other);
 
@@ -89,7 +83,10 @@ class AbstractAspect : public QObject {
 		
 		void addChild(AbstractAspect*);
 		void insertChildBefore(AbstractAspect *child, AbstractAspect *before);
+		void reparent(AbstractAspect* new_parent, int new_index=-1);
 		void removeChild(AbstractAspect*);
+		void removeAllChildren();
+		
 		QList<AbstractAspect*> children(const char* className, const ChildIndexFlags &flags=0);
 
 		//TODO: recursive flag doesn't work! How should it work with templates?!?
@@ -143,9 +140,6 @@ class AbstractAspect : public QObject {
 			}
 			return -1;
 		}
-		void reparent(AbstractAspect* new_parent, int new_index=-1);
-
-		void removeAllChildren();
 
 		virtual const Project* project() const { return parentAspect() ? parentAspect()->project() : 0; }
 		virtual Project* project() { return parentAspect() ? parentAspect()->project() : 0; }
@@ -161,25 +155,33 @@ class AbstractAspect : public QObject {
 		QString caption() const;
 		bool hidden() const;
 
+		//undo/redo related functions
 		virtual QUndoStack* undoStack() const { return parentAspect() ? parentAspect()->undoStack() : 0; }
-		void exec(QUndoCommand*);
-		void exec(QUndoCommand* command, const char *preChangeSignal, const char *postChangeSignal,
-				QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),
-				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());
+		void exec(QUndoCommand*);		
 		void beginMacro(const QString& text);
 		void endMacro();
 
+		//access to global settings
 		static QVariant global(const QString &key);
 		static void setGlobal(const QString &key, const QVariant &value);
 		static void setGlobalDefault(const QString &key, const QVariant &value);
 
 		virtual void save(QXmlStreamWriter*) const {}
 		virtual bool load(XmlStreamReader*) { return false; }
+
 	protected:
+		void setCreationTime(const QDateTime&);
+		void info(const QString &text) { emit statusInfo(text); }
+
+		//serialization/deserialization
 		bool readBasicAttributes(XmlStreamReader*);
 		void writeBasicAttributes(QXmlStreamWriter*) const;
 		void writeCommentElement(QXmlStreamWriter*) const;
 		bool readCommentElement(XmlStreamReader*);
+		
+	private:
+		Private* m_aspect_private;
+		const QList<AbstractAspect*> rawChildren() const;
 
 	public slots:
 		void setName(const QString&);
@@ -212,14 +214,6 @@ class AbstractAspect : public QObject {
 		//selection/deselection in view
 		void childAspectSelectedInView(const AbstractAspect*);
 		void childAspectDeselectedInView(const AbstractAspect*);
-		
-	protected:
-		void setCreationTime(const QDateTime&);
-		void info(const QString &text) { emit statusInfo(text); }
-
-	private:
-		Private* m_aspect_private;
-		const QList< AbstractAspect* > rawChildren() const;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)
