@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : columncommands.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Commands to be called by Column to modify Column::Private
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
@@ -94,7 +94,7 @@
 /**
  * \brief Ctor
  */
-ColumnSetModeCmd::ColumnSetModeCmd(Column::Private * col, SciDAVis::ColumnMode mode, QUndoCommand * parent )
+ColumnSetModeCmd::ColumnSetModeCmd(Column::Private * col, AbstractColumn::ColumnMode mode, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_mode(mode)
 {
 	setText(QObject::tr("%1: change column type").arg(col->name()));
@@ -109,30 +109,30 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 	if(m_undone) {
 		if(m_new_data != m_old_data)
 			switch (m_mode) {
-				case SciDAVis::Numeric:
+				case AbstractColumn::Numeric:
 					delete static_cast< QVector<double>* >(m_new_data);
 					break;
-				case SciDAVis::Text:
+				case AbstractColumn::Text:
 					delete static_cast< QStringList* >(m_new_data);
 					break;
-				case SciDAVis::DateTime:
-				case SciDAVis::Month:
-				case SciDAVis::Day:
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
 					delete static_cast< QList<QDateTime>* >(m_new_data);
 					break;
 			}
 	} else {
 		if(m_new_data != m_old_data)
 			switch (m_old_mode) {
-				case SciDAVis::Numeric:
+				case AbstractColumn::Numeric:
 					delete static_cast< QVector<double>* >(m_old_data);
 					break;
-				case SciDAVis::Text:
+				case AbstractColumn::Text:
 					delete static_cast< QStringList* >(m_old_data);
 					break;
-				case SciDAVis::DateTime:
-				case SciDAVis::Month:
-				case SciDAVis::Day:
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
 					delete static_cast< QList<QDateTime>* >(m_old_data);
 					break;
 			}
@@ -525,7 +525,7 @@ void ColumnRemoveRowsCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnSetPlotDesignationCmd::ColumnSetPlotDesignationCmd( Column::Private * col, SciDAVis::PlotDesignation pd , QUndoCommand * parent )
+ColumnSetPlotDesignationCmd::ColumnSetPlotDesignationCmd( Column::Private * col, AbstractColumn::PlotDesignation pd , QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_new_pd(pd)
 {
 	setText(QObject::tr("%1: set plot designation").arg(col->name()));
@@ -644,30 +644,30 @@ ColumnClearCmd::~ColumnClearCmd()
 	if(m_undone) {
 		if (!m_empty_data) return;
 		switch(m_col->columnMode()) {
-			case SciDAVis::Numeric:
+			case AbstractColumn::Numeric:
 				delete static_cast< QVector<double>* >(m_empty_data);
 				break;
-			case SciDAVis::Text:
+			case AbstractColumn::Text:
 				delete static_cast< QStringList* >(m_empty_data);
 				break;
-			case SciDAVis::DateTime:
-			case SciDAVis::Month:
-			case SciDAVis::Day:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
 				delete static_cast< QList<QDateTime>* >(m_empty_data);
 				break;
 		}
 	} else {
 		if (!m_data) return;
 		switch(m_col->columnMode()) {
-			case SciDAVis::Numeric:
+			case AbstractColumn::Numeric:
 				delete static_cast< QVector<double>* >(m_data);
 				break;
-			case SciDAVis::Text:
+			case AbstractColumn::Text:
 				delete static_cast< QStringList* >(m_data);
 				break;
-			case SciDAVis::DateTime:
-			case SciDAVis::Month:
-			case SciDAVis::Day:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
 				delete static_cast< QList<QDateTime>* >(m_data);
 				break;
 		}
@@ -682,17 +682,17 @@ void ColumnClearCmd::redo()
 	if(!m_empty_data) {
 		int rowCount = m_col->rowCount();
 		switch(m_col->columnMode()) {
-			case SciDAVis::Numeric:
+			case AbstractColumn::Numeric:
 				m_empty_data = new QVector<double>(rowCount);
 				break;
-			case SciDAVis::DateTime:
-			case SciDAVis::Month:
-			case SciDAVis::Day:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
 				m_empty_data = new QList<QDateTime>();
 				for(int i=0; i<rowCount; i++)
 					static_cast< QList<QDateTime> *>(m_empty_data)->append(QDateTime());
 				break;
-			case SciDAVis::Text:
+			case AbstractColumn::Text:
 				m_empty_data = new QStringList();
 				for(int i=0; i<rowCount; i++)
 					static_cast< QStringList *>(m_empty_data)->append(QString());

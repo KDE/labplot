@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : Double2DayOfWeekFilter.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
@@ -58,12 +58,12 @@ class Double2DayOfWeekFilter : public AbstractSimpleFilter
 		}
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Day; }
+		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Day; }
 
 	protected:
 		//! Using typed ports: only double inputs are accepted.
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == SciDAVis::Numeric;
+			return source->columnMode() == AbstractColumn::Numeric;
 		}
 };
 

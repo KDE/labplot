@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : DateTime2StringFilter.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert,
                            Knut Franke
@@ -53,7 +53,7 @@ class DateTime2StringFilter : public AbstractSimpleFilter
 		QString format() const { return m_format; }
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
+		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
 
 	signals:
 		void formatChanged();

@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : columncommands.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Commands to be called by Column to modify Column::Private
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
@@ -43,7 +43,7 @@ class AbstractSimpleFilter;
 class ColumnSetModeCmd : public QUndoCommand
 {
 public:
-	ColumnSetModeCmd(Column::Private * col, SciDAVis::ColumnMode mode, QUndoCommand * parent = 0 );
+	ColumnSetModeCmd(Column::Private * col, AbstractColumn::ColumnMode mode, QUndoCommand * parent = 0 );
 	~ColumnSetModeCmd();
 
 	virtual void redo();
@@ -51,8 +51,8 @@ public:
 
 private:
 	Column::Private * m_col;
-	SciDAVis::ColumnMode m_old_mode;	
-	SciDAVis::ColumnMode m_mode;
+	AbstractColumn::ColumnMode m_old_mode;	
+	AbstractColumn::ColumnMode m_mode;
 	void * m_old_data;
 	void * m_new_data;
 	AbstractSimpleFilter* m_new_in_filter;
@@ -138,7 +138,7 @@ private:
 class ColumnSetPlotDesignationCmd : public QUndoCommand
 {
 public:
-	ColumnSetPlotDesignationCmd(Column::Private * col, SciDAVis::PlotDesignation pd, QUndoCommand * parent = 0 );
+	ColumnSetPlotDesignationCmd(Column::Private * col, AbstractColumn::PlotDesignation pd, QUndoCommand * parent = 0 );
 	~ColumnSetPlotDesignationCmd();
 
 	virtual void redo();
@@ -146,8 +146,8 @@ public:
 
 private:
 	Column::Private * m_col;
-	SciDAVis::PlotDesignation m_new_pd;
-	SciDAVis::PlotDesignation m_old_pd;
+	AbstractColumn::PlotDesignation m_new_pd;
+	AbstractColumn::PlotDesignation m_old_pd;
 };
 
 class ColumnSetWidthCmd : public QUndoCommand

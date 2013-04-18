@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : SpreadsheetModel.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Model for the access to a Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
@@ -373,7 +373,7 @@ void SpreadsheetModel::updateHorizontalHeader()
 		m_horizontal_header_data.removeLast();
 
 	int x_cols;
-	if(m_spreadsheet->columnCount(SciDAVis::X) <= 1)
+	if(m_spreadsheet->columnCount(AbstractColumn::X) <= 1)
 		x_cols = -1;
 	else
 		x_cols = 0;
@@ -384,41 +384,41 @@ void SpreadsheetModel::updateHorizontalHeader()
 		QString middle_section;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		switch(col->columnMode()) {
-			case SciDAVis::Numeric:
+			case AbstractColumn::Numeric:
 				middle_section = " {numeric} ";
 				break;
-			case SciDAVis::Text:
+			case AbstractColumn::Text:
 				middle_section = " {text} ";
 				break;
-			case SciDAVis::DateTime:
-			case SciDAVis::Month:
-			case SciDAVis::Day:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
 				middle_section = " {datetime} ";
 				break;
 		}
 #endif
 		QString designation_section;
 		switch(col->plotDesignation()) {
-			case SciDAVis::X:
+			case AbstractColumn::X:
 				designation_section = x_cols>-1 ? QString("[X%1]").arg(++x_cols) : QString("[X]");
 				break;
 
-			case SciDAVis::Y:
+			case AbstractColumn::Y:
 				designation_section = x_cols>0 ? QString("[Y%1]").arg(x_cols) : QString("[Y]");
 				break;
 
-			case SciDAVis::Z:
+			case AbstractColumn::Z:
 				designation_section = x_cols>0 ? QString("[Z%1]").arg(x_cols) : QString("[Z]");
 				break;
 
-			case SciDAVis::xErr:
+			case AbstractColumn::xErr:
 				designation_section = x_cols>0 ? QString("[xEr%1]").arg(x_cols) : QString("[xEr]");
 				break;
 
-			case SciDAVis::yErr:
+			case AbstractColumn::yErr:
 				designation_section = x_cols>0 ? QString("[yEr%1]").arg(x_cols) : QString("[yEr]");
 				break;
-			case SciDAVis::noDesignation:
+			case AbstractColumn::noDesignation:
 				break;
 		}
 

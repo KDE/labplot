@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : Column.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net)
@@ -36,8 +36,10 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include <QIcon>
 #include <QXmlStreamWriter>
-#include <QtDebug>
+// #include <QtDebug>
 #include <QVariant>
+// #include <QMetaObject>
+#include <QMetaEnum>
 
 /**
  * \class Column
@@ -61,7 +63,7 @@
  * \param name the column name (= aspect name)
  * \param mode initial column mode
  */
-Column::Column(const QString& name, SciDAVis::ColumnMode mode)
+Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
  : AbstractColumn(name), m_column_private( new Private(this, mode) ) 
 {
 	init();
@@ -74,7 +76,7 @@ Column::Column(const QString& name, SciDAVis::ColumnMode mode)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QVector<double> data)
- : AbstractColumn(name), m_column_private( new Private(this, SciDAVis::Numeric, new QVector<double>(data)) )
+ : AbstractColumn(name), m_column_private( new Private(this, AbstractColumn::Numeric, new QVector<double>(data)) )
 {
 	init();
 }
@@ -86,7 +88,7 @@ Column::Column(const QString& name, QVector<double> data)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QStringList data)
- : AbstractColumn(name), m_column_private( new Private(this, SciDAVis::Text, new QStringList(data)))
+ : AbstractColumn(name), m_column_private( new Private(this, AbstractColumn::Text, new QStringList(data)))
 {
 	init();
 }
@@ -98,7 +100,7 @@ Column::Column(const QString& name, QStringList data)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QList<QDateTime> data)
- : AbstractColumn(name), m_column_private( new Private(this, SciDAVis::DateTime, new QList<QDateTime>(data)) )
+ : AbstractColumn(name), m_column_private( new Private(this, AbstractColumn::DateTime, new QList<QDateTime>(data)) )
 {
 	init();
 }
@@ -132,7 +134,7 @@ Column::~Column() {
  * This sets the column mode and, if
  * necessary, converts it to another datatype.
  */
-void Column::setColumnMode(SciDAVis::ColumnMode mode)
+void Column::setColumnMode(AbstractColumn::ColumnMode mode)
 {
 	if(mode == columnMode()) return;
 	beginMacro(QObject::tr("%1: change column type").arg(name()));
@@ -211,7 +213,7 @@ void Column::handleRowRemoval(int first, int count)
 /**
  * \brief Set the column plot designation
  */
-void Column::setPlotDesignation(SciDAVis::PlotDesignation pd)
+void Column::setPlotDesignation(AbstractColumn::PlotDesignation pd)
 {
 	if(pd != plotDesignation())
 		exec(new ColumnSetPlotDesignationCmd(m_column_private, pd));
@@ -428,13 +430,13 @@ double Column::valueAt(int row) const
 QIcon Column::icon() const
 {
 	switch(columnMode()) {
-		case SciDAVis::Numeric:
+		case AbstractColumn::Numeric:
 			return QIcon(QPixmap(":/numerictype.png"));
-		case SciDAVis::Text:
+		case AbstractColumn::Text:
 			return QIcon(QPixmap(":/texttype.png"));
-		case SciDAVis::DateTime:
-		case SciDAVis::Month:
-		case SciDAVis::Day:
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
 			return QIcon(QPixmap(":/datetype.png"));
 	}
 	return QIcon();
@@ -452,8 +454,8 @@ void Column::save(QXmlStreamWriter * writer) const
 {
 	writer->writeStartElement("column");
 	writeBasicAttributes(writer);
-	writer->writeAttribute("mode", SciDAVis::enumValueToString(columnMode(), "ColumnMode"));
-	writer->writeAttribute("plot_designation", SciDAVis::enumValueToString(plotDesignation(), "PlotDesignation"));
+	writer->writeAttribute("mode", enumValueToString(columnMode(), "ColumnMode"));
+	writer->writeAttribute("plot_designation", enumValueToString(plotDesignation(), "PlotDesignation"));
 	writer->writeAttribute("width", QString::number(width()));
 	writeCommentElement(writer);
 	writer->writeStartElement("input_filter");
@@ -474,7 +476,7 @@ void Column::save(QXmlStreamWriter * writer) const
 	}
 	int i;
 	switch(columnMode()) {
-		case SciDAVis::Numeric:
+		case AbstractColumn::Numeric:
 			{
 				const char * data = reinterpret_cast<const char*>(
 						static_cast< QVector<double>* >(m_column_private->dataPointer())->constData());
@@ -482,7 +484,7 @@ void Column::save(QXmlStreamWriter * writer) const
 				writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
 				break;
 			}
-		case SciDAVis::Text:
+		case AbstractColumn::Text:
 			for(i=0; i<rowCount(); i++)
 			{
 				writer->writeStartElement("row");
@@ -492,9 +494,9 @@ void Column::save(QXmlStreamWriter * writer) const
 			}
 			break;
 
-		case SciDAVis::DateTime:
-		case SciDAVis::Month:
-		case SciDAVis::Day:
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
 			for(i=0; i<rowCount(); i++)
 			{
 				writer->writeStartElement("row");
@@ -538,25 +540,25 @@ bool Column::load(XmlStreamReader * reader)
 			reader->raiseError(tr("column mode missing"));
 			return false;
 		}
-		int mode_code = SciDAVis::enumStringToValue(str, "ColumnMode");
+		int mode_code = enumStringToValue(str, "ColumnMode");
 		if(mode_code == -1)
 		{
 			reader->raiseError(tr("column mode invalid"));
 			return false;
 		}
-		setColumnMode((SciDAVis::ColumnMode)mode_code);
+		setColumnMode((AbstractColumn::ColumnMode)mode_code);
 		// read plot designation
 		str = attribs.value(reader->namespaceUri().toString(), "plot_designation").toString();
-		int pd_code = SciDAVis::enumStringToValue(str, "PlotDesignation");
+		int pd_code = enumStringToValue(str, "PlotDesignation");
 		if(str.isEmpty())
-			setPlotDesignation(SciDAVis::noDesignation);
+			setPlotDesignation(AbstractColumn::noDesignation);
 		else if(pd_code == -1)
 		{
 			reader->raiseError(tr("column plot designation invalid"));
 			return false;
 		}
 		else
-			setPlotDesignation((SciDAVis::PlotDesignation)pd_code);
+			setPlotDesignation((AbstractColumn::PlotDesignation)pd_code);
 		bool ok;
 		int width = attribs.value(reader->namespaceUri().toString(), "width").toString().toInt(&ok);
 		if (ok)
@@ -602,7 +604,7 @@ bool Column::load(XmlStreamReader * reader)
 					return false;
 			} 
 			QString content = reader->text().toString().trimmed();
-			if (!content.isEmpty() && columnMode() == SciDAVis::Numeric) {
+			if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
 				QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 				QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
 				memcpy(data->data(), bytes.data(), (bytes.size()/sizeof(double))*sizeof(double));
@@ -683,7 +685,7 @@ bool Column::XmlReadRow(XmlStreamReader * reader)
 
 	str = reader->readElementText();
 	switch(columnMode()) {
-		case SciDAVis::Numeric:
+		case AbstractColumn::Numeric:
 			{
 				double value = str.toDouble(&ok);
 				if(!ok) {
@@ -693,13 +695,13 @@ bool Column::XmlReadRow(XmlStreamReader * reader)
 				setValueAt(index, value);
 				break;
 			}
-		case SciDAVis::Text:
+		case AbstractColumn::Text:
 			setTextAt(index, str);
 			break;
 
-		case SciDAVis::DateTime:
-		case SciDAVis::Month:
-		case SciDAVis::Day:
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
 			QDateTime date_time = QDateTime::fromString(str,"yyyy-dd-MM hh:mm:ss:zzz");
 			setDateTimeAt(index, date_time);
 			break;
@@ -726,7 +728,7 @@ bool Column::isReadOnly() const {
  * by plots. The column mode specifies how to interpret 
  * the values in the column additional to the data type.
  */ 
-SciDAVis::ColumnMode Column::columnMode() const 
+AbstractColumn::ColumnMode Column::columnMode() const 
 { 
 	return m_column_private->columnMode(); 
 }
@@ -746,7 +748,7 @@ int Column::rowCount() const
 /**
  * \brief Return the column plot designation
  */
-SciDAVis::PlotDesignation Column::plotDesignation() const
+AbstractColumn::PlotDesignation Column::plotDesignation() const
 { 
 	return m_column_private->plotDesignation(); 
 }
@@ -796,7 +798,7 @@ QList< Interval<int> > Column::formulaIntervals() const
 
 void Column::handleFormatChange()
 {
-	if (columnMode() == SciDAVis::DateTime) {		
+	if (columnMode() == AbstractColumn::DateTime) {		
 		String2DateTimeFilter *input_filter = static_cast<String2DateTimeFilter*>(m_column_private->inputFilter());
 		DateTime2StringFilter *output_filter = static_cast<DateTime2StringFilter*>(m_column_private->outputFilter());
 		input_filter->setFormat(output_filter->format());
@@ -804,6 +806,21 @@ void Column::handleFormatChange()
 
 	emit dataChanged(this); // all cells must be repainted
 	emit aspectDescriptionChanged(this); // the icon for the type changed
+}
+
+
+QString Column::enumValueToString(int key, const QString& enum_name) {
+	int index = staticMetaObject.indexOfEnumerator(enum_name.toAscii());
+	if(index == -1) return QString("invalid");
+	QMetaEnum meta_enum = staticMetaObject.enumerator(index);
+	return QString(meta_enum.valueToKey(key));
+}
+
+int Column::enumStringToValue(const QString& string, const QString& enum_name) {
+	int index = staticMetaObject.indexOfEnumerator(enum_name.toAscii());
+	if(index == -1) return -1;
+	QMetaEnum meta_enum = staticMetaObject.enumerator(index);
+	return meta_enum.keyToValue(string.toAscii());
 }
 
 /**
@@ -828,7 +845,7 @@ QString ColumnStringIO::textAt(int row) const
 }
 
 bool ColumnStringIO::copy(const AbstractColumn *other) {
-	if (other->columnMode() != SciDAVis::Text) return false;
+	if (other->columnMode() != AbstractColumn::Text) return false;
 	m_owner->m_column_private->inputFilter()->input(0,other);
 	m_owner->copy(m_owner->m_column_private->inputFilter()->output(0));
 	m_owner->m_column_private->inputFilter()->input(0,this);
@@ -836,7 +853,7 @@ bool ColumnStringIO::copy(const AbstractColumn *other) {
 }
 
 bool ColumnStringIO::copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows) {
-	if (source->columnMode() != SciDAVis::Text) return false;
+	if (source->columnMode() != AbstractColumn::Text) return false;
 	m_owner->m_column_private->inputFilter()->input(0,source);
 	m_owner->copy(m_owner->m_column_private->inputFilter()->output(0), source_start, dest_start, num_rows);
 	m_owner->m_column_private->inputFilter()->input(0,this);

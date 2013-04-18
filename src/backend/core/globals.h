@@ -37,38 +37,14 @@
 class SciDAVis : public QObject
 {
 	Q_OBJECT
-	Q_ENUMS(PlotDesignation)
-	Q_ENUMS(ColumnMode)
 
 	private:
 		SciDAVis() {} // don't allow instanciating
 
 	public:
 		virtual ~SciDAVis() {} // avoid the warning message
-		enum PlotDesignation
-		{
-			noDesignation = 0,
-			X = 1,
-			Y = 2,
-			Z = 3,
-			xErr = 4,
-			yErr = 5
-		};
-
-		enum ColumnMode
-		{
-			Numeric = 0,
-			Text = 1,
-			Month = 4,
-			Day = 5,
-			DateTime = 6
-			// 2 and 3 are skipped to avoid problems with old obsolete values
-		};
 
 		static int version();
-
-		static QString enumValueToString(int key, const QString& enum_name);
-		static int enumStringToValue(const QString& string, const QString& enum_name);
 
 		static QString versionString();
 

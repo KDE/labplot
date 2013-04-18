@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : Double2StringFilter.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
@@ -52,7 +52,7 @@ class Double2StringFilter : public AbstractSimpleFilter
 		int numDigits() const { return m_digits; }
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
+		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
 
 	signals:
 		void formatChanged();
@@ -84,7 +84,7 @@ class Double2StringFilter : public AbstractSimpleFilter
 	protected:
 		//! Using typed ports: only double inputs are accepted.
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == SciDAVis::Numeric;
+			return source->columnMode() == AbstractColumn::Numeric;
 		}
 };
 

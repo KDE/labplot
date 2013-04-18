@@ -12,68 +12,12 @@
 #include <QMessageBox>
 #include <QIcon>
 #include <QObject>
-#include <QMetaObject>
-#include <QMetaEnum>
 
 /**
  * \class SciDAVis
  * \brief Definition of global constants and enums
  *
  * This class must not be instanced. All members are static.
- */
-
-/**
- * \enum SciDAVis::PlotDesignation
- * \brief Types of plot designations
- */
-/**
- * \var SciDAVis::noDesignation
- * \brief no plot designation
- */
-/**
- * \var SciDAVis::X
- * \brief x values
- */
-/**
- * \var SciDAVis::Y
- * \brief y values
- */
-/**
- * \var SciDAVis::Z
- * \brief z values
- */
-/**
- * \var SciDAVis::xErr
- * \brief x errors
- */
-/**
- * \var SciDAVis::yErr
- * \brief y errors
- */
-
-/**
- * \enum SciDAVis::ColumnMode
- * \brief The column mode (defines output and input filter for table columns)
- */
-/**
- * \var SciDAVis::Numeric
- * \brief column contains doubles
- */
-/**
- * \var SciDAVis::Text
- * \brief column contains strings
- */
-/**
- * \var SciDAVis::Month
- * \brief column contains month names
- */
-/**
- * \var SciDAVis::Day
- * \brief column contains day of week names
- */
-/**
- * \var SciDAVis::DateTime
- * \brief column contains dates and/or times
  */
 
 // TODO: This is still very SciDAVis specific, should be adjusted to be used by LabPlot as well.
@@ -167,20 +111,3 @@ QString SciDAVis::releaseDateString()
 {
 	return release_date;
 }
-
-QString SciDAVis::enumValueToString(int key, const QString& enum_name)
-{
-	int index = staticMetaObject.indexOfEnumerator(enum_name.toAscii());
-	if(index == -1) return QString("invalid");
-	QMetaEnum meta_enum = staticMetaObject.enumerator(index);
-	return QString(meta_enum.valueToKey(key));
-}
-
-int SciDAVis::enumStringToValue(const QString& string, const QString& enum_name)
-{
-	int index = staticMetaObject.indexOfEnumerator(enum_name.toAscii());
-	if(index == -1) return -1;
-	QMetaEnum meta_enum = staticMetaObject.enumerator(index);
-	return meta_enum.keyToValue(string.toAscii());
-}
-

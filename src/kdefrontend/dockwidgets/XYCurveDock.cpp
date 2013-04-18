@@ -424,33 +424,33 @@ void XYCurveDock::fillSymbolStyles(){
   
   synchronize this function with ColumnDock::updateFormat.
 */
-void XYCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode columnMode){
+void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode columnMode){
   ui.cbValuesFormat->clear();
 
   switch (columnMode){
-	case SciDAVis::Numeric:
+	case AbstractColumn::Numeric:
 	  ui.cbValuesFormat->addItem(tr("Decimal"), QVariant('f'));
 	  ui.cbValuesFormat->addItem(tr("Scientific (e)"), QVariant('e'));
 	  ui.cbValuesFormat->addItem(tr("Scientific (E)"), QVariant('E'));
 	  ui.cbValuesFormat->addItem(tr("Automatic (e)"), QVariant('g'));
 	  ui.cbValuesFormat->addItem(tr("Automatic (E)"), QVariant('G'));
 	  break;
-	case SciDAVis::Text:
+	case AbstractColumn::Text:
 	  ui.cbValuesFormat->addItem(tr("Text"), QVariant());
 	  break;
-	case SciDAVis::Month:
+	case AbstractColumn::Month:
 	  ui.cbValuesFormat->addItem(tr("Number without leading zero"), QVariant("M"));
 	  ui.cbValuesFormat->addItem(tr("Number with leading zero"), QVariant("MM"));
 	  ui.cbValuesFormat->addItem(tr("Abbreviated month name"), QVariant("MMM"));
 	  ui.cbValuesFormat->addItem(tr("Full month name"), QVariant("MMMM"));
 	  break;
-	case SciDAVis::Day:
+	case AbstractColumn::Day:
 	  ui.cbValuesFormat->addItem(tr("Number without leading zero"), QVariant("d"));
 	  ui.cbValuesFormat->addItem(tr("Number with leading zero"), QVariant("dd"));
 	  ui.cbValuesFormat->addItem(tr("Abbreviated day name"), QVariant("ddd"));
 	  ui.cbValuesFormat->addItem(tr("Full day name"), QVariant("dddd"));
 	  break;
-	case SciDAVis::DateTime:{
+	case AbstractColumn::DateTime:{
 	  foreach(QString s, dateStrings)
 		ui.cbValuesFormat->addItem(s, QVariant(s));
 	  
@@ -470,7 +470,7 @@ void XYCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode columnMod
   
   ui.cbValuesFormat->setCurrentIndex(0);
   
-  if (columnMode == SciDAVis::Numeric){
+  if (columnMode == AbstractColumn::Numeric){
 	ui.lValuesPrecision->show();
 	ui.sbValuesPrecision->show();
   }else{
@@ -478,7 +478,7 @@ void XYCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode columnMod
 	ui.sbValuesPrecision->hide();
   }
   
-  if (columnMode == SciDAVis::Text){
+  if (columnMode == AbstractColumn::Text){
 	ui.lValuesFormatTop->hide();
 	ui.lValuesFormat->hide();
 	ui.cbValuesFormat->hide();
@@ -489,7 +489,7 @@ void XYCurveDock::updateValuesFormatWidgets(const SciDAVis::ColumnMode columnMod
 	ui.cbValuesFormat->setCurrentIndex(0);
   }
   
-  if (columnMode == SciDAVis::DateTime){
+  if (columnMode == AbstractColumn::DateTime){
 	ui.cbValuesFormat->setEditable( true );
   }else{
 	ui.cbValuesFormat->setEditable( false );
@@ -506,10 +506,10 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 	// no valid column is available 
 	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
 	m_initializing = true;
-	this->updateValuesFormatWidgets(SciDAVis::Text);
+	this->updateValuesFormatWidgets(AbstractColumn::Text);
 	m_initializing = false;
   }else{
-	SciDAVis::ColumnMode columnMode = column->columnMode();
+	AbstractColumn::ColumnMode columnMode = column->columnMode();
 	
 	//update the format widgets for the new column mode
 	m_initializing = true;
@@ -518,15 +518,15 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 	  
 	 //show the actuall formating properties
 	switch(columnMode) {
-		case SciDAVis::Numeric:{
+		case AbstractColumn::Numeric:{
 		  Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
 		  ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
 		  ui.sbValuesPrecision->setValue(filter->numDigits());
 		  break;
 		}
-		case SciDAVis::Month:
-		case SciDAVis::Day:
-		case SciDAVis::DateTime: {
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+		case AbstractColumn::DateTime: {
 				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
 				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 				break;

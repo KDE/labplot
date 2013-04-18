@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : Column.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net)
@@ -45,7 +45,7 @@ class Column : public AbstractColumn
 		class Private;
 		friend class Private;
 
-		Column(const QString& name, SciDAVis::ColumnMode mode);
+		Column(const QString& name, AbstractColumn::ColumnMode mode);
 		Column(const QString& name, QVector<double> data);
 		Column(const QString& name, QStringList data); 
 		Column(const QString& name, QList<QDateTime> data);
@@ -55,13 +55,13 @@ class Column : public AbstractColumn
 		virtual QIcon icon() const;
 
 		bool isReadOnly() const;
-		SciDAVis::ColumnMode columnMode() const;
-		void setColumnMode(SciDAVis::ColumnMode mode);
+		AbstractColumn::ColumnMode columnMode() const;
+		void setColumnMode(AbstractColumn::ColumnMode mode);
 		bool copy(const AbstractColumn * other);
 		bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
 		int rowCount() const;
-		SciDAVis::PlotDesignation plotDesignation() const;
-		void setPlotDesignation(SciDAVis::PlotDesignation pd);
+		AbstractColumn::PlotDesignation plotDesignation() const;
+		void setPlotDesignation(AbstractColumn::PlotDesignation pd);
 		int width() const;
 		void setWidth(int value);
 		void clear();
@@ -99,6 +99,14 @@ class Column : public AbstractColumn
 
 		void handleRowInsertion(int before, int count);
 		void handleRowRemoval(int first, int count);
+		
+		static QString enumValueToString(int key, const QString& enum_name);
+		static int enumStringToValue(const QString& string, const QString& enum_name);
+
+		Private * m_column_private;
+		ColumnStringIO * m_string_io;
+
+		friend class ColumnStringIO;		
 
 	signals:
 		void widthAboutToChange(const Column*);
@@ -106,12 +114,6 @@ class Column : public AbstractColumn
 
 	private slots:
 		void handleFormatChange();
-
-	private:
-		Private * m_column_private;
-		ColumnStringIO * m_string_io;
-		
-		friend class ColumnStringIO;
 };
 
 class ColumnStringIO : public AbstractColumn
@@ -120,8 +122,8 @@ class ColumnStringIO : public AbstractColumn
 	
 	public:
 		ColumnStringIO(Column * owner) : AbstractColumn(tr("as string")), m_owner(owner), m_setting(false) {}
-		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
-		virtual SciDAVis::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
+		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
+		virtual AbstractColumn::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
 		virtual int rowCount() const { return m_owner->rowCount(); }
 		virtual QString textAt(int row) const;
 		virtual void setTextAt(int row, const QString &value);

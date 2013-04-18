@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : SpreadsheetView.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
@@ -488,7 +488,7 @@ int SpreadsheetView::selectedColumnCount(bool full){
 /*!
   Returns the number of (at least partly) selected columns with the plot designation \param pd.
  */
-int SpreadsheetView::selectedColumnCount(SciDAVis::PlotDesignation pd){
+int SpreadsheetView::selectedColumnCount(AbstractColumn::PlotDesignation pd){
 	int count = 0;
 	int cols = m_spreadsheet->columnCount();
 	for (int i=0; i<cols; i++)
@@ -759,7 +759,7 @@ void SpreadsheetView::copySelection(){
 				{
 					output_str += col_ptr->formula(first_row + r);
 				}
-				else if (col_ptr->columnMode() == SciDAVis::Numeric)
+				else if (col_ptr->columnMode() == AbstractColumn::Numeric)
 				{
 					Double2StringFilter * out_fltr = static_cast<Double2StringFilter *>(col_ptr->outputFilter());
 					output_str += QLocale().toString(col_ptr->valueAt(first_row + r), 
@@ -827,8 +827,8 @@ void SpreadsheetView::pasteIntoSelection(){
 			{
 				for (int i=0; i<last_col+1-m_spreadsheet->columnCount(); i++)
 				{
-					Column * new_col = new Column(QString::number(i+1), SciDAVis::Text);
-					new_col->setPlotDesignation(SciDAVis::Y);
+					Column * new_col = new Column(QString::number(i+1), AbstractColumn::Text);
+					new_col->setPlotDesignation(AbstractColumn::Y);
 					new_col->insertRows(0, m_spreadsheet->rowCount());
 					m_spreadsheet->addChild(new_col);
 				}
@@ -914,7 +914,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 
 		switch (col_ptr->columnMode()) {
-			case SciDAVis::Numeric:
+			case AbstractColumn::Numeric:
 				{
 					QVector<double> results(last-first+1);
 					for (int row=first; row<=last; row++)
@@ -925,7 +925,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 					col_ptr->replaceValues(first, results);
 					break;
 				}
-			case SciDAVis::Text:
+			case AbstractColumn::Text:
 				{
 					QStringList results;
 					for (int row=first; row<=last; row++)
@@ -956,7 +956,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 	foreach(Column *col_ptr, selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		switch (col_ptr->columnMode()) {
-			case SciDAVis::Numeric:
+			case AbstractColumn::Numeric:
 				{
 					QVector<double> results(last-first+1);
 					for (int row=first; row<=last; row++)
@@ -967,7 +967,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 					col_ptr->replaceValues(first, results);
 					break;
 				}
-			case SciDAVis::Text:
+			case AbstractColumn::Text:
 				{
 					QStringList results;
 					for (int row=first; row<=last; row++)
@@ -978,9 +978,9 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 					col_ptr->replaceTexts(first, results);
 					break;
 				}
-			case SciDAVis::DateTime:
-			case SciDAVis::Month:
-			case SciDAVis::Day:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
 				{
 					QList<QDateTime> results;
 					QDate earliestDate(1,1,1);
@@ -1029,8 +1029,8 @@ void SpreadsheetView::insertEmptyColumns(){
 		Column *first_col = m_spreadsheet->child<Column>(first);
 		for (int i=0; i<count; i++)
 		{
-			Column * new_col = new Column(QString::number(i+1), SciDAVis::Numeric);
-			new_col->setPlotDesignation(SciDAVis::Y);
+			Column * new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
+			new_col->setPlotDesignation(AbstractColumn::Y);
 			new_col->insertRows(0, rows);
 			m_spreadsheet->insertChildBefore(new_col, first_col);
 		}
@@ -1072,7 +1072,7 @@ void SpreadsheetView::clearSelectedColumns(){
 	RESET_CURSOR;
 }
 
-void SpreadsheetView::setSelectionAs(SciDAVis::PlotDesignation pd){
+void SpreadsheetView::setSelectionAs(AbstractColumn::PlotDesignation pd){
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(QObject::tr("%1: set plot designation(s)").arg(m_spreadsheet->name()));
 
@@ -1085,27 +1085,27 @@ void SpreadsheetView::setSelectionAs(SciDAVis::PlotDesignation pd){
 }
 
 void SpreadsheetView::setSelectedColumnsAsX(){
-	setSelectionAs(SciDAVis::X);
+	setSelectionAs(AbstractColumn::X);
 }
 
 void SpreadsheetView::setSelectedColumnsAsY(){
-	setSelectionAs(SciDAVis::Y);
+	setSelectionAs(AbstractColumn::Y);
 }
 
 void SpreadsheetView::setSelectedColumnsAsZ(){
-	setSelectionAs(SciDAVis::Z);
+	setSelectionAs(AbstractColumn::Z);
 }
 
 void SpreadsheetView::setSelectedColumnsAsYError(){
-	setSelectionAs(SciDAVis::yErr);
+	setSelectionAs(AbstractColumn::yErr);
 }
 
 void SpreadsheetView::setSelectedColumnsAsXError(){
-	setSelectionAs(SciDAVis::xErr);
+	setSelectionAs(AbstractColumn::xErr);
 }
 
 void SpreadsheetView::setSelectedColumnsAsNone(){
-	setSelectionAs(SciDAVis::noDesignation);
+	setSelectionAs(AbstractColumn::noDesignation);
 }
 
 void SpreadsheetView::normalizeSelectedColumns(){
@@ -1113,7 +1113,7 @@ void SpreadsheetView::normalizeSelectedColumns(){
 	m_spreadsheet->beginMacro(QObject::tr("%1: normalize column(s)").arg(m_spreadsheet->name()));
 	QList< Column* > cols = selectedColumns();
 	foreach(Column * col, cols)	{
-		if (col->columnMode() == SciDAVis::Numeric)
+		if (col->columnMode() == AbstractColumn::Numeric)
 		{
 			double max = 0.0;
 			for (int row=0; row<col->rowCount(); row++)
@@ -1135,7 +1135,7 @@ void SpreadsheetView::normalizeSelection(){
 	m_spreadsheet->beginMacro(QObject::tr("%1: normalize selection").arg(m_spreadsheet->name()));
 	double max = 0.0;
 	for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
-		if (m_spreadsheet->column(col)->columnMode() == SciDAVis::Numeric)
+		if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
 			for (int row=0; row<m_spreadsheet->rowCount(); row++)
 			{
 				if (isCellSelected(row, col) && m_spreadsheet->column(col)->valueAt(row) > max)
@@ -1145,7 +1145,7 @@ void SpreadsheetView::normalizeSelection(){
 	if (max != 0.0) // avoid division by zero
 	{
 		for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
-			if (m_spreadsheet->column(col)->columnMode() == SciDAVis::Numeric)
+			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
 				for (int row=0; row<m_spreadsheet->rowCount(); row++)
 				{
 					if (isCellSelected(row, col))

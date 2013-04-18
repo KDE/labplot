@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : Spreadsheet.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke*web.de)
@@ -85,8 +85,8 @@ void Spreadsheet::initDefault() {
 #endif
 
 	for(int i=0; i<columns; i++) {
-		Column* new_col = new Column(QString::number(i+1), SciDAVis::Numeric);
-		new_col->setPlotDesignation(i == 0 ? SciDAVis::X : SciDAVis::Y);
+		Column* new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
+		new_col->setPlotDesignation(i == 0 ? AbstractColumn::X : AbstractColumn::Y);
 		addChild(new_col);
 	}
 	setRowCount(rows);	
@@ -202,7 +202,7 @@ int Spreadsheet::columnCount() const{
 /*!
   Returns the number of columns matching the given designation.
  */
-int Spreadsheet::columnCount(SciDAVis::PlotDesignation pd) const
+int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const
 {
 	int count = 0;
 	foreach(Column * col, children<Column>())
@@ -229,8 +229,8 @@ void Spreadsheet::insertColumns(int before, int count)
 	Column * before_col = column(before);
 	int rows = rowCount();
 	for (int i=0; i<count; i++) {
-		Column * new_col = new Column(QString::number(i+1), SciDAVis::Numeric);
-		new_col->setPlotDesignation(SciDAVis::Y);
+		Column * new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
+		new_col->setPlotDesignation(AbstractColumn::Y);
 		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
 	}
@@ -343,13 +343,13 @@ int Spreadsheet::colX(int col)
 {
 	for(int i=col-1; i>=0; i--)
 	{
-		if (column(i)->plotDesignation() == SciDAVis::X)
+		if (column(i)->plotDesignation() == AbstractColumn::X)
 			return i;
 	}
 	int cols = columnCount();
 	for(int i=col+1; i<cols; i++)
 	{
-		if (column(i)->plotDesignation() == SciDAVis::X)
+		if (column(i)->plotDesignation() == AbstractColumn::X)
 			return i;
 	}
 	return -1;
@@ -362,25 +362,25 @@ int Spreadsheet::colY(int col)
 {
 	int cols = columnCount();
 
-	if (column(col)->plotDesignation() == SciDAVis::xErr || 
-			column(col)->plotDesignation() == SciDAVis::yErr) {
+	if (column(col)->plotDesignation() == AbstractColumn::xErr || 
+			column(col)->plotDesignation() == AbstractColumn::yErr) {
 		// look to the left first
 		for(int i=col-1; i>=0; i--) {
-			if (column(i)->plotDesignation() == SciDAVis::Y)
+			if (column(i)->plotDesignation() == AbstractColumn::Y)
 				return i;
 		}
 		for(int i=col+1; i<cols; i++) {
-			if (column(i)->plotDesignation() == SciDAVis::Y)
+			if (column(i)->plotDesignation() == AbstractColumn::Y)
 				return i;
 		}
 	} else {
 		// look to the right first
 		for(int i=col+1; i<cols; i++) {
-			if (column(i)->plotDesignation() == SciDAVis::Y)
+			if (column(i)->plotDesignation() == AbstractColumn::Y)
 				return i;
 		}
 		for(int i=col-1; i>=0; i--) {
-			if (column(i)->plotDesignation() == SciDAVis::Y)
+			if (column(i)->plotDesignation() == AbstractColumn::Y)
 				return i;
 		}
 	}
@@ -430,7 +430,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 	if(leading == 0) { // sort separately
 		foreach(Column *col, cols) {
 			switch (col->columnMode()) {
-				case SciDAVis::Numeric:
+				case AbstractColumn::Numeric:
 					{
 						int rows = col->rowCount();
 						QList< QPair<double, int> > map;
@@ -458,7 +458,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 						delete temp_col;
 						break;
 					}
-				case SciDAVis::Text:
+				case AbstractColumn::Text:
 					{
 						int rows = col->rowCount();
 						QList< QPair<QString, int> > map;
@@ -486,9 +486,9 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 						delete temp_col;
 						break;
 					}
-				case SciDAVis::DateTime:
-				case SciDAVis::Month:
-				case SciDAVis::Day:
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
 					{
 						int rows = col->rowCount();
 						QList< QPair<QDateTime, int> > map;
@@ -520,7 +520,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 		}
 	} else { // sort with leading column
 		switch (leading->columnMode()) {
-			case SciDAVis::Numeric:
+			case AbstractColumn::Numeric:
 				{
 					QList< QPair<double, int> > map;
 					int rows = leading->rowCount();
@@ -550,7 +550,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 					}
 					break;
 				}
-			case SciDAVis::Text:
+			case AbstractColumn::Text:
 				{
 					QList< QPair<QString, int> > map;
 					int rows = leading->rowCount();
@@ -580,9 +580,9 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 					}
 					break;
 				}
-			case SciDAVis::DateTime:
-			case SciDAVis::Month:
-			case SciDAVis::Day:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
 				{
 					QList< QPair<QDateTime, int> > map;
 					int rows = leading->rowCount();
@@ -729,7 +729,7 @@ bool Spreadsheet::load(XmlStreamReader * reader)
 				}
 				else if(reader->name() == "column")
 				{
-					Column * column = new Column(tr("Column %1").arg(1), SciDAVis::Text);
+					Column * column = new Column(tr("Column %1").arg(1), AbstractColumn::Text);
 					if (!column->load(reader))
 					{
                         delete column;

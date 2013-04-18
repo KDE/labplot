@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : Spreadsheet.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs*gmx.net)
@@ -48,7 +48,7 @@ class Spreadsheet : public AbstractDataSource{
 
 		void initDefault();
 		int columnCount() const;
-		int columnCount(SciDAVis::PlotDesignation pd) const;
+		int columnCount(AbstractColumn::PlotDesignation) const;
 		Column* column(int index) const;
 		Column* column(const QString &name) const;
 		int rowCount() const;

@@ -103,22 +103,21 @@ void ColumnDock::setColumns(QList<Column*> list){
   }
   
   //show the properties of the first column
-  SciDAVis::ColumnMode columnMode = column->columnMode();
-  qDebug()<<"set columns, mode "<< columnMode;
+  AbstractColumn::ColumnMode columnMode = column->columnMode();
   ui.cbType->setCurrentIndex(ui.cbType->findData((int)columnMode));
   this->updateFormatWidgets(columnMode);
 
   switch(columnMode) {
-	  case SciDAVis::Numeric:{
+	  case AbstractColumn::Numeric:{
 			  Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
 			  ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
 			  qDebug()<<"set columns, numeric format"<<filter->numericFormat();
 			  ui.sbPrecision->setValue(filter->numDigits());
 			  break;
 		  }
-	  case SciDAVis::Month:
-	  case SciDAVis::Day:
-	  case SciDAVis::DateTime: {
+	  case AbstractColumn::Month:
+	  case AbstractColumn::Day:
+	  case AbstractColumn::DateTime: {
 			  DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
 			  ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
 			  break;
@@ -137,32 +136,32 @@ void ColumnDock::setColumns(QList<Column*> list){
   shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
   Called when the type (column mode) is changed.
 */
-void ColumnDock::updateFormatWidgets(const SciDAVis::ColumnMode columnMode){
+void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode){
   ui.cbFormat->clear();
 
   switch (columnMode){
-	case SciDAVis::Numeric:
+	case AbstractColumn::Numeric:
 	  ui.cbFormat->addItem(tr("Decimal"), QVariant('f'));
 	  ui.cbFormat->addItem(tr("Scientific (e)"), QVariant('e'));
 	  ui.cbFormat->addItem(tr("Scientific (E)"), QVariant('E'));
 	  ui.cbFormat->addItem(tr("Automatic (e)"), QVariant('g'));
 	  ui.cbFormat->addItem(tr("Automatic (E)"), QVariant('G'));
 	  break;
-	case SciDAVis::Text:
+	case AbstractColumn::Text:
 	  break;
-	case SciDAVis::Month:
+	case AbstractColumn::Month:
 	  ui.cbFormat->addItem(tr("Number without leading zero"), QVariant("M"));
 	  ui.cbFormat->addItem(tr("Number with leading zero"), QVariant("MM"));
 	  ui.cbFormat->addItem(tr("Abbreviated month name"), QVariant("MMM"));
 	  ui.cbFormat->addItem(tr("Full month name"), QVariant("MMMM"));
 	  break;
-	case SciDAVis::Day:
+	case AbstractColumn::Day:
 	  ui.cbFormat->addItem(tr("Number without leading zero"), QVariant("d"));
 	  ui.cbFormat->addItem(tr("Number with leading zero"), QVariant("dd"));
 	  ui.cbFormat->addItem(tr("Abbreviated day name"), QVariant("ddd"));
 	  ui.cbFormat->addItem(tr("Full day name"), QVariant("dddd"));
 	  break;
-	case SciDAVis::DateTime:{
+	case AbstractColumn::DateTime:{
 	  foreach(QString s, dateStrings)
 		ui.cbFormat->addItem(s, QVariant(s));
 	  
@@ -180,7 +179,7 @@ void ColumnDock::updateFormatWidgets(const SciDAVis::ColumnMode columnMode){
 		break;
   }
   
-  if (columnMode == SciDAVis::Numeric){
+  if (columnMode == AbstractColumn::Numeric){
 	ui.lPrecision->show();
 	ui.sbPrecision->show();
   }else{
@@ -188,7 +187,7 @@ void ColumnDock::updateFormatWidgets(const SciDAVis::ColumnMode columnMode){
 	ui.sbPrecision->hide();
   }
   
-  if (columnMode == SciDAVis::Text){
+  if (columnMode == AbstractColumn::Text){
 	ui.lFormat->hide();
 	ui.cbFormat->hide();
   }else{
@@ -197,7 +196,7 @@ void ColumnDock::updateFormatWidgets(const SciDAVis::ColumnMode columnMode){
 	ui.cbFormat->setCurrentIndex(0);
   }
   
-  if (columnMode == SciDAVis::DateTime){
+  if (columnMode == AbstractColumn::DateTime){
 	ui.cbFormat->setEditable( true );
   }else{
 	ui.cbFormat->setEditable( false );
@@ -209,11 +208,11 @@ void ColumnDock::retranslateUi(){
 	m_initializing = true;
 	
   	ui.cbType->clear();
-	ui.cbType->addItem(i18n("Numeric"), QVariant(int(SciDAVis::Numeric)));
-	ui.cbType->addItem(i18n("Text"), QVariant(int(SciDAVis::Text)));
-	ui.cbType->addItem(i18n("Month names"), QVariant(int(SciDAVis::Month)));
-	ui.cbType->addItem(i18n("Day names"), QVariant(int(SciDAVis::Day)));
-	ui.cbType->addItem(i18n("Date and time"), QVariant(int(SciDAVis::DateTime)));
+	ui.cbType->addItem(i18n("Numeric"), QVariant(int(AbstractColumn::Numeric)));
+	ui.cbType->addItem(i18n("Text"), QVariant(int(AbstractColumn::Text)));
+	ui.cbType->addItem(i18n("Month names"), QVariant(int(AbstractColumn::Month)));
+	ui.cbType->addItem(i18n("Day names"), QVariant(int(AbstractColumn::Day)));
+	ui.cbType->addItem(i18n("Date and time"), QVariant(int(AbstractColumn::DateTime)));
 	
 	ui.cbPlotDesignation->clear();
 	ui.cbPlotDesignation->addItem(i18n("none"));
@@ -250,7 +249,7 @@ void ColumnDock::typeChanged(int index){
 	return;
 
 
-  SciDAVis::ColumnMode columnMode = (SciDAVis::ColumnMode)ui.cbType->itemData( index ).toInt();
+  AbstractColumn::ColumnMode columnMode = (AbstractColumn::ColumnMode)ui.cbType->itemData( index ).toInt();
   
   m_initializing = true;
   this->updateFormatWidgets(columnMode);
@@ -259,7 +258,7 @@ void ColumnDock::typeChanged(int index){
   int format_index = ui.cbFormat->currentIndex();
 
   switch(columnMode) {
-	  case SciDAVis::Numeric:{
+	  case AbstractColumn::Numeric:{
 		int digits = ui.sbPrecision->value();
 		Double2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
@@ -272,14 +271,14 @@ void ColumnDock::typeChanged(int index){
 		}
 		break;
 	  }
-	  case SciDAVis::Text:
+	  case AbstractColumn::Text:
 		  foreach(Column* col, m_columnsList){
 			  col->setColumnMode(columnMode);
 		  }
 		  break;
-	  case SciDAVis::Month:
-	  case SciDAVis::Day:
-	  case SciDAVis::DateTime:{
+	  case AbstractColumn::Month:
+	  case AbstractColumn::Day:
+	  case AbstractColumn::DateTime:{
 		QString format;
 		DateTime2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
@@ -302,11 +301,11 @@ void ColumnDock::formatChanged(int index){
   if (m_initializing)
 	return;
 
-  SciDAVis::ColumnMode mode = (SciDAVis::ColumnMode)ui.cbType->itemData( ui.cbType->currentIndex() ).toInt();
+  AbstractColumn::ColumnMode mode = (AbstractColumn::ColumnMode)ui.cbType->itemData( ui.cbType->currentIndex() ).toInt();
   int format_index = index;
 
   switch(mode) {
-	  case SciDAVis::Numeric:{
+	  case AbstractColumn::Numeric:{
 		Double2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
 		  filter = static_cast<Double2StringFilter*>(col->outputFilter());
@@ -314,11 +313,11 @@ void ColumnDock::formatChanged(int index){
 		}
 		break;
 	  }
-	  case SciDAVis::Text:
+	  case AbstractColumn::Text:
 		  break;
-	  case SciDAVis::Month:
-	  case SciDAVis::Day:
-	  case SciDAVis::DateTime:{
+	  case AbstractColumn::Month:
+	  case AbstractColumn::Day:
+	  case AbstractColumn::DateTime:{
 		DateTime2StringFilter * filter;
 		QString format = ui.cbFormat->itemData( ui.cbFormat->currentIndex() ).toString();
 		foreach(Column* col, m_columnsList){
@@ -346,7 +345,7 @@ void ColumnDock::plotDesignationChanged(int index){
   if (m_initializing)
 	return;
   
-  SciDAVis::PlotDesignation pd=SciDAVis::PlotDesignation(index);
+  AbstractColumn::PlotDesignation pd=AbstractColumn::PlotDesignation(index);
   foreach(Column* col, m_columnsList){
 	col->setPlotDesignation(pd);
   }  

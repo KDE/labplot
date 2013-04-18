@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : AbstractSimpleFilter.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
@@ -29,7 +29,6 @@
  ***************************************************************************/
 
 #include "AbstractSimpleFilter.h"
-#include "globals.h"
 
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
@@ -66,10 +65,10 @@
  * 03 {
  * 04	protected:
  * 05		virtual bool inputAcceptable(int, AbstractColumn *source) {
- * 06			return (source->columnMode() == SciDAVis::Numeric);
+ * 06			return (source->columnMode() == AbstractColumn::Numeric);
  * 07		}
  * 08	public:
- * 09		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
+ * 09		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
  * 10
  * 11		virtual double valueAt(int row) const {
  * 12			if (!m_inputs.value(0)) return 0.0;
@@ -89,7 +88,7 @@
  * fully-functional filter!
  *
  * Equivalently, you can write 1:1-filters for QString or QDateTime inputs by checking for
- * SciDAVis::TypeQString or SciDAVis::TypeQDateTime in line 6. You would then use
+ * AbstractColumn::TypeQString or AbstractColumn::TypeQDateTime in line 6. You would then use
  * AbstractColumn::textAt(row) or AbstractColumn::dateTimeAt(row) in line 13 to access the input data.
  * For QString output, you need to implement AbstractColumn::textAt(row). 
  * For QDateTime output, you have to implement three methods:
@@ -110,10 +109,10 @@
  * 03 {
  * 04	protected:
  * 05		virtual bool inputAcceptable(int, AbstractColumn *source) {
- * 06			return (source->columnMode() == SciDAVis::Numeric);
+ * 06			return (source->columnMode() == AbstractColumn::Numeric);
  * 07		}
  * 08	public:
- * 09		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
+ * 09		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Numeric; }
  * \endcode
  * Even rows (including row 0) get dropped, odd rows are renumbered:
  * \code
@@ -152,10 +151,10 @@ int AbstractSimpleFilter::outputCount() const {
 /**
  * \brief Copy plot designation of input port 0.
  */
-SciDAVis::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
+AbstractColumn::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
 	return m_inputs.value(0) ?
 		m_inputs.at(0)->plotDesignation() :
-		SciDAVis::noDesignation;
+		AbstractColumn::noDesignation;
 }
 
 /**
@@ -165,11 +164,11 @@ SciDAVis::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
  * by plots. The column mode specifies how to interpret 
  * the values in the column additional to the data type.
  */ 
-SciDAVis::ColumnMode AbstractSimpleFilter::columnMode() const {
+AbstractColumn::ColumnMode AbstractSimpleFilter::columnMode() const {
 	// calling this function while m_input is empty is a sign of very bad code
 	// nevertheless it will return some rather meaningless value to
 	// avoid crashes
-	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : SciDAVis::Text;
+	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : AbstractColumn::Text;
 }
 
 /**
@@ -395,7 +394,7 @@ bool AbstractSimpleFilter::load(XmlStreamReader * reader)
 //! \class SimpleFilterColumn
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SciDAVis::ColumnMode SimpleFilterColumn::columnMode() const {
+AbstractColumn::ColumnMode SimpleFilterColumn::columnMode() const {
 	return m_owner->columnMode();
 }
 

@@ -175,7 +175,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 	}
 	else if (element_name == "column")
 	{
-		Column * column = new Column("", SciDAVis::Text);
+		Column * column = new Column("", AbstractColumn::Text);
 		if (!column->load(reader))
 		{
 			delete column;

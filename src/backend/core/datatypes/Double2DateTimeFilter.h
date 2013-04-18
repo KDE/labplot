@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : Double2DateTimeFilter.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
@@ -63,12 +63,12 @@ class Double2DateTimeFilter : public AbstractSimpleFilter
 		}
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::DateTime; }
+		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::DateTime; }
 
 	protected:
 		//! Using typed ports: only double inputs are accepted.
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == SciDAVis::Numeric;
+			return source->columnMode() == AbstractColumn::Numeric;
 		}
 };
 

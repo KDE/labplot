@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : Double2MonthFilter.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
@@ -59,11 +59,11 @@ class Double2MonthFilter : public AbstractSimpleFilter
 		}
 
 		//! Return the data type of the column
-		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Month; }
+		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Month; }
 
 	protected:
 		virtual bool inputAcceptable(int, const AbstractColumn *source) {
-			return source->columnMode() == SciDAVis::Numeric;
+			return source->columnMode() == AbstractColumn::Numeric;
 		}
 };
 

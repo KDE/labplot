@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : DateTime2StringFilter.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert,
                            Knut Franke
@@ -73,9 +73,9 @@ QString DateTime2StringFilter::textAt(int row) const {
 }
 
 bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn *source) {
-	return (source->columnMode() == SciDAVis::DateTime) 
-		|| (source->columnMode() == SciDAVis::Day) 
-		|| (source->columnMode() == SciDAVis::Month);
+	return (source->columnMode() == AbstractColumn::DateTime) 
+		|| (source->columnMode() == AbstractColumn::Day) 
+		|| (source->columnMode() == AbstractColumn::Month);
 }
 
 DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format)

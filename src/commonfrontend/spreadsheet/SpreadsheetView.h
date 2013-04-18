@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : SpreadsheetView.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
@@ -33,7 +33,7 @@
 
 #include <QTableView>
 
-#include "core/globals.h"
+#include "core/AbstractColumn.h"
 #include "lib/IntervalAttribute.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -63,7 +63,7 @@ class SpreadsheetView : public QTableView{
 		bool areCommentsShown() const;
 
 		int selectedColumnCount(bool full = false);
-		int selectedColumnCount(SciDAVis::PlotDesignation pd);
+		int selectedColumnCount(AbstractColumn::PlotDesignation);
 		bool isColumnSelected(int col, bool full = false);
 		QList<Column *> selectedColumns(bool full = false);
 		int selectedRowCount(bool full = false);
@@ -156,7 +156,7 @@ class SpreadsheetView : public QTableView{
 		void goToCell();
 		void sortSpreadsheet();
 		
-		void setSelectionAs(SciDAVis::PlotDesignation pd);
+		void setSelectionAs(AbstractColumn::PlotDesignation);
 		void cutSelection();
 		void copySelection();
 		void pasteIntoSelection();

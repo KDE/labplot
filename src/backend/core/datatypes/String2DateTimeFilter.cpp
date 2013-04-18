@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : String2DateTimeFilter.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Tilman Benkert,
                            Knut Franke
@@ -76,8 +76,8 @@ const char * String2DateTimeFilter::time_formats[] = {
 	0
 };
 
-SciDAVis::ColumnMode String2DateTimeFilter::columnMode() const {
-	return SciDAVis::DateTime;
+AbstractColumn::ColumnMode String2DateTimeFilter::columnMode() const {
+	return AbstractColumn::DateTime;
 }
 
 QDateTime String2DateTimeFilter::dateTimeAt(int row) const
@@ -140,7 +140,7 @@ QTime String2DateTimeFilter::timeAt(int row) const {
 }
 
 bool String2DateTimeFilter::inputAcceptable(int, const AbstractColumn *source) {
-	return source->columnMode() == SciDAVis::Text;
+	return source->columnMode() == AbstractColumn::Text;
 }
 
 void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter * writer) const

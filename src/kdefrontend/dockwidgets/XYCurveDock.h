@@ -32,7 +32,7 @@
 
 #include <QList>
 
-#include "backend/core/globals.h"
+#include "backend/core/AbstractColumn.h"
 #include "ui_xycurvedock.h"
 #include <memory>
 
@@ -65,7 +65,7 @@ private:
 	CurveSymbolFactory* symbolFactory;
 
 	void fillSymbolStyles();
-	void updateValuesFormatWidgets(const SciDAVis::ColumnMode);
+	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
 	void showValuesColumnFormat(const Column*);
 
 private slots:

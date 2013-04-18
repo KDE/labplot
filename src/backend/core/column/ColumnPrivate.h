@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : ColumnPrivate.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
@@ -39,14 +39,14 @@ class QString;
 class Column::Private
 {
 	public:
-		Private(Column * owner, SciDAVis::ColumnMode mode);
+		Private(Column * owner, AbstractColumn::ColumnMode mode);
 		~Private();
-		Private(Column * owner, SciDAVis::ColumnMode mode, void * data);
+		Private(Column * owner, AbstractColumn::ColumnMode mode, void * data);
 
 		Column *owner() { return m_owner; }
 
-		SciDAVis::ColumnMode columnMode() const;
-		void setColumnMode(SciDAVis::ColumnMode mode);
+		AbstractColumn::ColumnMode columnMode() const;
+		void setColumnMode(AbstractColumn::ColumnMode mode);
 
 		bool copy(const AbstractColumn * other);
 		bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
@@ -57,14 +57,14 @@ class Column::Private
 		void insertRows(int before, int count);
 		void removeRows(int first, int count);
 		QString name() const;
-		SciDAVis::PlotDesignation plotDesignation() const;
-		void setPlotDesignation(SciDAVis::PlotDesignation pd);
+		AbstractColumn::PlotDesignation plotDesignation() const;
+		void setPlotDesignation(AbstractColumn::PlotDesignation);
 		int width() const;
 		void setWidth(int value);
 		void *dataPointer() const;
 		AbstractSimpleFilter* inputFilter() const;
 		AbstractSimpleFilter* outputFilter() const;
-		void replaceModeData(SciDAVis::ColumnMode mode, void * data, AbstractSimpleFilter *in_filter,
+		void replaceModeData(AbstractColumn::ColumnMode mode, void * data, AbstractSimpleFilter *in_filter,
 				AbstractSimpleFilter *out_filter);
 		void replaceData(void * data);
 		IntervalAttribute<QString> formulaAttribute() const;
@@ -91,12 +91,12 @@ class Column::Private
 		void replaceValues(int first, const QVector<double>& new_values);
 
 	private:
-		SciDAVis::ColumnMode m_column_mode;
+		AbstractColumn::ColumnMode m_column_mode;
 		void * m_data;
 		AbstractSimpleFilter* m_input_filter;
 		AbstractSimpleFilter* m_output_filter;
 		IntervalAttribute<QString> m_formulas;
-		SciDAVis::PlotDesignation m_plot_designation;
+		AbstractColumn::PlotDesignation m_plot_designation;
 		int m_width;
 		Column * m_owner;
 };

@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : AbstractColumn.cpp
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
@@ -95,7 +95,7 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
  */
 
 /**
- * \fn SciDAVis::ColumnMode AbstractColumn::columnMode() const
+ * \fn AbstractColumn::ColumnMode AbstractColumn::columnMode() const
  * \brief Return the column mode
  *
  * This function is most used by tables but can also be used
@@ -109,7 +109,7 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
  * This sets the column mode and, if
  * necessary, converts it to another datatype.
  */
-void AbstractColumn::setColumnMode(SciDAVis::ColumnMode) {}
+void AbstractColumn::setColumnMode(AbstractColumn::ColumnMode) {}
 
 /**
  * \brief Copy another column of the same type
@@ -185,14 +185,14 @@ void AbstractColumn::handleRowRemoval(int first, int count) {
 }
 
 /**
- * \fn SciDAVis::PlotDesignation AbstractColumn::plotDesignation() const
+ * \fn AbstractColumn::PlotDesignation AbstractColumn::plotDesignation() const
  * \brief Return the column plot designation
  */
 
 /**
  * \brief Set the column plot designation
  */
-void AbstractColumn::setPlotDesignation(SciDAVis::PlotDesignation pd) {
+void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
 	Q_UNUSED(pd)
 }
 
@@ -206,13 +206,13 @@ void AbstractColumn::clear() {}
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-		case SciDAVis::Numeric:
+		case AbstractColumn::Numeric:
 			return !isnan(valueAt(row));
-		case SciDAVis::Text:
+		case AbstractColumn::Text:
 			return !textAt(row).isNull();
-		case SciDAVis::DateTime:
-		case SciDAVis::Month:
-		case SciDAVis::Day:
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
 			return dateTimeAt(row).isValid();
 	}
 

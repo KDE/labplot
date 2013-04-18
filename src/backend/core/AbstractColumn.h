@@ -1,8 +1,9 @@
 /***************************************************************************
     File                 : AbstractColumn.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
+    Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses) 
 
@@ -30,7 +31,6 @@
 #ifndef ABSTRACTCOLUMN_H
 #define ABSTRACTCOLUMN_H
 
-#include "backend/core/globals.h"
 #include "backend/core/AbstractAspect.h"
 
 class AbstractSimpleFilter;
@@ -45,18 +45,38 @@ template<class T> class Interval;
 class AbstractColumn : public AbstractAspect
 {
 	Q_OBJECT
+	Q_ENUMS(PlotDesignation)
+	Q_ENUMS(ColumnMode)
 
 	public:
+		enum PlotDesignation {
+			noDesignation = 0,
+			X = 1,
+			Y = 2,
+			Z = 3,
+			xErr = 4,
+			yErr = 5
+		};
+
+		enum ColumnMode {
+			Numeric = 0,
+			Text = 1,
+			Month = 4,
+			Day = 5,
+			DateTime = 6
+			// 2 and 3 are skipped to avoid problems with old obsolete values
+		};
+		
 		class Private;
 
 		AbstractColumn(const QString& name);
 		virtual ~AbstractColumn() { aboutToBeDestroyed(this);}
 
 		virtual bool isReadOnly() const { return true; };
-		virtual SciDAVis::ColumnMode columnMode() const = 0;
-		virtual void setColumnMode(SciDAVis::ColumnMode mode);
-		virtual SciDAVis::PlotDesignation plotDesignation() const = 0;
-		virtual void setPlotDesignation(SciDAVis::PlotDesignation pd);
+		virtual ColumnMode columnMode() const = 0;
+		virtual void setColumnMode(AbstractColumn::ColumnMode);
+		virtual PlotDesignation plotDesignation() const = 0;
+		virtual void setPlotDesignation(AbstractColumn::PlotDesignation);
 
 		virtual bool copy(const AbstractColumn *source);
 		virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);

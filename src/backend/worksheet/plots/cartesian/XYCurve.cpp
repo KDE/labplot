@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : XYCurve.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot/AbstractColumn
     Description          : A 2D-curve.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
@@ -579,8 +579,8 @@ void XYCurvePrivate::retransform(){
 	int endRow = xColumn->rowCount() - 1;
 	QPointF tempPoint;
 
-	SciDAVis::ColumnMode xColMode = xColumn->columnMode();
-	SciDAVis::ColumnMode yColMode = yColumn->columnMode();
+	AbstractColumn::ColumnMode xColMode = xColumn->columnMode();
+	AbstractColumn::ColumnMode yColMode = yColumn->columnMode();
 
 	//take over only valid and non masked points.
 	for (int row = startRow; row <= endRow; row++ ){
@@ -588,14 +588,14 @@ void XYCurvePrivate::retransform(){
 			&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
 
 			switch(xColMode) {
-				case SciDAVis::Numeric:
+				case AbstractColumn::Numeric:
 					tempPoint.setX(xColumn->valueAt(row));
 					break;
-				case SciDAVis::Text:
+				case AbstractColumn::Text:
 					//TODO
-				case SciDAVis::DateTime:
-				case SciDAVis::Month:
-				case SciDAVis::Day:
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
 					//TODO
 					break;
 				default:
@@ -603,14 +603,14 @@ void XYCurvePrivate::retransform(){
 			}
 
 			switch(yColMode) {
-				case SciDAVis::Numeric:
+				case AbstractColumn::Numeric:
 					tempPoint.setY(yColumn->valueAt(row));
 					break;
-				case SciDAVis::Text:
+				case AbstractColumn::Text:
 					//TODO
-				case SciDAVis::DateTime:
-				case SciDAVis::Month:
-				case SciDAVis::Day:
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
 					//TODO
 					break;
 				default:
@@ -913,20 +913,20 @@ void XYCurvePrivate::updateValues(){
 // 		else
 // 		  endRow = symbolPointsLogical.size();
 // 
-// 		SciDAVis::ColumnMode xColMode = valuesColumn->columnMode();
+// 		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
 // 		for (int row=0; row<endRow; row++){
 // 		  if ( !valuesColumn->isValid(row) || valuesColumn->isMasked(row) )
 // 			continue;
 // 
 // 		  switch (xColMode){
-// 				case SciDAVis::Numeric:
+// 				case AbstractColumn::Numeric:
 // 				  valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(row)) + valuesSuffix;
 // 					break;
-// 				case SciDAVis::Text:
+// 				case AbstractColumn::Text:
 // 					valuesStrings << valuesPrefix + valuesColumn->textAt(row) + valuesSuffix;
-// 				case SciDAVis::DateTime:
-// 				case SciDAVis::Month:
-// 				case SciDAVis::Day:
+// 				case AbstractColumn::DateTime:
+// 				case AbstractColumn::Month:
+// 				case AbstractColumn::Day:
 // 					//TODO
 // 					break;
 // 				default:

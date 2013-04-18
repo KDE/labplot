@@ -1,6 +1,6 @@
 /***************************************************************************
 File                 : AsciiFilter.cpp
-Project              : LabPlot/SciDAVis
+Project              : LabPlot/AbstractColumn
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2009 by Stefan Gerlach
@@ -363,13 +363,13 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	if (mode==AbstractFileFilter::Append){
 		columnOffset=dataSource->childCount<Column>();
 		for ( int n=startColumn; n<=endColumn; n++ ){
-			newColumn = new Column(vectorNameList.at(n), SciDAVis::Numeric);
+			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
 			dataSource->addChild(newColumn);
 		}			
 	}else if (mode==AbstractFileFilter::Prepend){
 		Column* firstColumn = dataSource->child<Column>(0);
 		for ( int n=startColumn; n<=endColumn; n++ ){
-			newColumn = new Column(vectorNameList.at(n), SciDAVis::Numeric);
+			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
 			dataSource->insertChildBefore(newColumn, firstColumn);
 		}
 	}else if (mode==AbstractFileFilter::Replace){
@@ -384,20 +384,20 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			
 			//rename the columns, that are already available
 			for (int i=0; i<=endColumn-startColumn; i++){
-				dataSource->child<Column>(i)->setColumnMode( SciDAVis::Numeric);
+				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
 				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
 			}
 		}else{
 			//there're are not sufficient columns in the data source
 			//rename the columns, that are already available
 			for (int i=0; i<columns; i++){
-				dataSource->child<Column>(i)->setColumnMode( SciDAVis::Numeric);
+				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
 				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
 			}
 			
 			//create additional columns
 			for(int i=0;i<=(endColumn - startColumn - columns);i++){
-				newColumn = new Column(vectorNameList.at(columns+startColumn+i), SciDAVis::Numeric);
+				newColumn = new Column(vectorNameList.at(columns+startColumn+i), AbstractColumn::Numeric);
 				dataSource->addChild(newColumn);
 			}
 		}

@@ -49,7 +49,7 @@ class ColumnDock: public QWidget{
 	  QStringList dateStrings;
 	  QStringList timeStrings;
 	  
-	  void updateFormatWidgets(const SciDAVis::ColumnMode);
+	  void updateFormatWidgets(const AbstractColumn::ColumnMode);
 	  
   private slots:
 	void retranslateUi();

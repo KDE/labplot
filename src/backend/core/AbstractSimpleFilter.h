@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : AbstractSimpleFilter.h
-    Project              : SciDAVis
+    Project              : AbstractColumn
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
@@ -47,8 +47,8 @@ class AbstractSimpleFilter : public AbstractFilter
 		virtual int outputCount() const;
 		virtual AbstractColumn* output(int port);
 		virtual const AbstractColumn * output(int port) const;
-		virtual SciDAVis::PlotDesignation plotDesignation() const;
-		virtual SciDAVis::ColumnMode columnMode() const;
+		virtual AbstractColumn::PlotDesignation plotDesignation() const;
+		virtual AbstractColumn::ColumnMode columnMode() const;
 		virtual QString textAt(int row) const;
 		virtual QDate dateAt(int row) const;
 		virtual QTime timeAt(int row) const;
@@ -85,9 +85,9 @@ class SimpleFilterColumn : public AbstractColumn
 	public:
 		SimpleFilterColumn(AbstractSimpleFilter *owner) : AbstractColumn(owner->name()), m_owner(owner) {}
 
-		virtual SciDAVis::ColumnMode columnMode() const;
+		virtual AbstractColumn::ColumnMode columnMode() const;
 		virtual int rowCount() const { return m_owner->rowCount(); }
-		virtual SciDAVis::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
+		virtual AbstractColumn::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
 		virtual QString textAt(int row) const;
 		virtual QDate dateAt(int row) const;
 		virtual QTime timeAt(int row) const;
