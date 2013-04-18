@@ -32,34 +32,12 @@
 #define PROJECT_H
 
 #include "core/Folder.h"
-#include "core/interfaces.h"
 #include "lib/macros.h"
 
 class QString;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-class ProjectWindow;
-#endif
-class QAction;
 class AbstractScriptingEngine;
 
-
-/* remarks by thzs about the Labplot/SciDAVis integration of class Project:
-
-- save/open: the stream based XML reading and writing is faster than using DOM.
-  If you want, you can of course use DOM instead.
-- QString m_filename: now d->file_name
-- int m_version: now d->version
-- QString m_labPlot: now d->labPlot
-- QString m_title: use AbstractAspect::name()
-- QString m_author: now d->author
-- QDateTime m_created: use AbstractAspect::creationTime()
-- QDateTime m_modified: now d->modification_time
-- QString m_notes: use AbstractAspect::comment()
-- bool m_changed: now d->changed
-*/
-
-class Project : public Folder
-{
+class Project : public Folder {
 	Q_OBJECT
 
 	public:
@@ -97,11 +75,6 @@ class Project : public Folder
 		void setChanged(const bool  value=true);
 		bool hasChanged() const;
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		static ConfigPageWidget * makeConfigPage();
-		static QString configPageLabel();
-#endif
-
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 
@@ -115,10 +88,6 @@ class Project : public Folder
 		class Private;
 		Private *d;
 		bool readProjectAttributes(XmlStreamReader * reader);
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		friend class ProjectConfigPage;
-#endif
 };
 
 #endif // ifndef PROJECT_H

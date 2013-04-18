@@ -29,30 +29,13 @@
  *                                                                         *
  ***************************************************************************/
 #include "backend/core/Project.h"
-#include "backend/core/ScriptingEngineManager.h"
-#include "backend/core/interfaces.h"
-#include "backend/core/globals.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include "backedn/core/ProjectWindow.h"
-#include "backedn/core/ProjectConfigPage.h"
-#else
-#include "kdefrontend/MainWin.h"
-#endif
-
 #include <QUndoStack>
-#include <QString>
-#include <QKeySequence>
 #include <QMenu>
-#include <QSettings>
-#include <QComboBox>
-#include <QFile>
-#include <QXmlStreamWriter>
 #include <QDateTime>
-#include <QtDebug>
 
 /**
  * \class Project
@@ -98,11 +81,7 @@ class Project::Private
 			modification_time(QDateTime::currentDateTime()),
 			changed(false)
 			{}
-		~Private() {
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE // in LabPlot, the MainWin deletes the Project
-			delete static_cast<ProjectWindow *>(primary_view);
-#endif
-		}
+
 		QUndoStack undo_stack;
 		MdiWindowVisibility mdi_window_visibility;
 		QWidget * primary_view;
@@ -138,12 +117,9 @@ QUndoStack *Project::undoStack() const
 	return &d->undo_stack;
 }
 
+//TODO does Project really need a view?
 QWidget *Project::view()
 {
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	if (!d->primary_view)
-		d->primary_view = new ProjectWindow(this);
-#endif
 	return d->primary_view;
 }
 
