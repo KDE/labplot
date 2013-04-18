@@ -2,8 +2,9 @@
     File                 : AspectPrivate.h
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
+	Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
+							(replace * with @ in the email addresses)
     Description          : Private data managed by AbstractAspect.
 
  ***************************************************************************/
@@ -34,11 +35,8 @@
 #include <QString>
 #include <QDateTime>
 #include <QList>
-#include <QSettings>
-#include <QHash>
 
-class AbstractAspect::Private
-{
+class AbstractAspect::Private {
 	public:
 		Private(AbstractAspect * owner, const QString &name);
 		~Private();
@@ -48,14 +46,10 @@ class AbstractAspect::Private
 		int removeChild(AbstractAspect* child);
 
 		QString caption() const;
-
 		QString uniqueNameFor(const QString &current_name) const;
 
 	public:
-		static QSettings * g_settings;
-		static QHash<QString, QVariant> g_defaults;
-	
-		QList< AbstractAspect* > m_children;
+		QList<AbstractAspect*> m_children;
 		QString m_name, m_comment, m_caption_spec;
 		QDateTime m_creation_time;
 		bool m_hidden;

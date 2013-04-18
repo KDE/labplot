@@ -49,8 +49,6 @@ class AbstractColumn : public AbstractAspect
 	public:
 		class Private;
 
-		static void staticInit();
-
 		AbstractColumn(const QString& name);
 		virtual ~AbstractColumn() { aboutToBeDestroyed(this);}
 

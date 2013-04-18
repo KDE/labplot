@@ -3,7 +3,7 @@
     Project              : SciDAVis
     Description          : Represents a SciDAVis project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses)
@@ -83,7 +83,7 @@ class Project::Private
 {
 	public:
 		Private() :
-			mdi_window_visibility(static_cast<MdiWindowVisibility>(Project::global("default_mdi_window_visibility").toInt())),
+			mdi_window_visibility(Project::folderOnly),
 			primary_view(0),
 			scripting_engine(0),
 		 	file_name(QString()),
@@ -414,15 +414,15 @@ bool Project::readProjectAttributes(XmlStreamReader * reader)
 //@}
 ////////////////////////////////////////////////////////////////////////////////
 
-void Project::staticInit()
-{
+// void Project::staticInit()
+// {
 	// defaults for global settings
-	Project::setGlobalDefault("default_mdi_window_visibility", Project::folderOnly);
-	Project::setGlobalDefault("auto_save", true);
-	Project::setGlobalDefault("auto_save_interval", 15);
-	Project::setGlobalDefault("default_scripting_language", QString("muParser"));
-	// TODO: not really Project-specific; maybe put these somewhere else:
-	Project::setGlobalDefault("language", QString("en"));
-	Project::setGlobalDefault("auto_search_updates", false);
-	Project::setGlobalDefault("locale_use_group_separator", false);
-}
+// 	Project::setGlobalDefault("default_mdi_window_visibility", Project::folderOnly);
+// 	Project::setGlobalDefault("auto_save", true);
+// 	Project::setGlobalDefault("auto_save_interval", 15);
+// 	Project::setGlobalDefault("default_scripting_language", QString("muParser"));
+// 	// TODO: not really Project-specific; maybe put these somewhere else:
+// 	Project::setGlobalDefault("language", QString("en"));
+// 	Project::setGlobalDefault("auto_search_updates", false);
+// 	Project::setGlobalDefault("locale_use_group_separator", false);
+// }

@@ -4,6 +4,7 @@
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net)
+	Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -30,9 +31,7 @@
 #ifndef COLUMN_H
 #define COLUMN_H
 
-// #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractSimpleFilter.h"
-// #include "lib/IntervalAttribute.h"
 #include "backend/lib/XmlStreamReader.h"
 class QString;
 
@@ -45,8 +44,6 @@ class Column : public AbstractColumn
 	public:
 		class Private;
 		friend class Private;
-
-		static void staticInit();
 
 		Column(const QString& name, SciDAVis::ColumnMode mode);
 		Column(const QString& name, QVector<double> data);

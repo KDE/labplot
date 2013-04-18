@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
 	Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
     Description          : Base class for all persistent objects in a Project.
 
@@ -59,8 +59,6 @@ class AbstractAspect : public QObject {
 		friend class AspectChildAddCmd;
 		friend class AspectChildRemoveCmd;
 		
-		static void staticInit();
-
 		AbstractAspect(const QString& name);
 		virtual ~AbstractAspect();
 
@@ -163,11 +161,6 @@ class AbstractAspect : public QObject {
 				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());		
 		void beginMacro(const QString& text);
 		void endMacro();
-
-		//access to global settings
-		static QVariant global(const QString &key);
-		static void setGlobal(const QString &key, const QVariant &value);
-		static void setGlobalDefault(const QString &key, const QVariant &value);
 
 		virtual void save(QXmlStreamWriter*) const {}
 		virtual bool load(XmlStreamReader*) { return false; }

@@ -102,12 +102,9 @@ int main (int argc, char *argv[]) {
 //	kDebug()<<"GSL_VERSION > 1.8"<<endl;
 //#endif
 
-	// init global defaults
-	AbstractAspect::staticInit();
-	AbstractColumn::staticInit();
-	Project::staticInit();
-	Column::staticInit();
-	Spreadsheet::setGlobalDefault("default_comment_visibility", false);
+	// needed in order to have the signals triggered by SignallingUndoCommand
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");	
 
 	MainWin* window = new MainWin(0,filename);
 	window->show();

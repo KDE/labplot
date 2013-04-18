@@ -94,7 +94,6 @@ void SpreadsheetView::init(){
 	setHorizontalHeader(m_horizontalHeader);
 	m_horizontalHeader->setResizeMode(QHeaderView::Interactive);
 	m_horizontalHeader->setMovable(true);
-	m_horizontalHeader->setDefaultSectionSize(defaultColumnWidth());
 	m_horizontalHeader->installEventFilter(this);
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
@@ -127,7 +126,7 @@ void SpreadsheetView::init(){
 
 	
 	connectActions();
-	showComments(defaultCommentVisibility());
+	showComments(false);
 
 	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
 			this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -377,18 +376,11 @@ void SpreadsheetView::updateSectionSize(const Column* col){
 	connect(m_horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
 }
 
-void SpreadsheetView::setColumnWidth(int col, int width){ 
-	m_horizontalHeader->resizeSection(col, width);
-}
-
-int SpreadsheetView::columnWidth(int col) const{ 
-	return m_horizontalHeader->sectionSize(col);
-}
-
+//TODO what for?!?
 void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize){	
+	Q_UNUSED(logicalIndex);
 	Q_UNUSED(oldSize);
 	static bool inside = false;
-	m_spreadsheet->column(logicalIndex)->setWidth(newSize);
 	if (inside) return;
 	inside = true;
 
@@ -1326,24 +1318,6 @@ void SpreadsheetView::addColumns(){
 */
 void SpreadsheetView::addRows(){
 	m_spreadsheet->appendRows(selectedRowCount(false));
-}
-
-int SpreadsheetView::defaultColumnWidth() { 
-	return Column::global("default_width").toInt();
-}
-
-/*!
-  Set default for comment visibility for spreadsheet views.
-*/
-void SpreadsheetView::setDefaultCommentVisibility(bool visible){ 
-	Spreadsheet::setGlobal("default_comment_visibility", visible); 
-}
-
-/*!
-  Return the default for comment visibility for spreadsheet views.
- */
-bool SpreadsheetView::defaultCommentVisibility() { 
-	return Spreadsheet::global("default_comment_visibility").toBool(); 
 }
 
 //TODO 

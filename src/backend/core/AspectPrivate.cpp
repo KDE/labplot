@@ -36,19 +36,6 @@
  * \brief Private data managed by AbstractAspect.
  */
 
-QSettings * AbstractAspect::Private::g_settings =
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#ifdef Q_OS_MAC
-	new QSettings(QSettings::IniFormat, QSettings::UserScope, "SciDAVis", "SciDAVis");
-#else
-	new QSettings(QSettings::NativeFormat, QSettings::UserScope, "SciDAVis", "SciDAVis");
-#endif
-#else
-// TODO ! add labplot/KDE specific config saving here
-	new QSettings(QSettings::NativeFormat, QSettings::UserScope, "LabPlot", "LabPlot");
-#endif
-QHash<QString, QVariant> AbstractAspect::Private::g_defaults;
-
 AbstractAspect::Private::Private(AbstractAspect * owner, const QString& name)
 	: m_name(name.isEmpty() ? "1" : name),  m_caption_spec("%n%C{ - }%c"), m_hidden(false), m_owner(owner), m_parent(0)
 {

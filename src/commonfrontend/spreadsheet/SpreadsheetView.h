@@ -77,12 +77,6 @@ class SpreadsheetView : public QTableView{
 		void setCellSelected(int row, int col, bool select = true);
 		void setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select = true);
 		void getCurrentCell(int * row, int * col);
-
-		static int defaultColumnWidth();
-		static void setDefaultColumnWidth(int width);
-
-		static void setDefaultCommentVisibility(bool visible);
-		static bool defaultCommentVisibility();
 	
 	private:
 	  	 void init();
@@ -195,9 +189,7 @@ class SpreadsheetView : public QTableView{
 		
 		void addColumns();
 		void addRows();
-		
-		void setColumnWidth(int col, int width);
-		int columnWidth(int col) const;
+
 		bool formulaModeActive() const;
 
 		void createContextMenu(QMenu * menu);

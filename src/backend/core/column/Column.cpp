@@ -4,6 +4,7 @@
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
 
  ***************************************************************************/
@@ -53,11 +54,6 @@
  * of the corresponding Spreadsheet in the aspect hierarchy. Columns don't
  * have a view as they are intended to be displayed inside a spreadsheet.
  */
-
-void Column::staticInit()
-{
-	setGlobalDefault("default_width", 120);
-}
 
 /**
  * \brief Ctor
@@ -119,14 +115,14 @@ void Column::init()
 	m_column_private->outputFilter()->setHidden(true);
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
-	m_column_private->setWidth(global("default_width").toInt());
+	m_column_private->setWidth(120);
 }
 
 /**
  * \brief Dtor
  */
-Column::~Column()
-{
+Column::~Column() {
+	delete m_string_io;
 	delete m_column_private;
 }
 

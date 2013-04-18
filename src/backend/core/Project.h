@@ -3,7 +3,7 @@
     Project              : SciDAVis
     Description          : Represents a SciDAVis project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses)
@@ -101,7 +101,6 @@ class Project : public Folder
 		static ConfigPageWidget * makeConfigPage();
 		static QString configPageLabel();
 #endif
-		static void staticInit();
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);

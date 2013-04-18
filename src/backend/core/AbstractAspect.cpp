@@ -230,11 +230,6 @@
 // start of AbstractAspect implementation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void AbstractAspect::staticInit() {
-	// needed in order to have the signals triggered by SignallingUndoCommand
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-}
-
 AbstractAspect::AbstractAspect(const QString &name)
 	: m_aspect_private(new Private(this, name))
 {
@@ -786,33 +781,4 @@ void AbstractAspect::removeAllChildren()
 	}
 
 	endMacro();
-}
-
-/**
- * \brief Retrieve a global setting.
- */
-QVariant AbstractAspect::global(const QString &key)
-{
-	QString qualified_key = QString(staticMetaObject.className()) + "/" + key;
-	QVariant result = Private::g_settings->value(qualified_key);
-	if (result.isValid())
-		return result;
-	else
-		return Private::g_defaults[qualified_key];
-}
-
-/**
- * \brief Update a global setting.
- */
-void AbstractAspect::setGlobal(const QString &key, const QVariant &value)
-{
-	Private::g_settings->setValue(QString(staticMetaObject.className()) + "/" + key, value);
-}
-
-/**
- * \brief Set default value for a global setting.
- */
-void AbstractAspect::setGlobalDefault(const QString &key, const QVariant &value)
-{
-	Private::g_defaults[QString(staticMetaObject.className()) + "/" + key] = value;
 }

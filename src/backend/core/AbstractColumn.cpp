@@ -79,11 +79,6 @@
  * writing interface. 
  */
 
-void AbstractColumn::staticInit() {
-	// needed in order to have the signals triggered by SignallingUndoCommand
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
-
 /**
  * \brief Ctor
  *
