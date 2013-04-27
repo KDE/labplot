@@ -101,7 +101,8 @@ void TextLabel::init() {
 }
 
 TextLabel::~TextLabel() {
-	delete d_ptr;
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem 
+	//and is deleted during the cleanup in QGraphicsScene
 }
 
 QGraphicsItem* TextLabel::graphicsItem() const{

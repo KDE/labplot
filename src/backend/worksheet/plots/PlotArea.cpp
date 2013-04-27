@@ -62,7 +62,8 @@ PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
 }
 
 PlotArea::~PlotArea(){
-	delete d_ptr;
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem 
+	//and is deleted during the cleanup in QGraphicsScene
 }
 
 void PlotArea::init(){

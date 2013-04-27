@@ -245,11 +245,13 @@ QIcon Axis::icon() const{
 }
 
 Axis::~Axis() {
-	Q_D(Axis);
-	delete d->title;
-	delete d_ptr;
 	delete orientationMenu;
 	delete lineMenu;
+	
+	//no need to delete d->title, since it was added with addChild in init();
+
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem 
+	//and is deleted during the cleanup in QGraphicsScene	
 }
 
 QGraphicsItem *Axis::graphicsItem() const {

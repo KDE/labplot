@@ -42,7 +42,7 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		WorksheetElementContainer(const QString &name);
 		virtual ~WorksheetElementContainer();
 
-		virtual QGraphicsItem *graphicsItem() const;
+		virtual QGraphicsItem* graphicsItem() const;
 
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
@@ -56,7 +56,7 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 	
 	protected:
-		WorksheetElementContainerPrivate * const d_ptr;
+		WorksheetElementContainerPrivate* const d_ptr;
 		WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd);
 
 	protected slots:

@@ -235,10 +235,8 @@ AbstractAspect::AbstractAspect(const QString &name)
 {
 }
 
-AbstractAspect::~AbstractAspect()
-{
-	//TODO: crash while closing project
-// 	delete m_aspect_private;
+AbstractAspect::~AbstractAspect() {
+	delete m_aspect_private;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

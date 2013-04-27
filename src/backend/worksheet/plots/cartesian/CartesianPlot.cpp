@@ -90,10 +90,13 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):Abst
 }
 
 CartesianPlot::~CartesianPlot(){
-	delete d_ptr;
 	delete m_coordinateSystem;
 	delete addNewMenu;
+
 	//don't need to delete objects added with addChild()
+
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem 
+	//and is deleted during the cleanup in QGraphicsScene		
 }
 
 /*!

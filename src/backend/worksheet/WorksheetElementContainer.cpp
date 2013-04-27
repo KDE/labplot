@@ -65,7 +65,8 @@ WorksheetElementContainer::WorksheetElementContainer(const QString &name, Worksh
 }
 
 WorksheetElementContainer::~WorksheetElementContainer(){
-	delete d_ptr;
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem
+	//and is deleted during the cleanup in QGraphicsScene
 }
 
 QGraphicsItem *WorksheetElementContainer::graphicsItem() const {
