@@ -107,6 +107,10 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	
 	m_label = labels.first();
 
+	// settings for default selection (necessary if not changed later)
+	positionXChanged(0);
+	positionYChanged(0);
+
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
@@ -132,6 +136,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	m_axesList = axes;
 	m_label = m_labelsList.first();
 
+
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
   	loadConfig(group);
@@ -145,7 +150,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 }
 
 /*!
- * enables/disables the "fixe label"-mode, used when displaying 
+ * enables/disables the "fixed label"-mode, used when displaying 
  * the properties of axis' title label.
  * In this mode, in the "geometry"-part only the offset (offset to the axis)
  * and the rotation of the label are available.
@@ -377,7 +382,7 @@ void LabelWidget::positionXChanged(int index){
 	}else{
 		ui.sbPositionX->setEnabled(false);
 	}
-	
+
 	if (m_initializing)
 		return;
 
@@ -397,7 +402,7 @@ void LabelWidget::positionYChanged(int index){
 	}else{
 		ui.sbPositionY->setEnabled(false);
 	}
-	
+
 	if (m_initializing)
 		return;
 
