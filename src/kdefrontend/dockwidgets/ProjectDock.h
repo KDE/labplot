@@ -31,6 +31,7 @@
 
 #include "ui_projectdock.h"
 class Project;
+class AbstractAspect;
 
 //class Worksheet;
 
@@ -52,7 +53,10 @@ private slots:
 	void titleChanged(const QString&);
 	void authorChanged(const QString&);
 	void commentChanged();
-  
+
+        //SLOTs for changes triggered in Project
+        void projectDescriptionChanged(const AbstractAspect*);
+
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
 };

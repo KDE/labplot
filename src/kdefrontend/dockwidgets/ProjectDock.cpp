@@ -70,6 +70,9 @@ void ProjectDock::setProject(Project *project) {
 	//show default properties of a project
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
+	
+	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(projectDescriptionChanged(const AbstractAspect*)));
+
 	m_initializing = false;
 }
 
@@ -98,6 +101,22 @@ void ProjectDock::commentChanged(){
 		return;
 
 	m_project->setComment(ui.tbComment->toPlainText());
+}
+
+//*************************************************************
+//******** SLOTs for changes triggered in Project   ***********
+//*************************************************************
+void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
+        if (m_project != aspect)
+                return;
+
+        m_initializing = true;
+        if (aspect->name() != ui.leTitle->text()) {
+                ui.leTitle->setText(aspect->name());
+        } else if (aspect->comment() != ui.tbComment->toPlainText()) {
+                ui.tbComment->setText(aspect->comment());
+        }
+        m_initializing = false;
 }
 
 /*************************************************************/
