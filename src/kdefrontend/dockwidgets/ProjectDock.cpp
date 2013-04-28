@@ -2,7 +2,7 @@
     File                 : ProjectDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for project properties
                            
@@ -42,7 +42,7 @@ ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(0), m_init
 	ui.setupUi(this);
 
 	// SLOTS
-	connect(ui.leTitle, SIGNAL( textChanged(const QString&) ), this, SLOT( titleChanged(const QString&) ) );
+	connect(ui.leName, SIGNAL( textChanged(const QString&) ), this, SLOT( titleChanged(const QString&) ) );
 	connect(ui.leAuthor, SIGNAL( textChanged(const QString&) ), this, SLOT( authorChanged(const QString&) ) );
 	connect(ui.tbComment, SIGNAL( textChanged() ), this, SLOT( commentChanged() ) );
 
@@ -61,7 +61,7 @@ void ProjectDock::setProject(Project *project) {
 	ui.leFileName->setText(project->fileName());
 	ui.lProjectVersion->setText(QString::number(project->version()));
 	ui.lLabPlotVersion->setText(project->labPlot());
-	ui.leTitle->setText(project->name());
+	ui.leName->setText(project->name());
 	ui.leAuthor->setText(project->author());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
@@ -111,8 +111,8 @@ void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
                 return;
 
         m_initializing = true;
-        if (aspect->name() != ui.leTitle->text()) {
-                ui.leTitle->setText(aspect->name());
+        if (aspect->name() != ui.leName->text()) {
+                ui.leName->setText(aspect->name());
         } else if (aspect->comment() != ui.tbComment->toPlainText()) {
                 ui.tbComment->setText(aspect->comment());
         }
@@ -124,7 +124,7 @@ void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
 void ProjectDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Project" );
 
-	ui.leTitle->setText( group.readEntry("Title", m_project->name()) );
+	ui.leName->setText( group.readEntry("Title", m_project->name()) );
 	ui.leAuthor->setText( group.readEntry("Author", m_project->author()) );
 	ui.tbComment->setText( group.readEntry("Comment", m_project->comment()) );
 }
@@ -132,7 +132,7 @@ void ProjectDock::loadConfig(KConfig& config){
 void ProjectDock::saveConfig(KConfig& config){
 	KConfigGroup group = config.group( "Project" );
 
-	group.writeEntry("Title", ui.leTitle->text());
+	group.writeEntry("Title", ui.leName->text());
 	group.writeEntry("Author", ui.leAuthor->text());
 	group.writeEntry("Comment", ui.tbComment->toPlainText());
 }
