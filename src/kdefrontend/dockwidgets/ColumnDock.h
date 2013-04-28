@@ -37,29 +37,33 @@ class Column;
 
 class ColumnDock: public QWidget{
 	Q_OBJECT
-	
+
   public:
-	  ColumnDock(QWidget *parent);
-	  void setColumns(QList<Column*>);
-	  
+	ColumnDock(QWidget *parent);
+	void setColumns(QList<Column*>);
+
   private:
-	  Ui::ColumnDock ui;
-	  QList<Column*> m_columnsList;
-	  bool m_initializing;
-	  QStringList dateStrings;
-	  QStringList timeStrings;
-	  
-	  void updateFormatWidgets(const AbstractColumn::ColumnMode);
-	  
+	Ui::ColumnDock ui;
+	QList<Column*> m_columnsList;
+	Column* m_column;
+	bool m_initializing;
+	QStringList dateStrings;
+	QStringList timeStrings;
+
+	void updateFormatWidgets(const AbstractColumn::ColumnMode);
+
   private slots:
 	void retranslateUi();
-	
+
 	void nameChanged();
 	void commentChanged();
 	void typeChanged(int);
 	void formatChanged(int);
 	void precisionChanged(int);
 	void plotDesignationChanged(int);
+
+	//SLOTs for changes triggered in Column
+        void columnDescriptionChanged(const AbstractAspect*);
 };
 
 #endif // COLUMNDOCK_H

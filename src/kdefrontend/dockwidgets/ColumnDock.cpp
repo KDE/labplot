@@ -79,56 +79,59 @@ ColumnDock::ColumnDock(QWidget *parent): QWidget(parent){
 }
 
 void ColumnDock::setColumns(QList<Column*> list){
-  m_initializing=true;
-  m_columnsList = list;
-  
-  Column* column=list.first();
-  
-  if (list.size()==1){
-	ui.lName->setEnabled(true);
-	ui.leName->setEnabled(true);
-	ui.lComment->setEnabled(true);
-	ui.leComment->setEnabled(true);
-	
-	ui.leName->setText(column->name());
-	ui.leComment->setText(column->comment());
-  }else{
-	ui.lName->setEnabled(false);
-	ui.leName->setEnabled(false);
-	ui.lComment->setEnabled(false);
-	ui.leComment->setEnabled(false);
-	
-	ui.leName->setText("");
-	ui.leComment->setText("");
-  }
-  
-  //show the properties of the first column
-  AbstractColumn::ColumnMode columnMode = column->columnMode();
-  ui.cbType->setCurrentIndex(ui.cbType->findData((int)columnMode));
-  this->updateFormatWidgets(columnMode);
+	m_initializing=true;
+	m_columnsList = list;
 
-  switch(columnMode) {
-	  case AbstractColumn::Numeric:{
-			  Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
-			  ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
-			  qDebug()<<"set columns, numeric format"<<filter->numericFormat();
-			  ui.sbPrecision->setValue(filter->numDigits());
-			  break;
-		  }
-	  case AbstractColumn::Month:
-	  case AbstractColumn::Day:
-	  case AbstractColumn::DateTime: {
-			  DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-			  ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
-			  break;
-		  }
-	  default:
-		  break;
-  }
-  
-  ui.cbPlotDesignation->setCurrentIndex( int(column->plotDesignation()) );
-  
-  m_initializing=false;
+	m_column=list.first();
+
+	if (list.size()==1){
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
+
+		ui.leName->setText(m_column->name());
+		ui.leComment->setText(m_column->comment());
+	}else{
+		ui.lName->setEnabled(false);
+		ui.leName->setEnabled(false);
+		ui.lComment->setEnabled(false);
+		ui.leComment->setEnabled(false);
+
+		ui.leName->setText("");
+		ui.leComment->setText("");
+	}
+
+	//show the properties of the first column
+	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
+	ui.cbType->setCurrentIndex(ui.cbType->findData((int)columnMode));
+	this->updateFormatWidgets(columnMode);
+
+	switch(columnMode) {
+		case AbstractColumn::Numeric:{
+			Double2StringFilter* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
+			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
+			//qDebug()<<"set columns, numeric format"<<filter->numericFormat();
+			ui.sbPrecision->setValue(filter->numDigits());
+			break;
+		}
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+		case AbstractColumn::DateTime: {
+			DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
+			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
+			break;
+		}
+		default:
+			break;
+	}
+
+	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
+
+	// slots 
+	connect(m_column, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(columnDescriptionChanged(const AbstractAspect*)));
+
+	m_initializing=false;
 }
 
 /*!
@@ -349,4 +352,21 @@ void ColumnDock::plotDesignationChanged(int index){
   foreach(Column* col, m_columnsList){
 	col->setPlotDesignation(pd);
   }  
+}
+
+
+//*************************************************************
+//******** SLOTs for changes triggered in Column ***********
+//*************************************************************
+void ColumnDock::columnDescriptionChanged(const AbstractAspect* aspect) {
+        if (m_column != aspect)
+                return;
+
+        m_initializing = true;
+        if (aspect->name() != ui.leName->text()) {
+                ui.leName->setText(aspect->name());
+        } else if (aspect->comment() != ui.leComment->text()) {
+                ui.leComment->setText(aspect->comment());
+        }
+        m_initializing = false;
 }
