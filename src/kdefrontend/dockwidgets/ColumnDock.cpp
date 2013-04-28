@@ -2,8 +2,9 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach*uni.kn)
+                                                        (use @ for *)
     Description          : widget for column properties
                            
  ***************************************************************************/
@@ -130,6 +131,10 @@ void ColumnDock::setColumns(QList<Column*> list){
 
 	// slots 
 	connect(m_column, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(columnDescriptionChanged(const AbstractAspect*)));
+	// TODO: type change
+	connect(m_column->outputFilter(), SIGNAL(formatChanged()),this, SLOT(columnFormatChanged()));
+	connect(m_column->outputFilter(), SIGNAL(digitsChanged()),this, SLOT(columnPrecisionChanged()));
+	// TODO: plot designation change
 
 	m_initializing=false;
 }
@@ -147,8 +152,8 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 	  ui.cbFormat->addItem(tr("Decimal"), QVariant('f'));
 	  ui.cbFormat->addItem(tr("Scientific (e)"), QVariant('e'));
 	  ui.cbFormat->addItem(tr("Scientific (E)"), QVariant('E'));
-	  ui.cbFormat->addItem(tr("Automatic (e)"), QVariant('g'));
-	  ui.cbFormat->addItem(tr("Automatic (E)"), QVariant('G'));
+	  ui.cbFormat->addItem(tr("Automatic (g)"), QVariant('g'));
+	  ui.cbFormat->addItem(tr("Automatic (G)"), QVariant('G'));
 	  break;
 	case AbstractColumn::Text:
 	  break;
@@ -369,4 +374,27 @@ void ColumnDock::columnDescriptionChanged(const AbstractAspect* aspect) {
                 ui.leComment->setText(aspect->comment());
         }
         m_initializing = false;
+}
+
+void ColumnDock::columnTypeChanged() {
+	//TODO
+}
+
+void ColumnDock::columnFormatChanged() {
+        m_initializing = true;
+	Double2StringFilter * filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
+	//TODO: numericFormat() returns char of format!
+	//ui.cbFormat->setCurrentIndex(filter->numericFormat());
+        m_initializing = false;
+}
+
+void ColumnDock::columnPrecisionChanged() {
+        m_initializing = true;
+	Double2StringFilter * filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
+	ui.sbPrecision->setValue(filter->numDigits());
+        m_initializing = false;
+}
+
+void ColumnDock::columnPlotDesignationChanged() {
+	//TODO
 }

@@ -56,6 +56,7 @@ class Double2StringFilter : public AbstractSimpleFilter
 
 	signals:
 		void formatChanged();
+		void digitsChanged();
 
 	private:
 		friend class Double2StringFilterSetFormatCmd;

@@ -134,7 +134,7 @@ void Double2StringFilterSetDigitsCmd::redo()
 	int tmp = m_target->m_digits;
 	m_target->m_digits = m_other_digits;
 	m_other_digits = tmp;
-	emit m_target->formatChanged();
+	emit m_target->digitsChanged();
 }
 
 void Double2StringFilterSetDigitsCmd::undo() 

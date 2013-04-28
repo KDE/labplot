@@ -63,7 +63,11 @@ class ColumnDock: public QWidget{
 	void plotDesignationChanged(int);
 
 	//SLOTs for changes triggered in Column
-        void columnDescriptionChanged(const AbstractAspect*);
+	void columnDescriptionChanged(const AbstractAspect*);
+	void columnTypeChanged();
+	void columnFormatChanged();
+	void columnPrecisionChanged();
+	void columnPlotDesignationChanged();
 };
 
 #endif // COLUMNDOCK_H
