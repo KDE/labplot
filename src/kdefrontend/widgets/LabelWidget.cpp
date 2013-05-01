@@ -108,8 +108,8 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_label = labels.first();
 
 	// settings for default selection (necessary if not changed later)
-	positionXChanged(0);
-	positionYChanged(0);
+	ui.sbPositionX->setEnabled(false);
+	ui.sbPositionY->setEnabled(false);
 
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
