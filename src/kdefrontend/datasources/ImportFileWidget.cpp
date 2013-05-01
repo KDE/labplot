@@ -142,6 +142,7 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
     FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 	 if ( fileType==FileDataSource::AsciiVector ) {
+		 //TODO use auto_ptr
         AsciiFilter* filter = new AsciiFilter();
         if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
 		  filter->setAutoModeEnabled(true);
@@ -158,10 +159,17 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
         }
 
         //save the data portion to import
-        filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value() );
-		filter->setEndColumn( ui.sbEndColumn->value() );
+        filter->setStartRow( ui.sbStartRow->value()-1 );
+		if (ui.sbEndRow->value()==-1)
+			filter->setEndRow(-1);
+		else
+			filter->setEndRow( ui.sbEndRow->value() );
+		
+		filter->setStartColumn( ui.sbStartColumn->value()-1 );
+		if (ui.sbEndColumn->value() == -1)
+			filter->setEndColumn(-1);
+		else
+			filter->setEndColumn( ui.sbEndColumn->value()-1 );
 
 		return filter;
 //         source->setFilter(filter);

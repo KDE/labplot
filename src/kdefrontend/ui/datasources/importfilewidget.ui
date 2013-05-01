@@ -322,6 +322,9 @@
             <property name="toolTip">
              <string>Specify the number of the start row to import</string>
             </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
            </widget>
           </item>
           <item row="0" column="2">
@@ -384,6 +387,9 @@
            <widget class="QSpinBox" name="sbStartColumn">
             <property name="toolTip">
              <string>Specify the number of the start column to import</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
             </property>
            </widget>
           </item>
