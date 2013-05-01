@@ -87,13 +87,6 @@ void XYCurve::init(){
 	d->dropLineType = XYCurve::NoDropLine;
 	d->dropLineOpacity = 1.0;
 	
-	d->symbolsOpacity = 1.0;
-	d->symbolsRotationAngle = 0;
-	d->symbolsSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
-	d->symbolsAspectRatio = 1;
-	d->symbolsPrototype = NULL;
-	d->swapSymbolsTypeId("diamond");
-
 	d->valuesType = XYCurve::NoValues;
 	d->valuesColumn = NULL;	
 	d->valuesPosition = XYCurve::ValuesAbove;
@@ -102,11 +95,19 @@ void XYCurve::init(){
 	d->valuesOpacity = 1.0;
 	d->valuesFont.setPointSizeF( Worksheet::convertToSceneUnits( 6, Worksheet::Point ) );
 	
+	d->symbolsOpacity = 1.0;
+	d->symbolsRotationAngle = 0;
+	d->symbolsSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
+	d->symbolsAspectRatio = 1;
+	d->symbolsPrototype = NULL;
+	d->swapSymbolsTypeId("diamond");
+	
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 XYCurve::~XYCurve() {
-	delete d_ptr;
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem
+	//and is deleted during the cleanup in QGraphicsScene
 }
 
 /*!

@@ -149,7 +149,7 @@ void WorksheetElementContainer::handleAspectAboutToBeRemoved(const AbstractAspec
 //################### Private implementation ##########################
 //################################################################
 WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
-	: q(owner) {
+	: q(owner), m_hovered(false) {
 	this->setAcceptHoverEvents(true);
 }
 

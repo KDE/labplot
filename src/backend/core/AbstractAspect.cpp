@@ -363,7 +363,6 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 
 	emit aspectAboutToBeAdded(this, 0, child);
 	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->m_children.count()));
-	emit aspectAdded(child);
 	endMacro();
 
 	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
