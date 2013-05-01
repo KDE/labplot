@@ -35,6 +35,7 @@
 #include <QBrush>
 #include <QIcon>
 #include <QPixmap>
+#include <QDebug>
 
 SpreadsheetModel::SpreadsheetModel(Spreadsheet * spreadsheet)
 	: QAbstractItemModel(0), m_spreadsheet(spreadsheet), m_formula_mode(false)
@@ -334,6 +335,7 @@ void SpreadsheetModel::handleRowsInserted(const AbstractColumn * col, int before
 	updateVerticalHeader();
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	emit dataChanged(index(0, i), index(col->rowCount()-1, i));
+	m_spreadsheet->emitRowCountChanged();
 }
 
 void SpreadsheetModel::handleRowsRemoved(const AbstractColumn * col, int first, int count)
@@ -342,6 +344,7 @@ void SpreadsheetModel::handleRowsRemoved(const AbstractColumn * col, int first, 
 	updateVerticalHeader();
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	emit dataChanged(index(0, i), index(col->rowCount()-1, i));
+	m_spreadsheet->emitRowCountChanged();
 }
 
 void SpreadsheetModel::updateVerticalHeader()

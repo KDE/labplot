@@ -29,8 +29,12 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "backend/spreadsheet/Spreadsheet.h"
+#include "Spreadsheet.h"
+#include "backend/core/AspectPrivate.h"
+#include "backend/core/AbstractAspect.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
@@ -145,23 +149,23 @@ void Spreadsheet::insertRows(int before, int count)
 }
 
 void Spreadsheet::appendRows(int count){
-  insertRows(rowCount(), count);
+	insertRows(rowCount(), count);
 }
 
 void Spreadsheet::appendRow(){
-  insertRows(rowCount(), 1);
+	insertRows(rowCount(), 1);
 }
 
 void Spreadsheet::appendColumns(int count){
-  insertColumns(columnCount(), count);
+	insertColumns(columnCount(), count);
 }
 
 void Spreadsheet::appendColumn(){
-  insertColumns(columnCount(), 1);
+	insertColumns(columnCount(), 1);
 }
 
 void Spreadsheet::prependColumns(int count){
-  insertColumns(0, count);
+	insertColumns(0, count);
 }
 
 /*!

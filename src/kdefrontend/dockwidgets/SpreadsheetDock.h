@@ -60,8 +60,11 @@ private slots:
 	void columnCountChanged(int);
 	void commentsShownChanged(int);
 
-	//SLOTs for changes triggered in Worksheet
+	//SLOTs for changes triggered in Spreadsheet
 	void spreadsheetDescriptionChanged(const AbstractAspect*);
+	void spreadsheetRowCountChanged(int);
+	void spreadsheetColumnCountChanged(int);
+	void spreadsheetShowCommentsChanged(int);
 
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);

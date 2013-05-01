@@ -84,9 +84,12 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
-	//TODO: undo functions
+	// undo functions
 	connect(m_spreadsheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 			this, SLOT(spreadsheetDescriptionChanged(const AbstractAspect*)));
+	connect(m_spreadsheet, SIGNAL(rowCountChanged(int)),this, SLOT(spreadsheetRowCountChanged(int)));
+	connect(m_spreadsheet, SIGNAL(columnCountChanged(int)),this, SLOT(spreadsheetColumnCountChanged(int)));
+	//TODO: show comments
 
 	m_initializing = false;
 }
@@ -146,6 +149,24 @@ void SpreadsheetDock::spreadsheetDescriptionChanged(const AbstractAspect* aspect
 	} else if (aspect->comment() != ui.leComment->text()) {
 		ui.leComment->setText(aspect->comment());
 	}
+	m_initializing = false;
+}
+
+void SpreadsheetDock::spreadsheetRowCountChanged(int count) {
+	m_initializing = true;
+  	ui.sbRowCount->setValue(count);
+	m_initializing = false;
+}
+
+void SpreadsheetDock::spreadsheetColumnCountChanged(int count) {
+	m_initializing = true;
+  	ui.sbColumnCount->setValue(count);
+	m_initializing = false;
+}
+
+void SpreadsheetDock::spreadsheetShowCommentsChanged(int checked) {
+	m_initializing = true;
+	ui.cbShowComments->setChecked(checked);
 	m_initializing = false;
 }
 

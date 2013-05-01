@@ -66,16 +66,20 @@ class Spreadsheet : public AbstractDataSource{
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
-		
+
 		void setColumnSelectedInView(int index, bool selected);
-		
+
+		// used from model to inform dock
+		void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
+		void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
+
 	public slots:
 		void appendRows(int count);
 		void appendRow();
 		void appendColumns(int count);
 		void appendColumn();
 		void prependColumns(int count);
-		
+
 		void setColumnCount(int new_size);
 		void setRowCount(int new_size);
 
@@ -87,7 +91,7 @@ class Spreadsheet : public AbstractDataSource{
 	private:
 		void init();
 
-	 private slots:
+	private slots:
 		virtual void childSelected(const AbstractAspect*);
 		virtual void childDeselected(const AbstractAspect*);
 
@@ -96,6 +100,10 @@ class Spreadsheet : public AbstractDataSource{
 		void requestProjectContextMenu(QMenu *menu);
 		void columnSelected(int);
 		void columnDeselected(int);
+
+		// for spreadsheet dock
+		void rowCountChanged(int);
+		void columnCountChanged(int);
 };
 
 #endif
