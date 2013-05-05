@@ -61,6 +61,7 @@
 
 #ifdef HAVE_GSL
 #include <gsl/gsl_spline.h>
+#include <gsl/gsl_errno.h>
 #endif
 #include <math.h>
 #include <vector>
@@ -746,16 +747,38 @@ void XYCurvePrivate::updateLines(){
 		}
 		
 		if (lineType==XYCurve::SplineCubicNatural){
-		  spline  = gsl_spline_alloc (gsl_interp_cspline, count);
+			spline = gsl_spline_alloc(gsl_interp_cspline, count);
 		}else if (lineType==XYCurve::SplineCubicPeriodic){
-			spline  = gsl_spline_alloc (gsl_interp_cspline_periodic, count);
+			spline = gsl_spline_alloc(gsl_interp_cspline_periodic, count);
 		}else if (lineType==XYCurve::SplineAkimaNatural){
-		  spline  = gsl_spline_alloc (gsl_interp_akima, count);
+			spline = gsl_spline_alloc(gsl_interp_akima, count);
 		}else if (lineType==XYCurve::SplineAkimaPeriodic){
-			spline  = gsl_spline_alloc (gsl_interp_akima_periodic, count);
+			spline = gsl_spline_alloc(gsl_interp_akima_periodic, count);
 		}
-		
-		gsl_spline_init (spline, x, y, count);
+
+		if (!spline) {
+			//TODO:akima splines don't work at the moment
+			qDebug()<<"Couldn't initalize spline function";
+			recalcShapeAndBoundingRect();
+			return;
+		}
+
+		gsl_set_error_handler_off();
+		int status = gsl_spline_init (spline, x, y, count);
+		if (status ) {
+			//TODO: check in gsl/interp.c when GSL_EINVAL is thrown
+			QString gslError;
+			if (status == GSL_EINVAL)
+				gslError = "x values must be monotonically increasing.";
+			else
+				gslError = gsl_strerror (status);
+
+			//TODO: forward the error message to the UI.
+			qDebug() << "Error in spline calculation. " << gslError;
+
+			recalcShapeAndBoundingRect();
+			return;
+		}
 		
 		//create interpolating points
 		std::vector<double> xinterp, yinterp;
