@@ -54,9 +54,6 @@ class Double2StringFilter : public AbstractSimpleFilter
 		//! Return the data type of the column
 		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
 
-	signals:
-		void formatChanged();
-		void digitsChanged();
 
 	private:
 		friend class Double2StringFilterSetFormatCmd;

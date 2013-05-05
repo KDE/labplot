@@ -62,6 +62,10 @@ class AbstractSimpleFilter : public AbstractFilter
 		virtual bool load(XmlStreamReader * reader);
 		virtual void writeExtraAttributes(QXmlStreamWriter * writer) const;
 
+	signals:
+		void formatChanged();
+		void digitsChanged();
+
 	protected:
 		virtual void inputPlotDesignationAboutToChange(const AbstractColumn*);
 		virtual void inputPlotDesignationChanged(const AbstractColumn*);

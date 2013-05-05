@@ -73,7 +73,7 @@ ColumnDock::ColumnDock(QWidget *parent): QWidget(parent){
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
-	connect( ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)) );
+	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)) );
 	connect(ui.cbPlotDesignation, SIGNAL(currentIndexChanged(int)), this, SLOT(plotDesignationChanged(int)));
 	
 	retranslateUi();
@@ -131,10 +131,9 @@ void ColumnDock::setColumns(QList<Column*> list){
 
 	// slots 
 	connect(m_column, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(columnDescriptionChanged(const AbstractAspect*)));
-	// TODO: type change
 	connect(m_column->outputFilter(), SIGNAL(formatChanged()),this, SLOT(columnFormatChanged()));
 	connect(m_column->outputFilter(), SIGNAL(digitsChanged()),this, SLOT(columnPrecisionChanged()));
-	// TODO: plot designation change
+	connect(m_column, SIGNAL(plotDesignationChanged(const AbstractColumn*)),this, SLOT(columnPlotDesignationChanged(const AbstractColumn *)));
 
 	m_initializing=false;
 }
@@ -376,15 +375,25 @@ void ColumnDock::columnDescriptionChanged(const AbstractAspect* aspect) {
         m_initializing = false;
 }
 
-void ColumnDock::columnTypeChanged() {
-	//TODO
-}
-
 void ColumnDock::columnFormatChanged() {
         m_initializing = true;
-	Double2StringFilter * filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
-	//TODO: numericFormat() returns char of format!
-	//ui.cbFormat->setCurrentIndex(filter->numericFormat());
+	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
+	switch(columnMode) {
+                case AbstractColumn::Numeric:{
+                        Double2StringFilter* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
+                        ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
+                        break;
+                }
+                case AbstractColumn::Month:
+                case AbstractColumn::Day:
+                case AbstractColumn::DateTime: {
+                        DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
+                        ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
+                        break;
+                }
+                default:
+                        break;
+        }
         m_initializing = false;
 }
 
@@ -395,6 +404,8 @@ void ColumnDock::columnPrecisionChanged() {
         m_initializing = false;
 }
 
-void ColumnDock::columnPlotDesignationChanged() {
-	//TODO
+void ColumnDock::columnPlotDesignationChanged(const AbstractColumn* col) {
+	m_initializing = true;
+	ui.cbPlotDesignation->setCurrentIndex( int(col->plotDesignation()) );
+	m_initializing = false;
 }
