@@ -32,6 +32,7 @@
 #include "../../commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "../../backend/spreadsheet/Spreadsheet.h"
 #include "../TemplateHandler.h"
+#include <QDebug>
 
  /*!
   \class SpreadsheetDock

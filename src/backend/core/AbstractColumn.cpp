@@ -41,6 +41,7 @@
 #include <QtCore/QTime>
 #include <math.h>
 #include <QMetaType>
+#include <QDebug>
 
 /**
  * \class AbstractColumn

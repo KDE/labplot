@@ -226,16 +226,19 @@ QModelIndex SpreadsheetModel::parent(const QModelIndex & child) const
 
 void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * new_child)
 {
+//	qDebug()<<"handleAspectAboutToBeAdded";
 	const Column * col = qobject_cast<const Column*>(new_child);
 	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
 	int index = before ? m_spreadsheet->indexOfChild<Column>(before) : 0;
-	beginInsertColumns(QModelIndex(), index, index);
+	//TODO: breaks undo/redo 
+	//beginInsertColumns(QModelIndex(), index, index);
 }
 
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect)
 {
+//	qDebug()<<"handleAspectAdded";
 	const Column * col = qobject_cast<const Column*>(aspect);
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
@@ -245,13 +248,10 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect)
 
 	updateVerticalHeader();
 	updateHorizontalHeader();
-	endInsertColumns();
 
 	emit headerDataChanged(Qt::Horizontal, 0, m_spreadsheet->columnCount()-1);
 	//emit headerDataChanged(Qt::Vertical, old_rows, m_spreadsheet->rowCount()-1);
 	emit headerDataChanged(Qt::Vertical, 0, m_spreadsheet->rowCount()-1);
-
-	reset();
 
 	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn*)), this,
 			SLOT(handlePlotDesignationChange(const AbstractColumn*)));
@@ -267,10 +267,17 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect)
 			SLOT(handleRowsRemoved(const AbstractColumn*,int,int)));
 	connect(col, SIGNAL(maskingChanged(const AbstractColumn*)), this,
 			SLOT(handleDataChange(const AbstractColumn*)));
+
+	beginResetModel();
+	//TODO: breaks undo/redo
+	//endInsertColumns();
+	endResetModel();
+
 }
 
 void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
 {
+//	qDebug()<<"handleAspectAboutToBeRemoved";
 	const Column * col = qobject_cast<const Column*>(aspect);
 	if (!col || aspect->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
@@ -282,6 +289,7 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect * aspec
 
 void SpreadsheetModel::handleAspectRemoved(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * child)
 {
+//	qDebug()<<"handleAspectRemoved";
 	Q_UNUSED(before)
 	const Column * col = qobject_cast<const Column*>(child);
 	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
@@ -291,12 +299,13 @@ void SpreadsheetModel::handleAspectRemoved(const AbstractAspect * parent, const 
 
 	updateVerticalHeader();
 	updateHorizontalHeader();
-	endRemoveColumns();
 
 	emit headerDataChanged(Qt::Horizontal, 0, m_spreadsheet->columnCount()-1);
 	emit headerDataChanged(Qt::Vertical, old_rows, m_spreadsheet->rowCount()-1);
 
-	reset();
+	beginResetModel();
+	endRemoveColumns();
+	endResetModel();
 }
 
 void SpreadsheetModel::handleDescriptionChange(const AbstractAspect * aspect)
