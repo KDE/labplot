@@ -485,6 +485,7 @@ QString WorksheetPrivate::name() const{
 QRectF WorksheetPrivate::swapPageRect(const QRectF &rect) {
 	QRectF oldRect = m_scene->sceneRect();
 	m_scene->setSceneRect(rect.normalized());
+	emit q->pageRectChanged();
 
 	return oldRect;
 }

@@ -69,25 +69,25 @@ class Worksheet: public AbstractPart, public scripted{
 
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
 		void setSelectedInView(const bool);
-				
-        BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
-        BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
-        BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-        BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-        BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-        CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-        CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-        CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
-		
-        BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
-        BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
-        BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
-        BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
-        BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
-        BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
-        BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
-        BASIC_D_ACCESSOR_DECL(int, layoutRowCount, LayoutRowCount)
-        BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
+
+		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
+		BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
+		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
+		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
+		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
+
+		BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
+		BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
+		BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
+		BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
+		BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
+		BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
+		BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
+		BASIC_D_ACCESSOR_DECL(int, layoutRowCount, LayoutRowCount)
+		BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
 		typedef WorksheetPrivate Private;
 
@@ -111,6 +111,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void itemDeselected(QGraphicsItem*);
 		void requestUpdate();
 		void layoutChanged(Worksheet::Layout);
+		void pageRectChanged();
 
 		friend class WorksheetSetBackgroundTypeCmd;
 		friend class WorksheetSetBackgroundColorStyleCmd;

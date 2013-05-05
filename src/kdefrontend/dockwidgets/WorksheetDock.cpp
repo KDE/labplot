@@ -171,6 +171,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
   	loadConfig(config);
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
+	connect(m_worksheet, SIGNAL(pageRectChanged()),this, SLOT(worksheetGeometryChanged()));
+
 
 	connect(m_worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
 	connect(m_worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
@@ -198,17 +200,21 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	updates Size and Orientation checkbox when width/height changes.
 */
 void WorksheetDock::updatePaperSize(){
+	//qDebug()<<"WorksheetDock::updatePaperSize()";
+
 	int i=0;
-	
+
 	//In UI we use cm, so we need to convert to mm first before we check with qt_paperSizes
 	int w=(float)ui.sbWidth->value()*10;
 	int h=(float)ui.sbHeight->value()*10;
+	//qDebug()<<w<<' '<<h;
 
 	//check the portrait-orientation first
 	while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) ){
 		i++;
 	}
-	
+	//qDebug()<<"index: "<<i;
+
 	if (i!=numOfPaperSizes) {
 		ui.cbOrientation->setCurrentIndex(0);  //a QPrinter::PaperSize  in portrait-orientation was found
 	}else{
@@ -217,11 +223,11 @@ void WorksheetDock::updatePaperSize(){
 		while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][1] && h==qt_paperSizes[i][0]) ){
 			i++;
 		}
-		
+
 		if (i!=numOfPaperSizes)
 			ui.cbOrientation->setCurrentIndex(1); //a QPrinter::PaperSize  in landscape-orientation was found
 	}
-	
+
 	//determine the position of the QPrinter::PaperSize in the combobox
 	for (int index=0; index<numOfPaperSizes+1; index++){
 		if (ui.cbSize->itemData(index).toInt() == i){
@@ -242,36 +248,36 @@ void WorksheetDock::retranslateUi(){
 	ui.cbOrientation->addItem(i18n("portrait"));
 	ui.cbOrientation->addItem(i18n("landscape"));
 
-    ui.cbSize->addItem(i18n("A0"), QPrinter::A0);
-    ui.cbSize->addItem(i18n("A1"), QPrinter::A1);
-    ui.cbSize->addItem(i18n("A2"), QPrinter::A2);
-    ui.cbSize->addItem(i18n("A3"), QPrinter::A3);
-    ui.cbSize->addItem(i18n("A4"), QPrinter::A4);
-    ui.cbSize->addItem(i18n("A5"), QPrinter::A5);
-    ui.cbSize->addItem(i18n("A6"), QPrinter::A6);
-    ui.cbSize->addItem(i18n("A7"), QPrinter::A7);
-    ui.cbSize->addItem(i18n("A8"), QPrinter::A8);
-    ui.cbSize->addItem(i18n("A9"), QPrinter::A9);
-    ui.cbSize->addItem(i18n("B0"), QPrinter::B0);
-    ui.cbSize->addItem(i18n("B1"), QPrinter::B1);
-    ui.cbSize->addItem(i18n("B2"), QPrinter::B2);
-    ui.cbSize->addItem(i18n("B3"), QPrinter::B3);
-    ui.cbSize->addItem(i18n("B4"), QPrinter::B4);
-    ui.cbSize->addItem(i18n("B5"), QPrinter::B5);
-    ui.cbSize->addItem(i18n("B6"), QPrinter::B6);
-    ui.cbSize->addItem(i18n("B7"), QPrinter::B7);
-    ui.cbSize->addItem(i18n("B8"), QPrinter::B8);
-    ui.cbSize->addItem(i18n("B9"), QPrinter::B9);
-    ui.cbSize->addItem(i18n("B10"), QPrinter::B10);
-    ui.cbSize->addItem(i18n("C5E"), QPrinter::C5E);
-    ui.cbSize->addItem(i18n("DLE"), QPrinter::DLE);
-    ui.cbSize->addItem(i18n("Executive"), QPrinter::Executive);
-    ui.cbSize->addItem(i18n("Folio"), QPrinter::Folio);
-    ui.cbSize->addItem(i18n("Ledger"), QPrinter::Ledger);
-    ui.cbSize->addItem(i18n("Legal"), QPrinter::Legal);
-    ui.cbSize->addItem(i18n("Letter"), QPrinter::Letter);
-    ui.cbSize->addItem(i18n("Tabloid"), QPrinter::Tabloid);
-    ui.cbSize->addItem(i18n("US Common #10 Envelope"), QPrinter::Comm10E);
+	ui.cbSize->addItem(i18n("A0"), QPrinter::A0);
+	ui.cbSize->addItem(i18n("A1"), QPrinter::A1);
+	ui.cbSize->addItem(i18n("A2"), QPrinter::A2);
+	ui.cbSize->addItem(i18n("A3"), QPrinter::A3);
+	ui.cbSize->addItem(i18n("A4"), QPrinter::A4);
+	ui.cbSize->addItem(i18n("A5"), QPrinter::A5);
+	ui.cbSize->addItem(i18n("A6"), QPrinter::A6);
+	ui.cbSize->addItem(i18n("A7"), QPrinter::A7);
+	ui.cbSize->addItem(i18n("A8"), QPrinter::A8);
+	ui.cbSize->addItem(i18n("A9"), QPrinter::A9);
+	ui.cbSize->addItem(i18n("B0"), QPrinter::B0);
+	ui.cbSize->addItem(i18n("B1"), QPrinter::B1);
+	ui.cbSize->addItem(i18n("B2"), QPrinter::B2);
+	ui.cbSize->addItem(i18n("B3"), QPrinter::B3);
+	ui.cbSize->addItem(i18n("B4"), QPrinter::B4);
+	ui.cbSize->addItem(i18n("B5"), QPrinter::B5);
+	ui.cbSize->addItem(i18n("B6"), QPrinter::B6);
+	ui.cbSize->addItem(i18n("B7"), QPrinter::B7);
+	ui.cbSize->addItem(i18n("B8"), QPrinter::B8);
+	ui.cbSize->addItem(i18n("B9"), QPrinter::B9);
+	ui.cbSize->addItem(i18n("B10"), QPrinter::B10);
+	ui.cbSize->addItem(i18n("C5E"), QPrinter::C5E);
+	ui.cbSize->addItem(i18n("DLE"), QPrinter::DLE);
+	ui.cbSize->addItem(i18n("Executive"), QPrinter::Executive);
+	ui.cbSize->addItem(i18n("Folio"), QPrinter::Folio);
+	ui.cbSize->addItem(i18n("Ledger"), QPrinter::Ledger);
+	ui.cbSize->addItem(i18n("Legal"), QPrinter::Legal);
+	ui.cbSize->addItem(i18n("Letter"), QPrinter::Letter);
+	ui.cbSize->addItem(i18n("Tabloid"), QPrinter::Tabloid);
+	ui.cbSize->addItem(i18n("US Common #10 Envelope"), QPrinter::Comm10E);
 	ui.cbSize->addItem(i18n("Custom"), QPrinter::Custom);
 	
 	//Background
@@ -316,8 +322,8 @@ void WorksheetDock::commentChanged(){
 }
 
 void WorksheetDock::sizeChanged(int i){
-	int index  = ui.cbSize->itemData(i).toInt();
-    
+	int index = ui.cbSize->itemData(i).toInt();
+
 	if (index==QPrinter::Custom){
 		ui.sbWidth->setEnabled(true);
 		ui.sbHeight->setEnabled(true);
@@ -330,10 +336,10 @@ void WorksheetDock::sizeChanged(int i){
 		ui.lOrientation->show();
 		ui.cbOrientation->show();
 	}
-	
+
 	if (m_initializing)
 		return;
-  
+ 
 	float w, h;
 	if (ui.cbOrientation->currentIndex() == 0){
 		w=qt_paperSizes[index][0];
@@ -342,13 +348,13 @@ void WorksheetDock::sizeChanged(int i){
 		w=qt_paperSizes[index][1];
 		h=qt_paperSizes[index][0];
 	}
-	
+
 	m_initializing = true;
 	//w and h from qt_paperSizes above are in mm, in UI we show everything in cm
 	ui.sbWidth->setValue(w/10);
 	ui.sbHeight->setValue(h/10);
 	m_initializing=false;
-	
+
 	bool scaleContent = ui.chScaleContent->isChecked();
 	w = Worksheet::convertToSceneUnits(w, Worksheet::Millimeter);
 	h = Worksheet::convertToSceneUnits(h, Worksheet::Millimeter);
@@ -358,8 +364,8 @@ void WorksheetDock::sizeChanged(int i){
 }
 
 void WorksheetDock::sizeChanged(){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
   	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
 	int h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
@@ -371,16 +377,16 @@ void WorksheetDock::sizeChanged(){
 
 void WorksheetDock::orientationChanged(int index){
 	Q_UNUSED(index);
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  this->sizeChanged(ui.cbSize->currentIndex());
+	this->sizeChanged(ui.cbSize->currentIndex());
 }
 
 // "Background"-tab
 void WorksheetDock::opacityChanged(int value){
-  if (m_initializing)
-	return;
+  	if (m_initializing)
+		return;
 
 	qreal opacity = (float)value/100;
 	foreach(Worksheet* worksheet, m_worksheetList){
@@ -638,6 +644,14 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
+void WorksheetDock::worksheetGeometryChanged() {
+	m_initializing = true;
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_worksheet->pageRect().width(), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_worksheet->pageRect().height(), Worksheet::Centimeter));
+	updatePaperSize();
+	m_initializing = false;
+}
+
 void WorksheetDock::worksheetBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
 	ui.cbBackgroundType->setCurrentIndex(type);
@@ -758,18 +772,12 @@ void WorksheetDock::loadConfig(KConfig& config){
 	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100 );
 	
 	// Layout
-	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", 
-												   Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin",
-													   Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin",
-													 Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin",
-													  Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing",
-														    Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
-	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing",
-														  Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), Worksheet::Centimeter)) );
+	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );
+	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter)) );
+	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), Worksheet::Centimeter)) );
+	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), Worksheet::Centimeter)) );
+	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing", Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
+	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing", Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), Worksheet::Centimeter)) );
 	
 	ui.sbLayoutRowCount->setValue(group.readEntry("LayoutRowCount", m_worksheet->layoutRowCount()));
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_worksheet->layoutColumnCount()));

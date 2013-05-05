@@ -86,6 +86,7 @@ private slots:
 
 	//SLOTs for changes triggered in Worksheet
 	void worksheetDescriptionChanged(const AbstractAspect*);
+	void worksheetGeometryChanged();
 
 	void worksheetBackgroundTypeChanged(PlotArea::BackgroundType);
 	void worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
