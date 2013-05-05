@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2012 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for worksheet properties
                            
@@ -200,20 +200,16 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	updates Size and Orientation checkbox when width/height changes.
 */
 void WorksheetDock::updatePaperSize(){
-	//qDebug()<<"WorksheetDock::updatePaperSize()";
-
 	int i=0;
 
 	//In UI we use cm, so we need to convert to mm first before we check with qt_paperSizes
-	int w=(float)ui.sbWidth->value()*10;
-	int h=(float)ui.sbHeight->value()*10;
-	//qDebug()<<w<<' '<<h;
+	float w=(float)ui.sbWidth->value()*10;
+	float h=(float)ui.sbHeight->value()*10;
 
 	//check the portrait-orientation first
 	while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) ){
 		i++;
 	}
-	//qDebug()<<"index: "<<i;
 
 	if (i!=numOfPaperSizes) {
 		ui.cbOrientation->setCurrentIndex(0);  //a QPrinter::PaperSize  in portrait-orientation was found
