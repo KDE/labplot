@@ -626,7 +626,7 @@ void XYCurvePrivate::retransform(){
 	const CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
 	if (cSystem)
 		 cSystem->mapLogicalToScene(symbolPointsLogical, symbolPoints, symbolPointsLogicalRestricted);
-	
+
 	updateLines();
 	updateDropLines();
 	updateValues();
@@ -643,7 +643,7 @@ void XYCurvePrivate::updateLines(){
 	  return;
 	}
 	
-	int count=symbolPointsLogical.count();
+	int count=symbolPointsLogicalRestricted.count();
 	
 	//nothing to do, if no data points available
 	if (count<=1){
@@ -658,14 +658,14 @@ void XYCurvePrivate::updateLines(){
 	switch(lineType){
 	  case XYCurve::Line:{
 		for (int i=0; i<count-1; i++){
-		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+		  lines.append(QLineF(symbolPointsLogicalRestricted.at(i), symbolPointsLogicalRestricted.at(i+1)));
 		}
 		break;
 	  }
 	  case XYCurve::StartHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsLogical.at(i);
-		  nextPoint=symbolPointsLogical.at(i+1);
+		  curPoint=symbolPointsLogicalRestricted.at(i);
+		  nextPoint=symbolPointsLogicalRestricted.at(i+1);
 		  tempPoint1=QPointF(nextPoint.x(), curPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
 		  lines.append(QLineF(tempPoint1, nextPoint));
@@ -674,8 +674,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::StartVertical:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsLogical.at(i);
-		  nextPoint=symbolPointsLogical.at(i+1);
+		  curPoint=symbolPointsLogicalRestricted.at(i);
+		  nextPoint=symbolPointsLogicalRestricted.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), nextPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
 		  lines.append(QLineF(tempPoint1,nextPoint));
@@ -684,8 +684,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsLogical.at(i);
-		  nextPoint=symbolPointsLogical.at(i+1);
+		  curPoint=symbolPointsLogicalRestricted.at(i);
+		  nextPoint=symbolPointsLogicalRestricted.at(i+1);
 		  tempPoint1=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
 		  tempPoint2=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, nextPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
@@ -696,8 +696,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointVertical:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsLogical.at(i);
-		  nextPoint=symbolPointsLogical.at(i+1);		  
+		  curPoint=symbolPointsLogicalRestricted.at(i);
+		  nextPoint=symbolPointsLogicalRestricted.at(i+1);		  
 		  tempPoint1=QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
 		  tempPoint2=QPointF(nextPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
 		  lines.append(QLineF(curPoint, tempPoint1));
@@ -710,7 +710,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=1){
-			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+			lines.append(QLineF(symbolPointsLogicalRestricted.at(i), symbolPointsLogicalRestricted.at(i+1)));
 			skip++;
 		  }else{
 			skip=0;
@@ -722,7 +722,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=2){
-			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+			lines.append(QLineF(symbolPointsLogicalRestricted.at(i), symbolPointsLogicalRestricted.at(i+1)));
 			skip++;
 		  }else{
 			skip=0;
@@ -741,8 +741,8 @@ void XYCurvePrivate::updateLines(){
 		  
 		double x[count],  y[count];
 		for (int i=0; i<count; i++){
-		  x[i]=symbolPointsLogical.at(i).x();
-		  y[i]=symbolPointsLogical.at(i).y();
+		  x[i]=symbolPointsLogicalRestricted.at(i).x();
+		  y[i]=symbolPointsLogicalRestricted.at(i).y();
 		}
 		
 		if (lineType==XYCurve::SplineCubicNatural){
