@@ -100,7 +100,7 @@ LabelWidget::~LabelWidget() {}
 void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_labelsList = labels;
 	
-	//TODO: labplot craches sporadicaly when a new TextLabel is created upon a plot was already created.
+	//TODO: labplot crashes sporadicaly when a new TextLabel is created upon a plot was already created.
 	//The list is (sporadicaly) empty. This shouldn't happen!
 	if (labels.isEmpty())
 		return;
@@ -110,6 +110,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	// settings for default selection (necessary if not changed later)
 	ui.sbPositionX->setEnabled(false);
 	ui.sbPositionY->setEnabled(false);
+	ui.sbOffset->setEnabled(false);
 
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
@@ -126,16 +127,19 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 			 this, SLOT(labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment)) );
 	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
 			 this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
+	connect( m_label, SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes){
 	m_labelsList.clear();
-	foreach(Axis* axis, axes)
+	foreach(Axis* axis, axes) {
 		m_labelsList.append(axis->title());
-	
+		connect(axis, SIGNAL(titleOffsetChanged(float)), this, SLOT(labelOffsetChanged(float)) );
+		connect(axis->title(), SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
+	}	
+
 	m_axesList = axes;
 	m_label = m_labelsList.first();
-
 
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
@@ -145,6 +149,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText(m_label->text().text);
 	//TODO save the offset value in KConfigGroup? (available only for the axis labels)
+	ui.sbOffset->setEnabled(true);
 	ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(axes.first()->titleOffset(), Worksheet::Point) );
 	m_initializing = false;
 }
@@ -475,6 +480,8 @@ void LabelWidget::visibilityChanged(bool state){
 //*********************************************************
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
+//TODO: text properties ???
+
 void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& position){
 	m_initializing = true;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
@@ -493,6 +500,18 @@ void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment
 void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment index){
 	m_initializing = true;
 	ui.cbVerticalAlignment->setCurrentIndex(index);
+	m_initializing = false;
+}
+
+void LabelWidget::labelOffsetChanged(float offset){
+	m_initializing = true;
+	ui.sbOffset->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	m_initializing = false;
+}
+
+void LabelWidget::labelRotationAngleChanged(float angle){
+	m_initializing = true;
+	ui.sbRotation->setValue(angle);
 	m_initializing = false;
 }
 

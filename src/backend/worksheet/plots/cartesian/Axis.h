@@ -175,6 +175,9 @@ class Axis: public AbstractWorksheetElement {
 		friend class AxisSetScalingFactorCmd;
 		void zeroOffsetChanged(qreal);
 		void scalingFactorChanged(qreal);
+
+		friend class AxisSetTitleOffsetCmd;
+		void titleOffsetChanged(float);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

@@ -523,7 +523,7 @@ void Axis::setScalingFactor(qreal scalingFactor) {
 }
 
 //Title
-STD_SETTER_CMD_IMPL_F(Axis, SetTitleOffset, float, titleOffset, retransform);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffset, float, titleOffset, retransform);
 void Axis::setTitleOffset(float offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffset)

@@ -177,7 +177,7 @@ void TextLabel::setPosition(const QPointF& point) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetRotationAngle, float, rotationAngle, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetRotationAngle, float, rotationAngle, recalcShapeAndBoundingRect);
 void TextLabel::setRotationAngle(float angle) {
 	Q_D(TextLabel);
 	if (angle != d->rotationAngle)

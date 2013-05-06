@@ -106,9 +106,11 @@ class TextLabel : public AbstractWorksheetElement{
 		friend class TextLabelSetPositionCmd;
 		friend class TextLabelSetHorizontalAlignmentCmd;
 		friend class TextLabelSetVerticalAlignmentCmd;
+		friend class TextLabelSetRotationAngleCmd;
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 		void verticalAlignmentChanged(TextLabel::VerticalAlignment);
+		void rotationAngleChanged(float);
 
 		void changed();
 };

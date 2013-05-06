@@ -90,6 +90,8 @@ private slots:
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
+	void labelOffsetChanged(float);
+	void labelRotationAngleChanged(float);
 };
 
 #endif //LABELWIDGET_H
