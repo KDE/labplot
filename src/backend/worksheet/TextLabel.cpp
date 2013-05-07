@@ -138,7 +138,7 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::VerticalAlignment, verticalAlig
 BASIC_SHARED_D_READER_IMPL(TextLabel, float, rotationAngle, rotationAngle);
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )

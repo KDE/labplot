@@ -87,6 +87,7 @@ private slots:
 	void visibilityChanged(bool);
 	
 	//SLOTs for changes triggered in TextLabel
+	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);

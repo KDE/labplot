@@ -103,10 +103,13 @@ class TextLabel : public AbstractWorksheetElement{
 		void init();
 
 	signals:
+		friend class TextLabelSetTextCmd;
 		friend class TextLabelSetPositionCmd;
 		friend class TextLabelSetHorizontalAlignmentCmd;
 		friend class TextLabelSetVerticalAlignmentCmd;
 		friend class TextLabelSetRotationAngleCmd;
+		//TODO friend TextLabelSetVisibleCmd;
+		void textWrapperChanged(const TextLabel::TextWrapper&);
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 		void verticalAlignmentChanged(TextLabel::VerticalAlignment);

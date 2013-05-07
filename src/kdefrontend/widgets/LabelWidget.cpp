@@ -118,9 +118,11 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
-	ui.teLabel->setText(m_label->text().text);
+	ui.teLabel->setText( m_label->text().text );
 	m_initializing = false;
 
+	connect( m_label, SIGNAL(textWrapperChanged(const TextLabel::TextWrapper&)),
+			 this, SLOT(labelTextWrapperChanged(const TextLabel::TextWrapper&)) );
 	connect( m_label, SIGNAL(positionChanged(const TextLabel::PositionWrapper&)),
 			 this, SLOT(labelPositionChanged(const TextLabel::PositionWrapper&)) );
 	connect( m_label, SIGNAL(horizontalAlignmentChanged(TextLabel::HorizontalAlignment)),
@@ -198,7 +200,7 @@ void LabelWidget::setNoGeometryMode(const bool b) {
 }
 
 //**********************************************************
-//****** SLOTs for changes triggered in LabelWidget*********
+//****** SLOTs for changes triggered in LabelWidget ********
 //**********************************************************
 
 // text formating slots
@@ -480,7 +482,18 @@ void LabelWidget::visibilityChanged(bool state){
 //*********************************************************
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
-//TODO: text properties ???
+void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text){
+	m_initializing = true;
+//TODO
+	// see textChanged()
+	// TODO: fix cursor jump
+	//ui.teLabel->setText( text.text );
+	ui.chbTeX->setChecked(text.teXUsed);
+	m_initializing = false;
+}
+
+//TODO: teXFontSize
+//TODO: teXFontColor
 
 void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& position){
 	m_initializing = true;
@@ -514,6 +527,8 @@ void LabelWidget::labelRotationAngleChanged(float angle){
 	ui.sbRotation->setValue(angle);
 	m_initializing = false;
 }
+
+//TODO: visible flag
 
 //**********************************************************
 //******************** SETTINGS ****************************
