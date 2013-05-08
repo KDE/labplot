@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : PartMdiView.cpp
-    Project              : SciDAVis
-    Description          : MDI sub window to be wrapped around views of
-                           AbstractPart.
+    Project              : LabPlot
+    Description          : QMdiSubWindow wrapper for aspect views.
     --------------------------------------------------------------------
+	Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007,2008 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses) 
@@ -30,17 +30,20 @@
  ***************************************************************************/
 #include "core/PartMdiView.h"
 #include "core/AbstractPart.h"
-
 #include <QCloseEvent>
-#include <QMenu>
-#include <QMdiArea>
+#include <QIcon>
 
-//TODO:currently, the only(?) purpose of this class is to change the name of the mdi sub window
-//when the aspect name was changed. This can also be handled in MainWin.
-//Check whether this class can be removed.
-
+/*!
+ * \class PartMdiView
+ * 
+ * \brief QMdiSubWindow wrapper for aspect views.
+ * In addition to the functionality provided by QMdiSubWindow,
+ * this class automatically updates the window title when
+ * AbstractAspect::caption() is changed.
+ */
+//TODO:check whether m_status is somehow used or can be used in a meaningfull way.
 PartMdiView::PartMdiView(AbstractPart *part, QWidget * embedded_view)
-	: QMdiSubWindow(0), m_part(part), m_closing(false), m_status(Closed)
+	: QMdiSubWindow(0), m_part(part), m_status(Closed) 
 {
 	setWindowIcon(m_part->icon());
 	handleAspectDescriptionChanged(m_part);
@@ -52,62 +55,46 @@ PartMdiView::PartMdiView(AbstractPart *part, QWidget * embedded_view)
 	setAttribute(Qt::WA_DeleteOnClose);
 }
 
-//TODO deactivated this feature because of the crash in worksheetview.
-//decide later whether we really need a customised contextmenu for the mdi-subwindow bar.
-
-// void PartMdiView::contextMenuEvent(QContextMenuEvent *event)
-// {
-// 	QMenu *menu = m_part->createContextMenu();
-// 	Q_ASSERT(menu);
-// 	menu->exec(event->globalPos());
-// 	delete menu;
-// }
-
-PartMdiView::~PartMdiView()
-{
+AbstractPart* PartMdiView::part() const {
+	return m_part;
 }
 
-void PartMdiView::handleAspectDescriptionChanged(const AbstractAspect *aspect)
-{
-	if (aspect != m_part) return;
+PartMdiView::SubWindowStatus PartMdiView::status() const {
+	return m_status;
+}
+
+void PartMdiView::handleAspectDescriptionChanged(const AbstractAspect* aspect) {
+	if (aspect != m_part)
+		return;
+
 	setWindowTitle(m_part->caption());
 	update();
 }
 
-void PartMdiView::handleAspectAboutToBeRemoved(const AbstractAspect *aspect)
-{
-	if (aspect != m_part) return;
-	m_closing = true;
+void PartMdiView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	if (aspect != m_part)
+		return;
 	close();
 }
 
-void PartMdiView::closeEvent(QCloseEvent *event)
-{
-	if (!m_closing) {
-		m_closing = true;
-		m_part->deleteView();
-		event->accept();
-	}
-	m_closing = false;
-	
+void PartMdiView::closeEvent(QCloseEvent *event) {
+	m_part->deleteView();
+	event->accept();
 	SubWindowStatus old_status = m_status;
 	m_status = Closed;
 	emit statusChanged(this, old_status, m_status);
 }
 
-void PartMdiView::hideEvent(QHideEvent *event)
-{
+void PartMdiView::hideEvent(QHideEvent *event) {
 	SubWindowStatus old_status = m_status;
 	m_status = Hidden;
 	emit statusChanged(this, old_status, m_status);
 	event->accept();
 }
 
-void PartMdiView::showEvent(QShowEvent *event)
-{
+void PartMdiView::showEvent(QShowEvent *event) {
 	SubWindowStatus old_status = m_status;
 	m_status = Visible;
 	emit statusChanged(this, old_status, m_status);
 	event->accept();
 }
-
