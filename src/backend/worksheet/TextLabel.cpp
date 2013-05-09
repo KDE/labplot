@@ -199,7 +199,6 @@ void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign){
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(TextLabel, SetVisible, bool, swapVisible, retransform);
-//STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVisible, bool, visible, retransform);
 void TextLabel::setVisible(bool on) {
 	Q_D(TextLabel);
 	exec(new TextLabelSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));

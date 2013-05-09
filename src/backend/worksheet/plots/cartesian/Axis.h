@@ -178,6 +178,8 @@ class Axis: public AbstractWorksheetElement {
 
 		friend class AxisSetTitleOffsetCmd;
 		void titleOffsetChanged(float);
+
+		void visibleChanged(bool);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

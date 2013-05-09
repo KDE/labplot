@@ -252,6 +252,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(zeroOffsetChanged(qreal)), this, SLOT(axisZeroOffsetChanged(qreal)));
 	connect(m_axis, SIGNAL(scalingFactorChanged(qreal)), this, SLOT(axisScalingFactorChanged(qreal)));
 	//TODO: more undo functions
+	connect(m_axis, SIGNAL(visibleChanged(bool)), this, SLOT(axisVisibleChanged(bool)));
 
   	m_initializing = false;
 }
@@ -1106,6 +1107,12 @@ void AxisDock::axisLinePenChanged(const QPen& pen){
 	ui.kcbLineColor->setColor( pen.color() );
 	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color() );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point) );
+	m_initializing = false;
+}
+
+void AxisDock::axisVisibleChanged(bool on){
+	m_initializing = true;
+	ui.chkVisible->setChecked(on);
 	m_initializing = false;
 }
 

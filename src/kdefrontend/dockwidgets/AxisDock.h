@@ -149,6 +149,7 @@ private slots:
 	
 	//grids
 	
+	void axisVisibleChanged(bool);
 	
 	//save/load
 	void loadConfig(KConfig&);

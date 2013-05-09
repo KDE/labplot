@@ -977,25 +977,25 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 void CartesianPlot::save(QXmlStreamWriter* writer) const{
 	Q_D(const CartesianPlot);
 
-    writer->writeStartElement( "cartesianPlot" );
-    writeBasicAttributes(writer);
-    writeCommentElement(writer);
+	writer->writeStartElement( "cartesianPlot" );
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
 
 	//geometry
-    writer->writeStartElement( "geometry" );
-    writer->writeAttribute( "x", QString::number(d->rect.x()) );
-    writer->writeAttribute( "y", QString::number(d->rect.y()) );
-    writer->writeAttribute( "width", QString::number(d->rect.width()) );
-    writer->writeAttribute( "height", QString::number(d->rect.height()) );
+	writer->writeStartElement( "geometry" );
+	writer->writeAttribute( "x", QString::number(d->rect.x()) );
+	writer->writeAttribute( "y", QString::number(d->rect.y()) );
+	writer->writeAttribute( "width", QString::number(d->rect.width()) );
+	writer->writeAttribute( "height", QString::number(d->rect.height()) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
-    writer->writeEndElement();
+	writer->writeEndElement();
 	
 	//coordinate system and padding
 // 	m_coordinateSystem->save(writer); //TODO save scales
 	writer->writeStartElement( "coordinateSystem" );
 	writer->writeAttribute( "autoScaleX", QString::number(d->autoScaleX) );
 	writer->writeAttribute( "autoScaleY", QString::number(d->autoScaleY) );
-    writer->writeAttribute( "xMin", QString::number(d->xMin) );
+	writer->writeAttribute( "xMin", QString::number(d->xMin) );
 	writer->writeAttribute( "xMax", QString::number(d->xMax) );
 	writer->writeAttribute( "yMin", QString::number(d->yMin) );
 	writer->writeAttribute( "yMax", QString::number(d->yMax) );
