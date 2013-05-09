@@ -104,16 +104,20 @@ class TextLabel : public AbstractWorksheetElement{
 
 	signals:
 		friend class TextLabelSetTextCmd;
+		friend class TextLabelSetTeXFontSizeCmd;
+		friend class TextLabelSetTeXFontColorCmd;
 		friend class TextLabelSetPositionCmd;
 		friend class TextLabelSetHorizontalAlignmentCmd;
 		friend class TextLabelSetVerticalAlignmentCmd;
 		friend class TextLabelSetRotationAngleCmd;
-		//TODO friend TextLabelSetVisibleCmd;
 		void textWrapperChanged(const TextLabel::TextWrapper&);
+		void teXFontSizeChanged(const qreal);
+		void teXFontColorChanged(const QColor);
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 		void verticalAlignmentChanged(TextLabel::VerticalAlignment);
 		void rotationAngleChanged(float);
+		void visibleChanged(bool);
 
 		void changed();
 };

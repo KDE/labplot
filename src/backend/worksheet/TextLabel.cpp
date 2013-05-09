@@ -145,14 +145,14 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 		exec(new TextLabelSetTextCmd(d, textWrapper, tr("%1: set label text")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXFontSize, qreal, teXFontSize, updateText);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontSize, qreal, teXFontSize, updateText);
 void TextLabel::setTeXFontSize(const qreal fontSize) {
 	Q_D(TextLabel);
 	if (fontSize != d->teXFontSize)
 		exec(new TextLabelSetTeXFontSizeCmd(d, fontSize, tr("%1: set TeX font size")));
 }
 
-STD_SETTER_CMD_IMPL_F(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateText);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateText);
 void TextLabel::setTeXFontColor(const QColor fontColor) {
 	Q_D(TextLabel);
 	if (fontColor != d->teXFontColor)
@@ -198,7 +198,8 @@ void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign){
 		exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, tr("%1: set vertical alignment")));
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(TextLabel, SetVisible, bool, swapVisible);
+STD_SWAP_METHOD_SETTER_CMD_IMPL_F(TextLabel, SetVisible, bool, swapVisible, retransform);
+//STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVisible, bool, visible, retransform);
 void TextLabel::setVisible(bool on) {
 	Q_D(TextLabel);
 	exec(new TextLabelSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
@@ -356,7 +357,8 @@ void TextLabelPrivate::updateTeXImage(){
 bool TextLabelPrivate::swapVisible(bool on){
 	bool oldValue = isVisible();
 	setVisible(on);
-	emit(q->changed());
+	emit q->changed();
+	emit q->visibleChanged(on);
 	return oldValue;
 }
 

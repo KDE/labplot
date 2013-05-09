@@ -88,11 +88,14 @@ private slots:
 	
 	//SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
+	void labelTeXFontSizeChanged(const qreal);
+	void labelTeXFontColorChanged(const QColor);
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
 	void labelOffsetChanged(float);
 	void labelRotationAngleChanged(float);
+	void labelVisibleChanged(bool);
 };
 
 #endif //LABELWIDGET_H

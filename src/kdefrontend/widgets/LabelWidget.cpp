@@ -123,6 +123,10 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 
 	connect( m_label, SIGNAL(textWrapperChanged(const TextLabel::TextWrapper&)),
 			 this, SLOT(labelTextWrapperChanged(const TextLabel::TextWrapper&)) );
+	connect( m_label, SIGNAL(teXFontSizeChanged(const qreal)),
+			 this, SLOT(labelTeXFontSizeChanged(const qreal)) );
+	connect( m_label, SIGNAL(teXFontColorChanged(const QColor)),
+			 this, SLOT(labelTeXFontColorChanged(const QColor)) );
 	connect( m_label, SIGNAL(positionChanged(const TextLabel::PositionWrapper&)),
 			 this, SLOT(labelPositionChanged(const TextLabel::PositionWrapper&)) );
 	connect( m_label, SIGNAL(horizontalAlignmentChanged(TextLabel::HorizontalAlignment)),
@@ -130,6 +134,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
 			 this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
 	connect( m_label, SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
+	connect( m_label, SIGNAL(visibleChanged(bool)), this, SLOT(labelVisibleChanged(bool)) );
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes){
@@ -484,16 +489,23 @@ void LabelWidget::visibilityChanged(bool state){
 //*********************************************************
 void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text){
 	m_initializing = true;
-//TODO
-	// see textChanged()
-	// TODO: fix cursor jump
-	//ui.teLabel->setText( text.text );
+	ui.teLabel->setText(text.text);
+	ui.teLabel->moveCursor(QTextCursor::End);
 	ui.chbTeX->setChecked(text.teXUsed);
 	m_initializing = false;
 }
 
-//TODO: teXFontSize
-//TODO: teXFontColor
+void LabelWidget::labelTeXFontSizeChanged(const qreal size){
+	m_initializing = true;
+//TODO
+	m_initializing = false;
+}
+void LabelWidget::labelTeXFontColorChanged(const QColor color){
+	m_initializing = true;
+	if(m_label->text().teXUsed)
+		ui.kcbTextColor->setColor(color);
+	m_initializing = false;
+}
 
 void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& position){
 	m_initializing = true;
@@ -528,7 +540,11 @@ void LabelWidget::labelRotationAngleChanged(float angle){
 	m_initializing = false;
 }
 
-//TODO: visible flag
+void LabelWidget::labelVisibleChanged(bool on){
+	m_initializing = true;
+	ui.chbVisible->setChecked(on);
+	m_initializing = false;
+}
 
 //**********************************************************
 //******************** SETTINGS ****************************
