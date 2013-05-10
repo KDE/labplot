@@ -206,6 +206,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
+	connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
 	//TODO: more undo stuff (title, scale brakes)
 
 	// Plot Area
@@ -701,9 +702,6 @@ void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void CartesianPlotDock::plotRectChanged(QRectF& rect){
-	if (m_initializing)
-		return;
-
 	m_initializing = true;
 	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), Worksheet::Centimeter));
 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), Worksheet::Centimeter));
@@ -745,6 +743,12 @@ void CartesianPlotDock::plotYMaxChanged(float value){
 void CartesianPlotDock::plotYScaleChanged(int scale){
 	m_initializing = true;
 	ui.cbYScaling->setCurrentIndex( scale );
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotVisibleChanged(bool on){
+	m_initializing = true;
+	ui.chkVisible->setChecked(on);
 	m_initializing = false;
 }
 
@@ -799,9 +803,6 @@ void CartesianPlotDock::plotBackgroundOpacityChanged(float value){
 }
 
 void CartesianPlotDock::plotBorderPenChanged(QPen& pen){
-	if (m_initializing)
-		return;
-
 	m_initializing = true;
 	if(ui.cbBorderStyle->currentIndex() != pen.style())
 		ui.cbBorderStyle->setCurrentIndex(pen.style());

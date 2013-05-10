@@ -30,6 +30,9 @@
 
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
+
 #include <QtDebug>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -78,17 +81,29 @@ QRectF WorksheetElementContainer::rect() const{
 	return d->rect;
 }
 
+STD_SWAP_METHOD_SETTER_CMD_IMPL(WorksheetElementContainer, SetVisible, bool, swapVisible)
 void WorksheetElementContainer::setVisible(bool on){
 	Q_D(WorksheetElementContainer);
+
+	beginMacro(on ? tr("%1: set visible").arg(name()) : tr("%1: set invisible").arg(name()));
 	
-	//change the visibility of the containter itself
-	d->setVisible(on);
-	
-	//change also the visibility of all children
+	//take care of proper ordering on the undo-stack, 
+	//when making the container and all its children visible/invisible.
+	//if visible is set true, change the visibility of the container first
+	if (on)
+    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));		
+
+	//change the visibility of all children
 	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(AbstractWorksheetElement *elem, childList){
 		elem->setVisible(on);
 	}
+	
+	//if visible is set false, change the visibility of the container last
+	if (!on)
+    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));		
+	
+	endMacro();
 }
 
 bool WorksheetElementContainer::isVisible() const {
@@ -153,12 +168,17 @@ WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElem
 	this->setAcceptHoverEvents(true);
 }
 
+QString WorksheetElementContainerPrivate::name() const{
+  return q->name();
+}
+
 void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
 	scene()->clearSelection();
 	setSelected(true);
 	QMenu* menu = q->createContextMenu();
 	menu->exec(event->screenPos());
 }
+
 void WorksheetElementContainerPrivate::hoverLeaveEvent (QGraphicsSceneHoverEvent*) {
 	m_hovered = false;
 	update();
@@ -167,6 +187,13 @@ void WorksheetElementContainerPrivate::hoverLeaveEvent (QGraphicsSceneHoverEvent
 void WorksheetElementContainerPrivate::hoverEnterEvent ( QGraphicsSceneHoverEvent * ) {
 	m_hovered = true;
 	update();
+}
+
+bool WorksheetElementContainerPrivate::swapVisible(bool on){
+	bool oldValue = isVisible();
+	setVisible(on);
+	emit q->visibleChanged(on);
+	return oldValue;
 }
 
 // Inherited from QGraphicsItem

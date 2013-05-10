@@ -51,6 +51,9 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		QRectF rect() const;
 		virtual void setRect(const QRectF&) = 0;
 
+		typedef AbstractWorksheetElement BaseClass;
+		typedef WorksheetElementContainerPrivate Private;
+
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
@@ -65,6 +68,10 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 
 	private:
     	Q_DECLARE_PRIVATE(WorksheetElementContainer)
+		
+	signals:
+		friend class WorksheetElementContainerSetVisibleCmd;
+		void visibleChanged(bool);
 };
 
 #endif

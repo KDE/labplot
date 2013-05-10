@@ -97,6 +97,7 @@ private slots:
 	void verticalPaddingChanged(double);
 	
 	//SLOTs for changes triggered in CartesianPlot
+	//general
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotRectChanged(QRectF&);
 	void plotXMinChanged(float);
@@ -105,6 +106,9 @@ private slots:
 	void plotYMinChanged(float);
 	void plotYMaxChanged(float);
 	void plotYScaleChanged(int);
+	void plotVisibleChanged(bool);
+	
+	//background
 	void plotBackgroundTypeChanged(PlotArea::BackgroundType);
 	void plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 	void plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

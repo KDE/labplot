@@ -39,10 +39,13 @@ class WorksheetElementContainerPrivate:  public QGraphicsItem{
 		WorksheetElementContainerPrivate(WorksheetElementContainer *owner);
 		virtual ~WorksheetElementContainerPrivate(){}
 
+		QString name() const;
 		virtual QRectF boundingRect() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 		virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
 		virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent * event);
+
+		bool swapVisible(bool on);
 
 		WorksheetElementContainer *q;
 		void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
