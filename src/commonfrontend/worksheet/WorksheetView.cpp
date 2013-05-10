@@ -807,16 +807,24 @@ void WorksheetView::selectionChanged(){
 	
 	QList<QGraphicsItem *> items = scene()->selectedItems();
 	
+	//When making a graphics item invisible, it gets deselected in the scene.
+	//In this case we don't want to deselect the item in the project explorer.
+	bool invisibleDeselected = false;
+	
 	//check, whether the previously selected items were deselected now.
 	//Forward the deselection prior to the selection of new items
 	//in order to avoid the unwanted multiple selection in project explorer
 	foreach ( QGraphicsItem* item , m_selectedItems ){
-		if ( items.indexOf(item) == -1 )
-			m_worksheet->setItemSelectedInView( item, false );
+		if ( items.indexOf(item) == -1 ) {
+			if (item->isVisible())
+				m_worksheet->setItemSelectedInView( item, false );
+			else
+				invisibleDeselected = true;
+		}
 	}
 
 	//select new items
-	if (items.size() == 0){
+	if (items.size() == 0 && invisibleDeselected == false){
 		//no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
 	}else{
