@@ -102,6 +102,9 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	setupGUI();
 	setAttribute( Qt::WA_DeleteOnClose );
 
+	//make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
+	statusBar()->setFixedHeight(statusBar()->height());
+
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), 
 			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 	
@@ -1076,9 +1079,9 @@ void MainWin::importFileDialog(){
 	//TODO add Matrix here in future.
 	 if ( m_currentAspect->inherits("Spreadsheet") )
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-	
+
 	if ( m_importFileDialog->exec() == QDialog::Accepted )
-		m_importFileDialog->importToSpreadsheet();
+		m_importFileDialog->importToSpreadsheet(statusBar());
 
 	delete m_importFileDialog;
 	m_importFileDialog = 0;

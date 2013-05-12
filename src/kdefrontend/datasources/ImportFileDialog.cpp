@@ -30,12 +30,13 @@
 #include "ImportFileDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/widgets/TreeViewComboBox.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <kmessagebox.h>
 #include <KInputDialog>
-
+#include <QtCore>
 /*!
 	\class ImportFileDialog
 	\brief Dialog for importing data from a file. Embeddes \c ImportFileWidget and provides the standard buttons.
@@ -135,15 +136,30 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source) const{
 /*!
   triggers data import to the currently selected spreadsheet
 */
-void ImportFileDialog::importToSpreadsheet() const{
-  AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
-  Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
-  QString fileName = importFileWidget->fileName();
-  AbstractFileFilter* filter = importFileWidget->currentFileFilter();
-  AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
+void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
+	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
+	Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
+	QString fileName = importFileWidget->fileName();
+	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
+	connect(filter, SIGNAL(completed(int)), this, SIGNAL(completed(int)));
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
   
-  filter->read(fileName, sheet, mode);
-  delete filter;
+	//show a progress bar in the status bar
+	QProgressBar* progressBar = new QProgressBar();
+	progressBar->setMinimum(0);
+	progressBar->setMaximum(100);
+	connect(filter, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+		
+	statusBar->clearMessage();
+	statusBar->addWidget(progressBar, 1);
+
+	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+	filter->read(fileName, sheet, mode);
+  	QApplication::restoreOverrideCursor();
+	
+	statusBar->removeWidget(progressBar);
+	delete filter;
 }
 
 void ImportFileDialog::toggleOptions(){

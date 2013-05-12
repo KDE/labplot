@@ -3,8 +3,8 @@
     Project              : LabPlot/SciDAVis
     Description          : Private implementation class for AsciiFilter.
     --------------------------------------------------------------------
-    Copyright            		: (C) 2009 Alexander Semke
-    Email (use @ for *)  	: alexander.semke*web.de
+	Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
+						   (replace * with @ in the email addresses) 
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,12 +34,14 @@ class AbstractDataSource;
 class AsciiFilterPrivate {
   
   public:
-    AsciiFilterPrivate();
-    ~AsciiFilterPrivate();
+    AsciiFilterPrivate(AsciiFilter*);
 
-    void read(const QString & fileName, AbstractDataSource* dataSource,  AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
+    void read(const QString & fileName, AbstractDataSource* dataSource,
+			  AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
     void write(const QString & fileName, AbstractDataSource* dataSource);
 
+	const AsciiFilter* q;
+	
     QString commentCharacter;
     QString separatingCharacter;
     bool autoModeEnabled;

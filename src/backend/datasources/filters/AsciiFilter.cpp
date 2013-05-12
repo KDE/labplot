@@ -32,10 +32,8 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <QApplication>
 #include <QFile>
 #include <QTextStream>
-#include <QProgressDialog>
 #include <QDebug>
 
  /*!
@@ -45,7 +43,7 @@ Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
 	\ingroup datasources
  */
 
-AsciiFilter::AsciiFilter():AbstractFileFilter(), d(new AsciiFilterPrivate){
+AsciiFilter::AsciiFilter():AbstractFileFilter(), d(new AsciiFilterPrivate(this)){
 
 }
 
@@ -247,26 +245,22 @@ int AsciiFilter::endColumn() const{
   return d->endColumn;
 }
 
-//##########  Private-implementation  ############
-AsciiFilterPrivate::AsciiFilterPrivate(){
-    //default values
-  transposed=false;;
-  commentCharacter="#";
-  separatingCharacter="auto";
-  autoModeEnabled=true;
-  headerEnabled=true;
-  emptyLinesEnabled=true;
-  simplifyWhitespacesEnabled=true;
-  filterName="";
-
-  startRow=0;
-  endRow=-1;
-  startColumn=0;
-  endColumn=-1;
-}
-
-AsciiFilterPrivate::~AsciiFilterPrivate(){
-
+//#####################################################################
+//################### Private implementation ##########################
+//#####################################################################
+AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
+  commentCharacter("#"),
+  separatingCharacter("auto"),
+  autoModeEnabled(true),
+  headerEnabled(true),
+  emptyLinesEnabled(true),
+  simplifyWhitespacesEnabled(true),
+  transposed(false),
+  startRow(0),
+  endRow(-1),
+  startColumn(0),
+  endColumn(-1)
+  {
 }
 
 /*!
@@ -274,7 +268,6 @@ AsciiFilterPrivate::~AsciiFilterPrivate(){
     Uses the settings defined in the data source.
 */
 //TODO : read strings (comments) or datetime too
-//TODO remove QProgressDialog and use QProgressBar in the main window instead
 //TODO the terms vector and column are used synonymously, straighten the notation
 void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
 	int currentRow=0; //indexes the position in the vector(column)
@@ -290,13 +283,8 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
         return;
 
 	QTextStream in(&file);
-// 	QProgressDialog progressDialog( QObject::tr("Reading ASCII data ..."),
-//                                     QObject::tr("Cancel"), 0, 0 );
-// 	progressDialog.setWindowModality(Qt::WindowModal);
 
 
-	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
-	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	
 	//TODO implement 
 	// if (transposed)
@@ -307,7 +295,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
         //if the number of rows to skip is bigger then the actual number
 		//of the rows in the file, then quit the function.
 		if( in.atEnd() ){
-		  QApplication::restoreOverrideCursor();
 		  return;
 		}
 		
@@ -318,7 +305,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
     //use the first row to determine the number of columns,
 	//create the columns and use (optionaly) the first row to name them
     if( in.atEnd() ){
-	  QApplication::restoreOverrideCursor();
 	  return;
 	}
 	
@@ -381,32 +367,31 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		if (columns>(endColumn-startColumn+1)){
 			//there're more columns in the data source then required
 			//-> remove the superfluous columns
-			for(int i=0;i<columns-(endColumn-startColumn+1);i++) {
+			for(int i=0;i<columns-(endColumn-startColumn);i++) {
 				dataSource->removeChild(dataSource->child<Column>(0));
 			}
 			
 			//rename the columns, that are already available
 			for (int i=0; i<=endColumn-startColumn; i++){
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i+1));
+				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
 			}
 		}else{
 			//rename the columns, that are already available
 			for (int i=0; i<columns; i++){
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i+1));
+				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
 			}
 			
 			//create additional columns if needed
-			for(int i=0; i<(endColumn-startColumn+1-columns); i++) {
-				newColumn = new Column(vectorNameList.at(columns+startColumn+i+1), AbstractColumn::Numeric);
+			for(int i=0; i<=(endColumn-startColumn-columns); i++) {
+				newColumn = new Column(vectorNameList.at(columns+startColumn+i), AbstractColumn::Numeric);
 				dataSource->addChild(newColumn);
 			}
 		}
 	}
 
 
-// 	progressDialog.setMinimum(0);
 	int numLines=AsciiFilter::lineNumber(fileName);
 	
 	if (endRow == -1)
@@ -420,8 +405,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	else
 		numLines = endRow-startRow+1;
 
-// 	progressDialog.setMaximum( numLines );
-	
 	//resize the spreadsheet
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (mode==AbstractFileFilter::Replace){
@@ -436,7 +419,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	QVector<QVector<double>*> dataPointers;
 	for ( int n=startColumn; n<=endColumn; n++ ){
 		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-startColumn)->data());
-		vector->resize(numLines);
+// 		vector->resize(numLines);
 		dataPointers.push_back(vector);
 	}
 	
@@ -484,13 +467,8 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 // 				column->asStringColumn()->setTextAt(currentRow, QString());
 		}
 		
-// 		progressDialog.setValue( currentRow );
-// 		if ( progressDialog.wasCanceled() ){
-// 		  //TODO
-// 		  // 			kDebug()<<"WARNING: Import canceled()"<<endl;
-// 		  break;
-// 		}
 		currentRow++;
+		emit q->completed(100*currentRow/numLines);
     }
     
     //set the comments for each of the columns
@@ -506,7 +484,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 // 	spreadsheet->endMacro();
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

@@ -3,7 +3,7 @@ File                 : FileDataSource.cpp
 Project              : LabPlot/SciDAVis
 Description 		: Represents file data source
 --------------------------------------------------------------------
-Copyright            		: (C) 2009-2011 Alexander Semke
+Copyright            		: (C) 2009-2013 Alexander Semke
 Email (use @ for *)  	: alexander.semke*web.de
 
 ***************************************************************************/
@@ -32,9 +32,8 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QDateTime>
 #include <QProcess>
 #include <QDir>
-
-#include "filters/AsciiFilter.h"
-#include "../../commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>

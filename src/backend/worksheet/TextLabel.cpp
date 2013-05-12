@@ -35,7 +35,7 @@
 #include "backend/lib/XmlStreamReader.h"
 
 #include <QApplication>
-#include <QtCore>
+#include <QtConcurrentRun>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QGraphicsScene>

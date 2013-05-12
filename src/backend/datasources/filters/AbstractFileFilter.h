@@ -3,8 +3,8 @@
     Project              : LabPlot/SciDAVis
     Description          : file I/O-filter related interface for plugins
     --------------------------------------------------------------------
-    Copyright            		: (C) 2009 Alexander Semke
-    Email (use @ for *)  	: alexander.semke*web.de
+    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
+    					   (use @ for *)
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,8 +32,12 @@
 #include <QtPlugin>
 class AbstractDataSource;
 
-class AbstractFileFilter{
+class AbstractFileFilter : public QObject {
+	Q_OBJECT
+// 	Q_INTERFACES(AbstractFileFilter)
+
 	public:
+		AbstractFileFilter() {};
 		virtual ~AbstractFileFilter() {}
 		enum ImportMode {Append, Prepend, Replace};
 		
@@ -42,6 +46,9 @@ class AbstractFileFilter{
 
 		virtual void loadFilterSettings(const QString& filterName) = 0;
 		virtual void saveFilterSettings(const QString& filterName) const = 0;
+
+	signals:
+		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process		
 };
 
 Q_DECLARE_INTERFACE(AbstractFileFilter, "net.sf.scidavis.datasources.abstractfilefilter/0.1")

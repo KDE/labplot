@@ -32,9 +32,8 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "datasources/filters/AbstractFileFilter.h"
 
 class AsciiFilterPrivate;
-class AsciiFilter : public QObject, public AbstractFileFilter{
-  Q_OBJECT
-  Q_INTERFACES(AbstractFileFilter)
+class AsciiFilter : public AbstractFileFilter{
+	Q_OBJECT
 
   public:
 	AsciiFilter();
@@ -91,6 +90,7 @@ class AsciiFilter : public QObject, public AbstractFileFilter{
 
   private:
 	AsciiFilterPrivate* const d;
+	friend class AsciiFilterPrivate;
 };
 
 #endif
