@@ -347,7 +347,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	//we need in total (endColumn-startColumn+1) columns.
 	//Create new columns, if needed.
 	Column * newColumn;
-// 	dataSource->beginMacro( QObject::tr("Import from %1").arg(fileName) );
+	dataSource->setUndoAware(false);
 	if (mode==AbstractFileFilter::Append){
 		columnOffset=dataSource->childCount<Column>();
 		for ( int n=startColumn; n<=endColumn; n++ ){
@@ -414,7 +414,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		if (spreadsheet->rowCount()<numLines)
 			spreadsheet->setRowCount(numLines);
 	}
-// 	
+
 	//pointers to the actual data containers
 	QVector<QVector<double>*> dataPointers;
 	for ( int n=startColumn; n<=endColumn; n++ ){
@@ -426,7 +426,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	//import the values in the first line, if they were not used as the header (as the names for the columns)
 	if (!headerEnabled){
 		for ( int n=startColumn; n<=endColumn; n++ ){
-// 		 spreadsheet->column(columnOffset+n-startColumn)->setValueAt(0, lineStringList.at(n).toDouble());
 			dataPointers[n-startColumn]->push_back(lineStringList.at(n).toDouble());
 	  }
 	  currentRow++;
@@ -480,10 +479,13 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		comment = "numerical data, " + QString::number(currentRow+1) + " elements";
 	
 	for ( int n=startColumn; n<=endColumn; n++ ){
-		spreadsheet->column(columnOffset+n-startColumn)->setComment(comment);
+		Column* column = spreadsheet->column(columnOffset+n-startColumn);
+		column->setUndoAware(false);
+		column->setComment(comment);
+		column->setUndoAware(true);
 	}
 
-// 	spreadsheet->endMacro();
+	spreadsheet->setUndoAware(true);
 }
 
 /*!

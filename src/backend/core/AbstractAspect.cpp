@@ -231,7 +231,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 AbstractAspect::AbstractAspect(const QString &name)
-	: m_aspect_private(new Private(this, name))
+	: m_undoAware(true), m_aspect_private(new Private(this, name))
 {
 }
 
@@ -463,6 +463,9 @@ const QList< AbstractAspect* > AbstractAspect::rawChildren() const
 //! \name undo related
 //@{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+void AbstractAspect::setUndoAware(bool b) {
+	m_undoAware = b;
+}
 
 /**
  * \fn virtual QUndoStack *AbstractAspect::undoStack() const
@@ -480,12 +483,17 @@ const QList< AbstractAspect* > AbstractAspect::rawChildren() const
 void AbstractAspect::exec(QUndoCommand *cmd)
 {
 	Q_CHECK_PTR(cmd);
-	QUndoStack *stack = undoStack();
-	if (stack)
-		stack->push(cmd);
-	else {
+	if (m_undoAware) {
+		QUndoStack *stack = undoStack();
+		if (stack)
+			stack->push(cmd);
+		else {
+			cmd->redo();
+			delete cmd;
+		}
+	} else {
 		cmd->redo();
-		delete cmd;
+		delete cmd;		
 	}
 	if (project())
 		project()->setChanged(true);
@@ -524,6 +532,9 @@ void AbstractAspect::exec(QUndoCommand *command,
  * \brief Begin an undo stack macro (series of commands)
  */
 void AbstractAspect::beginMacro(const QString& text) {
+	if (!m_undoAware)
+		return;
+
 	QUndoStack *stack = undoStack();
 	if (stack)
 		stack->beginMacro(text);
@@ -533,6 +544,9 @@ void AbstractAspect::beginMacro(const QString& text) {
  * \brief End the current undo stack macro
  */
 void AbstractAspect::endMacro() {
+	if (!m_undoAware)
+		return;
+
 	QUndoStack *stack = undoStack();
 	if (stack)
 		stack->endMacro();

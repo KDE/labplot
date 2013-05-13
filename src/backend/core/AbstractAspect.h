@@ -154,6 +154,7 @@ class AbstractAspect : public QObject {
 		bool hidden() const;
 
 		//undo/redo related functions
+		void setUndoAware(bool);
 		virtual QUndoStack* undoStack() const { return parentAspect() ? parentAspect()->undoStack() : 0; }
 		void exec(QUndoCommand*);
 		void exec(QUndoCommand* command, const char *preChangeSignal, const char *postChangeSignal,
@@ -178,6 +179,7 @@ class AbstractAspect : public QObject {
 	private:
 		Private* m_aspect_private;
 		const QList<AbstractAspect*> rawChildren() const;
+		bool m_undoAware;
 
 	public slots:
 		void setName(const QString&);
