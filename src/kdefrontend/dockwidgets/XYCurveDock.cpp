@@ -53,18 +53,37 @@
 
 XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
+
+	QGridLayout* gridLayout;
 	
 	// Tab "General"
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
+
 	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
-	ui.gridLayoutGeneral->addWidget(cbXColumn, 2, 1, 1, 1);
-	
+	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
+
 	cbYColumn = new TreeViewComboBox(ui.tabGeneral);
-	ui.gridLayoutGeneral->addWidget(cbYColumn, 3, 1, 1, 1);
-	
+	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
+
 	//Tab "Values"
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
-	qobject_cast<QGridLayout*>(ui.tabValues->layout())->addWidget(cbValuesColumn, 2, 2, 1, 1);
-	
+	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
+
+	//Tab "Error bars"
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
+
+	cbXErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbXErrorMinusColumn, 2, 2, 1, 1);
+
+	cbXErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbXErrorPlusColumn, 3, 2, 1, 1);
+
+	cbYErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbYErrorMinusColumn, 12, 2, 1, 1);
+
+	cbYErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbYErrorPlusColumn, 13, 2, 1, 1);
 	
 	//adjust layouts in the tabs
 	QGridLayout* layout;
@@ -296,6 +315,47 @@ void XYCurveDock::init(){
 	//Values
 	ui.cbValuesType->addItems(XYCurve::valuesTypeStrings());
 	ui.cbValuesPosition->addItems(XYCurve::valuesPositionStrings());
+	
+	//Error-bars
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,17,17);
+	pa.end();
+	ui.cbXErrorType->addItem(i18n("bars"));
+	ui.cbXErrorType->setItemIcon(0, pm);
+	ui.cbYErrorType->addItem(i18n("bars"));
+	ui.cbYErrorType->setItemIcon(0, pm);
+	
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawEllipse( 1,1,4,4);
+	pa.drawEllipse( 15,15,4,4);
+	pa.drawLine(3,3,17,17);
+	pa.end();
+	ui.cbXErrorType->addItem(i18n("bars with ends"));
+	ui.cbXErrorType->setItemIcon(1, pm);
+	ui.cbYErrorType->addItem(i18n("bars with ends"));
+	ui.cbYErrorType->setItemIcon(1, pm);
+	
+	//x
+	ui.cbXError->addItem(i18n("no"));
+	ui.cbXError->addItem(i18n("symmetric"));
+	ui.cbXError->addItem(i18n("asymmetric"));
+
+	GuiTools::updatePenStyles(ui.cbXErrorLineStyle, Qt::black);
+
+	//y
+	ui.cbYError->addItem(i18n("no"));
+	ui.cbYError->addItem(i18n("symmetric"));
+	ui.cbYError->addItem(i18n("asymmetric"));
+	GuiTools::updatePenStyles(ui.cbYErrorLineStyle, Qt::black);
+
 }
 
 void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
@@ -306,6 +366,10 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
 	cbXColumn->setTopLevelClasses(list);
 	cbYColumn->setTopLevelClasses(list);
 	cbValuesColumn->setTopLevelClasses(list);
+	cbXErrorMinusColumn->setTopLevelClasses(list);
+	cbXErrorPlusColumn->setTopLevelClasses(list);
+	cbYErrorMinusColumn->setTopLevelClasses(list);
+	cbYErrorPlusColumn->setTopLevelClasses(list);
 	
  	list.clear();
 	list<<"Column";
@@ -315,7 +379,11 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
   	cbXColumn->setModel(m_aspectTreeModel.get());
 	cbYColumn->setModel(m_aspectTreeModel.get());
 	cbValuesColumn->setModel(m_aspectTreeModel.get());
-	
+	cbXErrorMinusColumn->setModel(m_aspectTreeModel.get());
+	cbXErrorPlusColumn->setModel(m_aspectTreeModel.get());
+	cbYErrorMinusColumn->setModel(m_aspectTreeModel.get());
+	cbYErrorPlusColumn->setModel(m_aspectTreeModel.get());	
+
 	m_initializing=false;
 }
 

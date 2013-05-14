@@ -61,6 +61,10 @@ private:
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbYColumn;
 	TreeViewComboBox* cbValuesColumn;
+	TreeViewComboBox* cbXErrorPlusColumn;
+	TreeViewComboBox* cbXErrorMinusColumn;
+	TreeViewComboBox* cbYErrorPlusColumn;
+	TreeViewComboBox* cbYErrorMinusColumn;
 	
 	CurveSymbolFactory* symbolFactory;
 
