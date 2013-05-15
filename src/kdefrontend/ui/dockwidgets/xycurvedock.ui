@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>406</width>
+    <width>342</width>
     <height>595</height>
    </rect>
   </property>
@@ -1063,14 +1063,14 @@
           </font>
          </property>
          <property name="text">
-          <string>x-values:</string>
+          <string>x-error:</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lXError">
          <property name="text">
-          <string>Error</string>
+          <string>Error type</string>
          </property>
         </widget>
        </item>
@@ -1115,95 +1115,6 @@
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="lXErrorType">
-         <property name="text">
-          <string>Type</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QComboBox" name="cbXErrorType"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lXErrorLineStyle">
-         <property name="text">
-          <string>Style</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QComboBox" name="cbXErrorLineStyle"/>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lXErrorLineColor">
-         <property name="text">
-          <string>Color</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="KColorButton" name="kcbXErrorLineColor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lXErrorLineWidth">
-         <property name="text">
-          <string>Width</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QDoubleSpinBox" name="sbXErrorLineWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lXErrorLineOpacity">
-         <property name="text">
-          <string>Opacity</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QSpinBox" name="sbXErrorLineOpacity">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
-         </property>
-         <property name="suffix">
-          <string> %</string>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
         <spacer name="verticalSpacer_10">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1219,7 +1130,7 @@
          </property>
         </spacer>
        </item>
-       <item row="10" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="lErrorBarY">
          <property name="font">
           <font>
@@ -1228,63 +1139,92 @@
           </font>
          </property>
          <property name="text">
-          <string>y-values:</string>
+          <string>y-error:</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="lYError">
          <property name="text">
-          <string>Error</string>
+          <string>Error type</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="2">
+       <item row="6" column="2">
         <widget class="QComboBox" name="cbYError"/>
        </item>
-       <item row="12" column="0">
+       <item row="7" column="0">
         <widget class="QLabel" name="lYErrorDataPlus">
          <property name="text">
           <string>Data, +</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
+       <item row="8" column="0">
         <widget class="QLabel" name="lYErrorDataMinus">
          <property name="text">
           <string>Data, -</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="lYErrorType">
+       <item row="9" column="0">
+        <spacer name="verticalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lErrorFormat">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Format:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="lErrorType">
          <property name="text">
           <string>Type</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="2">
-        <widget class="QComboBox" name="cbYErrorType"/>
+       <item row="11" column="2">
+        <widget class="QComboBox" name="cbErrorType"/>
        </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lYErrorLineStyle">
+       <item row="12" column="0">
+        <widget class="QLabel" name="lErrorLineStyle">
          <property name="text">
           <string>Style</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="2">
-        <widget class="QComboBox" name="cbYErrorLineStyle"/>
+       <item row="12" column="2">
+        <widget class="QComboBox" name="cbErrorLineStyle"/>
        </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="lYErrorLineColor">
+       <item row="13" column="0">
+        <widget class="QLabel" name="lErrorLineColor">
          <property name="text">
           <string>Color</string>
          </property>
         </widget>
        </item>
-       <item row="16" column="2">
-        <widget class="KColorButton" name="kcbYErrorLineColor">
+       <item row="13" column="2">
+        <widget class="KColorButton" name="kcbErrorLineColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1293,15 +1233,15 @@
          </property>
         </widget>
        </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="lYErrorLineWidth">
+       <item row="14" column="0">
+        <widget class="QLabel" name="lErrorLineWidth">
          <property name="text">
           <string>Width</string>
          </property>
         </widget>
        </item>
-       <item row="17" column="2">
-        <widget class="QDoubleSpinBox" name="sbYErrorLineWidth">
+       <item row="14" column="2">
+        <widget class="QDoubleSpinBox" name="sbErrorLineWidth">
          <property name="suffix">
           <string> pt</string>
          </property>
@@ -1310,15 +1250,15 @@
          </property>
         </widget>
        </item>
-       <item row="18" column="0">
-        <widget class="QLabel" name="lYErrorLineOpacity">
+       <item row="15" column="0">
+        <widget class="QLabel" name="lErrorLineOpacity">
          <property name="text">
           <string>Opacity</string>
          </property>
         </widget>
        </item>
-       <item row="18" column="2">
-        <widget class="QSpinBox" name="sbYErrorLineOpacity">
+       <item row="15" column="2">
+        <widget class="QSpinBox" name="sbErrorLineOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1345,7 +1285,7 @@
          </property>
         </widget>
        </item>
-       <item row="19" column="0">
+       <item row="16" column="0">
         <spacer name="verticalSpacer_12">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1356,7 +1296,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>13</height>
+           <height>104</height>
           </size>
          </property>
         </spacer>

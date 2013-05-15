@@ -76,6 +76,7 @@ private slots:
 	void init();
 	void retranslateUi();
   
+	//SLOTs for changes triggered in XYCurveDock
 	void nameChanged();
 	void commentChanged();
 	void xColumnChanged(const QModelIndex&);
@@ -119,6 +120,17 @@ private slots:
 	void valuesFontChanged(const QFont&);
 	void valuesFontColorChanged(const QColor&);
 
+	//"Error bars"-Tab
+	void xErrorChanged(int) const;
+	void yErrorChanged(int) const;
+	void errorLineColorChanged(const QColor&);
+
+
+	//SLOTs for changes triggered in XYCurve
+	//TODO
+
+
+	//load and save
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
 };
