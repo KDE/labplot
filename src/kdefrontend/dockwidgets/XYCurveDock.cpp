@@ -433,6 +433,26 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 		cbValuesColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->valuesColumn()) );
 	else
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
+
+	if (curve->xErrorPlusColumn())
+		cbXErrorPlusColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xErrorPlusColumn()) );
+	else
+		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
+
+	if (curve->xErrorMinusColumn())
+		cbXErrorMinusColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xErrorMinusColumn()) );
+	else
+		cbXErrorMinusColumn->setCurrentModelIndex(QModelIndex());
+
+	if (curve->yErrorPlusColumn())
+		cbYErrorPlusColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yErrorPlusColumn()) );
+	else
+		cbYErrorPlusColumn->setCurrentModelIndex(QModelIndex());
+
+	if (curve->xErrorMinusColumn())
+		cbYErrorMinusColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yErrorMinusColumn()) );
+	else
+		cbYErrorMinusColumn->setCurrentModelIndex(QModelIndex());	
   }else{
 	ui.lName->setEnabled(false);
 	ui.leName->setEnabled(false);
@@ -448,6 +468,10 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	cbXColumn->setCurrentModelIndex(QModelIndex());
 	cbYColumn->setCurrentModelIndex(QModelIndex());
 	cbValuesColumn->setCurrentModelIndex(QModelIndex());
+	cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
+	cbXErrorMinusColumn->setCurrentModelIndex(QModelIndex());
+	cbYErrorPlusColumn->setCurrentModelIndex(QModelIndex());
+	cbYErrorMinusColumn->setCurrentModelIndex(QModelIndex());	
   }
 
 	//show the properties of the first curve
@@ -1384,7 +1408,7 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", (int) curve->dropLineType()) );
 	ui.cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", (int) curve->dropLinePen().style()) );
 	ui.kcbDropLineColor->setColor( group.readEntry("DropLineColor", curve->dropLinePen().color()) );
-  	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("DropLineColor", curve->dropLinePen().color()) );
+  	GuiTools::updatePenStyles(ui.cbDropLineStyle, group.readEntry("DropLineColor", curve->dropLinePen().color()) );
 	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", curve->dropLinePen().widthF()),Worksheet::Point) );
 	ui.sbDropLineOpacity->setValue( group.readEntry("DropLineOpacity", curve->dropLineOpacity())*100 );
 
@@ -1417,7 +1441,17 @@ void XYCurveDock::loadConfig(KConfig& config){
   	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
   	ui.kcbValuesFontColor->setColor( group.readEntry("ValuesFontColor", curve->valuesColor()) );
 
-	//TODO: Area Filling, Error Bars
+	//TODO: Area Filling,
+	
+	//Error bars
+	ui.cbXErrorType->setCurrentIndex( group.readEntry("XErrorType", (int) curve->xErrorType()) );
+	ui.cbYErrorType->setCurrentIndex( group.readEntry("YErrorType", (int) curve->yErrorType()) );
+	ui.cbErrorBarsType->setCurrentIndex( group.readEntry("ErrorBarsType", (int) curve->errorBarsType()) );
+	ui.cbErrorBarsStyle->setCurrentIndex( group.readEntry("ErrorBarsStyle", (int) curve->errorBarsPen().style()) );
+	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", curve->errorBarsPen().color()) );
+  	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, group.readEntry("ErrorBarsColor", curve->errorBarsPen().color()) );
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", curve->errorBarsPen().widthF()),Worksheet::Point) );
+	ui.sbErrorBarsOpacity->setValue( group.readEntry("ErrorBarsOpacity", curve->errorBarsOpacity())*100 );	
 }
 
 void XYCurveDock::saveConfig(KConfig& config){
@@ -1433,6 +1467,7 @@ void XYCurveDock::saveConfig(KConfig& config){
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
 	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(),Worksheet::Point) );
 	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100 );
+
 	//Drop Line
 	group.writeEntry("DropLineType", ui.cbDropLineType->currentIndex());
 	group.writeEntry("DropLineStyle", ui.cbDropLineStyle->currentIndex());
@@ -1464,7 +1499,16 @@ void XYCurveDock::saveConfig(KConfig& config){
 	group.writeEntry("ValuesFont", valuesFont);
 	group.writeEntry("ValuesFontColor", ui.kcbValuesFontColor->color());
 
-	//TODO: Area Filling, Error Bars
+	//TODO: Area Filling,
+	
+	//Error bars
+	group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());
+	group.writeEntry("YErrorType", ui.cbYErrorType->currentIndex());
+	group.writeEntry("ErrorBarsType", ui.cbErrorBarsType->currentIndex());
+	group.writeEntry("ErrorBarsStyle", ui.cbErrorBarsStyle->currentIndex());
+	group.writeEntry("ErrorBarsColor", ui.kcbErrorBarsColor->color());
+	group.writeEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(ui.sbErrorBarsWidth->value(),Worksheet::Point) );
+	group.writeEntry("ErrorBarsOpacity", ui.sbErrorBarsOpacity->value()/100 );	
 
 	config.sync();
 }
