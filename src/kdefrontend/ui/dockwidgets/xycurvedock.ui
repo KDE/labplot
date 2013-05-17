@@ -1068,7 +1068,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="lXError">
+        <widget class="QLabel" name="lXErrorType">
          <property name="text">
           <string>Error type</string>
          </property>
@@ -1091,7 +1091,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="QComboBox" name="cbXError">
+        <widget class="QComboBox" name="cbXErrorType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1144,14 +1144,14 @@
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="lYError">
+        <widget class="QLabel" name="lYErrorType">
          <property name="text">
           <string>Error type</string>
          </property>
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QComboBox" name="cbYError"/>
+        <widget class="QComboBox" name="cbYErrorType"/>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="lYErrorDataPlus">
@@ -1197,34 +1197,34 @@
         </widget>
        </item>
        <item row="11" column="0">
-        <widget class="QLabel" name="lErrorType">
+        <widget class="QLabel" name="lErrorBarsType">
          <property name="text">
           <string>Type</string>
          </property>
         </widget>
        </item>
        <item row="11" column="2">
-        <widget class="QComboBox" name="cbErrorType"/>
+        <widget class="QComboBox" name="cbErrorBarsType"/>
        </item>
        <item row="12" column="0">
-        <widget class="QLabel" name="lErrorLineStyle">
+        <widget class="QLabel" name="lErrorBarsStyle">
          <property name="text">
           <string>Style</string>
          </property>
         </widget>
        </item>
        <item row="12" column="2">
-        <widget class="QComboBox" name="cbErrorLineStyle"/>
+        <widget class="QComboBox" name="cbErrorBarsStyle"/>
        </item>
        <item row="13" column="0">
-        <widget class="QLabel" name="lErrorLineColor">
+        <widget class="QLabel" name="lErrorBarsColor">
          <property name="text">
           <string>Color</string>
          </property>
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KColorButton" name="kcbErrorLineColor">
+        <widget class="KColorButton" name="kcbErrorBarsColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1234,14 +1234,14 @@
         </widget>
        </item>
        <item row="14" column="0">
-        <widget class="QLabel" name="lErrorLineWidth">
+        <widget class="QLabel" name="lErrorBarsWidth">
          <property name="text">
           <string>Width</string>
          </property>
         </widget>
        </item>
        <item row="14" column="2">
-        <widget class="QDoubleSpinBox" name="sbErrorLineWidth">
+        <widget class="QDoubleSpinBox" name="sbErrorBarsWidth">
          <property name="suffix">
           <string> pt</string>
          </property>
@@ -1251,14 +1251,14 @@
         </widget>
        </item>
        <item row="15" column="0">
-        <widget class="QLabel" name="lErrorLineOpacity">
+        <widget class="QLabel" name="lErrorBarsOpacity">
          <property name="text">
           <string>Opacity</string>
          </property>
         </widget>
        </item>
        <item row="15" column="2">
-        <widget class="QSpinBox" name="sbErrorLineOpacity">
+        <widget class="QSpinBox" name="sbErrorBarsOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>

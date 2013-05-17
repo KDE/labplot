@@ -149,10 +149,17 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.kcbValuesFontColor, SIGNAL(changed(const QColor &)), this, SLOT(valuesFontColorChanged(const QColor&)) );
 	
 	//Error bars
-	connect( ui.cbXError, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorChanged(int)) );
-	connect( ui.cbYError, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorChanged(int)) );
-	
-	connect( ui.kcbErrorLineColor, SIGNAL(changed(const QColor &)), this, SLOT(errorLineColorChanged(const QColor&)) );
+	connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
+	connect( cbXErrorPlusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(xErrorPlusColumnChanged(const QModelIndex&)) );
+	connect( cbXErrorMinusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(xErrorMinusColumnChanged(const QModelIndex&)) );
+	connect( ui.cbYErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorTypeChanged(int)) );
+	connect( cbYErrorPlusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yErrorPlusColumnChanged(const QModelIndex&)) );
+	connect( cbYErrorMinusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yErrorMinusColumnChanged(const QModelIndex&)) );
+	connect( ui.cbErrorBarsType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsTypeChanged(int)) );
+	connect( ui.cbErrorBarsStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsStyleChanged(int)) );
+	connect( ui.kcbErrorBarsColor, SIGNAL(changed (const QColor &)), this, SLOT(errorBarsColorChanged(const QColor&)) );
+	connect( ui.sbErrorBarsWidth, SIGNAL(valueChanged(double)), this, SLOT(errorBarsWidthChanged(double)) );
+	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );	
 	
 	//template handler
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
@@ -160,6 +167,8 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	templateHandler->show();
 	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
 	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+
+	ui.tabWidget->removeTab(ui.tabWidget->indexOf(ui.tabAreaFilling)); //TODO
 
 	retranslateUi();
 	init();
@@ -330,8 +339,8 @@ void XYCurveDock::init(){
 	pa.drawLine(3,10,17,10);//vert. line
 	pa.drawLine(10,3,10,17);//hor. line
 	pa.end();
-	ui.cbErrorType->addItem(i18n("bars"));
-	ui.cbErrorType->setItemIcon(0, pm);
+	ui.cbErrorBarsType->addItem(i18n("bars"));
+	ui.cbErrorBarsType->setItemIcon(0, pm);
 	
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
@@ -344,18 +353,18 @@ void XYCurveDock::init(){
 	pa.drawLine(3,7,3,13); //left cap
 	pa.drawLine(17,7,17,13); //right cap
 	pa.end();
-	ui.cbErrorType->addItem(i18n("bars with ends"));
-	ui.cbErrorType->setItemIcon(1, pm);
+	ui.cbErrorBarsType->addItem(i18n("bars with ends"));
+	ui.cbErrorBarsType->setItemIcon(1, pm);
 	
-	ui.cbXError->addItem(i18n("no"));
-	ui.cbXError->addItem(i18n("symmetric"));
-	ui.cbXError->addItem(i18n("asymmetric"));
+	ui.cbXErrorType->addItem(i18n("no"));
+	ui.cbXErrorType->addItem(i18n("symmetric"));
+	ui.cbXErrorType->addItem(i18n("asymmetric"));
 
-	ui.cbYError->addItem(i18n("no"));
-	ui.cbYError->addItem(i18n("symmetric"));
-	ui.cbYError->addItem(i18n("asymmetric"));
+	ui.cbYErrorType->addItem(i18n("no"));
+	ui.cbYErrorType->addItem(i18n("symmetric"));
+	ui.cbYErrorType->addItem(i18n("asymmetric"));
 
-	GuiTools::updatePenStyles(ui.cbErrorLineStyle, Qt::black);
+	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
 
 }
 
@@ -643,8 +652,9 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index){
   
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
-	if (!column)
-		cbXColumn->setCurrentModelIndex(QModelIndex());
+	//TODO: do we really need this check?
+// 	if (!column)
+// 		cbXColumn->setCurrentModelIndex(QModelIndex());
 
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setXColumn(column);
@@ -1148,7 +1158,7 @@ void XYCurveDock::valuesFontColorChanged(const QColor& color){
 }
 
 //"Error bars"-Tab
-void XYCurveDock::xErrorChanged(int index) const {
+void XYCurveDock::xErrorTypeChanged(int index) const {
 	if (index == 0) {
 		//no error
 		ui.lXErrorDataPlus->setVisible(false);
@@ -1171,26 +1181,53 @@ void XYCurveDock::xErrorChanged(int index) const {
 		ui.lXErrorDataPlus->setText(i18n("Data, +"));
 	}
 
-	bool b = (index!=0 || ui.cbYError->currentIndex()!=0);
+	bool b = (index!=0 || ui.cbYErrorType->currentIndex()!=0);
 	ui.lErrorFormat->setVisible(b);
-	ui.lErrorType->setVisible(b);
-	ui.cbErrorType->setVisible(b);
-	ui.lErrorLineStyle->setVisible(b);
-	ui.cbErrorLineStyle->setVisible(b);
-	ui.lErrorLineColor->setVisible(b);
-	ui.kcbErrorLineColor->setVisible(b);
-	ui.lErrorLineWidth->setVisible(b);
-	ui.sbErrorLineWidth->setVisible(b);
-	ui.lErrorLineOpacity->setVisible(b);
-	ui.sbErrorLineOpacity->setVisible(b);
+	ui.lErrorBarsType->setVisible(b);
+	ui.cbErrorBarsType->setVisible(b);
+	ui.lErrorBarsStyle->setVisible(b);
+	ui.cbErrorBarsStyle->setVisible(b);
+	ui.lErrorBarsColor->setVisible(b);
+	ui.kcbErrorBarsColor->setVisible(b);
+	ui.lErrorBarsWidth->setVisible(b);
+	ui.sbErrorBarsWidth->setVisible(b);
+	ui.lErrorBarsOpacity->setVisible(b);
+	ui.sbErrorBarsOpacity->setVisible(b);
 
 	if (m_initializing)
 		return;
-	//TODO
-// 	foreach(XYCurve* curve, m_curvesList)	
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setXErrorType(XYCurve::ErrorType(index));
 }
 
-void XYCurveDock::yErrorChanged(int index) const {
+void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) const{
+	Q_UNUSED(index);
+	if (m_initializing)
+		return;
+  
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setXErrorPlusColumn(column);
+}
+
+void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) const{
+	Q_UNUSED(index);
+	if (m_initializing)
+		return;
+  
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setXErrorMinusColumn(column);
+}
+
+void XYCurveDock::yErrorTypeChanged(int index) const{
 	if (index == 0) {
 		//no error
 		ui.lYErrorDataPlus->setVisible(false);
@@ -1213,38 +1250,113 @@ void XYCurveDock::yErrorChanged(int index) const {
 		ui.lYErrorDataPlus->setText(i18n("Data, +"));
 	}
 
-	bool b = (index!=0 || ui.cbXError->currentIndex()!=0);
+	bool b = (index!=0 || ui.cbXErrorType->currentIndex()!=0);
 	ui.lErrorFormat->setVisible(b);
-	ui.lErrorType->setVisible(b);
-	ui.cbErrorType->setVisible(b);
-	ui.lErrorLineStyle->setVisible(b);
-	ui.cbErrorLineStyle->setVisible(b);
-	ui.lErrorLineColor->setVisible(b);
-	ui.kcbErrorLineColor->setVisible(b);
-	ui.lErrorLineWidth->setVisible(b);
-	ui.sbErrorLineWidth->setVisible(b);
-	ui.lErrorLineOpacity->setVisible(b);
-	ui.sbErrorLineOpacity->setVisible(b);
+	ui.lErrorBarsType->setVisible(b);
+	ui.cbErrorBarsType->setVisible(b);
+	ui.lErrorBarsStyle->setVisible(b);
+	ui.cbErrorBarsStyle->setVisible(b);
+	ui.lErrorBarsColor->setVisible(b);
+	ui.kcbErrorBarsColor->setVisible(b);
+	ui.lErrorBarsWidth->setVisible(b);
+	ui.sbErrorBarsWidth->setVisible(b);
+	ui.lErrorBarsOpacity->setVisible(b);
+	ui.sbErrorBarsOpacity->setVisible(b);
 
 
-	if (m_initializing)
-		return;	
-	//TODO
-// 	foreach(XYCurve* curve, m_curvesList)
-}
-
-void XYCurveDock::errorLineColorChanged(const QColor& color){
 	if (m_initializing)
 		return;
 
-/*  QPen pen;
-  foreach(XYCurve* curve, m_curvesList){
-	pen=curve->xErrorLinePen();
-	pen.setColor(color);
-	curve->setXErrorLinePen(pen);
-  } */ 
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setYErrorType(XYCurve::ErrorType(index));
+}
 
-  GuiTools::updatePenStyles(ui.cbErrorLineStyle, color);
+
+void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const{
+	Q_UNUSED(index);
+	if (m_initializing)
+		return;
+  
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setYErrorPlusColumn(column);
+}
+
+void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const{
+	Q_UNUSED(index);
+	if (m_initializing)
+		return;
+  
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setYErrorMinusColumn(column);
+}
+
+void XYCurveDock::errorBarsTypeChanged(int index) const{
+	if (m_initializing)
+		return;
+
+	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	QPen pen;
+	foreach(XYCurve* curve, m_curvesList){
+		pen=curve->errorBarsPen();
+		pen.setStyle(penStyle);
+		curve->setErrorBarsPen(pen);
+	}
+}
+
+void XYCurveDock::errorBarsStyleChanged(int index) const{
+	if (m_initializing)
+		return;
+
+	Qt::PenStyle penStyle=Qt::PenStyle(index);
+	QPen pen;
+	foreach(XYCurve* curve, m_curvesList){
+		pen=curve->errorBarsPen();
+		pen.setStyle(penStyle);
+		curve->setErrorBarsPen(pen);
+	}
+}
+
+void XYCurveDock::errorBarsColorChanged(const QColor& color) const{
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	foreach(XYCurve* curve, m_curvesList){
+		pen=curve->errorBarsPen();
+		pen.setColor(color);
+		curve->setErrorBarsPen(pen);
+	}  
+
+	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, color);
+}
+
+void XYCurveDock::errorBarsWidthChanged(double value) const{
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	foreach(XYCurve* curve, m_curvesList){
+		pen=curve->errorBarsPen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		curve->setErrorBarsPen(pen);
+	}
+}
+
+void XYCurveDock::errorBarsOpacityChanged(int value) const{
+	if (m_initializing)
+		return;
+		
+	qreal opacity = (float)value/100;
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setErrorBarsOpacity(opacity);
 }
 
 /* Settings */

@@ -89,7 +89,7 @@ void XYCurve::init(){
 	d->dropLineOpacity = 1.0;
 	
 	d->valuesType = XYCurve::NoValues;
-	d->valuesColumn = NULL;	
+	d->valuesColumn = NULL;
 	d->valuesPosition = XYCurve::ValuesAbove;
 	d->valuesDistance =  Worksheet::convertToSceneUnits( 5, Worksheet::Point );
 	d->valuesRotationAngle = 0;
@@ -102,6 +102,15 @@ void XYCurve::init(){
 	d->symbolsAspectRatio = 1;
 	d->symbolsPrototype = NULL;
 	d->swapSymbolsTypeId("diamond");
+	
+	d->xErrorType = XYCurve::NoError;
+	d->xErrorPlusColumn = NULL;
+	d->xErrorMinusColumn = NULL;
+	d->yErrorType = XYCurve::NoError;
+	d->yErrorPlusColumn = NULL;
+	d->yErrorMinusColumn = NULL;
+	d->errorBarsType = XYCurve::ErrorBars;
+	d->errorBarsOpacity = 1.0;
 	
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -307,6 +316,17 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, valuesColor, valuesColor)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
+
+//error bars
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xErrorPlusColumn, xErrorPlusColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xErrorMinusColumn, xErrorMinusColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yErrorPlusColumn, yErrorPlusColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yErrorMinusColumn, yErrorMinusColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
 
 /* ============================ setter methods and undo commands ================= */
 
@@ -518,6 +538,62 @@ void XYCurve::setValuesColor(const QColor& color) {
 		exec(new XYCurveSetValuesColorCmd(d, color, tr("%1: set values color")));
 }
 
+//Error bars
+STD_SETTER_CMD_IMPL_F(XYCurve, SetXErrorType, XYCurve::ErrorType, xErrorType, updateErrorBars)
+void XYCurve::setXErrorType(ErrorType type) {
+	Q_D(XYCurve);
+	if (type != d->xErrorType)
+		exec(new XYCurveSetXErrorTypeCmd(d, type, tr("%1: x-error type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetXErrorPlusColumn, const AbstractColumn*, xErrorPlusColumn, updateErrorBars)
+void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
+	
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetXErrorMinusColumn, const AbstractColumn*, xErrorMinusColumn, updateErrorBars)
+void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
+	
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetYErrorType, XYCurve::ErrorType, yErrorType, updateErrorBars)
+void XYCurve::setYErrorType(ErrorType type) {
+	Q_D(XYCurve);
+	if (type != d->yErrorType)
+		exec(new XYCurveSetYErrorTypeCmd(d, type, tr("%1: y-error type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
+void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
+	
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetYErrorMinusColumn, const AbstractColumn*, yErrorMinusColumn, updateErrorBars)
+void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
+	
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
+void XYCurve::setErrorBarsType(ErrorBarsType type) {
+	Q_D(XYCurve);
+	if (type != d->errorBarsType)
+		exec(new XYCurveSetErrorBarsTypeCmd(d, type, tr("%1: error bar type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsPen, QPen, errorBarsPen, recalcShapeAndBoundingRect)
+void XYCurve::setErrorBarsPen(const QPen& pen) {
+	Q_D(XYCurve);
+	if (pen != d->errorBarsPen)
+		exec(new XYCurveSetErrorBarsPenCmd(d, pen, tr("%1: set error bar style")));
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsOpacity, qreal, errorBarsOpacity, update)
+void XYCurve::setErrorBarsOpacity(qreal opacity) {
+	Q_D(XYCurve);
+	if (opacity != d->errorBarsOpacity)
+		exec(new XYCurveSetErrorBarsOpacityCmd(d, opacity, tr("%1: set error bar opacity")));
+}
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -631,6 +707,7 @@ void XYCurvePrivate::retransform(){
 	updateLines();
 	updateDropLines();
 	updateValues();
+	updateErrorBars();
 }
 
 /*!
@@ -1011,6 +1088,48 @@ void XYCurvePrivate::updateValues(){
 	recalcShapeAndBoundingRect();
 }
 
+void XYCurvePrivate::updateErrorBars(){
+  	errorBarsPath = QPainterPath();
+	if (xErrorType==XYCurve::NoError && yErrorType==XYCurve::NoError){
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
+	QList<QLineF> lines;
+
+	//error bars for x
+	foreach(QPointF point, symbolPointsLogicalRestricted){
+		if (xErrorType==XYCurve::SymmetricError) {
+// 			lines.append(QLineF(QPointF(point.x()-0.6, point.y()), QPointF(point.x()+0.6, point.y())));
+		} else {
+			
+		}
+	}
+
+	//error bars for y
+	foreach(QPointF point, symbolPointsLogicalRestricted){
+		if (yErrorType==XYCurve::SymmetricError) {
+// 			lines.append(QLineF(QPointF(point.x(), point.y()-0.6), QPointF(point.x(), point.y()+0.6)));
+		} else {
+			
+		}
+	}
+
+	//map the error bars to scene coordinates
+	CartesianPlot* plot = qobject_cast<CartesianPlot*>(q->parentAspect());
+	Q_ASSERT(plot != NULL);
+	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+	Q_ASSERT(cSystem != NULL);
+	lines = cSystem->mapLogicalToScene(lines);
+	
+	//new painter path for the drop lines
+	foreach (QLineF line, lines){
+		errorBarsPath.moveTo(line.p1());
+		errorBarsPath.lineTo(line.p2());
+	}
+	
+	recalcShapeAndBoundingRect();
+}
 /*!
   recalculates the outer bounds and the shape of the curve.
 */
@@ -1123,7 +1242,15 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 	painter->setBrush(Qt::NoBrush);
 	painter->drawPath(dropLinePath);
   }
-  
+
+  //draw error bars
+  if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
+	painter->setOpacity(errorBarsOpacity);
+	painter->setPen(errorBarsPen);
+	painter->setBrush(Qt::NoBrush);
+	painter->drawPath(errorBarsPath);
+  }
+
   //draw symbols
   if (symbolsPrototype->id()!="none"){
 	  painter->setOpacity(symbolsOpacity);
@@ -1153,7 +1280,8 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 	  painter->translate(-valuesPoints.at(i));
 	}
   }
-  
+ 
+
   painter->setOpacity(opacity);
   
   if (isSelected()){

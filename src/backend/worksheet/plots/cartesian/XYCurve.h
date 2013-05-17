@@ -47,7 +47,9 @@ class XYCurve: public AbstractWorksheetElement {
 		enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY};
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
-		
+		enum ErrorType {NoError, SymmetricError, AsymmetricError};
+		enum ErrorBarsType {ErrorBars, ErrorBarsWithEnds};
+
 		static QStringList lineTypeStrings();
 		static QStringList dropLineTypeStrings();
 		static QStringList valuesTypeStrings();
@@ -96,6 +98,16 @@ class XYCurve: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 		CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
+		BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
+		BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
+		BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
+		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
+		BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
+		
 		//TODO: signal/slot connections with columns
 
 		virtual void setVisible(bool on);

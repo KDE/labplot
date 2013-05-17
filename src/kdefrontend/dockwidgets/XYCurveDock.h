@@ -121,10 +121,17 @@ private slots:
 	void valuesFontColorChanged(const QColor&);
 
 	//"Error bars"-Tab
-	void xErrorChanged(int) const;
-	void yErrorChanged(int) const;
-	void errorLineColorChanged(const QColor&);
-
+	void xErrorTypeChanged(int) const;
+	void yErrorTypeChanged(int) const;
+	void xErrorPlusColumnChanged(const QModelIndex&) const;
+	void xErrorMinusColumnChanged(const QModelIndex&) const;
+	void yErrorPlusColumnChanged(const QModelIndex&) const;
+	void yErrorMinusColumnChanged(const QModelIndex&) const;
+	void errorBarsTypeChanged(int) const;
+  	void errorBarsStyleChanged(int) const;
+	void errorBarsColorChanged(const QColor&) const;
+	void errorBarsWidthChanged(double) const;
+	void errorBarsOpacityChanged(int) const;
 
 	//SLOTs for changes triggered in XYCurve
 	//TODO

@@ -46,6 +46,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		void updateLines();
 		void updateDropLines();
 		void updateValues();
+		void updateErrorBars();
 		void updateSymbol();
 		bool swapVisible(bool on);
 		QString swapSymbolsTypeId(const QString &id);
@@ -88,9 +89,20 @@ class XYCurvePrivate: public QGraphicsItem {
 		QFont valuesFont;
 		QColor valuesColor;
 		
+		XYCurve::ErrorType xErrorType;
+		const AbstractColumn* xErrorPlusColumn;
+		const AbstractColumn* xErrorMinusColumn;
+		XYCurve::ErrorType yErrorType;
+		const AbstractColumn* yErrorPlusColumn;
+		const AbstractColumn* yErrorMinusColumn;
+		XYCurve::ErrorBarsType errorBarsType;
+		QPen errorBarsPen;
+		qreal errorBarsOpacity;
+		
 		QPainterPath linePath;
 		QPainterPath dropLinePath;
 		QPainterPath valuesPath;
+		QPainterPath errorBarsPath;
 		AbstractCurveSymbol *symbolsPrototype;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
