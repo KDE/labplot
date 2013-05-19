@@ -4,7 +4,7 @@
     Description          : A 2D-curve.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
 								  (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -268,22 +268,10 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
-
-QString& XYCurve::xColumnName() const {
-	return d_ptr->xColumnName;
-}
-
-QString& XYCurve::yColumnName() const {
-	return d_ptr->yColumnName;
-}
-
-QString& XYCurve::xColumnParentName() const {
-	return d_ptr->xColumnParentName;
-}
-
-QString& XYCurve::yColumnParentName() const {
-	return d_ptr->yColumnParentName;
-}
+QString& XYCurve::xColumnName() const { return d_ptr->xColumnName; }
+QString& XYCurve::yColumnName() const {	return d_ptr->yColumnName; }
+QString& XYCurve::xColumnParentName() const { return d_ptr->xColumnParentName;}
+QString& XYCurve::yColumnParentName() const { return d_ptr->yColumnParentName; }
 
 //line
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
@@ -308,6 +296,8 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 //values
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn)
+QString& XYCurve::valuesColumnName() const { return d_ptr->valuesColumnName; }
+QString& XYCurve::valuesColumnParentName() const { return d_ptr->valuesColumnParentName;}
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle)
@@ -320,10 +310,20 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xErrorPlusColumn, xErrorPlusColumn)
+QString& XYCurve::xErrorPlusColumnName() const { return d_ptr->xErrorPlusColumnName; }
+QString& XYCurve::xErrorPlusColumnParentName() const { return d_ptr->xErrorPlusColumnParentName; }
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xErrorMinusColumn, xErrorMinusColumn)
+QString& XYCurve::xErrorMinusColumnName() const { return d_ptr->xErrorMinusColumnName; }
+QString& XYCurve::xErrorMinusColumnParentName() const { return d_ptr->xErrorMinusColumnParentName; }
+
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yErrorPlusColumn, yErrorPlusColumn)
+QString& XYCurve::yErrorPlusColumnName() const { return d_ptr->yErrorPlusColumnName; }
+QString& XYCurve::yErrorPlusColumnParentName() const { return d_ptr->yErrorPlusColumnParentName; }
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yErrorMinusColumn, yErrorMinusColumn)
+QString& XYCurve::yErrorMinusColumnName() const { return d_ptr->yErrorMinusColumnName; }
+QString& XYCurve::yErrorMinusColumnParentName() const { return d_ptr->yErrorMinusColumnParentName; }
+
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
@@ -1304,21 +1304,8 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 
 	//general
 	writer->writeStartElement( "general" );
-	if (d->xColumn){
-		writer->writeAttribute( "xColumn", d->xColumn->name() );
-		writer->writeAttribute( "xColumnParent", d->xColumn->parentAspect()->name() );
-	} else {
-		writer->writeAttribute( "xColumn", "" );
-		writer->writeAttribute( "xColumnParent", "" );
-	}
-
-	if (d->yColumn){
-		writer->writeAttribute( "yColumn", d->yColumn->name() );
-		writer->writeAttribute( "yColumnParent", d->yColumn->parentAspect()->name() );
-	} else {
-		writer->writeAttribute( "yColumn", "" );
-		writer->writeAttribute( "yColumnParent", "" );
-	}
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMN(d->yColumn, yColumn);
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -1351,7 +1338,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	//Values
 	writer->writeStartElement( "values" );
 	writer->writeAttribute( "type", QString::number(d->valuesType) );
-	//TODO values column
+	WRITE_COLUMN(d->valuesColumn, valuesColumn);
 	//TODO values format and precision
 	writer->writeAttribute( "position", QString::number(d->valuesPosition) );
 	writer->writeAttribute( "distance", QString::number(d->valuesDistance) );
@@ -1361,6 +1348,19 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "suffix", d->valuesSuffix );
 	WRITE_QCOLOR(d->valuesColor);
 	WRITE_QFONT(d->valuesFont);
+	writer->writeEndElement();
+
+	//Error bars
+	writer->writeStartElement( "errorBars" );
+	writer->writeAttribute( "xErrorType", QString::number(d->xErrorType) );
+	WRITE_COLUMN(d->xErrorPlusColumn, xErrorPlusColumn);
+	WRITE_COLUMN(d->xErrorMinusColumn, xErrorMinusColumn);
+	writer->writeAttribute( "yErrorType", QString::number(d->yErrorType) );
+	WRITE_COLUMN(d->yErrorPlusColumn, yErrorPlusColumn);
+	WRITE_COLUMN(d->yErrorMinusColumn, yErrorMinusColumn);
+	writer->writeAttribute( "type", QString::number(d->errorBarsType) );
+	WRITE_QPEN(d->errorBarsPen);
+	writer->writeAttribute( "opacity", QString::number(d->errorBarsOpacity) );
 	writer->writeEndElement();
 
 	writer->writeEndElement(); //close "xyCurve" section
@@ -1395,20 +1395,8 @@ bool XYCurve::load(XmlStreamReader* reader){
 		}else if (reader->name() == "general"){
 			attribs = reader->attributes();
 
-			//column names can be empty in case no columns were used before save
-			str = attribs.value("xColumn").toString();
-			d->xColumnName = str;
-
-			str = attribs.value("yColumn").toString();
-            d->yColumnName = str;
-
-			str = attribs.value("xColumnParent").toString();
-			d->xColumnParentName = str;
-
-			str = attribs.value("yColumnParent").toString();
-            d->yColumnParentName = str;
-			
-			//the actual pointers to the x- and y-columns are restored in Project::load()
+			READ_COLUMN(xColumn);
+			READ_COLUMN(yColumn);
 			
 			str = attribs.value("visible").toString();
             if(str.isEmpty())
@@ -1497,7 +1485,7 @@ bool XYCurve::load(XmlStreamReader* reader){
             else
                 d->valuesType = (XYCurve::ValuesType)str.toInt();
 
-			//TODO values column
+			READ_COLUMN(valuesColumn);
 			
 			str = attribs.value("position").toString();
             if(str.isEmpty())
@@ -1534,7 +1522,41 @@ bool XYCurve::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->valuesOpacity = str.toDouble();			
+                d->valuesOpacity = str.toDouble();
+		}else if (reader->name() == "errorBars"){
+			attribs = reader->attributes();
+
+			str = attribs.value("xErrorType").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'xErrorType'"));
+            else
+                d->xErrorType = (XYCurve::ErrorType)str.toInt();
+			
+			READ_COLUMN(xErrorPlusColumn);
+			READ_COLUMN(xErrorMinusColumn);
+
+			str = attribs.value("yErrorType").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'yErrorType'"));
+            else
+                d->xErrorType = (XYCurve::ErrorType)str.toInt();
+			
+			READ_COLUMN(yErrorPlusColumn);
+			READ_COLUMN(yErrorMinusColumn);
+			
+			str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'type'"));
+            else
+                d->errorBarsType = (XYCurve::ErrorBarsType)str.toInt();
+
+			READ_QPEN(d->errorBarsPen);
+			
+			str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'opacity'"));
+            else
+                d->errorBarsOpacity = str.toDouble();
 		}
 	}
 

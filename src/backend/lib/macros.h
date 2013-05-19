@@ -348,4 +348,44 @@ else																		\
 brush.setColor(color);														\
 } while(0)
 
+
+
+//Column
+#define WRITE_COLUMN(column, columnName) 											\
+do {																				\
+if (column){																		\
+	writer->writeAttribute( #columnName, column->name() );							\
+	writer->writeAttribute( #columnName"Parent", column->parentAspect()->name() );	\
+} else {																			\
+writer->writeAttribute( #columnName, "" );											\
+	writer->writeAttribute( #columnName"Parent", "" );								\
+}																					\
+} while(0)
+
+//column names can be empty in case no columns were used before save
+//the actual pointers to the x- and y-columns are restored in Project::load()
+#define READ_COLUMN(columnName)														\
+do {																				\
+str = attribs.value(#columnName).toString();										\
+d->columnName ##Name = str;															\
+str = attribs.value(#columnName"Parent").toString();								\
+d->columnName ##ParentName = str;													\
+} while(0)
+
+//used in Project::load()
+#define RESTORE_COLUMN_POINTER(col, Col) 											\
+do {																				\
+if (!curve->col ##Name().isEmpty()) {												\
+	name = curve->col ##ParentName();												\
+	foreach (AbstractAspect* aspect, spreadsheets) {								\
+		if (aspect->name() == name) {												\
+			sheet = dynamic_cast<Spreadsheet*>(aspect);								\
+			if (!sheet) continue;													\
+ 			curve->set## Col(sheet->column(curve->col ##Name()));					\
+			break;				 													\
+		}																			\
+	}																				\
+}																					\
+} while(0)
+
 #endif // MACROS_H

@@ -4,7 +4,7 @@
     Description          : A curve drawn as line and/or symbols
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
 								(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -89,6 +89,8 @@ class XYCurve: public AbstractWorksheetElement {
 		
 		BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
+		QString& valuesColumnName() const;
+		QString& valuesColumnParentName() const;		
 		BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
@@ -100,10 +102,18 @@ class XYCurve: public AbstractWorksheetElement {
 
 		BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
+		QString& xErrorPlusColumnName() const;
+		QString& xErrorPlusColumnParentName() const;	
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
+		QString& xErrorMinusColumnName() const;
+		QString& xErrorMinusColumnParentName() const;
 		BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
+		QString& yErrorPlusColumnName() const;
+		QString& yErrorPlusColumnParentName() const;		
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
+		QString& yErrorMinusColumnName() const;
+		QString& yErrorMinusColumnParentName() const;		
 		BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
 		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)

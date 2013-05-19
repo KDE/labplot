@@ -205,12 +205,7 @@ void Project::save(QXmlStreamWriter * writer) const
 	writer->writeDTD("<!DOCTYPE LabPlotXML>");
 #endif
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	writer->writeStartElement("scidavis_project");
-#else
-	writer->writeStartElement("labplot_project");
-#endif
-
+	writer->writeStartElement("project");
 	writer->writeAttribute("version", QString::number(version()));
 	writer->writeAttribute("file_name", fileName());
 	writer->writeAttribute("modification_time" , modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
@@ -243,12 +238,7 @@ bool Project::load(XmlStreamReader * reader)
 	{
 		if (!reader->skipToNextTag()) return false;
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		if (reader->name() == "scidavis_project")
-#else
-		if (reader->name() == "labplot_project")
-#endif
-		{
+		if (reader->name() == "project") {
 			setComment("");
 			removeAllChildren();
 
@@ -303,43 +293,21 @@ bool Project::load(XmlStreamReader * reader)
 					curve = dynamic_cast<XYCurve*>(aspect);
 					if (!curve) continue;
 
-					//set the x-column
-					if (!curve->xColumnName().isEmpty()) {
-						name = curve->xColumnParentName();
-						foreach (AbstractAspect* aspect, spreadsheets) {
-							sheet = dynamic_cast<Spreadsheet*>(aspect);
-							if (!sheet) continue;
-							if (sheet->name() == name) {
-								curve->setXColumn(sheet->column(curve->xColumnName()));
-								break;
-							}
-						}
-					}
-
-					//set the y-column
-					if (!curve->yColumnName().isEmpty()) {
-						name = curve->yColumnParentName();
-						foreach (AbstractAspect* aspect, spreadsheets) {
-							sheet = dynamic_cast<Spreadsheet*>(aspect);
-							if (!sheet) continue;							
-							if (sheet->name() == name) {
-								curve->setYColumn(sheet->column(curve->yColumnName()));
-								break;
-							}
-						}
-					}
+					RESTORE_COLUMN_POINTER(xColumn, XColumn);
+					RESTORE_COLUMN_POINTER(yColumn, YColumn);
+					RESTORE_COLUMN_POINTER(valuesColumn, ValuesColumn);
+					RESTORE_COLUMN_POINTER(xErrorPlusColumn, XErrorPlusColumn);
+					RESTORE_COLUMN_POINTER(xErrorMinusColumn, XErrorMinusColumn);
+					RESTORE_COLUMN_POINTER(yErrorPlusColumn, YErrorPlusColumn);
+					RESTORE_COLUMN_POINTER(yErrorMinusColumn, YErrorMinusColumn);					
 				}
 			}
+		} else {// no project element
+			reader->raiseError(tr("no project element found"));
 		}
-		else // no project element
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-			reader->raiseError(tr("no scidavis_project element found"));
-#else
-			reader->raiseError(tr("no labplot_project element found"));
-#endif
-	}
-	else // no start document
+	} else {// no start document
 		reader->raiseError(tr("no valid XML document found"));
+	}
 
 	return !reader->hasError();
 }

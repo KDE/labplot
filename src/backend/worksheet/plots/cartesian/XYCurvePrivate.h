@@ -4,7 +4,7 @@
     Description          : Private members of XYCurvePrivate
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
 							  (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -79,7 +79,9 @@ class XYCurvePrivate: public QGraphicsItem {
 		QString symbolsTypeId;
 	
 		XYCurve::ValuesType valuesType;
-		const AbstractColumn *valuesColumn;
+		const AbstractColumn* valuesColumn;
+		QString valuesColumnName;
+		QString valuesColumnParentName;
 		XYCurve::ValuesPosition valuesPosition;
 		qreal valuesDistance;
 		qreal valuesRotationAngle;
@@ -89,12 +91,23 @@ class XYCurvePrivate: public QGraphicsItem {
 		QFont valuesFont;
 		QColor valuesColor;
 		
+		//error bars
 		XYCurve::ErrorType xErrorType;
 		const AbstractColumn* xErrorPlusColumn;
+		QString xErrorPlusColumnName;
+		QString xErrorPlusColumnParentName;
 		const AbstractColumn* xErrorMinusColumn;
+		QString xErrorMinusColumnName;
+		QString xErrorMinusColumnParentName;
+		
 		XYCurve::ErrorType yErrorType;
 		const AbstractColumn* yErrorPlusColumn;
+		QString yErrorPlusColumnName;
+		QString yErrorPlusColumnParentName;		
 		const AbstractColumn* yErrorMinusColumn;
+		QString yErrorMinusColumnName;
+		QString yErrorMinusColumnParentName;
+
 		XYCurve::ErrorBarsType errorBarsType;
 		QPen errorBarsPen;
 		qreal errorBarsOpacity;
