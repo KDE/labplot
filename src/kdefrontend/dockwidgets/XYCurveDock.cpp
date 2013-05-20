@@ -479,7 +479,8 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
-	//TODO connect the signals of the first column with the slots of this class.
+	// connect the signals of the first curve with the slots of this class.
+	//TODO
 
   m_initializing=false;
 }
@@ -517,7 +518,6 @@ void XYCurveDock::fillSymbolStyles(){
 		}
 	}
 }
-
 
 /*!
   depending on the currently selected values column type (column mode) updates the widgets for the values column format, 
@@ -640,9 +640,9 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 }
 
 
-//************************************************************
-//****************** SLOTS ********************************
-//************************************************************
+//*************************************************************
+//********** SLOTs for changes triggered in XYCurveDock ********
+//*************************************************************
 void XYCurveDock::retranslateUi(){
 	ui.lName->setText(i18n("Name"));
 	ui.lComment->setText(i18n("Comment"));
@@ -676,9 +676,7 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index){
   
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
-	//TODO: do we really need this check?
-// 	if (!column)
-// 		cbXColumn->setCurrentModelIndex(QModelIndex());
+	Q_ASSERT(column);
 
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setXColumn(column);
@@ -702,9 +700,8 @@ void XYCurveDock::visibilityChanged(bool state){
   if (m_initializing)
 	return;
   
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setVisible(state);
-  }
 }
 
 // "Line"-tab
@@ -737,19 +734,16 @@ void XYCurveDock::lineTypeChanged(int index){
   if (m_initializing)
 	return;
   
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setLineType(lineType);
-  }
 }
-
 
 void XYCurveDock::lineInterpolationPointsCountChanged(int count){
    if (m_initializing)
 	return;
 
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setLineInterpolationPointsCount(count);
-  }
 }
 
 void XYCurveDock::lineStyleChanged(int index){
@@ -798,7 +792,6 @@ void XYCurveDock::lineOpacityChanged(int value){
   qreal opacity = (float)value/100;
   foreach(XYCurve* curve, m_curvesList)
 	curve->setLineOpacity(opacity);
-	
 }
 
 void XYCurveDock::dropLineTypeChanged(int index){
@@ -819,11 +812,9 @@ void XYCurveDock::dropLineTypeChanged(int index){
   if (m_initializing)
 	return;
   
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setDropLineType(dropLineType);
-  }
 }
-
 
 void XYCurveDock::dropLineStyleChanged(int index){
    if (m_initializing)
@@ -871,7 +862,6 @@ void XYCurveDock::dropLineOpacityChanged(int value){
   qreal opacity = (float)value/100;
   foreach(XYCurve* curve, m_curvesList)
 	curve->setDropLineOpacity(opacity);
-	
 }
 
 //"Symbol"-tab
@@ -922,18 +912,16 @@ void XYCurveDock::symbolsSizeChanged(double value){
   if (m_initializing)
 	return;
 	
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
-  }
 }
 
 void XYCurveDock::symbolsRotationChanged(int value){
   if (m_initializing)
 	return;
 	
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setSymbolsRotationAngle(value);
-  }
 }
 
 void XYCurveDock::symbolsOpacityChanged(int value){
@@ -941,9 +929,8 @@ void XYCurveDock::symbolsOpacityChanged(int value){
 	return;
 		
   qreal opacity = (float)value/100;
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setSymbolsOpacity(opacity);
-  }
 }
 
 void XYCurveDock::symbolsFillingStyleChanged(int index){
@@ -1081,9 +1068,8 @@ void XYCurveDock::valuesTypeChanged(int index){
   if (m_initializing)
 	return;
 
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesType(valuesType);
-  }
 }
 
 /*!
@@ -1107,27 +1093,24 @@ void XYCurveDock::valuesPositionChanged(int index){
   if (m_initializing)
 	return;
 	
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesPosition(XYCurve::ValuesPosition(index));
-  }
 }
 
 void XYCurveDock::valuesDistanceChanged(double  value){
   if (m_initializing)
 	return;
 		
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
-  }
 }
 
 void XYCurveDock::valuesRotationChanged(int value){
   if (m_initializing)
 	return;
 		
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesRotationAngle(value);
-  }
 }
 
 void XYCurveDock::valuesOpacityChanged(int value){
@@ -1135,9 +1118,8 @@ void XYCurveDock::valuesOpacityChanged(int value){
 	return;
 		
   qreal opacity = (float)value/100;
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesOpacity(opacity);
-  }
 }
 
 void XYCurveDock::valuesPrefixChanged(){
@@ -1145,9 +1127,8 @@ void XYCurveDock::valuesPrefixChanged(){
 	return;
 		
   QString prefix = ui.leValuesPrefix->text();
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesPrefix(prefix);
-  }
 }
 
 void XYCurveDock::valuesSuffixChanged(){
@@ -1155,9 +1136,8 @@ void XYCurveDock::valuesSuffixChanged(){
 	return;
 		
   QString suffix = ui.leValuesSuffix->text();
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesSuffix(suffix);
-  }
 }
 
 void XYCurveDock::valuesFontChanged(const QFont& font){
@@ -1166,19 +1146,16 @@ void XYCurveDock::valuesFontChanged(const QFont& font){
 	
 	QFont valuesFont = font;
 	valuesFont.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
-	foreach(XYCurve* curve, m_curvesList){
+	foreach(XYCurve* curve, m_curvesList)
 		curve->setValuesFont(valuesFont);
-	}
 }
 
 void XYCurveDock::valuesFontColorChanged(const QColor& color){
   if (m_initializing)
 	return;
   
-  QPen pen;
-  foreach(XYCurve* curve, m_curvesList){
+  foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesColor(color);
-  }  
 }
 
 //"Error bars"-Tab
@@ -1383,8 +1360,19 @@ void XYCurveDock::errorBarsOpacityChanged(int value) const{
 		curve->setErrorBarsOpacity(opacity);
 }
 
-/* Settings */
+//*************************************************************
+//*********** SLOTs for changes triggered in XYCurve **********
+//*************************************************************
+//TODO
 
+//Values
+
+//Error bars
+
+
+//*************************************************************
+//************************* Settings **************************
+//*************************************************************
 void XYCurveDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "XYCurve" );
 

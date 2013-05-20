@@ -135,7 +135,11 @@ private slots:
 
 	//SLOTs for changes triggered in XYCurve
 	//TODO
+	
+	//Values-Tab
 
+	//"Error bars"-Tab
+	
 
 	//load and save
 	void loadConfig(KConfig&);

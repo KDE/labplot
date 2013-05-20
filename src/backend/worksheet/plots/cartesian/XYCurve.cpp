@@ -475,11 +475,15 @@ void XYCurve::setValuesType(XYCurve::ValuesType type) {
 		exec(new XYCurveSetValuesTypeCmd(d, type, tr("%1: set values type")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesColumn, const AbstractColumn *, valuesColumn, updateValues)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColumn, const AbstractColumn *, valuesColumn, updateValues)
 void XYCurve::setValuesColumn(const AbstractColumn *valuesColumn) {
 	Q_D(XYCurve);
-	if (valuesColumn != d->valuesColumn)
+	if (valuesColumn != d->valuesColumn) {
 		exec(new XYCurveSetValuesColumnCmd(d, valuesColumn, tr("%1: set values column")));
+		connect(valuesColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
+		connect(valuesColumn, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+				this, SLOT(valuesColumnAboutToBeRemoved()));
+	}	
 }
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, valuesPosition, updateValues)
@@ -546,14 +550,26 @@ void XYCurve::setXErrorType(ErrorType type) {
 		exec(new XYCurveSetXErrorTypeCmd(d, type, tr("%1: x-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetXErrorPlusColumn, const AbstractColumn*, xErrorPlusColumn, updateErrorBars)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorPlusColumn, const AbstractColumn*, xErrorPlusColumn, updateErrorBars)
 void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
-	
+	Q_D(XYCurve);
+	if (column != d->xErrorPlusColumn) {
+		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, tr("%1: set x-error column")));
+		connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+		connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+				this, SLOT(xErrorPlusColumnAboutToBeRemoved()));
+	}		
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetXErrorMinusColumn, const AbstractColumn*, xErrorMinusColumn, updateErrorBars)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorMinusColumn, const AbstractColumn*, xErrorMinusColumn, updateErrorBars)
 void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
-	
+	Q_D(XYCurve);
+	if (column != d->xErrorMinusColumn) {
+		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, tr("%1: set x-error column")));
+		connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+		connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+				this, SLOT(xErrorMinusColumnAboutToBeRemoved()));
+	}
 }
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetYErrorType, XYCurve::ErrorType, yErrorType, updateErrorBars)
@@ -563,14 +579,26 @@ void XYCurve::setYErrorType(ErrorType type) {
 		exec(new XYCurveSetYErrorTypeCmd(d, type, tr("%1: y-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
 void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
-	
+	Q_D(XYCurve);
+	if (column != d->xErrorPlusColumn) {
+		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, tr("%1: set y-error column")));
+		connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+		connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+				this, SLOT(yErrorPlusColumnAboutToBeRemoved()));
+	}
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetYErrorMinusColumn, const AbstractColumn*, yErrorMinusColumn, updateErrorBars)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorMinusColumn, const AbstractColumn*, yErrorMinusColumn, updateErrorBars)
 void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
-	
+	Q_D(XYCurve);
+	if (column != d->xErrorMinusColumn) {
+		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, tr("%1: set y-error column")));
+		connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+		connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+				this, SLOT(yErrorMinusColumnAboutToBeRemoved()));
+	}
 }
 
 STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
@@ -607,6 +635,36 @@ void XYCurve::yColumnAboutToBeRemoved() {
 	Q_D(XYCurve);
 	d->yColumn = 0;
 	d->retransform();
+}
+
+void XYCurve::valuesColumnAboutToBeRemoved() {
+	Q_D(XYCurve);
+	d->valuesColumn = 0;
+	d->updateValues();
+}
+
+void XYCurve::xErrorPlusColumnColumnAboutToBeRemoved() {
+	Q_D(XYCurve);
+	d->xErrorPlusColumn = 0;
+	d->updateErrorBars();
+}
+
+void XYCurve::xErrorMinusColumnColumnAboutToBeRemoved() {
+	Q_D(XYCurve);
+	d->xErrorMinusColumn = 0;
+	d->updateErrorBars();
+}
+
+void XYCurve::yErrorPlusColumnColumnAboutToBeRemoved() {
+	Q_D(XYCurve);
+	d->yErrorPlusColumn = 0;
+	d->updateErrorBars();
+}
+
+void XYCurve::yErrorMinusColumnColumnAboutToBeRemoved() {
+	Q_D(XYCurve);
+	d->yErrorMinusColumn = 0;
+	d->updateErrorBars();
 }
 
 //##############################################################################
