@@ -150,6 +150,11 @@ class XYCurve: public AbstractWorksheetElement {
 		void xDataChanged();
 		void yDataChanged();
 
+		friend class XYCurveSetXColumnCmd;
+		friend class XYCurveSetYColumnCmd;
+		void xColumnChanged(const AbstractColumn*);
+		void yColumnChanged(const AbstractColumn*);
+		
 		//values
 		friend class XYCurveSetValuesColumnCmd;
 		void valuesColumnChanged(const AbstractColumn*);

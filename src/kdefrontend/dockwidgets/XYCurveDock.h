@@ -71,6 +71,7 @@ private:
 	void fillSymbolStyles();
 	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
 	void showValuesColumnFormat(const Column*);
+	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
 private slots:
 	void init();
@@ -110,7 +111,7 @@ private slots:
 	
 	//Values-Tab
 	void valuesTypeChanged(int);
-	void valuesColumnChanged(int);
+	void valuesColumnChanged(const QModelIndex&);
 	void valuesPositionChanged(int);
 	void valuesDistanceChanged(double);
 	void valuesRotationChanged(int);
@@ -135,11 +136,18 @@ private slots:
 
 	//SLOTs for changes triggered in XYCurve
 	//TODO
+	//General-Tab
+	void curveXColumnChanged(const AbstractColumn*);
+	void curveYColumnChanged(const AbstractColumn*);
 	
 	//Values-Tab
+	void curveValuesColumnChanged(const AbstractColumn*);
 
 	//"Error bars"-Tab
-	
+	void curveXErrorPlusColumnChanged(const AbstractColumn*);
+	void curveXErrorMinusColumnChanged(const AbstractColumn*);
+	void curveYErrorPlusColumnChanged(const AbstractColumn*);
+	void curveYErrorMinusColumnChanged(const AbstractColumn*);
 
 	//load and save
 	void loadConfig(KConfig&);

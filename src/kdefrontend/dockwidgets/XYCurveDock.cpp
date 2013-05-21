@@ -136,7 +136,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
-	connect( cbValuesColumn, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesColumnChanged(int)) );
+	connect( cbValuesColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(valuesColumnChanged(const QModelIndex&)) );
 	connect( ui.cbValuesPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesPositionChanged(int)) );
 	connect( ui.sbValuesDistance, SIGNAL(valueChanged(double)), this, SLOT(valuesDistanceChanged(double)) );
 	connect( ui.sbValuesRotation, SIGNAL(valueChanged(int)), this, SLOT(valuesRotationChanged(int)) );
@@ -419,40 +419,13 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	ui.leName->setText(curve->name());
 	ui.leComment->setText(curve->comment());
 	
-	if (curve->xColumn())
-		cbXColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xColumn()) );
-	else
-		cbXColumn->setCurrentModelIndex(QModelIndex());
-	
-	if (curve->yColumn())
-		cbYColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yColumn()) );
-	else
-		cbYColumn->setCurrentModelIndex(QModelIndex());
-	
-	if (curve->valuesColumn())
-		cbValuesColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->valuesColumn()) );
-	else
-		cbValuesColumn->setCurrentModelIndex(QModelIndex());
-
-	if (curve->xErrorPlusColumn())
-		cbXErrorPlusColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xErrorPlusColumn()) );
-	else
-		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-
-	if (curve->xErrorMinusColumn())
-		cbXErrorMinusColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->xErrorMinusColumn()) );
-	else
-		cbXErrorMinusColumn->setCurrentModelIndex(QModelIndex());
-
-	if (curve->yErrorPlusColumn())
-		cbYErrorPlusColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yErrorPlusColumn()) );
-	else
-		cbYErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-
-	if (curve->xErrorMinusColumn())
-		cbYErrorMinusColumn->setCurrentModelIndex( m_aspectTreeModel->modelIndexOfAspect(curve->yErrorMinusColumn()) );
-	else
-		cbYErrorMinusColumn->setCurrentModelIndex(QModelIndex());	
+	this->setModelIndexFromColumn(cbXColumn, curve->xColumn());
+	this->setModelIndexFromColumn(cbYColumn, curve->yColumn());
+	this->setModelIndexFromColumn(cbValuesColumn, curve->valuesColumn());
+	this->setModelIndexFromColumn(cbXErrorPlusColumn, curve->xErrorPlusColumn());
+	this->setModelIndexFromColumn(cbXErrorMinusColumn, curve->xErrorMinusColumn());
+	this->setModelIndexFromColumn(cbYErrorPlusColumn, curve->yErrorPlusColumn());
+	this->setModelIndexFromColumn(cbYErrorMinusColumn, curve->yErrorMinusColumn());	
   }else{
 	ui.lName->setEnabled(false);
 	ui.leName->setEnabled(false);
@@ -481,10 +454,21 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 
 	// connect the signals of the first curve with the slots of this class.
 	//TODO
+	//general
+	connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
+	connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
+	
+	//values
+	connect(curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
 
-  m_initializing=false;
+	//error bars
+	connect(curve, SIGNAL(xErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorPlusColumnChanged(const AbstractColumn*)));
+	connect(curve, SIGNAL(xErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorMinusColumnChanged(const AbstractColumn*)));
+	connect(curve, SIGNAL(yErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorPlusColumnChanged(const AbstractColumn*)));
+	connect(curve, SIGNAL(yErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorMinusColumnChanged(const AbstractColumn*)));
+
+	m_initializing=false;
 }
-
 
 /*!
 	fills the ComboBox for the symbol style with all possible styles in the style factory.
@@ -639,6 +623,12 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
   }
 }
 
+void XYCurveDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column){
+	if (column)
+		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+	else
+		cb->setCurrentModelIndex(QModelIndex());
+}
 
 //*************************************************************
 //********** SLOTs for changes triggered in XYCurveDock ********
@@ -689,8 +679,7 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index){
   
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
-	if (!column)
-		cbYColumn->setCurrentModelIndex(QModelIndex());
+	Q_ASSERT(column);
 
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setYColumn(column);
@@ -1075,12 +1064,11 @@ void XYCurveDock::valuesTypeChanged(int index){
 /*!
   called when the custom column for the values was changed.
 */
-void XYCurveDock::valuesColumnChanged(int index){
-	Q_UNUSED(index);
+void XYCurveDock::valuesColumnChanged(const QModelIndex& index){
   if (m_initializing)
 	return;
-
-  Column* column= static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
+qDebug()<<"in slot";
+  Column* column= static_cast<Column*>(index.internalPointer());
   this->showValuesColumnFormat(column);
   
   foreach(XYCurve* curve, m_curvesList){
@@ -1365,10 +1353,50 @@ void XYCurveDock::errorBarsOpacityChanged(int value) const{
 //*************************************************************
 //TODO
 
+//General
+void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbXColumn, column);
+	m_initializing = false;
+}
+
+void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbYColumn, column);
+	m_initializing = false;
+}
+
 //Values
+void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbValuesColumn, column);
+	m_initializing = false;
+}
 
 //Error bars
+void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbXErrorPlusColumn, column);
+	m_initializing = false;
+}
 
+void XYCurveDock::curveXErrorMinusColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbXErrorMinusColumn, column);
+	m_initializing = false;
+}
+
+void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbYErrorPlusColumn, column);
+	m_initializing = false;
+}
+
+void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbYErrorMinusColumn, column);
+	m_initializing = false;
+}
 
 //*************************************************************
 //************************* Settings **************************

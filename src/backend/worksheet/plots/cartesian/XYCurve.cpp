@@ -330,37 +330,41 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
 
 /* ============================ setter methods and undo commands ================= */
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetXColumn, const AbstractColumn *, xColumn, retransform)
-void XYCurve::setXColumn(const AbstractColumn *xColumn) {
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, retransform)
+void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (xColumn != d->xColumn) {
-		exec(new XYCurveSetXColumnCmd(d, xColumn, tr("%1: assign x values")));
+	if (column != d->xColumn) {
+		exec(new XYCurveSetXColumnCmd(d, column, tr("%1: assign x values")));
 
 		//emit xDataChanged() in order to notife the plot about the changes
 		emit xDataChanged();
-		connect(xColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
 
-		//update the curve itself on changes
-		connect(xColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
-		connect(xColumn, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(xColumnAboutToBeRemoved()));
-		//TODO: add disconnect in the undo-function
+			//update the curve itself on changes
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(xColumnAboutToBeRemoved()));
+			//TODO: add disconnect in the undo-function
+		}
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetYColumn, const AbstractColumn *, yColumn, retransform)
-void XYCurve::setYColumn(const AbstractColumn *yColumn) {
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, retransform)
+void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (yColumn != d->yColumn) {
-		exec(new XYCurveSetYColumnCmd(d, yColumn, tr("%1: assign y values")));
+	if (column != d->yColumn) {
+		exec(new XYCurveSetYColumnCmd(d, column, tr("%1: assign y values")));
 
 		//emit yDataChanged() in order to notife the plot about the changes
 		emit yDataChanged();
-		connect(yColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
 
-		//update the curve itself on changes
-		connect(yColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
-		connect(yColumn, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(yColumnAboutToBeRemoved()));
-		//TODO: add disconnect in the undo-function
+			//update the curve itself on changes
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(yColumnAboutToBeRemoved()));
+			//TODO: add disconnect in the undo-function
+		}
 	}
 }
 
@@ -475,14 +479,16 @@ void XYCurve::setValuesType(XYCurve::ValuesType type) {
 		exec(new XYCurveSetValuesTypeCmd(d, type, tr("%1: set values type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColumn, const AbstractColumn *, valuesColumn, updateValues)
-void XYCurve::setValuesColumn(const AbstractColumn *valuesColumn) {
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColumn, const AbstractColumn*, valuesColumn, updateValues)
+void XYCurve::setValuesColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (valuesColumn != d->valuesColumn) {
-		exec(new XYCurveSetValuesColumnCmd(d, valuesColumn, tr("%1: set values column")));
-		connect(valuesColumn, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
-		connect(valuesColumn, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-				this, SLOT(valuesColumnAboutToBeRemoved()));
+	if (column != d->valuesColumn) {
+		exec(new XYCurveSetValuesColumnCmd(d, column, tr("%1: set values column")));
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(valuesColumnAboutToBeRemoved()));
+		}
 	}	
 }
 
@@ -555,9 +561,11 @@ void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorPlusColumn) {
 		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, tr("%1: set x-error column")));
-		connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-		connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-				this, SLOT(xErrorPlusColumnAboutToBeRemoved()));
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(xErrorPlusColumnAboutToBeRemoved()));
+		}
 	}		
 }
 
@@ -566,9 +574,11 @@ void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorMinusColumn) {
 		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, tr("%1: set x-error column")));
-		connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-		connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-				this, SLOT(xErrorMinusColumnAboutToBeRemoved()));
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(xErrorMinusColumnAboutToBeRemoved()));
+		}
 	}
 }
 
@@ -584,9 +594,11 @@ void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorPlusColumn) {
 		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, tr("%1: set y-error column")));
-		connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-		connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-				this, SLOT(yErrorPlusColumnAboutToBeRemoved()));
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(yErrorPlusColumnAboutToBeRemoved()));
+		}
 	}
 }
 
@@ -595,9 +607,11 @@ void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorMinusColumn) {
 		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, tr("%1: set y-error column")));
-		connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-		connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-				this, SLOT(yErrorMinusColumnAboutToBeRemoved()));
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(yErrorMinusColumnAboutToBeRemoved()));
+		}
 	}
 }
 
@@ -1068,18 +1082,18 @@ void XYCurvePrivate::updateValues(){
 		//that correspond to the currently visible points in the plot. Redesign the commented code part below.
 // 		int endRow;
 // 		if (symbolPointsLogical.size()>valuesColumn->rowCount())
-// 		  endRow =  valuesColumn->rowCount();
+// 			endRow =  valuesColumn->rowCount();
 // 		else
-// 		  endRow = symbolPointsLogical.size();
+// 			endRow = symbolPointsLogical.size();
 // 
 // 		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
 // 		for (int row=0; row<endRow; row++){
-// 		  if ( !valuesColumn->isValid(row) || valuesColumn->isMasked(row) )
-// 			continue;
+// 			if ( !valuesColumn->isValid(row) || valuesColumn->isMasked(row) )
+// 				continue;
 // 
-// 		  switch (xColMode){
+// 			switch (xColMode){
 // 				case AbstractColumn::Numeric:
-// 				  valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(row)) + valuesSuffix;
+// 					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(row)) + valuesSuffix;
 // 					break;
 // 				case AbstractColumn::Text:
 // 					valuesStrings << valuesPrefix + valuesColumn->textAt(row) + valuesSuffix;
@@ -1094,7 +1108,7 @@ void XYCurvePrivate::updateValues(){
 // 		}
 	  }
 	}
-	
+
 	//Calculate the coordinates where to paint the value strings.
 	//The coordinates depend on the actual size of the string.
 	QPointF tempPoint;
