@@ -207,7 +207,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
 	connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
-	//TODO: more undo stuff (title, scale brakes)
+	//TODO: undo scale braking
 
 	// Plot Area
 	connect( m_plot->plotArea(), SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)) );
@@ -223,8 +223,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(horizontalPaddingChanged(float)), this, SLOT(plotHorizontalPaddingChanged(float)) );
 	connect( m_plot, SIGNAL(verticalPaddingChanged(float)), this, SLOT(plotVerticalPaddingChanged(float)) );
 	
-	//TODO: visible flag
-
 	m_initializing = false;
 }
 

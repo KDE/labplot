@@ -240,18 +240,30 @@ void AxisDock::setAxes(QList<Axis*> list){
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
+	// general
 	connect(m_axis, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(axisDescriptionChanged(const AbstractAspect*)));
 
 	connect(m_axis, SIGNAL(orientationChanged(Axis::AxisOrientation)), this, SLOT(axisOrientationChanged(Axis::AxisOrientation)));
-	connect(m_axis, SIGNAL(linePenChanged(const QPen&)), this, SLOT(axisLinePenChanged(const QPen&)));
-
+	//TODO position, scale, autofit
 	connect(m_axis, SIGNAL(startChanged(float)), this, SLOT(axisStartChanged(float)));
 	connect(m_axis, SIGNAL(endChanged(float)), this, SLOT(axisEndChanged(float)));
-	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
-	//TODO: more undo functions
 	connect(m_axis, SIGNAL(zeroOffsetChanged(qreal)), this, SLOT(axisZeroOffsetChanged(qreal)));
 	connect(m_axis, SIGNAL(scalingFactorChanged(qreal)), this, SLOT(axisScalingFactorChanged(qreal)));
-	//TODO: more undo functions
+
+	//title: text&geometry
+	//TODO
+
+	// line
+	connect(m_axis, SIGNAL(linePenChanged(const QPen&)), this, SLOT(axisLinePenChanged(const QPen&)));
+	//TODO
+
+	// ticks
+	//TODO
+
+	// labels
+	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
+	//TODO
+
 	connect(m_axis, SIGNAL(visibleChanged(bool)), this, SLOT(axisVisibleChanged(bool)));
 
   	m_initializing = false;
