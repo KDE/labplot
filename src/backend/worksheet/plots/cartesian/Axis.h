@@ -162,22 +162,29 @@ class Axis: public AbstractWorksheetElement {
 		
 	signals:
 		friend class AxisSetOrientationCmd;
-		friend class AxisSetLinePenCmd;
-		void orientationChanged(Axis::AxisOrientation);
-		void linePenChanged(const QPen&);
-
-		void startChanged(float);
-		void endChanged(float);
-		void positionChanged(float);
-
-		void labelsPrecisionChanged(int);
+		friend class AxisSetPositionCmd;
+		friend class AxisSetScalingCmd;
 		friend class AxisSetZeroOffsetCmd;
 		friend class AxisSetScalingFactorCmd;
+		void orientationChanged(Axis::AxisOrientation);
+		void positionChanged(Axis::AxisPosition);
+		void positionChanged(float);
+		void scaleChanged(Axis::AxisScale);
 		void zeroOffsetChanged(qreal);
 		void scalingFactorChanged(qreal);
+		void startChanged(float);
+		void endChanged(float);
 
+		//title
 		friend class AxisSetTitleOffsetCmd;
 		void titleOffsetChanged(float);
+
+		// line
+		friend class AxisSetLinePenCmd;
+		void linePenChanged(const QPen&);
+
+		//labels
+		void labelsPrecisionChanged(int);
 
 		void visibleChanged(bool);
 };

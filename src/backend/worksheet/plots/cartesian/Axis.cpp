@@ -453,14 +453,14 @@ void Axis::setOrientation( AxisOrientation orientation) {
 		exec(new AxisSetOrientationCmd(d, orientation, tr("%1: set axis orientation")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetPosition, Axis::AxisPosition, position, retransform);
-void Axis::setPosition( AxisPosition position) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetPosition, Axis::AxisPosition, position, retransform);
+void Axis::setPosition(AxisPosition position) {
 	Q_D(Axis);
 	if (position != d->position)
 		exec(new AxisSetPositionCmd(d, position, tr("%1: set axis position")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetScaling, Axis::AxisScale, scale, retransform);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::AxisScale, scale, retransform);
 void Axis::setScale(AxisScale scale) {
 	Q_D(Axis);
 	if (scale != d->scale)
@@ -876,6 +876,8 @@ bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 	recalculates the position of the axis ticks.
  */ 
 void AxisPrivate::retransformTicks(){
+	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
+
 	majorTicksPath = QPainterPath();
 	minorTicksPath = QPainterPath();
 	majorTickPoints.clear();

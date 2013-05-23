@@ -133,7 +133,9 @@ private slots:
 	//general
 	void axisDescriptionChanged(const AbstractAspect*);
 	void axisOrientationChanged(Axis::AxisOrientation);
+	void axisPositionChanged(Axis::AxisPosition);
 	void axisPositionChanged(float);
+	void axisScaleChanged(Axis::AxisScale);
 	void axisStartChanged(float);
 	void axisEndChanged(float);
 	void axisLabelsPrecisionChanged(int);

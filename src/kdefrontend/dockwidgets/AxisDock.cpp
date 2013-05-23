@@ -244,7 +244,9 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(axisDescriptionChanged(const AbstractAspect*)));
 
 	connect(m_axis, SIGNAL(orientationChanged(Axis::AxisOrientation)), this, SLOT(axisOrientationChanged(Axis::AxisOrientation)));
-	//TODO position, scale, autofit
+	connect(m_axis, SIGNAL(positionChanged(Axis::AxisPosition)), this, SLOT(axisPositionChanged(Axis::AxisPosition)));
+	connect(m_axis, SIGNAL(scaleChanged(Axis::AxisScale)), this, SLOT(axisScaleChanged(Axis::AxisScale)));
+	//TODO autofit
 	connect(m_axis, SIGNAL(startChanged(float)), this, SLOT(axisStartChanged(float)));
 	connect(m_axis, SIGNAL(endChanged(float)), this, SLOT(axisEndChanged(float)));
 	connect(m_axis, SIGNAL(zeroOffsetChanged(qreal)), this, SLOT(axisZeroOffsetChanged(qreal)));
@@ -1076,9 +1078,21 @@ void AxisDock::axisOrientationChanged(Axis::AxisOrientation orientation){
 	m_initializing = false;
 }
 
+void AxisDock::axisPositionChanged(Axis::AxisPosition position){
+	m_initializing = true;
+	ui.cbPosition->setCurrentIndex( (int)position );
+	m_initializing = false;
+}
+
 void AxisDock::axisPositionChanged(float value){
 	m_initializing = true;
 	ui.lePosition->setText( QString::number(value) );
+	m_initializing = false;
+}
+
+void AxisDock::axisScaleChanged(Axis::AxisScale scale){
+	m_initializing = true;
+	ui.cbScale->setCurrentIndex( (int)scale );
 	m_initializing = false;
 }
 
