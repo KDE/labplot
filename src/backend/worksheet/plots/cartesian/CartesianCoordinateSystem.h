@@ -35,6 +35,8 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/Interval.h"
 
+#include <vector>
+
 class CartesianPlot;
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
@@ -82,7 +84,7 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		virtual ~CartesianCoordinateSystem();
 
 		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
-		void mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints, QList<QPointF>& restrictedLogicalPoints, const MappingFlags &flags = DefaultMapping) const;
+		void mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints, std::vector<bool>& visiblePoints, const MappingFlags& flags = DefaultMapping) const;
 		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
 		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const;
 

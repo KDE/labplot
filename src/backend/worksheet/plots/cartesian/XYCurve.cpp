@@ -175,97 +175,9 @@ bool XYCurve::isVisible() const{
 	return d->isVisible();
 }
 
-void XYCurve::retransform(){
-	d_ptr->retransform();
-}
-
-void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
-  //TODO
-	Q_D(const XYCurve);
-	
-	setSymbolsSize(d->symbolsSize * horizontalRatio);
-	setSymbolsAspectRatio(d->symbolsAspectRatio * horizontalRatio / verticalRatio);
-	
-	QPen pen = d->symbolsPen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
-	setSymbolsPen(pen);
-	
-	pen = d->linePen;
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
-	setLinePen(pen);
-
-	//setValuesDistance(d->distance*);
-	QFont font=d->valuesFont;
-	font.setPointSizeF(font.pointSizeF()*horizontalRatio);
-	setValuesFont(font);
-	
-	retransform();
-}
-
-/* ============================ accessor documentation ================= */
-//TODO provide a proper documentation for all functions implemented with the help of the macros
-
-/**
-  \fn   XYCurve::POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
-  \brief Set/get the pointer to the X column.
-*/
-/**
-  \fn   XYCurve::POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
-  \brief Set/get the pointer to the Y column.
-*/
-
-//line
-/**
-  \fn   XYCurve::CLASS_D_ACCESSOR_DECL(XYCurve::LineType, lineType , LineType);
-  \brief Set/get the line type.
-*/
-/**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(bool, lineVisible, LineVisible);
-  \brief Set/get whether the line is visible/invisible.
-*/
-/**
-  \fn   XYCurve::CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen);
-  \brief Get/set the line pen.
-*/
-
-//symbols
-/**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsVisible, SymbolsVisible);
-  \brief Set/get whether the symbols are visible/invisible.
-*/
-/**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(bool, symbolsOpacity, SymbolsOpacity);
-  \brief Set/get the opacity of the symbols. The opacity ranges from 0.0 to 1.0, where 0.0 is fully transparent and 1.0 is fully opaque.
-*/
-/**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolRotationAngle);
-  \brief Set/get the rotation angle of the symbols.
-*/
-/**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolSize);
-  \brief Set/get the (horizontal) size of the symbols.
-*/
-/**
-  \fn   XYCurve::BASIC_D_ACCESSOR_DECL(qreal, symbolsAspectRatio, SymbolAspectRatio);
-  \brief Set/get the ratio between the width and height of the symbols.
-*/
-/**
-  \fn   XYCurve::CLASS_D_ACCESSOR_DECL(QString, symbolsTypeId, SymbolTypeId);
-  \brief Set/get the symbol type.
-*/
-/**
-  \fn   XYCurve::CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush);
-  \brief Get/set the symbol filling brush.
-*/
-/**
-  \fn   XYCurve::CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen);
-  \brief Get/set the symbol outline pen.
-*/
-
-//values
-//TODO documentation for value-functions
-
-/* ============================ getter methods ================= */
+//##############################################################################
+//##########################  getter methods  ##################################
+//##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
 QString& XYCurve::xColumnName() const { return d_ptr->xColumnName; }
@@ -328,8 +240,9 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, error
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
 
-/* ============================ setter methods and undo commands ================= */
-
+//##############################################################################
+//#################  setter methods and undo commands ##########################
+//##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, retransform)
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
@@ -639,6 +552,41 @@ void XYCurve::setErrorBarsOpacity(qreal opacity) {
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
+void XYCurve::retransform() {
+	d_ptr->retransform();
+}
+
+void XYCurve::updateValues() {
+	d_ptr->updateValues();
+}
+
+void XYCurve::updateErrorBars() {
+	d_ptr->updateErrorBars();
+}
+
+//TODO
+void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
+	Q_D(const XYCurve);
+	
+	setSymbolsSize(d->symbolsSize * horizontalRatio);
+	setSymbolsAspectRatio(d->symbolsAspectRatio * horizontalRatio / verticalRatio);
+	
+	QPen pen = d->symbolsPen;
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	setSymbolsPen(pen);
+	
+	pen = d->linePen;
+	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
+	setLinePen(pen);
+
+	//setValuesDistance(d->distance*);
+	QFont font=d->valuesFont;
+	font.setPointSizeF(font.pointSizeF()*horizontalRatio);
+	setValuesFont(font);
+	
+	retransform();
+}
+
 void XYCurve::xColumnAboutToBeRemoved() {
 	Q_D(XYCurve);
 	d->xColumn = 0;
@@ -657,25 +605,25 @@ void XYCurve::valuesColumnAboutToBeRemoved() {
 	d->updateValues();
 }
 
-void XYCurve::xErrorPlusColumnColumnAboutToBeRemoved() {
+void XYCurve::xErrorPlusColumnAboutToBeRemoved() {
 	Q_D(XYCurve);
 	d->xErrorPlusColumn = 0;
 	d->updateErrorBars();
 }
 
-void XYCurve::xErrorMinusColumnColumnAboutToBeRemoved() {
+void XYCurve::xErrorMinusColumnAboutToBeRemoved() {
 	Q_D(XYCurve);
 	d->xErrorMinusColumn = 0;
 	d->updateErrorBars();
 }
 
-void XYCurve::yErrorPlusColumnColumnAboutToBeRemoved() {
+void XYCurve::yErrorPlusColumnAboutToBeRemoved() {
 	Q_D(XYCurve);
 	d->yErrorPlusColumn = 0;
 	d->updateErrorBars();
 }
 
-void XYCurve::yErrorMinusColumnColumnAboutToBeRemoved() {
+void XYCurve::yErrorMinusColumnAboutToBeRemoved() {
 	Q_D(XYCurve);
 	d->yErrorMinusColumn = 0;
 	d->updateErrorBars();
@@ -717,8 +665,7 @@ bool XYCurvePrivate::swapVisible(bool on){
 */
 void XYCurvePrivate::retransform(){
 	symbolPointsLogical.clear();
-	symbolPoints.clear();
-	symbolPointsLogicalRestricted.clear();
+	symbolPointsScene.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) ){
 		recalcShapeAndBoundingRect();
@@ -773,8 +720,10 @@ void XYCurvePrivate::retransform(){
 	//calculate the scene coordinates
 	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
 	const CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
+	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
+// 	visiblePoints.shrink_to_fit();
 	if (cSystem)
-		 cSystem->mapLogicalToScene(symbolPointsLogical, symbolPoints, symbolPointsLogicalRestricted);
+		 cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
 
 	updateLines();
 	updateDropLines();
@@ -793,7 +742,7 @@ void XYCurvePrivate::updateLines(){
 	  return;
 	}
 	
-	int count=symbolPointsLogicalRestricted.count();
+	int count=symbolPointsScene.count();
 	
 	//nothing to do, if no data points available
 	if (count<=1){
@@ -808,14 +757,14 @@ void XYCurvePrivate::updateLines(){
 	switch(lineType){
 	  case XYCurve::Line:{
 		for (int i=0; i<count-1; i++){
-		  lines.append(QLineF(symbolPointsLogicalRestricted.at(i), symbolPointsLogicalRestricted.at(i+1)));
+		  lines.append(QLineF(symbolPointsScene.at(i), symbolPointsScene.at(i+1)));
 		}
 		break;
 	  }
 	  case XYCurve::StartHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsLogicalRestricted.at(i);
-		  nextPoint=symbolPointsLogicalRestricted.at(i+1);
+		  curPoint=symbolPointsScene.at(i);
+		  nextPoint=symbolPointsScene.at(i+1);
 		  tempPoint1=QPointF(nextPoint.x(), curPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
 		  lines.append(QLineF(tempPoint1, nextPoint));
@@ -824,8 +773,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::StartVertical:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsLogicalRestricted.at(i);
-		  nextPoint=symbolPointsLogicalRestricted.at(i+1);
+		  curPoint=symbolPointsScene.at(i);
+		  nextPoint=symbolPointsScene.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), nextPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
 		  lines.append(QLineF(tempPoint1,nextPoint));
@@ -834,8 +783,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsLogicalRestricted.at(i);
-		  nextPoint=symbolPointsLogicalRestricted.at(i+1);
+		  curPoint=symbolPointsScene.at(i);
+		  nextPoint=symbolPointsScene.at(i+1);
 		  tempPoint1=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
 		  tempPoint2=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, nextPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
@@ -846,8 +795,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointVertical:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsLogicalRestricted.at(i);
-		  nextPoint=symbolPointsLogicalRestricted.at(i+1);		  
+		  curPoint=symbolPointsScene.at(i);
+		  nextPoint=symbolPointsScene.at(i+1);		  
 		  tempPoint1=QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
 		  tempPoint2=QPointF(nextPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
 		  lines.append(QLineF(curPoint, tempPoint1));
@@ -860,7 +809,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=1){
-			lines.append(QLineF(symbolPointsLogicalRestricted.at(i), symbolPointsLogicalRestricted.at(i+1)));
+			lines.append(QLineF(symbolPointsScene.at(i), symbolPointsScene.at(i+1)));
 			skip++;
 		  }else{
 			skip=0;
@@ -872,7 +821,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=2){
-			lines.append(QLineF(symbolPointsLogicalRestricted.at(i), symbolPointsLogicalRestricted.at(i+1)));
+			lines.append(QLineF(symbolPointsScene.at(i), symbolPointsScene.at(i+1)));
 			skip++;
 		  }else{
 			skip=0;
@@ -891,8 +840,8 @@ void XYCurvePrivate::updateLines(){
 		  
 		double x[count],  y[count];
 		for (int i=0; i<count; i++){
-		  x[i]=symbolPointsLogicalRestricted.at(i).x();
-		  y[i]=symbolPointsLogicalRestricted.at(i).y();
+		  x[i]=symbolPointsScene.at(i).x();
+		  y[i]=symbolPointsScene.at(i).y();
 		}
 		
 		if (lineType==XYCurve::SplineCubicNatural){
@@ -957,19 +906,15 @@ void XYCurvePrivate::updateLines(){
 	  default:
 		break;
 	}
-	
-	//map the lines to scene coordinates
-	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
-	if (cSystem)
-	  lines = cSystem->mapLogicalToScene(lines);
-	
+
 	//new line path
 	foreach (QLineF line, lines){
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
 	
+	//TODO: add clipping when splines are used.
+
 	recalcShapeAndBoundingRect();
 }
 
@@ -996,19 +941,25 @@ void XYCurvePrivate::updateDropLines(){
 	yMin = plot->yMin();
 	switch(dropLineType){
 	  case XYCurve::DropLineX:{
-		foreach(QPointF point, symbolPointsLogicalRestricted){
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), yMin)));
 		}
 		break;
 	  }
 	  case XYCurve::DropLineY:{
-		foreach(QPointF point, symbolPointsLogicalRestricted){
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
 	  }
 	  case XYCurve::DropLineXY:{
-		foreach(QPointF point, symbolPointsLogicalRestricted){
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), yMin)));
 			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
@@ -1049,26 +1000,32 @@ void XYCurvePrivate::updateValues(){
 	switch (valuesType){
 	  case XYCurve::NoValues:
 	  case XYCurve::ValuesX:{
-		foreach(QPointF point, symbolPointsLogicalRestricted){
- 			valuesStrings << valuesPrefix + QString::number(point.x()) + valuesSuffix;
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+ 			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + valuesSuffix;
 		}
 	  break;
 	  }
 	  case XYCurve::ValuesY:{
-		foreach(QPointF point, symbolPointsLogicalRestricted){
- 			valuesStrings << valuesPrefix + QString::number(point.y()) + valuesSuffix;
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+ 			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
 		}
 		break;
 	  }
 	  case XYCurve::ValuesXY:{
-		foreach(QPointF point, symbolPointsLogicalRestricted){
-			valuesStrings << valuesPrefix + QString::number(point.x()) + "," + QString::number(point.y()) + valuesSuffix;
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + ","
+							+ QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
 		}
 		break;
 	  }
 	  case XYCurve::ValuesXYBracketed:{
-		foreach(QPointF point, symbolPointsLogicalRestricted){
-			valuesStrings <<  valuesPrefix + "(" + QString::number(point.x()) + "," + QString::number(point.y()) +")" + valuesSuffix;
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+			valuesStrings <<  valuesPrefix + "(" + QString::number(symbolPointsLogical.at(i).x()) + ","
+							+ QString::number(symbolPointsLogical.at(i).y()) +")" + valuesSuffix;
 		}
 		break;
 	  }
@@ -1078,34 +1035,34 @@ void XYCurvePrivate::updateValues(){
 		  return;
 		}
 
-		//TODO from the custom column containing the value textes we need to determine only those rows
-		//that correspond to the currently visible points in the plot. Redesign the commented code part below.
-// 		int endRow;
-// 		if (symbolPointsLogical.size()>valuesColumn->rowCount())
-// 			endRow =  valuesColumn->rowCount();
-// 		else
-// 			endRow = symbolPointsLogical.size();
-// 
-// 		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
-// 		for (int row=0; row<endRow; row++){
-// 			if ( !valuesColumn->isValid(row) || valuesColumn->isMasked(row) )
-// 				continue;
-// 
-// 			switch (xColMode){
-// 				case AbstractColumn::Numeric:
-// 					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(row)) + valuesSuffix;
-// 					break;
-// 				case AbstractColumn::Text:
-// 					valuesStrings << valuesPrefix + valuesColumn->textAt(row) + valuesSuffix;
-// 				case AbstractColumn::DateTime:
-// 				case AbstractColumn::Month:
-// 				case AbstractColumn::Day:
-// 					//TODO
-// 					break;
-// 				default:
-// 					break;
-// 			}
-// 		}
+		int endRow;
+		if (symbolPointsLogical.size()>valuesColumn->rowCount())
+			endRow =  valuesColumn->rowCount();
+		else
+			endRow = symbolPointsLogical.size();
+
+		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
+		for (int i=0; i<endRow; ++i){
+			if (!visiblePoints[i]) continue;
+
+			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
+				continue;
+
+			switch (xColMode){
+				case AbstractColumn::Numeric:
+					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+					break;
+				case AbstractColumn::Text:
+					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+				case AbstractColumn::DateTime:
+				case AbstractColumn::Month:
+				case AbstractColumn::Day:
+					//TODO
+					break;
+				default:
+					break;
+			}
+		}
 	  }
 	}
 
@@ -1120,8 +1077,8 @@ void XYCurvePrivate::updateValues(){
 	  case XYCurve::ValuesAbove:{
 		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPoints.at(i).x() - w/2);
-		  tempPoint.setY( symbolPoints.at(i).y() - valuesDistance );
+		  tempPoint.setX( symbolPointsScene.at(i).x() - w/2);
+		  tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
 		  valuesPoints.append(tempPoint);
 		  }
 		  break;
@@ -1129,8 +1086,8 @@ void XYCurvePrivate::updateValues(){
 	  case XYCurve::ValuesUnder:{
 		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPoints.at(i).x() -w/2 );
-		  tempPoint.setY( symbolPoints.at(i).y() + valuesDistance + h/2);
+		  tempPoint.setX( symbolPointsScene.at(i).x() -w/2 );
+		  tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
 		  valuesPoints.append(tempPoint);
 		}
 		break;
@@ -1138,8 +1095,8 @@ void XYCurvePrivate::updateValues(){
 	  case XYCurve::ValuesLeft:{
 		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPoints.at(i).x() - valuesDistance - w - 1 );
-		  tempPoint.setY( symbolPoints.at(i).y());
+		  tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 );
+		  tempPoint.setY( symbolPointsScene.at(i).y());
 		  valuesPoints.append(tempPoint);
 		}
 		break;
@@ -1147,8 +1104,8 @@ void XYCurvePrivate::updateValues(){
 	  case XYCurve::ValuesRight:{
 		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPoints.at(i).x() + valuesDistance - 1 );
-		  tempPoint.setY( symbolPoints.at(i).y() );
+		  tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 );
+		  tempPoint.setY( symbolPointsScene.at(i).y() );
 		  valuesPoints.append(tempPoint);
 		}
 		break;
@@ -1168,22 +1125,50 @@ void XYCurvePrivate::updateErrorBars(){
 	}
 
 	QList<QLineF> lines;
+	float errorPlus, errorMinus;
+	for (int i=0; i<symbolPointsLogical.size(); ++i){
+		if (!visiblePoints[i])
+			continue;
 
-	//error bars for x
-	foreach(QPointF point, symbolPointsLogicalRestricted){
-		if (xErrorType==XYCurve::SymmetricError) {
-// 			lines.append(QLineF(QPointF(point.x()-0.6, point.y()), QPointF(point.x()+0.6, point.y())));
-		} else {
-			
+		const QPointF& point = symbolPointsLogical.at(i);
+		//error bars for x
+		if (xErrorType!=XYCurve::NoError) {
+			if (xErrorPlusColumn && xErrorPlusColumn->isValid(i) && !xErrorPlusColumn->isMasked(i))
+				errorPlus = xErrorPlusColumn->valueAt(i);
+			else
+				errorPlus = 0;
+
+			if (xErrorType==XYCurve::SymmetricError) {
+				errorMinus = errorPlus;
+			} else {
+				if (xErrorMinusColumn && xErrorMinusColumn->isValid(i) && !xErrorMinusColumn->isMasked(i))
+					errorMinus = xErrorMinusColumn->valueAt(i);
+				else
+					errorMinus = 0;
+			}
+
+			//TODO: add different styles for the error bars (with caps etc.)
+			lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()), QPointF(point.x()+errorPlus, point.y())));
 		}
-	}
+		
+		//error bars for y
+		if (yErrorType!=XYCurve::NoError) {
+			if (yErrorPlusColumn && yErrorPlusColumn->isValid(i) && !yErrorPlusColumn->isMasked(i))
+				errorPlus = yErrorPlusColumn->valueAt(i);
+			else
+				errorPlus = 0;
 
-	//error bars for y
-	foreach(QPointF point, symbolPointsLogicalRestricted){
-		if (yErrorType==XYCurve::SymmetricError) {
-// 			lines.append(QLineF(QPointF(point.x(), point.y()-0.6), QPointF(point.x(), point.y()+0.6)));
-		} else {
-			
+			if (yErrorType==XYCurve::SymmetricError) {
+				errorMinus = errorPlus;
+			} else {
+				if (yErrorMinusColumn && yErrorMinusColumn->isValid(i) && !yErrorMinusColumn->isMasked(i) )
+					errorMinus = xErrorMinusColumn->valueAt(i);
+				else
+					errorMinus = 0;
+			}
+
+			//TODO: add different styles for the error bars (with caps etc.)
+			lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus), QPointF(point.x(), point.y()+errorPlus)));
 		}
 	}
 
@@ -1202,6 +1187,7 @@ void XYCurvePrivate::updateErrorBars(){
 	
 	recalcShapeAndBoundingRect();
 }
+
 /*!
   recalculates the outer bounds and the shape of the curve.
 */
@@ -1224,7 +1210,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (symbolsPrototype->id() !="none"){
 	  QPainterPath symbolsPath;
 	  QRectF prototypeBoundingRect = symbolsPrototype->boundingRect();
-	  foreach (QPointF point, symbolPoints) {
+	  foreach (QPointF point, symbolPointsScene) {
 		  prototypeBoundingRect.moveCenter(point); 
 		  boundingRectangle |= prototypeBoundingRect;
 		  //TODO ellipse or the actual bounding rect of the current symbol?
@@ -1251,6 +1237,11 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, QPen()));
 		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
 	}
+	
+	if (xErrorType!=XYCurve::NoError || yErrorType!=XYCurve::NoError){
+		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
+		boundingRectangle = boundingRectangle.united(errorBarsPath.boundingRect());
+	}		
 }
 
 QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
@@ -1330,7 +1321,7 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 // 	  painter->setPen(symbolsPen);
 // 	  painter->setBrush(symbolsBrush);
 // 	  painter->rotate(symbolsRotationAngle);
-	  foreach(QPointF point, symbolPoints){
+	  foreach(QPointF point, symbolPointsScene){
 		  painter->translate(point);
 		  symbolsPrototype->paint(painter, option, widget);
 		  painter->translate(-point);
@@ -1611,7 +1602,7 @@ bool XYCurve::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'yErrorType'"));
             else
-                d->xErrorType = (XYCurve::ErrorType)str.toInt();
+                d->yErrorType = (XYCurve::ErrorType)str.toInt();
 			
 			READ_COLUMN(yErrorPlusColumn);
 			READ_COLUMN(yErrorMinusColumn);

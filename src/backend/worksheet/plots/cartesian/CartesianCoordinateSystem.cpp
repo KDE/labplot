@@ -300,8 +300,10 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 	\param restrictedLogicalPoints List for the logical coordinates restricted to the current region of the coordinate system
 	\param flags
  */
-void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints,
-												  QList<QPointF>& restrictedLogicalPoints, const MappingFlags& flags) const{
+void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalPoints,
+												  QList<QPointF>& scenePoints,
+												  std::vector<bool>& visiblePoints,
+												  const MappingFlags& flags) const{
 	const QRectF pageRect = d->plot->plotRect();
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
@@ -315,7 +317,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
 
-			foreach(QPointF point, logicalPoints){
+			for (int i=0; i<logicalPoints.size(); ++i) {
+				const QPointF& point = logicalPoints.at(i);
 				double x = point.x();
 				double y = point.y();
 
@@ -333,7 +336,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 				QPointF mappedPoint(x, y);
 				if (noPageClipping || pageRect.contains(mappedPoint)){
 					scenePoints.append(mappedPoint);
-					restrictedLogicalPoints.append(point);
+					visiblePoints[i].flip();
 				}
 			}
 		}

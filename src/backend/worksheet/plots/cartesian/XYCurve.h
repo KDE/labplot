@@ -129,13 +129,17 @@ class XYCurve: public AbstractWorksheetElement {
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+
+	private slots:
+		void updateValues();
+		void updateErrorBars();
 		void xColumnAboutToBeRemoved();
 		void yColumnAboutToBeRemoved();
 		void valuesColumnAboutToBeRemoved();
-		void xErrorPlusColumnColumnAboutToBeRemoved();
-		void xErrorMinusColumnColumnAboutToBeRemoved();
-		void yErrorPlusColumnColumnAboutToBeRemoved();
-		void yErrorMinusColumnColumnAboutToBeRemoved();
+		void xErrorPlusColumnAboutToBeRemoved();
+		void xErrorMinusColumnAboutToBeRemoved();
+		void yErrorPlusColumnAboutToBeRemoved();
+		void yErrorMinusColumnAboutToBeRemoved();
 
 	protected:
 		XYCurve(const QString &name, XYCurvePrivate *dd);

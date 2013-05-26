@@ -32,6 +32,7 @@
 #define XYCURVEPRIVATE_H
 
 #include "backend/worksheet/AbstractCurveSymbol.h"
+#include <vector>
 
 class XYCurvePrivate: public QGraphicsItem {
 	public:
@@ -41,13 +42,13 @@ class XYCurvePrivate: public QGraphicsItem {
 		QString name() const;
 		virtual QRectF boundingRect() const;
 		QPainterPath shape() const;
-		
-		virtual void retransform();
+
+		void retransform();
 		void updateLines();
 		void updateDropLines();
-		void updateValues();
-		void updateErrorBars();
 		void updateSymbol();
+		void updateValues();
+		void updateErrorBars();		
 		bool swapVisible(bool on);
 		QString swapSymbolsTypeId(const QString &id);
 		void recalcShapeAndBoundingRect();
@@ -119,9 +120,9 @@ class XYCurvePrivate: public QGraphicsItem {
 		AbstractCurveSymbol *symbolsPrototype;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
-		QList<QPointF> symbolPointsLogical; 			//points in logical coordinates
-		QList<QPointF> symbolPoints;					//points in scene coordinates
-		QList<QPointF> symbolPointsLogicalRestricted; 	//points in logical coordinates restricted to the currently visible area in the plot
+		QList<QPointF> symbolPointsLogical;	//points in logical coordinates
+		QList<QPointF> symbolPointsScene;	//points in scene coordinates
+		std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
 		QList<QPointF> valuesPoints;
 		QList<QString> valuesStrings;
 
