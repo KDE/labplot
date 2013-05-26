@@ -409,8 +409,10 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 	m_treeView->update();
 }
 
-void ProjectExplorer::selectIndex(const QModelIndex &  index){
+void ProjectExplorer::selectIndex(const QModelIndex&  index){
   m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+  m_treeView->setExpanded(index, true);
+  m_treeView->scrollTo(index);
 }
  
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
