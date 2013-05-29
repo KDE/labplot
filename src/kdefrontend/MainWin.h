@@ -77,6 +77,7 @@ private:
 	QString m_undoViewEmptyLabel;
 	ImportFileDialog* m_importFileDialog;
 	bool m_suppressCurrentSubWindowChangedEvent;
+	bool m_closing;
 	
 	KRecentFilesAction* m_recentProjectsAction;
 	KAction* m_saveAction;

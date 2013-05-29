@@ -82,6 +82,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	m_currentFolder(0),
 	m_fileName(filename),
 	m_suppressCurrentSubWindowChangedEvent(false),
+	m_closing(false),
 	m_visibilityMenu(0),
 	m_newMenu(0),
 	axisDock(0),
@@ -403,6 +404,9 @@ bool MainWin::warnModified() {
 	disables/enables menu items etc. depending on the currently selected Aspect.
 */
 void MainWin::updateGUI() {
+	if (m_closing)
+		return;
+	
 	KXMLGUIFactory* factory=this->guiFactory();
 
 	//disable all menus if there is no project
@@ -645,13 +649,18 @@ bool MainWin::closeProject(){
 	delete m_aspectTreeModel;
 	m_aspectTreeModel=0;
 	delete m_project;
- 	m_project=0;
+	m_project=0;
 
-	m_projectExplorerDock->hide();
-	m_propertiesDock->hide();
-	m_currentAspect=0;
-	m_currentFolder=0;
- 	updateGUI();
+	//update the UI if we're just closing a project
+	//and not closing(quitting) the application
+	if (!m_closing) {
+		m_projectExplorerDock->hide();
+		m_propertiesDock->hide();
+		m_currentAspect=0;
+		m_currentFolder=0;
+		updateGUI();
+	}
+
 	return true;
 }
 
@@ -1046,8 +1055,11 @@ void MainWin::toggleDockWidget(QAction* action) const{
 }
 
 void MainWin::closeEvent(QCloseEvent* event) {
-	if (!this->closeProject())
+	m_closing = true;
+	if (!this->closeProject()) {
+		m_closing = false;
 		event->ignore();
+	}
 }
 
 /***************************************************************************************/
