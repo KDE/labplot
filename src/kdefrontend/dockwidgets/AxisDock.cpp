@@ -246,7 +246,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(orientationChanged(Axis::AxisOrientation)), this, SLOT(axisOrientationChanged(Axis::AxisOrientation)));
 	connect(m_axis, SIGNAL(positionChanged(Axis::AxisPosition)), this, SLOT(axisPositionChanged(Axis::AxisPosition)));
 	connect(m_axis, SIGNAL(scaleChanged(Axis::AxisScale)), this, SLOT(axisScaleChanged(Axis::AxisScale)));
-	//TODO autofit
+	connect(m_axis, SIGNAL(autoScaleChanged(bool)), this, SLOT(axisAutoScaleChanged(bool)));
 	connect(m_axis, SIGNAL(startChanged(float)), this, SLOT(axisStartChanged(float)));
 	connect(m_axis, SIGNAL(endChanged(float)), this, SLOT(axisEndChanged(float)));
 	connect(m_axis, SIGNAL(zeroOffsetChanged(qreal)), this, SLOT(axisZeroOffsetChanged(qreal)));
@@ -1093,6 +1093,12 @@ void AxisDock::axisPositionChanged(float value){
 void AxisDock::axisScaleChanged(Axis::AxisScale scale){
 	m_initializing = true;
 	ui.cbScale->setCurrentIndex( (int)scale );
+	m_initializing = false;
+}
+
+void AxisDock::axisAutoScaleChanged(bool on){
+	m_initializing = true;
+	ui.chkAutoScale->setChecked(on);
 	m_initializing = false;
 }
 

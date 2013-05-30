@@ -136,6 +136,7 @@ private slots:
 	void axisPositionChanged(Axis::AxisPosition);
 	void axisPositionChanged(float);
 	void axisScaleChanged(Axis::AxisScale);
+	void axisAutoScaleChanged(bool);
 	void axisStartChanged(float);
 	void axisEndChanged(float);
 	void axisLabelsPrecisionChanged(int);

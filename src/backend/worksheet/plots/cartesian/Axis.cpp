@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach*uni-konstanz.de)
 					(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -408,14 +409,12 @@ CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorGridPen, minorGridPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
 
 /* ============================ setter methods and undo commands ================= */
-//TODO: make undo aware
-STD_SETTER_CMD_IMPL_F(Axis, SetAutoScale, bool, autoScale, retransform);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetAutoScale, bool, autoScale, retransform);
 void Axis::setAutoScale(bool autoScale) {
 	Q_D(Axis);
 	if (autoScale != d->autoScale){
 		exec(new AxisSetAutoScaleCmd(d, autoScale, tr("%1: set axis auto scaling")));
 		
-		//TODO changing of end and start is not undoable at the moment
 		if (autoScale){
 			CartesianPlot *plot = qobject_cast<CartesianPlot*>(parentAspect());
 			if (!plot)
@@ -482,7 +481,7 @@ void Axis::setOffset(float offset, bool undo) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetStart, float, start, retransform);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetStart, float, start, retransform);
 void Axis::setStart(float start, bool undo) {
 	Q_D(Axis);
 	if (start != d->start){
@@ -495,7 +494,7 @@ void Axis::setStart(float start, bool undo) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetEnd, float, end, retransform);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetEnd, float, end, retransform);
 void Axis::setEnd(float end, bool undo) {
 	Q_D(Axis);
 	if (end != d->end){
@@ -507,7 +506,6 @@ void Axis::setEnd(float end, bool undo) {
 	}
 }
 
-//TODO undo-functions
 STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform);
 void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
@@ -538,6 +536,7 @@ void Axis::setLinePen(const QPen &pen) {
 		exec(new AxisSetLinePenCmd(d, pen, tr("%1: set line style")));
 }
 
+//TODO undo-functions
 STD_SETTER_CMD_IMPL_F(Axis, SetLineOpacity, qreal, lineOpacity, update);
 void Axis::setLineOpacity(qreal opacity){
 	Q_D(Axis);

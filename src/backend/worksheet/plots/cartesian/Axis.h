@@ -164,16 +164,20 @@ class Axis: public AbstractWorksheetElement {
 		friend class AxisSetOrientationCmd;
 		friend class AxisSetPositionCmd;
 		friend class AxisSetScalingCmd;
+		friend class AxisSetAutoScaleCmd;
+		friend class AxisSetStartCmd;
+		friend class AxisSetEndCmd;
 		friend class AxisSetZeroOffsetCmd;
 		friend class AxisSetScalingFactorCmd;
 		void orientationChanged(Axis::AxisOrientation);
 		void positionChanged(Axis::AxisPosition);
 		void positionChanged(float);
 		void scaleChanged(Axis::AxisScale);
+		void startChanged(float);
+		void autoScaleChanged(bool);
+		void endChanged(float);
 		void zeroOffsetChanged(qreal);
 		void scalingFactorChanged(qreal);
-		void startChanged(float);
-		void endChanged(float);
 
 		//title
 		friend class AxisSetTitleOffsetCmd;
