@@ -129,6 +129,7 @@ private slots:
 	void yErrorPlusColumnChanged(const QModelIndex&) const;
 	void yErrorMinusColumnChanged(const QModelIndex&) const;
 	void errorBarsTypeChanged(int) const;
+	void errorBarsCapSizeChanged(double) const;
   	void errorBarsStyleChanged(int) const;
 	void errorBarsColorChanged(const QColor&) const;
 	void errorBarsWidthChanged(double) const;

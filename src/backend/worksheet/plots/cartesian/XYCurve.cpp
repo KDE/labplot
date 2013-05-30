@@ -107,6 +107,7 @@ void XYCurve::init(){
 	d->xErrorPlusColumn = NULL;
 	d->xErrorMinusColumn = NULL;
 	d->yErrorType = XYCurve::NoError;
+	d->errorBarsCapSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
 	d->yErrorPlusColumn = NULL;
 	d->yErrorMinusColumn = NULL;
 	d->errorBarsType = XYCurve::ErrorBars;
@@ -237,6 +238,7 @@ QString& XYCurve::yErrorMinusColumnName() const { return d_ptr->yErrorMinusColum
 QString& XYCurve::yErrorMinusColumnParentName() const { return d_ptr->yErrorMinusColumnParentName; }
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
 
@@ -500,6 +502,13 @@ void XYCurve::setYErrorType(ErrorType type) {
 	Q_D(XYCurve);
 	if (type != d->yErrorType)
 		exec(new XYCurveSetYErrorTypeCmd(d, type, tr("%1: y-error type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
+void XYCurve::setErrorBarsCapSize(qreal size) {
+	Q_D(XYCurve);
+	if (size != d->errorBarsCapSize)
+		exec(new XYCurveSetErrorBarsCapSizeCmd(d, size, tr("%1: set error bar cap size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
@@ -1422,6 +1431,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->yErrorPlusColumn, yErrorPlusColumn);
 	WRITE_COLUMN(d->yErrorMinusColumn, yErrorMinusColumn);
 	writer->writeAttribute( "type", QString::number(d->errorBarsType) );
+	writer->writeAttribute( "capSize", QString::number(d->errorBarsCapSize) );
 	WRITE_QPEN(d->errorBarsPen);
 	writer->writeAttribute( "opacity", QString::number(d->errorBarsOpacity) );
 	writer->writeEndElement();
@@ -1594,7 +1604,7 @@ bool XYCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'xErrorType'"));
             else
                 d->xErrorType = (XYCurve::ErrorType)str.toInt();
-			
+
 			READ_COLUMN(xErrorPlusColumn);
 			READ_COLUMN(xErrorMinusColumn);
 
@@ -1603,15 +1613,21 @@ bool XYCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'yErrorType'"));
             else
                 d->yErrorType = (XYCurve::ErrorType)str.toInt();
-			
+
 			READ_COLUMN(yErrorPlusColumn);
 			READ_COLUMN(yErrorMinusColumn);
-			
+
 			str = attribs.value("type").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'type'"));
             else
                 d->errorBarsType = (XYCurve::ErrorBarsType)str.toInt();
+
+			str = attribs.value("capSize").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'capSize'"));
+            else
+                d->errorBarsCapSize = str.toDouble();
 
 			READ_QPEN(d->errorBarsPen);
 			

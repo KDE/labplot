@@ -156,10 +156,11 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( cbYErrorPlusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yErrorPlusColumnChanged(const QModelIndex&)) );
 	connect( cbYErrorMinusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yErrorMinusColumnChanged(const QModelIndex&)) );
 	connect( ui.cbErrorBarsType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsTypeChanged(int)) );
+	connect( ui.sbErrorBarsCapSize, SIGNAL(valueChanged(double)), this, SLOT(errorBarsCapSizeChanged(double)) );
 	connect( ui.cbErrorBarsStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsStyleChanged(int)) );
 	connect( ui.kcbErrorBarsColor, SIGNAL(changed (const QColor &)), this, SLOT(errorBarsColorChanged(const QColor&)) );
 	connect( ui.sbErrorBarsWidth, SIGNAL(valueChanged(double)), this, SLOT(errorBarsWidthChanged(double)) );
-	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );	
+	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 	
 	//template handler
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
@@ -1288,16 +1289,25 @@ void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const{
 }
 
 void XYCurveDock::errorBarsTypeChanged(int index) const{
+	XYCurve::ErrorBarsType type = XYCurve::ErrorBarsType(index);
+	bool b = (type == XYCurve::ErrorBarsWithEnds);
+	ui.lErrorBarsCapSize->setVisible(b);
+	ui.sbErrorBarsCapSize->setVisible(b);
+
 	if (m_initializing)
 		return;
 
-	Qt::PenStyle penStyle=Qt::PenStyle(index);
-	QPen pen;
-	foreach(XYCurve* curve, m_curvesList){
-		pen=curve->errorBarsPen();
-		pen.setStyle(penStyle);
-		curve->setErrorBarsPen(pen);
-	}
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setErrorBarsType(type);
+}
+
+void XYCurveDock::errorBarsCapSizeChanged(double value) const{
+	if (m_initializing)
+		return;
+
+	float size = Worksheet::convertToSceneUnits(value, Worksheet::Point);
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setErrorBarsCapSize(size);
 }
 
 void XYCurveDock::errorBarsStyleChanged(int index) const{
@@ -1463,6 +1473,7 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.cbXErrorType->setCurrentIndex( group.readEntry("XErrorType", (int) curve->xErrorType()) );
 	ui.cbYErrorType->setCurrentIndex( group.readEntry("YErrorType", (int) curve->yErrorType()) );
 	ui.cbErrorBarsType->setCurrentIndex( group.readEntry("ErrorBarsType", (int) curve->errorBarsType()) );
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", curve->errorBarsCapSize()), Worksheet::Point) );
 	ui.cbErrorBarsStyle->setCurrentIndex( group.readEntry("ErrorBarsStyle", (int) curve->errorBarsPen().style()) );
 	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", curve->errorBarsPen().color()) );
   	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, group.readEntry("ErrorBarsColor", curve->errorBarsPen().color()) );
@@ -1521,6 +1532,7 @@ void XYCurveDock::saveConfig(KConfig& config){
 	group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());
 	group.writeEntry("YErrorType", ui.cbYErrorType->currentIndex());
 	group.writeEntry("ErrorBarsType", ui.cbErrorBarsType->currentIndex());
+	group.writeEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(),Worksheet::Point) );	
 	group.writeEntry("ErrorBarsStyle", ui.cbErrorBarsStyle->currentIndex());
 	group.writeEntry("ErrorBarsColor", ui.kcbErrorBarsColor->color());
 	group.writeEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(ui.sbErrorBarsWidth->value(),Worksheet::Point) );

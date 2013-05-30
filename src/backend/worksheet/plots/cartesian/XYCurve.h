@@ -115,6 +115,7 @@ class XYCurve: public AbstractWorksheetElement {
 		QString& yErrorMinusColumnName() const;
 		QString& yErrorMinusColumnParentName() const;		
 		BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
+		BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 		

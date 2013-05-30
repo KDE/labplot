@@ -110,6 +110,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		QString yErrorMinusColumnParentName;
 
 		XYCurve::ErrorBarsType errorBarsType;
+		double errorBarsCapSize;
 		QPen errorBarsPen;
 		qreal errorBarsOpacity;
 		
