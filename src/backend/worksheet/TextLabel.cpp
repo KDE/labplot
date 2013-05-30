@@ -143,6 +143,7 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
 		exec(new TextLabelSetTextCmd(d, textWrapper, tr("%1: set label text")));
+
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontSize, qreal, teXFontSize, updateText);

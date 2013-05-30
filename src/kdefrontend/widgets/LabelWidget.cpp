@@ -488,6 +488,7 @@ void LabelWidget::visibilityChanged(bool state){
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
 void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text){
+	qDebug()<<"LabelWidget::labelTextWrapperChanged";
 	m_initializing = true;
 	ui.teLabel->setText(text.text);
 	ui.teLabel->moveCursor(QTextCursor::End);

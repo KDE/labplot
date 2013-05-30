@@ -29,10 +29,9 @@
  ***************************************************************************/
 
 #include "CartesianPlotDock.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -64,10 +63,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( KIcon("document-open") );
-	
+
 	KUrlCompletion *comp = new KUrlCompletion();
-    ui.kleBackgroundFileName->setCompletionObject(comp);
-	
+	ui.kleBackgroundFileName->setCompletionObject(comp);
+
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
  	labelWidget=new LabelWidget(ui.tabTitle);
@@ -83,8 +82,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 		layout->setContentsMargins(2,2,2,2);
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
-  }
-  
+	}
+
 	//SIGNAL/SLOT
 
 	//General

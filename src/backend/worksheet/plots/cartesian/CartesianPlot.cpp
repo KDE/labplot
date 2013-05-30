@@ -197,7 +197,6 @@ void CartesianPlot::initDefault(){
 	
 	//Plot title
  	m_title = new TextLabel(this->name());
-	m_title->setText(this->name());
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem()); //set the parent before doing any positioning

@@ -33,8 +33,8 @@
 #include "ui_axisdock.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
-class LabelWidget;
 class AbstractAspect;
+class LabelWidget;
 
 class AxisDock : public QWidget{
 	Q_OBJECT
@@ -71,9 +71,6 @@ private slots:
 	void endChanged();
 	void zeroOffsetChanged();
 	void scalingFactorChanged();
-
-	//"Title"-tab
-	void titleChanged();
 
 	//Line-Tab
   	void lineStyleChanged(int);

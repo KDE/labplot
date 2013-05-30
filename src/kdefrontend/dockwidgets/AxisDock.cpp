@@ -43,7 +43,7 @@
   \ingroup kdefrontend
 */
  
-AxisDock::AxisDock(QWidget* parent):QWidget(parent){
+AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	ui.setupUi(this);
 
 	//adjust layouts in the tabs
@@ -85,10 +85,9 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent){
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
- 	labelWidget=new LabelWidget(ui.tabTitle);
+ 	labelWidget = new LabelWidget(ui.tabTitle);
 	labelWidget->setFixedLabelMode(true);
 	hboxLayout->addWidget(labelWidget);
-	connect( labelWidget, SIGNAL(dataChanged(bool)), this, SLOT(titleChanged()) );
 
 	//"Major ticks"-tab
 	connect( ui.cbMajorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksDirectionChanged(int)) );
@@ -461,14 +460,6 @@ void AxisDock::scalingFactorChanged(){
   double scalingFactor = ui.leScalingFactor->text().toDouble();
   foreach(Axis* axis, m_axesList)
 	axis->setScalingFactor(scalingFactor);
-}
-
-// "Title"-tab
-void AxisDock::titleChanged(){
-  if (m_initializing)
-	return;
-  
-	//TODO
 }
 
 // "Line"-tab
@@ -1174,7 +1165,7 @@ void AxisDock::loadConfig(KConfig& config){
   	ui.leScalingFactor->setText( QString::number( group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
 
 	//Title
-	//TODO labelWidget->loadConfig(group);
+	labelWidget->loadConfig(group);
 
 	//Line
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_axis->linePen().style()) );
@@ -1265,7 +1256,7 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("ScalingFactor", ui.leScalingFactor->text());
 
 	//Title
-	//TODO labelWidget->saveConfig(group);
+	labelWidget->saveConfig(group);
 
 	//Line
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());

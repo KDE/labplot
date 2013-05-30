@@ -64,7 +64,7 @@ class Axis: public AbstractWorksheetElement {
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
-		
+
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 
@@ -133,6 +133,7 @@ class Axis: public AbstractWorksheetElement {
 	protected:
 		AxisPrivate * const d_ptr;
 		Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate *dd);
+		TextLabel *m_title;
 
 	private:
     	Q_DECLARE_PRIVATE(Axis)
