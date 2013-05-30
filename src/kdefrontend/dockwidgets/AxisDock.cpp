@@ -256,7 +256,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 
 	// line
 	connect(m_axis, SIGNAL(linePenChanged(const QPen&)), this, SLOT(axisLinePenChanged(const QPen&)));
-	//TODO
+	connect(m_axis, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(axisLineOpacityChanged(qreal)));
 
 	// ticks
 	//TODO
@@ -514,12 +514,12 @@ void AxisDock::lineWidthChanged(double  value){
 }
 
 void AxisDock::lineOpacityChanged(int value){
-  if (m_initializing)
-	return;
-		
-  qreal opacity = (float)value/100;
-  foreach(Axis* axis, m_axesList)
-	axis->setLineOpacity(opacity);
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(Axis* axis, m_axesList)
+		axis->setLineOpacity(opacity);
 }
 
 //"Major ticks" tab
@@ -660,12 +660,12 @@ void AxisDock::majorTicksLengthChanged(double value){
 }
 
 void AxisDock::majorTicksOpacityChanged(int value){
-  if (m_initializing)
-	return;
-		
-  qreal opacity = (float)value/100;
-  foreach(Axis* axis, m_axesList)
-	axis->setMajorTicksOpacity(opacity);
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(Axis* axis, m_axesList)
+		axis->setMajorTicksOpacity(opacity);
 }
 
 //"Minor ticks" tab
@@ -801,12 +801,12 @@ void AxisDock::minorTicksLengthChanged(double value){
 }
 
 void AxisDock::minorTicksOpacityChanged(int value){
-  if (m_initializing)
-	return;
-		
-  qreal opacity = (float)value/100;
-  foreach(Axis* axis, m_axesList)
-	axis->setMinorTicksOpacity(opacity);
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(Axis* axis, m_axesList)
+		axis->setMinorTicksOpacity(opacity);
 }
 
 //"Tick labels"-tab
@@ -917,12 +917,12 @@ void AxisDock::labelsFontColorChanged(const QColor& color){
 }
 
 void AxisDock::labelsOpacityChanged(int value){
-  if (m_initializing)
-	return;
-		
-  qreal opacity = (float)value/100;
-  foreach(Axis* axis, m_axesList)
-	axis->setLabelsOpacity(opacity);
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(Axis* axis, m_axesList)
+		axis->setLabelsOpacity(opacity);
 }
 
 // "Grid"-tab
@@ -978,13 +978,12 @@ void AxisDock::majorGridWidthChanged(double  value){
 }
 
 void AxisDock::majorGridOpacityChanged(int value){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  qreal opacity = (float)value/100;
-  qDebug()<<"opacity "<<opacity;
-  foreach(Axis* axis, m_axesList)
-	axis->setMajorGridOpacity(opacity);
+	qreal opacity = (float)value/100.;
+	foreach(Axis* axis, m_axesList)
+		axis->setMajorGridOpacity(opacity);
 }
 
 //minor grid
@@ -1039,12 +1038,12 @@ void AxisDock::minorGridWidthChanged(double  value){
 }
 
 void AxisDock::minorGridOpacityChanged(int value){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  qreal opacity = (float)value/100;
-  foreach(Axis* axis, m_axesList)
-	axis->setMinorGridOpacity(opacity);
+	qreal opacity = (float)value/100.;
+	foreach(Axis* axis, m_axesList)
+		axis->setMinorGridOpacity(opacity);
 }
 
 //*************************************************************
@@ -1130,6 +1129,12 @@ void AxisDock::axisLinePenChanged(const QPen& pen){
 	ui.kcbLineColor->setColor( pen.color() );
 	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color() );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point) );
+	m_initializing = false;
+}
+
+void AxisDock::axisLineOpacityChanged(qreal opacity){
+	m_initializing = true;
+	ui.sbLineOpacity->setValue( 100.*opacity );
 	m_initializing = false;
 }
 

@@ -536,14 +536,14 @@ void Axis::setLinePen(const QPen &pen) {
 		exec(new AxisSetLinePenCmd(d, pen, tr("%1: set line style")));
 }
 
-//TODO undo-functions
-STD_SETTER_CMD_IMPL_F(Axis, SetLineOpacity, qreal, lineOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLineOpacity, qreal, lineOpacity, update);
 void Axis::setLineOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->lineOpacity)
 		exec(new AxisSetLineOpacityCmd(d, opacity, tr("%1: set line opacity")));
 }
 
+//TODO undo-functions
 //Major ticks
 STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksDirection, Axis::TicksDirection, majorTicksDirection, retransformTicks);
 void Axis::setMajorTicksDirection(const TicksDirection majorTicksDirection) {

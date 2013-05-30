@@ -605,13 +605,12 @@ void CartesianPlotDock::fileNameChanged(){
 }
 
 void CartesianPlotDock::backgroundOpacityChanged(int value){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  qreal opacity = (float)value/100;
-  foreach(CartesianPlot* plot, m_plotList){
-	plot->plotArea()->setBackgroundOpacity(opacity);
-  }
+	qreal opacity = (float)value/100.;
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->plotArea()->setBackgroundOpacity(opacity);
 }
 
 // "Border"-tab
@@ -657,13 +656,12 @@ void CartesianPlotDock::borderWidthChanged(double value){
 }
 
 void CartesianPlotDock::borderOpacityChanged(int value){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  qreal opacity = (float)value/100;
-  foreach(CartesianPlot* plot, m_plotList){
-	plot->plotArea()->setBorderOpacity(opacity);
-  }
+	qreal opacity = (float)value/100.;
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->plotArea()->setBorderOpacity(opacity);
 }
 
 void CartesianPlotDock::horizontalPaddingChanged(double value){
@@ -794,7 +792,7 @@ void CartesianPlotDock::plotBackgroundFileNameChanged(QString& filename){
 
 void CartesianPlotDock::plotBackgroundOpacityChanged(float value){
 	m_initializing = true;
-	float v = (float)value*100;
+	float v = (float)value*100.;
 	ui.sbBackgroundOpacity->setValue(v);
 	m_initializing = false;
 }
@@ -812,7 +810,7 @@ void CartesianPlotDock::plotBorderPenChanged(QPen& pen){
 
 void CartesianPlotDock::plotBorderOpacityChanged(float value){
 	m_initializing = true;
-	float v = (float)value*100;
+	float v = (float)value*100.;
 	ui.sbBorderOpacity->setValue(v);
 	m_initializing = false;
 }

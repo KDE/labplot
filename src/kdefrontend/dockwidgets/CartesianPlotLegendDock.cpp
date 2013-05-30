@@ -524,9 +524,9 @@ void CartesianPlotLegendDock::backgroundOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	float opacity = (float)value/100;
+	float opacity = (float)value/100.;
 	foreach(CartesianPlotLegend* legend, m_legendList)
-	 legend->setBackgroundOpacity(opacity);
+		legend->setBackgroundOpacity(opacity);
 }
 
 // "Border"-tab
@@ -575,7 +575,7 @@ void CartesianPlotLegendDock::borderOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	float opacity = (float)value/100;
+	float opacity = (float)value/100.;
 	foreach(CartesianPlotLegend* legend, m_legendList)
 		legend->setBorderOpacity(opacity);
 }
@@ -725,7 +725,7 @@ void CartesianPlotLegendDock::legendBackgroundFileNameChanged(QString& filename)
 
 void CartesianPlotLegendDock::legendBackgroundOpacityChanged(float value) {
 	m_initializing = true;
-	float v = (float)value*100;
+	float v = (float)value*100.;
 	ui.sbBackgroundOpacity->setValue(v);
 	m_initializing = false;
 }
@@ -747,7 +747,7 @@ void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 
 void CartesianPlotLegendDock::legendBorderOpacityChanged(float value) {
 	m_initializing = true;
-	float v = (float)value*100;
+	float v = (float)value*100.;
 	ui.sbBorderOpacity->setValue(v);
 	m_initializing = false;
 }

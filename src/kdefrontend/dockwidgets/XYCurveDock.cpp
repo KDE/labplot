@@ -776,12 +776,12 @@ void XYCurveDock::lineWidthChanged(double value){
 }
 
 void XYCurveDock::lineOpacityChanged(int value){
-  if (m_initializing)
-	return;
-		
-  qreal opacity = (float)value/100;
-  foreach(XYCurve* curve, m_curvesList)
-	curve->setLineOpacity(opacity);
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setLineOpacity(opacity);
 }
 
 void XYCurveDock::dropLineTypeChanged(int index){
@@ -846,12 +846,12 @@ void XYCurveDock::dropLineWidthChanged(double value){
 }
 
 void XYCurveDock::dropLineOpacityChanged(int value){
-  if (m_initializing)
-	return;
-		
-  qreal opacity = (float)value/100;
-  foreach(XYCurve* curve, m_curvesList)
-	curve->setDropLineOpacity(opacity);
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setDropLineOpacity(opacity);
 }
 
 //"Symbol"-tab
@@ -915,12 +915,12 @@ void XYCurveDock::symbolsRotationChanged(int value){
 }
 
 void XYCurveDock::symbolsOpacityChanged(int value){
-  if (m_initializing)
-	return;
-		
-  qreal opacity = (float)value/100;
-  foreach(XYCurve* curve, m_curvesList)
-	curve->setSymbolsOpacity(opacity);
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setSymbolsOpacity(opacity);
 }
 
 void XYCurveDock::symbolsFillingStyleChanged(int index){
@@ -1103,12 +1103,12 @@ void XYCurveDock::valuesRotationChanged(int value){
 }
 
 void XYCurveDock::valuesOpacityChanged(int value){
-  if (m_initializing)
-	return;
-		
-  qreal opacity = (float)value/100;
-  foreach(XYCurve* curve, m_curvesList)
-	curve->setValuesOpacity(opacity);
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setValuesOpacity(opacity);
 }
 
 void XYCurveDock::valuesPrefixChanged(){
@@ -1353,7 +1353,7 @@ void XYCurveDock::errorBarsOpacityChanged(int value) const{
 	if (m_initializing)
 		return;
 		
-	qreal opacity = (float)value/100;
+	qreal opacity = (float)value/100.;
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setErrorBarsOpacity(opacity);
 }

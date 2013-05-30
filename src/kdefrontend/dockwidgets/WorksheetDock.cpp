@@ -384,10 +384,9 @@ void WorksheetDock::opacityChanged(int value){
   	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100;
-	foreach(Worksheet* worksheet, m_worksheetList){
+	qreal opacity = (float)value/100.;
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundOpacity(opacity);
-	}
 }
 
 void WorksheetDock::backgroundTypeChanged(int index){

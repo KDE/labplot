@@ -142,6 +142,7 @@ private slots:
 
 	//line
 	void axisLinePenChanged(const QPen&);
+	void axisLineOpacityChanged(qreal);
 
 	//ticks
 	

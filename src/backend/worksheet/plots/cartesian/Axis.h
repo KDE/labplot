@@ -186,7 +186,9 @@ class Axis: public AbstractWorksheetElement {
 
 		// line
 		friend class AxisSetLinePenCmd;
+		friend class AxisSetLineOpacityCmd;
 		void linePenChanged(const QPen&);
+		void lineOpacityChanged(qreal);
 
 		//labels
 		void labelsPrecisionChanged(int);
