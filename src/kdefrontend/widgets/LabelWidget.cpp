@@ -121,20 +121,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	ui.teLabel->setText( m_label->text().text );
 	m_initializing = false;
 
-	connect( m_label, SIGNAL(textWrapperChanged(const TextLabel::TextWrapper&)),
-			 this, SLOT(labelTextWrapperChanged(const TextLabel::TextWrapper&)) );
-	connect( m_label, SIGNAL(teXFontSizeChanged(const qreal)),
-			 this, SLOT(labelTeXFontSizeChanged(const qreal)) );
-	connect( m_label, SIGNAL(teXFontColorChanged(const QColor)),
-			 this, SLOT(labelTeXFontColorChanged(const QColor)) );
-	connect( m_label, SIGNAL(positionChanged(const TextLabel::PositionWrapper&)),
-			 this, SLOT(labelPositionChanged(const TextLabel::PositionWrapper&)) );
-	connect( m_label, SIGNAL(horizontalAlignmentChanged(TextLabel::HorizontalAlignment)),
-			 this, SLOT(labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment)) );
-	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
-			 this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
-	connect( m_label, SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
-	connect( m_label, SIGNAL(visibleChanged(bool)), this, SLOT(labelVisibleChanged(bool)) );
+	initConnections();
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes){
@@ -159,6 +146,25 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	ui.sbOffset->setEnabled(true);
 	ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(axes.first()->titleOffset(), Worksheet::Point) );
 	m_initializing = false;
+
+	initConnections();
+}
+
+void LabelWidget::initConnections() {
+	connect( m_label, SIGNAL(textWrapperChanged(const TextLabel::TextWrapper&)),
+			 this, SLOT(labelTextWrapperChanged(const TextLabel::TextWrapper&)) );
+	connect( m_label, SIGNAL(teXFontSizeChanged(const qreal)),
+			 this, SLOT(labelTeXFontSizeChanged(const qreal)) );
+	connect( m_label, SIGNAL(teXFontColorChanged(const QColor)),
+			 this, SLOT(labelTeXFontColorChanged(const QColor)) );
+	connect( m_label, SIGNAL(positionChanged(const TextLabel::PositionWrapper&)),
+			 this, SLOT(labelPositionChanged(const TextLabel::PositionWrapper&)) );
+	connect( m_label, SIGNAL(horizontalAlignmentChanged(TextLabel::HorizontalAlignment)),
+			 this, SLOT(labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment)) );
+	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
+			 this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
+	connect( m_label, SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
+	connect( m_label, SIGNAL(visibleChanged(bool)), this, SLOT(labelVisibleChanged(bool)) );	
 }
 
 /*!
@@ -488,7 +494,6 @@ void LabelWidget::visibilityChanged(bool state){
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
 void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text){
-	qDebug()<<"LabelWidget::labelTextWrapperChanged";
 	m_initializing = true;
 	ui.teLabel->setText(text.text);
 	ui.teLabel->moveCursor(QTextCursor::End);

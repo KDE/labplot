@@ -56,6 +56,8 @@ private:
 	QList<Axis*> m_axesList;
 	bool m_initializing;
 
+	void initConnections();
+
 signals:
 	void dataChanged(bool);
 
