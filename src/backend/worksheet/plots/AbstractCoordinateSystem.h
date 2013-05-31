@@ -49,9 +49,11 @@ class AbstractCoordinateSystem{
 		AbstractCoordinateSystem(AbstractPlot*);
 		virtual ~AbstractCoordinateSystem();
 
-		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const = 0;
-		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const = 0;
-		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QPointF mapLogicalToScene(const QPointF&,const MappingFlags& flags = DefaultMapping) const = 0;
+		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF>&, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
+		virtual QPointF mapSceneToLogical(const QPointF&, const MappingFlags &flags = DefaultMapping) const = 0;
 
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio) = 0;
 

@@ -83,10 +83,12 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		CartesianCoordinateSystem(CartesianPlot*);
 		virtual ~CartesianCoordinateSystem();
 
-		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
+		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const;
 		void mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints, std::vector<bool>& visiblePoints, const MappingFlags& flags = DefaultMapping) const;
-		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags = DefaultMapping) const;
-		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags = DefaultMapping) const;
+		virtual QPointF mapLogicalToScene(const QPointF&,const MappingFlags& flags = DefaultMapping) const;
+		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const;
+		virtual QPointF mapSceneToLogical(const QPointF&, const MappingFlags &flags = DefaultMapping) const;
+		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF>&, const MappingFlags &flags = DefaultMapping) const;
 
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 

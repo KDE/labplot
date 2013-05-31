@@ -110,7 +110,7 @@ void XYCurve::init(){
 	d->errorBarsCapSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
 	d->yErrorPlusColumn = NULL;
 	d->yErrorMinusColumn = NULL;
-	d->errorBarsType = XYCurve::ErrorBars;
+	d->errorBarsType = XYCurve::ErrorBarsSimple;
 	d->errorBarsOpacity = 1.0;
 	
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -1135,13 +1135,39 @@ void XYCurvePrivate::updateErrorBars(){
 
 	QList<QLineF> lines;
 	float errorPlus, errorMinus;
+	
+	CartesianPlot* plot = qobject_cast<CartesianPlot*>(q->parentAspect());
+	Q_ASSERT(plot != NULL);	
+	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+	Q_ASSERT(cSystem != NULL);
+
+	//the cap size for the errorbars is given in scene units.
+	//determine first the (half of the) cap size in logical units.
+	float capSizeX = 0;
+	float capSizeY = 0;
+	if (errorBarsType != XYCurve::ErrorBarsSimple && !symbolPointsLogical.isEmpty()) {
+		//cap size for x-error bars
+		QPointF pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(0));
+		pointScene.setY(pointScene.y()+errorBarsCapSize);
+		QPointF pointLogical = cSystem->mapSceneToLogical(pointScene, AbstractCoordinateSystem::SuppressPageClipping);
+		capSizeX = (pointLogical.y() - symbolPointsLogical.at(0).y())/2;
+		
+		//cap size for y-error bars
+		pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(0));
+		pointScene.setX(pointScene.x()+errorBarsCapSize);
+		pointLogical = cSystem->mapSceneToLogical(pointScene, AbstractCoordinateSystem::SuppressPageClipping);
+		capSizeY = (pointLogical.x() - symbolPointsLogical.at(0).x())/2;		
+	}
+	
 	for (int i=0; i<symbolPointsLogical.size(); ++i){
 		if (!visiblePoints[i])
 			continue;
 
 		const QPointF& point = symbolPointsLogical.at(i);
+
 		//error bars for x
 		if (xErrorType!=XYCurve::NoError) {
+			//determine the values for the errors
 			if (xErrorPlusColumn && xErrorPlusColumn->isValid(i) && !xErrorPlusColumn->isMasked(i))
 				errorPlus = xErrorPlusColumn->valueAt(i);
 			else
@@ -1156,12 +1182,31 @@ void XYCurvePrivate::updateErrorBars(){
 					errorMinus = 0;
 			}
 
-			//TODO: add different styles for the error bars (with caps etc.)
-			lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()), QPointF(point.x()+errorPlus, point.y())));
+			//draw the error bars
+			switch(errorBarsType) {
+				case XYCurve::ErrorBarsSimple:
+					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
+										QPointF(point.x()+errorPlus, point.y())));
+					break;
+				case XYCurve::ErrorBarsWithEnds: {
+					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
+										QPointF(point.x()+errorPlus, point.y())));
+					if (errorMinus!=0) {
+						lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()-capSizeX),
+											QPointF(point.x()-errorMinus, point.y()+capSizeX)));
+					}
+					if (errorPlus!=0) {
+						lines.append(QLineF(QPointF(point.x()+errorPlus, point.y()-capSizeX),
+											QPointF(point.x()+errorPlus, point.y()+capSizeX)));
+					}
+					break;
+				}
+			}
 		}
 		
 		//error bars for y
 		if (yErrorType!=XYCurve::NoError) {
+			//determine the values for the errors
 			if (yErrorPlusColumn && yErrorPlusColumn->isValid(i) && !yErrorPlusColumn->isMasked(i))
 				errorPlus = yErrorPlusColumn->valueAt(i);
 			else
@@ -1176,16 +1221,30 @@ void XYCurvePrivate::updateErrorBars(){
 					errorMinus = 0;
 			}
 
-			//TODO: add different styles for the error bars (with caps etc.)
-			lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus), QPointF(point.x(), point.y()+errorPlus)));
+			//draw the error bars
+			switch(errorBarsType) {
+				case XYCurve::ErrorBarsSimple:
+					lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
+										QPointF(point.x(), point.y()+errorPlus)));
+					break;
+				case XYCurve::ErrorBarsWithEnds: {
+					lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
+										QPointF(point.x(), point.y()+errorPlus)));				
+					if (errorMinus!=0) {
+						lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
+											QPointF(point.x()+capSizeY, point.y()-errorMinus)));
+					}
+					if (errorPlus!=0) {
+						lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
+											QPointF(point.x()+capSizeY, point.y()+errorPlus)));
+					}
+					break;
+				}
+			}			
 		}
 	}
 
 	//map the error bars to scene coordinates
-	CartesianPlot* plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	Q_ASSERT(plot != NULL);
-	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
-	Q_ASSERT(cSystem != NULL);
 	lines = cSystem->mapLogicalToScene(lines);
 	
 	//new painter path for the drop lines

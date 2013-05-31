@@ -343,6 +343,41 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 	}
 }
 
+QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint, const MappingFlags& flags) const{
+	const QRectF pageRect = d->plot->plotRect();
+	QList<QPointF> result;
+	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+	bool valid = true;
+
+	foreach (Scale *xScale, d->xScales){
+		Interval<double> xInterval;
+		xScale->getProperties(NULL, &xInterval);
+
+		foreach (Scale *yScale, d->yScales){
+			Interval<double> yInterval;
+			yScale->getProperties(NULL, &yInterval);
+
+			double x = logicalPoint.x();
+			double y = logicalPoint.y();
+
+			if (!(xInterval.contains(x) && yInterval.contains(y)))
+				continue;
+
+			valid = xScale->map(&x);
+			if (!valid)
+				continue;
+
+			valid = yScale->map(&y);
+			if (!valid)
+				continue;
+
+			QPointF mappedPoint(x, y);
+			if (noPageClipping || pageRect.contains(mappedPoint))
+				return mappedPoint;
+		}
+	}
+	return QPointF();
+}
 
 QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
 	QRectF pageRect = d->plot->rect();
@@ -384,6 +419,46 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 					result.append(QPointF(x, y));
 					found = true;
 				}
+			}
+		}
+	}
+
+	return result;
+}
+
+QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint, const MappingFlags& flags) const {
+	QRectF pageRect = d->plot->rect();
+	QPointF result;
+	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+
+	if (noPageClipping || pageRect.contains(logicalPoint)) {
+		double x = logicalPoint.x();
+		double y = logicalPoint.y();
+
+		foreach (Scale *xScale, d->xScales) {
+			Interval<double> xInterval;
+			xScale->getProperties(NULL, &xInterval);
+
+			foreach (Scale *yScale, d->yScales) {
+				Interval<double> yInterval;
+				yScale->getProperties(NULL, &yInterval);
+
+				bool valid = true;
+
+				valid = xScale->inverseMap(&x);
+				if (!valid)
+					continue;
+
+				valid = yScale->inverseMap(&y);
+				if (!valid)
+					continue;
+
+				if (!(xInterval.contains(x) && yInterval.contains(y)))
+					continue;
+
+				result.setX(x);
+				result.setY(y);
+				return result;
 			}
 		}
 	}

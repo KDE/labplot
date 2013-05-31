@@ -48,7 +48,7 @@ class XYCurve: public AbstractWorksheetElement {
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
-		enum ErrorBarsType {ErrorBars, ErrorBarsWithEnds};
+		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
 
 		static QStringList lineTypeStrings();
 		static QStringList dropLineTypeStrings();
