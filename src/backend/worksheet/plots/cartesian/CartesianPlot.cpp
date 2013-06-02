@@ -575,9 +575,20 @@ void CartesianPlot::scaleAutoX(){
 	}
 
 	if(update){
-		float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
-		d->xMin -= offset;
-		d->xMax += offset;
+		if (d->xMax == d->xMin){
+			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
+			if (d->xMax!=0){
+				d->xMax = d->xMax*1.1;
+				d->xMin = d->xMin*0.9;
+			}else{
+				d->xMax = 0.1;
+				d->xMin = -0.1;
+			}
+		}else{
+			float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
+			d->xMin -= offset;
+			d->xMax += offset;
+		}
 		d->retransformScales();
 	}
 }
@@ -616,9 +627,20 @@ void CartesianPlot::scaleAutoY(){
 	}
 	
 	if(update){
-		float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
-		d->yMin -= offset;
-		d->yMax += offset;
+		if (d->yMax == d->yMin){
+			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
+			if (d->yMax!=0){
+				d->yMax = d->yMax*1.1;
+				d->yMin = d->yMin*0.9;
+			}else{
+				d->yMax = 0.1;
+				d->yMin = -0.1;
+			}
+		}else{
+			float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
+			d->yMin -= offset;
+			d->yMax += offset;
+		}
 		d->retransformScales();
 	}
 }
@@ -684,14 +706,36 @@ void CartesianPlot::scaleAuto(){
 
 	if(updateX || updateY){
 		if (updateX){
-			float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
-			d->xMin -= offset;
-			d->xMax += offset;
+			if (d->xMax == d->xMin) {
+				//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
+				if (d->xMax!=0){
+					d->xMax = d->xMax*1.1;
+					d->xMin = d->xMin*0.9;
+				}else{
+					d->xMax = 0.1;
+					d->xMin = -0.1;
+				}
+			} else {
+				float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
+				d->xMin -= offset;
+				d->xMax += offset;
+			}
 		}
 		if (updateY){
-			float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
-			d->yMin -= offset;
-			d->yMax += offset;
+			if (d->yMax == d->yMin) {
+				//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
+				if (d->yMax!=0){
+					d->yMax = d->yMax*1.1;
+					d->yMin = d->yMin*0.9;
+				}else{
+					d->yMax = 0.1;
+					d->yMin = -0.1;
+				}
+			} else {
+				float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
+				d->yMin -= offset;
+				d->yMax += offset;
+			}
 		}
 		d->retransformScales();
 	}
