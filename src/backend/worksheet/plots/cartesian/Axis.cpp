@@ -862,7 +862,7 @@ void AxisPrivate::retransformLine(){
 bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 	QList<QPointF> points;
 	points.append(*anchorPoint);
-	points = m_cSystem->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
+	points = m_cSystem->mapLogicalToScene(points);
 	if (points.count() != 1){ // point is not mappable or in a coordinate gap
 		return false;
 	}else{
@@ -883,72 +883,71 @@ void AxisPrivate::retransformTicks(){
 	minorTickPoints.clear();
 	tickLabelValues.clear();
   
-  if (majorTicksNumber<1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ){
-	retransformTickLabels(); //this calls recalcShapeAndBoundingRect()
-	return;
-  }
-  
-  //determine the spacing for the major ticks
-  double majorTicksSpacing;
-  int tmpMajorTicksNumber;
-  if (majorTicksType == Axis::TicksTotalNumber){
-	//the total number of the major ticks is given - > determine the spacing
-	  switch (scale){
-		case Axis::ScaleLinear:
-		  majorTicksSpacing = (end - start)/ (majorTicksNumber - 1);
-		  break;
-		case Axis::ScaleLog10:
-		  majorTicksSpacing = (log10(end) - log10(start))/(majorTicksNumber - 1);
-		  break;
-		case Axis::ScaleLog2:
-		  majorTicksSpacing = (log(end) - log(start))/log(2)/(majorTicksNumber - 1);
-		  break;
-		case Axis::ScaleLn:
-		  majorTicksSpacing = (log(end) - log(start))/(majorTicksNumber - 1);
-		  break;		
-		case Axis::ScaleSqrt:
-		  majorTicksSpacing = (sqrt(end) - sqrt(start))/(majorTicksNumber - 1);
-		  break;					
-		case Axis::ScaleX2:
-		  majorTicksSpacing = (pow(end,2) - pow(start,2))/(majorTicksNumber - 1);
-		  break;			
-		default://Linear
-		  majorTicksSpacing = (end - start)/(majorTicksNumber - 1);
-	  }
-	  tmpMajorTicksNumber = majorTicksNumber;
-  }else{
-	//the spacing (increment ) of the major ticks is given - > determine the number
-	majorTicksSpacing = majorTicksIncrement;
-	switch (scale){
-	  case Axis::ScaleLinear:
-		tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
-		break;
-	  case Axis::ScaleLog10:
-		tmpMajorTicksNumber = (log10(end)-log10(start))/majorTicksSpacing + 1;
-		break;
-	  case Axis::ScaleLog2:
-		tmpMajorTicksNumber = (log(end)-log(start))/log(2)/majorTicksSpacing + 1;
-		break;
-	  case Axis::ScaleLn:
-		tmpMajorTicksNumber = (log(end)-log(start))/majorTicksSpacing + 1;
-		break;		
-	  case Axis::ScaleSqrt:
-		tmpMajorTicksNumber = (sqrt(end)-sqrt(start))/majorTicksSpacing + 1;
-		break;					
-	  case Axis::ScaleX2:
-		tmpMajorTicksNumber = (pow(end,2)-pow(start,2))/majorTicksSpacing + 1;
-		break;			
-	  default://Linear
-		tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
+	if ( majorTicksNumber<1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ) {
+		retransformTickLabels(); //this calls recalcShapeAndBoundingRect()
+		return;
 	}
-  }
   
-  int tmpMinorTicksNumber;
-	if (minorTicksType == Axis::TicksTotalNumber){
-	  tmpMinorTicksNumber = minorTicksNumber;
-  }else{
-	  tmpMinorTicksNumber = (end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
-  }
+	//determine the spacing for the major ticks
+	double majorTicksSpacing;
+	int tmpMajorTicksNumber;
+	if (majorTicksType == Axis::TicksTotalNumber) {
+		//the total number of the major ticks is given - > determine the spacing
+		switch (scale){
+			case Axis::ScaleLinear:
+				majorTicksSpacing = (end - start)/ (majorTicksNumber - 1);
+				break;
+			case Axis::ScaleLog10:
+				majorTicksSpacing = (log10(end) - log10(start))/(majorTicksNumber - 1);
+				break;
+			case Axis::ScaleLog2:
+				majorTicksSpacing = (log(end) - log(start))/log(2)/(majorTicksNumber - 1);
+				break;
+			case Axis::ScaleLn:
+				majorTicksSpacing = (log(end) - log(start))/(majorTicksNumber - 1);
+				break;		
+			case Axis::ScaleSqrt:
+				majorTicksSpacing = (sqrt(end) - sqrt(start))/(majorTicksNumber - 1);
+				break;					
+			case Axis::ScaleX2:
+				majorTicksSpacing = (pow(end,2) - pow(start,2))/(majorTicksNumber - 1);
+				break;			
+			default://Linear
+				majorTicksSpacing = (end - start)/(majorTicksNumber - 1);
+		}
+		tmpMajorTicksNumber = majorTicksNumber;
+	} else {
+		//the spacing (increment ) of the major ticks is given - > determine the number
+		majorTicksSpacing = majorTicksIncrement;
+		switch (scale) {
+			case Axis::ScaleLinear:
+			tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
+			break;
+			case Axis::ScaleLog10:
+			tmpMajorTicksNumber = (log10(end)-log10(start))/majorTicksSpacing + 1;
+			break;
+			case Axis::ScaleLog2:
+			tmpMajorTicksNumber = (log(end)-log(start))/log(2)/majorTicksSpacing + 1;
+			break;
+			case Axis::ScaleLn:
+			tmpMajorTicksNumber = (log(end)-log(start))/majorTicksSpacing + 1;
+			break;		
+			case Axis::ScaleSqrt:
+			tmpMajorTicksNumber = (sqrt(end)-sqrt(start))/majorTicksSpacing + 1;
+			break;					
+			case Axis::ScaleX2:
+			tmpMajorTicksNumber = (pow(end,2)-pow(start,2))/majorTicksSpacing + 1;
+			break;			
+			default://Linear
+			tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
+		}
+	}
+  
+	int tmpMinorTicksNumber;
+	if (minorTicksType == Axis::TicksTotalNumber)
+		tmpMinorTicksNumber = minorTicksNumber;
+	else
+		tmpMinorTicksNumber = (end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
   
 	QPointF anchorPoint;
 	QPointF startPoint;
@@ -960,136 +959,139 @@ void AxisPrivate::retransformTicks(){
 	int yDirection = m_cSystem->yDirection();
 	float middleX = (m_plot->xMax() - m_plot->xMin())/2;
 	float middleY = (m_plot->yMax() - m_plot->yMin())/2;
+	bool valid;
 
-	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++){
-	  switch (scale){
-		case Axis::ScaleLinear:
-		  majorTickPos = start + majorTicksSpacing * (qreal)iMajor;
-		  break;
-		case Axis::ScaleLog10:
-		  majorTickPos = pow(10, log10(start) + majorTicksSpacing * (qreal)iMajor);
-		  break;
-		case Axis::ScaleLog2:
-		  majorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing * (qreal)iMajor);
-		  break;
-		case Axis::ScaleLn:
-		  majorTickPos = exp(log(start) + majorTicksSpacing * (qreal)iMajor);
-		  break;
-		case Axis::ScaleSqrt:
-		  majorTickPos = pow(sqrt(start) + majorTicksSpacing * (qreal)iMajor, 2);
-		  break;
-		case Axis::ScaleX2:
-		  majorTickPos = sqrt(sqrt(start) + majorTicksSpacing * (qreal)iMajor);
-		  break;		  
-		default://Linear
-		  majorTickPos = start + majorTicksSpacing * (qreal)iMajor; 
-	  }
-  
-	  if (majorTicksDirection != Axis::noTicks ){
-		  if (orientation == Axis::AxisHorizontal){
-			  anchorPoint.setX(majorTickPos);
-			  anchorPoint.setY(offset);
-			  
-			  if (transformAnchor(&anchorPoint)){
-				if(offset < middleY) {
-					startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
-					endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
-				}
-				else {
-					startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
-					endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
-				}
-			}
-		  }else{ // vertical
-			  anchorPoint.setY(majorTickPos);
-			  anchorPoint.setX(offset);
+	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
+		switch (scale){
+			case Axis::ScaleLinear:
+				majorTickPos = start + majorTicksSpacing * (qreal)iMajor;
+				break;
+			case Axis::ScaleLog10:
+				majorTickPos = pow(10, log10(start) + majorTicksSpacing * (qreal)iMajor);
+				break;
+			case Axis::ScaleLog2:
+				majorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing * (qreal)iMajor);
+				break;
+			case Axis::ScaleLn:
+				majorTickPos = exp(log(start) + majorTicksSpacing * (qreal)iMajor);
+				break;
+			case Axis::ScaleSqrt:
+				majorTickPos = pow(sqrt(start) + majorTicksSpacing * (qreal)iMajor, 2);
+				break;
+			case Axis::ScaleX2:
+				majorTickPos = sqrt(sqrt(start) + majorTicksSpacing * (qreal)iMajor);
+				break;		  
+			default://Linear
+				majorTickPos = start + majorTicksSpacing * (qreal)iMajor; 
+		}
 
-			  if (transformAnchor(&anchorPoint)){
-				if(offset < middleX) {
-					startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
-					endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
-				  }
-				  else {
-					startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
-					endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
-				  }
-			  }
-		  }
-		  
-		majorTicksPath.moveTo(startPoint);
-		majorTicksPath.lineTo(endPoint);
-		majorTickPoints << anchorPoint;
-		
-		//Tick-labels
-		tickLabelValues<< scalingFactor*majorTickPos+zeroOffset;
-	  }
-
-	  //minor ticks
-	  if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor < tmpMajorTicksNumber - 1)) {
-		  for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
-			switch (scale){
-			  case Axis::ScaleLinear:
-				minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
-				break;
-			  case Axis::ScaleLog10:
-				nextMajorTickPos = start + pow(10, majorTicksSpacing * (qreal)(iMajor + 1));
-				minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-				break;
-			  case Axis::ScaleLog2:
-				nextMajorTickPos = start + pow(2, majorTicksSpacing * (qreal)(iMajor + 1));
-				minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-				break;
-			  case Axis::ScaleLn:
-				nextMajorTickPos = start + exp(majorTicksSpacing * (qreal)(iMajor + 1));
-				minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-				break;
-			  case Axis::ScaleSqrt:
-				nextMajorTickPos = start + pow(majorTicksSpacing * (qreal)(iMajor + 1), 2);
-				minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-				break;
-			  case Axis::ScaleX2:
-				nextMajorTickPos = start + sqrt(majorTicksSpacing * (qreal)(iMajor + 1));
-				minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-				break;
-			  default://Linear
-				minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
-			}
-			  
-			if (orientation == Axis::AxisHorizontal){
-				anchorPoint.setX(minorTickPos);
+		if (majorTicksDirection != Axis::noTicks ) {
+			if (orientation == Axis::AxisHorizontal) {
+				anchorPoint.setX(majorTickPos);
 				anchorPoint.setY(offset);
+				valid = transformAnchor(&anchorPoint);
 
-				if (transformAnchor(&anchorPoint)){
+				if (valid) {
 					if(offset < middleY) {
-						startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
-						endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
-					}
-					else {
-						startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut)  ? yDirection * minorTicksLength  : 0);
-						endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
+						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
+					} else {
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
+						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
 					}
 				}
 			}else{ // vertical
-				anchorPoint.setY(minorTickPos);
+				anchorPoint.setY(majorTickPos);
 				anchorPoint.setX(offset);
+				valid = transformAnchor(&anchorPoint);
 
-				if (transformAnchor(&anchorPoint)){
-				if(offset < middleX) {
-					startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
-				  	endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
-				}
-				else {
-					startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut)  ? xDirection * minorTicksLength  : 0, 0);
-				  	endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? -xDirection * minorTicksLength : 0, 0);
-				}
+				if (valid) {
+					if(offset < middleX) {
+						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
+						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
+					} else {
+						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
+						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
+					}
 				}
 			}
-			
-			minorTicksPath.moveTo(startPoint);
-			minorTicksPath.lineTo(endPoint);
-			minorTickPoints << anchorPoint;
-		  }
-	  }
+
+			if (valid) {
+				majorTicksPath.moveTo(startPoint);
+				majorTicksPath.lineTo(endPoint);
+				majorTickPoints << anchorPoint;
+				tickLabelValues<< scalingFactor*majorTickPos+zeroOffset;
+			}
+		}
+
+		//minor ticks
+		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor < tmpMajorTicksNumber - 1)) {
+			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
+				switch (scale){
+					case Axis::ScaleLinear:
+						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
+						break;
+					case Axis::ScaleLog10:
+						nextMajorTickPos = start + pow(10, majorTicksSpacing * (qreal)(iMajor + 1));
+						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+						break;
+					case Axis::ScaleLog2:
+						nextMajorTickPos = start + pow(2, majorTicksSpacing * (qreal)(iMajor + 1));
+						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+						break;
+					case Axis::ScaleLn:
+						nextMajorTickPos = start + exp(majorTicksSpacing * (qreal)(iMajor + 1));
+						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+						break;
+					case Axis::ScaleSqrt:
+						nextMajorTickPos = start + pow(majorTicksSpacing * (qreal)(iMajor + 1), 2);
+						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+						break;
+					case Axis::ScaleX2:
+						nextMajorTickPos = start + sqrt(majorTicksSpacing * (qreal)(iMajor + 1));
+						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+						break;
+					default://Linear
+						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
+				}
+			  
+				if (orientation == Axis::AxisHorizontal) {
+					anchorPoint.setX(minorTickPos);
+					anchorPoint.setY(offset);
+					valid = transformAnchor(&anchorPoint);
+
+					if (valid) {
+						if(offset < middleY) {
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
+							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
+						} else {
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut)  ? yDirection * minorTicksLength  : 0);
+							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
+						}
+					}
+				} else { // vertical
+					anchorPoint.setY(minorTickPos);
+					anchorPoint.setX(offset);
+					valid = transformAnchor(&anchorPoint);
+
+					if (valid){
+						if(offset < middleX) {
+							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
+							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
+						} else {
+							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut)  ? xDirection * minorTicksLength  : 0, 0);
+							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? -xDirection * minorTicksLength : 0, 0);
+						}
+					}
+				}
+
+				if (valid) {
+					minorTicksPath.moveTo(startPoint);
+					minorTicksPath.lineTo(endPoint);
+					minorTickPoints << anchorPoint;
+				}
+			}
+		}
 	}
 
 	//tick positions where changed -> update the position of the tick labels and grid lines

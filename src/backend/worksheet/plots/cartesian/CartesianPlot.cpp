@@ -4,7 +4,7 @@
     Description          : A plot containing decoration elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -523,10 +523,8 @@ void CartesianPlot::updateLegend() {
 */
 void CartesianPlot::xDataChanged(){
 	Q_D(CartesianPlot);
-	if (!d->autoScaleX)
-		return;
-	
-	this->scaleAutoX();
+	if (d->autoScaleX)
+		this->scaleAutoX();
 }
 
 /*!
@@ -535,10 +533,8 @@ void CartesianPlot::xDataChanged(){
 */
 void CartesianPlot::yDataChanged(){
 	Q_D(CartesianPlot);
-	if (!d->autoScaleY)
-		return;
-	
-	this->scaleAutoY();
+	if (d->autoScaleY)
+		this->scaleAutoY();
 }
 
 void CartesianPlot::scaleAutoX(){
