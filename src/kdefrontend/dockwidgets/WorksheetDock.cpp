@@ -121,7 +121,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
-	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)) );
+	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
 
 	//Layout
 	connect( ui.sbLayoutTopMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutTopMarginChanged(double)) );
@@ -380,15 +380,6 @@ void WorksheetDock::orientationChanged(int index){
 }
 
 // "Background"-tab
-void WorksheetDock::opacityChanged(int value){
-  	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value/100.;
-	foreach(Worksheet* worksheet, m_worksheetList)
-		worksheet->setBackgroundOpacity(opacity);
-}
-
 void WorksheetDock::backgroundTypeChanged(int index){
 	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
 
@@ -523,6 +514,15 @@ void WorksheetDock::backgroundSecondColorChanged(const QColor& c){
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setBackgroundSecondColor(c);
 	}
+}
+
+void WorksheetDock::backgroundOpacityChanged(int value){
+  	if (m_initializing)
+		return;
+
+	float opacity = (float)value/100;
+	foreach(Worksheet* worksheet, m_worksheetList)
+		worksheet->setBackgroundOpacity(opacity);
 }
 
 //"Layout"-tab
@@ -691,7 +691,7 @@ void WorksheetDock::worksheetBackgroundFileNameChanged(QString& name) {
 
 void WorksheetDock::worksheetBackgroundOpacityChanged(float opacity) {
 	m_initializing = true;
-	ui.sbBackgroundOpacity->setValue(opacity*100);
+	ui.sbBackgroundOpacity->setValue( floor((opacity*100.0)+0.5) );
 	m_initializing = false;
 }
 
@@ -764,7 +764,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_worksheet->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_worksheet->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_worksheet->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100 );
+	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", floor((m_worksheet->backgroundOpacity()*100.0)+0.5)) );
 	
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );

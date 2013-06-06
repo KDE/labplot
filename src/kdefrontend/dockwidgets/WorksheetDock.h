@@ -70,9 +70,9 @@ private slots:
 	void backgroundBrushStyleChanged(int);
 	void backgroundFirstColorChanged(const QColor&);
 	void backgroundSecondColorChanged(const QColor&);
+	void backgroundOpacityChanged(int);
 	void selectFile();
 	void fileNameChanged();
-	void opacityChanged(int);
 
 	//"Layout"-tab
 	void layoutTopMarginChanged(double);
