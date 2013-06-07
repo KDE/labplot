@@ -261,7 +261,7 @@ void ColumnDock::typeChanged(int index){
   m_initializing = true;
   this->updateFormatWidgets(columnMode);
   m_initializing = false;
-  
+
   int format_index = ui.cbFormat->currentIndex();
 
   switch(columnMode) {

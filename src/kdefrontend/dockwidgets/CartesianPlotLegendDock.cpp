@@ -723,10 +723,9 @@ void CartesianPlotLegendDock::legendBackgroundFileNameChanged(QString& filename)
 	m_initializing = false;
 }
 
-void CartesianPlotLegendDock::legendBackgroundOpacityChanged(float value) {
+void CartesianPlotLegendDock::legendBackgroundOpacityChanged(float opacity) {
 	m_initializing = true;
-	float v = (float)value*100.;
-	ui.sbBackgroundOpacity->setValue(v);
+	ui.sbBackgroundOpacity->setValue( floor((opacity*100.0)+0.5) );
 	m_initializing = false;
 }
 
@@ -827,14 +826,14 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_legend->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_legend->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_legend->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( group.readEntry("BackgroundOpacity", m_legend->backgroundOpacity())*100 );
+	ui.sbBackgroundOpacity->setValue( floor(group.readEntry("BackgroundOpacity", m_legend->backgroundOpacity())*100.0+0.5) );
 
 	//Border
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_legend->borderPen().color()) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", m_legend->borderPen().color()));
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_legend->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Point) );
-	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_legend->borderOpacity())*100 );
+	ui.sbBorderOpacity->setValue( floor(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0+0.5) );
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin",

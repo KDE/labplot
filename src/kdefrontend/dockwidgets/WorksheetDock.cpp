@@ -764,7 +764,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_worksheet->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_worksheet->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_worksheet->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue(group.readEntry("BackgroundOpacity", floor((m_worksheet->backgroundOpacity()*100.0)+0.5)) );
+	ui.sbBackgroundOpacity->setValue( floor(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100.0+0.5) );
 	
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );
