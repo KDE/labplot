@@ -272,8 +272,19 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(minorTicksOpacityChanged(qreal)), this, SLOT(axisMinorTicksOpacityChanged(qreal)));
 
 	// labels
+	connect(m_axis, SIGNAL(labelsFormatChanged(Axis::LabelsFormat)), this, SLOT(axisLabelsFormatChanged(Axis::LabelsFormat)));
+	connect(m_axis, SIGNAL(labelsAutoPrecisionChanged(bool)), this, SLOT(axisLabelsAutoPrecisionChanged(bool)));
 	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
-	//TODO
+	connect(m_axis, SIGNAL(labelsPositionChanged(Axis::LabelsPosition)), this, SLOT(axisLabelsPositionChanged(Axis::LabelsPosition)));
+	connect(m_axis, SIGNAL(labelsOffsetChanged(float)), this, SLOT(axisLabelsOffsetChanged(float)));
+	connect(m_axis, SIGNAL(labelsRotationAngleChanged(qreal)), this, SLOT(axisLabelsRotationAngleChanged(qreal)));
+	connect(m_axis, SIGNAL(labelsFontChanged(QFont)), this, SLOT(axisLabelsFontChanged(QFont)));
+	connect(m_axis, SIGNAL(labelsFontColorChanged(QColor)), this, SLOT(axisLabelsFontColorChanged(QColor)));
+	connect(m_axis, SIGNAL(labelsPrefixChanged(QString)), this, SLOT(axisLabelsPrefixChanged(QString)));
+	connect(m_axis, SIGNAL(labelsSuffixChanged(QString)), this, SLOT(axisLabelsSuffixChanged(QString)));
+	connect(m_axis, SIGNAL(labelsOpacityChanged(qreal)), this, SLOT(axisLabelsOpacityChanged(qreal)));
+
+	//TODO grids
 
 	connect(m_axis, SIGNAL(visibleChanged(bool)), this, SLOT(axisVisibleChanged(bool)));
 
@@ -1114,12 +1125,6 @@ void AxisDock::axisEndChanged(float value){
 	m_initializing = false;
 }
 
-void AxisDock::axisLabelsPrecisionChanged(int value){
-	m_initializing = true;
-	ui.sbLabelsPrecision->setValue( value );
-	m_initializing = false;
-}
-
 void AxisDock::axisZeroOffsetChanged(qreal value){
 	m_initializing = true;
 	ui.leZeroOffset->setText( QString::number(value) );
@@ -1222,10 +1227,68 @@ void AxisDock::axisMinorTicksLengthChanged(qreal length) {
 }
 void AxisDock::axisMinorTicksOpacityChanged(qreal opacity) {
 	m_initializing = true;
-        ui.sbMinorTicksOpacity->setValue( round(opacity*100.0));
+        ui.sbMinorTicksOpacity->setValue(round(opacity*100.0));
 	m_initializing = false;
 }
-//labels TODO
+
+//labels
+void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
+	m_initializing = true;
+	ui.cbLabelsFormat->setCurrentIndex(format);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
+	m_initializing = true;
+	ui.chkLabelsAutoPrecision->setChecked((int) on);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsPrecisionChanged(int precision) {
+	m_initializing = true;
+	ui.sbLabelsPrecision->setValue(precision);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsPositionChanged(Axis::LabelsPosition position) {
+	m_initializing = true;
+	ui.cbLabelsPosition->setCurrentIndex(position);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsOffsetChanged(float offset) {
+	m_initializing = true;
+	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(offset, Worksheet::Point) );
+	m_initializing = false;
+}
+void AxisDock::axisLabelsRotationAngleChanged(qreal rotation) {
+	m_initializing = true;
+	ui.sbLabelsRotation->setValue(rotation);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsFontChanged(QFont font) {
+	m_initializing = true;
+	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	ui.kfrLabelsFont->setFont(font);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsFontColorChanged(QColor color) {
+	m_initializing = true;
+	ui.kcbLabelsFontColor->setColor(color);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsPrefixChanged(QString prefix) {
+	m_initializing = true;
+	ui.leLabelsPrefix->setText(prefix);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsSuffixChanged(QString suffix) {
+	m_initializing = true;
+	ui.leLabelsSuffix->setText(suffix);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbLabelsOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+
 //grid TODO
 
 void AxisDock::axisVisibleChanged(bool on){

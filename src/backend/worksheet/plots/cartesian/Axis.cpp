@@ -645,77 +645,77 @@ void Axis::setMinorTicksOpacity(qreal opacity){
 }
 
 //Labels
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat, retransformTicks);
 void Axis::setLabelsFormat(const LabelsFormat labelsFormat){
 	Q_D(Axis);
 	if (labelsFormat != d->labelsFormat)
 		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, tr("%1: set labels format")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings);
 void Axis::setLabelsAutoPrecision(const bool labelsAutoPrecision){
 	Q_D(Axis);
 	if (labelsAutoPrecision != d->labelsAutoPrecision)
 		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, tr("%1: set labels precision")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsPrecision, int, labelsPrecision, retransformTickLabelStrings);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrecision, int, labelsPrecision, retransformTickLabelStrings);
 void Axis::setLabelsPrecision(const int labelsPrecision){
 	Q_D(Axis);
 	if (labelsPrecision != d->labelsPrecision)
 		exec(new AxisSetLabelsPrecisionCmd(d, labelsPrecision, tr("%1: set labels precision")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabels);
 void Axis::setLabelsPosition(const LabelsPosition labelsPosition) {
 	Q_D(Axis);
 	if (labelsPosition != d->labelsPosition)
 		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, tr("%1: set labels position")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsOffset, float, labelsOffset, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOffset, float, labelsOffset, retransformTickLabels);
 void Axis::setLabelsOffset(float offset) {
 	Q_D(Axis);
 	if (offset != d->labelsOffset)
 		exec(new AxisSetLabelsOffsetCmd(d, offset, tr("%1: set label offset")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabels);
 void Axis::setLabelsRotationAngle(qreal angle) {
 	Q_D(Axis);
 	if (angle != d->labelsRotationAngle)
 		exec(new AxisSetLabelsRotationAngleCmd(d, angle, tr("%1: set label rotation angle")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsColor, QColor, labelsColor, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsColor, QColor, labelsColor, update);
 void Axis::setLabelsColor(const QColor &color) {
 	Q_D(Axis);
 	if (color != d->labelsColor)
 		exec(new AxisSetLabelsColorCmd(d, color, tr("%1: set label color")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsFont, QFont, labelsFont, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFont, QFont, labelsFont, retransformTickLabels);
 void Axis::setLabelsFont(const QFont &font) {
 	Q_D(Axis);
 	if (font != d->labelsFont)
 		exec(new AxisSetLabelsFontCmd(d, font, tr("%1: set label font")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsPrefix, QString, labelsPrefix, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrefix, QString, labelsPrefix, retransformTickLabels);
 void Axis::setLabelsPrefix(const QString& prefix) {
 	Q_D(Axis);
 	if (prefix != d->labelsPrefix)
 		exec(new AxisSetLabelsPrefixCmd(d, prefix, tr("%1: set label prefix")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsSuffix, QString, labelsSuffix, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsSuffix, QString, labelsSuffix, retransformTickLabels);
 void Axis::setLabelsSuffix(const QString& suffix) {
 	Q_D(Axis);
 	if (suffix != d->labelsSuffix)
 		exec(new AxisSetLabelsSuffixCmd(d, suffix, tr("%1: set label suffix")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetLabelsOpacity, qreal, labelsOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOpacity, qreal, labelsOpacity, update);
 void Axis::setLabelsOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->labelsOpacity)

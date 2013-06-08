@@ -136,7 +136,6 @@ private slots:
 	void axisAutoScaleChanged(bool);
 	void axisStartChanged(float);
 	void axisEndChanged(float);
-	void axisLabelsPrecisionChanged(int);
 	void axisZeroOffsetChanged(qreal);
 	void axisScalingFactorChanged(qreal);
 
@@ -161,7 +160,17 @@ private slots:
 	void axisMinorTicksOpacityChanged(qreal);
 	
 	//labels
-	//TODO	
+	void axisLabelsFormatChanged(Axis::LabelsFormat);
+	void axisLabelsAutoPrecisionChanged(bool on); 
+	void axisLabelsPrecisionChanged(int precision);
+	void axisLabelsPositionChanged(Axis::LabelsPosition position);
+	void axisLabelsOffsetChanged(float offset);
+	void axisLabelsRotationAngleChanged(qreal rotation);
+	void axisLabelsFontChanged(QFont font);
+	void axisLabelsFontColorChanged(QColor color);
+	void axisLabelsPrefixChanged(QString prefix);
+	void axisLabelsSuffixChanged(QString suffix);
+	void axisLabelsOpacityChanged(qreal opacity);
 
 	//grids
 	//TODO	

@@ -223,8 +223,28 @@ class Axis: public AbstractWorksheetElement {
 		void minorTicksOpacityChanged(qreal);
 
 		//labels
+		friend class AxisSetLabelsFormatCmd;
+		friend class AxisSetLabelsAutoPrecisionCmd;
+		friend class AxisSetLabelsPrecisionCmd;
+		friend class AxisSetLabelsPositionCmd;
+		friend class AxisSetLabelsOffsetCmd;
+		friend class AxisSetLabelsRotationAngleCmd;
+		friend class AxisSetLabelsColorCmd;
+		friend class AxisSetLabelsFontCmd;
+		friend class AxisSetLabelsPrefixCmd;
+		friend class AxisSetLabelsSuffixCmd;
+		friend class AxisSetLabelsOpacityCmd;
+		void labelsFormatChanged(Axis::LabelsFormat);
+		void labelsAutoPrecisionChanged(bool);
 		void labelsPrecisionChanged(int);
-		//TODO
+		void labelsPositionChanged(Axis::LabelsPosition);
+		void labelsOffsetChanged(float);
+		void labelsRotationAngleChanged(qreal);
+		void labelsColorChanged(QColor);
+		void labelsFontChanged(QFont);
+		void labelsPrefixChanged(QString);
+		void labelsSuffixChanged(QString);
+		void labelsOpacityChanged(qreal);
 
 		//TODO grid
 
