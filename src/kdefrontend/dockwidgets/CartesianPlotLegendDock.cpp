@@ -725,7 +725,7 @@ void CartesianPlotLegendDock::legendBackgroundFileNameChanged(QString& filename)
 
 void CartesianPlotLegendDock::legendBackgroundOpacityChanged(float opacity) {
 	m_initializing = true;
-	ui.sbBackgroundOpacity->setValue( floor((opacity*100.0)+0.5) );
+	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -744,10 +744,9 @@ void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 	m_initializing = false;
 }
 
-void CartesianPlotLegendDock::legendBorderOpacityChanged(float value) {
+void CartesianPlotLegendDock::legendBorderOpacityChanged(float opacity) {
 	m_initializing = true;
-	float v = (float)value*100.;
-	ui.sbBorderOpacity->setValue(v);
+	ui.sbBorderOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -826,14 +825,14 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_legend->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_legend->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_legend->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( floor(group.readEntry("BackgroundOpacity", m_legend->backgroundOpacity())*100.0+0.5) );
+	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_legend->backgroundOpacity())*100.0) );
 
 	//Border
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_legend->borderPen().color()) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", m_legend->borderPen().color()));
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_legend->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Point) );
-	ui.sbBorderOpacity->setValue( floor(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0+0.5) );
+	ui.sbBorderOpacity->setValue( round(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0) );
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin",

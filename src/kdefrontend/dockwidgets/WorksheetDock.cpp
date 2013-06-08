@@ -691,7 +691,7 @@ void WorksheetDock::worksheetBackgroundFileNameChanged(QString& name) {
 
 void WorksheetDock::worksheetBackgroundOpacityChanged(float opacity) {
 	m_initializing = true;
-	ui.sbBackgroundOpacity->setValue( floor((opacity*100.0)+0.5) );
+	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -764,7 +764,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_worksheet->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_worksheet->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_worksheet->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( floor(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100.0+0.5) );
+	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100) );
 	
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );

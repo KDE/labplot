@@ -1428,7 +1428,7 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", curve->linePen().color()) );
   	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("LineColor", curve->linePen().color()) );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", curve->linePen().widthF()), Worksheet::Point) );
-	ui.sbLineOpacity->setValue( floor(group.readEntry("LineOpacity", curve->lineOpacity())*100.0+0.5) );
+	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", curve->lineOpacity())*100.0) );
 	
 	//Drop lines
 	ui.cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", (int) curve->dropLineType()) );
@@ -1436,14 +1436,14 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.kcbDropLineColor->setColor( group.readEntry("DropLineColor", curve->dropLinePen().color()) );
   	GuiTools::updatePenStyles(ui.cbDropLineStyle, group.readEntry("DropLineColor", curve->dropLinePen().color()) );
 	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", curve->dropLinePen().widthF()),Worksheet::Point) );
-	ui.sbDropLineOpacity->setValue( floor(group.readEntry("DropLineOpacity", curve->dropLineOpacity())*100.0+0.5) );
+	ui.sbDropLineOpacity->setValue( round(group.readEntry("DropLineOpacity", curve->dropLineOpacity())*100.0) );
 
 	//Symbols
 	//TODO: character
 	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", ui.cbSymbolStyle->findText(curve->symbolsTypeId())) );
   	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", curve->symbolsSize()), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", curve->symbolsRotationAngle()) );
-	ui.sbSymbolOpacity->setValue( floor(group.readEntry("SymbolOpacity", curve->symbolsOpacity())*100.0+0.5) );
+	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", curve->symbolsOpacity())*100.0) );
 
   	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) curve->symbolsBrush().style()) );
   	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", curve->symbolsBrush().color()) );
@@ -1459,7 +1459,7 @@ void XYCurveDock::loadConfig(KConfig& config){
   	ui.cbValuesPosition->setCurrentIndex( group.readEntry("ValuesPosition", (int) curve->valuesPosition()) );
   	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", curve->valuesDistance()), Worksheet::Point) );
 	ui.sbValuesRotation->setValue( group.readEntry("ValuesRotation", curve->valuesRotationAngle()) );
-	ui.sbValuesOpacity->setValue( floor(group.readEntry("ValuesOpacity",curve->valuesOpacity())*100.0+0.5) );
+	ui.sbValuesOpacity->setValue( round(group.readEntry("ValuesOpacity",curve->valuesOpacity())*100.0) );
   	ui.leValuesPrefix->setText( group.readEntry("ValuesPrefix", curve->valuesPrefix()) );
   	ui.leValuesSuffix->setText( group.readEntry("ValuesSuffix", curve->valuesSuffix()) );
 	QFont valuesFont = curve->valuesFont();
@@ -1478,7 +1478,7 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", curve->errorBarsPen().color()) );
   	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, group.readEntry("ErrorBarsColor", curve->errorBarsPen().color()) );
 	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", curve->errorBarsPen().widthF()),Worksheet::Point) );
-	ui.sbErrorBarsOpacity->setValue( floor(group.readEntry("ErrorBarsOpacity", curve->errorBarsOpacity())*100.0+0.5) );	
+	ui.sbErrorBarsOpacity->setValue( round(group.readEntry("ErrorBarsOpacity", curve->errorBarsOpacity())*100.0) );	
 }
 
 void XYCurveDock::saveConfig(KConfig& config){

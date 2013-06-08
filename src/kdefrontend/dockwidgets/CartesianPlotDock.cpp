@@ -792,7 +792,7 @@ void CartesianPlotDock::plotBackgroundFileNameChanged(QString& filename){
 
 void CartesianPlotDock::plotBackgroundOpacityChanged(float opacity){
 	m_initializing = true;
-	ui.sbBackgroundOpacity->setValue(floor((opacity*100.0)+0.5));
+	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
 
@@ -864,7 +864,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_plot->plotArea()->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_plot->plotArea()->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_plot->plotArea()->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( floor(group.readEntry("BackgroundOpacity", m_plot->plotArea()->backgroundOpacity())*100.0+0.5) );
+	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_plot->plotArea()->backgroundOpacity())*100.0) );
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), Worksheet::Centimeter));
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), Worksheet::Centimeter));
 
