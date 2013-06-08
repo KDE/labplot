@@ -64,7 +64,7 @@ class WorksheetView : public QGraphicsView{
 		float opacity;
 	};
 	
-	void setScene(QGraphicsScene * scene);
+	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat format, const ExportArea area) const;
 
 
@@ -72,11 +72,12 @@ class WorksheetView : public QGraphicsView{
 	void initActions();
 	void initMenus();
 	
-	void contextMenuEvent(QContextMenuEvent *);
-	void wheelEvent(QWheelEvent *event);
-	void mouseReleaseEvent (QMouseEvent * event);
+	void contextMenuEvent(QContextMenuEvent*);
+	void wheelEvent(QWheelEvent*);
+	void mousePressEvent(QMouseEvent*);
+	void mouseReleaseEvent(QMouseEvent*);
 
-	void drawBackground(QPainter *painter, const QRectF &rect);
+	void drawBackground(QPainter*, const QRectF&);
 
 	Worksheet *m_worksheet;
 	WorksheetModel *m_model;
@@ -126,8 +127,8 @@ class WorksheetView : public QGraphicsView{
 	QAction* snapToGridAction;	
 
   public slots:
-	void createContextMenu(QMenu * menu);
-	void fillProjectMenu(QMenu *menu, bool *rc);
+	void createContextMenu(QMenu*);
+	void fillProjectMenu(QMenu* menu, bool* rc);
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void selectItem(QGraphicsItem*);
@@ -153,7 +154,7 @@ class WorksheetView : public QGraphicsView{
 	void fadeOut(qreal);
 
   signals:
-	void statusInfo(const QString &text);
+	void statusInfo(const QString&);
 };
 
 #endif

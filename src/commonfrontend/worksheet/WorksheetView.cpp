@@ -357,7 +357,7 @@ void WorksheetView::createContextMenu(QMenu* menu){
 }
 
 void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
-  Q_UNUSED(rc);
+	Q_UNUSED(rc);
 	this->createContextMenu(menu);
 }
 
@@ -556,7 +556,17 @@ void WorksheetView::wheelEvent(QWheelEvent *event) {
   }
 }
 
-void WorksheetView::mouseReleaseEvent (QMouseEvent * event){
+void WorksheetView::mousePressEvent(QMouseEvent* event) {
+	// select the worksheet in the project explorer if the view was clicked 
+	// and there is no selection currently. We need this for the case when
+	// there is a single worksheet in the project and we change from the project-node
+	// in the project explorer to the worksheet-node by clicking the view.
+	if ( scene()->selectedItems().empty() )
+		m_worksheet->setSelectedInView(true);
+
+	QGraphicsView::mousePressEvent(event);
+}
+void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
   if (m_currentMouseMode == ZoomMode){
 	fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
   }
@@ -805,7 +815,7 @@ void WorksheetView::selectionChanged(){
 	if (m_suppressSelectionChangedEvent)
 		return;
 	
-	QList<QGraphicsItem *> items = scene()->selectedItems();
+	QList<QGraphicsItem*> items = scene()->selectedItems();
 	
 	//When making a graphics item invisible, it gets deselected in the scene.
 	//In this case we don't want to deselect the item in the project explorer.
