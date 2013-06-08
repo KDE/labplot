@@ -284,7 +284,11 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(labelsSuffixChanged(QString)), this, SLOT(axisLabelsSuffixChanged(QString)));
 	connect(m_axis, SIGNAL(labelsOpacityChanged(qreal)), this, SLOT(axisLabelsOpacityChanged(qreal)));
 
-	//TODO grids
+	// grids
+	connect(m_axis, SIGNAL(labelsMajorGridPenChanged(QPen)), this, SLOT(axisMajorGridPenChanged(QPen)));
+	connect(m_axis, SIGNAL(labelsMajorGridOpacityChanged(qreal)), this, SLOT(axisMajorGridOpacityChanged(qreal)));
+	connect(m_axis, SIGNAL(labelsMinorGridPenChanged(QPen)), this, SLOT(axisMinorGridPenChanged(QPen)));
+	connect(m_axis, SIGNAL(labelsMinorGridOpacityChanged(qreal)), this, SLOT(axisMinorGridOpacityChanged(qreal)));
 
 	connect(m_axis, SIGNAL(visibleChanged(bool)), this, SLOT(axisVisibleChanged(bool)));
 
@@ -1289,7 +1293,33 @@ void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-//grid TODO
+//grid
+void AxisDock::axisMajorGridPenChanged(QPen pen) {
+	m_initializing = true;
+	ui.cbMajorGridStyle->setCurrentIndex((int) pen.style());
+	ui.kcbMajorGridColor->setColor(pen.color());
+	GuiTools::updatePenStyles(ui.cbMajorGridStyle, pen.color());
+	ui.sbMajorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+	m_initializing = false;
+}
+void AxisDock::axisMajorGridOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbMajorGridOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+void AxisDock::axisMinorGridPenChanged(QPen pen) {
+	m_initializing = true;
+	ui.cbMinorGridStyle->setCurrentIndex((int) pen.style());
+	ui.kcbMinorGridColor->setColor(pen.color());
+	GuiTools::updatePenStyles(ui.cbMinorGridStyle, pen.color());
+	ui.sbMinorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+	m_initializing = false;
+}
+void AxisDock::axisMinorGridOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbMinorGridOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
 
 void AxisDock::axisVisibleChanged(bool on){
 	m_initializing = true;

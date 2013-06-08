@@ -173,7 +173,10 @@ private slots:
 	void axisLabelsOpacityChanged(qreal opacity);
 
 	//grids
-	//TODO	
+	void axisMajorGridPenChanged(QPen);
+	void axisMajorGridOpacityChanged(qreal);
+	void axisMinorGridPenChanged(QPen);
+	void axisMinorGridOpacityChanged(qreal);
 
 	void axisVisibleChanged(bool);
 	

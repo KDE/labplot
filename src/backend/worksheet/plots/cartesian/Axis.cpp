@@ -723,14 +723,14 @@ void Axis::setLabelsOpacity(qreal opacity){
 }
 
 //Major grid
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorGridPen, QPen, majorGridPen, retransformMajorGrid);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridPen, QPen, majorGridPen, retransformMajorGrid);
 void Axis::setMajorGridPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->majorGridPen)
 		exec(new AxisSetMajorGridPenCmd(d, pen, tr("%1: set major grid style")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, update);
 void Axis::setMajorGridOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->majorGridOpacity)
@@ -738,14 +738,14 @@ void Axis::setMajorGridOpacity(qreal opacity){
 }
 
 //Minor grid
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorGridPen, QPen, minorGridPen, retransformMinorGrid);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridPen, QPen, minorGridPen, retransformMinorGrid);
 void Axis::setMinorGridPen(const QPen &pen){
 	Q_D(Axis);
 	if (pen != d->minorGridPen)
 		exec(new AxisSetMinorGridPenCmd(d, pen, tr("%1: set minor grid style")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, update);
 void Axis::setMinorGridOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->minorGridOpacity)

@@ -246,7 +246,14 @@ class Axis: public AbstractWorksheetElement {
 		void labelsSuffixChanged(QString);
 		void labelsOpacityChanged(qreal);
 
-		//TODO grid
+		friend class AxisSetMajorGridPenCmd;
+		friend class AxisSetMajorGridOpacityCmd;
+		friend class AxisSetMinorGridPenCmd;
+		friend class AxisSetMinorGridOpacityCmd;
+		void majorGridPenChanged(QPen);
+		void majorGridOpacityChanged(qreal);
+		void minorGridPenChanged(QPen);
+		void minorGridOpacityChanged(qreal);
 
 		void visibleChanged(bool);
 };
