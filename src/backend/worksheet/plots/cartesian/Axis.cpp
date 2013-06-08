@@ -545,49 +545,49 @@ void Axis::setLineOpacity(qreal opacity){
 
 //TODO undo-functions
 //Major ticks
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksDirection, Axis::TicksDirection, majorTicksDirection, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksDirection, Axis::TicksDirection, majorTicksDirection, retransformTicks);
 void Axis::setMajorTicksDirection(const TicksDirection majorTicksDirection) {
 	Q_D(Axis);
 	if (majorTicksDirection != d->majorTicksDirection)
 		exec(new AxisSetMajorTicksDirectionCmd(d, majorTicksDirection, tr("%1: set major ticks direction")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksType, Axis::TicksType, majorTicksType, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksType, Axis::TicksType, majorTicksType, retransformTicks);
 void Axis::setMajorTicksType(const TicksType majorTicksType) {
 	Q_D(Axis);
 	if (majorTicksType!= d->majorTicksType)
 		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, tr("%1: set major ticks type")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks);
 void Axis::setMajorTicksNumber(int majorTicksNumber) {
 	Q_D(Axis);
 	if (majorTicksNumber != d->majorTicksNumber)
 		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, tr("%1: set the total number of the major ticks")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksIncrement, qreal, majorTicksIncrement, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksIncrement, qreal, majorTicksIncrement, retransformTicks);
 void Axis::setMajorTicksIncrement(qreal majorTicksIncrement) {
 	Q_D(Axis);
 	if (majorTicksIncrement != d->majorTicksIncrement)
 		exec(new AxisSetMajorTicksIncrementCmd(d, majorTicksIncrement, tr("%1: set the increment for the major ticks")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksPen, QPen, majorTicksPen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, recalcShapeAndBoundingRect);
 void Axis::setMajorTicksPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->majorTicksPen)
 		exec(new AxisSetMajorTicksPenCmd(d, pen, tr("%1: set major ticks style")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksLength, qreal, majorTicksLength, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksLength, qreal, majorTicksLength, retransformTicks);
 void Axis::setMajorTicksLength(qreal majorTicksLength) {
 	Q_D(Axis);
 	if (majorTicksLength != d->majorTicksLength)
 		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, tr("%1: set major ticks length")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMajorTicksOpacity, qreal, majorTicksOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksOpacity, qreal, majorTicksOpacity, update);
 void Axis::setMajorTicksOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->majorTicksOpacity)

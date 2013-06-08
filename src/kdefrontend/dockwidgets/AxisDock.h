@@ -145,11 +145,20 @@ private slots:
 	void axisLineOpacityChanged(qreal);
 
 	//ticks
+	void axisMajorTicksDirectionChanged(Axis::TicksDirection);
+	void axisMajorTicksTypeChanged(Axis::TicksType);
+	void axisMajorTicksNumberChanged(int);
+	void axisMajorTicksIncrementChanged(qreal);
+	void axisMajorTicksPenChanged(QPen);
+	void axisMajorTicksLengthChanged(qreal);
+	void axisMajorTicksOpacityChanged(qreal);
 	
 	//labels
-	
+	//TODO	
+
 	//grids
-	
+	//TODO	
+
 	void axisVisibleChanged(bool);
 	
 	//save/load

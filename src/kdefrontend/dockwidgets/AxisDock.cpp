@@ -251,14 +251,18 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(zeroOffsetChanged(qreal)), this, SLOT(axisZeroOffsetChanged(qreal)));
 	connect(m_axis, SIGNAL(scalingFactorChanged(qreal)), this, SLOT(axisScalingFactorChanged(qreal)));
 
-	//title: text&geometry
-	//TODO
-
 	// line
 	connect(m_axis, SIGNAL(linePenChanged(const QPen&)), this, SLOT(axisLinePenChanged(const QPen&)));
 	connect(m_axis, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(axisLineOpacityChanged(qreal)));
 
 	// ticks
+	// major ticks direction,type,number,style,color,width,length,opacity
+	connect(m_axis, SIGNAL(majorTicksDirectionChanged(Axis::TicksDirection)), this, SLOT(axisMajorTicksDirectionChanged(Axis::TicksDirection)));
+	connect(m_axis, SIGNAL(majorTicksTypeChanged(Axis::TicksType)), this, SLOT(axisMajorTicksTypeChanged(Axis::TicksType)));
+	connect(m_axis, SIGNAL(majorTicksNumberChanged(int)), this, SLOT(axisMajorTicksNumberChanged(int)));
+	connect(m_axis, SIGNAL(majorTicksIncrementChanged(qreal)), this, SLOT(axisMajorTicksIncrementChanged(qreal)));
+	connect(m_axis, SIGNAL(majorTicksPenChanged(QPen)), this, SLOT(axisMajorTicksPenChanged(QPen)));
+	// minor ticks direction,type,number,style,color,width,length,opacity
 	//TODO
 
 	// labels
@@ -1122,6 +1126,7 @@ void AxisDock::axisScalingFactorChanged(qreal value){
 	m_initializing = false;
 }
 
+//line
 void AxisDock::axisLinePenChanged(const QPen& pen){
 	m_initializing = true;
 	ui.cbLineStyle->setCurrentIndex( pen.style() );
@@ -1136,6 +1141,49 @@ void AxisDock::axisLineOpacityChanged(qreal opacity){
 	ui.sbLineOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
+
+//major ticks
+void AxisDock::axisMajorTicksDirectionChanged(Axis::TicksDirection direction) {
+	m_initializing = true;
+	ui.cbMajorTicksDirection->setCurrentIndex(direction);
+	m_initializing = false;
+}
+void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
+	m_initializing = true;
+	ui.cbMajorTicksType->setCurrentIndex(type);
+	m_initializing = false;
+}
+void AxisDock::axisMajorTicksNumberChanged(int number) {
+	m_initializing = true;
+	ui.sbMajorTicksNumber->setValue(number);
+	m_initializing = false;
+}
+void AxisDock::axisMajorTicksIncrementChanged(qreal increment) {
+	m_initializing = true;
+        ui.leMajorTicksIncrement->setText( QString::number(increment));
+	m_initializing = false;
+}
+void AxisDock::axisMajorTicksPenChanged(QPen pen) {
+	m_initializing = true;
+	ui.cbMajorTicksLineStyle->setCurrentIndex(pen.style());      
+        ui.kcbMajorTicksColor->setColor(pen.color());
+        ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	m_initializing = false;
+}
+void AxisDock::axisMajorTicksLengthChanged(qreal length) {
+	m_initializing = true;
+        ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(length,Worksheet::Point) );
+	m_initializing = false;
+}
+void AxisDock::axisMajorTicksOpacityChanged(qreal opacity) {
+	m_initializing = true;
+        ui.sbMajorTicksOpacity->setValue( round(opacity*100.0));
+	m_initializing = false;
+}
+
+//minor ticks TODO
+//labels TODO
+//grid TODO
 
 void AxisDock::axisVisibleChanged(bool on){
 	m_initializing = true;

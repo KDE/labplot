@@ -189,9 +189,32 @@ class Axis: public AbstractWorksheetElement {
 		friend class AxisSetLineOpacityCmd;
 		void linePenChanged(const QPen&);
 		void lineOpacityChanged(qreal);
+		
+		// ticks
+		friend class AxisSetMajorTicksDirectionCmd;
+		friend class AxisSetMajorTicksTypeCmd;
+		friend class AxisSetMajorTicksNumberCmd;
+		friend class AxisSetMajorTicksIncrementCmd;
+		friend class AxisSetMajorTicksPenCmd;
+		friend class AxisSetMajorTicksLengthCmd;
+		friend class AxisSetMajorTicksOpacityCmd;
+		void majorTicksDirectionChanged(Axis::TicksDirection);
+		void majorTicksTypeChanged(Axis::TicksType);
+		void majorTicksNumberChanged(int);
+		void majorTicksIncrementChanged(qreal);
+		void majorTicksPenChanged(QPen);
+		void majorTicksLengthChanged(qreal);
+		void majorTicksOpacityChanged(qreal);
+
+		//TODO
+
+		//TODO minor ticks
 
 		//labels
 		void labelsPrecisionChanged(int);
+		//TODO
+
+		//TODO grid
 
 		void visibleChanged(bool);
 };
