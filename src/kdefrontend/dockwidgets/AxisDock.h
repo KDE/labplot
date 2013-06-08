@@ -152,6 +152,13 @@ private slots:
 	void axisMajorTicksPenChanged(QPen);
 	void axisMajorTicksLengthChanged(qreal);
 	void axisMajorTicksOpacityChanged(qreal);
+	void axisMinorTicksDirectionChanged(Axis::TicksDirection);
+	void axisMinorTicksTypeChanged(Axis::TicksType);
+	void axisMinorTicksNumberChanged(int);
+	void axisMinorTicksIncrementChanged(qreal);
+	void axisMinorTicksPenChanged(QPen);
+	void axisMinorTicksLengthChanged(qreal);
+	void axisMinorTicksOpacityChanged(qreal);
 	
 	//labels
 	//TODO	

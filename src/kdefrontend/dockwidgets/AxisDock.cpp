@@ -256,14 +256,20 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(axisLineOpacityChanged(qreal)));
 
 	// ticks
-	// major ticks direction,type,number,style,color,width,length,opacity
 	connect(m_axis, SIGNAL(majorTicksDirectionChanged(Axis::TicksDirection)), this, SLOT(axisMajorTicksDirectionChanged(Axis::TicksDirection)));
 	connect(m_axis, SIGNAL(majorTicksTypeChanged(Axis::TicksType)), this, SLOT(axisMajorTicksTypeChanged(Axis::TicksType)));
 	connect(m_axis, SIGNAL(majorTicksNumberChanged(int)), this, SLOT(axisMajorTicksNumberChanged(int)));
 	connect(m_axis, SIGNAL(majorTicksIncrementChanged(qreal)), this, SLOT(axisMajorTicksIncrementChanged(qreal)));
 	connect(m_axis, SIGNAL(majorTicksPenChanged(QPen)), this, SLOT(axisMajorTicksPenChanged(QPen)));
-	// minor ticks direction,type,number,style,color,width,length,opacity
-	//TODO
+	connect(m_axis, SIGNAL(majorTicksLengthChanged(qreal)), this, SLOT(axisMajorTicksLengthChanged(qreal)));
+	connect(m_axis, SIGNAL(majorTicksOpacityChanged(qreal)), this, SLOT(axisMajorTicksOpacityChanged(qreal)));
+	connect(m_axis, SIGNAL(minorTicksDirectionChanged(Axis::TicksDirection)), this, SLOT(axisMinorTicksDirectionChanged(Axis::TicksDirection)));
+	connect(m_axis, SIGNAL(minorTicksTypeChanged(Axis::TicksType)), this, SLOT(axisMinorTicksTypeChanged(Axis::TicksType)));
+	connect(m_axis, SIGNAL(minorTicksNumberChanged(int)), this, SLOT(axisMinorTicksNumberChanged(int)));
+	connect(m_axis, SIGNAL(minorTicksIncrementChanged(qreal)), this, SLOT(axisMinorTicksIncrementChanged(qreal)));
+	connect(m_axis, SIGNAL(minorTicksPenChanged(QPen)), this, SLOT(axisMinorTicksPenChanged(QPen)));
+	connect(m_axis, SIGNAL(minorTicksLengthChanged(qreal)), this, SLOT(axisMinorTicksLengthChanged(qreal)));
+	connect(m_axis, SIGNAL(minorTicksOpacityChanged(qreal)), this, SLOT(axisMinorTicksOpacityChanged(qreal)));
 
 	// labels
 	connect(m_axis, SIGNAL(labelsPrecisionChanged(int)), this, SLOT(axisLabelsPrecisionChanged(int)));
@@ -1181,7 +1187,44 @@ void AxisDock::axisMajorTicksOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-//minor ticks TODO
+//minor ticks
+void AxisDock::axisMinorTicksDirectionChanged(Axis::TicksDirection direction) {
+	m_initializing = true;
+	ui.cbMinorTicksDirection->setCurrentIndex(direction);
+	m_initializing = false;
+}
+void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
+	m_initializing = true;
+	ui.cbMinorTicksType->setCurrentIndex(type);
+	m_initializing = false;
+}
+void AxisDock::axisMinorTicksNumberChanged(int number) {
+	m_initializing = true;
+	ui.sbMinorTicksNumber->setValue(number);
+	m_initializing = false;
+}
+void AxisDock::axisMinorTicksIncrementChanged(qreal increment) {
+	m_initializing = true;
+        ui.leMinorTicksIncrement->setText( QString::number(increment));
+	m_initializing = false;
+}
+void AxisDock::axisMinorTicksPenChanged(QPen pen) {
+	m_initializing = true;
+	ui.cbMinorTicksLineStyle->setCurrentIndex(pen.style());      
+        ui.kcbMinorTicksColor->setColor(pen.color());
+        ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	m_initializing = false;
+}
+void AxisDock::axisMinorTicksLengthChanged(qreal length) {
+	m_initializing = true;
+        ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(length,Worksheet::Point) );
+	m_initializing = false;
+}
+void AxisDock::axisMinorTicksOpacityChanged(qreal opacity) {
+	m_initializing = true;
+        ui.sbMinorTicksOpacity->setValue( round(opacity*100.0));
+	m_initializing = false;
+}
 //labels TODO
 //grid TODO
 

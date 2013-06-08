@@ -190,7 +190,7 @@ class Axis: public AbstractWorksheetElement {
 		void linePenChanged(const QPen&);
 		void lineOpacityChanged(qreal);
 		
-		// ticks
+		// major ticks
 		friend class AxisSetMajorTicksDirectionCmd;
 		friend class AxisSetMajorTicksTypeCmd;
 		friend class AxisSetMajorTicksNumberCmd;
@@ -206,9 +206,21 @@ class Axis: public AbstractWorksheetElement {
 		void majorTicksLengthChanged(qreal);
 		void majorTicksOpacityChanged(qreal);
 
-		//TODO
-
-		//TODO minor ticks
+		// minor ticks
+		friend class AxisSetMinorTicksDirectionCmd;
+		friend class AxisSetMinorTicksTypeCmd;
+		friend class AxisSetMinorTicksNumberCmd;
+		friend class AxisSetMinorTicksIncrementCmd;
+		friend class AxisSetMinorTicksPenCmd;
+		friend class AxisSetMinorTicksLengthCmd;
+		friend class AxisSetMinorTicksOpacityCmd;
+		void minorTicksDirectionChanged(Axis::TicksDirection);
+		void minorTicksTypeChanged(Axis::TicksType);
+		void minorTicksNumberChanged(int);
+		void minorTicksIncrementChanged(qreal);
+		void minorTicksPenChanged(QPen);
+		void minorTicksLengthChanged(qreal);
+		void minorTicksOpacityChanged(qreal);
 
 		//labels
 		void labelsPrecisionChanged(int);

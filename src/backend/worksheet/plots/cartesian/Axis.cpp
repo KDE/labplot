@@ -595,49 +595,49 @@ void Axis::setMajorTicksOpacity(qreal opacity){
 }
 
 //Minor ticks
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksDirection, Axis::TicksDirection, minorTicksDirection, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksDirection, Axis::TicksDirection, minorTicksDirection, retransformTicks);
 void Axis::setMinorTicksDirection(const TicksDirection minorTicksDirection) {
 	Q_D(Axis);
 	if (minorTicksDirection != d->minorTicksDirection)
 		exec(new AxisSetMinorTicksDirectionCmd(d, minorTicksDirection, tr("%1: set minor ticks direction")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksType, Axis::TicksType, minorTicksType, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksType, Axis::TicksType, minorTicksType, retransformTicks);
 void Axis::setMinorTicksType(const TicksType minorTicksType) {
 	Q_D(Axis);
 	if (minorTicksType!= d->minorTicksType)
 		exec(new AxisSetMinorTicksTypeCmd(d, minorTicksType, tr("%1: set minor ticks type")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksNumber, int, minorTicksNumber, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksNumber, int, minorTicksNumber, retransformTicks);
 void Axis::setMinorTicksNumber(int minorTicksNumber) {
 	Q_D(Axis);
 	if (minorTicksNumber != d->minorTicksNumber)
 		exec(new AxisSetMinorTicksNumberCmd(d, minorTicksNumber, tr("%1: set the total number of the minor ticks")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksIncrement, qreal, minorTicksIncrement, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksIncrement, qreal, minorTicksIncrement, retransformTicks);
 void Axis::setMinorTicksIncrement(qreal minorTicksIncrement) {
 	Q_D(Axis);
 	if (minorTicksIncrement != d->minorTicksIncrement)
 		exec(new AxisSetMinorTicksIncrementCmd(d, minorTicksIncrement, tr("%1: set the increment for the minor ticks")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksPen, QPen, minorTicksPen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, recalcShapeAndBoundingRect);
 void Axis::setMinorTicksPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->minorTicksPen)
 		exec(new AxisSetMinorTicksPenCmd(d, pen, tr("%1: set minor ticks style")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksLength, qreal, minorTicksLength, retransformTicks);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksLength, qreal, minorTicksLength, retransformTicks);
 void Axis::setMinorTicksLength(qreal minorTicksLength) {
 	Q_D(Axis);
 	if (minorTicksLength != d->minorTicksLength)
 		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, tr("%1: set minor ticks length")));
 }
 
-STD_SETTER_CMD_IMPL_F(Axis, SetMinorTicksOpacity, qreal, minorTicksOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksOpacity, qreal, minorTicksOpacity, update);
 void Axis::setMinorTicksOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->minorTicksOpacity)
