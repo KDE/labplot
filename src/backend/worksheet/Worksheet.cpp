@@ -258,7 +258,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect){
 void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 	//determine the corresponding aspect
 	const AbstractAspect* aspect = 0;
-	foreach( const AbstractWorksheetElement* child, children<AbstractWorksheetElement>() ){
+	foreach( const AbstractWorksheetElement* child, children<AbstractWorksheetElement>(IncludeHidden) ){
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
