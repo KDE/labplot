@@ -3,7 +3,8 @@
     Project            : LabPlot
     --------------------------------------------------------------------
     Copyright         : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
-							(replace * with @ in the email addresses)
+    Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach*uni.kn) 
+				(replace * with @ in the email addresses)
     Description      : widget for curve properties
                            
  ***************************************************************************/
@@ -33,6 +34,7 @@
 #include <QList>
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "ui_xycurvedock.h"
 #include <memory>
 
@@ -141,15 +143,28 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
 	void curveYColumnChanged(const AbstractColumn*);
+
+	//Line-Tab
+	void curveLineTypeChanged(XYCurve::LineType);
+	void curveLineInterpolationPointsCountChanged(int);
+	void curveLinePenChanged(QPen);
+	void curveLineOpacityChanged(qreal); 
+	void curveDropLineTypeChanged(XYCurve::DropLineType);
+	void curveDropLinePenChanged(QPen);
+	void curveDropLineOpacityChanged(qreal);
+
+	//TODO Symbol-Tab
 	
 	//Values-Tab
 	void curveValuesColumnChanged(const AbstractColumn*);
+	//TODO
 
 	//"Error bars"-Tab
 	void curveXErrorPlusColumnChanged(const AbstractColumn*);
 	void curveXErrorMinusColumnChanged(const AbstractColumn*);
 	void curveYErrorPlusColumnChanged(const AbstractColumn*);
 	void curveYErrorMinusColumnChanged(const AbstractColumn*);
+	//TODO
 
 	//load and save
 	void loadConfig(KConfig&);

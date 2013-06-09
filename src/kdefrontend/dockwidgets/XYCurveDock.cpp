@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+    Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for XYCurve properties
                            
@@ -402,51 +402,51 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYCurveDock::setCurves(QList<XYCurve*> list){
-  m_initializing=true;
-  m_curvesList=list;
-  m_curve=list.first();
+	m_initializing=true;
+	m_curvesList=list;
+	m_curve=list.first();
   
-  //if there are more then one curve in the list, disable the tab "general"
-  if (list.size()==1){
-	ui.lName->setEnabled(true);
-	ui.leName->setEnabled(true);
-	ui.lComment->setEnabled(true);
-	ui.leComment->setEnabled(true);
-	ui.lXColumn->setEnabled(true);
-	cbXColumn->setEnabled(true);
-	ui.lYColumn->setEnabled(true);
-	cbYColumn->setEnabled(true);
+	//if there are more then one curve in the list, disable the tab "general"
+	if (list.size()==1){
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
+		ui.lXColumn->setEnabled(true);
+		cbXColumn->setEnabled(true);
+		ui.lYColumn->setEnabled(true);
+		cbYColumn->setEnabled(true);
+
+		ui.leName->setText(m_curve->name());
+		ui.leComment->setText(m_curve->comment());
 	
-	ui.leName->setText(m_curve->name());
-	ui.leComment->setText(m_curve->comment());
+		this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
+		this->setModelIndexFromColumn(cbYColumn, m_curve->yColumn());
+		this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
+		this->setModelIndexFromColumn(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
+		this->setModelIndexFromColumn(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
+		this->setModelIndexFromColumn(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
+		this->setModelIndexFromColumn(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());	
+	}else {
+		ui.lName->setEnabled(false);
+		ui.leName->setEnabled(false);
+		ui.lComment->setEnabled(false);
+		ui.leComment->setEnabled(false);
+		ui.lXColumn->setEnabled(false);
+		cbXColumn->setEnabled(false);
+		ui.lYColumn->setEnabled(false);
+		cbYColumn->setEnabled(false);	
 	
-	this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
-	this->setModelIndexFromColumn(cbYColumn, m_curve->yColumn());
-	this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
-	this->setModelIndexFromColumn(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
-	this->setModelIndexFromColumn(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
-	this->setModelIndexFromColumn(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
-	this->setModelIndexFromColumn(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());	
-  }else{
-	ui.lName->setEnabled(false);
-	ui.leName->setEnabled(false);
-	ui.lComment->setEnabled(false);
-	ui.leComment->setEnabled(false);
-	ui.lXColumn->setEnabled(false);
-	cbXColumn->setEnabled(false);
-	ui.lYColumn->setEnabled(false);
-	cbYColumn->setEnabled(false);	
-	
-	ui.leName->setText("");
-	ui.leComment->setText("");
-	cbXColumn->setCurrentModelIndex(QModelIndex());
-	cbYColumn->setCurrentModelIndex(QModelIndex());
-	cbValuesColumn->setCurrentModelIndex(QModelIndex());
-	cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-	cbXErrorMinusColumn->setCurrentModelIndex(QModelIndex());
-	cbYErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-	cbYErrorMinusColumn->setCurrentModelIndex(QModelIndex());	
-  }
+		ui.leName->setText("");
+		ui.leComment->setText("");
+		cbXColumn->setCurrentModelIndex(QModelIndex());
+		cbYColumn->setCurrentModelIndex(QModelIndex());
+		cbValuesColumn->setCurrentModelIndex(QModelIndex());
+		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
+		cbXErrorMinusColumn->setCurrentModelIndex(QModelIndex());
+		cbYErrorPlusColumn->setCurrentModelIndex(QModelIndex());
+		cbYErrorMinusColumn->setCurrentModelIndex(QModelIndex());	
+	}
 
 	//show the properties of the first curve
 	ui.chkVisible->setChecked( m_curve->isVisible() );
@@ -458,7 +458,15 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
 	
-	//TODO line
+	//Line-Tab
+	connect(m_curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(curveLineTypeChanged(XYCurve::LineType)));
+	connect(m_curve, SIGNAL(lineInterpolationPointsCountChanged(int)), this, SLOT(curveLineInterpolationPointsCountChanged(int)));
+	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
+	connect(m_curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(curveLineOpacityChanged(qreal)));
+	connect(m_curve, SIGNAL(dropLineTypeChanged(XYCurve::DropLineType)), this, SLOT(curveDropLineTypeChanged(XYCurve::DropLineType)));
+	connect(m_curve, SIGNAL(dropLinePenChanged(QPen)), this, SLOT(curveDropLinePenChanged(QPen)));
+	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
+		
 	//TODO symbol
 
 	//TODO values
@@ -1363,7 +1371,7 @@ void XYCurveDock::errorBarsOpacityChanged(int value) const{
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
-//General
+//General-Tab
 void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_curve != aspect)
 		return;
@@ -1389,14 +1397,60 @@ void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = false;
 }
 
-//Values
+//TODO: Line-Tab
+void XYCurveDock::curveLineTypeChanged(XYCurve::LineType type) {
+	m_initializing = true;
+	ui.cbLineType->setCurrentIndex( (int) type);
+	m_initializing = false;
+}
+void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {
+	m_initializing = true;
+	ui.sbLineInterpolationPointsCount->setValue(count);
+	m_initializing = false;
+}
+void XYCurveDock::curveLinePenChanged(QPen pen) {
+	m_initializing = true;
+	ui.cbLineStyle->setCurrentIndex( (int)pen.style());
+	ui.kcbLineColor->setColor( pen.color());
+  	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Point) );
+	m_initializing = false;
+}
+void XYCurveDock::curveLineOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbLineOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+void XYCurveDock::curveDropLineTypeChanged(XYCurve::DropLineType type) {
+	m_initializing = true;
+	ui.cbDropLineType->setCurrentIndex( (int)type );
+	m_initializing = false;
+}
+void XYCurveDock::curveDropLinePenChanged(QPen pen) {
+	m_initializing = true;
+	ui.cbDropLineStyle->setCurrentIndex( (int) pen.style());
+	ui.kcbDropLineColor->setColor( pen.color());
+  	GuiTools::updatePenStyles(ui.cbDropLineStyle, pen.color());
+	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	m_initializing = false;
+}
+void XYCurveDock::curveDropLineOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbDropLineOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+
+//TODO: Symbol-Tab
+
+//Values-Tab
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromColumn(cbValuesColumn, column);
 	m_initializing = false;
 }
+//TODO
 
-//Error bars
+//"Error bars"-Tab
 void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromColumn(cbXErrorPlusColumn, column);
@@ -1420,6 +1474,7 @@ void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
 	this->setModelIndexFromColumn(cbYErrorMinusColumn, column);
 	m_initializing = false;
 }
+//TODO
 
 //*************************************************************
 //************************* Settings **************************

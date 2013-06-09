@@ -5,7 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
-								  (replace * with @ in the email addresses) 
+    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach*uni.kn)
+					(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 
@@ -284,28 +285,28 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 }
 
 //Line
-STD_SETTER_CMD_IMPL_F(XYCurve, SetLineType, XYCurve::LineType, lineType, updateLines)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineType, XYCurve::LineType, lineType, updateLines)
 void XYCurve::setLineType(LineType type) {
 	Q_D(XYCurve);
 	if (type != d->lineType)
 		exec(new XYCurveSetLineTypeCmd(d, type, tr("%1: line type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetLineInterpolationPointsCount, int, lineInterpolationPointsCount, updateLines)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineInterpolationPointsCount, int, lineInterpolationPointsCount, updateLines)
 void XYCurve::setLineInterpolationPointsCount(int count) {
 	Q_D(XYCurve);
 	if (count != d->lineInterpolationPointsCount)
 		exec(new XYCurveSetLineInterpolationPointsCountCmd(d, count, tr("%1: set the number of interpolation points")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
 void XYCurve::setLinePen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->linePen)
 		exec(new XYCurveSetLinePenCmd(d, pen, tr("%1: set line style")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetLineOpacity, qreal, lineOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, update);
 void XYCurve::setLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->lineOpacity)
@@ -313,28 +314,28 @@ void XYCurve::setLineOpacity(qreal opacity) {
 }
 
 //Drop lines
-STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLineType, XYCurve::DropLineType, dropLineType, updateDropLines)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLineType, XYCurve::DropLineType, dropLineType, updateDropLines)
 void XYCurve::setDropLineType(DropLineType type) {
 	Q_D(XYCurve);
 	if (type != d->dropLineType)
 		exec(new XYCurveSetDropLineTypeCmd(d, type, tr("%1: drop line type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLinePen, QPen, dropLinePen, recalcShapeAndBoundingRect)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLinePen, QPen, dropLinePen, recalcShapeAndBoundingRect)
 void XYCurve::setDropLinePen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->dropLinePen)
 		exec(new XYCurveSetDropLinePenCmd(d, pen, tr("%1: set drop line style")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetDropLineOpacity, qreal, dropLineOpacity, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLineOpacity, qreal, dropLineOpacity, update)
 void XYCurve::setDropLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->dropLineOpacity)
 		exec(new XYCurveSetDropLineOpacityCmd(d, opacity, tr("%1: set drop line opacity")));
 }
 
-// Symbols 
+// Symbols-Tab
 STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, update)
 void XYCurve::setSymbolsOpacity(qreal opacity) {
 	Q_D(XYCurve);

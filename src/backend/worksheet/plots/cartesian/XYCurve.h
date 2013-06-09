@@ -151,7 +151,7 @@ class XYCurve: public AbstractWorksheetElement {
 		void init();
 
 	signals:
-		//general
+		//General-Tab
 		void xDataChanged();
 		void yDataChanged();
 
@@ -160,11 +160,30 @@ class XYCurve: public AbstractWorksheetElement {
 		void xColumnChanged(const AbstractColumn*);
 		void yColumnChanged(const AbstractColumn*);
 		
-		//values
+		//Line-Tab
+		friend class XYCurveSetLineTypeCmd;
+		friend class XYCurveSetLineInterpolationPointsCountCmd;
+		friend class XYCurveSetLinePenCmd;
+		friend class XYCurveSetLineOpacityCmd;
+		friend class XYCurveSetDropLineTypeCmd;
+		friend class XYCurveSetDropLinePenCmd;
+		friend class XYCurveSetDropLineOpacityCmd;
+		void lineTypeChanged(XYCurve::LineType);
+		void lineInterpolationPointsCountChanged(int);
+		void linePenChanged(QPen);
+		void lineOpacityChanged(qreal);
+		void dropLineTypeChanged(XYCurve::DropLineType);
+		void dropLinePenChanged(QPen);
+		void dropLineOpacityChanged(qreal);
+
+		//TODO: Symbol-Tab
+
+		//Values-Tab
 		friend class XYCurveSetValuesColumnCmd;
 		void valuesColumnChanged(const AbstractColumn*);
+		//TODO
 
-		//error bars
+		//"Error bars"-Tab
 		friend class XYCurveSetXErrorPlusColumnCmd;
 		friend class XYCurveSetXErrorMinusColumnCmd;
 		friend class XYCurveSetYErrorPlusColumnCmd;
@@ -173,6 +192,7 @@ class XYCurve: public AbstractWorksheetElement {
 		void xErrorMinusColumnChanged(const AbstractColumn*);
 		void yErrorPlusColumnChanged(const AbstractColumn*);
 		void yErrorMinusColumnChanged(const AbstractColumn*);		
+		//TODO
 };
 
 #endif
