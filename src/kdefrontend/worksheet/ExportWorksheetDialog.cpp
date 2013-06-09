@@ -34,13 +34,13 @@
 #include <KMessageBox>
 #include <KPushButton>
 #include <QStringList>
-
+#include <QDebug>
 /*!
 	\class ExportWorksheetDialog
 	\brief Dialog for exporting a worksheet  to a file.
 
 	\ingroup kdefrontend
- */
+*/
  
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) {
 	mainWidget = new QWidget(this);
@@ -73,6 +73,11 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 
 	setCaption(i18n("Export worksheet"));
 	setWindowIcon(KIcon("document-export-database"));
+	
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", "").toInt());
+	ui.cbExportArea->setCurrentIndex(conf.readEntry("Area", "").toInt());	
+	
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
 
@@ -87,7 +92,7 @@ QString ExportWorksheetDialog::path() const{
 WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const{
 	int index = ui.cbFormat->currentIndex();
 	
-	//we have a separator in the format combobox at the 4th posiiton -> skip it
+	//we have a separator in the format combobox at the 4th position -> skip it
 	if (index>3)
 		index --;
 
@@ -114,8 +119,12 @@ void ExportWorksheetDialog::okClicked(){
 		}
 	}
 
+    KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+    conf.writeEntry("Format", ui.cbFormat->currentIndex());
+	conf.writeEntry("Area", ui.cbExportArea->currentIndex());
+	
 	accept();
- }
+}
 
 /*!
 	Shows/hides the GroupBox with export options in this dialog.
