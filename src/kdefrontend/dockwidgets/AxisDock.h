@@ -127,7 +127,7 @@ private slots:
 	void minorGridOpacityChanged(int);
 
 	//SLOTs for changes triggered in Axis
-	//general
+	//General-Tab
 	void axisDescriptionChanged(const AbstractAspect*);
 	void axisOrientationChanged(Axis::AxisOrientation);
 	void axisPositionChanged(Axis::AxisPosition);

@@ -53,6 +53,7 @@ public:
 private:
 	Ui::XYCurveDock ui;
 	QList<XYCurve*> m_curvesList;
+	XYCurve* m_curve;
 	std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
 	bool m_initializing;
 	QStringList dateStrings;
@@ -136,8 +137,8 @@ private slots:
 	void errorBarsOpacityChanged(int) const;
 
 	//SLOTs for changes triggered in XYCurve
-	//TODO
 	//General-Tab
+	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
 	void curveYColumnChanged(const AbstractColumn*);
 	

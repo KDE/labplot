@@ -404,7 +404,7 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
 void XYCurveDock::setCurves(QList<XYCurve*> list){
   m_initializing=true;
   m_curvesList=list;
-  XYCurve* curve=list.first();
+  m_curve=list.first();
   
   //if there are more then one curve in the list, disable the tab "general"
   if (list.size()==1){
@@ -417,16 +417,16 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	ui.lYColumn->setEnabled(true);
 	cbYColumn->setEnabled(true);
 	
-	ui.leName->setText(curve->name());
-	ui.leComment->setText(curve->comment());
+	ui.leName->setText(m_curve->name());
+	ui.leComment->setText(m_curve->comment());
 	
-	this->setModelIndexFromColumn(cbXColumn, curve->xColumn());
-	this->setModelIndexFromColumn(cbYColumn, curve->yColumn());
-	this->setModelIndexFromColumn(cbValuesColumn, curve->valuesColumn());
-	this->setModelIndexFromColumn(cbXErrorPlusColumn, curve->xErrorPlusColumn());
-	this->setModelIndexFromColumn(cbXErrorMinusColumn, curve->xErrorMinusColumn());
-	this->setModelIndexFromColumn(cbYErrorPlusColumn, curve->yErrorPlusColumn());
-	this->setModelIndexFromColumn(cbYErrorMinusColumn, curve->yErrorMinusColumn());	
+	this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
+	this->setModelIndexFromColumn(cbYColumn, m_curve->yColumn());
+	this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
+	this->setModelIndexFromColumn(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
+	this->setModelIndexFromColumn(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
+	this->setModelIndexFromColumn(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
+	this->setModelIndexFromColumn(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());	
   }else{
 	ui.lName->setEnabled(false);
 	ui.leName->setEnabled(false);
@@ -449,24 +449,26 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
   }
 
 	//show the properties of the first curve
-	ui.chkVisible->setChecked( curve->isVisible() );
+	ui.chkVisible->setChecked( m_curve->isVisible() );
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
-	// connect the signals of the first curve with the slots of this class.
-	//TODO
 	//general
-	connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
-	connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
 	
-	//values
-	connect(curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
+	//TODO line
+	//TODO symbol
 
-	//error bars
-	connect(curve, SIGNAL(xErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorPlusColumnChanged(const AbstractColumn*)));
-	connect(curve, SIGNAL(xErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorMinusColumnChanged(const AbstractColumn*)));
-	connect(curve, SIGNAL(yErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorPlusColumnChanged(const AbstractColumn*)));
-	connect(curve, SIGNAL(yErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorMinusColumnChanged(const AbstractColumn*)));
+	//TODO values
+	connect(m_curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
+
+	//TODO error bars
+	connect(m_curve, SIGNAL(xErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorPlusColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(xErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorMinusColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(yErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorPlusColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(yErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorMinusColumnChanged(const AbstractColumn*)));
 
 	m_initializing=false;
 }
@@ -649,7 +651,7 @@ void XYCurveDock::nameChanged(){
   if (m_initializing)
 	return;
   
-  m_curvesList.first()->setName(ui.leName->text());
+  m_curve->setName(ui.leName->text());
 }
 
 
@@ -657,7 +659,7 @@ void XYCurveDock::commentChanged(){
   if (m_initializing)
 	return;
 
-  m_curvesList.first()->setComment(ui.leComment->text());
+  m_curve->setComment(ui.leComment->text());
 }
 
 void XYCurveDock::xColumnChanged(const QModelIndex& index){
@@ -1361,9 +1363,20 @@ void XYCurveDock::errorBarsOpacityChanged(int value) const{
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
-//TODO
-
 //General
+void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_curve != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text()) {
+		ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.leComment->text()) {
+		ui.leComment->setText(aspect->comment());
+	}
+	m_initializing = false;
+}
+
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromColumn(cbXColumn, column);
