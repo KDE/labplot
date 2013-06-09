@@ -468,6 +468,13 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
 		
 	//TODO symbol
+	connect(m_curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(curveSymbolsTypeIdChanged(QString)));
+	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
+	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
+	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
+	connect(m_curve, SIGNAL(symbolsAspectRatioChanged(qreal)), this, SLOT(curveSymbolsAspectRatioChanged(qreal)));
+	connect(m_curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(curveSymbolsBrushChanged(QBrush)));
+	connect(m_curve, SIGNAL(symbolsPenChanged(const QPen&)), this, SLOT(curveSymbolsPenChanged(const QPen&)));
 
 	//TODO values
 	connect(m_curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
@@ -1397,7 +1404,7 @@ void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = false;
 }
 
-//TODO: Line-Tab
+//Line-Tab
 void XYCurveDock::curveLineTypeChanged(XYCurve::LineType type) {
 	m_initializing = true;
 	ui.cbLineType->setCurrentIndex( (int) type);
@@ -1408,7 +1415,7 @@ void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {
 	ui.sbLineInterpolationPointsCount->setValue(count);
 	m_initializing = false;
 }
-void XYCurveDock::curveLinePenChanged(QPen pen) {
+void XYCurveDock::curveLinePenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.cbLineStyle->setCurrentIndex( (int)pen.style());
 	ui.kcbLineColor->setColor( pen.color());
@@ -1426,7 +1433,7 @@ void XYCurveDock::curveDropLineTypeChanged(XYCurve::DropLineType type) {
 	ui.cbDropLineType->setCurrentIndex( (int)type );
 	m_initializing = false;
 }
-void XYCurveDock::curveDropLinePenChanged(QPen pen) {
+void XYCurveDock::curveDropLinePenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.cbDropLineStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbDropLineColor->setColor( pen.color());
@@ -1440,7 +1447,47 @@ void XYCurveDock::curveDropLineOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-//TODO: Symbol-Tab
+//Symbol-Tab
+void XYCurveDock::curveSymbolsTypeIdChanged(QString typeId) {
+	m_initializing = true;
+	ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(typeId));
+	m_initializing = false;
+}
+void XYCurveDock::curveSymbolsSizeChanged(qreal size) {
+	m_initializing = true;
+  	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	m_initializing = false;
+}
+void XYCurveDock::curveSymbolsRotationAngleChanged(qreal angle) {
+	m_initializing = true;
+	ui.sbSymbolRotation->setValue(angle);
+	m_initializing = false;
+}
+void XYCurveDock::curveSymbolsOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+void XYCurveDock::curveSymbolsAspectRatioChanged(qreal ratio) {
+	m_initializing = true;
+	//TODO
+	m_initializing = false;
+}
+void XYCurveDock::curveSymbolsBrushChanged(QBrush brush) {
+	m_initializing = true;
+  	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
+  	ui.kcbSymbolFillingColor->setColor(brush.color());
+	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, brush.color());
+	m_initializing = false;
+}
+void XYCurveDock::curveSymbolsPenChanged(const QPen& pen) {
+	m_initializing = true;
+  	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
+  	ui.kcbSymbolBorderColor->setColor( pen.color());
+	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
+  	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point));
+	m_initializing = false;
+}
 
 //Values-Tab
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {

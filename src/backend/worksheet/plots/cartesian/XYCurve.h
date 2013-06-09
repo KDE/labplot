@@ -170,13 +170,27 @@ class XYCurve: public AbstractWorksheetElement {
 		friend class XYCurveSetDropLineOpacityCmd;
 		void lineTypeChanged(XYCurve::LineType);
 		void lineInterpolationPointsCountChanged(int);
-		void linePenChanged(QPen);
+		void linePenChanged(const QPen&);
 		void lineOpacityChanged(qreal);
 		void dropLineTypeChanged(XYCurve::DropLineType);
-		void dropLinePenChanged(QPen);
+		void dropLinePenChanged(const QPen&);
 		void dropLineOpacityChanged(qreal);
 
-		//TODO: Symbol-Tab
+		//Symbol-Tab
+		friend class XYCurveSetSymbolsTypeIdCmd;
+		friend class XYCurveSetSymbolsSizeCmd;
+		friend class XYCurveSetSymbolsRotationAngleCmd;
+		friend class XYCurveSetSymbolsOpacityCmd;
+		friend class XYCurveSetSymbolsAspectRatioCmd;
+		friend class XYCurveSetSymbolsBrushCmd;
+		friend class XYCurveSetSymbolsPenCmd;
+		void symbolsTypeIdChanged(QString);
+		void symbolsSizeChanged(qreal);
+		void symbolsRotationAngleChanged(qreal);
+		void symbolsOpacityChanged(qreal);
+		void symbolsAspectRatioChanged(qreal);
+		void symbolsBrushChanged(QBrush);
+		void symbolsPenChanged(const QPen&);
 
 		//Values-Tab
 		friend class XYCurveSetValuesColumnCmd;

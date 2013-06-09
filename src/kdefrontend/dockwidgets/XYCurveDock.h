@@ -147,13 +147,20 @@ private slots:
 	//Line-Tab
 	void curveLineTypeChanged(XYCurve::LineType);
 	void curveLineInterpolationPointsCountChanged(int);
-	void curveLinePenChanged(QPen);
+	void curveLinePenChanged(const QPen&);
 	void curveLineOpacityChanged(qreal); 
 	void curveDropLineTypeChanged(XYCurve::DropLineType);
-	void curveDropLinePenChanged(QPen);
+	void curveDropLinePenChanged(const QPen&);
 	void curveDropLineOpacityChanged(qreal);
 
-	//TODO Symbol-Tab
+	//Symbol-Tab
+	void curveSymbolsTypeIdChanged(QString);
+	void curveSymbolsSizeChanged(qreal);
+	void curveSymbolsRotationAngleChanged(qreal);
+	void curveSymbolsOpacityChanged(qreal);
+	void curveSymbolsAspectRatioChanged(qreal);
+	void curveSymbolsBrushChanged(QBrush);
+	void curveSymbolsPenChanged(const QPen&);
 	
 	//Values-Tab
 	void curveValuesColumnChanged(const AbstractColumn*);

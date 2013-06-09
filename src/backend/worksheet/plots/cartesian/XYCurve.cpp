@@ -336,36 +336,6 @@ void XYCurve::setDropLineOpacity(qreal opacity) {
 }
 
 // Symbols-Tab
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, update)
-void XYCurve::setSymbolsOpacity(qreal opacity) {
-	Q_D(XYCurve);
-	if (opacity != d->symbolsOpacity)
-		exec(new XYCurveSetSymbolsOpacityCmd(d, opacity, tr("%1: set symbols opacity")));
-}
-
-
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsRotationAngle, qreal, symbolsRotationAngle,updateSymbol)
-void XYCurve::setSymbolsRotationAngle(qreal angle) {
-	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
-		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
-}
-
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsSize, qreal, symbolsSize, updateSymbol)
-void XYCurve::setSymbolsSize(qreal size) {
-	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
-		exec(new XYCurveSetSymbolsSizeCmd(d, size, tr("%1: set symbol size")));
-}
-
-//TODO ???
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsAspectRatio, qreal, symbolsAspectRatio, updateSymbol)
-void XYCurve::setSymbolsAspectRatio(qreal ratio) {
-	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + ratio, 1 + d->symbolsAspectRatio))
-		exec(new XYCurveSetSymbolsAspectRatioCmd(d, ratio, tr("%1: set symbol aspect ratio")));
-}
-
 STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetSymbolsTypeId, QString, swapSymbolsTypeId)
 void XYCurve::setSymbolsTypeId(const QString &id) {
 	Q_D(XYCurve);
@@ -373,21 +343,50 @@ void XYCurve::setSymbolsTypeId(const QString &id) {
 		exec(new XYCurveSetSymbolsTypeIdCmd(d, id, tr("%1: set symbol type")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, updateSymbol)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsSize, qreal, symbolsSize, updateSymbol)
+void XYCurve::setSymbolsSize(qreal size) {
+	Q_D(XYCurve);
+	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
+		exec(new XYCurveSetSymbolsSizeCmd(d, size, tr("%1: set symbol size")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsRotationAngle, qreal, symbolsRotationAngle,updateSymbol)
+void XYCurve::setSymbolsRotationAngle(qreal angle) {
+	Q_D(XYCurve);
+	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
+		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
+}
+
+//TODO
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsAspectRatio, qreal, symbolsAspectRatio, updateSymbol)
+void XYCurve::setSymbolsAspectRatio(qreal ratio) {
+	Q_D(XYCurve);
+	if (!qFuzzyCompare(1 + ratio, 1 + d->symbolsAspectRatio))
+		exec(new XYCurveSetSymbolsAspectRatioCmd(d, ratio, tr("%1: set symbol aspect ratio")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, updateSymbol)
 void XYCurve::setSymbolsBrush(const QBrush &brush) {
 	Q_D(XYCurve);
 	if (brush != d->symbolsBrush)
 		exec(new XYCurveSetSymbolsBrushCmd(d, brush, tr("%1: set symbol filling")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetSymbolsPen, QPen, symbolsPen, updateSymbol)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsPen, QPen, symbolsPen, updateSymbol)
 void XYCurve::setSymbolsPen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->symbolsPen)
 		exec(new XYCurveSetSymbolsPenCmd(d, pen, tr("%1: set symbol outline style")));
 }
 
-//Values
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, update)
+void XYCurve::setSymbolsOpacity(qreal opacity) {
+	Q_D(XYCurve);
+	if (opacity != d->symbolsOpacity)
+		exec(new XYCurveSetSymbolsOpacityCmd(d, opacity, tr("%1: set symbols opacity")));
+}
+
+//Values-Tab
 STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesType, XYCurve::ValuesType, valuesType, updateValues)
 void XYCurve::setValuesType(XYCurve::ValuesType type) {
 	Q_D(XYCurve);
@@ -1315,7 +1314,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 	QString oldId = symbolsTypeId;
-	if (id != symbolsTypeId)	{
+	if (id != symbolsTypeId) {
 		symbolsTypeId = id;
 		delete symbolsPrototype;
 		symbolsPrototype = NULL;
@@ -1324,13 +1323,14 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 				CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
 				if (factory) {
 					const AbstractCurveSymbol *prototype = factory->prototype(symbolsTypeId);
-					if (prototype)					{
+					if (prototype) {
 						symbolsPrototype = prototype->clone();
 						break;
 					}
 				}
 			}
 		}
+		emit q->symbolsTypeIdChanged(id);
 	}
 
 	if (!symbolsPrototype) // safety fallback

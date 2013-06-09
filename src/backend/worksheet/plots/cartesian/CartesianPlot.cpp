@@ -481,7 +481,7 @@ void CartesianPlot::addCurve(){
 	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(linePenChanged(const QPen&)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(symbolTypeChanged()), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(symbolTypeIdChanged(QString)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolPenChanged(const QPen&)), this, SLOT(updateLegend()));
 }
 
