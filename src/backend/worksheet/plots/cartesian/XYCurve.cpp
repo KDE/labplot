@@ -79,16 +79,23 @@ XYCurve::XYCurve(const QString &name, XYCurvePrivate *dd)
 
 void XYCurve::init(){
 	Q_D(XYCurve);
-	
+
   	d->xColumn = NULL;
 	d->yColumn = NULL;
-	
+
 	d->lineType = XYCurve::NoLine;
 	d->lineInterpolationPointsCount = 1;
 	d->lineOpacity = 1.0;
 	d->dropLineType = XYCurve::NoDropLine;
 	d->dropLineOpacity = 1.0;
-	
+
+	d->symbolsOpacity = 1.0;
+	d->symbolsRotationAngle = 0;
+	d->symbolsSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
+	d->symbolsAspectRatio = 1;
+	d->symbolsPrototype = NULL;
+	d->swapSymbolsTypeId("diamond");
+
 	d->valuesType = XYCurve::NoValues;
 	d->valuesColumn = NULL;
 	d->valuesPosition = XYCurve::ValuesAbove;
@@ -96,14 +103,7 @@ void XYCurve::init(){
 	d->valuesRotationAngle = 0;
 	d->valuesOpacity = 1.0;
 	d->valuesFont.setPointSizeF( Worksheet::convertToSceneUnits( 6, Worksheet::Point ) );
-	
-	d->symbolsOpacity = 1.0;
-	d->symbolsRotationAngle = 0;
-	d->symbolsSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
-	d->symbolsAspectRatio = 1;
-	d->symbolsPrototype = NULL;
-	d->swapSymbolsTypeId("diamond");
-	
+
 	d->xErrorType = XYCurve::NoError;
 	d->xErrorPlusColumn = NULL;
 	d->xErrorMinusColumn = NULL;
@@ -113,7 +113,7 @@ void XYCurve::init(){
 	d->yErrorMinusColumn = NULL;
 	d->errorBarsType = XYCurve::ErrorBarsSimple;
 	d->errorBarsOpacity = 1.0;
-	
+
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
@@ -357,7 +357,7 @@ void XYCurve::setSymbolsRotationAngle(qreal angle) {
 		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
 }
 
-//TODO
+//TODO: not used
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsAspectRatio, qreal, symbolsAspectRatio, updateSymbol)
 void XYCurve::setSymbolsAspectRatio(qreal ratio) {
 	Q_D(XYCurve);
@@ -387,7 +387,7 @@ void XYCurve::setSymbolsOpacity(qreal opacity) {
 }
 
 //Values-Tab
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesType, XYCurve::ValuesType, valuesType, updateValues)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesType, XYCurve::ValuesType, valuesType, updateValues)
 void XYCurve::setValuesType(XYCurve::ValuesType type) {
 	Q_D(XYCurve);
 	if (type != d->valuesType)
@@ -407,56 +407,58 @@ void XYCurve::setValuesColumn(const AbstractColumn* column) {
 	}	
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, valuesPosition, updateValues)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, valuesPosition, updateValues)
 void XYCurve::setValuesPosition(ValuesPosition position) {
 	Q_D(XYCurve);
 	if (position != d->valuesPosition)
 		exec(new XYCurveSetValuesPositionCmd(d, position, tr("%1: set values position")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesDistance, qreal, valuesDistance, updateValues)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesDistance, qreal, valuesDistance, updateValues)
 void XYCurve::setValuesDistance(qreal distance) {
 	Q_D(XYCurve);
 	if (distance != d->valuesDistance)
 		exec(new XYCurveSetValuesDistanceCmd(d, distance, tr("%1: set values distance")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesOpacity, qreal, valuesOpacity, update)
-void XYCurve::setValuesOpacity(qreal opacity) {
-	Q_D(XYCurve);
-	if (opacity != d->valuesOpacity)
-		exec(new XYCurveSetValuesOpacityCmd(d, opacity, tr("%1: set values opacity")));
-}
-
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesRotationAngle, qreal, valuesRotationAngle,updateValues)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesRotationAngle, qreal, valuesRotationAngle, updateValues)
 void XYCurve::setValuesRotationAngle(qreal angle) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->valuesRotationAngle))
 		exec(new XYCurveSetValuesRotationAngleCmd(d, angle, tr("%1: rotate values")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesPrefix, QString, valuesPrefix, updateValues)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesOpacity, qreal, valuesOpacity, update)
+void XYCurve::setValuesOpacity(qreal opacity) {
+	Q_D(XYCurve);
+	if (opacity != d->valuesOpacity)
+		exec(new XYCurveSetValuesOpacityCmd(d, opacity, tr("%1: set values opacity")));
+}
+
+//TODO: Format, Precision
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPrefix, QString, valuesPrefix, updateValues)
 void XYCurve::setValuesPrefix(const QString& prefix) {
 	Q_D(XYCurve);
 	if (prefix!= d->valuesPrefix)
 		exec(new XYCurveSetValuesPrefixCmd(d, prefix, tr("%1: set values prefix")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesSuffix, QString, valuesSuffix, updateValues)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesSuffix, QString, valuesSuffix, updateValues)
 void XYCurve::setValuesSuffix(const QString& suffix) {
 	Q_D(XYCurve);
 	if (suffix!= d->valuesSuffix)
 		exec(new XYCurveSetValuesSuffixCmd(d, suffix, tr("%1: set values suffix")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesFont, QFont, valuesFont, updateValues)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesFont, QFont, valuesFont, updateValues)
 void XYCurve::setValuesFont(const QFont& font) {
 	Q_D(XYCurve);
 	if (font!= d->valuesFont)
 		exec(new XYCurveSetValuesFontCmd(d, font, tr("%1: set values font")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetValuesColor, QColor, valuesColor, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColor, QColor, valuesColor, update)
 void XYCurve::setValuesColor(const QColor& color) {
 	Q_D(XYCurve);
 	if (color != d->valuesColor)

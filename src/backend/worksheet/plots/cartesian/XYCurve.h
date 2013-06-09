@@ -194,8 +194,25 @@ class XYCurve: public AbstractWorksheetElement {
 
 		//Values-Tab
 		friend class XYCurveSetValuesColumnCmd;
+		friend class XYCurveSetValuesTypeCmd;
+		friend class XYCurveSetValuesPositionCmd;
+		friend class XYCurveSetValuesDistanceCmd;
+		friend class XYCurveSetValuesRotationAngleCmd;
+		friend class XYCurveSetValuesOpacityCmd;
+		friend class XYCurveSetValuesPrefixCmd;
+		friend class XYCurveSetValuesSuffixCmd;
+		friend class XYCurveSetValuesFontCmd;
+		friend class XYCurveSetValuesColorCmd;
+		void valuesTypeChanged(XYCurve::ValuesType);
 		void valuesColumnChanged(const AbstractColumn*);
-		//TODO
+		void valuesPositionChanged(XYCurve::ValuesPosition);
+		void valuesDistanceChanged(qreal);
+		void valuesRotationAngleChanged(qreal);
+		void valuesOpacityChanged(qreal);
+		void valuesPrefixChanged(QString);
+		void valuesSuffixChanged(QString);
+		void valuesFontChanged(QFont);
+		void valuesColorChanged(QColor);
 
 		//"Error bars"-Tab
 		friend class XYCurveSetXErrorPlusColumnCmd;

@@ -122,7 +122,7 @@ private slots:
 	void valuesPrefixChanged();
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
-	void valuesFontColorChanged(const QColor&);
+	void valuesColorChanged(const QColor&);
 
 	//"Error bars"-Tab
 	void xErrorTypeChanged(int) const;
@@ -163,8 +163,16 @@ private slots:
 	void curveSymbolsPenChanged(const QPen&);
 	
 	//Values-Tab
+	void curveValuesTypeChanged(XYCurve::ValuesType);
 	void curveValuesColumnChanged(const AbstractColumn*);
-	//TODO
+	void curveValuesPositionChanged(XYCurve::ValuesPosition);
+	void curveValuesDistanceChanged(qreal);
+	void curveValuesOpacityChanged(qreal);
+	void curveValuesRotationAngleChanged(qreal);
+	void curveValuesPrefixChanged(QString);
+	void curveValuesSuffixChanged(QString);
+	void curveValuesFontChanged(QFont);
+	void curveValuesColorChanged(QColor);
 
 	//"Error bars"-Tab
 	void curveXErrorPlusColumnChanged(const AbstractColumn*);

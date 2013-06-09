@@ -146,7 +146,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.leValuesPrefix, SIGNAL(returnPressed()), this, SLOT(valuesPrefixChanged()) );
 	connect( ui.leValuesSuffix, SIGNAL(returnPressed()), this, SLOT(valuesSuffixChanged()) );
 	connect( ui.kfrValuesFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(valuesFontChanged(const QFont&)) );
-	connect( ui.kcbValuesFontColor, SIGNAL(changed(const QColor &)), this, SLOT(valuesFontColorChanged(const QColor&)) );
+	connect( ui.kcbValuesColor, SIGNAL(changed(const QColor &)), this, SLOT(valuesColorChanged(const QColor&)) );
 	
 	//Error bars
 	connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
@@ -467,7 +467,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(dropLinePenChanged(QPen)), this, SLOT(curveDropLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
 		
-	//TODO symbol
+	//symbol
 	connect(m_curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(curveSymbolsTypeIdChanged(QString)));
 	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
@@ -477,7 +477,16 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(symbolsPenChanged(const QPen&)), this, SLOT(curveSymbolsPenChanged(const QPen&)));
 
 	//TODO values
+	connect(m_curve, SIGNAL(valuesTypeChanged(XYCurve::ValuesType)), this, SLOT(curveValuesTypeChanged(XYCurve::ValuesType)));
 	connect(m_curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(valuesPositionChanged(XYCurve::ValuesPosition)), this, SLOT(curveValuesPositionChanged(XYCurve::ValuesPosition)));
+	connect(m_curve, SIGNAL(valuesDistanceChanged(qreal)), this, SLOT(curveValuesDistanceChanged(qreal)));
+	connect(m_curve, SIGNAL(valuesOpacityChanged(qreal)), this, SLOT(curveValuesOpacityChanged(qreal)));
+	connect(m_curve, SIGNAL(valuesRotationAngleChanged(qreal)), this, SLOT(curveValuesRotationAngleChanged(qreal)));
+	connect(m_curve, SIGNAL(valuesPrefixChanged(QString)), this, SLOT(curveValuesPrefixChanged(QString)));
+	connect(m_curve, SIGNAL(valuesSuffixChanged(QString)), this, SLOT(curveValuesSuffixChanged(QString)));
+	connect(m_curve, SIGNAL(valuesFontChanged(QFont)), this, SLOT(curveValuesFontChanged(QFont)));
+	connect(m_curve, SIGNAL(valuesColorChanged(QColor)), this, SLOT(curveValuesColorChanged(QColor)));
 
 	//TODO error bars
 	connect(m_curve, SIGNAL(xErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorPlusColumnChanged(const AbstractColumn*)));
@@ -1039,7 +1048,7 @@ void XYCurveDock::valuesTypeChanged(int index){
 	ui.leValuesPrefix->setEnabled(false);
 	ui.leValuesSuffix->setEnabled(false);
 	ui.kfrValuesFont->setEnabled(false);
-	ui.kcbValuesFontColor->setEnabled(false);
+	ui.kcbValuesColor->setEnabled(false);
   }else{
 	ui.cbValuesPosition->setEnabled(true);
 	ui.sbValuesDistance->setEnabled(true);
@@ -1050,7 +1059,7 @@ void XYCurveDock::valuesTypeChanged(int index){
 	ui.leValuesPrefix->setEnabled(true);
 	ui.leValuesSuffix->setEnabled(true);
 	ui.kfrValuesFont->setEnabled(true);
-	ui.kcbValuesFontColor->setEnabled(true);	
+	ui.kcbValuesColor->setEnabled(true);	
 	
 	const Column* column;
 	if (valuesType==XYCurve::ValuesCustomColumn){
@@ -1156,7 +1165,7 @@ void XYCurveDock::valuesFontChanged(const QFont& font){
 		curve->setValuesFont(valuesFont);
 }
 
-void XYCurveDock::valuesFontColorChanged(const QColor& color){
+void XYCurveDock::valuesColorChanged(const QColor& color){
   if (m_initializing)
 	return;
   
@@ -1490,12 +1499,57 @@ void XYCurveDock::curveSymbolsPenChanged(const QPen& pen) {
 }
 
 //Values-Tab
+void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
+	m_initializing = true;
+  	ui.cbValuesType->setCurrentIndex((int) type);
+	m_initializing = false;
+}
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromColumn(cbValuesColumn, column);
 	m_initializing = false;
 }
-//TODO
+void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
+	m_initializing = true;
+  	ui.cbValuesPosition->setCurrentIndex((int) position);
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesDistanceChanged(qreal distance) {
+	m_initializing = true;
+  	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(distance, Worksheet::Point) );
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesRotationAngleChanged(qreal angle) {
+	m_initializing = true;
+	ui.sbValuesRotation->setValue(angle);
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbValuesOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesPrefixChanged(QString prefix) {
+	m_initializing = true;
+  	ui.leValuesPrefix->setText(prefix);
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesSuffixChanged(QString suffix) {
+	m_initializing = true;
+  	ui.leValuesSuffix->setText(suffix);
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesFontChanged(QFont font) {
+	m_initializing = true;
+	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+  	ui.kfrValuesFont->setFont(font);
+	m_initializing = false;
+}
+void XYCurveDock::curveValuesColorChanged(QColor color) {
+	m_initializing = true;
+  	ui.kcbValuesColor->setColor(color);
+	m_initializing = false;
+}
 
 //"Error bars"-Tab
 void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
@@ -1578,11 +1632,11 @@ void XYCurveDock::loadConfig(KConfig& config){
 	QFont valuesFont = m_curve->valuesFont();
 	valuesFont.setPointSizeF( Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Point) );
   	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
-  	ui.kcbValuesFontColor->setColor( group.readEntry("ValuesFontColor", m_curve->valuesColor()) );
+  	ui.kcbValuesColor->setColor( group.readEntry("ValuesColor", m_curve->valuesColor()) );
 
-	//TODO: Area Filling,
+	//TODO: Area Filling
 	
-	//Error bars
+	//"Error bars"-Tab
 	ui.cbXErrorType->setCurrentIndex( group.readEntry("XErrorType", (int) m_curve->xErrorType()) );
 	ui.cbYErrorType->setCurrentIndex( group.readEntry("YErrorType", (int) m_curve->yErrorType()) );
 	ui.cbErrorBarsType->setCurrentIndex( group.readEntry("ErrorBarsType", (int) m_curve->errorBarsType()) );
@@ -1637,7 +1691,7 @@ void XYCurveDock::saveConfig(KConfig& config){
 	QFont valuesFont =ui.kfrValuesFont->font();
 	valuesFont.setPointSizeF( Worksheet::convertToSceneUnits(valuesFont.pointSizeF(), Worksheet::Point) );
 	group.writeEntry("ValuesFont", valuesFont);
-	group.writeEntry("ValuesFontColor", ui.kcbValuesFontColor->color());
+	group.writeEntry("ValuesColor", ui.kcbValuesColor->color());
 
 	//TODO: Area Filling,
 	
