@@ -175,11 +175,16 @@ private slots:
 	void curveValuesColorChanged(QColor);
 
 	//"Error bars"-Tab
+	void curveXErrorTypeChanged(XYCurve::ErrorType);
 	void curveXErrorPlusColumnChanged(const AbstractColumn*);
 	void curveXErrorMinusColumnChanged(const AbstractColumn*);
+	void curveYErrorTypeChanged(XYCurve::ErrorType);
 	void curveYErrorPlusColumnChanged(const AbstractColumn*);
 	void curveYErrorMinusColumnChanged(const AbstractColumn*);
-	//TODO
+	void curveErrorBarsCapSizeChanged(qreal);
+	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
+	void curveErrorBarsPenChanged(QPen);
+	void curveErrorBarsOpacityChanged(qreal);
 
 	//load and save
 	void loadConfig(KConfig&);

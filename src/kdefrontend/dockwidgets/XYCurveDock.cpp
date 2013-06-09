@@ -453,7 +453,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
-	//general
+	//General-Tab
 	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
@@ -467,7 +467,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(dropLinePenChanged(QPen)), this, SLOT(curveDropLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
 		
-	//symbol
+	//Symbol-Tab
 	connect(m_curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(curveSymbolsTypeIdChanged(QString)));
 	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
@@ -476,7 +476,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(curveSymbolsBrushChanged(QBrush)));
 	connect(m_curve, SIGNAL(symbolsPenChanged(const QPen&)), this, SLOT(curveSymbolsPenChanged(const QPen&)));
 
-	//TODO values
+	//Values-Tab
 	connect(m_curve, SIGNAL(valuesTypeChanged(XYCurve::ValuesType)), this, SLOT(curveValuesTypeChanged(XYCurve::ValuesType)));
 	connect(m_curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(valuesPositionChanged(XYCurve::ValuesPosition)), this, SLOT(curveValuesPositionChanged(XYCurve::ValuesPosition)));
@@ -488,11 +488,17 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(valuesFontChanged(QFont)), this, SLOT(curveValuesFontChanged(QFont)));
 	connect(m_curve, SIGNAL(valuesColorChanged(QColor)), this, SLOT(curveValuesColorChanged(QColor)));
 
-	//TODO error bars
+	//"Error bars"-Tab
+	connect(m_curve, SIGNAL(xErrorTypeChanged(XYCurve::ErrorType)), this, SLOT(curveXErrorTypeChanged(XYCurve::ErrorType)));
 	connect(m_curve, SIGNAL(xErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorPlusColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(xErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorMinusColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(yErrorTypeChanged(XYCurve::ErrorType)), this, SLOT(curveYErrorTypeChanged(XYCurve::ErrorType)));
 	connect(m_curve, SIGNAL(yErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorPlusColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(yErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorMinusColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(errorBarsCapSizeChanged(qreal)), this, SLOT(curveErrorBarsCapSizeChanged(qreal)));
+	connect(m_curve, SIGNAL(errorBarsTypeChanged(XYCurve::ErrorBarsType)), this, SLOT(curveErrorBarsTypeChanged(XYCurve::ErrorBarsType)));
+	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
+	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
 
 	m_initializing=false;
 }
@@ -1552,18 +1558,26 @@ void XYCurveDock::curveValuesColorChanged(QColor color) {
 }
 
 //"Error bars"-Tab
+void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
+	m_initializing = true;
+	ui.cbXErrorType->setCurrentIndex((int) type);
+	m_initializing = false;
+}
 void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromColumn(cbXErrorPlusColumn, column);
 	m_initializing = false;
 }
-
 void XYCurveDock::curveXErrorMinusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromColumn(cbXErrorMinusColumn, column);
 	m_initializing = false;
 }
-
+void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
+	m_initializing = true;
+	ui.cbYErrorType->setCurrentIndex((int) type);
+	m_initializing = false;
+}
 void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromColumn(cbYErrorPlusColumn, column);
@@ -1575,7 +1589,29 @@ void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
 	this->setModelIndexFromColumn(cbYErrorMinusColumn, column);
 	m_initializing = false;
 }
-//TODO
+void XYCurveDock::curveErrorBarsCapSizeChanged(qreal size) {
+	m_initializing = true;
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	m_initializing = false;
+}
+void XYCurveDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
+	m_initializing = true;
+	ui.cbErrorBarsType->setCurrentIndex( (int) type);
+	m_initializing = false;
+}
+void XYCurveDock::curveErrorBarsPenChanged(QPen pen) {
+	m_initializing = true;
+	ui.cbErrorBarsStyle->setCurrentIndex( (int) pen.style());
+	ui.kcbErrorBarsColor->setColor( pen.color());
+  	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, pen.color());
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
+	m_initializing = false;
+}
+void XYCurveDock::curveErrorBarsOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbErrorBarsOpacity->setValue( round(opacity*100.0) );	
+	m_initializing = false;
+}
 
 //*************************************************************
 //************************* Settings **************************

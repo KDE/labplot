@@ -215,15 +215,26 @@ class XYCurve: public AbstractWorksheetElement {
 		void valuesColorChanged(QColor);
 
 		//"Error bars"-Tab
+		friend class XYCurveSetXErrorTypeCmd;
 		friend class XYCurveSetXErrorPlusColumnCmd;
 		friend class XYCurveSetXErrorMinusColumnCmd;
+		friend class XYCurveSetYErrorTypeCmd;
 		friend class XYCurveSetYErrorPlusColumnCmd;
 		friend class XYCurveSetYErrorMinusColumnCmd;
+		friend class XYCurveSetErrorBarsCapSizeCmd;
+		friend class XYCurveSetErrorBarsTypeCmd;
+		friend class XYCurveSetErrorBarsPenCmd;
+		friend class XYCurveSetErrorBarsOpacityCmd;
+		void xErrorTypeChanged(XYCurve::ErrorType);
 		void xErrorPlusColumnChanged(const AbstractColumn*);
 		void xErrorMinusColumnChanged(const AbstractColumn*);
+		void yErrorTypeChanged(XYCurve::ErrorType);
 		void yErrorPlusColumnChanged(const AbstractColumn*);
 		void yErrorMinusColumnChanged(const AbstractColumn*);		
-		//TODO
+		void errorBarsCapSizeChanged(qreal);
+		void errorBarsTypeChanged(XYCurve::ErrorBarsType);
+		void errorBarsPenChanged(QPen);
+		void errorBarsOpacityChanged(qreal);
 };
 
 #endif

@@ -466,7 +466,7 @@ void XYCurve::setValuesColor(const QColor& color) {
 }
 
 //Error bars
-STD_SETTER_CMD_IMPL_F(XYCurve, SetXErrorType, XYCurve::ErrorType, xErrorType, updateErrorBars)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorType, XYCurve::ErrorType, xErrorType, updateErrorBars)
 void XYCurve::setXErrorType(ErrorType type) {
 	Q_D(XYCurve);
 	if (type != d->xErrorType)
@@ -499,18 +499,11 @@ void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetYErrorType, XYCurve::ErrorType, yErrorType, updateErrorBars)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorType, XYCurve::ErrorType, yErrorType, updateErrorBars)
 void XYCurve::setYErrorType(ErrorType type) {
 	Q_D(XYCurve);
 	if (type != d->yErrorType)
 		exec(new XYCurveSetYErrorTypeCmd(d, type, tr("%1: y-error type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
-void XYCurve::setErrorBarsCapSize(qreal size) {
-	Q_D(XYCurve);
-	if (size != d->errorBarsCapSize)
-		exec(new XYCurveSetErrorBarsCapSizeCmd(d, size, tr("%1: set error bar cap size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
@@ -539,21 +532,28 @@ void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
+void XYCurve::setErrorBarsCapSize(qreal size) {
+	Q_D(XYCurve);
+	if (size != d->errorBarsCapSize)
+		exec(new XYCurveSetErrorBarsCapSizeCmd(d, size, tr("%1: set error bar cap size")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
 void XYCurve::setErrorBarsType(ErrorBarsType type) {
 	Q_D(XYCurve);
 	if (type != d->errorBarsType)
 		exec(new XYCurveSetErrorBarsTypeCmd(d, type, tr("%1: error bar type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsPen, QPen, errorBarsPen, recalcShapeAndBoundingRect)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsPen, QPen, errorBarsPen, recalcShapeAndBoundingRect)
 void XYCurve::setErrorBarsPen(const QPen& pen) {
 	Q_D(XYCurve);
 	if (pen != d->errorBarsPen)
 		exec(new XYCurveSetErrorBarsPenCmd(d, pen, tr("%1: set error bar style")));
 }
 
-STD_SETTER_CMD_IMPL_F(XYCurve, SetErrorBarsOpacity, qreal, errorBarsOpacity, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsOpacity, qreal, errorBarsOpacity, update)
 void XYCurve::setErrorBarsOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->errorBarsOpacity)
