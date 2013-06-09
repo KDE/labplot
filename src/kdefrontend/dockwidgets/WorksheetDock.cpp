@@ -602,15 +602,25 @@ void WorksheetDock::layoutColumnCountChanged(int count){
 	opens a file dialog and lets the user select the image file.
 */
 void WorksheetDock::selectFile() {
-    QString path=QFileDialog::getOpenFileName(this, i18n("Select the image file"));
+	KConfigGroup conf(KSharedConfig::openConfig(), "WorksheetDock");
+	QString dir = conf.readEntry("LastImageDir", "");
+    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
     if (path=="")
-        return;
+        return; //cancel was clicked in the file-dialog
 
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos!=-1) {
+		QString newDir = path.left(pos);
+		if (newDir!=dir) {
+			KConfigGroup conf(KSharedConfig::openConfig(), "WorksheetDock");
+			conf.writeEntry("LastImageDir", newDir);
+		}
+	}
+	
     ui.kleBackgroundFileName->setText( path );
 
-	foreach(Worksheet* worksheet, m_worksheetList){
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundFileName(path);
-  }  
 }
 
 void WorksheetDock::fileNameChanged(){
