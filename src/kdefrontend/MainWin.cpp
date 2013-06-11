@@ -1114,7 +1114,9 @@ void MainWin::exportDialog(){
 			WorksheetView::ExportArea area = dlg->exportArea();
 			
 			WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
+			WAIT_CURSOR;
 			view->exportToFile(path, format, area);
+			RESET_CURSOR;
 		}
 	}else{//Spreadsheet
 		//TODO

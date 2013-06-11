@@ -34,7 +34,7 @@
 #include <KMessageBox>
 #include <KPushButton>
 #include <QStringList>
-#include <QDebug>
+
 /*!
 	\class ExportWorksheetDialog
 	\brief Dialog for exporting a worksheet  to a file.
@@ -82,7 +82,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 }
 
 void ExportWorksheetDialog::setFileName(const QString& name){
-	ui.kleFileName->setText(QDir::homePath() + "/" +  name + ".pdf");
+	ui.kleFileName->setText(QDir::homePath() + "/" +  name);
+	this->formatChanged(ui.cbFormat->currentIndex());
 }
 
 QString ExportWorksheetDialog::path() const{
