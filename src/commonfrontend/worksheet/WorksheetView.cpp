@@ -566,6 +566,7 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 
 	QGraphicsView::mousePressEvent(event);
 }
+
 void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
   if (m_currentMouseMode == ZoomMode){
 	fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
@@ -814,7 +815,7 @@ void WorksheetView::deselectItem(QGraphicsItem* item){
 void WorksheetView::selectionChanged(){
 	if (m_suppressSelectionChangedEvent)
 		return;
-	
+
 	QList<QGraphicsItem*> items = scene()->selectedItems();
 	
 	//When making a graphics item invisible, it gets deselected in the scene.
@@ -849,19 +850,19 @@ void WorksheetView::selectionChanged(){
 	m_selectedItems = items;
 }
 
-void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area) const{
-	QRectF rect;
+void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area) {
+	QRectF sourceRect;
 
 	//determine the rectangular to print
 	if (area==WorksheetView::ExportBoundingBox){
-		rect =scene()->itemsBoundingRect();
+		sourceRect = scene()->itemsBoundingRect();
 	}else if (area==WorksheetView::ExportSelection){
 		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
 		foreach(QGraphicsItem* item, m_selectedItems) {
-			rect = rect.united( item->mapToScene(item->boundingRect()).boundingRect() );
+			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
 		}
 	}else{
-		rect =scene()->sceneRect();
+		sourceRect = scene()->sceneRect();
 	}
 
 	//print
@@ -873,43 +874,64 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 			printer.setOutputFormat(QPrinter::PostScriptFormat);
 		
 		printer.setOutputFileName(path);
-		printer.setPaperSize( QSizeF(rect.width(), rect.height()), QPrinter::Millimeter);
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+		printer.setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
 		printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
 		printer.setCreator( QString("LabPlot ") + LVERSION );
 
 		QPainter painter(&printer);
-		painter. setRenderHint(QPainter::Antialiasing);
-
+		painter.setRenderHint(QPainter::Antialiasing);
+		QRectF targetRect(0, 0, painter.device()->width(),painter.device()->height());
 		painter.begin(&printer);
-		scene()->render(&painter, QRectF(), rect);
+		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
 	}else if (format==WorksheetView::Svg){
 		QSvgGenerator generator;
 		generator.setFileName(path);
-		generator.setSize(QSize(rect.width(), rect.height()));
-		generator.setViewBox(rect);
-
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);		
+		w = w*QApplication::desktop()->physicalDpiX()/25.4;
+		h = h*QApplication::desktop()->physicalDpiY()/25.4;
+		
+		generator.setSize(QSize(w, h));
+		QRectF targetRect(0, 0, w, h);
+		generator.setViewBox(targetRect);
+		
 		QPainter painter;
 		painter.begin(&generator);
-		scene()->render(&painter, QRectF(), rect);
+		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
 	}else{
 		//PNG
 		//TODO add all formats supported by Qt in QImage
 		//TODO make the size of the image customizable by the user in the ExportWorksheetDialog
-		int w = rect.width()*QApplication::desktop()->physicalDpiX()/25.4;
-		int h = rect.height()*QApplication::desktop()->physicalDpiY()/25.4;
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);		
+		w = w*QApplication::desktop()->physicalDpiX()/25.4;
+		h = h*QApplication::desktop()->physicalDpiY()/25.4;
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
-		
+		QRectF targetRect(0, 0, w, h);
+
 		QPainter painter;
 		painter.begin(&image);
-		painter.scale(QApplication::desktop()->physicalDpiX()/25.4,QApplication::desktop()->physicalDpiY()/25.4);
-		scene()->render(&painter, QRect(), rect);
+		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
 
 		image.save(path, "png");
 	}
+}
+
+void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect) {
+	//draw the background
+	painter->save();
+	painter->scale(targetRect.width()/sourceRect.width(), targetRect.height()/sourceRect.height());
+	drawBackground(painter, sourceRect);
+	painter->restore();
+	
+	//draw the scene items
+	scene()->render(painter, QRectF(), sourceRect);
 }
 
 void WorksheetView::print(QPrinter* printer) const{
