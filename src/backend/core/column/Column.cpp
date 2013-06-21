@@ -35,10 +35,6 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include <QIcon>
-#include <QXmlStreamWriter>
-// #include <QtDebug>
-#include <QVariant>
-// #include <QMetaObject>
 #include <QMetaEnum>
 
 /**

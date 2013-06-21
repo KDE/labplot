@@ -395,13 +395,7 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-	//draw the selection box before scaling since it already has the proper size.
-	if (isSelected()){
-		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-		painter->drawPath(labelShape);
-// 			setGraphicsEffect(new QGraphicsDropShadowEffect());
-	}
-	
+	painter->save();
 	painter->rotate(rotationAngle);
 
 	if (textWrapper.teXUsed){
@@ -418,6 +412,12 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 		float h = staticText.size().height();
  		painter->drawStaticText(QPoint(-w/2,-h/2), staticText);
 	}
+	painter->restore();
+	
+	if (isSelected()){
+		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->drawPath(labelShape);
+	}	
 }
 
 QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant &value){

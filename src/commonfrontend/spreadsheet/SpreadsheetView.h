@@ -148,7 +148,6 @@ class SpreadsheetView : public QTableView{
 	public slots:
 		void activateFormulaMode(bool on);
 		void goToCell(int row, int col);
-		void deselectAll();
 		void toggleComments();
 		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize); 
 		void goToNextColumn();

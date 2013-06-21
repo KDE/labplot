@@ -397,7 +397,7 @@ void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSi
  */
 void SpreadsheetView::advanceCell(){
 	QModelIndex idx = currentIndex();
-    if (idx.row()+1 >= m_spreadsheet->rowCount())	{
+    if (idx.row()+1 >= m_spreadsheet->rowCount()) {
 		int new_size = m_spreadsheet->rowCount()+1;
 		m_spreadsheet->setRowCount(new_size);
 	}
@@ -408,11 +408,6 @@ void SpreadsheetView::goToCell(int row, int col){
 	QModelIndex index = m_model->index(row, col);
 	scrollTo(index);
 	setCurrentIndex(index);
-}
-
-//TODO for what?
-void SpreadsheetView::deselectAll(){
-	clearSelection();
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to){
@@ -1319,16 +1314,6 @@ void SpreadsheetView::addColumns(){
 void SpreadsheetView::addRows(){
 	m_spreadsheet->appendRows(selectedRowCount(false));
 }
-
-//TODO 
-// void SpreadsheetView::selectAll(){
-// 	// the original QSpreadsheetView::selectAll() toggles all cells which is strange behavior IMHO - thzs
-// 	QItemSelectionModel * sel_model = selectionModel();
-// 	QItemSelection sel(model()->index(0, 0, QModelIndex()), model()->index(model()->rowCount()-1, 
-// 		model()->columnCount()-1, QModelIndex()));
-// 		
-// 	sel_model->select(sel, QItemSelectionModel::Select);
-// }
 
 /*!
   Cause a repaint of the header.

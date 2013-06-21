@@ -659,23 +659,65 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 			}
 
 			//curve's symbol
-			if (curve->symbolsTypeId()!="none"){
-				if (factory) {
-					painter->setOpacity(curve->symbolsOpacity());
-					AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
+			if (curve->symbolsTypeId()!="none" && factory){
+				painter->setOpacity(curve->symbolsOpacity());
+				AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
 
-					symbol->setSize(curve->symbolsSize());
-					symbol->setAspectRatio(curve->symbolsAspectRatio());
-					symbol->setBrush(curve->symbolsBrush());
-					symbol->setPen(curve->symbolsPen());
-					symbol->setRotationAngle(curve->symbolsRotationAngle());
+				symbol->setSize(curve->symbolsSize());
+				symbol->setAspectRatio(curve->symbolsAspectRatio());
+				symbol->setBrush(curve->symbolsBrush());
+				symbol->setPen(curve->symbolsPen());
+				symbol->setRotationAngle(curve->symbolsRotationAngle());
 
-					painter->translate(QPointF(lineSymbolWidth/2, h/2));
-					symbol->paint(painter, option, widget);
-					painter->translate(-QPointF(lineSymbolWidth/2, h/2));
-				}
+				painter->translate(QPointF(lineSymbolWidth/2, h/2));
+				symbol->paint(painter, option, widget);
+				painter->translate(-QPointF(lineSymbolWidth/2, h/2));
 			}
 
+			//error bars
+			if ( (curve->xErrorType() != XYCurve::NoError) || (curve->yErrorType() != XYCurve::NoError) ) {
+				painter->setOpacity(curve->errorBarsOpacity());
+				painter->setPen(curve->errorBarsPen());
+	
+				//curve's error bars for x
+				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
+				if (curve->symbolsTypeId()!="none" && errorBarsSize<curve->symbolsSize()*1.4)
+					errorBarsSize = curve->symbolsSize()*1.4;
+
+				switch(curve->errorBarsType()) {
+					case XYCurve::ErrorBarsSimple:
+						//horiz. line
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
+										  lineSymbolWidth/2+errorBarsSize/2, h/2);		
+						//vert. line
+						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
+										  lineSymbolWidth/2, h/2+errorBarsSize/2);
+						break;
+					case XYCurve::ErrorBarsWithEnds: {
+						//horiz. line
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
+										  lineSymbolWidth/2+errorBarsSize/2, h/2);
+
+						//vert. line
+						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
+										  lineSymbolWidth/2, h/2+errorBarsSize/2);
+
+						//caps for the horiz. line
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2-errorBarsSize/4,
+										  lineSymbolWidth/2-errorBarsSize/2, h/2+errorBarsSize/4);
+						painter->drawLine(lineSymbolWidth/2+errorBarsSize/2, h/2-errorBarsSize/4,
+										  lineSymbolWidth/2+errorBarsSize/2, h/2+errorBarsSize/4);
+
+						//caps for the vert. line
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/4, h/2-errorBarsSize/2,
+										  lineSymbolWidth/2+errorBarsSize/4, h/2-errorBarsSize/2);
+						painter->drawLine(lineSymbolWidth/2-errorBarsSize/4, h/2+errorBarsSize/2,
+										  lineSymbolWidth/2+errorBarsSize/4, h/2+errorBarsSize/2);
+						break;
+					}
+				}
+			}
+			
 			//curve's name
 			painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
