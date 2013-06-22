@@ -94,20 +94,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	lineSymbolCurveDock(0),
 	worksheetDock(0),
 	textLabelDock(0){
-
-	m_mdiArea = new QMdiArea;
-	setCentralWidget(m_mdiArea);
-	statusBar()->showMessage(i18n("Welcome to LabPlot") + " " + LVERSION);
-	initActions();
-	initMenus();
-	setupGUI();
-	setAttribute( Qt::WA_DeleteOnClose );
-
-	//make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
-	statusBar()->setFixedHeight(statusBar()->height());
-
-	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), 
-			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 	
 	QTimer::singleShot( 0, this, SLOT(initGUI()) );
 }
@@ -129,6 +115,20 @@ MainWin::~MainWin() {
 }
 
 void MainWin::initGUI(){
+	m_mdiArea = new QMdiArea;
+	setCentralWidget(m_mdiArea);
+	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), 
+			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+	
+	statusBar()->showMessage(i18n("Welcome to LabPlot") + " " + LVERSION);
+	initActions();
+	initMenus();
+	setupGUI();
+	setAttribute( Qt::WA_DeleteOnClose );
+
+	//make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
+	statusBar()->setFixedHeight(statusBar()->height());
+
   //TODO make the tabbed view optional and/or accessible via the menu.
   //The tabbed view collides with the visibility policy for the subwindows.
   //Hide the menus for the visibility policy if the tabbed view is used.
@@ -143,7 +143,8 @@ void MainWin::initGUI(){
 
 	//TODO There is no file to open -> create a new project or open the last used project.
 	// Make this selection - new or last used - optional in the settings.
- 	updateGUI();
+
+ 	updateGUIOnProjectChanges();
 }
 
 void MainWin::initActions() {
@@ -194,69 +195,6 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_database_datasource", m_newSqlDataSourceAction);
 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
-/*
-	//"New plots"
-	QActionGroup* newPlotActions = new QActionGroup(this);
-	//TODO add KDE-icon
-// 	action = new KAction(KIcon(QIcon(newFunction_xpm)),i18n("New 2D Plot"),this);
-	action = new KAction(KIcon(),i18n("New 2D Plot"),this);
-	actionCollection()->addAction("new_2D_plot", action);
-	newPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 2D Surface Plot"),this);
-	actionCollection()->addAction("new_2D_surface_plot", action);
-	newPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 2D Polar Plot"),this);
-	actionCollection()->addAction("new_2D_polar_plot", action);
-	newPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 3D Plot"),this);
-	actionCollection()->addAction("new_3D_plot", action);
-	newPlotActions->addAction(action);
-
-	connect(newPlotActions, SIGNAL(triggered(QAction*)), this, SLOT(newPlotActionTriggered(QAction*)));
-
-	//Function plots
-   QActionGroup* functionPlotActions = new QActionGroup(this);
-	action = new KAction(i18n("New 2D Function Plot"),this);
-	actionCollection()->addAction("new_2D_function_plot", action);
-	functionPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 2D Surface Function Plot"),this);
-	actionCollection()->addAction("new_2D_surface_function_plot", action);
-	functionPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 2D Polar Function Plot"),this);
-	actionCollection()->addAction("new_2D_polar_function_plot", action);
-	functionPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 3D Function Plot"),this);
-	actionCollection()->addAction("new_3D_function_plot", action);
-	functionPlotActions->addAction(action);
-
-	connect(functionPlotActions, SIGNAL(triggered(QAction*)), this, SLOT(functionPlotActionTriggered(QAction*)));
-
-	//"New data plots"
-	QActionGroup* dataPlotActions = new QActionGroup(this);
-	action = new KAction(i18n("New 2D Data Plot"),this);
-	actionCollection()->addAction("new_2D_data_plot", action);
-	dataPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 2D Surface Data Plot"),this);
-	actionCollection()->addAction("new_2D_surface_data_plot", action);
-	dataPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 2D Polar Data Plot"),this);
-	actionCollection()->addAction("new_2D_polar_data_plot", action);
-	dataPlotActions->addAction(action);
-
-	action = new KAction(i18n("New 3D Data Plot"),this);
-	actionCollection()->addAction("new_3D_data_plot", action);
-	dataPlotActions->addAction(action);
-
-	connect(dataPlotActions, SIGNAL(triggered(QAction*)), this, SLOT(dataPlotActionTriggered(QAction*)));
-*/
 	m_importAction = new KAction(KIcon("document-import-database"), i18n("Import"), this);
 	m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_L);
 	actionCollection()->addAction("import", m_importAction);
@@ -401,9 +339,10 @@ bool MainWin::warnModified() {
 }
 
 /*!
-	disables/enables menu items etc. depending on the currently selected Aspect.
-*/
-void MainWin::updateGUI() {
+ * updates the state of actions, menus and toolbars (enabled or disabled) 
+ * on project changes (project closes and opens)
+ */
+void MainWin::updateGUIOnProjectChanges() {
 	if (m_closing)
 		return;
 	
@@ -432,15 +371,26 @@ void MainWin::updateGUI() {
 	factory->container("windows", this)->setEnabled(!b);
 
 	if (b) {
-		m_undoAction->setEnabled(false);
-		m_redoAction->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
-		return;
 	}
+	
+	// undo/redo actions are disabled in both cases - when the project is closed or opened
+	m_undoAction->setEnabled(false);
+	m_redoAction->setEnabled(false);
+}
 
-	//Activate/deactivate menus and toolbar depending on the currently active window (worksheet or spreadsheet).
+/*
+ * updates the state of actions, menus and toolbars (enabled or disabled) 
+ * depending on the currently active window (worksheet or spreadsheet).
+ */
+void MainWin::updateGUI() {
+	if (m_closing)
+		return;
+	
+	KXMLGUIFactory* factory=this->guiFactory();
+
 	Worksheet* w = this->activeWorksheet();
 	if (w!=0){
 		//enable worksheet related menus
@@ -548,7 +498,7 @@ bool MainWin::newProject(){
 	
 	m_projectExplorerDock->show();
 	m_propertiesDock->show();
-	updateGUI();
+	updateGUIOnProjectChanges();
 
 	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
 		this, SLOT(handleAspectRemoved(const AbstractAspect *)));
@@ -604,6 +554,8 @@ void MainWin::openProject(const QString& filename) {
 	m_projectExplorer->setCurrentAspect(m_project);
 	m_recentProjectsAction->addUrl( KUrl(filename) );
 	setCaption(m_project->name());
+	updateGUIOnProjectChanges();
+	updateGUI(); //there are most probably worksheets or spreadsheets in the open project -> update the GUI
 }
 
 void MainWin::openRecentProject(const KUrl& url) {
@@ -658,7 +610,7 @@ bool MainWin::closeProject(){
 		m_propertiesDock->hide();
 		m_currentAspect=0;
 		m_currentFolder=0;
-		updateGUI();
+		updateGUIOnProjectChanges();
 	}
 
 	return true;
@@ -819,12 +771,13 @@ void MainWin::newWorksheet() {
 	Otherwise returns \a 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const{
-	QMdiSubWindow* win =  m_mdiArea->currentSubWindow();
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
 		return 0;
-	
-	AbstractPart* part = qobject_cast<PartMdiView*>(win)->part();
-	return  qobject_cast<Spreadsheet*>(part);
+
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	return dynamic_cast<Spreadsheet*>(part);
 }
 
 /*!
@@ -832,12 +785,13 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	Otherwise returns \a 0.
 */
 Worksheet* MainWin::activeWorksheet() const{
-	QMdiSubWindow* win =  m_mdiArea->currentSubWindow();
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
 		return 0;
-	
-	AbstractPart* part = qobject_cast<PartMdiView*>(win)->part();
-	return  qobject_cast<Worksheet*>(part);
+
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	return dynamic_cast<Worksheet*>(part);
 }
 
 /*!
@@ -1020,7 +974,6 @@ void MainWin::updateMdiWindowVisibility() const{
 		case Project::folderOnly:
 			foreach(QMdiSubWindow *window, windows){
 				part_view = qobject_cast<PartMdiView *>(window);
-				qDebug()<<"name "<<part_view->part()->name();
 				Q_ASSERT(part_view);
 				if(part_view->part()->folder() == m_currentFolder)
 					part_view->show();

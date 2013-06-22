@@ -140,7 +140,6 @@ private:
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	
-	void updateGUI();
 	void openXML(QIODevice*);
 
 	void initActions();
@@ -159,6 +158,8 @@ private:
 	
 private slots:
 	void initGUI();
+	void updateGUI();
+	void updateGUIOnProjectChanges();
 	void undo();
 	void redo();
 
