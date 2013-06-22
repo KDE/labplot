@@ -658,22 +658,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				painter->drawLine(0, h/2, lineSymbolWidth, h/2);
 			}
 
-			//curve's symbol
-			if (curve->symbolsTypeId()!="none" && factory){
-				painter->setOpacity(curve->symbolsOpacity());
-				AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
-
-				symbol->setSize(curve->symbolsSize());
-				symbol->setAspectRatio(curve->symbolsAspectRatio());
-				symbol->setBrush(curve->symbolsBrush());
-				symbol->setPen(curve->symbolsPen());
-				symbol->setRotationAngle(curve->symbolsRotationAngle());
-
-				painter->translate(QPointF(lineSymbolWidth/2, h/2));
-				symbol->paint(painter, option, widget);
-				painter->translate(-QPointF(lineSymbolWidth/2, h/2));
-			}
-
 			//error bars
 			if ( (curve->xErrorType() != XYCurve::NoError) || (curve->yErrorType() != XYCurve::NoError) ) {
 				painter->setOpacity(curve->errorBarsOpacity());
@@ -717,7 +701,23 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 					}
 				}
 			}
-			
+
+			//curve's symbol
+			if (curve->symbolsTypeId()!="none" && factory){
+				painter->setOpacity(curve->symbolsOpacity());
+				AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
+
+				symbol->setSize(curve->symbolsSize());
+				symbol->setAspectRatio(curve->symbolsAspectRatio());
+				symbol->setBrush(curve->symbolsBrush());
+				symbol->setPen(curve->symbolsPen());
+				symbol->setRotationAngle(curve->symbolsRotationAngle());
+
+				painter->translate(QPointF(lineSymbolWidth/2, h/2));
+				symbol->paint(painter, option, widget);
+				painter->translate(-QPointF(lineSymbolWidth/2, h/2));
+			}
+
 			//curve's name
 			painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
