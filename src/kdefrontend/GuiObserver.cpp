@@ -55,7 +55,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QDockWidget>
 #include <QStackedWidget>
 #include <QToolBar>
-#include <QDebug>
+#include <KDebug>
 
 #include <memory>
 
@@ -89,24 +89,15 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 	return;
   }
-	
+
   AbstractAspect* aspect=0;
-  
-  //determine the class name of the first aspect
-  aspect = static_cast<AbstractAspect *>(selectedAspects.first());
-    if (!aspect){
-	  if (mainWindow->stackedWidget->currentWidget())
-		mainWindow->stackedWidget->currentWidget()->hide();
-	  
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
-	return;
-  }
-  
-  QString className=aspect->metaObject()->className();
-  
-  //check, whether objects of different  type where selected -> hide the dock in this case.
+  QString prevClassName, className;
+ 
+  //check, whether objects of different types where selected
+  //don't show any dock widgets in this case.
   foreach(aspect, selectedAspects){
-	  if (aspect->metaObject()->className() != className){
+	  className= aspect->metaObject()->className();
+	  if ( className != prevClassName && prevClassName!=""){
 		if (mainWindow->stackedWidget->currentWidget())
 		  mainWindow->stackedWidget->currentWidget()->hide();
 
@@ -114,7 +105,8 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 		this->updateGui("", 0);
 		return;
 	  }
-	}
+	  prevClassName = className;
+  }
 	
   if (mainWindow->stackedWidget->currentWidget())
 	mainWindow->stackedWidget->currentWidget()->show();
