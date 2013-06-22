@@ -1,12 +1,12 @@
 /***************************************************************************
-    File                		: ProjectExplorer.cpp
-    Project              	: SciDAVis/Labplot2
-    Description       	: A tree view for displaying and editing an AspectTreeModel.
+    File                 : ProjectExplorer.cpp
+    Project              : SciDAVis/Labplot2
+    Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
-									(replace * with @ in the email addresses)
+    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
+							(replace * with @ in the email addresses)
  ***************************************************************************/
 
 /***************************************************************************
@@ -42,17 +42,17 @@ class ProjectExplorer : public QWidget{
 	Q_OBJECT
 
 	public:
-		ProjectExplorer(QWidget *parent = 0);
+		ProjectExplorer(QWidget* parent = 0);
 
-		void setCurrentAspect(const AbstractAspect * aspect);
-		void setModel(QAbstractItemModel * model);
+		void setCurrentAspect(const AbstractAspect*);
+		void setModel(QAbstractItemModel*);
 		void setProject(const Project*);
 		QModelIndex currentIndex() const;
-		QAbstractItemModel * model() const;
+		QAbstractItemModel* model() const;
 		
 	private:
 		void createActions();
-	  	void contextMenuEvent(QContextMenuEvent *event);
+	  	void contextMenuEvent(QContextMenuEvent*);
 		bool eventFilter(QObject*, QEvent*);
 		int m_columnToHide;
 		QTreeView* m_treeView;
@@ -68,15 +68,15 @@ class ProjectExplorer : public QWidget{
 		
 		QFrame* frameFilter;
 		QLabel* lFilter;
-		QLineEdit *leFilter;
-		QPushButton *bClearFilter;
-		QPushButton *bFilterOptions;
+		QLineEdit* leFilter;
+		QPushButton* bClearFilter;
+		QPushButton* bFilterOptions;
 	
 	private slots:
-		void expandAspect(const AbstractAspect * aspect);
+		void aspectAdded(const AbstractAspect*);
 		void toggleColumn(int);
 		void showAllColumns();
-		void filterTextChanged(const QString& );
+		void filterTextChanged(const QString&);
 		void toggleFilterCaseSensitivity();
 		void toggleFilterMatchCompleteWord();
 		void toggleFilterWidgets();

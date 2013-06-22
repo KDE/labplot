@@ -1,11 +1,11 @@
 /***************************************************************************
-    File                		: ProjectExplorer.cpp
-    Project              	: SciDAVis/Labplot2
-    Description       	: A tree view for displaying and editing an AspectTreeModel.
+    File                 : ProjectExplorer.cpp
+    Project              : SciDAVis/Labplot2
+    Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
     Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
 									(replace * with @ in the email addresses)
  ***************************************************************************/
 
@@ -40,7 +40,7 @@
 #include <QLabel>
 #include <QHeaderView>
 #include <QSignalMapper>
-
+#include <QDebug>
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QLineEdit>
 #else
@@ -102,11 +102,10 @@ ProjectExplorer::ProjectExplorer(QWidget *parent){
 	m_treeView->header()->installEventFilter(this);
 	
 	layout->addWidget(m_treeView);
-	
-	
+
 	m_columnToHide=0;
 	this->createActions();
-	
+
 	connect(leFilter, SIGNAL(textChanged(const QString&)), this, SLOT(filterTextChanged(const QString&)));
 	connect(bFilterOptions, SIGNAL(toggled(bool)), this, SLOT(toggleFilterOptionsMenu(bool)));
 }
@@ -218,7 +217,7 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 }
 
 void ProjectExplorer::setProject ( const Project* project){
-	connect(project, SIGNAL(aspectAdded(const AbstractAspect *)), this, SLOT(expandAspect(const AbstractAspect *)));
+	connect(project, SIGNAL(aspectAdded(const AbstractAspect *)), this, SLOT(aspectAdded(const AbstractAspect *)));
 }
 
 QModelIndex ProjectExplorer::currentIndex() const{
@@ -274,23 +273,25 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 //#################################  SLOTS  ####################################
 //##############################################################################
 /*!
-  expand the aspect \c aspect (the tree index corresponding to it) in the tree view and makes it visible.
-  Called when a new aspect is added to the project.
+  expand the aspect \c aspect (the tree index corresponding to it) in the tree view
+  and makes it visible and selected. Called when a new aspect is added to the project.
  */
-void ProjectExplorer::expandAspect(const AbstractAspect* aspect){
-	AspectTreeModel * tree_model = qobject_cast<AspectTreeModel *>(m_treeView->model());
+void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
+	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	const QModelIndex& index =  tree_model->modelIndexOfAspect(aspect);
 
+	//expand and make the aspect visible
 	m_treeView->setExpanded(index, true);
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
-	
+
+	//select the added aspect
 	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){
 	Q_UNUSED(previous);
-	emit currentAspectChanged(static_cast<AbstractAspect *>(current.internalPointer()));
+	emit currentAspectChanged(static_cast<AbstractAspect*>(current.internalPointer()));
 }
 
 void ProjectExplorer::toggleColumn(int index){
@@ -410,43 +411,42 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index){
-  m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-  m_treeView->setExpanded(index, true);
-  m_treeView->scrollTo(index);
+	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+	m_treeView->setExpanded(index, true);
+	m_treeView->scrollTo(index);
 }
  
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
-  m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
+	m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
 }
 
-//TODO optimize
- void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
-  QModelIndex index;
-  QModelIndexList items;
-  AbstractAspect* aspect=0;
+void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
+	QModelIndex index;
+	QModelIndexList items;
+	AbstractAspect* aspect = 0;
 
-  //there are four model indices in each row ->divide by 4 to obtain the number of selected aspects.
-  //TODO find out a solution which is not explicitely dependent on the current number of columns.
-  items = selected.indexes();
-  for (int i=0; i<items.size()/4; ++i){
-	index=items.at(i*4);
-	aspect = static_cast<AbstractAspect *>(index.internalPointer());
-	aspect->setSelected(true);
-  }
-  
-  items = deselected.indexes();
-  for (int i=0; i<items.size()/4; ++i){
-	index=items.at(i*4);
-	aspect = static_cast<AbstractAspect *>(index.internalPointer());
-	aspect->setSelected(false);
-  }
-  
-  items = m_treeView->selectionModel()->selectedRows();
-  QList<AbstractAspect*> selectedAspects;
-  foreach(index,items){
-	aspect = static_cast<AbstractAspect *>(index.internalPointer());
-	selectedAspects<<aspect;
-  }
-  
-  emit selectedAspectsChanged(selectedAspects);
+	//there are four model indices in each row 
+	//-> divide by 4 to obtain the number of selected rows (=aspects)
+	items = selected.indexes();
+	for (int i=0; i<items.size()/4; ++i){
+		index = items.at(i*4);
+		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		aspect->setSelected(true);
+	}
+
+	items = deselected.indexes();
+	for (int i=0; i<items.size()/4; ++i){
+		index = items.at(i*4);
+		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		aspect->setSelected(false);
+	}
+
+	items = m_treeView->selectionModel()->selectedRows();
+	QList<AbstractAspect*> selectedAspects;
+	foreach(index,items){
+		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		selectedAspects<<aspect;
+	}
+
+	emit selectedAspectsChanged(selectedAspects);
 }

@@ -361,12 +361,12 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 		child->setName(new_name);
 	}
 
+	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
+	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
+
 	emit aspectAboutToBeAdded(this, 0, child);
 	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->m_children.count()));
 	endMacro();
-
-	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
-	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
 }
 
 /**
@@ -681,13 +681,13 @@ void AbstractAspect::setSelected(bool s){
 }
 
 void AbstractAspect::childSelected(const AbstractAspect* aspect) {
-	//forward the signal to the most possible level in the parent-child hierarchy
+	//forward the signal to the highest possible level in the parent-child hierarchy
 	if (aspect->parentAspect() != 0)
 		emit aspect->parentAspect()->selected(aspect);
 }
 
 void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
-	//forward the signal to the most possible level in the parent-child hierarchy
+	//forward the signal to the highest possible level in the parent-child hierarchy
 	if (aspect->parentAspect() != 0)
 		emit aspect->parentAspect()->deselected(aspect);	
 }
