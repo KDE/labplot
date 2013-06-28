@@ -67,10 +67,6 @@ TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd):AbstractWorkshee
 void TextLabel::init() {
 	Q_D(TextLabel);
 
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-
 	d->textWrapper.teXUsed = false;
 	d->teXFontSize = 12;
 	d->teXFontColor = Qt::black;
@@ -94,10 +90,11 @@ void TextLabel::init() {
 	d->teXImageResolution = 300;
 	d->teXImageScaleFactor = QApplication::desktop()->physicalDpiX()/float(d->teXImageResolution)*d->scaleFactor;
 
-	d->suppressRetransform = false;
-	d->suppressItemChangeEvent = false;
-
 	connect(&d->teXImageFutureWatcher, SIGNAL(finished()), this, SLOT(updateTeXImage()));
+
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
+	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);	
 }
 
 TextLabel::~TextLabel() {
@@ -218,7 +215,8 @@ void TextLabel::updateTeXImage(){
 //################################################################
 //################### Private implementation ##########################
 //################################################################
-TextLabelPrivate::TextLabelPrivate(TextLabel *owner) : q(owner){
+TextLabelPrivate::TextLabelPrivate(TextLabel *owner)
+		: q(owner), suppressItemChangeEvent(false), suppressRetransform(false) {
 }
 
 QString TextLabelPrivate::name() const{

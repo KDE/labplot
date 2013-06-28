@@ -51,9 +51,9 @@ class TextLabel : public AbstractWorksheetElement{
 		enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
 
 		struct TextWrapper{
-			TextWrapper(){ teXUsed=false; }
-			TextWrapper(const QString& t, bool b){ text=t; teXUsed=b; }
-			TextWrapper(const QString& t){ text=t; teXUsed=false; }
+			TextWrapper() : teXUsed(false){}
+			TextWrapper(const QString& t, bool b) : text(t), teXUsed(b){}
+			TextWrapper(const QString& t) : text(t), teXUsed(false){}
 
 			QString text;
 			bool teXUsed;

@@ -51,7 +51,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		TextLabel::HorizontalAlignment horizontalAlignment;
 		TextLabel::VerticalAlignment verticalAlignment;
 
-		TextLabel * const q;
+		TextLabel* const q;
 		QString name() const;
 		void retransform();
 		bool swapVisible(bool on);
@@ -72,7 +72,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		//reimplemented from QGraphicsItem
 		virtual QRectF boundingRect() const;
  		virtual QPainterPath shape() const;
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
