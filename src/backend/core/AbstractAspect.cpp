@@ -48,6 +48,7 @@
 #include <KIcon>
 #include <KAction>
 #include <KStandardAction>
+#include <KMenu>
 #endif
 /**
  * \class AbstractAspect 
@@ -706,22 +707,24 @@ QIcon AbstractAspect::icon() const
  * The caller takes ownership of the menu.
  */
 QMenu *AbstractAspect::createContextMenu(){
-	QMenu * menu = new QMenu();
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	QMenu* menu = new QMenu();
 	QAction *action;
 	const QStyle *widget_style = qApp->style();
 	action = menu->addAction(QObject::tr("&Remove"), this, SLOT(remove()));
 	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
+	return menu;
 #else
+	KMenu* menu = new KMenu();
+	menu->addTitle(this->name());
 	menu->addAction( KStandardAction::cut(this) );
 	menu->addAction(KStandardAction::copy(this));
 	menu->addAction(KStandardAction::paste(this));
 	menu->addSeparator();
 	menu->addAction(QIcon(KIcon("edit-rename")), QObject::tr("Rename"), this, SIGNAL(renameRequested()));
 	menu->addAction(QIcon(KIcon("edit-delete")), QObject::tr("Delete"), this, SLOT(remove()));
-#endif
-	
 	return menu;
+#endif
 }
 
 /**

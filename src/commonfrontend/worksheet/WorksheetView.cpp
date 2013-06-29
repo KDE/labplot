@@ -334,12 +334,23 @@ void WorksheetView::initMenus(){
 }
 
 void WorksheetView::createContextMenu(QMenu* menu){
-  if (!menu)
-	menu=new QMenu();
-  else
-	menu->addSeparator();
+	if (!menu)
+		return;
+	if(!menu)
+		menu=new QMenu();
+	else
+		menu->addSeparator();
 
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
 	QAction* firstAction = menu->actions().first();
+#else
+	QAction* firstAction = 0;
+	if (menu->actions().size()>1)
+		firstAction = menu->actions().at(1);
+	else
+		firstAction = menu->actions().first();
+#endif
+
 	menu->insertMenu(firstAction, m_addNewMenu);
 	menu->insertSeparator(firstAction);
   
@@ -790,6 +801,7 @@ void WorksheetView::changeSnapToGrid(){
  *  and is finally handled here.
  */
 void WorksheetView::selectItem(QGraphicsItem* item){
+	qDebug()<<"selectItem";
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(true);
 	m_selectedItems<<item;

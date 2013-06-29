@@ -55,6 +55,7 @@
 #include <KIcon>
 #include <KAction>
 #include <KLocale>
+#include <KMenu>
 #endif
 
 /**
@@ -208,8 +209,13 @@ void Axis::initMenus(){
 QMenu* Axis::createContextMenu(){
 	Q_D(Axis);
 	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
 	QAction* firstAction = menu->actions().first();
-	
+#else
+	QAction* firstAction = menu->actions().at(1);
+#endif
+
 	//Orientation
 	if ( d->orientation == AxisHorizontal )
 		orientationHorizontalAction->setChecked(true);
@@ -265,6 +271,7 @@ void Axis::retransform() {
 }
 
 void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
+	return;
 	Q_D(Axis);
 
 	QPen pen = d->linePen;
@@ -851,6 +858,7 @@ void AxisPrivate::retransformLine(){
 
 	lines.append(QLineF(startPoint, endPoint));
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	qDebug()<<"retransformed lines " << lines.count();
 	foreach (QLineF line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -1288,6 +1296,7 @@ void AxisPrivate::retransformMajorGrid(){
 	}
 	
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	qDebug()<<"retransformed major grid lines " << lines.count();
 	foreach (QLineF line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1326,6 +1335,7 @@ void AxisPrivate::retransformMinorGrid(){
 	}
 
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	qDebug()<<"retransformed minor grid lines " << lines.count();
 	foreach (QLineF line, lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
@@ -1408,32 +1418,29 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
   if (!isVisible())
 	return;
   
-  //draw the axis title
-	//TODO
+	//draw the line
+	if (linePen.style() != Qt::NoPen){
+		painter->setOpacity(lineOpacity);
+		painter->setPen(linePen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(linePath);
+	}
 
-  //draw the line
-  if (linePen.style() != Qt::NoPen){
-	painter->setOpacity(lineOpacity);
-	painter->setPen(linePen);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawPath(linePath);
-  }
+	//draw the major ticks
+	if (majorTicksDirection != Axis::noTicks){
+		painter->setOpacity(majorTicksOpacity);
+		painter->setPen(majorTicksPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(majorTicksPath);
+	}
 
-  //draw the major ticks
-  if (majorTicksDirection != Axis::noTicks){
-	painter->setOpacity(majorTicksOpacity);
-	painter->setPen(majorTicksPen);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawPath(majorTicksPath);
-  }
-  
-  //draw the minor ticks
-  if (minorTicksDirection != Axis::noTicks){
-	painter->setOpacity(minorTicksOpacity);
-	painter->setPen(minorTicksPen);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawPath(minorTicksPath);
-  }
+	//draw the minor ticks
+	if (minorTicksDirection != Axis::noTicks){
+		painter->setOpacity(minorTicksOpacity);
+		painter->setPen(minorTicksPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(minorTicksPath);
+	}
 
   	//draw major grid
 	if (majorGridPen.style() != Qt::NoPen){
@@ -1451,25 +1458,25 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->drawPath(minorGridPath);
 	}
 
-  // draw tick labels
-  if (labelsPosition != Axis::NoLabels){
-	painter->setOpacity(labelsOpacity);
-	painter->setPen(QPen(labelsColor));
-	painter->setFont(labelsFont);
-	for (int i=0; i<tickLabelPoints.size(); i++){
-	  painter->translate(tickLabelPoints.at(i));
-	  painter->save();
-	  painter->rotate(-labelsRotationAngle);
- 	  painter->drawText(QPoint(0,0), tickLabelStrings.at(i) );
- 	  painter->restore();
-	  painter->translate(-tickLabelPoints.at(i));
+	// draw tick labels
+	if (labelsPosition != Axis::NoLabels){
+		painter->setOpacity(labelsOpacity);
+		painter->setPen(QPen(labelsColor));
+		painter->setFont(labelsFont);
+		for (int i=0; i<tickLabelPoints.size(); i++){
+			painter->translate(tickLabelPoints.at(i));
+			painter->save();
+			painter->rotate(-labelsRotationAngle);
+			painter->drawText(QPoint(0,0), tickLabelStrings.at(i) );
+			painter->restore();
+			painter->translate(-tickLabelPoints.at(i));
+		}
 	}
-  }
-  
-   if (isSelected()){
-	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-	painter->drawPath(shape());
-  }
+
+	if (isSelected()){
+		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->drawPath(shape());
+	}
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){

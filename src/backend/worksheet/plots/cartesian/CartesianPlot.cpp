@@ -194,7 +194,7 @@ void CartesianPlot::initDefault(){
 	axis->setMinorTicksNumber(1);
 	axis->setLabelsPosition(Axis::NoLabels);
 	axis->title()->setText(QString());
-	
+
 	//Plot title
  	m_title = new TextLabel(this->name());
 	addChild(m_title);
@@ -313,7 +313,12 @@ void CartesianPlot::initMenus(){
 QMenu *CartesianPlot::createContextMenu(){
 	QMenu *menu = AbstractWorksheetElement::createContextMenu();
 
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
 	QAction* firstAction = menu->actions().first();
+#else
+	QAction* firstAction = menu->actions().at(1);
+#endif
+
 	menu->insertMenu(firstAction, addNewMenu);
 	menu->insertMenu(firstAction, zoomMenu);
 	menu->insertSeparator(firstAction);

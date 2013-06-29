@@ -336,7 +336,16 @@ void SpreadsheetView::createContextMenu(QMenu * menu){
 	else
 		menu->addSeparator();
 
-  	QAction* firstAction = menu->actions().first();
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+	QAction* firstAction = menu->actions().first();
+#else
+	QAction* firstAction = 0;
+	if (menu->actions().size()>1)
+		firstAction = menu->actions().at(1);
+	else
+		firstAction = menu->actions().first();
+#endif
+
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertAction(firstAction, action_toggle_comments);
 	menu->insertSeparator(firstAction);
