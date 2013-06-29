@@ -1148,23 +1148,37 @@ void XYCurvePrivate::updateErrorBars(){
 	Q_ASSERT(cSystem);
 
 	//the cap size for the errorbars is given in scene units.
-	//determine first the (half of the) cap size in logical units.
+	//determine first the (half of the) cap size in logical units:
+	// * take the first visible point in logical units
+	// * convert it to scene units
+	// * add to this point an offset corresponding to the cap size in scene units
+	// * convert this point back to logical units
+	// * substract from this point the original coordinates (without the new offset)
+	//   to determine the cap size in logical units.
 	float capSizeX = 0;
 	float capSizeY = 0;
 	if (errorBarsType != XYCurve::ErrorBarsSimple && !symbolPointsLogical.isEmpty()) {
+		//determine the index of the first visible point
+		size_t i = 0;
+		while( !visiblePoints[i] && i<visiblePoints.size())
+			i++;
+
+		if (i==visiblePoints.size())
+			return; //no visible points -> no error bars to draw
+
 		//cap size for x-error bars
-		QPointF pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(0));
-		pointScene.setY(pointScene.y()+errorBarsCapSize);
+		QPointF pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(i));
+		pointScene.setY(pointScene.y()-errorBarsCapSize);
 		QPointF pointLogical = cSystem->mapSceneToLogical(pointScene, AbstractCoordinateSystem::SuppressPageClipping);
-		capSizeX = (pointLogical.y() - symbolPointsLogical.at(0).y())/2;
+		capSizeX = (pointLogical.y() - symbolPointsLogical.at(i).y())/2;
 		
 		//cap size for y-error bars
-		pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(0));
+		pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(i));
 		pointScene.setX(pointScene.x()+errorBarsCapSize);
 		pointLogical = cSystem->mapSceneToLogical(pointScene, AbstractCoordinateSystem::SuppressPageClipping);
-		capSizeY = (pointLogical.x() - symbolPointsLogical.at(0).x())/2;		
+		capSizeY = (pointLogical.x() - symbolPointsLogical.at(i).x())/2;		
 	}
-	
+
 	for (int i=0; i<symbolPointsLogical.size(); ++i){
 		if (!visiblePoints[i])
 			continue;
@@ -1209,7 +1223,7 @@ void XYCurvePrivate::updateErrorBars(){
 				}
 			}
 		}
-		
+
 		//error bars for y
 		if (yErrorType!=XYCurve::NoError) {
 			//determine the values for the errors
@@ -1222,7 +1236,7 @@ void XYCurvePrivate::updateErrorBars(){
 				errorMinus = errorPlus;
 			} else {
 				if (yErrorMinusColumn && yErrorMinusColumn->isValid(i) && !yErrorMinusColumn->isMasked(i) )
-					errorMinus = xErrorMinusColumn->valueAt(i);
+					errorMinus = yErrorMinusColumn->valueAt(i);
 				else
 					errorMinus = 0;
 			}
