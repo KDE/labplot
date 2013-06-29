@@ -61,7 +61,8 @@ Email (use @ for *)  	: alexander.semke*web.de
 
 /*!
   \class GuiObserver
-  \brief The GUI observer looks for the selection changes in the main window and shows/hides the correspondings dock widgets, toolbars etc.
+  \brief The GUI observer looks for the selection changes in the main window
+  and shows/hides the correspondings dock widgets, toolbars etc.
   This class is intended to simplify (or not to overload) the code in MainWin.
 
   \ingroup kdefrontend
@@ -294,16 +295,22 @@ void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspe
   if (className == ""){
 	//no object or objects of different kind (e.g. a spreadsheet and a worksheet) were selected.
 	
-  }else if (className=="CartesianPlot"){
+  }else if (className=="CartesianPlot" || className=="Axis" || className=="XYCurve" || className=="CartesianPlotLegend"){
 	//populate worksheet-toolbar
-	QToolBar* toolbar=qobject_cast<QToolBar*>(mainWindow->guiFactory()->container("cartesian_plot_toolbar", mainWindow));
+	QToolBar* toolbar=dynamic_cast<QToolBar*>(mainWindow->guiFactory()->container("cartesian_plot_toolbar", mainWindow));
 	toolbar->show();
 	toolbar->setEnabled(true);
 	toolbar->clear();
-	const CartesianPlot* plot = qobject_cast<const CartesianPlot*>(aspect);
-	if (plot)
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
+	if (plot) {
 		plot->fillToolBar(toolbar);
-	else
-		toolbar->setEnabled(false);	
+	} else {
+		// one of plot's childred was selected
+		const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect->parentAspect());
+		if (plot)
+			plot->fillToolBar(toolbar);
+		else
+			toolbar->setEnabled(false);	
+	}
   }
 }

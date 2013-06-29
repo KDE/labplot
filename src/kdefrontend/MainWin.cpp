@@ -420,6 +420,7 @@ void MainWin::updateGUI() {
 		factory->container("worksheet", this)->setEnabled(false);
 //  		factory->container("drawing", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->setVisible(false);
+		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
 
 		//Handle the Spreadsheet-object
 		Spreadsheet* spreadsheet = this->activeSpreadsheet();
