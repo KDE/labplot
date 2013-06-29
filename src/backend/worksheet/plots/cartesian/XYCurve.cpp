@@ -729,12 +729,12 @@ void XYCurvePrivate::retransform(){
 	}
 
 	//calculate the scene coordinates
-	AbstractPlot *plot = qobject_cast<AbstractPlot*>(q->parentAspect());
-	const CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
+	const AbstractPlot* plot = dynamic_cast<const AbstractPlot*>(q->parentAspect());
+	Q_ASSERT(plot);
+	const CartesianCoordinateSystem *cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	Q_ASSERT(cSystem);
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
-// 	visiblePoints.shrink_to_fit();
-	if (cSystem)
-		 cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
+	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
 
 	updateLines();
 	updateDropLines();
@@ -753,7 +753,7 @@ void XYCurvePrivate::updateLines(){
 	  return;
 	}
 	
-	int count=symbolPointsScene.count();
+	int count=symbolPointsLogical.count();
 	
 	//nothing to do, if no data points available
 	if (count<=1){
@@ -768,14 +768,14 @@ void XYCurvePrivate::updateLines(){
 	switch(lineType){
 	  case XYCurve::Line:{
 		for (int i=0; i<count-1; i++){
-		  lines.append(QLineF(symbolPointsScene.at(i), symbolPointsScene.at(i+1)));
+		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		break;
 	  }
 	  case XYCurve::StartHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsScene.at(i);
-		  nextPoint=symbolPointsScene.at(i+1);
+		  curPoint=symbolPointsLogical.at(i);
+		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(nextPoint.x(), curPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
 		  lines.append(QLineF(tempPoint1, nextPoint));
@@ -784,8 +784,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::StartVertical:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsScene.at(i);
-		  nextPoint=symbolPointsScene.at(i+1);
+		  curPoint=symbolPointsLogical.at(i);
+		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), nextPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
 		  lines.append(QLineF(tempPoint1,nextPoint));
@@ -794,8 +794,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsScene.at(i);
-		  nextPoint=symbolPointsScene.at(i+1);
+		  curPoint=symbolPointsLogical.at(i);
+		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
 		  tempPoint2=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, nextPoint.y());
 		  lines.append(QLineF(curPoint, tempPoint1));
@@ -806,8 +806,8 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointVertical:{
 		for (int i=0; i<count-1; i++){
-		  curPoint=symbolPointsScene.at(i);
-		  nextPoint=symbolPointsScene.at(i+1);		  
+		  curPoint=symbolPointsLogical.at(i);
+		  nextPoint=symbolPointsLogical.at(i+1);		  
 		  tempPoint1=QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
 		  tempPoint2=QPointF(nextPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
 		  lines.append(QLineF(curPoint, tempPoint1));
@@ -820,7 +820,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=1){
-			lines.append(QLineF(symbolPointsScene.at(i), symbolPointsScene.at(i+1)));
+			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 			skip++;
 		  }else{
 			skip=0;
@@ -832,7 +832,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=2){
-			lines.append(QLineF(symbolPointsScene.at(i), symbolPointsScene.at(i+1)));
+			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 			skip++;
 		  }else{
 			skip=0;
@@ -851,8 +851,8 @@ void XYCurvePrivate::updateLines(){
 		  
 		double x[count],  y[count];
 		for (int i=0; i<count; i++){
-		  x[i]=symbolPointsScene.at(i).x();
-		  y[i]=symbolPointsScene.at(i).y();
+		  x[i]=symbolPointsLogical.at(i).x();
+		  y[i]=symbolPointsLogical.at(i).y();
 		}
 		
 		if (lineType==XYCurve::SplineCubicNatural){
@@ -918,13 +918,18 @@ void XYCurvePrivate::updateLines(){
 		break;
 	}
 
+	//map the lines to scene coordinates
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	Q_ASSERT(plot);
+	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+	Q_ASSERT(cSystem);
+	lines = cSystem->mapLogicalToScene(lines);
+	
 	//new line path
 	foreach (QLineF line, lines){
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
-	
-	//TODO: add clipping when splines are used.
 
 	recalcShapeAndBoundingRect();
 }
@@ -944,9 +949,8 @@ void XYCurvePrivate::updateDropLines(){
 	QList<QLineF> lines;
 	float xMin = 0;
 	float yMin = 0;
-	CartesianPlot *plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	if (!plot)
-		return;
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	Q_ASSERT(plot);
 	
 	xMin = plot->xMin();
 	yMin = plot->yMin();
@@ -981,16 +985,16 @@ void XYCurvePrivate::updateDropLines(){
 	}
 	
 	//map the drop lines to scene coordinates
-	const AbstractCoordinateSystem *cSystem = plot->coordinateSystem();
-	if (cSystem)
-	  lines = cSystem->mapLogicalToScene(lines);
-	
+	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+	Q_ASSERT(cSystem);
+	lines = cSystem->mapLogicalToScene(lines);
+
 	//new painter path for the drop lines
 	foreach (QLineF line, lines){
 		dropLinePath.moveTo(line.p1());
 		dropLinePath.lineTo(line.p2());
 	}
-	
+
 	recalcShapeAndBoundingRect();
 }
 
@@ -1138,10 +1142,10 @@ void XYCurvePrivate::updateErrorBars(){
 	QList<QLineF> lines;
 	float errorPlus, errorMinus;
 	
-	CartesianPlot* plot = qobject_cast<CartesianPlot*>(q->parentAspect());
-	Q_ASSERT(plot != NULL);	
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	Q_ASSERT(plot);	
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
-	Q_ASSERT(cSystem != NULL);
+	Q_ASSERT(cSystem);
 
 	//the cap size for the errorbars is given in scene units.
 	//determine first the (half of the) cap size in logical units.
