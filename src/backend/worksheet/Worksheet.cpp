@@ -534,7 +534,7 @@ void WorksheetPrivate::updateLayout(){
 			emit q->layoutRowCountChanged(layoutRowCount);
 		}
 		
-		w=(m_scene->sceneRect().height()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
+		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
 		int columnIndex=0; //counts the columns in a row
 		foreach(WorksheetElementContainer* elem, list){
