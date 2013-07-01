@@ -54,6 +54,8 @@
 #include <QGraphicsEllipseItem>
 #include <QPainterPath>
 #include <QPainter>
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
 #include <QtDebug>
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -662,6 +664,10 @@ QRectF XYCurvePrivate::boundingRect() const{
 */
 QPainterPath XYCurvePrivate::shape() const{
   return curveShape;
+}
+
+void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
+    q->createContextMenu()->exec(event->screenPos());
 }
 
 bool XYCurvePrivate::swapVisible(bool on){

@@ -128,6 +128,9 @@ class XYCurvePrivate: public QGraphicsItem {
 		QList<QString> valuesStrings;
 
 		XYCurve * const q;
+
+	private:
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);		
 };
 
 #endif

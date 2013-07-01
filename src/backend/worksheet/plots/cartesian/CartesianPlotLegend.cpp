@@ -50,6 +50,8 @@
 #include <QGraphicsItem>
 #include <QPainterPath>
 #include <QPainter>
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
 #include <QtDebug>
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -390,6 +392,10 @@ QString CartesianPlotLegendPrivate::name() const {
 
 QRectF CartesianPlotLegendPrivate::boundingRect() const {
 	return rect;
+}
+
+void CartesianPlotLegendPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
+    q->createContextMenu()->exec(event->screenPos());
 }
 
 /*!

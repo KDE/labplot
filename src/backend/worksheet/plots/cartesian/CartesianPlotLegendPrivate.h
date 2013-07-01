@@ -36,6 +36,7 @@
 #include <QFont>
 
 class CartesianPlotLegend;
+class QGraphicsSceneContextMenuEvent;
 
 class CartesianPlotLegendPrivate : public QGraphicsItem {
 	public:
@@ -91,6 +92,9 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		float layoutVerticalSpacing;
 		float layoutHorizontalSpacing;
 		int layoutColumnCount;
+
+	private:
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 };
 
 #endif
