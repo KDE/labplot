@@ -59,6 +59,7 @@ class XYCurve: public AbstractWorksheetElement {
 		virtual ~XYCurve();
 
 		virtual QIcon icon() const;
+		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
@@ -142,6 +143,9 @@ class XYCurve: public AbstractWorksheetElement {
 		void yErrorPlusColumnAboutToBeRemoved();
 		void yErrorMinusColumnAboutToBeRemoved();
 
+		//SLOTs for changes triggered via QActions in the context menu
+		void visibilityChanged();
+		
 	protected:
 		XYCurve(const QString &name, XYCurvePrivate *dd);
 		XYCurvePrivate * const d_ptr;
@@ -149,7 +153,10 @@ class XYCurve: public AbstractWorksheetElement {
 	private:
     	Q_DECLARE_PRIVATE(XYCurve)
 		void init();
+		void initActions();
 
+		QAction* visibilityAction;
+		
 	signals:
 		//General-Tab
 		void xDataChanged();

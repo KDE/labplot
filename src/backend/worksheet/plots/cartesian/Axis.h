@@ -141,6 +141,7 @@ class Axis: public AbstractWorksheetElement {
 		void initActions();
 		void initMenus();
 
+		QAction* visibilityAction;
 		QAction* orientationHorizontalAction;
 		QAction* orientationVerticalAction;
 		
@@ -160,7 +161,8 @@ class Axis: public AbstractWorksheetElement {
 		void orientationChanged(QAction*);
 		void lineStyleChanged(QAction*);
 		void lineColorChanged(QAction*);
-		
+		void visibilityChanged();
+
 	signals:
 		friend class AxisSetOrientationCmd;
 		friend class AxisSetPositionCmd;

@@ -55,6 +55,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		virtual ~CartesianPlotLegend();
 
 		virtual QIcon icon() const;
+		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
@@ -104,8 +105,16 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 	private:
     	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 		void init();
+		void initActions();
+
 		CartesianPlot* m_plot;
 
+		QAction* visibilityAction;
+
+	private slots:
+		//SLOTs for changes triggered via QActions in the context menu
+		void visibilityChanged();
+		
 	signals:
 		friend class CartesianPlotLegendSetLabelFontCmd;
 		friend class CartesianPlotLegendSetLabelColorCmd;

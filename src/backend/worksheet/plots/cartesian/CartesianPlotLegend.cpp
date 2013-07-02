@@ -70,6 +70,11 @@ CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &nam
 	init();
 }
 
+CartesianPlotLegend::~CartesianPlotLegend() {
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem
+	//and is deleted during the cleanup in QGraphicsScene
+}
+
 void CartesianPlotLegend::init(){
 	Q_D(CartesianPlotLegend);
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -129,11 +134,30 @@ void CartesianPlotLegend::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	
+	this->initActions();
 }
 
-CartesianPlotLegend::~CartesianPlotLegend() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
+void CartesianPlotLegend::initActions(){
+	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction->setCheckable(true);
+	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+}
+
+QMenu* CartesianPlotLegend::createContextMenu(){
+	Q_D(const CartesianPlotLegend);
+	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+	QAction* firstAction = menu->actions().first();
+#else
+	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
+#endif
+
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+
+	return menu;
 }
 
 /*!
@@ -378,6 +402,14 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 
+
+//##############################################################################
+//######  SLOTs for changes triggered via QActions in the context menu  ########
+//##############################################################################
+void CartesianPlotLegend::visibilityChanged(){
+	Q_D(const CartesianPlotLegend);
+	this->setVisible(!d->isVisible());
+}
 
 //##############################################################################
 //######################### Private implementation #############################

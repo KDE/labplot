@@ -166,6 +166,10 @@ void Axis::init(){
  * For some ActionGroups the actual actions are created in \c GuiTool, 
  */
 void Axis::initActions(){
+	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction->setCheckable(true);
+	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	
 	//Orientation 
 	orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -207,15 +211,18 @@ void Axis::initMenus(){
 }
 
 QMenu* Axis::createContextMenu(){
-	Q_D(Axis);
+	Q_D(const Axis);
 	QMenu *menu = AbstractWorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
 	QAction* firstAction = menu->actions().first();
 #else
-	QAction* firstAction = menu->actions().at(1);
+	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 #endif
 
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+	
 	//Orientation
 	if ( d->orientation == AxisHorizontal )
 		orientationHorizontalAction->setChecked(true);
@@ -770,17 +777,22 @@ void Axis::orientationChanged(QAction* action){
 }
 
 void Axis::lineStyleChanged(QAction* action){
-	Q_D(Axis);
+	Q_D(const Axis);
 	QPen pen = d->linePen;
 	pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
 	this->setLinePen(pen);
 }
 
 void Axis::lineColorChanged(QAction* action){
-	Q_D(Axis);
+	Q_D(const Axis);
 	QPen pen = d->linePen;
 	pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 	this->setLinePen(pen);
+}
+
+void Axis::visibilityChanged(){
+	Q_D(const Axis);
+	this->setVisible(!d->isVisible());
 }
 
 //#####################################################################

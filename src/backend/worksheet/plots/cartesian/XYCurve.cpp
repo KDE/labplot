@@ -79,6 +79,11 @@ XYCurve::XYCurve(const QString &name, XYCurvePrivate *dd)
 	init();
 }
 
+XYCurve::~XYCurve() {
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem
+	//and is deleted during the cleanup in QGraphicsScene
+}
+
 void XYCurve::init(){
 	Q_D(XYCurve);
 
@@ -117,11 +122,30 @@ void XYCurve::init(){
 	d->errorBarsOpacity = 1.0;
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+	this->initActions();
 }
 
-XYCurve::~XYCurve() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
+void XYCurve::initActions(){
+	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction->setCheckable(true);
+	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+}
+
+QMenu* XYCurve::createContextMenu(){
+// 	Q_D(const XYCurve);
+	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+	QAction* firstAction = menu->actions().first();
+#else
+	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
+#endif
+
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+
+	return menu;
 }
 
 /*!
@@ -640,6 +664,14 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved() {
 	Q_D(XYCurve);
 	d->yErrorMinusColumn = 0;
 	d->updateErrorBars();
+}
+
+//##############################################################################
+//######  SLOTs for changes triggered via QActions in the context menu  ########
+//##############################################################################
+void XYCurve::visibilityChanged(){
+	Q_D(const XYCurve);
+	this->setVisible(!d->isVisible());
 }
 
 //##############################################################################

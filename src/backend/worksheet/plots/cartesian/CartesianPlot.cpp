@@ -279,6 +279,9 @@ void CartesianPlot::initActions(){
 	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
 	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
 	
+	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction->setCheckable(true);
+	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));	
 }
 
 void CartesianPlot::initMenus(){
@@ -310,14 +313,17 @@ void CartesianPlot::initMenus(){
 	zoomMenu->addAction(shiftDownYAction);
 }
 
-QMenu *CartesianPlot::createContextMenu(){
-	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+QMenu* CartesianPlot::createContextMenu(){
+	QMenu* menu = AbstractWorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = menu->actions().at(1);
 #endif
+
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
 
 	menu->insertMenu(firstAction, addNewMenu);
 	menu->insertMenu(firstAction, zoomMenu);
@@ -827,7 +833,15 @@ void CartesianPlot::shiftDownY(){
 	d->yMin -= offsetY;
 	d->retransformScales();
 }
-		
+
+//##############################################################################
+//######  SLOTs for changes triggered via QActions in the context menu  ########
+//##############################################################################
+void CartesianPlot::visibilityChanged(){
+	Q_D(CartesianPlot);
+	this->setVisible(!d->isVisible());
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################

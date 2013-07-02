@@ -74,6 +74,8 @@ class CartesianPlot:public AbstractPlot{
 
 		CartesianPlotLegend* m_legend;
 
+		QAction* visibilityAction;
+
 		QAction* addCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
@@ -122,6 +124,9 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
+
+		//SLOTs for changes triggered via QActions in the context menu
+		void visibilityChanged();
 
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);

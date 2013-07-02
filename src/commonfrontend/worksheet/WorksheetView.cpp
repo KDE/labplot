@@ -334,8 +334,6 @@ void WorksheetView::initMenus(){
 }
 
 void WorksheetView::createContextMenu(QMenu* menu){
-	if (!menu)
-		return;
 	if(!menu)
 		menu=new QMenu();
 	else
