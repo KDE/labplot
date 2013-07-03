@@ -353,6 +353,7 @@ AbstractAspect * AbstractAspect::parentAspect() const
  * \brief Add the given Aspect to my list of children.
  */
 void AbstractAspect::addChild(AbstractAspect* child) {
+	qDebug()<<"AbstractAspect::addChild";
 	Q_CHECK_PTR(child);
 
 	QString new_name = m_aspect_private->uniqueNameFor(child->name());
@@ -365,7 +366,6 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
 	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
 
-	emit aspectAboutToBeAdded(this, 0, child);
 	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->m_children.count()));
 	endMacro();
 }
@@ -386,9 +386,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 	if (index == -1)
 		index = m_aspect_private->m_children.count();
 
-	emit aspectAboutToBeAdded(this, before, child);
 	exec(new AspectChildAddCmd(m_aspect_private, child, index));
-	emit aspectAdded(child);
 	endMacro();
 }
 
@@ -408,9 +406,7 @@ void AbstractAspect::removeChild(AbstractAspect* child) {
 	  nextSibling = m_aspect_private->m_children.at(m_aspect_private->indexOfChild(child) + 1);
 	
 	beginMacro(tr("%1: remove %2.").arg(name()).arg(child->name()));
-	emit aspectAboutToBeRemoved(child);
 	exec(new AspectChildRemoveCmd(m_aspect_private, child));
-	emit aspectRemoved(this, nextSibling, child);
 	endMacro();
 }
 
