@@ -54,8 +54,6 @@ WorksheetElementContainer::WorksheetElementContainer(const QString &name)
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd)
@@ -63,8 +61,6 @@ WorksheetElementContainer::WorksheetElementContainer(const QString &name, Worksh
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 }
 
 WorksheetElementContainer::~WorksheetElementContainer(){
@@ -135,6 +131,7 @@ void WorksheetElementContainer::handlePageResize(double horizontalRatio, double 
 }
 
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) {
+	qDebug()<<"WorksheetElementContainer::handleAspectAdded "<< aspect->name();
 	Q_D(WorksheetElementContainer);
 
 	const AbstractWorksheetElement *addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
@@ -148,15 +145,6 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 		foreach(AbstractWorksheetElement *elem, childElements) {
 			elem->graphicsItem()->setZValue(zVal++);
 		}
-	}
-}
-
-void WorksheetElementContainer::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
-	const AbstractWorksheetElement *removedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
-	if (removedElement && (aspect->parentAspect() == this)) {
-		QGraphicsItem *item = removedElement->graphicsItem();
-		Q_ASSERT(item != NULL);
-		item->setParentItem(NULL);	
 	}
 }
 

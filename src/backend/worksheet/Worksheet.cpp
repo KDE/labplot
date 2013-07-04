@@ -180,10 +180,11 @@ QWidget *Worksheet::view() const {
 	return m_view;
 }
 
-void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
-	const AbstractWorksheetElement *addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
+void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
+	qDebug()<<"Worksheet::handleAspectAdded "<< aspect->name();
+	const AbstractWorksheetElement* addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
 	if (addedElement) {
-		const_cast<AbstractWorksheetElement *>(addedElement)->retransform();
+		const_cast<AbstractWorksheetElement*>(addedElement)->retransform();
 
 		if (aspect->parentAspect() == this){
 			QGraphicsItem *item = addedElement->graphicsItem();
@@ -195,13 +196,15 @@ void Worksheet::handleAspectAdded(const AbstractAspect *aspect) {
 			foreach(AbstractWorksheetElement *elem, childElements) {
 				elem->graphicsItem()->setZValue(zVal++);
 			}
+
+			if (d->layout != Worksheet::NoLayout)
+				d->updateLayout();
 		}
 	}
-	if (d->layout != Worksheet::NoLayout)
-		d->updateLayout();
 }
 
-void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
+void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	qDebug()<<"Worksheet::handleAspectAboutToBeRemoved " << aspect->name();
 	const AbstractWorksheetElement *removedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
 	if (removedElement) {
 		QGraphicsItem *item = removedElement->graphicsItem();

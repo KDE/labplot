@@ -175,8 +175,9 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 	delete menu;
 }
 
-void ProjectExplorer::setCurrentAspect(const AbstractAspect * aspect){
-	AspectTreeModel * tree_model = qobject_cast<AspectTreeModel *>(m_treeView->model());
+void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect){
+	qDebug()<<"ProjectExplorer::setCurrentAspect" << aspect->name();
+	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(tree_model)
 	  m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
 }
@@ -411,16 +412,19 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index){
+	qDebug()<<"ProjectExplorer::selectIndex";
 	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 	m_treeView->setExpanded(index, true);
 	m_treeView->scrollTo(index);
 }
  
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
+	qDebug()<<"ProjectExplorer::deselectIndex";
 	m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
+	qDebug()<<"ProjectExplorer::selectionChanged";
 	QModelIndex index;
 	QModelIndexList items;
 	AbstractAspect* aspect = 0;

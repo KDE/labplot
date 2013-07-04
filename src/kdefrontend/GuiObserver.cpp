@@ -223,7 +223,7 @@ GuiObserver::GuiObserver(MainWin* mainWin){
   }else if (className=="TextLabel"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
 	
-	if (!mainWindow->axisDock){
+	if (!mainWindow->textLabelDock){
 	  mainWindow->textLabelDock = new LabelWidget(mainWindow->stackedWidget);
 	  mainWindow->stackedWidget->addWidget(mainWindow->textLabelDock);
 	}

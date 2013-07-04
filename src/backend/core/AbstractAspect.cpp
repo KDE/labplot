@@ -232,7 +232,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 AbstractAspect::AbstractAspect(const QString &name)
-	: m_undoAware(true), m_aspect_private(new Private(this, name))
+	: m_aspect_private(new Private(this, name)), m_undoAware(true)
 {
 }
 
@@ -399,12 +399,6 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
  */
 void AbstractAspect::removeChild(AbstractAspect* child) {
 	Q_ASSERT(child->parentAspect() == this);
-	AbstractAspect *nextSibling;
- 	if (child==m_aspect_private->m_children.last())
- 	  nextSibling=0;
-	else
-	  nextSibling = m_aspect_private->m_children.at(m_aspect_private->indexOfChild(child) + 1);
-	
 	beginMacro(tr("%1: remove %2.").arg(name()).arg(child->name()));
 	exec(new AspectChildRemoveCmd(m_aspect_private, child));
 	endMacro();
