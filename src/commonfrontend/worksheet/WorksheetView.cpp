@@ -312,20 +312,25 @@ void WorksheetView::initMenus(){
 	m_gridMenu->addAction(snapToGridAction);
 }
 
+/*!
+ * Populates the menu \c menu with the worksheet and worksheet view relevant actions.
+ * The menu is used
+ *   - as the context menu in WorksheetView
+ *   - as the "worksheet menu" in the main menu-bar (called form MainWin)
+ *   - as a part of the worksheet context menu in project explorer
+ */
 void WorksheetView::createContextMenu(QMenu* menu){
-	if(!menu)
-		menu=new QMenu();
-	else
-		menu->addSeparator();
+	Q_ASSERT(menu);
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = 0;
+	// if we're populating the context menu for the project explorer, then
+	//there're already actions available there. Skip the first title-action
+	//and insert the action at the beginning of the menu.
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
-	else
-		firstAction = menu->actions().first();
 #endif
 
 	menu->insertMenu(firstAction, m_addNewMenu);
@@ -342,11 +347,6 @@ void WorksheetView::createContextMenu(QMenu* menu){
 	menu->insertMenu(firstAction, m_layoutMenu);
 	menu->insertMenu(firstAction, m_gridMenu);
 	menu->insertSeparator(firstAction);
-}
-
-void WorksheetView::fillProjectMenu(QMenu *menu, bool *rc) {
-	Q_UNUSED(rc);
-	this->createContextMenu(menu);
 }
 
 void WorksheetView::fillToolBar(QToolBar* toolBar){

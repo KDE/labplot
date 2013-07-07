@@ -128,7 +128,6 @@ class WorksheetView : public QGraphicsView{
 
   public slots:
 	void createContextMenu(QMenu*);
-	void fillProjectMenu(QMenu* menu, bool* rc);
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void selectItem(QGraphicsItem*);

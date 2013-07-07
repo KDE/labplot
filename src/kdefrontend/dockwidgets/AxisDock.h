@@ -148,34 +148,34 @@ private slots:
 	void axisMajorTicksTypeChanged(Axis::TicksType);
 	void axisMajorTicksNumberChanged(int);
 	void axisMajorTicksIncrementChanged(qreal);
-	void axisMajorTicksPenChanged(QPen);
+	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);
 	void axisMajorTicksOpacityChanged(qreal);
 	void axisMinorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMinorTicksTypeChanged(Axis::TicksType);
 	void axisMinorTicksNumberChanged(int);
 	void axisMinorTicksIncrementChanged(qreal);
-	void axisMinorTicksPenChanged(QPen);
+	void axisMinorTicksPenChanged(const QPen&);
 	void axisMinorTicksLengthChanged(qreal);
 	void axisMinorTicksOpacityChanged(qreal);
 	
 	//labels
 	void axisLabelsFormatChanged(Axis::LabelsFormat);
-	void axisLabelsAutoPrecisionChanged(bool on); 
-	void axisLabelsPrecisionChanged(int precision);
-	void axisLabelsPositionChanged(Axis::LabelsPosition position);
-	void axisLabelsOffsetChanged(float offset);
-	void axisLabelsRotationAngleChanged(qreal rotation);
-	void axisLabelsFontChanged(QFont font);
-	void axisLabelsFontColorChanged(QColor color);
-	void axisLabelsPrefixChanged(QString prefix);
-	void axisLabelsSuffixChanged(QString suffix);
-	void axisLabelsOpacityChanged(qreal opacity);
+	void axisLabelsAutoPrecisionChanged(bool); 
+	void axisLabelsPrecisionChanged(int);
+	void axisLabelsPositionChanged(Axis::LabelsPosition);
+	void axisLabelsOffsetChanged(float);
+	void axisLabelsRotationAngleChanged(qreal);
+	void axisLabelsFontChanged(const QFont&);
+	void axisLabelsFontColorChanged(const QColor&);
+	void axisLabelsPrefixChanged(const QString&);
+	void axisLabelsSuffixChanged(const QString&);
+	void axisLabelsOpacityChanged(qreal);
 
 	//grids
-	void axisMajorGridPenChanged(QPen);
+	void axisMajorGridPenChanged(const QPen&);
 	void axisMajorGridOpacityChanged(qreal);
-	void axisMinorGridPenChanged(QPen);
+	void axisMinorGridPenChanged(const QPen&);
 	void axisMinorGridOpacityChanged(qreal);
 
 	void axisVisibleChanged(bool);
