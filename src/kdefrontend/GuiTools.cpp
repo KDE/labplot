@@ -192,12 +192,19 @@ void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup){
 void GuiTools::selectColorAction(QActionGroup* actionGroup, const QColor& color) {
 	int index;
 	for (index=0; index<colorsCount; ++index) {
-		if (color==colors[index])
+		if (color==colors[index]) {
 			actionGroup->actions()[index]->setChecked(true);
+			break;
+		}
 	}
 
-	if (index==colorsCount)
-		actionGroup->checkedAction()->setChecked(false);
+	if (index==colorsCount) {
+		//the color was not found in the list of predefined colors
+		// -> uncheck the previously checked action
+		QAction* checkedAction = actionGroup->checkedAction();
+		if (checkedAction)
+			checkedAction->setChecked(false);
+	}
 }
 
 QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
