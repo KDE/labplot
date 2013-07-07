@@ -110,7 +110,6 @@ class Worksheet: public AbstractPart, public scripted{
 		void itemSelected(QGraphicsItem*);
 		void itemDeselected(QGraphicsItem*);
 		void requestUpdate();
-		void layoutChanged(Worksheet::Layout);
 		void pageRectChanged();
 
 		friend class WorksheetSetBackgroundTypeCmd;
@@ -121,6 +120,7 @@ class Worksheet: public AbstractPart, public scripted{
 		friend class WorksheetSetBackgroundSecondColorCmd;
 		friend class WorksheetSetBackgroundFileNameCmd;
 		friend class WorksheetSetBackgroundOpacityCmd;
+		friend class WorksheetSetLayoutCmd;
 		friend class WorksheetSetLayoutTopMarginCmd;
 		friend class WorksheetSetLayoutBottomMarginCmd;
 		friend class WorksheetSetLayoutLeftMarginCmd;
@@ -137,6 +137,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void backgroundSecondColorChanged(QColor&);
 		void backgroundFileNameChanged(QString&);
 		void backgroundOpacityChanged(float);
+		void layoutChanged(Worksheet::Layout);
 		void layoutTopMarginChanged(float);
 		void layoutBottomMarginChanged(float);
 		void layoutLeftMarginChanged(float);

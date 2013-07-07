@@ -4,7 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
 
  ***************************************************************************/
@@ -42,7 +42,6 @@
 #include <QTimeLine>
 
 #include "commonfrontend/worksheet/WorksheetView.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetModel.h"
 #include "backend/worksheet/WorksheetElementGroup.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
@@ -82,39 +81,41 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	tbZoom(0) {
   
 	setScene(m_model->scene());
+  
+	setRenderHint(QPainter::Antialiasing);
+	setInteractive(true);
+	setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
+	setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+	setResizeAnchor(QGraphicsView::AnchorViewCenter);
+	setMinimumSize(16, 16);
+	setFocusPolicy(Qt::StrongFocus);
 
-	connect(worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
-	connect(worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
-	connect(worksheet, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
-	connect(worksheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
-  
-  setRenderHint(QPainter::Antialiasing);
-  setInteractive(true);
-  setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
-  setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-  setResizeAnchor(QGraphicsView::AnchorViewCenter);
-  setMinimumSize(16, 16);
-  setFocusPolicy(Qt::StrongFocus);
-  
 
-  viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
-  viewport()->setAttribute( Qt::WA_NoSystemBackground );
-  setAcceptDrops( true );
-  setCacheMode(QGraphicsView::CacheBackground);
-  
-  m_gridSettings.style = WorksheetView::NoGrid;
-  
-  initActions();
-  initMenus();
-  navigationModeAction->setChecked(true);
-  
-  changeZoom(zoomOriginAction);
-  currentZoomAction=zoomInAction;
+	viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
+	viewport()->setAttribute( Qt::WA_NoSystemBackground );
+	setAcceptDrops( true );
+	setCacheMode(QGraphicsView::CacheBackground);
+
+	m_gridSettings.style = WorksheetView::NoGrid;
+
+	initActions();
+	initMenus();
+	navigationModeAction->setChecked(true);
+
+	changeZoom(zoomOriginAction);
+	currentZoomAction=zoomInAction;
 	
-  connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-  connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
-  connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) ); 
-  connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
+
+	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
+	connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
+	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
+	connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
+	connect(m_worksheet, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
+	connect(m_worksheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
+	connect(m_worksheet, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)) );
+	
+	connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
 }
 
 WorksheetView::~WorksheetView(){
@@ -256,31 +257,9 @@ void WorksheetView::initActions(){
 	snapToGridAction = new KAction(i18n("snap to grid"), this);
 	snapToGridAction->setCheckable(true);
 #endif
-	Worksheet::Layout layout = m_worksheet->layout();
-	if (layout==Worksheet::NoLayout){
-		verticalLayoutAction->setEnabled(true);
-		verticalLayoutAction->setChecked(false);
-
-		horizontalLayoutAction->setEnabled(true);
-		horizontalLayoutAction->setChecked(false);
-
-		gridLayoutAction->setEnabled(true);
-		gridLayoutAction->setChecked(false);
-
-		breakLayoutAction->setEnabled(false);
-	}else{
-		verticalLayoutAction->setEnabled(false);
-		horizontalLayoutAction->setEnabled(false);
-		gridLayoutAction->setEnabled(false);
-		breakLayoutAction->setEnabled(true);
-
-		if (layout==Worksheet::VerticalLayout)
-			verticalLayoutAction->setChecked(true);
-		else if (layout==Worksheet::HorizontalLayout)
-			horizontalLayoutAction->setChecked(true);
-		else
-			gridLayoutAction->setChecked(true);
-	}
+	
+	//check the action corresponding to the currently active layout in worksheet
+	this->layoutChanged(m_worksheet->layout());
 	
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
@@ -709,6 +688,10 @@ void WorksheetView::fadeOut(qreal value) {
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
 
+/*!
+ * called when one of the layout-actions in WorkseetView was triggered.
+ * sets the layout in Worksheet and enables/disables the layout actions.
+ */
 void WorksheetView::changeLayout(QAction* action){
 	if (action==breakLayoutAction){
 		verticalLayoutAction->setEnabled(true);
@@ -952,4 +935,35 @@ void WorksheetView::print(QPrinter* printer) const{
 
 void WorksheetView::updateBackground(){
 	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
+}
+
+/*! 
+ * called when the layout was changed in Worksheet,
+ * enables the corresponding action
+ */
+void WorksheetView::layoutChanged(Worksheet::Layout layout) {
+	if (layout==Worksheet::NoLayout){
+		verticalLayoutAction->setEnabled(true);
+		verticalLayoutAction->setChecked(false);
+
+		horizontalLayoutAction->setEnabled(true);
+		horizontalLayoutAction->setChecked(false);
+
+		gridLayoutAction->setEnabled(true);
+		gridLayoutAction->setChecked(false);
+
+		breakLayoutAction->setEnabled(false);
+	}else{
+		verticalLayoutAction->setEnabled(false);
+		horizontalLayoutAction->setEnabled(false);
+		gridLayoutAction->setEnabled(false);
+		breakLayoutAction->setEnabled(true);
+
+		if (layout==Worksheet::VerticalLayout)
+			verticalLayoutAction->setChecked(true);
+		else if (layout==Worksheet::HorizontalLayout)
+			horizontalLayoutAction->setChecked(true);
+		else
+			gridLayoutAction->setChecked(true);
+	}
 }

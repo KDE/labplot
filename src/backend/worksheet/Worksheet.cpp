@@ -388,13 +388,10 @@ void Worksheet::setBackgroundOpacity(float opacity) {
 }
 
 /* ============================ setter methods and undo commands  for layout options  ================= */
-//TODO make this undo/redo-aware
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
 void Worksheet::setLayout(Worksheet::Layout layout){
-	if (layout != d->layout){
-		d->layout = layout;
-		d->updateLayout();
-		emit layoutChanged(layout);
-	}
+	if (layout != d->layout)
+		exec(new WorksheetSetLayoutCmd(d, layout, tr("%1: set layout")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout)
@@ -502,6 +499,7 @@ WorksheetPrivate::~WorksheetPrivate(){
 }
 
 void WorksheetPrivate::updateLayout(){
+	emit q->layoutChanged(layout);
 	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
 	if (layout==Worksheet::NoLayout){
 		foreach(WorksheetElementContainer* elem, list) {

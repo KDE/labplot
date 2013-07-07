@@ -32,6 +32,7 @@
 #define WORKSHEETVIEW_H
 
 #include <QGraphicsView>
+#include "backend/worksheet/Worksheet.h"
 
 class QMenu;
 class QToolBar;
@@ -39,7 +40,6 @@ class QToolButton;
 class QWheelEvent;
 class QTimeLine;
 
-class Worksheet;
 class WorksheetModel;
 class AbstractAspect;
 class AbstractWorksheetElement;
@@ -149,6 +149,7 @@ class WorksheetView : public QGraphicsView{
 	void deselectItem(QGraphicsItem*);
 	void selectionChanged();
 	void updateBackground();
+	void layoutChanged(Worksheet::Layout);
 
 	void fadeIn(qreal);
 	void fadeOut(qreal);
