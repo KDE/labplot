@@ -146,16 +146,6 @@ QIcon Worksheet::icon() const {
 	return ico;
 }
 
-//! Fill the part specific menu for the main window including setting the title
-/**
- * \return true on success, otherwise false (e.g. part has no actions).
- */
-bool Worksheet::fillProjectMenu(QMenu * menu) {
-	Q_UNUSED(menu);
-	// TODO
-	return false;
-}
-
 //! Return a new context menu.
 /**
  * The caller takes ownership of the menu.

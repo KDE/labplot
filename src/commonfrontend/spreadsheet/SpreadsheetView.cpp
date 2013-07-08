@@ -132,7 +132,6 @@ void SpreadsheetView::init(){
 			this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_spreadsheet, SIGNAL(requestProjectMenu(QMenu*,bool*)), this, SLOT(fillProjectMenu(QMenu*,bool*)));
 	connect(m_spreadsheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 
 	
@@ -297,18 +296,6 @@ void SpreadsheetView::connectActions(){
 	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
 }
 
-
-//! Fill the part specific menu for the main window including setting the title
-/**
-	* \param menu the menu to append the actions to
-	* \param rc return code: true on success, otherwise false (e.g. part has no actions).
-	*/
-void SpreadsheetView::fillProjectMenu(QMenu * menu, bool * rc){
-    Q_UNUSED(menu);
-        //TODO
-	if (rc) *rc = true;
-}
-
 void SpreadsheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addAction(action_insert_rows);
 	toolBar->addAction(action_add_rows);
@@ -326,24 +313,25 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addAction(action_sort_desc_column);
 }
 
-//! Return a new context menu.
-/**
-* The caller takes ownership of the menu.
-*/
-void SpreadsheetView::createContextMenu(QMenu * menu){
-	if (!menu)
-		menu=new QMenu();
-	else
-		menu->addSeparator();
+/*!
+ * Populates the menu \c menu with the spreadsheet and spreadsheet view relevant actions.
+ * The menu is used
+ *   - as the context menu in SpreadsheetView
+ *   - as the "spreadsheet menu" in the main menu-bar (called form MainWin)
+ *   - as a part of the spreadsheet context menu in project explorer
+ */
+void SpreadsheetView::createContextMenu(QMenu * menu) const {
+	Q_ASSERT(menu);
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = 0;
+	// if we're populating the context menu for the project explorer, then
+	//there're already actions available there. Skip the first title-action
+	//and insert the action at the beginning of the menu.
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
-	else
-		firstAction = menu->actions().first();
 #endif
 
 	menu->insertMenu(firstAction, m_selectionMenu);

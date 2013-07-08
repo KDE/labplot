@@ -42,7 +42,6 @@ class Spreadsheet : public AbstractDataSource{
 		Spreadsheet(AbstractScriptingEngine* engine, const QString &name);
 
 		virtual QIcon icon() const;
-		virtual bool fillProjectMenu(QMenu* menu);
 		virtual QMenu *createContextMenu();
 		virtual QWidget *view() const;
 

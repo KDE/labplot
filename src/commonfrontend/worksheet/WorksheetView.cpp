@@ -319,7 +319,7 @@ void WorksheetView::initMenus(){
  *   - as the "worksheet menu" in the main menu-bar (called form MainWin)
  *   - as a part of the worksheet context menu in project explorer
  */
-void WorksheetView::createContextMenu(QMenu* menu){
+void WorksheetView::createContextMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
@@ -596,7 +596,7 @@ void WorksheetView::changeZoom(QAction* action){
 	}
 	currentZoomAction=action;
 	if (tbZoom)
-			tbZoom->setDefaultAction(action);
+		tbZoom->setDefaultAction(action);
 }
 
 void WorksheetView::enableNavigationMode(){

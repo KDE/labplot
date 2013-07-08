@@ -191,8 +191,7 @@ class SpreadsheetView : public QTableView{
 
 		bool formulaModeActive() const;
 
-		void createContextMenu(QMenu * menu);
-		void fillProjectMenu(QMenu * menu, bool * rc);
+		void createContextMenu(QMenu*) const;
 		void fillToolBar(QToolBar*);
 		void sortDialog(QList<Column*> cols);
 

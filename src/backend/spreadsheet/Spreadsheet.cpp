@@ -292,17 +292,6 @@ QMenu *Spreadsheet::createContextMenu(){
 	return menu;
 }
 
-/*!
-  Fills the part specific menu for the main window including setting the title.
-  \return true on success, otherwise false (e.g. part has no actions).
-*/
-bool Spreadsheet::fillProjectMenu(QMenu * menu){
-	bool rc = false;
-	emit requestProjectMenu(menu, &rc);
-	return rc;
-}
-
-
 void Spreadsheet::moveColumn(int from, int to)
 {
 	Column * col = child<Column>(from);

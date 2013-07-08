@@ -65,7 +65,7 @@ class WorksheetView : public QGraphicsView{
 	};
 	
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const ExportFormat format, const ExportArea area);
+	void exportToFile(const QString&, const ExportFormat, const ExportArea);
 
   private:
 	void initActions();
@@ -127,7 +127,7 @@ class WorksheetView : public QGraphicsView{
 	QAction* snapToGridAction;	
 
   public slots:
-	void createContextMenu(QMenu*);
+	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void selectItem(QGraphicsItem*);

@@ -55,7 +55,6 @@ class Worksheet: public AbstractPart, public scripted{
 		static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
 
 		virtual QIcon icon() const;
-		virtual bool fillProjectMenu(QMenu *menu);
 		virtual QMenu *createContextMenu();
 		virtual QWidget *view() const;
 
