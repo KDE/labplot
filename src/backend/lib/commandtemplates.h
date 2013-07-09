@@ -63,6 +63,40 @@ class StandardSetterCmd: public QUndoCommand {
 };
 
 template <class target_class, typename value_type>
+class StandardMacroSetterCmd: public QUndoCommand {
+	public:
+		StandardMacroSetterCmd(target_class *target, value_type target_class:: *field, 
+				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use tr("%1: ...") for last arg
+			: m_target(target), m_field(field), m_otherValue(newValue)  {
+				setText(description.arg(m_target->name()));
+			}
+
+		virtual void initialize() {};
+		virtual void finalize() {};
+
+		virtual void redo() {
+			initialize();
+			value_type tmp = *m_target.*m_field;
+			*m_target.*m_field = m_otherValue;
+			m_otherValue = tmp;
+			finalize();
+		}
+
+		//don't do any finalize()-call in undo
+		virtual void undo() { 
+			initialize();
+			value_type tmp = *m_target.*m_field;
+			*m_target.*m_field = m_otherValue;
+			m_otherValue = tmp;
+		}
+
+	protected:
+		target_class *m_target;
+		value_type target_class:: *m_field;
+		value_type m_otherValue;
+};
+
+template <class target_class, typename value_type>
 class StandardSwapMethodSetterCmd: public QUndoCommand {
 	public:
 		StandardSwapMethodSetterCmd(target_class *target, value_type (target_class::*method)(typename Loki::TypeTraits<value_type>::ParameterType), 

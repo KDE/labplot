@@ -147,6 +147,15 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 		virtual void finalize() { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
 };
 
+// setter class with finalize() and signal emmiting for changing several properties in one single step (embedded in beginMacro/endMacro)
+#define STD_SETTER_CMD_IMPL_M_F_S(class_name, cmd_name, value_type, field_name, finalize_method) \
+class class_name ## cmd_name ## Cmd: public StandardMacroSetterCmd<class_name::Private, value_type> { \
+	public: \
+		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
+			: StandardMacroSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
+		virtual void finalize() { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
+};
+
 #define STD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, field_name, init_method) \
 class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
 	public: \
