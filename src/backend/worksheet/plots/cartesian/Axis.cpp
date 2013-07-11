@@ -869,7 +869,6 @@ void AxisPrivate::retransformLine(){
 
 	lines.append(QLineF(startPoint, endPoint));
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-	qDebug()<<"retransformed lines " << lines.count();
 	foreach (QLineF line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -877,11 +876,16 @@ void AxisPrivate::retransformLine(){
 }
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
-//TODO refactor this function, coordinate system should provide a function to map a single point
 bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 	QList<QPointF> points;
 	points.append(*anchorPoint);
-	points = m_cSystem->mapLogicalToScene(points);
+	
+	//this function currently is only used in retransormTicks() were we iterate over points
+	//that are _certainly_ within the plot rectangular.
+	// -> we can ommit page clipping here. Without this flag it can happen that the ticks (and grid lines)
+	// at the boundaries of the plot are not visible anymore because of (wrong) float comparison in QRect::contains()
+	// in CartesianCoordinateSystem::mapLogicalToScene()
+	points = m_cSystem->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
 	if (points.count() != 1){ // point is not mappable or in a coordinate gap
 		return false;
 	}else{
@@ -1284,7 +1288,6 @@ void AxisPrivate::retransformMajorGrid(){
 
 	//major tick points are already in scene coordinates, convert them back to logical...
 	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
-
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal){ //horizontal axis
 		float yMin = m_plot->yMin();
@@ -1307,7 +1310,6 @@ void AxisPrivate::retransformMajorGrid(){
 	}
 	
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-	qDebug()<<"retransformed major grid lines " << lines.count();
 	foreach (QLineF line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1346,7 +1348,6 @@ void AxisPrivate::retransformMinorGrid(){
 	}
 
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-	qDebug()<<"retransformed minor grid lines " << lines.count();
 	foreach (QLineF line, lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
