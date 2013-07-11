@@ -154,6 +154,7 @@ class class_name ## cmd_name ## Cmd: public StandardMacroSetterCmd<class_name::P
 		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardMacroSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
 		virtual void finalize() { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
+		virtual void finalizeUndo() { emit m_target->q->field_name##Changed(m_target->*m_field); } \
 };
 
 #define STD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, field_name, init_method) \

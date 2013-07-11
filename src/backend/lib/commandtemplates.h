@@ -73,6 +73,7 @@ class StandardMacroSetterCmd: public QUndoCommand {
 
 		virtual void initialize() {};
 		virtual void finalize() {};
+		virtual void finalizeUndo() {};
 
 		virtual void redo() {
 			initialize();
@@ -82,12 +83,15 @@ class StandardMacroSetterCmd: public QUndoCommand {
 			finalize();
 		}
 
-		//don't do any finalize()-call in undo
+		//call finalizeUndo() at the end where only the signal is emmited
+		//and no actual finalize-method is called that can potentially 
+		//cause  new entries on the undo-stack
 		virtual void undo() { 
 			initialize();
 			value_type tmp = *m_target.*m_field;
 			*m_target.*m_field = m_otherValue;
 			m_otherValue = tmp;
+			finalizeUndo();
 		}
 
 	protected:
