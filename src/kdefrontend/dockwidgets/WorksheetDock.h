@@ -30,8 +30,8 @@
 #ifndef WORKSHEETDOCK_H
 #define WORKSHEETDOCK_H
 
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include <QList>
 #include "ui_worksheetdock.h"
 
 class Worksheet;
@@ -96,6 +96,7 @@ private slots:
 	void worksheetBackgroundSecondColorChanged(QColor&);
 	void worksheetBackgroundFileNameChanged(QString&);
 	void worksheetBackgroundOpacityChanged(float);
+	void worksheetLayoutChanged(Worksheet::Layout);
 	void worksheetLayoutTopMarginChanged(float);
 	void worksheetLayoutBottomMarginChanged(float);
 	void worksheetLayoutLeftMarginChanged(float);

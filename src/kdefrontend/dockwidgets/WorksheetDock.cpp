@@ -29,7 +29,6 @@
  ***************************************************************************/
 
 #include "WorksheetDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 #include <QPrinter>
@@ -169,6 +168,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	//show the properties of the first worksheet
 	KConfig config("", KConfig::SimpleConfig);
   	loadConfig(config);
+	this->worksheetLayoutChanged(m_worksheet->layout());
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
 	connect(m_worksheet, SIGNAL(pageRectChanged()),this, SLOT(worksheetGeometryChanged()));
@@ -183,6 +183,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	connect(m_worksheet,SIGNAL(backgroundFileNameChanged(QString&)),this,SLOT(worksheetBackgroundFileNameChanged(QString&)));
 	connect(m_worksheet,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(worksheetBackgroundOpacityChanged(float)));
 
+	connect(m_worksheet,SIGNAL(layoutChanged(Worksheet::Layout)),this,SLOT(worksheetLayoutChanged(Worksheet::Layout)));
 	connect(m_worksheet,SIGNAL(layoutTopMarginChanged(float)),this,SLOT(worksheetLayoutTopMarginChanged(float)));
 	connect(m_worksheet,SIGNAL(layoutBottomMarginChanged(float)),this,SLOT(worksheetLayoutBottomMarginChanged(float)));
 	connect(m_worksheet,SIGNAL(layoutLeftMarginChanged(float)),this,SLOT(worksheetLayoutLeftMarginChanged(float)));
@@ -703,6 +704,33 @@ void WorksheetDock::worksheetBackgroundOpacityChanged(float opacity) {
 	m_initializing = true;
 	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
+}
+
+void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
+	bool b = (layout != Worksheet::NoLayout);
+	ui.sbLayoutTopMargin->setEnabled(b);
+	ui.sbLayoutBottomMargin->setEnabled(b);
+	ui.sbLayoutLeftMargin->setEnabled(b);
+	ui.sbLayoutRightMargin->setEnabled(b);
+	ui.sbLayoutHorizontalSpacing->setEnabled(b);
+	ui.sbLayoutVerticalSpacing->setEnabled(b);
+	ui.sbLayoutRowCount->setEnabled(b);
+	ui.sbLayoutColumnCount->setEnabled(b);
+	
+	if (b) {
+		bool grid = (layout == Worksheet::GridLayout);
+		ui.lGrid->setVisible(grid);
+		ui.lRowCount->setVisible(grid);
+		ui.sbLayoutRowCount->setVisible(grid);
+		ui.lColumnCount->setVisible(grid);
+		ui.sbLayoutColumnCount->setVisible(grid);
+	}else {
+		ui.lGrid->setVisible(true);
+		ui.lRowCount->setVisible(true);
+		ui.sbLayoutRowCount->setVisible(true);
+		ui.lColumnCount->setVisible(true);
+		ui.sbLayoutColumnCount->setVisible(true);
+	}		
 }
 
 void WorksheetDock::worksheetLayoutTopMarginChanged(float value) {
