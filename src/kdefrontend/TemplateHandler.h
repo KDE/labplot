@@ -63,9 +63,9 @@ class TemplateHandler : public QWidget{
 	private slots:
 		void loadMenu();
 		void saveMenu();
-		void loadMenuSelected(QAction* action);
-		void saveMenuSelected(QAction* action);
-		void saveNewSelected(const QString& filename);
+		void loadMenuSelected(QAction*);
+		void saveMenuSelected(QAction*);
+		void saveNewSelected(const QString&);
 		void saveDefaults();
 
 	signals:

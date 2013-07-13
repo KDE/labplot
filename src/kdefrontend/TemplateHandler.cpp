@@ -32,20 +32,22 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QToolButton>
-#include <QtGui/QMenu>
+#include <QLabel>
 #include <QFileInfo>
 #include <QWidgetAction>
 #include <KLocale>
 #include <KStandardDirs>
 #include <KLineEdit>
 #include <KIcon>
+#include <KMenu>
 #include <KConfig>
 
  /*!
   \class TemplateHandler
   \brief Provides a widget with buttons for saving and loading of templates.
   
-  Emits \c loadConfig() and \c saveConfig() signals that have to be connected to the appropriate slots in the ui (mostly in the dock widgets)
+  Emits \c loadConfig() and \c saveConfig() signals that have to be connected 
+  to the appropriate slots in the ui (mostly in the dock widgets)
 
   \ingroup kdefrontend
 */
@@ -93,10 +95,27 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	dirNames<<"spreadsheet"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis";
 	
 	this->retranslateUi();
+	
+	//disable the load-button if no templates are available yet
+	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/" + dirNames.at(className) + "/*");
+	tbLoad->setEnabled(list.size());
 }
 
-void TemplateHandler::loadMenu(){
-	QMenu menu;
+void TemplateHandler::retranslateUi(){
+	tbLoad->setToolTip(i18n("Load properties from a template"));
+	tbSave->setToolTip(i18n("Save current properties as a template"));
+	tbSaveDefault->setToolTip(i18n("Save current properties as default"));
+	tbCopy->setToolTip(i18n("Copy properties"));
+	tbPaste->setToolTip(i18n("Paste properties"));
+}
+
+//##############################################################################
+//##################################  Slots ####################################
+//##############################################################################
+void TemplateHandler::loadMenu() {
+	KMenu menu;
+	menu.addTitle(i18n("Load from"));
+
 	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/" + dirNames.at(className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
@@ -109,13 +128,15 @@ void TemplateHandler::loadMenu(){
 	menu.exec(tbLoad->mapToGlobal(pos));
 }
 
-void TemplateHandler::loadMenuSelected(QAction* action){
+void TemplateHandler::loadMenuSelected(QAction* action) {
 	KConfig config(action->data().toString(), KConfig::SimpleConfig);
 	emit (loadConfigRequested(config));
 }
 
-void TemplateHandler::saveMenu(){
-	QMenu menu;
+void TemplateHandler::saveMenu() {
+	KMenu menu;
+	menu.addTitle(i18n("Save as"));
+
 	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/"+ dirNames.at(className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
@@ -125,45 +146,54 @@ void TemplateHandler::saveMenu(){
 	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(saveMenuSelected(QAction*)));
 
 	// add editable action
-	QWidgetAction *widgetAction = new QWidgetAction(this);
-	KLineEdit *leFilename = new KLineEdit("");
-	connect(leFilename, SIGNAL(returnPressed(QString&)), this, SLOT(saveNewSelected(const QString&)));
-	connect(leFilename, SIGNAL(returnPressed(QString&)), &menu, SLOT(close()));
-	widgetAction->setDefaultWidget(leFilename);
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	QFrame* frame = new QFrame(this);
+	QHBoxLayout* layout = new QHBoxLayout(frame);
+
+	QLabel* label = new QLabel(i18n("new:"), frame);
+	layout->addWidget(label);
+
+	KLineEdit* leFilename = new KLineEdit("", frame);
+	layout->addWidget(leFilename);
+	connect(leFilename, SIGNAL(returnPressed(const QString&)), this, SLOT(saveNewSelected(const QString&)));
+	connect(leFilename, SIGNAL(returnPressed(const QString&)), &menu, SLOT(close()));
+
+	widgetAction->setDefaultWidget(frame);
 	menu.addAction(widgetAction);
 
 	QPoint pos(-menu.sizeHint().width()+tbSave->width(),-menu.sizeHint().height());
 	menu.exec(tbSave->mapToGlobal(pos));
+
+	//TODO: focus is not set. why?
+	leFilename->setFocus();
 }
 
 /*!
-	the receiver of the signal had to config.sync().
+ * Is called when the current properties are going to be saved as a new template.
+ * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
-void TemplateHandler::saveNewSelected(const QString& filename){
+void TemplateHandler::saveNewSelected(const QString& filename) {
 	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+"/" + dirNames.at(className) + "/"+filename, KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
+	
+	//we have at least one save template now -> enable the load button
+	tbLoad->setEnabled(true);
 }
 
 /*!
-	the receiver of the signal had to config.sync().
+ * Is called when the current properties are going to be saved in an already availabletemplate.
+ * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
-void TemplateHandler::saveMenuSelected(QAction* action){
+void TemplateHandler::saveMenuSelected(QAction* action) {
 	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
 }
 
 /*!
-	the receiver of the signal had to config.sync().
+ * Is called when the current properties are going to be saved as new default properies.
+ * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
-void TemplateHandler::saveDefaults(){
+void TemplateHandler::saveDefaults() {
 	KConfig config;
 	emit (saveConfigRequested(config));
-}
-
-void TemplateHandler::retranslateUi(){
-	tbLoad->setToolTip(i18n("Load properties from a template"));
-	tbSave->setToolTip(i18n("Save properties as a template"));
-	tbSaveDefault->setToolTip(i18n("Save properties as default"));
-	tbCopy->setToolTip(i18n("Copy properties"));
-	tbPaste->setToolTip(i18n("Paste properties"));
 }
