@@ -265,14 +265,10 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 
 			foreach(QPointF point, points) {
 				bool valid = true;
-
 				double x = point.x();
 				double y = point.y();
-// 				qDebug()<<"point "<<x << " " << d->plot->xMax() << " " << x << " " << d->plot->xMin() << " " << y <<" "<< d->plot->yMax() <<" "<< y <<" "<< d->plot->yMin();
-// 				if (x > d->plot->xMax() || x < d->plot->xMin() || y > d->plot->yMax() || y < d->plot->yMin() )
-// 					continue;
 
-				if (!(xInterval.contains(x) && yInterval.contains(y)))
+				if (!(xInterval.fuzzyContains(x) && yInterval.fuzzyContains(y)))
 					continue;
 
 				valid = xScale->map(&x);
@@ -284,7 +280,7 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 					continue;
 
 				QPointF mappedPoint(x, y);
-				if (noPageClipping || pageRect.contains(mappedPoint))
+				if (noPageClipping || rectContainsPoint(pageRect, mappedPoint))
 					result.append(mappedPoint);
 			}
 		}
@@ -322,7 +318,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 				double x = point.x();
 				double y = point.y();
 
-				if (!(xInterval.contains(x) && yInterval.contains(y)))
+				if (!(xInterval.fuzzyContains(x) && yInterval.fuzzyContains(y)))
 					continue;
 
 				valid = xScale->map(&x);
@@ -334,7 +330,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 					continue;
 
 				QPointF mappedPoint(x, y);
-				if (noPageClipping || pageRect.contains(mappedPoint)){
+				if (noPageClipping || rectContainsPoint(pageRect, mappedPoint)){
 					scenePoints.append(mappedPoint);
 					visiblePoints[i].flip();
 				}
@@ -360,7 +356,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 			double x = logicalPoint.x();
 			double y = logicalPoint.y();
 
-			if (!(xInterval.contains(x) && yInterval.contains(y)))
+			if (!(xInterval.fuzzyContains(x) && yInterval.fuzzyContains(y)))
 				continue;
 
 			valid = xScale->map(&x);
@@ -372,7 +368,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 				continue;
 
 			QPointF mappedPoint(x, y);
-			if (noPageClipping || pageRect.contains(mappedPoint))
+			if (noPageClipping || rectContainsPoint(pageRect, mappedPoint))
 				return mappedPoint;
 		}
 	}
@@ -413,7 +409,7 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 					if (!valid)
 						continue;
 
-					if (!(xInterval.contains(x) && yInterval.contains(y)))
+					if (!(xInterval.fuzzyContains(x) && yInterval.fuzzyContains(y)))
 						continue;
 
 					result.append(QPointF(x, y));
@@ -453,7 +449,7 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint
 				if (!valid)
 					continue;
 
-				if (!(xInterval.contains(x) && yInterval.contains(y)))
+				if (!(xInterval.fuzzyContains(x) && yInterval.fuzzyContains(y)))
 					continue;
 
 				result.setX(x);
@@ -702,6 +698,42 @@ void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double 
 	d->plot->endMacro();
 }
 
+/*!
+ * Adjusted the function QRectF::contains(QPointF) from Qt 4.8.4 to handle the 
+ * comparison of float numbers correctly.
+ * TODO: check whether the newer versions of Qt do the comparison correctly.
+ */
+bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, const QPointF& point) const{
+    qreal l = rect.x();
+    qreal r = rect.x();
+	qreal w = rect.width();
+	qreal h = rect.height();
+    if (w < 0)
+        l += w;
+    else
+        r += w;
+    if ( AbstractCoordinateSystem::essentiallyEqual(l, r)) // null rect
+        return false;
+
+    if ( AbstractCoordinateSystem::definitelyLessThan(point.x(), l) 
+		|| AbstractCoordinateSystem::definitelyGreaterThan(point.x(), r) )
+        return false;
+
+    qreal t = rect.y();
+    qreal b = rect.y();
+    if (h < 0)
+        t += h;
+    else
+        b += h;
+    if ( AbstractCoordinateSystem::essentiallyEqual(t, b) ) // null rect
+        return false;
+
+	if ( AbstractCoordinateSystem::definitelyLessThan(point.y(), t) 
+		|| AbstractCoordinateSystem::definitelyGreaterThan(point.y(), b) )
+        return false;
+
+    return true;
+}
 
 //##############################################################################
 //######################### Private implementation #############################

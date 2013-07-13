@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : Interval.h
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-                           Knut Franke
-    Email (use @ for *)  : thzs*gmx.net, knut.franke*gmx.de
+    Copyright            : (C) 2007 by Tilman Benkert (thzs*gmx.net), Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)                            
     Description          : Auxiliary class for interval based data
                            
  ***************************************************************************/
@@ -31,15 +31,11 @@
 #ifndef INTERVAL_H
 #define INTERVAL_H
 
-#include <QList>
-#include <QString>
-#include <QtGlobal>
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 
-// forward declaration
 template<class T> class Interval;
 
-template<class T> class IntervalBase
-{
+template<class T> class IntervalBase {
 	public:
 		IntervalBase() : m_start(-1), m_end(-1){}
 		IntervalBase(const IntervalBase<T>& other) {
@@ -57,6 +53,11 @@ template<class T> class IntervalBase
 		void setEnd(T end) { m_end = end; }
 		bool contains(const Interval<T>& other) const { return ( m_start <= other.start() && m_end >= other.end() ); }
 		bool contains(T value) const { return ( m_start <= value && m_end >= value ); }
+		bool fuzzyContains(T value) const {
+			bool rc1 = AbstractCoordinateSystem::definitelyLessThan(m_start, value);
+			bool rc2 = AbstractCoordinateSystem::definitelyGreaterThan(m_end, value);
+			return (rc1 && rc2);
+		}
 		bool intersects(const Interval<T>& other) const { return ( contains(other.start()) || contains(other.end()) ); }
 		//! Return the intersection of two intervals
 		/**
@@ -186,10 +187,11 @@ template<class T> class IntervalBase
 			delete tmp1;
 			return result;
 		}
-	//! Return a string in the format '[start,end]'
-	QString toString() const {
-		return "[" + QString::number(m_start) + "," + QString::number(m_end) + "]";
-	}
+
+		//! Return a string in the format '[start,end]'
+		QString toString() const {
+			return "[" + QString::number(m_start) + "," + QString::number(m_end) + "]";
+		}
 
 	protected:
 		//! Interval start
@@ -207,8 +209,7 @@ template<class T> class IntervalBase
  *	For the template argument (T), only numerical types ((unsigned) short, (unsigned) int,
  *	(unsigned) long, float, double, long double) are supported.
  */
-template<class T> class Interval : public IntervalBase<T>
-{
+template<class T> class Interval : public IntervalBase<T> {
 	public:
 		Interval() {}
 		Interval(T start, T end) : IntervalBase<T>(start, end) {}

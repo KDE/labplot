@@ -104,6 +104,7 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 
 	private:
 		void init();
+		bool rectContainsPoint(const QRectF&, const QPointF&) const;
 		CartesianCoordinateSystemPrivate* d;
 };
 

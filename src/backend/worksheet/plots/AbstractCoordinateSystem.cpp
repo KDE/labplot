@@ -198,3 +198,21 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
     }
     return true;
 }
+
+//more intelligent comparison of floats,
+//taken from Knuth's "The art of computer programming"
+bool AbstractCoordinateSystem::approximatelyEqual(float a, float b, float epsilon) {
+	return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+bool AbstractCoordinateSystem::essentiallyEqual(float a, float b, float epsilon) {
+	return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+bool AbstractCoordinateSystem::definitelyGreaterThan(float a, float b, float epsilon) {
+	return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+bool AbstractCoordinateSystem::definitelyLessThan(float a, float b, float epsilon) {
+	return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}

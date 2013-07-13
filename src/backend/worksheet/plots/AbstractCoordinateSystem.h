@@ -76,6 +76,11 @@ class AbstractCoordinateSystem{
 				bool yClippedBottom[2];
 		};
 
+		//static members
 		static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = NULL);
+		static bool approximatelyEqual(float a, float b, float epsilon=0.0000001);
+		static bool essentiallyEqual(float a, float b, float epsilon=0.0000001);
+		static bool definitelyGreaterThan(float a, float b, float epsilon=0.0000001);
+		static bool definitelyLessThan(float a, float b, float epsilon=0.0000001);
 };
 #endif

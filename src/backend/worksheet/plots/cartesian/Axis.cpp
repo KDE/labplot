@@ -879,13 +879,8 @@ void AxisPrivate::retransformLine(){
 bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 	QList<QPointF> points;
 	points.append(*anchorPoint);
+	points = m_cSystem->mapLogicalToScene(points);
 	
-	//this function currently is only used in retransormTicks() were we iterate over points
-	//that are _certainly_ within the plot rectangular.
-	// -> we can ommit page clipping here. Without this flag it can happen that the ticks (and grid lines)
-	// at the boundaries of the plot are not visible anymore because of (wrong) float comparison in QRect::contains()
-	// in CartesianCoordinateSystem::mapLogicalToScene()
-	points = m_cSystem->mapLogicalToScene(points, AbstractCoordinateSystem::SuppressPageClipping);
 	if (points.count() != 1){ // point is not mappable or in a coordinate gap
 		return false;
 	}else{
@@ -980,8 +975,8 @@ void AxisPrivate::retransformTicks(){
 	qreal nextMajorTickPos;
 	int xDirection = m_cSystem->xDirection();
 	int yDirection = m_cSystem->yDirection();
-	float middleX = (m_plot->xMax() - m_plot->xMin())/2;
-	float middleY = (m_plot->yMax() - m_plot->yMin())/2;
+	float middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
+	float middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
 	bool valid;
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
