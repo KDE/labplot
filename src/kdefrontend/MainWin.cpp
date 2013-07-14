@@ -80,7 +80,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	m_propertiesDock(0),
 	m_currentAspect(0),
 	m_currentFolder(0),
-	m_fileName(filename),
 	m_suppressCurrentSubWindowChangedEvent(false),
 	m_closing(false),
 	m_visibilityMenu(0),
@@ -95,7 +94,8 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	worksheetDock(0),
 	textLabelDock(0){
 	
-	QTimer::singleShot( 0, this, SLOT(initGUI()) );
+// 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
+	initGUI(filename);
 }
 
 MainWin::~MainWin() {
@@ -114,7 +114,7 @@ MainWin::~MainWin() {
 	}
 }
 
-void MainWin::initGUI(){
+void MainWin::initGUI(const QString& fileName){
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), 
@@ -138,8 +138,8 @@ void MainWin::initGUI(){
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
 	m_recentProjectsAction->setEnabled(true);
 
-	if ( !m_fileName.isEmpty() )
-		openProject(m_fileName);
+	if ( !fileName.isEmpty() )
+		openProject(fileName);
 
 	//TODO There is no file to open -> create a new project or open the last used project.
 	// Make this selection - new or last used - optional in the settings.
@@ -521,13 +521,18 @@ void MainWin::openProject(){
 	QString fileName = QFileDialog::getOpenFileName(this,i18n("Open project"),QString::null,
 			i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
 
-	if (!fileName.isEmpty())
+	if (!fileName.isEmpty()) 
 		this->openProject(fileName);
 }
 
 void MainWin::openProject(const QString& filename) {
-	if(filename.isEmpty())
+	if (filename == m_currentFileName) {
+		KMessageBox::information(this,
+									i18n("The project file %1 is already opened.").arg(filename),
+									i18n("Open project")
+								);
 		return;
+	}
 
 	QIODevice *file = KFilterDev::deviceForFile(filename,QString::null,true);
 	if (file==0)
@@ -548,6 +553,7 @@ void MainWin::openProject(const QString& filename) {
 	file->close();
 	delete file;
 
+	m_currentFileName = filename;
 	m_project->setFileName(filename);
  	m_project->setChanged(false);
 	m_project->undoStack()->clear();

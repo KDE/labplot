@@ -68,12 +68,12 @@ private:
 	QMdiSubWindow* m_currentSubWindow;
 	Project *m_project;
 	AspectTreeModel* m_aspectTreeModel;
-	ProjectExplorer * m_projectExplorer;
-	QDockWidget * m_projectExplorerDock;
+	ProjectExplorer* m_projectExplorer;
+	QDockWidget* m_projectExplorerDock;
 	QDockWidget* m_propertiesDock;
-	AbstractAspect * m_currentAspect;
-	Folder * m_currentFolder;
-	QString m_fileName;
+	AbstractAspect* m_currentAspect;
+	Folder* m_currentFolder;
+	QString m_currentFileName;
 	QString m_undoViewEmptyLabel;
 	ImportFileDialog* m_importFileDialog;
 	bool m_suppressCurrentSubWindowChangedEvent;
@@ -157,7 +157,7 @@ private:
 	GuiObserver* m_guiObserver;
 	
 private slots:
-	void initGUI();
+	void initGUI(const QString&);
 	void updateGUI();
 	void updateGUIOnProjectChanges();
 	void undo();
