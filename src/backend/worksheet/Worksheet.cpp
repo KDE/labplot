@@ -257,12 +257,7 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 			break;
 	}
 
-	//no aspect were found.
-	//TODO
-	if (!aspect){
-		qDebug() << "not an  aspect selected";
-		return;
-	}
+	Q_ASSERT(aspect);
 
 	//forward selection/deselection to AbstractTreeModel
 	if (b)
@@ -459,30 +454,31 @@ void Worksheet::setLayoutColumnCount(int count){
 	}
 }
 
-//TODO: this is not really undoable at the moment.
-STD_SWAP_METHOD_SETTER_CMD_IMPL(Worksheet, SetPageRect, QRectF, swapPageRect)
-void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
-	if (qFuzzyCompare(rect.width() + 1, 1) || qFuzzyCompare(rect.height() + 1, 1))
+class WorksheetSetPageRectCmd : public StandardMacroSetterCmd<Worksheet::Private, QRectF> {
+	public:
+		WorksheetSetPageRectCmd(Worksheet::Private* target, Loki::TypeTraits<QRectF>::ParameterType newValue, const QString& description)
+		: StandardMacroSetterCmd<Worksheet::Private, QRectF>(target, &Worksheet::Private::pageRect, newValue, description) {}
+	virtual void finalize() {
+		m_target->updatePageRect();
+		m_target->q->pageRectChanged(m_target->*m_field);
+	}
+	virtual void finalizeUndo() {
+		m_target->m_scene->setSceneRect(m_target->*m_field);
+		m_target->q->pageRectChanged(m_target->*m_field);
+	}
+}; 
+
+void Worksheet::setPageRect(const QRectF& rect, bool scaleContent) {
+	//don't allow any rectangulars of width/height equal to zero
+	if (qFuzzyCompare(rect.width(), 0.) || qFuzzyCompare(rect.height(), 0.)){
+		pageRectChanged(d->pageRect);
 		return;
+	}
 
-	if (rect != d->m_scene->sceneRect()) {
-		QString title = tr("%1: set page size");
-		QRectF oldRect = d->m_scene->sceneRect();
-		beginMacro(title.arg(name()));
-		exec(new WorksheetSetPageRectCmd(d, rect, title));
-
-		qreal horizontalRatio = rect.width() / oldRect.normalized().width();
-		qreal verticalRatio = rect.height() / oldRect.normalized().height();
-
-		if (d->layout != Worksheet::NoLayout) {
-			d->updateLayout();
-		} else {
-			if (scaleContent) {
-				QList<AbstractWorksheetElement*> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-				foreach(AbstractWorksheetElement *elem, childElements)
-					elem->handlePageResize(horizontalRatio, verticalRatio);
-			}
-		}
+	if (rect != d->pageRect) {
+		d->scaleContent = scaleContent;
+		beginMacro(tr("%1: set page size").arg(name()));
+		exec(new WorksheetSetPageRectCmd(d, rect, tr("%1: set page size")));
 		endMacro();
 	}
 }
@@ -490,21 +486,30 @@ void Worksheet::setPageRect(const QRectF &rect, bool scaleContent){
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner) {
-	m_scene = new QGraphicsScene();
-	m_scene->setSceneRect(0, 0, 1500, 1500);
+WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner),
+	pageRect(0, 0, 1500, 1500),
+	m_scene(new QGraphicsScene(pageRect)),
+	scaleContent(false) {
 }
 
 QString WorksheetPrivate::name() const{
 	return q->name();
 }
 
-QRectF WorksheetPrivate::swapPageRect(const QRectF &rect) {
+void WorksheetPrivate::updatePageRect() {
 	QRectF oldRect = m_scene->sceneRect();
-	m_scene->setSceneRect(rect.normalized());
-	emit q->pageRectChanged();
+	m_scene->setSceneRect(pageRect);
 
-	return oldRect;
+	if (scaleContent) {
+		qreal horizontalRatio = pageRect.width() / oldRect.width();
+		qreal verticalRatio = pageRect.height() / oldRect.height();				
+		QList<AbstractWorksheetElement*> childElements = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden);
+		foreach(AbstractWorksheetElement* elem, childElements)
+			elem->handlePageResize(horizontalRatio, verticalRatio);
+	}
+	
+	if (layout != Worksheet::NoLayout)
+		updateLayout();
 }
 
 void WorksheetPrivate::update(){

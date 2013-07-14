@@ -41,12 +41,14 @@ class WorksheetPrivate{
 		virtual ~WorksheetPrivate();
 
 		Worksheet * const q;
+		QRectF pageRect;
 		QGraphicsScene* m_scene;
-		QRectF swapPageRect(const QRectF& rect);
+		bool scaleContent;
 
 		QString name() const;
 		void update();
 		void updateLayout();
+		void updatePageRect();
 
 		PlotArea::BackgroundType backgroundType;
 		PlotArea::BackgroundColorStyle backgroundColorStyle;

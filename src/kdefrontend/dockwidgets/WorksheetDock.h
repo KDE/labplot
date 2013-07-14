@@ -86,15 +86,15 @@ private slots:
 
 	//SLOTs for changes triggered in Worksheet
 	void worksheetDescriptionChanged(const AbstractAspect*);
-	void worksheetGeometryChanged();
+	void worksheetPageRectChanged(const QRectF&);
 
 	void worksheetBackgroundTypeChanged(PlotArea::BackgroundType);
 	void worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 	void worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
 	void worksheetBackgroundBrushStyleChanged(Qt::BrushStyle);
-	void worksheetBackgroundFirstColorChanged(QColor&);
-	void worksheetBackgroundSecondColorChanged(QColor&);
-	void worksheetBackgroundFileNameChanged(QString&);
+	void worksheetBackgroundFirstColorChanged(const QColor&);
+	void worksheetBackgroundSecondColorChanged(const QColor&);
+	void worksheetBackgroundFileNameChanged(const QString&);
 	void worksheetBackgroundOpacityChanged(float);
 	void worksheetLayoutChanged(Worksheet::Layout);
 	void worksheetLayoutTopMarginChanged(float);

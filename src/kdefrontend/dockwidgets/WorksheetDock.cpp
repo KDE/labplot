@@ -171,16 +171,16 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	this->worksheetLayoutChanged(m_worksheet->layout());
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
-	connect(m_worksheet, SIGNAL(pageRectChanged()),this, SLOT(worksheetGeometryChanged()));
+	connect(m_worksheet, SIGNAL(pageRectChanged(const QRectF&)),this, SLOT(worksheetPageRectChanged(const QRectF&)));
 
 
 	connect(m_worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
 	connect(m_worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
 	connect(m_worksheet,SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)),this,SLOT(worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
 	connect(m_worksheet,SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)),this,SLOT(worksheetBackgroundBrushStyleChanged(Qt::BrushStyle)));
-	connect(m_worksheet,SIGNAL(backgroundFirstColorChanged(QColor&)),this,SLOT(worksheetBackgroundFirstColorChanged(QColor&)));
-	connect(m_worksheet,SIGNAL(backgroundSecondColorChanged(QColor&)),this,SLOT(worksheetBackgroundSecondColorChanged(QColor&)));
-	connect(m_worksheet,SIGNAL(backgroundFileNameChanged(QString&)),this,SLOT(worksheetBackgroundFileNameChanged(QString&)));
+	connect(m_worksheet,SIGNAL(backgroundFirstColorChanged(const QColor&)),this,SLOT(worksheetBackgroundFirstColorChanged(const QColor&)));
+	connect(m_worksheet,SIGNAL(backgroundSecondColorChanged(const QColor&)),this,SLOT(worksheetBackgroundSecondColorChanged(const QColor&)));
+	connect(m_worksheet,SIGNAL(backgroundFileNameChanged(const QString&)),this,SLOT(worksheetBackgroundFileNameChanged(const QString&)));
 	connect(m_worksheet,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(worksheetBackgroundOpacityChanged(float)));
 
 	connect(m_worksheet,SIGNAL(layoutChanged(Worksheet::Layout)),this,SLOT(worksheetLayoutChanged(Worksheet::Layout)));
@@ -650,10 +650,10 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void WorksheetDock::worksheetGeometryChanged() {
+void WorksheetDock::worksheetPageRectChanged(const QRectF& rect) {
 	m_initializing = true;
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_worksheet->pageRect().width(), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_worksheet->pageRect().height(), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
 	updatePaperSize();
 	m_initializing = false;
 }
@@ -682,19 +682,19 @@ void WorksheetDock::worksheetBackgroundBrushStyleChanged(Qt::BrushStyle style) {
 	m_initializing = false;
 }
 
-void WorksheetDock::worksheetBackgroundFirstColorChanged(QColor& color) {
+void WorksheetDock::worksheetBackgroundFirstColorChanged(const QColor& color) {
 	m_initializing = true;
 	ui.kcbBackgroundFirstColor->setColor(color);
 	m_initializing = false;
 }
 
-void WorksheetDock::worksheetBackgroundSecondColorChanged(QColor& color) {
+void WorksheetDock::worksheetBackgroundSecondColorChanged(const QColor& color) {
 	m_initializing = true;
 	ui.kcbBackgroundSecondColor->setColor(color);
 	m_initializing = false;
 }
 
-void WorksheetDock::worksheetBackgroundFileNameChanged(QString& name) {
+void WorksheetDock::worksheetBackgroundFileNameChanged(const QString& name) {
 	m_initializing = true;
 	ui.kleBackgroundFileName->setText(name);
 	m_initializing = false;
