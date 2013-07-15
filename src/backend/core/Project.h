@@ -79,6 +79,8 @@ class Project : public Folder {
 		virtual bool load(XmlStreamReader *);
 
 	signals:
+		void loadStarted();
+		void loadFinished();
 		void requestProjectContextMenu(QMenu*);
 		void requestFolderContextMenu(const Folder * folder, QMenu * menu);
 		void mdiWindowVisibilityChanged();

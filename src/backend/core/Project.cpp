@@ -230,8 +230,9 @@ void Project::save(QXmlStreamWriter * writer) const
 /**
  * \brief Load from XML
  */
-bool Project::load(XmlStreamReader * reader)
-{
+bool Project::load(XmlStreamReader * reader) {
+	emit loadStarted();
+
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
 	if(!(reader->atEnd()))
@@ -309,6 +310,7 @@ bool Project::load(XmlStreamReader * reader)
 		reader->raiseError(tr("no valid XML document found"));
 	}
 
+	emit loadFinished();
 	return !reader->hasError();
 }
 

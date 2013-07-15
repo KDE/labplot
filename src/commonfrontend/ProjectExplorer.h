@@ -56,6 +56,7 @@ class ProjectExplorer : public QWidget{
 		bool eventFilter(QObject*, QEvent*);
 		int m_columnToHide;
 		QTreeView* m_treeView;
+		bool m_projectLoading;
 		
 		QAction* caseSensitiveAction;
 		QAction* matchCompleteWordAction;
@@ -73,6 +74,9 @@ class ProjectExplorer : public QWidget{
 		QPushButton* bFilterOptions;
 	
 	private slots:
+		void projectLoadStarted();
+		void projectLoadFinished();
+
 		void aspectAdded(const AbstractAspect*);
 		void toggleColumn(int);
 		void showAllColumns();

@@ -61,7 +61,7 @@
   \ingroup commonfrontend
 */
 
-ProjectExplorer::ProjectExplorer(QWidget *parent){
+ProjectExplorer::ProjectExplorer(QWidget* parent) : m_projectLoading(false) {
     Q_UNUSED(parent);
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setSpacing(0);
@@ -219,6 +219,8 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 
 void ProjectExplorer::setProject ( const Project* project){
 	connect(project, SIGNAL(aspectAdded(const AbstractAspect *)), this, SLOT(aspectAdded(const AbstractAspect *)));
+	connect(project, SIGNAL(loadStarted()), this, SLOT(projectLoadStarted()));
+	connect(project, SIGNAL(loadFinished()), this, SLOT(projectLoadFinished()));
 }
 
 QModelIndex ProjectExplorer::currentIndex() const{
@@ -273,6 +275,14 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
+void ProjectExplorer::projectLoadStarted() {
+	m_projectLoading = true;
+}
+
+void ProjectExplorer::projectLoadFinished() {
+	m_projectLoading = false;
+}
+
 /*!
   expand the aspect \c aspect (the tree index corresponding to it) in the tree view
   and makes it visible and selected. Called when a new aspect is added to the project.
@@ -281,13 +291,15 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	const QModelIndex& index =  tree_model->modelIndexOfAspect(aspect);
 
-	//expand and make the aspect visible
-	m_treeView->setExpanded(index, true);
-	m_treeView->scrollTo(index);
-	m_treeView->setCurrentIndex(index);
+	if (!m_projectLoading) {
+		//expand and make the aspect visible
+		m_treeView->setExpanded(index, true);
+		m_treeView->scrollTo(index);
+		m_treeView->setCurrentIndex(index);
 
-	//select the added aspect
-	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+		//select the added aspect
+		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+	}
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){
