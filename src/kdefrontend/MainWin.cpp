@@ -563,6 +563,8 @@ void MainWin::openProject(const QString& filename) {
 	setCaption(m_project->name());
 	updateGUIOnProjectChanges();
 	updateGUI(); //there are most probably worksheets or spreadsheets in the open project -> update the GUI
+	m_saveAction->setEnabled(false);
+	m_saveAsAction->setEnabled(false);
 }
 
 void MainWin::openRecentProject(const KUrl& url) {
@@ -609,6 +611,7 @@ bool MainWin::closeProject(){
 	m_aspectTreeModel=0;
 	delete m_project;
 	m_project=0;
+	m_currentFileName = "";
 
 	//update the UI if we're just closing a project
 	//and not closing(quitting) the application
