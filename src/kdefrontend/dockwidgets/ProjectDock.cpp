@@ -59,8 +59,7 @@ void ProjectDock::setProject(Project *project) {
 	m_initializing=true;
 	m_project = project;
 	ui.leFileName->setText(project->fileName());
-	ui.lProjectVersion->setText(QString::number(project->version()));
-	ui.lLabPlotVersion->setText(project->labPlot());
+	ui.lVersion->setText(project->version());
 	ui.leName->setText(project->name());
 	ui.leAuthor->setText(project->author());
 	ui.lCreated->setText(project->creationTime().toString());

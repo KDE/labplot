@@ -62,141 +62,93 @@
  * \brief show MDI windows for all Parts in the project simultaneously
  */
 
-class Project::Private
-{
+class Project::Private {
 	public:
 		Private() :
-			mdi_window_visibility(Project::folderOnly),
-			primary_view(0),
-			scripting_engine(0),
-		 	file_name(QString()),
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-			version(SciDAVis::version()),
-#else
-			version(0),
-			labPlot(QString(LVERSION)),
-#endif
+			mdiWindowVisibility(Project::folderOnly),
+			scriptingEngine(0),
+			version(LVERSION),
 			author(QString(getenv("USER"))),
-			modification_time(QDateTime::currentDateTime()),
+			modificatoinTime(QDateTime::currentDateTime()),
 			changed(false)
 			{}
 
 		QUndoStack undo_stack;
-		MdiWindowVisibility mdi_window_visibility;
-		QWidget * primary_view;
-		AbstractScriptingEngine * scripting_engine;
-		QString file_name;
-		int version;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		QString labPlot;
-#endif
-		QString  author;
-		QDateTime modification_time;
+		MdiWindowVisibility mdiWindowVisibility;
+		AbstractScriptingEngine* scriptingEngine;
+		QString fileName;
+		QString version;
+		QString author;
+		QDateTime modificatoinTime;
 		bool changed;
 };
 
-Project::Project()
-	: Folder(tr("Project")), d(new Private())
-{
+Project::Project() : Folder(tr("Project")), d(new Private()) {
 #ifndef SUPPRESS_SCRIPTING_INIT
 	// TODO: intelligent engine choosing
 	Q_ASSERT(ScriptingEngineManager::instance()->engineNames().size() > 0);
 	QString engine_name = ScriptingEngineManager::instance()->engineNames()[0];
-	d->scripting_engine = ScriptingEngineManager::instance()->engine(engine_name);
+	d->scriptingEngine = ScriptingEngineManager::instance()->engine(engine_name);
 #endif
 }
 
-Project::~Project()
-{
+Project::~Project() {
 	delete d;
 }
 
-QUndoStack *Project::undoStack() const
-{
+QUndoStack* Project::undoStack() const {
 	return &d->undo_stack;
 }
 
-//TODO does Project really need a view?
-QWidget *Project::view()
-{
-	return d->primary_view;
-}
-
-QMenu *Project::createContextMenu()
-{
-	QMenu * menu = new QMenu(); // no remove action from AbstractAspect in the project context menu
+QMenu* Project::createContextMenu() {
+	QMenu* menu = new QMenu(); // no remove action from AbstractAspect in the project context menu
 	emit requestProjectContextMenu(menu);
 	return menu;
 }
 
-QMenu *Project::createFolderContextMenu(const Folder * folder)
-{
-	QMenu * menu = const_cast<Folder *>(folder)->AbstractAspect::createContextMenu();
+QMenu* Project::createFolderContextMenu(const Folder* folder) {
+	QMenu* menu = const_cast<Folder*>(folder)->AbstractAspect::createContextMenu();
 	Q_ASSERT(menu);
 	emit requestFolderContextMenu(folder, menu);
 	return menu;
 }
 
-void Project::setMdiWindowVisibility(MdiWindowVisibility visibility)
-{
-	d->mdi_window_visibility = visibility;
+void Project::setMdiWindowVisibility(MdiWindowVisibility visibility) {
+	d->mdiWindowVisibility = visibility;
 	emit mdiWindowVisibilityChanged();
 }
 
-Project::MdiWindowVisibility Project::mdiWindowVisibility() const
-{
-	return d->mdi_window_visibility;
+Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
+	return d->mdiWindowVisibility;
 }
 
-AbstractScriptingEngine * Project::scriptingEngine() const
-{
-	return d->scripting_engine;
+AbstractScriptingEngine* Project::scriptingEngine() const {
+	return d->scriptingEngine;
 }
 
-/* ================== static methods ======================= */
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-ConfigPageWidget * Project::makeConfigPage()
-{
-	 return new ProjectConfigPage();
-}
-
-QString Project::configPageLabel()
-{
-	return QObject::tr("General");
-}
-#endif
-
-CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, file_name)
-BASIC_D_ACCESSOR_IMPL(Project, int, version, Version, version)
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-CLASS_D_ACCESSOR_IMPL(Project, QString, labPlot, LabPlot, labPlot)
-#endif
-// TODO: add support for these in the SciDAVis UI
+CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
+BASIC_D_ACCESSOR_IMPL(Project, QString, version, Version, version)
 CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)
-CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modification_time)
+CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificatoinTime)
 
-void Project ::setChanged(const bool value){
+void Project::setChanged(const bool value) {
 	if ( value && !d->changed )
 		emit changed();
 	
 	d->changed = value;
 }
 
-bool Project ::hasChanged() const{
+bool Project ::hasChanged() const {
 	return d->changed ;
 } 
 
-////////////////////////////////////////////////////////////////////////////////
-//! \name serialize/deserialize
-//@{
-////////////////////////////////////////////////////////////////////////////////
-
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
 /**
  * \brief Save as XML
  */
-void Project::save(QXmlStreamWriter * writer) const
-{
+void Project::save(QXmlStreamWriter* writer) const {
     writer->setAutoFormatting(true);
 	writer->writeStartDocument();
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -206,23 +158,27 @@ void Project::save(QXmlStreamWriter * writer) const
 #endif
 
 	writer->writeStartElement("project");
-	writer->writeAttribute("version", QString::number(version()));
-	writer->writeAttribute("file_name", fileName());
-	writer->writeAttribute("modification_time" , modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
+	writer->writeAttribute("version", version());
+	writer->writeAttribute("fileName", fileName());
+	writer->writeAttribute("modificatoinTime" , modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	writer->writeAttribute("LabPlot" , labPlot());
-#endif
 	writeBasicAttributes(writer);
 
 	writeCommentElement(writer);
 
-	foreach(AbstractAspect * child, children<AbstractAspect>(IncludeHidden)) {
+	//save all children
+	foreach(AbstractAspect* child, children<AbstractAspect>(IncludeHidden)) {
 		writer->writeStartElement("child_aspect");
 		child->save(writer);
 		writer->writeEndElement();
 	}
 
+	//save the state of the views (visible, maximized/minimized/geometry)
+	//and the state of the project explorer (expanded items, currently selected item)
+	writer->writeStartElement("state");
+	//TODO:
+	writer->writeEndElement();
+	
 	writer->writeEndElement();
 	writer->writeEndDocument();
 }
@@ -230,52 +186,43 @@ void Project::save(QXmlStreamWriter * writer) const
 /**
  * \brief Load from XML
  */
-bool Project::load(XmlStreamReader * reader) {
+bool Project::load(XmlStreamReader* reader) {
 	emit loadStarted();
 
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
-	if(!(reader->atEnd()))
-	{
-		if (!reader->skipToNextTag()) return false;
+
+	if(!(reader->atEnd())) {
+		if (!reader->skipToNextTag())
+			return false;
 
 		if (reader->name() == "project") {
-			setComment("");
-			removeAllChildren();
-
-			bool ok;
-			int version = reader->readAttributeInt("version", &ok);
-			if(!ok)
-			{
-				reader->raiseError(tr("invalid or missing project version"));
-				return false;
-			}
-			setVersion(version);
-			// version dependent staff goes here
+			QString version = reader->attributes().value("version").toString();
+			if(version.isEmpty())
+				reader->raiseWarning(tr("Attribute 'version' is missing."));
+			else
+				d->version = version;
 
 			if (!readBasicAttributes(reader)) return false;
 			if (!readProjectAttributes(reader)) return false;
 
-			while (!reader->atEnd())
-			{
+			while (!reader->atEnd()) {
 				reader->readNext();
 
 				if (reader->isEndElement()) break;
 
-				if (reader->isStartElement())
-				{
-					if (reader->name() == "comment")
-					{
+				if (reader->isStartElement()) {
+					if (reader->name() == "comment") {
 						if (!readCommentElement(reader))
 							return false;
-					}
-					else if(reader->name() == "child_aspect")
-					{
+					} else if(reader->name() == "child_aspect") {
 						if (!readChildAspectElement(reader))
 							return false;
-					}
-					else // unknown element
-					{
+					} else if(reader->name() == "state") {
+						//load the state of the views (visible, maximized/minimized/geometry)
+						//and the state of the project explorer (expanded items, currently selected item)						
+						//TODO:
+					} else {
 						reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
 						if (!reader->skipToEndElement()) return false;
 					}
@@ -314,61 +261,26 @@ bool Project::load(XmlStreamReader * reader) {
 	return !reader->hasError();
 }
 
-bool Project::readProjectAttributes(XmlStreamReader * reader)
-{
-	QString prefix(tr("XML read error: ","prefix for XML error messages"));
-	QString postfix(tr(" (loading failed)", "postfix for XML error messages"));
-
+bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString str;
-
-	str = attribs.value(reader->namespaceUri().toString(), "file_name").toString();
-	if(str.isEmpty())
-	{
-		reader->raiseError(prefix+tr("project file name missing")+postfix);
+	QString str = attribs.value(reader->namespaceUri().toString(), "fileName").toString();
+	if(str.isEmpty()) {
+		reader->raiseError(tr("Project file name missing."));
 		return false;
 	}
-	setFileName(str);
+	d->fileName = str;
 
-	str = attribs.value(reader->namespaceUri().toString(), "modification_time").toString();
-	QDateTime modification_time = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
-	if(str.isEmpty() || !modification_time.isValid())
-	{
+	str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
+	QDateTime modificatoinTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
+	if(str.isEmpty() || !modificatoinTime.isValid()) {
 		reader->raiseWarning(tr("Invalid project modification time. Using current time."));
-		setModificationTime(QDateTime::currentDateTime());
+		d->modificatoinTime = QDateTime::currentDateTime();
+	} else {
+		d->modificatoinTime = modificatoinTime;
 	}
-	else
-		setModificationTime(modification_time);
 
 	str = attribs.value(reader->namespaceUri().toString(), "author").toString();
-	setAuthor(str);
-
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	str = attribs.value(reader->namespaceUri().toString(), "LabPlot").toString();
-	if(str.isEmpty())
-	{
-		reader->raiseError(prefix+tr("LabPlot attribute missing")+postfix);
-		return false;
-	}
-	setLabPlot(str);
-#endif
+	d->author = str;
 
 	return true;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-//@}
-////////////////////////////////////////////////////////////////////////////////
-
-// void Project::staticInit()
-// {
-	// defaults for global settings
-// 	Project::setGlobalDefault("default_mdi_window_visibility", Project::folderOnly);
-// 	Project::setGlobalDefault("auto_save", true);
-// 	Project::setGlobalDefault("auto_save_interval", 15);
-// 	Project::setGlobalDefault("default_scripting_language", QString("muParser"));
-// 	// TODO: not really Project-specific; maybe put these somewhere else:
-// 	Project::setGlobalDefault("language", QString("en"));
-// 	Project::setGlobalDefault("auto_search_updates", false);
-// 	Project::setGlobalDefault("locale_use_group_separator", false);
-// }

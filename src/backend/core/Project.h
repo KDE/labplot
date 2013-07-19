@@ -52,44 +52,40 @@ class Project : public Folder {
 		Project();
 		~Project();
 
-		virtual const Project *project() const { return this; }
-		virtual Project *project() { return this; }
-		virtual QUndoStack *undoStack() const;
+		virtual const Project* project() const { return this; }
+		virtual Project* project() { return this; }
+		virtual QUndoStack* undoStack() const;
 		virtual QString path() const { return name(); }
-		virtual QWidget *view();
-		virtual QMenu *createContextMenu();
-		virtual QMenu *createFolderContextMenu(const Folder * folder);
+		virtual QMenu* createContextMenu();
+		virtual QMenu* createFolderContextMenu(const Folder*);
 
-		AbstractScriptingEngine * scriptingEngine() const;
+		AbstractScriptingEngine* scriptingEngine() const;
 
 		void setMdiWindowVisibility(MdiWindowVisibility visibility);
 		MdiWindowVisibility mdiWindowVisibility() const;
 		CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
-		BASIC_D_ACCESSOR_DECL(int, version, Version)
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		CLASS_D_ACCESSOR_DECL(QString, labPlot, LabPlot)
-#endif
+		BASIC_D_ACCESSOR_DECL(QString, version, Version)
 		CLASS_D_ACCESSOR_DECL(QString, author, Author)
 		CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 
-		void setChanged(const bool  value=true);
+		void setChanged(const bool value=true);
 		bool hasChanged() const;
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 	signals:
 		void loadStarted();
 		void loadFinished();
 		void requestProjectContextMenu(QMenu*);
-		void requestFolderContextMenu(const Folder * folder, QMenu * menu);
+		void requestFolderContextMenu(const Folder*, QMenu*);
 		void mdiWindowVisibilityChanged();
 		void changed();
 		
 	private:
 		class Private;
-		Private *d;
-		bool readProjectAttributes(XmlStreamReader * reader);
+		Private* d;
+		bool readProjectAttributes(XmlStreamReader*);
 };
 
 #endif // ifndef PROJECT_H
