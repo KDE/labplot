@@ -75,6 +75,8 @@ class Project : public Folder {
 		virtual bool load(XmlStreamReader*);
 
 	signals:
+		void requestSaveState(QXmlStreamWriter*) const;
+		void requestLoadState(XmlStreamReader*) const;
 		void loadStarted();
 		void loadFinished();
 		void requestProjectContextMenu(QMenu*);

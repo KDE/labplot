@@ -69,7 +69,7 @@ class Project::Private {
 			scriptingEngine(0),
 			version(LVERSION),
 			author(QString(getenv("USER"))),
-			modificatoinTime(QDateTime::currentDateTime()),
+			modificationTime(QDateTime::currentDateTime()),
 			changed(false)
 			{}
 
@@ -79,7 +79,7 @@ class Project::Private {
 		QString fileName;
 		QString version;
 		QString author;
-		QDateTime modificatoinTime;
+		QDateTime modificationTime;
 		bool changed;
 };
 
@@ -129,7 +129,7 @@ AbstractScriptingEngine* Project::scriptingEngine() const {
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
 BASIC_D_ACCESSOR_IMPL(Project, QString, version, Version, version)
 CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)
-CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificatoinTime)
+CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 
 void Project::setChanged(const bool value) {
 	if ( value && !d->changed )
@@ -160,7 +160,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("project");
 	writer->writeAttribute("version", version());
 	writer->writeAttribute("fileName", fileName());
-	writer->writeAttribute("modificatoinTime" , modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
+	writer->writeAttribute("modificationTime" , modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
 	writeBasicAttributes(writer);
 
@@ -175,9 +175,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 
 	//save the state of the views (visible, maximized/minimized/geometry)
 	//and the state of the project explorer (expanded items, currently selected item)
-	writer->writeStartElement("state");
-	//TODO:
-	writer->writeEndElement();
+	emit requestSaveState(writer);
 	
 	writer->writeEndElement();
 	writer->writeEndDocument();
@@ -221,7 +219,7 @@ bool Project::load(XmlStreamReader* reader) {
 					} else if(reader->name() == "state") {
 						//load the state of the views (visible, maximized/minimized/geometry)
 						//and the state of the project explorer (expanded items, currently selected item)						
-						//TODO:
+						emit requestLoadState(reader);
 					} else {
 						reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
 						if (!reader->skipToEndElement()) return false;
@@ -271,12 +269,12 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	d->fileName = str;
 
 	str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
-	QDateTime modificatoinTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
-	if(str.isEmpty() || !modificatoinTime.isValid()) {
+	QDateTime modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
+	if(str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(tr("Invalid project modification time. Using current time."));
-		d->modificatoinTime = QDateTime::currentDateTime();
+		d->modificationTime = QDateTime::currentDateTime();
 	} else {
-		d->modificatoinTime = modificatoinTime;
+		d->modificationTime = modificationTime;
 	}
 
 	str = attribs.value(reader->namespaceUri().toString(), "author").toString();
