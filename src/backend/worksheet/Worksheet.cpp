@@ -595,8 +595,6 @@ void Worksheet::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "height", QString::number(rect.height()) );
     writer->writeEndElement();
 
-    //TODO window state and position
-
     //layout
     writer->writeStartElement( "layout" );
     writer->writeAttribute( "layout", QString::number(d->layout) );
@@ -644,7 +642,6 @@ bool Worksheet::load(XmlStreamReader* reader){
     if (!readBasicAttributes(reader))
         return false;
 
-//    QString elementWarning = tr("Element '%1' not found, default values are used");
     QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;

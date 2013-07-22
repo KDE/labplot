@@ -558,7 +558,6 @@ void MainWin::openProject(const QString& filename) {
  	m_project->setChanged(false);
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("Project %1 opened").arg(m_project->name());
-	m_projectExplorer->setCurrentAspect(m_project);
 	m_recentProjectsAction->addUrl( KUrl(filename) );
 	setCaption(m_project->name());
 	updateGUIOnProjectChanges();

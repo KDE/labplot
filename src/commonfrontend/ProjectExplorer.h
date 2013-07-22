@@ -37,6 +37,8 @@ class QPushButton;
 class QLabel;
 class QSignalMapper;
 class Project;
+class QXmlStreamWriter;
+class XmlStreamReader;
 
 class ProjectExplorer : public QWidget{
 	Q_OBJECT
@@ -57,6 +59,7 @@ class ProjectExplorer : public QWidget{
 		int m_columnToHide;
 		QTreeView* m_treeView;
 		bool m_projectLoading;
+		const Project* m_project;
 		
 		QAction* caseSensitiveAction;
 		QAction* matchCompleteWordAction;
@@ -91,6 +94,9 @@ class ProjectExplorer : public QWidget{
 		void deselectIndex(const QModelIndex&);
 		void selectionChanged(const QItemSelection&, const QItemSelection&);
 		
+		void save(QXmlStreamWriter*) const;
+		bool load(XmlStreamReader*);
+
 	signals:
 		void currentAspectChanged(AbstractAspect*);
 		void selectedAspectsChanged(QList<AbstractAspect*>&);

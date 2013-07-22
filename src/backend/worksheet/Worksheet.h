@@ -105,7 +105,7 @@ class Worksheet: public AbstractPart, public scripted{
 		virtual void childDeselected(const AbstractAspect*);
 
 	 signals:
-		void requestProjectContextMenu(QMenu *menu);
+		void requestProjectContextMenu(QMenu*);
 		void itemSelected(QGraphicsItem*);
 		void itemDeselected(QGraphicsItem*);
 		void requestUpdate();

@@ -30,7 +30,10 @@
 #include "ProjectExplorer.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/AbstractPart.h"
 #include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "commonfrontend/core/PartMdiView.h"
 
 #include <QContextMenuEvent>
 #include <QMenu>
@@ -186,6 +189,7 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect){
   Sets the \c model for the tree view to present.
 */
 void ProjectExplorer::setModel(QAbstractItemModel * model){
+	qDebug()<<"ProjectExplorer::setModel";
 	m_treeView->setModel(model);
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 	
@@ -214,13 +218,16 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	  connect(showColumnAction, SIGNAL(triggered(bool)), showColumnsSignalMapper, SLOT(map()));
 	  showColumnsSignalMapper->setMapping(showColumnAction, i);
 	}
-	 connect(showColumnsSignalMapper, SIGNAL(mapped(int)), this, SLOT(toggleColumn(int)));	
+	connect(showColumnsSignalMapper, SIGNAL(mapped(int)), this, SLOT(toggleColumn(int)));	
 }
 
-void ProjectExplorer::setProject ( const Project* project){
+void ProjectExplorer::setProject( const Project* project) {
 	connect(project, SIGNAL(aspectAdded(const AbstractAspect *)), this, SLOT(aspectAdded(const AbstractAspect *)));
 	connect(project, SIGNAL(loadStarted()), this, SLOT(projectLoadStarted()));
 	connect(project, SIGNAL(loadFinished()), this, SLOT(projectLoadFinished()));
+	connect(project, SIGNAL(requestSaveState(QXmlStreamWriter*)), this, SLOT(save(QXmlStreamWriter*)));
+	connect(project, SIGNAL(requestLoadState(XmlStreamReader*)), this, SLOT(load(XmlStreamReader*)));
+	m_project = project;
 }
 
 QModelIndex ProjectExplorer::currentIndex() const{
@@ -288,18 +295,19 @@ void ProjectExplorer::projectLoadFinished() {
   and makes it visible and selected. Called when a new aspect is added to the project.
  */
 void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
+	if (m_projectLoading)
+		return;
+
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	const QModelIndex& index =  tree_model->modelIndexOfAspect(aspect);
 
-	if (!m_projectLoading) {
-		//expand and make the aspect visible
-		m_treeView->setExpanded(index, true);
-		m_treeView->scrollTo(index);
-		m_treeView->setCurrentIndex(index);
+	//expand and make the aspect visible
+	m_treeView->setExpanded(index, true);
+	m_treeView->scrollTo(index);
+	m_treeView->setCurrentIndex(index);
 
-		//select the added aspect
-		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-	}
+	//select the added aspect
+	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){
@@ -465,4 +473,203 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	}
 
 	emit selectedAspectsChanged(selectedAspects);
+}
+
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+struct ViewState{
+	Qt::WindowStates state;
+	QRect geometry;
+};
+
+/**
+ * \brief Save the current state of the tree view
+ * (expanded items and the currently selected item) as XML
+ */	
+void ProjectExplorer::save(QXmlStreamWriter* writer) const {
+	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	QList<int> selected;
+	QList<int> expanded;
+	QList<int> withView;
+	QList<ViewState> viewStates;
+
+	int currentRow = 0; //row corresponding to the current index in the tree view
+	QModelIndexList selectedRows = m_treeView->selectionModel()->selectedRows();
+
+	int row = 0;
+	QList<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+	foreach(const AbstractAspect* aspect, aspects) {
+		QModelIndex index = model->modelIndexOfAspect(aspect);
+		
+		const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
+		if (part && part->hasMdiSubWindow()) {
+			withView.push_back(row);
+			ViewState s = {part->view()->windowState(), part->view()->geometry()};
+			viewStates.push_back(s);
+		}
+			
+		if (m_treeView->isExpanded(index))
+			expanded.push_back(row);
+
+		if (selectedRows.indexOf(index) != -1)
+			selected.push_back(row);
+
+		if (index == m_treeView->currentIndex())
+			currentRow = row;
+
+		row++;
+	}
+	
+	writer->writeStartElement("state");
+	
+	writer->writeStartElement("expanded");
+	for (int i=0; i<expanded.size(); ++i) {
+		writer->writeTextElement("row", QString::number(expanded.at(i)));
+	}
+	writer->writeEndElement();
+	
+	writer->writeStartElement("selected");
+	for (int i=0; i<selected.size(); ++i) {
+		writer->writeTextElement("row", QString::number(selected.at(i)));
+	}
+	writer->writeEndElement();
+	
+	writer->writeStartElement("view");
+	for (int i=0; i<withView.size(); ++i) {
+		writer->writeStartElement("row");
+		const ViewState& s = viewStates.at(i);
+		writer->writeAttribute( "state", QString::number(s.state) );
+		writer->writeAttribute( "x", QString::number(s.geometry.x()) );
+		writer->writeAttribute( "y", QString::number(s.geometry.y()) );
+		writer->writeAttribute( "width", QString::number(s.geometry.width()) );
+		writer->writeAttribute( "height", QString::number(s.geometry.height()) );
+		writer->writeCharacters(QString::number(withView.at(i)));
+		writer->writeEndElement();
+	}
+	writer->writeEndElement();
+
+	writer->writeStartElement("current");
+	writer->writeTextElement("row", QString::number(currentRow));
+	writer->writeEndElement();
+	
+	writer->writeEndElement();
+}
+
+/**
+ * \brief Load from XML
+ */
+bool ProjectExplorer::load(XmlStreamReader* reader) {
+	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	QList<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
+
+	bool expandedItem = false;
+	bool selectedItem = false;
+	bool viewItem = false;
+	bool currentItem = false;
+	QModelIndex currentIndex;
+	QString str;
+	int row;
+	QList<QModelIndex> selected;
+	QXmlStreamAttributes attribs;
+	QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "state")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+		
+		if (reader->name() == "expanded") {
+			expandedItem = true;
+			selectedItem = false;
+			viewItem = false;
+			currentItem = false;
+		} else if (reader->name() == "selected") {
+			expandedItem = false;
+			selectedItem = true;
+			viewItem = false;
+			currentItem = false;
+		} else 	if (reader->name() == "view") {
+			expandedItem = false;
+			selectedItem = false;
+			viewItem = true;
+			currentItem = false;
+		} else 	if (reader->name() == "current") {
+			expandedItem = false;
+			selectedItem = false;
+			viewItem = false;
+			currentItem = true;			
+		} else if (reader->name() == "row") {
+			attribs = reader->attributes();
+			row = reader->readElementText().toInt();
+			if (row>aspects.size())
+				continue;
+
+			const QModelIndex& index = model->modelIndexOfAspect(aspects.at(row));
+
+			if (expandedItem) {
+				m_treeView->setExpanded(index, true);
+				m_treeView->scrollTo(index);
+			} else if (selectedItem) {
+				selected.push_back(index);
+			} else if (currentItem) {
+				currentIndex = index;
+			} else {
+				AbstractPart* part = dynamic_cast<AbstractPart*>(aspects.at(row));
+				if (!part)
+					continue; //TODO: add error/warning message here?
+				
+				emit currentAspectChanged(part);
+
+				str = attribs.value("state").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'state'"));
+				else
+					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
+				
+				if (str != "0")
+					continue;
+
+				QRect geometry;
+				str = attribs.value("x").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'x'"));
+				else
+					geometry.setX(str.toInt());
+
+				str = attribs.value("y").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'y'"));
+				else
+					geometry.setY(str.toInt());
+
+				str = attribs.value("width").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'width'"));
+				else
+					geometry.setWidth(str.toInt());
+
+				str = attribs.value("height").toString();
+				if(str.isEmpty())
+					reader->raiseWarning(attributeWarning.arg("'height'"));
+				else
+					geometry.setHeight(str.toInt());
+				
+				part->mdiSubWindow()->setGeometry(geometry);
+			}
+		}
+	}
+
+	m_treeView->setCurrentIndex(currentIndex);
+	m_treeView->selectionModel()->select(currentIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+	m_treeView->scrollTo(currentIndex);
+	
+	foreach(QModelIndex index, selected)
+		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+
+	return true;
 }

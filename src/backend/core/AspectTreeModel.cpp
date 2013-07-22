@@ -69,12 +69,12 @@
  * \brief Convenience wrapper around QAbstractItemModel::createIndex().
  */
 
-AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject *parent)
-	: QAbstractItemModel(parent), m_root(root){
-
-	m_folderSelectable = true;
-	m_filterCaseSensitivity = Qt::CaseInsensitive;
-	m_matchCompleteWord = false;
+AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
+	: QAbstractItemModel(parent),
+	  m_root(root),
+	  m_folderSelectable(true),
+	  m_filterCaseSensitivity(Qt::CaseInsensitive),
+	  m_matchCompleteWord(false) {
 
 	connect(m_root, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)),
 		this, SLOT(aspectDescriptionChanged(const AbstractAspect *)));

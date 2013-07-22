@@ -70,6 +70,10 @@ PartMdiView* AbstractPart::mdiSubWindow() const
 	return m_mdiWindow;
 }
 
+bool AbstractPart::hasMdiSubWindow() const {
+	return m_mdiWindow;
+}
+
 /*!
  * this function is called in MainWin when an aspect is removed from the project.
  * deletes the view and it's mdi-subwindow-wrapper

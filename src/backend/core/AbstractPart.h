@@ -46,6 +46,7 @@ class AbstractPart : public AbstractAspect {
 		void deleteView() const;
 
 		PartMdiView* mdiSubWindow() const;
+		bool hasMdiSubWindow() const;
 		void deleteMdiSubWindow();
 		
 		virtual QMenu* createContextMenu();
