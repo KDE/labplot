@@ -502,6 +502,7 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text){
 }
 
 void LabelWidget::labelTeXFontSizeChanged(const qreal size){
+	Q_UNUSED(size);
 	m_initializing = true;
 //TODO
 	m_initializing = false;

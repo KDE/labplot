@@ -112,6 +112,9 @@ void TextLabel::retransform(){
 }
 
 void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
+	Q_UNUSED(horizontalRatio);
+	Q_UNUSED(verticalRatio);
+	
 	Q_D(TextLabel);
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
 }

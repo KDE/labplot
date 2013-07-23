@@ -567,6 +567,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	bool expandedItem = false;
 	bool selectedItem = false;
 	bool viewItem = false;
+	(void)viewItem; // because of a strange g++-warning about unused viewItem
 	bool currentItem = false;
 	QModelIndex currentIndex;
 	QString str;
@@ -632,7 +633,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
 				
 				if (str != "0")
-					continue;
+					continue; //no geometry settings required for maximized/minimized windows
 
 				QRect geometry;
 				str = attribs.value("x").toString();

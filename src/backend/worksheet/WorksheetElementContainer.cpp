@@ -123,6 +123,7 @@ void WorksheetElementContainer::retransform() {
 }
 
 void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
+	qDebug()<<"WorksheetElementContainer::handlePageResize";
 	Q_D(WorksheetElementContainer);
 	QRectF rect(d->rect);
 	rect.setWidth(d->rect.width()*horizontalRatio);

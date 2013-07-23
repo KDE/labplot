@@ -231,8 +231,9 @@ void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect * parent,
 	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
-	int index = before ? m_spreadsheet->indexOfChild<Column>(before) : 0;
 	//TODO: breaks undo/redo 
+	Q_UNUSED(before);
+// 	int index = before ? m_spreadsheet->indexOfChild<Column>(before) : 0;
 	//beginInsertColumns(QModelIndex(), index, index);
 }
 

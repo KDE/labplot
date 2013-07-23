@@ -1484,6 +1484,7 @@ void XYCurveDock::curveSymbolsOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 void XYCurveDock::curveSymbolsAspectRatioChanged(qreal ratio) {
+	Q_UNUSED(ratio);
 	m_initializing = true;
 	//TODO
 	m_initializing = false;

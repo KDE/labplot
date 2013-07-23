@@ -47,7 +47,7 @@ SettingsGeneralPage::~SettingsGeneralPage(){
 }
 
 void SettingsGeneralPage::autoSaveChanged(int state){
-// 	if (state==
+	Q_UNUSED(state);
 }
 
 void SettingsGeneralPage::applySettings(){

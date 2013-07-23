@@ -32,6 +32,7 @@
 SettingsPrintingPage::SettingsPrintingPage(MainWin* main, QWidget* parent)
 	:SettingsPage(parent){
 
+	Q_UNUSED(main);
 	ui.setupUi(this);
 //     mainWindow=main;
 	loadSettings();
