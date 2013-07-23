@@ -68,6 +68,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		CartesianPlotPrivate(CartesianPlot *owner);
 		CartesianPlot * const q;
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 		virtual void retransform();
 		void retransformScales();
 		float round(float value, int precision);
@@ -77,6 +78,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		bool autoScaleX, autoScaleY;
 		float autoScaleOffsetFactor;
 		CartesianPlot::Scale xScale, yScale;
+		bool suppressRetransform;
 };
 
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
@@ -845,7 +847,8 @@ void CartesianPlot::visibilityChanged(){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) : AbstractPlotPrivate(owner),q(owner){
+CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) 
+	: AbstractPlotPrivate(owner), q(owner), suppressRetransform(false) {
 }
 
 /*!
@@ -856,6 +859,10 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) : AbstractPlotP
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform(){
+	if (suppressRetransform)
+		return;
+
+	qDebug()<<"CartesianPlotPrivate::retransform";
 	prepareGeometryChange();
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 	
@@ -903,8 +910,7 @@ void CartesianPlotPrivate::retransformScales(){
 																	itemRect.x()+horizontalPadding,
 																	itemRect.x()+itemRect.width()-horizontalPadding,
 																	xMin, xMax, 2.0);
-// 	}else if (xScale == CartesianPlot::ScaleLn){
-	}else{
+	}else{ //CartesianPlot::ScaleLn
 		if (xMin<=0) xMin=0.1;
 		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
 																	itemRect.x()+horizontalPadding,
@@ -984,7 +990,6 @@ void CartesianPlotPrivate::retransformScales(){
 			}
 			if (axis->position() == Axis::AxisCustom && deltaY != 0){
 				axis->setOffset(axis->offset() + deltaY, false);
-// 					qDebug()<<" new offset "<<axis->offset() + deltaY;
 			}
 		}else{
 			if (deltaY!=0){
@@ -993,7 +998,6 @@ void CartesianPlotPrivate::retransformScales(){
 			}
 			if (axis->position() == Axis::AxisCustom && deltaX != 0){
 				axis->setOffset(axis->offset() + deltaX, false);
-// 					qDebug()<<" new offset "<<axis->offset() + deltaX;
 			}
 		}
 	}
@@ -1011,20 +1015,42 @@ float CartesianPlotPrivate::round(float value, int precision){
  */
 QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
 	if (change == QGraphicsItem::ItemPositionChange) {
-		QPointF itemPos = value.toPointF();//item's center point in parent's coordinates;
+		const QPointF& itemPos = value.toPointF();//item's center point in parent's coordinates;
 		float x = itemPos.x();
 		float y = itemPos.y();
 		
-		//update rect
+		//calculate the new rect and forward the changes to the frontend
+		QRectF newRect;
 		float w = rect.width();
 		float h = rect.height();
-		rect.setX(x-w/2);
-		rect.setY(y-h/2);
-		rect.setWidth(w);
-		rect.setHeight(h);
-		emit dynamic_cast<CartesianPlot*>(q)->rectChanged(rect);
+		newRect.setX(x-w/2);
+		newRect.setY(y-h/2);
+		newRect.setWidth(w);
+		newRect.setHeight(h);
+		emit q->rectChanged(newRect);
      }
 	return QGraphicsItem::itemChange(change, value);
+}
+
+void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	const QPointF& itemPos = pos();//item's center point in parent's coordinates;
+	float x = itemPos.x();
+	float y = itemPos.y();
+	
+	//calculate the new rect and set it
+	QRectF newRect;
+	float w = rect.width();
+	float h = rect.height();
+	newRect.setX(x-w/2);
+	newRect.setY(y-h/2);
+	newRect.setWidth(w);
+	newRect.setHeight(h);
+	
+	suppressRetransform = true;
+	q->setRect(newRect);
+	suppressRetransform = false;	
+
+	QGraphicsItem::mouseReleaseEvent(event);
 }
 
 //##############################################################################
