@@ -673,13 +673,15 @@ void AbstractAspect::setSelected(bool s){
 
 void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//forward the signal to the highest possible level in the parent-child hierarchy
-	if (aspect->parentAspect() != 0)
+	//e.g. axis of a plot was selected. don't include folders here
+	if (aspect->parentAspect() != 0 && !aspect->parentAspect()->inherits("Folder"))
 		emit aspect->parentAspect()->selected(aspect);
 }
 
 void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
-	//forward the signal to the highest possible level in the parent-child hierarchy
-	if (aspect->parentAspect() != 0)
+	//forward the signal to the highest possible level in the parent-child hierarch
+	//e.g. axis of a plot was selected. don't include folders here
+	if (aspect->parentAspect() != 0 && !aspect->parentAspect()->inherits("Folder"))
 		emit aspect->parentAspect()->deselected(aspect);	
 }
 
