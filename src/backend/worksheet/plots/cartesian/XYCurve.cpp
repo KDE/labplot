@@ -43,7 +43,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/core/plugin/PluginManager.h"
-#include "backend/worksheet/symbols/EllipseCurveSymbol.h"
 #include "backend/worksheet/interfaces.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -99,7 +98,6 @@ void XYCurve::init(){
 	d->symbolsOpacity = 1.0;
 	d->symbolsRotationAngle = 0;
 	d->symbolsSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
-	d->symbolsAspectRatio = 1;
 	d->symbolsPrototype = NULL;
 	d->swapSymbolsTypeId("diamond");
 
@@ -228,7 +226,6 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, dropLineOpacity, dropLineOpacity)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsOpacity, symbolsOpacity)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsRotationAngle, symbolsRotationAngle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsSize, symbolsSize)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsAspectRatio, symbolsAspectRatio)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QString, symbolsTypeId, symbolsTypeId)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QBrush, symbolsBrush, symbolsBrush)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
@@ -381,14 +378,6 @@ void XYCurve::setSymbolsRotationAngle(qreal angle) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
 		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
-}
-
-//TODO: not used
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsAspectRatio, qreal, symbolsAspectRatio, updateSymbol)
-void XYCurve::setSymbolsAspectRatio(qreal ratio) {
-	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + ratio, 1 + d->symbolsAspectRatio))
-		exec(new XYCurveSetSymbolsAspectRatioCmd(d, ratio, tr("%1: set symbol aspect ratio")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, updateSymbol)
@@ -606,7 +595,6 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 	Q_D(const XYCurve);
 	
 	setSymbolsSize(d->symbolsSize * horizontalRatio);
-	setSymbolsAspectRatio(d->symbolsAspectRatio * horizontalRatio / verticalRatio);
 	
 	QPen pen = d->symbolsPen;
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
@@ -1334,16 +1322,20 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	}
 	
 	if (symbolsPrototype->id() !="none"){
-	  QPainterPath symbolsPath;
-	  QRectF prototypeBoundingRect = symbolsPrototype->boundingRect();
-	  foreach (QPointF point, symbolPointsScene) {
-		  prototypeBoundingRect.moveCenter(point); 
-		  boundingRectangle |= prototypeBoundingRect;
-		  //TODO ellipse or the actual bounding rect of the current symbol?
-		  //TODO tack possible rotation into account
-		  symbolsPath.addEllipse(prototypeBoundingRect);
-	  }
-	  curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
+		QPainterPath symbolsPath;
+		QRectF rect = symbolsPrototype->boundingRect();
+		rect.moveCenter(QPoint(0,0));
+		QTransform trafo;
+		QPainterPath tempPath;
+		tempPath.addPath(symbolsPrototype->shape());
+		foreach (QPointF point, symbolPointsScene) {
+			trafo.reset();
+			trafo.translate( point.x(), point.y() );
+			trafo.rotate(symbolsRotationAngle);
+			
+			symbolsPath.addPath(AbstractWorksheetElement::shapeFromPath(trafo.map(tempPath), QPen()));
+		}
+		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
 	}
 
 	if (valuesType != XYCurve::NoValues){
@@ -1356,9 +1348,8 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 			trafo.reset();
 			trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
 			trafo.rotate( -valuesRotationAngle );
-			tempPath = trafo.map(tempPath);
 
-			valuesPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, QPen()));
+			valuesPath.addPath(AbstractWorksheetElement::shapeFromPath(trafo.map(tempPath), QPen()));
 		}
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, QPen()));
 		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
@@ -1376,26 +1367,24 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 		symbolsTypeId = id;
 		delete symbolsPrototype;
 		symbolsPrototype = NULL;
-		if (symbolsTypeId != "ellipse") {
-			foreach(QObject *plugin, PluginManager::plugins()) {
-				CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
-				if (factory) {
-					const AbstractCurveSymbol *prototype = factory->prototype(symbolsTypeId);
-					if (prototype) {
-						symbolsPrototype = prototype->clone();
-						break;
-					}
+		foreach(QObject *plugin, PluginManager::plugins()) {
+			CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
+			if (factory) {
+				const AbstractCurveSymbol *prototype = factory->prototype(symbolsTypeId);
+				if (prototype) {
+					symbolsPrototype = prototype->clone();
+					break;
 				}
 			}
 		}
+		if (!symbolsPrototype)
+			return oldId;
+
 		emit q->symbolsTypeIdChanged(id);
 	}
 
-	if (!symbolsPrototype) // safety fallback
-		symbolsPrototype = EllipseCurveSymbol::staticPrototype()->clone();
-
 	symbolsPrototype->setSize(symbolsSize);
-	symbolsPrototype->setAspectRatio(symbolsAspectRatio);
+	symbolsPrototype->setAspectRatio(1);
 	symbolsPrototype->setBrush(symbolsBrush);
 	symbolsPrototype->setPen(symbolsPen);
 	symbolsPrototype->setRotationAngle(symbolsRotationAngle);
@@ -1519,7 +1508,6 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "opacity", QString::number(d->symbolsOpacity) );
 	writer->writeAttribute( "rotation", QString::number(d->symbolsRotationAngle) );
 	writer->writeAttribute( "size", QString::number(d->symbolsSize) );
-	writer->writeAttribute( "ratio", QString::number(d->symbolsAspectRatio) );
 	writer->writeAttribute( "id", d->symbolsTypeId );
 	WRITE_QBRUSH(d->symbolsBrush);
 	WRITE_QPEN(d->symbolsPen);
@@ -1652,13 +1640,7 @@ bool XYCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'size'"));
             else
                 d->symbolsSize = str.toDouble();
-			
-			str = attribs.value("ratio").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'ratio'"));
-            else
-                d->symbolsAspectRatio = str.toDouble();
-			
+
 			str = attribs.value("id").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'id'"));

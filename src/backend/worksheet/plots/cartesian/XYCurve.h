@@ -120,8 +120,6 @@ class XYCurve: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 		
-		//TODO: signal/slot connections with columns
-
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 

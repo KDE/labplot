@@ -217,7 +217,9 @@ QRectF PathCurveSymbol::boundingRect() const {
 QPainterPath PathCurveSymbol::shape() const {
 	Q_D(const PathCurveSymbol);
 
-	return AbstractWorksheetElement::shapeFromPath(d->path, d->pen);
+	QTransform trafo;
+	trafo.scale(d->size,d->size / d->aspectRatio);
+	return AbstractWorksheetElement::shapeFromPath(trafo.map(d->path), d->pen);
 }
 
 AbstractCurveSymbol *PathCurveSymbol::clone() const {

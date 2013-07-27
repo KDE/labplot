@@ -746,7 +746,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
 
 				symbol->setSize(curve->symbolsSize());
-				symbol->setAspectRatio(curve->symbolsAspectRatio());
 				symbol->setBrush(curve->symbolsBrush());
 				symbol->setPen(curve->symbolsPen());
 				symbol->setRotationAngle(curve->symbolsRotationAngle());

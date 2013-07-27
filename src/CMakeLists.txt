@@ -99,7 +99,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
-	${BACKEND_DIR}/worksheet/symbols/EllipseCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/symbols/PathCurveSymbol.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
