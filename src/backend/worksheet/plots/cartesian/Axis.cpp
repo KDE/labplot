@@ -556,7 +556,6 @@ void Axis::setLineOpacity(qreal opacity){
 		exec(new AxisSetLineOpacityCmd(d, opacity, tr("%1: set line opacity")));
 }
 
-//TODO undo-functions
 //Major ticks
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksDirection, Axis::TicksDirection, majorTicksDirection, retransformTicks);
 void Axis::setMajorTicksDirection(const TicksDirection majorTicksDirection) {
@@ -1354,25 +1353,10 @@ void AxisPrivate::retransformMinorGrid(){
 void AxisPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	float w = linePath.boundingRect().width();
-	float h = linePath.boundingRect().height();
-	float penWidth = linePen.width();
-	boundingRectangle = QRectF(-w/2 - penWidth/2, -h/2 - penWidth/2, w + penWidth, h + penWidth);
-	
-	w = majorTicksPath.boundingRect().width();
-	h = majorTicksPath.boundingRect().height();
-	penWidth = majorTicksPen.width();
-	boundingRectangle |=  QRectF(-w/2 - penWidth/2, -h/2 - penWidth/2, w + penWidth, h + penWidth);
-	
-	w = minorTicksPath.boundingRect().width();
-	h = minorTicksPath.boundingRect().height();
-	penWidth = minorTicksPen.width();
-	boundingRectangle |= QRectF(-w/2 - penWidth/2, -h/2 - penWidth/2, w + penWidth, h + penWidth);
-
 	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
-	
+
 	QPainterPath  tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::NoLabels){
 		QTransform trafo;
@@ -1411,7 +1395,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 	
-// 	boundingRectangle = boundingRectangle.normalized();
+	boundingRectangle = axisShape.boundingRect();
 }
 
 /*!
