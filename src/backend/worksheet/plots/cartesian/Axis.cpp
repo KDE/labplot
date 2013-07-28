@@ -1145,8 +1145,12 @@ void AxisPrivate::retransformTickLabelStrings(){
 		format = 'e';
 
 	tickLabelStrings.clear();
-	foreach(float value, tickLabelValues)
-		tickLabelStrings << QString::number(value, format, labelsPrecision);	
+	QString str;
+	foreach(float value, tickLabelValues) {
+		str = QString::number(value, format, labelsPrecision);
+		if (str=="-0") str="0";
+		tickLabelStrings << str;
+	}
 	
 	retransformTickLabels();
 }
@@ -1222,7 +1226,8 @@ void AxisPrivate::retransformTickLabels(){
 	float height = fm.ascent();
 	QString label;
 	QPointF pos;
-
+	float middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
+	float middleY = m_plot->yMin() + (m_plot->yMax() - m_plot->yMin())/2;
 	int xDirection = m_cSystem->xDirection();
 	int yDirection = m_cSystem->yDirection();
 
@@ -1236,7 +1241,7 @@ void AxisPrivate::retransformTickLabels(){
 		  
 		//center align all labels with respect to the end point of the tick line
 		if (orientation == Axis::AxisHorizontal){
-			if(offset < 0.5) {
+			if(offset < middleY) {
 				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
 			}
@@ -1252,7 +1257,7 @@ void AxisPrivate::retransformTickLabels(){
 				pos.setY( startPoint.y() - labelsOffset );
 			}
 		}else{// vertical
-			if(offset < 0.5) {
+			if(offset < middleX) {
 				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
 			} else {
