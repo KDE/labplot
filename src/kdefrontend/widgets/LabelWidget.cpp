@@ -99,7 +99,7 @@ LabelWidget::~LabelWidget() {}
 
 void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_labelsList = labels;
-	
+
 	//TODO: labplot crashes sporadicaly when a new TextLabel is created upon a plot was already created.
 	//The list is (sporadicaly) empty. This shouldn't happen!
 	if (labels.isEmpty())
@@ -136,15 +136,13 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	m_label = m_labelsList.first();
 
 	KConfig config("", KConfig::SimpleConfig);
-	KConfigGroup group = config.group( "TextLabel" );
+	KConfigGroup group = config.group( "AxisLabel" );
   	loadConfig(group);
 
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText(m_label->text().text);
-	//TODO save the offset value in KConfigGroup? (available only for the axis labels)
 	ui.sbOffset->setEnabled(true);
-	ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(axes.first()->titleOffset(), Worksheet::Point) );
 	m_initializing = false;
 
 	initConnections();
@@ -569,14 +567,17 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 		ui.kcbTextColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
 	// Geometry
-	ui.cbPositionX->setCurrentIndex( group.readEntry("TitlePositionX", (int) m_label->position().horizontalPosition ) );
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("TitlePositionXValue", m_label->position().point.x()),Worksheet::Centimeter) );
-	ui.cbPositionY->setCurrentIndex( group.readEntry("TitlePositionY", (int) m_label->position().verticalPosition ) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("TitlePositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
-	//TODO group.writeEntry("TitleOffset", ui.sbOffset->value());
-	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("TitleHorizontalAlignment", (int) m_label->horizontalAlignment()) );
-	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("TitleVerticalAlignment", (int) m_label->verticalAlignment()) );
-	ui.sbRotation->setValue( group.readEntry("TitleRotation", m_label->rotationAngle()) );
+	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),Worksheet::Centimeter) );
+	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
+
+	if (m_axesList.size())
+		ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("Offset", m_axesList.first()->titleOffset()), Worksheet::Point) );
+
+	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
+	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
+	ui.sbRotation->setValue( group.readEntry("Rotation", m_label->rotationAngle()) );
 	
 	m_initializing = false;
 }
@@ -588,12 +589,15 @@ void LabelWidget::saveConfig(KConfigGroup &group) {
 	group.writeEntry("TeXFontColor", ui.kcbTextColor->color());
 
 	// Geometry
-	group.writeEntry("TitlePositionX", ui.cbPositionX->currentIndex());
-	group.writeEntry("TitlePositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
-	group.writeEntry("TitlePositionY", ui.cbPositionY->currentIndex());
-	group.writeEntry("TitlePositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
-	//TODO group.writeEntry("TitleOffset", ui.sbOffset->value());
-	group.writeEntry("TitleHorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
-	group.writeEntry("TitleVerticalAlignment", ui.cbVerticalAlignment->currentIndex());
-	group.writeEntry("TitleRotation", ui.sbRotation->value());
+	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
+	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+
+	if (m_axesList.size())
+		group.writeEntry("Offset",  Worksheet::convertToSceneUnits(ui.sbOffset->value(), Worksheet::Point) );
+
+	group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
+	group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
+	group.writeEntry("Rotation", ui.sbRotation->value());
 }
