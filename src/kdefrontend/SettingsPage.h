@@ -2,7 +2,7 @@
     File                 : SettingsPage.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
+    Copyright            : (C) 2008-2013 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : settings page
                            
@@ -31,11 +31,7 @@
 
 #include <QtGui/QWidget>
 
-/**
- * @brief Base class for the settings pages of the Dolphin settings dialog.
- *
- */
-class SettingsPage : public QWidget{
+class SettingsPage : public QWidget {
     Q_OBJECT
 
 public:

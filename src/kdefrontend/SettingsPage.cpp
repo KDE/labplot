@@ -2,7 +2,7 @@
     File                 : SettingsPage.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
+    Copyright            : (C) 2008-2013 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : settings page
                            
@@ -28,5 +28,10 @@
  ***************************************************************************/
 #include "SettingsPage.h"
 
+/*!
+ * \brief Base class for the settings pages
+ *
+ */
 SettingsPage::SettingsPage(QWidget* parent) : QWidget(parent){}
+
 SettingsPage::~SettingsPage(){}

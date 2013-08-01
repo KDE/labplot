@@ -2,7 +2,7 @@
     File                 : SettingsDialog.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
+    Copyright            : (C) 2008-2013 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : general settings dialog
                            
@@ -29,36 +29,34 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
-#include <QtGui>
 #include <kpagedialog.h>
 
-class MainWin;
 class SettingsGeneralPage;
-class SettingsPrintingPage;
+// class SettingsPrintingPage;
 
-/**
- * @brief Settings dialog for Labplot.
- *
- * Contains the pages for general settings and view settings.
- *
- */
-class SettingsDialog : public KPageDialog{
+class SettingsDialog : public KPageDialog {
     Q_OBJECT
 
 public:
-    explicit SettingsDialog(MainWin* mainWindow);
+    explicit SettingsDialog(QWidget*);
     virtual ~SettingsDialog();
+
+private slots:
+	void changed();
 
 protected slots:
     virtual void slotButtonClicked(int button);
 
 private:
+	bool m_changed;
+    SettingsGeneralPage* generalPage;
+//     SettingsPrintingPage* printingPage;
+
     void applySettings();
     void restoreDefaults();
 
-private:
-    SettingsGeneralPage* generalPage;
-    SettingsPrintingPage* printingPage;
+signals:
+	void settingsSaved();
 };
 
 #endif

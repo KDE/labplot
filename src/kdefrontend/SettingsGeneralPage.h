@@ -2,7 +2,7 @@
     File                 : SettingsGeneralPage.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
+    Copyright            : (C) 2008-2013 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : general settings page
                            
@@ -29,38 +29,28 @@
 #ifndef SETTINGSGENERALPAGE_H
 #define SETTINGSGENERALPAGE_H
 
-#include <QtGui>
-
 #include "SettingsPage.h"
 #include "ui_settingsgeneralpage.h"
 
-class MainWin;
-
-/**
- * @brief Page for the 'General' settings of the Labplot settings dialog.
- *
- */
-class SettingsGeneralPage : public SettingsPage{
+class SettingsGeneralPage : public SettingsPage {
     Q_OBJECT
 
 public:
-    SettingsGeneralPage(MainWin* mainWindow, QWidget* parent);
-    virtual ~SettingsGeneralPage();
+    SettingsGeneralPage(QWidget* parent);
 
-    /** @see SettingsPageBase::applySettings() */
     virtual void applySettings();
-
-    /** @see SettingsPageBase::restoreDefaults() */
     virtual void restoreDefaults();
 
 private:
 	Ui::SettingsGeneralPage ui;
-    MainWin* mainWindow;
+	bool m_changed;
 
 	void loadSettings();
+	void retranslateUi();
 
 private slots:
-    void autoSaveChanged(int);
+	void interfaceChanged(int);
+    void changed();
 };
 
 #endif

@@ -2,7 +2,7 @@
     File                 : SettingsDialog.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
+    Copyright            : (C) 2008-2013 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : general settings dialog
                            
@@ -30,32 +30,37 @@
 
 #include "MainWin.h"
 #include "SettingsGeneralPage.h"
-#include "SettingsPrintingPage.h"
+// #include "SettingsPrintingPage.h"
 
 #include <KLocale>
 #include <kmessagebox.h>
 #include <KIcon>
 
-SettingsDialog::SettingsDialog(MainWin* mainWindow) :
-    KPageDialog(mainWindow){
+/**
+ * \brief Settings dialog for Labplot.
+ *
+ * Contains the pages for general settings and view settings.
+ *
+ */
+SettingsDialog::SettingsDialog(QWidget* parent) :
+    KPageDialog(parent){
 
     const QSize minSize = minimumSize();
     setMinimumSize(QSize(512, minSize.height()));
 
     setFaceType(List);
-    setCaption(i18nc("@title:window", "Dolphin Preferences"));
+    setCaption(i18nc("@title:window", "Labplot Preferences"));
     setButtons(Ok | Apply | Cancel | Default);
     setDefaultButton(Ok);
 
-    generalPage = new SettingsGeneralPage(mainWindow, this);
-    KPageWidgetItem* generalFrame = addPage(generalPage,
-                                                    i18nc("@title:group", "General"));
+    generalPage = new SettingsGeneralPage(this);
+    KPageWidgetItem* generalFrame = addPage(generalPage, i18nc("@title:group", "General"));
     generalFrame->setIcon(KIcon("system-run"));
+	connect(generalPage, SIGNAL(changed()), this, SLOT(changed()));
 
-    printingPage = new SettingsPrintingPage(mainWindow, this);
-    KPageWidgetItem* printingFrame = addPage(printingPage,
-                                                 i18nc("@title:group", "View Modes"));
-    printingFrame->setIcon(KIcon("document-print"));
+//     printingPage = new SettingsPrintingPage(mainWindow, this);
+//     KPageWidgetItem* printingFrame = addPage(printingPage, i18nc("@title:group", "Print"));
+//     printingFrame->setIcon(KIcon("document-print"));
 
     const KConfigGroup dialogConfig(KSharedConfig::openConfig("labplotrc"), "SettingsDialog");
     restoreDialogSize(dialogConfig);
@@ -68,7 +73,8 @@ SettingsDialog::~SettingsDialog(){
 
 void SettingsDialog::slotButtonClicked(int button){
     if ((button == Ok) || (button == Apply)) {
-        applySettings();
+		if (m_changed)
+			applySettings();
     } else if (button == Default) {
         const QString text(i18nc("@info", "All settings will be reset to default values. Do you want to continue?"));
         if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
@@ -79,18 +85,17 @@ void SettingsDialog::slotButtonClicked(int button){
     KPageDialog::slotButtonClicked(button);
 }
 
+void SettingsDialog::changed() {
+	m_changed = true;
+}
+
 void SettingsDialog::applySettings(){
-//     generalPage->applySettings();
+    generalPage->applySettings();
 //     printingPage->applySettings();
-	//TODO
-//     LabplotApplication::app()->refreshMainWindows();
+	emit settingsSaved();
 }
 
 void SettingsDialog::restoreDefaults(){
-//     generalPage->restoreDefaults();
+    generalPage->restoreDefaults();
 //     printingPage->restoreDefaults();
-	//TODO
-//     LabplotApplication::app()->refreshMainWindows();
 }
-
-// #include "moc_SettingsDialog.cpp"

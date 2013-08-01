@@ -2,7 +2,7 @@
     File                 : SettingsGeneral.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
+    Copyright            : (C) 2008-2013 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : general settings page
                            
@@ -33,36 +33,29 @@
 #include <KLocale>
 #include <kfiledialog.h>
 
-SettingsGeneralPage::SettingsGeneralPage(MainWin* main, QWidget* parent) :
-    SettingsPage(parent){
+/**
+ * \brief Page for the 'General' settings of the Labplot settings dialog.
+ *
+ */
+SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
+    SettingsPage(parent), m_changed(false) {
 
 	ui.setupUi(this);
-    mainWindow=main;
+	retranslateUi();
+
 	loadSettings();
 
-	connect(ui.checkBoxAutoSave, SIGNAL(stateChanged(int)), this, SLOT( autoSaveChanged(int)) );
+	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT( changed()) );
+	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT( interfaceChanged(int)) );
+	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT( changed()) );
+	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT( changed()) );
+	
+	interfaceChanged(0);
 }
 
-SettingsGeneralPage::~SettingsGeneralPage(){
-}
 
-void SettingsGeneralPage::autoSaveChanged(int state){
-	Q_UNUSED(state);
-}
-
+/** @see SettingsPageBase::applySettings() */
 void SettingsGeneralPage::applySettings(){
-//     GeneralSettings* settings = DolphinSettings::instance().generalSettings();
-//
-//     const KUrl url(m_homeUrl->text());
-//     KFileItem fileItem(S_IFDIR, KFileItem::Unknown, url);
-//     if (url.isValid() && fileItem.isDir()) {
-//         settings->setHomeUrl(url.prettyUrl());
-//     }
-//
-//     settings->setSplitView(m_splitView->isChecked());
-//     settings->setEditableUrl(m_editableUrl->isChecked());
-//     settings->setFilterBar(m_filterBar->isChecked());
-//
 //     KSharedConfig::Ptr konqConfig = KSharedConfig::openConfig("konquerorrc", KConfig::IncludeGlobals);
 //     KConfigGroup trashConfig(konqConfig, "Trash");
 //     trashConfig.writeEntry("ConfirmTrash", m_confirmMoveToTrash->isChecked());
@@ -74,6 +67,7 @@ void SettingsGeneralPage::applySettings(){
 //     kdeConfig.sync();
 }
 
+/** @see SettingsPageBase::restoreDefaults() */
 void SettingsGeneralPage::restoreDefaults(){
 //     GeneralSettings* settings = DolphinSettings::instance().generalSettings();
 //     settings->setDefaults();
@@ -84,17 +78,48 @@ void SettingsGeneralPage::restoreDefaults(){
 }
 
 void SettingsGeneralPage::loadSettings(){
-//     GeneralSettings* settings = DolphinSettings::instance().generalSettings();
-//     m_homeUrl->setText(settings->homeUrl());
-//     m_splitView->setChecked(settings->splitView());
-//     m_editableUrl->setChecked(settings->editableUrl());
-//     m_filterBar->setChecked(settings->filterBar());
-//
 //     KSharedConfig::Ptr konqConfig = KSharedConfig::openConfig("konquerorrc", KConfig::IncludeGlobals);
 //     const KConfigGroup trashConfig(konqConfig, "Trash");
 //     m_confirmMoveToTrash->setChecked(trashConfig.readEntry("ConfirmTrash", false));
 //     m_confirmDelete->setChecked(trashConfig.readEntry("ConfirmDelete", true));
-//
+// 
 //     const KConfigGroup kdeConfig(KGlobal::config(), "KDE");
 //     m_showDeleteCommand->setChecked(kdeConfig.readEntry("ShowDeleteCommand", false));
+}
+
+void SettingsGeneralPage::retranslateUi() {
+	ui.cbLoadOnStart->clear();
+	ui.cbLoadOnStart->addItem(i18n("Do nothing"));
+	ui.cbLoadOnStart->addItem(i18n("Create new empty project"));
+	ui.cbLoadOnStart->addItem(i18n("Create new project with worksheet"));
+	ui.cbLoadOnStart->addItem(i18n("Load last used project"));
+	
+	ui.cbInterface->clear();
+	ui.cbInterface->addItem(i18n("Sub-window view"));
+	ui.cbInterface->addItem(i18n("Tabbed view"));
+	
+	ui.cbMdiVisibility->clear();
+	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder only"));
+	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder and its subfolders only"));
+	ui.cbMdiVisibility->addItem(i18n("Show all windows"));
+
+	ui.cbTabPosition->clear();
+	ui.cbTabPosition->addItem(i18n("Top"));
+	ui.cbTabPosition->addItem(i18n("Bottom"));
+	ui.cbTabPosition->addItem(i18n("Left"));
+	ui.cbTabPosition->addItem(i18n("Right"));
+}
+
+void SettingsGeneralPage::changed() {
+	m_changed = true;
+}
+
+void SettingsGeneralPage::interfaceChanged(int index) {
+	bool tabbedView = (index==1);
+	ui.lTabPosition->setVisible(tabbedView);
+	ui.cbTabPosition->setVisible(tabbedView);
+	ui.lMdiVisibility->setVisible(!tabbedView);
+	ui.cbMdiVisibility->setVisible(!tabbedView);
+	
+	changed();
 }
