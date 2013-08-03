@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : SettingsGeneral.cc
+    File                 : SettingsGeneralPage.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2013 by Alexander Semke
@@ -43,48 +43,39 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 	ui.setupUi(this);
 	retranslateUi();
 
-	loadSettings();
-
 	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT( changed()) );
 	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT( interfaceChanged(int)) );
+	connect(ui.cbMdiVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT( changed()) );
+	connect(ui.cbTabPosition, SIGNAL(currentIndexChanged(int)), this, SLOT( changed()) );
 	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT( changed()) );
 	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT( changed()) );
-	
-	interfaceChanged(0);
+
+	loadSettings();
+	interfaceChanged(ui.cbInterface->currentIndex());
 }
 
-
-/** @see SettingsPageBase::applySettings() */
 void SettingsGeneralPage::applySettings(){
-//     KSharedConfig::Ptr konqConfig = KSharedConfig::openConfig("konquerorrc", KConfig::IncludeGlobals);
-//     KConfigGroup trashConfig(konqConfig, "Trash");
-//     trashConfig.writeEntry("ConfirmTrash", m_confirmMoveToTrash->isChecked());
-//     trashConfig.writeEntry("ConfirmDelete", m_confirmDelete->isChecked());
-//     trashConfig.sync();
-//
-//     KConfigGroup kdeConfig(KGlobal::config(), "KDE");
-//     kdeConfig.writeEntry("ShowDeleteCommand", m_showDeleteCommand->isChecked());
-//     kdeConfig.sync();
+	KConfigGroup group = KGlobal::config()->group( "General" );
+	group.writeEntry("LoadOnStart", ui.cbLoadOnStart->currentIndex());
+	group.writeEntry("ViewMode", ui.cbInterface->currentIndex());
+	group.writeEntry("TabPosition", ui.cbTabPosition->currentIndex());
+	group.writeEntry("MdiWindowVisibility", ui.cbMdiVisibility->currentIndex());
+	group.writeEntry("AutoSave", ui.chkAutoSave->isChecked());
+	group.writeEntry("AutoSaveInterval", ui.sbAutoSaveInterval->value());
 }
 
-/** @see SettingsPageBase::restoreDefaults() */
 void SettingsGeneralPage::restoreDefaults(){
-//     GeneralSettings* settings = DolphinSettings::instance().generalSettings();
-//     settings->setDefaults();
-//
-//     // TODO: reset default settings for trash and show delete command...
-//
-//     loadSettings();
+    loadSettings();
 }
 
 void SettingsGeneralPage::loadSettings(){
-//     KSharedConfig::Ptr konqConfig = KSharedConfig::openConfig("konquerorrc", KConfig::IncludeGlobals);
-//     const KConfigGroup trashConfig(konqConfig, "Trash");
-//     m_confirmMoveToTrash->setChecked(trashConfig.readEntry("ConfirmTrash", false));
-//     m_confirmDelete->setChecked(trashConfig.readEntry("ConfirmDelete", true));
-// 
-//     const KConfigGroup kdeConfig(KGlobal::config(), "KDE");
-//     m_showDeleteCommand->setChecked(kdeConfig.readEntry("ShowDeleteCommand", false));
+	const KConfigGroup group = KGlobal::config()->group( "General" );
+	ui.cbLoadOnStart->setCurrentIndex(group.readEntry("LoadOnStart", 0));
+	ui.cbInterface->setCurrentIndex(group.readEntry("ViewMode", 0));
+	ui.cbTabPosition->setCurrentIndex(group.readEntry("TabPosition", 0));
+	ui.cbMdiVisibility->setCurrentIndex(group.readEntry("MdiWindowVisibility", 0));
+	ui.chkAutoSave->setChecked(group.readEntry("AutoSave", 0));
+	ui.sbAutoSaveInterval->setValue(group.readEntry("AutoSaveInterval", 0));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -112,6 +103,7 @@ void SettingsGeneralPage::retranslateUi() {
 
 void SettingsGeneralPage::changed() {
 	m_changed = true;
+	emit settingsChanged();
 }
 
 void SettingsGeneralPage::interfaceChanged(int index) {

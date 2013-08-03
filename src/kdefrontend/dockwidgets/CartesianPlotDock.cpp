@@ -755,7 +755,6 @@ void CartesianPlotDock::plotVisibleChanged(bool on){
 	m_initializing = false;
 }
 
-//TODO: more slots
 void CartesianPlotDock::plotBackgroundTypeChanged(PlotArea::BackgroundType type){
 	m_initializing = true;
 	ui.cbBackgroundType->setCurrentIndex(type);

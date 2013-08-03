@@ -56,7 +56,7 @@ private:
     void restoreDefaults();
 
 signals:
-	void settingsSaved();
+	void settingsChanged();
 };
 
 #endif

@@ -100,13 +100,14 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 
 MainWin::~MainWin() {
 	kDebug()<<"write settings"<<endl;
+
 	//write settings
-	//TODO
 	m_recentProjectsAction->saveEntries( KGlobal::config()->group("Recent Files") );
 	//etc...
-	 KGlobal::config()->sync();
+	
+	KGlobal::config()->sync();
 
-	 if (m_project!=0){
+	if (m_project!=0){
 		m_mdiArea->closeAllSubWindows();
 		disconnect(m_project, 0, this, 0);
 		delete m_aspectTreeModel;
@@ -129,29 +130,44 @@ void MainWin::initGUI(const QString& fileName){
 	//make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
 	statusBar()->setFixedHeight(statusBar()->height());
 
-  //TODO make the tabbed view optional and/or accessible via the menu.
-  //The tabbed view collides with the visibility policy for the subwindows.
-  //Hide the menus for the visibility policy if the tabbed view is used.
-//   	m_mdiArea->setViewMode(QMdiArea::TabbedView);
-// 	m_mdiArea->setTabPosition(QTabWidget::South);
-
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
 	m_recentProjectsAction->setEnabled(true);
+	
+	
+	KConfigGroup group = KGlobal::config()->group("General");
+	int viewMode = group.readEntry("ViewMode", 0);
+	if (viewMode == 1) {
+		m_mdiArea->setViewMode(QMdiArea::TabbedView);
+		int tabPosition = group.readEntry("TabPosition", 0);
+		m_mdiArea->setTabPosition(QTabWidget::TabPosition(tabPosition));
+		m_mdiArea->setTabsClosable(true);
+		m_mdiArea->setTabsMovable(true);
+	}
 
-	if ( !fileName.isEmpty() )
+	if ( !fileName.isEmpty() ) {
 		openProject(fileName);
-
-	//TODO There is no file to open -> create a new project or open the last used project.
-	// Make this selection - new or last used - optional in the settings.
-
+	} else {
+		//There is no file to open. Depending on the settings do nothing, 
+		//create a new project or open the last used project.
+		int load = group.readEntry("LoadOnStart", 0);
+		if (load == 1) { //create new project
+			newProject();
+		} else if (load == 2) { //create new project with a worksheet
+			newProject();
+			newWorksheet();
+		} else if (load == 3) { //open last used project
+			if (m_recentProjectsAction->urls().size())
+				openRecentProject( m_recentProjectsAction->urls().first() );
+		}
+	}
  	updateGUIOnProjectChanges();
 }
 
 void MainWin::initActions() {
-	KAction *action;
+	KAction* action;
 
 	// ******************** File-menu *******************************
-		//add some standard actions
+	//add some standard actions
  	action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
 	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
   	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(const KUrl&)),actionCollection());
@@ -260,12 +276,11 @@ void MainWin::initActions() {
 	KStandardAction::quit(this, SLOT(close()), actionCollection());
 
 	//Actions for window visibility
-	QActionGroup * windowVisibilityActions = new QActionGroup(this);
+	QActionGroup* windowVisibilityActions = new QActionGroup(this);
 	windowVisibilityActions->setExclusive(true);
 	
 	m_visibilityFolderAction = new KAction(KIcon("folder"), tr("Current &Folder Only"), windowVisibilityActions);
 	m_visibilityFolderAction->setCheckable(true);
-	m_visibilityFolderAction->setChecked(true);
 	m_visibilityFolderAction->setData(Project::folderOnly);
 	
 	m_visibilitySubfolderAction = new KAction(KIcon("folder-documents"), tr("Current Folder and &Subfolders"), windowVisibilityActions);
@@ -464,6 +479,16 @@ bool MainWin::newProject(){
   	m_currentAspect = m_project;
  	m_currentFolder = m_project;
 
+	KConfigGroup group = KGlobal::config()->group("General");
+	Project::MdiWindowVisibility vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
+	m_project->setMdiWindowVisibility( vis );
+	if (vis == Project::folderOnly)
+		m_visibilityFolderAction->setChecked(true);
+	else if (vis == Project::folderAndSubfolders)
+		m_visibilitySubfolderAction->setChecked(true);
+	else
+		m_visibilityAllAction->setChecked(true);
+	
 	m_aspectTreeModel = new AspectTreeModel(m_project, this);
 		
 	//newProject is called for the first time, there is no project explorer yet 
@@ -926,21 +951,24 @@ void MainWin::newFolder() {
 /*!
 	this is called on a right click on the root folder in the project explorer
 */
-void MainWin::createContextMenu(QMenu * menu) const{
+void MainWin::createContextMenu(QMenu* menu) const {
 	menu->addMenu(m_newMenu);
-	menu->addMenu(m_visibilityMenu);
+	
+	//The tabbed view collides with the visibility policy for the subwindows.
+	//Hide the menus for the visibility policy if the tabbed view is used.
+	if (m_mdiArea->viewMode() != QMdiArea::TabbedView)
+		menu->addMenu(m_visibilityMenu);
 }
 
 /*!
 	this is called on a right click on a non-root folder in the project explorer
 */
-void MainWin::createFolderContextMenu(const Folder * folder, QMenu * menu) const{
+void MainWin::createFolderContextMenu(const Folder* folder, QMenu* menu) const{
 	Q_UNUSED(folder);
 
 	//Folder provides it's own context menu. Add a separator befor adding additional actions.
 	menu->addSeparator();
-	menu->addMenu(m_newMenu);
-	menu->addMenu(m_visibilityMenu);
+	this->createContextMenu(menu);
 }
 
 void MainWin::undo(){
@@ -1022,6 +1050,25 @@ void MainWin::closeEvent(QCloseEvent* event) {
 		m_closing = false;
 		event->ignore();
 	}
+}
+
+void MainWin::handleSettingsChanges() {
+	const KConfigGroup group = KGlobal::config()->group( "General" );
+
+	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
+	if (m_mdiArea->viewMode() != viewMode) {
+		m_mdiArea->setViewMode(viewMode);
+		if (viewMode == QMdiArea::SubWindowView)
+			this->updateMdiWindowVisibility();
+	}
+	
+	if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
+		QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
+		if (m_mdiArea->tabPosition() != tabPosition)
+			m_mdiArea->setTabPosition(tabPosition);
+	}
+
+	//TODO autosave
 }
 
 /***************************************************************************************/
@@ -1119,6 +1166,8 @@ void MainWin::addAspectToProject(AbstractAspect* aspect){
 }
 
 void MainWin::settingsDialog(){
-	//TODO
-	(new SettingsDialog(this))->show();
+	SettingsDialog* dlg = new SettingsDialog(this);
+	connect (dlg, SIGNAL(settingsChanged()), this, SLOT(handleSettingsChanges()));
+	dlg->exec();
+	delete dlg;
 }

@@ -113,7 +113,6 @@ bool PlotArea::isVisible() const{
 void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio){
 	Q_D(PlotArea);
 
-	//TODO: doesn't work properly
 	d->rect.setWidth(d->rect.width()*horizontalRatio);
 	d->rect.setHeight(d->rect.height()*verticalRatio);
 	

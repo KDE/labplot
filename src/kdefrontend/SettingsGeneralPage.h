@@ -51,6 +51,9 @@ private:
 private slots:
 	void interfaceChanged(int);
     void changed();
+
+signals:
+	void settingsChanged();
 };
 
 #endif

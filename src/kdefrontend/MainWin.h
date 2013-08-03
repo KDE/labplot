@@ -198,7 +198,9 @@ private slots:
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleSubWindowStatusChange(PartMdiView* view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
 	void handleShowSubWindowRequested();
-	
+
+	void handleSettingsChanges();
+
 	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility() const;
 	void toggleDockWidget(QAction*) const;

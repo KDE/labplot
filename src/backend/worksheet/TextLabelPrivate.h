@@ -32,6 +32,7 @@
 
 #include <QStaticText>
 #include <QFutureWatcher>
+#include <QGraphicsItem>
 
 class TextLabelPrivate: public QGraphicsItem{
 	public:
