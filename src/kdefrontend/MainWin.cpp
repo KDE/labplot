@@ -82,6 +82,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	m_currentFolder(0),
 	m_suppressCurrentSubWindowChangedEvent(false),
 	m_closing(false),
+	m_autoSaveActive(false),
 	m_visibilityMenu(0),
 	m_newMenu(0),
 	axisDock(0),
@@ -130,10 +131,11 @@ void MainWin::initGUI(const QString& fileName){
 	//make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
 	statusBar()->setFixedHeight(statusBar()->height());
 
+	//load recently used projects
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
 	m_recentProjectsAction->setEnabled(true);
 	
-	
+	//set the view mode of the mdi area
 	KConfigGroup group = KGlobal::config()->group("General");
 	int viewMode = group.readEntry("ViewMode", 0);
 	if (viewMode == 1) {
@@ -144,6 +146,13 @@ void MainWin::initGUI(const QString& fileName){
 		m_mdiArea->setTabsMovable(true);
 	}
 
+	//auto-save
+	m_autoSaveActive = group.readEntry("AutoSave", 0);
+	int interval = group.readEntry("AutoSaveInterval", 1);
+	interval = interval*60*1000;
+	m_autoSaveTimer.setInterval(interval);
+	connect(&m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveProject()));
+	
 	if ( !fileName.isEmpty() ) {
 		openProject(fileName);
 	} else {
@@ -538,7 +547,7 @@ bool MainWin::newProject(){
 
  	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
  	setCaption(m_project->name());
-	 
+
 	return true;
 }
 
@@ -589,6 +598,11 @@ void MainWin::openProject(const QString& filename) {
 	updateGUI(); //there are most probably worksheets or spreadsheets in the open project -> update the GUI
 	m_saveAction->setEnabled(false);
 	m_saveAsAction->setEnabled(false);
+	
+	statusBar()->showMessage(i18n("Project successfully opened."));
+
+	if (m_autoSaveActive)
+		m_autoSaveTimer.start();	
 }
 
 void MainWin::openRecentProject(const KUrl& url) {
@@ -694,6 +708,11 @@ bool MainWin::save(const QString& fileName) {
 		m_saveAction->setEnabled(false);
 		m_recentProjectsAction->addUrl( KUrl(fileName) );
 		ok = true;
+		
+		//we have a file name now
+		// -> auto save can be activated now if not happened yet
+		if (m_autoSaveActive && !m_autoSaveTimer.isActive())
+			m_autoSaveTimer.start();
 	}else{
 		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));
 		ok = false;
@@ -701,7 +720,20 @@ bool MainWin::save(const QString& fileName) {
 	
 	if (file != 0)
 		delete file;
+	
 	return ok;	
+}
+
+/*!
+ * automatically saves the project in the specified time interval.
+ */
+void MainWin::autoSaveProject() {
+	//don't auto save when there are no changes or the file name
+	//was not provided yet (the project was never explicitly saved yet).
+	if ( !m_project->hasChanged() || m_project->fileName().isEmpty())
+		return;
+	
+	this->saveProject();
 }
 
 /*!
@@ -1068,7 +1100,20 @@ void MainWin::handleSettingsChanges() {
 			m_mdiArea->setTabPosition(tabPosition);
 	}
 
-	//TODO autosave
+	//autosave
+	bool autoSave = group.readEntry("AutoSave", 0);
+	if (m_autoSaveActive != autoSave) {
+		m_autoSaveActive = autoSave;
+		if (autoSave)
+			m_autoSaveTimer.start();
+		else
+			m_autoSaveTimer.stop();
+	}
+
+	int interval = group.readEntry("AutoSaveInterval", 1);
+	interval = interval*60*1000;
+	if (interval!=m_autoSaveTimer.interval())
+		m_autoSaveTimer.setInterval(interval);
 }
 
 /***************************************************************************************/

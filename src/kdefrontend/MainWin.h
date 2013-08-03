@@ -34,6 +34,7 @@
 #include <KXmlGuiWindow>
 #include <KRecentFilesAction>
 #include "commonfrontend/core/PartMdiView.h"
+#include <QTimer>
 
 class AbstractAspect;
 class AspectTreeModel;
@@ -43,8 +44,6 @@ class Project;
 class Worksheet;
 class Spreadsheet;
 class GuiObserver;
-class QDockWidget;
-class QStackedWidget;
 class AxisDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
@@ -55,6 +54,9 @@ class XYCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
+
+class QDockWidget;
+class QStackedWidget;
 
 class MainWin : public KXmlGuiWindow{
 	Q_OBJECT
@@ -78,6 +80,8 @@ private:
 	ImportFileDialog* m_importFileDialog;
 	bool m_suppressCurrentSubWindowChangedEvent;
 	bool m_closing;
+	bool m_autoSaveActive;
+	QTimer m_autoSaveTimer;
 	
 	KRecentFilesAction* m_recentProjectsAction;
 	KAction* m_saveAction;
@@ -170,7 +174,8 @@ private slots:
 	bool closeProject();
 	bool saveProject();
 	bool saveProjectAs();
-	
+	void autoSaveProject();
+
 	void print();
 	void printPreview();
 	

@@ -74,7 +74,7 @@ void SettingsGeneralPage::loadSettings(){
 	ui.cbInterface->setCurrentIndex(group.readEntry("ViewMode", 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry("TabPosition", 0));
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry("MdiWindowVisibility", 0));
-	ui.chkAutoSave->setChecked(group.readEntry("AutoSave", 0));
+	ui.chkAutoSave->setChecked(group.readEntry<bool>("AutoSave", 0));
 	ui.sbAutoSaveInterval->setValue(group.readEntry("AutoSaveInterval", 0));
 }
 
