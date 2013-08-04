@@ -545,6 +545,13 @@ void WorksheetView::wheelEvent(QWheelEvent *event) {
 }
 
 void WorksheetView::mousePressEvent(QMouseEvent* event) {
+	//prevent the deselection of items when context menu event
+	//was triggered (right button click)
+	if (event->button() != Qt::LeftButton) {
+        event->accept();
+        return;
+    }
+
 	// select the worksheet in the project explorer if the view was clicked 
 	// and there is no selection currently. We need this for the case when
 	// there is a single worksheet in the project and we change from the project-node

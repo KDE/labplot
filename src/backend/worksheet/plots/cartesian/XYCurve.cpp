@@ -1336,6 +1336,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 			symbolsPath.addPath(AbstractWorksheetElement::shapeFromPath(trafo.map(tempPath), QPen()));
 		}
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
+		boundingRectangle = boundingRectangle.united(symbolsPath.boundingRect());
 	}
 
 	if (valuesType != XYCurve::NoValues){

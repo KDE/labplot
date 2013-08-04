@@ -147,7 +147,7 @@ void MainWin::initGUI(const QString& fileName){
 	}
 
 	//auto-save
-	m_autoSaveActive = group.readEntry("AutoSave", 0);
+	m_autoSaveActive = group.readEntry<bool>("AutoSave", 0);
 	int interval = group.readEntry("AutoSaveInterval", 1);
 	interval = interval*60*1000;
 	m_autoSaveTimer.setInterval(interval);

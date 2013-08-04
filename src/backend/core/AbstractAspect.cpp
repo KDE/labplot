@@ -709,9 +709,10 @@ QMenu *AbstractAspect::createContextMenu(){
 #else
 	KMenu* menu = new KMenu();
 	menu->addTitle(this->name());
-	menu->addAction( KStandardAction::cut(this) );
-	menu->addAction(KStandardAction::copy(this));
-	menu->addAction(KStandardAction::paste(this));
+	//TODO: activate this again when the functionality is implemented
+// 	menu->addAction( KStandardAction::cut(this) );
+// 	menu->addAction(KStandardAction::copy(this));
+// 	menu->addAction(KStandardAction::paste(this));
 	menu->addSeparator();
 	menu->addAction(QIcon(KIcon("edit-rename")), QObject::tr("Rename"), this, SIGNAL(renameRequested()));
 	menu->addAction(QIcon(KIcon("edit-delete")), QObject::tr("Delete"), this, SLOT(remove()));

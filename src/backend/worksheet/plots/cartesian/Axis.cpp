@@ -1146,12 +1146,15 @@ void AxisPrivate::retransformTickLabelStrings(){
 
 	tickLabelStrings.clear();
 	QString str;
+	QString nullStr = QString::number(0, format, labelsPrecision);
 	foreach(float value, tickLabelValues) {
 		str = QString::number(value, format, labelsPrecision);
-		if (str=="-0") str="0";
+		if (str == "-"+nullStr)
+			str=nullStr;
+
 		tickLabelStrings << str;
 	}
-	
+
 	retransformTickLabels();
 }
 
