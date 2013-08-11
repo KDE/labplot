@@ -36,6 +36,7 @@
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -44,7 +45,8 @@
 #include <QDebug>
 #include <QMenu>
 #include <QToolBar>
- 
+#include <QGraphicsSceneWheelEvent>
+
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
 #else
@@ -79,6 +81,8 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		float autoScaleOffsetFactor;
 		CartesianPlot::Scale xScale, yScale;
 		bool suppressRetransform;
+
+		void wheelEvent( QGraphicsSceneWheelEvent*);
 };
 
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
@@ -975,11 +979,8 @@ void CartesianPlotPrivate::retransformScales(){
 	yMaxPrev = yMax;
 
 	//adjust auto-scale axes
-	QList<AbstractWorksheetElement *> childElements = q->children<AbstractWorksheetElement>();
-    foreach(AbstractWorksheetElement *elem, childElements){
-		Axis* axis = qobject_cast<Axis*>(elem);
-		if (!axis)
-			continue;
+	QList<Axis *> childElements = q->children<Axis>();
+	foreach(Axis* axis, childElements){
 		if (!axis->autoScale())
 			continue;
 			
@@ -1051,6 +1052,41 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	suppressRetransform = false;	
 
 	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
+	//determine first, which axes are selected and zoom only in the corresponding direction.
+	//zoom the entire plot if no axes selected.
+	bool zoomX = false;
+	bool zoomY = false;
+	QList<Axis*> axes = q->children<Axis>();
+	foreach(Axis* axis, axes){
+		if (!axis->graphicsItem()->isSelected())
+			continue;
+			
+		if (axis->orientation() == Axis::AxisHorizontal)
+			zoomX  = true;
+		else
+			zoomY = true;
+	}
+
+	if (event->delta() > 0) {
+		if (!zoomX && !zoomY) {
+			//no special axis selected -> zoom in everything
+			q->zoomIn();
+		} else {
+			if (zoomX) q->zoomInX();
+			if (zoomY) q->zoomInY();
+		}
+	} else {
+		if (!zoomX && !zoomY) {
+			//no special axis selected -> zoom in everything
+			q->zoomOut();
+		} else {
+			if (zoomX) q->zoomOutX();
+			if (zoomY) q->zoomOutY();
+		}
+	}
 }
 
 //##############################################################################
