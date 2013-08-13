@@ -110,7 +110,8 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	// settings for default selection (necessary if not changed later)
 	ui.sbPositionX->setEnabled(false);
 	ui.sbPositionY->setEnabled(false);
-	ui.sbOffset->setEnabled(false);
+	ui.lOffset->hide();
+	ui.sbOffset->hide();
 
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
@@ -142,7 +143,8 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText(m_label->text().text);
-	ui.sbOffset->setEnabled(true);
+	ui.lOffset->show();
+	ui.sbOffset->show();
 	m_initializing = false;
 
 	initConnections();

@@ -153,7 +153,8 @@ QIcon FileDataSource::icon() const{
 
 // TODO
 QMenu* FileDataSource::createContextMenu(){
-	return 0;
+	QMenu* menu = AbstractPart::createContextMenu();
+	return menu;
 }
 
 void FileDataSource::read(){

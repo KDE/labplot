@@ -57,7 +57,6 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
 	
     setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 	setButtonText(KDialog::User1,i18n("Show Options"));
-	enableButtonOk(false);
 	
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
@@ -74,7 +73,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 
   //Frame for the "Add To"-Stuff
   frameAddTo = new QGroupBox(this);
-  frameAddTo->setTitle(i18n("Import  to"));
+  frameAddTo->setTitle(i18n("Import to"));
   QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
   hLayout->addWidget( new QLabel(i18n("Spreadsheet"),  frameAddTo) );
 	
@@ -112,6 +111,9 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 
   //hide the data-source related widgets
   importFileWidget->hideDataSource();
+  
+  //ok is only available if a valid spreadsheet was selected
+  enableButtonOk(false);
 }
 
 void ImportFileDialog::updateModel(std::auto_ptr<QAbstractItemModel> model){

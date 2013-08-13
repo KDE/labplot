@@ -979,7 +979,7 @@ void CartesianPlotPrivate::retransformScales(){
 	yMaxPrev = yMax;
 
 	//adjust auto-scale axes
-	QList<Axis *> childElements = q->children<Axis>();
+	QList<Axis*> childElements = q->children<Axis>();
 	foreach(Axis* axis, childElements){
 		if (!axis->autoScale())
 			continue;
