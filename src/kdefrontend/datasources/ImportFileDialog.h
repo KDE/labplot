@@ -66,7 +66,6 @@ class ImportFileDialog: public KDialog {
 
 	signals:
 		void newSpreadsheetRequested(const QString&);
-		void completed(int);
 };
 
 #endif //IMPORTFILEDIALOG_H

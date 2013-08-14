@@ -128,8 +128,16 @@ void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index){
 		aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
 		isTopLevel = false;
 		foreach(const char * classString, m_topLevelClasses)
-			if (aspect->inherits(classString))
-				isTopLevel = true;
+			if (aspect->inherits(classString)) {
+				if ( strcmp(classString, "Spreadsheet")==0 ) {
+					if (aspect->inherits("FileDataSource"))
+						isTopLevel = false;
+					else
+						isTopLevel = true;
+				} else {
+					isTopLevel = true;
+				}
+			}
 
 		m_treeView.setRowHidden(i, index, !isTopLevel);
 	}

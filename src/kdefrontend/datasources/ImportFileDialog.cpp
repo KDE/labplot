@@ -132,7 +132,11 @@ void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
 */
 void ImportFileDialog::importToFileDataSource(FileDataSource* source) const{
 	importFileWidget->saveSettings(source);
+	
+	//TODO: add progress bar
+	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 	source->read();
+	QApplication::restoreOverrideCursor();
 }
 
 /*!
@@ -143,7 +147,6 @@ void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
 	Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
 	QString fileName = importFileWidget->fileName();
 	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
-	connect(filter, SIGNAL(completed(int)), this, SIGNAL(completed(int)));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
   
 	//show a progress bar in the status bar
