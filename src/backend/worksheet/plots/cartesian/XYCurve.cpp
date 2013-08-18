@@ -366,28 +366,28 @@ void XYCurve::setSymbolsTypeId(const QString &id) {
 		exec(new XYCurveSetSymbolsTypeIdCmd(d, id, tr("%1: set symbol type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsSize, qreal, symbolsSize, updateSymbol)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsSize, qreal, symbolsSize, updateSymbols)
 void XYCurve::setSymbolsSize(qreal size) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
 		exec(new XYCurveSetSymbolsSizeCmd(d, size, tr("%1: set symbol size")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsRotationAngle, qreal, symbolsRotationAngle,updateSymbol)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsRotationAngle, qreal, symbolsRotationAngle, updateSymbols)
 void XYCurve::setSymbolsRotationAngle(qreal angle) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
 		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, updateSymbol)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, update)
 void XYCurve::setSymbolsBrush(const QBrush &brush) {
 	Q_D(XYCurve);
 	if (brush != d->symbolsBrush)
 		exec(new XYCurveSetSymbolsBrushCmd(d, brush, tr("%1: set symbol filling")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsPen, QPen, symbolsPen, updateSymbol)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsPen, QPen, symbolsPen, updateSymbols)
 void XYCurve::setSymbolsPen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->symbolsPen)
@@ -764,6 +764,7 @@ void XYCurvePrivate::retransform(){
 
 	updateLines();
 	updateDropLines();
+	updateSymbols();
 	updateValues();
 	updateErrorBars();
 }
@@ -841,7 +842,7 @@ void XYCurvePrivate::updateLines(){
 		  lines.append(QLineF(tempPoint2, nextPoint));
 		}
 		break;
-	  }	  
+	  }
 	  case XYCurve::Segments2:{
 		int skip=0;
 		for (int i=0; i<count-1; i++){
@@ -1019,6 +1020,27 @@ void XYCurvePrivate::updateDropLines(){
 	foreach (QLineF line, lines){
 		dropLinePath.moveTo(line.p1());
 		dropLinePath.lineTo(line.p2());
+	}
+
+	recalcShapeAndBoundingRect();
+}
+
+void XYCurvePrivate::updateSymbols(){
+	symbolsPath = QPainterPath();
+
+	if (symbolsPrototype->id() != "none"){
+		QPainterPath path = symbolsPrototype->shape();
+		QTransform trafo;
+		if (symbolsRotationAngle != 0) {
+			trafo.rotate(symbolsRotationAngle);
+			path = trafo.map(path);
+		}
+
+		foreach (QPointF point, symbolPointsScene) {
+			trafo.reset();
+			trafo.translate(point.x(), point.y());
+			symbolsPath.addPath(trafo.map(path));
+		}
 	}
 
 	recalcShapeAndBoundingRect();
@@ -1321,20 +1343,12 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		boundingRectangle = boundingRectangle.united(dropLinePath.boundingRect());
 	}
 	
-	if (symbolsPrototype->id() !="none"){
-		QPainterPath symbolsPath;
-		QRectF rect = symbolsPrototype->boundingRect();
-		rect.moveCenter(QPoint(0,0));
-		QTransform trafo;
-		QPainterPath tempPath;
-		tempPath.addPath(symbolsPrototype->shape());
-		foreach (QPointF point, symbolPointsScene) {
-			trafo.reset();
-			trafo.translate( point.x(), point.y() );
-			trafo.rotate(symbolsRotationAngle);
-			
-			symbolsPath.addPath(AbstractWorksheetElement::shapeFromPath(trafo.map(tempPath), QPen()));
-		}
+	if (dropLineType != XYCurve::NoDropLine){
+		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
+		boundingRectangle = boundingRectangle.united(dropLinePath.boundingRect());
+	}
+
+	if (symbolsPrototype->id() != "none"){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
 		boundingRectangle = boundingRectangle.united(symbolsPath.boundingRect());
 	}
@@ -1389,12 +1403,8 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 	symbolsPrototype->setBrush(symbolsBrush);
 	symbolsPrototype->setPen(symbolsPen);
 	symbolsPrototype->setRotationAngle(symbolsRotationAngle);
-	recalcShapeAndBoundingRect();
+	updateSymbols();
 	return oldId;
-}
-
-void XYCurve::Private::updateSymbol(){
-	swapSymbolsTypeId(symbolsTypeId);
 }
 
 /*!
@@ -1432,19 +1442,13 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   }
 
   //draw symbols
-  if (symbolsPrototype->id()!="none"){
-	  painter->setOpacity(symbolsOpacity);
-	  //TODO move the symbol properties from the Symbol-Class to XYCurve?
-// 	  painter->setPen(symbolsPen);
-// 	  painter->setBrush(symbolsBrush);
-// 	  painter->rotate(symbolsRotationAngle);
-	  foreach(QPointF point, symbolPointsScene){
-		  painter->translate(point);
-		  symbolsPrototype->paint(painter, option, widget);
-		  painter->translate(-point);
-	  }
-  }
-  
+	if (symbolsPrototype->id() != "none"){
+		painter->setOpacity(symbolsOpacity);
+		painter->setPen(symbolsPen);
+		painter->setBrush(symbolsBrush);
+		painter->drawPath(symbolsPath);
+	}
+
   //draw values
   if (valuesType != XYCurve::NoValues){
 	painter->setOpacity(valuesOpacity);

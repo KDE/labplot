@@ -46,7 +46,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		void retransform();
 		void updateLines();
 		void updateDropLines();
-		void updateSymbol();
+		void updateSymbols();
 		void updateValues();
 		void updateErrorBars();		
 		bool swapVisible(bool on);
@@ -118,6 +118,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		QPainterPath dropLinePath;
 		QPainterPath valuesPath;
 		QPainterPath errorBarsPath;
+		QPainterPath symbolsPath;
 		AbstractCurveSymbol *symbolsPrototype;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
