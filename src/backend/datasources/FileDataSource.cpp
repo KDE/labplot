@@ -50,10 +50,14 @@ Email (use @ for *)  : alexander.semke*web.de
   \ingroup datasources
 */
 
-FileDataSource::FileDataSource(AbstractScriptingEngine *engine, const QString& name)
-     : Spreadsheet(engine, name){
+FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& name)
+     : Spreadsheet(engine, name),
+     m_fileType(AsciiVector),
+     m_fileWatched(false),
+     m_fileLinked(false),
+     m_filter(0)
 
-}
+{ }
 
 FileDataSource::~FileDataSource(){
   if (m_filter)
@@ -344,6 +348,17 @@ bool FileDataSource::load(XmlStreamReader* reader) {
             else
                 m_fileType = (FileType)str.toInt();
 
+			str = attribs.value("fileWatched").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fileWatched'"));
+            else
+                m_fileWatched = str.toInt();
+
+			str = attribs.value("fileLinked").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fileLinked'"));
+            else
+                m_fileLinked = str.toInt();
 		} else if (reader->name() == "asciiFilter") {
 			m_filter = new AsciiFilter();
 			if (!m_filter->load(reader))
@@ -363,6 +378,8 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 	}
 
 	//read the content of the file if it was only linked
-	//TODO:
+	if (m_fileLinked)
+		m_filter->read(m_fileName, this);
+
 	return !reader->hasError();
 }
