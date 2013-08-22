@@ -1,10 +1,10 @@
 /***************************************************************************
 File                 : FileDataSource.cpp
 Project              : LabPlot/SciDAVis
-Description 		: Represents file data source
+Description 		 : Represents file data source
 --------------------------------------------------------------------
-Copyright            		: (C) 2009-2013 Alexander Semke
-Email (use @ for *)  	: alexander.semke*web.de
+Copyright            : (C) 2009-2013 Alexander Semke
+Email (use @ for *)  : alexander.semke*web.de
 
 ***************************************************************************/
 
@@ -27,13 +27,14 @@ Email (use @ for *)  	: alexander.semke*web.de
 *                                                                         *
 ***************************************************************************/
 
-#include "FileDataSource.h"
+#include "backend/datasources/FileDataSource.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+
 #include <QFileInfo>
 #include <QDateTime>
 #include <QProcess>
 #include <QDir>
-#include "backend/datasources/filters/AsciiFilter.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -53,7 +54,6 @@ FileDataSource::FileDataSource(AbstractScriptingEngine *engine, const QString& n
      : Spreadsheet(engine, name){
 
 }
-
 
 FileDataSource::~FileDataSource(){
   if (m_filter)
@@ -116,7 +116,7 @@ void FileDataSource::setFileWatched(const bool b){
 bool FileDataSource::isFileWatched() const{
   	return m_fileWatched;
 }
-  
+
 /*!
   sets whether only a link to the file is saved in the project file (\c b=true)
   or the whole content of the file (\c b=false).
@@ -136,9 +136,7 @@ bool FileDataSource::isFileLinked() const{
 
 QIcon FileDataSource::icon() const{
 	QIcon icon;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	//TODO
-#else
+#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
   if (m_fileType==AsciiVector || m_fileType==AsciiMatrix)
 	  icon = KIcon("text-plain");
   else if (m_fileType==BinaryVector || m_fileType==BinaryMatrix)
@@ -270,3 +268,101 @@ FileDataSource::watchFile(){
 FileDataSource::fileChanged(){
   
 }*/
+
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+/*!
+  Saves as XML.
+ */
+void FileDataSource::save(QXmlStreamWriter* writer) const
+{
+	writer->writeStartElement("fileDataSource");
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+
+	//general
+    writer->writeStartElement( "general" );
+	writer->writeAttribute( "fileName", m_fileName );
+	writer->writeAttribute( "fileType", QString::number(m_fileType) );
+	writer->writeAttribute( "fileWatched", QString::number(m_fileWatched) );
+	writer->writeAttribute( "fileLinked", QString::number(m_fileLinked) );
+	writer->writeEndElement();
+
+	//filter
+	m_filter->save(writer);
+
+	//columns
+	if (!m_fileLinked) {
+		foreach (Column * col, children<Column>(IncludeHidden))
+			col->save(writer);
+	}
+
+	writer->writeEndElement(); // "spreadsheet"
+}
+
+/*!
+  Loads from XML.
+*/
+bool FileDataSource::load(XmlStreamReader* reader) {
+    if(!reader->isStartElement() || reader->name() != "fileDataSource") {
+        reader->raiseError(tr("no fileDataSource element found"));
+        return false;
+    }
+
+    if (!readBasicAttributes(reader))
+        return false;
+
+    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+
+    while (!reader->atEnd()) {
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "fileDataSource")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+        if (reader->name() == "comment") {
+            if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "general"){
+            attribs = reader->attributes();
+
+			str = attribs.value("fileName").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fileName'"));
+            else
+                m_fileName = str;
+
+            str = attribs.value("fileType").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fileType'"));
+            else
+                m_fileType = (FileType)str.toInt();
+
+		} else if (reader->name() == "asciiFilter") {
+			m_filter = new AsciiFilter();
+			if (!m_filter->load(reader))
+				return false;
+		} else if(reader->name() == "column") {
+			Column* column = new Column("", AbstractColumn::Text);
+			if (!column->load(reader)) {
+				delete column;
+				setColumnCount(0);
+				return false;
+			}
+			addChild(column);
+		} else {// unknown element
+			reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+			if (!reader->skipToEndElement()) return false;
+		}
+	}
+
+	//read the content of the file if it was only linked
+	//TODO:
+	return !reader->hasError();
+}

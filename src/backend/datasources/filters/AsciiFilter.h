@@ -1,10 +1,10 @@
 /***************************************************************************
 File                 : AsciiFilter.h
-Project              : LabPlot/SciDAVis
+Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            		: (C) 2009 Alexander Semke
-Email (use @ for *)  	: alexander.semke*web.de
+Copyright            : (C) 2009-2013 Alexander Semke
+Email (use @ for *)  : alexander.semke*web.de
 ***************************************************************************/
 
 /***************************************************************************
@@ -87,6 +87,9 @@ class AsciiFilter : public AbstractFileFilter{
 
 	void setEndColumn(const int);
 	int endColumn() const;
+
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
 
   private:
 	AsciiFilterPrivate* const d;

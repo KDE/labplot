@@ -29,7 +29,10 @@
 #ifndef ABSTRACTFILEFILTER_H
 #define ABSTRACTFILEFILTER_H
 
-#include <QtPlugin>
+// #include <QtPlugin>
+#include "backend/lib/XmlStreamReader.h"
+#include <QXmlStreamWriter>
+
 class AbstractDataSource;
 
 class AbstractFileFilter : public QObject {
@@ -47,10 +50,13 @@ class AbstractFileFilter : public QObject {
 		virtual void loadFilterSettings(const QString& filterName) = 0;
 		virtual void saveFilterSettings(const QString& filterName) const = 0;
 
+		virtual void save(QXmlStreamWriter*) const = 0;
+		virtual bool load(XmlStreamReader*) = 0;
+
 	signals:
 		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process		
 };
 
-Q_DECLARE_INTERFACE(AbstractFileFilter, "net.sf.scidavis.datasources.abstractfilefilter/0.1")
+// Q_DECLARE_INTERFACE(AbstractFileFilter, "net.sf.scidavis.datasources.abstractfilefilter/0.1")
 
 #endif

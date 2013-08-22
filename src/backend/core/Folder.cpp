@@ -1,8 +1,9 @@
 /***************************************************************************
     File                 : Folder.cpp
-    Project              : SciDAVis
+    Project              : LabPlot
     Description          : Folder in a project
     --------------------------------------------------------------------
+    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses)
@@ -27,38 +28,35 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#include "backend/core/Folder.h"
 #include "core/Project.h"
-#include "Folder.h"
-#include "lib/XmlStreamReader.h"
-#include "core/column/Column.h"
-#include "worksheet/Worksheet.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/core/column/Column.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/datasources/FileDataSource.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
-#include <QIcon>
-#include <QApplication>
-#include <QStyle>
+// #include <QApplication>
+// #include <QStyle>
 #include <QXmlStreamWriter>
+#include <QtDebug>
+
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include <QIcon>
 #include "core/plugin/PluginManager.h"
 #else
 #include <KIcon>
-#include "spreadsheet/Spreadsheet.h"
 #include <klocalizedstring.h>
 #endif
-#include <QtDebug>
 
 /**
  * \class Folder
  * \brief Folder in a project
  */
 
-Folder::Folder(const QString &name)
-	: AbstractAspect(name)
-{
-}
+Folder::Folder(const QString &name) : AbstractAspect(name) {}
 
-Folder::~Folder()
-{
-}
+Folder::~Folder(){}
 
 QIcon Folder::icon() const
 {
@@ -230,7 +228,15 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 		}
 		addChild(worksheet);
 		loaded = true;
-	}
+	} else if (element_name == "fileDataSource") {
+		FileDataSource* fileDataSource = new FileDataSource(0, "");
+		if (!fileDataSource->load(reader)){
+			delete fileDataSource;
+			return false;
+		}
+		addChild(fileDataSource);
+		loaded = true;
+	}	
 
 	if (!loaded)
 	{

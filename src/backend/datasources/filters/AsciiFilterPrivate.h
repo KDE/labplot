@@ -50,7 +50,6 @@ class AsciiFilterPrivate {
     bool emptyLinesEnabled;
     bool simplifyWhitespacesEnabled;
     bool transposed;
-    bool filterName;
 
     int startRow;
     int endRow;

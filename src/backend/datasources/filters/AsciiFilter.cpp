@@ -508,4 +508,121 @@ void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dat
     Q_UNUSED(dataSource);
 }
 
-Q_EXPORT_PLUGIN2(ioasciifilter, AsciiFilter)
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+/*!
+  Saves as XML.
+ */
+void AsciiFilter::save(QXmlStreamWriter* writer) const {
+    writer->writeStartElement( "asciiFilter" );
+	writer->writeAttribute( "commentCharacter", d->commentCharacter );
+	writer->writeAttribute( "separatingCharacter", d->separatingCharacter );
+	writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled) );
+	writer->writeAttribute( "header", QString::number(d->headerEnabled) );
+	writer->writeAttribute( "vectorNames", d->vectorNames );
+	writer->writeAttribute( "emptyLines", QString::number(d->emptyLinesEnabled) );
+	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled) );
+	writer->writeAttribute( "transposed", QString::number(d->transposed) );
+	writer->writeAttribute( "startRow", QString::number(d->startRow) );
+	writer->writeAttribute( "endRow", QString::number(d->endRow) );
+	writer->writeAttribute( "startColumn", QString::number(d->startColumn) );
+	writer->writeAttribute( "endColumn", QString::number(d->endColumn) );
+	writer->writeEndElement();
+}
+
+/*!
+  Loads from XML.
+*/
+bool AsciiFilter::load(XmlStreamReader* reader) {
+	if(!reader->isStartElement() || reader->name() != "asciiFilter"){
+        reader->raiseError(tr("no ascii filter element found"));
+        return false;
+    }
+
+    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "asciiFilter")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+		attribs = reader->attributes();
+
+		str = attribs.value("commentCharacter").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'commentCharacter'"));
+		else
+			d->commentCharacter = str;
+
+		str = attribs.value("separatingCharacter").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'separatingCharacter'"));
+		else
+			d->separatingCharacter = str;
+
+		str = attribs.value("autoMode").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'autoMode'"));
+		else
+			d->autoModeEnabled = str.toInt();
+
+		str = attribs.value("header").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'header'"));
+		else
+			d->headerEnabled = str.toInt();
+		
+		str = attribs.value("vectorNames").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'vectorNames'"));
+		else
+			d->vectorNames = str;
+		
+		str = attribs.value("simplifyWhitespaces").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
+		else
+			d->simplifyWhitespacesEnabled = str.toInt();
+
+		str = attribs.value("transposed").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'transposed'"));
+		else
+			d->transposed = str.toInt();
+		
+		str = attribs.value("startRow").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'startRow'"));
+		else
+			d->startRow = str.toInt();
+
+		str = attribs.value("endRow").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'endRow'"));
+		else
+			d->endRow = str.toInt();
+
+		str = attribs.value("startColumn").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'startColumn'"));
+		else
+			d->startColumn = str.toInt();
+
+		str = attribs.value("endColumn").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'endColumn'"));
+		else
+			d->endColumn = str.toInt();
+	}
+
+	return true;
+}
+
+// Q_EXPORT_PLUGIN2(ioasciifilter, AsciiFilter)

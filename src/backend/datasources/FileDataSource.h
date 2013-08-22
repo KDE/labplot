@@ -61,10 +61,14 @@ class FileDataSource : public Spreadsheet{
 	QString fileName() const;
 
 	void setFilter(AbstractFileFilter*);
-	QIcon icon() const;
-	QMenu *createContextMenu();
-	virtual QWidget *view() const;
-	
+
+	virtual QIcon icon() const;
+	virtual QMenu* createContextMenu();
+	virtual QWidget* view() const;
+
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
+
   private:
 	QString m_fileName;
 	FileType m_fileType;
