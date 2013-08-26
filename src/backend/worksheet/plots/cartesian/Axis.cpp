@@ -1361,9 +1361,9 @@ void AxisPrivate::retransformMinorGrid(){
 void AxisPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	axisShape = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
-	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
-	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
+	axisShapeWithoutGrids = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
+	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
+	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 
 	QPainterPath  tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::NoLabels){
@@ -1380,7 +1380,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 			tickLabelsPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, linePen));
 		}
-		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
+		axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 		boundingRectangle = boundingRectangle.united(tickLabelsPath.boundingRect());
 	}
 	
@@ -1400,9 +1400,13 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		}
 		
 		boundingRectangle |=mapRectFromItem( title->graphicsItem(), title->graphicsItem()->boundingRect() );
-		axisShape.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
+		axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 	
+	axisShape = axisShapeWithoutGrids;
+	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorGridPath, majorGridPen));
+	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorGridPath, minorGridPen));
+
 	boundingRectangle = axisShape.boundingRect();
 }
 
@@ -1474,7 +1478,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 	if (isSelected()){
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-		painter->drawPath(shape());
+		painter->drawPath(axisShapeWithoutGrids);
 	}
 }
 
@@ -1522,6 +1526,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "direction", QString::number(d->majorTicksDirection) );
 	writer->writeAttribute( "type", QString::number(d->majorTicksType) );
 	writer->writeAttribute( "number", QString::number(d->majorTicksNumber) );
+	writer->writeAttribute( "increment", QString::number(d->majorTicksIncrement) );
 	writer->writeAttribute( "length", QString::number(d->majorTicksLength) );
 	WRITE_QPEN(d->majorTicksPen);
 	writer->writeAttribute( "opacity", QString::number(d->majorTicksOpacity) );
@@ -1532,6 +1537,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "direction", QString::number(d->minorTicksDirection) );
 	writer->writeAttribute( "type", QString::number(d->minorTicksType) );
 	writer->writeAttribute( "number", QString::number(d->minorTicksNumber) );
+	writer->writeAttribute( "increment", QString::number(d->minorTicksIncrement) );
 	writer->writeAttribute( "length", QString::number(d->minorTicksLength) );
 	WRITE_QPEN(d->minorTicksPen);
 	writer->writeAttribute( "opacity", QString::number(d->minorTicksOpacity) );
@@ -1693,6 +1699,12 @@ bool Axis::load(XmlStreamReader* reader){
             else
                 d->majorTicksNumber = str.toInt();
 
+			str = attribs.value("increment").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'increment'"));
+            else
+                d->majorTicksIncrement = str.toDouble();
+			
 			str = attribs.value("length").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'length'"));
@@ -1726,6 +1738,12 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'number'"));
             else
                 d->minorTicksNumber = str.toInt();
+
+			str = attribs.value("increment").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'increment'"));
+            else
+                d->minorTicksIncrement = str.toDouble();
 
 			str = attribs.value("length").toString();
             if(str.isEmpty())

@@ -665,7 +665,12 @@ void XYCurve::visibilityChanged(){
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner): q(owner){
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : q(owner), symbolsFactory(0) {
+	foreach(QObject *plugin, PluginManager::plugins()) {
+		CurveSymbolFactory* factory = qobject_cast<CurveSymbolFactory*>(plugin);	
+		if (factory)
+			symbolsFactory = factory;
+	}
 }
 
 XYCurvePrivate::~XYCurvePrivate() {
@@ -1378,20 +1383,16 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 	QString oldId = symbolsTypeId;
+	if (!symbolsFactory)
+		return oldId;
+
 	if (id != symbolsTypeId) {
 		symbolsTypeId = id;
 		delete symbolsPrototype;
 		symbolsPrototype = NULL;
-		foreach(QObject *plugin, PluginManager::plugins()) {
-			CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
-			if (factory) {
-				const AbstractCurveSymbol *prototype = factory->prototype(symbolsTypeId);
-				if (prototype) {
-					symbolsPrototype = prototype->clone();
-					break;
-				}
-			}
-		}
+		const AbstractCurveSymbol* prototype = symbolsFactory->prototype(symbolsTypeId);
+		if (prototype)
+			symbolsPrototype = prototype->clone();
 		if (!symbolsPrototype)
 			return oldId;
 
@@ -1464,10 +1465,9 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 	  painter->translate(-valuesPoints.at(i));
 	}
   }
- 
 
   painter->setOpacity(opacity);
-  
+
   if (isSelected()){
 	QPainterPath path = shape();  
 	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
@@ -1650,7 +1650,7 @@ bool XYCurve::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'id'"));
             else
-                d->symbolsTypeId = str;
+                d->swapSymbolsTypeId(str);
 
 			READ_QBRUSH(d->symbolsBrush);
 			READ_QPEN(d->symbolsPen);
@@ -1744,6 +1744,5 @@ bool XYCurve::load(XmlStreamReader* reader){
 		}
 	}
 
-	d->swapSymbolsTypeId(d->symbolsTypeId);
 	return true;
 }

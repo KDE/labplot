@@ -117,6 +117,7 @@ class AxisPrivate: public QGraphicsItem {
 		QPainterPath minorGridPath;
 		QRectF boundingRectangle;
 		QPainterPath axisShape;
+		QPainterPath axisShapeWithoutGrids;
 
 		//TODO extra tick label
 // 		QList<TextLabel *> labels;

@@ -34,6 +34,8 @@
 #include "backend/worksheet/AbstractCurveSymbol.h"
 #include <vector>
 
+class CurveSymbolFactory;
+
 class XYCurvePrivate: public QGraphicsItem {
 	public:
 		XYCurvePrivate(XYCurve *owner);
@@ -119,7 +121,8 @@ class XYCurvePrivate: public QGraphicsItem {
 		QPainterPath valuesPath;
 		QPainterPath errorBarsPath;
 		QPainterPath symbolsPath;
-		AbstractCurveSymbol *symbolsPrototype;
+		AbstractCurveSymbol* symbolsPrototype;
+		CurveSymbolFactory* symbolsFactory;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
 		QList<QPointF> symbolPointsLogical;	//points in logical coordinates

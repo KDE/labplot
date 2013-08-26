@@ -916,6 +916,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 		QPainter painter;
 		painter.begin(&image);
+		painter.setRenderHint(QPainter::Antialiasing);
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
 

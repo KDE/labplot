@@ -629,8 +629,10 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				str = attribs.value("state").toString();
 				if(str.isEmpty())
 					reader->raiseWarning(attributeWarning.arg("'state'"));
-				else
+				else {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
+					part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
+				}
 				
 				if (str != "0")
 					continue; //no geometry settings required for maximized/minimized windows
