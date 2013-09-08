@@ -400,17 +400,18 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 
 
 	int numLines=AsciiFilter::lineNumber(fileName);
-	
+	int actualEndRow;
 	if (endRow == -1)
-		endRow=numLines;
-	
-	if (endRow > numLines-1)
-		endRow=numLines-1;
+		actualEndRow = numLines;
+	else if (endRow > numLines-1)
+		actualEndRow = numLines-1;
+	else
+		actualEndRow = endRow;
 
 	if (headerEnabled)
-		numLines = endRow-startRow;
+		numLines = actualEndRow-startRow;
 	else
-		numLines = endRow-startRow+1;
+		numLines = actualEndRow-startRow+1;
 
 	//resize the spreadsheet
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -498,6 +499,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	spreadsheet->setUndoAware(true);
+	qDebug()<<"file successfully read";
 }
 
 /*!

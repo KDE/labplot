@@ -30,17 +30,22 @@ Email (use @ for *)  : alexander.semke*web.de
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/core/Project.h"
 
 #include <QFileInfo>
 #include <QDateTime>
 #include <QProcess>
 #include <QDir>
+#include <QMenu>
+#include <QFileSystemWatcher>
+#include <QDebug>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
+#include <QAction>
 #else
 #include <KIcon>
-#include <kdirwatch.h>
+#include <KAction>
 #endif
 
 /*!
@@ -55,13 +60,32 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
      m_fileType(AsciiVector),
      m_fileWatched(false),
      m_fileLinked(false),
-     m_filter(0)
+     m_filter(0),
+     m_fileSystemWatcher(0)
 
-{ }
+{ 
+	initActions();
+}
 
 FileDataSource::~FileDataSource(){
-  if (m_filter)
-	delete m_filter;
+	if (m_filter)
+		delete m_filter;
+  
+	if (m_fileSystemWatcher)
+		delete m_fileSystemWatcher;
+}
+
+void FileDataSource::initActions(){
+	m_reloadAction = new KAction(KIcon("view-refresh"), tr("Reload"), this);
+	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
+
+	m_toggleWatchAction = new KAction(tr("Watch the file"), this);
+	m_toggleWatchAction->setCheckable(true);
+	connect(m_toggleWatchAction, SIGNAL(triggered()), this, SLOT(watchToggled()));
+	
+	m_toggleLinkAction = new KAction(tr("Link the file"), this);
+	m_toggleLinkAction->setCheckable(true);
+	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
 }
 
 //TODO make the view customizable (show as a spreadsheet or as a pure text file in an editor)
@@ -153,12 +177,35 @@ QIcon FileDataSource::icon() const{
 	return icon;
 }
 
-// TODO
 QMenu* FileDataSource::createContextMenu(){
 	QMenu* menu = AbstractPart::createContextMenu();
+	
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+	QAction* firstAction = menu->actions().first();
+#else
+	QAction* firstAction = 0;
+	// if we're populating the context menu for the project explorer, then
+	//there're already actions available there. Skip the first title-action
+	//and insert the action at the beginning of the menu.
+	if (menu->actions().size()>1)
+		firstAction = menu->actions().at(1);
+#endif
+
+	if (!m_fileWatched)
+		menu->insertAction(firstAction, m_reloadAction);
+
+	m_toggleWatchAction->setChecked(m_fileWatched);
+	menu->insertAction(firstAction, m_toggleWatchAction);
+	
+	m_toggleLinkAction->setChecked(m_fileLinked);
+	menu->insertAction(firstAction, m_toggleLinkAction);
+	
 	return menu;
 }
 
+//##############################################################################
+//#################################  SLOTS  ####################################
+//##############################################################################
 void FileDataSource::read(){
   if (m_fileName.isEmpty())
 	return;
@@ -167,10 +214,41 @@ void FileDataSource::read(){
 	return;
 
   m_filter->read(m_fileName, this);
-  
-  //watch the file upon reading for changes if required
-//   if (m_fileWatched)
-// 	this->watchFile();
+  watch();
+}
+
+void FileDataSource::fileChanged() {
+	qDebug()<<"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+	qDebug()<<"fileChanged";
+	qDebug()<<"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+	this->read();
+}
+
+void FileDataSource::watchToggled() {
+	m_fileWatched = !m_fileWatched;
+	watch();
+	project()->setChanged(true);
+}
+
+void FileDataSource::linkToggled() {
+	m_fileLinked = !m_fileLinked;
+	project()->setChanged(true);
+}
+
+//watch the file upon reading for changes if required
+void FileDataSource::watch() {
+  if (m_fileWatched) {
+	  if (!m_fileSystemWatcher) {
+		m_fileSystemWatcher = new QFileSystemWatcher();
+		connect (m_fileSystemWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(fileChanged()));
+	  }
+
+	  if ( !m_fileSystemWatcher->files().contains(m_fileName) )
+		m_fileSystemWatcher->addPath(m_fileName);
+  }	else {
+	  if (m_fileSystemWatcher)
+		m_fileSystemWatcher->removePath(m_fileName);
+  }
 }
 
 /*!
@@ -260,19 +338,6 @@ QString FileDataSource::fileInfoString(const QString &name){
 
     return infoString;
 }
-/*
-FileDataSource::watchFile(){
-  KDirWatch dirWatch;
-  dirWatch->addFile(m_fileName);
-  connect(dirWatch, dirty(const QString&), this, fileChanged(const QString&) );
-  
-}*/
-/*
-
-FileDataSource::fileChanged(){
-  
-}*/
-
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
@@ -303,7 +368,7 @@ void FileDataSource::save(QXmlStreamWriter* writer) const
 			col->save(writer);
 	}
 
-	writer->writeEndElement(); // "spreadsheet"
+	writer->writeEndElement(); // "fileDataSource"
 }
 
 /*!
@@ -379,7 +444,7 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 
 	//read the content of the file if it was only linked
 	if (m_fileLinked)
-		m_filter->read(m_fileName, this);
+		this->read();
 
 	return !reader->hasError();
 }
