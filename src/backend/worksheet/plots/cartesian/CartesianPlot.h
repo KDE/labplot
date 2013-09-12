@@ -73,6 +73,7 @@ class CartesianPlot:public AbstractPlot{
 		void initMenus();
 
 		CartesianPlotLegend* m_legend;
+		float m_zoomFactor;
 
 		QAction* visibilityAction;
 

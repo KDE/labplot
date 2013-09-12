@@ -375,7 +375,6 @@ void AxisDock::orientationChanged(int index){
 void AxisDock::positionChanged(int index){
 	if ( index==2 ){
 		ui.lePosition->setVisible(true);
-		ui.lePosition->setText( QString::number(m_axis->offset()) );
 	}else{
 		ui.lePosition->setVisible(false);
 	}
@@ -1095,7 +1094,12 @@ void AxisDock::axisOrientationChanged(Axis::AxisOrientation orientation){
 
 void AxisDock::axisPositionChanged(Axis::AxisPosition position){
 	m_initializing = true;
-	ui.cbPosition->setCurrentIndex( (int)position );
+	int index(position);
+	if (index > 1)
+		ui.cbPosition->setCurrentIndex(index-2);
+	else
+		ui.cbPosition->setCurrentIndex(index);
+
 	m_initializing = false;
 }
 

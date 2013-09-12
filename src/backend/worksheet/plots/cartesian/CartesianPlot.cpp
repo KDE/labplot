@@ -86,12 +86,12 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 };
 
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
-	m_legend(0) {
+	m_legend(0), m_zoomFactor(1.2) {
 	init();
 }
 
 CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):AbstractPlot(name, dd),
-	m_legend(0) {
+	m_legend(0), m_zoomFactor(1.2) {
 	init();
 }
 
@@ -539,6 +539,7 @@ void CartesianPlot::updateLegend() {
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::xDataChanged(){
+	qDebug()<<"CartesianPlot::xDataChanged";
 	Q_D(CartesianPlot);
 	if (d->autoScaleX)
 		this->scaleAutoX();
@@ -607,6 +608,7 @@ void CartesianPlot::scaleAutoX(){
 }
 
 void CartesianPlot::scaleAutoY(){
+	qDebug()<<"CartesianPlot::scaleAutoY()";
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum y-value
@@ -753,58 +755,70 @@ void CartesianPlot::scaleAuto(){
 		d->retransformScales();
 	}
 }
-		
+
 void CartesianPlot::zoomIn(){
 	Q_D(CartesianPlot);
-	float offsetX = (d->xMax-d->xMin)*0.1;
-	d->xMax -= offsetX;
-	d->xMin += offsetX;
-	float offsetY = (d->yMax-d->yMin)*0.1;
-	d->yMax -= offsetY;
-	d->yMin += offsetY;
+	float oldRange = (d->xMax-d->xMin);
+	float newRange = (d->xMax-d->xMin)/m_zoomFactor;
+	d->xMax = d->xMax + (newRange-oldRange)/2;
+	d->xMin = d->xMin - (newRange-oldRange)/2;
+
+	oldRange = (d->yMax-d->yMin);
+	newRange = (d->yMax-d->yMin)/m_zoomFactor;
+	d->yMax = d->yMax + (newRange-oldRange)/2;
+	d->yMin = d->yMin - (newRange-oldRange)/2;
+
 	d->retransformScales();
 }
 
 void CartesianPlot::zoomOut(){
 	Q_D(CartesianPlot);
-	float offsetX = (d->xMax-d->xMin)*0.1;
-	d->xMax += offsetX;
-	d->xMin -= offsetX;
-	float offsetY = (d->yMax-d->yMin)*0.1;
-	d->yMax += offsetY;
-	d->yMin -= offsetY;
+	float oldRange = (d->xMax-d->xMin);
+	float newRange = (d->xMax-d->xMin)*m_zoomFactor;
+	d->xMax = d->xMax + (newRange-oldRange)/2;
+	d->xMin = d->xMin - (newRange-oldRange)/2;
+
+	oldRange = (d->yMax-d->yMin);
+	newRange = (d->yMax-d->yMin)*m_zoomFactor;
+	d->yMax = d->yMax + (newRange-oldRange)/2;
+	d->yMin = d->yMin - (newRange-oldRange)/2;
+
 	d->retransformScales();
 }
 
 void CartesianPlot::zoomInX(){
 	Q_D(CartesianPlot);
-	float offsetX = (d->xMax-d->xMin)*0.1;
-	d->xMax -= offsetX;
-	d->xMin += offsetX;
+	float oldRange = (d->xMax-d->xMin);
+	float newRange = (d->xMax-d->xMin)/m_zoomFactor;
+	d->xMax = d->xMax + (newRange-oldRange)/2;
+	d->xMin = d->xMin - (newRange-oldRange)/2;
 	d->retransformScales();
 }
 
 void CartesianPlot::zoomOutX(){
 	Q_D(CartesianPlot);
-	float offsetX = (d->xMax-d->xMin)*0.1;
-	d->xMax += offsetX;
-	d->xMin -= offsetX;
+	float oldRange = (d->xMax-d->xMin);
+	float newRange = (d->xMax-d->xMin)*m_zoomFactor;
+	d->xMax = d->xMax + (newRange-oldRange)/2;
+	d->xMin = d->xMin - (newRange-oldRange)/2;
 	d->retransformScales();
 }
 
 void CartesianPlot::zoomInY(){
 	Q_D(CartesianPlot);
-	float offsetY = (d->yMax-d->yMin)*0.1;
-	d->yMax -= offsetY;
-	d->yMin += offsetY;
+	float oldRange = (d->yMax-d->yMin);
+	float newRange = (d->yMax-d->yMin)/m_zoomFactor;
+	d->yMax = d->yMax + (newRange-oldRange)/2;
+	d->yMin = d->yMin - (newRange-oldRange)/2;
 	d->retransformScales();
 }
 
 void CartesianPlot::zoomOutY(){
 	Q_D(CartesianPlot);
-	float offsetY = (d->yMax-d->yMin)*0.1;
-	d->yMax += offsetY;
-	d->yMin -= offsetY;
+	float oldRange = (d->yMax-d->yMin);
+	float newRange = (d->yMax-d->yMin)*m_zoomFactor;
+	d->yMax = d->yMax + (newRange-oldRange)/2;
+	d->yMin = d->yMin - (newRange-oldRange)/2;
 	d->retransformScales();
 }
 
@@ -889,7 +903,7 @@ void CartesianPlotPrivate::retransform(){
 
 void CartesianPlotPrivate::retransformScales(){
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
-	CartesianCoordinateSystem *cSystem = dynamic_cast<CartesianCoordinateSystem *>(plot->coordinateSystem());
+	CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale*> scales;
 	
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
@@ -954,25 +968,31 @@ void CartesianPlotPrivate::retransformScales(){
 	cSystem ->setYScales(scales);
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
-	float deltaX = 0;
-	float deltaY = 0;
+	float deltaXMin = 0;
+	float deltaXMax = 0;
+	float deltaYMin = 0;
+	float deltaYMax = 0;
 
-	if (xMin!=xMinPrev){
-		deltaX = xMin - xMinPrev;
+	if (xMin!=xMinPrev) {
+		deltaXMin = xMin - xMinPrev;
 		emit plot->xMinChanged(xMin);
 	}
 
-	if (xMax!=xMaxPrev)
+	if (xMax!=xMaxPrev) {
+		deltaXMax = xMax - xMaxPrev;
 		emit plot->xMaxChanged(xMax);
+	}
 
-	if (yMin!=yMinPrev){
-		deltaY = yMin - yMinPrev;
+	if (yMin!=yMinPrev) {
+		deltaYMin = yMin - yMinPrev;
 		emit plot->yMinChanged(yMin);
 	}
 
-	if (yMax!=yMaxPrev)
+	if (yMax!=yMaxPrev) {
+		deltaYMax = yMax - yMaxPrev;
 		emit plot->yMaxChanged(yMax);
-	
+	}
+
 	xMinPrev = xMin;
 	xMaxPrev = xMax;
 	yMinPrev = yMin;
@@ -985,20 +1005,22 @@ void CartesianPlotPrivate::retransformScales(){
 			continue;
 			
 		if (axis->orientation() == Axis::AxisHorizontal){
-			if (deltaX!=0){
+			if (deltaXMax!=0)
 				axis->setEnd(xMax, false);
+			if (deltaXMin!=0)
 				axis->setStart(xMin, false);
-			}
-			if (axis->position() == Axis::AxisCustom && deltaY != 0){
-				axis->setOffset(axis->offset() + deltaY, false);
+
+			if (axis->position() == Axis::AxisCustom && deltaYMin != 0){
+				axis->setOffset(axis->offset() + deltaYMin, false);
 			}
 		}else{
-			if (deltaY!=0){
+			if (deltaYMax!=0)
 				axis->setEnd(yMax, false);
+			if (deltaYMin!=0)
 				axis->setStart(yMin, false);
-			}
-			if (axis->position() == Axis::AxisCustom && deltaX != 0){
-				axis->setOffset(axis->offset() + deltaX, false);
+
+			if (axis->position() == Axis::AxisCustom && deltaXMin != 0){
+				axis->setOffset(axis->offset() + deltaXMin, false);
 			}
 		}
 	}

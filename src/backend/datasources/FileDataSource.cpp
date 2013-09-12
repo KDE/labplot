@@ -218,9 +218,6 @@ void FileDataSource::read(){
 }
 
 void FileDataSource::fileChanged() {
-	qDebug()<<"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-	qDebug()<<"fileChanged";
-	qDebug()<<"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 	this->read();
 }
 
