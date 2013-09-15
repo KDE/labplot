@@ -48,7 +48,8 @@ class TextLabelPrivate: public QGraphicsItem{
 		QFutureWatcher<QImage> teXImageFutureWatcher;
 
 		TextLabel::PositionWrapper position; //position in parent's coordinate system, the label gets aligned around this point.
-		
+		bool positionInvalid;
+
 		TextLabel::HorizontalAlignment horizontalAlignment;
 		TextLabel::VerticalAlignment verticalAlignment;
 

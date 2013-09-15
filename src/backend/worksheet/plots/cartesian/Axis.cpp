@@ -834,7 +834,6 @@ void AxisPrivate::retransform(){
 		return;
 	
 	retransformLine();
-	retransformTicks();
 }
 
 void AxisPrivate::retransformLine(){
@@ -872,6 +871,13 @@ void AxisPrivate::retransformLine(){
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
+
+	if (linePath.isEmpty()){
+		recalcShapeAndBoundingRect();
+		return;
+	}else{
+		retransformTicks();
+	}
 }
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
@@ -899,7 +905,7 @@ void AxisPrivate::retransformTicks(){
 	majorTickPoints.clear();
 	minorTickPoints.clear();
 	tickLabelValues.clear();
-  
+
 	if ( majorTicksNumber<1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ) {
 		retransformTickLabels(); //this calls recalcShapeAndBoundingRect()
 		return;
@@ -1361,6 +1367,15 @@ void AxisPrivate::retransformMinorGrid(){
 void AxisPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
+	if (linePath.isEmpty()) {
+		axisShape = QPainterPath();
+		boundingRectangle = QRectF();
+		title->setPositionInvalid(true);
+		return;
+	} else {
+		title->setPositionInvalid(false);
+	}
+
 	axisShapeWithoutGrids = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
 	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
 	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
@@ -1418,9 +1433,12 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-  if (!isVisible())
-	return;
-  
+	if (!isVisible())
+		return;
+
+	if (linePath.isEmpty())
+		return;
+
 	//draw the line
 	if (linePen.style() != Qt::NoPen){
 		painter->setOpacity(lineOpacity);
@@ -1477,7 +1495,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	}
 
 	if (isSelected()){
-		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
 		painter->drawPath(axisShapeWithoutGrids);
 	}
 }

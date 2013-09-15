@@ -168,13 +168,24 @@ void TextLabel::setPosition(const PositionWrapper& pos) {
 }
 
 /*!
-	sets the position without undo/redo-stuff-
+	sets the position without undo/redo-stuff
 */
 void TextLabel::setPosition(const QPointF& point) {
 	Q_D(TextLabel);
 	if (point != d->position.point){
 		d->position.point = point;
 		retransform();
+	}
+}
+
+/*!
+ * position is set to invalid if the parent item is not drawn on the scene
+ * (e.g. axis is not drawn because it's outside plot ranges -> don't draw axis' title label)
+ */
+void TextLabel::setPositionInvalid(bool invalid) {
+	Q_D(TextLabel);
+	if (invalid != d->positionInvalid){
+		d->positionInvalid = invalid;
 	}
 }
 
@@ -219,7 +230,7 @@ void TextLabel::updateTeXImage(){
 //################### Private implementation ##########################
 //################################################################
 TextLabelPrivate::TextLabelPrivate(TextLabel *owner)
-		: q(owner), suppressItemChangeEvent(false), suppressRetransform(false) {
+		: q(owner), positionInvalid(false), suppressItemChangeEvent(false), suppressRetransform(false) {
 }
 
 QString TextLabelPrivate::name() const{
@@ -308,6 +319,7 @@ void TextLabelPrivate::updatePosition(){
 		parentRect = scene()->sceneRect();
 	}
 
+
 	if (position.horizontalPosition != TextLabel::hPositionCustom){
 		if (position.horizontalPosition == TextLabel::hPositionLeft)
 			position.point.setX( parentRect.x() );
@@ -325,6 +337,7 @@ void TextLabelPrivate::updatePosition(){
 		else if (position.verticalPosition == TextLabel::vPositionBottom)
 			position.point.setY( parentRect.y() + parentRect.height() );
 	}
+
 	emit q->positionChanged(position);
 }
 
@@ -395,6 +408,9 @@ void TextLabelPrivate::recalcShapeAndBoundingRect(){
 void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
+
+	if (positionInvalid)
+		return;
 
 	painter->save();
 	painter->rotate(rotationAngle);

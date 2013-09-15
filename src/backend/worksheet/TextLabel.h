@@ -78,6 +78,7 @@ class TextLabel : public AbstractWorksheetElement{
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
 		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
 		void setPosition(const QPointF&);
+		void setPositionInvalid(bool);
 		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment);
 		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment);
 		BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle);
