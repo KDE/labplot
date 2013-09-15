@@ -535,10 +535,11 @@ bool MainWin::newProject(){
 	m_propertiesDock->show();
 	updateGUIOnProjectChanges();
 
-	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
-		this, SLOT(handleAspectRemoved(const AbstractAspect *)));
-	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)),
-		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect *)));
+	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)),
+			this, SLOT(handleAspectRemoved(const AbstractAspect*)));
+	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_project, SIGNAL(statusInfo(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
 	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
@@ -793,10 +794,6 @@ void MainWin::printPreview(){
 void MainWin::newSpreadsheet(){
 	Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
 	spreadsheet->initDefault();
-	connect(spreadsheet, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
-	connect(spreadsheet, SIGNAL(printRequested()), this, SLOT(print()));
-	connect(spreadsheet, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
-	connect(spreadsheet, SIGNAL(showRequested()), this, SLOT(handleShowSubWindowRequested()));
 	this->addAspectToProject(spreadsheet);
 }
 
@@ -824,13 +821,8 @@ void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
 */
 void MainWin::newWorksheet() {
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
-	connect(worksheet, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
-	connect(worksheet, SIGNAL(printRequested()), this, SLOT(print()));
-	connect(worksheet, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
-	connect(worksheet, SIGNAL(showRequested()), this, SLOT(handleShowSubWindowRequested()));
 	this->addAspectToProject(worksheet);
 }
-
 
 /*!
 	returns a pointer to a Spreadsheet-object, if the currently active Mdi-Subwindow is \a SpreadsheetView.
@@ -888,6 +880,16 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 	updateGUI();
 	if (!m_suppressCurrentSubWindowChangedEvent)
 		m_projectExplorer->setCurrentAspect(view->part());
+}
+
+void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
+	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
+	if (part) {
+		connect(part, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
+		connect(part, SIGNAL(printRequested()), this, SLOT(print()));
+		connect(part, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
+		connect(part, SIGNAL(showRequested()), this, SLOT(handleShowSubWindowRequested()));
+	}
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect *parent){
