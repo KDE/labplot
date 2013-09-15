@@ -256,10 +256,12 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
 	foreach (Scale *xScale, d->xScales) {
+		if (!xScale) continue;
 		Interval<double> xInterval;
 		xScale->getProperties(NULL, &xInterval);
 
 		foreach (Scale *yScale, d->yScales) {
+			if (!yScale) continue;
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
 
@@ -306,10 +308,12 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 	bool valid = true;
 
 	foreach (Scale *xScale, d->xScales){
+		if (!xScale) continue;
 		Interval<double> xInterval;
 		xScale->getProperties(NULL, &xInterval);
 
 		foreach (Scale *yScale, d->yScales){
+			if (!yScale) continue;
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
 
@@ -346,10 +350,12 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 	bool valid = true;
 
 	foreach (Scale *xScale, d->xScales){
+		if (!xScale) continue;
 		Interval<double> xInterval;
 		xScale->getProperties(NULL, &xInterval);
 
 		foreach (Scale *yScale, d->yScales){
+			if (!yScale) continue;
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
 
@@ -390,12 +396,14 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 			foreach (Scale *xScale, d->xScales) {
 				if (found) break;
 
+				if (!xScale) continue;
 				Interval<double> xInterval;
 				xScale->getProperties(NULL, &xInterval);
 
 				foreach (Scale *yScale, d->yScales) {
 					if (found) break;
 
+					if (!yScale) continue;
 					Interval<double> yInterval;
 					yScale->getProperties(NULL, &yInterval);
 
@@ -432,10 +440,12 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint
 		double y = logicalPoint.y();
 
 		foreach (Scale *xScale, d->xScales) {
+			if (!xScale) continue;
 			Interval<double> xInterval;
 			xScale->getProperties(NULL, &xInterval);
 
 			foreach (Scale *yScale, d->yScales) {
+				if (!yScale) continue;
 				Interval<double> yInterval;
 				yScale->getProperties(NULL, &yInterval);
 
@@ -481,12 +491,14 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
  	QListIterator<Scale *> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
 		Scale *xScale = xIterator.next();
+		if (!xScale) continue;
 		Interval<double> xInterval;
 		xScale->getProperties(NULL, &xInterval);
 		
 		xGapBefore = xGapAfter;
 		if (xIterator.hasNext()) {
 			Scale *nextXScale = xIterator.peekNext();
+			if (!nextXScale) continue;
 			Interval<double> nextXInterval;
 			nextXScale->getProperties(NULL, &nextXInterval);
 			double x1 = xInterval.end();
@@ -505,12 +517,14 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 		QListIterator<Scale *> yIterator(d->yScales);
 		while (yIterator.hasNext()) {
 			Scale *yScale = yIterator.next();
+			if (!yScale) continue;
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
 
 			yGapBefore = yGapAfter;
 			if (yIterator.hasNext()) {
 				Scale *nextYScale = yIterator.peekNext();
+				if (!nextYScale) continue;
 				Interval<double> nextYInterval;
 				nextYScale->getProperties(NULL, &nextYInterval);
 				double y1 = yInterval.end();
