@@ -1296,13 +1296,24 @@ void AxisPrivate::retransformMajorGrid(){
 
 	//major tick points are already in scene coordinates, convert them back to logical...
 	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+
+	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
+	//since we don't want to paint any grid lines at the plot boundaries
+	int start, end;
+	if (autoScale) {
+		start = 1;
+		end = logicalMajorTickPoints.size()-1;
+	} else {
+		start = 0;
+		end = logicalMajorTickPoints.size();
+	}
+
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal){ //horizontal axis
 		float yMin = m_plot->yMin();
 		float yMax = m_plot->yMax();
 
-		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
-		for (int i=1; i<logicalMajorTickPoints.size()-1; ++i){
+		for (int i=start; i<end; ++i){
 			const QPointF& point = logicalMajorTickPoints.at(i);
 			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
 		}
@@ -1311,7 +1322,7 @@ void AxisPrivate::retransformMajorGrid(){
 		float xMax = m_plot->xMax();
 
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
-		for (int i=1; i<logicalMajorTickPoints.size()-1; ++i){
+		for (int i=start; i<end; ++i){
 			const QPointF& point = logicalMajorTickPoints.at(i);
 			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
 		}
