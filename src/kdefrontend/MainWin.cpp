@@ -563,9 +563,7 @@ void MainWin::openProject(){
 void MainWin::openProject(const QString& filename) {
 	if (filename == m_currentFileName) {
 		KMessageBox::information(this,
-									i18n("The project file %1 is already opened.").arg(filename),
-									i18n("Open project")
-								);
+			i18n("The project file %1 is already opened.").arg(filename),i18n("Open project"));
 		return;
 	}
 
@@ -573,7 +571,7 @@ void MainWin::openProject(const QString& filename) {
 	if (file==0)
 		file = new QFile(filename);
 
-	if ( file->open( QIODevice::ReadOnly | QFile::Text) == 0) {
+	if (!file->open(QIODevice::ReadOnly)) {
 		KMessageBox::error(this, i18n("Sorry. Could not open file for reading!"));
 		return;
 	}
@@ -695,7 +693,7 @@ bool MainWin::save(const QString& fileName) {
 		file = new QFile(fileName);
 
 	bool ok;
-	if(file->open(QIODevice::WriteOnly | QIODevice::Text)){
+	if(file->open(QIODevice::WriteOnly)){
 		m_project->setFileName(fileName);
 
 		QXmlStreamWriter writer(file);
