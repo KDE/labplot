@@ -82,6 +82,7 @@ private:
 	bool m_closing;
 	bool m_autoSaveActive;
 	QTimer m_autoSaveTimer;
+	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 	
 	KRecentFilesAction* m_recentProjectsAction;
 	KAction* m_saveAction;
@@ -210,6 +211,7 @@ private slots:
 	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility() const;
 	void toggleDockWidget(QAction*) const;
+	void toggleFullScreen();
 };
 
 #endif

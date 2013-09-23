@@ -432,7 +432,7 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	painter->restore();
 	
 	if (isSelected()){
-		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+		painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
 		painter->drawPath(labelShape);
 	}	
 }

@@ -185,6 +185,7 @@ void MainWin::initActions() {
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
 	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
+	KToggleFullScreenAction* fullScreenAction = KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 
 	//New Folder/Spreadsheet/Worksheet/Datasources
 	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("Spreadsheet"),this);
@@ -658,6 +659,9 @@ bool MainWin::closeProject(){
 		m_currentAspect=0;
 		m_currentFolder=0;
 		updateGUIOnProjectChanges();
+
+		if (m_autoSaveActive)
+			m_autoSaveTimer.stop();
 	}
 
 	return true;
@@ -1076,6 +1080,16 @@ void MainWin::toggleDockWidget(QAction* action) const{
 			m_propertiesDock->hide();
 		else
 			m_propertiesDock->show();
+	}
+}
+
+void MainWin::toggleFullScreen() {
+	if (this->windowState() == Qt::WindowFullScreen){
+		this->setWindowState(m_lastWindowState);
+	} else {
+		m_lastWindowState = this->windowState();
+		qDebug()<<"m_lastWindowState " << m_lastWindowState;
+		this->showFullScreen();
 	}
 }
 
