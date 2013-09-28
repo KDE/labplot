@@ -275,7 +275,7 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 	if (column != d->xColumn) {
 		exec(new XYCurveSetXColumnCmd(d, column, tr("%1: assign x values")));
 
-		//emit xDataChanged() in order to notife the plot about the changes
+		//emit xDataChanged() in order to notify the plot about the changes
 		emit xDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xDataChanged()));
@@ -294,7 +294,7 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 	if (column != d->yColumn) {
 		exec(new XYCurveSetYColumnCmd(d, column, tr("%1: assign y values")));
 
-		//emit yDataChanged() in order to notife the plot about the changes
+		//emit yDataChanged() in order to notify the plot about the changes
 		emit yDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yDataChanged()));
@@ -419,7 +419,7 @@ void XYCurve::setValuesColumn(const AbstractColumn* column) {
 			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 					this, SLOT(valuesColumnAboutToBeRemoved()));
 		}
-	}	
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, valuesPosition, updateValues)
@@ -1181,7 +1181,21 @@ void XYCurvePrivate::updateValues(){
 	  default:
 	  break;
 	}
-	
+
+	QTransform trafo;
+	QPainterPath path;
+	for (int i=0; i<valuesPoints.size(); i++){
+		path = QPainterPath();
+		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
+
+		trafo.reset();
+		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
+		if (valuesRotationAngle!=0)
+			trafo.rotate( -valuesRotationAngle );
+
+		valuesPath.addPath(trafo.map(path));
+	}
+
 	recalcShapeAndBoundingRect();
 }
 
@@ -1359,26 +1373,14 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	}
 
 	if (valuesType != XYCurve::NoValues){
-		QTransform trafo;
-		QPainterPath tempPath;
-	  	for (int i=0; i<valuesPoints.size(); i++){
-			tempPath = QPainterPath();
-			tempPath.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
-
-			trafo.reset();
-			trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
-			trafo.rotate( -valuesRotationAngle );
-
-			valuesPath.addPath(AbstractWorksheetElement::shapeFromPath(trafo.map(tempPath), QPen()));
-		}
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, QPen()));
 		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
 	}
-	
+
 	if (xErrorType!=XYCurve::NoError || yErrorType!=XYCurve::NoError){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
 		boundingRectangle = boundingRectangle.united(errorBarsPath.boundingRect());
-	}		
+	}
 }
 
 QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
@@ -1442,7 +1444,7 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 	painter->drawPath(errorBarsPath);
   }
 
-  //draw symbols
+	//draw symbols
 	if (symbolsPrototype->id() != "none"){
 		painter->setOpacity(symbolsOpacity);
 		painter->setPen(symbolsPen);
@@ -1450,27 +1452,20 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 		painter->drawPath(symbolsPath);
 	}
 
-  //draw values
-  if (valuesType != XYCurve::NoValues){
-	painter->setOpacity(valuesOpacity);
- 	painter->setPen(valuesColor);	
-	painter->setBrush(Qt::NoBrush);
-	painter->setFont(valuesFont);
-	for (int i=0; i<valuesPoints.size(); i++){
-	  painter->translate(valuesPoints.at(i));
-	  painter->save();
-	  painter->rotate(-valuesRotationAngle);
- 	  painter->drawText(QPoint(0,0), valuesStrings.at(i) );
- 	  painter->restore();
-	  painter->translate(-valuesPoints.at(i));
+	//draw values
+	if (valuesType != XYCurve::NoValues){
+		painter->setOpacity(valuesOpacity);
+		painter->setPen(valuesColor);
+		painter->setBrush(Qt::NoBrush);
+// 		painter->setBrush(Qt::SolidPattern);
+		painter->drawPath(valuesPath);
 	}
-  }
 
   painter->setOpacity(opacity);
 
   if (isSelected()){
 	QPainterPath path = shape();  
-	painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
+	painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
 	painter->drawPath(path);
   }
 }

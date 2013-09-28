@@ -833,6 +833,7 @@ bool Worksheet::load(XmlStreamReader* reader){
     }
 
     d->m_scene->setSceneRect(rect);
+	d->updateLayout();
 
     return true;
 }

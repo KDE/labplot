@@ -344,7 +344,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		}
 	}
 
-
 	//make sure we have enough columns in the data source.
 	//we need in total (endColumn-startColumn+1) columns.
 	//Create new columns, if needed.
@@ -499,7 +498,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	spreadsheet->setUndoAware(true);
-	qDebug()<<"file successfully read";
 }
 
 /*!
@@ -544,85 +542,70 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
     }
 
     QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QXmlStreamAttributes attribs = reader->attributes();
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "asciiFilter")
-            break;
+	QString str = attribs.value("commentCharacter").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'commentCharacter'"));
+	else
+		d->commentCharacter = str;
 
-        if (!reader->isStartElement())
-            continue;
+	str = attribs.value("separatingCharacter").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'separatingCharacter'"));
+	else
+		d->separatingCharacter = str;
 
-		attribs = reader->attributes();
+	str = attribs.value("autoMode").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
+	else
+		d->autoModeEnabled = str.toInt();
 
-		str = attribs.value("commentCharacter").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'commentCharacter'"));
-		else
-			d->commentCharacter = str;
+	str = attribs.value("header").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'header'"));
+	else
+		d->headerEnabled = str.toInt();
 
-		str = attribs.value("separatingCharacter").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'separatingCharacter'"));
-		else
-			d->separatingCharacter = str;
+	str = attribs.value("vectorNames").toString();
+	d->vectorNames = str; //may be empty
+	
+	str = attribs.value("simplifyWhitespaces").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
+	else
+		d->simplifyWhitespacesEnabled = str.toInt();
 
-		str = attribs.value("autoMode").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'autoMode'"));
-		else
-			d->autoModeEnabled = str.toInt();
+	str = attribs.value("transposed").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'transposed'"));
+	else
+		d->transposed = str.toInt();
+	
+	str = attribs.value("startRow").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'startRow'"));
+	else
+		d->startRow = str.toInt();
 
-		str = attribs.value("header").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'header'"));
-		else
-			d->headerEnabled = str.toInt();
-		
-		str = attribs.value("vectorNames").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'vectorNames'"));
-		else
-			d->vectorNames = str;
-		
-		str = attribs.value("simplifyWhitespaces").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
-		else
-			d->simplifyWhitespacesEnabled = str.toInt();
+	str = attribs.value("endRow").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'endRow'"));
+	else
+		d->endRow = str.toInt();
 
-		str = attribs.value("transposed").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'transposed'"));
-		else
-			d->transposed = str.toInt();
-		
-		str = attribs.value("startRow").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'startRow'"));
-		else
-			d->startRow = str.toInt();
+	str = attribs.value("startColumn").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'startColumn'"));
+	else
+		d->startColumn = str.toInt();
 
-		str = attribs.value("endRow").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'endRow'"));
-		else
-			d->endRow = str.toInt();
-
-		str = attribs.value("startColumn").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'startColumn'"));
-		else
-			d->startColumn = str.toInt();
-
-		str = attribs.value("endColumn").toString();
-		if(str.isEmpty())
-			reader->raiseWarning(attributeWarning.arg("'endColumn'"));
-		else
-			d->endColumn = str.toInt();
-	}
+	str = attribs.value("endColumn").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'endColumn'"));
+	else
+		d->endColumn = str.toInt();
 
 	return true;
 }

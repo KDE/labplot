@@ -46,6 +46,14 @@ AbstractPart::AbstractPart(const QString &name) : AbstractAspect(name),
 	m_mdiWindow(0), m_view(0) {
 }
 
+AbstractPart::~AbstractPart() {
+	if (m_view)
+		delete m_view;
+
+	if (m_mdiWindow)
+		delete m_mdiWindow;
+}
+
 /**
  * \fn QWidget *AbstractPart::view() const
  * \brief Construct a primary view on me.

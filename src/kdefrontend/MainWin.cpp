@@ -906,7 +906,6 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	disconnect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
 		this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
 	m_mdiArea->removeSubWindow(win);
-	const_cast<AbstractPart*>(part)->deleteMdiSubWindow();
 	updateGUI();
 }
 
