@@ -612,10 +612,8 @@ void WorksheetDock::selectFile() {
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {
 		QString newDir = path.left(pos);
-		if (newDir!=dir) {
-			KConfigGroup conf(KSharedConfig::openConfig(), "WorksheetDock");
+		if (newDir!=dir)
 			conf.writeEntry("LastImageDir", newDir);
-		}
 	}
 	
     ui.kleBackgroundFileName->setText( path );

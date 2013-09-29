@@ -82,7 +82,10 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 }
 
 void ExportWorksheetDialog::setFileName(const QString& name){
-	ui.kleFileName->setText(QDir::homePath() + "/" +  name);
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	QString dir = conf.readEntry("LastDir", "");	
+	if (dir.isEmpty()) dir = QDir::homePath();
+	ui.kleFileName->setText(dir + "/" +  name);
 	this->formatChanged(ui.cbFormat->currentIndex());
 }
 
@@ -149,9 +152,19 @@ void ExportWorksheetDialog::toggleOptions(){
 	opens a file dialog and lets the user select the file.
 */
 void ExportWorksheetDialog::selectFile() {
-    QString fileName = QFileDialog::getOpenFileName(this, i18n("Export to file"));
-    if (fileName != "")
-		ui.kleFileName->setText(fileName);
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	QString dir = conf.readEntry("LastDir", "");
+    QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
+    if (path != "") {
+		ui.kleFileName->setText(path);
+		
+		int pos = path.lastIndexOf(QDir::separator());
+		if (pos!=-1) {
+			QString newDir = path.left(pos);
+			if (newDir!=dir)
+				conf.writeEntry("LastDir", newDir);
+		}
+	}
 }
 
 /*!

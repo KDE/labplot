@@ -554,11 +554,21 @@ bool MainWin::newProject(){
 }
 
 void MainWin::openProject(){
-	QString fileName = QFileDialog::getOpenFileName(this,i18n("Open project"),QString::null,
+	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
+	QString dir = conf.readEntry("LastOpenDir", "");
+	QString path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
 			i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
 
-	if (!fileName.isEmpty()) 
-		this->openProject(fileName);
+	if (!path.isEmpty()) {
+		this->openProject(path);
+
+		int pos = path.lastIndexOf(QDir::separator());
+		if (pos!=-1) {
+			QString newDir = path.left(pos);
+			if (newDir!=dir)
+				conf.writeEntry("LastOpenDir", newDir);
+		}
+	}
 }
 
 void MainWin::openProject(const QString& filename) {

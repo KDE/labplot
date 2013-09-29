@@ -205,10 +205,8 @@ void ImportFileWidget::selectFile() {
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {
 		QString newDir = path.left(pos);
-		if (newDir!=dir) {
-			KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
+		if (newDir!=dir)
 			conf.writeEntry("LastDir", newDir);
-		}
 	}
 
     ui.kleFileName->setText( path );
