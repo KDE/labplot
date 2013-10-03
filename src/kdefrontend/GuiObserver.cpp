@@ -194,7 +194,10 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	  mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
 	  mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
 	}
-	
+
+	std::auto_ptr<AspectTreeModel> model( new AspectTreeModel(mainWindow->m_project) );
+	mainWindow->axisDock->setModel( model );
+
 	QList<Axis*> list;
 	foreach(aspect, selectedAspects){
 	  list<<qobject_cast<Axis *>(aspect);

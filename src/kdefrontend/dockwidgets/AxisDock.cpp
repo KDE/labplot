@@ -28,9 +28,12 @@
  *                                                                         *
  ***************************************************************************/
 #include "AxisDock.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/core/column/Column.h"
+#include "backend/widgets/TreeViewComboBox.h"
+#include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
-#include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include <KMessageBox>
 #include <QTimer>
@@ -46,8 +49,16 @@
 AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	ui.setupUi(this);
 
-	//adjust layouts in the tabs
 	QGridLayout* layout;
+
+	layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
+	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
+	layout->addWidget(cbMajorTicksColumn, 5, 2);
+
+	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
+	layout->addWidget(cbMinorTicksColumn, 18, 2);
+	
+	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
 		layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
@@ -94,6 +105,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.cbMajorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksTypeChanged(int)) );
 	connect( ui.sbMajorTicksNumber, SIGNAL(valueChanged(int)), this, SLOT(majorTicksNumberChanged(int)) );
  	connect( ui.leMajorTicksIncrement, SIGNAL(returnPressed()), this, SLOT(majorTicksIncrementChanged()) );
+	connect( cbMajorTicksColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(majorTicksColumnChanged(const QModelIndex&)) );
 	connect( ui.cbMajorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksLineStyleChanged(int)) );
 	connect( ui.kcbMajorTicksColor, SIGNAL(changed (const QColor&)), this, SLOT(majorTicksColorChanged(const QColor&)) );
 	connect( ui.sbMajorTicksWidth, SIGNAL(valueChanged(double)), this, SLOT(majorTicksWidthChanged(double)) );
@@ -105,6 +117,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.cbMinorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksTypeChanged(int)) );
 	connect( ui.sbMinorTicksNumber, SIGNAL(valueChanged(int)), this, SLOT(minorTicksNumberChanged(int)) );
  	connect( ui.leMinorTicksIncrement, SIGNAL(returnPressed()), this, SLOT(minorTicksIncrementChanged()) );
+	connect( cbMinorTicksColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(minorTicksColumnChanged(const QModelIndex&)) );
 	connect( ui.cbMinorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksLineStyleChanged(int)) );
 	connect( ui.kcbMinorTicksColor, SIGNAL(changed (const QColor&)), this, SLOT(minorTicksColorChanged(const QColor&)) );
 	connect( ui.sbMinorTicksWidth, SIGNAL(valueChanged(double)), this, SLOT(minorTicksWidthChanged(double)) );
@@ -185,11 +198,19 @@ void AxisDock::init(){
 	ui.cbMajorTicksDirection->addItem( i18n("out") );
 	ui.cbMajorTicksDirection->addItem( i18n("in and out") );
 
+	ui.cbMajorTicksType->addItem( i18n("Number") );
+	ui.cbMajorTicksType->addItem( i18n("Increment") );
+	ui.cbMajorTicksType->addItem( i18n("Custom column") );
+	
 	ui.cbMinorTicksDirection->addItem( i18n("none") );
 	ui.cbMinorTicksDirection->addItem( i18n("in") );
 	ui.cbMinorTicksDirection->addItem( i18n("out") );
 	ui.cbMinorTicksDirection->addItem( i18n("in and out") );
 
+	ui.cbMinorTicksType->addItem( i18n("Number") );
+	ui.cbMinorTicksType->addItem( i18n("Increment") );
+	ui.cbMinorTicksType->addItem( i18n("Custom column") );
+	
 	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
@@ -197,16 +218,27 @@ void AxisDock::init(){
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
 	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
 
-	//Grid
-	//TODO: remove this later
-	ui.kcbMajorGridColor->setColor(Qt::black);
-	GuiTools::updatePenStyles(ui.cbMajorGridStyle, QColor(Qt::black));
-	ui.kcbMinorGridColor->setColor(Qt::black);
-	GuiTools::updatePenStyles(ui.cbMinorGridStyle, QColor(Qt::black));
- 
 	m_initializing=false;
 }
 
+void AxisDock::setModel(std::auto_ptr<AspectTreeModel> model){
+	m_aspectTreeModel=model;
+
+	QList<const char *>  list;
+	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+	cbMajorTicksColumn->setTopLevelClasses(list);
+	cbMajorTicksColumn->setTopLevelClasses(list);
+
+	list.clear();
+	list<<"Column";
+	m_aspectTreeModel->setSelectableAspects(list);
+
+	m_initializing=true;
+	cbMajorTicksColumn->setModel(m_aspectTreeModel.get());
+	cbMinorTicksColumn->setModel(m_aspectTreeModel.get());
+
+	m_initializing=false;
+}
 
 /*!
   sets the axes. The properties of the axes in the list \c list can be edited in this widget.
@@ -226,13 +258,17 @@ void AxisDock::setAxes(QList<Axis*> list){
 		ui.leComment->setEnabled(true);
 		ui.leName->setText(m_axis->name());
 		ui.leComment->setText(m_axis->comment());
+		this->setModelIndexFromColumn(cbMajorTicksColumn, m_axis->majorTicksColumn());
+		this->setModelIndexFromColumn(cbMinorTicksColumn, m_axis->minorTicksColumn());
 	}else{
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
 		ui.leComment->setEnabled(false);
 		ui.leName->setText("");
-		ui.leComment->setText("");	
+		ui.leComment->setText("");
+		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
+		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 	}
 
   	//show the properties of the first axis
@@ -297,6 +333,13 @@ void AxisDock::setAxes(QList<Axis*> list){
 
 void AxisDock::activateTitleTab(){
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
+}
+
+void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column){
+	if (column)
+		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+	else
+		cb->setCurrentModelIndex(QModelIndex());
 }
 
 //*************************************************************
@@ -591,14 +634,25 @@ void AxisDock::majorTicksTypeChanged(int index){
 	  ui.lMajorTicksNumber->show();
 	  ui.sbMajorTicksNumber->show();
 	  ui.lMajorTicksIncrement->hide();
-	  ui.leMajorTicksIncrement->hide();	  
-  }else{
+	  ui.leMajorTicksIncrement->hide();
+	  ui.lMajorTicksColumn->hide();
+	  cbMajorTicksColumn->hide();
+  }else if ( type == Axis::TicksIncrement){
 	  ui.lMajorTicksNumber->hide();
 	  ui.sbMajorTicksNumber->hide();
 	  ui.lMajorTicksIncrement->show();
-	  ui.leMajorTicksIncrement->show();	  
+	  ui.leMajorTicksIncrement->show();
+	  ui.lMajorTicksColumn->hide();
+	  cbMajorTicksColumn->hide();
+  }else{
+	  ui.lMajorTicksNumber->hide();
+	  ui.sbMajorTicksNumber->hide();
+	  ui.lMajorTicksIncrement->hide();
+	  ui.leMajorTicksIncrement->hide();
+	  ui.lMajorTicksColumn->show();
+	  cbMajorTicksColumn->show();
   }
-  
+
   if (m_initializing)
 	return;
 		
@@ -645,6 +699,19 @@ void AxisDock::majorTicksLineStyleChanged(int index){
 		pen.setStyle(penStyle);
 		axis->setMajorTicksPen(pen);
 	}
+}
+
+void AxisDock::majorTicksColumnChanged(const QModelIndex& index){
+	Q_UNUSED(index);
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+
+	foreach(Axis* axis, m_axesList)
+		axis->setMajorTicksColumn(column);
 }
 
 void AxisDock::majorTicksColorChanged(const QColor& color){
@@ -733,16 +800,27 @@ void AxisDock::minorTicksTypeChanged(int index){
 	ui.sbMinorTicksNumber->show();
 	ui.lMinorTicksIncrement->hide();
 	ui.leMinorTicksIncrement->hide();
-  }else{
+	ui.lMinorTicksColumn->hide();
+	cbMinorTicksColumn->hide();
+  }else if ( type == Axis::TicksIncrement){
 	  ui.lMinorTicksNumber->hide();
 	  ui.sbMinorTicksNumber->hide();
 	  ui.lMinorTicksIncrement->show();
 	  ui.leMinorTicksIncrement->show();
+	  ui.lMinorTicksColumn->hide();
+	  cbMinorTicksColumn->hide();
+  }else{
+	  ui.lMinorTicksNumber->hide();
+	  ui.sbMinorTicksNumber->hide();
+	  ui.lMinorTicksIncrement->hide();
+	  ui.leMinorTicksIncrement->hide();
+	  ui.lMinorTicksColumn->show();
+	  cbMinorTicksColumn->show();
   }
-  
+
   if (m_initializing)
 	return;
-		
+
   foreach(Axis* axis, m_axesList)
 	axis->setMinorTicksType(type);
 }
@@ -762,6 +840,19 @@ void AxisDock::minorTicksIncrementChanged(){
   double value = ui.leMinorTicksIncrement->text().toDouble();
   foreach(Axis* axis, m_axesList)
 	axis->setMinorTicksIncrement(value);
+}
+
+void AxisDock::minorTicksColumnChanged(const QModelIndex& index){
+	Q_UNUSED(index);
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+
+	foreach(Axis* axis, m_axesList)
+		axis->setMinorTicksColumn(column);
 }
 
 void AxisDock::minorTicksLineStyleChanged(int index){

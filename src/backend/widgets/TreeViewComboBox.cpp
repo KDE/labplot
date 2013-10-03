@@ -101,7 +101,7 @@ QModelIndex TreeViewComboBox::currentModelIndex() const{
 	Triggers showTopLevelOnly() to show toplevel items only.
 */
 void TreeViewComboBox::showPopup(){
-	if (!m_treeView.model()->hasChildren())
+	if (!m_treeView.model() || !m_treeView.model()->hasChildren())
 		return;
 
 	QModelIndex root = m_treeView.model()->index(0,0);

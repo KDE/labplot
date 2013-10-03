@@ -412,6 +412,9 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	if (positionInvalid)
 		return;
 
+	if (textWrapper.text.isEmpty())
+		return;
+
 	painter->save();
 	painter->rotate(rotationAngle);
 

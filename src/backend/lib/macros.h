@@ -383,15 +383,15 @@ d->columnName ##ParentName = str;													\
 } while(0)
 
 //used in Project::load()
-#define RESTORE_COLUMN_POINTER(col, Col) 											\
+#define RESTORE_COLUMN_POINTER(obj, col, Col) 										\
 do {																				\
-if (!curve->col ##Name().isEmpty()) {												\
-	name = curve->col ##ParentName();												\
+if (!obj->col ##Name().isEmpty()) {													\
+	name = obj->col ##ParentName();													\
 	foreach (AbstractAspect* aspect, spreadsheets) {								\
 		if (aspect->name() == name) {												\
 			sheet = dynamic_cast<Spreadsheet*>(aspect);								\
 			if (!sheet) continue;													\
- 			curve->set## Col(sheet->column(curve->col ##Name()));					\
+ 			obj->set## Col(sheet->column(obj->col ##Name()));						\
 			break;				 													\
 		}																			\
 	}																				\

@@ -35,10 +35,11 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "CartesianPlot.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "CartesianPlot.h"
 
 #include "kdefrontend/GuiTools.h"
 #include <QBrush>
@@ -392,6 +393,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majo
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksIncrement, majorTicksIncrement)
+BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
+QString& Axis::majorTicksColumnName() const { return d_ptr->majorTicksColumnName; }
+QString& Axis::majorTicksColumnParentName() const {	return d_ptr->majorTicksColumnParentName; }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
@@ -400,6 +404,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, mino
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksIncrement, minorTicksIncrement)
+BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, minorTicksColumn, minorTicksColumn)
+QString& Axis::minorTicksColumnName() const { return d_ptr->minorTicksColumnName; }
+QString& Axis::minorTicksColumnParentName() const {	return d_ptr->minorTicksColumnParentName; }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
@@ -585,6 +592,20 @@ void Axis::setMajorTicksIncrement(qreal majorTicksIncrement) {
 		exec(new AxisSetMajorTicksIncrementCmd(d, majorTicksIncrement, tr("%1: set the increment for the major ticks")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksColumn, const AbstractColumn*, majorTicksColumn, retransformTicks)
+void Axis::setMajorTicksColumn(const AbstractColumn* column) {
+	Q_D(Axis);
+	if (column != d->majorTicksColumn) {
+		exec(new AxisSetMajorTicksColumnCmd(d, column, tr("%1: assign major ticks' values")));
+
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks())); //TODO slot in d
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(majorTicksColumnAboutToBeRemoved()));
+			//TODO: add disconnect in the undo-function
+		}
+	}
+}
+
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, recalcShapeAndBoundingRect);
 void Axis::setMajorTicksPen(const QPen &pen) {
 	Q_D(Axis);
@@ -633,6 +654,20 @@ void Axis::setMinorTicksIncrement(qreal minorTicksIncrement) {
 	Q_D(Axis);
 	if (minorTicksIncrement != d->minorTicksIncrement)
 		exec(new AxisSetMinorTicksIncrementCmd(d, minorTicksIncrement, tr("%1: set the increment for the minor ticks")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksColumn, const AbstractColumn*, minorTicksColumn, retransformTicks)
+void Axis::setMinorTicksColumn(const AbstractColumn* column) {
+	Q_D(Axis);
+	if (column != d->minorTicksColumn) {
+		exec(new AxisSetMinorTicksColumnCmd(d, column, tr("%1: assign minor ticks' values")));
+
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
+			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(minorTicksColumnAboutToBeRemoved()));
+			//TODO: add disconnect in the undo-function
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, recalcShapeAndBoundingRect);
@@ -796,7 +831,7 @@ void Axis::visibilityChanged(){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), q(owner){
+AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), majorTicksColumn(0), minorTicksColumn(0), q(owner){
 }
 
 QString AxisPrivate::name() const{
@@ -898,6 +933,7 @@ bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 	recalculates the position of the axis ticks.
  */ 
 void AxisPrivate::retransformTicks(){
+	qDebug()<<"AxisPrivate::retransformTicks()";
 	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
 
 	majorTicksPath = QPainterPath();
@@ -928,18 +964,18 @@ void AxisPrivate::retransformTicks(){
 				break;
 			case Axis::ScaleLn:
 				majorTicksSpacing = (log(end) - log(start))/(majorTicksNumber - 1);
-				break;		
+				break;
 			case Axis::ScaleSqrt:
 				majorTicksSpacing = (sqrt(end) - sqrt(start))/(majorTicksNumber - 1);
-				break;					
+				break;
 			case Axis::ScaleX2:
 				majorTicksSpacing = (pow(end,2) - pow(start,2))/(majorTicksNumber - 1);
-				break;			
+				break;
 			default://Linear
 				majorTicksSpacing = (end - start)/(majorTicksNumber - 1);
 		}
 		tmpMajorTicksNumber = majorTicksNumber;
-	} else {
+	} else if (majorTicksType == Axis::TicksTotalNumber) {
 		//the spacing (increment ) of the major ticks is given - > determine the number
 		majorTicksSpacing = majorTicksIncrement;
 		switch (scale) {
@@ -954,15 +990,23 @@ void AxisPrivate::retransformTicks(){
 			break;
 			case Axis::ScaleLn:
 			tmpMajorTicksNumber = (log(end)-log(start))/majorTicksSpacing + 1;
-			break;		
+			break;
 			case Axis::ScaleSqrt:
 			tmpMajorTicksNumber = (sqrt(end)-sqrt(start))/majorTicksSpacing + 1;
-			break;					
+			break;
 			case Axis::ScaleX2:
 			tmpMajorTicksNumber = (pow(end,2)-pow(start,2))/majorTicksSpacing + 1;
-			break;			
+			break;
 			default://Linear
 			tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
+		}
+	} else {
+		//custom column was provided
+		if (majorTicksColumn) {
+			tmpMajorTicksNumber = majorTicksColumn->rowCount();
+		} else {
+			retransformTickLabels(); //this calls recalcShapeAndBoundingRect()
+			return;
 		}
 	}
   
@@ -985,27 +1029,34 @@ void AxisPrivate::retransformTicks(){
 	bool valid;
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
-		switch (scale){
-			case Axis::ScaleLinear:
-				majorTickPos = start + majorTicksSpacing * (qreal)iMajor;
-				break;
-			case Axis::ScaleLog10:
-				majorTickPos = pow(10, log10(start) + majorTicksSpacing * (qreal)iMajor);
-				break;
-			case Axis::ScaleLog2:
-				majorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing * (qreal)iMajor);
-				break;
-			case Axis::ScaleLn:
-				majorTickPos = exp(log(start) + majorTicksSpacing * (qreal)iMajor);
-				break;
-			case Axis::ScaleSqrt:
-				majorTickPos = pow(sqrt(start) + majorTicksSpacing * (qreal)iMajor, 2);
-				break;
-			case Axis::ScaleX2:
-				majorTickPos = sqrt(sqrt(start) + majorTicksSpacing * (qreal)iMajor);
-				break;		  
-			default://Linear
-				majorTickPos = start + majorTicksSpacing * (qreal)iMajor; 
+		if (majorTicksType != Axis::TicksCustomColumn) {
+			switch (scale){
+				case Axis::ScaleLinear:
+					majorTickPos = start + majorTicksSpacing * (qreal)iMajor;
+					break;
+				case Axis::ScaleLog10:
+					majorTickPos = pow(10, log10(start) + majorTicksSpacing * (qreal)iMajor);
+					break;
+				case Axis::ScaleLog2:
+					majorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing * (qreal)iMajor);
+					break;
+				case Axis::ScaleLn:
+					majorTickPos = exp(log(start) + majorTicksSpacing * (qreal)iMajor);
+					break;
+				case Axis::ScaleSqrt:
+					majorTickPos = pow(sqrt(start) + majorTicksSpacing * (qreal)iMajor, 2);
+					break;
+				case Axis::ScaleX2:
+					majorTickPos = sqrt(sqrt(start) + majorTicksSpacing * (qreal)iMajor);
+					break;		  
+				default://Linear
+					majorTickPos = start + majorTicksSpacing * (qreal)iMajor; 
+			}
+		} else {
+			majorTickPos = majorTicksColumn->valueAt(iMajor);
+			if (isnan(majorTickPos))
+				break; //stop iterating after the first non numerical value in the column
+			qDebug()<<majorTickPos;
 		}
 
 		if (majorTicksDirection != Axis::noTicks ) {
@@ -1048,7 +1099,7 @@ void AxisPrivate::retransformTicks(){
 		}
 
 		//minor ticks
-		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor < tmpMajorTicksNumber - 1)) {
+		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0)) {
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				switch (scale){
 					case Axis::ScaleLinear:
@@ -1289,7 +1340,7 @@ void AxisPrivate::retransformTickLabels(){
 
 void AxisPrivate::retransformMajorGrid(){
 	majorGridPath = QPainterPath();
-	if (majorGridPen.style() == Qt::NoPen){
+	if (majorGridPen.style() == Qt::NoPen || majorTickPoints.size() == 0){
 		update();
 		return;
 	}
@@ -1297,14 +1348,35 @@ void AxisPrivate::retransformMajorGrid(){
 	//major tick points are already in scene coordinates, convert them back to logical...
 	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
+	//TODO:
 	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
 	//since we don't want to paint any grid lines at the plot boundaries
+	bool skipLowestTick, skipUpperTick;
+	if (orientation == Axis::AxisHorizontal) { //horizontal axis
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), m_plot->xMin());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), m_plot->xMax());
+	} else {
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), m_plot->yMin());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), m_plot->yMax());
+	}
+
 	int start, end;
-	if (autoScale) {
-		start = 1;
-		end = logicalMajorTickPoints.size()-1;
+	if (skipLowestTick){
+		if (logicalMajorTickPoints.size()>1) 
+			start = 1;
+		else
+			start = 0;
 	} else {
 		start = 0;
+	}
+	
+	if ( skipUpperTick ){
+		if (logicalMajorTickPoints.size()>1) 
+			end = logicalMajorTickPoints.size()-1;
+		else
+			end = 0;
+
+	} else {
 		end = logicalMajorTickPoints.size();
 	}
 
@@ -1556,6 +1628,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "type", QString::number(d->majorTicksType) );
 	writer->writeAttribute( "number", QString::number(d->majorTicksNumber) );
 	writer->writeAttribute( "increment", QString::number(d->majorTicksIncrement) );
+	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
 	writer->writeAttribute( "length", QString::number(d->majorTicksLength) );
 	WRITE_QPEN(d->majorTicksPen);
 	writer->writeAttribute( "opacity", QString::number(d->majorTicksOpacity) );
@@ -1567,6 +1640,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "type", QString::number(d->minorTicksType) );
 	writer->writeAttribute( "number", QString::number(d->minorTicksNumber) );
 	writer->writeAttribute( "increment", QString::number(d->minorTicksIncrement) );
+	WRITE_COLUMN(d->minorTicksColumn, minorTicksColumn);
 	writer->writeAttribute( "length", QString::number(d->minorTicksLength) );
 	WRITE_QPEN(d->minorTicksPen);
 	writer->writeAttribute( "opacity", QString::number(d->minorTicksOpacity) );
@@ -1733,7 +1807,9 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'increment'"));
             else
                 d->majorTicksIncrement = str.toDouble();
-			
+
+			READ_COLUMN(majorTicksColumn);
+
 			str = attribs.value("length").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'length'"));
@@ -1773,6 +1849,8 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'increment'"));
             else
                 d->minorTicksIncrement = str.toDouble();
+
+			READ_COLUMN(minorTicksColumn);
 
 			str = attribs.value("length").toString();
             if(str.isEmpty())

@@ -32,9 +32,13 @@
 
 #include "ui_axisdock.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include <memory>
 
 class AbstractAspect;
 class LabelWidget;
+class TreeViewComboBox;
+class AspectTreeModel;
+class AbstractColumn;
 
 class AxisDock : public QWidget{
 	Q_OBJECT
@@ -43,6 +47,7 @@ public:
 	AxisDock(QWidget*);
 	~AxisDock();
 
+	void setModel(std::auto_ptr<AspectTreeModel>);
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
 
@@ -50,9 +55,14 @@ private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
 	Axis* m_axis;
+	std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
 	LabelWidget* labelWidget;
+	TreeViewComboBox* cbMajorTicksColumn;
+	TreeViewComboBox* cbMinorTicksColumn;
 	bool m_dataChanged;
 	bool m_initializing;
+
+	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
 private slots:
 	void init();
@@ -83,6 +93,7 @@ private slots:
 	void majorTicksTypeChanged(int);
  	void majorTicksNumberChanged(int);
 	void majorTicksIncrementChanged();
+	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTicksLineStyleChanged(int);
 	void majorTicksColorChanged(const QColor&);
 	void majorTicksWidthChanged(double);
@@ -94,6 +105,7 @@ private slots:
 	void minorTicksTypeChanged(int);
  	void minorTicksNumberChanged(int);
 	void minorTicksIncrementChanged();
+	void minorTicksColumnChanged(const QModelIndex&);
 	void minorTicksLineStyleChanged(int);
 	void minorTicksColorChanged(const QColor&);
 	void minorTicksWidthChanged(double);

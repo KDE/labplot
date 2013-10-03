@@ -38,6 +38,7 @@
 
 class TextLabel;
 class AxisPrivate;
+class AbstractColumn;
 
 class Axis: public AbstractWorksheetElement {
 	Q_OBJECT
@@ -54,7 +55,7 @@ class Axis: public AbstractWorksheetElement {
 		};
 		Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-		enum TicksType {TicksTotalNumber, TicksIncrement};
+		enum TicksType {TicksTotalNumber, TicksIncrement, TicksCustomColumn, TicksCustomValues};
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 		
@@ -91,6 +92,9 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
 		BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber)
 		BASIC_D_ACCESSOR_DECL(qreal, majorTicksIncrement, MajorTicksIncrement)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
+		QString& majorTicksColumnName() const;
+		QString& majorTicksColumnParentName() const;
 		CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
 		BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
 		BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity)
@@ -99,6 +103,9 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
 		BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksIncrement, MinorTicksIncrement)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
+		QString& minorTicksColumnName() const;
+		QString& minorTicksColumnParentName() const;		
 		CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
@@ -197,6 +204,7 @@ class Axis: public AbstractWorksheetElement {
 		friend class AxisSetMajorTicksTypeCmd;
 		friend class AxisSetMajorTicksNumberCmd;
 		friend class AxisSetMajorTicksIncrementCmd;
+		friend class AxisSetMajorTicksColumnCmd;
 		friend class AxisSetMajorTicksPenCmd;
 		friend class AxisSetMajorTicksLengthCmd;
 		friend class AxisSetMajorTicksOpacityCmd;
@@ -204,6 +212,7 @@ class Axis: public AbstractWorksheetElement {
 		void majorTicksTypeChanged(Axis::TicksType);
 		void majorTicksNumberChanged(int);
 		void majorTicksIncrementChanged(qreal);
+		void majorTicksColumnChanged(const AbstractColumn*);
 		void majorTicksPenChanged(QPen);
 		void majorTicksLengthChanged(qreal);
 		void majorTicksOpacityChanged(qreal);
@@ -213,6 +222,7 @@ class Axis: public AbstractWorksheetElement {
 		friend class AxisSetMinorTicksTypeCmd;
 		friend class AxisSetMinorTicksNumberCmd;
 		friend class AxisSetMinorTicksIncrementCmd;
+		friend class AxisSetMinorTicksColumnCmd;
 		friend class AxisSetMinorTicksPenCmd;
 		friend class AxisSetMinorTicksLengthCmd;
 		friend class AxisSetMinorTicksOpacityCmd;
@@ -220,6 +230,7 @@ class Axis: public AbstractWorksheetElement {
 		void minorTicksTypeChanged(Axis::TicksType);
 		void minorTicksNumberChanged(int);
 		void minorTicksIncrementChanged(qreal);
+		void minorTicksColumnChanged(const AbstractColumn*);
 		void minorTicksPenChanged(QPen);
 		void minorTicksLengthChanged(qreal);
 		void minorTicksOpacityChanged(qreal);

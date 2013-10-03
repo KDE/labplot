@@ -72,6 +72,9 @@ class AxisPrivate: public QGraphicsItem {
 		Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 		int majorTicksNumber; //!< number of major ticks
 		qreal majorTicksIncrement; //!< increment (step) for the major ticks
+		const AbstractColumn* majorTicksColumn; //!< column containing values for major ticks' positions
+		QString majorTicksColumnName;
+		QString majorTicksColumnParentName;
 		qreal majorTicksLength; //!< major tick length (in page units!)
 		QPen majorTicksPen;
 		qreal majorTicksOpacity;
@@ -80,6 +83,9 @@ class AxisPrivate: public QGraphicsItem {
 		Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
 		int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
 		qreal minorTicksIncrement; //!< increment (step) for the minor ticks
+		const AbstractColumn* minorTicksColumn; //!< column containing values for minor ticks' positions
+		QString minorTicksColumnName;
+		QString minorTicksColumnParentName;		
 		qreal minorTicksLength; //!< minor tick length (in page units!)
 		QPen minorTicksPen;
 		qreal minorTicksOpacity;	

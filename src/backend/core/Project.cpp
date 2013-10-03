@@ -32,6 +32,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include <QUndoStack>
 #include <QMenu>
@@ -230,22 +231,33 @@ bool Project::load(XmlStreamReader* reader) {
 			//everything is read now.
 			//restore the pointer to the data sets (columns) in xy-curves etc.
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
-			if (curves.size()!=0) {
+			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
+			if (curves.size()!=0 || axes.size()!=0) {
 				QList<AbstractAspect*> spreadsheets = children("Spreadsheet", AbstractAspect::Recursive);
-				XYCurve* curve;
 				Spreadsheet* sheet;
 				QString name;
+
+				//XY-curves
 				foreach (AbstractAspect* aspect, curves) {
-					curve = dynamic_cast<XYCurve*>(aspect);
+					XYCurve* curve = dynamic_cast<XYCurve*>(aspect);
 					if (!curve) continue;
 
-					RESTORE_COLUMN_POINTER(xColumn, XColumn);
-					RESTORE_COLUMN_POINTER(yColumn, YColumn);
-					RESTORE_COLUMN_POINTER(valuesColumn, ValuesColumn);
-					RESTORE_COLUMN_POINTER(xErrorPlusColumn, XErrorPlusColumn);
-					RESTORE_COLUMN_POINTER(xErrorMinusColumn, XErrorMinusColumn);
-					RESTORE_COLUMN_POINTER(yErrorPlusColumn, YErrorPlusColumn);
-					RESTORE_COLUMN_POINTER(yErrorMinusColumn, YErrorMinusColumn);					
+					RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+					RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+					RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+					RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
+					RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
+					RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
+					RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+				}
+
+				//Axes
+				foreach (AbstractAspect* aspect, axes) {
+					Axis* axis = dynamic_cast<Axis*>(aspect);
+					if (!axis) continue;
+
+					RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
+					RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
 				}
 			}
 		} else {// no project element
