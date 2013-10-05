@@ -133,8 +133,13 @@ void MainWin::initGUI(const QString& fileName){
 
 	//load recently used projects
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
-	m_recentProjectsAction->setEnabled(true);
-	
+	qDebug()<<"LOADED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
+	qDebug()<<"LOADED m_recentProjectsAction->urls().first()="<<m_recentProjectsAction->urls().first()<<endl;
+	for(int i=0;i<m_recentProjectsAction->urls().size();i++) {
+		qDebug()<<"LOADED m_recentProjectsAction->urls().action("<<i<<")="<<m_recentProjectsAction->action(i)<<endl;
+		qDebug()<<"LOADED m_recentProjectsAction->urls().urls("<<i<<")="<<m_recentProjectsAction->urls().at(i)<<endl;
+	}	
+
 	//set the view mode of the mdi area
 	KConfigGroup group = KGlobal::config()->group("General");
 	int viewMode = group.readEntry("ViewMode", 0);
@@ -152,7 +157,7 @@ void MainWin::initGUI(const QString& fileName){
 	interval = interval*60*1000;
 	m_autoSaveTimer.setInterval(interval);
 	connect(&m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveProject()));
-	
+
 	if ( !fileName.isEmpty() ) {
 		openProject(fileName);
 	} else {
@@ -572,6 +577,7 @@ void MainWin::openProject(){
 }
 
 void MainWin::openProject(const QString& filename) {
+	qDebug()<<"OPEN"<<filename<<endl;//TODO
 	if (filename == m_currentFileName) {
 		KMessageBox::information(this,
 			i18n("The project file %1 is already opened.").arg(filename),i18n("Open project"));

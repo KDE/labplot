@@ -115,6 +115,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
+	qDebug()<<"loadConfig(TextLabel)"<<endl;
   	loadConfig(group);
 
 	m_initializing = true;
@@ -138,6 +139,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "AxisLabel" );
+	qDebug()<<"loadConfig(AxisLabel)"<<endl;
   	loadConfig(group);
 
 	m_initializing = true;
@@ -569,7 +571,15 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 		ui.kcbTextColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
 	// Geometry
-	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
+	qDebug()<<"m_label="<<m_label<<endl;
+	//qDebug()<<"label->position = "<<m_label->position().horizontalPosition<<" "<<m_label->position().verticalPosition <<endl;
+	qDebug()<<"label->position()->horizontalPosition = "<<m_label->position().horizontalPosition<<endl;
+	qDebug()<<"ui.cbPositionX = "<<ui.cbPositionX <<endl;
+	qDebug()<<"ui.cbPositionX->count = "<<ui.cbPositionX->count() <<endl;
+	qDebug()<<"ui.cbPositionX->currentIndex = "<<ui.cbPositionX->currentIndex() <<endl;
+	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", 0 ) );
+	//ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
+	qDebug()<<"After CRASH"<<endl;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),Worksheet::Centimeter) );
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
