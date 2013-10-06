@@ -577,14 +577,13 @@ void MainWin::openProject(){
 }
 
 void MainWin::openProject(const QString& filename) {
-	qDebug()<<"OPEN"<<filename<<endl;//TODO
 	if (filename == m_currentFileName) {
 		KMessageBox::information(this,
 			i18n("The project file %1 is already opened.").arg(filename),i18n("Open project"));
 		return;
 	}
 
-	QIODevice *file = KFilterDev::deviceForFile(filename,QString::null,true);
+	QIODevice *file = KFilterDev::deviceForFile(filename,"application/x-gzip",true);
 	if (file==0)
 		file = new QFile(filename);
 
@@ -708,7 +707,7 @@ bool MainWin::saveProjectAs() {
  * auxilary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
-	QIODevice* file = KFilterDev::deviceForFile(fileName, QString::null, true);
+	QIODevice* file = KFilterDev::deviceForFile(fileName, "application/x-gzip", true);
 	if (file == 0)
 		file = new QFile(fileName);
 
