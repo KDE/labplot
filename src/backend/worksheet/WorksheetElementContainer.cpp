@@ -203,15 +203,12 @@ void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOpti
 		return;
 
 	if (m_hovered && !isSelected()){
-		QPainterPath path = shape();
 		painter->setPen(QPen(QColor(128,179,255), 10, Qt::SolidLine));
-		painter->drawPath(path);
+		painter->drawRect(boundingRect());
 	}
 	
-	//TODO remove this later
 	if (isSelected()){
-		QPainterPath path = shape();  
 		painter->setPen(QPen(Qt::blue, 10, Qt::SolidLine));
-		painter->drawPath(path);
+		painter->drawRect(boundingRect());
   }
 }

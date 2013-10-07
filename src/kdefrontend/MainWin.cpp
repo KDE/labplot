@@ -598,6 +598,8 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
+	WAIT_CURSOR;
+
 	openXML(file);
 	file->close();
 	delete file;
@@ -617,7 +619,9 @@ void MainWin::openProject(const QString& filename) {
 	statusBar()->showMessage(i18n("Project successfully opened."));
 
 	if (m_autoSaveActive)
-		m_autoSaveTimer.start();	
+		m_autoSaveTimer.start();
+
+	RESET_CURSOR;
 }
 
 void MainWin::openRecentProject(const KUrl& url) {

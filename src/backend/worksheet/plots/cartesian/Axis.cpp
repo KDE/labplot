@@ -1348,6 +1348,9 @@ void AxisPrivate::retransformMajorGrid(){
 	//major tick points are already in scene coordinates, convert them back to logical...
 	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
+	if (!logicalMajorTickPoints.size())
+		return;
+	
 	//TODO:
 	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
 	//since we don't want to paint any grid lines at the plot boundaries
@@ -1653,6 +1656,9 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "position", QString::number(d->labelsPosition) );
 	writer->writeAttribute( "offset", QString::number(d->labelsOffset) );
 	writer->writeAttribute( "rotation", QString::number(d->labelsRotationAngle) );
+	writer->writeAttribute( "format", QString::number(d->labelsFormat) );
+	writer->writeAttribute( "precision", QString::number(d->labelsPrecision) );
+	writer->writeAttribute( "autoPrecision", QString::number(d->labelsAutoPrecision) );
 	WRITE_QCOLOR(d->labelsColor);
 	WRITE_QFONT(d->labelsFont);
 	writer->writeAttribute( "prefix", d->labelsPrefix );
@@ -1795,7 +1801,7 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'type'"));
             else
                 d->majorTicksType = (Axis::TicksType)str.toInt();
-			
+
 			str = attribs.value("number").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'number'"));
@@ -1831,13 +1837,13 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'direction'"));
             else
                 d->minorTicksDirection = (Axis::TicksDirection)str.toInt();
-			
+
 			str = attribs.value("type").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'type'"));
             else
                 d->minorTicksType = (Axis::TicksType)str.toInt();
-			
+
 			str = attribs.value("number").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'number'"));
@@ -1859,7 +1865,7 @@ bool Axis::load(XmlStreamReader* reader){
                 d->minorTicksLength = str.toDouble();
 			
 			READ_QPEN(d->minorTicksPen);
-			
+
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
@@ -1873,19 +1879,37 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'position'"));
             else
                 d->labelsPosition = (Axis::LabelsPosition)str.toInt();
-			
+
 			str = attribs.value("offset").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'offset'"));
             else
                 d->labelsOffset = str.toDouble();
-			
+
 			str = attribs.value("rotation").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'rotation'"));
             else
                 d->labelsRotationAngle = str.toDouble();
-			
+
+			str = attribs.value("format").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'format'"));
+            else
+                d->labelsFormat = (Axis::LabelsFormat)str.toInt();
+
+			str = attribs.value("precision").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'precision'"));
+            else
+                d->labelsPrecision = str.toInt();
+
+			str = attribs.value("autoPrecision").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'autoPrecision'"));
+            else
+                d->labelsAutoPrecision = str.toInt();
+
 			READ_QCOLOR(d->labelsColor);
 			READ_QFONT(d->labelsFont);
 

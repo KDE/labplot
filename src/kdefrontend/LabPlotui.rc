@@ -46,7 +46,7 @@
 <Action name="export" />
 <Action name="project" />
 </Menu>
-<Menu name="edit"><text>&amp;Editklj</text>
+<Menu name="edit"><text>&amp;Edit</text>
 	<Action name="undo" />
 	<Action name="redo" />
 	<Action name="history" />
