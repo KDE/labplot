@@ -46,7 +46,6 @@
 #include <QPen>
 #include <QPainter>
 #include <QFontMetricsF>
-// #include <QtDebug>
 
 #include <math.h>
 
@@ -975,28 +974,28 @@ void AxisPrivate::retransformTicks(){
 				majorTicksSpacing = (end - start)/(majorTicksNumber - 1);
 		}
 		tmpMajorTicksNumber = majorTicksNumber;
-	} else if (majorTicksType == Axis::TicksTotalNumber) {
+	} else if (majorTicksType == Axis::TicksIncrement) {
 		//the spacing (increment ) of the major ticks is given - > determine the number
 		majorTicksSpacing = majorTicksIncrement;
 		switch (scale) {
 			case Axis::ScaleLinear:
-			tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
-			break;
+				tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
+				break;
 			case Axis::ScaleLog10:
-			tmpMajorTicksNumber = (log10(end)-log10(start))/majorTicksSpacing + 1;
-			break;
+				tmpMajorTicksNumber = (log10(end)-log10(start))/majorTicksSpacing + 1;
+				break;
 			case Axis::ScaleLog2:
-			tmpMajorTicksNumber = (log(end)-log(start))/log(2)/majorTicksSpacing + 1;
-			break;
+				tmpMajorTicksNumber = (log(end)-log(start))/log(2)/majorTicksSpacing + 1;
+				break;
 			case Axis::ScaleLn:
-			tmpMajorTicksNumber = (log(end)-log(start))/majorTicksSpacing + 1;
-			break;
+				tmpMajorTicksNumber = (log(end)-log(start))/majorTicksSpacing + 1;
+				break;
 			case Axis::ScaleSqrt:
-			tmpMajorTicksNumber = (sqrt(end)-sqrt(start))/majorTicksSpacing + 1;
-			break;
+				tmpMajorTicksNumber = (sqrt(end)-sqrt(start))/majorTicksSpacing + 1;
+				break;
 			case Axis::ScaleX2:
-			tmpMajorTicksNumber = (pow(end,2)-pow(start,2))/majorTicksSpacing + 1;
-			break;
+				tmpMajorTicksNumber = (pow(end,2)-pow(start,2))/majorTicksSpacing + 1;
+				break;
 			default://Linear
 			tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
 		}
@@ -1009,13 +1008,13 @@ void AxisPrivate::retransformTicks(){
 			return;
 		}
 	}
-  
+
 	int tmpMinorTicksNumber;
 	if (minorTicksType == Axis::TicksTotalNumber)
 		tmpMinorTicksNumber = minorTicksNumber;
 	else
 		tmpMinorTicksNumber = (end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
-  
+
 	QPointF anchorPoint;
 	QPointF startPoint;
 	QPointF endPoint;
@@ -1056,7 +1055,6 @@ void AxisPrivate::retransformTicks(){
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
 			if (isnan(majorTickPos))
 				break; //stop iterating after the first non numerical value in the column
-			qDebug()<<majorTickPos;
 		}
 
 		if (majorTicksDirection != Axis::noTicks ) {
