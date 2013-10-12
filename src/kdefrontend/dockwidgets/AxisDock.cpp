@@ -227,7 +227,7 @@ void AxisDock::setModel(std::auto_ptr<AspectTreeModel> model){
 	QList<const char *>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	cbMajorTicksColumn->setTopLevelClasses(list);
-	cbMajorTicksColumn->setTopLevelClasses(list);
+	cbMinorTicksColumn->setTopLevelClasses(list);
 
 	list.clear();
 	list<<"Column";

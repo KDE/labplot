@@ -163,7 +163,10 @@ class Axis: public AbstractWorksheetElement {
 		
 	private slots:
 		void labelChanged();
-		
+		void retransformTicks();
+		void majorTicksColumnAboutToBeRemoved();
+		void minorTicksColumnAboutToBeRemoved();
+
 		//SLOTs for changes triggered via QActions in the context menu
 		void orientationChanged(QAction*);
 		void lineStyleChanged(QAction*);

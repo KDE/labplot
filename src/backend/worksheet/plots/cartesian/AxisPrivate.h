@@ -4,8 +4,8 @@
     Description          : Private members of Axis.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
-								  (replace * with @ in the email addresses) 
+    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
+							(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 
@@ -33,7 +33,6 @@
 
 #include <QGraphicsItem>
 #include <QPen>
-#include <QFont>
 #include "Axis.h"
 
 class CartesianPlot;
@@ -43,7 +42,7 @@ class TextLabel;
 
 class AxisPrivate: public QGraphicsItem {
 	public:
-		AxisPrivate(Axis *owner);
+		AxisPrivate(Axis* owner);
 
 		const CartesianPlot* m_plot;
 		const CartesianCoordinateSystem* m_cSystem;
@@ -64,7 +63,7 @@ class AxisPrivate: public QGraphicsItem {
 		qreal lineOpacity;
 
 		// Title
-		TextLabel *title;
+		TextLabel* title;
 		float titleOffset; //distance to the axis line
 
 		// Ticks
@@ -78,18 +77,18 @@ class AxisPrivate: public QGraphicsItem {
 		qreal majorTicksLength; //!< major tick length (in page units!)
 		QPen majorTicksPen;
 		qreal majorTicksOpacity;
-		
+
 		Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
 		Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
 		int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
 		qreal minorTicksIncrement; //!< increment (step) for the minor ticks
 		const AbstractColumn* minorTicksColumn; //!< column containing values for minor ticks' positions
 		QString minorTicksColumnName;
-		QString minorTicksColumnParentName;		
+		QString minorTicksColumnParentName;
 		qreal minorTicksLength; //!< minor tick length (in page units!)
 		QPen minorTicksPen;
-		qreal minorTicksOpacity;	
-		
+		qreal minorTicksOpacity;
+
 		// Tick Label
 		Axis::LabelsFormat labelsFormat;
 		int labelsPrecision;
@@ -100,8 +99,7 @@ class AxisPrivate: public QGraphicsItem {
 		QColor labelsColor;
 		QFont labelsFont;
 		float labelsOffset; //!< offset, distance to the end of the tick line (in page units)
-		qreal labelsOpacity;	
-		// TODO support for date/time and string labels
+		qreal labelsOpacity;
 		QString labelsPrefix;
 		QString labelsSuffix;
 		QList<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
@@ -109,13 +107,13 @@ class AxisPrivate: public QGraphicsItem {
 		QList<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
 		QList<float> tickLabelValues; //!< major tick labels values
 		QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
-		
+
 		//Grid
 		QPen majorGridPen;
 		qreal majorGridOpacity;
 		QPen minorGridPen;
 		qreal minorGridOpacity;
-		
+
 		QPainterPath linePath;
 		QPainterPath majorTicksPath;
 		QPainterPath minorTicksPath;
@@ -125,13 +123,10 @@ class AxisPrivate: public QGraphicsItem {
 		QPainterPath axisShape;
 		QPainterPath axisShapeWithoutGrids;
 
-		//TODO extra tick label
-// 		QList<TextLabel *> labels;
-
 		QString name() const;
 		virtual QRectF boundingRect() const;
 		virtual QPainterPath shape() const;
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
 		virtual void retransform();
 		void retransformLine();
@@ -146,13 +141,13 @@ class AxisPrivate: public QGraphicsItem {
 		virtual void recalcShapeAndBoundingRect();
 		bool swapVisible(bool on);
 
-		Axis * const q;
+		Axis* const q;
 
 	private:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 
 	protected:
-		bool transformAnchor(QPointF *anchorPoint);
+		bool transformAnchor(QPointF*);
 };
 
 #endif

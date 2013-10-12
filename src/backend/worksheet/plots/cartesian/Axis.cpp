@@ -6,7 +6,7 @@
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach*uni-konstanz.de)
-					(replace * with @ in the email addresses) 
+							(replace * with @ in the email addresses) 
                            
  ***************************************************************************/
 
@@ -33,27 +33,21 @@
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "CartesianPlot.h"
+#include "backend/lib/macros.h"
 
-#include "kdefrontend/GuiTools.h"
-#include <QBrush>
-#include <QPen>
-#include <QPainter>
 #include <QFontMetricsF>
 
 #include <math.h>
+#include "kdefrontend/GuiTools.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <KConfig>
 #include <KConfigGroup>
 #include <KIcon>
-#include <KAction>
 #include <KLocale>
 #include <KMenu>
 #endif
@@ -62,11 +56,8 @@
  * \class Axis
  * \brief Axis for cartesian coordinate systems.
  *
- *  
+ *  \ingroup worksheet
  */
-
-// TODO: decide whether it makes sense to move some of the functionality into a class AbstractAxis
-
 Axis::Axis(const QString &name, const AxisOrientation &orientation)
 		: AbstractWorksheetElement(name), d_ptr(new AxisPrivate(this)) {
 	d_ptr->orientation = orientation;
@@ -300,77 +291,6 @@ void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
 	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
 
-void Axis::labelChanged(){
-	Q_D(Axis);
-	d->recalcShapeAndBoundingRect();
-}
-
-/* ============================ accessor documentation ================= */
-/**
-   \fn Axis::CLASS_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation);
-   \brief Get/set the axis orientation: left, right, bottom, or top (usually not changed after creation).
-
-   The orientation has not much to do with the actual position of the axis, which
-   is determined by Axis::Private::offset. It only determines whether the axis
-   is horizontal or vertical and which direction means in/out for the ticks.
- */
-/**
-   \fn Axis::BASIC_D_ACCESSOR_DECL(qreal, offset, Offset);
-   \brief Get/set the offset from zero in the directin perpendicular to the axis.
- */
-/**
-   \fn Axis::BASIC_D_ACCESSOR_DECL(qreal, start, Start);
-   \brief Get/set the start coordinate of the axis line.
- */
-/**
-   \fn Axis::BASIC_D_ACCESSOR_DECL(qreal, end, End);
-   \brief Get/set the end coordinate of the axis line.
- */
-/**
-   \fn Axis::BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber);
-   \brief Get/set the number of major ticks.
- */
-/**
-   \fn Axis::BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber);
-   \brief Get/set the number of minor ticks (between each two major ticks).
- */
-/**
-   \fn Axis::BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength);
-   \brief Get/set the major tick length (in page units!).
- */
-/**
-   \fn Axis::BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength);
-   \brief Get/set the minor tick length (in page units!).
- */
-/**
-   \fn Axis::CLASS_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection);
-   \brief Get/set the major ticks direction: inwards, outwards, both, or none.
- */
-/**
-   \fn Axis::CLASS_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection);
-   \brief Get/set the minor ticks direction: inwards, outwards, both, or none.
- */
-/**
-   \fn Axis::BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelRotationAngle);
-   \brief Get/set the rotation angle of the tick labels.
- */
-/**
-   \fn Axis::CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelColor);
-   \brief Get/set the color of the tick labels.
- */
-/**
-   \fn Axis::CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelFont);
-   \brief Get/set the font of the tick labels (size of the QFont will be ignored).
- */
-/**
-   \fn Axis::CLASS_D_ACCESSOR_DECL(float, labelsOffset, LabelOffset);
-   \brief Get/set the position offset of the tick labels relative to the end of the tick line.
- */
-/**
-   \fn Axis::CLASS_D_ACCESSOR_DECL(QPen, pen, Pen);
-   \brief Get/set the pen for the lines.
- */
-
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation)
@@ -598,7 +518,7 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 		exec(new AxisSetMajorTicksColumnCmd(d, column, tr("%1: assign major ticks' values")));
 
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks())); //TODO slot in d
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
 			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(majorTicksColumnAboutToBeRemoved()));
 			//TODO: add disconnect in the undo-function
 		}
@@ -796,6 +716,31 @@ void Axis::setMinorGridOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->minorGridOpacity)
 		exec(new AxisSetMinorGridOpacityCmd(d, opacity, tr("%1: set minor grid opacity")));
+}
+
+//##############################################################################
+//####################################  SLOTs   ################################
+//##############################################################################
+void Axis::labelChanged(){
+	Q_D(Axis);
+	d->recalcShapeAndBoundingRect();
+}
+
+void Axis::retransformTicks(){
+	Q_D(Axis);
+	d->retransformTicks();
+}
+
+void Axis::majorTicksColumnAboutToBeRemoved() {
+	Q_D(Axis);
+	d->majorTicksColumn = 0;
+	d->retransformTicks();
+}
+
+void Axis::minorTicksColumnAboutToBeRemoved() {
+	Q_D(Axis);
+	d->minorTicksColumn = 0;
+	d->retransformTicks();
 }
 
 //##############################################################################
@@ -1012,8 +957,11 @@ void AxisPrivate::retransformTicks(){
 	int tmpMinorTicksNumber;
 	if (minorTicksType == Axis::TicksTotalNumber)
 		tmpMinorTicksNumber = minorTicksNumber;
-	else
+	else if (minorTicksType == Axis::TicksIncrement)
 		tmpMinorTicksNumber = (end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
+	else
+		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
+	
 
 	QPointF anchorPoint;
 	QPointF startPoint;
@@ -1099,34 +1047,45 @@ void AxisPrivate::retransformTicks(){
 		//minor ticks
 		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0)) {
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
-				switch (scale){
-					case Axis::ScaleLinear:
-						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
+				if (minorTicksType != Axis::TicksCustomColumn) {
+					switch (scale){
+						case Axis::ScaleLinear:
+							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
+							break;
+						case Axis::ScaleLog10:
+							nextMajorTickPos = start + pow(10, majorTicksSpacing * (qreal)(iMajor + 1));
+							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+							break;
+						case Axis::ScaleLog2:
+							nextMajorTickPos = start + pow(2, majorTicksSpacing * (qreal)(iMajor + 1));
+							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+							break;
+						case Axis::ScaleLn:
+							nextMajorTickPos = start + exp(majorTicksSpacing * (qreal)(iMajor + 1));
+							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+							break;
+						case Axis::ScaleSqrt:
+							nextMajorTickPos = start + pow(majorTicksSpacing * (qreal)(iMajor + 1), 2);
+							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+							break;
+						case Axis::ScaleX2:
+							nextMajorTickPos = start + sqrt(majorTicksSpacing * (qreal)(iMajor + 1));
+							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
+							break;
+						default://Linear
+							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
+					}
+				} else {
+					minorTickPos = minorTicksColumn->valueAt(iMinor);
+					if (isnan(minorTickPos))
+						break; //stop iterating after the first non numerical value in the column
+					
+					//in the case a custom column is used for the minor ticks, we draw them _once_ for the whole range of the axis.
+					//execute the minor ticks loop only once.
+					if (iMajor>0)
 						break;
-					case Axis::ScaleLog10:
-						nextMajorTickPos = start + pow(10, majorTicksSpacing * (qreal)(iMajor + 1));
-						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-						break;
-					case Axis::ScaleLog2:
-						nextMajorTickPos = start + pow(2, majorTicksSpacing * (qreal)(iMajor + 1));
-						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-						break;
-					case Axis::ScaleLn:
-						nextMajorTickPos = start + exp(majorTicksSpacing * (qreal)(iMajor + 1));
-						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-						break;
-					case Axis::ScaleSqrt:
-						nextMajorTickPos = start + pow(majorTicksSpacing * (qreal)(iMajor + 1), 2);
-						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-						break;
-					case Axis::ScaleX2:
-						nextMajorTickPos = start + sqrt(majorTicksSpacing * (qreal)(iMajor + 1));
-						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-						break;
-					default://Linear
-						minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
 				}
-			  
+
 				if (orientation == Axis::AxisHorizontal) {
 					anchorPoint.setX(minorTickPos);
 					anchorPoint.setY(offset);
