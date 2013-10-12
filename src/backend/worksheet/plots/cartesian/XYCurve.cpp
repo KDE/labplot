@@ -33,7 +33,7 @@
   \class XYCurve
   \brief A 2D-curve, provides an interface for editing many properties of the the curve.
  
-  \ingroup kdefrontend
+  \ingroup worksheet
 */
 
 #include "XYCurve.h"
@@ -282,7 +282,8 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 
 			//update the curve itself on changes
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(xColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(xColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -301,7 +302,8 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 
 			//update the curve itself on changes
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(yColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), 
+					this, SLOT(yColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -416,8 +418,8 @@ void XYCurve::setValuesColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetValuesColumnCmd(d, column, tr("%1: set values column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(valuesColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(valuesColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -495,8 +497,8 @@ void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, tr("%1: set x-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(xErrorPlusColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(xErrorPlusColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}		
 }
@@ -508,8 +510,8 @@ void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, tr("%1: set x-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(xErrorMinusColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -528,8 +530,8 @@ void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, tr("%1: set y-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(yErrorPlusColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -541,8 +543,8 @@ void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, tr("%1: set y-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(yErrorMinusColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -612,46 +614,60 @@ void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
 	retransform();
 }
 
-void XYCurve::xColumnAboutToBeRemoved() {
+void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	d->xColumn = 0;
-	d->retransform();
+	if (aspect == d->xColumn) {
+		d->xColumn = 0;
+		d->retransform();
+	}
 }
 
-void XYCurve::yColumnAboutToBeRemoved() {
+void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	d->yColumn = 0;
-	d->retransform();
+	if (aspect == d->yColumn) {
+		d->yColumn = 0;
+		d->retransform();
+	}
 }
 
-void XYCurve::valuesColumnAboutToBeRemoved() {
+void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	d->valuesColumn = 0;
-	d->updateValues();
+	if (aspect == d->valuesColumn) {
+		d->valuesColumn = 0;
+		d->updateValues();
+	}
 }
 
-void XYCurve::xErrorPlusColumnAboutToBeRemoved() {
+void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	d->xErrorPlusColumn = 0;
-	d->updateErrorBars();
+	if (aspect == d->xErrorPlusColumn) {
+		d->xErrorPlusColumn = 0;
+		d->updateErrorBars();
+	}
 }
 
-void XYCurve::xErrorMinusColumnAboutToBeRemoved() {
+void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	d->xErrorMinusColumn = 0;
-	d->updateErrorBars();
+	if (aspect == d->xErrorMinusColumn) {
+		d->xErrorMinusColumn = 0;
+		d->updateErrorBars();
+	}
 }
 
-void XYCurve::yErrorPlusColumnAboutToBeRemoved() {
+void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	d->yErrorPlusColumn = 0;
-	d->updateErrorBars();
+	if (aspect == d->yErrorPlusColumn) {
+		d->yErrorPlusColumn = 0;
+		d->updateErrorBars();
+	}
 }
 
-void XYCurve::yErrorMinusColumnAboutToBeRemoved() {
+void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	d->yErrorMinusColumn = 0;
-	d->updateErrorBars();
+	if (aspect == d->yErrorMinusColumn) {
+		d->yErrorMinusColumn = 0;
+		d->updateErrorBars();
+	}
 }
 
 //##############################################################################
@@ -710,6 +726,11 @@ void XYCurvePrivate::retransform(){
 	symbolPointsScene.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) ){
+		linePath = QPainterPath();
+		dropLinePath = QPainterPath();
+		symbolsPath = QPainterPath();
+		valuesPath = QPainterPath();
+		errorBarsPath = QPainterPath();
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1351,15 +1372,9 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = QRectF();
 	boundingRectangle = boundingRectangle.normalized();
 	curveShape = QPainterPath();
-
 	if (lineType != XYCurve::NoLine){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(linePath, linePen));
 		boundingRectangle = boundingRectangle.united(linePath.boundingRect());
-	}
-	
-	if (dropLineType != XYCurve::NoDropLine){
-		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
-		boundingRectangle = boundingRectangle.united(dropLinePath.boundingRect());
 	}
 	
 	if (dropLineType != XYCurve::NoDropLine){
@@ -1381,6 +1396,11 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
 		boundingRectangle = boundingRectangle.united(errorBarsPath.boundingRect());
 	}
+
+	//TODO: when the selection is painted, line intersections are visible.
+	//simplified() removes those artifacts but is horrible slow for curves with large number of points.
+	//search for an alternative.
+	//curveShape = curveShape.simplified();
 }
 
 QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
@@ -1464,9 +1484,8 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   painter->setOpacity(opacity);
 
   if (isSelected()){
-	QPainterPath path = shape();  
 	painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
-	painter->drawPath(path);
+	painter->drawPath(shape());
   }
 }
 
@@ -1517,11 +1536,11 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement( "values" );
 	writer->writeAttribute( "type", QString::number(d->valuesType) );
 	WRITE_COLUMN(d->valuesColumn, valuesColumn);
-	//TODO values format and precision
 	writer->writeAttribute( "position", QString::number(d->valuesPosition) );
 	writer->writeAttribute( "distance", QString::number(d->valuesDistance) );
 	writer->writeAttribute( "rotation", QString::number(d->valuesRotationAngle) );
 	writer->writeAttribute( "opacity", QString::number(d->valuesOpacity) );
+	//TODO values format and precision
 	writer->writeAttribute( "prefix", d->valuesPrefix );
 	writer->writeAttribute( "suffix", d->valuesSuffix );
 	WRITE_QCOLOR(d->valuesColor);

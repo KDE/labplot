@@ -519,7 +519,7 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(majorTicksColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(majorTicksColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -583,7 +583,7 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
-			connect(column, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(minorTicksColumnAboutToBeRemoved()));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(minorTicksColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -731,16 +731,20 @@ void Axis::retransformTicks(){
 	d->retransformTicks();
 }
 
-void Axis::majorTicksColumnAboutToBeRemoved() {
+void Axis::majorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Axis);
-	d->majorTicksColumn = 0;
-	d->retransformTicks();
+	if (aspect==d->majorTicksColumn) {
+		d->majorTicksColumn = 0;
+		d->retransformTicks();
+	}
 }
 
-void Axis::minorTicksColumnAboutToBeRemoved() {
+void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Axis);
-	d->minorTicksColumn = 0;
-	d->retransformTicks();
+	if (aspect==d->minorTicksColumn) {
+		d->minorTicksColumn = 0;
+		d->retransformTicks();
+	}
 }
 
 //##############################################################################

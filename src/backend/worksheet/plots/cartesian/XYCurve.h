@@ -133,13 +133,13 @@ class XYCurve: public AbstractWorksheetElement {
 	private slots:
 		void updateValues();
 		void updateErrorBars();
-		void xColumnAboutToBeRemoved();
-		void yColumnAboutToBeRemoved();
-		void valuesColumnAboutToBeRemoved();
-		void xErrorPlusColumnAboutToBeRemoved();
-		void xErrorMinusColumnAboutToBeRemoved();
-		void yErrorPlusColumnAboutToBeRemoved();
-		void yErrorMinusColumnAboutToBeRemoved();
+		void xColumnAboutToBeRemoved(const AbstractAspect*);
+		void yColumnAboutToBeRemoved(const AbstractAspect*);
+		void valuesColumnAboutToBeRemoved(const AbstractAspect*);
+		void xErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
+		void xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
+		void yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
+		void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
