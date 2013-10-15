@@ -287,7 +287,7 @@ else																		\
 #define WRITE_QFONT(font) 													\
 do {																		\
 writer->writeAttribute( "fontFamily", font.family() );						\
-writer->writeAttribute( "fontSize", QString::number(font.pointSize()) );	\
+writer->writeAttribute( "fontSize", QString::number(font.pixelSize()) );	\
 writer->writeAttribute( "fontWeight", QString::number(font.weight()) );		\
 writer->writeAttribute( "fontItalic", QString::number(font.italic()) );		\
 } while(0)
@@ -304,7 +304,7 @@ str = attribs.value("fontSize").toString();									\
 if(str.isEmpty())															\
 	reader->raiseWarning(attributeWarning.arg("'fontSize'"));				\
 else																		\
-	font.setPointSize( str.toInt() );										\
+	font.setPixelSize( str.toInt() );										\
 																			\
 str = attribs.value("fontWeight").toString();								\
 if(str.isEmpty())															\

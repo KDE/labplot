@@ -1016,9 +1016,8 @@ void AxisDock::labelsSuffixChanged(){
 void AxisDock::labelsFontChanged(const QFont& font){
   if (m_initializing)
 	return;
-	
   	QFont labelsFont = font;
-	labelsFont.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	foreach(Axis* axis, m_axesList)
 		axis->setLabelsFont( labelsFont );
 }
@@ -1363,8 +1362,9 @@ void AxisDock::axisLabelsRotationAngleChanged(qreal rotation) {
 }
 void AxisDock::axisLabelsFontChanged(const QFont& font) {
 	m_initializing = true;
+	//we need to set the font size in points for KFontRequester
 	QFont newFont(font);
-	newFont.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	newFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
 	ui.kfrLabelsFont->setFont(newFont);
 	m_initializing = false;
 }
@@ -1493,8 +1493,9 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) m_axis->labelsPosition()) );
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", m_axis->labelsRotationAngle()) );
+	//we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
 	ui.kfrLabelsFont->setFont( group.readEntry("LabelsFont", font) );
 	ui.kcbLabelsFontColor->setColor( group.readEntry("LabelsFontColor", m_axis->labelsColor()) );
 	ui.leLabelsPrefix->setText( group.readEntry("LabelsPrefix", m_axis->labelsPrefix()) );
@@ -1579,9 +1580,7 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
 	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Point));
 	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
-	QFont font =ui.kfrLabelsFont->font();
-	font.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
-	group.writeEntry("LabelsFont", font);
+	group.writeEntry("LabelsFont", ui.kfrLabelsFont->font());
 	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());
 	group.writeEntry("LabelsPrefix", ui.leLabelsPrefix->text());
 	group.writeEntry("LabelsSuffix", ui.leLabelsSuffix->text());

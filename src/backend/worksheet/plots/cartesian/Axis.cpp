@@ -103,7 +103,7 @@ void Axis::init(){
 	d->title->setText(this->name());
 	if ( d->orientation == AxisVertical )
 		d->title->setRotationAngle(270);
-	d->titleOffset = Worksheet::convertToSceneUnits(5, Worksheet::Point); //distance to the axis tick labels
+	d->titleOffset = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
 
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
@@ -127,7 +127,7 @@ void Axis::init(){
 	d->labelsOffset= group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Point ));
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
 	//TODO load font and font size from the config
-	d->labelsFont.setPointSizeF( Worksheet::convertToSceneUnits( 8.0, Worksheet::Point ) );
+	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Point ) );
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
 

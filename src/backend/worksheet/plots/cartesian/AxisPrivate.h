@@ -94,7 +94,6 @@ class AxisPrivate: public QGraphicsItem {
 		int labelsPrecision;
 		bool labelsAutoPrecision;
 		Axis::LabelsPosition labelsPosition;
-		qreal labelsFontSize;
 		qreal labelsRotationAngle;
 		QColor labelsColor;
 		QFont labelsFont;
