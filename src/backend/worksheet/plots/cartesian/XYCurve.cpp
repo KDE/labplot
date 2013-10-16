@@ -157,38 +157,9 @@ QIcon XYCurve::icon() const{
 	return icon;
 }
 
-QStringList XYCurve::lineTypeStrings(){
-  //TODO add i18n-Version
-  return ( QStringList()<<tr("none")<<tr("line")
-								<<tr("horiz. start")<<tr("vert. start")
-								<<tr("horiz. midpoint")<<tr("vert. midpoint")
-								<<tr("2-segments")<<tr("3-segments") 
-								<<tr("cubic spline (natural)")
-								<<tr("cubic spline (periodic)")
-								<<tr("Akima-spline (natural)")
-								<<tr("Akima-spline (periodic)") );
-}
-
-QStringList XYCurve::dropLineTypeStrings(){
-  //TODO add i18n-Version
-  return ( QStringList()<<tr("none")
-			<<tr("drop lines, X")<<tr("drop lines, Y")<<tr("drop lines, XY") );
-}
-
-QStringList XYCurve::valuesTypeStrings(){
-  //TODO add i18n-Version
-  return ( QStringList()<<tr("no values")<<"x"<<"y"<<"x, y"<<"(x, y)"<<tr("custom column") );
-}
-
-QStringList XYCurve::valuesPositionStrings(){
-  //TODO add i18n-Version
-  return ( QStringList()<<tr("above")<<tr("below")<<tr("left")<<tr("right") );
-}
-
 QGraphicsItem *XYCurve::graphicsItem() const{
 	return d_ptr;
 }
-
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetVisible, bool, swapVisible)
 void XYCurve::setVisible(bool on){
@@ -1434,34 +1405,36 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
-  if (!isVisible())
+	Q_UNUSED(option);
+	Q_UNUSED(widget);
+	if (!isVisible())
 	return;
-  
-  qreal opacity=painter->opacity();
-  
-  //draw lines
-  if (lineType != XYCurve::NoLine){
-	painter->setOpacity(lineOpacity);
-	painter->setPen(linePen);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawPath(linePath);
-  }
 
-  //draw drop lines
-  if (dropLineType != XYCurve::NoDropLine){
-	painter->setOpacity(dropLineOpacity);
-	painter->setPen(dropLinePen);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawPath(dropLinePath);
-  }
+	qreal opacity=painter->opacity();
 
-  //draw error bars
-  if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
-	painter->setOpacity(errorBarsOpacity);
-	painter->setPen(errorBarsPen);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawPath(errorBarsPath);
-  }
+	//draw lines
+	if (lineType != XYCurve::NoLine){
+		painter->setOpacity(lineOpacity);
+		painter->setPen(linePen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(linePath);
+	}
+
+	//draw drop lines
+	if (dropLineType != XYCurve::NoDropLine){
+		painter->setOpacity(dropLineOpacity);
+		painter->setPen(dropLinePen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(dropLinePath);
+	}
+
+	//draw error bars
+	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
+		painter->setOpacity(errorBarsOpacity);
+		painter->setPen(errorBarsPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(errorBarsPath);
+	}
 
 	//draw symbols
 	if (symbolsPrototype->id() != "none"){
@@ -1480,12 +1453,12 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 		painter->drawPath(valuesPath);
 	}
 
-  painter->setOpacity(opacity);
+	painter->setOpacity(opacity);
 
-  if (isSelected()){
-	painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
-	painter->drawPath(shape());
-  }
+	if (isSelected()){
+		painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
+		painter->drawPath(shape());
+	}
 }
 
 //##############################################################################

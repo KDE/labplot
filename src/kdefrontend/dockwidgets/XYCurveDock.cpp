@@ -198,8 +198,20 @@ void XYCurveDock::init(){
 
 	m_initializing = true;
 
-  	//Line
-	ui.cbLineType->addItems(XYCurve::lineTypeStrings());
+	//Line
+	ui.cbLineType->addItem(i18n("none"));
+	ui.cbLineType->addItem(i18n("line"));
+	ui.cbLineType->addItem(i18n("horiz. start"));
+	ui.cbLineType->addItem(i18n("vert. start"));
+	ui.cbLineType->addItem(i18n("horiz. midpoint"));
+	ui.cbLineType->addItem(i18n("vert. midpoint"));
+	ui.cbLineType->addItem(i18n("2-segments"));
+	ui.cbLineType->addItem(i18n("3-segments"));
+	ui.cbLineType->addItem(i18n("cubic spline (natural)"));
+	ui.cbLineType->addItem(i18n("cubic spline (periodic)"));
+	ui.cbLineType->addItem(i18n("Akima-spline (natural)"));
+	ui.cbLineType->addItem(i18n("Akima-spline (periodic)"));
+
 	QPainter pa;
 	QPixmap pm( 20, 20 );
 	ui.cbLineType->setIconSize( QSize(20,20) );
@@ -315,12 +327,13 @@ void XYCurveDock::init(){
 	ui.cbLineType->setItemIcon(9, pm);
 	ui.cbLineType->setItemIcon(10, pm);
 	ui.cbLineType->setItemIcon(11, pm);
-	
 
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
-	
+
 	//Drop lines
-	ui.cbDropLineType->addItems(XYCurve::dropLineTypeStrings());
+	ui.cbDropLineType->addItem(i18n("drop lines, X"));
+	ui.cbDropLineType->addItem(i18n("drop lines, Y"));
+	ui.cbDropLineType->addItem(i18n("drop lines, XY"));
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
 	
 	//Symbols
@@ -330,8 +343,17 @@ void XYCurveDock::init(){
 	m_initializing = false;
 	
 	//Values
-	ui.cbValuesType->addItems(XYCurve::valuesTypeStrings());
-	ui.cbValuesPosition->addItems(XYCurve::valuesPositionStrings());
+	ui.cbValuesType->addItem(i18n("no values"));
+	ui.cbValuesType->addItem("x");
+	ui.cbValuesType->addItem("y");
+	ui.cbValuesType->addItem("x, y");
+	ui.cbValuesType->addItem("(x, y)");
+	ui.cbValuesType->addItem(i18n("custom column"));
+	
+	ui.cbValuesPosition->addItem(i18n("above"));
+	ui.cbValuesPosition->addItem(i18n("below"));
+	ui.cbValuesPosition->addItem(i18n("left"));
+	ui.cbValuesPosition->addItem(i18n("right"));
 	
 	//Error-bars
 	pm.fill(Qt::transparent);

@@ -145,7 +145,6 @@ void CartesianPlotLegend::initActions(){
 }
 
 QMenu* CartesianPlotLegend::createContextMenu(){
-	Q_D(const CartesianPlotLegend);
 	QMenu *menu = AbstractWorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	

@@ -31,8 +31,6 @@
 #ifndef XYCURVEDOCK_H
 #define XYCURVEDOCK_H
 
-#include <QList>
-
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "ui_xycurvedock.h"

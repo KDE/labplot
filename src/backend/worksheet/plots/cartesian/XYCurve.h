@@ -50,11 +50,6 @@ class XYCurve: public AbstractWorksheetElement {
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
 		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
 
-		static QStringList lineTypeStrings();
-		static QStringList dropLineTypeStrings();
-		static QStringList valuesTypeStrings();
-		static QStringList valuesPositionStrings();
-		
 		XYCurve(const QString &name);
 		virtual ~XYCurve();
 
