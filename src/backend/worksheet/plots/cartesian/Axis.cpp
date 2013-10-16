@@ -40,16 +40,11 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
-#include <QFontMetricsF>
-
-#include <math.h>
-#include "kdefrontend/GuiTools.h"
-
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+#include "kdefrontend/GuiTools.h"
 #include <KConfigGroup>
 #include <KIcon>
 #include <KLocale>
-#include <KMenu>
 #endif
 
 /**
@@ -73,20 +68,18 @@ Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate 
 void Axis::init(){
 	Q_D(Axis);
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	// only settings general to all axes
 	KConfig config;
 	KConfigGroup group = config.group( "Axis" );
-	//TODO: add missing settings (see AxisDock::load())
 
 	d->autoScale = true;
 	d->position = Axis::AxisCustom;
-	d->scale = (Axis::AxisScale) group.readEntry("Scale", (int) Axis::ScaleLinear);
 	d->offset = group.readEntry("PositionOffset", 0);
+	d->scale = (Axis::AxisScale) group.readEntry("Scale", (int) Axis::ScaleLinear);
+	d->autoScale = group.readEntry("AutoScale", true);
 	d->start = group.readEntry("Start", 0);
 	d->end = group.readEntry("End", 10);
-	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
+	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 	
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
@@ -99,16 +92,17 @@ void Axis::init(){
 	d->title->setHidden(true);
 	d->title->graphicsItem()->setParentItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-	// TODO: Crash (see bug  #3583420)
 	d->title->setText(this->name());
-	if ( d->orientation == AxisVertical )
-		d->title->setRotationAngle(270);
+	if (d->orientation == AxisVertical) d->title->setRotationAngle(270);
 	d->titleOffset = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
 
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
 	d->majorTicksIncrement = group.readEntry("MajorTicksIncrement", 1.0);
+	d->majorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine) );
+	d->majorTicksPen.setColor( group.readEntry("MajorTicksColor", QColor(Qt::black) ) );
+	d->majorTicksPen.setWidthF( group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
 	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Point));
 	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
 	
@@ -116,6 +110,9 @@ void Axis::init(){
 	d->minorTicksType = (Axis::TicksType) group.readEntry("MinorTicksType", (int) Axis::TicksTotalNumber);
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
 	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.5);
+	d->minorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine) );
+	d->minorTicksPen.setColor( group.readEntry("MinorTicksColor", QColor(Qt::black) ) );
+	d->minorTicksPen.setWidthF( group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
 	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Point));
 	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
 	
@@ -125,24 +122,25 @@ void Axis::init(){
 	d->labelsPrecision = group.readEntry("LabelsPrecision", 1);
 	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
 	d->labelsOffset= group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Point ));
-	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
-	//TODO load font and font size from the config
-	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Point ) );
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
+	d->labelsFont = group.readEntry("LabelsFont", QFont());
+	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Point ) );
+	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
+	d->labelsPrefix =  group.readEntry("LabelsPrefix", "" );
+	d->labelsSuffix =  group.readEntry("LabelsSuffix", "" );
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
 
 	//major grid
 	d->majorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MajorGridStyle", (int) Qt::NoPen) );
-	d->majorGridPen.setColor(Qt::gray);//TODO load from config
+	d->majorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)) );
 	d->majorGridPen.setWidthF( group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->majorGridOpacity = group.readEntry("MajorGridOpacity", 1.0);
 
 	//minor grid
 	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::NoPen) );
-	d->minorGridPen.setColor(Qt::gray);//TODO load from config
+	d->minorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)) );
 	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
-#endif
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -1234,7 +1232,6 @@ float AxisPrivate::round(float value, int precision){
 	recalculates the postion of the tick labels.
 	Called when the geometry related properties (position, offset, font size, suffix, prefix) of the labels are changed.
  */
-//TODO optimize
 void AxisPrivate::retransformTickLabels(){
 	tickLabelPoints.clear();
 	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::NoLabels){
