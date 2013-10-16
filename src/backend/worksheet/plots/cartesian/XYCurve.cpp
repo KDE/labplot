@@ -107,7 +107,7 @@ void XYCurve::init(){
 	d->valuesDistance =  Worksheet::convertToSceneUnits( 5, Worksheet::Point );
 	d->valuesRotationAngle = 0;
 	d->valuesOpacity = 1.0;
-	d->valuesFont.setPointSizeF( Worksheet::convertToSceneUnits( 6, Worksheet::Point ) );
+	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 6, Worksheet::Point ) );
 
 	d->xErrorType = XYCurve::NoError;
 	d->xErrorPlusColumn = NULL;
@@ -681,9 +681,9 @@ void XYCurve::visibilityChanged(){
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : q(owner), symbolsFactory(0) {
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : symbolsFactory(0), q(owner) {
 	foreach(QObject *plugin, PluginManager::plugins()) {
-		CurveSymbolFactory* factory = qobject_cast<CurveSymbolFactory*>(plugin);	
+		CurveSymbolFactory* factory = qobject_cast<CurveSymbolFactory*>(plugin);
 		if (factory)
 			symbolsFactory = factory;
 	}
@@ -1370,7 +1370,6 @@ void XYCurvePrivate::updateErrorBars(){
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	boundingRectangle = QRectF();
-	boundingRectangle = boundingRectangle.normalized();
 	curveShape = QPainterPath();
 	if (lineType != XYCurve::NoLine){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(linePath, linePen));
@@ -1477,7 +1476,7 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 		painter->setOpacity(valuesOpacity);
 		painter->setPen(valuesColor);
 		painter->setBrush(Qt::NoBrush);
-// 		painter->setBrush(Qt::SolidPattern);
+		painter->setBrush(Qt::SolidPattern);
 		painter->drawPath(valuesPath);
 	}
 

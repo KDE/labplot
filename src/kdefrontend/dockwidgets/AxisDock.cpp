@@ -1007,16 +1007,17 @@ void AxisDock::labelsPrefixChanged(){
 void AxisDock::labelsSuffixChanged(){
   if (m_initializing)
 	return;
-		
+
   QString suffix = ui.leLabelsSuffix->text();
   foreach(Axis* axis, m_axesList)
 	axis->setLabelsSuffix(suffix);
 }
 
 void AxisDock::labelsFontChanged(const QFont& font){
-  if (m_initializing)
-	return;
-  	QFont labelsFont = font;
+	if (m_initializing)
+		return;
+
+	QFont labelsFont = font;
 	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	foreach(Axis* axis, m_axesList)
 		axis->setLabelsFont( labelsFont );

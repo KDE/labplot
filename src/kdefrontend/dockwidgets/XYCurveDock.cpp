@@ -1162,21 +1162,21 @@ void XYCurveDock::valuesSuffixChanged(){
 }
 
 void XYCurveDock::valuesFontChanged(const QFont& font){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 	
 	QFont valuesFont = font;
-	valuesFont.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setValuesFont(valuesFont);
 }
 
 void XYCurveDock::valuesColorChanged(const QColor& color){
-  if (m_initializing)
-	return;
-  
-  foreach(XYCurve* curve, m_curvesList)
-	curve->setValuesColor(color);
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setValuesColor(color);
 }
 
 //"Error bars"-Tab
@@ -1548,7 +1548,7 @@ void XYCurveDock::curveValuesSuffixChanged(QString suffix) {
 }
 void XYCurveDock::curveValuesFontChanged(QFont font) {
 	m_initializing = true;
-	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
   	ui.kfrValuesFont->setFont(font);
 	m_initializing = false;
 }
@@ -1667,7 +1667,7 @@ void XYCurveDock::loadConfig(KConfig& config){
   	ui.leValuesPrefix->setText( group.readEntry("ValuesPrefix", m_curve->valuesPrefix()) );
   	ui.leValuesSuffix->setText( group.readEntry("ValuesSuffix", m_curve->valuesSuffix()) );
 	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF( Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Point) );
+	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Point)) );
   	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
   	ui.kcbValuesColor->setColor( group.readEntry("ValuesColor", m_curve->valuesColor()) );
 
@@ -1725,9 +1725,7 @@ void XYCurveDock::saveConfig(KConfig& config){
 	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100);
 	group.writeEntry("ValuesPrefix", ui.leValuesPrefix->text());
 	group.writeEntry("ValuesSuffix", ui.leValuesSuffix->text());
-	QFont valuesFont =ui.kfrValuesFont->font();
-	valuesFont.setPointSizeF( Worksheet::convertToSceneUnits(valuesFont.pointSizeF(), Worksheet::Point) );
-	group.writeEntry("ValuesFont", valuesFont);
+	group.writeEntry("ValuesFont", ui.kfrValuesFont->font());
 	group.writeEntry("ValuesColor", ui.kcbValuesColor->color());
 
 	//TODO: Area Filling,
