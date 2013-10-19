@@ -46,6 +46,7 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QGraphicsSceneWheelEvent>
+#include <QGraphicsSceneMouseEvent>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -71,9 +72,13 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		CartesianPlot * const q;
 		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+		virtual void mouseMoveEvent (QGraphicsSceneMouseEvent*);
+		
 		virtual void retransform();
 		void retransformScales();
 		float round(float value, int precision);
+		void checkXRange();
+		void checkYRange();
 
 		float xMin, xMax, yMin, yMax;
 		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
@@ -146,6 +151,11 @@ void CartesianPlot::init(){
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)),
 			this, SLOT(childRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)));
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);	
 }
 
 /*!
@@ -945,24 +955,21 @@ void CartesianPlotPrivate::retransformScales(){
 																	itemRect.y()+itemRect.height()-verticalPadding,
 																	itemRect.y()+verticalPadding, 
 																	yMin, yMax);
-	}else if (yScale == CartesianPlot::ScaleLog10){
-		if (yMin<=0) yMin=0.1;
+	}else if (yScale == CartesianPlot::ScaleLog10 || yScale == CartesianPlot::ScaleLog2 || yScale == CartesianPlot::ScaleLn){
+		float base;
+		if (yScale == CartesianPlot::ScaleLog10)
+			base = 10.0;
+		else if (yScale == CartesianPlot::ScaleLog2)
+			base = 2.0;
+		else
+			base = 2.71828;
+		
+		checkXRange();
+		checkYRange();
 		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
 																	itemRect.y()+itemRect.height()-verticalPadding,
 																	itemRect.y()+verticalPadding, 
-																	yMin, yMax, 10.0);
-	}else if (yScale == CartesianPlot::ScaleLog2){
-		if (yMin<=0) yMin=0.1;
-		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																	itemRect.y()+itemRect.height()-verticalPadding,
-																	itemRect.y()+verticalPadding,
-																	yMin, yMax, 2.0);
-	}else{
-		if (yMin<=0) yMin=0.1;
-		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																	itemRect.y()+itemRect.height()-verticalPadding,
-																	itemRect.y()+verticalPadding,
-																	yMin, yMax, 2.71828);
+																	yMin, yMax, base);
 	}
 	
 	cSystem ->setYScales(scales);
@@ -1029,6 +1036,36 @@ void CartesianPlotPrivate::retransformScales(){
 	q->retransform();
 }
 
+/*!
+ * don't allow any negative values on for the x range when log or sqrt scalings are used
+ */
+void CartesianPlotPrivate::checkXRange() {
+	double min = 0.01;
+
+	if (xMin <= 0.0) {
+		(min < xMax*min) ? xMin = min : xMin = xMax*min;
+		emit q->xMinChanged(xMin);
+	}else if (xMax <= 0.0) {
+		(-min > xMin*min) ? xMax = -min : xMax = xMin*min;
+		emit q->xMaxChanged(xMax);
+	}
+}
+
+/*!
+ * don't allow any negative values on for the y range when log or sqrt scalings are used
+ */
+void CartesianPlotPrivate::checkYRange() {
+	double min = 0.01;
+
+	if (yMin <= 0.0) {
+		(min < yMax*min) ? yMin = min : yMin = yMax*min;
+		emit q->yMinChanged(yMin);
+	}else if (yMax <= 0.0) {
+		(-min > yMin*min) ? yMax = -min : yMax = yMin*min;
+		emit q->yMaxChanged(yMax);
+	}
+}
+
 float CartesianPlotPrivate::round(float value, int precision){
 	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
 }
@@ -1053,6 +1090,19 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 		emit q->rectChanged(newRect);
      }
 	return QGraphicsItem::itemChange(change, value);
+}
+
+void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
+	CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
+	QPointF pos = event->pos();
+	float x = pos.x() + horizontalPadding;
+	float y = pos.y() + verticalPadding;
+	qDebug()<<"##################";
+	qDebug()<<QPointF(x,y);
+	qDebug()<<cSystem->mapSceneToLogical(QPointF(x,y));
+
+	QGraphicsItem::mouseMoveEvent(event) ;
 }
 
 void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
@@ -1321,7 +1371,7 @@ bool CartesianPlot::load(XmlStreamReader* reader){
             }else{
                 addChild(m_legend);
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
-            }            
+            }
         }else{ // unknown element
             reader->raiseWarning(tr("unknown cartesianPlot element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
@@ -1333,6 +1383,6 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 		m_title->setHidden(true);
 		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
 	}
-	
+
     return true;
 }
