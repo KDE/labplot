@@ -874,10 +874,11 @@ Worksheet* MainWin::activeWorksheet() const{
 }
 
 /*!
-	called if there were changes on the the projects.
+	called if there were changes in the project.
 	Adds "changed" to the window caption and activates the save-Action.
 */
 void MainWin::projectChanged(){
+	qDebug()<< "MainWin::projectChanged()";
 	setCaption(m_project->name() + "    [" + i18n("Changed") + "]" );
 	m_saveAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
@@ -1163,8 +1164,17 @@ void MainWin::historyDialog(){
 
 	HistoryDialog* dialog = new HistoryDialog(this, m_project->undoStack(), m_undoViewEmptyLabel);
 	int index = m_project->undoStack()->index();
-	if (dialog->exec() != QDialog::Accepted)
-		m_project->undoStack()->setIndex(index);
+	if (dialog->exec() != QDialog::Accepted) {
+		if (m_project->undoStack()->count() != 0)
+			m_project->undoStack()->setIndex(index);
+	}
+
+	//disable undo/redo-actions if the history was cleared
+	//(in both cases, when accepted or rejected in the dialog)
+	if (m_project->undoStack()->count() == 0) {
+		m_undoAction->setEnabled(false);
+		m_redoAction->setEnabled(false);
+	}
 }
 
 /*!

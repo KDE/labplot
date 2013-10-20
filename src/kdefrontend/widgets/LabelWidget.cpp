@@ -563,7 +563,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 		return;
 
 	m_initializing = true;
-	
+
 	//Text
 	//TODO font, color etc.
 	ui.chbTeX->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
@@ -571,15 +571,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 		ui.kcbTextColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
 	// Geometry
-	qDebug()<<"m_label="<<m_label<<endl;
-	//qDebug()<<"label->position = "<<m_label->position().horizontalPosition<<" "<<m_label->position().verticalPosition <<endl;
-	qDebug()<<"label->position()->horizontalPosition = "<<m_label->position().horizontalPosition<<endl;
-	qDebug()<<"ui.cbPositionX = "<<ui.cbPositionX <<endl;
-	qDebug()<<"ui.cbPositionX->count = "<<ui.cbPositionX->count() <<endl;
-	qDebug()<<"ui.cbPositionX->currentIndex = "<<ui.cbPositionX->currentIndex() <<endl;
-	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", 0 ) );
-	//ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
-	qDebug()<<"After CRASH"<<endl;
+	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),Worksheet::Centimeter) );
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
@@ -590,7 +582,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
 	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
 	ui.sbRotation->setValue( group.readEntry("Rotation", m_label->rotationAngle()) );
-	
+
 	m_initializing = false;
 }
 
