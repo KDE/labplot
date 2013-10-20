@@ -185,9 +185,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 // 			filter.setFilterName( ui.cbFilter->currentText() );
 // 		}
 // 		source->setFilter(filter);
-    }else{
-	  
-	}
+    }
 	return 0;
 }
 

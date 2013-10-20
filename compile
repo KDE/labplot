@@ -13,11 +13,11 @@ fi
 cd build
 
 
-#cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release  -DCMAKE_CXX_FLAGS="-fstack-protector -fno-exceptions" && make -j 2
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release  -DCMAKE_CXX_FLAGS="-fstack-protector -fno-exceptions" && make -j 2
 
 # or
 
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" && make -j 2
+# cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" && make -j 2
 
 #some other usefull flags, producing a lot of "noise" currently:
 # -Weffc++ -Wshadow -Wconversion -Wfloat-equal -Wswitch-default -Wswitch-enum

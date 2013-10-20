@@ -274,9 +274,8 @@ AbstractWorksheetElement* Worksheet::aspectFromGraphicsItem(const AbstractWorksh
 	if ( aspect->graphicsItem() == item ){
 		return const_cast<AbstractWorksheetElement*>(aspect);
 	}else{
-		AbstractWorksheetElement* a = 0;
 		foreach( const AbstractWorksheetElement* child, aspect->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden) ){
-			a = this->aspectFromGraphicsItem(child, item);
+			AbstractWorksheetElement* a = this->aspectFromGraphicsItem(child, item);
 			if (a)
 				return a;
 		}

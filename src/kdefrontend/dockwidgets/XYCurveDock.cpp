@@ -86,9 +86,9 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	gridLayout->addWidget(cbYErrorMinusColumn, 8, 2, 1, 1);
 	
 	//adjust layouts in the tabs
-	QGridLayout* layout;
+
 	for (int i=0; i<ui.tabWidget->count(); ++i){
-	  layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	  QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 	  if (!layout)
 		continue;
 	  

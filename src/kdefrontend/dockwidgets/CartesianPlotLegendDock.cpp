@@ -62,9 +62,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
     ui.kleBackgroundFileName->setCompletionObject(comp);
 	
 	//adjust layouts in the tabs
-	QGridLayout* layout;
 	for (int i=0; i<ui.tabWidget->count(); ++i){
-		layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		QGridLayout* layout = static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 		continue;
 		

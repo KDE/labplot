@@ -88,10 +88,9 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleBackgroundFileName->setCompletionObject(comp);
 
-	  //adjust layouts in the tabs
-	QGridLayout* layout;
+	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
-		layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		QGridLayout* layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -146,7 +145,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	m_worksheetList = list;
 	m_worksheet = list.first();
   
-	//if there are more then one worksheets in the list, disable the name and comment field in the tab "general"
+	//if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size()==1){
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -172,7 +171,6 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
 	connect(m_worksheet, SIGNAL(pageRectChanged(const QRectF&)),this, SLOT(worksheetPageRectChanged(const QRectF&)));
-
 
 	connect(m_worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
 	connect(m_worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));

@@ -190,7 +190,7 @@ void MainWin::initActions() {
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
 	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
-	KToggleFullScreenAction* fullScreenAction = KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 
 	//New Folder/Spreadsheet/Worksheet/Datasources
 	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("Spreadsheet"),this);

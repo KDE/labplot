@@ -119,13 +119,12 @@ void TreeViewComboBox::showPopup(){
 */
 void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index){
 	int rows = index.model()->rowCount(index);
-	AbstractAspect *aspect;
 	QModelIndex currentChild;
 	bool isTopLevel;
 	for (int i=0; i<rows; i++) {
 		currentChild = index.child(i, 0);
 		showTopLevelOnly(currentChild);
-		aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
+		AbstractAspect* aspect =  static_cast<AbstractAspect*>(currentChild.internalPointer());
 		isTopLevel = false;
 		foreach(const char * classString, m_topLevelClasses)
 			if (aspect->inherits(classString)) {

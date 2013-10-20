@@ -266,7 +266,6 @@ void Axis::retransform() {
 }
 
 void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
-	return;
 	Q_D(Axis);
 
 	QPen pen = d->linePen;

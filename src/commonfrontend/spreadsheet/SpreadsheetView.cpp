@@ -1006,8 +1006,8 @@ void SpreadsheetView::sortSpreadsheet(){
  */
 void SpreadsheetView::insertEmptyColumns(){
 	int first = firstSelectedColumn();
-	int last = lastSelectedColumn();
 	if ( first < 0 ) return;
+	int last = lastSelectedColumn();
 	int count, current = first;
 
 	WAIT_CURSOR;
@@ -1169,10 +1169,9 @@ void SpreadsheetView::statisticsOnSelectedRows(){
 */
 void SpreadsheetView::insertEmptyRows(){
 	int first = firstSelectedRow();
+	if ( first < 0 ) return;
 	int last = lastSelectedRow();
 	int count, current = first;
-
-	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(QObject::tr("%1: insert empty rows(s)").arg(m_spreadsheet->name()));

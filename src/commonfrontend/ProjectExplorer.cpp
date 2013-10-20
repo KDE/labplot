@@ -208,9 +208,8 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
 	showColumnsSignalMapper = new QSignalMapper(this);
-	QAction* showColumnAction;
 	for (int i=0; i<m_treeView->model()->columnCount(); i++){
-	  showColumnAction =  new QAction(m_treeView->model()->headerData(i, Qt::Horizontal).toString(), this);
+	  QAction* showColumnAction =  new QAction(m_treeView->model()->headerData(i, Qt::Horizontal).toString(), this);
 	  showColumnAction->setCheckable(true);
 	  showColumnAction->setChecked(true);
 	  list_showColumnActions.append(showColumnAction);
@@ -603,7 +602,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			expandedItem = false;
 			selectedItem = false;
 			viewItem = false;
-			currentItem = true;			
+			currentItem = true;
 		} else if (reader->name() == "row") {
 			attribs = reader->attributes();
 			row = reader->readElementText().toInt();
@@ -619,7 +618,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				selected.push_back(index);
 			} else if (currentItem) {
 				currentIndex = index;
-			} else {
+			} else if (viewItem) {
 				AbstractPart* part = dynamic_cast<AbstractPart*>(aspects.at(row));
 				if (!part)
 					continue; //TODO: add error/warning message here?
