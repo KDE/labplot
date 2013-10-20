@@ -8,7 +8,7 @@ include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DI
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 include_directories(${KDE4_INCLUDES})
 add_definitions(${KDE4_DEFINITIONS})
-add_definitions (-DLVERSION='\"2.0.0.alpha3\"')
+add_definitions (-DLVERSION='\"2.0.0.beta1\"')
 # needed for qt_plugin_instance_scidavis_standardcurvesymbolfactory()
 add_definitions(-D QT_STATICPLUGIN )
 add_definitions(-DSUPPRESS_SCRIPTING_INIT)
