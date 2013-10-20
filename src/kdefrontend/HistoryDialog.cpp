@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : history dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2012 by Alexander Semke
+    Copyright            : (C) 2012-2013 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
 
  ***************************************************************************/
@@ -38,7 +38,6 @@
 
 	\ingroup kdefrontend
  */
- 
 HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, QString& emptyLabel) : KDialog(parent){
 	m_undoStack = stack;
 	QUndoView* undoView = new QUndoView(stack, this);
@@ -48,16 +47,20 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, QString& emptyL
 	undoView->setWhatsThis(i18n("List of all performed steps/actions.")+"\n"
 			 + i18n("Select an item in the list to navigate to the corresponding step."));
 	setMainWidget(undoView);
-	
+
 	setWindowIcon( KIcon("view-history") );
 	setWindowTitle(i18n("Undo/Redo History"));
-	showButtonSeparator(true)	;
+	showButtonSeparator(true);
 
-	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-	setButtonText(KDialog::User1,i18n("Clear"));
-	setButtonIcon(KDialog::User1,KIcon("edit-clear"));
-	setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
-	connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
+	if (stack->count()) {
+		setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+		setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
+		setButtonIcon(KDialog::User1, KIcon("edit-clear"));
+		setButtonText(KDialog::User1, i18n("Clear"));
+		connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
+	}else{
+		setButtons( KDialog::Ok | KDialog::Cancel );
+	}
 }
 
 void HistoryDialog::clearUndoStack(){
@@ -67,4 +70,3 @@ void HistoryDialog::clearUndoStack(){
 								  ) == KMessageBox::Yes)
 		m_undoStack->clear();
 }
-
