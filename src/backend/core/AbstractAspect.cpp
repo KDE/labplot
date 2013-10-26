@@ -286,48 +286,40 @@ bool AbstractAspect::readCommentElement(XmlStreamReader * reader){
 }
 
 /**
- * \brief Save name, creation time and caption spec to XML
+ * \brief Save name and creation time to XML
  */
-void AbstractAspect::writeBasicAttributes(QXmlStreamWriter * writer) const
-{
+void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("creation_time" , creationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
-	writer->writeAttribute("caption_spec", captionSpec());
 	writer->writeAttribute("name", name());
 }
 
 /**
- * \brief Load name, creation time and caption spec from XML
+ * \brief Load name and creation time from XML
  *
  * \return false on error
  */
-bool AbstractAspect::readBasicAttributes(XmlStreamReader * reader)
-{
-	QString prefix(tr("XML read error: ","prefix for XML error messages"));
-	QString postfix(tr(" (non-critical)", "postfix for XML error messages"));
-
+bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader){
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString str;
 
-	// read name
-	str = attribs.value(reader->namespaceUri().toString(), "name").toString();
+	// name
+	QString str = attribs.value("name").toString();
 	if(str.isEmpty())
-	{
-		reader->raiseWarning(prefix+tr("aspect name missing or empty")+postfix);
-	}
+		reader->raiseWarning(tr("Attribute 'name' is missing or empty."));
+
 	setName(str);
-	// read creation time
-	str = attribs.value(reader->namespaceUri().toString(), "creation_time").toString();
-	QDateTime creation_time = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
-	if(str.isEmpty() || !creation_time.isValid())
-	{
+
+	// creation time
+	str = attribs.value("creation_time").toString();
+	if(str.isEmpty()) {
 		reader->raiseWarning(tr("Invalid creation time for '%1'. Using current time.").arg(name()));
 		setCreationTime(QDateTime::currentDateTime());
+	} else {
+		QDateTime creation_time = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
+		if (creation_time.isValid())
+			setCreationTime(creation_time);
+		else
+			setCreationTime(QDateTime::currentDateTime());
 	}
-	else
-		setCreationTime(creation_time);
-	// read caption spec
-	str = attribs.value(reader->namespaceUri().toString(), "caption_spec").toString();
-	setCaptionSpec(str);
 
 	return true;
 }
@@ -589,38 +581,6 @@ void AbstractAspect::setComment(const QString &value)
 }
 
 /**
- * \brief Return the specification string used for constructing the caption().
- *
- * See setCaptionSpec() for format.
- */
-QString AbstractAspect::captionSpec() const
-{
-	return m_aspect_private->m_caption_spec;
-}
-
-/**
- * \brief Set the specification string used for constructing the caption().
- *
- * The caption is constructed by substituting some magic tokens in the specification:
- *
- * - \%n - name()
- * - \%c - comment()
- * - \%t - creationTime()
- *
- * Additionally, you can use the construct %C{&lt;text&gt;}. &lt;text&gt; is only shown in the caption
- * if comment() is not empty (name and creation time should never be empty).
- *
- * The default caption specification is "%n%C{ - }%c".
- */
-void AbstractAspect::setCaptionSpec(const QString &value)
-{
-	if (value == m_aspect_private->m_caption_spec) return;
-	exec(new PropertyChangeCommand<QString>(tr("%1: change caption").arg(m_aspect_private->m_name),
-				&m_aspect_private->m_caption_spec, value),
-			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
-}
-
-/**
  * \brief Set the creation time
  *
  * The creation time will automatically be set when the aspect object
@@ -639,10 +599,10 @@ QDateTime AbstractAspect::creationTime() const
 	return m_aspect_private->m_creation_time;
 }
 
-QString AbstractAspect::caption() const
-{
-	return m_aspect_private->caption();
-}
+// QString AbstractAspect::caption() const
+// {
+// 	return m_aspect_private->caption();
+// }
 
 bool AbstractAspect::hidden() const
 {

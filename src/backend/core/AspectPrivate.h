@@ -30,31 +30,30 @@
 #ifndef ASPECT_PRIVATE_H
 #define ASPECT_PRIVATE_H
 
-#include "AbstractAspect.h"
-
-#include <QString>
 #include <QDateTime>
 #include <QList>
 
+class AbstractAspect;
+
 class AbstractAspect::Private {
 	public:
-		Private(AbstractAspect * owner, const QString &name);
+		Private(AbstractAspect* owner, const QString& name);
 		~Private();
 
-		void insertChild(int index, AbstractAspect* child);
-		int indexOfChild(const AbstractAspect *child) const;
-		int removeChild(AbstractAspect* child);
+		void insertChild(int index, AbstractAspect*);
+		int indexOfChild(const AbstractAspect*) const;
+		int removeChild(AbstractAspect*);
 
-		QString caption() const;
-		QString uniqueNameFor(const QString &current_name) const;
+		QString uniqueNameFor(const QString&) const;
 
 	public:
 		QList<AbstractAspect*> m_children;
-		QString m_name, m_comment, m_caption_spec;
+		QString m_name;
+		QString m_comment;
 		QDateTime m_creation_time;
 		bool m_hidden;
-		AbstractAspect * m_owner;
-		AbstractAspect * m_parent;
+		AbstractAspect* m_owner;
+		AbstractAspect* m_parent;
 
 	private:
 		static int indexOfMatchingBrace(const QString &str, int start);

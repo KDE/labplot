@@ -321,7 +321,6 @@ void Spreadsheet::copy(Spreadsheet * other)
 		new_col->setWidth(src_col->width());
 		addChild(new_col);
 	}
-	setCaptionSpec(other->captionSpec());
 	setComment(other->comment());
 
 	endMacro();

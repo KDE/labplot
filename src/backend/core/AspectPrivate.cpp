@@ -37,7 +37,7 @@
  */
 
 AbstractAspect::Private::Private(AbstractAspect * owner, const QString& name)
-	: m_name(name.isEmpty() ? "1" : name),  m_caption_spec("%n%C{ - }%c"), m_hidden(false), m_owner(owner), m_parent(0)
+	: m_name(name.isEmpty() ? "1" : name), m_hidden(false), m_owner(owner), m_parent(0)
 {
 	m_creation_time = QDateTime::currentDateTime();
 }
@@ -90,36 +90,6 @@ int AbstractAspect::Private::removeChild(AbstractAspect* child)
 	QObject::disconnect(child, 0, m_owner, 0);
 	child->m_aspect_private->m_parent = 0;
 	return index;
-}
-
-int AbstractAspect::Private::indexOfMatchingBrace(const QString &str, int start)
-{
-	int result = str.indexOf('}', start);
-	if (result < 0)
-		result = start;
-	return result;
-}
-
-QString AbstractAspect::Private::caption() const
-{
-	QString result = m_caption_spec;
-	QRegExp magic("%(.)");
-	for(int pos=magic.indexIn(result, 0); pos >= 0; pos=magic.indexIn(result, pos)) {
-		QString replacement;
-		int length=0;
-		switch(magic.cap(1).at(0).toAscii()) {
-			case '%': replacement = "%"; length=2; break;
-			case 'n': replacement = m_name; length=2; break;
-			case 'c': replacement = m_comment; length=2; break;
-			case 't': replacement = m_creation_time.toString(); length=2; break;
-			case 'C': length = indexOfMatchingBrace(result, pos) - pos + 1;
-					replacement = m_comment.isEmpty() ? "" : result.mid(pos+3, length-4);
-				 	break;
-		}
-		result.replace(pos, length, replacement);
-		pos += replacement.size();
-	}
-	return result;
 }
 
 QString AbstractAspect::Private::uniqueNameFor(const QString &current_name) const

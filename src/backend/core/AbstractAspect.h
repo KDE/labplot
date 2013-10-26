@@ -148,9 +148,7 @@ class AbstractAspect : public QObject {
 
 		QString name() const;
 		QString comment() const;
-		QString captionSpec() const;
 		QDateTime creationTime() const;
-		QString caption() const;
 		bool hidden() const;
 
 		//undo/redo related functions
@@ -184,7 +182,6 @@ class AbstractAspect : public QObject {
 	public slots:
 		void setName(const QString&);
 		void setComment(const QString&);
-		void setCaptionSpec(const QString&);
 		void setHidden(bool);
 		virtual void remove() { if(parentAspect()) parentAspect()->removeChild(this); }
 		QString uniqueNameFor(const QString&) const;

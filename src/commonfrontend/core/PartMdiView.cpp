@@ -67,7 +67,7 @@ void PartMdiView::handleAspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (aspect != m_part)
 		return;
 
-	setWindowTitle(m_part->caption());
+	setWindowTitle(m_part->name());
 	update();
 }
 
