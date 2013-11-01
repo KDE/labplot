@@ -85,9 +85,9 @@
     </widget>
    </item>
    <item row="4" column="0" colspan="3">
-    <widget class="QCheckBox" name="chbEmptyLines">
+    <widget class="QCheckBox" name="chbSkipEmptyParts">
      <property name="text">
-      <string>Allow empty lines</string>
+      <string>Skip empty parts</string>
      </property>
     </widget>
    </item>

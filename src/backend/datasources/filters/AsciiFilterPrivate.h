@@ -47,7 +47,7 @@ class AsciiFilterPrivate {
     bool autoModeEnabled;
     bool headerEnabled;
     QString vectorNames;
-    bool emptyLinesEnabled;
+    bool skipEmptyParts;
     bool simplifyWhitespacesEnabled;
     bool transposed;
 

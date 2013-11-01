@@ -70,8 +70,8 @@ class AsciiFilter : public AbstractFileFilter{
 	void setVectorNames(const QString);
 	QString vectorNames() const;
 
-	void setEmptyLinesEnabled(const bool);
-	bool emptyLinesEnabled() const;
+	void setSkipEmptyParts(const bool);
+	bool skipEmptyParts() const;
 
 	void setSimplifyWhitespacesEnabled(const bool);
 	bool simplifyWhitespacesEnabled() const;

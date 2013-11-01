@@ -100,7 +100,6 @@ QStringList AsciiFilter::separatorCharacters(){
 				  <<",SPACE"<<";SPACE"<<":SPACE");
 }
 
-
 /*!
 returns the list of all predefined comment characters.
 */
@@ -199,12 +198,12 @@ QString AsciiFilter::vectorNames() const{
 	return d->vectorNames;
 }
 
-void AsciiFilter::setEmptyLinesEnabled(bool b){
-  d->emptyLinesEnabled=b;
+void AsciiFilter::setSkipEmptyParts(bool b){
+  d->skipEmptyParts=b;
 }
 
-bool AsciiFilter::emptyLinesEnabled() const{
-  return d->emptyLinesEnabled;
+bool AsciiFilter::skipEmptyParts() const{
+  return d->skipEmptyParts;
 }
 
 void AsciiFilter::setSimplifyWhitespacesEnabled(bool b){
@@ -255,7 +254,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
   separatingCharacter("auto"),
   autoModeEnabled(true),
   headerEnabled(true),
-  emptyLinesEnabled(true),
+  skipEmptyParts(false),
   simplifyWhitespacesEnabled(true),
   transposed(false),
   startRow(0),
@@ -287,7 +286,6 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	QTextStream in(&file);
 
 
-	
 	//TODO implement 
 	// if (transposed)
 	//...
@@ -315,13 +313,13 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		line = line.simplified();
 
 	if( separatingCharacter == "auto" ){
-	  lineStringList = line.split( QRegExp("\\s+"), (QString::SplitBehavior)emptyLinesEnabled );
+	  lineStringList = line.split( QRegExp("\\s+"), QString::SplitBehavior(skipEmptyParts) );
     }else{
 	  //TODO: doesn't work...
-	  separatingCharacter.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
-	  separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+	  separatingCharacter = separatingCharacter.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
+	  separatingCharacter = separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
 // 	  qDebug()<<"separator"<<separatingCharacter;
-	  lineStringList = line.split( separatingCharacter, (QString::SplitBehavior)emptyLinesEnabled );
+	  lineStringList = line.split( separatingCharacter, QString::SplitBehavior(skipEmptyParts) );
     }
 
 	if (endColumn == -1)
@@ -438,7 +436,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			if (n<lineStringList.size())
 				column->setValueAt(0, lineStringList.at(n).toDouble());
 			else
-				column->setValueAt(0, NAN);			
+				column->setValueAt(0, NAN);
 	  }
 	  currentRow++;
 	}
@@ -450,19 +448,19 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		if( simplifyWhitespacesEnabled )
 			line = line.simplified();
 
+		//skip empty lines
+		if (line.isEmpty())
+			continue;
+
 		if( line.startsWith(commentCharacter) == true ){
 			currentRow++;
 			continue;
 		}
 
 		if( separatingCharacter == "auto" )
-			lineStringList = line.split( QRegExp("\\s+"), (QString::SplitBehavior)emptyLinesEnabled );
+			lineStringList = line.split( QRegExp("\\s+"), QString::SplitBehavior(skipEmptyParts) );
 		else
-			lineStringList = line.split( separatingCharacter, (QString::SplitBehavior)emptyLinesEnabled );
-
-		// handle empty lines correctly
-		if(lineStringList.count() == 0)
-			continue;
+			lineStringList = line.split( separatingCharacter, QString::SplitBehavior(skipEmptyParts) );
 
 		// TODO : read strings (comments) or datetime too
 		for ( int n=startColumn; n<=endColumn; n++ ){
@@ -472,10 +470,13 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 // 				dataPointers[n-startColumn]->operator[](i) = 0;
 			
 			Column* column = dataSource->child<Column>(columnOffset+n-startColumn);
-			if (n<lineStringList.size())
-				column->setValueAt(currentRow, lineStringList.at(n).toDouble());
-			else
+			if (n<lineStringList.size()){
+				bool isNumber;
+				double value = lineStringList.at(n).toDouble(&isNumber);
+				isNumber ? column->setValueAt(currentRow, value) : column->setValueAt(currentRow, NAN);
+			}else{
 				column->setValueAt(currentRow, NAN);
+			}
 		}
 		
 		currentRow++;
@@ -522,7 +523,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled) );
 	writer->writeAttribute( "header", QString::number(d->headerEnabled) );
 	writer->writeAttribute( "vectorNames", d->vectorNames );
-	writer->writeAttribute( "emptyLines", QString::number(d->emptyLinesEnabled) );
+	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts) );
 	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled) );
 	writer->writeAttribute( "transposed", QString::number(d->transposed) );
 	writer->writeAttribute( "startRow", QString::number(d->startRow) );
@@ -576,6 +577,12 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
 	else
 		d->simplifyWhitespacesEnabled = str.toInt();
+	
+	str = attribs.value("skipEmptyParts").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'skipEmptyParts'"));
+	else
+		d->skipEmptyParts = str.toInt();
 
 	str = attribs.value("transposed").toString();
 	if(str.isEmpty())

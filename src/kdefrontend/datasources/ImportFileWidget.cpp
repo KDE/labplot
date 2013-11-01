@@ -57,6 +57,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     asciiOptionsWidget.setupUi(w1);
     asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
     asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
+	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
     ui.swOptions->insertWidget(0, w1);
 
     QWidget* w2=new QWidget(0);
@@ -148,12 +149,13 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		  filter->setAutoModeEnabled(true);
         } else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
 		  filter->setAutoModeEnabled(false);
-		  filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
 		  filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
 		  filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
-		  filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
-		  filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
 		  filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
+		  filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
+		  filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
+		  filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
+		  filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
         } else {
 		  filter->loadFilterSettings( ui.cbFilter->currentText() );
         }
