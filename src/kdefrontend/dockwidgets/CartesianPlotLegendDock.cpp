@@ -173,6 +173,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 
 	//SIGNALs/SLOTs
 	//General
+	connect( m_legend, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(legendDescriptionChanged(const AbstractAspect*)) );
 	connect( m_legend, SIGNAL(labelFontChanged(QFont&)), this, SLOT(legendLabelFontChanged(QFont&)) );
 	connect( m_legend, SIGNAL(labelColorChanged(QColor&)), this, SLOT(legendLabelColorChanged(QColor&)) );
 	connect( m_legend, SIGNAL(labelColumnMajorChanged(bool)), this, SLOT(legendLabelOrderChanged(bool)) );
@@ -653,6 +654,19 @@ void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
 //**** SLOTs for changes triggered in CartesianPlotLegend *****
 //*************************************************************
 //General
+void CartesianPlotLegendDock::legendDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_legend != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text()) {
+		ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.leComment->text()) {
+		ui.leComment->setText(aspect->comment());
+	}
+	m_initializing = false;
+}
+
 void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
 	m_initializing = true;
 	QFont f(font);
