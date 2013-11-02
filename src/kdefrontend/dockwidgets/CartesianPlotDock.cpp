@@ -76,8 +76,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	for (int i=0; i<ui.tabWidget->count(); ++i){
 		QGridLayout* layout = static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
-		continue;
-		
+			continue;
+
 		layout->setContentsMargins(2,2,2,2);
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
