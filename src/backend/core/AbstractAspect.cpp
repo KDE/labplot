@@ -345,7 +345,7 @@ AbstractAspect * AbstractAspect::parentAspect() const
  * \brief Add the given Aspect to my list of children.
  */
 void AbstractAspect::addChild(AbstractAspect* child) {
-	qDebug()<<"AbstractAspect::addChild";
+	//qDebug()<<"AbstractAspect::addChild";
 	Q_CHECK_PTR(child);
 
 	QString new_name = m_aspect_private->uniqueNameFor(child->name());

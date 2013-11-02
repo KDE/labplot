@@ -99,7 +99,6 @@ void XYCurve::init(){
 	d->symbolsRotationAngle = 0;
 	d->symbolsSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
 	d->symbolsPrototype = NULL;
-	d->swapSymbolsTypeId("diamond");
 
 	d->valuesType = XYCurve::NoValues;
 	d->valuesColumn = NULL;
@@ -118,6 +117,9 @@ void XYCurve::init(){
 	d->yErrorMinusColumn = NULL;
 	d->errorBarsType = XYCurve::ErrorBarsSimple;
 	d->errorBarsOpacity = 1.0;
+	
+	// set type after all defaults
+	d->swapSymbolsTypeId("diamond");
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -1051,7 +1053,7 @@ void XYCurvePrivate::updateValues(){
 	valuesPoints.clear();
 	valuesStrings.clear();
 	
-	if (valuesType== XYCurve::NoValues){
+	if (valuesType == XYCurve::NoValues){
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1362,7 +1364,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
 	}
 
-	if (xErrorType!=XYCurve::NoError || yErrorType!=XYCurve::NoError){
+	if (xErrorType != XYCurve::NoError || yErrorType != XYCurve::NoError){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
 		boundingRectangle = boundingRectangle.united(errorBarsPath.boundingRect());
 	}
