@@ -2,7 +2,7 @@
     File                 : TeXRenderer.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008-2013 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     					(use @ for *)
     Description          : TeX renderer class
@@ -52,9 +52,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 		QDir::setCurrent("/dev/shm");
 	}
 	else {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		kWarning()<<"/dev/shm failed. using /tmp"<<endl;
-#endif
 		file.setFileTemplate("/tmp/labplot_XXXXXX.tex");
 		if(file.open())
 			QDir::setCurrent("/tmp");
@@ -64,14 +62,15 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 
 	// create latex code
 	QTextStream out(&file);
-	out << "\\documentclass[" << fontSize <<  "]{article}\n";
-	out << "\\usepackage{color}\n\\usepackage[active,displaymath,textmath,tightpage]{preview}\n";
-	out << "\\begin{document}\n";
-	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ','<<fontColor.blueF() << "}\n";
-	out << "\\begin{preview}\n";
+	out << "\\documentclass{minimal}";
+	out << "\\usepackage{color}\\usepackage[active,displaymath,textmath,tightpage]{preview}";
+	out << "\\begin{document}";
+	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ','<<fontColor.blueF() << "}";
+	out << "\\begin{preview}";
+	out << "{\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
 	out << "{\\color{fontcolor}\n";
 	out << teXString;
-	out << "\n}\n\\end{preview}\n";
+	out << "\n}}\\end{preview}";
 	out << "\\end{document}";
 	out.flush();
 
@@ -90,8 +89,8 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 
 		// convert: PDF -> PNG
 		convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + "x" + QString::number(dpi)
-																<< fi.completeBaseName() + ".pdf"
-																<< fi.completeBaseName() + ".png");
+														<< fi.completeBaseName() + ".pdf"
+														<< fi.completeBaseName() + ".png");
 		//gs doesn't work here. Why?
 // 		convertProcess.start("gs", QStringList() << "-sDEVICE=png16m -dTextAlphaBits=4 -r" + QString::number(dpi) + " -dGraphicsAlphaBits=4 -dSAFER -q -dNOPAUSE"
 // 																		<< "-sOutputFile=" <<  fi.completeBaseName() + ".png"
@@ -111,9 +110,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 			return QImage();
 		}
 	}else{
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		kWarning()<<"pdflatex failed."<<endl;
-#endif
 	}
 
 	//////////// fallback if pdflatex fails ///////////////
@@ -122,9 +119,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	// also possible: latexmf -C
 	if (!latexProcess.waitForFinished()) {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		kWarning()<<"latex failed."<<endl;
-#endif
 		QFile::remove(fi.completeBaseName()+".aux");
 		QFile::remove(fi.completeBaseName()+".log");
 		return QImage();
@@ -136,9 +131,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
 	if (!dvipsProcess.waitForFinished()) {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		kWarning()<<"dvips failed."<<endl;
-#endif
 		QFile::remove(fi.completeBaseName()+".dvi");
 		return QImage();
 	}
@@ -146,9 +139,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	// convert: PS -> PNG
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + "x" + QString::number(dpi)  << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
 	if (!convertProcess.waitForFinished()) {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		kWarning()<<"convert failed."<<endl;
-#endif
 		QFile::remove(fi.completeBaseName()+".ps");
 		return QImage();
 	}
