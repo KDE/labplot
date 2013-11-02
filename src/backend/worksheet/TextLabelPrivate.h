@@ -43,7 +43,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		int teXImageResolution;
 		float teXImageScaleFactor;
 		TextLabel::TextWrapper textWrapper;
-		qreal teXFontSize;
+		int teXFontSize;
 		QColor teXFontColor;
 		QFutureWatcher<QImage> teXImageFutureWatcher;
 

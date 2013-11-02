@@ -55,7 +55,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
   	layout->setContentsMargins(2,2,2,2);
 	layout->setHorizontalSpacing(2);
 	layout->setVerticalSpacing(2);
-	ui.kcbTextColor->setColor(Qt::black); // default color
+	ui.kcbFontColor->setColor(Qt::black); // default color
 
 	//Icons
 	ui.tbFontBold->setIcon( KIcon("format-text-bold") );
@@ -65,14 +65,16 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontSuperScript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
 	ui.tbSymbols->setIcon( KIcon("applications-education-mathematics") );
-	
+	ui.tbTexUsed->setIconSize(QSize(20, 20));
+	ui.tbTexUsed->setIcon( KIcon("TeX_logo") );
+
 	//SLOTS
 	// text properties
-	connect(ui.chbTeX, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
+	connect(ui.tbTexUsed, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
 	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(const QTextCharFormat&)), 
 			this, SLOT(charFormatChanged(const QTextCharFormat&)));
-	connect(ui.kcbTextColor, SIGNAL(changed(const QColor&)), this, SLOT(textColorChanged(const QColor&)));
+	connect(ui.kcbFontColor, SIGNAL(changed(const QColor&)), this, SLOT(fontColorChanged(const QColor&)));
 	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
 	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
 	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
@@ -81,6 +83,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
 	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
 	connect(ui.kfontRequester, SIGNAL(fontSelected(const QFont&)), this, SLOT(fontChanged(const QFont&)));
+	connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
 	
 	// geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
@@ -100,10 +103,9 @@ LabelWidget::~LabelWidget() {}
 void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_labelsList = labels;
 
-	//TODO: labplot crashes sporadicaly when a new TextLabel is created upon a plot was already created.
+	//TODO:
 	//The list is (sporadicaly) empty. This shouldn't happen!
-	if (labels.isEmpty())
-		return;
+	Q_ASSERT(!labels.isEmpty());
 	
 	m_label = labels.first();
 
@@ -115,12 +117,12 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "TextLabel" );
-	qDebug()<<"loadConfig(TextLabel)"<<endl;
   	loadConfig(group);
 
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText( m_label->text().text );
+	this->teXUsedChanged(m_label->text().teXUsed);
 	m_initializing = false;
 
 	initConnections();
@@ -139,12 +141,12 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 
 	KConfig config("", KConfig::SimpleConfig);
 	KConfigGroup group = config.group( "AxisLabel" );
-	qDebug()<<"loadConfig(AxisLabel)"<<endl;
   	loadConfig(group);
 
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText(m_label->text().text);
+	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.lOffset->show();
 	ui.sbOffset->show();
 	m_initializing = false;
@@ -155,8 +157,8 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 void LabelWidget::initConnections() {
 	connect( m_label, SIGNAL(textWrapperChanged(const TextLabel::TextWrapper&)),
 			 this, SLOT(labelTextWrapperChanged(const TextLabel::TextWrapper&)) );
-	connect( m_label, SIGNAL(teXFontSizeChanged(const qreal)),
-			 this, SLOT(labelTeXFontSizeChanged(const qreal)) );
+	connect( m_label, SIGNAL(teXFontSizeChanged(const int)),
+			 this, SLOT(labelTeXFontSizeChanged(const int)) );
 	connect( m_label, SIGNAL(teXFontColorChanged(const QColor)),
 			 this, SLOT(labelTeXFontColorChanged(const QColor)) );
 	connect( m_label, SIGNAL(positionChanged(const TextLabel::PositionWrapper&)),
@@ -222,7 +224,7 @@ void LabelWidget::textChanged(){
 	if (m_initializing)
 		return;
 
-	if (ui.chbTeX->isChecked()) {
+	if (ui.tbTexUsed->isChecked()) {
 		QString text=ui.teLabel->toPlainText();
 		TextLabel::TextWrapper wrapper(text, true);
 
@@ -268,23 +270,36 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format){
 		ui.tbFontSubScript->setChecked(false);
 	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
 
-	if(!ui.chbTeX->isChecked())
-		ui.kcbTextColor->setColor(format.foreground().color());
+	if(!ui.tbTexUsed->isChecked())
+		ui.kcbFontColor->setColor(format.foreground().color());
 	ui.kfontRequester->setFont(format.font());
 }
 
 void LabelWidget::teXUsedChanged(bool checked){
+	//disable text editing elements if Tex-option is used
+// 	ui.tbFontBold->setEnabled(!checked);
+// 	ui.tbFontItalic->setEnabled(!checked);
+// 	ui.tbFontUnderline->setEnabled(!checked);
+// 	ui.tbFontSuperScript->setEnabled(!checked);
+// 	ui.tbFontSubScript->setEnabled(!checked);
+// 	ui.tbFontStrikeOut->setEnabled(!checked);
+// 	ui.tbSymbols->setEnabled(!checked);
+
+	ui.tbFontBold->setVisible(!checked);
+	ui.tbFontItalic->setVisible(!checked);
+	ui.tbFontUnderline->setVisible(!checked);
+	ui.tbFontSuperScript->setVisible(!checked);
+	ui.tbFontSubScript->setVisible(!checked);
+	ui.tbFontStrikeOut->setVisible(!checked);
+	ui.tbSymbols->setVisible(!checked);
+	
+	ui.lFont->setVisible(!checked);
+	ui.kfontRequester->setVisible(!checked);
+	ui.lFontSize->setVisible(checked);
+	ui.sbFontSize->setVisible(checked);
+
 	if (m_initializing)
 		return;
-
-	//disable text editing elements if Tex-option is used
-	ui.tbFontBold->setEnabled(!checked);
-	ui.tbFontItalic->setEnabled(!checked);
-	ui.tbFontUnderline->setEnabled(!checked);
-	ui.tbFontSuperScript->setEnabled(!checked);
-	ui.tbFontSubScript->setEnabled(!checked);
-	ui.tbFontStrikeOut->setEnabled(!checked);
-	ui.tbSymbols->setEnabled(!checked);
 
 	QString text = checked ? ui.teLabel->toPlainText() : ui.teLabel->toHtml();
 	TextLabel::TextWrapper wrapper(text, checked);
@@ -292,13 +307,21 @@ void LabelWidget::teXUsedChanged(bool checked){
 		label->setText(wrapper);
 }
 
-void LabelWidget::textColorChanged(const QColor& color){
+void LabelWidget::fontColorChanged(const QColor& color){
 	if (m_initializing)
 		return;
 
 	ui.teLabel->setTextColor(color);
 	foreach(TextLabel* label, m_labelsList)
 		label->setTeXFontColor(color);
+}
+
+void LabelWidget::fontSizeChanged(int value){
+	if (m_initializing)
+		return;
+
+	foreach(TextLabel* label, m_labelsList)
+		label->setTeXFontSize(value);
 }
 
 void LabelWidget::fontBoldChanged(bool checked){
@@ -499,20 +522,19 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text){
 	m_initializing = true;
 	ui.teLabel->setText(text.text);
 	ui.teLabel->moveCursor(QTextCursor::End);
-	ui.chbTeX->setChecked(text.teXUsed);
+	ui.tbTexUsed->setChecked(text.teXUsed);
 	m_initializing = false;
 }
 
-void LabelWidget::labelTeXFontSizeChanged(const qreal size){
-	Q_UNUSED(size);
+void LabelWidget::labelTeXFontSizeChanged(const int size){
 	m_initializing = true;
-//TODO
+	ui.sbFontSize->setValue(size);
 	m_initializing = false;
 }
+
 void LabelWidget::labelTeXFontColorChanged(const QColor color){
 	m_initializing = true;
-	if(m_label->text().teXUsed)
-		ui.kcbTextColor->setColor(color);
+	ui.kcbFontColor->setColor(color);
 	m_initializing = false;
 }
 
@@ -565,10 +587,10 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	m_initializing = true;
 
 	//Text
-	//TODO font, color etc.
-	ui.chbTeX->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
+	ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
+	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFontSize()) );
 	if(m_label->text().teXUsed)
-		ui.kcbTextColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
+		ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
@@ -588,9 +610,9 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 
 void LabelWidget::saveConfig(KConfigGroup &group) {
 	//Text
-	//TODO font, color etc.
-	group.writeEntry("TeXUsed", ui.chbTeX->isChecked());
-	group.writeEntry("TeXFontColor", ui.kcbTextColor->color());
+	group.writeEntry("TeXUsed", ui.tbTexUsed->isChecked());
+	group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
+	group.writeEntry("TeXFontSize", ui.sbFontSize->value());
 
 	// Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());

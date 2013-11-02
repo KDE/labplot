@@ -66,7 +66,7 @@ private slots:
 	void textChanged();
 	void charFormatChanged(const QTextCharFormat& format);
 	void teXUsedChanged(bool);
-	void textColorChanged(const QColor&);
+	void fontColorChanged(const QColor&);
 	void fontBoldChanged(bool);
 	void fontItalicChanged(bool);
 	void fontUnderlineChanged(bool);
@@ -76,7 +76,8 @@ private slots:
 	void charMenu();
 	void insertChar(QChar);
 	void fontChanged(const QFont&);
-	
+	void fontSizeChanged(int);
+
 	void positionXChanged(int);
 	void positionYChanged(int);
 	void customPositionXChanged(double);
@@ -90,7 +91,7 @@ private slots:
 	
 	//SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
-	void labelTeXFontSizeChanged(const qreal);
+	void labelTeXFontSizeChanged(const int);
 	void labelTeXFontColorChanged(const QColor);
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);

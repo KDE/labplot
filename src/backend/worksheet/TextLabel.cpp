@@ -87,7 +87,7 @@ void TextLabel::init() {
 	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
 	// -> take this into account
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
-	d->teXImageResolution = 300;
+	d->teXImageResolution = 100;
 	d->teXImageScaleFactor = QApplication::desktop()->physicalDpiX()/float(d->teXImageResolution)*d->scaleFactor;
 
 	connect(&d->teXImageFutureWatcher, SIGNAL(finished()), this, SLOT(updateTeXImage()));
@@ -130,7 +130,7 @@ QIcon TextLabel::icon() const{
 
 /* ============================ getter methods ================= */
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
-CLASS_SHARED_D_READER_IMPL(TextLabel, qreal, teXFontSize, teXFontSize);
+CLASS_SHARED_D_READER_IMPL(TextLabel, int, teXFontSize, teXFontSize);
 CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, teXFontColor, teXFontColor);
 CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
@@ -146,8 +146,8 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontSize, qreal, teXFontSize, updateText);
-void TextLabel::setTeXFontSize(const qreal fontSize) {
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontSize, int, teXFontSize, updateText);
+void TextLabel::setTeXFontSize(const int fontSize) {
 	Q_D(TextLabel);
 	if (fontSize != d->teXFontSize)
 		exec(new TextLabelSetTeXFontSizeCmd(d, fontSize, tr("%1: set TeX font size")));

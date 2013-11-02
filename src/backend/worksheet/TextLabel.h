@@ -74,7 +74,7 @@ class TextLabel : public AbstractWorksheetElement{
 		virtual bool load(XmlStreamReader *);
 		
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
-		BASIC_D_ACCESSOR_DECL(qreal, teXFontSize, TeXFontSize);
+		BASIC_D_ACCESSOR_DECL(int, teXFontSize, TeXFontSize);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
 		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
 		void setPosition(const QPointF&);
@@ -96,8 +96,8 @@ class TextLabel : public AbstractWorksheetElement{
 		void updateTeXImage();
 
 	protected:
-		TextLabelPrivate * const d_ptr;
-		TextLabel(const QString &name, TextLabelPrivate *dd);
+		TextLabelPrivate* const d_ptr;
+		TextLabel(const QString& name, TextLabelPrivate* dd);
 
 	private:
     	Q_DECLARE_PRIVATE(TextLabel)
@@ -112,7 +112,7 @@ class TextLabel : public AbstractWorksheetElement{
 		friend class TextLabelSetVerticalAlignmentCmd;
 		friend class TextLabelSetRotationAngleCmd;
 		void textWrapperChanged(const TextLabel::TextWrapper&);
-		void teXFontSizeChanged(const qreal);
+		void teXFontSizeChanged(const int);
 		void teXFontColorChanged(const QColor);
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
