@@ -3,7 +3,7 @@
     Project              : SciDAVis
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
-	Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
     Description          : Base class for all persistent objects in a Project.
