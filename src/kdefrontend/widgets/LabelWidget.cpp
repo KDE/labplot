@@ -276,15 +276,7 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format){
 }
 
 void LabelWidget::teXUsedChanged(bool checked){
-	//disable text editing elements if Tex-option is used
-// 	ui.tbFontBold->setEnabled(!checked);
-// 	ui.tbFontItalic->setEnabled(!checked);
-// 	ui.tbFontUnderline->setEnabled(!checked);
-// 	ui.tbFontSuperScript->setEnabled(!checked);
-// 	ui.tbFontSubScript->setEnabled(!checked);
-// 	ui.tbFontStrikeOut->setEnabled(!checked);
-// 	ui.tbSymbols->setEnabled(!checked);
-
+	//hide text editing elements if TeX-option is used
 	ui.tbFontBold->setVisible(!checked);
 	ui.tbFontItalic->setVisible(!checked);
 	ui.tbFontUnderline->setVisible(!checked);
@@ -292,7 +284,7 @@ void LabelWidget::teXUsedChanged(bool checked){
 	ui.tbFontSubScript->setVisible(!checked);
 	ui.tbFontStrikeOut->setVisible(!checked);
 	ui.tbSymbols->setVisible(!checked);
-	
+
 	ui.lFont->setVisible(!checked);
 	ui.kfontRequester->setVisible(!checked);
 	ui.lFontSize->setVisible(checked);
@@ -520,9 +512,17 @@ void LabelWidget::visibilityChanged(bool state){
 //*********************************************************
 void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text){
 	m_initializing = true;
+	
+	//save and restore the current cursor position after changing the text
+	QTextCursor cursor = ui.teLabel->textCursor();
+	int position = cursor.position();
 	ui.teLabel->setText(text.text);
-	ui.teLabel->moveCursor(QTextCursor::End);
+	cursor.movePosition(QTextCursor::Start);
+	cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
+	ui.teLabel->setTextCursor(cursor);
+
 	ui.tbTexUsed->setChecked(text.teXUsed);
+	this->teXUsedChanged(text.teXUsed);
 	m_initializing = false;
 }
 
