@@ -330,7 +330,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	  separator = separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
 	  lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
     }
-	qDebug() << "separator '"<<separator << "'";
+// 	qDebug() << "separator '"<<separator << "'";
 
 	if (endColumn == -1)
 		endColumn = lineStringList.size()-1; //use the last available column index

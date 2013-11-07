@@ -50,8 +50,17 @@
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 
+#include <QMdiArea>
+#include <QToolBar>
+#include <QMenu>
 #include <QDockWidget>
 #include <QStackedWidget>
+#include <QFileDialog>
+#include <QUndoStack>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+#include <QCloseEvent>
 
 #include <KApplication>
 #include <KActionCollection>
@@ -104,6 +113,7 @@ MainWin::~MainWin() {
 
 	//write settings
 	m_recentProjectsAction->saveEntries( KGlobal::config()->group("Recent Files") );
+	qDebug()<<"SAVED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
 	//etc...
 	
 	KGlobal::config()->sync();
@@ -133,13 +143,13 @@ void MainWin::initGUI(const QString& fileName){
 
 	//load recently used projects
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
-/*	qDebug()<<"LOADED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
-	qDebug()<<"LOADED m_recentProjectsAction->urls().first()="<<m_recentProjectsAction->urls().first()<<endl;
-	for(int i=0;i<m_recentProjectsAction->urls().size();i++) {
-		qDebug()<<"LOADED m_recentProjectsAction->urls().action("<<i<<")="<<m_recentProjectsAction->action(i)<<endl;
-		qDebug()<<"LOADED m_recentProjectsAction->urls().urls("<<i<<")="<<m_recentProjectsAction->urls().at(i)<<endl;
-	}	
-*/
+	qDebug()<<"LOADED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
+// 	qDebug()<<"LOADED m_recentProjectsAction->urls().first()="<<m_recentProjectsAction->urls().first()<<endl;
+// 	for(int i=0;i<m_recentProjectsAction->urls().size();i++) {
+// 		qDebug()<<"LOADED m_recentProjectsAction->urls().action("<<i<<")="<<m_recentProjectsAction->action(i)<<endl;
+// 		qDebug()<<"LOADED m_recentProjectsAction->urls().urls("<<i<<")="<<m_recentProjectsAction->urls().at(i)<<endl;
+// 	}	
+
 	//set the view mode of the mdi area
 	KConfigGroup group = KGlobal::config()->group("General");
 	int viewMode = group.readEntry("ViewMode", 0);
@@ -170,8 +180,10 @@ void MainWin::initGUI(const QString& fileName){
 			newProject();
 			newWorksheet();
 		} else if (load == 3) { //open last used project
-			if (m_recentProjectsAction->urls().size())
+			if (m_recentProjectsAction->urls().size()){
+				qDebug()<<"TO OPEN m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls().first()<<endl;
 				openRecentProject( m_recentProjectsAction->urls().first() );
+			}
 		}
 	}
  	updateGUIOnProjectChanges();

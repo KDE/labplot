@@ -44,7 +44,7 @@ public:
 	ImportFileWidget(QWidget*);
 	~ImportFileWidget();
 
- 	bool toggleOptions();
+	void showOptions(bool);
 	void saveSettings(FileDataSource*) const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;

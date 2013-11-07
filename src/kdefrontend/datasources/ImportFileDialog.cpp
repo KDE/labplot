@@ -36,7 +36,11 @@
 
 #include <kmessagebox.h>
 #include <KInputDialog>
-#include <QtCore>
+#include <QProgressBar>
+#include <QStatusBar>
+#include <QDir>
+#include <QInputDialog>
+
 /*!
 	\class ImportFileDialog
 	\brief Dialog for importing data from a file. Embeddes \c ImportFileWidget and provides the standard buttons.
@@ -44,7 +48,7 @@
 	\ingroup kdefrontend
  */
  
-ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
+ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), m_optionsShown(false) {
 	mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
 	vLayout->setSpacing(0);
@@ -56,13 +60,26 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent) {
 	setMainWidget( mainWidget );
 	
     setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-	setButtonText(KDialog::User1,i18n("Show Options"));
 	
+	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
+	m_optionsShown = conf.readEntry("ShowOptions", false);
+	if (m_optionsShown){
+		setButtonText(KDialog::User1,i18n("Hide Options"));
+	} else {
+		setButtonText(KDialog::User1,i18n("Show Options"));
+	}
+	importFileWidget->showOptions(m_optionsShown);
+
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Import data to spreadsheet/matrix"));
 	setWindowIcon(KIcon("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
+}
+
+ImportFileDialog::~ImportFileDialog(){
+	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
+	conf.writeEntry("ShowOptions", m_optionsShown);
 }
 
 /*!
@@ -161,18 +178,20 @@ void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
 	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	filter->read(fileName, sheet, mode);
-  	QApplication::restoreOverrideCursor();
-	
+	QApplication::restoreOverrideCursor();
+
 	statusBar->removeWidget(progressBar);
 	delete filter;
 }
 
 void ImportFileDialog::toggleOptions(){
-	if (importFileWidget->toggleOptions()){
+	importFileWidget->showOptions(!m_optionsShown);
+	m_optionsShown = !m_optionsShown;
+
+	if (m_optionsShown)
 		setButtonText(KDialog::User1,i18n("Hide Options"));
-	}else{
+	else
 		setButtonText(KDialog::User1,i18n("Show Options"));
-	}
 
 	//resize the dialog
 	mainWidget->resize(layout()->minimumSize());

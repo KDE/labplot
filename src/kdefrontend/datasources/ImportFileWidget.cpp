@@ -83,17 +83,21 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
     connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
-	
+
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
-	
-	filterChanged(0);
+	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
+	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
+
+	filterChanged(ui.cbFilter->currentIndex());
 }
 
 ImportFileWidget::~ImportFileWidget() {
     //save the last selected file to KConfigGroup
     KConfigGroup conf(KSharedConfig::openConfig(),"Import");
     conf.writeEntry("LastImportedFile", ui.kleFileName->text());
+	conf.writeEntry("Type", ui.cbFileType->currentIndex());
+	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 }
 
 void ImportFileWidget::hideDataSource() const{
@@ -103,24 +107,15 @@ void ImportFileWidget::hideDataSource() const{
   ui.chbLinkFile->hide();
 }
 
-/*!
-	toggles the filter options. Returns \c true on "on" and \c false on "off".
-*/
-bool ImportFileWidget::toggleOptions() {
-    if (ui.gbOptions->isHidden()) {
-        ui.gbOptions->show();
-        resize(layout()->minimumSize());
-        return true;
-    } else {
-        ui.gbOptions->hide();
-        resize(layout()->minimumSize());
-        return false;
-    }
+void ImportFileWidget::showOptions(bool b) {
+	ui.gbOptions->setVisible(b);
+	resize(layout()->minimumSize());
 }
 
 QString ImportFileWidget::fileName() const{
   return ui.kleFileName->text();
 }
+
 /*!
 	saves the settings to the data source \c source.
 */

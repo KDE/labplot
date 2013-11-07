@@ -30,18 +30,28 @@
 #ifndef IMPORTFILEDIALOG_H
 #define IMPORTFILEDIALOG_H
 
-#include <QtGui>
 #include <KDialog>
 #include <memory>
 class ImportFileWidget;
 class FileDataSource;
 class TreeViewComboBox;
 
+class QStatusBar;
+class QAbstractItemModel;
+class QModelIndex;
+class QVBoxLayout;
+class QLabel;
+class QComboBox;
+class QGroupBox;
+class QProgressBar;
+
 class ImportFileDialog: public KDialog {
   Q_OBJECT
 
   public:
 	ImportFileDialog(QWidget*);
+	~ImportFileDialog();
+
 	void importToFileDataSource(FileDataSource*) const;
 	void importToSpreadsheet(QStatusBar*) const;
 	void setModel(std::auto_ptr<QAbstractItemModel>);
@@ -58,6 +68,7 @@ class ImportFileDialog: public KDialog {
 	QWidget* mainWidget;
     QPushButton* bNewSpreadsheet;
 	std::auto_ptr<QAbstractItemModel> m_model;
+	bool m_optionsShown;
 	
   private slots:
 	void toggleOptions();
