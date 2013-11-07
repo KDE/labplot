@@ -123,7 +123,7 @@ int AsciiFilter::columnNumber(const QString & fileName){
 
   QTextStream in(&file);
   line = in.readLine();
-  lineStringList = line.split( QRegExp("\\s+"));
+  lineStringList = line.split( QRegExp("\\s+")); //TODO
   return lineStringList.size();
 }
 
@@ -268,8 +268,6 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-//TODO : read strings (comments) or datetime too
-//TODO the terms vector and column are used synonymously, straighten the notation
 void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
 	int currentRow=0; //indexes the position in the vector(column)
 	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
@@ -312,15 +310,27 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	if( simplifyWhitespacesEnabled)
 		line = line.simplified();
 
+	QString separator;
 	if( separatingCharacter == "auto" ){
-	  lineStringList = line.split( QRegExp("\\s+"), QString::SplitBehavior(skipEmptyParts) );
+		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
+		lineStringList = line.split( regExp, QString::SplitBehavior(skipEmptyParts) );
+
+		//determine the separator
+		if (lineStringList.size()){
+		int length1 = lineStringList.at(0).length();
+			if (lineStringList.size()>1){
+				int pos2 = line.indexOf(lineStringList.at(1));
+				separator = line.mid(length1, pos2-length1);
+		  }else{
+				separator = line.right(line.length()-length1);
+		  }
+	  }
     }else{
-	  //TODO: doesn't work...
-	  separatingCharacter = separatingCharacter.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
-	  separatingCharacter = separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
-// 	  qDebug()<<"separator"<<separatingCharacter;
-	  lineStringList = line.split( separatingCharacter, QString::SplitBehavior(skipEmptyParts) );
+	  separator = separatingCharacter.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
+	  separator = separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+	  lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
     }
+	qDebug() << "separator '"<<separator << "'";
 
 	if (endColumn == -1)
 		endColumn = lineStringList.size()-1; //use the last available column index
@@ -329,9 +339,9 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	if ( headerEnabled ){
 		vectorNameList = lineStringList;
 	}else{
-		//create vector names out of the vectorNames-string, if not empty
+		//create vector names out of the space separated vectorNames-string, if not empty
 		if (vectorNames != ""){
-			vectorNameList = vectorNames.split( QRegExp("\\s+") );
+			vectorNameList = vectorNames.split(" ");
 		}
 
 		//if there were no (or not enough) strings provided, add the default descriptions for the columns/vectors
@@ -433,10 +443,13 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		for ( int n=startColumn; n<=endColumn; n++ ){
 // 			dataPointers[n-startColumn]->insert(0, lineStringList.at(n).toDouble());
 			Column* column = dataSource->child<Column>(columnOffset+n-startColumn);
-			if (n<lineStringList.size())
-				column->setValueAt(0, lineStringList.at(n).toDouble());
-			else
+			if (n<lineStringList.size()){
+				bool isNumber;
+				double value = lineStringList.at(n).toDouble(&isNumber);
+				isNumber ? column->setValueAt(0, value) : column->setValueAt(currentRow, NAN);
+			}else{
 				column->setValueAt(0, NAN);
+			}
 	  }
 	  currentRow++;
 	}
@@ -457,10 +470,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			continue;
 		}
 
-		if( separatingCharacter == "auto" )
-			lineStringList = line.split( QRegExp("\\s+"), QString::SplitBehavior(skipEmptyParts) );
-		else
-			lineStringList = line.split( separatingCharacter, QString::SplitBehavior(skipEmptyParts) );
+		lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
 
 		// TODO : read strings (comments) or datetime too
 		for ( int n=startColumn; n<=endColumn; n++ ){
