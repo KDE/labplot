@@ -156,7 +156,6 @@ private slots:
 	void curveSymbolsSizeChanged(qreal);
 	void curveSymbolsRotationAngleChanged(qreal);
 	void curveSymbolsOpacityChanged(qreal);
-	void curveSymbolsAspectRatioChanged(qreal);
 	void curveSymbolsBrushChanged(QBrush);
 	void curveSymbolsPenChanged(const QPen&);
 	

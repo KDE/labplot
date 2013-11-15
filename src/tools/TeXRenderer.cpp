@@ -92,9 +92,16 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 														<< fi.completeBaseName() + ".pdf"
 														<< fi.completeBaseName() + ".png");
 		//gs doesn't work here. Why?
-// 		convertProcess.start("gs", QStringList() << "-sDEVICE=png16m -dTextAlphaBits=4 -r" + QString::number(dpi) + " -dGraphicsAlphaBits=4 -dSAFER -q -dNOPAUSE"
-// 																		<< "-sOutputFile=" <<  fi.completeBaseName() + ".png"
-// 																		<< fi.completeBaseName() + ".pdf");
+// 		convertProcess.start("gs", QStringList()<< "-sDEVICE=png16m"
+// 												<< "-dTextAlphaBits=4"
+// 												<< "-r" + QString::number(dpi)
+// 												<< "-dGraphicsAlphaBits=4"
+// 												<< "-sDEVICE=pngalpha"
+// 												<< "-dSAFER"
+// 												<< "-q"
+// 												<< "-dNOPAUSE"
+// 												<< "-sOutputFile=" + fi.completeBaseName() + ".png"
+// 												<< fi.completeBaseName() + ".pdf");
 
 		// clean up and read png file
 		if (convertProcess.waitForFinished()) {
@@ -146,7 +153,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 
 	// read png file
 	QImage image;
-	image.load(fi.completeBaseName()+".png");
+	image.load(fi.completeBaseName()+".png", "png");
 
 	//clean up
 	QFile::remove(fi.completeBaseName()+".png");

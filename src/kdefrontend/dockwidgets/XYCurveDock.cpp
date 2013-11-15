@@ -494,7 +494,6 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsAspectRatioChanged(qreal)), this, SLOT(curveSymbolsAspectRatioChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(curveSymbolsBrushChanged(QBrush)));
 	connect(m_curve, SIGNAL(symbolsPenChanged(const QPen&)), this, SLOT(curveSymbolsPenChanged(const QPen&)));
 
@@ -1003,7 +1002,9 @@ void XYCurveDock::symbolsFillingColorChanged(const QColor& color){
 	curve->setSymbolsBrush(brush);
   }
 
+  m_initializing = true;
   GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
+  m_initializing = false;
 }
 
 void XYCurveDock::symbolsBorderStyleChanged(int index){
@@ -1503,12 +1504,6 @@ void XYCurveDock::curveSymbolsRotationAngleChanged(qreal angle) {
 void XYCurveDock::curveSymbolsOpacityChanged(qreal opacity) {
 	m_initializing = true;
 	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
-}
-void XYCurveDock::curveSymbolsAspectRatioChanged(qreal ratio) {
-	Q_UNUSED(ratio);
-	m_initializing = true;
-	//TODO
 	m_initializing = false;
 }
 void XYCurveDock::curveSymbolsBrushChanged(QBrush brush) {

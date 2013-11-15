@@ -78,7 +78,6 @@ class XYCurve: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
-		BASIC_D_ACCESSOR_DECL(qreal, symbolsAspectRatio, SymbolsAspectRatio)
 		CLASS_D_ACCESSOR_DECL(QString, symbolsTypeId, SymbolsTypeId)
 		CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
 		CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
