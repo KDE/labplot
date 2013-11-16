@@ -645,17 +645,13 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
   if (!column){
 	// no valid column is available 
 	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
-	m_initializing = true;
 	this->updateValuesFormatWidgets(AbstractColumn::Text);
-	m_initializing = false;
   }else{
 	AbstractColumn::ColumnMode columnMode = column->columnMode();
-	
+
 	//update the format widgets for the new column mode
-	m_initializing = true;
 	this->updateValuesFormatWidgets(columnMode);
-	m_initializing = false;
-	  
+
 	 //show the actuall formating properties
 	switch(columnMode) {
 		case AbstractColumn::Numeric:{
@@ -1032,14 +1028,14 @@ void XYCurveDock::symbolsBorderStyleChanged(int index){
 void XYCurveDock::symbolsBorderColorChanged(const QColor& color){
   if (m_initializing)
 	return;
-  
+
   QPen pen;
   foreach(XYCurve* curve, m_curvesList){
 	pen=curve->symbolsPen();
 	pen.setColor(color);
 	curve->setSymbolsPen(pen);
-  }  
-  
+  }
+
   GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
 }
 
@@ -1144,7 +1140,7 @@ void XYCurveDock::valuesPositionChanged(int index){
 void XYCurveDock::valuesDistanceChanged(double  value){
   if (m_initializing)
 	return;
-		
+
   foreach(XYCurve* curve, m_curvesList)
 	curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
