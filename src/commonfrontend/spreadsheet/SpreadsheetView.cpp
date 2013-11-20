@@ -71,9 +71,10 @@
 	\ingroup commonfrontend
  */
 SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QTableView(),
-  m_spreadsheet(spreadsheet),  m_suppressSelectionChangedEvent(false){
+	m_spreadsheet(spreadsheet),
+	m_model( new SpreadsheetModel(spreadsheet) ),
+	m_suppressSelectionChangedEvent(false){
 
-	m_model = new SpreadsheetModel(spreadsheet);
 	init();
 }
 
@@ -86,8 +87,8 @@ void SpreadsheetView::init(){
 	initMenus();
 	
 	setModel(m_model);
-  
-	// horizontal header
+
+	//horizontal header
 	m_horizontalHeader = new SpreadsheetDoubleHeaderView();
     m_horizontalHeader->setClickable(true);
     m_horizontalHeader->setHighlightSections(true);
@@ -101,9 +102,10 @@ void SpreadsheetView::init(){
 	
 	// vertical header
 	QHeaderView * v_header = verticalHeader();
-	v_header->setResizeMode(QHeaderView::ResizeToContents);
+	v_header->setResizeMode(QHeaderView::Fixed);
+	v_header->setDefaultSectionSize(22);
 	v_header->setMovable(false);
-	v_header->installEventFilter(this);	
+	v_header->installEventFilter(this);
 	
 	m_delegate = new SpreadsheetItemDelegate(this);
 	setItemDelegate(m_delegate);

@@ -127,8 +127,6 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 {
 	switch(orientation) {
 		case Qt::Horizontal:
-			if (section < 0 || section >= m_spreadsheet->columnCount())
-				return QVariant();
 			switch(role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
@@ -144,8 +142,6 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 					return QSize(m_spreadsheet->child<Column>(section)->width(), 20);
 			}
 		case Qt::Vertical:
-			if (section < 0 || section >= m_spreadsheet->rowCount())
-				return QVariant();
 			switch(role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
@@ -155,6 +151,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 	return QVariant();
 }
 
+/* TODO: unused function
 bool SpreadsheetModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
 	if (orientation == Qt::Horizontal && role == Qt::SizeHintRole) {
@@ -165,6 +162,7 @@ bool SpreadsheetModel::setHeaderData(int section, Qt::Orientation orientation, c
 
 	return true;
 }
+*/
 
 int SpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
@@ -220,8 +218,12 @@ QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex &pare
 
 QModelIndex SpreadsheetModel::parent(const QModelIndex & child) const
 {
-	Q_UNUSED(child)
+	Q_UNUSED(child)	
     return QModelIndex();
+}
+
+bool SpreadsheetModel::hasChildren(const QModelIndex& parent) const {
+	return false;
 }
 
 void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * new_child)
