@@ -90,7 +90,6 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	setMinimumSize(16, 16);
 	setFocusPolicy(Qt::StrongFocus);
 
-
 	viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
 	viewport()->setAttribute( Qt::WA_NoSystemBackground );
 	setAcceptDrops( true );

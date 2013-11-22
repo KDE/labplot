@@ -1028,6 +1028,12 @@ void XYCurvePrivate::updateSymbols(){
 	symbolsPath = QPainterPath();
 
 	if (symbolsPrototype->id() != "none"){
+		symbolsPrototype->setSize(symbolsSize);
+		symbolsPrototype->setAspectRatio(1);
+		symbolsPrototype->setBrush(symbolsBrush);
+		symbolsPrototype->setPen(symbolsPen);
+		symbolsPrototype->setRotationAngle(symbolsRotationAngle);
+
 		QPainterPath path = symbolsPrototype->shape();
 		QTransform trafo;
 		if (symbolsRotationAngle != 0) {
@@ -1393,11 +1399,6 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 		emit q->symbolsTypeIdChanged(id);
 	}
 
-	symbolsPrototype->setSize(symbolsSize);
-	symbolsPrototype->setAspectRatio(1);
-	symbolsPrototype->setBrush(symbolsBrush);
-	symbolsPrototype->setPen(symbolsPen);
-	symbolsPrototype->setRotationAngle(symbolsRotationAngle);
 	updateSymbols();
 	return oldId;
 }

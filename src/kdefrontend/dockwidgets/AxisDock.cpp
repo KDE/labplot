@@ -156,8 +156,6 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(double)), this, SLOT(minorGridWidthChanged(double)) );
 	connect( ui.sbMinorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorGridOpacityChanged(int)) );
 
-//TODO cbMajorTicksDirection is empty when the axes are set
-	//QTimer::singleShot(0, this, SLOT(init()));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
 	ui.verticalLayout->addWidget(templateHandler);
