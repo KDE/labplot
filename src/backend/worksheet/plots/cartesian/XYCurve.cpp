@@ -1236,13 +1236,13 @@ void XYCurvePrivate::updateErrorBars(){
 		//cap size for x-error bars
 		QPointF pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(i));
 		pointScene.setY(pointScene.y()-errorBarsCapSize);
-		QPointF pointLogical = cSystem->mapSceneToLogical(pointScene, AbstractCoordinateSystem::SuppressPageClipping);
+		QPointF pointLogical = cSystem->mapSceneToLogical(pointScene);
 		capSizeX = (pointLogical.y() - symbolPointsLogical.at(i).y())/2;
 		
 		//cap size for y-error bars
 		pointScene = cSystem->mapLogicalToScene(symbolPointsLogical.at(i));
 		pointScene.setX(pointScene.x()+errorBarsCapSize);
-		pointLogical = cSystem->mapSceneToLogical(pointScene, AbstractCoordinateSystem::SuppressPageClipping);
+		pointLogical = cSystem->mapSceneToLogical(pointScene);
 		capSizeY = (pointLogical.x() - symbolPointsLogical.at(i).x())/2;		
 	}
 
