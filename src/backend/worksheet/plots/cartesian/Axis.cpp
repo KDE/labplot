@@ -1303,7 +1303,7 @@ void AxisPrivate::retransformMajorGrid(){
 	}
 
 	//major tick points are already in scene coordinates, convert them back to logical...
-	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints);
 
 	if (!logicalMajorTickPoints.size())
 		return;
@@ -1377,7 +1377,7 @@ void AxisPrivate::retransformMinorGrid(){
 	}
 
 	//minor tick points are already in scene coordinates, convert them back to logical...
-	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints);
 
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal){ //horizontal axis

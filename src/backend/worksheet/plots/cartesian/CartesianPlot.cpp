@@ -47,6 +47,7 @@
 #include <QToolBar>
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsItem>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -69,11 +70,14 @@
 class CartesianPlotPrivate:public AbstractPlotPrivate{
     public:
 		CartesianPlotPrivate(CartesianPlot *owner);
-		CartesianPlot * const q;
-		QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		CartesianPlot* const q;
+
+		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 		virtual void mouseMoveEvent (QGraphicsSceneMouseEvent*);
-		
+		virtual void wheelEvent( QGraphicsSceneWheelEvent*);
+		virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * event );
+
 		virtual void retransform();
 		void retransformScales();
 		float round(float value, int precision);
@@ -86,8 +90,6 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		float autoScaleOffsetFactor;
 		CartesianPlot::Scale xScale, yScale;
 		bool suppressRetransform;
-
-		void wheelEvent( QGraphicsSceneWheelEvent*);
 };
 
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
@@ -399,13 +401,14 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
 	return the actual bounding rectangular of the plot (plot's rectangular minus padding)
 	in plot's coordinates
  */
+//TODO: return here a private variable only, update this variable on rect and padding changes.
 QRectF CartesianPlot::plotRect() {
 	Q_D(const CartesianPlot);
 	QRectF rect = d->mapFromScene(d->rect).boundingRect();
 	rect.setX(rect.x() + d->horizontalPadding);
 	rect.setY(rect.y() + d->verticalPadding);
 	rect.setWidth(rect.width() - d->horizontalPadding);
-	rect.setHeight(rect.height()-d->verticalPadding);	
+	rect.setHeight(rect.height()-d->verticalPadding);
 	return rect;
 }
 
@@ -895,19 +898,17 @@ void CartesianPlotPrivate::retransform(){
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 	
 	retransformScales();
-	
-	AbstractPlot* plot = dynamic_cast<AbstractPlot*>(q);
-	
+
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
-	plot->plotArea()->setRect(rect);
+	q->plotArea()->setRect(rect);
 
 	//call retransform() for the title and the legend (if available)
 	//when a predefined position relative to the (Left, Centered etc.) is used, 
 	//the actual position needs to be updated on plot's geometry changes.
-	plot->title()->retransform();
+	q->title()->retransform();
 	if (q->m_legend)
 		q->m_legend->retransform();
-	
+
 	q->retransform();
 }
 
@@ -1093,14 +1094,8 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 }
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
-	CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
-	QPointF pos = event->pos();
-	float x = pos.x() + horizontalPadding;
-	float y = pos.y() + verticalPadding;
-	qDebug()<<"##################";
-	qDebug()<<QPointF(x,y);
-	qDebug()<<cSystem->mapSceneToLogical(QPointF(x,y));
+	//TODO: implement the navigation in plot on mouse move events, 
+	//calculate the position changes and call shift*()-functions
 
 	QGraphicsItem::mouseMoveEvent(event) ;
 }
@@ -1159,6 +1154,16 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 			if (zoomY) q->zoomOutY();
 		}
 	}
+}
+
+void CartesianPlotPrivate::hoverMoveEvent ( QGraphicsSceneHoverEvent * event ){
+	QPointF point = event->pos();
+	if (q->plotRect().contains(point)){
+		CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(q->coordinateSystem());
+		qDebug()<<cSystem->mapSceneToLogical(point);
+	}
+
+	QGraphicsItem::hoverMoveEvent(event) ;
 }
 
 //##############################################################################
