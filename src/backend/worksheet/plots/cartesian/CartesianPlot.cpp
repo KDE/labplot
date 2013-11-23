@@ -1160,7 +1160,9 @@ void CartesianPlotPrivate::hoverMoveEvent ( QGraphicsSceneHoverEvent * event ){
 	QPointF point = event->pos();
 	if (q->plotRect().contains(point)){
 		CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(q->coordinateSystem());
-		qDebug()<<cSystem->mapSceneToLogical(point);
+		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
+		QString info = "x=" + QString::number(logicalPoint.x()) + ", y=" + QString::number(logicalPoint.y());
+		q->info(info);
 	}
 
 	QGraphicsItem::hoverMoveEvent(event) ;

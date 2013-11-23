@@ -432,7 +432,6 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 
 QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint, const MappingFlags& flags) const {
 	QRectF pageRect = d->plot->plotRect();
-	qDebug()<< "map: " << pageRect << "  " << logicalPoint << "  " << pageRect.contains(logicalPoint);
 	QPointF result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
