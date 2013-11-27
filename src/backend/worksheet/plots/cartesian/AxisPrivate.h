@@ -46,6 +46,7 @@ class AxisPrivate: public QGraphicsItem {
 
 		const CartesianPlot* m_plot;
 		const CartesianCoordinateSystem* m_cSystem;
+		bool m_printing;
 
 		//general
 		bool autoScale;

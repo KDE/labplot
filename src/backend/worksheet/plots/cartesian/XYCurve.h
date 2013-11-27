@@ -116,6 +116,7 @@ class XYCurve: public AbstractWorksheetElement {
 		
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
+		virtual void setPrinting(bool on);
 
 		typedef AbstractWorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;

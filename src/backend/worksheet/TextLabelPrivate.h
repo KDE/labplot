@@ -66,6 +66,7 @@ class TextLabelPrivate: public QGraphicsItem{
 
 		bool suppressItemChangeEvent;
 		bool suppressRetransform;
+		bool m_printing;
 
 		QRectF boundingRectangle; //bounding rectangle of the text
 		QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
@@ -80,6 +81,7 @@ class TextLabelPrivate: public QGraphicsItem{
 
 	private:
 		QImage teXImage;
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 };
 
 #endif

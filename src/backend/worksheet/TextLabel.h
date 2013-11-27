@@ -68,8 +68,9 @@ class TextLabel : public AbstractWorksheetElement{
 		TextLabel(const QString &name);
 		~TextLabel();
 		
-		virtual QGraphicsItem *graphicsItem() const;
 		virtual QIcon icon() const;
+		virtual QMenu* createContextMenu();
+		virtual QGraphicsItem *graphicsItem() const;
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 		
@@ -85,6 +86,7 @@ class TextLabel : public AbstractWorksheetElement{
 		
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
+		virtual void setPrinting(bool);
 
 		typedef TextLabelPrivate Private;
 
@@ -95,6 +97,9 @@ class TextLabel : public AbstractWorksheetElement{
 	private slots:
 		void updateTeXImage();
 
+		//SLOTs for changes triggered via QActions in the context menu
+		void visibilityChanged();
+
 	protected:
 		TextLabelPrivate* const d_ptr;
 		TextLabel(const QString& name, TextLabelPrivate* dd);
@@ -102,6 +107,9 @@ class TextLabel : public AbstractWorksheetElement{
 	private:
     	Q_DECLARE_PRIVATE(TextLabel)
 		void init();
+		void initActions();
+
+		QAction* visibilityAction;
 
 	signals:
 		friend class TextLabelSetTextCmd;

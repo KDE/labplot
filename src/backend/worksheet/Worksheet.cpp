@@ -482,6 +482,13 @@ void Worksheet::setPageRect(const QRectF& rect, bool scaleContent) {
 	}
 }
 
+void Worksheet::setPrinting(bool on) const {
+	QList<AbstractWorksheetElement*> childElements = children<AbstractWorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	foreach(AbstractWorksheetElement* elem, childElements)
+		elem->setPrinting(on);
+}
+
+
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################

@@ -381,6 +381,11 @@ bool Axis::isVisible() const {
 	return d->isVisible();
 }
 
+void Axis::setPrinting(bool on) {
+	Q_D(Axis);
+	d->m_printing = on;
+}
+
 STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation, retransform);
 void Axis::setOrientation( AxisOrientation orientation) {
 	Q_D(Axis);
@@ -776,7 +781,8 @@ void Axis::visibilityChanged(){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), majorTicksColumn(0), minorTicksColumn(0), q(owner){
+AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false),
+	majorTicksColumn(0), minorTicksColumn(0), q(owner){
 }
 
 QString AxisPrivate::name() const{
@@ -1537,7 +1543,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		}
 	}
 
-	if (isSelected()){
+	if (isSelected() && !m_printing){
 		painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
 		painter->drawPath(axisShapeWithoutGrids);
 	}

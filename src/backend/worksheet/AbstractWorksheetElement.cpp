@@ -91,7 +91,13 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
 bool AbstractWorksheetElement::isFullyVisible() const {
 	return isVisible();
 }
-		
+
+/**
+ * \fn void AbstractWorksheetElement::setPrinting(bool on)
+ * \brief Switches the printing mode on/off
+ *
+ */
+
 /**
  * \fn void AbstractWorksheetElement::retransform()
  * \brief Tell the element to newly transform its graphics item into its coordinate system.

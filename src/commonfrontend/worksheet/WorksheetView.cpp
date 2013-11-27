@@ -931,13 +931,17 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	painter->restore();
 	
 	//draw the scene items
+	m_worksheet->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect);
+	m_worksheet->setPrinting(false);
 }
 
 void WorksheetView::print(QPrinter* printer) const{
+	m_worksheet->setPrinting(true);
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
 	scene()->render(&painter);
+	m_worksheet->setPrinting(false);
 }
 
 void WorksheetView::updateBackground(){

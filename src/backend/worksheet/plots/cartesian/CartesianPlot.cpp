@@ -90,6 +90,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		float autoScaleOffsetFactor;
 		CartesianPlot::Scale xScale, yScale;
 		bool suppressRetransform;
+		bool m_printing;
 };
 
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
@@ -382,6 +383,11 @@ QIcon CartesianPlot::icon() const{
 	ico = KIcon("office-chart-line");
 #endif
 	return ico;
+}
+
+void CartesianPlot::setPrinting(bool on) {
+	Q_D(CartesianPlot);
+	d->m_printing = on;
 }
 
 //##############################################################################
@@ -879,7 +885,7 @@ void CartesianPlot::visibilityChanged(){
 //################### Private implementation ##########################
 //#####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) 
-	: AbstractPlotPrivate(owner), q(owner), suppressRetransform(false) {
+	: AbstractPlotPrivate(owner), q(owner), suppressRetransform(false), m_printing(false) {
 }
 
 /*!

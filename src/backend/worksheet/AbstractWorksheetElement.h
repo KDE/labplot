@@ -47,7 +47,7 @@ class AbstractWorksheetElement: public AbstractAspect {
 		virtual void setVisible(bool on) = 0;
 		virtual bool isVisible() const = 0;
 		virtual bool isFullyVisible() const;
-
+		virtual void setPrinting(bool) = 0;
 		virtual QMenu *createContextMenu();
 
 		static QPainterPath shapeFromPath(const QPainterPath &path, const QPen &pen);

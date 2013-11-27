@@ -45,6 +45,8 @@ class XYCurvePrivate: public QGraphicsItem {
 		virtual QRectF boundingRect() const;
 		QPainterPath shape() const;
 
+		bool m_printing;
+
 		void retransform();
 		void updateLines();
 		void updateDropLines();
@@ -134,7 +136,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		XYCurve * const q;
 
 	private:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);		
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 };
 
 #endif

@@ -40,6 +40,7 @@
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QMenu>
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
@@ -87,14 +88,22 @@ void TextLabel::init() {
 	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
 	// -> take this into account
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
-	d->teXImageResolution = 100;
+	d->teXImageResolution = 600;
 	d->teXImageScaleFactor = QApplication::desktop()->physicalDpiX()/float(d->teXImageResolution)*d->scaleFactor;
 
 	connect(&d->teXImageFutureWatcher, SIGNAL(finished()), this, SLOT(updateTeXImage()));
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);	
+	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+
+	this->initActions();
+}
+
+void TextLabel::initActions() {
+	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction->setCheckable(true);
+	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
 TextLabel::~TextLabel() {
@@ -126,6 +135,21 @@ QIcon TextLabel::icon() const{
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	return  KIcon("draw-text");
 #endif
+}
+
+QMenu* TextLabel::createContextMenu(){
+	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+	QAction* firstAction = menu->actions().first();
+#else
+	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
+#endif
+
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+
+	return menu;
 }
 
 /* ============================ getter methods ================= */
@@ -221,16 +245,32 @@ bool TextLabel::isVisible() const {
 	return d->isVisible();
 }
 
+void TextLabel::setPrinting(bool on) {
+	Q_D(TextLabel);
+	d->m_printing = on;
+}
+
 void TextLabel::updateTeXImage(){
 	Q_D(TextLabel);
 	d->updateTeXImage();
 }
+//##############################################################################
+//######  SLOTs for changes triggered via QActions in the context menu  ########
+//##############################################################################
+void TextLabel::visibilityChanged(){
+	Q_D(const TextLabel);
+	this->setVisible(!d->isVisible());
+}
 
-//################################################################
-//################### Private implementation ##########################
-//################################################################
+//##############################################################################
+//####################### Private implementation ###############################
+//##############################################################################
 TextLabelPrivate::TextLabelPrivate(TextLabel *owner)
-		: q(owner), positionInvalid(false), suppressItemChangeEvent(false), suppressRetransform(false) {
+		: q(owner),
+		positionInvalid(false),
+		suppressItemChangeEvent(false),
+		suppressRetransform(false), 
+		m_printing(false) {
 }
 
 QString TextLabelPrivate::name() const{
@@ -434,7 +474,7 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	}
 	painter->restore();
 	
-	if (isSelected()){
+	if (isSelected() && !m_printing){
 		painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
 		painter->drawPath(labelShape);
 	}	
@@ -522,6 +562,10 @@ QPointF TextLabelPrivate::positionFromItemPosition(const QPointF& itemPos) {
 	}
 
 	return tmpPosition;
+}
+
+void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
+    q->createContextMenu()->exec(event->screenPos());
 }
 
 //##############################################################################

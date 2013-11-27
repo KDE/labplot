@@ -60,8 +60,9 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 
-		virtual void setVisible(bool on);
+		virtual void setVisible(bool);
 		virtual bool isVisible() const;
+		virtual void setPrinting(bool);
 
 		TextLabel* title();
 

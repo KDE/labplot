@@ -127,8 +127,9 @@ class Axis: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
 		BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
 		
-		virtual void setVisible(bool on);
+		virtual void setVisible(bool);
 		virtual bool isVisible() const;
+		virtual void setPrinting(bool);
 
 		typedef AbstractWorksheetElement BaseClass;
 		typedef AxisPrivate Private;

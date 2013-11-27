@@ -53,6 +53,7 @@ class PlotArea: public AbstractWorksheetElement{
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
+		virtual void setPrinting(bool) {};
 		
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)

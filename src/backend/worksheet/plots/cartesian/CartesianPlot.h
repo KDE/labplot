@@ -51,6 +51,7 @@ class CartesianPlot:public AbstractPlot{
 		void fillToolBar(QToolBar*) const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
+		virtual void setPrinting(bool);
 		
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
@@ -133,7 +134,6 @@ class CartesianPlot:public AbstractPlot{
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 
 	signals:
-
 		friend class CartesianPlotSetRectCmd;
 		friend class CartesianPlotSetXMinCmd;
 		friend class CartesianPlotSetXMaxCmd;

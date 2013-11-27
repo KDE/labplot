@@ -181,6 +181,11 @@ bool CartesianPlotLegend::isVisible() const{
 	return d->isVisible();
 }
 
+void CartesianPlotLegend::setPrinting(bool on) {
+	Q_D(CartesianPlotLegend);
+	d->m_printing = on;
+}
+
 QGraphicsItem *CartesianPlotLegend::graphicsItem() const{
 	return d_ptr;
 }
@@ -414,7 +419,7 @@ void CartesianPlotLegend::visibilityChanged(){
 //######################### Private implementation #############################
 //##############################################################################
 CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner):q(owner),
-	suppressItemChangeEvent(false), suppressRetransform(false) {
+	suppressItemChangeEvent(false), suppressRetransform(false), m_printing(false) {
 }
 
 QString CartesianPlotLegendPrivate::name() const {
@@ -772,7 +777,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	painter->restore();
 	painter->restore();
 
-	if (isSelected()){
+	if (isSelected() && !m_printing){
 		QPainterPath path = shape();
 		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
 		painter->drawPath(path);

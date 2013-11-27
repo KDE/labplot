@@ -174,6 +174,11 @@ bool XYCurve::isVisible() const{
 	return d->isVisible();
 }
 
+void XYCurve::setPrinting(bool on) {
+	Q_D(XYCurve);
+	d->m_printing = on;
+}
+
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
@@ -654,7 +659,7 @@ void XYCurve::visibilityChanged(){
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : symbolsFactory(0), q(owner) {
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : symbolsFactory(0), q(owner), m_printing(false) {
 	foreach(QObject *plugin, PluginManager::plugins()) {
 		CurveSymbolFactory* factory = qobject_cast<CurveSymbolFactory*>(plugin);
 		if (factory)
@@ -1458,7 +1463,7 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
 	painter->setOpacity(opacity);
 
-	if (isSelected()){
+	if (isSelected() && !m_printing){
 		painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
 		painter->drawPath(shape());
 	}

@@ -65,6 +65,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void setPageRect(const QRectF &rect, const bool scaleContent=false);
 		QGraphicsScene *scene() const;
 		void update();
+		void setPrinting(bool) const;
 
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
 		void setSelectedInView(const bool);

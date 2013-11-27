@@ -58,6 +58,7 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 
 		bool suppressItemChangeEvent;
 		bool suppressRetransform;
+		bool m_printing;
 
 		QRectF rect;
 		QFont labelFont;
