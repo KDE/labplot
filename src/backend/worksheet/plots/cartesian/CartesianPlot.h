@@ -51,7 +51,6 @@ class CartesianPlot:public AbstractPlot{
 		void fillToolBar(QToolBar*) const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
-		virtual void setPrinting(bool);
 		
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);

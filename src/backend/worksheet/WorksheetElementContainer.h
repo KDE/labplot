@@ -47,6 +47,7 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual bool isFullyVisible() const;
+		virtual void setPrinting(bool);
 
 		QRectF rect() const;
 		virtual void setRect(const QRectF&) = 0;

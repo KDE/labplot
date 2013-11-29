@@ -659,7 +659,7 @@ void XYCurve::visibilityChanged(){
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : symbolsFactory(0), q(owner), m_printing(false) {
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), symbolsFactory(0), q(owner) {
 	foreach(QObject *plugin, PluginManager::plugins()) {
 		CurveSymbolFactory* factory = qobject_cast<CurveSymbolFactory*>(plugin);
 		if (factory)

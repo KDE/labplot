@@ -116,6 +116,11 @@ bool WorksheetElementContainer::isFullyVisible() const {
 	return true;
 }
 
+void WorksheetElementContainer::setPrinting(bool on) {
+	Q_D(WorksheetElementContainer);
+	d->m_printing = on;
+}
+
 void WorksheetElementContainer::retransform() {
 	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(AbstractWorksheetElement *elem, childList)
@@ -153,7 +158,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 //################### Private implementation ##########################
 //################################################################
 WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
-	: q(owner), m_hovered(false) {
+	: q(owner), m_hovered(false), m_printing(false) {
 	this->setAcceptHoverEvents(true);
 }
 
@@ -202,12 +207,12 @@ void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOpti
 	if (!isVisible())
 		return;
 
-	if (m_hovered && !isSelected()){
+	if (m_hovered && !isSelected() && !m_printing){
 		painter->setPen(QPen(QColor(128,179,255), 10, Qt::SolidLine));
 		painter->drawRect(boundingRect());
 	}
 	
-	if (isSelected()){
+	if (isSelected() && !m_printing){
 		painter->setPen(QPen(Qt::blue, 10, Qt::SolidLine));
 		painter->drawRect(boundingRect());
   }

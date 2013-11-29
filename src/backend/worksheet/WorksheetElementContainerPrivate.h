@@ -52,6 +52,7 @@ class WorksheetElementContainerPrivate:  public QGraphicsItem{
 
 		QRectF rect;
 		bool m_hovered;
+		bool m_printing;
 
 signals:
     void selectedChange(QGraphicsItem *item);
