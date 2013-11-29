@@ -99,6 +99,9 @@ class WorksheetView : public QGraphicsView{
 	QAction* currentZoomAction;
 
 	//Actions
+	QAction* selectAllAction;
+	QAction* deleteAction;
+
 	QAction* zoomInAction;
 	QAction* zoomOutAction;
 	QAction* zoomOriginAction;
@@ -139,6 +142,8 @@ class WorksheetView : public QGraphicsView{
 
 	void addNew(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
+	void selectAllElements();
+	void deleteElement();
 
 	void changeZoom(QAction*);
 	void changeLayout(QAction*);

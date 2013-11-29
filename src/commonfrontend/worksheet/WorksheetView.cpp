@@ -128,104 +128,67 @@ void WorksheetView::initActions(){
 	QActionGroup* layoutActionGroup = new QActionGroup(this);
 	QActionGroup * gridActionGroup = new QActionGroup(this);
 	gridActionGroup->setExclusive(true);
-	
- #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
- //Zoom actions
- zoomInAction = new QAction(tr("Zoom in"), this);
- zoomInAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
- 
- zoomOutAction = new QAction(tr("Zoom out"), this);
- zoomOutAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
- 
- zoomOriginAction = new QAction(tr("Original size"), this);
- zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
- 
- zoomFitPageHeightAction = new QAction(tr("Fit to height"), this);
- 
- zoomFitPageWidthAction = new QAction(tr("Fit to width"), this);
 
- zoomFitSelectionAction = new QAction(tr("Fit to selection"), this);
- 
- // Mouse mode actions 
- navigationModeAction = new QAction(tr("Navigation"), navigationModeAction);
- navigationModeAction->setCheckable(true);
- connect(navigationModeAction, SIGNAL(triggered()), SLOT(enableNavigationMode()));
- 
- zoomModeAction = new QAction(tr("Zoom"), navigationModeAction);
- zoomModeAction->setCheckable(true);
- connect(zoomModeAction, SIGNAL(triggered()), SLOT(enableZoomMode()));
- 
- selectionModeAction = new QAction(tr("Selection"), navigationModeAction);
- selectionModeAction->setCheckable(true);
- connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
- 
- //Layout actions
- verticalLayoutAction = new QAction(tr("Vertical layout"), layoutActionGroup);
- verticalLayoutAction->setObjectName("verticalLayoutAction");
- verticalLayoutAction->setCheckable(true);
- 
- horizontalLayoutAction = new QAction(tr("Horizontal layout"), layoutActionGroup);
- horizontalLayoutAction->setObjectName("horizontalLayoutAction");
- horizontalLayoutAction->setCheckable(true);
- 
- gridLayoutAction = new QAction(tr("Grid layout"), layoutActionGroup);
- gridLayoutAction->setObjectName("gridLayoutAction");
- gridLayoutAction->setCheckable(true);
- 
- breakLayoutAction = new QAction(tr("Break layout"), layoutActionGroup);
- breakLayoutAction->setObjectName("breakLayoutAction");
- breakLayoutAction->setEnabled(false);
-#else
-  //Zoom actions
-  zoomInAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
-  zoomInAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
+	selectAllAction = new KAction(KIcon("edit-select-all"), i18n("Select all"), this);
+	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
+// 	selectAllAction->setShortcutContext(Qt::WidgetShortcut);
+	this->addAction(selectAllAction);
+	connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAllElements()));
 
-  zoomOutAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), zoomActionGroup);
-  zoomOutAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
+	deleteAction = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
+	deleteAction->setShortcut(Qt::Key_Delete);
+// 	deleteAction->setShortcutContext(Qt::WidgetShortcut);
+	this->addAction(deleteAction);
+	connect(deleteAction, SIGNAL(triggered()), SLOT(deleteElement()));
 
-  zoomOriginAction = new KAction(KIcon("zoom-original"), i18n("Original size"), zoomActionGroup);
-  zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
+	//Zoom actions
+	zoomInAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
+	zoomInAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
 
-  zoomFitPageHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
+	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), zoomActionGroup);
+	zoomOutAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
 
-  zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
-  
-  zoomFitSelectionAction = new KAction(i18n("Fit to selection"), zoomActionGroup);
+	zoomOriginAction = new KAction(KIcon("zoom-original"), i18n("Original size"), zoomActionGroup);
+	zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
 
-  // Mouse mode actions 
-  navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigation"), mouseModeActionGroup);
-  navigationModeAction->setCheckable(true);
-  connect(navigationModeAction, SIGNAL(triggered()), SLOT(enableNavigationMode()));
+	zoomFitPageHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
+	zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
+	zoomFitSelectionAction = new KAction(i18n("Fit to selection"), zoomActionGroup);
 
-  zoomModeAction = new KAction(KIcon("page-zoom"), i18n("Zoom"), mouseModeActionGroup);
-  zoomModeAction->setCheckable(true);
-  connect(zoomModeAction, SIGNAL(triggered()), SLOT(enableZoomMode()));
+	// Mouse mode actions 
+	navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigation"), mouseModeActionGroup);
+	navigationModeAction->setCheckable(true);
+	connect(navigationModeAction, SIGNAL(triggered()), SLOT(enableNavigationMode()));
 
-  selectionModeAction = new KAction(KIcon("select-rectangular"), i18n("Selection"), mouseModeActionGroup);
-  selectionModeAction->setCheckable(true);
-  connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
+	zoomModeAction = new KAction(KIcon("page-zoom"), i18n("Zoom"), mouseModeActionGroup);
+	zoomModeAction->setCheckable(true);
+	connect(zoomModeAction, SIGNAL(triggered()), SLOT(enableZoomMode()));
 
-  //"Add new" related actions
-  addPlotAction = new KAction(KIcon("office-chart-line"), i18n("xy-plot"), addNewActionGroup);
-  addTextLabelAction = new KAction(KIcon("draw-text"), i18n("text label"), addNewActionGroup);
-  
-  //Layout actions
-  verticalLayoutAction = new KAction(KIcon("editvlayout"), i18n("Vertical layout"), layoutActionGroup);
-  verticalLayoutAction->setObjectName("verticalLayoutAction");
-  verticalLayoutAction->setCheckable(true);
+	selectionModeAction = new KAction(KIcon("select-rectangular"), i18n("Selection"), mouseModeActionGroup);
+	selectionModeAction->setCheckable(true);
+	connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
 
-  horizontalLayoutAction = new KAction(KIcon("edithlayout"), i18n("Horizontal layout"), layoutActionGroup);
-  horizontalLayoutAction->setObjectName("horizontalLayoutAction");
-  horizontalLayoutAction->setCheckable(true);
+	//"Add new" related actions
+	addPlotAction = new KAction(KIcon("office-chart-line"), i18n("xy-plot"), addNewActionGroup);
+	addTextLabelAction = new KAction(KIcon("draw-text"), i18n("text label"), addNewActionGroup);
 
-  gridLayoutAction = new KAction(KIcon("editgrid"), i18n("Grid layout"), layoutActionGroup);
-  gridLayoutAction->setObjectName("gridLayoutAction");
-  gridLayoutAction->setCheckable(true);
+	//Layout actions
+	verticalLayoutAction = new KAction(KIcon("editvlayout"), i18n("Vertical layout"), layoutActionGroup);
+	verticalLayoutAction->setObjectName("verticalLayoutAction");
+	verticalLayoutAction->setCheckable(true);
 
-  breakLayoutAction = new KAction(KIcon("editbreaklayout"), i18n("Break layout"), layoutActionGroup);
-  breakLayoutAction->setObjectName("breakLayoutAction");
-  breakLayoutAction->setEnabled(false);
-  
+	horizontalLayoutAction = new KAction(KIcon("edithlayout"), i18n("Horizontal layout"), layoutActionGroup);
+	horizontalLayoutAction->setObjectName("horizontalLayoutAction");
+	horizontalLayoutAction->setCheckable(true);
+
+	gridLayoutAction = new KAction(KIcon("editgrid"), i18n("Grid layout"), layoutActionGroup);
+	gridLayoutAction->setObjectName("gridLayoutAction");
+	gridLayoutAction->setCheckable(true);
+
+	breakLayoutAction = new KAction(KIcon("editbreaklayout"), i18n("Break layout"), layoutActionGroup);
+	breakLayoutAction->setObjectName("breakLayoutAction");
+	breakLayoutAction->setEnabled(false);
+
    //Grid actions
 	noGridAction = new KAction(i18n("no grid"), gridActionGroup);
 	noGridAction->setObjectName("noGridAction");
@@ -255,8 +218,7 @@ void WorksheetView::initActions(){
 	
 	snapToGridAction = new KAction(i18n("snap to grid"), this);
 	snapToGridAction->setCheckable(true);
-#endif
-	
+
 	//check the action corresponding to the currently active layout in worksheet
 	this->layoutChanged(m_worksheet->layout());
 	
@@ -531,7 +493,9 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 	painter->restore();	
 }
 
-//#################### EVENTS #################
+//##############################################################################
+//####################################  Events   ###############################
+//##############################################################################
 void WorksheetView::wheelEvent(QWheelEvent *event) {
   if (m_currentMouseMode == ZoomMode){
 	if (event->delta() > 0)
@@ -581,7 +545,9 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 }
 
 
-//###################### SLOTS #################
+//##############################################################################
+//####################################  SLOTs   ################################
+//##############################################################################
 void WorksheetView::changeZoom(QAction* action){
 	if (action==zoomInAction){
 		scale(1.2, 1.2);
@@ -658,7 +624,33 @@ void WorksheetView::addNew(QAction* action){
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);	
 	m_fadeInTimeLine->start();
 }
+
+/*!
+ * select all top-level items
+ */
+void WorksheetView::selectAllElements() {
+	//deselect all previously selected items since there can be some non top-level items belong them
+	m_suppressSelectionChangedEvent = true;
+	QList<QGraphicsItem*> items = scene()->selectedItems();
+	foreach ( QGraphicsItem* item , m_selectedItems ){
+		m_worksheet->setItemSelectedInView(item, false);
+	}
 	
+	//select top-level items
+	items = scene()->items();
+	foreach(QGraphicsItem* item, items){
+		if (!item->parentItem())
+			item->setSelected(true);
+	}
+	m_suppressSelectionChangedEvent = false;
+	this->selectionChanged();
+}
+
+void WorksheetView::deleteElement() {
+	qDebug()<<"WorksheetView::deleteElement";
+}
+
+
 void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
 	lastAddedWorksheetElement = dynamic_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (!lastAddedWorksheetElement)
