@@ -646,10 +646,22 @@ void WorksheetView::selectAllElements() {
 	this->selectionChanged();
 }
 
+/*!
+ * deletes selected worksheet elements
+ */
 void WorksheetView::deleteElement() {
-	qDebug()<<"WorksheetView::deleteElement";
-}
+	QList<QGraphicsItem*> items = scene()->selectedItems();
+	if (items.size()==0)
+		return;
 
+	m_suppressSelectionChangedEvent = true;
+	m_worksheet->beginMacro(tr("%1: Remove selected worksheet element(s).").arg(m_worksheet->name()));
+	foreach ( QGraphicsItem* item , m_selectedItems ) {
+		m_worksheet->deleteAspectFromGraphicsItem(item);
+	}
+	m_worksheet->endMacro();
+	m_suppressSelectionChangedEvent = false;
+}
 
 void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
 	lastAddedWorksheetElement = dynamic_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));

@@ -69,6 +69,7 @@ class Worksheet: public AbstractPart, public scripted{
 
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
 		void setSelectedInView(const bool);
+		void deleteAspectFromGraphicsItem(const QGraphicsItem*);
 
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)

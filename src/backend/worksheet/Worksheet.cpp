@@ -257,7 +257,8 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 			break;
 	}
 
-	Q_ASSERT(aspect);
+	if (!aspect)
+		return;
 
 	//forward selection/deselection to AbstractTreeModel
 	if (b)
@@ -294,6 +295,25 @@ void Worksheet::setSelectedInView(const bool b){
 		emit childAspectSelectedInView(this);
 	else
 		emit childAspectDeselectedInView(this);
+}
+
+void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item){
+	Q_ASSERT(item);
+	//determine the corresponding aspect
+	AbstractAspect* aspect = 0;
+	foreach( const AbstractWorksheetElement* child, children<AbstractWorksheetElement>(IncludeHidden) ){
+		aspect = this->aspectFromGraphicsItem(child, item);
+		if (aspect)
+			break;
+	}
+
+	if (!aspect)
+		return;
+
+	if (aspect->parentAspect())
+		aspect->parentAspect()->removeChild(aspect);
+	else
+		this->removeChild(aspect);
 }
 
 void Worksheet::update(){
