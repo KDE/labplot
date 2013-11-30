@@ -174,7 +174,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const{
 				case 0: return aspect->name();
 				case 1: return aspect->metaObject()->className();
 				case 2: return aspect->creationTime().toString();
-				case 3: return aspect->comment();
+				case 3: return aspect->comment().replace("\n", " ").simplified();
 				default: return QVariant();
 			}
 		case Qt::ToolTipRole:
