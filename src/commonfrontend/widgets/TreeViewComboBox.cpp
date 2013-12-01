@@ -28,7 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "backend/widgets/TreeViewComboBox.h"
+#include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
 #include <QHeaderView>

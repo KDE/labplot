@@ -31,8 +31,8 @@
 #include "ImportFileWidget.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include "backend/widgets/TreeViewComboBox.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <kmessagebox.h>
 #include <KInputDialog>

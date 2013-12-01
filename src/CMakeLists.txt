@@ -80,7 +80,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
-	${BACKEND_DIR}/widgets/TreeViewComboBox.cpp
 	${BACKEND_DIR}/worksheet/AbstractCurveSymbol.cpp
 	${BACKEND_DIR}/worksheet/AbstractWorksheetDecorationElement.cpp
 	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
@@ -118,6 +117,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
+	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 )
 
 set(TOOLS_SOURCES

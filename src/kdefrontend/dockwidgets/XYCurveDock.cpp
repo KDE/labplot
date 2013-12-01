@@ -35,9 +35,9 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/plugin/PluginManager.h"
 #include "backend/worksheet/StandardCurveSymbolFactory.h"
-#include "backend/widgets/TreeViewComboBox.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 
