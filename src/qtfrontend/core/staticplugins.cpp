@@ -1,3 +1,0 @@
-#include <QtPlugin>
-
-IMPORT_SCIDAVIS_MODULES
