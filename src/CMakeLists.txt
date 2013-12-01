@@ -32,7 +32,6 @@ set(GUI_SOURCES
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
-	${KDEFRONTEND_DIR}/ui/projectdialog.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
