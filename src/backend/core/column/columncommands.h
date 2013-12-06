@@ -31,8 +31,8 @@
 #ifndef COLUMNCOMMANDS_H
 #define COLUMNCOMMANDS_H
 
-#include "lib/IntervalAttribute.h"
-#include "core/column/Column.h"
+#include "backend/lib/IntervalAttribute.h"
+#include "backend/core/column/Column.h"
 
 #include <QUndoCommand>
 #include <QStringList>

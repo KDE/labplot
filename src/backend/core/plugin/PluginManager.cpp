@@ -27,11 +27,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "core/plugin/PluginManager.h"
-#include "core/plugin/PluginLoader.h"
-#include "core/globals.h"
+#include "backend/core/plugin/PluginManager.h"
+#include "backend/core/plugin/PluginLoader.h"
+#include "backend/core/globals.h"
 #include <QPluginLoader>
-#include <QString>
 #include <QSettings>
 #include <QtDebug>
 #include <QSet>

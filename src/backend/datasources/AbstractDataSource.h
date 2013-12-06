@@ -29,8 +29,8 @@
 #ifndef ABSTRACTDATASOURCE_H
 #define ABSTRACTDATASOURCE_H
 
-#include "core/AbstractPart.h"
-#include "core/AbstractScriptingEngine.h"
+#include "backend/core/AbstractPart.h"
+#include "backend/core/AbstractScriptingEngine.h"
 
 class AbstractDataSource : public AbstractPart, public scripted{
 

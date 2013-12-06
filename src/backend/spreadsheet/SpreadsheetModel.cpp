@@ -28,9 +28,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "core/column/Column.h"
-#include "spreadsheet/Spreadsheet.h"
-#include "spreadsheet/SpreadsheetModel.h"
+#include "backend/core/column/Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/spreadsheet/SpreadsheetModel.h"
 #include <QString>
 #include <QBrush>
 #include <QIcon>
@@ -223,6 +223,7 @@ QModelIndex SpreadsheetModel::parent(const QModelIndex & child) const
 }
 
 bool SpreadsheetModel::hasChildren(const QModelIndex& parent) const {
+	Q_UNUSED(parent)
 	return false;
 }
 

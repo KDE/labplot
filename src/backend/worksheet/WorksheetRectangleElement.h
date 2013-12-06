@@ -30,8 +30,7 @@
 #ifndef WORKSHEETRECTANGLEELEMENT_H
 #define WORKSHEETRECTANGLEELEMENT_H
 
-#include "worksheet/AbstractWorksheetElement.h"
-#include <QGraphicsRectItem>
+#include "backend/worksheet/AbstractWorksheetElement.h"
 
 class WorksheetRectangleElement: public AbstractWorksheetElement {
 	Q_OBJECT

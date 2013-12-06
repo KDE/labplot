@@ -31,11 +31,11 @@
 #ifndef WORKSHEET_H
 #define WORKSHEET_H
 
-#include "core/AbstractPart.h"
-#include "core/AbstractScriptingEngine.h"
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/plots/PlotArea.h"
-#include "lib/macros.h"
+#include "backend/core/AbstractPart.h"
+#include "backend/core/AbstractScriptingEngine.h"
+#include "backend/worksheet/WorksheetModel.h"
+#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/lib/macros.h"
 
 class QGraphicsItem;
 class QRectF;

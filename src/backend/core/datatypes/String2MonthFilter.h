@@ -33,7 +33,7 @@
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
 #include <math.h>
-#include "lib/XmlStreamReader.h"
+#include "backend/lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
 
 //! Conversion filter String -> QDateTime, interpreting the input as months of the year (either numeric or "Jan" etc).

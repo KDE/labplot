@@ -32,7 +32,7 @@
 #define SPREADSHEETCOMMENTSHEADERMODEL_H
 
 #include <QAbstractTableModel>
-#include <spreadsheet/SpreadsheetModel.h>
+#include <backend/spreadsheet/SpreadsheetModel.h>
 
 class SpreadsheetCommentsHeaderModel : public QAbstractTableModel{
 	Q_OBJECT

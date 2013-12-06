@@ -29,7 +29,7 @@ Email (use @ for *)  : alexander.semke*web.de
 #define ASCIIFILTER_H
 
 #include <QStringList>
-#include "datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 
 class AsciiFilterPrivate;
 class AsciiFilter : public AbstractFileFilter{

@@ -28,8 +28,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "core/PartMdiView.h"
-#include "core/AbstractPart.h"
+#include "commonfrontend/core/PartMdiView.h"
+#include "backend/core/AbstractPart.h"
 #include <QCloseEvent>
 #include <QIcon>
 

@@ -53,7 +53,6 @@ class TextLabelPrivate: public QGraphicsItem{
 		TextLabel::HorizontalAlignment horizontalAlignment;
 		TextLabel::VerticalAlignment verticalAlignment;
 
-		TextLabel* const q;
 		QString name() const;
 		void retransform();
 		bool swapVisible(bool on);
@@ -78,6 +77,8 @@ class TextLabelPrivate: public QGraphicsItem{
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+
+		TextLabel* const q;
 
 	private:
 		QImage teXImage;

@@ -28,7 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "spreadsheet/SpreadsheetCommentsHeaderModel.h"
+#include "commonfrontend/spreadsheet/SpreadsheetCommentsHeaderModel.h"
 
  /*!
 	\class SpreadsheetCommentsHeaderModel

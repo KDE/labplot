@@ -31,7 +31,7 @@
 #define PATHCURVESYMBOL_H
 
 #include <QtGlobal>
-#include "worksheet/AbstractCurveSymbol.h"
+#include "backend/worksheet/AbstractCurveSymbol.h"
 
 class PathCurveSymbolPrivate;
 class PathCurveSymbol: public QObject, public AbstractCurveSymbol  {

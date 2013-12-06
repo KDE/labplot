@@ -27,9 +27,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "core/ScriptingEngineManager.h"
-#include "core/AbstractScriptingEngine.h"
-#include "core/plugin/PluginManager.h"
+#include "backend/core/ScriptingEngineManager.h"
+#include "backend/core/AbstractScriptingEngine.h"
+#include "backend/core/plugin/PluginManager.h"
 
 #include <QStringList>
 

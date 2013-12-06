@@ -32,7 +32,7 @@
 #include <QXmlStreamReader>
 #include <QString>
 #include <QStringList>
-#include "lib/macros.h"
+#include "backend/lib/macros.h"
 
 //! XML stream parser that supports errors as well as warnings
 /**

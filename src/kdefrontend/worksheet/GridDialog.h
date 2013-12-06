@@ -31,7 +31,7 @@
 #define GRIDDIALOG_H
 
 #include <KDialog>
-#include "worksheet/WorksheetView.h"
+#include "commonfrontend/worksheet/WorksheetView.h"
 
 class QComboBox;
 class QSpinBox;

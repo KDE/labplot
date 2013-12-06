@@ -28,7 +28,7 @@
  ***************************************************************************/
 
 #include "Double2StringFilter.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
 #include <QUndoCommand>
 

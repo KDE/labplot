@@ -33,14 +33,8 @@
 
 #include <QTableView>
 
-#include "core/AbstractColumn.h"
-#include "lib/IntervalAttribute.h"
-
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-class KAction;
-#else
-class QAction;
-#endif
+#include "backend/core/AbstractColumn.h"
+#include "backend/lib/IntervalAttribute.h"
 
 class Column;
 class Spreadsheet;

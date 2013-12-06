@@ -34,7 +34,7 @@
 #include <QDateTime>
 #include <QDate>
 #include <QTime>
-#include "lib/XmlStreamReader.h"
+#include "backend/lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
 #include <math.h>
 

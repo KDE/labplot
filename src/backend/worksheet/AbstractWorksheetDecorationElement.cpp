@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/AbstractWorksheetDecorationElement.h"
+#include "backend/worksheet/AbstractWorksheetDecorationElement.h"
 
 /**
  * \class WorksheetDecorationElement

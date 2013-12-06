@@ -29,11 +29,8 @@
 #ifndef INTERFACES_H
 #define INTERFACES_H
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include "lib/ConfigPageWidget.h"
-#endif
-#include "core/AbstractAspect.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <QtPlugin>
 
@@ -76,29 +73,6 @@ class FileFormat
 };
 
 Q_DECLARE_INTERFACE(FileFormat, "net.sf.scidavis.fileformat/0.1")
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-class ActionManagerOwner
-{
-	public:
-		virtual ~ActionManagerOwner() {}
-		virtual ActionManager * actionManager() = 0;
-		virtual void initActionManager() {}
-};
-
-Q_DECLARE_INTERFACE(ActionManagerOwner, "net.sf.scidavis.actionmanagerowner/0.1")
-
-class ConfigPageMaker {
-	public:
-		virtual ~ConfigPageMaker() {}
-		virtual ConfigPageWidget * makeConfigPage() = 0;
-		virtual QString configPageLabel() = 0;
-		// TODO (maybe): icons instead of tabs to select the pages
-		//		virtual QIcon icon() = 0;
-};
-
-Q_DECLARE_INTERFACE(ConfigPageMaker, "net.sf.scidavis.configpagemaker/0.1")
-#endif
 
 class XmlElementAspectMaker
 {

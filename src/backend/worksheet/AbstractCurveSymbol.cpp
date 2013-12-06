@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/AbstractCurveSymbol.h"
+#include "backend/worksheet/AbstractCurveSymbol.h"
 
 /**
  * \class AbstractCurveSymbol

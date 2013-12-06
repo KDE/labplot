@@ -30,8 +30,8 @@
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
-#include "lib/IntervalAttribute.h"
-#include "core/column/Column.h"
+#include "backend/lib/IntervalAttribute.h"
+#include "backend/core/column/Column.h"
 
 class AbstractSimpleFilter;
 class QString;

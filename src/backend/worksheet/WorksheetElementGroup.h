@@ -30,7 +30,7 @@
 #ifndef WORKSHEETELEMENTGROUP_H
 #define WORKSHEETELEMENTGROUP_H
 
-#include "worksheet/WorksheetElementContainer.h"
+#include "backend/worksheet/WorksheetElementContainer.h"
 
 class WorksheetElementGroup: public WorksheetElementContainer {
 	Q_OBJECT

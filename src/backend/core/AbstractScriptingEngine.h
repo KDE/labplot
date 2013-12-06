@@ -36,7 +36,7 @@
 #include <QObject>
 #include <QEvent>
 
-#include "core/customevents.h"
+#include "backend/core/customevents.h"
 
 class AbstractScript;
 class QString;

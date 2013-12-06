@@ -29,7 +29,7 @@
  ***************************************************************************/
 #include "String2DateTimeFilter.h"
 #include <QStringList>
-#include "lib/XmlStreamReader.h"
+#include "backend/lib/XmlStreamReader.h"
 #include <QUndoCommand>
 #include <QDateTime>
 #include <QTime>

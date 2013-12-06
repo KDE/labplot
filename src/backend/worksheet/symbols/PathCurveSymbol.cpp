@@ -28,9 +28,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/symbols/PathCurveSymbol.h"
-#include "worksheet/symbols/PathCurveSymbolPrivate.h"
-#include "worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/symbols/PathCurveSymbol.h"
+#include "backend/worksheet/symbols/PathCurveSymbolPrivate.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
 #include <QPainter>
 
 /**

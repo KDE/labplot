@@ -27,8 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetElementGroup.h"
-#include <QtGlobal>
+#include "backend/worksheet/WorksheetElementGroup.h"
 
 /**
  * \class WorksheetElementGroup

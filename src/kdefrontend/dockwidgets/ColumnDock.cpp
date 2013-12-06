@@ -30,12 +30,12 @@
 
 #include "ColumnDock.h"
 
-#include "core/AbstractFilter.h"
-#include "core/datatypes/SimpleCopyThroughFilter.h"
-#include "core/datatypes/Double2StringFilter.h"
-#include "core/datatypes/String2DoubleFilter.h"
-#include "core/datatypes/DateTime2StringFilter.h"
-#include "core/datatypes/String2DateTimeFilter.h"
+#include "backend/core/AbstractFilter.h"
+#include "backend/core/datatypes/SimpleCopyThroughFilter.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/core/datatypes/String2DoubleFilter.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/core/datatypes/String2DateTimeFilter.h"
 
 #include <QDebug>
 

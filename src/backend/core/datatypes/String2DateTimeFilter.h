@@ -30,7 +30,7 @@
 #ifndef STRING2DATE_TIME_FILTER_H
 #define STRING2DATE_TIME_FILTER_H
 
-#include "core/AbstractSimpleFilter.h"
+#include "backend/core/AbstractSimpleFilter.h"
 
 /**
  * \brief Conversion filter QString -> QDateTime.

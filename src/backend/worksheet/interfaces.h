@@ -31,10 +31,8 @@
 #define WORKSHEET_INTERFACES_H
 
 #include <QtPlugin>
-#include <QList>
-#include <QString>
 #include <QStringList>
-#include "worksheet/AbstractCurveSymbol.h"
+#include "backend/worksheet/AbstractCurveSymbol.h"
 
 class CurveSymbolFactory
 {

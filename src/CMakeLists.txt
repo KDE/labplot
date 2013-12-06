@@ -2,7 +2,6 @@ set(KDE_FRONTEND true)
 set(KDEFRONTEND_DIR kdefrontend)
 set(BACKEND_DIR backend)
 set(COMMONFRONTEND_DIR commonfrontend)
-set(DATASOURCES_DIR ${KDEFRONTEND_DIR}/datasources)
 set(TOOLS_DIR tools)
 
 set(GUI_SOURCES
@@ -16,6 +15,11 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
+	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
@@ -101,14 +105,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
 
-set(DATASOURCES_SOURCES
-	${DATASOURCES_DIR}/AsciiOptionsWidget.cpp
-	${DATASOURCES_DIR}/BinaryOptionsWidget.cpp
-	${DATASOURCES_DIR}/ImportFileWidget.cpp
-	${DATASOURCES_DIR}/ImportFileDialog.cpp
-	${DATASOURCES_DIR}/FileInfoDialog.cpp
-)
-
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetDoubleHeaderView.cpp
@@ -137,26 +133,23 @@ set(QTMOC_HDRS
 	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
 )
 
-
 qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
 
-add_custom_command (OUTPUT parser/parser.tab.c
-                   COMMAND ${YACC_EXECUTABLE} ARGS -b parser parser.y
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
+# add_custom_command (OUTPUT parser/parser.tab.c
+#                    COMMAND ${YACC_EXECUTABLE} ARGS -b parser parser.y
+#                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
 add_subdirectory( pics )
 ##############################################################################
-INCLUDE_DIRECTORIES(${BACKEND_DIR} ${COMMONFRONTEND_DIR} .)
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
-
+INCLUDE_DIRECTORIES(.)
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
 kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} 
-${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 # ${OPJ_LIBRARY}
 
 ############## installation ################################
 
 install(TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR})
-# install(FILES LabPlotui.rc DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)
+install(FILES ${KDEFRONTEND_DIR}/LabPlotui.rc DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)

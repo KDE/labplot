@@ -33,8 +33,6 @@
 class Project;
 class AbstractAspect;
 
-//class Worksheet;
-
 class ProjectDock: public QWidget{
 	Q_OBJECT
 	

@@ -31,8 +31,8 @@
 #ifndef ABSTRACT_COLUMN_PRIVATE_H
 #define ABSTRACT_COLUMN_PRIVATE_H
 
-#include "core/AbstractColumn.h"
-#include "lib/IntervalAttribute.h"
+#include "backend/core/AbstractColumn.h"
+#include "backend/lib/IntervalAttribute.h"
 
 class AbstractColumn::Private {
 	public:

@@ -32,9 +32,8 @@
 #define STANDARDCURVESYMBOLFACTORY_H
 
 #include <QObject>
-#include <QList>
 #include <QStringList>
-#include "worksheet/interfaces.h"
+#include "backend/worksheet/interfaces.h"
 
 class StandardCurveSymbolFactory: public QObject, public CurveSymbolFactory {
 	Q_OBJECT

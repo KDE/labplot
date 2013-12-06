@@ -28,9 +28,8 @@
  ***************************************************************************/
 
 #include "FileInfoDialog.h"
-#include "datasources/FileDataSource.h"
+#include "backend/datasources/FileDataSource.h"
 
-#include <KDebug>
 #include <KLocale>
 #include <KFilterDev>
 #include <QFileInfo>

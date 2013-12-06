@@ -31,8 +31,8 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include "core/Folder.h"
-#include "lib/macros.h"
+#include "backend/core/Folder.h"
+#include "backend/lib/macros.h"
 
 class QString;
 class AbstractScriptingEngine;

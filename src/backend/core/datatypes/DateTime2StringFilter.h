@@ -30,7 +30,7 @@
 #ifndef DATE_TIME2STRING_FILTER_H
 #define DATE_TIME2STRING_FILTER_H
 
-#include "core/AbstractSimpleFilter.h"
+#include "backend/core/AbstractSimpleFilter.h"
 
 class DateTime2StringFilterSetFormatCmd;
 

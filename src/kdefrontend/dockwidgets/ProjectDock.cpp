@@ -28,7 +28,7 @@
  ***************************************************************************/
 
 #include "ProjectDock.h"
-#include "core/Project.h"
+#include "backend/core/Project.h"
 #include "../TemplateHandler.h"
 
 /*!

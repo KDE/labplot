@@ -32,9 +32,8 @@
 
 #include "AbstractFilter.h"
 #include "AbstractColumn.h"
-#include "lib/IntervalAttribute.h"
+#include "backend/lib/IntervalAttribute.h"
 
-// forward declaration - class follows
 class SimpleFilterColumn;
 
 class AbstractSimpleFilter : public AbstractFilter

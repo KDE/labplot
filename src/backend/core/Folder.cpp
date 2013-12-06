@@ -29,17 +29,15 @@
  *                                                                         *
  ***************************************************************************/
 #include "backend/core/Folder.h"
-#include "core/Project.h"
+#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-// #include <QApplication>
-// #include <QStyle>
 #include <QXmlStreamWriter>
-#include <QtDebug>
+// #include <QtDebug>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>

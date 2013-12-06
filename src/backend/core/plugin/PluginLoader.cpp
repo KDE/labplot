@@ -27,9 +27,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "core/plugin/PluginLoader.h"
-#include "core/globals.h"
-#include "core/interfaces.h"
+#include "backend/core/plugin/PluginLoader.h"
+#include "backend/core/globals.h"
+#include "backend/core/interfaces.h"
 
 /**
  * \class PluginLoader

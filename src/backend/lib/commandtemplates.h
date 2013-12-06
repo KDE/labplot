@@ -32,7 +32,7 @@
 
 #include <QUndoCommand>
 
-#include "lib/Loki/TypeTraits.h"
+#include "backend/lib/Loki/TypeTraits.h"
 
 template <class target_class, typename value_type>
 class StandardSetterCmd: public QUndoCommand {

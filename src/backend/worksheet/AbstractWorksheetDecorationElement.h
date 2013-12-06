@@ -30,7 +30,7 @@
 #ifndef ABSTRACTWORKSHEETDECORATIONELEMENT_H
 #define ABSTRACTWORKSHEETDECORATIONELEMENT_H
 
-#include "worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/AbstractWorksheetElement.h"
 
 class AbstractWorksheetDecorationElement: public AbstractWorksheetElement {
 	Q_OBJECT

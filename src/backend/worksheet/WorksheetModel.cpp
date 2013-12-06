@@ -27,9 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/WorksheetModel.h"
-#include "worksheet/Worksheet.h"
-//#include "worksheet/WorksheetGraphicsScene.h"
+#include "backend/worksheet/WorksheetModel.h"
+#include "backend/worksheet/Worksheet.h"
 
 /**
  * \class WorksheetModel

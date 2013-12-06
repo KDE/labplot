@@ -35,7 +35,7 @@
 #include <QtCore/QDate>
 #include <QtCore/QTime>
 #include <QtXml/QXmlStreamWriter>
-#include "lib/XmlStreamReader.h"
+#include "backend/lib/XmlStreamReader.h"
 
 /**
  * \class AbstractSimpleFilter

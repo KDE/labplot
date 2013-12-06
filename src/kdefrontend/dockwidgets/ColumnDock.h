@@ -30,7 +30,7 @@
 #ifndef COLUMNDOCK_H
 #define COLUMNDOCK_H
 
-#include "core/column/Column.h"
+#include "backend/core/column/Column.h"
 #include <QList>
 #include "ui_columndock.h"
 class Column;

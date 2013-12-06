@@ -1,37 +1,10 @@
 #!/bin/bash
 
-
-# for building KDE4 frontend (LabPlot): 
-#######################################
-
-if [ -d build ]; then
-	echo "directory build/ exists! Please remove it."
-else
+if ! [ -d build ]; then
 	mkdir build
 fi
 
 cd build
 
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions"&& make -j 2
 
-#cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release  -DCMAKE_CXX_FLAGS="-fstack-protector -fno-exceptions" && make -j 2
-
-# or
-
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" && make -j 2
-
-#some other usefull flags, producing a lot of "noise" currently:
-# -Weffc++ -Wshadow -Wconversion -Wfloat-equal -Wswitch-default -Wswitch-enum
-
-# address sanitizer, available in gcc 4.8.0
-# -fsanitize=address
-
-#-DQT_QTCORE_LIBRARY_DEBUG=/usr/lib/debug/usr/lib/libQtCore.so.4.8.4 
-
-# optional:
-#make install
-
-
-# for building Qt Frontend (SciDAVis):
-######################################
-
-# cd src/qtfrontend && qmake scidavis.pro && make

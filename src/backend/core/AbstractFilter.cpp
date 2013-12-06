@@ -28,7 +28,7 @@
  ***************************************************************************/
 #include "AbstractFilter.h"
 
-#include "core/AbstractColumn.h"
+#include "backend/core/AbstractColumn.h"
 
 /**
  * \class AbstractFilter

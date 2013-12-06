@@ -31,7 +31,7 @@
 #ifndef ABSTRACTCOORDINATESYSTEM_H
 #define ABSTRACTCOORDINATESYSTEM_H
 
-#include "worksheet/plots/AbstractPlot.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
 #include <QString>
 #include <QList>
 #include <QLine>

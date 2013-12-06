@@ -31,7 +31,7 @@
 #define SPREADSHEETDOUBLEHEADERVIEW_H
 
 #include <QHeaderView>
-#include <spreadsheet/SpreadsheetModel.h>
+#include <backend/spreadsheet/SpreadsheetModel.h>
 
 
 class SpreadsheetCommentsHeaderView : public QHeaderView{

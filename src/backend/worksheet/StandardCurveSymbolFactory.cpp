@@ -28,8 +28,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "worksheet/StandardCurveSymbolFactory.h"
-#include "worksheet/symbols/PathCurveSymbol.h"
+#include "backend/worksheet/StandardCurveSymbolFactory.h"
+#include "backend/worksheet/symbols/PathCurveSymbol.h"
 #ifndef QT_STATICPLUGIN
 #define QT_STATICPLUGIN
 #endif

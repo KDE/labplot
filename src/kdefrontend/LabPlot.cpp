@@ -36,8 +36,8 @@
 #include <QFile>
 
 #include "MainWin.h"
-#include "core/Project.h"
-#include "spreadsheet/Spreadsheet.h"
+#include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 int main (int argc, char *argv[]) {
 	KAboutData aboutData( "LabPlot", "LabPlot",

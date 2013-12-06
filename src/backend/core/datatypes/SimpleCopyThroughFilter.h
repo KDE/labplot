@@ -30,8 +30,8 @@
 #ifndef SIMPLE_COPY_THROUGH_FILTER_H
 #define SIMPLE_COPY_THROUGH_FILTER_H
 
-#include "core/AbstractSimpleFilter.h"
-#include "lib/XmlStreamReader.h"
+#include "backend/core/AbstractSimpleFilter.h"
+#include "backend/lib/XmlStreamReader.h"
 #include <QXmlStreamWriter>
 
 /**

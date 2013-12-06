@@ -266,11 +266,11 @@ void TextLabel::visibilityChanged(){
 //####################### Private implementation ###############################
 //##############################################################################
 TextLabelPrivate::TextLabelPrivate(TextLabel *owner)
-		: q(owner),
-		positionInvalid(false),
-		suppressItemChangeEvent(false),
-		suppressRetransform(false), 
-		m_printing(false) {
+		: positionInvalid(false),
+		  suppressItemChangeEvent(false),
+		  suppressRetransform(false), 
+		  m_printing(false),
+		  q(owner){
 }
 
 QString TextLabelPrivate::name() const{

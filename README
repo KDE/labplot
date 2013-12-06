@@ -14,6 +14,12 @@ LabPlot requires Qt version 4.7 or newer. Please update your Qt installation if 
 
 # ./compile
 
+Specify the path:
+-DCMAKE_INSTALL_PREFIX=/usr
+
+Specify the build type:
+-DCMAKE_BUILD_TYPE = Release
+
 Installation:
 -------------
 # cd build
@@ -23,34 +29,5 @@ Clean-up:
 ---------
 # rm -rf build
 
-B. Building SciDAvis (Qt frontend):
---------------------------------
-The Qt frontend is currently unsupported and not functional.
-If you still want to compile it use:
 
-# cd src/qtfrontend
-# qmake scidavis.pro
-# make
-# make install (optional, not needed for most development tasks)
-
-If the Qt frontend is build any other way, make sure that ACTIVATE_SCIDAVIS_SPECIFIC_CODE is defined in the Makefile.
-
-###############
-
-This project is currently under active development.
-See https://sourceforge.net/apps/mediawiki/labplot/index.php?title=Main_Page for more informations.
-
-SciDAVis introduces an abstraction of the application design called "aspect framework" or "5 layer model". 
-Very short description:
-Every object (aspect) in a project is placed in a hierarchy with the project as the root node. Every aspect
-itself has 5 layers of functionality: 
-layer 0: data
-layer 1: undo commands
-layer 2: public API
-layer 3: Qt models
-layer 4: GUI (including Qt views), scripting
-Long description: see src/qtfrontend/doc/aspect-framework.dox 
-(or generate Doxygen docs by "doxygen Doxyfile" in the qtfrontend dir)
-
-####################
 

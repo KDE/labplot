@@ -28,8 +28,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "core/AbstractPart.h"
-#include "core/PartMdiView.h"
+#include "backend/core/AbstractPart.h"
+#include "commonfrontend/core/PartMdiView.h"
 #include <QMenu>
 #include <QStyle>
 
