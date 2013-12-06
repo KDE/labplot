@@ -301,6 +301,7 @@ void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspe
   }else if (className=="CartesianPlot" || className=="Axis" || className=="XYCurve" || className=="CartesianPlotLegend"){
 	//populate worksheet-toolbar
 	QToolBar* toolbar=dynamic_cast<QToolBar*>(mainWindow->guiFactory()->container("cartesian_plot_toolbar", mainWindow));
+	if (!toolbar)return;
 	toolbar->show();
 	toolbar->setEnabled(true);
 	toolbar->clear();

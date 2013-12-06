@@ -410,7 +410,9 @@ void SpreadsheetView::goToCell(int row, int col){
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to){
-        static bool inside = false;
+	Q_UNUSED(index);
+
+	static bool inside = false;
 	if (inside) return;
 
 	Q_ASSERT(index == from);

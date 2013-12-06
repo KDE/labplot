@@ -389,7 +389,12 @@ void MainWin::updateGUIOnProjectChanges() {
 		return;
 	
 	KXMLGUIFactory* factory=this->guiFactory();
-
+	if (factory->container("worksheet", this)==NULL) {
+		//no worksheet menu found, most probably Labplotui.rc 
+		//was not properly installed -> return here in order not to crash
+		return;
+	}
+	
 	//disable all menus if there is no project
 	bool b = (m_project==0);
 	m_saveAction->setEnabled(!b);
@@ -430,8 +435,14 @@ void MainWin::updateGUIOnProjectChanges() {
 void MainWin::updateGUI() {
 	if (m_closing)
 		return;
-	
+
 	KXMLGUIFactory* factory=this->guiFactory();
+	if (factory->container("worksheet", this)==NULL) {
+		//no worksheet menu found, most probably Labplotui.rc 
+		//was not properly installed -> return here in order not to crash
+		return;
+	}
+
 
 	Worksheet* w = this->activeWorksheet();
 	if (w!=0){
