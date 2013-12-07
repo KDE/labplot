@@ -86,7 +86,8 @@ XYCurve::~XYCurve() {
 void XYCurve::init(){
 	Q_D(XYCurve);
 
-  	d->xColumn = NULL;
+	//TODO: read from the settings!
+	d->xColumn = NULL;
 	d->yColumn = NULL;
 
 	d->lineType = XYCurve::NoLine;
@@ -106,7 +107,8 @@ void XYCurve::init(){
 	d->valuesDistance =  Worksheet::convertToSceneUnits( 5, Worksheet::Point );
 	d->valuesRotationAngle = 0;
 	d->valuesOpacity = 1.0;
-	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 6, Worksheet::Point ) );
+	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
+	d->valuesColor = QColor(Qt::black);
 
 	d->xErrorType = XYCurve::NoError;
 	d->xErrorPlusColumn = NULL;

@@ -1,12 +1,10 @@
-OLD LabPlot WISHLIST:
+This file contains old feature requests and wishes for labplot1.x.
+The following items will be adopted to the new code and implemented if they still make sense.
+For items where it is clear that they need to be implemented in the near feature, consider creating a feature 
+request ticket at sourceforge.
+
 #####################
-
-TODO: put Features (if still relevant) into list at 
-	https://sourceforge.net/apps/mediawiki/labplot/index.php?title=Upcoming_Feature_List
-
 Planned Features:
-	* independent/different y axes
-		* option to disconnect y2,x2 axes ?
 	* Categorical x-axis (also y-axis ?)	-> see mails
 	* parametric plot 
 		* (XY(t)). ( using scripting ? )
@@ -37,11 +35,6 @@ GUI/Application:
 	* use/save predefined functions (in function dialog)
 		* load from Origin projects
 	* use QLabel::setBuddy() for accels
-	* Q_CHECK_PTR() for all pointer ?
-	* configure :
-		(* save data in project as link (yes/no))
-		(* open new Plot in active Worksheet or in new Worksheet)
-		* graphs (link to data !)
 	* Spreadsheet
 		* save last used formula for each column.
 		U Am besten den horizontalen Scrollbereich der Scrollleiste erhöhen, so
@@ -55,24 +48,13 @@ GUI/Application:
 		U mark column if right clicked on header
 			-> too complicated
 	* get the index of the double clicked object (for object dialog list index)
-	* nicer dialogs
-		* exclusive buttongroups (enable/disable) when needed
-		* completion of line edits (filename)	: use KDECompletion ? (filename, ...)
-	* include kghostview menus and toolbars, etc. in print preview (see kgv_part.rc)
-		-> how to delete gv part gui elements ?
 	* Print with correct scales (mm/in)
-	* use STL contructs for some critical objects (see C++-Unleashed & SGI docu)
 	* animations
 I/O:
 ****
 	* reading multiple files from data dialog
 		-> also "same x column"
 	F support "indexed" matrix format
-	* SAVE/OPEN :
-		* save data file externally ? (separate from project file)
-			* saving a data file name in a project file instead of the data itself (hotlink data)
-			-> update function ?
-		* XML -> OASIS format (John)
 	* transparent background when exporting to SVG ?
 		* svg export option "transparent background" ?
 	* IMPORT/EXPORT
@@ -97,7 +79,6 @@ drawing/ data manipulation :
 		* more symbols : N types (...)
 		* more fills : 16 types (center, corner,...)
 		* character as symbols
-		* opaque symbols
 		* (x/y/x,y) values as symbol
 	* move marker with mouse
 	* image profiling (vertical/horizontal profiles)
@@ -108,24 +89,14 @@ drawing/ data manipulation :
 	* update open dialogs
 		* update object dialog listviews
 	* Plots :
-		* I'm making a 2D scatter plot, but I want each data point labelled with an
-			atomic symbol (Al, Sc, Y etc...). I have the data labels in a spreadsheet
-			column I have designated "label", but I can't find how to assign them to the
-			data series.
 		* set drawing object relative to graph (fixed to axes)
-		* axis position (left,center,right)
 		* sqrt/x² scales
 			* data mode Plot.cc
 			* maglens/mask/pan zoom (Worksheet.cc)
 			* X/YCoordinate
 			* partRanges
 		* period or comma as decimal point (configure LabPlot)
-		* gradient plot / graph background, fill
-			-> use QBrush of Qt 4.0 ?
 		* zoom-plot (extra plot as zoom of another plot)
-		* legend  :
-			* background
-			* multiline label
 		* new plot type (Taylor diagrams) : Taylor_2001_JGR.pdf
 			If you want to improve a new graph type, for time series analysis of
 			the results of a model the best are the Taylor diagrams.
@@ -133,8 +104,6 @@ drawing/ data manipulation :
 			* use own format and rounding (see axes settings)
 			* rotation
 			* size, color, font
-		* handle log axis errorbar problems (y=1,dy=2, etc. )
-		* place legend automatical in a corner
 		* wizard for plots (generic plot dialog : type/x-column/y-columns ?)
 			* Probably you have added what I meant in Labplot 1.5.0., but it is something 
 			like to have an option in the Plot menu: New graph. When you choose it some 
@@ -197,7 +166,6 @@ drawing/ data manipulation :
 				* test irregular X-Y-Z data : data points ? / mesh grid ?
 			* legend box undefined (used for legend.inside() !)
 			* use Qwt3D::USERSCALE for log2,ln,sqrt ?
-			* use settings from style tab
 			* custom plotstyle (boxes, etc.)
 			* vector plot
 			* speed mode
@@ -277,15 +245,6 @@ drawing/ data manipulation :
 		* support x=f(y) plots (f(x)=sin(y))
 		* ArrangePlotDialog :
 			* size+pos for nr = 9,10,11,12,13,14,15,16
-		* Wie waere es, wenn es eine "Repeat" Option fuer jede Achse gibt zusammen mit
-		der einer Auswahl fuer die Position? Dann waere das fuer den Nutzer
-		eindeutiger. Wenn ich eine neue y-Achse aktiviere, erwarte ich eigentlich
-		eine *neue* y-Achse. Oder eine Schaltflaeche wie "Connected to" wuerde die
-		gleiche functionalitaet bieten und offensichtlich fuer den Nutzer sein.
-		Bei der Gelegenheit: Eine Erweiterung der Anzahl an y-Achsen(3,4,5,...) mit
-		auswahl auf welcher Seite des Diagramms diese stehen waere auch ein sehr
-		willkommenes Feature. Ich weiss, dies ist eigentlich *verboten* doch ist z.b.
-		die darstellung von clima daten mit 3 oder 4 verschiedenen groessen ueblich.
 		* data over (structured-unstructured) meshes, like 
 			the ones generated in finite element modeling, 2D and 3D.
 		* support for 2D/3D indexed data		-> CRD/
@@ -322,8 +281,6 @@ drawing/ data manipulation :
 			* x²	: -10..10 ?
 			* new 1/x,1/x² scales
 			* db axis scale (exp+log)
-		* grid, ticks and numbers : in or out of plotarea
-		* minor tic label for log scale (?)
 	* Ebenso fehlt die Zeichenbefehlen zum Gruppieren / Gruppe aufheben, eine 
 		Zeichenebene nach oben / unten oder nach ganz oben oder unten verschieben
 		Click + Ziehen um alle Elemente im aufgezogenen Bereich auszuwählen wäre

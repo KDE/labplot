@@ -1,0 +1,18 @@
+LabPlot requires Qt version 4.7 or newer. Please update your Qt installation if necessary.
+
+# ./compile
+
+Specify the path:
+-DCMAKE_INSTALL_PREFIX=/usr
+
+Specify the build type:
+-DCMAKE_BUILD_TYPE = Release
+
+Installation:
+-------------
+# cd build
+# make install
+
+Clean-up:
+---------
+# rm -rf build

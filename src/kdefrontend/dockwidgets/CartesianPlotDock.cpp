@@ -136,6 +136,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
 	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 
+	//TODO: activate the tab for scale breakings later again
+	ui.tabWidget->removeTab(2);
+
 	init();
 }
 

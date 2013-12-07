@@ -386,7 +386,7 @@
        <string>Title</string>
       </attribute>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tabScales">
       <attribute name="title">
        <string>Scale Breakings</string>
       </attribute>
