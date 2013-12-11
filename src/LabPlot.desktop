@@ -1,0 +1,17 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=labplot2 -caption "%c" %i %m
+Icon=LabPlot
+Name=LabPlot
+GenericName=LabPlot
+Comment=LabPlot is a KDE-apprication for analysis of scientific data
+Comment[de]=LabPlot ist ein KDE-Programm für die Auswertung von 
+wissenschaftlichen Daten.
+Terminal=false
+MimeType=application/x-LabPlot-project;
+Categories=Qt;KDE;Education;Science;Physics;Math;
+X-DocPath=LabPlot/index.html
+X-ServiceTypes=Browser/View
+X-KDE-Library=libLabPlot

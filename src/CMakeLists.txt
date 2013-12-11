@@ -153,3 +153,4 @@ target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARI
 
 install(TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR})
 install(FILES ${KDEFRONTEND_DIR}/LabPlotui.rc DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)
+install(PROGRAMS LabPlot.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
