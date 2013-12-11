@@ -513,6 +513,9 @@ bool MainWin::newProject(){
 	if (m_project)
 		delete m_project;
 
+	if (m_aspectTreeModel)
+		delete m_aspectTreeModel;
+
 	m_project = new Project();
   	m_currentAspect = m_project;
  	m_currentFolder = m_project;

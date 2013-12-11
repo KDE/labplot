@@ -94,6 +94,7 @@ Project::Project() : Folder(tr("Project")), d(new Private()) {
 }
 
 Project::~Project() {
+	d->undo_stack.clear();
 	delete d;
 }
 

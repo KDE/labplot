@@ -89,7 +89,7 @@ void SpreadsheetView::init(){
 	setModel(m_model);
 
 	//horizontal header
-	m_horizontalHeader = new SpreadsheetDoubleHeaderView();
+	m_horizontalHeader = new SpreadsheetDoubleHeaderView(this);
     m_horizontalHeader->setClickable(true);
     m_horizontalHeader->setHighlightSections(true);
 	setHorizontalHeader(m_horizontalHeader);

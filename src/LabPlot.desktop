@@ -6,11 +6,11 @@ Exec=labplot2 -caption "%c" %i %m
 Icon=LabPlot
 Name=LabPlot
 GenericName=LabPlot
+Patterns=*.lml
 Comment=LabPlot is a KDE-apprication for analysis of scientific data
-Comment[de]=LabPlot ist ein KDE-Programm für die Auswertung von 
-wissenschaftlichen Daten.
+Comment[de]=LabPlot ist ein KDE-Programm für die Auswertung von wissenschaftlichen Daten.
 Terminal=false
-MimeType=application/x-LabPlot-project;
+MimeType=application/x-LabPlot-gzip;
 Categories=Qt;KDE;Education;Science;Physics;Math;
 X-DocPath=LabPlot/index.html
 X-ServiceTypes=Browser/View
