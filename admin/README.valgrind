@@ -1,0 +1,13 @@
+######### Suppression file: ##########
+to generate a file suppressing a lot of valgrind messages found for Qt, run 
+
+# valgrind --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all --log-file=labplot.supp ../build/src/labplot2
+# cat labplot.supp | parse_valgring_suppressions.sh > labplot_minimal.supp
+
+To use this file run
+# valgrind --suppressions=labplot_minimal.supp ../build/src/labplot2
+
+
+More on valgrind's suppression files can be found here:
+http://valgrind.org/docs/manual/manual-core.html#manual-core.suppress
+http://wiki.wxwidgets.org/Valgrind_Suppression_File_Howto
