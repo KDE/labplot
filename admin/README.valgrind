@@ -2,7 +2,7 @@
 to generate a file suppressing a lot of valgrind messages found for Qt, run 
 
 # valgrind --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all --log-file=labplot.supp ../build/src/labplot2
-# cat labplot.supp | parse_valgring_suppressions.sh > labplot_minimal.supp
+# cat labplot.supp | parse_valgrind_suppressions.sh > labplot_minimal.supp
 
 To use this file run
 # valgrind --suppressions=labplot_minimal.supp ../build/src/labplot2
