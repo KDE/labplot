@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=MimeType
+MimeTyp=application/x-LabPlot-gzip
+Name=LabPlot2
+Icon=LabPlot2
+DefaultApp=labplot2
+Patterns=*.lml
+Comment=LabPlot2 project file
+Comment[de]=LabPlot2 Projektdatei

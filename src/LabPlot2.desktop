@@ -3,8 +3,8 @@
 Encoding=UTF-8
 Type=Application
 Exec=labplot2 -caption "%c" %i %m
-Icon=LabPlot
-Name=LabPlot
+Icon=LabPlot2
+Name=LabPlot2
 GenericName=LabPlot
 Patterns=*.lml
 Comment=LabPlot is a KDE-apprication for analysis of scientific data

@@ -140,6 +140,7 @@ qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
 #                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
 add_subdirectory( pics )
+
 ##############################################################################
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
@@ -153,4 +154,7 @@ target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARI
 
 install(TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR})
 install(FILES ${KDEFRONTEND_DIR}/LabPlotui.rc DESTINATION  ${DATA_INSTALL_DIR}/LabPlot)
-install(PROGRAMS LabPlot.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install(PROGRAMS LabPlot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install(PROGRAMS lml.desktop DESTINATION ${XDG_MIME_INSTALL_DIR} )
+kde4_install_icons(${ICON_INSTALL_DIR})
+kde4_update_iconcache()

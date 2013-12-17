@@ -136,6 +136,7 @@ void MainWin::initGUI(const QString& fileName){
 	initActions();
 	initMenus();
 	setupGUI();
+	setWindowIcon(KIcon("LabPlot2"));
 	setAttribute( Qt::WA_DeleteOnClose );
 
 	//make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
