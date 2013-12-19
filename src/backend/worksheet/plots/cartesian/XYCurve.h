@@ -61,10 +61,8 @@ class XYCurve: public AbstractWorksheetElement {
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
-		QString& xColumnName() const;
-		QString& yColumnName() const;
-		QString& xColumnParentName() const;
-		QString& yColumnParentName() const;
+		QString& xColumnPath() const;
+		QString& yColumnPath() const;
 
 		BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
 		BASIC_D_ACCESSOR_DECL(int, lineInterpolationPointsCount, LineInterpolationPointsCount)
@@ -84,8 +82,7 @@ class XYCurve: public AbstractWorksheetElement {
 		
 		BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
-		QString& valuesColumnName() const;
-		QString& valuesColumnParentName() const;		
+		QString& valuesColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
@@ -97,18 +94,14 @@ class XYCurve: public AbstractWorksheetElement {
 
 		BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
-		QString& xErrorPlusColumnName() const;
-		QString& xErrorPlusColumnParentName() const;	
+		QString& xErrorPlusColumnPath() const;
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
-		QString& xErrorMinusColumnName() const;
-		QString& xErrorMinusColumnParentName() const;
+		QString& xErrorMinusColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
-		QString& yErrorPlusColumnName() const;
-		QString& yErrorPlusColumnParentName() const;		
+		QString& yErrorPlusColumnPath() const;
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
-		QString& yErrorMinusColumnName() const;
-		QString& yErrorMinusColumnParentName() const;		
+		QString& yErrorMinusColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)

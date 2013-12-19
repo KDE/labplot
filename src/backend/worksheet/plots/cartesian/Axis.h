@@ -93,8 +93,7 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber)
 		BASIC_D_ACCESSOR_DECL(qreal, majorTicksIncrement, MajorTicksIncrement)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
-		QString& majorTicksColumnName() const;
-		QString& majorTicksColumnParentName() const;
+		QString& majorTicksColumnPath() const;
 		CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
 		BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
 		BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity)
@@ -104,8 +103,7 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksIncrement, MinorTicksIncrement)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
-		QString& minorTicksColumnName() const;
-		QString& minorTicksColumnParentName() const;		
+		QString& minorTicksColumnPath() const;
 		CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)

@@ -364,11 +364,9 @@ brush.setColor(color);														\
 #define WRITE_COLUMN(column, columnName) 											\
 do {																				\
 if (column){																		\
-	writer->writeAttribute( #columnName, column->name() );							\
-	writer->writeAttribute( #columnName"Parent", column->parentAspect()->name() );	\
+	writer->writeAttribute( #columnName, column->path() );							\
 } else {																			\
-writer->writeAttribute( #columnName, "" );											\
-	writer->writeAttribute( #columnName"Parent", "" );								\
+	writer->writeAttribute( #columnName, "" );										\
 }																					\
 } while(0)
 
@@ -376,22 +374,19 @@ writer->writeAttribute( #columnName, "" );											\
 //the actual pointers to the x- and y-columns are restored in Project::load()
 #define READ_COLUMN(columnName)														\
 do {																				\
-str = attribs.value(#columnName).toString();										\
-d->columnName ##Name = str;															\
-str = attribs.value(#columnName"Parent").toString();								\
-d->columnName ##ParentName = str;													\
+	str = attribs.value(#columnName).toString();									\
+	d->columnName ##Path = str;														\
 } while(0)
 
 //used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col) 										\
 do {																				\
-if (!obj->col ##Name().isEmpty()) {													\
-	name = obj->col ##ParentName();													\
-	foreach (AbstractAspect* aspect, spreadsheets) {								\
-		if (aspect->name() == name) {												\
-			sheet = dynamic_cast<Spreadsheet*>(aspect);								\
-			if (!sheet) continue;													\
- 			obj->set## Col(sheet->column(obj->col ##Name()));						\
+if (!obj->col ##Path().isEmpty()) {													\
+	foreach (AbstractAspect* aspect, columns) {										\
+		if (aspect->path() == obj->col ##Path()) {									\
+			AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);			\
+			if (!column) continue;													\
+ 			obj->set## Col(column);													\
 			break;				 													\
 		}																			\
 	}																				\

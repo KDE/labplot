@@ -59,12 +59,10 @@ class XYCurvePrivate: public QGraphicsItem {
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 		
-		const AbstractColumn *xColumn;
-		const AbstractColumn *yColumn;
-		QString xColumnName;
-		QString yColumnName;
-		QString xColumnParentName;
-		QString yColumnParentName;
+		const AbstractColumn* xColumn;
+		const AbstractColumn* yColumn;
+		QString xColumnPath;
+		QString yColumnPath;
 		
 		XYCurve::LineType lineType;
 		int lineInterpolationPointsCount;
@@ -85,8 +83,7 @@ class XYCurvePrivate: public QGraphicsItem {
 	
 		XYCurve::ValuesType valuesType;
 		const AbstractColumn* valuesColumn;
-		QString valuesColumnName;
-		QString valuesColumnParentName;
+		QString valuesColumnPath;
 		XYCurve::ValuesPosition valuesPosition;
 		qreal valuesDistance;
 		qreal valuesRotationAngle;
@@ -99,19 +96,15 @@ class XYCurvePrivate: public QGraphicsItem {
 		//error bars
 		XYCurve::ErrorType xErrorType;
 		const AbstractColumn* xErrorPlusColumn;
-		QString xErrorPlusColumnName;
-		QString xErrorPlusColumnParentName;
+		QString xErrorPlusColumnPath;
 		const AbstractColumn* xErrorMinusColumn;
-		QString xErrorMinusColumnName;
-		QString xErrorMinusColumnParentName;
+		QString xErrorMinusColumnPath;
 		
 		XYCurve::ErrorType yErrorType;
 		const AbstractColumn* yErrorPlusColumn;
-		QString yErrorPlusColumnName;
-		QString yErrorPlusColumnParentName;		
+		QString yErrorPlusColumnPath;
 		const AbstractColumn* yErrorMinusColumn;
-		QString yErrorMinusColumnName;
-		QString yErrorMinusColumnParentName;
+		QString yErrorMinusColumnPath;
 
 		XYCurve::ErrorBarsType errorBarsType;
 		double errorBarsCapSize;

@@ -186,10 +186,8 @@ void XYCurve::setPrinting(bool on) {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
-QString& XYCurve::xColumnName() const { return d_ptr->xColumnName; }
-QString& XYCurve::yColumnName() const {	return d_ptr->yColumnName; }
-QString& XYCurve::xColumnParentName() const { return d_ptr->xColumnParentName;}
-QString& XYCurve::yColumnParentName() const { return d_ptr->yColumnParentName; }
+QString& XYCurve::xColumnPath() const { return d_ptr->xColumnPath; }
+QString& XYCurve::yColumnPath() const {	return d_ptr->yColumnPath; }
 
 //line
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
@@ -213,8 +211,7 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 //values
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn)
-QString& XYCurve::valuesColumnName() const { return d_ptr->valuesColumnName; }
-QString& XYCurve::valuesColumnParentName() const { return d_ptr->valuesColumnParentName;}
+QString& XYCurve::valuesColumnPath() const { return d_ptr->valuesColumnPath; }
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle)
@@ -227,19 +224,15 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xErrorPlusColumn, xErrorPlusColumn)
-QString& XYCurve::xErrorPlusColumnName() const { return d_ptr->xErrorPlusColumnName; }
-QString& XYCurve::xErrorPlusColumnParentName() const { return d_ptr->xErrorPlusColumnParentName; }
+QString& XYCurve::xErrorPlusColumnPath() const { return d_ptr->xErrorPlusColumnPath; }
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xErrorMinusColumn, xErrorMinusColumn)
-QString& XYCurve::xErrorMinusColumnName() const { return d_ptr->xErrorMinusColumnName; }
-QString& XYCurve::xErrorMinusColumnParentName() const { return d_ptr->xErrorMinusColumnParentName; }
+QString& XYCurve::xErrorMinusColumnPath() const { return d_ptr->xErrorMinusColumnPath; }
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yErrorPlusColumn, yErrorPlusColumn)
-QString& XYCurve::yErrorPlusColumnName() const { return d_ptr->yErrorPlusColumnName; }
-QString& XYCurve::yErrorPlusColumnParentName() const { return d_ptr->yErrorPlusColumnParentName; }
+QString& XYCurve::yErrorPlusColumnPath() const { return d_ptr->yErrorPlusColumnPath; }
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yErrorMinusColumn, yErrorMinusColumn)
-QString& XYCurve::yErrorMinusColumnName() const { return d_ptr->yErrorMinusColumnName; }
-QString& XYCurve::yErrorMinusColumnParentName() const { return d_ptr->yErrorMinusColumnParentName; }
+QString& XYCurve::yErrorMinusColumnPath() const { return d_ptr->yErrorMinusColumnPath; }
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)

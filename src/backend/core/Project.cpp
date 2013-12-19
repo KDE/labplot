@@ -234,9 +234,7 @@ bool Project::load(XmlStreamReader* reader) {
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
 			if (curves.size()!=0 || axes.size()!=0) {
-				QList<AbstractAspect*> spreadsheets = children("Spreadsheet", AbstractAspect::Recursive);
-				Spreadsheet* sheet;
-				QString name;
+				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
 
 				//XY-curves
 				foreach (AbstractAspect* aspect, curves) {
