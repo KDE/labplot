@@ -40,11 +40,12 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 int main (int argc, char *argv[]) {
-	KAboutData aboutData( "LabPlot", "LabPlot",
-			ki18n("LabPlot"), LVERSION,
+	KAboutData aboutData( "LabPlot2", "LabPlot2",
+			ki18n("LabPlot2"), LVERSION,
 			ki18n("An application for plotting and analysis of 2d and 3d functions and data."),
 			KAboutData::License_GPL,
-			ki18n("(c) 2007-2012") );
+			ki18n("(c) 2007-2013") );
+	aboutData.setHomepage("http://www.labplot.sourceforge.net");
 	aboutData.addAuthor(ki18n("Stefan Gerlach"), ki18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
 	aboutData.addAuthor(ki18n("Alexander Semke"), ki18n("developer"), "alexander.semke@web.de", 0);
 
@@ -63,16 +64,16 @@ int main (int argc, char *argv[]) {
 	if(!filename.isEmpty() ){
 		if ( !QFile::exists(filename)) {
 			if ( KMessageBox::warningContinueCancel( 0,
-																						i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.").arg(filename),
-																						i18n("Failed to open")) == KMessageBox::Cancel){
-				exit(-1);  //"Cancel" clicked -> exit the application
+													i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.").arg(filename),
+													i18n("Failed to open")) == KMessageBox::Cancel){
+			exit(-1);  //"Cancel" clicked -> exit the application
 			}else{
 				filename=""; //Wrong file -> clear the file name and continue
 			}
 		}else if ( !(filename.contains(".lml") || filename.contains(".xml")) ){
 			if ( KMessageBox::warningContinueCancel( 0,
-																							i18n( "File \'%1\' doesn't contain any labplot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.").arg(filename),
-																							i18n("Failed to open")) == KMessageBox::Cancel){
+													i18n( "File \'%1\' doesn't contain any labplot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.").arg(filename),
+													i18n("Failed to open")) == KMessageBox::Cancel){
 				exit(-1); //"Cancel" clicked -> exit the application
 			}else{
 				filename=""; //Wrong file -> clear the file name and continue
@@ -82,7 +83,7 @@ int main (int argc, char *argv[]) {
 
 	KSplashScreen *splash=0;
 	if (args->isSet("-splash")) {
-		QString file = KStandardDirs::locate("appdata", "labplot.png");
+		QString file = KStandardDirs::locate("appdata", "splash.png");
 		QPixmap pixmap(file);
 		splash= new KSplashScreen(pixmap);
 		splash->show();

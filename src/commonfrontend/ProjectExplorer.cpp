@@ -189,7 +189,6 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect){
   Sets the \c model for the tree view to present.
 */
 void ProjectExplorer::setModel(QAbstractItemModel * model){
-	qDebug()<<"ProjectExplorer::setModel";
 	m_treeView->setModel(model);
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 	

@@ -113,7 +113,7 @@ MainWin::~MainWin() {
 
 	//write settings
 	m_recentProjectsAction->saveEntries( KGlobal::config()->group("Recent Files") );
-	qDebug()<<"SAVED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
+// 	qDebug()<<"SAVED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
 	//etc...
 	
 	KGlobal::config()->sync();
@@ -144,7 +144,7 @@ void MainWin::initGUI(const QString& fileName){
 
 	//load recently used projects
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
-	qDebug()<<"LOADED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
+// 	qDebug()<<"LOADED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
 // 	qDebug()<<"LOADED m_recentProjectsAction->urls().first()="<<m_recentProjectsAction->urls().first()<<endl;
 // 	for(int i=0;i<m_recentProjectsAction->urls().size();i++) {
 // 		qDebug()<<"LOADED m_recentProjectsAction->urls().action("<<i<<")="<<m_recentProjectsAction->action(i)<<endl;
