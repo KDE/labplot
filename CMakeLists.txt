@@ -117,4 +117,5 @@ ENDIF (GSL_FOUND)
 # INCLUDE_DIRECTORIES(liborigin)
 # ENDIF(OPJ_LIBRARY)
 # ##############################################
+add_subdirectory(icons)
 add_subdirectory(src)

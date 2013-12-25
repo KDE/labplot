@@ -36,6 +36,7 @@
 #include "backend/core/AbstractColumn.h"
 
 #include <QFont>
+#include <QPen>
 
 class XYCurvePrivate;
 class XYCurve: public AbstractWorksheetElement {
