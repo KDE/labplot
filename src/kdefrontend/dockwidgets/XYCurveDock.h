@@ -132,7 +132,7 @@ private slots:
 	void errorBarsTypeChanged(int) const;
 	void errorBarsCapSizeChanged(double) const;
   	void errorBarsStyleChanged(int) const;
-	void errorBarsColorChanged(const QColor&) const;
+	void errorBarsColorChanged(const QColor&);
 	void errorBarsWidthChanged(double) const;
 	void errorBarsOpacityChanged(int) const;
 

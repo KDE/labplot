@@ -810,7 +810,9 @@ void XYCurveDock::lineColorChanged(const QColor& color){
 	curve->setLinePen(pen);
   }  
 
+  m_initializing = true;
   GuiTools::updatePenStyles(ui.cbLineStyle, color);
+  m_initializing = false;
 }
 
 void XYCurveDock::lineWidthChanged(double value){
@@ -880,7 +882,9 @@ void XYCurveDock::dropLineColorChanged(const QColor& color){
 	curve->setDropLinePen(pen);
   }  
 
+  m_initializing = true;
   GuiTools::updatePenStyles(ui.cbDropLineStyle, color);
+  m_initializing = false;
 }
 
 void XYCurveDock::dropLineWidthChanged(double value){
@@ -1037,7 +1041,9 @@ void XYCurveDock::symbolsBorderColorChanged(const QColor& color){
 	curve->setSymbolsPen(pen);
   }
 
+  m_initializing = true;
   GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
+  m_initializing = false;
 }
 
 void XYCurveDock::symbolsBorderWidthChanged(double value){
@@ -1375,7 +1381,7 @@ void XYCurveDock::errorBarsStyleChanged(int index) const{
 	}
 }
 
-void XYCurveDock::errorBarsColorChanged(const QColor& color) const{
+void XYCurveDock::errorBarsColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
@@ -1386,7 +1392,9 @@ void XYCurveDock::errorBarsColorChanged(const QColor& color) const{
 		curve->setErrorBarsPen(pen);
 	}  
 
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, color);
+	m_initializing = false;
 }
 
 void XYCurveDock::errorBarsWidthChanged(double value) const{
