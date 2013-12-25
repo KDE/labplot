@@ -46,6 +46,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		QPainterPath shape() const;
 
 		bool m_printing;
+		bool m_suppressRecalc;
 
 		void retransform();
 		void updateLines();

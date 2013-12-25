@@ -654,7 +654,7 @@ void XYCurve::visibilityChanged(){
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), symbolsFactory(0), q(owner) {
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), m_suppressRecalc(false), symbolsFactory(0), q(owner) {
 	foreach(QObject *plugin, PluginManager::plugins()) {
 		CurveSymbolFactory* factory = qobject_cast<CurveSymbolFactory*>(plugin);
 		if (factory)
@@ -761,10 +761,12 @@ void XYCurvePrivate::retransform(){
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
 	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
 
+	m_suppressRecalc = true;
 	updateLines();
 	updateDropLines();
 	updateSymbols();
 	updateValues();
+	m_suppressRecalc = false;
 	updateErrorBars();
 }
 
@@ -1347,6 +1349,9 @@ void XYCurvePrivate::updateErrorBars(){
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
+	if (m_suppressRecalc)
+		return;
+
 	prepareGeometryChange();
 	boundingRectangle = QRectF();
 	curveShape = QPainterPath();
@@ -1361,12 +1366,13 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	}
 
 	if (symbolsPrototype->id() != "none"){
-		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(symbolsPath, symbolsPen));
+		curveShape.addPath(symbolsPath);
+
 		boundingRectangle = boundingRectangle.united(symbolsPath.boundingRect());
 	}
 
 	if (valuesType != XYCurve::NoValues){
-		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(valuesPath, QPen()));
+		curveShape.addPath(valuesPath);
 		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
 	}
 
