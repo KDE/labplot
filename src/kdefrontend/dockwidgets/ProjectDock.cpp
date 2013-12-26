@@ -3,6 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
+	Copyright            : (C) 2013 Alexander Semke (alexander.semke*web.de)    
     							(use @ for *)
     Description          : widget for project properties
                            
@@ -29,11 +30,11 @@
 
 #include "ProjectDock.h"
 #include "backend/core/Project.h"
-#include "../TemplateHandler.h"
+#include "kdefrontend/TemplateHandler.h"
 
 /*!
   \class ProjectDock
-  \brief  Provides a widget for editing the properties of a project
+  \brief Provides a widget for editing the properties of a project
 
   \ingroup kdefrontend
 */
@@ -60,17 +61,15 @@ void ProjectDock::setProject(Project *project) {
 	m_project = project;
 	ui.leFileName->setText(project->fileName());
 	ui.lVersion->setText(project->version());
-	ui.leName->setText(project->name());
-	ui.leAuthor->setText(project->author());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
-	ui.tbComment->setText(project->comment());
 
-	//show default properties of a project
+	//show default properties of the project
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
-	
-	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(projectDescriptionChanged(const AbstractAspect*)));
+
+	connect(m_project, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
+			this, SLOT(projectDescriptionChanged(const AbstractAspect*)));
 
 	m_initializing = false;
 }
@@ -106,24 +105,25 @@ void ProjectDock::commentChanged(){
 //******** SLOTs for changes triggered in Project   ***********
 //*************************************************************
 void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
-        if (m_project != aspect)
-                return;
+	if (m_project != aspect)
+		return;
 
-        m_initializing = true;
-        if (aspect->name() != ui.leName->text()) {
-                ui.leName->setText(aspect->name());
-        } else if (aspect->comment() != ui.tbComment->toPlainText()) {
-                ui.tbComment->setText(aspect->comment());
-        }
-        m_initializing = false;
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text()) {
+			ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.tbComment->toPlainText()) {
+			ui.tbComment->setText(aspect->comment());
+	}
+	m_initializing = false;
 }
 
-/*************************************************************/
-
+//*************************************************************
+//************************* Settings **************************
+//*************************************************************
 void ProjectDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Project" );
 
-	ui.leName->setText( group.readEntry("Title", m_project->name()) );
+	ui.leName->setText( group.readEntry("Name", m_project->name()) );
 	ui.leAuthor->setText( group.readEntry("Author", m_project->author()) );
 	ui.tbComment->setText( group.readEntry("Comment", m_project->comment()) );
 }
@@ -131,7 +131,7 @@ void ProjectDock::loadConfig(KConfig& config){
 void ProjectDock::saveConfig(KConfig& config){
 	KConfigGroup group = config.group( "Project" );
 
-	group.writeEntry("Title", ui.leName->text());
+	group.writeEntry("Name", ui.leName->text());
 	group.writeEntry("Author", ui.leAuthor->text());
 	group.writeEntry("Comment", ui.tbComment->toPlainText());
 }

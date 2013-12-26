@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : Project.cpp
-    Project              : SciDAVis
-    Description          : Represents a SciDAVis project.
+    Project              : LabPlot
+    Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
@@ -40,10 +40,10 @@
 
 /**
  * \class Project
- * \brief Represents a SciDAVis project.
- *  \ingroup core
- * Project manages an undo stack and is responsible for creating ProjectWindow instances
- * as views on itself.
+ * \brief Represents a project.
+ * \ingroup core
+ * Project represents the root node of all objects created during the runtime of the programm.
+ * Manages also the undo stack.
  */
 
 /**
@@ -151,18 +151,18 @@ bool Project ::hasChanged() const {
  * \brief Save as XML
  */
 void Project::save(QXmlStreamWriter* writer) const {
+	//set the version and the modification time to the current values
+	d->version = LVERSION;
+	d->modificationTime = QDateTime::currentDateTime();
+
 	writer->setAutoFormatting(true);
 	writer->writeStartDocument();
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	writer->writeDTD("<!DOCTYPE SciDAVisProject>");
-#else
 	writer->writeDTD("<!DOCTYPE LabPlotXML>");
-#endif
 
 	writer->writeStartElement("project");
 	writer->writeAttribute("version", version());
 	writer->writeAttribute("fileName", fileName());
-	writer->writeAttribute("modificationTime" , modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
+	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
 	writeBasicAttributes(writer);
 

@@ -1443,7 +1443,6 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			tickLabelsPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, linePen));
 		}
 		axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
-		boundingRectangle = boundingRectangle.united(tickLabelsPath.boundingRect());
 	}
 	
 	//add title label, if available
@@ -1461,7 +1460,6 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ) );
 		}
 		
-		boundingRectangle |=mapRectFromItem( title->graphicsItem(), title->graphicsItem()->boundingRect() );
 		axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 	

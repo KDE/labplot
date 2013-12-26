@@ -1353,33 +1353,28 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		return;
 
 	prepareGeometryChange();
-	boundingRectangle = QRectF();
 	curveShape = QPainterPath();
 	if (lineType != XYCurve::NoLine){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(linePath, linePen));
-		boundingRectangle = boundingRectangle.united(linePath.boundingRect());
 	}
-	
+
 	if (dropLineType != XYCurve::NoDropLine){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
-		boundingRectangle = boundingRectangle.united(dropLinePath.boundingRect());
 	}
 
 	if (symbolsPrototype->id() != "none"){
 		curveShape.addPath(symbolsPath);
-
-		boundingRectangle = boundingRectangle.united(symbolsPath.boundingRect());
 	}
 
 	if (valuesType != XYCurve::NoValues){
 		curveShape.addPath(valuesPath);
-		boundingRectangle = boundingRectangle.united(valuesPath.boundingRect());
 	}
 
 	if (xErrorType != XYCurve::NoError || yErrorType != XYCurve::NoError){
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
-		boundingRectangle = boundingRectangle.united(errorBarsPath.boundingRect());
 	}
+
+	boundingRectangle = curveShape.boundingRect();
 
 	//TODO: when the selection is painted, line intersections are visible.
 	//simplified() removes those artifacts but is horrible slow for curves with large number of points.

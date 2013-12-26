@@ -46,6 +46,7 @@
 
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 #include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
@@ -738,6 +739,7 @@ bool MainWin::saveProjectAs() {
  * auxilary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
+	WAIT_CURSOR;
 	QIODevice* file = KFilterDev::deviceForFile(fileName, "application/x-gzip", true);
 	if (file == 0)
 		file = new QFile(fileName);
@@ -757,7 +759,12 @@ bool MainWin::save(const QString& fileName) {
 		m_saveAction->setEnabled(false);
 		m_recentProjectsAction->addUrl( KUrl(fileName) );
 		ok = true;
-		
+
+		//if the project dock is visible, refresh the shown content
+		//(version and modification time might have been changed)
+		if (stackedWidget->currentWidget() == projectDock)
+			projectDock->setProject(m_project);
+
 		//we have a file name now
 		// -> auto save can be activated now if not happened yet
 		if (m_autoSaveActive && !m_autoSaveTimer.isActive())
@@ -770,7 +777,8 @@ bool MainWin::save(const QString& fileName) {
 	if (file != 0)
 		delete file;
 	
-	return ok;	
+	RESET_CURSOR;
+	return ok;
 }
 
 /*!
@@ -1080,7 +1088,7 @@ void MainWin::redo(){
 }
 
 /*!
-	Shows/hides mdi sub-windows depending on the currend visibility policy.
+	Shows/hides mdi sub-windows depending on the current visibility policy.
 */
 void MainWin::updateMdiWindowVisibility() const{
 	QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
