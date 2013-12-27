@@ -107,6 +107,10 @@ WorksheetView::ExportArea ExportWorksheetDialog::exportArea() const{
 	return WorksheetView::ExportArea(ui.cbExportArea->currentIndex());
 }
 
+bool ExportWorksheetDialog::exportBackground() const {
+	return ui.chkExportBackground->isChecked();
+}
+
 void ExportWorksheetDialog::slotButtonClicked(int button) {
 	if (button == KDialog::Ok)
 		okClicked();

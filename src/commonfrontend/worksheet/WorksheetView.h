@@ -65,7 +65,7 @@ class WorksheetView : public QGraphicsView{
 	};
 	
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const ExportFormat, const ExportArea);
+	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool);
 
   private:
 	void initActions();
@@ -77,7 +77,7 @@ class WorksheetView : public QGraphicsView{
 	void mouseReleaseEvent(QMouseEvent*);
 
 	void drawBackground(QPainter*, const QRectF&);
-	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
+	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 
 	Worksheet *m_worksheet;
 	WorksheetModel *m_model;

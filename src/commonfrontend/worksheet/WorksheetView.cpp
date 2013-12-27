@@ -853,7 +853,7 @@ void WorksheetView::selectionChanged(){
 	m_selectedItems = items;
 }
 
-void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area) {
+void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background) {
 	QRectF sourceRect;
 
 	//determine the rectangular to print
@@ -888,7 +888,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.setRenderHint(QPainter::Antialiasing);
 		QRectF targetRect(0, 0, painter.device()->width(),painter.device()->height());
 		painter.begin(&printer);
-		exportPaint(&painter, targetRect, sourceRect);
+		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 	}else if (format==WorksheetView::Svg){
 		QSvgGenerator generator;
@@ -904,7 +904,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		
 		QPainter painter;
 		painter.begin(&generator);
-		exportPaint(&painter, targetRect, sourceRect);
+		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 	}else{
 		//PNG
@@ -915,24 +915,27 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		w = w*QApplication::desktop()->physicalDpiX()/25.4;
 		h = h*QApplication::desktop()->physicalDpiY()/25.4;
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+		image.fill(Qt::transparent);
 		QRectF targetRect(0, 0, w, h);
 
 		QPainter painter;
 		painter.begin(&image);
 		painter.setRenderHint(QPainter::Antialiasing);
-		exportPaint(&painter, targetRect, sourceRect);
+		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 
 		image.save(path, "png");
 	}
 }
 
-void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect) {
+void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
 	//draw the background
-	painter->save();
-	painter->scale(targetRect.width()/sourceRect.width(), targetRect.height()/sourceRect.height());
-	drawBackground(painter, sourceRect);
-	painter->restore();
+	if (background) {
+		painter->save();
+		painter->scale(targetRect.width()/sourceRect.width(), targetRect.height()/sourceRect.height());
+		drawBackground(painter, sourceRect);
+		painter->restore();
+	}
 	
 	//draw the scene items
 	m_worksheet->setPrinting(true);

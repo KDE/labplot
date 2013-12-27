@@ -43,6 +43,7 @@ class ExportWorksheetDialog: public KDialog{
 	void setFileName(const QString&);
 	WorksheetView::ExportFormat exportFormat() const;
 	WorksheetView::ExportArea exportArea() const;
+	bool exportBackground() const;
 
   private:
 	QWidget* mainWidget;

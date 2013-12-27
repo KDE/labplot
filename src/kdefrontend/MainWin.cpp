@@ -1246,10 +1246,11 @@ void MainWin::exportDialog(){
 			QString path = dlg->path();
 			WorksheetView::ExportFormat format = dlg->exportFormat();
 			WorksheetView::ExportArea area = dlg->exportArea();
+			bool background = dlg->exportBackground();
 			
 			WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
 			WAIT_CURSOR;
-			view->exportToFile(path, format, area);
+			view->exportToFile(path, format, area, background);
 			RESET_CURSOR;
 		}
 	}else{//Spreadsheet
