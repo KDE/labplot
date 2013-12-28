@@ -120,14 +120,6 @@ void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 
 	m_coordinateSystem = new CartesianCoordinateSystem(this);
-	d->xMin = 0;
-	d->xMax = 1;
-	d->yMin = 0;
-	d->yMax = 1;
-	d->xMinPrev = d->xMin;
-	d->xMaxPrev = d->xMax;
-	d->yMinPrev = d->yMin;
-	d->yMaxPrev = d->yMax;
 	d->autoScaleX = true;
 	d->autoScaleY = true;
 	d->xScale = ScaleLinear;
@@ -163,56 +155,181 @@ void CartesianPlot::init(){
 
 /*!
 	initializes all children of \c CartesianPlot and 
-	setups a default plot with for axes and plot title.
+	setups a default plot of type \c type with a plot title.
 */
-void CartesianPlot::initDefault(){
+void CartesianPlot::initDefault(Type type){
 	Q_D(CartesianPlot);
 	
-	//Axes
-	Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
-	addChild(axis);
-	axis->setPosition(Axis::AxisBottom);
-	axis->setStart(0);
-	axis->setEnd(1);
-	axis->setMajorTicksDirection(Axis::ticksIn);
-	axis->setMajorTicksNumber(6);
-	axis->setMinorTicksDirection(Axis::ticksIn);
-	axis->setMinorTicksNumber(1);
+	switch (type) {
+		case FourAxes:
+		{
+			d->xMin = 0;
+			d->xMax = 1;
+			d->yMin = 0;
+			d->yMax = 1;
 
-	axis = new Axis("x axis 2", Axis::AxisHorizontal);
-	addChild(axis);
-	axis->setPosition(Axis::AxisTop);
-	axis->setStart(0);
-	axis->setEnd(1);
-	axis->setMajorTicksDirection(Axis::ticksIn);
-	axis->setMajorTicksNumber(6);
-	axis->setMinorTicksDirection(Axis::ticksIn);
-	axis->setMinorTicksNumber(1);
-	axis->setLabelsPosition(Axis::NoLabels);
-	axis->title()->setText(QString());
+			//Axes
+			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisBottom);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksIn);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksIn);
+			axis->setMinorTicksNumber(1);
+			QPen pen = axis->majorGridPen();
+			pen.setStyle(Qt::SolidLine);
+			axis->setMajorGridPen(pen);
+			pen = axis->minorGridPen();
+			pen.setStyle(Qt::DotLine);
+			axis->setMinorGridPen(pen);
 
-	axis = new Axis("y axis 1", Axis::AxisVertical);
-	addChild(axis);
-	axis->setPosition(Axis::AxisLeft);
-	axis->setStart(0);
-	axis->setEnd(1);
-	axis->setMajorTicksDirection(Axis::ticksIn);
-	axis->setMajorTicksNumber(6);
-	axis->setMinorTicksDirection(Axis::ticksIn);
-	axis->setMinorTicksNumber(1);
-	
-	axis = new Axis("y axis 2", Axis::AxisVertical);
-	addChild(axis);
-	axis->setPosition(Axis::AxisRight);
-	axis->setStart(0);
-	axis->setEnd(1);
-	axis->setOffset(1);
-	axis->setMajorTicksDirection(Axis::ticksIn);
-	axis->setMajorTicksNumber(6);
-	axis->setMinorTicksDirection(Axis::ticksIn);
-	axis->setMinorTicksNumber(1);
-	axis->setLabelsPosition(Axis::NoLabels);
-	axis->title()->setText(QString());
+			axis = new Axis("x axis 2", Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisTop);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksIn);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksIn);
+			axis->setMinorTicksNumber(1);
+			axis->setLabelsPosition(Axis::NoLabels);
+			axis->title()->setText(QString());
+
+			axis = new Axis("y axis 1", Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisLeft);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksIn);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksIn);
+			axis->setMinorTicksNumber(1);
+			pen = axis->majorGridPen();
+			pen.setStyle(Qt::SolidLine);
+			axis->setMajorGridPen(pen);
+			pen = axis->minorGridPen();
+			pen.setStyle(Qt::DotLine);
+			axis->setMinorGridPen(pen);
+
+			axis = new Axis("y axis 2", Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisRight);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setOffset(1);
+			axis->setMajorTicksDirection(Axis::ticksIn);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksIn);
+			axis->setMinorTicksNumber(1);
+			axis->setLabelsPosition(Axis::NoLabels);
+			axis->title()->setText(QString());
+			
+			break;
+		}
+		case TwoAxes:
+		{
+			d->xMin = 0;
+			d->xMax = 1;
+			d->yMin = 0;
+			d->yMax = 1;
+
+			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisBottom);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+
+			axis = new Axis("y axis 1", Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisLeft);
+			axis->setStart(0);
+			axis->setEnd(1);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			
+			break;
+		}
+		case TwoAxesCentered:
+		{
+			d->xMin = -0.5;
+			d->xMax = 0.5;
+			d->yMin = -0.5;
+			d->yMax = 0.5;
+
+			d->horizontalPadding = 0;
+			d->verticalPadding = 0;
+			
+			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisCentered);
+			axis->setStart(-0.5);
+			axis->setEnd(0.5);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(10);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->title()->setText(QString());
+
+			axis = new Axis("y axis 1", Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisCentered);
+			axis->setStart(-0.5);
+			axis->setEnd(0.5);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(10);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->title()->setText(QString());
+			
+			break;
+		}			
+		case TwoAxesCenteredZero:
+		{
+			d->xMin = -0.5;
+			d->xMax = 0.5;
+			d->yMin = -0.5;
+			d->yMax = 0.5;
+
+			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+			addChild(axis);
+			axis->setPosition(Axis::AxisCustom);
+			axis->setOffset(0);
+			axis->setStart(-0.5);
+			axis->setEnd(0.5);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->title()->setText(QString());
+
+			axis = new Axis("y axis 1", Axis::AxisVertical);
+			addChild(axis);
+			axis->setPosition(Axis::AxisCustom);
+			axis->setOffset(0);
+			axis->setStart(-0.5);
+			axis->setEnd(0.5);
+			axis->setMajorTicksDirection(Axis::ticksBoth);
+			axis->setMajorTicksNumber(6);
+			axis->setMinorTicksDirection(Axis::ticksBoth);
+			axis->setMinorTicksNumber(1);
+			axis->title()->setText(QString());
+			
+			break;
+		}
+	}
+
+	d->xMinPrev = d->xMin;
+	d->xMaxPrev = d->xMax;
+	d->yMinPrev = d->yMin;
+	d->yMaxPrev = d->yMax;
 
 	//Plot title
  	m_title = new TextLabel(this->name());
@@ -1019,18 +1136,18 @@ void CartesianPlotPrivate::retransformScales(){
 			if (deltaXMin!=0)
 				axis->setStart(xMin, false);
 
-			if (axis->position() == Axis::AxisCustom && deltaYMin != 0){
-				axis->setOffset(axis->offset() + deltaYMin, false);
-			}
+// 			if (axis->position() == Axis::AxisCustom && deltaYMin != 0){
+// 				axis->setOffset(axis->offset() + deltaYMin, false);
+// 			}
 		}else{
 			if (deltaYMax!=0)
 				axis->setEnd(yMax, false);
 			if (deltaYMin!=0)
 				axis->setStart(yMin, false);
 
-			if (axis->position() == Axis::AxisCustom && deltaXMin != 0){
-				axis->setOffset(axis->offset() + deltaXMin, false);
-			}
+// 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0){
+// 				axis->setOffset(axis->offset() + deltaXMin, false);
+// 			}
 		}
 	}
 	

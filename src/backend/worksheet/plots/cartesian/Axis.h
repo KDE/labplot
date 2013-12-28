@@ -45,7 +45,7 @@ class Axis: public AbstractWorksheetElement {
 
 	public:
 		enum AxisOrientation {AxisHorizontal, AxisVertical};
-		enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCustom};
+		enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCentered, AxisCustom};
 		enum LabelsFormat {FormatDecimal, FormatScientificE};
 		enum TicksFlags {
 			noTicks = 0x00,

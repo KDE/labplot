@@ -44,16 +44,17 @@ class CartesianPlot:public AbstractPlot{
 		virtual ~CartesianPlot();
 
 		enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
+		enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
 
-		void initDefault();
+		void initDefault(Type=FourAxes);
 		QIcon icon() const;
 		QMenu* createContextMenu();
 		void fillToolBar(QToolBar*) const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
 		
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 		
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)

@@ -126,18 +126,16 @@ void WorksheetView::initActions(){
 	QActionGroup* zoomActionGroup = new QActionGroup(this);
 	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
 	QActionGroup* layoutActionGroup = new QActionGroup(this);
-	QActionGroup * gridActionGroup = new QActionGroup(this);
+	QActionGroup* gridActionGroup = new QActionGroup(this);
 	gridActionGroup->setExclusive(true);
 
 	selectAllAction = new KAction(KIcon("edit-select-all"), i18n("Select all"), this);
 	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
-// 	selectAllAction->setShortcutContext(Qt::WidgetShortcut);
 	this->addAction(selectAllAction);
 	connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAllElements()));
 
 	deleteAction = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
 	deleteAction->setShortcut(Qt::Key_Delete);
-// 	deleteAction->setShortcutContext(Qt::WidgetShortcut);
 	this->addAction(deleteAction);
 	connect(deleteAction, SIGNAL(triggered()), SLOT(deleteElement()));
 
@@ -169,7 +167,10 @@ void WorksheetView::initActions(){
 	connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
 
 	//"Add new" related actions
-	addPlotAction = new KAction(KIcon("office-chart-line"), i18n("xy-plot"), addNewActionGroup);
+	addCartesianPlot1Action = new KAction(KIcon("cartesian-plot-four-axes"), i18n("box plot, four axes"), addNewActionGroup);
+	addCartesianPlot2Action = new KAction(KIcon("cartesian-plot-two-axes"), i18n("box plot, two axes"), addNewActionGroup);
+	addCartesianPlot3Action = new KAction(KIcon("cartesian-plot-two-axes-centered"), i18n("two axes, centered"), addNewActionGroup);
+	addCartesianPlot4Action = new KAction(KIcon("cartesian-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
 	addTextLabelAction = new KAction(KIcon("draw-text"), i18n("text label"), addNewActionGroup);
 
 	//Layout actions
@@ -230,22 +231,21 @@ void WorksheetView::initActions(){
 }
 
 void WorksheetView::initMenus(){
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	m_addNewMenu = new QMenu(tr("Add new"));
-	m_zoomMenu = new QMenu(tr("Zoom"));
-	m_layoutMenu = new QMenu(tr("Layout"));
-	m_gridMenu = new QMenu(tr("Grid"));
-#else
 	m_addNewMenu = new QMenu(i18n("Add new"));
+	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"));
 	m_zoomMenu = new QMenu(i18n("Zoom"));
 	m_layoutMenu = new QMenu(i18n("Layout"));
 	m_gridMenu = new QMenu(i18n("Grid"));
 	m_gridMenu->setIcon(QIcon(KIcon("view-grid")));
-#endif
 
+	m_addNewCartesianPlotMenu->addAction(addCartesianPlot1Action);
+	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
+	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
+	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
+	
 	m_addNewMenu->addAction(addTextLabelAction);
 	m_addNewMenu->addSeparator();
-	m_addNewMenu->addAction(addPlotAction);
+	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(KIcon("office-chart-line"));
 	
 	m_zoomMenu->addAction(zoomInAction);
 	m_zoomMenu->addAction(zoomOutAction);
@@ -316,11 +316,13 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addAction(zoomModeAction);
 	toolBar->addAction(selectionModeAction);
 	
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	toolBar->addSeparator();
 	toolBar->addAction(addTextLabelAction);
-	toolBar->addAction(addPlotAction);
-#endif
+	tbNewCartesianPlot = new QToolButton(toolBar);
+	tbNewCartesianPlot->setPopupMode(QToolButton::MenuButtonPopup);
+	tbNewCartesianPlot->setMenu(m_addNewCartesianPlotMenu);
+	tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
+	toolBar->addWidget(tbNewCartesianPlot);
 
 	toolBar->addSeparator();
 	toolBar->addAction(verticalLayoutAction);
@@ -329,12 +331,11 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addAction(breakLayoutAction);
 	
 	toolBar->addSeparator();
-	QToolButton* b = new QToolButton(toolBar);
-	b->setPopupMode(QToolButton::MenuButtonPopup);
-	b->setMenu(m_zoomMenu);
-	b->setDefaultAction(currentZoomAction);
-	toolBar->addWidget(b);
-	tbZoom=b;
+	tbZoom = new QToolButton(toolBar);
+	tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
+	tbZoom->setMenu(m_zoomMenu);
+	tbZoom->setDefaultAction(currentZoomAction);
+	toolBar->addWidget(tbZoom);
 }
 
 void WorksheetView::setScene(QGraphicsScene * scene) {
@@ -589,9 +590,22 @@ void WorksheetView::enableSelectionMode(){
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action){
 	AbstractWorksheetElement* aspect = 0;
-	if ( action == addPlotAction ){
+	if ( action == addCartesianPlot1Action ){
 		aspect = new CartesianPlot("xy-plot");
-		dynamic_cast<CartesianPlot*>(aspect)->initDefault();
+		dynamic_cast<CartesianPlot*>(aspect)->initDefault(CartesianPlot::FourAxes);
+		tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
+	}else if ( action == addCartesianPlot2Action ){
+		aspect = new CartesianPlot("xy-plot");
+		dynamic_cast<CartesianPlot*>(aspect)->initDefault(CartesianPlot::TwoAxes);
+		tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
+	}else if ( action == addCartesianPlot3Action ){
+		aspect = new CartesianPlot("xy-plot");
+		dynamic_cast<CartesianPlot*>(aspect)->initDefault(CartesianPlot::TwoAxesCentered);
+		tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
+	}else if ( action == addCartesianPlot4Action ){
+		aspect = new CartesianPlot("xy-plot");
+		dynamic_cast<CartesianPlot*>(aspect)->initDefault(CartesianPlot::TwoAxesCenteredZero);
+		tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel("text label");
 		l->setText(QString("text label"));

@@ -79,8 +79,8 @@ class WorksheetView : public QGraphicsView{
 	void drawBackground(QPainter*, const QRectF&);
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 
-	Worksheet *m_worksheet;
-	WorksheetModel *m_model;
+	Worksheet* m_worksheet;
+	WorksheetModel* m_model;
 	MouseMode m_currentMouseMode;
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
@@ -91,10 +91,12 @@ class WorksheetView : public QGraphicsView{
 
 	//Menus
 	QMenu* m_addNewMenu;
+	QMenu* m_addNewCartesianPlotMenu;
 	QMenu* m_zoomMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
 
+	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
 	QAction* currentZoomAction;
 
@@ -113,7 +115,10 @@ class WorksheetView : public QGraphicsView{
 	QAction* zoomModeAction;
 	QAction* selectionModeAction;
 	
-	QAction* addPlotAction;
+	QAction* addCartesianPlot1Action;
+	QAction* addCartesianPlot2Action;
+	QAction* addCartesianPlot3Action;
+	QAction* addCartesianPlot4Action;
 	QAction* addTextLabelAction;
 	
 	QAction* verticalLayoutAction;

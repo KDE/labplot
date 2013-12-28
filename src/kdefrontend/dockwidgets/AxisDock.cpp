@@ -395,6 +395,7 @@ void AxisDock::orientationChanged(int index){
 	ui.cbLabelsPosition->addItem( i18n("right") );
 	ui.cbLabelsPosition->addItem( i18n("left") );
   }
+  ui.cbPosition->addItem( i18n("centered") );
   ui.cbPosition->addItem( i18n("custom") );
   
   //TODO: orientation was changed 
@@ -414,7 +415,7 @@ void AxisDock::orientationChanged(int index){
 	(top, bottom, left, right or custom) was changed.
 */
 void AxisDock::positionChanged(int index){
-	if ( index==2 ){
+	if ( index==3 ){
 		ui.lePosition->setVisible(true);
 	}else{
 		ui.lePosition->setVisible(false);
@@ -424,7 +425,7 @@ void AxisDock::positionChanged(int index){
 		return;
 
 	Axis::AxisPosition position;
-	if (index==2){
+	if (index==3){
 		position = Axis::AxisCustom;
 	}else{
 		if ( m_axis->orientation() == Axis::AxisHorizontal)
@@ -1523,6 +1524,8 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
 	if (ui.cbPosition->currentIndex()==2){
+		group.writeEntry("Position", (int)Axis::AxisCentered);
+	}else if (ui.cbPosition->currentIndex()==3){
 		group.writeEntry("Position", (int)Axis::AxisCustom);
 	}else{
 		if ( ui.cbOrientation->currentIndex() == Axis::AxisHorizontal )

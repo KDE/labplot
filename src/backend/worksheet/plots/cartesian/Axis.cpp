@@ -832,6 +832,8 @@ void AxisPrivate::retransformLine(){
 			offset = m_plot->yMax();
 		else if (position == Axis::AxisBottom)
 			offset = m_plot->yMin();
+		else if (position == Axis::AxisCentered)
+			offset = m_plot->yMin() + (m_plot->yMax()-m_plot->yMin())/2;
 
 		startPoint.setX(start);
 		startPoint.setY(offset);
@@ -842,6 +844,8 @@ void AxisPrivate::retransformLine(){
 			offset = m_plot->xMin();
 		else if (position == Axis::AxisRight)
 			offset = m_plot->xMax();
+		else if (position == Axis::AxisCentered)
+			offset = m_plot->xMin() + (m_plot->xMax()-m_plot->xMin())/2;
 
 		startPoint.setX(offset);
 		startPoint.setY(start);
@@ -1492,22 +1496,6 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->drawPath(linePath);
 	}
 
-	//draw the major ticks
-	if (majorTicksDirection != Axis::noTicks){
-		painter->setOpacity(majorTicksOpacity);
-		painter->setPen(majorTicksPen);
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(majorTicksPath);
-	}
-
-	//draw the minor ticks
-	if (minorTicksDirection != Axis::noTicks){
-		painter->setOpacity(minorTicksOpacity);
-		painter->setPen(minorTicksPen);
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(minorTicksPath);
-	}
-
   	//draw major grid
 	if (majorGridPen.style() != Qt::NoPen){
 		painter->setOpacity(majorGridOpacity);
@@ -1522,6 +1510,22 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->setPen(minorGridPen);
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(minorGridPath);
+	}
+
+	//draw the major ticks
+	if (majorTicksDirection != Axis::noTicks){
+		painter->setOpacity(majorTicksOpacity);
+		painter->setPen(majorTicksPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(majorTicksPath);
+	}
+
+	//draw the minor ticks
+	if (minorTicksDirection != Axis::noTicks){
+		painter->setOpacity(minorTicksOpacity);
+		painter->setPen(minorTicksPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(minorTicksPath);
 	}
 
 	// draw tick labels
