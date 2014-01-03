@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : Worksheet.cpp
     Project              : LabPlot/SciDAVis
-    Description          : Worksheet (2D visualization) part
+    Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-	Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+	Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -77,7 +77,6 @@ Worksheet::~Worksheet() {
 }
 
 void Worksheet::init() {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KConfig config;
 	KConfigGroup group = config.group( "Worksheet" );
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
@@ -89,7 +88,7 @@ void Worksheet::init() {
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 	
-	d->layout = (Worksheet::Layout) group.readEntry("Layout", (int) Worksheet::NoLayout);
+	d->layout = (Worksheet::Layout) group.readEntry("Layout", (int) Worksheet::VerticalLayout);
 	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", convertToSceneUnits(1, Centimeter));
 	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(1, Centimeter));
 	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(1, Centimeter));
@@ -98,7 +97,6 @@ void Worksheet::init() {
 	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(1, Centimeter));
 	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
-#endif
 }
 
 /*!

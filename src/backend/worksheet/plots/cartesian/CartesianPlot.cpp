@@ -266,7 +266,11 @@ void CartesianPlot::initDefault(Type type){
 
 			d->horizontalPadding = 0;
 			d->verticalPadding = 0;
-			
+
+			QPen pen = m_plotArea->borderPen();
+			pen.setStyle(Qt::NoPen);
+			m_plotArea->setBorderPen(pen);
+
 			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			addChild(axis);
 			axis->setPosition(Axis::AxisCentered);
@@ -297,6 +301,13 @@ void CartesianPlot::initDefault(Type type){
 			d->xMax = 0.5;
 			d->yMin = -0.5;
 			d->yMax = 0.5;
+
+			d->horizontalPadding = 0;
+			d->verticalPadding = 0;
+
+			QPen pen = m_plotArea->borderPen();
+			pen.setStyle(Qt::NoPen);
+			m_plotArea->setBorderPen(pen);
 
 			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			addChild(axis);

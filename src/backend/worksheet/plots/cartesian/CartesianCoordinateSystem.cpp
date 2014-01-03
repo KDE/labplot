@@ -4,7 +4,7 @@
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -120,7 +120,7 @@ class LinearScale: public CartesianCoordinateSystem::Scale {
 		}
 
 		virtual bool inverseMap(double *value) const {
-			if (m_a == 0.0)
+			if (m_b == 0.0)
 				return false;
 			*value = (*value - m_a) / m_b;
 			return true;
