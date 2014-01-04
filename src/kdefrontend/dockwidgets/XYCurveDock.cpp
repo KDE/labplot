@@ -2,7 +2,7 @@
     File                 : XYCurveDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for XYCurve properties
@@ -166,8 +166,9 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
-	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
-	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
 	ui.tabWidget->removeTab(ui.tabWidget->indexOf(ui.tabAreaFilling)); //TODO
 

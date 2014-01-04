@@ -2,7 +2,7 @@
     File                 : WorksheetDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for worksheet properties
@@ -134,8 +134,9 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	ui.verticalLayout->addWidget(templateHandler, 0, 0);
 	templateHandler->show();
-	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
-	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
 	this->retranslateUi();
 }

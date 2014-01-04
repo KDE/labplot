@@ -2,9 +2,9 @@
     File                 : XYCurveDock.h
     Project            : LabPlot
     --------------------------------------------------------------------
-    Copyright         : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright         : (C) 2010-2014 Alexander Semke (alexander.semke*web.de)
     Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach*uni.kn) 
-				(replace * with @ in the email addresses)
+						(replace * with @ in the email addresses)
     Description      : widget for curve properties
                            
  ***************************************************************************/
@@ -186,6 +186,9 @@ private slots:
 	//load and save
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
+
+signals:
+	void info(const QString&);
 };
 
 #endif

@@ -101,7 +101,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	columnDock(0),
 	spreadsheetDock(0),
 	projectDock(0),
-	lineSymbolCurveDock(0),
+	xyCurveDock(0),
 	worksheetDock(0),
 	textLabelDock(0){
 	

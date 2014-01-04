@@ -141,7 +141,7 @@ private:
 	ColumnDock* columnDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;
-	XYCurveDock* lineSymbolCurveDock;
+	XYCurveDock* xyCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	

@@ -2,7 +2,7 @@
     File                 : CartesianPlotDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for cartesian plot properties
@@ -125,6 +125,9 @@ private slots:
 	//save/load
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
+
+signals:
+	void info(const QString&);
 };
 
 #endif

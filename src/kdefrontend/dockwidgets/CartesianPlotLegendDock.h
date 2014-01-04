@@ -2,8 +2,8 @@
     File                 : CartesianPlotLegendDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 Alexander Semke (alexander.semke*web.de)
-    							(use @ for *)
+    Copyright            : (C) 2013-2014 Alexander Semke (alexander.semke*web.de)
+							(use @ for *)
     Description          : widget for cartesian legend legend properties
                            
  ***************************************************************************/
@@ -125,6 +125,9 @@ private slots:
 	//save/load
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
+
+signals:
+	void info(const QString&);
 };
 
 #endif

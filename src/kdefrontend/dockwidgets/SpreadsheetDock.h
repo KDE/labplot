@@ -2,7 +2,7 @@
     File                 : SpreadsheetDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for spreadsheet properties
@@ -68,6 +68,9 @@ private slots:
 
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
+
+signals:
+	void info(const QString&);
 };
 
 #endif // SPREADSHEETDOCK_H

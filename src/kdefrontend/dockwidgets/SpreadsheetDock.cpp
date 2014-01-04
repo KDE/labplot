@@ -2,7 +2,7 @@
     File                 : SpreadsheetDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2010,2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
 						(use @ for *)
     Description          : widget for spreadsheet properties
@@ -29,9 +29,9 @@
  ***************************************************************************/
 
 #include "SpreadsheetDock.h"
-#include "../../commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "../../backend/spreadsheet/Spreadsheet.h"
-#include "../TemplateHandler.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "kdefrontend/TemplateHandler.h"
 #include <QDebug>
 
  /*!
@@ -54,8 +54,9 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
 	ui.gridLayout->addWidget(templateHandler, 6, 0, 1, 3);
 	templateHandler->show();
-	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
-	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 }
 
 /*!

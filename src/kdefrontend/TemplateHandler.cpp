@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
 	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke*web.de)
+	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
                            
  ***************************************************************************/
@@ -131,6 +131,8 @@ void TemplateHandler::loadMenu() {
 void TemplateHandler::loadMenuSelected(QAction* action) {
 	KConfig config(action->data().toString(), KConfig::SimpleConfig);
 	emit (loadConfigRequested(config));
+
+	emit info( i18n("Template \"%1\" was loaded.").arg(action->text().remove('&')) );
 }
 
 void TemplateHandler::saveMenu() {
@@ -141,7 +143,8 @@ void TemplateHandler::saveMenu() {
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
-			action->setData(QVariant(fileinfo.path()));
+			menu.addAction(action);
+			action->setShortcut(QKeySequence());
 	}
 	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(saveMenuSelected(QAction*)));
 
@@ -176,17 +179,21 @@ void TemplateHandler::saveNewSelected(const QString& filename) {
 	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+"/" + dirNames.at(className) + "/"+filename, KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
 	
-	//we have at least one save template now -> enable the load button
+	//we have at least one saved template now -> enable the load button
 	tbLoad->setEnabled(true);
+	
+	emit info( i18n("New template \"%1\" was saved.").arg(filename) );
 }
 
 /*!
- * Is called when the current properties are going to be saved in an already availabletemplate.
+ * Is called when the current properties are going to be saved in an already available template.
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveMenuSelected(QAction* action) {
 	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
+
+	emit info( i18n("Template \"%1\" was saved.").arg(action->text()) );
 }
 
 /*!
@@ -196,4 +203,6 @@ void TemplateHandler::saveMenuSelected(QAction* action) {
 void TemplateHandler::saveDefaults() {
 	KConfig config;
 	emit (saveConfigRequested(config));
+
+	emit info( i18n("New default template was saved.") );
 }

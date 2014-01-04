@@ -71,6 +71,7 @@ class TemplateHandler : public QWidget{
 	signals:
 		void loadConfigRequested(KConfig&);
 		void saveConfigRequested(KConfig&);
+		void info(const QString&);
 };
 
 #endif

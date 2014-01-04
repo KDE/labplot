@@ -2,7 +2,7 @@
     File                 : AxisDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
 							(use @ for *)
     Description          : axes widget class
@@ -195,6 +195,9 @@ private slots:
 	//save/load
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
+	
+signals:
+	void info(const QString&);
 };
 
 #endif

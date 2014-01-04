@@ -3,6 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach
+	Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke*web.de)
     Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : widget for worksheet properties
                            
@@ -109,6 +110,9 @@ private slots:
 	//saving/loading
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
+
+signals:
+	void info(const QString&);
 };
 
 #endif // WORKSHEETDOCK_H

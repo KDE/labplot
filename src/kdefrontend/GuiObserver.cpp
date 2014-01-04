@@ -51,6 +51,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "kdefrontend/widgets/LabelWidget.h"
 
 #include <kxmlguifactory.h>
+#include <kstatusbar.h>
 
 #include <QDockWidget>
 #include <QStackedWidget>
@@ -117,6 +118,7 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	
 	if (!mainWindow->spreadsheetDock){
 	  mainWindow->spreadsheetDock = new SpreadsheetDock(mainWindow->stackedWidget);
+	  connect(mainWindow->spreadsheetDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->spreadsheetDock);
 	}
 
@@ -132,6 +134,7 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	
 	if (!mainWindow->columnDock){
 	  mainWindow->columnDock = new ColumnDock(mainWindow->stackedWidget);
+	  connect(mainWindow->columnDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->columnDock);
 	}
 	
@@ -147,6 +150,7 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	
 	if (!mainWindow->worksheetDock){
 	  mainWindow->worksheetDock = new WorksheetDock(mainWindow->stackedWidget);
+	  connect(mainWindow->worksheetDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->worksheetDock);
 	}
 	
@@ -162,6 +166,7 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	
 	if (!mainWindow->cartesianPlotDock){
 	  mainWindow->cartesianPlotDock = new CartesianPlotDock(mainWindow->stackedWidget);
+	  connect(mainWindow->cartesianPlotDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
 	}
 	
@@ -177,6 +182,7 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 
 	if (!mainWindow->cartesianPlotLegendDock){
 	  mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(mainWindow->stackedWidget);
+	  connect(mainWindow->cartesianPlotLegendDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotLegendDock);
 	}
 
@@ -192,6 +198,7 @@ GuiObserver::GuiObserver(MainWin* mainWin){
 	
 	if (!mainWindow->axisDock){
 	  mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
+	  connect(mainWindow->axisDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
 	}
 
@@ -208,21 +215,22 @@ GuiObserver::GuiObserver(MainWin* mainWin){
   }else if (className=="XYCurve"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-curve properties"));
 
-	if (!mainWindow->lineSymbolCurveDock){
-	  mainWindow->lineSymbolCurveDock = new XYCurveDock(mainWindow->stackedWidget);
-	  mainWindow->stackedWidget->addWidget(mainWindow->lineSymbolCurveDock);
+	if (!mainWindow->xyCurveDock){
+	  mainWindow->xyCurveDock = new XYCurveDock(mainWindow->stackedWidget);
+	  connect(mainWindow->xyCurveDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
+	  mainWindow->stackedWidget->addWidget(mainWindow->xyCurveDock);
 	}
 	
 	std::auto_ptr<AspectTreeModel> model( new AspectTreeModel(mainWindow->m_project) );
- 	mainWindow->lineSymbolCurveDock->setModel( model );
+ 	mainWindow->xyCurveDock->setModel( model );
 	
 	QList<XYCurve*> list;
 	foreach(aspect, selectedAspects){
 	  list<<qobject_cast<XYCurve *>(aspect);
 	}
-	mainWindow->lineSymbolCurveDock->setCurves(list);
+	mainWindow->xyCurveDock->setCurves(list);
 	
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->lineSymbolCurveDock);
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyCurveDock);
   }else if (className=="TextLabel"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
 	

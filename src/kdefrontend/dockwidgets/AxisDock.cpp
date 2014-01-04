@@ -2,7 +2,7 @@
     File                 : AxisDock.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : axes widget class
@@ -159,8 +159,9 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
 	ui.verticalLayout->addWidget(templateHandler);
-	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
-	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
 	init();
 }

@@ -2,8 +2,8 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-    							(use @ for *)
+    Copyright            : (C) 2013-2014 by Alexander Semke (alexander.semke*web.de)
+							(use @ for *)
     Description          : widget for cartesian plot legend properties
                            
  ***************************************************************************/
@@ -122,8 +122,9 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
-	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
-	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
 	init();
 }
