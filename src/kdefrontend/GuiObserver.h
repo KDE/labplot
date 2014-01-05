@@ -33,6 +33,7 @@
 #include <QItemSelection>
 class MainWin;
 class AbstractAspect;
+class CartesianPlot;
 
 class GuiObserver:public QObject{
   Q_OBJECT
@@ -42,6 +43,7 @@ class GuiObserver:public QObject{
 
   private:
 	MainWin* mainWindow;
+	CartesianPlot* m_lastCartesianPlot;
 	void updateGui(const QString&, const AbstractAspect*);
 	
   private slots:

@@ -69,7 +69,7 @@ Email (use @ for *)  	: alexander.semke*web.de
   \ingroup kdefrontend
 */
 
-GuiObserver::GuiObserver(MainWin* mainWin){
+GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	connect(mainWin->m_projectExplorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)), 
 					this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&) ) );
 	connect(mainWin->m_projectExplorer, SIGNAL(hiddenAspectSelected(const AbstractAspect*)), 
@@ -312,17 +312,25 @@ void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspe
 	if (!toolbar)return;
 	toolbar->show();
 	toolbar->setEnabled(true);
-	toolbar->clear();
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {
-		plot->fillToolBar(toolbar);
+		if (plot!=m_lastCartesianPlot) {
+			toolbar->clear();
+			plot->fillToolBar(toolbar);
+			m_lastCartesianPlot = const_cast<CartesianPlot*>(plot);
+		}
 	} else {
 		// one of plot's childred was selected
 		const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect->parentAspect());
-		if (plot)
-			plot->fillToolBar(toolbar);
-		else
-			toolbar->setEnabled(false);	
+		if (plot) {
+			if (plot!=m_lastCartesianPlot) {
+				toolbar->clear();
+				plot->fillToolBar(toolbar);
+				m_lastCartesianPlot = const_cast<CartesianPlot*>(plot);
+			}
+		} else {
+			toolbar->setEnabled(false);
+		}
 	}
   }
 }
