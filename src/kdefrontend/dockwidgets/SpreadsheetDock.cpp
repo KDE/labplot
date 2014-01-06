@@ -32,7 +32,7 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/TemplateHandler.h"
-#include <QDebug>
+#include <QDir>
 
  /*!
   \class SpreadsheetDock
@@ -54,7 +54,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
 	ui.gridLayout->addWidget(templateHandler, 6, 0, 1, 3);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 }
@@ -175,6 +175,25 @@ void SpreadsheetDock::spreadsheetShowCommentsChanged(int checked) {
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
+void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
+	//extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+	
+	int size = m_spreadsheetList.size();
+	if (size>1)
+		m_spreadsheet->beginMacro(i18n("%1 spreadsheets: template \"%2\" loaded").arg(size).arg(name));
+	else
+		m_spreadsheet->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_spreadsheet->name()).arg(name));
+
+	this->loadConfig(config);
+
+	m_spreadsheet->endMacro();
+}
 
 /*!
 	loads saved spreadsheet properties from \c config.

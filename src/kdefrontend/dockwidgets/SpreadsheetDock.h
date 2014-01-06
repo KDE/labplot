@@ -66,6 +66,7 @@ private slots:
 	void spreadsheetColumnCountChanged(int);
 	void spreadsheetShowCommentsChanged(int);
 
+	void loadConfigFromTemplate(KConfig&);
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
 

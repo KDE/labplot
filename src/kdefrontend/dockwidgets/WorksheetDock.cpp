@@ -134,7 +134,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	ui.verticalLayout->addWidget(templateHandler, 0, 0);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
@@ -781,6 +781,24 @@ void WorksheetDock::worksheetLayoutColumnCountChanged(int value) {
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
+void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
+	//extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+	
+	int size = m_worksheetList.size();
+	if (size>1)
+		m_worksheet->beginMacro(i18n("%1 worksheets: template \"%2\" loaded").arg(size).arg(name));
+	else
+		m_worksheet->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_worksheet->name()).arg(name));
+
+	this->loadConfig(config);
+	m_worksheet->endMacro();
+}
 
 void WorksheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );

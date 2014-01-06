@@ -159,7 +159,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
 	ui.verticalLayout->addWidget(templateHandler);
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
@@ -1427,6 +1427,25 @@ void AxisDock::axisVisibleChanged(bool on){
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
+void AxisDock::loadConfigFromTemplate(KConfig& config) {
+	//extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+	
+	int size = m_axesList.size();
+	if (size>1)
+		m_axis->beginMacro(i18n("%1 axes: template \"%2\" loaded").arg(size).arg(name));
+	else
+		m_axis->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_axis->name()).arg(name));
+
+	this->loadConfig(config);
+
+	m_axis->endMacro();
+}
 
 void AxisDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Axis" );
@@ -1455,13 +1474,12 @@ void AxisDock::loadConfig(KConfig& config){
 	//Line
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_axis->linePen().style()) );
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_axis->linePen().color()) );
-	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("LineColor", m_axis->linePen().color()) );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_axis->linePen().widthF()),Worksheet::Point) );
 	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_axis->lineOpacity())*100.0) );
+
 	//Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex( group.readEntry("MajorTicksDirection", (int) m_axis->majorTicksDirection()) );
 	ui.cbMajorTicksType->setCurrentIndex( group.readEntry("MajorTicksType", (int) m_axis->majorTicksType()) );
-	this->majorTicksTypeChanged( group.readEntry("MajorTicksType", (int) m_axis->majorTicksType()) );
 	ui.sbMajorTicksNumber->setValue( group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()) );
   	ui.leMajorTicksIncrement->setText( QString::number( group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement())) );
 	ui.cbMajorTicksLineStyle->setCurrentIndex( group.readEntry("MajorTicksLineStyle", (int) m_axis->majorTicksPen().style()) );
@@ -1469,12 +1487,10 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksWidth", m_axis->majorTicksPen().widthF()),Worksheet::Point) );
 	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksLength", m_axis->majorTicksLength()),Worksheet::Point) );
 	ui.sbMajorTicksOpacity->setValue( round(group.readEntry("MajorTicksOpacity", m_axis->majorTicksOpacity())*100.0) );
-	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, group.readEntry("MajorTicksColor", m_axis->majorTicksPen().color()) );
-	
+
 	//Minor ticks
 	ui.cbMinorTicksDirection->setCurrentIndex( group.readEntry("MinorTicksDirection", (int) m_axis->minorTicksDirection()) );
 	ui.cbMinorTicksType->setCurrentIndex( group.readEntry("MinorTicksType", (int) m_axis->minorTicksType()) );
-	this->minorTicksTypeChanged( group.readEntry("MinorTicksType", (int) m_axis->minorTicksType()) );
 	ui.sbMinorTicksNumber->setValue( group.readEntry("MinorTicksNumber", m_axis->minorTicksNumber()) );
   	ui.leMinorTicksIncrement->setText( QString::number( group.readEntry("MinorTicksIncrement", m_axis->minorTicksIncrement())) );
 	ui.cbMinorTicksLineStyle->setCurrentIndex( group.readEntry("MinorTicksLineStyle", (int) m_axis->minorTicksPen().style()) );
@@ -1482,7 +1498,6 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksWidth", m_axis->minorTicksPen().widthF()),Worksheet::Point) );
 	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()),Worksheet::Point) );
 	ui.sbMinorTicksOpacity->setValue( round(group.readEntry("MinorTicksOpacity", m_axis->minorTicksOpacity())*100.0) );
-	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, group.readEntry("MinorTicksColor", m_axis->minorTicksPen().color()) );
 
 	//Extra ticks
 	//TODO
@@ -1506,15 +1521,23 @@ void AxisDock::loadConfig(KConfig& config){
 	//Grid
 	ui.cbMajorGridStyle->setCurrentIndex( group.readEntry("MajorGridStyle", (int) m_axis->majorGridPen().style()) );
 	ui.kcbMajorGridColor->setColor( group.readEntry("MajorGridColor", m_axis->majorGridPen().color()) );
-	GuiTools::updatePenStyles(ui.cbMajorGridStyle, group.readEntry("MajorGridColor", m_axis->majorGridPen().color()) );
 	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorGridWidth", m_axis->majorGridPen().widthF()),Worksheet::Point) );
 	ui.sbMajorGridOpacity->setValue( round(group.readEntry("MajorGridOpacity", m_axis->majorGridOpacity())*100.0) );
 
 	ui.cbMinorGridStyle->setCurrentIndex( group.readEntry("MinorGridStyle", (int) m_axis->minorGridPen().style()) );
 	ui.kcbMinorGridColor->setColor( group.readEntry("MinorGridColor", m_axis->minorGridPen().color()) );
-	GuiTools::updatePenStyles(ui.cbMinorGridStyle, group.readEntry("MinorGridColor", m_axis->minorGridPen().color()) );
 	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorGridWidth", m_axis->minorGridPen().widthF()),Worksheet::Point) );
 	ui.sbMinorGridOpacity->setValue( round(group.readEntry("MinorGridOpacity", m_axis->minorGridOpacity())*100.0) );
+	
+	m_initializing=true;
+	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
+	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
+	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, ui.kcbMajorTicksColor->color());
+	this->minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
+	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
+	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
+	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
+	m_initializing=false;	
 }
 
 void AxisDock::saveConfig(KConfig& config){

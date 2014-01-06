@@ -193,6 +193,7 @@ private slots:
 	void axisVisibleChanged(bool);
 	
 	//save/load
+	void loadConfigFromTemplate(KConfig&);
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
 	

@@ -166,7 +166,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
@@ -1640,7 +1640,27 @@ void XYCurveDock::curveErrorBarsOpacityChanged(qreal opacity) {
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
-void XYCurveDock::loadConfig(KConfig& config){
+void XYCurveDock::loadConfigFromTemplate(KConfig& config) {
+	//extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+	
+	int size = m_curvesList.size();
+	if (size>1)
+		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded").arg(size).arg(name));
+	else
+		m_curve->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_curve->name()).arg(name));
+
+	this->loadConfig(config);
+
+	m_curve->endMacro();
+}
+
+void XYCurveDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "XYCurve" );
 
   	//General
@@ -1653,7 +1673,6 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()) );
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_curve->linePen().style()) );
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_curve->linePen().color()) );
-  	GuiTools::updatePenStyles(ui.cbLineStyle, group.readEntry("LineColor", m_curve->linePen().color()) );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Point) );
 	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_curve->lineOpacity())*100.0) );
 	
@@ -1661,7 +1680,6 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", (int) m_curve->dropLineType()) );
 	ui.cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", (int) m_curve->dropLinePen().style()) );
 	ui.kcbDropLineColor->setColor( group.readEntry("DropLineColor", m_curve->dropLinePen().color()) );
-  	GuiTools::updatePenStyles(ui.cbDropLineStyle, group.readEntry("DropLineColor", m_curve->dropLinePen().color()) );
 	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", m_curve->dropLinePen().widthF()),Worksheet::Point) );
 	ui.sbDropLineOpacity->setValue( round(group.readEntry("DropLineOpacity", m_curve->dropLineOpacity())*100.0) );
 
@@ -1671,14 +1689,10 @@ void XYCurveDock::loadConfig(KConfig& config){
   	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_curve->symbolsRotationAngle()) );
 	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_curve->symbolsOpacity())*100.0) );
-
   	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_curve->symbolsBrush().style()) );
   	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_curve->symbolsBrush().color()) );
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, group.readEntry("SymbolFillingColor", m_curve->symbolsBrush().color()) );
-	
   	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_curve->symbolsPen().style()) );
   	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_curve->symbolsPen().color()) );
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, group.readEntry("SymbolBorderColor", m_curve->symbolsPen().color()) );
   	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_curve->symbolsPen().widthF()), Worksheet::Point) );
 
 	//Values
@@ -1703,9 +1717,16 @@ void XYCurveDock::loadConfig(KConfig& config){
 	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Point) );
 	ui.cbErrorBarsStyle->setCurrentIndex( group.readEntry("ErrorBarsStyle", (int) m_curve->errorBarsPen().style()) );
 	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()) );
-  	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()) );
 	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()),Worksheet::Point) );
 	ui.sbErrorBarsOpacity->setValue( round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity())*100.0) );	
+
+	m_initializing=true;
+	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
+	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
+	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
+	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
+	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
+	m_initializing=false;
 }
 
 void XYCurveDock::saveConfig(KConfig& config){

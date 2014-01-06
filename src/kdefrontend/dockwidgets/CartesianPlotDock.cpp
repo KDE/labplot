@@ -133,7 +133,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
@@ -839,6 +839,25 @@ void CartesianPlotDock::plotVerticalPaddingChanged(float value){
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
+void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
+	//extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+	
+	int size = m_plotList.size();
+	if (size>1)
+		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded").arg(size).arg(name));
+	else
+		m_plot->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_plot->name()).arg(name));
+
+	this->loadConfig(config);
+
+	m_plot->endMacro();
+}
 
 void CartesianPlotDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "CartesianPlot" );
@@ -880,10 +899,13 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 
 	//Border-tab
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()) );
-	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()));
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_plot->plotArea()->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_plot->plotArea()->borderPen().widthF()), Worksheet::Point) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_plot->plotArea()->borderOpacity())*100 );
+
+	m_initializing=true;
+	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	m_initializing=false;	
 }
 
 void CartesianPlotDock::saveConfig(KConfig& config){

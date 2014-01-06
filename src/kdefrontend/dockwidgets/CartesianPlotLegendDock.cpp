@@ -122,7 +122,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
 
@@ -823,6 +823,26 @@ void CartesianPlotLegendDock::legendLayoutColumnCountChanged(int value) {
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
+void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
+	//extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+	
+	int size = m_legendList.size();
+	if (size>1)
+		m_legend->beginMacro(i18n("%1 cartesian plot legends: template \"%2\" loaded").arg(size).arg(name));
+	else
+		m_legend->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_legend->name()).arg(name));
+
+	this->loadConfig(config);
+
+	m_legend->endMacro();
+}
+
 void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
@@ -856,7 +876,6 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 
 	//Border
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_legend->borderPen().color()) );
-	GuiTools::updatePenStyles(ui.cbBorderStyle, group.readEntry("BorderColor", m_legend->borderPen().color()));
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_legend->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Point) );
 	ui.sbBorderOpacity->setValue( round(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0) );
@@ -876,6 +895,10 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 														  Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), Worksheet::Centimeter)) );
 
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_legend->layoutColumnCount()));
+
+	m_initializing=true;
+	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	m_initializing=false;
 }
 
 void CartesianPlotLegendDock::saveConfig(KConfig& config) {

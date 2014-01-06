@@ -232,7 +232,7 @@ STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderPen, QPen, borderPen, update)
 void PlotArea::setBorderPen(const QPen &pen) {
 	Q_D(PlotArea);
 	if (pen != d->borderPen)
-		exec(new PlotAreaSetBorderPenCmd(d, pen, tr("%1: set plot area border style")));
+		exec(new PlotAreaSetBorderPenCmd(d, pen, tr("%1: set plot area border")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderOpacity, qreal, borderOpacity, update)
