@@ -67,6 +67,8 @@ class ColumnDock: public QWidget{
 	void columnFormatChanged();
 	void columnPrecisionChanged();
 	void columnPlotDesignationChanged(const AbstractColumn*);
+signals:
+	void info(const QString&);
 };
 
 #endif // COLUMNDOCK_H
