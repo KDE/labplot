@@ -1,1 +1,22 @@
-TODO: provide a short description of LabPlot here, couple of sourceforge links and the feature list.
+LabPlot 2.0.0
+==========================================================================================
+http://labplot.sourceforge.net
+
+LabPlot is a KDE-application for interactive graphing and analysis of scientific data.
+LabPlot provides an easy way to create, manage and edit plots. It allows you to produce
+plots based on data from a spreadsheet or on data imported from external files. Plots 
+can be exported to several pixmap and vector graphic formats.
+
+Please see INSTALL for installation details.
+
+==========================================================================================
+The most current stable version is avaible here:
+http://labplot.sourceforge.net/download/
+
+If you want to see the current state of the project or to follow the development, checkout
+our subversion repository:
+svn checkout svn://svn.code.sf.net/p/labplot/code/2.0
+
+If you're interested in following the development of the project or would like to conribute,
+consider subscribing to labplot-devel. See http://sourceforge.net/p/labplot/mailman/?source=navbar
+for more information.

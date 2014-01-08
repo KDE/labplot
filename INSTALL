@@ -1,18 +1,30 @@
-LabPlot requires Qt version 4.7 or newer. Please update your Qt installation if necessary.
+LabPlot requires Qt version 4.7 or newer.
+Please update your Qt installation if necessary.
 
+===============================================================================
+To build LabPlot just execute
 # ./compile
 
-Specify the path:
--DCMAKE_INSTALL_PREFIX=/usr
+Edit the compile script if you want to use options different from default ones.
+E.g. specify a custom installation path via 
+-DCMAKE_INSTALL_PREFIX=/usr/local
 
-Specify the build type:
--DCMAKE_BUILD_TYPE = Release
+or build a debug build via
+-DCMAKE_BUILD_TYPE = DebugFull
 
-Installation:
--------------
+================================================================================
+To install LabPlot execute
+
 # cd build
 # make install
 
-Clean-up:
----------
+================================================================================
+To uninstall LabPlot execute
+
+# cd build
+# make uninstall
+
+================================================================================
+To remove build files execute
+
 # rm -rf build
