@@ -108,6 +108,7 @@ private slots:
 	void worksheetLayoutColumnCountChanged(int);
 	
 	//saving/loading
+	void load();
 	void loadConfigFromTemplate(KConfig&);
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);

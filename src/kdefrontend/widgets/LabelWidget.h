@@ -43,6 +43,8 @@ public:
 	~LabelWidget();
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
+
+	void load();
 	void loadConfig(KConfigGroup&);
 	void saveConfig(KConfigGroup&);
 	

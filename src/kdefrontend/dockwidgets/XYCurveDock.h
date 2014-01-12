@@ -184,6 +184,7 @@ private slots:
 	void curveErrorBarsOpacityChanged(qreal);
 
 	//load and save
+	void load();
 	void loadConfigFromTemplate(KConfig&);
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);

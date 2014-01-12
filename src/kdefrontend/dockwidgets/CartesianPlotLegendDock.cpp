@@ -159,9 +159,8 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	}
 
 	//show the properties of the first curve
-	KConfig config("", KConfig::SimpleConfig);
-  	loadConfig(config);
-	
+	this->load();
+
 	//legend title
 	QList<TextLabel*> labels;
 	foreach(CartesianPlotLegend* legend, list)
@@ -823,6 +822,52 @@ void CartesianPlotLegendDock::legendLayoutColumnCountChanged(int value) {
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
+void CartesianPlotLegendDock::load() {
+	//General-tab
+	ui.chkVisible->setChecked( m_legend->isVisible() );
+	QFont font = m_legend->labelFont();
+	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	ui.kfrLabelFont->setFont(font);
+	ui.kcbLabelColor->setColor( m_legend->labelColor() );
+	bool columnMajor = m_legend->labelColumnMajor();
+	if (columnMajor)
+		ui.cbOrder->setCurrentIndex(0); //column major
+	else
+		ui.cbOrder->setCurrentIndex(1); //row major
+
+	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter) );
+
+	//Background-tab
+	ui.cbBackgroundType->setCurrentIndex( (int) m_legend->backgroundType() );
+	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_legend->backgroundColorStyle() );
+	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_legend->backgroundImageStyle() );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_legend->backgroundBrushStyle() );
+	ui.kleBackgroundFileName->setText( m_legend->backgroundFileName() );
+	ui.kcbBackgroundFirstColor->setColor( m_legend->backgroundFirstColor() );
+	ui.kcbBackgroundSecondColor->setColor( m_legend->backgroundSecondColor() );
+	ui.sbBackgroundOpacity->setValue( round(m_legend->backgroundOpacity()*100.0) );
+
+	//Border
+	ui.kcbBorderColor->setColor( m_legend->borderPen().color() );
+	ui.cbBorderStyle->setCurrentIndex( (int) m_legend->borderPen().style() );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderOpacity->setValue( round(m_legend->borderOpacity()*100.0) );
+
+	// Layout
+	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), Worksheet::Centimeter) );
+	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), Worksheet::Centimeter) );
+	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), Worksheet::Centimeter) );
+	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), Worksheet::Centimeter) );
+	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), Worksheet::Centimeter) );
+	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), Worksheet::Centimeter) );
+
+	ui.sbLayoutColumnCount->setValue( m_legend->layoutColumnCount() );
+
+	m_initializing=true;
+	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	m_initializing=false;
+}
+
 void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;

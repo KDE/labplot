@@ -271,8 +271,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 	}
 
   	//show the properties of the first axis
-	KConfig config("", KConfig::SimpleConfig);
-	loadConfig(config);
+	this->load();
 
 	// general
 	connect(m_axis, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(axisDescriptionChanged(const AbstractAspect*)));
@@ -1427,6 +1426,94 @@ void AxisDock::axisVisibleChanged(bool on){
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
+void AxisDock::load(){
+	//General
+  	ui.chkVisible->setChecked( m_axis->isVisible() );
+	ui.cbOrientation->setCurrentIndex( (int) m_axis->orientation() );
+	
+	int index = (int) m_axis->position();
+	if (index > 1)
+		ui.cbPosition->setCurrentIndex(index-2);
+	else
+		ui.cbPosition->setCurrentIndex(index);
+	
+  	ui.lePosition->setText( QString::number( m_axis->offset()) );
+	ui.cbScale->setCurrentIndex(  (int) m_axis->scale() );
+	ui.chkAutoScale->setChecked( m_axis->autoScale() );
+  	ui.leStart->setText( QString::number(m_axis->start()) );
+  	ui.leEnd->setText( QString::number(m_axis->end()) );
+  	ui.leZeroOffset->setText( QString::number(m_axis->zeroOffset()) );
+  	ui.leScalingFactor->setText( QString::number(m_axis->scalingFactor()) );
+
+	//Line
+	ui.cbLineStyle->setCurrentIndex( (int) m_axis->linePen().style() );
+	ui.kcbLineColor->setColor( m_axis->linePen().color() );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->linePen().widthF(),Worksheet::Point) );
+	ui.sbLineOpacity->setValue( round(m_axis->lineOpacity()*100.0) );
+
+	//Major ticks
+	ui.cbMajorTicksDirection->setCurrentIndex( (int) m_axis->majorTicksDirection() );
+	ui.cbMajorTicksType->setCurrentIndex( (int) m_axis->majorTicksType() );
+	ui.sbMajorTicksNumber->setValue( m_axis->majorTicksNumber() );
+  	ui.leMajorTicksIncrement->setText( QString::number(m_axis->majorTicksIncrement()) );
+	ui.cbMajorTicksLineStyle->setCurrentIndex( (int) m_axis->majorTicksPen().style() );
+	ui.kcbMajorTicksColor->setColor( m_axis->majorTicksPen().color() );
+	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksPen().widthF(),Worksheet::Point) );
+	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksLength(),Worksheet::Point) );
+	ui.sbMajorTicksOpacity->setValue( round(m_axis->majorTicksOpacity()*100.0) );
+
+	//Minor ticks
+	ui.cbMinorTicksDirection->setCurrentIndex( (int) m_axis->minorTicksDirection() );
+	ui.cbMinorTicksType->setCurrentIndex( (int) m_axis->minorTicksType() );
+	ui.sbMinorTicksNumber->setValue( m_axis->minorTicksNumber() );
+  	ui.leMinorTicksIncrement->setText( QString::number( m_axis->minorTicksIncrement()) );
+	ui.cbMinorTicksLineStyle->setCurrentIndex( (int) m_axis->minorTicksPen().style() );
+	ui.kcbMinorTicksColor->setColor( m_axis->minorTicksPen().color() );
+	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksPen().widthF(),Worksheet::Point) );
+	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(),Worksheet::Point) );
+	ui.sbMinorTicksOpacity->setValue( round(m_axis->minorTicksOpacity()*100.0) );
+
+	//Extra ticks
+	//TODO
+
+	// Tick label
+	ui.cbLabelsFormat->setCurrentIndex( (int) m_axis->labelsFormat() );
+	ui.chkLabelsAutoPrecision->setChecked( (int) m_axis->labelsAutoPrecision() );
+	ui.sbLabelsPrecision->setValue( (int)m_axis->labelsPrecision() );
+	ui.cbLabelsPosition->setCurrentIndex( (int) m_axis->labelsPosition() );
+	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(m_axis->labelsOffset(),Worksheet::Point) );
+	ui.sbLabelsRotation->setValue( m_axis->labelsRotationAngle() );
+	//we need to set the font size in points for KFontRequester
+	QFont font = m_axis->labelsFont();
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	ui.kfrLabelsFont->setFont( font );
+	ui.kcbLabelsFontColor->setColor( m_axis->labelsColor() );
+	ui.leLabelsPrefix->setText( m_axis->labelsPrefix() );
+	ui.leLabelsSuffix->setText( m_axis->labelsSuffix() );
+	ui.sbLabelsOpacity->setValue( round(m_axis->labelsOpacity()*100.0) );
+
+	//Grid
+	ui.cbMajorGridStyle->setCurrentIndex( (int) m_axis->majorGridPen().style() );
+	ui.kcbMajorGridColor->setColor( m_axis->majorGridPen().color() );
+	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->majorGridPen().widthF(),Worksheet::Point) );
+	ui.sbMajorGridOpacity->setValue( round(m_axis->majorGridOpacity()*100.0) );
+
+	ui.cbMinorGridStyle->setCurrentIndex( (int) m_axis->minorGridPen().style() );
+	ui.kcbMinorGridColor->setColor( m_axis->minorGridPen().color() );
+	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorGridPen().widthF(),Worksheet::Point) );
+	ui.sbMinorGridOpacity->setValue( round(m_axis->minorGridOpacity()*100.0) );
+	
+	m_initializing=true;
+	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
+	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
+	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, ui.kcbMajorTicksColor->color());
+	this->minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
+	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
+	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
+	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
+	m_initializing=false;	
+}
+
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;

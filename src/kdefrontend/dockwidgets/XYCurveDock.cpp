@@ -1640,6 +1640,71 @@ void XYCurveDock::curveErrorBarsOpacityChanged(qreal opacity) {
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
+void XYCurveDock::load() {
+  	//General
+	//This data is read in XYCurveDock::setCurves().
+
+  	//Line
+	ui.cbLineType->setCurrentIndex( (int) m_curve->lineType() );
+	ui.sbLineInterpolationPointsCount->setValue( m_curve->lineInterpolationPointsCount() );
+	ui.cbLineStyle->setCurrentIndex( (int) m_curve->linePen().style() );
+	ui.kcbLineColor->setColor( m_curve->linePen().color() );
+	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->linePen().widthF(), Worksheet::Point) );
+	ui.sbLineOpacity->setValue( round(m_curve->lineOpacity()*100.0) );
+	
+	//Drop lines
+	ui.cbDropLineType->setCurrentIndex( (int) m_curve->dropLineType() );
+	ui.cbDropLineStyle->setCurrentIndex( (int) m_curve->dropLinePen().style() );
+	ui.kcbDropLineColor->setColor( m_curve->dropLinePen().color() );
+	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->dropLinePen().widthF(),Worksheet::Point) );
+	ui.sbDropLineOpacity->setValue( round(m_curve->dropLineOpacity()*100.0) );
+
+	//Symbols
+	//TODO: character
+	ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(m_curve->symbolsTypeId()) );
+  	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsSize(), Worksheet::Point) );
+	ui.sbSymbolRotation->setValue( m_curve->symbolsRotationAngle() );
+	ui.sbSymbolOpacity->setValue( round(m_curve->symbolsOpacity()*100.0) );
+  	ui.cbSymbolFillingStyle->setCurrentIndex( (int) m_curve->symbolsBrush().style() );
+  	ui.kcbSymbolFillingColor->setColor(  m_curve->symbolsBrush().color() );
+  	ui.cbSymbolBorderStyle->setCurrentIndex( (int) m_curve->symbolsPen().style() );
+  	ui.kcbSymbolBorderColor->setColor( m_curve->symbolsPen().color() );
+  	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsPen().widthF(), Worksheet::Point) );
+
+	//Values
+  	ui.cbValuesType->setCurrentIndex( (int) m_curve->valuesType() );
+  	ui.cbValuesPosition->setCurrentIndex( (int) m_curve->valuesPosition() );
+  	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(m_curve->valuesDistance(), Worksheet::Point) );
+	ui.sbValuesRotation->setValue( m_curve->valuesRotationAngle() );
+	ui.sbValuesOpacity->setValue( round(m_curve->valuesOpacity()*100.0) );
+  	ui.leValuesPrefix->setText( m_curve->valuesPrefix() );
+  	ui.leValuesSuffix->setText( m_curve->valuesSuffix() );
+	QFont valuesFont = m_curve->valuesFont();
+	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Point)) );
+  	ui.kfrValuesFont->setFont(valuesFont);
+  	ui.kcbValuesColor->setColor( m_curve->valuesColor() );
+
+	//TODO: Area Filling
+	
+	//"Error bars"-Tab
+	ui.cbXErrorType->setCurrentIndex( (int) m_curve->xErrorType() );
+	ui.cbYErrorType->setCurrentIndex( (int) m_curve->yErrorType() );
+	ui.cbErrorBarsType->setCurrentIndex( (int) m_curve->errorBarsType() );
+	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(m_curve->errorBarsCapSize(), Worksheet::Point) );
+	ui.cbErrorBarsStyle->setCurrentIndex( (int) m_curve->errorBarsPen().style() );
+	ui.kcbErrorBarsColor->setColor( m_curve->errorBarsPen().color() );
+	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->errorBarsPen().widthF(),Worksheet::Point) );
+	ui.sbErrorBarsOpacity->setValue( round(m_curve->errorBarsOpacity()*100.0) );	
+
+	m_initializing=true;
+	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
+	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
+	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
+	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
+	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
+	m_initializing=false;
+}
+
 void XYCurveDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;

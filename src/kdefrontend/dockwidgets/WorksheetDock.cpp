@@ -166,8 +166,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	}
 
 	//show the properties of the first worksheet
-	KConfig config("", KConfig::SimpleConfig);
-  	loadConfig(config);
+  	this->load();
 	this->worksheetLayoutChanged(m_worksheet->layout());
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
@@ -781,6 +780,35 @@ void WorksheetDock::worksheetLayoutColumnCountChanged(int value) {
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
+void WorksheetDock::load(){
+	// Geometry
+	ui.chScaleContent->setChecked(false);
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits( m_worksheet->pageRect().width(), Worksheet::Centimeter) );
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits( m_worksheet->pageRect().height(), Worksheet::Centimeter) );
+	updatePaperSize();
+
+	// Background-tab
+	ui.cbBackgroundType->setCurrentIndex( (int) m_worksheet->backgroundType() );	
+	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_worksheet->backgroundColorStyle() );
+	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_worksheet->backgroundImageStyle() );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_worksheet->backgroundBrushStyle() );
+	ui.kleBackgroundFileName->setText( m_worksheet->backgroundFileName() );
+	ui.kcbBackgroundFirstColor->setColor( m_worksheet->backgroundFirstColor() );
+	ui.kcbBackgroundSecondColor->setColor( m_worksheet->backgroundSecondColor() );
+	ui.sbBackgroundOpacity->setValue( round(m_worksheet->backgroundOpacity()*100) );
+	
+	// Layout
+	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter) );
+	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter) );
+	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), Worksheet::Centimeter) );
+	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), Worksheet::Centimeter) );
+	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter) );
+	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), Worksheet::Centimeter) );
+	
+	ui.sbLayoutRowCount->setValue( m_worksheet->layoutRowCount() );
+	ui.sbLayoutColumnCount->setValue( m_worksheet->layoutColumnCount() );
+}
+
 void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;

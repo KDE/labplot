@@ -161,28 +161,28 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	
 	labelWidget->setLabels(labels);
 	
-  //if there is more then one curve in the list, disable the tab "general"
-  if (list.size()==1){
-	ui.lName->setEnabled(true);
-	ui.leName->setEnabled(true);
-	ui.lComment->setEnabled(true);
-	ui.leComment->setEnabled(true);
+	//if there is more then one curve in the list, disable the tab "general"
+	if (list.size()==1){
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
 
-	ui.leName->setText(m_plot->name());
-	ui.leComment->setText(m_plot->comment());
-  }else{
-	ui.lName->setEnabled(false);
-	ui.leName->setEnabled(false);
-	ui.lComment->setEnabled(false);
-	ui.leComment->setEnabled(false);
+		ui.leName->setText(m_plot->name());
+		ui.leComment->setText(m_plot->comment());
+	}else{
+		ui.lName->setEnabled(false);
+		ui.leName->setEnabled(false);
+		ui.lComment->setEnabled(false);
+		ui.leComment->setEnabled(false);
 
-	ui.leName->setText("");
-	ui.leComment->setText("");
-  }
+		ui.leName->setText("");
+		ui.leComment->setText("");
+	}
 
 	//show the properties of the first curve
-	KConfig config("", KConfig::SimpleConfig);
-  	loadConfig(config);
+  	this->load();
+	
 	//update active widgets
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 
@@ -857,6 +857,53 @@ void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
 	this->loadConfig(config);
 
 	m_plot->endMacro();
+}
+
+void CartesianPlotDock::load(){
+	//General-tab
+	ui.chkVisible->setChecked(m_plot->isVisible());
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
+
+	ui.chkAutoScaleX->setChecked(m_plot->autoScaleX());
+  	ui.kleXMin->setText( QString::number(m_plot->xMin()) );
+	ui.kleXMax->setText( QString::number(m_plot->xMax()) );
+	ui.cbXScaling->setCurrentIndex( (int) m_plot->xScale() );
+
+	ui.chkAutoScaleY->setChecked(m_plot->autoScaleY());
+  	ui.kleYMin->setText( QString::number(m_plot->yMin()) );
+	ui.kleYMax->setText( QString::number(m_plot->yMax()) );
+	ui.cbYScaling->setCurrentIndex( (int)m_plot->yScale() );
+
+	//Title
+	labelWidget->load();
+
+	//Scale breakings
+	//TODO
+	
+	//Background-tab
+	ui.cbBackgroundType->setCurrentIndex( (int)m_plot->plotArea()->backgroundType() );
+	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundColorStyle() );
+	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundImageStyle() );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundBrushStyle() );
+	ui.kleBackgroundFileName->setText( m_plot->plotArea()->backgroundFileName() );
+	ui.kcbBackgroundFirstColor->setColor( m_plot->plotArea()->backgroundFirstColor() );
+	ui.kcbBackgroundSecondColor->setColor( m_plot->plotArea()->backgroundSecondColor() );
+	ui.sbBackgroundOpacity->setValue( round(m_plot->plotArea()->backgroundOpacity()*100.0) );
+	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), Worksheet::Centimeter) );
+	ui.sbPaddingVertical->setValue( Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), Worksheet::Centimeter) );
+
+	//Border-tab
+	ui.kcbBorderColor->setColor( m_plot->plotArea()->borderPen().color() );
+	ui.cbBorderStyle->setCurrentIndex( (int) m_plot->plotArea()->borderPen().style() );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderOpacity->setValue( round(m_plot->plotArea()->borderOpacity()*100) );
+
+	m_initializing=true;
+	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	m_initializing=false;	
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config){

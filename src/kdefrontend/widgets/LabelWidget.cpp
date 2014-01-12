@@ -102,11 +102,6 @@ LabelWidget::~LabelWidget() {}
 
 void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_labelsList = labels;
-
-	//TODO:
-	//The list is (sporadicaly) empty. This shouldn't happen!
-	Q_ASSERT(!labels.isEmpty());
-	
 	m_label = labels.first();
 
 	// settings for default selection (necessary if not changed later)
@@ -115,9 +110,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	ui.lOffset->hide();
 	ui.sbOffset->hide();
 
-	KConfig config("", KConfig::SimpleConfig);
-	KConfigGroup group = config.group( "TextLabel" );
-  	loadConfig(group);
+	this->load();
 
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
@@ -580,6 +573,34 @@ void LabelWidget::labelVisibleChanged(bool on){
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
+void LabelWidget::load() {
+	if(m_label == NULL)
+		return;
+
+	m_initializing = true;
+
+	//Text
+	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
+	ui.sbFontSize->setValue( m_label->teXFontSize() );
+	if(m_label->text().teXUsed)
+		ui.kcbFontColor->setColor( m_label->teXFontColor() );
+
+	// Geometry
+	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),Worksheet::Centimeter) );
+	ui.cbPositionY->setCurrentIndex( (int) m_label->position().verticalPosition );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
+
+	if (m_axesList.size())
+		ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffset(), Worksheet::Point) );
+
+	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
+	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
+	ui.sbRotation->setValue( m_label->rotationAngle() );
+
+	m_initializing = false;
+}
+
 void LabelWidget::loadConfig(KConfigGroup &group) {
 	if(m_label == NULL)
 		return;

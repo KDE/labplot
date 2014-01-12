@@ -123,6 +123,7 @@ private slots:
 	void legendLayoutColumnCountChanged(int);
 	
 	//save/load
+	void load();
 	void loadConfigFromTemplate(KConfig&);
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);

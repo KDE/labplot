@@ -123,6 +123,7 @@ private slots:
 	void plotVerticalPaddingChanged(float);
 	
 	//save/load
+	void load();
 	void loadConfigFromTemplate(KConfig&);
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
