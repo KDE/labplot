@@ -4,7 +4,7 @@
     Description          : A 2D-curve.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach*uni.kn)
 					(replace * with @ in the email addresses) 
                            
@@ -57,9 +57,9 @@
 #include <QMenu>
 #include <QtDebug>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
-#endif
+#include <KConfig>
+#include <KConfigGroup>
 
 #ifdef HAVE_GSL
 #include <gsl/gsl_spline.h>
@@ -86,42 +86,62 @@ XYCurve::~XYCurve() {
 void XYCurve::init(){
 	Q_D(XYCurve);
 
-	//TODO: read from the settings!
+	KConfig config;
+	KConfigGroup group = config.group("XYCurve");
+
 	d->xColumn = NULL;
 	d->yColumn = NULL;
 
-	d->lineType = XYCurve::NoLine;
-	d->lineInterpolationPointsCount = 1;
-	d->lineOpacity = 1.0;
-	d->dropLineType = XYCurve::NoDropLine;
-	d->dropLineOpacity = 1.0;
+	d->lineType = (XYCurve::LineType) group.readEntry("LineType", (int)XYCurve::NoLine);
+	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
+	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
+	d->linePen.setColor( group.readEntry("LineColor", QColor(Qt::black)) );
+	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
+	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
-	d->symbolsOpacity = 1.0;
-	d->symbolsRotationAngle = 0;
-	d->symbolsSize = Worksheet::convertToSceneUnits( 5, Worksheet::Point  );
+	d->dropLineType = (XYCurve::DropLineType) group.readEntry("DropLineType", (int)XYCurve::NoLine);
+	d->dropLinePen.setStyle( (Qt::PenStyle) group.readEntry("DropLineStyle", (int)Qt::SolidLine) );
+	d->dropLinePen.setColor( group.readEntry("DropLineColor", QColor(Qt::black)));
+	d->dropLinePen.setWidthF( group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
+	d->dropLineOpacity = group.readEntry("DropLineOpacity", 1.0);
+
 	d->symbolsPrototype = NULL;
-
-	d->valuesType = XYCurve::NoValues;
+	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Point));
+	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
+	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
+  	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::NoBrush) );
+  	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
+  	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
+  	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
+	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+	
+	d->valuesType = (XYCurve::ValuesType) group.readEntry("ValuesType", (int)XYCurve::NoValues);
 	d->valuesColumn = NULL;
-	d->valuesPosition = XYCurve::ValuesAbove;
-	d->valuesDistance =  Worksheet::convertToSceneUnits( 5, Worksheet::Point );
-	d->valuesRotationAngle = 0;
-	d->valuesOpacity = 1.0;
+	d->valuesPosition = (XYCurve::ValuesPosition) group.readEntry("ValuesPosition", (int)XYCurve::ValuesAbove);
+	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Point));
+	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
+	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
+	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
+	d->valuesSuffix = group.readEntry("ValuesSuffix", "");
+	d->valuesFont = group.readEntry("ValuesFont", QFont());
 	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
-	d->valuesColor = QColor(Qt::black);
+	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
-	d->xErrorType = XYCurve::NoError;
+	d->xErrorType = (XYCurve::ErrorType) group.readEntry("XErrorType", (int)XYCurve::NoError);
 	d->xErrorPlusColumn = NULL;
 	d->xErrorMinusColumn = NULL;
-	d->yErrorType = XYCurve::NoError;
-	d->errorBarsCapSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
+	d->yErrorType = (XYCurve::ErrorType) group.readEntry("YErrorType", (int)XYCurve::NoError);
 	d->yErrorPlusColumn = NULL;
 	d->yErrorMinusColumn = NULL;
-	d->errorBarsType = XYCurve::ErrorBarsSimple;
-	d->errorBarsOpacity = 1.0;
+	d->errorBarsType = (XYCurve::ErrorBarsType) group.readEntry("ErrorBarsType", (int)XYCurve::ErrorBarsSimple);
+	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Point) );
+	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
+	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
+	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
 	
 	// set type after all defaults
-	d->swapSymbolsTypeId("diamond");
+	d->swapSymbolsTypeId(group.readEntry("SymbolStyle", "diamond"));
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -1362,7 +1382,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
 	}
 
-	if (symbolsPrototype->id() != "none"){
+	if (symbolsPrototype && symbolsPrototype->id() != "none"){
 		curveShape.addPath(symbolsPath);
 	}
 

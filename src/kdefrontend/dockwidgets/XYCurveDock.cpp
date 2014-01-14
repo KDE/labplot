@@ -1816,7 +1816,7 @@ void XYCurveDock::saveConfig(KConfig& config){
 	group.writeEntry("DropLineOpacity", ui.sbDropLineOpacity->value()/100 );
 
 	//Symbol (TODO: character)
-	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentIndex());
+	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentText());
 	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Point));
 	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
 	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100 );
