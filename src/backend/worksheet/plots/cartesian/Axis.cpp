@@ -1311,7 +1311,9 @@ void AxisPrivate::retransformMajorGrid(){
 	}
 
 	//major tick points are already in scene coordinates, convert them back to logical...
-	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints);
+	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
+	//Currently, grid lines disappear somtimes without this flag
+	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	if (!logicalMajorTickPoints.size())
 		return;
@@ -1385,7 +1387,9 @@ void AxisPrivate::retransformMinorGrid(){
 	}
 
 	//minor tick points are already in scene coordinates, convert them back to logical...
-	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints);
+	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
+	//Currently, grid lines disappear somtimes without this flag
+	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal){ //horizontal axis
