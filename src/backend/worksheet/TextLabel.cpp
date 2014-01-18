@@ -4,7 +4,7 @@
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -42,9 +42,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
-#endif
+#include <KConfig>
+#include <KConfigGroup>
 
 /**
  * \class TextLabel
@@ -57,32 +57,58 @@
  */
 
 
-TextLabel::TextLabel(const QString &name):AbstractWorksheetElement(name), d_ptr(new TextLabelPrivate(this)){
+TextLabel::TextLabel(const QString& name, Type type):AbstractWorksheetElement(name),
+	m_type(type),
+	d_ptr(new TextLabelPrivate(this)){
 	init();
 }
 
-TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd):AbstractWorksheetElement(name), d_ptr(dd) {
+TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type):AbstractWorksheetElement(name), m_type(type), d_ptr(dd) {
 	init();
+}
+
+TextLabel::Type TextLabel::type() const {
+	return m_type;
 }
 
 void TextLabel::init() {
 	Q_D(TextLabel);
 
-	d->textWrapper.teXUsed = false;
-	d->teXFontSize = 12;
-	d->teXFontColor = Qt::black;
+	KConfig config;
+	KConfigGroup group;
+	if (m_type == AxisTitle)
+		group = config.group("AxisTitle");
+	else if (m_type == PlotTitle)
+		group = config.group("PlotTitle");
+	else if (m_type == PlotLegendTitle)
+		group = config.group("PlotLegendTitle");
+	else
+		group = config.group("TextLabel");
+
+	//properties common to all types
+	d->textWrapper.teXUsed = group.readEntry("TeXUsed", false);
+	d->teXFontSize = group.readEntry("TeXFontSize", 12);
+	d->teXFontColor = group.readEntry("TeXFontColor", QColor(Qt::black));
 	d->staticText.setTextFormat(Qt::RichText);
+	d->rotationAngle = group.readEntry("Rotation", 0.0);
 
-	d->position.horizontalPosition = TextLabel::hPositionCustom;
-	d->position.verticalPosition = TextLabel::vPositionCustom;
-	d->position.point.setX( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
-	d->position.point.setY( Worksheet::convertToSceneUnits(1, Worksheet::Centimeter) );
-	
-	d->horizontalAlignment= TextLabel::hAlignCenter;
-	d->verticalAlignment= TextLabel::vAlignCenter;
+	//position and alignment relevant properties, dependent on the actual type
+	if (m_type == PlotTitle || m_type == PlotLegendTitle) {
+		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)TextLabel::hPositionCenter);
+		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionX", (int) TextLabel::vPositionTop);
+		d->position.point.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
+		d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
+		d->horizontalAlignment= (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)TextLabel::hAlignCenter);
+		d->verticalAlignment= (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)TextLabel::vAlignBottom);		
+	} else {
+		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)TextLabel::hPositionCustom);
+		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionX", (int) TextLabel::vPositionCustom);
+		d->position.point.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
+		d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
+		d->horizontalAlignment= (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)TextLabel::hAlignCenter);
+		d->verticalAlignment= (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)TextLabel::vAlignCenter);
+	}
 
-	d->rotationAngle = 0.0;
-	
 	//scaling:
 	//we need to scale from the font size specified in points to scene units.
 	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
@@ -113,6 +139,12 @@ TextLabel::~TextLabel() {
 
 QGraphicsItem* TextLabel::graphicsItem() const{
 	return d_ptr;
+}
+
+void TextLabel::setParentGraphicsItem(QGraphicsItem* item) {
+	Q_D(TextLabel);
+	d->setParentItem(item);
+	d->updatePosition();
 }
 
 void TextLabel::retransform(){

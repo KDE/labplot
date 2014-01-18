@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : ScalableTextLabel.h
+    File                 : TextLabel.h
     Project              : LabPlot/SciDAVis
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -44,6 +44,8 @@ class TextLabel : public AbstractWorksheetElement{
 	Q_OBJECT
 
 	public:
+		enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
+
 		enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
 		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
 		
@@ -65,12 +67,14 @@ class TextLabel : public AbstractWorksheetElement{
 			VerticalPosition   verticalPosition;
 		};
 
-		TextLabel(const QString &name);
+		TextLabel(const QString& name, Type type = General);
 		~TextLabel();
 		
+		Type type() const;
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
+		void setParentGraphicsItem(QGraphicsItem*);
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
@@ -103,13 +107,14 @@ class TextLabel : public AbstractWorksheetElement{
 
 	protected:
 		TextLabelPrivate* const d_ptr;
-		TextLabel(const QString& name, TextLabelPrivate* dd);
+		TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
 
 	private:
     	Q_DECLARE_PRIVATE(TextLabel)
 		void init();
 		void initActions();
 
+		Type m_type;
 		QAction* visibilityAction;
 
 	signals:

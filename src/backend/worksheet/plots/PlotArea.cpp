@@ -4,7 +4,7 @@
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -38,11 +38,8 @@
 #include "backend/lib/XmlStreamReader.h"
 
 #include <QPainter>
-#include <QDebug>
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KConfig>
 #include <KConfigGroup>
-#endif
 
 /**
  * \class PlotArea
@@ -73,7 +70,6 @@ void PlotArea::init(){
 	d->rect = QRectF(0, 0, 1, 1);
 	d->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	KConfig config;
 	KConfigGroup group = config.group( "PlotArea" );
 
@@ -92,7 +88,6 @@ void PlotArea::init(){
 											group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
 											(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
-#endif
 }
 
 QGraphicsItem *PlotArea::graphicsItem() const{

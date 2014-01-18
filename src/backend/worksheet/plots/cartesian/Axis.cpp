@@ -86,7 +86,7 @@ void Axis::init(){
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
 	// axis title
- 	d->title = new TextLabel(this->name());
+ 	d->title = new TextLabel(this->name(), TextLabel::AxisTitle);
 	connect( d->title, SIGNAL(changed()), this, SLOT(labelChanged()) );
 	addChild(d->title);
 	d->title->setHidden(true);

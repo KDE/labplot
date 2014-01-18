@@ -906,9 +906,6 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth",
 													Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter)) );
 
-	//Title
-	//TODO labelWidget->loadConfig(group);
-	
 	//Background-tab
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_legend->backgroundType()) );
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_legend->backgroundColorStyle()) );
@@ -938,8 +935,11 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 														    Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
 	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing",
 														  Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), Worksheet::Centimeter)) );
-
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_legend->layoutColumnCount()));
+
+	//Title
+	group = config.group("PlotLegend");
+	labelWidget->loadConfig(group);
 
 	m_initializing=true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
@@ -957,9 +957,6 @@ void CartesianPlotLegendDock::saveConfig(KConfig& config) {
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex()==0);// true for "column major", false for "row major"
 	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), Worksheet::Centimeter));
-
-	//Title
-	//TODO labelWidget->saveConfig(group);
 
 	//Background
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
@@ -985,6 +982,10 @@ void CartesianPlotLegendDock::saveConfig(KConfig& config) {
 	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), Worksheet::Centimeter));
 	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), Worksheet::Centimeter));
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
+
+	//Title
+	group = config.group("PlotLegend");
+	labelWidget->saveConfig(group);
 
 	config.sync();
 }

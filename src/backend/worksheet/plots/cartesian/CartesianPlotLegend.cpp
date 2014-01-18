@@ -92,18 +92,12 @@ void CartesianPlotLegend::init(){
 	d->position.verticalPosition = CartesianPlotLegend::vPositionBottom;
 
 	//Title
- 	d->title = new TextLabel(this->name());
+ 	d->title = new TextLabel(this->name(), TextLabel::PlotLegendTitle);
 	d->title->setText(this->name());
 	addChild(d->title);
 	d->title->setHidden(true);
-	d->title->graphicsItem()->setParentItem(graphicsItem()); //set the parent before doing any positioning
+	d->title->setParentGraphicsItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-	TextLabel::PositionWrapper position;
-	position.horizontalPosition = TextLabel::hPositionCenter;
-	position.verticalPosition = TextLabel::vPositionTop;
-	d->title->setPosition(position);
-	d->title->setHorizontalAlignment(TextLabel::hAlignCenter);
-	d->title->setVerticalAlignment(TextLabel::vAlignBottom);
 	connect(d->title, SIGNAL(changed()), this, SLOT(retransform()));
 	
 	//Background

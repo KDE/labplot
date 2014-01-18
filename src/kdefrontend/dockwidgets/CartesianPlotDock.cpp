@@ -907,32 +907,37 @@ void CartesianPlotDock::load(){
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config){
-	KConfigGroup group = config.group( "CartesianPlot" );
+// 	KConfigGroup group = config.group( "CartesianPlot" );
 
 	//General-tab
-	ui.chkVisible->setChecked( group.readEntry("Visible", m_plot->isVisible()) );
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Left", m_plot->rect().x()), Worksheet::Centimeter));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Top", m_plot->rect().y()), Worksheet::Centimeter));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_plot->rect().width()), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_plot->rect().height()), Worksheet::Centimeter));
-
-	ui.chkAutoScaleX->setChecked(group.readEntry("AutoScaleX", m_plot->autoScaleX()));
-  	ui.kleXMin->setText( QString::number( group.readEntry("xMin", m_plot->xMin())) );
-	ui.kleXMax->setText( QString::number( group.readEntry("xMax", m_plot->xMax())) );
-	ui.cbXScaling->setCurrentIndex( group.readEntry("xScale", (int) m_plot->xScale()) );
-
-	ui.chkAutoScaleY->setChecked(group.readEntry("AutoScaleY", m_plot->autoScaleY()));
-  	ui.kleYMin->setText( QString::number( group.readEntry("yMin", m_plot->yMin())) );
-	ui.kleYMax->setText( QString::number( group.readEntry("yMax", m_plot->yMax())) );
-	ui.cbYScaling->setCurrentIndex( group.readEntry("yScale", (int) m_plot->yScale()) );
+	//TODO: decide whether to load properties, not related to the appearance/style of the plot.
+	//most probably we don't want: when loading a new template we only want to change the style of the plot
+	//and not the plot region that depends on the data currently shown in the plot.
+// 	ui.chkVisible->setChecked( group.readEntry("Visible", m_plot->isVisible()) );
+// 	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Left", m_plot->rect().x()), Worksheet::Centimeter));
+// 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Top", m_plot->rect().y()), Worksheet::Centimeter));
+// 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_plot->rect().width()), Worksheet::Centimeter));
+// 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_plot->rect().height()), Worksheet::Centimeter));
+// 
+// 	ui.chkAutoScaleX->setChecked(group.readEntry("AutoScaleX", m_plot->autoScaleX()));
+//   	ui.kleXMin->setText( QString::number( group.readEntry("xMin", m_plot->xMin())) );
+// 	ui.kleXMax->setText( QString::number( group.readEntry("xMax", m_plot->xMax())) );
+// 	ui.cbXScaling->setCurrentIndex( group.readEntry("xScale", (int) m_plot->xScale()) );
+// 
+// 	ui.chkAutoScaleY->setChecked(group.readEntry("AutoScaleY", m_plot->autoScaleY()));
+//   	ui.kleYMin->setText( QString::number( group.readEntry("yMin", m_plot->yMin())) );
+// 	ui.kleYMax->setText( QString::number( group.readEntry("yMax", m_plot->yMax())) );
+// 	ui.cbYScaling->setCurrentIndex( group.readEntry("yScale", (int) m_plot->yScale()) );
 
 	//Title
+	KConfigGroup group = config.group("PlotTitle");
 	labelWidget->loadConfig(group);
 
 	//Scale breakings
 	//TODO
 	
 	//Background-tab
+	group = config.group("PlotArea");
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_plot->plotArea()->backgroundType()) );
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_plot->plotArea()->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_plot->plotArea()->backgroundImageStyle()) );
@@ -956,32 +961,35 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 }
 
 void CartesianPlotDock::saveConfig(KConfig& config){
-	KConfigGroup group = config.group( "CartesianPlot" );
+// 	KConfigGroup group = config.group( "CartesianPlot" );
 
 	//General-tab
-	group.writeEntry("Visible", ui.chkVisible->isChecked());
-	group.writeEntry("Left", Worksheet::convertToSceneUnits(ui.sbLeft->value(), Worksheet::Centimeter));
-	group.writeEntry("Top", Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter));
-	group.writeEntry("Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
-	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
-
-	group.writeEntry("AutoScaleX", ui.chkAutoScaleX->isChecked());
-	group.writeEntry("xMin", ui.kleXMin->text());
-	group.writeEntry("xMax", ui.kleXMax->text());
-	group.writeEntry("xScale", ui.cbXScaling->currentIndex());
-	
-	group.writeEntry("AutoScaleY", ui.chkAutoScaleY->isChecked());
-	group.writeEntry("yMin", ui.kleYMin->text());
-	group.writeEntry("yMax", ui.kleYMax->text());
-	group.writeEntry("yScale", ui.cbYScaling->currentIndex());
+	//TODO: decide whether to save properties, not related to the appearance/style of the plot
+// 	group.writeEntry("Visible", ui.chkVisible->isChecked());
+// 	group.writeEntry("Left", Worksheet::convertToSceneUnits(ui.sbLeft->value(), Worksheet::Centimeter));
+// 	group.writeEntry("Top", Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter));
+// 	group.writeEntry("Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
+// 	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
+// 
+// 	group.writeEntry("AutoScaleX", ui.chkAutoScaleX->isChecked());
+// 	group.writeEntry("xMin", ui.kleXMin->text());
+// 	group.writeEntry("xMax", ui.kleXMax->text());
+// 	group.writeEntry("xScale", ui.cbXScaling->currentIndex());
+// 	
+// 	group.writeEntry("AutoScaleY", ui.chkAutoScaleY->isChecked());
+// 	group.writeEntry("yMin", ui.kleYMin->text());
+// 	group.writeEntry("yMax", ui.kleYMax->text());
+// 	group.writeEntry("yScale", ui.cbYScaling->currentIndex());
 	
 	//Title
+	KConfigGroup group = config.group("PlotTitle");
 	labelWidget->saveConfig(group);
 
 	//Scale breakings
 	//TODO
 
 	//Background
+	group = config.group("PlotArea");
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());

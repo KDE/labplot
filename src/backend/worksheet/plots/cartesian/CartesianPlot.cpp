@@ -343,16 +343,10 @@ void CartesianPlot::initDefault(Type type){
 	d->yMaxPrev = d->yMax;
 
 	//Plot title
- 	m_title = new TextLabel(this->name());
+ 	m_title = new TextLabel(this->name(), TextLabel::PlotTitle);
 	addChild(m_title);
 	m_title->setHidden(true);
-	m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem()); //set the parent before doing any positioning
-	TextLabel::PositionWrapper position;
-	position.horizontalPosition = TextLabel::hPositionCenter;
-	position.verticalPosition = TextLabel::vPositionTop;
-	m_title->setPosition(position);
-	m_title->setHorizontalAlignment(TextLabel::hAlignCenter);
-	m_title->setVerticalAlignment(TextLabel::vAlignBottom);
+	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 	
 	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
