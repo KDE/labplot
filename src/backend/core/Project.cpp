@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
                            (replace * with @ in the email addresses)
@@ -37,6 +37,9 @@
 #include <QUndoStack>
 #include <QMenu>
 #include <QDateTime>
+
+#include <KConfig>
+#include <KConfigGroup>
 
 /**
  * \class Project
@@ -85,6 +88,19 @@ class Project::Private {
 };
 
 Project::Project() : Folder(tr("Project")), d(new Private()) {
+	//load default values for name, comment and author from config
+	KConfig config;
+	KConfigGroup group = config.group("Project");
+
+	d->author = group.readEntry("Author", QString());
+	
+	//we don't have direct access to the members name and comment
+	//->temporaly disable the undo stack and call the setters
+	setUndoAware(false);
+	setName(group.readEntry("Name", QString()));
+	setComment(group.readEntry("Comment", QString()));
+	setUndoAware(true);
+
 #ifndef SUPPRESS_SCRIPTING_INIT
 	// TODO: intelligent engine choosing
 	Q_ASSERT(ScriptingEngineManager::instance()->engineNames().size() > 0);
