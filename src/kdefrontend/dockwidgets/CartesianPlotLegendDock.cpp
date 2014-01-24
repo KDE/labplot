@@ -283,7 +283,7 @@ void CartesianPlotLegendDock::labelFontChanged(const QFont& font){
 		return;
 
 	QFont labelsFont = font;
-	labelsFont.setPointSizeF( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );	
 	foreach(CartesianPlotLegend* legend, m_legendList)
 		legend->setLabelFont(labelsFont);
 }
@@ -669,8 +669,9 @@ void CartesianPlotLegendDock::legendDescriptionChanged(const AbstractAspect* asp
 
 void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
 	m_initializing = true;
+	//we need to set the font size in points for KFontRequester
 	QFont f(font);
-	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pointSizeF(), Worksheet::Point) );
+	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Point) );
 	ui.kfrLabelFont->setFont(f);
 	m_initializing = false;
 }
@@ -825,9 +826,13 @@ void CartesianPlotLegendDock::legendLayoutColumnCountChanged(int value) {
 void CartesianPlotLegendDock::load() {
 	//General-tab
 	ui.chkVisible->setChecked( m_legend->isVisible() );
+
+	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+// 	qDebug()<<"font size " << font.pixelSize() << "  " << font.pointSizeF();
 	ui.kfrLabelFont->setFont(font);
+	
 	ui.kcbLabelColor->setColor( m_legend->labelColor() );
 	bool columnMajor = m_legend->labelColumnMajor();
 	if (columnMajor)
@@ -893,10 +898,14 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 
 	//General-tab
 	ui.chkVisible->setChecked( group.readEntry("Visible", m_legend->isVisible()) );
+
+	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
 	ui.kfrLabelFont->setFont( group.readEntry("LabelFont", font) );
+
 	ui.kcbLabelColor->setColor( group.readEntry("LabelColor", m_legend->labelColor()) );
+
 	bool columnMajor = group.readEntry("LabelColumMajor", m_legend->labelColumnMajor());
 	if (columnMajor)
 		ui.cbOrder->setCurrentIndex(0); //column major

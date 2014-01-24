@@ -3,7 +3,7 @@
     Project              : LabPlot/SciDAVis
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2013-2014 Alexander Semke (alexander.semke*web.de)
 								(replace * with @ in the email addresses)
                            
  ***************************************************************************/
@@ -54,11 +54,9 @@
 #include <QMenu>
 #include <QtDebug>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
-#endif
 
 #include <KLocale>
 
@@ -79,11 +77,13 @@ CartesianPlotLegend::~CartesianPlotLegend() {
 
 void CartesianPlotLegend::init(){
 	Q_D(CartesianPlotLegend);
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+
 	KConfig config;
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
-	d->labelFont.setPointSizeF( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
+	d->labelFont = group.readEntry("LabelsFont", QFont());
+	d->labelFont.setPixelSize( Worksheet::convertToSceneUnits( 10, Worksheet::Point ) );
+	
 	d->labelColor = Qt::black;
 	d->labelColumnMajor = true;
 	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter));
@@ -126,7 +126,7 @@ void CartesianPlotLegend::init(){
 	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1, Worksheet::Centimeter));
 	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1, Worksheet::Centimeter));
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 1);
-#endif	
+
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
