@@ -76,14 +76,14 @@ FileDataSource::~FileDataSource(){
 }
 
 void FileDataSource::initActions(){
-	m_reloadAction = new KAction(KIcon("view-refresh"), tr("Reload"), this);
+	m_reloadAction = new KAction(KIcon("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
-	m_toggleWatchAction = new KAction(tr("Watch the file"), this);
+	m_toggleWatchAction = new KAction(i18n("Watch the file"), this);
 	m_toggleWatchAction->setCheckable(true);
 	connect(m_toggleWatchAction, SIGNAL(triggered()), this, SLOT(watchToggled()));
 	
-	m_toggleLinkAction = new KAction(tr("Link the file"), this);
+	m_toggleLinkAction = new KAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
 	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
 }
@@ -100,12 +100,12 @@ QWidget *FileDataSource::view() const{
   returns the list with all supported data file formats.
 */
 QStringList FileDataSource::fileTypes(){
-    return (QStringList()<< tr("ASCII vector data")
-//                         << tr("BINARY vector data")
-//                         << tr("ASCII matrix data")
-//                         << tr("BINARY matrix data")
-//                         << tr("Image")
-//                         << tr("Sound")
+    return (QStringList()<< i18n("ASCII vector data")
+//                         << i18n("BINARY vector data")
+//                         << i18n("ASCII matrix data")
+//                         << i18n("BINARY matrix data")
+//                         << i18n("Image")
+//                         << i18n("Sound")
 //                         << "FITS"
 //                         << "NetCDF"
 //                         << "HDF"
@@ -135,7 +135,7 @@ void FileDataSource::setFilter(AbstractFileFilter* f){
 
 /*!
   sets whether the file should be watched or not.
-  In the first case the data source will be automaticaly updated on file changes.
+  In the first case the data source will be automatically updated on file changes.
 */
 void FileDataSource::setFileWatched(const bool b){
 	m_fileWatched=b;
@@ -274,30 +274,30 @@ QString FileDataSource::fileInfoString(const QString &name){
 		infoString += "<u><b>" + fileName + ":</b></u><br>";
 		fileInfo.setFile(fileName);
 
-		infoString +=	tr("Readable") + ": ";
+		infoString +=	i18n("Readable") + ": ";
 		if ( fileInfo.isReadable() )
-			infoString += tr("yes");
+			infoString += i18n("yes");
 		else
-			infoString += tr("no");
+			infoString += i18n("no");
 
-		infoString += "<br>" + tr("Writable") + ": ";
+		infoString += "<br>" + i18n("Writable") + ": ";
 		if ( fileInfo.isWritable() )
-			infoString += tr("yes");
+			infoString += i18n("yes");
 		else
-			infoString += tr("no");
+			infoString += i18n("no");
 
-		infoString += "<br>" + tr("Executable") + ": ";
+		infoString += "<br>" + i18n("Executable") + ": ";
 		if ( fileInfo.isExecutable() )
-			infoString += tr("yes");
+			infoString += i18n("yes");
 		else
-			infoString += tr("no");
+			infoString += i18n("no");
 
-		infoString += "<br>" + tr("Created") + ": " + fileInfo.created().toString();
-		infoString += "<br>" + tr("Last modified") + ": " + fileInfo.lastModified().toString();
-		infoString += "<br>" + tr("Last read") + ": " + fileInfo.lastRead().toString();
-		infoString += "<br>" + tr("Owner") + ": " + fileInfo.owner();
-		infoString += "<br>" + tr("Group") + ": " + fileInfo.group();
-		infoString += "<br>" + tr("Size") + ": " + QString::number(fileInfo.size()) + " " + tr("cBytes");
+		infoString += "<br>" + i18n("Created") + ": " + fileInfo.created().toString();
+		infoString += "<br>" + i18n("Last modified") + ": " + fileInfo.lastModified().toString();
+		infoString += "<br>" + i18n("Last read") + ": " + fileInfo.lastRead().toString();
+		infoString += "<br>" + i18n("Owner") + ": " + fileInfo.owner();
+		infoString += "<br>" + i18n("Group") + ": " + fileInfo.group();
+		infoString += "<br>" + i18n("Size") + ": " + QString::number(fileInfo.size()) + " " + i18n("cBytes");
 
         // file type and type specific information about the file
 #ifdef Q_OS_LINUX
@@ -307,30 +307,30 @@ QString FileDataSource::fileInfoString(const QString &name){
 		proc->start( "file", args);
 
 		if(proc->waitForReadyRead(1000) == false){
-            infoString+= tr("Could not open file %1 for reading.").arg(fileName);
+            infoString+= i18n("Could not open file %1 for reading.").arg(fileName);
 		}else{
             fileTypeString = proc->readLine();
-            if( fileTypeString.contains(tr("cannot open")) )
+            if( fileTypeString.contains(i18n("cannot open")) )
                 fileTypeString="";
             else {
                 fileTypeString.remove(fileTypeString.length()-1,1);	// remove '\n'
             }
 		}
-		infoString += "<br>" + tr("File type") + ": " + fileTypeString;
+		infoString += "<br>" + i18n("File type") + ": " + fileTypeString;
 #endif
 
         //TODO depending on the file type, generate additional information about the file:
         //Number of lines for ASCII, color-depth for images etc. Use the specific filters here.
         // port the old labplot1.6 code.
          if( fileTypeString.contains("ASCII")){
-            infoString += "<br><br>" + tr("Number of columns") + ": "
+            infoString += "<br><br>" + i18n("Number of columns") + ": "
                           + QString::number(AsciiFilter::columnNumber(fileName));
 
-            infoString += "<br>" + tr("Number of lines") + ": "
+            infoString += "<br>" + i18n("Number of lines") + ": "
                           + QString::number(AsciiFilter::lineNumber(fileName));
         }
 	}else{
-		infoString+= tr("Could not open file %1 for reading.").arg(fileName);
+		infoString+= i18n("Could not open file %1 for reading.").arg(fileName);
 	}
 
     return infoString;
@@ -373,14 +373,14 @@ void FileDataSource::save(QXmlStreamWriter* writer) const
 */
 bool FileDataSource::load(XmlStreamReader* reader) {
     if(!reader->isStartElement() || reader->name() != "fileDataSource") {
-        reader->raiseError(tr("no fileDataSource element found"));
+        reader->raiseError(i18n("no fileDataSource element found"));
         return false;
     }
 
     if (!readBasicAttributes(reader))
         return false;
 
-    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;
 
@@ -434,7 +434,7 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 			}
 			addChild(column);
 		} else {// unknown element
-			reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+			reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}

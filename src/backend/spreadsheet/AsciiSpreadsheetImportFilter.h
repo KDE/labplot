@@ -64,7 +64,7 @@ class AsciiSpreadsheetImportFilter : public AbstractImportFilter
 		{}
 		virtual AbstractAspect * importAspect(QIODevice * input);
 		virtual QStringList fileExtensions() const;
-		virtual QString name() const { return QObject::tr("ASCII table"); }
+		virtual QString name() const { return QObject::i18n("ASCII table"); }
 
 		ACCESSOR(int, ignored_lines);
 		Q_PROPERTY(int ignored_lines READ ignored_lines WRITE set_ignored_lines);

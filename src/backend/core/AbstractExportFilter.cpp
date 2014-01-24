@@ -43,7 +43,7 @@
  * \fn bool AbstractExportFilter::exportAspect(AbstractAspect *object, QIODevice *output)
  * \brief Export object to output.
  *
- * \return true if export was sucessfull, false otherwise
+ * \return true if export was successfull, false otherwise
  */
 
 /**

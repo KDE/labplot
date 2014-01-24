@@ -30,6 +30,7 @@
  ***************************************************************************/
 
 #include "abstractcolumncommands.h"
+#include <KLocale>
 
 /** ***************************************************************************
  * \class AbstractColumnClearMasksCmd
@@ -57,7 +58,7 @@
 AbstractColumnClearMasksCmd::AbstractColumnClearMasksCmd(AbstractColumn::Private * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
-	setText(QObject::tr("%1: clear masks").arg(col->name()));
+	setText(i18n("%1: clear masks").arg(col->name()));
 	m_copied = false;
 }
 
@@ -126,9 +127,9 @@ AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumn::Private *
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_masked(masked)
 {
 	if(masked)
-		setText(QObject::tr("%1: mask cells").arg(col->name()));
+		setText(i18n("%1: mask cells").arg(col->name()));
 	else
-		setText(QObject::tr("%1: unmask cells").arg(col->name()));
+		setText(i18n("%1: unmask cells").arg(col->name()));
 	m_copied = false;
 }
 

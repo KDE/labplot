@@ -308,15 +308,15 @@ void MainWin::initActions() {
 	QActionGroup* windowVisibilityActions = new QActionGroup(this);
 	windowVisibilityActions->setExclusive(true);
 	
-	m_visibilityFolderAction = new KAction(KIcon("folder"), tr("Current &Folder Only"), windowVisibilityActions);
+	m_visibilityFolderAction = new KAction(KIcon("folder"), i18n("Current &Folder Only"), windowVisibilityActions);
 	m_visibilityFolderAction->setCheckable(true);
 	m_visibilityFolderAction->setData(Project::folderOnly);
 	
-	m_visibilitySubfolderAction = new KAction(KIcon("folder-documents"), tr("Current Folder and &Subfolders"), windowVisibilityActions);
+	m_visibilitySubfolderAction = new KAction(KIcon("folder-documents"), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
 	m_visibilitySubfolderAction->setCheckable(true);
 	m_visibilitySubfolderAction->setData(Project::folderAndSubfolders);
 	
-	m_visibilityAllAction = new KAction(tr("&All"), windowVisibilityActions);
+	m_visibilityAllAction = new KAction(i18n("&All"), windowVisibilityActions);
 	m_visibilityAllAction->setCheckable(true);
 	m_visibilityAllAction->setData(Project::allMdiWindows);
 	
@@ -539,7 +539,7 @@ bool MainWin::newProject(){
 	if ( m_projectExplorer==0 ){
 		m_projectExplorerDock = new QDockWidget(this);
 		m_projectExplorerDock->setObjectName("projectexplorer");
-		m_projectExplorerDock->setWindowTitle(tr("Project Explorer"));
+		m_projectExplorerDock->setWindowTitle(i18n("Project Explorer"));
 		addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
 		
 		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
@@ -551,7 +551,7 @@ bool MainWin::newProject(){
 		//Properties dock
 		m_propertiesDock = new QDockWidget(this);
 		m_propertiesDock->setObjectName("aspect_properties_dock");
-		m_propertiesDock->setWindowTitle(tr("Properties"));
+		m_propertiesDock->setWindowTitle(i18n("Properties"));
 		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
 		
 		stackedWidget = new QStackedWidget(m_propertiesDock);
@@ -666,7 +666,7 @@ void MainWin::openXML(QIODevice *file) {
 		return;
 	}
 	if (reader.hasWarnings()) {
-		QString msg_text = i18n("The following problems occured when loading the project:\n");
+		QString msg_text = i18n("The following problems occurred when loading the project:\n");
 		QStringList warnings = reader.warningStrings();
 		foreach(QString str, warnings)
 			msg_text += str + "\n";
@@ -803,7 +803,7 @@ void MainWin::print(){
 	Worksheet* w=this->activeWorksheet();
 	if (w!=0){ //worksheet
 		QPrintDialog *dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(tr("Print worksheet"));
+		dialog->setWindowTitle(i18n("Print worksheet"));
 		if (dialog->exec() != QDialog::Accepted)
 			return;
 	 
@@ -814,7 +814,7 @@ void MainWin::print(){
 		//Spreadsheet
 		Spreadsheet* s=this->activeSpreadsheet();
 		QPrintDialog *dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(tr("Print spreadsheet"));
+		dialog->setWindowTitle(i18n("Print spreadsheet"));
 		if (dialog->exec() != QDialog::Accepted)
 			return;
 	 
@@ -1037,7 +1037,7 @@ void MainWin::newMatrix(){
 }
 
 void MainWin::newFolder() {
-	Folder * folder = new Folder(tr("Folder %1").arg(1));
+	Folder * folder = new Folder(i18n("Folder %1").arg(1));
 	this->addAspectToProject(folder);
 }
 

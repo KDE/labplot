@@ -988,7 +988,7 @@
        <item row="14" column="0">
         <widget class="QLabel" name="lValuesSuffix">
          <property name="text">
-          <string>Sufix</string>
+          <string>Suffix</string>
          </property>
         </widget>
        </item>

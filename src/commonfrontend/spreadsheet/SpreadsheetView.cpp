@@ -154,9 +154,9 @@ void SpreadsheetView::init(){
 
 void SpreadsheetView::initMenus(){
 	//Selection menu
-	m_selectionMenu = new QMenu(tr("Selection"));
+	m_selectionMenu = new QMenu(i18n("Selection"));
 	
-	QMenu * submenu = new QMenu(tr("Fi&ll Selection with"));
+	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
 	m_selectionMenu ->addMenu(submenu);
@@ -181,7 +181,7 @@ void SpreadsheetView::initMenus(){
 	// Column menu
 	m_columnMenu = new QMenu();
 
-	submenu = new QMenu(tr("S&et Column(s) As"));
+	submenu = new QMenu(i18n("S&et Column(s) As"));
 	submenu->addAction(action_set_as_x);
 	submenu->addAction(action_set_as_y);
 	submenu->addAction(action_set_as_z);
@@ -193,7 +193,7 @@ void SpreadsheetView::initMenus(){
 	m_columnMenu->addMenu(submenu);
 	m_columnMenu->addSeparator();
 
-	submenu = new QMenu(tr("Fi&ll Selection with"));
+	submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
 	m_columnMenu->addMenu(submenu);
@@ -207,7 +207,7 @@ void SpreadsheetView::initMenus(){
 	
 	m_columnMenu->addAction(action_normalize_columns);
 	
-	submenu = new QMenu(tr("Sort"));
+	submenu = new QMenu(i18n("Sort"));
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	submenu->setIcon(KIcon("view-sort-ascending"));
 #endif
@@ -247,7 +247,7 @@ void SpreadsheetView::initMenus(){
 	m_rowMenu->addAction(action_add_rows);
 	m_rowMenu->addSeparator();
 	
-	submenu = new QMenu(tr("Fi&ll Selection with"));
+	submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
 	m_rowMenu->addMenu(submenu);
@@ -442,9 +442,9 @@ void SpreadsheetView::toggleComments(){
 	showComments(!areCommentsShown());
 	//TODO
 	if(areCommentsShown()) 
-		action_toggle_comments->setText(tr("Hide Comments"));
+		action_toggle_comments->setText(i18n("Hide Comments"));
 	else
-		action_toggle_comments->setText(tr("Show Comments"));
+		action_toggle_comments->setText(i18n("Show Comments"));
 }
 
 //! Shows (\c on=true) or hides (\c on=false) the column comments in the horizontal header
@@ -722,7 +722,7 @@ void SpreadsheetView::cutSelection(){
 	  return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(tr("%1: cut selected cell(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: cut selected cell(s)").arg(m_spreadsheet->name()));
 	copySelection();
 	clearSelectedCells();
 	m_spreadsheet->endMacro();
@@ -781,7 +781,7 @@ void SpreadsheetView::pasteIntoSelection(){
 	  return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(tr("%1: paste from clipboard").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: paste from clipboard").arg(m_spreadsheet->name()));
 	const QMimeData * mime_data = QApplication::clipboard()->mimeData();
 
 	if (mime_data->hasFormat("text/plain")){
@@ -864,7 +864,7 @@ void SpreadsheetView::maskSelection(){
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(tr("%1: mask selected cell(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: mask selected cell(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
@@ -882,7 +882,7 @@ void SpreadsheetView::unmaskSelection(){
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(tr("%1: unmask selected cell(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: unmask selected cell(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)	{
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
@@ -905,7 +905,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 	if ( first < 0 ) return;
 	
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(tr("%1: fill cells with row numbers").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers").arg(m_spreadsheet->name()));
 	foreach(Column * col_ptr, selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 
@@ -947,7 +947,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 	if ( first < 0 ) return;
 	
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(tr("%1: fill cells with random values").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values").arg(m_spreadsheet->name()));
 	qsrand(QTime::currentTime().msec());
 	foreach(Column *col_ptr, selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
@@ -1015,7 +1015,7 @@ void SpreadsheetView::insertEmptyColumns(){
 	int count, current = first;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: insert empty column(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: insert empty column(s)").arg(m_spreadsheet->name()));
 	int rows = m_spreadsheet->rowCount();
 	while( current <= last )
 	{
@@ -1041,7 +1041,7 @@ void SpreadsheetView::insertEmptyColumns(){
 
 void SpreadsheetView::removeSelectedColumns(){
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: remove selected column(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: remove selected column(s)").arg(m_spreadsheet->name()));
 
 	QList< Column* > list = selectedColumns();
 	foreach(Column* ptr, list)
@@ -1053,7 +1053,7 @@ void SpreadsheetView::removeSelectedColumns(){
 
 void SpreadsheetView::clearSelectedColumns(){
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: clear selected column(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: clear selected column(s)").arg(m_spreadsheet->name()));
 
 	QList< Column* > list = selectedColumns();
 	if (formulaModeActive())	{
@@ -1070,7 +1070,7 @@ void SpreadsheetView::clearSelectedColumns(){
 
 void SpreadsheetView::setSelectionAs(AbstractColumn::PlotDesignation pd){
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: set plot designation(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: set plot designation(s)").arg(m_spreadsheet->name()));
 
 	QList< Column* > list = selectedColumns();
 	foreach(Column* ptr, list)
@@ -1106,7 +1106,7 @@ void SpreadsheetView::setSelectedColumnsAsNone(){
 
 void SpreadsheetView::normalizeSelectedColumns(){
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: normalize column(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: normalize column(s)").arg(m_spreadsheet->name()));
 	QList< Column* > cols = selectedColumns();
 	foreach(Column * col, cols)	{
 		if (col->columnMode() == AbstractColumn::Numeric)
@@ -1128,7 +1128,7 @@ void SpreadsheetView::normalizeSelectedColumns(){
 
 void SpreadsheetView::normalizeSelection(){
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: normalize selection").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: normalize selection").arg(m_spreadsheet->name()));
 	double max = 0.0;
 	for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
 		if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
@@ -1178,7 +1178,7 @@ void SpreadsheetView::insertEmptyRows(){
 	int count, current = first;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: insert empty rows(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: insert empty rows(s)").arg(m_spreadsheet->name()));
 	while( current <= last ){
 		current = first+1;
 		while( current <= last && isRowSelected(current) ) current++;
@@ -1197,7 +1197,7 @@ void SpreadsheetView::removeSelectedRows(){
 	if ( firstSelectedRow() < 0 ) return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: remove selected rows(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: remove selected rows(s)").arg(m_spreadsheet->name()));
 	foreach(Interval<int> i, selectedRows().intervals())
 		m_spreadsheet->removeRows(i.start(), i.size());
 	m_spreadsheet->endMacro();
@@ -1208,7 +1208,7 @@ void SpreadsheetView::clearSelectedRows(){
 	if ( firstSelectedRow() < 0 ) return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(QObject::tr("%1: clear selected rows(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: clear selected rows(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
@@ -1238,7 +1238,7 @@ void SpreadsheetView::clearSelectedCells(){
 	if ( first < 0 ) return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(tr("%1: clear selected cell(s)").arg(m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18n("%1: clear selected cell(s)").arg(m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
 	foreach(Column * col_ptr, list)
 	{
@@ -1269,11 +1269,11 @@ void SpreadsheetView::clearSelectedCells(){
 void SpreadsheetView::goToCell(){
 	bool ok;
 
-	int col = QInputDialog::getInteger(0, tr("Go to Cell"), tr("Enter column"),
+	int col = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter column"),
 			1, 1, m_spreadsheet->columnCount(), 1, &ok);
 	if ( !ok ) return;
 
-	int row = QInputDialog::getInteger(0, tr("Go to Cell"), tr("Enter row"),
+	int row = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter row"),
 			1, 1, m_spreadsheet->rowCount(), 1, &ok);
 	if ( !ok ) return;
 

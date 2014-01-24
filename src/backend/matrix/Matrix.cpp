@@ -92,7 +92,7 @@ void Matrix::insertColumns(int before, int count)
 {
 	if( count < 1 || before < 0 || before > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: insert %2 column(s)").arg(name()).arg(count));
+	beginMacro(QObject::i18n("%1: insert %2 column(s)").arg(name()).arg(count));
 	exec(new MatrixInsertColumnsCmd(m_matrix_private, before, count));
 	endMacro();
 	RESET_CURSOR;
@@ -102,7 +102,7 @@ void Matrix::removeColumns(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: remove %2 column(s)").arg(name()).arg(count));
+	beginMacro(QObject::i18n("%1: remove %2 column(s)").arg(name()).arg(count));
 	exec(new MatrixRemoveColumnsCmd(m_matrix_private, first, count));
 	endMacro();
 	RESET_CURSOR;
@@ -112,7 +112,7 @@ void Matrix::removeRows(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: remove %2 row(s)").arg(name()).arg(count));
+	beginMacro(QObject::i18n("%1: remove %2 row(s)").arg(name()).arg(count));
 	exec(new MatrixRemoveRowsCmd(m_matrix_private, first, count));
 	endMacro();
 	RESET_CURSOR;
@@ -122,7 +122,7 @@ void Matrix::insertRows(int before, int count)
 {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: insert %2 row(s)").arg(name()).arg(count));
+	beginMacro(QObject::i18n("%1: insert %2 row(s)").arg(name()).arg(count));
 	exec(new MatrixInsertRowsCmd(m_matrix_private, before, count));
 	endMacro();
 	RESET_CURSOR;
@@ -132,7 +132,7 @@ void Matrix::setDimensions(int rows, int cols)
 {
 	if( (rows < 0) || (cols < 0 ) || (rows == rowCount() && cols == columnCount()) ) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: set matrix size to %2x%3").arg(name()).arg(rows).arg(cols));
+	beginMacro(QObject::i18n("%1: set matrix size to %2x%3").arg(name()).arg(rows).arg(cols));
 	int col_diff = cols - columnCount();
 	int row_diff = rows - rowCount();
 	if(col_diff > 0)
@@ -160,7 +160,7 @@ int Matrix::rowCount() const
 void Matrix::clear()
 {
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: clear").arg(name()));
+	beginMacro(QObject::i18n("%1: clear").arg(name()));
 	exec(new MatrixClearCmd(m_matrix_private));
 	endMacro();
 	RESET_CURSOR;
@@ -180,7 +180,7 @@ void Matrix::cutSelection()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(tr("%1: cut selected cell(s)").arg(name()));
+	beginMacro(i18n("%1: cut selected cell(s)").arg(name()));
 	copySelection();
 	clearSelectedCells();
 	endMacro();
@@ -227,7 +227,7 @@ void Matrix::pasteIntoSelection()
 	if(columnCount() < 1 || rowCount() < 1) return;
 
 	WAIT_CURSOR;
-	beginMacro(tr("%1: paste from clipboard").arg(name()));
+	beginMacro(i18n("%1: paste from clipboard").arg(name()));
 	const QMimeData * mime_data = QApplication::clipboard()->mimeData();
 
 	int first_col = m_view->firstSelectedColumn(false);
@@ -300,7 +300,7 @@ void Matrix::insertEmptyColumns()
 	int count, current = first;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: insert empty column(s)").arg(name()));
+	beginMacro(QObject::i18n("%1: insert empty column(s)").arg(name()));
 	while( current <= last )
 	{
 		current = first+1;
@@ -324,7 +324,7 @@ void Matrix::removeSelectedColumns()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: remove selected column(s)").arg(name()));
+	beginMacro(QObject::i18n("%1: remove selected column(s)").arg(name()));
 	for(int i=last; i>=first; i--)
 		if(m_view->isColumnSelected(i, false)) removeColumns(i, 1);
 	endMacro();
@@ -335,7 +335,7 @@ void Matrix::clearSelectedColumns()
 {
 	if (!m_view) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: clear selected column(s)").arg(name()));
+	beginMacro(QObject::i18n("%1: clear selected column(s)").arg(name()));
 	for(int i=0; i<columnCount(); i++)
 		if(m_view->isColumnSelected(i, false))
 			exec(new MatrixClearColumnCmd(m_matrix_private, i));
@@ -353,7 +353,7 @@ void Matrix::insertEmptyRows()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: insert empty rows(s)").arg(name()));
+	beginMacro(QObject::i18n("%1: insert empty rows(s)").arg(name()));
 	while( current <= last )
 	{
 		current = first+1;
@@ -377,7 +377,7 @@ void Matrix::removeSelectedRows()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: remove selected rows(s)").arg(name()));
+	beginMacro(QObject::i18n("%1: remove selected rows(s)").arg(name()));
 	for(int i=last; i>=first; i--)
 		if(m_view->isRowSelected(i, false)) removeRows(i, 1);
 	endMacro();
@@ -392,7 +392,7 @@ void Matrix::clearSelectedRows()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: clear selected rows(s)").arg(name()));
+	beginMacro(QObject::i18n("%1: clear selected rows(s)").arg(name()));
 	for(int i=first; i<=last; i++)
 	{
 		if(m_view->isRowSelected(i))
@@ -414,7 +414,7 @@ void Matrix::clearSelectedCells()
 	if( first_col < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(tr("%1: clear selected cell(s)").arg(name()));
+	beginMacro(i18n("%1: clear selected cell(s)").arg(name()));
 	for(int i=first_row; i<=last_row; i++)
 		for(int j=first_col; j<=last_col; j++)
 			if(m_view->isCellSelected(i, j))
@@ -507,19 +507,19 @@ void Matrix::createActions()
 	QIcon * icon_temp;
 
 	// selection related actions
-	action_cut_selection = new QAction(QIcon(QPixmap(":/cut.xpm")), tr("Cu&t"), this);
+	action_cut_selection = new QAction(QIcon(QPixmap(":/cut.xpm")), i18n("Cu&t"), this);
 	actionManager()->addAction(action_cut_selection, "cut_selection");
 
-	action_copy_selection = new QAction(QIcon(QPixmap(":/copy.xpm")), tr("&Copy"), this);
+	action_copy_selection = new QAction(QIcon(QPixmap(":/copy.xpm")), i18n("&Copy"), this);
 	actionManager()->addAction(action_copy_selection, "copy_selection");
 
-	action_paste_into_selection = new QAction(QIcon(QPixmap(":/paste.xpm")), tr("Past&e"), this);
+	action_paste_into_selection = new QAction(QIcon(QPixmap(":/paste.xpm")), i18n("Past&e"), this);
 	actionManager()->addAction(action_paste_into_selection, "paste_into_selection"); 
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/clear.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/clear.png"));
-	action_clear_selection = new QAction(*icon_temp, tr("Clea&r","clear selection"), this);
+	action_clear_selection = new QAction(*icon_temp, i18n("Clea&r","clear selection"), this);
 	actionManager()->addAction(action_clear_selection, "clear_selection"); 
 	delete icon_temp;
 
@@ -527,15 +527,15 @@ void Matrix::createActions()
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/fx.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/fx.png"));
-	action_set_formula = new QAction(*icon_temp, tr("Assign &Formula"), this);
+	action_set_formula = new QAction(*icon_temp, i18n("Assign &Formula"), this);
 	actionManager()->addAction(action_set_formula, "set_formula"); 
 	delete icon_temp;
 	
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/recalculate.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/recalculate.png"));
-	action_recalculate = new QAction(*icon_temp, tr("Recalculate"), this);
-	action_recalculate->setShortcut(tr("Ctrl+Return"));
+	action_recalculate = new QAction(*icon_temp, i18n("Recalculate"), this);
+	action_recalculate->setShortcut(i18n("Ctrl+Return"));
 	actionManager()->addAction(action_recalculate, "recalculate"); 
 	delete icon_temp;
 
@@ -549,75 +549,75 @@ void Matrix::createActions()
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/select_all.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/select_all.png"));
-	action_select_all = new QAction(*icon_temp, tr("Select All"), this);
+	action_select_all = new QAction(*icon_temp, i18n("Select All"), this);
 	actionManager()->addAction(action_select_all, "select_all"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/clear_table.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/clear_table.png"));
-	action_clear_matrix = new QAction(*icon_temp, tr("Clear Matrix"), this);
+	action_clear_matrix = new QAction(*icon_temp, i18n("Clear Matrix"), this);
 	actionManager()->addAction(action_clear_matrix, "clear_matrix"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/go_to_cell.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/go_to_cell.png"));
-	action_go_to_cell = new QAction(*icon_temp, tr("&Go to Cell"), this);
-	action_go_to_cell->setShortcut(tr("Ctrl+Alt+G"));
+	action_go_to_cell = new QAction(*icon_temp, i18n("&Go to Cell"), this);
+	action_go_to_cell->setShortcut(i18n("Ctrl+Alt+G"));
 	actionManager()->addAction(action_go_to_cell, "go_to_cell"); 
 	delete icon_temp;
 
-	action_transpose = new QAction(tr("&Transpose"), this);
+	action_transpose = new QAction(i18n("&Transpose"), this);
 	actionManager()->addAction(action_transpose, "transpose"); 
 
-	action_mirror_horizontally = new QAction(tr("Mirror &Horizontally"), this);
+	action_mirror_horizontally = new QAction(i18n("Mirror &Horizontally"), this);
 	actionManager()->addAction(action_mirror_horizontally, "mirror_horizontally"); 
 
-	action_mirror_vertically = new QAction(tr("Mirror &Vertically"), this);
+	action_mirror_vertically = new QAction(i18n("Mirror &Vertically"), this);
 	actionManager()->addAction(action_mirror_vertically, "mirror_vertically"); 
 
-	action_import_image = new QAction(tr("&Import Image", "import image as matrix"), this);
+	action_import_image = new QAction(i18n("&Import Image", "import image as matrix"), this);
 	actionManager()->addAction(action_import_image, "import_image"); 
 	
-	action_duplicate = new QAction(QIcon(QPixmap(":/duplicate.xpm")), tr("&Duplicate", "duplicate matrix"), this);
+	action_duplicate = new QAction(QIcon(QPixmap(":/duplicate.xpm")), i18n("&Duplicate", "duplicate matrix"), this);
 	actionManager()->addAction(action_duplicate, "duplicate"); 
 	
-	action_dimensions_dialog = new QAction(QIcon(QPixmap(":/resize.xpm")), tr("&Dimensions", "matrix size"), this);
+	action_dimensions_dialog = new QAction(QIcon(QPixmap(":/resize.xpm")), i18n("&Dimensions", "matrix size"), this);
 	actionManager()->addAction(action_dimensions_dialog, "dimensions_dialog"); 
 	
-	action_edit_coordinates = new QAction(tr("Set &Coordinates"), this);
+	action_edit_coordinates = new QAction(i18n("Set &Coordinates"), this);
 	actionManager()->addAction(action_edit_coordinates, "edit_coordinates"); 
 	
-	action_edit_format = new QAction(tr("Set Display &Format"), this);
+	action_edit_format = new QAction(i18n("Set Display &Format"), this);
 	actionManager()->addAction(action_edit_format, "edit_format"); 
 
 	// column related actions
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/insert_column.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/insert_column.png"));
-	action_insert_columns = new QAction(*icon_temp, tr("&Insert Empty Columns"), this);
+	action_insert_columns = new QAction(*icon_temp, i18n("&Insert Empty Columns"), this);
 	actionManager()->addAction(action_insert_columns, "insert_columns"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/remove_column.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/remove_column.png"));
-	action_remove_columns = new QAction(*icon_temp, tr("Remo&ve Columns"), this);
+	action_remove_columns = new QAction(*icon_temp, i18n("Remo&ve Columns"), this);
 	actionManager()->addAction(action_remove_columns, "remove_columns"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/clear_column.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/clear_column.png"));
-	action_clear_columns = new QAction(*icon_temp, tr("Clea&r Columns"), this);
+	action_clear_columns = new QAction(*icon_temp, i18n("Clea&r Columns"), this);
 	actionManager()->addAction(action_clear_columns, "clear_columns"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/add_columns.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/add_columns.png"));
-	action_add_columns = new QAction(*icon_temp, tr("&Add Columns"), this);
+	action_add_columns = new QAction(*icon_temp, i18n("&Add Columns"), this);
 	actionManager()->addAction(action_add_columns, "add_columns"); 
 	delete icon_temp;
 
@@ -625,28 +625,28 @@ void Matrix::createActions()
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/insert_row.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/insert_row.png"));
-	action_insert_rows = new QAction(*icon_temp ,tr("&Insert Empty Rows"), this);;
+	action_insert_rows = new QAction(*icon_temp ,i18n("&Insert Empty Rows"), this);;
 	actionManager()->addAction(action_insert_rows, "insert_rows"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/remove_row.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/remove_row.png"));
-	action_remove_rows = new QAction(*icon_temp, tr("Remo&ve Rows"), this);;
+	action_remove_rows = new QAction(*icon_temp, i18n("Remo&ve Rows"), this);;
 	actionManager()->addAction(action_remove_rows, "remove_rows"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/clear_row.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/clear_row.png"));
-	action_clear_rows = new QAction(*icon_temp, tr("Clea&r Rows"), this);;
+	action_clear_rows = new QAction(*icon_temp, i18n("Clea&r Rows"), this);;
 	actionManager()->addAction(action_clear_rows, "clear_rows"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/add_rows.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/add_rows.png"));
-	action_add_rows = new QAction(*icon_temp, tr("&Add Rows"), this);;
+	action_add_rows = new QAction(*icon_temp, i18n("&Add Rows"), this);;
 	actionManager()->addAction(action_add_rows, "add_rows"); 
 	delete icon_temp;
 }
@@ -717,7 +717,7 @@ void Matrix::addActionsToView() const
 
 bool Matrix::fillProjectMenu(QMenu * menu)
 {
-	menu->setTitle(tr("&Matrix"));
+	menu->setTitle(i18n("&Matrix"));
 
 	menu->addAction(action_toggle_tabbar);
 	menu->addSeparator();
@@ -781,11 +781,11 @@ void Matrix::goToCell()
 	if (!m_view) return;
 	bool ok;
 
-	int col = QInputDialog::getInteger(0, tr("Go to Cell"), tr("Enter column"),
+	int col = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter column"),
 			1, 1, columnCount(), 1, &ok);
 	if ( !ok ) return;
 
-	int row = QInputDialog::getInteger(0, tr("Go to Cell"), tr("Enter row"),
+	int row = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter row"),
 			1, 1, rowCount(), 1, &ok);
 	if ( !ok ) return;
 
@@ -795,7 +795,7 @@ void Matrix::goToCell()
 void Matrix::copy(Matrix * other)
 {
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: copy %2").arg(name()).arg(other->name()));
+	beginMacro(QObject::i18n("%1: copy %2").arg(name()).arg(other->name()));
 	int rows = other->rowCount();
 	int columns = other->columnCount();
 	setDimensions(rows, columns);
@@ -853,11 +853,11 @@ void Matrix::dimensionsDialog()
 {
 	bool ok;
 
-	int cols = QInputDialog::getInteger(0, tr("Set Matrix Dimensions"), tr("Enter number of columns"),
+	int cols = QInputDialog::getInteger(0, i18n("Set Matrix Dimensions"), i18n("Enter number of columns"),
 			columnCount(), 1, 1e9, 1, &ok);
 	if ( !ok ) return;
 
-	int rows = QInputDialog::getInteger(0, tr("Set Matrix Dimensions"), tr("Enter number of rows"),
+	int rows = QInputDialog::getInteger(0, i18n("Set Matrix Dimensions"), i18n("Enter number of rows"),
 			rowCount(), 1, 1e9, 1, &ok);
 	if ( !ok ) return;
 	
@@ -867,7 +867,7 @@ void Matrix::dimensionsDialog()
 void Matrix::importImageDialog()
 {
 	QList<QByteArray> formats = QImageReader::supportedImageFormats();
-	QString filter = tr("Images") + " (";
+	QString filter = i18n("Images") + " (";
 	for (int i=0; i<formats.count(); i++)
 		filter += " *."+formats.at(i)+" ";
 	filter += ");;";
@@ -875,7 +875,7 @@ void Matrix::importImageDialog()
 		filter += " *."+formats.at(i)+" (*." + formats.at(i) +");;";
 
 	QString images_path = global("images_path").toString();
-	QString file_name = QFileDialog::getOpenFileName(0, tr("Import image from file"), images_path, filter);
+	QString file_name = QFileDialog::getOpenFileName(0, i18n("Import image from file"), images_path, filter);
 	if ( !file_name.isEmpty() )
 	{
 		QFileInfo file_info(file_name);
@@ -891,7 +891,7 @@ void Matrix::importImageDialog()
 			delete matrix;
 		}
 		else
-			QMessageBox::information(0, tr("Error importing image"), tr("Import of image '%1' failed").arg(file_name));
+			QMessageBox::information(0, i18n("Error importing image"), i18n("Import of image '%1' failed").arg(file_name));
 	}
 }
 
@@ -926,7 +926,7 @@ void Matrix::addRows()
 	if (!m_view) return;
 	WAIT_CURSOR;
 	int count = m_view->selectedRowCount(false);
-	beginMacro(QObject::tr("%1: add %2 rows(s)").arg(name()).arg(count));
+	beginMacro(QObject::i18n("%1: add %2 rows(s)").arg(name()).arg(count));
 	exec(new MatrixInsertRowsCmd(m_matrix_private, rowCount(), count));
 	endMacro();
 	RESET_CURSOR;
@@ -937,7 +937,7 @@ void Matrix::addColumns()
 	if (!m_view) return;
 	WAIT_CURSOR;
 	int count = m_view->selectedRowCount(false);
-	beginMacro(QObject::tr("%1: add %2 column(s)").arg(name()).arg(count));
+	beginMacro(QObject::i18n("%1: add %2 column(s)").arg(name()).arg(count));
 	exec(new MatrixInsertColumnsCmd(m_matrix_private, columnCount(), count));
 	endMacro();
 	RESET_CURSOR;
@@ -1106,7 +1106,7 @@ bool Matrix::load(XmlStreamReader * reader)
 		cols = reader->readAttributeInt("columns", &ok2);
 		if(!ok1 || !ok2) 
 		{
-			reader->raiseError(tr("invalid row or column count"));
+			reader->raiseError(i18n("invalid row or column count"));
 			return false;
 		}
 		d_matrix_private->blockChangeSignals(true);
@@ -1138,7 +1138,7 @@ bool Matrix::load(XmlStreamReader * reader)
 					ret_val = readColumnWidthElement(reader);
 				else // unknown element
 				{
-					reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+					reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 				if(!ret_val) return false;
@@ -1147,7 +1147,7 @@ bool Matrix::load(XmlStreamReader * reader)
 		d_matrix_private->blockChangeSignals(false);
 	}
 	else // no matrix element
-		reader->raiseError(tr("no matrix element found"));
+		reader->raiseError(i18n("no matrix element found"));
 
 	return !reader->hasError();
 }
@@ -1160,7 +1160,7 @@ bool Matrix::readDisplayElement(XmlStreamReader * reader)
 	QString str = attribs.value(reader->namespaceUri().toString(), "numeric_format").toString();
 	if(str.isEmpty() || str.length() != 1)
 	{
-		reader->raiseError(tr("invalid or missing numeric format"));
+		reader->raiseError(i18n("invalid or missing numeric format"));
 		return false;
 	}
 	setNumericFormat(str.at(0).toAscii());
@@ -1169,7 +1169,7 @@ bool Matrix::readDisplayElement(XmlStreamReader * reader)
 	int digits = reader->readAttributeInt("displayed_digits", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid or missing number of displayed digits"));
+		reader->raiseError(i18n("invalid or missing number of displayed digits"));
 		return false;
 	}
 	setDisplayedDigits(digits);
@@ -1188,7 +1188,7 @@ bool Matrix::readCoordinatesElement(XmlStreamReader * reader)
 	val = reader->readAttributeInt("x_start", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid x start value"));
+		reader->raiseError(i18n("invalid x start value"));
 		return false;
 	}
 	setXStart(val);
@@ -1196,7 +1196,7 @@ bool Matrix::readCoordinatesElement(XmlStreamReader * reader)
 	val = reader->readAttributeInt("x_end", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid x end value"));
+		reader->raiseError(i18n("invalid x end value"));
 		return false;
 	}
 	setXEnd(val);
@@ -1204,7 +1204,7 @@ bool Matrix::readCoordinatesElement(XmlStreamReader * reader)
 	val = reader->readAttributeInt("y_start", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid y start value"));
+		reader->raiseError(i18n("invalid y start value"));
 		return false;
 	}
 	setYStart(val);
@@ -1212,7 +1212,7 @@ bool Matrix::readCoordinatesElement(XmlStreamReader * reader)
 	val = reader->readAttributeInt("y_end", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid y end value"));
+		reader->raiseError(i18n("invalid y end value"));
 		return false;
 	}
 	setYEnd(val);
@@ -1235,14 +1235,14 @@ bool Matrix::readRowHeightElement(XmlStreamReader * reader)
 	int row = reader->readAttributeInt("row", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid or missing row index"));
+		reader->raiseError(i18n("invalid or missing row index"));
 		return false;
 	}
 	QString str = reader->readElementText();
 	int value = str.toInt(&ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid row height"));
+		reader->raiseError(i18n("invalid row height"));
 		return false;
 	}
 	if (m_view)
@@ -1259,14 +1259,14 @@ bool Matrix::readColumnWidthElement(XmlStreamReader * reader)
 	int col = reader->readAttributeInt("column", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid or missing column index"));
+		reader->raiseError(i18n("invalid or missing column index"));
 		return false;
 	}
 	QString str = reader->readElementText();
 	int value = str.toInt(&ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid column width"));
+		reader->raiseError(i18n("invalid column width"));
 		return false;
 	}
 	if (m_view)
@@ -1288,13 +1288,13 @@ bool Matrix::readCellElement(XmlStreamReader * reader)
 	row = reader->readAttributeInt("row", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid or missing row index"));
+		reader->raiseError(i18n("invalid or missing row index"));
 		return false;
 	}
 	col = reader->readAttributeInt("column", &ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid or missing column index"));
+		reader->raiseError(i18n("invalid or missing column index"));
 		return false;
 	}
 
@@ -1302,7 +1302,7 @@ bool Matrix::readCellElement(XmlStreamReader * reader)
 	double value = str.toDouble(&ok);
 	if(!ok)
 	{
-		reader->raiseError(tr("invalid cell value"));
+		reader->raiseError(i18n("invalid cell value"));
 		return false;
 	}
 	setCell(row, col, value);
@@ -1333,9 +1333,9 @@ int Matrix::columnWidth(int col) const
 void Matrix::adjustTabBarAction(bool visible)
 {
 	if(visible) 
-		action_toggle_tabbar->setText(tr("Hide Controls"));
+		action_toggle_tabbar->setText(i18n("Hide Controls"));
 	else
-		action_toggle_tabbar->setText(tr("Show Controls"));
+		action_toggle_tabbar->setText(i18n("Show Controls"));
 }
 
 QVector<double> Matrix::columnCells(int col, int first_row, int last_row)
@@ -1399,7 +1399,7 @@ void Matrix::initActionManager()
 	if (!action_manager)
 		action_manager = new ActionManager();
 
-	action_manager->setTitle(tr("Matrix"));
+	action_manager->setTitle(i18n("Matrix"));
 	volatile Matrix * action_creator = new Matrix(); // initialize the action texts
 	delete action_creator;
 }
@@ -1411,10 +1411,10 @@ Matrix * Matrix::fromImage(const QImage & image)
 
 	QProgressDialog progress;
 	progress.setRange(0, cols);
-	progress.setWindowTitle(tr("SciDAVis") + " - " + tr("Import image..."));
+	progress.setWindowTitle(i18n("SciDAVis") + " - " + i18n("Import image..."));
 	progress.raise();
 
-	Matrix * matrix = new Matrix(0, rows, cols, tr("Matrix %1").arg(1));
+	Matrix * matrix = new Matrix(0, rows, cols, i18n("Matrix %1").arg(1));
 
 	QVector<double> values;
 	values.resize(rows);

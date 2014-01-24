@@ -45,6 +45,7 @@
 #include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocale>
 
 /**
  * \class TextLabel
@@ -127,7 +128,7 @@ void TextLabel::init() {
 }
 
 void TextLabel::initActions() {
-	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
@@ -198,7 +199,7 @@ STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper,
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
-		exec(new TextLabelSetTextCmd(d, textWrapper, tr("%1: set label text")));
+		exec(new TextLabelSetTextCmd(d, textWrapper, i18n("%1: set label text")));
 
 }
 
@@ -206,21 +207,21 @@ STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontSize, int, teXFontSize, updateText)
 void TextLabel::setTeXFontSize(const int fontSize) {
 	Q_D(TextLabel);
 	if (fontSize != d->teXFontSize)
-		exec(new TextLabelSetTeXFontSizeCmd(d, fontSize, tr("%1: set TeX font size")));
+		exec(new TextLabelSetTeXFontSizeCmd(d, fontSize, i18n("%1: set TeX font size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, teXFontColor, updateText);
 void TextLabel::setTeXFontColor(const QColor fontColor) {
 	Q_D(TextLabel);
 	if (fontColor != d->teXFontColor)
-		exec(new TextLabelSetTeXFontColorCmd(d, fontColor, tr("%1: set TeX font color")));
+		exec(new TextLabelSetTeXFontColorCmd(d, fontColor, i18n("%1: set TeX font color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPosition, TextLabel::PositionWrapper, position, retransform);
 void TextLabel::setPosition(const PositionWrapper& pos) {
 	Q_D(TextLabel);
 	if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition || pos.verticalPosition!=d->position.verticalPosition)
-		exec(new TextLabelSetPositionCmd(d, pos, tr("%1: set position")));
+		exec(new TextLabelSetPositionCmd(d, pos, i18n("%1: set position")));
 }
 
 /*!
@@ -249,27 +250,27 @@ STD_SETTER_CMD_IMPL_F_S(TextLabel, SetRotationAngle, float, rotationAngle, recal
 void TextLabel::setRotationAngle(float angle) {
 	Q_D(TextLabel);
 	if (angle != d->rotationAngle)
-		exec(new TextLabelSetRotationAngleCmd(d, angle, tr("%1: set rotation angle")));
+		exec(new TextLabelSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetHorizontalAlignment, TextLabel::HorizontalAlignment, horizontalAlignment, retransform);
 void TextLabel::setHorizontalAlignment(const TextLabel::HorizontalAlignment hAlign){
 	Q_D(TextLabel);
 	if (hAlign != d->horizontalAlignment)
-		exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, tr("%1: set horizontal alignment")));
+		exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, i18n("%1: set horizontal alignment")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVerticalAlignment, TextLabel::VerticalAlignment, verticalAlignment, retransform);
 void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign){
 	Q_D(TextLabel);
 	if (vAlign != d->verticalAlignment)
-		exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, tr("%1: set vertical alignment")));
+		exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, i18n("%1: set vertical alignment")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(TextLabel, SetVisible, bool, swapVisible, retransform);
 void TextLabel::setVisible(bool on) {
 	Q_D(TextLabel);
-	exec(new TextLabelSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
+	exec(new TextLabelSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 }
 
 bool TextLabel::isVisible() const {
@@ -643,14 +644,14 @@ bool TextLabel::load(XmlStreamReader* reader){
 	Q_D(TextLabel);
 
     if(!reader->isStartElement() || reader->name() != "textLabel"){
-        reader->raiseError(tr("no textLabel element found"));
+        reader->raiseError(i18n("no textLabel element found"));
         return false;
     }
 
     if (!readBasicAttributes(reader))
         return false;
 
-    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;
     QRectF rect;
@@ -750,7 +751,7 @@ bool TextLabel::load(XmlStreamReader* reader){
             else
                 d->teXFontColor.setBlue( str.toInt() );			
         }else{ // unknown element
-            reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+            reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }
     }

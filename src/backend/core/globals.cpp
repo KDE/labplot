@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QIcon>
 #include <QObject>
+#include <KLocale>
 
 /**
  * \class SciDAVis
@@ -84,12 +85,12 @@ QString SciDAVis::extraVersion()
 void SciDAVis::about()
 {
 	QString text = "<h2>"+ versionString() + extraVersion() + "</h2>";
-	text += "<h3>" + QObject::tr("Released") + ": " + QString(SciDAVis::release_date) + "</h3>";
+	text += "<h3>" + i18n("Released") + ": " + QString(SciDAVis::release_date) + "</h3>";
 	text +=	"<h3>" + QString(SciDAVis::copyright_string).replace("\n", "<br>") + "</h3>";
 
 	QMessageBox *mb = new QMessageBox();
 	mb->setAttribute(Qt::WA_DeleteOnClose);
-	mb->setWindowTitle(QObject::tr("About SciDAVis"));
+	mb->setWindowTitle(i18n("About SciDAVis"));
 	mb->setWindowIcon(QIcon(":/appicon"));
 	mb->setIconPixmap(QPixmap(":/appicon"));
 	mb->setText(text);

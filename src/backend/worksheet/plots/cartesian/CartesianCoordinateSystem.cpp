@@ -39,6 +39,8 @@
 #include <QDebug>
 #include <limits>
 
+#include <KLocale>
+
 /**
  * \class CartesianCoordinateSystem
  * \brief Cartesian coordinate system for plots.
@@ -693,7 +695,7 @@ void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double 
 	Interval<double> interval;
 	double a, b, c;
 
-	d->plot->beginMacro(QObject::tr("adjust to page size"));
+	d->plot->beginMacro(i18n("adjust to page size"));
 	foreach (Scale *xScale, d->xScales) {
 		xScale->getPropertiesOnResize(horizontalRatio, &type, &interval, &a, &b, &c);
 		d->plot->exec(new CartesianCoordinateSystemSetScalePropertiesCmd(xScale, interval, a, b, c));	

@@ -669,7 +669,7 @@ void WorksheetView::deleteElement() {
 		return;
 
 	m_suppressSelectionChangedEvent = true;
-	m_worksheet->beginMacro(tr("%1: Remove selected worksheet element(s).").arg(m_worksheet->name()));
+	m_worksheet->beginMacro(i18n("%1: Remove selected worksheet element(s).").arg(m_worksheet->name()));
 	foreach ( QGraphicsItem* item , m_selectedItems ) {
 		m_worksheet->deleteAspectFromGraphicsItem(item);
 	}

@@ -34,6 +34,8 @@
 #include <QRegExp>
 #include <QUndoCommand>
 
+#include <KLocale>
+
 class DateTime2StringFilterSetFormatCmd : public QUndoCommand
 {
 	public:
@@ -82,9 +84,9 @@ DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2St
 	: m_target(target), m_other_format(new_format) 
 {
 	if(m_target->parentAspect())
-		setText(QObject::tr("%1: set date-time format to %2").arg(m_target->parentAspect()->name()).arg(new_format));
+		setText(i18n("%1: set date-time format to %2").arg(m_target->parentAspect()->name()).arg(new_format));
 	else
-		setText(QObject::tr("set date-time format to %1").arg(new_format));
+		setText(i18n("set date-time format to %1").arg(new_format));
 }
 
 void DateTime2StringFilterSetFormatCmd::redo() 

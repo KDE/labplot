@@ -38,7 +38,7 @@ template <class target_class, typename value_type>
 class StandardSetterCmd: public QUndoCommand {
 	public:
 		StandardSetterCmd(target_class *target, value_type target_class:: *field, 
-				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use tr("%1: ...") for last arg
+				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use i18n("%1: ...") for last arg
 			: m_target(target), m_field(field), m_otherValue(newValue)  {
 				setText(description.arg(m_target->name()));
 			}
@@ -66,7 +66,7 @@ template <class target_class, typename value_type>
 class StandardMacroSetterCmd: public QUndoCommand {
 	public:
 		StandardMacroSetterCmd(target_class *target, value_type target_class:: *field, 
-				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use tr("%1: ...") for last arg
+				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use i18n("%1: ...") for last arg
 			: m_target(target), m_field(field), m_otherValue(newValue)  {
 				setText(description.arg(m_target->name()));
 			}
@@ -104,7 +104,7 @@ template <class target_class, typename value_type>
 class StandardSwapMethodSetterCmd: public QUndoCommand {
 	public:
 		StandardSwapMethodSetterCmd(target_class *target, value_type (target_class::*method)(typename Loki::TypeTraits<value_type>::ParameterType), 
-				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use tr("%1: ...") for last arg
+				typename Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) // use i18n("%1: ...") for last arg
 			: m_target(target), m_method(method), m_otherValue(newValue) {
 				setText(description.arg(m_target->name()));
 			}

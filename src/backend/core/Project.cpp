@@ -87,7 +87,7 @@ class Project::Private {
 		bool changed;
 };
 
-Project::Project() : Folder(tr("Project")), d(new Private()) {
+Project::Project() : Folder(i18n("Project")), d(new Private()) {
 	//load default values for name, comment and author from config
 	KConfig config;
 	KConfigGroup group = config.group("Project");
@@ -215,7 +215,7 @@ bool Project::load(XmlStreamReader* reader) {
 		if (reader->name() == "project") {
 			QString version = reader->attributes().value("version").toString();
 			if(version.isEmpty())
-				reader->raiseWarning(tr("Attribute 'version' is missing."));
+				reader->raiseWarning(i18n("Attribute 'version' is missing."));
 			else
 				d->version = version;
 
@@ -239,7 +239,7 @@ bool Project::load(XmlStreamReader* reader) {
 						//and the state of the project explorer (expanded items, currently selected item)						
 						emit requestLoadState(reader);
 					} else {
-						reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+						reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
 						if (!reader->skipToEndElement()) return false;
 					}
 				}
@@ -276,10 +276,10 @@ bool Project::load(XmlStreamReader* reader) {
 				}
 			}
 		} else {// no project element
-			reader->raiseError(tr("no project element found"));
+			reader->raiseError(i18n("no project element found"));
 		}
 	} else {// no start document
-		reader->raiseError(tr("no valid XML document found"));
+		reader->raiseError(i18n("no valid XML document found"));
 	}
 
 	emit loadFinished();
@@ -290,7 +290,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "fileName").toString();
 	if(str.isEmpty()) {
-		reader->raiseError(tr("Project file name missing."));
+		reader->raiseError(i18n("Project file name missing."));
 		return false;
 	}
 	d->fileName = str;
@@ -298,7 +298,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
 	QDateTime modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
 	if(str.isEmpty() || !modificationTime.isValid()) {
-		reader->raiseWarning(tr("Invalid project modification time. Using current time."));
+		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
 		d->modificationTime = QDateTime::currentDateTime();
 	} else {
 		d->modificationTime = modificationTime;

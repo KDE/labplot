@@ -40,6 +40,7 @@
 #include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocale>
 #endif
 
 #include <QApplication>
@@ -130,7 +131,7 @@ void Spreadsheet::removeRows(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: remove %2 row(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: remove %2 row(s)").arg(name()).arg(count));
 	foreach(Column * col, children<Column>(IncludeHidden))
 	    col->removeRows(first, count);
 	endMacro();
@@ -141,7 +142,7 @@ void Spreadsheet::insertRows(int before, int count)
 {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: insert %2 row(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: insert %2 row(s)").arg(name()).arg(count));
 	foreach(Column * col, children<Column>(IncludeHidden))
 	    col->insertRows(before, count);
 	endMacro();
@@ -219,7 +220,7 @@ void Spreadsheet::removeColumns(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: remove %2 column(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: remove %2 column(s)").arg(name()).arg(count));
 	for (int i=0; i<count; i++)
 		child<Column>(first)->remove();
 	endMacro();
@@ -229,7 +230,7 @@ void Spreadsheet::removeColumns(int first, int count)
 void Spreadsheet::insertColumns(int before, int count)
 {
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: insert %2 column(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: insert %2 column(s)").arg(name()).arg(count));
 	Column * before_col = column(before);
 	int rows = rowCount();
 	for (int i=0; i<count; i++) {
@@ -262,7 +263,7 @@ void Spreadsheet::setColumnCount(int new_size)
 void Spreadsheet::clear()
 {
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: clear").arg(name()));
+	beginMacro(i18n("%1: clear").arg(name()));
 	foreach (Column * col, children<Column>())
 		col->clear();
 	endMacro();
@@ -275,7 +276,7 @@ void Spreadsheet::clear()
 void Spreadsheet::clearMasks()
 {
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: clear all masks").arg(name()));
+	beginMacro(i18n("%1: clear all masks").arg(name()));
 	foreach(Column * col, children<Column>())
 	    col->clearMasks();
 	endMacro();
@@ -295,7 +296,7 @@ QMenu *Spreadsheet::createContextMenu(){
 void Spreadsheet::moveColumn(int from, int to)
 {
 	Column * col = child<Column>(from);
-	beginMacro(tr("%1: move column %2 from position %3 to %4.").arg(name()).arg(col->name()).arg(from+1).arg(to+1));
+	beginMacro(i18n("%1: move column %2 from position %3 to %4.").arg(name()).arg(col->name()).arg(from+1).arg(to+1));
 	col->remove();
 	insertChildBefore(col, child<Column>(to));
 	endMacro();
@@ -304,7 +305,7 @@ void Spreadsheet::moveColumn(int from, int to)
 void Spreadsheet::copy(Spreadsheet * other)
 {
 	WAIT_CURSOR;
-	beginMacro(QObject::tr("%1: copy %2").arg(name()).arg(other->name()));
+	beginMacro(i18n("%1: copy %2").arg(name()).arg(other->name()));
 
 	foreach(Column * col, children<Column>())
 		col->remove();
@@ -417,7 +418,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 	};
 
 	WAIT_CURSOR;
-	beginMacro(tr("%1: sort column(s)").arg(name()));
+	beginMacro(i18n("%1: sort column(s)").arg(name()));
 
 	if(leading == 0) { // sort separately
 		foreach(Column *col, cols) {
@@ -732,14 +733,14 @@ bool Spreadsheet::load(XmlStreamReader * reader)
 				}
 				else // unknown element
 				{
-					reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+					reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 			}
 		}
 	}
 	else // no spreadsheet element
-		reader->raiseError(tr("no spreadsheet element found"));
+		reader->raiseError(i18n("no spreadsheet element found"));
 
 	return !reader->hasError();
 }

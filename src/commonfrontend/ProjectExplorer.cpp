@@ -75,7 +75,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_projectLoading(false) {
 	layoutFilter->setSpacing(0);
 	layoutFilter->setContentsMargins(0, 0, 0, 0);
 
-	lFilter = new QLabel(tr("Search/Filter:"));
+	lFilter = new QLabel(i18n("Search/Filter:"));
 	layoutFilter->addWidget(lFilter);
 	
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -88,7 +88,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_projectLoading(false) {
 	layoutFilter->addWidget(leFilter);
 
 	bFilterOptions = new QPushButton(frameFilter);
-	bFilterOptions->setText(tr("Options"));
+	bFilterOptions->setText(i18n("Options"));
 	bFilterOptions->setEnabled(true);
 	bFilterOptions->setCheckable(true);
 	layoutFilter->addWidget(bFilterOptions);
@@ -114,26 +114,26 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_projectLoading(false) {
 }
 
 void ProjectExplorer::createActions(){
-    caseSensitiveAction = new QAction(tr("case sensitive"), this);
+    caseSensitiveAction = new QAction(i18n("case sensitive"), this);
     caseSensitiveAction->setCheckable(true);
     caseSensitiveAction->setChecked(false);
     connect(caseSensitiveAction, SIGNAL(triggered()), this, SLOT(toggleFilterCaseSensitivity()));
 
-	matchCompleteWordAction = new QAction(tr("match complete word"), this);
+	matchCompleteWordAction = new QAction(i18n("match complete word"), this);
     matchCompleteWordAction->setCheckable(true);
     matchCompleteWordAction->setChecked(false);
     connect(matchCompleteWordAction, SIGNAL(triggered()), this, SLOT(toggleFilterMatchCompleteWord()));
 	
-    expandTreeAction = new QAction(tr("expand all"), this);
+    expandTreeAction = new QAction(i18n("expand all"), this);
     connect(expandTreeAction, SIGNAL(triggered()), m_treeView, SLOT(expandAll()));
 
-	collapseTreeAction = new QAction(tr("collapse all"), this);
+	collapseTreeAction = new QAction(i18n("collapse all"), this);
     connect(collapseTreeAction, SIGNAL(triggered()), m_treeView, SLOT(collapseAll()));
 
-    toggleFilterAction = new QAction(tr("hide search/filter options"), this);
+    toggleFilterAction = new QAction(i18n("hide search/filter options"), this);
     connect(toggleFilterAction, SIGNAL(triggered()), this, SLOT(toggleFilterWidgets()));
 
-	showAllColumnsAction = new QAction(tr("show all"),this);
+	showAllColumnsAction = new QAction(i18n("show all"),this);
 	showAllColumnsAction->setCheckable(true);
     showAllColumnsAction->setChecked(true);
 	showAllColumnsAction->setEnabled(false);
@@ -155,14 +155,14 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 	if (!menu){
 		menu = new QMenu();
 
-		menu->addSeparator()->setText(tr("Tree options"));
+		menu->addSeparator()->setText(i18n("Tree options"));
 		menu->addAction(expandTreeAction);
 		menu->addAction(collapseTreeAction);
 		menu->addSeparator();
 		menu->addAction(toggleFilterAction);
 
 		//Menu for showing/hiding the columns in the tree view
-		QMenu* columnsMenu = menu->addMenu(tr("show/hide columns"));
+		QMenu* columnsMenu = menu->addMenu(i18n("show/hide columns"));
 		columnsMenu->addAction(showAllColumnsAction);
 		columnsMenu->addSeparator();
 		for (int i=0; i<list_showColumnActions.size(); i++)
@@ -170,7 +170,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 
 		//TODO
 		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
-// 		QMenu* objectsMenu = menu->addMenu(tr("show/hide objects"));
+// 		QMenu* objectsMenu = menu->addMenu(i18n("show/hide objects"));
 
 	}
 
@@ -371,10 +371,10 @@ void ProjectExplorer::showAllColumns(){
 void ProjectExplorer::toggleFilterWidgets(){
  	if (frameFilter->isVisible()){
 	  frameFilter->hide();
-	  toggleFilterAction->setText(tr("show search/filter options"));
+	  toggleFilterAction->setText(i18n("show search/filter options"));
 	}else{
 	  frameFilter->show();
-	  toggleFilterAction->setText(tr("hide search/filter options"));
+	  toggleFilterAction->setText(i18n("hide search/filter options"));
 	}
 }
 
@@ -572,7 +572,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	int row;
 	QList<QModelIndex> selected;
 	QXmlStreamAttributes attribs;
-	QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 
     while (!reader->atEnd()){
         reader->readNext();

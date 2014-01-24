@@ -362,10 +362,10 @@ void CartesianPlot::initDefault(Type type){
 
 void CartesianPlot::initActions(){
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	addCurveAction = new QAction(tr("xy-curve"), this);
-	addLegendAction = new QAction(tr("legend"), this);
-	addHorizontalAxisAction = new QAction(tr("horizontal axis"), this);
-	addVerticalAxisAction = new QAction(tr("vertical axis"), this);
+	addCurveAction = new QAction(i18n("xy-curve"), this);
+	addLegendAction = new QAction(i18n("legend"), this);
+	addHorizontalAxisAction = new QAction(i18n("horizontal axis"), this);
+	addVerticalAxisAction = new QAction(i18n("vertical axis"), this);
 
 	scaleAutoAction = new QAction(i18n("auto scale"), this);
 	scaleAutoXAction = new QAction(i18n("auto scale X"), this);
@@ -420,20 +420,20 @@ void CartesianPlot::initActions(){
 	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
 	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
 	
-	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));	
 }
 
 void CartesianPlot::initMenus(){
-	addNewMenu = new QMenu(tr("Add new"));
+	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
 	addNewMenu->addAction(addVerticalAxisAction);
 	
-	zoomMenu = new QMenu(tr("Zoom"));
+	zoomMenu = new QMenu(i18n("Zoom"));
 	zoomMenu->addAction(scaleAutoAction);
 	zoomMenu->addAction(scaleAutoXAction);
 	zoomMenu->addAction(scaleAutoYAction);
@@ -545,7 +545,7 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRect, QRectF, rect, retransform)
 void CartesianPlot::setRect(const QRectF& rect){
 	Q_D(CartesianPlot);
 	if (rect != d->rect)
-		exec(new CartesianPlotSetRectCmd(d, rect, tr("%1: set geometry rect")));
+		exec(new CartesianPlotSetRectCmd(d, rect, i18n("%1: set geometry rect")));
 }
 
 //TODO: provide an undo-aware version
@@ -553,7 +553,7 @@ void CartesianPlot::setRect(const QRectF& rect){
 void CartesianPlot::setAutoScaleX(bool autoScaleX){
 	Q_D(CartesianPlot);
 	if (autoScaleX != d->autoScaleX){
-// 		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX, tr("%1: change auto scale x")));
+// 		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX, i18n("%1: change auto scale x")));
 		d->autoScaleX = autoScaleX;
 		if (autoScaleX)
 			this->scaleAutoX();
@@ -564,21 +564,21 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMin, float, xMin, retransformScales)
 void CartesianPlot::setXMin(float xMin){
 	Q_D(CartesianPlot);
 	if (xMin != d->xMin)
-		exec(new CartesianPlotSetXMinCmd(d, xMin, tr("%1: set min x")));
+		exec(new CartesianPlotSetXMinCmd(d, xMin, i18n("%1: set min x")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMax, float, xMax, retransformScales);
 void CartesianPlot::setXMax(float xMax){
 	Q_D(CartesianPlot);
 	if (xMax != d->xMax)
-		exec(new CartesianPlotSetXMaxCmd(d, xMax, tr("%1: set max x")));
+		exec(new CartesianPlotSetXMaxCmd(d, xMax, i18n("%1: set max x")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales);
 void CartesianPlot::setXScale(Scale scale){
 	Q_D(CartesianPlot);
 	if (scale != d->xScale)
-		exec(new CartesianPlotSetXScaleCmd(d, scale, tr("%1: set x scale")));
+		exec(new CartesianPlotSetXScaleCmd(d, scale, i18n("%1: set x scale")));
 }
 
 //TODO: provide an undo-aware version
@@ -586,7 +586,7 @@ void CartesianPlot::setXScale(Scale scale){
 void CartesianPlot::setAutoScaleY(bool autoScaleY){
 	Q_D(CartesianPlot);
 	if (autoScaleY != d->autoScaleY){
-// 		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY, tr("%1: change auto scale y")));
+// 		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY, i18n("%1: change auto scale y")));
 		d->autoScaleY = autoScaleY;
 		if (autoScaleY)
 			this->scaleAutoY();
@@ -597,21 +597,21 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMin, float, yMin, retransformScales);
 void CartesianPlot::setYMin(float yMin){
 	Q_D(CartesianPlot);
 	if (yMin != d->yMin)
-		exec(new CartesianPlotSetYMinCmd(d, yMin, tr("%1: set min y")));
+		exec(new CartesianPlotSetYMinCmd(d, yMin, i18n("%1: set min y")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMax, float, yMax, retransformScales);
 void CartesianPlot::setYMax(float yMax){
 	Q_D(CartesianPlot);
 	if (yMax != d->yMax)
-		exec(new CartesianPlotSetYMaxCmd(d, yMax, tr("%1: set max y")));
+		exec(new CartesianPlotSetYMaxCmd(d, yMax, i18n("%1: set max y")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales);
 void CartesianPlot::setYScale(Scale scale){
 	Q_D(CartesianPlot);
 	if (scale != d->yScale)
-		exec(new CartesianPlotSetYScaleCmd(d, scale, tr("%1: set y scale")));
+		exec(new CartesianPlotSetYScaleCmd(d, scale, i18n("%1: set y scale")));
 }
 
 //################################################################
@@ -1341,14 +1341,14 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 	Q_D(CartesianPlot);
 
     if(!reader->isStartElement() || reader->name() != "cartesianPlot"){
-        reader->raiseError(tr("no cartesianPlot element found"));
+        reader->raiseError(i18n("no cartesianPlot element found"));
         return false;
     }
 
     if (!readBasicAttributes(reader))
         return false;
 
-    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;
 
@@ -1503,7 +1503,7 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
             }
         }else{ // unknown element
-            reader->raiseWarning(tr("unknown cartesianPlot element '%1'").arg(reader->name().toString()));
+            reader->raiseWarning(i18n("unknown cartesianPlot element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }
     }

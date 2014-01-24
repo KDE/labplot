@@ -892,7 +892,7 @@
        <item row="7" column="3">
         <widget class="QCheckBox" name="chkLabelsAutoPrecision">
          <property name="toolTip">
-          <string>Automaticaly determine the optimal number of digits after the decimal point</string>
+          <string>Automatically determine the optimal number of digits after the decimal point</string>
          </property>
          <property name="text">
           <string>Auto</string>

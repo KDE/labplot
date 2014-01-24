@@ -36,6 +36,7 @@
 #include <QtCore/QTime>
 #include <QtXml/QXmlStreamWriter>
 #include "backend/lib/XmlStreamReader.h"
+#include <KLocale>
 
 /**
  * \class AbstractSimpleFilter
@@ -359,7 +360,7 @@ bool AbstractSimpleFilter::load(XmlStreamReader * reader)
 		QString str = attribs.value(reader->namespaceUri().toString(), "filter_name").toString();
 		if(str != metaObject()->className())
 		{
-			reader->raiseError(tr("incompatible filter type"));
+			reader->raiseError(i18n("incompatible filter type"));
 			return false;
 		}
 
@@ -378,14 +379,14 @@ bool AbstractSimpleFilter::load(XmlStreamReader * reader)
 				}
 				else // unknown element
 				{
-					reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+					reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 			} 
 		}
 	}
 	else
-		reader->raiseError(tr("no simple filter element found"));
+		reader->raiseError(i18n("no simple filter element found"));
 
 	return !reader->hasError();
 }

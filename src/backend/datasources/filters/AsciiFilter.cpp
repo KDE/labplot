@@ -548,11 +548,11 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
 	if(!reader->isStartElement() || reader->name() != "asciiFilter"){
-        reader->raiseError(tr("no ascii filter element found"));
+        reader->raiseError(i18n("no ascii filter element found"));
         return false;
     }
 
-    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value("commentCharacter").toString();

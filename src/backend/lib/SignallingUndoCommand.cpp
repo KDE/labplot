@@ -74,7 +74,7 @@
  * \code
  * QUndoStack stack;
  * QAction action;
- * stack.push(new SignallingUndoCommand(tr("enable action"), &action, "setEnabled", "setDisabled", Q_ARG(bool, true)));
+ * stack.push(new SignallingUndoCommand(i18n("enable action"), &action, "setEnabled", "setDisabled", Q_ARG(bool, true)));
  * \endcode
  */
 SignallingUndoCommand::SignallingUndoCommand(const QString &text, QObject *receiver, const char *redoMethod, const char *undoMethod,

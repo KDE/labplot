@@ -88,9 +88,9 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 	{
 		case Qt::ToolTipRole:
 				if(col_ptr->isMasked(row))
-					postfix = " " + tr("(masked)");
+					postfix = " " + i18n("(masked)");
 				if(!col_ptr->isValid(row))
-					return QVariant(tr("invalid cell (ignored in all operations)","tooltip string for invalid rows") + postfix);
+					return QVariant(i18n("invalid cell (ignored in all operations)","tooltip string for invalid rows") + postfix);
 		case Qt::EditRole:
 				if(!m_formula_mode && !col_ptr->isValid(row))
 					return QVariant();
@@ -99,7 +99,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 				if(m_formula_mode)
 					return QVariant(col_ptr->formula(row));
 				if(!col_ptr->isValid(row))
-					return QVariant(tr("-","string for invalid cells"));
+					return QVariant(i18n("-","string for invalid cells"));
 				
 				return QVariant(col_ptr->asStringColumn()->textAt(row) + postfix);
 			}

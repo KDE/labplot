@@ -30,6 +30,8 @@
 
 #include <QStringList>
 
+#include <KLocale>
+
 /**
  * \class AbstractScriptingEngine
  * \brief An interpreter for evaluating scripting code.
@@ -84,7 +86,7 @@ bool AbstractScriptingEngine::isRunning() const {
  */
 
 /**
- * \brief If an exception / error occured, return a nicely formated stack backtrace.
+ * \brief If an exception / error occurred, return a nicely formated stack backtrace.
  */
 QString AbstractScriptingEngine::stackTraceString() {
 	return QString::null;
@@ -139,7 +141,7 @@ const QString AbstractScriptingEngine::nameAndPatterns() const
 	if (extensions.isEmpty())
 		return "";
 	else
-		return tr("%1 Source (*.%2)").arg(objectName()).arg(extensions.join(" *."));
+		return i18n("%1 Source (*.%2)").arg(objectName()).arg(extensions.join(" *."));
 }
 
 /**

@@ -148,25 +148,25 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 
   switch (columnMode){
 	case AbstractColumn::Numeric:
-	  ui.cbFormat->addItem(tr("Decimal"), QVariant('f'));
-	  ui.cbFormat->addItem(tr("Scientific (e)"), QVariant('e'));
-	  ui.cbFormat->addItem(tr("Scientific (E)"), QVariant('E'));
-	  ui.cbFormat->addItem(tr("Automatic (g)"), QVariant('g'));
-	  ui.cbFormat->addItem(tr("Automatic (G)"), QVariant('G'));
+	  ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
+	  ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	  ui.cbFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	  ui.cbFormat->addItem(i18n("Automatic (g)"), QVariant('g'));
+	  ui.cbFormat->addItem(i18n("Automatic (G)"), QVariant('G'));
 	  break;
 	case AbstractColumn::Text:
 	  break;
 	case AbstractColumn::Month:
-	  ui.cbFormat->addItem(tr("Number without leading zero"), QVariant("M"));
-	  ui.cbFormat->addItem(tr("Number with leading zero"), QVariant("MM"));
-	  ui.cbFormat->addItem(tr("Abbreviated month name"), QVariant("MMM"));
-	  ui.cbFormat->addItem(tr("Full month name"), QVariant("MMMM"));
+	  ui.cbFormat->addItem(i18n("Number without leading zero"), QVariant("M"));
+	  ui.cbFormat->addItem(i18n("Number with leading zero"), QVariant("MM"));
+	  ui.cbFormat->addItem(i18n("Abbreviated month name"), QVariant("MMM"));
+	  ui.cbFormat->addItem(i18n("Full month name"), QVariant("MMMM"));
 	  break;
 	case AbstractColumn::Day:
-	  ui.cbFormat->addItem(tr("Number without leading zero"), QVariant("d"));
-	  ui.cbFormat->addItem(tr("Number with leading zero"), QVariant("dd"));
-	  ui.cbFormat->addItem(tr("Abbreviated day name"), QVariant("ddd"));
-	  ui.cbFormat->addItem(tr("Full day name"), QVariant("dddd"));
+	  ui.cbFormat->addItem(i18n("Number without leading zero"), QVariant("d"));
+	  ui.cbFormat->addItem(i18n("Number with leading zero"), QVariant("dd"));
+	  ui.cbFormat->addItem(i18n("Abbreviated day name"), QVariant("ddd"));
+	  ui.cbFormat->addItem(i18n("Full day name"), QVariant("dddd"));
 	  break;
 	case AbstractColumn::DateTime:{
 	  foreach(QString s, dateStrings)
@@ -269,7 +269,7 @@ void ColumnDock::typeChanged(int index){
 		int digits = ui.sbPrecision->value();
 		Double2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
-		  col->beginMacro(QObject::tr("%1: change column type").arg(col->name()));
+		  col->beginMacro(i18n("%1: change column type").arg(col->name()));
 		  col->setColumnMode(columnMode);
 		  filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		  filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
@@ -289,7 +289,7 @@ void ColumnDock::typeChanged(int index){
 		QString format;
 		DateTime2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
-		  col->beginMacro(QObject::tr("%1: change column type").arg(col->name()));
+		  col->beginMacro(i18n("%1: change column type").arg(col->name()));
 		  format = ui.cbFormat->currentText();
 		  col->setColumnMode(columnMode);
 		  filter = static_cast<DateTime2StringFilter*>(col->outputFilter());

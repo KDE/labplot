@@ -571,26 +571,26 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 
   switch (columnMode){
 	case AbstractColumn::Numeric:
-	  ui.cbValuesFormat->addItem(tr("Decimal"), QVariant('f'));
-	  ui.cbValuesFormat->addItem(tr("Scientific (e)"), QVariant('e'));
-	  ui.cbValuesFormat->addItem(tr("Scientific (E)"), QVariant('E'));
-	  ui.cbValuesFormat->addItem(tr("Automatic (e)"), QVariant('g'));
-	  ui.cbValuesFormat->addItem(tr("Automatic (E)"), QVariant('G'));
+	  ui.cbValuesFormat->addItem(i18n("Decimal"), QVariant('f'));
+	  ui.cbValuesFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	  ui.cbValuesFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	  ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	  ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 	  break;
 	case AbstractColumn::Text:
-	  ui.cbValuesFormat->addItem(tr("Text"), QVariant());
+	  ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
 	  break;
 	case AbstractColumn::Month:
-	  ui.cbValuesFormat->addItem(tr("Number without leading zero"), QVariant("M"));
-	  ui.cbValuesFormat->addItem(tr("Number with leading zero"), QVariant("MM"));
-	  ui.cbValuesFormat->addItem(tr("Abbreviated month name"), QVariant("MMM"));
-	  ui.cbValuesFormat->addItem(tr("Full month name"), QVariant("MMMM"));
+	  ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("M"));
+	  ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("MM"));
+	  ui.cbValuesFormat->addItem(i18n("Abbreviated month name"), QVariant("MMM"));
+	  ui.cbValuesFormat->addItem(i18n("Full month name"), QVariant("MMMM"));
 	  break;
 	case AbstractColumn::Day:
-	  ui.cbValuesFormat->addItem(tr("Number without leading zero"), QVariant("d"));
-	  ui.cbValuesFormat->addItem(tr("Number with leading zero"), QVariant("dd"));
-	  ui.cbValuesFormat->addItem(tr("Abbreviated day name"), QVariant("ddd"));
-	  ui.cbValuesFormat->addItem(tr("Full day name"), QVariant("dddd"));
+	  ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("d"));
+	  ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("dd"));
+	  ui.cbValuesFormat->addItem(i18n("Abbreviated day name"), QVariant("ddd"));
+	  ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
 	  break;
 	case AbstractColumn::DateTime:{
 	  foreach(QString s, dateStrings)

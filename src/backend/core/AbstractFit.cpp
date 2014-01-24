@@ -40,7 +40,7 @@ class FitSetYErrorSourceCmd : public QUndoCommand
 	public:
 		FitSetYErrorSourceCmd(AbstractFit * target, AbstractFit::ErrorSource source) :
 			m_target(target), m_other_source(source) {
-				setText(QObject::tr("%1: change error source to %2.").arg(m_target->name()).arg(AbstractFit::nameOf(m_other_source)));
+				setText(QObject::i18n("%1: change error source to %2.").arg(m_target->name()).arg(AbstractFit::nameOf(m_other_source)));
 			}
 
 		void undo() {
@@ -64,7 +64,7 @@ class ResultsColumn : public AbstractColumn
 {
 
 	public:
-		ResultsColumn(AbstractFit * owner) : AbstractColumn(tr("value")), m_owner(owner) {}
+		ResultsColumn(AbstractFit * owner) : AbstractColumn(i18n("value")), m_owner(owner) {}
 
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
 		virtual int rowCount() const { return m_owner->numParameters(); }
@@ -82,7 +82,7 @@ class ErrorsColumn : public AbstractColumn
 {
 
 	public:
-		ErrorsColumn(AbstractFit * owner) : AbstractColumn(tr("error")), m_owner(owner) {}
+		ErrorsColumn(AbstractFit * owner) : AbstractColumn(i18n("error")), m_owner(owner) {}
 
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Numeric; }
 		virtual int rowCount() const { return m_owner->numParameters(); }
@@ -100,7 +100,7 @@ class NamesColumn : public AbstractColumn
 {
 
 	public:
-		NamesColumn(AbstractFit * owner) : AbstractColumn(tr("error")), m_owner(owner) {}
+		NamesColumn(AbstractFit * owner) : AbstractColumn(i18n("error")), m_owner(owner) {}
 
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
 		virtual int rowCount() const { return m_owner->numParameters(); }
@@ -118,7 +118,7 @@ class DescriptionsColumn : public AbstractColumn
 {
 
 	public:
-		DescriptionsColumn(AbstractFit * owner) : AbstractColumn(tr("error")), m_owner(owner) {}
+		DescriptionsColumn(AbstractFit * owner) : AbstractColumn(i18n("error")), m_owner(owner) {}
 
 		virtual SciDAVis::ColumnMode columnMode() const { return SciDAVis::Text; }
 		virtual int rowCount() const { return m_owner->numParameters(); }

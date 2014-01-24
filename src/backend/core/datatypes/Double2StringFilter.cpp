@@ -32,6 +32,8 @@
 #include <QXmlStreamWriter>
 #include <QUndoCommand>
 
+#include <KLocale>
+
 class Double2StringFilterSetFormatCmd : public QUndoCommand
 {
 	public:
@@ -75,7 +77,7 @@ bool Double2StringFilter::load(XmlStreamReader * reader)
 		bool ok;
 		int digits = digits_str.toInt(&ok);
 		if( (format_str.size() != 1) || !ok )
-			reader->raiseError(tr("missing or invalid format attribute(s)"));
+			reader->raiseError(i18n("missing or invalid format attribute(s)"));
 		else
 		{
 			setNumericFormat( format_str.at(0).toAscii() );
@@ -102,9 +104,9 @@ Double2StringFilterSetFormatCmd::Double2StringFilterSetFormatCmd(Double2StringFi
 	: m_target(target), m_other_format(new_format) 
 {
 	if(m_target->parentAspect())
-		setText(QObject::tr("%1: set numeric format to '%2'").arg(m_target->parentAspect()->name()).arg(new_format));
+		setText(i18n("%1: set numeric format to '%2'").arg(m_target->parentAspect()->name()).arg(new_format));
 	else
-		setText(QObject::tr("set numeric format to '%1'").arg(new_format));
+		setText(i18n("set numeric format to '%1'").arg(new_format));
 }
 
 void Double2StringFilterSetFormatCmd::redo() 
@@ -124,9 +126,9 @@ Double2StringFilterSetDigitsCmd::Double2StringFilterSetDigitsCmd(Double2StringFi
 	: m_target(target), m_other_digits(new_digits) 
 {
 	if(m_target->parentAspect())
-		setText(QObject::tr("%1: set decimal digits to %2").arg(m_target->parentAspect()->name()).arg(new_digits));
+		setText(i18n("%1: set decimal digits to %2").arg(m_target->parentAspect()->name()).arg(new_digits));
 	else
-		setText(QObject::tr("set decimal digits to %1").arg(new_digits));
+		setText(i18n("set decimal digits to %1").arg(new_digits));
 }
 
 void Double2StringFilterSetDigitsCmd::redo() 

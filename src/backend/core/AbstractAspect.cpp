@@ -304,14 +304,14 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader){
 	// name
 	QString str = attribs.value("name").toString();
 	if(str.isEmpty())
-		reader->raiseWarning(tr("Attribute 'name' is missing or empty."));
+		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
 
 	setName(str);
 
 	// creation time
 	str = attribs.value("creation_time").toString();
 	if(str.isEmpty()) {
-		reader->raiseWarning(tr("Invalid creation time for '%1'. Using current time.").arg(name()));
+		reader->raiseWarning(i18n("Invalid creation time for '%1'. Using current time.").arg(name()));
 		setCreationTime(QDateTime::currentDateTime());
 	} else {
 		QDateTime creation_time = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
@@ -349,9 +349,9 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
 
 	QString new_name = m_aspect_private->uniqueNameFor(child->name());
-	beginMacro(tr("%1: add %2.").arg(name()).arg(new_name));
+	beginMacro(i18n("%1: add %2.").arg(name()).arg(new_name));
 	if (new_name != child->name()) {
-		info(tr("Renaming \"%1\" to \"%2\" in order to avoid name collision.").arg(child->name()).arg(new_name));
+		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.").arg(child->name()).arg(new_name));
 		child->setName(new_name);
 	}
 
@@ -369,9 +369,9 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 	Q_CHECK_PTR(child);
 
 	QString new_name = m_aspect_private->uniqueNameFor(child->name());
-	beginMacro(tr("%1: insert %2 before %3.").arg(name()).arg(new_name).arg(before ? before->name() : "end"));
+	beginMacro(i18n("%1: insert %2 before %3.").arg(name()).arg(new_name).arg(before ? before->name() : "end"));
 	if (new_name != child->name()) {
-		info(tr("Renaming \"%1\" to \"%2\" in order to avoid name collision.").arg(child->name()).arg(new_name));
+		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.").arg(child->name()).arg(new_name));
 		child->setName(new_name);
 	}
 	int index = m_aspect_private->indexOfChild(before);
@@ -391,7 +391,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
  */
 void AbstractAspect::removeChild(AbstractAspect* child) {
 	Q_ASSERT(child->parentAspect() == this);
-	beginMacro(tr("%1: remove %2.").arg(name()).arg(child->name()));
+	beginMacro(i18n("%1: remove %2.").arg(name()).arg(child->name()));
 	exec(new AspectChildRemoveCmd(m_aspect_private, child));
 	endMacro();
 }
@@ -557,12 +557,12 @@ void AbstractAspect::setName(const QString &value) {
 	if (m_aspect_private->m_parent) {
 		new_name = m_aspect_private->m_parent->uniqueNameFor(value);
 		if (new_name != value)
-			info(tr("Intended name \"%1\" diverted to \"%2\" in order to avoid name collision.").arg(value).arg(new_name));
+			info(i18n("Intended name \"%1\" diverted to \"%2\" in order to avoid name collision.").arg(value).arg(new_name));
 	} else {
 		new_name = value;
 	}
 	
-	exec(new PropertyChangeCommand<QString>(tr("%1: rename to %2").arg(m_aspect_private->m_name).arg(new_name),
+	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2").arg(m_aspect_private->m_name).arg(new_name),
 				&m_aspect_private->m_name, new_name),
 			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
 }
@@ -575,7 +575,7 @@ QString AbstractAspect::comment() const
 void AbstractAspect::setComment(const QString &value)
 {
 	if (value == m_aspect_private->m_comment) return;
-	exec(new PropertyChangeCommand<QString>(tr("%1: change comment").arg(m_aspect_private->m_name),
+	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment").arg(m_aspect_private->m_name),
 				&m_aspect_private->m_comment, value),
 			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
 }
@@ -590,7 +590,7 @@ void AbstractAspect::setComment(const QString &value)
 void AbstractAspect::setCreationTime(const QDateTime& time)
 {
 	if (time == m_aspect_private->m_creation_time) return;
-	exec(new PropertyChangeCommand<QDateTime>(tr("%1: set creation time").arg(m_aspect_private->m_name),
+	exec(new PropertyChangeCommand<QDateTime>(i18n("%1: set creation time").arg(m_aspect_private->m_name),
 				&m_aspect_private->m_creation_time, time));
 }
 
@@ -615,7 +615,7 @@ bool AbstractAspect::hidden() const
 void AbstractAspect::setHidden(bool value)
 {
     if (value == m_aspect_private->m_hidden) return;
-    exec(new PropertyChangeCommand<bool>(tr("%1: change hidden status").arg(m_aspect_private->m_name),
+    exec(new PropertyChangeCommand<bool>(i18n("%1: change hidden status").arg(m_aspect_private->m_name),
 				 &m_aspect_private->m_hidden, value),
 			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
 }
@@ -663,7 +663,7 @@ QMenu *AbstractAspect::createContextMenu(){
 	QMenu* menu = new QMenu();
 	QAction *action;
 	const QStyle *widget_style = qApp->style();
-	action = menu->addAction(QObject::tr("&Remove"), this, SLOT(remove()));
+	action = menu->addAction(QObject::i18n("&Remove"), this, SLOT(remove()));
 	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
 	return menu;
 #else
@@ -674,8 +674,8 @@ QMenu *AbstractAspect::createContextMenu(){
 // 	menu->addAction(KStandardAction::copy(this));
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
-	menu->addAction(QIcon(KIcon("edit-rename")), QObject::tr("Rename"), this, SIGNAL(renameRequested()));
-	menu->addAction(QIcon(KIcon("edit-delete")), QObject::tr("Delete"), this, SLOT(remove()));
+	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
+	menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
 	return menu;
 #endif
 }
@@ -724,7 +724,7 @@ QString AbstractAspect::uniqueNameFor(const QString &current_name) const
  */
 void AbstractAspect::removeAllChildren()
 {
-	beginMacro(tr("%1: remove all children.").arg(name()));
+	beginMacro(i18n("%1: remove all children.").arg(name()));
 
 	QList<AbstractAspect*> children = rawChildren();
 	QList<AbstractAspect*>::iterator i = children.begin();

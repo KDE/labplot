@@ -36,6 +36,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include <QIcon>
 #include <QMetaEnum>
+#include <KLocale>
 
 /**
  * \class Column
@@ -133,7 +134,7 @@ Column::~Column() {
 void Column::setColumnMode(AbstractColumn::ColumnMode mode)
 {
 	if(mode == columnMode()) return;
-	beginMacro(QObject::tr("%1: change column type").arg(name()));
+	beginMacro(i18n("%1: change column type").arg(name()));
 	AbstractSimpleFilter * old_input_filter = m_column_private->inputFilter();
 	AbstractSimpleFilter * old_output_filter = m_column_private->outputFilter();
 	exec(new ColumnSetModeCmd(m_column_private, mode));
@@ -533,13 +534,13 @@ bool Column::load(XmlStreamReader * reader)
 		str = attribs.value(reader->namespaceUri().toString(), "mode").toString();
 		if(str.isEmpty())
 		{
-			reader->raiseError(tr("column mode missing"));
+			reader->raiseError(i18n("column mode missing"));
 			return false;
 		}
 		int mode_code = enumStringToValue(str, "ColumnMode");
 		if(mode_code == -1)
 		{
-			reader->raiseError(tr("column mode invalid"));
+			reader->raiseError(i18n("column mode invalid"));
 			return false;
 		}
 		setColumnMode((AbstractColumn::ColumnMode)mode_code);
@@ -550,7 +551,7 @@ bool Column::load(XmlStreamReader * reader)
 			setPlotDesignation(AbstractColumn::noDesignation);
 		else if(pd_code == -1)
 		{
-			reader->raiseError(tr("column plot designation invalid"));
+			reader->raiseError(i18n("column plot designation invalid"));
 			return false;
 		}
 		else
@@ -560,7 +561,7 @@ bool Column::load(XmlStreamReader * reader)
 		if (ok)
 			setWidth(width);
 		else {
-			reader->raiseError(tr("missing or invalid column width"));
+			reader->raiseError(i18n("missing or invalid column width"));
 			return false;
 		}
 
@@ -593,7 +594,7 @@ bool Column::load(XmlStreamReader * reader)
 					ret_val = XmlReadRow(reader);
 				else // unknown element
 				{
-					reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+					reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 				if(!ret_val)
@@ -609,7 +610,7 @@ bool Column::load(XmlStreamReader * reader)
 		}
 	}
 	else // no column element
-		reader->raiseError(tr("no column element found"));
+		reader->raiseError(i18n("no column element found"));
 
 	return !reader->error();
 }
@@ -653,7 +654,7 @@ bool Column::XmlReadFormula(XmlStreamReader * reader)
 	end = reader->readAttributeInt("end_row", &ok2);
 	if(!ok1 || !ok2) 
 	{
-		reader->raiseError(tr("invalid or missing start or end row"));
+		reader->raiseError(i18n("invalid or missing start or end row"));
 		return false;
 	}
 	setFormula(Interval<int>(start,end), reader->readElementText());
@@ -675,7 +676,7 @@ bool Column::XmlReadRow(XmlStreamReader * reader)
 	bool ok;
 	int index = reader->readAttributeInt("index", &ok);
 	if(!ok) {
-		reader->raiseError(tr("invalid or missing row index"));
+		reader->raiseError(i18n("invalid or missing row index"));
 		return false;
 	}
 
@@ -685,7 +686,7 @@ bool Column::XmlReadRow(XmlStreamReader * reader)
 			{
 				double value = str.toDouble(&ok);
 				if(!ok) {
-					reader->raiseError(tr("invalid row value"));
+					reader->raiseError(i18n("invalid row value"));
 					return false;
 				}
 				setValueAt(index, value);

@@ -154,7 +154,7 @@ void Axis::init(){
  * For some ActionGroups the actual actions are created in \c GuiTool, 
  */
 void Axis::initActions(){
-	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 	
@@ -163,10 +163,10 @@ void Axis::initActions(){
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(orientationChanged(QAction*)));
 
-	orientationHorizontalAction = new QAction(tr("horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(i18n("horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 	
-	orientationVerticalAction = new QAction(tr("vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(i18n("vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 	
 	//Line 
@@ -184,16 +184,16 @@ void Axis::initActions(){
 
 void Axis::initMenus(){
 	//Orientation
-	orientationMenu = new QMenu(tr("Orientation"));
+	orientationMenu = new QMenu(i18n("Orientation"));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 	
 	//Line
-	lineMenu = new QMenu(tr("Line"));
-	lineStyleMenu = new QMenu(tr("style"), lineMenu);
+	lineMenu = new QMenu(i18n("Line"));
+	lineStyleMenu = new QMenu(i18n("style"), lineMenu);
 	lineMenu->addMenu( lineStyleMenu );
 
-	lineColorMenu = new QMenu(tr("color"), lineMenu);
+	lineColorMenu = new QMenu(i18n("color"), lineMenu);
 	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
 	lineMenu->addMenu( lineColorMenu );
 }
@@ -347,7 +347,7 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetAutoScale, bool, autoScale, retransform);
 void Axis::setAutoScale(bool autoScale) {
 	Q_D(Axis);
 	if (autoScale != d->autoScale){
-		exec(new AxisSetAutoScaleCmd(d, autoScale, tr("%1: set axis auto scaling")));
+		exec(new AxisSetAutoScaleCmd(d, autoScale, i18n("%1: set axis auto scaling")));
 		
 		if (autoScale){
 			CartesianPlot *plot = qobject_cast<CartesianPlot*>(parentAspect());
@@ -371,7 +371,7 @@ void Axis::setAutoScale(bool autoScale) {
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
 void Axis::setVisible(bool on) {
 	Q_D(Axis);
-	exec(new AxisSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
+	exec(new AxisSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 }
 
 bool Axis::isVisible() const {
@@ -388,21 +388,21 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation
 void Axis::setOrientation( AxisOrientation orientation) {
 	Q_D(Axis);
 	if (orientation != d->orientation)
-		exec(new AxisSetOrientationCmd(d, orientation, tr("%1: set axis orientation")));
+		exec(new AxisSetOrientationCmd(d, orientation, i18n("%1: set axis orientation")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetPosition, Axis::AxisPosition, position, retransform);
 void Axis::setPosition(AxisPosition position) {
 	Q_D(Axis);
 	if (position != d->position)
-		exec(new AxisSetPositionCmd(d, position, tr("%1: set axis position")));
+		exec(new AxisSetPositionCmd(d, position, i18n("%1: set axis position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::AxisScale, scale, retransform);
 void Axis::setScale(AxisScale scale) {
 	Q_D(Axis);
 	if (scale != d->scale)
-		exec(new AxisSetScalingCmd(d, scale, tr("%1: set axis scale")));
+		exec(new AxisSetScalingCmd(d, scale, i18n("%1: set axis scale")));
 }
 
 STD_SETTER_CMD_IMPL_F(Axis, SetOffset, float, offset, retransform);
@@ -410,7 +410,7 @@ void Axis::setOffset(float offset, bool undo) {
 	Q_D(Axis);
 	if (offset != d->offset){
 		if (undo){
-			exec(new AxisSetOffsetCmd(d, offset, tr("%1: set axis offset")));
+			exec(new AxisSetOffsetCmd(d, offset, i18n("%1: set axis offset")));
 		}else{
 			d->offset = offset;
 			//don't need to call retransform() afterward 
@@ -425,7 +425,7 @@ void Axis::setStart(float start, bool undo) {
 	Q_D(Axis);
 	if (start != d->start){
 		if (undo)
-			exec(new AxisSetStartCmd(d, start, tr("%1: set axis start")));
+			exec(new AxisSetStartCmd(d, start, i18n("%1: set axis start")));
 		else
 			d->start = start;
 			
@@ -438,7 +438,7 @@ void Axis::setEnd(float end, bool undo) {
 	Q_D(Axis);
 	if (end != d->end){
 		if (undo)
-			exec(new AxisSetEndCmd(d, end, tr("%1: set axis end")));
+			exec(new AxisSetEndCmd(d, end, i18n("%1: set axis end")));
 		else
 			d->end = end;
 		emit endChanged(end);
@@ -449,14 +449,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform);
 void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
 	if (zeroOffset != d->zeroOffset)
-		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, tr("%1: set axis zero offset")));
+		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, i18n("%1: set axis zero offset")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform);
 void Axis::setScalingFactor(qreal scalingFactor) {
 	Q_D(Axis);
 	if (scalingFactor != d->scalingFactor)
-		exec(new AxisSetScalingFactorCmd(d, scalingFactor, tr("%1: set axis scaling factor")));
+		exec(new AxisSetScalingFactorCmd(d, scalingFactor, i18n("%1: set axis scaling factor")));
 }
 
 //Title
@@ -464,7 +464,7 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffset, float, titleOffset, retransform);
 void Axis::setTitleOffset(float offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffset)
-		exec(new AxisSetTitleOffsetCmd(d, offset, tr("%1: set title offset")));
+		exec(new AxisSetTitleOffsetCmd(d, offset, i18n("%1: set title offset")));
 }
 
 //Line
@@ -472,14 +472,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetLinePen, QPen, linePen, recalcShapeAndBoundingR
 void Axis::setLinePen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->linePen)
-		exec(new AxisSetLinePenCmd(d, pen, tr("%1: set line style")));
+		exec(new AxisSetLinePenCmd(d, pen, i18n("%1: set line style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLineOpacity, qreal, lineOpacity, update);
 void Axis::setLineOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->lineOpacity)
-		exec(new AxisSetLineOpacityCmd(d, opacity, tr("%1: set line opacity")));
+		exec(new AxisSetLineOpacityCmd(d, opacity, i18n("%1: set line opacity")));
 }
 
 //Major ticks
@@ -487,35 +487,35 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksDirection, Axis::TicksDirection, majo
 void Axis::setMajorTicksDirection(const TicksDirection majorTicksDirection) {
 	Q_D(Axis);
 	if (majorTicksDirection != d->majorTicksDirection)
-		exec(new AxisSetMajorTicksDirectionCmd(d, majorTicksDirection, tr("%1: set major ticks direction")));
+		exec(new AxisSetMajorTicksDirectionCmd(d, majorTicksDirection, i18n("%1: set major ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksType, Axis::TicksType, majorTicksType, retransformTicks);
 void Axis::setMajorTicksType(const TicksType majorTicksType) {
 	Q_D(Axis);
 	if (majorTicksType!= d->majorTicksType)
-		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, tr("%1: set major ticks type")));
+		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, i18n("%1: set major ticks type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks);
 void Axis::setMajorTicksNumber(int majorTicksNumber) {
 	Q_D(Axis);
 	if (majorTicksNumber != d->majorTicksNumber)
-		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, tr("%1: set the total number of the major ticks")));
+		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, i18n("%1: set the total number of the major ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksIncrement, qreal, majorTicksIncrement, retransformTicks);
 void Axis::setMajorTicksIncrement(qreal majorTicksIncrement) {
 	Q_D(Axis);
 	if (majorTicksIncrement != d->majorTicksIncrement)
-		exec(new AxisSetMajorTicksIncrementCmd(d, majorTicksIncrement, tr("%1: set the increment for the major ticks")));
+		exec(new AxisSetMajorTicksIncrementCmd(d, majorTicksIncrement, i18n("%1: set the increment for the major ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksColumn, const AbstractColumn*, majorTicksColumn, retransformTicks)
 void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 	Q_D(Axis);
 	if (column != d->majorTicksColumn) {
-		exec(new AxisSetMajorTicksColumnCmd(d, column, tr("%1: assign major ticks' values")));
+		exec(new AxisSetMajorTicksColumnCmd(d, column, i18n("%1: assign major ticks' values")));
 
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
@@ -529,21 +529,21 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, recalcShape
 void Axis::setMajorTicksPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->majorTicksPen)
-		exec(new AxisSetMajorTicksPenCmd(d, pen, tr("%1: set major ticks style")));
+		exec(new AxisSetMajorTicksPenCmd(d, pen, i18n("%1: set major ticks style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksLength, qreal, majorTicksLength, retransformTicks);
 void Axis::setMajorTicksLength(qreal majorTicksLength) {
 	Q_D(Axis);
 	if (majorTicksLength != d->majorTicksLength)
-		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, tr("%1: set major ticks length")));
+		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, i18n("%1: set major ticks length")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksOpacity, qreal, majorTicksOpacity, update);
 void Axis::setMajorTicksOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->majorTicksOpacity)
-		exec(new AxisSetMajorTicksOpacityCmd(d, opacity, tr("%1: set major ticks opacity")));
+		exec(new AxisSetMajorTicksOpacityCmd(d, opacity, i18n("%1: set major ticks opacity")));
 }
 
 //Minor ticks
@@ -551,35 +551,35 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksDirection, Axis::TicksDirection, mino
 void Axis::setMinorTicksDirection(const TicksDirection minorTicksDirection) {
 	Q_D(Axis);
 	if (minorTicksDirection != d->minorTicksDirection)
-		exec(new AxisSetMinorTicksDirectionCmd(d, minorTicksDirection, tr("%1: set minor ticks direction")));
+		exec(new AxisSetMinorTicksDirectionCmd(d, minorTicksDirection, i18n("%1: set minor ticks direction")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksType, Axis::TicksType, minorTicksType, retransformTicks);
 void Axis::setMinorTicksType(const TicksType minorTicksType) {
 	Q_D(Axis);
 	if (minorTicksType!= d->minorTicksType)
-		exec(new AxisSetMinorTicksTypeCmd(d, minorTicksType, tr("%1: set minor ticks type")));
+		exec(new AxisSetMinorTicksTypeCmd(d, minorTicksType, i18n("%1: set minor ticks type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksNumber, int, minorTicksNumber, retransformTicks);
 void Axis::setMinorTicksNumber(int minorTicksNumber) {
 	Q_D(Axis);
 	if (minorTicksNumber != d->minorTicksNumber)
-		exec(new AxisSetMinorTicksNumberCmd(d, minorTicksNumber, tr("%1: set the total number of the minor ticks")));
+		exec(new AxisSetMinorTicksNumberCmd(d, minorTicksNumber, i18n("%1: set the total number of the minor ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksIncrement, qreal, minorTicksIncrement, retransformTicks);
 void Axis::setMinorTicksIncrement(qreal minorTicksIncrement) {
 	Q_D(Axis);
 	if (minorTicksIncrement != d->minorTicksIncrement)
-		exec(new AxisSetMinorTicksIncrementCmd(d, minorTicksIncrement, tr("%1: set the increment for the minor ticks")));
+		exec(new AxisSetMinorTicksIncrementCmd(d, minorTicksIncrement, i18n("%1: set the increment for the minor ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksColumn, const AbstractColumn*, minorTicksColumn, retransformTicks)
 void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 	Q_D(Axis);
 	if (column != d->minorTicksColumn) {
-		exec(new AxisSetMinorTicksColumnCmd(d, column, tr("%1: assign minor ticks' values")));
+		exec(new AxisSetMinorTicksColumnCmd(d, column, i18n("%1: assign minor ticks' values")));
 
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
@@ -593,21 +593,21 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, recalcShape
 void Axis::setMinorTicksPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->minorTicksPen)
-		exec(new AxisSetMinorTicksPenCmd(d, pen, tr("%1: set minor ticks style")));
+		exec(new AxisSetMinorTicksPenCmd(d, pen, i18n("%1: set minor ticks style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksLength, qreal, minorTicksLength, retransformTicks);
 void Axis::setMinorTicksLength(qreal minorTicksLength) {
 	Q_D(Axis);
 	if (minorTicksLength != d->minorTicksLength)
-		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, tr("%1: set minor ticks length")));
+		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, i18n("%1: set minor ticks length")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksOpacity, qreal, minorTicksOpacity, update);
 void Axis::setMinorTicksOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->minorTicksOpacity)
-		exec(new AxisSetMinorTicksOpacityCmd(d, opacity, tr("%1: set minor ticks opacity")));
+		exec(new AxisSetMinorTicksOpacityCmd(d, opacity, i18n("%1: set minor ticks opacity")));
 }
 
 //Labels
@@ -615,77 +615,77 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat,
 void Axis::setLabelsFormat(const LabelsFormat labelsFormat){
 	Q_D(Axis);
 	if (labelsFormat != d->labelsFormat)
-		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, tr("%1: set labels format")));
+		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, i18n("%1: set labels format")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings);
 void Axis::setLabelsAutoPrecision(const bool labelsAutoPrecision){
 	Q_D(Axis);
 	if (labelsAutoPrecision != d->labelsAutoPrecision)
-		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, tr("%1: set labels precision")));
+		exec(new AxisSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, i18n("%1: set labels precision")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrecision, int, labelsPrecision, retransformTickLabelStrings);
 void Axis::setLabelsPrecision(const int labelsPrecision){
 	Q_D(Axis);
 	if (labelsPrecision != d->labelsPrecision)
-		exec(new AxisSetLabelsPrecisionCmd(d, labelsPrecision, tr("%1: set labels precision")));
+		exec(new AxisSetLabelsPrecisionCmd(d, labelsPrecision, i18n("%1: set labels precision")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabels);
 void Axis::setLabelsPosition(const LabelsPosition labelsPosition) {
 	Q_D(Axis);
 	if (labelsPosition != d->labelsPosition)
-		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, tr("%1: set labels position")));
+		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, i18n("%1: set labels position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOffset, float, labelsOffset, retransformTickLabels);
 void Axis::setLabelsOffset(float offset) {
 	Q_D(Axis);
 	if (offset != d->labelsOffset)
-		exec(new AxisSetLabelsOffsetCmd(d, offset, tr("%1: set label offset")));
+		exec(new AxisSetLabelsOffsetCmd(d, offset, i18n("%1: set label offset")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabels);
 void Axis::setLabelsRotationAngle(qreal angle) {
 	Q_D(Axis);
 	if (angle != d->labelsRotationAngle)
-		exec(new AxisSetLabelsRotationAngleCmd(d, angle, tr("%1: set label rotation angle")));
+		exec(new AxisSetLabelsRotationAngleCmd(d, angle, i18n("%1: set label rotation angle")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsColor, QColor, labelsColor, update);
 void Axis::setLabelsColor(const QColor &color) {
 	Q_D(Axis);
 	if (color != d->labelsColor)
-		exec(new AxisSetLabelsColorCmd(d, color, tr("%1: set label color")));
+		exec(new AxisSetLabelsColorCmd(d, color, i18n("%1: set label color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFont, QFont, labelsFont, retransformTickLabels);
 void Axis::setLabelsFont(const QFont &font) {
 	Q_D(Axis);
 	if (font != d->labelsFont)
-		exec(new AxisSetLabelsFontCmd(d, font, tr("%1: set label font")));
+		exec(new AxisSetLabelsFontCmd(d, font, i18n("%1: set label font")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrefix, QString, labelsPrefix, retransformTickLabels);
 void Axis::setLabelsPrefix(const QString& prefix) {
 	Q_D(Axis);
 	if (prefix != d->labelsPrefix)
-		exec(new AxisSetLabelsPrefixCmd(d, prefix, tr("%1: set label prefix")));
+		exec(new AxisSetLabelsPrefixCmd(d, prefix, i18n("%1: set label prefix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsSuffix, QString, labelsSuffix, retransformTickLabels);
 void Axis::setLabelsSuffix(const QString& suffix) {
 	Q_D(Axis);
 	if (suffix != d->labelsSuffix)
-		exec(new AxisSetLabelsSuffixCmd(d, suffix, tr("%1: set label suffix")));
+		exec(new AxisSetLabelsSuffixCmd(d, suffix, i18n("%1: set label suffix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOpacity, qreal, labelsOpacity, update);
 void Axis::setLabelsOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->labelsOpacity)
-		exec(new AxisSetLabelsOpacityCmd(d, opacity, tr("%1: set labels opacity")));
+		exec(new AxisSetLabelsOpacityCmd(d, opacity, i18n("%1: set labels opacity")));
 }
 
 //Major grid
@@ -693,14 +693,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridPen, QPen, majorGridPen, retransformMa
 void Axis::setMajorGridPen(const QPen &pen) {
 	Q_D(Axis);
 	if (pen != d->majorGridPen)
-		exec(new AxisSetMajorGridPenCmd(d, pen, tr("%1: set major grid style")));
+		exec(new AxisSetMajorGridPenCmd(d, pen, i18n("%1: set major grid style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, update);
 void Axis::setMajorGridOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->majorGridOpacity)
-		exec(new AxisSetMajorGridOpacityCmd(d, opacity, tr("%1: set major grid opacity")));
+		exec(new AxisSetMajorGridOpacityCmd(d, opacity, i18n("%1: set major grid opacity")));
 }
 
 //Minor grid
@@ -708,14 +708,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridPen, QPen, minorGridPen, retransformMi
 void Axis::setMinorGridPen(const QPen &pen){
 	Q_D(Axis);
 	if (pen != d->minorGridPen)
-		exec(new AxisSetMinorGridPenCmd(d, pen, tr("%1: set minor grid style")));
+		exec(new AxisSetMinorGridPenCmd(d, pen, i18n("%1: set minor grid style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, update);
 void Axis::setMinorGridOpacity(qreal opacity){
 	Q_D(Axis);
 	if (opacity != d->minorGridOpacity)
-		exec(new AxisSetMinorGridOpacityCmd(d, opacity, tr("%1: set minor grid opacity")));
+		exec(new AxisSetMinorGridOpacityCmd(d, opacity, i18n("%1: set minor grid opacity")));
 }
 
 //##############################################################################
@@ -1652,14 +1652,14 @@ bool Axis::load(XmlStreamReader* reader){
 	Q_D(Axis);
 
     if(!reader->isStartElement() || reader->name() != "axis"){
-        reader->raiseError(tr("no axis element found"));
+        reader->raiseError(i18n("no axis element found"));
         return false;
     }
 
     if (!readBasicAttributes(reader))
         return false;
 
-    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;
     QRectF rect;
@@ -1910,7 +1910,7 @@ bool Axis::load(XmlStreamReader* reader){
             else
                 d->minorGridOpacity = str.toInt();
         }else{ // unknown element
-            reader->raiseWarning(tr("unknown element '%1'").arg(reader->name().toString()));
+            reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }
     }

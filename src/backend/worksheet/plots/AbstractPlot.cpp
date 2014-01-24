@@ -34,6 +34,8 @@
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <KLocale>
+
 /**
  * \class AbstractPlot
  * \brief Second level container in a Worksheet for logical grouping
@@ -87,14 +89,14 @@ STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetHorizontalPadding, float, horizontalPad
 void AbstractPlot::setHorizontalPadding(float padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->horizontalPadding)
-		exec(new AbstractPlotSetHorizontalPaddingCmd(d, padding, tr("%1: set horizontal padding")));
+		exec(new AbstractPlotSetHorizontalPaddingCmd(d, padding, i18n("%1: set horizontal padding")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetVerticalPadding, float, verticalPadding, retransform)
 void AbstractPlot::setVerticalPadding(float padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->verticalPadding)
-		exec(new AbstractPlotSetVerticalPaddingCmd(d, padding, tr("%1: set vertical padding")));
+		exec(new AbstractPlotSetVerticalPaddingCmd(d, padding, i18n("%1: set vertical padding")));
 }
 
 //################################################################

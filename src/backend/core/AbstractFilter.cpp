@@ -27,6 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "AbstractFilter.h"
+#include <KLocale>
 
 #include "backend/core/AbstractColumn.h"
 
@@ -222,7 +223,7 @@ const AbstractColumn *AbstractFilter::input(int port) const {
  */
 QString AbstractFilter::inputLabel(int port) const
 {
-	return QObject::tr("In%1", "default labels of filter input ports").arg(port + 1);
+	return i18nc("default labels of filter input ports", "In%1").arg(port + 1);
 }
 
 /**

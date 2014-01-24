@@ -37,6 +37,8 @@
 #include <QPainterPathStroker>
 #include <QMenu>
 
+#include <KLocale>
+
 /**
  * \class AbstractWorksheetElement
  * \brief Base class for all Worksheet children.
@@ -46,9 +48,9 @@
 AbstractWorksheetElement::AbstractWorksheetElement(const QString &name)
 		: AbstractAspect(name) {
 	
-	m_drawingOrderMenu = new QMenu(tr("Drawing &order"));
-	m_moveBehindMenu = new QMenu(tr("Move &behind"));
-	m_moveInFrontOfMenu = new QMenu(tr("Move in &front of"));
+	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
+	m_moveBehindMenu = new QMenu(i18n("Move &behind"));
+	m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
 	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
 	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
 
@@ -182,7 +184,7 @@ void AbstractWorksheetElement::execMoveBehind(QAction *action) {
 	if (parent) {
 		int index = action->data().toInt();
 		AbstractAspect *sibling1 = parent->child<AbstractWorksheetElement>(index);
-		beginMacro(tr("%1: move behind %2.").arg(name()).arg(sibling1->name()));
+		beginMacro(i18n("%1: move behind %2.").arg(name()).arg(sibling1->name()));
 		remove();
 		AbstractAspect *sibling2 = parent->child<AbstractWorksheetElement>(index + 1);
 		parent->insertChildBefore(this, sibling2);
@@ -196,7 +198,7 @@ void AbstractWorksheetElement::execMoveInFrontOf(QAction *action) {
 	if (parent) {
 		int index = action->data().toInt();
 		AbstractAspect *sibling = parent->child<AbstractWorksheetElement>(index);
-		beginMacro(tr("%1: move in front of %2.").arg(name()).arg(sibling->name()));
+		beginMacro(i18n("%1: move in front of %2.").arg(name()).arg(sibling->name()));
 		remove();
 		parent->insertChildBefore(this, sibling);
 		endMacro();

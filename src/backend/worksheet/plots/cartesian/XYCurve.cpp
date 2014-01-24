@@ -60,6 +60,7 @@
 #include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocale>
 
 #ifdef HAVE_GSL
 #include <gsl/gsl_spline.h>
@@ -149,7 +150,7 @@ void XYCurve::init(){
 }
 
 void XYCurve::initActions(){
-	visibilityAction = new QAction(tr("visible"), this);
+	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
@@ -188,7 +189,7 @@ QGraphicsItem *XYCurve::graphicsItem() const{
 STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetVisible, bool, swapVisible)
 void XYCurve::setVisible(bool on){
 	Q_D(XYCurve);
-	exec(new XYCurveSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));
+	exec(new XYCurveSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 }
 
 bool XYCurve::isVisible() const{
@@ -266,7 +267,7 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, ret
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xColumn) {
-		exec(new XYCurveSetXColumnCmd(d, column, tr("%1: assign x values")));
+		exec(new XYCurveSetXColumnCmd(d, column, i18n("%1: assign x values")));
 
 		//emit xDataChanged() in order to notify the plot about the changes
 		emit xDataChanged();
@@ -286,7 +287,7 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, ret
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yColumn) {
-		exec(new XYCurveSetYColumnCmd(d, column, tr("%1: assign y values")));
+		exec(new XYCurveSetYColumnCmd(d, column, i18n("%1: assign y values")));
 
 		//emit yDataChanged() in order to notify the plot about the changes
 		emit yDataChanged();
@@ -307,28 +308,28 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineType, XYCurve::LineType, lineType, updat
 void XYCurve::setLineType(LineType type) {
 	Q_D(XYCurve);
 	if (type != d->lineType)
-		exec(new XYCurveSetLineTypeCmd(d, type, tr("%1: line type changed")));
+		exec(new XYCurveSetLineTypeCmd(d, type, i18n("%1: line type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineInterpolationPointsCount, int, lineInterpolationPointsCount, updateLines)
 void XYCurve::setLineInterpolationPointsCount(int count) {
 	Q_D(XYCurve);
 	if (count != d->lineInterpolationPointsCount)
-		exec(new XYCurveSetLineInterpolationPointsCountCmd(d, count, tr("%1: set the number of interpolation points")));
+		exec(new XYCurveSetLineInterpolationPointsCountCmd(d, count, i18n("%1: set the number of interpolation points")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
 void XYCurve::setLinePen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->linePen)
-		exec(new XYCurveSetLinePenCmd(d, pen, tr("%1: set line style")));
+		exec(new XYCurveSetLinePenCmd(d, pen, i18n("%1: set line style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, update);
 void XYCurve::setLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->lineOpacity)
-		exec(new XYCurveSetLineOpacityCmd(d, opacity, tr("%1: set line opacity")));
+		exec(new XYCurveSetLineOpacityCmd(d, opacity, i18n("%1: set line opacity")));
 }
 
 //Drop lines
@@ -336,21 +337,21 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLineType, XYCurve::DropLineType, dropLin
 void XYCurve::setDropLineType(DropLineType type) {
 	Q_D(XYCurve);
 	if (type != d->dropLineType)
-		exec(new XYCurveSetDropLineTypeCmd(d, type, tr("%1: drop line type changed")));
+		exec(new XYCurveSetDropLineTypeCmd(d, type, i18n("%1: drop line type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLinePen, QPen, dropLinePen, recalcShapeAndBoundingRect)
 void XYCurve::setDropLinePen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->dropLinePen)
-		exec(new XYCurveSetDropLinePenCmd(d, pen, tr("%1: set drop line style")));
+		exec(new XYCurveSetDropLinePenCmd(d, pen, i18n("%1: set drop line style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLineOpacity, qreal, dropLineOpacity, update)
 void XYCurve::setDropLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->dropLineOpacity)
-		exec(new XYCurveSetDropLineOpacityCmd(d, opacity, tr("%1: set drop line opacity")));
+		exec(new XYCurveSetDropLineOpacityCmd(d, opacity, i18n("%1: set drop line opacity")));
 }
 
 // Symbols-Tab
@@ -358,42 +359,42 @@ STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetSymbolsTypeId, QString, swapSymbolsT
 void XYCurve::setSymbolsTypeId(const QString &id) {
 	Q_D(XYCurve);
 	if (id != d->symbolsTypeId)
-		exec(new XYCurveSetSymbolsTypeIdCmd(d, id, tr("%1: set symbol type")));
+		exec(new XYCurveSetSymbolsTypeIdCmd(d, id, i18n("%1: set symbol type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsSize, qreal, symbolsSize, updateSymbols)
 void XYCurve::setSymbolsSize(qreal size) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
-		exec(new XYCurveSetSymbolsSizeCmd(d, size, tr("%1: set symbol size")));
+		exec(new XYCurveSetSymbolsSizeCmd(d, size, i18n("%1: set symbol size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsRotationAngle, qreal, symbolsRotationAngle, updateSymbols)
 void XYCurve::setSymbolsRotationAngle(qreal angle) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
-		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, tr("%1: rotate symbols")));
+		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, i18n("%1: rotate symbols")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, update)
 void XYCurve::setSymbolsBrush(const QBrush &brush) {
 	Q_D(XYCurve);
 	if (brush != d->symbolsBrush)
-		exec(new XYCurveSetSymbolsBrushCmd(d, brush, tr("%1: set symbol filling")));
+		exec(new XYCurveSetSymbolsBrushCmd(d, brush, i18n("%1: set symbol filling")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsPen, QPen, symbolsPen, updateSymbols)
 void XYCurve::setSymbolsPen(const QPen &pen) {
 	Q_D(XYCurve);
 	if (pen != d->symbolsPen)
-		exec(new XYCurveSetSymbolsPenCmd(d, pen, tr("%1: set symbol outline style")));
+		exec(new XYCurveSetSymbolsPenCmd(d, pen, i18n("%1: set symbol outline style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, update)
 void XYCurve::setSymbolsOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->symbolsOpacity)
-		exec(new XYCurveSetSymbolsOpacityCmd(d, opacity, tr("%1: set symbols opacity")));
+		exec(new XYCurveSetSymbolsOpacityCmd(d, opacity, i18n("%1: set symbols opacity")));
 }
 
 //Values-Tab
@@ -401,14 +402,14 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesType, XYCurve::ValuesType, valuesType,
 void XYCurve::setValuesType(XYCurve::ValuesType type) {
 	Q_D(XYCurve);
 	if (type != d->valuesType)
-		exec(new XYCurveSetValuesTypeCmd(d, type, tr("%1: set values type")));
+		exec(new XYCurveSetValuesTypeCmd(d, type, i18n("%1: set values type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColumn, const AbstractColumn*, valuesColumn, updateValues)
 void XYCurve::setValuesColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->valuesColumn) {
-		exec(new XYCurveSetValuesColumnCmd(d, column, tr("%1: set values column")));
+		exec(new XYCurveSetValuesColumnCmd(d, column, i18n("%1: set values column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -421,28 +422,28 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPosition, XYCurve::ValuesPosition, val
 void XYCurve::setValuesPosition(ValuesPosition position) {
 	Q_D(XYCurve);
 	if (position != d->valuesPosition)
-		exec(new XYCurveSetValuesPositionCmd(d, position, tr("%1: set values position")));
+		exec(new XYCurveSetValuesPositionCmd(d, position, i18n("%1: set values position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesDistance, qreal, valuesDistance, updateValues)
 void XYCurve::setValuesDistance(qreal distance) {
 	Q_D(XYCurve);
 	if (distance != d->valuesDistance)
-		exec(new XYCurveSetValuesDistanceCmd(d, distance, tr("%1: set values distance")));
+		exec(new XYCurveSetValuesDistanceCmd(d, distance, i18n("%1: set values distance")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesRotationAngle, qreal, valuesRotationAngle, updateValues)
 void XYCurve::setValuesRotationAngle(qreal angle) {
 	Q_D(XYCurve);
 	if (!qFuzzyCompare(1 + angle, 1 + d->valuesRotationAngle))
-		exec(new XYCurveSetValuesRotationAngleCmd(d, angle, tr("%1: rotate values")));
+		exec(new XYCurveSetValuesRotationAngleCmd(d, angle, i18n("%1: rotate values")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesOpacity, qreal, valuesOpacity, update)
 void XYCurve::setValuesOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->valuesOpacity)
-		exec(new XYCurveSetValuesOpacityCmd(d, opacity, tr("%1: set values opacity")));
+		exec(new XYCurveSetValuesOpacityCmd(d, opacity, i18n("%1: set values opacity")));
 }
 
 //TODO: Format, Precision
@@ -451,28 +452,28 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPrefix, QString, valuesPrefix, updateV
 void XYCurve::setValuesPrefix(const QString& prefix) {
 	Q_D(XYCurve);
 	if (prefix!= d->valuesPrefix)
-		exec(new XYCurveSetValuesPrefixCmd(d, prefix, tr("%1: set values prefix")));
+		exec(new XYCurveSetValuesPrefixCmd(d, prefix, i18n("%1: set values prefix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesSuffix, QString, valuesSuffix, updateValues)
 void XYCurve::setValuesSuffix(const QString& suffix) {
 	Q_D(XYCurve);
 	if (suffix!= d->valuesSuffix)
-		exec(new XYCurveSetValuesSuffixCmd(d, suffix, tr("%1: set values suffix")));
+		exec(new XYCurveSetValuesSuffixCmd(d, suffix, i18n("%1: set values suffix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesFont, QFont, valuesFont, updateValues)
 void XYCurve::setValuesFont(const QFont& font) {
 	Q_D(XYCurve);
 	if (font!= d->valuesFont)
-		exec(new XYCurveSetValuesFontCmd(d, font, tr("%1: set values font")));
+		exec(new XYCurveSetValuesFontCmd(d, font, i18n("%1: set values font")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColor, QColor, valuesColor, update)
 void XYCurve::setValuesColor(const QColor& color) {
 	Q_D(XYCurve);
 	if (color != d->valuesColor)
-		exec(new XYCurveSetValuesColorCmd(d, color, tr("%1: set values color")));
+		exec(new XYCurveSetValuesColorCmd(d, color, i18n("%1: set values color")));
 }
 
 //Error bars
@@ -480,14 +481,14 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorType, XYCurve::ErrorType, xErrorType, 
 void XYCurve::setXErrorType(ErrorType type) {
 	Q_D(XYCurve);
 	if (type != d->xErrorType)
-		exec(new XYCurveSetXErrorTypeCmd(d, type, tr("%1: x-error type changed")));
+		exec(new XYCurveSetXErrorTypeCmd(d, type, i18n("%1: x-error type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorPlusColumn, const AbstractColumn*, xErrorPlusColumn, updateErrorBars)
 void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorPlusColumn) {
-		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, tr("%1: set x-error column")));
+		exec(new XYCurveSetXErrorPlusColumnCmd(d, column, i18n("%1: set x-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -500,7 +501,7 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorMinusColumn, const AbstractColumn*, xE
 void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorMinusColumn) {
-		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, tr("%1: set x-error column")));
+		exec(new XYCurveSetXErrorMinusColumnCmd(d, column, i18n("%1: set x-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -513,14 +514,14 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorType, XYCurve::ErrorType, yErrorType, 
 void XYCurve::setYErrorType(ErrorType type) {
 	Q_D(XYCurve);
 	if (type != d->yErrorType)
-		exec(new XYCurveSetYErrorTypeCmd(d, type, tr("%1: y-error type changed")));
+		exec(new XYCurveSetYErrorTypeCmd(d, type, i18n("%1: y-error type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
 void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorPlusColumn) {
-		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, tr("%1: set y-error column")));
+		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, i18n("%1: set y-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -533,7 +534,7 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorMinusColumn, const AbstractColumn*, yE
 void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorMinusColumn) {
-		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, tr("%1: set y-error column")));
+		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, i18n("%1: set y-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -546,28 +547,28 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsCapSize, qreal, errorBarsCapSize, u
 void XYCurve::setErrorBarsCapSize(qreal size) {
 	Q_D(XYCurve);
 	if (size != d->errorBarsCapSize)
-		exec(new XYCurveSetErrorBarsCapSizeCmd(d, size, tr("%1: set error bar cap size")));
+		exec(new XYCurveSetErrorBarsCapSizeCmd(d, size, i18n("%1: set error bar cap size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
 void XYCurve::setErrorBarsType(ErrorBarsType type) {
 	Q_D(XYCurve);
 	if (type != d->errorBarsType)
-		exec(new XYCurveSetErrorBarsTypeCmd(d, type, tr("%1: error bar type changed")));
+		exec(new XYCurveSetErrorBarsTypeCmd(d, type, i18n("%1: error bar type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsPen, QPen, errorBarsPen, recalcShapeAndBoundingRect)
 void XYCurve::setErrorBarsPen(const QPen& pen) {
 	Q_D(XYCurve);
 	if (pen != d->errorBarsPen)
-		exec(new XYCurveSetErrorBarsPenCmd(d, pen, tr("%1: set error bar style")));
+		exec(new XYCurveSetErrorBarsPenCmd(d, pen, i18n("%1: set error bar style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsOpacity, qreal, errorBarsOpacity, update)
 void XYCurve::setErrorBarsOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->errorBarsOpacity)
-		exec(new XYCurveSetErrorBarsOpacityCmd(d, opacity, tr("%1: set error bar opacity")));
+		exec(new XYCurveSetErrorBarsOpacityCmd(d, opacity, i18n("%1: set error bar opacity")));
 }
 
 //##############################################################################
@@ -1565,14 +1566,14 @@ bool XYCurve::load(XmlStreamReader* reader){
 	Q_D(XYCurve);
 
     if(!reader->isStartElement() || reader->name() != "xyCurve"){
-        reader->raiseError(tr("no xy-curve element found"));
+        reader->raiseError(i18n("no xy-curve element found"));
         return false;
     }
 
     if (!readBasicAttributes(reader))
         return false;
 
-    QString attributeWarning = tr("Attribute '%1' missing or empty, default value is used");
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;
 

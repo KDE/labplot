@@ -63,7 +63,7 @@ class StatisticsColumn : public AbstractColumn {
 /**
  * \brief Standard constructor.
  */
-StatisticsFilter::StatisticsFilter() : AbstractFilter(tr("Statistics")) {
+StatisticsFilter::StatisticsFilter() : AbstractFilter(i18n("Statistics")) {
 	for (int i=0; i<11; i++)
 		m_columns[i] = new StatisticsColumn(this, (StatItem)i);
 }
@@ -190,17 +190,17 @@ StatisticsColumn::StatisticsColumn(const StatisticsFilter *parent, StatisticsFil
 
 QString StatisticsColumn::nameForItem(StatisticsFilter::StatItem item) {
 	switch(item) {
-		case StatisticsFilter::Label: return (tr("Name"));
-		case StatisticsFilter::Rows: return (tr("Rows"));
-		case StatisticsFilter::Mean: return (tr("Mean"));
-		case StatisticsFilter::Sigma: return (tr("StandardDev"));
-		case StatisticsFilter::Variance: return (tr("Variance"));
-		case StatisticsFilter::Sum: return (tr("Sum"));
-		case StatisticsFilter::iMax: return (tr("iMax"));
-		case StatisticsFilter::Max: return (tr("Max"));
-		case StatisticsFilter::iMin: return (tr("iMin"));
-		case StatisticsFilter::Min: return (tr("Min"));
-		case StatisticsFilter::N: return (tr("N"));
+		case StatisticsFilter::Label: return (i18n("Name"));
+		case StatisticsFilter::Rows: return (i18n("Rows"));
+		case StatisticsFilter::Mean: return (i18n("Mean"));
+		case StatisticsFilter::Sigma: return (i18n("StandardDev"));
+		case StatisticsFilter::Variance: return (i18n("Variance"));
+		case StatisticsFilter::Sum: return (i18n("Sum"));
+		case StatisticsFilter::iMax: return (i18n("iMax"));
+		case StatisticsFilter::Max: return (i18n("Max"));
+		case StatisticsFilter::iMin: return (i18n("iMin"));
+		case StatisticsFilter::Min: return (i18n("Min"));
+		case StatisticsFilter::N: return (i18n("N"));
 	}
 }
 

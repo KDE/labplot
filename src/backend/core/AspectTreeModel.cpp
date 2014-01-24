@@ -38,6 +38,8 @@
 #include <QApplication>
 #include <QDebug>
 
+#include <KLocale>
+
 /**
  * \class AspectTreeModel
  * \brief Represents a tree of AbstractAspect objects as a Qt item model.
@@ -143,10 +145,10 @@ QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, i
 	switch(role) {
 		case Qt::DisplayRole:
 			switch(section) {
-				case 0: return tr("Name");
-				case 1: return tr("Type");
-				case 2: return tr("Created");
-				case 3: return tr("Comment");
+				case 0: return i18n("Name");
+				case 1: return i18n("Type");
+				case 2: return i18n("Created");
+				case 3: return i18n("Comment");
 				default: return QVariant();
 			}
 		case Qt::SizeHintRole:

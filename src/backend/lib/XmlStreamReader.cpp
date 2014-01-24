@@ -29,6 +29,8 @@
 
 #include "backend/lib/XmlStreamReader.h"
 
+#include <KLocale>
+
 XmlStreamReader::XmlStreamReader()
 {
 	init();
@@ -60,10 +62,10 @@ XmlStreamReader::XmlStreamReader(const char * data)
 
 void XmlStreamReader::init()
 {
-	m_error_prefix = QObject::tr("XML reader error: ","prefix for XML error messages");
-	m_error_postfix = QObject::tr(" (loading failed)", "postfix for XML error messages");
-	m_warning_prefix = QObject::tr("XML reader warning: ","prefix for XML warning messages");
-	m_warning_postfix = QObject::tr("", "postfix for XML warning messages");
+	m_error_prefix = i18nc("prefix for XML error messages", "XML reader error: ");
+	m_error_postfix = i18nc("postfix for XML error messages", " (loading failed)");
+	m_warning_prefix = i18nc("prefix for XML warning messages", "XML reader warning: ");
+	m_warning_postfix = i18nc("postfix for XML warning messages", "");
 }
 
 QStringList XmlStreamReader::warningStrings() const
@@ -78,13 +80,13 @@ bool XmlStreamReader::hasWarnings() const
 
 void XmlStreamReader::raiseError(const QString & message)
 {
-	QString prefix2 = QString(QObject::tr("line %1, column %2: ").arg(lineNumber()).arg(columnNumber()));
+	QString prefix2 = QString(i18n("line %1, column %2: ").arg(lineNumber()).arg(columnNumber()));
 	QXmlStreamReader::raiseError(m_error_prefix+prefix2+message+m_error_postfix);
 }
 
 void XmlStreamReader::raiseWarning(const QString & message)
 {
-	QString prefix2 = QString(QObject::tr("line %1, column %2: ").arg(lineNumber()).arg(columnNumber()));
+	QString prefix2 = QString(i18n("line %1, column %2: ").arg(lineNumber()).arg(columnNumber()));
 	m_warnings.append(m_warning_prefix+prefix2+message+m_warning_postfix);
 }
 
@@ -92,7 +94,7 @@ bool XmlStreamReader::skipToNextTag()
 {
 	if (atEnd())
 	{
-		raiseError(QObject::tr("unexpected end of document"));
+		raiseError(i18n("unexpected end of document"));
 		return false;
 	}
 	do {
@@ -100,7 +102,7 @@ bool XmlStreamReader::skipToNextTag()
 	} while (!(isStartElement() || isEndElement() || atEnd()));
 	if (atEnd())
 	{
-		raiseError(QObject::tr("unexpected end of document"));
+		raiseError(i18n("unexpected end of document"));
 		return false;
 	}
 	return true;
@@ -122,7 +124,7 @@ bool XmlStreamReader::skipToEndElement()
 	int depth = 1;
 	if (atEnd())
 	{
-		raiseError(QObject::tr("unexpected end of document"));
+		raiseError(i18n("unexpected end of document"));
 		return false;
 	}
 	do {
@@ -132,7 +134,7 @@ bool XmlStreamReader::skipToEndElement()
 	} while (!((isEndElement() && depth == 0) || atEnd()));
 	if (atEnd())
 	{
-		raiseError(QObject::tr("unexpected end of document"));
+		raiseError(i18n("unexpected end of document"));
 		return false;
 	}
 	return true;

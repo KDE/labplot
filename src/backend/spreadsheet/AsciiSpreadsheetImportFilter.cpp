@@ -91,7 +91,7 @@ AbstractAspect * AsciiSpreadsheetImportFilter::importAspect(QIODevice * input)
 
 	// build a Spreadsheet from the gathered data
 	// renaming will be done by the kernel
-	Spreadsheet * result = new Spreadsheet(0, 0, 0, tr("Spreadsheet"));
+	Spreadsheet * result = new Spreadsheet(0, 0, 0, i18n("Spreadsheet"));
 	for (i=0; i<data.size(); ++i)
 	{
 		Column *new_col;

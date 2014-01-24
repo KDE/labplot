@@ -54,10 +54,10 @@ class AbstractFit : public AbstractFilter
 		};
 		static QString nameOf(ErrorSource source) {
 			switch(source) {
-				case UnknownErrors: return tr("unknown");
-				case AssociatedErrors: return tr("associated");
-				case PoissonErrors: return tr("Poisson (sqrt(Y))");
-				case CustomErrors: return tr("user-supplied");
+				case UnknownErrors: return i18n("unknown");
+				case AssociatedErrors: return i18n("associated");
+				case PoissonErrors: return i18n("Poisson (sqrt(Y))");
+				case CustomErrors: return i18n("user-supplied");
 			}
 		}
 		AbstractFit();

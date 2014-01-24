@@ -35,6 +35,8 @@
 #include <QTime>
 #include <QDate>
 
+#include <KLocale>
+
 class String2DateTimeFilterSetFormatCmd : public QUndoCommand
 {
 	public:
@@ -170,9 +172,9 @@ String2DateTimeFilterSetFormatCmd::String2DateTimeFilterSetFormatCmd(String2Date
 	: m_target(target), m_other_format(new_format) 
 {
 	if(m_target->parentAspect())
-		setText(QObject::tr("%1: set date-time format to %2").arg(m_target->parentAspect()->name()).arg(new_format));
+		setText(i18n("%1: set date-time format to %2").arg(m_target->parentAspect()->name()).arg(new_format));
 	else
-		setText(QObject::tr("set date-time format to %1").arg(new_format));
+		setText(i18n("set date-time format to %1").arg(new_format));
 }
 
 void String2DateTimeFilterSetFormatCmd::redo() 

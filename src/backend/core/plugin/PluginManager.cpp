@@ -75,7 +75,7 @@ QObjectList PluginManager::m_allPlugins;
  * \brief Load a plugin and append it to the plugin list in the settings.
  *
  * \param absolutePath Absolute path to the plugin file.
- * \return True, if the plugin was sucessfully loaded. Even if false is returned, 
+ * \return True, if the plugin was successfully loaded. Even if false is returned, 
  * the path is still appended to the settings.
  */
 bool PluginManager::enablePlugin(const QString &absolutePath) {
@@ -185,7 +185,7 @@ void PluginManager::disablePlugin(const QString &absolutePath, bool rightNow) {
  * \brief Get all plugin root instances.
  *
  * This function will return a list of all static plugin root instances
- * as well as those from all sucessfully loaded dynamic plugins.
+ * as well as those from all successfully loaded dynamic plugins.
  */
 QObjectList PluginManager::plugins() {
 	loadAll();

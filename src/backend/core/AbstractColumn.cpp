@@ -42,6 +42,7 @@
 #include <math.h>
 #include <QMetaType>
 #include <QDebug>
+#include <KLocale>
 
 /**
  * \class AbstractColumn
@@ -151,7 +152,7 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {
-	beginMacro(tr("%1: insert %2 row(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: insert %2 row(s)").arg(name()).arg(count));
 	exec(new SignallingUndoCommand("pre-signal", this, "rowsAboutToBeInserted", "rowsRemoved",
 				Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
 
@@ -170,7 +171,7 @@ void AbstractColumn::handleRowInsertion(int before, int count) {
  * \brief Remove 'count' rows starting from row 'first'
  */
 void AbstractColumn::removeRows(int first, int count) {
-	beginMacro(tr("%1: remove %2 row(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: remove %2 row(s)").arg(name()).arg(count));
 	exec(new SignallingUndoCommand("change signal", this, "rowsAboutToBeRemoved", "rowsInserted",
 				Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
 
@@ -611,7 +612,7 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
 	start = reader->readAttributeInt("start_row", &ok1);
 	end = reader->readAttributeInt("end_row", &ok2);
 	if(!ok1 || !ok2) {
-		reader->raiseError(tr("invalid or missing start or end row"));
+		reader->raiseError(i18n("invalid or missing start or end row"));
 		return false;
 	}
 	setMasked(Interval<int>(start,end));

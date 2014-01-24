@@ -33,6 +33,7 @@
 
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include <KLocale>
 class QString;
 
 class ColumnStringIO;
@@ -121,7 +122,7 @@ class ColumnStringIO : public AbstractColumn
 	Q_OBJECT
 	
 	public:
-		ColumnStringIO(Column * owner) : AbstractColumn(tr("as string")), m_owner(owner), m_setting(false) {}
+		ColumnStringIO(Column * owner) : AbstractColumn(i18n("as string")), m_owner(owner), m_setting(false) {}
 		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
 		virtual AbstractColumn::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
 		virtual int rowCount() const { return m_owner->rowCount(); }

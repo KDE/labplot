@@ -273,7 +273,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 void ImportFileWidget::saveFilter(){
   bool ok;
   QString text = QInputDialog::getText(this, i18n("Save filter settings as"),
-												tr("Filter name"), QLineEdit::Normal,
+												i18n("Filter name"), QLineEdit::Normal,
 												i18n("new filter"), &ok);
   if (ok && !text.isEmpty()){
 	//TODO

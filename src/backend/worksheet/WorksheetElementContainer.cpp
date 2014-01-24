@@ -40,6 +40,8 @@
 #include <QMenu>
 #include <QPainter>
 
+#include <KLocale>
+
 /**
  * \class WorksheetElementContainer
  * \brief Generic AbstractWorksheetElement container.
@@ -81,13 +83,13 @@ STD_SWAP_METHOD_SETTER_CMD_IMPL(WorksheetElementContainer, SetVisible, bool, swa
 void WorksheetElementContainer::setVisible(bool on){
 	Q_D(WorksheetElementContainer);
 
-	beginMacro(on ? tr("%1: set visible").arg(name()) : tr("%1: set invisible").arg(name()));
+	beginMacro(on ? i18n("%1: set visible").arg(name()) : i18n("%1: set invisible").arg(name()));
 	
 	//take care of proper ordering on the undo-stack, 
 	//when making the container and all its children visible/invisible.
 	//if visible is set true, change the visibility of the container first
 	if (on)
-    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));		
+    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));		
 
 	//change the visibility of all children
 	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
@@ -97,7 +99,7 @@ void WorksheetElementContainer::setVisible(bool on){
 	
 	//if visible is set false, change the visibility of the container last
 	if (!on)
-    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? tr("%1: set visible") : tr("%1: set invisible")));		
+    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));		
 	
 	endMacro();
 }
@@ -196,6 +198,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 	QList<AbstractWorksheetElement *> childList = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(const AbstractWorksheetElement *elem, childList)
 		rect |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
+
 	return rect;
 }
  
