@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export worksheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke
+    Copyright            : (C) 2011-2014 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
 
  ***************************************************************************/
@@ -55,6 +55,7 @@ class ExportWorksheetDialog: public KDialog{
 	void toggleOptions();
 	void selectFile();
 	void formatChanged(int);
+	void fileNameChanged(const QString&);
 };
 
 #endif

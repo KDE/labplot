@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export worksheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke
+    Copyright            : (C) 2011-2014 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
 
  ***************************************************************************/
@@ -69,6 +69,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	
 	connect( ui.cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
+	connect( ui.kleFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged(const QString&)) );
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Export worksheet"));
@@ -130,7 +131,19 @@ void ExportWorksheetDialog::okClicked(){
     KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
     conf.writeEntry("Format", ui.cbFormat->currentIndex());
 	conf.writeEntry("Area", ui.cbExportArea->currentIndex());
-	
+
+    QString path = ui.kleFileName->text();
+    if (path != "") {
+		QString dir = conf.readEntry("LastDir", "");
+		ui.kleFileName->setText(path);
+		int pos = path.lastIndexOf(QDir::separator());
+		if (pos!=-1) {
+			QString newDir = path.left(pos);
+			if (newDir!=dir)
+				conf.writeEntry("LastDir", newDir);
+		}
+	}
+
 	accept();
 }
 
@@ -190,3 +203,8 @@ void ExportWorksheetDialog::formatChanged(int index){
 
 	ui.kleFileName->setText(path);
 }
+
+void ExportWorksheetDialog::fileNameChanged(const QString& name) {
+	enableButtonOk( !name.simplified().isEmpty() );
+}
+
