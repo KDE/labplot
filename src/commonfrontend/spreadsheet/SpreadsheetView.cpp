@@ -767,10 +767,10 @@ void SpreadsheetView::copySelection(){
 				}
 			}
 			if (c < cols-1)
-				output_str += "\t";
+				output_str += '\t';
 		}
 		if (r < rows-1)
-			output_str += "\n";
+			output_str += '\n';
 	}
 	QApplication::clipboard()->setText(output_str);
 	RESET_CURSOR;
@@ -795,7 +795,7 @@ void SpreadsheetView::pasteIntoSelection(){
 	
 		QString input_str = QString(mime_data->data("text/plain")).trimmed();
 		QList< QStringList > cellTexts;
-		QStringList input_rows(input_str.split("\n"));
+		QStringList input_rows(input_str.split('\n'));
 		input_row_count = input_rows.count();
 		input_col_count = 0;
 		for (int i=0; i<input_row_count; i++)
@@ -1198,7 +1198,7 @@ void SpreadsheetView::removeSelectedRows(){
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows(s)").arg(m_spreadsheet->name()));
-	foreach(Interval<int> i, selectedRows().intervals())
+	foreach(const Interval<int>& i, selectedRows().intervals())
 		m_spreadsheet->removeRows(i.start(), i.size());
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1213,10 +1213,10 @@ void SpreadsheetView::clearSelectedRows(){
 	foreach(Column * col_ptr, list)
 	{
 		if (formulaModeActive()) {
-			foreach(Interval<int> i, selectedRows().intervals())
+			foreach(const Interval<int>& i, selectedRows().intervals())
 				col_ptr->setFormula(i, "");
 		} else {
-			foreach(Interval<int> i, selectedRows().intervals()) {
+			foreach(const Interval<int>& i, selectedRows().intervals()) {
 				if (i.end() == col_ptr->rowCount()-1)
 					col_ptr->removeRows(i.start(), i.size());
 				else {
@@ -1431,7 +1431,7 @@ void SpreadsheetView::print(QPrinter* printer) const{
 	QString cellText;
 	for (i=0;i<rows;i++){
 		right = margin;
-		cellText = model()->headerData(i, Qt::Vertical).toString()+"\t";
+		cellText = model()->headerData(i, Qt::Vertical).toString()+'\t';
 		tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
 		painter.drawLine(right, height, right, height+tr.height());
 
@@ -1444,7 +1444,7 @@ void SpreadsheetView::print(QPrinter* printer) const{
 
 		for(int j=0;j<cols;j++){
 			int w = columnWidth (j);
-			cellText = m_spreadsheet->text(i,j)+"\t";
+			cellText = m_spreadsheet->text(i,j)+'\t';
 			tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
 			br.setTopLeft(QPoint(right,height));
 			br.setWidth(w);

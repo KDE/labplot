@@ -341,7 +341,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
-		if (backgroundFileName.trimmed() != "") {
+		if ( backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle){
 				case PlotArea::ScaledCropped:

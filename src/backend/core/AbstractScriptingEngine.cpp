@@ -62,7 +62,7 @@ AbstractScriptingEngine::AbstractScriptingEngine(const char *lang_name)
  * \fn void AbstractScriptingEngine::initialize()
  * \brief Initialize the scripting environment.
  *
- * Don't forget to set m_initialized to true in implemenations after a successfull
+ * Don't forget to set m_initialized to true in implementations after a successfull
  * initialization.
  */
 

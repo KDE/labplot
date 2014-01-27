@@ -411,7 +411,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 		painter->drawRect(scene_rect);
 	}else if (m_worksheet->backgroundType() == PlotArea::Image){
 		const QString& backgroundFileName = m_worksheet->backgroundFileName().trimmed();
-		if ( backgroundFileName!= "") {
+		if ( !backgroundFileName.isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (m_worksheet->backgroundImageStyle()){
 				case PlotArea::ScaledCropped:

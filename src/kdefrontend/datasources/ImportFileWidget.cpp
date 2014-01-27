@@ -194,7 +194,7 @@ void ImportFileWidget::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
 	QString dir = conf.readEntry("LastDir", "");
     QString path = QFileDialog::getOpenFileName(this, i18n("Select the file data source"), dir);
-    if (path=="")
+    if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
@@ -208,7 +208,7 @@ void ImportFileWidget::selectFile() {
 
     //use the file name as the name of the data source,
     //if there is no data source name provided yet
-    if (ui.kleSourceName->text()=="") {
+    if (ui.kleSourceName->text().isEmpty()) {
         QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
         ui.kleSourceName->setText(fileName);
     }
@@ -313,14 +313,14 @@ void ImportFileWidget::fileTypeChanged(int id) {
 	shows the dialog with the information about the file(s) to be imported.
 */
 void ImportFileWidget::fileInfoDialog() {
-    QStringList files = ui.kleFileName->text().split(";");
+    QStringList files = ui.kleFileName->text().split(';');
     FileInfoDialog* dlg = new FileInfoDialog(this);
     dlg->setFiles(files);
     dlg->exec();
 }
 
 /*!
-	enables the options if the filter "custom" was choosen. Disables the options otherwise.
+	enables the options if the filter "custom" was chosen. Disables the options otherwise.
 */
 void ImportFileWidget::filterChanged(int index) {
     if (index==0){// "automatic"
@@ -365,7 +365,7 @@ void ImportFileWidget::refreshPreview(){
 				break;
 			
 			importedText += stream.readLine();
-			importedText += "\n";
+			importedText += '\n';
 		}
 	}
 

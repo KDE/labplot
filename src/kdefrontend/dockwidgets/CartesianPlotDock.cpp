@@ -589,7 +589,7 @@ void CartesianPlotDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
 	QString dir = conf.readEntry("LastImageDir", "");
     QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
-    if (path=="")
+    if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());

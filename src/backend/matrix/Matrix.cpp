@@ -212,10 +212,10 @@ void Matrix::copySelection()
 				output_str += QLocale().toString(cell(first_row + r, first_col + c), 
 						m_matrix_private->numericFormat(), 16); // copy with max. precision
 			if(c < cols-1)
-				output_str += "\t";
+				output_str += '\t';
 		}
 		if(r < rows-1)
-			output_str += "\n";
+			output_str += '\n';
 	}
 	QApplication::clipboard()->setText(output_str);
 	RESET_CURSOR;
@@ -242,12 +242,12 @@ void Matrix::pasteIntoSelection()
 	{
 		QString input_str = QString(mime_data->data("text/plain"));
 		QList< QStringList > cell_texts;
-		QStringList input_rows(input_str.split("\n"));
+		QStringList input_rows(input_str.split('\n'));
 		input_row_count = input_rows.count();
 		input_col_count = 0;
 		for(int i=0; i<input_row_count; i++)
 		{
-			cell_texts.append(input_rows.at(i).split("\t"));
+			cell_texts.append(input_rows.at(i).split('\t'));
 			if(cell_texts.at(i).count() > input_col_count) input_col_count = cell_texts.at(i).count();
 		}
 
@@ -869,7 +869,7 @@ void Matrix::importImageDialog()
 	QList<QByteArray> formats = QImageReader::supportedImageFormats();
 	QString filter = i18n("Images") + " (";
 	for (int i=0; i<formats.count(); i++)
-		filter += " *."+formats.at(i)+" ";
+		filter += " *." + formats.at(i) + ' ';
 	filter += ");;";
 	for (int i=0; i<formats.count(); i++)
 		filter += " *."+formats.at(i)+" (*." + formats.at(i) +");;";

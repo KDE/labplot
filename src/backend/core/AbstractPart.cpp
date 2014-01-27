@@ -58,7 +58,7 @@ AbstractPart::~AbstractPart() {
  * \fn QWidget *AbstractPart::view() const
  * \brief Construct a primary view on me.
  *
- * The caller recieves ownership of the view.
+ * The caller receives ownership of the view.
  *
  * This method may be called multiple times during the life time of a Part, or it might not get
  * called at all. Parts must not depend on the existence of a view for their operation.

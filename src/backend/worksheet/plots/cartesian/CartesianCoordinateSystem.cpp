@@ -267,7 +267,7 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
 
-			foreach(QPointF point, points) {
+			foreach(const QPointF& point, points) {
 				bool valid = true;
 				double x = point.x();
 				double y = point.y();
@@ -388,7 +388,7 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach(QPointF point, points) {
+	foreach(const QPointF& point, points) {
 		if (noPageClipping || pageRect.contains(point)) {
 			bool found = false;
 
@@ -671,7 +671,7 @@ int CartesianCoordinateSystem::yDirection() const{
 	return d->yScales.at(0)->direction();
 }
 
-// TODO: design elegant, flexible and undo-avare API for changing scales
+// TODO: design elegant, flexible and undo-aware API for changing scales
 bool CartesianCoordinateSystem::setXScales(const QList<Scale *> &scales) {
 	d->xScales = scales;
 	return true; // TODO: check scales validity

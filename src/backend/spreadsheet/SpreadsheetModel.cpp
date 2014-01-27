@@ -89,7 +89,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 	{
 		case Qt::ToolTipRole:
 				if(col_ptr->isMasked(row))
-					postfix = " " + i18n("(masked)");
+					postfix = ' ' + i18n("(masked)");
 				if(!col_ptr->isValid(row))
 					return QVariant(i18n("invalid cell (ignored in all operations)") + postfix);
 		case Qt::EditRole:

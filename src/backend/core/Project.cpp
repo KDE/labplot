@@ -45,7 +45,7 @@
  * \class Project
  * \brief Represents a project.
  * \ingroup core
- * Project represents the root node of all objects created during the runtime of the programm.
+ * Project represents the root node of all objects created during the runtime of the program.
  * Manages also the undo stack.
  */
 
@@ -72,7 +72,7 @@ class Project::Private {
 			mdiWindowVisibility(Project::folderOnly),
 			scriptingEngine(0),
 			version(LVERSION),
-			author(QString(getenv("USER"))),
+			author(QString(qgetenv("USER"))),
 			modificationTime(QDateTime::currentDateTime()),
 			changed(false)
 			{}

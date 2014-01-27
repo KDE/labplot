@@ -210,7 +210,7 @@ void PluginManager::loadAll() {
 #else
 		plugins = QSet<QString>::fromList(plugins).toList();
 #endif
-		foreach (QString plugin, plugins) {
+		foreach (const QString& plugin, plugins) {
 			PluginLoader *pluginLoader = new PluginLoader(plugin);
 			if (!pluginLoader->load()) {
 				m_pluginsWithErrors << pluginLoader;

@@ -465,7 +465,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	foreach(index,items){
+	foreach(const QModelIndex& index,items){
 		aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		selectedAspects<<aspect;
 	}

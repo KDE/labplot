@@ -88,7 +88,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 // 			return QImage();
 
 		// convert: PDF -> PNG
-		convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + "x" + QString::number(dpi)
+		convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + 'x' + QString::number(dpi)
 														<< fi.completeBaseName() + ".pdf"
 														<< fi.completeBaseName() + ".png");
 		//gs doesn't work here. Why?
@@ -144,7 +144,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	}
 
 	// convert: PS -> PNG
-	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + "x" + QString::number(dpi)  << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
+	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)  << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
 	if (!convertProcess.waitForFinished()) {
 		kWarning()<<"convert failed."<<endl;
 		QFile::remove(fi.completeBaseName()+".ps");

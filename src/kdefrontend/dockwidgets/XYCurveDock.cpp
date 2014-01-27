@@ -593,15 +593,15 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 	  ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
 	  break;
 	case AbstractColumn::DateTime:{
-	  foreach(QString s, dateStrings)
+	  foreach(const QString& s, dateStrings)
 		ui.cbValuesFormat->addItem(s, QVariant(s));
 	  
-	  foreach(QString s, timeStrings)
+	  foreach(const QString& s, timeStrings)
 		ui.cbValuesFormat->addItem(s, QVariant(s));
 	  
-	  foreach(QString s1, dateStrings){
-		foreach(QString s2, timeStrings)
-		  ui.cbValuesFormat->addItem(s1 + " " + s2, QVariant(s1 + " " + s2));
+	  foreach(const QString& s1, dateStrings){
+		foreach(const QString& s2, timeStrings)
+		  ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 	  }
 	  
 	  break;

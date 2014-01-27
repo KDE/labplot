@@ -314,10 +314,10 @@ void Spreadsheet::copy(Spreadsheet * other)
 		new_col->copy(src_col);
 		new_col->setPlotDesignation(src_col->plotDesignation());
 		QList< Interval<int> > masks = src_col->maskedIntervals();
-		foreach(Interval<int> iv, masks)
+		foreach(const Interval<int>& iv, masks)
 			new_col->setMasked(iv);
 		QList< Interval<int> > formulas = src_col->formulaIntervals();
-		foreach(Interval<int> iv, formulas)
+		foreach(const Interval<int>& iv, formulas)
 			new_col->setFormula(iv, src_col->formula(iv.start()));
 		new_col->setWidth(src_col->width());
 		addChild(new_col);

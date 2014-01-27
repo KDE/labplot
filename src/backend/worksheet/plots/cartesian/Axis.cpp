@@ -855,7 +855,7 @@ void AxisPrivate::retransformLine(){
 
 	lines.append(QLineF(startPoint, endPoint));
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-	foreach (QLineF line, lines) {
+	foreach (const QLineF& line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -1371,7 +1371,7 @@ void AxisPrivate::retransformMajorGrid(){
 	}
 	
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-	foreach (QLineF line, lines) {
+	foreach (const QLineF& line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
 	}
@@ -1411,7 +1411,7 @@ void AxisPrivate::retransformMinorGrid(){
 	}
 
 	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
-	foreach (QLineF line, lines) {
+	foreach (const QLineF& line, lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
 	}
@@ -1454,7 +1454,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 	
 	//add title label, if available
-	if ( title->isVisible() && title->text().text!="" ){
+	if ( title->isVisible() && !title->text().text.isEmpty() ){
 		//determine the new position of the title label:
 		//we calculate the new position here and not in retransform(),
 		//since it depends on the size and position of the tick labels, tickLabelsPath, available here.

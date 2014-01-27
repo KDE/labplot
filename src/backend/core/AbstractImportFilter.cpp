@@ -75,5 +75,5 @@
  * \brief Uses name() and fileExtensions() to produce a filter specification as used by QFileDialog.
  */
  QString AbstractImportFilter::nameAndPatterns() const {
-	 return name() + " (*." + fileExtensions().join(" *.") + ")";
+	 return name() + " (*." + fileExtensions().join(" *.") + ')';
  }

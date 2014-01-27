@@ -385,7 +385,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 /**
  * \brief Remove the given Aspect from my list of children.
  *
- * The ownership of the child is transfered to the undo command,
+ * The ownership of the child is transferred to the undo command,
  * i.e., the aspect is deleted by the undo command.
  * \sa reparent()
  */

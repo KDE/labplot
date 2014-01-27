@@ -176,7 +176,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const{
 				case 0: return aspect->name();
 				case 1: return aspect->metaObject()->className();
 				case 2: return aspect->creationTime().toString();
-				case 3: return aspect->comment().replace("\n", " ").simplified();
+				case 3: return aspect->comment().replace('\n', ' ').simplified();
 				default: return QVariant();
 			}
 		case Qt::ToolTipRole:
@@ -221,7 +221,7 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const{
 	  //default case: the list for the selectable aspects is empty and all aspects are selectable.
 	  // Apply filter, if available. Indices, that don't match the filter are not selectable.
 	  //Don't apply any filter to the very first index in the model  - this top index corresponds to the project item.
-	  if (index!=this->index(0,0,QModelIndex()) &&  m_filterString != ""){
+	  if ( index!=this->index(0,0,QModelIndex()) &&  !m_filterString.isEmpty() ) {
 		  if (this->containsFilterString(aspect))
 			  result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 		  else
@@ -342,14 +342,14 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const{
 			return true;
 	}
 
-	//check for the occurence of the filter string in the names of the parents
+	//check for the occurrence of the filter string in the names of the parents
 	if ( aspect->parentAspect() )
 		return this->containsFilterString(aspect->parentAspect());
 	else
 		return false;
 	
 	//TODO make this optional
-	// 	//check for the occurence of the filter string in the names of the children
+	// 	//check for the occurrence of the filter string in the names of the children
 // 	foreach(const AbstractAspect * child, aspect->children<AbstractAspect>()){
 // 	  if ( this->containsFilterString(child) )
 // 		return true;

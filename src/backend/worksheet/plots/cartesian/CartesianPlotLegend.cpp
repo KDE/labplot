@@ -496,7 +496,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendWidth += layoutLeftMargin + layoutRightMargin; //margins
 	legendWidth += columnCount*lineSymbolWidth + layoutHorizontalSpacing; //width of the columns without the text
 	legendWidth += (columnCount-1)*2*layoutHorizontalSpacing; //spacings between the columns
-	if (title->isVisible() && title->text().text!="") {
+	if (title->isVisible() && !title->text().text.isEmpty()) {
 		float titleWidth = title->graphicsItem()->boundingRect().width();
 		if (titleWidth>legendWidth)
 			legendWidth = titleWidth;
@@ -506,7 +506,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	float legendHeight = layoutTopMargin + layoutBottomMargin; //margins
 	legendHeight += rowCount*h; //height of the rows
 	legendHeight += (rowCount-1)*layoutVerticalSpacing; //spacing between the rows
-	if (title->isVisible() && title->text().text!="")
+	if (title->isVisible() && !title->text().text.isEmpty())
 		legendHeight += title->graphicsItem()->boundingRect().height(); //legend title
 
 	rect.setX(-legendWidth/2);
@@ -613,7 +613,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
-		if (backgroundFileName.trimmed() != "") {
+		if ( backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle){
 				case PlotArea::ScaledCropped:
@@ -669,7 +669,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	
 	//translate to left upper conner of the bounding rect plus the layout offset and the height of the title
 	painter->translate(-rect.width()/2+layoutLeftMargin, -rect.height()/2+layoutTopMargin);
-	if (title->isVisible() && title->text().text!="")
+	if (title->isVisible() && !title->text().text.isEmpty())
 		painter->translate(0, title->graphicsItem()->boundingRect().height());
 
 	painter->save();

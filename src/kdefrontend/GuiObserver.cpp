@@ -99,7 +99,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
   //don't show any dock widgets in this case.
   foreach(aspect, selectedAspects){
 	  className= aspect->metaObject()->className();
-	  if ( className != prevClassName && prevClassName!=""){
+	  if ( className != prevClassName && !prevClassName.isEmpty() ){
 		if (mainWindow->stackedWidget->currentWidget())
 		  mainWindow->stackedWidget->currentWidget()->hide();
 
@@ -303,7 +303,7 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
   Depending on the currently selected object(s), identified by \c className, activates/diactivates the corresponding toolbars and menus.
 */
 void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspect){
-  if (className == ""){
+  if (className.isEmpty()){
 	//no object or objects of different kind (e.g. a spreadsheet and a worksheet) were selected.
 	
   }else if (className=="CartesianPlot" || className=="Axis" || className=="XYCurve" || className=="CartesianPlotLegend"){

@@ -463,7 +463,7 @@ void Column::save(QXmlStreamWriter * writer) const
 	writer->writeEndElement();
 	XmlWriteMask(writer);
 	QList< Interval<int> > formulas = formulaIntervals();
-	foreach(Interval<int> interval, formulas)
+	foreach(const Interval<int>& interval, formulas)
 	{
 		writer->writeStartElement("formula");
 		writer->writeAttribute("start_row", QString::number(interval.start()));

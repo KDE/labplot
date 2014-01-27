@@ -133,7 +133,7 @@ void MainWin::initGUI(const QString& fileName){
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), 
 			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 	
-	statusBar()->showMessage(i18n("Welcome to LabPlot") + " " + LVERSION);
+	statusBar()->showMessage(i18n("Welcome to LabPlot") + ' ' + LVERSION);
 	initActions();
 	initMenus();
 	setupGUI();
@@ -668,8 +668,8 @@ void MainWin::openXML(QIODevice *file) {
 	if (reader.hasWarnings()) {
 		QString msg_text = i18n("The following problems occurred when loading the project:\n");
 		QStringList warnings = reader.warningStrings();
-		foreach(QString str, warnings)
-			msg_text += str + "\n";
+		foreach(const QString& str, warnings)
+			msg_text += str + '\n';
 		KMessageBox::error(this, msg_text, i18n("Project loading partly failed"));
 		statusBar()->showMessage(msg_text);
 	}
@@ -914,7 +914,7 @@ Worksheet* MainWin::activeWorksheet() const{
 */
 void MainWin::projectChanged(){
 	qDebug()<< "MainWin::projectChanged()";
-	setCaption(m_project->name() + "    [" + i18n("Changed") + "]" );
+	setCaption(m_project->name() + "    [" + i18n("Changed") + ']' );
 	m_saveAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
 	return;
@@ -1059,7 +1059,7 @@ void MainWin::createContextMenu(QMenu* menu) const {
 void MainWin::createFolderContextMenu(const Folder* folder, QMenu* menu) const{
 	Q_UNUSED(folder);
 
-	//Folder provides it's own context menu. Add a separator befor adding additional actions.
+	//Folder provides it's own context menu. Add a separator before adding additional actions.
 	menu->addSeparator();
 	this->createContextMenu(menu);
 }

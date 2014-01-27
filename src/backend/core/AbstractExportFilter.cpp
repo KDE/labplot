@@ -43,7 +43,7 @@
  * \fn bool AbstractExportFilter::exportAspect(AbstractAspect *object, QIODevice *output)
  * \brief Export object to output.
  *
- * \return true if export was successfull, false otherwise
+ * \return true if export was successful, false otherwise
  */
 
 /**
@@ -60,5 +60,5 @@
  * \brief Uses name() and fileExtensions() to produce a filter specification as used by QFileDialog.
  */
 QString AbstractExportFilter::nameAndPatterns() const {
-	return name() + " (*." + fileExtensions().join(" *.") + ")";
+	return name() + " (*." + fileExtensions().join(" *.") + ')';
 }

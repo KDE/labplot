@@ -65,7 +65,7 @@ void FileInfoDialog::setFiles(QStringList& files){
 		if(fileName.isEmpty())
 			continue;
 
-        if (infoString!="")
+        if (!infoString.isEmpty())
             infoString += "<br><br><br>";
 
         infoString += FileDataSource::fileInfoString(fileName);

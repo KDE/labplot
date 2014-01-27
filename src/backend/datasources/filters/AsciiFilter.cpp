@@ -340,8 +340,8 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		vectorNameList = lineStringList;
 	}else{
 		//create vector names out of the space separated vectorNames-string, if not empty
-		if (vectorNames != ""){
-			vectorNameList = vectorNames.split(" ");
+		if (!vectorNames.isEmpty()){
+			vectorNameList = vectorNames.split(' ');
 		}
 
 		//if there were no (or not enough) strings provided, add the default descriptions for the columns/vectors

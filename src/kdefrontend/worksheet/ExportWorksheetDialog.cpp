@@ -86,7 +86,7 @@ void ExportWorksheetDialog::setFileName(const QString& name){
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	QString dir = conf.readEntry("LastDir", "");	
 	if (dir.isEmpty()) dir = QDir::homePath();
-	ui.kleFileName->setText(dir + "/" +  name);
+	ui.kleFileName->setText(dir + QDir::separator() +  name);
 	this->formatChanged(ui.cbFormat->currentIndex());
 }
 
@@ -133,7 +133,7 @@ void ExportWorksheetDialog::okClicked(){
 	conf.writeEntry("Area", ui.cbExportArea->currentIndex());
 
     QString path = ui.kleFileName->text();
-    if (path != "") {
+    if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
 		ui.kleFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());
@@ -172,7 +172,7 @@ void ExportWorksheetDialog::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
     QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
-    if (path != "") {
+    if (!path.isEmpty()) {
 		ui.kleFileName->setText(path);
 		
 		int pos = path.lastIndexOf(QDir::separator());

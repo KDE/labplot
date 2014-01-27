@@ -297,7 +297,7 @@ QString FileDataSource::fileInfoString(const QString &name){
 		infoString += "<br>" + i18n("Last read") + ": " + fileInfo.lastRead().toString();
 		infoString += "<br>" + i18n("Owner") + ": " + fileInfo.owner();
 		infoString += "<br>" + i18n("Group") + ": " + fileInfo.group();
-		infoString += "<br>" + i18n("Size") + ": " + QString::number(fileInfo.size()) + " " + i18n("cBytes");
+		infoString += "<br>" + i18n("Size") + ": " + QString::number(fileInfo.size()) + ' ' + i18n("cBytes");
 
         // file type and type specific information about the file
 #ifdef Q_OS_LINUX

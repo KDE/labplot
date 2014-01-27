@@ -53,7 +53,7 @@
  * 
  * The label is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates
- * in parent's coordinate system, or by specifing one of the predefined position
+ * in parent's coordinate system, or by specifying one of the predefined position
  * flags (\ca HorizontalPosition, \ca VerticalPosition).
  */
 

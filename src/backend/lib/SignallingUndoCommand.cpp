@@ -58,7 +58,7 @@
  * be created. This uses QMetaType, which means that (non-trivial) argument types need to be
  * registered using qRegisterMetaType() before giving them to a SignallingUndoCommand (in
  * particular, this also goes for pointers to custom data types). The situation here is analogous
- * to an asynchronous method invokation using QMetaMethod::invoke() with Qt::QueuedConnection.
+ * to an asynchronous method invocation using QMetaMethod::invoke() with Qt::QueuedConnection.
  */
 
 /**

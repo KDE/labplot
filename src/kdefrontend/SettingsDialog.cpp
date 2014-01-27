@@ -94,7 +94,7 @@ void SettingsDialog::slotButtonClicked(int button){
 
 void SettingsDialog::changed() {
 	m_changed = true;
-	setCaption(i18n("Preferences") + "    [" + i18n("Changed") + "]" );
+	setCaption(i18n("Preferences") + "    [" + i18n("Changed") + ']' );
 	enableButton(Apply, true);
 }
 

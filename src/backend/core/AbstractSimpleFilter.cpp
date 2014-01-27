@@ -49,7 +49,7 @@
  * The trick here is that, in a sense, the filter is its own output port. This means you
  * can implement a complete filter in only one class and don't have to coordinate data
  * transfer between a filter class and a data source class.
- * Additionaly, AbstractSimpleFilter offers some useful convenience methods which make writing
+ * Additionally, AbstractSimpleFilter offers some useful convenience methods which make writing
  * filters as painless as possible.
  *
  * For the data type of the output, all types supported by AbstractColumn (currently double, QString and
@@ -275,7 +275,7 @@ void AbstractSimpleFilter::inputRowsAboutToBeInserted(const AbstractColumn * sou
 {
 	Q_UNUSED(source);
 	Q_UNUSED(count);
-	foreach(Interval<int> output_range, dependentRows(Interval<int>(before, before)))
+	foreach(const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
 		emit m_output_column->rowsAboutToBeInserted(m_output_column, output_range.start(), output_range.size());
 }
 
@@ -283,21 +283,21 @@ void AbstractSimpleFilter::inputRowsInserted(const AbstractColumn * source, int 
 {
 	Q_UNUSED(source);
 	Q_UNUSED(count);
-	foreach(Interval<int> output_range, dependentRows(Interval<int>(before, before)))
+	foreach(const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
 		emit m_output_column->rowsInserted(m_output_column, output_range.start(), output_range.size());
 }
 
 void AbstractSimpleFilter::inputRowsAboutToBeRemoved(const AbstractColumn * source, int first, int count)
 {
 	Q_UNUSED(source);
-	foreach(Interval<int> output_range, dependentRows(Interval<int>(first, first+count-1)))
+	foreach(const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
 		emit m_output_column->rowsAboutToBeRemoved(m_output_column, output_range.start(), output_range.size());
 }
 
 void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn * source, int first, int count)
 {
 	Q_UNUSED(source);
-	foreach(Interval<int> output_range, dependentRows(Interval<int>(first, first+count-1)))
+	foreach(const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
 		emit m_output_column->rowsRemoved(m_output_column, output_range.start(), output_range.size());
 }
 

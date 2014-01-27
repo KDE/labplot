@@ -604,7 +604,7 @@ void WorksheetDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "WorksheetDock");
 	QString dir = conf.readEntry("LastImageDir", "");
     QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
-    if (path=="")
+    if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
@@ -832,7 +832,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
 	
 	// Geometry
-	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", FALSE));
+	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", false));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_worksheet->pageRect().width()), Worksheet::Centimeter));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_worksheet->pageRect().height()), Worksheet::Centimeter));
 	updatePaperSize();

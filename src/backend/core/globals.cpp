@@ -65,9 +65,9 @@ int SciDAVis::version()
  */
 QString SciDAVis::versionString()
 {
-	return appName + " " + 
-			QString::number((scidavis_version & 0xFF0000) >> 16)+"."+ 
-			QString::number((scidavis_version & 0x00FF00) >> 8)+"."+
+	return appName + ' ' + 
+			QString::number((scidavis_version & 0xFF0000) >> 16)+'.'+ 
+			QString::number((scidavis_version & 0x00FF00) >> 8)+'.'+
 			QString::number(scidavis_version & 0x0000FF);
 }
 			
@@ -77,24 +77,6 @@ QString SciDAVis::versionString()
 QString SciDAVis::extraVersion()
 {
 	return	QString(extra_version);
-}
-
-/**
- * \brief Show about dialog
- */
-void SciDAVis::about()
-{
-	QString text = "<h2>"+ versionString() + extraVersion() + "</h2>";
-	text += "<h3>" + i18n("Released") + ": " + QString(SciDAVis::release_date) + "</h3>";
-	text +=	"<h3>" + QString(SciDAVis::copyright_string).replace("\n", "<br>") + "</h3>";
-
-	QMessageBox *mb = new QMessageBox();
-	mb->setAttribute(Qt::WA_DeleteOnClose);
-	mb->setWindowTitle(i18n("About SciDAVis"));
-	mb->setWindowIcon(QIcon(":/appicon"));
-	mb->setIconPixmap(QPixmap(":/appicon"));
-	mb->setText(text);
-	mb->exec();
 }
 
 /**

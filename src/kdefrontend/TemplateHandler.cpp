@@ -176,7 +176,7 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates")+"/" + dirNames.at(className) + "/"+filename, KConfig::SimpleConfig);
+	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates") + '/' + dirNames.at(className) + '/' + filename, KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
 	
 	//we have at least one saved template now -> enable the load button
@@ -197,7 +197,7 @@ void TemplateHandler::saveMenuSelected(QAction* action) {
 }
 
 /*!
- * Is called when the current properties are going to be saved as new default properies.
+ * Is called when the current properties are going to be saved as new default properties.
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveDefaults() {

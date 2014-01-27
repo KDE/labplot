@@ -31,7 +31,7 @@
 
 /*!
   \class XYCurve
-  \brief A 2D-curve, provides an interface for editing many properties of the the curve.
+  \brief A 2D-curve, provides an interface for editing many properties of the curve.
  
   \ingroup worksheet
 */
@@ -894,7 +894,7 @@ void XYCurvePrivate::updateLines(){
 	  case XYCurve::SplineAkimaNatural:
 	  case XYCurve::SplineAkimaPeriodic:{
 #ifdef HAVE_GSL
-		//TODO: optimize! try to ommit the copying from the column to the arrays of doubles.
+		//TODO: optimize! try to omit the copying from the column to the arrays of doubles.
 		gsl_interp_accel *acc  = gsl_interp_accel_alloc();
 		gsl_spline *spline=0;
 		  
@@ -916,7 +916,7 @@ void XYCurvePrivate::updateLines(){
 
 		if (!spline) {
 			//TODO:akima splines don't work at the moment
-			qDebug()<<"Couldn't initalize spline function";
+			qDebug()<<"Couldn't initialize spline function";
 			recalcShapeAndBoundingRect();
 			return;
 		}
@@ -975,7 +975,7 @@ void XYCurvePrivate::updateLines(){
 	lines = cSystem->mapLogicalToScene(lines);
 	
 	//new line path
-	foreach (QLineF line, lines){
+	foreach (const QLineF& line, lines){
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -1039,7 +1039,7 @@ void XYCurvePrivate::updateDropLines(){
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new painter path for the drop lines
-	foreach (QLineF line, lines){
+	foreach (const QLineF& line, lines){
 		dropLinePath.moveTo(line.p1());
 		dropLinePath.lineTo(line.p2());
 	}
@@ -1064,7 +1064,7 @@ void XYCurvePrivate::updateSymbols(){
 			path = trafo.map(path);
 		}
 
-		foreach (QPointF point, symbolPointsScene) {
+		foreach (const QPointF& point, symbolPointsScene) {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
 			symbolsPath.addPath(trafo.map(path));
@@ -1107,7 +1107,7 @@ void XYCurvePrivate::updateValues(){
 	  case XYCurve::ValuesXY:{
 		for(int i=0; i<symbolPointsLogical.size(); ++i){
 			if (!visiblePoints[i]) continue;
-			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + ","
+			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + ','
 							+ QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
 		}
 		break;
@@ -1115,8 +1115,8 @@ void XYCurvePrivate::updateValues(){
 	  case XYCurve::ValuesXYBracketed:{
 		for(int i=0; i<symbolPointsLogical.size(); ++i){
 			if (!visiblePoints[i]) continue;
-			valuesStrings <<  valuesPrefix + "(" + QString::number(symbolPointsLogical.at(i).x()) + ","
-							+ QString::number(symbolPointsLogical.at(i).y()) +")" + valuesSuffix;
+			valuesStrings <<  valuesPrefix + '(' + QString::number(symbolPointsLogical.at(i).x()) + ','
+							+ QString::number(symbolPointsLogical.at(i).y()) +')' + valuesSuffix;
 		}
 		break;
 	  }
@@ -1243,7 +1243,7 @@ void XYCurvePrivate::updateErrorBars(){
 	// * convert it to scene units
 	// * add to this point an offset corresponding to the cap size in scene units
 	// * convert this point back to logical units
-	// * substract from this point the original coordinates (without the new offset)
+	// * subtract from this point the original coordinates (without the new offset)
 	//   to determine the cap size in logical units.
 	float capSizeX = 0;
 	float capSizeY = 0;
@@ -1358,7 +1358,7 @@ void XYCurvePrivate::updateErrorBars(){
 	lines = cSystem->mapLogicalToScene(lines);
 	
 	//new painter path for the drop lines
-	foreach (QLineF line, lines){
+	foreach (const QLineF& line, lines){
 		errorBarsPath.moveTo(line.p1());
 		errorBarsPath.lineTo(line.p2());
 	}
