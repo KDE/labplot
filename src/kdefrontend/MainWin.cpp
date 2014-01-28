@@ -423,6 +423,10 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
+		setCaption("LabPlot2");
+	}
+	else {
+ 		setCaption(m_project->name());
 	}
 	
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
