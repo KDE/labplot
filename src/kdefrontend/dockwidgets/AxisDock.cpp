@@ -49,9 +49,16 @@
 AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	ui.setupUi(this);
 
-	QGridLayout* layout;
+	//"Title"-tab
+	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+ 	labelWidget = new LabelWidget(ui.tabTitle);
+	labelWidget->setFixedLabelMode(true);
+	hboxLayout->addWidget(labelWidget);
+	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setSpacing(2);
 
-	layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
+	//"Ticks"-tab
+	QGridLayout* layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
 	layout->addWidget(cbMajorTicksColumn, 5, 2);
 
@@ -60,7 +67,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
-		layout=static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -92,13 +99,6 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.kcbLineColor, SIGNAL(changed (const QColor&)), this, SLOT(lineColorChanged(const QColor&)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
 	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );	
-	
-
-	//"Title"-tab
-	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
- 	labelWidget = new LabelWidget(ui.tabTitle);
-	labelWidget->setFixedLabelMode(true);
-	hboxLayout->addWidget(labelWidget);
 
 	//"Major ticks"-tab
 	connect( ui.cbMajorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksDirectionChanged(int)) );

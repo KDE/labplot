@@ -71,10 +71,12 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
  	labelWidget=new LabelWidget(ui.tabTitle);
 	hboxLayout->addWidget(labelWidget);
+	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setSpacing(2);
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
-		QGridLayout* layout = static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 

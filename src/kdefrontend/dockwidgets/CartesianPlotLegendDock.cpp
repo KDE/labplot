@@ -53,6 +53,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
  	labelWidget=new LabelWidget(ui.tabTitle);
 	labelWidget->setNoGeometryMode(true);
 	hboxLayout->addWidget(labelWidget);
+	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setSpacing(2);
 
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
@@ -63,17 +65,13 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
-		//CRASH when using QGridLayout!
-		//QGridLayout* layout = static_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
-		QLayout* layout = ui.tabWidget->widget(i)->layout();
+		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
 		layout->setContentsMargins(2,2,2,2);
-		layout->setSpacing(2);
-		//only available in QGridLayout:
-		//layout->setHorizontalSpacing(2);
-		//layout->setVerticalSpacing(2);
+		layout->setHorizontalSpacing(2);
+		layout->setVerticalSpacing(2);
 	}
  
 	//SIGNAL/SLOT
