@@ -1,3 +1,8 @@
+-----2.0.1-----
+Bug fix release. Solved issues:
+	* Fixed wrong scaling of legend's text labels in pdf-export
+	* Fixed memory corruption in CartesianPlotDock that can lead to crashes
+
 -----2.0.0-----
 First stable release of LabPlot2. LabPlot2 is a complete rewrite of LabPlot1 and lacks in this release a lot of features available in the predecessor. On the other hand, the GUI and the usability is more superior as compared to LabPlot1 and there are several new features that were not available in LabPlot1.
 
