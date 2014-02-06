@@ -112,7 +112,7 @@ class SpreadsheetModel : public QAbstractItemModel
 		//! Toggle flag for formula mode
 		bool m_formula_mode;
 		//! Vertical header data
-		QStringList m_vertical_header_data;
+		QList<int> m_vertical_header_data;
 		//! Horizontal header data
 		QStringList m_horizontal_header_data;
 }; 
