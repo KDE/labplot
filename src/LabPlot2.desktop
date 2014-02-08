@@ -5,7 +5,6 @@ Icon=LabPlot2
 Name=LabPlot2
 GenericName=LabPlot
 Comment=LabPlot is a KDE-application for interactive graphing and analysis of scientific data.
-Comment[de]=LabPlot ist ein KDE-Programm für interaktive graphische Darstellung und Auswertung von wissenschaftlichen Daten.
 Terminal=false
 MimeType=application/x-LabPlot-gzip;
 Categories=Qt;KDE;Education;Science;Physics;Math;
