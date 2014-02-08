@@ -65,7 +65,7 @@ void XmlStreamReader::init()
 	m_error_prefix = i18nc("prefix for XML error messages", "XML reader error: ");
 	m_error_postfix = i18nc("postfix for XML error messages", " (loading failed)");
 	m_warning_prefix = i18nc("prefix for XML warning messages", "XML reader warning: ");
-	m_warning_postfix = i18nc("postfix for XML warning messages", "");
+	m_warning_postfix = i18nc("postfix for XML warning messages", " ");
 }
 
 QStringList XmlStreamReader::warningStrings() const
