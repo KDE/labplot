@@ -35,9 +35,12 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/LabelWidget.h"
-#include <KMessageBox>
-#include <QTimer>
 
+#include <QTimer>
+#include <QDir>
+#include <KMessageBox>
+
+#include <math.h>
 
  /*!
   \class AxisDock

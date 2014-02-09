@@ -28,6 +28,12 @@
  ***************************************************************************/
 
 #include "GuiTools.h"
+
+#include <QComboBox>
+#include <QMenu>
+#include <QColor>
+#include <QPainter>
+
 #include <KLocale>
 
 static const int colorsCount = 26;

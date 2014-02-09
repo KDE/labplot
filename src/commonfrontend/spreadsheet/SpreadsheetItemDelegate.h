@@ -27,6 +27,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef SPREADSHEETITEMDELEGATE_H
+#define SPREADSHEETITEMDELEGATE_H
+
 #include <QItemDelegate>
 #include <QAbstractItemModel>
 
@@ -48,3 +51,5 @@ class SpreadsheetItemDelegate : public QItemDelegate{
 	private:
 		QColor m_maskingColor;
 };
+
+#endif

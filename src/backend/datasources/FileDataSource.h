@@ -26,8 +26,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef ASCIIDATASOURCE_H
-#define ASCIIDATASOURCE_H
+#ifndef FILEDATASOURCE_H
+#define FILEDATASOURCE_H
 
 #include "backend/spreadsheet/Spreadsheet.h"
 #include <QString>

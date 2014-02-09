@@ -27,8 +27,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef AXESDOCK_H
-#define AXESDOCK_H
+#ifndef AXISDOCK_H
+#define AXISDOCK_H
 
 #include "ui_axisdock.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"

@@ -31,9 +31,12 @@
 #include "WorksheetDock.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
+
 #include <QPrinter>
 #include <QFileDialog>
 #include <KUrlCompletion>
+
+#include <math.h>
 
 // a couple of standard sizes in mm, taken from qprinter.cpp
 const int numOfPaperSizes = 30;

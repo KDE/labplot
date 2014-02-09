@@ -34,7 +34,11 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 
+#include <QDir>
+#include <QFileDialog>
 #include <KUrlCompletion>
+
+#include <math.h>
 
 /*!
   \class CartesianPlotLegendDock

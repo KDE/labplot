@@ -740,7 +740,7 @@ bool MainWin::saveProjectAs() {
 }
 
 /*!
- * auxilary function that does the actual saving of the project
+ * auxillary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
 	WAIT_CURSOR;

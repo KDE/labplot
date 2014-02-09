@@ -30,7 +30,13 @@
 #ifndef GUITOOLS_H
 #define GUITOOLS_H
 
-#include <QtGui>
+#include <QPen>
+
+class QComboBox;
+class QColor;
+class QMenu;
+class QActionGroup;
+class QAction;
 
 class GuiTools{
   public:

@@ -40,12 +40,19 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
+#include <QPainter>
+#include <QMenu>
+#include <QDebug>
+#include <QGraphicsSceneContextMenuEvent>
+
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "kdefrontend/GuiTools.h"
 #include <KConfigGroup>
 #include <KIcon>
 #include <KLocale>
 #endif
+
+#include <math.h>
 
 /**
  * \class Axis
@@ -247,8 +254,11 @@ QIcon Axis::icon() const{
 }
 
 Axis::~Axis() {
-	delete orientationMenu;
-	delete lineMenu;
+	if (orientationMenu)
+		delete orientationMenu;
+
+	if (lineMenu)
+		delete lineMenu;
 	
 	//no need to delete d->title, since it was added with addChild in init();
 

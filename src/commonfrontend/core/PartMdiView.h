@@ -28,8 +28,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef ASPECT_VIEW_H
-#define ASPECT_VIEW_H
+#ifndef PART_MDI_VIEW_H
+#define PART_MDI_VIEW_H
 
 #include <QMdiSubWindow>
 
@@ -62,4 +62,4 @@ class PartMdiView : public QMdiSubWindow {
 		void handleAspectAboutToBeRemoved(const AbstractAspect*);		
 };
 
-#endif // ifndef ASPECT_VIEW_H
+#endif // ifndef PART_MDI_VIEW_H

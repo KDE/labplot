@@ -37,7 +37,11 @@
 #include "kdefrontend/TemplateHandler.h"
 
 #include <QTimer>
+#include <QDir>
+#include <QFileDialog>
 #include <KUrlCompletion>
+
+#include <math.h>
 
 /*!
   \class CartesianPlotDock

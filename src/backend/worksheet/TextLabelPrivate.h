@@ -27,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef WORKSHEETPRIVATE_H
-#define WORKSHEETPRIVATE_H
+#ifndef TEXTLABELPRIVATE_H
+#define TEXTLABELPRIVATE_H
 
 #include <QStaticText>
 #include <QFutureWatcher>

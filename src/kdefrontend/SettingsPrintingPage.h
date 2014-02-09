@@ -29,8 +29,6 @@
 #ifndef SETTINGSPRINTINGPAGE_H
 #define SETTINGSPRINTINGPAGE_H
 
-#include <QtGui>
-
 #include "SettingsPage.h"
 #include "ui_settingsprintingpage.h"
 

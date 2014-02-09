@@ -34,7 +34,11 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 //#include "backend/datasources/filters/BinaryFilter.h"
 
-#include <QtGui>
+#include <QInputDialog>
+#include <QDir>
+#include <QFileDialog>
+#include <QProcess>
+#include <QTextStream>
 #include <KUrlCompletion>
 
 /*!

@@ -669,7 +669,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	m_treeView->selectionModel()->select(currentIndex, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 	m_treeView->scrollTo(currentIndex);
 	
-	foreach(QModelIndex index, selected)
+	foreach(const QModelIndex& index, selected)
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 
 	return true;

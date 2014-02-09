@@ -28,8 +28,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TABLEVIEW_H
-#define TABLEVIEW_H
+#ifndef SPREADSHEETVIEW_H
+#define SPREADSHEETVIEW_H
 
 #include <QTableView>
 

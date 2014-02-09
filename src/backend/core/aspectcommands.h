@@ -29,6 +29,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef ASPECTCOMMANDS_H
+#define ASPECTCOMMANDS_H
 
 #include "AspectPrivate.h"
 #include <QUndoCommand>
@@ -125,3 +127,5 @@ class AspectChildReparentCmd : public QUndoCommand {
 		int m_index;
 		int m_new_index;
 };
+
+#endif

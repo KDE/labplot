@@ -41,6 +41,10 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 
+#include <QPainter>
+#include <QDir>
+#include <QDebug>
+
 /*!
   \class XYCurveDock
   \brief  Provides a widget for editing the properties of the XYCurves (2D-curves) currently selected in the project explorer.
