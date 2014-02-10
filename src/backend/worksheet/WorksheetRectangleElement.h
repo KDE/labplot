@@ -36,7 +36,7 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
-		WorksheetRectangleElement(const QString &name);
+		explicit WorksheetRectangleElement(const QString &name);
 		WorksheetRectangleElement(const QString &name, const QRectF &rect);
 		virtual ~WorksheetRectangleElement();
 

@@ -67,7 +67,7 @@ class TextLabel : public AbstractWorksheetElement{
 			VerticalPosition   verticalPosition;
 		};
 
-		TextLabel(const QString& name, Type type = General);
+		explicit TextLabel(const QString& name, Type type = General);
 		~TextLabel();
 		
 		Type type() const;

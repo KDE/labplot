@@ -41,7 +41,7 @@ class ImportFileWidget : public QWidget{
     Q_OBJECT
 
 public:
-	ImportFileWidget(QWidget*);
+	explicit ImportFileWidget(QWidget*);
 	~ImportFileWidget();
 
 	void showOptions(bool);

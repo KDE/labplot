@@ -46,7 +46,7 @@ class AbstractCoordinateSystem{
 		};
 		Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
 
-		AbstractCoordinateSystem(AbstractPlot*);
+		explicit AbstractCoordinateSystem(AbstractPlot*);
 		virtual ~AbstractCoordinateSystem();
 
 		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;

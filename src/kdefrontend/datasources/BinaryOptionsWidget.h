@@ -36,7 +36,7 @@ class BinaryOptionsWidget : public QWidget{
     Q_OBJECT
 
 public:
-	BinaryOptionsWidget(QWidget*);
+	explicit BinaryOptionsWidget(QWidget*);
 	~BinaryOptionsWidget();
 
 private:

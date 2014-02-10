@@ -39,7 +39,7 @@ class ColumnDock: public QWidget{
 	Q_OBJECT
 
   public:
-	ColumnDock(QWidget *parent);
+	explicit ColumnDock(QWidget *parent);
 	void setColumns(QList<Column*>);
 
   private:

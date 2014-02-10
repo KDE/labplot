@@ -34,7 +34,7 @@ class AbstractDataSource;
 class AsciiFilterPrivate {
   
   public:
-    AsciiFilterPrivate(AsciiFilter*);
+    explicit AsciiFilterPrivate(AsciiFilter*);
 
     void read(const QString & fileName, AbstractDataSource* dataSource,
 			  AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);

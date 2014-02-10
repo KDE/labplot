@@ -37,7 +37,7 @@
 
 class AbstractColumnClearMasksCmd : public QUndoCommand {
 public:
-	AbstractColumnClearMasksCmd(AbstractColumn::Private *col, QUndoCommand *parent = 0);
+	explicit AbstractColumnClearMasksCmd(AbstractColumn::Private *col, QUndoCommand *parent = 0);
 	~AbstractColumnClearMasksCmd();
 
 	virtual void redo();
@@ -53,7 +53,7 @@ private:
 class AbstractColumnSetMaskedCmd : public QUndoCommand
 {
 public:
-	AbstractColumnSetMaskedCmd(AbstractColumn::Private * col, Interval<int> interval, bool masked, QUndoCommand * parent = 0 );
+	explicit AbstractColumnSetMaskedCmd(AbstractColumn::Private * col, Interval<int> interval, bool masked, QUndoCommand * parent = 0 );
 	~AbstractColumnSetMaskedCmd();
 
 	virtual void redo();
@@ -71,7 +71,7 @@ private:
 class AbstractColumnInsertRowsCmd : public QUndoCommand
 {
 public:
-	AbstractColumnInsertRowsCmd(AbstractColumn * col, int before, int count, QUndoCommand * parent = 0 );
+	explicit AbstractColumnInsertRowsCmd(AbstractColumn * col, int before, int count, QUndoCommand * parent = 0 );
 	~AbstractColumnInsertRowsCmd();
 
 	virtual void redo();
@@ -86,7 +86,7 @@ protected:
 class AbstractColumnRemoveRowsCmd : public QUndoCommand
 {
 public:
-	AbstractColumnRemoveRowsCmd(AbstractColumn * col, int first, int count, QUndoCommand * parent = 0 );
+	explicit AbstractColumnRemoveRowsCmd(AbstractColumn * col, int first, int count, QUndoCommand * parent = 0 );
 	~AbstractColumnRemoveRowsCmd();
 
 	virtual void redo();

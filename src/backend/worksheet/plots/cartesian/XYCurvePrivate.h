@@ -38,7 +38,7 @@ class CurveSymbolFactory;
 
 class XYCurvePrivate: public QGraphicsItem {
 	public:
-		XYCurvePrivate(XYCurve *owner);
+		explicit XYCurvePrivate(XYCurve *owner);
 		~XYCurvePrivate();
 
 		QString name() const;

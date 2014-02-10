@@ -41,7 +41,7 @@ class GridDialog: public KDialog {
 	Q_OBJECT
 
 public:
-	GridDialog(QWidget*);
+	explicit GridDialog(QWidget*);
 	void save(WorksheetView::GridSettings&);
 
 private:

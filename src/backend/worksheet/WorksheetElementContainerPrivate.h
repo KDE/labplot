@@ -36,7 +36,7 @@ class QGraphicsSceneContextMenuEvent;
 class WorksheetElementContainer;
 class WorksheetElementContainerPrivate:  public QGraphicsItem{
 	public:
-		WorksheetElementContainerPrivate(WorksheetElementContainer *owner);
+		explicit WorksheetElementContainerPrivate(WorksheetElementContainer *owner);
 		virtual ~WorksheetElementContainerPrivate(){}
 
 		QString name() const;

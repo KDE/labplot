@@ -148,7 +148,7 @@ private:
 class MatrixClearCmd : public QUndoCommand
 {
 public:
-	MatrixClearCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
+	explicit MatrixClearCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
 	~MatrixClearCmd();
 
 	virtual void redo();
@@ -385,7 +385,7 @@ private:
 class MatrixTransposeCmd : public QUndoCommand
 {
 public:
-	MatrixTransposeCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
+	explicit MatrixTransposeCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
 	~MatrixTransposeCmd();
 
 	virtual void redo();
@@ -407,7 +407,7 @@ private:
 class MatrixMirrorHorizontallyCmd : public QUndoCommand
 {
 public:
-	MatrixMirrorHorizontallyCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
+	explicit MatrixMirrorHorizontallyCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
 	~MatrixMirrorHorizontallyCmd();
 
 	virtual void redo();
@@ -429,7 +429,7 @@ private:
 class MatrixMirrorVerticallyCmd : public QUndoCommand
 {
 public:
-	MatrixMirrorVerticallyCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
+	explicit MatrixMirrorVerticallyCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
 	~MatrixMirrorVerticallyCmd();
 
 	virtual void redo();

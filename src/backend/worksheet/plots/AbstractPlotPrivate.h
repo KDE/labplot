@@ -3,7 +3,7 @@
 
 class AbstractPlotPrivate:public WorksheetElementContainerPrivate{
 public:
-	AbstractPlotPrivate(AbstractPlot* owner);
+	explicit AbstractPlotPrivate(AbstractPlot* owner);
 	virtual ~AbstractPlotPrivate(){}
 	virtual QString name() const;
 	virtual void retransform(){}

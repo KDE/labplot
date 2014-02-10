@@ -49,7 +49,7 @@ class ImportFileDialog: public KDialog {
   Q_OBJECT
 
   public:
-	ImportFileDialog(QWidget*);
+	explicit ImportFileDialog(QWidget*);
 	~ImportFileDialog();
 
 	void importToFileDataSource(FileDataSource*) const;

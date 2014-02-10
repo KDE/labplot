@@ -44,7 +44,7 @@ class AxisDock : public QWidget{
 	Q_OBJECT
 
 public:
-	AxisDock(QWidget*);
+	explicit AxisDock(QWidget*);
 	~AxisDock();
 
 	void setModel(std::auto_ptr<AspectTreeModel>);

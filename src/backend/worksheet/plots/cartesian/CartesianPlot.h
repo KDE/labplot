@@ -40,7 +40,7 @@ class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
 
 	public:
-		CartesianPlot(const QString &name);
+		explicit CartesianPlot(const QString &name);
 		virtual ~CartesianPlot();
 
 		enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};

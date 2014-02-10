@@ -46,7 +46,7 @@ class AbstractScriptingEngine : public QObject
   Q_OBJECT
 
   public:
-    AbstractScriptingEngine(const char *lang_name);
+    explicit AbstractScriptingEngine(const char *lang_name);
     virtual void initialize() = 0;
     bool initialized() const;
     virtual bool isRunning() const;
@@ -105,7 +105,7 @@ class ScriptingChangeEvent : public QEvent
 class scripted
 {
   public:
-   scripted(AbstractScriptingEngine* engine);
+   explicit scripted(AbstractScriptingEngine* engine);
    ~scripted();
    void scriptingChangeEvent(ScriptingChangeEvent*);
   protected:

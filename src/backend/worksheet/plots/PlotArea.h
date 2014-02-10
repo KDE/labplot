@@ -41,7 +41,7 @@ class PlotArea: public AbstractWorksheetElement{
 	Q_OBJECT
 
 	public:
-		PlotArea(const QString &name);
+		explicit PlotArea(const QString &name);
 		virtual ~PlotArea();
 		
 		enum BackgroundType{Color, Image, Pattern};

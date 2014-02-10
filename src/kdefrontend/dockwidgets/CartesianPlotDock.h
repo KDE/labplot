@@ -42,7 +42,7 @@ class CartesianPlotDock: public QWidget{
 	Q_OBJECT
 	
 public:
-	CartesianPlotDock(QWidget* parent);
+	explicit CartesianPlotDock(QWidget* parent);
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
 	

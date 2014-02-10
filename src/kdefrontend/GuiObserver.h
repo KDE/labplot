@@ -39,7 +39,7 @@ class GuiObserver:public QObject{
   Q_OBJECT
   
   public:
-	GuiObserver(MainWin*);
+	explicit GuiObserver(MainWin*);
 
   private:
 	MainWin* mainWindow;

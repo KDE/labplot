@@ -38,7 +38,7 @@ class PathCurveSymbol: public QObject, public AbstractCurveSymbol  {
 	Q_OBJECT
 
 	public:
-		PathCurveSymbol(const QString& symbolId);
+		explicit PathCurveSymbol(const QString& symbolId);
 		virtual ~PathCurveSymbol();
 
 		virtual QString id() const;

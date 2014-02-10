@@ -42,7 +42,7 @@ class TextLabel;
 
 class AxisPrivate: public QGraphicsItem {
 	public:
-		AxisPrivate(Axis* owner);
+		explicit AxisPrivate(Axis* owner);
 
 		const CartesianPlot* m_plot;
 		const CartesianCoordinateSystem* m_cSystem;

@@ -41,7 +41,7 @@ class CartesianPlotLegendDock: public QWidget{
 	Q_OBJECT
 	
 public:
-	CartesianPlotLegendDock(QWidget *parent);
+	explicit CartesianPlotLegendDock(QWidget *parent);
 	void setLegends(QList<CartesianPlotLegend*>);
 	void activateTitleTab() const;
 	

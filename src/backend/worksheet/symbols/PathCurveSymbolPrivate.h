@@ -32,7 +32,7 @@
 
 class PathCurveSymbolPrivate {
 	public:
-    	PathCurveSymbolPrivate(const QString &symbolId);
+    	explicit PathCurveSymbolPrivate(const QString &symbolId);
     	virtual ~PathCurveSymbolPrivate();
 
 		qreal size;

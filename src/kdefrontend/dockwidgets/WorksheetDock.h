@@ -42,7 +42,7 @@ class WorksheetDock: public QWidget{
 	Q_OBJECT
 	
 public:
-	WorksheetDock(QWidget *parent);
+	explicit WorksheetDock(QWidget *parent);
 	void setWorksheets(QList<Worksheet*>);
 	
 private:

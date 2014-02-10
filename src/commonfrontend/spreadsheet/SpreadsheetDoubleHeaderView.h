@@ -38,7 +38,7 @@ class SpreadsheetCommentsHeaderView : public QHeaderView{
 	Q_OBJECT
 
 	public:
-		SpreadsheetCommentsHeaderView(QWidget *parent = 0);
+		explicit SpreadsheetCommentsHeaderView(QWidget *parent = 0);
 		virtual ~SpreadsheetCommentsHeaderView();
 
 	virtual void setModel(QAbstractItemModel * model);
@@ -51,7 +51,7 @@ class SpreadsheetDoubleHeaderView : public QHeaderView{
 	Q_OBJECT
 
 	public:
-		SpreadsheetDoubleHeaderView(QWidget * parent = 0);
+		explicit SpreadsheetDoubleHeaderView(QWidget * parent = 0);
 		~SpreadsheetDoubleHeaderView();
 
 		virtual void setModel(QAbstractItemModel * model);

@@ -59,7 +59,7 @@ class Axis: public AbstractWorksheetElement {
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 		
-		Axis(const QString &name, const AxisOrientation &orientation = AxisHorizontal);
+		explicit Axis(const QString &name, const AxisOrientation &orientation = AxisHorizontal);
 		virtual ~Axis();
 
 		virtual QIcon icon() const;

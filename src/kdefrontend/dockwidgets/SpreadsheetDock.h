@@ -43,7 +43,7 @@ class SpreadsheetDock: public QWidget{
 	Q_OBJECT
 	  
 public:
-	SpreadsheetDock(QWidget *parent);
+	explicit SpreadsheetDock(QWidget *parent);
 	void setSpreadsheets(QList<Spreadsheet*>);
   
 private:

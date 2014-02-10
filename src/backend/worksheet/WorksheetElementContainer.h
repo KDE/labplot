@@ -39,7 +39,7 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
-		WorksheetElementContainer(const QString &name);
+		explicit WorksheetElementContainer(const QString &name);
 		virtual ~WorksheetElementContainer();
 
 		virtual QGraphicsItem* graphicsItem() const;

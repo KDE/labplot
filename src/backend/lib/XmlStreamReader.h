@@ -42,10 +42,10 @@ class XmlStreamReader : public QXmlStreamReader
 {
 	public:
 		XmlStreamReader();
-		XmlStreamReader(QIODevice * device);
-		XmlStreamReader(const QByteArray & data);
-		XmlStreamReader(const QString & data);
-		XmlStreamReader(const char * data);
+		explicit XmlStreamReader(QIODevice* device);
+		explicit XmlStreamReader(const QByteArray& data);
+		explicit XmlStreamReader(const QString& data);
+		explicit XmlStreamReader(const char* data);
 
 		QStringList warningStrings() const;
 		bool hasWarnings() const;

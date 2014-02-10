@@ -39,8 +39,9 @@ class LabelWidget: public QWidget{
 	Q_OBJECT
 
 public:
-	LabelWidget(QWidget *);
+	explicit LabelWidget(QWidget *);
 	~LabelWidget();
+
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
 

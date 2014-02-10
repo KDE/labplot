@@ -38,7 +38,7 @@
 class PlotArea;
 class PlotAreaPrivate: public QGraphicsItem{
 	public:
-		PlotAreaPrivate(PlotArea *owner);
+		explicit PlotAreaPrivate(PlotArea *owner);
 		virtual ~PlotAreaPrivate();
 
 		QString name() const;

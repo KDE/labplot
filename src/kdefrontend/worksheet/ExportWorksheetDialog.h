@@ -38,7 +38,7 @@ class ExportWorksheetDialog: public KDialog{
   Q_OBJECT
 
   public:
-	ExportWorksheetDialog(QWidget*);
+	explicit ExportWorksheetDialog(QWidget*);
 	QString path() const;
 	void setFileName(const QString&);
 	WorksheetView::ExportFormat exportFormat() const;

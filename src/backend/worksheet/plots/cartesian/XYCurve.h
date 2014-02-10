@@ -51,7 +51,7 @@ class XYCurve: public AbstractWorksheetElement {
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
 		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
 
-		XYCurve(const QString &name);
+		explicit XYCurve(const QString &name);
 		virtual ~XYCurve();
 
 		virtual QIcon icon() const;

@@ -35,7 +35,7 @@ class AsciiOptionsWidget : public QWidget{
     Q_OBJECT
 
 public:
-	AsciiOptionsWidget(QWidget*);
+	explicit AsciiOptionsWidget(QWidget*);
 	~AsciiOptionsWidget();
 
 private:

@@ -36,7 +36,7 @@ class WorksheetElementGroup: public WorksheetElementContainer {
 	Q_OBJECT
 
 	public:
-		WorksheetElementGroup(const QString &name);
+		explicit WorksheetElementGroup(const QString &name);
 		~WorksheetElementGroup();
 
 	protected:

@@ -37,7 +37,7 @@ class ProjectDock: public QWidget{
 	Q_OBJECT
 	
 public:
-	ProjectDock(QWidget *parent);
+	explicit ProjectDock(QWidget *parent);
 	void setProject(Project* project);
 	
 private:

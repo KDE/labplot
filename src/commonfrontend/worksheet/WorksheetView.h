@@ -48,7 +48,7 @@ class WorksheetView : public QGraphicsView{
 	Q_OBJECT
 
   public:
-	WorksheetView(Worksheet *worksheet);
+	explicit WorksheetView(Worksheet* worksheet);
 	virtual ~WorksheetView();
 
 	enum MouseMode{NavigationMode, ZoomMode, SelectionMode};

@@ -39,7 +39,7 @@ class AbstractFilter : public AbstractAspect
 	Q_OBJECT
 
 	public:
-		AbstractFilter(const QString& name) : AbstractAspect(name) {}
+		explicit AbstractFilter(const QString& name) : AbstractAspect(name) {}
 		virtual ~AbstractFilter() {}
 
 		virtual int inputCount() const = 0;

@@ -69,7 +69,7 @@ class AbstractColumn : public AbstractAspect
 		
 		class Private;
 
-		AbstractColumn(const QString& name);
+		explicit AbstractColumn(const QString& name);
 		virtual ~AbstractColumn() { aboutToBeDestroyed(this);}
 
 		virtual bool isReadOnly() const { return true; };

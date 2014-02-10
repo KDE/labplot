@@ -46,7 +46,7 @@ class XYCurveDock: public QWidget{
 	Q_OBJECT
 	
 public:
-	XYCurveDock(QWidget *parent);
+	explicit XYCurveDock(QWidget *parent);
 	void setModel(std::auto_ptr<AspectTreeModel>);
 	void setCurves(QList<XYCurve*>);
 	

@@ -59,7 +59,7 @@ class AbstractAspect : public QObject {
 		friend class AspectChildAddCmd;
 		friend class AspectChildRemoveCmd;
 		
-		AbstractAspect(const QString& name);
+		explicit AbstractAspect(const QString& name);
 		virtual ~AbstractAspect();
 
 		AbstractAspect * parentAspect() const;

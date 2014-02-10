@@ -36,7 +36,7 @@ class SettingsGeneralPage : public SettingsPage {
     Q_OBJECT
 
 public:
-    SettingsGeneralPage(QWidget* parent);
+    explicit SettingsGeneralPage(QWidget* parent);
 
     virtual void applySettings();
     virtual void restoreDefaults();

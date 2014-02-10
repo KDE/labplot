@@ -39,7 +39,7 @@ class AbstractPart : public AbstractAspect {
 	Q_OBJECT
 
 	public:
-		AbstractPart(const QString &name);
+		explicit AbstractPart(const QString &name);
 		virtual ~AbstractPart();
 		
 		virtual QWidget* view() const = 0;

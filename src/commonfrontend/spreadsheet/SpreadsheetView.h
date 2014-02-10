@@ -50,7 +50,7 @@ class SpreadsheetView : public QTableView{
     Q_OBJECT
 
 	public:
-		SpreadsheetView(Spreadsheet *spreadsheet);
+		explicit SpreadsheetView(Spreadsheet *spreadsheet);
 		virtual ~SpreadsheetView();
 				
 		void showComments(bool on = true);

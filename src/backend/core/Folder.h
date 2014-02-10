@@ -37,7 +37,7 @@ class Folder : public AbstractAspect
 	Q_OBJECT
 
 	public:
-		Folder(const QString &name);
+		explicit Folder(const QString &name);
 
 		virtual ~Folder();
 

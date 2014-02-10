@@ -44,7 +44,7 @@ class ProjectExplorer : public QWidget{
 	Q_OBJECT
 
 	public:
-		ProjectExplorer(QWidget* parent = 0);
+		explicit ProjectExplorer(QWidget* parent = 0);
 
 		void setCurrentAspect(const AbstractAspect*);
 		void setModel(QAbstractItemModel*);

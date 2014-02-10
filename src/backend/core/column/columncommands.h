@@ -43,7 +43,7 @@ class AbstractSimpleFilter;
 class ColumnSetModeCmd : public QUndoCommand
 {
 public:
-	ColumnSetModeCmd(Column::Private * col, AbstractColumn::ColumnMode mode, QUndoCommand * parent = 0 );
+	explicit ColumnSetModeCmd(Column::Private * col, AbstractColumn::ColumnMode mode, QUndoCommand * parent = 0 );
 	~ColumnSetModeCmd();
 
 	virtual void redo();
@@ -66,7 +66,7 @@ private:
 class ColumnFullCopyCmd : public QUndoCommand
 {
 public:
-	ColumnFullCopyCmd(Column::Private * col, const AbstractColumn * src, QUndoCommand * parent = 0 );
+	explicit ColumnFullCopyCmd(Column::Private * col, const AbstractColumn * src, QUndoCommand * parent = 0 );
 	~ColumnFullCopyCmd();
 
 	virtual void redo();
@@ -83,7 +83,7 @@ private:
 class ColumnPartialCopyCmd : public QUndoCommand
 {
 public:
-	ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent = 0 );
+	explicit ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent = 0 );
 	~ColumnPartialCopyCmd();
 
 	virtual void redo();
@@ -105,7 +105,7 @@ private:
 class ColumnInsertRowsCmd : public QUndoCommand
 {
 public:
-	ColumnInsertRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent = 0 );
+	explicit ColumnInsertRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent = 0 );
 	~ColumnInsertRowsCmd();
 
 	virtual void redo();
@@ -119,7 +119,7 @@ private:
 class ColumnRemoveRowsCmd : public QUndoCommand
 {
 public:
-	ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent = 0 );
+	explicit ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent = 0 );
 	~ColumnRemoveRowsCmd();
 
 	virtual void redo();
@@ -138,7 +138,7 @@ private:
 class ColumnSetPlotDesignationCmd : public QUndoCommand
 {
 public:
-	ColumnSetPlotDesignationCmd(Column::Private * col, AbstractColumn::PlotDesignation pd, QUndoCommand * parent = 0 );
+	explicit ColumnSetPlotDesignationCmd(Column::Private * col, AbstractColumn::PlotDesignation pd, QUndoCommand * parent = 0 );
 	~ColumnSetPlotDesignationCmd();
 
 	virtual void redo();
@@ -153,7 +153,7 @@ private:
 class ColumnSetWidthCmd : public QUndoCommand
 {
 public:
-	ColumnSetWidthCmd(Column::Private * col, int new_value, QUndoCommand * parent = 0 );
+	explicit ColumnSetWidthCmd(Column::Private * col, int new_value, QUndoCommand * parent = 0 );
 	~ColumnSetWidthCmd();
 
 	virtual void redo();
@@ -167,7 +167,7 @@ private:
 class ColumnClearCmd : public QUndoCommand
 {
 public:
-	ColumnClearCmd(Column::Private * col, QUndoCommand * parent = 0 );
+	explicit ColumnClearCmd(Column::Private * col, QUndoCommand * parent = 0 );
 	~ColumnClearCmd();
 
 	virtual void redo();
@@ -184,7 +184,7 @@ private:
 class ColumnSetFormulaCmd : public QUndoCommand
 {
 public:
-	ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent = 0 );
+	explicit ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent = 0 );
 	~ColumnSetFormulaCmd();
 
 	virtual void redo();
@@ -202,7 +202,7 @@ private:
 class ColumnClearFormulasCmd : public QUndoCommand
 {
 public:
-	ColumnClearFormulasCmd(Column::Private * col, QUndoCommand * parent = 0 );
+	explicit ColumnClearFormulasCmd(Column::Private * col, QUndoCommand * parent = 0 );
 	~ColumnClearFormulasCmd();
 
 	virtual void redo();
@@ -218,7 +218,7 @@ private:
 class ColumnSetTextCmd : public QUndoCommand
 {
 public:
-	ColumnSetTextCmd(Column::Private * col, int row, const QString& new_value, QUndoCommand * parent = 0 );
+	explicit ColumnSetTextCmd(Column::Private * col, int row, const QString& new_value, QUndoCommand * parent = 0 );
 	~ColumnSetTextCmd();
 
 	virtual void redo();
@@ -235,7 +235,7 @@ private:
 class ColumnSetValueCmd : public QUndoCommand
 {
 public:
-	ColumnSetValueCmd(Column::Private * col, int row, double new_value, QUndoCommand * parent = 0 );
+	explicit ColumnSetValueCmd(Column::Private * col, int row, double new_value, QUndoCommand * parent = 0 );
 	~ColumnSetValueCmd();
 
 	virtual void redo();
@@ -252,7 +252,7 @@ private:
 class ColumnSetDateTimeCmd : public QUndoCommand
 {
 public:
-	ColumnSetDateTimeCmd(Column::Private * col, int row, const QDateTime& new_value, QUndoCommand * parent = 0 );
+	explicit ColumnSetDateTimeCmd(Column::Private * col, int row, const QDateTime& new_value, QUndoCommand * parent = 0 );
 	~ColumnSetDateTimeCmd();
 
 	virtual void redo();
@@ -269,7 +269,7 @@ private:
 class ColumnReplaceTextsCmd : public QUndoCommand
 {
 public:
-	ColumnReplaceTextsCmd(Column::Private * col, int first, const QStringList& new_values, QUndoCommand * parent = 0 );
+	explicit ColumnReplaceTextsCmd(Column::Private * col, int first, const QStringList& new_values, QUndoCommand * parent = 0 );
 	~ColumnReplaceTextsCmd();
 
 	virtual void redo();
@@ -287,7 +287,7 @@ private:
 class ColumnReplaceValuesCmd : public QUndoCommand
 {
 public:
-	ColumnReplaceValuesCmd(Column::Private * col, int first, const QVector<double>& new_values, QUndoCommand * parent = 0 );
+	explicit ColumnReplaceValuesCmd(Column::Private * col, int first, const QVector<double>& new_values, QUndoCommand * parent = 0 );
 	~ColumnReplaceValuesCmd();
 
 	virtual void redo();
@@ -305,7 +305,7 @@ private:
 class ColumnReplaceDateTimesCmd : public QUndoCommand
 {
 public:
-	ColumnReplaceDateTimesCmd(Column::Private * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent = 0 );
+	explicit ColumnReplaceDateTimesCmd(Column::Private * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent = 0 );
 	~ColumnReplaceDateTimesCmd();
 
 	virtual void redo();

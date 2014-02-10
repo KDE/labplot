@@ -40,7 +40,7 @@ class QGraphicsSceneContextMenuEvent;
 
 class CartesianPlotLegendPrivate : public QGraphicsItem {
 	public:
-		CartesianPlotLegendPrivate(CartesianPlotLegend* owner);
+		explicit CartesianPlotLegendPrivate(CartesianPlotLegend* owner);
 
 		CartesianPlotLegend* const q;
 

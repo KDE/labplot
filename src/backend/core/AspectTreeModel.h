@@ -40,7 +40,7 @@ class AspectTreeModel : public QAbstractItemModel{
 	Q_OBJECT
 
 	public:
-		AspectTreeModel(AbstractAspect* root, QObject *parent=0);
+		explicit AspectTreeModel(AbstractAspect* root, QObject *parent=0);
 
 		enum CustomDataRole {
 			ContextMenuRole = Qt::UserRole,

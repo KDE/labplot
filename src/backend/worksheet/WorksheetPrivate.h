@@ -37,7 +37,7 @@ class QGraphicsScene;
 
 class WorksheetPrivate{
 	public:
-		WorksheetPrivate(Worksheet *owner);
+		explicit WorksheetPrivate(Worksheet *owner);
 		virtual ~WorksheetPrivate();
 
 		Worksheet * const q;
