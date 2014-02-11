@@ -25,6 +25,6 @@ To uninstall LabPlot execute
 # make uninstall
 
 ================================================================================
-To remove build files execute
+To remove all build files in the base directory execute
 
 # rm -rf build
