@@ -397,11 +397,11 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		PlotArea::BackgroundColorStyle style = 
 			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
-			ui.lBackgroundFirstColor->setText("Color");
+			ui.lBackgroundFirstColor->setText(i18n("Color"));
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
 		}else{
-			ui.lBackgroundFirstColor->setText("First Color");
+			ui.lBackgroundFirstColor->setText(i18n("First Color"));
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
@@ -421,7 +421,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
 	}else if(type == PlotArea::Pattern) {
-		ui.lBackgroundFirstColor->setText("Color");
+		ui.lBackgroundFirstColor->setText(i18n("Color"));
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->hide();
@@ -449,13 +449,13 @@ void CartesianPlotLegendDock::backgroundColorStyleChanged(int index) {
 	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::SingleColor){
-		ui.lBackgroundFirstColor->setText("Color");
+		ui.lBackgroundFirstColor->setText(i18n("Color"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
 		ui.lBackgroundBrushStyle->show();
 		ui.cbBackgroundBrushStyle->show();
 	}else{
-		ui.lBackgroundFirstColor->setText("First Color");
+		ui.lBackgroundFirstColor->setText(i18n("First Color"));
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
 		ui.lBackgroundBrushStyle->hide();
