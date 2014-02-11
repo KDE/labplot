@@ -19,7 +19,7 @@
     </widget>
    </item>
    <item row="0" column="4">
-    <widget class="QComboBox" name="cbCommentCharacter">
+    <widget class="KComboBox" name="cbCommentCharacter">
      <property name="editable">
       <bool>true</bool>
      </property>
@@ -46,7 +46,7 @@
     </widget>
    </item>
    <item row="1" column="4">
-    <widget class="QComboBox" name="cbSeparatingCharacter">
+    <widget class="KComboBox" name="cbSeparatingCharacter">
      <property name="editable">
       <bool>true</bool>
      </property>
@@ -149,7 +149,7 @@
  <customwidgets>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
+   <extends>KLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>

@@ -48,7 +48,7 @@
         </spacer>
        </item>
        <item row="0" column="2">
-        <widget class="QLineEdit" name="leName"/>
+        <widget class="KLineEdit" name="leName"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lComment">
@@ -58,7 +58,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLineEdit" name="leComment"/>
+        <widget class="KLineEdit" name="leComment"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="lXColumn">
@@ -141,7 +141,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="QComboBox" name="cbLineType">
+        <widget class="KComboBox" name="cbLineType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -178,7 +178,7 @@
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QComboBox" name="cbLineStyle"/>
+        <widget class="KComboBox" name="cbLineStyle"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lLineColor">
@@ -286,7 +286,7 @@
         </widget>
        </item>
        <item row="9" column="2">
-        <widget class="QComboBox" name="cbDropLineType">
+        <widget class="KComboBox" name="cbDropLineType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -303,7 +303,7 @@
         </widget>
        </item>
        <item row="10" column="2">
-        <widget class="QComboBox" name="cbDropLineStyle"/>
+        <widget class="KComboBox" name="cbDropLineStyle"/>
        </item>
        <item row="11" column="0">
         <widget class="QLabel" name="lDropLineColor">
@@ -521,7 +521,7 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QComboBox" name="cbSymbolStyle">
+        <widget class="KComboBox" name="cbSymbolStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -689,10 +689,10 @@
         </widget>
        </item>
        <item row="8" column="2">
-        <widget class="QComboBox" name="cbSymbolFillingStyle"/>
+        <widget class="KComboBox" name="cbSymbolFillingStyle"/>
        </item>
        <item row="12" column="2">
-        <widget class="QComboBox" name="cbSymbolBorderStyle"/>
+        <widget class="KComboBox" name="cbSymbolBorderStyle"/>
        </item>
        <item row="3" column="2">
         <widget class="QDoubleSpinBox" name="sbSymbolSize">
@@ -761,7 +761,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="QComboBox" name="cbValuesType">
+        <widget class="KComboBox" name="cbValuesType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -785,7 +785,7 @@
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QComboBox" name="cbValuesPosition"/>
+        <widget class="KComboBox" name="cbValuesPosition"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lValuesDistance">
@@ -908,7 +908,7 @@
         </widget>
        </item>
        <item row="9" column="2">
-        <widget class="QComboBox" name="cbValuesFormat"/>
+        <widget class="KComboBox" name="cbValuesFormat"/>
        </item>
        <item row="10" column="0">
         <widget class="QLabel" name="lValuesPrecision">
@@ -973,7 +973,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="QLineEdit" name="leValuesPrefix">
+        <widget class="KLineEdit" name="leValuesPrefix">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -990,7 +990,7 @@
         </widget>
        </item>
        <item row="14" column="2">
-        <widget class="QLineEdit" name="leValuesSuffix">
+        <widget class="KLineEdit" name="leValuesSuffix">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1088,7 +1088,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="QComboBox" name="cbXErrorType">
+        <widget class="KComboBox" name="cbXErrorType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1148,7 +1148,7 @@
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QComboBox" name="cbYErrorType"/>
+        <widget class="KComboBox" name="cbYErrorType"/>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="lYErrorDataPlus">
@@ -1201,7 +1201,7 @@
         </widget>
        </item>
        <item row="11" column="2">
-        <widget class="QComboBox" name="cbErrorBarsType"/>
+        <widget class="KComboBox" name="cbErrorBarsType"/>
        </item>
        <item row="12" column="0">
         <widget class="QLabel" name="lErrorBarsStyle">
@@ -1211,7 +1211,7 @@
         </widget>
        </item>
        <item row="12" column="2">
-        <widget class="QComboBox" name="cbErrorBarsStyle"/>
+        <widget class="KComboBox" name="cbErrorBarsStyle"/>
        </item>
        <item row="13" column="0">
         <widget class="QLabel" name="lErrorBarsCapSize">

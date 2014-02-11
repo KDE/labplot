@@ -274,7 +274,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="QComboBox" name="cbXScaling"/>
+        <widget class="KComboBox" name="cbXScaling"/>
        </item>
        <item row="14" column="0">
         <spacer name="verticalSpacer_6">
@@ -367,7 +367,7 @@
         </widget>
        </item>
        <item row="19" column="2">
-        <widget class="QComboBox" name="cbYScaling"/>
+        <widget class="KComboBox" name="cbYScaling"/>
        </item>
        <item row="21" column="0">
         <widget class="QCheckBox" name="chkVisible">
@@ -459,7 +459,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="cbXBreakNumber">
+           <widget class="KComboBox" name="cbXBreakNumber">
             <property name="maximumSize">
              <size>
               <width>40</width>
@@ -482,7 +482,7 @@
         </widget>
        </item>
        <item row="1" column="2" colspan="3">
-        <widget class="QLineEdit" name="leXBreakStart"/>
+        <widget class="KLineEdit" name="leXBreakStart"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="lXBreakEnd">
@@ -492,7 +492,7 @@
         </widget>
        </item>
        <item row="2" column="2" colspan="3">
-        <widget class="QLineEdit" name="leXBreakEnd"/>
+        <widget class="KLineEdit" name="leXBreakEnd"/>
        </item>
        <item row="3" column="0" colspan="2">
         <widget class="QLabel" name="lXBreakPosition">
@@ -614,7 +614,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="cbYBreakNumber">
+           <widget class="KComboBox" name="cbYBreakNumber">
             <property name="maximumSize">
              <size>
               <width>40</width>
@@ -637,7 +637,7 @@
         </widget>
        </item>
        <item row="8" column="2" colspan="3">
-        <widget class="QLineEdit" name="leYBreakStart"/>
+        <widget class="KLineEdit" name="leYBreakStart"/>
        </item>
        <item row="9" column="0">
         <widget class="QLabel" name="lYBreakEnd">
@@ -647,7 +647,7 @@
         </widget>
        </item>
        <item row="9" column="2" colspan="3">
-        <widget class="QLineEdit" name="leYBreakEnd"/>
+        <widget class="KLineEdit" name="leYBreakEnd"/>
        </item>
        <item row="10" column="0" colspan="2">
         <widget class="QLabel" name="lYBreakPosition">
@@ -684,7 +684,7 @@
         </widget>
        </item>
        <item row="11" column="2" colspan="3">
-        <widget class="QComboBox" name="cbYBreakStyle"/>
+        <widget class="KComboBox" name="cbYBreakStyle"/>
        </item>
        <item row="3" column="2" colspan="3">
         <widget class="QSpinBox" name="sbXBreakPosition">
@@ -694,7 +694,7 @@
         </widget>
        </item>
        <item row="4" column="2" colspan="3">
-        <widget class="QComboBox" name="cbXBreakStyle"/>
+        <widget class="KComboBox" name="cbXBreakStyle"/>
        </item>
       </layout>
      </widget>
@@ -704,7 +704,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="4" column="2">
-        <widget class="QComboBox" name="cbBackgroundImageStyle"/>
+        <widget class="KComboBox" name="cbBackgroundImageStyle"/>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lBackground">
@@ -743,7 +743,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="QComboBox" name="cbBackgroundType">
+        <widget class="KComboBox" name="cbBackgroundType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -793,7 +793,7 @@
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QComboBox" name="cbBackgroundColorStyle"/>
+        <widget class="KComboBox" name="cbBackgroundColorStyle"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lBackgroundImageStyle">
@@ -897,7 +897,7 @@
         </widget>
        </item>
        <item row="11" column="2">
-        <widget class="QComboBox" name="cbBorderStyle">
+        <widget class="KComboBox" name="cbBorderStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1074,7 +1074,7 @@
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="QComboBox" name="cbBackgroundBrushStyle"/>
+        <widget class="KComboBox" name="cbBackgroundBrushStyle"/>
        </item>
       </layout>
      </widget>
@@ -1090,7 +1090,7 @@
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
+   <extends>KLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>

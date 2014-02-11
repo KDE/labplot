@@ -52,7 +52,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbFunctions" >
+          <widget class="KComboBox" name="cbFunctions" >
            <property name="toolTip" >
             <string>Choose a function to add to the text field below</string>
            </property>
@@ -82,7 +82,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbConstants" >
+          <widget class="KComboBox" name="cbConstants" >
            <property name="toolTip" >
             <string>Choose a constant to add to the text field below</string>
            </property>
@@ -105,7 +105,7 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLineEdit" name="leFunction" >
+       <widget class="KLineEdit" name="leFunction" >
         <property name="text" >
          <string/>
         </property>
@@ -233,7 +233,7 @@
        </widget>
       </item>
       <item row="1" column="3" >
-       <widget class="QLineEdit" name="leAxis1Start" />
+       <widget class="KLineEdit" name="leAxis1Start" />
       </item>
       <item row="1" column="4" >
        <spacer>
@@ -259,7 +259,7 @@
        </widget>
       </item>
       <item row="1" column="6" >
-       <widget class="QLineEdit" name="leAxis1End" />
+       <widget class="KLineEdit" name="leAxis1End" />
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="lAxis1Number" >
@@ -350,7 +350,7 @@
        </widget>
       </item>
       <item row="1" column="3" >
-       <widget class="QLineEdit" name="leAxis2Start" />
+       <widget class="KLineEdit" name="leAxis2Start" />
       </item>
       <item row="1" column="4" >
        <spacer>
@@ -376,7 +376,7 @@
        </widget>
       </item>
       <item row="1" column="6" >
-       <widget class="QLineEdit" name="leAxis2End" />
+       <widget class="KLineEdit" name="leAxis2End" />
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="lAxis2Number" >

@@ -54,7 +54,7 @@
         </spacer>
        </item>
        <item row="0" column="2">
-        <widget class="QLineEdit" name="leName"/>
+        <widget class="KLineEdit" name="leName"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lComment">
@@ -70,7 +70,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLineEdit" name="leComment">
+        <widget class="KLineEdit" name="leComment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -127,7 +127,7 @@ Otherwise resize the canvas only.</string>
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="QComboBox" name="cbSize"/>
+        <widget class="KComboBox" name="cbSize"/>
        </item>
        <item row="6" column="0">
         <widget class="QLabel" name="lOrientation">
@@ -137,7 +137,7 @@ Otherwise resize the canvas only.</string>
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QComboBox" name="cbOrientation"/>
+        <widget class="KComboBox" name="cbOrientation"/>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="lWidth">
@@ -217,7 +217,7 @@ Otherwise resize the canvas only.</string>
         </spacer>
        </item>
        <item row="0" column="2">
-        <widget class="QComboBox" name="cbBackgroundType">
+        <widget class="KComboBox" name="cbBackgroundType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -267,7 +267,7 @@ Otherwise resize the canvas only.</string>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QComboBox" name="cbBackgroundColorStyle"/>
+        <widget class="KComboBox" name="cbBackgroundColorStyle"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lBackgroundImageStyle">
@@ -277,7 +277,7 @@ Otherwise resize the canvas only.</string>
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QComboBox" name="cbBackgroundImageStyle"/>
+        <widget class="KComboBox" name="cbBackgroundImageStyle"/>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="lBackgroundFirstColor">
@@ -355,7 +355,7 @@ Otherwise resize the canvas only.</string>
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QComboBox" name="cbBackgroundBrushStyle"/>
+        <widget class="KComboBox" name="cbBackgroundBrushStyle"/>
        </item>
       </layout>
      </widget>
@@ -632,7 +632,7 @@ Otherwise resize the canvas only.</string>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
+   <extends>KLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>

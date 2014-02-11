@@ -203,7 +203,7 @@
     </widget>
    </item>
    <item row="4" column="4" >
-    <widget class="QComboBox" name="cbFillBrushStyle" />
+    <widget class="KComboBox" name="cbFillBrushStyle" />
    </item>
    <item row="5" column="2" colspan="2" >
     <widget class="QLabel" name="lThreshold" >
@@ -213,7 +213,7 @@
     </widget>
    </item>
    <item row="5" column="4" >
-    <widget class="QLineEdit" name="leThreshold" >
+    <widget class="KLineEdit" name="leThreshold" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
        <horstretch>0</horstretch>
@@ -276,7 +276,7 @@
     </widget>
    </item>
    <item row="10" column="4" >
-    <widget class="QLineEdit" name="leLevelsNumber" >
+    <widget class="KLineEdit" name="leLevelsNumber" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
        <horstretch>0</horstretch>
