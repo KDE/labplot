@@ -14,8 +14,8 @@ The most current stable version is avaible here:
 http://labplot.sourceforge.net/download/
 
 If you want to see the current state of the project or to follow the development, checkout
-our subversion repository:
-svn checkout svn://svn.code.sf.net/p/labplot/code/2.0
+our git repository:
+git clone git://anongit.kde.org/labplot
 
 If you're interested in following the development of the project or would like to conribute,
 consider subscribing to labplot-devel. See http://sourceforge.net/p/labplot/mailman/?source=navbar
