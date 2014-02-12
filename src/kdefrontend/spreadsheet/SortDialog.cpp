@@ -82,7 +82,7 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : KDialog( parent, fl )
 	setButtonText(KDialog::Ok, i18n("&Sort"));
 
 	connect(this, SIGNAL(okClicked()), this, SLOT(sort()));
-    connect( cbType, SIGNAL( currentIndexChanged(int) ), this, SLOT(changeType(int)));
+    connect( cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
 
 	this->resize(400,0);
 }

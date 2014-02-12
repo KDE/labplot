@@ -144,8 +144,8 @@ void CartesianPlot::init(){
 	initMenus();
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)),
-			this, SLOT(childRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)));
+	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+			this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -633,9 +633,9 @@ void CartesianPlot::addCurve(){
 	//update the legend on changes of the name, line and symbol styles
 	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(linePenChanged(const QPen&)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(symbolsPenChanged(const QPen&)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
 }
 
 void CartesianPlot::addLegend(){

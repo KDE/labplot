@@ -78,7 +78,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.bSaveFilter->setIcon( KIcon("document-save") );
 	ui.bRefreshPreview->setIcon( KIcon("view-refresh") );
 
-    connect( ui.kleFileName, SIGNAL(textChanged (const QString&)), SLOT(fileNameChanged(const QString&)) );
+    connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
     connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
     connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );

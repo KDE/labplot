@@ -72,9 +72,9 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	// text properties
 	connect(ui.tbTexUsed, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
-	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(const QTextCharFormat&)), 
-			this, SLOT(charFormatChanged(const QTextCharFormat&)));
-	connect(ui.kcbFontColor, SIGNAL(changed(const QColor&)), this, SLOT(fontColorChanged(const QColor&)));
+	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)), 
+			this, SLOT(charFormatChanged(QTextCharFormat)));
+	connect(ui.kcbFontColor, SIGNAL(changed(QColor)), this, SLOT(fontColorChanged(QColor)));
 	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
 	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
 	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
@@ -82,7 +82,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
 	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
-	connect(ui.kfontRequester, SIGNAL(fontSelected(const QFont&)), this, SLOT(fontChanged(const QFont&)));
+	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
 	connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
 	
 	// geometry
@@ -148,14 +148,14 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 }
 
 void LabelWidget::initConnections() {
-	connect( m_label, SIGNAL(textWrapperChanged(const TextLabel::TextWrapper&)),
-			 this, SLOT(labelTextWrapperChanged(const TextLabel::TextWrapper&)) );
-	connect( m_label, SIGNAL(teXFontSizeChanged(const int)),
-			 this, SLOT(labelTeXFontSizeChanged(const int)) );
-	connect( m_label, SIGNAL(teXFontColorChanged(const QColor)),
-			 this, SLOT(labelTeXFontColorChanged(const QColor)) );
-	connect( m_label, SIGNAL(positionChanged(const TextLabel::PositionWrapper&)),
-			 this, SLOT(labelPositionChanged(const TextLabel::PositionWrapper&)) );
+	connect( m_label, SIGNAL(textWrapperChanged(TextLabel::TextWrapper)),
+			 this, SLOT(labelTextWrapperChanged(TextLabel::TextWrapper)) );
+	connect( m_label, SIGNAL(teXFontSizeChanged(int)),
+			 this, SLOT(labelTeXFontSizeChanged(int)) );
+	connect( m_label, SIGNAL(teXFontColorChanged(QColor)),
+			 this, SLOT(labelTeXFontColorChanged(QColor)) );
+	connect( m_label, SIGNAL(positionChanged(TextLabel::PositionWrapper)),
+			 this, SLOT(labelPositionChanged(TextLabel::PositionWrapper)) );
 	connect( m_label, SIGNAL(horizontalAlignmentChanged(TextLabel::HorizontalAlignment)),
 			 this, SLOT(labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment)) );
 	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),

@@ -237,7 +237,7 @@ void FileDataSource::watch() {
   if (m_fileWatched) {
 	  if (!m_fileSystemWatcher) {
 		m_fileSystemWatcher = new QFileSystemWatcher();
-		connect (m_fileSystemWatcher, SIGNAL(fileChanged(const QString&)), this, SLOT(fileChanged()));
+		connect (m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged()));
 	  }
 
 	  if ( !m_fileSystemWatcher->files().contains(m_fileName) )

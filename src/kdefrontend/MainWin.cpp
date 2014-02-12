@@ -198,7 +198,7 @@ void MainWin::initActions() {
 	//add some standard actions
  	action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
 	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
-  	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(const KUrl&)),actionCollection());
+  	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(KUrl)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
@@ -549,8 +549,8 @@ bool MainWin::newProject(){
 		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
 		m_projectExplorerDock->setWidget(m_projectExplorer);
 						
-		connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect *)),
-			this, SLOT(handleCurrentAspectChanged(AbstractAspect *)));
+		connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect*)),
+			this, SLOT(handleCurrentAspectChanged(AbstractAspect*)));
 			
 		//Properties dock
 		m_propertiesDock = new QDockWidget(this);
@@ -574,14 +574,14 @@ bool MainWin::newProject(){
 	updateGUIOnProjectChanges();
 
 	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)),
+	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 			this, SLOT(handleAspectRemoved(const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_project, SIGNAL(statusInfo(const QString&)), statusBar(), SLOT(showMessage(const QString&)));
+	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
 	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*, QMenu*)), this, SLOT(createFolderContextMenu(const Folder*, QMenu*)));
+	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*,QMenu*)), this, SLOT(createFolderContextMenu(const Folder*,QMenu*)));
 	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
 
  	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
@@ -962,8 +962,8 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	if (!part) return;
 	PartMdiView *win = part->mdiSubWindow();
 	Q_ASSERT(win);
-	disconnect(win, SIGNAL(statusChanged(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
-		this, SLOT(handleSubWindowStatusChange(PartMdiView *, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
+	disconnect(win, SIGNAL(statusChanged(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)),
+		this, SLOT(handleSubWindowStatusChange(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)));
 	m_mdiArea->removeSubWindow(win);
 	updateGUI();
 }
@@ -998,8 +998,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		PartMdiView* win = part->mdiSubWindow();
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
 			m_mdiArea->addSubWindow(win);
-			connect(win, SIGNAL(statusChanged(PartMdiView*, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)),
-				this, SLOT(handleSubWindowStatusChange(PartMdiView*, PartMdiView::SubWindowStatus, PartMdiView::SubWindowStatus)));
+			connect(win, SIGNAL(statusChanged(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)),
+				this, SLOT(handleSubWindowStatusChange(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)));
 		}
 		win->show();
 		m_mdiArea->setActiveSubWindow(win);
@@ -1221,8 +1221,8 @@ void MainWin::historyDialog(){
 */
 void MainWin::importFileDialog(){
 	m_importFileDialog = new ImportFileDialog(this);
-	connect (m_importFileDialog, SIGNAL(newSpreadsheetRequested(const QString&)),
-			 this, SLOT(newSpreadsheetForImportFileDialog(const QString&)));
+	connect (m_importFileDialog, SIGNAL(newSpreadsheetRequested(QString)),
+			 this, SLOT(newSpreadsheetForImportFileDialog(QString)));
 	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
 	m_importFileDialog->setModel( model );
 	

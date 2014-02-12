@@ -133,7 +133,7 @@ void ColumnDock::setColumns(QList<Column*> list){
 	connect(m_column, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(columnDescriptionChanged(const AbstractAspect*)));
 	connect(m_column->outputFilter(), SIGNAL(formatChanged()),this, SLOT(columnFormatChanged()));
 	connect(m_column->outputFilter(), SIGNAL(digitsChanged()),this, SLOT(columnPrecisionChanged()));
-	connect(m_column, SIGNAL(plotDesignationChanged(const AbstractColumn*)),this, SLOT(columnPlotDesignationChanged(const AbstractColumn *)));
+	connect(m_column, SIGNAL(plotDesignationChanged(const AbstractColumn*)),this, SLOT(columnPlotDesignationChanged(const AbstractColumn*)));
 
 	m_initializing=false;
 }

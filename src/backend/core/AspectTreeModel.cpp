@@ -78,15 +78,15 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	  m_filterCaseSensitivity(Qt::CaseInsensitive),
 	  m_matchCompleteWord(false) {
 
-	connect(m_root, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)),
-		this, SLOT(aspectDescriptionChanged(const AbstractAspect *)));
-	connect(m_root, SIGNAL(aspectAboutToBeAdded(const AbstractAspect *,const AbstractAspect *,const AbstractAspect *)),
-		this, SLOT(aspectAboutToBeAdded(const AbstractAspect *,const AbstractAspect *,const AbstractAspect*)));
-	connect(m_root, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)),
-		this, SLOT(aspectAboutToBeRemoved(const AbstractAspect *)));
-	connect(m_root, SIGNAL(aspectAdded(const AbstractAspect *)),
-		this, SLOT(aspectAdded(const AbstractAspect *)));
-	connect(m_root, SIGNAL(aspectRemoved(const AbstractAspect *,const AbstractAspect *, const AbstractAspect*)),
+	connect(m_root, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
+		this, SLOT(aspectDescriptionChanged(const AbstractAspect*)));
+	connect(m_root, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+		this, SLOT(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	connect(m_root, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+		this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
+	connect(m_root, SIGNAL(aspectAdded(const AbstractAspect*)),
+		this, SLOT(aspectAdded(const AbstractAspect*)));
+	connect(m_root, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 		this, SLOT(aspectRemoved()));
 	connect(m_root, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)),
 		this, SLOT(aspectHiddenAboutToChange(const AbstractAspect*)));

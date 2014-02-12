@@ -103,9 +103,9 @@ FunctionWidget::FunctionWidget(QWidget* parent, const Plot::PlotType& type)
 	//SLOTS
 	connect( ui.bClear, SIGNAL(clicked()), ui.leFunction, SLOT(clear()) );
 	connect( ui.bSync, SIGNAL(toggled(bool)),  SLOT(syncStatusChangedSlot(bool)) );
- 	connect( ui.cbFunctions,SIGNAL(activated(const QString&)),SLOT(insertSlot(const QString&)) );
-	connect( ui.cbConstants,SIGNAL(activated(const QString&)),SLOT(insertSlot(const QString&)) );
-	connect( ui.leFunction, SIGNAL(textChanged (const QString&)), SLOT(functionChangedSlot(const QString&)) );
+ 	connect( ui.cbFunctions,SIGNAL(activated(QString)),SLOT(insertSlot(QString)) );
+	connect( ui.cbConstants,SIGNAL(activated(QString)),SLOT(insertSlot(QString)) );
+	connect( ui.leFunction, SIGNAL(textChanged(QString)), SLOT(functionChangedSlot(QString)) );
 
 	emit functionChanged(ui.leFunction->text());
 }

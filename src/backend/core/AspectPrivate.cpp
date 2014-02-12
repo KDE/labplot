@@ -55,24 +55,24 @@ void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)
 	// Can't handle this case here since two undo commands have to be created.
 	Q_ASSERT(child->m_aspect_private->m_parent == 0);
 	child->m_aspect_private->m_parent = m_owner;
-	connect(child, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect *)), 
-			m_owner, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect *)));
-	connect(child, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)), 
-			m_owner, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)));
-	connect(child, SIGNAL(aspectAboutToBeAdded(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
-			m_owner, SIGNAL(aspectAboutToBeAdded(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)));
-	connect(child, SIGNAL(aspectAdded(const AbstractAspect *)),
-			m_owner, SIGNAL(aspectAdded(const AbstractAspect *)));
-	connect(child, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)),
-			m_owner, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect *)));
-	connect(child, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)),
-			m_owner, SIGNAL(aspectRemoved(const AbstractAspect *, const AbstractAspect *, const AbstractAspect *)));
-	connect(child, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect *)),
-			m_owner, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect *)));
+	connect(child, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)), 
+			m_owner, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)));
+	connect(child, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), 
+			m_owner, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)));
+	connect(child, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+			m_owner, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	connect(child, SIGNAL(aspectAdded(const AbstractAspect*)),
+			m_owner, SIGNAL(aspectAdded(const AbstractAspect*)));
+	connect(child, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+			m_owner, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)));
+	connect(child, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+			m_owner, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	connect(child, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)),
+			m_owner, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)));
 	connect(child, SIGNAL(aspectHiddenChanged(const AbstractAspect*)),
 			m_owner, SIGNAL(aspectHiddenChanged(const AbstractAspect*)));
-	connect(child, SIGNAL(statusInfo(const QString&)),
-			m_owner, SIGNAL(statusInfo(const QString&)));
+	connect(child, SIGNAL(statusInfo(QString)),
+			m_owner, SIGNAL(statusInfo(QString)));
 }
 
 int AbstractAspect::Private::indexOfChild(const AbstractAspect *child) const

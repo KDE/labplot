@@ -52,7 +52,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
 	addItem("");
 	setCurrentIndex(0);
 	
-	connect(&m_treeView, SIGNAL(activated(const QModelIndex&)), this, SLOT(treeViewIndexActivated(const QModelIndex&) ) );
+	connect(&m_treeView, SIGNAL(activated(QModelIndex)), this, SLOT(treeViewIndexActivated(QModelIndex)) );
 }
 
 void TreeViewComboBox::setTopLevelClasses(QList<const char *> list){

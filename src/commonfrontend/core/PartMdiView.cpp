@@ -47,8 +47,8 @@ PartMdiView::PartMdiView(AbstractPart *part, QWidget * embedded_view)
 {
 	setWindowIcon(m_part->icon());
 	handleAspectDescriptionChanged(m_part);
-	connect(m_part, SIGNAL(aspectDescriptionChanged(const AbstractAspect *)), 
-		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect *)));
+	connect(m_part, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), 
+		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect*)));
 	connect(m_part, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	setWidget(embedded_view);

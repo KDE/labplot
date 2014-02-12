@@ -69,7 +69,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	
 	connect( ui.cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect( ui.kleFileName, SIGNAL(textChanged(const QString&)), this, SLOT(fileNameChanged(const QString&)) );
+	connect( ui.kleFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Export worksheet"));

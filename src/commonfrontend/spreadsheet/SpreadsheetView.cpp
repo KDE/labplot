@@ -98,7 +98,7 @@ void SpreadsheetView::init(){
 	m_horizontalHeader->installEventFilter(this);
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
-	connect(m_horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
+	connect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 	
 	// vertical header
 	QHeaderView * v_header = verticalHeader();
@@ -140,12 +140,12 @@ void SpreadsheetView::init(){
 	//selection relevant connections
 	QItemSelectionModel * sel_model = selectionModel();
 
-	connect(sel_model, SIGNAL(currentColumnChanged(const QModelIndex&, const QModelIndex&)), 
-		this, SLOT(currentColumnChanged(const QModelIndex&, const QModelIndex&)));
-	connect(sel_model, SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)),
-		this, SLOT(selectionChanged(const QItemSelection&,const QItemSelection&)));
-	connect(sel_model, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), 
-			this, SLOT(selectionChanged(const QItemSelection&, const QItemSelection&) ) );
+	connect(sel_model, SIGNAL(currentColumnChanged(QModelIndex,QModelIndex)), 
+		this, SLOT(currentColumnChanged(QModelIndex,QModelIndex)));
+	connect(sel_model, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+		this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
+	connect(sel_model, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), 
+			this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
 			
 	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) ); 
 	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) ); 
@@ -370,9 +370,9 @@ void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect * aspect
 }
 
 void SpreadsheetView::updateSectionSize(const Column* col){
-	disconnect(m_horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
+	disconnect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 	m_horizontalHeader->resizeSection(m_spreadsheet->indexOfChild<Column>(col), col->width());
-	connect(m_horizontalHeader, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
+	connect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 }
 
 //TODO what for?!?

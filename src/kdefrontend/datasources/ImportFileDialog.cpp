@@ -100,7 +100,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
   list<<"Folder"<<"Spreadsheet";
   cbAddTo->setTopLevelClasses(list);
   hLayout->addWidget( cbAddTo);
-  connect( cbAddTo, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(currentAddToIndexChanged(const QModelIndex&)) );
+  connect( cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)) );
 	
   bNewSpreadsheet = new QPushButton(frameAddTo);
   bNewSpreadsheet->setIcon(KIcon("insert-table"));

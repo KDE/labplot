@@ -109,7 +109,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) : m_projectLoading(false) {
 	m_columnToHide=0;
 	this->createActions();
 
-	connect(leFilter, SIGNAL(textChanged(const QString&)), this, SLOT(filterTextChanged(const QString&)));
+	connect(leFilter, SIGNAL(textChanged(QString)), this, SLOT(filterTextChanged(QString)));
 	connect(bFilterOptions, SIGNAL(toggled(bool)), this, SLOT(toggleFilterOptionsMenu(bool)));
 }
 
@@ -195,14 +195,14 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	AspectTreeModel* treeModel = qobject_cast<AspectTreeModel*>(model);
 
 	connect(treeModel, SIGNAL(renameRequested(QModelIndex)), m_treeView, SLOT(edit(QModelIndex)));
-	connect(treeModel, SIGNAL(indexSelected(const QModelIndex&)), this, SLOT(selectIndex(const QModelIndex&) ));
-	connect(treeModel, SIGNAL(indexDeselected(const QModelIndex&)), this, SLOT(deselectIndex(const QModelIndex&) ));
+	connect(treeModel, SIGNAL(indexSelected(QModelIndex)), this, SLOT(selectIndex(QModelIndex)));
+	connect(treeModel, SIGNAL(indexDeselected(QModelIndex)), this, SLOT(deselectIndex(QModelIndex)));
 	connect(treeModel, SIGNAL(hiddenAspectSelected(const AbstractAspect*)), this, SIGNAL(hiddenAspectSelected(const AbstractAspect*)));
 	
-	connect(m_treeView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-							this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)) );
-	connect(m_treeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), 
-					this, SLOT(selectionChanged(const QItemSelection&, const QItemSelection&) ) );
+	connect(m_treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+							this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
+	connect(m_treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), 
+					this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
 	
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
@@ -220,7 +220,7 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 }
 
 void ProjectExplorer::setProject( const Project* project) {
-	connect(project, SIGNAL(aspectAdded(const AbstractAspect *)), this, SLOT(aspectAdded(const AbstractAspect *)));
+	connect(project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(aspectAdded(const AbstractAspect*)));
 	connect(project, SIGNAL(loadStarted()), this, SLOT(projectLoadStarted()));
 	connect(project, SIGNAL(loadFinished()), this, SLOT(projectLoadFinished()));
 	connect(project, SIGNAL(requestSaveState(QXmlStreamWriter*)), this, SLOT(save(QXmlStreamWriter*)));

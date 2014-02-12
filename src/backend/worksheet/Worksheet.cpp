@@ -69,8 +69,8 @@ Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(this, SIGNAL( aspectRemoved(const AbstractAspect*, const AbstractAspect* , const AbstractAspect*)),
-		this, SLOT(handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*)) );
+	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+		this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
 	init();
 }
 
@@ -165,7 +165,7 @@ QMenu *Worksheet::createContextMenu() {
 QWidget *Worksheet::view() const {
 	if (!m_view) {
 		m_view = new WorksheetView(const_cast<Worksheet *>(this));
-		connect(m_view, SIGNAL(statusInfo(const QString&)), this, SIGNAL(statusInfo(const QString&)));
+		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
 	return m_view;
 }

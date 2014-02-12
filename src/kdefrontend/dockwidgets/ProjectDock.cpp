@@ -43,9 +43,9 @@ ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(0), m_init
 	ui.setupUi(this);
 
 	// SLOTS
-	connect(ui.leName, SIGNAL( textChanged(const QString&) ), this, SLOT( titleChanged(const QString&) ) );
-	connect(ui.leAuthor, SIGNAL( textChanged(const QString&) ), this, SLOT( authorChanged(const QString&) ) );
-	connect(ui.tbComment, SIGNAL( textChanged() ), this, SLOT( commentChanged() ) );
+	connect(ui.leName, SIGNAL(textChanged(QString)), this, SLOT(titleChanged(QString)) );
+	connect(ui.leAuthor, SIGNAL(textChanged(QString)), this, SLOT(authorChanged(QString)) );
+	connect(ui.tbComment, SIGNAL(textChanged()), this, SLOT(commentChanged()) );
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	ui.verticalLayout->addWidget(templateHandler, 0, 0);

@@ -120,8 +120,8 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
-	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
-	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
+	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
+	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
 
 	//Layout
@@ -139,7 +139,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	this->retranslateUi();
 }
@@ -173,15 +173,15 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	this->worksheetLayoutChanged(m_worksheet->layout());
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
-	connect(m_worksheet, SIGNAL(pageRectChanged(const QRectF&)),this, SLOT(worksheetPageRectChanged(const QRectF&)));
+	connect(m_worksheet, SIGNAL(pageRectChanged(QRectF)),this, SLOT(worksheetPageRectChanged(QRectF)));
 
 	connect(m_worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
 	connect(m_worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
 	connect(m_worksheet,SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)),this,SLOT(worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
 	connect(m_worksheet,SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)),this,SLOT(worksheetBackgroundBrushStyleChanged(Qt::BrushStyle)));
-	connect(m_worksheet,SIGNAL(backgroundFirstColorChanged(const QColor&)),this,SLOT(worksheetBackgroundFirstColorChanged(const QColor&)));
-	connect(m_worksheet,SIGNAL(backgroundSecondColorChanged(const QColor&)),this,SLOT(worksheetBackgroundSecondColorChanged(const QColor&)));
-	connect(m_worksheet,SIGNAL(backgroundFileNameChanged(const QString&)),this,SLOT(worksheetBackgroundFileNameChanged(const QString&)));
+	connect(m_worksheet,SIGNAL(backgroundFirstColorChanged(QColor)),this,SLOT(worksheetBackgroundFirstColorChanged(QColor)));
+	connect(m_worksheet,SIGNAL(backgroundSecondColorChanged(QColor)),this,SLOT(worksheetBackgroundSecondColorChanged(QColor)));
+	connect(m_worksheet,SIGNAL(backgroundFileNameChanged(QString)),this,SLOT(worksheetBackgroundFileNameChanged(QString)));
 	connect(m_worksheet,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(worksheetBackgroundOpacityChanged(float)));
 
 	connect(m_worksheet,SIGNAL(layoutChanged(Worksheet::Layout)),this,SLOT(worksheetLayoutChanged(Worksheet::Layout)));

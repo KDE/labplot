@@ -96,10 +96,10 @@ FunctionPlotDialog::FunctionPlotDialog(MainWin *mw, const Plot::PlotType& type)
 	this->setWindowIcon(QIcon(newFunction_xpm));
 
 	//SLOTs
-	connect( this, SIGNAL( applyClicked() ), this, SLOT( apply() ) );
- 	connect( this, SIGNAL( okClicked() ), this, SLOT( save() ) );
-	connect( this, SIGNAL( changed( bool ) ), this, SLOT( enableButtonApply( bool ) ) ); //TODO
-	connect(functionWidget, SIGNAL( functionChanged(const QString&) ), labelWidget, SLOT( setText(const QString&) ) );
+	connect( this, SIGNAL(applyClicked()), this, SLOT(apply()) );
+ 	connect( this, SIGNAL(okClicked()), this, SLOT(save()) );
+	connect( this, SIGNAL(changed(bool)), this, SLOT(enableButtonApply(bool)) ); //TODO
+	connect(functionWidget, SIGNAL(functionChanged(QString)), labelWidget, SLOT(setText(QString)) );
 
 	functionWidget->init(); //call this to trigger the signal in FunctionWidget in order to update of the Label text
 	resize( QSize(200,400) );

@@ -99,7 +99,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	
 	//"Line"-tab
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
-	connect( ui.kcbLineColor, SIGNAL(changed (const QColor&)), this, SLOT(lineColorChanged(const QColor&)) );
+	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
 	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );	
 
@@ -108,9 +108,9 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.cbMajorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksTypeChanged(int)) );
 	connect( ui.sbMajorTicksNumber, SIGNAL(valueChanged(int)), this, SLOT(majorTicksNumberChanged(int)) );
  	connect( ui.leMajorTicksIncrement, SIGNAL(returnPressed()), this, SLOT(majorTicksIncrementChanged()) );
-	connect( cbMajorTicksColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(majorTicksColumnChanged(const QModelIndex&)) );
+	connect( cbMajorTicksColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(majorTicksColumnChanged(QModelIndex)) );
 	connect( ui.cbMajorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksLineStyleChanged(int)) );
-	connect( ui.kcbMajorTicksColor, SIGNAL(changed (const QColor&)), this, SLOT(majorTicksColorChanged(const QColor&)) );
+	connect( ui.kcbMajorTicksColor, SIGNAL(changed(QColor)), this, SLOT(majorTicksColorChanged(QColor)) );
 	connect( ui.sbMajorTicksWidth, SIGNAL(valueChanged(double)), this, SLOT(majorTicksWidthChanged(double)) );
 	connect( ui.sbMajorTicksLength, SIGNAL(valueChanged(double)), this, SLOT(majorTicksLengthChanged(double)) );
 	connect( ui.sbMajorTicksOpacity, SIGNAL(valueChanged(int)), this, SLOT(majorTicksOpacityChanged(int)) );
@@ -120,9 +120,9 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.cbMinorTicksType, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksTypeChanged(int)) );
 	connect( ui.sbMinorTicksNumber, SIGNAL(valueChanged(int)), this, SLOT(minorTicksNumberChanged(int)) );
  	connect( ui.leMinorTicksIncrement, SIGNAL(returnPressed()), this, SLOT(minorTicksIncrementChanged()) );
-	connect( cbMinorTicksColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(minorTicksColumnChanged(const QModelIndex&)) );
+	connect( cbMinorTicksColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(minorTicksColumnChanged(QModelIndex)) );
 	connect( ui.cbMinorTicksLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(minorTicksLineStyleChanged(int)) );
-	connect( ui.kcbMinorTicksColor, SIGNAL(changed (const QColor&)), this, SLOT(minorTicksColorChanged(const QColor&)) );
+	connect( ui.kcbMinorTicksColor, SIGNAL(changed(QColor)), this, SLOT(minorTicksColorChanged(QColor)) );
 	connect( ui.sbMinorTicksWidth, SIGNAL(valueChanged(double)), this, SLOT(minorTicksWidthChanged(double)) );
 	connect( ui.sbMinorTicksLength, SIGNAL(valueChanged(double)), this, SLOT(minorTicksLengthChanged(double)) );
 	connect( ui.sbMinorTicksOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorTicksOpacityChanged(int)) );
@@ -136,8 +136,8 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.cbLabelsPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsPositionChanged(int)) );
 	connect( ui.sbLabelsOffset, SIGNAL(valueChanged(double)), this, SLOT(labelsOffsetChanged(double)) );
 	connect( ui.sbLabelsRotation, SIGNAL(valueChanged(int)), this, SLOT(labelsRotationChanged(int)) );
-	connect( ui.kfrLabelsFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(labelsFontChanged(const QFont&)) );
-	connect( ui.kcbLabelsFontColor, SIGNAL(changed (const QColor&)), this, SLOT(labelsFontColorChanged(const QColor&)) );
+	connect( ui.kfrLabelsFont, SIGNAL(fontSelected(QFont)), this, SLOT(labelsFontChanged(QFont)) );
+	connect( ui.kcbLabelsFontColor, SIGNAL(changed(QColor)), this, SLOT(labelsFontColorChanged(QColor)) );
 	connect( ui.leLabelsPrefix, SIGNAL(returnPressed()), this, SLOT(labelsPrefixChanged()) );
 	connect( ui.leLabelsSuffix, SIGNAL(returnPressed()), this, SLOT(labelsSuffixChanged()) );
 	connect( ui.sbLabelsOpacity, SIGNAL(valueChanged(int)), this, SLOT(labelsOpacityChanged(int)) );
@@ -145,17 +145,17 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	/*
 
 	connect( ui.sbLabelsPrecision, SIGNAL(valueChanged(int)), this, SLOT(slotDataChanged()) );
-	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(labelFormatChanged(const QString&)) );
-	connect( ui.leLabelsDateFormat, SIGNAL(textChanged(const QString&)), this, SLOT(slotDataChanged()) );
+	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(QString)), this, SLOT(labelFormatChanged(QString)) );
+	connect( ui.leLabelsDateFormat, SIGNAL(textChanged(QString)), this, SLOT(slotDataChanged()) );
 */
 	//"Grid"-tab
 	connect( ui.cbMajorGridStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(majorGridStyleChanged(int)) );
-	connect( ui.kcbMajorGridColor, SIGNAL(changed (const QColor&)), this, SLOT(majorGridColorChanged(const QColor&)) );
+	connect( ui.kcbMajorGridColor, SIGNAL(changed(QColor)), this, SLOT(majorGridColorChanged(QColor)) );
 	connect( ui.sbMajorGridWidth, SIGNAL(valueChanged(double)), this, SLOT(majorGridWidthChanged(double)) );
 	connect( ui.sbMajorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(majorGridOpacityChanged(int)) );
 
 	connect( ui.cbMinorGridStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(minorGridStyleChanged(int)) );
-	connect( ui.kcbMinorGridColor, SIGNAL(changed (const QColor&)), this, SLOT(minorGridColorChanged(const QColor&)) );
+	connect( ui.kcbMinorGridColor, SIGNAL(changed(QColor)), this, SLOT(minorGridColorChanged(QColor)) );
 	connect( ui.sbMinorGridWidth, SIGNAL(valueChanged(double)), this, SLOT(minorGridWidthChanged(double)) );
 	connect( ui.sbMinorGridOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorGridOpacityChanged(int)) );
 
@@ -164,7 +164,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	init();
 }
@@ -289,7 +289,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(scalingFactorChanged(qreal)), this, SLOT(axisScalingFactorChanged(qreal)));
 
 	// line
-	connect(m_axis, SIGNAL(linePenChanged(const QPen&)), this, SLOT(axisLinePenChanged(const QPen&)));
+	connect(m_axis, SIGNAL(linePenChanged(QPen)), this, SLOT(axisLinePenChanged(QPen)));
 	connect(m_axis, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(axisLineOpacityChanged(qreal)));
 
 	// ticks
@@ -297,14 +297,14 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(majorTicksTypeChanged(Axis::TicksType)), this, SLOT(axisMajorTicksTypeChanged(Axis::TicksType)));
 	connect(m_axis, SIGNAL(majorTicksNumberChanged(int)), this, SLOT(axisMajorTicksNumberChanged(int)));
 	connect(m_axis, SIGNAL(majorTicksIncrementChanged(qreal)), this, SLOT(axisMajorTicksIncrementChanged(qreal)));
-	connect(m_axis, SIGNAL(majorTicksPenChanged(const QPen&)), this, SLOT(axisMajorTicksPenChanged(const QPen&)));
+	connect(m_axis, SIGNAL(majorTicksPenChanged(QPen)), this, SLOT(axisMajorTicksPenChanged(QPen)));
 	connect(m_axis, SIGNAL(majorTicksLengthChanged(qreal)), this, SLOT(axisMajorTicksLengthChanged(qreal)));
 	connect(m_axis, SIGNAL(majorTicksOpacityChanged(qreal)), this, SLOT(axisMajorTicksOpacityChanged(qreal)));
 	connect(m_axis, SIGNAL(minorTicksDirectionChanged(Axis::TicksDirection)), this, SLOT(axisMinorTicksDirectionChanged(Axis::TicksDirection)));
 	connect(m_axis, SIGNAL(minorTicksTypeChanged(Axis::TicksType)), this, SLOT(axisMinorTicksTypeChanged(Axis::TicksType)));
 	connect(m_axis, SIGNAL(minorTicksNumberChanged(int)), this, SLOT(axisMinorTicksNumberChanged(int)));
 	connect(m_axis, SIGNAL(minorTicksIncrementChanged(qreal)), this, SLOT(axisMinorTicksIncrementChanged(qreal)));
-	connect(m_axis, SIGNAL(minorTicksPenChanged(const QPen&)), this, SLOT(axisMinorTicksPenChanged(const QPen&)));
+	connect(m_axis, SIGNAL(minorTicksPenChanged(QPen)), this, SLOT(axisMinorTicksPenChanged(QPen)));
 	connect(m_axis, SIGNAL(minorTicksLengthChanged(qreal)), this, SLOT(axisMinorTicksLengthChanged(qreal)));
 	connect(m_axis, SIGNAL(minorTicksOpacityChanged(qreal)), this, SLOT(axisMinorTicksOpacityChanged(qreal)));
 
@@ -315,16 +315,16 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(labelsPositionChanged(Axis::LabelsPosition)), this, SLOT(axisLabelsPositionChanged(Axis::LabelsPosition)));
 	connect(m_axis, SIGNAL(labelsOffsetChanged(float)), this, SLOT(axisLabelsOffsetChanged(float)));
 	connect(m_axis, SIGNAL(labelsRotationAngleChanged(qreal)), this, SLOT(axisLabelsRotationAngleChanged(qreal)));
-	connect(m_axis, SIGNAL(labelsFontChanged(const QFont&)), this, SLOT(axisLabelsFontChanged(const QFont&)));
-	connect(m_axis, SIGNAL(labelsColorChanged(const QColor&)), this, SLOT(axisLabelsFontColorChanged(const QColor&)));
-	connect(m_axis, SIGNAL(labelsPrefixChanged(const QString&)), this, SLOT(axisLabelsPrefixChanged(const QString&)));
-	connect(m_axis, SIGNAL(labelsSuffixChanged(const QString&)), this, SLOT(axisLabelsSuffixChanged(const QString&)));
+	connect(m_axis, SIGNAL(labelsFontChanged(QFont)), this, SLOT(axisLabelsFontChanged(QFont)));
+	connect(m_axis, SIGNAL(labelsColorChanged(QColor)), this, SLOT(axisLabelsFontColorChanged(QColor)));
+	connect(m_axis, SIGNAL(labelsPrefixChanged(QString)), this, SLOT(axisLabelsPrefixChanged(QString)));
+	connect(m_axis, SIGNAL(labelsSuffixChanged(QString)), this, SLOT(axisLabelsSuffixChanged(QString)));
 	connect(m_axis, SIGNAL(labelsOpacityChanged(qreal)), this, SLOT(axisLabelsOpacityChanged(qreal)));
 
 	// grids
-	connect(m_axis, SIGNAL(majorGridPenChanged(const QPen&)), this, SLOT(axisMajorGridPenChanged(const QPen&)));
+	connect(m_axis, SIGNAL(majorGridPenChanged(QPen)), this, SLOT(axisMajorGridPenChanged(QPen)));
 	connect(m_axis, SIGNAL(majorGridOpacityChanged(qreal)), this, SLOT(axisMajorGridOpacityChanged(qreal)));
-	connect(m_axis, SIGNAL(minorGridPenChanged(const QPen&)), this, SLOT(axisMinorGridPenChanged(const QPen&)));
+	connect(m_axis, SIGNAL(minorGridPenChanged(QPen)), this, SLOT(axisMinorGridPenChanged(QPen)));
 	connect(m_axis, SIGNAL(minorGridOpacityChanged(qreal)), this, SLOT(axisMinorGridOpacityChanged(qreal)));
 
 	connect(m_axis, SIGNAL(visibleChanged(bool)), this, SLOT(axisVisibleChanged(bool)));

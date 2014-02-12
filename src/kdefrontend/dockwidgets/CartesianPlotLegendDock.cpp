@@ -84,8 +84,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
-	connect( ui.kfrLabelFont, SIGNAL(fontSelected(const QFont&)), this, SLOT(labelFontChanged(const QFont&)) );
-	connect( ui.kcbLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(labelColorChanged(const QColor&)) );
+	connect( ui.kfrLabelFont, SIGNAL(fontSelected(QFont)), this, SLOT(labelFontChanged(QFont)) );
+	connect( ui.kcbLabelColor, SIGNAL(changed(QColor)), this, SLOT(labelColorChanged(QColor)) );
 	connect( ui.cbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(labelOrderChanged(int)) );
 	connect( ui.sbLineSymbolWidth, SIGNAL(valueChanged(double)), this, SLOT(lineSymbolWidthChanged(double)) );
 
@@ -102,13 +102,13 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect(ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
-	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundFirstColorChanged(const QColor&)) );
-	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed (const QColor &)), this, SLOT(backgroundSecondColorChanged(const QColor&)) );
+	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
+	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
 	
 	//Border 
 	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
-	connect( ui.kcbBorderColor, SIGNAL(changed (const QColor &)), this, SLOT(borderColorChanged(const QColor&)) );
+	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
@@ -126,7 +126,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	init();
 }
@@ -179,8 +179,8 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect( m_legend, SIGNAL(labelFontChanged(QFont&)), this, SLOT(legendLabelFontChanged(QFont&)) );
 	connect( m_legend, SIGNAL(labelColorChanged(QColor&)), this, SLOT(legendLabelColorChanged(QColor&)) );
 	connect( m_legend, SIGNAL(labelColumnMajorChanged(bool)), this, SLOT(legendLabelOrderChanged(bool)) );
-	connect( m_legend, SIGNAL(positionChanged(const CartesianPlotLegend::PositionWrapper&)),
-			 this, SLOT(legendPositionChanged(const CartesianPlotLegend::PositionWrapper&)) );
+	connect( m_legend, SIGNAL(positionChanged(CartesianPlotLegend::PositionWrapper)),
+			 this, SLOT(legendPositionChanged(CartesianPlotLegend::PositionWrapper)) );
 	connect( m_legend, SIGNAL(lineSymbolWidthChanged(float)), this, SLOT(legendLineSymbolWidthChanged(float)) );
 	
 	//background

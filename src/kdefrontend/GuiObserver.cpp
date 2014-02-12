@@ -71,9 +71,9 @@ Email (use @ for *)  	: alexander.semke*web.de
 
 GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	connect(mainWin->m_projectExplorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)), 
-					this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&) ) );
+					this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&)) );
 	connect(mainWin->m_projectExplorer, SIGNAL(hiddenAspectSelected(const AbstractAspect*)), 
-					this, SLOT(hiddenAspectSelected(const AbstractAspect*) ) );	
+					this, SLOT(hiddenAspectSelected(const AbstractAspect*)) );	
 	mainWindow=mainWin;
 }
 
@@ -118,7 +118,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	
 	if (!mainWindow->spreadsheetDock){
 	  mainWindow->spreadsheetDock = new SpreadsheetDock(mainWindow->stackedWidget);
-	  connect(mainWindow->spreadsheetDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
+	  connect(mainWindow->spreadsheetDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->spreadsheetDock);
 	}
 
@@ -134,7 +134,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	
 	if (!mainWindow->columnDock){
 	  mainWindow->columnDock = new ColumnDock(mainWindow->stackedWidget);
-	  connect(mainWindow->columnDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
+	  connect(mainWindow->columnDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->columnDock);
 	}
 	
@@ -150,7 +150,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	
 	if (!mainWindow->worksheetDock){
 	  mainWindow->worksheetDock = new WorksheetDock(mainWindow->stackedWidget);
-	  connect(mainWindow->worksheetDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
+	  connect(mainWindow->worksheetDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->worksheetDock);
 	}
 	
@@ -166,7 +166,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	
 	if (!mainWindow->cartesianPlotDock){
 	  mainWindow->cartesianPlotDock = new CartesianPlotDock(mainWindow->stackedWidget);
-	  connect(mainWindow->cartesianPlotDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
+	  connect(mainWindow->cartesianPlotDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
 	}
 	
@@ -182,7 +182,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	if (!mainWindow->cartesianPlotLegendDock){
 	  mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(mainWindow->stackedWidget);
-	  connect(mainWindow->cartesianPlotLegendDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
+	  connect(mainWindow->cartesianPlotLegendDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotLegendDock);
 	}
 
@@ -198,7 +198,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	
 	if (!mainWindow->axisDock){
 	  mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
-	  connect(mainWindow->axisDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
+	  connect(mainWindow->axisDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
 	}
 
@@ -217,7 +217,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	if (!mainWindow->xyCurveDock){
 	  mainWindow->xyCurveDock = new XYCurveDock(mainWindow->stackedWidget);
-	  connect(mainWindow->xyCurveDock, SIGNAL(info(const QString&)), mainWindow->statusBar(), SLOT(showMessage(const QString&)));
+	  connect(mainWindow->xyCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->xyCurveDock);
 	}
 	

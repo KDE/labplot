@@ -44,14 +44,14 @@ SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel( SpreadsheetModel
 		this, SIGNAL(headerDataChanged(Qt::Orientation,int,int)));
 	connect(m_spreadsheet_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
 		this, SIGNAL(headerDataChanged(Qt::Orientation,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(columnsAboutToBeInserted(const QModelIndex&,int,int)),
-		this, SIGNAL(columnsAboutToBeInserted(const QModelIndex&,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(columnsAboutToBeRemoved(const QModelIndex&,int,int)),
-		this, SIGNAL(columnsAboutToBeRemoved(const QModelIndex&,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(columnsInserted(const QModelIndex&,int,int)),
-		this, SIGNAL(columnsInserted(const QModelIndex&,int,int)));
-	connect(m_spreadsheet_model, SIGNAL(columnsRemoved(const QModelIndex&,int,int)),
-		this, SIGNAL(columnsRemoved(const QModelIndex&,int,int)));
+	connect(m_spreadsheet_model, SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)),
+		this, SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)));
+	connect(m_spreadsheet_model, SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),
+		this, SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)));
+	connect(m_spreadsheet_model, SIGNAL(columnsInserted(QModelIndex,int,int)),
+		this, SIGNAL(columnsInserted(QModelIndex,int,int)));
+	connect(m_spreadsheet_model, SIGNAL(columnsRemoved(QModelIndex,int,int)),
+		this, SIGNAL(columnsRemoved(QModelIndex,int,int)));
 }
 
 SpreadsheetCommentsHeaderModel::~SpreadsheetCommentsHeaderModel(){

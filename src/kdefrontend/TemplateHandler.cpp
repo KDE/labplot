@@ -158,8 +158,8 @@ void TemplateHandler::saveMenu() {
 
 	KLineEdit* leFilename = new KLineEdit("", frame);
 	layout->addWidget(leFilename);
-	connect(leFilename, SIGNAL(returnPressed(const QString&)), this, SLOT(saveNewSelected(const QString&)));
-	connect(leFilename, SIGNAL(returnPressed(const QString&)), &menu, SLOT(close()));
+	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
+	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
 
 	widgetAction->setDefaultWidget(frame);
 	menu.addAction(widgetAction);

@@ -108,20 +108,20 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( cbXColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(xColumnChanged(const QModelIndex&)) );
-	connect( cbYColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yColumnChanged(const QModelIndex&)) );
+	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
+	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
 	
 	//Lines
 	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
 	connect( ui.sbLineInterpolationPointsCount, SIGNAL(valueChanged(int)), this, SLOT(lineInterpolationPointsCountChanged(int)) );
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
-	connect( ui.kcbLineColor, SIGNAL(changed (const QColor &)), this, SLOT(lineColorChanged(const QColor&)) );
+	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
 	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );
 
 	connect( ui.cbDropLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(dropLineTypeChanged(int)) );
 	connect( ui.cbDropLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(dropLineStyleChanged(int)) );
-	connect( ui.kcbDropLineColor, SIGNAL(changed (const QColor &)), this, SLOT(dropLineColorChanged(const QColor&)) );
+	connect( ui.kcbDropLineColor, SIGNAL(changed(QColor)), this, SLOT(dropLineColorChanged(QColor)) );
 	connect( ui.sbDropLineWidth, SIGNAL(valueChanged(double)), this, SLOT(dropLineWidthChanged(double)) );
 	connect( ui.sbDropLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(dropLineOpacityChanged(int)) );
 	
@@ -132,15 +132,15 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbSymbolOpacity, SIGNAL(valueChanged(int)), this, SLOT(symbolsOpacityChanged(int)) );
 	
 	connect( ui.cbSymbolFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsFillingStyleChanged(int)) );
-	connect( ui.kcbSymbolFillingColor, SIGNAL(changed (const QColor &)), this, SLOT(symbolsFillingColorChanged(const QColor)) );
+	connect( ui.kcbSymbolFillingColor, SIGNAL(changed(QColor)), this, SLOT(symbolsFillingColorChanged(QColor)) );
 
 	connect( ui.cbSymbolBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsBorderStyleChanged(int)) );
-	connect( ui.kcbSymbolBorderColor, SIGNAL(changed (const QColor &)), this, SLOT(symbolsBorderColorChanged(const QColor&)) );
+	connect( ui.kcbSymbolBorderColor, SIGNAL(changed(QColor)), this, SLOT(symbolsBorderColorChanged(QColor)) );
 	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolsBorderWidthChanged(double)) );
 
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
-	connect( cbValuesColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(valuesColumnChanged(const QModelIndex&)) );
+	connect( cbValuesColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(valuesColumnChanged(QModelIndex)) );
 	connect( ui.cbValuesPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesPositionChanged(int)) );
 	connect( ui.sbValuesDistance, SIGNAL(valueChanged(double)), this, SLOT(valuesDistanceChanged(double)) );
 	connect( ui.sbValuesRotation, SIGNAL(valueChanged(int)), this, SLOT(valuesRotationChanged(int)) );
@@ -149,20 +149,20 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	//TODO connect( ui.cbValuesFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesColumnFormatChanged(int)) );
 	connect( ui.leValuesPrefix, SIGNAL(returnPressed()), this, SLOT(valuesPrefixChanged()) );
 	connect( ui.leValuesSuffix, SIGNAL(returnPressed()), this, SLOT(valuesSuffixChanged()) );
-	connect( ui.kfrValuesFont, SIGNAL(fontSelected(const QFont& )), this, SLOT(valuesFontChanged(const QFont&)) );
-	connect( ui.kcbValuesColor, SIGNAL(changed(const QColor &)), this, SLOT(valuesColorChanged(const QColor&)) );
+	connect( ui.kfrValuesFont, SIGNAL(fontSelected(QFont)), this, SLOT(valuesFontChanged(QFont)) );
+	connect( ui.kcbValuesColor, SIGNAL(changed(QColor)), this, SLOT(valuesColorChanged(QColor)) );
 	
 	//Error bars
 	connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
-	connect( cbXErrorPlusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(xErrorPlusColumnChanged(const QModelIndex&)) );
-	connect( cbXErrorMinusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(xErrorMinusColumnChanged(const QModelIndex&)) );
+	connect( cbXErrorPlusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorPlusColumnChanged(QModelIndex)) );
+	connect( cbXErrorMinusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorMinusColumnChanged(QModelIndex)) );
 	connect( ui.cbYErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorTypeChanged(int)) );
-	connect( cbYErrorPlusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yErrorPlusColumnChanged(const QModelIndex&)) );
-	connect( cbYErrorMinusColumn, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(yErrorMinusColumnChanged(const QModelIndex&)) );
+	connect( cbYErrorPlusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorPlusColumnChanged(QModelIndex)) );
+	connect( cbYErrorMinusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorMinusColumnChanged(QModelIndex)) );
 	connect( ui.cbErrorBarsType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsTypeChanged(int)) );
 	connect( ui.sbErrorBarsCapSize, SIGNAL(valueChanged(double)), this, SLOT(errorBarsCapSizeChanged(double)) );
 	connect( ui.cbErrorBarsStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsStyleChanged(int)) );
-	connect( ui.kcbErrorBarsColor, SIGNAL(changed (const QColor &)), this, SLOT(errorBarsColorChanged(const QColor&)) );
+	connect( ui.kcbErrorBarsColor, SIGNAL(changed(QColor)), this, SLOT(errorBarsColorChanged(QColor)) );
 	connect( ui.sbErrorBarsWidth, SIGNAL(valueChanged(double)), this, SLOT(errorBarsWidthChanged(double)) );
 	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 	
@@ -172,7 +172,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-	connect(templateHandler, SIGNAL(info(const QString&)), this, SIGNAL(info(const QString&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	ui.tabWidget->removeTab(ui.tabWidget->indexOf(ui.tabAreaFilling)); //TODO
 
@@ -501,7 +501,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(curveSymbolsBrushChanged(QBrush)));
-	connect(m_curve, SIGNAL(symbolsPenChanged(const QPen&)), this, SLOT(curveSymbolsPenChanged(const QPen&)));
+	connect(m_curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(curveSymbolsPenChanged(QPen)));
 
 	//Values-Tab
 	connect(m_curve, SIGNAL(valuesTypeChanged(XYCurve::ValuesType)), this, SLOT(curveValuesTypeChanged(XYCurve::ValuesType)));

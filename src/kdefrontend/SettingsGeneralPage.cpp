@@ -43,12 +43,12 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 	ui.setupUi(this);
 	retranslateUi();
 
-	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT( changed()) );
-	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT( interfaceChanged(int)) );
-	connect(ui.cbMdiVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT( changed()) );
-	connect(ui.cbTabPosition, SIGNAL(currentIndexChanged(int)), this, SLOT( changed()) );
-	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT( changed()) );
-	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT( changed()) );
+	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
+	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT(interfaceChanged(int)) );
+	connect(ui.cbMdiVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
+	connect(ui.cbTabPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
+	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
