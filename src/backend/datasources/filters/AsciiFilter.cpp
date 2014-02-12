@@ -497,9 +497,9 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
     //TODO: generalize to different data types
     QString comment;
 	if (headerEnabled)
-		comment = "numerical data, " + QString::number(currentRow) + " elements";
+		comment = i18np("numerical data, %1 element", "numerical data, %1 elements", currentRow);
 	else
-		comment = "numerical data, " + QString::number(currentRow+1) + " elements";
+		comment = i18np("numerical data, %1 element", "numerical data, %1 elements", currentRow+1);
 	
 	for ( int n=startColumn; n<=endColumn; n++ ){
 		Column* column = spreadsheet->column(columnOffset+n-startColumn);
