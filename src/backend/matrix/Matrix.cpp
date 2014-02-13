@@ -519,7 +519,7 @@ void Matrix::createActions()
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/clear.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/clear.png"));
-	action_clear_selection = new QAction(*icon_temp, i18n("Clea&r","clear selection"), this);
+	action_clear_selection = new QAction(*icon_temp, i18nc("clear selection", "Clea&r"), this);
 	actionManager()->addAction(action_clear_selection, "clear_selection"); 
 	delete icon_temp;
 
@@ -542,7 +542,7 @@ void Matrix::createActions()
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/table_options.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/table_options.png"));
-	action_toggle_tabbar = new QAction(*icon_temp, QString("Show/Hide Controls"), this); // show/hide control tabs
+	action_toggle_tabbar = new QAction(*icon_temp, i18n("Show/Hide Controls"), this); // show/hide control tabs
 	actionManager()->addAction(action_toggle_tabbar, "toggle_tabbar"); 
 	delete icon_temp;
 
@@ -577,13 +577,13 @@ void Matrix::createActions()
 	action_mirror_vertically = new QAction(i18n("Mirror &Vertically"), this);
 	actionManager()->addAction(action_mirror_vertically, "mirror_vertically"); 
 
-	action_import_image = new QAction(i18n("&Import Image", "import image as matrix"), this);
+	action_import_image = new QAction(i18nc("import image as matrix", "&Import image"), this);
 	actionManager()->addAction(action_import_image, "import_image"); 
 	
-	action_duplicate = new QAction(QIcon(QPixmap(":/duplicate.xpm")), i18n("&Duplicate", "duplicate matrix"), this);
+	action_duplicate = new QAction(QIcon(QPixmap(":/duplicate.xpm")), i18nc("duplicate matrix", "&Duplicate"), this);
 	actionManager()->addAction(action_duplicate, "duplicate"); 
 	
-	action_dimensions_dialog = new QAction(QIcon(QPixmap(":/resize.xpm")), i18n("&Dimensions", "matrix size"), this);
+	action_dimensions_dialog = new QAction(QIcon(QPixmap(":/resize.xpm")), i18nc("matrix size", "&Dimensions"), this);
 	actionManager()->addAction(action_dimensions_dialog, "dimensions_dialog"); 
 	
 	action_edit_coordinates = new QAction(i18n("Set &Coordinates"), this);

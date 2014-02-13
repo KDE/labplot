@@ -13,10 +13,10 @@ void SpreadsheetView::initActions(){
 	action_paste_into_selection = new QAction(QIcon(QPixmap(":/paste.xpm")), i18n("Past&e"), this);
 	actionManager()->addAction(action_paste_into_selection, "paste_into_selection"); 
 
-	action_mask_selection = new QAction(QIcon(QPixmap(":/mask.xpm")), i18n("&Mask","mask selection"), this);
+	action_mask_selection = new QAction(QIcon(QPixmap(":/mask.xpm")), i18nc("mask selection", "&Mask"), this);
 	actionManager()->addAction(action_mask_selection, "mask_selection"); 
 
-	action_unmask_selection = new QAction(QIcon(QPixmap(":/unmask.xpm")), i18n("&Unmask","unmask selection"), this);
+	action_unmask_selection = new QAction(QIcon(QPixmap(":/unmask.xpm")), i18nc("unmask selection", "&Unmask"), this);
 	actionManager()->addAction(action_unmask_selection, "unmask_selection"); 
 
 	icon_temp = new QIcon();
@@ -29,7 +29,7 @@ void SpreadsheetView::initActions(){
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/clear.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/clear.png"));
-	action_clear_selection = new QAction(*icon_temp, i18n("Clea&r","clear selection"), this);
+	action_clear_selection = new QAction(*icon_temp, i18nc("clear selection", "Clea&r"), this);
 	actionManager()->addAction(action_clear_selection, "clear_selection"); 
 	delete icon_temp;
 
@@ -103,7 +103,7 @@ void SpreadsheetView::initActions(){
 	actionManager()->addAction(action_go_to_cell, "go_to_cell"); 
 	delete icon_temp;
 
-	action_dimensions_dialog = new QAction(QIcon(QPixmap(":/resize.xpm")), i18n("&Dimensions", "spreadsheet size"), this);
+	action_dimensions_dialog = new QAction(QIcon(QPixmap(":/resize.xpm")), i18nc("spreadsheet size", "&Dimensions"), this);
 	actionManager()->addAction(action_dimensions_dialog, "dimensions_dialog"); 
 
 	// column related actions
@@ -135,30 +135,30 @@ void SpreadsheetView::initActions(){
 	actionManager()->addAction(action_add_columns, "add_columns"); 
 	delete icon_temp;
 
-	action_set_as_x = new QAction(QIcon(QPixmap()), i18n("X","plot designation"), this);
+	action_set_as_x = new QAction(QIcon(QPixmap()), i18nc("plot designation", "X"), this);
 	actionManager()->addAction(action_set_as_x, "set_as_x"); 
 
-	action_set_as_y = new QAction(QIcon(QPixmap()), i18n("Y","plot designation"), this);
+	action_set_as_y = new QAction(QIcon(QPixmap()), i18nc("plot designation", "Y"), this);
 	actionManager()->addAction(action_set_as_y, "set_as_y"); 
 
-	action_set_as_z = new QAction(QIcon(QPixmap()), i18n("Z","plot designation"), this);
+	action_set_as_z = new QAction(QIcon(QPixmap()), i18nc("plot designation", "Z"), this);
 	actionManager()->addAction(action_set_as_z, "set_as_z"); 
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/x_error.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/x_error.png"));
-	action_set_as_xerr = new QAction(*icon_temp, i18n("X Error","plot designation"), this);
+	action_set_as_xerr = new QAction(*icon_temp, i18nc("plot designation", "X Error"), this);
 	actionManager()->addAction(action_set_as_xerr, "set_as_xerr"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/y_error.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/y_error.png"));
-	action_set_as_yerr = new QAction(*icon_temp, i18n("Y Error","plot designation"), this);
+	action_set_as_yerr = new QAction(*icon_temp, i18nc("plot designation", "Y Error"), this);
 	actionManager()->addAction(action_set_as_yerr, "set_as_yerr"); 
 	delete icon_temp;
 
-	action_set_as_none = new QAction(QIcon(QPixmap()), i18n("None","plot designation"), this);
+	action_set_as_none = new QAction(QIcon(QPixmap()), i18nc("plot designation", "None"), this);
 	actionManager()->addAction(action_set_as_none, "set_as_none"); 
 
 	icon_temp = new QIcon();
