@@ -50,14 +50,14 @@ void SpreadsheetView::initActions(){
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/table_header.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/table_header.png"));
-	action_toggle_comments = new QAction(*icon_temp, QString("Show/Hide comments"), this); // show/hide column comments
+	action_toggle_comments = new QAction(*icon_temp, i18n("Show/Hide comments"), this); // show/hide column comments
 	actionManager()->addAction(action_toggle_comments, "toggle_comments"); 
 	delete icon_temp;
 
 	icon_temp = new QIcon();
 	icon_temp->addPixmap(QPixmap(":/16x16/table_options.png"));
 	icon_temp->addPixmap(QPixmap(":/32x32/table_options.png"));
-	action_toggle_tabbar = new QAction(*icon_temp, QString("Show/Hide Controls"), this); // show/hide control tabs
+	action_toggle_tabbar = new QAction(*icon_temp, i18n("Show/Hide Controls"), this); // show/hide control tabs
 	actionManager()->addAction(action_toggle_tabbar, "toggle_tabbar"); 
 	delete icon_temp;
 

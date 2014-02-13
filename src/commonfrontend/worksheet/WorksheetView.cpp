@@ -608,7 +608,7 @@ void WorksheetView::addNew(QAction* action){
 		tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel("text label");
-		l->setText(QString("text label"));
+		l->setText(i18n("text label"));
 		aspect = l;
 	}
 
