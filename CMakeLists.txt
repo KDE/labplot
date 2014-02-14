@@ -53,7 +53,7 @@ IF (GSL_FOUND)
 	add_definitions (-DGSL_VERSION=GSL_VERSION)
 ELSE (GSL_FOUND)
 	MESSAGE (STATUS "GNU Scientific Library not found. "
-			"LabPlot will be build without GSL suppot.")
+			"LabPlot will be build without GSL support.")
 	SET (GSL_LIBRARIES "")
 	SET (GSL_CBLAS_LIBRARIES "")
 ENDIF (GSL_FOUND)
