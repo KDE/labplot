@@ -1,5 +1,5 @@
 
-class Project;/***************************************************************************
+/***************************************************************************
     File                 : HistoryDialog.h
     Project              : LabPlot
     Description          : history dialog
@@ -32,6 +32,7 @@ class Project;/*****************************************************************
 #define HISTORYDIALOG_H
 
 #include <KDialog>
+class Project;
 class QUndoStack;
 
 class HistoryDialog: public KDialog {

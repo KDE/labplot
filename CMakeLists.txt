@@ -1,28 +1,21 @@
 project(LabPlot2)
 cmake_minimum_required(VERSION 2.6) 
 find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
-# build/src for finding ui_* in out-of-source build
-include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} build/src)
+include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-include_directories(${KDE4_INCLUDES})
 add_definitions(${KDE4_DEFINITIONS})
 add_definitions (-DLVERSION='\"2.0.1\"')
 # needed for qt_plugin_instance_scidavis_standardcurvesymbolfactory()
 add_definitions(-D QT_STATICPLUGIN )
 add_definitions(-DSUPPRESS_SCRIPTING_INIT)
-# add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-# useful for debugging
-#set(CMAKE_VERBOSE_MAKEFILE true)
 set(BUILD_SHARED_LIBS true)
-# needed for shared libs
 add_definitions(-fvisibility=default)
 
-# FIND_PROGRAM(YACC_EXECUTABLE
-# 	NAMES yacc bison
-# 	PATHS /usr/bin /usr/local/bin
-# 	DOC "Yacc or Bison executable")
 
 ### GSL ######################################
 FIND_LIBRARY(GSL_LIBRARIES gsl

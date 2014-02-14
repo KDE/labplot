@@ -136,10 +136,6 @@ set(QTMOC_HDRS
 
 qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
 
-# add_custom_command (OUTPUT parser/parser.tab.c
-#                    COMMAND ${YACC_EXECUTABLE} ARGS -b parser parser.y
-#                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/parser)
-
 add_subdirectory( pics )
 
 ##############################################################################
@@ -158,4 +154,3 @@ install(FILES ${KDEFRONTEND_DIR}/LabPlot2ui.rc ${KDEFRONTEND_DIR}/splash.png DES
 install(PROGRAMS LabPlot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
-kde4_update_iconcache()
