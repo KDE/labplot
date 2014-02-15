@@ -77,7 +77,7 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	lastAddedWorksheetElement(0),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
-
+	tbNewCartesianPlot(0),
 	tbZoom(0) {
   
 	setScene(m_model->scene());
@@ -591,23 +591,31 @@ void WorksheetView::enableSelectionMode(){
 void WorksheetView::addNew(QAction* action){
 	AbstractWorksheetElement* aspect = 0;
 	if ( action == addCartesianPlot1Action ){
-		aspect = new CartesianPlot("xy-plot");
-		dynamic_cast<CartesianPlot*>(aspect)->initDefault(CartesianPlot::FourAxes);
-		tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
+		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
+		plot->initDefault(CartesianPlot::FourAxes);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	}else if ( action == addCartesianPlot2Action ){
-		aspect = new CartesianPlot("xy-plot");
-		dynamic_cast<CartesianPlot*>(aspect)->initDefault(CartesianPlot::TwoAxes);
-		tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
+		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
+		plot->initDefault(CartesianPlot::TwoAxes);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
 	}else if ( action == addCartesianPlot3Action ){
-		aspect = new CartesianPlot("xy-plot");
-		dynamic_cast<CartesianPlot*>(aspect)->initDefault(CartesianPlot::TwoAxesCentered);
-		tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
+		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
+		plot->initDefault(CartesianPlot::TwoAxesCentered);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
 	}else if ( action == addCartesianPlot4Action ){
-		aspect = new CartesianPlot("xy-plot");
-		dynamic_cast<CartesianPlot*>(aspect)->initDefault(CartesianPlot::TwoAxesCenteredZero);
-		tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
+		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
+		plot->initDefault(CartesianPlot::TwoAxesCenteredZero);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 	}else if ( action == addTextLabelAction ){
-		TextLabel* l = new TextLabel("text label");
+		TextLabel* l = new TextLabel(i18n("text label"));
 		l->setText(i18n("text label"));
 		aspect = l;
 	}
