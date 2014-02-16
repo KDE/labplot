@@ -133,10 +133,8 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 				case Qt::ToolTipRole:
 				case Qt::EditRole:
 					return m_horizontal_header_data.at(section);
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 				case Qt::DecorationRole:
 					return m_spreadsheet->child<Column>(section)->icon();
-#endif
 				case SpreadsheetModel::CommentRole:
 					return m_spreadsheet->child<Column>(section)->comment();
 				case Qt::SizeHintRole:
@@ -399,7 +397,6 @@ void SpreadsheetModel::updateHorizontalHeader()
 		Column * col = m_spreadsheet->child<Column>(i);
 
 		QString middle_section;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		switch(col->columnMode()) {
 			case AbstractColumn::Numeric:
 				middle_section = " {numeric} ";
@@ -413,7 +410,7 @@ void SpreadsheetModel::updateHorizontalHeader()
 				middle_section = " {datetime} ";
 				break;
 		}
-#endif
+
 		QString designation_section;
 		switch(col->plotDesignation()) {
 			case AbstractColumn::X:

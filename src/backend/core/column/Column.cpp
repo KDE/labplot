@@ -34,7 +34,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
-#include <QIcon>
+#include <KIcon>
 #include <QMetaEnum>
 #include <KLocale>
 
@@ -424,19 +424,20 @@ double Column::valueAt(int row) const
 /**
  * \brief Return an icon to be used for decorating the views and spreadsheet column headers
  */
-QIcon Column::icon() const
-{
-	switch(columnMode()) {
-		case AbstractColumn::Numeric:
-			return QIcon(QPixmap(":/numerictype.png"));
-		case AbstractColumn::Text:
-			return QIcon(QPixmap(":/texttype.png"));
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-			return QIcon(QPixmap(":/datetype.png"));
-	}
-	return QIcon();
+QIcon Column::icon() const {
+	//TODO: provide type-specific icons
+// 	switch(columnMode()) {
+// 		case AbstractColumn::Numeric:
+// 			return KIcon("x-shape-text");
+// 		case AbstractColumn::Text:
+// 			return QIcon(QPixmap(":/texttype.png"));
+// 		case AbstractColumn::DateTime:
+// 		case AbstractColumn::Month:
+// 		case AbstractColumn::Day:
+// 			return QIcon(QPixmap(""));
+// 	}
+
+	return KIcon("x-shape-text");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

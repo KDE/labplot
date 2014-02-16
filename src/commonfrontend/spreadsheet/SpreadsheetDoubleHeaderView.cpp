@@ -94,11 +94,10 @@ SpreadsheetDoubleHeaderView::~SpreadsheetDoubleHeaderView(){
 }
 
 QSize SpreadsheetDoubleHeaderView::sizeHint() const{
-	QSize master_size, slave_size;
-	master_size = QHeaderView::sizeHint();
-	slave_size = m_slave->sizeHint();
+	QSize master_size = QHeaderView::sizeHint();
+	master_size.setHeight(master_size.height() + 5);
 	if(m_showComments)
-		master_size.setHeight(master_size.height() + slave_size.height());
+		master_size.setHeight(master_size.height() + m_slave->sizeHint().height());
 	return master_size;
 }
 

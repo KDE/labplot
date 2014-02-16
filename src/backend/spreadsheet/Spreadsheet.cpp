@@ -614,17 +614,8 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 /*!
   Returns an icon to be used for decorating my views.
   */
-QIcon Spreadsheet::icon() const
-{
-	QIcon ico;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	ico.addPixmap(QPixmap(":/16x16/table.png"));
-	ico.addPixmap(QPixmap(":/24x24/table.png"));
-	ico.addPixmap(QPixmap(":/32x32/table.png"));
-#else
-	ico = KIcon("x-office-spreadsheet");
-#endif
-	return ico;
+QIcon Spreadsheet::icon() const {
+	return KIcon("table"); //or KIcon("x-office-spreadsheet")
 }
 
 /*!
