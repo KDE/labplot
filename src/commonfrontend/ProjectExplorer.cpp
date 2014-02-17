@@ -493,7 +493,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	QList<int> withView;
 	QList<ViewState> viewStates;
 
-	int currentRow = 0; //row corresponding to the current index in the tree view
+	int currentRow = -1; //row corresponding to the current index in the tree view, -1 for the root element (=project)
 	QModelIndexList selectedRows = m_treeView->selectionModel()->selectedRows();
 
 	int row = 0;
@@ -551,7 +551,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("current");
 	writer->writeTextElement("row", QString::number(currentRow));
 	writer->writeEndElement();
-	
+
 	writer->writeEndElement();
 }
 
@@ -605,7 +605,13 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "row") {
 			attribs = reader->attributes();
 			row = reader->readElementText().toInt();
-			if (row>aspects.size())
+
+			if (row==-1) {
+				//-1 can only be stored for no current item or for the project-item being the current item (s.a. load())
+				//-> make the project item current in this case
+				currentIndex = model->modelIndexOfAspect(m_project);
+				continue;
+			}else if (row>=aspects.size())
 				continue;
 
 			const QModelIndex& index = model->modelIndexOfAspect(aspects.at(row));
