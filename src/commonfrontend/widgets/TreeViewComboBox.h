@@ -42,17 +42,18 @@ Q_OBJECT
 
 public:
     explicit TreeViewComboBox(QWidget* parent = 0);
-    ~TreeViewComboBox();
 
  	void setModel(QAbstractItemModel *model);
 	void setCurrentModelIndex(const QModelIndex&);
-	void setTopLevelClasses(QList<const char *>);
+	void setTopLevelClasses(QList<const char*>);
+	void setSelectableClasses(QList<const char*>);
 	QModelIndex currentModelIndex() const;
 	virtual void showPopup();
 
 private:
 	QTreeView m_treeView;
-	QList<const char *> m_topLevelClasses;
+	QList<const char*> m_topLevelClasses;
+	QList<const char*> m_selectableClasses;
 	void showTopLevelOnly(const QModelIndex & index);
 	bool eventFilter(QObject *obj, QEvent *event);
 

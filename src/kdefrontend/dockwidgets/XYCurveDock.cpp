@@ -59,7 +59,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
 
 	QGridLayout* gridLayout;
-	
+
 	// Tab "General"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 
@@ -88,9 +88,8 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 
 	cbYErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
 	gridLayout->addWidget(cbYErrorMinusColumn, 8, 2, 1, 1);
-	
-	//adjust layouts in the tabs
 
+	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
 	  QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 	  if (!layout)
@@ -101,16 +100,15 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	  layout->setVerticalSpacing(2);
 	}
 	
-	
 	//Slots
-	
+
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
-	
+
 	//Lines
 	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
 	connect( ui.sbLineInterpolationPointsCount, SIGNAL(valueChanged(int)), this, SLOT(lineInterpolationPointsCountChanged(int)) );
@@ -413,7 +411,9 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
  	list.clear();
 	list<<"Column";
 	m_aspectTreeModel->setSelectableAspects(list);
-	
+	cbXColumn->setSelectableClasses(list);
+	cbYColumn->setSelectableClasses(list);
+
 	m_initializing=true;
   	cbXColumn->setModel(m_aspectTreeModel.get());
 	cbYColumn->setModel(m_aspectTreeModel.get());
@@ -721,8 +721,11 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index){
 		return;
   
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
 
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setXColumn(column);
@@ -734,8 +737,11 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index){
 		return;
   
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
 
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setYColumn(column);

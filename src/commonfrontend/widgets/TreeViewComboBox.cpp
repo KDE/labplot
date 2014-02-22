@@ -2,7 +2,7 @@
     File                 : TreeViewComboBox.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2008-2014 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
                            (replace * with @ in the email addresses)
     Description          : Provides a QTreeView in a QComboBox
@@ -55,11 +55,13 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
 	connect(&m_treeView, SIGNAL(activated(QModelIndex)), this, SLOT(treeViewIndexActivated(QModelIndex)) );
 }
 
-void TreeViewComboBox::setTopLevelClasses(QList<const char *> list){
-  m_topLevelClasses=list;
+void TreeViewComboBox::setTopLevelClasses(QList<const char*> list) {
+	m_topLevelClasses=list;
 }
 
-TreeViewComboBox::~TreeViewComboBox(){
+
+void TreeViewComboBox::setSelectableClasses(QList<const char*> list) {
+	m_selectableClasses=list;
 }
 
 /*!
@@ -157,7 +159,21 @@ bool TreeViewComboBox::eventFilter(QObject *object, QEvent *event){
 //SLOTs
 
 void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
-	QComboBox::setItemText(0, index.data().toString());
+	if (index.internalPointer()) {
+		AbstractAspect* aspect =  static_cast<AbstractAspect*>(index.internalPointer());
+		const char* currentClassName = aspect->metaObject()->className();
+		foreach(const char* className, m_selectableClasses) {
+			if ( strcmp(currentClassName, className)==0 ) {
+				QComboBox::setCurrentIndex(0);
+				QComboBox::setItemText(0, index.data().toString());
+				emit currentModelIndexChanged(index);
+				m_treeView.hide();
+				return;
+			}
+		}
+	}
+
+	QComboBox::setCurrentIndex(-1);
+	emit currentModelIndexChanged(QModelIndex());
 	m_treeView.hide();
-	emit currentModelIndexChanged(index);
 }
