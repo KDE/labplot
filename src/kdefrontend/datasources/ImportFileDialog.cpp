@@ -101,6 +101,10 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
   cbAddTo->setTopLevelClasses(list);
   hLayout->addWidget( cbAddTo);
   connect( cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)) );
+
+  list.clear();
+  list<<"Spreadsheet";
+  cbAddTo->setSelectableClasses(list);
 	
   bNewSpreadsheet = new QPushButton(frameAddTo);
   bNewSpreadsheet->setIcon(KIcon("insert-table"));
@@ -201,10 +205,8 @@ void ImportFileDialog::toggleOptions(){
 
 void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
 	AbstractAspect * aspect = static_cast<AbstractAspect *>(index.internalPointer());
-	if (!aspect)
-		return;
-	
-	if ( aspect->inherits("Spreadsheet") ){
+
+	if ( aspect ){
 		lPosition->setEnabled(true);
 		cbPosition->setEnabled(true);
 		enableButtonOk(true);
@@ -212,7 +214,6 @@ void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
 		lPosition->setEnabled(false);
 		cbPosition->setEnabled(false);
 		enableButtonOk(false);
-		cbAddTo->setCurrentModelIndex(QModelIndex());
 	}
 }
 

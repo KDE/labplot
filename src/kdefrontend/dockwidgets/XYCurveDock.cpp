@@ -413,6 +413,11 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
 	m_aspectTreeModel->setSelectableAspects(list);
 	cbXColumn->setSelectableClasses(list);
 	cbYColumn->setSelectableClasses(list);
+	cbValuesColumn->setSelectableClasses(list);
+	cbXErrorMinusColumn->setSelectableClasses(list);
+	cbXErrorPlusColumn->setSelectableClasses(list);
+	cbYErrorMinusColumn->setSelectableClasses(list);
+	cbYErrorPlusColumn->setSelectableClasses(list);
 
 	m_initializing=true;
   	cbXColumn->setModel(m_aspectTreeModel.get());
