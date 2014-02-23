@@ -31,7 +31,7 @@
 #ifndef SPREADSHEETVIEW_H
 #define SPREADSHEETVIEW_H
 
-#include <QTableView>
+#include <QWidget>
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
@@ -42,11 +42,12 @@ class SpreadsheetModel;
 class SpreadsheetItemDelegate;
 class SpreadsheetDoubleHeaderView;
 class AbstractAspect;
+class QTableView;
 
 class QMenu;
 class QToolBar;
 
-class SpreadsheetView : public QTableView{
+class SpreadsheetView : public QWidget{
     Q_OBJECT
 
 	public:
@@ -73,7 +74,8 @@ class SpreadsheetView : public QTableView{
 		void getCurrentCell(int * row, int * col);
 	
 	private:
-	  	 void init();
+	  	void init();
+		QTableView* m_tableView;
 		Spreadsheet * m_spreadsheet;
 		SpreadsheetItemDelegate * m_delegate;
 		SpreadsheetModel * m_model;

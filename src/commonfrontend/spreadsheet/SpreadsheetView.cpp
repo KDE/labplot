@@ -43,6 +43,8 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 
+#include <QTableView>
+#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QClipboard>
@@ -70,10 +72,15 @@
 
 	\ingroup commonfrontend
  */
-SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QTableView(),
+SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QWidget(),
+	m_tableView(new QTableView(this)),
 	m_spreadsheet(spreadsheet),
 	m_model( new SpreadsheetModel(spreadsheet) ),
 	m_suppressSelectionChangedEvent(false){
+
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setContentsMargins(0,0,0,0);
+	layout->addWidget(m_tableView);
 
 	init();
 }
@@ -86,13 +93,13 @@ void SpreadsheetView::init(){
 	initActions();
 	initMenus();
 	
-	setModel(m_model);
+	m_tableView->setModel(m_model);
 
 	//horizontal header
 	m_horizontalHeader = new SpreadsheetDoubleHeaderView(this);
     m_horizontalHeader->setClickable(true);
     m_horizontalHeader->setHighlightSections(true);
-	setHorizontalHeader(m_horizontalHeader);
+	m_tableView->setHorizontalHeader(m_horizontalHeader);
 	m_horizontalHeader->setResizeMode(QHeaderView::Interactive);
 	m_horizontalHeader->setMovable(true);
 	m_horizontalHeader->installEventFilter(this);
@@ -101,18 +108,18 @@ void SpreadsheetView::init(){
 	connect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 	
 	// vertical header
-	QHeaderView * v_header = verticalHeader();
+	QHeaderView * v_header = m_tableView->verticalHeader();
 	v_header->setResizeMode(QHeaderView::Fixed);
 	v_header->setDefaultSectionSize(22);
 	v_header->setMovable(false);
 	v_header->installEventFilter(this);
 	
 	m_delegate = new SpreadsheetItemDelegate(this);
-	setItemDelegate(m_delegate);
+	m_tableView->setItemDelegate(m_delegate);
 
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
-	setSelectionMode(QAbstractItemView::ExtendedSelection);
+	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 
 	installEventFilter(this);
@@ -138,7 +145,7 @@ void SpreadsheetView::init(){
 
 	
 	//selection relevant connections
-	QItemSelectionModel * sel_model = selectionModel();
+	QItemSelectionModel * sel_model = m_tableView->selectionModel();
 
 	connect(sel_model, SIGNAL(currentColumnChanged(QModelIndex,QModelIndex)), 
 		this, SLOT(currentColumnChanged(QModelIndex,QModelIndex)));
@@ -149,7 +156,7 @@ void SpreadsheetView::init(){
 			
 	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) ); 
 	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) ); 
-	connect(horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
+	connect(m_tableView->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
 }
 
 void SpreadsheetView::initMenus(){
@@ -395,18 +402,18 @@ void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSi
   Advance current cell after [Return] or [Enter] was pressed.
  */
 void SpreadsheetView::advanceCell(){
-	QModelIndex idx = currentIndex();
+	QModelIndex idx = m_tableView->currentIndex();
     if (idx.row()+1 >= m_spreadsheet->rowCount()) {
 		int new_size = m_spreadsheet->rowCount()+1;
 		m_spreadsheet->setRowCount(new_size);
 	}
-	setCurrentIndex(idx.sibling(idx.row()+1, idx.column()));
+	m_tableView->setCurrentIndex(idx.sibling(idx.row()+1, idx.column()));
 }
 
 void SpreadsheetView::goToCell(int row, int col){
 	QModelIndex index = m_model->index(row, col);
-	scrollTo(index);
-	setCurrentIndex(index);
+	m_tableView->scrollTo(index);
+	m_tableView->setCurrentIndex(index);
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to){
@@ -418,7 +425,7 @@ void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to){
 	Q_ASSERT(index == from);
 
 	inside = true;
-	horizontalHeader()->moveSection(to, from);
+	m_tableView->horizontalHeader()->moveSection(to, from);
 	inside = false;
 	m_spreadsheet->moveColumn(from, to);
 }
@@ -463,7 +470,7 @@ void SpreadsheetView::currentColumnChanged(const QModelIndex & current, const QM
 void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int first, int last){
 	if (orientation != Qt::Horizontal) return;
 
-	QItemSelectionModel * sel_model = selectionModel();
+	QItemSelectionModel * sel_model = m_tableView->selectionModel();
 
 	int col = sel_model->currentIndex().column();
 	if (col < first || col > last) return;
@@ -499,9 +506,9 @@ int SpreadsheetView::selectedColumnCount(AbstractColumn::PlotDesignation pd){
 */
 bool SpreadsheetView::isColumnSelected(int col, bool full){
 	if (full)
-		return selectionModel()->isColumnSelected(col, QModelIndex());
+		return m_tableView->selectionModel()->isColumnSelected(col, QModelIndex());
 	else
-		return selectionModel()->columnIntersectsSelection(col, QModelIndex());
+		return m_tableView->selectionModel()->columnIntersectsSelection(col, QModelIndex());
 }
 
 /*!
@@ -535,9 +542,9 @@ int SpreadsheetView::selectedRowCount(bool full){
 */
 bool SpreadsheetView::isRowSelected(int row, bool full){
 	if (full)
-		return selectionModel()->isRowSelected(row, QModelIndex());
+		return m_tableView->selectionModel()->isRowSelected(row, QModelIndex());
 	else
-		return selectionModel()->rowIntersectsSelection(row, QModelIndex());
+		return m_tableView->selectionModel()->rowIntersectsSelection(row, QModelIndex());
 }
 
 /*!
@@ -598,7 +605,7 @@ int SpreadsheetView::lastSelectedRow(bool full){
 bool SpreadsheetView::isCellSelected(int row, int col){
 	if (row < 0 || col < 0 || row >= m_spreadsheet->rowCount() || col >= m_spreadsheet->columnCount()) return false;
 
-	return selectionModel()->isSelected(m_model->index(row, col));
+	return m_tableView->selectionModel()->isSelected(m_model->index(row, col));
 }
 
 /*!
@@ -617,7 +624,7 @@ IntervalAttribute<bool> SpreadsheetView::selectedRows(bool full){
   Select/Deselect a cell.
  */
 void SpreadsheetView::setCellSelected(int row, int col, bool select){
-	 selectionModel()->select(m_model->index(row, col), 
+	m_tableView->selectionModel()->select(m_model->index(row, col),
 			 select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
 }
 
@@ -627,7 +634,7 @@ void SpreadsheetView::setCellSelected(int row, int col, bool select){
 void SpreadsheetView::setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select){
 	QModelIndex top_left = m_model->index(first_row, first_col);
 	QModelIndex bottom_right = m_model->index(last_row, last_col);
-	selectionModel()->select(QItemSelection(top_left, bottom_right), 
+	m_tableView->selectionModel()->select(QItemSelection(top_left, bottom_right),
 			select ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Deselect);
 }
 
@@ -635,7 +642,7 @@ void SpreadsheetView::setCellsSelected(int first_row, int first_col, int last_ro
   Determine the current cell (-1 if no cell is designated as the current).
  */
 void SpreadsheetView::getCurrentCell(int * row, int * col){
-	QModelIndex index = selectionModel()->currentIndex();
+	QModelIndex index = m_tableView->selectionModel()->currentIndex();
 	if (index.isValid())	{
 		*row = index.row();
 		*col = index.column();
@@ -646,7 +653,7 @@ void SpreadsheetView::getCurrentCell(int * row, int * col){
 }
 
 bool SpreadsheetView::eventFilter(QObject * watched, QEvent * event){
-	QHeaderView * v_header = verticalHeader();
+	QHeaderView * v_header = m_tableView->verticalHeader();
 
 	if (event->type() == QEvent::ContextMenu){
 		QContextMenuEvent *cm_event = static_cast<QContextMenuEvent *>(event);
@@ -656,7 +663,7 @@ bool SpreadsheetView::eventFilter(QObject * watched, QEvent * event){
 		}else if (watched == m_horizontalHeader) {	
 			int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 			if (!isColumnSelected(col, true)) {
-				QItemSelectionModel *sel_model = selectionModel();
+				QItemSelectionModel *sel_model = m_tableView->selectionModel();
 				sel_model->clearSelection();
 				sel_model->select(QItemSelection(m_model->index(0, col, QModelIndex()),
 							m_model->index(m_model->rowCount()-1, col, QModelIndex())),
@@ -696,24 +703,24 @@ void SpreadsheetView::activateFormulaMode(bool on){
 void SpreadsheetView::goToNextColumn(){
 	if (m_spreadsheet->columnCount() == 0) return;
 
-	QModelIndex idx = currentIndex();
+	QModelIndex idx = m_tableView->currentIndex();
 	int col = idx.column()+1;
     if (col >= m_spreadsheet->columnCount())
 		col = 0;
 	
-	setCurrentIndex(idx.sibling(idx.row(), col));
+	m_tableView->setCurrentIndex(idx.sibling(idx.row(), col));
 }
 
 void SpreadsheetView::goToPreviousColumn(){
 	if (m_spreadsheet->columnCount() == 0)
 	  return;
 
-	QModelIndex idx = currentIndex();
+	QModelIndex idx = m_tableView->currentIndex();
 	int col = idx.column()-1;
     if (col < 0)
 		col = m_spreadsheet->columnCount()-1;
 	
-	setCurrentIndex(idx.sibling(idx.row(), col));
+	m_tableView->setCurrentIndex(idx.sibling(idx.row(), col));
 }
 
 void SpreadsheetView::cutSelection(){
@@ -1323,16 +1330,14 @@ void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int las
 	Q_UNUSED(last)
 	//TODO
 	if (o != Qt::Horizontal) return;
-	horizontalHeader()->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
-	horizontalHeader()->updateGeometry();
-	horizontalHeader()->setStretchLastSection(false); // ugly hack part 2
+	m_tableView->horizontalHeader()->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
+	m_tableView->horizontalHeader()->updateGeometry();
+	m_tableView->horizontalHeader()->setStretchLastSection(false); // ugly hack part 2
 }
 
 void SpreadsheetView::keyPressEvent(QKeyEvent * event){
     if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
 	  advanceCell();
-	
-	QTableView::keyPressEvent(event);
 }
 
 /*!
@@ -1341,7 +1346,7 @@ void SpreadsheetView::keyPressEvent(QKeyEvent * event){
 void SpreadsheetView::selectColumn(int column){
   QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount()-1, column) );
   m_suppressSelectionChangedEvent = true;
-  selectionModel()->select(selection, QItemSelectionModel::Select);
+  m_tableView->selectionModel()->select(selection, QItemSelectionModel::Select);
   m_suppressSelectionChangedEvent = false;
 }
 
@@ -1351,7 +1356,7 @@ void SpreadsheetView::selectColumn(int column){
 void SpreadsheetView::deselectColumn(int column){
   QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount()-1, column) );
   m_suppressSelectionChangedEvent = true;
-  selectionModel()->select(selection, QItemSelectionModel::Deselect);
+  m_tableView->selectionModel()->select(selection, QItemSelectionModel::Deselect);
   m_suppressSelectionChangedEvent = false;
 }
 
@@ -1374,7 +1379,7 @@ void SpreadsheetView::columnClicked(int column){
   if (m_suppressSelectionChangedEvent)
 	  return;
 
-  QItemSelectionModel* selModel=selectionModel();
+  QItemSelectionModel* selModel = m_tableView->selectionModel();
   for (int i=0; i<m_spreadsheet->columnCount(); i++){
 	m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i, QModelIndex()));
   }
@@ -1389,8 +1394,8 @@ void SpreadsheetView::print(QPrinter* printer) const{
 	int dpiy = printer->logicalDpiY();
 	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
 
-	QHeaderView *hHeader = horizontalHeader();
-	QHeaderView *vHeader = verticalHeader();
+	QHeaderView *hHeader = m_tableView->horizontalHeader();
+	QHeaderView *vHeader = m_tableView->verticalHeader();
 
 	int rows = m_spreadsheet->rowCount();
 	int cols = m_spreadsheet->columnCount();
@@ -1401,15 +1406,15 @@ void SpreadsheetView::print(QPrinter* printer) const{
 
 	//Paint the horizontal header first
 	painter.setFont(hHeader->font());
-	QString headerString = model()->headerData(0, Qt::Horizontal).toString();
+	QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
 	QRect br = painter.boundingRect(br, Qt::AlignCenter, headerString);
 	painter.drawLine(right, height, right, height+br.height());
 	QRect tr(br);
 
 	int w;
 	for (i=0;i<cols;i++){
-		headerString = model()->headerData(i, Qt::Horizontal).toString();
-		w = columnWidth(i);
+		headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+		w = m_tableView->columnWidth(i);
 		tr.setTopLeft(QPoint(right,height));
 		tr.setWidth(w);
 		tr.setHeight(br.height());
@@ -1431,7 +1436,7 @@ void SpreadsheetView::print(QPrinter* printer) const{
 	QString cellText;
 	for (i=0;i<rows;i++){
 		right = margin;
-		cellText = model()->headerData(i, Qt::Vertical).toString()+'\t';
+		cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
 		tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
 		painter.drawLine(right, height, right, height+tr.height());
 
@@ -1443,7 +1448,7 @@ void SpreadsheetView::print(QPrinter* printer) const{
 		painter.drawLine(right, height, right, height+tr.height());
 
 		for(int j=0;j<cols;j++){
-			int w = columnWidth (j);
+			int w = m_tableView->columnWidth(j);
 			cellText = m_spreadsheet->text(i,j)+'\t';
 			tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
 			br.setTopLeft(QPoint(right,height));
