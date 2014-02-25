@@ -48,7 +48,7 @@
 SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : KDialog( parent, fl ){
 
     setWindowIcon(KIcon("view-sort-ascending"));
-	setWindowTitle(i18n("Sort column(s)"));
+	setWindowTitle(i18n("Sort columns"));
 	setSizeGripEnabled(true);
 
 	QGroupBox* widget = new QGroupBox(i18n("Options"));

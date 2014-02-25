@@ -216,7 +216,7 @@ void ColumnSetModeCmd::undo()
 ColumnFullCopyCmd::ColumnFullCopyCmd(Column::Private * col, const AbstractColumn * src, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_src(src), m_backup(0), m_backup_owner(0)
 {
-	setText(i18n("%1: change cell value(s)").arg(col->name()));
+	setText(i18n("%1: change cell values").arg(col->name()));
 }
 
 /**
@@ -329,7 +329,7 @@ void ColumnFullCopyCmd::undo()
 ColumnPartialCopyCmd::ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_src(src), m_col_backup(0), m_src_backup(0), m_col_backup_owner(0), m_src_backup_owner(0), m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows)
 {
-	setText(i18n("%1: change cell value(s)").arg(col->name()));
+	setText(i18n("%1: change cell values").arg(col->name()));
 }
 
 /**

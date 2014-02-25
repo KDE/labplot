@@ -131,7 +131,7 @@ void Spreadsheet::removeRows(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: remove %2 row(s)").arg(name()).arg(count));
+	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
 	foreach(Column * col, children<Column>(IncludeHidden))
 	    col->removeRows(first, count);
 	endMacro();
@@ -142,7 +142,7 @@ void Spreadsheet::insertRows(int before, int count)
 {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: insert %2 row(s)").arg(name()).arg(count));
+	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
 	foreach(Column * col, children<Column>(IncludeHidden))
 	    col->insertRows(before, count);
 	endMacro();
@@ -220,7 +220,7 @@ void Spreadsheet::removeColumns(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: remove %2 column(s)").arg(name()).arg(count));
+	beginMacro( i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count) );
 	for (int i=0; i<count; i++)
 		child<Column>(first)->remove();
 	endMacro();
@@ -230,7 +230,7 @@ void Spreadsheet::removeColumns(int first, int count)
 void Spreadsheet::insertColumns(int before, int count)
 {
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: insert %2 column(s)").arg(name()).arg(count));
+	beginMacro( i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count) );
 	Column * before_col = column(before);
 	int rows = rowCount();
 	for (int i=0; i<count; i++) {
@@ -418,7 +418,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 	};
 
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: sort column(s)").arg(name()));
+	beginMacro(i18n("%1: sort columns").arg(name()));
 
 	if(leading == 0) { // sort separately
 		foreach(Column *col, cols) {

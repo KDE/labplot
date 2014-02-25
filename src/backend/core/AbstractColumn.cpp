@@ -152,7 +152,7 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {
-	beginMacro(i18n("%1: insert %2 row(s)").arg(name()).arg(count));
+	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
 	exec(new SignallingUndoCommand("pre-signal", this, "rowsAboutToBeInserted", "rowsRemoved",
 				Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
 
@@ -171,7 +171,7 @@ void AbstractColumn::handleRowInsertion(int before, int count) {
  * \brief Remove 'count' rows starting from row 'first'
  */
 void AbstractColumn::removeRows(int first, int count) {
-	beginMacro(i18n("%1: remove %2 row(s)").arg(name()).arg(count));
+	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
 	exec(new SignallingUndoCommand("change signal", this, "rowsAboutToBeRemoved", "rowsInserted",
 				Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
 
