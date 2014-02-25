@@ -46,6 +46,8 @@ class QTableView;
 
 class QMenu;
 class QToolBar;
+class QModelIndex;
+class QItemSelection;
 
 class SpreadsheetView : public QWidget{
     Q_OBJECT
