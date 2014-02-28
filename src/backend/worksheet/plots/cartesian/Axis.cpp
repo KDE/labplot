@@ -896,7 +896,7 @@ bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 	recalculates the position of the axis ticks.
  */ 
 void AxisPrivate::retransformTicks(){
-	qDebug()<<"AxisPrivate::retransformTicks()";
+// 	qDebug()<<"AxisPrivate::retransformTicks()";
 	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
 
 	majorTicksPath = QPainterPath();

@@ -380,63 +380,66 @@ void AxisDock::visibilityChanged(int state){
 */
 
 void AxisDock::orientationChanged(int index){
-   Axis::AxisOrientation orientation = (Axis::AxisOrientation)index;
-  int oldIndex = ui.cbPosition->currentIndex();
-  int oldLabelsIndex = ui.cbLabelsPosition->currentIndex();
-  
-  ui.cbPosition->clear();
-  ui.cbLabelsPosition->clear();
-  ui.cbLabelsPosition->addItem(i18n("no labels"));
-  if (orientation == Axis::AxisHorizontal){
-	ui.cbPosition->addItem( i18n("top") );
-	ui.cbPosition->addItem( i18n("bottom") );
-	ui.cbLabelsPosition->addItem( i18n("top") );
-	ui.cbLabelsPosition->addItem( i18n("bottom") );	
-  }else{//vertical
-	ui.cbPosition->addItem( i18n("left") );
-	ui.cbPosition->addItem( i18n("right") );
-	ui.cbLabelsPosition->addItem( i18n("right") );
-	ui.cbLabelsPosition->addItem( i18n("left") );
-  }
-  ui.cbPosition->addItem( i18n("centered") );
-  ui.cbPosition->addItem( i18n("custom") );
-  
-  //TODO: orientation was changed 
-  //-> update also the properties of axis and not only the ComboBoxes for the position and labels position.
-  ui.cbPosition->setCurrentIndex(oldIndex);
-  ui.cbLabelsPosition->setCurrentIndex(oldLabelsIndex);
-  
+	Axis::AxisOrientation orientation = (Axis::AxisOrientation)index;
+	int oldIndex = ui.cbPosition->currentIndex();
+	int oldLabelsIndex = ui.cbLabelsPosition->currentIndex();
+
+	ui.cbPosition->clear();
+	ui.cbLabelsPosition->clear();
+	ui.cbLabelsPosition->addItem(i18n("no labels"));
+	if (orientation == Axis::AxisHorizontal){
+		ui.cbPosition->addItem( i18n("top") );
+		ui.cbPosition->addItem( i18n("bottom") );
+		ui.cbLabelsPosition->addItem( i18n("top") );
+		ui.cbLabelsPosition->addItem( i18n("bottom") );
+	}else{//vertical
+		ui.cbPosition->addItem( i18n("left") );
+		ui.cbPosition->addItem( i18n("right") );
+		ui.cbLabelsPosition->addItem( i18n("right") );
+		ui.cbLabelsPosition->addItem( i18n("left") );
+	}
+	ui.cbPosition->addItem( i18n("centered") );
+	ui.cbPosition->addItem( i18n("custom") );
+
+	//TODO: orientation was changed
+	//-> update also the properties of axis and not only the ComboBoxes for the position and labels position.
+	ui.cbPosition->setCurrentIndex(oldIndex);
+	ui.cbLabelsPosition->setCurrentIndex(oldLabelsIndex);
+
     if (m_initializing)
 	  return;
-	
-  foreach(Axis* axis, m_axesList)
-	axis->setOrientation(orientation);
+
+	foreach(Axis* axis, m_axesList)
+		axis->setOrientation(orientation);
 }
 
 /*!
 	called if one of the predefined axis positions
-	(top, bottom, left, right or custom) was changed.
+	(top, bottom, left, right, center or custom) was changed.
 */
 void AxisDock::positionChanged(int index){
-	if ( index==3 ){
+	if (index==-1)
+		return;	//we occasionally get -1 here, nothing to do in this case
+
+	if ( index==3 )
 		ui.lePosition->setVisible(true);
-	}else{
+	else
 		ui.lePosition->setVisible(false);
-	}
 
 	if (m_initializing)
 		return;
 
+	//map from the current index in the combo box to the enum value in Axis::AxisPosition,
+	//depends on the current orientation
 	Axis::AxisPosition position;
-	if (index==3){
-		position = Axis::AxisCustom;
-	}else{
-		if ( m_axis->orientation() == Axis::AxisHorizontal)
-			position = Axis::AxisPosition(index);
-		else
-			position = Axis::AxisPosition(index+2);		
+	if ( ui.cbOrientation->currentIndex() == 0 ) {
+		if (index>1)
+			index += 2;
+		position = Axis::AxisPosition(index);
+	} else {
+		position = Axis::AxisPosition(index+2);
 	}
-	
+
 	foreach(Axis* axis, m_axesList)
 		axis->setPosition(position);
 }
@@ -1187,6 +1190,8 @@ void AxisDock::axisOrientationChanged(Axis::AxisOrientation orientation){
 
 void AxisDock::axisPositionChanged(Axis::AxisPosition position){
 	m_initializing = true;
+
+	//map from the enum Axis::AxisOrientation to the index in the combo box
 	int index(position);
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index-2);
