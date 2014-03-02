@@ -3,25 +3,24 @@
 
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_const_mksa.h>
-// #include <gsl/gsl_const_mks.h>
-// #include <gsl/gsl_const_cgsm.h>
 #include <gsl/gsl_const_num.h>
 
+#include "backend/gsl/parser_struct.h"
+
 struct con constants[] = {
-	//Mathematical constants
+	/* Mathematical constants */
 	{"e",M_E},
 	{"pi",M_PI},
 
-	//Physical constants: http://www.gnu.org/software/gsl/manual/html_node/Physical-Constants.html
+	/* Physical constants: http://www.gnu.org/software/gsl/manual/html_node/Physical-Constants.html */
+	/* Physical constants in MKSA system */
 
-	//Physical constants in MKSA system
-
-	//Fundamental Constants
+	/* Fundamental Constants */
 	{"c",GSL_CONST_MKSA_SPEED_OF_LIGHT},
 	{"mu0",GSL_CONST_MKSA_VACUUM_PERMEABILITY},
 	{"e0",GSL_CONST_MKSA_VACUUM_PERMITTIVITY},
-	{"h",GSL_CONST_MKSA_PLANCKS_CONSTANT_H}
-	{"hbar",GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR}
+	{"h",GSL_CONST_MKSA_PLANCKS_CONSTANT_H},
+	{"hbar",GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR},
 	{"na",GSL_CONST_NUM_AVOGADRO},
 	{"f",GSL_CONST_MKSA_FARADAY},
 	{"k",GSL_CONST_MKSA_BOLTZMANN},
@@ -30,7 +29,7 @@ struct con constants[] = {
 	{"sigma",GSL_CONST_MKSA_STEFAN_BOLTZMANN_CONSTANT},
 	{"gauss",GSL_CONST_MKSA_GAUSS},
 
-	//Astronomy and Astrophysics
+	/* Astronomy and Astrophysics */
 	{"au",GSL_CONST_MKSA_ASTRONOMICAL_UNIT},
 	{"G",GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT},
 	{"ly",GSL_CONST_MKSA_LIGHT_YEAR},
@@ -38,7 +37,7 @@ struct con constants[] = {
 	{"gg",GSL_CONST_MKSA_GRAV_ACCEL},
 	{"ms",GSL_CONST_MKSA_SOLAR_MASS},
 
-	//Atomic and Nuclear Physics
+	/* Atomic and Nuclear Physics */
 	{"e",GSL_CONST_MKSA_ELECTRON_CHARGE},
 	{"ev",GSL_CONST_MKSA_ELECTRON_VOLT},
 	{"amu",GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS},
@@ -58,33 +57,33 @@ struct con constants[] = {
 	{"sigmaT",GSL_CONST_MKSA_THOMSON_CROSS_SECTION},
 	{"pD",GSL_CONST_MKSA_DEBYE},
 
-	//Measurement of Time
+	/* Measurement of Time */
 	{"min",GSL_CONST_MKSA_MINUTE},
 	{"h",GSL_CONST_MKSA_HOUR},
 	{"d",GSL_CONST_MKSA_DAY},
 	{"week",GSL_CONST_MKSA_WEEK},
 
-	//Imperial Units
+	/* Imperial Units */
 	{"in",GSL_CONST_MKSA_INCH},
 	{"ft",GSL_CONST_MKSA_FOOT},
 	{"yard",GSL_CONST_MKSA_YARD},
 	{"mile",GSL_CONST_MKSA_MILE},
 	{"mil",GSL_CONST_MKSA_MIL},
 
-	//Speed and Nautical Units
+	/* Speed and Nautical Units */
 	{"v_km_per_h",GSL_CONST_MKSA_KILOMETERS_PER_HOUR},
 	{"v_mile_per_h",GSL_CONST_MKSA_MILES_PER_HOUR},
 	{"nmile",GSL_CONST_MKSA_NAUTICAL_MILE},
 	{"fathom",GSL_CONST_MKSA_FATHOM},
 	{"knot",GSL_CONST_MKSA_KNOT},
 
-	//Printers Units
+	/* Printers Units */
 	{"pt",GSL_CONST_MKSA_POINT},
 	{"texpt",GSL_CONST_MKSA_TEXPOINT},
 
-	//Volume, Area and Length
+	/* Volume, Area and Length */
 	{"micron",GSL_CONST_MKSA_MICRON},
-	{"hectare",GSL_CONST_MKSA_HECTARE}
+	{"hectare",GSL_CONST_MKSA_HECTARE},
 	{"acre",GSL_CONST_MKSA_ACRE},
 	{"liter",GSL_CONST_MKSA_LITER},
 	{"us_gallon",GSL_CONST_MKSA_US_GALLON},
@@ -93,7 +92,7 @@ struct con constants[] = {
 	{"quart",GSL_CONST_MKSA_QUART},
 	{"pint",GSL_CONST_MKSA_PINT},
 
-	//Mass and Weight
+	/* Mass and Weight */
 	{"pound",GSL_CONST_MKSA_POUND_MASS},
 	{"ounce",GSL_CONST_MKSA_OUNCE_MASS},
 	{"ton",GSL_CONST_MKSA_TON},
@@ -106,13 +105,13 @@ struct con constants[] = {
 	{"kilepound_force",GSL_CONST_MKSA_KILOPOUND_FORCE},
 	{"poundal",GSL_CONST_MKSA_POUNDAL},
 
-	//Thermal Energy and Power
+	/* Thermal Energy and Power */
 	{"cal",GSL_CONST_MKSA_CALORIE},
 	{"btu",GSL_CONST_MKSA_BTU},
 	{"therm",GSL_CONST_MKSA_THERM},
 	{"hp",GSL_CONST_MKSA_HORSEPOWER},
 
-	//Pressure
+	/* Pressure */
 	{"bar",GSL_CONST_MKSA_BAR},
 	{"atm",GSL_CONST_MKSA_STD_ATMOSPHERE},
 	{"torr",GSL_CONST_MKSA_TORR},
@@ -121,11 +120,11 @@ struct con constants[] = {
 	{"inh2o",GSL_CONST_MKSA_INCH_OF_WATER},
 	{"psi",GSL_CONST_MKSA_PSI},
 
-	//Viscosity
+	/* Viscosity */
 	{"poise",GSL_CONST_MKSA_POISE},
 	{"stokes",GSL_CONST_MKSA_STOKES},
 
-	//Light and Illumination
+	/* Light and Illumination */
 	{"stilb",GSL_CONST_MKSA_STILB},
 	{"lumen",GSL_CONST_MKSA_LUMEN},
 	{"lux",GSL_CONST_MKSA_LUX},
@@ -134,12 +133,12 @@ struct con constants[] = {
 	{"lambert",GSL_CONST_MKSA_LAMBERT},
 	{"ftlambert",GSL_CONST_MKSA_FOOTLAMBERT},
 
-	//Radioactivity
+	/* Radioactivity */
 	{"curie",GSL_CONST_MKSA_CURIE},
 	{"roentgen",GSL_CONST_MKSA_ROENTGEN},
 	{"rad",GSL_CONST_MKSA_RAD},
 
-	//Force and Energy
+	/* Force and Energy */
 	{"N",GSL_CONST_MKSA_NEWTON},
 	{"dyne",GSL_CONST_MKSA_DYNE},
 	{"J",GSL_CONST_MKSA_JOULE},
