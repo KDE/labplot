@@ -32,6 +32,7 @@
 #include "CartesianCoordinateSystem.h"
 #include "Axis.h"
 #include "XYCurve.h"
+#include "XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
@@ -361,31 +362,12 @@ void CartesianPlot::initDefault(Type type){
 }
 
 void CartesianPlot::initActions(){
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	addCurveAction = new QAction(i18n("xy-curve"), this);
-	addLegendAction = new QAction(i18n("legend"), this);
-	addHorizontalAxisAction = new QAction(i18n("horizontal axis"), this);
-	addVerticalAxisAction = new QAction(i18n("vertical axis"), this);
-
-	scaleAutoAction = new QAction(i18n("auto scale"), this);
-	scaleAutoXAction = new QAction(i18n("auto scale X"), this);
-	scaleAutoYAction = new QAction(i18n("auto scale Y"), this);
-	zoomInAction = new QAction(i18n("zoom in"), this);
-	zoomOutAction = new QAction(i18n("zoom out"), this);
-	zoomInXAction = new QAction(i18n("zoom in X"), this);
-	zoomOutXAction = new QAction(i18n("zoom out X"), this);
-	zoomInYAction = new QAction(i18n("zoom in Y"), this);
-	zoomOutYAction = new QAction(i18n("zoom out Y"), this);
-    shiftLeftXAction = new QAction(i18n("shift left X"), this);
-	shiftRightXAction = new QAction(i18n("shift right X"), this);
-	shiftUpYAction = new QAction(i18n("shift up Y"), this);
-	shiftDownYAction = new QAction(i18n("shift down Y"), this);
-#else
 	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
+	addEquationCurveAction = new KAction(KIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
-	
+
 	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
 	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), this);
 	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
@@ -399,8 +381,9 @@ void CartesianPlot::initActions(){
 	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
 	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
 	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
-#endif
+
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
@@ -428,6 +411,7 @@ void CartesianPlot::initActions(){
 void CartesianPlot::initMenus(){
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
+	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
@@ -475,6 +459,7 @@ QMenu* CartesianPlot::createContextMenu(){
 
 void CartesianPlot::fillToolBar(QToolBar* toolBar) const{
 	toolBar->addAction(addCurveAction);
+	toolBar->addAction(addEquationCurveAction);
 	toolBar->addAction(addLegendAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
@@ -626,6 +611,20 @@ void CartesianPlot::addAxis(){
 
 void CartesianPlot::addCurve(){
 	XYCurve* curve = new XYCurve("xy-curve");
+	this->addChild(curve);
+	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
+	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
+
+	//update the legend on changes of the name, line and symbol styles
+	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
+}
+
+void CartesianPlot::addEquationCurve(){
+	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	this->addChild(curve);
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
 	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));

@@ -55,22 +55,11 @@
   \ingroup kdefrontend
 */
 
-XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
+XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYColumn(0){
 	ui.setupUi(this);
 
-	QGridLayout* gridLayout;
-
-	// Tab "General"
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
-
-	cbXColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
-
-	cbYColumn = new TreeViewComboBox(ui.tabGeneral);
-	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
-
 	//Tab "Values"
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
+	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
 	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
 
@@ -99,15 +88,8 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	  layout->setHorizontalSpacing(2);
 	  layout->setVerticalSpacing(2);
 	}
-	
-	//Slots
 
-	//General
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
-	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
+	//Slots
 
 	//Lines
 	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
@@ -177,6 +159,31 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent){
 	retranslateUi();
 	init();
 }
+
+void XYCurveDock::setupGeneral() {
+	QWidget* generalTab = new QWidget(ui.tabGeneral);
+	uiGeneralTab.setupUi(generalTab);
+	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	layout->setMargin(0);
+	layout->addWidget(generalTab);
+
+	// Tab "General"
+	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
+
+	cbXColumn = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
+
+	cbYColumn = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
+
+	//General
+	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
+	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );	
+}
+
 
 void XYCurveDock::init(){
   	dateStrings<<"yyyy-MM-dd";
@@ -400,8 +407,10 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
 
 	QList<const char *>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
-	cbXColumn->setTopLevelClasses(list);
-	cbYColumn->setTopLevelClasses(list);
+	if (cbXColumn) {
+		cbXColumn->setTopLevelClasses(list);
+		cbYColumn->setTopLevelClasses(list);
+	}
 	cbValuesColumn->setTopLevelClasses(list);
 	cbXErrorMinusColumn->setTopLevelClasses(list);
 	cbXErrorPlusColumn->setTopLevelClasses(list);
@@ -411,8 +420,10 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
  	list.clear();
 	list<<"Column";
 	m_aspectTreeModel->setSelectableAspects(list);
-	cbXColumn->setSelectableClasses(list);
-	cbYColumn->setSelectableClasses(list);
+	if (cbXColumn) {
+		cbXColumn->setSelectableClasses(list);
+		cbYColumn->setSelectableClasses(list);
+	}
 	cbValuesColumn->setSelectableClasses(list);
 	cbXErrorMinusColumn->setSelectableClasses(list);
 	cbXErrorPlusColumn->setSelectableClasses(list);
@@ -420,8 +431,10 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
 	cbYErrorPlusColumn->setSelectableClasses(list);
 
 	m_initializing=true;
-  	cbXColumn->setModel(m_aspectTreeModel.get());
-	cbYColumn->setModel(m_aspectTreeModel.get());
+	if (cbXColumn) {
+		cbXColumn->setModel(m_aspectTreeModel.get());
+		cbYColumn->setModel(m_aspectTreeModel.get());
+	}
 	cbValuesColumn->setModel(m_aspectTreeModel.get());
 	cbXErrorMinusColumn->setModel(m_aspectTreeModel.get());
 	cbXErrorPlusColumn->setModel(m_aspectTreeModel.get());
@@ -438,42 +451,65 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
-  
-	//if there are more then one curve in the list, disable the tab "general"
-	if (list.size()==1){
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
-		ui.lXColumn->setEnabled(true);
+	initGeneralTab();
+	initTabs();
+	m_initializing=false;
+}
+
+void XYCurveDock::initGeneralTab(){
+	//if there are more then one curve in the list, disable the content in the tab "general"
+	if (m_curvesList.size()==1){
+		uiGeneralTab.lName->setEnabled(true);
+		uiGeneralTab.leName->setEnabled(true);
+		uiGeneralTab.lComment->setEnabled(true);
+		uiGeneralTab.leComment->setEnabled(true);
+
+		uiGeneralTab.lXColumn->setEnabled(true);
 		cbXColumn->setEnabled(true);
-		ui.lYColumn->setEnabled(true);
+		uiGeneralTab.lYColumn->setEnabled(true);
 		cbYColumn->setEnabled(true);
 
-		ui.leName->setText(m_curve->name());
-		ui.leComment->setText(m_curve->comment());
-	
 		this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
 		this->setModelIndexFromColumn(cbYColumn, m_curve->yColumn());
+
+		uiGeneralTab.leName->setText(m_curve->name());
+		uiGeneralTab.leComment->setText(m_curve->comment());
+	}else {
+		uiGeneralTab.lName->setEnabled(false);
+		uiGeneralTab.leName->setEnabled(false);
+		uiGeneralTab.lComment->setEnabled(false);
+		uiGeneralTab.leComment->setEnabled(false);
+
+		uiGeneralTab.lXColumn->setEnabled(false);
+		cbXColumn->setEnabled(false);
+		uiGeneralTab.lYColumn->setEnabled(false);
+		cbYColumn->setEnabled(false);
+
+		cbXColumn->setCurrentModelIndex(QModelIndex());
+		cbYColumn->setCurrentModelIndex(QModelIndex());
+
+		uiGeneralTab.leName->setText("");
+		uiGeneralTab.leComment->setText("");
+	}
+
+	//show the properties of the first curve
+	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+
+	//Slots
+	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));	
+}
+
+void XYCurveDock::initTabs() {
+	//if there are more then one curve in the list, disable the tab "general"
+	if (m_curvesList.size()==1){
 		this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
 		this->setModelIndexFromColumn(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
 		this->setModelIndexFromColumn(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
 		this->setModelIndexFromColumn(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
 		this->setModelIndexFromColumn(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());	
 	}else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
-		ui.lXColumn->setEnabled(false);
-		cbXColumn->setEnabled(false);
-		ui.lYColumn->setEnabled(false);
-		cbYColumn->setEnabled(false);	
-	
-		ui.leName->setText("");
-		ui.leComment->setText("");
-		cbXColumn->setCurrentModelIndex(QModelIndex());
-		cbYColumn->setCurrentModelIndex(QModelIndex());
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
 		cbXErrorMinusColumn->setCurrentModelIndex(QModelIndex());
@@ -482,15 +518,11 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	}
 
 	//show the properties of the first curve
-	ui.chkVisible->setChecked( m_curve->isVisible() );
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
 
-	//General-Tab
-	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
-	
+	//Slots
+
 	//Line-Tab
 	connect(m_curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(curveLineTypeChanged(XYCurve::LineType)));
 	connect(m_curve, SIGNAL(lineInterpolationPointsCountChanged(int)), this, SLOT(curveLineInterpolationPointsCountChanged(int)));
@@ -531,8 +563,6 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	connect(m_curve, SIGNAL(errorBarsTypeChanged(XYCurve::ErrorBarsType)), this, SLOT(curveErrorBarsTypeChanged(XYCurve::ErrorBarsType)));
 	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
 	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
-
-	m_initializing=false;
 }
 
 /*!
@@ -695,11 +725,12 @@ void XYCurveDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractCo
 //********** SLOTs for changes triggered in XYCurveDock ********
 //*************************************************************
 void XYCurveDock::retranslateUi(){
-	ui.lName->setText(i18n("Name"));
-	ui.lComment->setText(i18n("Comment"));
-	ui.chkVisible->setText(i18n("Visible"));
-	ui.lXColumn->setText(i18n("x-data"));
-	ui.lYColumn->setText(i18n("y-data"));
+	//TODO:
+// 	uiGeneralTab.lName->setText(i18n("Name"));
+// 	uiGeneralTab.lComment->setText(i18n("Comment"));
+// 	uiGeneralTab.chkVisible->setText(i18n("Visible"));
+// 	uiGeneralTab.lXColumn->setText(i18n("x-data"));
+// 	uiGeneralTab.lYColumn->setText(i18n("y-data"));
 	
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
@@ -709,7 +740,7 @@ void XYCurveDock::nameChanged(){
   if (m_initializing)
 	return;
   
-  m_curve->setName(ui.leName->text());
+  m_curve->setName(uiGeneralTab.leName->text());
 }
 
 
@@ -717,7 +748,7 @@ void XYCurveDock::commentChanged(){
   if (m_initializing)
 	return;
 
-  m_curve->setComment(ui.leComment->text());
+  m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
 void XYCurveDock::xColumnChanged(const QModelIndex& index){
@@ -1443,10 +1474,10 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
-		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
-		ui.leComment->setText(aspect->comment());
+	if (aspect->name() != uiGeneralTab.leName->text()) {
+		uiGeneralTab.leName->setText(aspect->name());
+	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+		uiGeneralTab.leComment->setText(aspect->comment());
 	}
 	m_initializing = false;
 }

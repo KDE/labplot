@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : XYCurve.cpp
-    Project              : LabPlot/AbstractColumn
-    Description          : A 2D-curve.
+    Project              : LabPlot
+    Description          : A xy-curve
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke*web.de)

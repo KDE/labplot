@@ -79,6 +79,7 @@ class CartesianPlot:public AbstractPlot{
 		QAction* visibilityAction;
 
 		QAction* addCurveAction;
+		QAction* addEquationCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
@@ -105,6 +106,7 @@ class CartesianPlot:public AbstractPlot{
 	private slots:
 		void addAxis();
 		void addCurve();
+		void addEquationCurve();
 		void addLegend();
 		void updateLegend();
 		void childAdded(const AbstractAspect*);

@@ -3,7 +3,7 @@ File                 : GuiObserver.cpp
 Project              : LabPlot/SciDAVis
 Description 		: GUI observer
 --------------------------------------------------------------------
-Copyright            		: (C) 2010 Alexander Semke
+Copyright            	: (C) 2010-2014 Alexander Semke
 Email (use @ for *)  	: alexander.semke*web.de
 
 ***************************************************************************/
@@ -47,6 +47,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 
@@ -217,6 +218,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	if (!mainWindow->xyCurveDock){
 	  mainWindow->xyCurveDock = new XYCurveDock(mainWindow->stackedWidget);
+	  mainWindow->xyCurveDock->setupGeneral();
 	  connect(mainWindow->xyCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->xyCurveDock);
 	}
@@ -231,6 +233,26 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->xyCurveDock->setCurves(list);
 	
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyCurveDock);
+  }else if (className=="XYEquationCurve"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-equation-curve properties"));
+
+	if (!mainWindow->xyEquationCurveDock){
+	  mainWindow->xyEquationCurveDock = new XYEquationCurveDock(mainWindow->stackedWidget);
+	  mainWindow->xyEquationCurveDock->setupGeneral();
+	  connect(mainWindow->xyEquationCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+	  mainWindow->stackedWidget->addWidget(mainWindow->xyEquationCurveDock);
+	}
+
+	std::auto_ptr<AspectTreeModel> model( new AspectTreeModel(mainWindow->m_project) );
+ 	mainWindow->xyEquationCurveDock->setModel( model );
+
+	QList<XYCurve*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<XYCurve *>(aspect);
+	}
+	mainWindow->xyEquationCurveDock->setCurves(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyEquationCurveDock);
   }else if (className=="TextLabel"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
 	

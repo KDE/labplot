@@ -34,6 +34,8 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "ui_xycurvedock.h"
+#include "ui_xycurvedockgeneraltab.h"
+
 #include <memory>
 
 class XYCurve;
@@ -49,13 +51,12 @@ public:
 	explicit XYCurveDock(QWidget *parent);
 	void setModel(std::auto_ptr<AspectTreeModel>);
 	void setCurves(QList<XYCurve*>);
-	
+	virtual void setupGeneral();
+
 private:
-	Ui::XYCurveDock ui;
-	QList<XYCurve*> m_curvesList;
-	XYCurve* m_curve;
+	Ui::XYCurveDockGeneralTab uiGeneralTab;
 	std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
-	bool m_initializing;
+
 	QStringList dateStrings;
 	QStringList timeStrings;
 	  
@@ -69,10 +70,19 @@ private:
 	
 	CurveSymbolFactory* symbolFactory;
 
+	virtual void initGeneralTab();
 	void fillSymbolStyles();
 	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
 	void showValuesColumnFormat(const Column*);
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
+
+protected:
+	bool m_initializing;
+	Ui::XYCurveDock ui;
+	QList<XYCurve*> m_curvesList;
+	XYCurve* m_curve;
+
+	void initTabs();
 
 private slots:
 	void init();

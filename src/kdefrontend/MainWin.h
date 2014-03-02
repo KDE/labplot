@@ -51,6 +51,7 @@ class ColumnDock;
 class ProjectDock;
 class SpreadsheetDock;
 class XYCurveDock;
+class XYEquationCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
@@ -142,6 +143,7 @@ private:
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;
 	XYCurveDock* xyCurveDock;
+	XYEquationCurveDock* xyEquationCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	
