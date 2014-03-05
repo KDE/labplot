@@ -5,6 +5,10 @@
 #include "functions.h"
 #include "parser_struct.h"
 
+#include <string.h>
+#include <strings.h>
+#include <ctype.h>
+
 /* Functions type.                                   */
 #ifdef HAVE_SOLARIS
 typedef double (*func_t) (double);

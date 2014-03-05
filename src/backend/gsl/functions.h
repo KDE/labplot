@@ -9,18 +9,8 @@
 double drand() { return random()/(double)RAND_MAX; }
 double my_rand() { return rand(); }
 double my_random() { return random(); }
-double my_fac(double i) { return fac((int)i); }
-double my_fdtr(double df1, double df2, double x) { return fdtr((int)df1, (int)df2, x); }
-double my_fdtrc(double df1, double df2, double x) { return fdtrc((int)df1, (int)df2, x); }
-double my_fdtri(double df1, double df2, double p) { return fdtri((int)df1, (int)df2, p); }
 double my_jn(double n, double x) { return jn((int)n,x); }
-double my_kn(double n, double x) { return kn((int)n,x); }
 double my_ldexp(double x, double expo) { return ldexp(x,(int)expo); }
-double my_pdtr(double k, double m) { return pdtr((int)k,m); }
-double my_pdtrc(double k, double m) { return pdtrc((int)k,m); }
-double my_pdtri(double k, double y) { return pdtr((int)k,y); }
-double my_stdtr(double k, double t) { return stdtr((short)k, t); }
-double my_stdtri(double k, double p) { return stdtri((short)k,p); }
 double my_yn(double n,double x) { return yn((int)n,x); }
 
 /* wrapper for GSL functions with integer parameters*/
@@ -115,44 +105,11 @@ double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf((unsigne
 struct init arith_fncts[] = {
   {"atan",atan},
   {"atan2",atan2},
-  {"beta",beta},
-  {"chbevl",chbevl},
   {"ceil",ceil},
-  {"chdtrc",chdtrc},
-  {"chdtr",chdtr},
-  {"chdtri",chdtri},
-  {"ellie",ellie},
-  {"ellik",ellik},
-  {"expn",expn},
-  {"fac",my_fac},
-  {"fdtrc",my_fdtrc},
-  {"fdtr",my_fdtr},
-  {"fdtri",my_fdtri},
-  {"gdtr",gdtr},
-  {"gdtrc",gdtrc},
-  {"hyp2f1",hyp2f1},
-  {"hyperg",hyperg},
-  {"igamc",igamc},
-  {"igam",igam},
-  {"igami",igami},
-  {"incbet",incbet},
-  {"incbi",incbi},
-  {"iv",iv},
   {"jn",my_jn},
-  {"jv",jv},
-  {"kn",my_kn},
-  {"lbeta",lbeta},
   {"ldexp",my_ldexp},
-  {"pdtrc",my_pdtrc},
-  {"pdtr",my_pdtr},
-  {"pdtri",my_pdtri},
   {"pow",pow},
-  {"stdtr",my_stdtr},
-  {"stdtri",my_stdtri},
-  {"struve",struve},
   {"yn",my_yn},
-  {"yv",yv},
-  {"zeta",zeta},
   {"acos",acos},
   {"acosh",acosh},
   {"asin",asin},
@@ -161,55 +118,36 @@ struct init arith_fncts[] = {
   {"cbrt",cbrt},
   {"cos", cos},
   {"cosh",cosh},
-  {"cosm1",cosm1},
-  {"dawsn",dawsn},
-  {"ellpe",ellpe},
-  {"ellpk",ellpk},
   {"erf",erf},
   {"erfc",erfc},
   {"exp", exp},
   {"expm1",expm1},
   {"fabs",fabs},
 /*  {"fresnl",fresnl},*/
-  {"i0",i0},
-  {"i0e",i0e},
-  {"i1",i1},
-  {"i1e",i1e},
 /*  {"ilogb",ilogb},*/
   {"j0",j0},
   {"j1",j1},
-  {"k0",k0},
-  {"k0e",k0e},
-  {"k1",k1},
-  {"k1e",k1e},
   {"ln", log},
   {"log",log10},
   {"logb",logb},
   {"log1p",log1p},
 /*  {"mtherr",mtherr},*/
-  {"ndtr",ndtr},
-  {"ndtri",ndtri},
-  {"psi",psi},
   {"rand",my_rand},
   {"random",my_random},
   {"drand",drand},
 /*  {"revers",revers},*/
-  {"rgamma",rgamma},
   {"rint",rint},
 /*  {"round",round},*/
 /*  {"shichi",shichi},*/
 /*  {"sici",sici},*/
   {"sin", sin},
   {"sinh",sinh},
-  {"spence",spence},
   {"sqrt", sqrt},
   {"tan",tan},
   {"tanh",tanh},
-  {"true_gamma",true_gamma},
 /*  {"trunc",trunc},*/
   {"y0",y0},
   {"y1",y1},
-  {"zetac",zetac},
   {"gsl_log1p",gsl_log1p},
   {"gsl_expm1",gsl_expm1},
   {"gsl_hypot",gsl_hypot},

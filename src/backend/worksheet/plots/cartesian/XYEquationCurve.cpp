@@ -39,11 +39,11 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
-// #include <gsl/gsl_errno.h>
-// #include <gsl/gsl_math.h>
-//
-// #include "backend/gsl/parser_struct.h"
-// #include "backend/gsl/parser_extern.h"
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_math.h>
+
+#include "backend/gsl/parser_struct.h"
+#include "backend/gsl/parser_extern.h"
 
 
 #include <KIcon>

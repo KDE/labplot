@@ -23,7 +23,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
@@ -85,7 +85,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	#${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
-# 	${BACKEND_DIR}/gsl/parser.tab.c
+ 	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
