@@ -30,6 +30,7 @@
 #define XYEQUATIONCURVEDOCK_H
 
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "ui_xyequationcurvedockgeneraltab.h"
 
 class XYEquationCurveDock: public XYCurveDock {
@@ -43,16 +44,19 @@ public:
 private:
 	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
 	virtual void initGeneralTab();
+	XYEquationCurve* m_equationCurve;
 
 private slots:
 	//SLOTs for changes triggered in XYCurveDock
 	void nameChanged();
 	void commentChanged();	
 	void typeChanged(int);
+	void recalculateClicked();
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
+	void curveEquationDataChanged(const XYEquationCurve::EquationData&);
 };
 
 #endif

@@ -33,13 +33,19 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
 class XYEquationCurve;
+class Column;
 
 class XYEquationCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYEquationCurvePrivate(XYEquationCurve*);
 		~XYEquationCurvePrivate();
 
-		XYEquationCurve::EquationType equationType;
+		void recalculate();
+
+		XYEquationCurve::EquationData equationData;
+
+		Column* xColumn;
+		Column* yColumn;
 
 		XYEquationCurve* const q;
 };

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>326</width>
+    <width>313</width>
     <height>518</height>
    </rect>
   </property>
@@ -77,18 +77,11 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lParamFuncX">
-     <property name="text">
-      <string>x=f(t)</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="3" colspan="3">
-    <widget class="KLineEdit" name="leParamFuncX"/>
+    <widget class="KLineEdit" name="leEquation1"/>
    </item>
    <item row="5" column="6">
-    <widget class="QToolButton" name="tbFunctions">
+    <widget class="QToolButton" name="tbFunctions1">
      <property name="toolTip">
       <string>Functions</string>
      </property>
@@ -98,7 +91,7 @@
     </widget>
    </item>
    <item row="5" column="7">
-    <widget class="QToolButton" name="tbConstants">
+    <widget class="QToolButton" name="tbConstants1">
      <property name="toolTip">
       <string>Constants</string>
      </property>
@@ -107,15 +100,8 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lParamFuncY">
-     <property name="text">
-      <string>y=g(t)</string>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="3" colspan="3">
-    <widget class="KLineEdit" name="leParamFuncY">
+    <widget class="KLineEdit" name="leEquation2">
      <property name="text">
       <string/>
      </property>
@@ -157,15 +143,8 @@
      </property>
     </spacer>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="lParameterMin">
-     <property name="text">
-      <string>t, min</string>
-     </property>
-    </widget>
-   </item>
    <item row="8" column="3">
-    <widget class="KLineEdit" name="leParameterMin">
+    <widget class="KLineEdit" name="leMin">
      <property name="text">
       <string/>
      </property>
@@ -184,15 +163,8 @@
      </property>
     </spacer>
    </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="lParameterMax">
-     <property name="text">
-      <string>t, max</string>
-     </property>
-    </widget>
-   </item>
    <item row="9" column="3">
-    <widget class="KLineEdit" name="leParameterMax">
+    <widget class="KLineEdit" name="leMax">
      <property name="text">
       <string/>
      </property>
@@ -222,7 +194,7 @@
     </widget>
    </item>
    <item row="11" column="3">
-    <widget class="QSpinBox" name="sbAxis1Number">
+    <widget class="QSpinBox" name="sbCount">
      <property name="maximum">
       <number>999999999</number>
      </property>
@@ -245,7 +217,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>112</width>
+       <width>99</width>
        <height>20</height>
       </size>
      </property>
@@ -294,6 +266,34 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QLabel" name="lEquation1">
+     <property name="text">
+      <string>x=f(t)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="lEquation2">
+     <property name="text">
+      <string>y=g(t)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QLabel" name="lMin">
+     <property name="text">
+      <string>t, min</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <widget class="QLabel" name="lMax">
+     <property name="text">
+      <string>t, max</string>
      </property>
     </widget>
    </item>

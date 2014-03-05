@@ -38,6 +38,17 @@ class XYEquationCurve: public XYCurve {
 	public:
 		enum EquationType {Cartesian, Polar, Parametric, Implicit};
 
+		struct EquationData {
+			EquationData() : type(Cartesian), count(-1){};
+
+			EquationType type;
+			QString expression1;
+			QString expression2;
+			QString min;
+			QString max;
+			int count;
+		};
+
 		explicit XYEquationCurve(const QString& name);
 		virtual ~XYEquationCurve();
 
@@ -45,7 +56,7 @@ class XYEquationCurve: public XYCurve {
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
-		BASIC_D_ACCESSOR_DECL(EquationType, equationType, EquationType)
+		CLASS_D_ACCESSOR_DECL(EquationData, equationData, EquationData)
 
 		typedef AbstractWorksheetElement BaseClass;
 		typedef XYEquationCurvePrivate Private;
@@ -55,6 +66,10 @@ class XYEquationCurve: public XYCurve {
 
 	private:
 		Q_DECLARE_PRIVATE(XYEquationCurve)
+
+	signals:
+		friend class XYEquationCurveSetEquationDataCmd;
+		void equationDataChanged(const EquationData&);
 };
 
 #endif

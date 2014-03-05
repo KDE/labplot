@@ -57,7 +57,7 @@ void XYEquationCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	uiGeneralTab.tbConstants->setIcon( KIcon("applications-education-mathematics") );
+	uiGeneralTab.tbConstants1->setIcon( KIcon("applications-education-mathematics") );
 	uiGeneralTab.tbConstants2->setIcon( KIcon("applications-education-mathematics") );
 
 	uiGeneralTab.cbType->addItem(i18n("cartesian"));
@@ -73,6 +73,7 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
 /*!
@@ -82,6 +83,8 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list){
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
+	m_equationCurve = dynamic_cast<XYEquationCurve*>(m_curve);
+	Q_ASSERT(m_equationCurve);
 	initGeneralTab();
 	initTabs();
 	m_initializing=false;
@@ -110,8 +113,8 @@ void XYEquationCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	const XYEquationCurve* equationCurve = dynamic_cast<const XYEquationCurve*>(m_curve);
 	Q_ASSERT(equationCurve);
-	uiGeneralTab.cbType->setCurrentIndex(equationCurve->equationType());
-	this->typeChanged(equationCurve->equationType());
+	uiGeneralTab.cbType->setCurrentIndex(equationCurve->equationData().type);
+	this->typeChanged(equationCurve->equationData().type);
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -140,53 +143,64 @@ void XYEquationCurveDock::commentChanged(){
 void XYEquationCurveDock::typeChanged(int index) {
 	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(index);
 	if (type==XYEquationCurve::Cartesian) {
-		uiGeneralTab.lParamFuncX->setText("y=f(x)");
-		uiGeneralTab.lParamFuncY->hide();
-		uiGeneralTab.leParamFuncY->hide();
+		uiGeneralTab.lEquation1->setText("y=f(x)");
+		uiGeneralTab.lEquation2->hide();
+		uiGeneralTab.leEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
 		uiGeneralTab.tbConstants2->hide();
-		uiGeneralTab.lParameterMin->show();
-		uiGeneralTab.lParameterMax->show();
-		uiGeneralTab.leParameterMin->show();
-		uiGeneralTab.leParameterMax->show();
-		uiGeneralTab.lParameterMin->setText(i18n("x, min"));
-		uiGeneralTab.lParameterMax->setText(i18n("x, max"));
+		uiGeneralTab.lMin->show();
+		uiGeneralTab.lMax->show();
+		uiGeneralTab.leMin->show();
+		uiGeneralTab.leMax->show();
+		uiGeneralTab.lMin->setText(i18n("x, min"));
+		uiGeneralTab.lMax->setText(i18n("x, max"));
 	} else if (type==XYEquationCurve::Polar) {
-		uiGeneralTab.lParamFuncX->setText(QString::fromUtf8("r(φ)"));
-		uiGeneralTab.lParamFuncY->hide();
-		uiGeneralTab.leParamFuncY->hide();
+		uiGeneralTab.lEquation1->setText(QString::fromUtf8("r(φ)"));
+		uiGeneralTab.lEquation2->hide();
+		uiGeneralTab.leEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
 		uiGeneralTab.tbConstants2->hide();
-		uiGeneralTab.lParameterMin->show();
-		uiGeneralTab.lParameterMax->show();
-		uiGeneralTab.leParameterMin->show();
-		uiGeneralTab.leParameterMax->show();
-		uiGeneralTab.lParameterMin->setText(i18n("φ, min"));
-		uiGeneralTab.lParameterMax->setText(i18n("φ, max"));
+		uiGeneralTab.lMin->show();
+		uiGeneralTab.lMax->show();
+		uiGeneralTab.leMin->show();
+		uiGeneralTab.leMax->show();
+		uiGeneralTab.lMin->setText(i18n("φ, min"));
+		uiGeneralTab.lMax->setText(i18n("φ, max"));
 	} else if (type==XYEquationCurve::Parametric) {
-		uiGeneralTab.lParamFuncX->setText("x=f(t)");
-		uiGeneralTab.lParamFuncY->setText("y=f(t)");
-		uiGeneralTab.lParamFuncY->show();
-		uiGeneralTab.leParamFuncY->show();
+		uiGeneralTab.lEquation1->setText("x=f(t)");
+		uiGeneralTab.lEquation2->setText("y=f(t)");
+		uiGeneralTab.lEquation2->show();
+		uiGeneralTab.leEquation2->show();
 		uiGeneralTab.tbFunctions2->show();
 		uiGeneralTab.tbConstants2->show();
-		uiGeneralTab.lParameterMin->show();
-		uiGeneralTab.lParameterMax->show();
-		uiGeneralTab.leParameterMin->show();
-		uiGeneralTab.leParameterMax->show();
-		uiGeneralTab.lParameterMin->setText(i18n("t, min"));
-		uiGeneralTab.lParameterMax->setText(i18n("t, max"));
+		uiGeneralTab.lMin->show();
+		uiGeneralTab.lMax->show();
+		uiGeneralTab.leMin->show();
+		uiGeneralTab.leMax->show();
+		uiGeneralTab.lMin->setText(i18n("t, min"));
+		uiGeneralTab.lMax->setText(i18n("t, max"));
 	} else if (type==XYEquationCurve::Implicit) {
-		uiGeneralTab.lParamFuncX->setText("f(x,y)");
-		uiGeneralTab.lParamFuncY->hide();
-		uiGeneralTab.leParamFuncY->hide();
+		uiGeneralTab.lEquation1->setText("f(x,y)");
+		uiGeneralTab.lEquation2->hide();
+		uiGeneralTab.leEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
 		uiGeneralTab.tbConstants2->hide();
-		uiGeneralTab.lParameterMin->hide();
-		uiGeneralTab.lParameterMax->hide();
-		uiGeneralTab.leParameterMin->hide();
-		uiGeneralTab.leParameterMax->hide();
+		uiGeneralTab.lMin->hide();
+		uiGeneralTab.lMax->hide();
+		uiGeneralTab.leMin->hide();
+		uiGeneralTab.leMax->hide();
 	}
+}
+
+void XYEquationCurveDock::recalculateClicked() {
+	XYEquationCurve::EquationData data;
+	data.type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
+	data.expression1 = uiGeneralTab.leEquation1->text();
+	data.expression2 = uiGeneralTab.leEquation2->text();
+	data.min = uiGeneralTab.leMin->text();
+	data.max = uiGeneralTab.leEquation1->text();
+	data.count = uiGeneralTab.sbCount->value();
+	m_equationCurve->setEquationData(data);
 }
 
 //*************************************************************
@@ -206,3 +220,8 @@ void XYEquationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) 
 	m_initializing = false;
 }
 
+void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& equationData) {
+	m_initializing = true;
+	//TODO
+	m_initializing = false;
+}

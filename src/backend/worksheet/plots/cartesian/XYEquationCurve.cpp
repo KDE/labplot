@@ -35,6 +35,16 @@
 
 #include "XYEquationCurve.h"
 #include "XYEquationCurvePrivate.h"
+#include "backend/core/AbstractColumn.h"
+#include "backend/core/column/Column.h"
+#include "backend/lib/commandtemplates.h"
+
+// #include <gsl/gsl_errno.h>
+// #include <gsl/gsl_math.h>
+//
+// #include "backend/gsl/parser_struct.h"
+// #include "backend/gsl/parser_extern.h"
+
 
 #include <KIcon>
 
@@ -64,21 +74,82 @@ QIcon XYEquationCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYEquationCurve, XYEquationCurve::EquationType, equationType, equationType)
+BASIC_SHARED_D_READER_IMPL(XYEquationCurve, XYEquationCurve::EquationData, equationData, equationData)
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-
+STD_SETTER_CMD_IMPL_F_S(XYEquationCurve, SetEquationData, XYEquationCurve::EquationData, equationData, recalculate);
+void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equationData) {
+	Q_D(XYEquationCurve);
+	if ( (equationData.expression1 != d->equationData.expression1)
+		|| (equationData.expression2 != d->equationData.expression2)
+		|| (equationData.min != d->equationData.min)
+		|| (equationData.max != d->equationData.max)
+		|| (equationData.count != d->equationData.count) )
+		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, i18n("%1: set equation")));
+}
 
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner) : XYCurvePrivate(owner),
-	equationType(XYEquationCurve::Cartesian), q(owner)  {
+	xColumn(new Column("x", AbstractColumn::Numeric)),
+	yColumn(new Column("y", AbstractColumn::Numeric)),
+	q(owner)  {
 }
 
 XYEquationCurvePrivate::~XYEquationCurvePrivate() {
+	delete xColumn;
+	delete yColumn;
+}
+
+
+void XYEquationCurvePrivate::recalculate() {
+// 	QString fun;
+// 	fun.remove(QRegExp(".*="));		// remove any "xyz =" before expression
+
+	//resize columns
+	//TODO
+// 	xColumn->setRowCount(equationData.count);
+// 	xColumn->setRowCount(equationData.count);
+
+	if (equationData.count<1)
+		return;
+
+	//TODO: solve linking problem!
+/*
+	init_table();
+
+	if (equationData.type == XYEquationCurve::Cartesian) {
+		double xMin = parse( equationData.max.toAscii().data() );
+		double xMax = parse( equationData.min.toAscii().data() );
+		double step = (xMax-xMin)/(double)(equationData.count-1);
+		char*  func = equationData.expression1.toAscii().data();
+		double x, y;
+		char xVar[] = "x";
+
+		for(int i = 0;i < equationData.count; i++) {
+			x = xMin + step*i;
+			assign_variable(xVar,x);
+			gsl_set_error_handler_off();
+			y = parse(func);
+
+			if(parse_errors()>0) {
+				delete_table();
+				return;//TODO
+			}
+
+			xColumn->setValueAt(i, x);
+			if (finite(y))
+				yColumn->setValueAt(i, y);
+			else
+				yColumn->setValueAt(i, NAN);
+		}
+	}
+
+	delete_table();
+	*/
 }
 
 //##############################################################################
