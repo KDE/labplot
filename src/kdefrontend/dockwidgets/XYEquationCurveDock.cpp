@@ -198,7 +198,7 @@ void XYEquationCurveDock::recalculateClicked() {
 	data.expression1 = uiGeneralTab.leEquation1->text();
 	data.expression2 = uiGeneralTab.leEquation2->text();
 	data.min = uiGeneralTab.leMin->text();
-	data.max = uiGeneralTab.leEquation1->text();
+	data.max = uiGeneralTab.leMax->text();
 	data.count = uiGeneralTab.sbCount->value();
 	m_equationCurve->setEquationData(data);
 }

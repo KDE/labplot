@@ -41,12 +41,11 @@
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
-
 #include "backend/gsl/parser_struct.h"
 #include "backend/gsl/parser_extern.h"
 
-
 #include <KIcon>
+#include <QDebug>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
 		: XYCurve(name, new XYEquationCurvePrivate(this)){
@@ -106,7 +105,6 @@ XYEquationCurvePrivate::~XYEquationCurvePrivate() {
 
 
 void XYEquationCurvePrivate::recalculate() {
-// 	QString fun;
 // 	fun.remove(QRegExp(".*="));		// remove any "xyz =" before expression
 
 	//resize columns
@@ -117,23 +115,24 @@ void XYEquationCurvePrivate::recalculate() {
 	if (equationData.count<1)
 		return;
 
-	//TODO: solve linking problem!
-/*
 	init_table();
 
 	if (equationData.type == XYEquationCurve::Cartesian) {
-		double xMin = parse( equationData.max.toAscii().data() );
-		double xMax = parse( equationData.min.toAscii().data() );
+		double xMin = parse( equationData.min.toLocal8Bit().data() );
+		double xMax = parse( equationData.max.toLocal8Bit().data() );
 		double step = (xMax-xMin)/(double)(equationData.count-1);
-		char*  func = equationData.expression1.toAscii().data();
+		QByteArray expressionByteArray = equationData.expression1.toLocal8Bit();
+		char* func = expressionByteArray.data();
+		printf("fun = %s (%g,%g)\n",func,xMin,xMax);
 		double x, y;
-		char xVar[] = "x";
 
 		for(int i = 0;i < equationData.count; i++) {
 			x = xMin + step*i;
+			char xVar[] = "x";
 			assign_variable(xVar,x);
 			gsl_set_error_handler_off();
 			y = parse(func);
+			printf("f(%g)=%g\n",x,y);
 
 			if(parse_errors()>0) {
 				delete_table();
@@ -149,7 +148,7 @@ void XYEquationCurvePrivate::recalculate() {
 	}
 
 	delete_table();
-	*/
+	
 }
 
 //##############################################################################
