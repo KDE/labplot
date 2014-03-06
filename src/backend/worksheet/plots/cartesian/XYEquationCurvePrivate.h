@@ -43,9 +43,10 @@ class XYEquationCurvePrivate: public XYCurvePrivate {
 		void recalculate();
 
 		XYEquationCurve::EquationData equationData;
-
 		Column* xColumn;
 		Column* yColumn;
+		QVector<double>* xVector;
+		QVector<double>* yVector;
 
 		XYEquationCurve* const q;
 };

@@ -95,7 +95,10 @@ void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equat
 XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner) : XYCurvePrivate(owner),
 	xColumn(new Column("x", AbstractColumn::Numeric)),
 	yColumn(new Column("y", AbstractColumn::Numeric)),
+	xVector(static_cast<QVector<double>* >(xColumn->data())),
+	yVector(static_cast<QVector<double>* >(yColumn->data())),
 	q(owner)  {
+
 }
 
 XYEquationCurvePrivate::~XYEquationCurvePrivate() {
@@ -105,17 +108,30 @@ XYEquationCurvePrivate::~XYEquationCurvePrivate() {
 
 
 void XYEquationCurvePrivate::recalculate() {
-// 	fun.remove(QRegExp(".*="));		// remove any "xyz =" before expression
+	//TODO: this should be set in constructor, but it crashes. why?
+	q->setXColumn(xColumn);
+	q->setYColumn(yColumn);
 
-	//resize columns
-	//TODO
-// 	xColumn->setRowCount(equationData.count);
-// 	xColumn->setRowCount(equationData.count);
 
-	if (equationData.count<1)
-		return;
+	//resize the vector if a new number of point to calculate was provided
+	if (equationData.count != xVector->size()) {
+		if (equationData.count>=1) {
+			xVector->resize(equationData.count);
+			yVector->resize(equationData.count);
+		} else {
+			//invalid number of points provided
+			xVector->resize(0);
+			yVector->resize(0);
+			emit (q->xDataChanged());
+			emit (q->yDataChanged());
+			return;
+		}
+	} else {
+		if (equationData.count<1)
+			return;
+	}
 
-	init_table();
+	init_table(); //TODO: don't initialize this every time recalculate is called
 
 	if (equationData.type == XYEquationCurve::Cartesian) {
 		double xMin = parse( equationData.min.toLocal8Bit().data() );
@@ -123,7 +139,7 @@ void XYEquationCurvePrivate::recalculate() {
 		double step = (xMax-xMin)/(double)(equationData.count-1);
 		QByteArray expressionByteArray = equationData.expression1.toLocal8Bit();
 		char* func = expressionByteArray.data();
-		printf("fun = %s (%g,%g)\n",func,xMin,xMax);
+// 		printf("fun = %s (%g,%g)\n",func,xMin,xMax);
 		double x, y;
 
 		for(int i = 0;i < equationData.count; i++) {
@@ -132,23 +148,29 @@ void XYEquationCurvePrivate::recalculate() {
 			assign_variable(xVar,x);
 			gsl_set_error_handler_off();
 			y = parse(func);
-			printf("f(%g)=%g\n",x,y);
+// 			printf("f(%g)=%g\n",x,y);
 
 			if(parse_errors()>0) {
+				qDebug()<<"parse errors";
 				delete_table();
-				return;//TODO
+				xVector->clear();
+				yVector->clear();
+				emit (q->xDataChanged());
+				emit (q->yDataChanged());
+				return;
 			}
 
-			xColumn->setValueAt(i, x);
+			(*xVector)[i] = x;
 			if (finite(y))
-				yColumn->setValueAt(i, y);
+				(*yVector)[i] = y;
 			else
-				yColumn->setValueAt(i, NAN);
+				(*yVector)[i] = NAN;
 		}
 	}
 
+	emit (q->xDataChanged());
+	emit (q->yDataChanged());
 	delete_table();
-	
 }
 
 //##############################################################################
