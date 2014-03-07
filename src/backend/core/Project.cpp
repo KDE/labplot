@@ -97,9 +97,10 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 	//we don't have direct access to the members name and comment
 	//->temporaly disable the undo stack and call the setters
 	setUndoAware(false);
-	setName(group.readEntry("Name", QString()));
+	setName(group.readEntry("Name", i18n("Project")));
 	setComment(group.readEntry("Comment", QString()));
 	setUndoAware(true);
+	d->changed = false;
 
 #ifndef SUPPRESS_SCRIPTING_INIT
 	// TODO: intelligent engine choosing

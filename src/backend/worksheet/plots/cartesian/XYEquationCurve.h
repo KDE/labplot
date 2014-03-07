@@ -39,7 +39,7 @@ class XYEquationCurve: public XYCurve {
 		enum EquationType {Cartesian, Polar, Parametric, Implicit};
 
 		struct EquationData {
-			EquationData() : type(Cartesian), count(-1){};
+			EquationData() : type(Cartesian), min("0"), max("1"), count(100){};
 
 			EquationType type;
 			QString expression1;
@@ -69,7 +69,7 @@ class XYEquationCurve: public XYCurve {
 
 	signals:
 		friend class XYEquationCurveSetEquationDataCmd;
-		void equationDataChanged(const EquationData&);
+		void equationDataChanged(const XYEquationCurve::EquationData&);
 };
 
 #endif

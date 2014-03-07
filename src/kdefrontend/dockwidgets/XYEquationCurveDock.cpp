@@ -113,13 +113,22 @@ void XYEquationCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	const XYEquationCurve* equationCurve = dynamic_cast<const XYEquationCurve*>(m_curve);
 	Q_ASSERT(equationCurve);
-	uiGeneralTab.cbType->setCurrentIndex(equationCurve->equationData().type);
+	const XYEquationCurve::EquationData& data = equationCurve->equationData();
+	uiGeneralTab.cbType->setCurrentIndex(data.type);
+	uiGeneralTab.leEquation1->setText(data.expression1);
+	uiGeneralTab.leEquation2->setText(data.expression2);
+	uiGeneralTab.leMin->setText(data.min);
+	uiGeneralTab.leMax->setText(data.max);
+	uiGeneralTab.sbCount->setValue(data.count);
 	this->typeChanged(equationCurve->equationData().type);
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_equationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
+			this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_equationCurve, SIGNAL(equationDataChanged(XYEquationCurve::EquationData)),
+			this, SLOT(curveEquationDataChanged(XYEquationCurve::EquationData)));
 }
 
 //*************************************************************
@@ -220,8 +229,13 @@ void XYEquationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) 
 	m_initializing = false;
 }
 
-void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& equationData) {
+void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& data) {
 	m_initializing = true;
-	//TODO
+	uiGeneralTab.cbType->setCurrentIndex(data.type);
+	uiGeneralTab.leEquation1->setText(data.expression1);
+	uiGeneralTab.leEquation2->setText(data.expression2);
+	uiGeneralTab.leMin->setText(data.min);
+	uiGeneralTab.leMax->setText(data.max);
+	uiGeneralTab.sbCount->setValue(data.count);
 	m_initializing = false;
 }
