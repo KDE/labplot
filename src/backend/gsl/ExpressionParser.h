@@ -37,6 +37,8 @@ public:
 	static ExpressionParser* getInstance();
 
 	bool isValid(const QString&, XYEquationCurve::EquationType);
+	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max,
+						   int count, QVector<double>* xVector, QVector<double>* yVector);
 
 private:
 	ExpressionParser();

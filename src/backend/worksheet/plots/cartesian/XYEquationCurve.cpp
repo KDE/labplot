@@ -38,11 +38,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
-
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_math.h>
-#include "backend/gsl/parser_struct.h"
-#include "backend/gsl/parser_extern.h"
+#include "backend/gsl/ExpressionParser.h"
 
 #include <KIcon>
 #include <QDebug>
@@ -112,7 +108,6 @@ void XYEquationCurvePrivate::recalculate() {
 	q->setXColumn(xColumn);
 	q->setYColumn(yColumn);
 
-
 	//resize the vector if a new number of point to calculate was provided
 	if (equationData.count != xVector->size()) {
 		if (equationData.count>=1) {
@@ -120,8 +115,8 @@ void XYEquationCurvePrivate::recalculate() {
 			yVector->resize(equationData.count);
 		} else {
 			//invalid number of points provided
-			xVector->resize(0);
-			yVector->resize(0);
+			xVector->clear();
+			yVector->clear();
 			emit (q->xDataChanged());
 			emit (q->yDataChanged());
 			return;
@@ -131,46 +126,21 @@ void XYEquationCurvePrivate::recalculate() {
 			return;
 	}
 
-	init_table(); //TODO: don't initialize this every time recalculate is called
-
+	ExpressionParser* parser = ExpressionParser::getInstance();
 	if (equationData.type == XYEquationCurve::Cartesian) {
-		double xMin = parse( equationData.min.toLocal8Bit().data() );
-		double xMax = parse( equationData.max.toLocal8Bit().data() );
-		double step = (xMax-xMin)/(double)(equationData.count-1);
-		QByteArray expressionByteArray = equationData.expression1.toLocal8Bit();
-		char* func = expressionByteArray.data();
-// 		printf("fun = %s (%g,%g)\n",func,xMin,xMax);
-		double x, y;
-
-		for(int i = 0;i < equationData.count; i++) {
-			x = xMin + step*i;
-			char xVar[] = "x";
-			assign_variable(xVar,x);
-			gsl_set_error_handler_off();
-			y = parse(func);
-// 			printf("f(%g)=%g\n",x,y);
-
-			if(parse_errors()>0) {
-				qDebug()<<"parse errors";
-				delete_table();
-				xVector->clear();
-				yVector->clear();
-				emit (q->xDataChanged());
-				emit (q->yDataChanged());
-				return;
-			}
-
-			(*xVector)[i] = x;
-			if (finite(y))
-				(*yVector)[i] = y;
-			else
-				(*yVector)[i] = NAN;
+		bool rc = parser->evaluateCartesian(equationData.expression1,
+											equationData.min,
+											equationData.max,
+											equationData.count,
+											xVector, yVector);
+		if (!rc) {
+			xVector->clear();
+			yVector->clear();
 		}
 	}
 
 	emit (q->xDataChanged());
 	emit (q->yDataChanged());
-	delete_table();
 }
 
 //##############################################################################
