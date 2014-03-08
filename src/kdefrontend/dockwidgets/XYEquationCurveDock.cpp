@@ -28,6 +28,7 @@
 
 #include "XYEquationCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/gsl/ExpressionParser.h"
 
 /*!
   \class XYEquationCurveDock
@@ -73,6 +74,10 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+	connect( uiGeneralTab.leEquation1, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
+	connect( uiGeneralTab.leEquation2, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
+	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
+	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
@@ -210,6 +215,17 @@ void XYEquationCurveDock::recalculateClicked() {
 	data.max = uiGeneralTab.leMax->text();
 	data.count = uiGeneralTab.sbCount->value();
 	m_equationCurve->setEquationData(data);
+}
+
+void XYEquationCurveDock::validateExpression(const QString& eq) {
+	QLineEdit* lineEdit = dynamic_cast<QLineEdit*>(QObject::sender());
+	Q_ASSERT(lineEdit);
+	XYEquationCurve::EquationType type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
+	bool rc = ExpressionParser::getInstance()->isValid(eq, type);
+	if (!rc)
+		lineEdit->setStyleSheet("QLineEdit{background: red;}");
+	else
+		lineEdit->setStyleSheet("QLineEdit{background: white;}"); //TODO: assign the default color for the current style/theme
 }
 
 //*************************************************************

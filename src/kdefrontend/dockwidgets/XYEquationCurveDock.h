@@ -52,6 +52,7 @@ private slots:
 	void commentChanged();	
 	void typeChanged(int);
 	void recalculateClicked();
+	void validateExpression(const QString&);
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
