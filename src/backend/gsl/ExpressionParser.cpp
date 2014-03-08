@@ -55,6 +55,14 @@ bool ExpressionParser::isValid(const QString& expr, XYEquationCurve::EquationTyp
 		char xVar[] = "x";
 		double x = 0;
 		assign_variable(xVar,x);
+	} else if (type == XYEquationCurve::Polar) {
+		char var[] = "phi";
+		double phi = 0;
+		assign_variable(var,phi);
+	} else if (type == XYEquationCurve::Parametric) {
+		char var[] = "t";
+		double t = 0;
+		assign_variable(var,t);
 	}
 
 	parse(data);
@@ -82,6 +90,71 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 			return false;
 
 		(*xVector)[i] = x;
+		if (finite(y))
+			(*yVector)[i] = y;
+		else
+			(*yVector)[i] = NAN;
+	}
+
+	return true;
+}
+
+bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, const QString& max,
+										 int count, QVector<double>* xVector, QVector<double>* yVector) {
+	double minValue = parse( min.toLocal8Bit().data() );
+	double maxValue = parse( max.toLocal8Bit().data() );
+	double step = (maxValue-minValue)/(double)(count-1);
+	char* func = expr.toLocal8Bit().data();
+	double r, phi;
+	char var[] = "phi";
+	gsl_set_error_handler_off();
+
+	for(int i = 0;i < count; i++) {
+		phi = minValue + step*i;
+		assign_variable(var,phi);
+		r = parse(func);
+		if(parse_errors()>0)
+			return false;
+
+		if (finite(r)) {
+			(*xVector)[i] = r*cos(phi);
+			(*yVector)[i] = r*sin(phi);
+		} else {
+			(*xVector)[i] = NAN;
+			(*yVector)[i] = NAN;
+		}
+	}
+
+	return true;
+}
+
+bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& expr2, const QString& min, const QString& max,
+										 int count, QVector<double>* xVector, QVector<double>* yVector) {
+	double minValue = parse( min.toLocal8Bit().data() );
+	double maxValue = parse( max.toLocal8Bit().data() );
+	double step = (maxValue-minValue)/(double)(count-1);
+	char* xFunc = expr1.toLocal8Bit().data();
+	char* yFunc = expr2.toLocal8Bit().data();
+	double x, y, t;
+	char var[] = "t";
+	gsl_set_error_handler_off();
+
+	for(int i = 0;i < count; i++) {
+		t = minValue + step*i;
+		assign_variable(var,t);
+		x = parse(xFunc);
+		if(parse_errors()>0)
+			return false;
+
+		if (finite(x))
+			(*xVector)[i] = x;
+		else
+			(*xVector)[i] = NAN;
+
+		y = parse(yFunc);
+		if(parse_errors()>0)
+			return false;
+
 		if (finite(y))
 			(*yVector)[i] = y;
 		else

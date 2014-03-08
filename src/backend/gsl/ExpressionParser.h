@@ -39,6 +39,10 @@ public:
 	bool isValid(const QString&, XYEquationCurve::EquationType);
 	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 						   int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool evaluatePolar(const QString& expr, const QString& min, const QString& max,
+						   int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool evaluateParametric(const QString& expr1, const QString& expr2, const QString& min, const QString& max,
+						   int count, QVector<double>* xVector, QVector<double>* yVector);
 
 private:
 	ExpressionParser();

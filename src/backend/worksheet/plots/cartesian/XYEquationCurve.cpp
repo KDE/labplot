@@ -127,18 +127,32 @@ void XYEquationCurvePrivate::recalculate() {
 	}
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
+	bool rc = false;
 	if (equationData.type == XYEquationCurve::Cartesian) {
-		bool rc = parser->evaluateCartesian(equationData.expression1,
-											equationData.min,
-											equationData.max,
-											equationData.count,
-											xVector, yVector);
-		if (!rc) {
-			xVector->clear();
-			yVector->clear();
-		}
+		rc = parser->evaluateCartesian( equationData.expression1,
+										equationData.min,
+										equationData.max,
+										equationData.count,
+										xVector, yVector );
+	} else if (equationData.type == XYEquationCurve::Polar) {
+		rc = parser->evaluatePolar( equationData.expression1,
+									equationData.min,
+									equationData.max,
+									equationData.count,
+									xVector, yVector );
+	} else if (equationData.type == XYEquationCurve::Parametric) {
+		rc = parser->evaluateParametric(equationData.expression1,
+									    equationData.expression2,
+										equationData.min,
+										equationData.max,
+										equationData.count,
+										xVector, yVector);
 	}
 
+	if (!rc) {
+		xVector->clear();
+		yVector->clear();
+	}
 	emit (q->xDataChanged());
 	emit (q->yDataChanged());
 }
@@ -148,11 +162,23 @@ void XYEquationCurvePrivate::recalculate() {
 //##############################################################################
 //! Save as XML
 void XYEquationCurve::save(QXmlStreamWriter* writer) const{
-// 	Q_D(const XYEquationCurve);
-// 
-//     writer->writeStartElement( "xyEquationCurve" );
-// 	XYEquationCurve::save(writer);
-// 	writer->writeEndElement(); //close "xyCurve" section
+	Q_D(const XYEquationCurve);
+
+    writer->writeStartElement( "xyEquationCurve" );
+
+	//write xy-curve information
+	XYCurve::save(writer);
+
+	//write xy-equationCurve specific information
+	writer->writeStartElement( "equationData" );
+	writer->writeAttribute( "expression1", d->equationData.expression1 );
+	writer->writeAttribute( "expression2", d->equationData.expression1 );
+	writer->writeAttribute( "min", d->equationData.min);
+	writer->writeAttribute( "max", d->equationData.max );
+	writer->writeAttribute( "count", QString::number(d->equationData.count) );
+	writer->writeEndElement();
+
+	writer->writeEndElement();
 }
 
 //! Load from XML
