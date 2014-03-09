@@ -74,8 +74,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.leEquation1, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
-	connect( uiGeneralTab.leEquation2, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
+	connect( uiGeneralTab.teEquation1, SIGNAL(textChanged()), this, SLOT(validateExpression()) );
+	connect( uiGeneralTab.teEquation2, SIGNAL(textChanged()), this, SLOT(validateExpression()) );
 	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -120,8 +120,8 @@ void XYEquationCurveDock::initGeneralTab() {
 	Q_ASSERT(equationCurve);
 	const XYEquationCurve::EquationData& data = equationCurve->equationData();
 	uiGeneralTab.cbType->setCurrentIndex(data.type);
-	uiGeneralTab.leEquation1->setText(data.expression1);
-	uiGeneralTab.leEquation2->setText(data.expression2);
+	uiGeneralTab.teEquation1->setText(data.expression1);
+	uiGeneralTab.teEquation2->setText(data.expression2);
 	uiGeneralTab.leMin->setText(data.min);
 	uiGeneralTab.leMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
@@ -159,7 +159,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 	if (type==XYEquationCurve::Cartesian) {
 		uiGeneralTab.lEquation1->setText("y=f(x)");
 		uiGeneralTab.lEquation2->hide();
-		uiGeneralTab.leEquation2->hide();
+		uiGeneralTab.teEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
 		uiGeneralTab.tbConstants2->hide();
 		uiGeneralTab.lMin->show();
@@ -171,7 +171,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 	} else if (type==XYEquationCurve::Polar) {
 		uiGeneralTab.lEquation1->setText(QString::fromUtf8("r(φ)"));
 		uiGeneralTab.lEquation2->hide();
-		uiGeneralTab.leEquation2->hide();
+		uiGeneralTab.teEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
 		uiGeneralTab.tbConstants2->hide();
 		uiGeneralTab.lMin->show();
@@ -184,7 +184,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.lEquation1->setText("x=f(t)");
 		uiGeneralTab.lEquation2->setText("y=f(t)");
 		uiGeneralTab.lEquation2->show();
-		uiGeneralTab.leEquation2->show();
+		uiGeneralTab.teEquation2->show();
 		uiGeneralTab.tbFunctions2->show();
 		uiGeneralTab.tbConstants2->show();
 		uiGeneralTab.lMin->show();
@@ -196,7 +196,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 	} else if (type==XYEquationCurve::Implicit) {
 		uiGeneralTab.lEquation1->setText("f(x,y)");
 		uiGeneralTab.lEquation2->hide();
-		uiGeneralTab.leEquation2->hide();
+		uiGeneralTab.teEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
 		uiGeneralTab.tbConstants2->hide();
 		uiGeneralTab.lMin->hide();
@@ -209,12 +209,23 @@ void XYEquationCurveDock::typeChanged(int index) {
 void XYEquationCurveDock::recalculateClicked() {
 	XYEquationCurve::EquationData data;
 	data.type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
-	data.expression1 = uiGeneralTab.leEquation1->text();
-	data.expression2 = uiGeneralTab.leEquation2->text();
+	data.expression1 = uiGeneralTab.teEquation1->document()->toPlainText();
+	data.expression2 = uiGeneralTab.teEquation2->document()->toPlainText();
 	data.min = uiGeneralTab.leMin->text();
 	data.max = uiGeneralTab.leMax->text();
 	data.count = uiGeneralTab.sbCount->value();
 	m_equationCurve->setEquationData(data);
+}
+
+void XYEquationCurveDock::validateExpression() {
+	QTextEdit* textEdit = dynamic_cast<QTextEdit*>(QObject::sender());
+	Q_ASSERT(textEdit);
+	XYEquationCurve::EquationType type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
+	bool rc = ExpressionParser::getInstance()->isValid(textEdit->document()->toPlainText(), type);
+	if (!rc)
+		textEdit->setStyleSheet("QTextEdit{background: red;}");
+	else
+		textEdit->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
 }
 
 void XYEquationCurveDock::validateExpression(const QString& eq) {
@@ -248,8 +259,8 @@ void XYEquationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) 
 void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& data) {
 	m_initializing = true;
 	uiGeneralTab.cbType->setCurrentIndex(data.type);
-	uiGeneralTab.leEquation1->setText(data.expression1);
-	uiGeneralTab.leEquation2->setText(data.expression2);
+	uiGeneralTab.teEquation1->setText(data.expression1);
+	uiGeneralTab.teEquation2->setText(data.expression2);
 	uiGeneralTab.leMin->setText(data.min);
 	uiGeneralTab.leMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
