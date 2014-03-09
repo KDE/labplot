@@ -1510,7 +1510,7 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
             }
         }else{ // unknown element
-            reader->raiseWarning(i18n("unknown cartesianPlot element '%1'").arg(reader->name().toString()));
+            reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }
     }

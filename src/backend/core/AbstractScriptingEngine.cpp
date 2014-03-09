@@ -141,7 +141,7 @@ const QString AbstractScriptingEngine::nameAndPatterns() const
 	if (extensions.isEmpty())
 		return "";
 	else
-		return i18n("%1 Source (*.%2)").arg(objectName()).arg(extensions.join(" *."));
+		return i18n("%1 Source (*.%2)", objectName(), extensions.join(" *."));
 }
 
 /**

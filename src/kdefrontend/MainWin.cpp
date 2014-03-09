@@ -366,7 +366,7 @@ void MainWin::initMenus(){
 bool MainWin::warnModified() {
 	if(m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
-			i18n("The current project %1 has been modified. Do you want to save it?").arg(m_project->name()),
+			i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
 			i18n("Save Project"));
 		switch (want_save) {
 			case KMessageBox::Yes:
@@ -585,7 +585,7 @@ bool MainWin::newProject(){
 	connect(m_project, SIGNAL(requestFolderContextMenu(const Folder*,QMenu*)), this, SLOT(createFolderContextMenu(const Folder*,QMenu*)));
 	connect(m_project, SIGNAL(mdiWindowVisibilityChanged()), this, SLOT(updateMdiWindowVisibility()));
 
- 	m_undoViewEmptyLabel = i18n("Project %1 created").arg(m_project->name());
+ 	m_undoViewEmptyLabel = i18n("Project %1 created", m_project->name());
  	setCaption(m_project->name());
 
 	return true;
@@ -612,7 +612,7 @@ void MainWin::openProject(){
 void MainWin::openProject(const QString& filename) {
 	if (filename == m_currentFileName) {
 		KMessageBox::information(this,
-			i18n("The project file %1 is already opened.").arg(filename),i18n("Open project"));
+			i18n("The project file %1 is already opened.", filename),i18n("Open project"));
 		return;
 	}
 
@@ -641,7 +641,7 @@ void MainWin::openProject(const QString& filename) {
 	m_project->setFileName(filename);
  	m_project->setChanged(false);
 	m_project->undoStack()->clear();
-	m_undoViewEmptyLabel = i18n("Project %1 opened").arg(m_project->name());
+	m_undoViewEmptyLabel = i18n("Project %1 opened", m_project->name());
 	m_recentProjectsAction->addUrl( KUrl(filename) );
 	setCaption(m_project->name());
 	updateGUIOnProjectChanges();
@@ -688,7 +688,7 @@ bool MainWin::closeProject(){
 		return true; //nothing to close
 
 	int b = KMessageBox::warningYesNo( this,
-										i18n("The current project %1 will be closed. Do you want to continue?").arg(m_project->name()),
+										i18n("The current project %1 will be closed. Do you want to continue?", m_project->name()),
 										i18n("Close Project"));
 	if (b==KMessageBox::No)
 		return false;
@@ -1042,7 +1042,7 @@ void MainWin::newMatrix(){
 }
 
 void MainWin::newFolder() {
-	Folder * folder = new Folder(i18n("Folder %1").arg(1));
+	Folder * folder = new Folder(i18n("Folder %1", 1));
 	this->addAspectToProject(folder);
 }
 
@@ -1269,7 +1269,7 @@ void MainWin::exportDialog(){
 void MainWin::newFileDataSourceActionTriggered(){
   ImportFileDialog* dlg = new ImportFileDialog(this);
   if ( dlg->exec() == QDialog::Accepted ) {
-	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1").arg(1));
+	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
 	  dlg->importToFileDataSource(dataSource);
 	  this->addAspectToProject(dataSource);
 	  kDebug()<<"new file data source created"<<endl;

@@ -751,7 +751,7 @@ bool TextLabel::load(XmlStreamReader* reader){
             else
                 d->teXFontColor.setBlue( str.toInt() );			
         }else{ // unknown element
-            reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
+            reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }
     }

@@ -528,7 +528,7 @@ bool PlotArea::load(XmlStreamReader* reader){
             else
                 d->borderOpacity = str.toDouble();
         }else{ // unknown element
-            reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
+            reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }
     }

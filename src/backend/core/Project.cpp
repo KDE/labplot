@@ -241,7 +241,7 @@ bool Project::load(XmlStreamReader* reader) {
 						//and the state of the project explorer (expanded items, currently selected item)						
 						emit requestLoadState(reader);
 					} else {
-						reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
+						reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 						if (!reader->skipToEndElement()) return false;
 					}
 				}

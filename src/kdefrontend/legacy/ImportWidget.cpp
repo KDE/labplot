@@ -171,7 +171,7 @@ void ImportWidget::fileInfoDialog() {
 		else {
 			kDebug()<<"WARNING: Could not open file"<<filename<<endl;
 			// TODO : hangs here
-			KMessageBox::sorry(this, i18n("Sorry. Could not open file %1 for reading!").arg(filename));
+			KMessageBox::sorry(this, i18n("Sorry. Could not open file %1 for reading!", filename));
 		}
 	}
 }

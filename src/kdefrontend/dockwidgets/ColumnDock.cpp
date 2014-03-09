@@ -269,7 +269,7 @@ void ColumnDock::typeChanged(int index){
 		int digits = ui.sbPrecision->value();
 		Double2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
-		  col->beginMacro(i18n("%1: change column type").arg(col->name()));
+		  col->beginMacro(i18n("%1: change column type", col->name()));
 		  col->setColumnMode(columnMode);
 		  filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		  filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
@@ -289,7 +289,7 @@ void ColumnDock::typeChanged(int index){
 		QString format;
 		DateTime2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
-		  col->beginMacro(i18n("%1: change column type").arg(col->name()));
+		  col->beginMacro(i18n("%1: change column type", col->name()));
 		  format = ui.cbFormat->currentText();
 		  col->setColumnMode(columnMode);
 		  filter = static_cast<DateTime2StringFilter*>(col->outputFilter());

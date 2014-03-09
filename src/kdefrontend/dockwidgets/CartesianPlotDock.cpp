@@ -853,9 +853,9 @@ void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
 	
 	int size = m_plotList.size();
 	if (size>1)
-		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded").arg(size).arg(name));
+		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded", size, name));
 	else
-		m_plot->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_plot->name()).arg(name));
+		m_plot->beginMacro(i18n("%1: template \"%2\" loaded", m_plot->name(), name));
 
 	this->loadConfig(config);
 

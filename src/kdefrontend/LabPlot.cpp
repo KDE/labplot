@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
 	if(!filename.isEmpty() ){
 		if ( !QFile::exists(filename)) {
 			if ( KMessageBox::warningContinueCancel( 0,
-													i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.").arg(filename),
+													i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
 													i18n("Failed to open")) == KMessageBox::Cancel){
 			exit(-1);  //"Cancel" clicked -> exit the application
 			}else{
@@ -72,7 +72,7 @@ int main (int argc, char *argv[]) {
 			}
 		}else if ( !(filename.contains(".lml") || filename.contains(".xml")) ){
 			if ( KMessageBox::warningContinueCancel( 0,
-													i18n( "File \'%1\' doesn't contain any labplot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.").arg(filename),
+													i18n( "File \'%1\' doesn't contain any labplot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
 													i18n("Failed to open")) == KMessageBox::Cancel){
 				exit(-1); //"Cancel" clicked -> exit the application
 			}else{

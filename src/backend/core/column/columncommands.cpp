@@ -98,7 +98,7 @@
 ColumnSetModeCmd::ColumnSetModeCmd(Column::Private * col, AbstractColumn::ColumnMode mode, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_mode(mode)
 {
-	setText(i18n("%1: change column type").arg(col->name()));
+	setText(i18n("%1: change column type", col->name()));
 	m_undone = false;
 	m_executed = false;
 }
@@ -216,7 +216,7 @@ void ColumnSetModeCmd::undo()
 ColumnFullCopyCmd::ColumnFullCopyCmd(Column::Private * col, const AbstractColumn * src, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_src(src), m_backup(0), m_backup_owner(0)
 {
-	setText(i18n("%1: change cell values").arg(col->name()));
+	setText(i18n("%1: change cell values", col->name()));
 }
 
 /**
@@ -329,7 +329,7 @@ void ColumnFullCopyCmd::undo()
 ColumnPartialCopyCmd::ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_src(src), m_col_backup(0), m_src_backup(0), m_col_backup_owner(0), m_src_backup_owner(0), m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows)
 {
-	setText(i18n("%1: change cell values").arg(col->name()));
+	setText(i18n("%1: change cell values", col->name()));
 }
 
 /**
@@ -529,7 +529,7 @@ void ColumnRemoveRowsCmd::undo()
 ColumnSetPlotDesignationCmd::ColumnSetPlotDesignationCmd( Column::Private * col, AbstractColumn::PlotDesignation pd , QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_new_pd(pd)
 {
-	setText(i18n("%1: set plot designation").arg(col->name()));
+	setText(i18n("%1: set plot designation", col->name()));
 }
 
 /**
@@ -572,7 +572,7 @@ void ColumnSetPlotDesignationCmd::undo()
 ColumnSetWidthCmd::ColumnSetWidthCmd( Column::Private * col, int new_value , QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_other_value(new_value)
 {
-	setText(i18n("%1: set width").arg(col->name()));
+	setText(i18n("%1: set width", col->name()));
 }
 
 /**
@@ -631,7 +631,7 @@ void ColumnSetWidthCmd::undo()
 ColumnClearCmd::ColumnClearCmd(Column::Private * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
-	setText(i18n("%1: clear column").arg(col->name()));
+	setText(i18n("%1: clear column", col->name()));
 	m_empty_data = 0;
 	m_data = 0;
 	m_undone = false;
@@ -751,7 +751,7 @@ void ColumnClearCmd::undo()
 ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_formula(formula)
 {
-	setText(i18n("%1: set cell formula").arg(col->name()));
+	setText(i18n("%1: set cell formula", col->name()));
 	m_copied = false;
 }
 
@@ -809,7 +809,7 @@ void ColumnSetFormulaCmd::undo()
 ColumnClearFormulasCmd::ColumnClearFormulasCmd(Column::Private * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
-	setText(i18n("%1: clear all formulas").arg(col->name()));
+	setText(i18n("%1: clear all formulas", col->name()));
 	m_copied = false;
 }
 
@@ -877,7 +877,7 @@ void ColumnClearFormulasCmd::undo()
 ColumnSetTextCmd::ColumnSetTextCmd(Column::Private * col, int row, const QString& new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
-	setText(i18n("%1: set text for row %2").arg(col->name()).arg(row));
+	setText(i18n("%1: set text for row %2", col->name(), row));
 }
 
 /**
@@ -943,7 +943,7 @@ void ColumnSetTextCmd::undo()
 ColumnSetValueCmd::ColumnSetValueCmd(Column::Private * col, int row, double new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
-	setText(i18n("%1: set value for row %2").arg(col->name()).arg(row));
+	setText(i18n("%1: set value for row %2", col->name(), row));
 }
 
 /**
@@ -1009,7 +1009,7 @@ void ColumnSetValueCmd::undo()
 ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(Column::Private * col, int row, const QDateTime& new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
-	setText(i18n("%1: set value for row %2").arg(col->name()).arg(row));
+	setText(i18n("%1: set value for row %2", col->name(), row));
 }
 
 /**
@@ -1080,7 +1080,7 @@ void ColumnSetDateTimeCmd::undo()
 ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(Column::Private * col, int first, const QStringList& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
-	setText(i18n("%1: replace the texts for rows %2 to %3").arg(col->name()).arg(first).arg(first + new_values.count() -1));
+	setText(i18n("%1: replace the texts for rows %2 to %3", col->name(), first, first + new_values.count() -1));
 	m_copied = false;
 }
 
@@ -1156,7 +1156,7 @@ void ColumnReplaceTextsCmd::undo()
 ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(Column::Private * col, int first, const QVector<double>& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
-	setText(i18n("%1: replace the values for rows %2 to %3").arg(col->name()).arg(first).arg(first + new_values.count() -1));
+	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
 	m_copied = false;
 }
 
@@ -1232,7 +1232,7 @@ void ColumnReplaceValuesCmd::undo()
 ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(Column::Private * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
-	setText(i18n("%1: replace the values for rows %2 to %3").arg(col->name()).arg(first).arg(first + new_values.count() -1));
+	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
 	m_copied = false;
 }
 

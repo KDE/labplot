@@ -82,15 +82,15 @@ bool PluginLoader::load() {
 				QString appName = plugin->pluginTargetAppName();
 				if (SciDAVis::appName == appName && 
 						(SciDAVis::version() & 0xFFFF00) == (version & 0xFFFF00)) {
-					m_statusString = i18n("Plugin '%1' successfully loaded.").arg(m_fileName);
+					m_statusString = i18n("Plugin '%1' successfully loaded.", m_fileName);
 					m_status = Active;
 				} else {
-					m_statusString = i18n("Plugin '%1' was created for incompatible version: %2 %3.%4.x")
-							.arg(m_fileName).arg(appName).arg((version & 0xFF0000) >> 16).arg((version & 0x00FF00) >> 8);
+					m_statusString = i18n("Plugin '%1' was created for incompatible version: %2 %3.%4.x",
+							m_fileName, appName, (version & 0xFF0000) >> 16, (version & 0x00FF00) >> 8);
 					m_status = IncompatibleApp;
 				}
 			} else {
-				m_statusString = i18n("Plugin '%1' is not a %2 plugin.").arg(m_fileName).arg(SciDAVis::appName);
+				m_statusString = i18n("Plugin '%1' is not a %2 plugin.", m_fileName, SciDAVis::appName);
 				m_status = NoVersionedPlugin;
 			}
 		} else {

@@ -135,7 +135,7 @@ bool Folder::load(XmlStreamReader * reader)
 				}
 				else // unknown element
 				{
-					reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
+					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 			}
@@ -197,7 +197,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 				}
 				else
 				{
-					reader->raiseError(i18n("creation of aspect from element '%1' failed").arg(element_name));
+					reader->raiseError(i18n("creation of aspect from element '%1' failed", element_name));
 					return false;
 				}
 			}
@@ -205,7 +205,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 	}
 	if (!loaded)
 	{
-		reader->raiseWarning(i18n("no plugin to load element '%1' found").arg(element_name));
+		reader->raiseWarning(i18n("no plugin to load element '%1' found", element_name));
 		if (!reader->skipToEndElement()) return false;
 	}
 #else
@@ -238,7 +238,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 
 	if (!loaded)
 	{
-		reader->raiseWarning(i18n("unknown element '%1' found").arg(element_name));
+		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
 		if (!reader->skipToEndElement()) return false;
 	}
 #endif

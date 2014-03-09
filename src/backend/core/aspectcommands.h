@@ -40,7 +40,7 @@ class AspectChildRemoveCmd : public QUndoCommand {
 	public:
 		AspectChildRemoveCmd(AbstractAspect::Private* target, AbstractAspect* child)
 			: m_target(target), m_child(child), m_index(-1), m_removed(false) {
-				setText(i18n("%1: remove %2").arg(m_target->m_name).arg(m_child->name()));
+				setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
 			}
 
 		~AspectChildRemoveCmd() {
@@ -85,7 +85,7 @@ class AspectChildAddCmd : public AspectChildRemoveCmd {
 	public:
 		AspectChildAddCmd(AbstractAspect::Private * target, AbstractAspect* child, int index)
 			: AspectChildRemoveCmd(target, child) {
-				setText(i18n("%1: add %2").arg(m_target->m_name).arg(m_child->name()));
+				setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 				m_index = index;
 				m_removed = true;
 			}
@@ -101,7 +101,7 @@ class AspectChildReparentCmd : public QUndoCommand {
 				AbstractAspect* child, int new_index)
 			: m_target(target), m_new_parent(new_parent), m_child(child), m_index(-1), m_new_index(new_index)
 		{
-			setText(i18n("%1: move %2 to %3.").arg(m_target->m_name).arg(m_child->name()).arg(m_new_parent->m_name));
+			setText(i18n("%1: move %2 to %3.", m_target->m_name, m_child->name(), m_new_parent->m_name));
 		}
 		~AspectChildReparentCmd() {}
 

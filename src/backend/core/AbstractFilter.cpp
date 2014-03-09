@@ -223,7 +223,7 @@ const AbstractColumn *AbstractFilter::input(int port) const {
  */
 QString AbstractFilter::inputLabel(int port) const
 {
-	return i18nc("default labels of filter input ports", "In%1").arg(port + 1);
+	return i18nc("default labels of filter input ports", "In%1", port + 1);
 }
 
 /**

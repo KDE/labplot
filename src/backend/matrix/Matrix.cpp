@@ -92,7 +92,7 @@ void Matrix::insertColumns(int before, int count)
 {
 	if( count < 1 || before < 0 || before > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: insert %2 column(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: insert %2 column(s)", name(), count);
 	exec(new MatrixInsertColumnsCmd(m_matrix_private, before, count));
 	endMacro();
 	RESET_CURSOR;
@@ -102,7 +102,7 @@ void Matrix::removeColumns(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: remove %2 column(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: remove %2 column(s)", name(), count);
 	exec(new MatrixRemoveColumnsCmd(m_matrix_private, first, count));
 	endMacro();
 	RESET_CURSOR;
@@ -112,7 +112,7 @@ void Matrix::removeRows(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: remove %2 row(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: remove %2 row(s)", name(), count);
 	exec(new MatrixRemoveRowsCmd(m_matrix_private, first, count));
 	endMacro();
 	RESET_CURSOR;
@@ -122,7 +122,7 @@ void Matrix::insertRows(int before, int count)
 {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: insert %2 row(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: insert %2 row(s)", name(), count);
 	exec(new MatrixInsertRowsCmd(m_matrix_private, before, count));
 	endMacro();
 	RESET_CURSOR;
@@ -132,7 +132,7 @@ void Matrix::setDimensions(int rows, int cols)
 {
 	if( (rows < 0) || (cols < 0 ) || (rows == rowCount() && cols == columnCount()) ) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: set matrix size to %2x%3").arg(name()).arg(rows).arg(cols));
+	beginMacro(i18n("%1: set matrix size to %2x%3", name(), rows, cols);
 	int col_diff = cols - columnCount();
 	int row_diff = rows - rowCount();
 	if(col_diff > 0)
@@ -160,7 +160,7 @@ int Matrix::rowCount() const
 void Matrix::clear()
 {
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: clear").arg(name()));
+	beginMacro(i18n("%1: clear", name());
 	exec(new MatrixClearCmd(m_matrix_private));
 	endMacro();
 	RESET_CURSOR;
@@ -180,7 +180,7 @@ void Matrix::cutSelection()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: cut selected cell(s)").arg(name()));
+	beginMacro(i18n("%1: cut selected cell(s)", name());
 	copySelection();
 	clearSelectedCells();
 	endMacro();
@@ -227,7 +227,7 @@ void Matrix::pasteIntoSelection()
 	if(columnCount() < 1 || rowCount() < 1) return;
 
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: paste from clipboard").arg(name()));
+	beginMacro(i18n("%1: paste from clipboard", name());
 	const QMimeData * mime_data = QApplication::clipboard()->mimeData();
 
 	int first_col = m_view->firstSelectedColumn(false);
@@ -300,7 +300,7 @@ void Matrix::insertEmptyColumns()
 	int count, current = first;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: insert empty column(s)").arg(name()));
+	beginMacro(i18n("%1: insert empty column(s)", name());
 	while( current <= last )
 	{
 		current = first+1;
@@ -324,7 +324,7 @@ void Matrix::removeSelectedColumns()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: remove selected column(s)").arg(name()));
+	beginMacro(i18n("%1: remove selected column(s)", name());
 	for(int i=last; i>=first; i--)
 		if(m_view->isColumnSelected(i, false)) removeColumns(i, 1);
 	endMacro();
@@ -335,7 +335,7 @@ void Matrix::clearSelectedColumns()
 {
 	if (!m_view) return;
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: clear selected column(s)").arg(name()));
+	beginMacro(i18n("%1: clear selected column(s)", name());
 	for(int i=0; i<columnCount(); i++)
 		if(m_view->isColumnSelected(i, false))
 			exec(new MatrixClearColumnCmd(m_matrix_private, i));
@@ -353,7 +353,7 @@ void Matrix::insertEmptyRows()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: insert empty rows(s)").arg(name()));
+	beginMacro(i18n("%1: insert empty rows(s)", name());
 	while( current <= last )
 	{
 		current = first+1;
@@ -377,7 +377,7 @@ void Matrix::removeSelectedRows()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: remove selected rows(s)").arg(name()));
+	beginMacro(i18n("%1: remove selected rows(s)", name());
 	for(int i=last; i>=first; i--)
 		if(m_view->isRowSelected(i, false)) removeRows(i, 1);
 	endMacro();
@@ -392,7 +392,7 @@ void Matrix::clearSelectedRows()
 	if( first < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: clear selected rows(s)").arg(name()));
+	beginMacro(i18n("%1: clear selected rows(s)", name());
 	for(int i=first; i<=last; i++)
 	{
 		if(m_view->isRowSelected(i))
@@ -414,7 +414,7 @@ void Matrix::clearSelectedCells()
 	if( first_col < 0 ) return;
 
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: clear selected cell(s)").arg(name()));
+	beginMacro(i18n("%1: clear selected cell(s)", name());
 	for(int i=first_row; i<=last_row; i++)
 		for(int j=first_col; j<=last_col; j++)
 			if(m_view->isCellSelected(i, j))
@@ -795,7 +795,7 @@ void Matrix::goToCell()
 void Matrix::copy(Matrix * other)
 {
 	WAIT_CURSOR;
-	beginMacro(QObject::i18n("%1: copy %2").arg(name()).arg(other->name()));
+	beginMacro(i18n("%1: copy %2", name(), other->name());
 	int rows = other->rowCount();
 	int columns = other->columnCount();
 	setDimensions(rows, columns);
@@ -891,7 +891,7 @@ void Matrix::importImageDialog()
 			delete matrix;
 		}
 		else
-			QMessageBox::information(0, i18n("Error importing image"), i18n("Import of image '%1' failed").arg(file_name));
+			QMessageBox::information(0, i18n("Error importing image"), i18n("Import of image '%1' failed", file_name));
 	}
 }
 
@@ -926,7 +926,7 @@ void Matrix::addRows()
 	if (!m_view) return;
 	WAIT_CURSOR;
 	int count = m_view->selectedRowCount(false);
-	beginMacro(QObject::i18n("%1: add %2 rows(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: add %2 rows(s)", name(), count);
 	exec(new MatrixInsertRowsCmd(m_matrix_private, rowCount(), count));
 	endMacro();
 	RESET_CURSOR;
@@ -937,7 +937,7 @@ void Matrix::addColumns()
 	if (!m_view) return;
 	WAIT_CURSOR;
 	int count = m_view->selectedRowCount(false);
-	beginMacro(QObject::i18n("%1: add %2 column(s)").arg(name()).arg(count));
+	beginMacro(i18n("%1: add %2 column(s)", name(), count);
 	exec(new MatrixInsertColumnsCmd(m_matrix_private, columnCount(), count));
 	endMacro();
 	RESET_CURSOR;
@@ -1138,7 +1138,7 @@ bool Matrix::load(XmlStreamReader * reader)
 					ret_val = readColumnWidthElement(reader);
 				else // unknown element
 				{
-					reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
+					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 				if(!ret_val) return false;
@@ -1414,7 +1414,7 @@ Matrix * Matrix::fromImage(const QImage & image)
 	progress.setWindowTitle(i18n("SciDAVis") + " - " + i18n("Import image..."));
 	progress.raise();
 
-	Matrix * matrix = new Matrix(0, rows, cols, i18n("Matrix %1").arg(1));
+	Matrix * matrix = new Matrix(0, rows, cols, i18n("Matrix %1", 1));
 
 	QVector<double> values;
 	values.resize(rows);

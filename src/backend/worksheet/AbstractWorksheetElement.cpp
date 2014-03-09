@@ -184,7 +184,7 @@ void AbstractWorksheetElement::execMoveBehind(QAction *action) {
 	if (parent) {
 		int index = action->data().toInt();
 		AbstractAspect *sibling1 = parent->child<AbstractWorksheetElement>(index);
-		beginMacro(i18n("%1: move behind %2.").arg(name()).arg(sibling1->name()));
+		beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
 		remove();
 		AbstractAspect *sibling2 = parent->child<AbstractWorksheetElement>(index + 1);
 		parent->insertChildBefore(this, sibling2);
@@ -198,7 +198,7 @@ void AbstractWorksheetElement::execMoveInFrontOf(QAction *action) {
 	if (parent) {
 		int index = action->data().toInt();
 		AbstractAspect *sibling = parent->child<AbstractWorksheetElement>(index);
-		beginMacro(i18n("%1: move in front of %2.").arg(name()).arg(sibling->name()));
+		beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
 		remove();
 		parent->insertChildBefore(this, sibling);
 		endMacro();

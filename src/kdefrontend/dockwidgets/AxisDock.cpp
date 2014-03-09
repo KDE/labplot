@@ -1533,9 +1533,9 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 	
 	int size = m_axesList.size();
 	if (size>1)
-		m_axis->beginMacro(i18n("%1 axes: template \"%2\" loaded").arg(size).arg(name));
+		m_axis->beginMacro(i18n("%1 axes: template \"%2\" loaded", size, name));
 	else
-		m_axis->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_axis->name()).arg(name));
+		m_axis->beginMacro(i18n("%1: template \"%2\" loaded", m_axis->name(), name));
 
 	this->loadConfig(config);
 

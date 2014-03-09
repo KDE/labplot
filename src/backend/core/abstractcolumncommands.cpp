@@ -58,7 +58,7 @@
 AbstractColumnClearMasksCmd::AbstractColumnClearMasksCmd(AbstractColumn::Private * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
-	setText(i18n("%1: clear masks").arg(col->name()));
+	setText(i18n("%1: clear masks", col->name()));
 	m_copied = false;
 }
 
@@ -127,9 +127,9 @@ AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumn::Private *
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_masked(masked)
 {
 	if(masked)
-		setText(i18n("%1: mask cells").arg(col->name()));
+		setText(i18n("%1: mask cells", col->name()));
 	else
-		setText(i18n("%1: unmask cells").arg(col->name()));
+		setText(i18n("%1: unmask cells", col->name()));
 	m_copied = false;
 }
 

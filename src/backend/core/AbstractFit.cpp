@@ -40,7 +40,7 @@ class FitSetYErrorSourceCmd : public QUndoCommand
 	public:
 		FitSetYErrorSourceCmd(AbstractFit * target, AbstractFit::ErrorSource source) :
 			m_target(target), m_other_source(source) {
-				setText(QObject::i18n("%1: change error source to %2.").arg(m_target->name()).arg(AbstractFit::nameOf(m_other_source)));
+				setText(QObject::i18n("%1: change error source to %2.", m_target->name(), AbstractFit::nameOf(m_other_source)));
 			}
 
 		void undo() {

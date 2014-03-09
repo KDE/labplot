@@ -104,9 +104,9 @@ Double2StringFilterSetFormatCmd::Double2StringFilterSetFormatCmd(Double2StringFi
 	: m_target(target), m_other_format(new_format) 
 {
 	if(m_target->parentAspect())
-		setText(i18n("%1: set numeric format to '%2'").arg(m_target->parentAspect()->name()).arg(new_format));
+		setText(i18n("%1: set numeric format to '%2'", m_target->parentAspect()->name(), new_format));
 	else
-		setText(i18n("set numeric format to '%1'").arg(new_format));
+		setText(i18n("set numeric format to '%1'", new_format));
 }
 
 void Double2StringFilterSetFormatCmd::redo() 
@@ -126,9 +126,9 @@ Double2StringFilterSetDigitsCmd::Double2StringFilterSetDigitsCmd(Double2StringFi
 	: m_target(target), m_other_digits(new_digits) 
 {
 	if(m_target->parentAspect())
-		setText(i18n("%1: set decimal digits to %2").arg(m_target->parentAspect()->name()).arg(new_digits));
+		setText(i18n("%1: set decimal digits to %2", m_target->parentAspect()->name(), new_digits));
 	else
-		setText(i18n("set decimal digits to %1").arg(new_digits));
+		setText(i18n("set decimal digits to %1", new_digits));
 }
 
 void Double2StringFilterSetDigitsCmd::redo() 

@@ -886,9 +886,9 @@ void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
 	
 	int size = m_legendList.size();
 	if (size>1)
-		m_legend->beginMacro(i18n("%1 cartesian plot legends: template \"%2\" loaded").arg(size).arg(name));
+		m_legend->beginMacro(i18n("%1 cartesian plot legends: template \"%2\" loaded", size, name));
 	else
-		m_legend->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_legend->name()).arg(name));
+		m_legend->beginMacro(i18n("%1: template \"%2\" loaded", m_legend->name(), name));
 
 	this->loadConfig(config);
 

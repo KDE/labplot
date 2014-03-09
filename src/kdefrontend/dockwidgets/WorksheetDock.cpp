@@ -470,7 +470,7 @@ void WorksheetDock::backgroundColorStyleChanged(int index){
 
 	int size = m_worksheetList.size();
 	if (size>1) {
-		m_worksheet->beginMacro(i18n("%1 worksheets: background color style changed").arg(size));
+		m_worksheet->beginMacro(i18n("%1 worksheets: background color style changed", size));
 		foreach(Worksheet* w, m_worksheetList) {
 			w->setBackgroundColorStyle(style);
 		}
@@ -823,9 +823,9 @@ void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
 	
 	int size = m_worksheetList.size();
 	if (size>1)
-		m_worksheet->beginMacro(i18n("%1 worksheets: template \"%2\" loaded").arg(size).arg(name));
+		m_worksheet->beginMacro(i18n("%1 worksheets: template \"%2\" loaded", size, name));
 	else
-		m_worksheet->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_worksheet->name()).arg(name));
+		m_worksheet->beginMacro(i18n("%1: template \"%2\" loaded", m_worksheet->name(), name));
 
 	this->loadConfig(config);
 	m_worksheet->endMacro();

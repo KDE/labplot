@@ -307,7 +307,7 @@ QString FileDataSource::fileInfoString(const QString &name){
 		proc->start( "file", args);
 
 		if(proc->waitForReadyRead(1000) == false){
-            infoString+= i18n("Could not open file %1 for reading.").arg(fileName);
+            infoString+= i18n("Could not open file %1 for reading.", fileName);
 		}else{
             fileTypeString = proc->readLine();
             if( fileTypeString.contains(i18n("cannot open")) )
@@ -330,7 +330,7 @@ QString FileDataSource::fileInfoString(const QString &name){
                           + QString::number(AsciiFilter::lineNumber(fileName));
         }
 	}else{
-		infoString+= i18n("Could not open file %1 for reading.").arg(fileName);
+		infoString+= i18n("Could not open file %1 for reading.", fileName);
 	}
 
     return infoString;
@@ -434,7 +434,7 @@ bool FileDataSource::load(XmlStreamReader* reader) {
 			}
 			addChild(column);
 		} else {// unknown element
-			reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
+			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}

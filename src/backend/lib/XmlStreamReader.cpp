@@ -80,13 +80,13 @@ bool XmlStreamReader::hasWarnings() const
 
 void XmlStreamReader::raiseError(const QString & message)
 {
-	QString prefix2 = QString(i18n("line %1, column %2: ").arg(lineNumber()).arg(columnNumber()));
+	QString prefix2 = QString(i18n("line %1, column %2: ", lineNumber(), columnNumber()));
 	QXmlStreamReader::raiseError(m_error_prefix+prefix2+message+m_error_postfix);
 }
 
 void XmlStreamReader::raiseWarning(const QString & message)
 {
-	QString prefix2 = QString(i18n("line %1, column %2: ").arg(lineNumber()).arg(columnNumber()));
+	QString prefix2 = QString(i18n("line %1, column %2: ", lineNumber(), columnNumber()));
 	m_warnings.append(m_warning_prefix+prefix2+message+m_warning_postfix);
 }
 

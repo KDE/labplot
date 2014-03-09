@@ -134,7 +134,7 @@ Column::~Column() {
 void Column::setColumnMode(AbstractColumn::ColumnMode mode)
 {
 	if(mode == columnMode()) return;
-	beginMacro(i18n("%1: change column type").arg(name()));
+	beginMacro(i18n("%1: change column type", name()));
 	AbstractSimpleFilter * old_input_filter = m_column_private->inputFilter();
 	AbstractSimpleFilter * old_output_filter = m_column_private->outputFilter();
 	exec(new ColumnSetModeCmd(m_column_private, mode));
@@ -595,7 +595,7 @@ bool Column::load(XmlStreamReader * reader)
 					ret_val = XmlReadRow(reader);
 				else // unknown element
 				{
-					reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
+					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 				if(!ret_val)

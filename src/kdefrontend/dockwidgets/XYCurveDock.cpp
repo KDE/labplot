@@ -1762,9 +1762,9 @@ void XYCurveDock::loadConfigFromTemplate(KConfig& config) {
 	
 	int size = m_curvesList.size();
 	if (size>1)
-		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded").arg(size).arg(name));
+		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
 	else
-		m_curve->beginMacro(i18n("%1: template \"%2\" loaded").arg(m_curve->name()).arg(name));
+		m_curve->beginMacro(i18n("%1: template \"%2\" loaded", m_curve->name(), name));
 
 	this->loadConfig(config);
 

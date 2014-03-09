@@ -263,7 +263,7 @@ void Spreadsheet::setColumnCount(int new_size)
 void Spreadsheet::clear()
 {
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: clear").arg(name()));
+	beginMacro(i18n("%1: clear", name()));
 	foreach (Column * col, children<Column>())
 		col->clear();
 	endMacro();
@@ -276,7 +276,7 @@ void Spreadsheet::clear()
 void Spreadsheet::clearMasks()
 {
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: clear all masks").arg(name()));
+	beginMacro(i18n("%1: clear all masks", name()));
 	foreach(Column * col, children<Column>())
 	    col->clearMasks();
 	endMacro();
@@ -296,7 +296,7 @@ QMenu *Spreadsheet::createContextMenu(){
 void Spreadsheet::moveColumn(int from, int to)
 {
 	Column * col = child<Column>(from);
-	beginMacro(i18n("%1: move column %2 from position %3 to %4.").arg(name()).arg(col->name()).arg(from+1).arg(to+1));
+	beginMacro(i18n("%1: move column %2 from position %3 to %4.", name(), col->name(), from+1, to+1));
 	col->remove();
 	insertChildBefore(col, child<Column>(to));
 	endMacro();
@@ -305,7 +305,7 @@ void Spreadsheet::moveColumn(int from, int to)
 void Spreadsheet::copy(Spreadsheet * other)
 {
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: copy %2").arg(name()).arg(other->name()));
+	beginMacro(i18n("%1: copy %2", name(), other->name()));
 
 	foreach(Column * col, children<Column>())
 		col->remove();
@@ -418,7 +418,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
 	};
 
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: sort columns").arg(name()));
+	beginMacro(i18n("%1: sort columns", name()));
 
 	if(leading == 0) { // sort separately
 		foreach(Column *col, cols) {
@@ -724,7 +724,7 @@ bool Spreadsheet::load(XmlStreamReader * reader)
 				}
 				else // unknown element
 				{
-					reader->raiseWarning(i18n("unknown element '%1'").arg(reader->name().toString()));
+					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
 			}
