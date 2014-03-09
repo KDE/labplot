@@ -59,6 +59,11 @@ XYEquationCurve::~XYEquationCurve() {
 	//and is deleted during the cleanup in QGraphicsScene
 }
 
+void XYEquationCurve::recalculate() {
+	Q_D(XYEquationCurve);
+	d->recalculate();
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -171,8 +176,9 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 
 	//write xy-equationCurve specific information
 	writer->writeStartElement( "equationData" );
+	writer->writeAttribute( "type", QString::number(d->equationData.type) );
 	writer->writeAttribute( "expression1", d->equationData.expression1 );
-	writer->writeAttribute( "expression2", d->equationData.expression1 );
+	writer->writeAttribute( "expression2", d->equationData.expression2 );
 	writer->writeAttribute( "min", d->equationData.min);
 	writer->writeAttribute( "max", d->equationData.max );
 	writer->writeAttribute( "count", QString::number(d->equationData.count) );
@@ -183,29 +189,54 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 
 //! Load from XML
 bool XYEquationCurve::load(XmlStreamReader* reader){
-// 	Q_D(XYEquationCurve);
-// 
-//     if(!reader->isStartElement() || reader->name() != "xyEquationCurve"){
-//         reader->raiseError(i18n("no xy equation curve element found"));
-//         return false;
-//     }
-// 
-//     if (!readBasicAttributes(reader))
-//         return false;
-// 
-//     QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-//     QXmlStreamAttributes attribs;
-//     QString str;
-// 
-//     while (!reader->atEnd()){
-//         reader->readNext();
-//         if (reader->isEndElement() && reader->name() == "xyEquationCurve")
-//             break;
-// 
-//         if (!reader->isStartElement())
-//             continue;
-// 
-// 	}
+	Q_D(XYEquationCurve);
+
+    if(!reader->isStartElement() || reader->name() != "xyEquationCurve"){
+        reader->raiseError(i18n("no xy equation curve element found"));
+        return false;
+    }
+
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "xyEquationCurve")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+		if (reader->name() == "xyCurve") {
+            if ( !XYCurve::load(reader) )
+				return false;
+		}else if (reader->name() == "equationData"){
+			attribs = reader->attributes();
+
+			str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'type'"));
+            else
+                d->equationData.type = (XYEquationCurve::EquationType)str.toInt();
+
+			str = attribs.value("expression1").toString();
+			d->equationData.expression1 = str;
+
+			str = attribs.value("expression2").toString();
+			d->equationData.expression2 = str;
+
+			str = attribs.value("min").toString();
+			d->equationData.min = str;
+
+			str = attribs.value("max").toString();
+			d->equationData.max = str;
+
+			str = attribs.value("count").toString();
+			if(!str.isEmpty())
+				d->equationData.count = str.toInt();
+		}
+	}
 
 	return true;
 }

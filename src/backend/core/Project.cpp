@@ -32,6 +32,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include <QUndoStack>
@@ -258,13 +259,19 @@ bool Project::load(XmlStreamReader* reader) {
 					XYCurve* curve = dynamic_cast<XYCurve*>(aspect);
 					if (!curve) continue;
 
-					RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
-					RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-					RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-					RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-					RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-					RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-					RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(aspect);
+					if (equationCurve) {
+						//curves defined by a mathematical equations recalculate their own columns on load again.
+						equationCurve->recalculate();
+					} else {
+						RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+						RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+						RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+						RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
+						RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
+						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
+						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+					}
 				}
 
 				//Axes

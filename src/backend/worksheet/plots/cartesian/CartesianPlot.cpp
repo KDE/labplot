@@ -4,7 +4,7 @@
     Description          : A plot containing decoration elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses) 
                            
  ***************************************************************************/
@@ -609,7 +609,7 @@ void CartesianPlot::addAxis(){
 		addChild(new Axis("y-axis", Axis::AxisVertical));
 }
 
-void CartesianPlot::addCurve(){
+XYCurve* CartesianPlot::addCurve(){
 	XYCurve* curve = new XYCurve("xy-curve");
 	this->addChild(curve);
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
@@ -621,9 +621,11 @@ void CartesianPlot::addCurve(){
 	connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
+
+	return curve;
 }
 
-void CartesianPlot::addEquationCurve(){
+XYEquationCurve* CartesianPlot::addEquationCurve(){
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	this->addChild(curve);
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
@@ -635,6 +637,8 @@ void CartesianPlot::addEquationCurve(){
 	connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
 	connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
+
+	return curve;
 }
 
 void CartesianPlot::addLegend(){
@@ -1485,12 +1489,16 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 addChild(axis);
             }
 		}else if(reader->name() == "xyCurve"){
-            XYCurve* curve = new XYCurve("");
+            XYCurve* curve = addCurve();
             if (!curve->load(reader)){
-                delete curve;
+                removeChild(curve);
                 return false;
-            }else{
-                addChild(curve);
+            }
+		}else if(reader->name() == "xyEquationCurve"){
+			XYEquationCurve* curve = addEquationCurve();
+            if (!curve->load(reader)){
+				removeChild(curve);
+                return false;
             }
 		}else if(reader->name() == "cartesianPlotLegend"){
             m_legend = new CartesianPlotLegend(this, "");

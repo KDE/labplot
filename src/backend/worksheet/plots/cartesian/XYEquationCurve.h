@@ -39,7 +39,7 @@ class XYEquationCurve: public XYCurve {
 		enum EquationType {Cartesian, Polar, Parametric, Implicit};
 
 		struct EquationData {
-			EquationData() : type(Cartesian), min("0"), max("1"), count(100){};
+			EquationData() : type(Cartesian), min("0"), max("1"), count(1000){};
 
 			EquationType type;
 			QString expression1;
@@ -52,6 +52,7 @@ class XYEquationCurve: public XYCurve {
 		explicit XYEquationCurve(const QString& name);
 		virtual ~XYEquationCurve();
 
+		void recalculate();
 		virtual QIcon icon() const;
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);

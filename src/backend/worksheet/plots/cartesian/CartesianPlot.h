@@ -35,6 +35,8 @@
 class QToolBar;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
+class XYCurve;
+class XYEquationCurve;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -105,8 +107,8 @@ class CartesianPlot:public AbstractPlot{
 
 	private slots:
 		void addAxis();
-		void addCurve();
-		void addEquationCurve();
+		XYCurve* addCurve();
+		XYEquationCurve* addEquationCurve();
 		void addLegend();
 		void updateLegend();
 		void childAdded(const AbstractAspect*);
