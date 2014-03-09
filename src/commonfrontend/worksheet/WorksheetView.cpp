@@ -4,7 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
 
  ***************************************************************************/
@@ -27,6 +27,18 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/worksheet/WorksheetModel.h"
+#include "backend/worksheet/WorksheetElementGroup.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/WorksheetRectangleElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/core/column/Column.h"
+#include "backend/worksheet/TextLabel.h"
+#include "kdefrontend/worksheet/GridDialog.h"
+
 #include <QApplication>
 #include <QMenu>
 #include <QToolBar>
@@ -41,22 +53,9 @@
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
 
-#include "commonfrontend/worksheet/WorksheetView.h"
-#include "backend/worksheet/WorksheetModel.h"
-#include "backend/worksheet/WorksheetElementGroup.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/WorksheetRectangleElement.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/core/column/Column.h"
-#include "backend/worksheet/TextLabel.h"
-
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KAction>
 #include <KLocale>
-#include "kdefrontend/worksheet/GridDialog.h"
-#endif
+#include <KMessageBox>
 
 /**
  * \class WorksheetView
@@ -674,6 +673,13 @@ void WorksheetView::selectAllElements() {
 void WorksheetView::deleteElement() {
 	QList<QGraphicsItem*> items = scene()->selectedItems();
 	if (items.size()==0)
+		return;
+
+	int rc = KMessageBox::warningYesNo( this,
+			i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()),
+			i18n("Delete selected objects"));
+
+	if (rc==KMessageBox::No)
 		return;
 
 	m_suppressSelectionChangedEvent = true;
