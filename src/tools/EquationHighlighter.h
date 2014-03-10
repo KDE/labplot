@@ -1,9 +1,9 @@
 /***************************************************************************
-    File             : ExpressionParser.h
+    File             : EquationHighlighter.h
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Description      : c++ wrapper for the bison generated parser.
+    Description      : syntax highligher for mathematical equations
                            
  ***************************************************************************/
 
@@ -25,34 +25,26 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef EQUATIONHIGHLIGHTER_H
+#define EQUATIONHIGHLIGHTER_H
 
-#ifndef EXPRESSIONPARSER_H
-#define EXPRESSIONPARSER_H
+#include <QtGui/QSyntaxHighlighter>
+#include <QStringList>
 
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+class KTextEdit;
 
-class ExpressionParser{
-
-public:
-	static ExpressionParser* getInstance();
-
-	bool isValid(const QString&, XYEquationCurve::EquationType);
-	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max,
-						   int count, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluatePolar(const QString& expr, const QString& min, const QString& max,
-						   int count, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateParametric(const QString& expr1, const QString& expr2, const QString& min, const QString& max,
-						   int count, QVector<double>* xVector, QVector<double>* yVector);
-
-	const QStringList& functionsList();
-	const QStringList& constantsList();
-
-private:
-	ExpressionParser();
-	~ExpressionParser();
-
-	static ExpressionParser* instance;
-	QStringList m_functions;
-	QStringList m_constants;
+class EquationHighlighter : public QSyntaxHighlighter {
+	public:
+		EquationHighlighter(KTextEdit* parent);
+		void setVariables(QStringList&);
+// 		void setErrorPosition(int position);
+		
+	protected:
+		virtual void highlightBlock(const QString& text);
+		
+// 		int m_errorPosition;
+		KTextEdit* m_parent;
+		QStringList m_variables;
 };
+
 #endif

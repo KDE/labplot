@@ -125,6 +125,7 @@ set(COMMONFRONTEND_SOURCES
 
 set(TOOLS_SOURCES
 	${TOOLS_DIR}/TeXRenderer.cpp
+	${TOOLS_DIR}/EquationHighlighter.cpp
 )
 
 set(QTMOC_HDRS

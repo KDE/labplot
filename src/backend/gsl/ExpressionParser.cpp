@@ -28,6 +28,7 @@
 
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/parser_extern.h"
+#include "backend/gsl/parser_struct.h"
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
@@ -36,6 +37,12 @@ ExpressionParser* ExpressionParser::instance = NULL;
 
 ExpressionParser::ExpressionParser(){
 	init_table();
+
+	for (int i = 0; constants[i].name != 0; i++)
+		m_constants << constants[i].name;
+
+	for (int i = 0; arith_fncts[i].fname != 0; i++)
+		m_functions << arith_fncts[i].fname;
 }
 
 ExpressionParser::~ExpressionParser(){
@@ -47,6 +54,14 @@ ExpressionParser* ExpressionParser::getInstance(){
 		instance = new ExpressionParser();
 
 	return instance;
+}
+
+const QStringList& ExpressionParser::functionsList() {
+	return m_functions;
+}
+
+const QStringList& ExpressionParser::constantsList() {
+	return m_constants;
 }
 
 bool ExpressionParser::isValid(const QString& expr, XYEquationCurve::EquationType type){

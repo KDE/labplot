@@ -29,6 +29,7 @@
 #include "XYEquationCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "tools/EquationHighlighter.h"
 
 /*!
   \class XYEquationCurveDock
@@ -67,6 +68,14 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("implicit"));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+
+	m_highlighter1 = new EquationHighlighter(uiGeneralTab.teEquation1);
+	m_highlighter2 = new EquationHighlighter(uiGeneralTab.teEquation2);
+
+	//currently, highlighter2 is for implicit equations only, with two parameters - x and y
+	QStringList vars;
+	vars<<"x"<<"y";
+	m_highlighter2->setVariables(vars);
 
 	//Slots
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
@@ -156,6 +165,7 @@ void XYEquationCurveDock::commentChanged(){
 
 void XYEquationCurveDock::typeChanged(int index) {
 	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(index);
+	QStringList vars;
 	if (type==XYEquationCurve::Cartesian) {
 		uiGeneralTab.lEquation1->setText("y=f(x)");
 		uiGeneralTab.lEquation2->hide();
@@ -168,6 +178,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.leMax->show();
 		uiGeneralTab.lMin->setText(i18n("x, min"));
 		uiGeneralTab.lMax->setText(i18n("x, max"));
+		vars<<"x";
 	} else if (type==XYEquationCurve::Polar) {
 		uiGeneralTab.lEquation1->setText(QString::fromUtf8("r(φ)"));
 		uiGeneralTab.lEquation2->hide();
@@ -180,6 +191,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.leMax->show();
 		uiGeneralTab.lMin->setText(i18n("φ, min"));
 		uiGeneralTab.lMax->setText(i18n("φ, max"));
+		vars<<"phi";
 	} else if (type==XYEquationCurve::Parametric) {
 		uiGeneralTab.lEquation1->setText("x=f(t)");
 		uiGeneralTab.lEquation2->setText("y=f(t)");
@@ -193,6 +205,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.leMax->show();
 		uiGeneralTab.lMin->setText(i18n("t, min"));
 		uiGeneralTab.lMax->setText(i18n("t, max"));
+		vars<<"t";
 	} else if (type==XYEquationCurve::Implicit) {
 		uiGeneralTab.lEquation1->setText("f(x,y)");
 		uiGeneralTab.lEquation2->hide();
@@ -203,7 +216,9 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.lMax->hide();
 		uiGeneralTab.leMin->hide();
 		uiGeneralTab.leMax->hide();
+		vars<<"x"<<"y";
 	}
+	m_highlighter1->setVariables(vars);
 }
 
 void XYEquationCurveDock::recalculateClicked() {

@@ -33,6 +33,8 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "ui_xyequationcurvedockgeneraltab.h"
 
+class EquationHighlighter;
+
 class XYEquationCurveDock: public XYCurveDock {
 	Q_OBJECT
 
@@ -45,6 +47,8 @@ private:
 	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
 	virtual void initGeneralTab();
 	XYEquationCurve* m_equationCurve;
+	EquationHighlighter* m_highlighter1;
+	EquationHighlighter* m_highlighter2;
 
 private slots:
 	//SLOTs for changes triggered in XYCurveDock

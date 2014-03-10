@@ -8,4 +8,7 @@ extern "C" void init_table();
 extern "C" void delete_table();
 extern "C" void* assign_variable(char* variable, double value);
 
+extern "C" struct con constants[];
+extern "C" struct init arith_fncts[];
+
 #endif /* PARSER_EXTERN_H */
