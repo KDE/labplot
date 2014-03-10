@@ -162,6 +162,14 @@ void StandardCurveSymbolFactory::init(){
 	
 	path = QPainterPath();
 	polygon.clear();
+	polygon<<QPointF(-0.3, 0.5)<<QPointF(0, -0.5)<<QPointF(0.3, 0.5)<<QPointF(0, 0)<<QPointF(-0.3, 0.5);
+	path.addPolygon(polygon);
+	symbol = new PathCurveSymbol("small boomerang");
+	symbol->setPath(path);
+	m_prototypes.append(symbol);
+	
+	path = QPainterPath();
+	polygon.clear();
 	polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
 				<<QPointF(0.1, 0.1)<<QPointF(0, 0.5)<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
 	path.addPolygon(polygon);
