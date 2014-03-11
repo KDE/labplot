@@ -1756,15 +1756,15 @@ yyreturn:
 #line 50 "parser.y"
 
 
+/* enable debugging */
+/* #define LDEBUG */
+
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
 
-/* debugging flag */
-/* #define LDEBUG */
-
 double parse(char *str) {
 #ifdef LDEBUG
-	printf("parse(%s)\n",str);
+	printf("\nparse(\"%s\")\n",str);
 #endif
 	pos=0;
 
@@ -1776,20 +1776,19 @@ double parse(char *str) {
 	string[strlen(string)] = '\n';
 
 	/* be sure that the symbol table has been initialized */
-
 	if (!sym_table)
 	   init_table();
 
 #ifdef LDEBUG
-	printf("calling yyparse()\n");
+	printf("	calling yyparse()\n");
 #endif
 	yyparse();
 #ifdef LDEBUG
-	printf("After calling yyparse()\n");
+	printf("	After calling yyparse()\n");
 #endif
 
 #ifdef LDEBUG
-	printf("parse() DONE\n");
+	printf("	parse() DONE\n");
 #endif
 	return res;
 }
@@ -1854,7 +1853,7 @@ symrec* putsym (const char *sym_name, int sym_type) {
 
 symrec* getsym (const char *sym_name) {
 #ifdef LDEBUG
-	printf("getsym() : sym_name = %s\n",sym_name);
+	printf("	getsym() : sym_name = %s\n",sym_name);
 #endif
 	symrec *ptr;
 	for (ptr = sym_table; ptr != (symrec *) 0;
@@ -1875,7 +1874,7 @@ symrec* assign_variable(const char* symb_name, double value) {
 
 static int getcharstr(void) {
 #ifdef LDEBUG
-	printf("getcharstr()\n");
+	printf("	getcharstr()\n");
 #endif
 	if ('\0' == string[pos])
 		return EOF;
@@ -1889,7 +1888,7 @@ static void ungetcstr(void) {
 
 int yylex (void) {
 #ifdef LDEBUG
-	printf("yylex()\n");
+	printf("	yylex()\n");
 #endif
 	int c;
 
@@ -1897,7 +1896,7 @@ int yylex (void) {
 	while ((c = getcharstr ()) == ' ' || c == '\t');
 
 #ifdef LDEBUG
-	printf("c=%c\n",c);
+	printf("		c=%c\n",c);
 #endif
 	/* return end-of-file  */
 	if (c == EOF) {
@@ -1907,21 +1906,21 @@ int yylex (void) {
 	/* TODO : catch single '.' as error "1+." */
 	if (c == '.' || isdigit (c)) {
 #ifdef LDEBUG
-		printf("is digit or .\n");
+		printf("		is digit or .\n");
 #endif
 		char *tmp, *tmp2;
                 double result;
                 ungetcstr();
                 tmp = &string[pos];
 #ifdef LDEBUG
-		printf("tmp = %s\n",tmp);
+		printf("		tmp = %s\n",tmp);
 #endif
                 result = strtod(tmp,&tmp2);
 		/* check conversion */
 		if(strlen(tmp) == strlen(tmp2))
 			return 0;
 #ifdef LDEBUG
-		printf("result = %g\n",result);
+		printf("		result = %g\n",result);
 #endif
                 sscanf (tmp,"%lf", &(yylval.dval));
                 pos+= strlen(tmp)-strlen(tmp2);
@@ -1932,7 +1931,7 @@ int yylex (void) {
 	/* Char starts an identifier => read the name. */
 	if (isalpha (c)) {
 #ifdef LDEBUG
-		printf("is alpha\n");
+		printf("		is alpha\n");
 #endif
 		symrec *s;
 		static char *symbuf = 0;
