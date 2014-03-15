@@ -34,11 +34,15 @@
 class KTextEdit;
 
 class EquationHighlighter : public QSyntaxHighlighter {
+	Q_OBJECT
 	public:
 		EquationHighlighter(KTextEdit* parent);
 		void setVariables(QStringList&);
 // 		void setErrorPosition(int position);
-		
+
+	public slots:
+		void rehighlight();
+
 	protected:
 		virtual void highlightBlock(const QString& text);
 		

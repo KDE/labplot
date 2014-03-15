@@ -67,6 +67,7 @@ class XYEquationCurve: public XYCurve {
 
 	private:
 		Q_DECLARE_PRIVATE(XYEquationCurve)
+		void init();
 
 	signals:
 		friend class XYEquationCurveSetEquationDataCmd;

@@ -84,7 +84,9 @@ void XYEquationCurveDock::setupGeneral() {
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
 	connect( uiGeneralTab.teEquation1, SIGNAL(textChanged()), this, SLOT(validateExpression()) );
+	connect( uiGeneralTab.teEquation1, SIGNAL(cursorPositionChanged()), m_highlighter1, SLOT(rehighlight()) );
 	connect( uiGeneralTab.teEquation2, SIGNAL(textChanged()), this, SLOT(validateExpression()) );
+	connect( uiGeneralTab.teEquation2, SIGNAL(cursorPositionChanged()), m_highlighter2, SLOT(rehighlight()) );
 	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );

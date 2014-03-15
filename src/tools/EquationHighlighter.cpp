@@ -32,7 +32,6 @@
 
 #include <QLocale>
 #include <QPalette>
-
 #include <KTextEdit>
 
 EquationHighlighter::EquationHighlighter(KTextEdit* parent)
@@ -133,7 +132,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 			setFormat(i, 1, other);
 		*/
 	}
-	
+
 	//highlight matched brackets
 	int cursorPos = m_parent->textCursor().position();
 	if (cursorPos < 0)
@@ -150,9 +149,9 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 	
 	if ((haveOpen || haveClose) && m_parent->hasFocus()) {
 		// Search for the other bracket
-		
+
 		int inc = haveOpen ? 1 : -1; // which direction to search in
-		
+
 		int level = 0;
 		for (int i = cursorPos; i >= 0 && i < text.size(); i += inc) {
 			if (text[i] == ')')
@@ -176,6 +175,11 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 // 	
 // 		setFormat(m_errorPosition, 1, error);
 // 	}
+}
+
+void EquationHighlighter::rehighlight() {
+	setDocument(0);
+	setDocument(m_parent->document());
 }
 
 /**

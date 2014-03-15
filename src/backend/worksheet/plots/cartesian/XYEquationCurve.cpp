@@ -45,18 +45,33 @@
 
 XYEquationCurve::XYEquationCurve(const QString& name)
 		: XYCurve(name, new XYEquationCurvePrivate(this)){
-// 	init();
+	init();
 }
 
 XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd)
 		: XYCurve(name, dd){
-// 	init();
+	init();
 }
 
  
 XYEquationCurve::~XYEquationCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
+}
+
+void XYEquationCurve::init() {
+	Q_D(XYEquationCurve);
+
+	d->xColumn->setHidden(true);
+	addChild(d->xColumn);
+
+	d->yColumn->setHidden(true);
+	addChild(d->yColumn);
+
+	setUndoAware(false);
+	setXColumn(d->xColumn);
+	setYColumn(d->yColumn);
+	setUndoAware(true);
 }
 
 void XYEquationCurve::recalculate() {
@@ -103,16 +118,11 @@ XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner) : XYCurve
 }
 
 XYEquationCurvePrivate::~XYEquationCurvePrivate() {
-	delete xColumn;
-	delete yColumn;
+	//no need to delete xColumn and yColumn, they are deleted
+	//when the parent aspect is removed
 }
 
-
 void XYEquationCurvePrivate::recalculate() {
-	//TODO: this should be set in constructor, but it crashes. why?
-	q->setXColumn(xColumn);
-	q->setYColumn(yColumn);
-
 	//resize the vector if a new number of point to calculate was provided
 	if (equationData.count != xVector->size()) {
 		if (equationData.count>=1) {

@@ -776,7 +776,9 @@ void XYCurvePrivate::retransform(){
 
 	//calculate the scene coordinates
 	const AbstractPlot* plot = dynamic_cast<const AbstractPlot*>(q->parentAspect());
-	Q_ASSERT(plot);
+	if (!plot)
+		return;
+
 	const CartesianCoordinateSystem *cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	Q_ASSERT(cSystem);
 	visiblePoints = std::vector<bool>(symbolPointsLogical.count(), false);
