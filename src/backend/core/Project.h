@@ -74,6 +74,9 @@ class Project : public Folder {
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
+	public slots:
+		void descriptionChanged(const AbstractAspect* aspect);
+
 	signals:
 		void requestSaveState(QXmlStreamWriter*) const;
 		void requestLoadState(XmlStreamReader*) const;

@@ -109,6 +109,8 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 	QString engine_name = ScriptingEngineManager::instance()->engineNames()[0];
 	d->scriptingEngine = ScriptingEngineManager::instance()->engine(engine_name);
 #endif
+
+	connect(this, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(descriptionChanged(const AbstractAspect*)));
 }
 
 Project::~Project() {
@@ -161,6 +163,14 @@ void Project::setChanged(const bool value) {
 bool Project ::hasChanged() const {
 	return d->changed ;
 } 
+
+void Project::descriptionChanged(const AbstractAspect* aspect) {
+	if (this!=aspect)
+		return;
+
+	d->changed = true;
+	emit changed();
+}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

@@ -273,7 +273,7 @@ void SpreadsheetView::connectActions(){
 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
-	connect(action_select_all, SIGNAL(triggered()), this, SLOT(selectAll()));
+	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 	connect(action_add_column, SIGNAL(triggered()), m_spreadsheet, SLOT(appendColumn()));
 	connect(action_clear_spreadsheet, SIGNAL(triggered()), m_spreadsheet, SLOT(clear()));
 	connect(action_clear_masks, SIGNAL(triggered()), m_spreadsheet, SLOT(clearMasks()));

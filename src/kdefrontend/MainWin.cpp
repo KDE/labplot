@@ -918,7 +918,6 @@ Worksheet* MainWin::activeWorksheet() const{
 	Adds "changed" to the window caption and activates the save-Action.
 */
 void MainWin::projectChanged(){
-	qDebug()<< "MainWin::projectChanged()";
 	setCaption(m_project->name() + "    [" + i18n("Changed") + ']' );
 	m_saveAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
