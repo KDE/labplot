@@ -31,6 +31,10 @@
 #include "backend/gsl/ExpressionParser.h"
 #include "tools/EquationHighlighter.h"
 
+#include <QCompleter>
+#include <QKeyEvent>
+#include <QScrollBar>
+
 /*!
   \class XYEquationCurveDock
   \brief  Provides a widget for editing the properties of the XYEquationCurves
@@ -69,6 +73,7 @@ void XYEquationCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
+	//highlighting
 	m_highlighter1 = new EquationHighlighter(uiGeneralTab.teEquation1);
 	m_highlighter2 = new EquationHighlighter(uiGeneralTab.teEquation2);
 
@@ -76,6 +81,24 @@ void XYEquationCurveDock::setupGeneral() {
 	QStringList vars;
 	vars<<"x"<<"y";
 	m_highlighter2->setVariables(vars);
+
+	//completion
+	QStringList list = ExpressionParser::getInstance()->functionsList();
+	list.append(ExpressionParser::getInstance()->constantsList());
+	m_completer1 = new QCompleter(list);
+	m_completer1->setWidget(uiGeneralTab.teEquation1);
+	m_completer1->setCompletionMode(QCompleter::PopupCompletion);
+	m_completer1->setCaseSensitivity(Qt::CaseInsensitive);
+	connect(m_completer1, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
+
+	m_completer2 = new QCompleter(list);
+	m_completer2->setWidget(uiGeneralTab.teEquation2);
+	m_completer2->setCompletionMode(QCompleter::PopupCompletion);
+	m_completer2->setCaseSensitivity(Qt::CaseInsensitive);
+	connect(m_completer2, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
+
+	uiGeneralTab.teEquation1->installEventFilter(this);
+	uiGeneralTab.teEquation2->installEventFilter(this);
 
 	//Slots
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
@@ -145,6 +168,93 @@ void XYEquationCurveDock::initGeneralTab() {
 			this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_equationCurve, SIGNAL(equationDataChanged(XYEquationCurve::EquationData)),
 			this, SLOT(curveEquationDataChanged(XYEquationCurve::EquationData)));
+}
+
+/*!
+ * Code for the completion adopted from http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+ */
+bool XYEquationCurveDock::eventFilter(QObject* object, QEvent* event){
+	if (event->type()!=QEvent::KeyPress)
+		return false;
+
+	QCompleter* c;
+	QTextEdit* te;
+	if (object==uiGeneralTab.teEquation1) {
+		c = m_completer1;
+		te = uiGeneralTab.teEquation1;
+	} else if (object==uiGeneralTab.teEquation2) {
+		c = m_completer2;
+		te = uiGeneralTab.teEquation2;
+	} else {
+		return false;
+	}
+
+	QKeyEvent* e = dynamic_cast<QKeyEvent*>(event);
+	if (c && c->popup()->isVisible()) {
+         // The following keys are forwarded by the completer to the widget
+        switch (e->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        case Qt::Key_Escape:
+        case Qt::Key_Tab:
+        case Qt::Key_Backtab:
+             e->ignore();
+             return false; // let the completer do default behavior
+        default:
+            break;
+        }
+     }
+
+     bool isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space); // CTRL+SPACE
+     if (!c || !isShortcut) // do not process the shortcut when we have a completer
+		 return false;
+
+     const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+     if (!c || (ctrlOrShift && e->text().isEmpty()))
+         return false;
+
+     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+     bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
+
+	 QTextCursor tc = te->textCursor();
+     tc.select(QTextCursor::WordUnderCursor);
+     QString completionPrefix = tc.selectedText();
+
+     if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
+                       || eow.contains(e->text().right(1)))) {
+         c->popup()->hide();
+         return false;
+     }
+
+     if (completionPrefix != c->completionPrefix()) {
+         c->setCompletionPrefix(completionPrefix);
+         c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+     }
+     QRect cr = te->cursorRect();
+     cr.setWidth(c->popup()->sizeHintForColumn(0)
+                 + c->popup()->verticalScrollBar()->sizeHint().width());
+     c->complete(cr); // popup it up!
+
+	 return true;
+}
+
+void XYEquationCurveDock::insertCompletion(const QString& completion) {
+	QTextEdit* te;
+	QCompleter* c;
+	if (QObject::sender() == m_completer1) {
+		te = uiGeneralTab.teEquation1;
+		c = m_completer1;
+	} else {
+		te = uiGeneralTab.teEquation2;
+		c = m_completer2;
+	}
+
+	QTextCursor tc = te->textCursor();
+	int extra = completion.length() - c->completionPrefix().length();
+	tc.movePosition(QTextCursor::Left);
+	tc.movePosition(QTextCursor::EndOfWord);
+	tc.insertText(completion.right(extra));
+	te->setTextCursor(tc);
 }
 
 //*************************************************************
