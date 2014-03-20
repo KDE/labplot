@@ -232,7 +232,7 @@ void MainWin::initActions() {
 	connect(m_newFolderAction, SIGNAL(triggered()),SLOT(newFolder()));
 
 	//"New file datasources"
-	m_newFileDataSourceAction = new KAction(KIcon("application-octet-stream"),i18n("File Data Source "),this);
+	m_newFileDataSourceAction = new KAction(KIcon("application-octet-stream"),i18n("File Data Source"),this);
 	actionCollection()->addAction("new_file_datasource", m_newFileDataSourceAction);
 	connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
 
@@ -621,7 +621,7 @@ void MainWin::openProject(const QString& filename) {
 		file = new QFile(filename);
 
 	if (!file->open(QIODevice::ReadOnly)) {
-		KMessageBox::error(this, i18n("Sorry. Could not open file for reading!"));
+		KMessageBox::error(this, i18n("Sorry. Could not open file for reading."));
 		return;
 	}
 
@@ -775,7 +775,7 @@ bool MainWin::save(const QString& fileName) {
 		if (m_autoSaveActive && !m_autoSaveTimer.isActive())
 			m_autoSaveTimer.start();
 	}else{
-		KMessageBox::error(this, i18n("Sorry. Could not open file for writing!"));
+		KMessageBox::error(this, i18n("Sorry. Could not open file for writing."));
 		ok = false;
 	}
 	

@@ -343,7 +343,7 @@
           <item row="0" column="3">
            <widget class="QLabel" name="label_7">
             <property name="text">
-             <string>End row :</string>
+             <string>End row:</string>
             </property>
            </widget>
           </item>

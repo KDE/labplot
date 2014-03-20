@@ -72,7 +72,7 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), m_options
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
-	setCaption(i18n("Import data to spreadsheet/matrix"));
+	setCaption(i18n("Import Data to Spreadsheet/Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
@@ -90,7 +90,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 
   //Frame for the "Add To"-Stuff
   frameAddTo = new QGroupBox(this);
-  frameAddTo->setTitle(i18n("Import to"));
+  frameAddTo->setTitle(i18n("Import To"));
   QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
   hLayout->addWidget( new QLabel(i18n("Spreadsheet"),  frameAddTo) );
 	
@@ -230,8 +230,8 @@ void ImportFileDialog::newSpreadsheet(){
 
 //	this->setWindowIcon( QIcon(KIcon("insert-table")) );
 	dlg->setWindowIcon( QIcon(KIcon("insert-table")) );
-	name = dlg->getText(this, i18n("add new Spreadsheet"), i18n("Spreadsheet name"), QLineEdit::Normal, name, &ok);
-// 	name = KInputDialog::getText( i18n("add new Spreadsheet"), i18n("Spreadsheet name"), name, &ok);
+	name = dlg->getText(this, i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), QLineEdit::Normal, name, &ok);
+// 	name = KInputDialog::getText( i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), name, &ok);
 	if (ok)
 		emit newSpreadsheetRequested(name);
 

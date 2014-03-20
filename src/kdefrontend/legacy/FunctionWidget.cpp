@@ -167,7 +167,7 @@ int FunctionWidget::createSetData(Set* set) {
 	set->list_data.clear(); //clear the old stuff. a new data set is going to be created now.
 	int NX=set->list_numbers[0];
 
-	QProgressDialog progress( i18n("Creating function ..."), i18n("Cancel"), 0, NX, this );
+	QProgressDialog progress( i18n("Creating function..."), i18n("Cancel"), 0, NX, this );
 	progress.setMinimumDuration(2000);
 	progress.setWindowModality(Qt::WindowModal);
 	bool nanvalue;
@@ -197,7 +197,7 @@ int FunctionWidget::createSetData(Set* set) {
 
 			if(parse_errors()>0) {
 				progress.cancel();
-				KMessageBox::error(this, i18n("Parse Error!\n Please check the given function."));
+				KMessageBox::error(this, i18n("Parse Error.\nPlease check the given function."));
 				delete_table();
 				return 1;
 			}
@@ -272,7 +272,7 @@ int FunctionWidget::createSetData(Set* set) {
 				z = parse( (char *) set->functionName().toLatin1().data() );
 				if(parse_errors()>0) {
 					progress.cancel();
-					KMessageBox::error(this, i18n("Parse Error!\n Please check the given function."));
+					KMessageBox::error(this, i18n("Parse Error.\nPlease check the given function."));
 					delete_table();
 					return 1;
 				}

@@ -171,7 +171,7 @@ void ImportWidget::fileInfoDialog() {
 		else {
 			kDebug()<<"WARNING: Could not open file"<<filename<<endl;
 			// TODO : hangs here
-			KMessageBox::sorry(this, i18n("Sorry. Could not open file %1 for reading!", filename));
+			KMessageBox::sorry(this, i18n("Sorry. Could not open file %1 for reading.", filename));
 		}
 	}
 }
@@ -371,7 +371,7 @@ int ImportWidget::importNETCDF(QString filename, Spreadsheet *spreadsheet) {
 	spreadsheet->setColumnCount(ncf.NVars());
 
 	kDebug()<<" nvars = "<<ncf.NVars()<<endl;
-	QProgressDialog progress( i18n("Reading NETCDF data ..."), i18n("Cancel"), 0, ncf.NVars()-startRow());
+	QProgressDialog progress( i18n("Reading NETCDF data..."), i18n("Cancel"), 0, ncf.NVars()-startRow());
 	progress.setWindowModality(Qt::WindowModal);
 //	s->setUpdatesEnabled(false);
 	for (int j=startRow();j<ncf.NVars();j++) {
@@ -410,7 +410,7 @@ int ImportWidget::importCDF(QString filename, Spreadsheet *spreadsheet) {
 	s->setRowCount(cdf.MaxRec());
 
 	kDebug()<<" nvars = "<<cdf.NVars()<<endl;
-	QProgressDialog progress( i18n("Reading CDF data ..."), i18n("Cancel"), 0, cdf.NVars()-startRow());
+	QProgressDialog progress( i18n("Reading CDF data..."), i18n("Cancel"), 0, cdf.NVars()-startRow());
 	progress.setWindowModality(Qt::WindowModal);
 //	s->setUpdatesEnabled(false);
 	for (int j=startRow();j<cdf.NVars();j++) {
@@ -450,7 +450,7 @@ void ImportWidget::importBinary(QIODevice *file, Spreadsheet *spreadsheet) {
 	if(fields > spreadsheet->columnCount())
 		spreadsheet->setColumnCount(fields);
 
-	QProgressDialog progress( i18n("Reading binary data ..."), i18n("Cancel"), 0, file->size());
+	QProgressDialog progress( i18n("Reading binary data..."), i18n("Cancel"), 0, file->size());
 	progress.setWindowModality(Qt::WindowModal);
 //	s->setUpdatesEnabled(false);
 	int row=0;
@@ -522,7 +522,7 @@ void ImportWidget::importASCII(QIODevice *file, Spreadsheet *spreadsheet) {
 
 	int row=0,actrow=0;
 	QTextStream in(file);
-	QProgressDialog progress( i18n("Reading ASCII data ..."), i18n("Cancel"), 0, file->size());
+	QProgressDialog progress( i18n("Reading ASCII data..."), i18n("Cancel"), 0, file->size());
 	progress.setWindowModality(Qt::WindowModal);
 //	s->setUpdatesEnabled(false);
 	while (!in.atEnd()) {

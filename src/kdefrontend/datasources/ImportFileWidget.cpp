@@ -197,7 +197,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 void ImportFileWidget::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
 	QString dir = conf.readEntry("LastDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the file data source"), dir);
+    QString path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
     if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 
@@ -276,8 +276,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 */
 void ImportFileWidget::saveFilter(){
   bool ok;
-  QString text = QInputDialog::getText(this, i18n("Save filter settings as"),
-												i18n("Filter name"), QLineEdit::Normal,
+  QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"),
+												i18n("Filter name:"), QLineEdit::Normal,
 												i18n("new filter"), &ok);
   if (ok && !text.isEmpty()){
 	//TODO
