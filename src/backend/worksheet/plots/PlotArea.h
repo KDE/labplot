@@ -65,6 +65,7 @@ class PlotArea: public AbstractWorksheetElement{
 		BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity)
 
 		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
+		BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
 		BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
 		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled)
@@ -98,6 +99,7 @@ class PlotArea: public AbstractWorksheetElement{
 		friend class PlotAreaSetBackgroundFileNameCmd;
 		friend class PlotAreaSetBackgroundOpacityCmd;
 		friend class PlotAreaSetBorderPenCmd;
+		friend class PlotAreaSetBorderCornerRadiusCmd;
 		friend class PlotAreaSetBorderOpacityCmd;
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
@@ -108,6 +110,7 @@ class PlotArea: public AbstractWorksheetElement{
 		void backgroundFileNameChanged(QString&);
 		void backgroundOpacityChanged(float);
 		void borderPenChanged(QPen&);
+		void borderCornerRadiusChanged(float);
 		void borderOpacityChanged(float);
 };
 

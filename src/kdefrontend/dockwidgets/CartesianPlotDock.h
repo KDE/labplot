@@ -92,6 +92,7 @@ private slots:
   	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
+	void borderCornerRadiusChanged(double);
 	void borderOpacityChanged(int);
 	void horizontalPaddingChanged(double);
 	void verticalPaddingChanged(double);
@@ -118,6 +119,7 @@ private slots:
 	void plotBackgroundFileNameChanged(QString&);
 	void plotBackgroundOpacityChanged(float);
 	void plotBorderPenChanged(QPen&);
+	void plotBorderCornerRadiusChanged(float);
 	void plotBorderOpacityChanged(float);
 	void plotHorizontalPaddingChanged(float);
 	void plotVerticalPaddingChanged(float);

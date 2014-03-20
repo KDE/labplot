@@ -86,8 +86,9 @@ void PlotArea::init(){
 
 	//Border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)), 
-											group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
-											(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
+						(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 }
 
@@ -145,6 +146,7 @@ CLASS_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFile
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, backgroundOpacity, backgroundOpacity)
 
 CLASS_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderCornerRadius, borderCornerRadius)
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderOpacity, borderOpacity)
 
 
@@ -229,6 +231,13 @@ void PlotArea::setBorderPen(const QPen &pen) {
 	Q_D(PlotArea);
 	if (pen != d->borderPen)
 		exec(new PlotAreaSetBorderPenCmd(d, pen, i18n("%1: set plot area border")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderCornerRadius, qreal, borderCornerRadius, update)
+void PlotArea::setBorderCornerRadius(qreal radius) {
+	Q_D(PlotArea);
+	if (radius != d->borderCornerRadius)
+		exec(new PlotAreaSetBorderCornerRadiusCmd(d, radius, i18n("%1: set plot area corner radius")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderOpacity, qreal, borderOpacity, update)
@@ -379,7 +388,10 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		painter->setPen(borderPen);
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderOpacity);
-		painter->drawRect(rect);
+		if ( qFuzzyIsNull(borderCornerRadius) )
+			painter->drawRect(rect);
+		else
+			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
 }
 
@@ -415,6 +427,7 @@ void PlotArea::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement( "border" );
 	WRITE_QPEN(d->borderPen);
     writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
+	writer->writeAttribute( "borderCornerRadius", QString::number(d->borderCornerRadius) );
     writer->writeEndElement();
 	
 	writer->writeEndElement();
@@ -522,11 +535,17 @@ bool PlotArea::load(XmlStreamReader* reader){
 
 			READ_QPEN(d->borderPen);
 
-            str = attribs.value("borderOpacity").toString();
+			str = attribs.value("borderOpacity").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("borderOpacity"));
             else
                 d->borderOpacity = str.toDouble();
+
+			str = attribs.value("borderCornerRadius").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("borderCornerRadius"));
+            else
+                d->borderCornerRadius = str.toDouble();
         }else{ // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;

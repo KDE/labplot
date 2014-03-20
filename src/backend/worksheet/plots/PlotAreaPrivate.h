@@ -63,6 +63,7 @@ class PlotAreaPrivate: public QGraphicsItem{
 		qreal backgroundOpacity;
 		QPen borderPen;
 		qreal borderOpacity;
+		qreal borderCornerRadius;
 		
 		PlotArea * const q;
 };

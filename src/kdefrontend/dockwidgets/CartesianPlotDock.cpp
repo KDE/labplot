@@ -130,6 +130,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
 	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
+	connect( ui.sbBorderCornerRadius, SIGNAL(valueChanged(double)), this, SLOT(borderCornerRadiusChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
 	//Padding
@@ -669,6 +670,14 @@ void CartesianPlotDock::borderWidthChanged(double value){
   }  
 }
 
+void CartesianPlotDock::borderCornerRadiusChanged(double value){
+	if (m_initializing)
+		return;
+
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+}
+
 void CartesianPlotDock::borderOpacityChanged(int value){
 	if (m_initializing)
 		return;
@@ -820,6 +829,12 @@ void CartesianPlotDock::plotBorderPenChanged(QPen& pen){
 	m_initializing = false;
 }
 
+void CartesianPlotDock::plotBorderCornerRadiusChanged(float value){
+	m_initializing = true;
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
 void CartesianPlotDock::plotBorderOpacityChanged(float value){
 	m_initializing = true;
 	float v = (float)value*100.;
@@ -902,6 +917,7 @@ void CartesianPlotDock::load(){
 	ui.kcbBorderColor->setColor( m_plot->plotArea()->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_plot->plotArea()->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderCornerRadius(), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( round(m_plot->plotArea()->borderOpacity()*100) );
 
 	m_initializing=true;
@@ -956,6 +972,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_plot->plotArea()->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_plot->plotArea()->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius()), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_plot->plotArea()->borderOpacity())*100 );
 
 	m_initializing=true;
@@ -1008,6 +1025,7 @@ void CartesianPlotDock::saveConfig(KConfig& config){
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
+	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), Worksheet::Centimeter));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 
 	config.sync();
