@@ -82,6 +82,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
         CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
 
 		CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
+		BASIC_D_ACCESSOR_DECL(float, borderCornerRadius, BorderCornerRadius)
 		BASIC_D_ACCESSOR_DECL(float, borderOpacity, BorderOpacity)
 
         BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
@@ -131,6 +132,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		friend class CartesianPlotLegendSetBackgroundFileNameCmd;
 		friend class CartesianPlotLegendSetBackgroundOpacityCmd;
 		friend class CartesianPlotLegendSetBorderPenCmd;
+		friend class CartesianPlotLegendSetBorderCornerRadiusCmd;
 		friend class CartesianPlotLegendSetBorderOpacityCmd;
 		friend class CartesianPlotLegendSetLayoutTopMarginCmd;
 		friend class CartesianPlotLegendSetLayoutBottomMarginCmd;
@@ -153,6 +155,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 		void backgroundFileNameChanged(QString&);
 		void backgroundOpacityChanged(float);
 		void borderPenChanged(QPen&);
+		void borderCornerRadiusChanged(float);
 		void borderOpacityChanged(float);
 		void layoutTopMarginChanged(float);
 		void layoutBottomMarginChanged(float);

@@ -116,6 +116,7 @@ void CartesianPlotLegend::init(){
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
 										 group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
 										 (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 
 	//Layout
@@ -225,6 +226,7 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, backgroundOpacity, backgr
 
 //Border
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderCornerRadius, borderCornerRadius)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderOpacity, borderOpacity)
 
 //Layout
@@ -341,6 +343,13 @@ void CartesianPlotLegend::setBorderPen(const QPen &pen) {
 		exec(new CartesianPlotLegendSetBorderPenCmd(d, pen, i18n("%1: set border style")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderCornerRadius, qreal, borderCornerRadius, update)
+void CartesianPlotLegend::setBorderCornerRadius(float radius) {
+	Q_D(CartesianPlotLegend);
+	if (radius != d->borderCornerRadius)
+		exec(new CartesianPlotLegendSetBorderCornerRadiusCmd(d, radius, i18n("%1: set border corner radius")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderOpacity, qreal, borderOpacity, update)
 void CartesianPlotLegend::setBorderOpacity(float opacity) {
 	Q_D(CartesianPlotLegend);
@@ -435,7 +444,11 @@ void CartesianPlotLegendPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent
 */
 QPainterPath CartesianPlotLegendPrivate::shape() const {
 	QPainterPath path;
-	path.addRect(rect);
+	if ( qFuzzyIsNull(borderCornerRadius) )
+		path.addRect(rect);
+	else
+		path.addRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+
 	return path;
 }
 
@@ -613,7 +626,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
-		if ( backgroundFileName.trimmed().isEmpty() ) {
+		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle){
 				case PlotArea::ScaledCropped:
@@ -642,16 +655,23 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
-			painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
+		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
-	painter->drawRect(rect);
+
+	if ( qFuzzyIsNull(borderCornerRadius) )
+		painter->drawRect(rect);
+	else
+		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	//draw the border
 	if (borderPen.style() != Qt::NoPen){
 		painter->setPen(borderPen);
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderOpacity);
-		painter->drawRect(rect);
+		if ( qFuzzyIsNull(borderCornerRadius) )
+			painter->drawRect(rect);
+		else
+			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
 
 	//draw curve's line+symbol and the names

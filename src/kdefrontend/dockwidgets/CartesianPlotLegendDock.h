@@ -83,6 +83,7 @@ private slots:
   	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
+	void borderCornerRadiusChanged(double);
 	void borderOpacityChanged(int);
 	
 	//"Layout"-tab
@@ -112,6 +113,7 @@ private slots:
 	void legendBackgroundOpacityChanged(float);
 
 	void legendBorderPenChanged(QPen&);
+	void legendBorderCornerRadiusChanged(float);
 	void legendBorderOpacityChanged(float);
 
 	void legendLayoutTopMarginChanged(float);

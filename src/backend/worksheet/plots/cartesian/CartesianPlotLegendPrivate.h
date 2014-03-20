@@ -83,6 +83,7 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 
 		//Border
 		QPen borderPen;
+		qreal borderCornerRadius;
 		qreal borderOpacity;
 
 		//Layout

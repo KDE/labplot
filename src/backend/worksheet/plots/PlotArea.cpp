@@ -291,7 +291,11 @@ QRectF PlotAreaPrivate::boundingRect () const{
 
 QPainterPath PlotAreaPrivate::shape() const{
 	QPainterPath path;
-	path.addRect(rect);
+	if ( qFuzzyIsNull(borderCornerRadius) )
+		path.addRect(rect);
+	else
+		path.addRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+
 	return path;
 }
 
@@ -350,7 +354,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
-		if ( backgroundFileName.trimmed().isEmpty() ) {
+		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle){
 				case PlotArea::ScaledCropped:
@@ -379,9 +383,13 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
-			painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
+		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
-	painter->drawRect(rect);
+
+	if ( qFuzzyIsNull(borderCornerRadius) )
+		painter->drawRect(rect);
+	else
+		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	//draw the border
 	if (borderPen.style() != Qt::NoPen){

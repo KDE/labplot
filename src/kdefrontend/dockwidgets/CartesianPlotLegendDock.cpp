@@ -110,6 +110,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
 	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
+	connect( ui.sbBorderCornerRadius, SIGNAL(valueChanged(double)), this, SLOT(borderCornerRadiusChanged(double)) );
 	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
 
 	//Layout
@@ -193,6 +194,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect( m_legend, SIGNAL(backgroundFileNameChanged(QString&)), this, SLOT(legendBackgroundFileNameChanged(QString&)) );
 	connect( m_legend, SIGNAL(backgroundOpacityChanged(float)), this, SLOT(legendBackgroundOpacityChanged(float)) );
 	connect( m_legend, SIGNAL(borderPenChanged(QPen&)), this, SLOT(legendBorderPenChanged(QPen&)) );
+	connect( m_legend, SIGNAL(borderCornerRadiusChanged(float)), this, SLOT(legendBorderCornerRadiusChanged(float)) );
 	connect( m_legend, SIGNAL(borderOpacityChanged(float)), this, SLOT(legendBorderOpacityChanged(float)) );
 
 	//layout
@@ -576,7 +578,7 @@ void CartesianPlotLegendDock::borderColorChanged(const QColor& color) {
 
 void CartesianPlotLegendDock::borderWidthChanged(double value) {
 	if (m_initializing)
-	return;
+		return;
 
 	QPen pen;
 	foreach(CartesianPlotLegend* legend, m_legendList) {
@@ -584,6 +586,14 @@ void CartesianPlotLegendDock::borderWidthChanged(double value) {
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		legend->setBorderPen(pen);
 	}
+}
+
+void CartesianPlotLegendDock::borderCornerRadiusChanged(double value) {
+	if (m_initializing)
+		return;
+
+	foreach(CartesianPlotLegend* legend, m_legendList)
+		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 }
 
 void CartesianPlotLegendDock::borderOpacityChanged(int value) {
@@ -773,6 +783,12 @@ void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 	m_initializing = false;
 }
 
+void CartesianPlotLegendDock::legendBorderCornerRadiusChanged(float value){
+	m_initializing = true;
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	m_initializing = false;
+}
+
 void CartesianPlotLegendDock::legendBorderOpacityChanged(float opacity) {
 	m_initializing = true;
 	ui.sbBorderOpacity->setValue( round(opacity*100.0) );
@@ -858,6 +874,7 @@ void CartesianPlotLegendDock::load() {
 	ui.kcbBorderColor->setColor( m_legend->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_legend->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( round(m_legend->borderOpacity()*100.0) );
 
 	// Layout
@@ -931,6 +948,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_legend->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_legend->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( round(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0) );
 
 	// Layout
@@ -983,6 +1001,7 @@ void CartesianPlotLegendDock::saveConfig(KConfig& config) {
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
+	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), Worksheet::Centimeter));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 
 	//Layout
