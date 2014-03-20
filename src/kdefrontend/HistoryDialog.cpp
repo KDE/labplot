@@ -44,8 +44,8 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, QString& emptyL
 	undoView->setCleanIcon( KIcon("edit-clear-history") );
  	undoView->setEmptyLabel(emptyLabel);
 	undoView->setMinimumWidth(350);
-	undoView->setWhatsThis(i18n("List of all performed steps/actions.")+'\n'
-			 + i18n("Select an item in the list to navigate to the corresponding step."));
+	undoView->setWhatsThis(i18n("List of all performed steps/actions.\n"
+			"Select an item in the list to navigate to the corresponding step."));
 	setMainWidget(undoView);
 
 	setWindowIcon( KIcon("view-history") );

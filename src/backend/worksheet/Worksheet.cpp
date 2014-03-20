@@ -395,7 +395,7 @@ void Worksheet::setBackgroundOpacity(float opacity) {
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
 void Worksheet::setLayout(Worksheet::Layout layout){
 	if (layout != d->layout) {
-		beginMacro(i18n("%1: set layout").arg(name()));
+		beginMacro(i18n("%1: set layout", name()));
 		exec(new WorksheetSetLayoutCmd(d, layout, i18n("%1: set layout")));
 		endMacro();
 	}
@@ -404,7 +404,7 @@ void Worksheet::setLayout(Worksheet::Layout layout){
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout)
 void Worksheet::setLayoutTopMargin(float margin){
 	if (margin != d->layoutTopMargin) {
-		beginMacro(i18n("%1: set layout top margin").arg(name()));
+		beginMacro(i18n("%1: set layout top margin", name()));
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, i18n("%1: set layout top margin")));
 		endMacro();
 	}
@@ -413,7 +413,7 @@ void Worksheet::setLayoutTopMargin(float margin){
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutBottomMargin, float, layoutBottomMargin, updateLayout)
 void Worksheet::setLayoutBottomMargin(float margin){
 	if (margin != d->layoutBottomMargin) {
-		beginMacro(i18n("%1: set layout bottom margin").arg(name()));
+		beginMacro(i18n("%1: set layout bottom margin", name()));
 		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, i18n("%1: set layout bottom margin")));
 		endMacro();
 	}
@@ -422,7 +422,7 @@ void Worksheet::setLayoutBottomMargin(float margin){
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargin, updateLayout)
 void Worksheet::setLayoutLeftMargin(float margin){
 	if (margin != d->layoutLeftMargin) {
-		beginMacro(i18n("%1: set layout left margin").arg(name()));
+		beginMacro(i18n("%1: set layout left margin", name()));
 		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, i18n("%1: set layout left margin")));
 		endMacro();
 	}
@@ -431,7 +431,7 @@ void Worksheet::setLayoutLeftMargin(float margin){
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRightMargin, float, layoutRightMargin, updateLayout)
 void Worksheet::setLayoutRightMargin(float margin){
 	if (margin != d->layoutRightMargin) {
-		beginMacro(i18n("%1: set layout right margin").arg(name()));
+		beginMacro(i18n("%1: set layout right margin", name()));
 		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, i18n("%1: set layout right margin")));
 		endMacro();
 	}
@@ -440,7 +440,7 @@ void Worksheet::setLayoutRightMargin(float margin){
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, updateLayout)
 void Worksheet::setLayoutVerticalSpacing(float spacing){
 	if (spacing != d->layoutVerticalSpacing) {
-		beginMacro(i18n("%1: set layout vertical spacing").arg(name()));
+		beginMacro(i18n("%1: set layout vertical spacing", name()));
 		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, i18n("%1: set layout vertical spacing")));
 		endMacro();
 	}
@@ -449,7 +449,7 @@ void Worksheet::setLayoutVerticalSpacing(float spacing){
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, updateLayout)
 void Worksheet::setLayoutHorizontalSpacing(float spacing){
 	if (spacing != d->layoutHorizontalSpacing) {
-		beginMacro(i18n("%1: set layout horizontal spacing").arg(name()));
+		beginMacro(i18n("%1: set layout horizontal spacing", name()));
 		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, i18n("%1: set layout horizontal spacing")));
 		endMacro();
 	}
@@ -458,7 +458,7 @@ void Worksheet::setLayoutHorizontalSpacing(float spacing){
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout)
 void Worksheet::setLayoutRowCount(int count){
 	if (count != d->layoutRowCount) {
-		beginMacro(i18n("%1: set layout row count").arg(name()));
+		beginMacro(i18n("%1: set layout row count", name()));
 		exec(new WorksheetSetLayoutRowCountCmd(d, count, i18n("%1: set layout row count")));
 		endMacro();
 	}
@@ -467,7 +467,7 @@ void Worksheet::setLayoutRowCount(int count){
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout)
 void Worksheet::setLayoutColumnCount(int count){
 	if (count != d->layoutColumnCount) {
-		beginMacro(i18n("%1: set layout column count").arg(name()));
+		beginMacro(i18n("%1: set layout column count", name()));
 		exec(new WorksheetSetLayoutColumnCountCmd(d, count, i18n("%1: set layout column count")));
 		endMacro();
 	}
@@ -496,7 +496,7 @@ void Worksheet::setPageRect(const QRectF& rect, bool scaleContent) {
 
 	if (rect != d->pageRect) {
 		d->scaleContent = scaleContent;
-		beginMacro(i18n("%1: set page size").arg(name()));
+		beginMacro(i18n("%1: set page size", name()));
 		exec(new WorksheetSetPageRectCmd(d, rect, i18n("%1: set page size")));
 		endMacro();
 	}

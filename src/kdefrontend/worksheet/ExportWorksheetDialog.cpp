@@ -65,7 +65,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	setMainWidget( mainWidget );
 	
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-	setButtonText(KDialog::User1,i18n("Options") + ">>");
+	setButtonText(KDialog::User1,i18n("Options >>"));
 	
 	connect( ui.cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -153,10 +153,10 @@ void ExportWorksheetDialog::okClicked(){
 void ExportWorksheetDialog::toggleOptions(){
 	if (ui.gbOptions->isVisible()){
 		ui.gbOptions->hide();
-		setButtonText(KDialog::User1,i18n("Options") + ">>");
+		setButtonText(KDialog::User1,i18n("Options >>"));
 	}else{
 		ui.gbOptions->show();
-		setButtonText(KDialog::User1,i18n("Options") + "<<");
+		setButtonText(KDialog::User1,i18n("Options <<"));
 	}
 
 	//resize the dialog

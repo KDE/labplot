@@ -83,7 +83,7 @@ STD_SWAP_METHOD_SETTER_CMD_IMPL(WorksheetElementContainer, SetVisible, bool, swa
 void WorksheetElementContainer::setVisible(bool on){
 	Q_D(WorksheetElementContainer);
 
-	beginMacro(on ? i18n("%1: set visible").arg(name()) : i18n("%1: set invisible").arg(name()));
+	beginMacro(on ? i18n("%1: set visible", name()) : i18n("%1: set invisible", name()));
 	
 	//take care of proper ordering on the undo-stack, 
 	//when making the container and all its children visible/invisible.

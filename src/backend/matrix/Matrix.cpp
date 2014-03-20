@@ -92,7 +92,7 @@ void Matrix::insertColumns(int before, int count)
 {
 	if( count < 1 || before < 0 || before > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: insert %2 column(s)", name(), count);
+	beginMacro(i18np("%1: insert %2 column", "%1: insert %2 columns", name(), count);
 	exec(new MatrixInsertColumnsCmd(m_matrix_private, before, count));
 	endMacro();
 	RESET_CURSOR;
@@ -102,7 +102,7 @@ void Matrix::removeColumns(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: remove %2 column(s)", name(), count);
+	beginMacro(i18np("%1: remove %2 column", "%1: remove %2 columns", name(), count);
 	exec(new MatrixRemoveColumnsCmd(m_matrix_private, first, count));
 	endMacro();
 	RESET_CURSOR;
@@ -112,7 +112,7 @@ void Matrix::removeRows(int first, int count)
 {
 	if( count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: remove %2 row(s)", name(), count);
+	beginMacro(i18np("%1: remove %2 row", "%1: remove %2 rows", name(), count);
 	exec(new MatrixRemoveRowsCmd(m_matrix_private, first, count));
 	endMacro();
 	RESET_CURSOR;
@@ -122,7 +122,7 @@ void Matrix::insertRows(int before, int count)
 {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
-	beginMacro(i18n("%1: insert %2 row(s)", name(), count);
+	beginMacro(i18np("%1: insert %2 row", "%1: insert %2 rows", name(), count);
 	exec(new MatrixInsertRowsCmd(m_matrix_private, before, count));
 	endMacro();
 	RESET_CURSOR;
@@ -926,7 +926,7 @@ void Matrix::addRows()
 	if (!m_view) return;
 	WAIT_CURSOR;
 	int count = m_view->selectedRowCount(false);
-	beginMacro(i18n("%1: add %2 rows(s)", name(), count);
+	beginMacro(i18np("%1: add %2 rows", "%1: add %2 rows", name(), count);
 	exec(new MatrixInsertRowsCmd(m_matrix_private, rowCount(), count));
 	endMacro();
 	RESET_CURSOR;
@@ -937,7 +937,7 @@ void Matrix::addColumns()
 	if (!m_view) return;
 	WAIT_CURSOR;
 	int count = m_view->selectedRowCount(false);
-	beginMacro(i18n("%1: add %2 column(s)", name(), count);
+	beginMacro(i18np("%1: add %2 column", "%1: add %2 columns", name(), count);
 	exec(new MatrixInsertColumnsCmd(m_matrix_private, columnCount(), count));
 	endMacro();
 	RESET_CURSOR;
@@ -1411,7 +1411,7 @@ Matrix * Matrix::fromImage(const QImage & image)
 
 	QProgressDialog progress;
 	progress.setRange(0, cols);
-	progress.setWindowTitle(i18n("SciDAVis") + " - " + i18n("Import image..."));
+	progress.setWindowTitle(i18n("SciDAVis - Import image..."));
 	progress.raise();
 
 	Matrix * matrix = new Matrix(0, rows, cols, i18n("Matrix %1", 1));

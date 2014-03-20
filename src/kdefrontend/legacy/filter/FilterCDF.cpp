@@ -162,8 +162,7 @@ QString FilterCDF::Var(int varid) {
 	if (status < CDF_OK)
 		return 0;
 
-	QString var = QString(name)+i18n(" ( ")+Type(type)+i18n(" ) ")+i18n(" : ")+QString::number(nelems);
-	var += ' '+QString::number(recvary);
+	QString var = i18n("%1 (%2): %3 %4", name, Type(type), nelems, recvary);
 
 	return var;
 }
@@ -186,7 +185,7 @@ QString FilterCDF::Att(int aid) {
 
 	CDFattrInquire(id,aid,name,&scope,&entry);
 
-	QString att = QString(name)+i18n(" : ")+QString::number(scope)+' '+QString::number(entry);
+	QString att = i18n("%1: %2 %3", name, scope, entry);
 	return att;
 }
 
@@ -196,7 +195,7 @@ QString FilterCDF::Compression( ) {
 
 	CDFlib(SELECT_,CDF_,id,GET_,CDF_COMPRESSION_,&type, parms, &pct);
 
-	QString c = Comp(type)+i18n(" ( ")+QString::number(pct)+QString(" % )");
+	QString c = i18n("%1 (%2%)", Comp(type), pct);
 
 	return c;
 }

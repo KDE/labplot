@@ -35,7 +35,7 @@
 MatrixInsertColumnsCmd::MatrixInsertColumnsCmd( Matrix::Private * private_obj, int before, int count, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_before(before), m_count(count)
 {
-	setText(i18n("%1: insert %2 column(s)", m_private_obj->name(), m_count));
+	setText(i18np("%1: insert %2 column", "%1: insert %2 columns", m_private_obj->name(), m_count));
 }
 
 MatrixInsertColumnsCmd::~MatrixInsertColumnsCmd()
@@ -61,7 +61,7 @@ void MatrixInsertColumnsCmd::undo()
 MatrixInsertRowsCmd::MatrixInsertRowsCmd( Matrix::Private * private_obj, int before, int count, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_before(before), m_count(count)
 {
-	setText(i18n("%1: insert %2 row(s)", m_private_obj->name(), m_count));
+	setText(i18np("%1: insert %2 row", "%1: insert %2 rows", m_private_obj->name(), m_count));
 }
 
 MatrixInsertRowsCmd::~MatrixInsertRowsCmd()
@@ -87,7 +87,7 @@ void MatrixInsertRowsCmd::undo()
 MatrixRemoveColumnsCmd::MatrixRemoveColumnsCmd( Matrix::Private * private_obj, int first, int count, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_first(first), m_count(count)
 {
-	setText(i18n("%1: remove %2 column(s)", m_private_obj->name(), m_count));
+	setText(i18np("%1: remove %2 column", "%1: remove %2 columns", m_private_obj->name(), m_count));
 }
 
 MatrixRemoveColumnsCmd::~MatrixRemoveColumnsCmd()
@@ -122,7 +122,7 @@ void MatrixRemoveColumnsCmd::undo()
 MatrixRemoveRowsCmd::MatrixRemoveRowsCmd( Matrix::Private * private_obj, int first, int count, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_first(first), m_count(count)
 {
-	setText(i18n("%1: remove %2 row(s)", m_private_obj->name(), m_count));
+	setText(i18np("%1: remove %2 row", "%1: remove %2 rows", m_private_obj->name(), m_count));
 }
 
 MatrixRemoveRowsCmd::~MatrixRemoveRowsCmd()

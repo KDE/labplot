@@ -134,7 +134,7 @@ void MainWin::initGUI(const QString& fileName){
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), 
 			this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 	
-	statusBar()->showMessage(i18n("Welcome to LabPlot") + ' ' + LVERSION);
+	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 	initActions();
 	initMenus();
 	setupGUI();
@@ -918,7 +918,7 @@ Worksheet* MainWin::activeWorksheet() const{
 	Adds "changed" to the window caption and activates the save-Action.
 */
 void MainWin::projectChanged(){
-	setCaption(m_project->name() + "    [" + i18n("Changed") + ']' );
+	setCaption(i18n("%1    [Changed]", m_project->name()));
 	m_saveAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
 	return;
