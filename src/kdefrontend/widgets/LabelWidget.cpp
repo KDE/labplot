@@ -68,6 +68,25 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbTexUsed->setIconSize(QSize(20, 20));
 	ui.tbTexUsed->setIcon( KIcon("TeX_logo") );
 
+	//Positioning and alignment
+	ui.cbPositionX->addItem(i18n("left"));
+	ui.cbPositionX->addItem(i18n("center"));
+	ui.cbPositionX->addItem(i18n("right"));
+	ui.cbPositionX->addItem(i18n("custom"));
+
+	ui.cbPositionY->addItem(i18n("top"));
+	ui.cbPositionY->addItem(i18n("center"));
+	ui.cbPositionY->addItem(i18n("bottom"));
+	ui.cbPositionY->addItem(i18n("custom"));
+
+	ui.cbHorizontalAlignment->addItem(i18n("left"));
+	ui.cbHorizontalAlignment->addItem(i18n("center"));
+	ui.cbHorizontalAlignment->addItem(i18n("right"));
+
+	ui.cbVerticalAlignment->addItem(i18n("top"));
+	ui.cbVerticalAlignment->addItem(i18n("center"));
+	ui.cbVerticalAlignment->addItem(i18n("bottom"));
+
 	//SLOTS
 	// text properties
 	connect(ui.tbTexUsed, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
