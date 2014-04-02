@@ -29,7 +29,6 @@
 
 #include "backend/core/plugin/PluginManager.h"
 #include "backend/core/plugin/PluginLoader.h"
-#include "backend/core/globals.h"
 #include <QPluginLoader>
 #include <QSettings>
 #include <QtDebug>
@@ -82,19 +81,20 @@ bool PluginManager::enablePlugin(const QString &absolutePath) {
 	loadAll();
 
 	// save the plugin in the settings
-	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
-	settings.beginGroup("PluginManager");
-	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
-#if QT_VERSION >= 0x040500
-	pluginPaths.removeDuplicates();
-#else
-	pluginPaths = QSet<QString>::fromList(pluginPaths).toList();
-#endif
-	if (!pluginPaths.contains(absolutePath)) {
-		pluginPaths << absolutePath;
-		settings.setValue("enabledPlugins", pluginPaths);
-	}
-	settings.endGroup();
+	//TODO
+// 	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
+// 	settings.beginGroup("PluginManager");
+// 	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
+// #if QT_VERSION >= 0x040500
+// 	pluginPaths.removeDuplicates();
+// #else
+// 	pluginPaths = QSet<QString>::fromList(pluginPaths).toList();
+// #endif
+// 	if (!pluginPaths.contains(absolutePath)) {
+// 		pluginPaths << absolutePath;
+// 		settings.setValue("enabledPlugins", pluginPaths);
+// 	}
+// 	settings.endGroup();
 	
 	// check whether it's already loaded
 	bool result = true;
@@ -143,20 +143,21 @@ void PluginManager::disablePlugin(const QString &absolutePath, bool rightNow) {
 	loadAll();
 
 	// remove the plugin from the settings
-	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
-	settings.beginGroup("PluginManager");
-	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
-#if QT_VERSION >= 0x040500
-	pluginPaths.removeDuplicates();
-#else
-	pluginPaths = QSet<QString>::fromList(pluginPaths).toList();
-#endif
-	int index = pluginPaths.indexOf(absolutePath);
-	if (index > -1) {
-		pluginPaths.removeAt(index);
-		settings.setValue("enabledPlugins", pluginPaths);
-	}
-	settings.endGroup();
+	//TODO
+// 	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
+// 	settings.beginGroup("PluginManager");
+// 	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
+// #if QT_VERSION >= 0x040500
+// 	pluginPaths.removeDuplicates();
+// #else
+// 	pluginPaths = QSet<QString>::fromList(pluginPaths).toList();
+// #endif
+// 	int index = pluginPaths.indexOf(absolutePath);
+// 	if (index > -1) {
+// 		pluginPaths.removeAt(index);
+// 		settings.setValue("enabledPlugins", pluginPaths);
+// 	}
+// 	settings.endGroup();
 
 	// remove the related loader if it is in the list of failed loaders
 	foreach (PluginLoader *loader, m_pluginsWithErrors) {
@@ -202,24 +203,25 @@ void PluginManager::loadAll() {
 		m_staticPlugins = QPluginLoader::staticInstances();
 		m_allPlugins << m_staticPlugins;
 
-		QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
-		settings.beginGroup("PluginManager");
-		QStringList plugins = settings.value("enabledPlugins", QStringList()).toStringList();
-#if QT_VERSION >= 0x040500
-		plugins.removeDuplicates();
-#else
-		plugins = QSet<QString>::fromList(plugins).toList();
-#endif
-		foreach (const QString& plugin, plugins) {
-			PluginLoader *pluginLoader = new PluginLoader(plugin);
-			if (!pluginLoader->load()) {
-				m_pluginsWithErrors << pluginLoader;
-			} else {
-				m_loadedPlugins << pluginLoader;
-				m_allPlugins << pluginLoader->instance();
-			}
-		}
-		settings.endGroup();
+		//TODO:
+// 		QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
+// 		settings.beginGroup("PluginManager");
+// 		QStringList plugins = settings.value("enabledPlugins", QStringList()).toStringList();
+// #if QT_VERSION >= 0x040500
+// 		plugins.removeDuplicates();
+// #else
+// 		plugins = QSet<QString>::fromList(plugins).toList();
+// #endif
+// 		foreach (const QString& plugin, plugins) {
+// 			PluginLoader *pluginLoader = new PluginLoader(plugin);
+// 			if (!pluginLoader->load()) {
+// 				m_pluginsWithErrors << pluginLoader;
+// 			} else {
+// 				m_loadedPlugins << pluginLoader;
+// 				m_allPlugins << pluginLoader->instance();
+// 			}
+// 		}
+// 		settings.endGroup();
 
 		m_loaded = true;
 	}

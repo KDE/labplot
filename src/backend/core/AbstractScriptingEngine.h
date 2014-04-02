@@ -36,7 +36,8 @@
 #include <QObject>
 #include <QEvent>
 
-#include "backend/core/customevents.h"
+
+#define SCRIPTING_CHANGE_EVENT QEvent::User
 
 class AbstractScript;
 class QString;
