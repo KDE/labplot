@@ -60,8 +60,6 @@
 /**
  * \class WorksheetView
  * \brief Worksheet view
- *
- *
  */
 
 /*!
@@ -102,8 +100,8 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 
 	changeZoom(zoomOriginAction);
 	currentZoomAction=zoomInAction;
-	
 
+	//signal/slot connections
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
 	connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
@@ -111,8 +109,8 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
 	connect(m_worksheet, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
 	connect(m_worksheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
+	connect(m_worksheet, SIGNAL(useViewSizeRequested()), this, SLOT(useViewSizeRequested()) );
 	connect(m_worksheet, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)) );
-	
 	connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
 }
 
@@ -343,23 +341,26 @@ void WorksheetView::setScene(QGraphicsScene * scene) {
 }
 
 void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
-  painter->save();
-//   painter->setRenderHint(QPainter::Antialiasing);
-  QRectF scene_rect = sceneRect();
+	painter->save();
 
-  // background
-  if (!scene_rect.contains(rect))
-	painter->fillRect(rect, Qt::lightGray);
+	//painter->setRenderHint(QPainter::Antialiasing);
+	QRectF scene_rect = sceneRect();
 
-  //shadow
-  int shadowSize = scene_rect.width()*0.02;
-  QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize,
-									  shadowSize, scene_rect.height());
-  QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(),
-									  scene_rect.width(), shadowSize);
-												  
-  painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
-  painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
+	if (!m_worksheet->useViewSize()) {
+		// background
+		if (!scene_rect.contains(rect))
+			painter->fillRect(rect, Qt::lightGray);
+
+		//shadow
+		int shadowSize = scene_rect.width()*0.02;
+		QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize,
+											shadowSize, scene_rect.height());
+		QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(),
+											scene_rect.width(), shadowSize);
+
+		painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
+		painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
+	}
 
 	// canvas
 	painter->setOpacity(m_worksheet->backgroundOpacity());
@@ -444,10 +445,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 	}
   
   //grid
-	if (m_gridSettings.style == WorksheetView::NoGrid){
-		painter->restore();
-		return;
-	}else{
+	if (m_gridSettings.style != WorksheetView::NoGrid){
 		QColor c=m_gridSettings.color;
  		c.setAlphaF(m_gridSettings.opacity);
 		painter->setPen(c);
@@ -460,21 +458,21 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 		
 		if (m_gridSettings.style==WorksheetView::LineGrid){
 			QLineF line;
-			
+
 			//horizontal lines
 			y = top + m_gridSettings.verticalSpacing;
-			while (y < bottom){
-			line.setLine( left, y,  right, y );
-			painter->drawLine(line);
-			y += m_gridSettings.verticalSpacing;
+			while (y < bottom) {
+				line.setLine( left, y,  right, y );
+				painter->drawLine(line);
+				y += m_gridSettings.verticalSpacing;
 			}
-			
+
 			//vertical lines
 			x = left + m_gridSettings.horizontalSpacing;
 			while (x < right) {
-			line.setLine( x, top,  x, bottom );
-			painter->drawLine(line);
-			x += m_gridSettings.horizontalSpacing;
+				line.setLine( x, top,  x, bottom );
+				painter->drawLine(line);
+				x += m_gridSettings.horizontalSpacing;
 			}
 		}else{ //DotGrid
 			y = top + m_gridSettings.verticalSpacing;
@@ -488,7 +486,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 			}
 		}
 	}
-	
+
 	invalidateScene(rect, QGraphicsScene::BackgroundLayer);
 	painter->restore();	
 }
@@ -496,6 +494,13 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 //##############################################################################
 //####################################  Events   ###############################
 //##############################################################################
+void WorksheetView::resizeEvent(QResizeEvent *event) {
+	if (m_worksheet->useViewSize())
+		this->processResize();
+
+	QGraphicsView::resizeEvent(event);
+}
+
 void WorksheetView::wheelEvent(QWheelEvent *event) {
   if (m_currentMouseMode == ZoomMode){
 	if (event->delta() > 0)
@@ -548,14 +553,44 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 //##############################################################################
 //####################################  SLOTs   ################################
 //##############################################################################
+void WorksheetView::useViewSizeRequested() {
+	if (m_worksheet->useViewSize()) {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		zoomFitPageHeightAction->setVisible(false);
+		zoomFitPageWidthAction->setVisible(false);
+		currentZoomAction = zoomInAction;
+		if (tbZoom)
+			tbZoom->setDefaultAction(zoomInAction);
+
+		//determine and set the current view size
+		this->processResize();
+	} else {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		zoomFitPageHeightAction->setVisible(true);
+		zoomFitPageWidthAction->setVisible(true);
+	}
+}
+
+void WorksheetView::processResize() {
+	if (size() != sceneRect().size()) {
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+		m_worksheet->setUndoAware(false);
+		m_worksheet->setPageRect(QRectF(0.0, 0.0, width()/hscale, height()/vscale));
+		m_worksheet->setUndoAware(true);
+	}
+}
+
 void WorksheetView::changeZoom(QAction* action){
 	if (action==zoomInAction){
 		scale(1.2, 1.2);
 	}else if (action==zoomOutAction){
 		scale(1.0/1.2, 1.0/1.2);
 	}else if (action==zoomOriginAction){
-		float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-		float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
 		setTransform(QTransform::fromScale(hscale, vscale));
 	}else if (action==zoomFitPageWidthAction){
 		float scaleFactor = viewport()->width()/m_model->scene()->sceneRect().width();

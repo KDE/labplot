@@ -111,8 +111,8 @@
        <item row="4" column="2">
         <widget class="QCheckBox" name="chScaleContent">
          <property name="toolTip">
-          <string>If checked, rescale the content of the worksheet on size changes.
-Otherwise resize the canvas only.</string>
+          <string>If checked, rescale the content of the worksheet on size changes. Otherwise resize the canvas only.
+Note, the content is automatically rescaled if a layout is active.</string>
          </property>
          <property name="text">
           <string>rescale the content</string>
@@ -631,8 +631,13 @@ Otherwise resize the canvas only.</string>
    <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KLineEdit</class>
-   <extends>KLineEdit</extends>
+   <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>

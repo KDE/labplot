@@ -125,6 +125,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
 
 	//Layout
+	connect( ui.chScaleContent, SIGNAL(clicked(bool)), this, SLOT(scaleContentChanged(bool)) );
 	connect( ui.sbLayoutTopMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutTopMarginChanged(double)) );
 	connect( ui.sbLayoutBottomMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutBottomMarginChanged(double)) );
 	connect( ui.sbLayoutLeftMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutLeftMarginChanged(double)) );
@@ -174,6 +175,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
 	connect(m_worksheet, SIGNAL(pageRectChanged(QRectF)),this, SLOT(worksheetPageRectChanged(QRectF)));
+	connect(m_worksheet,SIGNAL(scaleContentChanged(bool)),this,SLOT(worksheetScaleContentChanged(bool)));
 
 	connect(m_worksheet,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(worksheetBackgroundTypeChanged(PlotArea::BackgroundType)));
 	connect(m_worksheet,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
@@ -202,6 +204,11 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	updates Size and Orientation checkbox when width/height changes.
 */
 void WorksheetDock::updatePaperSize(){
+	if (m_worksheet->useViewSize()) {
+		ui.cbSize->setCurrentIndex(0);
+		return;
+	}
+
 	int i=0;
 
 	//In UI we use cm, so we need to convert to mm first before we check with qt_paperSizes
@@ -228,13 +235,12 @@ void WorksheetDock::updatePaperSize(){
 
 	//determine the position of the QPrinter::PaperSize in the combobox
 	for (int index=0; index<numOfPaperSizes+1; index++){
-		if (ui.cbSize->itemData(index).toInt() == i){
-			ui.cbSize->setCurrentIndex(index);
+		if (ui.cbSize->itemData(index+2).toInt() == i){
+			ui.cbSize->setCurrentIndex(index+2);
 			break;
 		}
 	}
 }
-
 
 //*************************************************************
 //****** SLOTs for changes triggered in WorksheetDock *********
@@ -243,9 +249,12 @@ void WorksheetDock::retranslateUi(){
 	m_initializing = true;
 	
 	//Geometry
+	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("portrait"));
 	ui.cbOrientation->addItem(i18n("landscape"));
 
+	ui.cbSize->clear();
+	ui.cbSize->addItem(i18n("view size"));
 	ui.cbSize->addItem(i18n("A0"), QPrinter::A0);
 	ui.cbSize->addItem(i18n("A1"), QPrinter::A1);
 	ui.cbSize->addItem(i18n("A2"), QPrinter::A2);
@@ -277,12 +286,15 @@ void WorksheetDock::retranslateUi(){
 	ui.cbSize->addItem(i18n("Tabloid"), QPrinter::Tabloid);
 	ui.cbSize->addItem(i18n("US Common #10 Envelope"), QPrinter::Comm10E);
 	ui.cbSize->addItem(i18n("Custom"), QPrinter::Custom);
+	ui.cbSize->insertSeparator(1);
 	
 	//Background
+	ui.cbBackgroundType->clear();
 	ui.cbBackgroundType->addItem(i18n("color"));
 	ui.cbBackgroundType->addItem(i18n("image"));
 	ui.cbBackgroundType->addItem(i18n("pattern"));
 
+	ui.cbBackgroundColorStyle->clear();
 	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
 	ui.cbBackgroundColorStyle->addItem(i18n("horizontal linear gradient"));
 	ui.cbBackgroundColorStyle->addItem(i18n("vertical linear gradient"));
@@ -290,6 +302,7 @@ void WorksheetDock::retranslateUi(){
 	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
  
+	ui.cbBackgroundImageStyle->clear();
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled, keep proportions"));
@@ -298,11 +311,8 @@ void WorksheetDock::retranslateUi(){
 	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
-	//layout
-
 	m_initializing = false;
 }
-
 
 // "General"-tab
 void WorksheetDock::nameChanged(){
@@ -319,6 +329,14 @@ void WorksheetDock::commentChanged(){
   m_worksheet->setComment(ui.leComment->text());
 }
 
+void WorksheetDock::scaleContentChanged(bool scaled){
+	if (m_initializing)
+		return;
+
+	foreach(Worksheet* worksheet, m_worksheetList)
+		worksheet->setScaleContent(scaled);
+}
+
 void WorksheetDock::sizeChanged(int i){
 	int index = ui.cbSize->itemData(i).toInt();
 
@@ -331,33 +349,45 @@ void WorksheetDock::sizeChanged(int i){
 	}else{
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
-		ui.lOrientation->show();
-		ui.cbOrientation->show();
+		if (i==0) { //no orientation available when using the complete view size (first item in the combox is selected)
+			ui.lOrientation->hide();
+			ui.cbOrientation->hide();
+		} else {
+			ui.lOrientation->show();
+			ui.cbOrientation->show();
+		}
 	}
 
 	if (m_initializing)
 		return;
  
-	float w, h;
-	if (ui.cbOrientation->currentIndex() == 0){
-		w=qt_paperSizes[index][0];
-		h=qt_paperSizes[index][1];
-	}else{
-		w=qt_paperSizes[index][1];
-		h=qt_paperSizes[index][0];
-	}
+	if (i==0) {
+		//use the complete view size (first item in the combox is selected)
+		foreach(Worksheet* worksheet, m_worksheetList)
+			worksheet->setUseViewSize(true);
+	} else {
+		//determine the width and the height of the to be used predefined layout
+		float w, h;
+		if (ui.cbOrientation->currentIndex() == 0){
+			w=qt_paperSizes[index][0];
+			h=qt_paperSizes[index][1];
+		}else{
+			w=qt_paperSizes[index][1];
+			h=qt_paperSizes[index][0];
+		}
 
-	m_initializing = true;
-	//w and h from qt_paperSizes above are in mm, in UI we show everything in cm
-	ui.sbWidth->setValue(w/10);
-	ui.sbHeight->setValue(h/10);
-	m_initializing=false;
+		m_initializing = true;
+		//w and h from qt_paperSizes above are in mm, in UI we show everything in cm
+		ui.sbWidth->setValue(w/10);
+		ui.sbHeight->setValue(h/10);
+		m_initializing=false;
 
-	bool scaleContent = ui.chScaleContent->isChecked();
-	w = Worksheet::convertToSceneUnits(w, Worksheet::Millimeter);
-	h = Worksheet::convertToSceneUnits(h, Worksheet::Millimeter);
-	foreach(Worksheet* worksheet, m_worksheetList){
-		worksheet->setPageRect(QRect(0,0,w,h), scaleContent);
+		w = Worksheet::convertToSceneUnits(w, Worksheet::Millimeter);
+		h = Worksheet::convertToSceneUnits(h, Worksheet::Millimeter);
+		foreach(Worksheet* worksheet, m_worksheetList) {
+			worksheet->setUseViewSize(false);
+			worksheet->setPageRect(QRect(0,0,w,h));
+		}
 	}
 }
 
@@ -367,10 +397,8 @@ void WorksheetDock::sizeChanged(){
 
   	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
 	int h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
-	bool scaleContent = ui.chScaleContent->isChecked();
-	foreach(Worksheet* worksheet, m_worksheetList){
-		worksheet->setPageRect(QRect(0,0,w,h), scaleContent);
-	}
+	foreach(Worksheet* worksheet, m_worksheetList)
+		worksheet->setPageRect(QRect(0,0,w,h));
 }
 
 void WorksheetDock::orientationChanged(int index){
@@ -649,6 +677,12 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
+void WorksheetDock::worksheetScaleContentChanged(bool scaled) {
+	m_initializing = true;
+	ui.chScaleContent->setChecked(scaled);
+	m_initializing = false;
+}
+
 void WorksheetDock::worksheetPageRectChanged(const QRectF& rect) {
 	m_initializing = true;
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
@@ -785,7 +819,7 @@ void WorksheetDock::worksheetLayoutColumnCountChanged(int value) {
 //*************************************************************
 void WorksheetDock::load(){
 	// Geometry
-	ui.chScaleContent->setChecked(false);
+	ui.chScaleContent->setChecked(m_worksheet->scaleContent());
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits( m_worksheet->pageRect().width(), Worksheet::Centimeter) );
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits( m_worksheet->pageRect().height(), Worksheet::Centimeter) );
 	updatePaperSize();
@@ -867,6 +901,7 @@ void WorksheetDock::saveConfig(KConfig& config){
 
 	//General
 	group.writeEntry("ScaleContent",ui.chScaleContent->isChecked());
+	group.writeEntry("UseViewSize",ui.cbSize->currentIndex()==0);
 	group.writeEntry("Width",Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
 	group.writeEntry("Height",Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
 

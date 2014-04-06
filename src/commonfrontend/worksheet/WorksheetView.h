@@ -70,14 +70,16 @@ class WorksheetView : public QGraphicsView{
   private:
 	void initActions();
 	void initMenus();
-	
+	void processResize();
+	void drawBackground(QPainter*, const QRectF&);
+	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
+
+	//events
+	void resizeEvent(QResizeEvent*);
 	void contextMenuEvent(QContextMenuEvent*);
 	void wheelEvent(QWheelEvent*);
 	void mousePressEvent(QMouseEvent*);
 	void mouseReleaseEvent(QMouseEvent*);
-
-	void drawBackground(QPainter*, const QRectF&);
-	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 
 	Worksheet* m_worksheet;
 	WorksheetModel* m_model;
@@ -150,6 +152,7 @@ class WorksheetView : public QGraphicsView{
 	void selectAllElements();
 	void deleteElement();
 
+	void useViewSizeRequested();
 	void changeZoom(QAction*);
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);

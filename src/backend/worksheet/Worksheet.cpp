@@ -60,8 +60,6 @@
  *
  * * \ingroup worksheet
  */
-	
-
 Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
 		: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)){
 
@@ -81,6 +79,16 @@ Worksheet::~Worksheet() {
 void Worksheet::init() {
 	KConfig config;
 	KConfigGroup group = config.group( "Worksheet" );
+
+	//size
+	d->scaleContent = group.readEntry("ScaleContent", false);
+	d->useViewSize = group.readEntry("UseViewSize", false);
+	d->pageRect.setX(0);
+	d->pageRect.setY(0);
+	d->pageRect.setWidth(group.readEntry("Width", 1500));
+	d->pageRect.setHeight(group.readEntry("Height",1500));
+
+	//background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
 	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
 	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
@@ -89,7 +97,8 @@ void Worksheet::init() {
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
-	
+
+	//layout
 	d->layout = (Worksheet::Layout) group.readEntry("Layout", (int) Worksheet::VerticalLayout);
 	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", convertToSceneUnits(1, Centimeter));
 	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(1, Centimeter));
@@ -171,7 +180,7 @@ QWidget *Worksheet::view() const {
 }
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
-	qDebug()<<"Worksheet::handleAspectAdded "<< aspect->name();
+// 	qDebug()<<"Worksheet::handleAspectAdded "<< aspect->name();
 	const AbstractWorksheetElement* addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
 	if (addedElement) {
 		const_cast<AbstractWorksheetElement*>(addedElement)->retransform();
@@ -194,7 +203,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	qDebug()<<"Worksheet::handleAspectAboutToBeRemoved " << aspect->name();
+// 	qDebug()<<"Worksheet::handleAspectAboutToBeRemoved " << aspect->name();
 	const AbstractWorksheetElement *removedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
 	if (removedElement) {
 		QGraphicsItem *item = removedElement->graphicsItem();
@@ -320,6 +329,10 @@ void Worksheet::update(){
 	emit requestUpdate();
 }
 
+/* =============================== getter methods for general options ==================================== */
+BASIC_D_READER_IMPL(Worksheet, bool, scaleContent, scaleContent)
+BASIC_D_READER_IMPL(Worksheet, bool, useViewSize, useViewSize)
+
 /* =============================== getter methods for background options ================================= */
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundType, backgroundType, backgroundType)
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
@@ -341,6 +354,20 @@ BASIC_D_READER_IMPL(Worksheet, float, layoutVerticalSpacing, layoutVerticalSpaci
 BASIC_D_READER_IMPL(Worksheet, int, layoutRowCount, layoutRowCount)
 BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount)
 
+
+/* ============================ setter methods and undo commands for general options  ===================== */
+void Worksheet::setUseViewSize(bool useViewSize){
+	if (useViewSize != d->useViewSize) {
+		d->useViewSize = useViewSize;
+		emit useViewSizeRequested();
+	}
+}
+
+STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
+void Worksheet::setScaleContent(bool scaleContent){
+	if (scaleContent != d->scaleContent)
+		exec(new WorksheetSetScaleContentCmd(d, scaleContent, i18n("%1: change \"scale layout\" property")));
+}
 
 /* ============================ setter methods and undo commands  for background options  ================= */
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
@@ -487,7 +514,7 @@ class WorksheetSetPageRectCmd : public StandardMacroSetterCmd<Worksheet::Private
 	}
 }; 
 
-void Worksheet::setPageRect(const QRectF& rect, bool scaleContent) {
+void Worksheet::setPageRect(const QRectF& rect) {
 	//don't allow any rectangulars of width/height equal to zero
 	if (qFuzzyCompare(rect.width(), 0.) || qFuzzyCompare(rect.height(), 0.)){
 		pageRectChanged(d->pageRect);
@@ -495,7 +522,6 @@ void Worksheet::setPageRect(const QRectF& rect, bool scaleContent) {
 	}
 
 	if (rect != d->pageRect) {
-		d->scaleContent = scaleContent;
 		beginMacro(i18n("%1: set page size", name()));
 		exec(new WorksheetSetPageRectCmd(d, rect, i18n("%1: set page size")));
 		endMacro();

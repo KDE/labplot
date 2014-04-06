@@ -43,6 +43,7 @@ class WorksheetPrivate{
 		Worksheet * const q;
 		QRectF pageRect;
 		QGraphicsScene* m_scene;
+		bool useViewSize;
 		bool scaleContent;
 
 		QString name() const;

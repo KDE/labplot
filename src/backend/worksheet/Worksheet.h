@@ -62,7 +62,7 @@ class Worksheet: public AbstractPart, public scripted{
 		virtual bool load(XmlStreamReader *);
 
 		QRectF pageRect() const;
-		void setPageRect(const QRectF &rect, const bool scaleContent=false);
+		void setPageRect(const QRectF&);
 		QGraphicsScene *scene() const;
 		void update();
 		void setPrinting(bool) const;
@@ -80,6 +80,8 @@ class Worksheet: public AbstractPart, public scripted{
 		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
 		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
 
+		BASIC_D_ACCESSOR_DECL(bool, scaleContent, ScaleContent)
+		BASIC_D_ACCESSOR_DECL(bool, useViewSize, UseViewSize)
 		BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
 		BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
 		BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
@@ -111,6 +113,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void itemSelected(QGraphicsItem*);
 		void itemDeselected(QGraphicsItem*);
 		void requestUpdate();
+		void useViewSizeRequested();
 
 		friend class WorksheetSetBackgroundTypeCmd;
 		friend class WorksheetSetBackgroundColorStyleCmd;
@@ -120,6 +123,7 @@ class Worksheet: public AbstractPart, public scripted{
 		friend class WorksheetSetBackgroundSecondColorCmd;
 		friend class WorksheetSetBackgroundFileNameCmd;
 		friend class WorksheetSetBackgroundOpacityCmd;
+		friend class WorksheetSetScaleContentCmd;
 		friend class WorksheetSetPageRectCmd;
 		friend class WorksheetSetLayoutCmd;
 		friend class WorksheetSetLayoutTopMarginCmd;
@@ -138,6 +142,7 @@ class Worksheet: public AbstractPart, public scripted{
 		void backgroundSecondColorChanged(const QColor&);
 		void backgroundFileNameChanged(const QString&);
 		void backgroundOpacityChanged(float);
+		void scaleContentChanged(bool);
 		void pageRectChanged(const QRectF&);
 		void layoutChanged(Worksheet::Layout);
 		void layoutTopMarginChanged(float);

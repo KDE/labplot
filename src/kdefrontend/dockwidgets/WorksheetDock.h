@@ -60,6 +60,7 @@ private slots:
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
+	void scaleContentChanged(bool);
 	void sizeChanged(int);
 	void sizeChanged();
 	void orientationChanged(int);
@@ -87,6 +88,7 @@ private slots:
 
 	//SLOTs for changes triggered in Worksheet
 	void worksheetDescriptionChanged(const AbstractAspect*);
+	void worksheetScaleContentChanged(bool);
 	void worksheetPageRectChanged(const QRectF&);
 
 	void worksheetBackgroundTypeChanged(PlotArea::BackgroundType);
