@@ -56,6 +56,8 @@ class Axis: public AbstractWorksheetElement {
 		Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
 		enum TicksType {TicksTotalNumber, TicksIncrement, TicksCustomColumn, TicksCustomValues};
+		enum ArrowType {NoArrow, SimpleArrowSmall, SimpleArrowBig, FilledArrowSmall, FilledArrowBig, SemiFilledArrowSmall, SemiFilledArrowBig};
+		enum ArrowPosition {ArrowLeft, ArrowRight, ArrowBoth};
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
 		
@@ -87,6 +89,9 @@ class Axis: public AbstractWorksheetElement {
 		
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
+		BASIC_D_ACCESSOR_DECL(ArrowType, arrowType, ArrowType)
+		BASIC_D_ACCESSOR_DECL(ArrowPosition, arrowPosition, ArrowPosition)
+		BASIC_D_ACCESSOR_DECL(float, arrowSize, ArrowSize)
 		
 		BASIC_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection)
 		BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
@@ -198,9 +203,15 @@ class Axis: public AbstractWorksheetElement {
 		// line
 		friend class AxisSetLinePenCmd;
 		friend class AxisSetLineOpacityCmd;
+		friend class AxisSetArrowTypeCmd;
+		friend class AxisSetArrowPositionCmd;
+		friend class AxisSetArrowSizeCmd;
 		void linePenChanged(const QPen&);
 		void lineOpacityChanged(qreal);
-		
+		void arrowTypeChanged(Axis::ArrowType);
+		void arrowPositionChanged(Axis::ArrowPosition);
+		void arrowSizeChanged(float);
+
 		// major ticks
 		friend class AxisSetMajorTicksDirectionCmd;
 		friend class AxisSetMajorTicksTypeCmd;

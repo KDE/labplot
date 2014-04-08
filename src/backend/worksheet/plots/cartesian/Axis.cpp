@@ -91,6 +91,9 @@ void Axis::init(){
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
+	d->arrowType = (Axis::ArrowType) group.readEntry("ArrowType", (int)Axis::NoArrow);
+	d->arrowPosition = (Axis::ArrowPosition) group.readEntry("ArrowPosition", (int)Axis::ArrowRight);
+	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(50, Worksheet::Point));
 
 	// axis title
  	d->title = new TextLabel(this->name(), TextLabel::AxisTitle);
@@ -314,6 +317,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffset, titleOffset)
 
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::ArrowType, arrowType, arrowType)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::ArrowPosition, arrowPosition, arrowPosition)
+BASIC_SHARED_D_READER_IMPL(Axis, float, arrowSize, arrowSize)
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majorTicksDirection)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
@@ -492,6 +498,28 @@ void Axis::setLineOpacity(qreal opacity){
 		exec(new AxisSetLineOpacityCmd(d, opacity, i18n("%1: set line opacity")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowType, Axis::ArrowType, arrowType, retransformLine);
+void Axis::setArrowType(ArrowType type) {
+	Q_D(Axis);
+	if (type != d->arrowType)
+		exec(new AxisSetArrowTypeCmd(d, type, i18n("%1: set arrow type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowPosition, Axis::ArrowPosition, arrowPosition, retransformLine);
+void Axis::setArrowPosition(ArrowPosition position) {
+	Q_D(Axis);
+	if (position != d->arrowPosition)
+		exec(new AxisSetArrowPositionCmd(d, position, i18n("%1: set arrow position")));
+}
+
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowSize, float, arrowSize, retransformLine);
+void Axis::setArrowSize(float arrowSize) {
+	Q_D(Axis);
+	if (arrowSize != d->arrowSize)
+		exec(new AxisSetArrowSizeCmd(d, arrowSize, i18n("%1: set arrow size")));
+}
+
 //Major ticks
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksDirection, Axis::TicksDirection, majorTicksDirection, retransformTicks);
 void Axis::setMajorTicksDirection(const TicksDirection majorTicksDirection) {
@@ -529,7 +557,8 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(majorTicksColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(majorTicksColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -593,7 +622,8 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransformTicks()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(minorTicksColumnAboutToBeRemoved(const AbstractAspect*)));
+			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+					this, SLOT(minorTicksColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -864,7 +894,7 @@ void AxisPrivate::retransformLine(){
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping & AbstractCoordinateSystem::MarkGaps);
 	foreach (const QLineF& line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -876,6 +906,22 @@ void AxisPrivate::retransformLine(){
 	}else{
 		retransformTicks();
 	}
+
+// 	if (arrowPosition!=Axis::NoArrow) {
+// 		if (orientation==Axis::AxisHorizontal) {
+// 			const QPointF& endPoint = lines.at(lines.size()-1).p2();
+// 			QPointF arrowEndPoint = QPointF(endPoint.x()+arrowSize, endPoint.y());
+// 			linePath.moveTo(endPoint);
+// 			linePath.lineTo(arrowEndPoint);
+// 			linePath.moveTo(arrowEndPoint);
+// 			linePath.lineTo(QPointF(arrowEndPoint.x()-arrowSize/2, arrowEndPoint.y()-arrowSize/2));
+// 			
+// 			linePath.moveTo(arrowEndPoint);
+// 			linePath.lineTo(QPointF(arrowEndPoint.x()-arrowSize/2, arrowEndPoint.y()+arrowSize/2));
+// 		} else {
+// 			
+// 		}
+// 	}
 }
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
@@ -1599,6 +1645,9 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement( "line" );
 	WRITE_QPEN(d->linePen);
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
+	writer->writeAttribute( "arrowType", QString::number(d->arrowType) );
+	writer->writeAttribute( "arrowPosition", QString::number(d->arrowPosition) );
+	writer->writeAttribute( "arrowSize", QString::number(d->arrowSize) );
 	writer->writeEndElement();
 	
 	//major ticks
@@ -1763,6 +1812,24 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
                 d->lineOpacity = str.toInt();
+
+			str = attribs.value("arrowType").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'arrowType'"));
+            else
+                d->arrowType = (Axis::ArrowType)str.toInt();
+
+			str = attribs.value("arrowPosition").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'arrowPosition'"));
+            else
+                d->arrowPosition = (Axis::ArrowPosition)str.toInt();
+
+			str = attribs.value("arrowSize").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'arrowSize'"));
+            else
+                d->arrowSize = str.toDouble();
 		}else if (reader->name() == "majorTicks"){
 			attribs = reader->attributes();
 	

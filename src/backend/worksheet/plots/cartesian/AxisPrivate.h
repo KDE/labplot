@@ -62,6 +62,9 @@ class AxisPrivate: public QGraphicsItem {
 		//line
 		QPen linePen;
 		qreal lineOpacity;
+		Axis::ArrowType arrowType;
+		Axis::ArrowPosition arrowPosition;
+		float arrowSize;
 
 		// Title
 		TextLabel* title;

@@ -38,6 +38,8 @@
 
 #include <QTimer>
 #include <QDir>
+#include <QPainter>
+
 #include <KMessageBox>
 
 #include <math.h>
@@ -102,6 +104,9 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
 	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );	
+	connect( ui.cbArrowPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(arrowPositionChanged(int)) );
+	connect( ui.cbArrowType, SIGNAL(currentIndexChanged(int)), this, SLOT(arrowTypeChanged(int)) );
+	connect( ui.sbArrowSize, SIGNAL(valueChanged(int)), this, SLOT(arrowSizeChanged(int)) );
 
 	//"Major ticks"-tab
 	connect( ui.cbMajorTicksDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(majorTicksDirectionChanged(int)) );
@@ -194,6 +199,38 @@ void AxisDock::init(){
 
 	ui.cbOrientation->addItem( i18n("horizontal") );
 	ui.cbOrientation->addItem( i18n("vertical") );
+
+	//Arrows
+	ui.cbArrowType->addItem( i18n("no arrow") );
+	ui.cbArrowType->addItem( i18n("simple, small") );
+	ui.cbArrowType->addItem( i18n("simple, big") );
+	ui.cbArrowType->addItem( i18n("filled, small") );
+	ui.cbArrowType->addItem( i18n("filled, big") );
+	ui.cbArrowType->addItem( i18n("semi-filled, small") );
+	ui.cbArrowType->addItem( i18n("semi-filled, big") );
+
+	QPainter pa;
+	QPixmap pm( 20, 20 );
+	ui.cbArrowType->setIconSize( QSize(20,20) );
+
+	QPen pen(Qt::SolidPattern, 0);
+	pa.setPen( pen );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+
+	//no arrow
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.drawLine(3,10,17,10);
+	pa.end();
+	ui.cbArrowType->setItemIcon(0, pm);
+
+	//TODO: simple, small etc.
+
+
+	ui.cbArrowPosition->addItem( i18n("left") );
+	ui.cbArrowPosition->addItem( i18n("right") );
+	ui.cbArrowPosition->addItem( i18n("both") );
 	
 	ui.cbMajorTicksDirection->addItem( i18n("none") );
 	ui.cbMajorTicksDirection->addItem( i18n("in") );
@@ -278,7 +315,6 @@ void AxisDock::setAxes(QList<Axis*> list){
 
 	// general
 	connect(m_axis, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(axisDescriptionChanged(const AbstractAspect*)));
-
 	connect(m_axis, SIGNAL(orientationChanged(Axis::AxisOrientation)), this, SLOT(axisOrientationChanged(Axis::AxisOrientation)));
 	connect(m_axis, SIGNAL(positionChanged(Axis::AxisPosition)), this, SLOT(axisPositionChanged(Axis::AxisPosition)));
 	connect(m_axis, SIGNAL(scaleChanged(Axis::AxisScale)), this, SLOT(axisScaleChanged(Axis::AxisScale)));
@@ -291,6 +327,9 @@ void AxisDock::setAxes(QList<Axis*> list){
 	// line
 	connect(m_axis, SIGNAL(linePenChanged(QPen)), this, SLOT(axisLinePenChanged(QPen)));
 	connect(m_axis, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(axisLineOpacityChanged(qreal)));
+	connect(m_axis, SIGNAL(arrowTypeChanged(Axis::ArrowType)), this, SLOT(axisArrowTypeChanged(Axis::ArrowType)));
+	connect(m_axis, SIGNAL(arrowPositionChanged(Axis::ArrowPosition)), this, SLOT(axisArrowPositionChanged(Axis::ArrowPosition)));
+	connect(m_axis, SIGNAL(arrowSizeChanged(float)), this, SLOT(axisArrowSizeChanged(float)));
 
 	// ticks
 	connect(m_axis, SIGNAL(majorTicksDirectionChanged(Axis::TicksDirection)), this, SLOT(axisMajorTicksDirectionChanged(Axis::TicksDirection)));
@@ -594,6 +633,41 @@ void AxisDock::lineOpacityChanged(int value){
 		axis->setLineOpacity(opacity);
 }
 
+void AxisDock::arrowTypeChanged(int index){
+	Axis::ArrowType type = (Axis::ArrowType)index;
+	if (type==Axis::NoArrow) {
+		ui.cbArrowPosition->setEnabled(false);
+		ui.sbArrowSize->setEnabled(false);
+	} else {
+		ui.cbArrowPosition->setEnabled(true);
+		ui.sbArrowSize->setEnabled(true);
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(Axis* axis, m_axesList)
+		axis->setArrowType(type);
+}
+
+void AxisDock::arrowPositionChanged(int index){
+	if (m_initializing)
+		return;
+
+	Axis::ArrowPosition position = (Axis::ArrowPosition)index;
+	foreach(Axis* axis, m_axesList)
+		axis->setArrowPosition(position);
+}
+
+void AxisDock::arrowSizeChanged(int value){
+	if (m_initializing)
+		return;
+
+	float v = Worksheet::convertToSceneUnits(value, Worksheet::Point);
+	foreach(Axis* axis, m_axesList)
+		axis->setArrowSize(v);
+}
+
 //"Major ticks" tab
 void AxisDock::majorTicksDirectionChanged(int index){
 	Axis::TicksDirection direction = Axis::TicksDirection(index);
@@ -621,7 +695,7 @@ void AxisDock::majorTicksDirectionChanged(int index){
 	ui.sbMajorTicksLength->setEnabled(b);
 	ui.lMajorTicksOpacity->setEnabled(b);
 	ui.sbMajorTicksOpacity->setEnabled(b);  
-  
+
 	if (m_initializing)
 		return;
 
@@ -1253,9 +1327,27 @@ void AxisDock::axisLinePenChanged(const QPen& pen){
 	m_initializing = false;
 }
 
+void AxisDock::axisArrowTypeChanged(Axis::ArrowType type){
+	m_initializing = true;
+	ui.cbArrowType->setCurrentIndex( (int)type);
+	m_initializing = false;
+}
+
 void AxisDock::axisLineOpacityChanged(qreal opacity){
 	m_initializing = true;
 	ui.sbLineOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+
+void AxisDock::axisArrowPositionChanged(Axis::ArrowPosition position){
+	m_initializing = true;
+	ui.cbArrowPosition->setCurrentIndex( (int)position );
+	m_initializing = false;
+}
+
+void AxisDock::axisArrowSizeChanged(float size){
+	m_initializing = true;
+	ui.sbArrowSize->setValue( (int)Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
 	m_initializing = false;
 }
 
@@ -1458,6 +1550,9 @@ void AxisDock::load(){
 	ui.kcbLineColor->setColor( m_axis->linePen().color() );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->linePen().widthF(),Worksheet::Point) );
 	ui.sbLineOpacity->setValue( round(m_axis->lineOpacity()*100.0) );
+	ui.cbArrowType->setCurrentIndex( (int)m_axis->arrowType() );
+	ui.cbArrowPosition->setCurrentIndex( (int)m_axis->arrowPosition() );
+	ui.sbArrowSize->setValue( (int)Worksheet::convertFromSceneUnits(m_axis->arrowSize(), Worksheet::Point) );
 
 	//Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex( (int) m_axis->majorTicksDirection() );
@@ -1571,6 +1666,9 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_axis->linePen().color()) );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_axis->linePen().widthF()),Worksheet::Point) );
 	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_axis->lineOpacity())*100.0) );
+	ui.cbArrowType->setCurrentIndex( group.readEntry("ArrowType", (int) m_axis->arrowType()) );
+	ui.cbArrowPosition->setCurrentIndex( group.readEntry("ArrowPosition", (int) m_axis->arrowPosition()) );
+	ui.sbArrowSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ArrowSize", m_axis->arrowSize()), Worksheet::Point) );
 
 	//Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex( group.readEntry("MajorTicksDirection", (int) m_axis->majorTicksDirection()) );

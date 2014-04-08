@@ -87,6 +87,9 @@ private slots:
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
+	void arrowPositionChanged(int);
+	void arrowTypeChanged(int);
+	void arrowSizeChanged(int);
 
 	//"Major ticks"-tab
 	void majorTicksDirectionChanged(int);
@@ -154,6 +157,9 @@ private slots:
 	//line
 	void axisLinePenChanged(const QPen&);
 	void axisLineOpacityChanged(qreal);
+	void axisArrowTypeChanged(Axis::ArrowType);
+	void axisArrowPositionChanged(Axis::ArrowPosition);
+	void axisArrowSizeChanged(float);
 
 	//ticks
 	void axisMajorTicksDirectionChanged(Axis::TicksDirection);
