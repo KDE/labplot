@@ -58,6 +58,7 @@ private:
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
 	bool m_initializing;
+	QMenu* m_dateTimeMenu;
 
 	void initConnections();
 
@@ -80,6 +81,8 @@ private slots:
 	void insertChar(QChar);
 	void fontChanged(const QFont&);
 	void fontSizeChanged(int);
+	void dateTimeMenu();
+	void insertDateTime(QAction*);
 
 	void positionXChanged(int);
 	void positionYChanged(int);

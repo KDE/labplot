@@ -48,7 +48,7 @@
  */
 
 // see legacy/LabelWidget.cpp
-LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
+LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
 	
 	QGridLayout* layout =static_cast<QGridLayout*>(this->layout());
@@ -65,6 +65,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	ui.tbFontSuperScript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
 	ui.tbSymbols->setIcon( KIcon("applications-education-mathematics") );
+	ui.tbDateTime->setIcon( KIcon("chronometer") );
 	ui.tbTexUsed->setIconSize(QSize(20, 20));
 	ui.tbTexUsed->setIcon( KIcon("TeX_logo") );
 
@@ -101,6 +102,8 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent){
 	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
 	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
 	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
+	connect(ui.tbDateTime, SIGNAL(clicked(bool)), this, SLOT(dateTimeMenu()));
+	connect(m_dateTimeMenu, SIGNAL(triggered(QAction*)), this, SLOT(insertDateTime(QAction*)) );
 	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
 	connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
 	
@@ -415,6 +418,29 @@ void LabelWidget::charMenu(){
 
 void LabelWidget::insertChar(QChar c) {
 	ui.teLabel->insertPlainText(QString(c));
+}
+
+void LabelWidget::dateTimeMenu() {
+	m_dateTimeMenu->clear();
+	QDate date = QDate::currentDate();
+	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
+	m_dateTimeMenu->addAction( date.toString(Qt::ISODate) );
+	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
+	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleShortDate) );
+	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleLongDate) );
+
+	QDateTime time = QDateTime::currentDateTime();
+	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
+	m_dateTimeMenu->addAction( time.toString(Qt::ISODate) );
+	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
+	m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleShortDate) );
+	m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleLongDate) );
+
+	m_dateTimeMenu->exec( mapToGlobal(ui.tbDateTime->rect().bottomLeft()));
+}
+
+void LabelWidget::insertDateTime(QAction* action) {
+	ui.teLabel->insertPlainText( action->text().remove('&') );
 }
 
 // geometry slots

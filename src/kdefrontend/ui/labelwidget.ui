@@ -42,8 +42,8 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="tbFontItalic">
+      <item row="0" column="0">
+       <widget class="QToolButton" name="tbFontBold">
         <property name="text">
          <string/>
         </property>
@@ -53,12 +53,66 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QToolButton" name="tbFontBold">
+       <widget class="QToolButton" name="tbFontItalic">
         <property name="text">
          <string/>
         </property>
         <property name="checkable">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="tbFontUnderline">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QToolButton" name="tbFontStrikeOut">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QToolButton" name="tbFontSuperScript">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QToolButton" name="tbFontSubScript">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="QToolButton" name="tbSymbols">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QToolButton" name="tbDateTime">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -97,26 +151,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="5">
-       <widget class="QToolButton" name="tbFontSuperScript">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="6">
-       <widget class="QToolButton" name="tbFontSubScript">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" colspan="10">
        <widget class="QTextEdit" name="teLabel">
         <property name="sizePolicy">
@@ -130,33 +164,6 @@
           <width>16777215</width>
           <height>50</height>
          </size>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="tbFontUnderline">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="7">
-       <widget class="QToolButton" name="tbSymbols">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QToolButton" name="tbFontStrikeOut">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
