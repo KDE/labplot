@@ -93,7 +93,7 @@ void Axis::init(){
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 	d->arrowType = (Axis::ArrowType) group.readEntry("ArrowType", (int)Axis::NoArrow);
 	d->arrowPosition = (Axis::ArrowPosition) group.readEntry("ArrowPosition", (int)Axis::ArrowRight);
-	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(50, Worksheet::Point));
+	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Point));
 
 	// axis title
  	d->title = new TextLabel(this->name(), TextLabel::AxisTitle);
@@ -498,14 +498,14 @@ void Axis::setLineOpacity(qreal opacity){
 		exec(new AxisSetLineOpacityCmd(d, opacity, i18n("%1: set line opacity")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowType, Axis::ArrowType, arrowType, retransformLine);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowType, Axis::ArrowType, arrowType, retransformArrow);
 void Axis::setArrowType(ArrowType type) {
 	Q_D(Axis);
 	if (type != d->arrowType)
 		exec(new AxisSetArrowTypeCmd(d, type, i18n("%1: set arrow type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowPosition, Axis::ArrowPosition, arrowPosition, retransformLine);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowPosition, Axis::ArrowPosition, arrowPosition, retransformArrow);
 void Axis::setArrowPosition(ArrowPosition position) {
 	Q_D(Axis);
 	if (position != d->arrowPosition)
@@ -513,7 +513,7 @@ void Axis::setArrowPosition(ArrowPosition position) {
 }
 
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowSize, float, arrowSize, retransformLine);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowSize, float, arrowSize, retransformArrow);
 void Axis::setArrowSize(float arrowSize) {
 	Q_D(Axis);
 	if (arrowSize != d->arrowSize)
@@ -862,8 +862,8 @@ void AxisPrivate::retransform(){
 
 void AxisPrivate::retransformLine(){
 	linePath = QPainterPath();
+	lines.clear();
 
-	QList<QLineF> lines;
 	QPointF startPoint;
 	QPointF endPoint;
 
@@ -904,24 +904,121 @@ void AxisPrivate::retransformLine(){
 		recalcShapeAndBoundingRect();
 		return;
 	}else{
+		retransformArrow();
 		retransformTicks();
 	}
+}
 
-// 	if (arrowPosition!=Axis::NoArrow) {
-// 		if (orientation==Axis::AxisHorizontal) {
-// 			const QPointF& endPoint = lines.at(lines.size()-1).p2();
-// 			QPointF arrowEndPoint = QPointF(endPoint.x()+arrowSize, endPoint.y());
-// 			linePath.moveTo(endPoint);
-// 			linePath.lineTo(arrowEndPoint);
-// 			linePath.moveTo(arrowEndPoint);
-// 			linePath.lineTo(QPointF(arrowEndPoint.x()-arrowSize/2, arrowEndPoint.y()-arrowSize/2));
-// 			
-// 			linePath.moveTo(arrowEndPoint);
-// 			linePath.lineTo(QPointF(arrowEndPoint.x()-arrowSize/2, arrowEndPoint.y()+arrowSize/2));
-// 		} else {
-// 			
-// 		}
-// 	}
+void AxisPrivate::retransformArrow() {
+	arrowPath = QPainterPath();
+	if (arrowType == Axis::NoArrow || lines.isEmpty()) {
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
+	if (arrowPosition==Axis::ArrowRight || arrowPosition==Axis::ArrowBoth) {
+		const QPointF& endPoint = lines.at(lines.size()-1).p2();
+		this->addArrow(endPoint, 1);
+	}
+
+	if (arrowPosition==Axis::ArrowLeft || arrowPosition==Axis::ArrowBoth) {
+		const QPointF& endPoint = lines.at(0).p1();
+		this->addArrow(endPoint, -1);
+	}
+
+	recalcShapeAndBoundingRect();
+}
+
+void AxisPrivate::addArrow(const QPointF& startPoint, int direction) {
+	static const float cos_phi = cos(3.14159/6);
+
+	if (orientation==Axis::AxisHorizontal) {
+		QPointF endPoint = QPointF(startPoint.x()+direction*arrowSize, startPoint.y());
+		arrowPath.moveTo(startPoint);
+		arrowPath.lineTo(endPoint);
+
+		switch (arrowType) {
+			case Axis::NoArrow:
+				break;
+			case Axis::SimpleArrowSmall:
+				arrowPath.moveTo(endPoint);
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
+				arrowPath.moveTo(endPoint);
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
+				break;
+			case Axis::SimpleArrowBig:
+				arrowPath.moveTo(endPoint);
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
+				arrowPath.moveTo(endPoint);
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
+				break;
+			case Axis::FilledArrowSmall:
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
+				arrowPath.lineTo(endPoint);
+				break;
+			case Axis::FilledArrowBig:
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
+				arrowPath.lineTo(endPoint);
+				break;
+			case Axis::SemiFilledArrowSmall:
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/8, endPoint.y()));
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
+				arrowPath.lineTo(endPoint);
+				break;
+			case Axis::SemiFilledArrowBig:
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()));
+				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
+				arrowPath.lineTo(endPoint);
+				break;
+		}
+	} else { //vertical orientation
+		QPointF endPoint = QPointF(startPoint.x(), startPoint.y()-direction*arrowSize);
+		arrowPath.moveTo(startPoint);
+		arrowPath.lineTo(endPoint);
+
+		switch (arrowType) {
+			case Axis::NoArrow:
+				break;
+			case Axis::SimpleArrowSmall:
+				arrowPath.moveTo(endPoint);
+				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+				arrowPath.moveTo(endPoint);
+				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+				break;
+			case Axis::SimpleArrowBig:
+				arrowPath.moveTo(endPoint);
+				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+				arrowPath.moveTo(endPoint);
+				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+				break;
+			case Axis::FilledArrowSmall:
+				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+				arrowPath.lineTo(endPoint);
+				break;
+			case Axis::FilledArrowBig:
+				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+				arrowPath.lineTo(endPoint);
+				break;
+			case Axis::SemiFilledArrowSmall:
+				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+				arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/8));
+				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+				arrowPath.lineTo(endPoint);
+				break;
+			case Axis::SemiFilledArrowBig:
+				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+				arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/4));
+				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+				arrowPath.lineTo(endPoint);
+				break;
+		}
+	}
 }
 
 //! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
@@ -1487,6 +1584,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	axisShapeWithoutGrids = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
+	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(arrowPath, linePen));
 	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
 	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 
@@ -1551,7 +1649,19 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	if (linePen.style() != Qt::NoPen){
 		painter->setOpacity(lineOpacity);
 		painter->setPen(linePen);
-		painter->setBrush(Qt::NoBrush);
+		painter->setBrush(Qt::SolidPattern);
+		painter->drawPath(linePath);
+
+		//draw the arrow
+		if (arrowType != Axis::NoArrow)
+			painter->drawPath(arrowPath);
+	}
+
+	//draw the line
+	if (linePen.style() != Qt::NoPen){
+		painter->setOpacity(lineOpacity);
+		painter->setPen(linePen);
+		painter->setBrush(Qt::SolidPattern);
 		painter->drawPath(linePath);
 	}
 

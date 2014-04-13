@@ -245,6 +245,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
 			addChild(axis);
@@ -255,6 +256,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
 			
 			break;
 		}
@@ -265,8 +267,8 @@ void CartesianPlot::initDefault(Type type){
 			d->yMin = -0.5;
 			d->yMax = 0.5;
 
-			d->horizontalPadding = 0;
-			d->verticalPadding = 0;
+			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
 
 			QPen pen = m_plotArea->borderPen();
 			pen.setStyle(Qt::NoPen);
@@ -281,6 +283,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(10);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
@@ -292,6 +295,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(10);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
 			
 			break;
@@ -303,8 +307,8 @@ void CartesianPlot::initDefault(Type type){
 			d->yMin = -0.5;
 			d->yMax = 0.5;
 
-			d->horizontalPadding = 0;
-			d->verticalPadding = 0;
+			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
 
 			QPen pen = m_plotArea->borderPen();
 			pen.setStyle(Qt::NoPen);
@@ -320,6 +324,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
@@ -332,6 +337,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
+			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
 			
 			break;

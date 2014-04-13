@@ -210,23 +210,83 @@ void AxisDock::init(){
 	ui.cbArrowType->addItem( i18n("semi-filled, big") );
 
 	QPainter pa;
-	QPixmap pm( 20, 20 );
+	pa.setPen( QPen(Qt::SolidPattern, 0) );
+	QPixmap pm(20, 20);
 	ui.cbArrowType->setIconSize( QSize(20,20) );
-
-	QPen pen(Qt::SolidPattern, 0);
-	pa.setPen( pen );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
 
 	//no arrow
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3,10,17,10);
 	pa.end();
 	ui.cbArrowType->setItemIcon(0, pm);
 
-	//TODO: simple, small etc.
+	//simple, small
+	float cos_phi = cos(3.14159/6);
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.drawLine(3,10,17,10);
+	pa.drawLine(17,10, 10, 10-5*cos_phi);
+	pa.drawLine(17,10, 10, 10+5*cos_phi);
+	pa.end();
+	ui.cbArrowType->setItemIcon(1, pm);
 
+	//simple, big
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.drawLine(3,10,17,10);
+	pa.drawLine(17,10, 10, 10-10*cos_phi);
+	pa.drawLine(17,10, 10, 10+10*cos_phi);
+	pa.end();
+	ui.cbArrowType->setItemIcon(2, pm);
+
+	//filled, small
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,17,10);
+	QPointF points3[3] = {QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(10, 10+4*cos_phi) };
+	pa.drawPolygon(points3, 3);
+	pa.end();
+	ui.cbArrowType->setItemIcon(3, pm);
+
+	//filled, big
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,17,10);
+	QPointF points4[3] = {QPointF(17, 10), QPointF(10, 10-10*cos_phi), QPointF(10, 10+10*cos_phi) };
+	pa.drawPolygon(points4, 3);
+	pa.end();
+	ui.cbArrowType->setItemIcon(4, pm);
+
+	//semi-filled, small
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,17,10);
+	QPointF points5[4] = {QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(13, 10), QPointF(10, 10+4*cos_phi) };
+	pa.drawPolygon(points5, 4);
+	pa.end();
+	ui.cbArrowType->setItemIcon(5, pm);
+
+	//semi-filled, big
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,17,10);
+	QPointF points6[4] = {QPointF(17, 10), QPointF(10, 10-10*cos_phi), QPointF(13, 10), QPointF(10, 10+10*cos_phi) };
+	pa.drawPolygon(points6, 4);
+	pa.end();
+	ui.cbArrowType->setItemIcon(6, pm);
 
 	ui.cbArrowPosition->addItem( i18n("left") );
 	ui.cbArrowPosition->addItem( i18n("right") );

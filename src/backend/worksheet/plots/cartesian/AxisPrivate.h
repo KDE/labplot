@@ -60,6 +60,7 @@ class AxisPrivate: public QGraphicsItem {
 		qreal zeroOffset;
 
 		//line
+		QList<QLineF> lines;
 		QPen linePen;
 		qreal lineOpacity;
 		Axis::ArrowType arrowType;
@@ -116,6 +117,7 @@ class AxisPrivate: public QGraphicsItem {
 		qreal minorGridOpacity;
 
 		QPainterPath linePath;
+		QPainterPath arrowPath;
 		QPainterPath majorTicksPath;
 		QPainterPath minorTicksPath;
 		QPainterPath majorGridPath;
@@ -131,6 +133,8 @@ class AxisPrivate: public QGraphicsItem {
 
 		virtual void retransform();
 		void retransformLine();
+		void retransformArrow();
+		void addArrow(const QPointF& point, int direction);
 		void retransformTicks();
 		void retransformTickLabels();
 		void retransformTickLabelStrings();
