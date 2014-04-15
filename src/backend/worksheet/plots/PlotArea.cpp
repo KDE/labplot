@@ -359,15 +359,21 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 			switch (backgroundImageStyle){
 				case PlotArea::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-					painter->drawPixmap(rect.topLeft(),pix);
+					//painter->drawPixmap(rect.topLeft(),pix);
+					painter->setBrush(QBrush(pix.toImage()));
+					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				case PlotArea::Scaled:
 					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-					painter->drawPixmap(rect.topLeft(),pix);
+					//painter->drawPixmap(rect.topLeft(),pix);
+					painter->setBrush(QBrush(pix));
+					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				case PlotArea::ScaledAspectRatio:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-					painter->drawPixmap(rect.topLeft(),pix);
+					//painter->drawPixmap(rect.topLeft(),pix);
+					painter->setBrush(QBrush(pix));
+					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				case PlotArea::Centered:
 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
@@ -379,7 +385,9 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
 					break;
 				default:
-					painter->drawPixmap(rect.topLeft(),pix);
+					//painter->drawPixmap(rect.topLeft(),pix);
+					painter->setBrush(QBrush(pix));
+					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
