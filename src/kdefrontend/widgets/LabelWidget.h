@@ -34,6 +34,7 @@
 
 class Label;
 class Axis;
+class KMenu;
 
 class LabelWidget: public QWidget{
 	Q_OBJECT
@@ -58,7 +59,7 @@ private:
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
 	bool m_initializing;
-	QMenu* m_dateTimeMenu;
+	KMenu* m_dateTimeMenu;
 
 	void initConnections();
 

@@ -83,4 +83,7 @@ class AbstractCoordinateSystem{
 		static bool definitelyGreaterThan(float a, float b, float epsilon=0.0000001);
 		static bool definitelyLessThan(float a, float b, float epsilon=0.0000001);
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractCoordinateSystem::MappingFlags)
+
 #endif

@@ -894,7 +894,7 @@ void AxisPrivate::retransformLine(){
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping & AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping|AbstractCoordinateSystem::MarkGaps);
 	foreach (const QLineF& line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -1522,7 +1522,7 @@ void AxisPrivate::retransformMajorGrid(){
 		}
 	}
 	
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines);
 	foreach (const QLineF& line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1562,7 +1562,7 @@ void AxisPrivate::retransformMinorGrid(){
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines);
 	foreach (const QLineF& line, lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
@@ -1655,14 +1655,6 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		//draw the arrow
 		if (arrowType != Axis::NoArrow)
 			painter->drawPath(arrowPath);
-	}
-
-	//draw the line
-	if (linePen.style() != Qt::NoPen){
-		painter->setOpacity(lineOpacity);
-		painter->setPen(linePen);
-		painter->setBrush(Qt::SolidPattern);
-		painter->drawPath(linePath);
 	}
 
   	//draw major grid

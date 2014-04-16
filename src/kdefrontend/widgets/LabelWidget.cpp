@@ -31,11 +31,11 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "tools/TeXRenderer.h"
-#include <QMenu>
+
 #include <QWidgetAction>
-#include <QTimer>
-#include <kdebug.h>
-#include <kcharselect.h>
+
+#include <KCharSelect>
+#include <KMenu>
 
 /*!
 	\class LabelWidget
@@ -48,9 +48,11 @@
  */
 
 // see legacy/LabelWidget.cpp
-LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new QMenu(this)) {
+LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new KMenu(this)) {
 	ui.setupUi(this);
 	
+	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
+
 	QGridLayout* layout =static_cast<QGridLayout*>(this->layout());
   	layout->setContentsMargins(2,2,2,2);
 	layout->setHorizontalSpacing(2);
@@ -422,7 +424,9 @@ void LabelWidget::insertChar(QChar c) {
 
 void LabelWidget::dateTimeMenu() {
 	m_dateTimeMenu->clear();
+
 	QDate date = QDate::currentDate();
+	m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
 	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
 	m_dateTimeMenu->addAction( date.toString(Qt::ISODate) );
 	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
@@ -430,6 +434,7 @@ void LabelWidget::dateTimeMenu() {
 	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleLongDate) );
 
 	QDateTime time = QDateTime::currentDateTime();
+	m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
 	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
 	m_dateTimeMenu->addAction( time.toString(Qt::ISODate) );
 	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
