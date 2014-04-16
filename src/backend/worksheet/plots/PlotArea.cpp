@@ -382,10 +382,15 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
 					break;
 				case PlotArea::Tiled:
-					painter->drawTiledPixmap(rect,pix);
+					//painter->drawTiledPixmap(rect,pix);
+					painter->setBrush(QBrush(pix));
+					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				case PlotArea::CenterTiled:
-					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
+					//painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				default:
 					//painter->drawPixmap(rect.topLeft(),pix);
