@@ -89,12 +89,14 @@ void XYEquationCurveDock::setupGeneral() {
 	m_completer1->setWidget(uiGeneralTab.teEquation1);
 	m_completer1->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer1->setCaseSensitivity(Qt::CaseInsensitive);
+	m_completer1->setWrapAround(false);
 	connect(m_completer1, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
 
 	m_completer2 = new QCompleter(list);
 	m_completer2->setWidget(uiGeneralTab.teEquation2);
 	m_completer2->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer2->setCaseSensitivity(Qt::CaseInsensitive);
+	m_completer2->setWrapAround(false);
 	connect(m_completer2, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
 
 	uiGeneralTab.teEquation1->installEventFilter(this);
@@ -198,7 +200,7 @@ bool XYEquationCurveDock::eventFilter(QObject* object, QEvent* event){
         case Qt::Key_Escape:
         case Qt::Key_Tab:
         case Qt::Key_Backtab:
-             e->ignore();
+//              e->ignore();
              return false; // let the completer do default behavior
         default:
             break;
@@ -207,7 +209,7 @@ bool XYEquationCurveDock::eventFilter(QObject* object, QEvent* event){
 
      bool isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space); // CTRL+SPACE
      if (!c || !isShortcut) // do not process the shortcut when we have a completer
-		 return false;
+		 return true;
 
      const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
      if (!c || (ctrlOrShift && e->text().isEmpty()))
@@ -219,8 +221,7 @@ bool XYEquationCurveDock::eventFilter(QObject* object, QEvent* event){
 	 QTextCursor tc = te->textCursor();
      tc.select(QTextCursor::WordUnderCursor);
      QString completionPrefix = tc.selectedText();
-
-     if (!isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
+     if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 1
                        || eow.contains(e->text().right(1)))) {
          c->popup()->hide();
          return false;
@@ -235,7 +236,7 @@ bool XYEquationCurveDock::eventFilter(QObject* object, QEvent* event){
                  + c->popup()->verticalScrollBar()->sizeHint().width());
      c->complete(cr); // popup it up!
 
-	 return true;
+	 return false;
 }
 
 void XYEquationCurveDock::insertCompletion(const QString& completion) {
