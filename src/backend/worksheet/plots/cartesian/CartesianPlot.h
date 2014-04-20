@@ -47,6 +47,21 @@ class CartesianPlot:public AbstractPlot{
 
 		enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
+		enum ScaleBreakingStyle {ScaleBreakingSimple, ScaleBreakingVertical, ScaleBreakingSloped};
+
+		struct ScaleBreaking {
+			ScaleBreaking() : start(0), end(0), position(0.5), isValid(true) {};
+			float start;
+			float end;
+			float position;
+			ScaleBreakingStyle style;
+			bool isValid;
+		};
+
+		//simple wrapper for QList<ScaleBreaking> in order to get our macros working
+		struct ScaleBreakings {
+			QList<ScaleBreaking> list;
+		};
 
 		void initDefault(Type=FourAxes);
 		QIcon icon() const;
@@ -66,7 +81,9 @@ class CartesianPlot:public AbstractPlot{
 		BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
 		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
-		
+		CLASS_D_ACCESSOR_DECL(ScaleBreakings, xScaleBreakings, XScaleBreakings);
+		CLASS_D_ACCESSOR_DECL(ScaleBreakings, yScaleBreakings, YScaleBreakings);
+
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;
 
@@ -145,6 +162,8 @@ class CartesianPlot:public AbstractPlot{
 		friend class CartesianPlotSetYMinCmd;
 		friend class CartesianPlotSetYMaxCmd;
 		friend class CartesianPlotSetYScaleCmd;
+		friend class CartesianPlotSetXScaleBreakingsCmd;
+		friend class CartesianPlotSetYScaleBreakingsCmd;
 		void rectChanged(QRectF&);
 		void xMinChanged(float);
 		void xMaxChanged(float);
@@ -152,6 +171,8 @@ class CartesianPlot:public AbstractPlot{
 		void yMinChanged(float);
 		void yMaxChanged(float);
 		void yScaleChanged(int);
+		void xScaleBreakingsChanged(const CartesianPlot::ScaleBreakings&);
+		void yScaleBreakingsChanged(const CartesianPlot::ScaleBreakings&);
 };
 
 #endif

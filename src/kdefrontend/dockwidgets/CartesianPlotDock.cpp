@@ -31,11 +31,11 @@
 #include "CartesianPlotDock.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 
+#include <QPainter>
 #include <QTimer>
 #include <QDir>
 #include <QFileDialog>
@@ -58,11 +58,11 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	//"Coordinate system"-tab
 	ui.bAddXBreak->setIcon( KIcon("list-add") );
 	ui.bRemoveXBreak->setIcon( KIcon("list-remove") );
-	ui.cbXBreakNumber->addItem("1");
+	ui.cbXBreak->addItem("1");
 
 	ui.bAddYBreak->setIcon( KIcon("list-add") );
 	ui.bRemoveYBreak->setIcon( KIcon("list-remove") );
-	ui.cbYBreakNumber->addItem("1");
+	ui.cbYBreak->addItem("1");
 
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
@@ -89,8 +89,13 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 		layout->setVerticalSpacing(2);
 	}
 
-	//SIGNAL/SLOT
+	//Validators
+	ui.leXBreakStart->setValidator( new QDoubleValidator(ui.leXBreakStart) );
+	ui.leXBreakEnd->setValidator( new QDoubleValidator(ui.leXBreakEnd) );
+	ui.leYBreakStart->setValidator( new QDoubleValidator(ui.leYBreakStart) );
+	ui.leYBreakEnd->setValidator( new QDoubleValidator(ui.leYBreakEnd) );
 
+	//SIGNAL/SLOT
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
@@ -112,7 +117,20 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
 	//Scale breakings
 	connect( ui.chkXBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleXBreak(int)) );
+	connect( ui.bAddXBreak, SIGNAL(clicked()), this, SLOT(addXBreak()) );
+	connect( ui.bRemoveXBreak, SIGNAL(clicked()), this, SLOT(removeXBreak()) );
+	connect( ui.cbXBreak, SIGNAL(currentIndexChanged(int)), this, SLOT(currentXBreakChanged(int)) );
+	connect( ui.leXBreakStart, SIGNAL(returnPressed()), this, SLOT(xBreakStartChanged()) );
+	connect( ui.leXBreakEnd, SIGNAL(returnPressed()), this, SLOT(xBreakEndChanged()) );
+	connect( ui.sbXBreakPosition, SIGNAL(valueChanged(int)), this, SLOT(xBreakPositionChanged(int)) );
+
 	connect( ui.chkYBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleYBreak(int)) );
+	connect( ui.bAddYBreak, SIGNAL(clicked()), this, SLOT(addYBreak()) );
+	connect( ui.bRemoveYBreak, SIGNAL(clicked()), this, SLOT(removeYBreak()) );
+	connect( ui.cbYBreak, SIGNAL(currentIndexChanged(int)), this, SLOT(currentYBreakChanged(int)) );
+	connect( ui.leYBreakStart, SIGNAL(returnPressed()), this, SLOT(yBreakStartChanged()) );
+	connect( ui.leYBreakEnd, SIGNAL(returnPressed()), this, SLOT(yBreakEndChanged()) );
+	connect( ui.sbYBreakPosition, SIGNAL(valueChanged(int)), this, SLOT(yBreakPositionChanged(int)) );
 	
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -149,8 +167,50 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
 void CartesianPlotDock::init(){
 	this->retranslateUi();
-	this->toggleXBreak(Qt::Unchecked);
-	this->toggleYBreak(Qt::Unchecked);
+
+	//create icons for the different styles for scale breaking
+	QPainter pa;
+	pa.setPen( QPen(Qt::SolidPattern, 0) );
+	QPixmap pm(20, 20);
+	ui.cbXBreakStyle->setIconSize( QSize(20,20) );
+	ui.cbYBreakStyle->setIconSize( QSize(20,20) );
+
+	//simple
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,8,10);
+	pa.drawLine(12,10,17,10);
+	pa.end();
+	ui.cbXBreakStyle->setItemIcon(0, pm);
+	ui.cbYBreakStyle->setItemIcon(0, pm);
+
+	//vertical
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,8,10);
+	pa.drawLine(12,10,17,10);
+	pa.drawLine(8,14,8,6);
+	pa.drawLine(12,14,12,6);
+	pa.end();
+	ui.cbXBreakStyle->setItemIcon(1, pm);
+	ui.cbYBreakStyle->setItemIcon(1, pm);
+
+	//sloped
+	pm.fill(Qt::transparent);
+	pa.begin( &pm );
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,8,10);
+	pa.drawLine(12,10,17,10);
+	pa.drawLine(6,14,10,6);
+	pa.drawLine(10,14,14,6);
+	pa.end();
+	ui.cbXBreakStyle->setItemIcon(2, pm);
+	ui.cbYBreakStyle->setItemIcon(2, pm);
 }
 
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
@@ -212,8 +272,9 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
+	connect( m_plot, SIGNAL(xScaleBreakingsChanged(CartesianPlot::ScaleBreakings)), this, SLOT(plotXScaleBreakingChanged(CartesianPlot::ScaleBreakings)) );
+	connect( m_plot, SIGNAL(yScaleBreakingsChanged(CartesianPlot::ScaleBreakings)), this, SLOT(plotYScaleBreakingChanged(CartesianPlot::ScaleBreakings)) );
 	connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
-	//TODO: undo scale braking
 
 	// Plot Area
 	connect( m_plot->plotArea(), SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)) );
@@ -242,6 +303,7 @@ void CartesianPlotDock::activateTitleTab(){
 void CartesianPlotDock::retranslateUi(){
 	m_initializing = true;
 
+	//general
 	ui.cbXScaling->addItem( i18n("linear") );
 	ui.cbXScaling->addItem( i18n("log(x)") );
 	ui.cbXScaling->addItem( i18n("log2(x)") );
@@ -252,6 +314,16 @@ void CartesianPlotDock::retranslateUi(){
 	ui.cbYScaling->addItem( i18n("log2(y)") );
 	ui.cbYScaling->addItem( i18n("ln(y)") );
 
+	//scale breakings
+	ui.cbXBreakStyle->addItem( i18n("simple") );
+	ui.cbXBreakStyle->addItem( i18n("vertical") );
+	ui.cbXBreakStyle->addItem( i18n("sloped") );
+
+	ui.cbYBreakStyle->addItem( i18n("simple") );
+	ui.cbYBreakStyle->addItem( i18n("vertical") );
+	ui.cbYBreakStyle->addItem( i18n("sloped") );
+
+	//plot area
 	ui.cbBackgroundType->addItem(i18n("color"));
 	ui.cbBackgroundType->addItem(i18n("image"));
 	ui.cbBackgroundType->addItem(i18n("pattern"));
@@ -436,6 +508,61 @@ void CartesianPlotDock::toggleXBreak(int state){
 	ui.cbXBreakStyle->setVisible(b);
 }
 
+void CartesianPlotDock::addXBreak() {
+	
+}
+
+void CartesianPlotDock::removeXBreak() {
+// 	ui.bRemoveXBreak->setVisible(m_plot->xScaleBreakings().size()!=0);	
+}
+
+void CartesianPlotDock::currentXBreakChanged(int) {
+	
+}
+
+void CartesianPlotDock::xBreakStartChanged() {
+	if (m_initializing)
+		return;
+
+	int index = ui.cbXBreak->currentIndex();
+	CartesianPlot::ScaleBreakings breakings = m_plot->xScaleBreakings();
+	if (index==0 && breakings.list.size()==0) {
+		//no scale breaking avaiable yet, create a new one
+		CartesianPlot::ScaleBreaking breaking;
+		breaking.start = ui.leXBreakStart->text().toDouble();
+		breakings.list<<breaking;
+	} else {
+		breakings.list[index].start = ui.leXBreakStart->text().toDouble();
+	}
+
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setXScaleBreakings(breakings);
+}
+
+void CartesianPlotDock::xBreakEndChanged() {
+	if (m_initializing)
+		return;
+
+	int index = ui.cbXBreak->currentIndex();
+	CartesianPlot::ScaleBreakings breakings = m_plot->xScaleBreakings();
+	if (index==0 && breakings.list.size()==0) {
+		//no scale breaking avaiable yet, create a new one
+		CartesianPlot::ScaleBreaking breaking;
+		breaking.end = ui.leXBreakEnd->text().toDouble();
+		breakings.list<<breaking;
+	} else {
+		breakings.list[index].end = ui.leXBreakEnd->text().toDouble();
+	}
+
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setXScaleBreakings(breakings);
+}
+
+void CartesianPlotDock::xBreakPositionChanged(int) {
+	if (m_initializing)
+		return;
+}
+
 void CartesianPlotDock::toggleYBreak(int state){
 	if (m_initializing)
 		return;
@@ -450,6 +577,30 @@ void CartesianPlotDock::toggleYBreak(int state){
 	ui.sbYBreakPosition->setVisible(b);
     ui.lYBreakStyle->setVisible(b);
 	ui.cbYBreakStyle->setVisible(b);
+}
+
+void CartesianPlotDock::addYBreak() {
+	
+}
+
+void CartesianPlotDock::removeYBreak() {
+	
+}
+
+void CartesianPlotDock::currentYBreakChanged(int) {
+	
+}
+
+void CartesianPlotDock::yBreakStartChanged() {
+	
+}
+
+void CartesianPlotDock::yBreakEndChanged() {
+	
+}
+
+void CartesianPlotDock::yBreakPositionChanged(int) {
+	
 }
 
 // "Plot area"-tab
@@ -706,6 +857,7 @@ void CartesianPlotDock::verticalPaddingChanged(double value){
 //*************************************************************
 //****** SLOTs for changes triggered in CartesianPlot *********
 //*************************************************************
+//general
 void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_plot != aspect)
 		return;
@@ -770,6 +922,16 @@ void CartesianPlotDock::plotVisibleChanged(bool on){
 	m_initializing = false;
 }
 
+//scale breakings
+void CartesianPlotDock::plotXScaleBreakingChanged(const CartesianPlot::ScaleBreakings& breakings) {
+	
+}
+
+void CartesianPlotDock::plotYScaleBreakingChanged(const CartesianPlot::ScaleBreakings& breakings) {
+	
+}
+
+//background
 void CartesianPlotDock::plotBackgroundTypeChanged(PlotArea::BackgroundType type){
 	m_initializing = true;
 	ui.cbBackgroundType->setCurrentIndex(type);

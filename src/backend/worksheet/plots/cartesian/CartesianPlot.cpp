@@ -29,7 +29,7 @@
  ***************************************************************************/
 
 #include "CartesianPlot.h"
-#include "CartesianCoordinateSystem.h"
+#include "CartesianPlotPrivate.h"
 #include "Axis.h"
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
@@ -46,9 +46,7 @@
 #include <QDebug>
 #include <QMenu>
 #include <QToolBar>
-#include <QGraphicsSceneWheelEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsItem>
+
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -67,33 +65,6 @@
  *
  * 
  */
-
-class CartesianPlotPrivate:public AbstractPlotPrivate{
-    public:
-		CartesianPlotPrivate(CartesianPlot *owner);
-		CartesianPlot* const q;
-
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-		virtual void mouseMoveEvent (QGraphicsSceneMouseEvent*);
-		virtual void wheelEvent( QGraphicsSceneWheelEvent*);
-		virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * event );
-
-		virtual void retransform();
-		void retransformScales();
-		float round(float value, int precision);
-		void checkXRange();
-		void checkYRange();
-
-		float xMin, xMax, yMin, yMax;
-		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
-		bool autoScaleX, autoScaleY;
-		float autoScaleOffsetFactor;
-		CartesianPlot::Scale xScale, yScale;
-		bool suppressRetransform;
-		bool m_printing;
-};
-
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
 	m_legend(0), m_zoomFactor(1.2) {
 	init();
@@ -505,11 +476,13 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMax, xMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, xScale, xScale)
+CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::ScaleBreakings, xScaleBreakings, xScaleBreakings)
 
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMin, yMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
+CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::ScaleBreakings, yScaleBreakings, yScaleBreakings)
 
 /*!
 	return the actual bounding rectangular of the plot (plot's rectangular minus padding)
@@ -572,6 +545,14 @@ void CartesianPlot::setXScale(Scale scale){
 		exec(new CartesianPlotSetXScaleCmd(d, scale, i18n("%1: set x scale")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScaleBreakings, CartesianPlot::ScaleBreakings, xScaleBreakings, retransformScales);
+void CartesianPlot::setXScaleBreakings(const ScaleBreakings& breakings) {
+	Q_D(CartesianPlot);
+	d->xScaleBreakings = breakings;
+	exec(new CartesianPlotSetXScaleBreakingsCmd(d, breakings, i18n("%1: set x-scale breakings")));
+}
+
+
 //TODO: provide an undo-aware version
 // STD_SETTER_CMD_IMPL_F(CartesianPlot, SetAutoScaleY, bool, autoScaleY, retransformScales)
 void CartesianPlot::setAutoScaleY(bool autoScaleY){
@@ -603,6 +584,13 @@ void CartesianPlot::setYScale(Scale scale){
 	Q_D(CartesianPlot);
 	if (scale != d->yScale)
 		exec(new CartesianPlotSetYScaleCmd(d, scale, i18n("%1: set y scale")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScaleBreakings, CartesianPlot::ScaleBreakings, yScaleBreakings, retransformScales);
+void CartesianPlot::setYScaleBreakings(const ScaleBreakings& breakings) {
+	Q_D(CartesianPlot);
+	d->yScaleBreakings = breakings;
+	exec(new CartesianPlotSetYScaleBreakingsCmd(d, breakings, i18n("%1: set y-scale breakings")));
 }
 
 //################################################################
@@ -1048,63 +1036,50 @@ void CartesianPlotPrivate::retransformScales(){
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale*> scales;
-	
+	double sceneStart, sceneEnd, logicalStart, logicalEnd;
+
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
-	QRectF itemRect = mapRectFromScene( rect );
+	QRectF itemRect = mapRectFromScene(rect);
+
+	//check ranges for log-scales
+	if (xScale != CartesianPlot::ScaleLinear)
+		checkXRange();
 
 	//create x-scales
-	//TODO: for negative values of xMin and yMin use a value smaller that xMax/yMax and not 0.1
-	if (xScale == CartesianPlot::ScaleLinear){
-		scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																	itemRect.x()+horizontalPadding,
-																	itemRect.x()+itemRect.width()-horizontalPadding,
-																	xMin, xMax);
-	}else if (xScale == CartesianPlot::ScaleLog10){
-		if (xMin<=0) xMin=0.1;
-		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																	itemRect.x()+horizontalPadding,
-																	itemRect.x()+itemRect.width()-horizontalPadding,
-																	xMin, xMax, 10.0);
-	}else if (xScale == CartesianPlot::ScaleLog2){
-		if (xMin<=0) xMin=0.1;
-		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																	itemRect.x()+horizontalPadding,
-																	itemRect.x()+itemRect.width()-horizontalPadding,
-																	xMin, xMax, 2.0);
-	}else{ //CartesianPlot::ScaleLn
-		if (xMin<=0) xMin=0.1;
-		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																	itemRect.x()+horizontalPadding,
-																	itemRect.x()+itemRect.width()-horizontalPadding,
-																	xMin, xMax, 2.71828);
+	if (xScaleBreakings.list.size()==0) {
+		sceneStart = itemRect.x()+horizontalPadding;
+		sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
+		logicalStart = xMin;
+		logicalEnd = xMax;
+		Interval<double> interval (SCALE_MIN, SCALE_MAX);
+		scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+	} else {
+		//TODO:
+// 		foreach(CartesianPlot::ScaleBreaking* breaking, xScaleBreakings) {
+// 		}
 	}
 
 	cSystem ->setXScales(scales);
 
+	//check ranges for log-scales
+	if (yScale != CartesianPlot::ScaleLinear)
+		checkYRange();
+
 	//create y-scales
 	scales.clear();
-	if (yScale == CartesianPlot::ScaleLinear){
-		scales << CartesianCoordinateSystem::Scale::createLinearScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																	itemRect.y()+itemRect.height()-verticalPadding,
-																	itemRect.y()+verticalPadding, 
-																	yMin, yMax);
-	}else if (yScale == CartesianPlot::ScaleLog10 || yScale == CartesianPlot::ScaleLog2 || yScale == CartesianPlot::ScaleLn){
-		float base;
-		if (yScale == CartesianPlot::ScaleLog10)
-			base = 10.0;
-		else if (yScale == CartesianPlot::ScaleLog2)
-			base = 2.0;
-		else
-			base = 2.71828;
-		
-		checkXRange();
-		checkYRange();
-		scales << CartesianCoordinateSystem::Scale::createLogScale(Interval<double>(SCALE_MIN, SCALE_MAX),
-																	itemRect.y()+itemRect.height()-verticalPadding,
-																	itemRect.y()+verticalPadding, 
-																	yMin, yMax, base);
+	if (yScaleBreakings.list.size()==0) {
+		sceneStart = itemRect.y()+itemRect.height()-verticalPadding;
+		sceneEnd = itemRect.y()+verticalPadding;
+		logicalStart = yMin;
+		logicalEnd = yMax;
+		Interval<double> interval (SCALE_MIN, SCALE_MAX);
+		scales << this->createScale(yScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+	} else {
+		//TODO:
+// 		foreach(CartesianPlot::ScaleBreaking* breaking, xScaleBreakings) {
+// 		}
 	}
-	
+
 	cSystem ->setYScales(scales);
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
@@ -1201,6 +1176,25 @@ void CartesianPlotPrivate::checkYRange() {
 
 float CartesianPlotPrivate::round(float value, int precision){
 	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
+}
+
+
+CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, Interval<double>& interval,
+																	double sceneStart, double sceneEnd,
+																	double logicalStart, double logicalEnd) {
+	if (type == CartesianPlot::ScaleLinear){
+		return CartesianCoordinateSystem::Scale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+	}else {
+		float base;
+		if (type == CartesianPlot::ScaleLog10)
+			base = 10.0;
+		else if (type == CartesianPlot::ScaleLog2)
+			base = 2.0;
+		else
+			base = 2.71828;
+
+		return CartesianCoordinateSystem::Scale::createLogScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd, base);
+	}
 }
 
 /*!
@@ -1322,7 +1316,6 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 	
 	//coordinate system and padding
-// 	m_coordinateSystem->save(writer); //TODO save scales
 	writer->writeStartElement( "coordinateSystem" );
 	writer->writeAttribute( "autoScaleX", QString::number(d->autoScaleX) );
 	writer->writeAttribute( "autoScaleY", QString::number(d->autoScaleY) );
@@ -1335,7 +1328,37 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
 	writer->writeEndElement();
-	
+
+	//x-scale breakings
+	if (d->xScaleBreakings.list.size()) {
+		writer->writeStartElement("xScaleBreakings");
+		foreach(const ScaleBreaking& breaking, d->xScaleBreakings.list) {
+			writer->writeStartElement("item");
+			writer->writeAttribute("start", QString::number(breaking.start));
+			writer->writeAttribute("end", QString::number(breaking.end));
+			writer->writeAttribute("position", QString::number(breaking.position));
+			writer->writeAttribute("style", QString::number(breaking.style));
+			writer->writeAttribute("isValid", QString::number(breaking.isValid));
+			writer->writeEndElement();
+		}
+		writer->writeEndElement();
+	}
+
+	//y-scale breakings
+	if (d->yScaleBreakings.list.size()) {
+		writer->writeStartElement("yScaleBreakings");
+		foreach(const ScaleBreaking& breaking, d->yScaleBreakings.list) {
+			writer->writeStartElement("item");
+			writer->writeAttribute("start", QString::number(breaking.start));
+			writer->writeAttribute("end", QString::number(breaking.end));
+			writer->writeAttribute("position", QString::number(breaking.position));
+			writer->writeAttribute("style", QString::number(breaking.style));
+			writer->writeAttribute("isValid", QString::number(breaking.isValid));
+			writer->writeEndElement();
+		}
+		writer->writeEndElement();
+	}
+
     //serialize all children (plot area, title text label, axes and curves)
     QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
     foreach(AbstractWorksheetElement *elem, childElements)
@@ -1405,7 +1428,6 @@ bool CartesianPlot::load(XmlStreamReader* reader){
             else
                 d->setVisible(str.toInt());			
 		}else if(reader->name() == "coordinateSystem"){
-// 			m_coordinateSystem->load(reader); //TODO read scales
             attribs = reader->attributes();
 
 			str = attribs.value("autoScaleX").toString();

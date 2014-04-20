@@ -459,7 +459,7 @@
            </widget>
           </item>
           <item>
-           <widget class="KComboBox" name="cbXBreakNumber">
+           <widget class="KComboBox" name="cbXBreak">
             <property name="maximumSize">
              <size>
               <width>40</width>
@@ -614,7 +614,7 @@
            </widget>
           </item>
           <item>
-           <widget class="KComboBox" name="cbYBreakNumber">
+           <widget class="KComboBox" name="cbYBreak">
             <property name="maximumSize">
              <size>
               <width>40</width>
@@ -681,6 +681,9 @@
          <property name="suffix">
           <string> %</string>
          </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
         </widget>
        </item>
        <item row="11" column="2" colspan="3">
@@ -690,6 +693,9 @@
         <widget class="QSpinBox" name="sbXBreakPosition">
          <property name="suffix">
           <string> %</string>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
          </property>
         </widget>
        </item>

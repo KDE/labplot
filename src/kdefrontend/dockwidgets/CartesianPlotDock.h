@@ -31,11 +31,11 @@
 #ifndef CARTESIANPLOTDOCK_H
 #define CARTESIANPLOTDOCK_H
 
-#include <QList>
-#include "ui_cartesianplotdock.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "ui_cartesianplotdock.h"
+#include <QList>
 
-class CartesianPlot;
 class LabelWidget;
 
 class CartesianPlotDock: public QWidget{
@@ -77,7 +77,20 @@ private slots:
 
 	//"Scale breaking"-tab
 	void toggleXBreak(int);
+	void addXBreak();
+	void removeXBreak();
+	void currentXBreakChanged(int);
+	void xBreakStartChanged();
+	void xBreakEndChanged();
+	void xBreakPositionChanged(int);
+
 	void toggleYBreak(int);
+	void addYBreak();
+	void removeYBreak();
+	void currentYBreakChanged(int);
+	void yBreakStartChanged();
+	void yBreakEndChanged();
+	void yBreakPositionChanged(int);
 
 	//"Plot area"-tab
   	void backgroundTypeChanged(int);
@@ -109,6 +122,10 @@ private slots:
 	void plotYScaleChanged(int);
 	void plotVisibleChanged(bool);
 	
+	//scale breakings
+	void plotXScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
+	void plotYScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
+
 	//background
 	void plotBackgroundTypeChanged(PlotArea::BackgroundType);
 	void plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
