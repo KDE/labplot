@@ -29,7 +29,6 @@
 #include "XYEquationCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/gsl/ExpressionParser.h"
-#include "tools/EquationHighlighter.h"
 
 #include <QCompleter>
 #include <QKeyEvent>
@@ -73,45 +72,12 @@ void XYEquationCurveDock::setupGeneral() {
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
-	//highlighting
-	m_highlighter1 = new EquationHighlighter(uiGeneralTab.teEquation1);
-	m_highlighter2 = new EquationHighlighter(uiGeneralTab.teEquation2);
-
-	//currently, highlighter2 is for implicit equations only, with two parameters - x and y
-	QStringList vars;
-	vars<<"x"<<"y";
-	m_highlighter2->setVariables(vars);
-
-	//completion
-	QStringList list = ExpressionParser::getInstance()->functionsList();
-	list.append(ExpressionParser::getInstance()->constantsList());
-	m_completer1 = new QCompleter(list);
-	m_completer1->setWidget(uiGeneralTab.teEquation1);
-	m_completer1->setCompletionMode(QCompleter::PopupCompletion);
-	m_completer1->setCaseSensitivity(Qt::CaseInsensitive);
-	m_completer1->setWrapAround(false);
-	connect(m_completer1, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
-
-	m_completer2 = new QCompleter(list);
-	m_completer2->setWidget(uiGeneralTab.teEquation2);
-	m_completer2->setCompletionMode(QCompleter::PopupCompletion);
-	m_completer2->setCaseSensitivity(Qt::CaseInsensitive);
-	m_completer2->setWrapAround(false);
-	connect(m_completer2, SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
-
-	uiGeneralTab.teEquation1->installEventFilter(this);
-	uiGeneralTab.teEquation2->installEventFilter(this);
-
 	//Slots
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.teEquation1, SIGNAL(textChanged()), this, SLOT(validateExpression()) );
-	connect( uiGeneralTab.teEquation1, SIGNAL(cursorPositionChanged()), m_highlighter1, SLOT(rehighlight()) );
-	connect( uiGeneralTab.teEquation2, SIGNAL(textChanged()), this, SLOT(validateExpression()) );
-	connect( uiGeneralTab.teEquation2, SIGNAL(cursorPositionChanged()), m_highlighter2, SLOT(rehighlight()) );
 	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -172,92 +138,6 @@ void XYEquationCurveDock::initGeneralTab() {
 			this, SLOT(curveEquationDataChanged(XYEquationCurve::EquationData)));
 }
 
-/*!
- * Code for the completion adopted from http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
- */
-bool XYEquationCurveDock::eventFilter(QObject* object, QEvent* event){
-	if (event->type()!=QEvent::KeyPress)
-		return false;
-
-	QCompleter* c;
-	QTextEdit* te;
-	if (object==uiGeneralTab.teEquation1) {
-		c = m_completer1;
-		te = uiGeneralTab.teEquation1;
-	} else if (object==uiGeneralTab.teEquation2) {
-		c = m_completer2;
-		te = uiGeneralTab.teEquation2;
-	} else {
-		return false;
-	}
-
-	QKeyEvent* e = dynamic_cast<QKeyEvent*>(event);
-	if (c && c->popup()->isVisible()) {
-         // The following keys are forwarded by the completer to the widget
-        switch (e->key()) {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        case Qt::Key_Escape:
-        case Qt::Key_Tab:
-        case Qt::Key_Backtab:
-//              e->ignore();
-             return false; // let the completer do default behavior
-        default:
-            break;
-        }
-     }
-
-     bool isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_Space); // CTRL+SPACE
-     if (!c || !isShortcut) // do not process the shortcut when we have a completer
-		 return true;
-
-     const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-     if (!c || (ctrlOrShift && e->text().isEmpty()))
-         return false;
-
-     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
-     bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-
-	 QTextCursor tc = te->textCursor();
-     tc.select(QTextCursor::WordUnderCursor);
-     QString completionPrefix = tc.selectedText();
-     if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 1
-                       || eow.contains(e->text().right(1)))) {
-         c->popup()->hide();
-         return false;
-     }
-
-     if (completionPrefix != c->completionPrefix()) {
-         c->setCompletionPrefix(completionPrefix);
-         c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
-     }
-     QRect cr = te->cursorRect();
-     cr.setWidth(c->popup()->sizeHintForColumn(0)
-                 + c->popup()->verticalScrollBar()->sizeHint().width());
-     c->complete(cr); // popup it up!
-
-	 return false;
-}
-
-void XYEquationCurveDock::insertCompletion(const QString& completion) {
-	QTextEdit* te;
-	QCompleter* c;
-	if (QObject::sender() == m_completer1) {
-		te = uiGeneralTab.teEquation1;
-		c = m_completer1;
-	} else {
-		te = uiGeneralTab.teEquation2;
-		c = m_completer2;
-	}
-
-	QTextCursor tc = te->textCursor();
-	int extra = completion.length() - c->completionPrefix().length();
-	tc.movePosition(QTextCursor::Left);
-	tc.movePosition(QTextCursor::EndOfWord);
-	tc.insertText(completion.right(extra));
-	te->setTextCursor(tc);
-}
-
 //*************************************************************
 //**** SLOTs for changes triggered in XYEquationCurveDock *****
 //*************************************************************
@@ -278,7 +158,6 @@ void XYEquationCurveDock::commentChanged(){
 
 void XYEquationCurveDock::typeChanged(int index) {
 	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(index);
-	QStringList vars;
 	if (type==XYEquationCurve::Cartesian) {
 		uiGeneralTab.lEquation1->setText("y=f(x)");
 		uiGeneralTab.lEquation2->hide();
@@ -291,7 +170,6 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.leMax->show();
 		uiGeneralTab.lMin->setText(i18n("x, min"));
 		uiGeneralTab.lMax->setText(i18n("x, max"));
-		vars<<"x";
 	} else if (type==XYEquationCurve::Polar) {
 		uiGeneralTab.lEquation1->setText(QString::fromUtf8("r(φ)"));
 		uiGeneralTab.lEquation2->hide();
@@ -304,7 +182,6 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.leMax->show();
 		uiGeneralTab.lMin->setText(i18n("φ, min"));
 		uiGeneralTab.lMax->setText(i18n("φ, max"));
-		vars<<"phi";
 	} else if (type==XYEquationCurve::Parametric) {
 		uiGeneralTab.lEquation1->setText("x=f(t)");
 		uiGeneralTab.lEquation2->setText("y=f(t)");
@@ -318,7 +195,6 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.leMax->show();
 		uiGeneralTab.lMin->setText(i18n("t, min"));
 		uiGeneralTab.lMax->setText(i18n("t, max"));
-		vars<<"t";
 	} else if (type==XYEquationCurve::Implicit) {
 		uiGeneralTab.lEquation1->setText("f(x,y)");
 		uiGeneralTab.lEquation2->hide();
@@ -329,9 +205,9 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.lMax->hide();
 		uiGeneralTab.leMin->hide();
 		uiGeneralTab.leMax->hide();
-		vars<<"x"<<"y";
 	}
-	m_highlighter1->setVariables(vars);
+
+	uiGeneralTab.teEquation1->setExpressionType(type);
 }
 
 void XYEquationCurveDock::recalculateClicked() {
@@ -343,17 +219,6 @@ void XYEquationCurveDock::recalculateClicked() {
 	data.max = uiGeneralTab.leMax->text();
 	data.count = uiGeneralTab.sbCount->value();
 	m_equationCurve->setEquationData(data);
-}
-
-void XYEquationCurveDock::validateExpression() {
-	QTextEdit* textEdit = dynamic_cast<QTextEdit*>(QObject::sender());
-	Q_ASSERT(textEdit);
-	XYEquationCurve::EquationType type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
-	bool rc = ExpressionParser::getInstance()->isValid(textEdit->document()->toPlainText(), type);
-	if (!rc)
-		textEdit->setStyleSheet("QTextEdit{background: red;}");
-	else
-		textEdit->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
 }
 
 void XYEquationCurveDock::validateExpression(const QString& eq) {

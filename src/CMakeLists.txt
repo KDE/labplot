@@ -33,6 +33,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
+	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
 )
 

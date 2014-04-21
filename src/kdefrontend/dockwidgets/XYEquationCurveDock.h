@@ -46,14 +46,9 @@ public:
 
 private:
 	virtual void initGeneralTab();
-	bool eventFilter(QObject *obj, QEvent *event);
 
 	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
 	XYEquationCurve* m_equationCurve;
-	EquationHighlighter* m_highlighter1;
-	EquationHighlighter* m_highlighter2;
-	QCompleter* m_completer1;
-	QCompleter* m_completer2;
 
 private slots:
 	//SLOTs for changes triggered in XYCurveDock
@@ -61,9 +56,7 @@ private slots:
 	void commentChanged();	
 	void typeChanged(int);
 	void recalculateClicked();
-	void validateExpression();
 	void validateExpression(const QString&);
-	void insertCompletion(const QString&);
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
