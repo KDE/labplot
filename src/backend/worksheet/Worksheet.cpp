@@ -645,6 +645,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "y", QString::number(rect.y()) );
     writer->writeAttribute( "width", QString::number(rect.width()) );
     writer->writeAttribute( "height", QString::number(rect.height()) );
+	writer->writeAttribute( "useViewSize", QString::number(d->useViewSize) );
     writer->writeEndElement();
 
     //layout
@@ -735,6 +736,12 @@ bool Worksheet::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'height'"));
             else
                 rect.setHeight(str.toDouble());
+
+            str = attribs.value("useViewSize").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'useViewSize'"));
+            else
+                d->useViewSize = str.toInt();
         }else if (reader->name() == "layout"){
             attribs = reader->attributes();
 
