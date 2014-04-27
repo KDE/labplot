@@ -5,8 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -63,7 +63,7 @@
  * \class CartesianPlot
  * \brief A xy-plot.
  *
- * 
+ *
  */
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
 	m_legend(0), m_zoomFactor(1.2) {
@@ -81,8 +81,8 @@ CartesianPlot::~CartesianPlot(){
 
 	//don't need to delete objects added with addChild()
 
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem 
-	//and is deleted during the cleanup in QGraphicsScene		
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem
+	//and is deleted during the cleanup in QGraphicsScene
 }
 
 /*!
@@ -91,7 +91,9 @@ CartesianPlot::~CartesianPlot(){
 void CartesianPlot::init(){
 	Q_D(CartesianPlot);
 
-	m_coordinateSystem = new CartesianCoordinateSystem(this);
+	d->cSystem = new CartesianCoordinateSystem(this);;
+	m_coordinateSystem = d->cSystem;
+
 	d->autoScaleX = true;
 	d->autoScaleY = true;
 	d->xScale = ScaleLinear;
@@ -100,18 +102,18 @@ void CartesianPlot::init(){
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling
 	//Factor 1 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
-	d->autoScaleOffsetFactor = 0.05; 
+	d->autoScaleOffsetFactor = 0.05;
 
 	//TODO: make this factor optional.
 	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
-	
+
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
 
 	//offset between the plot area and the area defining the coordinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
-	
+
 	initActions();
 	initMenus();
 
@@ -122,16 +124,16 @@ void CartesianPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);	
+    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
 }
 
 /*!
-	initializes all children of \c CartesianPlot and 
+	initializes all children of \c CartesianPlot and
 	setups a default plot of type \c type with a plot title.
 */
 void CartesianPlot::initDefault(Type type){
 	Q_D(CartesianPlot);
-	
+
 	switch (type) {
 		case FourAxes:
 		{
@@ -197,7 +199,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMinorTicksNumber(1);
 			axis->setLabelsPosition(Axis::NoLabels);
 			axis->title()->setText(QString());
-			
+
 			break;
 		}
 		case TwoAxes:
@@ -228,7 +230,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
-			
+
 			break;
 		}
 		case TwoAxesCentered:
@@ -268,9 +270,9 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
-			
+
 			break;
-		}			
+		}
 		case TwoAxesCenteredZero:
 		{
 			d->xMin = -0.5;
@@ -310,7 +312,7 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
 			axis->title()->setText(QString());
-			
+
 			break;
 		}
 	}
@@ -325,20 +327,30 @@ void CartesianPlot::initDefault(Type type){
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
-	
+
 	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
 	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
 	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
 	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
-	
+
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x,y,w,h);
 	d->retransform();
 }
 
 void CartesianPlot::initActions(){
+	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
+	mouseModeActionGroup->setExclusive(true);
+	selectionModeAction = new KAction(KIcon("xy-curve"), i18n("Select and edit"), mouseModeActionGroup);
+	selectionModeAction->setCheckable(true);
+	selectionModeAction->setChecked(true);
+
+	zoomSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select and zoom in"), mouseModeActionGroup);
+	zoomSelectionModeAction->setCheckable(true);
+	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(mouseModeChanged(QAction*)));
+
 	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
@@ -364,7 +376,7 @@ void CartesianPlot::initActions(){
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
-	
+
 	//zoom actions
 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
@@ -379,10 +391,10 @@ void CartesianPlot::initActions(){
 	connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
 	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
 	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
-	
+
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));	
+	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
 void CartesianPlot::initMenus(){
@@ -393,7 +405,7 @@ void CartesianPlot::initMenus(){
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
 	addNewMenu->addAction(addVerticalAxisAction);
-	
+
 	zoomMenu = new QMenu(i18n("Zoom"));
 	zoomMenu->addAction(scaleAutoAction);
 	zoomMenu->addAction(scaleAutoXAction);
@@ -418,7 +430,7 @@ void CartesianPlot::initMenus(){
 QMenu* CartesianPlot::createContextMenu(){
 	QMenu* menu = AbstractWorksheetElement::createContextMenu();
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = menu->actions().at(1);
@@ -435,13 +447,16 @@ QMenu* CartesianPlot::createContextMenu(){
 }
 
 void CartesianPlot::fillToolBar(QToolBar* toolBar) const{
+	toolBar->addAction(selectionModeAction);
+	toolBar->addAction(zoomSelectionModeAction);
+	toolBar->addSeparator();
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addEquationCurveAction);
 	toolBar->addAction(addLegendAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
 	toolBar->addAction(addVerticalAxisAction);
-	
+	toolBar->addSeparator();
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
 	toolBar->addAction(scaleAutoYAction);
@@ -454,7 +469,7 @@ void CartesianPlot::fillToolBar(QToolBar* toolBar) const{
 	toolBar->addAction(shiftLeftXAction);
 	toolBar->addAction(shiftRightXAction);
 	toolBar->addAction(shiftUpYAction);
-	toolBar->addAction(shiftDownYAction);	
+	toolBar->addAction(shiftDownYAction);
 }
 /*!
 	Returns an icon to be used in the project explorer.
@@ -491,7 +506,7 @@ CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::ScaleBreakings, yScaleB
 //TODO: return here a private variable only, update this variable on rect and padding changes.
 QRectF CartesianPlot::plotRect() {
 	Q_D(const CartesianPlot);
-	QRectF rect = d->mapFromScene(d->rect).boundingRect();
+	QRectF rect = d->mapRectFromScene(d->rect);
 	rect.setX(rect.x() + d->horizontalPadding);
 	rect.setY(rect.y() + d->verticalPadding);
 	rect.setWidth(rect.width() - d->horizontalPadding);
@@ -688,9 +703,20 @@ void CartesianPlot::yDataChanged(){
 		this->scaleAutoY();
 }
 
+void CartesianPlot::mouseModeChanged(QAction* action) {
+	Q_D(CartesianPlot);
+	if (action==selectionModeAction) {
+		d->m_mouseMode = CartesianPlotPrivate::SelectionMode;
+		d->setHandlesChildEvents(false);
+	} else if (action==zoomSelectionModeAction) {
+		d->m_mouseMode = CartesianPlotPrivate::ZoomSelectionMode;
+		d->setHandlesChildEvents(true);
+	}
+}
+
 void CartesianPlot::scaleAutoX(){
 	Q_D(CartesianPlot);
-	
+
 	//loop over all xy-curves and determine the maximum x-value
 	double min = INFINITY;
 	double max = -INFINITY;
@@ -703,7 +729,7 @@ void CartesianPlot::scaleAutoX(){
 			if (curve->xColumn()->minimum() < min)
 				min = curve->xColumn()->minimum();
 		}
-		
+
 		if (curve->xColumn()->maximum() != -INFINITY){
 			if (curve->xColumn()->maximum() > max)
 				max = curve->xColumn()->maximum();
@@ -715,7 +741,7 @@ void CartesianPlot::scaleAutoX(){
 		d->xMin = min;
 		update = true;
 	}
-	
+
 	if (max != d->xMax && max != -INFINITY){
 		d->xMax = max;
 		update = true;
@@ -751,12 +777,12 @@ void CartesianPlot::scaleAutoY(){
 	foreach(XYCurve* curve, children) {
 		if (!curve->yColumn())
 			continue;
-		
+
 		if (curve->yColumn()->minimum() != INFINITY){
 			if (curve->yColumn()->minimum() < min)
 				min = curve->yColumn()->minimum();
 		}
-		
+
 		if (curve->yColumn()->maximum() != -INFINITY){
 			if (curve->yColumn()->maximum() > max)
 				max = curve->yColumn()->maximum();
@@ -768,12 +794,12 @@ void CartesianPlot::scaleAutoY(){
 		d->yMin = min;
 		update = true;
 	}
-	
+
 	if (max != d->yMax && max != -INFINITY){
 		d->yMax = max;
 		update = true;
 	}
-	
+
 	if(update){
 		if (d->yMax == d->yMin){
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
@@ -810,7 +836,7 @@ void CartesianPlot::scaleAuto(){
 			if (curve->xColumn()->minimum() < xMin)
 				xMin = curve->xColumn()->minimum();
 		}
-		
+
 		if (curve->xColumn()->maximum() != -INFINITY){
 			if (curve->xColumn()->maximum() > xMax)
 				xMax = curve->xColumn()->maximum();
@@ -818,16 +844,16 @@ void CartesianPlot::scaleAuto(){
 
 		if (!curve->yColumn())
 			continue;
-		
+
 		if (curve->yColumn()->minimum() != INFINITY){
 			if (curve->yColumn()->minimum() < yMin)
 				yMin = curve->yColumn()->minimum();
 		}
-		
+
 		if (curve->yColumn()->maximum() != -INFINITY){
 			if (curve->yColumn()->maximum() > yMax)
 				yMax = curve->yColumn()->maximum();
-		}		
+		}
 	}
 
 	bool updateX = false;
@@ -998,8 +1024,10 @@ void CartesianPlot::visibilityChanged(){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner) 
-	: AbstractPlotPrivate(owner), q(owner), suppressRetransform(false), m_printing(false) {
+CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
+	: AbstractPlotPrivate(owner), q(owner),suppressRetransform(false),
+	m_printing(false), m_rubberBand(0), cSystem(0),
+	m_mouseMode(SelectionMode){
 }
 
 /*!
@@ -1016,14 +1044,14 @@ void CartesianPlotPrivate::retransform(){
 	qDebug()<<"CartesianPlotPrivate::retransform";
 	prepareGeometryChange();
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
-	
+
 	retransformScales();
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	q->plotArea()->setRect(rect);
 
 	//call retransform() for the title and the legend (if available)
-	//when a predefined position relative to the (Left, Centered etc.) is used, 
+	//when a predefined position relative to the (Left, Centered etc.) is used,
 	//the actual position needs to be updated on plot's geometry changes.
 	q->title()->retransform();
 	if (q->m_legend)
@@ -1034,7 +1062,6 @@ void CartesianPlotPrivate::retransform(){
 
 void CartesianPlotPrivate::retransformScales(){
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
-	CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(plot->coordinateSystem());
 	QList<CartesianCoordinateSystem::Scale*> scales;
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;
 
@@ -1118,7 +1145,7 @@ void CartesianPlotPrivate::retransformScales(){
 	foreach(Axis* axis, childElements){
 		if (!axis->autoScale())
 			continue;
-			
+
 		if (axis->orientation() == Axis::AxisHorizontal){
 			if (deltaXMax!=0)
 				axis->setEnd(xMax, false);
@@ -1139,7 +1166,7 @@ void CartesianPlotPrivate::retransformScales(){
 // 			}
 		}
 	}
-	
+
 	// call retransform() on the parent to trigger the update of all axes and curves
 	q->retransform();
 }
@@ -1205,7 +1232,7 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 		const QPointF& itemPos = value.toPointF();//item's center point in parent's coordinates;
 		float x = itemPos.x();
 		float y = itemPos.y();
-		
+
 		//calculate the new rect and forward the changes to the frontend
 		QRectF newRect;
 		float w = rect.width();
@@ -1219,32 +1246,84 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 	return QGraphicsItem::itemChange(change, value);
 }
 
-void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	//TODO: implement the navigation in plot on mouse move events, 
-	//calculate the position changes and call shift*()-functions
+void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+	QGraphicsItem::mousePressEvent(event);
 
-	QGraphicsItem::mouseMoveEvent(event) ;
+	if (m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomXSelectionMode || m_mouseMode == ZoomYSelectionMode) {
+		QGraphicsItem::mousePressEvent(event);
+		m_zoomStart = event->pos();
+		m_rubberBandStart = event->screenPos();
+		if (!m_rubberBand)
+			m_rubberBand = new QRubberBand(QRubberBand::Rectangle);
+		m_rubberBand->setGeometry(m_rubberBandStart.x(), m_rubberBandStart.y(), 0, 0);
+		m_rubberBand->show();
+	}
+}
+
+void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if (m_mouseMode == SelectionMode) {
+		QGraphicsItem::mouseMoveEvent(event);
+	} else if (m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomXSelectionMode || m_mouseMode == ZoomYSelectionMode) {
+		if( boundingRect().contains(event->pos()) )
+			m_rubberBand->setGeometry(QRect(m_rubberBandStart, event->screenPos()).normalized());
+	}
+	//TODO: implement the navigation in plot on mouse move events,
+	//calculate the position changes and call shift*()-functions
 }
 
 void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	const QPointF& itemPos = pos();//item's center point in parent's coordinates;
-	float x = itemPos.x();
-	float y = itemPos.y();
-	
-	//calculate the new rect and set it
-	QRectF newRect;
-	float w = rect.width();
-	float h = rect.height();
-	newRect.setX(x-w/2);
-	newRect.setY(y-h/2);
-	newRect.setWidth(w);
-	newRect.setHeight(h);
-	
-	suppressRetransform = true;
-	q->setRect(newRect);
-	suppressRetransform = false;	
+	if (m_mouseMode == SelectionMode) {
+		const QPointF& itemPos = pos();//item's center point in parent's coordinates;
+		float x = itemPos.x();
+		float y = itemPos.y();
 
-	QGraphicsItem::mouseReleaseEvent(event);
+		//calculate the new rect and set it
+		QRectF newRect;
+		float w = rect.width();
+		float h = rect.height();
+		newRect.setX(x-w/2);
+		newRect.setY(y-h/2);
+		newRect.setWidth(w);
+		newRect.setHeight(h);
+
+		suppressRetransform = true;
+		q->setRect(newRect);
+		suppressRetransform = false;
+
+		QGraphicsItem::mouseReleaseEvent(event);
+	} else if (m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomSelectionMode) {
+		QPointF zoomEnd = event->pos();
+
+		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
+		if ( abs(zoomEnd.x()-m_zoomStart.x())<20 || abs(zoomEnd.y()-m_zoomStart.y())<20 ) {
+			m_rubberBand->hide();
+			return;
+		}
+
+		//determine the new plot ranges
+		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_zoomStart, AbstractCoordinateSystem::SuppressPageClipping);
+		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(zoomEnd, AbstractCoordinateSystem::SuppressPageClipping);
+		if (zoomEnd.x()>m_zoomStart.x()) {
+			xMin = logicalZoomStart.x();
+			xMax = logicalZoomEnd.x();
+		} else {
+			xMin = logicalZoomEnd.x();
+			xMax = logicalZoomStart.x();
+		}
+
+		if (zoomEnd.y()>m_zoomStart.y()) {
+			yMin = logicalZoomEnd.y();
+			yMax = logicalZoomStart.y();
+		} else {
+			yMin = logicalZoomStart.y();
+			yMax = logicalZoomEnd.y();
+		}
+
+	// 	qDebug()<< "zoom start " << logicalStart;
+	// 	qDebug()<< "zoom end " << logicalEnd;
+		retransformScales();
+		m_rubberBand->hide();
+	}
 }
 
 void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
@@ -1256,7 +1335,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	foreach(Axis* axis, axes){
 		if (!axis->graphicsItem()->isSelected())
 			continue;
-			
+
 		if (axis->orientation() == Axis::AxisHorizontal)
 			zoomX  = true;
 		else
@@ -1282,16 +1361,15 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	}
 }
 
-void CartesianPlotPrivate::hoverMoveEvent ( QGraphicsSceneHoverEvent * event ){
+void CartesianPlotPrivate::hoverMoveEvent (QGraphicsSceneHoverEvent* event){
 	QPointF point = event->pos();
 	if (q->plotRect().contains(point)){
-		CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(q->coordinateSystem());
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 		QString info = "x=" + QString::number(logicalPoint.x()) + ", y=" + QString::number(logicalPoint.y());
 		q->info(info);
 	}
 
-	QGraphicsItem::hoverMoveEvent(event) ;
+	QGraphicsItem::hoverMoveEvent(event);
 }
 
 //##############################################################################
@@ -1314,7 +1392,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "height", QString::number(d->rect.height()) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
-	
+
 	//coordinate system and padding
 	writer->writeStartElement( "coordinateSystem" );
 	writer->writeAttribute( "autoScaleX", QString::number(d->autoScaleX) );
@@ -1397,7 +1475,7 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 				return false;
 		}else if(reader->name() == "geometry"){
             attribs = reader->attributes();
-	
+
             str = attribs.value("x").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'x'"));
@@ -1409,13 +1487,13 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'y'"));
             else
                 d->rect.setY( str.toDouble() );
-			
+
 			str = attribs.value("width").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'width'"));
             else
                 d->rect.setWidth( str.toDouble() );
-			
+
 			str = attribs.value("height").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'height'"));
@@ -1426,7 +1504,7 @@ bool CartesianPlot::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'visible'"));
             else
-                d->setVisible(str.toInt());			
+                d->setVisible(str.toInt());
 		}else if(reader->name() == "coordinateSystem"){
             attribs = reader->attributes();
 
@@ -1491,12 +1569,12 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
             else
                 d->horizontalPadding = str.toDouble();
-			
+
             str = attribs.value("verticalPadding").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
             else
-                d->verticalPadding = str.toDouble();	
+                d->verticalPadding = str.toDouble();
         }else if(reader->name() == "textLabel"){
             m_title = new TextLabel("");
             if (!m_title->load(reader)){

@@ -4,7 +4,7 @@
     Description          : Private members of CartesianPlot.
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,13 +36,17 @@
 #include <QGraphicsSceneWheelEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsItem>
+#include <QRubberBand>
 
 class CartesianPlotPrivate:public AbstractPlotPrivate{
     public:
-		CartesianPlotPrivate(CartesianPlot *owner);
+		CartesianPlotPrivate(CartesianPlot* owner);
 		CartesianPlot* const q;
 
+		enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
+
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
 		virtual void wheelEvent(QGraphicsSceneWheelEvent*);
@@ -67,6 +71,11 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 
 		bool suppressRetransform;
 		bool m_printing;
+		QRubberBand* m_rubberBand;
+		QPoint m_rubberBandStart;
+		QPointF m_zoomStart;
+		CartesianCoordinateSystem* cSystem;
+		MouseMode m_mouseMode;
 };
 
 #endif

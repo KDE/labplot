@@ -97,6 +97,11 @@ class CartesianPlot:public AbstractPlot{
 
 		QAction* visibilityAction;
 
+		QAction* selectionModeAction;
+		QAction* zoomSelectionModeAction;
+		QAction* xZoomSelectionModeAction;
+		QAction* yZoomSelectionModeAction;
+
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addHorizontalAxisAction;
@@ -134,6 +139,7 @@ class CartesianPlot:public AbstractPlot{
 		void xDataChanged();
 		void yDataChanged();
 
+		void mouseModeChanged(QAction*);
 		void scaleAuto();
 		void scaleAutoX();
 		void scaleAutoY();

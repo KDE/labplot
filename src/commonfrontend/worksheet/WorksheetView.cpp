@@ -87,6 +87,11 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 	setMinimumSize(16, 16);
 	setFocusPolicy(Qt::StrongFocus);
 
+	if (m_worksheet->useViewSize()) {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	}
+
 	viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
 	viewport()->setAttribute( Qt::WA_NoSystemBackground );
 	setAcceptDrops( true );

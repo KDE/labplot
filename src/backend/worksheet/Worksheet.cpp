@@ -4,9 +4,9 @@
     Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-	Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+	Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -51,12 +51,12 @@
 #endif
 #include <KLocale>
 
-	
+
 /**
  * \class Worksheet
- * \brief The plotting part. 
+ * \brief The plotting part.
  *
- * Top-level container for WorksheetElements. 
+ * Top-level container for WorksheetElements.
  *
  * * \ingroup worksheet
  */
@@ -218,7 +218,7 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const Abstract
 	Q_UNUSED(child);
 
 	if (d->layout != Worksheet::NoLayout)
-		d->updateLayout();	
+		d->updateLayout();
 }
 
 QGraphicsScene *Worksheet::scene() const {
@@ -231,7 +231,7 @@ QRectF Worksheet::pageRect() const {
 
 /*!
 	this slot is called when a worksheet element is selected in the project explorer.
-	emits \c itemSelected() which forwards this event to the \c WorksheetView 
+	emits \c itemSelected() which forwards this event to the \c WorksheetView
 	in order to select the corresponding \c QGraphicsItem.
  */
 void Worksheet::childSelected(const AbstractAspect* aspect){
@@ -242,7 +242,7 @@ void Worksheet::childSelected(const AbstractAspect* aspect){
 
 /*!
 	this slot is called when a worksheet element is deselected in the project explorer.
-	emits \c itemDeselected() which forwards this event to \c WorksheetView 
+	emits \c itemDeselected() which forwards this event to \c WorksheetView
 	in order to deselect the corresponding \c QGraphicsItem.
  */
 void Worksheet::childDeselected(const AbstractAspect* aspect){
@@ -252,7 +252,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect){
 }
 
 /*!
- *  Emits the signal to select or to deselect the aspect corresponding to \c QGraphicsItem \c item in the project explorer, 
+ *  Emits the signal to select or to deselect the aspect corresponding to \c QGraphicsItem \c item in the project explorer,
  *  if \c selected=true or \c selected=false, respectively.
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
  * This function is called in \c WorksheetView upon selection changes.
@@ -366,7 +366,7 @@ void Worksheet::setUseViewSize(bool useViewSize){
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
 void Worksheet::setScaleContent(bool scaleContent){
 	if (scaleContent != d->scaleContent)
-		exec(new WorksheetSetScaleContentCmd(d, scaleContent, i18n("%1: change \"scale layout\" property")));
+		exec(new WorksheetSetScaleContentCmd(d, scaleContent, i18n("%1: change \"rescale the content\" property")));
 }
 
 /* ============================ setter methods and undo commands  for background options  ================= */
@@ -512,7 +512,7 @@ class WorksheetSetPageRectCmd : public StandardMacroSetterCmd<Worksheet::Private
 		m_target->m_scene->setSceneRect(m_target->*m_field);
 		m_target->q->pageRectChanged(m_target->*m_field);
 	}
-}; 
+};
 
 void Worksheet::setPageRect(const QRectF& rect) {
 	//don't allow any rectangulars of width/height equal to zero
@@ -522,9 +522,15 @@ void Worksheet::setPageRect(const QRectF& rect) {
 	}
 
 	if (rect != d->pageRect) {
-		beginMacro(i18n("%1: set page size", name()));
-		exec(new WorksheetSetPageRectCmd(d, rect, i18n("%1: set page size")));
-		endMacro();
+		if (!d->useViewSize) {
+			beginMacro(i18n("%1: set page size", name()));
+			exec(new WorksheetSetPageRectCmd(d, rect, i18n("%1: set page size")));
+			endMacro();
+		} else {
+			d->pageRect = rect;
+			d->updatePageRect();
+			pageRectChanged(d->pageRect);
+		}
 	}
 }
 
@@ -552,16 +558,26 @@ void WorksheetPrivate::updatePageRect() {
 	QRectF oldRect = m_scene->sceneRect();
 	m_scene->setSceneRect(pageRect);
 
-	if (scaleContent) {
-		qreal horizontalRatio = pageRect.width() / oldRect.width();
-		qreal verticalRatio = pageRect.height() / oldRect.height();				
-		QList<AbstractWorksheetElement*> childElements = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden);
-		foreach(AbstractWorksheetElement* elem, childElements)
-			elem->handlePageResize(horizontalRatio, verticalRatio);
-	}
-	
-	if (layout != Worksheet::NoLayout)
+	if (layout != Worksheet::NoLayout) {
 		updateLayout();
+	} else {
+		if (scaleContent) {
+			qreal horizontalRatio = pageRect.width() / oldRect.width();
+			qreal verticalRatio = pageRect.height() / oldRect.height();
+			QList<AbstractWorksheetElement*> childElements = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden);
+			if (useViewSize) {
+				//don't make the change of the geometry undoable/redoable if the view size is used.
+				foreach(AbstractWorksheetElement* elem, childElements) {
+					elem->setUndoAware(false);
+					elem->handlePageResize(horizontalRatio, verticalRatio);
+					elem->setUndoAware(true);
+				}
+			} else {
+				foreach(AbstractWorksheetElement* elem, childElements)
+					elem->handlePageResize(horizontalRatio, verticalRatio);
+			}
+		}
+	}
 }
 
 void WorksheetPrivate::update(){
@@ -590,7 +606,13 @@ void WorksheetPrivate::updateLayout(){
 		w= m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
 		foreach(WorksheetElementContainer* elem, list){
-			elem->setRect(QRectF(x,y,w,h));
+			if (useViewSize) {
+				elem->setUndoAware(false);
+				elem->setRect(QRectF(x,y,w,h));
+				elem->setUndoAware(true);
+			} else {
+				elem->setRect(QRectF(x,y,w,h));
+			}
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 			y+=h + layoutVerticalSpacing;
 		}
@@ -598,7 +620,13 @@ void WorksheetPrivate::updateLayout(){
 		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
 		h= m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
 		foreach(WorksheetElementContainer* elem, list){
-			elem->setRect(QRectF(x,y,w,h));
+			if (useViewSize) {
+				elem->setUndoAware(false);
+				elem->setRect(QRectF(x,y,w,h));
+				elem->setUndoAware(true);
+			} else {
+				elem->setRect(QRectF(x,y,w,h));
+			}
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 			x+=w + layoutHorizontalSpacing;
 		}
@@ -608,12 +636,18 @@ void WorksheetPrivate::updateLayout(){
 			layoutRowCount = floor( (float)count/layoutColumnCount + 0.5);
 			emit q->layoutRowCountChanged(layoutRowCount);
 		}
-		
+
 		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
 		int columnIndex=0; //counts the columns in a row
 		foreach(WorksheetElementContainer* elem, list){
-			elem->setRect(QRectF(x,y,w,h));
+			if (useViewSize) {
+				elem->setUndoAware(false);
+				elem->setRect(QRectF(x,y,w,h));
+				elem->setUndoAware(true);
+			} else {
+				elem->setRect(QRectF(x,y,w,h));
+			}
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 			x+=w + layoutHorizontalSpacing;
 			columnIndex++;
