@@ -46,7 +46,7 @@
 #include <QDebug>
 #include <QMenu>
 #include <QToolBar>
-
+#include <QGraphicsView>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -347,8 +347,15 @@ void CartesianPlot::initActions(){
 	selectionModeAction->setCheckable(true);
 	selectionModeAction->setChecked(true);
 
-	zoomSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select and zoom in"), mouseModeActionGroup);
+	zoomSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select region and zoom in"), mouseModeActionGroup);
 	zoomSelectionModeAction->setCheckable(true);
+
+	zoomXSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select x-region and zoom in"), mouseModeActionGroup);
+	zoomXSelectionModeAction->setCheckable(true);
+
+	zoomYSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select y-region and zoom in"), mouseModeActionGroup);
+	zoomYSelectionModeAction->setCheckable(true);
+
 	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(mouseModeChanged(QAction*)));
 
 	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
@@ -449,6 +456,8 @@ QMenu* CartesianPlot::createContextMenu(){
 void CartesianPlot::fillToolBar(QToolBar* toolBar) const{
 	toolBar->addAction(selectionModeAction);
 	toolBar->addAction(zoomSelectionModeAction);
+	toolBar->addAction(zoomXSelectionModeAction);
+	toolBar->addAction(zoomYSelectionModeAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addEquationCurveAction);
@@ -711,7 +720,14 @@ void CartesianPlot::mouseModeChanged(QAction* action) {
 	} else if (action==zoomSelectionModeAction) {
 		d->m_mouseMode = CartesianPlotPrivate::ZoomSelectionMode;
 		d->setHandlesChildEvents(true);
+	} else if (action==zoomXSelectionModeAction) {
+		d->m_mouseMode = CartesianPlotPrivate::ZoomXSelectionMode;
+		d->setHandlesChildEvents(true);
+	} else if (action==zoomYSelectionModeAction) {
+		d->m_mouseMode = CartesianPlotPrivate::ZoomYSelectionMode;
+		d->setHandlesChildEvents(true);
 	}
+	qDebug() << "mode " << d->m_mouseMode;
 }
 
 void CartesianPlot::scaleAutoX(){
@@ -1247,16 +1263,39 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 }
 
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-	QGraphicsItem::mousePressEvent(event);
-
 	if (m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomXSelectionMode || m_mouseMode == ZoomYSelectionMode) {
-		QGraphicsItem::mousePressEvent(event);
-		m_zoomStart = event->pos();
-		m_rubberBandStart = event->screenPos();
-		if (!m_rubberBand)
+		if (!m_rubberBand) {
 			m_rubberBand = new QRubberBand(QRubberBand::Rectangle);
+			QPalette pal;
+			pal.setBrush(QPalette::Highlight, QBrush(Qt::red));
+			m_rubberBand->setPalette(pal);
+		}
+
+		if (m_mouseMode==ZoomSelectionMode) {
+			m_zoomStart = event->pos();
+			m_rubberBandStart = event->screenPos();
+		} else if (m_mouseMode==ZoomXSelectionMode) {
+			//determine the start point of the selection band in item's coordinates first (set y to the current maximal value),
+			//and map the start point to global coordinates (=m_rubberBandStart)
+			float ymax = cSystem->mapLogicalToScene(QPointF(0, yMax), AbstractCoordinateSystem::SuppressPageClipping).y();
+			m_zoomStart.setX(event->pos().x());
+			m_zoomStart.setY(ymax);
+			QGraphicsView* view = scene()->views().first();
+			m_rubberBandStart  = view->viewport()->mapToGlobal( view->mapFromScene(mapToScene(m_zoomStart)) );
+		} else if (m_mouseMode==ZoomYSelectionMode) {
+			//determine the start point of the selection band in item's coordinates first (set x to the current minimal value),
+			//and map the start point to global coordinates (=m_rubberBandStart)
+			float xmin = cSystem->mapLogicalToScene(QPointF(xMin, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
+			m_zoomStart.setX(xmin);
+			m_zoomStart.setY(event->pos().y());
+			QGraphicsView* view = scene()->views().first();
+			m_rubberBandStart  = view->viewport()->mapToGlobal( view->mapFromScene(mapToScene(m_zoomStart)) );
+		}
+
 		m_rubberBand->setGeometry(m_rubberBandStart.x(), m_rubberBandStart.y(), 0, 0);
 		m_rubberBand->show();
+	} else {
+		QGraphicsItem::mousePressEvent(event);
 	}
 }
 
@@ -1264,9 +1303,27 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (m_mouseMode == SelectionMode) {
 		QGraphicsItem::mouseMoveEvent(event);
 	} else if (m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomXSelectionMode || m_mouseMode == ZoomYSelectionMode) {
-		if( boundingRect().contains(event->pos()) )
-			m_rubberBand->setGeometry(QRect(m_rubberBandStart, event->screenPos()).normalized());
+		if ( !boundingRect().contains(event->pos()) )
+			return;
+
+		QPoint rubberBandEnd;
+		QGraphicsView* view = scene()->views().first();
+		if (m_mouseMode==ZoomSelectionMode) {
+			rubberBandEnd = event->screenPos();
+		} else if (m_mouseMode==ZoomXSelectionMode) {
+			//determine the end point of the selection band in item's coordinates first (set y to the current minimal value),
+			//and map the end point to global coordinates (=m_rubberBandStart)
+			float ymin = cSystem->mapLogicalToScene(QPointF(0, yMin), AbstractCoordinateSystem::SuppressPageClipping).y();
+			rubberBandEnd = view->viewport()->mapToGlobal( view->mapFromScene(mapToScene(QPoint(event->pos().x(), ymin))) );
+		} else if (m_mouseMode==ZoomYSelectionMode) {
+			//determine the end point of the selection band in item's coordinates first (set x to the current maximal value),
+			//and map the end point to global coordinates (=m_rubberBandStart)
+			float xmax = cSystem->mapLogicalToScene(QPointF(xMax, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
+			rubberBandEnd = view->viewport()->mapToGlobal( view->mapFromScene(mapToScene(QPoint(xmax, event->pos().y()))) );
+		}
+		m_rubberBand->setGeometry(QRect(m_rubberBandStart, rubberBandEnd).normalized());
 	}
+
 	//TODO: implement the navigation in plot on mouse move events,
 	//calculate the position changes and call shift*()-functions
 }
@@ -1291,8 +1348,19 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		suppressRetransform = false;
 
 		QGraphicsItem::mouseReleaseEvent(event);
-	} else if (m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomSelectionMode) {
-		QPointF zoomEnd = event->pos();
+	} else if (m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomXSelectionMode || m_mouseMode == ZoomYSelectionMode) {
+		QPointF zoomEnd;
+		if (m_mouseMode == ZoomSelectionMode) {
+			zoomEnd = event->pos();
+		} else if (m_mouseMode == ZoomXSelectionMode ) {
+			zoomEnd.setX(event->pos().x());
+			float ymin = cSystem->mapLogicalToScene(QPointF(0, yMin), AbstractCoordinateSystem::SuppressPageClipping).y();
+			zoomEnd.setY(ymin);
+		} else if (m_mouseMode == ZoomYSelectionMode ) {
+			float xmax = cSystem->mapLogicalToScene(QPointF(xMax, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
+			zoomEnd.setX(xmax);
+			zoomEnd.setY(event->pos().y());
+		}
 
 		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
 		if ( abs(zoomEnd.x()-m_zoomStart.x())<20 || abs(zoomEnd.y()-m_zoomStart.y())<20 ) {
@@ -1319,8 +1387,6 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 			yMax = logicalZoomEnd.y();
 		}
 
-	// 	qDebug()<< "zoom start " << logicalStart;
-	// 	qDebug()<< "zoom end " << logicalEnd;
 		retransformScales();
 		m_rubberBand->hide();
 	}

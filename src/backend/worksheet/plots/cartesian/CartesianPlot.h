@@ -3,9 +3,8 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -69,10 +68,10 @@ class CartesianPlot:public AbstractPlot{
 		void fillToolBar(QToolBar*) const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
-		
+
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-		
+
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
 		BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
@@ -99,8 +98,8 @@ class CartesianPlot:public AbstractPlot{
 
 		QAction* selectionModeAction;
 		QAction* zoomSelectionModeAction;
-		QAction* xZoomSelectionModeAction;
-		QAction* yZoomSelectionModeAction;
+		QAction* zoomXSelectionModeAction;
+		QAction* zoomYSelectionModeAction;
 
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
@@ -121,7 +120,7 @@ class CartesianPlot:public AbstractPlot{
 		QAction* shiftRightXAction;
 		QAction* shiftUpYAction;
 		QAction* shiftDownYAction;
-		
+
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
 
