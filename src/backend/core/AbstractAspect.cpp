@@ -51,7 +51,7 @@
 #include <KMenu>
 #endif
 /**
- * \class AbstractAspect 
+ * \class AbstractAspect
  * \brief Base class of all persistent objects in a Project.
  *
  * Before going into the details, it's useful to understand the ideas behind the
@@ -85,7 +85,7 @@
 
 /**
  * \enum AbstractAspect::ChildIndexFlag
- * \brief Flags which control numbering scheme of children. 
+ * \brief Flags which control numbering scheme of children.
  */
 /**
  * \var AbstractAspect::IncludeHidden
@@ -148,7 +148,7 @@
  */
 
 /**
- * \fn virtual QString AbstractAspect::path() const 
+ * \fn virtual QString AbstractAspect::path() const
  * \brief Return the path that leads from the top-most Aspect (usually a Project) to me.
  */
 
@@ -226,7 +226,7 @@
  * \fn protected virtual void childDeselected(const AbstractAspect*)
  * \brief called when a child's child aspect was deselected in the model
  */
-		
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // start of AbstractAspect implementation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -406,12 +406,12 @@ void AbstractAspect::reparent(AbstractAspect* new_parent, int new_index) {
 	if (new_index == -1)
 		new_index = max_index;
 	Q_ASSERT(new_index >= 0 && new_index <= max_index);
-	
+
 	AbstractAspect * old_parent = parentAspect();
 	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
 	AbstractAspect* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
 	AbstractAspect* new_sibling = new_parent->child<AbstractAspect>(new_index, IncludeHidden);
-	
+
 	//TODO check/test this!
 	emit aspectAboutToBeRemoved(this);
 	emit new_parent->aspectAboutToBeAdded(new_parent, new_sibling, this);
@@ -474,12 +474,13 @@ void AbstractAspect::exec(QUndoCommand *cmd)
 			cmd->redo();
 			delete cmd;
 		}
+
+		if (project())
+			project()->setChanged(true);
 	} else {
 		cmd->redo();
-		delete cmd;		
+		delete cmd;
 	}
-	if (project())
-		project()->setChanged(true);
 }
 
 /**
@@ -552,7 +553,7 @@ void AbstractAspect::setName(const QString &value) {
 
 	if (value == m_aspect_private->m_name)
 		return;
-	
+
 	QString new_name;
 	if (m_aspect_private->m_parent) {
 		new_name = m_aspect_private->m_parent->uniqueNameFor(value);
@@ -561,7 +562,7 @@ void AbstractAspect::setName(const QString &value) {
 	} else {
 		new_name = value;
 	}
-	
+
 	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", m_aspect_private->m_name, new_name),
 				&m_aspect_private->m_name, new_name),
 			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
@@ -642,7 +643,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//forward the signal to the highest possible level in the parent-child hierarch
 	//e.g. axis of a plot was selected. don't include folders here
 	if (aspect->parentAspect() != 0 && !aspect->parentAspect()->inherits("Folder"))
-		emit aspect->parentAspect()->deselected(aspect);	
+		emit aspect->parentAspect()->deselected(aspect);
 }
 
 /**
@@ -689,9 +690,9 @@ Folder * AbstractAspect::folder()
 {
 	if(inherits("Folder")) return static_cast<Folder *>(this);
 	AbstractAspect * parent_aspect = parentAspect();
-	while(parent_aspect && !parent_aspect->inherits("Folder")) 
+	while(parent_aspect && !parent_aspect->inherits("Folder"))
 		parent_aspect = parent_aspect->parentAspect();
-	return static_cast<Folder *>(parent_aspect);	
+	return static_cast<Folder *>(parent_aspect);
 }
 
 /**

@@ -75,7 +75,8 @@ class Project::Private {
 			version(LVERSION),
 			author(QString(qgetenv("USER"))),
 			modificationTime(QDateTime::currentDateTime()),
-			changed(false)
+			changed(false),
+			loading(false)
 			{}
 
 		QUndoStack undo_stack;
@@ -86,6 +87,7 @@ class Project::Private {
 		QString author;
 		QDateTime modificationTime;
 		bool changed;
+		bool loading;
 };
 
 Project::Project() : Folder(i18n("Project")), d(new Private()) {
@@ -94,13 +96,15 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 	KConfigGroup group = config.group("Project");
 
 	d->author = group.readEntry("Author", QString());
-	
+
 	//we don't have direct access to the members name and comment
 	//->temporaly disable the undo stack and call the setters
 	setUndoAware(false);
+	d->loading = true;
 	setName(group.readEntry("Name", i18n("Project")));
 	setComment(group.readEntry("Comment", QString()));
 	setUndoAware(true);
+	d->loading = false;
 	d->changed = false;
 
 #ifndef SUPPRESS_SCRIPTING_INIT
@@ -154,17 +158,23 @@ CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 
 void Project::setChanged(const bool value) {
+	if (d->loading)
+		return;
+
 	if ( value && !d->changed )
 		emit changed();
-	
+
 	d->changed = value;
 }
 
 bool Project ::hasChanged() const {
 	return d->changed ;
-} 
+}
 
 void Project::descriptionChanged(const AbstractAspect* aspect) {
+	if (d->loading)
+		return;
+
 	if (this!=aspect)
 		return;
 
@@ -206,7 +216,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 	//save the state of the views (visible, maximized/minimized/geometry)
 	//and the state of the project explorer (expanded items, currently selected item)
 	emit requestSaveState(writer);
-	
+
 	writer->writeEndElement();
 	writer->writeEndDocument();
 }
@@ -215,6 +225,7 @@ void Project::save(QXmlStreamWriter* writer) const {
  * \brief Load from XML
  */
 bool Project::load(XmlStreamReader* reader) {
+	d->loading = true;
 	emit loadStarted();
 
 	while (!(reader->isStartDocument() || reader->atEnd()))
@@ -248,7 +259,7 @@ bool Project::load(XmlStreamReader* reader) {
 							return false;
 					} else if(reader->name() == "state") {
 						//load the state of the views (visible, maximized/minimized/geometry)
-						//and the state of the project explorer (expanded items, currently selected item)						
+						//and the state of the project explorer (expanded items, currently selected item)
 						emit requestLoadState(reader);
 					} else {
 						reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
@@ -300,6 +311,7 @@ bool Project::load(XmlStreamReader* reader) {
 		reader->raiseError(i18n("no valid XML document found"));
 	}
 
+	d->loading = false;
 	emit loadFinished();
 	return !reader->hasError();
 }
