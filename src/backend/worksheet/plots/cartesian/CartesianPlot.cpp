@@ -350,10 +350,10 @@ void CartesianPlot::initActions(){
 	zoomSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select region and zoom in"), mouseModeActionGroup);
 	zoomSelectionModeAction->setCheckable(true);
 
-	zoomXSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select x-region and zoom in"), mouseModeActionGroup);
+	zoomXSelectionModeAction = new KAction(KIcon("zoom-select-x"), i18n("Select x-region and zoom in"), mouseModeActionGroup);
 	zoomXSelectionModeAction->setCheckable(true);
 
-	zoomYSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select y-region and zoom in"), mouseModeActionGroup);
+	zoomYSelectionModeAction = new KAction(KIcon("zoom-select-y"), i18n("Select y-region and zoom in"), mouseModeActionGroup);
 	zoomYSelectionModeAction->setCheckable(true);
 
 	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(mouseModeChanged(QAction*)));
@@ -727,7 +727,16 @@ void CartesianPlot::mouseModeChanged(QAction* action) {
 		d->m_mouseMode = CartesianPlotPrivate::ZoomYSelectionMode;
 		d->setHandlesChildEvents(true);
 	}
-	qDebug() << "mode " << d->m_mouseMode;
+
+	QList<QGraphicsItem*> items = d->childItems();
+	if (d->m_mouseMode == CartesianPlotPrivate::SelectionMode) {
+		foreach(QGraphicsItem* item, items)
+			item->setFlag(QGraphicsItem::ItemStacksBehindParent, false);
+	} else {
+		foreach(QGraphicsItem* item, items)
+			item->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
+	}
+	d->update();
 }
 
 void CartesianPlot::scaleAutoX(){
@@ -1303,6 +1312,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (m_mouseMode == SelectionMode) {
 		QGraphicsItem::mouseMoveEvent(event);
 	} else if (m_mouseMode == ZoomSelectionMode || m_mouseMode == ZoomXSelectionMode || m_mouseMode == ZoomYSelectionMode) {
+		QGraphicsItem::mouseMoveEvent(event);
 		if ( !boundingRect().contains(event->pos()) )
 			return;
 
@@ -1323,6 +1333,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		}
 		m_rubberBand->setGeometry(QRect(m_rubberBandStart, rubberBandEnd).normalized());
 	}
+
 
 	//TODO: implement the navigation in plot on mouse move events,
 	//calculate the position changes and call shift*()-functions
@@ -1433,9 +1444,35 @@ void CartesianPlotPrivate::hoverMoveEvent (QGraphicsSceneHoverEvent* event){
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 		QString info = "x=" + QString::number(logicalPoint.x()) + ", y=" + QString::number(logicalPoint.y());
 		q->info(info);
+		if (m_mouseMode == ZoomXSelectionMode && (!m_rubberBand || !m_rubberBand->isVisible())) {
+			QPointF p1(logicalPoint.x(), yMin);
+			QPointF p2(logicalPoint.x(), yMax);
+			m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1));
+			m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2));
+			update();
+		} else if (m_mouseMode == ZoomYSelectionMode && (!m_rubberBand || !m_rubberBand->isVisible())) {
+			QPointF p1(xMin, logicalPoint.y());
+			QPointF p2(xMax, logicalPoint.y());
+			m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1));
+			m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2));
+			update();
+		}
 	}
 
 	QGraphicsItem::hoverMoveEvent(event);
+}
+
+void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+	if (!isVisible())
+		return;
+
+	painter->setPen(QPen(Qt::black, 3));
+	if ( (m_mouseMode == ZoomXSelectionMode || m_mouseMode == ZoomYSelectionMode)
+		&& (!m_rubberBand || !m_rubberBand->isVisible())) {
+		painter->drawLine(m_selectionStartLine);
+	}
+
+	WorksheetElementContainerPrivate::paint(painter, option, widget);
 }
 
 //##############################################################################

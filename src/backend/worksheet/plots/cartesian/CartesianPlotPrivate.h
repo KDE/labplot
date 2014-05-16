@@ -51,6 +51,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
 		virtual void wheelEvent(QGraphicsSceneWheelEvent*);
 		virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
 		virtual void retransform();
 		void retransformScales();
@@ -76,6 +77,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		QPointF m_zoomStart;
 		CartesianCoordinateSystem* cSystem;
 		MouseMode m_mouseMode;
+		QLineF m_selectionStartLine;
 };
 
 #endif

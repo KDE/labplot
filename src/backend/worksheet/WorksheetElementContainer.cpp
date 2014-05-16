@@ -5,8 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -51,7 +51,7 @@
  *
  */
 
-WorksheetElementContainer::WorksheetElementContainer(const QString &name) 
+WorksheetElementContainer::WorksheetElementContainer(const QString &name)
 	: AbstractWorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
@@ -84,23 +84,23 @@ void WorksheetElementContainer::setVisible(bool on){
 	Q_D(WorksheetElementContainer);
 
 	beginMacro(on ? i18n("%1: set visible", name()) : i18n("%1: set invisible", name()));
-	
-	//take care of proper ordering on the undo-stack, 
+
+	//take care of proper ordering on the undo-stack,
 	//when making the container and all its children visible/invisible.
 	//if visible is set true, change the visibility of the container first
 	if (on)
-    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));		
+    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 
 	//change the visibility of all children
 	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(AbstractWorksheetElement *elem, childList){
 		elem->setVisible(on);
 	}
-	
+
 	//if visible is set false, change the visibility of the container last
 	if (!on)
-    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));		
-	
+    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+
 	endMacro();
 }
 
@@ -112,7 +112,7 @@ bool WorksheetElementContainer::isVisible() const {
 bool WorksheetElementContainer::isFullyVisible() const {
 	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(const AbstractWorksheetElement *elem, childList) {
-		if (!elem->isVisible()) 
+		if (!elem->isVisible())
 			return false;
 	}
 	return true;
@@ -201,12 +201,12 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 	return rect;
 }
- 
+
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
-	
+
 	if (!isVisible())
 		return;
 
@@ -214,7 +214,7 @@ void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOpti
 		painter->setPen(QPen(QColor(128,179,255), 10, Qt::SolidLine));
 		painter->drawRect(boundingRect());
 	}
-	
+
 	if (isSelected() && !m_printing){
 		painter->setPen(QPen(Qt::blue, 10, Qt::SolidLine));
 		painter->drawRect(boundingRect());
