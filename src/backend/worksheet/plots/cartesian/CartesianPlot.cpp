@@ -715,15 +715,19 @@ void CartesianPlot::yDataChanged(){
 void CartesianPlot::mouseModeChanged(QAction* action) {
 	Q_D(CartesianPlot);
 	if (action==selectionModeAction) {
+		d->scene()->views().first()->setCursor(Qt::ArrowCursor);
 		d->m_mouseMode = CartesianPlotPrivate::SelectionMode;
 		d->setHandlesChildEvents(false);
 	} else if (action==zoomSelectionModeAction) {
+		d->scene()->views().first()->setCursor(Qt::CrossCursor);
 		d->m_mouseMode = CartesianPlotPrivate::ZoomSelectionMode;
 		d->setHandlesChildEvents(true);
 	} else if (action==zoomXSelectionModeAction) {
+		d->scene()->views().first()->setCursor(Qt::SizeHorCursor);
 		d->m_mouseMode = CartesianPlotPrivate::ZoomXSelectionMode;
 		d->setHandlesChildEvents(true);
 	} else if (action==zoomYSelectionModeAction) {
+		d->scene()->views().first()->setCursor(Qt::SizeVerCursor);
 		d->m_mouseMode = CartesianPlotPrivate::ZoomYSelectionMode;
 		d->setHandlesChildEvents(true);
 	}
@@ -1457,6 +1461,8 @@ void CartesianPlotPrivate::hoverMoveEvent (QGraphicsSceneHoverEvent* event){
 			m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2));
 			update();
 		}
+	} else {
+		q->info("");
 	}
 
 	QGraphicsItem::hoverMoveEvent(event);
