@@ -1,9 +1,9 @@
 /***************************************************************************
-    File             : XYEquationCurveDock.h
-    Project          : LabPlot
+    File                 : ConstansWidget.h
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Description      : widget for editing properties of equation curves
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Description          : widget for selecting constants
 
  ***************************************************************************/
 
@@ -25,45 +25,34 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef CONSTANTSWIDGET_H
+#define CONSTANTSWIDGET_H
+#include <QWidget>
+// #include <QString>
+#include <QStringList>
 
-#ifndef XYEQUATIONCURVEDOCK_H
-#define XYEQUATIONCURVEDOCK_H
+#include "ui_constantswidget.h"
 
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "ui_xyequationcurvedockgeneraltab.h"
+class ExpressionParser;
 
-class EquationHighlighter;
-class QCompleter;
-
-class XYEquationCurveDock: public XYCurveDock {
+class ConstantsWidget: public QWidget{
 	Q_OBJECT
 
 public:
-	explicit XYEquationCurveDock(QWidget *parent);
-	virtual void setupGeneral();
-	void setCurves(QList<XYCurve*>);
+	explicit ConstantsWidget(QWidget *);
 
 private:
-	virtual void initGeneralTab();
+	Ui::ConstantsWidget ui;
+	ExpressionParser* m_expressionParser;
 
-	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
-	XYEquationCurve* m_equationCurve;
+signals:
+	void constantSelected(const QString&);
 
 private slots:
-	//SLOTs for changes triggered in XYCurveDock
-	void nameChanged();
-	void commentChanged();
-	void typeChanged(int);
-	void recalculateClicked();
-	void validateExpression(const QString&);
-	void showConstants();
-	void insertConstant(const QString& constant);
-
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
-	void curveEquationDataChanged(const XYEquationCurve::EquationData&);
+	void groupChanged(int);
+	void filterChanged(const QString&);
+	void constantChanged(const QString&);
+	void insertClicked();
 };
 
-#endif
+#endif //CONSTANTSWIDGET_H

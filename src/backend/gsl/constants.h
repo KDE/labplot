@@ -7,7 +7,7 @@
 
 #include "backend/gsl/parser_struct.h"
 
-struct con constants[] = {
+struct con _constants[] = {
 	/* Mathematical constants */
 	{"e",M_E},
 	{"pi",M_PI},

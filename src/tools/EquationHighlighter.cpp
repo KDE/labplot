@@ -5,7 +5,7 @@
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
     Copyright        : (C) 2006  David Saxton <david@bluehaze.org>
     Description      : syntax highligher for mathematical equations
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -46,7 +46,7 @@ void EquationHighlighter::setVariables(QStringList& variables) {
 
 void EquationHighlighter::highlightBlock(const QString& text) {
 	//TODO: m_parent->checkTextValidity();
-	
+
 	if (text.isEmpty())
 		return;
 
@@ -72,16 +72,16 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		constant.setForeground(QColor(255, 160, 160));
         matchedParenthesis.setBackground(QColor(85, 85, 0));
     }
-	
+
 	QTextCharFormat other;
-	
-	const QStringList& functions = ExpressionParser::getInstance()->functionsList();
-	const QStringList& constants = ExpressionParser::getInstance()->constantsList();
-	
+
+	static const QStringList& functions = ExpressionParser::getInstance()->functions();
+	static const QStringList& constants = ExpressionParser::getInstance()->constants();
+
 	for (int i = 0; i < text.length(); ++i) {
 		QString remaining = text.right(text.length() - i);
 		bool found = false;
-		
+
 		//variables
 		foreach (const QString& var, m_variables) {
 			if (remaining.startsWith(var)) {
@@ -125,7 +125,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		bool isPower = (u >= 0xb2 && u <= 0xb3) || (u == 0x2070) || (u >= 0x2074 && u <= 0x2079);
 		bool isDigit = text[i].isDigit();
 		bool isDecimalPoint = text[i] == QLocale().decimalPoint();
-		
+
 		if (isFraction || isPower || isDigit || isDecimalPoint)
 			setFormat(i, 1, number);
 		else
@@ -137,16 +137,16 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 	int cursorPos = m_parent->textCursor().position();
 	if (cursorPos < 0)
 		cursorPos = 0;
-	
+
 	// Adjust cursorpos to allow for a bracket before the cursor position
 	if (cursorPos >= text.size())
 		cursorPos = text.size() - 1;
 	else if (cursorPos > 0 && (text[cursorPos-1] == '(' || text[cursorPos-1] == ')'))
 		cursorPos--;
-	
+
 	bool haveOpen =  text[cursorPos] == '(';
 	bool haveClose = text[cursorPos] == ')';
-	
+
 	if ((haveOpen || haveClose) && m_parent->hasFocus()) {
 		// Search for the other bracket
 
@@ -158,7 +158,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 				level--;
 			else if (text[i] == '(')
 				level++;
-			
+
 			if (level == 0) {
 				// Matched!
 				setFormat(cursorPos, 1, matchedParenthesis);
@@ -172,7 +172,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 // 	if (m_errorPosition != -1) {
 // 		QTextCharFormat error;
 // 		error.setForeground(Qt::red);
-// 	
+//
 // 		setFormat(m_errorPosition, 1, error);
 // 	}
 }

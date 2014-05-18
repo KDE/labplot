@@ -103,14 +103,14 @@ void init_table (void) {
 	symrec *ptr;
 	int i;
 	/* add functions */
-	for (i = 0; arith_fncts[i].fname != 0; i++) {
-		ptr = putsym (arith_fncts[i].fname, FNCT);
-		ptr->value.fnctptr = arith_fncts[i].fnct;
+	for (i = 0; _functions[i].name != 0; i++) {
+		ptr = putsym (_functions[i].name, FNCT);
+		ptr->value.fnctptr = _functions[i].fnct;
 	}
 	/* add constants */
-	for (i = 0; constants[i].name != 0; i++) {
-		ptr = putsym (constants[i].name, VAR);
-		ptr->value.var = constants[i].value;
+	for (i = 0; _constants[i].name != 0; i++) {
+		ptr = putsym (_constants[i].name, VAR);
+		ptr->value.var = _constants[i].value;
 	}
 #ifdef LDEBUG
 	printf("init_table() DONE\n");

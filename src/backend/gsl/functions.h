@@ -105,7 +105,7 @@ double hypergeometric(double k, double n1,double n2,double t) {
 double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf((unsigned int)k,p); }
 #endif
 
-struct init arith_fncts[] = {
+struct func _functions[] = {
   {"drand",my_drand},
 /* stdlib.h */
   {"rand",my_rand},

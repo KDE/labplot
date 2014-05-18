@@ -51,9 +51,9 @@
 ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 	m_highlighter(new EquationHighlighter(this)),
 	m_expressionType(XYEquationCurve::Cartesian) {
-	
-	QStringList list = ExpressionParser::getInstance()->functionsList();
-	list.append(ExpressionParser::getInstance()->constantsList());
+
+	QStringList list = ExpressionParser::getInstance()->functions();
+	list.append(ExpressionParser::getInstance()->constants());
 
 	m_completer = new QCompleter(list);
 	m_completer->setWidget(this);
@@ -159,4 +159,3 @@ void ExpressionTextEdit::validateExpression() {
 	else
 		setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
 }
- 

@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of equation curves
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,15 +29,18 @@
 #include "XYEquationCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "kdefrontend/widgets/ConstantsWidget.h"
 
 #include <QCompleter>
 #include <QKeyEvent>
+#include <QMenu>
+#include <QWidgetAction>
 #include <QScrollBar>
 
 /*!
   \class XYEquationCurveDock
   \brief  Provides a widget for editing the properties of the XYEquationCurves
-		(2D-curves defined by a mathematical equation) currently selected in 
+		(2D-curves defined by a mathematical equation) currently selected in
 		the project explorer.
 
   If more then one curves are set, the properties of the first column are shown.
@@ -78,6 +81,7 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+	connect( uiGeneralTab.tbConstants1, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -230,6 +234,26 @@ void XYEquationCurveDock::validateExpression(const QString& eq) {
 		lineEdit->setStyleSheet("QLineEdit{background: red;}");
 	else
 		lineEdit->setStyleSheet("QLineEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+}
+
+//TODO: move this part to EquationTextEdit
+void XYEquationCurveDock::showConstants() {
+	QMenu menu;
+	ConstantsWidget constants(&menu);
+	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
+	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
+
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(&constants);
+	menu.addAction(widgetAction);
+
+	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants1->width(),-menu.sizeHint().height());
+	menu.exec(uiGeneralTab.tbConstants1->mapToGlobal(pos));
+
+}
+
+void XYEquationCurveDock::insertConstant(const QString& constant) {
+	uiGeneralTab.teEquation1->insertPlainText(constant);
 }
 
 //*************************************************************

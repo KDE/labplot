@@ -6,8 +6,8 @@ struct con {
 	double value;
 };
 
-struct init {
-	char const *fname;
+struct func {
+	char const *name;
 #ifdef HAVE_SOLARIS
 	double (*fnct)(double);
 #else

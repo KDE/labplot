@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
     Description      : c++ wrapper for the bison generated parser.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -44,15 +44,31 @@ public:
 	bool evaluateParametric(const QString& expr1, const QString& expr2, const QString& min, const QString& max,
 						   int count, QVector<double>* xVector, QVector<double>* yVector);
 
-	const QStringList& functionsList();
-	const QStringList& constantsList();
+	const QStringList& functions();
+
+	const QStringList& constants();
+	const QStringList& constantsGroups();
+	const QStringList& constantsNames();
+	const QStringList& constantsValues();
+	const QStringList& constantsUnits();
+	const QVector<int>& constantsGroupIndices();
 
 private:
 	ExpressionParser();
 	~ExpressionParser();
 
+	void initFunctions();
+	void initConstants();
+
 	static ExpressionParser* instance;
+
 	QStringList m_functions;
+
 	QStringList m_constants;
+	QStringList m_constantsGroups;
+	QStringList m_constantsNames;
+	QStringList m_constantsValues;
+	QStringList m_constantsUnits;
+	QVector<int> m_constantsGroupIndex;
 };
 #endif
