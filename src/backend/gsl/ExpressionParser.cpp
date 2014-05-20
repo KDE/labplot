@@ -87,7 +87,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << "Plank constant";
 	m_constantsNames << "Reduced Plank constant";
 	m_constantsNames << "Avogadro constant";
-	m_constantsNames << "Faraday constant";
+	m_constantsNames << "Faraday";
 	m_constantsNames << "Boltzman constant";
 	m_constantsNames << "Molar gas";
 	m_constantsNames << "Standard gas volume";

@@ -37,7 +37,7 @@
  */
 ConstantsWidget::ConstantsWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
-
+	ui.bInsert->setIcon(KIcon("edit-paste"));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->constantsGroups());
 
@@ -70,8 +70,26 @@ void ConstantsWidget::groupChanged(int index) {
 void ConstantsWidget::filterChanged(const QString& filter) {
 	if ( !filter.isEmpty() ) {
 		ui.cbGroup->setEnabled(false);
+
+		static const QStringList& names = m_expressionParser->constantsNames();
+		static const QStringList& constants = m_expressionParser->constants();
+		ui.lwConstants->clear();
+		for (int i=0; i<names.size(); ++i) {
+			if (names.at(i).contains(filter, Qt::CaseInsensitive))
+				ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ")" );
+		}
+
+		if (ui.lwConstants->count()) {
+			ui.lwConstants->setCurrentRow(0);
+			ui.bInsert->setEnabled(true);
+		} else {
+			ui.kleValue->setText("");
+			ui.lUnit->setText("");
+			ui.bInsert->setEnabled(false);
+		}
 	} else {
 		ui.cbGroup->setEnabled(true);
+		groupChanged(ui.cbGroup->currentIndex());
 	}
 }
 
