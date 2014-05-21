@@ -47,6 +47,9 @@ void ExpressionParser::initFunctions() {
 		m_functions << _functions[i].name;
 
 	//TODO:
+	m_functionsGroups << "Airy Functions and Derivatives";
+	m_functionsGroups << "Bessel Functions";
+	m_functionsGroups << "Clausen Functions";
 }
 
 //TODO: decide whether we want to have i18n here in the backend part of the code
@@ -141,6 +144,18 @@ ExpressionParser* ExpressionParser::getInstance(){
 
 const QStringList& ExpressionParser::functions() {
 	return m_functions;
+}
+
+const QStringList& ExpressionParser::functionsGroups() {
+	return m_functionsGroups;
+}
+
+const QStringList& ExpressionParser::functionsNames() {
+	return m_functionsNames;
+}
+
+const QVector<int>& ExpressionParser::functionsGroupIndices() {
+	return m_functionsGroupIndex;
 }
 
 const QStringList& ExpressionParser::constants() {

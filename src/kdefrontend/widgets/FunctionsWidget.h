@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : ConstansWidget.h
+    File                 : FunctionsWidget.h
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Description          : widget for selecting constants
+    Description          : widget for selecting functions
 
  ***************************************************************************/
 
@@ -25,34 +25,33 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef CONSTANTSWIDGET_H
-#define CONSTANTSWIDGET_H
+#ifndef FUNCTIONSWIDGET_H
+#define FUNCTIONSWIDGET_H
 
 #include <QWidget>
 #include <QStringList>
 
-#include "ui_constantswidget.h"
+#include "ui_functionswidget.h"
 
 class ExpressionParser;
 
-class ConstantsWidget: public QWidget{
+class FunctionsWidget: public QWidget{
 	Q_OBJECT
 
 public:
-	explicit ConstantsWidget(QWidget *);
+	explicit FunctionsWidget(QWidget *);
 
 private:
-	Ui::ConstantsWidget ui;
+	Ui::FunctionsWidget ui;
 	ExpressionParser* m_expressionParser;
 
 signals:
-	void constantSelected(const QString&);
+	void functionSelected(const QString&);
 
 private slots:
 	void groupChanged(int);
 	void filterChanged(const QString&);
-	void constantChanged(const QString&);
 	void insertClicked();
 };
 
-#endif //CONSTANTSWIDGET_H
+#endif //FUNCTIONSWIDGET_H

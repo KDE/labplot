@@ -58,6 +58,7 @@ private slots:
 	void recalculateClicked();
 	void validateExpression(const QString&);
 	void showConstants();
+	void showFunctions();
 	void insertConstant(const QString& constant);
 
 	//SLOTs for changes triggered in XYCurve

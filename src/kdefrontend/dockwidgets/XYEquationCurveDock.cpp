@@ -30,6 +30,7 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
+#include "kdefrontend/widgets/FunctionsWidget.h"
 
 #include <QCompleter>
 #include <QKeyEvent>
@@ -82,6 +83,7 @@ void XYEquationCurveDock::setupGeneral() {
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
 	connect( uiGeneralTab.tbConstants1, SIGNAL(clicked()), this, SLOT(showConstants()) );
+	connect( uiGeneralTab.tbFunctions1, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -254,6 +256,21 @@ void XYEquationCurveDock::showConstants() {
 
 void XYEquationCurveDock::insertConstant(const QString& constant) {
 	uiGeneralTab.teEquation1->insertPlainText(constant);
+}
+
+void XYEquationCurveDock::showFunctions() {
+	QMenu menu;
+	FunctionsWidget functions(&menu);
+	connect(&functions, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
+	connect(&functions, SIGNAL(functionsSelected(QString)), &menu, SLOT(close()));
+
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(&functions);
+	menu.addAction(widgetAction);
+
+	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions1->width(),-menu.sizeHint().height());
+	menu.exec(uiGeneralTab.tbFunctions1->mapToGlobal(pos));
+
 }
 
 //*************************************************************

@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : ConstantsWidget.cc
+    File                 : FunctionsWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
-    Description          : widget for selecting constants
+    Description          : widget for selecting functions
 
  ***************************************************************************/
 
@@ -25,66 +25,63 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "ConstantsWidget.h"
+#include "FunctionsWidget.h"
 #include "backend/gsl/ExpressionParser.h"
 
 /*!
-	\class ConstantsWidget
-	\brief Widget for selecting supported mathematical and physical constants
+	\class FunctionsWidget
+	\brief Widget for selecting supported mathematical functions
 	that can be used in expressions in \c ExpressionTextEdit.
 
 	\ingroup kdefrontend
  */
-ConstantsWidget::ConstantsWidget(QWidget *parent): QWidget(parent) {
+FunctionsWidget::FunctionsWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 	ui.bInsert->setIcon(KIcon("edit-paste"));
 	m_expressionParser = ExpressionParser::getInstance();
-	ui.cbGroup->addItems(m_expressionParser->constantsGroups());
+	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
 
 	//SLOTS
 	connect( ui.kleFilter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)) );
 	connect( ui.cbGroup, SIGNAL(currentIndexChanged(int)), this, SLOT(groupChanged(int)) );
-	connect( ui.lwConstants, SIGNAL(currentTextChanged(QString)), this, SLOT(constantChanged(QString)) );
 	connect( ui.bInsert, SIGNAL(clicked(bool)), this, SLOT(insertClicked()) );
-	connect( ui.lwConstants, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(insertClicked()) );
+	connect( ui.lwFunctions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(insertClicked()) );
 
 	this->groupChanged(0);
 }
 
 /*!
- * shows all constants of the selected group and selects the first one in the QStringList
+ * shows all functions of the selected group and selects the first one in the QStringList
  */
-void ConstantsWidget::groupChanged(int index) {
-	static const QStringList& constants = m_expressionParser->constants();
-	static const QStringList& names = m_expressionParser->constantsNames();
-	static const QVector<int>& indices = m_expressionParser->constantsGroupIndices();
+void FunctionsWidget::groupChanged(int index) {
+	static const QStringList& functions = m_expressionParser->functions();
+	static const QStringList& names = m_expressionParser->functionsNames();
+	static const QVector<int>& indices = m_expressionParser->functionsGroupIndices();
 
-	ui.lwConstants->clear();
+	ui.lwFunctions->clear();
 	for (int i=0; i<names.size(); ++i) {
 		if (indices.at(i) == index)
-			ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ")" );
+			ui.lwFunctions->addItem( names.at(i) + " (" + functions.at(i) + ")" );
 	}
-	ui.lwConstants->setCurrentRow(0);
+	ui.lwFunctions->setCurrentRow(0);
 }
 
-void ConstantsWidget::filterChanged(const QString& filter) {
+void FunctionsWidget::filterChanged(const QString& filter) {
 	if ( !filter.isEmpty() ) {
 		ui.cbGroup->setEnabled(false);
 
-		static const QStringList& names = m_expressionParser->constantsNames();
-		static const QStringList& constants = m_expressionParser->constants();
-		ui.lwConstants->clear();
+		static const QStringList& names = m_expressionParser->functionsNames();
+		static const QStringList& functions = m_expressionParser->functions();
+		ui.lwFunctions->clear();
 		for (int i=0; i<names.size(); ++i) {
 			if (names.at(i).contains(filter, Qt::CaseInsensitive))
-				ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ")" );
+				ui.lwFunctions->addItem( names.at(i) + " (" + functions.at(i) + ")" );
 		}
 
-		if (ui.lwConstants->count()) {
-			ui.lwConstants->setCurrentRow(0);
+		if (ui.lwFunctions->count()) {
+			ui.lwFunctions->setCurrentRow(0);
 			ui.bInsert->setEnabled(true);
 		} else {
-			ui.kleValue->setText("");
-			ui.lUnit->setText("");
 			ui.bInsert->setEnabled(false);
 		}
 	} else {
@@ -93,28 +90,15 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 	}
 }
 
-void ConstantsWidget::constantChanged(const QString& text) {
-	static const QStringList& names = m_expressionParser->constantsNames();
-	static const QStringList& values = m_expressionParser->constantsValues();
-	static const QStringList& units = m_expressionParser->constantsUnits();
-
-	QString name = text.left( text.indexOf(" (") );
-	int index = names.indexOf(name);
-	if (index!=-1){
-		ui.kleValue->setText(values.at(index));
-		ui.lUnit->setText(units.at(index));
-	}
-}
-
-void ConstantsWidget::insertClicked() {
-	static const QStringList& constants = m_expressionParser->constants();
-	static const QStringList& names = m_expressionParser->constantsNames();
+void FunctionsWidget::insertClicked() {
+	static const QStringList& functions = m_expressionParser->functions();
+	static const QStringList& names = m_expressionParser->functionsNames();
 
 	//determine the currently selected constant
-	const QString& text = ui.lwConstants->currentItem()->text();
+	const QString& text = ui.lwFunctions->currentItem()->text();
 	const QString& name = text.left( text.indexOf(" (") );
 	int index = names.indexOf(name);
-	const QString& constant = constants.at(index);
+	const QString& function = functions.at(index);
 
-	emit(constantSelected(constant));
+	emit(functionSelected(function));
 }

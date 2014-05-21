@@ -45,6 +45,9 @@ public:
 						   int count, QVector<double>* xVector, QVector<double>* yVector);
 
 	const QStringList& functions();
+	const QStringList& functionsGroups();
+	const QStringList& functionsNames();
+	const QVector<int>& functionsGroupIndices();
 
 	const QStringList& constants();
 	const QStringList& constantsGroups();
@@ -63,6 +66,9 @@ private:
 	static ExpressionParser* instance;
 
 	QStringList m_functions;
+	QStringList m_functionsGroups;
+	QStringList m_functionsNames;
+	QVector<int> m_functionsGroupIndex;
 
 	QStringList m_constants;
 	QStringList m_constantsGroups;
