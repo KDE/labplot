@@ -84,6 +84,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
 	connect( uiGeneralTab.tbConstants1, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( uiGeneralTab.tbFunctions1, SIGNAL(clicked()), this, SLOT(showFunctions()) );
+	connect( uiGeneralTab.tbConstants2, SIGNAL(clicked()), this, SLOT(showConstants()) );
+	connect( uiGeneralTab.tbFunctions2, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -238,39 +240,61 @@ void XYEquationCurveDock::validateExpression(const QString& eq) {
 		lineEdit->setStyleSheet("QLineEdit{background: white;}"); //TODO: assign the default color for the current style/theme
 }
 
-//TODO: move this part to EquationTextEdit
 void XYEquationCurveDock::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
-	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
+
+	if (QObject::sender()==uiGeneralTab.tbConstants1)
+		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insert1(QString)));
+	else
+		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insert2(QString)));
+
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants1->width(),-menu.sizeHint().height());
-	menu.exec(uiGeneralTab.tbConstants1->mapToGlobal(pos));
+	if (QObject::sender()==uiGeneralTab.tbConstants1) {
+		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants1->width(),-menu.sizeHint().height());
+		menu.exec(uiGeneralTab.tbConstants1->mapToGlobal(pos));
+	} else {
+		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants2->width(),-menu.sizeHint().height());
+		menu.exec(uiGeneralTab.tbConstants2->mapToGlobal(pos));
+	}
 
-}
-
-void XYEquationCurveDock::insertConstant(const QString& constant) {
-	uiGeneralTab.teEquation1->insertPlainText(constant);
 }
 
 void XYEquationCurveDock::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
-	connect(&functions, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
+	if (QObject::sender()==uiGeneralTab.tbFunctions1)
+		connect(&functions, SIGNAL(constantSelected(QString)), this, SLOT(insert1(QString)));
+	else
+		connect(&functions, SIGNAL(constantSelected(QString)), this, SLOT(insert2(QString)));
+
 	connect(&functions, SIGNAL(functionsSelected(QString)), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions1->width(),-menu.sizeHint().height());
-	menu.exec(uiGeneralTab.tbFunctions1->mapToGlobal(pos));
+	if (QObject::sender()==uiGeneralTab.tbFunctions1) {
+		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions1->width(),-menu.sizeHint().height());
+		menu.exec(uiGeneralTab.tbFunctions1->mapToGlobal(pos));
+	} else {
+		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions2->width(),-menu.sizeHint().height());
+		menu.exec(uiGeneralTab.tbFunctions2->mapToGlobal(pos));
+	}
 
+}
+
+void XYEquationCurveDock::insert1(const QString& str) {
+	uiGeneralTab.teEquation1->insertPlainText(str);
+}
+
+void XYEquationCurveDock::insert2(const QString& str) {
+	uiGeneralTab.teEquation2->insertPlainText(str);
 }
 
 //*************************************************************
