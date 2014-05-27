@@ -39,7 +39,7 @@ class ConstantsWidget: public QWidget{
 	Q_OBJECT
 
 public:
-	explicit ConstantsWidget(QWidget *);
+	explicit ConstantsWidget(QWidget*);
 
 private:
 	Ui::ConstantsWidget ui;

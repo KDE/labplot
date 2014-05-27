@@ -161,11 +161,11 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 //################################################################
 WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner)
 	: q(owner), m_hovered(false), m_printing(false) {
-	this->setAcceptHoverEvents(true);
+	setAcceptHoverEvents(true);
 }
 
-QString WorksheetElementContainerPrivate::name() const{
-  return q->name();
+QString WorksheetElementContainerPrivate::name() const {
+	return q->name();
 }
 
 void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
@@ -175,12 +175,12 @@ void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMen
 	menu->exec(event->screenPos());
 }
 
-void WorksheetElementContainerPrivate::hoverLeaveEvent (QGraphicsSceneHoverEvent*) {
+void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	m_hovered = false;
 	update();
 }
 
-void WorksheetElementContainerPrivate::hoverEnterEvent ( QGraphicsSceneHoverEvent * ) {
+void WorksheetElementContainerPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	m_hovered = true;
 	update();
 }
@@ -211,12 +211,14 @@ void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOpti
 		return;
 
 	if (m_hovered && !isSelected() && !m_printing){
-		painter->setPen(QPen(QColor(128,179,255), 10, Qt::SolidLine));
+		painter->setPen(q->hoveredPen);
+		painter->setOpacity(q->hoveredOpacity);
 		painter->drawRect(boundingRect());
 	}
 
 	if (isSelected() && !m_printing){
-		painter->setPen(QPen(Qt::blue, 10, Qt::SolidLine));
+		painter->setPen(q->selectedPen);
+		painter->setOpacity(q->selectedOpacity);
 		painter->drawRect(boundingRect());
   }
 }

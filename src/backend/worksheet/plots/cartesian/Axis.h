@@ -4,10 +4,10 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-				(replace * with @ in the email addresses) 
-                           
+				(replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -60,7 +60,7 @@ class Axis: public AbstractWorksheetElement {
 		enum ArrowPosition {ArrowLeft, ArrowRight, ArrowBoth};
 		enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
-		
+
 		explicit Axis(const QString &name, const AxisOrientation &orientation = AxisHorizontal);
 		virtual ~Axis();
 
@@ -80,19 +80,19 @@ class Axis: public AbstractWorksheetElement {
 		void setStart(const float, const bool=true);
 		float start() const;
 		void setEnd(const float, const bool=true);
-		float end() const;		
+		float end() const;
 		BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor)
 		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset)
 
 		POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
 		BASIC_D_ACCESSOR_DECL(float, titleOffset, TitleOffset)
-		
+
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
 		BASIC_D_ACCESSOR_DECL(ArrowType, arrowType, ArrowType)
 		BASIC_D_ACCESSOR_DECL(ArrowPosition, arrowPosition, ArrowPosition)
 		BASIC_D_ACCESSOR_DECL(float, arrowSize, ArrowSize)
-		
+
 		BASIC_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection)
 		BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
 		BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber)
@@ -102,7 +102,7 @@ class Axis: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
 		BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
 		BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity)
-		
+
 		BASIC_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection)
 		BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
 		BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
@@ -112,7 +112,7 @@ class Axis: public AbstractWorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
 		BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
-		
+
 		BASIC_D_ACCESSOR_DECL(LabelsFormat, labelsFormat, LabelsFormat)
 		BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
 		BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
@@ -129,7 +129,7 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, majorGridOpacity, MajorGridOpacity)
 		CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
 		BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
-		
+
 		virtual void setVisible(bool);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
@@ -155,16 +155,16 @@ class Axis: public AbstractWorksheetElement {
 		QAction* visibilityAction;
 		QAction* orientationHorizontalAction;
 		QAction* orientationVerticalAction;
-		
+
 		QActionGroup* orientationActionGroup;
 		QActionGroup* lineStyleActionGroup;
 		QActionGroup* lineColorActionGroup;
-		
+
 		QMenu* orientationMenu;
 		QMenu* lineMenu;
 		QMenu* lineStyleMenu;
 		QMenu* lineColorMenu;
-		
+
 	private slots:
 		void labelChanged();
 		void retransformTicks();

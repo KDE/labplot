@@ -4,10 +4,10 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach*uni-konstanz.de)
-							(replace * with @ in the email addresses) 
-                           
+							(replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -44,6 +44,7 @@
 #include <QMenu>
 #include <QDebug>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsSceneHoverEvent>
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "kdefrontend/GuiTools.h"
@@ -87,7 +88,7 @@ void Axis::init(){
 	d->end = group.readEntry("End", 10);
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
-	
+
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
@@ -102,6 +103,7 @@ void Axis::init(){
 	d->title->setHidden(true);
 	d->title->graphicsItem()->setParentItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	d->title->setText(this->name());
 	if (d->orientation == AxisVertical) d->title->setRotationAngle(270);
 	d->titleOffset = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
@@ -115,7 +117,7 @@ void Axis::init(){
 	d->majorTicksPen.setWidthF( group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
 	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Point));
 	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
-	
+
 	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
 	d->minorTicksType = (Axis::TicksType) group.readEntry("MinorTicksType", (int) Axis::TicksTotalNumber);
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
@@ -125,7 +127,7 @@ void Axis::init(){
 	d->minorTicksPen.setWidthF( group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
 	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Point));
 	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
-	
+
 	//Labels
 	d->labelsFormat = (Axis::LabelsFormat) group.readEntry("LabelsFormat", (int)Axis::FormatDecimal);
 	d->labelsAutoPrecision = group.readEntry("LabelsAutoPrecision", true);
@@ -152,43 +154,40 @@ void Axis::init(){
 	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
 
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
-
 	this->initActions();
 	this->initMenus();
 }
 
 /*!
  * For the most frequently edited properties, create Actions and ActionGroups for the context menu.
- * For some ActionGroups the actual actions are created in \c GuiTool, 
+ * For some ActionGroups the actual actions are created in \c GuiTool,
  */
 void Axis::initActions(){
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
-	
-	//Orientation 
+
+	//Orientation
 	orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(orientationChanged(QAction*)));
 
 	orientationHorizontalAction = new QAction(i18n("horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
-	
+
 	orientationVerticalAction = new QAction(i18n("vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
-	
-	//Line 
+
+	//Line
 	lineStyleActionGroup = new QActionGroup(this);
 	lineStyleActionGroup->setExclusive(true);
 	connect(lineStyleActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(lineStyleChanged(QAction*)));
-	
+
 	lineColorActionGroup = new QActionGroup(this);
 	lineColorActionGroup->setExclusive(true);
 	connect(lineColorActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(lineColorChanged(QAction*)));
-	
-	//Ticks 
+
+	//Ticks
 	//TODO
 }
 
@@ -197,7 +196,7 @@ void Axis::initMenus(){
 	orientationMenu = new QMenu(i18n("Orientation"));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
-	
+
 	//Line
 	lineMenu = new QMenu(i18n("Line"));
 	lineStyleMenu = new QMenu(i18n("style"), lineMenu);
@@ -212,7 +211,7 @@ QMenu* Axis::createContextMenu(){
 	Q_D(const Axis);
 	QMenu *menu = AbstractWorksheetElement::createContextMenu();
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
@@ -220,13 +219,13 @@ QMenu* Axis::createContextMenu(){
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
-	
+
 	//Orientation
 	if ( d->orientation == AxisHorizontal )
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	
+
 	menu->insertMenu(firstAction, orientationMenu);
 
 	//Line styles
@@ -262,11 +261,11 @@ Axis::~Axis() {
 
 	if (lineMenu)
 		delete lineMenu;
-	
+
 	//no need to delete d->title, since it was added with addChild in init();
 
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem 
-	//and is deleted during the cleanup in QGraphicsScene	
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem
+	//and is deleted during the cleanup in QGraphicsScene
 }
 
 QGraphicsItem *Axis::graphicsItem() const {
@@ -292,7 +291,7 @@ void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
 	} else {
 		setMajorTicksLength(d->majorTicksLength * horizontalRatio);
 		setMinorTicksLength(d->minorTicksLength * horizontalRatio);
-		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio); // this is not perfectly correct for rotated labels 
+		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio); // this is not perfectly correct for rotated labels
 															// when the page aspect ratio changes, but should not matter
 	}
 	//TODO setLabelsOffset(QPointF(d->labelsOffset.x() * horizontalRatio, d->labelsOffset.y() * verticalRatio));
@@ -364,12 +363,12 @@ void Axis::setAutoScale(bool autoScale) {
 	Q_D(Axis);
 	if (autoScale != d->autoScale){
 		exec(new AxisSetAutoScaleCmd(d, autoScale, i18n("%1: set axis auto scaling")));
-		
+
 		if (autoScale){
 			CartesianPlot *plot = qobject_cast<CartesianPlot*>(parentAspect());
 			if (!plot)
 				return;
-			
+
 			if (d->orientation == Axis::AxisHorizontal){
 				d->end = plot->xMax();
 				d->start = plot->xMin();
@@ -429,7 +428,7 @@ void Axis::setOffset(float offset, bool undo) {
 			exec(new AxisSetOffsetCmd(d, offset, i18n("%1: set axis offset")));
 		}else{
 			d->offset = offset;
-			//don't need to call retransform() afterward 
+			//don't need to call retransform() afterward
 			//since the only usage of this call is in CartesianPlot, where retransform is called for all children anyway.
 		}
 		emit positionChanged(offset);
@@ -444,7 +443,7 @@ void Axis::setStart(float start, bool undo) {
 			exec(new AxisSetStartCmd(d, start, i18n("%1: set axis start")));
 		else
 			d->start = start;
-			
+
 		emit startChanged(start);
 	}
 }
@@ -819,8 +818,12 @@ void Axis::visibilityChanged(){
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false),
+AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false), m_hovered(false),
 	majorTicksColumn(0), minorTicksColumn(0), q(owner){
+
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setFlag(QGraphicsItem::ItemIsFocusable, true);
+	setAcceptHoverEvents(true);
 }
 
 QString AxisPrivate::name() const{
@@ -856,7 +859,7 @@ void AxisPrivate::retransform(){
 	m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem());
 	if (!m_cSystem)
 		return;
-	
+
 	retransformLine();
 }
 
@@ -1026,7 +1029,7 @@ bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 	QList<QPointF> points;
 	points.append(*anchorPoint);
 	points = m_cSystem->mapLogicalToScene(points);
-	
+
 	if (points.count() != 1){ // point is not mappable or in a coordinate gap
 		return false;
 	}else{
@@ -1037,7 +1040,7 @@ bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
 
 /*!
 	recalculates the position of the axis ticks.
- */ 
+ */
 void AxisPrivate::retransformTicks(){
 	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
 
@@ -1051,7 +1054,7 @@ void AxisPrivate::retransformTicks(){
 		retransformTickLabels(); //this calls recalcShapeAndBoundingRect()
 		return;
 	}
-  
+
 	//determine the spacing for the major ticks
 	double majorTicksSpacing;
 	int tmpMajorTicksNumber;
@@ -1122,7 +1125,7 @@ void AxisPrivate::retransformTicks(){
 		tmpMinorTicksNumber = (end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
 	else
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
-	
+
 
 	QPointF anchorPoint;
 	QPointF startPoint;
@@ -1156,9 +1159,9 @@ void AxisPrivate::retransformTicks(){
 					break;
 				case Axis::ScaleX2:
 					majorTickPos = sqrt(sqrt(start) + majorTicksSpacing * (qreal)iMajor);
-					break;		  
+					break;
 				default://Linear
-					majorTickPos = start + majorTicksSpacing * (qreal)iMajor; 
+					majorTickPos = start + majorTicksSpacing * (qreal)iMajor;
 			}
 		} else {
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
@@ -1240,7 +1243,7 @@ void AxisPrivate::retransformTicks(){
 					minorTickPos = minorTicksColumn->valueAt(iMinor);
 					if (isnan(minorTickPos))
 						break; //stop iterating after the first non numerical value in the column
-					
+
 					//in the case a custom column is used for the minor ticks, we draw them _once_ for the whole range of the axis.
 					//execute the minor ticks loop only once.
 					if (iMajor>0)
@@ -1344,14 +1347,14 @@ int AxisPrivate::upperLabelsPrecision(int precision){
 	for (int i=0; i<tickLabelValues.size(); ++i){
 		tempValues.append( round(tickLabelValues[i], precision) );
 	}
-	
+
 	for (int i=0; i<tempValues.size(); ++i){
 		if (tempValues.count(tempValues[i]) > 1){
 			//duplicate for the current precision found, increase the precision and check again
 			return upperLabelsPrecision(precision+1);
 		}
 	}
-	
+
 	//no duplicates for the current precision found, return the current value
 	return precision;
 }
@@ -1370,7 +1373,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision){
 	for (int i=0; i<tickLabelValues.size(); ++i){
 		tempValues.append( round(tickLabelValues[i], precision-1) );
 	}
-	
+
 	for (int i=0; i<tempValues.size(); ++i){
 		if (tempValues.count(tempValues[i]) > 1){
 			//duplicate found for the reduced precision
@@ -1378,7 +1381,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision){
 			return precision;
 		}
 	}
-	
+
 	//no duplicates found, reduce further, and check again
 	return lowerLabelsPrecision(precision-1);
 }
@@ -1415,7 +1418,7 @@ void AxisPrivate::retransformTickLabels(){
 		label = labelsPrefix + tickLabelStrings.at(i) + labelsSuffix;
 		width = fm.width( label );
 		anchorPoint = majorTickPoints.at(i);
-		  
+
 		//center align all labels with respect to the end point of the tick line
 		if (orientation == Axis::AxisHorizontal){
 			if(offset < middleY) {
@@ -1469,7 +1472,7 @@ void AxisPrivate::retransformMajorGrid(){
 
 	if (!logicalMajorTickPoints.size())
 		return;
-	
+
 	//TODO:
 	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
 	//since we don't want to paint any grid lines at the plot boundaries
@@ -1484,16 +1487,16 @@ void AxisPrivate::retransformMajorGrid(){
 
 	int start, end;
 	if (skipLowestTick){
-		if (logicalMajorTickPoints.size()>1) 
+		if (logicalMajorTickPoints.size()>1)
 			start = 1;
 		else
 			start = 0;
 	} else {
 		start = 0;
 	}
-	
+
 	if ( skipUpperTick ){
-		if (logicalMajorTickPoints.size()>1) 
+		if (logicalMajorTickPoints.size()>1)
 			end = logicalMajorTickPoints.size()-1;
 		else
 			end = 0;
@@ -1521,7 +1524,7 @@ void AxisPrivate::retransformMajorGrid(){
 			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
 		}
 	}
-	
+
 	lines = m_cSystem->mapLogicalToScene(lines);
 	foreach (const QLineF& line, lines) {
 		majorGridPath.moveTo(line.p1());
@@ -1598,14 +1601,14 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 			trafo.reset();
 			trafo.translate( tickLabelPoints.at(i).x(), tickLabelPoints.at(i).y() );
-			trafo.rotate( -labelsRotationAngle );	
+			trafo.rotate( -labelsRotationAngle );
 			tempPath = trafo.map(tempPath);
 
 			tickLabelsPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, linePen));
 		}
 		axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 	}
-	
+
 	//add title label, if available
 	if ( title->isVisible() && !title->text().text.isEmpty() ){
 		//determine the new position of the title label:
@@ -1620,10 +1623,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			offset += title->graphicsItem()->boundingRect().width()/2 + tickLabelsPath.boundingRect().width();
 			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ) );
 		}
-		
+
 		axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
-	
+
 	axisShape = axisShapeWithoutGrids;
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorGridPath, majorGridPen));
 	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorGridPath, minorGridPen));
@@ -1704,14 +1707,31 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		}
 	}
 
+	if (m_hovered && !isSelected() && !m_printing){
+		painter->setPen(q->hoveredPen);
+		painter->setOpacity(q->hoveredOpacity);
+		painter->drawPath(axisShapeWithoutGrids);
+	}
+
 	if (isSelected() && !m_printing){
-		painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
+		painter->setPen(q->selectedPen);
+		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(axisShapeWithoutGrids);
 	}
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
     q->createContextMenu()->exec(event->screenPos());
+}
+
+void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	m_hovered = true;
+	update();
+}
+
+void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	m_hovered = false;
+	update();
 }
 
 //##############################################################################
@@ -1739,10 +1759,10 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "titleOffset", QString::number(d->titleOffset) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
-	
+
 	//label
 	d->title->save( writer );
-	
+
 	//line
 	writer->writeStartElement( "line" );
 	WRITE_QPEN(d->linePen);
@@ -1751,7 +1771,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "arrowPosition", QString::number(d->arrowPosition) );
 	writer->writeAttribute( "arrowSize", QString::number(d->arrowSize) );
 	writer->writeEndElement();
-	
+
 	//major ticks
 	writer->writeStartElement( "majorTicks" );
 	writer->writeAttribute( "direction", QString::number(d->majorTicksDirection) );
@@ -1775,7 +1795,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	WRITE_QPEN(d->minorTicksPen);
 	writer->writeAttribute( "opacity", QString::number(d->minorTicksOpacity) );
 	writer->writeEndElement();
-	
+
 	//extra ticks
 
 	//labels
@@ -1792,7 +1812,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "suffix", d->labelsSuffix );
 	writer->writeAttribute( "opacity", QString::number(d->labelsOpacity) );
 	writer->writeEndElement();
-	
+
 	//grid
 	writer->writeStartElement( "majorGrid" );
 	WRITE_QPEN(d->majorGridPen);
@@ -1878,13 +1898,13 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'end'"));
             else
                 d->end = str.toDouble();
-			
+
             str = attribs.value("scalingFactor").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'scalingFactor'"));
             else
                 d->scalingFactor = str.toDouble();
-			
+
 			str = attribs.value("zeroOffset").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'zeroOffset'"));
@@ -1934,13 +1954,13 @@ bool Axis::load(XmlStreamReader* reader){
                 d->arrowSize = str.toDouble();
 		}else if (reader->name() == "majorTicks"){
 			attribs = reader->attributes();
-	
+
 			str = attribs.value("direction").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'direction'"));
             else
                 d->majorTicksDirection = (Axis::TicksDirection)str.toInt();
-			
+
 			str = attribs.value("type").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'type'"));
@@ -1976,7 +1996,7 @@ bool Axis::load(XmlStreamReader* reader){
                 d->majorTicksOpacity = str.toInt();
 		}else if (reader->name() == "minorTicks"){
 			attribs = reader->attributes();
-	
+
 			str = attribs.value("direction").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'direction'"));
@@ -2008,7 +2028,7 @@ bool Axis::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'length'"));
             else
                 d->minorTicksLength = str.toDouble();
-			
+
 			READ_QPEN(d->minorTicksPen);
 
 			str = attribs.value("opacity").toString();

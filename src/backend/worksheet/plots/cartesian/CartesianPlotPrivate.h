@@ -43,8 +43,6 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		CartesianPlotPrivate(CartesianPlot* owner);
 		CartesianPlot* const q;
 
-		enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
-
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 		virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
@@ -76,7 +74,7 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		QPoint m_rubberBandStart;
 		QPointF m_zoomStart;
 		CartesianCoordinateSystem* cSystem;
-		MouseMode m_mouseMode;
+		CartesianPlot::MouseMode mouseMode;
 		QLineF m_selectionStartLine;
 };
 

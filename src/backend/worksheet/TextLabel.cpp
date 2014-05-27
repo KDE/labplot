@@ -5,8 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -50,7 +50,7 @@
 /**
  * \class TextLabel
  * \brief A label supporting rendering of html- and tex-formated textes.
- * 
+ *
  * The label is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates
  * in parent's coordinate system, or by specifying one of the predefined position
@@ -100,7 +100,7 @@ void TextLabel::init() {
 		d->position.point.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
 		d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
 		d->horizontalAlignment= (TextLabel::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)TextLabel::hAlignCenter);
-		d->verticalAlignment= (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)TextLabel::vAlignBottom);		
+		d->verticalAlignment= (TextLabel::VerticalAlignment) group.readEntry("VerticalAlignment", (int)TextLabel::vAlignBottom);
 	} else {
 		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)TextLabel::hPositionCustom);
 		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int) TextLabel::vPositionCustom);
@@ -120,10 +120,6 @@ void TextLabel::init() {
 
 	connect(&d->teXImageFutureWatcher, SIGNAL(finished()), this, SLOT(updateTeXImage()));
 
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-
 	this->initActions();
 }
 
@@ -134,7 +130,7 @@ void TextLabel::initActions() {
 }
 
 TextLabel::~TextLabel() {
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem 
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
 }
 
@@ -156,7 +152,7 @@ void TextLabel::retransform(){
 void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
-	
+
 	Q_D(TextLabel);
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
 }
@@ -173,7 +169,7 @@ QIcon TextLabel::icon() const{
 QMenu* TextLabel::createContextMenu(){
 	QMenu *menu = AbstractWorksheetElement::createContextMenu();
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
@@ -287,6 +283,7 @@ void TextLabel::updateTeXImage(){
 	Q_D(TextLabel);
 	d->updateTeXImage();
 }
+
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -301,9 +298,15 @@ void TextLabel::visibilityChanged(){
 TextLabelPrivate::TextLabelPrivate(TextLabel *owner)
 		: positionInvalid(false),
 		  suppressItemChangeEvent(false),
-		  suppressRetransform(false), 
+		  suppressRetransform(false),
 		  m_printing(false),
+		  m_hovered(false),
 		  q(owner){
+
+	setFlag(QGraphicsItem::ItemIsSelectable);
+	setFlag(QGraphicsItem::ItemIsMovable);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
 }
 
 QString TextLabelPrivate::name() const{
@@ -316,7 +319,7 @@ QString TextLabelPrivate::name() const{
 void TextLabelPrivate::retransform(){
 	if (suppressRetransform)
 		return;
-	
+
 	if (position.horizontalPosition != TextLabel::hPositionCustom
 		|| position.verticalPosition != TextLabel::vPositionCustom)
 		updatePosition();
@@ -372,7 +375,6 @@ void TextLabelPrivate::retransform(){
 
 	recalcShapeAndBoundingRect();
 
-	// TODO: Crash (see bug  #3583420)
 	emit(q->changed());
 }
 
@@ -506,17 +508,24 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
  		painter->drawStaticText(QPoint(-w/2,-h/2), staticText);
 	}
 	painter->restore();
-	
-	if (isSelected() && !m_printing){
-		painter->setPen(QPen(Qt::blue, 0, Qt::SolidLine));
+
+	if (m_hovered && !isSelected() && !m_printing){
+		painter->setPen(q->hoveredPen);
+		painter->setOpacity(q->hoveredOpacity);
 		painter->drawPath(labelShape);
-	}	
+	}
+
+	if (isSelected() && !m_printing){
+		painter->setPen(q->selectedPen);
+		painter->setOpacity(q->selectedOpacity);
+		painter->drawPath(labelShape);
+	}
 }
 
 QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
 	if (suppressItemChangeEvent)
 		return value;
-	
+
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
 		TextLabel::PositionWrapper tempPosition{
@@ -524,7 +533,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 			TextLabel::hPositionCustom,
 			TextLabel::vPositionCustom
 		};
-		
+
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
 		//this is done on mouse release events only.
@@ -601,6 +610,16 @@ void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
     q->createContextMenu()->exec(event->screenPos());
 }
 
+void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	m_hovered = true;
+	update();
+}
+
+void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	m_hovered = false;
+	update();
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -623,11 +642,11 @@ void TextLabel::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
     writer->writeEndElement();
-	
+
 	writer->writeStartElement( "text" );
 	writer->writeCharacters( d->textWrapper.text );
 	writer->writeEndElement();
-	
+
 	writer->writeStartElement( "format" );
     writer->writeAttribute( "teXUsed", QString::number(d->textWrapper.teXUsed) );
 	writer->writeAttribute( "teXFontSize", QString::number(d->teXFontSize) );
@@ -635,7 +654,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "teXFontColor_g", QString::number(d->teXFontColor.green()) );
 	writer->writeAttribute( "teXFontColor_b", QString::number(d->teXFontColor.blue()) );
 	writer->writeEndElement();
-	
+
     writer->writeEndElement(); // close "textLabel" section
 }
 
@@ -704,7 +723,7 @@ bool TextLabel::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'verticalAlignment'"));
             else
                 d->verticalAlignment = (TextLabel::VerticalAlignment)str.toInt();
-			
+
             str = attribs.value("rotationAngle").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'rotationAngle'"));
@@ -715,7 +734,7 @@ bool TextLabel::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'visible'"));
             else
-                d->setVisible(str.toInt());				
+                d->setVisible(str.toInt());
 		}else if (reader->name() == "text"){
 			d->textWrapper.text = reader->readElementText();
 		}else if (reader->name() == "format"){
@@ -726,13 +745,13 @@ bool TextLabel::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'teXUsed'"));
             else
                 d->textWrapper.teXUsed = str.toInt();
-			
+
 			str = attribs.value("teXFontSize").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'teXFontSize'"));
             else
                 d->teXFontSize = str.toInt();
-			
+
 			str = attribs.value("teXFontColor_r").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'teXFontColor_r'"));
@@ -744,12 +763,12 @@ bool TextLabel::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'teXFontColor_g'"));
             else
                 d->teXFontColor.setGreen( str.toInt() );
-			
+
 			str = attribs.value("teXFontColor_b").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'teXFontColor_b'"));
             else
-                d->teXFontColor.setBlue( str.toInt() );			
+                d->teXFontColor.setBlue( str.toInt() );
         }else{ // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;

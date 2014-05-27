@@ -4,8 +4,8 @@
     Description          : Private members of WorksheetElementContainer.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,7 +34,8 @@
 
 class QGraphicsSceneContextMenuEvent;
 class WorksheetElementContainer;
-class WorksheetElementContainerPrivate:  public QGraphicsItem{
+
+class WorksheetElementContainerPrivate : public QGraphicsItem {
 	public:
 		explicit WorksheetElementContainerPrivate(WorksheetElementContainer *owner);
 		virtual ~WorksheetElementContainerPrivate(){}
@@ -42,20 +43,20 @@ class WorksheetElementContainerPrivate:  public QGraphicsItem{
 		QString name() const;
 		virtual QRectF boundingRect() const;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-		virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
-		virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent * event);
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 
 		bool swapVisible(bool on);
 
 		WorksheetElementContainer *q;
-		void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+		void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 
 		QRectF rect;
 		bool m_hovered;
 		bool m_printing;
 
-signals:
-    void selectedChange(QGraphicsItem *item);
+	signals:
+		void selectedChange(QGraphicsItem *item);
 };
 
 #endif

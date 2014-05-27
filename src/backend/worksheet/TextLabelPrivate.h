@@ -3,9 +3,9 @@
     Project              : LabPlot/SciDAVis
     Description          : Private members of Worksheet.
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,10 +34,12 @@
 #include <QFutureWatcher>
 #include <QGraphicsItem>
 
-class TextLabelPrivate: public QGraphicsItem{
+class QGraphicsSceneHoverEvent;
+
+class TextLabelPrivate: public QGraphicsItem {
 	public:
 		explicit TextLabelPrivate(TextLabel*);
-	
+
 		float rotationAngle;
 		float scaleFactor;
 		int teXImageResolution;
@@ -66,6 +68,7 @@ class TextLabelPrivate: public QGraphicsItem{
 		bool suppressItemChangeEvent;
 		bool suppressRetransform;
 		bool m_printing;
+		bool m_hovered;
 
 		QRectF boundingRectangle; //bounding rectangle of the text
 		QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
@@ -76,13 +79,15 @@ class TextLabelPrivate: public QGraphicsItem{
  		virtual QPainterPath shape() const;
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
 		TextLabel* const q;
 
 	private:
 		QImage teXImage;
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+        virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 };
 
 #endif

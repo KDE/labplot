@@ -47,6 +47,7 @@ class CartesianPlot:public AbstractPlot{
 		enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
 		enum ScaleBreakingStyle {ScaleBreakingSimple, ScaleBreakingVertical, ScaleBreakingSloped};
+		enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
 
 		struct ScaleBreaking {
 			ScaleBreaking() : start(0), end(0), position(0.5), isValid(true) {};
@@ -68,6 +69,7 @@ class CartesianPlot:public AbstractPlot{
 		void fillToolBar(QToolBar*) const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
+		MouseMode mouseMode() const;
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);

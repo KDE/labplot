@@ -4,9 +4,9 @@
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke*web.de)
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -33,6 +33,8 @@
 
 #include "backend/core/AbstractAspect.h"
 #include <QGraphicsItem>
+#include <QPen>
+
 class QAction;
 
 class AbstractWorksheetElement: public AbstractAspect {
@@ -61,11 +63,17 @@ class AbstractWorksheetElement: public AbstractAspect {
 		QMenu *m_moveBehindMenu;
 		QMenu *m_moveInFrontOfMenu;
 
+	protected:
+		static QPen selectedPen;
+		static float selectedOpacity;
+		static QPen hoveredPen;
+		static float hoveredOpacity;
+
 	private slots:
 		void prepareMoveBehindMenu();
 		void prepareMoveInFrontOfMenu();
-		void execMoveBehind(QAction *action);
-		void execMoveInFrontOf(QAction *action);
+		void execMoveBehind(QAction*);
+		void execMoveInFrontOf(QAction*);
 
 	signals:
 		friend class AbstractPlotSetHorizontalPaddingCmd;

@@ -5,8 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -39,6 +39,11 @@
 
 #include <KLocale>
 
+QPen AbstractWorksheetElement::hoveredPen = QPen(QColor(128,179,255), 10, Qt::SolidLine);
+float AbstractWorksheetElement::hoveredOpacity = 0.6;
+QPen AbstractWorksheetElement::selectedPen = QPen(Qt::darkBlue, 10, Qt::SolidLine);
+float AbstractWorksheetElement::selectedOpacity = 0.3;
+
 /**
  * \class AbstractWorksheetElement
  * \brief Base class for all Worksheet children.
@@ -47,7 +52,7 @@
 
 AbstractWorksheetElement::AbstractWorksheetElement(const QString &name)
 		: AbstractAspect(name) {
-	
+
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
 	m_moveBehindMenu = new QMenu(i18n("Move &behind"));
 	m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
@@ -107,7 +112,7 @@ bool AbstractWorksheetElement::isFullyVisible() const {
  * This method must not change the undo-aware data of the element, only
  * the graphics item which represents the item is to be updated.
  */
-		
+
 /**
  * \fn AbstractCoordinateSystem *AbstractWorksheetElement::coordinateSystem() const
  * \brief Return the current coordinate system (can be NULL which means don't transform).
@@ -159,7 +164,7 @@ void AbstractWorksheetElement::prepareMoveBehindMenu() {
 			if (elem != this) {
 				QAction *action = m_moveBehindMenu->addAction(elem->name());
 				action->setData(parent->indexOfChild<AbstractWorksheetElement>(elem));
-			}	
+			}
 		}
 	}
 }
@@ -173,7 +178,7 @@ void AbstractWorksheetElement::prepareMoveInFrontOfMenu() {
 			if (elem != this) {
 				QAction *action = m_moveInFrontOfMenu->addAction(elem->name());
 				action->setData(parent->indexOfChild<AbstractWorksheetElement>(elem));
-			}	
+			}
 		}
 	}
 }
@@ -211,8 +216,8 @@ void AbstractWorksheetElement::execMoveInFrontOf(QAction *action) {
  * \param horizontalRatio New page width divided by old page width.
  * \param verticalRatio   New page height divided by old page height.
  *
- * Override this function with a handler which rescales all properties 
- * which are in page coodrinates (such as line widths). Don't forget 
+ * Override this function with a handler which rescales all properties
+ * which are in page coodrinates (such as line widths). Don't forget
  * to call the base class's handler in the overridden version.
  */
 void AbstractWorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio){

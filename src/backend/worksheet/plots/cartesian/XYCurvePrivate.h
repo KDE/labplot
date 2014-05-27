@@ -5,8 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
-							  (replace * with @ in the email addresses) 
-                           
+							  (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -35,17 +35,18 @@
 #include <vector>
 
 class CurveSymbolFactory;
+class CartesianPlot;
 
 class XYCurvePrivate: public QGraphicsItem {
 	public:
 		explicit XYCurvePrivate(XYCurve *owner);
-		~XYCurvePrivate();
 
 		QString name() const;
 		virtual QRectF boundingRect() const;
 		QPainterPath shape() const;
 
 		bool m_printing;
+		bool m_hovered;
 		bool m_suppressRecalc;
 
 		void retransform();
@@ -53,27 +54,27 @@ class XYCurvePrivate: public QGraphicsItem {
 		void updateDropLines();
 		void updateSymbols();
 		void updateValues();
-		void updateErrorBars();		
+		void updateErrorBars();
 		bool swapVisible(bool on);
 		QString swapSymbolsTypeId(const QString &id);
 		void recalcShapeAndBoundingRect();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
-		
+
 		const AbstractColumn* xColumn;
 		const AbstractColumn* yColumn;
 		QString xColumnPath;
 		QString yColumnPath;
-		
+
 		XYCurve::LineType lineType;
 		int lineInterpolationPointsCount;
 		QPen linePen;
 		qreal lineOpacity;
-		
+
 		XYCurve::DropLineType dropLineType;
 		QPen dropLinePen;
 		qreal dropLineOpacity;
-		
+
 		QBrush symbolsBrush;
 		QPen symbolsPen;
 		qreal symbolsOpacity;
@@ -81,7 +82,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		qreal symbolsSize;
 		qreal symbolsAspectRatio;
 		QString symbolsTypeId;
-	
+
 		XYCurve::ValuesType valuesType;
 		const AbstractColumn* valuesColumn;
 		QString valuesColumnPath;
@@ -90,17 +91,17 @@ class XYCurvePrivate: public QGraphicsItem {
 		qreal valuesRotationAngle;
 		qreal valuesOpacity;
 		QString valuesPrefix;
-		QString valuesSuffix;		
+		QString valuesSuffix;
 		QFont valuesFont;
 		QColor valuesColor;
-		
+
 		//error bars
 		XYCurve::ErrorType xErrorType;
 		const AbstractColumn* xErrorPlusColumn;
 		QString xErrorPlusColumnPath;
 		const AbstractColumn* xErrorMinusColumn;
 		QString xErrorMinusColumnPath;
-		
+
 		XYCurve::ErrorType yErrorType;
 		const AbstractColumn* yErrorPlusColumn;
 		QString yErrorPlusColumnPath;
@@ -111,7 +112,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		double errorBarsCapSize;
 		QPen errorBarsPen;
 		qreal errorBarsOpacity;
-		
+
 		QPainterPath linePath;
 		QPainterPath dropLinePath;
 		QPainterPath valuesPath;
@@ -127,10 +128,12 @@ class XYCurvePrivate: public QGraphicsItem {
 		QList<QPointF> valuesPoints;
 		QList<QString> valuesStrings;
 
-		XYCurve * const q;
+		XYCurve* const q;
 
 	private:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 };
 
 #endif

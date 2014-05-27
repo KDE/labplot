@@ -39,7 +39,7 @@ class FunctionsWidget: public QWidget{
 	Q_OBJECT
 
 public:
-	explicit FunctionsWidget(QWidget *);
+	explicit FunctionsWidget(QWidget*);
 
 private:
 	Ui::FunctionsWidget ui;

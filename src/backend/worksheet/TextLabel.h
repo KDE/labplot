@@ -5,8 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -48,7 +48,7 @@ class TextLabel : public AbstractWorksheetElement{
 
 		enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
 		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
-		
+
 		enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
 		enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
 
@@ -69,7 +69,7 @@ class TextLabel : public AbstractWorksheetElement{
 
 		explicit TextLabel(const QString& name, Type type = General);
 		~TextLabel();
-		
+
 		Type type() const;
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
@@ -78,7 +78,7 @@ class TextLabel : public AbstractWorksheetElement{
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
-		
+
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
 		BASIC_D_ACCESSOR_DECL(int, teXFontSize, TeXFontSize);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
@@ -88,7 +88,7 @@ class TextLabel : public AbstractWorksheetElement{
 		BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment);
 		BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment);
 		BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle);
-		
+
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);

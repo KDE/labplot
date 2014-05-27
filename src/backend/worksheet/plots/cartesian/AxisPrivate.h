@@ -4,9 +4,9 @@
     Description          : Private members of Axis.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
-							(replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
+							(replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -35,6 +35,8 @@
 #include <QPen>
 #include "Axis.h"
 
+class QGraphicsSceneHoverEvent;
+
 class CartesianPlot;
 class AbstractCoordinateSystem;
 class CartesianCoordinateSystem;
@@ -47,6 +49,7 @@ class AxisPrivate: public QGraphicsItem {
 		const CartesianPlot* m_plot;
 		const CartesianCoordinateSystem* m_cSystem;
 		bool m_printing;
+		bool m_hovered;
 
 		//general
 		bool autoScale;
@@ -149,7 +152,9 @@ class AxisPrivate: public QGraphicsItem {
 		Axis* const q;
 
 	private:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+        virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 
 	protected:
 		bool transformAnchor(QPointF*);
