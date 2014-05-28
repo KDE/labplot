@@ -4,7 +4,7 @@
     Description          : A xy-curve defined by a mathematical equation
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -53,7 +53,7 @@ XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd
 	init();
 }
 
- 
+
 XYEquationCurve::~XYEquationCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
@@ -67,6 +67,10 @@ void XYEquationCurve::init() {
 
 	d->yColumn->setHidden(true);
 	addChild(d->yColumn);
+
+	//TODO: read from the saved settings for XYEquationCurve?
+	d->lineType = XYCurve::Line;
+	d->swapSymbolsTypeId("none");
 
 	setUndoAware(false);
 	setXColumn(d->xColumn);

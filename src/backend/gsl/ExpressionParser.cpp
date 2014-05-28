@@ -46,10 +46,36 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; _functions[i].name != 0; i++)
 		m_functions << _functions[i].name;
 
-	//TODO:
+	//http://www.gnu.org/software/gsl/manual/html_node/Special-Functions.html
 	m_functionsGroups << "Airy Functions and Derivatives";
 	m_functionsGroups << "Bessel Functions";
 	m_functionsGroups << "Clausen Functions";
+	//TODO: Coulomb Functions?
+	m_functionsGroups << "Coupling Coefficients";
+	m_functionsGroups << "Dawson Function";
+	m_functionsGroups << "Debye Functions";
+	m_functionsGroups << "Dilogarithm";
+	m_functionsGroups << "Elementary Operations";
+	m_functionsGroups << "Elliptic Integrals";
+	m_functionsGroups << "Elliptic Functions (Jacobi)";
+	m_functionsGroups << "Error Functions";
+	m_functionsGroups << "Exponential Functions";
+	m_functionsGroups << "Exponential Integrals";
+	m_functionsGroups << "Fermi-Dirac Function";
+	m_functionsGroups << "Gamma and Beta Functions";
+	m_functionsGroups << "Gegenbauer Functions";
+	m_functionsGroups << "Hypergeometric Functions";
+	m_functionsGroups << "Laguerre Functions";
+	m_functionsGroups << "Lambert W Functions";
+	m_functionsGroups << "Legendre Functions and Spherical Harmonics";
+	m_functionsGroups << "Logarithm and Related Functions";
+	m_functionsGroups << "Mathieu Functions";
+	m_functionsGroups << "Power Function";
+	m_functionsGroups << "Psi (Digamma) Function";
+	m_functionsGroups << "Synchrotron Functions";
+	m_functionsGroups << "Transport Functions:";
+	m_functionsGroups << "Trigonometric Functions";
+	m_functionsGroups << "Zeta Functions:";
 }
 
 //TODO: decide whether we want to have i18n here in the backend part of the code
