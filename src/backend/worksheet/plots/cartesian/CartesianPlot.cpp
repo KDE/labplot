@@ -47,6 +47,7 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QGraphicsView>
+ #include <QGraphicsColorizeEffect>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -1284,9 +1285,15 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		if (!m_rubberBand) {
 			m_rubberBand = new QRubberBand(QRubberBand::Rectangle);
-			QPalette pal;
-			pal.setBrush(QPalette::Highlight, QBrush(Qt::red));
-			m_rubberBand->setPalette(pal);
+			QGraphicsColorizeEffect *e = new QGraphicsColorizeEffect(m_rubberBand);
+			e->setColor(QColor(Qt::blue));
+			m_rubberBand->setGraphicsEffect(e);
+
+			/*QPalette pal;
+			QColor color(Qt::blue);
+			color.setAlpha(50);
+			pal.setBrush(QPalette::Highlight, QBrush(color));
+			m_rubberBand->setPalette(pal);*/
 		}
 
 		if (mouseMode==CartesianPlot::ZoomSelectionMode) {
