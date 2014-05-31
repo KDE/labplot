@@ -50,8 +50,8 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << "Airy Functions and Derivatives";
 	m_functionsGroups << "Bessel Functions";
 	m_functionsGroups << "Clausen Functions";
-	//TODO: Coulomb Functions?
-	m_functionsGroups << "Coupling Coefficients";
+	m_functionsGroups << "Coulomb Functions";
+// 	m_functionsGroups << "Coupling Coefficients";
 	m_functionsGroups << "Dawson Function";
 	m_functionsGroups << "Debye Functions";
 	m_functionsGroups << "Dilogarithm";

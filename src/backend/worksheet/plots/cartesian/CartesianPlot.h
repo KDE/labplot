@@ -36,6 +36,7 @@ class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class XYCurve;
 class XYEquationCurve;
+class XYFitCurve;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -105,6 +106,7 @@ class CartesianPlot:public AbstractPlot{
 
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
+		QAction* addFitCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
@@ -132,6 +134,7 @@ class CartesianPlot:public AbstractPlot{
 		void addAxis();
 		XYCurve* addCurve();
 		XYEquationCurve* addEquationCurve();
+		XYFitCurve* addFitCurve();
 		void addLegend();
 		void updateLegend();
 		void childAdded(const AbstractAspect*);

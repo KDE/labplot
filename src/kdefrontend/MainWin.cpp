@@ -102,6 +102,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	spreadsheetDock(0),
 	projectDock(0),
 	xyCurveDock(0),
+	xyFitCurveDock(0),
 	xyEquationCurveDock(0),
 	worksheetDock(0),
 	textLabelDock(0){

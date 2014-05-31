@@ -33,6 +33,7 @@
 #include "Axis.h"
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
+#include "XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
@@ -47,7 +48,7 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QGraphicsView>
- #include <QGraphicsColorizeEffect>
+#include <QGraphicsColorizeEffect>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -361,6 +362,7 @@ void CartesianPlot::initActions(){
 
 	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+	addFitCurveAction = new KAction(KIcon("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
@@ -381,6 +383,7 @@ void CartesianPlot::initActions(){
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
+	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
@@ -409,6 +412,7 @@ void CartesianPlot::initMenus(){
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
@@ -462,6 +466,7 @@ void CartesianPlot::fillToolBar(QToolBar* toolBar) const{
 	toolBar->addSeparator();
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addEquationCurveAction);
+	toolBar->addAction(addFitCurveAction);
 	toolBar->addAction(addLegendAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
@@ -651,6 +656,22 @@ XYCurve* CartesianPlot::addCurve(){
 
 XYEquationCurve* CartesianPlot::addEquationCurve(){
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
+	this->addChild(curve);
+	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
+	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
+
+	//update the legend on changes of the name, line and symbol styles
+	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
+	connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
+
+	return curve;
+}
+
+XYFitCurve* CartesianPlot::addFitCurve(){
+	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
 	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));

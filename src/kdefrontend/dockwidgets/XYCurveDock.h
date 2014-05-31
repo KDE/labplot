@@ -3,10 +3,10 @@
     Project            : LabPlot
     --------------------------------------------------------------------
     Copyright         : (C) 2010-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach*uni.kn) 
+    Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach*uni.kn)
 						(replace * with @ in the email addresses)
     Description      : widget for curve properties
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -46,7 +46,7 @@ class Column;
 
 class XYCurveDock: public QWidget{
 	Q_OBJECT
-	
+
 public:
 	explicit XYCurveDock(QWidget *parent);
 	void setModel(std::auto_ptr<AspectTreeModel>);
@@ -59,15 +59,13 @@ private:
 
 	QStringList dateStrings;
 	QStringList timeStrings;
-	  
-	TreeViewComboBox* cbXColumn;
-	TreeViewComboBox* cbYColumn;
+
 	TreeViewComboBox* cbValuesColumn;
 	TreeViewComboBox* cbXErrorPlusColumn;
 	TreeViewComboBox* cbXErrorMinusColumn;
 	TreeViewComboBox* cbYErrorPlusColumn;
 	TreeViewComboBox* cbYErrorMinusColumn;
-	
+
 	CurveSymbolFactory* symbolFactory;
 
 	virtual void initGeneralTab();
@@ -81,20 +79,22 @@ protected:
 	Ui::XYCurveDock ui;
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve;
+	TreeViewComboBox* cbXColumn;
+	TreeViewComboBox* cbYColumn;
 
 	void initTabs();
 
 private slots:
 	void init();
 	void retranslateUi();
-  
+
 	//SLOTs for changes triggered in XYCurveDock
 	void nameChanged();
 	void commentChanged();
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
-	
+
 	//Line-Tab
 	void lineTypeChanged(int);
 	void lineInterpolationPointsCountChanged(int);
@@ -102,13 +102,13 @@ private slots:
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
-	
+
 	void dropLineTypeChanged(int);
   	void dropLineStyleChanged(int);
 	void dropLineColorChanged(const QColor&);
 	void dropLineWidthChanged(double);
 	void dropLineOpacityChanged(int);
-	
+
 	//Symbol-tab
   	void symbolsStyleChanged(int);
 	void symbolsSizeChanged(double);
@@ -119,7 +119,7 @@ private slots:
 	void symbolsBorderStyleChanged(int);
 	void symbolsBorderColorChanged(const QColor&);
 	void symbolsBorderWidthChanged(double);
-	
+
 	//Values-Tab
 	void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);
@@ -156,7 +156,7 @@ private slots:
 	void curveLineTypeChanged(XYCurve::LineType);
 	void curveLineInterpolationPointsCountChanged(int);
 	void curveLinePenChanged(const QPen&);
-	void curveLineOpacityChanged(qreal); 
+	void curveLineOpacityChanged(qreal);
 	void curveDropLineTypeChanged(XYCurve::DropLineType);
 	void curveDropLinePenChanged(const QPen&);
 	void curveDropLineOpacityChanged(qreal);
@@ -168,7 +168,7 @@ private slots:
 	void curveSymbolsOpacityChanged(qreal);
 	void curveSymbolsBrushChanged(QBrush);
 	void curveSymbolsPenChanged(const QPen&);
-	
+
 	//Values-Tab
 	void curveValuesTypeChanged(XYCurve::ValuesType);
 	void curveValuesColumnChanged(const AbstractColumn*);

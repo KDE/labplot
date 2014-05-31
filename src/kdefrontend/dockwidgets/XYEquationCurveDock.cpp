@@ -62,6 +62,13 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent){
 void XYEquationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
+	if (gridLayout ) {
+	  gridLayout->setContentsMargins(2,2,2,2);
+	  gridLayout->setHorizontalSpacing(2);
+	  gridLayout->setVerticalSpacing(2);
+	}
+
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);

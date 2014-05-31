@@ -52,6 +52,7 @@ class ProjectDock;
 class SpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
+class XYFitCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
@@ -84,7 +85,7 @@ private:
 	bool m_autoSaveActive;
 	QTimer m_autoSaveTimer;
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
-	
+
 	KRecentFilesAction* m_recentProjectsAction;
 	KAction* m_saveAction;
 	KAction* m_saveAsAction;
@@ -108,8 +109,8 @@ private:
 	//toggling doch widgets
 	KAction* m_toggleProjectExplorerDockAction;
 	KAction* m_togglePropertiesDockAction;
-	
-	//worksheet actions 
+
+	//worksheet actions
 	KAction* worksheetZoomInAction;
 	KAction* worksheetZoomOutAction;
 	KAction* worksheetZoomOriginAction;
@@ -125,15 +126,15 @@ private:
 	KAction* worksheetHorizontalLayoutAction;
 	KAction* worksheetGridLayoutAction;
 	KAction* worksheetBreakLayoutAction;
-	
+
 	KAction* m_visibilityFolderAction;
 	KAction* m_visibilitySubfolderAction;
 	KAction* m_visibilityAllAction;
-	
+
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
-	
+
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
@@ -144,9 +145,10 @@ private:
 	ProjectDock* projectDock;
 	XYCurveDock* xyCurveDock;
 	XYEquationCurveDock* xyEquationCurveDock;
+	XYFitCurveDock* xyFitCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
-	
+
 	void openXML(QIODevice*);
 
 	void initActions();
@@ -162,7 +164,7 @@ private:
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
-	
+
 private slots:
 	void initGUI(const QString&);
 	void updateGUI();
@@ -181,7 +183,7 @@ private slots:
 
 	void print();
 	void printPreview();
-	
+
 	void historyDialog();
 	void importFileDialog();
 	void exportDialog();
@@ -196,10 +198,10 @@ private slots:
 	void newMatrix();
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
-	
+
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;
-	
+
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent);
