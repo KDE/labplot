@@ -160,7 +160,48 @@ void ExpressionParser::initConstants() {
 		m_constantsGroupIndex << 2;
 
 	// Atomic and Nuclear Physics;
+	m_constantsNames << "Charge of the electron";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_CHARGE); m_constantsUnits << "A s";
+	m_constantsNames << "Energy of 1 electron volt";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_VOLT); m_constantsUnits << "kg m^2 / s^2";
+	m_constantsNames << "Unified atomic mass";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of the electron";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_ELECTRON); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of the muon";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_MUON); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of the proton";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_PROTON); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of the neutron";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_NEUTRON); m_constantsUnits << "kg";
+	m_constantsNames << "Electromagnetic fine structure constant";
+	m_constantsValues << QString::number(GSL_CONST_NUM_FINE_STRUCTURE); m_constantsUnits << "";
+	m_constantsNames << "Rydberg constant";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_RYDBERG); m_constantsUnits << "kg m^2 / s^2";
+	m_constantsNames << "Bohr radius";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BOHR_RADIUS); m_constantsUnits << "m";
+	m_constantsNames << "Length of 1 angstrom";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ANGSTROM); m_constantsUnits << "m";
+	m_constantsNames << "Area of 1 barn";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BARN); m_constantsUnits << "m^2";
+	m_constantsNames << "Bohr Magneton";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BOHR_MAGNETON); m_constantsUnits << "A m^2";
+	m_constantsNames << "Nuclear Magneton";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_NUCLEAR_MAGNETON); m_constantsUnits << "A m^2";
+	m_constantsNames << "Magnetic moment of the electron [absolute value]";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_MAGNETIC_MOMENT); m_constantsUnits << "A m^2";
+	m_constantsNames << "Magnetic moment of the proton";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PROTON_MAGNETIC_MOMENT); m_constantsUnits << "A m^2";
+	m_constantsNames << "Thomson cross section";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_THOMSON_CROSS_SECTION); m_constantsUnits << "m^2";
+	m_constantsNames << "Electric dipole moment of 1 Debye";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_DEBYE); m_constantsUnits << "A s^2 / m^2";
 
+	for(int i=0;i<18;i++)
+		m_constantsGroupIndex << 3;
+
+	//m_constantsNames << "";
+	//m_constantsValues << QString::number(); m_constantsUnits << "";
 	//TODO: complete
 }
 

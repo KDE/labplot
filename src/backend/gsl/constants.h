@@ -38,7 +38,7 @@ struct con _constants[] = {
 	{"ms",GSL_CONST_MKSA_SOLAR_MASS},
 
 	/* Atomic and Nuclear Physics */
-	{"e",GSL_CONST_MKSA_ELECTRON_CHARGE},
+	{"ee",GSL_CONST_MKSA_ELECTRON_CHARGE},
 	{"ev",GSL_CONST_MKSA_ELECTRON_VOLT},
 	{"amu",GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS},
 	{"me",GSL_CONST_MKSA_MASS_ELECTRON},
