@@ -102,6 +102,7 @@ void ConstantsWidget::constantChanged(const QString& text) {
 	int index = names.indexOf(name);
 	if (index!=-1){
 		ui.kleValue->setText(values.at(index));
+		ui.kleValue->setCursorPosition(0);
 		ui.lUnit->setText(units.at(index));
 	}
 }

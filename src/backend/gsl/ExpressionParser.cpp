@@ -32,6 +32,8 @@
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_const_mksa.h>
+#include <gsl/gsl_const_num.h>
 
 ExpressionParser* ExpressionParser::instance = NULL;
 
@@ -76,6 +78,8 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << "Transport Functions:";
 	m_functionsGroups << "Trigonometric Functions";
 	m_functionsGroups << "Zeta Functions:";
+
+	//TODO: fill function groups
 }
 
 //TODO: decide whether we want to have i18n here in the backend part of the code
@@ -102,57 +106,60 @@ void ExpressionParser::initConstants() {
 
 	//Mathematical constants
 	m_constantsNames << "Euler constant";
+	m_constantsValues << QString::number(M_E,'g',15); m_constantsUnits << "";
 	m_constantsNames << "Pi";
+	m_constantsValues << QString::number(M_PI,'g',15); m_constantsUnits << "";
 
-	m_constantsValues << "2.71828182845904523536028747135"; m_constantsUnits << "";
-	m_constantsValues << "3.14159265358979323846264338328"; m_constantsUnits << "";
-
-	m_constantsGroupIndex << 0 << 0;
+	for(int i=0;i<2;i++)
+		m_constantsGroupIndex << 0;
 
 	//Fundamental constants
 	m_constantsNames << "Speed of light";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_SPEED_OF_LIGHT); m_constantsUnits << "m / s";
 	m_constantsNames << "Vaccuum permeability";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMEABILITY); m_constantsUnits << "kg m / A^2 s^2";
 	m_constantsNames << "Vaccuum permittivity";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMITTIVITY); m_constantsUnits << "A^2 s^4 / kg m^3";
 	m_constantsNames << "Plank constant";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_H); m_constantsUnits << "kg m^2 / s";
 	m_constantsNames << "Reduced Plank constant";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR); m_constantsUnits << "kg m^2 / s";
 	m_constantsNames << "Avogadro constant";
+	m_constantsValues << QString::number(GSL_CONST_NUM_AVOGADRO); m_constantsUnits << "1 / mol";
 	m_constantsNames << "Faraday";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FARADAY); m_constantsUnits << "A s / mol";
 	m_constantsNames << "Boltzman constant";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BOLTZMANN); m_constantsUnits << "kg m^2 / K s^2";
 	m_constantsNames << "Molar gas";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MOLAR_GAS); m_constantsUnits << "kg m^2 / K mol s^2";
 	m_constantsNames << "Standard gas volume";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STANDARD_GAS_VOLUME); m_constantsUnits << "m^3 / mol";
 	m_constantsNames << "Stefan-Boltzman constant";
-	m_constantsNames << "gauss";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STEFAN_BOLTZMANN_CONSTANT); m_constantsUnits << "kg / K^4 s^3";
+	m_constantsNames << "Gauss";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_GAUSS); m_constantsUnits << "kg / A s^2";
 
-	m_constantsValues << "2.99792458e8"; m_constantsUnits << "m / s";
-	m_constantsValues << "1.25663706144e-6"; m_constantsUnits << "kg m / A^2 s^2";
-	m_constantsValues << "8.854187817e-12"; m_constantsUnits << "A^2 s^4 / kg m^3";
-	m_constantsValues << "6.62606896e-34"; m_constantsUnits << "kg m^2 / s";
-	m_constantsValues << "1.05457162825e-34"; m_constantsUnits << "kg m^2 / s";
-	m_constantsValues << "6.02214199e23"; m_constantsUnits << "1 / mol";
-	m_constantsValues << "9.64853429775e4"; m_constantsUnits << "A s / mol";
-	m_constantsValues << "8.314472"; m_constantsUnits << "kg m^2 / K mol s^2";
-	m_constantsValues << "2.2710981e-2"; m_constantsUnits << "m^3 / mol";
-	m_constantsValues << "5.67040047374e-8"; m_constantsUnits << "kg / K^4 s^3";
-	m_constantsValues << "1e-4"; m_constantsUnits << "kg / A s^2";
-
-	m_constantsGroupIndex << 1 << 1 << 1 << 1 << 1 << 1 << 1 << 1 << 1 << 1 << 1 << 1;
+	for(int i=0;i<12;i++)
+		m_constantsGroupIndex << 1;
 
 	// Astronomy and Astrophysics
 	m_constantsNames << "Astronomical unit";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ASTRONOMICAL_UNIT); m_constantsUnits << "m";
 	m_constantsNames << "Gravitational constant";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT); m_constantsUnits << "m^3 / kg s^2";
 	m_constantsNames << "Light year";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LIGHT_YEAR); m_constantsUnits << "m";
 	m_constantsNames << "Parsec";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PARSEC); m_constantsUnits << "m";
 	m_constantsNames << "Gravitational acceleration";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAV_ACCEL); m_constantsUnits << "m / s^2";
 	m_constantsNames << "Solar mass";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_SOLAR_MASS); m_constantsUnits << "kg";
 
-	m_constantsValues << "1.49597870691e11"; m_constantsUnits << "m";
-	m_constantsValues << "6.673e-11"; m_constantsUnits << "m^3 / kg s^2";
-	m_constantsValues << "9.46053620707e15"; m_constantsUnits << "m";
-	m_constantsValues << "3.08567758135e16"; m_constantsUnits << "m";
-	m_constantsValues << "9.80665e0"; m_constantsUnits << "m / s^2";
-	m_constantsValues << "1.98892e30"; m_constantsUnits << "kg";
+	for(int i=0;i<6;i++)
+		m_constantsGroupIndex << 2;
 
-	m_constantsGroupIndex << 2 << 2 << 2 << 2 << 2 << 2;
+	// Atomic and Nuclear Physics;
 
 	//TODO: complete
 }
