@@ -200,6 +200,81 @@ void ExpressionParser::initConstants() {
 	for(int i=0;i<18;i++)
 		m_constantsGroupIndex << 3;
 
+	// Measurement of Time
+	m_constantsNames << "Number of seconds in 1 minute";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MINUTE); m_constantsUnits << "s";
+	m_constantsNames << "Number of seconds in 1 hour";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_HOUR); m_constantsUnits << "s";
+	m_constantsNames << "Number of seconds in 1 day";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_DAY); m_constantsUnits << "s";
+	m_constantsNames << "Number of seconds in 1 week";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_WEEK); m_constantsUnits << "s";
+
+	for(int i=0;i<4;i++)
+		m_constantsGroupIndex << 4;
+
+	// Imperial Units
+	m_constantsNames << "Length of 1 inch";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH); m_constantsUnits << "m";
+	m_constantsNames << "Length of 1 foot";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOT); m_constantsUnits << "m";
+	m_constantsNames << "Length of 1 yard";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_YARD); m_constantsUnits << "m";
+	m_constantsNames << "Length of 1 mile";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MILE); m_constantsUnits << "m";
+	m_constantsNames << "Length of 1/1000th of an inch";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MIL); m_constantsUnits << "m";
+
+	for(int i=0;i<5;i++)
+		m_constantsGroupIndex << 5;
+
+	// Speed and Nautical Units 
+	m_constantsNames << "Speed of 1 kilometer per hour";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOMETERS_PER_HOUR); m_constantsUnits << "m / s";
+	m_constantsNames << "Speed of 1 mile per hour";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MILES_PER_HOUR); m_constantsUnits << "m / s";
+	m_constantsNames << "Length of 1 nautical mile";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_NAUTICAL_MILE); m_constantsUnits << "m";
+	m_constantsNames << "Length of 1 fathom";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FATHOM); m_constantsUnits << "m";
+	m_constantsNames << "Speed of 1 knot";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_KNOT); m_constantsUnits << "m / s";
+
+	for(int i=0;i<5;i++)
+		m_constantsGroupIndex << 6;
+
+	// Printers Units
+	m_constantsNames << "length of 1 printer’s point [1/72 inch]";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POINT); m_constantsUnits << "m";
+	m_constantsNames << "length of 1 TeX point [1/72.27 inch]";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_TEXPOINT); m_constantsUnits << "m";
+
+	for(int i=0;i<2;i++)
+		m_constantsGroupIndex << 7;
+
+	// Volume, Area and Length
+	m_constantsNames << "Length of 1 micron";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MICRON); m_constantsUnits << "m";
+	m_constantsNames << "Area of 1 hectare";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_HECTARE); m_constantsUnits << "m^2";
+	m_constantsNames << "Area of 1 acre";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ACRE); m_constantsUnits << "m^2";
+	m_constantsNames << "Volume of 1 liter";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LITER); m_constantsUnits << "m^3";
+	m_constantsNames << "Volume of 1 US gallon";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_US_GALLON); m_constantsUnits << "m^3";
+	m_constantsNames << "Volume of 1 Canadian gallon";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_CANADIAN_GALLON); m_constantsUnits << "m^3";
+	m_constantsNames << "Volume of 1 UK gallon";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_UK_GALLON); m_constantsUnits << "m^3";
+	m_constantsNames << "Volume of 1 quart";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_QUART); m_constantsUnits << "m^3";
+	m_constantsNames << "Volume of 1 pint";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PINT); m_constantsUnits << "m^3";
+
+	for(int i=0;i<9;i++)
+		m_constantsGroupIndex << 8;
+
 	//m_constantsNames << "";
 	//m_constantsValues << QString::number(); m_constantsUnits << "";
 	//TODO: complete
@@ -219,6 +294,7 @@ ExpressionParser* ExpressionParser::getInstance(){
 const QStringList& ExpressionParser::functions() {
 	return m_functions;
 }
+
 
 const QStringList& ExpressionParser::functionsGroups() {
 	return m_functionsGroups;
