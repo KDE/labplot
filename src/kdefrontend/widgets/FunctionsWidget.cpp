@@ -98,7 +98,7 @@ void FunctionsWidget::insertClicked() {
 	const QString& text = ui.lwFunctions->currentItem()->text();
 	const QString& name = text.left( text.indexOf(" (") );
 	int index = names.indexOf(name);
-	const QString& function = functions.at(index);
+	const QString& function = functions.at(index)+"(x)";
 
 	emit(functionSelected(function));
 }

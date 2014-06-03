@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
+			(C) 2014 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : c++ wrapper for the bison generated parser.
 
  ***************************************************************************/
@@ -48,6 +49,7 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; _functions[i].name != 0; i++)
 		m_functions << _functions[i].name;
 
+	m_functionsGroups << "Standard Mathematical functions";
 	//http://www.gnu.org/software/gsl/manual/html_node/Special-Functions.html
 	m_functionsGroups << "Airy Functions and Derivatives";
 	m_functionsGroups << "Bessel Functions";
@@ -79,7 +81,30 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << "Trigonometric Functions";
 	m_functionsGroups << "Zeta Functions:";
 
-	//TODO: fill function groups
+	// Standard mathematical functions
+	m_functionsNames << "pseudo-random integer [0,RAND_MAX]";
+	m_functionsNames << "nonlinear additive feedback rng [0,RAND_MAX]";
+	m_functionsNames << "nonlinear additive feedback rng [0,1]";
+	m_functionsNames << "Arc cosine";
+	m_functionsNames << "Inverse hyperbolic cosine";
+	m_functionsNames << "Principal value of the arc sine";
+	m_functionsNames << "Inverse hyperbolic sine";
+	m_functionsNames << "Principal value of the arc tangent";
+	m_functionsNames << "atan() using sign";
+	m_functionsNames << "Inverse hyperbolic tangent";
+
+	m_functionsNames << "cube root";
+	m_functionsNames << "smallest integral value not less";
+	m_functionsNames << "cosine";
+	m_functionsNames << "hyperbolic cosine";
+
+	for(int i=0;i<14;i++)
+		m_functionsGroupIndex << 0;
+
+	//TODO
+	// Airy Functions and Derivatives
+	// ...
+
 }
 
 //TODO: decide whether we want to have i18n here in the backend part of the code

@@ -106,22 +106,23 @@ double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf((unsigne
 #endif
 
 struct func _functions[] = {
-  {"drand",my_drand},
-/* stdlib.h */
-  {"rand",my_rand},
-  {"random",my_random},
-/* math.h */
-  {"acos",acos},
-  {"acosh",acosh},
-  {"asin",asin},
-  {"asinh",asinh},
-  {"atan",atan},
-  {"atan2",atan2},
-  {"atanh",atanh},
-  {"cbrt",cbrt},
-  {"ceil",ceil},
-  {"cos", cos},
-  {"cosh",cosh},
+	/* Standard functions */
+	/* stdlib.h */
+	{"rand",my_rand},
+	{"random",my_random},
+	{"drand",my_drand},
+	/* math.h */
+	{"acos",acos},
+	{"acosh",acosh},
+	{"asin",asin},
+	{"asinh",asinh},
+	{"atan",atan},
+	{"atan2",atan2},
+	{"atanh",atanh},
+	{"cbrt",cbrt},
+	{"ceil",ceil},
+	{"cos", cos},
+	{"cosh",cosh},
   {"erf",erf},
   {"erfc",erfc},
   {"exp", exp},

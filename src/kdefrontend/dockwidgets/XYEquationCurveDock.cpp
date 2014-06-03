@@ -74,7 +74,7 @@ void XYEquationCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	uiGeneralTab.tbConstants1->setIcon( KIcon("applications-education-mathematics") );
-	uiGeneralTab.tbConstants2->setIcon( KIcon("applications-education-mathematics") );
+	uiGeneralTab.tbFunctions1->setIcon( KIcon("preferences-desktop-font") );
 
 	uiGeneralTab.cbType->addItem(i18n("cartesian"));
 	uiGeneralTab.cbType->addItem(i18n("polar"));
@@ -276,11 +276,11 @@ void XYEquationCurveDock::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
 	if (QObject::sender()==uiGeneralTab.tbFunctions1)
-		connect(&functions, SIGNAL(constantSelected(QString)), this, SLOT(insert1(QString)));
+		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insert1(QString)));
 	else
-		connect(&functions, SIGNAL(constantSelected(QString)), this, SLOT(insert2(QString)));
+		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insert2(QString)));
 
-	connect(&functions, SIGNAL(functionsSelected(QString)), &menu, SLOT(close()));
+	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
