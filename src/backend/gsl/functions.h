@@ -7,14 +7,14 @@
 
 /********* redefine functions to use double parameter *********/
 
-/* math.h */
-double my_jn(double n, double x) { return jn((int)n,x); }
-double my_ldexp(double x, double expo) { return ldexp(x,(int)expo); }
-double my_yn(double n,double x) { return yn((int)n,x); }
 /* stdlib.h */
 double my_rand() { return rand(); }
 double my_random() { return random(); }
 double my_drand() { return random()/(double)RAND_MAX; }
+/* math.h */
+double my_jn(double n, double x) { return jn((int)n,x); }
+double my_ldexp(double x, double expo) { return ldexp(x,(int)expo); }
+double my_yn(double n,double x) { return yn((int)n,x); }
 
 /* wrapper for GSL functions with integer parameters */
 #ifdef HAVE_GSL
@@ -123,37 +123,38 @@ struct func _functions[] = {
 	{"ceil",ceil},
 	{"cos", cos},
 	{"cosh",cosh},
-  {"erf",erf},
-  {"erfc",erfc},
-  {"exp", exp},
-  {"expm1",expm1},
-  {"fabs",fabs},
-  {"gamma",gamma},
-  {"hypot",hypot},
-  {"j0",j0},
-  {"j1",j1},
-  {"jn",my_jn},
-  {"ldexp",my_ldexp},
-  {"lgamma",lgamma},
-  {"ln", log},	/* german version natural log */
-  {"log",log},
-  {"log10",log10},
-  {"log1p",log1p},
-  {"logb",logb},
-  {"pow",pow},
-  {"rint",rint},
-  {"round",round},
-  {"sin", sin},
-  {"sinh",sinh},
-  {"sqrt", sqrt},
-  {"tan",tan},
-  {"tanh",tanh},
-  {"tgamma",tgamma},
-  {"trunc",trunc},
-  {"y0",y0},
-  {"y1",y1},
-  {"yn",my_yn},
-/* GSL functions */
+	{"erf",erf},
+	{"erfc",erfc},	
+	{"exp", exp},	
+	{"expm1",expm1},
+	{"fabs",fabs},
+	{"gamma",gamma},
+	{"hypot",hypot},
+	{"j0",j0},
+	{"j1",j1},
+	{"jn",my_jn},
+	{"ldexp",my_ldexp},
+	{"lgamma",lgamma},
+	{"ln", log},	/* german version natural log */
+	{"log",log},
+	{"log10",log10},
+	{"log1p",log1p},
+	{"logb",logb},
+	{"pow",pow},
+	{"rint",rint},
+	{"round",round},
+	{"sin", sin},
+	{"sinh",sinh},
+	{"sqrt", sqrt},
+	{"tan",tan},
+	{"tanh",tanh},
+	{"tgamma",tgamma},
+	{"trunc",trunc},
+	{"y0",y0},
+	{"y1",y1},
+	{"yn",my_yn},
+
+	/* GSL functions: see http://www.gnu.org/software/gsl/manual/html_node/Special-Functions.html */
   {"gsl_log1p",gsl_log1p},
   {"gsl_expm1",gsl_expm1},
   {"gsl_hypot",gsl_hypot},

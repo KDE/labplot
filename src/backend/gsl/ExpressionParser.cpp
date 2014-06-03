@@ -93,12 +93,45 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << "atan() using sign";
 	m_functionsNames << "Inverse hyperbolic tangent";
 
-	m_functionsNames << "cube root";
-	m_functionsNames << "smallest integral value not less";
-	m_functionsNames << "cosine";
-	m_functionsNames << "hyperbolic cosine";
+	m_functionsNames << "Cube root";
+	m_functionsNames << "Smallest integral value not less";
+	m_functionsNames << "Cosine";
+	m_functionsNames << "Hyperbolic cosine";
+	m_functionsNames << "Error function";
+	m_functionsNames << "Complementary error function";
+	m_functionsNames << "Exponential function";
+	m_functionsNames << "exp() - 1";
+	m_functionsNames << "Lbsolute value";
+	m_functionsNames << "Logarithm of the gamma function";
 
-	for(int i=0;i<14;i++)
+	m_functionsNames << "Length of the hypotenuse sqrt(x*x+y*y)";
+	m_functionsNames << "Bessel function of first kind, orders 0";
+	m_functionsNames << "Bessel function of first kind, orders 1";
+	m_functionsNames << "Bessel function of first kind, orders n";
+	m_functionsNames << "x * 2^y";
+	m_functionsNames << "Natural logarithm of the Gamma function (absolute value)";
+	m_functionsNames << "Natural logarithm";
+	m_functionsNames << "Natural logarithm";
+	m_functionsNames << "Base 10 logarithm";
+	m_functionsNames << "log (1 + x)";
+
+	m_functionsNames << "Extract the exponent";
+	m_functionsNames << "Power function [x^y]";
+	m_functionsNames << "Round to an integer value";
+	m_functionsNames << "Round to the nearest integer";
+	m_functionsNames << "Sine";
+	m_functionsNames << "Hyperbolic sine";
+	m_functionsNames << "Nonnegative square root";
+	m_functionsNames << "Tangent";
+	m_functionsNames << "Hyperbolic tangent";
+	m_functionsNames << "(True) Gamma function";
+
+	m_functionsNames << "Round to the nearest integer";
+	m_functionsNames << "Bessel function of second kind, orders 0";
+	m_functionsNames << "Bessel function of second kind, orders 1";
+	m_functionsNames << "Bessel function of second kind, orders n";
+
+	for(int i=0;i<44;i++)
 		m_functionsGroupIndex << 0;
 
 	//TODO
