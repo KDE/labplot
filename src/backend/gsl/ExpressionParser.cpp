@@ -97,6 +97,7 @@ void ExpressionParser::initConstants() {
 	m_constantsGroups << "Speed and Nautical Units";
 	m_constantsGroups << "Printers Units";
 	m_constantsGroups << "Volume, Area and Length";
+	m_constantsGroups << "Mass and Weight";
 	m_constantsGroups << "Thermal Energy and Power";
 	m_constantsGroups << "Pressure";
 	m_constantsGroups << "Viscosity";
@@ -275,9 +276,116 @@ void ExpressionParser::initConstants() {
 	for(int i=0;i<9;i++)
 		m_constantsGroupIndex << 8;
 
-	//m_constantsNames << "";
-	//m_constantsValues << QString::number(); m_constantsUnits << "";
-	//TODO: complete
+	// Mass and Weight
+	m_constantsNames << "Mass of 1 pound";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POUND_MASS); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of 1 ounce";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_OUNCE_MASS); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of 1 ton";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_TON); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of 1 metric ton [1000 kg]";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_METRIC_TON); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of 1 UK ton";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_UK_TON); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of 1 troy ounce";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_TROY_OUNCE); m_constantsUnits << "kg";
+	m_constantsNames << "Mass of 1 carat";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_CARAT); m_constantsUnits << "kg";
+	m_constantsNames << "Force of 1 gram weight";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAM_FORCE); m_constantsUnits << "kg m / s^2";
+	m_constantsNames << "Force of 1 pound weight";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POUND_FORCE); m_constantsUnits << "kg m / s^2";
+	m_constantsNames << "Force of 1 kilopound weight";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOPOUND_FORCE); m_constantsUnits << "kg m / s^2";
+	m_constantsNames << "Force of 1 poundal";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POUNDAL); m_constantsUnits << "kg m / s^2";
+
+	for(int i=0;i<11;i++)
+		m_constantsGroupIndex << 9;
+
+	// Thermal Energy and Power
+	m_constantsNames << "Energy of 1 calorie";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_CALORIE); m_constantsUnits << "kg m^2 / s^2";
+	m_constantsNames << "Energy of 1 British Thermal Unit";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BTU); m_constantsUnits << "kg m^2 / s^2";
+	m_constantsNames << "Energy of 1 Therm";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_THERM); m_constantsUnits << "kg m^2 / s^2";
+	m_constantsNames << "Power of 1 horsepower";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_HORSEPOWER); m_constantsUnits << "kg m^2 / s^3";
+
+	for(int i=0;i<4;i++)
+		m_constantsGroupIndex << 10;
+
+	// Pressure
+	m_constantsNames << "Pressure of 1 bar";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BAR); m_constantsUnits << "kg / m s^2";
+	m_constantsNames << "Pressure of 1 standard atmosphere";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STD_ATMOSPHERE); m_constantsUnits << "kg / m s^2";
+	m_constantsNames << "Pressure of 1 torr";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_TORR); m_constantsUnits << "kg / m s^2";
+	m_constantsNames << "Pressure of 1 meter of mercury";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_METER_OF_MERCURY); m_constantsUnits << "kg / m s^2";
+	m_constantsNames << "Pressure of 1 inch of mercury";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH_OF_MERCURY); m_constantsUnits << "kg / m s^2";
+	m_constantsNames << "Pressure of 1 inch of water";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH_OF_WATER); m_constantsUnits << "kg / m s^2";
+	m_constantsNames << "Pressure of 1 pound per square inch";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PSI); m_constantsUnits << "kg / m s^2";
+
+	for(int i=0;i<7;i++)
+		m_constantsGroupIndex << 11;
+
+	// Viscosity
+	m_constantsNames << "Dynamic viscosity of 1 poise";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POISE); m_constantsUnits << "kg / m s";
+	m_constantsNames << "Kinematic viscosity of 1 stokes";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STOKES); m_constantsUnits << "m^2 / s";
+
+	for(int i=0;i<2;i++)
+		m_constantsGroupIndex << 12;
+
+	// Light and Illumination
+	m_constantsNames << "Luminance of 1 stilb";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STILB); m_constantsUnits << "cd / m^2";
+	m_constantsNames << "Luminous flux of 1 lumen";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LUMEN); m_constantsUnits << "cd sr";
+	m_constantsNames << "Illuminance of 1 lux";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LUX); m_constantsUnits << "cd sr / m^2";
+	m_constantsNames << "Illuminance of 1 phot";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PHOT); m_constantsUnits << "cd sr / m^2";
+	m_constantsNames << "Illuminance of 1 footcandle";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTCANDLE); m_constantsUnits << "cd sr / m^2";
+	m_constantsNames << "Luminance of 1 lambert";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LAMBERT); m_constantsUnits << "cd sr / m^2";
+	m_constantsNames << "Luminance of 1 footlambert";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTLAMBERT); m_constantsUnits << "cd sr / m^2";
+
+	for(int i=0;i<7;i++)
+		m_constantsGroupIndex << 13;
+
+	// Radioactivity
+	m_constantsNames << "Activity of 1 curie";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_CURIE); m_constantsUnits << "1 / s";
+	m_constantsNames << "Exposure of 1 roentgen";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ROENTGEN); m_constantsUnits << "A s / kg";
+	m_constantsNames << "Absorbed dose of 1 rad";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_RAD); m_constantsUnits << "m^2 / s^2";
+
+	for(int i=0;i<3;i++)
+		m_constantsGroupIndex << 14;
+
+	// Force and Energy
+	m_constantsNames << "SI unit of force";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_NEWTON); m_constantsUnits << "kg m / s^2";
+	m_constantsNames << "Force of 1 Dyne";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_DYNE); m_constantsUnits << "kg m / s^2";
+	m_constantsNames << "SI unit of energy";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_JOULE); m_constantsUnits << "kg m^2 / s^2";
+	m_constantsNames << "Energy 1 erg";
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ERG); m_constantsUnits << "kg m^2 / s^2";
+
+	for(int i=0;i<4;i++)
+		m_constantsGroupIndex << 15;
 }
 
 ExpressionParser::~ExpressionParser(){
