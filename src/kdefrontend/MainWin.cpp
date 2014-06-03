@@ -670,14 +670,16 @@ void MainWin::openXML(QIODevice *file) {
 		statusBar()->showMessage(msg_text);
 		return;
 	}
-	if (reader.hasWarnings()) {
-		QString msg_text = i18n("The following problems occurred when loading the project:\n");
-		QStringList warnings = reader.warningStrings();
-		foreach(const QString& str, warnings)
-			msg_text += str + '\n';
-		KMessageBox::error(this, msg_text, i18n("Project loading partly failed"));
-		statusBar()->showMessage(msg_text);
-	}
+
+	//TODO: show warnings in a kind of "log window" but not in message box
+// 	if (reader.hasWarnings()) {
+// 		QString msg_text = i18n("The following problems occurred when loading the project:\n");
+// 		QStringList warnings = reader.warningStrings();
+// 		foreach(const QString& str, warnings)
+// 			msg_text += str + '\n';
+// 		KMessageBox::error(this, msg_text, i18n("Project loading partly failed"));
+// 		statusBar()->showMessage(msg_text);
+// 	}
 }
 
 /*!
