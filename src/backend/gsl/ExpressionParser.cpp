@@ -105,19 +105,16 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << "Logarithm of the gamma function";
 
 	m_functionsNames << "Length of the hypotenuse sqrt(x*x+y*y)";
-	m_functionsNames << "Bessel function of first kind, orders 0";
-	m_functionsNames << "Bessel function of first kind, orders 1";
-	m_functionsNames << "Bessel function of first kind, orders n";
 	m_functionsNames << "x * 2^y";
 	m_functionsNames << "Natural logarithm of the Gamma function (absolute value)";
 	m_functionsNames << "Natural logarithm";
 	m_functionsNames << "Natural logarithm";
 	m_functionsNames << "Base 10 logarithm";
 	m_functionsNames << "log (1 + x)";
-
 	m_functionsNames << "Extract the exponent";
 	m_functionsNames << "Power function [x^y]";
 	m_functionsNames << "Round to an integer value";
+
 	m_functionsNames << "Round to the nearest integer";
 	m_functionsNames << "Sine";
 	m_functionsNames << "Hyperbolic sine";
@@ -125,18 +122,89 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << "Tangent";
 	m_functionsNames << "Hyperbolic tangent";
 	m_functionsNames << "(True) Gamma function";
-
 	m_functionsNames << "Round to the nearest integer";
-	m_functionsNames << "Bessel function of second kind, orders 0";
-	m_functionsNames << "Bessel function of second kind, orders 1";
-	m_functionsNames << "Bessel function of second kind, orders n";
+//	m_functionsNames << "Bessel function of first kind, orders 0";
+//	m_functionsNames << "Bessel function of first kind, orders 1";
+//	m_functionsNames << "Bessel function of first kind, orders n";
+//	m_functionsNames << "Bessel function of second kind, orders 0";
+//	m_functionsNames << "Bessel function of second kind, orders 1";
+//	m_functionsNames << "Bessel function of second kind, orders n";
 
-	for(int i=0;i<44;i++)
+	for(int i=0;i<38;i++)
 		m_functionsGroupIndex << 0;
 
-	//TODO
 	// Airy Functions and Derivatives
-	// ...
+	m_functionsNames << "Airy function of the first kind";
+	m_functionsNames << "Airy function of the second kind";
+	m_functionsNames << "Scaled Airy function of the first kind";
+	m_functionsNames << "Scaled Airy function of the second kind";
+	m_functionsNames << "Airy function derivative of the first kind";
+	m_functionsNames << "Airy function derivative of the second kind";
+	m_functionsNames << "Scaled Airy function derivative of the first kind";
+	m_functionsNames << "Scaled Airy function derivative of the second kind";
+	m_functionsNames << "n-th zero of the Airy function of the first kind";
+	m_functionsNames << "n-th zero of the Airy function of the second kind";
+	m_functionsNames << "n-th zero of the Airy function derivative of the first kind";
+	m_functionsNames << "n-th zero of the Airy function derivative of the second kind";
+
+	for(int i=0;i<12;i++)
+		m_functionsGroupIndex << 1;
+	
+	// Bessel Functions
+	m_functionsNames << "Regular cylindrical Bessel function of zeroth order";
+	m_functionsNames << "Regular cylindrical Bessel function of first order";
+	m_functionsNames << "Regular cylindrical Bessel function of order n";
+	m_functionsNames << "Irregular cylindrical Bessel function of zeroth order";
+	m_functionsNames << "Irregular cylindrical Bessel function of first order";
+	m_functionsNames << "Irregular cylindrical Bessel function of order n";
+	m_functionsNames << "Regular modified cylindrical Bessel function of zeroth order";
+	m_functionsNames << "Regular modified cylindrical Bessel function of first order";
+	m_functionsNames << "Regular modified cylindrical Bessel function of order n";
+	m_functionsNames << "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|x|) I0(x)";
+
+	m_functionsNames << "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) I1(x)";
+	m_functionsNames << "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) In(x)";
+	m_functionsNames << "Irregular modified cylindrical Bessel function of zeroth order";
+	m_functionsNames << "Irregular modified cylindrical Bessel function of first order";
+	m_functionsNames << "Irregular modified cylindrical Bessel function of order n";
+	m_functionsNames << "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) K0(x)";
+	m_functionsNames << "Scaled irregular modified cylindrical Bessel function of first order exp(x) K1(x)";
+	m_functionsNames << "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)";
+	m_functionsNames << "Regular spherical Bessel function of zeroth order";
+	m_functionsNames << "Regular spherical Bessel function of first order";
+
+	m_functionsNames << "Regular spherical Bessel function of second order";
+	m_functionsNames << "Regular spherical Bessel function of order l";
+	m_functionsNames << "Irregular spherical Bessel function of zeroth order";
+	m_functionsNames << "Irregular spherical Bessel function of first order";
+	m_functionsNames << "Irregular spherical Bessel function of second order";
+	m_functionsNames << "Irregular spherical Bessel function of order l";
+	m_functionsNames << "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) i0(x)";
+	m_functionsNames << "Scaled regular modified spherical Bessel function of first order, exp(-|x|) i1(x)";
+	m_functionsNames << "Scaled regular modified spherical Bessel function of second order, exp(-|x|) i2(x)";
+	m_functionsNames << "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)";
+
+	m_functionsNames << "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) k0(x)";
+	m_functionsNames << "Scaled irregular modified spherical Bessel function of first order, exp(-|x|) k1(x)";
+	m_functionsNames << "Scaled irregular modified spherical Bessel function of second order, exp(-|x|) k2(x)";
+	m_functionsNames << "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) kl(x)";
+	m_functionsNames << "Regular cylindrical Bessel function of fractional order";
+	m_functionsNames << "Irregular cylindrical Bessel function of fractional order";
+	m_functionsNames << "Regular modified Bessel function of fractional order";
+	m_functionsNames << "Scaled regular modified Bessel function of fractional order";
+	m_functionsNames << "Irregular modified Bessel function of fractional order";
+	m_functionsNames << "Logarithm of irregular modified Bessel function of fractional order";
+
+	m_functionsNames << "Scaled irregular modified Bessel function of fractional order";
+	m_functionsNames << "n-th positive zero of the Bessel function J0";
+	m_functionsNames << "n-th positive zero of the Bessel function J1";
+	m_functionsNames << "n-th positive zero of the Bessel function Jnu";
+
+
+	for(int i=0;i<44;i++)
+		m_functionsGroupIndex << 2;
+	
+	// TODO ...
 
 }
 
