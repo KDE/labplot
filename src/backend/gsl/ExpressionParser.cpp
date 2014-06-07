@@ -50,6 +50,7 @@ void ExpressionParser::initFunctions() {
 		m_functions << _functions[i].name;
 
 	m_functionsGroups << "Standard Mathematical functions";
+	m_functionsGroups << "GSL Mathematical functions";
 	//http://www.gnu.org/software/gsl/manual/html_node/Special-Functions.html
 	m_functionsGroups << "Airy Functions and Derivatives";
 	m_functionsGroups << "Bessel Functions";
@@ -59,9 +60,9 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << "Dawson Function";
 	m_functionsGroups << "Debye Functions";
 	m_functionsGroups << "Dilogarithm";
-	m_functionsGroups << "Elementary Operations";
+//	m_functionsGroups << "Elementary Operations";
 	m_functionsGroups << "Elliptic Integrals";
-	m_functionsGroups << "Elliptic Functions (Jacobi)";
+//	m_functionsGroups << "Elliptic Functions (Jacobi)";
 	m_functionsGroups << "Error Functions";
 	m_functionsGroups << "Exponential Functions";
 	m_functionsGroups << "Exponential Integrals";
@@ -73,7 +74,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << "Lambert W Functions";
 	m_functionsGroups << "Legendre Functions and Spherical Harmonics";
 	m_functionsGroups << "Logarithm and Related Functions";
-	m_functionsGroups << "Mathieu Functions";
+//	m_functionsGroups << "Mathieu Functions";
 	m_functionsGroups << "Power Function";
 	m_functionsGroups << "Psi (Digamma) Function";
 	m_functionsGroups << "Synchrotron Functions";
@@ -95,33 +96,19 @@ void ExpressionParser::initFunctions() {
 
 	m_functionsNames << "Cube root";
 	m_functionsNames << "Smallest integral value not less";
-	m_functionsNames << "Cosine";
 	m_functionsNames << "Hyperbolic cosine";
-	m_functionsNames << "Error function";
-	m_functionsNames << "Complementary error function";
-	m_functionsNames << "Exponential function";
-	m_functionsNames << "exp() - 1";
-	m_functionsNames << "Lbsolute value";
-	m_functionsNames << "Logarithm of the gamma function";
-
-	m_functionsNames << "Length of the hypotenuse sqrt(x*x+y*y)";
+	m_functionsNames << "Absolute value";
 	m_functionsNames << "x * 2^y";
-	m_functionsNames << "Natural logarithm of the Gamma function (absolute value)";
-	m_functionsNames << "Natural logarithm";
-	m_functionsNames << "Natural logarithm";
 	m_functionsNames << "Base 10 logarithm";
-	m_functionsNames << "log (1 + x)";
 	m_functionsNames << "Extract the exponent";
 	m_functionsNames << "Power function [x^y]";
 	m_functionsNames << "Round to an integer value";
-
 	m_functionsNames << "Round to the nearest integer";
-	m_functionsNames << "Sine";
 	m_functionsNames << "Hyperbolic sine";
 	m_functionsNames << "Nonnegative square root";
+
 	m_functionsNames << "Tangent";
 	m_functionsNames << "Hyperbolic tangent";
-	m_functionsNames << "(True) Gamma function";
 	m_functionsNames << "Round to the nearest integer";
 //	m_functionsNames << "Bessel function of first kind, orders 0";
 //	m_functionsNames << "Bessel function of first kind, orders 1";
@@ -129,9 +116,46 @@ void ExpressionParser::initFunctions() {
 //	m_functionsNames << "Bessel function of second kind, orders 0";
 //	m_functionsNames << "Bessel function of second kind, orders 1";
 //	m_functionsNames << "Bessel function of second kind, orders n";
+//	m_functionsNames << "Error function";
+//	m_functionsNames << "Complementary error function";
+//	m_functionsNames << "Exponential function";
+//	m_functionsNames << "exp() - 1";
+//	m_functionsNames << "Logarithm of the gamma function";
+//	m_functionsNames << "Natural logarithm of the Gamma function (absolute value)";
+//	m_functionsNames << "(True) Gamma function";
+//	m_functionsNames << "Natural logarithm";
+//	m_functionsNames << "Natural logarithm";
+//	m_functionsNames << "log (1 + x)";
+//	m_functionsNames << "Cosine";
+//	m_functionsNames << "Length of the hypotenuse sqrt(x*x+y*y)";
+//	m_functionsNames << "Sine";
 
-	for(int i=0;i<38;i++)
+	for(int i=0;i<25;i++)
 		m_functionsGroupIndex << 0;
+
+	// GSL mathematical functions
+	m_functionsNames << "log(1+x)";
+	m_functionsNames << "exp(x)-1";
+	m_functionsNames << "sqrt(x^2+y^2)";
+	m_functionsNames << "sqrt(x^2+y^2+z^2)";
+	m_functionsNames << "arccosh(x)";
+	m_functionsNames << "arcsinh(x)";
+	m_functionsNames << "arctanh(x)";
+	m_functionsNames << "x * 2^e";
+	m_functionsNames << "x^n";
+	m_functionsNames << "x^2";
+
+	m_functionsNames << "x^3";
+	m_functionsNames << "x^4";
+	m_functionsNames << "x^5";
+	m_functionsNames << "x^6";
+	m_functionsNames << "x^7";
+	m_functionsNames << "x^8";
+	m_functionsNames << "x^9";
+
+	for(int i=0;i<17;i++)
+		m_functionsGroupIndex << 1;
+
 
 	// Airy Functions and Derivatives
 	m_functionsNames << "Airy function of the first kind";
@@ -148,7 +172,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << "n-th zero of the Airy function derivative of the second kind";
 
 	for(int i=0;i<12;i++)
-		m_functionsGroupIndex << 1;
+		m_functionsGroupIndex << 2;
 	
 	// Bessel Functions
 	m_functionsNames << "Regular cylindrical Bessel function of zeroth order";
@@ -200,11 +224,267 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << "n-th positive zero of the Bessel function J1";
 	m_functionsNames << "n-th positive zero of the Bessel function Jnu";
 
-
 	for(int i=0;i<44;i++)
-		m_functionsGroupIndex << 2;
+		m_functionsGroupIndex << 3;
 	
-	// TODO ...
+	// Clausen Functions
+	m_functionsNames << "Clausen function";
+	m_functionsGroupIndex << 4;
+	
+	// Coulomb Functions
+	m_functionsNames << "Lowest-order normalized hydrogenic bound state radial wavefunction";
+	m_functionsNames << "n-th normalized hydrogenic bound state radial wavefunction";
+
+	for(int i=0;i<2;i++)
+		m_functionsGroupIndex << 5;
+	
+	// Dawson Function	
+	m_functionsNames << "Dawson integral";
+	m_functionsGroupIndex << 6;
+
+	// Debye Functions
+	m_functionsNames << "First-order Debye function";
+	m_functionsNames << "Second-order Debye function";
+	m_functionsNames << "Third-order Debye function";
+	m_functionsNames << "Fourth-order Debye function";
+	m_functionsNames << "Fifth-order Debye function";
+	m_functionsNames << "Sixth-order Debye function";
+
+	for(int i=0;i<6;i++)
+		m_functionsGroupIndex << 7;
+
+	// Dilogarithm	
+        m_functionsNames << "Dilogarithm for a real argument";
+	m_functionsGroupIndex << 8;
+
+	// Elliptic Integrals
+        m_functionsNames << "Legendre form of complete elliptic integral K";
+        m_functionsNames << "Legendre form of complete elliptic integral E";
+        m_functionsNames << "Legendre form of complete elliptic integral Pi";
+        m_functionsNames << "Legendre form of incomplete elliptic Integral F";
+        m_functionsNames << "Legendre form of incomplete elliptic Integral E";
+        m_functionsNames << "Legendre form of incomplete elliptic Integral P";
+        m_functionsNames << "Legendre form of incomplete elliptic Integral D";
+        m_functionsNames << "Carlson form of incomplete elliptic integral RC";
+        m_functionsNames << "Carlson form of incomplete elliptic integral RD";
+        m_functionsNames << "Carlson form of incomplete elliptic integral RF";
+        m_functionsNames << "Carlson form of incomplete elliptic integral RJ";
+
+	for(int i=0;i<11;i++)
+		m_functionsGroupIndex << 9;
+
+	// Error Functions
+        m_functionsNames << "Error function";
+        m_functionsNames << "Complementary error function";
+        m_functionsNames << "Logarithm of complementary error function";
+        m_functionsNames << "Gaussian probability density function Z";
+        m_functionsNames << "Upper tail of the Gaussian probability function Q";
+        m_functionsNames << "Hazard function for the normal distribution Z/Q";
+
+	for(int i=0;i<6;i++)
+		m_functionsGroupIndex << 10;
+
+	// Exponential Functions
+        m_functionsNames << "Exponential function";
+        m_functionsNames << "exponentiate x and multiply by y";
+        m_functionsNames << "exp(x) - 1";
+        m_functionsNames << "(exp(x)-1)/x";
+        m_functionsNames << "2(exp(x)-1-x)/x^2";
+        m_functionsNames << "n-relative exponential";
+
+	for(int i=0;i<6;i++)
+		m_functionsGroupIndex << 11;
+
+	// Exponential Integrals
+        m_functionsNames << "Exponential integral";
+        m_functionsNames << "Second order exponential integral";
+        m_functionsNames << "Exponential integral of order n";
+        m_functionsNames << "Exponential integral Ei";
+        m_functionsNames << "Hyperbolic integral Shi";
+        m_functionsNames << "Hyperbolic integral Chi";
+        m_functionsNames << "Third-order exponential integral";
+        m_functionsNames << "Sine integral";
+        m_functionsNames << "Cosine integral";
+        m_functionsNames << "Arctangent integral";
+
+	for(int i=0;i<10;i++)
+		m_functionsGroupIndex << 12;
+
+	// Fermi-Dirac Function
+        m_functionsNames << "Complete Fermi-Dirac integral with index -1";
+        m_functionsNames << "Complete Fermi-Dirac integral with index 0";
+        m_functionsNames << "Complete Fermi-Dirac integral with index 1";
+        m_functionsNames << "Complete Fermi-Dirac integral with index 2";
+        m_functionsNames << "Complete Fermi-Dirac integral with integer index j";
+        m_functionsNames << "Complete Fermi-Dirac integral with index -1/2";
+        m_functionsNames << "Complete Fermi-Dirac integral with index 1/2";
+        m_functionsNames << "Complete Fermi-Dirac integral with index 3/2";
+        m_functionsNames << "Incomplete Fermi-Dirac integral with index zero";
+
+	for(int i=0;i<9;i++)
+		m_functionsGroupIndex << 13;
+
+	// Gamma and Beta Functions
+        m_functionsNames << "Gamma function";
+        m_functionsNames << "Gamma function";
+        m_functionsNames << "Logarithm of the Gamma function";
+        m_functionsNames << "Logarithm of the Gamma function";
+        m_functionsNames << "Regulated Gamma Function";
+        m_functionsNames << "Reciprocal of the gamma function";
+        m_functionsNames << "Factorial n!";
+        m_functionsNames << "Double factorial n!!";
+        m_functionsNames << "Logarithm of the factorial";
+        m_functionsNames << "Logarithm of the double factorial";
+
+        m_functionsNames << "Combinatorial factor";
+        m_functionsNames << "Logarithm of the combinatorial factor";
+        m_functionsNames << "Taylor coefficient";
+        m_functionsNames << "Pochhammer symbol";
+        m_functionsNames << "Logarithm of the Pochhammer symbol";
+        m_functionsNames << "Relative Pochhammer symbol";
+        m_functionsNames << "Unnormalized incomplete Gamma Function";
+        m_functionsNames << "Normalized incomplete Gamma Function";
+        m_functionsNames << "Complementary normalized incomplete Gamma Function";
+        m_functionsNames << "Beta function";
+
+        m_functionsNames << "Logarithm of the Beta function";
+        m_functionsNames << "Normalized incomplete Beta function";
+
+	for(int i=0;i<22;i++)
+		m_functionsGroupIndex << 14;
+
+	// Gegenbauer Functions
+        m_functionsNames << "Gegenbauer polynomial C_1";
+        m_functionsNames << "Gegenbauer polynomial C_2";
+        m_functionsNames << "Gegenbauer polynomial C_3";
+        m_functionsNames << "Gegenbauer polynomial C_n";
+
+	for(int i=0;i<4;i++)
+		m_functionsGroupIndex << 15;
+
+	// Hypergeometric Functions
+        m_functionsNames << "Hypergeometric function 0F1";
+        m_functionsNames << "Confluent hypergeometric function 1F1 for integer parameters";
+        m_functionsNames << "Confluent hypergeometric function 1F1 for general parameters";
+        m_functionsNames << "Confluent hypergeometric function U for integer parameters";
+        m_functionsNames << "Confluent hypergeometric function U";
+        m_functionsNames << "Gauss hypergeometric function 2F1";
+        m_functionsNames << "Gauss hypergeometric function 2F1 with complex parameters";
+        m_functionsNames << "Renormalized Gauss hypergeometric function 2F1";
+        m_functionsNames << "Renormalized Gauss hypergeometric function 2F1 with complex parameters";
+        m_functionsNames << "Hypergeometric function 2F0";
+
+	for(int i=0;i<10;i++)
+		m_functionsGroupIndex << 16;
+
+	// Laguerre Functions
+        m_functionsNames << "generalized Laguerre polynomials L_1";
+        m_functionsNames << "generalized Laguerre polynomials L_2";
+        m_functionsNames << "generalized Laguerre polynomials L_3";
+
+	for(int i=0;i<3;i++)
+		m_functionsGroupIndex << 17;
+
+	// Lambert W Functions
+        m_functionsNames << "Principal branch of the Lambert W function";
+        m_functionsNames << "Secondary real-valued branch of the Lambert W function";
+
+	for(int i=0;i<2;i++)
+		m_functionsGroupIndex << 18;
+
+	// Legendre Functions and Spherical Harmonics
+        m_functionsNames << "Legendre polynomial P_1";
+        m_functionsNames << "Legendre polynomial P_2";
+        m_functionsNames << "Legendre polynomial P_3";
+        m_functionsNames << "Legendre polynomial P_l";
+        m_functionsNames << "Legendre function Q_0";
+        m_functionsNames << "Legendre function Q_1";
+        m_functionsNames << "Legendre function Q_l";
+        m_functionsNames << "Associated Legendre polynomial";
+        m_functionsNames << "Normalized associated Legendre polynomial";
+        m_functionsNames << "Irregular spherical conical function P^1/2";
+
+        m_functionsNames << "Regular spherical conical function P^(-1/2)";
+        m_functionsNames << "Conical function P^0";
+        m_functionsNames << "Conical function P^1";
+        m_functionsNames << "Regular spherical conical function P^(-1/2-l)";
+        m_functionsNames << "Regular cylindrical conical function P^(-m)";
+        m_functionsNames << "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space";
+        m_functionsNames << "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space";
+        m_functionsNames << "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space";
+
+	for(int i=0;i<18;i++)
+		m_functionsGroupIndex << 19;
+
+	// Logarithm and Related Functions
+        m_functionsNames << "Logarithm";
+        m_functionsNames << "Logarithm of the magnitude";
+        m_functionsNames << "log(1+x)";
+        m_functionsNames << "log(1+x) - x";
+
+	for(int i=0;i<4;i++)
+		m_functionsGroupIndex << 20;
+
+	// Power Function
+        m_functionsNames << "x^n for integer n with an error estimate";
+	m_functionsGroupIndex << 21;
+
+	// Psi (Digamma) Function
+        m_functionsNames << "Digamma function for positive integer n";
+        m_functionsNames << "Digamma function";
+        m_functionsNames << "Real part of the digamma function on the line 1+i y";
+        m_functionsNames << "Trigamma function psi' for positive integer n";
+        m_functionsNames << "Trigamma function psi'";
+        m_functionsNames << "Polygamma function psi^(n)";
+
+	for(int i=0;i<6;i++)
+		m_functionsGroupIndex << 22;
+
+	// Synchrotron Functions
+        m_functionsNames << "First synchrotron function";
+        m_functionsNames << "Second synchrotron function";
+
+	for(int i=0;i<2;i++)
+		m_functionsGroupIndex << 23;
+
+	// Transport Functions
+        m_functionsNames << "Transport function";
+        m_functionsNames << "Transport function";
+        m_functionsNames << "Transport function";
+        m_functionsNames << "Transport function";
+
+	for(int i=0;i<4;i++)
+		m_functionsGroupIndex << 24;
+
+	// Trigonometric Functions
+        m_functionsNames << "sine";
+        m_functionsNames << "cosine";
+        m_functionsNames << "hypotenuse function";
+        m_functionsNames << "sin(x)/x";
+        m_functionsNames << "log(sinh(x))";
+        m_functionsNames << "log(cosh(x))";
+        m_functionsNames << "restrict to [-pi,pi]";
+        m_functionsNames << "restrict to [0,2 pi]";
+
+	for(int i=0;i<8;i++)
+		m_functionsGroupIndex << 25;
+
+	// Zeta Functions
+        m_functionsNames << "Riemann zeta function for integer n";
+        m_functionsNames << "Riemann zeta function";
+        m_functionsNames << "zeta(n)-1 for integer n";
+        m_functionsNames << "zeta(x)-1";
+        m_functionsNames << "Hurwitz zeta function";
+        m_functionsNames << "Eta function for integer n";
+        m_functionsNames << "Eta function";
+
+	for(int i=0;i<7;i++)
+		m_functionsGroupIndex << 26;
+
+	// GSL ran dist
+
+	//TODO randist
+        //m_functionsNames << "";
 
 }
 
