@@ -81,6 +81,32 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << "Transport Functions:";
 	m_functionsGroups << "Trigonometric Functions";
 	m_functionsGroups << "Zeta Functions:";
+	// GSL random distribution functions
+	m_functionsGroups << "Gaussian Distribution:";
+	m_functionsGroups << "Exponential Distribution:";
+	m_functionsGroups << "Laplace Distribution:";
+	m_functionsGroups << "Exponential Power Distribution:";
+	m_functionsGroups << "Cauchy Distribution:";
+	m_functionsGroups << "Rayleigh Distribution:";
+	m_functionsGroups << "Landau Distribution:";
+	m_functionsGroups << "Gamma Distribution:";
+	m_functionsGroups << "Flat (Uniform) Distribution:";
+	m_functionsGroups << "Lognormal Distribution:";
+	m_functionsGroups << "Chi-squared Distribution:";
+	m_functionsGroups << "F-distribution:";
+	m_functionsGroups << "t-distribution:";
+	m_functionsGroups << "Beta Distribution:";
+	m_functionsGroups << "Logistic Distribution:";
+	m_functionsGroups << "Pareto Distribution:";
+	m_functionsGroups << "Weibull Distribution:";
+	m_functionsGroups << "Gumbel Distribution:";
+	m_functionsGroups << "Poisson Distribution:";
+	m_functionsGroups << "Bernoulli Distribution:";
+	m_functionsGroups << "Binomial Distribution:";
+	m_functionsGroups << "Pascal Distribution:";
+	m_functionsGroups << "Geometric Distribution:";
+	m_functionsGroups << "Hypergeometric Distribution:";
+	m_functionsGroups << "Logarithmic Distribution:";
 
 	// Standard mathematical functions
 	m_functionsNames << "pseudo-random integer [0,RAND_MAX]";
@@ -481,11 +507,244 @@ void ExpressionParser::initFunctions() {
 	for(int i=0;i<7;i++)
 		m_functionsGroupIndex << 26;
 
-	// GSL ran dist
+	// GSL Random Number Distributions: see http://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distributions.html
+	// Gaussian Distribution
+        m_functionsNames << "Probability density for a Gaussian distribution";
+        m_functionsNames << "Probability density for a unit Gaussian distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+        m_functionsNames << "Cumulative unit distribution function P";
+        m_functionsNames << "Cumulative unit distribution function Q";
+        m_functionsNames << "Inverse cumulative unit distribution function P";
+        m_functionsNames << "Inverse cumulative unit distribution function Q";
 
-	//TODO randist
-        //m_functionsNames << "";
+        m_functionsNames << "Probability density for Gaussian tail distribution";
+        m_functionsNames << "Probability density for unit Gaussian tail distribution";
+        m_functionsNames << "Probability density for a bivariate Gaussian distribution";
 
+	for(int i=0;i<13;i++)
+		m_functionsGroupIndex << 27;
+
+	// Exponential Distribution
+        m_functionsNames << "Probability density for an exponential distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 28;
+
+	// Laplace Distribution
+        m_functionsNames << "Probability density for a Laplace distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 29;
+
+	// Exponential Power Distribution
+	m_functionsNames << "Probability density for an exponential power distribution";
+        m_functionsNames << "cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+
+	for(int i=0;i<3;i++)
+		m_functionsGroupIndex << 30;
+
+	// Cauchy Distribution
+        m_functionsNames << "Probability density for a Cauchy distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 31;
+
+	// Rayleigh Distribution
+        m_functionsNames << "Probability density for a Rayleigh distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+        m_functionsNames << "Probability density for a Rayleigh tail distribution";
+
+	for(int i=0;i<6;i++)
+		m_functionsGroupIndex << 32;
+
+	// Landau Distribution
+        m_functionsNames << "Probability density for a Landau distribution";
+	m_functionsGroupIndex << 33;
+
+	// Gamma Distribution
+        m_functionsNames << "Probability density for a Gamma distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 34;
+
+	// Flat (Uniform) Distribution
+        m_functionsNames << "Probability density for a uniform distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 35;
+
+	// Lognormal Distribution
+        m_functionsNames << "Probability density for a lognormal distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 36;
+
+	// Chi-squared Distribution
+        m_functionsNames << "Probability density for a chi squared distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 37;
+
+	// F-distribution
+        m_functionsNames << "Probability density for a F-distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 38;
+
+	// t-distribution
+        m_functionsNames << "Probability density for a t-distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 39;
+
+	// Beta Distribution
+        m_functionsNames << "Probability density for a beta distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 40;
+
+	// Logistic Distribution
+        m_functionsNames << "Probability density for a logisitc distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 41;
+
+	// Pareto Distribution
+        m_functionsNames << "Probability density for a Pareto distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 42;
+
+	// Weibull Distribution
+        m_functionsNames << "Probability density for a Weibull distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<5;i++)
+		m_functionsGroupIndex << 43;
+
+	// Gumbel Distribution
+        m_functionsNames << "Probability density for a Type-1 Gumbel distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+        m_functionsNames << "Probability density for a Type-2 Gumbel distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Inverse cumulative distribution function P";
+        m_functionsNames << "Inverse cumulative distribution function Q";
+
+	for(int i=0;i<10;i++)
+		m_functionsGroupIndex << 44;
+
+	// Poisson Distribution
+        m_functionsNames << "Probability density for a Poisson distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+
+	for(int i=0;i<3;i++)
+		m_functionsGroupIndex << 45;
+
+	// Bernoulli Distribution
+        m_functionsNames << "Probability density for a Bernoulli distribution";
+	m_functionsGroupIndex << 46;
+
+	// Binomial Distribution
+        m_functionsNames << "Probability density for a binomial distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+        m_functionsNames << "Probability density for a negative binomial distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+
+	for(int i=0;i<6;i++)
+		m_functionsGroupIndex << 47;
+
+	// Pascal Distribution
+        m_functionsNames << "Probability density for a Pascal distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+
+	for(int i=0;i<3;i++)
+		m_functionsGroupIndex << 48;
+
+	// Geometric Distribution
+        m_functionsNames << "Probability density for a geometric distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+
+	for(int i=0;i<3;i++)
+		m_functionsGroupIndex << 49;
+
+	// Hypergeometric Distribution
+        m_functionsNames << "Probability density for a hypergeometric distribution";
+        m_functionsNames << "Cumulative distribution function P";
+        m_functionsNames << "Cumulative distribution function Q";
+
+	for(int i=0;i<3;i++)
+		m_functionsGroupIndex << 50;
+
+	// Logarithmic Distribution
+        m_functionsNames << "Probability density for a logarithmic distribution";
+	m_functionsGroupIndex << 51;
 }
 
 //TODO: decide whether we want to have i18n here in the backend part of the code

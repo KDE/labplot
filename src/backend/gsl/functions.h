@@ -4,6 +4,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_randist.h>
+#include <gsl/gsl_cdf.h>
 
 /********* redefine functions to use double parameter *********/
 
@@ -403,40 +404,151 @@ struct func _functions[] = {
 	{"etaint",etaint},
 	{"eta",gsl_sf_eta},
 
-	/* from gsl_randist.h: TODO see */
-  {"gaussian",gsl_ran_gaussian_pdf},
-  {"ugaussian",gsl_ran_ugaussian_pdf},
-  {"gaussian_tail",gsl_ran_gaussian_tail_pdf},
-  {"ugaussian_tail",gsl_ran_ugaussian_tail_pdf},
-  {"bivariate_gaussian",gsl_ran_bivariate_gaussian_pdf},
-  {"exponential",gsl_ran_exponential_pdf},
-  {"laplace",gsl_ran_laplace_pdf},
-  {"exppow",gsl_ran_exppow_pdf},
-  {"cauchy",gsl_ran_cauchy_pdf},
-  {"rayleigh",gsl_ran_rayleigh_pdf},
-  {"rayleigh_tail",gsl_ran_rayleigh_tail_pdf},
-  {"landau",gsl_ran_landau_pdf},
-  {"gamma_pdf",gsl_ran_gamma_pdf},
-  {"flat",gsl_ran_flat_pdf},
-  {"lognormal",gsl_ran_lognormal_pdf},
-  {"chisq",gsl_ran_chisq_pdf},
-  {"fdist",gsl_ran_fdist_pdf},
-  {"tdist",gsl_ran_tdist_pdf},
-  {"beta_pdf",gsl_ran_beta_pdf},
-  {"logistic",gsl_ran_logistic_pdf},
-  {"pareto",gsl_ran_pareto_pdf},
-  {"weibull",gsl_ran_weibull_pdf},
-  {"gumbel1",gsl_ran_gumbel1_pdf},
-  {"gumbel2",gsl_ran_gumbel2_pdf},
-  {"poisson",poisson},
-  {"bernoulli",bernoulli},
-  {"binomial",binomial},
-  {"negative_binomial",negative_binomial},
-  {"pascal",pascal},
-  {"geometric",geometric},
-  {"hypergeometric",hypergeometric},
-  {"logarithmic",logarithmic},
-  {0, 0}
+	/* GSL Random Number Distributions: see http://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distributions.html */
+	/* Gaussian Distribution */
+	{"gaussian",gsl_ran_gaussian_pdf},
+	{"ugaussian",gsl_ran_ugaussian_pdf},
+	{"gaussianP",gsl_cdf_gaussian_P},
+	{"gaussianQ",gsl_cdf_gaussian_Q},
+	{"gaussianPinv",gsl_cdf_gaussian_Pinv},
+	{"gaussianQinv",gsl_cdf_gaussian_Qinv},
+	{"ugaussianP",gsl_cdf_ugaussian_P},
+	{"ugaussianQ",gsl_cdf_ugaussian_Q},
+	{"ugaussianPinv",gsl_cdf_ugaussian_Pinv},
+	{"ugaussianQinv",gsl_cdf_ugaussian_Qinv},
+	{"gaussiantail",gsl_ran_gaussian_tail_pdf},
+	{"ugaussiantail",gsl_ran_ugaussian_tail_pdf},
+	{"gaussianbi",gsl_ran_bivariate_gaussian_pdf},
+	/* Exponential Distribution */
+	{"exponential",gsl_ran_exponential_pdf},
+	{"exponentialP",gsl_cdf_exponential_P},
+	{"exponentialQ",gsl_cdf_exponential_Q},
+	{"exponentialPinv",gsl_cdf_exponential_Pinv},
+	{"exponentialQinv",gsl_cdf_exponential_Qinv},
+	/* Laplace Distribution */
+	{"laplace",gsl_ran_laplace_pdf},
+	{"laplaceP",gsl_cdf_laplace_P},
+	{"laplaceQ",gsl_cdf_laplace_Q},
+	{"laplacePinv",gsl_cdf_laplace_Pinv},
+	{"laplaceQinv",gsl_cdf_laplace_Qinv},
+	/* Exponential Power Distribution */
+	{"exppow",gsl_ran_exppow_pdf},
+	{"exppowP",gsl_cdf_exppow_P},
+	{"exppowQ",gsl_cdf_exppow_Q},
+	/* Cauchy Distribution */
+	{"cauchy",gsl_ran_cauchy_pdf},
+	{"cauchyP",gsl_cdf_cauchy_P},
+	{"cauchyQ",gsl_cdf_cauchy_Q},
+	{"cauchyPinv",gsl_cdf_cauchy_Pinv},
+	{"cauchyQinv",gsl_cdf_cauchy_Qinv},
+	/* Rayleigh Distribution */
+	{"rayleigh",gsl_ran_rayleigh_pdf},
+	{"rayleighP",gsl_cdf_rayleigh_P},
+	{"rayleighQ",gsl_cdf_rayleigh_Q},
+	{"rayleighPinv",gsl_cdf_rayleigh_Pinv},
+	{"rayleighQinv",gsl_cdf_rayleigh_Qinv},
+	{"rayleigh_tail",gsl_ran_rayleigh_tail_pdf},
+	/* Landau Distribution */
+	{"landau",gsl_ran_landau_pdf},
+	/* Gamma Distribution */
+	{"gammapdf",gsl_ran_gamma_pdf},
+	{"gammaP",gsl_cdf_gamma_P},
+	{"gammaQ",gsl_cdf_gamma_Q},
+	{"gammaPinv",gsl_cdf_gamma_Pinv},
+	{"gammaQinv",gsl_cdf_gamma_Qinv},
+	/* Flat (Uniform) Distribution */
+	{"flat",gsl_ran_flat_pdf},
+	{"flatP",gsl_cdf_flat_P},
+	{"flatQ",gsl_cdf_flat_Q},
+	{"flatPinv",gsl_cdf_flat_Pinv},
+	{"flatQinv",gsl_cdf_flat_Qinv},
+	/* Lognormal Distribution */
+	{"lognormal",gsl_ran_lognormal_pdf},
+	{"lognormalP",gsl_cdf_lognormal_P},
+	{"lognormalQ",gsl_cdf_lognormal_Q},
+	{"lognormalPinv",gsl_cdf_lognormal_Pinv},
+	{"lognormalQinv",gsl_cdf_lognormal_Qinv},
+	/* Chi-squared Distribution */
+	{"chisq",gsl_ran_chisq_pdf},
+	{"chisqP",gsl_cdf_chisq_P},
+	{"chisqQ",gsl_cdf_chisq_Q},
+	{"chisqPinv",gsl_cdf_chisq_Pinv},
+	{"chisqQinv",gsl_cdf_chisq_Qinv},
+	/* F-distribution */
+	{"fdist",gsl_ran_fdist_pdf},
+	{"fdistP",gsl_cdf_fdist_P},
+	{"fdistQ",gsl_cdf_fdist_Q},
+	{"fdistPinv",gsl_cdf_fdist_Pinv},
+	{"fdistQinv",gsl_cdf_fdist_Qinv},
+	/* t-distribution */
+	{"tdist",gsl_ran_tdist_pdf},
+	{"tdistP",gsl_cdf_tdist_P},
+	{"tdistQ",gsl_cdf_tdist_Q},
+	{"tdistPinv",gsl_cdf_tdist_Pinv},
+	{"tdistQinv",gsl_cdf_tdist_Qinv},
+	/* Beta Distribution */
+	{"betapdf",gsl_ran_beta_pdf},
+	{"betaP",gsl_cdf_beta_P},
+	{"betaQ",gsl_cdf_beta_Q},
+	{"betaPinv",gsl_cdf_beta_Pinv},
+	{"betaQinv",gsl_cdf_beta_Qinv},
+	/* Logistic Distribution */
+	{"logistic",gsl_ran_logistic_pdf},
+	{"logisticP",gsl_cdf_logistic_P},
+	{"logisticQ",gsl_cdf_logistic_Q},
+	{"logisticPinv",gsl_cdf_logistic_Pinv},
+	{"logisticQinv",gsl_cdf_logistic_Qinv},
+	/* Pareto Distribution */
+	{"pareto",gsl_ran_pareto_pdf},
+	{"paretoP",gsl_cdf_pareto_P},
+	{"paretoQ",gsl_cdf_pareto_Q},
+	{"paretoPinv",gsl_cdf_pareto_Pinv},
+	{"paretoQinv",gsl_cdf_pareto_Qinv},
+	/* Weibull Distribution */
+	{"weibull",gsl_ran_weibull_pdf},
+	{"weibullP",gsl_cdf_weibull_P},
+	{"weibullQ",gsl_cdf_weibull_Q},
+	{"weibullPinv",gsl_cdf_weibull_Pinv},
+	{"weibullQinv",gsl_cdf_weibull_Qinv},
+	/* Gumbel Distribution */
+	{"gumbel1",gsl_ran_gumbel1_pdf},
+	{"gumbel1P",gsl_cdf_gumbel1_P},
+	{"gumbel1Q",gsl_cdf_gumbel1_Q},
+	{"gumbel1Pinv",gsl_cdf_gumbel1_Pinv},
+	{"gumbel1Qinv",gsl_cdf_gumbel1_Qinv},
+	{"gumbel1",gsl_ran_gumbel1_pdf},
+	{"gumbel2P",gsl_cdf_gumbel2_P},
+	{"gumbel2Q",gsl_cdf_gumbel2_Q},
+	{"gumbel2Pinv",gsl_cdf_gumbel2_Pinv},
+	{"gumbel2Qinv",gsl_cdf_gumbel2_Qinv},
+	/* Poisson Distribution */
+	{"poisson",gsl_ran_poisson_pdf},
+	{"poissonP",gsl_cdf_poisson_P},
+	{"poissonQ",gsl_cdf_poisson_Q},
+	/* Bernoulli Distribution */
+	{"bernoulli",bernoulli},
+	/* Binomial Distribution */
+	{"binomial",gsl_ran_binomial_pdf},
+	{"binomialP",gsl_cdf_binomial_P},
+	{"binomialQ",gsl_cdf_binomial_Q},
+	{"nbinomial",gsl_ran_negative_binomial_pdf},
+	{"nbinomialP",gsl_cdf_negative_binomial_P},
+	{"nbinomialQ",gsl_cdf_negative_binomial_Q},
+	/* Pascal Distribution */
+	{"pascal",gsl_ran_pascal_pdf},
+	{"pascalP",gsl_cdf_pascal_P},
+	{"pascalQ",gsl_cdf_pascal_Q},
+	/* Geometric Distribution */
+	{"geometric",gsl_ran_geometric_pdf},
+	{"geometricP",gsl_cdf_geometric_P},
+	{"geometricQ",gsl_cdf_geometric_Q},
+	/* Hypergeometric Distribution */
+	{"hypergeometric",gsl_ran_hypergeometric_pdf},
+	{"hypergeometricP",gsl_cdf_hypergeometric_P},
+	{"hypergeometricQ",gsl_cdf_hypergeometric_Q},
+	/* Logarithmic Distribution */
+	{"logarithmic",logarithmic},
+	{0, 0}
 };
 
 #endif /*FUNCTIONS_H*/
