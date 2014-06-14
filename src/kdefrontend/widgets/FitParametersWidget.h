@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : XYFitCurvePrivate.h
+    File                 : FitParametersWidget.h
     Project              : LabPlot
-    Description          : Private members of XYFitCurve
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Description          : widget for editing the fit parameters
 
  ***************************************************************************/
 
@@ -25,44 +25,29 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef FITPARAMETERSWIDGET_H
+#define FITPARAMETERSWIDGET_H
 
-#ifndef XYEQUATIONCURVEPRIVATE_H
-#define XYEQUATIONCURVEPRIVATE_H
+#include <QWidget>
+#include <QStringList>
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "ui_fitparameterswidget.h"
 
-class XYFitCurve;
-class Column;
 
-#include <gsl/gsl_multifit_nlin.h>
+class FitParametersWidget: public QWidget {
+	Q_OBJECT
 
-class XYFitCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYFitCurvePrivate(XYFitCurve*);
-		~XYFitCurvePrivate();
+public:
+	explicit FitParametersWidget(QWidget*);
 
-		void recalculate();
+private:
+	Ui::FitParametersWidget ui;
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		const AbstractColumn* weightsColumn; //<! column storing the values for the weights to be used in the fit
-		QString xDataColumnPath;
-		QString yDataColumnPath;
-		QString weightsColumnPath;
+signals:
+	void finished();
 
-		XYFitCurve::FitData fitData;
-		QStringList solverOutput;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYFitCurve* const q;
-
-	private:
-		void writeSolverState(gsl_multifit_fdfsolver* s);
+private slots:
+	void applyClicked();
 };
 
-#endif
+#endif //FITPARAMETERSWIDGET_H

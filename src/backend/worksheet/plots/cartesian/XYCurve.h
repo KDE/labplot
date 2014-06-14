@@ -5,8 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
-								(replace * with @ in the email addresses) 
-                           
+								(replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -43,7 +43,7 @@ class XYCurve: public AbstractWorksheetElement {
 	Q_OBJECT
 
 	public:
-		enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3, 
+		enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
 					   SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic};
 		enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY};
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
@@ -69,18 +69,18 @@ class XYCurve: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(int, lineInterpolationPointsCount, LineInterpolationPointsCount)
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
-		
+
 		BASIC_D_ACCESSOR_DECL(DropLineType, dropLineType, DropLineType)
 		CLASS_D_ACCESSOR_DECL(QPen, dropLinePen, DropLinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, dropLineOpacity, DropLineOpacity)
-		
+
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
 		CLASS_D_ACCESSOR_DECL(QString, symbolsTypeId, SymbolsTypeId)
 		CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
 		CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
-		
+
 		BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
 		QString& valuesColumnPath() const;
@@ -107,7 +107,7 @@ class XYCurve: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
-		
+
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool on);
@@ -132,10 +132,10 @@ class XYCurve: public AbstractWorksheetElement {
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
-		
+
 	protected:
-		XYCurve(const QString &name, XYCurvePrivate *dd);
-		XYCurvePrivate * const d_ptr;
+		XYCurve(const QString& name, XYCurvePrivate* dd);
+		XYCurvePrivate* const d_ptr;
 
 	private:
     	Q_DECLARE_PRIVATE(XYCurve)
@@ -143,7 +143,7 @@ class XYCurve: public AbstractWorksheetElement {
 		void initActions();
 
 		QAction* visibilityAction;
-		
+
 	signals:
 		//General-Tab
 		void xDataChanged();
@@ -153,7 +153,7 @@ class XYCurve: public AbstractWorksheetElement {
 		friend class XYCurveSetYColumnCmd;
 		void xColumnChanged(const AbstractColumn*);
 		void yColumnChanged(const AbstractColumn*);
-		
+
 		//Line-Tab
 		friend class XYCurveSetLineTypeCmd;
 		friend class XYCurveSetLineInterpolationPointsCountCmd;
@@ -224,7 +224,7 @@ class XYCurve: public AbstractWorksheetElement {
 		void xErrorMinusColumnChanged(const AbstractColumn*);
 		void yErrorTypeChanged(XYCurve::ErrorType);
 		void yErrorPlusColumnChanged(const AbstractColumn*);
-		void yErrorMinusColumnChanged(const AbstractColumn*);		
+		void yErrorMinusColumnChanged(const AbstractColumn*);
 		void errorBarsCapSizeChanged(qreal);
 		void errorBarsTypeChanged(XYCurve::ErrorBarsType);
 		void errorBarsPenChanged(QPen);

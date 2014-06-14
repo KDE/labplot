@@ -204,8 +204,8 @@ void XYCurve::setPrinting(bool on) {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xColumn, xColumn)
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yColumn, yColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
 QString& XYCurve::xColumnPath() const { return d_ptr->xColumnPath; }
 QString& XYCurve::yColumnPath() const {	return d_ptr->yColumnPath; }
 
@@ -243,15 +243,15 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xErrorPlusColumn, xErrorPlusColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorPlusColumn, xErrorPlusColumn)
 QString& XYCurve::xErrorPlusColumnPath() const { return d_ptr->xErrorPlusColumnPath; }
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, xErrorMinusColumn, xErrorMinusColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorMinusColumn, xErrorMinusColumn)
 QString& XYCurve::xErrorMinusColumnPath() const { return d_ptr->xErrorMinusColumnPath; }
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yErrorPlusColumn, yErrorPlusColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorPlusColumn, yErrorPlusColumn)
 QString& XYCurve::yErrorPlusColumnPath() const { return d_ptr->yErrorPlusColumnPath; }
-BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, yErrorMinusColumn, yErrorMinusColumn)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorMinusColumn, yErrorMinusColumn)
 QString& XYCurve::yErrorMinusColumnPath() const { return d_ptr->yErrorMinusColumnPath; }
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)

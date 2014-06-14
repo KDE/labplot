@@ -752,7 +752,6 @@ void XYCurveDock::commentChanged(){
 }
 
 void XYCurveDock::xColumnChanged(const QModelIndex& index){
-	Q_UNUSED(index);
 	if (m_initializing)
 		return;
 
@@ -768,7 +767,6 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index){
 }
 
 void XYCurveDock::yColumnChanged(const QModelIndex& index){
-	Q_UNUSED(index);
 	if (m_initializing)
 		return;
 
@@ -784,11 +782,11 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index){
 }
 
 void XYCurveDock::visibilityChanged(bool state){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  foreach(XYCurve* curve, m_curvesList)
-	curve->setVisible(state);
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setVisible(state);
 }
 
 // "Line"-tab

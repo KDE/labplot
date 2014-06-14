@@ -142,7 +142,7 @@ void XYEquationCurveDock::initGeneralTab() {
 	uiGeneralTab.leMin->setText(data.min);
 	uiGeneralTab.leMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
-	this->typeChanged(equationCurve->equationData().type);
+	this->typeChanged(data.type);
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -233,7 +233,9 @@ void XYEquationCurveDock::recalculateClicked() {
 	data.min = uiGeneralTab.leMin->text();
 	data.max = uiGeneralTab.leMax->text();
 	data.count = uiGeneralTab.sbCount->value();
-	m_equationCurve->setEquationData(data);
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYEquationCurve*>(curve)->setEquationData(data);
 }
 
 void XYEquationCurveDock::validateExpression(const QString& eq) {

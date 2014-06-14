@@ -345,7 +345,7 @@ void CartesianPlot::initDefault(Type type){
 void CartesianPlot::initActions(){
 	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
 	mouseModeActionGroup->setExclusive(true);
-	selectionModeAction = new KAction(KIcon("xy-curve"), i18n("Select and edit"), mouseModeActionGroup);
+	selectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and edit"), mouseModeActionGroup);
 	selectionModeAction->setCheckable(true);
 	selectionModeAction->setChecked(true);
 

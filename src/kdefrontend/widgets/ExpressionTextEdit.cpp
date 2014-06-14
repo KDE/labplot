@@ -88,6 +88,10 @@ void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_highlighter->setVariables(vars);
 }
 
+void ExpressionTextEdit::setVariables(const QStringList& vars) {
+	m_highlighter->setVariables(vars);
+}
+
 void ExpressionTextEdit::insertCompletion(const QString& completion) {
 	QTextCursor tc = textCursor();
 	int extra = completion.length() - m_completer->completionPrefix().length();

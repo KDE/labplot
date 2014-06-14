@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : XYFitCurvePrivate.h
+    File                 : FitOptionsWidget.cc
     Project              : LabPlot
-    Description          : Private members of XYFitCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
+    Description          : widget for editing advanced fit options
 
  ***************************************************************************/
 
@@ -25,44 +25,27 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#include "FitOptionsWidget.h"
 
-#ifndef XYEQUATIONCURVEPRIVATE_H
-#define XYEQUATIONCURVEPRIVATE_H
+/*!
+	\class FitOptionsWidget
+	\brief Widget for editing advanced fit options.
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+	\ingroup kdefrontend
+ */
+FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData): QWidget(parent), m_fitData(fitData) {
+	ui.setupUi(this);
+	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
 
-class XYFitCurve;
-class Column;
+	ui.leEps->setText(QString::number(m_fitData->eps));
+	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
 
-#include <gsl/gsl_multifit_nlin.h>
+	//SLOTS
+	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
+}
 
-class XYFitCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYFitCurvePrivate(XYFitCurve*);
-		~XYFitCurvePrivate();
-
-		void recalculate();
-
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		const AbstractColumn* weightsColumn; //<! column storing the values for the weights to be used in the fit
-		QString xDataColumnPath;
-		QString yDataColumnPath;
-		QString weightsColumnPath;
-
-		XYFitCurve::FitData fitData;
-		QStringList solverOutput;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYFitCurve* const q;
-
-	private:
-		void writeSolverState(gsl_multifit_fdfsolver* s);
-};
-
-#endif
+void FitOptionsWidget::applyClicked() {
+	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();
+	m_fitData->eps = ui.leEps->text().toFloat();
+	emit(finished());
+}

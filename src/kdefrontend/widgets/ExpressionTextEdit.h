@@ -54,6 +54,7 @@ public:
 	ExpressionTextEdit(QWidget *parent = 0);
 	EquationHighlighter* highlighter();
 	void setExpressionType(XYEquationCurve::EquationType);
+	void setVariables(const QStringList&);
 
 protected:
 	void keyPressEvent(QKeyEvent*);
@@ -73,4 +74,3 @@ private:
 };
 
 #endif
- 

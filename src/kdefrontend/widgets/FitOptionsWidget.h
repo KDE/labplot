@@ -1,9 +1,9 @@
 /***************************************************************************
-    File             : XYFitCurveDock.h
-    Project          : LabPlot
+    File                 : FitOptionsWidget.h
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Description      : widget for editing properties of equation curves
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Description          : widget for editing advanced fit parameters
 
  ***************************************************************************/
 
@@ -25,63 +25,27 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef FITOPTIONSWIDGET_H
+#define FITOPTIONSSWIDGET_H
 
-#ifndef XYFITCURVEDOCK_H
-#define XYFITCURVEDOCK_H
-
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "ui_xyfitcurvedockgeneraltab.h"
+#include "ui_fitoptionswidget.h"
 
-class TreeViewComboBox;
-
-class XYFitCurveDock: public XYCurveDock {
+class FitOptionsWidget: public QWidget {
 	Q_OBJECT
 
 public:
-	explicit XYFitCurveDock(QWidget *parent);
-	void setModel(std::auto_ptr<AspectTreeModel>);
-	void setCurves(QList<XYCurve*>);
-	virtual void setupGeneral();
+	explicit FitOptionsWidget(QWidget*, XYFitCurve::FitData*);
 
 private:
-	virtual void initGeneralTab();
+	Ui::FitOptionsWidget ui;
+	XYFitCurve::FitData* m_fitData;
 
-	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbXDataColumn;
-	TreeViewComboBox* cbYDataColumn;
-	TreeViewComboBox* cbWeightsColumn;
-
-	XYFitCurve* m_fitCurve;
-	XYFitCurve::FitData m_fitData;
-	QList<double> parameters;
-	QList<double> parameterValues;
+signals:
+	void finished();
 
 private slots:
-	//SLOTs for changes triggered in XYFitCurveDock
-	//general tab
-	void nameChanged();
-	void commentChanged();
-	void modelChanged(int);
-	void xDataColumnChanged(const QModelIndex&);
-	void yDataColumnChanged(const QModelIndex&);
-	void weightsColumnChanged(const QModelIndex&);
-
-	void showConstants();
-	void showFunctions();
-	void showParameters();
-	void showOptions();
-	void insert(const QString&);
-	void recalculateClicked();
-	void updateModelEquation();
-
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
-	void curveXDataColumnChanged(const AbstractColumn*);
-	void curveYDataColumnChanged(const AbstractColumn*);
-	void curveWeightsColumnChanged(const AbstractColumn*);
-	void curveFitDataChanged(const XYFitCurve::FitData&);
+	void applyClicked();
 };
 
-#endif
+#endif //FITOPTIONSWIDGET_H

@@ -40,7 +40,7 @@ EquationHighlighter::EquationHighlighter(KTextEdit* parent)
 // 	m_errorPosition = -1
 {}
 
-void EquationHighlighter::setVariables(QStringList& variables) {
+void EquationHighlighter::setVariables(const QStringList& variables) {
 	m_variables = variables;
 }
 

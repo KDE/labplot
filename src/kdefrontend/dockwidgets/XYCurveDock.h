@@ -60,6 +60,8 @@ private:
 	QStringList dateStrings;
 	QStringList timeStrings;
 
+	TreeViewComboBox* cbXColumn;
+	TreeViewComboBox* cbYColumn;
 	TreeViewComboBox* cbValuesColumn;
 	TreeViewComboBox* cbXErrorPlusColumn;
 	TreeViewComboBox* cbXErrorMinusColumn;
@@ -72,17 +74,15 @@ private:
 	void fillSymbolStyles();
 	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
 	void showValuesColumnFormat(const Column*);
-	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
 protected:
 	bool m_initializing;
 	Ui::XYCurveDock ui;
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve;
-	TreeViewComboBox* cbXColumn;
-	TreeViewComboBox* cbYColumn;
 
 	void initTabs();
+	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
 private slots:
 	void init();

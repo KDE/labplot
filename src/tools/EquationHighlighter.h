@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
     Description      : syntax highligher for mathematical equations
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -37,7 +37,7 @@ class EquationHighlighter : public QSyntaxHighlighter {
 	Q_OBJECT
 	public:
 		EquationHighlighter(KTextEdit* parent);
-		void setVariables(QStringList&);
+		void setVariables(const QStringList&);
 // 		void setErrorPosition(int position);
 
 	public slots:
@@ -45,7 +45,7 @@ class EquationHighlighter : public QSyntaxHighlighter {
 
 	protected:
 		virtual void highlightBlock(const QString& text);
-		
+
 // 		int m_errorPosition;
 		KTextEdit* m_parent;
 		QStringList m_variables;

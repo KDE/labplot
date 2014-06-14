@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : XYFitCurvePrivate.h
+    File                 : FitParametersWidget.cc
     Project              : LabPlot
-    Description          : Private members of XYFitCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
+    Description          : widget for editing fit parameters
 
  ***************************************************************************/
 
@@ -25,44 +25,34 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#include "FitParametersWidget.h"
 
-#ifndef XYEQUATIONCURVEPRIVATE_H
-#define XYEQUATIONCURVEPRIVATE_H
+/*!
+	\class FitParametersWidget
+	\brief Widget for editing fit parameters. For predefined models the number of parameters,
+	their names and default values are given - the user can change the start values.
+	For custom models the user has to define here the parameter names and their start values.
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+	\ingroup kdefrontend
+ */
+FitParametersWidget::FitParametersWidget(QWidget *parent) : QWidget(parent) {
+	ui.setupUi(this);
+	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
 
-class XYFitCurve;
-class Column;
+	ui.tableWidget->setColumnCount(2);
 
-#include <gsl/gsl_multifit_nlin.h>
+	QTableWidgetItem* headerItem = new QTableWidgetItem();
+	headerItem->setText(i18n("Name"));
+	ui.tableWidget->setHorizontalHeaderItem(0, headerItem);
 
-class XYFitCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYFitCurvePrivate(XYFitCurve*);
-		~XYFitCurvePrivate();
+	headerItem = new QTableWidgetItem();
+	headerItem->setText(i18n("Start value"));
+	ui.tableWidget->setHorizontalHeaderItem(1, headerItem);
 
-		void recalculate();
+	//SLOTS
+	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
+}
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		const AbstractColumn* weightsColumn; //<! column storing the values for the weights to be used in the fit
-		QString xDataColumnPath;
-		QString yDataColumnPath;
-		QString weightsColumnPath;
-
-		XYFitCurve::FitData fitData;
-		QStringList solverOutput;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		XYFitCurve* const q;
-
-	private:
-		void writeSolverState(gsl_multifit_fdfsolver* s);
-};
-
-#endif
+void FitParametersWidget::applyClicked() {
+	emit(finished());
+}

@@ -36,13 +36,24 @@ class XYFitCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum FitType {Cartesian, Polar, Parametric, Implicit};
+		enum ModelType {Polynomial, Power, Exponential, Fourier, Gaussian, Lorentz, Maxwell, Custom};
+		enum WeightsType {NoWeights, WeightsFromColumn, WeightsFromErrorColumn};
 
 		struct FitData {
-			FitData() : type(Cartesian) {};
+			FitData() : modelType(Polynomial),
+						numberOfTerms(1),
+						maxIterations(500),
+						eps(1e-4) {};
 
-			FitType type;
+			ModelType modelType;
+			WeightsType weightsType;
+			int numberOfTerms;
+			int numberOfParameters;
+			QString model;
+			QVector<double> paramStartValues;
 
+			int maxIterations;
+			double eps;
 		};
 
 		explicit XYFitCurve(const QString& name);
@@ -52,6 +63,13 @@ class XYFitCurve: public XYCurve {
 		virtual QIcon icon() const;
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, weightsColumn, WeightsColumn)
+		const QString& xDataColumnPath() const;
+		const QString& yDataColumnPath() const;
+		const QString& weightsColumnPath() const;
 
 		CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
 
@@ -66,6 +84,13 @@ class XYFitCurve: public XYCurve {
 		void init();
 
 	signals:
+		friend class XYFitCurveSetXDataColumnCmd;
+		friend class XYFitCurveSetYDataColumnCmd;
+		friend class XYFitCurveSetWeightsColumnCmd;
+		void xDataColumnChanged(const AbstractColumn*);
+		void yDataColumnChanged(const AbstractColumn*);
+		void weightsColumnChanged(const AbstractColumn*);
+
 		friend class XYFitCurveSetFitDataCmd;
 		void fitDataChanged(const XYFitCurve::FitData&);
 };
