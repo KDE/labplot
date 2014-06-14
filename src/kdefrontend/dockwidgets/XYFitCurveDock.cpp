@@ -142,10 +142,11 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_fitCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-			this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)),
-			this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
+	connect(m_fitCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_fitCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
+	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
+	connect(m_fitCurve, SIGNAL(weightsColumnChanged(const AbstractColumn*)), this, SLOT(curveWeightsColumnChanged(const AbstractColumn*)));
+	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
 }
 
 void XYFitCurveDock::setModel(std::auto_ptr<AspectTreeModel> model) {
@@ -323,8 +324,8 @@ void XYFitCurveDock::updateModelEquation() {
 		if (num==2){
 			eq += " + c*exp(d*x)";
 			vars << "c" << "d";
-		} else {
-			eq = " + c*exp(d*x) + e*exp(f*x)";
+		} else if (num>2){
+			eq += " + c*exp(d*x) + e*exp(f*x)";
 			vars << "c" << "d" << "e" << "f";
 		}
 	} else if (type == XYFitCurve::Fourier) {
