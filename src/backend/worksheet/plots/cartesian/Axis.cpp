@@ -436,28 +436,17 @@ void Axis::setOffset(float offset, bool undo) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetStart, float, start, retransform);
-void Axis::setStart(float start, bool undo) {
+void Axis::setStart(float start) {
 	Q_D(Axis);
-	if (start != d->start){
-		if (undo)
-			exec(new AxisSetStartCmd(d, start, i18n("%1: set axis start")));
-		else
-			d->start = start;
-
-		emit startChanged(start);
-	}
+	if (start != d->start)
+		exec(new AxisSetStartCmd(d, start, i18n("%1: set axis start")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetEnd, float, end, retransform);
-void Axis::setEnd(float end, bool undo) {
+void Axis::setEnd(float end) {
 	Q_D(Axis);
-	if (end != d->end){
-		if (undo)
-			exec(new AxisSetEndCmd(d, end, i18n("%1: set axis end")));
-		else
-			d->end = end;
-		emit endChanged(end);
-	}
+	if (end != d->end)
+		exec(new AxisSetEndCmd(d, end, i18n("%1: set axis end")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform);

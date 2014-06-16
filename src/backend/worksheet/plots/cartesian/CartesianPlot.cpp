@@ -1,9 +1,8 @@
 /***************************************************************************
     File                 : CartesianPlot.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : A plot containing decoration elements.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
 
@@ -632,10 +631,25 @@ void CartesianPlot::setYScaleBreakings(const ScaleBreakings& breakings) {
 //########################## Slots ###############################
 //################################################################
 void CartesianPlot::addAxis(){
-	if (QObject::sender() == addHorizontalAxisAction)
-		addChild(new Axis("x-axis", Axis::AxisHorizontal));
-	else
-		addChild(new Axis("y-axis", Axis::AxisVertical));
+	if (QObject::sender() == addHorizontalAxisAction) {
+		Axis* axis = new Axis("x-axis", Axis::AxisHorizontal);
+		if (axis->autoScale()) {
+			axis->setUndoAware(false);
+			axis->setStart(xMin());
+			axis->setEnd(xMax());
+			axis->setUndoAware(true);
+		}
+		addChild(axis);
+	} else {
+		Axis* axis = new Axis("y-axis", Axis::AxisVertical);
+		if (axis->autoScale()) {
+			axis->setUndoAware(false);
+			axis->setStart(yMin());
+			axis->setEnd(yMax());
+			axis->setUndoAware(true);
+		}
+		addChild(axis);
+	}
 }
 
 XYCurve* CartesianPlot::addCurve(){
@@ -1203,19 +1217,31 @@ void CartesianPlotPrivate::retransformScales(){
 			continue;
 
 		if (axis->orientation() == Axis::AxisHorizontal){
-			if (deltaXMax!=0)
-				axis->setEnd(xMax, false);
-			if (deltaXMin!=0)
-				axis->setStart(xMin, false);
+			if (deltaXMax!=0) {
+				axis->setUndoAware(false);
+				axis->setEnd(xMax);
+				axis->setUndoAware(true);
+			}
+			if (deltaXMin!=0) {
+				axis->setUndoAware(false);
+				axis->setStart(xMin);
+				axis->setUndoAware(true);
+			}
 
 // 			if (axis->position() == Axis::AxisCustom && deltaYMin != 0){
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
 		}else{
-			if (deltaYMax!=0)
-				axis->setEnd(yMax, false);
-			if (deltaYMin!=0)
-				axis->setStart(yMin, false);
+			if (deltaYMax!=0) {
+				axis->setUndoAware(false);
+				axis->setEnd(yMax);
+				axis->setUndoAware(true);
+			}
+			if (deltaYMin!=0) {
+				axis->setUndoAware(false);
+				axis->setStart(yMin);
+				axis->setUndoAware(true);
+			}
 
 // 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0){
 // 				axis->setOffset(axis->offset() + deltaXMin, false);

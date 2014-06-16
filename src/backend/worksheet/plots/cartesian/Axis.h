@@ -75,12 +75,10 @@ class Axis: public AbstractWorksheetElement {
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
 		BASIC_D_ACCESSOR_DECL(AxisPosition, position, Position)
 		BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale)
+		BASIC_D_ACCESSOR_DECL(float, start, Start)
+		BASIC_D_ACCESSOR_DECL(float, end, End)
 		void setOffset(const float, const bool=true);
 		float offset() const;
-		void setStart(const float, const bool=true);
-		float start() const;
-		void setEnd(const float, const bool=true);
-		float end() const;
 		BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor)
 		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset)
 
