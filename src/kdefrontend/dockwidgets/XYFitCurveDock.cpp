@@ -134,6 +134,8 @@ void XYFitCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
+	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->xDataColumn()!=0 && m_fitCurve->yDataColumn()!=0);
+
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 	uiGeneralTab.sbNumberOfTerms->setValue(m_fitData.numberOfTerms);
 	uiGeneralTab.teEquation->setText(m_fitData.model);
@@ -144,7 +146,7 @@ void XYFitCurveDock::initGeneralTab() {
 	//Slots
 	connect(m_fitCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_fitCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
+	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(weightsColumnChanged(const AbstractColumn*)), this, SLOT(curveWeightsColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
 }
@@ -171,7 +173,7 @@ void XYFitCurveDock::setModel(std::auto_ptr<AspectTreeModel> model) {
 	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 	connect( cbWeightsColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(weightsColumnChanged(QModelIndex)) );
-
+	connect( uiGeneralTab.teEquation, SIGNAL(textChanged()), this, SLOT(customModelChanged()) );
 	XYCurveDock::setModel(model);
 }
 
@@ -220,6 +222,10 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index){
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
+
+	//no fitting possible without the x- and y-data
+	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+	uiGeneralTab.pbRecalculate->setEnabled(aspect!=0 && aspectY!=0);
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
@@ -235,6 +241,10 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
+
+	//no fitting possible without the x- and y-data
+	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+	uiGeneralTab.pbRecalculate->setEnabled(aspectX!=0 && aspect!=0);
 }
 
 void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
@@ -290,6 +300,10 @@ void XYFitCurveDock::modelChanged(int index) {
 	}
 
 	this->updateModelEquation();
+}
+
+void XYFitCurveDock::customModelChanged() {
+	uiGeneralTab.pbRecalculate->setEnabled( uiGeneralTab.teEquation->isValid() );
 }
 
 void XYFitCurveDock::updateModelEquation() {

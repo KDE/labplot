@@ -55,6 +55,7 @@ public:
 	EquationHighlighter* highlighter();
 	void setExpressionType(XYEquationCurve::EquationType);
 	void setVariables(const QStringList&);
+	bool isValid() const;
 
 protected:
 	void keyPressEvent(QKeyEvent*);
@@ -67,10 +68,10 @@ private slots:
 private:
 	QString textUnderCursor() const;
 
-private:
 	EquationHighlighter* m_highlighter;
 	XYEquationCurve::EquationType m_expressionType;
 	QCompleter* m_completer;
+	bool m_isValid;
 };
 
 #endif

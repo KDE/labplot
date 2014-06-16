@@ -50,7 +50,8 @@
 // modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
 ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 	m_highlighter(new EquationHighlighter(this)),
-	m_expressionType(XYEquationCurve::Cartesian) {
+	m_expressionType(XYEquationCurve::Cartesian),
+	m_isValid(false) {
 
 	QStringList list = ExpressionParser::getInstance()->functions();
 	list.append(ExpressionParser::getInstance()->constants());
@@ -71,7 +72,11 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 
 EquationHighlighter* ExpressionTextEdit::highlighter() {
 	return m_highlighter;
- }
+}
+
+bool ExpressionTextEdit::isValid() const {
+	return m_isValid;
+}
 
 void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
@@ -157,8 +162,8 @@ void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
 }
 
 void ExpressionTextEdit::validateExpression() {
-	bool rc = ExpressionParser::getInstance()->isValid(document()->toPlainText(), m_expressionType);
-	if (!rc)
+	m_isValid = ExpressionParser::getInstance()->isValid(document()->toPlainText(), m_expressionType);
+	if (!m_isValid)
 		setStyleSheet("QTextEdit{background: red;}");
 	else
 		setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme

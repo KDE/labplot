@@ -66,6 +66,7 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void weightsColumnChanged(const QModelIndex&);
+	void customModelChanged();
 
 	void showConstants();
 	void showFunctions();
