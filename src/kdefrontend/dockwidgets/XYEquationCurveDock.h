@@ -59,8 +59,10 @@ private slots:
 	void validateExpression(const QString&);
 	void showConstants();
 	void showFunctions();
-	void insert1(const QString&);
-	void insert2(const QString&);
+	void insertFunction1(const QString&);
+	void insertConstant1(const QString&);
+	void insertFunction2(const QString&);
+	void insertConstant2(const QString&);
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab

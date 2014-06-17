@@ -76,12 +76,17 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.tbConstants1->setIcon( KIcon("applications-education-mathematics") );
 	uiGeneralTab.tbFunctions1->setIcon( KIcon("preferences-desktop-font") );
 
+	uiGeneralTab.tbConstants2->setIcon( KIcon("applications-education-mathematics") );
+	uiGeneralTab.tbFunctions2->setIcon( KIcon("preferences-desktop-font") );
+
 	uiGeneralTab.cbType->addItem(i18n("cartesian"));
 	uiGeneralTab.cbType->addItem(i18n("polar"));
 	uiGeneralTab.cbType->addItem(i18n("parametric"));
-	uiGeneralTab.cbType->addItem(i18n("implicit"));
+// 	uiGeneralTab.cbType->addItem(i18n("implicit"));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+
+	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::Parametric);
 
 	//Slots
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
@@ -254,9 +259,9 @@ void XYEquationCurveDock::showConstants() {
 	ConstantsWidget constants(&menu);
 
 	if (QObject::sender()==uiGeneralTab.tbConstants1)
-		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insert1(QString)));
+		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant1(QString)));
 	else
-		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insert2(QString)));
+		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant2(QString)));
 
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
 
@@ -278,9 +283,9 @@ void XYEquationCurveDock::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
 	if (QObject::sender()==uiGeneralTab.tbFunctions1)
-		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insert1(QString)));
+		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction1(QString)));
 	else
-		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insert2(QString)));
+		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction2(QString)));
 
 	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
 
@@ -298,11 +303,25 @@ void XYEquationCurveDock::showFunctions() {
 
 }
 
-void XYEquationCurveDock::insert1(const QString& str) {
+void XYEquationCurveDock::insertFunction1(const QString& str) {
+	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
+	if (type==XYEquationCurve::Cartesian)
+		uiGeneralTab.teEquation1->insertPlainText(str + "(x)");
+	else if (type==XYEquationCurve::Polar)
+		uiGeneralTab.teEquation1->insertPlainText(str + "(phi)");
+	else if (type==XYEquationCurve::Parametric)
+		uiGeneralTab.teEquation1->insertPlainText(str + "(t)");
+}
+
+void XYEquationCurveDock::insertConstant1(const QString& str) {
 	uiGeneralTab.teEquation1->insertPlainText(str);
 }
 
-void XYEquationCurveDock::insert2(const QString& str) {
+void XYEquationCurveDock::insertFunction2(const QString& str) {
+	uiGeneralTab.teEquation2->insertPlainText(str + "(t)");
+}
+
+void XYEquationCurveDock::insertConstant2(const QString& str) {
 	uiGeneralTab.teEquation2->insertPlainText(str);
 }
 

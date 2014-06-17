@@ -72,7 +72,8 @@ private slots:
 	void showFunctions();
 	void showParameters();
 	void showOptions();
-	void insert(const QString&);
+	void insertFunction(const QString&);
+	void insertConstant(const QString&);
 	void recalculateClicked();
 	void updateModelEquation();
 

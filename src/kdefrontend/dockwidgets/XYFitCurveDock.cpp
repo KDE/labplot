@@ -88,6 +88,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
 	uiGeneralTab.tbConstants->setIcon( KIcon("applications-education-mathematics") );
+	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -385,7 +386,7 @@ void XYFitCurveDock::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
 
-	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insert(QString)));
+	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
@@ -399,8 +400,8 @@ void XYFitCurveDock::showConstants() {
 void XYFitCurveDock::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
-	connect(&functions, SIGNAL(functionsSelected(QString)), this, SLOT(insert1(QString)));
-	connect(&functions, SIGNAL(functionsSelected(QString)), &menu, SLOT(close()));
+	connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction(QString)));
+	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
@@ -436,7 +437,11 @@ void XYFitCurveDock::showOptions() {
 	menu.exec(uiGeneralTab.pbOptions->mapToGlobal(pos));
 }
 
-void XYFitCurveDock::insert(const QString& str) {
+void XYFitCurveDock::insertFunction(const QString& str) {
+	uiGeneralTab.teEquation->insertPlainText(str + "(x)");
+}
+
+void XYFitCurveDock::insertConstant(const QString& str) {
 	uiGeneralTab.teEquation->insertPlainText(str);
 }
 
