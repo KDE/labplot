@@ -31,17 +31,18 @@
 #include <QWidget>
 #include <QStringList>
 
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "ui_fitparameterswidget.h"
-
 
 class FitParametersWidget: public QWidget {
 	Q_OBJECT
 
 public:
-	explicit FitParametersWidget(QWidget*);
+	explicit FitParametersWidget(QWidget*, XYFitCurve::FitData*);
 
 private:
 	Ui::FitParametersWidget ui;
+	XYFitCurve::FitData* m_fitData;
 
 signals:
 	void finished();

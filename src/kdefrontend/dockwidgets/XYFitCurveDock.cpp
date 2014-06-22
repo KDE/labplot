@@ -37,6 +37,7 @@
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDebug>
 
 /*!
   \class XYFitCurveDock
@@ -138,7 +139,7 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->xDataColumn()!=0 && m_fitCurve->yDataColumn()!=0);
 
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	uiGeneralTab.sbNumberOfTerms->setValue(m_fitData.numberOfTerms);
+	uiGeneralTab.sbNumberOfTerms->setValue(m_fitData.degree);
 	uiGeneralTab.teEquation->setText(m_fitData.model);
 	this->modelChanged(m_fitData.modelType);
 
@@ -308,75 +309,100 @@ void XYFitCurveDock::customModelChanged() {
 }
 
 void XYFitCurveDock::updateModelEquation() {
-	QStringList vars;
-	QString eq;
-	XYFitCurve::ModelType type = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
-	int num = uiGeneralTab.sbNumberOfTerms->value();
+	QStringList vars; //variables/parameters that are known in ExpressionTestEdit teEquation
 	vars << "x";
+	QString eq;
+	m_fitData.modelType= (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
+	int num = uiGeneralTab.sbNumberOfTerms->value();
 
-	if (type == XYFitCurve::Polynomial) {
+	m_fitData.paramNames.clear();
+
+	if (m_fitData.modelType == XYFitCurve::Polynomial) {
 		eq = "c0 + c1*x";
 		vars << "c0" << "c1";
+		m_fitData.paramNames << "c0" << "c1";
 		if (num==2) {
 			eq += " + c2*x^2";
 			vars << "c2";
+			m_fitData.paramNames << "c2";
 		} else if (num>2) {
-			eq += " + ... + c" + QString::number(num) + "*x^" + QString::number(num);
-			for (int i=1; i<=num; ++i)
-				vars << "c"+QString::number(i);
+			QString numStr = QString::number(num);
+			eq += " + ... + c" + numStr + "*x^" + numStr;
+			vars << "c" + numStr;
+			for (int i=2; i<=num; ++i)
+				m_fitData.paramNames << "c"+QString::number(i);
 		}
-	} else if (type == XYFitCurve::Power) {
+	} else if (m_fitData.modelType == XYFitCurve::Power) {
 		if (num==1) {
 			eq = "a*x^b";
 			vars << "a" << "b";
+			m_fitData.paramNames << "a" << "b";
 		} else {
 			eq = "a + b*x^c";
 			vars << "a" << "b" << "c";
+			m_fitData.paramNames << "a" << "b" << "c";
 		}
-	} else if (type == XYFitCurve::Exponential) {
+	} else if (m_fitData.modelType == XYFitCurve::Exponential) {
 		eq = "a*exp(b*x)";
 		vars << "a" << "b";
+		m_fitData.paramNames << "a" << "b";
 		if (num==2){
 			eq += " + c*exp(d*x)";
 			vars << "c" << "d";
-		} else if (num>2){
+			m_fitData.paramNames << "c" << "d";
+		} else if (num==3){
 			eq += " + c*exp(d*x) + e*exp(f*x)";
 			vars << "c" << "d" << "e" << "f";
+			m_fitData.paramNames << "c" << "d" << "e" << "f";
 		}
-	} else if (type == XYFitCurve::Fourier) {
+	} else if (m_fitData.modelType == XYFitCurve::Fourier) {
 		eq = "a0 + (a1*cos(w*x) + b1*cos(w*x))";
 		vars << "w" << "a0" << "a1" << "b1";
+		m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
 		if (num==2) {
 			eq += " + (a2*cos(2*w*x) + b2*cos(2*w*x))";
-			vars << "a1" << "b1" << "a2" << "b2";
+			vars << "a2" << "b2";
+			m_fitData.paramNames << "a2" << "b2";
 		} else if (num>2) {
 			QString numStr = QString::number(num);
 			eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-			for (int i=1; i<=num; ++i)
-				vars << "b"+QString::number(i) << "b"+QString::number(i);
+			vars << "a"+numStr << "b"+numStr;
+			for (int i=2; i<=num; ++i)
+				m_fitData.paramNames << "a"+QString::number(i) << "b"+QString::number(i);
 		}
-	} else if (type == XYFitCurve::Gaussian) {
+	} else if (m_fitData.modelType == XYFitCurve::Gaussian) {
 		eq = "a1*exp(-((x-b1)/c1)^2)";
 		vars << "a1" << "b1" << "c1";
+		m_fitData.paramNames << "a1" << "b1" << "c1";
 		if (num==2) {
 			eq += " + a2*exp(-((x-b2)/c2)^2)";
 			vars << "a2" << "b2" << "c2";
+			m_fitData.paramNames << "a2" << "b2" << "c2";
 		} else if (num==3) {
 			eq += " + a2*exp(-((x-b2)/c2)^2) + a3*exp(-((x-b3)/c3)^2)";
 			vars << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
+			m_fitData.paramNames << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
 		} else if (num>3) {
 			QString numStr = QString::number(num);
 			eq += " + a2*exp(-((x-b2)/c2)^2) + ... + a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
-			for (int i=1; i<=num; ++i)
-				vars << "a"+QString::number(i) << "b"+QString::number(i) << "c"+QString::number(i);
+			vars << "a2" << "b2" << "c2" << "a"+numStr << "b"+numStr << "c"+numStr;
+			for (int i=2; i<=num; ++i)
+				m_fitData.paramNames << "a"+QString::number(i) << "b"+QString::number(i) << "c"+QString::number(i);
 		}
-	} else if (type == XYFitCurve::Lorentz) {
+	} else if (m_fitData.modelType == XYFitCurve::Lorentz) {
 		eq = "1/pi*s/(s^2+(x-t)^2)";
 		vars << "s" << "t";
-	} else if (type == XYFitCurve::Maxwell) {
+		m_fitData.paramNames << "s" << "t";
+	} else if (m_fitData.modelType == XYFitCurve::Maxwell) {
 		eq = "sqrt(2/pi)*exp(-x^2/(2*a^2))/a^3";
-		vars << "a" << "t";
+		vars << "a";
+		m_fitData.paramNames << "a";
 	}
+
+	m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
+	m_fitData.paramValues.resize(m_fitData.paramNames.size());
+	for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
+		m_fitData.paramStartValues[i] = 1.0;
 
 	uiGeneralTab.teEquation->setVariables(vars);
 	uiGeneralTab.teEquation->setText(eq);
@@ -413,7 +439,7 @@ void XYFitCurveDock::showFunctions() {
 
 void XYFitCurveDock::showParameters() {
 	QMenu menu;
-	FitParametersWidget w(&menu);
+	FitParametersWidget w(&menu, &m_fitData);
 	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
@@ -446,10 +472,13 @@ void XYFitCurveDock::insertConstant(const QString& str) {
 }
 
 void XYFitCurveDock::recalculateClicked() {
+	qDebug()<<"XYFitCurveDock::recalculateClicked";
 	m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
-	m_fitData.numberOfTerms = uiGeneralTab.sbNumberOfTerms->value();
-	if (m_fitData.modelType==XYFitCurve::Custom)
+	m_fitData.degree = uiGeneralTab.sbNumberOfTerms->value();
+
+	if (m_fitData.modelType==XYFitCurve::Custom) {
 		m_fitData.model = uiGeneralTab.teEquation->document()->toPlainText();
+	}
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);

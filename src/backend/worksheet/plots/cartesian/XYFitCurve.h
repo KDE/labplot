@@ -42,15 +42,16 @@ class XYFitCurve: public XYCurve {
 		struct FitData {
 			FitData() : modelType(Polynomial),
 						weightsType(XYFitCurve::WeightsFromColumn),
-						numberOfTerms(1),
+						degree(1),
 						maxIterations(500),
 						eps(1e-4) {};
 
 			ModelType modelType;
 			WeightsType weightsType;
-			int numberOfTerms;
-			int numberOfParameters;
+			int degree;
 			QString model;
+			QStringList paramNames;
+			QVector<double> paramValues;
 			QVector<double> paramStartValues;
 
 			int maxIterations;

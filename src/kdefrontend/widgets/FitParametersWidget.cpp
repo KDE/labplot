@@ -35,11 +35,12 @@
 
 	\ingroup kdefrontend
  */
-FitParametersWidget::FitParametersWidget(QWidget *parent) : QWidget(parent) {
+FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent), m_fitData(data) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
 
 	ui.tableWidget->setColumnCount(2);
+	ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
 	QTableWidgetItem* headerItem = new QTableWidgetItem();
 	headerItem->setText(i18n("Name"));
@@ -48,6 +49,14 @@ FitParametersWidget::FitParametersWidget(QWidget *parent) : QWidget(parent) {
 	headerItem = new QTableWidgetItem();
 	headerItem->setText(i18n("Start value"));
 	ui.tableWidget->setHorizontalHeaderItem(1, headerItem);
+
+	ui.tableWidget->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+
+	for (int i=0; i<m_fitData->paramNames.size(); ++i){
+		ui.tableWidget->setItem(i, 0, new QTableWidgetItem(m_fitData->paramNames.at(i)));
+		ui.tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(m_fitData->paramStartValues.at(i), 'g')));
+	}
 
 	//SLOTS
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );

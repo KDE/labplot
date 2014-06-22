@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>230</width>
-    <height>132</height>
+    <height>151</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -36,6 +36,16 @@
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="leEps"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="leNumberOfFittedPoints_2">
+        <property name="text">
+         <string>Fitted Points</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="leNumberOfFittedPoints"/>
       </item>
      </layout>
     </widget>
