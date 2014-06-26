@@ -176,7 +176,6 @@ struct data {
  * \param f vector containing
  */
 int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
-	qDebug()<<"func_f";
 	int n = ((struct data*)params)->n;
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
@@ -186,11 +185,14 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	char* func = ((struct data*)params)->func->toLatin1().data();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 
+	qDebug()<<"func_f " << ((struct data*)params)->func;
 	init_table();
 
 	//set current values of the parameters
-	for (int j=0; j<paramNames->size(); j++)
+	for (int j=0; j<paramNames->size(); j++) {
+		qDebug() << "assigning " << paramNames->at(j) << gsl_vector_get(paramValues,j);
 		assign_variable(paramNames->at(j).toLatin1().data(), gsl_vector_get(paramValues,j));
+	}
 
 	char var[]="x";
 	for (int i = 0; i < n; i++) {
@@ -201,9 +203,9 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		double Yi=0;
 		//TODO: add checks for allowed valus of x for different models if required (x>0 for ln(x) etc.)
 
+		qDebug()<<"assigning x=" << x[i];
 		assign_variable(var, x[i]);
 		Yi = parse(func);
-
 		if(parse_errors()>0) {
 			qDebug()<<"parse errors";
 			delete_table();
@@ -380,6 +382,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 }
 
 int func_fdf(const gsl_vector* x, void* params, gsl_vector* f,gsl_matrix* J) {
+	qDebug()<<"func_df";
 	func_f (x, params, f);
 	func_df (x, params, J);
 	return GSL_SUCCESS;
@@ -407,7 +410,14 @@ void XYFitCurvePrivate::recalculate() {
 	//fit settings
 	int maxIters = fitData.maxIterations; //maximal number of iteratoins
 	float delta = fitData.eps; //fit tolerance
-	const size_t n = xDataColumn->rowCount(); //number of data points
+	size_t n = 0; //number of data points
+	for (int i=0; i<xDataColumn->rowCount(); ++i) {
+		if (isnan(xdata[i])) {
+			n = i;
+			break;
+		}
+	}
+	qDebug()<<"number of points " << n;
 	const int np = fitData.paramNames.size(); //number of fit parameters
 
 	//calculate sigma from given weights type
@@ -522,6 +532,13 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	XYCurve::save(writer);
 
 	//write xy-fit-curve specific information
+	writer->writeStartElement( "fitData" );
+	WRITE_COLUMN(d->xDataColumn, xDataColumn);
+	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	WRITE_COLUMN(d->weightsColumn, weightsColumn);
+	//TODO
+	writer->writeEndElement();
+
 	writer->writeEndElement();
 }
 
