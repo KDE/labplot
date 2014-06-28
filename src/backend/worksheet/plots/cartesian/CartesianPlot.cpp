@@ -60,6 +60,7 @@
 #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
 #define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
 
+
 /**
  * \class CartesianPlot
  * \brief A xy-plot.
@@ -1096,7 +1097,7 @@ void CartesianPlot::visibilityChanged(){
 //#####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	: AbstractPlotPrivate(owner), q(owner),suppressRetransform(false),
-	m_printing(false), m_rubberBand(0), cSystem(0),
+	m_printing(false), m_selectionBandIsShown(false), cSystem(0),
 	mouseMode(CartesianPlot::SelectionMode){
 }
 
@@ -1330,42 +1331,25 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 	if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
-		if (!m_rubberBand) {
-			m_rubberBand = new QRubberBand(QRubberBand::Rectangle);
-			QGraphicsColorizeEffect *e = new QGraphicsColorizeEffect(m_rubberBand);
-			e->setColor(QColor(Qt::blue));
-			m_rubberBand->setGraphicsEffect(e);
-
-			/*QPalette pal;
-			QColor color(Qt::blue);
-			color.setAlpha(50);
-			pal.setBrush(QPalette::Highlight, QBrush(color));
-			m_rubberBand->setPalette(pal);*/
-		}
 
 		if (mouseMode==CartesianPlot::ZoomSelectionMode) {
-			m_zoomStart = event->pos();
-			m_rubberBandStart = event->screenPos();
+			m_selectionStart = event->pos();
 		} else if (mouseMode==CartesianPlot::ZoomXSelectionMode) {
 			//determine the start point of the selection band in item's coordinates first (set y to the current maximal value),
 			//and map the start point to global coordinates (=m_rubberBandStart)
 			float ymax = cSystem->mapLogicalToScene(QPointF(0, yMax), AbstractCoordinateSystem::SuppressPageClipping).y();
-			m_zoomStart.setX(event->pos().x());
-			m_zoomStart.setY(ymax);
-			QGraphicsView* view = scene()->views().first();
-			m_rubberBandStart  = view->viewport()->mapToGlobal( view->mapFromScene(mapToScene(m_zoomStart)) );
+			m_selectionStart.setX(event->pos().x());
+			m_selectionStart.setY(ymax);
 		} else if (mouseMode==CartesianPlot::ZoomYSelectionMode) {
 			//determine the start point of the selection band in item's coordinates first (set x to the current minimal value),
 			//and map the start point to global coordinates (=m_rubberBandStart)
 			float xmin = cSystem->mapLogicalToScene(QPointF(xMin, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
-			m_zoomStart.setX(xmin);
-			m_zoomStart.setY(event->pos().y());
-			QGraphicsView* view = scene()->views().first();
-			m_rubberBandStart  = view->viewport()->mapToGlobal( view->mapFromScene(mapToScene(m_zoomStart)) );
+			m_selectionStart.setX(xmin);
+			m_selectionStart.setY(event->pos().y());
 		}
 
-		m_rubberBand->setGeometry(m_rubberBandStart.x(), m_rubberBandStart.y(), 0, 0);
-		m_rubberBand->show();
+		m_selectionEnd = m_selectionStart;
+		m_selectionBandIsShown = true;
 	} else {
 		QGraphicsItem::mousePressEvent(event);
 	}
@@ -1379,22 +1363,22 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		if ( !boundingRect().contains(event->pos()) )
 			return;
 
-		QPoint rubberBandEnd;
-		QGraphicsView* view = scene()->views().first();
 		if (mouseMode==CartesianPlot::ZoomSelectionMode) {
-			rubberBandEnd = event->screenPos();
+			m_selectionEnd = event->pos();
 		} else if (mouseMode==CartesianPlot::ZoomXSelectionMode) {
 			//determine the end point of the selection band in item's coordinates first (set y to the current minimal value),
 			//and map the end point to global coordinates (=m_rubberBandStart)
 			float ymin = cSystem->mapLogicalToScene(QPointF(0, yMin), AbstractCoordinateSystem::SuppressPageClipping).y();
-			rubberBandEnd = view->viewport()->mapToGlobal( view->mapFromScene(mapToScene(QPoint(event->pos().x(), ymin))) );
+			m_selectionEnd.setX(event->pos().x());
+			m_selectionEnd.setY(ymin);
 		} else if (mouseMode==CartesianPlot::ZoomYSelectionMode) {
 			//determine the end point of the selection band in item's coordinates first (set x to the current maximal value),
 			//and map the end point to global coordinates (=m_rubberBandStart)
 			float xmax = cSystem->mapLogicalToScene(QPointF(xMax, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
-			rubberBandEnd = view->viewport()->mapToGlobal( view->mapFromScene(mapToScene(QPoint(xmax, event->pos().y()))) );
+			m_selectionEnd.setX(xmax);
+			m_selectionEnd.setY(event->pos().y());
 		}
-		m_rubberBand->setGeometry(QRect(m_rubberBandStart, rubberBandEnd).normalized());
+		update();
 	}
 
 
@@ -1423,29 +1407,28 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
-		QPointF zoomEnd;
 		if (mouseMode == CartesianPlot::ZoomSelectionMode) {
-			zoomEnd = event->pos();
+			m_selectionEnd = event->pos();
 		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode ) {
-			zoomEnd.setX(event->pos().x());
+			m_selectionEnd.setX(event->pos().x());
 			float ymin = cSystem->mapLogicalToScene(QPointF(0, yMin), AbstractCoordinateSystem::SuppressPageClipping).y();
-			zoomEnd.setY(ymin);
+			m_selectionEnd.setY(ymin);
 		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode ) {
 			float xmax = cSystem->mapLogicalToScene(QPointF(xMax, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
-			zoomEnd.setX(xmax);
-			zoomEnd.setY(event->pos().y());
+			m_selectionEnd.setX(xmax);
+			m_selectionEnd.setY(event->pos().y());
 		}
 
 		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
-		if ( abs(zoomEnd.x()-m_zoomStart.x())<20 || abs(zoomEnd.y()-m_zoomStart.y())<20 ) {
-			m_rubberBand->hide();
+		if ( abs(m_selectionEnd.x()-m_selectionStart.x())<20 || abs(m_selectionEnd.y()-m_selectionStart.y())<20 ) {
+			m_selectionBandIsShown = false;
 			return;
 		}
 
 		//determine the new plot ranges
-		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_zoomStart, AbstractCoordinateSystem::SuppressPageClipping);
-		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(zoomEnd, AbstractCoordinateSystem::SuppressPageClipping);
-		if (zoomEnd.x()>m_zoomStart.x()) {
+		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::SuppressPageClipping);
+		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::SuppressPageClipping);
+		if (m_selectionEnd.x()>m_selectionStart.x()) {
 			xMin = logicalZoomStart.x();
 			xMax = logicalZoomEnd.x();
 		} else {
@@ -1453,7 +1436,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 			xMax = logicalZoomStart.x();
 		}
 
-		if (zoomEnd.y()>m_zoomStart.y()) {
+		if (m_selectionEnd.y()>m_selectionStart.y()) {
 			yMin = logicalZoomEnd.y();
 			yMax = logicalZoomStart.y();
 		} else {
@@ -1461,8 +1444,8 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 			yMax = logicalZoomEnd.y();
 		}
 
+		m_selectionBandIsShown = false;
 		retransformScales();
-		m_rubberBand->hide();
 	}
 }
 
@@ -1507,13 +1490,13 @@ void CartesianPlotPrivate::hoverMoveEvent (QGraphicsSceneHoverEvent* event){
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 		QString info = "x=" + QString::number(logicalPoint.x()) + ", y=" + QString::number(logicalPoint.y());
 		q->info(info);
-		if (mouseMode == CartesianPlot::ZoomXSelectionMode && (!m_rubberBand || !m_rubberBand->isVisible())) {
+		if (mouseMode == CartesianPlot::ZoomXSelectionMode && !m_selectionBandIsShown) {
 			QPointF p1(logicalPoint.x(), yMin);
 			QPointF p2(logicalPoint.x(), yMax);
 			m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1));
 			m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2));
 			update();
-		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode && (!m_rubberBand || !m_rubberBand->isVisible())) {
+		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode && !m_selectionBandIsShown) {
 			QPointF p1(xMin, logicalPoint.y());
 			QPointF p2(xMax, logicalPoint.y());
 			m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1));
@@ -1533,8 +1516,18 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
 	painter->setPen(QPen(Qt::black, 3));
 	if ( (mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
-		&& (!m_rubberBand || !m_rubberBand->isVisible())) {
+		&& (!m_selectionBandIsShown)) {
 		painter->drawLine(m_selectionStartLine);
+	}
+
+	if (m_selectionBandIsShown){
+		painter->save();
+		painter->setPen(QPen(Qt::black, 5));
+		painter->drawRect(QRectF(m_selectionStart, m_selectionEnd));
+		painter->setBrush(Qt::blue);
+		painter->setOpacity(0.2);
+		painter->drawRect(QRectF(m_selectionStart, m_selectionEnd));
+		painter->restore();
 	}
 
 	WorksheetElementContainerPrivate::paint(painter, option, widget);

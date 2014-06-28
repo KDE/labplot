@@ -70,9 +70,9 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 
 		bool suppressRetransform;
 		bool m_printing;
-		QRubberBand* m_rubberBand;
-		QPoint m_rubberBandStart;
-		QPointF m_zoomStart;
+		bool m_selectionBandIsShown;
+		QPointF m_selectionStart;
+		QPointF m_selectionEnd;
 		CartesianCoordinateSystem* cSystem;
 		CartesianPlot::MouseMode mouseMode;
 		QLineF m_selectionStartLine;
