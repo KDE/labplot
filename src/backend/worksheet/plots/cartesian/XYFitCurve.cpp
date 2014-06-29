@@ -182,10 +182,12 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* sigma = ((struct data*)params)->sigma;
 // 	FModel model = ((struct data *)params)->model;
 // 	double base = ((struct data *)params)->base;
-	char* func = ((struct data*)params)->func->toLatin1().data();
+	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
+	char *func = funcba.data();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 
 	qDebug()<<"func_f " << ((struct data*)params)->func;
+	qDebug()<<"func " << func;
 	init_table();
 
 	//set current values of the parameters
