@@ -199,7 +199,7 @@ void ExpressionParser::initFunctions() {
 
 	for(int i=0;i<12;i++)
 		m_functionsGroupIndex << 2;
-	
+
 	// Bessel Functions
 	m_functionsNames << "Regular cylindrical Bessel function of zeroth order";
 	m_functionsNames << "Regular cylindrical Bessel function of first order";
@@ -252,19 +252,19 @@ void ExpressionParser::initFunctions() {
 
 	for(int i=0;i<44;i++)
 		m_functionsGroupIndex << 3;
-	
+
 	// Clausen Functions
 	m_functionsNames << "Clausen function";
 	m_functionsGroupIndex << 4;
-	
+
 	// Coulomb Functions
 	m_functionsNames << "Lowest-order normalized hydrogenic bound state radial wavefunction";
 	m_functionsNames << "n-th normalized hydrogenic bound state radial wavefunction";
 
 	for(int i=0;i<2;i++)
 		m_functionsGroupIndex << 5;
-	
-	// Dawson Function	
+
+	// Dawson Function
 	m_functionsNames << "Dawson integral";
 	m_functionsGroupIndex << 6;
 
@@ -279,7 +279,7 @@ void ExpressionParser::initFunctions() {
 	for(int i=0;i<6;i++)
 		m_functionsGroupIndex << 7;
 
-	// Dilogarithm	
+	// Dilogarithm
         m_functionsNames << "Dilogarithm for a real argument";
 	m_functionsGroupIndex << 8;
 
@@ -894,7 +894,7 @@ void ExpressionParser::initConstants() {
 	for(int i=0;i<5;i++)
 		m_constantsGroupIndex << 5;
 
-	// Speed and Nautical Units 
+	// Speed and Nautical Units
 	m_constantsNames << "Speed of 1 kilometer per hour";
 	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOMETERS_PER_HOUR); m_constantsUnits << "m / s";
 	m_constantsNames << "Speed of 1 mile per hour";
@@ -1105,22 +1105,11 @@ const QVector<int>& ExpressionParser::constantsGroupIndices() {
 	return m_constantsGroupIndex;
 }
 
-bool ExpressionParser::isValid(const QString& expr, XYEquationCurve::EquationType type){
-	char* data = expr.toLocal8Bit().data();
-	if (type == XYEquationCurve::Cartesian) {
-		char xVar[] = "x";
-		double x = 0;
-		assign_variable(xVar,x);
-	} else if (type == XYEquationCurve::Polar) {
-		char var[] = "phi";
-		double phi = 0;
-		assign_variable(var,phi);
-	} else if (type == XYEquationCurve::Parametric) {
-		char var[] = "t";
-		double t = 0;
-		assign_variable(var,t);
-	}
+bool ExpressionParser::isValid(const QString& expr, const QStringList& vars){
+	for (int i=0; i<vars.size(); ++i)
+		assign_variable(vars.at(i).toLocal8Bit().data(), 0);
 
+	char* data = expr.toLocal8Bit().data();
 	parse(data);
 	return !(parse_errors()>0);
 }

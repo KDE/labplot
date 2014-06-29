@@ -56,7 +56,6 @@ private slots:
 	void commentChanged();
 	void typeChanged(int);
 	void recalculateClicked();
-	void validateExpression(const QString&);
 	void showConstants();
 	void showFunctions();
 	void insertFunction1(const QString&);

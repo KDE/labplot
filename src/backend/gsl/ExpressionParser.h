@@ -29,14 +29,15 @@
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H
 
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include <QVector>
+#include <QStringList>
 
 class ExpressionParser{
 
 public:
 	static ExpressionParser* getInstance();
 
-	bool isValid(const QString&, XYEquationCurve::EquationType);
+	bool isValid(const QString& expr, const QStringList& vars);
 	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 						   int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool evaluatePolar(const QString& expr, const QString& min, const QString& max,

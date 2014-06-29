@@ -33,6 +33,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include <QUndoStack>
@@ -285,13 +286,20 @@ bool Project::load(XmlStreamReader* reader) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
 					} else {
-						RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
-						RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-						RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-						RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-						RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+						XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
+						if (fitCurve) {
+							RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
+							RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
+							RESTORE_COLUMN_POINTER(fitCurve, weightsColumn, WeightsColumn);
+						} else {
+							RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+							RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+							RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+							RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
+							RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
+							RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
+							RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+						}
 					}
 				}
 

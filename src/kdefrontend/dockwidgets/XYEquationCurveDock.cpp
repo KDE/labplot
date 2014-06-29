@@ -98,8 +98,6 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.tbFunctions1, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.tbConstants2, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( uiGeneralTab.tbFunctions2, SIGNAL(clicked()), this, SLOT(showFunctions()) );
-	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
-	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(validateExpression(QString)) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
@@ -241,17 +239,6 @@ void XYEquationCurveDock::recalculateClicked() {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYEquationCurve*>(curve)->setEquationData(data);
-}
-
-void XYEquationCurveDock::validateExpression(const QString& eq) {
-	QLineEdit* lineEdit = dynamic_cast<QLineEdit*>(QObject::sender());
-	Q_ASSERT(lineEdit);
-	XYEquationCurve::EquationType type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
-	bool rc = ExpressionParser::getInstance()->isValid(eq, type);
-	if (!rc)
-		lineEdit->setStyleSheet("QLineEdit{background: red;}");
-	else
-		lineEdit->setStyleSheet("QLineEdit{background: white;}"); //TODO: assign the default color for the current style/theme
 }
 
 void XYEquationCurveDock::showConstants() {

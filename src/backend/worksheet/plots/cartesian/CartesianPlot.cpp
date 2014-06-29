@@ -1767,6 +1767,12 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 				removeChild(curve);
                 return false;
             }
+		}else if(reader->name() == "xyFitCurve"){
+			XYFitCurve* curve = addFitCurve();
+            if (!curve->load(reader)){
+				removeChild(curve);
+                return false;
+            }
 		}else if(reader->name() == "cartesianPlotLegend"){
             m_legend = new CartesianPlotLegend(this, "");
             if (!m_legend->load(reader)){

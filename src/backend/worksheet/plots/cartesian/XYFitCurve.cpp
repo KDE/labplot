@@ -396,7 +396,6 @@ void XYFitCurvePrivate::recalculate() {
 	yVector->clear();
 
 	if (!xDataColumn || !yDataColumn) {
-
 		emit (q->xDataChanged());
 		emit (q->yDataChanged());
 		qDebug()<< "no data";
@@ -568,6 +567,10 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 				return false;
 		}else if (reader->name() == "fitData"){
 			attribs = reader->attributes();
+
+			READ_COLUMN(xDataColumn);
+			READ_COLUMN(yDataColumn);
+			READ_COLUMN(weightsColumn);
 
 			str = attribs.value("type").toString();
             if(str.isEmpty())

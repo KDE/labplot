@@ -61,10 +61,6 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
 
-	QStringList vars;
-	vars<<"x"<<"y";
-	m_highlighter->setVariables(vars);
-
 	connect(m_completer, SIGNAL(activated(QString)),this, SLOT(insertCompletion(QString)));
 	connect(this, SIGNAL(textChanged()), this, SLOT(validateExpression()) );
 	connect(this, SIGNAL(cursorPositionChanged()), m_highlighter, SLOT(rehighlight()) );
@@ -80,21 +76,22 @@ bool ExpressionTextEdit::isValid() const {
 
 void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
-	QStringList vars;
+	m_variables.clear();
 	if (type==XYEquationCurve::Cartesian)
-		vars<<"x";
+		m_variables<<"x";
 	else if (type==XYEquationCurve::Polar)
-		vars<<"phi";
+		m_variables<<"phi";
 	else if (type==XYEquationCurve::Parametric)
-		vars<<"t";
+		m_variables<<"t";
 	else if (type==XYEquationCurve::Implicit)
-		vars<<"x"<<"y";
+		m_variables<<"x"<<"y";
 
-	m_highlighter->setVariables(vars);
+	m_highlighter->setVariables(m_variables);
 }
 
 void ExpressionTextEdit::setVariables(const QStringList& vars) {
-	m_highlighter->setVariables(vars);
+	m_variables = vars;
+	m_highlighter->setVariables(m_variables);
 }
 
 void ExpressionTextEdit::insertCompletion(const QString& completion) {
@@ -162,7 +159,7 @@ void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
 }
 
 void ExpressionTextEdit::validateExpression() {
-	m_isValid = ExpressionParser::getInstance()->isValid(document()->toPlainText(), m_expressionType);
+	m_isValid = ExpressionParser::getInstance()->isValid(document()->toPlainText(), m_variables);
 	if (!m_isValid)
 		setStyleSheet("QTextEdit{background: red;}");
 	else

@@ -70,6 +70,7 @@ private:
 
 	EquationHighlighter* m_highlighter;
 	XYEquationCurve::EquationType m_expressionType;
+	QStringList m_variables;
 	QCompleter* m_completer;
 	bool m_isValid;
 };

@@ -2,7 +2,6 @@
 #define PARSER_EXTERN_H
 
 extern "C" double parse(char[]);
-extern "C" double old_parse(char[]);
 extern "C" int parse_errors();
 extern "C" void init_table();
 extern "C" void delete_table();
