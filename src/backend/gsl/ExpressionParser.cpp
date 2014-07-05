@@ -1115,6 +1115,38 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars){
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
+										 int count, QVector<double>* xVector, QVector<double>* yVector,
+										 const QStringList& paramNames, const QVector<double>& paramValues) {
+	double xMin = parse( min.toLocal8Bit().data() );
+	double xMax = parse( max.toLocal8Bit().data() );
+	double step = (xMax-xMin)/(double)(count-1);
+	char* func = expr.toLocal8Bit().data();
+	double x, y;
+	char xVar[] = "x";
+	gsl_set_error_handler_off();
+
+	for (int i=0; i<paramNames.size(); ++i)
+		assign_variable(paramNames.at(i).toLocal8Bit().data(), paramValues.at(i));
+
+	for(int i = 0;i < count; i++) {
+		x = xMin + step*i;
+		assign_variable(xVar,x);
+		y = parse(func);
+
+		if(parse_errors()>0)
+			return false;
+
+		(*xVector)[i] = x;
+		if (finite(y))
+			(*yVector)[i] = y;
+		else
+			(*yVector)[i] = NAN;
+	}
+
+	return true;
+}
+
+bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 										 int count, QVector<double>* xVector, QVector<double>* yVector) {
 	double xMin = parse( min.toLocal8Bit().data() );
 	double xMax = parse( max.toLocal8Bit().data() );

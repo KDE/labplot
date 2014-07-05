@@ -46,6 +46,7 @@ public:
 
 private:
 	virtual void initGeneralTab();
+	void showFitResult();
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;

@@ -52,6 +52,7 @@ class XYFitCurvePrivate: public XYCurvePrivate {
 		QString weightsColumnPath;
 
 		XYFitCurve::FitData fitData;
+		XYFitCurve::FitResult fitResult;
 		QStringList solverOutput;
 
 		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve

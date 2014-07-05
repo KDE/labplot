@@ -142,6 +142,7 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	uiGeneralTab.teEquation->setText(m_fitData.model);
 	this->modelChanged(m_fitData.modelType);
+	this->showFitResult();
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -330,7 +331,7 @@ void XYFitCurveDock::updateModelEquation() {
 		} else if (num>2) {
 			QString numStr = QString::number(num);
 			eq += " + ... + c" + numStr + "*x^" + numStr;
-			vars << "c" + numStr;
+			vars << "c" + numStr << "...";
 			for (int i=2; i<=num; ++i) {
 				numStr = QString::number(i);
 				m_fitData.model += "+c" + numStr + "*x^" + numStr;
@@ -375,7 +376,7 @@ void XYFitCurveDock::updateModelEquation() {
 		} else if (num>2) {
 			QString numStr = QString::number(num);
 			eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-			vars << "a"+numStr << "b"+numStr;
+			vars << "a"+numStr << "b"+numStr << "...";
 			for (int i=2; i<=num; ++i) {
 				numStr = QString::number(i);
 				m_fitData.model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
@@ -400,7 +401,7 @@ void XYFitCurveDock::updateModelEquation() {
 		} else if (num>3) {
 			QString numStr = QString::number(num);
 			eq += " + a2*exp(-((x-b2)/c2)^2) + ... + a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
-			vars << "a2" << "b2" << "c2" << "a"+numStr << "b"+numStr << "c"+numStr;
+			vars << "a2" << "b2" << "c2" << "a"+numStr << "b"+numStr << "c"+numStr << "...";
 			for (int i=2; i<=num; ++i) {
 				numStr = QString::number(i);
 				m_fitData.model += "+ a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
@@ -422,9 +423,8 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
-	m_fitData.paramValues.resize(m_fitData.paramNames.size());
 	for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
-		m_fitData.paramStartValues[i] = 1.0;
+		m_fitData.paramStartValues[i] = 120.0;
 
 	uiGeneralTab.teEquation->setVariables(vars);
 	uiGeneralTab.teEquation->setText(eq);
@@ -501,10 +501,29 @@ void XYFitCurveDock::recalculateClicked() {
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
 
-	//TODO
-	//show the fit result (details)
+	this->showFitResult();
 }
 
+/*!
+ * show the result and details of fit
+ */
+void XYFitCurveDock::showFitResult() {
+	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
+	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
+	QString str = "<b>Parameters:</b>";
+	for (int i=0; i<fitResult.paramValues.size(); i++) {
+		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
+				  + QString::fromUtf8("\u2213") + QString::number(fitResult.errorValues.at(i));
+	}
+
+	str += "<br><br><b>Goodness of fit:</b><br>";
+	str += "status: " + fitResult.status + "<br>";
+	str += "iterations: " + QString::number(fitResult.iterations) + "<br>";
+	str += "chi^2 =  " +QString::number(fitResult.chi2) + "<br>";
+	str += "chi^2/d.o.f =  " + QString::number(fitResult.chi2_over_dof);
+// 	str += "<br><br>" + fitResult.solverOutput;
+	uiGeneralTab.teResult->setText(str);
+}
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************

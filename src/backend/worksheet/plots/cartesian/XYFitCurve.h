@@ -51,11 +51,20 @@ class XYFitCurve: public XYCurve {
 			int degree;
 			QString model;
 			QStringList paramNames;
-			QVector<double> paramValues;
 			QVector<double> paramStartValues;
 
 			int maxIterations;
 			double eps;
+		};
+
+		struct FitResult {
+			int iterations;
+			QString status;
+			double chi2;
+			double chi2_over_dof;
+			QVector<double> paramValues;
+			QVector<double> errorValues;
+			QString solverOutput;
 		};
 
 		explicit XYFitCurve(const QString& name);
@@ -74,6 +83,7 @@ class XYFitCurve: public XYCurve {
 		const QString& weightsColumnPath() const;
 
 		CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
+		const FitResult& fitResult() const;
 
 		typedef AbstractWorksheetElement BaseClass;
 		typedef XYFitCurvePrivate Private;

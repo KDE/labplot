@@ -77,7 +77,8 @@ void XYFitCurve::init() {
 	addChild(d->yColumn);
 
 	//TODO: read from the saved settings for XYFitCurve?
-
+	d->lineType = XYCurve::Line;
+	d->swapSymbolsTypeId("none");
 
 	setUndoAware(false);
 	setXColumn(d->xColumn);
@@ -109,6 +110,10 @@ const QString& XYFitCurve::weightsColumnPath() const { Q_D(const XYFitCurve);ret
 
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, XYFitCurve::FitData, fitData, fitData)
 
+const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
+	Q_D(const XYFitCurve);
+	return d->fitResult;
+}
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -173,54 +178,42 @@ struct data {
 /*!
  * \param v vector containing current values of the fit parameters
  * \param params
- * \param f vector containing
+ * \param f vector with the elements (Yi - y[i])/sigma[i]
  */
 int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	int n = ((struct data*)params)->n;
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
 	double* sigma = ((struct data*)params)->sigma;
-// 	FModel model = ((struct data *)params)->model;
-// 	double base = ((struct data *)params)->base;
-	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
-	char *func = funcba.data();
+	char *func = ((struct data*)params)->func->toLocal8Bit().data();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 
-	qDebug()<<"func_f " << ((struct data*)params)->func;
-	qDebug()<<"func " << func;
-	init_table();
-
 	//set current values of the parameters
-	for (int j=0; j<paramNames->size(); j++) {
-		qDebug() << "assigning " << paramNames->at(j) << gsl_vector_get(paramValues,j);
+	for (int j=0; j<paramNames->size(); j++)
 		assign_variable(paramNames->at(j).toLatin1().data(), gsl_vector_get(paramValues,j));
-	}
 
 	char var[]="x";
 	for (int i = 0; i < n; i++) {
 		if (isnan(x[i]) || isnan(y[i]))
 			continue;
 
-// 		qDebug() << i << "  " << x[i] << "  " << y[i];
 		double Yi=0;
 		//TODO: add checks for allowed valus of x for different models if required (x>0 for ln(x) etc.)
 
-		qDebug()<<"assigning x=" << x[i];
 		assign_variable(var, x[i]);
 		Yi = parse(func);
 		if(parse_errors()>0) {
 			qDebug()<<"parse errors";
-			delete_table();
 			return GSL_EINVAL;
 		}
 
 // 		Yi += base; //TODO
-		if (sigma)
-			gsl_vector_set (f, i, (Yi - y[i])/sigma[i]);
-		else
-			gsl_vector_set (f, i, Yi - y[i]);
+		if (sigma) {
+				gsl_vector_set (f, i, (Yi - y[i])/sigma[i]);
+		} else {
+				gsl_vector_set (f, i, (Yi - y[i]));
+		}
 	}
-	delete_table();
 
 	return GSL_SUCCESS;
 }
@@ -239,13 +232,12 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	double* sigma = ((struct data*)params)->sigma;
 	char* func = ((struct data*)params)->func->toLatin1().data();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
+	XYFitCurve::ModelType modelType = ((struct data*)params)->modelType;
 
 	//copy current parameter values from gsl-vector to a local double array for the sake of easier usage below
 	double* p = new double[paramNames->size()];
 	for (int i=0; i<paramNames->size(); i++)
 		p[i]=gsl_vector_get(paramValues,i);
-
-	init_table();
 
 	//calculate the Jacobian matrix
 	for (int i=0; i<n; i++) {
@@ -259,126 +251,15 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		if (sigma)
 			s = sigma[i];
 
-		gsl_matrix_set (J, i, 0, t/s);
-		gsl_matrix_set (J, i, 1, 1.0/s);
-
-		/*
-		switch(model) {
-		case MFLINEAR:
-			gsl_matrix_set (J, i, 0, t/s);
-			gsl_matrix_set (J, i, 1, 1.0/s);
-			break;
-		case MEXP: {
-			double e = exp(-p[1] * t);
-			gsl_matrix_set (J, i, 0, e/s);
-			gsl_matrix_set (J, i, 1, - t * p[0] * e/s);
-			gsl_matrix_set (J, i, 2, 1.0/s);
-			}; break;
-		case MPOT: {
-			double tlog;
-			if (t<=0)
-				tlog = 0;
-			else
-				tlog=log(t);
-			gsl_matrix_set (J, i, 0, pow(t,p[1])/s);
-			gsl_matrix_set (J, i, 1, p[0] * pow(t,p[1]) * tlog/s);
-			}; break;
-		case MLN: {
-			double plog;
-			if (p[1]==0)
-				plog = 0;
-			else if (p[1]<0)
-				plog = log(-p[1]);
-			else
-				plog=log(p[1]);
-			gsl_matrix_set (J, i, 0, 1/s);
-			gsl_matrix_set (J, i, 1, plog/s);
-			}; break;
-		case M1L: {
-			double tmp = s*(p[0]+p[1]*t)*(p[0]+p[1]*t);
-			gsl_matrix_set (J, i, 0, -1/tmp);
-			gsl_matrix_set (J, i, 1, - t/tmp);
-			}; break;
-		case MEXP2:
-			gsl_matrix_set (J, i, 0, t*exp(-p[1]*t)/s);
-			gsl_matrix_set (J, i, 1, -p[0]*exp(-p[1]*t)*t*t/s);
-			break;
-		case MGAUSSIAN: {
-			// TODO : parameter c
-			double e = exp(-(t-p[1])*(t-p[1])/(2*p[2]*p[2]));
-			double p2 = p[2]*p[2];
-			gsl_matrix_set (J, i, 0, e/(p[2]*sqrt(2*M_PI))/s);
-			gsl_matrix_set (J, i, 1, p[0]*e*(t-p[1])/(p[2]*p2*sqrt(2*M_PI))/s);
-			gsl_matrix_set (J, i, 2, p[0]*e*(p[1]*p[1]-p[2]*p[2]-2*p[1]*t+t*t)/(sqrt(2*M_PI)*p2*p2)/s);
-			}; break;
-		case MMAXWELL: {
-			double e = exp(-p[1]*t*t);
-			gsl_matrix_set (J, i, 0, t*t*e/s);
-			gsl_matrix_set (J, i, 1, -p[0]*e*t*t*t*t/s);
-			}; break;
-		case MPLANCK: {
-			if (t==0) {
-				gsl_matrix_set (J, i, 0, 0);
-			 	gsl_matrix_set (J, i, 1, 0);
-			}
-			else {
-				double e = exp(p[1]*t);
-				gsl_matrix_set (J, i, 0, t*t*t/(e-1)/s);
-			 	gsl_matrix_set (J, i, 1, -p[0]*e*t*t*t*t/((e-1)*(e-1))/s);
-			}
-			}; break;
-		case MLORENTZ: {
-			double tmp = p[2]*p[2]/4+(t-p[1])*(t-p[1]);
-			gsl_matrix_set (J, i, 0, 1/tmp/s);
-			gsl_matrix_set (J, i, 1, 2*p[0]*(t-p[1])/(tmp*tmp)/s);
-			gsl_matrix_set (J, i, 2, -p[0]*p[2]/(2*tmp*tmp)/s);
-			}; break;
-		case MMULTIEXP2: {
-			double e1 = exp(p[1] * t);
-			double e2 = exp(p[3] * t);
-			gsl_matrix_set (J, i, 0, e1/s);
-			gsl_matrix_set (J, i, 1, t * p[0] * e1/s);
-			gsl_matrix_set (J, i, 2, e2/s);
-			gsl_matrix_set (J, i, 3, t * p[2] * e2/s);
-			}; break;
-		case MMULTIEXP3: {
-			double e1 = exp(p[1] * t);
-			double e2 = exp(p[3] * t);
-			double e3 = exp(p[5] * t);
-			gsl_matrix_set (J, i, 0, e1/s);
-			gsl_matrix_set (J, i, 1, t * p[0] * e1/s);
-			gsl_matrix_set (J, i, 2, e2/s);
-			gsl_matrix_set (J, i, 3, t * p[2] * e2/s);
-			gsl_matrix_set (J, i, 4, e3/s);
-			gsl_matrix_set (J, i, 5, t * p[4] * e3/s);
-			}; break;
-		default: {	// user defined
-			char var[]="x";
-			assign_variable(var,t);
-
-			for(int j=0;j<np;j++) {	//parameter
-				double dp=1.0e-5;	// variation of parameter
-				for(int k=0;k<np;k++) {	// set other parameter
-					if(k!=j) {
-						var[0]=97+k;
-						assign_variable(var,p[k]);
-					}
+		switch(modelType) {
+			case XYFitCurve::Polynomial: {
+				for (int j=0; j<paramNames->size(); ++j) {
+					gsl_matrix_set(J, i, j, pow(t,j)/s);
 				}
-				var[0]=97+j;
-
-				assign_variable(var,p[j]);
-				double f_p = parse((char *) fun.latin1());
-				assign_variable(var,p[j]+dp*p[j]);
-				double f_pdp = parse((char *) fun.latin1());
-
-				gsl_matrix_set(J,i,j,1.0/s*(f_pdp-f_p)/(dp*p[j]));
+				break;
 			}
-			}; break;
 		}
-		*/
-
 	}
-	delete_table();
 
 	return GSL_SUCCESS;
 }
@@ -392,15 +273,14 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f,gsl_matrix* J) {
 
 void XYFitCurvePrivate::recalculate() {
 	qDebug()<<"XYFitCurvePrivate::recalculate";
-	fitData.paramValues.clear();
-	fitData.paramValues.resize(fitData.paramNames.size());
+
+	// clear the previous result
 	xVector->clear();
 	yVector->clear();
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->xDataChanged());
 		emit (q->yDataChanged());
-		qDebug()<< "no data";
 		return;
 	}
 
@@ -411,17 +291,16 @@ void XYFitCurvePrivate::recalculate() {
 	//fit settings
 	int maxIters = fitData.maxIterations; //maximal number of iteratoins
 	float delta = fitData.eps; //fit tolerance
-	size_t n = 0; //number of data points
+	const int np = fitData.paramNames.size(); //number of fit parameters
+	size_t n = 0; //determine the number of data points in the column, stop iterating after the first nan was encountered
 	for (int i=0; i<xDataColumn->rowCount(); ++i) {
 		if (isnan(xdata[i])) {
 			n = i;
 			break;
 		}
 	}
-	qDebug()<<"number of points " << n;
-	const int np = fitData.paramNames.size(); //number of fit parameters
 
-	//calculate sigma from given weights type
+	//calculate sigma for the given weights type
 	double* sigma = 0;
 	if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
 		//weights from a given column -> calculate the inverse (sigma = 1/weight)
@@ -452,12 +331,11 @@ void XYFitCurvePrivate::recalculate() {
 	//iterate
 	int status;
 	int iter = 0;
-	solverOutput.clear();
+	fitResult.solverOutput.clear();
 	writeSolverState(s);
 	do {
 		iter++;
 		status = gsl_multifit_fdfsolver_iterate (s);
-		qDebug()<< "status " << status;
 		writeSolverState(s);
 		if (status) break;
 		status = gsl_multifit_test_delta (s->dx, s->x, delta, delta);
@@ -467,39 +345,42 @@ void XYFitCurvePrivate::recalculate() {
 	gsl_matrix* covar = gsl_matrix_alloc (np, np);
 	gsl_multifit_covar (s->J, 0.0, covar);
 
-	QString fitResult;
 	const size_t dof = n-np;
-	double chi = gsl_blas_dnrm2(s->f)/sqrt(dof); //or chi = gsl_blas_dnrm2(s->f); ?
+	double chi = gsl_blas_dnrm2(s->f); //compute the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
 	double c = GSL_MIN_DBL(1, chi);	// limit error for poor fit
 
+	fitResult.paramValues.resize(np);
+	fitResult.errorValues.resize(np);
 	for (int i=0; i<np; i++) {
-		if (i>0)
-			fitResult += "\n";
-
-		fitData.paramValues[i] = gsl_vector_get(s->x, i);
-		fitResult += fitData.paramNames.at(i) + QString(" = ") + QString::number(fitData.paramValues.at(i))
-				  + " +/- " + QString::number(c*sqrt(gsl_matrix_get(covar,i,i)));
+		fitResult.paramValues[i] = gsl_vector_get(s->x, i);
+		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
 	}
-	fitResult += "\nstatus = " + i18n(gsl_strerror(status));
-	fitResult += "\nchi^2 =  " +QString::number(chi*chi);
-	qDebug() << "result: \n" << fitResult;
+
+	fitResult.status = QString(gsl_strerror(status)); //TODO: add i18n
+	fitResult.iterations = iter;
+	fitResult.chi2 =  pow(chi, 2);
+	fitResult.chi2_over_dof = fitResult.chi2/dof;
+
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
 
 	//calculate the fit function (vectors)
-// 	ExpressionParser* parser = ExpressionParser::getInstance();
-// 	QString expr, min, max;
-// 	int count;
-// 	bool rc = parser->evaluateCartesian(fitData.model, min, max, count, xVector, yVector, fitData.paramNames, fitData.paramValues);
-// 	if (!rc) {
-// 		xVector->clear();
-// 		yVector->clear();
-// // 		const size_t n = fitData.numberOfFittedPoints;
-// 	}
+	ExpressionParser* parser = ExpressionParser::getInstance();
+	double min = xDataColumn->minimum();
+	double max = xDataColumn->maximum();
+	int count = 100;
+	xVector->resize(count);
+	yVector->resize(count);
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min), QString::number(max), count, xVector, yVector, fitData.paramNames, fitResult.paramValues);
+	if (!rc) {
+		xVector->clear();
+		yVector->clear();
+	}
 
 	//redraw the curve
 	emit (q->xDataChanged());
 	emit (q->yDataChanged());
+	retransform();
 }
 
 /*!
@@ -515,8 +396,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	//current value of the function
 	state += QString::number(gsl_blas_dnrm2 (s->f));
 
-	solverOutput << state;
-	qDebug()<< state;
+	fitResult.solverOutput += state;
 }
 
 

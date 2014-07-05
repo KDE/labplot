@@ -63,5 +63,11 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 }
 
 void FitParametersWidget::applyClicked() {
+	if (m_fitData->paramStartValues.size() != ui.tableWidget->rowCount())
+		m_fitData->paramStartValues.resize(ui.tableWidget->rowCount());
+
+	for (int i=0; i<ui.tableWidget->rowCount(); ++i)
+		m_fitData->paramStartValues[i] = ui.tableWidget->item(i,1)->text().toDouble();
+
 	emit(finished());
 }
