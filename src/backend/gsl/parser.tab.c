@@ -1862,15 +1862,17 @@ int yylex (void) {
 #ifdef LDEBUG
 	printf("		c=%c\n",c);
 #endif
-	/* return end-of-file  */
+	/* finish if reached EOF */
 	if (c == EOF) {
 		return 0;
 	}
 	/* process numbers   */
+	if (isdigit (c)) {
 	/* TODO : catch single '.' as error "1+." */
-	if (c == '.' || isdigit (c)) {
+	/* if (c == '.' || isdigit (c)) { */
 #ifdef LDEBUG
-		printf("		is digit or .\n");
+		printf("		is digit\n");
+		/* printf("		is digit or .\n"); */
 #endif
 		char *tmp, *tmp2;
                 double result;
@@ -1892,22 +1894,22 @@ int yylex (void) {
 		return NUM;
 	}
 
-	/* Char starts an identifier => read the name. */
-	if (isalpha (c)) {
+	/* Char or '.' starts an identifier => read the name. */
+	if (isalpha (c) || c == '.') {
+	/* if (isalpha (c)) { */
 #ifdef LDEBUG
-		printf("		is alpha\n");
+		printf("		is alpha or .\n");
 #endif
 		symrec *s;
 		static char *symbuf = 0;
 		static int length = 0;
-		int i;
+		int i=0;
 
 		/* Initially make the buffer long enough
 		   for a 20-character symbol name.  */
 		if (length == 0)
 			length = 20, symbuf = (char *)malloc (length + 1);
 
-		i = 0;
 		do {
 			/* If buffer is full, make it bigger.        */
 			if (i == length) {
@@ -1919,7 +1921,7 @@ int yylex (void) {
 			/* Get another character.                    */
 			c = getcharstr ();
 		}
-		while (c != EOF && (isalnum (c) || c == '_'));
+		while (c != EOF && (isalnum (c) || c == '_' || c == '.'));
 
 		ungetcstr ();
 		symbuf[i] = '\0';

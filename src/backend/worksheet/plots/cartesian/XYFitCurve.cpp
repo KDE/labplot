@@ -203,7 +203,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		assign_variable(var, x[i]);
 		Yi = parse(func);
 		if(parse_errors()>0) {
-			qDebug()<<"parse errors";
+			qDebug()<<"func_f: parse errors in parsing "<<func;
 			return GSL_EINVAL;
 		}
 
@@ -225,7 +225,6 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
  * \param J Jacobian matrix
  * */
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
-	qDebug()<<"func_df";
 	int n = ((struct data*)params)->n;
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
@@ -265,7 +264,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 }
 
 int func_fdf(const gsl_vector* x, void* params, gsl_vector* f,gsl_matrix* J) {
-	qDebug()<<"func_df";
 	func_f (x, params, f);
 	func_df (x, params, J);
 	return GSL_SUCCESS;
