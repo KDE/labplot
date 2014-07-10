@@ -57,8 +57,10 @@ class XYFitCurvePrivate: public XYCurvePrivate {
 
 		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
 		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
+		Column* residualsColumn;
 		QVector<double>* xVector;
 		QVector<double>* yVector;
+		QVector<double>* residualsVector;
 
 		XYFitCurve* const q;
 

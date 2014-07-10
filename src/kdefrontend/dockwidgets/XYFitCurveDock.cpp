@@ -424,7 +424,7 @@ void XYFitCurveDock::updateModelEquation() {
 
 	m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 	for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
-		m_fitData.paramStartValues[i] = 120.0;
+		m_fitData.paramStartValues[i] = 1.0;
 
 	uiGeneralTab.teEquation->setVariables(vars);
 	uiGeneralTab.teEquation->setText(eq);
@@ -509,21 +509,34 @@ void XYFitCurveDock::recalculateClicked() {
  */
 void XYFitCurveDock::showFitResult() {
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
+	if (!fitResult.available) {
+		uiGeneralTab.teResult->clear();
+		return;
+	}
+
 	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
-	QString str = "<b>Parameters:</b>";
+	QString str = i18n("status") + ": " + fitResult.status + "<br>";
+	str += i18n("iterations") + ": " + QString::number(fitResult.iterations) + "<br>";
+	str += i18n("degrees of freedom") + ": " + QString::number(fitResult.dof) + "<br><br>";
+
+	str += "<b>Parameters:</b>";
 	for (int i=0; i<fitResult.paramValues.size(); i++) {
 		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 				  + QString::fromUtf8("\u2213") + QString::number(fitResult.errorValues.at(i));
 	}
 
 	str += "<br><br><b>Goodness of fit:</b><br>";
-	str += "status: " + fitResult.status + "<br>";
-	str += "iterations: " + QString::number(fitResult.iterations) + "<br>";
-	str += "chi^2 =  " +QString::number(fitResult.chi2) + "<br>";
-	str += "chi^2/d.o.f =  " + QString::number(fitResult.chi2_over_dof);
+	str += i18n("sum of squared errors") + ": " + QString::number(fitResult.sse) + "<br>";
+	str += i18n("mean squared error") + ": " + QString::number(fitResult.mse) + "<br>";
+	str += i18n("root-mean squared error") + ": " + QString::number(fitResult.rmse) + "<br>";
+	str += i18n("mean absolute error") + ": " + QString::number(fitResult.mae) + "<br>";
+	str += i18n("residual mean square") + ": " + QString::number(fitResult.rms) + "<br>";
+	str += i18n("residual standard deviation") + ": " + QString::number(fitResult.rsd) + "<br>";
+	str += i18n("coefficient of determination (R-squared)") + ": " + QString::number(fitResult.rsquared) + "<br>";
 // 	str += "<br><br>" + fitResult.solverOutput;
 	uiGeneralTab.teResult->setText(str);
 }
+
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************

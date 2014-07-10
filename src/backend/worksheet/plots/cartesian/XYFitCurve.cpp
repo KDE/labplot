@@ -153,8 +153,10 @@ XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYCurvePrivate(owner),
 	weightsColumn(0),
 	xColumn(new Column("x", AbstractColumn::Numeric)),
 	yColumn(new Column("y", AbstractColumn::Numeric)),
+	residualsColumn(new Column("residuals", AbstractColumn::Numeric)),
 	xVector(static_cast<QVector<double>* >(xColumn->data())),
 	yVector(static_cast<QVector<double>* >(yColumn->data())),
+	residualsVector(static_cast<QVector<double>* >(residualsColumn->data())),
 	q(owner)  {
 
 }
@@ -178,7 +180,7 @@ struct data {
 /*!
  * \param v vector containing current values of the fit parameters
  * \param params
- * \param f vector with the elements (Yi - y[i])/sigma[i]
+ * \param f vector with the weighted residuals (Yi - y[i])/sigma[i]
  */
 int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	int n = ((struct data*)params)->n;
@@ -255,6 +257,27 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				for (int j=0; j<paramNames->size(); ++j) {
 					gsl_matrix_set(J, i, j, pow(t,j)/s);
 				}
+				break;
+			}
+			case XYFitCurve::Power: {
+				break;
+			}
+			case XYFitCurve::Exponential: {
+				break;
+			}
+			case XYFitCurve::Fourier: {
+				break;
+			}
+			case XYFitCurve::Gaussian: {
+				break;
+			}
+			case XYFitCurve::Lorentz: {
+				break;
+			}
+			case XYFitCurve::Maxwell: {
+				break;
+			}
+			case XYFitCurve::Custom: {
 				break;
 			}
 		}
@@ -339,25 +362,44 @@ void XYFitCurvePrivate::recalculate() {
 		status = gsl_multifit_test_delta (s->dx, s->x, delta, delta);
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
-	//get the fit result and create the info-string
+	//get the covariance matrix
 	gsl_matrix* covar = gsl_matrix_alloc (np, np);
 	gsl_multifit_covar (s->J, 0.0, covar);
 
-	const size_t dof = n-np;
-	double chi = gsl_blas_dnrm2(s->f); //compute the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
-	double c = GSL_MIN_DBL(1, chi);	// limit error for poor fit
 
+	//write the result
+	fitResult.available = true;
+	fitResult.status = QString(gsl_strerror(status)); //TODO: add i18n
+	fitResult.iterations = iter;
+	fitResult.dof = n-np;
+
+	//calculate:
+	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
+	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
+	//rmse = root-mean squared error = \sqrt(mse)
+	//mae = mean absolute error = \sum_i^n |Y_i-y_i|
+	//rms = residual mean square = sse/d.o.f.
+	//rsd = residual standard deviation = sqrt(rms)
+
+	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
+	//gsl_blas_dasum() - computes the absolute sum \sum |x_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
+	fitResult.sse = pow(gsl_blas_dnrm2(s->f), 2);
+	fitResult.mse = fitResult.sse/n;
+	fitResult.rmse = sqrt(fitResult.mse);
+	fitResult.mae = gsl_blas_dasum(s->f);
+	fitResult.rms = fitResult.sse/fitResult.dof;
+	fitResult.rsd = sqrt(fitResult.rms);
+
+	fitResult.rsquared = 0; //TODO
+
+	//parameter values
+	double c = GSL_MIN_DBL(1, sqrt(fitResult.sse)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	for (int i=0; i<np; i++) {
 		fitResult.paramValues[i] = gsl_vector_get(s->x, i);
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
 	}
-
-	fitResult.status = QString(gsl_strerror(status)); //TODO: add i18n
-	fitResult.iterations = iter;
-	fitResult.chi2 =  pow(chi, 2);
-	fitResult.chi2_over_dof = fitResult.chi2/dof;
 
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
@@ -391,8 +433,8 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	for (int i=0; i<fitData.paramNames.size(); ++i)
 		state += QString::number(gsl_vector_get(s->x, i)) + ";";
 
-	//current value of the function
-	state += QString::number(gsl_blas_dnrm2 (s->f));
+	//current value of the chi2-function
+	state += QString::number(pow(gsl_blas_dnrm2 (s->f),2));
 
 	fitResult.solverOutput += state;
 }
@@ -411,11 +453,64 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	XYCurve::save(writer);
 
 	//write xy-fit-curve specific information
-	writer->writeStartElement( "fitData" );
+
+	//fit data
+	writer->writeStartElement("fitData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	WRITE_COLUMN(d->weightsColumn, weightsColumn);
-	//TODO
+	writer->writeAttribute( "modelType", QString::number(d->fitData.modelType) );
+	writer->writeAttribute( "weightsType", QString::number(d->fitData.weightsType) );
+	writer->writeAttribute( "degree", QString::number(d->fitData.degree) );
+	writer->writeAttribute( "model", d->fitData.model );
+	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
+	writer->writeAttribute( "eps", QString::number(d->fitData.eps) );
+
+	writer->writeStartElement("paramNames");
+	for (int i=0; i<d->fitData.paramNames.size(); ++i)
+		writer->writeTextElement("name", d->fitData.paramNames.at(i));
+	writer->writeEndElement();
+
+	writer->writeStartElement("paramStartValues");
+	for (int i=0; i<d->fitData.paramStartValues.size(); ++i)
+		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i)));
+	writer->writeEndElement();
+
+	writer->writeEndElement();
+
+	//fit results (generated columns and goodness of the fit)
+	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
+	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
+	//rmse = root-mean squared error = \sqrt(mse)
+	//mae = mean absolute error = \sum_i^n |Y_i-y_i|
+	//rms = residual mean square = sse/d.o.f.
+	//rsd = residual standard deviation = sqrt(rms)
+	writer->writeStartElement("fitResult");
+	writer->writeAttribute( "available", QString::number(d->fitResult.available) );
+	writer->writeAttribute( "status", d->fitResult.status );
+	writer->writeAttribute( "iterations", QString::number(d->fitResult.iterations) );
+	writer->writeAttribute( "dof", QString::number(d->fitResult.dof) );
+	writer->writeAttribute( "sse", QString::number(d->fitResult.sse) );
+	writer->writeAttribute( "mse", QString::number(d->fitResult.mse) );
+	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse) );
+	writer->writeAttribute( "mae", QString::number(d->fitResult.mae) );
+	writer->writeAttribute( "rms", QString::number(d->fitResult.rms) );
+	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd) );
+	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
+
+	writer->writeStartElement("paramValues");
+	for (int i=0; i<d->fitResult.paramValues.size(); ++i)
+		writer->writeTextElement("value", QString::number(d->fitResult.paramValues.at(i)));
+	writer->writeEndElement();
+
+	writer->writeStartElement("errorValues");
+	for (int i=0; i<d->fitResult.errorValues.size(); ++i)
+		writer->writeTextElement("error", QString::number(d->fitResult.errorValues.at(i)));
+	writer->writeEndElement();
+
+	d->xColumn->save(writer);
+	d->yColumn->save(writer);
+	d->residualsColumn->save(writer);
 	writer->writeEndElement();
 
 	writer->writeEndElement();
@@ -452,13 +547,132 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 			READ_COLUMN(yDataColumn);
 			READ_COLUMN(weightsColumn);
 
-			str = attribs.value("type").toString();
+			str = attribs.value("modelType").toString();
             if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
+                reader->raiseWarning(attributeWarning.arg("'modelType'"));
             else
                 d->fitData.modelType = (XYFitCurve::ModelType)str.toInt();
+
+			str = attribs.value("weightsType").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'weightsType'"));
+            else
+                d->fitData.weightsType = (XYFitCurve::WeightsType)str.toInt();
+
+			str = attribs.value("degree").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'degree'"));
+            else
+                d->fitData.degree = str.toInt();
+
+			str = attribs.value("model").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'model'"));
+            else
+                d->fitData.model = str;
+
+			str = attribs.value("maxIterations").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'maxIterations'"));
+            else
+                d->fitData.maxIterations = str.toInt();
+
+			str = attribs.value("eps").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'eps'"));
+            else
+                d->fitData.eps = str.toDouble();
+		} else if (reader->name() == "name"){
+			d->fitData.paramNames<<reader->readElementText();
+		} else if (reader->name() == "startValue"){
+			d->fitData.paramStartValues<<reader->readElementText().toDouble();
+		} else if (reader->name() == "value"){
+			d->fitResult.paramValues<<reader->readElementText().toDouble();
+		} else if (reader->name() == "error"){
+			d->fitResult.errorValues<<reader->readElementText().toDouble();
+		}else if (reader->name() == "fitResult"){
+			attribs = reader->attributes();
+
+			str = attribs.value("available").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'available'"));
+            else
+                d->fitResult.available = str.toInt();
+
+			str = attribs.value("status").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'status'"));
+            else
+                d->fitResult.status = str;
+
+			str = attribs.value("iterations").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'iterations'"));
+            else
+                d->fitResult.iterations = str.toInt();
+
+			str = attribs.value("dof").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'dof'"));
+            else
+                d->fitResult.dof = str.toDouble();
+
+			str = attribs.value("sse").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'sse'"));
+            else
+                d->fitResult.sse = str.toDouble();
+
+			str = attribs.value("mse").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'mse'"));
+            else
+                d->fitResult.mse = str.toDouble();
+
+			str = attribs.value("rmse").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rmse'"));
+            else
+                d->fitResult.rmse = str.toDouble();
+
+			str = attribs.value("mae").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'mae'"));
+            else
+                d->fitResult.mae = str.toDouble();
+
+			str = attribs.value("rms").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rms'"));
+            else
+                d->fitResult.rms = str.toDouble();
+
+			str = attribs.value("rsd").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rsd'"));
+            else
+                d->fitResult.rsd = str.toDouble();
+
+			str = attribs.value("solverOutput").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'solverOutput'"));
+            else
+                d->fitResult.solverOutput = str;
+		} else if(reader->name() == "column") {
+			Column* column = new Column("", AbstractColumn::Numeric);
+			if (!column->load(reader)) {
+				delete column;
+				return false;
+			}
+			if (column->name()=="x")
+				d->xColumn = column;
+			else if (column->name()=="y")
+				d->yColumn = column;
+			else if (column->name()=="residuals")
+				d->residualsColumn = column;
 		}
 	}
 
+	retransform();
 	return true;
 }

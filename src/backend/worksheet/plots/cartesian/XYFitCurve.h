@@ -58,10 +58,19 @@ class XYFitCurve: public XYCurve {
 		};
 
 		struct FitResult {
-			int iterations;
+			FitResult() : available(false) {};
+
+			bool available;
 			QString status;
-			double chi2;
-			double chi2_over_dof;
+			int iterations;
+			double dof; //degrees of freedom
+			double sse; //sum of squared errors (SSE) / residual sum of errors (RSS) / sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
+			double mse; //mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
+			double rmse; //root-mean squared error = \sqrt(mse)
+			double mae; //mean absolute error = \sum_i^n |Y_i-y_i|
+			double rms; //residual mean square = SSE/d.o.f.
+			double rsd; //residual standard deviation = sqrt(SSE/d.o.f)
+			double rsquared; //Coefficient of determination (R^2)
 			QVector<double> paramValues;
 			QVector<double> errorValues;
 			QString solverOutput;
