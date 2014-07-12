@@ -144,6 +144,8 @@ struct con _constants[] = {
 	{"J",GSL_CONST_MKSA_JOULE},
 	{"erg",GSL_CONST_MKSA_ERG},
 
+	/* ignore '...' */
+	{"...",0},
 	{0,0}
 };
 

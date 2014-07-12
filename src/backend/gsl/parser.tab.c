@@ -1743,16 +1743,10 @@ double parse(char *str) {
 	if (!sym_table)
 	   init_table();
 
-#ifdef LDEBUG
-	printf("	calling yyparse()\n");
-#endif
 	yyparse();
-#ifdef LDEBUG
-	printf("	After calling yyparse()\n");
-#endif
 
 #ifdef LDEBUG
-	printf("	parse() DONE\n");
+	printf("parse() DONE\n");
 #endif
 	return res;
 }
@@ -1762,7 +1756,7 @@ int parse_errors() {
 }
 
 int yyerror (const char *s){
-	printf ("ERROR : %s\n", s);
+	printf ("parse ERROR: %s\n", s);
 	return 0;
 }
 
@@ -1799,7 +1793,7 @@ void delete_table(void) {
 
 symrec* putsym (const char *sym_name, int sym_type) {
 #ifdef LDEBUG
-	printf("putsym() : sym_name = %s\n",sym_name);
+	printf("	putsym(): sym_name = %s\n",sym_name);
 #endif
 	symrec *ptr;
 	ptr = (symrec *) malloc (sizeof (symrec));
@@ -1810,7 +1804,7 @@ symrec* putsym (const char *sym_name, int sym_type) {
 	ptr->next = (struct symrec *)sym_table;
 	sym_table = ptr;
 #ifdef LDEBUG
-	printf("putsym() DONE\n");
+	printf("	putsym() DONE\n");
 #endif
 	return ptr;
 }
@@ -1838,7 +1832,7 @@ symrec* assign_variable(const char* symb_name, double value) {
 
 static int getcharstr(void) {
 #ifdef LDEBUG
-	printf("	getcharstr()\n");
+	printf("		getcharstr()\n");
 #endif
 	if ('\0' == string[pos])
 		return EOF;
@@ -1857,50 +1851,51 @@ int yylex (void) {
 	int c;
 
 	/* skip white space  */
-	while ((c = getcharstr ()) == ' ' || c == '\t');
+	while ((c = getcharstr ()) == ' ' || c == '\t' );
 
-#ifdef LDEBUG
-	printf("		c=%c\n",c);
-#endif
 	/* finish if reached EOF */
 	if (c == EOF) {
+#ifdef LDEBUG
+		printf("FINISHED\n");
+#endif
 		return 0;
 	}
-	/* process numbers   */
+
+#ifdef LDEBUG
+	printf("	reading character: %c\n",c);
+#endif
+
+	/* process numbers */
 	if (isdigit (c)) {
-	/* TODO : catch single '.' as error "1+." */
-	/* if (c == '.' || isdigit (c)) { */
 #ifdef LDEBUG
-		printf("		is digit\n");
-		/* printf("		is digit or .\n"); */
+		printf("		reading number (starts with digit)\n");
 #endif
-		char *tmp, *tmp2;
-                double result;
                 ungetcstr();
-                tmp = &string[pos];
+                char *s = &string[pos];
+
+		/* convert to double */
+		char *remain;
+                double result = strtod(s,&remain);
 #ifdef LDEBUG
-		printf("		tmp = %s\n",tmp);
+		printf("		reading: %s",s);
+		printf("		remain = %s",remain);
 #endif
-                result = strtod(tmp,&tmp2);
 		/* check conversion */
-		if(strlen(tmp) == strlen(tmp2))
+		if(strlen(s) == strlen(remain))
 			return 0;
 #ifdef LDEBUG
 		printf("		result = %g\n",result);
 #endif
-                sscanf (tmp,"%lf", &(yylval.dval));
-                pos+= strlen(tmp)-strlen(tmp2);
+                sscanf (s,"%lf", &(yylval.dval));
+                pos += strlen(s)-strlen(remain);
 
 		return NUM;
 	}
 
-	/* Char or '.' starts an identifier => read the name. */
 	if (isalpha (c) || c == '.') {
-	/* if (isalpha (c)) { */
 #ifdef LDEBUG
-		printf("		is alpha or .\n");
+		printf("		reading identifier (starts with alpha)\n");
 #endif
-		symrec *s;
 		static char *symbuf = 0;
 		static int length = 0;
 		int i=0;
@@ -1926,10 +1921,13 @@ int yylex (void) {
 		ungetcstr ();
 		symbuf[i] = '\0';
 
-		s = getsym (symbuf);
-		/* symbol unknown */
-		if(s == 0)
+		symrec *s = getsym (symbuf);
+		if(s == 0) {	/* symbol unknown */
+#ifdef LDEBUG
+			printf("		ERROR: symbol \"%s\" UNKNOWN\n",symbuf);
+#endif
 			return 0;
+}
 		/* old behavior */
 		/* if (s == 0)
 			 s = putsym (symbuf, VAR);
@@ -1938,7 +1936,6 @@ int yylex (void) {
 		return s->type;
 	}
 
-
-	/* return single chars */
+	/* else: single operator */
 	return c;
 }
