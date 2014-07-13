@@ -103,6 +103,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	connect( uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelChanged(int)) );
 	connect( uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()) );
+	connect( uiGeneralTab.teEquation, SIGNAL(textChanged()), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()) );
@@ -136,12 +137,13 @@ void XYFitCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
-	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->xDataColumn()!=0 && m_fitCurve->yDataColumn()!=0);
 
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
-	uiGeneralTab.teEquation->setText(m_fitData.model);
 	this->modelChanged(m_fitData.modelType);
+	if (m_fitData.modelType == XYFitCurve::Custom)
+		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
+
+	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	this->showFitResult();
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
@@ -176,7 +178,6 @@ void XYFitCurveDock::setModel(std::auto_ptr<AspectTreeModel> model) {
 	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 	connect( cbWeightsColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(weightsColumnChanged(QModelIndex)) );
-	connect( uiGeneralTab.teEquation, SIGNAL(textChanged()), this, SLOT(customModelChanged()) );
 	XYCurveDock::setModel(model);
 }
 
@@ -192,6 +193,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list){
 	m_fitData = m_fitCurve->fitData();
 	initGeneralTab();
 	initTabs();
+	uiGeneralTab.pbRecalculate->setEnabled(false);
 	m_initializing=false;
 }
 
@@ -226,9 +228,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index){
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
 
-	//no fitting possible without the x- and y-data
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	uiGeneralTab.pbRecalculate->setEnabled(aspect!=0 && aspectY!=0);
+	this->enableRecalculate();
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
@@ -245,9 +245,7 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 
-	//no fitting possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	uiGeneralTab.pbRecalculate->setEnabled(aspectX!=0 && aspect!=0);
+	this->enableRecalculate();
 }
 
 void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
@@ -263,6 +261,8 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setWeightsColumn(column);
+
+	this->enableRecalculate();
 }
 
 void XYFitCurveDock::modelChanged(int index) {
@@ -303,10 +303,6 @@ void XYFitCurveDock::modelChanged(int index) {
 	}
 
 	this->updateModelEquation();
-}
-
-void XYFitCurveDock::customModelChanged() {
-	uiGeneralTab.pbRecalculate->setEnabled( uiGeneralTab.teEquation->isValid() );
 }
 
 void XYFitCurveDock::updateModelEquation() {
@@ -494,7 +490,6 @@ void XYFitCurveDock::insertConstant(const QString& str) {
 }
 
 void XYFitCurveDock::recalculateClicked() {
-	qDebug()<<"XYFitCurveDock::recalculateClicked";
 	m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
 
@@ -502,6 +497,23 @@ void XYFitCurveDock::recalculateClicked() {
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
 
 	this->showFitResult();
+	uiGeneralTab.pbRecalculate->setEnabled(false);
+}
+
+void XYFitCurveDock::enableRecalculate() const {
+	if (m_initializing)
+		return;
+
+	//no fitting possible without the x- and y-data
+	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+	bool data = (aspectX!=0 && aspectY!=0);
+
+	XYFitCurve::ModelType type = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
+	if (type==XYFitCurve::Custom)
+		uiGeneralTab.pbRecalculate->setEnabled( data && uiGeneralTab.teEquation->isValid() );
+	else
+		uiGeneralTab.pbRecalculate->setEnabled(data);
 }
 
 /*!
@@ -574,6 +586,13 @@ void XYFitCurveDock::curveWeightsColumnChanged(const AbstractColumn* column) {
 
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
 	m_initializing = true;
-	//TODO
+	m_fitData = data;
+	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+	this->modelChanged(m_fitData.modelType);
+	if (m_fitData.modelType == XYFitCurve::Custom)
+		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
+
+	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+	this->showFitResult();
 	m_initializing = false;
 }

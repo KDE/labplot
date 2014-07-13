@@ -67,7 +67,6 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void weightsColumnChanged(const QModelIndex&);
-	void customModelChanged();
 
 	void showConstants();
 	void showFunctions();
@@ -77,6 +76,7 @@ private slots:
 	void insertConstant(const QString&);
 	void recalculateClicked();
 	void updateModelEquation();
+	void enableRecalculate() const;
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab

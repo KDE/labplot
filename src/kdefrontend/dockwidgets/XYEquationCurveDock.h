@@ -62,6 +62,7 @@ private slots:
 	void insertConstant1(const QString&);
 	void insertFunction2(const QString&);
 	void insertConstant2(const QString&);
+	void enableRecalculate() const;
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab

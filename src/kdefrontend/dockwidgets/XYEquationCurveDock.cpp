@@ -94,6 +94,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+	connect( uiGeneralTab.teEquation1, SIGNAL(textChanged()), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.teEquation2, SIGNAL(textChanged()), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.tbConstants1, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( uiGeneralTab.tbFunctions1, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.tbConstants2, SIGNAL(clicked()), this, SLOT(showConstants()) );
@@ -112,6 +114,7 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list){
 	Q_ASSERT(m_equationCurve);
 	initGeneralTab();
 	initTabs();
+	uiGeneralTab.pbRecalculate->setEnabled(false);
 	m_initializing=false;
 }
 
@@ -239,6 +242,8 @@ void XYEquationCurveDock::recalculateClicked() {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYEquationCurve*>(curve)->setEquationData(data);
+
+	uiGeneralTab.pbRecalculate->setEnabled(false);
 }
 
 void XYEquationCurveDock::showConstants() {
@@ -251,6 +256,7 @@ void XYEquationCurveDock::showConstants() {
 		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant2(QString)));
 
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
+	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
@@ -275,6 +281,7 @@ void XYEquationCurveDock::showFunctions() {
 		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction2(QString)));
 
 	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
+	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
@@ -310,6 +317,19 @@ void XYEquationCurveDock::insertFunction2(const QString& str) {
 
 void XYEquationCurveDock::insertConstant2(const QString& str) {
 	uiGeneralTab.teEquation2->insertPlainText(str);
+}
+
+void XYEquationCurveDock::enableRecalculate() const {
+	if (m_initializing)
+		return;
+
+	//check whether the formular expressions are correct
+	//TODO: add checks for min and max values too
+	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
+	if (type!=XYEquationCurve::Parametric)
+		uiGeneralTab.pbRecalculate->setEnabled(uiGeneralTab.teEquation1->isValid());
+	else
+		uiGeneralTab.pbRecalculate->setEnabled(uiGeneralTab.teEquation1->isValid() && uiGeneralTab.teEquation2->isValid());
 }
 
 //*************************************************************

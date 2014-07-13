@@ -38,6 +38,7 @@
 FunctionsWidget::FunctionsWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 	ui.bInsert->setIcon(KIcon("edit-paste"));
+	ui.bCancel->setIcon(KIcon("dialog-cancel"));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
 
@@ -45,6 +46,7 @@ FunctionsWidget::FunctionsWidget(QWidget *parent): QWidget(parent) {
 	connect( ui.kleFilter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)) );
 	connect( ui.cbGroup, SIGNAL(currentIndexChanged(int)), this, SLOT(groupChanged(int)) );
 	connect( ui.bInsert, SIGNAL(clicked(bool)), this, SLOT(insertClicked()) );
+	connect( ui.bCancel, SIGNAL(clicked(bool)), this, SIGNAL(canceled()) );
 	connect( ui.lwFunctions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(insertClicked()) );
 
 	this->groupChanged(0);

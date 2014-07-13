@@ -411,7 +411,8 @@ void XYFitCurvePrivate::recalculate() {
 	int count = 100;
 	xVector->resize(count);
 	yVector->resize(count);
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min), QString::number(max), count, xVector, yVector, fitData.paramNames, fitResult.paramValues);
+	//TODO: remove this fix with replace() later, the parser should understand dots in float number.
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min).replace('.',','), QString::number(max).replace('.',','), count, xVector, yVector, fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();

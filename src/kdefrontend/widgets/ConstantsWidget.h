@@ -47,6 +47,7 @@ private:
 
 signals:
 	void constantSelected(const QString&);
+	void canceled();
 
 private slots:
 	void groupChanged(int);

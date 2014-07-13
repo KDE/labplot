@@ -38,6 +38,7 @@
 FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent), m_fitData(data) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
+	ui.pbCancel->setIcon(KIcon("dialog-cancel"));
 
 	ui.tableWidget->setColumnCount(2);
 	ui.tableWidget->setRowCount(m_fitData->paramNames.size());
@@ -60,6 +61,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 
 	//SLOTS
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
+	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
 }
 
 void FitParametersWidget::applyClicked() {

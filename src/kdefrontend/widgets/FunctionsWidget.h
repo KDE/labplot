@@ -47,6 +47,7 @@ private:
 
 signals:
 	void functionSelected(const QString&);
+	void canceled();
 
 private slots:
 	void groupChanged(int);

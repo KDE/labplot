@@ -36,12 +36,20 @@
 FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData): QWidget(parent), m_fitData(fitData) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
+	ui.pbCancel->setIcon(KIcon("dialog-cancel"));
+
+	//TODO: show "robust" option when robust fitting is possible
+// 	ui.cbRobust->addItem(i18n("on"));
+// 	ui.cbRobust->addItem(i18n("off"));
+	ui.lRobust->setVisible(false);
+	ui.cbRobust->setVisible(false);
 
 	ui.leEps->setText(QString::number(m_fitData->eps));
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
 
 	//SLOTS
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
+	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
 }
 
 void FitOptionsWidget::applyClicked() {

@@ -38,6 +38,7 @@
 ConstantsWidget::ConstantsWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 	ui.bInsert->setIcon(KIcon("edit-paste"));
+	ui.bCancel->setIcon(KIcon("dialog-cancel"));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->constantsGroups());
 
@@ -46,6 +47,7 @@ ConstantsWidget::ConstantsWidget(QWidget *parent): QWidget(parent) {
 	connect( ui.cbGroup, SIGNAL(currentIndexChanged(int)), this, SLOT(groupChanged(int)) );
 	connect( ui.lwConstants, SIGNAL(currentTextChanged(QString)), this, SLOT(constantChanged(QString)) );
 	connect( ui.bInsert, SIGNAL(clicked(bool)), this, SLOT(insertClicked()) );
+	connect( ui.bCancel, SIGNAL(clicked(bool)), this, SIGNAL(canceled()) );
 	connect( ui.lwConstants, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(insertClicked()) );
 
 	this->groupChanged(0);

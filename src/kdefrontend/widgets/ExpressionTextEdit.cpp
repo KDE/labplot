@@ -71,7 +71,7 @@ EquationHighlighter* ExpressionTextEdit::highlighter() {
 }
 
 bool ExpressionTextEdit::isValid() const {
-	return m_isValid;
+	return (!document()->toPlainText().isEmpty() && m_isValid);
 }
 
 void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
