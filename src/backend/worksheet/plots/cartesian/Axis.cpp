@@ -1376,7 +1376,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision){
 }
 
 float AxisPrivate::round(float value, int precision){
-	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
+	return float(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
 }
 
 /*!
