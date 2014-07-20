@@ -228,12 +228,13 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
  * */
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	int n = ((struct data*)params)->n;
-	double* x = ((struct data*)params)->x;
-	double* y = ((struct data*)params)->y;
-	double* sigma = ((struct data*)params)->sigma;
-	char* func = ((struct data*)params)->func->toLatin1().data();
+	double* xVector = ((struct data*)params)->x;
+// 	double* y = ((struct data*)params)->y;
+	double* sigmaVector = ((struct data*)params)->sigma;
+// 	char* func = ((struct data*)params)->func->toLatin1().data();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	XYFitCurve::ModelType modelType = ((struct data*)params)->modelType;
+	int degree = ((struct data*)params)->degree;
 
 	//copy current parameter values from gsl-vector to a local double array for the sake of easier usage below
 	double* p = new double[paramNames->size()];
@@ -241,46 +242,164 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		p[i]=gsl_vector_get(paramValues,i);
 
 	//calculate the Jacobian matrix
-	for (int i=0; i<n; i++) {
-		/* Jacobian matrix J(i,j) = dfi / dxj, */
-		/* where fi = (Yi - yi)/sigma[i],      */
-		/*	Yi = model  */
-		/* and the xj are the parameters */
 
-		double t = x[i];
-		double s = 1.0;
-		if (sigma)
-			s = sigma[i];
+	/* Jacobian matrix J(i,j) = dfi / dxj, */
+	/* where fi = (Yi - yi)/sigma[i],      */
+	/*	Yi = model  */
+	/* and the xj are the parameters */
 
-		switch(modelType) {
-			case XYFitCurve::Polynomial: {
+	double x;
+	double sigma = 1.0;
+
+	switch(modelType) {
+		case XYFitCurve::Polynomial: {
+			// Y(x) = c0 + c1*x + ... + cn*x^n
+			for (int i=0; i<n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
 				for (int j=0; j<paramNames->size(); ++j) {
-					gsl_matrix_set(J, i, j, pow(t,j)/s);
+					gsl_matrix_set(J, i, j, pow(x,j)/sigma);
 				}
-				break;
-			}
-			case XYFitCurve::Power: {
-				break;
-			}
-			case XYFitCurve::Exponential: {
-				break;
-			}
-			case XYFitCurve::Fourier: {
-				break;
-			}
-			case XYFitCurve::Gaussian: {
-				break;
-			}
-			case XYFitCurve::Lorentz: {
-				break;
-			}
-			case XYFitCurve::Maxwell: {
-				break;
-			}
-			case XYFitCurve::Custom: {
-				break;
-			}
+			break;
 		}
+		case XYFitCurve::Power: {
+			// Y(x) = a*x^b or Y(x) = a + b*x^c.
+			if (degree==1) {
+				double a = gsl_vector_get(paramValues,0);
+				double b = gsl_vector_get(paramValues,1);
+				for (int i=0; i<n; i++) {
+					x = xVector[i];
+					if (sigmaVector) sigma = sigmaVector[i];
+					gsl_matrix_set(J, i, 0, pow(x,b)/sigma);
+					gsl_matrix_set(J, i, 1, a*b*pow(x,b-1)/sigma);
+				}
+			} else if (degree==2) {
+				double b = gsl_vector_get(paramValues,1);
+				double c = gsl_vector_get(paramValues,2);
+				for (int i=0; i<n; i++) {
+					x = xVector[i];
+					if (sigmaVector) sigma = sigmaVector[i];
+					gsl_matrix_set(J, i, 0, 1/sigma);
+					gsl_matrix_set(J, i, 1, pow(x,c));
+					gsl_matrix_set(J, i, 2, b*c*pow(x,c-1));
+				}
+			}
+			break;
+		}
+		case XYFitCurve::Exponential: {
+			// Y(x) = a*exp(b*x) or Y(x) = a*exp(b*x) + c*exp(d*x) or Y(x) = a*exp(b*x) + c*exp(d*x) + e*exp(f*x)
+			if (degree==1) {
+				double a = gsl_vector_get(paramValues,0);
+				double b = gsl_vector_get(paramValues,1);
+				for (int i=0; i<n; i++) {
+					x = xVector[i];
+					if (sigmaVector) sigma = sigmaVector[i];
+					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 1, a*b*exp(b*x)/sigma);
+				}
+			} else if (degree==2) {
+				double a = gsl_vector_get(paramValues,0);
+				double b = gsl_vector_get(paramValues,1);
+				double c = gsl_vector_get(paramValues,2);
+				double d = gsl_vector_get(paramValues,3);
+				for (int i=0; i<n; i++) {
+					x = xVector[i];
+					if (sigmaVector) sigma = sigmaVector[i];
+					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 1, a*b*exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
+					gsl_matrix_set(J, i, 3, c*d*exp(d*x)/sigma);
+				}
+			} else if (degree==3) {
+				double a = gsl_vector_get(paramValues,0);
+				double b = gsl_vector_get(paramValues,1);
+				double c = gsl_vector_get(paramValues,2);
+				double d = gsl_vector_get(paramValues,3);
+				double e = gsl_vector_get(paramValues,4);
+				double f = gsl_vector_get(paramValues,5);
+				for (int i=0; i<n; i++) {
+					x = xVector[i];
+					if (sigmaVector) sigma = sigmaVector[i];
+					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 1, a*b*exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
+					gsl_matrix_set(J, i, 3, c*d*exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 4, exp(f*x)/sigma);
+					gsl_matrix_set(J, i, 5, e*f*exp(f*x)/sigma);
+				}
+			}
+			break;
+		}
+		case XYFitCurve::Fourier: {
+			// Y(x) = a0 + (a1*cos(w*x) + b1*sin(w*x)) + ... + (an*cos(n*w*x) + bn*sin(n*w*x)
+			//parameters: w, a0, a1, b1, ... an, bn
+			double a[degree];
+			double b[degree];
+			double w = gsl_vector_get(paramValues,0);
+			a[0] = gsl_vector_get(paramValues,1);
+			b[0] = 0;
+			for (int j=1; j<degree; ++j) {
+				a[j] = gsl_vector_get(paramValues,2*j);
+				b[j] = gsl_vector_get(paramValues,2*j+1);
+			}
+			for (int i=0; i<n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+				double wd = 0; //first derivative with respect to the w parameters
+				for (int j=1; j<degree; ++j) {
+					wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
+				}
+				gsl_matrix_set(J, i, 0, wd/sigma);
+				for (int j=0; j<degree; ++j) {
+					gsl_matrix_set(J, i, j+1, cos(j*w*x)/sigma);
+					gsl_matrix_set(J, i, j+2, sin(j*w*x)/sigma);
+				}
+			}
+			break;
+		}
+		case XYFitCurve::Gaussian: {
+			// Y(x) = a1*exp(-((x-b1)/c1)^2) + a2*exp(-((x-b2)/c2)^2) + ... + an*exp(-((x-bn)/cn)^2)
+			double a,b,c;
+			for (int i=0; i<n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+				for (int j=0; j<degree; ++j) {
+					a = gsl_vector_get(paramValues,3*j);
+					b = gsl_vector_get(paramValues,3*j+1);
+					c = gsl_vector_get(paramValues,3*j+2);
+					gsl_matrix_set(J, i, 3*j, exp(-(x-b)*(x-b)/(c*c))/sigma);
+					gsl_matrix_set(J, i, 3*j+1, 2*a*(x-b)/c*c*exp(-(x-b)*(x-b)/(c*c))/sigma);
+					gsl_matrix_set(J, i, 3*j+2, 2*a*(x-b)*(x-b)/c*c*c*exp(-(x-b)*(x-b)/(c*c))/sigma);
+				}
+			}
+			break;
+		}
+		case XYFitCurve::Lorentz: {
+			// Y(x) = 1/pi*s/(s^2+(x-t)^2)
+			double s = gsl_vector_get(paramValues,0);
+			double t = gsl_vector_get(paramValues,1);
+			for (int i=0; i<n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+				gsl_matrix_set(J, i, 0, (-s*s+(x-t)*(x-t))/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
+				gsl_matrix_set(J, i, 1, 2*s*(x-t)/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
+			}
+			break;
+		}
+		case XYFitCurve::Maxwell: {
+			// Y(x) = sqrt(2/pi)*exp(-x^2/(2*a^2))/a^3
+			double a = gsl_vector_get(paramValues,0);
+			for (int i=0; i<n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+				gsl_matrix_set(J, i, 0, sqrt(2/M_PI)*x*x*(x*x-3*a*a)*exp(-x*x/2/a/a)/pow(a,6)/sigma);
+			}
+			break;
+		}
+		case XYFitCurve::Custom: {
+			break;
+		}
+	}
 	}
 
 	return GSL_SUCCESS;
@@ -432,10 +551,11 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 
 	//current parameter values, semicolon separated
 	for (int i=0; i<fitData.paramNames.size(); ++i)
-		state += QString::number(gsl_vector_get(s->x, i)) + ";";
+		state += QString::number(gsl_vector_get(s->x, i)) + '\t';
 
 	//current value of the chi2-function
 	state += QString::number(pow(gsl_blas_dnrm2 (s->f),2));
+	state += ';';
 
 	fitResult.solverOutput += state;
 }

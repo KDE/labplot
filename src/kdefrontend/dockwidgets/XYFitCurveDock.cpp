@@ -306,6 +306,7 @@ void XYFitCurveDock::modelChanged(int index) {
 }
 
 void XYFitCurveDock::updateModelEquation() {
+	qDebug()<<"XYFitCurveDock::updateModelEquation()";
 	QStringList vars; //variables/parameters that are known in ExpressionTestEdit teEquation
 	vars << "x";
 	QString eq;
@@ -360,13 +361,13 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		m_fitData.model = eq;
 	} else if (m_fitData.modelType == XYFitCurve::Fourier) {
-		eq = "a0 + (a1*cos(w*x) + b1*cos(w*x))";
+		eq = "a0 + (a1*cos(w*x) + b1*sind(w*x))";
 		m_fitData.model = eq;
 		vars << "w" << "a0" << "a1" << "b1";
 		m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
 		if (num==2) {
-			eq += " + (a2*cos(2*w*x) + b2*cos(2*w*x))";
-			m_fitData.model += " + (a2*cos(2*w*x) + b2*cos(2*w*x))";
+			eq += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
+			m_fitData.model += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
 			vars << "a2" << "b2";
 			m_fitData.paramNames << "a2" << "b2";
 		} else if (num>2) {
@@ -410,7 +411,7 @@ void XYFitCurveDock::updateModelEquation() {
 		vars << "s" << "t";
 		m_fitData.paramNames << "s" << "t";
 	} else if (m_fitData.modelType == XYFitCurve::Maxwell) {
-		eq = "sqrt(2/pi)*exp(-x^2/(2*a^2))/a^3";
+		eq = "sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3";
 		m_fitData.model = eq;
 		vars << "a";
 		m_fitData.paramNames << "a";
@@ -418,9 +419,11 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = uiGeneralTab.teEquation->document()->toPlainText();
 	}
 
-	m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
-	for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
-		m_fitData.paramStartValues[i] = 1.0;
+	if (!m_initializing) {
+		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
+		for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
+			m_fitData.paramStartValues[i] = 1.0;
+	}
 
 	uiGeneralTab.teEquation->setVariables(vars);
 	uiGeneralTab.teEquation->setText(eq);
@@ -545,7 +548,12 @@ void XYFitCurveDock::showFitResult() {
 	str += i18n("residual mean square") + ": " + QString::number(fitResult.rms) + "<br>";
 	str += i18n("residual standard deviation") + ": " + QString::number(fitResult.rsd) + "<br>";
 	str += i18n("coefficient of determination (R-squared)") + ": " + QString::number(fitResult.rsquared) + "<br>";
-// 	str += "<br><br>" + fitResult.solverOutput;
+// 	str += "<br><br>";
+//
+// 	QStringList iterations = fitResult.solverOutput.split(';');
+// 	for (int i=0; i<iterations.size(); ++i)
+// 		str += "<br>" + iterations.at(i);
+
 	uiGeneralTab.teResult->setText(str);
 }
 
