@@ -82,6 +82,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Polynomial"));
 	uiGeneralTab.cbModel->addItem(i18n("Power"));
 	uiGeneralTab.cbModel->addItem(i18n("Exponential"));
+	uiGeneralTab.cbModel->addItem(i18n("Inverse Exponential"));
 	uiGeneralTab.cbModel->addItem(i18n("Fourier"));
 	uiGeneralTab.cbModel->addItem(i18n("Gaussian"));
 	uiGeneralTab.cbModel->addItem(i18n("Lorentz"));
@@ -297,7 +298,7 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Lorentz || type == XYFitCurve::Maxwell || type == XYFitCurve::Custom) {
+	} else if (type == XYFitCurve::Lorentz || type == XYFitCurve::Maxwell || type == XYFitCurve::Inverse_Exponential || type == XYFitCurve::Custom) {
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
@@ -360,6 +361,10 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "c" << "d" << "e" << "f";
 		}
 		m_fitData.model = eq;
+	} else if (m_fitData.modelType == XYFitCurve::Inverse_Exponential) {
+		eq = "a*(1-exp(b*x))+c";
+		vars << "a" << "b" << "c";
+		m_fitData.paramNames << "a" << "b" << "c";
 	} else if (m_fitData.modelType == XYFitCurve::Fourier) {
 		eq = "a0 + (a1*cos(w*x) + b1*sind(w*x))";
 		m_fitData.model = eq;

@@ -330,6 +330,19 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case XYFitCurve::Inverse_Exponential: {
+			// Y(x) = a*(1-exp(b*x))+c
+			double a = gsl_vector_get(paramValues,0);
+			double b = gsl_vector_get(paramValues,1);
+			//double c = gsl_vector_get(paramValues,2);
+			for (int i=0; i<n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+				gsl_matrix_set(J, i, 0, (1.0-exp(b*x))/sigma);
+				gsl_matrix_set(J, i, 1, -a*x*exp(b*x)/sigma);
+				gsl_matrix_set(J, i, 2, 1.0/sigma);
+			}
+		}
 		case XYFitCurve::Fourier: {
 			// Y(x) = a0 + (a1*cos(w*x) + b1*sin(w*x)) + ... + (an*cos(n*w*x) + bn*sin(n*w*x)
 			//parameters: w, a0, a1, b1, ... an, bn
@@ -397,6 +410,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case XYFitCurve::Custom: {
+			// TODO
+			qDebug()<<"custom model not supported yet!";
 			break;
 		}
 	}
@@ -432,6 +447,10 @@ void XYFitCurvePrivate::recalculate() {
 	int maxIters = fitData.maxIterations; //maximal number of iteratoins
 	float delta = fitData.eps; //fit tolerance
 	const int np = fitData.paramNames.size(); //number of fit parameters
+	if ( np == 0) {
+		qDebug()<<"	ERROR: model has no parameter! Giving up.";
+		return;
+	}
 
 	size_t n = xDataColumn->rowCount(); 
 	//determine the number of data points in the column, stop iterating after the first nan was encountered

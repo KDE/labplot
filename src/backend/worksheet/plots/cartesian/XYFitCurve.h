@@ -36,7 +36,7 @@ class XYFitCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum ModelType {Polynomial, Power, Exponential, Fourier, Gaussian, Lorentz, Maxwell, Custom};
+		enum ModelType {Polynomial, Power, Exponential, Inverse_Exponential, Fourier, Gaussian, Lorentz, Maxwell, Custom};
 		enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
 
 		struct FitData {
