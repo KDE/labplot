@@ -412,7 +412,7 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f,gsl_matrix* J) {
 }
 
 void XYFitCurvePrivate::recalculate() {
-	qDebug()<<"XYFitCurvePrivate::recalculate";
+	qDebug()<<"XYFitCurvePrivate::recalculate()";
 
 	// clear the previous result
 	xVector->clear();
@@ -432,12 +432,20 @@ void XYFitCurvePrivate::recalculate() {
 	int maxIters = fitData.maxIterations; //maximal number of iteratoins
 	float delta = fitData.eps; //fit tolerance
 	const int np = fitData.paramNames.size(); //number of fit parameters
-	size_t n = 0; //determine the number of data points in the column, stop iterating after the first nan was encountered
+
+	size_t n = xDataColumn->rowCount(); 
+	//determine the number of data points in the column, stop iterating after the first nan was encountered
 	for (int i=0; i<xDataColumn->rowCount(); ++i) {
 		if (isnan(xdata[i])) {
 			n = i;
 			break;
 		}
+	}
+
+	qDebug()<<"	n="<<n;
+	if ( n == 0) {
+		qDebug()<<"	ERROR: no data points available! Giving up.";
+		return;
 	}
 
 	//calculate sigma for the given weights type
