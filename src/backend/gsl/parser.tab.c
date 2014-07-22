@@ -65,10 +65,11 @@
 /* Line 371 of yacc.c  */
 #line 3 "parser.y"
 
+#include <locale.h>
 #include "parser.h"
 
 /* Line 371 of yacc.c  */
-#line 72 "parser.tab.c"
+#line 73 "parser.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -113,14 +114,14 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 7 "parser.y"
+#line 8 "parser.y"
 
 double dval;  /* For returning numbers.                   */
 symrec *tptr;   /* For returning symbol-table pointers      */
 
 
 /* Line 387 of yacc.c  */
-#line 124 "parser.tab.c"
+#line 125 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -148,7 +149,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 152 "parser.tab.c"
+#line 153 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -446,9 +447,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    23,    23,    24,    27,    28,    29,    32,    33,    34,
-      35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47
+       0,    24,    24,    25,    28,    29,    30,    33,    34,    35,
+      36,    37,    38,    39,    40,    41,    42,    43,    44,    45,
+      46,    47,    48
 };
 #endif
 
@@ -1377,115 +1378,115 @@ yyreduce:
     {
         case 5:
 /* Line 1792 of yacc.c  */
-#line 28 "parser.y"
+#line 29 "parser.y"
     { res=(yyvsp[(1) - (2)].dval); }
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 29 "parser.y"
+#line 30 "parser.y"
     { yyerrok; }
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 32 "parser.y"
+#line 33 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (1)].dval);                         }
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 33 "parser.y"
+#line 34 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (1)].tptr)->value.var;              }
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 34 "parser.y"
+#line 35 "parser.y"
     { (yyval.dval) = (yyvsp[(3) - (3)].dval); (yyvsp[(1) - (3)].tptr)->value.var = (yyvsp[(3) - (3)].dval);     }
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 35 "parser.y"
+#line 36 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (3)].tptr)->value.fnctptr))();   }
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 36 "parser.y"
+#line 37 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (4)].tptr)->value.fnctptr))((yyvsp[(3) - (4)].dval)); }
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 37 "parser.y"
+#line 38 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (6)].tptr)->value.fnctptr))((yyvsp[(3) - (6)].dval),(yyvsp[(5) - (6)].dval)); }
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 38 "parser.y"
+#line 39 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (8)].tptr)->value.fnctptr))((yyvsp[(3) - (8)].dval),(yyvsp[(5) - (8)].dval),(yyvsp[(7) - (8)].dval)); }
     break;
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 39 "parser.y"
+#line 40 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (10)].tptr)->value.fnctptr))((yyvsp[(3) - (10)].dval),(yyvsp[(5) - (10)].dval),(yyvsp[(7) - (10)].dval),(yyvsp[(9) - (10)].dval)); }
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 40 "parser.y"
+#line 41 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) + (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 41 "parser.y"
+#line 42 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) - (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 42 "parser.y"
+#line 43 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) * (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 43 "parser.y"
+#line 44 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) / (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 44 "parser.y"
+#line 45 "parser.y"
     { (yyval.dval) = -(yyvsp[(2) - (2)].dval);                        }
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 45 "parser.y"
+#line 46 "parser.y"
     { (yyval.dval) = pow ((yyvsp[(1) - (3)].dval), (yyvsp[(3) - (3)].dval));               }
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 46 "parser.y"
+#line 47 "parser.y"
     { (yyval.dval) = pow ((yyvsp[(1) - (4)].dval), (yyvsp[(4) - (4)].dval));               }
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 47 "parser.y"
+#line 48 "parser.y"
     { (yyval.dval) = (yyvsp[(2) - (3)].dval);                         }
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1489 "parser.tab.c"
+#line 1490 "parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1717,11 +1718,11 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 50 "parser.y"
+#line 51 "parser.y"
 
 
 /* enable debugging */
-/* #define LDEBUG */
+#define LDEBUG
 
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
@@ -1845,6 +1846,9 @@ static void ungetcstr(void) {
 }
 
 int yylex (void) {
+	/* use same locale for all languages: '.' as decimal point */
+	locale_t locale = newlocale (LC_NUMERIC_MASK, "C", NULL);
+
 #ifdef LDEBUG
 	printf("	yylex()\n");
 #endif
@@ -1875,7 +1879,7 @@ int yylex (void) {
 
 		/* convert to double */
 		char *remain;
-                double result = strtod(s,&remain);
+		double result = strtod_l(s,&remain,locale);
 #ifdef LDEBUG
 		printf("		reading: %s",s);
 		printf("		remain = %s",remain);

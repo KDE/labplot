@@ -1,6 +1,7 @@
 /* LabPlot : parser.y	*/
 
 %{
+#include <locale.h>
 #include "parser.h"
 %}
 
@@ -50,7 +51,7 @@ expr:      NUM       { $$ = $1;                         }
 %%
 
 /* enable debugging */
-/* #define LDEBUG */
+#define LDEBUG
 
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
@@ -174,6 +175,9 @@ static void ungetcstr(void) {
 }
 
 int yylex (void) {
+	/* use same locale for all languages: '.' as decimal point */
+	locale_t locale = newlocale (LC_NUMERIC_MASK, "C", NULL);
+
 #ifdef LDEBUG
 	printf("	yylex()\n");
 #endif
@@ -204,7 +208,7 @@ int yylex (void) {
 
 		/* convert to double */
 		char *remain;
-                double result = strtod(s,&remain);
+		double result = strtod_l(s,&remain,locale);
 #ifdef LDEBUG
 		printf("		reading: %s",s);
 		printf("		remain = %s",remain);
