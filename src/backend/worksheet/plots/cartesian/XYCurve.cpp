@@ -715,6 +715,7 @@ bool XYCurvePrivate::swapVisible(bool on){
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform(){
+	qDebug()<<"XYCurvePrivate::retransform()";
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 

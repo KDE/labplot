@@ -656,6 +656,7 @@ void CartesianPlot::addAxis(){
 XYCurve* CartesianPlot::addCurve(){
 	XYCurve* curve = new XYCurve("xy-curve");
 	this->addChild(curve);
+	connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
 	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
 
@@ -672,6 +673,7 @@ XYCurve* CartesianPlot::addCurve(){
 XYEquationCurve* CartesianPlot::addEquationCurve(){
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	this->addChild(curve);
+	connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
 	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
 
@@ -688,6 +690,7 @@ XYEquationCurve* CartesianPlot::addEquationCurve(){
 XYFitCurve* CartesianPlot::addFitCurve(){
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);
+	connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
 	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
 	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
 
@@ -734,14 +737,37 @@ void CartesianPlot::updateLegend() {
 }
 
 /*!
+	called when in one of the curves the data was changed.
+	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
+*/
+void CartesianPlot::dataChanged(){
+	qDebug()<<"CartesianPlot::dataChanged()";
+	Q_D(CartesianPlot);
+	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+	Q_ASSERT(curve);
+	if (d->autoScaleX && d->autoScaleY)
+		this->scaleAuto();
+	else if (d->autoScaleX)
+		this->scaleAutoX();
+	else if (d->autoScaleY)
+		this->scaleAutoY();
+	else
+		curve->retransform();
+}
+
+/*!
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::xDataChanged(){
-	qDebug()<<"CartesianPlot::xDataChanged";
+	qDebug()<<"CartesianPlot::xDataChanged()";
 	Q_D(CartesianPlot);
+	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+	Q_ASSERT(curve);
 	if (d->autoScaleX)
 		this->scaleAutoX();
+	else
+		curve->retransform();
 }
 
 /*!
@@ -749,9 +775,14 @@ void CartesianPlot::xDataChanged(){
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::yDataChanged(){
+	qDebug()<<"CartesianPlot::yDataChanged()";
 	Q_D(CartesianPlot);
+	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+	Q_ASSERT(curve);
 	if (d->autoScaleY)
 		this->scaleAutoY();
+	else
+		curve->retransform();
 }
 
 void CartesianPlot::mouseModeChanged(QAction* action) {
@@ -1132,6 +1163,7 @@ void CartesianPlotPrivate::retransform(){
 }
 
 void CartesianPlotPrivate::retransformScales(){
+	qDebug()<<"CartesianPlotPrivate::retransformScales";
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianCoordinateSystem::Scale*> scales;
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;

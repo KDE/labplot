@@ -146,6 +146,7 @@ class XYCurve: public AbstractWorksheetElement {
 
 	signals:
 		//General-Tab
+		void dataChanged();
 		void xDataChanged();
 		void yDataChanged();
 

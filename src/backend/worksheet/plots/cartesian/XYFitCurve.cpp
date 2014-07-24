@@ -434,8 +434,7 @@ void XYFitCurvePrivate::recalculate() {
 	yVector->clear();
 
 	if (!xDataColumn || !yDataColumn) {
-		emit (q->xDataChanged());
-		emit (q->yDataChanged());
+		emit (q->dataChanged());
 		return;
 	}
 
@@ -447,12 +446,13 @@ void XYFitCurvePrivate::recalculate() {
 	int maxIters = fitData.maxIterations; //maximal number of iteratoins
 	float delta = fitData.eps; //fit tolerance
 	const int np = fitData.paramNames.size(); //number of fit parameters
-	if ( np == 0) {
+	if (np == 0) {
 		qDebug()<<"	ERROR: model has no parameter! Giving up.";
+		emit (q->dataChanged());
 		return;
 	}
 
-	size_t n = xDataColumn->rowCount(); 
+	size_t n = xDataColumn->rowCount();
 	//determine the number of data points in the column, stop iterating after the first nan was encountered
 	for (int i=0; i<xDataColumn->rowCount(); ++i) {
 		if (isnan(xdata[i])) {
@@ -462,8 +462,9 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	qDebug()<<"	n="<<n;
-	if ( n == 0) {
+	if (n == 0) {
 		qDebug()<<"	ERROR: no data points available! Giving up.";
+		emit (q->dataChanged());
 		return;
 	}
 
@@ -564,9 +565,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//redraw the curve
-	emit (q->xDataChanged());
-	emit (q->yDataChanged());
-	retransform();
+	emit (q->dataChanged());
 }
 
 /*!

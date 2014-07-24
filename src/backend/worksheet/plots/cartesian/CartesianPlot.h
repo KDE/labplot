@@ -140,6 +140,7 @@ class CartesianPlot:public AbstractPlot{
 		void childAdded(const AbstractAspect*);
 		void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
+		void dataChanged();
 		void xDataChanged();
 		void yDataChanged();
 
