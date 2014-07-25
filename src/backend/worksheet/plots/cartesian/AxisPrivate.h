@@ -145,7 +145,7 @@ class AxisPrivate: public QGraphicsItem {
 		void retransformMajorGrid();
 		int upperLabelsPrecision(int precision);
 		int lowerLabelsPrecision(int precision);
-		float round(float value, int precision);
+		double round(double value, int precision);
 		virtual void recalcShapeAndBoundingRect();
 		bool swapVisible(bool on);
 
