@@ -430,6 +430,7 @@ void XYFitCurvePrivate::recalculate() {
 	qDebug()<<"XYFitCurvePrivate::recalculate()";
 
 	// clear the previous result
+	fitResult = XYFitCurve::FitResult();
 	xVector->clear();
 	yVector->clear();
 
@@ -447,13 +448,15 @@ void XYFitCurvePrivate::recalculate() {
 	float delta = fitData.eps; //fit tolerance
 	const int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
-		qDebug()<<"	ERROR: model has no parameter! Giving up.";
+		fitResult.available = true;
+		fitResult.valid = false;
+		fitResult.status = i18n("Model has no parameters.");
 		emit (q->dataChanged());
 		return;
 	}
 
-	size_t n = xDataColumn->rowCount();
 	//determine the number of data points in the column, stop iterating after the first nan was encountered
+	size_t n = xDataColumn->rowCount();
 	for (int i=0; i<xDataColumn->rowCount(); ++i) {
 		if (isnan(xdata[i])) {
 			n = i;
@@ -461,9 +464,18 @@ void XYFitCurvePrivate::recalculate() {
 		}
 	}
 
-	qDebug()<<"	n="<<n;
 	if (n == 0) {
-		qDebug()<<"	ERROR: no data points available! Giving up.";
+		fitResult.available = true;
+		fitResult.valid = false;
+		fitResult.status = i18n("No data points available.");
+		emit (q->dataChanged());
+		return;
+	}
+
+	if (n<np) {
+		fitResult.available = true;
+		fitResult.valid = false;
+		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).").arg(n).arg(np);
 		emit (q->dataChanged());
 		return;
 	}
@@ -516,6 +528,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//write the result
 	fitResult.available = true;
+	fitResult.valid = true;
 	fitResult.status = QString(gsl_strerror(status)); //TODO: add i18n
 	fitResult.iterations = iter;
 	fitResult.dof = n-np;
@@ -633,6 +646,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	//rsd = residual standard deviation = sqrt(rms)
 	writer->writeStartElement("fitResult");
 	writer->writeAttribute( "available", QString::number(d->fitResult.available) );
+	writer->writeAttribute( "valid", QString::number(d->fitResult.valid) );
 	writer->writeAttribute( "status", d->fitResult.status );
 	writer->writeAttribute( "iterations", QString::number(d->fitResult.iterations) );
 	writer->writeAttribute( "dof", QString::number(d->fitResult.dof) );
@@ -744,6 +758,12 @@ bool XYFitCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'available'"));
             else
                 d->fitResult.available = str.toInt();
+
+			str = attribs.value("valid").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'valid'"));
+            else
+                d->fitResult.valid = str.toInt();
 
 			str = attribs.value("status").toString();
             if(str.isEmpty())

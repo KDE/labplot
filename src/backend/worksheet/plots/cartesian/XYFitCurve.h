@@ -58,9 +58,10 @@ class XYFitCurve: public XYCurve {
 		};
 
 		struct FitResult {
-			FitResult() : available(false) {};
+			FitResult() : available(false), valid(false), iterations(0), dof(0), sse(0), mse(0), rmse(0), mae(0), rms(0), rsd(0), rsquared(0) {};
 
 			bool available;
+			bool valid;
 			QString status;
 			int iterations;
 			double dof; //degrees of freedom
