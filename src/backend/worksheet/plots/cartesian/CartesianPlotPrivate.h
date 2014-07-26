@@ -53,7 +53,6 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 
 		virtual void retransform();
 		void retransformScales();
-		double round(double value, int precision);
 		void checkXRange();
 		void checkYRange();
 		CartesianCoordinateSystem::Scale* createScale(CartesianPlot::Scale type, Interval<double>& interval,

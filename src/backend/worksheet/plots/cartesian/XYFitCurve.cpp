@@ -70,20 +70,9 @@ XYFitCurve::~XYFitCurve() {
 void XYFitCurve::init() {
 	Q_D(XYFitCurve);
 
-	d->xColumn->setHidden(true);
-	addChild(d->xColumn);
-
-	d->yColumn->setHidden(true);
-	addChild(d->yColumn);
-
 	//TODO: read from the saved settings for XYFitCurve?
 	d->lineType = XYCurve::Line;
 	d->swapSymbolsTypeId("none");
-
-	setUndoAware(false);
-	setXColumn(d->xColumn);
-	setYColumn(d->yColumn);
-	setUndoAware(true);
 }
 
 void XYFitCurve::recalculate() {
@@ -148,15 +137,9 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 //######################### Private implementation #############################
 //##############################################################################
 XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0),
-	yDataColumn(0),
-	weightsColumn(0),
-	xColumn(new Column("x", AbstractColumn::Numeric)),
-	yColumn(new Column("y", AbstractColumn::Numeric)),
-	residualsColumn(new Column("residuals", AbstractColumn::Numeric)),
-	xVector(static_cast<QVector<double>* >(xColumn->data())),
-	yVector(static_cast<QVector<double>* >(yColumn->data())),
-	residualsVector(static_cast<QVector<double>* >(residualsColumn->data())),
+	xDataColumn(0), yDataColumn(0), weightsColumn(0),
+	xColumn(0), yColumn(0), residualsColumn(0),
+	xVector(0), yVector(0), residualsVector(0),
 	q(owner)  {
 
 }
@@ -429,10 +412,33 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f,gsl_matrix* J) {
 void XYFitCurvePrivate::recalculate() {
 	qDebug()<<"XYFitCurvePrivate::recalculate()";
 
+	//create fit result columns if not available yet, clear them otherwise
+	if (!xColumn) {
+		xColumn = new Column("x", AbstractColumn::Numeric);
+		yColumn = new Column("y", AbstractColumn::Numeric);
+		residualsColumn = new Column("residuals", AbstractColumn::Numeric);
+		xVector = static_cast<QVector<double>* >(xColumn->data());
+		yVector = static_cast<QVector<double>* >(yColumn->data());
+		residualsVector = static_cast<QVector<double>* >(residualsColumn->data());
+
+		xColumn->setHidden(true);
+		q->addChild(xColumn);
+
+		yColumn->setHidden(true);
+		q->addChild(yColumn);
+
+		q->setUndoAware(false);
+		q->setXColumn(xColumn);
+		q->setYColumn(yColumn);
+		q->setUndoAware(true);
+	} else {
+		xVector->clear();
+		yVector->clear();
+		residualsVector->clear();
+	}
+
 	// clear the previous result
 	fitResult = XYFitCurve::FitResult();
-	xVector->clear();
-	yVector->clear();
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
@@ -606,7 +612,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	Q_D(const XYFitCurve);
 
-    writer->writeStartElement( "xyFitCurve" );
+    writer->writeStartElement("xyFitCurve");
 
 	//write xy-curve information
 	XYCurve::save(writer);
@@ -668,12 +674,13 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 		writer->writeTextElement("error", QString::number(d->fitResult.errorValues.at(i)));
 	writer->writeEndElement();
 
+	//save calculated columns
 	d->xColumn->save(writer);
 	d->yColumn->save(writer);
 	d->residualsColumn->save(writer);
-	writer->writeEndElement();
 
-	writer->writeEndElement();
+	writer->writeEndElement(); //"fitResult"
+	writer->writeEndElement(); //"xyFitCurve"
 }
 
 //! Load from XML
@@ -830,6 +837,7 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 				delete column;
 				return false;
 			}
+			qDebug()<<"column name " << column->name() << column->rowCount();
 			if (column->name()=="x")
 				d->xColumn = column;
 			else if (column->name()=="y")
@@ -838,6 +846,21 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 				d->residualsColumn = column;
 		}
 	}
+
+	d->xColumn->setHidden(true);
+	addChild(d->xColumn);
+
+	d->yColumn->setHidden(true);
+	addChild(d->yColumn);
+
+	setUndoAware(false);
+	setXColumn(d->xColumn);
+	setYColumn(d->yColumn);
+	setUndoAware(true);
+
+	d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
+	d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
+	d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
 
 	retransform();
 	return true;
