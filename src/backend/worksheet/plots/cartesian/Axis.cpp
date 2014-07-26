@@ -54,7 +54,6 @@
 #endif
 
 #include <math.h>
-#include <locale.h>
 
 /**
  * \class Axis
@@ -1377,13 +1376,11 @@ int AxisPrivate::lowerLabelsPrecision(int precision){
 }
 
 double AxisPrivate::round(double value, int precision){
-	/* use same locale for all languages: '.' as decimal point */
-	locale_t locale = newlocale (LC_NUMERIC_MASK, "C", NULL);
 	char l_fmtp[32], l_buf[64];
 	sprintf (l_fmtp, "%%.%df", precision);
 	sprintf (l_buf, l_fmtp, value);
 	//qDebug()<<"round("<<value<<","<<precision<<") ="<<((double)strtod(l_buf, 0, locale));
-	return ((double)strtod_l(l_buf, 0, locale));
+	return (double)strtod(l_buf, 0);
 }
 
 /*!
