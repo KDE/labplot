@@ -1330,6 +1330,7 @@ void AxisPrivate::retransformTickLabelStrings(){
 	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision){
+	qDebug()<<"AxisPrivate::upperLabelsPrecision";
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QList<float> tempValues;
@@ -1338,9 +1339,12 @@ int AxisPrivate::upperLabelsPrecision(int precision){
 	}
 
 	for (int i=0; i<tempValues.size(); ++i){
-		if (tempValues.count(tempValues[i]) > 1){
-			//duplicate for the current precision found, increase the precision and check again
-			return upperLabelsPrecision(precision+1);
+		for (int j=0; j<tempValues.size(); ++j){
+			if (i==j) continue;
+			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10,-precision)) ) {
+				//duplicate for the current precision found, increase the precision and check again
+				return upperLabelsPrecision(precision+1);
+			}
 		}
 	}
 
@@ -1364,10 +1368,13 @@ int AxisPrivate::lowerLabelsPrecision(int precision){
 	}
 
 	for (int i=0; i<tempValues.size(); ++i){
-		if (tempValues.count(tempValues[i]) > 1){
-			//duplicate found for the reduced precision
-			//-> current precision cannot be reduced, return the current value
-			return precision;
+		for (int j=0; j<tempValues.size(); ++j){
+			if (i==j) continue;
+			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10,-precision)) ) {
+				//duplicate found for the reduced precision
+				//-> current precision cannot be reduced, return the current value
+				return precision;
+			}
 		}
 	}
 
@@ -1376,11 +1383,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision){
 }
 
 double AxisPrivate::round(double value, int precision){
-	char l_fmtp[32], l_buf[64];
-	sprintf (l_fmtp, "%%.%df", precision);
-	sprintf (l_buf, l_fmtp, value);
-	//qDebug()<<"round("<<value<<","<<precision<<") ="<<((double)strtod(l_buf, 0, locale));
-	return (double)strtod(l_buf, 0);
+	return double(value*pow(10, precision))/pow(10, precision);
 }
 
 /*!

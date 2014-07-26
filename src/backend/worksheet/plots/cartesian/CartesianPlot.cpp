@@ -1316,15 +1316,6 @@ void CartesianPlotPrivate::checkYRange() {
 	}
 }
 
-double CartesianPlotPrivate::round(double value, int precision){
-	char l_fmtp[32], l_buf[64];
-	sprintf (l_fmtp, "%%.%df", precision);
-	sprintf (l_buf, l_fmtp, value);
-	//qDebug()<<"round("<<value<<","<<precision<<") ="<<((double)strtod(l_buf, 0, locale));
-	return (double)strtod(l_buf, 0);
-}
-
-
 CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, Interval<double>& interval,
 																	double sceneStart, double sceneEnd,
 																	double logicalStart, double logicalEnd) {
