@@ -536,6 +536,12 @@ void XYFitCurveDock::showFitResult() {
 
 	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 	QString str = i18n("status") + ": " + fitResult.status + "<br>";
+
+	if (!fitResult.valid) {
+		uiGeneralTab.teResult->setText(str);
+		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
+	}
+
 	str += i18n("iterations") + ": " + QString::number(fitResult.iterations) + "<br>";
 	str += i18n("degrees of freedom") + ": " + QString::number(fitResult.dof) + "<br><br>";
 
