@@ -85,7 +85,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Inverse Exponential"));
 	uiGeneralTab.cbModel->addItem(i18n("Fourier"));
 	uiGeneralTab.cbModel->addItem(i18n("Gaussian"));
-	uiGeneralTab.cbModel->addItem(i18n("Lorentz"));
+	uiGeneralTab.cbModel->addItem(i18n("Lorentz (Cauchy)"));
 	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
@@ -556,8 +556,12 @@ void XYFitCurveDock::showFitResult() {
 	str += i18n("mean squared error") + ": " + QString::number(fitResult.mse) + "<br>";
 	str += i18n("root-mean squared error") + ": " + QString::number(fitResult.rmse) + "<br>";
 	str += i18n("mean absolute error") + ": " + QString::number(fitResult.mae) + "<br>";
-	str += i18n("residual mean square") + ": " + QString::number(fitResult.rms) + "<br>";
-	str += i18n("residual standard deviation") + ": " + QString::number(fitResult.rsd) + "<br>";
+
+	if (fitResult.dof!=0) {
+		str += i18n("residual mean square") + ": " + QString::number(fitResult.rms) + "<br>";
+		str += i18n("residual standard deviation") + ": " + QString::number(fitResult.rsd) + "<br>";
+	}
+
 	str += i18n("coefficient of determination (R-squared)") + ": " + QString::number(fitResult.rsquared) + "<br>";
 // 	str += "<br><br>";
 //

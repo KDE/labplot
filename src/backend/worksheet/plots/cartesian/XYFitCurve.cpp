@@ -212,9 +212,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	int n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
-// 	double* y = ((struct data*)params)->y;
 	double* sigmaVector = ((struct data*)params)->sigma;
-// 	char* func = ((struct data*)params)->func->toLatin1().data();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	XYFitCurve::ModelType modelType = ((struct data*)params)->modelType;
 	int degree = ((struct data*)params)->degree;
@@ -278,7 +276,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					x = xVector[i];
 					if (sigmaVector) sigma = sigmaVector[i];
 					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 1, a*b*exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
 				}
 			} else if (degree==2) {
 				double a = gsl_vector_get(paramValues,0);
@@ -289,9 +287,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					x = xVector[i];
 					if (sigmaVector) sigma = sigmaVector[i];
 					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 1, a*b*exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
 					gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
-					gsl_matrix_set(J, i, 3, c*d*exp(d*x)/sigma);
+					gsl_matrix_set(J, i, 3, c*x*exp(d*x)/sigma);
 				}
 			} else if (degree==3) {
 				double a = gsl_vector_get(paramValues,0);
@@ -304,11 +302,11 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					x = xVector[i];
 					if (sigmaVector) sigma = sigmaVector[i];
 					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 1, a*b*exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
 					gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
-					gsl_matrix_set(J, i, 3, c*d*exp(b*x)/sigma);
+					gsl_matrix_set(J, i, 3, c*x*exp(b*x)/sigma);
 					gsl_matrix_set(J, i, 4, exp(f*x)/sigma);
-					gsl_matrix_set(J, i, 5, e*f*exp(f*x)/sigma);
+					gsl_matrix_set(J, i, 5, e*x*exp(f*x)/sigma);
 				}
 			}
 			break;
@@ -341,7 +339,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				double wd = 0; //first derivative with respect to the w parameters
+				double wd = 0; //first derivative with respect to the w parameter
 				for (int j=1; j<degree; ++j) {
 					wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
 				}
@@ -450,7 +448,7 @@ void XYFitCurvePrivate::recalculate() {
 	double* ydata = static_cast<QVector<double>* >(dynamic_cast<Column*>( const_cast<AbstractColumn*>(yDataColumn) )->data())->data();
 
 	//fit settings
-	int maxIters = fitData.maxIterations; //maximal number of iteratoins
+	int maxIters = fitData.maxIterations; //maximal number of iterations
 	float delta = fitData.eps; //fit tolerance
 	const int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
@@ -488,14 +486,27 @@ void XYFitCurvePrivate::recalculate() {
 
 	//calculate sigma for the given weights type
 	double* sigma = 0;
-	if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
-		//weights from a given column -> calculate the inverse (sigma = 1/weight)
-		//TODO
-	} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
-		//weights from a given column with error bars (sigma = error)
-		if (!weightsColumn)
+	if (weightsColumn) {
+		if (weightsColumn->rowCount()<n) {
+			fitResult.available = true;
+			fitResult.valid = false;
+			fitResult.status = i18n("Not sufficient weight data points provided.");
+			emit (q->dataChanged());
+			return;
+		}
+
+		if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
+			//weights from a given column -> calculate the inverse (sigma = sqrt(1/weight))
+			sigma = new double[n];
+			for (int i=0; i<n; ++i) {
+				sigma[i] = sqrt(1/weightsColumn->valueAt(i));
+			}
+		} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
+			//weights from a given column with error bars (sigma = error)
 			sigma = static_cast<QVector<double>* >(dynamic_cast<Column*>( const_cast<AbstractColumn*>(weightsColumn) )->data())->data();
+		}
 	}
+
 
 	//function to fit
 	gsl_multifit_function_fdf f;
@@ -553,8 +564,10 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
 	fitResult.mae = gsl_blas_dasum(s->f);
-	fitResult.rms = fitResult.sse/fitResult.dof;
-	fitResult.rsd = sqrt(fitResult.rms);
+	if (fitResult.dof!=0) {
+		fitResult.rms = fitResult.sse/fitResult.dof;
+		fitResult.rsd = sqrt(fitResult.rms);
+	}
 
 	fitResult.rsquared = 0; //TODO
 
@@ -567,8 +580,11 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
 	}
 
+	//free resources
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
+	if (sigma && fitData.weightsType == XYFitCurve::WeightsFromColumn)
+		delete [] sigma;
 
 	//calculate the fit function (vectors)
 	ExpressionParser* parser = ExpressionParser::getInstance();
