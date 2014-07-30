@@ -159,9 +159,16 @@ void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
 }
 
 void ExpressionTextEdit::validateExpression() {
-	m_isValid = ExpressionParser::getInstance()->isValid(document()->toPlainText(), m_variables);
-	if (!m_isValid)
-		setStyleSheet("QTextEdit{background: red;}");
-	else
-		setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+	//check whether the expression was changed or only the formating
+	QString text = toPlainText();
+	if (text != m_currentExpression) {
+		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
+		if (!m_isValid)
+			setStyleSheet("QTextEdit{background: red;}");
+		else
+			setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+
+		m_currentExpression = text;
+		emit(expressionChanged());
+	}
 }

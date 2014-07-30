@@ -73,6 +73,10 @@ private:
 	QStringList m_variables;
 	QCompleter* m_completer;
 	bool m_isValid;
+	QString m_currentExpression;
+
+signals:
+	void expressionChanged();
 };
 
 #endif

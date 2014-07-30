@@ -94,8 +94,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.teEquation1, SIGNAL(textChanged()), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.teEquation2, SIGNAL(textChanged()), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.teEquation1, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.teEquation2, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.tbConstants1, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( uiGeneralTab.tbFunctions1, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.tbConstants2, SIGNAL(clicked()), this, SLOT(showConstants()) );
