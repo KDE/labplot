@@ -6,7 +6,7 @@
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
 	Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -58,7 +58,9 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-	
+		void childHovered();
+		void childUnhovered();
+
 	protected:
 		WorksheetElementContainerPrivate* const d_ptr;
 		WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd);
@@ -68,7 +70,7 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 
 	private:
     	Q_DECLARE_PRIVATE(WorksheetElementContainer)
-		
+
 	signals:
 		friend class WorksheetElementContainerSetVisibleCmd;
 		void visibleChanged(bool);

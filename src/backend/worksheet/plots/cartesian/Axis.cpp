@@ -1721,11 +1721,13 @@ void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
 
 void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	m_hovered = true;
+	q->hovered();
 	update();
 }
 
 void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	m_hovered = false;
+	q->unhovered();
 	update();
 }
 

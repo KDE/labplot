@@ -80,6 +80,9 @@ class AbstractWorksheetElement: public AbstractAspect {
 		friend class AbstractPlotSetVerticalPaddingCmd;
 		void horizontalPaddingChanged(float);
 		void verticalPaddingChanged(float);
+
+		void hovered();
+		void unhovered();
 };
 
 #endif

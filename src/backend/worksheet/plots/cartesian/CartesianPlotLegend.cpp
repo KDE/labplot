@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2013-2014 Alexander Semke (alexander.semke*web.de)
 								(replace * with @ in the email addresses)
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,7 +30,7 @@
 /*!
   \class CartesianPlotLegend
   \brief Legend for the cartesian plot.
- 
+
   \ingroup kdefrontend
 */
 
@@ -83,7 +83,7 @@ void CartesianPlotLegend::init(){
 
 	d->labelFont = group.readEntry("LabelsFont", QFont());
 	d->labelFont.setPixelSize( Worksheet::convertToSceneUnits( 10, Worksheet::Point ) );
-	
+
 	d->labelColor = Qt::black;
 	d->labelColumnMajor = true;
 	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter));
@@ -101,7 +101,7 @@ void CartesianPlotLegend::init(){
 	d->title->setParentGraphicsItem(graphicsItem());
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	connect(d->title, SIGNAL(changed()), this, SLOT(retransform()));
-	
+
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
 	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
@@ -131,7 +131,7 @@ void CartesianPlotLegend::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-	
+
 	this->initActions();
 }
 
@@ -144,7 +144,7 @@ void CartesianPlotLegend::initActions(){
 QMenu* CartesianPlotLegend::createContextMenu(){
 	QMenu *menu = AbstractWorksheetElement::createContextMenu();
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
@@ -424,7 +424,9 @@ void CartesianPlotLegend::visibilityChanged(){
 //######################### Private implementation #############################
 //##############################################################################
 CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner):q(owner),
-	suppressItemChangeEvent(false), suppressRetransform(false), m_printing(false) {
+	suppressItemChangeEvent(false), suppressRetransform(false), m_printing(false), m_hovered(false) {
+
+	setAcceptHoverEvents(true);
 }
 
 QString CartesianPlotLegendPrivate::name() const {
@@ -474,7 +476,7 @@ void CartesianPlotLegendPrivate::retransform() {
 		rowCount = 0;
 	else
 		rowCount = ceil(double(curveCount)/double(columnCount));
-	
+
 	maxColumnTextWidths.clear();
 
 	//determine the width of the legend
@@ -493,7 +495,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			else
 				index = r*columnCount + c;
 
-			if ( index >= curveCount )			
+			if ( index >= curveCount )
 				break;
 
 			curve = children.at(index);
@@ -526,7 +528,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	rect.setY(-legendHeight/2);
 	rect.setWidth(legendWidth);
 	rect.setHeight(legendHeight);
-	
+
 	updatePosition();
 }
 
@@ -539,7 +541,7 @@ void CartesianPlotLegendPrivate::updatePosition(){
 	const QRectF parentRect = q->m_plot->plotRect();
 	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
 	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
-	
+
 	if (position.horizontalPosition != CartesianPlotLegend::hPositionCustom){
 		if (position.horizontalPosition == CartesianPlotLegend::hPositionLeft)
 			position.point.setX(parentRect.x() + rect.width()/2 + hOffset);
@@ -562,12 +564,12 @@ void CartesianPlotLegendPrivate::updatePosition(){
 	setPos(position.point);
 	suppressItemChangeEvent=false;
 	emit q->positionChanged(position);
-	
+
 	suppressRetransform = true;
 	title->retransform();
 	suppressRetransform = false;
 }
- 
+
 /*!
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the legend.
   \sa QGraphicsItem::paint().
@@ -686,14 +688,14 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 		factory = qobject_cast<CurveSymbolFactory*>(plugin);
 
 	painter->setFont(labelFont);
-	
+
 	//translate to left upper conner of the bounding rect plus the layout offset and the height of the title
 	painter->translate(-rect.width()/2+layoutLeftMargin, -rect.height()/2+layoutTopMargin);
 	if (title->isVisible() && !title->text().text.isEmpty())
 		painter->translate(0, title->graphicsItem()->boundingRect().height());
 
 	painter->save();
-	
+
 	int index;
 	for (int c=0; c<columnCount; ++c) {
 		for (int r=0; r<rowCount; ++r) {
@@ -720,7 +722,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 			if ( (curve->xErrorType() != XYCurve::NoError) || (curve->yErrorType() != XYCurve::NoError) ) {
 				painter->setOpacity(curve->errorBarsOpacity());
 				painter->setPen(curve->errorBarsPen());
-	
+
 				//curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
 				if (curve->symbolsTypeId()!="none" && errorBarsSize<curve->symbolsSize()*1.4)
@@ -730,7 +732,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 					case XYCurve::ErrorBarsSimple:
 						//horiz. line
 						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
-										  lineSymbolWidth/2+errorBarsSize/2, h/2);		
+										  lineSymbolWidth/2+errorBarsSize/2, h/2);
 						//vert. line
 						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
 										  lineSymbolWidth/2, h/2+errorBarsSize/2);
@@ -793,10 +795,16 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	painter->restore();
 	painter->restore();
 
+	if (m_hovered && !isSelected() && !m_printing){
+		painter->setPen(q->hoveredPen);
+		painter->setOpacity(q->hoveredOpacity);
+		painter->drawPath(shape());
+	}
+
 	if (isSelected() && !m_printing){
-		QPainterPath path = shape();
-		painter->setPen(QPen(Qt::blue, 0, Qt::DashLine));
-		painter->drawPath(path);
+		painter->setPen(q->selectedPen);
+		painter->setOpacity(q->selectedOpacity);
+		painter->drawPath(shape());
 	}
 }
 
@@ -839,6 +847,18 @@ void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* eve
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
+void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	m_hovered = true;
+	q->hovered();
+	update();
+}
+
+void CartesianPlotLegendPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	m_hovered = false;
+	q->unhovered();
+	update();
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -869,7 +889,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	//title
 	d->title->save(writer);
-	
+
 	//background
 	writer->writeStartElement( "background" );
     writer->writeAttribute( "type", QString::number(d->backgroundType) );
@@ -885,13 +905,13 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
     writer->writeAttribute( "fileName", d->backgroundFileName );
     writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
     writer->writeEndElement();
-	
+
 	//border
 	writer->writeStartElement( "border" );
 	WRITE_QPEN(d->borderPen);
     writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
     writer->writeEndElement();
-		
+
     //layout
     writer->writeStartElement( "layout" );
     writer->writeAttribute( "topMargin", QString::number(d->layoutTopMargin) );
@@ -902,7 +922,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
     writer->writeAttribute( "horizontalSpacing", QString::number(d->layoutHorizontalSpacing) );
     writer->writeAttribute( "columnCount", QString::number(d->layoutColumnCount) );
     writer->writeEndElement();
-	
+
 	writer->writeEndElement(); // close "cartesianPlotLegend" section
 }
 
@@ -937,7 +957,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
 
 			READ_QCOLOR(d->labelColor);
 			READ_QFONT(d->labelFont);
-			
+
 			str = attribs.value("columnMajor").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'columnMajor'"));
@@ -980,7 +1000,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'verticalPosition'"));
             else
-                d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();		
+                d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();
         }else if(reader->name() == "textLabel"){
             if (!d->title->load(reader)){
                 delete d->title;
@@ -1057,7 +1077,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("opacity"));
             else
-                d->backgroundOpacity = str.toDouble();			
+                d->backgroundOpacity = str.toDouble();
 		}else if (reader->name() == "border"){
 			attribs = reader->attributes();
 

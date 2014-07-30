@@ -142,9 +142,11 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 	qDebug()<<"WorksheetElementContainer::handleAspectAdded "<< aspect->name();
 	Q_D(WorksheetElementContainer);
 
-	const AbstractWorksheetElement *addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
-	if (addedElement && (aspect->parentAspect() == this)) {
-		QGraphicsItem *item = addedElement->graphicsItem();
+	const AbstractWorksheetElement* element = qobject_cast<const AbstractWorksheetElement*>(aspect);
+	if (element && (aspect->parentAspect() == this)) {
+		connect(element, SIGNAL(hovered()), this, SLOT(childHovered()));
+		connect(element, SIGNAL(unhovered()), this, SLOT(childUnhovered()));
+		QGraphicsItem *item = element->graphicsItem();
 		Q_ASSERT(item != NULL);
 		item->setParentItem(d);
 
@@ -154,6 +156,19 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 			elem->graphicsItem()->setZValue(zVal++);
 		}
 	}
+}
+
+void WorksheetElementContainer::childHovered() {
+	Q_D(WorksheetElementContainer);
+	if (d->m_hovered)
+		d->m_hovered = false;
+	d->update();
+}
+
+void WorksheetElementContainer::childUnhovered() {
+	Q_D(WorksheetElementContainer);
+	d->m_hovered = true;
+	d->update();
 }
 
 //################################################################
@@ -204,6 +219,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+	qDebug()<<"WorksheetElementContainerPrivate::paint";
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 

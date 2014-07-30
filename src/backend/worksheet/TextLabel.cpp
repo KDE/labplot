@@ -612,11 +612,13 @@ void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
 
 void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	m_hovered = true;
+	q->hovered();
 	update();
 }
 
 void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	m_hovered = false;
+	q->unhovered();
 	update();
 }
 

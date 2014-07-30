@@ -4,8 +4,8 @@
     Description          : Private members of CartesianPlotLegend.
     --------------------------------------------------------------------
     Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -54,11 +54,12 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		virtual QRectF boundingRect() const;
 		virtual QPainterPath shape() const;
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);		
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 
 		bool suppressItemChangeEvent;
 		bool suppressRetransform;
 		bool m_printing;
+		bool m_hovered;
 
 		QRectF rect;
 		QFont labelFont;
@@ -97,6 +98,8 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 
 	private:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 };
 
 #endif
