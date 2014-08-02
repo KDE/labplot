@@ -71,6 +71,7 @@ private slots:
 	void showConstants();
 	void showFunctions();
 	void showParameters();
+	void parametersChanged();
 	void showOptions();
 	void insertFunction(const QString&);
 	void insertConstant(const QString&);

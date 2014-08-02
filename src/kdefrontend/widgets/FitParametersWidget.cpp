@@ -26,6 +26,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "FitParametersWidget.h"
+#include <QKeyEvent>
 
 /*!
 	\class FitParametersWidget
@@ -41,7 +42,6 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.pbCancel->setIcon(KIcon("dialog-cancel"));
 
 	ui.tableWidget->setColumnCount(2);
-	ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
 	QTableWidgetItem* headerItem = new QTableWidgetItem();
 	headerItem->setText(i18n("Name"));
@@ -54,22 +54,112 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
 	ui.tableWidget->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
 
-	for (int i=0; i<m_fitData->paramNames.size(); ++i){
-		ui.tableWidget->setItem(i, 0, new QTableWidgetItem(m_fitData->paramNames.at(i)));
-		ui.tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(m_fitData->paramStartValues.at(i), 'g')));
+	if (m_fitData->modelType != XYFitCurve::Custom) {
+		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
+		for (int i=0; i<m_fitData->paramNames.size(); ++i){
+			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
+			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+			item->setBackground(QBrush(Qt::lightGray));
+			ui.tableWidget->setItem(i, 0, item);
+			ui.tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(m_fitData->paramStartValues.at(i), 'g')));
+		}
+		ui.tableWidget->setCurrentCell(0, 1);
+		ui.pbAdd->setVisible(false);
+		ui.pbRemove->setVisible(false);
+	} else {
+		if (m_fitData->paramNames.size()) {
+			//parameters for the custom model are already available -> show them
+			ui.tableWidget->setRowCount(m_fitData->paramNames.size());
+			for (int i=0; i<m_fitData->paramNames.size(); ++i){
+				QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
+				item->setBackground(QBrush(Qt::lightGray));
+				ui.tableWidget->setItem(i, 0, item);
+				ui.tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(m_fitData->paramStartValues.at(i), 'g')));
+			}
+		} else {
+			//no parameters available yet -> create the first row in the table for the first parameter
+			ui.tableWidget->setRowCount(1);
+			QTableWidgetItem* item = new QTableWidgetItem();
+			item->setBackground(QBrush(Qt::lightGray));
+			ui.tableWidget->setItem(0, 0, item);
+			ui.tableWidget->setItem(0, 1, new QTableWidgetItem());
+		}
+		ui.tableWidget->setCurrentCell(0, 0);
+		ui.pbAdd->setIcon(KIcon("list-add"));
+		ui.pbAdd->setVisible(true);
+		ui.pbRemove->setIcon(KIcon("list-remove"));
+		ui.pbRemove->setVisible(true);
+		ui.pbRemove->setEnabled(m_fitData->paramNames.size()>1);
 	}
 
+	ui.tableWidget->installEventFilter(this);
+
 	//SLOTS
+	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
+	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );
+	connect( ui.pbRemove, SIGNAL(clicked()), this, SLOT(removeParameter()) );
+}
+
+bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
+	if (watched == ui.tableWidget) {
+		if (event->type() == QEvent::KeyPress) {
+			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
+				if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
+					ui.pbApply->setFocus();
+					ui.tableWidget->clearSelection();
+				} else {
+					ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow()+1, 1);
+				}
+				return true;
+			}
+		}
+	}
+
+	return QWidget::eventFilter(watched, event);
 }
 
 void FitParametersWidget::applyClicked() {
-	if (m_fitData->paramStartValues.size() != ui.tableWidget->rowCount())
-		m_fitData->paramStartValues.resize(ui.tableWidget->rowCount());
+	if (m_fitData->modelType != XYFitCurve::Custom) {
+		for (int i=0; i<ui.tableWidget->rowCount(); ++i)
+			m_fitData->paramStartValues[i] = ui.tableWidget->item(i,1)->text().toDouble();
+	} else {
+		m_fitData->paramNames.clear();
+		m_fitData->paramStartValues.clear();
+		for (int i=0; i<ui.tableWidget->rowCount(); ++i) {
+			//skip those rows where either the name or the value are empty
+			if ( !ui.tableWidget->item(i,0)->text().simplified().isEmpty() && !ui.tableWidget->item(i,1)->text().simplified().isEmpty() ) {
+				m_fitData->paramNames.append( ui.tableWidget->item(i,0)->text() );
+				m_fitData->paramStartValues.append( ui.tableWidget->item(i,1)->text().toDouble() );
+			}
+		}
+	}
 
-	for (int i=0; i<ui.tableWidget->rowCount(); ++i)
-		m_fitData->paramStartValues[i] = ui.tableWidget->item(i,1)->text().toDouble();
+	if (m_changed)
+		emit(parametersChanged());
 
 	emit(finished());
+}
+
+void FitParametersWidget::addParameter() {
+	int rows = ui.tableWidget->rowCount();
+	ui.tableWidget->setRowCount(rows+1);
+	QTableWidgetItem* item = new QTableWidgetItem();
+	item->setBackground(QBrush(Qt::lightGray));
+	ui.tableWidget->setItem(rows, 0, item);
+	ui.tableWidget->setItem(rows, 1, new QTableWidgetItem());
+	ui.tableWidget->setCurrentCell(rows, 0);
+	ui.pbRemove->setEnabled(true);
+}
+
+void FitParametersWidget::removeParameter() {
+	ui.tableWidget->removeRow(ui.tableWidget->currentRow());
+	if (ui.tableWidget->rowCount()==1)
+		ui.pbRemove->setEnabled(false);
+}
+
+void FitParametersWidget::changed() {
+	m_changed = true;
 }

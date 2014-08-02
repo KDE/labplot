@@ -43,12 +43,18 @@ public:
 private:
 	Ui::FitParametersWidget ui;
 	XYFitCurve::FitData* m_fitData;
+	bool m_changed;
+	bool eventFilter( QObject * watched, QEvent * event);
 
 signals:
 	void finished();
+	void parametersChanged();
 
 private slots:
 	void applyClicked();
+	void addParameter();
+	void removeParameter();
+	void changed();
 };
 
 #endif //FITPARAMETERSWIDGET_H

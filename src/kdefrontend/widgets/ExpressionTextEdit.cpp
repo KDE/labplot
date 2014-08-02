@@ -92,6 +92,7 @@ void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 void ExpressionTextEdit::setVariables(const QStringList& vars) {
 	m_variables = vars;
 	m_highlighter->setVariables(m_variables);
+	validateExpression(true);
 }
 
 void ExpressionTextEdit::insertCompletion(const QString& completion) {
@@ -158,10 +159,14 @@ void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
 	m_completer->complete(cr); // popup it up!
 }
 
-void ExpressionTextEdit::validateExpression() {
+/*!
+ * \brief Validates the current expression if the text was changed and highlights the text field red if the expression is invalid.
+ * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
+ */
+void ExpressionTextEdit::validateExpression(bool force) {
 	//check whether the expression was changed or only the formating
 	QString text = toPlainText();
-	if (text != m_currentExpression) {
+	if (text != m_currentExpression || force) {
 		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
 		if (!m_isValid)
 			setStyleSheet("QTextEdit{background: red;}");

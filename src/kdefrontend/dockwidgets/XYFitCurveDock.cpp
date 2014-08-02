@@ -314,7 +314,8 @@ void XYFitCurveDock::updateModelEquation() {
 	m_fitData.modelType= (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
 	int num = uiGeneralTab.sbDegree->value();
 
-	m_fitData.paramNames.clear();
+	if (m_fitData.modelType!=XYFitCurve::Custom)
+		m_fitData.paramNames.clear();
 
 	if (m_fitData.modelType == XYFitCurve::Polynomial) {
 		eq = "c0 + c1*x";
@@ -421,7 +422,8 @@ void XYFitCurveDock::updateModelEquation() {
 		vars << "a";
 		m_fitData.paramNames << "a";
 	} else if (m_fitData.modelType==XYFitCurve::Custom) {
-		m_fitData.model = uiGeneralTab.teEquation->document()->toPlainText();
+		//use the equation of the last selected predefined model or of the last available custom model
+		eq = m_fitData.model;
 	}
 
 	if (!m_initializing) {
@@ -467,6 +469,7 @@ void XYFitCurveDock::showParameters() {
 	QMenu menu;
 	FitParametersWidget w(&menu, &m_fitData);
 	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
+	connect(&w, SIGNAL(parametersChanged()), this, SLOT(parametersChanged()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&w);
@@ -474,6 +477,15 @@ void XYFitCurveDock::showParameters() {
 
 	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.pbParameters->width(),-menu.sizeHint().height());
 	menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
+}
+
+/*!
+ * called when parameter names and/or start values for the custom model were changed
+ */
+void XYFitCurveDock::parametersChanged() {
+	//parameter names were (probably) changed -> set the new names in EquationTextEdit
+	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
+	enableRecalculate();
 }
 
 void XYFitCurveDock::showOptions() {

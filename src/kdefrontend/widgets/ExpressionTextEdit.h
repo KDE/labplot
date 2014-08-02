@@ -63,7 +63,7 @@ protected:
 
 private slots:
 	void insertCompletion(const QString&);
-	void validateExpression();
+	void validateExpression(bool force=false);
 
 private:
 	QString textUnderCursor() const;
