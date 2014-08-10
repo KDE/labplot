@@ -100,6 +100,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.tbFunctions1, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.tbConstants2, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( uiGeneralTab.tbFunctions2, SIGNAL(clicked()), this, SLOT(showFunctions()) );
+	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 

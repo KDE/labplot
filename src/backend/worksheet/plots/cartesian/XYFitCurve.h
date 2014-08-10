@@ -44,7 +44,8 @@ class XYFitCurve: public XYCurve {
 						weightsType(XYFitCurve::WeightsFromColumn),
 						degree(1),
 						maxIterations(500),
-						eps(1e-4) {};
+						eps(1e-4),
+						fittedPoints(100) {};
 
 			ModelType modelType;
 			WeightsType weightsType;
@@ -55,6 +56,7 @@ class XYFitCurve: public XYCurve {
 
 			int maxIterations;
 			double eps;
+			int fittedPoints;
 		};
 
 		struct FitResult {

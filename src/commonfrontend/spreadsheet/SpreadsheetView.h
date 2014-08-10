@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -55,7 +55,7 @@ class SpreadsheetView : public QWidget{
 	public:
 		explicit SpreadsheetView(Spreadsheet *spreadsheet);
 		virtual ~SpreadsheetView();
-				
+
 		void showComments(bool on = true);
 		bool areCommentsShown() const;
 
@@ -74,7 +74,7 @@ class SpreadsheetView : public QWidget{
 		void setCellSelected(int row, int col, bool select = true);
 		void setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select = true);
 		void getCurrentCell(int * row, int * col);
-	
+
 	private:
 	  	void init();
 		QTableView* m_tableView;
@@ -83,10 +83,10 @@ class SpreadsheetView : public QWidget{
 		SpreadsheetModel * m_model;
 		SpreadsheetDoubleHeaderView * m_horizontalHeader;
 		bool m_suppressSelectionChangedEvent;
-		
+
 		bool eventFilter( QObject * watched, QEvent * event);
 		void keyPressEvent(QKeyEvent * event);
-		
+
 		void initActions();
 		void initMenus();
 		void connectActions();
@@ -142,17 +142,17 @@ class SpreadsheetView : public QWidget{
 		QMenu* m_columnMenu;
 		QMenu* m_rowMenu;
 		QMenu* m_spreadsheetMenu;
-		
+
 	public slots:
 		void activateFormulaMode(bool on);
 		void goToCell(int row, int col);
 		void toggleComments();
-		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize); 
+		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 		void goToNextColumn();
 		void goToPreviousColumn();
 		void goToCell();
 		void sortSpreadsheet();
-		
+
 		void setSelectionAs(AbstractColumn::PlotDesignation);
 		void cutSelection();
 		void copySelection();
@@ -167,7 +167,7 @@ class SpreadsheetView : public QWidget{
 		void removeSelectedColumns();
 		void clearSelectedColumns();
 		void clearSelectedRows();
-		
+
 		void setSelectedColumnsAsX();
 		void setSelectedColumnsAsY();
 		void setSelectedColumnsAsZ();
@@ -183,7 +183,7 @@ class SpreadsheetView : public QWidget{
 		void statisticsOnSelectedRows();
 		void insertEmptyRows();
 		void removeSelectedRows();
-		
+
 		void addColumns();
 		void addRows();
 
@@ -205,7 +205,7 @@ class SpreadsheetView : public QWidget{
 		void handleAspectAboutToBeRemoved(const AbstractAspect * aspect);
 		void updateSectionSize(const Column* col);
 		void updateHeaderGeometry(Qt::Orientation o, int first, int last);
-		
+
 		void selectColumn(int);
 		void deselectColumn(int);
 		void columnClicked(int);

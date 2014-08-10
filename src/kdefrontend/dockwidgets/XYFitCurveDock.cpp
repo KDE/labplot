@@ -426,7 +426,9 @@ void XYFitCurveDock::updateModelEquation() {
 		eq = m_fitData.model;
 	}
 
-	if (!m_initializing) {
+	//resize the vector for the start values and set the elements to 1.0
+	//in case a custom model is used, do nothint, we take over the previous values
+	if (!m_initializing && m_fitData.modelType!=XYFitCurve::Custom) {
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
 			m_fitData.paramStartValues[i] = 1.0;
@@ -510,8 +512,10 @@ void XYFitCurveDock::insertConstant(const QString& str) {
 }
 
 void XYFitCurveDock::recalculateClicked() {
-	m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
+	if (m_fitData.modelType==XYFitCurve::Custom) {
+		m_fitData.model = uiGeneralTab.teEquation->toPlainText();
+	}
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
@@ -574,7 +578,7 @@ void XYFitCurveDock::showFitResult() {
 		str += i18n("residual standard deviation") + ": " + QString::number(fitResult.rsd) + "<br>";
 	}
 
-	str += i18n("coefficient of determination (R-squared)") + ": " + QString::number(fitResult.rsquared) + "<br>";
+	str += i18n("coefficient of determination (R²)") + ": " + QString::number(fitResult.rsquared) + "<br>";
 // 	str += "<br><br>";
 //
 // 	QStringList iterations = fitResult.solverOutput.split(';');

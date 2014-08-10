@@ -44,8 +44,13 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.lRobust->setVisible(false);
 	ui.cbRobust->setVisible(false);
 
+	ui.leEps->setValidator( new QDoubleValidator(ui.leEps) );
+	ui.leMaxIterations->setValidator( new QIntValidator(ui.leMaxIterations) );
+	ui.leFittedPoints->setValidator( new QIntValidator(ui.leFittedPoints) );
+
 	ui.leEps->setText(QString::number(m_fitData->eps));
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
+	ui.leFittedPoints->setText(QString::number(m_fitData->fittedPoints));
 
 	//SLOTS
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );

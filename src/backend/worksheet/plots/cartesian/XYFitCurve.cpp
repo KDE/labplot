@@ -217,17 +217,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	XYFitCurve::ModelType modelType = ((struct data*)params)->modelType;
 	int degree = ((struct data*)params)->degree;
 
-	//copy current parameter values from gsl-vector to a local double array for the sake of easier usage below
-	double* p = new double[paramNames->size()];
-	for (int i=0; i<paramNames->size(); i++)
-		p[i]=gsl_vector_get(paramValues,i);
-
-	//calculate the Jacobian matrix
-
-	/* Jacobian matrix J(i,j) = dfi / dxj, */
-	/* where fi = (Yi - yi)/sigma[i],      */
-	/*	Yi = model  */
-	/* and the xj are the parameters */
+	// calculate the Jacobian matrix:
+	// Jacobian matrix J(i,j) = dfi / dxj
+	// where fi = (Yi - yi)/sigma[i],
+	// Yi = model and the xj are the parameters
 
 	double x;
 	double sigma = 1.0;
@@ -241,6 +234,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				for (int j=0; j<paramNames->size(); ++j) {
 					gsl_matrix_set(J, i, j, pow(x,j)/sigma);
 				}
+			}
 			break;
 		}
 		case XYFitCurve::Power: {
@@ -391,11 +385,39 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case XYFitCurve::Custom: {
-			// TODO
-			qDebug()<<"custom model not supported yet!";
+			char* func = ((struct data*)params)->func->toLocal8Bit().data();
+			double eps = 1.0e-5;
+			char* name;
+			double value;
+			for (int i=0; i<n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+				char var[]="x";
+				assign_variable(var, x);
+
+				for(int j=0; j<paramNames->size(); j++) {
+					for(int k=0; k<paramNames->size();k++) {
+						if(k!=j) {
+							name = paramNames->at(k).toLocal8Bit().data();
+							value = gsl_vector_get(paramValues,k);
+							assign_variable(name, value);
+						}
+					}
+
+					name = paramNames->at(j).toLocal8Bit().data();
+					value = gsl_vector_get(paramValues,j);
+					assign_variable(name, value);
+					double f_p = parse(func);
+
+					value = value + eps;
+					assign_variable(name, value);
+					double f_pdp = parse(func);
+
+					gsl_matrix_set(J, i, j, (f_pdp-f_p)/eps/sigma);
+				}
+			}
 			break;
 		}
-	}
 	}
 
 	return GSL_SUCCESS;
@@ -460,7 +482,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//determine the number of data points in the column, stop iterating after the first nan was encountered
-	size_t n = xDataColumn->rowCount();
+	int n = xDataColumn->rowCount();
 	for (int i=0; i<xDataColumn->rowCount(); ++i) {
 		if (isnan(xdata[i])) {
 			n = i;
@@ -557,6 +579,7 @@ void XYFitCurvePrivate::recalculate() {
 	//mae = mean absolute error = \sum_i^n |Y_i-y_i|
 	//rms = residual mean square = sse/d.o.f.
 	//rsd = residual standard deviation = sqrt(rms)
+	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
 
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
 	//gsl_blas_dasum() - computes the absolute sum \sum |x_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
@@ -569,7 +592,15 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.rsd = sqrt(fitResult.rms);
 	}
 
-	fitResult.rsquared = 0; //TODO
+	//Coefficient of determination, R-squared
+	double ybar = 0; //mean value of the y-data
+	for (int i=0; i<n; ++i)
+		ybar += ydata[i];
+	ybar = ybar/n;
+	double sstot = 0;
+	for (int i=0; i<n; ++i)
+		sstot += pow(ydata[i]-ybar, 2);
+	fitResult.rsquared = 1 - fitResult.sse/sstot;
 
 	//parameter values
 	double c = GSL_MIN_DBL(1, sqrt(fitResult.sse)); //limit error for poor fit
@@ -590,10 +621,9 @@ void XYFitCurvePrivate::recalculate() {
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	double min = xDataColumn->minimum();
 	double max = xDataColumn->maximum();
-	int count = 100;
-	xVector->resize(count);
-	yVector->resize(count);
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min), QString::number(max), count, xVector, yVector, fitData.paramNames, fitResult.paramValues);
+	xVector->resize(fitData.fittedPoints);
+	yVector->resize(fitData.fittedPoints);
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min), QString::number(max), fitData.fittedPoints, xVector, yVector, fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();
@@ -690,10 +720,12 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 		writer->writeTextElement("error", QString::number(d->fitResult.errorValues.at(i)));
 	writer->writeEndElement();
 
-	//save calculated columns
-	d->xColumn->save(writer);
-	d->yColumn->save(writer);
-	d->residualsColumn->save(writer);
+	//save calculated columns if available
+	if (d->xColumn) {
+		d->xColumn->save(writer);
+		d->yColumn->save(writer);
+		d->residualsColumn->save(writer);
+	}
 
 	writer->writeEndElement(); //"fitResult"
 	writer->writeEndElement(); //"xyFitCurve"

@@ -1356,9 +1356,6 @@ int AxisPrivate::upperLabelsPrecision(int precision){
 	where no duplicates for the tick label float occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision){
-	if (precision == 0)
-		return 0;
-
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QList<float> tempValues;
@@ -1371,14 +1368,17 @@ int AxisPrivate::lowerLabelsPrecision(int precision){
 			if (i==j) continue;
 			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10,-precision)) ) {
 				//duplicate found for the reduced precision
-				//-> current precision cannot be reduced, return the current value
-				return precision;
+				//-> current precision cannot be reduced, return the current value + 1
+				return precision+1;
 			}
 		}
 	}
 
 	//no duplicates found, reduce further, and check again
-	return lowerLabelsPrecision(precision-1);
+	if (precision == 0)
+		return 0;
+	else
+		return lowerLabelsPrecision(precision-1);
 }
 
 double AxisPrivate::round(double value, int precision){
@@ -1386,7 +1386,7 @@ double AxisPrivate::round(double value, int precision){
 }
 
 /*!
-	recalculates the postion of the tick labels.
+	recalculates the position of the tick labels.
 	Called when the geometry related properties (position, offset, font size, suffix, prefix) of the labels are changed.
  */
 void AxisPrivate::retransformTickLabels(){
