@@ -5,7 +5,7 @@
     Copyright            : (C) 2013-2014 by Alexander Semke (alexander.semke*web.de)
 							(use @ for *)
     Description          : widget for cartesian plot legend properties
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -77,7 +77,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
- 
+
 	//SIGNAL/SLOT
 
 	//General
@@ -105,8 +105,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
-	
-	//Border 
+
+	//Border
 	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
 	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
@@ -120,7 +120,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect( ui.sbLayoutRightMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutRightMarginChanged(double)) );
 	connect( ui.sbLayoutHorizontalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutHorizontalSpacingChanged(double)) );
 	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
-	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );	
+	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
 	ui.verticalLayout->addWidget(templateHandler);
@@ -141,7 +141,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	m_legendList = list;
 
 	m_legend=list.first();
-  
+
 	//if there is more then one legend in the list, disable the tab "general"
 	if (list.size()==1){
 		ui.lName->setEnabled(true);
@@ -164,13 +164,19 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	//show the properties of the first curve
 	this->load();
 
+	//on the very first start the column count shown in UI is 1.
+	//if the this count for m_legend is also 1 then the slot layoutColumnCountChanged is not called
+	//and we need to disable the "order" widgets here.
+	ui.lOrder->setVisible(m_legend->layoutColumnCount()!=1);
+	ui.cbOrder->setVisible(m_legend->layoutColumnCount()!=1);
+
 	//legend title
 	QList<TextLabel*> labels;
 	foreach(CartesianPlotLegend* legend, list)
 		labels.append(legend->title());
-	
+
 	labelWidget->setLabels(labels);
-	
+
 	//update active widgets
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 
@@ -183,7 +189,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect( m_legend, SIGNAL(positionChanged(CartesianPlotLegend::PositionWrapper)),
 			 this, SLOT(legendPositionChanged(CartesianPlotLegend::PositionWrapper)) );
 	connect( m_legend, SIGNAL(lineSymbolWidthChanged(float)), this, SLOT(legendLineSymbolWidthChanged(float)) );
-	
+
 	//background
 	connect( m_legend, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(legendBackgroundTypeChanged(PlotArea::BackgroundType)) );
 	connect( m_legend, SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)) );
@@ -207,7 +213,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect(m_legend,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(legendLayoutColumnCountChanged(int)));
 
 	//layout
-	
+
 	m_initializing = false;
 }
 
@@ -250,7 +256,7 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbPositionY->addItem(i18n("center"));
 	ui.cbPositionY->addItem(i18n("bottom"));
 	ui.cbPositionY->addItem(i18n("custom"));
-	
+
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
@@ -287,7 +293,7 @@ void CartesianPlotLegendDock::labelFontChanged(const QFont& font){
 		return;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );	
+	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
 	foreach(CartesianPlotLegend* legend, m_legendList)
 		legend->setLabelFont(labelsFont);
 }
@@ -396,7 +402,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style = 
+		PlotArea::BackgroundColorStyle style =
 			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
 			ui.lBackgroundFirstColor->setText(i18n("Color"));
@@ -466,7 +472,7 @@ void CartesianPlotLegendDock::backgroundColorStyleChanged(int index) {
 
 	if (m_initializing)
 		return;
-   
+
 	foreach(CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundColorStyle(style);
 }
@@ -531,7 +537,7 @@ void CartesianPlotLegendDock::selectFile() {
 void CartesianPlotLegendDock::fileNameChanged() {
 	if (m_initializing)
 		return;
-	
+
 	QString fileName = ui.kleBackgroundFileName->text();
 	foreach(CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundFileName(fileName);
@@ -655,6 +661,9 @@ void CartesianPlotLegendDock::layoutVerticalSpacingChanged(double spacing) {
 }
 
 void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
+	ui.lOrder->setVisible(count!=1);
+	ui.cbOrder->setVisible(count!=1);
+
 	if (m_initializing)
 		return;
 
@@ -850,7 +859,7 @@ void CartesianPlotLegendDock::load() {
 	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
 // 	qDebug()<<"font size " << font.pixelSize() << "  " << font.pointSizeF();
 	ui.kfrLabelFont->setFont(font);
-	
+
 	ui.kcbLabelColor->setColor( m_legend->labelColor() );
 	bool columnMajor = m_legend->labelColumnMajor();
 	if (columnMajor)
@@ -900,7 +909,7 @@ void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
-	
+
 	int size = m_legendList.size();
 	if (size>1)
 		m_legend->beginMacro(i18n("%1 cartesian plot legends: template \"%2\" loaded", size, name));

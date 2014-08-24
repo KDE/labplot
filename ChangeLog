@@ -1,3 +1,22 @@
+-----2.0.2-----
+New features:
+	* Plot 2D-curves defined by mathematical equations in cartesian and polar coordinates or via a parametric equation.
+	* Linear and non-linear regression analysis. Several predifend fit-models are provided. User-defined models are possible.
+	* Besides fixed worksheet sizes (predefined und user-defined), complete view size can be used. All sizes are automatically adjusted on resize.
+	* Different axis arrow types.
+	* "select region and zoom in", "select x-region and zoom in", "select y-region and zoom in" -function for cartesian plot.
+	* Rounded border for several worksheet objects  (plot area, legend etc.)
+	* Hover effect for axis, curve and text label.
+	* Added a MessageBox - ask befor deleting worksheet objects.
+
+Bug fixes:
+	* Don't crash when trying to create a plot in case no rc-file was installed.
+	* Don't allow to select unwanted objects in TreeViewComboBox in ImportDialog and XYCurveDock.
+	* Corrected painting of background images in plot area and legend.
+	* BUG: 330723 - fixed weird selection in spreadsheet.
+	* BUG: 330774 - fixed wrong positioning of axis on orientation changes.
+	* Update main window title when project name is changed
+
 -----2.0.1-----
 Bug fix release. Solved issues:
 	* Fixed wrong scaling of legend's text labels in pdf-export

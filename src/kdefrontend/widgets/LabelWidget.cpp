@@ -40,7 +40,7 @@
 /*!
 	\class LabelWidget
  	\brief Widget for editing the properties of a TextLabel object, mostly used in an an appropriate dock widget.
- 	
+
  	In order the properties of the label to be shown, \c loadConfig() has to be called with the correspondig KConfigGroup
  	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
 
@@ -50,7 +50,7 @@
 // see legacy/LabelWidget.cpp
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new KMenu(this)) {
 	ui.setupUi(this);
-	
+
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
 
 	QGridLayout* layout =static_cast<QGridLayout*>(this->layout());
@@ -94,7 +94,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new K
 	// text properties
 	connect(ui.tbTexUsed, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
 	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
-	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)), 
+	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
 			this, SLOT(charFormatChanged(QTextCharFormat)));
 	connect(ui.kcbFontColor, SIGNAL(changed(QColor)), this, SLOT(fontColorChanged(QColor)));
 	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
@@ -108,7 +108,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new K
 	connect(m_dateTimeMenu, SIGNAL(triggered(QAction*)), this, SLOT(insertDateTime(QAction*)) );
 	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
 	connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
-	
+
 	// geometry
 	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
 	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
@@ -139,6 +139,8 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText( m_label->text().text );
+	ui.teLabel->selectAll();
+	ui.teLabel->setFocus();
 	this->teXUsedChanged(m_label->text().teXUsed);
 	m_initializing = false;
 
@@ -151,7 +153,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 		m_labelsList.append(axis->title());
 		connect(axis, SIGNAL(titleOffsetChanged(float)), this, SLOT(labelOffsetChanged(float)) );
 		connect(axis->title(), SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
-	}	
+	}
 
 	m_axesList = axes;
 	m_label = m_labelsList.first();
@@ -163,6 +165,8 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
 	ui.teLabel->setText(m_label->text().text);
+	ui.teLabel->selectAll();
+	ui.teLabel->setFocus();
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.lOffset->show();
 	ui.sbOffset->show();
@@ -185,11 +189,11 @@ void LabelWidget::initConnections() {
 	connect( m_label, SIGNAL(verticalAlignmentChanged(TextLabel::VerticalAlignment)),
 			 this, SLOT(labelVerticalAlignmentChanged(TextLabel::VerticalAlignment)) );
 	connect( m_label, SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
-	connect( m_label, SIGNAL(visibleChanged(bool)), this, SLOT(labelVisibleChanged(bool)) );	
+	connect( m_label, SIGNAL(visibleChanged(bool)), this, SLOT(labelVisibleChanged(bool)) );
 }
 
 /*!
- * enables/disables the "fixed label"-mode, used when displaying 
+ * enables/disables the "fixed label"-mode, used when displaying
  * the properties of axis' title label.
  * In this mode, in the "geometry"-part only the offset (offset to the axis)
  * and the rotation of the label are available.
@@ -204,7 +208,7 @@ void LabelWidget::setFixedLabelMode(const bool b){
 	ui.lHorizontalAlignment->setVisible(!b);
 	ui.cbHorizontalAlignment->setVisible(!b);
 	ui.lVerticalAlignment->setVisible(!b);
-	ui.cbVerticalAlignment->setVisible(!b);	
+	ui.cbVerticalAlignment->setVisible(!b);
 	ui.lOffset->setVisible(b);
 	ui.sbOffset->setVisible(b);
 }
@@ -373,9 +377,9 @@ void LabelWidget::fontSuperScriptChanged(bool checked){
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	if (checked)
 		format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-	else 
+	else
 		format.setVerticalAlignment(QTextCharFormat::AlignNormal);
-	
+
 	ui.teLabel->setCurrentCharFormat(format);
 }
 
@@ -386,9 +390,9 @@ void LabelWidget::fontSubScriptChanged(bool checked){
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	if (checked)
 		format.setVerticalAlignment(QTextCharFormat::AlignSubScript);
-	else 
+	else
 		format.setVerticalAlignment(QTextCharFormat::AlignNormal);
-	
+
 	ui.teLabel->setCurrentCharFormat(format);
 }
 
@@ -413,7 +417,7 @@ void LabelWidget::charMenu(){
 	QWidgetAction *widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&selection);
 	menu.addAction(widgetAction);
-	
+
 	QPoint pos(-menu.sizeHint().width()+ui.tbSymbols->width(),-menu.sizeHint().height());
 	menu.exec(ui.tbSymbols->mapToGlobal(pos));
 }
@@ -555,7 +559,7 @@ void LabelWidget::visibilityChanged(bool state){
 //*********************************************************
 void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text){
 	m_initializing = true;
-	
+
 	//save and restore the current cursor position after changing the text
 	QTextCursor cursor = ui.teLabel->textCursor();
 	int position = cursor.position();
