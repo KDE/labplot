@@ -86,6 +86,7 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveWeightsColumnChanged(const AbstractColumn*);
 	void curveFitDataChanged(const XYFitCurve::FitData&);
+	void dataChanged();
 };
 
 #endif

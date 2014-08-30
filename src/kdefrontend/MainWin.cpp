@@ -1232,8 +1232,10 @@ void MainWin::importFileDialog(){
 	 if ( m_currentAspect->inherits("Spreadsheet") )
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
 
-	if ( m_importFileDialog->exec() == QDialog::Accepted )
+	if ( m_importFileDialog->exec() == QDialog::Accepted ) {
 		m_importFileDialog->importToSpreadsheet(statusBar());
+		m_project->setChanged(true);
+	}
 
 	delete m_importFileDialog;
 	m_importFileDialog = 0;

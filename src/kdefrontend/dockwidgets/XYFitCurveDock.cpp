@@ -155,6 +155,9 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(weightsColumnChanged(const AbstractColumn*)), this, SLOT(curveWeightsColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
+
+	connect(m_fitCurve->xDataColumn(), SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(dataChanged()));
+	connect(m_fitCurve->yDataColumn(), SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(dataChanged()));
 }
 
 void XYFitCurveDock::setModel(std::auto_ptr<AspectTreeModel> model) {
@@ -367,7 +370,7 @@ void XYFitCurveDock::updateModelEquation() {
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
 	} else if (m_fitData.modelType == XYFitCurve::Fourier) {
-		eq = "a0 + (a1*cos(w*x) + b1*sind(w*x))";
+		eq = "a0 + (a1*cos(w*x) + b1*sin(w*x))";
 		m_fitData.model = eq;
 		vars << "w" << "a0" << "a1" << "b1";
 		m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
@@ -634,4 +637,8 @@ void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	this->showFitResult();
 	m_initializing = false;
+}
+
+void XYFitCurveDock::dataChanged() {
+	this->enableRecalculate();
 }

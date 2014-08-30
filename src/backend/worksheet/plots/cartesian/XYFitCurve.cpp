@@ -42,7 +42,6 @@
 #include "backend/gsl/parser_extern.h"
 #include "backend/gsl/parser_struct.h"
 
-#include <math.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
@@ -255,8 +254,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					x = xVector[i];
 					if (sigmaVector) sigma = sigmaVector[i];
 					gsl_matrix_set(J, i, 0, 1/sigma);
-					gsl_matrix_set(J, i, 1, pow(x,c));
-					gsl_matrix_set(J, i, 2, b*c*pow(x,c-1));
+					gsl_matrix_set(J, i, 1, pow(x,c)/sigma);
+					gsl_matrix_set(J, i, 2, b*c*pow(x,c-1)/sigma);
 				}
 			}
 			break;
@@ -518,7 +517,7 @@ void XYFitCurvePrivate::recalculate() {
 		}
 
 		if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
-			//weights from a given column -> calculate the inverse (sigma = sqrt(1/weight))
+			//weights from a given column -> calculate the square root of the inverse (sigma = sqrt(1/weight))
 			sigma = new double[n];
 			for (int i=0; i<n; ++i) {
 				sigma[i] = sqrt(1/weightsColumn->valueAt(i));

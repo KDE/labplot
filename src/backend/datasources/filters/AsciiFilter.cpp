@@ -4,8 +4,8 @@ Project              : LabPlot/AbstractColumn
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
-					   (replace * with @ in the email addresses) 
+Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke*web.de)
+					   (replace * with @ in the email addresses)
 
 ***************************************************************************/
 
@@ -62,7 +62,7 @@ void AsciiFilter::read(const QString & fileName, AbstractDataSource* dataSource,
 
 
 /*!
-writes the content of the data source \c dataSource to the file \c fileName. 
+writes the content of the data source \c dataSource to the file \c fileName.
 */
 void AsciiFilter::write(const QString & fileName, AbstractDataSource* dataSource){
  	d->write(fileName, dataSource);
@@ -284,10 +284,10 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	QTextStream in(&file);
 
 
-	//TODO implement 
+	//TODO implement
 	// if (transposed)
 	//...
-	
+
 	//skip rows, if required
 	for (int i=0; i<startRow; i++){
         //if the number of rows to skip is bigger then the actual number
@@ -295,7 +295,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		if( in.atEnd() ){
 		  return;
 		}
-		
+
 		in.readLine();
 	}
 
@@ -305,7 +305,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
     if( in.atEnd() ){
 	  return;
 	}
-	
+
 	line = in.readLine();
 	if( simplifyWhitespacesEnabled)
 		line = line.simplified();
@@ -363,7 +363,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->addChild(newColumn);
-		}			
+		}
 	}else if (mode==AbstractFileFilter::Prepend){
 		Column* firstColumn = dataSource->child<Column>(0);
 		for ( int n=startColumn; n<=endColumn; n++ ){
@@ -381,7 +381,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			for(int i=0;i<columns-(endColumn-startColumn+1);i++) {
 				dataSource->removeChild(dataSource->child<Column>(0));
 			}
-			
+
 			//rename the columns, that are already available
 			for (int i=0; i<endColumn-startColumn; i++){
 				dataSource->child<Column>(i)->setUndoAware(false);
@@ -395,7 +395,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
 				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
 			}
-			
+
 			//create additional columns if needed
 			for(int i=0; i<=(endColumn-startColumn-columns); i++) {
 				newColumn = new Column(vectorNameList.at(columns+startColumn+i), AbstractColumn::Numeric);
@@ -416,9 +416,9 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		actualEndRow = endRow;
 
 	if (headerEnabled)
-		numLines = actualEndRow-startRow;
+		numLines = actualEndRow-startRow-1;
 	else
-		numLines = actualEndRow-startRow+1;
+		numLines = actualEndRow-startRow;
 
 	//resize the spreadsheet
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -437,7 +437,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 // // 		vector->resize(numLines);
 // 		dataPointers.push_back(vector);
 // 	}
-	
+
 	//import the values in the first line, if they were not used as the header (as the names for the columns)
 	if (!headerEnabled){
 		for ( int n=startColumn; n<=endColumn; n++ ){
@@ -478,7 +478,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 // 				dataPointers[n-startColumn]->insert(i, lineStringList.at(n).toDouble());
 // 			else
 // 				dataPointers[n-startColumn]->operator[](i) = 0;
-			
+
 			Column* column = dataSource->child<Column>(columnOffset+n-startColumn);
 			if (n<lineStringList.size()){
 				bool isNumber;
@@ -488,11 +488,11 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 				column->setValueAt(currentRow, NAN);
 			}
 		}
-		
+
 		currentRow++;
 		emit q->completed(100*currentRow/numLines);
     }
-    
+
     //set the comments for each of the columns
     //TODO: generalize to different data types
     QString comment;
@@ -500,7 +500,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		comment = i18np("numerical data, %1 element", "numerical data, %1 elements", currentRow);
 	else
 		comment = i18np("numerical data, %1 element", "numerical data, %1 elements", currentRow+1);
-	
+
 	for ( int n=startColumn; n<=endColumn; n++ ){
 		Column* column = spreadsheet->column(columnOffset+n-startColumn);
 // 		column->setUndoAware(false);
@@ -581,13 +581,13 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 
 	str = attribs.value("vectorNames").toString();
 	d->vectorNames = str; //may be empty
-	
+
 	str = attribs.value("simplifyWhitespaces").toString();
 	if(str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
 	else
 		d->simplifyWhitespacesEnabled = str.toInt();
-	
+
 	str = attribs.value("skipEmptyParts").toString();
 	if(str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipEmptyParts'"));
@@ -599,7 +599,7 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'transposed'"));
 	else
 		d->transposed = str.toInt();
-	
+
 	str = attribs.value("startRow").toString();
 	if(str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startRow'"));
