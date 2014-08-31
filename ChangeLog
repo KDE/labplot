@@ -1,7 +1,7 @@
 -----2.0.2-----
 New features:
 	* Plot 2D-curves defined by mathematical equations in cartesian and polar coordinates or via a parametric equation.
-	* Linear and non-linear regression analysis. Several predifend fit-models are provided. User-defined models are possible.
+	* Linear and non-linear regression analysis. Several predefined fit-models are provided. User-defined models are also possible.
 	* Besides fixed worksheet sizes (predefined und user-defined), complete view size can be used. All sizes are automatically adjusted on resize.
 	* Different axis arrow types.
 	* "select region and zoom in", "select x-region and zoom in", "select y-region and zoom in" -function for cartesian plot.

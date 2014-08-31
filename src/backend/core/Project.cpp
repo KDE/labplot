@@ -42,6 +42,7 @@
 
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocale>
 
 /**
  * \class Project

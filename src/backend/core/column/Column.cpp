@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -42,8 +42,8 @@
  * \class Column
  * \brief Aspect that manages a column
  *
- * This class represents a column, i.e., (mathematically) a 1D vector of 
- * values with a header. It provides a public reading and (undo aware) writing 
+ * This class represents a column, i.e., (mathematically) a 1D vector of
+ * values with a header. It provides a public reading and (undo aware) writing
  * interface as defined in AbstractColumn. A column
  * can have one of currently three data types: double, QString, or
  * QDateTime. The string representation of the values can differ depending
@@ -61,7 +61,7 @@
  * \param mode initial column mode
  */
 Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
- : AbstractColumn(name), m_column_private( new Private(this, mode) ) 
+ : AbstractColumn(name), m_column_private( new Private(this, mode) )
 {
 	init();
 }
@@ -138,13 +138,13 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode)
 	AbstractSimpleFilter * old_input_filter = m_column_private->inputFilter();
 	AbstractSimpleFilter * old_output_filter = m_column_private->outputFilter();
 	exec(new ColumnSetModeCmd(m_column_private, mode));
-	if (m_column_private->inputFilter() != old_input_filter) 
+	if (m_column_private->inputFilter() != old_input_filter)
 	{
 		removeChild(old_input_filter);
 		addChild(m_column_private->inputFilter());
 		m_column_private->inputFilter()->input(0,m_string_io);
 	}
-	if (m_column_private->outputFilter() != old_output_filter) 
+	if (m_column_private->outputFilter() != old_output_filter)
 	{
 		removeChild(old_output_filter);
 		addChild(m_column_private->outputFilter());
@@ -178,7 +178,7 @@ bool Column::copy(const AbstractColumn * other)
  * \param src_start first row to copy in the column to copy
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
- */ 
+ */
 bool Column::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows)
 {
 	Q_CHECK_PTR(source);
@@ -294,7 +294,7 @@ void Column::setTextAt(int row, const QString& new_value)
 }
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is Text
  */
@@ -335,7 +335,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value)
 }
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
@@ -356,7 +356,7 @@ void Column::setValueAt(int row, double new_value)
 }
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is Numeric
  */
@@ -415,6 +415,15 @@ QDateTime Column::dateTimeAt(int row) const
 double Column::valueAt(int row) const
 {
 	return m_column_private->valueAt(row);
+}
+
+/*
+ * call this function if the data of the column was changed directly via the data()-pointer
+ * and not via the setValueAt() in order to emit the dataChanged-signal.
+ * This is used e.g. in \c XYFitCurvePrivate::recalculate()
+ */
+void Column::setChanged() {
+	emit dataChanged(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -524,7 +533,7 @@ void Column::save(QXmlStreamWriter * writer) const
  */
 bool Column::load(XmlStreamReader * reader)
 {
-	if(reader->isStartElement() && reader->name() == "column") 
+	if(reader->isStartElement() && reader->name() == "column")
 	{
 		if (!readBasicAttributes(reader)) return false;
 
@@ -568,17 +577,17 @@ bool Column::load(XmlStreamReader * reader)
 
 		setComment("");
 		if (rowCount() > 0)
-			removeRows(0, rowCount());		
+			removeRows(0, rowCount());
 		clearMasks();
 		clearFormulas();
 		// read child elements
-		while (!reader->atEnd()) 
+		while (!reader->atEnd())
 		{
 			reader->readNext();
 
 			if (reader->isEndElement()) break;
 
-			if (reader->isStartElement()) 
+			if (reader->isStartElement())
 			{
 				bool ret_val = true;
 				if (reader->name() == "comment")
@@ -600,7 +609,7 @@ bool Column::load(XmlStreamReader * reader)
 				}
 				if(!ret_val)
 					return false;
-			} 
+			}
 			QString content = reader->text().toString().trimmed();
 			if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
 				QByteArray bytes = QByteArray::fromBase64(content.toAscii());
@@ -615,7 +624,7 @@ bool Column::load(XmlStreamReader * reader)
 
 	return !reader->error();
 }
-					
+
 /**
  * \brief Read XML input filter element
  */
@@ -653,7 +662,7 @@ bool Column::XmlReadFormula(XmlStreamReader * reader)
 	int start, end;
 	start = reader->readAttributeInt("start_row", &ok1);
 	end = reader->readAttributeInt("end_row", &ok2);
-	if(!ok1 || !ok2) 
+	if(!ok1 || !ok2)
 	{
 		reader->raiseError(i18n("invalid or missing start or end row"));
 		return false;
@@ -669,11 +678,11 @@ bool Column::XmlReadFormula(XmlStreamReader * reader)
 bool Column::XmlReadRow(XmlStreamReader * reader)
 {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "row");
-	
+
 	QString str;
 
 	QXmlStreamAttributes attribs = reader->attributes();
-	
+
 	bool ok;
 	int index = reader->readAttributeInt("index", &ok);
 	if(!ok) {
@@ -723,37 +732,37 @@ bool Column::isReadOnly() const {
  * \brief Return the column mode
  *
  * This function is mostly used by spreadsheets but can also be used
- * by plots. The column mode specifies how to interpret 
+ * by plots. The column mode specifies how to interpret
  * the values in the column additional to the data type.
- */ 
-AbstractColumn::ColumnMode Column::columnMode() const 
-{ 
-	return m_column_private->columnMode(); 
+ */
+AbstractColumn::ColumnMode Column::columnMode() const
+{
+	return m_column_private->columnMode();
 }
 
 /**
  * \brief Return the data vector size
  *
- * This returns the number of rows that actually contain data. 
+ * This returns the number of rows that actually contain data.
  * Rows beyond this can be masked etc. but should be ignored by filters,
  * plots etc.
  */
-int Column::rowCount() const 
-{ 
-	return m_column_private->rowCount(); 
+int Column::rowCount() const
+{
+	return m_column_private->rowCount();
 }
 
 /**
  * \brief Return the column plot designation
  */
 AbstractColumn::PlotDesignation Column::plotDesignation() const
-{ 
-	return m_column_private->plotDesignation(); 
+{
+	return m_column_private->plotDesignation();
 }
 
-AbstractSimpleFilter * Column::outputFilter() const 
-{ 
-	return m_column_private->outputFilter(); 
+AbstractSimpleFilter * Column::outputFilter() const
+{
+	return m_column_private->outputFilter();
 }
 
 /**
@@ -769,11 +778,11 @@ ColumnStringIO *Column::asStringColumn() const {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * \brief Return the formula associated with row 'row' 	 
+ * \brief Return the formula associated with row 'row'
  */
-QString Column::formula(int row) const 
-{ 
-	return m_column_private->formula(row); 
+QString Column::formula(int row) const
+{
+	return m_column_private->formula(row);
 }
 
 /**
@@ -789,14 +798,14 @@ QString Column::formula(int row) const
  * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
  * \endcode
  */
-QList< Interval<int> > Column::formulaIntervals() const 
-{ 
-	return m_column_private->formulaIntervals(); 
+QList< Interval<int> > Column::formulaIntervals() const
+{
+	return m_column_private->formulaIntervals();
 }
 
 void Column::handleFormatChange()
 {
-	if (columnMode() == AbstractColumn::DateTime) {		
+	if (columnMode() == AbstractColumn::DateTime) {
 		String2DateTimeFilter *input_filter = static_cast<String2DateTimeFilter*>(m_column_private->inputFilter());
 		DateTime2StringFilter *output_filter = static_cast<DateTime2StringFilter*>(m_column_private->outputFilter());
 		input_filter->setFormat(output_filter->format());

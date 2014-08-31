@@ -37,6 +37,7 @@ Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke*web.de)
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
+#include <KLocale>
 
  /*!
 	\class AsciiFilter

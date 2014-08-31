@@ -46,6 +46,7 @@ Email (use @ for *)  : alexander.semke*web.de
 #else
 #include <KIcon>
 #include <KAction>
+#include <KLocale>
 #endif
 
 /*!
@@ -63,14 +64,14 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
      m_filter(0),
      m_fileSystemWatcher(0)
 
-{ 
+{
 	initActions();
 }
 
 FileDataSource::~FileDataSource(){
 	if (m_filter)
 		delete m_filter;
-  
+
 	if (m_fileSystemWatcher)
 		delete m_fileSystemWatcher;
 }
@@ -82,7 +83,7 @@ void FileDataSource::initActions(){
 	m_toggleWatchAction = new KAction(i18n("Watch the file"), this);
 	m_toggleWatchAction->setCheckable(true);
 	connect(m_toggleWatchAction, SIGNAL(triggered()), this, SLOT(watchToggled()));
-	
+
 	m_toggleLinkAction = new KAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
 	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
@@ -179,8 +180,8 @@ QIcon FileDataSource::icon() const{
 
 QMenu* FileDataSource::createContextMenu(){
 	QMenu* menu = AbstractPart::createContextMenu();
-	
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = 0;
@@ -196,10 +197,10 @@ QMenu* FileDataSource::createContextMenu(){
 
 	m_toggleWatchAction->setChecked(m_fileWatched);
 	menu->insertAction(firstAction, m_toggleWatchAction);
-	
+
 	m_toggleLinkAction->setChecked(m_fileLinked);
 	menu->insertAction(firstAction, m_toggleLinkAction);
-	
+
 	return menu;
 }
 

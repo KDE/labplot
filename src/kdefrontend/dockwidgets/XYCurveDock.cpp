@@ -406,7 +406,7 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
 	m_aspectTreeModel=model;
 
 	QList<const char *>  list;
-	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);

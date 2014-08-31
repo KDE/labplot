@@ -46,8 +46,8 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 
-
 #include <KIcon>
+#include <KLocale>
 #include <QDebug>
 
 XYFitCurve::XYFitCurve(const QString& name)
@@ -460,6 +460,8 @@ void XYFitCurvePrivate::recalculate() {
 		yColumn->setHidden(true);
 		q->addChild(yColumn);
 
+		q->addChild(residualsColumn);
+
 		q->setUndoAware(false);
 		q->setXColumn(xColumn);
 		q->setYColumn(yColumn);
@@ -586,6 +588,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.dof = n-np;
 
 	//calculate:
+	//residuals (Y_i-y_i)
 	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
 	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
 	//rmse = root-mean squared error = \sqrt(mse)
@@ -593,6 +596,12 @@ void XYFitCurvePrivate::recalculate() {
 	//rms = residual mean square = sse/d.o.f.
 	//rsd = residual standard deviation = sqrt(rms)
 	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
+
+	residualsVector->resize(xDataColumn->rowCount());
+	for (int i=0; i<xDataColumn->rowCount(); ++i) {
+		residualsVector->data()[i] = gsl_vector_get(s->f, i);
+	}
+	residualsColumn->setChanged();
 
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
 	//gsl_blas_dasum() - computes the absolute sum \sum |x_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
@@ -899,7 +908,6 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 				delete column;
 				return false;
 			}
-			qDebug()<<"column name " << column->name() << column->rowCount();
 			if (column->name()=="x")
 				d->xColumn = column;
 			else if (column->name()=="y")
@@ -909,11 +917,15 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 		}
 	}
 
-	d->xColumn->setHidden(true);
-	addChild(d->xColumn);
+	if (d->xColumn) {
+		d->xColumn->setHidden(true);
+		addChild(d->xColumn);
 
-	d->yColumn->setHidden(true);
-	addChild(d->yColumn);
+		d->yColumn->setHidden(true);
+		addChild(d->yColumn);
+
+		addChild(d->residualsColumn);
+	}
 
 	setUndoAware(false);
 	setXColumn(d->xColumn);

@@ -41,6 +41,7 @@
 #include "backend/gsl/ExpressionParser.h"
 
 #include <KIcon>
+#include <KLocale>
 #include <QDebug>
 
 XYEquationCurve::XYEquationCurve(const QString& name)

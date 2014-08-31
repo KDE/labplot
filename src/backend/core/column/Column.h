@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net)
 	Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -33,7 +33,7 @@
 
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/lib/XmlStreamReader.h"
-#include <KLocale>
+
 class QString;
 
 class ColumnStringIO;
@@ -48,7 +48,7 @@ class Column : public AbstractColumn
 
 		Column(const QString& name, AbstractColumn::ColumnMode mode);
 		Column(const QString& name, QVector<double> data);
-		Column(const QString& name, QStringList data); 
+		Column(const QString& name, QStringList data);
 		Column(const QString& name, QList<QDateTime> data);
 		void init();
 		~Column();
@@ -89,6 +89,7 @@ class Column : public AbstractColumn
 		double valueAt(int row) const;
 		void setValueAt(int row, double new_value);
 		virtual void replaceValues(int first, const QVector<double>& new_values);
+		void setChanged();
 
 		void save(QXmlStreamWriter * writer) const;
 		bool load(XmlStreamReader * reader);
@@ -100,14 +101,14 @@ class Column : public AbstractColumn
 
 		void handleRowInsertion(int before, int count);
 		void handleRowRemoval(int first, int count);
-		
+
 		static QString enumValueToString(int key, const QString& enum_name);
 		static int enumStringToValue(const QString& string, const QString& enum_name);
 
 		Private * m_column_private;
 		ColumnStringIO * m_string_io;
 
-		friend class ColumnStringIO;		
+		friend class ColumnStringIO;
 
 	signals:
 		void widthAboutToChange(const Column*);
@@ -120,9 +121,9 @@ class Column : public AbstractColumn
 class ColumnStringIO : public AbstractColumn
 {
 	Q_OBJECT
-	
+
 	public:
-		ColumnStringIO(Column * owner) : AbstractColumn(i18n("as string")), m_owner(owner), m_setting(false) {}
+		ColumnStringIO(Column * owner) : AbstractColumn(""), m_owner(owner), m_setting(false) {}
 		virtual AbstractColumn::ColumnMode columnMode() const { return AbstractColumn::Text; }
 		virtual AbstractColumn::PlotDesignation plotDesignation() const { return m_owner->plotDesignation(); }
 		virtual int rowCount() const { return m_owner->rowCount(); }
