@@ -1842,7 +1842,7 @@ symrec* assign_variable(const char* symb_name, double value) {
 #ifdef LDEBUG
 	printf("		calling putsym() : symb_name = %s\n",symb_name);
 #endif
-		
+
 		ptr = putsym(symb_name,VAR);
 	}
 
@@ -1866,9 +1866,6 @@ static void ungetcstr(void) {
 }
 
 int yylex (void) {
-	/* use same locale for all languages: '.' as decimal point */
-	locale_t locale = newlocale (LC_NUMERIC_MASK, "C", NULL);
-
 #ifdef LDEBUG
 	printf("	yylex()\n");
 #endif
@@ -1897,9 +1894,13 @@ int yylex (void) {
                 ungetcstr();
                 char *s = &string[pos];
 
+		/* use same locale for all languages: '.' as decimal point */
+		locale_t locale = newlocale (LC_NUMERIC_MASK, "C", NULL);
+
 		/* convert to double */
 		char *remain;
 		double result = strtod_l(s,&remain,locale);
+		freelocale(locale);
 #ifdef LDEBUG
 		printf("		reading: %s",s);
 		printf("		remain = %s",remain);
@@ -1911,7 +1912,7 @@ int yylex (void) {
 		printf("		result = %g\n",result);
 #endif
 		yylval.dval=result;
-		
+
                 pos += strlen(s)-strlen(remain);
 
 		return NUM;
