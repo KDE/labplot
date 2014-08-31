@@ -30,7 +30,7 @@ struct symrec {
 
 typedef struct symrec symrec;
 
-double parse(char *str);
+double parse(const char *str);
 int parse_errors();
 symrec *putsym (const char *, int);
 symrec *getsym (const char *);

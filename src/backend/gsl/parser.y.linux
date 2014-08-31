@@ -58,7 +58,7 @@ expr:      NUM       { $$ = $1;                         }
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
 
-double parse(char *str) {
+double parse(const char *str) {
 #ifdef LDEBUG
 	printf("\nparse(\"%s\")\n",str);
 #endif
@@ -146,19 +146,37 @@ symrec* getsym (const char *sym_name) {
 	printf("	getsym() : sym_name = %s\n",sym_name);
 #endif
 	symrec *ptr;
-	for (ptr = sym_table; ptr != (symrec *) 0;
-			ptr = (symrec *)ptr->next)
-		if (strcmp (ptr->name,sym_name) == 0)
+	for (ptr = sym_table; ptr != (symrec *) 0; ptr = (symrec *)ptr->next) {
+		if (strcmp (ptr->name,sym_name) == 0) {
+#ifdef LDEBUG
+			printf("		symbol \'%s\' found\n",sym_name);
+#endif
 			return ptr;
+		}
+	}
+
+#ifdef LDEBUG
+	printf("		symbol \'%s\' not found\n",sym_name);
+#endif
 	return 0;
 }
 
 symrec* assign_variable(const char* symb_name, double value) {
-	symrec* ptr;
-	ptr = getsym(symb_name);
-	if (!ptr)
-	ptr = putsym(symb_name,VAR);
+#ifdef LDEBUG
+	printf("	assign_variable() : symb_name = %s value=%g\n",symb_name,value);
+#endif
+
+	symrec* ptr = getsym(symb_name);
+	if (!ptr) {
+#ifdef LDEBUG
+	printf("		calling putsym() : symb_name = %s\n",symb_name);
+#endif
+		
+		ptr = putsym(symb_name,VAR);
+	}
+
 	ptr->value.var=value;
+
 	return ptr;
 };
 
@@ -263,7 +281,7 @@ int yylex (void) {
 			printf("		ERROR: symbol \"%s\" UNKNOWN\n",symbuf);
 #endif
 			return 0;
-}
+		}
 		/* old behavior */
 		/* if (s == 0)
 			 s = putsym (symbuf, VAR);
@@ -272,6 +290,9 @@ int yylex (void) {
 		return s->type;
 	}
 
+#ifdef LDEBUG
+	printf("	single operator\n");
+#endif
 	/* else: single operator */
 	return c;
 }

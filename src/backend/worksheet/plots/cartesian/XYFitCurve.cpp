@@ -169,12 +169,15 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
 	double* sigma = ((struct data*)params)->sigma;
-	char *func = ((struct data*)params)->func->toLocal8Bit().data();
+	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
+	const char *func = funcba.data();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 
 	//set current values of the parameters
-	for (int j=0; j<paramNames->size(); j++)
-		assign_variable(paramNames->at(j).toLatin1().data(), gsl_vector_get(paramValues,j));
+	for (int j=0; j<paramNames->size(); j++) {
+		//assign_variable(paramNames->at(j).toLatin1().data(), gsl_vector_get(paramValues,j));
+		assign_variable(paramNames->at(j).toLocal8Bit().data(), gsl_vector_get(paramValues,j));
+	}
 
 	char var[]="x";
 	for (int i = 0; i < n; i++) {
@@ -186,6 +189,11 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 		assign_variable(var, x[i]);
 		Yi = parse(func);
+/*		printf("func=%s, X[%d]=%g\n	",func,i,x[i]);
+		for (int j=0; j<paramNames->size(); j++)
+			printf("%g ",gsl_vector_get(paramValues,j));
+		printf("\n	Y[%d]=%g \n",i,Yi);
+*/
 		if(parse_errors()>0) {
 			qDebug()<<"func_f: parse errors in parsing "<<func;
 			return GSL_EINVAL;
@@ -244,6 +252,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				for (int i=0; i<n; i++) {
 					x = xVector[i];
 					if (sigmaVector) sigma = sigmaVector[i];
+					//qDebug()<<"x="<<x<<", b="<<b<<", pow(x,b)="<<pow(x,b);
+					//qDebug()<<"x="<<x<<", b="<<b<<", a*b*pow(x,b-1)="<<a*b*pow(x,b-1);
 					gsl_matrix_set(J, i, 0, pow(x,b)/sigma);
 					gsl_matrix_set(J, i, 1, a*b*pow(x,b-1)/sigma);
 				}
