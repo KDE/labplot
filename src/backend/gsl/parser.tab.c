@@ -1722,9 +1722,9 @@ yyreturn:
 
 
 /* Enable DEBUGGING */
-
+/*
 #define LDEBUG
-
+*/
 
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
