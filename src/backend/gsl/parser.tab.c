@@ -1721,8 +1721,10 @@ yyreturn:
 #line 51 "parser.y"
 
 
-/* enable debugging */
-/* #define LDEBUG */
+/* Enable DEBUGGING */
+
+#define LDEBUG
+
 
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
@@ -1890,7 +1892,8 @@ int yylex (void) {
 #ifdef LDEBUG
 		printf("		result = %g\n",result);
 #endif
-                sscanf (s,"%lf", &(yylval.dval));
+		yylval.dval=result;
+		
                 pos += strlen(s)-strlen(remain);
 
 		return NUM;
