@@ -345,6 +345,7 @@ void XYCurveDock::init(){
 	ui.cbDropLineType->addItem(i18n("drop lines, X"));
 	ui.cbDropLineType->addItem(i18n("drop lines, Y"));
 	ui.cbDropLineType->addItem(i18n("drop lines, XY"));
+	ui.cbDropLineType->addItem(i18n("drop lines, X, to zero line"));
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
 
 	//Symbols

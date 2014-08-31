@@ -1028,6 +1028,14 @@ void XYCurvePrivate::updateDropLines(){
 		}
 		break;
 	  }
+	  case XYCurve::DropLineXToZero:{
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+			const QPointF& point = symbolPointsLogical.at(i);
+			lines.append(QLineF(point, QPointF(point.x(), 0)));
+		}
+		break;
+	  }
 	  default:
 		break;
 	}

@@ -45,7 +45,7 @@ class XYCurve: public AbstractWorksheetElement {
 	public:
 		enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
 					   SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic};
-		enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY};
+		enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY, DropLineXToZero};
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
