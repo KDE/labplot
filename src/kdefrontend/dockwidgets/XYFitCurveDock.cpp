@@ -314,8 +314,9 @@ void XYFitCurveDock::updateModelEquation() {
 	QStringList vars; //variables/parameters that are known in ExpressionTestEdit teEquation
 	vars << "x";
 	QString eq;
-	m_fitData.modelType= (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
+	m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
 	int num = uiGeneralTab.sbDegree->value();
+	qDebug()<<"	modelType = "<<m_fitData.modelType;
 
 	if (m_fitData.modelType!=XYFitCurve::Custom)
 		m_fitData.paramNames.clear();
@@ -367,6 +368,7 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq;
 	} else if (m_fitData.modelType == XYFitCurve::Inverse_Exponential) {
 		eq = "a*(1-exp(b*x))+c";
+		m_fitData.model = eq;
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
 	} else if (m_fitData.modelType == XYFitCurve::Fourier) {

@@ -189,11 +189,12 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 		assign_variable(var, x[i]);
 		Yi = parse(func);
-/*		printf("func=%s, X[%d]=%g\n	",func,i,x[i]);
+// Debugging
+		printf("func=%s, X[%d]=%g\n	",func,i,x[i]);
 		for (int j=0; j<paramNames->size(); j++)
 			printf("%g ",gsl_vector_get(paramValues,j));
 		printf("\n	Y[%d]=%g \n",i,Yi);
-*/
+
 		if(parse_errors()>0) {
 			qDebug()<<"func_f: parse errors in parsing "<<func;
 			return GSL_EINVAL;
@@ -394,8 +395,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case XYFitCurve::Custom: {
-			char* func = ((struct data*)params)->func->toLocal8Bit().data();
+			QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
+			char* func = funcba.data();
 			double eps = 1.0e-5;
+			QByteArray nameba;
 			char* name;
 			double value;
 			for (int i=0; i<n; i++) {
@@ -413,7 +416,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 						}
 					}
 
-					name = paramNames->at(j).toLocal8Bit().data();
+					nameba = paramNames->at(j).toLocal8Bit();
+					name = nameba.data();
 					value = gsl_vector_get(paramValues,j);
 					assign_variable(name, value);
 					double f_p = parse(func);
@@ -632,6 +636,7 @@ void XYFitCurvePrivate::recalculate() {
 	double max = xDataColumn->maximum();
 	xVector->resize(fitData.fittedPoints);
 	yVector->resize(fitData.fittedPoints);
+	qDebug()<<"Model="<<fitData.model;
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min), QString::number(max), fitData.fittedPoints, xVector, yVector, fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();

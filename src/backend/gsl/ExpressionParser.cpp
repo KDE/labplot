@@ -1162,7 +1162,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 		x = xMin + step*i;
 		assign_variable(xVar,x);
 		y = parse(func);
-// 		printf("f(%g)=%g\n",x,y);
 
 		if(parse_errors()>0)
 			return false;
