@@ -80,7 +80,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << "Synchrotron Functions";
 	m_functionsGroups << "Transport Functions";
 	m_functionsGroups << "Trigonometric Functions";
-	m_functionsGroups << "Zeta Functions:";
+	m_functionsGroups << "Zeta Functions";
 	// GSL random distribution functions
 	m_functionsGroups << "Gaussian Distribution";
 	m_functionsGroups << "Exponential Distribution";
