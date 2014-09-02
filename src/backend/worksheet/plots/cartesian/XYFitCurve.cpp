@@ -190,11 +190,11 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		assign_variable(var, x[i]);
 		Yi = parse(func);
 // Debugging
-		printf("func=%s, X[%d]=%g\n	",func,i,x[i]);
+/*		printf("func=%s, X[%d]=%g\n	",func,i,x[i]);
 		for (int j=0; j<paramNames->size(); j++)
 			printf("%g ",gsl_vector_get(paramValues,j));
 		printf("\n	Y[%d]=%g \n",i,Yi);
-
+*/
 		if(parse_errors()>0) {
 			qDebug()<<"func_f: parse errors in parsing "<<func;
 			return GSL_EINVAL;
