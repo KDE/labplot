@@ -38,6 +38,7 @@
 
 #include "XYCurve.h"
 #include "XYCurvePrivate.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -1028,11 +1029,27 @@ void XYCurvePrivate::updateDropLines(){
 		}
 		break;
 	  }
-	  case XYCurve::DropLineXToZero:{
+	  case XYCurve::DropLineXZeroBaseline:{
 		for(int i=0; i<symbolPointsLogical.size(); ++i){
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), 0)));
+		}
+		break;
+	  }
+	  case XYCurve::DropLineXMinBaseline:{
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+			const QPointF& point = symbolPointsLogical.at(i);
+			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->minimum())) );
+		}
+		break;
+	  }
+	  case XYCurve::DropLineXMaxBaseline:{
+		for(int i=0; i<symbolPointsLogical.size(); ++i){
+			if (!visiblePoints[i]) continue;
+			const QPointF& point = symbolPointsLogical.at(i);
+			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->maximum())) );
 		}
 		break;
 	  }
