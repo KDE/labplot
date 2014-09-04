@@ -813,6 +813,21 @@ void CartesianPlot::mouseModeChanged(QAction* action) {
 		foreach(QGraphicsItem* item, items)
 			item->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
 	}
+
+	//when doing zoom selection, prevent the graphics item from being movable
+	//if it's currently movable (no worksheet layout available)
+	const Worksheet* worksheet = dynamic_cast<const Worksheet*>(parentAspect());
+	if (worksheet) {
+		if (action==selectionModeAction) {
+			if (worksheet->layout() != Worksheet::NoLayout)
+				graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			else
+				graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
+		} else { //zoom m_selection
+			graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+		}
+	}
+
 	d->update();
 }
 
