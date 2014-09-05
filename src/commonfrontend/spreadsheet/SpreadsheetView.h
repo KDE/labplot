@@ -102,6 +102,7 @@ class SpreadsheetView : public QWidget{
 		QAction* action_recalculate;
 		QAction* action_fill_row_numbers;
 		QAction* action_fill_random;
+		QAction* action_fill_const;
 
 		//spreadsheet related actions
 		QAction* action_toggle_comments;
@@ -163,6 +164,7 @@ class SpreadsheetView : public QWidget{
 		void recalculateSelectedCells();
 		void fillSelectedCellsWithRowNumbers();
 		void fillSelectedCellsWithRandomNumbers();
+		void fillSelectedCellsWithConstValues();
 		void insertEmptyColumns();
 		void removeSelectedColumns();
 		void clearSelectedColumns();

@@ -13,6 +13,7 @@ void SpreadsheetView::initActions(){
 	action_recalculate = new KAction(KIcon(""), i18n("Recalculate"), this);
 	action_fill_row_numbers = new KAction(KIcon(""), i18n("Row Numbers"), this);
 	action_fill_random = new KAction(KIcon(""), i18n("Random Values"), this);
+	action_fill_const = new KAction(KIcon(""), i18n("Const Values"), this);
 
 	//spreadsheet related actions
 	action_toggle_comments = new KAction(KIcon("document-properties"), i18n("Show Comments"), this);

@@ -55,6 +55,7 @@
 #include <QPainter>
 #include <QPrinter>
 #include <QToolBar>
+#include <QInputDialog>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "spreadsheetview_qactions.h"
@@ -166,6 +167,7 @@ void SpreadsheetView::initMenus(){
 	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
+	submenu->addAction(action_fill_const);
 	m_selectionMenu ->addMenu(submenu);
 	m_selectionMenu ->addSeparator();
 
@@ -203,6 +205,7 @@ void SpreadsheetView::initMenus(){
 	submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
+	submenu->addAction(action_fill_const);
 	m_columnMenu->addMenu(submenu);
 	m_columnMenu->addSeparator();
 
@@ -215,9 +218,7 @@ void SpreadsheetView::initMenus(){
 	m_columnMenu->addAction(action_normalize_columns);
 
 	submenu = new QMenu(i18n("Sort"));
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	submenu->setIcon(KIcon("view-sort-ascending"));
-#endif
 	submenu->addAction(action_sort_asc_column);
 	submenu->addAction(action_sort_desc_column);
 	submenu->addAction(action_sort_columns);
@@ -257,6 +258,7 @@ void SpreadsheetView::initMenus(){
 	submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
+	submenu->addAction(action_fill_const);
 	m_rowMenu->addMenu(submenu);
 	m_rowMenu->addSeparator();
 	m_rowMenu->addAction(action_statistics_rows);
@@ -273,6 +275,7 @@ void SpreadsheetView::connectActions(){
 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
+	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithConstValues()));
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 	connect(action_add_column, SIGNAL(triggered()), m_spreadsheet, SLOT(appendColumn()));
 	connect(action_clear_spreadsheet, SIGNAL(triggered()), m_spreadsheet, SLOT(clear()));
@@ -1001,6 +1004,67 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
+}
+
+void SpreadsheetView::fillSelectedCellsWithConstValues(){
+	if (selectedColumnCount() < 1) return;
+	int first = firstSelectedRow();
+	int last = lastSelectedRow();
+	if ( first < 0 )
+		return;
+
+	bool doubleOk = false;
+	bool stringOk = false;
+	double doubleValue = 0;
+	QString stringValue;
+
+	m_spreadsheet->beginMacro(i18n("%1: fill cells with const values", m_spreadsheet->name()));
+	foreach(Column* col_ptr, selectedColumns()) {
+		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
+
+		switch (col_ptr->columnMode()) {
+			case AbstractColumn::Numeric: {
+				if (!doubleOk)
+					doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
+															i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
+				if (doubleOk) {
+					WAIT_CURSOR;
+					QVector<double> results(last-first+1);
+					for (int row=first; row<=last; row++) {
+						if(isCellSelected(row, col))
+							results[row-first] = doubleValue;
+						else
+							results[row-first] = col_ptr->valueAt(row);
+					}
+					col_ptr->replaceValues(first, results);
+					RESET_CURSOR;
+				}
+				break;
+			}
+			case AbstractColumn::Text: {
+				if (!stringOk)
+					stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
+															i18n("Value"), QLineEdit::Normal, 0, &stringOk);
+				if (stringOk && !stringValue.isEmpty()) {
+					WAIT_CURSOR;
+					QStringList results;
+					for (int row=first; row<=last; row++) {
+						if (isCellSelected(row, col))
+							results << stringValue;
+						else
+							results << col_ptr->textAt(row);
+					}
+					col_ptr->replaceTexts(first, results);
+					RESET_CURSOR;
+				}
+				break;
+				}
+			//TODO: handle other modes
+			default:
+				break;
+		}
+	}
+	m_spreadsheet->endMacro();
 }
 
 /*!
