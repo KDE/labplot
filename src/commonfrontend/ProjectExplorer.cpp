@@ -296,6 +296,9 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 	if (m_projectLoading)
 		return;
 
+	if (aspect->hidden())
+		return;
+
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	const QModelIndex& index =  tree_model->modelIndexOfAspect(aspect);
 

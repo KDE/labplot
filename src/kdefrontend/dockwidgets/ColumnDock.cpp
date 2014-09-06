@@ -2,11 +2,11 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
     Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach*uni.kn)
                                                         (use @ for *)
     Description          : widget for column properties
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,11 +36,10 @@
 #include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
-
-#include <QDebug>
+#include "backend/spreadsheet/Spreadsheet.h"
 
 /*!
-  \class SpreadsheetDock
+  \class ColumnDock
   \brief Provides a widget for editing the properties of the spreadsheet columns currently selected in the project explorer.
 
   \ingroup kdefrontend
@@ -48,15 +47,15 @@
 
 ColumnDock::ColumnDock(QWidget *parent): QWidget(parent){
 	ui.setupUi(this);
-	
+
 	dateStrings<<"yyyy-MM-dd";
 	dateStrings<<"yyyy/MM/dd";
-	dateStrings<<"dd/MM/yyyy"; 
+	dateStrings<<"dd/MM/yyyy";
 	dateStrings<<"dd/MM/yy";
 	dateStrings<<"dd.MM.yyyy";
 	dateStrings<<"dd.MM.yy";
 	dateStrings<<"MM/yyyy";
-	dateStrings<<"dd.MM."; 
+	dateStrings<<"dd.MM.";
 	dateStrings<<"yyyyMMdd";
 
 	timeStrings<<"hh";
@@ -68,14 +67,14 @@ ColumnDock::ColumnDock(QWidget *parent): QWidget(parent){
 	timeStrings<<"hh:mm:ss:zzz";
 	timeStrings<<"mm:ss.zzz";
 	timeStrings<<"hhmmss";
-	
+
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)) );
 	connect(ui.cbPlotDesignation, SIGNAL(currentIndexChanged(int)), this, SLOT(plotDesignationChanged(int)));
-	
+
 	retranslateUi();
 }
 
@@ -85,18 +84,24 @@ void ColumnDock::setColumns(QList<Column*> list){
 
 	m_column=list.first();
 
+	//check whether we have non-editable columns (e.g. columns for residuals calculated in XYFitCurve)
+	bool nonEditable = false;
+	foreach(Column* col, m_columnsList){
+		Spreadsheet* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
+		if (!s) {
+			nonEditable = true;
+			break;
+		}
+	}
+
 	if (list.size()==1){
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.leName->setEnabled(!nonEditable);
+		ui.leComment->setEnabled(!nonEditable);
 
 		ui.leName->setText(m_column->name());
 		ui.leComment->setText(m_column->comment());
 	}else{
-		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
 		ui.leName->setText("");
@@ -106,6 +111,20 @@ void ColumnDock::setColumns(QList<Column*> list){
 	//show the properties of the first column
 	AbstractColumn::ColumnMode columnMode = m_column->columnMode();
 	ui.cbType->setCurrentIndex(ui.cbType->findData((int)columnMode));
+
+	//disable widgets if we have at least one non-editable column
+	ui.cbType->setEnabled(!nonEditable);
+	ui.lFormat->setVisible(!nonEditable);
+	ui.cbFormat->setVisible(!nonEditable);
+	ui.lPrecision->setVisible(!nonEditable);
+	ui.sbPrecision->setVisible(!nonEditable);
+	ui.lPlotDesignation->setVisible(!nonEditable);
+	ui.cbPlotDesignation->setVisible(!nonEditable);
+	if (nonEditable) {
+		m_initializing = false;
+		return;
+	}
+
 	this->updateFormatWidgets(columnMode);
 
 	switch(columnMode) {
@@ -129,7 +148,7 @@ void ColumnDock::setColumns(QList<Column*> list){
 
 	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
 
-	// slots 
+	// slots
 	connect(m_column, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(columnDescriptionChanged(const AbstractAspect*)));
 	connect(m_column->outputFilter(), SIGNAL(formatChanged()),this, SLOT(columnFormatChanged()));
 	connect(m_column->outputFilter(), SIGNAL(digitsChanged()),this, SLOT(columnPrecisionChanged()));
@@ -139,7 +158,7 @@ void ColumnDock::setColumns(QList<Column*> list){
 }
 
 /*!
-  depending on the currently selected column type (column mode) updates the widgets for the column format, 
+  depending on the currently selected column type (column mode) updates the widgets for the column format,
   shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
   Called when the type (column mode) is changed.
 */
@@ -171,21 +190,21 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 	case AbstractColumn::DateTime:{
 	  foreach(const QString& s, dateStrings)
 		ui.cbFormat->addItem(s, QVariant(s));
-	  
+
 	  foreach(const QString& s, timeStrings)
 		ui.cbFormat->addItem(s, QVariant(s));
-	  
+
 	  foreach(const QString& s1, dateStrings){
 		foreach(const QString& s2, timeStrings)
 		  ui.cbFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 	  }
-	  
+
 	  break;
 	}
 	default:
 		break;
   }
-  
+
   if (columnMode == AbstractColumn::Numeric){
 	ui.lPrecision->show();
 	ui.sbPrecision->show();
@@ -193,7 +212,7 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 	ui.lPrecision->hide();
 	ui.sbPrecision->hide();
   }
-  
+
   if (columnMode == AbstractColumn::Text){
 	ui.lFormat->hide();
 	ui.cbFormat->hide();
@@ -202,7 +221,7 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 	ui.cbFormat->show();
 	ui.cbFormat->setCurrentIndex(0);
   }
-  
+
   if (columnMode == AbstractColumn::DateTime){
 	ui.cbFormat->setEditable( true );
   }else{
@@ -210,17 +229,17 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
   }
 }
 
-// SLOTS 
+// SLOTS
 void ColumnDock::retranslateUi(){
 	m_initializing = true;
-	
+
   	ui.cbType->clear();
 	ui.cbType->addItem(i18n("Numeric"), QVariant(int(AbstractColumn::Numeric)));
 	ui.cbType->addItem(i18n("Text"), QVariant(int(AbstractColumn::Text)));
 	ui.cbType->addItem(i18n("Month names"), QVariant(int(AbstractColumn::Month)));
 	ui.cbType->addItem(i18n("Day names"), QVariant(int(AbstractColumn::Day)));
 	ui.cbType->addItem(i18n("Date and time"), QVariant(int(AbstractColumn::DateTime)));
-	
+
 	ui.cbPlotDesignation->clear();
 	ui.cbPlotDesignation->addItem(i18n("none"));
 	ui.cbPlotDesignation->addItem(i18n("X"));
@@ -228,7 +247,7 @@ void ColumnDock::retranslateUi(){
 	ui.cbPlotDesignation->addItem(i18n("Z"));
 	ui.cbPlotDesignation->addItem(i18n("X-error"));
 	ui.cbPlotDesignation->addItem(i18n("Y-error"));
-	
+
 	m_initializing = false;
 }
 
@@ -236,7 +255,7 @@ void ColumnDock::retranslateUi(){
 void ColumnDock::nameChanged(){
   if (m_initializing)
 	return;
-  
+
   m_columnsList.first()->setName(ui.leName->text());
 }
 
@@ -244,20 +263,20 @@ void ColumnDock::nameChanged(){
 void ColumnDock::commentChanged(){
   if (m_initializing)
 	return;
-  
+
   m_columnsList.first()->setComment(ui.leComment->text());
 }
 
 /*!
   called when the type (column mode - numeric, text etc.) of the column was changed.
-*/ 
+*/
 void ColumnDock::typeChanged(int index){
    if (m_initializing)
 	return;
 
 
   AbstractColumn::ColumnMode columnMode = (AbstractColumn::ColumnMode)ui.cbType->itemData( index ).toInt();
-  
+
   m_initializing = true;
   this->updateFormatWidgets(columnMode);
   m_initializing = false;
@@ -340,22 +359,22 @@ void ColumnDock::formatChanged(int index){
 void ColumnDock::precisionChanged(int digits){
   if (m_initializing)
 	return;
-  
+
   foreach(Column* col, m_columnsList){
 	  Double2StringFilter * filter = static_cast<Double2StringFilter*>(col->outputFilter());
 	  filter->setNumDigits(digits);
-  }  
+  }
 }
 
 
 void ColumnDock::plotDesignationChanged(int index){
   if (m_initializing)
 	return;
-  
+
   AbstractColumn::PlotDesignation pd=AbstractColumn::PlotDesignation(index);
   foreach(Column* col, m_columnsList){
 	col->setPlotDesignation(pd);
-  }  
+  }
 }
 
 

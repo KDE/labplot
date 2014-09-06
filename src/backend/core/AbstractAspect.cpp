@@ -634,15 +634,23 @@ void AbstractAspect::setSelected(bool s){
 
 void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//forward the signal to the highest possible level in the parent-child hierarchy
-	//e.g. axis of a plot was selected. don't include folders here
-	if (aspect->parentAspect() != 0 && !aspect->parentAspect()->inherits("Folder"))
+	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
+	//need to react on the selection of children: e.g. Folder or XYFitCurve with
+	//the child column for calculated residuals
+	if (aspect->parentAspect() != 0
+		&& !aspect->parentAspect()->inherits("Folder")
+		&& !aspect->parentAspect()->inherits("XYFitCurve"))
 		emit aspect->parentAspect()->selected(aspect);
 }
 
 void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
-	//forward the signal to the highest possible level in the parent-child hierarch
-	//e.g. axis of a plot was selected. don't include folders here
-	if (aspect->parentAspect() != 0 && !aspect->parentAspect()->inherits("Folder"))
+	//forward the signal to the highest possible level in the parent-child hierarchy
+	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
+	//need to react on the deselection of children: e.g. Folder or XYFitCurve with
+	//the child column for calculated residuals
+	if (aspect->parentAspect() != 0
+		&& !aspect->parentAspect()->inherits("Folder")
+		&& !aspect->parentAspect()->inherits("XYFitCurve"))
 		emit aspect->parentAspect()->deselected(aspect);
 }
 
