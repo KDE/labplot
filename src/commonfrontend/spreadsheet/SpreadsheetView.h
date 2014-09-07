@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : SpreadsheetView.h
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
@@ -102,6 +102,7 @@ class SpreadsheetView : public QWidget{
 		QAction* action_recalculate;
 		QAction* action_fill_row_numbers;
 		QAction* action_fill_random;
+		QAction* action_fill_random_nonuniform;
 		QAction* action_fill_const;
 
 		//spreadsheet related actions
@@ -164,6 +165,7 @@ class SpreadsheetView : public QWidget{
 		void recalculateSelectedCells();
 		void fillSelectedCellsWithRowNumbers();
 		void fillSelectedCellsWithRandomNumbers();
+		void fillWithNonuniformRandomNumbers();
 		void fillSelectedCellsWithConstValues();
 		void insertEmptyColumns();
 		void removeSelectedColumns();

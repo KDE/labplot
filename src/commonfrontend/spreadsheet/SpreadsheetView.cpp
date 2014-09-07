@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : SpreadsheetView.cpp
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
@@ -65,6 +65,7 @@
 #include <KLocale>
 #include "commonfrontend/spreadsheet/spreadsheetview_kactions.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
+#include "kdefrontend/spreadsheet/NonUniformRandomDialog.h"
 #endif
 
 /*!
@@ -205,6 +206,7 @@ void SpreadsheetView::initMenus(){
 	submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_random);
+	submenu->addAction(action_fill_random_nonuniform);
 	submenu->addAction(action_fill_const);
 	m_columnMenu->addMenu(submenu);
 	m_columnMenu->addSeparator();
@@ -275,6 +277,7 @@ void SpreadsheetView::connectActions(){
 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
+	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithNonuniformRandomNumbers()));
 	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithConstValues()));
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 	connect(action_add_column, SIGNAL(triggered()), m_spreadsheet, SLOT(appendColumn()));
@@ -1004,6 +1007,14 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
+}
+
+void SpreadsheetView::fillWithNonuniformRandomNumbers() {
+	if (selectedColumnCount() < 1) return;
+	NonUniformRandomDialog* dlg = new NonUniformRandomDialog(m_spreadsheet);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
 }
 
 void SpreadsheetView::fillSelectedCellsWithConstValues(){

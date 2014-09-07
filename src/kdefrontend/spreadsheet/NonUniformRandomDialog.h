@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : SortDialog.h
+    File                 : NonUniformRandomDialog.h
     Project              : LabPlot
-    Description          : Sorting options dialog
+    Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,41 +25,30 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef SORTDIALOG_H
-#define SORTDIALOG_H
+#ifndef NONUNIFORMRANDOMDIALOG_H
+#define NONUNIFORMRANDOMDIALOG_H
 
+#include "ui_nonuniformrandomwidget.h"
 #include "backend/core/column/Column.h"
 #include <KDialog>
 
-class QPushButton;
-class QComboBox;
-class QLabel;
+class Spreadsheet;
 
-class SortDialog : public KDialog{
+class NonUniformRandomDialog : public KDialog{
 	Q_OBJECT
 
 	public:
-		explicit SortDialog( QWidget* parent = 0, Qt::WFlags fl = 0 );
-		void setColumnsList(QList<Column*> list);
-
-		enum { Separately=0, Together=1 };
-		enum { Ascending=0, Descending=1 };
-
-	private slots:
-		void sort();
-		void changeType(int index);
-
-	signals:
-		void sort(Column *leading, QList<Column*> cols, bool ascending);
+		explicit NonUniformRandomDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+		void setColumns(QList<Column*>);
 
 	private:
-		QList<Column*> m_columns_list;
+		Ui::NonUniformRandomWidget ui;
+		QList<Column*> m_columns;
+		Spreadsheet* m_spreadsheet;
 
-		QComboBox* cbOrdering;
-		QLabel* lblType;
-		QComboBox* cbType;
-		QLabel* lblColumns;
-		QComboBox* cbColumns;
+	private slots:
+		void generate();
+		void distributionChanged(int index);
 };
 
 #endif

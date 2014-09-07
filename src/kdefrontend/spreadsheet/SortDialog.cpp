@@ -1,11 +1,9 @@
 /***************************************************************************
-    File                		 : SortDialog.h
-    Project              	: LabPlot
-    Description       : Sorting options dialog
+    File                 : SortDialog.h
+    Project              : LabPlot
+    Description          : Sorting options dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2006 by Ion Vasilief (ion_vasilief*yahoo.fr), Tilman Benkert ( thzs*gmx.net)
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
-									(replace * with @ in the email addresses) 
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
