@@ -62,6 +62,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QCloseEvent>
+#include <QElapsedTimer>
 
 #include <KApplication>
 #include <KActionCollection>
@@ -633,7 +634,8 @@ void MainWin::openProject(const QString& filename) {
 	}
 
 	WAIT_CURSOR;
-
+	QElapsedTimer timer;
+	timer.start();
 	openXML(file);
 	file->close();
 	delete file;
@@ -649,7 +651,7 @@ void MainWin::openProject(const QString& filename) {
 	m_saveAction->setEnabled(false);
 	m_saveAsAction->setEnabled(false);
 
-	statusBar()->showMessage(i18n("Project successfully opened."));
+	statusBar()->showMessage( i18n("Project successfully opened (in %1 seconds).").arg((float)timer.elapsed()/1000) );
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();

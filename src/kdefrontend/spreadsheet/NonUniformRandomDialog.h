@@ -49,6 +49,7 @@ class NonUniformRandomDialog : public KDialog{
 	private slots:
 		void generate();
 		void distributionChanged(int index);
+		void checkValues();
 };
 
 #endif
