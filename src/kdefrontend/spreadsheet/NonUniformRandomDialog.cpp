@@ -45,7 +45,7 @@
 enum distribution {
 	Gaussian, Exponential, Laplace, ExponentialPower, Cauchy, Rayleigh, RayleighTail, Landau,
 	LevyAlphaStable, LevySkewAlphaStable, Gamma, Flat, Lognormal, ChiSquared, F, t, Beta,
-	Logistic, Pareto, Weibull, Type1Gumbel, Type2Gumbel, Poisson, Bernoulli, Binomial,
+	Logistic, Pareto, Weibull, Gumbel1, Gumbel2, Poisson, Bernoulli, Binomial,
 	NegativeBinomial, Pascal, Geometric, Hypergeometric, Logarithmic
 };
 
@@ -83,8 +83,8 @@ NonUniformRandomDialog::NonUniformRandomDialog(Spreadsheet* s, QWidget* parent, 
 	ui.cbDistribution->addItem(i18n("Pareto Distribution"), Pareto);
 // 	ui.cbDistribution->addItem(i18n("Spherical Vector Distributions"));
 	ui.cbDistribution->addItem(i18n("Weibull Distribution"), Weibull);
-	ui.cbDistribution->addItem(i18n("Type-1 Gumbel Distribution"), Type1Gumbel);
-	ui.cbDistribution->addItem(i18n("Type-2 Gumbel Distribution"), Type2Gumbel);
+	ui.cbDistribution->addItem(i18n("Type-1 Gumbel Distribution"), Gumbel1);
+	ui.cbDistribution->addItem(i18n("Type-2 Gumbel Distribution"), Gumbel2);
 // 	ui.cbDistribution->addItem(i18n("Dirichlet Distribution"));
 // 	ui.cbDistribution->addItem(i18n("General Discrete Distributions"));
 	ui.cbDistribution->addItem(i18n("Poisson Distribution"), Poisson);
@@ -145,7 +145,7 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
 		ui.lParameter1->setText(QString::fromUtf8("μ"));
-		ui.lParameter2->setText(QString::fromUtf8("a"));
+		ui.lParameter2->setText("a");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 	} else if (distr == ExponentialPower) {
@@ -154,8 +154,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
 		ui.lParameter1->setText(QString::fromUtf8("μ"));
-		ui.lParameter2->setText(QString::fromUtf8("a"));
-		ui.lParameter2->setText(QString::fromUtf8("b"));
+		ui.lParameter2->setText("a");
+		ui.lParameter2->setText("b");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
@@ -164,7 +164,7 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("a"));
+		ui.lParameter1->setText("a");
 		ui.kleParameter1->setText("1.0");
 	} else if (distr == Rayleigh) {
 		ui.lParameter2->hide();
@@ -179,7 +179,7 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
 		ui.lParameter1->setText(QString::fromUtf8("σ"));
-		ui.lParameter2->setText(QString::fromUtf8("a"));
+		ui.lParameter2->setText("a");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("0.0");
 	} else if (distr == Landau) {
@@ -194,7 +194,7 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("c"));
+		ui.lParameter1->setText("c");
 		ui.lParameter2->setText(QString::fromUtf8("α"));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
@@ -209,22 +209,13 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
-	} else if (distr == Gamma) {
+	} else if (distr==Gamma || distr==Flat || distr==Beta || distr==Pareto || distr==Weibull || distr==Gumbel1 || distr==Gumbel2) {
 		ui.lParameter2->show();
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("a"));
-		ui.lParameter2->setText(QString::fromUtf8("b"));
-		ui.kleParameter1->setText("1.0");
-		ui.kleParameter2->setText("1.0");
-	} else if (distr == Flat) {
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("a"));
-		ui.lParameter2->setText(QString::fromUtf8("b"));
+		ui.lParameter1->setText("a");
+		ui.lParameter2->setText("b");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 	}  else if (distr == Lognormal) {
@@ -243,6 +234,63 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter3->hide();
 		ui.lParameter1->setText(QString::fromUtf8("ν"));
 		ui.kleParameter1->setText("1.0");
+	} else if (distr == F) {
+		ui.lParameter2->show();
+		ui.kleParameter2->show();
+		ui.lParameter3->hide();
+		ui.kleParameter3->hide();
+		ui.lParameter1->setText(QString::fromUtf8("ν1"));
+		ui.lParameter2->setText(QString::fromUtf8("ν2"));
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("1.0");
+	} else if (distr == t) {
+		ui.lParameter2->hide();
+		ui.kleParameter2->hide();
+		ui.lParameter3->hide();
+		ui.kleParameter3->hide();
+		ui.lParameter1->setText(QString::fromUtf8("ν"));
+		ui.kleParameter1->setText("1.0");
+	} else if (distr == Logistic) {
+		ui.lParameter2->hide();
+		ui.kleParameter2->hide();
+		ui.lParameter3->hide();
+		ui.kleParameter3->hide();
+		ui.lParameter1->setText("a");
+		ui.kleParameter1->setText("1.0");
+	} else if (distr == Poisson) {
+		ui.lParameter2->hide();
+		ui.kleParameter2->hide();
+		ui.lParameter3->hide();
+		ui.kleParameter3->hide();
+		ui.lParameter1->setText(QString::fromUtf8("μ"));
+		ui.kleParameter1->setText("0.0");
+	} else if (distr==Bernoulli || distr==Geometric || distr==Logarithmic) {
+		ui.lParameter2->hide();
+		ui.kleParameter2->hide();
+		ui.lParameter3->hide();
+		ui.kleParameter3->hide();
+		ui.lParameter1->setText("p");
+		ui.kleParameter1->setText("0.5");
+	} else if (distr==Binomial || distr==NegativeBinomial || distr==Pascal) {
+		ui.lParameter2->show();
+		ui.kleParameter2->show();
+		ui.lParameter3->hide();
+		ui.kleParameter3->hide();
+		ui.lParameter1->setText("p");
+		ui.lParameter1->setText("n");
+		ui.kleParameter1->setText("0.5");
+		ui.kleParameter2->setText("100");
+	} else if (distr == Hypergeometric) {
+		ui.lParameter2->show();
+		ui.kleParameter2->show();
+		ui.lParameter3->show();
+		ui.kleParameter3->show();
+		ui.lParameter1->setText("n1");
+		ui.lParameter2->setText("n2");
+		ui.lParameter2->setText("t");
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("2.0");
+		ui.kleParameter3->setText("3.0");
 	}
 }
 
@@ -274,7 +322,10 @@ void NonUniformRandomDialog::generate() {
 	gsl_rng* r = gsl_rng_alloc (T);
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: fill column with non-uniform random numbers", m_spreadsheet->name()));
+	m_spreadsheet->beginMacro(i18np("%1: fill column with non-uniform random numbers",
+									"%1: fill columns with non-uniform random numbers",
+									m_spreadsheet->name(),
+									m_columns.size()));
 
 	int index = ui.cbDistribution->currentIndex();
 	distribution distr = (distribution)ui.cbDistribution->itemData(index).toInt();
@@ -397,6 +448,145 @@ void NonUniformRandomDialog::generate() {
 		foreach(Column* col, m_columns) {
 			for (int i=0; i<col->rowCount(); ++i) {
 				double value = gsl_ran_chisq(r, nu);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == F) {
+		double nu1 = ui.kleParameter1->text().toDouble();
+		double nu2 = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_fdist(r, nu1, nu2);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == t) {
+		double nu = ui.kleParameter1->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_tdist(r, nu);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Beta) {
+		double a = ui.kleParameter1->text().toDouble();
+		double b = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_beta(r, a, b);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Logistic) {
+		double a = ui.kleParameter1->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_logistic(r, a);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Pareto) {
+		double a = ui.kleParameter1->text().toDouble();
+		double b = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_pareto(r, a, b);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Weibull) {
+		double a = ui.kleParameter1->text().toDouble();
+		double b = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_weibull(r, a, b);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Gumbel1) {
+		double a = ui.kleParameter1->text().toDouble();
+		double b = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_gumbel1(r, a, b);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Gumbel2) {
+		double a = ui.kleParameter1->text().toDouble();
+		double b = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_gumbel2(r, a, b);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Poisson) {
+		double mu = ui.kleParameter1->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_poisson(r, mu);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Bernoulli) {
+		double p = ui.kleParameter1->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_bernoulli(r, p);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Binomial) {
+		double p = ui.kleParameter1->text().toDouble();
+		double n = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_binomial(r, p, n);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == NegativeBinomial) {
+		double p = ui.kleParameter1->text().toDouble();
+		double n = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_negative_binomial(r, p, n);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Pascal) {
+		double p = ui.kleParameter1->text().toDouble();
+		double n = ui.kleParameter2->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_pascal(r, p, n);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Geometric) {
+		double p = ui.kleParameter1->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_geometric(r, p);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Hypergeometric) {
+		double n1 = ui.kleParameter1->text().toDouble();
+		double n2 = ui.kleParameter2->text().toDouble();
+		double t = ui.kleParameter3->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_hypergeometric(r, n1, n2, t);
+				col->setValueAt(i, value);
+			}
+		}
+	} else if (distr == Logarithmic) {
+		double p = ui.kleParameter1->text().toDouble();
+		foreach(Column* col, m_columns) {
+			for (int i=0; i<col->rowCount(); ++i) {
+				double value = gsl_ran_logarithmic(r, p);
 				col->setValueAt(i, value);
 			}
 		}
