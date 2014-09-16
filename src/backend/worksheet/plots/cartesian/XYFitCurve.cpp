@@ -174,9 +174,10 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 
 	//set current values of the parameters
+	QByteArray paramba;
 	for (int j=0; j<paramNames->size(); j++) {
-		//assign_variable(paramNames->at(j).toLatin1().data(), gsl_vector_get(paramValues,j));
-		assign_variable(paramNames->at(j).toLocal8Bit().data(), gsl_vector_get(paramValues,j));
+		paramba = paramNames->at(j).toLocal8Bit();
+		assign_variable(paramba.data(), gsl_vector_get(paramValues,j));
 	}
 
 	char var[]="x";
@@ -253,10 +254,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				for (int i=0; i<n; i++) {
 					x = xVector[i];
 					if (sigmaVector) sigma = sigmaVector[i];
-					//qDebug()<<"x="<<x<<", b="<<b<<", pow(x,b)="<<pow(x,b);
-					//qDebug()<<"x="<<x<<", b="<<b<<", a*b*pow(x,b-1)="<<a*b*pow(x,b-1);
 					gsl_matrix_set(J, i, 0, pow(x,b)/sigma);
-					gsl_matrix_set(J, i, 1, a*b*pow(x,b-1)/sigma);
+					gsl_matrix_set(J, i, 1, a*pow(x,b)*log(x)/sigma);
 				}
 			} else if (degree==2) {
 				double b = gsl_vector_get(paramValues,1);
@@ -266,7 +265,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					if (sigmaVector) sigma = sigmaVector[i];
 					gsl_matrix_set(J, i, 0, 1/sigma);
 					gsl_matrix_set(J, i, 1, pow(x,c)/sigma);
-					gsl_matrix_set(J, i, 2, b*c*pow(x,c-1)/sigma);
+					gsl_matrix_set(J, i, 2, b*pow(x,c)*log(x)/sigma);
 				}
 			}
 			break;
@@ -410,9 +409,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				for(int j=0; j<paramNames->size(); j++) {
 					for(int k=0; k<paramNames->size();k++) {
 						if(k!=j) {
-							name = paramNames->at(k).toLocal8Bit().data();
+							nameba = paramNames->at(k).toLocal8Bit();
 							value = gsl_vector_get(paramValues,k);
-							assign_variable(name, value);
+							assign_variable(nameba.data(), value);
 						}
 					}
 
@@ -669,6 +668,8 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	//current value of the chi2-function
 	state += QString::number(pow(gsl_blas_dnrm2 (s->f),2));
 	state += ';';
+
+	qDebug()<<"state: "<<state;
 
 	fitResult.solverOutput += state;
 }
