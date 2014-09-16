@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>285</width>
-    <height>169</height>
+    <width>454</width>
+    <height>213</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,19 +31,26 @@
        <widget class="QComboBox" name="cbDistribution"/>
       </item>
       <item row="1" column="2">
-       <widget class="KLineEdit" name="kleParameter1"/>
+       <widget class="QLabel" name="lFormula">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
       <item row="2" column="2">
-       <widget class="KLineEdit" name="kleParameter2"/>
+       <widget class="KLineEdit" name="kleParameter1"/>
       </item>
       <item row="3" column="2">
+       <widget class="KLineEdit" name="kleParameter2"/>
+      </item>
+      <item row="4" column="2">
        <widget class="KLineEdit" name="kleParameter3">
         <property name="text">
          <string>3</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -56,7 +63,7 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="0" colspan="2">
+      <item row="2" column="0" colspan="2">
        <widget class="QLabel" name="lParameter1">
         <property name="font">
          <font>
@@ -72,7 +79,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
+      <item row="3" column="0" colspan="2">
        <widget class="QLabel" name="lParameter2">
         <property name="font">
          <font>
@@ -88,7 +95,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="4" column="0" colspan="2">
        <widget class="QLabel" name="lParameter3">
         <property name="font">
          <font>
