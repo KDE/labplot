@@ -30,6 +30,7 @@
 
 #include "ui_nonuniformrandomwidget.h"
 #include "backend/core/column/Column.h"
+#include <QMap>
 #include <KDialog>
 
 class Spreadsheet;
@@ -45,6 +46,7 @@ class NonUniformRandomDialog : public KDialog{
 		Ui::NonUniformRandomWidget ui;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
+		QMap<int, QString> m_formulaPixs;
 
 	private slots:
 		void generate();
