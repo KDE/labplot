@@ -926,16 +926,16 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 		addChild(d->yColumn);
 
 		addChild(d->residualsColumn);
+
+		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
+		d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
+
+		setUndoAware(false);
+		setXColumn(d->xColumn);
+		setYColumn(d->yColumn);
+		setUndoAware(true);
 	}
-
-	setUndoAware(false);
-	setXColumn(d->xColumn);
-	setYColumn(d->yColumn);
-	setUndoAware(true);
-
-	d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
-	d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
-	d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
 
 	retransform();
 	return true;

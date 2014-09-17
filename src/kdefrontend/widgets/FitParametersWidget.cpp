@@ -107,11 +107,29 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 		if (event->type() == QEvent::KeyPress) {
 			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-				if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
-					ui.pbApply->setFocus();
-					ui.tableWidget->clearSelection();
+				if (m_fitData->modelType!=XYFitCurve::Custom) {
+					//on the second column with the values is editable.
+					//navigate to the next cell in the second column, or to the apply-button
+					if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
+						ui.pbApply->setFocus();
+						ui.tableWidget->clearSelection();
+					} else {
+						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow()+1, 1);
+					}
 				} else {
-					ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow()+1, 1);
+					//both columns (names and start values) are editable
+					if (ui.tableWidget->currentColumn()==0) {
+						//name was entered, navigate to the value-cell
+						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow(), 1);
+					} else {
+						//start value was entered, navigate to the next name-cell or to the apply-button
+						if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
+							ui.pbApply->setFocus();
+							ui.tableWidget->clearSelection();
+						} else {
+							ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow()+1, 0);
+						}
+					}
 				}
 				return true;
 			}
