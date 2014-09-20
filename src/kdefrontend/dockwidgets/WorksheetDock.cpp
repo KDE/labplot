@@ -6,7 +6,7 @@
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for worksheet properties
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -103,7 +103,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	}
 
 	//SLOTs
-	
+
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
@@ -111,7 +111,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(sizeChanged()) );
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
-	
+
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
 	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
@@ -134,7 +134,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
 	connect( ui.sbLayoutRowCount, SIGNAL(valueChanged(int)), this, SLOT(layoutRowCountChanged(int)) );
 	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
-	
+
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	ui.verticalLayout->addWidget(templateHandler, 0, 0);
 	templateHandler->show();
@@ -149,7 +149,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list){
 	m_initializing = true;
 	m_worksheetList = list;
 	m_worksheet = list.first();
-  
+
 	//if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size()==1){
 		ui.lName->setEnabled(true);
@@ -247,7 +247,7 @@ void WorksheetDock::updatePaperSize(){
 //*************************************************************
 void WorksheetDock::retranslateUi(){
 	m_initializing = true;
-	
+
 	//Geometry
 	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("portrait"));
@@ -287,7 +287,7 @@ void WorksheetDock::retranslateUi(){
 	ui.cbSize->addItem(i18n("US Common #10 Envelope"), QPrinter::Comm10E);
 	ui.cbSize->addItem(i18n("Custom"), QPrinter::Custom);
 	ui.cbSize->insertSeparator(1);
-	
+
 	//Background
 	ui.cbBackgroundType->clear();
 	ui.cbBackgroundType->addItem(i18n("color"));
@@ -301,7 +301,7 @@ void WorksheetDock::retranslateUi(){
 	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
- 
+
 	ui.cbBackgroundImageStyle->clear();
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
@@ -318,14 +318,14 @@ void WorksheetDock::retranslateUi(){
 void WorksheetDock::nameChanged(){
   if (m_initializing)
 	return;
-  
+
   m_worksheet->setName(ui.leName->text());
 }
 
 void WorksheetDock::commentChanged(){
   if (m_initializing)
 	return;
-  
+
   m_worksheet->setComment(ui.leComment->text());
 }
 
@@ -345,7 +345,6 @@ void WorksheetDock::sizeChanged(int i){
 		ui.sbHeight->setEnabled(true);
 		ui.lOrientation->hide();
 		ui.cbOrientation->hide();
-		return;
 	}else{
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
@@ -360,11 +359,17 @@ void WorksheetDock::sizeChanged(int i){
 
 	if (m_initializing)
 		return;
- 
+
 	if (i==0) {
 		//use the complete view size (first item in the combox is selected)
 		foreach(Worksheet* worksheet, m_worksheetList)
 			worksheet->setUseViewSize(true);
+	}else if (index==QPrinter::Custom) {
+		if (m_worksheet->useViewSize()) {
+			foreach(Worksheet* worksheet, m_worksheetList) {
+				worksheet->setUseViewSize(false);
+			}
+		}
 	} else {
 		//determine the width and the height of the to be used predefined layout
 		float w, h;
@@ -420,7 +425,7 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		ui.cbBackgroundImageStyle->hide();
 		ui.lBackgroundBrushStyle->hide();
 		ui.cbBackgroundBrushStyle->hide();
-		
+
 		ui.lBackgroundFileName->hide();
 		ui.kleBackgroundFileName->hide();
 		ui.bOpen->hide();
@@ -428,7 +433,7 @@ void WorksheetDock::backgroundTypeChanged(int index){
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style = 
+		PlotArea::BackgroundColorStyle style =
 			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
 			ui.lBackgroundFirstColor->setText(i18n("Color"));
@@ -474,7 +479,7 @@ void WorksheetDock::backgroundTypeChanged(int index){
 
 	if (m_initializing)
 		return;
-   
+
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setBackgroundType(type);
   }
@@ -515,7 +520,7 @@ void WorksheetDock::backgroundImageStyleChanged(int index){
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setBackgroundImageStyle(style);
-	}  
+	}
 }
 
 void WorksheetDock::backgroundBrushStyleChanged(int index){
@@ -525,7 +530,7 @@ void WorksheetDock::backgroundBrushStyleChanged(int index){
 	Qt::BrushStyle style = (Qt::BrushStyle)index;
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setBackgroundBrushStyle(style);
-	}  
+	}
 }
 
 void WorksheetDock::backgroundFirstColorChanged(const QColor& c){
@@ -644,7 +649,7 @@ void WorksheetDock::selectFile() {
 		if (newDir!=dir)
 			conf.writeEntry("LastImageDir", newDir);
 	}
-	
+
     ui.kleBackgroundFileName->setText( path );
 
 	foreach(Worksheet* worksheet, m_worksheetList)
@@ -654,11 +659,11 @@ void WorksheetDock::selectFile() {
 void WorksheetDock::fileNameChanged(){
 	if (m_initializing)
 		return;
-	
+
 	QString fileName = ui.kleBackgroundFileName->text();
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setBackgroundFileName(fileName);
-  } 
+  }
 }
 
 //*************************************************************
@@ -667,7 +672,7 @@ void WorksheetDock::fileNameChanged(){
 void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_worksheet != aspect)
 		return;
-	
+
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text()) {
 		ui.leName->setText(aspect->name());
@@ -749,7 +754,7 @@ void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
 	ui.sbLayoutVerticalSpacing->setEnabled(b);
 	ui.sbLayoutRowCount->setEnabled(b);
 	ui.sbLayoutColumnCount->setEnabled(b);
-	
+
 	if (b) {
 		bool grid = (layout == Worksheet::GridLayout);
 		ui.lGrid->setVisible(grid);
@@ -763,7 +768,7 @@ void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
 		ui.sbLayoutRowCount->setVisible(true);
 		ui.lColumnCount->setVisible(true);
 		ui.sbLayoutColumnCount->setVisible(true);
-	}		
+	}
 }
 
 void WorksheetDock::worksheetLayoutTopMarginChanged(float value) {
@@ -825,7 +830,7 @@ void WorksheetDock::load(){
 	updatePaperSize();
 
 	// Background-tab
-	ui.cbBackgroundType->setCurrentIndex( (int) m_worksheet->backgroundType() );	
+	ui.cbBackgroundType->setCurrentIndex( (int) m_worksheet->backgroundType() );
 	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_worksheet->backgroundColorStyle() );
 	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_worksheet->backgroundImageStyle() );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_worksheet->backgroundBrushStyle() );
@@ -833,7 +838,7 @@ void WorksheetDock::load(){
 	ui.kcbBackgroundFirstColor->setColor( m_worksheet->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_worksheet->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_worksheet->backgroundOpacity()*100) );
-	
+
 	// Layout
 	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter) );
 	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter) );
@@ -841,7 +846,7 @@ void WorksheetDock::load(){
 	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), Worksheet::Centimeter) );
 	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter) );
 	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), Worksheet::Centimeter) );
-	
+
 	ui.sbLayoutRowCount->setValue( m_worksheet->layoutRowCount() );
 	ui.sbLayoutColumnCount->setValue( m_worksheet->layoutColumnCount() );
 }
@@ -854,7 +859,7 @@ void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
-	
+
 	int size = m_worksheetList.size();
 	if (size>1)
 		m_worksheet->beginMacro(i18n("%1 worksheets: template \"%2\" loaded", size, name));
@@ -867,7 +872,7 @@ void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
 
 void WorksheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Worksheet" );
-	
+
 	// Geometry
 	ui.chScaleContent->setChecked(group.readEntry("ScaleContent", false));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_worksheet->pageRect().width()), Worksheet::Centimeter));
@@ -875,7 +880,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	updatePaperSize();
 
 	// Background-tab
-	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_worksheet->backgroundType()) );	
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_worksheet->backgroundType()) );
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_worksheet->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_worksheet->backgroundImageStyle()) );
 	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) m_worksheet->backgroundBrushStyle()) );
@@ -883,7 +888,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_worksheet->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_worksheet->backgroundSecondColor()) );
 	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100) );
-	
+
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter)) );
 	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), Worksheet::Centimeter)) );
@@ -891,7 +896,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin", Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), Worksheet::Centimeter)) );
 	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing", Worksheet::convertFromSceneUnits(m_worksheet->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
 	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing", Worksheet::convertFromSceneUnits(m_worksheet->layoutVerticalSpacing(), Worksheet::Centimeter)) );
-	
+
 	ui.sbLayoutRowCount->setValue(group.readEntry("LayoutRowCount", m_worksheet->layoutRowCount()));
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_worksheet->layoutColumnCount()));
 }

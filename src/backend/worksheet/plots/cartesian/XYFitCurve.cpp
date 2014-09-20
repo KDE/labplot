@@ -48,6 +48,7 @@
 
 #include <KIcon>
 #include <KLocale>
+#include <QElapsedTimer>
 #include <QDebug>
 
 XYFitCurve::XYFitCurve(const QString& name)
@@ -443,6 +444,8 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f,gsl_matrix* J) {
 
 void XYFitCurvePrivate::recalculate() {
 	qDebug()<<"XYFitCurvePrivate::recalculate()";
+	QElapsedTimer timer;
+	timer.start();
 
 	//create fit result columns if not available yet, clear them otherwise
 	if (!xColumn) {
@@ -498,7 +501,7 @@ void XYFitCurvePrivate::recalculate() {
 	//determine the number of data points in the column, stop iterating after the first nan was encountered
 	int n = xDataColumn->rowCount();
 	for (int i=0; i<xDataColumn->rowCount(); ++i) {
-		if (isnan(xdata[i])) {
+		if (isnan(xdata[i]) || isnan(ydata[i])) {
 			n = i;
 			break;
 		}
@@ -595,9 +598,10 @@ void XYFitCurvePrivate::recalculate() {
 	//rms = residual mean square = sse/d.o.f.
 	//rsd = residual standard deviation = sqrt(rms)
 	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
+	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*n-1)/(n-np-1);
 
-	residualsVector->resize(xDataColumn->rowCount());
-	for (int i=0; i<xDataColumn->rowCount(); ++i) {
+	residualsVector->resize(n);
+	for (int i=0; i<n; ++i) {
 		residualsVector->data()[i] = gsl_vector_get(s->f, i);
 	}
 	residualsColumn->setChanged();
@@ -622,6 +626,7 @@ void XYFitCurvePrivate::recalculate() {
 	for (int i=0; i<n; ++i)
 		sstot += pow(ydata[i]-ybar, 2);
 	fitResult.rsquared = 1 - fitResult.sse/sstot;
+	fitResult.rsquaredAdj = 1-(1-fitResult.rsquared*fitResult.rsquared)*(n-1)/(n-np-1);
 
 	//parameter values
 	double c = GSL_MIN_DBL(1, sqrt(fitResult.sse)); //limit error for poor fit
@@ -644,12 +649,13 @@ void XYFitCurvePrivate::recalculate() {
 	double max = xDataColumn->maximum();
 	xVector->resize(fitData.fittedPoints);
 	yVector->resize(fitData.fittedPoints);
-	qDebug()<<"Model="<<fitData.model;
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min), QString::number(max), fitData.fittedPoints, xVector, yVector, fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();
 	}
+
+	fitResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
 	emit (q->dataChanged());
@@ -668,8 +674,6 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	//current value of the chi2-function
 	state += QString::number(pow(gsl_blas_dnrm2 (s->f),2));
 	state += ';';
-
-	qDebug()<<"state: "<<state;
 
 	fitResult.solverOutput += state;
 }
@@ -720,11 +724,14 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	//mae = mean absolute error = \sum_i^n |Y_i-y_i|
 	//rms = residual mean square = sse/d.o.f.
 	//rsd = residual standard deviation = sqrt(rms)
+	//R-squared
+	//adjusted R-squared
 	writer->writeStartElement("fitResult");
 	writer->writeAttribute( "available", QString::number(d->fitResult.available) );
 	writer->writeAttribute( "valid", QString::number(d->fitResult.valid) );
 	writer->writeAttribute( "status", d->fitResult.status );
 	writer->writeAttribute( "iterations", QString::number(d->fitResult.iterations) );
+	writer->writeAttribute( "time", QString::number(d->fitResult.elapsedTime) );
 	writer->writeAttribute( "dof", QString::number(d->fitResult.dof) );
 	writer->writeAttribute( "sse", QString::number(d->fitResult.sse) );
 	writer->writeAttribute( "mse", QString::number(d->fitResult.mse) );
@@ -732,6 +739,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "mae", QString::number(d->fitResult.mae) );
 	writer->writeAttribute( "rms", QString::number(d->fitResult.rms) );
 	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd) );
+	writer->writeAttribute( "rsquared", QString::number(d->fitResult.rsquared) );
+	writer->writeAttribute( "rsquaredAdj", QString::number(d->fitResult.rsquaredAdj) );
 	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
 
 	writer->writeStartElement("paramValues");
@@ -856,6 +865,12 @@ bool XYFitCurve::load(XmlStreamReader* reader){
             else
                 d->fitResult.iterations = str.toInt();
 
+			str = attribs.value("time").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'time'"));
+            else
+                d->fitResult.elapsedTime = str.toInt();
+
 			str = attribs.value("dof").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'dof'"));
@@ -897,6 +912,18 @@ bool XYFitCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'rsd'"));
             else
                 d->fitResult.rsd = str.toDouble();
+
+			str = attribs.value("rsquared").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rsquared'"));
+            else
+                d->fitResult.rsquared = str.toDouble();
+
+			str = attribs.value("rsquaredAdj").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rsquaredAdj'"));
+            else
+                d->fitResult.rsquaredAdj = str.toDouble();
 
 			str = attribs.value("solverOutput").toString();
             if(str.isEmpty())

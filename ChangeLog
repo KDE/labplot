@@ -9,6 +9,8 @@ New features:
 	* Hover effect for axis, curve and text label.
 	* Added a MessageBox - ask befor deleting worksheet objects.
 	* Added three new types for drop lines - "zero baseline", "min baseline" and "max baseline"
+	* Fill the selection in Spreadsheet with a constant value provided by the user
+	* Fill columns with uniform and non-uniform random numbers, several distributions are available.
 
 Bug fixes:
 	* Don't crash when trying to create a plot in case no rc-file was installed.

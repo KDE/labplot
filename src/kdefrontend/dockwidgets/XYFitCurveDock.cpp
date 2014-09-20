@@ -310,13 +310,11 @@ void XYFitCurveDock::modelChanged(int index) {
 }
 
 void XYFitCurveDock::updateModelEquation() {
-	qDebug()<<"XYFitCurveDock::updateModelEquation()";
 	QStringList vars; //variables/parameters that are known in ExpressionTestEdit teEquation
 	vars << "x";
 	QString eq;
 	m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
 	int num = uiGeneralTab.sbDegree->value();
-	qDebug()<<"	modelType = "<<m_fitData.modelType;
 
 	if (m_fitData.modelType!=XYFitCurve::Custom)
 		m_fitData.paramNames.clear();
@@ -517,6 +515,7 @@ void XYFitCurveDock::insertConstant(const QString& str) {
 }
 
 void XYFitCurveDock::recalculateClicked() {
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
 	if (m_fitData.modelType==XYFitCurve::Custom) {
 		m_fitData.model = uiGeneralTab.teEquation->toPlainText();
@@ -527,6 +526,7 @@ void XYFitCurveDock::recalculateClicked() {
 
 	this->showFitResult();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+	QApplication::restoreOverrideCursor();
 }
 
 void XYFitCurveDock::enableRecalculate() const {
@@ -564,6 +564,11 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	str += i18n("iterations") + ": " + QString::number(fitResult.iterations) + "<br>";
+	if (fitResult.elapsedTime>1000)
+		str += i18n("calculation time: %1 s").arg(QString::number(fitResult.elapsedTime/1000)) + "<br>";
+	else
+		str += i18n("calculation time: %1 ms").arg(QString::number(fitResult.elapsedTime)) + "<br>";
+
 	str += i18n("degrees of freedom") + ": " + QString::number(fitResult.dof) + "<br><br>";
 
 	str += "<b>Parameters:</b>";
@@ -584,6 +589,7 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	str += i18n("coefficient of determination (R²)") + ": " + QString::number(fitResult.rsquared) + "<br>";
+	str += i18n("adj. coefficient of determination (R²)") + ": " + QString::number(fitResult.rsquaredAdj) + "<br>";
 // 	str += "<br><br>";
 //
 // 	QStringList iterations = fitResult.solverOutput.split(';');
