@@ -139,8 +139,9 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("μ"));
-		ui.lParameter2->setText(QString::fromUtf8("σ"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("μ="));
+		ui.lParameter2->setText(QString::fromUtf8("σ="));
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 	} else if (distr == Exponential) {
@@ -150,7 +151,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("λ"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("λ="));
 		ui.kleParameter1->setText("1.0");
 	} else if (distr == Laplace) {
 		ui.lParameter1->show();
@@ -159,8 +161,9 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("μ"));
-		ui.lParameter2->setText("a");
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("μ="));
+		ui.lParameter2->setText("a=");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 	} else if (distr == ExponentialPower) {
@@ -170,9 +173,10 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("μ"));
-		ui.lParameter2->setText("a");
-		ui.lParameter3->setText("b");
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("μ="));
+		ui.lParameter2->setText("a=");
+		ui.lParameter3->setText("b=");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
@@ -183,7 +187,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText("a");
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText("a=");
 		ui.kleParameter1->setText("1.0");
 	} else if (distr == Rayleigh) {
 		ui.lParameter1->show();
@@ -192,7 +197,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("σ"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("σ="));
 		ui.kleParameter1->setText("1.0");
 	} else if (distr == RayleighTail) {
 		ui.lParameter1->show();
@@ -201,8 +207,9 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("σ"));
-		ui.lParameter2->setText("a");
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("σ="));
+		ui.lParameter2->setText("a=");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("0.0");
 	} else if (distr == Landau) {
@@ -221,8 +228,9 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText("c");
-		ui.lParameter2->setText(QString::fromUtf8("α"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText("c=");
+		ui.lParameter2->setText(QString::fromUtf8("α="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 	}else if (distr == LevySkewAlphaStable) {
@@ -232,9 +240,10 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lParameter1->setText(QString::fromUtf8("c"));
-		ui.lParameter2->setText(QString::fromUtf8("α"));
-		ui.lParameter3->setText(QString::fromUtf8("β"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("c="));
+		ui.lParameter2->setText(QString::fromUtf8("α="));
+		ui.lParameter3->setText(QString::fromUtf8("β="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
@@ -247,8 +256,9 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText("a");
-		ui.lParameter2->setText("b");
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText("a=");
+		ui.lParameter2->setText("b=");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 	}  else if (distr == Lognormal) {
@@ -258,8 +268,9 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("σ"));
-		ui.lParameter2->setText(QString::fromUtf8("ζ"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("σ="));
+		ui.lParameter2->setText(QString::fromUtf8("ζ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 	} else if (distr == ChiSquared) {
@@ -269,7 +280,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("ν"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("ν="));
 		ui.kleParameter1->setText("1.0");
 	} else if (distr == F) {
 		ui.lParameter1->show();
@@ -278,8 +290,9 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("ν1"));
-		ui.lParameter2->setText(QString::fromUtf8("ν2"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("ν1="));
+		ui.lParameter2->setText(QString::fromUtf8("ν2="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 	} else if (distr == t) {
@@ -289,7 +302,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("ν"));
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText(QString::fromUtf8("ν="));
 		ui.kleParameter1->setText("1.0");
 	} else if (distr == Logistic) {
 		ui.lParameter1->show();
@@ -298,7 +312,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText("a");
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText("a=");
 		ui.kleParameter1->setText("1.0");
 	} else if (distr == Poisson) {
 		ui.lParameter1->show();
@@ -307,7 +322,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText(QString::fromUtf8("μ"));
+		ui.lFunc->setText("p(k)=");
+		ui.lParameter1->setText(QString::fromUtf8("μ="));
 		ui.kleParameter1->setText("0.0");
 	} else if (distr==Bernoulli || distr==Geometric || distr==Logarithmic) {
 		ui.lParameter1->show();
@@ -316,7 +332,8 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText("p");
+		ui.lFunc->setText("p(k)=");
+		ui.lParameter1->setText("p=");
 		ui.kleParameter1->setText("0.5");
 	} else if (distr==Binomial || distr==NegativeBinomial || distr==Pascal) {
 		ui.lParameter1->show();
@@ -325,8 +342,9 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lParameter1->setText("p");
-		ui.lParameter1->setText("n");
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText("p=");
+		ui.lParameter1->setText("n=");
 		ui.kleParameter1->setText("0.5");
 		ui.kleParameter2->setText("100");
 	} else if (distr == Hypergeometric) {
@@ -336,16 +354,17 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lParameter1->setText("n1");
-		ui.lParameter2->setText("n2");
-		ui.lParameter2->setText("t");
+		ui.lFunc->setText("p(k)=");
+		ui.lParameter1->setText("n1=");
+		ui.lParameter2->setText("n2=");
+		ui.lParameter2->setText("t=");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("2.0");
 		ui.kleParameter3->setText("3.0");
 	}
 
 	QString file = KStandardDirs::locate("data", "LabPlot2/pics/gsl_distributions/" + m_formulaPixs[distr] + ".jpg");
-	ui.lFormula->setPixmap(QPixmap(file));
+	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
 void NonUniformRandomDialog::checkValues() {

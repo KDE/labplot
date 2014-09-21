@@ -31,7 +31,7 @@
        <widget class="QComboBox" name="cbDistribution"/>
       </item>
       <item row="1" column="2">
-       <widget class="QLabel" name="lFormula">
+       <widget class="QLabel" name="lFuncPic">
         <property name="text">
          <string/>
         </property>
@@ -46,7 +46,7 @@
       <item row="4" column="2">
        <widget class="KLineEdit" name="kleParameter3">
         <property name="text">
-         <string>3</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -105,6 +105,22 @@
         </property>
         <property name="text">
          <string>3</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QLabel" name="lFunc">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>p(x)</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

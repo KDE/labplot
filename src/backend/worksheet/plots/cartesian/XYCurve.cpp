@@ -58,6 +58,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QtDebug>
+#include <QElapsedTimer>
 
 #include <KIcon>
 #include <KConfig>
@@ -70,6 +71,21 @@
 #endif
 #include <math.h>
 #include <vector>
+
+class PerfTracer {
+	public:
+		PerfTracer(QString msg){
+			m_msg = msg;
+			m_timer.start();
+		};
+		~PerfTracer() {
+			qDebug()<< m_msg << ": " << m_timer.nsecsElapsed();
+		}
+
+	private:
+		QElapsedTimer m_timer;
+		QString m_msg;
+};
 
 XYCurve::XYCurve(const QString &name)
 		: AbstractWorksheetElement(name), d_ptr(new XYCurvePrivate(this)){
@@ -716,7 +732,7 @@ bool XYCurvePrivate::swapVisible(bool on){
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform(){
-	qDebug()<<"XYCurvePrivate::retransform()";
+	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 
@@ -898,6 +914,7 @@ void XYCurvePrivate::updateLines(){
 	  case XYCurve::SplineAkimaPeriodic:{
 #ifdef HAVE_GSL
 		//TODO: optimize! try to omit the copying from the column to the arrays of doubles.
+		//TODO: forward the error message to the UI.
 		gsl_interp_accel *acc  = gsl_interp_accel_alloc();
 		gsl_spline *spline=0;
 
@@ -907,6 +924,7 @@ void XYCurvePrivate::updateLines(){
 		  y[i]=symbolPointsLogical.at(i).y();
 		}
 
+		gsl_set_error_handler_off();
 		if (lineType==XYCurve::SplineCubicNatural){
 			spline = gsl_spline_alloc(gsl_interp_cspline, count);
 		}else if (lineType==XYCurve::SplineCubicPeriodic){
@@ -918,13 +936,16 @@ void XYCurvePrivate::updateLines(){
 		}
 
 		if (!spline) {
-			//TODO:akima splines don't work at the moment
-			qDebug()<<"Couldn't initialize spline function";
+			QString msg;
+			if ( (lineType==XYCurve::SplineAkimaNatural || lineType==XYCurve::SplineAkimaPeriodic) && count<5)
+				msg=i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
+			else
+				msg =i18n("Couldn't initialize spline function");
+			qDebug()<<msg;
 			recalcShapeAndBoundingRect();
 			return;
 		}
 
-		gsl_set_error_handler_off();
 		int status = gsl_spline_init (spline, x, y, count);
 		if (status ) {
 			//TODO: check in gsl/interp.c when GSL_EINVAL is thrown
@@ -934,7 +955,6 @@ void XYCurvePrivate::updateLines(){
 			else
 				gslError = gsl_strerror (status);
 
-			//TODO: forward the error message to the UI.
 			qDebug() << "Error in spline calculation. " << gslError;
 
 			recalcShapeAndBoundingRect();
@@ -950,7 +970,7 @@ void XYCurvePrivate::updateLines(){
 		   x2 = x[i+1];
 		   step=fabs(x2-x1)/(lineInterpolationPointsCount+1);
 
-		  for (xi=x1; xi<=x2; xi += step){
+		  for (xi=x1; xi<x2; xi += step){
 			yi = gsl_spline_eval (spline, xi, acc);
 			xinterp.push_back(xi);
 			yinterp.push_back(yi);
@@ -960,6 +980,7 @@ void XYCurvePrivate::updateLines(){
 		for (unsigned int i=0; i<xinterp.size()-1; i++){
 		  lines.append(QLineF(xinterp[i], yinterp[i], xinterp[i+1], yinterp[i+1]));
 		}
+		lines.append(QLineF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1], x[count-1], y[count-1]));
 
 		gsl_spline_free (spline);
         gsl_interp_accel_free (acc);
@@ -1450,6 +1471,7 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
+	PerfTracer("XYCurvePrivate::paint, " + q->name());
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!isVisible())
@@ -1497,12 +1519,14 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 	}
 
 	if (m_hovered && !isSelected() && !m_printing){
+		PerfTracer("XYCurvePrivate::paint, " + q->name() + ", hovered");
 		painter->setPen(q->hoveredPen);
 		painter->setOpacity(q->hoveredOpacity);
 		painter->drawPath(shape());
 	}
 
 	if (isSelected() && !m_printing){
+		PerfTracer("XYCurvePrivate::paint, " + q->name() + ", selected");
 		painter->setPen(q->selectedPen);
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(shape());

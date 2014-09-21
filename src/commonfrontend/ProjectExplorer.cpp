@@ -434,14 +434,18 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index){
 	qDebug()<<"ProjectExplorer::selectIndex";
-	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-	m_treeView->setExpanded(index, true);
-	m_treeView->scrollTo(index);
+	if ( !m_treeView->selectionModel()->isSelected(index) ) {
+		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+		m_treeView->setExpanded(index, true);
+		m_treeView->scrollTo(index);
+	}
 }
 
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
 	qDebug()<<"ProjectExplorer::deselectIndex";
-	m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
+	if ( m_treeView->selectionModel()->isSelected(index) ) {
+		m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
+	}
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){

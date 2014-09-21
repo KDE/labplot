@@ -157,6 +157,7 @@ set(QTMOC_HDRS
 qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
 
 add_subdirectory( pics )
+add_subdirectory( pics/gsl_distributions )
 
 ##############################################################################
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
