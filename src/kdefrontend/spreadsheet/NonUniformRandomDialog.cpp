@@ -105,6 +105,29 @@ NonUniformRandomDialog::NonUniformRandomDialog(Spreadsheet* s, QWidget* parent, 
 	m_formulaPixs[Cauchy] = "cauchy";
 	m_formulaPixs[Rayleigh] = "rayleigh";
 	m_formulaPixs[RayleighTail] = "rayleigh_tail";
+	m_formulaPixs[Landau] = "landau";
+	m_formulaPixs[LevyAlphaStable] = "levy_alpha_stable";
+	m_formulaPixs[LevySkewAlphaStable] = "levy_skew_alpha_stable";
+	m_formulaPixs[Gamma] = "gamma";
+	m_formulaPixs[Flat] = "flat";
+	m_formulaPixs[Lognormal] = "lognormal";
+	m_formulaPixs[ChiSquared] = "chi_squared";
+	m_formulaPixs[F] = "F";
+	m_formulaPixs[t] = "t";
+	m_formulaPixs[Beta] = "beta";
+	m_formulaPixs[Logistic] = "logistic";
+	m_formulaPixs[Pareto] = "pareto";
+	m_formulaPixs[Weibull] = "weibull";
+	m_formulaPixs[Gumbel1] = "gumbel_type_1";
+	m_formulaPixs[Gumbel2] = "gumbel_type_2";
+	m_formulaPixs[Poisson] = "poisson";
+	m_formulaPixs[Bernoulli] = "bernoulli";
+	m_formulaPixs[Binomial] = "binomial";
+	m_formulaPixs[NegativeBinomial] = "binomial_negative";
+	m_formulaPixs[Pascal] = "pascal";
+	m_formulaPixs[Geometric] = "geometric";
+	m_formulaPixs[Hypergeometric] = "hypergeometric";
+	m_formulaPixs[Logarithmic] = "logarithmic";
 
 	ui.kleParameter1->setClearButtonShown(true);
 	ui.kleParameter2->setClearButtonShown(true);
@@ -332,7 +355,11 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->hide();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(k)=");
+		if (distr==Bernoulli) {
+			ui.lFunc->setText("");
+		} else {
+			ui.lFunc->setText("p(k)=");
+		}
 		ui.lParameter1->setText("p=");
 		ui.kleParameter1->setText("0.5");
 	} else if (distr==Binomial || distr==NegativeBinomial || distr==Pascal) {
@@ -342,7 +369,7 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 		ui.kleParameter2->show();
 		ui.lParameter3->hide();
 		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x)=");
+		ui.lFunc->setText("p(k)=");
 		ui.lParameter1->setText("p=");
 		ui.lParameter1->setText("n=");
 		ui.kleParameter1->setText("0.5");
