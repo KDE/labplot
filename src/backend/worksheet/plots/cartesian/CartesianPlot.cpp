@@ -839,6 +839,8 @@ void CartesianPlot::scaleAutoX(){
 	double max = -INFINITY;
 	QList<XYCurve*> children = this->children<XYCurve>();
 	foreach(XYCurve* curve, children) {
+		if (!curve->isVisible())
+			continue;
 		if (!curve->xColumn())
 			continue;
 
@@ -892,6 +894,8 @@ void CartesianPlot::scaleAutoY(){
 	double max = -INFINITY;
 	QList<XYCurve*> children = this->children<XYCurve>();
 	foreach(XYCurve* curve, children) {
+		if (!curve->isVisible())
+			continue;
 		if (!curve->yColumn())
 			continue;
 
@@ -946,6 +950,8 @@ void CartesianPlot::scaleAuto(){
 	double yMax = -INFINITY;
 	QList<XYCurve*> children = this->children<XYCurve>();
 	foreach(XYCurve* curve, children) {
+		if (!curve->isVisible())
+			continue;
 		if (!curve->xColumn())
 			continue;
 
@@ -1830,7 +1836,7 @@ bool CartesianPlot::load(XmlStreamReader* reader){
         }
     }
 
-	d->retransform();
+	d->retransform();//TODO: This is expensive. why do we need this on load?
 	if (m_title) {
 		m_title->setHidden(true);
 		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());

@@ -140,7 +140,6 @@ void XYFitCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
 
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	this->modelChanged(m_fitData.modelType);
 	if (m_fitData.modelType == XYFitCurve::Custom)
 		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
 
@@ -427,6 +426,7 @@ void XYFitCurveDock::updateModelEquation() {
 	} else if (m_fitData.modelType==XYFitCurve::Custom) {
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
+		vars << m_fitData.paramNames;
 	}
 
 	//resize the vector for the start values and set the elements to 1.0
@@ -497,6 +497,7 @@ void XYFitCurveDock::showOptions() {
 	QMenu menu;
 	FitOptionsWidget w(&menu, &m_fitData);
 	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
+	connect(&w, SIGNAL(optionsChanged()), this, SLOT(enableRecalculate()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&w);

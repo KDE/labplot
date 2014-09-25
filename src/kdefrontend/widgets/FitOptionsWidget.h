@@ -40,12 +40,15 @@ public:
 private:
 	Ui::FitOptionsWidget ui;
 	XYFitCurve::FitData* m_fitData;
+	bool m_changed;
 
 signals:
 	void finished();
+	void optionsChanged();
 
 private slots:
 	void applyClicked();
+	void changed();
 };
 
 #endif //FITOPTIONSWIDGET_H

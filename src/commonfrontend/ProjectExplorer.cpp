@@ -296,6 +296,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 	if (m_projectLoading)
 		return;
 
+	//don't do anything if hidden aspects were added
 	if (aspect->hidden())
 		return;
 
@@ -304,10 +305,18 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 
 	//expand and make the aspect visible
 	m_treeView->setExpanded(index, true);
+
+	//"auxilary" aspects like residual columns in XYFitCurve are only expanded
+	//but not selected, return here
+	if ( aspect->parentAspect()->inherits("XYFitCurve") ) {
+		m_treeView->setExpanded(tree_model->modelIndexOfAspect(aspect->parentAspect()), true);
+		return;
+	}
+
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
 
-	//select the added aspect
+	//select the added aspect.
 	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
 
@@ -515,7 +524,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 			viewStates.push_back(s);
 		}
 
-		if (m_treeView->isExpanded(index))
+		if (model->rowCount(index)>0 && m_treeView->isExpanded(index))
 			expanded.push_back(row);
 
 		if (selectedRows.indexOf(index) != -1)
@@ -578,6 +587,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	QString str;
 	int row;
 	QList<QModelIndex> selected;
+	QList<QModelIndex> expanded;
 	QXmlStreamAttributes attribs;
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 
@@ -614,7 +624,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			row = reader->readElementText().toInt();
 
 			if (row==-1) {
-				//-1 can only be stored for no current item or for the project-item being the current item (s.a. load())
+				//-1 can only be stored for no current item or for the project-item being the current item (s.a. ProjectExplorer::save())
 				//-> make the project item current in this case
 				currentIndex = model->modelIndexOfAspect(m_project);
 				continue;
@@ -624,8 +634,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			const QModelIndex& index = model->modelIndexOfAspect(aspects.at(row));
 
 			if (expandedItem) {
-				m_treeView->setExpanded(index, true);
-				m_treeView->scrollTo(index);
+				expanded.push_back(index);
 			} else if (selectedItem) {
 				selected.push_back(index);
 			} else if (currentItem) {
@@ -678,9 +687,26 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 		}
 	}
 
+	foreach(const QModelIndex& index, expanded) {
+		m_treeView->setExpanded(index, true);
+		collapseParents(index, expanded);//collapse all parent indices if they are not expanded
+	}
+
 	foreach(const QModelIndex& index, selected)
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 
 	m_treeView->setCurrentIndex(currentIndex);
+	m_treeView->scrollTo(currentIndex);
+	collapseParents(currentIndex, expanded);//even if it's the current index, collapse all parent indices if they are not expanded when saved
+
 	return true;
+}
+
+void ProjectExplorer::collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded) {
+	QModelIndex parent = index.parent();
+	if (parent==QModelIndex())
+		return;
+
+	if (expanded.indexOf(parent)==-1)
+		m_treeView->collapse(parent);
 }

@@ -42,6 +42,7 @@ EquationHighlighter::EquationHighlighter(KTextEdit* parent)
 
 void EquationHighlighter::setVariables(const QStringList& variables) {
 	m_variables = variables;
+	rehighlight();
 }
 
 void EquationHighlighter::highlightBlock(const QString& text) {

@@ -53,6 +53,9 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.leFittedPoints->setText(QString::number(m_fitData->fittedPoints));
 
 	//SLOTS
+	connect( ui.leEps, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
+	connect( ui.leMaxIterations, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
+	connect( ui.leFittedPoints, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
 }
@@ -60,5 +63,14 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 void FitOptionsWidget::applyClicked() {
 	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();
 	m_fitData->eps = ui.leEps->text().toFloat();
+	m_fitData->fittedPoints = ui.leFittedPoints->text().toInt();
+
+	if (m_changed)
+		emit(optionsChanged());
+
 	emit(finished());
+}
+
+void FitOptionsWidget::changed() {
+	m_changed = true;
 }

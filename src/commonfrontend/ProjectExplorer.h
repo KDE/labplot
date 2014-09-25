@@ -51,16 +51,17 @@ class ProjectExplorer : public QWidget{
 		void setProject(const Project*);
 		QModelIndex currentIndex() const;
 		QAbstractItemModel* model() const;
-		
+
 	private:
 		void createActions();
 	  	void contextMenuEvent(QContextMenuEvent*);
 		bool eventFilter(QObject*, QEvent*);
+		void collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded);
 		int m_columnToHide;
 		QTreeView* m_treeView;
 		bool m_projectLoading;
 		const Project* m_project;
-		
+
 		QAction* caseSensitiveAction;
 		QAction* matchCompleteWordAction;
 		QAction* expandTreeAction;
@@ -69,13 +70,13 @@ class ProjectExplorer : public QWidget{
 		QAction* showAllColumnsAction;
 		QList<QAction*> list_showColumnActions;
 		QSignalMapper* showColumnsSignalMapper;
-		
+
 		QFrame* frameFilter;
 		QLabel* lFilter;
 		QLineEdit* leFilter;
 		QPushButton* bClearFilter;
 		QPushButton* bFilterOptions;
-	
+
 	private slots:
 		void projectLoadStarted();
 		void projectLoadFinished();
@@ -88,12 +89,12 @@ class ProjectExplorer : public QWidget{
 		void toggleFilterMatchCompleteWord();
 		void toggleFilterWidgets();
 		void toggleFilterOptionsMenu(bool);
-		
+
 		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 		void selectIndex(const QModelIndex&);
 		void deselectIndex(const QModelIndex&);
 		void selectionChanged(const QItemSelection&, const QItemSelection&);
-		
+
 		void save(QXmlStreamWriter*) const;
 		bool load(XmlStreamReader*);
 

@@ -704,6 +704,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "model", d->fitData.model );
 	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
 	writer->writeAttribute( "eps", QString::number(d->fitData.eps) );
+	writer->writeAttribute( "fittedPoints", QString::number(d->fitData.fittedPoints) );
 
 	writer->writeStartElement("paramNames");
 	for (int i=0; i<d->fitData.paramNames.size(); ++i)
@@ -830,6 +831,12 @@ bool XYFitCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'eps'"));
             else
                 d->fitData.eps = str.toDouble();
+
+			str = attribs.value("fittedPoints").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'fittedPoints'"));
+            else
+                d->fitData.fittedPoints = str.toInt();
 		} else if (reader->name() == "name"){
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue"){
