@@ -183,8 +183,6 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 // 	qDebug()<<"Worksheet::handleAspectAdded "<< aspect->name();
 	const AbstractWorksheetElement* addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
 	if (addedElement) {
-		const_cast<AbstractWorksheetElement*>(addedElement)->retransform();
-
 		if (aspect->parentAspect() == this){
 			QGraphicsItem *item = addedElement->graphicsItem();
 			Q_ASSERT(item != NULL);
