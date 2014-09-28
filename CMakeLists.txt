@@ -111,3 +111,5 @@ ENDIF (GSL_FOUND)
 # ##############################################
 add_subdirectory(icons)
 add_subdirectory(src)
+
+install(FILES labplot.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
