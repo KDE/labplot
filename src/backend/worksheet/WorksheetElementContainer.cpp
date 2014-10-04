@@ -160,15 +160,19 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 
 void WorksheetElementContainer::childHovered() {
 	Q_D(WorksheetElementContainer);
-	if (d->m_hovered)
-		d->m_hovered = false;
-	d->update();
+	if (!d->isSelected()) {
+		if (d->m_hovered)
+			d->m_hovered = false;
+		d->update();
+	}
 }
 
 void WorksheetElementContainer::childUnhovered() {
 	Q_D(WorksheetElementContainer);
-	d->m_hovered = true;
-	d->update();
+	if (!d->isSelected()) {
+		d->m_hovered = true;
+		d->update();
+	}
 }
 
 //################################################################
@@ -190,14 +194,18 @@ void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMen
 	menu->exec(event->screenPos());
 }
 
-void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	m_hovered = false;
-	update();
+void WorksheetElementContainerPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	if (!isSelected()) {
+		m_hovered = true;
+		update();
+	}
 }
 
-void WorksheetElementContainerPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	m_hovered = true;
-	update();
+void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	if (m_hovered) {
+		m_hovered = false;
+		update();
+	}
 }
 
 bool WorksheetElementContainerPrivate::swapVisible(bool on){

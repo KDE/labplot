@@ -103,28 +103,52 @@ const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
 	Q_D(const XYFitCurve);
 	return d->fitResult;
 }
+
+bool XYFitCurve::isSourceDataChangedSinceLastFit() const {
+	Q_D(const XYFitCurve);
+	return d->sourceDataChangedSinceLastFit;
+}
+
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
 STD_SETTER_CMD_IMPL_S(XYFitCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
 void XYFitCurve::setXDataColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
-	if (column != d->xDataColumn)
+	if (column != d->xDataColumn) {
 		exec(new XYFitCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
+		emit sourceDataChangedSinceLastFit();
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			//TODO disconnect on undo
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_S(XYFitCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
 void XYFitCurve::setYDataColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
-	if (column != d->yDataColumn)
+	if (column != d->yDataColumn) {
 		exec(new XYFitCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
+		emit sourceDataChangedSinceLastFit();
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			//TODO disconnect on undo
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_S(XYFitCurve, SetWeightsColumn, const AbstractColumn*, weightsColumn)
 void XYFitCurve::setWeightsColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
-	if (column != d->weightsColumn)
+	if (column != d->weightsColumn) {
 		exec(new XYFitCurveSetWeightsColumnCmd(d, column, i18n("%1: assign weights")));
+		emit sourceDataChangedSinceLastFit();
+		if (column) {
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
+			//TODO disconnect on undo
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate);
@@ -134,12 +158,22 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 }
 
 //##############################################################################
+//################################## SLOTS ####################################
+//##############################################################################
+void XYFitCurve::handleSourceDataChanged() {
+	Q_D(XYFitCurve);
+	d->sourceDataChangedSinceLastFit = true;
+	emit sourceDataChangedSinceLastFit();
+}
+
+//##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), weightsColumn(0),
 	xColumn(0), yColumn(0), residualsColumn(0),
 	xVector(0), yVector(0), residualsVector(0),
+	sourceDataChangedSinceLastFit(false),
 	q(owner)  {
 
 }
@@ -479,6 +513,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
+		sourceDataChangedSinceLastFit = false;
 		return;
 	}
 
@@ -495,6 +530,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
 		emit (q->dataChanged());
+		sourceDataChangedSinceLastFit = false;
 		return;
 	}
 
@@ -512,6 +548,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("No data points available.");
 		emit (q->dataChanged());
+		sourceDataChangedSinceLastFit = false;
 		return;
 	}
 
@@ -520,6 +557,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).").arg(n).arg(np);
 		emit (q->dataChanged());
+		sourceDataChangedSinceLastFit = false;
 		return;
 	}
 
@@ -531,6 +569,7 @@ void XYFitCurvePrivate::recalculate() {
 			fitResult.valid = false;
 			fitResult.status = i18n("Not sufficient weight data points provided.");
 			emit (q->dataChanged());
+			sourceDataChangedSinceLastFit = false;
 			return;
 		}
 
@@ -659,6 +698,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
+	sourceDataChangedSinceLastFit = false;
 }
 
 /*!

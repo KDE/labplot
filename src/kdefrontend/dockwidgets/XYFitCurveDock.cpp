@@ -140,11 +140,13 @@ void XYFitCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
 
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	if (m_fitData.modelType == XYFitCurve::Custom)
-		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
+	this->modelChanged(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	this->showFitResult();
+
+	//enable the "recalculate"-button if the source data was changed since the last fit
+	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastFit());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -154,9 +156,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(weightsColumnChanged(const AbstractColumn*)), this, SLOT(curveWeightsColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
-
-	connect(m_fitCurve->xDataColumn(), SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(dataChanged()));
-	connect(m_fitCurve->yDataColumn(), SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(dataChanged()));
+	connect(m_fitCurve, SIGNAL(sourceDataChangedSinceLastFit()), this, SLOT(enableRecalculate()));
 }
 
 void XYFitCurveDock::setModel(std::auto_ptr<AspectTreeModel> model) {
@@ -196,7 +196,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list){
 	m_fitData = m_fitCurve->fitData();
 	initGeneralTab();
 	initTabs();
-	uiGeneralTab.pbRecalculate->setEnabled(false);
 	m_initializing=false;
 }
 
@@ -230,8 +229,6 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index){
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
-
-	this->enableRecalculate();
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
@@ -247,8 +244,6 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
-
-	this->enableRecalculate();
 }
 
 void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
@@ -264,8 +259,6 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setWeightsColumn(column);
-
-	this->enableRecalculate();
 }
 
 void XYFitCurveDock::modelChanged(int index) {
