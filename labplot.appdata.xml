@@ -8,7 +8,9 @@
   <name xml:lang="de">LabPlot</name>
   <name xml:lang="es">LabPlot</name>
   <name xml:lang="nl">LabPlot</name>
+  <name xml:lang="pl">LabPlot</name>
   <name xml:lang="pt">LabPlot</name>
+  <name xml:lang="pt-BR">LabPlot</name>
   <name xml:lang="sk">LabPlot</name>
   <name xml:lang="sv">Labplot</name>
   <name xml:lang="uk">LabPlot</name>
@@ -18,7 +20,9 @@
   <summary xml:lang="de">LabPlot2 ist eine KDE-Anwendung zur interaktiven Erstellung von Grafiken und Analyse wissenschaftlicher Daten</summary>
   <summary xml:lang="es">LabPlot2 es una aplicación de KDE para gráficos interactivos y análisis de datos científicos</summary>
   <summary xml:lang="nl">LabPlot2 is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens</summary>
+  <summary xml:lang="pl">LabPlot2 jest aplikacją KDE do interaktywnego przestawiania graficznego i analizy danych naukowych.</summary>
   <summary xml:lang="pt">O LabPlot2 é uma aplicação do KDE para gráficos interactivos e para a análise de dados científicos</summary>
+  <summary xml:lang="pt-BR">LabPlot2 é um aplicativo do KDE para criação de gráficos interativos e análise de dados científicos</summary>
   <summary xml:lang="sv">Labplot 2 är ett KDE-program för interaktiv diagramritning och analys av vetenskaplig data</summary>
   <summary xml:lang="uk">LabPlot2 — програма KDE для інтерактивної побудови графіків та аналізу наукових даних.</summary>
   <summary xml:lang="x-test">xxLabPlot2 is a KDE application for interactive graphing and analysis of scientific dataxx</summary>
@@ -30,7 +34,9 @@
     <p xml:lang="de">LabPlot ist eine KDE-Anwendung zur interaktiven Erstellung von Grafiken und Analyse wissenschaftlicher Daten.</p>
     <p xml:lang="es">LabPlot es una aplicación de KDE para gráficos interactivos y análisis de datos científicos.</p>
     <p xml:lang="nl">LabPlot2 is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens.</p>
+    <p xml:lang="pl">LabPlot jest aplikacją KDE do interaktywnego przestawiania graficznego i analizy danych naukowych.</p>
     <p xml:lang="pt">O LabPlot é uma aplicação do KDE para gráficos interactivos e para a análise de dados científicos.</p>
+    <p xml:lang="pt-BR">LabPlot é um aplicativo do KDE para criação de gráficos interativos e análise de dados científicos.</p>
     <p xml:lang="sv">Labplot är ett KDE-program för interaktiv diagramritning och analys av vetenskaplig data.</p>
     <p xml:lang="uk">LabPlot — програма KDE для інтерактивної побудови графіків та аналізу наукових даних.</p>
     <p xml:lang="x-test">xxLabPlot is a KDE-application for interactive graphing and analysis of scientific data.xx</p>
@@ -39,7 +45,9 @@
     </p>
     <p xml:lang="es">LabPlot proporciona un sencillo modo de crear, gestionar y editar gráficos. Le permite generar gráficos basados en datos obtenidos de una hoja de cálculo o importados de archivos externos. Los gráficos se pueden exportar a diversos formatos de mapas de bits y vectoriales.</p>
     <p xml:lang="nl">Met LabPlot is het eenvoudig plots te maken, te beheren en te bewerken. U kunt er plots mee maken op basis van gegevens in een werkblad (spreadsheet), of van gegevens die met externe bestanden zijn geïmporteerd. Plots kunnen worden geëxporteerd in diverse pixmap- of vector-grafische bestanden.</p>
+    <p xml:lang="pl">LabPlot zapewnia łatwy sposób do tworzenia, zarządzania i edytowania wykresów. Umożliwia tworzenie wykresów na podstawie danych z arkusza kalkulacyjnego lub danych zaimportowanych z plików zewnętrznych. Wykresy można eksportować do kilku formatów graficznych map pikselowych i wektorowych.</p>
     <p xml:lang="pt">O LabPlot oferece uma forma simples de criar, gerir e editar os gráficos. Permite-lhe produzir gráficos com base nos dados de uma folha de cálculo ou nos dados importados de ficheiros externos. Os gráficos podem ser exportados para diferentes formatos de imagens rasterizados e vectoriais.</p>
+    <p xml:lang="pt-BR">O LabPlot oferece uma forma simples de criar, gerenciar e editar gráficos. Permite-lhe produzir gráficos com base nos dados de uma planilha ou nos dados importados a partir de arquivos externos. Os gráficos podem ser exportados para diferentes formatos de imagens rasterizadas e vetoriais.</p>
     <p xml:lang="sv">Labplot tillhandahåller ett enkelt sätt att skapa, hantera och redigera diagram. Det låter dig skapa diagram baserat på data från ett kalkylark eller data importerad från externa filer. Diagram kan exporteras till flera olika punktavbildnings- och vektorgrafik-format.</p>
     <p xml:lang="uk">За допомогою LabPlot просто створювати креслення, керувати ними та редагувати креслення. За допомогою програми можна створювати креслення на основі електронної таблиці або даних, імпортованих із зовнішнього файла. Креслення можна експортувати у форматі растрового або векторного зображення.</p>
     <p xml:lang="x-test">xxLabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.xx</p>
@@ -48,7 +56,9 @@
     </p>
     <p xml:lang="es">LabPlot2 es una reescritura completa de LabPlot1 y, al tratarse de una primera versión, carece de muchas funcionalidades disponibles en su predecesor. Por otra parte, la interfaz gráfica y la usabilidad son muy superiores si se comparan con las de LabPlot1. Además, contiene varias funcionalidades nuevas que no estaban disponibles en LabPlot1.</p>
     <p xml:lang="nl">LabPlot2 is een geheel opnieuw geschreven LabPlot1 en mist in de eerste uitgave een flink aantal mogelijkheden die in daarin beschikbaar waren. Maar daar staat tegenover dat de GUI (grafische scherm) en bruikbaarheid veel beter zijn dan van LabPlot1, en er zijn ook nieuwe eigenschappen die in LabPlot1 niet beschikbaar waren.</p>
+    <p xml:lang="pl">LabPlot2 jest całkowicie przepisanym LabPlot1 i w jego pierwszym wydaniu brakuje wielu możliwości dostępnych u poprzednika. Z drugiej strony, interfejs użytkownika i użyteczność jest lepsza w porównaniu do LabPlot1; ma także więcej możliwości, które były niedostępne LabPlot1.</p>
     <p xml:lang="pt">O LabPlot2 é uma remodelação completa do LabPlot1 e faltam-lhe, na sua primeira versão, diversas funcionalidades disponíveis na versão anterior. Por outro lado, a interface e a usabilidade estão bastante melhores em comparação com o LabPlot1 e existem diversas funcionalidades novas que não estavam disponíveis no LabPlot1.</p>
+    <p xml:lang="pt-BR">O LabPlot2 é uma remodelação completa do LabPlot1 e faltam-lhe, na sua primeira versão, diversas funcionalidades disponíveis na versão anterior. Por outro lado, a interface e a usabilidade estão muito melhores em comparação com o LabPlot1 e existem diversas novas funcionalidades não disponíveis no LabPlot1.</p>
     <p xml:lang="sv">Labplot 2 är en fullständig omarbetning av Labplot 1, och saknar många funktioner tillgängliga i föregångaren i den första utgåvan. Å andra sidan är det grafiska användargränssnittet och användbarheten överlägsna jämfört med Labplot 1, och det finns flera nya funktioner som inte var tillgängliga i Labplot 1.</p>
     <p xml:lang="uk">LabPlot2 є повністю переписаною версією LabPlot1, отже у перших випусках немає багатьох можливостей, якими можна було скористатися у попередній версії програми. Втім, графічний інтерфейс та зручність у користуванні нової версії є значно кращими. Крім того, реалізовано декілька нових можливостей, яких не було у LabPlot1.</p>
     <p xml:lang="x-test">xxLabPlot2 is a complete rewrite of LabPlot1 and lacks in the first release a lot of features available in the predecessor. On the other hand, the GUI and the usability is more superior as compared to LabPlot1 and there are several new features that were not available in LabPlot1.xx</p>
