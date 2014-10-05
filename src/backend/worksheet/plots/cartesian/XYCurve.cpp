@@ -72,21 +72,6 @@
 #include <math.h>
 #include <vector>
 
-class PerfTracer {
-	public:
-		PerfTracer(QString msg){
-			m_msg = msg;
-			m_timer.start();
-		};
-		~PerfTracer() {
-			qDebug()<< m_msg << ": " << m_timer.nsecsElapsed();
-		}
-
-	private:
-		QElapsedTimer m_timer;
-		QString m_msg;
-};
-
 XYCurve::XYCurve(const QString &name)
 		: AbstractWorksheetElement(name), d_ptr(new XYCurvePrivate(this)){
 	init();
@@ -172,7 +157,6 @@ void XYCurve::initActions(){
 }
 
 QMenu* XYCurve::createContextMenu(){
-// 	Q_D(const XYCurve);
 	QMenu *menu = AbstractWorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
@@ -1471,11 +1455,13 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
-	PerfTracer("XYCurvePrivate::paint, " + q->name());
+	qDebug()<<"XYCurvePrivate::paint, " + q->name();
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!isVisible())
 		return;
+
+// 	QTime timer;
 
 	//draw lines
 	if (lineType != XYCurve::NoLine){
@@ -1501,41 +1487,91 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 		painter->drawPath(errorBarsPath);
 	}
 
+// 	timer.start();
 	//draw symbols
 	if (symbolsPrototype->id() != "none"){
 		painter->setOpacity(symbolsOpacity);
 		painter->setPen(symbolsPen);
 		painter->setBrush(symbolsBrush);
-		painter->drawPath(symbolsPath);
+		drawSymbols(painter);
 	}
 
 	//draw values
 	if (valuesType != XYCurve::NoValues){
 		painter->setOpacity(valuesOpacity);
 		painter->setPen(valuesColor);
-		painter->setBrush(Qt::NoBrush);
 		painter->setBrush(Qt::SolidPattern);
-		painter->drawPath(valuesPath);
+		drawValues(painter);
 	}
+// 	qDebug() << "Paint the curve: " << timer.elapsed() << "ms";
+
 
 	if (m_hovered && !isSelected() && !m_printing){
-		PerfTracer("XYCurvePrivate::paint, " + q->name() + ", hovered");
+// 		timer.start();
+		painter->setBrush(Qt::NoBrush);
 		painter->setPen(q->hoveredPen);
 		painter->setOpacity(q->hoveredOpacity);
-		painter->drawPath(shape());
+		painter->drawPath(linePath);
+		painter->drawPath(dropLinePath);
+		painter->drawPath(errorBarsPath);
+		drawSymbols(painter);
+		drawValues(painter);
+// 		qDebug() << "Paint hovering effect: " << timer.elapsed() << "ms";
+		return;
 	}
 
 	if (isSelected() && !m_printing){
-		PerfTracer("XYCurvePrivate::paint, " + q->name() + ", selected");
+// 		timer.start();
+		painter->setBrush(Qt::NoBrush);
 		painter->setPen(q->selectedPen);
 		painter->setOpacity(q->selectedOpacity);
-		painter->drawPath(shape());
+		painter->drawPath(linePath);
+		painter->drawPath(dropLinePath);
+		painter->drawPath(errorBarsPath);
+		drawSymbols(painter);
+		drawValues(painter);
+// 		qDebug() << "Paint selection effect: " << timer.elapsed() << "ms";
+		return;
+	}
+}
+
+/*!
+	Drawing of symbolsPath is very slow, so we draw every symbol in the loop
+	which us much faster (factor 10)
+*/
+void XYCurvePrivate::drawSymbols(QPainter* painter) {
+	QPainterPath path = symbolsPrototype->shape();
+	QTransform trafo;
+	if (symbolsRotationAngle != 0) {
+		trafo.rotate(symbolsRotationAngle);
+		path = trafo.map(path);
+	}
+	foreach (const QPointF& point, symbolPointsScene) {
+		trafo.reset();
+		trafo.translate(point.x(), point.y());
+		painter->drawPath(trafo.map(path));
+	}
+}
+
+void XYCurvePrivate::drawValues(QPainter* painter) {
+	QTransform trafo;
+	QPainterPath path;
+	for (int i=0; i<valuesPoints.size(); i++){
+		path = QPainterPath();
+		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
+
+		trafo.reset();
+		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
+		if (valuesRotationAngle!=0)
+			trafo.rotate( -valuesRotationAngle );
+
+		painter->drawPath(trafo.map(path));
 	}
 }
 
 void XYCurvePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::SelectionMode) {
+	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
 		m_hovered = true;
 		q->hovered();
 		update();
@@ -1544,7 +1580,7 @@ void XYCurvePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 
 void XYCurvePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::SelectionMode) {
+	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
 		m_hovered = false;
 		q->unhovered();
 		update();

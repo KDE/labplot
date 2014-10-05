@@ -1634,6 +1634,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+	qDebug()<<"AxisPrivate::paint " << q->name();
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -1720,15 +1721,19 @@ void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
 }
 
 void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	m_hovered = true;
-	q->hovered();
-	update();
+	if (!isSelected()) {
+		m_hovered = true;
+		q->hovered();
+		update(axisShapeWithoutGrids.boundingRect());
+	}
 }
 
 void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	m_hovered = false;
-	q->unhovered();
-	update();
+	if (m_hovered) {
+		m_hovered = false;
+		q->unhovered();
+		update(axisShapeWithoutGrids.boundingRect());
+	}
 }
 
 //##############################################################################

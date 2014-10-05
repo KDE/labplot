@@ -58,6 +58,8 @@ class XYCurvePrivate: public QGraphicsItem {
 		bool swapVisible(bool on);
 		QString swapSymbolsTypeId(const QString &id);
 		void recalcShapeAndBoundingRect();
+		void drawSymbols(QPainter*);
+		void drawValues(QPainter*);
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 

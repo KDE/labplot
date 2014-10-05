@@ -611,15 +611,19 @@ void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
 }
 
 void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	m_hovered = true;
-	q->hovered();
-	update();
+	if (!isSelected()) {
+		m_hovered = true;
+		q->hovered();
+		update();
+	}
 }
 
 void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	m_hovered = false;
-	q->unhovered();
-	update();
+	if (m_hovered) {
+		m_hovered = false;
+		q->unhovered();
+		update();
+	}
 }
 
 //##############################################################################
