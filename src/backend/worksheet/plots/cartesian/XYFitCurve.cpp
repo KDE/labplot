@@ -382,9 +382,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
 				}
 				gsl_matrix_set(J, i, 0, wd/sigma);
-				for (int j=0; j<degree; ++j) {
-					gsl_matrix_set(J, i, j+1, cos(j*w*x)/sigma);
-					gsl_matrix_set(J, i, j+2, sin(j*w*x)/sigma);
+				gsl_matrix_set(J, i, 1, 1/sigma);
+				for (int j=1; j<=degree; ++j) {
+					gsl_matrix_set(J, i, 2*j, cos(j*w*x)/sigma);
+					gsl_matrix_set(J, i, 2*j+1, sin(j*w*x)/sigma);
 				}
 			}
 			break;
