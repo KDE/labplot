@@ -361,6 +361,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				gsl_matrix_set(J, i, 1, -a*x*exp(b*x)/sigma);
 				gsl_matrix_set(J, i, 2, 1.0/sigma);
 			}
+			break;
 		}
 		case XYFitCurve::Fourier: {
 			// Y(x) = a0 + (a1*cos(w*x) + b1*sin(w*x)) + ... + (an*cos(n*w*x) + bn*sin(n*w*x)
@@ -401,8 +402,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					b = gsl_vector_get(paramValues,3*j+1);
 					c = gsl_vector_get(paramValues,3*j+2);
 					gsl_matrix_set(J, i, 3*j, exp(-(x-b)*(x-b)/(c*c))/sigma);
-					gsl_matrix_set(J, i, 3*j+1, 2*a*(x-b)/c*c*exp(-(x-b)*(x-b)/(c*c))/sigma);
-					gsl_matrix_set(J, i, 3*j+2, 2*a*(x-b)*(x-b)/c*c*c*exp(-(x-b)*(x-b)/(c*c))/sigma);
+					gsl_matrix_set(J, i, 3*j+1, 2*a*(x-b)/(c*c)*exp(-(x-b)*(x-b)/(c*c))/sigma);
+					gsl_matrix_set(J, i, 3*j+2, 2*a*(x-b)*(x-b)/(c*c*c)*exp(-(x-b)*(x-b)/(c*c))/sigma);
 				}
 			}
 			break;
@@ -420,7 +421,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case XYFitCurve::Maxwell: {
-			// Y(x) = sqrt(2/pi)*exp(-x^2/(2*a^2))/a^3
+			// Y(x) = sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3
 			double a = gsl_vector_get(paramValues,0);
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
