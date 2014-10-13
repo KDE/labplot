@@ -57,7 +57,7 @@ class ImportFileDialog: public KDialog {
 	void setModel(std::auto_ptr<QAbstractItemModel>);
 	void updateModel(std::auto_ptr<QAbstractItemModel>);
 	void setCurrentIndex(const QModelIndex&);
-	
+
   private:
 	QVBoxLayout* vLayout;
 	ImportFileWidget *importFileWidget;
@@ -69,7 +69,7 @@ class ImportFileDialog: public KDialog {
     QPushButton* bNewSpreadsheet;
 	std::auto_ptr<QAbstractItemModel> m_model;
 	bool m_optionsShown;
-	
+
   private slots:
 	void toggleOptions();
 	void currentAddToIndexChanged(QModelIndex);

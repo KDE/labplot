@@ -47,20 +47,20 @@
 
 	\ingroup kdefrontend
  */
- 
-ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), m_optionsShown(false) {
+
+ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPosition(0), m_optionsShown(false) {
 	mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
 	vLayout->setSpacing(0);
 	vLayout->setContentsMargins(0,0,0,0);
-	
+
 	importFileWidget = new ImportFileWidget( mainWidget );
 	vLayout->addWidget(importFileWidget);
-	
+
 	setMainWidget( mainWidget );
-	
+
     setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-	
+
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
 	m_optionsShown = conf.readEntry("ShowOptions", false);
 	if (m_optionsShown){
@@ -80,6 +80,8 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), m_options
 ImportFileDialog::~ImportFileDialog(){
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
 	conf.writeEntry("ShowOptions", m_optionsShown);
+	if (cbPosition)
+		conf.writeEntry("Position", cbPosition->currentIndex());
 }
 
 /*!
@@ -88,51 +90,53 @@ ImportFileDialog::~ImportFileDialog(){
 void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	m_model = model;
 
-  //Frame for the "Add To"-Stuff
-  frameAddTo = new QGroupBox(this);
-  frameAddTo->setTitle(i18n("Import To"));
-  QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
-  hLayout->addWidget( new QLabel(i18n("Spreadsheet"),  frameAddTo) );
-	
-  cbAddTo = new TreeViewComboBox(frameAddTo);
-  cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-  QList<const char *> list;
-  list<<"Folder"<<"Spreadsheet";
-  cbAddTo->setTopLevelClasses(list);
-  hLayout->addWidget( cbAddTo);
-  connect( cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)) );
+	//Frame for the "Add To"-Stuff
+	frameAddTo = new QGroupBox(this);
+	frameAddTo->setTitle(i18n("Import To"));
+	QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
+	hLayout->addWidget( new QLabel(i18n("Spreadsheet"),  frameAddTo) );
 
-  list.clear();
-  list<<"Spreadsheet";
-  cbAddTo->setSelectableClasses(list);
-	
-  bNewSpreadsheet = new QPushButton(frameAddTo);
-  bNewSpreadsheet->setIcon(KIcon("insert-table"));
-  bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
-  hLayout->addWidget( bNewSpreadsheet);
-  connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
-  
-  hLayout->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
-  
-  lPosition = new QLabel(i18n("Position"),  frameAddTo);
-  lPosition->setEnabled(false);
-  hLayout->addWidget(lPosition);
-  
-  cbPosition = new QComboBox(frameAddTo);
-  cbPosition->setEnabled(false);
-  cbPosition->addItem(i18n("Append"));
-  cbPosition->addItem(i18n("Prepend"));
-  cbPosition->addItem(i18n("Replace"));
+	cbAddTo = new TreeViewComboBox(frameAddTo);
+	cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+	QList<const char *> list;
+	list<<"Folder"<<"Spreadsheet";
+	cbAddTo->setTopLevelClasses(list);
+	hLayout->addWidget( cbAddTo);
+	connect( cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)) );
 
-  cbPosition->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-  hLayout->addWidget( cbPosition);
-  
-  vLayout->addWidget(frameAddTo);
-  cbAddTo->setModel(m_model.get());
+	list.clear();
+	list<<"Spreadsheet";
+	cbAddTo->setSelectableClasses(list);
 
-  //hide the data-source related widgets
-  importFileWidget->hideDataSource();
-  
+	bNewSpreadsheet = new QPushButton(frameAddTo);
+	bNewSpreadsheet->setIcon(KIcon("insert-table"));
+	bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
+	hLayout->addWidget( bNewSpreadsheet);
+	connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
+
+	hLayout->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
+
+	lPosition = new QLabel(i18n("Position"),  frameAddTo);
+	lPosition->setEnabled(false);
+	hLayout->addWidget(lPosition);
+
+	cbPosition = new QComboBox(frameAddTo);
+	cbPosition->setEnabled(false);
+	cbPosition->addItem(i18n("Append"));
+	cbPosition->addItem(i18n("Prepend"));
+	cbPosition->addItem(i18n("Replace"));
+	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
+	cbPosition->setCurrentIndex( conf.readEntry("Position", false) );
+
+	cbPosition->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+	hLayout->addWidget( cbPosition);
+
+	vLayout->addWidget(frameAddTo);
+	cbAddTo->setModel(m_model.get());
+
+	//hide the data-source related widgets
+	importFileWidget->hideDataSource();
+
   //ok is only available if a valid spreadsheet was selected
   enableButtonOk(false);
 }
@@ -153,7 +157,7 @@ void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
 */
 void ImportFileDialog::importToFileDataSource(FileDataSource* source) const{
 	importFileWidget->saveSettings(source);
-	
+
 	//TODO: add progress bar
 	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 	source->read();
@@ -169,13 +173,13 @@ void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
 	QString fileName = importFileWidget->fileName();
 	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
-  
+
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
 	connect(filter, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-		
+
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
@@ -220,7 +224,7 @@ void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
 void ImportFileDialog::newSpreadsheet(){
 	QString path = importFileWidget->fileName();
 	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-	
+
 	if (name.isEmpty())
 		name = i18n("new Spreadsheet");
 

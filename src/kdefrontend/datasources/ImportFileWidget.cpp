@@ -71,7 +71,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     ui.swOptions->setCurrentIndex(0);
 
 	ui.gbOptions->hide();
-	
+
     ui.bOpen->setIcon( KIcon("document-open") );
     ui.bFileInfo->setIcon( KIcon("help-about") );
     ui.bManageFilters->setIcon( KIcon("configure") );
@@ -83,7 +83,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
-    connect( ui.cbFileType, SIGNAL(activated(int)), SLOT(fileTypeChanged(int)) );
+    connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged()) );
     connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
     connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
@@ -133,7 +133,7 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 	source->setFileType(fileType);
-	source->setFilter(this->currentFileFilter());	
+	source->setFilter(this->currentFileFilter());
 }
 
 /*!
@@ -165,7 +165,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 			filter->setEndRow(-1);
 		else
 			filter->setEndRow( ui.sbEndRow->value() );
-		
+
 		filter->setStartColumn( ui.sbStartColumn->value()-1 );
 		if (ui.sbEndColumn->value() == -1)
 			filter->setEndColumn(-1);
@@ -247,7 +247,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.kleSourceName->setEnabled(fileExists);
 	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
-		
+
     if ( !fileExists )
 		return;
 
@@ -336,7 +336,7 @@ void ImportFileWidget::filterChanged(int index) {
 	}else{
 	  // predefined filter settings were selected.
 	  //load and show them in the GUI.
-	  //TODO 
+	  //TODO
 	}
 }
 
@@ -367,7 +367,7 @@ void ImportFileWidget::refreshPreview(){
 		for (int i=0; i<lines; ++i){
 			if( stream.atEnd() )
 				break;
-			
+
 			importedText += stream.readLine();
 			importedText += '\n';
 		}

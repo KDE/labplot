@@ -1231,8 +1231,12 @@ void MainWin::importFileDialog(){
 	m_importFileDialog->setModel( model );
 
 	//TODO add Matrix here in future.
-	 if ( m_currentAspect->inherits("Spreadsheet") )
+	 if ( m_currentAspect->inherits("Spreadsheet") ) {
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
+	 } else if ( m_currentAspect->inherits("Column") ) {
+		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
+			m_importFileDialog->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
+	 }
 
 	if ( m_importFileDialog->exec() == QDialog::Accepted ) {
 		m_importFileDialog->importToSpreadsheet(statusBar());
