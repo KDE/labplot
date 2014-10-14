@@ -4,7 +4,7 @@
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -58,7 +58,7 @@
  * \var Column::Private::m_column_mode
  * \brief The column mode
  *
- * The column mode specifies how to interpret 
+ * The column mode specifies how to interpret
  * the values in the column additional to the data type.
  */
 
@@ -101,11 +101,11 @@
 Column::Private::Private(Column * owner, AbstractColumn::ColumnMode mode)
  : m_owner(owner)
 {
-	Q_ASSERT(owner != 0); // a Column::Private without owner is not allowed 
+	Q_ASSERT(owner != 0); // a Column::Private without owner is not allowed
 					      // because the owner must become the parent aspect of the input and output filters
 	m_column_mode = mode;
 	switch(mode)
-	{		
+	{
 		case AbstractColumn::Numeric:
 			m_input_filter = new String2DoubleFilter();
 			m_output_filter = new Double2StringFilter();
@@ -151,14 +151,14 @@ Column::Private::Private(Column * owner, AbstractColumn::ColumnMode mode)
 /**
  * \brief Special ctor (to be called from Column only!)
  */
-Column::Private::Private(Column * owner, AbstractColumn::ColumnMode mode, void * data) 
+Column::Private::Private(Column * owner, AbstractColumn::ColumnMode mode, void * data)
 	: m_owner(owner)
 {
 	m_column_mode = mode;
 	m_data = data;
 
 	switch(mode)
-	{		
+	{
 		case AbstractColumn::Numeric:
 			m_input_filter = new String2DoubleFilter();
 			m_output_filter = new Double2StringFilter();
@@ -211,7 +211,7 @@ Column::Private::~Private()
 		case AbstractColumn::Text:
 			delete static_cast< QStringList* >(m_data);
 			break;
-			
+
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
@@ -224,9 +224,9 @@ Column::Private::~Private()
  * \brief Return the column mode
  *
  * This function is most used by spreadsheets but can also be used
- * by plots. The column mode specifies how to interpret 
+ * by plots. The column mode specifies how to interpret
  * the values in the column additional to the data type.
- */ 
+ */
 AbstractColumn::ColumnMode Column::Private::columnMode() const {
 	return m_column_mode;
 }
@@ -236,7 +236,7 @@ AbstractColumn::ColumnMode Column::Private::columnMode() const {
  *
  * This sets the column mode and, if
  * necessary, converts it to another datatype.
- * Remark: setting the mode back to undefined (the 
+ * Remark: setting the mode back to undefined (the
  * initial value) is not supported.
  */
 void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
@@ -259,7 +259,7 @@ void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
 			disconnect(static_cast<Double2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
 				m_owner, SLOT(handleFormatChange()));
 			switch(mode)
-			{		
+			{
 				case AbstractColumn::Numeric:
 					break;
 				case AbstractColumn::Text:
@@ -287,7 +287,7 @@ void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
 
 		case AbstractColumn::Text:
 			switch(mode)
-			{		
+			{
 				case AbstractColumn::Text:
 					break;
 				case AbstractColumn::Numeric:
@@ -319,7 +319,7 @@ void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
 			disconnect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
 				m_owner, SLOT(handleFormatChange()));
 			switch(mode)
-			{		
+			{
 				case AbstractColumn::DateTime:
 					break;
 				case AbstractColumn::Text:
@@ -347,7 +347,7 @@ void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
 	}
 
 	// determine the new input and output filters
-	switch(mode) {		
+	switch(mode) {
 		case AbstractColumn::Numeric:
 			new_in_filter = new String2DoubleFilter();
 			new_out_filter = new Double2StringFilter();
@@ -407,9 +407,9 @@ void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
 /**
  * \brief Replace all mode related members
  *
- * Replace column mode, data type, data pointer and filters directly 
+ * Replace column mode, data type, data pointer and filters directly
  */
-void Column::Private::replaceModeData(AbstractColumn::ColumnMode mode, void * data, 
+void Column::Private::replaceModeData(AbstractColumn::ColumnMode mode, void * data,
 	AbstractSimpleFilter * in_filter, AbstractSimpleFilter * out_filter)
 {
 	emit m_owner->modeAboutToChange(m_owner);
@@ -441,7 +441,7 @@ void Column::Private::replaceModeData(AbstractColumn::ColumnMode mode, void * da
 	m_output_filter->input(0, m_owner);
 
 	// connect formatChanged()
-	switch(m_column_mode) {		
+	switch(m_column_mode) {
 		case AbstractColumn::Numeric:
 			connect(static_cast<Double2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
 				m_owner, SLOT(handleFormatChange()));
@@ -454,7 +454,7 @@ void Column::Private::replaceModeData(AbstractColumn::ColumnMode mode, void * da
 			break;
 		default:
 			break;
-	} 
+	}
 
 	emit m_owner->modeChanged(m_owner);
 }
@@ -466,7 +466,8 @@ void Column::Private::replaceData(void * data)
 {
 	emit m_owner->dataAboutToChange(m_owner);
 	m_data = data;
-	emit m_owner->dataChanged(m_owner);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -482,7 +483,7 @@ bool Column::Private::copy(const AbstractColumn * other)
 	int num_rows = other->rowCount();
 
 	emit m_owner->dataAboutToChange(m_owner);
-	resizeTo(num_rows); 
+	resizeTo(num_rows);
 
 	// copy the data
 	switch(m_column_mode) {
@@ -509,7 +510,8 @@ bool Column::Private::copy(const AbstractColumn * other)
 			}
 	}
 
-	emit m_owner->dataChanged(m_owner);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 
 	return true;
 }
@@ -523,7 +525,7 @@ bool Column::Private::copy(const AbstractColumn * other)
  * \param src_start first row to copy in the column to copy
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
- */ 
+ */
 bool Column::Private::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows)
 {
 	if (source->columnMode() != m_column_mode) return false;
@@ -531,7 +533,7 @@ bool Column::Private::copy(const AbstractColumn * source, int source_start, int 
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (dest_start + num_rows > rowCount())
-		resizeTo(dest_start + num_rows); 
+		resizeTo(dest_start + num_rows);
 
 	// copy the data
 	switch(m_column_mode) {
@@ -554,7 +556,8 @@ bool Column::Private::copy(const AbstractColumn * source, int source_start, int 
 				break;
 	}
 
-	emit m_owner->dataChanged(m_owner);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 
 	return true;
 }
@@ -572,7 +575,7 @@ bool Column::Private::copy(const Private * other)
 	int num_rows = other->rowCount();
 
 	emit m_owner->dataAboutToChange(m_owner);
-	resizeTo(num_rows); 
+	resizeTo(num_rows);
 
 	// copy the data
 	switch(m_column_mode) {
@@ -599,7 +602,8 @@ bool Column::Private::copy(const Private * other)
 			}
 	}
 
-	emit m_owner->dataChanged(m_owner);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 
 	return true;
 }
@@ -613,7 +617,7 @@ bool Column::Private::copy(const Private * other)
  * \param src_start first row to copy in the column to copy
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
- */ 
+ */
 bool Column::Private::copy(const Private * source, int source_start, int dest_start, int num_rows)
 {
 	if (source->columnMode() != m_column_mode) return false;
@@ -621,7 +625,7 @@ bool Column::Private::copy(const Private * source, int source_start, int dest_st
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (dest_start + num_rows > rowCount())
-		resizeTo(dest_start + num_rows); 
+		resizeTo(dest_start + num_rows);
 
 	// copy the data
 	switch(m_column_mode) {
@@ -644,7 +648,8 @@ bool Column::Private::copy(const Private * source, int source_start, int dest_st
 				break;
 	}
 
-	emit m_owner->dataChanged(m_owner);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 
 	return true;
 }
@@ -652,7 +657,7 @@ bool Column::Private::copy(const Private * source, int source_start, int dest_st
 /**
  * \brief Return the data vector size
  *
- * This returns the number of rows that actually contain data. 
+ * This returns the number of rows that actually contain data.
  * Rows beyond this can be masked etc. but should be ignored by filters,
  * plots etc.
  */
@@ -760,10 +765,10 @@ void Column::Private::removeRows(int first, int count)
 
 	m_formulas.removeRows(first, count);
 
-	if (first < rowCount()) 
+	if (first < rowCount())
 	{
 		int corrected_count = count;
-		if (first + count > rowCount()) 
+		if (first + count > rowCount())
 			corrected_count = rowCount() - first;
 
 		switch(m_column_mode) {
@@ -802,7 +807,7 @@ AbstractColumn::PlotDesignation Column::Private::plotDesignation() const {
 void Column::Private::setPlotDesignation(AbstractColumn::PlotDesignation pd)
 {
 	emit m_owner->plotDesignationAboutToChange(m_owner);
-	m_plot_designation = pd; 
+	m_plot_designation = pd;
 	emit m_owner->plotDesignationChanged(m_owner);
 }
 
@@ -850,7 +855,7 @@ AbstractSimpleFilter *Column::Private::outputFilter() const {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * \brief Return the formula associated with row 'row' 	 
+ * \brief Return the formula associated with row 'row'
  */
 QString Column::Private::formula(int row) const {
 	return m_formulas.value(row);
@@ -971,21 +976,22 @@ void Column::Private::setTextAt(int row, const QString& new_value)
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
-		resizeTo(row+1); 
+		resizeTo(row+1);
 
 	static_cast< QStringList* >(m_data)->replace(row, new_value);
-	emit m_owner->dataChanged(m_owner);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 }
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is Text
  */
 void Column::Private::replaceTexts(int first, const QStringList& new_values)
 {
 	if (m_column_mode != AbstractColumn::Text) return;
-	
+
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
@@ -993,7 +999,9 @@ void Column::Private::replaceTexts(int first, const QStringList& new_values)
 
 	for(int i=0; i<num_rows; i++)
 		static_cast< QStringList* >(m_data)->replace(first+i, new_values.at(i));
-	emit m_owner->dataChanged(m_owner);
+
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1022,7 +1030,7 @@ void Column::Private::setTimeAt(int row, const QTime& new_value)
 			m_column_mode != AbstractColumn::Month &&
 			m_column_mode != AbstractColumn::Day)
 		return;
-	
+
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
 
@@ -1040,14 +1048,15 @@ void Column::Private::setDateTimeAt(int row, const QDateTime& new_value)
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
-		resizeTo(row+1); 
+		resizeTo(row+1);
 
 	static_cast< QList<QDateTime>* >(m_data)->replace(row, new_value);
-	emit m_owner->dataChanged(m_owner);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 }
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
@@ -1057,7 +1066,7 @@ void Column::Private::replaceDateTimes(int first, const QList<QDateTime>& new_va
 			m_column_mode != AbstractColumn::Month &&
 			m_column_mode != AbstractColumn::Day)
 		return;
-	
+
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
@@ -1065,7 +1074,9 @@ void Column::Private::replaceDateTimes(int first, const QList<QDateTime>& new_va
 
 	for(int i=0; i<num_rows; i++)
 		static_cast< QList<QDateTime>* >(m_data)->replace(first+i, new_values.at(i));
-	emit m_owner->dataChanged(m_owner);
+
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1079,21 +1090,22 @@ void Column::Private::setValueAt(int row, double new_value)
 
 	emit m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
-		resizeTo(row+1); 
+		resizeTo(row+1);
 
 	static_cast< QVector<double>* >(m_data)->replace(row, new_value);
-	emit m_owner->dataChanged(m_owner);
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 }
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is Numeric
  */
 void Column::Private::replaceValues(int first, const QVector<double>& new_values)
 {
 	if (m_column_mode != AbstractColumn::Numeric) return;
-	
+
 	emit m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
@@ -1102,7 +1114,9 @@ void Column::Private::replaceValues(int first, const QVector<double>& new_values
 	double * ptr = static_cast< QVector<double>* >(m_data)->data();
 	for(int i=0; i<num_rows; i++)
 		ptr[first+i] = new_values.at(i);
-	emit m_owner->dataChanged(m_owner);
+
+	if (!m_owner->m_suppressDataChangedSignal)
+		emit m_owner->dataChanged(m_owner);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

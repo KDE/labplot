@@ -852,6 +852,7 @@ void SpreadsheetView::pasteIntoSelection(){
 		{
 			for (int c=0; c<cols && c<input_col_count; c++)
 			{
+				//TODO c->setSuppressDataChangedSignal(true);
 				if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) )
 				{
 					Column * col_ptr = m_spreadsheet->column(first_col + c);
@@ -904,8 +905,8 @@ void SpreadsheetView::unmaskSelection(){
 	RESET_CURSOR;
 }
 
+// TODO
 void SpreadsheetView::recalculateSelectedCells(){
-	// TODO
 	QMessageBox::information(0, "info", "not yet implemented");
 }
 
@@ -917,9 +918,9 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
-	foreach(Column * col_ptr, selectedColumns()) {
+	foreach(Column* col_ptr, selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-
+		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 			case AbstractColumn::Numeric:
 				{
@@ -946,6 +947,9 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 			//TODO: handle other modes
 			default: break;
 		}
+
+		col_ptr->setSuppressDataChangedSignal(false);
+		col_ptr->setChanged();
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -960,8 +964,9 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values", m_spreadsheet->name()));
 	qsrand(QTime::currentTime().msec());
-	foreach(Column *col_ptr, selectedColumns()) {
+	foreach(Column* col_ptr, selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
+		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 			case AbstractColumn::Numeric:
 				{
@@ -1004,6 +1009,9 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 					break;
 				}
 		}
+
+		col_ptr->setSuppressDataChangedSignal(false);
+		col_ptr->setChanged();
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1032,7 +1040,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues(){
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with const values", m_spreadsheet->name()));
 	foreach(Column* col_ptr, selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-
+		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
 			case AbstractColumn::Numeric: {
 				if (!doubleOk)
@@ -1074,6 +1082,9 @@ void SpreadsheetView::fillSelectedCellsWithConstValues(){
 			default:
 				break;
 		}
+
+		col_ptr->setSuppressDataChangedSignal(false);
+		col_ptr->setChanged();
 	}
 	m_spreadsheet->endMacro();
 }
@@ -1137,11 +1148,19 @@ void SpreadsheetView::clearSelectedColumns(){
 
 	QList< Column* > list = selectedColumns();
 	if (formulaModeActive())	{
-		foreach(Column* ptr, list)
+		foreach(Column* ptr, list) {
+			ptr->setSuppressDataChangedSignal(true);
 			ptr->clearFormulas();
+			ptr->setSuppressDataChangedSignal(false);
+			ptr->setChanged();
+		}
 	}else{
-		foreach(Column* ptr, list)
+		foreach(Column* ptr, list) {
+			ptr->setSuppressDataChangedSignal(true);
 			ptr->clear();
+			ptr->setSuppressDataChangedSignal(false);
+			ptr->setChanged();
+		}
 	}
 
 	m_spreadsheet->endMacro();
@@ -1188,18 +1207,21 @@ void SpreadsheetView::normalizeSelectedColumns(){
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
 	QList< Column* > cols = selectedColumns();
-	foreach(Column * col, cols)	{
-		if (col->columnMode() == AbstractColumn::Numeric)
-		{
+	foreach(Column* col, cols)	{
+		if (col->columnMode() == AbstractColumn::Numeric) {
+			col->setSuppressDataChangedSignal(true);
 			double max = 0.0;
 			for (int row=0; row<col->rowCount(); row++)
 			{
 				if (col->valueAt(row) > max)
 					max = col->valueAt(row);
 			}
-			if (max != 0.0) // avoid division by zero
+			if (max != 0.0) {// avoid division by zero
 				for (int row=0; row<col->rowCount(); row++)
 					col->setValueAt(row, col->valueAt(row) / max);
+			}
+			col->setSuppressDataChangedSignal(false);
+			col->setChanged();
 		}
 	}
 	m_spreadsheet->endMacro();
@@ -1220,6 +1242,7 @@ void SpreadsheetView::normalizeSelection(){
 
 	if (max != 0.0) // avoid division by zero
 	{
+		//TODO setSuppressDataChangedSignal
 		for (int col=firstSelectedColumn(); col<=lastSelectedColumn(); col++)
 			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
 				for (int row=0; row<m_spreadsheet->rowCount(); row++)
@@ -1238,13 +1261,13 @@ void SpreadsheetView::sortSelectedColumns(){
 }
 
 
+// TODO
 void SpreadsheetView::statisticsOnSelectedColumns(){
-	// TODO
 	QMessageBox::information(0, "info", "not yet implemented");
 }
 
+// TODO
 void SpreadsheetView::statisticsOnSelectedRows(){
-	// TODO
 	QMessageBox::information(0, "info", "not yet implemented");
 }
 
@@ -1278,6 +1301,7 @@ void SpreadsheetView::removeSelectedRows(){
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
+	//TODO setSuppressDataChangedSignal
 	foreach(const Interval<int>& i, selectedRows().intervals())
 		m_spreadsheet->removeRows(i.start(), i.size());
 	m_spreadsheet->endMacro();
@@ -1290,8 +1314,8 @@ void SpreadsheetView::clearSelectedRows(){
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected rows", m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
-	foreach(Column * col_ptr, list)
-	{
+	foreach(Column* col_ptr, list) {
+		col_ptr->setSuppressDataChangedSignal(true);
 		if (formulaModeActive()) {
 			foreach(const Interval<int>& i, selectedRows().intervals())
 				col_ptr->setFormula(i, "");
@@ -1307,6 +1331,9 @@ void SpreadsheetView::clearSelectedRows(){
 				}
 			}
 		}
+
+		col_ptr->setSuppressDataChangedSignal(false);
+		col_ptr->setChanged();
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1320,8 +1347,8 @@ void SpreadsheetView::clearSelectedCells(){
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
-	foreach(Column * col_ptr, list)
-	{
+	foreach(Column* col_ptr, list) {
+		col_ptr->setSuppressDataChangedSignal(true);
 		if (formulaModeActive())
 		{
 			int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
@@ -1341,6 +1368,8 @@ void SpreadsheetView::clearSelectedCells(){
 						col_ptr->asStringColumn()->setTextAt(row, QString());
 				}
 		}
+		col_ptr->setSuppressDataChangedSignal(false);
+		col_ptr->setChanged();
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1364,21 +1393,44 @@ void SpreadsheetView::goToCell(){
 void SpreadsheetView::sortDialog(QList<Column*> cols){
 	if (cols.isEmpty()) return;
 
+	foreach(Column* col, cols)
+		col->setSuppressDataChangedSignal(true);
+
 	SortDialog* dlg = new SortDialog();
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	connect(dlg, SIGNAL(sort(Column*,QList<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QList<Column*>,bool)));
 	dlg->setColumnsList(cols);
-	dlg->exec();
+	int rc = dlg->exec();
+
+	foreach(Column* col, cols) {
+		col->setSuppressDataChangedSignal(false);
+		if (rc==QDialog::Accepted)
+			col->setChanged();
+	}
 }
 
 void SpreadsheetView::sortColumnAscending(){
 	QList< Column* > cols = selectedColumns();
+	foreach(Column* col, cols) {
+		col->setSuppressDataChangedSignal(true);
+	}
 	m_spreadsheet->sortColumns(cols.first(), cols, true);
+	foreach(Column* col, cols) {
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
+	}
 }
 
 void SpreadsheetView::sortColumnDescending(){
 	QList< Column* > cols = selectedColumns();
+	foreach(Column* col, cols) {
+		col->setSuppressDataChangedSignal(true);
+	}
 	m_spreadsheet->sortColumns(cols.first(), cols, false);
+	foreach(Column* col, cols) {
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
+	}
 }
 
 /*!

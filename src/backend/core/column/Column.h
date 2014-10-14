@@ -90,6 +90,7 @@ class Column : public AbstractColumn
 		void setValueAt(int row, double new_value);
 		virtual void replaceValues(int first, const QVector<double>& new_values);
 		void setChanged();
+		void setSuppressDataChangedSignal(bool);
 
 		void save(QXmlStreamWriter * writer) const;
 		bool load(XmlStreamReader * reader);
@@ -105,8 +106,9 @@ class Column : public AbstractColumn
 		static QString enumValueToString(int key, const QString& enum_name);
 		static int enumStringToValue(const QString& string, const QString& enum_name);
 
-		Private * m_column_private;
-		ColumnStringIO * m_string_io;
+		Private* m_column_private;
+		ColumnStringIO* m_string_io;
+		bool m_suppressDataChangedSignal;
 
 		friend class ColumnStringIO;
 

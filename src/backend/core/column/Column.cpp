@@ -105,8 +105,7 @@ Column::Column(const QString& name, QList<QDateTime> data)
 /**
  * \brief Common part of ctors
  */
-void Column::init()
-{
+void Column::init() {
 	m_string_io = new ColumnStringIO(this);
 	m_column_private->inputFilter()->input(0,m_string_io);
 	m_column_private->outputFilter()->input(0,this);
@@ -115,6 +114,8 @@ void Column::init()
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
 	m_column_private->setWidth(120);
+
+	m_suppressDataChangedSignal = false;
 }
 
 /**
@@ -123,6 +124,13 @@ void Column::init()
 Column::~Column() {
 	delete m_string_io;
 	delete m_column_private;
+}
+
+/*!
+ *
+ */
+void Column::setSuppressDataChangedSignal(bool b) {
+	m_suppressDataChangedSignal = b;
 }
 
 /**
@@ -194,7 +202,8 @@ void Column::handleRowInsertion(int before, int count)
 {
 	AbstractColumn::handleRowInsertion(before, count);
 	exec(new ColumnInsertRowsCmd(m_column_private, before, count));
-	emit dataChanged(this);
+	if (!m_suppressDataChangedSignal)
+		emit dataChanged(this);
 }
 
 /**
@@ -204,7 +213,8 @@ void Column::handleRowRemoval(int first, int count)
 {
 	AbstractColumn::handleRowRemoval(first, count);
 	exec(new ColumnRemoveRowsCmd(m_column_private, first, count));
-	emit dataChanged(this);
+	if (!m_suppressDataChangedSignal)
+		emit dataChanged(this);
 }
 
 /**
@@ -423,7 +433,8 @@ double Column::valueAt(int row) const
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-	emit dataChanged(this);
+	if (!m_suppressDataChangedSignal)
+		emit dataChanged(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -811,8 +822,9 @@ void Column::handleFormatChange()
 		input_filter->setFormat(output_filter->format());
 	}
 
-	emit dataChanged(this); // all cells must be repainted
 	emit aspectDescriptionChanged(this); // the icon for the type changed
+	if (!m_suppressDataChangedSignal)
+		emit dataChanged(this); // all cells must be repainted
 }
 
 

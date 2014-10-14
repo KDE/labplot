@@ -422,6 +422,10 @@ void NonUniformRandomDialog::generate() {
 	gsl_rng* r = gsl_rng_alloc (T);
 
 	WAIT_CURSOR;
+	foreach(Column* col, m_columns) {
+		col->setSuppressDataChangedSignal(true);
+	}
+
 	m_spreadsheet->beginMacro(i18np("%1: fill column with non-uniform random numbers",
 									"%1: fill columns with non-uniform random numbers",
 									m_spreadsheet->name(),
@@ -692,6 +696,10 @@ void NonUniformRandomDialog::generate() {
 		}
 	}
 
+	foreach(Column* col, m_columns) {
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
+	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 

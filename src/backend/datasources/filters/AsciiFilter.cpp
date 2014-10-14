@@ -388,6 +388,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 				dataSource->child<Column>(i)->setUndoAware(false);
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
 				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 		}else{
 			//rename the columns, that are already available
@@ -395,6 +396,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 				dataSource->child<Column>(i)->setUndoAware(false);
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
 				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 
 			//create additional columns if needed
@@ -402,6 +404,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 				newColumn = new Column(vectorNameList.at(columns+startColumn+i), AbstractColumn::Numeric);
 				newColumn->setUndoAware(false);
 				dataSource->addChild(newColumn);
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 		}
 	}
@@ -507,6 +510,10 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 // 		column->setUndoAware(false);
 		column->setComment(comment);
 		column->setUndoAware(true);
+		if (mode==AbstractFileFilter::Replace) {
+			column->setSuppressDataChangedSignal(true);
+			column->setChanged();
+		}
 	}
 
 	spreadsheet->setUndoAware(true);
