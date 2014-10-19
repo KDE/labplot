@@ -126,7 +126,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	cbPosition->addItem(i18n("Prepend"));
 	cbPosition->addItem(i18n("Replace"));
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
-	cbPosition->setCurrentIndex( conf.readEntry("Position", false) );
+	cbPosition->setCurrentIndex( conf.readEntry("Position", 0) );
 
 	cbPosition->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
 	hLayout->addWidget( cbPosition);

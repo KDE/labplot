@@ -181,9 +181,10 @@ void SpreadsheetView::initMenus(){
 	m_selectionMenu ->addAction(action_unmask_selection);
 	m_selectionMenu ->addSeparator();
 	m_selectionMenu ->addAction(action_normalize_selection);
-	m_selectionMenu ->addSeparator();
-	m_selectionMenu ->addAction(action_set_formula);
-	m_selectionMenu ->addAction(action_recalculate);
+	//TODO
+// 	m_selectionMenu ->addSeparator();
+// 	m_selectionMenu ->addAction(action_set_formula);
+// 	m_selectionMenu ->addAction(action_recalculate);
 
 
 	//TODO add plot menu to spreadsheet- and column-menu, like in scidavis, origin etc.
@@ -230,7 +231,8 @@ void SpreadsheetView::initMenus(){
 	m_columnMenu->addAction(action_toggle_comments);
 	m_columnMenu->addSeparator();
 
-	m_columnMenu->addAction(action_statistics_columns);
+	//TODO
+// 	m_columnMenu->addAction(action_statistics_columns);
 
 
 	//Spreadsheet menu
@@ -262,8 +264,10 @@ void SpreadsheetView::initMenus(){
 	submenu->addAction(action_fill_random);
 	submenu->addAction(action_fill_const);
 	m_rowMenu->addMenu(submenu);
-	m_rowMenu->addSeparator();
-	m_rowMenu->addAction(action_statistics_rows);
+
+	//TODO
+// 	m_rowMenu->addSeparator();
+// 	m_rowMenu->addAction(action_statistics_rows);
 }
 
 void SpreadsheetView::connectActions(){
@@ -315,13 +319,14 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addAction(action_insert_rows);
 	toolBar->addAction(action_add_rows);
 	toolBar->addAction(action_remove_rows);
-	toolBar->addAction(action_statistics_rows);
+// 	toolBar->addAction(action_statistics_rows);
 
 	toolBar->addSeparator();
 	toolBar->addAction(action_insert_columns);
 	toolBar->addAction(action_add_column);
 	toolBar->addAction(action_remove_columns);
-	toolBar->addAction(action_statistics_columns);
+	//TODO
+// 	toolBar->addAction(action_statistics_columns);
 
 	toolBar->addSeparator();
 	toolBar->addAction(action_sort_asc_column);

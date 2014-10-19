@@ -293,8 +293,12 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	for (int i=0; i<startRow; i++){
         //if the number of rows to skip is bigger then the actual number
 		//of the rows in the file, then quit the function.
-		if( in.atEnd() ){
-		  return;
+		if( in.atEnd() ) {
+			if (mode==AbstractFileFilter::Replace) {
+				//file with no data to be imported. In replace-mode clear the spreadsheet
+				this->clearDataSource(dataSource);
+			}
+			return;
 		}
 
 		in.readLine();
@@ -303,8 +307,12 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	//parse the first row:
     //use the first row to determine the number of columns,
 	//create the columns and use (optionaly) the first row to name them
-    if( in.atEnd() ){
-	  return;
+    if( in.atEnd() ) {
+		if (mode==AbstractFileFilter::Replace) {
+			//file with no data to be imported. In replace-mode clear the spreadsheet
+			this->clearDataSource(dataSource);
+		}
+		return;
 	}
 
 	line = in.readLine();
@@ -517,6 +525,20 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	spreadsheet->setUndoAware(true);
+}
+
+
+void AsciiFilterPrivate::clearDataSource(AbstractDataSource* dataSource) const {
+// 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	int columns = dataSource->childCount<Column>();
+	for (int i=0; i<columns; i++){
+		dataSource->child<Column>(i)->setUndoAware(false);
+		dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
+		dataSource->child<Column>(i)->clear();
+		dataSource->child<Column>(i)->setUndoAware(true);
+		dataSource->child<Column>(i)->setSuppressDataChangedSignal(false);
+		dataSource->child<Column>(i)->setChanged();
+	}
 }
 
 /*!

@@ -4,7 +4,7 @@
     Description          : Private implementation class for AsciiFilter.
     --------------------------------------------------------------------
 	Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
-						   (replace * with @ in the email addresses) 
+						   (replace * with @ in the email addresses)
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,29 +32,32 @@
 class AbstractDataSource;
 
 class AsciiFilterPrivate {
-  
-  public:
-    explicit AsciiFilterPrivate(AsciiFilter*);
 
-    void read(const QString & fileName, AbstractDataSource* dataSource,
-			  AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-    void write(const QString & fileName, AbstractDataSource* dataSource);
+	public:
+		explicit AsciiFilterPrivate(AsciiFilter*);
 
-	const AsciiFilter* q;
-	
-    QString commentCharacter;
-    QString separatingCharacter;
-    bool autoModeEnabled;
-    bool headerEnabled;
-    QString vectorNames;
-    bool skipEmptyParts;
-    bool simplifyWhitespacesEnabled;
-    bool transposed;
+		void read(const QString & fileName, AbstractDataSource* dataSource,
+					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		void write(const QString & fileName, AbstractDataSource* dataSource);
 
-    int startRow;
-    int endRow;
-    int startColumn;
-    int endColumn;
+		const AsciiFilter* q;
+
+		QString commentCharacter;
+		QString separatingCharacter;
+		bool autoModeEnabled;
+		bool headerEnabled;
+		QString vectorNames;
+		bool skipEmptyParts;
+		bool simplifyWhitespacesEnabled;
+		bool transposed;
+
+		int startRow;
+		int endRow;
+		int startColumn;
+		int endColumn;
+
+	private:
+		void clearDataSource(AbstractDataSource*) const;
 };
 
 #endif
