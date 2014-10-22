@@ -4,7 +4,7 @@
     Description          : A xy-curve defined by a mathematical equation
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,7 +36,7 @@ class XYEquationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum EquationType {Cartesian, Polar, Parametric, Implicit};
+		enum EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
 
 		struct EquationData {
 			EquationData() : type(Cartesian), min("0"), max("1"), count(1000){};

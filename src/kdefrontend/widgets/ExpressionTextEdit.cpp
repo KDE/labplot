@@ -50,7 +50,7 @@
 // modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
 ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 	m_highlighter(new EquationHighlighter(this)),
-	m_expressionType(XYEquationCurve::Cartesian),
+	m_expressionType(XYEquationCurve::Neutral),
 	m_isValid(false) {
 
 	QStringList list = ExpressionParser::getInstance()->functions();

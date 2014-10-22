@@ -100,8 +100,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.tbFunctions1, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.tbConstants2, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( uiGeneralTab.tbFunctions2, SIGNAL(clicked()), this, SLOT(showFunctions()) );
-	connect( uiGeneralTab.leMin, SIGNAL(textChanged(QString)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.leMax, SIGNAL(textChanged(QString)), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.teMin, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.teMax, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.sbCount, SIGNAL(valueChanged(int)), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -148,8 +148,8 @@ void XYEquationCurveDock::initGeneralTab() {
 	uiGeneralTab.cbType->setCurrentIndex(data.type);
 	uiGeneralTab.teEquation1->setText(data.expression1);
 	uiGeneralTab.teEquation2->setText(data.expression2);
-	uiGeneralTab.leMin->setText(data.min);
-	uiGeneralTab.leMax->setText(data.max);
+	uiGeneralTab.teMin->setText(data.min);
+	uiGeneralTab.teMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
 	this->typeChanged(data.type);
 
@@ -172,7 +172,6 @@ void XYEquationCurveDock::nameChanged(){
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-
 void XYEquationCurveDock::commentChanged(){
 	if (m_initializing)
 		return;
@@ -190,8 +189,8 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.tbConstants2->hide();
 		uiGeneralTab.lMin->show();
 		uiGeneralTab.lMax->show();
-		uiGeneralTab.leMin->show();
-		uiGeneralTab.leMax->show();
+		uiGeneralTab.teMin->show();
+		uiGeneralTab.teMax->show();
 		uiGeneralTab.lMin->setText(i18n("x, min"));
 		uiGeneralTab.lMax->setText(i18n("x, max"));
 	} else if (type==XYEquationCurve::Polar) {
@@ -202,8 +201,8 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.tbConstants2->hide();
 		uiGeneralTab.lMin->show();
 		uiGeneralTab.lMax->show();
-		uiGeneralTab.leMin->show();
-		uiGeneralTab.leMax->show();
+		uiGeneralTab.teMin->show();
+		uiGeneralTab.teMax->show();
 		uiGeneralTab.lMin->setText(i18n("φ, min"));
 		uiGeneralTab.lMax->setText(i18n("φ, max"));
 	} else if (type==XYEquationCurve::Parametric) {
@@ -215,8 +214,8 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.tbConstants2->show();
 		uiGeneralTab.lMin->show();
 		uiGeneralTab.lMax->show();
-		uiGeneralTab.leMin->show();
-		uiGeneralTab.leMax->show();
+		uiGeneralTab.teMin->show();
+		uiGeneralTab.teMax->show();
 		uiGeneralTab.lMin->setText(i18n("t, min"));
 		uiGeneralTab.lMax->setText(i18n("t, max"));
 	} else if (type==XYEquationCurve::Implicit) {
@@ -227,8 +226,8 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.tbConstants2->hide();
 		uiGeneralTab.lMin->hide();
 		uiGeneralTab.lMax->hide();
-		uiGeneralTab.leMin->hide();
-		uiGeneralTab.leMax->hide();
+		uiGeneralTab.teMin->hide();
+		uiGeneralTab.teMax->hide();
 	}
 
 	uiGeneralTab.teEquation1->setExpressionType(type);
@@ -240,8 +239,8 @@ void XYEquationCurveDock::recalculateClicked() {
 	data.type = (XYEquationCurve::EquationType)uiGeneralTab.cbType->currentIndex();
 	data.expression1 = uiGeneralTab.teEquation1->document()->toPlainText();
 	data.expression2 = uiGeneralTab.teEquation2->document()->toPlainText();
-	data.min = uiGeneralTab.leMin->text();
-	data.max = uiGeneralTab.leMax->text();
+	data.min = uiGeneralTab.teMin->document()->toPlainText();
+	data.max = uiGeneralTab.teMax->document()->toPlainText();
 	data.count = uiGeneralTab.sbCount->value();
 
 	foreach(XYCurve* curve, m_curvesList)
@@ -328,12 +327,15 @@ void XYEquationCurveDock::enableRecalculate() const {
 		return;
 
 	//check whether the formular expressions are correct
-	//TODO: add checks for min and max values too
+	bool valid = false;
 	XYEquationCurve::EquationType type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
 	if (type!=XYEquationCurve::Parametric)
-		uiGeneralTab.pbRecalculate->setEnabled(uiGeneralTab.teEquation1->isValid());
+		valid = uiGeneralTab.teEquation1->isValid();
 	else
-		uiGeneralTab.pbRecalculate->setEnabled(uiGeneralTab.teEquation1->isValid() && uiGeneralTab.teEquation2->isValid());
+		valid = (uiGeneralTab.teEquation1->isValid() && uiGeneralTab.teEquation2->isValid());
+
+	valid = (valid && uiGeneralTab.teMin->isValid() && uiGeneralTab.teMax->isValid());
+	uiGeneralTab.pbRecalculate->setEnabled(valid);
 }
 
 //*************************************************************
@@ -358,8 +360,8 @@ void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::Equati
 	uiGeneralTab.cbType->setCurrentIndex(data.type);
 	uiGeneralTab.teEquation1->setText(data.expression1);
 	uiGeneralTab.teEquation2->setText(data.expression2);
-	uiGeneralTab.leMin->setText(data.min);
-	uiGeneralTab.leMax->setText(data.max);
+	uiGeneralTab.teMin->setText(data.min);
+	uiGeneralTab.teMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
 	m_initializing = false;
 }
