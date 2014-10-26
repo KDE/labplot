@@ -66,21 +66,21 @@
   Constructur of the class.
   Creates a view for the Worksheet \c worksheet and initializes the internal model.
 */
-WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
+WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_worksheet(worksheet),
 	m_model(new WorksheetModel(worksheet)),
-	m_currentMouseMode(NavigationMode), 
+	m_mouseMode(SelectionMode),
+	m_selectionBandIsShown(false),
 	m_suppressSelectionChangedEvent(false),
 	lastAddedWorksheetElement(0),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
 	tbNewCartesianPlot(0),
 	tbZoom(0) {
-  
+
 	setScene(m_model->scene());
-  
+
 	setRenderHint(QPainter::Antialiasing);
-	setInteractive(true);
 	setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
 	setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 	setResizeAnchor(QGraphicsView::AnchorViewCenter);
@@ -94,23 +94,23 @@ WorksheetView::WorksheetView(Worksheet *worksheet) : QGraphicsView(),
 
 	viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
 	viewport()->setAttribute( Qt::WA_NoSystemBackground );
-	setAcceptDrops( true );
+// 	setAcceptDrops( true );
 	setCacheMode(QGraphicsView::CacheBackground);
 
 	m_gridSettings.style = WorksheetView::NoGrid;
 
 	initActions();
 	initMenus();
-	navigationModeAction->setChecked(true);
+	selectionModeAction->setChecked(true);
 
 	changeZoom(zoomOriginAction);
 	currentZoomAction=zoomInAction;
 
 	//signal/slot connections
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
+	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) );
 	connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
-	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) ); 
+	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) );
 	connect(m_worksheet, SIGNAL(itemDeselected(QGraphicsItem*)), this, SLOT(deselectItem(QGraphicsItem*)) );
 	connect(m_worksheet, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
 	connect(m_worksheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(aspectAboutToBeRemoved(const AbstractAspect*)));
@@ -155,18 +155,19 @@ void WorksheetView::initActions(){
 	zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
 	zoomFitSelectionAction = new KAction(i18n("Fit to selection"), zoomActionGroup);
 
-	// Mouse mode actions 
-	navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigation"), mouseModeActionGroup);
-	navigationModeAction->setCheckable(true);
-	connect(navigationModeAction, SIGNAL(triggered()), SLOT(enableNavigationMode()));
-
-	zoomModeAction = new KAction(KIcon("page-zoom"), i18n("Zoom"), mouseModeActionGroup);
-	zoomModeAction->setCheckable(true);
-	connect(zoomModeAction, SIGNAL(triggered()), SLOT(enableZoomMode()));
-
-	selectionModeAction = new KAction(KIcon("select-rectangular"), i18n("Selection"), mouseModeActionGroup);
+	// Mouse mode actions
+	selectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
 	selectionModeAction->setCheckable(true);
-	connect(selectionModeAction, SIGNAL(triggered()), SLOT(enableSelectionMode()));
+
+	navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
+	navigationModeAction->setCheckable(true);
+
+	zoomSelectionModeAction = new KAction(KIcon("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
+	zoomSelectionModeAction->setCheckable(true);
+
+	//TODO implement later "group selection action" where multiple objects can be selected by drawing a rectangular
+// 	selectionModeAction = new KAction(KIcon("select-rectangular"), i18n("Selection"), mouseModeActionGroup);
+// 	selectionModeAction->setCheckable(true);
 
 	//"Add new" related actions
 	addCartesianPlot1Action = new KAction(KIcon("cartesian-plot-four-axes"), i18n("box plot, four axes"), addNewActionGroup);
@@ -198,11 +199,11 @@ void WorksheetView::initActions(){
 	noGridAction->setCheckable(true);
 	noGridAction->setChecked(true);
 	noGridAction->setData(WorksheetView::NoGrid);
-	
+
 	denseLineGridAction = new KAction(i18n("dense line grid"), gridActionGroup);
 	denseLineGridAction->setObjectName("denseLineGridAction");
 	denseLineGridAction->setCheckable(true);
-	
+
 	sparseLineGridAction = new KAction(i18n("sparse line grid"), gridActionGroup);
 	sparseLineGridAction->setObjectName("sparseLineGridAction");
 	sparseLineGridAction->setCheckable(true);
@@ -210,22 +211,23 @@ void WorksheetView::initActions(){
 	denseDotGridAction = new KAction(i18n("dense dot grid"), gridActionGroup);
 	denseDotGridAction->setObjectName("denseDotGridAction");
 	denseDotGridAction->setCheckable(true);
-	
+
 	sparseDotGridAction = new KAction(i18n("sparse dot grid"), gridActionGroup);
 	sparseDotGridAction->setObjectName("sparseDotGridAction");
 	sparseDotGridAction->setCheckable(true);
-	
+
 	customGridAction = new KAction(i18n("custom grid"), gridActionGroup);
 	customGridAction->setObjectName("customGridAction");
 	customGridAction->setCheckable(true);
-	
+
 	snapToGridAction = new KAction(i18n("snap to grid"), this);
 	snapToGridAction->setCheckable(true);
 
 	//check the action corresponding to the currently active layout in worksheet
 	this->layoutChanged(m_worksheet->layout());
-	
+
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
+	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
 	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
 	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
@@ -244,11 +246,11 @@ void WorksheetView::initMenus(){
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
-	
-	m_addNewMenu->addAction(addTextLabelAction);
-	m_addNewMenu->addSeparator();
+
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(KIcon("office-chart-line"));
-	
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addTextLabelAction);
+
 	m_zoomMenu->addAction(zoomInAction);
 	m_zoomMenu->addAction(zoomOutAction);
 	m_zoomMenu->addAction(zoomOriginAction);
@@ -258,7 +260,7 @@ void WorksheetView::initMenus(){
 
 	m_layoutMenu->addAction(verticalLayoutAction);
 	m_layoutMenu->addAction(horizontalLayoutAction);
-	m_layoutMenu->addAction(gridLayoutAction); 
+	m_layoutMenu->addAction(gridLayoutAction);
 	m_layoutMenu->addSeparator();
 	m_layoutMenu->addAction(breakLayoutAction);
 
@@ -285,7 +287,7 @@ void WorksheetView::initMenus(){
 void WorksheetView::createContextMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE	
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
 #else
 	QAction* firstAction = 0;
@@ -298,12 +300,12 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 
 	menu->insertMenu(firstAction, m_addNewMenu);
 	menu->insertSeparator(firstAction);
-  
+
 	//Mouse mode actions
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, navigationModeAction);
-	menu->insertAction(firstAction, zoomModeAction);
 	menu->insertAction(firstAction, selectionModeAction);
+	menu->insertAction(firstAction, navigationModeAction);
+	menu->insertAction(firstAction, zoomSelectionModeAction);
 
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_zoomMenu);
@@ -314,25 +316,23 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 
 void WorksheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addSeparator();
-	toolBar->addAction(navigationModeAction);
-	toolBar->addAction(zoomModeAction);
-	toolBar->addAction(selectionModeAction);
-	
-	toolBar->addSeparator();
-	toolBar->addAction(addTextLabelAction);
 	tbNewCartesianPlot = new QToolButton(toolBar);
 	tbNewCartesianPlot->setPopupMode(QToolButton::MenuButtonPopup);
 	tbNewCartesianPlot->setMenu(m_addNewCartesianPlotMenu);
 	tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	toolBar->addWidget(tbNewCartesianPlot);
+	toolBar->addAction(addTextLabelAction);
 
 	toolBar->addSeparator();
 	toolBar->addAction(verticalLayoutAction);
 	toolBar->addAction(horizontalLayoutAction);
 	toolBar->addAction(gridLayoutAction);
 	toolBar->addAction(breakLayoutAction);
-	
+
 	toolBar->addSeparator();
+	toolBar->addAction(selectionModeAction);
+	toolBar->addAction(navigationModeAction);
+	toolBar->addAction(zoomSelectionModeAction);
 	tbZoom = new QToolButton(toolBar);
 	tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
 	tbZoom->setMenu(m_zoomMenu);
@@ -340,12 +340,26 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addWidget(tbZoom);
 }
 
-void WorksheetView::setScene(QGraphicsScene * scene) {
+void WorksheetView::setScene(QGraphicsScene* scene) {
   QGraphicsView::setScene(scene);
   setTransform(QTransform());
 }
 
-void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
+void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
+	if (m_mouseMode==ZoomSelectionMode && m_selectionBandIsShown) {
+		painter->save();
+		const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
+		painter->setPen(QPen(Qt::black, 5));
+		painter->drawRect(selRect);
+		painter->setBrush(Qt::blue);
+		painter->setOpacity(0.2);
+		painter->drawRect(selRect);
+		painter->restore();
+	}
+	QGraphicsView::drawForeground(painter, rect);
+}
+
+void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->save();
 
 	//painter->setRenderHint(QPainter::Antialiasing);
@@ -409,7 +423,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 				radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
 				painter->setBrush(QBrush(radialGrad));
 				break;
-			}			
+			}
 			default:
 				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
@@ -448,7 +462,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
 		painter->drawRect(scene_rect);
 	}
-  
+
   //grid
 	if (m_gridSettings.style != WorksheetView::NoGrid){
 		QColor c=m_gridSettings.color;
@@ -460,7 +474,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 		qreal right = scene_rect.right();
 		qreal top = scene_rect.top();
 		qreal bottom = scene_rect.bottom();
-		
+
 		if (m_gridSettings.style==WorksheetView::LineGrid){
 			QLineF line;
 
@@ -493,7 +507,7 @@ void WorksheetView::drawBackground(QPainter * painter, const QRectF & rect) {
 	}
 
 	invalidateScene(rect, QGraphicsScene::BackgroundLayer);
-	painter->restore();	
+	painter->restore();
 }
 
 //##############################################################################
@@ -507,7 +521,7 @@ void WorksheetView::resizeEvent(QResizeEvent *event) {
 }
 
 void WorksheetView::wheelEvent(QWheelEvent *event) {
-  if (m_currentMouseMode == ZoomMode){
+  if (m_mouseMode == ZoomSelectionMode){
 	if (event->delta() > 0)
 		scale(1.2, 1.2);
 	else if (event->delta() < 0)
@@ -518,6 +532,11 @@ void WorksheetView::wheelEvent(QWheelEvent *event) {
 }
 
 void WorksheetView::mousePressEvent(QMouseEvent* event) {
+	if (m_mouseMode == ZoomSelectionMode) {
+		m_selectionStart = event->pos();
+		m_selectionBandIsShown = true;
+	}
+
 	//prevent the deselection of items when context menu event
 	//was triggered (right button click)
 	if (event->button() != Qt::LeftButton) {
@@ -525,7 +544,7 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
         return;
     }
 
-	// select the worksheet in the project explorer if the view was clicked 
+	// select the worksheet in the project explorer if the view was clicked
 	// and there is no selection currently. We need this for the case when
 	// there is a single worksheet in the project and we change from the project-node
 	// in the project explorer to the worksheet-node by clicking the view.
@@ -536,10 +555,24 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
-  if (m_currentMouseMode == ZoomMode){
-	fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
-  }
-  QGraphicsView::mouseReleaseEvent(event);
+	if (m_mouseMode == ZoomSelectionMode) {
+		m_selectionBandIsShown = false;
+		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
+
+		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
+		if ( abs(m_selectionEnd.x()-m_selectionStart.x())>20 && abs(m_selectionEnd.y()-m_selectionStart.y())>20 )
+			fitInView(mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect(), Qt::KeepAspectRatio);
+	}
+	QGraphicsView::mouseReleaseEvent(event);
+}
+
+void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
+	if (m_selectionBandIsShown) {
+		m_selectionEnd = event->pos();
+		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
+	}
+
+	QGraphicsView::mouseMoveEvent(event);
 }
 
 void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
@@ -553,7 +586,6 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 		QGraphicsView::contextMenuEvent(e);
 	}
 }
-
 
 //##############################################################################
 //####################################  SLOTs   ################################
@@ -611,21 +643,23 @@ void WorksheetView::changeZoom(QAction* action){
 		tbZoom->setDefaultAction(action);
 }
 
-void WorksheetView::enableNavigationMode(){
-  m_currentMouseMode = NavigationMode;
-  setDragMode(QGraphicsView::ScrollHandDrag);
+void WorksheetView::mouseModeChanged(QAction* action) {
+	if (action==selectionModeAction) {
+		m_mouseMode = SelectionMode;
+		setInteractive(true);
+		setDragMode(QGraphicsView::NoDrag);
+	} else if (action==navigationModeAction) {
+		m_mouseMode = NavigationMode;
+		setInteractive(false);
+		setDragMode(QGraphicsView::ScrollHandDrag);
+	} else {
+		m_mouseMode = ZoomSelectionMode;
+		setInteractive(false);
+// 		setDragMode(QGraphicsView::NoDrag);
+		setDragMode(QGraphicsView::NoDrag);
+	}
 }
 
-void WorksheetView::enableZoomMode(){
-  m_currentMouseMode = ZoomMode;
-  setDragMode(QGraphicsView::RubberBandDrag);
-}
-
-void WorksheetView::enableSelectionMode(){
-  m_currentMouseMode = SelectionMode;
-  setDragMode(QGraphicsView::RubberBandDrag);
-}
- 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action){
 	AbstractWorksheetElement* aspect = 0;
@@ -669,20 +703,20 @@ void WorksheetView::addNew(QAction* action){
 		m_fadeInTimeLine->setFrameRange(0, 100);
 		connect(m_fadeInTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeIn(qreal)));
 	}
-	
+
 	//if there is already an element fading in, stop the time line and show the element with the full opacity.
 	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
 		m_fadeInTimeLine->stop();
 		QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
 		effect->setOpacity(1);
-		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);		
+		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	}
-	
+
 	//fade-in the newly added element
 	lastAddedWorksheetElement = aspect;
 	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
 	effect->setOpacity(0);
-	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);	
+	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	m_fadeInTimeLine->start();
 }
 
@@ -696,7 +730,7 @@ void WorksheetView::selectAllElements() {
 	foreach ( QGraphicsItem* item , m_selectedItems ){
 		m_worksheet->setItemSelectedInView(item, false);
 	}
-	
+
 	//select top-level items
 	items = scene()->items();
 	foreach(QGraphicsItem* item, items){
@@ -745,9 +779,9 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
 		m_fadeOutTimeLine->setFrameRange(0, 100);
 		connect(m_fadeOutTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeOut(qreal)));
 	}
-	
+
 	//if there is already an element fading out, stop the time line
-	if (m_fadeOutTimeLine->state() == QTimeLine::Running) 
+	if (m_fadeOutTimeLine->state() == QTimeLine::Running)
 		m_fadeOutTimeLine->stop();
 
 	m_fadeOutTimeLine->start();
@@ -774,15 +808,15 @@ void WorksheetView::changeLayout(QAction* action){
 	if (action==breakLayoutAction){
 		verticalLayoutAction->setEnabled(true);
 		verticalLayoutAction->setChecked(false);
-		
+
 		horizontalLayoutAction->setEnabled(true);
 		horizontalLayoutAction->setChecked(false);
-		
+
 		gridLayoutAction->setEnabled(true);
 		gridLayoutAction->setChecked(false);
-		
+
 		breakLayoutAction->setEnabled(false);
-		
+
 		m_worksheet->setLayout(Worksheet::NoLayout);
 	}else{
 		verticalLayoutAction->setEnabled(false);
@@ -805,7 +839,7 @@ void WorksheetView::changeLayout(QAction* action){
 
 void WorksheetView::changeGrid(QAction* action){
 	QString name = action->objectName();
-	
+
 	if (name == "noGridAction"){
 		m_gridSettings.style = WorksheetView::NoGrid;
 		snapToGridAction->setEnabled(false);
@@ -851,16 +885,15 @@ void WorksheetView::changeGrid(QAction* action){
 
 //TODO
 void WorksheetView::changeSnapToGrid(){
-	
+
 }
 
 /*!
  *  Selects the QGraphicsItem \c item in \c WorksheetView.
- * 	The selection in \c ProjectExplorer is forwarded to  \c Worksheet 
+ * 	The selection in \c ProjectExplorer is forwarded to  \c Worksheet
  *  and is finally handled here.
  */
 void WorksheetView::selectItem(QGraphicsItem* item){
-	qDebug()<<"WorksheetView::selectItem";
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(true);
 	m_selectedItems<<item;
@@ -869,7 +902,7 @@ void WorksheetView::selectItem(QGraphicsItem* item){
 
 /*!
  *  Deselects the \c QGraphicsItem \c item in \c WorksheetView.
- * 	The deselection in \c ProjectExplorer is forwarded to \c Worksheet 
+ * 	The deselection in \c ProjectExplorer is forwarded to \c Worksheet
  *  and is finally handled here.
  */
 void WorksheetView::deselectItem(QGraphicsItem* item){
@@ -888,11 +921,11 @@ void WorksheetView::selectionChanged(){
 		return;
 
 	QList<QGraphicsItem*> items = scene()->selectedItems();
-	
+
 	//When making a graphics item invisible, it gets deselected in the scene.
 	//In this case we don't want to deselect the item in the project explorer.
 	bool invisibleDeselected = false;
-	
+
 	//check, whether the previously selected items were deselected now.
 	//Forward the deselection prior to the selection of new items
 	//in order to avoid the unwanted multiple selection in project explorer
@@ -912,12 +945,12 @@ void WorksheetView::selectionChanged(){
 	}else{
 		foreach ( const QGraphicsItem* item , items )
 			m_worksheet->setItemSelectedInView( item, true );
-		
+
 		//items selected -> deselect the worksheet in the project explorer
 		//prevents unwanted multiple selection with worksheet (if it was selected before)
 		m_worksheet->setSelectedInView(false);
 	}
-	
+
 	m_selectedItems = items;
 }
 
@@ -943,7 +976,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 			printer.setOutputFormat(QPrinter::PdfFormat);
 		else
 			printer.setOutputFormat(QPrinter::PostScriptFormat);
-		
+
 		printer.setOutputFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
@@ -962,14 +995,14 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		QSvgGenerator generator;
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);		
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
 		w = w*QApplication::desktop()->physicalDpiX()/25.4;
 		h = h*QApplication::desktop()->physicalDpiY()/25.4;
-		
+
 		generator.setSize(QSize(w, h));
 		QRectF targetRect(0, 0, w, h);
 		generator.setViewBox(targetRect);
-		
+
 		QPainter painter;
 		painter.begin(&generator);
 		exportPaint(&painter, targetRect, sourceRect, background);
@@ -979,7 +1012,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		//TODO add all formats supported by Qt in QImage
 		//TODO make the size of the image customizable by the user in the ExportWorksheetDialog
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);		
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
 		w = w*QApplication::desktop()->physicalDpiX()/25.4;
 		h = h*QApplication::desktop()->physicalDpiY()/25.4;
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
@@ -1004,7 +1037,7 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 		drawBackground(painter, sourceRect);
 		painter->restore();
 	}
-	
+
 	//draw the scene items
 	m_worksheet->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect);
@@ -1023,7 +1056,7 @@ void WorksheetView::updateBackground(){
 	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
 }
 
-/*! 
+/*!
  * called when the layout was changed in Worksheet,
  * enables the corresponding action
  */

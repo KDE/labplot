@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : WorksheetView.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009-2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009-2014 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -44,14 +42,14 @@ class WorksheetModel;
 class AbstractAspect;
 class AbstractWorksheetElement;
 
-class WorksheetView : public QGraphicsView{
+class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
   public:
 	explicit WorksheetView(Worksheet* worksheet);
 	virtual ~WorksheetView();
 
-	enum MouseMode{NavigationMode, ZoomMode, SelectionMode};
+	enum MouseMode{SelectionMode, NavigationMode, ZoomSelectionMode};
 	enum GridStyle{NoGrid, LineGrid, DotGrid};
 	enum ExportFormat{Pdf, Eps, Svg, Png};
 	enum ExportArea{ExportBoundingBox, ExportSelection, ExportWorksheet};
@@ -63,7 +61,7 @@ class WorksheetView : public QGraphicsView{
 		int verticalSpacing;
 		float opacity;
 	};
-	
+
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool);
 
@@ -71,6 +69,7 @@ class WorksheetView : public QGraphicsView{
 	void initActions();
 	void initMenus();
 	void processResize();
+	void drawForeground(QPainter*, const QRectF&);
 	void drawBackground(QPainter*, const QRectF&);
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 
@@ -80,10 +79,14 @@ class WorksheetView : public QGraphicsView{
 	void wheelEvent(QWheelEvent*);
 	void mousePressEvent(QMouseEvent*);
 	void mouseReleaseEvent(QMouseEvent*);
+	void mouseMoveEvent(QMouseEvent*);
 
 	Worksheet* m_worksheet;
 	WorksheetModel* m_model;
-	MouseMode m_currentMouseMode;
+	MouseMode m_mouseMode;
+	bool m_selectionBandIsShown;
+	QPoint m_selectionStart;
+	QPoint m_selectionEnd;
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
 	bool m_suppressSelectionChangedEvent;
@@ -112,29 +115,29 @@ class WorksheetView : public QGraphicsView{
 	QAction* zoomFitPageHeightAction;
 	QAction* zoomFitPageWidthAction;
 	QAction* zoomFitSelectionAction;
-	
+
 	QAction* navigationModeAction;
-	QAction* zoomModeAction;
+	QAction* zoomSelectionModeAction;
 	QAction* selectionModeAction;
-	
+
 	QAction* addCartesianPlot1Action;
 	QAction* addCartesianPlot2Action;
 	QAction* addCartesianPlot3Action;
 	QAction* addCartesianPlot4Action;
 	QAction* addTextLabelAction;
-	
+
 	QAction* verticalLayoutAction;
 	QAction* horizontalLayoutAction;
 	QAction* gridLayoutAction;
 	QAction* breakLayoutAction;
-	
+
 	QAction* noGridAction;
 	QAction* denseLineGridAction;
 	QAction* sparseLineGridAction;
 	QAction* denseDotGridAction;
 	QAction* sparseDotGridAction;
-	QAction* customGridAction;	
-	QAction* snapToGridAction;	
+	QAction* customGridAction;
+	QAction* snapToGridAction;
 
   public slots:
 	void createContextMenu(QMenu*) const;
@@ -143,15 +146,12 @@ class WorksheetView : public QGraphicsView{
 	void selectItem(QGraphicsItem*);
 
   private slots:
-	void enableNavigationMode();
-	void enableZoomMode();
-	void enableSelectionMode();
-
 	void addNew(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void selectAllElements();
 	void deleteElement();
 
+	void mouseModeChanged(QAction*);
 	void useViewSizeRequested();
 	void changeZoom(QAction*);
 	void changeLayout(QAction*);
