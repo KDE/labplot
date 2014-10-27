@@ -649,7 +649,6 @@ void MainWin::openProject(const QString& filename) {
 	updateGUIOnProjectChanges();
 	updateGUI(); //there are most probably worksheets or spreadsheets in the open project -> update the GUI
 	m_saveAction->setEnabled(false);
-	m_saveAsAction->setEnabled(false);
 
 	statusBar()->showMessage( i18n("Project successfully opened (in %1 seconds).").arg((float)timer.elapsed()/1000) );
 
@@ -1078,7 +1077,6 @@ void MainWin::undo(){
 	if (m_project->undoStack()->index()==0) {
 		setCaption(m_project->name());
 		m_saveAction->setEnabled(false);
-		m_saveAsAction->setEnabled(false);
 		m_undoAction->setEnabled(false);
 		m_project->setChanged(false);
 	}

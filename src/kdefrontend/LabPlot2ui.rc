@@ -4,6 +4,9 @@
 
 <ToolBar name="mainToolBar" >
 <text>Main</text>
+<Action name="toggle_project_explorer_dock"/>
+<Action name="toggle_properties_explorer_dock"/>
+<Separator/>
 <Action name="undo" />
 <Action name="redo" />
 <Separator/>
@@ -11,9 +14,7 @@
 <Action name="export" />
 <Action name="new_spreadsheet" />
 <Action name="new_worksheet" />
-<Separator/>
-<Action name="toggle_project_explorer_dock"/>
-<Action name="toggle_properties_explorer_dock"/>
+
 </ToolBar>
 
 <ToolBar name="worksheet_toolbar" >
