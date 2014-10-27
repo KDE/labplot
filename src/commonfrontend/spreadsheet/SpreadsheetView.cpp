@@ -4,7 +4,7 @@
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
 
  ***************************************************************************/
@@ -66,6 +66,7 @@
 #include "commonfrontend/spreadsheet/spreadsheetview_kactions.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/NonUniformRandomDialog.h"
+#include "kdefrontend/spreadsheet/EquidistantNumbersDialog.h"
 #endif
 
 /*!
@@ -204,9 +205,10 @@ void SpreadsheetView::initMenus(){
 	m_columnMenu->addMenu(submenu);
 	m_columnMenu->addSeparator();
 
-	submenu = new QMenu(i18n("Fi&ll Selection with"));
+	submenu = new QMenu(i18n("Generate Data"));
 	submenu->addAction(action_fill_row_numbers);
-	submenu->addAction(action_fill_random);
+// 	submenu->addAction(action_fill_random);
+	submenu->addAction(action_fill_equidistant);
 	submenu->addAction(action_fill_random_nonuniform);
 	submenu->addAction(action_fill_const);
 	m_columnMenu->addMenu(submenu);
@@ -237,6 +239,7 @@ void SpreadsheetView::initMenus(){
 
 	//Spreadsheet menu
 	m_spreadsheetMenu = new QMenu();
+// 	m_selectionMenu->setTitle(i18n("Fi&ll Selection with"));
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
@@ -282,6 +285,7 @@ void SpreadsheetView::connectActions(){
 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
 	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithNonuniformRandomNumbers()));
+	connect(action_fill_equidistant, SIGNAL(triggered()), this, SLOT(fillWithEquidistantNumbers()));
 	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithConstValues()));
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 	connect(action_add_column, SIGNAL(triggered()), m_spreadsheet, SLOT(appendColumn()));
@@ -1025,6 +1029,14 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 void SpreadsheetView::fillWithNonuniformRandomNumbers() {
 	if (selectedColumnCount() < 1) return;
 	NonUniformRandomDialog* dlg = new NonUniformRandomDialog(m_spreadsheet);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::fillWithEquidistantNumbers() {
+	if (selectedColumnCount() < 1) return;
+	EquidistantNumbersDialog* dlg = new EquidistantNumbersDialog(m_spreadsheet);
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();

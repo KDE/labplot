@@ -14,6 +14,7 @@ void SpreadsheetView::initActions(){
 	action_fill_row_numbers = new KAction(KIcon(""), i18n("Row Numbers"), this);
 	action_fill_random = new KAction(KIcon(""), i18n("Uniform Random Values"), this);
 	action_fill_random_nonuniform = new KAction(KIcon(""), i18n("Non-Uniform Random Values"), this);
+	action_fill_equidistant = new KAction(KIcon(""), i18n("Equidistant Values"), this);
 	action_fill_const = new KAction(KIcon(""), i18n("Const Values"), this);
 
 	//spreadsheet related actions
