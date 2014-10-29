@@ -29,10 +29,10 @@
 #define NONUNIFORMRANDOMDIALOG_H
 
 #include "ui_nonuniformrandomwidget.h"
-#include "backend/core/column/Column.h"
 #include <QMap>
 #include <KDialog>
 
+class Column;
 class Spreadsheet;
 
 class NonUniformRandomDialog : public KDialog{

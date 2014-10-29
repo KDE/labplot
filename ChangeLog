@@ -11,6 +11,7 @@ New features:
 	* Added three new types for drop lines - "zero baseline", "min baseline" and "max baseline"
 	* Fill the selection in Spreadsheet with a constant value provided by the user
 	* Fill columns with uniform and non-uniform random numbers, several distributions are available.
+	* Fill columns with function values
 
 Bug fixes:
 	* Don't crash when trying to create a plot in case no rc-file was installed.

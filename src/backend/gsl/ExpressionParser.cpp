@@ -1176,6 +1176,30 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	return true;
 }
 
+bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
+	QByteArray funcba = expr.toLocal8Bit();
+	const char* func = funcba.data();
+	double x, y;
+	char xVar[] = "x";
+	gsl_set_error_handler_off();
+
+	for(int i = 0; i < xVector->count(); i++) {
+		x = xVector->at(i);
+		assign_variable(xVar,x);
+		y = parse(func);
+
+		if(parse_errors()>0)
+			return false;
+
+		if (finite(y))
+			(*yVector)[i] = y;
+		else
+			(*yVector)[i] = NAN;
+	}
+
+	return true;
+}
+
 bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, const QString& max,
 										 int count, QVector<double>* xVector, QVector<double>* yVector) {
 	double minValue = parse( min.toLocal8Bit().data() );

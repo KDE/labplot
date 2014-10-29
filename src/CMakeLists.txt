@@ -34,6 +34,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/NonUniformRandomDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantNumbersDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
@@ -68,6 +69,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/nonuniformrandomwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantnumberswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 )
 

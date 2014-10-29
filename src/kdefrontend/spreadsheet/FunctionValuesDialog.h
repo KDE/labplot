@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : EquidistNumbersDialog.h
+    File                 : FunctionValuesDialog.h
     Project              : LabPlot
     Description          : Dialog for generating equidistant numbers
     --------------------------------------------------------------------
@@ -25,31 +25,40 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef EQUIDISTANTNUMBERSDIALOG_H
-#define EQUIDISTANTNUMBERSDIALOG_H
+#ifndef FUNCTIONVALUESDIALOG_H
+#define FUNCTIONVALUESDIALOG_H
 
-#include "ui_equidistantnumberswidget.h"
+#include "ui_functionvalueswidget.h"
 #include <KDialog>
+
+#include <memory>
 
 class Column;
 class Spreadsheet;
+class TreeViewComboBox;
+class AspectTreeModel;
 
-class EquidistantNumbersDialog : public KDialog{
+class FunctionValuesDialog : public KDialog{
 	Q_OBJECT
 
 	public:
-		explicit EquidistantNumbersDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+		explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
 		void setColumns(QList<Column*>);
 
 	private:
-		Ui::EquidistantNumbersWidget ui;
+		Ui::FunctionValuesWidget ui;
+		TreeViewComboBox* cbXDataColumn;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
+		std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
 
 	private slots:
 		void generate();
-		void typeChanged(int index);
 		void checkValues();
+		void showConstants();
+		void showFunctions();
+		void insertFunction(const QString&);
+		void insertConstant(const QString&);
 };
 
 #endif

@@ -29,9 +29,6 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include <KLocale>
-#include <KStandardDirs>
-
 
 /*!
 	\class EquidistantNumbersDialog
@@ -65,6 +62,10 @@ EquidistantNumbersDialog::EquidistantNumbersDialog(Spreadsheet* s, QWidget* pare
 	ui.kleIncrement->setValidator( new QDoubleValidator(ui.kleIncrement) );
 	ui.kleNumber->setValidator( new QIntValidator(ui.kleNumber) );
 
+	ui.kleFrom->setText("1");
+	ui.kleTo->setText("100");
+	ui.kleIncrement->setText("1");
+
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(typeChanged(int)) );
 	connect( ui.kleFrom, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect( ui.kleTo, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
@@ -80,6 +81,7 @@ EquidistantNumbersDialog::EquidistantNumbersDialog(Spreadsheet* s, QWidget* pare
 
 void EquidistantNumbersDialog::setColumns(QList<Column*> list) {
 	m_columns = list;
+	ui.kleNumber->setText( QString::number(m_columns.first()->rowCount()) );
 }
 
 void EquidistantNumbersDialog::typeChanged(int index) {

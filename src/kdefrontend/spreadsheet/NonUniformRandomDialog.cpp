@@ -29,9 +29,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include <KLocale>
 #include <KStandardDirs>
-#include <QDebug>
 #include <stdio.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>

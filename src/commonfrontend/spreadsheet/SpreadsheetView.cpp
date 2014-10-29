@@ -67,6 +67,7 @@
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/NonUniformRandomDialog.h"
 #include "kdefrontend/spreadsheet/EquidistantNumbersDialog.h"
+#include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #endif
 
 /*!
@@ -209,8 +210,9 @@ void SpreadsheetView::initMenus(){
 	submenu->addAction(action_fill_row_numbers);
 // 	submenu->addAction(action_fill_random);
 	submenu->addAction(action_fill_equidistant);
-	submenu->addAction(action_fill_random_nonuniform);
 	submenu->addAction(action_fill_const);
+	submenu->addAction(action_fill_random_nonuniform);
+	submenu->addAction(action_fill_function);
 	m_columnMenu->addMenu(submenu);
 	m_columnMenu->addSeparator();
 
@@ -284,8 +286,9 @@ void SpreadsheetView::connectActions(){
 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
-	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithNonuniformRandomNumbers()));
-	connect(action_fill_equidistant, SIGNAL(triggered()), this, SLOT(fillWithEquidistantNumbers()));
+	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithRandomValues()));
+	connect(action_fill_equidistant, SIGNAL(triggered()), this, SLOT(fillWithEquidistantValues()));
+	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
 	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithConstValues()));
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 	connect(action_add_column, SIGNAL(triggered()), m_spreadsheet, SLOT(appendColumn()));
@@ -1026,7 +1029,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 	RESET_CURSOR;
 }
 
-void SpreadsheetView::fillWithNonuniformRandomNumbers() {
+void SpreadsheetView::fillWithRandomValues() {
 	if (selectedColumnCount() < 1) return;
 	NonUniformRandomDialog* dlg = new NonUniformRandomDialog(m_spreadsheet);
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
@@ -1034,9 +1037,17 @@ void SpreadsheetView::fillWithNonuniformRandomNumbers() {
 	dlg->exec();
 }
 
-void SpreadsheetView::fillWithEquidistantNumbers() {
+void SpreadsheetView::fillWithEquidistantValues() {
 	if (selectedColumnCount() < 1) return;
 	EquidistantNumbersDialog* dlg = new EquidistantNumbersDialog(m_spreadsheet);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::fillWithFunctionValues() {
+	if (selectedColumnCount() < 1) return;
+	FunctionValuesDialog* dlg = new FunctionValuesDialog(m_spreadsheet);
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();

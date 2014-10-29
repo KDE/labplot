@@ -105,6 +105,7 @@ class SpreadsheetView : public QWidget{
 		QAction* action_fill_equidistant;
 		QAction* action_fill_random_nonuniform;
 		QAction* action_fill_const;
+		QAction* action_fill_function;
 
 		//spreadsheet related actions
 		QAction* action_toggle_comments;
@@ -166,8 +167,9 @@ class SpreadsheetView : public QWidget{
 		void recalculateSelectedCells();
 		void fillSelectedCellsWithRowNumbers();
 		void fillSelectedCellsWithRandomNumbers();
-		void fillWithNonuniformRandomNumbers();
-		void fillWithEquidistantNumbers();
+		void fillWithRandomValues();
+		void fillWithEquidistantValues();
+		void fillWithFunctionValues();
 		void fillSelectedCellsWithConstValues();
 		void insertEmptyColumns();
 		void removeSelectedColumns();
