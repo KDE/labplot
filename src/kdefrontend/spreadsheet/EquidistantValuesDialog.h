@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : NonUniformRandomDialog.h
+    File                 : EquidistantValuesDialog.h
     Project              : LabPlot
-    Description          : Dialog for generating non-uniformly distributed random numbers
+    Description          : Dialog for generating equidistant values
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
 
@@ -25,32 +25,30 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef NONUNIFORMRANDOMDIALOG_H
-#define NONUNIFORMRANDOMDIALOG_H
+#ifndef EQUIDISTANTVALUESDIALOG_H
+#define EQUIDISTANTVALUESDIALOG_H
 
-#include "ui_nonuniformrandomwidget.h"
-#include <QMap>
+#include "ui_equidistantvalueswidget.h"
 #include <KDialog>
 
 class Column;
 class Spreadsheet;
 
-class NonUniformRandomDialog : public KDialog{
+class EquidistantValuesDialog : public KDialog{
 	Q_OBJECT
 
 	public:
-		explicit NonUniformRandomDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+		explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
 		void setColumns(QList<Column*>);
 
 	private:
-		Ui::NonUniformRandomWidget ui;
+		Ui::EquidistantValuesWidget ui;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
-		QMap<int, QString> m_formulaPixs;
 
 	private slots:
 		void generate();
-		void distributionChanged(int index);
+		void typeChanged(int index);
 		void checkValues();
 };
 

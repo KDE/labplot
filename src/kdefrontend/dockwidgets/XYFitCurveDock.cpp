@@ -28,6 +28,7 @@
 
 #include "XYFitCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
@@ -159,7 +160,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, SIGNAL(sourceDataChangedSinceLastFit()), this, SLOT(enableRecalculate()));
 }
 
-void XYFitCurveDock::setModel(std::auto_ptr<AspectTreeModel> model) {
+void XYFitCurveDock::setModel() {
 	QList<const char*>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	cbXDataColumn->setTopLevelClasses(list);
@@ -173,15 +174,15 @@ void XYFitCurveDock::setModel(std::auto_ptr<AspectTreeModel> model) {
 	cbWeightsColumn->setSelectableClasses(list);
 
 	m_initializing=true;
-	cbXDataColumn->setModel(model.get());
-	cbYDataColumn->setModel(model.get());
-	cbWeightsColumn->setModel(model.get());
+	cbXDataColumn->setModel(m_aspectTreeModel);
+	cbYDataColumn->setModel(m_aspectTreeModel);
+	cbWeightsColumn->setModel(m_aspectTreeModel);
 	m_initializing=false;
 
 	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 	connect( cbWeightsColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(weightsColumnChanged(QModelIndex)) );
-	XYCurveDock::setModel(model);
+	XYCurveDock::setModel();
 }
 
 /*!
@@ -196,6 +197,8 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list){
 	m_fitData = m_fitCurve->fitData();
 	initGeneralTab();
 	initTabs();
+	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());
+	this->setModel();
 	m_initializing=false;
 }
 

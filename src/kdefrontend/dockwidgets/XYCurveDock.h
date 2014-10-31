@@ -36,8 +36,6 @@
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
 
-#include <memory>
-
 class XYCurve;
 class TreeViewComboBox;
 class CurveSymbolFactory;
@@ -49,13 +47,13 @@ class XYCurveDock: public QWidget{
 
 public:
 	explicit XYCurveDock(QWidget *parent);
-	void setModel(std::auto_ptr<AspectTreeModel>);
+    virtual ~XYCurveDock();
+
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 
 private:
 	Ui::XYCurveDockGeneralTab uiGeneralTab;
-	std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
 
 	QStringList dateStrings;
 	QStringList timeStrings;
@@ -80,8 +78,10 @@ protected:
 	Ui::XYCurveDock ui;
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve;
+	AspectTreeModel* m_aspectTreeModel;
 
 	void initTabs();
+	virtual void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
 private slots:

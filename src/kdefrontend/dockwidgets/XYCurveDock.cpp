@@ -34,6 +34,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/plugin/PluginManager.h"
+#include "backend/core/Project.h"
 #include "backend/worksheet/StandardCurveSymbolFactory.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
@@ -55,7 +56,7 @@
   \ingroup kdefrontend
 */
 
-XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYColumn(0){
+XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), m_aspectTreeModel(0), cbXColumn(0), cbYColumn(0){
 	ui.setupUi(this);
 
 	//Tab "Values"
@@ -158,6 +159,11 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 
 	retranslateUi();
 	init();
+}
+
+XYCurveDock::~XYCurveDock() {
+	if (m_aspectTreeModel)
+		delete m_aspectTreeModel;
 }
 
 void XYCurveDock::setupGeneral() {
@@ -402,13 +408,10 @@ void XYCurveDock::init(){
 	ui.cbYErrorType->addItem(i18n("asymmetric"));
 
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
-
 }
 
-void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
-	m_aspectTreeModel=model;
-
-	QList<const char *>  list;
+void XYCurveDock::setModel() {
+	QList<const char*>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
@@ -435,16 +438,14 @@ void XYCurveDock::setModel(std::auto_ptr<AspectTreeModel> model){
 
 	m_initializing=true;
 	if (cbXColumn) {
-		cbXColumn->setModel(m_aspectTreeModel.get());
-		cbYColumn->setModel(m_aspectTreeModel.get());
+		cbXColumn->setModel(m_aspectTreeModel);
+		cbYColumn->setModel(m_aspectTreeModel);
 	}
-	cbValuesColumn->setModel(m_aspectTreeModel.get());
-	cbXErrorMinusColumn->setModel(m_aspectTreeModel.get());
-	cbXErrorPlusColumn->setModel(m_aspectTreeModel.get());
-	cbYErrorMinusColumn->setModel(m_aspectTreeModel.get());
-	cbYErrorPlusColumn->setModel(m_aspectTreeModel.get());
-
-	m_initializing=false;
+	cbValuesColumn->setModel(m_aspectTreeModel);
+	cbXErrorMinusColumn->setModel(m_aspectTreeModel);
+	cbXErrorPlusColumn->setModel(m_aspectTreeModel);
+	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
+	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
 }
 
 /*!
@@ -456,6 +457,8 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	m_curve=list.first();
 	initGeneralTab();
 	initTabs();
+	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
+	setModel();
 	m_initializing=false;
 }
 

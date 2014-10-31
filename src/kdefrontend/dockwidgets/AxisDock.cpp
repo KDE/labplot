@@ -30,6 +30,7 @@
 #include "AxisDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -50,8 +51,8 @@
 
   \ingroup kdefrontend
 */
- 
-AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
+
+AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_aspectTreeModel(0), m_initializing(false) {
 	ui.setupUi(this);
 
 	//"Title"-tab
@@ -69,7 +70,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 
 	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
 	layout->addWidget(cbMinorTicksColumn, 18, 2);
-	
+
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
 		layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -87,23 +88,23 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
-	
+
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
 	connect( ui.lePosition, SIGNAL(returnPressed()), this, SLOT(positionChanged()) );
 	connect( ui.cbScale, SIGNAL(currentIndexChanged(int)), this, SLOT(scaleChanged(int)) );
-	
+
 	connect( ui.chkAutoScale, SIGNAL(stateChanged(int)), this, SLOT(autoScaleChanged(int)) );
 	connect( ui.leStart, SIGNAL(returnPressed()), this, SLOT(startChanged()) );
 	connect( ui.leEnd, SIGNAL(returnPressed()), this, SLOT(endChanged()) );
 	connect( ui.leZeroOffset, SIGNAL(returnPressed()), this, SLOT(zeroOffsetChanged()) );
 	connect( ui.leScalingFactor, SIGNAL(returnPressed()), this, SLOT(scalingFactorChanged()) );
-	
+
 	//"Line"-tab
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
 	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
-	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );	
+	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );
 	connect( ui.cbArrowPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(arrowPositionChanged(int)) );
 	connect( ui.cbArrowType, SIGNAL(currentIndexChanged(int)), this, SLOT(arrowTypeChanged(int)) );
 	connect( ui.sbArrowSize, SIGNAL(valueChanged(int)), this, SLOT(arrowSizeChanged(int)) );
@@ -131,9 +132,9 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.sbMinorTicksWidth, SIGNAL(valueChanged(double)), this, SLOT(minorTicksWidthChanged(double)) );
 	connect( ui.sbMinorTicksLength, SIGNAL(valueChanged(double)), this, SLOT(minorTicksLengthChanged(double)) );
 	connect( ui.sbMinorTicksOpacity, SIGNAL(valueChanged(int)), this, SLOT(minorTicksOpacityChanged(int)) );
-	
+
 	//"Extra ticks"-tab
-	
+
 	//"Tick labels"-tab
 	connect( ui.cbLabelsFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(labelsFormatChanged(int)) );
 	connect( ui.sbLabelsPrecision, SIGNAL(valueChanged(int)), this, SLOT(labelsPrecisionChanged(int)) );
@@ -146,7 +147,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	connect( ui.leLabelsPrefix, SIGNAL(returnPressed()), this, SLOT(labelsPrefixChanged()) );
 	connect( ui.leLabelsSuffix, SIGNAL(returnPressed()), this, SLOT(labelsSuffixChanged()) );
 	connect( ui.sbLabelsOpacity, SIGNAL(valueChanged(int)), this, SLOT(labelsOpacityChanged(int)) );
-	
+
 	/*
 
 	connect( ui.sbLabelsPrecision, SIGNAL(valueChanged(int)), this, SLOT(slotDataChanged()) );
@@ -174,7 +175,10 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_initializing(false){
 	init();
 }
 
-AxisDock::~AxisDock(){}
+AxisDock::~AxisDock() {
+	if (m_aspectTreeModel)
+		delete m_aspectTreeModel;
+}
 
 void AxisDock::init(){
 	m_initializing=true;
@@ -185,7 +189,7 @@ void AxisDock::init(){
 	ui.leEnd->setValidator( new QDoubleValidator(ui.leEnd) );
 	ui.leZeroOffset->setValidator( new QDoubleValidator(ui.leZeroOffset) );
 	ui.leScalingFactor->setValidator( new QDoubleValidator(ui.leScalingFactor) );
-	
+
 	ui.leMajorTicksIncrement->setValidator( new QDoubleValidator(ui.leMajorTicksIncrement) );
 	ui.leMinorTicksIncrement->setValidator( new QDoubleValidator(ui.leMinorTicksIncrement) );
 
@@ -291,7 +295,7 @@ void AxisDock::init(){
 	ui.cbArrowPosition->addItem( i18n("left") );
 	ui.cbArrowPosition->addItem( i18n("right") );
 	ui.cbArrowPosition->addItem( i18n("both") );
-	
+
 	ui.cbMajorTicksDirection->addItem( i18n("none") );
 	ui.cbMajorTicksDirection->addItem( i18n("in") );
 	ui.cbMajorTicksDirection->addItem( i18n("out") );
@@ -300,7 +304,7 @@ void AxisDock::init(){
 	ui.cbMajorTicksType->addItem( i18n("Number") );
 	ui.cbMajorTicksType->addItem( i18n("Increment") );
 	ui.cbMajorTicksType->addItem( i18n("Custom column") );
-	
+
 	ui.cbMinorTicksDirection->addItem( i18n("none") );
 	ui.cbMinorTicksDirection->addItem( i18n("in") );
 	ui.cbMinorTicksDirection->addItem( i18n("out") );
@@ -309,7 +313,7 @@ void AxisDock::init(){
 	ui.cbMinorTicksType->addItem( i18n("Number") );
 	ui.cbMinorTicksType->addItem( i18n("Increment") );
 	ui.cbMinorTicksType->addItem( i18n("Custom column") );
-	
+
 	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
@@ -320,9 +324,7 @@ void AxisDock::init(){
 	m_initializing=false;
 }
 
-void AxisDock::setModel(std::auto_ptr<AspectTreeModel> model){
-	m_aspectTreeModel=model;
-
+void AxisDock::setModel(){
 	QList<const char *>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	cbMajorTicksColumn->setTopLevelClasses(list);
@@ -333,8 +335,8 @@ void AxisDock::setModel(std::auto_ptr<AspectTreeModel> model){
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	m_initializing=true;
-	cbMajorTicksColumn->setModel(m_aspectTreeModel.get());
-	cbMinorTicksColumn->setModel(m_aspectTreeModel.get());
+	cbMajorTicksColumn->setModel(m_aspectTreeModel);
+	cbMinorTicksColumn->setModel(m_aspectTreeModel);
 
 	m_initializing=false;
 }
@@ -369,6 +371,9 @@ void AxisDock::setAxes(QList<Axis*> list){
 		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 	}
+
+	m_aspectTreeModel =  new AspectTreeModel(m_axis->project());
+	this->setModel();
 
   	//show the properties of the first axis
 	this->load();
@@ -449,21 +454,21 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 void AxisDock::nameChanged(){
   if (m_initializing)
 	return;
-  
+
   m_axis->setName(ui.leName->text());
 }
 
 void AxisDock::commentChanged(){
   if (m_initializing)
 	return;
-  
+
   m_axis->setComment(ui.leComment->text());
 }
 
 void AxisDock::visibilityChanged(int state){
   if (m_initializing)
 	return;
-  
+
   bool b;
   if (state==Qt::Checked)
 	b=true;
@@ -549,7 +554,7 @@ void AxisDock::positionChanged(int index){
 void AxisDock::positionChanged(){
   if (m_initializing)
 	return;
-  
+
   double offset = ui.lePosition->text().toDouble();
   foreach(Axis* axis, m_axesList)
 	axis->setOffset(offset);
@@ -579,7 +584,7 @@ void AxisDock::autoScaleChanged(int index){
 void AxisDock::startChanged(){
   if (m_initializing)
 	return;
-  
+
   double value = ui.leStart->text().toDouble();
 
   //check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
@@ -618,7 +623,7 @@ void AxisDock::endChanged(){
 void AxisDock::zeroOffsetChanged(){
   if (m_initializing)
 	return;
-  
+
   double offset = ui.leZeroOffset->text().toDouble();
   foreach(Axis* axis, m_axesList)
 	axis->setZeroOffset(offset);
@@ -627,7 +632,7 @@ void AxisDock::zeroOffsetChanged(){
 void AxisDock::scalingFactorChanged(){
   if (m_initializing)
 	return;
-  
+
   double scalingFactor = ui.leScalingFactor->text().toDouble();
   foreach(Axis* axis, m_axesList)
 	axis->setScalingFactor(scalingFactor);
@@ -644,7 +649,7 @@ void AxisDock::lineStyleChanged(int index){
 	ui.sbLineWidth->setEnabled(b);
 	ui.lLineOpacity->setEnabled(b);
 	ui.sbLineOpacity->setEnabled(b);
-  
+
 	if (m_initializing)
 		return;
 
@@ -665,7 +670,7 @@ void AxisDock::lineColorChanged(const QColor& color){
 	pen=axis->linePen();
 	pen.setColor(color);
 	axis->setLinePen(pen);
-  }  
+  }
 
   m_initializing=true;
   GuiTools::updatePenStyles(ui.cbLineStyle, color);
@@ -675,13 +680,13 @@ void AxisDock::lineColorChanged(const QColor& color){
 void AxisDock::lineWidthChanged(double  value){
   if (m_initializing)
 	return;
-  
+
   QPen pen;
   foreach(Axis* axis, m_axesList){
 	pen=axis->linePen();
 	pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Point));
 	axis->setLinePen(pen);
-  }  
+  }
 }
 
 void AxisDock::lineOpacityChanged(int value){
@@ -731,12 +736,12 @@ void AxisDock::arrowSizeChanged(int value){
 //"Major ticks" tab
 void AxisDock::majorTicksDirectionChanged(int index){
 	Axis::TicksDirection direction = Axis::TicksDirection(index);
-  
+
 	bool b = (direction != Axis::noTicks);
 	ui.lMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksType->setEnabled(b);
-	ui.lMajorTicksType->setEnabled(b);  
-	ui.cbMajorTicksType->setEnabled(b);  
+	ui.lMajorTicksType->setEnabled(b);
+	ui.cbMajorTicksType->setEnabled(b);
 	ui.lMajorTicksNumber->setEnabled(b);
 	ui.sbMajorTicksNumber->setEnabled(b);
 	ui.lMajorTicksIncrement->setEnabled(b);
@@ -754,7 +759,7 @@ void AxisDock::majorTicksDirectionChanged(int index){
 	ui.lMajorTicksLength->setEnabled(b);
 	ui.sbMajorTicksLength->setEnabled(b);
 	ui.lMajorTicksOpacity->setEnabled(b);
-	ui.sbMajorTicksOpacity->setEnabled(b);  
+	ui.sbMajorTicksOpacity->setEnabled(b);
 
 	if (m_initializing)
 		return;
@@ -794,7 +799,7 @@ void AxisDock::majorTicksTypeChanged(int index){
 
   if (m_initializing)
 	return;
-		
+
   foreach(Axis* axis, m_axesList)
 	axis->setMajorTicksType(type);
 }
@@ -862,7 +867,7 @@ void AxisDock::majorTicksColorChanged(const QColor& color){
 	pen=axis->majorTicksPen();
 	pen.setColor(color);
 	axis->setMajorTicksPen(pen);
-  }  
+  }
 
   m_initializing=true;
   GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, color);
@@ -872,19 +877,19 @@ void AxisDock::majorTicksColorChanged(const QColor& color){
 void AxisDock::majorTicksWidthChanged(double value){
   if (m_initializing)
 	return;
-  
+
   QPen pen;
   foreach(Axis* axis, m_axesList){
 	pen=axis->majorTicksPen();
 	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	axis->setMajorTicksPen(pen);
-  }  
+  }
 }
 
 void AxisDock::majorTicksLengthChanged(double value){
   if (m_initializing)
 	return;
-  
+
   foreach(Axis* axis, m_axesList)
 	axis->setMajorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
@@ -904,8 +909,8 @@ void AxisDock::minorTicksDirectionChanged(int index){
 	bool b = (direction != Axis::noTicks);
 	ui.lMinorTicksType->setEnabled(b);
 	ui.cbMinorTicksType->setEnabled(b);
-	ui.lMinorTicksType->setEnabled(b);  
-	ui.cbMinorTicksType->setEnabled(b);  
+	ui.lMinorTicksType->setEnabled(b);
+	ui.cbMinorTicksType->setEnabled(b);
 	ui.lMinorTicksNumber->setEnabled(b);
 	ui.sbMinorTicksNumber->setEnabled(b);
 	ui.lMinorTicksIncrement->setEnabled(b);
@@ -915,7 +920,7 @@ void AxisDock::minorTicksDirectionChanged(int index){
 	if (b){
 		Qt::PenStyle penStyle=Qt::PenStyle(ui.cbMinorTicksLineStyle->currentIndex());
 		b = (penStyle != Qt::NoPen);
-	}  	
+	}
 	ui.lMinorTicksColor->setEnabled(b);
 	ui.kcbMinorTicksColor->setEnabled(b);
 	ui.lMinorTicksWidth->setEnabled(b);
@@ -923,13 +928,13 @@ void AxisDock::minorTicksDirectionChanged(int index){
 	ui.lMinorTicksLength->setEnabled(b);
 	ui.sbMinorTicksLength->setEnabled(b);
 	ui.lMinorTicksOpacity->setEnabled(b);
-	ui.sbMinorTicksOpacity->setEnabled(b);  
-  
+	ui.sbMinorTicksOpacity->setEnabled(b);
+
 	if (m_initializing)
 		return;
 
 	foreach(Axis* axis, m_axesList)
-		axis->setMinorTicksDirection(direction);  
+		axis->setMinorTicksDirection(direction);
 }
 
 void AxisDock::minorTicksTypeChanged(int index){
@@ -996,7 +1001,7 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index){
 
 void AxisDock::minorTicksLineStyleChanged(int index){
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
-  
+
 	bool b=(penStyle != Qt::NoPen);
 	ui.lMinorTicksColor->setEnabled(b);
 	ui.kcbMinorTicksColor->setEnabled(b);
@@ -1027,7 +1032,7 @@ void AxisDock::minorTicksColorChanged(const QColor& color){
 	pen=axis->minorTicksPen();
 	pen.setColor(color);
 	axis->setMinorTicksPen(pen);
-  }  
+  }
 
   m_initializing=true;
   GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, color);
@@ -1037,19 +1042,19 @@ void AxisDock::minorTicksColorChanged(const QColor& color){
 void AxisDock::minorTicksWidthChanged(double value){
   if (m_initializing)
 	return;
-  
+
   QPen pen;
   foreach(Axis* axis, m_axesList){
 	pen=axis->minorTicksPen();
 	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	axis->setMinorTicksPen(pen);
-  }  
+  }
 }
 
 void AxisDock::minorTicksLengthChanged(double value){
   if (m_initializing)
 	return;
-  
+
   foreach(Axis* axis, m_axesList)
 	axis->setMinorTicksLength( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
@@ -1109,8 +1114,8 @@ void AxisDock::labelsPositionChanged(int index){
 	ui.lLabelsSuffix->setEnabled(b);
 	ui.leLabelsSuffix->setEnabled(b);
 	ui.lLabelsOpacity->setEnabled(b);
-	ui.sbLabelsOpacity->setEnabled(b);  
-	
+	ui.sbLabelsOpacity->setEnabled(b);
+
 	  if (m_initializing)
 		return;
 
@@ -1129,7 +1134,7 @@ void AxisDock::labelsOffsetChanged(double value){
 void AxisDock::labelsRotationChanged(int value){
   if (m_initializing)
 	return;
-	
+
   foreach(Axis* axis, m_axesList)
 	axis->setLabelsRotationAngle(value);
 }
@@ -1137,7 +1142,7 @@ void AxisDock::labelsRotationChanged(int value){
 void AxisDock::labelsPrefixChanged(){
   if (m_initializing)
 	return;
-		
+
   QString prefix = ui.leLabelsPrefix->text();
   foreach(Axis* axis, m_axesList)
 	axis->setLabelsPrefix(prefix);
@@ -1165,7 +1170,7 @@ void AxisDock::labelsFontChanged(const QFont& font){
 void AxisDock::labelsFontColorChanged(const QColor& color){
   if (m_initializing)
 	return;
-	
+
   foreach(Axis* axis, m_axesList)
 	axis->setLabelsColor(color);
 }
@@ -1434,7 +1439,7 @@ void AxisDock::axisMajorTicksIncrementChanged(qreal increment) {
 }
 void AxisDock::axisMajorTicksPenChanged(const QPen& pen) {
 	m_initializing = true;
-	ui.cbMajorTicksLineStyle->setCurrentIndex(pen.style());      
+	ui.cbMajorTicksLineStyle->setCurrentIndex(pen.style());
         ui.kcbMajorTicksColor->setColor(pen.color());
         ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
 	m_initializing = false;
@@ -1473,7 +1478,7 @@ void AxisDock::axisMinorTicksIncrementChanged(qreal increment) {
 }
 void AxisDock::axisMinorTicksPenChanged(const QPen& pen) {
 	m_initializing = true;
-	ui.cbMinorTicksLineStyle->setCurrentIndex(pen.style());      
+	ui.cbMinorTicksLineStyle->setCurrentIndex(pen.style());
         ui.kcbMinorTicksColor->setColor(pen.color());
         ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point) );
 	m_initializing = false;
@@ -1590,13 +1595,13 @@ void AxisDock::load(){
 	//General
   	ui.chkVisible->setChecked( m_axis->isVisible() );
 	ui.cbOrientation->setCurrentIndex( (int) m_axis->orientation() );
-	
+
 	int index = (int) m_axis->position();
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index-2);
 	else
 		ui.cbPosition->setCurrentIndex(index);
-	
+
   	ui.lePosition->setText( QString::number( m_axis->offset()) );
 	ui.cbScale->setCurrentIndex(  (int) m_axis->scale() );
 	ui.chkAutoScale->setChecked( m_axis->autoScale() );
@@ -1665,7 +1670,7 @@ void AxisDock::load(){
 	ui.kcbMinorGridColor->setColor( m_axis->minorGridPen().color() );
 	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorGridPen().widthF(),Worksheet::Point) );
 	ui.sbMinorGridOpacity->setValue( round(m_axis->minorGridOpacity()*100.0) );
-	
+
 	m_initializing=true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
@@ -1674,7 +1679,7 @@ void AxisDock::load(){
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
-	m_initializing=false;	
+	m_initializing=false;
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
@@ -1685,7 +1690,7 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
-	
+
 	int size = m_axesList.size();
 	if (size>1)
 		m_axis->beginMacro(i18n("%1 axes: template \"%2\" loaded", size, name));
@@ -1703,13 +1708,13 @@ void AxisDock::loadConfig(KConfig& config){
 	//General
   	ui.chkVisible->setChecked(group.readEntry("Visible", m_axis->isVisible()));
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int) m_axis->orientation()) );
-	
+
 	int index = group.readEntry("Position", (int) m_axis->position());
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index-2);
 	else
 		ui.cbPosition->setCurrentIndex(index);
-	
+
   	ui.lePosition->setText( QString::number( group.readEntry("PositionOffset", m_axis->offset())) );
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
 	ui.chkAutoScale->setChecked(group.readEntry("AutoScale", m_axis->autoScale()));
@@ -1781,7 +1786,7 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.kcbMinorGridColor->setColor( group.readEntry("MinorGridColor", m_axis->minorGridPen().color()) );
 	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorGridWidth", m_axis->minorGridPen().widthF()),Worksheet::Point) );
 	ui.sbMinorGridOpacity->setValue( round(group.readEntry("MinorGridOpacity", m_axis->minorGridOpacity())*100.0) );
-	
+
 	m_initializing=true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
@@ -1790,7 +1795,7 @@ void AxisDock::loadConfig(KConfig& config){
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
-	m_initializing=false;	
+	m_initializing=false;
 }
 
 void AxisDock::saveConfig(KConfig& config){

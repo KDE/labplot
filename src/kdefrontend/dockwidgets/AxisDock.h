@@ -6,7 +6,7 @@
     Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
 							(use @ for *)
     Description          : axes widget class
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,7 +32,6 @@
 
 #include "ui_axisdock.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include <memory>
 
 class AbstractAspect;
 class LabelWidget;
@@ -45,9 +44,8 @@ class AxisDock : public QWidget{
 
 public:
 	explicit AxisDock(QWidget*);
-	~AxisDock();
+    ~AxisDock();
 
-	void setModel(std::auto_ptr<AspectTreeModel>);
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
 
@@ -55,13 +53,14 @@ private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
 	Axis* m_axis;
-	std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
+	AspectTreeModel* m_aspectTreeModel;
 	LabelWidget* labelWidget;
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	bool m_dataChanged;
 	bool m_initializing;
 
+	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
 private slots:
@@ -125,7 +124,7 @@ private slots:
 	void labelsOffsetChanged(double);
 	void labelsRotationChanged(int);
 	void labelsFontChanged(const QFont&);
-	void labelsFontColorChanged(const QColor&);	
+	void labelsFontColorChanged(const QColor&);
 	void labelsPrefixChanged();
 	void labelsSuffixChanged();
 	void labelsOpacityChanged(int);
@@ -176,10 +175,10 @@ private slots:
 	void axisMinorTicksPenChanged(const QPen&);
 	void axisMinorTicksLengthChanged(qreal);
 	void axisMinorTicksOpacityChanged(qreal);
-	
+
 	//labels
 	void axisLabelsFormatChanged(Axis::LabelsFormat);
-	void axisLabelsAutoPrecisionChanged(bool); 
+	void axisLabelsAutoPrecisionChanged(bool);
 	void axisLabelsPrecisionChanged(int);
 	void axisLabelsPositionChanged(Axis::LabelsPosition);
 	void axisLabelsOffsetChanged(float);
@@ -197,13 +196,13 @@ private slots:
 	void axisMinorGridOpacityChanged(qreal);
 
 	void axisVisibleChanged(bool);
-	
+
 	//save/load
 	void load();
 	void loadConfigFromTemplate(KConfig&);
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);
-	
+
 signals:
 	void info(const QString&);
 };

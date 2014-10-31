@@ -40,7 +40,6 @@ class XYFitCurveDock: public XYCurveDock {
 
 public:
 	explicit XYFitCurveDock(QWidget *parent);
-	void setModel(std::auto_ptr<AspectTreeModel>);
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 
@@ -57,6 +56,9 @@ private:
 	XYFitCurve::FitData m_fitData;
 	QList<double> parameters;
 	QList<double> parameterValues;
+
+protected:
+	virtual void setModel();
 
 private slots:
 	//SLOTs for changes triggered in XYFitCurveDock

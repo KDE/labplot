@@ -27,6 +27,8 @@
  ***************************************************************************/
 
 #include "XYEquationCurveDock.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
@@ -117,6 +119,8 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list){
 	Q_ASSERT(m_equationCurve);
 	initGeneralTab();
 	initTabs();
+	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());
+	XYCurveDock::setModel();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	m_initializing=false;
 }
@@ -272,7 +276,6 @@ void XYEquationCurveDock::showConstants() {
 		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants2->width(),-menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbConstants2->mapToGlobal(pos));
 	}
-
 }
 
 void XYEquationCurveDock::showFunctions() {
@@ -297,7 +300,6 @@ void XYEquationCurveDock::showFunctions() {
 		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions2->width(),-menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbFunctions2->mapToGlobal(pos));
 	}
-
 }
 
 void XYEquationCurveDock::insertFunction1(const QString& str) {

@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : EquidistantNumbersDialog.cpp
+    File                 : EquidistantValuesDialog.cpp
     Project              : LabPlot
     Description          : Dialog for generating equidistant numbers
     --------------------------------------------------------------------
@@ -25,19 +25,19 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "EquidistantNumbersDialog.h"
+#include "EquidistantValuesDialog.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 /*!
-	\class EquidistantNumbersDialog
-	\brief Dialog for equidistant numbers.
+	\class EquidistantValuesDialog
+	\brief Dialog for equidistant values.
 
 	\ingroup kdefrontend
  */
 
-EquidistantNumbersDialog::EquidistantNumbersDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
+EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
 
 	setWindowTitle(i18n("Equidistant numbers"));
 
@@ -79,12 +79,12 @@ EquidistantNumbersDialog::EquidistantNumbersDialog(Spreadsheet* s, QWidget* pare
 	resize( QSize(300,0).expandedTo(minimumSize()) );
 }
 
-void EquidistantNumbersDialog::setColumns(QList<Column*> list) {
+void EquidistantValuesDialog::setColumns(QList<Column*> list) {
 	m_columns = list;
 	ui.kleNumber->setText( QString::number(m_columns.first()->rowCount()) );
 }
 
-void EquidistantNumbersDialog::typeChanged(int index) {
+void EquidistantValuesDialog::typeChanged(int index) {
 	if (index==0) { //fixed number
 		ui.lIncrement->hide();
 		ui.kleIncrement->hide();
@@ -98,7 +98,7 @@ void EquidistantNumbersDialog::typeChanged(int index) {
 	}
 }
 
-void EquidistantNumbersDialog::checkValues() {
+void EquidistantValuesDialog::checkValues() {
 	if (ui.kleFrom->text().simplified().isEmpty()) {
 		enableButton(KDialog::Ok, false);
 		return;
@@ -124,7 +124,7 @@ void EquidistantNumbersDialog::checkValues() {
 	enableButton(KDialog::Ok, true);
 }
 
-void EquidistantNumbersDialog::generate() {
+void EquidistantValuesDialog::generate() {
 	Q_ASSERT(m_spreadsheet);
 
 	WAIT_CURSOR;

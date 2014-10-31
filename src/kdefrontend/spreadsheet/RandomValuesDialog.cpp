@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : NonUniformRandomDialog.cpp
+    File                 : RandomValuesDialog.cpp
     Project              : LabPlot
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
@@ -25,7 +25,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "NonUniformRandomDialog.h"
+#include "RandomValuesDialog.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -35,7 +35,7 @@
 #include <gsl/gsl_randist.h>
 
 /*!
-	\class NonUniformRandomDialog
+	\class RandomValuesDialog
 	\brief Dialog for generating non-uniform random numbers.
 
 	\ingroup kdefrontend
@@ -48,7 +48,7 @@ enum distribution {
 	NegativeBinomial, Pascal, Geometric, Hypergeometric, Logarithmic
 };
 
-NonUniformRandomDialog::NonUniformRandomDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
+RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
 
 	setWindowTitle(i18n("Non-uniform random numbers"));
 
@@ -147,11 +147,11 @@ NonUniformRandomDialog::NonUniformRandomDialog(Spreadsheet* s, QWidget* parent, 
 	resize( QSize(400,0).expandedTo(minimumSize()) );
 }
 
-void NonUniformRandomDialog::setColumns(QList<Column*> list) {
+void RandomValuesDialog::setColumns(QList<Column*> list) {
 	m_columns = list;
 }
 
-void NonUniformRandomDialog::distributionChanged(int index) {
+void RandomValuesDialog::distributionChanged(int index) {
 	distribution distr = (distribution)ui.cbDistribution->itemData(index).toInt();
 	if (distr == Gaussian) {
 		ui.lParameter1->show();
@@ -392,7 +392,7 @@ void NonUniformRandomDialog::distributionChanged(int index) {
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
-void NonUniformRandomDialog::checkValues() {
+void RandomValuesDialog::checkValues() {
 	if (ui.kleParameter1->text().simplified().isEmpty()) {
 		enableButton(KDialog::Ok, false);
 		return;
@@ -411,7 +411,7 @@ void NonUniformRandomDialog::checkValues() {
 	enableButton(KDialog::Ok, true);
 }
 
-void NonUniformRandomDialog::generate() {
+void RandomValuesDialog::generate() {
 	Q_ASSERT(m_spreadsheet);
 
 	//create a generator chosen by the environment variable GSL_RNG_TYPE

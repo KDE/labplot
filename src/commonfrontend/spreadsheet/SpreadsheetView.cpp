@@ -65,8 +65,8 @@
 #include <KLocale>
 #include "commonfrontend/spreadsheet/spreadsheetview_kactions.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
-#include "kdefrontend/spreadsheet/NonUniformRandomDialog.h"
-#include "kdefrontend/spreadsheet/EquidistantNumbersDialog.h"
+#include "kdefrontend/spreadsheet/RandomValuesDialog.h"
+#include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #endif
 
@@ -1031,7 +1031,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
 
 void SpreadsheetView::fillWithRandomValues() {
 	if (selectedColumnCount() < 1) return;
-	NonUniformRandomDialog* dlg = new NonUniformRandomDialog(m_spreadsheet);
+	RandomValuesDialog* dlg = new RandomValuesDialog(m_spreadsheet);
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
@@ -1039,7 +1039,7 @@ void SpreadsheetView::fillWithRandomValues() {
 
 void SpreadsheetView::fillWithEquidistantValues() {
 	if (selectedColumnCount() < 1) return;
-	EquidistantNumbersDialog* dlg = new EquidistantNumbersDialog(m_spreadsheet);
+	EquidistantValuesDialog* dlg = new EquidistantValuesDialog(m_spreadsheet);
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();

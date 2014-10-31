@@ -60,8 +60,6 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QToolBar>
 #include <KDebug>
 
-#include <memory>
-
 /*!
   \class GuiObserver
   \brief The GUI observer looks for the selection changes in the main window
@@ -204,9 +202,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	  mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
 	}
 
-	std::auto_ptr<AspectTreeModel> model( new AspectTreeModel(mainWindow->m_project) );
-	mainWindow->axisDock->setModel( model );
-
 	QList<Axis*> list;
 	foreach(aspect, selectedAspects){
 	  list<<qobject_cast<Axis *>(aspect);
@@ -223,9 +218,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	  connect(mainWindow->xyCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->xyCurveDock);
 	}
-
-	std::auto_ptr<AspectTreeModel> model( new AspectTreeModel(mainWindow->m_project) );
- 	mainWindow->xyCurveDock->setModel( model );
 
 	QList<XYCurve*> list;
 	foreach(aspect, selectedAspects){
@@ -244,9 +236,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	  mainWindow->stackedWidget->addWidget(mainWindow->xyEquationCurveDock);
 	}
 
-	std::auto_ptr<AspectTreeModel> model( new AspectTreeModel(mainWindow->m_project) );
- 	mainWindow->xyEquationCurveDock->setModel( model );
-
 	QList<XYCurve*> list;
 	foreach(aspect, selectedAspects){
 	  list<<qobject_cast<XYCurve *>(aspect);
@@ -263,9 +252,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	  connect(mainWindow->xyFitCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->xyFitCurveDock);
 	}
-
-	std::auto_ptr<AspectTreeModel> model( new AspectTreeModel(mainWindow->m_project) );
-	mainWindow->xyFitCurveDock->setModel( model );
 
 	QList<XYCurve*> list;
 	foreach(aspect, selectedAspects){
