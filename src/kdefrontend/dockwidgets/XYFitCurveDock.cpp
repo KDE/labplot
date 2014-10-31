@@ -173,11 +173,9 @@ void XYFitCurveDock::setModel() {
 	cbYDataColumn->setSelectableClasses(list);
 	cbWeightsColumn->setSelectableClasses(list);
 
-	m_initializing=true;
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
 	cbWeightsColumn->setModel(m_aspectTreeModel);
-	m_initializing=false;
 
 	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
@@ -194,11 +192,11 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list){
 	m_curve=list.first();
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
 	Q_ASSERT(m_fitCurve);
+	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
+	this->setModel();
 	m_fitData = m_fitCurve->fitData();
 	initGeneralTab();
 	initTabs();
-	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());
-	this->setModel();
 	m_initializing=false;
 }
 
@@ -528,6 +526,7 @@ void XYFitCurveDock::recalculateClicked() {
 }
 
 void XYFitCurveDock::enableRecalculate() const {
+	qDebug()<<"XYFitCurveDock::enableRecalculate";
 	if (m_initializing)
 		return;
 

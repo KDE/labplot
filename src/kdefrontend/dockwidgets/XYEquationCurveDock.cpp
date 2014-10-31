@@ -117,10 +117,10 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list){
 	m_curve=list.first();
 	m_equationCurve = dynamic_cast<XYEquationCurve*>(m_curve);
 	Q_ASSERT(m_equationCurve);
-	initGeneralTab();
-	initTabs();
 	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());
 	XYCurveDock::setModel();
+	initGeneralTab();
+	initTabs();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	m_initializing=false;
 }

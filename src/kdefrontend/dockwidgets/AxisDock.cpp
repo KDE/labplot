@@ -334,11 +334,8 @@ void AxisDock::setModel(){
 	list<<"Column";
 	m_aspectTreeModel->setSelectableAspects(list);
 
-	m_initializing=true;
 	cbMajorTicksColumn->setModel(m_aspectTreeModel);
 	cbMinorTicksColumn->setModel(m_aspectTreeModel);
-
-	m_initializing=false;
 }
 
 /*!
@@ -348,6 +345,9 @@ void AxisDock::setAxes(QList<Axis*> list){
   	m_initializing=true;
   	m_axesList=list;
   	m_axis=list.first();
+	Q_ASSERT(m_axis);
+	m_aspectTreeModel =  new AspectTreeModel(m_axis->project());
+	this->setModel();
 
 	labelWidget->setAxes(list);
 
@@ -372,8 +372,6 @@ void AxisDock::setAxes(QList<Axis*> list){
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 	}
 
-	m_aspectTreeModel =  new AspectTreeModel(m_axis->project());
-	this->setModel();
 
   	//show the properties of the first axis
 	this->load();
@@ -846,7 +844,6 @@ void AxisDock::majorTicksLineStyleChanged(int index){
 }
 
 void AxisDock::majorTicksColumnChanged(const QModelIndex& index){
-	Q_UNUSED(index);
 	if (m_initializing)
 		return;
 
@@ -987,7 +984,6 @@ void AxisDock::minorTicksIncrementChanged(){
 }
 
 void AxisDock::minorTicksColumnChanged(const QModelIndex& index){
-	Q_UNUSED(index);
 	if (m_initializing)
 		return;
 

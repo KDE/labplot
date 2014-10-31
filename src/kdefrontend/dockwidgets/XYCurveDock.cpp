@@ -436,7 +436,6 @@ void XYCurveDock::setModel() {
 	cbYErrorMinusColumn->setSelectableClasses(list);
 	cbYErrorPlusColumn->setSelectableClasses(list);
 
-	m_initializing=true;
 	if (cbXColumn) {
 		cbXColumn->setModel(m_aspectTreeModel);
 		cbYColumn->setModel(m_aspectTreeModel);
@@ -455,10 +454,11 @@ void XYCurveDock::setCurves(QList<XYCurve*> list){
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
-	initGeneralTab();
-	initTabs();
+	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
+	initGeneralTab();
+	initTabs();
 	m_initializing=false;
 }
 
