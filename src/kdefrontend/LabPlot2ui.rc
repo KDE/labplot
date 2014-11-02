@@ -66,6 +66,9 @@
 <Separator/>
 <Action name="next window" />
 <Action name="previous window" />
+<Separator/>
+<Action name="toggle_project_explorer_dock" />
+<Action name="toggle_properties_explorer_dock" />
 </Menu>
 </MenuBar>
 </gui>

@@ -164,6 +164,8 @@ void MainWin::initGUI(const QString& fileName){
 		m_mdiArea->setTabPosition(QTabWidget::TabPosition(tabPosition));
 		m_mdiArea->setTabsClosable(true);
 		m_mdiArea->setTabsMovable(true);
+		m_tileWindows->setVisible(false);
+		m_cascadeWindows->setVisible(false);
 	}
 
 	//auto-save
@@ -211,7 +213,7 @@ void MainWin::initActions() {
 
 	//New Folder/Spreadsheet/Worksheet/Datasources
 	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("Spreadsheet"),this);
-	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
+// 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
 
@@ -221,7 +223,7 @@ void MainWin::initActions() {
 // 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
 	m_newWorksheetAction= new KAction(KIcon("archive-insert"),i18n("Worksheet"),this);
-	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
+// 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
 
@@ -244,23 +246,19 @@ void MainWin::initActions() {
 // 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
 	m_importAction = new KAction(KIcon("document-import-database"), i18n("Import"), this);
-	m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_L);
+	m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	actionCollection()->addAction("import", m_importAction);
 	connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
 
 	m_exportAction = new KAction(KIcon("document-export-database"), i18n("Export"), this);
+	m_exportAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
 
 	// Edit
 	//Undo/Redo-stuff
-	m_undoAction = new KAction(KIcon("edit-undo"),i18n("Undo"),this);
-	actionCollection()->addAction("undo", m_undoAction);
-	connect(m_undoAction, SIGNAL(triggered()),SLOT(undo()));
-
-	m_redoAction = new KAction(KIcon("edit-redo"),i18n("Redo"),this);
-	actionCollection()->addAction("redo", m_redoAction);
-	connect(m_redoAction, SIGNAL(triggered()),SLOT(redo()));
+	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
+	m_redoAction = KStandardAction::redo(this, SLOT(redo()), actionCollection());
 
 	m_historyAction = new KAction(KIcon("view-history"), i18n("Undo/Redo History"),this);
 	actionCollection()->addAction("history", m_historyAction);
@@ -273,7 +271,7 @@ void MainWin::initActions() {
 
 	//Windows
 	action  = new KAction(i18n("Cl&ose"), this);
-	action->setShortcut(i18n("Ctrl+F4"));
+	action->setShortcut(i18n("Ctrl+W"));
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
@@ -283,22 +281,22 @@ void MainWin::initActions() {
 	actionCollection()->addAction("close all windows", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeAllSubWindows()));
 
-	action = new KAction(i18n("&Tile"), this);
-	action->setStatusTip(i18n("Tile the windows"));
-	actionCollection()->addAction("tile windows", action);
-	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(tileSubWindows()));
+	m_tileWindows = new KAction(i18n("&Tile"), this);
+	m_tileWindows->setStatusTip(i18n("Tile the windows"));
+	actionCollection()->addAction("tile windows", m_tileWindows);
+	connect(m_tileWindows, SIGNAL(triggered()), m_mdiArea, SLOT(tileSubWindows()));
 
-	action = new KAction(i18n("&Cascade"), this);
-	action->setStatusTip(i18n("Cascade the windows"));
-	actionCollection()->addAction("cascade windows", action);
-	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
+	m_cascadeWindows = new KAction(i18n("&Cascade"), this);
+	m_cascadeWindows->setStatusTip(i18n("Cascade the windows"));
+	actionCollection()->addAction("cascade windows", m_cascadeWindows);
+	connect(m_cascadeWindows, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
 
-	action = new KAction(i18n("Ne&xt"), this);
+	action = new KAction(KIcon("go-next-view"), i18n("Ne&xt"), this);
 	action->setStatusTip(i18n("Move the focus to the next window"));
 	actionCollection()->addAction("next window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
 
-	action = new KAction(i18n("Pre&vious"), this);
+	action = new KAction(KIcon("go-previous-view"), i18n("Pre&vious"), this);
 	action->setStatusTip(i18n("Move the focus to the previous window"));
 	actionCollection()->addAction("previous window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
@@ -1172,9 +1170,14 @@ void MainWin::handleSettingsChanges() {
 	}
 
 	if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
+		m_tileWindows->setVisible(false);
+		m_cascadeWindows->setVisible(false);
 		QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
 		if (m_mdiArea->tabPosition() != tabPosition)
 			m_mdiArea->setTabPosition(tabPosition);
+	} else {
+		m_tileWindows->setVisible(true);
+		m_cascadeWindows->setVisible(true);
 	}
 
 	//autosave

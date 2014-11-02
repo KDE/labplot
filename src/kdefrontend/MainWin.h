@@ -105,6 +105,8 @@ private:
 	KAction *m_historyAction;
 	KAction *m_undoAction;
 	KAction *m_redoAction;
+	KAction *m_tileWindows;
+	KAction *m_cascadeWindows;
 
 	//toggling doch widgets
 	KAction* m_toggleProjectExplorerDockAction;
