@@ -1,0 +1,1665 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY latex "L<superscript>A</superscript>T<subscript>E</subscript>X">
+  <!ENTITY tex "T<subscript>E</subscript>X">
+  <!ENTITY LabPlot "<application>LabPlot</application>">
+  <!ENTITY kappname "&LabPlot;">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+]>
+
+<book lang="&language;">
+<bookinfo>
+<title>The &LabPlot; Handbook</title>
+
+<authorgroup>
+	<author>
+		<firstname>Stefan</firstname>
+		<surname>Gerlach</surname>
+		<affiliation>
+			<address><email>stefan.gerlach@uni-konstanz.de</email></address>
+		</affiliation>
+	</author>
+	<author>
+		<firstname>Yuri</firstname>
+		<surname>Chornoivan</surname>
+		<affiliation>
+			<address><email>yurchor@ukr.net</email></address>
+		</affiliation>
+	</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+  <year>2007</year><year>2014</year>
+	<holder>Stefan Gerlach</holder>
+</copyright>
+<copyright>
+  <year>2008</year><year>2014</year>
+	<holder>Alexander Semke</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+<date>2014-02-13</date>
+<releaseinfo>2.0</releaseinfo>
+
+<abstract>
+	<para>
+		&LabPlot; is a program for two-dimensional function plotting and data analysis.
+	</para>
+</abstract>
+
+<keywordset>
+	<keyword>KDE</keyword>
+	<keyword>LabPlot</keyword>
+	<keyword>plot</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title>Introduction</title>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="labplot.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<para>
+&LabPlot; is a program for two-dimensional graphical presentation of data
+sets and functions. &LabPlot; allows you to work with multiple plots which each can have multiple
+graphs. The graphs can be produced from data or from functions.
+</para>
+
+<para>
+All settings of a complete set of plots can be saved in a project files.
+These project files may be opened by command
+line parameters or using the <link linkend="file-menu">File menu</link>.
+</para>
+
+<para>The settings of a plot/graph can be changed using the properties panel. With &LabPlot; menus, additional data sets and functions (graphs) can be included which can be
+displayed in the same as well as in different plot.
+</para>
+</chapter>
+<chapter id="features">
+<title>Features</title>
+<para>
+This chapter tries to provide a complete list of the features of &LabPlot;.
+</para>
+
+<para>Function plotting</para>
+<itemizedlist>
+  <listitem><para>flexible data reading in ASCII format and writing in different formats (including <acronym>PDF</acronym>, <acronym>EPS</acronym>, <acronym>SVG</acronym> and <acronym>PNG</acronym>)
+ </para></listitem>
+<listitem><para>extensive parser for creating 2D functions</para></listitem>
+<listitem><para>support for all &GNU; Scientific Library (GSL) functions and constants</para></listitem>
+<listitem><para>multiple plots per worksheet</para></listitem>
+<listitem><para>data set operations</para></listitem>
+<listitem><para>speed mode for large data sets and data mode for inspecting data points</para></listitem>
+<listitem><para>plotting fitting curves for given data</para></listitem>
+</itemizedlist>
+
+<para>Easy editing of plots</para>
+<itemizedlist>
+<listitem><para>versatile spreadsheet for data manipulation</para></listitem>
+<listitem><para>online scaling and shifting of plots</para></listitem>
+<listitem><para>&latex; and richtext label support</para></listitem>
+<listitem><para>evaluating expressions and direct editing of data</para></listitem>
+<listitem><para>data statistics information</para></listitem>
+<listitem><para>drawing objects editable with mouse</para></listitem>
+<listitem><para>free or pan zooming, masking of data points and marker</para></listitem>
+<listitem><para>support for panel plots</para></listitem>
+<listitem><para>versatile errorbar styles</para></listitem>
+</itemizedlist>
+
+<!--<para>Analysis of data and functions</para>
+<itemizedlist>
+<listitem><para>average, smooth and prune data</para></listitem>
+<listitem><para>compress, periodical and seasonal analysis</para></listitem>
+<listitem><para>peak find</para></listitem>
+<listitem><para>interpolation (splines, &etc;)</para></listitem>
+<listitem><para>differences</para></listitem>
+<listitem><para>integration</para></listitem>
+<listitem><para>histogram</para></listitem>
+<listitem><para>regression (up to 10th order)</para></listitem>
+<listitem><para>non-linear fit (also any user defined function with up to 9 parameter)</para></listitem>
+<listitem><para>Fourier, Wavelet, Laplace and Hankel transform</para></listitem>
+<listitem><para>(de)convolution</para></listitem>
+<listitem><para>image manipulation</para></listitem>
+<listitem><para>noise, signal filter and auto-/crosscorrelation</para></listitem>
+<listitem><para>capability analysis</para></listitem>
+<listitem><para>using R for functions and descriptive statistics/one and two sample tests</para></listitem>
+</itemizedlist>-->
+
+ <para>&LabPlot; project files</para>
+<itemizedlist>
+<listitem><para>support for different worksheets and spreadsheets using MDI</para></listitem>
+<listitem><para>save and open all worksheets and spreadsheets in a xml project file (*.lml)</para></listitem>
+<listitem><para>editable project information</para></listitem>
+<listitem><para>export worksheets as PNG image, PS, EPS, SVG, and PDF formats</para></listitem>
+<listitem><para>support for project and data set notes</para></listitem>
+</itemizedlist>
+
+<para>&kde; look and feel</para>
+<itemizedlist>
+<listitem><para>configure default value for plot style and symbols</para></listitem>
+<listitem><para>print and embedded print preview</para></listitem>
+<listitem><para>&kde; handbook</para></listitem>
+</itemizedlist>
+
+</chapter>
+
+
+<chapter id="using-LabPlot">
+<title>Using &LabPlot;</title>
+
+<!--TODO:
+
+Describe the general structure of the software, intoduce the different 
+objects that can be created within the software and introduce the project-
+explorer as the tool to manage all created stuff. Folders and sub-folders can 
+be created to bring in more structure into the project.
+-->
+<sect1 id="interface-overview">
+  <title>Interface Overview</title>
+  <screenshot>
+    <screeninfo>The default &LabPlot; window</screeninfo>
+    <mediaobjectco>
+      <imageobjectco>
+	<areaspec units="other" otherunits="imagemap">
+	  <!--these ids are used only internally by DocBook so we keep them short-->
+	  <area id="im-win1a1" linkends="project-explorer" coords="37,112,316,747" />
+	  <area id="im-win1a2" linkends="worksheet" coords="314,116,842,741" />
+	  <area id="im-win1a4" linkends="toolbar" coords="38,86,1294,116" />
+	  <area id="im-win1a5" linkends="commands" coords="38,62,520,86" />
+	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777" />
+	  <area id="im-win1a7" linkends="properties" coords="843,116,1294,741" />
+	</areaspec>
+	<imageobject>
+	  <imagedata fileref="using1.png" format="PNG"/>
+	</imageobject>
+      </imageobjectco>
+    </mediaobjectco>
+  </screenshot>
+  <para>
+    The default &LabPlot; window has the <link linkend="project-explorer">Project Explorer</link> pane on the left, the <link linkend="properties">Properties</link> pane on the right, <link linkend="spreadsheet">spreadsheet</link>/<link linkend="worksheet">worksheet</link> area in the center, the <link linkend="toolbar">main toolbar</link> on the top and the status bar on the bottom.
+  </para>
+</sect1>
+
+<sect1 id="project-explorer">
+<title>The Project Explorer</title>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="project-explorer.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<para>
+The Project Explorer is the main part of &LabPlot; aimed to handle its objects.
+</para>
+<para>
+  You can access the action list for an object by clicking with the &RMB; on its item in the Project Explorer list. The content of the list depends on the tpype of the clicked object.
+</para>
+<para>
+  The list of objects can be filtered using the <guilabel>Search/Filter</guilabel> bar. Just enter the search or filtering term and &LabPlot; would filter out those objects in the list whose name does not contain the term. The filtering can be made case sensitive or matching just whole words by clicking on <guibutton>Options</guibutton> button.
+</para>
+<para>
+  It is possible to configure the content of the Project Explorer pane itself. To do this click with the &RMB; on the empty space in the list of objects. You can expand or collapse all nested items, hide or show the <guilabel>Search/Filter</guilabel> bar, and choose the data columns to be shown in the list.
+</para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="pe-context-menu.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</sect1>
+
+<!-- TODO:
+
+Describe the basic functionality of the spreadsheet.
+-->
+
+<sect1 id="spreadsheet">
+<title>The Spreadsheet</title>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="spreadsheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<para>
+The spreadsheet is the main part of &LabPlot; when working with data.
+For controlling and converting data the spreadsheet contains a customizable table.
+Every column of the table has a certain label and can be assigned a format (like decimal or scientific format).
+</para>
+<para>
+You can import data via the <link linkend="importdialog">import dialog</link>.
+Any spreadsheet function can be reached via the context menu (&RMB; click).
+You can cut, copy and paste between spreadsheets, fill, normalize and convert data and finally make plots out of your data.
+Of course you can also export the data in the spreadsheet.
+</para>
+<para>
+  You can mask certain data points in the spreadsheet which are excluded from plotting (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu). The masking of datapoints can be later influenced in the graph list dialog.
+</para>
+</sect1>
+
+<!-- TODO:
+
+Describe the functionality of worksheet (creation of plots, layout, zoom-
+in, zoom-out of the entire worksheet, export-Dialog with all its options).
+-->
+<sect1 id="worksheet">
+<title>The Worksheet</title>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="worksheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<para>
+The worksheet contains all the plots and drawing objects. You can customize the worksheet using its popup menu (can be opened by clicking with &RMB; on the worksheet).
+</para>
+<para>
+The worksheet can contain multiple plots with different characteristics. To arrange plots in a worksheet use the 
+<guimenuitem>Drawing order</guimenuitem> submenu items in the plot popup menu on the <link linkend="project-explorer">Project Explorer</link> pane.
+</para>
+</sect1>
+
+<!-- TODO:
+
+Describe the basic functionality of the properties pane.
+-->
+
+<sect1 id="properties">
+<title>The Properties Pane</title>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="properties.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<para>
+The Properties pane is a part of the &LabPlot; window used to modify object properties.
+</para>
+<sect2 id="axes">
+<title>Axes Properties</title>
+<para>
+The axes page lets you change the settings for the different axes. It can be opened by clicking with &LMB; on one of the axes items in the <link linkend="project-explorer">Project Explorer</link> pane.
+</para>
+<para>
+There are different tabs to change a lot axis settings (color, ticks, grid, &etc;) on this page.
+</para>
+</sect2>
+
+<sect2 id="legend">
+<title>Legend Properties</title>
+<para>
+The legend properties page allows you to change parameters of the legend (title border, spacing, layout, font &etc;). The page can be opened by clicking with &LMB; on the legend item in the <link linkend="project-explorer">Project Explorer</link> pane.
+</para>
+</sect2>
+</sect1>
+
+<sect1 id="statusbar">
+<title>Status Bar</title>
+<para>
+The horizontal and vertical positions of the mouse pointer in the plot area are displayed
+in data units on the left side of the status bar at the bottom of the &LabPlot; window.
+</para>
+</sect1>
+
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<sect1 id="file-menu">
+<title>The File Menu</title>
+
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>N</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new &LabPlot; project file.</action></para>
+<para> In a project file all settings and all plots are stored in ASCII
+format.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>O</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Open</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a &LabPlot; project file.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guisubmenu>Open Recent</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Opens a recent &LabPlot; project file.</action></para>
+<para> Here the last used 10 project files are listed.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>S</keycap></keycombo></shortcut>
+<guimenu><accel>F</accel>ile</guimenu><guimenuitem><accel>S</accel>ave</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the actual project.</action></para>
+<para>If you haven't saved the project before the project is saved under a temporary project file name.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guimenuitem>Save As</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>
+Saves the actual project under a different name.
+</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>P</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Print</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Prints the active plot.</action></para>
+<para>
+Here a print dialog is opened where you can select the printer, different paper sizes, &etc;
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guimenuitem>Print Preview</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open a print preview window.</action> &LabPlot; allows you to choose print settings using the toolbar of this window and view the result immediately.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>=</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guisubmenu>New</guisubmenu><guimenuitem>Spreadsheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new spreadsheet in the current folder of &LabPlot; project.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Alt;<keycap>X</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guisubmenu>New</guisubmenu><guimenuitem>Worksheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new worksheet in the current folder of &LabPlot; project.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guisubmenu>New</guisubmenu><guimenuitem>Folder</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new spreadsheet in the current folder of &LabPlot; project.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guisubmenu>New</guisubmenu><guimenuitem>File Data Source</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens <guilabel>Import data to spreadsheet/matrix</guilabel> window.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;&Shift;<keycap>L</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Import</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Import data into the active spreadsheet</action></para>
+<para>
+This item can be used to import data into &LabPlot;. Please read more in the <link linkend="importdialog">import dialog</link>
+section.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guimenuitem>Export</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the active plot as special format.</action></para>
+<para>Currently supported are Encapsulated Postscript (EPS), Portable Document Format (PDF), Scalable Vector Graphics (SVG) and Portable Network Graphics (PNG).</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>W</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Closes the current opened &LabPlot; project file.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>Q</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quit &LabPlot;.</action></para>
+</listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="edit-menu">
+<title>The Edit Menu</title>
+
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Undo/Redo History</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the &LabPlot; action history window.</action> Select an item in the list to navigate to the corresponding step.
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="worksheet-menu">
+<title>The Worksheet Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a worksheet. 
+The menu is only available when a worksheet object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
+
+<sect1 id="spreadsheet-menu">
+<title>The Spreadsheet Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a spreadsheet. 
+The menu is only available when a spreadsheet object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
+
+
+<sect1 id="settings-menu">
+<title>The Settings Menu</title>
+
+<para>This menu gives you the ability to change user settings.</para>
+
+<para>Apart from the common &kde; Settings menu entries described in the <ulink url="help:/fundamentals/ui.html#menus-settings">Settings Menu</ulink> chapter of the &kde; Fundamentals &LabPlot; has this application specific menu entry:
+</para>
+
+<variablelist>
+<varlistentry><term><menuchoice><shortcut>
+<keycombo>&Ctrl;&Shift;<keycap>F</keycap></keycombo></shortcut>
+<guimenu>Settings</guimenu><guimenuitem>Full Screen Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show the workspace in full screen mode.</action></para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+
+<sect1 id="help-menu">
+<title>The Help Menu</title>
+
+<para>
+  Additionally, &LabPlot; has the common &kde; Help menu items. For more information, read the section about the <ulink url="help:/fundamentals/ui.html#menus-help">Help Menu</ulink> of the &kde; Fundamentals.
+</para>
+
+</sect1>
+
+<sect1 id="toolbar">
+<title>Toolbar</title>
+
+<para>
+  The main toolbar contains the main items that you can find in the different menus. More details on this can be found in the <ulink url="help:/fundamentals/config.html#toolbars">&kde; Fundamentals manual</ulink>.</para>
+</sect1>
+
+</chapter>
+
+<!-- TODO:
+
+Cartesian plots, curves and legends. General description of the many 
+editing possibilities in the corresponding dock widgets.
+-->
+
+<chapter id="plotting">
+<title>Plotting</title>
+
+<sect1 id="func">
+<title>Function</title>
+<para>
+The curve properties pane is used to create and modify the settings
+for function plots. It looks the similar for data curves and curves from mathematical equations.</para>
+<para>
+  The <guilabel>y=f(x)</guilabel> for xy-equation-curves contains the expression for the plot function. The entered expression is evaluated
+via a powerful parser. For a complete list of supported functions see the
+<link linkend="parser">parser section</link>.
+</para>
+<para>
+With the remaining style items you can influence the appearance of the function.
+If you create a normal function the first selection defines
+the line style (no line, solid line, dash line, dot line, dash-dot line, or dash-dot-dot line), the color and if you want it to have drop line
+(with a different color). The other items select the symbol for the plot points, with color, size, if
+it should be filled and with which color.
+Then you can select if values should be shown on the plot and define the style of the values.
+</para>
+</sect1>
+
+<sect1 id="importdialog">
+<title>Import Dialog</title>
+<screenshot>
+  <screeninfo>Importing data into &LabPlot;</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="import-dialog.png" format="PNG" />
+    </imageobject>
+    <textobject>
+      <phrase>Importing data into &LabPlot;</phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+<para>
+With the import dialog you can import data into &LabPlot;. 
+</para>
+<para>
+  In the line edit you can specify a data file to read. The <guibutton>File Info</guibutton> button shows you some information about the selected
+files. You can also specify the type of the data, the filter, the separating character (for instance ",") and the comment line character.
+</para>
+<para>
+  The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
+</para>
+</sect1>
+
+</chapter>
+
+<!-- TODO:
+
+Describe import of ascii-data. Import can be done either by importing the 
+data to an already available spreadsheet or by adding a "File data source". 
+The latter is more useful for bigger data sets where you don't need a view on 
+it. A file data source can be updated on file changes and all the xy-curves 
+consuming the data from this data source will also be updated.
+-->
+
+<chapter id="advanced_topics">
+<title>Advanced Topics</title>
+<para>
+Here you will find some explanations of advanced topics.
+</para>
+
+<sect1 id="topics">
+<title>Topics</title>
+<sect2 id="errorbar">
+<title>Error bars</title>
+<para>If you want to plot data with error bars just import your data with the <link linkend="importdialog">import dialog</link> into your project. Then use the <guilabel>Error bars</guilabel> tab of <link linkend="properties">the curve properties</link> to select <guilabel>Error type</guilabel>, choose the error column from the <guilabel>Data, +-</guilabel> list. Format of the error bars can be defined using the <guilabel>Format:</guilabel> pane.</para>
+</sect2>
+
+<sect2 id="texlabel">
+<title>TeX label</title>
+<para>For using TeX label you just have to activate the switch button <guiicon>TeX</guiicon> in the <guilabel>Title</guilabel> tab. With that every text you enter in the text box is rendered by TeX and plotted accordingly. Since this conversion takes some time you may see a certain delay when redrawing the plot.</para>
+</sect2>
+
+</sect1>
+<sect1 id="command-line-options">
+<title>Command Line Options</title>
+
+<sect2 id="specify-a-file">
+<title>Specify a File</title>
+
+<para>
+When starting &LabPlot; from the command prompt, you can supply the name of a project file:
+<cmdsynopsis>
+<command>labplot2</command>
+<arg rep="repeat"><replaceable>file.lml</replaceable></arg>
+</cmdsynopsis>
+</para>
+
+</sect2>
+
+<sect2>
+<title>Other Command Line Options</title>
+
+<para>The following command line help options are available</para>
+<variablelist>
+<varlistentry>
+<term><command>labplot2 <option>--help</option></command></term>
+<listitem><para>This lists the most basic options available at the
+ command line.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--help-qt</option></command></term>
+<listitem><para>This lists the options available for changing the
+way &LabPlot; interacts with &Qt;.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--help-kde</option></command></term>
+<listitem><para>This lists the options available for changing the way
+&LabPlot; interacts with &kde;.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--help-all</option></command></term>
+<listitem><para>This lists all of the command line options.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><command>labplot2 <option>--no-splash</option></command></term>
+<listitem><para>do not show the splash screen</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--author</option></command></term>
+<listitem><para>Lists &LabPlot;'s author in the terminal window</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--version</option></command></term>
+<listitem><para>Lists version information for &Qt;, &kde;, and &LabPlot;.
+Also available through <command>labplot2 <option>-v</option></command>
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+
+</sect1>
+</chapter>
+
+<chapter id="parser">
+<title>Parser functions</title>
+<para>
+The &LabPlot; parser allows you to use following functions:
+</para>
+
+<sect1 id="parser-normal">
+<title>Standard functions</title>
+
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Function</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>acos(x)</entry><entry><action>Arc cosine</action></entry></row>
+<row><entry>acosh(x)</entry><entry><action>Arc hyperbolic cosine</action></entry></row>
+<row><entry>asin(x)</entry><entry><action>Arcsine</action></entry></row>
+<row><entry>asinh(x)</entry><entry><action>Arc hyperbolic sine</action></entry></row>
+<row><entry>atan(x)</entry><entry><action>Arctangent</action></entry></row>
+<row><entry>atan2(y,x)</entry><entry><action>Arctangent function of two variables</action></entry></row>
+<row><entry>atanh(x)</entry><entry><action>Arc hyperbolic tangent</action></entry></row>
+<row><entry>cbrt(x)</entry><entry><action>Cube root</action></entry></row>
+<row><entry>ceil(x)</entry><entry><action>Truncate upward to integer</action></entry></row>
+<row><entry>cos(x)</entry><entry><action>Cosine</action></entry></row>
+<row><entry>cosh(x)</entry><entry><action>Hyperbolic cosine</action></entry></row>
+<row><entry>erf(x)</entry><entry><action>error function erf(x) = (2 / &radic;&pi;) &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = (2 / &radic;&pi;) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>exp(x)</entry><entry><action>Exponential, base e</action></entry></row>
+<row><entry>expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
+<row><entry>fabs(x)</entry><entry><action>Absolute value</action></entry></row>
+<row><entry>gamma(x)</entry><entry><action>Gamma function</action></entry></row>
+<row><entry>hypot(x,y)</entry><entry><action>Hypotenuse function &radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
+<row><entry>j0(x)</entry><entry><action>Bessel, order 0</action></entry></row>
+<row><entry>j1(x)</entry><entry><action>Bessel, order 1</action></entry></row>
+<row><entry>jn(n,x)</entry><entry><action>Bessel, order n</action></entry></row>
+<row><entry>lgamma(x)</entry><entry><action>Natural log of |gamma|</action></entry></row>
+<row><entry>ln(x)</entry><entry><action>Logarithm, base e</action></entry></row>
+<row><entry>log(x)</entry><entry><action>Logarithm, base e</action></entry></row>
+<row><entry>log10(x)</entry><entry><action>Logarithm, base 10</action></entry></row>
+<row><entry>logb(x)</entry><entry><action>Radix-independant exponent</action></entry></row>
+<row><entry>log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
+<row><entry>pow(x,y)</entry><entry><action>power function</action></entry></row>
+<row><entry>rint(x)</entry><entry><action>round to nearest integer</action></entry></row>
+<row><entry>round(x)</entry><entry><action>round to nearest integer</action></entry></row>
+<row><entry>sin(x)</entry><entry><action>Sine</action></entry></row>
+<row><entry>sinh(x)</entry><entry><action>Hyperbolic sine</action></entry></row>
+<row><entry>sqrt(x)</entry><entry><action>Square root</action></entry></row>
+<row><entry>tan(x)</entry><entry><action>Tangent</action></entry></row>
+<row><entry>tanh(x)</entry><entry><action>Hyperbolic tangent</action></entry></row>
+<row><entry>tgamma(x)</entry><entry><action>Gamma function</action></entry></row>
+<row><entry>trunc(x)</entry><entry><action>Returns the greatest integer less than or equal to x</action></entry></row>
+<row><entry>y0(x)</entry><entry><action>Bessel, second kind, order 0</action></entry></row>
+<row><entry>y1(x)</entry><entry><action>Bessel, second kind, order 1</action></entry></row>
+<row><entry>yn(n,x)</entry><entry><action>Bessel, second kind, order n</action></entry></row>
+
+</tbody></tgroup></informaltable>
+</sect1>
+
+<sect1 id="parser-gsl">
+<title>GSL special functions</title>
+<para>
+For more information about the functions see the documentation of GSL.
+</para>
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Function</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>gsl_log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
+<row><entry>gsl_expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
+<row><entry>gsl_hypot(x,y)</entry><entry><action>&radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
+<row><entry>gsl_acosh(x)</entry><entry><action>arccosh(x)</action></entry></row>
+<row><entry>gsl_asinh(x)</entry><entry><action>arcsinh(x)</action></entry></row>
+<row><entry>gsl_atanh(x)</entry><entry><action>arctanh(x)</action></entry></row>
+<row><entry>Ai(x)</entry><entry><action>Airy function Ai(x)</action></entry></row>
+<row><entry>Bi(x)</entry><entry><action>Airy function Bi(x)</action></entry></row>
+<row><entry>Ais(x)</entry><entry><action>scaled version of the Airy function S<subscript>A</subscript>(x) Ai(x)</action></entry></row>
+<row><entry>Bis(x)</entry><entry><action>scaled version of the Airy function S<subscript>B</subscript>(x) Bi(x)</action></entry></row>
+<row><entry>Aid(x)</entry><entry><action>Airy function derivative Ai'(x)</action></entry></row>
+<row><entry>Bid(x)</entry><entry><action>Airy function derivative Bi'(x)</action></entry></row>
+<row><entry>Aids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>A</subscript>(x) Ai(x)</action></entry></row>
+<row><entry>Bids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>B</subscript>(x) Bi(x)</action></entry></row>
+<row><entry>Ai0(s)</entry><entry><action>s-th zero of the Airy function Ai(x)</action></entry></row>
+<row><entry>Bi0(s)</entry><entry><action>s-th zero of the Airy function Bi(x)</action></entry></row>
+<row><entry>Aid0(s)</entry><entry><action>s-th zero of the Airy function derivative Ai'(x)</action></entry></row>
+<row><entry>Bid0(s)</entry><entry><action>s-th zero of the Airy function derivative Bi'(x)</action></entry></row>
+<row><entry>J0(x)</entry><entry><action>regular cylindrical Bessel function of zeroth order, J<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>J1(x)</entry><entry><action>regular cylindrical Bessel function of first order, J<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Jn(n,x)</entry><entry><action>regular cylindrical Bessel function of order n, J<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>Y0(x)</entry><entry><action>irregular cylindrical Bessel function of zeroth order, Y<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>Y1(x)</entry><entry><action>irregular cylindrical Bessel function of first order, Y<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Yn(n,x)</entry><entry><action>irregular cylindrical Bessel function of order n, Y<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>I0(x)</entry><entry><action>regular modified cylindrical Bessel function of zeroth order, I<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>I1(x)</entry><entry><action>regular modified cylindrical Bessel function of first order, I<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>In(n,x)</entry><entry><action>regular modified cylindrical Bessel function of order n, I<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>I0s(x)</entry><entry><action>scaled regular modified cylindrical Bessel function of zeroth order, exp (-|x|) I<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>I1s(x)</entry><entry><action>scaled regular modified cylindrical Bessel function of first order, exp(-|x|) I<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Ins(n,x)</entry><entry><action>scaled regular modified cylindrical Bessel function of order n, exp(-|x|) I<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>K0(x)</entry><entry><action>irregular modified cylindrical Bessel function of zeroth order, K<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>K1(x)</entry><entry><action>irregular modified cylindrical Bessel function of first order, K<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Kn(n,x)</entry><entry><action>irregular modified cylindrical Bessel function of order n, K<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>K0s(x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of zeroth order, exp(x) K<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>K1s(x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of first order, exp(x) K<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Kns(n,x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of order n, exp(x) K<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>gsl_j0(x)</entry><entry><action>regular spherical Bessel function of zeroth order, j<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>gsl_j1(x)</entry><entry><action>regular spherical Bessel function of first order, j<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>j2(x)</entry><entry><action>regular spherical Bessel function of second order, j<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>jl(l,x)</entry><entry><action>regular spherical Bessel function of order l, j<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>gsl_y0(x)</entry><entry><action>irregular spherical Bessel function of zeroth order, y<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>gsl_y1(x)</entry><entry><action>irregular spherical Bessel function of first order, y<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>y2(x)</entry><entry><action>irregular spherical Bessel function of second order, y<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>yl(l,x)</entry><entry><action>irregular spherical Bessel function of order l, y<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>i0s(x)</entry><entry><action>scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) i<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>i1s(x)</entry><entry><action>scaled regular modified spherical Bessel function of first order, exp(-|x|) i<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>i2s(x)</entry><entry><action>scaled regular modified spherical Bessel function of second order, exp(-|x|) i<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>ils(l,x)</entry><entry><action>scaled regular modified spherical Bessel function of order l, exp(-|x|) i<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>k0s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of zeroth order, exp(x) k<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>k1s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of first order, exp(x) k<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>k2s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of second order, exp(x) k<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>kls(l,x)</entry><entry><action>scaled irregular modified spherical Bessel function of order l, exp(x) k<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>Jnu(nu,x)</entry><entry><action>regular cylindrical Bessel function of fractional order nu, J<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Ynu(nu,x)</entry><entry><action>irregular cylindrical Bessel function of fractional order nu, Y<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Inu(nu,x)</entry><entry><action>regular modified Bessel function of fractional order nu, I<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Inus(nu,x)</entry><entry><action>scaled regular modified Bessel function of fractional order nu, exp(-|x|) I<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Knu(nu,x)</entry><entry><action>irregular modified Bessel function of fractional order nu, K<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>lnKnu(nu,x)</entry><entry><action>logarithm of the irregular modified Bessel function of fractional order nu,ln(K<subscript>&nu;</subscript>(x))</action></entry></row>
+<row><entry>Knus(nu,x)</entry><entry><action>scaled irregular modified Bessel function of fractional order nu, exp(|x|) K<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>J0_0(s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>J1_0(s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Jnu_0(nu,s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>clausen(x)</entry><entry><action>Clausen integral Cl<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>hydrogenicR_1(Z,R)</entry><entry><action>lowest-order normalized hydrogenic bound state radial wavefunction R<subscript>1</subscript> := 2Z &radic;Z exp(-Z r)</action></entry></row>
+<row><entry>hydrogenicR(n,l,Z,R)</entry><entry><action>n-th normalized hydrogenic bound state radial wavefunction</action></entry></row>
+<row><entry>dawson(x)</entry><entry><action>Dawson's integral</action></entry></row>
+<row><entry>debye_1(x)</entry><entry><action>first-order Debye function D<subscript>1</subscript>(x) = (1/x) &int;<subscript>0</subscript><superscript>x</superscript>(t/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>debye_2(x)</entry><entry><action>second-order Debye function D<subscript>2</subscript>(x) = (2/x<superscript>2</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>2</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>debye_3(x)</entry><entry><action>third-order Debye function D<subscript>3</subscript>(x) =  (3/x<superscript>3</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>3</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>debye_4(x)</entry><entry><action>fourth-order Debye function D<subscript>4</subscript>(x) =  (4/x<superscript>4</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>4</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>debye_5(x)</entry><entry><action>fifth-order Debye function D<subscript>5</subscript>(x) =  (5/x<superscript>5</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>5</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>debye_6(x)</entry><entry><action>sixth-order Debye function D<subscript>6</subscript>(x) =  (6/x<superscript>6</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>6</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>dilog(x)</entry><entry><action>dilogarithm</action></entry></row>
+<row><entry>ellint_Kc(k)</entry><entry><action>complete elliptic integral K(k)</action></entry></row>
+<row><entry>ellint_Ec(k)</entry><entry><action>complete elliptic integral E(k)</action></entry></row>
+<row><entry>ellint_F(phi,k)</entry><entry><action>incomplete elliptic integral F(phi,k)</action></entry></row>
+<row><entry>ellint_E(phi,k)</entry><entry><action>incomplete elliptic integral E(phi,k)</action></entry></row>
+<row><entry>ellint_P(phi,k,n)</entry><entry><action>incomplete elliptic integral P(phi,k,n)</action></entry></row>
+<row><entry>ellint_D(phi,k,n)</entry><entry><action>incomplete elliptic integral D(phi,k,n)</action></entry></row>
+<row><entry>ellint_RC(x,y)</entry><entry><action>incomplete elliptic integral RC(x,y)</action></entry></row>
+<row><entry>ellint_RD(x,y,z)</entry><entry><action>incomplete elliptic integral RD(x,y,z)</action></entry></row>
+<row><entry>ellint_RF(x,y,z)</entry><entry><action>incomplete elliptic integral RF(x,y,z)</action></entry></row>
+<row><entry>ellint_RJ(x,y,z)</entry><entry><action>incomplete elliptic integral RJ(x,y,z,p)</action></entry></row>
+<row><entry>gsl_erf(x)</entry><entry><action>error function erf(x) = 2/&radic;&pi; &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>gsl_erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = 2/&radic;&pi; &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>log_erfc(x)</entry><entry><action>logarithm of the complementary error function log(erfc(x))</action></entry></row>
+<row><entry>erf_z(x)</entry><entry><action>Gaussian probability function Z(x) = (1/(2&pi;)) exp(-x<superscript>2</superscript>/2)</action></entry></row>
+<row><entry>erf_q(x)</entry><entry><action>upper tail of the Gaussian probability function Q(x) = (1/(2&pi;)) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>/2) dt</action></entry></row>
+<row><entry>gsl_exp(x)</entry><entry><action>exponential function</action></entry></row>
+<row><entry>exprel(x)</entry><entry><action>(exp(x)-1)/x using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>exprel_2(x)</entry><entry><action>2(exp(x)-1-x)/x<superscript>2</superscript> using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>exprel_n(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `gsl_sf_exprel'</action></entry></row>
+<row><entry>expint_e1(x)</entry><entry><action>exponential integral E<subscript>1</subscript>(x), E<subscript>1</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t dt</action></entry></row>
+<row><entry>expint_e2(x)</entry><entry><action>second-order exponential integral E<subscript>2</subscript>(x), E<subscript>2</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>2</superscript> dt</action></entry></row>
+<row><entry>expint_ei(x)</entry><entry><action>exponential integral E_i(x), Ei(x) := PV(&int;<subscript>-x</subscript><superscript>&infin;</superscript> exp(-t)/t dt)</action></entry></row>
+<row><entry>shi(x)</entry><entry><action>Shi(x) = &int;<subscript>0</subscript><superscript>x</superscript> sinh(t)/t dt</action></entry></row>
+<row><entry>chi(x)</entry><entry><action>integral Chi(x) := Re[ &gamma;<subscript>E</subscript> + log(x) + &int;<subscript>0</subscript><superscript>x</superscript> (cosh[t]-1)/t dt ]</action></entry></row>
+<row><entry>expint_3(x)</entry><entry><action>exponential integral Ei<subscript>3</subscript>(x) = &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>3</superscript>) dt for x &gt;= 0</action></entry></row>
+<row><entry>si(x)</entry><entry><action>Sine integral Si(x) = &int;<subscript>0</subscript><superscript>x</superscript> sin(t)/t dt</action></entry></row>
+<row><entry>ci(x)</entry><entry><action>Cosine integral Ci(x) = -&int;<subscript>x</subscript><superscript>&infin;</superscript> cos(t)/t dt for x &gt; 0</action></entry></row>
+<row><entry>atanint(x)</entry><entry><action>Arctangent integral AtanInt(x) = &int;<subscript>0</subscript><superscript>x</superscript> arctan(t)/t dt</action></entry></row>
+<row><entry>fermi_dirac_m1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of -1, F<subscript>-1</subscript>(x) = e<superscript>x</superscript> / (1 + e<superscript>x</superscript>)</action></entry></row>
+<row><entry>fermi_dirac_0(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 0, F<subscript>0</subscript>(x) = ln(1 + e<superscript>x</superscript>)</action></entry></row>
+<row><entry>fermi_dirac_1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 1, F<subscript>1</subscript>(x) = &int;<subscript>0</subscript><superscript>&infin;</superscript> (t /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>fermi_dirac_2(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 2, F<subscript>2</subscript>(x) = (1/2) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>2</superscript> /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>fermi_dirac_int(j,x)</entry><entry><action>complete Fermi-Dirac integral with an index of j, F<subscript>j</subscript>(x) = (1/&Gamma;(j+1)) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>j</superscript> /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>fermi_dirac_mhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>-1/2</subscript>(x)</action></entry></row>
+<row><entry>fermi_dirac_half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>1/2</subscript>(x)</action></entry></row>
+<row><entry>fermi_dirac_3half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>3/2</subscript>(x)</action></entry></row>
+<row><entry>fermi_dirac_inc_0(x,b)</entry><entry><action>incomplete Fermi-Dirac integral with an index of zero, F<subscript>0</subscript>(x,b) = ln(1 + e<superscript>b-x</superscript>) - (b-x)</action></entry></row>
+<row><entry>gsl_gamma(x)</entry><entry><action>Gamma function</action></entry></row>
+<row><entry>lngamma(x)</entry><entry><action>logarithm of the Gamma function</action></entry></row>
+<row><entry>gammastar(x)</entry><entry><action>regulated Gamma Function &Gamma;<superscript>*</superscript>(x) for x &gt; 0</action></entry></row>
+<row><entry>gammainv(x)</entry><entry><action>reciprocal of the gamma function, 1/&Gamma;(x) using the real Lanczos method.</action></entry></row>
+<row><entry>fact(n)</entry><entry><action>factorial n!</action></entry></row>
+<row><entry>doublefact(n)</entry><entry><action>double factorial n!! = n(n-2)(n-4)...</action></entry></row>
+<row><entry>lnfact(n)</entry><entry><action>logarithm of the factorial of n, log(n!)</action></entry></row>
+<row><entry>lndoublefact(n)</entry><entry><action>logarithm of the double factorial log(n!!)</action></entry></row>
+<row><entry>choose(n,m)</entry><entry><action>combinatorial factor `n choose m' = n!/(m!(n-m)!)</action></entry></row>
+<row><entry>lnchoose(n,m)</entry><entry><action>logarithm of `n choose m'</action></entry></row>
+<row><entry>poch(a,x)</entry><entry><action>Pochhammer symbol (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(x)</action></entry></row>
+<row><entry>lnpoch(a,x)</entry><entry><action>logarithm of the Pochhammer symbol (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(x)</action></entry></row>
+<row><entry>pochrel(a,x)</entry><entry><action>relative Pochhammer symbol ((a,x) - 1)/x where (a,x) = (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(a)</action></entry></row>
+<row><entry>gamma_inc(a,x)</entry><entry><action>incomplete Gamma Function &Gamma;(a,x) = &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gamma_inc_Q(a,x)</entry><entry><action>normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gamma_inc_P(a,x)</entry><entry><action>complementary normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>0</subscript><superscript>x</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>beta(a,b)</entry><entry><action>Beta Function, B(a,b) = &Gamma;(a) &Gamma;(b)/&Gamma;(a+b) for a &gt; 0, b &gt; 0</action></entry></row>
+<row><entry>lnbeta(a,b)</entry><entry><action>logarithm of the Beta Function, log(B(a,b)) for a &gt; 0, b &gt; 0</action></entry></row>
+<row><entry>beta_inc(a,b,x)</entry><entry><action>normalize incomplete Beta function B_x(a,b)/B(a,b) for a &gt; 0, b &gt; 0 </action></entry></row>
+<row><entry>gegenpoly_1(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>gegenpoly_2(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>gegenpoly_3(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>gegenpoly_n(n,lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>n</subscript>(x)</action></entry></row>
+<row><entry>hyperg_0F1(c,x)</entry><entry><action>hypergeometric function <subscript>0</subscript>F<subscript>1</subscript>(c,x)</action></entry></row>
+<row><entry>hyperg_1F1i(m,n,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(m,n,x) = M(m,n,x) for integer parameters m, n</action></entry></row>
+<row><entry>hyperg_1F1(a,b,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(a,b,x) = M(a,b,x) for general parameters a,b</action></entry></row>
+<row><entry>hyperg_Ui(m,n,x)</entry><entry><action>confluent hypergeometric function U(m,n,x) for integer parameters m,n</action></entry></row>
+<row><entry>hyperg_U(a,b,x)</entry><entry><action>confluent hypergeometric function U(a,b,x)</action></entry></row>
+<row><entry>hyperg_2F1(a,b,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x)</action></entry></row>
+<row><entry>hyperg_2F1c(ar,ai,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) with complex parameters</action></entry></row>
+<row><entry>hyperg_2F1r(ar,ai,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x) / &Gamma;(c)</action></entry></row>
+<row><entry>hyperg_2F1cr(ar,ai,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) / &Gamma;(c)</action></entry></row>
+<row><entry>hyperg_2F0(a,b,x)</entry><entry><action>hypergeometric function <subscript>2</subscript>F<subscript>0</subscript>(a,b,x)</action></entry></row>
+<row><entry>laguerre_1(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>laguerre_2(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>laguerre_3(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>lambert_W0(x)</entry><entry><action>principal branch of the Lambert W function, W<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>lambert_Wm1(x)</entry><entry><action>secondary real-valued branch of the Lambert W function, W<subscript>-1</subscript>(x)</action></entry></row>
+<row><entry>legendre_p1(x)</entry><entry><action>Legendre polynomials P<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>legendre_p2(x)</entry><entry><action>Legendre polynomials P<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>legendre_p3(x)</entry><entry><action>Legendre polynomials P<subscript>3</subscript>(x)</action></entry></row>
+<row><entry>legendre_pl(l,x)</entry><entry><action>Legendre polynomials P<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>legendre_Q0(x)</entry><entry><action>Legendre polynomials Q<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>legendre_Q1(x)</entry><entry><action>Legendre polynomials Q<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>legendre_Ql(l,x)</entry><entry><action>Legendre polynomials Q<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>legendre_Plm(l,m,x)</entry><entry><action>associated Legendre polynomial P<subscript>l</subscript><superscript>m</superscript>(x)</action></entry></row>
+<row><entry>legendre_sphPlm(l,m,x)</entry><entry><action>normalized associated Legendre polynomial &radic;{(2l+1)/(4&pi;)} &radic;{(l-m)!/(l+m)!} P<subscript>l</subscript><superscript>m</superscript>(x) suitable for use in spherical harmonics</action></entry></row>
+<row><entry>conicalP_half(lambda,x)</entry><entry><action>irregular Spherical Conical Function P<superscript>1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>conicalP_mhalf(lambda,x)</entry><entry><action>regular Spherical Conical Function P<superscript>-1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>conicalP_0(lambda,x)</entry><entry><action>conical function P<superscript>0</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>conicalP_1(lambda,x)</entry><entry><action>conical function P<superscript>1</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>conicalP_sphreg(l,lambda,x)</entry><entry><action>Regular Spherical Conical Function P<superscript>-1/2-l</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, l &gt;= -1</action></entry></row>
+<row><entry>conicalP_cylreg(l,lambda,x)</entry><entry><action>Regular Cylindrical Conical Function P<superscript>-m</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, m &gt;= -1</action></entry></row>
+<row><entry>legendre_H3d_0(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>0</subscript>(lambda,eta) := sin(lambda eta)/(lambda sinh(eta)) for eta &gt;= 0</action></entry></row>
+<row><entry>legendre_H3d_1(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>1</subscript>(lambda,eta) := 1/&radic;{lambda<superscript>2</superscript> + 1} sin(lambda eta)/(lambda sinh(eta)) (coth(eta) - lambda cot(lambda eta)) for eta &gt;= 0</action></entry></row>
+<row><entry>legendre_H3d(l,lambda,eta)</entry><entry><action>L'th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space eta &gt;= 0, l &gt;= 0</action></entry></row>
+<row><entry>gsl_log(x)</entry><entry><action>logarithm of x</action></entry></row>
+<row><entry>loga(x)</entry><entry><action>logarithm of the magnitude of X, log(|x|)</action></entry></row>
+<row><entry>logp(x)</entry><entry><action>log(1 + x) for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>logm(x)</entry><entry><action>log(1 + x) - x for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>gsl_pow(x,n)</entry><entry><action>power x<superscript>n</superscript> for integer n</action></entry></row>
+<row><entry>psii(n)</entry><entry><action>digamma function &psi;(n) for positive integer n</action></entry></row>
+<row><entry>psi(x)</entry><entry><action>digamma function &psi;(n) for general x</action></entry></row>
+<row><entry>psiy(y)</entry><entry><action>real part of the digamma function on the line 1+i y, Re[&psi;(1 + i y)]</action></entry></row>
+<row><entry>ps1i(n)</entry><entry><action>Trigamma function &psi;'(n) for positive integer n</action></entry></row>
+<row><entry>psi_n(m,x)</entry><entry><action>polygamma function &psi;<superscript>(m)</superscript>(x) for m &gt;= 0, x &gt; 0</action></entry></row>
+<row><entry>synchrotron_1(x)</entry><entry><action>first synchrotron function x &int;<subscript>x</subscript><superscript>&infin;</superscript> K<subscript>5/3</subscript>(t) dt for x &gt;= 0</action></entry></row>
+<row><entry>synchrotron_2(x)</entry><entry><action>second synchrotron function x K<subscript>2/3</subscript>(x) for x &gt;= 0</action></entry></row>
+<row><entry>transport_2(x)</entry><entry><action>transport function J(2,x)</action></entry></row>
+<row><entry>transport_3(x)</entry><entry><action>transport function J(3,x)</action></entry></row>
+<row><entry>transport_4(x)</entry><entry><action>transport function J(4,x)</action></entry></row>
+<row><entry>transport_5(x)</entry><entry><action>transport function J(5,x)</action></entry></row>
+<row><entry>gsl_sin(x)</entry><entry><action>sine function</action></entry></row>
+<row><entry>gsl_cos(x)</entry><entry><action>cosine function</action></entry></row>
+<row><entry>gsl_hypot(x,y)</entry><entry><action>hypotenuse function &radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
+<row><entry>sinc(x)</entry><entry><action>sinc(x) = sin(&pi; x) / (&pi; x)</action></entry></row>
+<row><entry>lnsinh(x)</entry><entry><action>log(sinh(x)) for x &gt; 0</action></entry></row>
+<row><entry>lncosh(x)</entry><entry><action>log(cosh(x))</action></entry></row>
+<row><entry>zetai(n)</entry><entry><action>Riemann zeta function zeta(n) for integer N</action></entry></row>
+<row><entry>zeta(s)</entry><entry><action>Riemann zeta function zeta(s) for arbitrary s</action></entry></row>
+<row><entry>zetam1(s)</entry><entry><action>Riemann zeta function minus 1</action></entry></row>
+<row><entry>hzeta(s,q)</entry><entry><action>Hurwitz zeta function zeta(s,q) for s &gt; 1, q &gt; 0</action></entry></row>
+<row><entry>etai(n)</entry><entry><action>eta function &eta;(n) for integer n</action></entry></row>
+<row><entry>eta(s)</entry><entry><action>eta function &eta;(s) for arbitrary s</action></entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="parser-ran-gsl">
+<title>GSL random number distributions</title>
+<para>
+For more information about the functions see the documentation of GSL.
+</para>
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Function</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>gaussian(x,sigma)</entry><entry><action>probability density p(x) at X for a Gaussian distribution with standard deviation SIGMA</action></entry></row>
+<row><entry>ugaussian(x)</entry><entry><action>unit Gaussian distribution.  They are equivalent to the functions above with a standard deviation of one, SIGMA = 1</action></entry></row>
+<row><entry>gaussian_tail(x,a,sigma)</entry><entry><action>probability density p(x) at X for a Gaussian tail distribution with standard deviation SIGMA and lower limit A</action></entry></row>
+<row><entry>ugaussian_tail(x,a)</entry><entry><action>tail of a unit Gaussian distribution. They are equivalent to the functions above with a standard deviation of one, SIGMA = 1</action></entry></row>
+<row><entry>bivariate_gaussian(x,y,sigma_x,sigma_y,rho)</entry><entry><action>probability density p(x,y) at (X,Y) for a bivariate gaussian distribution with standard deviations SIGMA_X, SIGMA_Y and correlation coefficient RHO</action></entry></row>
+<row><entry>exponential(x,mu)</entry><entry><action>probability density p(x) at X for an exponential distribution with mean MU</action></entry></row>
+<row><entry>laplace(x,a)</entry><entry><action>probability density p(x) at X for a Laplace distribution with mean A</action></entry></row>
+<row><entry>exppow(x,a,b)</entry><entry><action>probability density p(x) at X for an exponential power distribution with scale parameter A and exponent B</action></entry></row>
+<row><entry>cauchy(x,a)</entry><entry><action>probability density p(x) at X for a Cauchy distribution with scale parameter A</action></entry></row>
+<row><entry>rayleigh(x,sigma)</entry><entry><action>probability density p(x) at X for a Rayleigh distribution with scale parameter SIGMA</action></entry></row>
+<row><entry>rayleigh_tail(x,a,sigma)</entry><entry><action>probability density p(x) at X for a Rayleigh tail distribution with scale parameter SIGMA and lower limit A</action></entry></row>
+<row><entry>landau(x)</entry><entry><action>probability density p(x) at X for the Landau distribution</action></entry></row>
+<row><entry>gamma_pdf(x,a,b)</entry><entry><action>probability density p(x) at X for a gamma distribution with parameters A and B</action></entry></row>
+<row><entry>flat(x,a,b)</entry><entry><action>probability density p(x) at X for a uniform distribution from A to B</action></entry></row>
+<row><entry>lognormal(x,zeta,sigma)</entry><entry><action>probability density p(x) at X for a lognormal distribution with parameters ZETA and SIGMA</action></entry></row>
+<row><entry>chisq(x,nu)</entry><entry><action>probability density p(x) at X for a chi-squared distribution with NU degrees of freedom</action></entry></row>
+<row><entry>fdist(x,nu1,nu2)</entry><entry><action>probability density p(x) at X for an F-distribution with NU1 and NU2 degrees of freedom</action></entry></row>
+<row><entry>tdist(x,nu)</entry><entry><action>probability density p(x) at X for a t-distribution with NU degrees of freedom</action></entry></row>
+<row><entry>beta_pdf(x,a,b)</entry><entry><action>probability density p(x) at X for a beta distribution with parameters A and B</action></entry></row>
+<row><entry>logistic(x,a)</entry><entry><action>probability density p(x) at X for a logistic distribution with scale parameter A</action></entry></row>
+<row><entry>pareto(x,a,b)</entry><entry><action>probability density p(x) at X for a Pareto distribution with exponent A and scale B</action></entry></row>
+<row><entry>weibull(x,a,b)</entry><entry><action>probability density p(x) at X for a Weibull distribution with scale A and exponent B</action></entry></row>
+<row><entry>gumbel1(x,a,b)</entry><entry><action>probability density p(x) at X for a Type-1 Gumbel distribution with parameters A and B</action></entry></row>
+<row><entry>gumbel2(x,a,b)</entry><entry><action>probability density p(x) at X for a Type-2 Gumbel distribution with parameters A and B</action></entry></row>
+<row><entry>poisson(k,mu)</entry><entry><action>probability p(k) of obtaining  K from a Poisson distribution with mean mu</action></entry></row>
+<row><entry>bernoulli(k,p)</entry><entry><action>probability p(k) of obtaining K from a Bernoulli distribution with probability parameter P</action></entry></row>
+<row><entry>binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a binomial distribution with parameters P and N</action></entry></row>
+<row><entry>negative_binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a negative binomial distribution with parameters P and N</action></entry></row>
+<row><entry>pascal(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a Pascal distribution with parameters P and N</action></entry></row>
+<row><entry>geometric(k,p)</entry><entry><action>probability p(k) of obtaining K from a geometric distribution with probability parameter P</action></entry></row>
+<row><entry>hypergeometric(k,n1,n2,t)</entry><entry><action>probability p(k) of obtaining K from a hypergeometric distribution with parameters N1, N2, N3</action></entry></row>
+<row><entry>logarithmic(k,p)</entry><entry><action>probability p(k) of obtaining K from a logarithmic distribution with probability parameter P</action></entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="parser-const">
+<title>Constants</title>
+
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Constant</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>e</entry><entry><action>The base of natural logarithms</action></entry></row>
+<row><entry>pi</entry><entry><action>&pi;</action></entry></row>
+
+</tbody></tgroup></informaltable>
+</sect1>
+
+<sect1 id="parser-const-gsl">
+<title>GSL constants</title>
+<para>
+For more information about this constants see the documentation of GSL.
+</para>
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Constant</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>c</entry><entry><action> The speed of light in vacuum</action></entry></row>
+<row><entry>mu0</entry><entry><action>The permeability of free space</action></entry></row>
+<row><entry>e0</entry><entry><action>The permittivity of free space</action></entry></row>
+<row><entry>h</entry><entry><action>The Planck constant h</action></entry></row>
+<row><entry>hbar</entry><entry><action>The reduced Planck constant &planck;</action></entry></row>
+<row><entry>na</entry><entry><action>Avogadro's number</action></entry></row>
+<row><entry>f</entry><entry><action>The molar charge of 1 Faraday</action></entry></row>
+<row><entry>k</entry><entry><action>The Boltzmann constant</action></entry></row>
+<row><entry>r0</entry><entry><action>The molar gas constant</action></entry></row>
+<row><entry>v0</entry><entry><action>The standard gas volume</action></entry></row>
+<row><entry>sigma</entry><entry><action>The Stefan–Boltzmann constant</action></entry></row>
+<row><entry>gauss</entry><entry><action>The magnetic field of 1 Gauss</action></entry></row>
+<row><entry>au</entry><entry><action>The length of 1 astronomical unit (mean earth-sun distance)</action></entry></row>
+<row><entry>G</entry><entry><action>The gravitational constant</action></entry></row>
+<row><entry>ly</entry><entry><action>The distance of 1 light-year</action></entry></row>
+<row><entry>pc</entry><entry><action>The distance of 1 parsec</action></entry></row>
+<row><entry>gg</entry><entry><action>The standard gravitational acceleration on Earth</action></entry></row>
+<row><entry>ms</entry><entry><action>The mass of the Sun</action></entry></row>
+<row><entry>e</entry><entry><action>The charge of the electron</action></entry></row>
+<row><entry>eV</entry><entry><action>The energy of 1 electron volt</action></entry></row>
+<row><entry>amu</entry><entry><action>The unified atomic mass</action></entry></row>
+<row><entry>me</entry><entry><action>The mass of the electron</action></entry></row>
+<row><entry>mmu</entry><entry><action>The mass of the muon</action></entry></row>
+<row><entry>mp</entry><entry><action>The mass of the proton</action></entry></row>
+<row><entry>mn</entry><entry><action>The mass of the neutron</action></entry></row>
+<row><entry>alpha</entry><entry><action>The electromagnetic fine structure constant</action></entry></row>
+<row><entry>ry</entry><entry><action>The Rydberg constant</action></entry></row>
+<row><entry>a0</entry><entry><action>The Bohr radius</action></entry></row>
+<row><entry>a</entry><entry><action>The length of 1 angstrom</action></entry></row>
+<row><entry>barn</entry><entry><action> The area of 1 barn</action></entry></row>
+<row><entry>muB</entry><entry><action>The Bohr Magneton</action></entry></row>
+<row><entry>mun</entry><entry><action>The Nuclear Magneton</action></entry></row>
+<row><entry>mue</entry><entry><action>The magnetic moment of the electron</action></entry></row>
+<row><entry>mup</entry><entry><action>The magnetic moment of the proton</action></entry></row>
+<row><entry>sigmaT</entry><entry><action>The Thomson cross section for an electron</action></entry></row>
+<row><entry>pD</entry><entry><action>The debye</action></entry></row>
+<row><entry>min</entry><entry><action>The number of seconds in 1 minute</action></entry></row>
+<row><entry>h</entry><entry><action>The number of seconds in 1 hour</action></entry></row>
+<row><entry>d</entry><entry><action> The number of seconds in 1 day</action></entry></row>
+<row><entry>week</entry><entry><action>The number of seconds in 1 week</action></entry></row>
+<row><entry>in</entry><entry><action>The length of 1 inch</action></entry></row>
+<row><entry>ft</entry><entry><action>The length of 1 foot</action></entry></row>
+<row><entry>yard</entry><entry><action>The length of 1 yard</action></entry></row>
+<row><entry>mil</entry><entry><action>The length of 1 mil (1/1000th of an inch)</action></entry></row>
+<row><entry>v_km_per_h</entry><entry><action>The speed of 1 kilometer per hour</action></entry></row>
+<row><entry>v_mile_per_h</entry><entry><action>The speed of 1 mile per hour</action></entry></row>
+<row><entry>nmile</entry><entry><action>The length of 1 nautical mile</action></entry></row>
+<row><entry>fathom</entry><entry><action>The length of 1 fathom</action></entry></row>
+<row><entry>knot</entry><entry><action>The speed of 1 knot</action></entry></row>
+<row><entry>pt</entry><entry><action> The length of 1 printer's point (1/72 inch)</action></entry></row>
+<row><entry>texpt</entry><entry><action>The length of 1 TeX point (1/72.27 inch)</action></entry></row>
+<row><entry>micron</entry><entry><action>The length of 1 micrometre</action></entry></row>
+<row><entry>hectare</entry><entry><action>The area of 1 hectare</action></entry></row>
+<row><entry>acre</entry><entry><action>The area of 1 acre</action></entry></row>
+<row><entry>liter</entry><entry><action>The volume of 1 liter</action></entry></row>
+<row><entry>us_gallon</entry><entry><action>The volume of 1 US gallon</action></entry></row>
+<row><entry>can_gallon</entry><entry><action>The volume of 1 Canadian gallon</action></entry></row>
+<row><entry>uk_gallon</entry><entry><action>The volume of 1 UK gallon</action></entry></row>
+<row><entry>quart</entry><entry><action>The volume of 1 quart</action></entry></row>
+<row><entry>pint</entry><entry><action>The volume of 1 pint</action></entry></row>
+<row><entry>pound</entry><entry><action>The mass of 1 pound</action></entry></row>
+<row><entry>ounce</entry><entry><action>The mass of 1 ounce</action></entry></row>
+<row><entry>ton</entry><entry><action>The mass of 1 ton</action></entry></row>
+<row><entry>mton</entry><entry><action>The mass of 1 metric ton (1000 kg)</action></entry></row>
+<row><entry>uk_ton</entry><entry><action>The mass of 1 UK ton</action></entry></row>
+<row><entry>troy_ounce</entry><entry><action>The mass of 1 troy ounce</action></entry></row>
+<row><entry>carat</entry><entry><action>The mass of 1 carat</action></entry></row>
+<row><entry>gram_force</entry><entry><action>The force of 1 gram weight</action></entry></row>
+<row><entry>pound_force</entry><entry><action>The force of 1 pound weight</action></entry></row>
+<row><entry>kilepound_force</entry><entry><action>The force of 1 kilopound weight</action></entry></row>
+<row><entry>poundal</entry><entry><action>The force of 1 poundal</action></entry></row>
+<row><entry>cal</entry><entry><action>The energy of 1 calorie</action></entry></row>
+<row><entry>btu</entry><entry><action>The energy of 1 British Thermal Unit</action></entry></row>
+<row><entry>therm</entry><entry><action>The energy of 1 Therm</action></entry></row>
+<row><entry>hp</entry><entry><action>The power of 1 horsepower</action></entry></row>
+<row><entry>bar</entry><entry><action>The pressure of 1 bar</action></entry></row>
+<row><entry>atm</entry><entry><action>The pressure of 1 standard atmosphere</action></entry></row>
+<row><entry>torr</entry><entry><action>The pressure of 1 torr</action></entry></row>
+<row><entry>mhg</entry><entry><action>The pressure of 1 meter of mercury</action></entry></row>
+<row><entry>inhg</entry><entry><action>The pressure of 1 inch of mercury</action></entry></row>
+<row><entry>inh2o</entry><entry><action>The pressure of 1 inch of water</action></entry></row>
+<row><entry>psi</entry><entry><action>The pressure of 1 pound per square inch</action></entry></row>
+<row><entry>poise</entry><entry><action>The dynamic viscosity of 1 poise</action></entry></row>
+<row><entry>stokes</entry><entry><action>The kinematic viscosity of 1 stokes</action></entry></row>
+<row><entry>stilb</entry><entry><action>The luminance of 1 stilb</action></entry></row>
+<row><entry>lumen</entry><entry><action>The luminous flux of 1 lumen</action></entry></row>
+<row><entry>lux</entry><entry><action>The illuminance of 1 lux</action></entry></row>
+<row><entry>phot</entry><entry><action>The illuminance of 1 phot</action></entry></row>
+<row><entry>ftcandle</entry><entry><action>The illuminance of 1 footcandle</action></entry></row>
+<row><entry>lambert</entry><entry><action>The luminance of 1 lambert</action></entry></row>
+<row><entry>ftlambert</entry><entry><action>The luminance of 1 footlambert</action></entry></row>
+<row><entry>curie</entry><entry><action>The activity of 1 curie</action></entry></row>
+<row><entry>roentgen</entry><entry><action>The exposure of 1 roentgen</action></entry></row>
+<row><entry>rad</entry><entry><action>The absorbed dose of 1 rad</action></entry></row>
+<row><entry>N</entry><entry><action>The force of 1 newton</action></entry></row>
+<row><entry>dyne</entry><entry><action>The force of 1 dyne</action></entry></row>
+<row><entry>J</entry><entry><action>The energey of 1 joule</action></entry></row>
+<row><entry>erg</entry><entry><action>The energy of 1 erg</action></entry></row>
+
+</tbody></tgroup></informaltable>
+
+</sect1>
+
+</chapter>
+
+<!-- TODO:
+
+A short tutorial for the basic workflow (create new project, import data, 
+create worksheet, create plots and layout them, add curves, select columns as 
+data sources for the curves, add legends, export everything to pdf) would also help to become familiar with the software more quickly.
+-->
+
+<chapter id="tutorials">
+<title>Short Tutorials</title>
+<sect1 id="sineplot">
+  <title>Building a sine graph with &LabPlot;</title>
+  <para>
+    In this chapter you will find explanations on how to build a simple plot for a curve in the Cartesian coordinates from a mathematical equation.
+  </para>
+  <screenshot>
+    <screeninfo>&LabPlot; window after the first start</screeninfo>
+    <mediaobject>
+      <imageobject>
+	<imagedata fileref="tutorial-xy-function1.png" format="PNG" />
+      </imageobject>
+      <textobject>
+	<phrase>&LabPlot; window after the first start</phrase>
+      </textobject>
+    </mediaobject>
+  </screenshot>
+  <procedure>
+    <step>
+      <para>
+	Click on the <guibutton>New</guibutton> button or press <keycombo>&Ctrl;<keycap>N</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>New &LabPlot; project</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>New &LabPlot; project</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Worksheet</guimenuitem></menuchoice> or press <keycombo>&Alt;<keycap>X</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; worksheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function3.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; worksheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guisubmenu>xy-plot</guisubmenu><guimenuitem>two axes, centered</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding axes to the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function4.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding axes to the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>xy-curve from a mathematical equation</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new curve</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function5.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new curve</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Use the <guilabel>xy-equation-curve properties</guilabel> pane on the right to enter <userinput>sin(x)</userinput> into the <guilabel>y=f(x)</guilabel> field (for the list of available functions please see <xref linkend="parser"/>), <userinput>-6</userinput> into the <guilabel>x, min</guilabel> field, <userinput>6</userinput> into the <guilabel>x, max</guilabel> field and click on the <guibutton>Recalculate</guibutton> button to see the result.
+      </para>
+      <screenshot>
+      <screeninfo>The default curve plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function6.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The default curve plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      <note>
+	<para>
+	  &LabPlot; highlights unknown syntax in the <guilabel>y=f(x)</guilabel> field. This is useful to control the correctness of the input.
+	</para>
+      </note>
+      <important>
+	<para>
+	  The list of the known functions can be found in <link linkend="parser">corresponding section of this manual</link>.
+	</para>
+      </important>
+    </step>
+    <step>
+      <para>
+	Switch to the <guilabel>Line</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>cubic spline (natural)</guimenuitem> from the <guilabel>Type</guilabel> drop down list.
+      </para>
+      <screenshot>
+      <screeninfo>Choosing the line type</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function7.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding the line type</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Switch to the <guilabel>Symbol</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>none</guimenuitem> from the <guilabel>Style</guilabel> drop down list.
+      </para>
+      <screenshot>
+      <screeninfo>Removing symbols from the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function8.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Removing symbols from the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>legend</guimenuitem></menuchoice>. Switch to the <guilabel>Title</guilabel> tab on the <guilabel>Cartesian plot legend properties</guilabel> pane and enter <userinput>Graph of sine</userinput> into the <guilabel>Text</guilabel> field. 
+      </para>
+      <screenshot>
+      <screeninfo>Changing the legend title</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function9.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Changing the legend title</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice> from the main menu. Select the place and the format to save the plot.
+      </para>
+      <screenshot>
+      <screeninfo>Exporting the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function10.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Exporting the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+  </procedure>
+</sect1>
+
+<sect1 id="spreadsheetplot">
+  <title>Building a graph from spreadsheet data with &LabPlot;</title>
+  <para>
+    In this chapter you will find explanations on how to build a simple plot from spreadsheet data.
+  </para>
+  <screenshot>
+    <screeninfo>&LabPlot; window after the first start</screeninfo>
+    <mediaobject>
+      <imageobject>
+	<imagedata fileref="tutorial-xy-function1.png" format="PNG" />
+      </imageobject>
+      <textobject>
+	<phrase>&LabPlot; window after the first start</phrase>
+      </textobject>
+    </mediaobject>
+  </screenshot>
+  <procedure>
+    <step>
+      <para>
+	Click on the <guibutton>New</guibutton> button or press <keycombo>&Ctrl;<keycap>N</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>New &LabPlot; project</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>New &LabPlot; project</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Spreadsheet</guimenuitem></menuchoice> or press <keycombo>&Ctrl;<keycap>=</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet1.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the header of the first column of the spreadsheet with the &LMB; then click on any of its cells with &RMB; and choose <menuchoice><guimenu>Selection</guimenu><guisubmenu>Fill Selection with</guisubmenu><guimenuitem>Row Numbers</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Filling the first column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Filling the first column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      <para>
+	Select <guimenuitem>Automatic (g)</guimenuitem> from the <guilabel>Format</guilabel> drop down list on the <guilabel>Column properties</guilabel> right dock to enhance data presentation for the first column.
+      </para>
+    </step>
+    <step>
+      <para>
+	Click on the header of the second column of the spreadsheet with the &RMB; and choose <menuchoice><guimenu>Generate Data</guimenu><guimenuitem>Random Values</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Filling the second column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet3.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Filling the second column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Worksheet</guimenuitem></menuchoice> or press <keycombo>&Alt;<keycap>X</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; worksheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet4.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; worksheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guisubmenu>xy-plot</guisubmenu><guimenuitem>box plot, four axes</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding axes to the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet5.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding axes to the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>xy-curve</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new curve</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet6.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new curve</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Use the <guilabel>xy-curve properties</guilabel> pane on the right to select <menuchoice><guimenu>Project</guimenu><guisubmenu>Spreadsheet</guisubmenu><guimenuitem>1</guimenuitem></menuchoice> in the <guilabel>x-data</guilabel> field (just click on the item and press &Enter;). Use the same procedure to  select <guimenuitem>2</guimenuitem> for the <guilabel>y-data</guilabel> field. The results will be shown on the worksheet immediately.
+      </para>
+      <screenshot>
+      <screeninfo>The plot for the unsorted data</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet7.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The plot for the unsorted data</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Spreadsheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &LMB; then click on the second column header with the &RMB; and choose <menuchoice><guimenu>Sort</guimenu><guimenuitem>Ascending</guimenuitem></menuchoice>. 
+      </para>
+      <screenshot>
+      <screeninfo>Sorting the second column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet8.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Sorting the second column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &LMB; to see the results. 
+      </para>
+      <screenshot>
+      <screeninfo>The plot for the sorted data</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet9.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The plot for the sorted data</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+  </procedure>
+</sect1>
+</chapter>
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<qandaset id="faqlist">
+
+<qandaentry>
+<question>
+<para>For which platforms is &LabPlot; available?</para>
+</question>
+<answer>
+<para>
+&LabPlot; is developed for Unix platforms and uses the &Qt; toolkit and &kde;. Normally you can expect &LabPlot;
+to build and run on every platform &kde; (&gt;=4) supports.
+A recent list of supported platforms and tips for compiling and running &LabPlot; can be found on
+<ulink url="http://labplot.wiki.sourceforge.net/Download">
+http://labplot.wiki.sourceforge.net/Download</ulink>.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>How do I export the active worksheet as image?</para>
+</question>
+<answer><para>
+The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice>. All &Qt; supported image formats are allowed. Just select the desired format and the active worksheet is exported.
+</para></answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>Some analysis functions are not working. What can i do?</para>
+</question>
+<answer>
+<para>
+&LabPlot; uses the &GNU; Scientific Library (GSL) to implement some functions.
+You can use &LabPlot; even if you don't have the GSL installed, but you won't be able to use the above
+mentioned functions. So please install the gsl if you want to use this features.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>How do I use greek letters for title, axes label, &etc;?</para>
+</question>
+<answer>
+<para>
+  Use <guiicon>&pi;</guiicon> button to open character selector window or <guiicon>&tex;</guiicon> to generate Greek letters and other symbols using &latex;.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>I miss an important feature. What can i do?</para>
+</question>
+<answer>
+<para>
+Please take a look at the TODO file in the documentation of &LabPlot;.
+Here all planed features are listed in more or
+less sorted order which i will implement in future releases of &LabPlot;.
+If you like to have additional
+features or like to have a listed feature soon, mail me your wishes and, if possible, send me
+example data or a short
+description of what you like to do.
+It is not unlikely that your feature will appear in the next stable release
+of &LabPlot; :-)
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>Many Analysis functions are disabled. What can i do?</para>
+</question>
+<answer><para>
+It looks like your &LabPlot; package was compiled without GSL (&GNU; Scientific Library) support. &LabPlot; was designed to even work on systems that
+are missing most of the standard libraries. Many distributions are shipping &LabPlot; packages without this additional functionality. In this case some functions are not available. Fortunately some programs (like <application>pstoedit</application> or <application>texvc</application>) can be added without recompiling &LabPlot;. You can always check your system environment in the help menu of &LabPlot;.
+</para>
+<para>
+The packages provided on the official download page are always built with the standard libraries (GSL, &etc;). You should use them
+to have all the features.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>I want to help. How can I contribute to &LabPlot;?</para>
+</question>
+<answer><para>
+Yes, of course. There are a lot things to do. Even if you don't know anything about programming we always
+need people to find bugs, test things and make suggestions. Also the translation and documentation always
+needs a lot of work.
+</para></answer>
+</qandaentry>
+
+
+</qandaset>
+</chapter>
+
+<chapter id="license">
+
+<title>License</title>
+
+<para>&LabPlot;</para>
+<para>
+Program copyright &copy; 2007 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
+</para>
+
+<important>
+<para>
+&LabPlot; is still under development. There is a long list of missing features that will be implemented in later versions of &LabPlot;.
+</para>
+</important>
+
+<para>
+Because there are a lot things to do, developers need every help you can give. Any contribution like wishes, corrections,
+patches, bug reports or screen shots is welcome.
+</para>
+
+<para>
+Documentation copyright &copy; 2007 Stefan Gerlach
+<email>stefan.gerlach@uni-konstanz.de</email>
+</para>
+<para>
+Documentation copyright &copy; 2014 Yuri Chornoivan
+<email>yurchor@ukr.net</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;
+&underGPL;
+
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-labplot">
+<title>How to Obtain &LabPlot;</title>
+
+<para>
+&LabPlot; can be found on its homepage at sourceforge.net:
+<ulink url="http://labplot.sf.net">http://labplot.sf.net</ulink>. 
+There is an overview about all available packages at
+<ulink url="http://labplot.wiki.sourceforge.net/Download">http://labplot.wiki.sourceforge.net/Download</ulink>.
+bug-fixed packages are released regular and can be found there too.
+</para>
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>
+In order to successfully use &LabPlot;, you need at least a standard &Qt; 4.7 and &kde; installation.
+</para>
+
+<para>
+Optional &LabPlot; uses the following programs/libraries when available:
+</para>
+
+<itemizedlist>
+<listitem><para>
+&GNU; scientific library (GSL) : used for special functions in the parser and most of the analysis functions.
+</para></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+&install.compile.documentation;
+
+</sect1>
+
+</appendix>
+
+&documentation.index;
+</book>
