@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : export worksheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,6 +33,7 @@
 #include <KMessageBox>
 #include <KPushButton>
 #include <QStringList>
+#include <QDesktopWidget>
 
 /*!
 	\class ExportWorksheetDialog
@@ -41,7 +41,7 @@
 
 	\ingroup kdefrontend
 */
- 
+
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) {
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
@@ -49,24 +49,32 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 
 	KUrlCompletion *comp = new KUrlCompletion();
     ui.kleFileName->setCompletionObject(comp);
-	
+
 	ui.bOpen->setIcon( KIcon("document-open") );
-	
+
 	ui.cbFormat->addItem(KIcon("application-pdf"), "Portable data format (PDF)");
 	ui.cbFormat->addItem(KIcon("image-x-eps"), "Encapsulated PostScript (EPS)");
 	ui.cbFormat->addItem(KIcon("image-svg+xml"), "Scalable Vector Graphics (SVG)");
 	ui.cbFormat->insertSeparator(3);
 	ui.cbFormat->addItem(KIcon("image-x-generic"), "Portable Network Graphics (PNG)");
-	
+
 	ui.cbExportArea->addItem("Object's bounding box");
 	ui.cbExportArea->addItem("Current selection");
 	ui.cbExportArea->addItem("Complete worksheet");
-	
+
+	ui.cbResolution->addItem(QString::number(QApplication::desktop()->physicalDpiX()) + " (" + i18n("desktop") + ")");
+	ui.cbResolution->addItem("100");
+	ui.cbResolution->addItem("150");
+	ui.cbResolution->addItem("200");
+	ui.cbResolution->addItem("300");
+	ui.cbResolution->addItem("600");
+	ui.cbResolution->setValidator(new QIntValidator(ui.cbResolution));
+
 	setMainWidget( mainWidget );
-	
+
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 	setButtonText(KDialog::User1,i18n("Options >>"));
-	
+
 	connect( ui.cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
@@ -74,17 +82,18 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 
 	setCaption(i18n("Export worksheet"));
 	setWindowIcon(KIcon("document-export-database"));
-	
+
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", "").toInt());
-	ui.cbExportArea->setCurrentIndex(conf.readEntry("Area", "").toInt());	
-	
+	ui.cbExportArea->setCurrentIndex(conf.readEntry("Area", "").toInt());
+	ui.cbResolution->setCurrentIndex(conf.readEntry("Resolution", "").toInt());
+
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
 
 void ExportWorksheetDialog::setFileName(const QString& name){
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-	QString dir = conf.readEntry("LastDir", "");	
+	QString dir = conf.readEntry("LastDir", "");
 	if (dir.isEmpty()) dir = QDir::homePath();
 	ui.kleFileName->setText(dir + QDir::separator() +  name);
 	this->formatChanged(ui.cbFormat->currentIndex());
@@ -96,7 +105,7 @@ QString ExportWorksheetDialog::path() const{
 
 WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const{
 	int index = ui.cbFormat->currentIndex();
-	
+
 	//we have a separator in the format combobox at the 4th position -> skip it
 	if (index>3)
 		index --;
@@ -110,6 +119,14 @@ WorksheetView::ExportArea ExportWorksheetDialog::exportArea() const{
 
 bool ExportWorksheetDialog::exportBackground() const {
 	return ui.chkExportBackground->isChecked();
+}
+
+int ExportWorksheetDialog::exportResolution() const {
+	if (ui.cbResolution->currentIndex() == 0)
+		return QApplication::desktop()->physicalDpiX();
+	else
+		return ui.cbResolution->currentText().toInt();
+
 }
 
 void ExportWorksheetDialog::slotButtonClicked(int button) {
@@ -131,6 +148,7 @@ void ExportWorksheetDialog::okClicked(){
     KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
     conf.writeEntry("Format", ui.cbFormat->currentIndex());
 	conf.writeEntry("Area", ui.cbExportArea->currentIndex());
+	conf.writeEntry("Resolution", ui.cbResolution->currentIndex());
 
     QString path = ui.kleFileName->text();
     if (!path.isEmpty()) {
@@ -174,7 +192,7 @@ void ExportWorksheetDialog::selectFile() {
     QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
     if (!path.isEmpty()) {
 		ui.kleFileName->setText(path);
-		
+
 		int pos = path.lastIndexOf(QDir::separator());
 		if (pos!=-1) {
 			QString newDir = path.left(pos);
@@ -202,6 +220,10 @@ void ExportWorksheetDialog::formatChanged(int index){
 		path=path.left(i) + extensions.at(index);
 
 	ui.kleFileName->setText(path);
+
+	// show resolution option for png format
+	ui.lResolution->setVisible(index==3);
+	ui.cbResolution->setVisible(index==3);
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {

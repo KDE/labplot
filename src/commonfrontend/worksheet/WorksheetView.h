@@ -63,7 +63,7 @@ class WorksheetView : public QGraphicsView {
 	};
 
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool);
+	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
 
   private:
 	void initActions();

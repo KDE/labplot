@@ -688,11 +688,11 @@ bool MainWin::closeProject(){
 	if (m_project==0)
 		return true; //nothing to close
 
-	int b = KMessageBox::warningYesNo( this,
-										i18n("The current project %1 will be closed. Do you want to continue?", m_project->name()),
-										i18n("Close Project"));
-	if (b==KMessageBox::No)
-		return false;
+// 	int b = KMessageBox::warningYesNo( this,
+// 										i18n("The current project %1 will be closed. Do you want to continue?", m_project->name()),
+// 										i18n("Close Project"));
+// 	if (b==KMessageBox::No)
+// 		return false;
 
 	if(warnModified())
 		return false;
@@ -1262,10 +1262,11 @@ void MainWin::exportDialog(){
 			WorksheetView::ExportFormat format = dlg->exportFormat();
 			WorksheetView::ExportArea area = dlg->exportArea();
 			bool background = dlg->exportBackground();
+			int resolution = dlg->exportResolution();
 
 			WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
 			WAIT_CURSOR;
-			view->exportToFile(path, format, area, background);
+			view->exportToFile(path, format, area, background, resolution);
 			RESET_CURSOR;
 		}
 	}else{//Spreadsheet

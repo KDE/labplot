@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : export worksheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -44,6 +43,7 @@ class ExportWorksheetDialog: public KDialog{
 	WorksheetView::ExportFormat exportFormat() const;
 	WorksheetView::ExportArea exportArea() const;
 	bool exportBackground() const;
+	int exportResolution() const;
 
   private:
 	QWidget* mainWidget;

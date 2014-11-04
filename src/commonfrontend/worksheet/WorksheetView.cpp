@@ -4,8 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -954,7 +953,8 @@ void WorksheetView::selectionChanged(){
 	m_selectedItems = items;
 }
 
-void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background) {
+void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
+								 const ExportArea area, const bool background, const int resolution) {
 	QRectF sourceRect;
 
 	//determine the rectangular to print
@@ -1010,11 +1010,10 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}else{
 		//PNG
 		//TODO add all formats supported by Qt in QImage
-		//TODO make the size of the image customizable by the user in the ExportWorksheetDialog
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
-		w = w*QApplication::desktop()->physicalDpiX()/25.4;
-		h = h*QApplication::desktop()->physicalDpiY()/25.4;
+		w = w*resolution/25.4;
+		h = h*resolution/25.4;
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
 		image.fill(Qt::transparent);
 		QRectF targetRect(0, 0, w, h);
