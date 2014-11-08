@@ -169,8 +169,8 @@ void SpreadsheetView::initMenus(){
 
 	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
-	submenu->addAction(action_fill_random);
 	submenu->addAction(action_fill_const);
+// 	submenu->addAction(action_fill_random);
 	m_selectionMenu ->addMenu(submenu);
 	m_selectionMenu ->addSeparator();
 
@@ -194,23 +194,23 @@ void SpreadsheetView::initMenus(){
 	// Column menu
 	m_columnMenu = new QMenu();
 
-	submenu = new QMenu(i18n("S&et Column As"));
-	submenu->addAction(action_set_as_x);
-	submenu->addAction(action_set_as_y);
-	submenu->addAction(action_set_as_z);
-	submenu->addSeparator();
-	submenu->addAction(action_set_as_xerr);
-	submenu->addAction(action_set_as_yerr);
-	submenu->addSeparator();
-	submenu->addAction(action_set_as_none);
-	m_columnMenu->addMenu(submenu);
-	m_columnMenu->addSeparator();
+// 	submenu = new QMenu(i18n("S&et Column As"));
+// 	submenu->addAction(action_set_as_x);
+// 	submenu->addAction(action_set_as_y);
+// 	submenu->addAction(action_set_as_z);
+// 	submenu->addSeparator();
+// 	submenu->addAction(action_set_as_xerr);
+// 	submenu->addAction(action_set_as_yerr);
+// 	submenu->addSeparator();
+// 	submenu->addAction(action_set_as_none);
+// 	m_columnMenu->addMenu(submenu);
+// 	m_columnMenu->addSeparator();
 
 	submenu = new QMenu(i18n("Generate Data"));
 	submenu->addAction(action_fill_row_numbers);
+	submenu->addAction(action_fill_const);
 // 	submenu->addAction(action_fill_random);
 	submenu->addAction(action_fill_equidistant);
-	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_random_nonuniform);
 	submenu->addAction(action_fill_function);
 	m_columnMenu->addMenu(submenu);
@@ -266,7 +266,7 @@ void SpreadsheetView::initMenus(){
 
 	submenu = new QMenu(i18n("Fi&ll Selection with"));
 	submenu->addAction(action_fill_row_numbers);
-	submenu->addAction(action_fill_random);
+// 	submenu->addAction(action_fill_random);
 	submenu->addAction(action_fill_const);
 	m_rowMenu->addMenu(submenu);
 
@@ -285,7 +285,7 @@ void SpreadsheetView::connectActions(){
 	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
-	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
+// 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
 	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithRandomValues()));
 	connect(action_fill_equidistant, SIGNAL(triggered()), this, SLOT(fillWithEquidistantValues()));
 	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
@@ -301,12 +301,12 @@ void SpreadsheetView::connectActions(){
 	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
 	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
 	connect(action_add_columns, SIGNAL(triggered()), this, SLOT(addColumns()));
-	connect(action_set_as_x, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsX()));
-	connect(action_set_as_y, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsY()));
-	connect(action_set_as_z, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsZ()));
-	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsXError()));
-	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsYError()));
-	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
+// 	connect(action_set_as_x, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsX()));
+// 	connect(action_set_as_y, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsY()));
+// 	connect(action_set_as_z, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsZ()));
+// 	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsXError()));
+// 	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsYError()));
+// 	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
 	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
@@ -695,6 +695,18 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				action_sort_asc_column->setVisible(false);
 				action_sort_desc_column->setVisible(false);
 			}
+
+			//check whether we have non-numeric columns selected and deactive actions for numeric columns
+			bool numeric = true;
+			foreach(Column* col, selectedColumns()) {
+				if (col->columnMode() != AbstractColumn::Numeric) {
+					numeric = false;
+					break;
+				}
+			}
+			action_fill_equidistant->setEnabled(numeric);
+			action_fill_random_nonuniform->setEnabled(numeric);
+			action_fill_function->setEnabled(numeric);
 
 			m_columnMenu->exec(global_pos);
 		}else if (watched == this){
@@ -1238,12 +1250,7 @@ void SpreadsheetView::normalizeSelectedColumns(){
 	foreach(Column* col, cols)	{
 		if (col->columnMode() == AbstractColumn::Numeric) {
 			col->setSuppressDataChangedSignal(true);
-			double max = 0.0;
-			for (int row=0; row<col->rowCount(); row++)
-			{
-				if (col->valueAt(row) > max)
-					max = col->valueAt(row);
-			}
+			double max = col->maximum();
 			if (max != 0.0) {// avoid division by zero
 				for (int row=0; row<col->rowCount(); row++)
 					col->setValueAt(row, col->valueAt(row) / max);

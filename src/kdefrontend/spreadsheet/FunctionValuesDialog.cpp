@@ -67,6 +67,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	vars<<"x";
 	ui.teEquation->setVariables(vars);
 
+	ui.teEquation->setFocus();
+
 	if (m_spreadsheet) {
 		m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 
@@ -81,7 +83,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 		cbXDataColumn->setModel(m_aspectTreeModel.get());
 
 		//select the first available column in the spreadsheet
-		m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->column(0));
+		cbXDataColumn->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->column(0)));
 	}
 
 	setButtons( KDialog::Ok | KDialog::Cancel );

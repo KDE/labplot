@@ -639,7 +639,7 @@ void XYFitCurvePrivate::recalculate() {
 	//rms = residual mean square = sse/d.o.f.
 	//rsd = residual standard deviation = sqrt(rms)
 	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
-	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*n-1)/(n-np-1);
+	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
 
 	residualsVector->resize(n);
 	for (int i=0; i<n; ++i) {

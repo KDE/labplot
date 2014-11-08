@@ -2,9 +2,8 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach*uni.kn)
-                                                        (use @ for *)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : widget for column properties
 
  ***************************************************************************/
@@ -75,6 +74,10 @@ ColumnDock::ColumnDock(QWidget *parent): QWidget(parent){
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)) );
 	connect(ui.cbPlotDesignation, SIGNAL(currentIndexChanged(int)), this, SLOT(plotDesignationChanged(int)));
 
+	//TODO activate later
+	ui.lPlotDesignation->hide();
+	ui.cbPlotDesignation->hide();
+
 	retranslateUi();
 }
 
@@ -118,8 +121,8 @@ void ColumnDock::setColumns(QList<Column*> list){
 	ui.cbFormat->setVisible(!nonEditable);
 	ui.lPrecision->setVisible(!nonEditable);
 	ui.sbPrecision->setVisible(!nonEditable);
-	ui.lPlotDesignation->setVisible(!nonEditable);
-	ui.cbPlotDesignation->setVisible(!nonEditable);
+// 	ui.lPlotDesignation->setVisible(!nonEditable);
+// 	ui.cbPlotDesignation->setVisible(!nonEditable);
 	if (nonEditable) {
 		m_initializing = false;
 		return;
