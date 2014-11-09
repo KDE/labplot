@@ -6,7 +6,7 @@
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net),
 	                                      Knut Franke (knut.franke*gmx.de)
 	 								(C) 2010 by Knut Franke
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -34,7 +34,7 @@
 
 /** ***************************************************************************
  * \class AbstractColumnClearMasksCmd
- * \brief Clear masking information 
+ * \brief Clear masking information
  ** ***************************************************************************/
 
 /**
@@ -80,6 +80,7 @@ void AbstractColumnClearMasksCmd::redo()
 		m_copied = true;
 	}
 	m_col->m_masking.clear();
+	emit m_col->owner()->dataChanged(m_col->owner());
 }
 
 /**
@@ -88,6 +89,7 @@ void AbstractColumnClearMasksCmd::redo()
 void AbstractColumnClearMasksCmd::undo()
 {
 	m_col->m_masking = m_masking;
+	emit m_col->owner()->dataChanged(m_col->owner());
 }
 
 /** ***************************************************************************
@@ -151,6 +153,7 @@ void AbstractColumnSetMaskedCmd::redo()
 		m_copied = true;
 	}
 	m_col->m_masking.setValue(m_interval, m_masked);
+	emit m_col->owner()->dataChanged(m_col->owner());
 }
 
 /**
@@ -159,6 +162,7 @@ void AbstractColumnSetMaskedCmd::redo()
 void AbstractColumnSetMaskedCmd::undo()
 {
 	m_col->m_masking = m_masking;
+	emit m_col->owner()->dataChanged(m_col->owner());
 }
 
 /** ***************************************************************************

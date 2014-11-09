@@ -519,10 +519,6 @@ void XYFitCurvePrivate::recalculate() {
 		return;
 	}
 
-	//data to fit
-	double* xdata = static_cast<QVector<double>* >(dynamic_cast<Column*>( const_cast<AbstractColumn*>(xDataColumn) )->data())->data();
-	double* ydata = static_cast<QVector<double>* >(dynamic_cast<Column*>( const_cast<AbstractColumn*>(yDataColumn) )->data())->data();
-
 	//fit settings
 	int maxIters = fitData.maxIterations; //maximal number of iterations
 	float delta = fitData.eps; //fit tolerance
@@ -536,15 +532,57 @@ void XYFitCurvePrivate::recalculate() {
 		return;
 	}
 
-	//determine the number of data points in the column, stop iterating after the first nan was encountered
-	int n = xDataColumn->rowCount();
-	for (int i=0; i<xDataColumn->rowCount(); ++i) {
-		if (isnan(xdata[i]) || isnan(ydata[i])) {
-			n = i;
-			break;
+	//check column sizes
+	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+		fitResult.available = true;
+		fitResult.valid = false;
+		fitResult.status = i18n("Number of x and y data points must be equal.");
+		emit (q->dataChanged());
+		sourceDataChangedSinceLastFit = false;
+		return;
+	}
+	if (weightsColumn) {
+		if (weightsColumn->rowCount()<xDataColumn->rowCount()) {
+			fitResult.available = true;
+			fitResult.valid = false;
+			fitResult.status = i18n("Not sufficient weight data points provided.");
+			emit (q->dataChanged());
+			sourceDataChangedSinceLastFit = false;
+			return;
 		}
 	}
 
+	//copy all valid data point for the fit to temporary vectors
+	QVector<double> xdataVector;
+	QVector<double> ydataVector;
+	QVector<double> sigmaVector;
+	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+		//only copy those data where _all_ values (for x, y and sigma, if given) are valid
+		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
+			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+
+			if (!weightsColumn) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			} else {
+				if (!isnan(weightsColumn->valueAt(row))) {
+					xdataVector.append(xDataColumn->valueAt(row));
+					ydataVector.append(yDataColumn->valueAt(row));
+
+					if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
+						//weights from a given column -> calculate the square root of the inverse (sigma = sqrt(1/weight))
+						sigmaVector.append( sqrt(1/weightsColumn->valueAt(row)) );
+					} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
+						//weights from a given column with error bars (sigma = error)
+						sigmaVector.append( weightsColumn->valueAt(row) );
+					}
+				}
+			}
+		}
+	}
+
+	//number of data points to fit
+	int n = xdataVector.size();
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
@@ -563,30 +601,11 @@ void XYFitCurvePrivate::recalculate() {
 		return;
 	}
 
-	//calculate sigma for the given weights type
+	double* xdata = xdataVector.data();
+	double* ydata = ydataVector.data();
 	double* sigma = 0;
-	if (weightsColumn) {
-		if (weightsColumn->rowCount()<n) {
-			fitResult.available = true;
-			fitResult.valid = false;
-			fitResult.status = i18n("Not sufficient weight data points provided.");
-			emit (q->dataChanged());
-			sourceDataChangedSinceLastFit = false;
-			return;
-		}
-
-		if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
-			//weights from a given column -> calculate the square root of the inverse (sigma = sqrt(1/weight))
-			sigma = new double[n];
-			for (int i=0; i<n; ++i) {
-				sigma[i] = sqrt(1/weightsColumn->valueAt(i));
-			}
-		} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
-			//weights from a given column with error bars (sigma = error)
-			sigma = static_cast<QVector<double>* >(dynamic_cast<Column*>( const_cast<AbstractColumn*>(weightsColumn) )->data())->data();
-		}
-	}
-
+	if (sigmaVector.size())
+		sigma = sigmaVector.data();
 
 	//function to fit
 	gsl_multifit_function_fdf f;
@@ -681,8 +700,6 @@ void XYFitCurvePrivate::recalculate() {
 	//free resources
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
-	if (sigma && fitData.weightsType == XYFitCurve::WeightsFromColumn)
-		delete [] sigma;
 
 	//calculate the fit function (vectors)
 	ExpressionParser* parser = ExpressionParser::getInstance();
