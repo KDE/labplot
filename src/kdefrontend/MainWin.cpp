@@ -625,6 +625,13 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
+	if (file->size() ==0 ) {
+		KMessageBox::error(this, "The project file is empty.", i18n("Error opening project"));
+		file->close();
+		delete file;
+		return;
+	}
+
 	if (!newProject()){
 		file->close();
 		delete file;
