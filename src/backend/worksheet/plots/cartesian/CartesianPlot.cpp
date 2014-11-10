@@ -1203,8 +1203,13 @@ void CartesianPlotPrivate::retransformScales(){
 		sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
 		logicalStart = xMin;
 		logicalEnd = xMax;
-		Interval<double> interval (SCALE_MIN, SCALE_MAX);
-		scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+
+		//TODO: how should we handle the case sceneStart=sceneEnd
+		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
+		if (sceneStart!=sceneEnd) {
+			Interval<double> interval (SCALE_MIN, SCALE_MAX);
+			scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		}
 	} else {
 		//TODO:
 // 		foreach(CartesianPlot::ScaleBreaking* breaking, xScaleBreakings) {
