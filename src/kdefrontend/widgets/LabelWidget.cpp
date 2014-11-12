@@ -36,6 +36,7 @@
 
 #include <KCharSelect>
 #include <KMenu>
+#include <QDebug>
 
 /*!
 	\class LabelWidget
@@ -164,10 +165,24 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 
 	m_initializing = true;
 	ui.chbVisible->setChecked( m_label->isVisible() );
-	ui.teLabel->setText(m_label->text().text);
+	ui.teLabel->setHtml(m_label->text().text);
 	ui.teLabel->selectAll();
 	ui.teLabel->setFocus();
 	this->teXUsedChanged(m_label->text().teXUsed);
+	// format
+	if(ui.teLabel->fontWeight()==QFont::Bold)
+		ui.tbFontBold->setChecked(true);
+	else
+		ui.tbFontBold->setChecked(false);
+	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	if(format.verticalAlignment() == QTextCharFormat::AlignSuperScript)
+		ui.tbFontSuperScript->setChecked(true);
+	else if(format.verticalAlignment() == QTextCharFormat::AlignSubScript) 
+		ui.tbFontSubScript->setChecked(true);
+	ui.kfontRequester->setFont(format.font());
 	ui.lOffset->show();
 	ui.sbOffset->show();
 	m_initializing = false;
