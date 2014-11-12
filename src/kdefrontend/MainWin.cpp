@@ -625,12 +625,17 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	if (file->size() ==0 ) {
-		KMessageBox::error(this, "The project file is empty.", i18n("Error opening project"));
-		file->close();
-		delete file;
-		return;
-	}
+	//TODO: this solves the problem with empty files (the application doesn't hang anymore)
+	//but it crashes from time to time at unexpected places within Qt.
+// 	char* c;
+// 	bool rc = file->getChar(c);
+// 	if (!rc) {
+// 		KMessageBox::error(this, "The project file is empty.", i18n("Error opening project"));
+// 		file->close();
+// 		delete file;
+// 		return;
+// 	}
+// 	file->seek(0);
 
 	if (!newProject()){
 		file->close();
@@ -641,9 +646,13 @@ void MainWin::openProject(const QString& filename) {
 	WAIT_CURSOR;
 	QElapsedTimer timer;
 	timer.start();
-	openXML(file);
+	bool rc = openXML(file);
 	file->close();
 	delete file;
+	if (!rc) {
+		closeProject();
+		return;
+	}
 
 	m_currentFileName = filename;
 	m_project->setFileName(filename);
@@ -667,14 +676,15 @@ void MainWin::openRecentProject(const KUrl& url) {
 	this->openProject(url.path());
 }
 
-void MainWin::openXML(QIODevice *file) {
+bool MainWin::openXML(QIODevice *file) {
 	XmlStreamReader reader(file);
 	if (m_project->load(&reader) == false) {
+		RESET_CURSOR;
 		kDebug()<<"ERROR: reading file content"<<endl;
 		QString msg_text = reader.errorString();
 		KMessageBox::error(this, msg_text, i18n("Error opening project"));
 		statusBar()->showMessage(msg_text);
-		return;
+		return false;
 	}
 
 	//TODO: show warnings in a kind of "log window" but not in message box
@@ -686,6 +696,8 @@ void MainWin::openXML(QIODevice *file) {
 // 		KMessageBox::error(this, msg_text, i18n("Project loading partly failed"));
 // 		statusBar()->showMessage(msg_text);
 // 	}
+
+	return true;
 }
 
 /*!
@@ -704,7 +716,6 @@ bool MainWin::closeProject(){
 	if(warnModified())
 		return false;
 
-	m_mdiArea->closeAllSubWindows();
 	delete m_aspectTreeModel;
 	m_aspectTreeModel=0;
 	delete m_project;

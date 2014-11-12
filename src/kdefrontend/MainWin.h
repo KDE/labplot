@@ -151,7 +151,7 @@ private:
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 
-	void openXML(QIODevice*);
+	bool openXML(QIODevice*);
 
 	void initActions();
 	void initMenus();

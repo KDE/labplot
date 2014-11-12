@@ -40,7 +40,6 @@
 #include <QTimer>
 #include <QDir>
 #include <QPainter>
-
 #include <KMessageBox>
 
 #include <math.h>
@@ -333,6 +332,8 @@ void AxisDock::setModel(){
 	list.clear();
 	list<<"Column";
 	m_aspectTreeModel->setSelectableAspects(list);
+	cbMajorTicksColumn->setSelectableClasses(list);
+	cbMinorTicksColumn->setSelectableClasses(list);
 
 	cbMajorTicksColumn->setModel(m_aspectTreeModel);
 	cbMinorTicksColumn->setModel(m_aspectTreeModel);
@@ -346,7 +347,7 @@ void AxisDock::setAxes(QList<Axis*> list){
   	m_axesList=list;
   	m_axis=list.first();
 	Q_ASSERT(m_axis);
-	m_aspectTreeModel =  new AspectTreeModel(m_axis->project());
+	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();
 
 	labelWidget->setAxes(list);
@@ -848,8 +849,11 @@ void AxisDock::majorTicksColumnChanged(const QModelIndex& index){
 		return;
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
 
 	foreach(Axis* axis, m_axesList)
 		axis->setMajorTicksColumn(column);
