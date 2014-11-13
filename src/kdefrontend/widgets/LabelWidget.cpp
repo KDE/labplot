@@ -143,6 +143,20 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	ui.teLabel->selectAll();
 	ui.teLabel->setFocus();
 	this->teXUsedChanged(m_label->text().teXUsed);
+	// format
+	if(ui.teLabel->fontWeight()==QFont::Bold)
+		ui.tbFontBold->setChecked(true);
+	else
+		ui.tbFontBold->setChecked(false);
+	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	if(format.verticalAlignment() == QTextCharFormat::AlignSuperScript)
+		ui.tbFontSuperScript->setChecked(true);
+	else if(format.verticalAlignment() == QTextCharFormat::AlignSubScript) 
+		ui.tbFontSubScript->setChecked(true);
+	ui.kfontRequester->setFont(format.font());
 	m_initializing = false;
 
 	initConnections();
