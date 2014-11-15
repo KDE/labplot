@@ -6,7 +6,7 @@
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     							(use @ for *)
     Description          : widget for cartesian plot properties
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -54,7 +54,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	m_initializing(false){
 
 	ui.setupUi(this);
-	
+
 	//"Coordinate system"-tab
 	ui.bAddXBreak->setIcon( KIcon("list-add") );
 	ui.bRemoveXBreak->setIcon( KIcon("list-remove") );
@@ -104,7 +104,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
-	
+
 	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
 	connect( ui.kleXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
 	connect( ui.kleXMax, SIGNAL(returnPressed()), this, SLOT(xMaxChanged()) );
@@ -131,7 +131,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.leYBreakStart, SIGNAL(returnPressed()), this, SLOT(yBreakStartChanged()) );
 	connect( ui.leYBreakEnd, SIGNAL(returnPressed()), this, SLOT(yBreakEndChanged()) );
 	connect( ui.sbYBreakPosition, SIGNAL(valueChanged(int)), this, SLOT(yBreakPositionChanged(int)) );
-	
+
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
 	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
@@ -143,8 +143,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
-	
-	//Border 
+
+	//Border
 	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
 	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
 	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
@@ -154,7 +154,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	//Padding
 	connect( ui.sbPaddingHorizontal, SIGNAL(valueChanged(double)), this, SLOT(horizontalPaddingChanged(double)) );
 	connect( ui.sbPaddingVertical, SIGNAL(valueChanged(double)), this, SLOT(verticalPaddingChanged(double)) );
-	
+
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
@@ -218,13 +218,13 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	m_plotList = list;
 
 	m_plot=list.first();
-  
+
 	QList<TextLabel*> labels;
 	foreach(CartesianPlot* plot, list)
 		labels.append(plot->title());
-	
+
 	labelWidget->setLabels(labels);
-	
+
 	//if there is more then one curve in the list, disable the tab "general"
 	if (list.size()==1){
 		ui.lName->setEnabled(true);
@@ -246,7 +246,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 
 	//show the properties of the first curve
   	this->load();
-	
+
 	//update active widgets
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 
@@ -289,7 +289,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	connect( m_plot->plotArea(), SIGNAL(borderOpacityChanged(float)), this, SLOT(plotBorderOpacityChanged(float)) );
 	connect( m_plot, SIGNAL(horizontalPaddingChanged(float)), this, SLOT(plotHorizontalPaddingChanged(float)) );
 	connect( m_plot, SIGNAL(verticalPaddingChanged(float)), this, SLOT(plotVerticalPaddingChanged(float)) );
-	
+
 	m_initializing = false;
 }
 
@@ -352,21 +352,21 @@ void CartesianPlotDock::retranslateUi(){
 void CartesianPlotDock::nameChanged(){
   if (m_initializing)
 	return;
-  
+
   m_plot->setName(ui.leName->text());
 }
 
 void CartesianPlotDock::commentChanged(){
   if (m_initializing)
 	return;
-  
+
   m_plot->setComment(ui.leComment->text());
 }
 
 void CartesianPlotDock::visibilityChanged(int state){
   if (m_initializing)
 	return;
-  
+
   bool b = (state==Qt::Checked);
   foreach(CartesianPlot* plot, m_plotList){
 	plot->setVisible(b);
@@ -402,7 +402,7 @@ void CartesianPlotDock::layoutChanged(Worksheet::Layout layout){
 		ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
 		ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
 		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
-		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));		
+		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
 		m_initializing = false;
 	}
 }
@@ -493,9 +493,6 @@ void CartesianPlotDock::yScaleChanged(int index){
 
 // "Scale Breakings"-tab
 void CartesianPlotDock::toggleXBreak(int state){
-	if (m_initializing)
-		return;
-  
 	bool b = (state==Qt::Checked);
 	ui.frameXBreakEdit->setVisible(b);
 	ui.lXBreakStart->setVisible(b);
@@ -506,18 +503,21 @@ void CartesianPlotDock::toggleXBreak(int state){
 	ui.sbXBreakPosition->setVisible(b);
     ui.lXBreakStyle->setVisible(b);
 	ui.cbXBreakStyle->setVisible(b);
+
+	if (m_initializing)
+		return;
 }
 
 void CartesianPlotDock::addXBreak() {
-	
+
 }
 
 void CartesianPlotDock::removeXBreak() {
-// 	ui.bRemoveXBreak->setVisible(m_plot->xScaleBreakings().size()!=0);	
+// 	ui.bRemoveXBreak->setVisible(m_plot->xScaleBreakings().size()!=0);
 }
 
 void CartesianPlotDock::currentXBreakChanged(int) {
-	
+
 }
 
 void CartesianPlotDock::xBreakStartChanged() {
@@ -564,9 +564,6 @@ void CartesianPlotDock::xBreakPositionChanged(int) {
 }
 
 void CartesianPlotDock::toggleYBreak(int state){
-	if (m_initializing)
-		return;
-  
 	bool b = (state==Qt::Checked);
 	ui.frameYBreakEdit->setVisible(b);
 	ui.lYBreakStart->setVisible(b);
@@ -577,30 +574,33 @@ void CartesianPlotDock::toggleYBreak(int state){
 	ui.sbYBreakPosition->setVisible(b);
     ui.lYBreakStyle->setVisible(b);
 	ui.cbYBreakStyle->setVisible(b);
+
+	if (m_initializing)
+		return;
 }
 
 void CartesianPlotDock::addYBreak() {
-	
+
 }
 
 void CartesianPlotDock::removeYBreak() {
-	
+
 }
 
 void CartesianPlotDock::currentYBreakChanged(int) {
-	
+
 }
 
 void CartesianPlotDock::yBreakStartChanged() {
-	
+
 }
 
 void CartesianPlotDock::yBreakEndChanged() {
-	
+
 }
 
 void CartesianPlotDock::yBreakPositionChanged(int) {
-	
+
 }
 
 // "Plot area"-tab
@@ -622,7 +622,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		PlotArea::BackgroundColorStyle style = 
+		PlotArea::BackgroundColorStyle style =
 			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
 			ui.lBackgroundFirstColor->setText(i18n("Color"));
@@ -668,10 +668,10 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 
 	if (m_initializing)
 		return;
-   
+
 	foreach(CartesianPlot* plot, m_plotList){
 		plot->plotArea()->setBackgroundType(type);
-  }  
+  }
 }
 
 void CartesianPlotDock::backgroundColorStyleChanged(int index){
@@ -693,10 +693,10 @@ void CartesianPlotDock::backgroundColorStyleChanged(int index){
 
 	if (m_initializing)
 		return;
-   
+
 	foreach(CartesianPlot* plot, m_plotList){
 		plot->plotArea()->setBackgroundColorStyle(style);
-  }  
+  }
 }
 
 void CartesianPlotDock::backgroundImageStyleChanged(int index){
@@ -706,7 +706,7 @@ void CartesianPlotDock::backgroundImageStyleChanged(int index){
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
 	foreach(CartesianPlot* plot, m_plotList){
 		plot->plotArea()->setBackgroundImageStyle(style);
-  }  
+  }
 }
 
 void CartesianPlotDock::backgroundBrushStyleChanged(int index){
@@ -716,7 +716,7 @@ void CartesianPlotDock::backgroundBrushStyleChanged(int index){
 	Qt::BrushStyle style = (Qt::BrushStyle)index;
 	foreach(CartesianPlot* plot, m_plotList){
 		plot->plotArea()->setBackgroundBrushStyle(style);
-  }  
+  }
 }
 
 void CartesianPlotDock::backgroundFirstColorChanged(const QColor& c){
@@ -725,7 +725,7 @@ void CartesianPlotDock::backgroundFirstColorChanged(const QColor& c){
 
   foreach(CartesianPlot* plot, m_plotList){
 	plot->plotArea()->setBackgroundFirstColor(c);
-  }  
+  }
 }
 
 void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c){
@@ -734,7 +734,7 @@ void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c){
 
   foreach(CartesianPlot* plot, m_plotList){
 	plot->plotArea()->setBackgroundSecondColor(c);
-  }  
+  }
 }
 
 /*!
@@ -753,7 +753,7 @@ void CartesianPlotDock::selectFile() {
 		if (newDir!=dir)
 			conf.writeEntry("LastImageDir", newDir);
 	}
-	
+
     ui.kleBackgroundFileName->setText( path );
 
 	foreach(CartesianPlot* plot, m_plotList)
@@ -763,11 +763,11 @@ void CartesianPlotDock::selectFile() {
 void CartesianPlotDock::fileNameChanged(){
 	if (m_initializing)
 		return;
-	
+
 	QString fileName = ui.kleBackgroundFileName->text();
 	foreach(CartesianPlot* plot, m_plotList){
 		plot->plotArea()->setBackgroundFileName(fileName);
-  } 
+  }
 }
 
 void CartesianPlotDock::backgroundOpacityChanged(int value){
@@ -802,7 +802,7 @@ void CartesianPlotDock::borderColorChanged(const QColor& color){
 	pen=plot->plotArea()->borderPen();
 	pen.setColor(color);
 	plot->plotArea()->setBorderPen(pen);
-  }  
+  }
 
   m_initializing=true;
   GuiTools::updatePenStyles(ui.cbBorderStyle, color);
@@ -812,13 +812,13 @@ void CartesianPlotDock::borderColorChanged(const QColor& color){
 void CartesianPlotDock::borderWidthChanged(double value){
   if (m_initializing)
 	return;
-  
+
   QPen pen;
   foreach(CartesianPlot* plot, m_plotList){
 	pen=plot->plotArea()->borderPen();
 	pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	plot->plotArea()->setBorderPen(pen);
-  }  
+  }
 }
 
 void CartesianPlotDock::borderCornerRadiusChanged(double value){
@@ -924,11 +924,11 @@ void CartesianPlotDock::plotVisibleChanged(bool on){
 
 //scale breakings
 void CartesianPlotDock::plotXScaleBreakingChanged(const CartesianPlot::ScaleBreakings& breakings) {
-	
+
 }
 
 void CartesianPlotDock::plotYScaleBreakingChanged(const CartesianPlot::ScaleBreakings& breakings) {
-	
+
 }
 
 //background
@@ -1027,7 +1027,7 @@ void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
-	
+
 	int size = m_plotList.size();
 	if (size>1)
 		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded", size, name));
@@ -1061,9 +1061,22 @@ void CartesianPlotDock::load(){
 	labelWidget->load();
 
 	//Scale breakings
-	//TODO
-	
-	//Background-tab
+	ui.chkXBreak->setChecked(m_plot->xScaleBreakingEnabled());
+	this->toggleXBreak(m_plot->xScaleBreakingEnabled());
+	if (m_plot->xScaleBreakings().list.size()) {
+
+	} else {
+		ui.leXBreakStart->setText("");
+		ui.leXBreakEnd->setText("");
+		ui.sbXBreakPosition->setValue(50);
+		ui.cbXBreakStyle->setCurrentIndex(0);
+	}
+
+	ui.chkYBreak->setChecked(m_plot->yScaleBreakingEnabled());
+	this->toggleYBreak(m_plot->yScaleBreakingEnabled());
+
+	//"Plot Area"-tab
+	//Background
 	ui.cbBackgroundType->setCurrentIndex( (int)m_plot->plotArea()->backgroundType() );
 	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundColorStyle() );
 	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundImageStyle() );
@@ -1072,10 +1085,12 @@ void CartesianPlotDock::load(){
 	ui.kcbBackgroundFirstColor->setColor( m_plot->plotArea()->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_plot->plotArea()->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_plot->plotArea()->backgroundOpacity()*100.0) );
+
+	//Padding
 	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), Worksheet::Centimeter) );
 	ui.sbPaddingVertical->setValue( Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), Worksheet::Centimeter) );
 
-	//Border-tab
+	//Border
 	ui.kcbBorderColor->setColor( m_plot->plotArea()->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_plot->plotArea()->borderPen().style() );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
@@ -1084,7 +1099,7 @@ void CartesianPlotDock::load(){
 
 	m_initializing=true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	m_initializing=false;	
+	m_initializing=false;
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config){
@@ -1099,12 +1114,12 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 // 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Top", m_plot->rect().y()), Worksheet::Centimeter));
 // 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Width", m_plot->rect().width()), Worksheet::Centimeter));
 // 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("Height", m_plot->rect().height()), Worksheet::Centimeter));
-// 
+//
 // 	ui.chkAutoScaleX->setChecked(group.readEntry("AutoScaleX", m_plot->autoScaleX()));
 //   	ui.kleXMin->setText( QString::number( group.readEntry("xMin", m_plot->xMin())) );
 // 	ui.kleXMax->setText( QString::number( group.readEntry("xMax", m_plot->xMax())) );
 // 	ui.cbXScaling->setCurrentIndex( group.readEntry("xScale", (int) m_plot->xScale()) );
-// 
+//
 // 	ui.chkAutoScaleY->setChecked(group.readEntry("AutoScaleY", m_plot->autoScaleY()));
 //   	ui.kleYMin->setText( QString::number( group.readEntry("yMin", m_plot->yMin())) );
 // 	ui.kleYMax->setText( QString::number( group.readEntry("yMax", m_plot->yMax())) );
@@ -1116,7 +1131,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 
 	//Scale breakings
 	//TODO
-	
+
 	//Background-tab
 	group = config.group("PlotArea");
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_plot->plotArea()->backgroundType()) );
@@ -1139,7 +1154,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
 
 	m_initializing=true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	m_initializing=false;	
+	m_initializing=false;
 }
 
 void CartesianPlotDock::saveConfig(KConfig& config){
@@ -1152,17 +1167,17 @@ void CartesianPlotDock::saveConfig(KConfig& config){
 // 	group.writeEntry("Top", Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter));
 // 	group.writeEntry("Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter));
 // 	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter));
-// 
+//
 // 	group.writeEntry("AutoScaleX", ui.chkAutoScaleX->isChecked());
 // 	group.writeEntry("xMin", ui.kleXMin->text());
 // 	group.writeEntry("xMax", ui.kleXMax->text());
 // 	group.writeEntry("xScale", ui.cbXScaling->currentIndex());
-// 	
+//
 // 	group.writeEntry("AutoScaleY", ui.chkAutoScaleY->isChecked());
 // 	group.writeEntry("yMin", ui.kleYMin->text());
 // 	group.writeEntry("yMax", ui.kleYMax->text());
 // 	group.writeEntry("yScale", ui.cbYScaling->currentIndex());
-	
+
 	//Title
 	KConfigGroup group = config.group("PlotTitle");
 	labelWidget->saveConfig(group);

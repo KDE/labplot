@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : A plot containing decoration elements.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -100,6 +99,8 @@ void CartesianPlot::init(){
 	d->autoScaleY = true;
 	d->xScale = ScaleLinear;
 	d->yScale = ScaleLinear;
+	d->xScaleBreakingEnabled = false;
+	d->yScaleBreakingEnabled = false;
 
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling
@@ -506,12 +507,14 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMax, xMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, xScale, xScale)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, xScaleBreakingEnabled, xScaleBreakingEnabled)
 CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::ScaleBreakings, xScaleBreakings, xScaleBreakings)
 
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMin, yMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yScaleBreakingEnabled, yScaleBreakingEnabled)
 CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::ScaleBreakings, yScaleBreakings, yScaleBreakings)
 
 /*!
@@ -656,51 +659,18 @@ void CartesianPlot::addAxis(){
 XYCurve* CartesianPlot::addCurve(){
 	XYCurve* curve = new XYCurve("xy-curve");
 	this->addChild(curve);
-	connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
-	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-
-	//update the legend on changes of the name, line and symbol styles
-	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
-
 	return curve;
 }
 
 XYEquationCurve* CartesianPlot::addEquationCurve(){
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	this->addChild(curve);
-	connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
-	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-
-	//update the legend on changes of the name, line and symbol styles
-	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
-
 	return curve;
 }
 
 XYFitCurve* CartesianPlot::addFitCurve(){
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);
-	connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
-	connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
-	connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-
-	//update the legend on changes of the name, line and symbol styles
-	connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
-	connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
-
 	return curve;
 }
 
@@ -714,9 +684,25 @@ void CartesianPlot::addLegend(){
 }
 
 void CartesianPlot::childAdded(const AbstractAspect* child) {
+	Q_D(CartesianPlot);
 	const XYCurve* curve = qobject_cast<const XYCurve*>(child);
-	if (curve)
+	if (curve) {
+		connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
+		connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
+		connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
+		connect(curve, SIGNAL(visibilityChanged()), this, SLOT(curveVisibilityChanged()));
+
+		//update the legend on changes of the name, line and symbol styles
+		connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
+		connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
+		connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
+		connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
+		connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
+
 		updateLegend();
+		d->curvesXMinMaxIsDirty = true;
+		d->curvesYMinMaxIsDirty = true;
+	}
 }
 
 void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
@@ -746,6 +732,8 @@ void CartesianPlot::dataChanged(){
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 	Q_ASSERT(curve);
+	d->curvesXMinMaxIsDirty = true;
+	d->curvesYMinMaxIsDirty = true;
 	if (d->autoScaleX && d->autoScaleY)
 		this->scaleAuto();
 	else if (d->autoScaleX)
@@ -765,6 +753,7 @@ void CartesianPlot::xDataChanged(){
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 	Q_ASSERT(curve);
+	d->curvesXMinMaxIsDirty = true;
 	if (d->autoScaleX)
 		this->scaleAutoX();
 	else
@@ -780,10 +769,24 @@ void CartesianPlot::yDataChanged(){
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 	Q_ASSERT(curve);
+	d->curvesYMinMaxIsDirty = true;
 	if (d->autoScaleY)
 		this->scaleAutoY();
 	else
 		curve->retransform();
+}
+
+void CartesianPlot::curveVisibilityChanged() {
+	Q_D(CartesianPlot);
+	d->curvesXMinMaxIsDirty = true;
+	d->curvesYMinMaxIsDirty = true;
+	updateLegend();
+	if (d->autoScaleX && d->autoScaleY)
+		this->scaleAuto();
+	else if (d->autoScaleX)
+		this->scaleAutoX();
+	else if (d->autoScaleY)
+		this->scaleAutoY();
 }
 
 void CartesianPlot::mouseModeChanged(QAction* action) {
@@ -836,34 +839,38 @@ void CartesianPlot::scaleAutoX(){
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum x-value
-	double min = INFINITY;
-	double max = -INFINITY;
-	QList<XYCurve*> children = this->children<XYCurve>();
-	foreach(XYCurve* curve, children) {
-		if (!curve->isVisible())
-			continue;
-		if (!curve->xColumn())
-			continue;
+	if (d->curvesXMinMaxIsDirty) {
+		d->curvesXMin = INFINITY;
+		d->curvesXMax = -INFINITY;
+		QList<XYCurve*> children = this->children<XYCurve>();
+		foreach(XYCurve* curve, children) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->xColumn())
+				continue;
 
-		if (curve->xColumn()->minimum() != INFINITY){
-			if (curve->xColumn()->minimum() < min)
-				min = curve->xColumn()->minimum();
+			if (curve->xColumn()->minimum() != INFINITY){
+				if (curve->xColumn()->minimum() < d->curvesXMin)
+					d->curvesXMin = curve->xColumn()->minimum();
+			}
+
+			if (curve->xColumn()->maximum() != -INFINITY){
+				if (curve->xColumn()->maximum() > d->curvesXMax)
+					d->curvesXMax = curve->xColumn()->maximum();
+			}
 		}
 
-		if (curve->xColumn()->maximum() != -INFINITY){
-			if (curve->xColumn()->maximum() > max)
-				max = curve->xColumn()->maximum();
-		}
+		d->curvesXMinMaxIsDirty = false;
 	}
 
 	bool update = false;
-	if (min != d->xMin && min != INFINITY){
-		d->xMin = min;
+	if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY){
+		d->xMin = d->curvesXMin;
 		update = true;
 	}
 
-	if (max != d->xMax && max != -INFINITY){
-		d->xMax = max;
+	if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY){
+		d->xMax = d->curvesXMax;
 		update = true;
 	}
 
@@ -891,34 +898,38 @@ void CartesianPlot::scaleAutoY(){
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum y-value
-	double min = INFINITY;
-	double max = -INFINITY;
-	QList<XYCurve*> children = this->children<XYCurve>();
-	foreach(XYCurve* curve, children) {
-		if (!curve->isVisible())
-			continue;
-		if (!curve->yColumn())
-			continue;
+	if (d->curvesYMinMaxIsDirty) {
+		d->curvesYMin = INFINITY;
+		d->curvesYMax = -INFINITY;
+		QList<XYCurve*> children = this->children<XYCurve>();
+		foreach(XYCurve* curve, children) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->yColumn())
+				continue;
 
-		if (curve->yColumn()->minimum() != INFINITY){
-			if (curve->yColumn()->minimum() < min)
-				min = curve->yColumn()->minimum();
+			if (curve->yColumn()->minimum() != INFINITY){
+				if (curve->yColumn()->minimum() < d->curvesYMin)
+					d->curvesYMin = curve->yColumn()->minimum();
+			}
+
+			if (curve->yColumn()->maximum() != -INFINITY){
+				if (curve->yColumn()->maximum() > d->curvesYMax)
+					d->curvesYMax = curve->yColumn()->maximum();
+			}
 		}
 
-		if (curve->yColumn()->maximum() != -INFINITY){
-			if (curve->yColumn()->maximum() > max)
-				max = curve->yColumn()->maximum();
-		}
+		d->curvesYMinMaxIsDirty = false;
 	}
 
 	bool update = false;
-	if (min != d->yMin && min != INFINITY){
-		d->yMin = min;
+	if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY){
+		d->yMin = d->curvesYMin;
 		update = true;
 	}
 
-	if (max != d->yMax && max != -INFINITY){
-		d->yMax = max;
+	if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY){
+		d->yMax = d->curvesYMax;
 		update = true;
 	}
 
@@ -945,60 +956,72 @@ void CartesianPlot::scaleAuto(){
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum x-value
-	double xMin = INFINITY;
-	double xMax = -INFINITY;
-	double yMin = INFINITY;
-	double yMax = -INFINITY;
 	QList<XYCurve*> children = this->children<XYCurve>();
-	foreach(XYCurve* curve, children) {
-		if (!curve->isVisible())
-			continue;
-		if (!curve->xColumn())
-			continue;
+	if (d->curvesXMinMaxIsDirty) {
+		qDebug()<<"###################### updating X-min/max values";
+		d->curvesXMin = INFINITY;
+		d->curvesXMax = -INFINITY;
+		foreach(XYCurve* curve, children) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->xColumn())
+				continue;
 
-		if (curve->xColumn()->minimum() != INFINITY){
-			if (curve->xColumn()->minimum() < xMin)
-				xMin = curve->xColumn()->minimum();
+			if (curve->xColumn()->minimum() != INFINITY){
+				if (curve->xColumn()->minimum() < d->curvesXMin)
+					d->curvesXMin = curve->xColumn()->minimum();
+			}
+
+			if (curve->xColumn()->maximum() != -INFINITY){
+				if (curve->xColumn()->maximum() > d->curvesXMax)
+					d->curvesXMax = curve->xColumn()->maximum();
+			}
+
+			d->curvesXMinMaxIsDirty = false;
 		}
+	}
 
-		if (curve->xColumn()->maximum() != -INFINITY){
-			if (curve->xColumn()->maximum() > xMax)
-				xMax = curve->xColumn()->maximum();
-		}
+	if (d->curvesYMinMaxIsDirty) {
+		qDebug()<<"###################### updating Y-min/max values";
+		d->curvesYMin = INFINITY;
+		d->curvesYMax = -INFINITY;
+		foreach(XYCurve* curve, children) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->xColumn())
+				continue;
 
-		if (!curve->yColumn())
-			continue;
+			if (curve->yColumn()->minimum() != INFINITY){
+				if (curve->yColumn()->minimum() < d->curvesYMin)
+					d->curvesYMin = curve->yColumn()->minimum();
+			}
 
-		if (curve->yColumn()->minimum() != INFINITY){
-			if (curve->yColumn()->minimum() < yMin)
-				yMin = curve->yColumn()->minimum();
-		}
-
-		if (curve->yColumn()->maximum() != -INFINITY){
-			if (curve->yColumn()->maximum() > yMax)
-				yMax = curve->yColumn()->maximum();
+			if (curve->yColumn()->maximum() != -INFINITY){
+				if (curve->yColumn()->maximum() > d->curvesYMax)
+					d->curvesYMax = curve->yColumn()->maximum();
+			}
 		}
 	}
 
 	bool updateX = false;
 	bool updateY = false;
-	if (xMin != d->xMin && xMin != INFINITY){
-		d->xMin = xMin;
+	if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY){
+		d->xMin = d->curvesXMin;
 		updateX = true;
 	}
 
-	if (xMax != d->xMax && xMax != -INFINITY){
-		d->xMax = xMax;
+	if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY){
+		d->xMax = d->curvesXMax;
 		updateX = true;
 	}
 
-	if (yMin != d->yMin && yMin != INFINITY){
-		d->yMin = yMin;
+	if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY){
+		d->yMin = d->curvesYMin;
 		updateY = true;
 	}
 
-	if (yMax != d->yMax && yMax != -INFINITY){
-		d->yMax = yMax;
+	if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY){
+		d->yMax = d->curvesYMax;
 		updateY = true;
 	}
 
@@ -1149,8 +1172,8 @@ void CartesianPlot::visibilityChanged(){
 //################### Private implementation ##########################
 //#####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
-	: AbstractPlotPrivate(owner), q(owner),suppressRetransform(false),
-	m_printing(false), m_selectionBandIsShown(false), cSystem(0),
+	: AbstractPlotPrivate(owner), q(owner), curvesXMinMaxIsDirty(false), curvesYMinMaxIsDirty(false),
+	suppressRetransform(false), m_printing(false), m_selectionBandIsShown(false), cSystem(0),
 	mouseMode(CartesianPlot::SelectionMode){
 }
 
@@ -1578,6 +1601,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event){
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+// 	qDebug()<<"CartesianPlotPrivate::paint";
 	if (!isVisible())
 		return;
 

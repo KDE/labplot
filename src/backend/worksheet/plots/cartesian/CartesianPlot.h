@@ -83,6 +83,8 @@ class CartesianPlot:public AbstractPlot{
 		BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
 		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
+		BASIC_D_ACCESSOR_DECL(bool, xScaleBreakingEnabled, XScaleBreakingEnabled)
+		BASIC_D_ACCESSOR_DECL(bool, yScaleBreakingEnabled, YScaleBreakingEnabled)
 		CLASS_D_ACCESSOR_DECL(ScaleBreakings, xScaleBreakings, XScaleBreakings);
 		CLASS_D_ACCESSOR_DECL(ScaleBreakings, yScaleBreakings, YScaleBreakings);
 
@@ -143,6 +145,7 @@ class CartesianPlot:public AbstractPlot{
 		void dataChanged();
 		void xDataChanged();
 		void yDataChanged();
+		void curveVisibilityChanged();
 
 		void mouseModeChanged(QAction*);
 		void scaleAuto();

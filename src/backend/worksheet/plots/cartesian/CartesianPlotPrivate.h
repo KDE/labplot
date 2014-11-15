@@ -64,8 +64,14 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		bool autoScaleX, autoScaleY;
 		float autoScaleOffsetFactor;
 		CartesianPlot::Scale xScale, yScale;
+		bool xScaleBreakingEnabled;
+		bool yScaleBreakingEnabled;
 		CartesianPlot::ScaleBreakings xScaleBreakings;
 		CartesianPlot::ScaleBreakings yScaleBreakings;
+
+		//cached values of minimum and maximum for all visible curves
+		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;
+		double curvesXMin, curvesXMax, curvesYMin, curvesYMax;
 
 		bool suppressRetransform;
 		bool m_printing;

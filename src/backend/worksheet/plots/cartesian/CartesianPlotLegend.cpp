@@ -469,8 +469,13 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	prepareGeometryChange();
 
+	curvesList.clear();
 	QList<XYCurve*> children = q->m_plot->children<XYCurve>();
-	int curveCount = children.size();
+	foreach(XYCurve* curve, children) {
+		if (curve && curve->isVisible())
+			curvesList.push_back(curve);
+	}
+	int curveCount = curvesList.size();
 	columnCount = (curveCount<layoutColumnCount) ? curveCount : layoutColumnCount;
 	if (columnCount==0) //no curves available
 		rowCount = 0;
@@ -498,8 +503,11 @@ void CartesianPlotLegendPrivate::retransform() {
 			if ( index >= curveCount )
 				break;
 
-			curve = children.at(index);
+			curve = curvesList.at(index);
 			if (curve) {
+				if (!curve->isVisible())
+					continue;
+
 				w = fm.width(curve->name());
 				if (w>maxTextWidth)
 					maxTextWidth = w;
@@ -677,8 +685,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	}
 
 	//draw curve's line+symbol and the names
-	QList<XYCurve*> children = q->m_plot->children<XYCurve>();
-	int curveCount = children.size();
+	int curveCount = curvesList.size();
 	QFontMetrics fm(labelFont);
 	float h=fm.ascent();
 	XYCurve* curve;
@@ -707,9 +714,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 			if ( index >= curveCount )
 				break;
 
-			curve = children.at(index);
-			if (!curve)
-				continue;
+			curve = curvesList.at(index);
 
 			//curve's line (painted at the half of the ascent size)
 			if (curve->lineType() != XYCurve::NoLine){

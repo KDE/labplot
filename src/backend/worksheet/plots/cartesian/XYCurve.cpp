@@ -153,7 +153,7 @@ void XYCurve::init(){
 void XYCurve::initActions(){
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(curveVisibilityChanged()));
 }
 
 QMenu* XYCurve::createContextMenu(){
@@ -667,7 +667,7 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void XYCurve::visibilityChanged(){
+void XYCurve::curveVisibilityChanged(){
 	Q_D(const XYCurve);
 	this->setVisible(!d->isVisible());
 }
@@ -708,6 +708,7 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
 bool XYCurvePrivate::swapVisible(bool on){
 	bool oldValue = isVisible();
 	setVisible(on);
+	emit q->visibilityChanged();
 	return oldValue;
 }
 

@@ -36,6 +36,7 @@
 #include <QFont>
 
 class CartesianPlotLegend;
+class XYCurve;
 class QGraphicsSceneContextMenuEvent;
 
 class CartesianPlotLegendPrivate : public QGraphicsItem {
@@ -61,6 +62,7 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		bool m_printing;
 		bool m_hovered;
 
+		QList<XYCurve*> curvesList; //list containing all visible curves
 		QRectF rect;
 		QFont labelFont;
 		QColor labelColor;
