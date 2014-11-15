@@ -886,7 +886,7 @@ void AxisPrivate::retransformLine(){
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping|AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
 	foreach (const QLineF& line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -1198,7 +1198,7 @@ void AxisPrivate::retransformTicks(){
 		}
 
 		//minor ticks
-		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0)) {
+		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor<tmpMajorTicksNumber-1)) {
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				if (minorTicksType != Axis::TicksCustomColumn) {
 					switch (scale){
@@ -1634,7 +1634,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-	qDebug()<<"AxisPrivate::paint " << q->name();
+// 	qDebug()<<"AxisPrivate::paint " << q->name();
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
