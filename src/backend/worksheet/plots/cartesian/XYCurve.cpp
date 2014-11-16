@@ -347,7 +347,7 @@ void XYCurve::setDropLinePen(const QPen &pen) {
 		exec(new XYCurveSetDropLinePenCmd(d, pen, i18n("%1: set drop line style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLineOpacity, qreal, dropLineOpacity, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLineOpacity, qreal, dropLineOpacity, updatePixmap)
 void XYCurve::setDropLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->dropLineOpacity)
@@ -376,7 +376,7 @@ void XYCurve::setSymbolsRotationAngle(qreal angle) {
 		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, i18n("%1: rotate symbols")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, updatePixmap)
 void XYCurve::setSymbolsBrush(const QBrush &brush) {
 	Q_D(XYCurve);
 	if (brush != d->symbolsBrush)
@@ -390,7 +390,7 @@ void XYCurve::setSymbolsPen(const QPen &pen) {
 		exec(new XYCurveSetSymbolsPenCmd(d, pen, i18n("%1: set symbol outline style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, updatePixmap)
 void XYCurve::setSymbolsOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->symbolsOpacity)
@@ -439,7 +439,7 @@ void XYCurve::setValuesRotationAngle(qreal angle) {
 		exec(new XYCurveSetValuesRotationAngleCmd(d, angle, i18n("%1: rotate values")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesOpacity, qreal, valuesOpacity, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesOpacity, qreal, valuesOpacity, updatePixmap)
 void XYCurve::setValuesOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->valuesOpacity)
@@ -469,7 +469,7 @@ void XYCurve::setValuesFont(const QFont& font) {
 		exec(new XYCurveSetValuesFontCmd(d, font, i18n("%1: set values font")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColor, QColor, valuesColor, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesColor, QColor, valuesColor, updatePixmap)
 void XYCurve::setValuesColor(const QColor& color) {
 	Q_D(XYCurve);
 	if (color != d->valuesColor)
@@ -564,7 +564,7 @@ void XYCurve::setErrorBarsPen(const QPen& pen) {
 		exec(new XYCurveSetErrorBarsPenCmd(d, pen, i18n("%1: set error bar style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsOpacity, qreal, errorBarsOpacity, update)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsOpacity, qreal, errorBarsOpacity, updatePixmap)
 void XYCurve::setErrorBarsOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->errorBarsOpacity)
@@ -1427,6 +1427,8 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	//simplified() removes those artifacts but is horrible slow for curves with large number of points.
 	//search for an alternative.
 	//curveShape = curveShape.simplified();
+
+	updatePixmap();
 }
 
 QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
@@ -1451,61 +1453,80 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 	return oldId;
 }
 
+void XYCurvePrivate::updatePixmap() {
+// 	QTime timer;
+// 	timer.start();
+	QPixmap pixmap(boundingRectangle.width()+1, boundingRectangle.height()+1);
+	pixmap.fill(Qt::transparent);
+	QPainter painter(&pixmap);
+	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.translate(-boundingRectangle.topLeft());
+
+	//draw lines
+	if (lineType != XYCurve::NoLine){
+		painter.setOpacity(lineOpacity);
+		painter.setPen(linePen);
+		painter.setBrush(Qt::NoBrush);
+		painter.drawPath(linePath);
+	}
+
+	//draw drop lines
+	if (dropLineType != XYCurve::NoDropLine){
+		painter.setOpacity(dropLineOpacity);
+		painter.setPen(dropLinePen);
+		painter.setBrush(Qt::NoBrush);
+		painter.drawPath(dropLinePath);
+	}
+
+	//draw error bars
+	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
+		painter.setOpacity(errorBarsOpacity);
+		painter.setPen(errorBarsPen);
+		painter.setBrush(Qt::NoBrush);
+		painter.drawPath(errorBarsPath);
+	}
+
+	//draw symbols
+	if (symbolsPrototype->id() != "none"){
+		painter.setOpacity(symbolsOpacity);
+		painter.setPen(symbolsPen);
+		painter.setBrush(symbolsBrush);
+		drawSymbols(&painter);
+	}
+
+	//draw values
+	if (valuesType != XYCurve::NoValues){
+		painter.setOpacity(valuesOpacity);
+		painter.setPen(valuesColor);
+		painter.setBrush(Qt::SolidPattern);
+		drawValues(&painter);
+	}
+
+	m_pixmap = pixmap;
+// 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
+}
+
 /*!
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
-	qDebug()<<"XYCurvePrivate::paint, " + q->name();
+// 	qDebug()<<"XYCurvePrivate::paint, " + q->name();
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!isVisible())
 		return;
 
 // 	QTime timer;
-
-	//draw lines
-	if (lineType != XYCurve::NoLine){
-		painter->setOpacity(lineOpacity);
-		painter->setPen(linePen);
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(linePath);
-	}
-
-	//draw drop lines
-	if (dropLineType != XYCurve::NoDropLine){
-		painter->setOpacity(dropLineOpacity);
-		painter->setPen(dropLinePen);
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(dropLinePath);
-	}
-
-	//draw error bars
-	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
-		painter->setOpacity(errorBarsOpacity);
-		painter->setPen(errorBarsPen);
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(errorBarsPath);
-	}
-
 // 	timer.start();
-	//draw symbols
-	if (symbolsPrototype->id() != "none"){
-		painter->setOpacity(symbolsOpacity);
-		painter->setPen(symbolsPen);
-		painter->setBrush(symbolsBrush);
-		drawSymbols(painter);
-	}
-
-	//draw values
-	if (valuesType != XYCurve::NoValues){
-		painter->setOpacity(valuesOpacity);
-		painter->setPen(valuesColor);
-		painter->setBrush(Qt::SolidPattern);
-		drawValues(painter);
-	}
-// 	qDebug() << "Paint the curve: " << timer.elapsed() << "ms";
-
+	painter->save();
+    painter->setPen(Qt::NoPen);
+	painter->setBrush(Qt::NoBrush);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
+	painter->restore();
+// 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
+// 	qDebug()<<this->boundingRect() << "   " << m_pixmap.size();
 
 	if (m_hovered && !isSelected() && !m_printing){
 // 		timer.start();

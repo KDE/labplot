@@ -48,6 +48,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		bool m_printing;
 		bool m_hovered;
 		bool m_suppressRecalc;
+		QPixmap m_pixmap;
 
 		void retransform();
 		void updateLines();
@@ -60,6 +61,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		void recalcShapeAndBoundingRect();
 		void drawSymbols(QPainter*);
 		void drawValues(QPainter*);
+		void updatePixmap();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
 
