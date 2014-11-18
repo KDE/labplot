@@ -571,6 +571,11 @@ void XYCurve::setErrorBarsOpacity(qreal opacity) {
 		exec(new XYCurveSetErrorBarsOpacityCmd(d, opacity, i18n("%1: set error bar opacity")));
 }
 
+void XYCurve::suppressRetransform(bool b) {
+	Q_D(XYCurve);
+	d->m_suppressRetransform = b;
+}
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -675,7 +680,7 @@ void XYCurve::curveVisibilityChanged(){
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), m_hovered(false), m_suppressRecalc(false), symbolsFactory(0), q(owner) {
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), m_hovered(false), m_suppressRecalc(false), m_suppressRetransform(false), symbolsFactory(0), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);
 
@@ -717,6 +722,10 @@ bool XYCurvePrivate::swapVisible(bool on){
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform(){
+	if (m_suppressRetransform){
+		return;
+	}
+
 	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();

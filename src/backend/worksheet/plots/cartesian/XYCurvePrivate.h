@@ -48,6 +48,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		bool m_printing;
 		bool m_hovered;
 		bool m_suppressRecalc;
+		bool m_suppressRetransform;
 		QPixmap m_pixmap;
 
 		void retransform();

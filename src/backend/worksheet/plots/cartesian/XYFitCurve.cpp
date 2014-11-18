@@ -1025,11 +1025,10 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 		d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
 
 		setUndoAware(false);
-		setXColumn(d->xColumn);
-		setYColumn(d->yColumn);
+		XYCurve::d_ptr->xColumn = d->xColumn;
+		XYCurve::d_ptr->yColumn = d->yColumn;
 		setUndoAware(true);
 	}
 
-	retransform();
 	return true;
 }

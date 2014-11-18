@@ -32,6 +32,7 @@
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
 #include "XYFitCurve.h"
+#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
@@ -749,6 +750,9 @@ void CartesianPlot::dataChanged(){
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::xDataChanged(){
+	if (project()->isLoading())
+		return;
+
 	qDebug()<<"CartesianPlot::xDataChanged()";
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
@@ -765,6 +769,9 @@ void CartesianPlot::xDataChanged(){
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::yDataChanged(){
+	if (project()->isLoading())
+		return;
+
 	qDebug()<<"CartesianPlot::yDataChanged()";
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
@@ -1203,8 +1210,6 @@ void CartesianPlotPrivate::retransform(){
 	q->title()->retransform();
 	if (q->m_legend)
 		q->m_legend->retransform();
-
-	q->retransform();
 }
 
 void CartesianPlotPrivate::retransformScales(){

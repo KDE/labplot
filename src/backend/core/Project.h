@@ -68,6 +68,7 @@ class Project : public Folder {
 		CLASS_D_ACCESSOR_DECL(QString, author, Author)
 		CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 
+		bool isLoading() const;
 		void setChanged(const bool value=true);
 		bool hasChanged() const;
 
@@ -86,7 +87,7 @@ class Project : public Folder {
 		void requestFolderContextMenu(const Folder*, QMenu*);
 		void mdiWindowVisibilityChanged();
 		void changed();
-		
+
 	private:
 		class Private;
 		Private* d;

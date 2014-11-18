@@ -184,6 +184,10 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	emit changed();
 }
 
+bool Project::isLoading() const {
+	return d->loading;
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -287,6 +291,7 @@ bool Project::load(XmlStreamReader* reader) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
 					} else {
+						curve->suppressRetransform(true);
 						XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
 						if (fitCurve) {
 							RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
@@ -301,6 +306,8 @@ bool Project::load(XmlStreamReader* reader) {
 							RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 							RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 						}
+						curve->suppressRetransform(false);
+						curve->retransform();
 					}
 				}
 
