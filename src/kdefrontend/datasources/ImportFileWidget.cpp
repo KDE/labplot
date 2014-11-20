@@ -83,7 +83,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
-    connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged()) );
+    connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
     connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
     connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );

@@ -286,6 +286,7 @@ bool Project::load(XmlStreamReader* reader) {
 					XYCurve* curve = dynamic_cast<XYCurve*>(aspect);
 					if (!curve) continue;
 
+					curve->suppressRetransform(true);
 					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(aspect);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
@@ -305,9 +306,9 @@ bool Project::load(XmlStreamReader* reader) {
 							RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 							RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 						}
-						curve->suppressRetransform(false);
-						curve->retransform();
 					}
+					curve->suppressRetransform(false);
+					curve->retransform();
 				}
 
 				//Axes

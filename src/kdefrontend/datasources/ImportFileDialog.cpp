@@ -185,7 +185,10 @@ void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
 
 	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
+	QTime timer;
+	timer.start();
 	filter->read(fileName, sheet, mode);
+	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
 	QApplication::restoreOverrideCursor();
 
 	statusBar->removeWidget(progressBar);
