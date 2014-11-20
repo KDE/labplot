@@ -291,7 +291,6 @@ bool Project::load(XmlStreamReader* reader) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
 					} else {
-						curve->suppressRetransform(true);
 						XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
 						if (fitCurve) {
 							RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
