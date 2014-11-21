@@ -681,7 +681,7 @@ void XYCurve::curveVisibilityChanged(){
 //######################### Private implementation #############################
 //##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), m_hovered(false), m_suppressRecalc(false),
-	m_suppressRetransform(true), symbolsFactory(0), q(owner) {
+	m_suppressRetransform(false), symbolsFactory(0), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);
 
