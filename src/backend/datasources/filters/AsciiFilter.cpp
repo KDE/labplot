@@ -443,30 +443,30 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	//pointers to the actual data containers
-// 	QVector<QVector<double>*> dataPointers;
-// 	for ( int n=startColumn; n<=endColumn; n++ ){
-// 		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-startColumn)->data());
-// // 		vector->resize(numLines);
-// 		dataPointers.push_back(vector);
-// 	}
+	QVector<QVector<double>*> dataPointers;
+	for ( int n=startColumn; n<=endColumn; n++ ){
+		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-startColumn)->data());
+		vector->reserve(numLines);
+		vector->resize(numLines);
+		dataPointers.push_back(vector);
+	}
 
 	//import the values in the first line, if they were not used as the header (as the names for the columns)
 	if (!headerEnabled){
 		for ( int n=startColumn; n<=endColumn; n++ ){
-// 			dataPointers[n-startColumn]->insert(0, lineStringList.at(n).toDouble());
-			Column* column = dataSource->child<Column>(columnOffset+n-startColumn);
-			if (n<lineStringList.size()){
+			if (n<lineStringList.size()) {
 				bool isNumber;
-				double value = lineStringList.at(n).toDouble(&isNumber);
-				isNumber ? column->setValueAt(0, value) : column->setValueAt(currentRow, NAN);
-			}else{
-				column->setValueAt(0, NAN);
+				const double value = lineStringList.at(n).toDouble(&isNumber);
+				isNumber ? dataPointers[columnOffset+n-startColumn]->operator[](0) = value : dataPointers[columnOffset+n-startColumn]->operator[](0) = NAN;
+			} else {
+				dataPointers[columnOffset+n-startColumn]->operator[](0) = NAN;
 			}
-	  }
-	  currentRow++;
+		}
+		currentRow++;
 	}
 
 	//first line in the file is parsed. Read the remainder of the file.
+	bool isNumber;
 	for (int i=0; i<numLines; i++){
 		line = in.readLine();
 
@@ -486,18 +486,11 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 
 		// TODO : read strings (comments) or datetime too
 		for ( int n=startColumn; n<=endColumn; n++ ){
-// 			if (n<lineStringList.size())
-// 				dataPointers[n-startColumn]->insert(i, lineStringList.at(n).toDouble());
-// 			else
-// 				dataPointers[n-startColumn]->operator[](i) = 0;
-
-			Column* column = dataSource->child<Column>(columnOffset+n-startColumn);
-			if (n<lineStringList.size()){
-				bool isNumber;
-				double value = lineStringList.at(n).toDouble(&isNumber);
-				isNumber ? column->setValueAt(currentRow, value) : column->setValueAt(currentRow, NAN);
-			}else{
-				column->setValueAt(currentRow, NAN);
+			if (n<lineStringList.size()) {
+				const double value = lineStringList.at(n).toDouble(&isNumber);
+				isNumber ? dataPointers[columnOffset+n-startColumn]->operator[](currentRow) = value : dataPointers[columnOffset+n-startColumn]->operator[](currentRow) = NAN;
+			} else {
+				dataPointers[columnOffset+n-startColumn]->operator[](currentRow) = NAN;
 			}
 		}
 
