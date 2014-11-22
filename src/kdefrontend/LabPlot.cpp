@@ -48,6 +48,7 @@ int main (int argc, char *argv[]) {
 	aboutData.setHomepage("http://www.labplot.sourceforge.net");
 	aboutData.addAuthor(ki18n("Stefan Gerlach"), ki18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
 	aboutData.addAuthor(ki18n("Alexander Semke"), ki18n("developer"), "alexander.semke@web.de", 0);
+	aboutData.addAuthor(ki18n("Andreas Kainz"), ki18n("icon designer"), "kainz.a@gmail.com", 0);
 
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineOptions options;
@@ -105,7 +106,7 @@ int main (int argc, char *argv[]) {
 
 	// needed in order to have the signals triggered by SignallingUndoCommand
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");	
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
 	MainWin* window = new MainWin(0,filename);
 	window->show();
