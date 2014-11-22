@@ -88,20 +88,45 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
     connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 
+	//load last used settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+
+	//general settings
 	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
 
+	//settings for ascii data
+	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
+	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
+	asciiOptionsWidget.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
+	asciiOptionsWidget.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
+	asciiOptionsWidget.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
+	asciiOptionsWidget.kleVectorNames->setText(conf.readEntry("Names", ""));
+
 	filterChanged(ui.cbFilter->currentIndex());
+
+	//TODO: implement save/load of user-defined settings later and activate these buttons again
+	ui.bSaveFilter->hide();
+	ui.bManageFilters->hide();
 }
 
 ImportFileWidget::~ImportFileWidget() {
-    //save the last selected file to KConfigGroup
+    //save current settings
     KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+
+	//general settings
     conf.writeEntry("LastImportedFile", ui.kleFileName->text());
 	conf.writeEntry("Type", ui.cbFileType->currentIndex());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
+
+	//settings for ascii data
+	conf.writeEntry("CommentCharacter", asciiOptionsWidget.cbCommentCharacter->currentText());
+	conf.writeEntry("SeparatingCharacter", asciiOptionsWidget.cbSeparatingCharacter->currentText());
+	conf.writeEntry("SimplifyWhitespaces", asciiOptionsWidget.chbSimplifyWhitespaces->isChecked());
+	conf.writeEntry("SkipEmptyParts", asciiOptionsWidget.chbSkipEmptyParts->isChecked());
+	conf.writeEntry("UseFirstRow", asciiOptionsWidget.chbHeader->isChecked());
+	conf.writeEntry("Names", asciiOptionsWidget.kleVectorNames->text());
 }
 
 void ImportFileWidget::hideDataSource() const{

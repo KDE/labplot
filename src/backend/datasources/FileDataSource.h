@@ -61,6 +61,7 @@ class FileDataSource : public Spreadsheet {
 		QString fileName() const;
 
 		void setFilter(AbstractFileFilter*);
+		AbstractFileFilter* filter() const;
 
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
@@ -79,7 +80,7 @@ class FileDataSource : public Spreadsheet {
 		bool m_fileLinked;
 		AbstractFileFilter* m_filter;
 		QFileSystemWatcher* m_fileSystemWatcher;
-		
+
 		QAction* m_reloadAction;
 		QAction* m_toggleLinkAction;
 		QAction* m_toggleWatchAction;
@@ -88,7 +89,7 @@ class FileDataSource : public Spreadsheet {
 
 	public slots:
 		void read();
-	
+
 	private slots:
 		void fileChanged();
 		void watchToggled();

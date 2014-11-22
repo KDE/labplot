@@ -155,13 +155,26 @@ void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
 /*!
   triggers data import to the file data source \c source
 */
-void ImportFileDialog::importToFileDataSource(FileDataSource* source) const{
+void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar* statusBar) const {
 	importFileWidget->saveSettings(source);
 
-	//TODO: add progress bar
+		//show a progress bar in the status bar
+	QProgressBar* progressBar = new QProgressBar();
+	progressBar->setMinimum(0);
+	progressBar->setMaximum(100);
+	connect(source->filter(), SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+
+	statusBar->clearMessage();
+	statusBar->addWidget(progressBar, 1);
 	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+
+	QTime timer;
+	timer.start();
 	source->read();
+	statusBar->showMessage( i18n("File data source created in %1 seconds.").arg((float)timer.elapsed()/1000) );
+
 	QApplication::restoreOverrideCursor();
+	statusBar->removeWidget(progressBar);
 }
 
 /*!
@@ -185,12 +198,13 @@ void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
 
 	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	QTime timer;
 	timer.start();
 	filter->read(fileName, sheet, mode);
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
-	QApplication::restoreOverrideCursor();
 
+	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
 	delete filter;
 }

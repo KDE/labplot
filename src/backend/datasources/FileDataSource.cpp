@@ -134,6 +134,10 @@ void FileDataSource::setFilter(AbstractFileFilter* f){
  	m_filter=f;
 }
 
+AbstractFileFilter* FileDataSource::filter() const {
+	return m_filter;
+}
+
 /*!
   sets whether the file should be watched or not.
   In the first case the data source will be automatically updated on file changes.

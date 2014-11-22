@@ -52,7 +52,7 @@ class ImportFileDialog: public KDialog {
 	explicit ImportFileDialog(QWidget*);
 	~ImportFileDialog();
 
-	void importToFileDataSource(FileDataSource*) const;
+	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
 	void importToSpreadsheet(QStatusBar*) const;
 	void setModel(std::auto_ptr<QAbstractItemModel>);
 	void updateModel(std::auto_ptr<QAbstractItemModel>);

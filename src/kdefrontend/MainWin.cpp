@@ -1299,7 +1299,7 @@ void MainWin::newFileDataSourceActionTriggered(){
   ImportFileDialog* dlg = new ImportFileDialog(this);
   if ( dlg->exec() == QDialog::Accepted ) {
 	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
-	  dlg->importToFileDataSource(dataSource);
+	  dlg->importToFileDataSource(dataSource, statusBar());
 	  this->addAspectToProject(dataSource);
 	  kDebug()<<"new file data source created"<<endl;
   }
