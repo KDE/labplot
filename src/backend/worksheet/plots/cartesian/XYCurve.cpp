@@ -96,7 +96,7 @@ void XYCurve::init(){
 	d->xColumn = NULL;
 	d->yColumn = NULL;
 
-	d->lineType = (XYCurve::LineType) group.readEntry("LineType", (int)XYCurve::NoLine);
+	d->lineType = (XYCurve::LineType) group.readEntry("LineType", (int)XYCurve::Line);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
 	d->linePen.setColor( group.readEntry("LineColor", QColor(Qt::black)) );
@@ -145,7 +145,7 @@ void XYCurve::init(){
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
 
 	// set type after all defaults
-	d->swapSymbolsTypeId(group.readEntry("SymbolStyle", "diamond"));
+	d->swapSymbolsTypeId(group.readEntry("SymbolStyle", "none"));
 
 	this->initActions();
 }
