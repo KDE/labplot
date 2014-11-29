@@ -924,11 +924,11 @@ void CartesianPlotDock::plotVisibleChanged(bool on){
 
 //scale breakings
 void CartesianPlotDock::plotXScaleBreakingChanged(const CartesianPlot::ScaleBreakings& breakings) {
-
+	Q_UNUSED(breakings);
 }
 
 void CartesianPlotDock::plotYScaleBreakingChanged(const CartesianPlot::ScaleBreakings& breakings) {
-
+	Q_UNUSED(breakings);
 }
 
 //background

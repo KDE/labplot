@@ -50,7 +50,6 @@ class XYFitCurvePrivate: public XYCurvePrivate {
 		QString xDataColumnPath;
 		QString yDataColumnPath;
 		QString weightsColumnPath;
-		bool sourceDataChangedSinceLastFit; //<! \c true if the data in the source columns (x, y, or weights) was changed, \c false otherwise
 
 		XYFitCurve::FitData fitData;
 		XYFitCurve::FitResult fitResult;
@@ -62,6 +61,8 @@ class XYFitCurvePrivate: public XYCurvePrivate {
 		QVector<double>* xVector;
 		QVector<double>* yVector;
 		QVector<double>* residualsVector;
+
+		bool sourceDataChangedSinceLastFit; //<! \c true if the data in the source columns (x, y, or weights) was changed, \c false otherwise
 
 		XYFitCurve* const q;
 

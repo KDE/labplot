@@ -246,7 +246,9 @@ void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
 	void * old_data = m_data;
 	// remark: the deletion of the old data will be done in the dtor of a command
 
-	AbstractSimpleFilter *filter, *new_in_filter, *new_out_filter;
+	AbstractSimpleFilter* filter = 0;
+	AbstractSimpleFilter* new_in_filter = 0;
+	AbstractSimpleFilter* new_out_filter = 0;
 	bool filter_is_temporary = false; // it can also become outputFilter(), which we may not delete here
 	Column* temp_col = 0;
 
