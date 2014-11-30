@@ -50,6 +50,10 @@ class XYCurvePrivate: public QGraphicsItem {
 		bool m_suppressRecalc;
 		bool m_suppressRetransform;
 		QPixmap m_pixmap;
+		QImage m_hoverEffectImage;
+		QImage m_selectionEffectImage;
+		bool m_hoverEffectImageIsDirty;
+		bool m_selectionEffectImageIsDirty;
 
 		void retransform();
 		void updateLines();
