@@ -517,6 +517,8 @@ bool MainWin::newProject(){
 	if (!closeProject())
 		return false;
 
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	if (m_project)
 		delete m_project;
 

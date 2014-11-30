@@ -35,6 +35,7 @@
 #include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/datasources/FileDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 /*!
@@ -91,15 +92,26 @@ void ColumnDock::setColumns(QList<Column*> list){
 	bool nonEditable = false;
 	foreach(Column* col, m_columnsList){
 		Spreadsheet* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
-		if (!s) {
+		if (s) {
+			if (dynamic_cast<FileDataSource*>(s)) {
+				nonEditable = true;
+				break;
+			}
+		} else {
 			nonEditable = true;
 			break;
 		}
 	}
 
 	if (list.size()==1){
-		ui.leName->setEnabled(!nonEditable);
-		ui.leComment->setEnabled(!nonEditable);
+		//names and comments of non-editable columns in a file data source can be changed.
+		if ( !nonEditable && dynamic_cast<FileDataSource*>(m_column->parentAspect())!=0 ) {
+			ui.leName->setEnabled(false);
+			ui.leComment->setEnabled(false);
+		} else {
+			ui.leName->setEnabled(true);
+			ui.leComment->setEnabled(true);
+		}
 
 		ui.leName->setText(m_column->name());
 		ui.leComment->setText(m_column->comment());
