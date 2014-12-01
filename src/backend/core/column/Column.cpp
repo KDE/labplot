@@ -34,8 +34,11 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
-#include <KIcon>
+
 #include <QMetaEnum>
+#include <QThreadPool>
+
+#include <KIcon>
 #include <KLocale>
 
 /**
@@ -539,6 +542,22 @@ void Column::save(QXmlStreamWriter * writer) const
 	writer->writeEndElement(); // "column"
 }
 
+
+class DecodeColumnTask : public QRunnable {
+	public:
+		DecodeColumnTask(Column::Private* priv, const QString& content) { m_private =priv; m_content = content;};
+		void run() {
+			QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
+			QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
+			memcpy(data->data(), bytes.data(), (bytes.size()/sizeof(double))*sizeof(double));
+			m_private->replaceData(data);
+		}
+
+	private:
+		Column::Private* m_private;
+		QString m_content;
+};
+
 /**
  * \brief Load the column from XML
  */
@@ -623,10 +642,8 @@ bool Column::load(XmlStreamReader * reader)
 			}
 			QString content = reader->text().toString().trimmed();
 			if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
-				QByteArray bytes = QByteArray::fromBase64(content.toAscii());
-				QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
-				memcpy(data->data(), bytes.data(), (bytes.size()/sizeof(double))*sizeof(double));
-				m_column_private->replaceData(data);
+				DecodeColumnTask* task = new DecodeColumnTask(m_column_private, content);
+				QThreadPool::globalInstance()->start(task);
 			}
 		}
 	}

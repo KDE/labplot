@@ -39,6 +39,7 @@
 #include <QUndoStack>
 #include <QMenu>
 #include <QDateTime>
+#include <QThreadPool>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -273,6 +274,9 @@ bool Project::load(XmlStreamReader* reader) {
 					}
 				}
 			}
+
+			//wait until all columns are decoded from base64-encoded data
+			QThreadPool::globalInstance()->waitForDone();
 
 			//everything is read now.
 			//restore the pointer to the data sets (columns) in xy-curves etc.
