@@ -3,10 +3,10 @@
     Project              : AbstractColumn
     Description          : Commands to be called by Column to modify Column::Private
     --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-	 								(C) 2010 by Knut Franke
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+						   (C) 2010 by Knut Franke
+						   (C) 2013-2014 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,10 +31,11 @@
 #include "columncommands.h"
 #include "ColumnPrivate.h"
 #include <KLocale>
+#include <cmath>
 
 /** ***************************************************************************
  * \class ColumnSetModeCmd
- * \brief Set the column mode 
+ * \brief Set the column mode
  ** ***************************************************************************/
 
 /**
@@ -148,7 +149,7 @@ void ColumnSetModeCmd::redo()
 	if(!m_executed)
 	{
 		// save old values
-		m_old_mode = m_col->columnMode();	
+		m_old_mode = m_col->columnMode();
 		m_old_data = m_col->dataPointer();
 		m_old_in_filter = m_col->inputFilter();
 		m_old_out_filter = m_col->outputFilter();
@@ -183,7 +184,7 @@ void ColumnSetModeCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnFullCopyCmd
- * \brief Copy a complete column 
+ * \brief Copy a complete column
  ** ***************************************************************************/
 
 /**
@@ -236,7 +237,7 @@ void ColumnFullCopyCmd::redo()
 	if(m_backup == 0)
 	{
 		m_backup_owner = new Column("temp", m_src->columnMode());
-		m_backup = new Column::Private(m_backup_owner, m_src->columnMode()); 
+		m_backup = new Column::Private(m_backup_owner, m_src->columnMode());
 		m_backup->copy(m_col);
 		m_col->copy(m_src);
 	}
@@ -374,7 +375,7 @@ void ColumnPartialCopyCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnInsertRowsCmd
- * \brief Insert empty rows 
+ * \brief Insert empty rows
  ** ***************************************************************************/
 
 /**
@@ -478,14 +479,14 @@ void ColumnRemoveRowsCmd::redo()
 	{
 		if(m_first >= m_col->rowCount())
 			m_data_row_count = 0;
-		else if(m_first + m_count > m_col->rowCount()) 
+		else if(m_first + m_count > m_col->rowCount())
 			m_data_row_count = m_col->rowCount() - m_first;
 		else
 			m_data_row_count = m_count;
 
 		m_old_size = m_col->rowCount();
 		m_backup_owner = new Column("temp", m_col->columnMode());
-		m_backup = new Column::Private(m_backup_owner, m_col->columnMode()); 
+		m_backup = new Column::Private(m_backup_owner, m_col->columnMode());
 		m_backup->copy(m_col, m_first, 0, m_data_row_count);
 		m_formulas = m_col->formulaAttribute();
 	}
@@ -602,7 +603,7 @@ void ColumnSetWidthCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnClearCmd
- * \brief Clear the column 
+ * \brief Clear the column
  ** ***************************************************************************/
 
 /**
@@ -681,11 +682,17 @@ ColumnClearCmd::~ColumnClearCmd()
 void ColumnClearCmd::redo()
 {
 	if(!m_empty_data) {
-		int rowCount = m_col->rowCount();
+		const int rowCount = m_col->rowCount();
 		switch(m_col->columnMode()) {
 			case AbstractColumn::Numeric:
-				m_empty_data = new QVector<double>(rowCount);
+			{
+				QVector<double>* vec = new QVector<double>(rowCount);
+				m_empty_data = vec;
+				for (int i=0; i<rowCount; i++) {
+					vec->operator[](i) = NAN;
+				}
 				break;
+			}
 			case AbstractColumn::DateTime:
 			case AbstractColumn::Month:
 			case AbstractColumn::Day:
@@ -785,7 +792,7 @@ void ColumnSetFormulaCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnClearFormulasCmd
- * \brief Clear all associated formulas 
+ * \brief Clear all associated formulas
  ** ***************************************************************************/
 
 /**
@@ -843,7 +850,7 @@ void ColumnClearFormulasCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnSetTextCmd
- * \brief Set the text for a string cell 
+ * \brief Set the text for a string cell
  ** ***************************************************************************/
 
 /**
@@ -909,7 +916,7 @@ void ColumnSetTextCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnSetValueCmd
- * \brief Set the value for a double cell 
+ * \brief Set the value for a double cell
  ** ***************************************************************************/
 
 /**
@@ -975,7 +982,7 @@ void ColumnSetValueCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnSetDataTimeCmd
- * \brief Set the value of a date-time cell 
+ * \brief Set the value of a date-time cell
  ** ***************************************************************************/
 
 /**
@@ -1041,7 +1048,7 @@ void ColumnSetDateTimeCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnReplaceTextsCmd
- * \brief Replace a range of strings in a string column 
+ * \brief Replace a range of strings in a string column
  ** ***************************************************************************/
 
 /**
@@ -1117,7 +1124,7 @@ void ColumnReplaceTextsCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnReplaceValuesCmd
- * \brief Replace a range of doubles in a double column 
+ * \brief Replace a range of doubles in a double column
  ** ***************************************************************************/
 
 /**
@@ -1193,7 +1200,7 @@ void ColumnReplaceValuesCmd::undo()
 
 /** ***************************************************************************
  * \class ColumnReplaceDateTimesCmd
- * \brief Replace a range of date-times in a date-time column 
+ * \brief Replace a range of date-times in a date-time column
  ** ***************************************************************************/
 
 /**
