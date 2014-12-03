@@ -1724,7 +1724,8 @@ void AxisDock::loadConfig(KConfig& config){
   	ui.leScalingFactor->setText( QString::number( group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
 
 	//Title
-	labelWidget->loadConfig(group);
+	KConfigGroup axisLabelGroup = config.group("AxisLabel");
+	labelWidget->loadConfig(axisLabelGroup);
 
 	//Line
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_axis->linePen().style()) );
@@ -1824,7 +1825,8 @@ void AxisDock::saveConfig(KConfig& config){
 	group.writeEntry("ScalingFactor", ui.leScalingFactor->text());
 
 	//Title
-	labelWidget->saveConfig(group);
+	KConfigGroup axisLabelGroup = config.group("AxisLabel");
+	labelWidget->saveConfig(axisLabelGroup);
 
 	//Line
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());

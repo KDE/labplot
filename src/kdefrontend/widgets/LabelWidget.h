@@ -2,8 +2,8 @@
     File                 : LabelWidget.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2008-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
  ***************************************************************************/
@@ -41,7 +41,6 @@ class LabelWidget: public QWidget{
 
 public:
 	explicit LabelWidget(QWidget *);
-	~LabelWidget();
 
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
@@ -49,7 +48,7 @@ public:
 	void load();
 	void loadConfig(KConfigGroup&);
 	void saveConfig(KConfigGroup&);
-	
+
 	void setNoGeometryMode(const bool);
 	void setFixedLabelMode(const bool);
 
@@ -93,9 +92,9 @@ private slots:
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
 	void offsetChanged(double);
-	
+
 	void visibilityChanged(bool);
-	
+
 	//SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
 	void labelTeXFontSizeChanged(const int);
