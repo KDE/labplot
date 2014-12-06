@@ -206,29 +206,97 @@ The Project Explorer is the main part of &LabPlot; aimed to handle its objects.
 </imageobject></mediaobject></screenshot>
 </sect1>
 
-<!-- TODO:
-
-Describe the basic functionality of the spreadsheet.
--->
 
 <sect1 id="spreadsheet">
 <title>The Spreadsheet</title>
+<para>
+The spreadsheet is the main part of &LabPlot; when working with data and consists of columns.
+Column is the basic data set in LabPlot used for plotting and data analysis.
+Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and data and time.
+Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns etc.
+</para>
+<para>
+You can mask certain data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
+Masked data is not plotted and is also excluded from data analysis functions like fitting etc.
+<!-- The masking of datapoints can be later influenced in the graph list dialog. -->
+</para>
+<para>
+Any spreadsheet function can be reached via the context menu (&RMB; click).
+You can cut, copy and paste between spreadsheets, generate, normalize and sort data and finally make plots out of your data.
+Of course you can also export the data in the spreadsheet.
+</para>
+
 <screenshot><mediaobject><imageobject>
       <imagedata fileref="spreadsheet.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
+
 <para>
-The spreadsheet is the main part of &LabPlot; when working with data.
-For controlling and converting data the spreadsheet contains a customizable table.
-Every column of the table has a certain label and can be assigned a format (like decimal or scientific format).
+New data can be produced either by entering it manually in the spreadsheet or by generating the data according to a certain prescription.
+LabPlot provides 5 different methods to generate data, accessible via the context menu of the column:
+
+<itemizedlist>
+<listitem>
+<para>
+Row Numbers - values in the column are set according to its row number, this provide an easy way to quickly create an index.
 </para>
+</listitem>
+
+<listitem>
 <para>
-You can import data via the <link linkend="importdialog">import dialog</link>.
-Any spreadsheet function can be reached via the context menu (&RMB; click).
-You can cut, copy and paste between spreadsheets, fill, normalize and convert data and finally make plots out of your data.
-Of course you can also export the data in the spreadsheet.
+Const Values - values in the column are set to a constant value provided by the user.
 </para>
+</listitem>
+
+<listitem>
 <para>
-  You can mask certain data points in the spreadsheet which are excluded from plotting (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu). The masking of datapoints can be later influenced in the graph list dialog.
+Equidistant values (for numeric columns only) - given the minimal and the maximal values, the equidistant values can be either generated 
+by fixing the total number of values in that range or by fixing the increment (distance).
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="spreadsheet_generate_equidistant_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Random values (for numeric columns only) - values are randomly generated according to the selected distribution.
+To generate uniformly distributed random numbers, select "Flat" distribution.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="spreadsheet_generate_random_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+In the simplest cases a non-uniform distribution is calculated analytically from the uniform distribution of a random number generator by applying
+an appropriate transformation. More complicated distributions are created by the acceptance-rejection method, which compares the desired distribution
+against a distribution which is similar and known analytically.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Function values (for numeric columns only) - values are generated according to a mathematical function provided by the user, 
+a column (data set) containing the function arguments has to be provided.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="spreadsheet_generate_function_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+</listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>
+Already existing data can be imported into a spreadsheet from external files via the <link linkend="importdialog">"Import Data" dialog</link>.
+Imported data will be stored in the project file. Changes on data, performed either in the spreadsheet or in the external file after the import, are not synchronized anymore.
+</para>
+
+</sect1>
+
+
+<!-- TODO: Describe the basic concepts and functionality of the file data source. -->
+<sect1 id="file_data_source">
+<title>File Data Source</title>
+<para>
+Similar in spirit to importing the data to a spreadsheet...
 </para>
 </sect1>
 
