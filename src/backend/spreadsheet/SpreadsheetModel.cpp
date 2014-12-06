@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -77,7 +77,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 {
 	if( !index.isValid() )
 		return QVariant();
-	
+
 	int row = index.row();
 	int col = index.column();
 	Column * col_ptr = m_spreadsheet->column(col);
@@ -105,7 +105,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 					return QVariant(col_ptr->formula(row));
 				if(!col_ptr->isValid(row))
 					return QVariant("-");
-				
+
 				return QVariant(col_ptr->asStringColumn()->textAt(row) + postfix);
 			}
 		case Qt::ForegroundRole:
@@ -187,7 +187,7 @@ bool SpreadsheetModel::setData(const QModelIndex & index, const QVariant & value
 	int row = index.row();
 
 	switch(role)
-	{  
+	{
 		case Qt::EditRole:
 			{
 				Column* col_ptr = m_spreadsheet->column(index.column());
@@ -200,16 +200,16 @@ bool SpreadsheetModel::setData(const QModelIndex & index, const QVariant & value
 			}
 		case MaskingRole:
 			{
-				m_spreadsheet->column(index.column())->setMasked(row, value.toBool());  
+				m_spreadsheet->column(index.column())->setMasked(row, value.toBool());
 				return true;
 			}
 		case FormulaRole:
 			{
-				m_spreadsheet->column(index.column())->setFormula(row, value.toString());  
+				m_spreadsheet->column(index.column())->setFormula(row, value.toString());
 				return true;
 			}
 	}
-	
+
 	return false;
 }
 
@@ -221,7 +221,7 @@ QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex &pare
 
 QModelIndex SpreadsheetModel::parent(const QModelIndex & child) const
 {
-	Q_UNUSED(child)	
+	Q_UNUSED(child)
     return QModelIndex();
 }
 
@@ -237,7 +237,7 @@ void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect * parent,
 	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
-	//TODO: breaks undo/redo 
+	//TODO: breaks undo/redo
 	Q_UNUSED(before);
 // 	int index = before ? m_spreadsheet->indexOfChild<Column>(before) : 0;
 	//beginInsertColumns(QModelIndex(), index, index);
@@ -415,6 +415,8 @@ void SpreadsheetModel::updateHorizontalHeader()
 				break;
 		}
 
+		/*
+		 //TODO: activate later when plot designation is somehow used in the application
 		QString designation_section;
 		switch(col->plotDesignation()) {
 			case AbstractColumn::X:
@@ -441,6 +443,8 @@ void SpreadsheetModel::updateHorizontalHeader()
 		}
 
 		m_horizontal_header_data.replace(i, col->name() + middle_section + designation_section);
+		*/
+		m_horizontal_header_data.replace(i, col->name() + middle_section);
 	}
 
 	Q_ASSERT(m_horizontal_header_data.size() == m_spreadsheet->columnCount());
@@ -450,7 +454,7 @@ Column * SpreadsheetModel::column(int index)
 {
 	return m_spreadsheet->column(index);
 }
-		
+
 void SpreadsheetModel::activateFormulaMode(bool on)
 {
 	if (m_formula_mode == on) return;

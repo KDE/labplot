@@ -727,7 +727,7 @@ void XYCurvePrivate::retransform(){
 		return;
 	}
 
-	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
+// 	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 

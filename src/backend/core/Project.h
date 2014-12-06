@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : Project.h
-    Project              : SciDAVis
-    Description          : Represents a SciDAVis project.
+    Project              : LabPlot
+    Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 
@@ -81,12 +80,10 @@ class Project : public Folder {
 	signals:
 		void requestSaveState(QXmlStreamWriter*) const;
 		void requestLoadState(XmlStreamReader*) const;
-		void loadStarted();
-		void loadFinished();
 		void requestProjectContextMenu(QMenu*);
 		void requestFolderContextMenu(const Folder*, QMenu*);
 		void mdiWindowVisibilityChanged();
-		void changed();
+		void changed() const;
 
 	private:
 		class Private;

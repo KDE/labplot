@@ -4,10 +4,8 @@
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses)
-
+    Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,7 +29,6 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
@@ -233,7 +230,6 @@ void Project::save(QXmlStreamWriter* writer) const {
  */
 bool Project::load(XmlStreamReader* reader) {
 	d->loading = true;
-	emit loadStarted();
 
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
@@ -332,7 +328,6 @@ bool Project::load(XmlStreamReader* reader) {
 	}
 
 	d->loading = false;
-	emit loadFinished();
 	return !reader->hasError();
 }
 

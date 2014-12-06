@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : ProjectExplorer.cpp
-    Project              : SciDAVis/Labplot2
+    Project              : Labplot2
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2007-2008 by Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
-							(replace * with @ in the email addresses)
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007-2008 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,17 +29,23 @@
 #ifndef PROJECT_EXPLORER_H
 #define PROJECT_EXPLORER_H
 
-#include <QTreeView>
+#include <QWidget>
 
 class AbstractAspect;
-class QPushButton;
-class QLabel;
-class QSignalMapper;
 class Project;
-class QXmlStreamWriter;
 class XmlStreamReader;
+class QAbstractItemModel;
+class QFrame;
+class QLabel;
+class QLineEdit;
+class QModelIndex;
+class QPushButton;
+class QSignalMapper;
+class QTreeView;
+class QXmlStreamWriter;
+class QItemSelection;
 
-class ProjectExplorer : public QWidget{
+class ProjectExplorer : public QWidget {
 	Q_OBJECT
 
 	public:
@@ -59,7 +64,6 @@ class ProjectExplorer : public QWidget{
 		void collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded);
 		int m_columnToHide;
 		QTreeView* m_treeView;
-		bool m_projectLoading;
 		const Project* m_project;
 
 		QAction* caseSensitiveAction;
@@ -78,9 +82,6 @@ class ProjectExplorer : public QWidget{
 		QPushButton* bFilterOptions;
 
 	private slots:
-		void projectLoadStarted();
-		void projectLoadFinished();
-
 		void aspectAdded(const AbstractAspect*);
 		void toggleColumn(int);
 		void showAllColumns();

@@ -965,7 +965,6 @@ void CartesianPlot::scaleAuto(){
 	//loop over all xy-curves and determine the maximum x-value
 	QList<XYCurve*> children = this->children<XYCurve>();
 	if (d->curvesXMinMaxIsDirty) {
-		qDebug()<<"###################### updating X-min/max values";
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
 		foreach(XYCurve* curve, children) {
@@ -989,7 +988,6 @@ void CartesianPlot::scaleAuto(){
 	}
 
 	if (d->curvesYMinMaxIsDirty) {
-		qDebug()<<"###################### updating Y-min/max values";
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
 		foreach(XYCurve* curve, children) {
@@ -1195,7 +1193,7 @@ void CartesianPlotPrivate::retransform(){
 	if (suppressRetransform)
 		return;
 
-	qDebug()<<"CartesianPlotPrivate::retransform";
+// 	qDebug()<<"CartesianPlotPrivate::retransform";
 	prepareGeometryChange();
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
@@ -1213,7 +1211,7 @@ void CartesianPlotPrivate::retransform(){
 }
 
 void CartesianPlotPrivate::retransformScales(){
-	qDebug()<<"CartesianPlotPrivate::retransformScales";
+// 	qDebug()<<"CartesianPlotPrivate::retransformScales";
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianCoordinateSystem::Scale*> scales;
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;

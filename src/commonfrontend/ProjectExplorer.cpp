@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : ProjectExplorer.cpp
-    Project              : SciDAVis/Labplot2
+    Project              : Labplot2
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2007-2008 by Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
-									(replace * with @ in the email addresses)
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007-2008 by Tilman Benkert (thzsgmx.net)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -35,8 +34,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/core/PartMdiView.h"
 
+#include <QTreeView>
 #include <QContextMenuEvent>
-#include <QMenu>
+// #include <QMenu>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -44,13 +44,10 @@
 #include <QHeaderView>
 #include <QSignalMapper>
 #include <QDebug>
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <QLineEdit>
-#else
+
 #include <KLineEdit>
 #include <KLocale>
 #include <KMenu>
-#endif
 
 /*!
   \class ProjectExplorer
@@ -64,7 +61,7 @@
   \ingroup commonfrontend
 */
 
-ProjectExplorer::ProjectExplorer(QWidget* parent) : m_projectLoading(false) {
+ProjectExplorer::ProjectExplorer(QWidget* parent) {
     Q_UNUSED(parent);
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setSpacing(0);
@@ -221,8 +218,6 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 
 void ProjectExplorer::setProject( const Project* project) {
 	connect(project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(aspectAdded(const AbstractAspect*)));
-	connect(project, SIGNAL(loadStarted()), this, SLOT(projectLoadStarted()));
-	connect(project, SIGNAL(loadFinished()), this, SLOT(projectLoadFinished()));
 	connect(project, SIGNAL(requestSaveState(QXmlStreamWriter*)), this, SLOT(save(QXmlStreamWriter*)));
 	connect(project, SIGNAL(requestLoadState(XmlStreamReader*)), this, SLOT(load(XmlStreamReader*)));
 	m_project = project;
@@ -276,24 +271,16 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	return true;
 }
 
-
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
-void ProjectExplorer::projectLoadStarted() {
-	m_projectLoading = true;
-}
-
-void ProjectExplorer::projectLoadFinished() {
-	m_projectLoading = false;
-}
 
 /*!
   expand the aspect \c aspect (the tree index corresponding to it) in the tree view
   and makes it visible and selected. Called when a new aspect is added to the project.
  */
 void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
-	if (m_projectLoading)
+	if (m_project->isLoading())
 		return;
 
 	//don't do anything if hidden aspects were added
@@ -458,7 +445,7 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index){
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
-	qDebug()<<"ProjectExplorer::selectionChanged";
+// 	qDebug()<<"ProjectExplorer::selectionChanged";
 	QModelIndex index;
 	QModelIndexList items;
 	AbstractAspect* aspect = 0;

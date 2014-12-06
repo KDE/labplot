@@ -130,7 +130,7 @@ void WorksheetElementContainer::retransform() {
 }
 
 void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
-	qDebug()<<"WorksheetElementContainer::handlePageResize";
+// 	qDebug()<<"WorksheetElementContainer::handlePageResize";
 	Q_D(WorksheetElementContainer);
 	QRectF rect(d->rect);
 	rect.setWidth(d->rect.width()*horizontalRatio);
@@ -139,7 +139,7 @@ void WorksheetElementContainer::handlePageResize(double horizontalRatio, double 
 }
 
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) {
-	qDebug()<<"WorksheetElementContainer::handleAspectAdded "<< aspect->name();
+// 	qDebug()<<"WorksheetElementContainer::handleAspectAdded "<< aspect->name();
 	Q_D(WorksheetElementContainer);
 
 	const AbstractWorksheetElement* element = qobject_cast<const AbstractWorksheetElement*>(aspect);
@@ -227,7 +227,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-	qDebug()<<"WorksheetElementContainerPrivate::paint";
+// 	qDebug()<<"WorksheetElementContainerPrivate::paint";
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
