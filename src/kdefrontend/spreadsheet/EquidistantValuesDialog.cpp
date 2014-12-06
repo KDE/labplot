@@ -39,7 +39,7 @@
 
 EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
 
-	setWindowTitle(i18n("Equidistant numbers"));
+	setWindowTitle(i18n("Equidistant values"));
 
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
@@ -50,7 +50,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
 	setButtonText(KDialog::Ok, i18n("&Generate"));
-	setButtonToolTip(KDialog::Ok, i18n("Generate equidistant numbers"));
+	setButtonToolTip(KDialog::Ok, i18n("Generate equidistant values"));
 
 	ui.kleFrom->setClearButtonShown(true);
 	ui.kleTo->setClearButtonShown(true);

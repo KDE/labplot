@@ -50,7 +50,7 @@ enum distribution {
 
 RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
 
-	setWindowTitle(i18n("Non-uniform random numbers"));
+	setWindowTitle(i18n("Random values"));
 
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
@@ -58,7 +58,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
 	setButtonText(KDialog::Ok, i18n("&Generate"));
-	setButtonToolTip(KDialog::Ok, i18n("Generate random numbers according to the selected distribution"));
+	setButtonToolTip(KDialog::Ok, i18n("Generate random values according to the selected distribution"));
 
 	ui.cbDistribution->addItem(i18n("Gaussian Distribution"), Gaussian);
 // 	ui.cbDistribution->addItem(i18n("Gaussian Tail Distribution"));

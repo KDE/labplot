@@ -374,10 +374,10 @@ void CartesianPlot::initActions(){
 	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
 	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), this);
 	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), this);
-	zoomInXAction = new KAction(KIcon("x-zoom-in"), i18n("zoom in X"), this);
-	zoomOutXAction = new KAction(KIcon("x-zoom-out"), i18n("zoom out X"), this);
-	zoomInYAction = new KAction(KIcon("y-zoom-in"), i18n("zoom in Y"), this);
-	zoomOutYAction = new KAction(KIcon("y-zoom-out"), i18n("zoom out Y"), this);
+	zoomInXAction = new KAction(KIcon("zoom-in-x"), i18n("zoom in X"), this);
+	zoomOutXAction = new KAction(KIcon("zoom-out-x"), i18n("zoom out X"), this);
+	zoomInYAction = new KAction(KIcon("zoom-in-y"), i18n("zoom in Y"), this);
+	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), this);
     shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
 	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
 	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
