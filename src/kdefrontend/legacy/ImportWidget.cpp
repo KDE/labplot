@@ -236,7 +236,7 @@ void ImportWidget::apply(MainWin *mainWin) {
 		// exit
 
 		// automatic
-		if (filename.endsWith(".opj",Qt::CaseInsensitive)) {
+		if (filename.endsWith(QLatin1String(".opj"),Qt::CaseInsensitive)) {
 			importOPJ(mainWin, filename);
 			return;
 		}
@@ -257,11 +257,11 @@ void ImportWidget::apply(MainWin *mainWin) {
 			spreadsheet->setName(filename);
 
 		// filter using file ending
-		if(filename.endsWith(".hdf",Qt::CaseInsensitive) || filename.endsWith(".h5",Qt::CaseInsensitive))
+		if(filename.endsWith(QLatin1String(".hdf"),Qt::CaseInsensitive) || filename.endsWith(".h5",Qt::CaseInsensitive))
 			importHDF5(mainWin,filename,spreadsheet);
-		else if (filename.endsWith(".nc",Qt::CaseInsensitive))
+		else if (filename.endsWith(QLatin1String(".nc"),Qt::CaseInsensitive))
 			importNETCDF(filename,spreadsheet);
-		else if (filename.endsWith(".cdf",Qt::CaseInsensitive))
+		else if (filename.endsWith(QLatin1String(".cdf"),Qt::CaseInsensitive))
 			importCDF(filename,spreadsheet);
 		else {
 			kDebug()<<"	Opening file"<<filename<<endl;

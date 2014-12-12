@@ -293,7 +293,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 	//expand and make the aspect visible
 	m_treeView->setExpanded(index, true);
 
-	//"auxilary" aspects like residual columns in XYFitCurve are only expanded
+	//"auxiliary" aspects like residual columns in XYFitCurve are only expanded
 	//but not selected, return here
 	if ( aspect->parentAspect()->inherits("XYFitCurve") ) {
 		m_treeView->setExpanded(tree_model->modelIndexOfAspect(aspect->parentAspect()), true);

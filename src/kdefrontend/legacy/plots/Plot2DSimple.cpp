@@ -202,7 +202,7 @@ void Plot2DSimple::drawCurves(QPainter *p, const int w, const int h) {
 // 				kDebug()<<"calculateXY, x="<<x<<" y="<<y<<endl;
 				vec_Points<<QPointF(x,y);
 // 				//TODO
-// 				// dont draw outside border
+// 				// don't draw outside border
 // 				// HACK : prevent drawing errors with too large coordinates
 // 				if(oldy > 10*ymax && y > 10*ymax || oldy < -1000 && y < -1000 ||
 // 					oldx > 10*xmax && x > 10*xmax || oldx < -1000 && x < -1000)

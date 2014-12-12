@@ -696,7 +696,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				action_sort_desc_column->setVisible(false);
 			}
 
-			//check whether we have non-numeric columns selected and deactive actions for numeric columns
+			//check whether we have non-numeric columns selected and deactivate actions for numeric columns
 			bool numeric = true;
 			foreach(Column* col, selectedColumns()) {
 				if (col->columnMode() != AbstractColumn::Numeric) {

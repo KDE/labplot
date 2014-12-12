@@ -782,4 +782,4 @@ QString FilterOPJ::parseOriginTags(const QString &str) const {
 //TODO: bug in grid dialog
 //		scale/minor ticks checkbox
 //		histogram: autobin export
-//		if prec not setted - automac+4digits
+//		if prec not set - automac+4digits
