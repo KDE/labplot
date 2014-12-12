@@ -32,6 +32,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
@@ -68,6 +69,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui

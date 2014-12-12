@@ -55,7 +55,8 @@
 #include <QPainter>
 #include <QPrinter>
 #include <QToolBar>
-#include <QInputDialog>
+#include <QTextStream>
+#include <QDebug>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "spreadsheetview_qactions.h"
@@ -1629,5 +1630,38 @@ void SpreadsheetView::print(QPrinter* printer) const{
 			height = margin;
 			painter.drawLine(margin, height, right, height);
 		}
+	}
+}
+
+void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator) const {
+	QFile file(path);
+	if (!file.open(QFile::WriteOnly | QFile::Truncate))
+		return;
+
+	QTextStream out(&file);
+	const int cols = m_spreadsheet->columnCount();
+
+	QString sep = separator;
+	sep = sep.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
+	sep = sep.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+
+	//export header (column names)
+	if (exportHeader) {
+		for (int j=0; j<cols; ++j) {
+			out << m_spreadsheet->column(j)->name();
+			if (j!=cols-1)
+				out<<sep;
+		}
+		out << '\n';
+	}
+
+	//export values
+	for (int i=0; i<m_spreadsheet->rowCount(); ++i) {
+		for (int j=0; j<cols; ++j) {
+			out << m_spreadsheet->column(j)->asStringColumn()->textAt(i);
+			if (j!=cols-1)
+				out<<sep;
+		}
+		out << '\n';
 	}
 }

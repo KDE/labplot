@@ -45,6 +45,7 @@
 #include "commonfrontend/worksheet/WorksheetView.h"
 
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
@@ -1290,7 +1291,22 @@ void MainWin::exportDialog(){
 			RESET_CURSOR;
 		}
 	}else{//Spreadsheet
-		//TODO
+		Spreadsheet* s = this->activeSpreadsheet();
+		if (!s)
+			return;
+
+		ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
+		dlg->setFileName(s->name());
+		if (dlg->exec()==QDialog::Accepted){
+			QString path = dlg->path();
+			const bool exportHeader = dlg->exportHeader();
+			QString separator = dlg->separator();
+
+			SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
+			WAIT_CURSOR;
+			view->exportToFile(path, exportHeader, separator);
+			RESET_CURSOR;
+		}
 	}
 }
 

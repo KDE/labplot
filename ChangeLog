@@ -13,6 +13,7 @@ New features:
 	* Fill columns with uniform and non-uniform random numbers, several distributions are available.
 	* Fill columns with function values
 	* Allow custom resolutions for PNG-export
+	* Export of the spreadsheet to a text file.
 
 Bug fixes:
 	* Don't crash when trying to create a plot in case no rc-file was installed.

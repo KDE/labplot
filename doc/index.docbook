@@ -223,7 +223,7 @@ Masked data is not plotted and is also excluded from data analysis functions lik
 <para>
 Any spreadsheet function can be reached via the context menu (&RMB; click).
 You can cut, copy and paste between spreadsheets, generate, normalize and sort data and finally make plots out of your data.
-Of course you can also export the data in the spreadsheet.
+Of course you can also <link linkend="exportdialog">export</link> the data in the spreadsheet to an external file.
 </para>
 
 <screenshot><mediaobject><imageobject>
@@ -634,6 +634,16 @@ files. You can also specify the type of the data, the filter, the separating cha
 </para>
 <para>
   The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
+</para>
+</sect1>
+
+<!-- TODO:
+	Describe the export of worksheet and spreadsheet.
+-->
+<sect1 id="exportdialog">
+<title>Export Dialog</title>
+<para>
+	
 </para>
 </sect1>
 
