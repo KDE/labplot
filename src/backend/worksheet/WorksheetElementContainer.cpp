@@ -44,7 +44,7 @@
 
 /**
  * \class WorksheetElementContainer
- * \brief Generic AbstractWorksheetElement container.
+ * \brief Generic WorksheetElement container.
  * \ingroup worksheet
  * This class combines functionality of worksheet element containers
  * such as groups, plots etc.
@@ -52,14 +52,14 @@
  */
 
 WorksheetElementContainer::WorksheetElementContainer(const QString &name)
-	: AbstractWorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
+	: WorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd)
-    : AbstractWorksheetElement(name), d_ptr(dd) {
+    : WorksheetElement(name), d_ptr(dd) {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -92,8 +92,8 @@ void WorksheetElementContainer::setVisible(bool on){
     	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 
 	//change the visibility of all children
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(AbstractWorksheetElement *elem, childList){
+	QList<WorksheetElement *> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(WorksheetElement *elem, childList){
 		elem->setVisible(on);
 	}
 
@@ -110,8 +110,8 @@ bool WorksheetElementContainer::isVisible() const {
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const AbstractWorksheetElement *elem, childList) {
+	QList<WorksheetElement *> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(const WorksheetElement *elem, childList) {
 		if (!elem->isVisible())
 			return false;
 	}
@@ -124,8 +124,8 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
-	QList<AbstractWorksheetElement *> childList = children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(AbstractWorksheetElement *elem, childList)
+	QList<WorksheetElement *> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(WorksheetElement *elem, childList)
 		elem->retransform();
 }
 
@@ -142,7 +142,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 // 	qDebug()<<"WorksheetElementContainer::handleAspectAdded "<< aspect->name();
 	Q_D(WorksheetElementContainer);
 
-	const AbstractWorksheetElement* element = qobject_cast<const AbstractWorksheetElement*>(aspect);
+	const WorksheetElement* element = qobject_cast<const WorksheetElement*>(aspect);
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, SIGNAL(hovered()), this, SLOT(childHovered()));
 		connect(element, SIGNAL(unhovered()), this, SLOT(childUnhovered()));
@@ -151,8 +151,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 		item->setParentItem(d);
 
 		qreal zVal = 0;
-		QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-		foreach(AbstractWorksheetElement *elem, childElements) {
+		QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+		foreach(WorksheetElement *elem, childElements) {
 			elem->graphicsItem()->setZValue(zVal++);
 		}
 	}
@@ -218,8 +218,8 @@ bool WorksheetElementContainerPrivate::swapVisible(bool on){
 // Inherited from QGraphicsItem
 QRectF WorksheetElementContainerPrivate::boundingRect() const {
 	QRectF rect;
-	QList<AbstractWorksheetElement *> childList = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const AbstractWorksheetElement *elem, childList)
+	QList<WorksheetElement *> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(const WorksheetElement *elem, childList)
 		rect |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
 
 	return rect;

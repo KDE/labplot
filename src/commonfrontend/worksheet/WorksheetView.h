@@ -39,7 +39,7 @@ class QWheelEvent;
 class QTimeLine;
 
 class AbstractAspect;
-class AbstractWorksheetElement;
+class WorksheetElement;
 class WorksheetModel;
 
 class WorksheetView : public QGraphicsView {
@@ -93,7 +93,7 @@ class WorksheetView : public QGraphicsView {
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
 	bool m_suppressSelectionChangedEvent;
-	AbstractWorksheetElement* lastAddedWorksheetElement;
+	WorksheetElement* lastAddedWorksheetElement;
 	QTimeLine* m_fadeInTimeLine;
 	QTimeLine* m_fadeOutTimeLine;
 

@@ -1,13 +1,11 @@
 /***************************************************************************
     File                 : PlotArea.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,29 +30,29 @@
 #ifndef PLOTAREA_H
 #define PLOTAREA_H
 
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
 
 class PlotAreaPrivate;
 
-class PlotArea: public AbstractWorksheetElement{
+class PlotArea: public WorksheetElement{
 	Q_OBJECT
 
 	public:
 		explicit PlotArea(const QString &name);
 		virtual ~PlotArea();
-		
+
 		enum BackgroundType{Color, Image, Pattern};
 		enum BackgroundColorStyle{SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
 																TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
 																RadialGradient};
 		enum BackgroundImageStyle{ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
-		
+
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool) {};
-		
+
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
@@ -73,8 +71,8 @@ class PlotArea: public AbstractWorksheetElement{
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
-		
-		typedef AbstractWorksheetElement BaseClass;
+
+		typedef WorksheetElement BaseClass;
 		typedef PlotAreaPrivate Private;
 
 	public slots:

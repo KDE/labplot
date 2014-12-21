@@ -1,13 +1,11 @@
 /***************************************************************************
     File                 : Axis.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach*uni-konstanz.de)
-							(replace * with @ in the email addresses)
-
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach@uni-konstanz.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -62,13 +60,13 @@
  *  \ingroup worksheet
  */
 Axis::Axis(const QString &name, const AxisOrientation &orientation)
-		: AbstractWorksheetElement(name), d_ptr(new AxisPrivate(this)) {
+		: WorksheetElement(name), d_ptr(new AxisPrivate(this)) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
 Axis::Axis(const QString &name, const AxisOrientation &orientation, AxisPrivate *dd)
-		: AbstractWorksheetElement(name), d_ptr(dd) {
+		: WorksheetElement(name), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
 }
@@ -209,7 +207,7 @@ void Axis::initMenus(){
 
 QMenu* Axis::createContextMenu(){
 	Q_D(const Axis);
-	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+	QMenu *menu = WorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
@@ -1581,10 +1579,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		title->setPositionInvalid(false);
 	}
 
-	axisShapeWithoutGrids = AbstractWorksheetElement::shapeFromPath(linePath, linePen);
-	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(arrowPath, linePen));
-	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
-	axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
+	axisShapeWithoutGrids = WorksheetElement::shapeFromPath(linePath, linePen);
+	axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
+	axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
+	axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 
 	QPainterPath  tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::NoLabels){
@@ -1599,9 +1597,9 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			trafo.rotate( -labelsRotationAngle );
 			tempPath = trafo.map(tempPath);
 
-			tickLabelsPath.addPath(AbstractWorksheetElement::shapeFromPath(tempPath, linePen));
+			tickLabelsPath.addPath(WorksheetElement::shapeFromPath(tempPath, linePen));
 		}
-		axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
+		axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 	}
 
 	//add title label, if available
@@ -1619,12 +1617,12 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ) );
 		}
 
-		axisShapeWithoutGrids.addPath(AbstractWorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
+		axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 
 	axisShape = axisShapeWithoutGrids;
-	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(majorGridPath, majorGridPen));
-	axisShape.addPath(AbstractWorksheetElement::shapeFromPath(minorGridPath, minorGridPen));
+	axisShape.addPath(WorksheetElement::shapeFromPath(majorGridPath, majorGridPen));
+	axisShape.addPath(WorksheetElement::shapeFromPath(minorGridPath, minorGridPen));
 
 	boundingRectangle = axisShape.boundingRect();
 }

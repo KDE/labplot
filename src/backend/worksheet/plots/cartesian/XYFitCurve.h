@@ -100,7 +100,7 @@ class XYFitCurve: public XYCurve {
 		const FitResult& fitResult() const;
 		bool isSourceDataChangedSinceLastFit() const;
 
-		typedef AbstractWorksheetElement BaseClass;
+		typedef WorksheetElement BaseClass;
 		typedef XYFitCurvePrivate Private;
 
 	protected:

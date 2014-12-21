@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : TextLabel.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -37,10 +36,10 @@
 #include <QPen>
 #include "backend/lib/macros.h"
 #include "tools/TeXRenderer.h"
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 
 class TextLabelPrivate;
-class TextLabel : public AbstractWorksheetElement{
+class TextLabel : public WorksheetElement{
 	Q_OBJECT
 
 	public:

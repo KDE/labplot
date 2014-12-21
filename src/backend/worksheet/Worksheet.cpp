@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : Worksheet.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Worksheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-	Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+	Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,7 +28,7 @@
 
 #include "Worksheet.h"
 #include "WorksheetPrivate.h"
-#include "AbstractWorksheetElement.h"
+#include "WorksheetElement.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/TextLabel.h"
@@ -181,7 +179,7 @@ QWidget *Worksheet::view() const {
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 // 	qDebug()<<"Worksheet::handleAspectAdded "<< aspect->name();
-	const AbstractWorksheetElement* addedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
+	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (addedElement) {
 		if (aspect->parentAspect() == this){
 			QGraphicsItem *item = addedElement->graphicsItem();
@@ -189,8 +187,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			d->m_scene->addItem(item);
 
 			qreal zVal = 0;
-			QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-			foreach(AbstractWorksheetElement *elem, childElements) {
+			QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+			foreach(WorksheetElement *elem, childElements) {
 				elem->graphicsItem()->setZValue(zVal++);
 			}
 
@@ -202,7 +200,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 // 	qDebug()<<"Worksheet::handleAspectAboutToBeRemoved " << aspect->name();
-	const AbstractWorksheetElement *removedElement = qobject_cast<const AbstractWorksheetElement*>(aspect);
+	const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
 		QGraphicsItem *item = removedElement->graphicsItem();
 		Q_ASSERT(item != NULL);
@@ -233,7 +231,7 @@ QRectF Worksheet::pageRect() const {
 	in order to select the corresponding \c QGraphicsItem.
  */
 void Worksheet::childSelected(const AbstractAspect* aspect){
-	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+	WorksheetElement* element=qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
 		emit itemSelected(element->graphicsItem());
 }
@@ -244,7 +242,7 @@ void Worksheet::childSelected(const AbstractAspect* aspect){
 	in order to deselect the corresponding \c QGraphicsItem.
  */
 void Worksheet::childDeselected(const AbstractAspect* aspect){
-	AbstractWorksheetElement* element=qobject_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+	WorksheetElement* element=qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
 		emit itemDeselected(element->graphicsItem());
 }
@@ -258,7 +256,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect){
 void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 	//determine the corresponding aspect
 	const AbstractAspect* aspect = 0;
-	foreach( const AbstractWorksheetElement* child, children<AbstractWorksheetElement>(IncludeHidden) ){
+	foreach( const WorksheetElement* child, children<WorksheetElement>(IncludeHidden) ){
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
@@ -276,14 +274,14 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
 
 /*!
  * helper function:  checks whether \c aspect or one of its children has the \c GraphicsItem \c item
- * Returns a pointer to \c AbstractWorksheetElement having this item.
+ * Returns a pointer to \c WorksheetElement having this item.
  */
-AbstractWorksheetElement* Worksheet::aspectFromGraphicsItem(const AbstractWorksheetElement* aspect, const QGraphicsItem* item) const{
+WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* aspect, const QGraphicsItem* item) const{
 	if ( aspect->graphicsItem() == item ){
-		return const_cast<AbstractWorksheetElement*>(aspect);
+		return const_cast<WorksheetElement*>(aspect);
 	}else{
-		foreach( const AbstractWorksheetElement* child, aspect->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden) ){
-			AbstractWorksheetElement* a = this->aspectFromGraphicsItem(child, item);
+		foreach( const WorksheetElement* child, aspect->children<WorksheetElement>(AbstractAspect::IncludeHidden) ){
+			WorksheetElement* a = this->aspectFromGraphicsItem(child, item);
 			if (a)
 				return a;
 		}
@@ -308,7 +306,7 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item){
 	Q_ASSERT(item);
 	//determine the corresponding aspect
 	AbstractAspect* aspect = 0;
-	foreach( const AbstractWorksheetElement* child, children<AbstractWorksheetElement>(IncludeHidden) ){
+	foreach( const WorksheetElement* child, children<WorksheetElement>(IncludeHidden) ){
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
@@ -533,8 +531,8 @@ void Worksheet::setPageRect(const QRectF& rect) {
 }
 
 void Worksheet::setPrinting(bool on) const {
-	QList<AbstractWorksheetElement*> childElements = children<AbstractWorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-	foreach(AbstractWorksheetElement* elem, childElements)
+	QList<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+	foreach(WorksheetElement* elem, childElements)
 		elem->setPrinting(on);
 }
 
@@ -562,16 +560,16 @@ void WorksheetPrivate::updatePageRect() {
 		if (scaleContent) {
 			qreal horizontalRatio = pageRect.width() / oldRect.width();
 			qreal verticalRatio = pageRect.height() / oldRect.height();
-			QList<AbstractWorksheetElement*> childElements = q->children<AbstractWorksheetElement>(AbstractAspect::IncludeHidden);
+			QList<WorksheetElement*> childElements = q->children<WorksheetElement>(AbstractAspect::IncludeHidden);
 			if (useViewSize) {
 				//don't make the change of the geometry undoable/redoable if the view size is used.
-				foreach(AbstractWorksheetElement* elem, childElements) {
+				foreach(WorksheetElement* elem, childElements) {
 					elem->setUndoAware(false);
 					elem->handlePageResize(horizontalRatio, verticalRatio);
 					elem->setUndoAware(true);
 				}
 			} else {
-				foreach(AbstractWorksheetElement* elem, childElements)
+				foreach(WorksheetElement* elem, childElements)
 					elem->handlePageResize(horizontalRatio, verticalRatio);
 			}
 		}
@@ -710,8 +708,8 @@ void Worksheet::save(QXmlStreamWriter* writer) const{
     writer->writeEndElement();
 
     //serialize all children
-    QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-    foreach(AbstractWorksheetElement *elem, childElements)
+    QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+    foreach(WorksheetElement *elem, childElements)
         elem->save(writer);
 
     writer->writeEndElement(); // close "worksheet" section

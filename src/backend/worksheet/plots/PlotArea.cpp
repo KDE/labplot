@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : PlotArea.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -49,24 +47,24 @@
  * \ingroup worksheet
  */
 
-PlotArea::PlotArea(const QString &name):AbstractWorksheetElement(name),
+PlotArea::PlotArea(const QString &name):WorksheetElement(name),
 		d_ptr(new PlotAreaPrivate(this)){
 	init();
 }
 
 PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
-    : AbstractWorksheetElement(name), d_ptr(dd){
+    : WorksheetElement(name), d_ptr(dd){
 	init();
 }
 
 PlotArea::~PlotArea(){
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem 
+	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
 }
 
 void PlotArea::init(){
 	Q_D(PlotArea);
-	
+
 	setHidden(true);//we don't show PlotArea aspect in the model view.
 	d->rect = QRectF(0, 0, 1, 1);
 	d->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -85,7 +83,7 @@ void PlotArea::init(){
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 
 	//Border
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)), 
+	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
 						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
 						(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
@@ -112,7 +110,7 @@ void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio){
 
 	d->rect.setWidth(d->rect.width()*horizontalRatio);
 	d->rect.setHeight(d->rect.height()*verticalRatio);
-	
+
 	// TODO: scale line width
 	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
@@ -349,7 +347,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				radialGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(radialGrad));
 				break;
-			}			
+			}
 			default:
 				painter->setBrush(QBrush(backgroundFirstColor));
 		}
@@ -432,7 +430,7 @@ void PlotArea::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("plotArea");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
-	
+
     writer->writeStartElement( "background" );
     writer->writeAttribute( "type", QString::number(d->backgroundType) );
     writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
@@ -454,14 +452,14 @@ void PlotArea::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
 	writer->writeAttribute( "borderCornerRadius", QString::number(d->borderCornerRadius) );
     writer->writeEndElement();
-	
+
 	writer->writeEndElement();
 }
 
 //! Load from XML
 bool PlotArea::load(XmlStreamReader* reader){
 	Q_D(PlotArea);
-	
+
     if(!reader->isStartElement() || reader->name() != "plotArea"){
         reader->raiseError(i18n("no plot area element found"));
         return false;

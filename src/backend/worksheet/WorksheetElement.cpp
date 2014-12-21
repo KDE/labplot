@@ -1,6 +1,6 @@
 /***************************************************************************
-    File                 : AbstractWorksheetElement.cpp
-    Project              : LabPlot/SciDAVis
+    File                 : WorksheetElement.cpp
+    Project              : LabPlot
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
@@ -29,7 +29,7 @@
  ***************************************************************************/
 
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 
 #include <QPen>
@@ -39,18 +39,20 @@
 
 #include <KLocale>
 
-QPen AbstractWorksheetElement::hoveredPen = QPen(QColor(128,179,255), 10, Qt::SolidLine);
-float AbstractWorksheetElement::hoveredOpacity = 0.6;
-QPen AbstractWorksheetElement::selectedPen = QPen(Qt::darkBlue, 10, Qt::SolidLine);
-float AbstractWorksheetElement::selectedOpacity = 0.3;
+QPen WorksheetElement::hoveredPen = QPen(QColor(128,179,255), 10, Qt::SolidLine);
+// QPen WorksheetElement::hoveredPen = QPen(QColor(128,179,255));
+float WorksheetElement::hoveredOpacity = 0.6;
+QPen WorksheetElement::selectedPen = QPen(Qt::darkBlue, 10, Qt::SolidLine);
+// QPen WorksheetElement::selectedPen = QPen(Qt::darkBlue);
+float WorksheetElement::selectedOpacity = 0.3;
 
 /**
- * \class AbstractWorksheetElement
+ * \class WorksheetElement
  * \brief Base class for all Worksheet children.
  *
  */
 
-AbstractWorksheetElement::AbstractWorksheetElement(const QString &name)
+WorksheetElement::WorksheetElement(const QString &name)
 		: AbstractAspect(name) {
 
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
@@ -59,33 +61,34 @@ AbstractWorksheetElement::AbstractWorksheetElement(const QString &name)
 	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
 	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
 
+
 	connect(m_moveBehindMenu, SIGNAL(aboutToShow()), this, SLOT(prepareMoveBehindMenu()));
 	connect(m_moveInFrontOfMenu, SIGNAL(aboutToShow()), this, SLOT(prepareMoveInFrontOfMenu()));
 	connect(m_moveBehindMenu, SIGNAL(triggered(QAction*)), this, SLOT(execMoveBehind(QAction*)));
 	connect(m_moveInFrontOfMenu, SIGNAL(triggered(QAction*)), this, SLOT(execMoveInFrontOf(QAction*)));
 }
 
-AbstractWorksheetElement::~AbstractWorksheetElement() {
+WorksheetElement::~WorksheetElement() {
 	delete m_moveBehindMenu;
 	delete m_moveInFrontOfMenu;
 	delete m_drawingOrderMenu;
 }
 
 /**
- * \fn QGraphicsItem *AbstractWorksheetElement::graphicsItem() const
+ * \fn QGraphicsItem *WorksheetElement::graphicsItem() const
  * \brief Return the graphics item representing this element.
  *
  *
  */
 
 /**
- * \fn void AbstractWorksheetElement::setVisible(bool on)
+ * \fn void WorksheetElement::setVisible(bool on)
  * \brief Show/hide the element.
  *
  */
 
 /**
- * \fn bool AbstractWorksheetElement::isVisible() const
+ * \fn bool WorksheetElement::isVisible() const
  * \brief Return whether the element is (at least) partially visible.
  *
  */
@@ -95,18 +98,18 @@ AbstractWorksheetElement::~AbstractWorksheetElement() {
  *
  * The standard implementation returns isVisible().
  */
-bool AbstractWorksheetElement::isFullyVisible() const {
+bool WorksheetElement::isFullyVisible() const {
 	return isVisible();
 }
 
 /**
- * \fn void AbstractWorksheetElement::setPrinting(bool on)
+ * \fn void WorksheetElement::setPrinting(bool on)
  * \brief Switches the printing mode on/off
  *
  */
 
 /**
- * \fn void AbstractWorksheetElement::retransform()
+ * \fn void WorksheetElement::retransform()
  * \brief Tell the element to newly transform its graphics item into its coordinate system.
  *
  * This method must not change the undo-aware data of the element, only
@@ -114,7 +117,7 @@ bool AbstractWorksheetElement::isFullyVisible() const {
  */
 
 /**
- * \fn AbstractCoordinateSystem *AbstractWorksheetElement::coordinateSystem() const
+ * \fn AbstractCoordinateSystem *WorksheetElement::coordinateSystem() const
  * \brief Return the current coordinate system (can be NULL which means don't transform).
  *
  * The standard implementation looks for the first ancestor within the worksheet which
@@ -124,7 +127,7 @@ bool AbstractWorksheetElement::isFullyVisible() const {
 /**
     This does exactly what Qt internally does to creates a shape from a painter path.
 */
-QPainterPath AbstractWorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen) {
+QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen) {
     // We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
     // if we pass a value of 0.0 to QPainterPathStroker::setWidth()
     const qreal penWidthZero = qreal(0.00000001);
@@ -144,9 +147,9 @@ QPainterPath AbstractWorksheetElement::shapeFromPath(const QPainterPath &path, c
     return p;
 }
 
-QMenu *AbstractWorksheetElement::createContextMenu() {
+QMenu *WorksheetElement::createContextMenu() {
 	QMenu *menu = AbstractAspect::createContextMenu();
-    if (parentAspect()->childCount<AbstractWorksheetElement>()>1){
+    if (parentAspect()->childCount<WorksheetElement>()>1){
 		menu->addSeparator();
 		menu->addMenu(m_drawingOrderMenu);
 		menu->addSeparator();
@@ -155,54 +158,54 @@ QMenu *AbstractWorksheetElement::createContextMenu() {
 	return menu;
 }
 
-void AbstractWorksheetElement::prepareMoveBehindMenu() {
+void WorksheetElement::prepareMoveBehindMenu() {
 	m_moveBehindMenu->clear();
 	AbstractAspect *parent = parentAspect();
 	if (parent) {
-		QList<AbstractWorksheetElement *> childElements = parent->children<AbstractWorksheetElement>();
-		foreach(AbstractWorksheetElement *elem, childElements) {
+		QList<WorksheetElement *> childElements = parent->children<WorksheetElement>();
+		foreach(WorksheetElement *elem, childElements) {
 			if (elem != this) {
 				QAction *action = m_moveBehindMenu->addAction(elem->name());
-				action->setData(parent->indexOfChild<AbstractWorksheetElement>(elem));
+				action->setData(parent->indexOfChild<WorksheetElement>(elem));
 			}
 		}
 	}
 }
 
-void AbstractWorksheetElement::prepareMoveInFrontOfMenu() {
+void WorksheetElement::prepareMoveInFrontOfMenu() {
 	m_moveInFrontOfMenu->clear();
 	AbstractAspect *parent = parentAspect();
 	if (parent) {
-		QList<AbstractWorksheetElement *> childElements = parent->children<AbstractWorksheetElement>();
-		foreach(AbstractWorksheetElement *elem, childElements) {
+		QList<WorksheetElement *> childElements = parent->children<WorksheetElement>();
+		foreach(WorksheetElement *elem, childElements) {
 			if (elem != this) {
 				QAction *action = m_moveInFrontOfMenu->addAction(elem->name());
-				action->setData(parent->indexOfChild<AbstractWorksheetElement>(elem));
+				action->setData(parent->indexOfChild<WorksheetElement>(elem));
 			}
 		}
 	}
 }
 
-void AbstractWorksheetElement::execMoveBehind(QAction *action) {
+void WorksheetElement::execMoveBehind(QAction *action) {
 	Q_ASSERT(action != NULL);
 	AbstractAspect *parent = parentAspect();
 	if (parent) {
 		int index = action->data().toInt();
-		AbstractAspect *sibling1 = parent->child<AbstractWorksheetElement>(index);
+		AbstractAspect *sibling1 = parent->child<WorksheetElement>(index);
 		beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
 		remove();
-		AbstractAspect *sibling2 = parent->child<AbstractWorksheetElement>(index + 1);
+		AbstractAspect *sibling2 = parent->child<WorksheetElement>(index + 1);
 		parent->insertChildBefore(this, sibling2);
 		endMacro();
 	}
 }
 
-void AbstractWorksheetElement::execMoveInFrontOf(QAction *action) {
+void WorksheetElement::execMoveInFrontOf(QAction *action) {
 	Q_ASSERT(action != NULL);
 	AbstractAspect *parent = parentAspect();
 	if (parent) {
 		int index = action->data().toInt();
-		AbstractAspect *sibling = parent->child<AbstractWorksheetElement>(index);
+		AbstractAspect *sibling = parent->child<WorksheetElement>(index);
 		beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
 		remove();
 		parent->insertChildBefore(this, sibling);
@@ -220,7 +223,7 @@ void AbstractWorksheetElement::execMoveInFrontOf(QAction *action) {
  * which are in page coodrinates (such as line widths). Don't forget
  * to call the base class's handler in the overridden version.
  */
-void AbstractWorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio){
+void WorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio){
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
 }

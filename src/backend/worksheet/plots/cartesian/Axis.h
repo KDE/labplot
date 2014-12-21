@@ -1,13 +1,11 @@
 /***************************************************************************
     File                 : Axis.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-				(replace * with @ in the email addresses)
-
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,7 +30,7 @@
 #ifndef AXISNEW_H
 #define AXISNEW_H
 
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
 #include <QActionGroup>
 
@@ -40,7 +38,7 @@ class TextLabel;
 class AxisPrivate;
 class AbstractColumn;
 
-class Axis: public AbstractWorksheetElement {
+class Axis: public WorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -132,7 +130,7 @@ class Axis: public AbstractWorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
 
-		typedef AbstractWorksheetElement BaseClass;
+		typedef WorksheetElement BaseClass;
 		typedef AxisPrivate Private;
 
 	public slots:

@@ -5,8 +5,8 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
     Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,7 +30,7 @@
 
 #include "backend/worksheet/symbols/PathCurveSymbol.h"
 #include "backend/worksheet/symbols/PathCurveSymbolPrivate.h"
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include <QPainter>
 
 /**
@@ -46,7 +46,7 @@
 PathCurveSymbol::PathCurveSymbol(const QString &symbolId)
 	: QObject(0), d_ptr(new PathCurveSymbolPrivate(symbolId)) {
 }
-		
+
 PathCurveSymbol::PathCurveSymbol(PathCurveSymbolPrivate *dd)
     : QObject(0), d_ptr(dd) {
 }
@@ -71,20 +71,20 @@ void PathCurveSymbol::setPath(const QPainterPath &path) {
 	d->path = path;
 	Q_ASSERT((path.boundingRect().width() <= 1.0) && (path.boundingRect().height() <= 1.0));
 }
-		
+
 QPainterPath PathCurveSymbol::path() const {
 	Q_D(const PathCurveSymbol);
 
 	return d->path;
 }
-		
+
 QString PathCurveSymbol::id() const {
 	Q_D(const PathCurveSymbol);
 
 	return d->id;
 }
-		
-void PathCurveSymbol::setSize(qreal size) { 
+
+void PathCurveSymbol::setSize(qreal size) {
 	Q_D(PathCurveSymbol);
 
 	if (size != d->size) {
@@ -142,7 +142,7 @@ QBrush PathCurveSymbol::brush() const {
 
 void PathCurveSymbol::setPen(const QPen &pen) {
 	Q_D(PathCurveSymbol);
-	
+
 	d->pen = pen;
 
 	d->pen.setCosmetic(true);
@@ -154,7 +154,7 @@ QPen PathCurveSymbol::pen() const {
 
 	return d->pen;
 }
-		
+
 void PathCurveSymbol::setFillingEnabled(bool b){
 	Q_D(PathCurveSymbol);
 
@@ -197,7 +197,7 @@ void PathCurveSymbol::paint(QPainter *painter) {
 	qreal xSize = d->size;
 	qreal ySize = d->size / d->aspectRatio;
 	painter->scale(xSize, ySize);
-	painter->rotate(d->rotationAngle);		
+	painter->rotate(d->rotationAngle);
 
 	painter->drawPath(d->path);
 
@@ -219,7 +219,7 @@ QPainterPath PathCurveSymbol::shape() const {
 
 	QTransform trafo;
 	trafo.scale(d->size,d->size / d->aspectRatio);
-	return AbstractWorksheetElement::shapeFromPath(trafo.map(d->path), d->pen);
+	return WorksheetElement::shapeFromPath(trafo.map(d->path), d->pen);
 }
 
 AbstractCurveSymbol *PathCurveSymbol::clone() const {

@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : TextLabel.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -58,12 +56,12 @@
  */
 
 
-TextLabel::TextLabel(const QString& name, Type type):AbstractWorksheetElement(name),
+TextLabel::TextLabel(const QString& name, Type type):WorksheetElement(name),
 	d_ptr(new TextLabelPrivate(this)), m_type(type) {
 	init();
 }
 
-TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type):AbstractWorksheetElement(name),
+TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type):WorksheetElement(name),
 	d_ptr(dd), m_type(type) {
 	init();
 }
@@ -167,7 +165,7 @@ QIcon TextLabel::icon() const{
 }
 
 QMenu* TextLabel::createContextMenu(){
-	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+	QMenu *menu = WorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();

@@ -815,7 +815,7 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action){
-	AbstractWorksheetElement* aspect = 0;
+	WorksheetElement* aspect = 0;
 	if ( action == addCartesianPlot1Action ){
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::FourAxes);
@@ -919,7 +919,7 @@ void WorksheetView::deleteElement() {
 }
 
 void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
-	lastAddedWorksheetElement = dynamic_cast<AbstractWorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+	lastAddedWorksheetElement = dynamic_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (!lastAddedWorksheetElement)
 		return;
 

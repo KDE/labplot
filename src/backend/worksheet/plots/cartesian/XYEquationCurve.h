@@ -59,7 +59,7 @@ class XYEquationCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(EquationData, equationData, EquationData)
 
-		typedef AbstractWorksheetElement BaseClass;
+		typedef WorksheetElement BaseClass;
 		typedef XYEquationCurvePrivate Private;
 
 	protected:

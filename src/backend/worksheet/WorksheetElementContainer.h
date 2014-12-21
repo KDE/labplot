@@ -31,11 +31,11 @@
 #ifndef WORKSHEETELEMENTCONTAINER_H
 #define WORKSHEETELEMENTCONTAINER_H
 
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 
 class WorksheetElementContainerPrivate;
 
-class WorksheetElementContainer: public AbstractWorksheetElement {
+class WorksheetElementContainer: public WorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -52,7 +52,7 @@ class WorksheetElementContainer: public AbstractWorksheetElement {
 		QRectF rect() const;
 		virtual void setRect(const QRectF&) = 0;
 
-		typedef AbstractWorksheetElement BaseClass;
+		typedef WorksheetElement BaseClass;
 		typedef WorksheetElementContainerPrivate Private;
 
 	public slots:

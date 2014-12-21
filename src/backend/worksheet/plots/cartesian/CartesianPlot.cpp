@@ -442,7 +442,7 @@ void CartesianPlot::initMenus(){
 }
 
 QMenu* CartesianPlot::createContextMenu(){
-	QMenu* menu = AbstractWorksheetElement::createContextMenu();
+	QMenu* menu = WorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
@@ -1694,8 +1694,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 	}
 
     //serialize all children (plot area, title text label, axes and curves)
-    QList<AbstractWorksheetElement *> childElements = children<AbstractWorksheetElement>(IncludeHidden);
-    foreach(AbstractWorksheetElement *elem, childElements)
+    QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+    foreach(WorksheetElement *elem, childElements)
         elem->save(writer);
 
     writer->writeEndElement(); // close "cartesianPlot" section

@@ -73,12 +73,12 @@
 #include <vector>
 
 XYCurve::XYCurve(const QString &name)
-		: AbstractWorksheetElement(name), d_ptr(new XYCurvePrivate(this)){
+		: WorksheetElement(name), d_ptr(new XYCurvePrivate(this)){
 	init();
 }
 
 XYCurve::XYCurve(const QString &name, XYCurvePrivate *dd)
-		: AbstractWorksheetElement(name), d_ptr(dd){
+		: WorksheetElement(name), d_ptr(dd){
 	init();
 }
 
@@ -157,7 +157,7 @@ void XYCurve::initActions(){
 }
 
 QMenu* XYCurve::createContextMenu(){
-	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+	QMenu *menu = WorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
@@ -1412,11 +1412,11 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	curveShape = QPainterPath();
 	if (lineType != XYCurve::NoLine){
-		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(linePath, linePen));
+		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
 	}
 
 	if (dropLineType != XYCurve::NoDropLine){
-		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
+		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
 	}
 
 	if (symbolsPrototype && symbolsPrototype->id() != "none"){
@@ -1428,7 +1428,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	}
 
 	if (xErrorType != XYCurve::NoError || yErrorType != XYCurve::NoError){
-		curveShape.addPath(AbstractWorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
+		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
 	}
 
 	boundingRectangle = curveShape.boundingRect();

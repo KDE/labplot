@@ -1,11 +1,9 @@
 /***************************************************************************
     File                 : CartesianPlotLegend.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 Alexander Semke (alexander.semke*web.de)
-						       (replace * with @ in the email addresses)
-                           
+    Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,7 +28,7 @@
 #ifndef CARTESIANPLOTLEGEND_H
 #define CARTESIANPLOTLEGEND_H
 
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
 
@@ -38,7 +36,7 @@ class CartesianPlot;
 class CartesianPlotLegendPrivate;
 class TextLabel;
 
-class CartesianPlotLegend: public AbstractWorksheetElement {
+class CartesianPlotLegend: public WorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -93,7 +91,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
         BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
         BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
-		typedef AbstractWorksheetElement BaseClass;
+		typedef WorksheetElement BaseClass;
 		typedef CartesianPlotLegendPrivate Private;
 
 	public slots:
@@ -116,7 +114,7 @@ class CartesianPlotLegend: public AbstractWorksheetElement {
 	private slots:
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
-		
+
 	signals:
 		friend class CartesianPlotLegendSetLabelFontCmd;
 		friend class CartesianPlotLegendSetLabelColorCmd;

@@ -109,8 +109,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/worksheet/AbstractCurveSymbol.cpp
-	${BACKEND_DIR}/worksheet/AbstractWorksheetDecorationElement.cpp
-	${BACKEND_DIR}/worksheet/AbstractWorksheetElement.cpp
+	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
 	${BACKEND_DIR}/worksheet/StandardCurveSymbolFactory.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp

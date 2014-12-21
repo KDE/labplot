@@ -31,7 +31,7 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
 #include "backend/core/AbstractColumn.h"
 
@@ -39,7 +39,7 @@
 #include <QPen>
 
 class XYCurvePrivate;
-class XYCurve: public AbstractWorksheetElement {
+class XYCurve: public WorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -113,7 +113,7 @@ class XYCurve: public AbstractWorksheetElement {
 		virtual void setPrinting(bool on);
 		void suppressRetransform(bool);
 
-		typedef AbstractWorksheetElement BaseClass;
+		typedef WorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;
 
 	public slots:

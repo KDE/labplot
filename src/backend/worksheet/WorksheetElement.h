@@ -1,6 +1,6 @@
 /***************************************************************************
-    File                 : AbstractWorksheetElement.h
-    Project              : LabPlot/SciDAVis
+    File                 : WorksheetElement.h
+    Project              : LabPlot
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
@@ -28,8 +28,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTWORKSHEETELEMENT_H
-#define ABSTRACTWORKSHEETELEMENT_H
+#ifndef WORKSHEETELEMENT_H
+#define WORKSHEETELEMENT_H
 
 #include "backend/core/AbstractAspect.h"
 #include <QGraphicsItem>
@@ -37,14 +37,14 @@
 
 class QAction;
 
-class AbstractWorksheetElement: public AbstractAspect {
+class WorksheetElement: public AbstractAspect {
 	Q_OBJECT
 
 	public:
-		explicit AbstractWorksheetElement(const QString &name);
-		virtual ~AbstractWorksheetElement();
+		explicit WorksheetElement(const QString &name);
+		virtual ~WorksheetElement();
 
-		virtual QGraphicsItem *graphicsItem() const = 0;
+		virtual QGraphicsItem* graphicsItem() const = 0;
 
 		virtual void setVisible(bool on) = 0;
 		virtual bool isVisible() const = 0;
@@ -81,8 +81,8 @@ class AbstractWorksheetElement: public AbstractAspect {
 		void horizontalPaddingChanged(float);
 		void verticalPaddingChanged(float);
 
-		void hovered();
-		void unhovered();
+		void hovered(QGraphicsItem* item = 0);
+		void unhovered(QGraphicsItem* item = 0);
 };
 
 #endif

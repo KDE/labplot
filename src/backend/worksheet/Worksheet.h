@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : Worksheet.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Worksheet (2D visualization) part
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -96,7 +94,7 @@ class Worksheet: public AbstractPart, public scripted{
 
 	private:
 		void init();
-		AbstractWorksheetElement* aspectFromGraphicsItem(const AbstractWorksheetElement*, const QGraphicsItem*) const;
+		WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
 		WorksheetPrivate* const d;
 		friend class WorksheetPrivate;
 

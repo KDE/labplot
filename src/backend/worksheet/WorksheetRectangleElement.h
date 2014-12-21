@@ -4,8 +4,8 @@
     Description          : Rectangle worksheet (decoration) element.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
-                           
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,9 +30,9 @@
 #ifndef WORKSHEETRECTANGLEELEMENT_H
 #define WORKSHEETRECTANGLEELEMENT_H
 
-#include "backend/worksheet/AbstractWorksheetElement.h"
+#include "backend/worksheet/WorksheetElement.h"
 
-class WorksheetRectangleElement: public AbstractWorksheetElement {
+class WorksheetRectangleElement: public WorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -62,7 +62,7 @@ class WorksheetRectangleElement: public AbstractWorksheetElement {
 		void setRect(const QRectF &rect);
 		QRectF rect() const;
 
-		typedef AbstractWorksheetElement BaseClass;
+		typedef WorksheetElement BaseClass;
 
 	public slots:
 		virtual void retransform();

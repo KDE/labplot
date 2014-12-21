@@ -1,11 +1,9 @@
 /***************************************************************************
     File                 : CartesianPlotLegend.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2014 Alexander Semke (alexander.semke*web.de)
-								(replace * with @ in the email addresses)
-
+    Copyright            : (C) 2013-2014 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -61,12 +59,12 @@
 #include <KLocale>
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name)
-		: AbstractWorksheetElement(name), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {
+		: WorksheetElement(name), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {
 	init();
 }
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name, CartesianPlotLegendPrivate *dd)
-		: AbstractWorksheetElement(name), d_ptr(dd), m_plot(plot){
+		: WorksheetElement(name), d_ptr(dd), m_plot(plot){
 	init();
 }
 
@@ -142,7 +140,7 @@ void CartesianPlotLegend::initActions(){
 }
 
 QMenu* CartesianPlotLegend::createContextMenu(){
-	QMenu *menu = AbstractWorksheetElement::createContextMenu();
+	QMenu *menu = WorksheetElement::createContextMenu();
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
