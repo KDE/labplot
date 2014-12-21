@@ -31,7 +31,6 @@
 #include "backend/worksheet/WorksheetModel.h"
 #include "backend/worksheet/WorksheetElementGroup.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/WorksheetRectangleElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
