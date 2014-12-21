@@ -332,34 +332,35 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
   Depending on the currently selected object(s), identified by \c className, activates/diactivates the corresponding toolbars and menus.
 */
 void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspect){
-  if (className.isEmpty()){
-	//no object or objects of different kind (e.g. a spreadsheet and a worksheet) were selected.
-
-  }else if (className=="CartesianPlot" || className=="Axis" || className=="XYCurve" || className=="CartesianPlotLegend"){
-	//populate worksheet-toolbar
-	QToolBar* toolbar=dynamic_cast<QToolBar*>(mainWindow->guiFactory()->container("cartesian_plot_toolbar", mainWindow));
-	if (!toolbar)return;
-	toolbar->show();
-	toolbar->setEnabled(true);
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
-	if (plot) {
-		if (plot!=m_lastCartesianPlot) {
-			toolbar->clear();
-			plot->fillToolBar(toolbar);
-			m_lastCartesianPlot = const_cast<CartesianPlot*>(plot);
-		}
-	} else {
-		// one of plot's childred was selected
-		const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect->parentAspect());
-		if (plot) {
-			if (plot!=m_lastCartesianPlot) {
-				toolbar->clear();
-				plot->fillToolBar(toolbar);
-				m_lastCartesianPlot = const_cast<CartesianPlot*>(plot);
-			}
-		} else {
-			toolbar->setEnabled(false);
-		}
-	}
-  }
+	return;
+//   if (className.isEmpty()){
+// 	//no object or objects of different kind (e.g. a spreadsheet and a worksheet) were selected.
+//
+//   }else if (className=="CartesianPlot" || className=="Axis" || className=="XYCurve" || className=="CartesianPlotLegend"){
+// 	//populate worksheet-toolbar
+// 	QToolBar* toolbar=dynamic_cast<QToolBar*>(mainWindow->guiFactory()->container("cartesian_plot_toolbar", mainWindow));
+// 	if (!toolbar)return;
+// 	toolbar->show();
+// 	toolbar->setEnabled(true);
+// 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
+// 	if (plot) {
+// 		if (plot!=m_lastCartesianPlot) {
+// 			toolbar->clear();
+// 			plot->fillToolBar(toolbar);
+// 			m_lastCartesianPlot = const_cast<CartesianPlot*>(plot);
+// 		}
+// 	} else {
+// 		// one of plot's childred was selected
+// 		const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect->parentAspect());
+// 		if (plot) {
+// 			if (plot!=m_lastCartesianPlot) {
+// 				toolbar->clear();
+// 				plot->fillToolBar(toolbar);
+// 				m_lastCartesianPlot = const_cast<CartesianPlot*>(plot);
+// 			}
+// 		} else {
+// 			toolbar->setEnabled(false);
+// 		}
+// 	}
+//   }
 }

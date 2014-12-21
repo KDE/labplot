@@ -176,7 +176,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 }
 
 void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect){
-	qDebug()<<"ProjectExplorer::setCurrentAspect" << aspect->name();
+// 	qDebug()<<"ProjectExplorer::setCurrentAspect" << aspect->name();
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(tree_model)
 	  m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
@@ -429,7 +429,7 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index){
-	qDebug()<<"ProjectExplorer::selectIndex";
+// 	qDebug()<<"ProjectExplorer::selectIndex";
 	if ( !m_treeView->selectionModel()->isSelected(index) ) {
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 		m_treeView->setExpanded(index, true);
@@ -438,7 +438,7 @@ void ProjectExplorer::selectIndex(const QModelIndex&  index){
 }
 
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
-	qDebug()<<"ProjectExplorer::deselectIndex";
+// 	qDebug()<<"ProjectExplorer::deselectIndex";
 	if ( m_treeView->selectionModel()->isSelected(index) ) {
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
 	}
@@ -684,6 +684,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
+//TODO
 	collapseParents(currentIndex, expanded);//even if it's the current index, collapse all parent indices if they are not expanded when saved
 
 	return true;

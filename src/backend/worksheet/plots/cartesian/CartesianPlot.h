@@ -132,22 +132,13 @@ class CartesianPlot:public AbstractPlot{
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
-	private slots:
-		void addAxis();
+	public slots:
+		void addHorizontalAxis();
+		void addVerticalAxis();
 		XYCurve* addCurve();
 		XYEquationCurve* addEquationCurve();
 		XYFitCurve* addFitCurve();
 		void addLegend();
-		void updateLegend();
-		void childAdded(const AbstractAspect*);
-		void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
-
-		void dataChanged();
-		void xDataChanged();
-		void yDataChanged();
-		void curveVisibilityChanged();
-
-		void mouseModeChanged(QAction*);
 		void scaleAuto();
 		void scaleAutoX();
 		void scaleAutoY();
@@ -161,6 +152,19 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
+
+	private slots:
+		void updateLegend();
+		void childAdded(const AbstractAspect*);
+		void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+
+		void dataChanged();
+		void xDataChanged();
+		void yDataChanged();
+		void curveVisibilityChanged();
+
+		void mouseModeChanged(QAction*);
+
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();

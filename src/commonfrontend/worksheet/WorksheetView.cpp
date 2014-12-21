@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : WorksheetView.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
@@ -27,6 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetModel.h"
 #include "backend/worksheet/WorksheetElementGroup.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
@@ -69,6 +70,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_worksheet(worksheet),
 	m_model(new WorksheetModel(worksheet)),
 	m_mouseMode(SelectionMode),
+	m_cartesianPlotActionMode(ApplyActionToSelection),
 	m_selectionBandIsShown(false),
 	m_suppressSelectionChangedEvent(false),
 	lastAddedWorksheetElement(0),
@@ -103,7 +105,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	selectionModeAction->setChecked(true);
 
 	changeZoom(zoomOriginAction);
-	currentZoomAction=zoomInAction;
+	currentZoomAction=zoomInViewAction;
 
 	//signal/slot connections
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
@@ -141,11 +143,11 @@ void WorksheetView::initActions(){
 	connect(deleteAction, SIGNAL(triggered()), SLOT(deleteElement()));
 
 	//Zoom actions
-	zoomInAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
-	zoomInAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
+	zoomInViewAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
+	zoomInViewAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
 
-	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), zoomActionGroup);
-	zoomOutAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
+	zoomOutViewAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), zoomActionGroup);
+	zoomOutViewAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
 
 	zoomOriginAction = new KAction(KIcon("zoom-original"), i18n("Original size"), zoomActionGroup);
 	zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
@@ -231,38 +233,115 @@ void WorksheetView::initActions(){
 	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
 	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
 	connect(snapToGridAction, SIGNAL(triggered()), this, SLOT(changeSnapToGrid()));
+
+
+	//action for cartesian plots
+	QActionGroup* cartesianPlotActionModeActionGroup = new QActionGroup(this);
+	cartesianPlotActionModeActionGroup->setExclusive(true);
+	cartesianPlotApplyToSelectionAction = new KAction(i18n("selected plots"), cartesianPlotActionModeActionGroup);
+	cartesianPlotApplyToSelectionAction->setCheckable(true);
+	cartesianPlotApplyToSelectionAction->setChecked(true);
+	cartesianPlotApplyToAllAction = new KAction(i18n("all plots"), cartesianPlotActionModeActionGroup);
+	cartesianPlotApplyToAllAction->setCheckable(true);
+	connect(cartesianPlotActionModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotActionModeChanged(QAction*)));
+
+	QActionGroup* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
+	cartesianPlotMouseModeActionGroup->setExclusive(true);
+	cartesianPlotSelectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and edit"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotSelectionModeAction->setCheckable(true);
+	cartesianPlotSelectionModeAction->setChecked(true);
+
+	cartesianPlotZoomSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select region and zoom in"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomSelectionModeAction->setCheckable(true);
+
+	cartesianPlotZoomXSelectionModeAction = new KAction(KIcon("zoom-select-x"), i18n("Select x-region and zoom in"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomXSelectionModeAction->setCheckable(true);
+
+	cartesianPlotZoomYSelectionModeAction = new KAction(KIcon("zoom-select-y"), i18n("Select y-region and zoom in"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
+
+	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
+
+	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
+	addEquationCurveAction = new KAction(KIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+	addFitCurveAction = new KAction(KIcon("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
+	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
+	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
+
+	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
+	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), this);
+	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
+	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), this);
+	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), this);
+	zoomInXAction = new KAction(KIcon("zoom-in-x"), i18n("zoom in X"), this);
+	zoomOutXAction = new KAction(KIcon("zoom-out-x"), i18n("zoom out X"), this);
+	zoomInYAction = new KAction(KIcon("zoom-in-y"), i18n("zoom in Y"), this);
+	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), this);
+    shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
+	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
+	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
+	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
+
+	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
+	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
+	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
+	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
+
+	//zoom actions
+	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
+	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
+	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
+	connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
+	connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
+	connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
+	connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
+	connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
+	connect(zoomOutYAction, SIGNAL(triggered()), SLOT(zoomOutY()));
+	connect(shiftLeftXAction, SIGNAL(triggered()), SLOT(shiftLeftX()));
+	connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
+	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
+	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
 }
 
 void WorksheetView::initMenus(){
-	m_addNewMenu = new QMenu(i18n("Add new"));
 	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"));
-	m_zoomMenu = new QMenu(i18n("Zoom"));
-	m_layoutMenu = new QMenu(i18n("Layout"));
-	m_gridMenu = new QMenu(i18n("Grid"));
-	m_gridMenu->setIcon(QIcon(KIcon("view-grid")));
-
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot1Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
 
+	m_addNewMenu = new QMenu(i18n("Add new"));
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(KIcon("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 
-	m_zoomMenu->addAction(zoomInAction);
-	m_zoomMenu->addAction(zoomOutAction);
+	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"));
+	m_viewMouseModeMenu->setIcon(KIcon("input-mouse"));
+	m_viewMouseModeMenu->addAction(selectionModeAction);
+	m_viewMouseModeMenu->addAction(navigationModeAction);
+	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
+
+	m_zoomMenu = new QMenu(i18n("Zoom"));
+	m_zoomMenu->setIcon(KIcon("zoom-draw"));
+	m_zoomMenu->addAction(zoomInViewAction);
+	m_zoomMenu->addAction(zoomOutViewAction);
 	m_zoomMenu->addAction(zoomOriginAction);
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
 
+	m_layoutMenu = new QMenu(i18n("Layout"));
 	m_layoutMenu->addAction(verticalLayoutAction);
 	m_layoutMenu->addAction(horizontalLayoutAction);
 	m_layoutMenu->addAction(gridLayoutAction);
 	m_layoutMenu->addSeparator();
 	m_layoutMenu->addAction(breakLayoutAction);
 
+	m_gridMenu = new QMenu(i18n("Grid"));
+	m_gridMenu->setIcon(KIcon("view-grid"));
 	m_gridMenu->addAction(noGridAction);
 	m_gridMenu->addSeparator();
 	m_gridMenu->addAction(sparseLineGridAction);
@@ -272,8 +351,59 @@ void WorksheetView::initMenus(){
 	m_gridMenu->addAction(denseDotGridAction);
 	m_gridMenu->addSeparator();
 	m_gridMenu->addAction(customGridAction);
-	m_gridMenu->addSeparator();
-	m_gridMenu->addAction(snapToGridAction);
+	//TODO: implement "snap to grid" and activate this action
+// 	m_gridMenu->addSeparator();
+// 	m_gridMenu->addAction(snapToGridAction);
+
+	m_cartesianPlotMenu = new QMenu(i18n("Cartesian Plot"));
+
+	m_cartesianPlotMouseModeMenu = new QMenu(i18n("Mouse Mode"));
+	m_cartesianPlotMouseModeMenu->setIcon(KIcon("input-mouse"));
+	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotSelectionModeAction);
+	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomSelectionModeAction);
+	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomXSelectionModeAction);
+	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomYSelectionModeAction);
+	m_cartesianPlotMouseModeMenu->addSeparator();
+
+	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add new"));
+	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addLegendAction);
+	m_cartesianPlotAddNewMenu->addSeparator();
+	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
+	m_cartesianPlotAddNewMenu->addAction(addVerticalAxisAction);
+
+	m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"));
+	m_cartesianPlotZoomMenu->setIcon(KIcon("zoom-draw"));
+	m_cartesianPlotZoomMenu->addAction(scaleAutoAction);
+	m_cartesianPlotZoomMenu->addAction(scaleAutoXAction);
+	m_cartesianPlotZoomMenu->addAction(scaleAutoYAction);
+	m_cartesianPlotZoomMenu->addSeparator();
+	m_cartesianPlotZoomMenu->addAction(zoomInAction);
+	m_cartesianPlotZoomMenu->addAction(zoomOutAction);
+	m_cartesianPlotZoomMenu->addSeparator();
+	m_cartesianPlotZoomMenu->addAction(zoomInXAction);
+	m_cartesianPlotZoomMenu->addAction(zoomOutXAction);
+	m_cartesianPlotZoomMenu->addSeparator();
+	m_cartesianPlotZoomMenu->addAction(zoomInYAction);
+	m_cartesianPlotZoomMenu->addAction(zoomOutYAction);
+	m_cartesianPlotZoomMenu->addSeparator();
+	m_cartesianPlotZoomMenu->addAction(shiftLeftXAction);
+	m_cartesianPlotZoomMenu->addAction(shiftRightXAction);
+	m_cartesianPlotZoomMenu->addSeparator();
+	m_cartesianPlotZoomMenu->addAction(shiftUpYAction);
+	m_cartesianPlotZoomMenu->addAction(shiftDownYAction);
+
+	m_cartesianPlotActionModeMenu = new QMenu(i18n("Apply actions to"));
+	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToSelectionAction);
+	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllAction);
+
+	m_cartesianPlotMenu->addMenu(m_cartesianPlotMouseModeMenu);
+	m_cartesianPlotMenu->addMenu(m_cartesianPlotAddNewMenu);
+	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
+	m_cartesianPlotMenu->addSeparator();
+	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
 }
 
 /*!
@@ -299,17 +429,12 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 
 	menu->insertMenu(firstAction, m_addNewMenu);
 	menu->insertSeparator(firstAction);
-
-	//Mouse mode actions
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, selectionModeAction);
-	menu->insertAction(firstAction, navigationModeAction);
-	menu->insertAction(firstAction, zoomSelectionModeAction);
-
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_viewMouseModeMenu);
 	menu->insertMenu(firstAction, m_zoomMenu);
 	menu->insertMenu(firstAction, m_layoutMenu);
 	menu->insertMenu(firstAction, m_gridMenu);
+	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_cartesianPlotMenu);
 	menu->insertSeparator(firstAction);
 }
 
@@ -337,6 +462,35 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	tbZoom->setMenu(m_zoomMenu);
 	tbZoom->setDefaultAction(currentZoomAction);
 	toolBar->addWidget(tbZoom);
+}
+
+void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
+	toolBar->addAction(cartesianPlotSelectionModeAction);
+	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
+	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
+	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
+	toolBar->addSeparator();
+	toolBar->addAction(addCurveAction);
+	toolBar->addAction(addEquationCurveAction);
+	toolBar->addAction(addFitCurveAction);
+	toolBar->addAction(addLegendAction);
+	toolBar->addSeparator();
+	toolBar->addAction(addHorizontalAxisAction);
+	toolBar->addAction(addVerticalAxisAction);
+	toolBar->addSeparator();
+	toolBar->addAction(scaleAutoAction);
+	toolBar->addAction(scaleAutoXAction);
+	toolBar->addAction(scaleAutoYAction);
+	toolBar->addAction(zoomInAction);
+	toolBar->addAction(zoomOutAction);
+	toolBar->addAction(zoomInXAction);
+	toolBar->addAction(zoomOutXAction);
+	toolBar->addAction(zoomInYAction);
+	toolBar->addAction(zoomOutYAction);
+	toolBar->addAction(shiftLeftXAction);
+	toolBar->addAction(shiftRightXAction);
+	toolBar->addAction(shiftUpYAction);
+	toolBar->addAction(shiftDownYAction);
 }
 
 void WorksheetView::setScene(QGraphicsScene* scene) {
@@ -595,9 +749,9 @@ void WorksheetView::useViewSizeRequested() {
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		zoomFitPageHeightAction->setVisible(false);
 		zoomFitPageWidthAction->setVisible(false);
-		currentZoomAction = zoomInAction;
+		currentZoomAction = zoomInViewAction;
 		if (tbZoom)
-			tbZoom->setDefaultAction(zoomInAction);
+			tbZoom->setDefaultAction(zoomInViewAction);
 
 		//determine and set the current view size
 		this->processResize();
@@ -620,9 +774,9 @@ void WorksheetView::processResize() {
 }
 
 void WorksheetView::changeZoom(QAction* action){
-	if (action==zoomInAction){
+	if (action==zoomInViewAction){
 		scale(1.2, 1.2);
-	}else if (action==zoomOutAction){
+	}else if (action==zoomOutViewAction){
 		scale(1.0/1.2, 1.0/1.2);
 	}else if (action==zoomOriginAction){
 		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
@@ -1083,5 +1237,267 @@ void WorksheetView::layoutChanged(Worksheet::Layout layout) {
 			horizontalLayoutAction->setChecked(true);
 		else
 			gridLayoutAction->setChecked(true);
+	}
+}
+
+
+//##############################################################################
+//########################  SLOTs for cartesian plots   ########################
+//##############################################################################
+void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
+	if (action == cartesianPlotApplyToSelectionAction)
+		m_cartesianPlotActionMode = ApplyActionToSelection;
+	else
+		m_cartesianPlotActionMode = ApplyActionToAll;
+}
+
+void WorksheetView::cartesianPlotMouseModeChanged(QAction*) {
+	//TODO
+}
+
+void WorksheetView::addCurve() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->addCurve();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->addCurve();
+		}
+	}
+}
+
+void WorksheetView::addEquationCurve() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->addEquationCurve();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->addEquationCurve();
+		}
+	}
+}
+
+void WorksheetView::addFitCurve() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->addFitCurve();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->addFitCurve();
+		}
+	}
+}
+
+void WorksheetView::addLegend() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->addLegend();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->addLegend();
+		}
+	}
+}
+
+void WorksheetView::addHorizontalAxis() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->addHorizontalAxis();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->addHorizontalAxis();
+		}
+	}
+}
+
+void WorksheetView::addVerticalAxis() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->addVerticalAxis();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->addVerticalAxis();
+		}
+	}
+}
+
+void WorksheetView::scaleAuto() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->scaleAuto();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->scaleAuto();
+		}
+	}
+}
+
+void WorksheetView::scaleAutoX() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->scaleAutoX();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->scaleAutoX();
+		}
+	}
+}
+
+void WorksheetView::scaleAutoY() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->scaleAutoY();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->scaleAutoY();
+		}
+	}
+}
+
+void WorksheetView::zoomIn() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->zoomIn();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->zoomIn();
+		}
+	}
+}
+
+void WorksheetView::zoomOut() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->zoomOut();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->zoomOut();
+		}
+	}
+}
+
+void WorksheetView::zoomInX() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->zoomInX();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->zoomInX();
+		}
+	}
+}
+
+void WorksheetView::zoomOutX() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->zoomOutX();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->zoomOutX();
+		}
+	}
+}
+
+void WorksheetView::zoomInY() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->zoomInY();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->zoomInY();
+		}
+	}
+}
+
+void WorksheetView::zoomOutY() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->zoomOutY();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->zoomOutY();
+		}
+	}
+}
+
+void WorksheetView::shiftLeftX() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->shiftLeftX();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->shiftLeftX();
+		}
+	}
+}
+
+void WorksheetView::shiftRightX() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->shiftRightX();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->shiftRightX();
+		}
+	}
+}
+
+void WorksheetView::shiftUpY() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->shiftUpY();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->shiftUpY();
+		}
+	}
+}
+
+void WorksheetView::shiftDownY() {
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->shiftDownY();
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->shiftDownY();
+		}
 	}
 }

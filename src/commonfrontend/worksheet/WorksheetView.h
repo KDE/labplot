@@ -38,9 +38,9 @@ class QToolButton;
 class QWheelEvent;
 class QTimeLine;
 
-class WorksheetModel;
 class AbstractAspect;
 class AbstractWorksheetElement;
+class WorksheetModel;
 
 class WorksheetView : public QGraphicsView {
 	Q_OBJECT
@@ -49,9 +49,8 @@ class WorksheetView : public QGraphicsView {
 	explicit WorksheetView(Worksheet* worksheet);
 	virtual ~WorksheetView();
 
-	enum MouseMode{SelectionMode, NavigationMode, ZoomSelectionMode};
-	enum GridStyle{NoGrid, LineGrid, DotGrid};
 	enum ExportFormat{Pdf, Eps, Svg, Png};
+	enum GridStyle{NoGrid, LineGrid, DotGrid};
 	enum ExportArea{ExportBoundingBox, ExportSelection, ExportWorksheet};
 
 	struct GridSettings {
@@ -66,6 +65,9 @@ class WorksheetView : public QGraphicsView {
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
 
   private:
+	enum MouseMode{SelectionMode, NavigationMode, ZoomSelectionMode};
+	enum CartesianPlotActionMode{ApplyActionToSelection, ApplyActionToAll};
+
 	void initActions();
 	void initMenus();
 	void processResize();
@@ -84,6 +86,7 @@ class WorksheetView : public QGraphicsView {
 	Worksheet* m_worksheet;
 	WorksheetModel* m_model;
 	MouseMode m_mouseMode;
+	CartesianPlotActionMode m_cartesianPlotActionMode;
 	bool m_selectionBandIsShown;
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
@@ -100,6 +103,12 @@ class WorksheetView : public QGraphicsView {
 	QMenu* m_zoomMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
+	QMenu* m_viewMouseModeMenu;
+	QMenu* m_cartesianPlotMenu;
+	QMenu* m_cartesianPlotMouseModeMenu;
+	QMenu* m_cartesianPlotAddNewMenu;
+	QMenu* m_cartesianPlotZoomMenu;
+	QMenu* m_cartesianPlotActionModeMenu;
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
@@ -109,8 +118,8 @@ class WorksheetView : public QGraphicsView {
 	QAction* selectAllAction;
 	QAction* deleteAction;
 
-	QAction* zoomInAction;
-	QAction* zoomOutAction;
+	QAction* zoomInViewAction;
+	QAction* zoomOutViewAction;
 	QAction* zoomOriginAction;
 	QAction* zoomFitPageHeightAction;
 	QAction* zoomFitPageWidthAction;
@@ -139,9 +148,39 @@ class WorksheetView : public QGraphicsView {
 	QAction* customGridAction;
 	QAction* snapToGridAction;
 
+	//Actions for cartesian plots
+	QAction* cartesianPlotApplyToSelectionAction;
+	QAction* cartesianPlotApplyToAllAction;
+	QAction* cartesianPlotSelectionModeAction;
+	QAction* cartesianPlotZoomSelectionModeAction;
+	QAction* cartesianPlotZoomXSelectionModeAction;
+	QAction* cartesianPlotZoomYSelectionModeAction;
+
+	QAction* addCurveAction;
+	QAction* addEquationCurveAction;
+	QAction* addFitCurveAction;
+	QAction* addHorizontalAxisAction;
+	QAction* addVerticalAxisAction;
+	QAction* addLegendAction;
+
+	QAction* scaleAutoXAction;
+	QAction* scaleAutoYAction;
+	QAction* scaleAutoAction;
+	QAction* zoomInAction;
+	QAction* zoomOutAction;
+	QAction* zoomInXAction;
+	QAction* zoomOutXAction;
+	QAction* zoomInYAction;
+	QAction* zoomOutYAction;
+	QAction* shiftLeftXAction;
+	QAction* shiftRightXAction;
+	QAction* shiftUpYAction;
+	QAction* shiftDownYAction;
+
   public slots:
 	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
+	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void selectItem(QGraphicsItem*);
 
@@ -165,6 +204,29 @@ class WorksheetView : public QGraphicsView {
 
 	void fadeIn(qreal);
 	void fadeOut(qreal);
+
+	//SLOTs for cartesian plots
+	void cartesianPlotActionModeChanged(QAction*);
+	void cartesianPlotMouseModeChanged(QAction*);
+	void addCurve();
+	void addEquationCurve();
+	void addFitCurve();
+	void addLegend();
+	void addHorizontalAxis();
+	void addVerticalAxis();
+	void scaleAuto();
+	void scaleAutoX();
+	void scaleAutoY();
+	void zoomIn();
+	void zoomOut();
+	void zoomInX();
+	void zoomOutX();
+	void zoomInY();
+	void zoomOutY();
+	void shiftLeftX();
+	void shiftRightX();
+	void shiftUpY();
+	void shiftDownY();
 
   signals:
 	void statusInfo(const QString&);

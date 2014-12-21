@@ -474,6 +474,12 @@ void MainWin::updateGUI() {
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 
+		//populate the toolbar for cartesian plots
+		toolbar=qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
+		toolbar->setVisible(true);
+		toolbar->clear();
+		view->fillCartesianPlotToolBar(toolbar);
+
 		//hide the spreadsheet toolbar
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	}else{

@@ -387,8 +387,8 @@ void CartesianPlot::initActions(){
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
-	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
-	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addAxis()));
+	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
+	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
 
 	//zoom actions
 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
@@ -635,26 +635,26 @@ void CartesianPlot::setYScaleBreakings(const ScaleBreakings& breakings) {
 //################################################################
 //########################## Slots ###############################
 //################################################################
-void CartesianPlot::addAxis(){
-	if (QObject::sender() == addHorizontalAxisAction) {
-		Axis* axis = new Axis("x-axis", Axis::AxisHorizontal);
-		if (axis->autoScale()) {
-			axis->setUndoAware(false);
-			axis->setStart(xMin());
-			axis->setEnd(xMax());
-			axis->setUndoAware(true);
-		}
-		addChild(axis);
-	} else {
-		Axis* axis = new Axis("y-axis", Axis::AxisVertical);
-		if (axis->autoScale()) {
-			axis->setUndoAware(false);
-			axis->setStart(yMin());
-			axis->setEnd(yMax());
-			axis->setUndoAware(true);
-		}
-		addChild(axis);
+void CartesianPlot::addHorizontalAxis(){
+	Axis* axis = new Axis("x-axis", Axis::AxisHorizontal);
+	if (axis->autoScale()) {
+		axis->setUndoAware(false);
+		axis->setStart(xMin());
+		axis->setEnd(xMax());
+		axis->setUndoAware(true);
 	}
+	addChild(axis);
+}
+
+void CartesianPlot::addVerticalAxis(){
+	Axis* axis = new Axis("y-axis", Axis::AxisVertical);
+	if (axis->autoScale()) {
+		axis->setUndoAware(false);
+		axis->setStart(yMin());
+		axis->setEnd(yMax());
+		axis->setUndoAware(true);
+	}
+	addChild(axis);
 }
 
 XYCurve* CartesianPlot::addCurve(){
@@ -676,6 +676,10 @@ XYFitCurve* CartesianPlot::addFitCurve(){
 }
 
 void CartesianPlot::addLegend(){
+	//don't do anything if there's already a legend
+	if (m_legend)
+		return;
+
 	m_legend = new CartesianPlotLegend(this, "legend");
 	this->addChild(m_legend);
 	m_legend->retransform();
@@ -849,8 +853,8 @@ void CartesianPlot::scaleAutoX(){
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
-		QList<XYCurve*> children = this->children<XYCurve>();
-		foreach(XYCurve* curve, children) {
+		QList<const XYCurve*> children = this->children<const XYCurve>();
+		foreach(const XYCurve* curve, children) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -901,15 +905,14 @@ void CartesianPlot::scaleAutoX(){
 }
 
 void CartesianPlot::scaleAutoY(){
-	qDebug()<<"CartesianPlot::scaleAutoY()";
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum y-value
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
-		QList<XYCurve*> children = this->children<XYCurve>();
-		foreach(XYCurve* curve, children) {
+		QList<const XYCurve*> children = this->children<const XYCurve>();
+		foreach(const XYCurve* curve, children) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->yColumn())
@@ -963,11 +966,11 @@ void CartesianPlot::scaleAuto(){
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum x-value
-	QList<XYCurve*> children = this->children<XYCurve>();
+	QList<const XYCurve*> children = this->children<const XYCurve>();
 	if (d->curvesXMinMaxIsDirty) {
 		d->curvesXMin = INFINITY;
 		d->curvesXMax = -INFINITY;
-		foreach(XYCurve* curve, children) {
+		foreach(const XYCurve* curve, children) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -990,7 +993,7 @@ void CartesianPlot::scaleAuto(){
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
 		d->curvesYMax = -INFINITY;
-		foreach(XYCurve* curve, children) {
+		foreach(const XYCurve* curve, children) {
 			if (!curve->isVisible())
 				continue;
 			if (!curve->xColumn())
@@ -1193,7 +1196,6 @@ void CartesianPlotPrivate::retransform(){
 	if (suppressRetransform)
 		return;
 
-// 	qDebug()<<"CartesianPlotPrivate::retransform";
 	prepareGeometryChange();
 	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
@@ -1313,7 +1315,7 @@ void CartesianPlotPrivate::retransformScales(){
 				axis->setStart(xMin);
 				axis->setUndoAware(true);
 			}
-
+			//TODO;
 // 			if (axis->position() == Axis::AxisCustom && deltaYMin != 0){
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
@@ -1329,6 +1331,7 @@ void CartesianPlotPrivate::retransformScales(){
 				axis->setUndoAware(true);
 			}
 
+			//TODO;
 // 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0){
 // 				axis->setOffset(axis->offset() + deltaXMin, false);
 // 			}
@@ -1472,7 +1475,6 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		update();
 	}
 
-
 	//TODO: implement the navigation in plot on mouse move events,
 	//calculate the position changes and call shift*()-functions
 }
@@ -1604,7 +1606,6 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event){
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-// 	qDebug()<<"CartesianPlotPrivate::paint";
 	if (!isVisible())
 		return;
 
