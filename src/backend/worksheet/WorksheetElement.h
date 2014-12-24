@@ -44,6 +44,8 @@ class WorksheetElement: public AbstractAspect {
 		explicit WorksheetElement(const QString &name);
 		virtual ~WorksheetElement();
 
+		enum WorksheetElementName {NameCartesianPlot = 1};
+
 		virtual QGraphicsItem* graphicsItem() const = 0;
 
 		virtual void setVisible(bool on) = 0;
@@ -81,8 +83,8 @@ class WorksheetElement: public AbstractAspect {
 		void horizontalPaddingChanged(float);
 		void verticalPaddingChanged(float);
 
-		void hovered(QGraphicsItem* item = 0);
-		void unhovered(QGraphicsItem* item = 0);
+		void hovered();
+		void unhovered();
 };
 
 #endif

@@ -31,6 +31,7 @@
 
 #include <QGraphicsView>
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class QMenu;
 class QToolBar;
@@ -87,6 +88,7 @@ class WorksheetView : public QGraphicsView {
 	WorksheetModel* m_model;
 	MouseMode m_mouseMode;
 	CartesianPlotActionMode m_cartesianPlotActionMode;
+	CartesianPlot::MouseMode m_cartesianPlotMouseMode;
 	bool m_selectionBandIsShown;
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;

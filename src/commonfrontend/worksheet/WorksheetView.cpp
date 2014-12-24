@@ -31,7 +31,6 @@
 #include "backend/worksheet/WorksheetModel.h"
 #include "backend/worksheet/WorksheetElementGroup.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/core/column/Column.h"
@@ -70,6 +69,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_model(new WorksheetModel(worksheet)),
 	m_mouseMode(SelectionMode),
 	m_cartesianPlotActionMode(ApplyActionToSelection),
+	m_cartesianPlotMouseMode(CartesianPlot::SelectionMode),
 	m_selectionBandIsShown(false),
 	m_suppressSelectionChangedEvent(false),
 	lastAddedWorksheetElement(0),
@@ -712,6 +712,7 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
 
 		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
+		m_selectionEnd = event->pos();
 		if ( abs(m_selectionEnd.x()-m_selectionStart.x())>20 && abs(m_selectionEnd.y()-m_selectionStart.y())>20 )
 			fitInView(mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect(), Qt::KeepAspectRatio);
 	}
@@ -719,7 +720,29 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
-	if (m_selectionBandIsShown) {
+	if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode != CartesianPlot::SelectionMode ) {
+		//check whether there is a cartesian plot under the cursor
+		bool plot = false;
+		QGraphicsItem* item = itemAt(event->pos());
+		if (item) {
+			plot = item->data(0).toInt() == WorksheetElement::NameCartesianPlot;
+			if (!plot && item->parentItem())
+				plot = item->parentItem()->data(0).toInt() == WorksheetElement::NameCartesianPlot;
+		}
+
+		//set the cursor appearance according to the current mouse mode for the cartesian plots
+		if (plot) {
+			if (m_cartesianPlotMouseMode == CartesianPlot::ZoomSelectionMode) {
+				setCursor(Qt::CrossCursor);
+			} else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomXSelectionMode) {
+				setCursor(Qt::SizeHorCursor);
+			} else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomYSelectionMode) {
+				setCursor(Qt::SizeVerCursor);
+			}
+		} else {
+			setCursor(Qt::ArrowCursor);
+		}
+	} else if (m_selectionBandIsShown) {
 		m_selectionEnd = event->pos();
 		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
 	}
@@ -807,7 +830,6 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 	} else {
 		m_mouseMode = ZoomSelectionMode;
 		setInteractive(false);
-// 		setDragMode(QGraphicsView::NoDrag);
 		setDragMode(QGraphicsView::NoDrag);
 	}
 }
@@ -818,24 +840,28 @@ void WorksheetView::addNew(QAction* action){
 	if ( action == addCartesianPlot1Action ){
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::FourAxes);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	}else if ( action == addCartesianPlot2Action ){
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::TwoAxes);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
 	}else if ( action == addCartesianPlot3Action ){
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::TwoAxesCentered);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
 	}else if ( action == addCartesianPlot4Action ){
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::TwoAxesCenteredZero);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
@@ -1250,8 +1276,20 @@ void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 		m_cartesianPlotActionMode = ApplyActionToAll;
 }
 
-void WorksheetView::cartesianPlotMouseModeChanged(QAction*) {
-	//TODO
+void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
+	if (action==cartesianPlotSelectionModeAction) {
+		m_cartesianPlotMouseMode = CartesianPlot::SelectionMode;
+	} else if (action==cartesianPlotZoomSelectionModeAction) {
+		m_cartesianPlotMouseMode = CartesianPlot::ZoomSelectionMode;
+	} else if (action==cartesianPlotZoomXSelectionModeAction) {
+		m_cartesianPlotMouseMode = CartesianPlot::ZoomXSelectionMode;
+	} else if (action==cartesianPlotZoomYSelectionModeAction) {
+		m_cartesianPlotMouseMode = CartesianPlot::ZoomYSelectionMode;
+	}
+
+	foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+		plot->setMouseMode(m_cartesianPlotMouseMode);
+	}
 }
 
 void WorksheetView::addCurve() {

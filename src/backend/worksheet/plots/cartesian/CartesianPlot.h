@@ -67,9 +67,9 @@ class CartesianPlot:public AbstractPlot{
 		void initDefault(Type=FourAxes);
 		QIcon icon() const;
 		QMenu* createContextMenu();
-		void fillToolBar(QToolBar*) const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
+		void setMouseMode(const MouseMode);
 		MouseMode mouseMode() const;
 
 		virtual void save(QXmlStreamWriter*) const;
@@ -100,11 +100,6 @@ class CartesianPlot:public AbstractPlot{
 		float m_zoomFactor;
 
 		QAction* visibilityAction;
-
-		QAction* selectionModeAction;
-		QAction* zoomSelectionModeAction;
-		QAction* zoomXSelectionModeAction;
-		QAction* zoomYSelectionModeAction;
 
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
@@ -162,9 +157,6 @@ class CartesianPlot:public AbstractPlot{
 		void xDataChanged();
 		void yDataChanged();
 		void curveVisibilityChanged();
-
-		void mouseModeChanged(QAction*);
-
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();

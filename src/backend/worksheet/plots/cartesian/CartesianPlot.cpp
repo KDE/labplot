@@ -345,23 +345,7 @@ void CartesianPlot::initDefault(Type type){
 }
 
 void CartesianPlot::initActions(){
-	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
-	mouseModeActionGroup->setExclusive(true);
-	selectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and edit"), mouseModeActionGroup);
-	selectionModeAction->setCheckable(true);
-	selectionModeAction->setChecked(true);
-
-	zoomSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select region and zoom in"), mouseModeActionGroup);
-	zoomSelectionModeAction->setCheckable(true);
-
-	zoomXSelectionModeAction = new KAction(KIcon("zoom-select-x"), i18n("Select x-region and zoom in"), mouseModeActionGroup);
-	zoomXSelectionModeAction->setCheckable(true);
-
-	zoomYSelectionModeAction = new KAction(KIcon("zoom-select-y"), i18n("Select y-region and zoom in"), mouseModeActionGroup);
-	zoomYSelectionModeAction->setCheckable(true);
-
-	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(mouseModeChanged(QAction*)));
-
+	//"add new" actions
 	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 	addFitCurveAction = new KAction(KIcon("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
@@ -369,6 +353,14 @@ void CartesianPlot::initActions(){
 	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
 
+	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
+	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
+	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
+	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
+
+	//zoom/navigate actions
 	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
 	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), this);
 	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
@@ -383,14 +375,6 @@ void CartesianPlot::initActions(){
 	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
 	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
 
-	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
-	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
-	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
-	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
-	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
-	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
-
-	//zoom actions
 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
 	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
@@ -405,6 +389,7 @@ void CartesianPlot::initActions(){
 	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
 	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
 
+	//visibility action
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
@@ -460,34 +445,6 @@ QMenu* CartesianPlot::createContextMenu(){
 	return menu;
 }
 
-void CartesianPlot::fillToolBar(QToolBar* toolBar) const{
-	toolBar->addAction(selectionModeAction);
-	toolBar->addAction(zoomSelectionModeAction);
-	toolBar->addAction(zoomXSelectionModeAction);
-	toolBar->addAction(zoomYSelectionModeAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addCurveAction);
-	toolBar->addAction(addEquationCurveAction);
-	toolBar->addAction(addFitCurveAction);
-	toolBar->addAction(addLegendAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addHorizontalAxisAction);
-	toolBar->addAction(addVerticalAxisAction);
-	toolBar->addSeparator();
-	toolBar->addAction(scaleAutoAction);
-	toolBar->addAction(scaleAutoXAction);
-	toolBar->addAction(scaleAutoYAction);
-	toolBar->addAction(zoomInAction);
-	toolBar->addAction(zoomOutAction);
-	toolBar->addAction(zoomInXAction);
-	toolBar->addAction(zoomOutXAction);
-	toolBar->addAction(zoomInYAction);
-	toolBar->addAction(zoomOutYAction);
-	toolBar->addAction(shiftLeftXAction);
-	toolBar->addAction(shiftRightXAction);
-	toolBar->addAction(shiftUpYAction);
-	toolBar->addAction(shiftDownYAction);
-}
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -800,25 +757,11 @@ void CartesianPlot::curveVisibilityChanged() {
 		this->scaleAutoY();
 }
 
-void CartesianPlot::mouseModeChanged(QAction* action) {
+void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 	Q_D(CartesianPlot);
-	if (action==selectionModeAction) {
-		d->scene()->views().first()->setCursor(Qt::ArrowCursor);
-		d->mouseMode = CartesianPlot::SelectionMode;
-		d->setHandlesChildEvents(false);
-	} else if (action==zoomSelectionModeAction) {
-		d->scene()->views().first()->setCursor(Qt::CrossCursor);
-		d->mouseMode = CartesianPlot::ZoomSelectionMode;
-		d->setHandlesChildEvents(true);
-	} else if (action==zoomXSelectionModeAction) {
-		d->scene()->views().first()->setCursor(Qt::SizeHorCursor);
-		d->mouseMode = CartesianPlot::ZoomXSelectionMode;
-		d->setHandlesChildEvents(true);
-	} else if (action==zoomYSelectionModeAction) {
-		d->scene()->views().first()->setCursor(Qt::SizeVerCursor);
-		d->mouseMode = CartesianPlot::ZoomYSelectionMode;
-		d->setHandlesChildEvents(true);
-	}
+
+	d->mouseMode = mouseMode;
+	d->setHandlesChildEvents(mouseMode != CartesianPlot::SelectionMode);
 
 	QList<QGraphicsItem*> items = d->childItems();
 	if (d->mouseMode == CartesianPlot::SelectionMode) {
@@ -833,7 +776,7 @@ void CartesianPlot::mouseModeChanged(QAction* action) {
 	//if it's currently movable (no worksheet layout available)
 	const Worksheet* worksheet = dynamic_cast<const Worksheet*>(parentAspect());
 	if (worksheet) {
-		if (action==selectionModeAction) {
+		if (mouseMode == CartesianPlot::SelectionMode) {
 			if (worksheet->layout() != Worksheet::NoLayout)
 				graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 			else
@@ -842,8 +785,6 @@ void CartesianPlot::mouseModeChanged(QAction* action) {
 			graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 		}
 	}
-
-	d->update();
 }
 
 void CartesianPlot::scaleAutoX(){
@@ -1183,6 +1124,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	: AbstractPlotPrivate(owner), q(owner), curvesXMinMaxIsDirty(false), curvesYMinMaxIsDirty(false),
 	suppressRetransform(false), m_printing(false), m_selectionBandIsShown(false), cSystem(0),
 	mouseMode(CartesianPlot::SelectionMode){
+	setData(0, WorksheetElement::NameCartesianPlot);
 }
 
 /*!
