@@ -119,6 +119,7 @@ class WorksheetView : public QGraphicsView {
 	//Actions
 	QAction* selectAllAction;
 	QAction* deleteAction;
+	QAction* backspaceAction;
 
 	QAction* zoomInViewAction;
 	QAction* zoomOutViewAction;

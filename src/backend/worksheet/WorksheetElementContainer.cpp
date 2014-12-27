@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : WorksheetElementContainer.cpp
-    Project              : LabPlot/SciDAVis
-    Description          : Generic WorksheetElement container.
+    Project              : LabPlot
+    Description          : Worksheet element container - parent of multiple elements
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -35,7 +33,6 @@
 
 #include <QtDebug>
 #include <QGraphicsScene>
-#include <QGraphicsItem>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
@@ -44,21 +41,21 @@
 
 /**
  * \class WorksheetElementContainer
- * \brief Generic WorksheetElement container.
+ * \brief Worksheet element container - parent of multiple elements
  * \ingroup worksheet
- * This class combines functionality of worksheet element containers
- * such as groups, plots etc.
+ * This class provides the functionality for a containers of multiple
+ * worksheet elements. Such a container can be a plot or group of elements.
  *
  */
 
-WorksheetElementContainer::WorksheetElementContainer(const QString &name)
+WorksheetElementContainer::WorksheetElementContainer(const QString& name)
 	: WorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
 }
 
-WorksheetElementContainer::WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd)
+WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd)
     : WorksheetElement(name), d_ptr(dd) {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
@@ -70,8 +67,8 @@ WorksheetElementContainer::~WorksheetElementContainer(){
 	//and is deleted during the cleanup in QGraphicsScene
 }
 
-QGraphicsItem *WorksheetElementContainer::graphicsItem() const {
-	return const_cast<QGraphicsItem *>(static_cast<const QGraphicsItem *>(d_ptr));
+QGraphicsItem* WorksheetElementContainer::graphicsItem() const {
+	return const_cast<QGraphicsItem*>(static_cast<const QGraphicsItem*>(d_ptr));
 }
 
 QRectF WorksheetElementContainer::rect() const{
@@ -110,8 +107,8 @@ bool WorksheetElementContainer::isVisible() const {
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
-	QList<WorksheetElement *> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const WorksheetElement *elem, childList) {
+	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(const WorksheetElement* elem, childList) {
 		if (!elem->isVisible())
 			return false;
 	}
@@ -124,8 +121,8 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
-	QList<WorksheetElement *> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(WorksheetElement *elem, childList)
+	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(WorksheetElement* elem, childList)
 		elem->retransform();
 }
 
@@ -138,7 +135,7 @@ void WorksheetElementContainer::handlePageResize(double horizontalRatio, double 
 	setRect(rect);
 }
 
-void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) {
+void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) {
 // 	qDebug()<<"WorksheetElementContainer::handleAspectAdded "<< aspect->name();
 	Q_D(WorksheetElementContainer);
 
@@ -151,7 +148,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect *aspect) 
 		item->setParentItem(d);
 
 		qreal zVal = 0;
-		QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+		QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
 		foreach(WorksheetElement *elem, childElements) {
 			elem->graphicsItem()->setZValue(zVal++);
 		}
@@ -187,7 +184,7 @@ QString WorksheetElementContainerPrivate::name() const {
 	return q->name();
 }
 
-void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
+void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	scene()->clearSelection();
 	setSelected(true);
 	QMenu* menu = q->createContextMenu();
@@ -226,7 +223,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 }
 
 // Inherited from QGraphicsItem
-void WorksheetElementContainerPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 // 	qDebug()<<"WorksheetElementContainerPrivate::paint";
 	Q_UNUSED(option)
 	Q_UNUSED(widget)

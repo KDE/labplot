@@ -66,7 +66,7 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new K
 	ui.tbFontStrikeOut->setIcon( KIcon("format-text-strikethrough") );
 	ui.tbFontSuperScript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
-	ui.tbSymbols->setIcon( KIcon("applications-education-mathematics") );
+	ui.tbSymbols->setIcon( KIcon("format-text-symbol") );
 	ui.tbDateTime->setIcon( KIcon("chronometer") );
 	ui.tbTexUsed->setIconSize(QSize(20, 20));
 	ui.tbTexUsed->setIcon( KIcon("TeX_logo") );
@@ -126,9 +126,6 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_labelsList = labels;
 	m_label = labels.first();
 
-	// settings for default selection (necessary if not changed later)
-	ui.sbPositionX->setEnabled(false);
-	ui.sbPositionY->setEnabled(false);
 	ui.lOffset->hide();
 	ui.sbOffset->hide();
 

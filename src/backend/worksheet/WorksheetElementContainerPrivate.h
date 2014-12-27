@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : WorksheetElementContainerPrivate.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Private members of WorksheetElementContainer.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
-
+	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -37,18 +36,18 @@ class WorksheetElementContainer;
 
 class WorksheetElementContainerPrivate : public QGraphicsItem {
 	public:
-		explicit WorksheetElementContainerPrivate(WorksheetElementContainer *owner);
+		explicit WorksheetElementContainerPrivate(WorksheetElementContainer* owner);
 		virtual ~WorksheetElementContainerPrivate(){}
 
 		QString name() const;
 		virtual QRectF boundingRect() const;
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 
 		bool swapVisible(bool on);
 
-		WorksheetElementContainer *q;
+		WorksheetElementContainer* q;
 		void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 
 		QRectF rect;
@@ -56,7 +55,7 @@ class WorksheetElementContainerPrivate : public QGraphicsItem {
 		bool m_printing;
 
 	signals:
-		void selectedChange(QGraphicsItem *item);
+		void selectedChange(QGraphicsItem*);
 };
 
 #endif

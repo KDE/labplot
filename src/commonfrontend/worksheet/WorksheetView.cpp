@@ -141,6 +141,11 @@ void WorksheetView::initActions(){
 	this->addAction(deleteAction);
 	connect(deleteAction, SIGNAL(triggered()), SLOT(deleteElement()));
 
+	backspaceAction = new KAction(this);
+	backspaceAction->setShortcut(Qt::Key_Backspace);
+	this->addAction(backspaceAction);
+	connect(backspaceAction, SIGNAL(triggered()), SLOT(deleteElement()));
+
 	//Zoom actions
 	zoomInViewAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
 	zoomInViewAction->setShortcut(Qt::CTRL+Qt::Key_Plus);

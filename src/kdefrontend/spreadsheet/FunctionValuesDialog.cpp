@@ -60,7 +60,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	Q_ASSERT(gridLayout);
 	gridLayout->addWidget(cbXDataColumn, 0, 2, 1, 1);
 
-	ui.tbConstants->setIcon( KIcon("applications-education-mathematics") );
+	ui.tbConstants->setIcon( KIcon("format-text-symbol") );
 	ui.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
 
 	QStringList vars;

@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : WorksheetElementContainer.h
-    Project              : LabPlot/SciDAVis
-    Description          : Generic WorksheetElement container.
+    Project              : LabPlot
+	Description          : Worksheet element container - parent of multiple elements.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-	Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -39,7 +38,7 @@ class WorksheetElementContainer: public WorksheetElement {
 	Q_OBJECT
 
 	public:
-		explicit WorksheetElementContainer(const QString &name);
+		explicit WorksheetElementContainer(const QString& name);
 		virtual ~WorksheetElementContainer();
 
 		virtual QGraphicsItem* graphicsItem() const;
@@ -63,7 +62,7 @@ class WorksheetElementContainer: public WorksheetElement {
 
 	protected:
 		WorksheetElementContainerPrivate* const d_ptr;
-		WorksheetElementContainer(const QString &name, WorksheetElementContainerPrivate *dd);
+		WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd);
 
 	protected slots:
 		virtual void handleAspectAdded(const AbstractAspect*);

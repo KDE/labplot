@@ -90,7 +90,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
-	uiGeneralTab.tbConstants->setIcon( KIcon("applications-education-mathematics") );
+	uiGeneralTab.tbConstants->setIcon( KIcon("format-text-symbol") );
 	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
