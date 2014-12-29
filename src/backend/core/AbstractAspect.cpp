@@ -1,13 +1,11 @@
 /***************************************************************************
     File                 : AbstractAspect.cpp
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-    Description          : Base class for all persistent objects in a Project.
-
+    Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Description          : Base class for all objects in a Project.
  ***************************************************************************/
 
 /***************************************************************************
@@ -28,10 +26,10 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/aspectcommands.h"
-#include "backend/core/Folder.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
@@ -42,7 +40,6 @@
 #include <QStyle>
 #include <QApplication>
 #include <QXmlStreamWriter>
-#include <QDebug>
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
@@ -105,6 +102,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * \fn template < class T > T *AbstractAspect::ancestor() const
+ * \brief Return the closest ancestor of class T (or NULL if none found).
+ */
+
+/**
  * \fn template < class T > QList<T*> AbstractAspect::children(const ChildIndexFlags &flags=0) const
  * \brief Return list of children inheriting from class T.
  *
@@ -135,26 +137,6 @@
 /**
  * \fn template < class T > int AbstractAspect::indexOfChild(const AbstractAspect * child, const ChildIndexFlags &flags=0) const
  * \brief Return (0 based) index of child in the list of children inheriting from class T.
- */
-
-/**
- * \fn virtual const Project *AbstractAspect::project() const
- * \brief Return the Project this Aspect belongs to, or 0 if it is currently not part of one.
- */
-
-/**
- * \fn virtual Project *AbstractAspect::project()
- * \brief Return the Project this Aspect belongs to, or 0 if it is currently not part of one.
- */
-
-/**
- * \fn virtual QString AbstractAspect::path() const
- * \brief Return the path that leads from the top-most Aspect (usually a Project) to me.
- */
-
-/**
- * \fn virtual void AbstractAspect::remove()
- * \brief Remove me from my parent's list of children.
  */
 
 /**
@@ -238,6 +220,302 @@ AbstractAspect::AbstractAspect(const QString &name)
 
 AbstractAspect::~AbstractAspect() {
 	delete m_aspect_private;
+}
+
+QString AbstractAspect::name() const {
+	return m_aspect_private->m_name;
+}
+
+void AbstractAspect::setName(const QString &value) {
+	if (value.isEmpty()) {
+		setName("1");
+		return;
+	}
+
+	if (value == m_aspect_private->m_name)
+		return;
+
+	QString new_name;
+	if (m_aspect_private->m_parent) {
+		new_name = m_aspect_private->m_parent->uniqueNameFor(value);
+		if (new_name != value)
+			info(i18n("Intended name \"%1\" was changed to \"%2\" in order to avoid name collision.", value, new_name));
+	} else {
+		new_name = value;
+	}
+
+	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", m_aspect_private->m_name, new_name),
+				&m_aspect_private->m_name, new_name),
+			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
+}
+
+QString AbstractAspect::comment() const {
+	return m_aspect_private->m_comment;
+}
+
+void AbstractAspect::setComment(const QString& value) {
+	if (value == m_aspect_private->m_comment) return;
+	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment", m_aspect_private->m_name),
+				&m_aspect_private->m_comment, value),
+			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
+}
+
+/**
+ * \brief Set the creation time
+ *
+ * The creation time will automatically be set when the aspect object
+ * is created. This function is usually only needed when the aspect
+ * is loaded from a file.
+ */
+void AbstractAspect::setCreationTime(const QDateTime& time) {
+	if (time == m_aspect_private->m_creation_time) return;
+	exec(new PropertyChangeCommand<QDateTime>(i18n("%1: set creation time", m_aspect_private->m_name),
+				&m_aspect_private->m_creation_time, time));
+}
+
+QDateTime AbstractAspect::creationTime() const {
+	return m_aspect_private->m_creation_time;
+}
+
+bool AbstractAspect::hidden() const {
+    return m_aspect_private->m_hidden;
+}
+
+/**
+ * \brief Set "hidden" property, i.e. whether to exclude this aspect from being shown in the explorer.
+ */
+void AbstractAspect::setHidden(bool value) {
+    if (value == m_aspect_private->m_hidden) return;
+    exec(new PropertyChangeCommand<bool>(i18n("%1: change hidden status", m_aspect_private->m_name),
+				 &m_aspect_private->m_hidden, value),
+			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
+}
+
+/**
+ * \brief Return an icon to be used for decorating my views.
+ */
+QIcon AbstractAspect::icon() const {
+	return QIcon();
+}
+
+/**
+ * \brief Return a new context menu.
+ *
+ * The caller takes ownership of the menu.
+ */
+QMenu* AbstractAspect::createContextMenu() {
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	QMenu* menu = new QMenu();
+	QAction *action;
+	const QStyle *widget_style = qApp->style();
+	action = menu->addAction(QObject::i18n("&Remove"), this, SLOT(remove()));
+	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
+	return menu;
+#else
+	KMenu* menu = new KMenu();
+	menu->addTitle(this->name());
+	//TODO: activate this again when the functionality is implemented
+// 	menu->addAction( KStandardAction::cut(this) );
+// 	menu->addAction(KStandardAction::copy(this));
+// 	menu->addAction(KStandardAction::paste(this));
+// 	menu->addSeparator();
+	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
+	menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+	return menu;
+#endif
+}
+
+/**
+ * \brief Return my parent Aspect or 0 if I currently don't have one.
+ */
+AbstractAspect * AbstractAspect::parentAspect() const {
+	return m_aspect_private->m_parent;
+}
+
+/**
+ * \brief Return the folder the Aspect is contained in or 0 if there is none.
+ *
+ * The returned folder may be the aspect itself if it inherits Folder.
+ */
+Folder* AbstractAspect::folder() {
+	if(inherits("Folder")) return static_cast<Folder*>(this);
+	AbstractAspect* parent_aspect = parentAspect();
+	while(parent_aspect && !parent_aspect->inherits("Folder"))
+		parent_aspect = parent_aspect->parentAspect();
+	return static_cast<Folder*>(parent_aspect);
+}
+
+/**
+ * \brief Return whether the there is a path upwards to the given aspect
+ *
+ * This also returns true if other==this.
+ */
+bool AbstractAspect::isDescendantOf(AbstractAspect* other) {
+	if(other == this) return true;
+	AbstractAspect* parent_aspect = parentAspect();
+	while(parent_aspect) 	{
+		if(parent_aspect == other) return true;
+		parent_aspect = parent_aspect->parentAspect();
+	}
+	return false;
+}
+
+/**
+ * \brief Return the Project this Aspect belongs to, or 0 if it is currently not part of one.
+ */
+const Project* AbstractAspect::project() const {
+	return parentAspect() ? parentAspect()->project() : 0;
+}
+
+/**
+ * \brief Return the Project this Aspect belongs to, or 0 if it is currently not part of one.
+ */
+Project* AbstractAspect::project() {
+	return parentAspect() ? parentAspect()->project() : 0;
+}
+
+/**
+ * \brief Return the path that leads from the top-most Aspect (usually a Project) to me.
+ */
+QString AbstractAspect::path() const {
+	return parentAspect() ? parentAspect()->path() + "/" + name() : "";
+}
+
+/**
+ * \brief Add the given Aspect to my list of children.
+ */
+void AbstractAspect::addChild(AbstractAspect* child) {
+	Q_CHECK_PTR(child);
+
+	QString new_name = m_aspect_private->uniqueNameFor(child->name());
+	beginMacro(i18n("%1: add %2.", name(), new_name));
+	if (new_name != child->name()) {
+		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
+		child->setName(new_name);
+	}
+
+	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
+	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
+
+	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->m_children.count()));
+	endMacro();
+}
+
+/**
+ * \brief Insert the given Aspect at a specific position in my list of children.
+ */
+void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
+	Q_CHECK_PTR(child);
+
+	QString new_name = m_aspect_private->uniqueNameFor(child->name());
+	beginMacro(i18n("%1: insert %2 before %3.", name(), new_name, before ? before->name() : "end"));
+	if (new_name != child->name()) {
+		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
+		child->setName(new_name);
+	}
+	int index = m_aspect_private->indexOfChild(before);
+	if (index == -1)
+		index = m_aspect_private->m_children.count();
+
+	exec(new AspectChildAddCmd(m_aspect_private, child, index));
+	endMacro();
+}
+
+/**
+ * \brief Remove the given Aspect from my list of children.
+ *
+ * The ownership of the child is transferred to the undo command,
+ * i.e., the aspect is deleted by the undo command.
+ * \sa reparent()
+ */
+void AbstractAspect::removeChild(AbstractAspect* child) {
+	Q_ASSERT(child->parentAspect() == this);
+	beginMacro(i18n("%1: remove %2.", name(), child->name()));
+	exec(new AspectChildRemoveCmd(m_aspect_private, child));
+	endMacro();
+}
+
+/**
+ * \brief Remove all child Aspects.
+ */
+void AbstractAspect::removeAllChildren() {
+	beginMacro(i18n("%1: remove all children.", name()));
+
+	QList<AbstractAspect*> children = rawChildren();
+	QList<AbstractAspect*>::iterator i = children.begin();
+	AbstractAspect *current = 0, *nextSibling = 0;
+	if (i != children.end()) {
+		current = *i;
+		if (++i != children.end())
+			nextSibling = *i;
+	}
+
+	while (current) {
+		emit aspectAboutToBeRemoved(current);
+		exec(new AspectChildRemoveCmd(m_aspect_private, current));
+		emit aspectRemoved(this, nextSibling, current);
+
+		current = nextSibling;
+		if (i != children.end() && ++i != children.end())
+			nextSibling = *i;
+		else
+			nextSibling = 0;
+	}
+
+	endMacro();
+}
+
+/**
+ * \brief Move a child to another parent aspect and transfer ownership.
+ */
+void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
+	Q_ASSERT(parentAspect() != NULL);
+	Q_ASSERT(newParent != NULL);
+	int max_index = newParent->childCount<AbstractAspect>(IncludeHidden);
+	if (newIndex == -1)
+		newIndex = max_index;
+	Q_ASSERT(newIndex >= 0 && newIndex <= max_index);
+
+	AbstractAspect* old_parent = parentAspect();
+	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
+	AbstractAspect* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
+	AbstractAspect* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
+
+	//TODO check/test this!
+	emit aspectAboutToBeRemoved(this);
+	emit newParent->aspectAboutToBeAdded(newParent, new_sibling, this);
+	exec(new AspectChildReparentCmd(parentAspect()->m_aspect_private, newParent->m_aspect_private, this, newIndex));
+	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
+	emit aspectAdded(this);
+
+	endMacro();
+}
+
+QList<AbstractAspect*> AbstractAspect::children(const char* className, const ChildIndexFlags &flags) {
+	QList<AbstractAspect*> result;
+	foreach (AbstractAspect * child, rawChildren()) {
+		if (flags & IncludeHidden || !child->hidden()) {
+			if ( child->inherits(className) || !(flags & Compress)) {
+				result << child;
+				if (flags & Recursive){
+					result << child->children(className, flags);
+				}
+			}
+		}
+	}
+	return result;
+}
+
+const QList<AbstractAspect*> AbstractAspect::rawChildren() const {
+	return m_aspect_private->m_children;
+}
+
+/**
+ * \brief Remove me from my parent's list of children.
+ */
+void AbstractAspect::remove() {
+	if(parentAspect())
+		parentAspect()->removeChild(this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,119 +606,7 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader){
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * \brief Return my parent Aspect or 0 if I currently don't have one.
- */
-AbstractAspect * AbstractAspect::parentAspect() const
-{
-	return m_aspect_private->m_parent;
-}
 
-/**
- * \fn template < class T > T *AbstractAspect::ancestor() const
- * \brief Return the closest ancestor of class T (or NULL if none found).
- */
-
-/**
- * \brief Add the given Aspect to my list of children.
- */
-void AbstractAspect::addChild(AbstractAspect* child) {
-	//qDebug()<<"AbstractAspect::addChild";
-	Q_CHECK_PTR(child);
-
-	QString new_name = m_aspect_private->uniqueNameFor(child->name());
-	beginMacro(i18n("%1: add %2.", name(), new_name));
-	if (new_name != child->name()) {
-		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
-		child->setName(new_name);
-	}
-
-	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
-	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
-
-	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->m_children.count()));
-	endMacro();
-}
-
-/**
- * \brief Insert the given Aspect at a specific position in my list of children.
- */
-void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
-	Q_CHECK_PTR(child);
-
-	QString new_name = m_aspect_private->uniqueNameFor(child->name());
-	beginMacro(i18n("%1: insert %2 before %3.", name(), new_name, before ? before->name() : "end"));
-	if (new_name != child->name()) {
-		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
-		child->setName(new_name);
-	}
-	int index = m_aspect_private->indexOfChild(before);
-	if (index == -1)
-		index = m_aspect_private->m_children.count();
-
-	exec(new AspectChildAddCmd(m_aspect_private, child, index));
-	endMacro();
-}
-
-/**
- * \brief Remove the given Aspect from my list of children.
- *
- * The ownership of the child is transferred to the undo command,
- * i.e., the aspect is deleted by the undo command.
- * \sa reparent()
- */
-void AbstractAspect::removeChild(AbstractAspect* child) {
-	Q_ASSERT(child->parentAspect() == this);
-	beginMacro(i18n("%1: remove %2.", name(), child->name()));
-	exec(new AspectChildRemoveCmd(m_aspect_private, child));
-	endMacro();
-}
-
-/**
- * \brief Move a child to another parent aspect and transfer ownership.
- */
-void AbstractAspect::reparent(AbstractAspect* new_parent, int new_index) {
-	Q_ASSERT(parentAspect() != NULL);
-	Q_ASSERT(new_parent != NULL);
-	int max_index = new_parent->childCount<AbstractAspect>(IncludeHidden);
-	if (new_index == -1)
-		new_index = max_index;
-	Q_ASSERT(new_index >= 0 && new_index <= max_index);
-
-	AbstractAspect * old_parent = parentAspect();
-	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
-	AbstractAspect* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
-	AbstractAspect* new_sibling = new_parent->child<AbstractAspect>(new_index, IncludeHidden);
-
-	//TODO check/test this!
-	emit aspectAboutToBeRemoved(this);
-	emit new_parent->aspectAboutToBeAdded(new_parent, new_sibling, this);
-	exec(new AspectChildReparentCmd(parentAspect()->m_aspect_private, new_parent->m_aspect_private, this, new_index));
-	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
-	emit aspectAdded(this);
-
-	endMacro();
-}
-
-QList<AbstractAspect*> AbstractAspect::children(const char* className, const ChildIndexFlags &flags) {
-	QList<AbstractAspect*> result;
-	foreach (AbstractAspect * child, rawChildren()) {
-		if (flags & IncludeHidden || !child->hidden()) {
-			if ( child->inherits(className) || !(flags & Compress)) {
-				result << child;
-				if (flags & Recursive){
-					result << child->children(className, flags);
-				}
-			}
-		}
-	}
-	return result;
-}
-
-const QList< AbstractAspect* > AbstractAspect::rawChildren() const
-{
-	return m_aspect_private->m_children;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! \name undo related
@@ -451,20 +617,20 @@ void AbstractAspect::setUndoAware(bool b) {
 }
 
 /**
- * \fn virtual QUndoStack *AbstractAspect::undoStack() const
  * \brief Return the undo stack of the Project, or 0 if this Aspect is not part of a Project.
  *
  * It's also possible to construct undo-enabled Aspect trees without Project.
  * The only requirement is that the root Aspect reimplements undoStack() to get the
  * undo stack from somewhere (the default implementation just delegates to parentAspect()).
  */
-// inlined
+QUndoStack* AbstractAspect::undoStack() const {
+	return parentAspect() ? parentAspect()->undoStack() : 0;
+}
 
 /**
  * \brief Execute the given command, pushing it on the undoStack() if available.
  */
-void AbstractAspect::exec(QUndoCommand *cmd)
-{
+void AbstractAspect::exec(QUndoCommand* cmd) {
 	Q_CHECK_PTR(cmd);
 	if (m_undoAware) {
 		QUndoStack *stack = undoStack();
@@ -499,8 +665,8 @@ void AbstractAspect::exec(QUndoCommand *cmd)
  *
  * \sa SignallingUndoCommand
  */
-void AbstractAspect::exec(QUndoCommand *command,
-		const char *preChangeSignal, const char *postChangeSignal,
+void AbstractAspect::exec(QUndoCommand* command,
+		const char* preChangeSignal, const char* postChangeSignal,
 		QGenericArgument val0, QGenericArgument val1, QGenericArgument val2, QGenericArgument val3) {
 	beginMacro(command->text());
 	exec(new SignallingUndoCommand("change signal", this,
@@ -511,7 +677,6 @@ void AbstractAspect::exec(QUndoCommand *command,
 	endMacro();
 }
 
-
 /**
  * \brief Begin an undo stack macro (series of commands)
  */
@@ -519,7 +684,7 @@ void AbstractAspect::beginMacro(const QString& text) {
 	if (!m_undoAware)
 		return;
 
-	QUndoStack *stack = undoStack();
+	QUndoStack* stack = undoStack();
 	if (stack)
 		stack->beginMacro(text);
 }
@@ -531,7 +696,7 @@ void AbstractAspect::endMacro() {
 	if (!m_undoAware)
 		return;
 
-	QUndoStack *stack = undoStack();
+	QUndoStack* stack = undoStack();
 	if (stack)
 		stack->endMacro();
 }
@@ -540,86 +705,6 @@ void AbstractAspect::endMacro() {
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-QString AbstractAspect::name() const
-{
-	return m_aspect_private->m_name;
-}
-
-void AbstractAspect::setName(const QString &value) {
-	if (value.isEmpty()) {
-		setName("1");
-		return;
-	}
-
-	if (value == m_aspect_private->m_name)
-		return;
-
-	QString new_name;
-	if (m_aspect_private->m_parent) {
-		new_name = m_aspect_private->m_parent->uniqueNameFor(value);
-		if (new_name != value)
-			info(i18n("Intended name \"%1\" diverted to \"%2\" in order to avoid name collision.", value, new_name));
-	} else {
-		new_name = value;
-	}
-
-	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", m_aspect_private->m_name, new_name),
-				&m_aspect_private->m_name, new_name),
-			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
-}
-
-QString AbstractAspect::comment() const
-{
-	return m_aspect_private->m_comment;
-}
-
-void AbstractAspect::setComment(const QString &value)
-{
-	if (value == m_aspect_private->m_comment) return;
-	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment", m_aspect_private->m_name),
-				&m_aspect_private->m_comment, value),
-			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
-}
-
-/**
- * \brief Set the creation time
- *
- * The creation time will automatically be set when the aspect object
- * is created. This function is usually only needed when the aspect
- * is loaded from a file.
- */
-void AbstractAspect::setCreationTime(const QDateTime& time)
-{
-	if (time == m_aspect_private->m_creation_time) return;
-	exec(new PropertyChangeCommand<QDateTime>(i18n("%1: set creation time", m_aspect_private->m_name),
-				&m_aspect_private->m_creation_time, time));
-}
-
-QDateTime AbstractAspect::creationTime() const
-{
-	return m_aspect_private->m_creation_time;
-}
-
-// QString AbstractAspect::caption() const
-// {
-// 	return m_aspect_private->caption();
-// }
-
-bool AbstractAspect::hidden() const
-{
-    return m_aspect_private->m_hidden;
-}
-
-/**
- * \brief Set "hidden" property, i.e. whether to exclude this aspect from being shown in the explorer.
- */
-void AbstractAspect::setHidden(bool value)
-{
-    if (value == m_aspect_private->m_hidden) return;
-    exec(new PropertyChangeCommand<bool>(i18n("%1: change hidden status", m_aspect_private->m_name),
-				 &m_aspect_private->m_hidden, value),
-			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
-}
 
 /*!
  * this function is called when the selection in ProjectExplorer was changed.
@@ -655,106 +740,8 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 }
 
 /**
- * \brief Return an icon to be used for decorating my views.
- */
-QIcon AbstractAspect::icon() const
-{
-	return QIcon();
-}
-
-/**
- * \brief Return a new context menu.
- *
- * The caller takes ownership of the menu.
- */
-QMenu *AbstractAspect::createContextMenu(){
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QMenu* menu = new QMenu();
-	QAction *action;
-	const QStyle *widget_style = qApp->style();
-	action = menu->addAction(QObject::i18n("&Remove"), this, SLOT(remove()));
-	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
-	return menu;
-#else
-	KMenu* menu = new KMenu();
-	menu->addTitle(this->name());
-	//TODO: activate this again when the functionality is implemented
-// 	menu->addAction( KStandardAction::cut(this) );
-// 	menu->addAction(KStandardAction::copy(this));
-// 	menu->addAction(KStandardAction::paste(this));
-// 	menu->addSeparator();
-	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
-	menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
-	return menu;
-#endif
-}
-
-/**
- * \brief Return the folder the Aspect is contained in or 0 if there is none.
- *
- * The returned folder may be the aspect itself if it inherits Folder.
- */
-Folder * AbstractAspect::folder()
-{
-	if(inherits("Folder")) return static_cast<Folder *>(this);
-	AbstractAspect * parent_aspect = parentAspect();
-	while(parent_aspect && !parent_aspect->inherits("Folder"))
-		parent_aspect = parent_aspect->parentAspect();
-	return static_cast<Folder *>(parent_aspect);
-}
-
-/**
- * \brief Return whether the there is a path upwards to the given aspect
- *
- * This also returns true if other==this.
- */
-bool AbstractAspect::isDescendantOf(AbstractAspect *other)
-{
-	if(other == this) return true;
-	AbstractAspect * parent_aspect = parentAspect();
-	while(parent_aspect)
-	{
-		if(parent_aspect == other) return true;
-		parent_aspect = parent_aspect->parentAspect();
-	}
-	return false;
-}
-
-/**
  * \brief Make the specified name unique among my children by incrementing a trailing number.
  */
-QString AbstractAspect::uniqueNameFor(const QString &current_name) const
-{
+QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 	return m_aspect_private->uniqueNameFor(current_name);
-}
-
-/**
- * \brief Remove all child Aspects.
- */
-void AbstractAspect::removeAllChildren()
-{
-	beginMacro(i18n("%1: remove all children.", name()));
-
-	QList<AbstractAspect*> children = rawChildren();
-	QList<AbstractAspect*>::iterator i = children.begin();
-	AbstractAspect *current = 0, *nextSibling = 0;
-	if (i != children.end()) {
-		current = *i;
-		if (++i != children.end())
-			nextSibling = *i;
-	}
-
-	while (current) {
-		emit aspectAboutToBeRemoved(current);
-		exec(new AspectChildRemoveCmd(m_aspect_private, current));
-		emit aspectRemoved(this, nextSibling, current);
-
-		current = nextSibling;
-		if (i != children.end() && ++i != children.end())
-			nextSibling = *i;
-		else
-			nextSibling = 0;
-	}
-
-	endMacro();
 }

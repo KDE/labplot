@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : AbstractAspect.h
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2011-2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-    Description          : Base class for all persistent objects in a Project.
+    Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Description          : Base class for all objects in a Project.
 
  ***************************************************************************/
 
@@ -58,41 +57,50 @@ class AbstractAspect : public QObject {
 		class Private;
 		friend class AspectChildAddCmd;
 		friend class AspectChildRemoveCmd;
-		
+
 		explicit AbstractAspect(const QString& name);
 		virtual ~AbstractAspect();
 
-		AbstractAspect * parentAspect() const;
-		template < class T > T * ancestor() const{
-			AbstractAspect *parent = parentAspect();
+		QString name() const;
+		QString comment() const;
+		QDateTime creationTime() const;
+		const Project* project() const;
+		Project* project();
+		QString path() const;
+		void setHidden(bool);
+		bool hidden() const;
+		void setSelected(bool);
+		virtual QIcon icon() const;
+		virtual QMenu* createContextMenu();
+
+		//functions related to the handling of the tree-like project structure
+		AbstractAspect* parentAspect() const;
+		Folder* folder();
+		bool isDescendantOf(AbstractAspect* other);
+		void addChild(AbstractAspect*);
+		QList<AbstractAspect*> children(const char* className, const ChildIndexFlags& flags=0);
+		void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
+		void reparent(AbstractAspect* newParent, int newIndex=-1);
+		void removeChild(AbstractAspect*);
+		void removeAllChildren();
+
+		template <class T> T* ancestor() const{
+			AbstractAspect* parent = parentAspect();
 			while (parent) {
-				T *ancestorAspect = qobject_cast<T *>(parent);
+				T* ancestorAspect = qobject_cast<T*>(parent);
 				if (ancestorAspect)
 					return ancestorAspect;
 				parent = parent->parentAspect();
 			}
 			return NULL;
 		}
-		
-		Folder* folder();
-		bool isDescendantOf(AbstractAspect* other);
-
-		void setSelected(bool);
-		
-		void addChild(AbstractAspect*);
-		void insertChildBefore(AbstractAspect *child, AbstractAspect *before);
-		void reparent(AbstractAspect* new_parent, int new_index=-1);
-		void removeChild(AbstractAspect*);
-		void removeAllChildren();
-		
-		QList<AbstractAspect*> children(const char* className, const ChildIndexFlags &flags=0);
 
 		//TODO: recursive flag doesn't work! How should it work with templates?!?
-		template < class T > QList<T*> children(const ChildIndexFlags &flags=0) const {
+		template <class T> QList<T*> children(const ChildIndexFlags& flags=0) const {
 			QList<T*> result;
-			foreach (AbstractAspect * child, rawChildren()) {
+			foreach (AbstractAspect* child, rawChildren()) {
 				if (flags & IncludeHidden || !child->hidden()) {
-					T * i = qobject_cast< T* >(child);
+					T* i = qobject_cast<T*>(child);
 					if (i) {
 						result << i;
 						if (flags & Recursive)
@@ -102,94 +110,86 @@ class AbstractAspect : public QObject {
 			}
 			return result;
 		}
-		template < class T > T * child(int index, const ChildIndexFlags &flags=0) const {
+
+		template <class T> T* child(int index, const ChildIndexFlags& flags=0) const {
 			int i = 0;
-			foreach(AbstractAspect * child, rawChildren()) {
-				T * c = qobject_cast< T* >(child);
+			foreach (AbstractAspect* child, rawChildren()) {
+				T* c = qobject_cast<T*>(child);
 				if (c && (flags & IncludeHidden || !child->hidden()) && index == i++)
 					return c;
 			}
 			return 0;
 		}
-		template < class T > T * child(const QString &name) const {
-			foreach(AbstractAspect * child, rawChildren()) {
-			T * c = qobject_cast< T* >(child);
+
+		template <class T> T* child(const QString& name) const {
+			foreach (AbstractAspect* child, rawChildren()) {
+			T* c = qobject_cast<T*>(child);
 			if (c && child->name() == name)
 				return c;
 			}
 			return 0;
 		}
-		template < class T > int childCount(const ChildIndexFlags &flags=0) const {
+
+		template <class T> int childCount(const ChildIndexFlags& flags=0) const {
 			int result = 0;
-			foreach(AbstractAspect * child, rawChildren()) {
-				T * i = qobject_cast< T* >(child);
+			foreach(AbstractAspect* child, rawChildren()) {
+				T* i = qobject_cast<T*>(child);
 				if (i && (flags & IncludeHidden || !child->hidden()))
 					result++;
 			}
 			return result;
 		}
-		template < class T > int indexOfChild(const AbstractAspect * child, const ChildIndexFlags &flags=0) const {
+
+		template <class T> int indexOfChild(const AbstractAspect* child, const ChildIndexFlags& flags=0) const {
 			int index = 0;
-			foreach(AbstractAspect * c, rawChildren()) {
+			foreach(AbstractAspect* c, rawChildren()) {
 				if (child == c) return index;
-				T * i = qobject_cast< T* >(c);
+				T* i = qobject_cast<T*>(c);
 				if (i && (flags & IncludeHidden || !c->hidden()))
 					index++;
 			}
 			return -1;
 		}
 
-		virtual const Project* project() const { return parentAspect() ? parentAspect()->project() : 0; }
-		virtual Project* project() { return parentAspect() ? parentAspect()->project() : 0; }
-		virtual QString path() const { return parentAspect() ? parentAspect()->path() + "/" + name() : "";  }
-
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-
-		QString name() const;
-		QString comment() const;
-		QDateTime creationTime() const;
-		bool hidden() const;
-
 		//undo/redo related functions
 		void setUndoAware(bool);
-		virtual QUndoStack* undoStack() const { return parentAspect() ? parentAspect()->undoStack() : 0; }
+		QUndoStack* undoStack() const;
 		void exec(QUndoCommand*);
-		void exec(QUndoCommand* command, const char *preChangeSignal, const char *postChangeSignal,
+		void exec(QUndoCommand* command, const char* preChangeSignal, const char* postChangeSignal,
 				QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),
-				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());		
+				QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());
 		void beginMacro(const QString& text);
 		void endMacro();
 
+		//save/load
 		virtual void save(QXmlStreamWriter*) const {}
 		virtual bool load(XmlStreamReader*) { return false; }
 
 	protected:
-		void setCreationTime(const QDateTime&);
-		void info(const QString &text) { emit statusInfo(text); }
+		void info(const QString& text) { emit statusInfo(text); }
 
 		//serialization/deserialization
 		bool readBasicAttributes(XmlStreamReader*);
 		void writeBasicAttributes(QXmlStreamWriter*) const;
 		void writeCommentElement(QXmlStreamWriter*) const;
 		bool readCommentElement(XmlStreamReader*);
-		
+
 	private:
 		Private* m_aspect_private;
+		QString uniqueNameFor(const QString&) const;
 		const QList<AbstractAspect*> rawChildren() const;
+		void setCreationTime(const QDateTime&);
 		bool m_undoAware;
 
 	public slots:
 		void setName(const QString&);
 		void setComment(const QString&);
-		void setHidden(bool);
-		virtual void remove() { if(parentAspect()) parentAspect()->removeChild(this); }
-		QString uniqueNameFor(const QString&) const;
+		void remove();
 
 	protected slots:
 		virtual void childSelected(const AbstractAspect*);
 		virtual void childDeselected(const AbstractAspect*);
-		
+
 	signals:
 		void aspectDescriptionAboutToChange(const AbstractAspect*);
 		void aspectDescriptionChanged(const AbstractAspect*);
@@ -201,11 +201,11 @@ class AbstractAspect : public QObject {
 		void aspectHiddenChanged(const AbstractAspect*);
 		void statusInfo(const QString&);
 		void renameRequested();
-		
+
 		//selection/deselection in model (project explorer)
 		void selected(const AbstractAspect*);
 		void deselected(const AbstractAspect*);
-		
+
 		//selection/deselection in view
 		void childAspectSelectedInView(const AbstractAspect*);
 		void childAspectDeselectedInView(const AbstractAspect*);
