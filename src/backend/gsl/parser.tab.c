@@ -1759,7 +1759,7 @@ int parse_errors() {
 }
 
 int yyerror (const char *s){
-	printf ("parse ERROR: %s\n", s);
+/* 	printf ("parse ERROR: %s\n", s); */
 	return 0;
 }
 

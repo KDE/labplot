@@ -41,7 +41,7 @@ class ExportSpreadsheetDialog: public KDialog{
 	QString path() const;
 	void setFileName(const QString&);
 	bool exportHeader() const;
-	const QString& separator() const;
+	QString separator() const;
 
   private:
 	QWidget* mainWidget;

@@ -2,9 +2,8 @@
     File                 : SettingsPage.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
-    Description          : settings page
+    Copyright            : (C) 2008-2014 by Alexander Semke (alexander.semke@web.de)
+    Description          : base class for all pages in the Settings-Dialog
                            
  ***************************************************************************/
 
@@ -35,8 +34,8 @@ class SettingsPage : public QWidget {
     Q_OBJECT
 
 public:
-    explicit SettingsPage(QWidget* parent);
-    virtual ~SettingsPage();
+    explicit SettingsPage(QWidget*) {};
+    virtual ~SettingsPage() {};
 
     virtual void applySettings() = 0;
     virtual void restoreDefaults() = 0;

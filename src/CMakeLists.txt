@@ -13,8 +13,6 @@ set(GUI_SOURCES
   	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
-	${KDEFRONTEND_DIR}/SettingsPage.cpp
-	${KDEFRONTEND_DIR}/SettingsPrintingPage.cpp
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
@@ -157,6 +155,7 @@ set(QTMOC_HDRS
 	${BACKEND_DIR}/core/datatypes/String2DayOfWeekFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
+	${KDEFRONTEND_DIR}/SettingsPage.h
 )
 
 qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})

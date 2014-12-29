@@ -106,7 +106,7 @@ bool ExportSpreadsheetDialog::exportHeader() const {
 	return ui.chkExportHeader->isChecked();
 }
 
-const QString& ExportSpreadsheetDialog::separator() const {
+QString ExportSpreadsheetDialog::separator() const {
 	return ui.cbSeparator->currentText();
 }
 

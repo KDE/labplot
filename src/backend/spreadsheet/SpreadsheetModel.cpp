@@ -391,11 +391,11 @@ void SpreadsheetModel::updateHorizontalHeader()
 	while(m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
-	int x_cols;
-	if(m_spreadsheet->columnCount(AbstractColumn::X) <= 1)
-		x_cols = -1;
-	else
-		x_cols = 0;
+// 	int x_cols;
+// 	if(m_spreadsheet->columnCount(AbstractColumn::X) <= 1)
+// 		x_cols = -1;
+// 	else
+// 		x_cols = 0;
 
 	for (int i=0; i<column_count; i++) {
 		Column * col = m_spreadsheet->child<Column>(i);
