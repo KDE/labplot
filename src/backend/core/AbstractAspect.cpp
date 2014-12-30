@@ -363,13 +363,6 @@ bool AbstractAspect::isDescendantOf(AbstractAspect* other) {
 /**
  * \brief Return the Project this Aspect belongs to, or 0 if it is currently not part of one.
  */
-const Project* AbstractAspect::project() const {
-	return parentAspect() ? parentAspect()->project() : 0;
-}
-
-/**
- * \brief Return the Project this Aspect belongs to, or 0 if it is currently not part of one.
- */
 Project* AbstractAspect::project() {
 	return parentAspect() ? parentAspect()->project() : 0;
 }

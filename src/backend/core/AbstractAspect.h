@@ -64,8 +64,7 @@ class AbstractAspect : public QObject {
 		QString name() const;
 		QString comment() const;
 		QDateTime creationTime() const;
-		const Project* project() const;
-		Project* project();
+		virtual Project* project();
 		QString path() const;
 		void setHidden(bool);
 		bool hidden() const;
