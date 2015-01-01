@@ -152,7 +152,7 @@ class AbstractAspect : public QObject {
 
 		//undo/redo related functions
 		void setUndoAware(bool);
-		QUndoStack* undoStack() const;
+		virtual QUndoStack* undoStack() const;
 		void exec(QUndoCommand*);
 		void exec(QUndoCommand* command, const char* preChangeSignal, const char* postChangeSignal,
 				QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),

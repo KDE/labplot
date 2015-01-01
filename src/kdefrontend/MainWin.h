@@ -2,13 +2,9 @@
     File                 : MainWin.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    Copyright            : (C) 2007-2008 Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
-    Description          : main class
-
+    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Description          : Main window of the application
  ***************************************************************************/
 
 /***************************************************************************
@@ -68,9 +64,9 @@ public:
 	~MainWin();
 
 private:
-	QMdiArea *m_mdiArea;
+	QMdiArea* m_mdiArea;
 	QMdiSubWindow* m_currentSubWindow;
-	Project *m_project;
+	Project* m_project;
 	AspectTreeModel* m_aspectTreeModel;
 	ProjectExplorer* m_projectExplorer;
 	QDockWidget* m_projectExplorerDock;
@@ -94,19 +90,19 @@ private:
 	KAction* m_importAction;
 	KAction* m_exportAction;
 	KAction* m_closeAction;
-	KAction *m_newFolderAction;
-	KAction *m_newSpreadsheetAction;
-	KAction *m_newMatrixAction;
-	KAction *m_newWorksheetAction;
-	KAction *m_newFileDataSourceAction;
-	KAction *m_newSqlDataSourceAction;
-	KAction *m_newScriptAction;
-	KAction *m_newProjectAction;
-	KAction *m_historyAction;
-	KAction *m_undoAction;
-	KAction *m_redoAction;
-	KAction *m_tileWindows;
-	KAction *m_cascadeWindows;
+	KAction* m_newFolderAction;
+	KAction* m_newSpreadsheetAction;
+	KAction* m_newMatrixAction;
+	KAction* m_newWorksheetAction;
+	KAction* m_newFileDataSourceAction;
+	KAction* m_newSqlDataSourceAction;
+	KAction* m_newScriptAction;
+	KAction* m_newProjectAction;
+	KAction* m_historyAction;
+	KAction* m_undoAction;
+	KAction* m_redoAction;
+	KAction* m_tileWindows;
+	KAction* m_cascadeWindows;
 
 	//toggling doch widgets
 	KAction* m_toggleProjectExplorerDockAction;

@@ -2,14 +2,9 @@
     File                 : MainWin.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    Copyright            : (C) 2007-2008 Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2007-2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
-    Description          : main window
-
-
+    Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Description          : Main window of the application
  ***************************************************************************/
 
 /***************************************************************************
@@ -70,6 +65,7 @@
 #include <KStandardAction>
 #include <kxmlguifactory.h>
 #include <KMessageBox>
+#include <KToolBar>
 #include <KStatusBar>
 #include <KLocale>
 #include <KDebug>
@@ -451,6 +447,12 @@ void MainWin::updateGUI() {
 		return;
 	}
 
+	//for the toolbar worksheet_toolbar, spreadsheet_toolbar and cartesian_plot_toolbar
+	//the default desktop style is ignored and the buttons are shown with icons and texts.
+	//We need to set the style explicitly when the toolbar is shown for the first time
+	//(no subgroup in the group "MainWindow" available)
+	//TODO: is this the usual behaviour for toolbars defined in the rc-file?
+	KConfigGroup group = KGlobal::config()->group("MainWindow");
 
 	Worksheet* w = this->activeWorksheet();
 	if (w!=0){
@@ -470,12 +472,18 @@ void MainWin::updateGUI() {
 
 		//populate worksheet-toolbar
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
+		if (group.groupList().indexOf("Toolbar worksheet_toolbar")==-1)
+			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
 		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 
 		//populate the toolbar for cartesian plots
 		toolbar=qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
+		if (group.groupList().indexOf("Toolbar cartesian_plot_toolbar")==-1)
+			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
 		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillCartesianPlotToolBar(toolbar);
@@ -504,6 +512,9 @@ void MainWin::updateGUI() {
 
 			//populate spreadsheet-toolbar
 			QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
+			if (group.groupList().indexOf("Toolbar spreadsheet_toolbar")==-1)
+				toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
 			toolbar->setVisible(true);
 			toolbar->clear();
 			view->fillToolBar(toolbar);
