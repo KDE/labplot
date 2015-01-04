@@ -747,6 +747,8 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		} else {
 			setCursor(Qt::ArrowCursor);
 		}
+	} else if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode == CartesianPlot::SelectionMode ) {
+		setCursor(Qt::ArrowCursor);
 	} else if (m_selectionBandIsShown) {
 		m_selectionEnd = event->pos();
 		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
