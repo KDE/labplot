@@ -211,6 +211,7 @@ class WorksheetView : public QGraphicsView {
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotMouseModeChanged(QAction*);
+	void handleCartesianPlotActions();
 	void addCurve();
 	void addEquationCurve();
 	void addFitCurve();

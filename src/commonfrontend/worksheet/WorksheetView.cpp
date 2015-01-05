@@ -102,6 +102,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	initActions();
 	initMenus();
 	selectionModeAction->setChecked(true);
+	handleCartesianPlotActions();
 
 	changeZoom(zoomOriginAction);
 	currentZoomAction=zoomInViewAction;
@@ -882,6 +883,7 @@ void WorksheetView::addNew(QAction* action){
 		return;
 
 	m_worksheet->addChild(aspect);
+	handleCartesianPlotActions();
 
 	if (!m_fadeInTimeLine) {
 		m_fadeInTimeLine = new QTimeLine(1000, this);
@@ -1137,6 +1139,50 @@ void WorksheetView::selectionChanged(){
 	}
 
 	m_selectedItems = items;
+	handleCartesianPlotActions();
+}
+
+//check whether we have cartesian plots selected and activate/deactivate
+void WorksheetView::handleCartesianPlotActions() {
+	bool plot = false;
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		//check whether we have cartesian plots selected
+		foreach (QGraphicsItem* item , m_selectedItems) {
+			if (item->data(0).toInt() == WorksheetElement::NameCartesianPlot) {
+				plot = true;
+				break;
+			}
+		}
+	} else {
+		//actions are applied to all available plots -> check whether we have plots
+		plot = (m_worksheet->children<CartesianPlot>().size() != 0);
+	}
+
+	cartesianPlotSelectionModeAction->setEnabled(plot);
+	cartesianPlotZoomSelectionModeAction->setEnabled(plot);
+	cartesianPlotZoomXSelectionModeAction->setEnabled(plot);
+	cartesianPlotZoomYSelectionModeAction->setEnabled(plot);
+
+	addCurveAction->setEnabled(plot);
+	addEquationCurveAction->setEnabled(plot);
+	addFitCurveAction->setEnabled(plot);
+	addHorizontalAxisAction->setEnabled(plot);
+	addVerticalAxisAction->setEnabled(plot);
+	addLegendAction->setEnabled(plot);
+
+	scaleAutoXAction->setEnabled(plot);
+	scaleAutoYAction->setEnabled(plot);
+	scaleAutoAction->setEnabled(plot);
+	zoomInAction->setEnabled(plot);
+	zoomOutAction->setEnabled(plot);
+	zoomInXAction->setEnabled(plot);
+	zoomOutXAction->setEnabled(plot);
+	zoomInYAction->setEnabled(plot);
+	zoomOutYAction->setEnabled(plot);
+	shiftLeftXAction->setEnabled(plot);
+	shiftRightXAction->setEnabled(plot);
+	shiftUpYAction->setEnabled(plot);
+	shiftDownYAction->setEnabled(plot);
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
@@ -1281,6 +1327,8 @@ void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 		m_cartesianPlotActionMode = ApplyActionToSelection;
 	else
 		m_cartesianPlotActionMode = ApplyActionToAll;
+
+	handleCartesianPlotActions();
 }
 
 void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
