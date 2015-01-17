@@ -199,7 +199,6 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-// 	qDebug()<<"Worksheet::handleAspectAboutToBeRemoved " << aspect->name();
 	const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
 		QGraphicsItem *item = removedElement->graphicsItem();
@@ -654,7 +653,6 @@ void WorksheetPrivate::updateLayout(){
 			}
 		}
 	}
-	q->update();
 }
 
 

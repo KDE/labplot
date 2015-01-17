@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach@uni-konstanz.de)
  ***************************************************************************/
 
@@ -1320,6 +1320,7 @@ void AxisPrivate::retransformTickLabelStrings(){
 		tickLabelStrings << str;
 	}
 
+	//recalculate the position of the tick labels
 	retransformTickLabels();
 }
 
@@ -1454,7 +1455,7 @@ void AxisPrivate::retransformTickLabels(){
 void AxisPrivate::retransformMajorGrid(){
 	majorGridPath = QPainterPath();
 	if (majorGridPen.style() == Qt::NoPen || majorTickPoints.size() == 0){
-		update();
+		recalcShapeAndBoundingRect();
 		return;
 	}
 
@@ -1524,13 +1525,13 @@ void AxisPrivate::retransformMajorGrid(){
 		majorGridPath.lineTo(line.p2());
 	}
 
-	update();
+	recalcShapeAndBoundingRect();
 }
 
 void AxisPrivate::retransformMinorGrid(){
 	minorGridPath = QPainterPath();
 	if (minorGridPen.style() == Qt::NoPen){
-		update();
+		recalcShapeAndBoundingRect();
 		return;
 	}
 
@@ -1564,7 +1565,7 @@ void AxisPrivate::retransformMinorGrid(){
 		minorGridPath.lineTo(line.p2());
 	}
 
-	update();
+	recalcShapeAndBoundingRect();
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
@@ -1623,7 +1624,6 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape = axisShapeWithoutGrids;
 	axisShape.addPath(WorksheetElement::shapeFromPath(majorGridPath, majorGridPen));
 	axisShape.addPath(WorksheetElement::shapeFromPath(minorGridPath, minorGridPen));
-
 	boundingRectangle = axisShape.boundingRect();
 }
 

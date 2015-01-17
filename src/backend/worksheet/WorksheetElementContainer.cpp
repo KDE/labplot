@@ -136,7 +136,6 @@ void WorksheetElementContainer::handlePageResize(double horizontalRatio, double 
 }
 
 void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) {
-// 	qDebug()<<"WorksheetElementContainer::handleAspectAdded "<< aspect->name();
 	Q_D(WorksheetElementContainer);
 
 	const WorksheetElement* element = qobject_cast<const WorksheetElement*>(aspect);
@@ -218,7 +217,6 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 	QList<WorksheetElement *> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(const WorksheetElement *elem, childList)
 		rect |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
-
 	return rect;
 }
 
