@@ -1,3 +1,32 @@
+/***************************************************************************
+    File             : ExpressionTextEdit.cpp
+    Project          : LabPlot
+    --------------------------------------------------------------------
+    Copyright        : (C) 2014-2015 Alexander Semke (alexander.semke@web.de)
+    Description      : widget for defining mathematical expressions
+					   modified version of
+					   http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+
 /****************************************************************************
  **
  ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
@@ -47,7 +76,17 @@
 #include <QAbstractItemView>
 #include <QScrollBar>
 
-// modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+
+
+/*!
+  \class ExpressionTextEdit
+  \brief  Provides a widget for for defining mathematical expressions
+		  Supports syntax-highlighting and completion.
+
+		  Modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+
+  \ingroup kdefrontend
+*/
 ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 	m_highlighter(new EquationHighlighter(this)),
 	m_expressionType(XYEquationCurve::Neutral),
@@ -55,6 +94,8 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 
 	QStringList list = ExpressionParser::getInstance()->functions();
 	list.append(ExpressionParser::getInstance()->constants());
+
+	setTabChangesFocus(true);
 
 	m_completer = new QCompleter(list);
 	m_completer->setWidget(this);
@@ -116,19 +157,13 @@ void ExpressionTextEdit::focusInEvent(QFocusEvent *e) {
 }
 
 void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
-	if (m_completer->popup()->isVisible()) {
-		// The following keys are forwarded by the completer to the widget
-		switch (e->key()) {
-			case Qt::Key_Enter:
-			case Qt::Key_Return:
-			case Qt::Key_Escape:
-			case Qt::Key_Tab:
-			case Qt::Key_Backtab:
-				e->ignore();
-				return; // let the completer do default behavior
-			default:
-				break;
-		}
+	switch (e->key()) {
+		case Qt::Key_Enter:
+		case Qt::Key_Return:
+			e->ignore();
+			return;
+		default:
+			break;
 	}
 
 	bool isShortcut = ((e->modifiers() & Qt::ControlModifier) && e->key() == Qt::Key_E); // CTRL+E
