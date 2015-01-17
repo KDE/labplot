@@ -1110,6 +1110,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars){
 		assign_variable(vars.at(i).toLocal8Bit().data(), 0);
 
 	char* data = expr.toLocal8Bit().data();
+	gsl_set_error_handler_off();
 	parse(data);
 	return !(parse_errors()>0);
 }

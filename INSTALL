@@ -10,7 +10,7 @@ E.g. specify a custom installation path via
 -DCMAKE_INSTALL_PREFIX=/usr/local
 
 or build a debug build via
--DCMAKE_BUILD_TYPE = DebugFull
+-DCMAKE_BUILD_TYPE=DebugFull
 
 ================================================================================
 To install LabPlot execute
