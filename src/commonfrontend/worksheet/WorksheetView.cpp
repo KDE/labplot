@@ -1084,6 +1084,7 @@ void WorksheetView::selectItem(QGraphicsItem* item){
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(true);
 	m_selectedItems<<item;
+	handleCartesianPlotActions();
 	m_suppressSelectionChangedEvent = false;
 }
 
@@ -1095,6 +1096,8 @@ void WorksheetView::selectItem(QGraphicsItem* item){
 void WorksheetView::deselectItem(QGraphicsItem* item){
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(false);
+	m_selectedItems.removeOne(item);
+	handleCartesianPlotActions();
 	m_suppressSelectionChangedEvent = false;
 }
 
@@ -1116,10 +1119,10 @@ void WorksheetView::selectionChanged(){
 	//check, whether the previously selected items were deselected now.
 	//Forward the deselection prior to the selection of new items
 	//in order to avoid the unwanted multiple selection in project explorer
-	foreach ( QGraphicsItem* item , m_selectedItems ){
+	foreach ( QGraphicsItem* item, m_selectedItems ){
 		if ( items.indexOf(item) == -1 ) {
 			if (item->isVisible())
-				m_worksheet->setItemSelectedInView( item, false );
+				m_worksheet->setItemSelectedInView(item, false);
 			else
 				invisibleDeselected = true;
 		}
@@ -1130,8 +1133,8 @@ void WorksheetView::selectionChanged(){
 		//no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
 	}else{
-		foreach ( const QGraphicsItem* item , items )
-			m_worksheet->setItemSelectedInView( item, true );
+		foreach (const QGraphicsItem* item, items)
+			m_worksheet->setItemSelectedInView(item, true);
 
 		//items selected -> deselect the worksheet in the project explorer
 		//prevents unwanted multiple selection with worksheet (if it was selected before)
