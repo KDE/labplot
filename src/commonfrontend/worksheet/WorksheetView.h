@@ -41,14 +41,12 @@ class QTimeLine;
 
 class AbstractAspect;
 class WorksheetElement;
-class WorksheetModel;
 
 class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
   public:
 	explicit WorksheetView(Worksheet* worksheet);
-	virtual ~WorksheetView();
 
 	enum ExportFormat{Pdf, Eps, Svg, Png};
 	enum GridStyle{NoGrid, LineGrid, DotGrid};
@@ -85,7 +83,6 @@ class WorksheetView : public QGraphicsView {
 	void mouseMoveEvent(QMouseEvent*);
 
 	Worksheet* m_worksheet;
-	WorksheetModel* m_model;
 	MouseMode m_mouseMode;
 	CartesianPlotActionMode m_cartesianPlotActionMode;
 	CartesianPlot::MouseMode m_cartesianPlotMouseMode;

@@ -54,7 +54,7 @@
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget *parent): XYCurveDock(parent){
+XYFitCurveDock::XYFitCurveDock(QWidget *parent): XYCurveDock(parent), m_fitCurve(0) {
 
 }
 

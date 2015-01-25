@@ -54,7 +54,7 @@
   \ingroup kdefrontend
 */
 
-XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent){
+XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent), m_equationCurve(0) {
 
 }
 

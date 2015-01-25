@@ -40,13 +40,9 @@
 #include <QGraphicsScene>
 #include <QWidget>
 #include <QDebug>
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <QIcon>
-#else
 #include "KIcon"
 #include <KConfig>
 #include <KConfigGroup>
-#endif
 #include <KLocale>
 
 
@@ -144,13 +140,7 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
-	QIcon ico;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	ico.addPixmap(QPixmap(":/graph.xpm"));
-#else
-	ico = KIcon("office-chart-area");
-#endif
-	return ico;
+	return KIcon("office-chart-area");
 }
 
 //! Return a new context menu.

@@ -4,7 +4,7 @@
     Description          : Worksheet view
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,7 +28,6 @@
  ***************************************************************************/
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/WorksheetModel.h"
 #include "backend/worksheet/WorksheetElementGroup.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
@@ -66,7 +65,6 @@
 */
 WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_worksheet(worksheet),
-	m_model(new WorksheetModel(worksheet)),
 	m_mouseMode(SelectionMode),
 	m_cartesianPlotActionMode(ApplyActionToSelection),
 	m_cartesianPlotMouseMode(CartesianPlot::SelectionMode),
@@ -78,7 +76,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	tbNewCartesianPlot(0),
 	tbZoom(0) {
 
-	setScene(m_model->scene());
+	setScene(m_worksheet->scene());
 
 	setRenderHint(QPainter::Antialiasing);
 	setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
@@ -118,10 +116,6 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	connect(m_worksheet, SIGNAL(useViewSizeRequested()), this, SLOT(useViewSizeRequested()) );
 	connect(m_worksheet, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)) );
 	connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
-}
-
-WorksheetView::~WorksheetView(){
-	delete m_model;
 }
 
 void WorksheetView::initActions(){
@@ -813,10 +807,10 @@ void WorksheetView::changeZoom(QAction* action){
 		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
 		setTransform(QTransform::fromScale(hscale, vscale));
 	}else if (action==zoomFitPageWidthAction){
-		float scaleFactor = viewport()->width()/m_model->scene()->sceneRect().width();
+		float scaleFactor = viewport()->width()/scene()->sceneRect().width();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 	}else if (action==zoomFitPageHeightAction){
-		float scaleFactor = viewport()->height()/m_model->scene()->sceneRect().height();
+		float scaleFactor = viewport()->height()/scene()->sceneRect().height();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 	}else if (action==zoomFitSelectionAction){
 		fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
