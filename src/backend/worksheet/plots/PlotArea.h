@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
  ***************************************************************************/
 
@@ -35,20 +34,20 @@
 
 class PlotAreaPrivate;
 
-class PlotArea: public WorksheetElement{
+class PlotArea : public WorksheetElement{
 	Q_OBJECT
 
 	public:
-		explicit PlotArea(const QString &name);
+		explicit PlotArea(const QString& name);
 		virtual ~PlotArea();
 
 		enum BackgroundType{Color, Image, Pattern};
 		enum BackgroundColorStyle{SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
-																TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
-																RadialGradient};
+								  TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
+								  RadialGradient};
 		enum BackgroundImageStyle{ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
-		virtual QGraphicsItem *graphicsItem() const;
+		virtual QGraphicsItem* graphicsItem() const;
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool) {};
@@ -69,8 +68,8 @@ class PlotArea: public WorksheetElement{
 		BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled)
 		CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect)
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		typedef WorksheetElement BaseClass;
 		typedef PlotAreaPrivate Private;
@@ -80,7 +79,7 @@ class PlotArea: public WorksheetElement{
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	protected:
-		PlotArea(const QString &name, PlotAreaPrivate *dd);
+		PlotArea(const QString& name, PlotAreaPrivate* dd);
 		PlotAreaPrivate* const d_ptr;
 
 	private:

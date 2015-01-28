@@ -31,7 +31,6 @@
 
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AbstractScriptingEngine.h"
-#include "backend/worksheet/WorksheetModel.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
 

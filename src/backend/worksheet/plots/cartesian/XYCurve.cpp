@@ -520,7 +520,7 @@ void XYCurve::setYErrorType(ErrorType type) {
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorPlusColumn, const AbstractColumn*, yErrorPlusColumn, updateErrorBars)
 void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (column != d->xErrorPlusColumn) {
+	if (column != d->yErrorPlusColumn) {
 		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, i18n("%1: set y-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
@@ -533,7 +533,7 @@ void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYErrorMinusColumn, const AbstractColumn*, yErrorMinusColumn, updateErrorBars)
 void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
-	if (column != d->xErrorMinusColumn) {
+	if (column != d->yErrorMinusColumn) {
 		exec(new XYCurveSetYErrorMinusColumnCmd(d, column, i18n("%1: set y-error column")));
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
@@ -1286,7 +1286,7 @@ void XYCurvePrivate::updateErrorBars(){
 	if (errorBarsType != XYCurve::ErrorBarsSimple && !symbolPointsLogical.isEmpty()) {
 		//determine the index of the first visible point
 		size_t i = 0;
-		while( !visiblePoints[i] && i<visiblePoints.size())
+		while( i<visiblePoints.size() && !visiblePoints[i])
 			i++;
 
 		if (i==visiblePoints.size())

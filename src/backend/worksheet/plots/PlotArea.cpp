@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,10 +28,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/PlotAreaPrivate.h"
-#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
-#include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/XmlStreamReader.h"
 
 #include <QPainter>
@@ -357,21 +353,18 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 			switch (backgroundImageStyle){
 				case PlotArea::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-					//painter->drawPixmap(rect.topLeft(),pix);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				case PlotArea::Scaled:
 					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-					//painter->drawPixmap(rect.topLeft(),pix);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				case PlotArea::ScaledAspectRatio:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-					//painter->drawPixmap(rect.topLeft(),pix);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
@@ -380,18 +373,15 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
 					break;
 				case PlotArea::Tiled:
-					//painter->drawTiledPixmap(rect,pix);
 					painter->setBrush(QBrush(pix));
 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				case PlotArea::CenterTiled:
-					//painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				default:
-					//painter->drawPixmap(rect.topLeft(),pix);
 					painter->setBrush(QBrush(pix));
 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
