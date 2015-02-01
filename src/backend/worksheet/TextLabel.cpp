@@ -4,7 +4,7 @@
     Description          : A one-line text label supporting floating point font sizes.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2015 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -113,8 +113,8 @@ void TextLabel::init() {
 	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
 	// -> take this into account
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
-	d->teXImageResolution = 600;
-	d->teXImageScaleFactor = QApplication::desktop()->physicalDpiX()/float(d->teXImageResolution)*d->scaleFactor;
+	d->teXImageResolution = QApplication::desktop()->physicalDpiX();
+	d->teXImageScaleFactor = Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Centimeter);
 
 	connect(&d->teXImageFutureWatcher, SIGNAL(finished()), this, SLOT(updateTeXImage()));
 
@@ -326,10 +326,12 @@ void TextLabelPrivate::retransform(){
 	//determine the size of the label in scene units.
 	float w, h;
 	if (textWrapper.teXUsed){
+		//image size is in pixel, convert to scene units
 		w = teXImage.width()*teXImageScaleFactor;
 		h = teXImage.height()*teXImageScaleFactor;
 	}
 	else {
+		//size is in points, convert to scene units
 		w = staticText.size().width()*scaleFactor;
 		h = staticText.size().height()*scaleFactor;
 	}
@@ -490,13 +492,8 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	painter->rotate(rotationAngle);
 
 	if (textWrapper.teXUsed){
-		painter->scale(teXImageScaleFactor, teXImageScaleFactor);
-		float w = teXImage.width();
-		float h = teXImage.height();
-		painter->translate(-w/2,-h/2);
-		painter->setRenderHint(QPainter::SmoothPixmapTransform);
-		QRectF rect = teXImage.rect();
-		painter->drawImage(rect, teXImage, rect);
+		QImage todraw = teXImage.scaled(boundingRect().width(), boundingRect().height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		painter->drawImage(boundingRect(), todraw);
 	}else{
 		painter->scale(scaleFactor, scaleFactor);
 		float w = staticText.size().width();

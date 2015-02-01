@@ -2,7 +2,7 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -35,7 +35,6 @@
 
 #include <KCharSelect>
 #include <KMenu>
-#include <QDebug>
 
 /*!
 	\class LabelWidget
@@ -222,13 +221,8 @@ void LabelWidget::textChanged(){
 		QString text=ui.teLabel->toPlainText();
 		TextLabel::TextWrapper wrapper(text, true);
 
-		// TODO: this uses format of current selection only
-		QTextCharFormat format = ui.teLabel->currentCharFormat();
-
-		foreach(TextLabel* label, m_labelsList){
-			label->setTeXFontSize(format.fontPointSize());
+		foreach(TextLabel* label, m_labelsList)
 			label->setText(wrapper);
-		}
 	}else{
 		//save an empty string instead of a html-string with empty body, if no text available in QTextEdit
 		QString text;
