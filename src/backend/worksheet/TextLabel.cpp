@@ -492,8 +492,10 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	painter->rotate(rotationAngle);
 
 	if (textWrapper.teXUsed){
-		QImage todraw = teXImage.scaled(boundingRect().width(), boundingRect().height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		painter->drawImage(boundingRect(), todraw);
+		if (boundingRect().width()!=0.0 &&  boundingRect().height()!=0.0){
+			QImage todraw = teXImage.scaled(boundingRect().width(), boundingRect().height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+			painter->drawImage(boundingRect(), todraw);
+		}
 	}else{
 		painter->scale(scaleFactor, scaleFactor);
 		float w = staticText.size().width();

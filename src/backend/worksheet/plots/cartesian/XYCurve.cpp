@@ -1466,7 +1466,11 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 void XYCurvePrivate::updatePixmap() {
 // 	QTime timer;
 // 	timer.start();
-	QPixmap pixmap(boundingRectangle.width()+1, boundingRectangle.height()+1);
+	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
+	if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
+		m_pixmap = pixmap;
+		return;
+	}
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
@@ -1591,7 +1595,7 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
 */
-void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
+void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget){
 // 	qDebug()<<"XYCurvePrivate::paint, " + q->name();
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
@@ -1600,14 +1604,11 @@ void XYCurvePrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
 // 	QTime timer;
 // 	timer.start();
-	painter->save();
     painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
-	painter->restore();
 // 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
-// 	qDebug()<<this->boundingRect() << "   " << m_pixmap.size();
 
 	if (m_hovered && !isSelected() && !m_printing){
 // 		timer.start();
