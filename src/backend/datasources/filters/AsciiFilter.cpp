@@ -369,14 +369,14 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	if (mode==AbstractFileFilter::Append){
 		columnOffset=dataSource->childCount<Column>();
 		for ( int n=startColumn; n<=endColumn; n++ ){
-			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
+			newColumn = new Column(vectorNameList.at(n-startColumn), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->addChild(newColumn);
 		}
 	}else if (mode==AbstractFileFilter::Prepend){
 		Column* firstColumn = dataSource->child<Column>(0);
 		for ( int n=startColumn; n<=endColumn; n++ ){
-			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
+			newColumn = new Column(vectorNameList.at(n-startColumn), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->insertChildBefore(newColumn, firstColumn);
 		}
@@ -457,9 +457,9 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			if (n<lineStringList.size()) {
 				bool isNumber;
 				const double value = lineStringList.at(n).toDouble(&isNumber);
-				isNumber ? dataPointers[columnOffset+n-startColumn]->operator[](0) = value : dataPointers[columnOffset+n-startColumn]->operator[](0) = NAN;
+				isNumber ? dataPointers[n-startColumn]->operator[](0) = value : dataPointers[n-startColumn]->operator[](0) = NAN;
 			} else {
-				dataPointers[columnOffset+n-startColumn]->operator[](0) = NAN;
+				dataPointers[n]->operator[](0) = NAN;
 			}
 		}
 		currentRow++;
@@ -488,9 +488,9 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		for ( int n=startColumn; n<=endColumn; n++ ){
 			if (n<lineStringList.size()) {
 				const double value = lineStringList.at(n).toDouble(&isNumber);
-				isNumber ? dataPointers[columnOffset+n-startColumn]->operator[](currentRow) = value : dataPointers[columnOffset+n-startColumn]->operator[](currentRow) = NAN;
+				isNumber ? dataPointers[n-startColumn]->operator[](currentRow) = value : dataPointers[n-startColumn]->operator[](currentRow) = NAN;
 			} else {
-				dataPointers[columnOffset+n-startColumn]->operator[](currentRow) = NAN;
+				dataPointers[n-startColumn]->operator[](currentRow) = NAN;
 			}
 		}
 

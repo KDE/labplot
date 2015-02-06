@@ -324,18 +324,20 @@ void ImportFileWidget::manageFilters(){
 void ImportFileWidget::fileTypeChanged(int id) {
     ui.swOptions->setCurrentIndex(id);
 
-    ui.cbFilter->clear();
+    FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+	if (fileType==FileDataSource::AsciiVector || fileType==FileDataSource::AsciiMatrix)
+	  ui.swOptions->setCurrentIndex(0);
+	else if (fileType==FileDataSource::BinaryVector || fileType==FileDataSource::BinaryMatrix)
+	  ui.swOptions->setCurrentIndex(1);
+
+	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
+	ui.cbFilter->clear();
     ui.cbFilter->addItem( i18n("Automatic") );
     ui.cbFilter->addItem( i18n("Custom") );
 
     //TODO: populate the combobox with the available pre-defined flter settings for the selected type
-    FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-	if (fileType==FileDataSource::AsciiVector || fileType==FileDataSource::AsciiMatrix){
-	  ui.swOptions->setCurrentIndex(0);
 
-	}else if (fileType==FileDataSource::BinaryVector || fileType==FileDataSource::BinaryMatrix){
-	  ui.swOptions->setCurrentIndex(1);
-    }
+	ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
 }
 
 /*!
