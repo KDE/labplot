@@ -522,7 +522,7 @@ void XYFitCurvePrivate::recalculate() {
 	//fit settings
 	int maxIters = fitData.maxIterations; //maximal number of iterations
 	float delta = fitData.eps; //fit tolerance
-	const int np = fitData.paramNames.size(); //number of fit parameters
+	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
@@ -582,7 +582,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//number of data points to fit
-	int n = xdataVector.size();
+	unsigned int n = xdataVector.size();
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
@@ -661,7 +661,7 @@ void XYFitCurvePrivate::recalculate() {
 	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
 
 	residualsVector->resize(n);
-	for (int i=0; i<n; ++i) {
+	for (unsigned int i=0; i<n; ++i) {
 		residualsVector->data()[i] = gsl_vector_get(s->f, i);
 	}
 	residualsColumn->setChanged();
@@ -679,11 +679,11 @@ void XYFitCurvePrivate::recalculate() {
 
 	//Coefficient of determination, R-squared
 	double ybar = 0; //mean value of the y-data
-	for (int i=0; i<n; ++i)
+	for (unsigned int i=0; i<n; ++i)
 		ybar += ydata[i];
 	ybar = ybar/n;
 	double sstot = 0;
-	for (int i=0; i<n; ++i)
+	for (unsigned int i=0; i<n; ++i)
 		sstot += pow(ydata[i]-ybar, 2);
 	fitResult.rsquared = 1 - fitResult.sse/sstot;
 	fitResult.rsquaredAdj = 1-(1-fitResult.rsquared*fitResult.rsquared)*(n-1)/(n-np-1);
@@ -692,7 +692,7 @@ void XYFitCurvePrivate::recalculate() {
 	double c = GSL_MIN_DBL(1, sqrt(fitResult.sse)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
-	for (int i=0; i<np; i++) {
+	for (unsigned int i=0; i<np; i++) {
 		fitResult.paramValues[i] = gsl_vector_get(s->x, i);
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
 	}

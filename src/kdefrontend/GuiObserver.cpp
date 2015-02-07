@@ -332,6 +332,8 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
   Depending on the currently selected object(s), identified by \c className, activates/diactivates the corresponding toolbars and menus.
 */
 void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspect){
+	Q_UNUSED(className);
+	Q_UNUSED(aspect);
 	return;
 //   if (className.isEmpty()){
 // 	//no object or objects of different kind (e.g. a spreadsheet and a worksheet) were selected.
