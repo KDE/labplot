@@ -40,7 +40,7 @@
 
 class CartesianPlotPrivate:public AbstractPlotPrivate{
     public:
-		CartesianPlotPrivate(CartesianPlot* owner);
+		explicit CartesianPlotPrivate(CartesianPlot* owner);
 		CartesianPlot* const q;
 
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);

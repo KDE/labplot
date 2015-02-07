@@ -65,10 +65,8 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-#ifdef HAVE_GSL
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_errno.h>
-#endif
 #include <math.h>
 #include <vector>
 
@@ -907,7 +905,6 @@ void XYCurvePrivate::updateLines(){
 	  case XYCurve::SplineCubicPeriodic:
 	  case XYCurve::SplineAkimaNatural:
 	  case XYCurve::SplineAkimaPeriodic:{
-#ifdef HAVE_GSL
 		//TODO: optimize! try to omit the copying from the column to the arrays of doubles.
 		//TODO: forward the error message to the UI.
 		gsl_interp_accel *acc  = gsl_interp_accel_alloc();
@@ -980,7 +977,6 @@ void XYCurvePrivate::updateLines(){
 		gsl_spline_free (spline);
         gsl_interp_accel_free (acc);
 		break;
-#endif
 	  }
 	  default:
 		break;

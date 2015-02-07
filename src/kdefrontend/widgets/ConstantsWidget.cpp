@@ -64,7 +64,7 @@ void ConstantsWidget::groupChanged(int index) {
 	ui.lwConstants->clear();
 	for (int i=0; i<names.size(); ++i) {
 		if (indices.at(i) == index)
-			ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ")" );
+			ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ')' );
 	}
 	ui.lwConstants->setCurrentRow(0);
 }
@@ -78,7 +78,7 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 		ui.lwConstants->clear();
 		for (int i=0; i<names.size(); ++i) {
 			if (names.at(i).contains(filter, Qt::CaseInsensitive))
-				ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ")" );
+				ui.lwConstants->addItem( names.at(i) + " (" + constants.at(i) + ')' );
 		}
 
 		if (ui.lwConstants->count()) {

@@ -110,8 +110,8 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	m_formulaPixs[Flat] = "flat";
 	m_formulaPixs[Lognormal] = "lognormal";
 	m_formulaPixs[ChiSquared] = "chi_squared";
-	m_formulaPixs[F] = "F";
-	m_formulaPixs[t] = "t";
+	m_formulaPixs[F] = 'F';
+	m_formulaPixs[t] = 't';
 	m_formulaPixs[Beta] = "beta";
 	m_formulaPixs[Logistic] = "logistic";
 	m_formulaPixs[Pareto] = "pareto";

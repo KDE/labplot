@@ -36,7 +36,7 @@ class KTextEdit;
 class EquationHighlighter : public QSyntaxHighlighter {
 	Q_OBJECT
 	public:
-		EquationHighlighter(KTextEdit* parent);
+		explicit EquationHighlighter(KTextEdit* parent);
 		void setVariables(const QStringList&);
 // 		void setErrorPosition(int position);
 

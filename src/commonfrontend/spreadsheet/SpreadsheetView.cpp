@@ -1573,7 +1573,7 @@ void SpreadsheetView::print(QPrinter* printer) const{
 	QRect tr(br);
 
 	int w;
-	for (i=0;i<cols;i++){
+	for (i=0; i<cols; ++i) {
 		headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
 		w = m_tableView->columnWidth(i);
 		tr.setTopLeft(QPoint(right,height));
@@ -1595,7 +1595,7 @@ void SpreadsheetView::print(QPrinter* printer) const{
 
 	// print table values
 	QString cellText;
-	for (i=0;i<rows;i++){
+	for (i=0; i<rows; ++i) {
 		right = margin;
 		cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
 		tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);

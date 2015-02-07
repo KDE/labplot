@@ -62,7 +62,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	ui.cbExportArea->addItem("Current selection");
 	ui.cbExportArea->addItem("Complete worksheet");
 
-	ui.cbResolution->addItem(QString::number(QApplication::desktop()->physicalDpiX()) + " (" + i18n("desktop") + ")");
+	ui.cbResolution->addItem(QString::number(QApplication::desktop()->physicalDpiX()) + " (" + i18n("desktop") + ')');
 	ui.cbResolution->addItem("100");
 	ui.cbResolution->addItem("150");
 	ui.cbResolution->addItem("200");

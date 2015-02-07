@@ -80,7 +80,7 @@ class ExpressionTextEdit : public KTextEdit {
 	Q_OBJECT
 
 public:
-	ExpressionTextEdit(QWidget *parent = 0);
+	explicit ExpressionTextEdit(QWidget *parent = 0);
 	EquationHighlighter* highlighter();
 	void setExpressionType(XYEquationCurve::EquationType);
 	void setVariables(const QStringList&);

@@ -25,8 +25,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef NONUNIFORMRANDOMDIALOG_H
-#define NONUNIFORMRANDOMDIALOG_H
+#ifndef RANDOMVALUESDIALOG_H
+#define RANDOMVALUESDIALOG_H
 
 #include "ui_randomvalueswidget.h"
 #include <QMap>

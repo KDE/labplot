@@ -506,7 +506,7 @@ void Column::save(QXmlStreamWriter * writer) const
 				break;
 			}
 		case AbstractColumn::Text:
-			for(i=0; i<rowCount(); i++)
+			for(i=0; i<rowCount(); ++i)
 			{
 				writer->writeStartElement("row");
 				writer->writeAttribute("index", QString::number(i));
@@ -518,7 +518,7 @@ void Column::save(QXmlStreamWriter * writer) const
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
-			for(i=0; i<rowCount(); i++)
+			for(i=0; i<rowCount(); ++i)
 			{
 				writer->writeStartElement("row");
 				writer->writeAttribute("index", QString::number(i));

@@ -63,7 +63,7 @@ void FunctionsWidget::groupChanged(int index) {
 	ui.lwFunctions->clear();
 	for (int i=0; i<names.size(); ++i) {
 		if (indices.at(i) == index)
-			ui.lwFunctions->addItem( names.at(i) + " (" + functions.at(i) + ")" );
+			ui.lwFunctions->addItem( names.at(i) + " (" + functions.at(i) + ')' );
 	}
 	ui.lwFunctions->setCurrentRow(0);
 }
@@ -77,7 +77,7 @@ void FunctionsWidget::filterChanged(const QString& filter) {
 		ui.lwFunctions->clear();
 		for (int i=0; i<names.size(); ++i) {
 			if (names.at(i).contains(filter, Qt::CaseInsensitive))
-				ui.lwFunctions->addItem( names.at(i) + " (" + functions.at(i) + ")" );
+				ui.lwFunctions->addItem( names.at(i) + " (" + functions.at(i) + ')' );
 		}
 
 		if (ui.lwFunctions->count()) {
