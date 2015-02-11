@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : abstractcolumncommands.h
-    Project              : SciDAVis/LabPlot
+    Project              : LabPlot
     Description          : Commands to be called by AbstractColumn to modify AbstractColumn::Private
     --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 Tilman Benkert (thzs*gmx.net),
-	                                      Knut Franke (knut.franke*gmx.de)
-	 								(C) 2010 by Knut Franke
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
+	Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 

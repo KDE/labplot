@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : Spreadsheet.h
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2006-2008 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2006-2009 Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief*yahoo.fr)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief@yahoo.fr)
 
  ***************************************************************************/
 

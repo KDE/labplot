@@ -1,10 +1,9 @@
 /***************************************************************************
     File                 : AbstractColumn.cpp
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -48,22 +47,22 @@
  * \class AbstractColumn
  * \brief Interface definition for data with column logic
  *
- * This is an abstract base class for column-based data, 
+ * This is an abstract base class for column-based data,
  * i.e. mathematically a vector or technically a 1D array or list.
- * It only defines the interface but has no data members itself. 
+ * It only defines the interface but has no data members itself.
  *
  * Classes derived from this are typically table columns or outputs
- * of filters which can be chained between table columns and plots. 
- * From the point of view of the plot functions there will be no difference 
+ * of filters which can be chained between table columns and plots.
+ * From the point of view of the plot functions there will be no difference
  * between a table column and a filter output since both use this interface.
  *
- * Classes derived from this will either store a 
- * vector with entries of one certain data type, e.g. double, QString, 
+ * Classes derived from this will either store a
+ * vector with entries of one certain data type, e.g. double, QString,
  * QDateTime, or generate such values on demand. To determine the data
- * type of a class derived from this, use the columnMode() function. 
- * AbstractColumn defines all access functions for all supported data 
- * types but only those corresponding to the return value of columnMode() 
- * will return a meaningful value. Calling functions not belonging to 
+ * type of a class derived from this, use the columnMode() function.
+ * AbstractColumn defines all access functions for all supported data
+ * types but only those corresponding to the return value of columnMode()
+ * will return a meaningful value. Calling functions not belonging to
  * the data type of the column is safe, but will do nothing (writing
  * function) or return some default value (reading functions).
  *
@@ -71,14 +70,14 @@
  * Any class whose output values are subject to change over time must emit
  * the according signals. These signals notify any object working with the
  * column before and after a change of the column.
- * In some cases it will be necessary for a class using 
- * the column to connect aboutToBeDestroyed(), to react 
- * to a column's deletion, e.g. a filter's reaction to a 
+ * In some cases it will be necessary for a class using
+ * the column to connect aboutToBeDestroyed(), to react
+ * to a column's deletion, e.g. a filter's reaction to a
  * table deletion.
  *
  * All writing functions have a "do nothing" standard implementation to
  * make deriving a read-only class very easy without bothering about the
- * writing interface. 
+ * writing interface.
  */
 
 /**
@@ -101,7 +100,7 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
  * \brief Return the column mode
  *
  * This function is most used by tables but can also be used
- * by plots. The column mode specifies how to interpret 
+ * by plots. The column mode specifies how to interpret
  * the values in the column additional to the data type.
  */
 
@@ -134,7 +133,7 @@ bool AbstractColumn::copy(const AbstractColumn *other) {
  * \param source_start first row to copy in the column to copy
  * \param destination_start first row to copy in
  * \param num_rows the number of rows to copy
- */ 
+ */
 bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int destination_start, int num_rows) {
 	Q_UNUSED(source)
 	Q_UNUSED(source_start)
@@ -227,24 +226,24 @@ bool AbstractColumn::isValid(int row) const {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * \brief Return whether a certain row is masked 	 
+ * \brief Return whether a certain row is masked
  */
 bool AbstractColumn::isMasked(int row) const {
-	return m_abstract_column_private->m_masking.isSet(row); 
+	return m_abstract_column_private->m_masking.isSet(row);
 }
 
 /**
- * \brief Return whether a certain interval of rows rows is fully masked 	 
+ * \brief Return whether a certain interval of rows rows is fully masked
  */
 bool AbstractColumn::isMasked(Interval<int> i) const {
-	return m_abstract_column_private->m_masking.isSet(i); 
+	return m_abstract_column_private->m_masking.isSet(i);
 }
 
 /**
  * \brief Return all intervals of masked rows
  */
 QList< Interval<int> > AbstractColumn::maskedIntervals() const {
-	return m_abstract_column_private->m_masking.intervals(); 
+	return m_abstract_column_private->m_masking.intervals();
 }
 
 /**
@@ -260,7 +259,7 @@ void AbstractColumn::clearMasks() {
  *
  * \param i the interval
  * \param mask true: mask, false: unmask
- */ 
+ */
 void AbstractColumn::setMasked(Interval<int> i, bool mask) {
 	exec(new AbstractColumnSetMaskedCmd(m_abstract_column_private, i, mask),
 			"maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
@@ -351,11 +350,11 @@ QString AbstractColumn::textAt(int row) const {
  * Use this only when columnMode() is Text
  */
 void AbstractColumn::setTextAt(int row, const QString& new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value) 
+	Q_UNUSED(row) Q_UNUSED(new_value)
 }
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is Text
  */
@@ -421,7 +420,7 @@ void AbstractColumn::setDateTimeAt(int row, const QDateTime& new_value) {
 };
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
@@ -449,7 +448,7 @@ void AbstractColumn::setValueAt(int row, double new_value) {
 };
 
 /**
- * \brief Replace a range of values 
+ * \brief Replace a range of values
  *
  * Use this only when columnMode() is Numeric
  */
@@ -465,7 +464,7 @@ double AbstractColumn::minimum() const{
 		val = valueAt(row);
 		if (isnan(val))
 			continue;
-		
+
 		if (val < min)
 			min = val;
 	}
@@ -479,7 +478,7 @@ double AbstractColumn::maximum() const{
 		val = valueAt(row);
 		if (isnan(val))
 			continue;
-		
+
 		if (val > max)
 			max = val;
 	}
@@ -598,7 +597,7 @@ double AbstractColumn::maximum() const{
  *
  * \param source the object emitting this signal
  *
- * This is needed by AbstractFilter. 
+ * This is needed by AbstractFilter.
  */
 
 /**

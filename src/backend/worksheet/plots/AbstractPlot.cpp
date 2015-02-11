@@ -1,11 +1,11 @@
 /***************************************************************************
     File                 : AbstractPlot.cpp
-    Project              : LabPlot/SciDAVis
-    Description          : Second level container in a Worksheet for logical grouping
+    Project              : LabPlot
+    Description          : Base class for plots of different types
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+	Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -40,9 +40,9 @@
  * \class AbstractPlot
  * \brief Second level container in a Worksheet for logical grouping
  *
- * TODO: decide the exact role of AbstractPlot 
+ * TODO: decide the exact role of AbstractPlot
  *
- */ 
+ */
 
 AbstractPlot::AbstractPlot(const QString &name):WorksheetElementContainer(name, new AbstractPlotPrivate(this)),
 	m_coordinateSystem(0), m_plotArea(0), m_title(0){

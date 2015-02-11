@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : DateTime2StringFilter.cpp
-    Project              : AbstractColumn
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-                           Knut Franke
-    Email (use @ for *)  : thzs*gmx.net, knut.franke*gmx.de
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
     Description          : Conversion filter QDateTime -> QString.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -49,8 +48,8 @@ class DateTime2StringFilterSetFormatCmd : public QUndoCommand
 		QString m_other_format;
 };
 
-void DateTime2StringFilter::setFormat(const QString& format) 
-{ 
+void DateTime2StringFilter::setFormat(const QString& format)
+{
 	exec(new DateTime2StringFilterSetFormatCmd(static_cast<DateTime2StringFilter*>(this), format));
 }
 
@@ -75,13 +74,13 @@ QString DateTime2StringFilter::textAt(int row) const {
 }
 
 bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn *source) {
-	return (source->columnMode() == AbstractColumn::DateTime) 
-		|| (source->columnMode() == AbstractColumn::Day) 
+	return (source->columnMode() == AbstractColumn::DateTime)
+		|| (source->columnMode() == AbstractColumn::Day)
 		|| (source->columnMode() == AbstractColumn::Month);
 }
 
 DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format)
-	: m_target(target), m_other_format(new_format) 
+	: m_target(target), m_other_format(new_format)
 {
 	if(m_target->parentAspect())
 		setText(i18n("%1: set date-time format to %2", m_target->parentAspect()->name(), new_format));
@@ -89,7 +88,7 @@ DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2St
 		setText(i18n("set date-time format to %1", new_format));
 }
 
-void DateTime2StringFilterSetFormatCmd::redo() 
+void DateTime2StringFilterSetFormatCmd::redo()
 {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
@@ -97,9 +96,9 @@ void DateTime2StringFilterSetFormatCmd::redo()
 	emit m_target->formatChanged();
 }
 
-void DateTime2StringFilterSetFormatCmd::undo() 
-{ 
-	redo(); 
+void DateTime2StringFilterSetFormatCmd::undo()
+{
+	redo();
 }
 
 void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const

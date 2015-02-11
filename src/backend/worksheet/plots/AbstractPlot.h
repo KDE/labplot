@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : AbstractPlot.h
-    Project              : LabPlot/SciDAVis
-    Description          : Second level container in a Worksheet for logical grouping
+    Project              : LabPlot
+    Description          : Base class for plots of different types
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -52,10 +51,10 @@ class AbstractPlot:public WorksheetElementContainer{
 
 		BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
 		BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
-		
+
 		typedef AbstractPlot BaseClass;
 		typedef AbstractPlotPrivate Private;
-		
+
 	public slots:
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 

@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : PlotAreaPrivate.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Private members of PlotArea.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2011 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,7 +34,7 @@
 #include <QPen>
 
 class PlotArea;
-class PlotAreaPrivate: public QGraphicsItem{
+class PlotAreaPrivate: public QGraphicsItem {
 	public:
 		explicit PlotAreaPrivate(PlotArea *owner);
 		virtual ~PlotAreaPrivate();
@@ -46,12 +44,12 @@ class PlotAreaPrivate: public QGraphicsItem{
 		bool toggleClipping(bool on);
 		bool clippingEnabled() const;
 		void setRect(const QRectF&);
-		
+
 		//QGraphicsItem's virtual functions
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 		virtual QRectF boundingRect() const;
 		virtual QPainterPath shape() const;
-		
+
 		QRectF rect;
 		PlotArea::BackgroundType backgroundType;
 		PlotArea::BackgroundColorStyle backgroundColorStyle;
@@ -64,8 +62,8 @@ class PlotAreaPrivate: public QGraphicsItem{
 		QPen borderPen;
 		qreal borderOpacity;
 		qreal borderCornerRadius;
-		
-		PlotArea * const q;
+
+		PlotArea* const q;
 };
 
 #endif

@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : ConstansWidget.h
     Project              : LabPlot
+    Description          : widget for selecting constants
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Description          : widget for selecting constants
 
  ***************************************************************************/
 

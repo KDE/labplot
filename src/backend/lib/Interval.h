@@ -2,11 +2,11 @@
     File                 : Interval.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert (thzs*gmx.net), Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)                            
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke@web.de)
     Description          : Auxiliary class for interval based data
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -63,9 +63,9 @@ template<class T> class IntervalBase {
 		/**
 		 * This function returns an invalid interval if the two intervals do not intersect.
 		 */
-		static Interval<T> intersection(const Interval<T>& first, const Interval<T>& second) 
-		{ 
-			return Interval<T>( qMax(first.start(), second.start()), qMin(first.end(), second.end()) ); 
+		static Interval<T> intersection(const Interval<T>& first, const Interval<T>& second)
+		{
+			return Interval<T>( qMax(first.start(), second.start()), qMin(first.end(), second.end()) );
 		}
 		void translate(T offset) { m_start += offset; m_end += offset; }
 		bool operator==(const Interval<T>& other) const { return ( m_start == other.start() && m_end == other.end() ); }
@@ -140,7 +140,7 @@ template<class T> class IntervalBase {
 		/**
 		 * Remark: This may decrease the list size.
 		 */
-		static void restrictList(QList< Interval<T> > * list, Interval<T> i) 
+		static void restrictList(QList< Interval<T> > * list, Interval<T> i)
 		{
 			Interval<T> temp;
 			for(int c=0; c<list->size(); c++)
@@ -151,7 +151,7 @@ template<class T> class IntervalBase {
 				else
 					list->replace(c, temp);
 			}
-			
+
 		}
 		//! Subtract an interval from all intervals in the list
 		/**

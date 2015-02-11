@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : StandardCurveSymbolFactory.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Factory of built-in curve symbols.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -54,23 +53,23 @@ void StandardCurveSymbolFactory::init(){
 	QPainterPath path;
 	PathCurveSymbol *symbol = NULL;
 	QPolygonF polygon;
-	
+
 	symbol = new PathCurveSymbol("none");
 	symbol->setFillingEnabled(false);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	path.addEllipse(QPoint(0,0), 0.5, 0.5);
 	symbol = new PathCurveSymbol("circle");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
 	symbol = new PathCurveSymbol("square");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
  	polygon.clear();
 	polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
@@ -78,7 +77,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("equilateral triangle");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5)<<QPointF(-0.5, -0.5);
@@ -86,13 +85,13 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("right triangle");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	path.addRect(QRectF(- 0.5, -0.2, 1.0, 0.4));
 	symbol = new PathCurveSymbol("bar");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.5, 0)<<QPointF(-0.3, -0.2)<<QPointF(0.3, -0.2)<<QPointF(0.5, 0)
@@ -101,7 +100,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("peaked bar");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.5, 0.2)<<QPointF(-0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.2, 0.2)<<QPointF(-0.5, 0.2);
@@ -109,7 +108,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("skewed bar");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.5, 0)<<QPointF(0, -0.5)<<QPointF(0.5, 0)<<QPointF(0, 0.5)<<QPointF(-0.5, 0);
@@ -117,7 +116,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("diamond");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.25, 0)<<QPointF(0, -0.5)<<QPointF(0.25, 0)<<QPointF(0, 0.5)<<QPointF(-0.25, 0);
@@ -125,7 +124,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("lozenge");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, -0.5)<<QPointF(-0.5, 0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, -0.5);
@@ -133,7 +132,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("tie");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(-0.2, 0.5)<<QPointF(0.2, 0.5)<<QPointF(-0.2, -0.5);
@@ -141,7 +140,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("tiny tie");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.5, 0.2)
@@ -151,7 +150,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("plus");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(0, 0)<<QPointF(-0.5, 0.5);
@@ -159,7 +158,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("boomerang");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.3, 0.5)<<QPointF(0, -0.5)<<QPointF(0.3, 0.5)<<QPointF(0, 0)<<QPointF(-0.3, 0.5);
@@ -167,7 +166,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("small boomerang");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
@@ -176,7 +175,7 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("star4");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath();
 	polygon.clear();
 	polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
@@ -186,14 +185,14 @@ void StandardCurveSymbolFactory::init(){
 	symbol = new PathCurveSymbol("star5");
 	symbol->setPath(path);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath(QPointF(0, -0.5));
 	path.lineTo(0, 0.5);
 	symbol = new PathCurveSymbol("line");
 	symbol->setPath(path);
 	symbol->setFillingEnabled(false);
 	m_prototypes.append(symbol);
-	
+
 	path = QPainterPath(QPointF(0, -0.5));
 	path.lineTo(0, 0.5);
 	path.moveTo(-0.5, 0);
@@ -210,7 +209,7 @@ QList<const AbstractCurveSymbol *> StandardCurveSymbolFactory::prototypes(){
 
 	return m_prototypes;
 }
-		
+
 QStringList StandardCurveSymbolFactory::ids(){
 	if (m_prototypes.isEmpty())
 		init();

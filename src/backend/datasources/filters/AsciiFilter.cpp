@@ -1,11 +1,10 @@
 /***************************************************************************
 File                 : AsciiFilter.cpp
-Project              : LabPlot/AbstractColumn
+Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke*web.de)
-					   (replace * with @ in the email addresses)
+Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 

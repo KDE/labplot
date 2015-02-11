@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : SpreadsheetDock.cpp
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-						(use @ for *)
     Description          : widget for spreadsheet properties
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -40,8 +39,8 @@
 
   \ingroup kdefrontend
 */
- 
-SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
+
+SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent) {
 	ui.setupUi(this);
 	m_initializing = false;
 
@@ -60,7 +59,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget *parent): QWidget(parent){
 }
 
 /*!
-  
+
 */
 void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 	m_initializing = true;
@@ -70,7 +69,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 	if (list.size()==1){
 		ui.leName->setEnabled(true);
 		ui.leComment->setEnabled(true);
-	
+
 		ui.leName->setText(m_spreadsheet->name());
 		ui.leComment->setText(m_spreadsheet->comment());
 	}else{
@@ -81,7 +80,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 		ui.leName->setText("");
 		ui.leComment->setText("");
   	}
- 
+
   	//show the properties of the first Spreadsheet in the list, if there are >1 spreadsheets
 	KConfig config("", KConfig::SimpleConfig);
 	loadConfig(config);
@@ -183,7 +182,7 @@ void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 		name = config.name().right(config.name().size() - index - 1);
 	else
 		name = config.name();
-	
+
 	int size = m_spreadsheetList.size();
 	if (size>1)
 		m_spreadsheet->beginMacro(i18n("%1 spreadsheets: template \"%2\" loaded", size, name));

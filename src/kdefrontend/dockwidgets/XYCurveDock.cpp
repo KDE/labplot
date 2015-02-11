@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : XYCurveDock.cpp
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    							(use @ for *)
     Description          : widget for XYCurve properties
+    --------------------------------------------------------------------
+    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 

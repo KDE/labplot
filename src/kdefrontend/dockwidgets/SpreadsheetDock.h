@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : SpreadsheetDock.h
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    							(use @ for *)
     Description          : widget for spreadsheet properties
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -41,11 +40,11 @@ class AbstractAspect;
 
 class SpreadsheetDock: public QWidget{
 	Q_OBJECT
-	  
+
 public:
 	explicit SpreadsheetDock(QWidget *parent);
 	void setSpreadsheets(QList<Spreadsheet*>);
-  
+
 private:
 	Ui::SpreadsheetDock ui;
 	QList<Spreadsheet*> m_spreadsheetList;

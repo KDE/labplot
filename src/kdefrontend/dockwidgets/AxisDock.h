@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : AxisDock.h
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-							(use @ for *)
     Description          : axes widget class
+    --------------------------------------------------------------------
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 

@@ -4,7 +4,7 @@
     Description          : Commands to be called by Column to modify Column::Private
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-						   (C) 2010 by Knut Franke
+						   (C) 2010 by Knut Franke (knut.franke@gmx.de)
 						   (C) 2013-2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/

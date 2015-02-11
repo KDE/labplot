@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : CartesianCoordinateSystem.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)

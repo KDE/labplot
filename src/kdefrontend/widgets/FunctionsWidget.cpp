@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : FunctionsWidget.cc
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
     Description          : widget for selecting functions
+    --------------------------------------------------------------------
+    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

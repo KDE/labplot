@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : TeXRenderer.cc
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    					(use @ for *)
     Description          : TeX renderer class
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2008-2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -110,7 +109,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 			QImage image;
 			image.load(fi.completeBaseName()+".png");
 			QFile::remove(fi.completeBaseName()+".png");
-			
+
 			return image;
 		}else{
 			QFile::remove(fi.completeBaseName()+".pdf");

@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : String2DateTimeFilter.cpp
-    Project              : AbstractColumn
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-                           Knut Franke
-    Email (use @ for *)  : thzs*gmx.net, knut.franke*gmx.de
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
     Description          : Conversion filter QString -> QDateTime.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -52,9 +51,9 @@ class String2DateTimeFilterSetFormatCmd : public QUndoCommand
 
 const char * String2DateTimeFilter::date_formats[] = {
 	"yyyy-M-d", // ISO 8601 w/ and w/o leading zeros
-	"yyyy/M/d", 
+	"yyyy/M/d",
 	"d/M/yyyy", // European style day/month order (this order seems to be used in more countries than the US style M/d/yyyy)
-	"d/M/yy", 
+	"d/M/yy",
 	"d-M-yyyy",
 	"d-M-yy",
 	"d.M.yyyy", // German style
@@ -163,13 +162,13 @@ bool String2DateTimeFilter::load(XmlStreamReader * reader)
 	return !reader->hasError();
 }
 
-void String2DateTimeFilter::setFormat(const QString& format) 
-{ 
+void String2DateTimeFilter::setFormat(const QString& format)
+{
 	exec(new String2DateTimeFilterSetFormatCmd(this, format));
 }
 
 String2DateTimeFilterSetFormatCmd::String2DateTimeFilterSetFormatCmd(String2DateTimeFilter* target, const QString &new_format)
-	: m_target(target), m_other_format(new_format) 
+	: m_target(target), m_other_format(new_format)
 {
 	if(m_target->parentAspect())
 		setText(i18n("%1: set date-time format to %2", m_target->parentAspect()->name(), new_format));
@@ -177,7 +176,7 @@ String2DateTimeFilterSetFormatCmd::String2DateTimeFilterSetFormatCmd(String2Date
 		setText(i18n("set date-time format to %1", new_format));
 }
 
-void String2DateTimeFilterSetFormatCmd::redo() 
+void String2DateTimeFilterSetFormatCmd::redo()
 {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
@@ -185,8 +184,8 @@ void String2DateTimeFilterSetFormatCmd::redo()
 	emit m_target->formatChanged();
 }
 
-void String2DateTimeFilterSetFormatCmd::undo() 
-{ 
-	redo(); 
+void String2DateTimeFilterSetFormatCmd::undo()
+{
+	redo();
 }
 

@@ -3,10 +3,9 @@
     Project              : LabPlot
     Description          : QMdiSubWindow wrapper for aspect views.
     --------------------------------------------------------------------
-	Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2007,2008 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
+	Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007,2008 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 
@@ -35,7 +34,7 @@
 
 /*!
  * \class PartMdiView
- * 
+ *
  * \brief QMdiSubWindow wrapper for aspect views.
  * In addition to the functionality provided by QMdiSubWindow,
  * this class automatically updates the window title when
@@ -43,11 +42,11 @@
  */
 //TODO:check whether m_status is somehow used or can be used in a meaningfull way.
 PartMdiView::PartMdiView(AbstractPart *part, QWidget * embedded_view)
-	: QMdiSubWindow(0), m_part(part), m_status(Closed) 
+	: QMdiSubWindow(0), m_part(part), m_status(Closed)
 {
 	setWindowIcon(m_part->icon());
 	handleAspectDescriptionChanged(m_part);
-	connect(m_part, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), 
+	connect(m_part, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect*)));
 	connect(m_part, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));

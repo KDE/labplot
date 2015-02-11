@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : FitParametersWidget.h
     Project              : LabPlot
+    Description          : widget for editing the fit parameters
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Description          : widget for editing the fit parameters
 
  ***************************************************************************/
 

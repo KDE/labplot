@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : CartesianCoordinateSystem.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -53,22 +52,22 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 					ScaleLinear,
 					ScaleLog,
 				};
-				
+
 				static Scale *createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
-				static Scale *createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd, 
+				static Scale *createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
 					double logicalStart, double logicalEnd);
-				static Scale *createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd, 
+				static Scale *createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
 					double logicalStart, double logicalEnd, double base);
 
-				virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL, 
+				virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL,
 						double *a = NULL, double *b = NULL, double *c = NULL) const;
 
 				virtual bool map(double *value) const = 0;
 				virtual bool inverseMap(double *value) const = 0;
 				virtual int direction() const = 0;
-				virtual void getPropertiesOnResize(double ratio, 
+				virtual void getPropertiesOnResize(double ratio,
 					ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const = 0;
-			
+
 				// changing properties is done via this command:
 				friend class CartesianCoordinateSystemSetScalePropertiesCmd;
 			protected:
@@ -98,7 +97,7 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		QList<Scale *> xScales() const;
 		bool setYScales(const QList<Scale *> &scales);
 		QList<Scale *> yScales() const;
-		
+
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 

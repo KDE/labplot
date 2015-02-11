@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : CartesianPlotDock.h
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    							(use @ for *)
     Description          : widget for cartesian plot properties
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -40,23 +39,23 @@ class LabelWidget;
 
 class CartesianPlotDock: public QWidget{
 	Q_OBJECT
-	
+
 public:
 	explicit CartesianPlotDock(QWidget* parent);
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
-	
+
 private:
 	Ui::CartesianPlotDock ui;
 	QList<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot;
 	LabelWidget* labelWidget;
 	bool m_initializing;
-	
+
 private slots:
 	void init();
 	void retranslateUi();
-  
+
 	//SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
 	void nameChanged();
@@ -109,7 +108,7 @@ private slots:
 	void borderOpacityChanged(int);
 	void horizontalPaddingChanged(double);
 	void verticalPaddingChanged(double);
-	
+
 	//SLOTs for changes triggered in CartesianPlot
 	//general
 	void plotDescriptionChanged(const AbstractAspect*);
@@ -121,7 +120,7 @@ private slots:
 	void plotYMaxChanged(float);
 	void plotYScaleChanged(int);
 	void plotVisibleChanged(bool);
-	
+
 	//scale breakings
 	void plotXScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
 	void plotYScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
@@ -140,7 +139,7 @@ private slots:
 	void plotBorderOpacityChanged(float);
 	void plotHorizontalPaddingChanged(float);
 	void plotVerticalPaddingChanged(float);
-	
+
 	//save/load
 	void load();
 	void loadConfigFromTemplate(KConfig&);

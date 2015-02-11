@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : macros.h
-    Project              : SciDAVis
+    Project              : LabPlot
     Description          : Various preprocessor macros
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2008 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************

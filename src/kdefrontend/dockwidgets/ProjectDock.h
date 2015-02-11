@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : ProjectDock.h
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
     Description          : widget for worksheet properties
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -33,16 +33,16 @@
 class Project;
 class AbstractAspect;
 
-class ProjectDock: public QWidget{
+class ProjectDock: public QWidget {
 	Q_OBJECT
-	
+
 public:
-	explicit ProjectDock(QWidget *parent);
+	explicit ProjectDock(QWidget* parent);
 	void setProject(Project* project);
-	
+
 private:
 	Ui::ProjectDock ui;
-	Project *m_project;
+	Project* m_project;
 	bool m_initializing;
 
 private slots:
@@ -52,8 +52,8 @@ private slots:
 	void authorChanged(const QString&);
 	void commentChanged();
 
-        //SLOTs for changes triggered in Project
-        void projectDescriptionChanged(const AbstractAspect*);
+	//SLOTs for changes triggered in Project
+	void projectDescriptionChanged(const AbstractAspect*);
 
 	void loadConfig(KConfig&);
 	void saveConfig(KConfig&);

@@ -1,9 +1,10 @@
 /***************************************************************************
     File                 : IntervalAttribute.h
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
+
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
     Description          : A class representing an interval-based attribute
 
  ***************************************************************************/
@@ -37,7 +38,7 @@
 template<class T> class IntervalAttribute
 {
 	public:
-		void setValue(Interval<int> i, T value) 
+		void setValue(Interval<int> i, T value)
 		{
 			// first: subtract the new interval from all others
 			QList< Interval<int> > temp_list;
@@ -49,7 +50,7 @@ template<class T> class IntervalAttribute
 					m_intervals.removeAt(c);
 					m_values.removeAt(c--);
 				}
-				else 
+				else
 				{
 					m_intervals.replace(c, temp_list.at(0));
 					if(temp_list.size()>1)
@@ -60,7 +61,7 @@ template<class T> class IntervalAttribute
 				}
 			}
 
-			// second: try to merge the new interval with an old one 
+			// second: try to merge the new interval with an old one
 			for(int c=0; c<m_intervals.size(); c++)
 			{
 				if( m_intervals.at(c).touches(i) &&
@@ -76,19 +77,19 @@ template<class T> class IntervalAttribute
 		}
 
 		// overloaded for convenience
-		void setValue(int row, T value) 
+		void setValue(int row, T value)
 		{
 			setValue(Interval<int>(row, row), value);
 		}
 
-		T value(int row) const 
+		T value(int row) const
 		{
 			for(int c=m_intervals.size()-1; c>=0; c--)
 			{
 				if(m_intervals.at(c).contains(row))
 					return m_values.at(c);
 			}
-			return T(); 
+			return T();
 		}
 
 		void insertRows(int before, int count)
@@ -107,7 +108,7 @@ template<class T> class IntervalAttribute
 						m_values.insert(c, m_values.at(c));
 						c++;
 					}
-					
+
 				}
 			}
 			// second: translate all intervals that start at 'before' or later
@@ -116,7 +117,7 @@ template<class T> class IntervalAttribute
 				if(m_intervals.at(c).start() >= before)
 					m_intervals[c].translate(count);
 			}
-			
+
 		}
 
 		void removeRows(int first, int count)
@@ -132,7 +133,7 @@ template<class T> class IntervalAttribute
 					m_intervals.removeAt(c);
 					m_values.removeAt(c--);
 				}
-				else 
+				else
 				{
 					m_intervals.replace(c, temp_list.at(0));
 					if(temp_list.size()>1)
@@ -177,7 +178,7 @@ template<class T> class IntervalAttribute
 
 		QList< Interval<int> > intervals() const { return m_intervals; }
 		QList<T> values() const { return m_values; }
-		IntervalAttribute<T>& operator=(const IntervalAttribute<T>& other) 
+		IntervalAttribute<T>& operator=(const IntervalAttribute<T>& other)
 		{
 			m_intervals.clear();
 			m_values.clear();
@@ -199,7 +200,7 @@ template<> class IntervalAttribute<bool>
 	public:
 		IntervalAttribute<bool>() {}
 		IntervalAttribute<bool>(QList< Interval<int> > intervals) : m_intervals(intervals) {}
-		IntervalAttribute<bool>& operator=(const IntervalAttribute<bool>& other) 
+		IntervalAttribute<bool>& operator=(const IntervalAttribute<bool>& other)
 		{
 			m_intervals.clear();
 			foreach( Interval<int> iv, other.intervals())
@@ -207,12 +208,12 @@ template<> class IntervalAttribute<bool>
 			return *this;
 		}
 
-		void setValue(Interval<int> i, bool value=true) 
+		void setValue(Interval<int> i, bool value=true)
 		{
-			if(value) 
+			if(value)
 			{
 				foreach(Interval<int> iv, m_intervals)
-					if(iv.contains(i)) 
+					if(iv.contains(i))
 						return;
 
 				Interval<int>::mergeIntervalIntoList(&m_intervals, i);
@@ -221,12 +222,12 @@ template<> class IntervalAttribute<bool>
 			}
 		}
 
-		void setValue(int row, bool value) 
+		void setValue(int row, bool value)
 		{
 			setValue(Interval<int>(row, row), value);
 		}
 
-		bool isSet(int row) const 
+		bool isSet(int row) const
 		{
 			foreach(Interval<int> iv, m_intervals)
 				if(iv.contains(row))
@@ -234,7 +235,7 @@ template<> class IntervalAttribute<bool>
 			return false;
 		}
 
-		bool isSet(Interval<int> i) const 
+		bool isSet(Interval<int> i) const
 		{
 			foreach(Interval<int> iv, m_intervals)
 				if(iv.contains(i))
@@ -255,7 +256,7 @@ template<> class IntervalAttribute<bool>
 					m_intervals.replace(c, temp_list.at(0));
 					if(temp_list.size()>1)
 						m_intervals.insert(c++, temp_list.at(1));
-					
+
 				}
 			}
 			// second: translate all intervals that start at 'before' or later
@@ -264,7 +265,7 @@ template<> class IntervalAttribute<bool>
 				if(m_intervals.at(c).start() >= before)
 					m_intervals[c].translate(count);
 			}
-			
+
 		}
 
 		void removeRows(int first, int count)

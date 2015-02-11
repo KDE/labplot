@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : TemplateHandler.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-                           
+	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -42,9 +41,9 @@ class TemplateHandler : public QWidget{
 
 	public:
 		enum ClassName {Spreadsheet, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis};
-		
+
 		TemplateHandler(QWidget* parent, ClassName);
-		
+
 	private:
 		void retranslateUi();
 

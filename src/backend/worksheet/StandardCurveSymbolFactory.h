@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : StandardCurveSymbolFactory.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Factory of built-in curve symbols.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -44,7 +43,7 @@ class StandardCurveSymbolFactory: public QObject, public CurveSymbolFactory {
 		virtual QList<const AbstractCurveSymbol *> prototypes();
 		virtual const AbstractCurveSymbol *prototype(const QString &id);
 		virtual QStringList ids();
-	
+
 	private:
 		QList<const AbstractCurveSymbol *> m_prototypes;
 		void init();

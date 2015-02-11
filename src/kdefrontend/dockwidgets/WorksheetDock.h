@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : WorksheetDock.h
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-	Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke*web.de)
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
     Description          : widget for worksheet properties
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+	Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -38,13 +37,13 @@
 class Worksheet;
 class AbstractAspect;
 
-class WorksheetDock: public QWidget{
+class WorksheetDock: public QWidget {
 	Q_OBJECT
-	
+
 public:
-	explicit WorksheetDock(QWidget *parent);
+	explicit WorksheetDock(QWidget* parent);
 	void setWorksheets(QList<Worksheet*>);
-	
+
 private:
 	Ui::WorksheetDock ui;
 	QList<Worksheet*> m_worksheetList;
@@ -55,7 +54,7 @@ private:
 
 private slots:
 	void retranslateUi();
-  
+
 	//SLOTs for changes triggered in WorksheetDock
 	//"General"-tab
 	void nameChanged();
@@ -64,7 +63,7 @@ private slots:
 	void sizeChanged(int);
 	void sizeChanged();
 	void orientationChanged(int);
-	
+
 	//"Background"-tab
   	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
@@ -108,7 +107,7 @@ private slots:
 	void worksheetLayoutHorizontalSpacingChanged(float);
 	void worksheetLayoutRowCountChanged(int);
 	void worksheetLayoutColumnCountChanged(int);
-	
+
 	//saving/loading
 	void load();
 	void loadConfigFromTemplate(KConfig&);

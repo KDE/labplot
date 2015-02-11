@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : AspectPrivate.h
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-	Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de), Tilman Benkert (thzs*gmx.net)
-							(replace * with @ in the email addresses)
+	Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
     Description          : Private data managed by AbstractAspect.
 
  ***************************************************************************/

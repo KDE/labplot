@@ -1,11 +1,12 @@
 /***************************************************************************
 	File       		: AspectTreeModel.h
-    Project         : SciDAVis
+    Project         : LabPlot
     Description     : Represents a tree of AbstractAspect objects as a Qt item model.
     --------------------------------------------------------------------
 	Copyright            : (C) 2007-2009 by Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
 	Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************

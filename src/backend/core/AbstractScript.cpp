@@ -2,10 +2,9 @@
     File                 : AbstractScript.cpp
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2006 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de
+    Copyright            : (C) 2006 by Knut Franke (knut.franke@gmx.de)
     Description          : A chunk of scripting code.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************

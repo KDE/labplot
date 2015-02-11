@@ -3,9 +3,9 @@
     Project              : Labplot2
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2007-2008 by Tilman Benkert (thzsgmx.net)
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007-2008 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,7 +36,6 @@
 
 #include <QTreeView>
 #include <QContextMenuEvent>
-// #include <QMenu>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

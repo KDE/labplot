@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : DateTime2DoubleFilter.h
-    Project              : AbstractColumn
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-                           Knut Franke
-    Email (use @ for *)  : thzs*gmx.net, knut.franke*gmx.de
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
     Description          : Conversion filter QDateTime -> double (using Julian day).
-                           
+
  ***************************************************************************/
 
 /***************************************************************************

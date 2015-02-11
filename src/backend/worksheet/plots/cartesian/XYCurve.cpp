@@ -3,10 +3,9 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach*uni.kn)
-					(replace * with @ in the email addresses)
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 

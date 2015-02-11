@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : aspectcommands.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007-2010 by Knut Franke (knut.franke*gmx.de), 
-	Copyright            : (C) 2007-2009 Tilman Benkert(thzs*gmx.net)
-	Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-							(replace * with @ in the email addresses)
+    Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
+	Copyright            : (C) 2007-2009 Tilman Benkert(thzs@gmx.net)
+	Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
     Description          : Undo commands used by AbstractAspect.
                            Only meant to be used within AbstractAspect.cpp
 
@@ -44,7 +43,7 @@ class AspectChildRemoveCmd : public QUndoCommand {
 			}
 
 		~AspectChildRemoveCmd() {
-			if (m_removed)			
+			if (m_removed)
 				delete m_child;
 		}
 
@@ -55,7 +54,7 @@ class AspectChildRemoveCmd : public QUndoCommand {
 				nextSibling = 0;
 			else
 				nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
-			
+
 			emit m_target->m_owner->aspectAboutToBeRemoved(m_child);
 			m_index = m_target->removeChild(m_child);
 			emit m_target->m_owner->aspectRemoved(m_target->m_owner, nextSibling, m_child);
@@ -97,7 +96,7 @@ class AspectChildAddCmd : public AspectChildRemoveCmd {
 
 class AspectChildReparentCmd : public QUndoCommand {
 	public:
-		AspectChildReparentCmd(AbstractAspect::Private * target, AbstractAspect::Private * new_parent, 
+		AspectChildReparentCmd(AbstractAspect::Private * target, AbstractAspect::Private * new_parent,
 				AbstractAspect* child, int new_index)
 			: m_target(target), m_new_parent(new_parent), m_child(child), m_index(-1), m_new_index(new_index)
 		{
@@ -106,16 +105,16 @@ class AspectChildReparentCmd : public QUndoCommand {
 		~AspectChildReparentCmd() {}
 
 		// calling redo transfers ownership of m_child to the new parent aspect
-		virtual void redo() 
+		virtual void redo()
 		{
 			m_index = m_target->removeChild(m_child);
 			m_new_parent->insertChild(m_new_index, m_child);
 		}
 
 		// calling undo transfers ownership of m_child back to its previous parent aspect
-		virtual void undo() 
+		virtual void undo()
 		{
-			Q_ASSERT(m_index != -1); 
+			Q_ASSERT(m_index != -1);
 			m_new_parent->removeChild(m_child);
 			m_target->insertChild(m_index, m_child);
 		}

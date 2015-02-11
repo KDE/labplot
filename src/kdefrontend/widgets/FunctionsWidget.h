@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : FunctionsWidget.h
     Project              : LabPlot
+    Description          : widget for selecting functions
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Description          : widget for selecting functions
 
  ***************************************************************************/
 

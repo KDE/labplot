@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : CartesianPlotDock.cpp
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    							(use @ for *)
     Description          : widget for cartesian plot properties
+    --------------------------------------------------------------------
+    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 

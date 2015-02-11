@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : ConstantsWidget.cc
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
     Description          : widget for selecting constants
+    --------------------------------------------------------------------
+    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

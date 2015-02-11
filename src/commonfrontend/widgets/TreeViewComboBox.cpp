@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : TreeViewComboBox.cpp
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2014 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
     Description          : Provides a QTreeView in a QComboBox
+    --------------------------------------------------------------------
+    Copyright            : (C) 2008-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -51,7 +50,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
 	m_treeView.installEventFilter(this);
 	addItem("");
 	setCurrentIndex(0);
-	
+
 	connect(&m_treeView, SIGNAL(activated(QModelIndex)), this, SLOT(treeViewIndexActivated(QModelIndex)) );
 }
 
@@ -69,7 +68,7 @@ void TreeViewComboBox::setSelectableClasses(QList<const char*> list) {
 */
 void TreeViewComboBox::setModel(QAbstractItemModel *model){
 	m_treeView.setModel(model);
-	
+
 	//show only the first column in the combo box
 	for (int i=1; i<model->columnCount(); i++){
 	  m_treeView.hideColumn(i);

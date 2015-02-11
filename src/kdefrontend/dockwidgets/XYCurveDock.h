@@ -1,11 +1,10 @@
 /***************************************************************************
-    File                 : XYCurveDock.h
-    Project            : LabPlot
-    --------------------------------------------------------------------
-    Copyright         : (C) 2010-2014 Alexander Semke (alexander.semke*web.de)
-    Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach*uni.kn)
-						(replace * with @ in the email addresses)
+    File             : XYCurveDock.h
+    Project          : LabPlot
     Description      : widget for curve properties
+    --------------------------------------------------------------------
+    Copyright         : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a mathematical equation
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

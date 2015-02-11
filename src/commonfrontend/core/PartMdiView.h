@@ -3,10 +3,9 @@
     Project              : LabPlot
     Description          : QMdiSubWindow wrapper for aspect views.
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2007,2008 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007,2008 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 
@@ -59,7 +58,7 @@ class PartMdiView : public QMdiSubWindow {
 
 	private slots:
 		void handleAspectDescriptionChanged(const AbstractAspect*);
-		void handleAspectAboutToBeRemoved(const AbstractAspect*);		
+		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 };
 
 #endif // ifndef PART_MDI_VIEW_H

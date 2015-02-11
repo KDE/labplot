@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : SpreadsheetModel.cpp
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : Model for the access to a Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2009 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 

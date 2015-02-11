@@ -3,9 +3,8 @@
     Project              : LabPlot
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

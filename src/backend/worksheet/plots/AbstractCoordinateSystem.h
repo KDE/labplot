@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : AbstractCoordinateSystem.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Base class of all worksheet coordinate systems.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2012 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -37,7 +36,7 @@
 #include <QLine>
 #include <QRectF>
 
-class AbstractCoordinateSystem{
+class AbstractCoordinateSystem {
 	public:
 		enum MappingFlag {
 			DefaultMapping = 0x00,

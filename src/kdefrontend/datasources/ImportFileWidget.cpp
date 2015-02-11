@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : ImportFileWidget.cpp
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
     Description          : import file data widget
+    --------------------------------------------------------------------
+    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

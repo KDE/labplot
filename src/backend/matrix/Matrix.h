@@ -3,10 +3,9 @@
     Project              : SciDAVis
     Description          : Aspect providing a spreadsheet to manage MxN matrix data
     --------------------------------------------------------------------
-    Copyright            : (C) 2006-2008 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2006-2008 Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief*yahoo.fr)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2006-2008 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief@yahoo.fr)
 
  ***************************************************************************/
 
@@ -52,7 +51,7 @@ class Matrix : public AbstractPart, public scripted
     Q_OBJECT
 
 	public:
-		class Private; 
+		class Private;
 		friend class Private;
 
 		/*!
@@ -126,7 +125,7 @@ class Matrix : public AbstractPart, public scripted
 		//! Return the total number of rows
 		int rowCount() const;
 
-		//! Set a plot menu 
+		//! Set a plot menu
 		/**
 		 * The matrix takes ownership of the menu.
 		 */
@@ -225,17 +224,17 @@ class Matrix : public AbstractPart, public scripted
 		void selectAll();
 		//! Show a context menu for the selected cells
 		/**
-		 * \param pos global position of the event 
+		 * \param pos global position of the event
 		*/
 		void showMatrixViewContextMenu(const QPoint& pos);
 		//! Show a context menu for the selected columns
 		/**
-		 * \param pos global position of the event 
+		 * \param pos global position of the event
 		*/
 		void showMatrixViewColumnContextMenu(const QPoint& pos);
 		//! Show a context menu for the selected rows
 		/**
-		 * \param pos global position of the event 
+		 * \param pos global position of the event
 		*/
 		void showMatrixViewRowContextMenu(const QPoint& pos);
 		void editFormat();
@@ -331,9 +330,9 @@ class Matrix : public AbstractPart, public scripted
   This private class manages matrix based data (i.e., mathematically
   a MxN matrix with M rows, N columns). These data are typically
   used to for 3D plots.
-  
+
   The API of this private class is to be called by Matrix and matrix
-  commands only. Matrix may only call the reading functions to ensure 
+  commands only. Matrix may only call the reading functions to ensure
   that undo/redo is possible for all data changing operations.
 
   The values of the matrix are stored as double precision values. They
@@ -345,7 +344,7 @@ class Matrix : public AbstractPart, public scripted
 class Matrix::Private
 {
 	public:
-		Private(Matrix *owner); 
+		Private(Matrix *owner);
 		//! Insert columns before column number 'before'
 		/**
 		 * If 'first' is equal to the current number of columns,
@@ -427,7 +426,7 @@ class Matrix::Private
 		void blockChangeSignals(bool block) { m_block_change_signals = block; }
 		//! Access to the dataChanged signal for commands
 		void emitDataChanged(int top, int left, int bottom, int right) { emit m_owner->dataChanged(top, left, bottom, right); }
-		
+
 	private:
 		//! The owner aspect
 		Matrix *m_owner;
@@ -436,7 +435,7 @@ class Matrix::Private
 		//! The number of rows
 		int m_row_count;
 		//! The matrix data
-		QVector< QVector<double> > m_data;	
+		QVector< QVector<double> > m_data;
 		//! Row widths
 		QList<int> m_row_heights;
 		//! Columns widths

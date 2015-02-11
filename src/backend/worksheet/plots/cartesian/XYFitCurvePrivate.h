@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of XYFitCurve
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
+    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

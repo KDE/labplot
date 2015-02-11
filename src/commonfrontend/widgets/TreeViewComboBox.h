@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : TreeViewComboBox.h
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2011 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
     Description          : Provides a QTreeView in a QComboBox
+    --------------------------------------------------------------------
+    Copyright            : (C) 2008-2011 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -59,7 +58,7 @@ private:
 
 private slots:
 	void treeViewIndexActivated(const QModelIndex&);
-	
+
 signals:
 	void currentModelIndexChanged(const QModelIndex&);
 };

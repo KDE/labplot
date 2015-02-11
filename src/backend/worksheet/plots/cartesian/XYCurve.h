@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : XYCurve.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
-								(replace * with @ in the email addresses)
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

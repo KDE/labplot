@@ -3,9 +3,8 @@
     Project              : LabPlot
     Description          : import file data widget
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -49,12 +48,12 @@ public:
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
 	void hideDataSource() const;
-	
+
 private:
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
-	
+
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);

@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : SpreadsheetModel.h
-    Project              : SciDAVis
+    Project              : LabPlot
     Description          : Model for the access to a Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2009 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2009 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 
@@ -41,13 +40,13 @@ class AbstractColumn;
 
 //! Model for the access to a Spreadsheet
 /**
-	This is a model in the sense of Qt4 model/view framework which is used 
-	to access a Spreadsheet object from any of Qt4s view classes, typically a QTableView. 
+	This is a model in the sense of Qt4 model/view framework which is used
+	to access a Spreadsheet object from any of Qt4s view classes, typically a QTableView.
 	Its main purposes are translating Spreadsheet signals into QAbstractItemModel signals
 	and translating calls to the QAbstractItemModel read/write API into calls
 	in the public API of Spreadsheet. In many cases a pointer to the addressed column
 	is obtained by calling Spreadsheet::column() and the manipulation is done using the
-	public API of column. 
+	public API of column.
   */
 class SpreadsheetModel : public QAbstractItemModel
 {
@@ -115,6 +114,6 @@ class SpreadsheetModel : public QAbstractItemModel
 		QList<int> m_vertical_header_data;
 		//! Horizontal header data
 		QStringList m_horizontal_header_data;
-}; 
+};
 
 #endif

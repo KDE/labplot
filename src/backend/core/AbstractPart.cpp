@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : AbstractPart.cpp
-    Project              : SciDAVis
+    Project              : LabPlot
     Description          : Base class of Aspects with MDI windows as views.
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Knut Franke (knut.franke*gmx.de)
-	Copyright            : (C) 2012 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email address)
+    Copyright            : (C) 2008 Knut Franke (knut.franke@gmx.de)
+	Copyright            : (C) 2012 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -93,7 +92,7 @@ void AbstractPart::deleteMdiSubWindow() {
 }
 
 /*!
- * this function is called when PartMdiView, the mdi-subwindow-wrapper of the actual view, 
+ * this function is called when PartMdiView, the mdi-subwindow-wrapper of the actual view,
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
 //TODO: maybe this part needs to be redesigned. the view can be deleted in PartMdiView
@@ -121,7 +120,7 @@ QMenu* AbstractPart::createContextMenu(){
 #else
 		menu->addAction(i18n("Export"), this, SIGNAL(exportRequested()));
 		menu->addAction(i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));		
+		menu->addAction(i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
 #endif
 		menu->addSeparator();
 

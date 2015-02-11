@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : TemplateHandler.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach*uni-konstanz.de)
-	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-                           
+	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -45,8 +44,8 @@
  /*!
   \class TemplateHandler
   \brief Provides a widget with buttons for saving and loading of templates.
-  
-  Emits \c loadConfig() and \c saveConfig() signals that have to be connected 
+
+  Emits \c loadConfig() and \c saveConfig() signals that have to be connected
   to the appropriate slots in the ui (mostly in the dock widgets)
 
   \ingroup kdefrontend
@@ -90,12 +89,12 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	connect( tbSaveDefault, SIGNAL(clicked()), this, SLOT(saveDefaults()));
 
 	className = name;
-	
+
 	//synchronize this with the ordering in TemplateHandler::ClassName
 	dirNames<<"spreadsheet"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis";
-	
+
 	this->retranslateUi();
-	
+
 	//disable the load-button if no templates are available yet
 	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/" + dirNames.at(className) + "/*");
 	tbLoad->setEnabled(list.size());
@@ -178,10 +177,10 @@ void TemplateHandler::saveMenu() {
 void TemplateHandler::saveNewSelected(const QString& filename) {
 	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates") + '/' + dirNames.at(className) + '/' + filename, KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
-	
+
 	//we have at least one saved template now -> enable the load button
 	tbLoad->setEnabled(true);
-	
+
 	emit info( i18n("New template \"%1\" was saved.", filename) );
 }
 

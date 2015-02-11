@@ -1,12 +1,11 @@
 /***************************************************************************
     File                 : AbstractCurveSymbol.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Abstract base class for curve symbols
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -47,16 +46,16 @@ class AbstractCurveSymbol  {
 		virtual qreal aspectRatio() const = 0;
 		virtual void setRotationAngle(qreal angle) = 0;
 		virtual qreal rotationAngle() const = 0;
-		virtual void setBrush (const QBrush &brush) = 0;
+		virtual void setBrush (const QBrush&) = 0;
 		virtual QBrush brush() const = 0;
-		virtual void setPen(const QPen &pen) = 0;
+		virtual void setPen(const QPen&) = 0;
 		virtual QPen pen() const = 0;
 		virtual AbstractCurveSymbol *clone() const = 0;
 		virtual bool fillingEnabled() const = 0;
 		virtual void setFillingEnabled(bool) = 0;
-		
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0) = 0;
-		virtual void paint(QPainter *painter) = 0;
+
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget=0) = 0;
+		virtual void paint(QPainter*) = 0;
 		virtual QRectF boundingRect() const = 0;
 		virtual QPainterPath shape() const = 0;
 };

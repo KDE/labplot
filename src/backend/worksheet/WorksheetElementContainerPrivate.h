@@ -3,8 +3,9 @@
     Project              : LabPlot
     Description          : Private members of WorksheetElementContainer.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
 	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************

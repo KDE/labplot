@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : FitOptionsWidget.cc
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke*web.de)
     Description          : widget for editing advanced fit options
+    --------------------------------------------------------------------
+    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

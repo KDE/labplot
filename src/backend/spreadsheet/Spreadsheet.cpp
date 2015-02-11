@@ -1,13 +1,12 @@
 /***************************************************************************
     File                 : Spreadsheet.cpp
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2006-2008 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2006-2009 Knut Franke (knut.franke*gmx.de)
-    Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief*yahoo.fr)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief@yahoo.fr)
 
  ***************************************************************************/
 
@@ -65,7 +64,7 @@
   SpreadsheetView and Spreadsheet will not know whether a script or a user changed the data.). All actions,
   menus etc. for the user interaction are handled SpreadsheetView, e.g., via a context menu.
   Selections are also handled by SpreadsheetView. The view itself is created by the first call to view();
-  
+
   \ingroup backend
 */
 
@@ -94,7 +93,7 @@ void Spreadsheet::initDefault() {
 		new_col->setPlotDesignation(i == 0 ? AbstractColumn::X : AbstractColumn::Y);
 		addChild(new_col);
 	}
-	setRowCount(rows);	
+	setRowCount(rows);
 }
 
 /*! Constructs a primary view on me.
@@ -108,7 +107,7 @@ QWidget *Spreadsheet::view() const
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		KConfig config;
 		KConfigGroup group = config.group( "Spreadsheet" );
-		reinterpret_cast<SpreadsheetView*>(m_view)->showComments(group.readEntry("ShowComments", false));		
+		reinterpret_cast<SpreadsheetView*>(m_view)->showComments(group.readEntry("ShowComments", false));
 #endif
 	}
 
@@ -355,7 +354,7 @@ int Spreadsheet::colY(int col)
 {
 	int cols = columnCount();
 
-	if (column(col)->plotDesignation() == AbstractColumn::xErr || 
+	if (column(col)->plotDesignation() == AbstractColumn::xErr ||
 			column(col)->plotDesignation() == AbstractColumn::yErr) {
 		// look to the left first
 		for(int i=col-1; i>=0; i--) {
@@ -639,7 +638,7 @@ void Spreadsheet::childSelected(const AbstractAspect* aspect){
 	if (column){
 		int index = indexOfChild<Column>(column);
 		emit columnSelected(index);
-	}  
+	}
 }
 
 /*!
@@ -651,11 +650,11 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect){
 	if (column){
 		int index = indexOfChild<Column>(column);
 		emit columnDeselected(index);
-	}  
+	}
 }
 
 /*!
- *  Emits the signal to select or to deselect the column number \c index in the project explorer, 
+ *  Emits the signal to select or to deselect the column number \c index in the project explorer,
  *  if \c selected=true or \c selected=false, respectively.
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
  * This function is called in \c SpreadsheetView upon selection changes.
@@ -663,7 +662,7 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect){
 void Spreadsheet::setColumnSelectedInView(int index, bool selected){
   if (selected){
 	emit childAspectSelectedInView(child<Column>(index));
-	
+
 	//deselect the spreadsheet in the project explorer, if a child (column) was selected.
 	//prevents unwanted multiple selection with spreadsheet (if it was selected before).
 	emit childAspectDeselectedInView(this);

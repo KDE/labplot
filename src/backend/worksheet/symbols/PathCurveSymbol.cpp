@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : PathCurveSymbol.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : A standard curve symbol defined by a painter path and a string id.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010 Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

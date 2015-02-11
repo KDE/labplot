@@ -1,12 +1,10 @@
 /***************************************************************************
     File                 : XYCurvePrivate.h
-    Project              : LabPlot/SciDAVis
-    Description          : Private members of XYCurvePrivate
+    Project              : LabPlot
+    Description          : Private members of XYCurve
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke*web.de)
-							  (replace * with @ in the email addresses)
-
+    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
  ***************************************************************************/
 
 /***************************************************************************

@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : AbstractColumn.h
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -66,7 +65,7 @@ class AbstractColumn : public AbstractAspect
 			DateTime = 6
 			// 2 and 3 are skipped to avoid problems with old obsolete values
 		};
-		
+
 		class Private;
 
 		explicit AbstractColumn(const QString& name);
@@ -118,19 +117,19 @@ class AbstractColumn : public AbstractAspect
 		virtual void setValueAt(int row, double new_value);
 		virtual void replaceValues(int first, const QVector<double>& new_values);
 
-	signals: 
-		void plotDesignationAboutToChange(const AbstractColumn * source); 
-		void plotDesignationChanged(const AbstractColumn * source); 
-		void modeAboutToChange(const AbstractColumn * source); 
-		void modeChanged(const AbstractColumn * source); 
-		void dataAboutToChange(const AbstractColumn * source); 
-		void dataChanged(const AbstractColumn * source); 
-		void rowsAboutToBeInserted(const AbstractColumn * source, int before, int count); 
-		void rowsInserted(const AbstractColumn * source, int before, int count); 
-		void rowsAboutToBeRemoved(const AbstractColumn * source, int first, int count); 
-		void rowsRemoved(const AbstractColumn * source, int first, int count); 
-		void maskingAboutToChange(const AbstractColumn * source); 
-		void maskingChanged(const AbstractColumn * source); 
+	signals:
+		void plotDesignationAboutToChange(const AbstractColumn * source);
+		void plotDesignationChanged(const AbstractColumn * source);
+		void modeAboutToChange(const AbstractColumn * source);
+		void modeChanged(const AbstractColumn * source);
+		void dataAboutToChange(const AbstractColumn * source);
+		void dataChanged(const AbstractColumn * source);
+		void rowsAboutToBeInserted(const AbstractColumn * source, int before, int count);
+		void rowsInserted(const AbstractColumn * source, int before, int count);
+		void rowsAboutToBeRemoved(const AbstractColumn * source, int first, int count);
+		void rowsRemoved(const AbstractColumn * source, int first, int count);
+		void maskingAboutToChange(const AbstractColumn * source);
+		void maskingChanged(const AbstractColumn * source);
 		void aboutToBeDestroyed(const AbstractColumn * source);
 
 	protected:
