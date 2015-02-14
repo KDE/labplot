@@ -1,15 +1,12 @@
 /***************************************************************************
     File                 : AbstractScript.h
     Project              : SciDAVis
-    --------------------------------------------------------------------
-    Copyright            : (C) 2006 by Ion Vasilief, 
-                           Tilman Benkert,
-                           Knut Franke
-    Copyright            : (C) 2008 by Knut Franke
-    Email (use @ for *)  : ion_vasilief*yahoo.fr, thzs*gmx.net,
-                           knut.franke*gmx.de
     Description          : A chunk of scripting code.
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2006 by Ion Vasilief (ion_vasilief@yahoo.fr)
+    Copyright            : (C) 2006 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2006-2008 Knut Franke (knut.franke@gmx.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -72,7 +69,7 @@ class AbstractScript : public QObject
     void codeChanged();
     void error(const QString &message, const QString &scriptName, int lineNumber);
     void print(const QString &output);
-    
+
   protected:
     AbstractScriptingEngine *m_engine;
     QString m_code, m_name;

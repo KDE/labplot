@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : columncommands.h
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : Commands to be called by Column to modify Column::Private
     --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-                           (C) 2010 by Knut Franke
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2010 by Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 
@@ -51,7 +50,7 @@ public:
 
 private:
 	Column::Private * m_col;
-	AbstractColumn::ColumnMode m_old_mode;	
+	AbstractColumn::ColumnMode m_old_mode;
 	AbstractColumn::ColumnMode m_mode;
 	void * m_old_data;
 	void * m_new_data;

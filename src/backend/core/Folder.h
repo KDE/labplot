@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : Folder.h
-    Project              : SciDAVis
+    Project              : LabPlot
     Description          : Folder in a project
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 
@@ -32,22 +31,22 @@
 
 #include "AbstractAspect.h"
 
-class Folder : public AbstractAspect
-{
+class Folder : public AbstractAspect {
 	Q_OBJECT
 
 	public:
-		explicit Folder(const QString &name);
+		explicit Folder(const QString& name);
 
 		virtual ~Folder();
 
 		virtual QIcon icon() const;
-		virtual QMenu *createContextMenu();
+		virtual QMenu* createContextMenu();
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+
 	protected:
-		bool readChildAspectElement(XmlStreamReader * reader);
+		bool readChildAspectElement(XmlStreamReader*);
 };
 
 #endif // ifndef FOLDER_H

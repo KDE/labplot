@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : LabPlot.cc
+    File                 : LabPlot.cpp
     Project              : LabPlot
+    Description          : main function
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de
-    Description          : main class
+    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -90,27 +90,12 @@ int main (int argc, char *argv[]) {
 		splash->show();
 	}
 
-#ifdef HAVE_GSL
-	kDebug()<<"HAVE_GSL defined"<<endl;
-#endif
-#ifdef GSL_FOUND
-	kDebug()<<"GSL_FOUND defined"<<endl;
-#endif
-#ifdef GSL_VERSION
-	kDebug()<<"GSL_VERSION defined"<<endl;
-#endif
-// TODO:
-//#if GSL_VERSION > 1.8
-//	kDebug()<<"GSL_VERSION > 1.8"<<endl;
-//#endif
-
 	// needed in order to have the signals triggered by SignallingUndoCommand
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
 	MainWin* window = new MainWin(0,filename);
 	window->show();
-//	sleep(1);		// to see splash screen
 	if(splash)
 		splash->finish(window);
 	return app.exec();

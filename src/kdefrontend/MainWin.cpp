@@ -1,10 +1,11 @@
 /***************************************************************************
     File                 : MainWin.cc
     Project              : LabPlot
+    Description          : Main window of the application
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Description          : Main window of the application
+    Copyright            : (C) 2008 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+
  ***************************************************************************/
 
 /***************************************************************************

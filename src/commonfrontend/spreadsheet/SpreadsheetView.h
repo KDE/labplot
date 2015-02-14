@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -48,11 +47,11 @@ class QToolBar;
 class QModelIndex;
 class QItemSelection;
 
-class SpreadsheetView : public QWidget{
+class SpreadsheetView : public QWidget {
     Q_OBJECT
 
 	public:
-		explicit SpreadsheetView(Spreadsheet *spreadsheet);
+		explicit SpreadsheetView(Spreadsheet* spreadsheet);
 		virtual ~SpreadsheetView();
 
 		void showComments(bool on = true);
@@ -61,7 +60,7 @@ class SpreadsheetView : public QWidget{
 		int selectedColumnCount(bool full = false);
 		int selectedColumnCount(AbstractColumn::PlotDesignation);
 		bool isColumnSelected(int col, bool full = false);
-		QList<Column *> selectedColumns(bool full = false);
+		QList<Column*> selectedColumns(bool full = false);
 		int selectedRowCount(bool full = false);
 		bool isRowSelected(int row, bool full = false);
 		int firstSelectedColumn(bool full = false);
@@ -72,20 +71,20 @@ class SpreadsheetView : public QWidget{
 		bool isCellSelected(int row, int col);
 		void setCellSelected(int row, int col, bool select = true);
 		void setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select = true);
-		void getCurrentCell(int * row, int * col);
+		void getCurrentCell(int* row, int* col);
 		void exportToFile(const QString&, const bool, const QString&) const;
 
 	private:
 	  	void init();
 		QTableView* m_tableView;
-		Spreadsheet * m_spreadsheet;
-		SpreadsheetItemDelegate * m_delegate;
-		SpreadsheetModel * m_model;
-		SpreadsheetDoubleHeaderView * m_horizontalHeader;
+		Spreadsheet* m_spreadsheet;
+		SpreadsheetItemDelegate* m_delegate;
+		SpreadsheetModel* m_model;
+		SpreadsheetDoubleHeaderView* m_horizontalHeader;
 		bool m_suppressSelectionChangedEvent;
 
-		bool eventFilter( QObject * watched, QEvent * event);
-		void keyPressEvent(QKeyEvent * event);
+		bool eventFilter(QObject*, QEvent*);
+		void keyPressEvent(QKeyEvent*);
 
 		void initActions();
 		void initMenus();
@@ -199,7 +198,7 @@ class SpreadsheetView : public QWidget{
 
 		void createContextMenu(QMenu*) const;
 		void fillToolBar(QToolBar*);
-		void sortDialog(QList<Column*> cols);
+		void sortDialog(QList<Column*>);
 
 		void print(QPrinter*) const;
 
@@ -208,16 +207,16 @@ class SpreadsheetView : public QWidget{
 		void handleHorizontalSectionMoved(int index, int from, int to);
 		void handleHorizontalHeaderDoubleClicked(int index);
 		void handleHeaderDataChanged(Qt::Orientation orientation, int first, int last);
-		void currentColumnChanged(const QModelIndex & current, const QModelIndex & previous);
-		void handleAspectAdded(const AbstractAspect * aspect);
-		void handleAspectAboutToBeRemoved(const AbstractAspect * aspect);
-		void updateSectionSize(const Column* col);
+		void currentColumnChanged(const QModelIndex& current, const QModelIndex & previous);
+		void handleAspectAdded(const AbstractAspect* aspect);
+		void handleAspectAboutToBeRemoved(const AbstractAspect* aspect);
+		void updateSectionSize(const Column*);
 		void updateHeaderGeometry(Qt::Orientation o, int first, int last);
 
 		void selectColumn(int);
 		void deselectColumn(int);
 		void columnClicked(int);
-		void selectionChanged(const QItemSelection & selected, const QItemSelection & deselected);
+		void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
 #endif

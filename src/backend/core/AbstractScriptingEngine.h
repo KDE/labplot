@@ -1,15 +1,12 @@
 /***************************************************************************
     File                 : AbstractScriptingEngine.h
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2006 by Ion Vasilief, 
-                           Tilman Benkert,
-                           Knut Franke
-    Copyright            : (C) 2008 by Knut Franke
-    Email (use @ for *)  : ion_vasilief*yahoo.fr, thzs*gmx.net,
-                           knut.franke*gmx.de
+    Copyright            : (C) 2006 Ion Vasilief (ion_vasilief*yahoo.fr)
+    Copyright            : (C) 2006 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2006-2008 Knut Franke (knut.franke@gmx.de)
     Description          : Scripting abstraction layer
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,6 +27,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 #ifndef ABSTRACT_SCRIPTING_ENGINE_H
 #define ABSTRACT_SCRIPTING_ENGINE_H
 
@@ -42,8 +40,7 @@
 class AbstractScript;
 class QString;
 
-class AbstractScriptingEngine : public QObject
-{
+class AbstractScriptingEngine : public QObject {
   Q_OBJECT
 
   public:
@@ -51,9 +48,9 @@ class AbstractScriptingEngine : public QObject
     virtual void initialize() = 0;
     bool initialized() const;
     virtual bool isRunning() const;
-    
-    virtual AbstractScript *makeScript(const QString&, QObject*, const QString&) = 0;
-      
+
+    virtual AbstractScript* makeScript(const QString&, QObject*, const QString&) = 0;
+
     virtual QString stackTraceString();
 
     virtual const QStringList mathFunctions() const;
@@ -79,7 +76,7 @@ class AbstractScriptingEngine : public QObject
   signals:
     void error(const QString &message, const QString &scriptName, int lineNumber);
     void print(const QString &output);
-    
+
   protected:
     bool m_initialized;
 

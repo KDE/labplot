@@ -3,10 +3,9 @@
     Project              : LabPlot
     Description          : Folder in a project
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
-    Copyright            : (C) 2007 Tilman Benkert (thzs*gmx.net)
-    Copyright            : (C) 2007 Knut Franke (knut.franke*gmx.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
 
  ***************************************************************************/
 
@@ -28,6 +27,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 #include "backend/core/Folder.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -37,7 +37,6 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QXmlStreamWriter>
-// #include <QtDebug>
 
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
@@ -234,7 +233,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 		}
 		addChild(fileDataSource);
 		loaded = true;
-	}	
+	}
 
 	if (!loaded)
 	{
