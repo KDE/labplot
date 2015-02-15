@@ -53,7 +53,6 @@
 #include <QMenu>
 #include <QDockWidget>
 #include <QStackedWidget>
-#include <QFileDialog>
 #include <QUndoStack>
 #include <QPrinter>
 #include <QPrintDialog>
@@ -63,6 +62,7 @@
 
 #include <KApplication>
 #include <KActionCollection>
+#include <KFileDialog>
 #include <KStandardAction>
 #include <kxmlguifactory.h>
 #include <KMessageBox>
@@ -615,8 +615,9 @@ bool MainWin::newProject(){
 void MainWin::openProject(){
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
-	QString path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
-			i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
+	QString path = KFileDialog::getOpenFileName(KUrl(dir),
+												i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"),
+												this, i18n("Open project"));
 
 	if (!path.isEmpty()) {
 		this->openProject(path);
@@ -768,8 +769,11 @@ bool MainWin::saveProject() {
 }
 
 bool MainWin::saveProjectAs() {
-	QString fileName = QFileDialog::getSaveFileName(this, i18n("Save project as"),QString::null,
-		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
+	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
+	QString dir = conf.readEntry("LastOpenDir", "");
+	QString fileName = KFileDialog::getSaveFileName(KUrl(dir),
+								i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"),
+								this, i18n("Save project as"));
 
 	if( fileName.isEmpty() )// "Cancel" was clicked
 		return false;

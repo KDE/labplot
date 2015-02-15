@@ -1,11 +1,11 @@
 /***************************************************************************
     File                 : AbstractScriptingEngine.h
     Project              : LabPlot
+    Description          : Scripting abstraction layer
     --------------------------------------------------------------------
-    Copyright            : (C) 2006 Ion Vasilief (ion_vasilief*yahoo.fr)
+    Copyright            : (C) 2006 Ion Vasilief (ion_vasilief@yahoo.fr)
     Copyright            : (C) 2006 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2006-2008 Knut Franke (knut.franke@gmx.de)
-    Description          : Scripting abstraction layer
 
  ***************************************************************************/
 

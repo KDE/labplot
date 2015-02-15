@@ -47,7 +47,6 @@ double my_ldexp(double x, double expo) { return ldexp(x,(int)expo); }
 double my_yn(double n,double x) { return yn((int)n,x); }
 
 /* wrapper for GSL functions with integer parameters */
-#ifdef HAVE_GSL
 #define MODE GSL_PREC_DOUBLE
 /* mathematical functions */
 double my_gsl_ldexp(double x, double expo) { return gsl_ldexp(x,(int)expo); }
@@ -138,7 +137,6 @@ double hypergeometric(double k, double n1,double n2,double t) {
 	return gsl_ran_hypergeometric_pdf((unsigned int)k,(unsigned int)n1,(unsigned int)n2,(unsigned int)t);
 }
 double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf((unsigned int)k,p); }
-#endif
 
 struct func _functions[] = {
 	/* Standard functions */
