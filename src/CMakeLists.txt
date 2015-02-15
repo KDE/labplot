@@ -162,14 +162,14 @@ add_subdirectory( pics/gsl_distributions )
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(.)
-kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
-kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
-target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+qt5_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
+add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
+target_link_libraries(labplot2 KF5::WidgetsAddons KF5::KIOWidgets ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 # ${OPJ_LIBRARY}
 
 ############## installation ################################
 
-install(TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${KDEFRONTEND_DIR}/LabPlot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME})
 install(PROGRAMS LabPlot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
