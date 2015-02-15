@@ -4,7 +4,7 @@
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -190,7 +190,7 @@ CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLinear
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
 
 	double lDiff = logicalEnd - logicalStart;
-	if (qFuzzyCompare(1 + lDiff, 1))
+	if (lDiff == 0.0)
 		return NULL;
 
 	double b = (sceneEnd - sceneStart) / lDiff;
@@ -202,15 +202,15 @@ CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLinear
 CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLogScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, double base) {
 
-	if (base < 0.0 || qFuzzyCompare(1 + base, 1))
+	if (base < 0.0 || base == 0.0)
 		return NULL;
-	if (logicalStart < 0.0 || qFuzzyCompare(1 + logicalStart, 1))
+	if (logicalStart < 0.0 || logicalStart == 0.0)
 		return NULL;
-	if (logicalEnd < 0.0 || qFuzzyCompare(1 + logicalEnd, 1))
+	if (logicalEnd < 0.0 || logicalEnd == 0.0)
 		return NULL;
-
+	
 	double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
-	if (qFuzzyCompare(1 + lDiff, 1))
+	if (lDiff == 0.0)
 		return NULL;
 
 	double b = (sceneEnd - sceneStart) / lDiff;
@@ -229,8 +229,8 @@ public:
 
 		CartesianCoordinateSystem* const q;
 		CartesianPlot* plot;
-		QList<CartesianCoordinateSystem::Scale *> xScales;
-		QList<CartesianCoordinateSystem::Scale *> yScales;
+		QList<CartesianCoordinateSystem::Scale*> xScales;
+		QList<CartesianCoordinateSystem::Scale*> yScales;
 };
 
 CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot)
