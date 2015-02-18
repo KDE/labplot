@@ -30,7 +30,7 @@
 #ifndef SPREADSHEETDOCK_H
 #define SPREADSHEETDOCK_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include <QtCore/QList>
 #include <kconfig.h>
 #include "ui_spreadsheetdock.h"

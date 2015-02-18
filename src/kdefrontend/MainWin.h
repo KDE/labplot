@@ -83,51 +83,53 @@ private:
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 
 	KRecentFilesAction* m_recentProjectsAction;
-	KAction* m_saveAction;
-	KAction* m_saveAsAction;
-	KAction* m_printAction;
-	KAction* m_printPreviewAction;
-	KAction* m_importAction;
-	KAction* m_exportAction;
-	KAction* m_closeAction;
-	KAction* m_newFolderAction;
-	KAction* m_newSpreadsheetAction;
-	KAction* m_newMatrixAction;
-	KAction* m_newWorksheetAction;
-	KAction* m_newFileDataSourceAction;
-	KAction* m_newSqlDataSourceAction;
-	KAction* m_newScriptAction;
-	KAction* m_newProjectAction;
-	KAction* m_historyAction;
-	KAction* m_undoAction;
-	KAction* m_redoAction;
-	KAction* m_tileWindows;
-	KAction* m_cascadeWindows;
+    QAction* m_saveAction;
+    QAction* m_saveAsAction;
+    QAction* m_printAction;
+    QAction* m_printPreviewAction;
+    QAction* m_importAction;
+    QAction* m_exportAction;
+    QAction* m_closeAction;
+    QAction* m_newFolderAction;
+    QAction* m_newSpreadsheetAction;
+    QAction* m_newMatrixAction;
+    QAction* m_newWorksheetAction;
+    QAction* m_newFileDataSourceAction;
+    QAction* m_newSqlDataSourceAction;
+    QAction* m_newScriptAction;
+    QAction* m_newProjectAction;
+    QAction* m_historyAction;
+    QAction* m_undoAction;
+    QAction* m_redoAction;
+    QAction* m_tileWindows;
+    QAction* m_cascadeWindows;
 
 	//toggling doch widgets
-	KAction* m_toggleProjectExplorerDockAction;
-	KAction* m_togglePropertiesDockAction;
+    QAction* m_toggleProjectExplorerDocQAction;
+    QAction* m_togglePropertiesDocQAction;
 
 	//worksheet actions
-	KAction* worksheetZoomInAction;
-	KAction* worksheetZoomOutAction;
-	KAction* worksheetZoomOriginAction;
-	KAction* worksheetZoomFitPageHeightAction;
-	KAction* worksheetZoomFitPageWidthAction;
-	KAction* worksheetZoomFitSelectionAction;
+    QAction* worksheetZoomInAction;
+    QAction* worksheetZoomOutAction;
+    QAction* worksheetZoomOriginAction;
+    QAction* worksheetZoomFitPageHeightAction;
+    QAction* worksheetZoomFitPageWidthAction;
+    QAction* worksheetZoomFitSelectionAction;
 
-	KAction* worksheetNavigationModeAction;
-	KAction* worksheetZoomModeAction;
-	KAction* worksheetSelectionModeAction;
+    QAction* worksheetNavigationModeAction;
+    QAction* worksheetZoomModeAction;
+    QAction* worksheetSelectionModeAction;
 
-	KAction* worksheetVerticalLayoutAction;
-	KAction* worksheetHorizontalLayoutAction;
-	KAction* worksheetGridLayoutAction;
-	KAction* worksheetBreakLayoutAction;
+    QAction* worksheetVerticalLayoutAction;
+    QAction* worksheetHorizontalLayoutAction;
+    QAction* worksheetGridLayoutAction;
+    QAction* worksheetBreakLayoutAction;
 
-	KAction* m_visibilityFolderAction;
-	KAction* m_visibilitySubfolderAction;
-	KAction* m_visibilityAllAction;
+    QAction* m_visibilityFolderAction;
+    QAction* m_visibilitySubfolderAction;
+    QAction* m_visibilityAllAction;
+    QAction* m_toggleProjectExplorerDockAction;
+    QAction* m_togglePropertiesDockAction;
 
 	//Menus
 	QMenu* m_visibilityMenu;
@@ -173,7 +175,7 @@ private slots:
 	bool newProject();
 	void openProject();
 	void openProject(const QString&);
-	void openRecentProject(const KUrl&);
+    void openRecentProject(const QUrl&);
 	bool closeProject();
 	bool saveProject();
 	bool saveProjectAs();

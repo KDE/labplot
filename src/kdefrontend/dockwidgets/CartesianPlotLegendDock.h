@@ -31,6 +31,7 @@
 #define CARTESIANPLOTLEGENDDOCK_H
 
 #include <QList>
+#include <KConfig>
 #include "ui_cartesianplotlegenddock.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"

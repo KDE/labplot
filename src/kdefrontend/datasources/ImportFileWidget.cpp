@@ -39,6 +39,8 @@
 #include <QProcess>
 #include <QTextStream>
 #include <KUrlCompletion>
+#include <KLocalizedString>
+ #include <KSharedConfig>
 
 /*!
    \class ImportFileWidget
@@ -71,11 +73,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.gbOptions->hide();
 
-    ui.bOpen->setIcon( KIcon("document-open") );
-    ui.bFileInfo->setIcon( KIcon("help-about") );
-    ui.bManageFilters->setIcon( KIcon("configure") );
-	ui.bSaveFilter->setIcon( KIcon("document-save") );
-	ui.bRefreshPreview->setIcon( KIcon("view-refresh") );
+    ui.bOpen->setIcon( QIcon("document-open") );
+    ui.bFileInfo->setIcon( QIcon("help-about") );
+    ui.bManageFilters->setIcon( QIcon("configure") );
+    ui.bSaveFilter->setIcon( QIcon("document-save") );
+    ui.bRefreshPreview->setIcon( QIcon("view-refresh") );
 
     connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
     connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -88,7 +90,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
     connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 
 	//load last used settings
-	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+    KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 
 	//general settings
 	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
@@ -219,7 +221,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	opens a file dialog and lets the user select the file data source.
 */
 void ImportFileWidget::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
+    KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
 	QString dir = conf.readEntry("LastDir", "");
     QString path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
     if (path.isEmpty())

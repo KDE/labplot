@@ -459,7 +459,7 @@ QIcon Column::icon() const {
 // 			return QIcon(QPixmap(""));
 // 	}
 
-	return KIcon("x-shape-text");
+    return QIcon("x-shape-text");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

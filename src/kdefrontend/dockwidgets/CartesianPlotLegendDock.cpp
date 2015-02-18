@@ -37,6 +37,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <KUrlCompletion>
+#include <KLocalizedString>
 
 #include <math.h>
 
@@ -62,7 +63,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
-	ui.bOpen->setIcon( KIcon("document-open") );
+    ui.bOpen->setIcon( QIcon("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleBackgroundFileName->setCompletionObject(comp);

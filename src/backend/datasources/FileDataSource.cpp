@@ -77,14 +77,14 @@ FileDataSource::~FileDataSource(){
 }
 
 void FileDataSource::initActions(){
-	m_reloadAction = new KAction(KIcon("view-refresh"), i18n("Reload"), this);
+    m_reloadAction = new QAction(KIcon("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
-	m_toggleWatchAction = new KAction(i18n("Watch the file"), this);
+    m_toggleWatchAction = new QAction(i18n("Watch the file"), this);
 	m_toggleWatchAction->setCheckable(true);
 	connect(m_toggleWatchAction, SIGNAL(triggered()), this, SLOT(watchToggled()));
 
-	m_toggleLinkAction = new KAction(i18n("Link the file"), this);
+    m_toggleLinkAction = new QAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
 	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
 }
@@ -171,13 +171,13 @@ QIcon FileDataSource::icon() const{
 	QIcon icon;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
   if (m_fileType==AsciiVector || m_fileType==AsciiMatrix)
-	  icon = KIcon("text-plain");
+      icon = QIcon("text-plain");
   else if (m_fileType==BinaryVector || m_fileType==BinaryMatrix)
-	icon = KIcon("application-octet-stream");
+    icon = QIcon("application-octet-stream");
   else if (m_fileType==Image)
-	icon = KIcon("image-x-generic");
+    icon = QIcon("image-x-generic");
   else if (m_fileType==Sound)
-	icon = KIcon("audio-x-generic");
+    icon = QIcon("audio-x-generic");
 #endif
 	return icon;
 }

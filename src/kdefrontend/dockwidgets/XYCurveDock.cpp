@@ -44,6 +44,8 @@
 #include <QPainter>
 #include <QDir>
 #include <QDebug>
+#include <KLocalizedString>
+#include <KConfigGroup>
 
 /*!
   \class XYCurveDock

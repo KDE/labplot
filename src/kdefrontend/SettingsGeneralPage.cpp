@@ -55,7 +55,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 }
 
 void SettingsGeneralPage::applySettings(){
-	KConfigGroup group = KGlobal::config()->group( "General" );
+    KConfigGroup group = KSharedConfig::openConfig()->group( "General" );
 	group.writeEntry("LoadOnStart", ui.cbLoadOnStart->currentIndex());
 	group.writeEntry("ViewMode", ui.cbInterface->currentIndex());
 	group.writeEntry("TabPosition", ui.cbTabPosition->currentIndex());
@@ -69,7 +69,7 @@ void SettingsGeneralPage::restoreDefaults(){
 }
 
 void SettingsGeneralPage::loadSettings(){
-	const KConfigGroup group = KGlobal::config()->group( "General" );
+    const KConfigGroup group = KSharedConfig::openConfig()->group( "General" );
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry("LoadOnStart", 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry("ViewMode", 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry("TabPosition", 0));

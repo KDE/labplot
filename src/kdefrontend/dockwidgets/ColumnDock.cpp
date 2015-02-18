@@ -38,6 +38,8 @@
 #include "backend/datasources/FileDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KLocalizedString>
+
 /*!
   \class ColumnDock
   \brief Provides a widget for editing the properties of the spreadsheet columns currently selected in the project explorer.

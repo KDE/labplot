@@ -30,6 +30,7 @@
 #define PROJECTDOCK_H
 
 #include "ui_projectdock.h"
+#include <KConfig>
 class Project;
 class AbstractAspect;
 

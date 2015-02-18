@@ -38,6 +38,7 @@
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <KLocalizedString>
 
 
 /*!
@@ -60,8 +61,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	Q_ASSERT(gridLayout);
 	gridLayout->addWidget(cbXDataColumn, 0, 2, 1, 1);
 
-	ui.tbConstants->setIcon( KIcon("format-text-symbol") );
-	ui.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
+    ui.tbConstants->setIcon( QIcon("format-text-symbol") );
+    ui.tbFunctions->setIcon( QIcon("preferences-desktop-font") );
 
 	QStringList vars;
 	vars<<"x";

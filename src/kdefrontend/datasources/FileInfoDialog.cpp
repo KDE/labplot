@@ -48,7 +48,7 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
 	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
 	setMainWidget( &textEditWidget );
  	setButtons( KDialog::Ok);
- 	setWindowIcon(KIcon("help-about"));
+    setWindowIcon(QIcon("help-about"));
 	setCaption(i18n("File info"));
  	resize( QSize(500,300) );
 }

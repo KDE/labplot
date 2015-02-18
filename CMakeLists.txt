@@ -4,9 +4,14 @@ cmake_minimum_required(VERSION 2.8.12)
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick QuickWidgets Svg Test)
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick QuickWidgets Svg Test Declarative)
 find_package(KF5 REQUIRED COMPONENTS
+  Archive
+  I18n
+  WidgetsAddons
+  XmlGui
   KIO
+  NotifyConfig
   KDELibs4Support)
   
 include(FeatureSummary)
@@ -20,7 +25,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -W
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION='\"2.0.1\"')
+add_definitions (-DLVERSION="2.0.1")
 # add_definitions (-DLDEBUG='1')
 # needed for qt_plugin_instance_scidavis_standardcurvesymbolfactory()
 add_definitions(-D QT_STATICPLUGIN )

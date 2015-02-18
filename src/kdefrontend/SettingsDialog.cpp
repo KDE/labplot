@@ -5,7 +5,7 @@
     Copyright            : (C) 2008-2013 by Alexander Semke
     Email (use @ for *)  : alexander.semke*web.de
     Description          : general settings dialog
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -36,6 +36,8 @@
 #include <KPushButton>
 #include <kmessagebox.h>
 #include <KIcon>
+#include <KConfigGroup>
+#include <KWindowConfig>
 
 /**
  * \brief Settings dialog for Labplot.
@@ -50,64 +52,86 @@ SettingsDialog::SettingsDialog(QWidget* parent) :
     setMinimumSize(QSize(512, minSize.height()));
 
     setFaceType(List);
-    setCaption(i18n("Preferences"));
-    setButtons(Ok | Apply | Cancel | Default);
-    setDefaultButton(Ok);
-	enableButton(Apply, false);
+    setWindowTitle(i18n("Preferences"));
+    QDialogButtonBox* dialogButtonBox = new QDialogButtonBox;
+
+    QPushButton* okbutton = dialogButtonBox->addButton(QDialogButtonBox::Ok);
+    connect( okbutton, &QAbstractButton::clicked, this, &SettingsDialog::onOkButton );
+
+    applybutton = dialogButtonBox->addButton(QDialogButtonBox::Apply);
+    connect( applybutton, &QAbstractButton::clicked, this, &SettingsDialog::onApplyButton );
+
+    dialogButtonBox->addButton(QDialogButtonBox::Cancel);
+
+    QPushButton* defaultbutton = dialogButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
+    connect( defaultbutton, &QAbstractButton::clicked, this, &SettingsDialog::onRestoreDefaultsButton );
+
+    okbutton->setDefault(true);
+    applybutton->setEnabled(false);
+
+    QVBoxLayout* layout = new QVBoxLayout;
+    layout->addWidget( dialogButtonBox );
+    setLayout( layout );
 
     generalPage = new SettingsGeneralPage(this);
     KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
-    generalFrame->setIcon(KIcon("system-run"));
-	connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
+    generalFrame->setIcon(QIcon("system-run"));
+    connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
 //     printingPage = new SettingsPrintingPage(mainWindow, this);
 //     KPageWidgetItem* printingFrame = addPage(printingPage, i18nc("@title:group", "Print"));
 //     printingFrame->setIcon(KIcon("document-print"));
 
-	const KConfigGroup dialogConfig = KGlobal::config()->group("SettingsDialog");
-    restoreDialogSize(dialogConfig);
+    const KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
+    KWindowConfig::restoreWindowSize(windowHandle(), dialogConfig);
 }
 
 SettingsDialog::~SettingsDialog(){
-	KConfigGroup dialogConfig = KGlobal::config()->group("SettingsDialog");
-    saveDialogSize(dialogConfig);
+    KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
+    KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
 }
 
-void SettingsDialog::slotButtonClicked(int button){
-    if ((button == Ok) || (button == Apply)) {
-		if (m_changed){
-			applySettings();
-			setCaption(i18n("Preferences"));
-			enableButton(Apply, false);
-		}
-    } else if (button == Default) {
-        const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
-        if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
-            restoreDefaults();
-			setCaption(i18n("Preferences"));
-			enableButton(Apply, false);
-        }
+void SettingsDialog::onOkButton(){
+    if (m_changed){
+        applySettings();
+        setWindowTitle(i18n("Preferences"));
+        applybutton->setEnabled(false);
     }
+}
 
-    KPageDialog::slotButtonClicked(button);
+void SettingsDialog::onApplyButton(){
+    if (m_changed){
+        applySettings();
+        setWindowTitle(i18n("Preferences"));
+        applybutton->setEnabled(false);
+    }
+}
+
+void SettingsDialog::onRestoreDefaultsButton(){
+    const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
+    if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
+        restoreDefaults();
+        setWindowTitle(i18n("Preferences"));
+        applybutton->setEnabled(false);
+    }
 }
 
 void SettingsDialog::changed() {
-	m_changed = true;
-	setCaption(i18n("Preferences    [Changed]"));
-	enableButton(Apply, true);
+    m_changed = true;
+    setWindowTitle(i18n("Preferences    [Changed]"));
+    applybutton->setEnabled(true);
 }
 
 void SettingsDialog::applySettings(){
-	m_changed = false;
+    m_changed = false;
     generalPage->applySettings();
 //     printingPage->applySettings();
-	KGlobal::config()->sync();	
-	emit settingsChanged();
+    KSharedConfig::openConfig()->sync();
+    emit settingsChanged();
 }
 
 void SettingsDialog::restoreDefaults(){
-	m_changed = false;
+    m_changed = false;
     generalPage->restoreDefaults();
-//     printingPage->restoreDefaults();
+//    printingPage->restoreDefaults();
 }

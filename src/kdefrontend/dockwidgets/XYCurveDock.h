@@ -34,6 +34,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
+#include <KConfig>
 
 class XYCurve;
 class TreeViewComboBox;

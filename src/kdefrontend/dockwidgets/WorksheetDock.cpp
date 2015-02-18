@@ -34,6 +34,8 @@
 #include <QPrinter>
 #include <QFileDialog>
 #include <KUrlCompletion>
+#include <KLocalizedString>
+#include <KConfigGroup>
 
 #include <math.h>
 
@@ -85,7 +87,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleBackgroundFileName->setClearButtonShown(true);
-	ui.bOpen->setIcon( KIcon("document-open") );
+    ui.bOpen->setIcon( QIcon("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleBackgroundFileName->setCompletionObject(comp);

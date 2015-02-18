@@ -553,7 +553,7 @@ struct func _functions[] = {
 	{"poissonP",gsl_cdf_poisson_P},
 	{"poissonQ",gsl_cdf_poisson_Q},
 	/* Bernoulli Distribution */
-	{"bernoulli",bernoulli},
+    {"bernoulli",bernoulli},
 	/* Binomial Distribution */
 	{"binomial",gsl_ran_binomial_pdf},
 	{"binomialP",gsl_cdf_binomial_P},

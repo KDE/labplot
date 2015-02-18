@@ -37,8 +37,8 @@
  */
 ConstantsWidget::ConstantsWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
-	ui.bInsert->setIcon(KIcon("edit-paste"));
-	ui.bCancel->setIcon(KIcon("dialog-cancel"));
+    ui.bInsert->setIcon(QIcon("edit-paste"));
+    ui.bCancel->setIcon(QIcon("dialog-cancel"));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->constantsGroups());
 

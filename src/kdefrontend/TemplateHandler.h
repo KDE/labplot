@@ -30,7 +30,7 @@
 #ifndef TEMPLATEHANDLER_H
 #define TEMPLATEHANDLER_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 class QHBoxLayout;
 class QToolButton;
 class QSpacerItem;

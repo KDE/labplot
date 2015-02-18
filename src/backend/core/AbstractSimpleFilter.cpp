@@ -34,7 +34,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QDate>
 #include <QtCore/QTime>
-#include <QtXml/QXmlStreamWriter>
+#include <QXmlStreamWriter>
 #include "backend/lib/XmlStreamReader.h"
 #include <KLocale>
 

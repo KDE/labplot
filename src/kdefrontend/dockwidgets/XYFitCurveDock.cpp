@@ -39,7 +39,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDebug>
-
+#include <KLocalizedString>
 /*!
   \class XYFitCurveDock
   \brief  Provides a widget for editing the properties of the XYFitCurves
@@ -90,9 +90,9 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
-	uiGeneralTab.tbConstants->setIcon( KIcon("format-text-symbol") );
-	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+    uiGeneralTab.tbConstants->setIcon( QIcon("format-text-symbol") );
+    uiGeneralTab.tbFunctions->setIcon( QIcon("preferences-desktop-font") );
+    uiGeneralTab.pbRecalculate->setIcon(QIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);

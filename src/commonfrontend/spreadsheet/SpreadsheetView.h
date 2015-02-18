@@ -30,6 +30,7 @@
 #define SPREADSHEETVIEW_H
 
 #include <QWidget>
+#include <QPrinter>
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"

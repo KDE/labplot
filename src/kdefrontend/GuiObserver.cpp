@@ -59,6 +59,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QStackedWidget>
 #include <QToolBar>
 #include <KDebug>
+#include <KLocalizedString>
 
 /*!
   \class GuiObserver
@@ -287,7 +288,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
   }else{
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
+    mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 	if (mainWindow->stackedWidget->currentWidget())
 	  mainWindow->stackedWidget->currentWidget()->hide();
   }

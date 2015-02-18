@@ -33,7 +33,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 
-#include <QtXml/QXmlStreamWriter>
+#include <QXmlStreamWriter>
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 #include <QtCore/QDate>

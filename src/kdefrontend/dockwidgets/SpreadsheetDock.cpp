@@ -32,6 +32,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/TemplateHandler.h"
 #include <QDir>
+#include <KLocalizedString>
+#include <KConfigGroup>
 
  /*!
   \class SpreadsheetDock

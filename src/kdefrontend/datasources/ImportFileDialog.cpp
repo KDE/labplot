@@ -40,6 +40,8 @@
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
+ #include <KSharedConfig>
+#include <KLocalizedString>
 
 /*!
 	\class ImportFileDialog
@@ -73,7 +75,7 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPositio
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Import Data to Spreadsheet/Matrix"));
-	setWindowIcon(KIcon("document-import-database"));
+    setWindowIcon(QIcon("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
 
@@ -109,7 +111,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	cbAddTo->setSelectableClasses(list);
 
 	bNewSpreadsheet = new QPushButton(frameAddTo);
-	bNewSpreadsheet->setIcon(KIcon("insert-table"));
+    bNewSpreadsheet->setIcon(QIcon("insert-table"));
 	bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
 	hLayout->addWidget( bNewSpreadsheet);
 	connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
@@ -250,7 +252,7 @@ void ImportFileDialog::newSpreadsheet(){
 	QInputDialog* dlg = new QInputDialog(this);
 
 //	this->setWindowIcon( QIcon(KIcon("insert-table")) );
-	dlg->setWindowIcon( QIcon(KIcon("insert-table")) );
+    dlg->setWindowIcon( QIcon(QIcon("insert-table")) );
 	name = dlg->getText(this, i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), QLineEdit::Normal, name, &ok);
 // 	name = KInputDialog::getText( i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), name, &ok);
 	if (ok)

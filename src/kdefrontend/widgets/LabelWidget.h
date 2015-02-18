@@ -31,6 +31,7 @@
 
 #include "ui_labelwidget.h"
 #include "backend/worksheet/TextLabel.h"
+#include <KConfigGroup>
 
 class Label;
 class Axis;

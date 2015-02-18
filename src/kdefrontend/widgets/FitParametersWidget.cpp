@@ -27,6 +27,7 @@
  ***************************************************************************/
 #include "FitParametersWidget.h"
 #include <QKeyEvent>
+#include <KLocalizedString>
 
 /*!
 	\class FitParametersWidget
@@ -38,8 +39,8 @@
  */
 FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent), m_fitData(data) {
 	ui.setupUi(this);
-	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
-	ui.pbCancel->setIcon(KIcon("dialog-cancel"));
+    ui.pbApply->setIcon(QIcon("dialog-ok-apply"));
+    ui.pbCancel->setIcon(QIcon("dialog-cancel"));
 
 	ui.tableWidget->setColumnCount(2);
 
@@ -85,9 +86,9 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			ui.tableWidget->setItem(0, 1, new QTableWidgetItem());
 		}
 		ui.tableWidget->setCurrentCell(0, 0);
-		ui.pbAdd->setIcon(KIcon("list-add"));
+        ui.pbAdd->setIcon(QIcon("list-add"));
 		ui.pbAdd->setVisible(true);
-		ui.pbRemove->setIcon(KIcon("list-remove"));
+        ui.pbRemove->setIcon(QIcon("list-remove"));
 		ui.pbRemove->setVisible(true);
 		ui.pbRemove->setEnabled(m_fitData->paramNames.size()>1);
 	}

@@ -28,7 +28,7 @@
 #ifndef SETTINGSPAGE_H
 #define SETTINGSPAGE_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class SettingsPage : public QWidget {
     Q_OBJECT
