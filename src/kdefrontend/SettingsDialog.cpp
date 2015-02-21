@@ -32,12 +32,12 @@
 #include "SettingsGeneralPage.h"
 // #include "SettingsPrintingPage.h"
 
-#include <KLocale>
 #include <KPushButton>
 #include <kmessagebox.h>
-#include <KIcon>
 #include <KConfigGroup>
+#include <KSharedConfig>
 #include <KWindowConfig>
+#include <KLocalizedString>
 
 /**
  * \brief Settings dialog for Labplot.

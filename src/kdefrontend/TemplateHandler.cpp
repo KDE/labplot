@@ -34,10 +34,9 @@
 #include <QLabel>
 #include <QFileInfo>
 #include <QWidgetAction>
-#include <KLocale>
-#include <KStandardDirs>
+
+#include <KLocalizedString>
 #include <KLineEdit>
-#include <KIcon>
 #include <KMenu>
 #include <KConfig>
  /*!

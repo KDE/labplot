@@ -33,7 +33,7 @@
 #include "backend/lib/XmlStreamReader.h"
 
 #include <QApplication>
-#include <QtConcurrentRun>
+#include <QtConcurrent/QtConcurrentRun>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QGraphicsScene>

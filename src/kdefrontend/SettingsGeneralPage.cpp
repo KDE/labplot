@@ -29,8 +29,9 @@
 #include "SettingsGeneralPage.h"
 #include "MainWin.h"
 
-#include <KDialog>
-#include <KLocale>
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <kfiledialog.h>
 
 /**

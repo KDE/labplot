@@ -37,7 +37,7 @@
 #include <QTemporaryFile>
 #include <QTextStream>
 #include <QProcess>
-#include <QtConcurrentRun>
+#include <QtConcurrent/QtConcurrentRun>
 
 // use (pdf)latex to render LaTeX text (see tex2im, etc.)
 // TODO: test convert to svg and render to qimage, test dvipng

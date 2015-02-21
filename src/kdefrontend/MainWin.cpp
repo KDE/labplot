@@ -58,9 +58,10 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QCloseEvent>
+#include <QFileDialog>
 #include <QElapsedTimer>
+#include <QDebug>
 
-#include <KApplication>
 #include <KActionCollection>
 #include <KFileDialog>
 #include <KStandardAction>
@@ -68,8 +69,7 @@
 #include <KMessageBox>
 #include <KToolBar>
 #include <KStatusBar>
-#include <KLocale>
-#include <KDebug>
+#include <KLocalizedString>
 #include <KFilterDev>
 
  /*!
@@ -111,7 +111,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 }
 
 MainWin::~MainWin() {
-    kDebug()<<"write settings"<<endl;
+    qDebug()<<"write settings"<<endl;
 
     //write settings
     m_recentProjectsAction->saveEntries( KSharedConfig::openConfig()->group("Recent Files") );
@@ -701,7 +701,7 @@ bool MainWin::openXML(QIODevice *file) {
     XmlStreamReader reader(file);
     if (m_project->load(&reader) == false) {
         RESET_CURSOR;
-        kDebug()<<"ERROR: reading file content"<<endl;
+        qDebug()<<"ERROR: reading file content"<<endl;
         QString msg_text = reader.errorString();
         KMessageBox::error(this, msg_text, i18n("Error opening project"));
         statusBar()->showMessage(msg_text);
@@ -1337,7 +1337,7 @@ void MainWin::newFileDataSourceActionTriggered(){
       FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
       dlg->importToFileDataSource(dataSource, statusBar());
       this->addAspectToProject(dataSource);
-      kDebug()<<"new file data source created"<<endl;
+      qDebug()<<"new file data source created"<<endl;
   }
   delete dlg;
 }

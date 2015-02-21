@@ -30,7 +30,7 @@
 #ifndef WORKSHEET_INTERFACES_H
 #define WORKSHEET_INTERFACES_H
 
-#include <QtPlugin>
+//#include <QtPlugin>
 #include <QStringList>
 #include "backend/worksheet/AbstractCurveSymbol.h"
 

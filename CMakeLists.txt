@@ -12,6 +12,7 @@ find_package(KF5 REQUIRED COMPONENTS
   XmlGui
   KIO
   NotifyConfig
+  Declarative
   KDELibs4Support)
   
 include(FeatureSummary)

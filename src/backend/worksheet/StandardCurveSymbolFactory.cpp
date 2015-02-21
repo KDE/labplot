@@ -232,5 +232,5 @@ const AbstractCurveSymbol *StandardCurveSymbolFactory::prototype(const QString &
 	return NULL;
 }
 
-Q_EXPORT_PLUGIN2(scidavis_standardcurvesymbolfactory, StandardCurveSymbolFactory)
-Q_IMPORT_PLUGIN(scidavis_standardcurvesymbolfactory)
+//Q_EXPORT_PLUGIN2(scidavis_standardcurvesymbolfactory, StandardCurveSymbolFactory)
+//Q_IMPORT_PLUGIN(scidavis_standardcurvesymbolfactory)

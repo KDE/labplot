@@ -58,7 +58,7 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include <QDockWidget>
 #include <QStackedWidget>
 #include <QToolBar>
-#include <KDebug>
+#include <QDebug>
 #include <KLocalizedString>
 
 /*!
