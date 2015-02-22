@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : CartesianPlot.cpp
     Project              : LabPlot
-    Description          : A plot containing decoration elements.
+    Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -46,16 +46,11 @@
 #include <QDebug>
 #include <QMenu>
 #include <QToolBar>
-#include <QGraphicsView>
-#include <QGraphicsColorizeEffect>
+#include <QPainter>
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <QIcon>
-#else
 #include <KIcon>
 #include <KAction>
 #include <KLocale>
-#endif
 
 #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
 #define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
@@ -690,7 +685,6 @@ void CartesianPlot::updateLegend() {
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::dataChanged(){
-	qDebug()<<"CartesianPlot::dataChanged()";
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 	Q_ASSERT(curve);
@@ -714,7 +708,6 @@ void CartesianPlot::xDataChanged(){
 	if (project()->isLoading())
 		return;
 
-	qDebug()<<"CartesianPlot::xDataChanged()";
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 	Q_ASSERT(curve);
@@ -733,7 +726,6 @@ void CartesianPlot::yDataChanged(){
 	if (project()->isLoading())
 		return;
 
-	qDebug()<<"CartesianPlot::yDataChanged()";
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 	Q_ASSERT(curve);
@@ -1155,7 +1147,6 @@ void CartesianPlotPrivate::retransform(){
 }
 
 void CartesianPlotPrivate::retransformScales(){
-// 	qDebug()<<"CartesianPlotPrivate::retransformScales";
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianCoordinateSystem::Scale*> scales;
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;
@@ -1360,16 +1351,10 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 		if (mouseMode==CartesianPlot::ZoomSelectionMode) {
 			m_selectionStart = event->pos();
 		} else if (mouseMode==CartesianPlot::ZoomXSelectionMode) {
-			//determine the start point of the selection band in item's coordinates first (set y to the current maximal value),
-			//and map the start point to global coordinates (=m_rubberBandStart)
-			float ymax = cSystem->mapLogicalToScene(QPointF(0, yMax), AbstractCoordinateSystem::SuppressPageClipping).y();
 			m_selectionStart.setX(event->pos().x());
-			m_selectionStart.setY(ymax);
+			m_selectionStart.setY(q->plotRect().height()/2);
 		} else if (mouseMode==CartesianPlot::ZoomYSelectionMode) {
-			//determine the start point of the selection band in item's coordinates first (set x to the current minimal value),
-			//and map the start point to global coordinates (=m_rubberBandStart)
-			float xmin = cSystem->mapLogicalToScene(QPointF(xMin, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
-			m_selectionStart.setX(xmin);
+			m_selectionStart.setX(-q->plotRect().width()/2);
 			m_selectionStart.setY(event->pos().y());
 		}
 
@@ -1397,18 +1382,12 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x()) + QString::fromUtf8(", Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 		} else if (mouseMode==CartesianPlot::ZoomXSelectionMode) {
-			//determine the end point of the selection band in item's coordinates first (set y to the current minimal value),
-			//and map the end point to global coordinates (=m_rubberBandStart)
-			float ymin = cSystem->mapLogicalToScene(QPointF(0, yMin), AbstractCoordinateSystem::SuppressPageClipping).y();
 			m_selectionEnd.setX(event->pos().x());
-			m_selectionEnd.setY(ymin);
+			m_selectionEnd.setY(-q->plotRect().height()/2);
 			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 		} else if (mouseMode==CartesianPlot::ZoomYSelectionMode) {
-			//determine the end point of the selection band in item's coordinates first (set x to the current maximal value),
-			//and map the end point to global coordinates (=m_rubberBandStart)
-			float xmax = cSystem->mapLogicalToScene(QPointF(xMax, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
-			m_selectionEnd.setX(xmax);
+			m_selectionEnd.setX(q->plotRect().width()/2);
 			m_selectionEnd.setY(event->pos().y());
 			QPointF logicalEnd = cSystem->mapSceneToLogical(m_selectionEnd);
 			info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
@@ -1442,18 +1421,6 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
-		if (mouseMode == CartesianPlot::ZoomSelectionMode) {
-			m_selectionEnd = event->pos();
-		} else if (mouseMode == CartesianPlot::ZoomXSelectionMode ) {
-			m_selectionEnd.setX(event->pos().x());
-			float ymin = cSystem->mapLogicalToScene(QPointF(0, yMin), AbstractCoordinateSystem::SuppressPageClipping).y();
-			m_selectionEnd.setY(ymin);
-		} else if (mouseMode == CartesianPlot::ZoomYSelectionMode ) {
-			float xmax = cSystem->mapLogicalToScene(QPointF(xMax, 0), AbstractCoordinateSystem::SuppressPageClipping).x();
-			m_selectionEnd.setX(xmax);
-			m_selectionEnd.setY(event->pos().y());
-		}
-
 		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
 		if ( abs(m_selectionEnd.x()-m_selectionStart.x())<20 || abs(m_selectionEnd.y()-m_selectionStart.y())<20 ) {
 			m_selectionBandIsShown = false;
