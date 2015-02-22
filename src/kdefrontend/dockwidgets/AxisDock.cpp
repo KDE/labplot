@@ -494,11 +494,23 @@ void AxisDock::orientationChanged(int index){
 		ui.cbPosition->addItem( i18n("bottom") );
 		ui.cbLabelsPosition->addItem( i18n("top") );
 		ui.cbLabelsPosition->addItem( i18n("bottom") );
+
+		ui.cbScale->setItemText(1, i18n("log(x)") );
+		ui.cbScale->setItemText(2, i18n("log2(x)") );
+		ui.cbScale->setItemText(3, i18n("ln(x)") );
+		ui.cbScale->setItemText(4, i18n("sqrt(x)") );
+		ui.cbScale->setItemText(5, i18n("x^2") );
 	}else{//vertical
 		ui.cbPosition->addItem( i18n("left") );
 		ui.cbPosition->addItem( i18n("right") );
 		ui.cbLabelsPosition->addItem( i18n("right") );
 		ui.cbLabelsPosition->addItem( i18n("left") );
+
+		ui.cbScale->setItemText(1, i18n("log(y)") );
+		ui.cbScale->setItemText(2, i18n("log2(y)") );
+		ui.cbScale->setItemText(3, i18n("ln(y)") );
+		ui.cbScale->setItemText(4, i18n("sqrt(y)") );
+		ui.cbScale->setItemText(5, i18n("y^2") );
 	}
 	ui.cbPosition->addItem( i18n("centered") );
 	ui.cbPosition->addItem( i18n("custom") );
