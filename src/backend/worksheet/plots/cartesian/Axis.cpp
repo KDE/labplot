@@ -411,7 +411,7 @@ void Axis::setPosition(AxisPosition position) {
 		exec(new AxisSetPositionCmd(d, position, i18n("%1: set axis position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::AxisScale, scale, retransform);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::AxisScale, scale, retransformTicks);
 void Axis::setScale(AxisScale scale) {
 	Q_D(Axis);
 	if (scale != d->scale)
@@ -1011,8 +1011,8 @@ void AxisPrivate::addArrow(const QPointF& startPoint, int direction) {
 	}
 }
 
-//! helper function for retransformTicks(const AbstractCoordinateSystem *cSystem)
-bool AxisPrivate::transformAnchor(QPointF *anchorPoint) {
+//! helper function for retransformTicks()
+bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	QList<QPointF> points;
 	points.append(*anchorPoint);
 	points = m_cSystem->mapLogicalToScene(points);
@@ -1047,53 +1047,53 @@ void AxisPrivate::retransformTicks(){
 	int tmpMajorTicksNumber;
 	if (majorTicksType == Axis::TicksTotalNumber) {
 		//the total number of the major ticks is given - > determine the spacing
+		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale){
 			case Axis::ScaleLinear:
-				majorTicksSpacing = (end - start)/ (majorTicksNumber - 1);
+				majorTicksSpacing = (end-start)/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleLog10:
-				majorTicksSpacing = (log10(end) - log10(start))/(majorTicksNumber - 1);
+				majorTicksSpacing = (log10(end)-log10(start))/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleLog2:
-				majorTicksSpacing = (log(end) - log(start))/log(2)/(majorTicksNumber - 1);
+				majorTicksSpacing = (log(end)-log(start))/log(2)/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleLn:
-				majorTicksSpacing = (log(end) - log(start))/(majorTicksNumber - 1);
+				majorTicksSpacing = (log(end)-log(start))/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleSqrt:
-				majorTicksSpacing = (sqrt(end) - sqrt(start))/(majorTicksNumber - 1);
+				majorTicksSpacing = (sqrt(end)-sqrt(start))/(majorTicksNumber-1);
 				break;
 			case Axis::ScaleX2:
-				majorTicksSpacing = (pow(end,2) - pow(start,2))/(majorTicksNumber - 1);
+				majorTicksSpacing = (pow(end,2)-pow(start,2))/(majorTicksNumber-1);
 				break;
 			default://Linear
-				majorTicksSpacing = (end - start)/(majorTicksNumber - 1);
+				majorTicksSpacing = (end-start)/(majorTicksNumber-1);
 		}
-		tmpMajorTicksNumber = majorTicksNumber;
 	} else if (majorTicksType == Axis::TicksIncrement) {
-		//the spacing (increment ) of the major ticks is given - > determine the number
+		//the spacing (increment) of the major ticks is given - > determine the number
 		majorTicksSpacing = majorTicksIncrement;
 		switch (scale) {
 			case Axis::ScaleLinear:
-				tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
+				tmpMajorTicksNumber = qRound((end-start)/majorTicksSpacing + 1);
 				break;
 			case Axis::ScaleLog10:
-				tmpMajorTicksNumber = (log10(end)-log10(start))/majorTicksSpacing + 1;
+				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksSpacing + 1);
 				break;
 			case Axis::ScaleLog2:
-				tmpMajorTicksNumber = (log(end)-log(start))/log(2)/majorTicksSpacing + 1;
+				tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksSpacing + 1);
 				break;
 			case Axis::ScaleLn:
-				tmpMajorTicksNumber = (log(end)-log(start))/majorTicksSpacing + 1;
+				tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksSpacing + 1);
 				break;
 			case Axis::ScaleSqrt:
-				tmpMajorTicksNumber = (sqrt(end)-sqrt(start))/majorTicksSpacing + 1;
+				tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksSpacing + 1);
 				break;
 			case Axis::ScaleX2:
-				tmpMajorTicksNumber = (pow(end,2)-pow(start,2))/majorTicksSpacing + 1;
+				tmpMajorTicksNumber = qRound((pow(end,2)-pow(start,2))/majorTicksSpacing + 1);
 				break;
 			default://Linear
-			tmpMajorTicksNumber = (end-start)/majorTicksSpacing + 1;
+				tmpMajorTicksNumber = qRound((end-start)/majorTicksSpacing + 1);
 		}
 	} else {
 		//custom column was provided
@@ -1113,7 +1113,6 @@ void AxisPrivate::retransformTicks(){
 	else
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 
-
 	QPointF anchorPoint;
 	QPointF startPoint;
 	QPointF endPoint;
@@ -1127,28 +1126,36 @@ void AxisPrivate::retransformTicks(){
 	bool valid;
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
+		//calculate major tick's position
 		if (majorTicksType != Axis::TicksCustomColumn) {
 			switch (scale){
 				case Axis::ScaleLinear:
-					majorTickPos = start + majorTicksSpacing * (qreal)iMajor;
+					majorTickPos = start + majorTicksSpacing*iMajor;
+					nextMajorTickPos = start + majorTicksSpacing*(iMajor+1);
 					break;
 				case Axis::ScaleLog10:
-					majorTickPos = pow(10, log10(start) + majorTicksSpacing * (qreal)iMajor);
+					majorTickPos = pow(10, log10(start) + majorTicksSpacing*iMajor);
+					nextMajorTickPos = pow(10, log10(start) + majorTicksSpacing*(iMajor+1));
 					break;
 				case Axis::ScaleLog2:
-					majorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing * (qreal)iMajor);
+					majorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing*iMajor);
+					nextMajorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing*(iMajor+1));
 					break;
 				case Axis::ScaleLn:
-					majorTickPos = exp(log(start) + majorTicksSpacing * (qreal)iMajor);
+					majorTickPos = exp(log(start) + majorTicksSpacing*iMajor);
+					nextMajorTickPos = exp(log(start) + majorTicksSpacing*(iMajor+1));
 					break;
 				case Axis::ScaleSqrt:
-					majorTickPos = pow(sqrt(start) + majorTicksSpacing * (qreal)iMajor, 2);
+					majorTickPos = pow(sqrt(start) + majorTicksSpacing*iMajor, 2);
+					nextMajorTickPos = pow(sqrt(start) + majorTicksSpacing*(iMajor+1), 2);
 					break;
 				case Axis::ScaleX2:
-					majorTickPos = sqrt(sqrt(start) + majorTicksSpacing * (qreal)iMajor);
+					majorTickPos = sqrt(sqrt(start) + majorTicksSpacing*iMajor);
+					nextMajorTickPos = sqrt(sqrt(start) + majorTicksSpacing*(iMajor+1));
 					break;
 				default://Linear
-					majorTickPos = start + majorTicksSpacing * (qreal)iMajor;
+					majorTickPos = start + majorTicksSpacing*iMajor;
+					nextMajorTickPos = start + majorTicksSpacing*(iMajor+1);
 			}
 		} else {
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
@@ -1156,12 +1163,12 @@ void AxisPrivate::retransformTicks(){
 				break; //stop iterating after the first non numerical value in the column
 		}
 
+		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks ) {
 			if (orientation == Axis::AxisHorizontal) {
 				anchorPoint.setX(majorTickPos);
 				anchorPoint.setY(offset);
 				valid = transformAnchor(&anchorPoint);
-
 				if (valid) {
 					if(offset < middleY) {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
@@ -1187,6 +1194,7 @@ void AxisPrivate::retransformTicks(){
 				}
 			}
 
+			//add major tick's line to the painter path
 			if (valid) {
 				majorTicksPath.moveTo(startPoint);
 				majorTicksPath.lineTo(endPoint);
@@ -1197,35 +1205,13 @@ void AxisPrivate::retransformTicks(){
 
 		//minor ticks
 		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor<tmpMajorTicksNumber-1)) {
+			//minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
+			double minorTicksSpacing = (nextMajorTickPos-majorTickPos)/(tmpMinorTicksNumber+1);
+
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
+				//calculate minor tick's position
 				if (minorTicksType != Axis::TicksCustomColumn) {
-					switch (scale){
-						case Axis::ScaleLinear:
-							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
-							break;
-						case Axis::ScaleLog10:
-							nextMajorTickPos = start + pow(10, majorTicksSpacing * (qreal)(iMajor + 1));
-							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-							break;
-						case Axis::ScaleLog2:
-							nextMajorTickPos = start + pow(2, majorTicksSpacing * (qreal)(iMajor + 1));
-							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-							break;
-						case Axis::ScaleLn:
-							nextMajorTickPos = start + exp(majorTicksSpacing * (qreal)(iMajor + 1));
-							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-							break;
-						case Axis::ScaleSqrt:
-							nextMajorTickPos = start + pow(majorTicksSpacing * (qreal)(iMajor + 1), 2);
-							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-							break;
-						case Axis::ScaleX2:
-							nextMajorTickPos = start + sqrt(majorTicksSpacing * (qreal)(iMajor + 1));
-							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * (nextMajorTickPos - majorTickPos) / (qreal)(tmpMinorTicksNumber + 1);
-							break;
-						default://Linear
-							minorTickPos = majorTickPos + (qreal)(iMinor + 1) * majorTicksSpacing / (qreal)(tmpMinorTicksNumber + 1);
-					}
+					minorTickPos = majorTickPos + (iMinor+1)*minorTicksSpacing;
 				} else {
 					minorTickPos = minorTicksColumn->valueAt(iMinor);
 					if (isnan(minorTickPos))
@@ -1237,6 +1223,7 @@ void AxisPrivate::retransformTicks(){
 						break;
 				}
 
+				//calculate start and end points for minor tick's line
 				if (orientation == Axis::AxisHorizontal) {
 					anchorPoint.setX(minorTickPos);
 					anchorPoint.setY(offset);
@@ -1267,6 +1254,7 @@ void AxisPrivate::retransformTicks(){
 					}
 				}
 
+				//add minor tick's line to the painter path
 				if (valid) {
 					minorTicksPath.moveTo(startPoint);
 					minorTicksPath.lineTo(endPoint);
@@ -1632,7 +1620,6 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-// 	qDebug()<<"AxisPrivate::paint " << q->name();
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
