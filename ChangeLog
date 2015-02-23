@@ -15,6 +15,7 @@ New features:
 	* Allow custom resolutions for PNG-export
 	* Export of the spreadsheet to a text file.
 	* Simultaneous zooming and navigation accross multiple plots.
+	* Implemented "Powers of 10/2/e" for the axis tick labels
 
 Bug fixes:
 	* Don't crash when trying to create a plot in case no rc-file was installed.

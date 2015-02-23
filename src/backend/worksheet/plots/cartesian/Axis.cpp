@@ -3,9 +3,9 @@
     Project              : LabPlot
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 Stefan Gerlach  (stefan.gerlach@uni-konstanz.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -41,6 +41,7 @@
 #include <QPainter>
 #include <QMenu>
 #include <QDebug>
+#include <QTextDocument>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsSceneHoverEvent>
 
@@ -658,21 +659,21 @@ void Axis::setLabelsPrecision(const int labelsPrecision){
 		exec(new AxisSetLabelsPrecisionCmd(d, labelsPrecision, i18n("%1: set labels precision")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPosition, Axis::LabelsPosition, labelsPosition, retransformTickLabelPositions);
 void Axis::setLabelsPosition(const LabelsPosition labelsPosition) {
 	Q_D(Axis);
 	if (labelsPosition != d->labelsPosition)
 		exec(new AxisSetLabelsPositionCmd(d, labelsPosition, i18n("%1: set labels position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOffset, float, labelsOffset, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsOffset, float, labelsOffset, retransformTickLabelPositions);
 void Axis::setLabelsOffset(float offset) {
 	Q_D(Axis);
 	if (offset != d->labelsOffset)
 		exec(new AxisSetLabelsOffsetCmd(d, offset, i18n("%1: set label offset")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabelPositions);
 void Axis::setLabelsRotationAngle(qreal angle) {
 	Q_D(Axis);
 	if (angle != d->labelsRotationAngle)
@@ -686,21 +687,21 @@ void Axis::setLabelsColor(const QColor &color) {
 		exec(new AxisSetLabelsColorCmd(d, color, i18n("%1: set label color")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFont, QFont, labelsFont, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFont, QFont, labelsFont, retransformTickLabelStrings);
 void Axis::setLabelsFont(const QFont &font) {
 	Q_D(Axis);
 	if (font != d->labelsFont)
 		exec(new AxisSetLabelsFontCmd(d, font, i18n("%1: set label font")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrefix, QString, labelsPrefix, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrefix, QString, labelsPrefix, retransformTickLabelStrings);
 void Axis::setLabelsPrefix(const QString& prefix) {
 	Q_D(Axis);
 	if (prefix != d->labelsPrefix)
 		exec(new AxisSetLabelsPrefixCmd(d, prefix, i18n("%1: set label prefix")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsSuffix, QString, labelsSuffix, retransformTickLabels);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsSuffix, QString, labelsSuffix, retransformTickLabelStrings);
 void Axis::setLabelsSuffix(const QString& suffix) {
 	Q_D(Axis);
 	if (suffix != d->labelsSuffix)
@@ -1038,7 +1039,7 @@ void AxisPrivate::retransformTicks(){
 	tickLabelValues.clear();
 
 	if ( majorTicksNumber<1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ) {
-		retransformTickLabels(); //this calls recalcShapeAndBoundingRect()
+		retransformTickLabelPositions(); //this calls recalcShapeAndBoundingRect()
 		return;
 	}
 
@@ -1100,7 +1101,7 @@ void AxisPrivate::retransformTicks(){
 		if (majorTicksColumn) {
 			tmpMajorTicksNumber = majorTicksColumn->rowCount();
 		} else {
-			retransformTickLabels(); //this calls recalcShapeAndBoundingRect()
+			retransformTickLabelPositions(); //this calls recalcShapeAndBoundingRect()
 			return;
 		}
 	}
@@ -1291,25 +1292,45 @@ void AxisPrivate::retransformTickLabelStrings(){
 		}
 	}
 
-	char format;
-	if (labelsFormat == Axis::FormatDecimal)
-		format = 'f';
-	else
-		format = 'e';
-
 	tickLabelStrings.clear();
 	QString str;
-	QString nullStr = QString::number(0, format, labelsPrecision);
-	foreach(float value, tickLabelValues) {
-		str = QString::number(value, format, labelsPrecision);
-		if (str == "-"+nullStr)
-			str=nullStr;
-
-		tickLabelStrings << str;
+	if (labelsFormat == Axis::FormatDecimal) {
+		QString nullStr = QString::number(0, 'f', labelsPrecision);
+		foreach(float value, tickLabelValues) {
+			str = QString::number(value, 'f', labelsPrecision);
+			if (str == "-"+nullStr) str=nullStr;
+			str = labelsPrefix + str + labelsSuffix;
+			tickLabelStrings << str;
+		}
+	} else if (labelsFormat == Axis::FormatScientificE) {
+		QString nullStr = QString::number(0, 'e', labelsPrecision);
+		foreach(float value, tickLabelValues) {
+			str = QString::number(value, 'e', labelsPrecision);
+			if (str == "-"+nullStr) str=nullStr;
+			tickLabelStrings << str;
+		}
+	} else if (labelsFormat == Axis::FormatPowers10) {
+		foreach(float value, tickLabelValues) {
+			str = "10<span style=\"vertical-align:super\">"+ QString::number(log10(value),'f',labelsPrecision)+"</span>";
+			str = labelsPrefix + str + labelsSuffix;
+			tickLabelStrings << str;
+		}
+	} else if (labelsFormat == Axis::FormatPowers2) {
+		foreach(float value, tickLabelValues) {
+			str = "2<span style=\"vertical-align:super\">"+ QString::number(log2(value),'f',labelsPrecision)+"</span>";
+			str = labelsPrefix + str + labelsSuffix;
+			tickLabelStrings << str;
+		}
+	} else if (labelsFormat == Axis::FormatPowersE) {
+		foreach(float value, tickLabelValues) {
+			str = "e<span style=\"vertical-align:super\">"+ QString::number(log(value),'f',labelsPrecision)+"</span>";
+			str = labelsPrefix + str + labelsSuffix;
+			tickLabelStrings << str;
+		}
 	}
 
 	//recalculate the position of the tick labels
-	retransformTickLabels();
+	retransformTickLabelPositions();
 }
 
 /*!
@@ -1376,7 +1397,7 @@ double AxisPrivate::round(double value, int precision){
 	recalculates the position of the tick labels.
 	Called when the geometry related properties (position, offset, font size, suffix, prefix) of the labels are changed.
  */
-void AxisPrivate::retransformTickLabels(){
+void AxisPrivate::retransformTickLabelPositions(){
 	tickLabelPoints.clear();
 	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::NoLabels){
 		recalcShapeAndBoundingRect();
@@ -1395,10 +1416,16 @@ void AxisPrivate::retransformTickLabels(){
 
 	QPointF startPoint, endPoint, anchorPoint;
 
-	//TODO optimize this loop
+	QTextDocument td;
+	td.setDefaultFont(labelsFont);
+
 	for ( int i=0; i<majorTickPoints.size(); i++ ){
-		label = labelsPrefix + tickLabelStrings.at(i) + labelsSuffix;
-		width = fm.width( label );
+		if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+			width = fm.width(tickLabelStrings.at(i));
+		} else {
+			td.setHtml(tickLabelStrings.at(i));
+			width = td.textWidth();
+		}
 		anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
@@ -1577,9 +1604,17 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	if (labelsPosition != Axis::NoLabels){
 		QTransform trafo;
 		QPainterPath tempPath;
+		QFontMetrics fm(labelsFont);
+		QTextDocument td;
+		td.setDefaultFont(labelsFont);
 	  	for (int i=0; i<tickLabelPoints.size(); i++){
 			tempPath = QPainterPath();
-			tempPath.addText( QPoint(0,0), labelsFont, tickLabelStrings.at(i) );
+			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+				tempPath.addRect( fm.boundingRect(tickLabelStrings.at(i)) );
+			} else {
+				td.setHtml(tickLabelStrings.at(i));
+				tempPath.addRect( QRectF(-td.size().width(), -td.size().height(), td.size().width(), td.size().height()) );
+			}
 
 			trafo.reset();
 			trafo.translate( tickLabelPoints.at(i).x(), tickLabelPoints.at(i).y() );
@@ -1678,11 +1713,21 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
 		painter->setFont(labelsFont);
+		QTextDocument td;
+		td.setDefaultFont(labelsFont);
 		for (int i=0; i<tickLabelPoints.size(); i++){
 			painter->translate(tickLabelPoints.at(i));
 			painter->save();
 			painter->rotate(-labelsRotationAngle);
-			painter->drawText(QPoint(0,0), tickLabelStrings.at(i) );
+
+			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+				painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
+			} else {
+				td.setHtml(tickLabelStrings.at(i));
+				painter->translate(-td.size().width(), -td.size().height());
+				td.drawContents(painter);
+			}
+
 			painter->restore();
 			painter->translate(-tickLabelPoints.at(i));
 		}

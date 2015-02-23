@@ -137,7 +137,7 @@ class AxisPrivate: public QGraphicsItem {
 		void retransformArrow();
 		void addArrow(const QPointF& point, int direction);
 		void retransformTicks();
-		void retransformTickLabels();
+		void retransformTickLabelPositions();
 		void retransformTickLabelStrings();
 		void retransformMinorGrid();
 		void retransformMajorGrid();
