@@ -219,7 +219,7 @@ void WorksheetElement::execMoveInFrontOf(QAction *action) {
  * \param verticalRatio   New page height divided by old page height.
  *
  * Override this function with a handler which rescales all properties
- * which are in page coodrinates (such as line widths). Don't forget
+ * which are in page coordinates (such as line widths). Don't forget
  * to call the base class's handler in the overridden version.
  */
 void WorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio){
