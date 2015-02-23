@@ -30,8 +30,8 @@
 #include <QCommandLineParser>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <KStandardDirs>
-#include <KSplashScreen>
+#include <QStandardPaths>
+#include <QSplashScreen>
 #include <QDebug>
 #include <KMessageBox>
 #include <QFile>
@@ -91,11 +91,11 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
-	KSplashScreen *splash=0;
+    QSplashScreen *splash=0;
     if (parser.isSet("-splash")) {
-		QString file = KStandardDirs::locate("appdata", "splash.png");
+        QString file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
 		QPixmap pixmap(file);
-		splash= new KSplashScreen(pixmap);
+        splash= new QSplashScreen(pixmap);
 		splash->show();
 	}
 

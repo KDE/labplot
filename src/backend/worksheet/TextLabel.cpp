@@ -40,7 +40,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 
-#include <KIcon>
+#include <QIcon>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
@@ -159,7 +159,7 @@ void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
 	Returns an icon to be used in the project explorer.
 */
 QIcon TextLabel::icon() const{
-	return  KIcon("draw-text");
+    return  QIcon("draw-text");
 }
 
 QMenu* TextLabel::createContextMenu(){

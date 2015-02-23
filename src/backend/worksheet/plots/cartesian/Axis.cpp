@@ -48,7 +48,7 @@
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "kdefrontend/GuiTools.h"
 #include <KConfigGroup>
-#include <KIcon>
+#include <QIcon>
 #include <KLocale>
 #endif
 
@@ -247,9 +247,9 @@ QIcon Axis::icon() const{
 	QIcon ico;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	if (d->orientation == Axis::AxisHorizontal)
-		ico = KIcon("axis-horizontal");
+        ico = QIcon("axis-horizontal");
 	else
-		ico = KIcon("axis-vertical");
+        ico = QIcon("axis-vertical");
 #endif
 	return ico;
 }

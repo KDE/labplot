@@ -44,7 +44,7 @@ Email (use @ for *)  : alexander.semke*web.de
 #include <QIcon>
 #include <QAction>
 #else
-#include <KIcon>
+#include <QIcon>
 #include <KAction>
 #include <KLocale>
 #endif
@@ -77,7 +77,7 @@ FileDataSource::~FileDataSource(){
 }
 
 void FileDataSource::initActions(){
-    m_reloadAction = new QAction(KIcon("view-refresh"), i18n("Reload"), this);
+    m_reloadAction = new QAction(QIcon("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
     m_toggleWatchAction = new QAction(i18n("Watch the file"), this);

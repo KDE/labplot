@@ -46,7 +46,7 @@
 
 #include <KLineEdit>
 #include <KLocale>
-#include <KMenu>
+#include <QMenu>
 
 /*!
   \class ProjectExplorer
@@ -79,7 +79,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 #else
 	leFilter= new KLineEdit(frameFilter);
 	qobject_cast<KLineEdit*>(leFilter)->setClearButtonShown(true);
-	qobject_cast<KLineEdit*>(leFilter)->setClickMessage(i18n("Search/Filter text"));
+    qobject_cast<KLineEdit*>(leFilter)->setPlaceholderText(i18n("Search/Filter text"));
 #endif
 	layoutFilter->addWidget(leFilter);
 
@@ -255,8 +255,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	columnsMenu = new QMenu(h);
 	//TODO how to add a caption/title for the QMenu, when used as a context menu?
 #else
-	columnsMenu = new KMenu(h);
-	(qobject_cast<KMenu*>(columnsMenu))->addTitle(i18n("Columns"));
+    columnsMenu = new QMenu(h);
+    (qobject_cast<QMenu*>(columnsMenu))->addSection(i18n("Columns"));
 #endif
 
 	columnsMenu->addAction(showAllColumnsAction);

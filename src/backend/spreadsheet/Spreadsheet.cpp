@@ -36,7 +36,7 @@
 #include "backend/lib/macros.h"
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <KIcon>
+#include <QIcon>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
@@ -614,7 +614,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
   Returns an icon to be used for decorating my views.
   */
 QIcon Spreadsheet::icon() const {
-	return KIcon("table"); //or KIcon("x-office-spreadsheet")
+    return QIcon("table"); //or QIcon("x-office-spreadsheet")
 }
 
 /*!

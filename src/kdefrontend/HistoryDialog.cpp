@@ -46,21 +46,21 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, QString& emptyL
 	undoView->setMinimumWidth(350);
 	undoView->setWhatsThis(i18n("List of all performed steps/actions.\n"
 			"Select an item in the list to navigate to the corresponding step."));
-	setMainWidget(undoView);
+    setMainWidget(undoView);
 
     setWindowIcon( QIcon("view-history") );
 	setWindowTitle(i18n("Undo/Redo History"));
-	showButtonSeparator(true);
+    showButtonSeparator(true);
 
-	if (stack->count()) {
-		setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-		setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
+    if (stack->count()) {
+        setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+        setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
         setButtonIcon(KDialog::User1, QIcon("edit-clear"));
-		setButtonText(KDialog::User1, i18n("Clear"));
-		connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
+        setButtonText(KDialog::User1, i18n("Clear"));
+        connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
 	}else{
-		setButtons( KDialog::Ok | KDialog::Cancel );
-	}
+        setButtons( KDialog::Ok | KDialog::Cancel );
+    }
 }
 
 void HistoryDialog::clearUndoStack(){

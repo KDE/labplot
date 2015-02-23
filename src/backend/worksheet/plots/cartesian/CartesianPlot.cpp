@@ -48,8 +48,8 @@
 #include <QToolBar>
 #include <QPainter>
 
-#include <KIcon>
-#include <KAction>
+#include <QIcon>
+#include <QAction>
 #include <KLocale>
 
 #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
@@ -341,12 +341,12 @@ void CartesianPlot::initDefault(Type type){
 
 void CartesianPlot::initActions(){
 	//"add new" actions
-	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
-	addEquationCurveAction = new KAction(KIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
-	addFitCurveAction = new KAction(KIcon("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
-	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
-	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
-	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
+    addCurveAction = new QAction(QIcon("xy-curve"), i18n("xy-curve"), this);
+    addEquationCurveAction = new QAction(QIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+    addFitCurveAction = new QAction(QIcon("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+    addLegendAction = new QAction(QIcon("text-field"), i18n("legend"), this);
+    addHorizontalAxisAction = new QAction(QIcon("axis-horizontal"), i18n("horizontal axis"), this);
+    addVerticalAxisAction = new QAction(QIcon("axis-vertical"), i18n("vertical axis"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
@@ -356,19 +356,19 @@ void CartesianPlot::initActions(){
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
 
 	//zoom/navigate actions
-	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
-	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), this);
-	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
-	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), this);
-	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), this);
-	zoomInXAction = new KAction(KIcon("zoom-in-x"), i18n("zoom in X"), this);
-	zoomOutXAction = new KAction(KIcon("zoom-out-x"), i18n("zoom out X"), this);
-	zoomInYAction = new KAction(KIcon("zoom-in-y"), i18n("zoom in Y"), this);
-	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), this);
-    shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
-	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
-	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
-	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
+    scaleAutoAction = new QAction(QIcon("auto-scale-all"), i18n("auto scale"), this);
+    scaleAutoXAction = new QAction(QIcon("auto-scale-x"), i18n("auto scale X"), this);
+    scaleAutoYAction = new QAction(QIcon("auto-scale-y"), i18n("auto scale Y"), this);
+    zoomInAction = new QAction(QIcon("zoom-in"), i18n("zoom in"), this);
+    zoomOutAction = new QAction(QIcon("zoom-out"), i18n("zoom out"), this);
+    zoomInXAction = new QAction(QIcon("zoom-in-x"), i18n("zoom in X"), this);
+    zoomOutXAction = new QAction(QIcon("zoom-out-x"), i18n("zoom out X"), this);
+    zoomInYAction = new QAction(QIcon("zoom-in-y"), i18n("zoom in Y"), this);
+    zoomOutYAction = new QAction(QIcon("zoom-out-y"), i18n("zoom out Y"), this);
+    shiftLeftXAction = new QAction(QIcon("shift-left-x"), i18n("shift left X"), this);
+    shiftRightXAction = new QAction(QIcon("shift-right-x"), i18n("shift right X"), this);
+    shiftUpYAction = new QAction(QIcon("shift-up-y"), i18n("shift up Y"), this);
+    shiftDownYAction = new QAction(QIcon("shift-down-y"), i18n("shift down Y"), this);
 
 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
@@ -448,7 +448,7 @@ QIcon CartesianPlot::icon() const{
 #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	ico.addPixmap(QPixmap(":/graph.xpm"));
 #else
-	ico = KIcon("office-chart-line");
+    ico = QIcon("office-chart-line");
 #endif
 	return ico;
 }

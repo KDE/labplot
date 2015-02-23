@@ -160,7 +160,7 @@ QMenu* CartesianPlotLegend::createContextMenu(){
 QIcon CartesianPlotLegend::icon() const{
 	QIcon icon;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		icon = KIcon("text-field");
+        icon = QIcon("text-field");
 #endif
 	return icon;
 }

@@ -37,7 +37,7 @@
 
 #include <KLocalizedString>
 #include <KLineEdit>
-#include <KMenu>
+#include <QMenu>
 #include <KConfig>
  /*!
   \class TemplateHandler
@@ -110,8 +110,8 @@ void TemplateHandler::retranslateUi(){
 //##################################  Slots ####################################
 //##############################################################################
 void TemplateHandler::loadMenu() {
-	KMenu menu;
-	menu.addTitle(i18n("Load from"));
+    QMenu menu;
+    menu.addSection(i18n("Load from"));
 
     QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + dirNames.at(className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
@@ -133,8 +133,8 @@ void TemplateHandler::loadMenuSelected(QAction* action) {
 }
 
 void TemplateHandler::saveMenu() {
-	KMenu menu;
-	menu.addTitle(i18n("Save as"));
+    QMenu menu;
+    menu.addSection(i18n("Save as"));
 
     QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ dirNames.at(className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {

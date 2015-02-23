@@ -637,7 +637,7 @@ void MainWin::openProject(const QString& filename) {
         return;
     }
 
-    QIODevice *file = KFilterDev::deviceForFile(filename,"application/x-gzip",true);
+    QIODevice *file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
     if (file==0)
         file = new QFile(filename);
 
@@ -785,7 +785,7 @@ bool MainWin::saveProjectAs() {
  */
 bool MainWin::save(const QString& fileName) {
     WAIT_CURSOR;
-    QIODevice* file = KFilterDev::deviceForFile(fileName, "application/x-gzip", true);
+    QIODevice* file = new KCompressionDevice(fileName, KFilterDev::compressionTypeForMimeType("application/x-gzip"));
     if (file == 0)
         file = new QFile(fileName);
 

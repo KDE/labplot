@@ -31,7 +31,7 @@
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KTempDir>
 #include <KProcess>
-#include <KDebug>
+#include <QDebug>
 #endif
 #include <QDir>
 #include <QTemporaryFile>
@@ -51,7 +51,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 		QDir::setCurrent("/dev/shm");
 	}
 	else {
-		kWarning()<<"/dev/shm failed. using /tmp"<<endl;
+        qWarning()<<"/dev/shm failed. using /tmp"<<endl;
 		file.setFileTemplate("/tmp/labplot_XXXXXX.tex");
 		if(file.open())
 			QDir::setCurrent("/tmp");
@@ -116,7 +116,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 			return QImage();
 		}
 	}else{
-		kWarning()<<"pdflatex failed."<<endl;
+        qWarning()<<"pdflatex failed."<<endl;
 	}
 
 	//////////// fallback if pdflatex fails ///////////////
@@ -125,7 +125,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	// also possible: latexmf -C
 	if (!latexProcess.waitForFinished()) {
-		kWarning()<<"latex failed."<<endl;
+        qWarning()<<"latex failed."<<endl;
 		QFile::remove(fi.completeBaseName()+".aux");
 		QFile::remove(fi.completeBaseName()+".log");
 		return QImage();
@@ -137,7 +137,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
 	if (!dvipsProcess.waitForFinished()) {
-		kWarning()<<"dvips failed."<<endl;
+        qWarning()<<"dvips failed."<<endl;
 		QFile::remove(fi.completeBaseName()+".dvi");
 		return QImage();
 	}
@@ -145,7 +145,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	// convert: PS -> PNG
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)  << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
 	if (!convertProcess.waitForFinished()) {
-		kWarning()<<"convert failed."<<endl;
+        qWarning()<<"convert failed."<<endl;
 		QFile::remove(fi.completeBaseName()+".ps");
 		return QImage();
 	}

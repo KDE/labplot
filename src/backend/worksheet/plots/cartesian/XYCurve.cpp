@@ -174,7 +174,7 @@ QMenu* XYCurve::createContextMenu(){
 QIcon XYCurve::icon() const{
 	QIcon icon;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		icon = KIcon("xy-curve");
+        icon = QIcon("xy-curve");
 #endif
 	return icon;
 }

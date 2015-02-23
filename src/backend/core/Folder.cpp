@@ -42,7 +42,7 @@
 #include <QIcon>
 #include "core/plugin/PluginManager.h"
 #else
-#include <KIcon>
+#include <QIcon>
 #include <klocalizedstring.h>
 #endif
 
@@ -62,7 +62,7 @@ QIcon Folder::icon() const
 	result.addFile(":/folder_closed.xpm", QSize(), QIcon::Normal, QIcon::Off);
 	result.addFile(":/folder_open.xpm", QSize(), QIcon::Normal, QIcon::On);
 #else
-	result=KIcon("folder");
+    result=QIcon("folder");
 #endif
 	return result;
 }

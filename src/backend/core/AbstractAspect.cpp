@@ -42,10 +42,10 @@
 #include <QXmlStreamWriter>
 
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <KIcon>
+#include <QIcon>
 #include <KAction>
 #include <KStandardAction>
-#include <KMenu>
+#include <QMenu>
 #endif
 /**
  * \class AbstractAspect
@@ -312,15 +312,15 @@ QMenu* AbstractAspect::createContextMenu() {
 	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
 	return menu;
 #else
-	KMenu* menu = new KMenu();
-	menu->addTitle(this->name());
+    QMenu* menu = new QMenu();
+    menu->addSection(this->name());
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 // 	menu->addAction(KStandardAction::copy(this));
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
-	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
-	menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+    menu->addAction(QIcon(QIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
+    menu->addAction(QIcon(QIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
 	return menu;
 #endif
 }

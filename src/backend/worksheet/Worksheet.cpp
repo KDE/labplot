@@ -40,7 +40,7 @@
 #include <QGraphicsScene>
 #include <QWidget>
 #include <QDebug>
-#include "KIcon"
+#include "QIcon"
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
@@ -140,7 +140,7 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
-	return KIcon("office-chart-area");
+    return QIcon("office-chart-area");
 }
 
 //! Return a new context menu.

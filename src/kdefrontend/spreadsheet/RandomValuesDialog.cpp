@@ -29,7 +29,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include <KStandardDirs>
+#include <QStandardPaths>
 #include <stdio.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
@@ -389,7 +389,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("3.0");
 	}
 
-	QString file = KStandardDirs::locate("data", "LabPlot2/pics/gsl_distributions/" + m_formulaPixs[distr] + ".jpg");
+    QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "LabPlot2/pics/gsl_distributions/" + m_formulaPixs[distr] + ".jpg");
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
