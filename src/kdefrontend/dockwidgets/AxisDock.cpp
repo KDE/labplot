@@ -318,6 +318,9 @@ void AxisDock::init(){
 
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
 	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
+	ui.cbLabelsFormat->addItem( i18n("Powers of 10") );
+	ui.cbLabelsFormat->addItem( i18n("Powers of 2") );
+	ui.cbLabelsFormat->addItem( i18n("Powers of e") );
 
 	m_initializing=false;
 }
