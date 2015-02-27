@@ -3,9 +3,9 @@
     Project              : LabPlot/SciDAVis
     Description          : Worksheet related interfaces for plugins
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+                           (replace * with @ in the email addresses)
+
  ***************************************************************************/
 
 /***************************************************************************

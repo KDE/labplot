@@ -87,8 +87,7 @@ This chapter tries to provide a complete list of the features of &LabPlot;.
 
 <para>Function plotting</para>
 <itemizedlist>
-  <listitem><para>flexible data reading in ASCII format and writing in different formats (including <acronym>PDF</acronym>, <acronym>EPS</acronym>, <acronym>SVG</acronym> and <acronym>PNG</acronym>)
- </para></listitem>
+<listitem><para>flexible data reading in ASCII format and writing in different formats (including <acronym>PDF</acronym>, <acronym>EPS</acronym>, <acronym>SVG</acronym> and <acronym>PNG</acronym>)</para></listitem>
 <listitem><para>extensive parser for creating 2D functions</para></listitem>
 <listitem><para>support for all &GNU; Scientific Library (GSL) functions and constants</para></listitem>
 <listitem><para>multiple plots per worksheet</para></listitem>
@@ -99,42 +98,43 @@ This chapter tries to provide a complete list of the features of &LabPlot;.
 
 <para>Easy editing of plots</para>
 <itemizedlist>
-<listitem><para>versatile spreadsheet for data manipulation</para></listitem>
+<listitem><para>versatile spreadsheet for data creation and manipulation</para></listitem>
 <listitem><para>online scaling and shifting of plots</para></listitem>
 <listitem><para>&latex; and richtext label support</para></listitem>
 <listitem><para>evaluating expressions and direct editing of data</para></listitem>
-<listitem><para>data statistics information</para></listitem>
+<!-- <listitem><para>data statistics information</para></listitem> -->
 <listitem><para>drawing objects editable with mouse</para></listitem>
 <listitem><para>free or pan zooming, masking of data points and marker</para></listitem>
 <listitem><para>support for panel plots</para></listitem>
 <listitem><para>versatile errorbar styles</para></listitem>
 </itemizedlist>
 
-<!--<para>Analysis of data and functions</para>
+<para>Analysis of data and functions</para>
 <itemizedlist>
-<listitem><para>average, smooth and prune data</para></listitem>
+<listitem><para>linear and non-linear regression with predefined and custom fit-models</para></listitem>
+<!--<listitem><para>average, smooth and prune data</para></listitem>
 <listitem><para>compress, periodical and seasonal analysis</para></listitem>
 <listitem><para>peak find</para></listitem>
 <listitem><para>interpolation (splines, &etc;)</para></listitem>
 <listitem><para>differences</para></listitem>
 <listitem><para>integration</para></listitem>
 <listitem><para>histogram</para></listitem>
-<listitem><para>regression (up to 10th order)</para></listitem>
 <listitem><para>non-linear fit (also any user defined function with up to 9 parameter)</para></listitem>
 <listitem><para>Fourier, Wavelet, Laplace and Hankel transform</para></listitem>
 <listitem><para>(de)convolution</para></listitem>
 <listitem><para>image manipulation</para></listitem>
 <listitem><para>noise, signal filter and auto-/crosscorrelation</para></listitem>
 <listitem><para>capability analysis</para></listitem>
-<listitem><para>using R for functions and descriptive statistics/one and two sample tests</para></listitem>
-</itemizedlist>-->
+<listitem><para>using R for functions and descriptive statistics/one and two sample tests</para></listitem>-->
+</itemizedlist>
 
- <para>&LabPlot; project files</para>
+<para>&LabPlot; projects</para>
 <itemizedlist>
-<listitem><para>support for different worksheets and spreadsheets using MDI</para></listitem>
+<listitem><para>support for different worksheets and spreadsheets using multiple document interface (MDI)</para></listitem>
 <listitem><para>save and open all worksheets and spreadsheets in a xml project file (*.lml)</para></listitem>
 <listitem><para>editable project information</para></listitem>
 <listitem><para>export worksheets as PNG image, PS, EPS, SVG, and PDF formats</para></listitem>
+<listitem><para>export spreadsheets as ASCII</para></listitem>
 <listitem><para>support for project and data set notes</para></listitem>
 </itemizedlist>
 
@@ -292,30 +292,40 @@ Imported data will be stored in the project file. Changes on data, performed eit
 </sect1>
 
 
+
+<sect1 id="worksheet">
+<title>The Worksheet</title>
+<para>
+The worksheet is, besides the <link linkend="spreadsheet">spreadsheet</link>, the second central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
+</para>
+<para>
+Worksheets can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the worksheet window. Multiple plots can be arranged on the worksheet in a vertical, horizontal or grid layouts.
+</para>
+<para>
+Many properties of the worksheet like size, background color and layout settings can be changed in the "Worksheet properties" pane.
+</para>
+
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="worksheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Different worksheet actions dealing with the creation of new objects, changing of the current mouse mode or zooming can be accessed via the toolbar, main menu or the context menu of the worksheet in the <link linkend="project-explorer">project explorer</link>.
+</para>
+
+<para>
+The results shown on the worksheet can be exported to different formats via the <link linkend="exportdialog">export dialog</link>.
+</para>
+</sect1>
+
+
 <!-- TODO: Describe the basic concepts and functionality of the file data source. -->
 <sect1 id="file_data_source">
 <title>File Data Source</title>
 <para>
 Similar in spirit to importing the data to a spreadsheet...
-</para>
-</sect1>
-
-<!-- TODO:
-
-Describe the functionality of worksheet (creation of plots, layout, zoom-
-in, zoom-out of the entire worksheet, export-Dialog with all its options).
--->
-<sect1 id="worksheet">
-<title>The Worksheet</title>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="worksheet.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
-<para>
-The worksheet contains all the plots and drawing objects. You can customize the worksheet using its popup menu (can be opened by clicking with &RMB; on the worksheet).
-</para>
-<para>
-The worksheet can contain multiple plots with different characteristics. To arrange plots in a worksheet use the 
-<guimenuitem>Drawing order</guimenuitem> submenu items in the plot popup menu on the <link linkend="project-explorer">Project Explorer</link> pane.
 </para>
 </sect1>
 
