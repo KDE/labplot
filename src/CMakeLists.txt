@@ -157,7 +157,7 @@ set(QTMOC_HDRS
 	${KDEFRONTEND_DIR}/SettingsPage.h
 )
 
-qt4_wrap_cpp(QTMOC_HDRS ${QTMOC_HDRS})
+set(CMAKE_AUTOMOC ON)
 
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
