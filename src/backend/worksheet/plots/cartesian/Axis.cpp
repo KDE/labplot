@@ -1534,7 +1534,7 @@ void AxisPrivate::retransformMajorGrid(){
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
 	foreach (const QLineF& line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1584,6 +1584,11 @@ void AxisPrivate::retransformMinorGrid(){
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
+	//if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
+	//request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
+	if (m_plot)
+		m_plot->prepareGeometryChange();
+
 	prepareGeometryChange();
 
 	if (linePath.isEmpty()) {

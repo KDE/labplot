@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of Axis.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -44,7 +44,7 @@ class AxisPrivate: public QGraphicsItem {
 	public:
 		explicit AxisPrivate(Axis* owner);
 
-		const CartesianPlot* m_plot;
+		CartesianPlot* m_plot;
 		const CartesianCoordinateSystem* m_cSystem;
 		bool m_printing;
 		bool m_hovered;

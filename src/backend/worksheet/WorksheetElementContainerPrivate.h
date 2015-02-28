@@ -4,7 +4,7 @@
     Description          : Private members of WorksheetElementContainer.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -37,20 +37,20 @@ class WorksheetElementContainer;
 
 class WorksheetElementContainerPrivate : public QGraphicsItem {
 	public:
-		explicit WorksheetElementContainerPrivate(WorksheetElementContainer* owner);
+		explicit WorksheetElementContainerPrivate(WorksheetElementContainer*);
 		virtual ~WorksheetElementContainerPrivate(){}
 
 		QString name() const;
 		virtual QRectF boundingRect() const;
-		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 
 		bool swapVisible(bool on);
-
-		WorksheetElementContainer* q;
+		void prepareGeometryChangeRequested();
 		void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 
+		WorksheetElementContainer* q;
 		QRectF rect;
 		bool m_hovered;
 		bool m_printing;

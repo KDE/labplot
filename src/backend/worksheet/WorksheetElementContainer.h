@@ -4,7 +4,7 @@
 	Description          : Worksheet element container - parent of multiple elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -50,6 +50,7 @@ class WorksheetElementContainer: public WorksheetElement {
 
 		QRectF rect() const;
 		virtual void setRect(const QRectF&) = 0;
+		virtual void prepareGeometryChange();
 
 		typedef WorksheetElement BaseClass;
 		typedef WorksheetElementContainerPrivate Private;

@@ -4,7 +4,7 @@
     Description          : Worksheet element container - parent of multiple elements
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -171,6 +171,11 @@ void WorksheetElementContainer::childUnhovered() {
 	}
 }
 
+void WorksheetElementContainer::prepareGeometryChange() {
+	Q_D(WorksheetElementContainer);
+	d->prepareGeometryChangeRequested();
+}
+
 //################################################################
 //################### Private implementation ##########################
 //################################################################
@@ -209,6 +214,10 @@ bool WorksheetElementContainerPrivate::swapVisible(bool on){
 	setVisible(on);
 	emit q->visibleChanged(on);
 	return oldValue;
+}
+
+void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
+	prepareGeometryChange();
 }
 
 // Inherited from QGraphicsItem
