@@ -4,6 +4,7 @@ set(KDEFRONTEND_DIR kdefrontend)
 set(BACKEND_DIR backend)
 set(COMMONFRONTEND_DIR commonfrontend)
 set(TOOLS_DIR tools)
+set(CMAKE_AUTOMOC ON)
 
 set(GUI_SOURCES
   	${KDEFRONTEND_DIR}/GuiObserver.cpp
@@ -13,6 +14,7 @@ set(GUI_SOURCES
   	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
+	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
@@ -91,6 +93,16 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/Project.cpp
 	${BACKEND_DIR}/core/AbstractPart.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
+	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2MonthFilter.h
+	${BACKEND_DIR}/core/datatypes/Month2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
+	${BACKEND_DIR}/core/datatypes/String2DayOfWeekFilter.h
+	${BACKEND_DIR}/core/datatypes/String2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
 	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
 	${BACKEND_DIR}/core/datatypes/String2DateTimeFilter.cpp
 	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
@@ -143,22 +155,6 @@ set(TOOLS_SOURCES
 	${TOOLS_DIR}/EquationHighlighter.cpp
 )
 
-set(QTMOC_HDRS
-	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
-	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
-	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
-	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
-	${BACKEND_DIR}/core/datatypes/Double2MonthFilter.h
-	${BACKEND_DIR}/core/datatypes/Month2DoubleFilter.h
-	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
-	${BACKEND_DIR}/core/datatypes/String2DayOfWeekFilter.h
-	${BACKEND_DIR}/core/datatypes/String2DoubleFilter.h
-	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
-	${KDEFRONTEND_DIR}/SettingsPage.h
-)
-
-set(CMAKE_AUTOMOC ON)
-
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
 
@@ -167,7 +163,7 @@ add_subdirectory( pics/gsl_distributions )
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(.)
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
-kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
+kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
 target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 # ${OPJ_LIBRARY}
 
