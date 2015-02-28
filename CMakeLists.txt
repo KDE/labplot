@@ -4,15 +4,13 @@ cmake_minimum_required(VERSION 2.8.12)
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Qml Quick QuickWidgets Svg Test Declarative)
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Svg Concurrent)
 find_package(KF5 REQUIRED COMPONENTS
   Archive
   I18n
   WidgetsAddons
   XmlGui
   KIO
-  NotifyConfig
-  Declarative
   KDELibs4Support)
   
 include(FeatureSummary)

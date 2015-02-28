@@ -47,9 +47,6 @@ private slots:
     void onApplyButton();
     void onRestoreDefaultsButton();
 
-protected slots:
-    virtual void slotButtonClicked(int button);
-
 private:
 	bool m_changed;
     QPushButton* applybutton;
