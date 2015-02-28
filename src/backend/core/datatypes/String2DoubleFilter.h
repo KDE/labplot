@@ -5,7 +5,7 @@
     Copyright            : (C) 2007 by Knut Franke
     Email (use @ for *)  : knut.franke*gmx.de
     Description          : Locale-aware conversion filter QString -> double.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,8 +31,6 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QLocale>
-#include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
 #include <math.h>
 
 //! Locale-aware conversion filter QString -> double.

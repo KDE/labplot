@@ -6,7 +6,7 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
     Description          : Conversion filter double -> QDateTime, interpreting
                            the input numbers as (fractional) Julian days.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,10 +32,6 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
-#include <QDate>
-#include <QTime>
-#include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
 #include <math.h>
 
 //! Conversion filter double -> QDateTime, interpreting the input numbers as (fractional) Julian days.
@@ -54,7 +50,7 @@ class Double2DateTimeFilter : public AbstractSimpleFilter
 			if (!m_inputs.value(0)) return QTime();
 			double inputValue = m_inputs.value(0)->valueAt(row);
 			if (isnan(inputValue)) return QTime();
-			// we only want the digits behind the dot and 
+			// we only want the digits behind the dot and
 			// convert them from fraction of day to milliseconds
 			return QTime(12,0,0,0).addMSecs(int( (inputValue - int(inputValue)) * 86400000.0 ));
 		}

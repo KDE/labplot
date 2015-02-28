@@ -31,8 +31,6 @@
 #define SIMPLE_COPY_THROUGH_FILTER_H
 
 #include "backend/core/AbstractSimpleFilter.h"
-#include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
 
 /**
  * \brief Filter which copies the provided input unaltered to the output
@@ -42,7 +40,7 @@
  *
  * The difference between this filter and CopyThroughFilter is that
  * this inherits AbstractColumn and thus can be directly used
- * as input for other filters and plot functions. 
+ * as input for other filters and plot functions.
  */
 class SimpleCopyThroughFilter : public AbstractSimpleFilter
 {
@@ -50,7 +48,7 @@ class SimpleCopyThroughFilter : public AbstractSimpleFilter
 
 	protected:
 		//! All types are accepted.
-		virtual bool inputAcceptable(int, const AbstractColumn *) 
+		virtual bool inputAcceptable(int, const AbstractColumn *)
 		{
 			return true;
 		}

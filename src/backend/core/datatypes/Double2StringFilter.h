@@ -5,7 +5,7 @@
     Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
     Description          : Locale-aware conversion filter double -> QString.
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,7 +31,6 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QLocale>
-#include <QChar>
 #include <math.h>
 
 //! Locale-aware conversion filter double -> QString.
@@ -58,9 +57,9 @@ class Double2StringFilter : public AbstractSimpleFilter
 	private:
 		friend class Double2StringFilterSetFormatCmd;
 		friend class Double2StringFilterSetDigitsCmd;
-		//! Format character as in QString::number 
+		//! Format character as in QString::number
 		char m_format;
-		//! Display digits or precision as in QString::number  
+		//! Display digits or precision as in QString::number
 		int m_digits;
 
 

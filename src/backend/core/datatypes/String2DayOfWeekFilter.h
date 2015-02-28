@@ -6,7 +6,7 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Conversion filter String -> QDateTime, interpreting
                            the input as days of the week (either numeric or "Mon" etc).
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -33,8 +33,6 @@
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
 #include <math.h>
-#include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
 
 //! Conversion filter String -> QDateTime, interpreting the input as days of the week (either numeric or "Mon" etc).
 class String2DayOfWeekFilter : public AbstractSimpleFilter
@@ -42,12 +40,12 @@ class String2DayOfWeekFilter : public AbstractSimpleFilter
 	Q_OBJECT
 
 	public:
-		virtual QDate dateAt(int row) const 
+		virtual QDate dateAt(int row) const
 		{
 			return dateTimeAt(row).date();
 		}
 
-		virtual QTime timeAt(int row) const 
+		virtual QTime timeAt(int row) const
 		{
 			return dateTimeAt(row).time();
 		}
@@ -62,7 +60,7 @@ class String2DayOfWeekFilter : public AbstractSimpleFilter
 			int day_value = input_value.toInt(&ok);
 			if(!ok)
 			{
-#if QT_VERSION <= 0x040300  
+#if QT_VERSION <= 0x040300
 				// workaround for Qt bug #171920
 				QDate temp = QDate(1900,1,1);
 				for(int i=1; i<=7; i++)
@@ -73,7 +71,7 @@ class String2DayOfWeekFilter : public AbstractSimpleFilter
 						break;
 					}
 
-#else 
+#else
 				QDate temp = QDate::fromString(input_value, "ddd");
 				if(!temp.isValid())
 					temp = QDate::fromString(input_value, "dddd");

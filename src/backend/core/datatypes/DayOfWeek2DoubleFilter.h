@@ -6,7 +6,7 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
     Description          : Conversion filter QDateTime -> double, translating
                            dates into days of the week (Monday -> 1).
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,9 +31,7 @@
 #define DAY_OF_WEEK2DOUBLE_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
-#include <QDateTime>
-#include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
+#include <QDate>
 #include <math.h>
 
 //! Conversion filter QDateTime -> double, translating dates into days of the week (Monday -> 1).

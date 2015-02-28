@@ -31,10 +31,6 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
-#include <QDate>
-#include <QTime>
-#include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
 #include <math.h>
 
 //! Conversion filter QDateTime -> double (using Julian day).

@@ -6,7 +6,7 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
     Description          : Conversion filter double -> QDateTime, interpreting
                            the input numbers as days of the week (1 -> Monday).
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,8 +32,6 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
-#include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
 #include <math.h>
 
 //! Conversion filter double -> QDateTime, interpreting the input numbers as days of the week (1 = Monday).
