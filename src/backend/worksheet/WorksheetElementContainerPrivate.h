@@ -48,9 +48,11 @@ class WorksheetElementContainerPrivate : public QGraphicsItem {
 
 		bool swapVisible(bool on);
 		void prepareGeometryChangeRequested();
+		void recalcBoundingRect();
 		void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 
 		WorksheetElementContainer* q;
+		QRectF boundingRectangle;
 		QRectF rect;
 		bool m_hovered;
 		bool m_printing;

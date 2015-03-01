@@ -1584,17 +1584,13 @@ void AxisPrivate::retransformMinorGrid(){
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
-	//if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
-	//request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
-	if (m_plot)
-		m_plot->prepareGeometryChange();
-
 	prepareGeometryChange();
 
 	if (linePath.isEmpty()) {
 		axisShape = QPainterPath();
 		boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
+		if (m_plot) m_plot->prepareGeometryChange();
 		return;
 	} else {
 		title->setPositionInvalid(false);
@@ -1653,6 +1649,11 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape.addPath(WorksheetElement::shapeFromPath(majorGridPath, majorGridPen));
 	axisShape.addPath(WorksheetElement::shapeFromPath(minorGridPath, minorGridPen));
 	boundingRectangle = axisShape.boundingRect();
+
+	//if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
+	//request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
+	if (m_plot)
+		m_plot->prepareGeometryChange();
 }
 
 /*!

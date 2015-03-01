@@ -121,13 +121,15 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
+	Q_D(WorksheetElementContainer);
 	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(WorksheetElement* elem, childList)
 		elem->retransform();
+
+	d->recalcBoundingRect();
 }
 
 void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
-// 	qDebug()<<"WorksheetElementContainer::handlePageResize";
 	Q_D(WorksheetElementContainer);
 	QRectF rect(d->rect);
 	rect.setWidth(d->rect.width()*horizontalRatio);
@@ -152,6 +154,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 			elem->graphicsItem()->setZValue(zVal++);
 		}
 	}
+
+	d->recalcBoundingRect();
 }
 
 void WorksheetElementContainer::childHovered() {
@@ -218,20 +222,23 @@ bool WorksheetElementContainerPrivate::swapVisible(bool on){
 
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 	prepareGeometryChange();
+	recalcBoundingRect();
+}
+
+void WorksheetElementContainerPrivate::recalcBoundingRect() {
+	boundingRectangle = QRectF();
+	QList<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(const WorksheetElement* elem, childList)
+		boundingRectangle |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
 }
 
 // Inherited from QGraphicsItem
 QRectF WorksheetElementContainerPrivate::boundingRect() const {
-	QRectF rect;
-	QList<WorksheetElement *> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const WorksheetElement *elem, childList)
-		rect |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
-	return rect;
+	return boundingRectangle;
 }
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-// 	qDebug()<<"WorksheetElementContainerPrivate::paint";
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 

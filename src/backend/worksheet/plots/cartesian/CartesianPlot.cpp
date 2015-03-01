@@ -1144,6 +1144,8 @@ void CartesianPlotPrivate::retransform(){
 	q->title()->retransform();
 	if (q->m_legend)
 		q->m_legend->retransform();
+
+	WorksheetElementContainerPrivate::recalcBoundingRect();
 }
 
 void CartesianPlotPrivate::retransformScales(){
