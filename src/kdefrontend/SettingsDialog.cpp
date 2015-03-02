@@ -43,21 +43,19 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent) :
-    KPageDialog(parent){
+SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent){
+	const QSize minSize = minimumSize();
+	setMinimumSize(QSize(512, minSize.height()));
 
-    const QSize minSize = minimumSize();
-    setMinimumSize(QSize(512, minSize.height()));
+	setFaceType(List);
+	setCaption(i18n("Preferences"));
+	setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
+	setDefaultButton(KDialog::Ok);
+	enableButton(KDialog::Apply, false);
 
-    setFaceType(List);
-    setCaption(i18n("Preferences"));
-    setButtons(Ok | Apply | Cancel | Default);
-    setDefaultButton(Ok);
-	enableButton(Apply, false);
-
-    generalPage = new SettingsGeneralPage(this);
-    KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
-    generalFrame->setIcon(KIcon("system-run"));
+	generalPage = new SettingsGeneralPage(this);
+	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
+	generalFrame->setIcon(KIcon("system-run"));
 	connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
 //     printingPage = new SettingsPrintingPage(mainWindow, this);
@@ -65,29 +63,29 @@ SettingsDialog::SettingsDialog(QWidget* parent) :
 //     printingFrame->setIcon(KIcon("document-print"));
 
 	const KConfigGroup dialogConfig = KGlobal::config()->group("SettingsDialog");
-    restoreDialogSize(dialogConfig);
+	restoreDialogSize(dialogConfig);
 }
 
 SettingsDialog::~SettingsDialog(){
 	KConfigGroup dialogConfig = KGlobal::config()->group("SettingsDialog");
-    saveDialogSize(dialogConfig);
+	saveDialogSize(dialogConfig);
 }
 
 void SettingsDialog::slotButtonClicked(int button){
-    if ((button == Ok) || (button == Apply)) {
+	if ((button == KDialog::Ok) || (button == KDialog::Apply)) {
 		if (m_changed){
 			applySettings();
 			setCaption(i18n("Preferences"));
-			enableButton(Apply, false);
+			enableButton(KDialog::Apply, false);
 		}
-    } else if (button == Default) {
-        const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
-        if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
-            restoreDefaults();
+	} else if (button == KDialog::Default) {
+		const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
+		if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
+			restoreDefaults();
 			setCaption(i18n("Preferences"));
-			enableButton(Apply, false);
-        }
-    }
+			enableButton(KDialog::Apply, false);
+		}
+	}
 
     KPageDialog::slotButtonClicked(button);
 }
@@ -95,12 +93,12 @@ void SettingsDialog::slotButtonClicked(int button){
 void SettingsDialog::changed() {
 	m_changed = true;
 	setCaption(i18n("Preferences    [Changed]"));
-	enableButton(Apply, true);
+	enableButton(KDialog::Apply, true);
 }
 
 void SettingsDialog::applySettings(){
 	m_changed = false;
-    generalPage->applySettings();
+	generalPage->applySettings();
 //     printingPage->applySettings();
 	KGlobal::config()->sync();	
 	emit settingsChanged();
@@ -108,6 +106,6 @@ void SettingsDialog::applySettings(){
 
 void SettingsDialog::restoreDefaults(){
 	m_changed = false;
-    generalPage->restoreDefaults();
+	generalPage->restoreDefaults();
 //     printingPage->restoreDefaults();
 }
