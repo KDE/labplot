@@ -1458,6 +1458,49 @@ QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
 	return oldId;
 }
 
+void XYCurvePrivate::draw(QPainter *painter) {
+	//draw lines
+	if (lineType != XYCurve::NoLine){
+		painter->setOpacity(lineOpacity);
+		painter->setPen(linePen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(linePath);
+	}
+
+	//draw drop lines
+	if (dropLineType != XYCurve::NoDropLine){
+		painter->setOpacity(dropLineOpacity);
+		painter->setPen(dropLinePen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(dropLinePath);
+	}
+
+	//draw error bars
+	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
+		painter->setOpacity(errorBarsOpacity);
+		painter->setPen(errorBarsPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(errorBarsPath);
+	}
+
+	//draw symbols
+	if (symbolsPrototype->id() != "none"){
+		painter->setOpacity(symbolsOpacity);
+		painter->setPen(symbolsPen);
+		painter->setBrush(symbolsBrush);
+		drawSymbols(painter);
+	}
+
+	//draw values
+	if (valuesType != XYCurve::NoValues){
+		painter->setOpacity(valuesOpacity);
+		painter->setPen(valuesColor);
+		painter->setBrush(Qt::SolidPattern);
+		drawValues(painter);
+	}
+	
+}
+
 void XYCurvePrivate::updatePixmap() {
 // 	QTime timer;
 // 	timer.start();
@@ -1471,45 +1514,8 @@ void XYCurvePrivate::updatePixmap() {
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-boundingRectangle.topLeft());
 
-	//draw lines
-	if (lineType != XYCurve::NoLine){
-		painter.setOpacity(lineOpacity);
-		painter.setPen(linePen);
-		painter.setBrush(Qt::NoBrush);
-		painter.drawPath(linePath);
-	}
-
-	//draw drop lines
-	if (dropLineType != XYCurve::NoDropLine){
-		painter.setOpacity(dropLineOpacity);
-		painter.setPen(dropLinePen);
-		painter.setBrush(Qt::NoBrush);
-		painter.drawPath(dropLinePath);
-	}
-
-	//draw error bars
-	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
-		painter.setOpacity(errorBarsOpacity);
-		painter.setPen(errorBarsPen);
-		painter.setBrush(Qt::NoBrush);
-		painter.drawPath(errorBarsPath);
-	}
-
-	//draw symbols
-	if (symbolsPrototype->id() != "none"){
-		painter.setOpacity(symbolsOpacity);
-		painter.setPen(symbolsPen);
-		painter.setBrush(symbolsBrush);
-		drawSymbols(&painter);
-	}
-
-	//draw values
-	if (valuesType != XYCurve::NoValues){
-		painter.setOpacity(valuesOpacity);
-		painter.setPen(valuesColor);
-		painter.setBrush(Qt::SolidPattern);
-		drawValues(&painter);
-	}
+	draw(&painter);
+	painter.end();
 
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
@@ -1599,10 +1605,15 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 // 	QTime timer;
 // 	timer.start();
-    painter->setPen(Qt::NoPen);
+	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+// TODO: draw directly
+	// draw(painter);
+// or use pixmap for double buffering
 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
+
 // 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
 	if (m_hovered && !isSelected() && !m_printing){

@@ -64,6 +64,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		void recalcShapeAndBoundingRect();
 		void drawSymbols(QPainter*);
 		void drawValues(QPainter*);
+		void draw(QPainter*);
 		void updatePixmap();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
