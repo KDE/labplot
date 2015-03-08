@@ -126,7 +126,7 @@ void WorksheetElementContainer::retransform() {
 	foreach(WorksheetElement* elem, childList)
 		elem->retransform();
 
-	d->recalcBoundingRect();
+	d->recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
@@ -155,7 +155,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 		}
 	}
 
-	d->recalcBoundingRect();
+	d->recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainer::childHovered() {
@@ -222,14 +222,21 @@ bool WorksheetElementContainerPrivate::swapVisible(bool on){
 
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 	prepareGeometryChange();
-	recalcBoundingRect();
+	recalcShapeAndBoundingRect();
 }
 
-void WorksheetElementContainerPrivate::recalcBoundingRect() {
+void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = QRectF();
+	containerShape = QPainterPath();
 	QList<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(const WorksheetElement* elem, childList)
 		boundingRectangle |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
+
+	QPainterPath path;
+	path.addRect(boundingRectangle);
+
+	//make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
+	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), q->hoveredPen.widthF()*2)));
 }
 
 // Inherited from QGraphicsItem
@@ -248,12 +255,12 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 	if (m_hovered && !isSelected() && !m_printing){
 		painter->setPen(q->hoveredPen);
 		painter->setOpacity(q->hoveredOpacity);
-		painter->drawRect(boundingRect());
+		painter->drawPath(containerShape);
 	}
 
 	if (isSelected() && !m_printing){
 		painter->setPen(q->selectedPen);
 		painter->setOpacity(q->selectedOpacity);
-		painter->drawRect(boundingRect());
+		painter->drawPath(containerShape);
   }
 }
