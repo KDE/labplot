@@ -103,7 +103,7 @@ class AbstractAspect : public QObject {
 					if (i) {
 						result << i;
 						if (flags & Recursive)
-							result << i->children<T>(flags);
+							result << i->template children<T>(flags);
 					}
 				}
 			}
