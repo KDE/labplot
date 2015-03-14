@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for XYCurve properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -32,9 +32,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
-#include "backend/core/plugin/PluginManager.h"
 #include "backend/core/Project.h"
-#include "backend/worksheet/StandardCurveSymbolFactory.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -228,8 +226,10 @@ void XYCurveDock::init(){
 	ui.cbLineType->addItem(i18n("Akima-spline (periodic)"));
 
 	QPainter pa;
-	QPixmap pm( 20, 20 );
-	ui.cbLineType->setIconSize( QSize(20,20) );
+	//TODO size of the icon depending on the actuall height of the combobox?
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+	ui.cbLineType->setIconSize(QSize(iconSize, iconSize));
 
 	QPen pen(Qt::SolidPattern, 0);
  	pa.setPen( pen );
@@ -357,7 +357,23 @@ void XYCurveDock::init(){
 
 	//Symbols
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-	this->fillSymbolStyles();
+
+	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
+	QTransform trafo;
+	trafo.scale(15, 15);
+
+	ui.cbSymbolStyle->addItem(i18n("none"));
+	for (int i=1; i<19; ++i) {
+		XYCurve::SymbolsStyle style = (XYCurve::SymbolsStyle)i;
+		pm.fill(Qt::transparent);
+		pa.begin(&pm);
+		pa.setRenderHint(QPainter::Antialiasing);
+		pa.translate(iconSize/2,iconSize/2);
+		pa.drawPath(trafo.map(XYCurve::symbolsPathFromStyle(style)));
+		pa.end();
+		ui.cbSymbolStyle->addItem(QIcon(pm), XYCurve::symbolsNameFromStyle(style));
+	}
+
  	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
 	m_initializing = false;
 
@@ -538,7 +554,7 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
 
 	//Symbol-Tab
-	connect(m_curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(curveSymbolsTypeIdChanged(QString)));
+	connect(m_curve, SIGNAL(symbolsStyleChanged(XYCurve::SymbolsStyle)), this, SLOT(curveSymbolsStyleChanged(XYCurve::SymbolsStyle)));
 	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
@@ -568,39 +584,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(errorBarsTypeChanged(XYCurve::ErrorBarsType)), this, SLOT(curveErrorBarsTypeChanged(XYCurve::ErrorBarsType)));
 	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
 	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
-}
-
-/*!
-	fills the ComboBox for the symbol style with all possible styles in the style factory.
-*/
-void XYCurveDock::fillSymbolStyles(){
-	QPainter painter;
-	int size=20; 	//TODO size of the icon depending on the actuall height of the combobox?
-	QPixmap pm( size, size );
- 	ui.cbSymbolStyle->setIconSize( QSize(size, size) );
-
-  //TODO redesign the PluginManager and adjust this part here (load only symbol plugins and not everything!!!)
-	foreach(QObject *plugin, PluginManager::plugins()) {
-		CurveSymbolFactory *factory = qobject_cast<CurveSymbolFactory *>(plugin);
-		if (factory){
-		  symbolFactory=factory;
-		  AbstractCurveSymbol* symbol;
-		  foreach (const AbstractCurveSymbol* symbolPrototype, factory->prototypes()){
-			if (symbolPrototype){
-			  symbol= symbolPrototype->clone();
-			  symbol->setSize(15);
-
-			  pm.fill(Qt::transparent);
-			  painter.begin( &pm );
-			  painter.setRenderHint(QPainter::Antialiasing);
-			  painter.translate(size/2,size/2);
-			  symbol->paint(&painter);
-			  painter.end();
-			  ui.cbSymbolStyle->addItem(QIcon(pm), symbol->id());
-			}
-		  }
-		}
-	}
 }
 
 /*!
@@ -961,9 +944,9 @@ void XYCurveDock::dropLineOpacityChanged(int value){
 //"Symbol"-tab
 void XYCurveDock::symbolsStyleChanged(int index){
   Q_UNUSED(index);
-  QString currentSymbolTypeId = ui.cbSymbolStyle->currentText();
+  XYCurve::SymbolsStyle style = XYCurve::SymbolsStyle(index);
 
-  if (currentSymbolTypeId=="none"){
+  if (style==XYCurve::NoSymbols){
 	ui.sbSymbolSize->setEnabled(false);
 	ui.sbSymbolRotation->setEnabled(false);
 	ui.sbSymbolOpacity->setEnabled(false);
@@ -980,7 +963,7 @@ void XYCurveDock::symbolsStyleChanged(int index){
 	ui.sbSymbolOpacity->setEnabled(true);
 
 	//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-	if ( symbolFactory->prototype(currentSymbolTypeId)->fillingEnabled() ){
+	if (style!=XYCurve::SymbolsLine && style!=XYCurve::SymbolsCross) {
 	  ui.cbSymbolFillingStyle->setEnabled(true);
 	  bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex())==Qt::NoBrush);
 	  ui.kcbSymbolFillingColor->setEnabled(!noBrush);
@@ -999,7 +982,7 @@ void XYCurveDock::symbolsStyleChanged(int index){
 	return;
 
   foreach(XYCurve* curve, m_curvesList)
-	curve->setSymbolsTypeId(currentSymbolTypeId);
+	curve->setSymbolsStyle(style);
 }
 
 void XYCurveDock::symbolsSizeChanged(double value){
@@ -1369,7 +1352,6 @@ void XYCurveDock::yErrorTypeChanged(int index) const{
 		curve->setYErrorType(XYCurve::ErrorType(index));
 }
 
-
 void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const{
 	Q_UNUSED(index);
 	if (m_initializing)
@@ -1541,9 +1523,9 @@ void XYCurveDock::curveDropLineOpacityChanged(qreal opacity) {
 }
 
 //Symbol-Tab
-void XYCurveDock::curveSymbolsTypeIdChanged(QString typeId) {
+void XYCurveDock::curveSymbolsStyleChanged(XYCurve::SymbolsStyle style) {
 	m_initializing = true;
-	ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(typeId));
+	ui.cbSymbolStyle->setCurrentIndex((int)style);
 	m_initializing = false;
 }
 void XYCurveDock::curveSymbolsSizeChanged(qreal size) {
@@ -1710,7 +1692,7 @@ void XYCurveDock::load() {
 
 	//Symbols
 	//TODO: character
-	ui.cbSymbolStyle->setCurrentIndex( ui.cbSymbolStyle->findText(m_curve->symbolsTypeId()) );
+	ui.cbSymbolStyle->setCurrentIndex( (int)m_curve->symbolsStyle() );
   	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsSize(), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( m_curve->symbolsRotationAngle() );
 	ui.sbSymbolOpacity->setValue( round(m_curve->symbolsOpacity()*100.0) );
@@ -1799,7 +1781,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 
 	//Symbols
 	//TODO: character
-	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", ui.cbSymbolStyle->findText(m_curve->symbolsTypeId())) );
+	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_curve->symbolsStyle()) );
   	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_curve->symbolsRotationAngle()) );
 	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_curve->symbolsOpacity())*100.0) );

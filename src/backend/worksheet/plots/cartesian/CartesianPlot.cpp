@@ -651,9 +651,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		//update the legend on changes of the name, line and symbol styles
 		connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
+		connect(curve, SIGNAL(symbolsStyleChanged(XYCurve::SymbolsStyle)), this, SLOT(updateLegend()));
 		connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
 		connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsTypeIdChanged(QString)), this, SLOT(updateLegend()));
 		connect(curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(updateLegend()));
 
 		updateLegend();

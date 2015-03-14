@@ -38,10 +38,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/core/plugin/PluginManager.h"
-#include "backend/worksheet/AbstractCurveSymbol.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/interfaces.h"
 #include "backend/lib/commandtemplates.h"
 #include <math.h>
 
@@ -688,10 +685,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	float h=fm.ascent();
 	XYCurve* curve;
 
-	CurveSymbolFactory* factory=0;
-	foreach(QObject *plugin, PluginManager::plugins())
-		factory = qobject_cast<CurveSymbolFactory*>(plugin);
-
 	painter->setFont(labelFont);
 
 	//translate to left upper conner of the bounding rect plus the layout offset and the height of the title
@@ -728,7 +721,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 
 				//curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
-				if (curve->symbolsTypeId()!="none" && errorBarsSize<curve->symbolsSize()*1.4)
+				if (curve->symbolsStyle()!=XYCurve::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
 					errorBarsSize = curve->symbolsSize()*1.4;
 
 				switch(curve->errorBarsType()) {
@@ -766,17 +759,24 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 			}
 
 			//curve's symbol
-			if (curve->symbolsTypeId()!="none" && factory){
+			if (curve->symbolsStyle()!=XYCurve::NoSymbols){
 				painter->setOpacity(curve->symbolsOpacity());
-				AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
+				painter->setBrush(curve->symbolsBrush());
+				painter->setPen(curve->symbolsPen());
 
-				symbol->setSize(curve->symbolsSize());
-				symbol->setBrush(curve->symbolsBrush());
-				symbol->setPen(curve->symbolsPen());
-				symbol->setRotationAngle(curve->symbolsRotationAngle());
+				QPainterPath path = XYCurve::symbolsPathFromStyle(curve->symbolsStyle());
+				QTransform trafo;
+				trafo.scale(curve->symbolsSize(), curve->symbolsSize());
+				path = trafo.map(path);
+
+				if (curve->symbolsRotationAngle() != 0) {
+					trafo.reset();
+					trafo.rotate(curve->symbolsRotationAngle());
+					path = trafo.map(path);
+				}
 
 				painter->translate(QPointF(lineSymbolWidth/2, h/2));
-				symbol->paint(painter, option, widget);
+				painter->drawPath(path);
 				painter->translate(-QPointF(lineSymbolWidth/2, h/2));
 			}
 

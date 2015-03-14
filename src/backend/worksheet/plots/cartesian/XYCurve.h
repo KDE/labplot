@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2010-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -45,6 +45,9 @@ class XYCurve: public WorksheetElement {
 		enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
 					   SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic};
 		enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY, DropLineXZeroBaseline, DropLineXMinBaseline, DropLineXMaxBaseline};
+		enum SymbolsStyle {NoSymbols, SymbolsCircle, SymbolsSquare, SymbolsEquilateralTriangle, SymbolsRightTriangle, SymbolsBar, SymbolsPeakedBar,
+						SymbolsSkewedBar, SymbolsDiamond, SymbolsLozenge, SymbolsTie, SymbolsTinyTie, SymbolsPlus, SymbolsBoomerang, SymbolsSmallBoomerang,
+						SymbolsStar4, SymbolsStar5, SymbolsLine, SymbolsCross};
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
@@ -56,8 +59,8 @@ class XYCurve: public WorksheetElement {
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
@@ -73,10 +76,10 @@ class XYCurve: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, dropLinePen, DropLinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, dropLineOpacity, DropLineOpacity)
 
+		BASIC_D_ACCESSOR_DECL(SymbolsStyle, symbolsStyle, SymbolsStyle)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
-		CLASS_D_ACCESSOR_DECL(QString, symbolsTypeId, SymbolsTypeId)
 		CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
 		CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
 
@@ -111,6 +114,8 @@ class XYCurve: public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool on);
 		void suppressRetransform(bool);
+		static QPainterPath symbolsPathFromStyle(XYCurve::SymbolsStyle);
+		static QString symbolsNameFromStyle(XYCurve::SymbolsStyle);
 
 		typedef WorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;
@@ -173,14 +178,14 @@ class XYCurve: public WorksheetElement {
 		void dropLineOpacityChanged(qreal);
 
 		//Symbol-Tab
-		friend class XYCurveSetSymbolsTypeIdCmd;
+		friend class XYCurveSetSymbolsStyleCmd;
 		friend class XYCurveSetSymbolsSizeCmd;
 		friend class XYCurveSetSymbolsRotationAngleCmd;
 		friend class XYCurveSetSymbolsOpacityCmd;
 		friend class XYCurveSetSymbolsAspectRatioCmd;
 		friend class XYCurveSetSymbolsBrushCmd;
 		friend class XYCurveSetSymbolsPenCmd;
-		void symbolsTypeIdChanged(QString);
+		void symbolsStyleChanged(XYCurve::SymbolsStyle);
 		void symbolsSizeChanged(qreal);
 		void symbolsRotationAngleChanged(qreal);
 		void symbolsOpacityChanged(qreal);

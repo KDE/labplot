@@ -29,10 +29,8 @@
 #ifndef XYCURVEPRIVATE_H
 #define XYCURVEPRIVATE_H
 
-#include "backend/worksheet/AbstractCurveSymbol.h"
 #include <vector>
 
-class CurveSymbolFactory;
 class CartesianPlot;
 
 class XYCurvePrivate: public QGraphicsItem {
@@ -60,14 +58,13 @@ class XYCurvePrivate: public QGraphicsItem {
 		void updateValues();
 		void updateErrorBars();
 		bool swapVisible(bool on);
-		QString swapSymbolsTypeId(const QString &id);
 		void recalcShapeAndBoundingRect();
 		void drawSymbols(QPainter*);
 		void drawValues(QPainter*);
 		void draw(QPainter*);
 		void updatePixmap();
 
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget = 0);
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
 		const AbstractColumn* xColumn;
 		const AbstractColumn* yColumn;
@@ -83,13 +80,13 @@ class XYCurvePrivate: public QGraphicsItem {
 		QPen dropLinePen;
 		qreal dropLineOpacity;
 
+		XYCurve::SymbolsStyle symbolsStyle;
 		QBrush symbolsBrush;
 		QPen symbolsPen;
 		qreal symbolsOpacity;
 		qreal symbolsRotationAngle;
 		qreal symbolsSize;
 		qreal symbolsAspectRatio;
-		QString symbolsTypeId;
 
 		XYCurve::ValuesType valuesType;
 		const AbstractColumn* valuesColumn;
@@ -126,8 +123,6 @@ class XYCurvePrivate: public QGraphicsItem {
 		QPainterPath valuesPath;
 		QPainterPath errorBarsPath;
 		QPainterPath symbolsPath;
-		AbstractCurveSymbol* symbolsPrototype;
-		CurveSymbolFactory* symbolsFactory;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
 		QList<QPointF> symbolPointsLogical;	//points in logical coordinates
