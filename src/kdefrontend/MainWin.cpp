@@ -369,12 +369,10 @@ bool MainWin::warnModified() {
 		switch (want_save) {
 			case KMessageBox::Yes:
 				return !saveProject();
-				break;
 			case KMessageBox::No:
 				break;
 			case KMessageBox::Cancel:
 				return true;
-				break;
 		}
 	}
 

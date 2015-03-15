@@ -630,11 +630,8 @@ void XYCurveDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode col
 		foreach(const QString& s2, timeStrings)
 		  ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
 	  }
-
 	  break;
 	}
-	default:
-		break;
   }
 
   ui.cbValuesFormat->setCurrentIndex(0);

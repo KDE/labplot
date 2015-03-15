@@ -344,8 +344,6 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 				painter->setBrush(QBrush(radialGrad));
 				break;
 			}
-			default:
-				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
@@ -380,11 +378,6 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-					break;
-				default:
-					painter->setBrush(QBrush(pix));
-					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){

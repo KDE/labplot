@@ -572,7 +572,9 @@ void CartesianPlotLegendPrivate::updatePosition(){
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the legend.
   \sa QGraphicsItem::paint().
 */
-void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+	Q_UNUSED(option);
+	Q_UNUSED(widget);
 	if (!isVisible())
 		return;
 
@@ -622,8 +624,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				painter->setBrush(QBrush(radialGrad));
 				break;
 			}
-			default:
-				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
@@ -649,9 +649,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 					break;
 				case PlotArea::CenterTiled:
 					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
-					break;
-				default:
-					painter->drawPixmap(rect.topLeft(),pix);
 			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
@@ -812,11 +809,10 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
-		CartesianPlotLegend::PositionWrapper tempPosition{
-			value.toPointF(),
-			CartesianPlotLegend::hPositionCustom,
-			CartesianPlotLegend::vPositionCustom
-		};
+		CartesianPlotLegend::PositionWrapper tempPosition;
+			tempPosition.point = value.toPointF();
+			tempPosition.horizontalPosition = CartesianPlotLegend::hPositionCustom;
+			tempPosition.verticalPosition = CartesianPlotLegend::vPositionCustom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -833,11 +829,10 @@ void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* eve
 	if (point!=position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
-		CartesianPlotLegend::PositionWrapper tempPosition{
-			point,
-			CartesianPlotLegend::hPositionCustom,
-			CartesianPlotLegend::vPositionCustom
-		};
+		CartesianPlotLegend::PositionWrapper tempPosition;
+		tempPosition.point = point;
+		tempPosition.horizontalPosition = CartesianPlotLegend::hPositionCustom;
+		tempPosition.verticalPosition = CartesianPlotLegend::vPositionCustom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}

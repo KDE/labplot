@@ -216,8 +216,6 @@ void ColumnDock::updateFormatWidgets(const AbstractColumn::ColumnMode columnMode
 
 	  break;
 	}
-	default:
-		break;
   }
 
   if (columnMode == AbstractColumn::Numeric){
