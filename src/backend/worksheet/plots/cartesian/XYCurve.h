@@ -182,14 +182,12 @@ class XYCurve: public WorksheetElement {
 		friend class XYCurveSetSymbolsSizeCmd;
 		friend class XYCurveSetSymbolsRotationAngleCmd;
 		friend class XYCurveSetSymbolsOpacityCmd;
-		friend class XYCurveSetSymbolsAspectRatioCmd;
 		friend class XYCurveSetSymbolsBrushCmd;
 		friend class XYCurveSetSymbolsPenCmd;
 		void symbolsStyleChanged(XYCurve::SymbolsStyle);
 		void symbolsSizeChanged(qreal);
 		void symbolsRotationAngleChanged(qreal);
 		void symbolsOpacityChanged(qreal);
-		void symbolsAspectRatioChanged(qreal);
 		void symbolsBrushChanged(QBrush);
 		void symbolsPenChanged(const QPen&);
 

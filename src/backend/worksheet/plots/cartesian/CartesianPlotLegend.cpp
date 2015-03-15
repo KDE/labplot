@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -47,7 +47,6 @@
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
-#include <QtDebug>
 
 #include <KIcon>
 #include <KConfig>
@@ -155,11 +154,7 @@ QMenu* CartesianPlotLegend::createContextMenu(){
 	Returns an icon to be used in the project explorer.
 */
 QIcon CartesianPlotLegend::icon() const{
-	QIcon icon;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		icon = KIcon("text-field");
-#endif
-	return icon;
+	return KIcon("text-field");
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(CartesianPlotLegend, SetVisible, bool, swapVisible)
