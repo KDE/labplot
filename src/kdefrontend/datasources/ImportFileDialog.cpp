@@ -252,7 +252,7 @@ void ImportFileDialog::newSpreadsheet(){
 	QInputDialog* dlg = new QInputDialog(this);
 
 //	this->setWindowIcon( QIcon::fromTheme(KIcon("insert-table")) );
-    dlg->setWindowIcon( QIcon(QIcon::fromTheme("insert-table")) );
+    dlg->setWindowIcon( QIcon::fromTheme("insert-table") );
 	name = dlg->getText(this, i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), QLineEdit::Normal, name, &ok);
 // 	name = KInputDialog::getText( i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), name, &ok);
 	if (ok)

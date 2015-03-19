@@ -114,9 +114,9 @@ QMenu* AbstractPart::createContextMenu(){
 
 	if (m_mdiWindow) {
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-        menu->addAction(QIcon(QIcon::fromTheme("document-export-database")), i18n("Export"), this, SIGNAL(exportRequested()));
-        menu->addAction(QIcon(QIcon::fromTheme("document-print")), i18n("Print"), this, SIGNAL(printRequested()));
-        menu->addAction(QIcon(QIcon::fromTheme("document-print-preview")), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
+        menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
+        menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
+        menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
 #else
 		menu->addAction(i18n("Export"), this, SIGNAL(exportRequested()));
 		menu->addAction(i18n("Print"), this, SIGNAL(printRequested()));

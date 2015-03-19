@@ -319,8 +319,8 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addAction(KStandardAction::copy(this));
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
-    menu->addAction(QIcon(QIcon::fromTheme("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
-    menu->addAction(QIcon(QIcon::fromTheme("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+    menu->addAction(QIcon::fromTheme("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
+    menu->addAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this, SLOT(remove()));
 	return menu;
 #endif
 }

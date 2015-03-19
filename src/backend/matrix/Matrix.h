@@ -66,7 +66,7 @@ class Matrix : public AbstractPart, public scripted
 		~Matrix();
 
 		//! Return an icon to be used for decorating my views.
-		virtual QIcon::fromTheme icon() const;
+		virtual QIcon icon() const;
 		//! Return a new context menu.
 		/**
 		 * The caller takes ownership of the menu.
