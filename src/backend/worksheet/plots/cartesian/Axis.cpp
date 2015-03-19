@@ -1067,9 +1067,6 @@ void AxisPrivate::retransformTicks(){
 				break;
 			case Axis::ScaleX2:
 				majorTicksSpacing = (pow(end,2)-pow(start,2))/(majorTicksNumber-1);
-				break;
-			default://Linear
-				majorTicksSpacing = (end-start)/(majorTicksNumber-1);
 		}
 	} else if (majorTicksType == Axis::TicksIncrement) {
 		//the spacing (increment) of the major ticks is given - > determine the number
@@ -1092,9 +1089,6 @@ void AxisPrivate::retransformTicks(){
 				break;
 			case Axis::ScaleX2:
 				tmpMajorTicksNumber = qRound((pow(end,2)-pow(start,2))/majorTicksSpacing + 1);
-				break;
-			default://Linear
-				tmpMajorTicksNumber = qRound((end-start)/majorTicksSpacing + 1);
 		}
 	} else {
 		//custom column was provided
@@ -1154,9 +1148,6 @@ void AxisPrivate::retransformTicks(){
 					majorTickPos = sqrt(sqrt(start) + majorTicksSpacing*iMajor);
 					nextMajorTickPos = sqrt(sqrt(start) + majorTicksSpacing*(iMajor+1));
 					break;
-				default://Linear
-					majorTickPos = start + majorTicksSpacing*iMajor;
-					nextMajorTickPos = start + majorTicksSpacing*(iMajor+1);
 			}
 		} else {
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
@@ -1487,11 +1478,11 @@ void AxisPrivate::retransformMajorGrid(){
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), m_plot->xMin());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), m_plot->xMax());
+		skipLowestTick = qFuzzyCompare((float)logicalMajorTickPoints.at(0).x(), m_plot->xMin());
+		skipUpperTick = qFuzzyCompare((float)logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), m_plot->xMax());
 	} else {
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), m_plot->yMin());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), m_plot->yMax());
+		skipLowestTick = qFuzzyCompare((float)logicalMajorTickPoints.at(0).y(), m_plot->yMin());
+		skipUpperTick = qFuzzyCompare((float)logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), m_plot->yMax());
 	}
 
 	int start, end;
@@ -1584,17 +1575,13 @@ void AxisPrivate::retransformMinorGrid(){
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
-	//if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
-	//request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
-	if (m_plot)
-		m_plot->prepareGeometryChange();
-
 	prepareGeometryChange();
 
 	if (linePath.isEmpty()) {
 		axisShape = QPainterPath();
 		boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
+		if (m_plot) m_plot->prepareGeometryChange();
 		return;
 	} else {
 		title->setPositionInvalid(false);
@@ -1653,6 +1640,11 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape.addPath(WorksheetElement::shapeFromPath(majorGridPath, majorGridPen));
 	axisShape.addPath(WorksheetElement::shapeFromPath(minorGridPath, minorGridPen));
 	boundingRectangle = axisShape.boundingRect();
+
+	//if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
+	//request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
+	if (m_plot)
+		m_plot->prepareGeometryChange();
 }
 
 /*!

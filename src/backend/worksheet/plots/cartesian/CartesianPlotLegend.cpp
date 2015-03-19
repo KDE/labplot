@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -38,10 +38,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/core/plugin/PluginManager.h"
-#include "backend/worksheet/AbstractCurveSymbol.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/interfaces.h"
 #include "backend/lib/commandtemplates.h"
 #include <math.h>
 
@@ -50,7 +47,6 @@
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
-#include <QtDebug>
 
 #include <KIcon>
 #include <KConfig>
@@ -158,11 +154,7 @@ QMenu* CartesianPlotLegend::createContextMenu(){
 	Returns an icon to be used in the project explorer.
 */
 QIcon CartesianPlotLegend::icon() const{
-	QIcon icon;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-        icon = QIcon("text-field");
-#endif
-	return icon;
+	return QIcon("text-field");
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(CartesianPlotLegend, SetVisible, bool, swapVisible)
@@ -580,7 +572,9 @@ void CartesianPlotLegendPrivate::updatePosition(){
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the legend.
   \sa QGraphicsItem::paint().
 */
-void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+	Q_UNUSED(option);
+	Q_UNUSED(widget);
 	if (!isVisible())
 		return;
 
@@ -630,8 +624,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 				painter->setBrush(QBrush(radialGrad));
 				break;
 			}
-			default:
-				painter->setBrush(QBrush(backgroundFirstColor));
 		}
 	}else if (backgroundType == PlotArea::Image){
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
@@ -657,9 +649,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 					break;
 				case PlotArea::CenterTiled:
 					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
-					break;
-				default:
-					painter->drawPixmap(rect.topLeft(),pix);
 			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
@@ -687,10 +676,6 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 	QFontMetrics fm(labelFont);
 	float h=fm.ascent();
 	XYCurve* curve;
-
-	CurveSymbolFactory* factory=0;
-	foreach(QObject *plugin, PluginManager::plugins())
-		factory = qobject_cast<CurveSymbolFactory*>(plugin);
 
 	painter->setFont(labelFont);
 
@@ -728,7 +713,7 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 
 				//curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
-				if (curve->symbolsTypeId()!="none" && errorBarsSize<curve->symbolsSize()*1.4)
+				if (curve->symbolsStyle()!=XYCurve::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
 					errorBarsSize = curve->symbolsSize()*1.4;
 
 				switch(curve->errorBarsType()) {
@@ -766,17 +751,24 @@ void CartesianPlotLegendPrivate::paint(QPainter *painter, const QStyleOptionGrap
 			}
 
 			//curve's symbol
-			if (curve->symbolsTypeId()!="none" && factory){
+			if (curve->symbolsStyle()!=XYCurve::NoSymbols){
 				painter->setOpacity(curve->symbolsOpacity());
-				AbstractCurveSymbol* symbol = factory->prototype(curve->symbolsTypeId())->clone();
+				painter->setBrush(curve->symbolsBrush());
+				painter->setPen(curve->symbolsPen());
 
-				symbol->setSize(curve->symbolsSize());
-				symbol->setBrush(curve->symbolsBrush());
-				symbol->setPen(curve->symbolsPen());
-				symbol->setRotationAngle(curve->symbolsRotationAngle());
+				QPainterPath path = XYCurve::symbolsPathFromStyle(curve->symbolsStyle());
+				QTransform trafo;
+				trafo.scale(curve->symbolsSize(), curve->symbolsSize());
+				path = trafo.map(path);
+
+				if (curve->symbolsRotationAngle() != 0) {
+					trafo.reset();
+					trafo.rotate(curve->symbolsRotationAngle());
+					path = trafo.map(path);
+				}
 
 				painter->translate(QPointF(lineSymbolWidth/2, h/2));
-				symbol->paint(painter, option, widget);
+				painter->drawPath(path);
 				painter->translate(-QPointF(lineSymbolWidth/2, h/2));
 			}
 
@@ -817,11 +809,10 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
-		CartesianPlotLegend::PositionWrapper tempPosition{
-			value.toPointF(),
-			CartesianPlotLegend::hPositionCustom,
-			CartesianPlotLegend::vPositionCustom
-		};
+		CartesianPlotLegend::PositionWrapper tempPosition;
+			tempPosition.point = value.toPointF();
+			tempPosition.horizontalPosition = CartesianPlotLegend::hPositionCustom;
+			tempPosition.verticalPosition = CartesianPlotLegend::vPositionCustom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -838,11 +829,10 @@ void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* eve
 	if (point!=position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
-		CartesianPlotLegend::PositionWrapper tempPosition{
-			point,
-			CartesianPlotLegend::hPositionCustom,
-			CartesianPlotLegend::vPositionCustom
-		};
+		CartesianPlotLegend::PositionWrapper tempPosition;
+		tempPosition.point = point;
+		tempPosition.horizontalPosition = CartesianPlotLegend::hPositionCustom;
+		tempPosition.verticalPosition = CartesianPlotLegend::vPositionCustom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}

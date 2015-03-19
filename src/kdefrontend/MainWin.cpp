@@ -362,21 +362,19 @@ void MainWin::initMenus(){
     \return \c true if the project still needs to be saved ("cancel" clicked), \c false otherwise.
  */
 bool MainWin::warnModified() {
-    if(m_project->hasChanged()) {
-        int want_save = KMessageBox::warningYesNoCancel( this,
-            i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-            i18n("Save Project"));
-        switch (want_save) {
-            case KMessageBox::Yes:
-                return !saveProject();
-                break;
-            case KMessageBox::No:
-                break;
-            case KMessageBox::Cancel:
-                return true;
-                break;
-        }
-    }
+	if(m_project->hasChanged()) {
+		int want_save = KMessageBox::warningYesNoCancel( this,
+			i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
+			i18n("Save Project"));
+		switch (want_save) {
+			case KMessageBox::Yes:
+				return !saveProject();
+			case KMessageBox::No:
+				break;
+			case KMessageBox::Cancel:
+				return true;
+		}
+	}
 
     return false;
 }

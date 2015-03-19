@@ -4,7 +4,7 @@
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,20 +29,13 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 
-#include <QPen>
-#include <QPainterPath>
-#include <QPainterPathStroker>
 #include <QMenu>
-
 #include <KLocale>
 
-QPen WorksheetElement::hoveredPen = QPen(QColor(128,179,255), 10, Qt::SolidLine);
-// QPen WorksheetElement::hoveredPen = QPen(QColor(128,179,255));
+QPen WorksheetElement::hoveredPen = QPen(QColor(128,179,255), 3, Qt::SolidLine);
 float WorksheetElement::hoveredOpacity = 0.6;
-QPen WorksheetElement::selectedPen = QPen(Qt::darkBlue, 10, Qt::SolidLine);
-// QPen WorksheetElement::selectedPen = QPen(Qt::darkBlue);
+QPen WorksheetElement::selectedPen = QPen(Qt::darkBlue, 3, Qt::SolidLine);
 float WorksheetElement::selectedOpacity = 0.3;
 
 /**
@@ -50,9 +43,7 @@ float WorksheetElement::selectedOpacity = 0.3;
  * \brief Base class for all Worksheet children.
  *
  */
-
-WorksheetElement::WorksheetElement(const QString &name)
-		: AbstractAspect(name) {
+WorksheetElement::WorksheetElement(const QString &name) : AbstractAspect(name) {
 
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
 	m_moveBehindMenu = new QMenu(i18n("Move &behind"));

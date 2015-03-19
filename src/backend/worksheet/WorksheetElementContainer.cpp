@@ -121,13 +121,15 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
+	Q_D(WorksheetElementContainer);
 	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach(WorksheetElement* elem, childList)
 		elem->retransform();
+
+	d->recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
-// 	qDebug()<<"WorksheetElementContainer::handlePageResize";
 	Q_D(WorksheetElementContainer);
 	QRectF rect(d->rect);
 	rect.setWidth(d->rect.width()*horizontalRatio);
@@ -152,6 +154,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 			elem->graphicsItem()->setZValue(zVal++);
 		}
 	}
+
+	d->recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainer::childHovered() {
@@ -218,20 +222,30 @@ bool WorksheetElementContainerPrivate::swapVisible(bool on){
 
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 	prepareGeometryChange();
+	recalcShapeAndBoundingRect();
+}
+
+void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
+	boundingRectangle = QRectF();
+	containerShape = QPainterPath();
+	QList<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	foreach(const WorksheetElement* elem, childList)
+		boundingRectangle |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
+
+	QPainterPath path;
+	path.addRect(boundingRectangle);
+
+	//make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
+	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), q->hoveredPen.widthF()*2)));
 }
 
 // Inherited from QGraphicsItem
 QRectF WorksheetElementContainerPrivate::boundingRect() const {
-	QRectF rect;
-	QList<WorksheetElement *> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const WorksheetElement *elem, childList)
-		rect |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
-	return rect;
+	return boundingRectangle;
 }
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-// 	qDebug()<<"WorksheetElementContainerPrivate::paint";
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -241,12 +255,12 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 	if (m_hovered && !isSelected() && !m_printing){
 		painter->setPen(q->hoveredPen);
 		painter->setOpacity(q->hoveredOpacity);
-		painter->drawRect(boundingRect());
+		painter->drawPath(containerShape);
 	}
 
 	if (isSelected() && !m_printing){
 		painter->setPen(q->selectedPen);
 		painter->setOpacity(q->selectedOpacity);
-		painter->drawRect(boundingRect());
+		painter->drawPath(containerShape);
   }
 }

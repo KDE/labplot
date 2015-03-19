@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -42,8 +41,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/core/plugin/PluginManager.h"
-#include "backend/worksheet/interfaces.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
 
@@ -106,7 +103,7 @@ void XYCurve::init(){
 	d->dropLinePen.setWidthF( group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->dropLineOpacity = group.readEntry("DropLineOpacity", 1.0);
 
-	d->symbolsPrototype = NULL;
+	d->symbolsStyle = (XYCurve::SymbolsStyle)group.readEntry("SymbolStyle", (int)XYCurve::NoSymbols);
 	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Point));
 	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
@@ -141,9 +138,6 @@ void XYCurve::init(){
 	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
 
-	// set type after all defaults
-	d->swapSymbolsTypeId(group.readEntry("SymbolStyle", "none"));
-
 	this->initActions();
 }
 
@@ -172,14 +166,10 @@ QMenu* XYCurve::createContextMenu(){
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYCurve::icon() const{
-	QIcon icon;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-        icon = QIcon("xy-curve");
-#endif
-	return icon;
+	return QIcon("xy-curve");
 }
 
-QGraphicsItem *XYCurve::graphicsItem() const{
+QGraphicsItem* XYCurve::graphicsItem() const{
 	return d_ptr;
 }
 
@@ -219,10 +209,10 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, dropLinePen, dropLinePen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, dropLineOpacity, dropLineOpacity)
 
 //symbols
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::SymbolsStyle, symbolsStyle, symbolsStyle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsOpacity, symbolsOpacity)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsRotationAngle, symbolsRotationAngle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsSize, symbolsSize)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, symbolsTypeId, symbolsTypeId)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QBrush, symbolsBrush, symbolsBrush)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 
@@ -352,11 +342,11 @@ void XYCurve::setDropLineOpacity(qreal opacity) {
 }
 
 // Symbols-Tab
-STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetSymbolsTypeId, QString, swapSymbolsTypeId)
-void XYCurve::setSymbolsTypeId(const QString &id) {
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsStyle, XYCurve::SymbolsStyle, symbolsStyle, updateSymbols)
+void XYCurve::setSymbolsStyle(XYCurve::SymbolsStyle style) {
 	Q_D(XYCurve);
-	if (id != d->symbolsTypeId)
-		exec(new XYCurveSetSymbolsTypeIdCmd(d, id, i18n("%1: set symbol type")));
+	if (style != d->symbolsStyle)
+		exec(new XYCurveSetSymbolsStyleCmd(d, style, i18n("%1: set symbol style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsSize, qreal, symbolsSize, updateSymbols)
@@ -573,6 +563,114 @@ void XYCurve::suppressRetransform(bool b) {
 	d->m_suppressRetransform = b;
 }
 
+QPainterPath XYCurve::symbolsPathFromStyle(XYCurve::SymbolsStyle style) {
+	QPainterPath path;
+	QPolygonF polygon;
+	if (style == XYCurve::SymbolsCircle) {
+		path.addEllipse(QPoint(0,0), 0.5, 0.5);
+	} else if (style == XYCurve::SymbolsSquare) {
+		path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
+	} else if (style == XYCurve::SymbolsEquilateralTriangle) {
+		polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsRightTriangle) {
+		polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5)<<QPointF(-0.5, -0.5);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsBar) {
+		path.addRect(QRectF(- 0.5, -0.2, 1.0, 0.4));
+	} else if (style == XYCurve::SymbolsPeakedBar) {
+		polygon<<QPointF(-0.5, 0)<<QPointF(-0.3, -0.2)<<QPointF(0.3, -0.2)<<QPointF(0.5, 0)
+				<<QPointF(0.3, 0.2)<<QPointF(-0.3, 0.2)<<QPointF(-0.5, 0);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsSkewedBar) {
+		polygon<<QPointF(-0.5, 0.2)<<QPointF(-0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.2, 0.2)<<QPointF(-0.5, 0.2);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsDiamond) {
+		polygon<<QPointF(-0.5, 0)<<QPointF(0, -0.5)<<QPointF(0.5, 0)<<QPointF(0, 0.5)<<QPointF(-0.5, 0);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsLozenge) {
+		polygon<<QPointF(-0.25, 0)<<QPointF(0, -0.5)<<QPointF(0.25, 0)<<QPointF(0, 0.5)<<QPointF(-0.25, 0);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsTie) {
+		polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, -0.5)<<QPointF(-0.5, 0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, -0.5);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsTinyTie) {
+		polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(-0.2, 0.5)<<QPointF(0.2, 0.5)<<QPointF(-0.2, -0.5);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsPlus) {
+		polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.5, 0.2)
+				<<QPointF(0.2, 0.2)<<QPointF(0.2, 0.5)<<QPointF(-0.2, 0.5)<<QPointF(-0.2, 0.2)<<QPointF(-0.5, 0.2)
+				<<QPointF(-0.5, -0.2)<<QPointF(-0.2, -0.2)<<QPointF(-0.2, -0.5);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsBoomerang) {
+		polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(0, 0)<<QPointF(-0.5, 0.5);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsSmallBoomerang) {
+		polygon<<QPointF(-0.3, 0.5)<<QPointF(0, -0.5)<<QPointF(0.3, 0.5)<<QPointF(0, 0)<<QPointF(-0.3, 0.5);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsStar4) {
+		polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
+				<<QPointF(0.1, 0.1)<<QPointF(0, 0.5)<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsStar5) {
+		polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
+				<<QPointF(0.1, 0.1)<<QPointF(0.5, 0.5)<<QPointF(0, 0.2)<<QPointF(-0.5, 0.5)
+				<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
+		path.addPolygon(polygon);
+	} else if (style == XYCurve::SymbolsLine) {
+		path = QPainterPath(QPointF(0, -0.5));
+		path.lineTo(0, 0.5);
+	} else if (style == XYCurve::SymbolsCross) {
+		path = QPainterPath(QPointF(0, -0.5));
+		path.lineTo(0, 0.5);
+		path.moveTo(-0.5, 0);
+		path.lineTo(0.5, 0);
+	}
+
+	return path;
+}
+
+QString XYCurve::symbolsNameFromStyle(XYCurve::SymbolsStyle style) {
+	QString name;
+	if (style == XYCurve::SymbolsCircle)
+		name = i18n("circle");
+	else if (style == XYCurve::SymbolsSquare)
+		name = i18n("square");
+	else if (style == XYCurve::SymbolsEquilateralTriangle)
+		name = i18n("equilateral triangle");
+	else if (style == XYCurve::SymbolsRightTriangle)
+		name = i18n("right triangle");
+	else if (style == XYCurve::SymbolsBar)
+		name = i18n("bar");
+	else if (style == XYCurve::SymbolsPeakedBar)
+		name = i18n("peaked bar");
+	else if (style == XYCurve::SymbolsSkewedBar)
+		name = i18n("skewed bar");
+	else if (style == XYCurve::SymbolsDiamond)
+		name = i18n("diamond");
+	else if (style == XYCurve::SymbolsLozenge)
+		name = i18n("lozenge");
+	else if (style == XYCurve::SymbolsTie)
+		name = i18n("tie");
+	else if (style == XYCurve::SymbolsTinyTie)
+		name = i18n("tiny tie");
+	else if (style == XYCurve::SymbolsPlus)
+		name = i18n("plus");
+	else if (style == XYCurve::SymbolsBoomerang)
+		name = i18n("boomerang");
+	else if (style == XYCurve::SymbolsSmallBoomerang)
+		name = i18n("small boomerang");
+	else if (style == XYCurve::SymbolsStar4)
+		name = i18n("star4");
+	else if (style == XYCurve::SymbolsStar5)
+		name = i18n("star5");
+	else if (style == XYCurve::SymbolsLine)
+		name = i18n("line");
+	else if (style == XYCurve::SymbolsCross)
+		name = i18n("cross");
+
+	return name;
+}
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -678,15 +776,9 @@ void XYCurve::curveVisibilityChanged(){
 //######################### Private implementation #############################
 //##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : m_printing(false), m_hovered(false), m_suppressRecalc(false),
-	m_suppressRetransform(false), m_hoverEffectImageIsDirty(false), m_selectionEffectImageIsDirty(false), symbolsFactory(0), q(owner) {
+	m_suppressRetransform(false), m_hoverEffectImageIsDirty(false), m_selectionEffectImageIsDirty(false), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(true);
-
-	foreach(QObject *plugin, PluginManager::plugins()) {
-		CurveSymbolFactory* factory = qobject_cast<CurveSymbolFactory*>(plugin);
-		if (factory)
-			symbolsFactory = factory;
-	}
 }
 
 QString XYCurvePrivate::name() const {
@@ -1083,16 +1175,14 @@ void XYCurvePrivate::updateDropLines(){
 
 void XYCurvePrivate::updateSymbols(){
 	symbolsPath = QPainterPath();
+	if (symbolsStyle != XYCurve::NoSymbols){
+		QPainterPath path = XYCurve::symbolsPathFromStyle(symbolsStyle);
 
-	if (symbolsPrototype->id() != "none"){
-		symbolsPrototype->setSize(symbolsSize);
-		symbolsPrototype->setAspectRatio(1);
-		symbolsPrototype->setBrush(symbolsBrush);
-		symbolsPrototype->setPen(symbolsPen);
-		symbolsPrototype->setRotationAngle(symbolsRotationAngle);
-
-		QPainterPath path = symbolsPrototype->shape();
 		QTransform trafo;
+		trafo.scale(symbolsSize, symbolsSize);
+		path = trafo.map(path);
+		trafo.reset();
+
 		if (symbolsRotationAngle != 0) {
 			trafo.rotate(symbolsRotationAngle);
 			path = trafo.map(path);
@@ -1414,7 +1504,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
 	}
 
-	if (symbolsPrototype && symbolsPrototype->id() != "none"){
+	if (symbolsStyle != XYCurve::NoSymbols){
 		curveShape.addPath(symbolsPath);
 	}
 
@@ -1436,26 +1526,47 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	updatePixmap();
 }
 
-QString XYCurvePrivate::swapSymbolsTypeId(const QString &id) {
-	QString oldId = symbolsTypeId;
-	if (!symbolsFactory)
-		return oldId;
-
-	if (id != symbolsTypeId) {
-		symbolsTypeId = id;
-		delete symbolsPrototype;
-		symbolsPrototype = NULL;
-		const AbstractCurveSymbol* prototype = symbolsFactory->prototype(symbolsTypeId);
-		if (prototype)
-			symbolsPrototype = prototype->clone();
-		if (!symbolsPrototype)
-			return oldId;
-
-		emit q->symbolsTypeIdChanged(id);
+void XYCurvePrivate::draw(QPainter *painter) {
+	//draw lines
+	if (lineType != XYCurve::NoLine){
+		painter->setOpacity(lineOpacity);
+		painter->setPen(linePen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(linePath);
 	}
 
-	updateSymbols();
-	return oldId;
+	//draw drop lines
+	if (dropLineType != XYCurve::NoDropLine){
+		painter->setOpacity(dropLineOpacity);
+		painter->setPen(dropLinePen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(dropLinePath);
+	}
+
+	//draw error bars
+	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
+		painter->setOpacity(errorBarsOpacity);
+		painter->setPen(errorBarsPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(errorBarsPath);
+	}
+
+	//draw symbols
+	if (symbolsStyle != XYCurve::NoSymbols){
+		painter->setOpacity(symbolsOpacity);
+		painter->setPen(symbolsPen);
+		painter->setBrush(symbolsBrush);
+		drawSymbols(painter);
+	}
+
+	//draw values
+	if (valuesType != XYCurve::NoValues){
+		painter->setOpacity(valuesOpacity);
+		painter->setPen(valuesColor);
+		painter->setBrush(Qt::SolidPattern);
+		drawValues(painter);
+	}
+
 }
 
 void XYCurvePrivate::updatePixmap() {
@@ -1471,45 +1582,8 @@ void XYCurvePrivate::updatePixmap() {
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-boundingRectangle.topLeft());
 
-	//draw lines
-	if (lineType != XYCurve::NoLine){
-		painter.setOpacity(lineOpacity);
-		painter.setPen(linePen);
-		painter.setBrush(Qt::NoBrush);
-		painter.drawPath(linePath);
-	}
-
-	//draw drop lines
-	if (dropLineType != XYCurve::NoDropLine){
-		painter.setOpacity(dropLineOpacity);
-		painter.setPen(dropLinePen);
-		painter.setBrush(Qt::NoBrush);
-		painter.drawPath(dropLinePath);
-	}
-
-	//draw error bars
-	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
-		painter.setOpacity(errorBarsOpacity);
-		painter.setPen(errorBarsPen);
-		painter.setBrush(Qt::NoBrush);
-		painter.drawPath(errorBarsPath);
-	}
-
-	//draw symbols
-	if (symbolsPrototype->id() != "none"){
-		painter.setOpacity(symbolsOpacity);
-		painter.setPen(symbolsPen);
-		painter.setBrush(symbolsBrush);
-		drawSymbols(&painter);
-	}
-
-	//draw values
-	if (valuesType != XYCurve::NoValues){
-		painter.setOpacity(valuesOpacity);
-		painter.setPen(valuesColor);
-		painter.setBrush(Qt::SolidPattern);
-		drawValues(&painter);
-	}
+	draw(&painter);
+	painter.end();
 
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
@@ -1599,10 +1673,15 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 // 	QTime timer;
 // 	timer.start();
-    painter->setPen(Qt::NoPen);
+	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+// TODO: draw directly
+	// draw(painter);
+// or use pixmap for double buffering
 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
+
 // 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
 	if (m_hovered && !isSelected() && !m_printing){
@@ -1647,8 +1726,12 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	which us much faster (factor 10)
 */
 void XYCurvePrivate::drawSymbols(QPainter* painter) {
-	QPainterPath path = symbolsPrototype->shape();
+	QPainterPath path = XYCurve::symbolsPathFromStyle(symbolsStyle);
+
 	QTransform trafo;
+	trafo.scale(symbolsSize, symbolsSize);
+	path = trafo.map(path);
+	trafo.reset();
 	if (symbolsRotationAngle != 0) {
 		trafo.rotate(symbolsRotationAngle);
 		path = trafo.map(path);
@@ -1729,10 +1812,10 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 
 	//Symbols
 	writer->writeStartElement( "symbols" );
+	writer->writeAttribute( "symbolsStyle", QString::number(d->symbolsStyle) );
 	writer->writeAttribute( "opacity", QString::number(d->symbolsOpacity) );
 	writer->writeAttribute( "rotation", QString::number(d->symbolsRotationAngle) );
 	writer->writeAttribute( "size", QString::number(d->symbolsSize) );
-	writer->writeAttribute( "id", d->symbolsTypeId );
 	WRITE_QBRUSH(d->symbolsBrush);
 	WRITE_QPEN(d->symbolsPen);
 	writer->writeEndElement();
@@ -1847,6 +1930,12 @@ bool XYCurve::load(XmlStreamReader* reader){
 		}else if (reader->name() == "symbols"){
 			attribs = reader->attributes();
 
+			str = attribs.value("symbolsStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'symbolsStyle'"));
+            else
+                d->symbolsStyle = (XYCurve::SymbolsStyle)str.toInt();
+
 			str = attribs.value("opacity").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
@@ -1864,12 +1953,6 @@ bool XYCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'size'"));
             else
                 d->symbolsSize = str.toDouble();
-
-			str = attribs.value("id").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'id'"));
-            else
-                d->swapSymbolsTypeId(str);
 
 			READ_QBRUSH(d->symbolsBrush);
 			READ_QPEN(d->symbolsPen);

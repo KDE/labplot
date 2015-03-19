@@ -523,11 +523,10 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
-		TextLabel::PositionWrapper tempPosition{
-			positionFromItemPosition(value.toPointF()),
-			TextLabel::hPositionCustom,
-			TextLabel::vPositionCustom
-		};
+		TextLabel::PositionWrapper tempPosition;
+		tempPosition.point = positionFromItemPosition(value.toPointF());
+		tempPosition.horizontalPosition = TextLabel::hPositionCustom;
+		tempPosition.verticalPosition = TextLabel::vPositionCustom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -544,11 +543,10 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	if (abs(point.x()-position.point.x())>20 && qAbs(point.y()-position.point.y())>20 ) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
-		TextLabel::PositionWrapper tempPosition{
-			point,
-			TextLabel::hPositionCustom,
-			TextLabel::vPositionCustom
-		};
+		TextLabel::PositionWrapper tempPosition;
+		tempPosition.point = point;
+		tempPosition.horizontalPosition = TextLabel::hPositionCustom;
+		tempPosition.verticalPosition = TextLabel::vPositionCustom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}

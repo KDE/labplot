@@ -45,11 +45,10 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent) :
-    KPageDialog(parent){
+SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent){
+	const QSize minSize = minimumSize();
+	setMinimumSize(QSize(512, minSize.height()));
 
-    const QSize minSize = minimumSize();
-    setMinimumSize(QSize(512, minSize.height()));
 
     setFaceType(List);
     setWindowTitle(i18n("Preferences"));
@@ -60,6 +59,9 @@ SettingsDialog::SettingsDialog(QWidget* parent) :
 
     applybutton = dialogButtonBox->addButton(QDialogButtonBox::Apply);
     connect( applybutton, &QAbstractButton::clicked, this, &SettingsDialog::onApplyButton );
+	generalPage = new SettingsGeneralPage(this);
+	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
+    generalFrame->setIcon(QIcon("system-run"));
 
     dialogButtonBox->addButton(QDialogButtonBox::Cancel);
 
@@ -72,9 +74,6 @@ SettingsDialog::SettingsDialog(QWidget* parent) :
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget( dialogButtonBox );
     setLayout( layout );
-
-    generalPage = new SettingsGeneralPage(this);
-    KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
     generalFrame->setIcon(QIcon("system-run"));
     connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
@@ -124,7 +123,7 @@ void SettingsDialog::changed() {
 
 void SettingsDialog::applySettings(){
     m_changed = false;
-    generalPage->applySettings();
+	generalPage->applySettings();
 //     printingPage->applySettings();
     KSharedConfig::openConfig()->sync();
     emit settingsChanged();
@@ -132,6 +131,6 @@ void SettingsDialog::applySettings(){
 
 void SettingsDialog::restoreDefaults(){
     m_changed = false;
-    generalPage->restoreDefaults();
+	generalPage->restoreDefaults();
 //    printingPage->restoreDefaults();
 }

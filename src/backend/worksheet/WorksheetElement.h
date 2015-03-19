@@ -4,7 +4,7 @@
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -40,7 +40,7 @@ class WorksheetElement: public AbstractAspect {
 	Q_OBJECT
 
 	public:
-		explicit WorksheetElement(const QString &name);
+		explicit WorksheetElement(const QString&);
 		virtual ~WorksheetElement();
 
 		enum WorksheetElementName {NameCartesianPlot = 1};
@@ -51,18 +51,18 @@ class WorksheetElement: public AbstractAspect {
 		virtual bool isVisible() const = 0;
 		virtual bool isFullyVisible() const;
 		virtual void setPrinting(bool) = 0;
-		virtual QMenu *createContextMenu();
+		virtual QMenu* createContextMenu();
 
-		static QPainterPath shapeFromPath(const QPainterPath &path, const QPen &pen);
+		static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 
 	public slots:
 		virtual void retransform() = 0;
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
 
 	private:
-		QMenu *m_drawingOrderMenu;
-		QMenu *m_moveBehindMenu;
-		QMenu *m_moveInFrontOfMenu;
+		QMenu* m_drawingOrderMenu;
+		QMenu* m_moveBehindMenu;
+		QMenu* m_moveInFrontOfMenu;
 
 	protected:
 		static QPen selectedPen;

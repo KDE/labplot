@@ -3,7 +3,7 @@
     Project          : LabPlot
     Description      : widget for curve properties
     --------------------------------------------------------------------
-    Copyright         : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright         : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
     Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -38,7 +38,6 @@
 
 class XYCurve;
 class TreeViewComboBox;
-class CurveSymbolFactory;
 class AspectTreeModel;
 class Column;
 
@@ -66,10 +65,7 @@ private:
 	TreeViewComboBox* cbYErrorPlusColumn;
 	TreeViewComboBox* cbYErrorMinusColumn;
 
-	CurveSymbolFactory* symbolFactory;
-
 	virtual void initGeneralTab();
-	void fillSymbolStyles();
 	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
 	void showValuesColumnFormat(const Column*);
 
@@ -162,7 +158,7 @@ private slots:
 	void curveDropLineOpacityChanged(qreal);
 
 	//Symbol-Tab
-	void curveSymbolsTypeIdChanged(QString);
+	void curveSymbolsStyleChanged(XYCurve::SymbolsStyle);
 	void curveSymbolsSizeChanged(qreal);
 	void curveSymbolsRotationAngleChanged(qreal);
 	void curveSymbolsOpacityChanged(qreal);
