@@ -73,11 +73,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.gbOptions->hide();
 
-    ui.bOpen->setIcon( QIcon("document-open") );
-    ui.bFileInfo->setIcon( QIcon("help-about") );
-    ui.bManageFilters->setIcon( QIcon("configure") );
-    ui.bSaveFilter->setIcon( QIcon("document-save") );
-    ui.bRefreshPreview->setIcon( QIcon("view-refresh") );
+    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+    ui.bFileInfo->setIcon( QIcon::fromTheme("help-about") );
+    ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
+    ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
+    ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
     connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
     connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );

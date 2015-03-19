@@ -87,7 +87,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleBackgroundFileName->setClearButtonShown(true);
-    ui.bOpen->setIcon( QIcon("document-open") );
+    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleBackgroundFileName->setCompletionObject(comp);

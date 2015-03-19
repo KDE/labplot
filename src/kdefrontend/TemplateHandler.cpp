@@ -76,11 +76,11 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	tbPaste->setEnabled(false);
 	horizontalLayout->addWidget(tbPaste);
 
-    tbLoad->setIcon(QIcon("document-open"));
-    tbSave->setIcon(QIcon("document-save"));
-    tbSaveDefault->setIcon(QIcon("document-save-as"));
-    tbCopy->setIcon(QIcon("edit-copy"));
-    tbPaste->setIcon(QIcon("edit-paste"));
+    tbLoad->setIcon(QIcon::fromTheme("document-open"));
+    tbSave->setIcon(QIcon::fromTheme("document-save"));
+    tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
+    tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
+    tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
 
 	connect( tbLoad, SIGNAL(clicked()), this, SLOT(loadMenu()));
 	connect( tbSave, SIGNAL(clicked()), this, SLOT(saveMenu()));

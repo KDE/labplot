@@ -63,7 +63,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
-    ui.bOpen->setIcon( QIcon("document-open") );
+    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleBackgroundFileName->setCompletionObject(comp);

@@ -52,13 +52,13 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	KUrlCompletion *comp = new KUrlCompletion();
     ui.kleFileName->setCompletionObject(comp);
 
-    ui.bOpen->setIcon( QIcon("document-open") );
+    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-    ui.cbFormat->addItem(QIcon("application-pdf"), "Portable data format (PDF)");
-    ui.cbFormat->addItem(QIcon("image-x-eps"), "Encapsulated PostScript (EPS)");
-    ui.cbFormat->addItem(QIcon("image-svg+xml"), "Scalable Vector Graphics (SVG)");
+    ui.cbFormat->addItem(QIcon::fromTheme("application-pdf"), "Portable data format (PDF)");
+    ui.cbFormat->addItem(QIcon::fromTheme("image-x-eps"), "Encapsulated PostScript (EPS)");
+    ui.cbFormat->addItem(QIcon::fromTheme("image-svg+xml"), "Scalable Vector Graphics (SVG)");
 	ui.cbFormat->insertSeparator(3);
-    ui.cbFormat->addItem(QIcon("image-x-generic"), "Portable Network Graphics (PNG)");
+    ui.cbFormat->addItem(QIcon::fromTheme("image-x-generic"), "Portable Network Graphics (PNG)");
 
 	ui.cbExportArea->addItem("Object's bounding box");
 	ui.cbExportArea->addItem("Current selection");
@@ -83,7 +83,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Export worksheet"));
-    setWindowIcon(QIcon("document-export-database"));
+    setWindowIcon(QIcon::fromTheme("document-export-database"));
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", "").toInt());

@@ -126,12 +126,12 @@ void WorksheetView::initActions(){
     QActionGroup* gridActionGroup = new QActionGroup(this);
     gridActionGroup->setExclusive(true);
 
-    selectAllAction = new QAction(QIcon("edit-select-all"), i18n("Select all"), this);
+    selectAllAction = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select all"), this);
     selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
     this->addAction(selectAllAction);
     connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAllElements()));
 
-    deleteAction = new QAction(QIcon("edit-delete"), i18n("Delete"), this);
+    deleteAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this);
     deleteAction->setShortcut(Qt::Key_Delete);
     this->addAction(deleteAction);
     connect(deleteAction, SIGNAL(triggered()), SLOT(deleteElement()));
@@ -142,54 +142,54 @@ void WorksheetView::initActions(){
     connect(backspaceAction, SIGNAL(triggered()), SLOT(deleteElement()));
 
     //Zoom actions
-    zoomInViewAction = new QAction(QIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
+    zoomInViewAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom in"), zoomActionGroup);
     zoomInViewAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
 
-    zoomOutViewAction = new QAction(QIcon("zoom-out"), i18n("Zoom out"), zoomActionGroup);
+    zoomOutViewAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom out"), zoomActionGroup);
     zoomOutViewAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
 
-    zoomOriginAction = new QAction(QIcon("zoom-original"), i18n("Original size"), zoomActionGroup);
+    zoomOriginAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original size"), zoomActionGroup);
     zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
 
-    zoomFitPageHeightAction = new QAction(QIcon("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
-    zoomFitPageWidthAction = new QAction(QIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
+    zoomFitPageHeightAction = new QAction(QIcon::fromTheme("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
+    zoomFitPageWidthAction = new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
     zoomFitSelectionAction = new QAction(i18n("Fit to selection"), zoomActionGroup);
 
     // Mouse mode actions
-    selectionModeAction = new QAction(QIcon("cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
+    selectionModeAction = new QAction(QIcon::fromTheme("cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
     selectionModeAction->setCheckable(true);
 
-    navigationModeAction = new QAction(QIcon("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
+    navigationModeAction = new QAction(QIcon::fromTheme("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
     navigationModeAction->setCheckable(true);
 
-    zoomSelectionModeAction = new QAction(QIcon("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
+    zoomSelectionModeAction = new QAction(QIcon::fromTheme("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
     zoomSelectionModeAction->setCheckable(true);
 
     //TODO implement later "group selection action" where multiple objects can be selected by drawing a rectangular
-// 	selectionModeAction = new QAction(QIcon("select-rectangular"), i18n("Selection"), mouseModeActionGroup);
+// 	selectionModeAction = new QAction(QIcon::fromTheme("select-rectangular"), i18n("Selection"), mouseModeActionGroup);
 // 	selectionModeAction->setCheckable(true);
 
     //"Add new" related actions
-    addCartesianPlot1Action = new QAction(QIcon("cartesian-plot-four-axes"), i18n("box plot, four axes"), addNewActionGroup);
-    addCartesianPlot2Action = new QAction(QIcon("cartesian-plot-two-axes"), i18n("box plot, two axes"), addNewActionGroup);
-    addCartesianPlot3Action = new QAction(QIcon("cartesian-plot-two-axes-centered"), i18n("two axes, centered"), addNewActionGroup);
-    addCartesianPlot4Action = new QAction(QIcon("cartesian-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
-    addTextLabelAction = new QAction(QIcon("draw-text"), i18n("text label"), addNewActionGroup);
+    addCartesianPlot1Action = new QAction(QIcon::fromTheme("cartesian-plot-four-axes"), i18n("box plot, four axes"), addNewActionGroup);
+    addCartesianPlot2Action = new QAction(QIcon::fromTheme("cartesian-plot-two-axes"), i18n("box plot, two axes"), addNewActionGroup);
+    addCartesianPlot3Action = new QAction(QIcon::fromTheme("cartesian-plot-two-axes-centered"), i18n("two axes, centered"), addNewActionGroup);
+    addCartesianPlot4Action = new QAction(QIcon::fromTheme("cartesian-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
+    addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("text label"), addNewActionGroup);
 
     //Layout actions
-    verticalLayoutAction = new QAction(QIcon("editvlayout"), i18n("Vertical layout"), layoutActionGroup);
+    verticalLayoutAction = new QAction(QIcon::fromTheme("editvlayout"), i18n("Vertical layout"), layoutActionGroup);
     verticalLayoutAction->setObjectName("verticalLayoutAction");
     verticalLayoutAction->setCheckable(true);
 
-    horizontalLayoutAction = new QAction(QIcon("edithlayout"), i18n("Horizontal layout"), layoutActionGroup);
+    horizontalLayoutAction = new QAction(QIcon::fromTheme("edithlayout"), i18n("Horizontal layout"), layoutActionGroup);
     horizontalLayoutAction->setObjectName("horizontalLayoutAction");
     horizontalLayoutAction->setCheckable(true);
 
-    gridLayoutAction = new QAction(QIcon("editgrid"), i18n("Grid layout"), layoutActionGroup);
+    gridLayoutAction = new QAction(QIcon::fromTheme("editgrid"), i18n("Grid layout"), layoutActionGroup);
     gridLayoutAction->setObjectName("gridLayoutAction");
     gridLayoutAction->setCheckable(true);
 
-    breakLayoutAction = new QAction(QIcon("editbreaklayout"), i18n("Break layout"), layoutActionGroup);
+    breakLayoutAction = new QAction(QIcon::fromTheme("editbreaklayout"), i18n("Break layout"), layoutActionGroup);
     breakLayoutAction->setObjectName("breakLayoutAction");
     breakLayoutAction->setEnabled(false);
 
@@ -246,41 +246,41 @@ void WorksheetView::initActions(){
 
     QActionGroup* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
     cartesianPlotMouseModeActionGroup->setExclusive(true);
-    cartesianPlotSelectionModeAction = new QAction(QIcon("cursor-arrow"), i18n("Select and edit"), cartesianPlotMouseModeActionGroup);
+    cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("cursor-arrow"), i18n("Select and edit"), cartesianPlotMouseModeActionGroup);
     cartesianPlotSelectionModeAction->setCheckable(true);
     cartesianPlotSelectionModeAction->setChecked(true);
 
-    cartesianPlotZoomSelectionModeAction = new QAction(QIcon("zoom-select"), i18n("Select region and zoom in"), cartesianPlotMouseModeActionGroup);
+    cartesianPlotZoomSelectionModeAction = new QAction(QIcon::fromTheme("zoom-select"), i18n("Select region and zoom in"), cartesianPlotMouseModeActionGroup);
     cartesianPlotZoomSelectionModeAction->setCheckable(true);
 
-    cartesianPlotZoomXSelectionModeAction = new QAction(QIcon("zoom-select-x"), i18n("Select x-region and zoom in"), cartesianPlotMouseModeActionGroup);
+    cartesianPlotZoomXSelectionModeAction = new QAction(QIcon::fromTheme("zoom-select-x"), i18n("Select x-region and zoom in"), cartesianPlotMouseModeActionGroup);
     cartesianPlotZoomXSelectionModeAction->setCheckable(true);
 
-    cartesianPlotZoomYSelectionModeAction = new QAction(QIcon("zoom-select-y"), i18n("Select y-region and zoom in"), cartesianPlotMouseModeActionGroup);
+    cartesianPlotZoomYSelectionModeAction = new QAction(QIcon::fromTheme("zoom-select-y"), i18n("Select y-region and zoom in"), cartesianPlotMouseModeActionGroup);
     cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
     connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
 
-    addCurveAction = new QAction(QIcon("xy-curve"), i18n("xy-curve"), this);
-    addEquationCurveAction = new QAction(QIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
-    addFitCurveAction = new QAction(QIcon("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
-    addLegendAction = new QAction(QIcon("text-field"), i18n("legend"), this);
-    addHorizontalAxisAction = new QAction(QIcon("axis-horizontal"), i18n("horizontal axis"), this);
-    addVerticalAxisAction = new QAction(QIcon("axis-vertical"), i18n("vertical axis"), this);
+    addCurveAction = new QAction(QIcon::fromTheme("xy-curve"), i18n("xy-curve"), this);
+    addEquationCurveAction = new QAction(QIcon::fromTheme("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+    addFitCurveAction = new QAction(QIcon::fromTheme("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+    addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), this);
+    addHorizontalAxisAction = new QAction(QIcon::fromTheme("axis-horizontal"), i18n("horizontal axis"), this);
+    addVerticalAxisAction = new QAction(QIcon::fromTheme("axis-vertical"), i18n("vertical axis"), this);
 
-    scaleAutoAction = new QAction(QIcon("auto-scale-all"), i18n("auto scale"), this);
-    scaleAutoXAction = new QAction(QIcon("auto-scale-x"), i18n("auto scale X"), this);
-    scaleAutoYAction = new QAction(QIcon("auto-scale-y"), i18n("auto scale Y"), this);
-    zoomInAction = new QAction(QIcon("zoom-in"), i18n("zoom in"), this);
-    zoomOutAction = new QAction(QIcon("zoom-out"), i18n("zoom out"), this);
-    zoomInXAction = new QAction(QIcon("zoom-in-x"), i18n("zoom in X"), this);
-    zoomOutXAction = new QAction(QIcon("zoom-out-x"), i18n("zoom out X"), this);
-    zoomInYAction = new QAction(QIcon("zoom-in-y"), i18n("zoom in Y"), this);
-    zoomOutYAction = new QAction(QIcon("zoom-out-y"), i18n("zoom out Y"), this);
-    shiftLeftXAction = new QAction(QIcon("shift-left-x"), i18n("shift left X"), this);
-    shiftRightXAction = new QAction(QIcon("shift-right-x"), i18n("shift right X"), this);
-    shiftUpYAction = new QAction(QIcon("shift-up-y"), i18n("shift up Y"), this);
-    shiftDownYAction = new QAction(QIcon("shift-down-y"), i18n("shift down Y"), this);
+    scaleAutoAction = new QAction(QIcon::fromTheme("auto-scale-all"), i18n("auto scale"), this);
+    scaleAutoXAction = new QAction(QIcon::fromTheme("auto-scale-x"), i18n("auto scale X"), this);
+    scaleAutoYAction = new QAction(QIcon::fromTheme("auto-scale-y"), i18n("auto scale Y"), this);
+    zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("zoom in"), this);
+    zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("zoom out"), this);
+    zoomInXAction = new QAction(QIcon::fromTheme("zoom-in-x"), i18n("zoom in X"), this);
+    zoomOutXAction = new QAction(QIcon::fromTheme("zoom-out-x"), i18n("zoom out X"), this);
+    zoomInYAction = new QAction(QIcon::fromTheme("zoom-in-y"), i18n("zoom in Y"), this);
+    zoomOutYAction = new QAction(QIcon::fromTheme("zoom-out-y"), i18n("zoom out Y"), this);
+    shiftLeftXAction = new QAction(QIcon::fromTheme("shift-left-x"), i18n("shift left X"), this);
+    shiftRightXAction = new QAction(QIcon::fromTheme("shift-right-x"), i18n("shift right X"), this);
+    shiftUpYAction = new QAction(QIcon::fromTheme("shift-up-y"), i18n("shift up Y"), this);
+    shiftDownYAction = new QAction(QIcon::fromTheme("shift-down-y"), i18n("shift down Y"), this);
 
     connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
     connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
@@ -313,18 +313,18 @@ void WorksheetView::initMenus(){
     m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
 
     m_addNewMenu = new QMenu(i18n("Add new"));
-    m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon("office-chart-line"));
+    m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
     m_addNewMenu->addSeparator();
     m_addNewMenu->addAction(addTextLabelAction);
 
     m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"));
-    m_viewMouseModeMenu->setIcon(QIcon("input-mouse"));
+    m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
     m_viewMouseModeMenu->addAction(selectionModeAction);
     m_viewMouseModeMenu->addAction(navigationModeAction);
     m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
 
     m_zoomMenu = new QMenu(i18n("Zoom"));
-    m_zoomMenu->setIcon(QIcon("zoom-draw"));
+    m_zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
     m_zoomMenu->addAction(zoomInViewAction);
     m_zoomMenu->addAction(zoomOutViewAction);
     m_zoomMenu->addAction(zoomOriginAction);
@@ -340,7 +340,7 @@ void WorksheetView::initMenus(){
     m_layoutMenu->addAction(breakLayoutAction);
 
     m_gridMenu = new QMenu(i18n("Grid"));
-    m_gridMenu->setIcon(QIcon("view-grid"));
+    m_gridMenu->setIcon(QIcon::fromTheme("view-grid"));
     m_gridMenu->addAction(noGridAction);
     m_gridMenu->addSeparator();
     m_gridMenu->addAction(sparseLineGridAction);
@@ -357,7 +357,7 @@ void WorksheetView::initMenus(){
     m_cartesianPlotMenu = new QMenu(i18n("Cartesian Plot"));
 
     m_cartesianPlotMouseModeMenu = new QMenu(i18n("Mouse Mode"));
-    m_cartesianPlotMouseModeMenu->setIcon(QIcon("input-mouse"));
+    m_cartesianPlotMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
     m_cartesianPlotMouseModeMenu->addAction(cartesianPlotSelectionModeAction);
     m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomSelectionModeAction);
     m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomXSelectionModeAction);
@@ -374,7 +374,7 @@ void WorksheetView::initMenus(){
     m_cartesianPlotAddNewMenu->addAction(addVerticalAxisAction);
 
     m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"));
-    m_cartesianPlotZoomMenu->setIcon(QIcon("zoom-draw"));
+    m_cartesianPlotZoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
     m_cartesianPlotZoomMenu->addAction(scaleAutoAction);
     m_cartesianPlotZoomMenu->addAction(scaleAutoXAction);
     m_cartesianPlotZoomMenu->addAction(scaleAutoYAction);

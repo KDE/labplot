@@ -90,9 +90,9 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
-    uiGeneralTab.tbConstants->setIcon( QIcon("format-text-symbol") );
-    uiGeneralTab.tbFunctions->setIcon( QIcon("preferences-desktop-font") );
-    uiGeneralTab.pbRecalculate->setIcon(QIcon("run-build"));
+    uiGeneralTab.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
+    uiGeneralTab.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
+    uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);

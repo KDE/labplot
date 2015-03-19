@@ -452,14 +452,14 @@ QIcon Column::icon() const {
 // 		case AbstractColumn::Numeric:
 // 			return KIcon("x-shape-text");
 // 		case AbstractColumn::Text:
-// 			return QIcon(QPixmap(":/texttype.png"));
+// 			return QIcon::fromTheme(QPixmap(":/texttype.png"));
 // 		case AbstractColumn::DateTime:
 // 		case AbstractColumn::Month:
 // 		case AbstractColumn::Day:
-// 			return QIcon(QPixmap(""));
+// 			return QIcon::fromTheme(QPixmap(""));
 // 	}
 
-    return QIcon("x-shape-text");
+    return QIcon::fromTheme("x-shape-text");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

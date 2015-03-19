@@ -51,7 +51,7 @@ class Worksheet: public AbstractPart, public scripted{
 		static float convertToSceneUnits(const float value, const Worksheet::Unit unit);
 		static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
 
-		virtual QIcon icon() const;
+        virtual QIcon icon() const;
 		virtual QMenu *createContextMenu();
 		virtual QWidget *view() const;
 

@@ -138,7 +138,7 @@ void MainWin::initGUI(const QString& fileName){
     initActions();
     initMenus();
     setupGUI();
-    setWindowIcon(QIcon("LabPlot2"));
+    setWindowIcon(QIcon::fromTheme("LabPlot2"));
     setAttribute( Qt::WA_DeleteOnClose );
 
     //make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
@@ -210,45 +210,45 @@ void MainWin::initActions() {
     KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 
     //New Folder/Spreadsheet/Worksheet/Datasources
-    m_newSpreadsheetAction = new QAction(QIcon("insert-table"),i18n("Spreadsheet"),this);
+    m_newSpreadsheetAction = new QAction(QIcon::fromTheme("insert-table"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
     actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
     connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
 
-// 	m_newMatrixAction = new QAction(QIcon("insert-table"),i18n("Matrix"),this);
+// 	m_newMatrixAction = new QAction(QIcon::fromTheme("insert-table"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 // 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
 // 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
-    m_newWorksheetAction= new QAction(QIcon("archive-insert"),i18n("Worksheet"),this);
+    m_newWorksheetAction= new QAction(QIcon::fromTheme("archive-insert"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
     actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
     connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
 
-// 	m_newScriptAction = new QAction(QIcon("insert-text"),i18n("Note/Script"),this);
+// 	m_newScriptAction = new QAction(QIcon::fromTheme("insert-text"),i18n("Note/Script"),this);
 // 	actionCollection()->addAction("new_script", m_newScriptAction);
 // 	connect(m_newScriptAction, SIGNAL(triggered()),SLOT(newScript()));
 
-    m_newFolderAction = new QAction(QIcon("folder-new"),i18n("Folder"),this);
+    m_newFolderAction = new QAction(QIcon::fromTheme("folder-new"),i18n("Folder"),this);
     actionCollection()->addAction("new_folder", m_newFolderAction);
     connect(m_newFolderAction, SIGNAL(triggered()),SLOT(newFolder()));
 
     //"New file datasources"
-    m_newFileDataSourceAction = new QAction(QIcon("application-octet-stream"),i18n("File Data Source"),this);
+    m_newFileDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("File Data Source"),this);
     actionCollection()->addAction("new_file_datasource", m_newFileDataSourceAction);
     connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
 
     //"New database datasources"
-// 	m_newSqlDataSourceAction = new QAction(QIcon("server-database"),i18n("SQL Data Source "),this);
+// 	m_newSqlDataSourceAction = new QAction(QIcon::fromTheme("server-database"),i18n("SQL Data Source "),this);
 // 	actionCollection()->addAction("new_database_datasource", m_newSqlDataSourceAction);
 // 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
-    m_importAction = new QAction(QIcon("document-import-database"), i18n("Import"), this);
+    m_importAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import"), this);
     m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
     actionCollection()->addAction("import", m_importAction);
     connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
 
-    m_exportAction = new QAction(QIcon("document-export-database"), i18n("Export"), this);
+    m_exportAction = new QAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this);
     m_exportAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
     actionCollection()->addAction("export", m_exportAction);
     connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
@@ -258,7 +258,7 @@ void MainWin::initActions() {
     m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
     m_redoAction = KStandardAction::redo(this, SLOT(redo()), actionCollection());
 
-    m_historyAction = new QAction(QIcon("view-history"), i18n("Undo/Redo History"),this);
+    m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History"),this);
     actionCollection()->addAction("history", m_historyAction);
     connect(m_historyAction, SIGNAL(triggered()),SLOT(historyDialog()));
 
@@ -289,12 +289,12 @@ void MainWin::initActions() {
     actionCollection()->addAction("cascade windows", m_cascadeWindows);
     connect(m_cascadeWindows, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
 
-    action = new QAction(QIcon("go-next-view"), i18n("Ne&xt"), this);
+    action = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
     action->setStatusTip(i18n("Move the focus to the next window"));
     actionCollection()->addAction("next window", action);
     connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
 
-    action = new QAction(QIcon("go-previous-view"), i18n("Pre&vious"), this);
+    action = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
     action->setStatusTip(i18n("Move the focus to the previous window"));
     actionCollection()->addAction("previous window", action);
     connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
@@ -307,11 +307,11 @@ void MainWin::initActions() {
     QActionGroup* windowVisibilityActions = new QActionGroup(this);
     windowVisibilityActions->setExclusive(true);
 
-    m_visibilityFolderAction = new QAction(QIcon("folder"), i18n("Current &Folder Only"), windowVisibilityActions);
+    m_visibilityFolderAction = new QAction(QIcon::fromTheme("folder"), i18n("Current &Folder Only"), windowVisibilityActions);
     m_visibilityFolderAction->setCheckable(true);
     m_visibilityFolderAction->setData(Project::folderOnly);
 
-    m_visibilitySubfolderAction = new QAction(QIcon("folder-documents"), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
+    m_visibilitySubfolderAction = new QAction(QIcon::fromTheme("folder-documents"), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
     m_visibilitySubfolderAction->setCheckable(true);
     m_visibilitySubfolderAction->setData(Project::folderAndSubfolders);
 
@@ -325,12 +325,12 @@ void MainWin::initActions() {
     QActionGroup * docksActions = new QActionGroup(this);
     docksActions->setExclusive(false);
 
-    m_toggleProjectExplorerDockAction = new QAction(QIcon("view-list-tree"), i18n("Project explorer"), docksActions);
+    m_toggleProjectExplorerDockAction = new QAction(QIcon::fromTheme("view-list-tree"), i18n("Project explorer"), docksActions);
     m_toggleProjectExplorerDockAction->setCheckable(true);
     m_toggleProjectExplorerDockAction->setChecked(true);
     actionCollection()->addAction("toggle_project_explorer_dock", m_toggleProjectExplorerDockAction);
 
-    m_togglePropertiesDockAction = new QAction(QIcon("view-list-details"), i18n("Properties explorer"), docksActions);
+    m_togglePropertiesDockAction = new QAction(QIcon::fromTheme("view-list-details"), i18n("Properties explorer"), docksActions);
     m_togglePropertiesDockAction->setCheckable(true);
     m_togglePropertiesDockAction->setChecked(true);
     actionCollection()->addAction("toggle_properties_explorer_dock", m_togglePropertiesDockAction);
@@ -341,7 +341,7 @@ void MainWin::initActions() {
 void MainWin::initMenus(){
     //menu for adding new aspects
     m_newMenu = new QMenu(i18n("Add new"));
-    m_newMenu->setIcon(QIcon("document-new"));
+    m_newMenu->setIcon(QIcon::fromTheme("document-new"));
     m_newMenu->addAction(m_newFolderAction);
     m_newMenu->addAction(m_newSpreadsheetAction);
     m_newMenu->addAction(m_newWorksheetAction);
@@ -351,7 +351,7 @@ void MainWin::initMenus(){
 
     //menu subwindow visibility policy
     m_visibilityMenu = new QMenu(i18n("Window visibility policy"));
-    m_visibilityMenu->setIcon(QIcon("window-duplicate"));
+    m_visibilityMenu->setIcon(QIcon::fromTheme("window-duplicate"));
     m_visibilityMenu ->addAction(m_visibilityFolderAction);
     m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
     m_visibilityMenu ->addAction(m_visibilityAllAction);

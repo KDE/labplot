@@ -61,7 +61,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent){
     connect( applybutton, &QAbstractButton::clicked, this, &SettingsDialog::onApplyButton );
 	generalPage = new SettingsGeneralPage(this);
 	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
-    generalFrame->setIcon(QIcon("system-run"));
+    generalFrame->setIcon(QIcon::fromTheme("system-run"));
 
     dialogButtonBox->addButton(QDialogButtonBox::Cancel);
 
@@ -74,7 +74,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent){
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget( dialogButtonBox );
     setLayout( layout );
-    generalFrame->setIcon(QIcon("system-run"));
+    generalFrame->setIcon(QIcon::fromTheme("system-run"));
     connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
 //     printingPage = new SettingsPrintingPage(mainWindow, this);

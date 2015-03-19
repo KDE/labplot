@@ -75,7 +75,7 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPositio
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Import Data to Spreadsheet/Matrix"));
-    setWindowIcon(QIcon("document-import-database"));
+    setWindowIcon(QIcon::fromTheme("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
 
@@ -111,7 +111,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	cbAddTo->setSelectableClasses(list);
 
 	bNewSpreadsheet = new QPushButton(frameAddTo);
-    bNewSpreadsheet->setIcon(QIcon("insert-table"));
+    bNewSpreadsheet->setIcon(QIcon::fromTheme("insert-table"));
 	bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
 	hLayout->addWidget( bNewSpreadsheet);
 	connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
@@ -251,8 +251,8 @@ void ImportFileDialog::newSpreadsheet(){
 	//TODO: how to set the icon in QInputDialog or in KInputDialog?
 	QInputDialog* dlg = new QInputDialog(this);
 
-//	this->setWindowIcon( QIcon(KIcon("insert-table")) );
-    dlg->setWindowIcon( QIcon(QIcon("insert-table")) );
+//	this->setWindowIcon( QIcon::fromTheme(KIcon("insert-table")) );
+    dlg->setWindowIcon( QIcon(QIcon::fromTheme("insert-table")) );
 	name = dlg->getText(this, i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), QLineEdit::Normal, name, &ok);
 // 	name = KInputDialog::getText( i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), name, &ok);
 	if (ok)

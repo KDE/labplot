@@ -154,7 +154,7 @@ QMenu* CartesianPlotLegend::createContextMenu(){
 	Returns an icon to be used in the project explorer.
 */
 QIcon CartesianPlotLegend::icon() const{
-	return QIcon("text-field");
+	return QIcon::fromTheme("text-field");
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(CartesianPlotLegend, SetVisible, bool, swapVisible)

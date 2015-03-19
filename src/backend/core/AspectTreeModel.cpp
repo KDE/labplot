@@ -184,7 +184,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const{
 			else
 				return aspect->name() + ", " + aspect->comment();
 		case Qt::DecorationRole:
-			return index.column() == 0 ? aspect->icon() : QIcon();
+            return index.column() == 0 ? aspect->icon() : QIcon();
 		case ContextMenuRole:
 			return QVariant::fromValue(static_cast<QWidget*>(aspect->createContextMenu()));
 		case Qt::ForegroundRole:{

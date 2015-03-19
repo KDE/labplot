@@ -71,7 +71,7 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color){
 		pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
 		pa.drawLine( offset, h/2, w-offset, h/2);
 		pa.end();
- 		comboBox->addItem( QIcon(pm), list[i] );
+        comboBox->addItem( QIcon(pm), list[i] );
 	}
 	comboBox->setCurrentIndex(index);
 }
@@ -103,7 +103,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 			pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
 			pa.drawLine( offset, h/2, w-offset, h/2);
 			pa.end();
-			action = new QAction( QIcon(pm), list[i], actionGroup );
+            action = new QAction( QIcon(pm), list[i], actionGroup );
 			action->setCheckable(true);
 			menu->addAction( action );
 			
@@ -116,7 +116,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 			pa.drawLine( offset, h/2, w-offset, h/2);
 			pa.end();
 			action = actionGroup->actions()[i];
-			action->setIcon( QIcon(pm) );
+            action->setIcon( QIcon(pm) );
 		}
 	}
 }
@@ -161,7 +161,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color){
  		pa.setBrush( QBrush(color, (Qt::BrushStyle)i) );
 		pa.drawRect( offset, offset, w - 2*offset, h - 2*offset);
 		pa.end();
-		comboBox->addItem( QIcon(pm), list[i] );
+        comboBox->addItem( QIcon(pm), list[i] );
 	}
 
 	comboBox->setCurrentIndex(index);
@@ -184,7 +184,7 @@ void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup){
 	
 	for (int i=0; i<colorsCount; ++i) {
 		p.fillRect(pix.rect(), colors[i]);
-		QAction* action = new QAction(QIcon(pix), colorNames[i], actionGroup);
+        QAction* action = new QAction(QIcon(pix), colorNames[i], actionGroup);
 		action->setCheckable(true);
 		menu->addAction(action);
 	}

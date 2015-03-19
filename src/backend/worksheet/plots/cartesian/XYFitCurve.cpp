@@ -84,7 +84,7 @@ void XYFitCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFitCurve::icon() const {
-    return QIcon("xy-fit-curve");
+    return QIcon::fromTheme("xy-fit-curve");
 }
 
 //##############################################################################

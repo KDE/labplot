@@ -41,21 +41,21 @@
 HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, QString& emptyLabel) : KDialog(parent){
 	m_undoStack = stack;
 	QUndoView* undoView = new QUndoView(stack, this);
-    undoView->setCleanIcon( QIcon("edit-clear-history") );
+    undoView->setCleanIcon( QIcon::fromTheme("edit-clear-history") );
  	undoView->setEmptyLabel(emptyLabel);
 	undoView->setMinimumWidth(350);
 	undoView->setWhatsThis(i18n("List of all performed steps/actions.\n"
 			"Select an item in the list to navigate to the corresponding step."));
     setMainWidget(undoView);
 
-    setWindowIcon( QIcon("view-history") );
+    setWindowIcon( QIcon::fromTheme("view-history") );
 	setWindowTitle(i18n("Undo/Redo History"));
     showButtonSeparator(true);
 
     if (stack->count()) {
         setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
         setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
-        setButtonIcon(KDialog::User1, QIcon("edit-clear"));
+        setButtonIcon(KDialog::User1, QIcon::fromTheme("edit-clear"));
         setButtonText(KDialog::User1, i18n("Clear"));
         connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
 	}else{

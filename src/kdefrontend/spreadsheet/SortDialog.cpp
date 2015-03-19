@@ -45,7 +45,7 @@
 
 SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : KDialog( parent, fl ){
 
-    setWindowIcon(QIcon("view-sort-ascending"));
+    setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18n("Sort columns"));
 	setSizeGripEnabled(true);
 
@@ -56,8 +56,8 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : KDialog( parent, fl )
 
 	layout->addWidget( new QLabel( i18n("Order")), 0, 0 );
 	cbOrdering = new QComboBox();
-    cbOrdering->addItem(QIcon("view-sort-ascending"), i18n("Ascending"));
-    cbOrdering->addItem(QIcon("view-sort-descending"), i18n("Descending"));
+    cbOrdering->addItem(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
+    cbOrdering->addItem(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
 	layout->addWidget(cbOrdering, 0, 1 );
 	
 	lblType = new QLabel(i18n("Sort columns"));

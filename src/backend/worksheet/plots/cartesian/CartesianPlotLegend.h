@@ -52,7 +52,7 @@ class CartesianPlotLegend: public WorksheetElement {
 		CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
 		virtual ~CartesianPlotLegend();
 
-		virtual QIcon icon() const;
+        virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void save(QXmlStreamWriter *) const;

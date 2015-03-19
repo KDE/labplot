@@ -65,7 +65,7 @@ class CartesianPlot:public AbstractPlot{
 		};
 
 		void initDefault(Type=FourAxes);
-		QIcon icon() const;
+        QIcon icon() const;
 		QMenu* createContextMenu();
 		void setRect(const QRectF&);
 		QRectF plotRect();

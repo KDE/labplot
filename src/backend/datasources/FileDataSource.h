@@ -63,7 +63,7 @@ class FileDataSource : public Spreadsheet {
 		void setFilter(AbstractFileFilter*);
 		AbstractFileFilter* filter() const;
 
-		virtual QIcon icon() const;
+        virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 

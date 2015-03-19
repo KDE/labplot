@@ -166,7 +166,7 @@ QMenu* XYCurve::createContextMenu(){
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYCurve::icon() const{
-	return QIcon("xy-curve");
+	return QIcon::fromTheme("xy-curve");
 }
 
 QGraphicsItem* XYCurve::graphicsItem() const{

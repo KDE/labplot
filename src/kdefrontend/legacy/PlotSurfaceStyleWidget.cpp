@@ -93,7 +93,7 @@ void PlotSurfaceStyleWidget::fillPatternBox() const{
  		pa.setBrush( QBrush(Qt::black, (Qt::BrushStyle)i) );
 		pa.drawRect( offset, offset, w-2*offset, h-2*offset);
 		pa.end();
-		ui.cbFillBrushStyle->addItem( QIcon(pm), "" );
+		ui.cbFillBrushStyle->addItem( QIcon::fromTheme(pm), "" );
 	}
 
 	ui.cbFillBrushStyle->setCurrentIndex(index);

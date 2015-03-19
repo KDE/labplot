@@ -159,55 +159,55 @@ void SpreadsheetView::init(){
 
 void SpreadsheetView::initActions(){
     // selection related actions
-    action_cut_selection = new QAction(QIcon("edit-cut"), i18n("Cu&t"), this);
-    action_copy_selection = new QAction(QIcon("edit-copy"), i18n("&Copy"), this);
-    action_paste_into_selection = new QAction(QIcon("edit-paste"), i18n("Past&e"), this);
-    action_mask_selection = new QAction(QIcon("edit-node"), i18n("&Mask Selection"), this);
-    action_unmask_selection = new QAction(QIcon("format-remove-node"), i18n("&Unmask Selection"), this);
+    action_cut_selection = new QAction(QIcon::fromTheme("edit-cut"), i18n("Cu&t"), this);
+    action_copy_selection = new QAction(QIcon::fromTheme("edit-copy"), i18n("&Copy"), this);
+    action_paste_into_selection = new QAction(QIcon::fromTheme("edit-paste"), i18n("Past&e"), this);
+    action_mask_selection = new QAction(QIcon::fromTheme("edit-node"), i18n("&Mask Selection"), this);
+    action_unmask_selection = new QAction(QIcon::fromTheme("format-remove-node"), i18n("&Unmask Selection"), this);
 
-    action_set_formula = new QAction(QIcon(""), i18n("Assign &Formula"), this);
-    action_clear_selection = new QAction(QIcon("edit-clear"), i18n("Clea&r Selection"), this);
-    action_recalculate = new QAction(QIcon(""), i18n("Recalculate"), this);
-    action_fill_row_numbers = new QAction(QIcon(""), i18n("Row Numbers"), this);
-    action_fill_random = new QAction(QIcon(""), i18n("Uniform Random Values"), this);
-    action_fill_random_nonuniform = new QAction(QIcon(""), i18n("Random Values"), this);
-    action_fill_equidistant = new QAction(QIcon(""), i18n("Equidistant Values"), this);
-    action_fill_function = new QAction(QIcon(""), i18n("Function Values"), this);
-    action_fill_const = new QAction(QIcon(""), i18n("Const Values"), this);
+    action_set_formula = new QAction(QIcon::fromTheme(""), i18n("Assign &Formula"), this);
+    action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selection"), this);
+    action_recalculate = new QAction(QIcon::fromTheme(""), i18n("Recalculate"), this);
+    action_fill_row_numbers = new QAction(QIcon::fromTheme(""), i18n("Row Numbers"), this);
+    action_fill_random = new QAction(QIcon::fromTheme(""), i18n("Uniform Random Values"), this);
+    action_fill_random_nonuniform = new QAction(QIcon::fromTheme(""), i18n("Random Values"), this);
+    action_fill_equidistant = new QAction(QIcon::fromTheme(""), i18n("Equidistant Values"), this);
+    action_fill_function = new QAction(QIcon::fromTheme(""), i18n("Function Values"), this);
+    action_fill_const = new QAction(QIcon::fromTheme(""), i18n("Const Values"), this);
 
     //spreadsheet related actions
-    action_toggle_comments = new QAction(QIcon("document-properties"), i18n("Show Comments"), this);
-    action_select_all = new QAction(QIcon("edit-select-all"), i18n("Select All"), this);
-    action_add_column = new QAction(QIcon("edit-table-insert-column-left"), i18n("&Add Column"), this);
-    action_clear_spreadsheet = new QAction(QIcon("edit-clear"), i18n("Clear Spreadsheet"), this);
-    action_clear_masks = new QAction(QIcon("format-remove-node"), i18n("Clear Masks"), this);
-    action_sort_spreadsheet = new QAction(QIcon("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
-    action_go_to_cell = new QAction(QIcon("go-jump"), i18n("&Go to Cell"), this);
+    action_toggle_comments = new QAction(QIcon::fromTheme("document-properties"), i18n("Show Comments"), this);
+    action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
+    action_add_column = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("&Add Column"), this);
+    action_clear_spreadsheet = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Spreadsheet"), this);
+    action_clear_masks = new QAction(QIcon::fromTheme("format-remove-node"), i18n("Clear Masks"), this);
+    action_sort_spreadsheet = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
+    action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
 
     // column related actions
-    action_insert_columns = new QAction(QIcon("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
-    action_remove_columns = new QAction(QIcon("edit-table-delete-column"), i18n("Remo&ve Columns"), this);
-    action_clear_columns = new QAction(QIcon("edit-clear"), i18n("Clea&r Columns"), this);
-    action_add_columns = new QAction(QIcon("edit-table-insert-column-right"), i18n("&Add Columns"), this);
-// 	action_set_as_x = new QAction(QIcon(""), i18n("X, Plot Designation"), this);
-// 	action_set_as_y = new QAction(QIcon(""), i18n("Y, Plot Designation"), this);
-// 	action_set_as_z = new QAction(QIcon(""), i18n("Z, Plot Designation"), this);
-// 	action_set_as_xerr = new QAction(QIcon(""), i18n("X Error, Plot Designation"), this);
-// 	action_set_as_yerr = new QAction(QIcon(""), i18n("Y Error, Plot Designation"), this);
-// 	action_set_as_none = new QAction(QIcon(""), i18n("None, Plot Designation"), this);
-    action_normalize_columns = new QAction(QIcon(""), i18n("&Normalize Columns"), this);
-    action_normalize_selection = new QAction(QIcon(""), i18n("&Normalize Selection"), this);
-    action_sort_columns = new QAction(QIcon(""), i18n("&Selected Columns"), this);
-    action_sort_asc_column = new QAction(QIcon("view-sort-ascending"), i18n("&Ascending"), this);
-    action_sort_desc_column = new QAction(QIcon("view-sort-descending"), i18n("&Descending"), this);
-    action_statistics_columns = new QAction(QIcon("view-statistics"), i18n("Column Statisti&cs"), this);
+    action_insert_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
+    action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remo&ve Columns"), this);
+    action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Columns"), this);
+    action_add_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("&Add Columns"), this);
+// 	action_set_as_x = new QAction(QIcon::fromTheme(""), i18n("X, Plot Designation"), this);
+// 	action_set_as_y = new QAction(QIcon::fromTheme(""), i18n("Y, Plot Designation"), this);
+// 	action_set_as_z = new QAction(QIcon::fromTheme(""), i18n("Z, Plot Designation"), this);
+// 	action_set_as_xerr = new QAction(QIcon::fromTheme(""), i18n("X Error, Plot Designation"), this);
+// 	action_set_as_yerr = new QAction(QIcon::fromTheme(""), i18n("Y Error, Plot Designation"), this);
+// 	action_set_as_none = new QAction(QIcon::fromTheme(""), i18n("None, Plot Designation"), this);
+    action_normalize_columns = new QAction(QIcon::fromTheme(""), i18n("&Normalize Columns"), this);
+    action_normalize_selection = new QAction(QIcon::fromTheme(""), i18n("&Normalize Selection"), this);
+    action_sort_columns = new QAction(QIcon::fromTheme(""), i18n("&Selected Columns"), this);
+    action_sort_asc_column = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Ascending"), this);
+    action_sort_desc_column = new QAction(QIcon::fromTheme("view-sort-descending"), i18n("&Descending"), this);
+    action_statistics_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Column Statisti&cs"), this);
 
     // row related actions
-    action_insert_rows = new QAction(QIcon("edit-table-insert-row-above") ,i18n("&Insert Empty Rows"), this);
-    action_remove_rows = new QAction(QIcon("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
-    action_clear_rows = new QAction(QIcon("edit-clear"), i18n("Clea&r Rows"), this);
-    action_add_rows = new QAction(QIcon("edit-table-insert-row-above"), i18n("&Add Rows"), this);
-    action_statistics_rows = new QAction(QIcon("view-statistics"), i18n("Row Statisti&cs"), this);
+    action_insert_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("&Insert Empty Rows"), this);
+    action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
+    action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Rows"), this);
+    action_add_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above"), i18n("&Add Rows"), this);
+    action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
 }
 
 void SpreadsheetView::initMenus(){
@@ -272,7 +272,7 @@ void SpreadsheetView::initMenus(){
     m_columnMenu->addAction(action_normalize_columns);
 
     submenu = new QMenu(i18n("Sort"));
-    submenu->setIcon(QIcon("view-sort-ascending"));
+    submenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
     submenu->addAction(action_sort_asc_column);
     submenu->addAction(action_sort_desc_column);
     submenu->addAction(action_sort_columns);

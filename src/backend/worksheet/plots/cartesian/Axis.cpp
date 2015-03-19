@@ -244,12 +244,12 @@ QMenu* Axis::createContextMenu(){
 */
 QIcon Axis::icon() const{
 	Q_D(const Axis);
-	QIcon ico;
+    QIcon ico;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	if (d->orientation == Axis::AxisHorizontal)
-        ico = QIcon("axis-horizontal");
+        ico = QIcon::fromTheme("axis-horizontal");
 	else
-        ico = QIcon("axis-vertical");
+        ico = QIcon::fromTheme("axis-vertical");
 #endif
 	return ico;
 }

@@ -56,17 +56,17 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
     ui.setupUi(this);
 
     //"Coordinate system"-tab
-    ui.bAddXBreak->setIcon( QIcon("list-add") );
-    ui.bRemoveXBreak->setIcon( QIcon("list-remove") );
+    ui.bAddXBreak->setIcon( QIcon::fromTheme("list-add") );
+    ui.bRemoveXBreak->setIcon( QIcon::fromTheme("list-remove") );
     ui.cbXBreak->addItem("1");
 
-    ui.bAddYBreak->setIcon( QIcon("list-add") );
-    ui.bRemoveYBreak->setIcon( QIcon("list-remove") );
+    ui.bAddYBreak->setIcon( QIcon::fromTheme("list-add") );
+    ui.bRemoveYBreak->setIcon( QIcon::fromTheme("list-remove") );
     ui.cbYBreak->addItem("1");
 
     //"Background"-tab
     ui.kleBackgroundFileName->setClearButtonShown(true);
-    ui.bOpen->setIcon( QIcon("document-open") );
+    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
     KUrlCompletion *comp = new KUrlCompletion();
     ui.kleBackgroundFileName->setCompletionObject(comp);

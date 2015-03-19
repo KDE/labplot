@@ -77,7 +77,7 @@ FileDataSource::~FileDataSource(){
 }
 
 void FileDataSource::initActions(){
-    m_reloadAction = new QAction(QIcon("view-refresh"), i18n("Reload"), this);
+    m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
     m_toggleWatchAction = new QAction(i18n("Watch the file"), this);
@@ -168,16 +168,16 @@ bool FileDataSource::isFileLinked() const{
 
 
 QIcon FileDataSource::icon() const{
-	QIcon icon;
+    QIcon icon;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
   if (m_fileType==AsciiVector || m_fileType==AsciiMatrix)
-      icon = QIcon("text-plain");
+      icon = QIcon::fromTheme("text-plain");
   else if (m_fileType==BinaryVector || m_fileType==BinaryMatrix)
-    icon = QIcon("application-octet-stream");
+    icon = QIcon::fromTheme("application-octet-stream");
   else if (m_fileType==Image)
-    icon = QIcon("image-x-generic");
+    icon = QIcon::fromTheme("image-x-generic");
   else if (m_fileType==Sound)
-    icon = QIcon("audio-x-generic");
+    icon = QIcon::fromTheme("audio-x-generic");
 #endif
 	return icon;
 }
