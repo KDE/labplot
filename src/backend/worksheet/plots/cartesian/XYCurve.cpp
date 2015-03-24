@@ -1678,15 +1678,13 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
 // TODO: draw directly
-	// draw(painter);
+	draw(painter);
 // or use pixmap for double buffering
-	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
-
+// 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
 // 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
 	if (m_hovered && !isSelected() && !m_printing){
 // 		timer.start();
-
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			pix.fill(q->hoveredPen.color());
@@ -1697,14 +1695,12 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 		painter->setOpacity(q->hoveredOpacity*2);
 		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
-
 // 		qDebug() << "Paint hovering effect: " << timer.elapsed() << "ms";
 		return;
 	}
 
 	if (isSelected() && !m_printing){
 // 		timer.start();
-
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			pix.fill(q->selectedPen.color());
@@ -1715,7 +1711,6 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 		painter->setOpacity(q->selectedOpacity*2);
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
-
 // 		qDebug() << "Paint selection effect: " << timer.elapsed() << "ms";
 		return;
 	}
