@@ -21,6 +21,13 @@
 		</affiliation>
 	</author>
 	<author>
+		<firstname>Alexander</firstname>
+		<surname>Semke</surname>
+		<affiliation>
+			<address><email>Alexander.Semke@web.de</email></address>
+		</affiliation>
+	</author>
+	<author>
 		<firstname>Yuri</firstname>
 		<surname>Chornoivan</surname>
 		<affiliation>
@@ -31,17 +38,21 @@
 </authorgroup>
 
 <copyright>
-  <year>2007</year><year>2014</year>
+  <year>2007-2015</year>
 	<holder>Stefan Gerlach</holder>
 </copyright>
 <copyright>
-  <year>2008</year><year>2014</year>
+  <year>2008-2015</year>
 	<holder>Alexander Semke</holder>
+</copyright>
+<copyright>
+  <year>2014</year>
+	<holder>Yuri Chornoivan</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2014-02-13</date>
-<releaseinfo>2.0</releaseinfo>
+<date>2015-03-28</date>
+<releaseinfo>3.0</releaseinfo>
 
 <abstract>
 	<para>
@@ -1538,19 +1549,6 @@ The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Expor
 
 <qandaentry>
 <question>
-<para>Some analysis functions are not working. What can i do?</para>
-</question>
-<answer>
-<para>
-&LabPlot; uses the &GNU; Scientific Library (GSL) to implement some functions.
-You can use &LabPlot; even if you don't have the GSL installed, but you won't be able to use the above
-mentioned functions. So please install the gsl if you want to use this features.
-</para>
-</answer>
-</qandaentry>
-
-<qandaentry>
-<question>
 <para>How do I use greek letters for title, axes label, &etc;?</para>
 </question>
 <answer>
@@ -1613,7 +1611,8 @@ needs a lot of work.
 
 <para>&LabPlot;</para>
 <para>
-Program copyright &copy; 2007 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
+Program copyright &copy; 2007-2015 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
+Program copyright &copy; 2008-2015 Alexander Semke <email>Alexander.Semke@web.de</email>
 </para>
 
 <important>
@@ -1628,10 +1627,12 @@ patches, bug reports or screen shots is welcome.
 </para>
 
 <para>
-Documentation copyright &copy; 2007 Stefan Gerlach
+Documentation copyright &copy; 2007-2015 Stefan Gerlach
 <email>stefan.gerlach@uni-konstanz.de</email>
-</para>
-<para>
+
+Documentation copyright &copy; 2008-2015 Alexander Semke
+<email>Alexander.Semke@web.de</email>
+
 Documentation copyright &copy; 2014 Yuri Chornoivan
 <email>yurchor@ukr.net</email>
 </para>
