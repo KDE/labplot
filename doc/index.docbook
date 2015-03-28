@@ -1662,10 +1662,10 @@ bug-fixed packages are released regular and can be found there too.
 <title>Requirements</title>
 
 <para>
-In order to successfully use &LabPlot;, you need at least a standard &Qt; 4.7 and &kde; installation.
+In order to successfully use &LabPlot;, you need at least a standard &Qt; 4.7 and &kde; installation and the &GNU; scientific library (GSL).
 </para>
 
-<para>
+<!-- <para>
 Optional &LabPlot; uses the following programs/libraries when available:
 </para>
 
@@ -1674,6 +1674,7 @@ Optional &LabPlot; uses the following programs/libraries when available:
 &GNU; scientific library (GSL) : used for special functions in the parser and most of the analysis functions.
 </para></listitem>
 </itemizedlist>
+-->
 
 </sect1>
 
