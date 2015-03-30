@@ -21,6 +21,13 @@
 		</affiliation>
 	</author>
 	<author>
+		<firstname>Alexander</firstname>
+		<surname>Semke</surname>
+		<affiliation>
+			<address><email>Alexander.Semke@web.de</email></address>
+		</affiliation>
+	</author>
+	<author>
 		<firstname>Yuri</firstname>
 		<surname>Chornoivan</surname>
 		<affiliation>
@@ -31,17 +38,21 @@
 </authorgroup>
 
 <copyright>
-  <year>2007</year><year>2014</year>
+  <year>2007-2015</year>
 	<holder>Stefan Gerlach</holder>
 </copyright>
 <copyright>
-  <year>2008</year><year>2014</year>
+  <year>2008-2015</year>
 	<holder>Alexander Semke</holder>
+</copyright>
+<copyright>
+  <year>2014</year>
+	<holder>Yuri Chornoivan</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2014-02-13</date>
-<releaseinfo>2.0</releaseinfo>
+<date>2015-03-28</date>
+<releaseinfo>3.0</releaseinfo>
 
 <abstract>
 	<para>
@@ -60,90 +71,27 @@
 
 <chapter id="introduction">
 <title>Introduction</title>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="labplot.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
 <para>
-&LabPlot; is a program for two-dimensional graphical presentation of data
-sets and functions. &LabPlot; allows you to work with multiple plots which each can have multiple
-graphs. The graphs can be produced from data or from functions.
+&LabPlot; is a KDE-application for interactive graphing and analysis of scientific data. &LabPlot; provides an easy way to create, manage and edit plots.
 </para>
 
 <para>
-All settings of a complete set of plots can be saved in a project files.
-These project files may be opened by command
-line parameters or using the <link linkend="file-menu">File menu</link>.
+Features:
+<itemizedlist>
+<listitem><para>Project-based management of data</para></listitem>
+<listitem><para>Project-explorer for management and organization of created objects in different folders and sub-folders</para></listitem>
+<listitem><para>Spreadsheet with basic functionality for manual data entry or for generation of uniform and non-uniform random numbers</para></listitem>
+<listitem><para>Import of external ASCII-data into the project for further editing and visualization</para></listitem>
+<listitem><para>Export of spreadsheet to an ASCII-file</para></listitem>
+<listitem><para>Worksheet as the main parent object for plots, labels etc., supports different layouts and zooming functions</para></listitem>
+<listitem><para>Export of worksheet to different formats (pdf, eps, png and svg)</para></listitem>
+<listitem><para>Great variety of editing capabilities for properties of worksheet and its objects</para></listitem>
+<listitem><para>Cartesian plots, created either from imported or manually created data sets or via mathematical equation</para></listitem>
+<listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
+<listitem><para>Analysis of plotted data is supported by many zooming and navigation features</para></listitem>
+<listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
+</itemizedlist>
 </para>
-
-<para>The settings of a plot/graph can be changed using the properties panel. With &LabPlot; menus, additional data sets and functions (graphs) can be included which can be
-displayed in the same as well as in different plot.
-</para>
-</chapter>
-<chapter id="features">
-<title>Features</title>
-<para>
-This chapter tries to provide a complete list of the features of &LabPlot;.
-</para>
-
-<para>Function plotting</para>
-<itemizedlist>
-<listitem><para>flexible data reading in ASCII format and writing in different formats (including <acronym>PDF</acronym>, <acronym>EPS</acronym>, <acronym>SVG</acronym> and <acronym>PNG</acronym>)</para></listitem>
-<listitem><para>extensive parser for creating 2D functions</para></listitem>
-<listitem><para>support for all &GNU; Scientific Library (GSL) functions and constants</para></listitem>
-<listitem><para>multiple plots per worksheet</para></listitem>
-<listitem><para>data set operations</para></listitem>
-<listitem><para>speed mode for large data sets and data mode for inspecting data points</para></listitem>
-<listitem><para>plotting fitting curves for given data</para></listitem>
-</itemizedlist>
-
-<para>Easy editing of plots</para>
-<itemizedlist>
-<listitem><para>versatile spreadsheet for data creation and manipulation</para></listitem>
-<listitem><para>online scaling and shifting of plots</para></listitem>
-<listitem><para>&latex; and richtext label support</para></listitem>
-<listitem><para>evaluating expressions and direct editing of data</para></listitem>
-<!-- <listitem><para>data statistics information</para></listitem> -->
-<listitem><para>drawing objects editable with mouse</para></listitem>
-<listitem><para>free or pan zooming, masking of data points and marker</para></listitem>
-<listitem><para>support for panel plots</para></listitem>
-<listitem><para>versatile errorbar styles</para></listitem>
-</itemizedlist>
-
-<para>Analysis of data and functions</para>
-<itemizedlist>
-<listitem><para>linear and non-linear regression with predefined and custom fit-models</para></listitem>
-<!--<listitem><para>average, smooth and prune data</para></listitem>
-<listitem><para>compress, periodical and seasonal analysis</para></listitem>
-<listitem><para>peak find</para></listitem>
-<listitem><para>interpolation (splines, &etc;)</para></listitem>
-<listitem><para>differences</para></listitem>
-<listitem><para>integration</para></listitem>
-<listitem><para>histogram</para></listitem>
-<listitem><para>non-linear fit (also any user defined function with up to 9 parameter)</para></listitem>
-<listitem><para>Fourier, Wavelet, Laplace and Hankel transform</para></listitem>
-<listitem><para>(de)convolution</para></listitem>
-<listitem><para>image manipulation</para></listitem>
-<listitem><para>noise, signal filter and auto-/crosscorrelation</para></listitem>
-<listitem><para>capability analysis</para></listitem>
-<listitem><para>using R for functions and descriptive statistics/one and two sample tests</para></listitem>-->
-</itemizedlist>
-
-<para>&LabPlot; projects</para>
-<itemizedlist>
-<listitem><para>support for different worksheets and spreadsheets using multiple document interface (MDI)</para></listitem>
-<listitem><para>save and open all worksheets and spreadsheets in a xml project file (*.lml)</para></listitem>
-<listitem><para>editable project information</para></listitem>
-<listitem><para>export worksheets as PNG image, PS, EPS, SVG, and PDF formats</para></listitem>
-<listitem><para>export spreadsheets as ASCII</para></listitem>
-<listitem><para>support for project and data set notes</para></listitem>
-</itemizedlist>
-
-<para>&kde; look and feel</para>
-<itemizedlist>
-<listitem><para>configure default value for plot style and symbols</para></listitem>
-<listitem><para>print and embedded print preview</para></listitem>
-<listitem><para>&kde; handbook</para></listitem>
-</itemizedlist>
 
 </chapter>
 
@@ -193,7 +141,7 @@ be created to bring in more structure into the project.
 The Project Explorer is the main part of &LabPlot; aimed to handle its objects.
 </para>
 <para>
-  You can access the action list for an object by clicking with the &RMB; on its item in the Project Explorer list. The content of the list depends on the tpype of the clicked object.
+  You can access the action list for an object by clicking with the &RMB; on its item in the Project Explorer list. The content of the list depends on the type of the clicked object.
 </para>
 <para>
   The list of objects can be filtered using the <guilabel>Search/Filter</guilabel> bar. Just enter the search or filtering term and &LabPlot; would filter out those objects in the list whose name does not contain the term. The filtering can be made case sensitive or matching just whole words by clicking on <guibutton>Options</guibutton> button.
@@ -796,7 +744,7 @@ The &LabPlot; parser allows you to use following functions:
 <row><entry>ln(x)</entry><entry><action>Logarithm, base e</action></entry></row>
 <row><entry>log(x)</entry><entry><action>Logarithm, base e</action></entry></row>
 <row><entry>log10(x)</entry><entry><action>Logarithm, base 10</action></entry></row>
-<row><entry>logb(x)</entry><entry><action>Radix-independant exponent</action></entry></row>
+<row><entry>logb(x)</entry><entry><action>Radix-independent exponent</action></entry></row>
 <row><entry>log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
 <row><entry>pow(x,y)</entry><entry><action>power function</action></entry></row>
 <row><entry>rint(x)</entry><entry><action>round to nearest integer</action></entry></row>
@@ -1195,7 +1143,7 @@ For more information about this constants see the documentation of GSL.
 <row><entry>rad</entry><entry><action>The absorbed dose of 1 rad</action></entry></row>
 <row><entry>N</entry><entry><action>The force of 1 newton</action></entry></row>
 <row><entry>dyne</entry><entry><action>The force of 1 dyne</action></entry></row>
-<row><entry>J</entry><entry><action>The energey of 1 joule</action></entry></row>
+<row><entry>J</entry><entry><action>The energy of 1 joule</action></entry></row>
 <row><entry>erg</entry><entry><action>The energy of 1 erg</action></entry></row>
 
 </tbody></tgroup></informaltable>
@@ -1601,20 +1549,7 @@ The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Expor
 
 <qandaentry>
 <question>
-<para>Some analysis functions are not working. What can i do?</para>
-</question>
-<answer>
-<para>
-&LabPlot; uses the &GNU; Scientific Library (GSL) to implement some functions.
-You can use &LabPlot; even if you don't have the GSL installed, but you won't be able to use the above
-mentioned functions. So please install the gsl if you want to use this features.
-</para>
-</answer>
-</qandaentry>
-
-<qandaentry>
-<question>
-<para>How do I use greek letters for title, axes label, &etc;?</para>
+<para>How do I use Greek letters for title, axes label, &etc;?</para>
 </question>
 <answer>
 <para>
@@ -1676,7 +1611,8 @@ needs a lot of work.
 
 <para>&LabPlot;</para>
 <para>
-Program copyright &copy; 2007 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
+Program copyright &copy; 2007-2015 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
+Program copyright &copy; 2008-2015 Alexander Semke <email>Alexander.Semke@web.de</email>
 </para>
 
 <important>
@@ -1691,10 +1627,12 @@ patches, bug reports or screen shots is welcome.
 </para>
 
 <para>
-Documentation copyright &copy; 2007 Stefan Gerlach
+Documentation copyright &copy; 2007-2015 Stefan Gerlach
 <email>stefan.gerlach@uni-konstanz.de</email>
-</para>
-<para>
+
+Documentation copyright &copy; 2008-2015 Alexander Semke
+<email>Alexander.Semke@web.de</email>
+
 Documentation copyright &copy; 2014 Yuri Chornoivan
 <email>yurchor@ukr.net</email>
 </para>
@@ -1725,10 +1663,10 @@ bug-fixed packages are released regular and can be found there too.
 <title>Requirements</title>
 
 <para>
-In order to successfully use &LabPlot;, you need at least a standard &Qt; 4.7 and &kde; installation.
+In order to successfully use &LabPlot;, you need at least a standard &Qt; 4.7 and &kde; installation and the &GNU; scientific library (GSL).
 </para>
 
-<para>
+<!-- <para>
 Optional &LabPlot; uses the following programs/libraries when available:
 </para>
 
@@ -1737,6 +1675,7 @@ Optional &LabPlot; uses the following programs/libraries when available:
 &GNU; scientific library (GSL) : used for special functions in the parser and most of the analysis functions.
 </para></listitem>
 </itemizedlist>
+-->
 
 </sect1>
 

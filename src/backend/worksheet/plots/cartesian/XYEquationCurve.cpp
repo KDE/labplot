@@ -128,7 +128,7 @@ XYEquationCurvePrivate::~XYEquationCurvePrivate() {
 }
 
 void XYEquationCurvePrivate::recalculate() {
-	qDebug()<<"XYEquationCurvePrivate::recalculate()";
+// 	qDebug()<<"XYEquationCurvePrivate::recalculate()";
 	//resize the vector if a new number of point to calculate was provided
 	if (equationData.count != xVector->size()) {
 		if (equationData.count>=1) {

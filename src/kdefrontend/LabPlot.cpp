@@ -61,6 +61,7 @@ int main (int argc, char *argv[]) {
     parser.addOption(nosplashOption);
 
     parser.addPositionalArgument("+[file]", i18n( "open a project file"));
+	aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
 
     aboutData.setupCommandLine(&parser);
     parser.process(app);
