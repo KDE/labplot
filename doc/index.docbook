@@ -101,7 +101,7 @@ Features:
 
 <!--TODO:
 
-Describe the general structure of the software, intoduce the different 
+Describe the general structure of the software, introduce the different 
 objects that can be created within the software and introduce the project-
 explorer as the tool to manage all created stuff. Folders and sub-folders can 
 be created to bring in more structure into the project.
@@ -546,10 +546,24 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
 Cartesian plots, curves and legends. General description of the many 
 editing possibilities in the corresponding dock widgets.
 -->
-
+ 
 <chapter id="plotting">
 <title>Plotting</title>
 
+<sect1 id="plots">
+  <title>Plots</title>
+  <para>
+      Plots can be created inside a worksheet via "Add new" in the context menu or in the application menu via "Worksheet"
+      by selecting "xy-plot" and the type of plot you like to have.
+  </para>
+  <para>
+    Within this "xy-plot" you can add a "xy-curve" (again via the context menu or application menu). 
+    This curve can be filled with values by selecting the x-data and y-data from a spreadsheet in the dock widget.
+    Another method to fill a curve is to use a mathematical function or a fit to data. These option can be also
+    selected in the menus.
+  </para>
+</sect1>
+  
 <sect1 id="func">
 <title>Function</title>
 <para>
