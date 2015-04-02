@@ -1,10 +1,9 @@
 /***************************************************************************
-File                 : GuiObserver.cpp
-Project              : LabPlot/SciDAVis
-Description 		: GUI observer
+	File                 : GuiObserver.cpp
+	Project              : LabPlot
+	Description 		 : GUI observer
 --------------------------------------------------------------------
-Copyright            	: (C) 2010-2014 Alexander Semke
-Email (use @ for *)  	: alexander.semke*web.de
+	Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -52,13 +51,11 @@ Email (use @ for *)  	: alexander.semke*web.de
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 
-#include <kxmlguifactory.h>
 #include <kstatusbar.h>
 
 #include <QDockWidget>
 #include <QStackedWidget>
 #include <QToolBar>
-#include <KDebug>
 
 /*!
   \class GuiObserver
@@ -104,7 +101,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		  mainWindow->stackedWidget->currentWidget()->hide();
 
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
-		this->updateGui("", 0);
 		return;
 	  }
 	  prevClassName = className;
@@ -292,7 +288,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	  mainWindow->stackedWidget->currentWidget()->hide();
   }
 
-  this->updateGui(className, aspect);
 }
 
 /*!
@@ -325,44 +320,4 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
 		}
 		mainWindow->cartesianPlotLegendDock->activateTitleTab();
 	}
-}
-
-/*!
-  udpates the GUI in MainWin.
-  Depending on the currently selected object(s), identified by \c className, activates/diactivates the corresponding toolbars and menus.
-*/
-void GuiObserver::updateGui(const QString& className, const AbstractAspect* aspect){
-	Q_UNUSED(className);
-	Q_UNUSED(aspect);
-	return;
-//   if (className.isEmpty()){
-// 	//no object or objects of different kind (e.g. a spreadsheet and a worksheet) were selected.
-//
-//   }else if (className=="CartesianPlot" || className=="Axis" || className=="XYCurve" || className=="CartesianPlotLegend"){
-// 	//populate worksheet-toolbar
-// 	QToolBar* toolbar=dynamic_cast<QToolBar*>(mainWindow->guiFactory()->container("cartesian_plot_toolbar", mainWindow));
-// 	if (!toolbar)return;
-// 	toolbar->show();
-// 	toolbar->setEnabled(true);
-// 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
-// 	if (plot) {
-// 		if (plot!=m_lastCartesianPlot) {
-// 			toolbar->clear();
-// 			plot->fillToolBar(toolbar);
-// 			m_lastCartesianPlot = const_cast<CartesianPlot*>(plot);
-// 		}
-// 	} else {
-// 		// one of plot's childred was selected
-// 		const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect->parentAspect());
-// 		if (plot) {
-// 			if (plot!=m_lastCartesianPlot) {
-// 				toolbar->clear();
-// 				plot->fillToolBar(toolbar);
-// 				m_lastCartesianPlot = const_cast<CartesianPlot*>(plot);
-// 			}
-// 		} else {
-// 			toolbar->setEnabled(false);
-// 		}
-// 	}
-//   }
 }
