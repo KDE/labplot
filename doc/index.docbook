@@ -148,7 +148,16 @@ Project explorer is a dockable window and can be placed at an arbitrary place. T
 <sect1 id="main-area">
 <title>Main Area</title>
 <para>
-	some text
+Created objects having a view (like worksheet, spreadsheet etc.) are placed in the main area of the application. Depending on the current setting for the user interface, windows are placed either as independent and freely moveable sub-windows (interface "Sub-window view") or as tabs in a tabbed view (interface "Tabbed view").
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="sub_window_tabbed_view_interfaces.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+When sub-windows are used, all windows of objects belonging to the currently selected folder only are shown. Alternatively, the visibility of windows can be extended to the currently selected folder and its sub-folders or to all windows in the project. This behaviour is controlled via the parameter "Window visibility policy" accessible via the context menu of the project explorer.
 </para>
 </sect1>
 
