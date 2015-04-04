@@ -164,7 +164,7 @@ Project explorer is a dockable window and can be placed at an arbitrary place. T
 <para>
 The spreadsheet is the main part of &LabPlot; when working with data and consists of columns.
 Column is the basic data set in LabPlot used for plotting and data analysis.
-Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and data and time.
+Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and date and time.
 Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns etc.
 </para>
 <para>
@@ -213,9 +213,11 @@ by fixing the total number of values in that range or by fixing the increment (d
 <para>
 Random values (for numeric columns only) - values are randomly generated according to the selected distribution.
 To generate uniformly distributed random numbers, select "Flat" distribution.
+</para>
 <screenshot><mediaobject><imageobject>
       <imagedata fileref="spreadsheet_generate_random_values.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
+<para>
 In the simplest cases a non-uniform distribution is calculated analytically from the uniform distribution of a random number generator by applying
 an appropriate transformation. More complicated distributions are created by the acceptance-rejection method, which compares the desired distribution
 against a distribution which is similar and known analytically.
