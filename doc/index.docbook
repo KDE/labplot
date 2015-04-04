@@ -98,16 +98,15 @@ Features:
 
 <chapter id="using-LabPlot">
 <title>Using &LabPlot;</title>
-
-<!--TODO:
-
-Describe the general structure of the software, introduce the different 
-objects that can be created within the software and introduce the project-
-explorer as the tool to manage all created stuff. Folders and sub-folders can 
-be created to bring in more structure into the project.
--->
 <sect1 id="interface-overview">
   <title>Interface Overview</title>
+  <para>
+&LabPlot; follows the MDI (Multiple Document Interface) philosophy - all the created application objects are placed as sub-windows in the <link linkend="main-area">Main Area</link> of the application window.The <link linkend="project-explorer">Project Explorer</link> serves as the tool to create and organize those objects in a tree-like structure.
+
+The <link linkend="properties-explorer">Properties Explorer</link> is used to modify the properties of the currently selected object(s).
+Many functions are reachable via the main menu and via object specific toolbars and context menus. Additional information and application notifications are shown in the status bar.
+</para>
+
   <screenshot>
     <screeninfo>The default &LabPlot; window</screeninfo>
     <mediaobjectco>
@@ -118,8 +117,8 @@ be created to bring in more structure into the project.
 	  <area id="im-win1a2" linkends="worksheet" coords="314,116,842,741" />
 	  <area id="im-win1a4" linkends="toolbar" coords="38,86,1294,116" />
 	  <area id="im-win1a5" linkends="commands" coords="38,62,520,86" />
-	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777" />
-	  <area id="im-win1a7" linkends="properties" coords="843,116,1294,741" />
+<!-- 	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777" /> -->
+	  <area id="im-win1a7" linkends="properties-explorer" coords="843,116,1294,741" />
 	</areaspec>
 	<imageobject>
 	  <imagedata fileref="using1.png" format="PNG"/>
@@ -127,36 +126,41 @@ be created to bring in more structure into the project.
       </imageobjectco>
     </mediaobjectco>
   </screenshot>
-  <para>
-    The default &LabPlot; window has the <link linkend="project-explorer">Project Explorer</link> pane on the left, the <link linkend="properties">Properties</link> pane on the right, <link linkend="spreadsheet">spreadsheet</link>/<link linkend="worksheet">worksheet</link> area in the center, the <link linkend="toolbar">main toolbar</link> on the top and the status bar on the bottom.
-  </para>
+<!--  <para>
+    The default &LabPlot; window has the <link linkend="project-explorer">Project Explorer</link> pane on the left, the <link linkend="properties-explorer">Properties</link> pane on the right, <link linkend="spreadsheet">spreadsheet</link>/<link linkend="worksheet">worksheet</link> area in the center, the <link linkend="toolbar">main toolbar</link> on the top and the status bar on the bottom.
+  </para>-->
 </sect1>
 
 <sect1 id="project-explorer">
-<title>The Project Explorer</title>
+<title>Project Explorer</title>
+<para>
+The Project Explorer is the main part of &LabPlot; aimed to handle its objects. Objects are organized in a tree-like structure representing the parent-child relations between the different objects.
+Folders and sub-folders can introduce additional grouping for the different objects.
+</para>
+<para>
+Project explorer is a dockable window and can be placed at an arbitrary place. The user can determine which columns should be shown by selecting/deselecting the columns of interest in the context menu (&RMB; click on an empty place in the tree-view or its header). Furthermore, the list of shown objects can be reduced by providing a filter in the <guilabel>Search/Filter</guilabel> text field.
+</para>
 <screenshot><mediaobject><imageobject>
       <imagedata fileref="project-explorer.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
-<para>
-The Project Explorer is the main part of &LabPlot; aimed to handle its objects.
-</para>
-<para>
-  You can access the action list for an object by clicking with the &RMB; on its item in the Project Explorer list. The content of the list depends on the type of the clicked object.
-</para>
-<para>
-  The list of objects can be filtered using the <guilabel>Search/Filter</guilabel> bar. Just enter the search or filtering term and &LabPlot; would filter out those objects in the list whose name does not contain the term. The filtering can be made case sensitive or matching just whole words by clicking on <guibutton>Options</guibutton> button.
-</para>
-<para>
-  It is possible to configure the content of the Project Explorer pane itself. To do this click with the &RMB; on the empty space in the list of objects. You can expand or collapse all nested items, hide or show the <guilabel>Search/Filter</guilabel> bar, and choose the data columns to be shown in the list.
-</para>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="pe-context-menu.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
 </sect1>
 
+<sect1 id="main-area">
+<title>Main Area</title>
+<para>
+	some text
+</para>
+</sect1>
+
+<sect1 id="properties-explorer">
+<title>Properties Explorer</title>
+<para>
+	some text
+</para>
+</sect1>
 
 <sect1 id="spreadsheet">
-<title>The Spreadsheet</title>
+<title>Spreadsheet</title>
 <para>
 The spreadsheet is the main part of &LabPlot; when working with data and consists of columns.
 Column is the basic data set in LabPlot used for plotting and data analysis.
@@ -242,7 +246,7 @@ Imported data will be stored in the project file. Changes on data, performed eit
 
 
 <sect1 id="worksheet">
-<title>The Worksheet</title>
+<title>Worksheet</title>
 <para>
 The worksheet is, besides the <link linkend="spreadsheet">spreadsheet</link>, the second central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
 </para>
@@ -277,42 +281,38 @@ Similar in spirit to importing the data to a spreadsheet...
 </para>
 </sect1>
 
-<!-- TODO:
-
-Describe the basic functionality of the properties pane.
--->
-
-<sect1 id="properties">
-<title>The Properties Pane</title>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="properties.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
+<sect1 id="importdialog">
+<title>Import Dialog</title>
+<screenshot>
+  <screeninfo>Importing data into &LabPlot;</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="import-dialog.png" format="PNG" />
+    </imageobject>
+    <textobject>
+      <phrase>Importing data into &LabPlot;</phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
 <para>
-The Properties pane is a part of the &LabPlot; window used to modify object properties.
-</para>
-<sect2 id="axes">
-<title>Axes Properties</title>
-<para>
-The axes page lets you change the settings for the different axes. It can be opened by clicking with &LMB; on one of the axes items in the <link linkend="project-explorer">Project Explorer</link> pane.
+With the import dialog you can import data into &LabPlot;. 
 </para>
 <para>
-There are different tabs to change a lot axis settings (color, ticks, grid, &etc;) on this page.
+  In the line edit you can specify a data file to read. The <guibutton>File Info</guibutton> button shows you some information about the selected
+files. You can also specify the type of the data, the filter, the separating character (for instance ",") and the comment line character.
 </para>
-</sect2>
-
-<sect2 id="legend">
-<title>Legend Properties</title>
 <para>
-The legend properties page allows you to change parameters of the legend (title border, spacing, layout, font &etc;). The page can be opened by clicking with &LMB; on the legend item in the <link linkend="project-explorer">Project Explorer</link> pane.
+  The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
 </para>
-</sect2>
 </sect1>
 
-<sect1 id="statusbar">
-<title>Status Bar</title>
+<!-- TODO:
+	Describe the export of worksheet and spreadsheet.
+-->
+<sect1 id="exportdialog">
+<title>Export Dialog</title>
 <para>
-The horizontal and vertical positions of the mouse pointer in the plot area are displayed
-in data units on the left side of the status bar at the bottom of the &LabPlot; window.
+	
 </para>
 </sect1>
 
@@ -584,41 +584,6 @@ Then you can select if values should be shown on the plot and define the style o
 </para>
 </sect1>
 
-<sect1 id="importdialog">
-<title>Import Dialog</title>
-<screenshot>
-  <screeninfo>Importing data into &LabPlot;</screeninfo>
-  <mediaobject>
-    <imageobject>
-      <imagedata fileref="import-dialog.png" format="PNG" />
-    </imageobject>
-    <textobject>
-      <phrase>Importing data into &LabPlot;</phrase>
-    </textobject>
-  </mediaobject>
-</screenshot>
-<para>
-With the import dialog you can import data into &LabPlot;. 
-</para>
-<para>
-  In the line edit you can specify a data file to read. The <guibutton>File Info</guibutton> button shows you some information about the selected
-files. You can also specify the type of the data, the filter, the separating character (for instance ",") and the comment line character.
-</para>
-<para>
-  The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
-</para>
-</sect1>
-
-<!-- TODO:
-	Describe the export of worksheet and spreadsheet.
--->
-<sect1 id="exportdialog">
-<title>Export Dialog</title>
-<para>
-	
-</para>
-</sect1>
-
 </chapter>
 
 <!-- TODO:
@@ -640,7 +605,7 @@ Here you will find some explanations of advanced topics.
 <title>Topics</title>
 <sect2 id="errorbar">
 <title>Error bars</title>
-<para>If you want to plot data with error bars just import your data with the <link linkend="importdialog">import dialog</link> into your project. Then use the <guilabel>Error bars</guilabel> tab of <link linkend="properties">the curve properties</link> to select <guilabel>Error type</guilabel>, choose the error column from the <guilabel>Data, +-</guilabel> list. Format of the error bars can be defined using the <guilabel>Format:</guilabel> pane.</para>
+<para>If you want to plot data with error bars just import your data with the <link linkend="importdialog">import dialog</link> into your project. Then use the <guilabel>Error bars</guilabel> tab of <link linkend="properties-explorer">the curve properties</link> to select <guilabel>Error type</guilabel>, choose the error column from the <guilabel>Data, +-</guilabel> list. Format of the error bars can be defined using the <guilabel>Format:</guilabel> pane.</para>
 </sect2>
 
 <sect2 id="texlabel">
