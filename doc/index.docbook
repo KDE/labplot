@@ -552,12 +552,6 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
 
 </chapter>
 
-<!-- TODO:
-
-Cartesian plots, curves and legends. General description of the many 
-editing possibilities in the corresponding dock widgets.
--->
- 
 <chapter id="plotting">
 <title>Plotting</title>
 
@@ -568,33 +562,47 @@ editing possibilities in the corresponding dock widgets.
       by selecting "xy-plot" and the type of plot you like to have.
   </para>
   <para>
-    Within this "xy-plot" you can add a "xy-curve" (again via the context menu or application menu). 
-    This curve can be filled with values by selecting the x-data and y-data from a spreadsheet in the dock widget.
-    Another method to fill a curve is to use a mathematical function or a fit to data. These option can be also
-    selected in the menus.
+    Within this xy-plot you can add a xy-curve containing data to show (again via the context menu or application menu).
+  </para>
+  <para>
+    The settings of a plot can be changed in the corresponding dock widget. There are general settings like geometry 
+    but also the range of the x- and y-axis (inluding scaling). The plot title can be set in the "Title" tab of the
+    dock widget. Background and border styles can be changed in the "Plot Area" tab.
   </para>
 </sect1>
   
-<sect1 id="func">
-<title>Function</title>
-<para>
-The curve properties pane is used to create and modify the settings
-for function plots. It looks the similar for data curves and curves from mathematical equations.</para>
-<para>
-  The <guilabel>y=f(x)</guilabel> for xy-equation-curves contains the expression for the plot function. The entered expression is evaluated
-via a powerful parser. For a complete list of supported functions see the
-<link linkend="parser">parser section</link>.
-</para>
-<para>
-With the remaining style items you can influence the appearance of the function.
-If you create a normal function the first selection defines
-the line style (no line, solid line, dash line, dot line, dash-dot line, or dash-dot-dot line), the color and if you want it to have drop line
-(with a different color). The other items select the symbol for the plot points, with color, size, if
-it should be filled and with which color.
-Then you can select if values should be shown on the plot and define the style of the values.
-</para>
+<sect1 id="curves">
+  <title>Curves</title>
+  <para>
+    Curves contain data points that can be shown in a plot. 
+    There are three different method to create curves: the standard xy-curve, a xy-curve from a mathematical expression
+    and a xy-curve from a fit to data.
+    </para>
+    <para>
+    The standard xy-curve can be filled with values of a spreadsheet by selecting the x-data and y-data as column of the 
+    spreadsheet in the xy-curve dock widget. Another method to fill a curve is to use a mathematical expression. Here you can
+    select any mathematical funtion and range to create the curve.
+    The third method to create a curve is to fit a function to data. The data to fit and the fit function can be
+    selected in the dock widget of th xy-fit curve.
+  </para>
+  <para>
+   For all types of curves the line and symbols styles can be changed in the dock widget. Also annotated values
+   and error bar settings can be changed here.
+  </para>
 </sect1>
 
+<sect1 id="legends">
+  <title>Legends</title>
+  <para>
+    A legend can be easily added to a plot by using the context of application menu. It contains informations
+    about all curves in a plot.
+  </para>
+  <para>
+    The settings of a legend (format and geometry) can be changed in the legend dock widget. Also the legend title
+    settings, the legend background and the layout can be changed in the corresponding tab of the legend dock widget.
+  </para>
+</sect1>
+  
 </chapter>
 
 <!-- TODO:
