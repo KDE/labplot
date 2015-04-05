@@ -164,7 +164,7 @@ When sub-windows are used, all windows of objects belonging to the currently sel
 <sect1 id="properties-explorer">
 <title>Properties Explorer</title>
 <para>
-	some text
+Project explorer is a dockable window and can be placed at an arbitrary place.
 </para>
 </sect1>
 
@@ -317,13 +317,28 @@ files. You can also specify the type of the data, the filter, the separating cha
 </para>
 </sect1>
 
-<!-- TODO:
-	Describe the export of worksheet and spreadsheet.
--->
+
 <sect1 id="exportdialog">
 <title>Export Dialog</title>
 <para>
-	
+	A worksheet can be exported to several graphics format (vector and raster). The export is done via the export dialog reachable via the <guibutton>Export</guibutton> in the main toolbar or <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice> in the main menu.
+</para>
+<para>
+	Besides the graphics format, the user can specify which part of the worksheet has to be exported and whether the background has to be exported or not.
+	Also, for raster graphics the image resolution can be provided.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="export_worksheet_dialog.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+	The content of a spreadsheet can be exported to an external text file. In the export dialog for spreadsheets the user can specify the character separating values of different columns. Optionally, the header of the spreadsheet (names of the columns in the spreadsheet) can be exported.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="export_spreadsheet_dialog.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
 </para>
 </sect1>
 
