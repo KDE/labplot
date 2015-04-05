@@ -101,7 +101,7 @@ Features:
 <sect1 id="interface-overview">
   <title>Interface Overview</title>
   <para>
-&LabPlot; follows the MDI (Multiple Document Interface) philosophy - all the created application objects are placed as sub-windows in the <link linkend="main-area">Main Area</link> of the application window.The <link linkend="project-explorer">Project Explorer</link> serves as the tool to create and organize those objects in a tree-like structure.
+&LabPlot; follows the MDI (Multiple Document Interface) philosophy - all the created application objects are placed as sub-windows in the <link linkend="main-area">Main Area</link> of the application window. The <link linkend="project-explorer">Project Explorer</link> serves as the tool to create and organize those objects in a tree-like structure.
 
 The <link linkend="properties-explorer">Properties Explorer</link> is used to modify the properties of the currently selected object(s).
 Many functions are reachable via the main menu and via object specific toolbars and context menus. Additional information and application notifications are shown in the status bar.
@@ -566,7 +566,7 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
   </para>
   <para>
     The settings of a plot can be changed in the corresponding dock widget. There are general settings like geometry 
-    but also the range of the x- and y-axis (inluding scaling). The plot title can be set in the "Title" tab of the
+    but also the range of the x- and y-axis (including scaling). The plot title can be set in the "Title" tab of the
     dock widget. Background and border styles can be changed in the "Plot Area" tab.
   </para>
 </sect1>
@@ -581,9 +581,9 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
     <para>
     The standard xy-curve can be filled with values of a spreadsheet by selecting the x-data and y-data as column of the 
     spreadsheet in the xy-curve dock widget. Another method to fill a curve is to use a mathematical expression. Here you can
-    select any mathematical funtion and range to create the curve.
+    select any mathematical function and range to create the curve.
     The third method to create a curve is to fit a function to data. The data to fit and the fit function can be
-    selected in the dock widget of th xy-fit curve.
+    selected in the dock widget of the xy-fit curve.
   </para>
   <para>
    For all types of curves the line and symbols styles can be changed in the dock widget. Also annotated values
@@ -594,7 +594,7 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
 <sect1 id="legends">
   <title>Legends</title>
   <para>
-    A legend can be easily added to a plot by using the context of application menu. It contains informations
+    A legend can be easily added to a plot by using the context of application menu. It contains information
     about all curves in a plot.
   </para>
   <para>
