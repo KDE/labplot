@@ -743,23 +743,16 @@ The &LabPlot; parser allows you to use following functions:
 <row><entry>ceil(x)</entry><entry><action>Truncate upward to integer</action></entry></row>
 <row><entry>cos(x)</entry><entry><action>Cosine</action></entry></row>
 <row><entry>cosh(x)</entry><entry><action>Hyperbolic cosine</action></entry></row>
-<row><entry>erf(x)</entry><entry><action>error function erf(x) = (2 / &radic;&pi;) &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
-<row><entry>erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = (2 / &radic;&pi;) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
 <row><entry>exp(x)</entry><entry><action>Exponential, base e</action></entry></row>
 <row><entry>expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
 <row><entry>fabs(x)</entry><entry><action>Absolute value</action></entry></row>
 <row><entry>gamma(x)</entry><entry><action>Gamma function</action></entry></row>
 <row><entry>hypot(x,y)</entry><entry><action>Hypotenuse function &radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
-<row><entry>j0(x)</entry><entry><action>Bessel, order 0</action></entry></row>
-<row><entry>j1(x)</entry><entry><action>Bessel, order 1</action></entry></row>
-<row><entry>jn(n,x)</entry><entry><action>Bessel, order n</action></entry></row>
-<row><entry>lgamma(x)</entry><entry><action>Natural log of |gamma|</action></entry></row>
 <row><entry>ln(x)</entry><entry><action>Logarithm, base e</action></entry></row>
 <row><entry>log(x)</entry><entry><action>Logarithm, base e</action></entry></row>
 <row><entry>log10(x)</entry><entry><action>Logarithm, base 10</action></entry></row>
 <row><entry>logb(x)</entry><entry><action>Radix-independent exponent</action></entry></row>
-<row><entry>log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
-<row><entry>pow(x,y)</entry><entry><action>power function</action></entry></row>
+<row><entry>pow(x,n)</entry><entry><action>power function x<superscript>n</superscript></action></entry></row>
 <row><entry>rint(x)</entry><entry><action>round to nearest integer</action></entry></row>
 <row><entry>round(x)</entry><entry><action>round to nearest integer</action></entry></row>
 <row><entry>sin(x)</entry><entry><action>Sine</action></entry></row>
@@ -769,15 +762,12 @@ The &LabPlot; parser allows you to use following functions:
 <row><entry>tanh(x)</entry><entry><action>Hyperbolic tangent</action></entry></row>
 <row><entry>tgamma(x)</entry><entry><action>Gamma function</action></entry></row>
 <row><entry>trunc(x)</entry><entry><action>Returns the greatest integer less than or equal to x</action></entry></row>
-<row><entry>y0(x)</entry><entry><action>Bessel, second kind, order 0</action></entry></row>
-<row><entry>y1(x)</entry><entry><action>Bessel, second kind, order 1</action></entry></row>
-<row><entry>yn(n,x)</entry><entry><action>Bessel, second kind, order n</action></entry></row>
 
 </tbody></tgroup></informaltable>
 </sect1>
 
 <sect1 id="parser-gsl">
-<title>GSL special functions</title>
+<title>Special functions</title>
 <para>
 For more information about the functions see the documentation of GSL.
 </para>
@@ -787,12 +777,6 @@ For more information about the functions see the documentation of GSL.
 
 <tbody>
 
-<row><entry>gsl_log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
-<row><entry>gsl_expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
-<row><entry>gsl_hypot(x,y)</entry><entry><action>&radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
-<row><entry>gsl_acosh(x)</entry><entry><action>arccosh(x)</action></entry></row>
-<row><entry>gsl_asinh(x)</entry><entry><action>arcsinh(x)</action></entry></row>
-<row><entry>gsl_atanh(x)</entry><entry><action>arctanh(x)</action></entry></row>
 <row><entry>Ai(x)</entry><entry><action>Airy function Ai(x)</action></entry></row>
 <row><entry>Bi(x)</entry><entry><action>Airy function Bi(x)</action></entry></row>
 <row><entry>Ais(x)</entry><entry><action>scaled version of the Airy function S<subscript>A</subscript>(x) Ai(x)</action></entry></row>
@@ -823,12 +807,12 @@ For more information about the functions see the documentation of GSL.
 <row><entry>K0s(x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of zeroth order, exp(x) K<subscript>0</subscript>(x)</action></entry></row>
 <row><entry>K1s(x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of first order, exp(x) K<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>Kns(n,x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of order n, exp(x) K<subscript>n</subscript>(x)</action></entry></row>
-<row><entry>gsl_j0(x)</entry><entry><action>regular spherical Bessel function of zeroth order, j<subscript>0</subscript>(x)</action></entry></row>
-<row><entry>gsl_j1(x)</entry><entry><action>regular spherical Bessel function of first order, j<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>j0(x)</entry><entry><action>regular spherical Bessel function of zeroth order, j<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>j1(x)</entry><entry><action>regular spherical Bessel function of first order, j<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>j2(x)</entry><entry><action>regular spherical Bessel function of second order, j<subscript>2</subscript>(x)</action></entry></row>
 <row><entry>jl(l,x)</entry><entry><action>regular spherical Bessel function of order l, j<subscript>l</subscript>(x)</action></entry></row>
-<row><entry>gsl_y0(x)</entry><entry><action>irregular spherical Bessel function of zeroth order, y<subscript>0</subscript>(x)</action></entry></row>
-<row><entry>gsl_y1(x)</entry><entry><action>irregular spherical Bessel function of first order, y<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>y0(x)</entry><entry><action>irregular spherical Bessel function of zeroth order, y<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>y1(x)</entry><entry><action>irregular spherical Bessel function of first order, y<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>y2(x)</entry><entry><action>irregular spherical Bessel function of second order, y<subscript>2</subscript>(x)</action></entry></row>
 <row><entry>yl(l,x)</entry><entry><action>irregular spherical Bessel function of order l, y<subscript>l</subscript>(x)</action></entry></row>
 <row><entry>i0s(x)</entry><entry><action>scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) i<subscript>0</subscript>(x)</action></entry></row>
@@ -853,51 +837,52 @@ For more information about the functions see the documentation of GSL.
 <row><entry>hydrogenicR_1(Z,R)</entry><entry><action>lowest-order normalized hydrogenic bound state radial wavefunction R<subscript>1</subscript> := 2Z &radic;Z exp(-Z r)</action></entry></row>
 <row><entry>hydrogenicR(n,l,Z,R)</entry><entry><action>n-th normalized hydrogenic bound state radial wavefunction</action></entry></row>
 <row><entry>dawson(x)</entry><entry><action>Dawson's integral</action></entry></row>
-<row><entry>debye_1(x)</entry><entry><action>first-order Debye function D<subscript>1</subscript>(x) = (1/x) &int;<subscript>0</subscript><superscript>x</superscript>(t/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_2(x)</entry><entry><action>second-order Debye function D<subscript>2</subscript>(x) = (2/x<superscript>2</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>2</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_3(x)</entry><entry><action>third-order Debye function D<subscript>3</subscript>(x) =  (3/x<superscript>3</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>3</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_4(x)</entry><entry><action>fourth-order Debye function D<subscript>4</subscript>(x) =  (4/x<superscript>4</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>4</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_5(x)</entry><entry><action>fifth-order Debye function D<subscript>5</subscript>(x) =  (5/x<superscript>5</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>5</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_6(x)</entry><entry><action>sixth-order Debye function D<subscript>6</subscript>(x) =  (6/x<superscript>6</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>6</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>dilog(x)</entry><entry><action>dilogarithm</action></entry></row>
-<row><entry>ellint_Kc(k)</entry><entry><action>complete elliptic integral K(k)</action></entry></row>
-<row><entry>ellint_Ec(k)</entry><entry><action>complete elliptic integral E(k)</action></entry></row>
-<row><entry>ellint_F(phi,k)</entry><entry><action>incomplete elliptic integral F(phi,k)</action></entry></row>
-<row><entry>ellint_E(phi,k)</entry><entry><action>incomplete elliptic integral E(phi,k)</action></entry></row>
-<row><entry>ellint_P(phi,k,n)</entry><entry><action>incomplete elliptic integral P(phi,k,n)</action></entry></row>
-<row><entry>ellint_D(phi,k,n)</entry><entry><action>incomplete elliptic integral D(phi,k,n)</action></entry></row>
-<row><entry>ellint_RC(x,y)</entry><entry><action>incomplete elliptic integral RC(x,y)</action></entry></row>
-<row><entry>ellint_RD(x,y,z)</entry><entry><action>incomplete elliptic integral RD(x,y,z)</action></entry></row>
-<row><entry>ellint_RF(x,y,z)</entry><entry><action>incomplete elliptic integral RF(x,y,z)</action></entry></row>
-<row><entry>ellint_RJ(x,y,z)</entry><entry><action>incomplete elliptic integral RJ(x,y,z,p)</action></entry></row>
-<row><entry>gsl_erf(x)</entry><entry><action>error function erf(x) = 2/&radic;&pi; &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
-<row><entry>gsl_erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = 2/&radic;&pi; &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>D1(x)</entry><entry><action>first-order Debye function D<subscript>1</subscript>(x) = (1/x) &int;<subscript>0</subscript><superscript>x</superscript>(t/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D2(x)</entry><entry><action>second-order Debye function D<subscript>2</subscript>(x) = (2/x<superscript>2</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>2</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D3(x)</entry><entry><action>third-order Debye function D<subscript>3</subscript>(x) =  (3/x<superscript>3</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>3</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D4(x)</entry><entry><action>fourth-order Debye function D<subscript>4</subscript>(x) =  (4/x<superscript>4</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>4</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D5(x)</entry><entry><action>fifth-order Debye function D<subscript>5</subscript>(x) =  (5/x<superscript>5</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>5</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D6(x)</entry><entry><action>sixth-order Debye function D<subscript>6</subscript>(x) =  (6/x<superscript>6</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>6</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>Li2(x)</entry><entry><action>dilogarithm</action></entry></row>
+<row><entry>Kc(k)</entry><entry><action>complete elliptic integral K(k)</action></entry></row>
+<row><entry>Ec(k)</entry><entry><action>complete elliptic integral E(k)</action></entry></row>
+<row><entry>F(phi,k)</entry><entry><action>incomplete elliptic integral F(phi,k)</action></entry></row>
+<row><entry>E(phi,k)</entry><entry><action>incomplete elliptic integral E(phi,k)</action></entry></row>
+<row><entry>P(phi,k,n)</entry><entry><action>incomplete elliptic integral P(phi,k,n)</action></entry></row>
+<row><entry>D(phi,k,n)</entry><entry><action>incomplete elliptic integral D(phi,k,n)</action></entry></row>
+<row><entry>RC(x,y)</entry><entry><action>incomplete elliptic integral RC(x,y)</action></entry></row>
+<row><entry>RD(x,y,z)</entry><entry><action>incomplete elliptic integral RD(x,y,z)</action></entry></row>
+<row><entry>RF(x,y,z)</entry><entry><action>incomplete elliptic integral RF(x,y,z)</action></entry></row>
+<row><entry>RJ(x,y,z)</entry><entry><action>incomplete elliptic integral RJ(x,y,z,p)</action></entry></row>
+<row><entry>erf(x)</entry><entry><action>error function erf(x) = 2/&radic;&pi; &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = 2/&radic;&pi; &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
 <row><entry>log_erfc(x)</entry><entry><action>logarithm of the complementary error function log(erfc(x))</action></entry></row>
-<row><entry>erf_z(x)</entry><entry><action>Gaussian probability function Z(x) = (1/(2&pi;)) exp(-x<superscript>2</superscript>/2)</action></entry></row>
-<row><entry>erf_q(x)</entry><entry><action>upper tail of the Gaussian probability function Q(x) = (1/(2&pi;)) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>/2) dt</action></entry></row>
-<row><entry>gsl_exp(x)</entry><entry><action>exponential function</action></entry></row>
+<row><entry>erf_Z(x)</entry><entry><action>Gaussian probability function Z(x) = (1/(2&pi;)) exp(-x<superscript>2</superscript>/2)</action></entry></row>
+<row><entry>erf_Q(x)</entry><entry><action>upper tail of the Gaussian probability function Q(x) = (1/(2&pi;)) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>/2) dt</action></entry></row>
+<row><entry>hazard(x)</entry><entry><action>hazard function for the normal distribution</action></entry></row>
+<row><entry>exp_mult(x,x)</entry><entry><action>exponentiate x and multiply by the factor y to return the product y exp(x)</action></entry></row>
 <row><entry>exprel(x)</entry><entry><action>(exp(x)-1)/x using an algorithm that is accurate for small x</action></entry></row>
-<row><entry>exprel_2(x)</entry><entry><action>2(exp(x)-1-x)/x<superscript>2</superscript> using an algorithm that is accurate for small x</action></entry></row>
-<row><entry>exprel_n(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `gsl_sf_exprel'</action></entry></row>
-<row><entry>expint_e1(x)</entry><entry><action>exponential integral E<subscript>1</subscript>(x), E<subscript>1</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t dt</action></entry></row>
-<row><entry>expint_e2(x)</entry><entry><action>second-order exponential integral E<subscript>2</subscript>(x), E<subscript>2</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>2</superscript> dt</action></entry></row>
-<row><entry>expint_ei(x)</entry><entry><action>exponential integral E_i(x), Ei(x) := PV(&int;<subscript>-x</subscript><superscript>&infin;</superscript> exp(-t)/t dt)</action></entry></row>
+<row><entry>exprel2(x)</entry><entry><action>2(exp(x)-1-x)/x<superscript>2</superscript> using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>expreln(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `gsl_sf_exprel'</action></entry></row>
+<row><entry>E1(x)</entry><entry><action>exponential integral E<subscript>1</subscript>(x), E<subscript>1</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t dt</action></entry></row>
+<row><entry>E2(x)</entry><entry><action>second-order exponential integral E<subscript>2</subscript>(x), E<subscript>2</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>2</superscript> dt</action></entry></row>
+<row><entry>En(x)</entry><entry><action>exponential integral E_n(x) of order n, E<subscript>n</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>n</superscript> dt)</action></entry></row>
+<row><entry>Ei(x)</entry><entry><action>exponential integral E_i(x), Ei(x) := PV(&int;<subscript>-x</subscript><superscript>&infin;</superscript> exp(-t)/t dt)</action></entry></row>
 <row><entry>shi(x)</entry><entry><action>Shi(x) = &int;<subscript>0</subscript><superscript>x</superscript> sinh(t)/t dt</action></entry></row>
 <row><entry>chi(x)</entry><entry><action>integral Chi(x) := Re[ &gamma;<subscript>E</subscript> + log(x) + &int;<subscript>0</subscript><superscript>x</superscript> (cosh[t]-1)/t dt ]</action></entry></row>
-<row><entry>expint_3(x)</entry><entry><action>exponential integral Ei<subscript>3</subscript>(x) = &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>3</superscript>) dt for x &gt;= 0</action></entry></row>
+<row><entry>Ei3(x)</entry><entry><action>exponential integral Ei<subscript>3</subscript>(x) = &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>3</superscript>) dt for x &gt;= 0</action></entry></row>
 <row><entry>si(x)</entry><entry><action>Sine integral Si(x) = &int;<subscript>0</subscript><superscript>x</superscript> sin(t)/t dt</action></entry></row>
 <row><entry>ci(x)</entry><entry><action>Cosine integral Ci(x) = -&int;<subscript>x</subscript><superscript>&infin;</superscript> cos(t)/t dt for x &gt; 0</action></entry></row>
 <row><entry>atanint(x)</entry><entry><action>Arctangent integral AtanInt(x) = &int;<subscript>0</subscript><superscript>x</superscript> arctan(t)/t dt</action></entry></row>
-<row><entry>fermi_dirac_m1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of -1, F<subscript>-1</subscript>(x) = e<superscript>x</superscript> / (1 + e<superscript>x</superscript>)</action></entry></row>
-<row><entry>fermi_dirac_0(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 0, F<subscript>0</subscript>(x) = ln(1 + e<superscript>x</superscript>)</action></entry></row>
-<row><entry>fermi_dirac_1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 1, F<subscript>1</subscript>(x) = &int;<subscript>0</subscript><superscript>&infin;</superscript> (t /(exp(t-x)+1)) dt</action></entry></row>
-<row><entry>fermi_dirac_2(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 2, F<subscript>2</subscript>(x) = (1/2) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>2</superscript> /(exp(t-x)+1)) dt</action></entry></row>
-<row><entry>fermi_dirac_int(j,x)</entry><entry><action>complete Fermi-Dirac integral with an index of j, F<subscript>j</subscript>(x) = (1/&Gamma;(j+1)) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>j</superscript> /(exp(t-x)+1)) dt</action></entry></row>
-<row><entry>fermi_dirac_mhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>-1/2</subscript>(x)</action></entry></row>
-<row><entry>fermi_dirac_half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>1/2</subscript>(x)</action></entry></row>
-<row><entry>fermi_dirac_3half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>3/2</subscript>(x)</action></entry></row>
-<row><entry>fermi_dirac_inc_0(x,b)</entry><entry><action>incomplete Fermi-Dirac integral with an index of zero, F<subscript>0</subscript>(x,b) = ln(1 + e<superscript>b-x</superscript>) - (b-x)</action></entry></row>
-<row><entry>gsl_gamma(x)</entry><entry><action>Gamma function</action></entry></row>
+<row><entry>Fm1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of -1, F<subscript>-1</subscript>(x) = e<superscript>x</superscript> / (1 + e<superscript>x</superscript>)</action></entry></row>
+<row><entry>F0(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 0, F<subscript>0</subscript>(x) = ln(1 + e<superscript>x</superscript>)</action></entry></row>
+<row><entry>F1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 1, F<subscript>1</subscript>(x) = &int;<subscript>0</subscript><superscript>&infin;</superscript> (t /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>F2(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 2, F<subscript>2</subscript>(x) = (1/2) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>2</superscript> /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>Fj(j,x)</entry><entry><action>complete Fermi-Dirac integral with an index of j, F<subscript>j</subscript>(x) = (1/&Gamma;(j+1)) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>j</superscript> /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>Fmhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>-1/2</subscript>(x)</action></entry></row>
+<row><entry>Fhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>1/2</subscript>(x)</action></entry></row>
+<row><entry>F3half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>3/2</subscript>(x)</action></entry></row>
+<row><entry>Finc0(x,b)</entry><entry><action>incomplete Fermi-Dirac integral with an index of zero, F<subscript>0</subscript>(x,b) = ln(1 + e<superscript>b-x</superscript>) - (b-x)</action></entry></row>
 <row><entry>lngamma(x)</entry><entry><action>logarithm of the Gamma function</action></entry></row>
 <row><entry>gammastar(x)</entry><entry><action>regulated Gamma Function &Gamma;<superscript>*</superscript>(x) for x &gt; 0</action></entry></row>
 <row><entry>gammainv(x)</entry><entry><action>reciprocal of the gamma function, 1/&Gamma;(x) using the real Lanczos method.</action></entry></row>
@@ -907,19 +892,20 @@ For more information about the functions see the documentation of GSL.
 <row><entry>lndoublefact(n)</entry><entry><action>logarithm of the double factorial log(n!!)</action></entry></row>
 <row><entry>choose(n,m)</entry><entry><action>combinatorial factor `n choose m' = n!/(m!(n-m)!)</action></entry></row>
 <row><entry>lnchoose(n,m)</entry><entry><action>logarithm of `n choose m'</action></entry></row>
+<row><entry>taylor(n,x)</entry><entry><action>Taylor coefficient x<superscript>n</superscript> / n! for x >= 0, n >= 0</action></entry></row>
 <row><entry>poch(a,x)</entry><entry><action>Pochhammer symbol (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(x)</action></entry></row>
 <row><entry>lnpoch(a,x)</entry><entry><action>logarithm of the Pochhammer symbol (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(x)</action></entry></row>
 <row><entry>pochrel(a,x)</entry><entry><action>relative Pochhammer symbol ((a,x) - 1)/x where (a,x) = (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(a)</action></entry></row>
-<row><entry>gamma_inc(a,x)</entry><entry><action>incomplete Gamma Function &Gamma;(a,x) = &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
-<row><entry>gamma_inc_Q(a,x)</entry><entry><action>normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
-<row><entry>gamma_inc_P(a,x)</entry><entry><action>complementary normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>0</subscript><superscript>x</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gammainc(a,x)</entry><entry><action>incomplete Gamma Function &Gamma;(a,x) = &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gammaincQ(a,x)</entry><entry><action>normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gammaincP(a,x)</entry><entry><action>complementary normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>0</subscript><superscript>x</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
 <row><entry>beta(a,b)</entry><entry><action>Beta Function, B(a,b) = &Gamma;(a) &Gamma;(b)/&Gamma;(a+b) for a &gt; 0, b &gt; 0</action></entry></row>
 <row><entry>lnbeta(a,b)</entry><entry><action>logarithm of the Beta Function, log(B(a,b)) for a &gt; 0, b &gt; 0</action></entry></row>
-<row><entry>beta_inc(a,b,x)</entry><entry><action>normalize incomplete Beta function B_x(a,b)/B(a,b) for a &gt; 0, b &gt; 0 </action></entry></row>
-<row><entry>gegenpoly_1(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>1</subscript>(x)</action></entry></row>
-<row><entry>gegenpoly_2(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>2</subscript>(x)</action></entry></row>
-<row><entry>gegenpoly_3(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>3</subscript>(x)</action></entry></row>
-<row><entry>gegenpoly_n(n,lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>n</subscript>(x)</action></entry></row>
+<row><entry>betainc(a,b,x)</entry><entry><action>normalize incomplete Beta function B_x(a,b)/B(a,b) for a &gt; 0, b &gt; 0 </action></entry></row>
+<row><entry>C1(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>C2(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>C3(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>Cn(n,lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>n</subscript>(x)</action></entry></row>
 <row><entry>hyperg_0F1(c,x)</entry><entry><action>hypergeometric function <subscript>0</subscript>F<subscript>1</subscript>(c,x)</action></entry></row>
 <row><entry>hyperg_1F1i(m,n,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(m,n,x) = M(m,n,x) for integer parameters m, n</action></entry></row>
 <row><entry>hyperg_1F1(a,b,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(a,b,x) = M(a,b,x) for general parameters a,b</action></entry></row>
@@ -930,64 +916,70 @@ For more information about the functions see the documentation of GSL.
 <row><entry>hyperg_2F1r(ar,ai,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x) / &Gamma;(c)</action></entry></row>
 <row><entry>hyperg_2F1cr(ar,ai,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) / &Gamma;(c)</action></entry></row>
 <row><entry>hyperg_2F0(a,b,x)</entry><entry><action>hypergeometric function <subscript>2</subscript>F<subscript>0</subscript>(a,b,x)</action></entry></row>
-<row><entry>laguerre_1(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>1</subscript>(x)</action></entry></row>
-<row><entry>laguerre_2(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>2</subscript>(x)</action></entry></row>
-<row><entry>laguerre_3(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>3</subscript>(x)</action></entry></row>
-<row><entry>lambert_W0(x)</entry><entry><action>principal branch of the Lambert W function, W<subscript>0</subscript>(x)</action></entry></row>
-<row><entry>lambert_Wm1(x)</entry><entry><action>secondary real-valued branch of the Lambert W function, W<subscript>-1</subscript>(x)</action></entry></row>
-<row><entry>legendre_p1(x)</entry><entry><action>Legendre polynomials P<subscript>1</subscript>(x)</action></entry></row>
-<row><entry>legendre_p2(x)</entry><entry><action>Legendre polynomials P<subscript>2</subscript>(x)</action></entry></row>
-<row><entry>legendre_p3(x)</entry><entry><action>Legendre polynomials P<subscript>3</subscript>(x)</action></entry></row>
-<row><entry>legendre_pl(l,x)</entry><entry><action>Legendre polynomials P<subscript>l</subscript>(x)</action></entry></row>
-<row><entry>legendre_Q0(x)</entry><entry><action>Legendre polynomials Q<subscript>0</subscript>(x)</action></entry></row>
-<row><entry>legendre_Q1(x)</entry><entry><action>Legendre polynomials Q<subscript>1</subscript>(x)</action></entry></row>
-<row><entry>legendre_Ql(l,x)</entry><entry><action>Legendre polynomials Q<subscript>l</subscript>(x)</action></entry></row>
-<row><entry>legendre_Plm(l,m,x)</entry><entry><action>associated Legendre polynomial P<subscript>l</subscript><superscript>m</superscript>(x)</action></entry></row>
-<row><entry>legendre_sphPlm(l,m,x)</entry><entry><action>normalized associated Legendre polynomial &radic;{(2l+1)/(4&pi;)} &radic;{(l-m)!/(l+m)!} P<subscript>l</subscript><superscript>m</superscript>(x) suitable for use in spherical harmonics</action></entry></row>
-<row><entry>conicalP_half(lambda,x)</entry><entry><action>irregular Spherical Conical Function P<superscript>1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>conicalP_mhalf(lambda,x)</entry><entry><action>regular Spherical Conical Function P<superscript>-1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>conicalP_0(lambda,x)</entry><entry><action>conical function P<superscript>0</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>conicalP_1(lambda,x)</entry><entry><action>conical function P<superscript>1</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>conicalP_sphreg(l,lambda,x)</entry><entry><action>Regular Spherical Conical Function P<superscript>-1/2-l</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, l &gt;= -1</action></entry></row>
-<row><entry>conicalP_cylreg(l,lambda,x)</entry><entry><action>Regular Cylindrical Conical Function P<superscript>-m</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, m &gt;= -1</action></entry></row>
-<row><entry>legendre_H3d_0(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>0</subscript>(lambda,eta) := sin(lambda eta)/(lambda sinh(eta)) for eta &gt;= 0</action></entry></row>
-<row><entry>legendre_H3d_1(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>1</subscript>(lambda,eta) := 1/&radic;{lambda<superscript>2</superscript> + 1} sin(lambda eta)/(lambda sinh(eta)) (coth(eta) - lambda cot(lambda eta)) for eta &gt;= 0</action></entry></row>
-<row><entry>legendre_H3d(l,lambda,eta)</entry><entry><action>L'th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space eta &gt;= 0, l &gt;= 0</action></entry></row>
-<row><entry>gsl_log(x)</entry><entry><action>logarithm of x</action></entry></row>
-<row><entry>loga(x)</entry><entry><action>logarithm of the magnitude of X, log(|x|)</action></entry></row>
+<row><entry>L1(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>L2(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>L3(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>W0(x)</entry><entry><action>principal branch of the Lambert W function, W<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>Wm1(x)</entry><entry><action>secondary real-valued branch of the Lambert W function, W<subscript>-1</subscript>(x)</action></entry></row>
+<row><entry>P1(x)</entry><entry><action>Legendre polynomials P<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>P2(x)</entry><entry><action>Legendre polynomials P<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>P3(x)</entry><entry><action>Legendre polynomials P<subscript>3</subscript>(x)</action></entry></row>
+<row><entry>Pl(l,x)</entry><entry><action>Legendre polynomials P<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>Q0(x)</entry><entry><action>Legendre polynomials Q<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>Q1(x)</entry><entry><action>Legendre polynomials Q<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Ql(l,x)</entry><entry><action>Legendre polynomials Q<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>Plm(l,m,x)</entry><entry><action>associated Legendre polynomial P<subscript>l</subscript><superscript>m</superscript>(x)</action></entry></row>
+<row><entry>Pslm(l,m,x)</entry><entry><action>normalized associated Legendre polynomial &radic;{(2l+1)/(4&pi;)} &radic;{(l-m)!/(l+m)!} P<subscript>l</subscript><superscript>m</superscript>(x) suitable for use in spherical harmonics</action></entry></row>
+<row><entry>Phalf(lambda,x)</entry><entry><action>irregular Spherical Conical Function P<superscript>1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pmhalf(lambda,x)</entry><entry><action>regular Spherical Conical Function P<superscript>-1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pc0(lambda,x)</entry><entry><action>conical function P<superscript>0</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pc1(lambda,x)</entry><entry><action>conical function P<superscript>1</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Psr(l,lambda,x)</entry><entry><action>Regular Spherical Conical Function P<superscript>-1/2-l</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, l &gt;= -1</action></entry></row>
+<row><entry>Pcr(l,lambda,x)</entry><entry><action>Regular Cylindrical Conical Function P<superscript>-m</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, m &gt;= -1</action></entry></row>
+<row><entry>H3d0(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>0</subscript>(lambda,eta) := sin(lambda eta)/(lambda sinh(eta)) for eta &gt;= 0</action></entry></row>
+<row><entry>H3d1(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>1</subscript>(lambda,eta) := 1/&radic;{lambda<superscript>2</superscript> + 1} sin(lambda eta)/(lambda sinh(eta)) (coth(eta) - lambda cot(lambda eta)) for eta &gt;= 0</action></entry></row>
+<row><entry>H3d(l,lambda,eta)</entry><entry><action>L'th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space eta &gt;= 0, l &gt;= 0</action></entry></row>
+<row><entry>logabs(x)</entry><entry><action>logarithm of the magnitude of X, log(|x|)</action></entry></row>
 <row><entry>logp(x)</entry><entry><action>log(1 + x) for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
 <row><entry>logm(x)</entry><entry><action>log(1 + x) - x for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
-<row><entry>gsl_pow(x,n)</entry><entry><action>power x<superscript>n</superscript> for integer n</action></entry></row>
-<row><entry>psii(n)</entry><entry><action>digamma function &psi;(n) for positive integer n</action></entry></row>
+<row><entry>psiint(n)</entry><entry><action>digamma function &psi;(n) for positive integer n</action></entry></row>
 <row><entry>psi(x)</entry><entry><action>digamma function &psi;(n) for general x</action></entry></row>
-<row><entry>psiy(y)</entry><entry><action>real part of the digamma function on the line 1+i y, Re[&psi;(1 + i y)]</action></entry></row>
-<row><entry>ps1i(n)</entry><entry><action>Trigamma function &psi;'(n) for positive integer n</action></entry></row>
-<row><entry>psi_n(m,x)</entry><entry><action>polygamma function &psi;<superscript>(m)</superscript>(x) for m &gt;= 0, x &gt; 0</action></entry></row>
-<row><entry>synchrotron_1(x)</entry><entry><action>first synchrotron function x &int;<subscript>x</subscript><superscript>&infin;</superscript> K<subscript>5/3</subscript>(t) dt for x &gt;= 0</action></entry></row>
-<row><entry>synchrotron_2(x)</entry><entry><action>second synchrotron function x K<subscript>2/3</subscript>(x) for x &gt;= 0</action></entry></row>
-<row><entry>transport_2(x)</entry><entry><action>transport function J(2,x)</action></entry></row>
-<row><entry>transport_3(x)</entry><entry><action>transport function J(3,x)</action></entry></row>
-<row><entry>transport_4(x)</entry><entry><action>transport function J(4,x)</action></entry></row>
-<row><entry>transport_5(x)</entry><entry><action>transport function J(5,x)</action></entry></row>
-<row><entry>gsl_sin(x)</entry><entry><action>sine function</action></entry></row>
-<row><entry>gsl_cos(x)</entry><entry><action>cosine function</action></entry></row>
-<row><entry>gsl_hypot(x,y)</entry><entry><action>hypotenuse function &radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
+<row><entry>psi1piy(y)</entry><entry><action>real part of the digamma function on the line 1+i y, Re[&psi;(1 + i y)]</action></entry></row>
+<row><entry>psi1int(n)</entry><entry><action>Trigamma function &psi;'(n) for positive integer n</action></entry></row>
+<row><entry>psi1(n)</entry><entry><action>Trigamma function &psi;'(x) for general x</action></entry></row>
+<row><entry>psin(m,x)</entry><entry><action>polygamma function &psi;<superscript>(m)</superscript>(x) for m &gt;= 0, x &gt; 0</action></entry></row>
+<row><entry>synchrotron1(x)</entry><entry><action>first synchrotron function x &int;<subscript>x</subscript><superscript>&infin;</superscript> K<subscript>5/3</subscript>(t) dt for x &gt;= 0</action></entry></row>
+<row><entry>synchrotron2(x)</entry><entry><action>second synchrotron function x K<subscript>2/3</subscript>(x) for x &gt;= 0</action></entry></row>
+<row><entry>J2(x)</entry><entry><action>transport function J(2,x)</action></entry></row>
+<row><entry>J3(x)</entry><entry><action>transport function J(3,x)</action></entry></row>
+<row><entry>J4(x)</entry><entry><action>transport function J(4,x)</action></entry></row>
+<row><entry>J5(x)</entry><entry><action>transport function J(5,x)</action></entry></row>
 <row><entry>sinc(x)</entry><entry><action>sinc(x) = sin(&pi; x) / (&pi; x)</action></entry></row>
-<row><entry>lnsinh(x)</entry><entry><action>log(sinh(x)) for x &gt; 0</action></entry></row>
-<row><entry>lncosh(x)</entry><entry><action>log(cosh(x))</action></entry></row>
-<row><entry>zetai(n)</entry><entry><action>Riemann zeta function zeta(n) for integer N</action></entry></row>
+<row><entry>logsinh(x)</entry><entry><action>log(sinh(x)) for x &gt; 0</action></entry></row>
+<row><entry>logcosh(x)</entry><entry><action>log(cosh(x))</action></entry></row>
+<row><entry>anglesymm(theta)</entry><entry><action>force the angle theta to lie in the range (-&pi;,&pi;]</action></entry></row>
+<row><entry>anglepos(theta)</entry><entry><action>force the angle theta to lie in the range (0,2&pi;]</action></entry></row>
+<row><entry>zetaint(n)</entry><entry><action>Riemann zeta function zeta(n) for integer n</action></entry></row>
 <row><entry>zeta(s)</entry><entry><action>Riemann zeta function zeta(s) for arbitrary s</action></entry></row>
+<row><entry>zetam1int(n)</entry><entry><action>Riemann zeta function minus 1 for integer n</action></entry></row>
 <row><entry>zetam1(s)</entry><entry><action>Riemann zeta function minus 1</action></entry></row>
+<row><entry>zetaintm1(s)</entry><entry><action>Riemann zeta function for integer n minus 1</action></entry></row>
 <row><entry>hzeta(s,q)</entry><entry><action>Hurwitz zeta function zeta(s,q) for s &gt; 1, q &gt; 0</action></entry></row>
-<row><entry>etai(n)</entry><entry><action>eta function &eta;(n) for integer n</action></entry></row>
+<row><entry>etaint(n)</entry><entry><action>eta function &eta;(n) for integer n</action></entry></row>
 <row><entry>eta(s)</entry><entry><action>eta function &eta;(s) for arbitrary s</action></entry></row>
+<row><entry>gsl_log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
+<row><entry>gsl_expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
+<row><entry>gsl_hypot(x,y)</entry><entry><action>&radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
+<row><entry>gsl_acosh(x)</entry><entry><action>arccosh(x)</action></entry></row>
+<row><entry>gsl_asinh(x)</entry><entry><action>arcsinh(x)</action></entry></row>
+<row><entry>gsl_atanh(x)</entry><entry><action>arctanh(x)</action></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
 </sect1>
 
 <sect1 id="parser-ran-gsl">
-<title>GSL random number distributions</title>
+<title>Random number distributions</title>
 <para>
 For more information about the functions see the documentation of GSL.
 </para>
