@@ -993,12 +993,12 @@ For more information about the functions see the documentation of GSL.
 <row><entry>ugaussian(x)</entry><entry><action>unit Gaussian distribution.  They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
 <row><entry>gaussianP(x,&sigma;)</entry><entry><action>cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
 <row><entry>gaussianQ(x,&sigma;)</entry><entry><action>cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
-<row><entry>gaussianPinv(x,&sigma;)</entry><entry><action>inverse cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
-<row><entry>gaussianQinv(x,&sigma;)</entry><entry><action>inverse cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianPinv(P,&sigma;)</entry><entry><action>inverse cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianQinv(Q,&sigma;)</entry><entry><action>inverse cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
 <row><entry>ugaussianP(x)</entry><entry><action>cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
 <row><entry>ugaussianQ(x)</entry><entry><action>cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
-<row><entry>ugaussianPinv(x)</entry><entry><action>inverse cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
-<row><entry>ugaussianQinv(x)</entry><entry><action>inverse cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianPinv(P)</entry><entry><action>inverse cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianQinv(Q)</entry><entry><action>inverse cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
 <row><entry>gaussiantail(x,a,&sigma;)</entry><entry><action>probability density p(x) for a Gaussian tail distribution with standard deviation &sigma; and lower limit a</action></entry></row>
 <row><entry>ugaussiantail(x,a)</entry><entry><action>tail of a unit Gaussian distribution. They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
 <row><entry>gaussianbi(x,y,&sigma;<subscript>x</subscript>,&sigma;<subscript>y</subscript>,&rho;)</entry><entry><action>probability density p(x,y) at (X,Y) for a bivariate gaussian distribution 
@@ -1006,32 +1006,56 @@ For more information about the functions see the documentation of GSL.
 <row><entry>exponential(x,&mu;)</entry><entry><action>probability density p(x) for an exponential distribution with mean &mu;</action></entry></row>
 <row><entry>exponentialP(x,&mu;)</entry><entry><action>cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
 <row><entry>exponentialQ(x,&mu;)</entry><entry><action>cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
-<row><entry>exponentialPinv(x,&mu;)</entry><entry><action>inverse cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
-<row><entry>exponentialQinv(x,&mu;)</entry><entry><action>inverse cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialPinv(P,&mu;)</entry><entry><action>inverse cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialQinv(Q,&mu;)</entry><entry><action>inverse cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
 <row><entry>laplace(x,a)</entry><entry><action>probability density p(x) for a Laplace distribution with width a</action></entry></row>
 <row><entry>laplaceP(x,a)</entry><entry><action>cumulative distribution function P(x) for a Laplace distribution with width a</action></entry></row>
 <row><entry>laplaceQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a Laplace distribution with width a</action></entry></row>
-<row><entry>laplacePinv(x,a)</entry><entry><action>inverse cumulative distribution function P(x) for an Laplace distribution with width a</action></entry></row>
-<row><entry>laplaceQinv(x,a)</entry><entry><action>inverse cumulative distribution function Q(x) for an Laplace distribution with width a</action></entry></row>
+<row><entry>laplacePinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for an Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for an Laplace distribution with width a</action></entry></row>
 <row><entry>exppow(x,a,b)</entry><entry><action>probability density p(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
 <row><entry>exppowP(x,a,b)</entry><entry><action>cumulative probability density P(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
 <row><entry>exppowQ(x,a,b)</entry><entry><action>cumulative probability density Q(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
 <row><entry>cauchy(x,a)</entry><entry><action>probability density p(x) for a Cauchy (Lorentz) distribution with scale parameter a</action></entry></row>
 <row><entry>cauchyP(x,a)</entry><entry><action>cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
 <row><entry>cauchyQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a Cauchy distribution with scale parameter a</action></entry></row>
-<row><entry>cauchyPinv(x,a)</entry><entry><action>inverse cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
-<row><entry>cauchyQinv(x,a)</entry><entry><action>inverse cumulative distribution function Q(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyPinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>rayleigh(x,&sigma;)</entry><entry><action>probability density p(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighP(x,&sigma;)</entry><entry><action>cumulative distribution function P(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighQ(x,&sigma;)</entry><entry><action>cumulative distribution function Q(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighPinv(P,&sigma;)</entry><entry><action>inverse cumulative distribution function P(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighQinv(Q,&sigma;)</entry><entry><action>inverse cumulative distribution function Q(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleigh_tail(x,a,&sigma;)</entry><entry><action>probability density p(x) for a Rayleigh tail distribution with scale parameter &sigma; and lower limit a</action></entry></row>
+<row><entry>landau(x)</entry><entry><action>probability density p(x) for the Landau distribution</action></entry></row>
+<row><entry>gammapdf(x,a,b)</entry><entry><action>probability density p(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>flat(x,a,b)</entry><entry><action>probability density p(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>lognormal(x,&zeta;,&sigma;)</entry><entry><action>probability density p(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalP(x,&zeta;,&sigma;)</entry><entry><action>cumulative distribution function P(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalQ(x,&zeta;,&sigma;)</entry><entry><action>cumulative distribution function Q(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalPinv(P,&zeta;,&sigma;)</entry><entry><action>inverse cumulative distribution function P(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalQinv(Q,&zeta;,&sigma;)</entry><entry><action>inverse cumulative distribution function Q(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>chisq(x,&nu;)</entry><entry><action>probability density p(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqP(x,&nu;)</entry><entry><action>cumulative distribution function P(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqQ(x,&nu;)</entry><entry><action>cumulative distribution function Q(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqPinv(P,&nu;)</entry><entry><action>inverse cumulative distribution function P(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqQinv(Q,&nu;)</entry><entry><action>inverse cumulative distribution function Q(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>fdist(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>probability density p(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistP(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>cumulative distribution function P(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistQ(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>cumulative distribution function Q(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistPinv(P,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>inverse cumulative distribution function P(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistQinv(Q,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>inverse cumulative distribution function Q(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
 
-<row><entry>rayleigh(x,sigma)</entry><entry><action>probability density p(x) at X for a Rayleigh distribution with scale parameter SIGMA</action></entry></row>
-<row><entry>rayleigh_tail(x,a,sigma)</entry><entry><action>probability density p(x) at X for a Rayleigh tail distribution with scale parameter SIGMA and lower limit A</action></entry></row>
-
-<row><entry>landau(x)</entry><entry><action>probability density p(x) at X for the Landau distribution</action></entry></row>
-<row><entry>gamma_pdf(x,a,b)</entry><entry><action>probability density p(x) at X for a gamma distribution with parameters A and B</action></entry></row>
-<row><entry>flat(x,a,b)</entry><entry><action>probability density p(x) at X for a uniform distribution from A to B</action></entry></row>
-<row><entry>lognormal(x,zeta,sigma)</entry><entry><action>probability density p(x) at X for a lognormal distribution with parameters ZETA and SIGMA</action></entry></row>
-<row><entry>chisq(x,nu)</entry><entry><action>probability density p(x) at X for a chi-squared distribution with NU degrees of freedom</action></entry></row>
-<row><entry>fdist(x,nu1,nu2)</entry><entry><action>probability density p(x) at X for an F-distribution with NU1 and NU2 degrees of freedom</action></entry></row>
 <row><entry>tdist(x,nu)</entry><entry><action>probability density p(x) at X for a t-distribution with NU degrees of freedom</action></entry></row>
+
 <row><entry>beta_pdf(x,a,b)</entry><entry><action>probability density p(x) at X for a beta distribution with parameters A and B</action></entry></row>
 <row><entry>logistic(x,a)</entry><entry><action>probability density p(x) at X for a logistic distribution with scale parameter A</action></entry></row>
 <row><entry>pareto(x,a,b)</entry><entry><action>probability density p(x) at X for a Pareto distribution with exponent A and scale B</action></entry></row>
