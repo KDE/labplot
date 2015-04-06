@@ -779,12 +779,12 @@ For more information about the functions see the documentation of GSL.
 
 <row><entry>Ai(x)</entry><entry><action>Airy function Ai(x)</action></entry></row>
 <row><entry>Bi(x)</entry><entry><action>Airy function Bi(x)</action></entry></row>
-<row><entry>Ais(x)</entry><entry><action>scaled version of the Airy function S<subscript>A</subscript>(x) Ai(x)</action></entry></row>
-<row><entry>Bis(x)</entry><entry><action>scaled version of the Airy function S<subscript>B</subscript>(x) Bi(x)</action></entry></row>
+<row><entry>Ais(x)</entry><entry><action>scaled version of the Airy function S<subscript>Ai</subscript>(x)</action></entry></row>
+<row><entry>Bis(x)</entry><entry><action>scaled version of the Airy function S<subscript>Bi</subscript>(x)</action></entry></row>
 <row><entry>Aid(x)</entry><entry><action>Airy function derivative Ai'(x)</action></entry></row>
 <row><entry>Bid(x)</entry><entry><action>Airy function derivative Bi'(x)</action></entry></row>
-<row><entry>Aids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>A</subscript>(x) Ai(x)</action></entry></row>
-<row><entry>Bids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>B</subscript>(x) Bi(x)</action></entry></row>
+<row><entry>Aids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>Ai</subscript>(x)</action></entry></row>
+<row><entry>Bids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>Bi</subscript>(x)</action></entry></row>
 <row><entry>Ai0(s)</entry><entry><action>s-th zero of the Airy function Ai(x)</action></entry></row>
 <row><entry>Bi0(s)</entry><entry><action>s-th zero of the Airy function Bi(x)</action></entry></row>
 <row><entry>Aid0(s)</entry><entry><action>s-th zero of the Airy function derivative Ai'(x)</action></entry></row>
@@ -863,7 +863,7 @@ For more information about the functions see the documentation of GSL.
 <row><entry>exp_mult(x,x)</entry><entry><action>exponentiate x and multiply by the factor y to return the product y exp(x)</action></entry></row>
 <row><entry>exprel(x)</entry><entry><action>(exp(x)-1)/x using an algorithm that is accurate for small x</action></entry></row>
 <row><entry>exprel2(x)</entry><entry><action>2(exp(x)-1-x)/x<superscript>2</superscript> using an algorithm that is accurate for small x</action></entry></row>
-<row><entry>expreln(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `gsl_sf_exprel'</action></entry></row>
+<row><entry>expreln(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `exprel'</action></entry></row>
 <row><entry>E1(x)</entry><entry><action>exponential integral E<subscript>1</subscript>(x), E<subscript>1</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t dt</action></entry></row>
 <row><entry>E2(x)</entry><entry><action>second-order exponential integral E<subscript>2</subscript>(x), E<subscript>2</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>2</superscript> dt</action></entry></row>
 <row><entry>En(x)</entry><entry><action>exponential integral E_n(x) of order n, E<subscript>n</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>n</superscript> dt)</action></entry></row>
@@ -1001,7 +1001,7 @@ For more information about the functions see the documentation of GSL.
 <row><entry>ugaussianQinv(Q)</entry><entry><action>inverse cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
 <row><entry>gaussiantail(x,a,&sigma;)</entry><entry><action>probability density p(x) for a Gaussian tail distribution with standard deviation &sigma; and lower limit a</action></entry></row>
 <row><entry>ugaussiantail(x,a)</entry><entry><action>tail of a unit Gaussian distribution. They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
-<row><entry>gaussianbi(x,y,&sigma;<subscript>x</subscript>,&sigma;<subscript>y</subscript>,&rho;)</entry><entry><action>probability density p(x,y) at (X,Y) for a bivariate gaussian distribution 
+<row><entry>gaussianbi(x,y,&sigma;<subscript>x</subscript>,&sigma;<subscript>y</subscript>,&rho;)</entry><entry><action>probability density p(x,y) for a bivariate gaussian distribution 
       with standard deviations &sigma;<subscript>x</subscript>, &sigma;<subscript>y</subscript> and correlation coefficient &rho;</action></entry></row>
 <row><entry>exponential(x,&mu;)</entry><entry><action>probability density p(x) for an exponential distribution with mean &mu;</action></entry></row>
 <row><entry>exponentialP(x,&mu;)</entry><entry><action>cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
@@ -1091,7 +1091,7 @@ For more information about the functions see the documentation of GSL.
 <row><entry>poisson(k,&mu;)</entry><entry><action>probability p(k) of obtaining k from a Poisson distribution with mean &mu;</action></entry></row>
 <row><entry>poissonP(k,&mu;)</entry><entry><action>cumulative distribution functions P(k) for a Poisson distribution with mean &mu;</action></entry></row>
 <row><entry>poissonQ(k,&mu;)</entry><entry><action>cumulative distribution functions Q(k) for a Poisson distribution with mean &mu;</action></entry></row>
-<row><entry>bernoulli(k,p)</entry><entry><action>probability p(k) of obtaining k from a Bernoulli distribution with probability parameter P</action></entry></row>
+<row><entry>bernoulli(k,p)</entry><entry><action>probability p(k) of obtaining k from a Bernoulli distribution with probability parameter p</action></entry></row>
 <row><entry>binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining p from a binomial distribution with parameters p and n</action></entry></row>
 <row><entry>binomialP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a binomial distribution with parameters p and n</action></entry></row>
 <row><entry>binomialQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a binomial distribution with parameters p and n</action></entry></row>
@@ -1107,7 +1107,7 @@ For more information about the functions see the documentation of GSL.
 <row><entry>hypergeometric(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>probability p(k) of obtaining k from a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
 <row><entry>hypergeometricP(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>cumulative distribution function P(k) for a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
 <row><entry>hypergeometricQ(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>cumulative distribution function Q(k) for a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
-<row><entry>logarithmic(k,p)</entry><entry><action>probability p(k) of obtaining K from a logarithmic distribution with probability parameter P</action></entry></row>
+<row><entry>logarithmic(k,p)</entry><entry><action>probability p(k) of obtaining K from a logarithmic distribution with probability parameter p</action></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -1157,7 +1157,7 @@ For more information about this constants see the documentation of GSL.
 <row><entry>pc</entry><entry><action>The distance of 1 parsec</action></entry></row>
 <row><entry>gg</entry><entry><action>The standard gravitational acceleration on Earth</action></entry></row>
 <row><entry>ms</entry><entry><action>The mass of the Sun</action></entry></row>
-<row><entry>e</entry><entry><action>The charge of the electron</action></entry></row>
+<row><entry>ee</entry><entry><action>The charge of the electron</action></entry></row>
 <row><entry>eV</entry><entry><action>The energy of 1 electron volt</action></entry></row>
 <row><entry>amu</entry><entry><action>The unified atomic mass</action></entry></row>
 <row><entry>me</entry><entry><action>The mass of the electron</action></entry></row>
