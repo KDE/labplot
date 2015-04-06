@@ -1575,6 +1575,8 @@ void XYCurvePrivate::updatePixmap() {
 	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
 	if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
 		m_pixmap = pixmap;
+		m_hoverEffectImageIsDirty = true;
+		m_selectionEffectImageIsDirty = true;
 		return;
 	}
 	pixmap.fill(Qt::transparent);
