@@ -310,6 +310,16 @@ The additional options determining the import of the data are equivalent to thos
 
 <sect1 id="importdialog">
 <title>Import Dialog</title>
+<para>
+In the import dialog you can import data into one of the available spreadsheets in &LabPlot;.
+</para>
+<para>
+The name of the file containing the data to import has to be provided. The <guibutton>File Info</guibutton> button opens a dialog where some information about the selected file is shown. The type of the data can be specified - currently, only ASCII files containing several data sets (vectors) stored as columns are supported.
+The filter - automatic or custom - determines how the file has to be parsed. Selecting the filter "custom", several parameters like separating character etc. can be provided manually in this case.
+</para>
+<para>
+The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
+</para>
 <screenshot>
   <screeninfo>Importing data into &LabPlot;</screeninfo>
   <mediaobject>
@@ -321,16 +331,6 @@ The additional options determining the import of the data are equivalent to thos
     </textobject>
   </mediaobject>
 </screenshot>
-<para>
-With the import dialog you can import data into &LabPlot;. 
-</para>
-<para>
-  In the line edit you can specify a data file to read. The <guibutton>File Info</guibutton> button shows you some information about the selected
-files. You can also specify the type of the data, the filter, the separating character (for instance ",") and the comment line character.
-</para>
-<para>
-  The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
-</para>
 </sect1>
 
 
