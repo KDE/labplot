@@ -1053,22 +1053,60 @@ For more information about the functions see the documentation of GSL.
 <row><entry>fdistQ(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>cumulative distribution function Q(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
 <row><entry>fdistPinv(P,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>inverse cumulative distribution function P(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
 <row><entry>fdistQinv(Q,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>inverse cumulative distribution function Q(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
-
-<row><entry>tdist(x,nu)</entry><entry><action>probability density p(x) at X for a t-distribution with NU degrees of freedom</action></entry></row>
-
-<row><entry>beta_pdf(x,a,b)</entry><entry><action>probability density p(x) at X for a beta distribution with parameters A and B</action></entry></row>
-<row><entry>logistic(x,a)</entry><entry><action>probability density p(x) at X for a logistic distribution with scale parameter A</action></entry></row>
-<row><entry>pareto(x,a,b)</entry><entry><action>probability density p(x) at X for a Pareto distribution with exponent A and scale B</action></entry></row>
-<row><entry>weibull(x,a,b)</entry><entry><action>probability density p(x) at X for a Weibull distribution with scale A and exponent B</action></entry></row>
-<row><entry>gumbel1(x,a,b)</entry><entry><action>probability density p(x) at X for a Type-1 Gumbel distribution with parameters A and B</action></entry></row>
+<row><entry>tdist(x,&nu;)</entry><entry><action>probability density p(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistP(x,&nu;)</entry><entry><action>cumulative distribution function P(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistQ(x,&nu;)</entry><entry><action>cumulative distribution function Q(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistPinv(P,&nu;)</entry><entry><action>inverse cumulative distribution function P(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistQinv(Q,&nu;)</entry><entry><action>inverse cumulative distribution function Q(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>betapdf(x,a,b)</entry><entry><action>probability density p(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>logistic(x,a)</entry><entry><action>probability density p(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticP(x,a)</entry><entry><action>cumulative distribution function P(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticPinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>pareto(x,a,b)</entry><entry><action>probability density p(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>weibull(x,a,b)</entry><entry><action>probability density p(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>gumbel1(x,a,b)</entry><entry><action>probability density p(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1P(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Q(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Pinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Qinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
 <row><entry>gumbel2(x,a,b)</entry><entry><action>probability density p(x) at X for a Type-2 Gumbel distribution with parameters A and B</action></entry></row>
-<row><entry>poisson(k,mu)</entry><entry><action>probability p(k) of obtaining  K from a Poisson distribution with mean mu</action></entry></row>
-<row><entry>bernoulli(k,p)</entry><entry><action>probability p(k) of obtaining K from a Bernoulli distribution with probability parameter P</action></entry></row>
-<row><entry>binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a binomial distribution with parameters P and N</action></entry></row>
-<row><entry>negative_binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a negative binomial distribution with parameters P and N</action></entry></row>
-<row><entry>pascal(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a Pascal distribution with parameters P and N</action></entry></row>
-<row><entry>geometric(k,p)</entry><entry><action>probability p(k) of obtaining K from a geometric distribution with probability parameter P</action></entry></row>
-<row><entry>hypergeometric(k,n1,n2,t)</entry><entry><action>probability p(k) of obtaining K from a hypergeometric distribution with parameters N1, N2, N3</action></entry></row>
+<row><entry>gumbel2P(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Q(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Pinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Qinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>poisson(k,&mu;)</entry><entry><action>probability p(k) of obtaining k from a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>poissonP(k,&mu;)</entry><entry><action>cumulative distribution functions P(k) for a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>poissonQ(k,&mu;)</entry><entry><action>cumulative distribution functions Q(k) for a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>bernoulli(k,p)</entry><entry><action>probability p(k) of obtaining k from a Bernoulli distribution with probability parameter P</action></entry></row>
+<row><entry>binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining p from a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>binomialP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>binomialQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomial(k,p,n)</entry><entry><action>probability p(k) of obtaining k from a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomialP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomialQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>pascal(k,p,n)</entry><entry><action>probability p(k) of obtaining k from a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>pascalP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>pascalQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>geometric(k,p)</entry><entry><action>probability p(k) of obtaining k from a geometric distribution with probability parameter p</action></entry></row>
+<row><entry>geometricP(k,p)</entry><entry><action>cumulative distribution functions P(k) for a geometric distribution with parameter p</action></entry></row>
+<row><entry>geometricQ(k,p)</entry><entry><action>cumulative distribution functions Q(k) for a geometric distribution with parameter p</action></entry></row>
+<row><entry>hypergeometric(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>probability p(k) of obtaining k from a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
+<row><entry>hypergeometricP(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>cumulative distribution function P(k) for a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
+<row><entry>hypergeometricQ(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>cumulative distribution function Q(k) for a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
 <row><entry>logarithmic(k,p)</entry><entry><action>probability p(k) of obtaining K from a logarithmic distribution with probability parameter P</action></entry></row>
 </tbody>
 </tgroup>
