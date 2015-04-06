@@ -164,7 +164,10 @@ When sub-windows are used, all windows of objects belonging to the currently sel
 <sect1 id="properties-explorer">
 <title>Properties Explorer</title>
 <para>
-Project explorer is a dockable window and can be placed at an arbitrary place.
+Properties explorer allows the user to modify the currently selected object in the project explorer. A great variety of object properties can be edited in undoable/redoable way. Editing of multiple objects of the same time is also possible. 
+</para>
+<para>
+Properties explorer is a dockable window and can be placed at an arbitrary place.
 </para>
 </sect1>
 
@@ -284,11 +287,24 @@ The results shown on the worksheet can be exported to different formats via the 
 </sect1>
 
 
-<!-- TODO: Describe the basic concepts and functionality of the file data source. -->
 <sect1 id="file_data_source">
 <title>File Data Source</title>
 <para>
-Similar in spirit to importing the data to a spreadsheet...
+A file data source is very similar in spirit to a spreadsheet with imported data from an external file. The difference is that the imported data cannot be shown and edited in LabPlot after the import anymore. This can be sufficient e.g. if you only want to plot the data stemming from a calculation in an external program (and exported to an ASCII-file aftewards).
+</para>
+<para>
+Since no spreadsheet has to be filled with the imported data, the import into a file data source is faster then into a spreadsheet which can be advantageously when dealing with big files.
+</para>
+<para>
+It is possible to store the link to the external file in the project file only and not its content. Each time the project file is opened in LabPlot, the content is read from the external file again. Also, it is possible to let LabPlot watch the file for changes - the content of the file data source is updated if the external file was changed.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="file_data_source.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+The additional options determining the import of the data are equivalent to those provided in <link linkend="importdialog">Import Dialog</link>.
 </para>
 </sect1>
 
