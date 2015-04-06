@@ -989,17 +989,42 @@ For more information about the functions see the documentation of GSL.
 
 <tbody>
 
-<row><entry>gaussian(x,sigma)</entry><entry><action>probability density p(x) at X for a Gaussian distribution with standard deviation SIGMA</action></entry></row>
-<row><entry>ugaussian(x)</entry><entry><action>unit Gaussian distribution.  They are equivalent to the functions above with a standard deviation of one, SIGMA = 1</action></entry></row>
-<row><entry>gaussian_tail(x,a,sigma)</entry><entry><action>probability density p(x) at X for a Gaussian tail distribution with standard deviation SIGMA and lower limit A</action></entry></row>
-<row><entry>ugaussian_tail(x,a)</entry><entry><action>tail of a unit Gaussian distribution. They are equivalent to the functions above with a standard deviation of one, SIGMA = 1</action></entry></row>
-<row><entry>bivariate_gaussian(x,y,sigma_x,sigma_y,rho)</entry><entry><action>probability density p(x,y) at (X,Y) for a bivariate gaussian distribution with standard deviations SIGMA_X, SIGMA_Y and correlation coefficient RHO</action></entry></row>
-<row><entry>exponential(x,mu)</entry><entry><action>probability density p(x) at X for an exponential distribution with mean MU</action></entry></row>
-<row><entry>laplace(x,a)</entry><entry><action>probability density p(x) at X for a Laplace distribution with mean A</action></entry></row>
-<row><entry>exppow(x,a,b)</entry><entry><action>probability density p(x) at X for an exponential power distribution with scale parameter A and exponent B</action></entry></row>
-<row><entry>cauchy(x,a)</entry><entry><action>probability density p(x) at X for a Cauchy distribution with scale parameter A</action></entry></row>
+<row><entry>gaussian(x,&sigma;)</entry><entry><action>probability density p(x) for a Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>ugaussian(x)</entry><entry><action>unit Gaussian distribution.  They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
+<row><entry>gaussianP(x,&sigma;)</entry><entry><action>cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianQ(x,&sigma;)</entry><entry><action>cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianPinv(x,&sigma;)</entry><entry><action>inverse cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianQinv(x,&sigma;)</entry><entry><action>invers cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>ugaussianP(x)</entry><entry><action>cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianQ(x)</entry><entry><action>cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianPinv(x)</entry><entry><action>inverse cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianQinv(x)</entry><entry><action>inverse cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>gaussiantail(x,a,&sigma;)</entry><entry><action>probability density p(x) for a Gaussian tail distribution with standard deviation &sigma; and lower limit a</action></entry></row>
+<row><entry>ugaussiantail(x,a)</entry><entry><action>tail of a unit Gaussian distribution. They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
+<row><entry>gaussianbi(x,y,&sigma;<subscript>x</subscript>,&sigma;<subscript>y</subscript>,&rho;)</entry><entry><action>probability density p(x,y) at (X,Y) for a bivariate gaussian distribution 
+      with standard deviations &sigma;<subscript>x</subscript>, &sigma;<subscript>y</subscript> and correlation coefficient &rho;</action></entry></row>
+<row><entry>exponential(x,&mu;)</entry><entry><action>probability density p(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialP(x,&mu;)</entry><entry><action>cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialQ(x,&mu;)</entry><entry><action>cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialPinv(x,&mu;)</entry><entry><action>inverse cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialQinv(x,&mu;)</entry><entry><action>inverse cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>laplace(x,a)</entry><entry><action>probability density p(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceP(x,a)</entry><entry><action>cumulative distribution function P(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplacePinv(x,a)</entry><entry><action>inverse cumulative distribution function P(x) for an Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceQinv(x,a)</entry><entry><action>inverse cumulative distribution function Q(x) for an Laplce distribution with width a</action></entry></row>
+<row><entry>exppow(x,a,b)</entry><entry><action>probability density p(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>exppowP(x,a,b)</entry><entry><action>cumulative probability density P(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>exppowQ(x,a,b)</entry><entry><action>cumulative probability density Q(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>cauchy(x,a)</entry><entry><action>probability density p(x) for a Cauchy (Lorentz) distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyP(x,a)</entry><entry><action>cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyPinv(x,a)</entry><entry><action>inverse cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyQinv(x,a)</entry><entry><action>inverse cumulative distribution function Q(x) for an Cauchy distribution with scale parameter a</action></entry></row>
+
 <row><entry>rayleigh(x,sigma)</entry><entry><action>probability density p(x) at X for a Rayleigh distribution with scale parameter SIGMA</action></entry></row>
 <row><entry>rayleigh_tail(x,a,sigma)</entry><entry><action>probability density p(x) at X for a Rayleigh tail distribution with scale parameter SIGMA and lower limit A</action></entry></row>
+
 <row><entry>landau(x)</entry><entry><action>probability density p(x) at X for the Landau distribution</action></entry></row>
 <row><entry>gamma_pdf(x,a,b)</entry><entry><action>probability density p(x) at X for a gamma distribution with parameters A and B</action></entry></row>
 <row><entry>flat(x,a,b)</entry><entry><action>probability density p(x) at X for a uniform distribution from A to B</action></entry></row>
