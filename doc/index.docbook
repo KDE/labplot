@@ -823,13 +823,13 @@ For more information about the functions see the documentation of GSL.
 <row><entry>k1s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of first order, exp(x) k<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>k2s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of second order, exp(x) k<subscript>2</subscript>(x)</action></entry></row>
 <row><entry>kls(l,x)</entry><entry><action>scaled irregular modified spherical Bessel function of order l, exp(x) k<subscript>l</subscript>(x)</action></entry></row>
-<row><entry>Jnu(nu,x)</entry><entry><action>regular cylindrical Bessel function of fractional order nu, J<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>Ynu(nu,x)</entry><entry><action>irregular cylindrical Bessel function of fractional order nu, Y<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>Inu(nu,x)</entry><entry><action>regular modified Bessel function of fractional order nu, I<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>Inus(nu,x)</entry><entry><action>scaled regular modified Bessel function of fractional order nu, exp(-|x|) I<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>Knu(nu,x)</entry><entry><action>irregular modified Bessel function of fractional order nu, K<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>lnKnu(nu,x)</entry><entry><action>logarithm of the irregular modified Bessel function of fractional order nu,ln(K<subscript>&nu;</subscript>(x))</action></entry></row>
-<row><entry>Knus(nu,x)</entry><entry><action>scaled irregular modified Bessel function of fractional order nu, exp(|x|) K<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Jnu(&nu;,x)</entry><entry><action>regular cylindrical Bessel function of fractional order &nu;, J<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Ynu(&nu;,x)</entry><entry><action>irregular cylindrical Bessel function of fractional order &nu;, Y<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Inu(&nu;,x)</entry><entry><action>regular modified Bessel function of fractional order &nu;, I<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Inus(&nu;,x)</entry><entry><action>scaled regular modified Bessel function of fractional order &nu;, exp(-|x|) I<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Knu(&nu;,x)</entry><entry><action>irregular modified Bessel function of fractional order &nu;, K<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>lnKnu(&nu;,x)</entry><entry><action>logarithm of the irregular modified Bessel function of fractional order &nu;,ln(K<subscript>&nu;</subscript>(x))</action></entry></row>
+<row><entry>Knus(&nu;,x)</entry><entry><action>scaled irregular modified Bessel function of fractional order &nu;, exp(|x|) K<subscript>&nu;</subscript>(x)</action></entry></row>
 <row><entry>J0_0(s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>0</subscript>(x)</action></entry></row>
 <row><entry>J1_0(s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>Jnu_0(nu,s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>&nu;</subscript>(x)</action></entry></row>
@@ -902,19 +902,19 @@ For more information about the functions see the documentation of GSL.
 <row><entry>beta(a,b)</entry><entry><action>Beta Function, B(a,b) = &Gamma;(a) &Gamma;(b)/&Gamma;(a+b) for a &gt; 0, b &gt; 0</action></entry></row>
 <row><entry>lnbeta(a,b)</entry><entry><action>logarithm of the Beta Function, log(B(a,b)) for a &gt; 0, b &gt; 0</action></entry></row>
 <row><entry>betainc(a,b,x)</entry><entry><action>normalize incomplete Beta function B_x(a,b)/B(a,b) for a &gt; 0, b &gt; 0 </action></entry></row>
-<row><entry>C1(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>1</subscript>(x)</action></entry></row>
-<row><entry>C2(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>2</subscript>(x)</action></entry></row>
-<row><entry>C3(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>3</subscript>(x)</action></entry></row>
-<row><entry>Cn(n,lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>n</subscript>(x)</action></entry></row>
+<row><entry>C1(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>C2(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>C3(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>Cn(n,&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>n</subscript>(x)</action></entry></row>
 <row><entry>hyperg_0F1(c,x)</entry><entry><action>hypergeometric function <subscript>0</subscript>F<subscript>1</subscript>(c,x)</action></entry></row>
 <row><entry>hyperg_1F1i(m,n,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(m,n,x) = M(m,n,x) for integer parameters m, n</action></entry></row>
 <row><entry>hyperg_1F1(a,b,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(a,b,x) = M(a,b,x) for general parameters a,b</action></entry></row>
 <row><entry>hyperg_Ui(m,n,x)</entry><entry><action>confluent hypergeometric function U(m,n,x) for integer parameters m,n</action></entry></row>
 <row><entry>hyperg_U(a,b,x)</entry><entry><action>confluent hypergeometric function U(a,b,x)</action></entry></row>
 <row><entry>hyperg_2F1(a,b,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x)</action></entry></row>
-<row><entry>hyperg_2F1c(ar,ai,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) with complex parameters</action></entry></row>
-<row><entry>hyperg_2F1r(ar,ai,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x) / &Gamma;(c)</action></entry></row>
-<row><entry>hyperg_2F1cr(ar,ai,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) / &Gamma;(c)</action></entry></row>
+<row><entry>hyperg_2F1c(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) with complex parameters</action></entry></row>
+<row><entry>hyperg_2F1r(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x) / &Gamma;(c)</action></entry></row>
+<row><entry>hyperg_2F1cr(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) / &Gamma;(c)</action></entry></row>
 <row><entry>hyperg_2F0(a,b,x)</entry><entry><action>hypergeometric function <subscript>2</subscript>F<subscript>0</subscript>(a,b,x)</action></entry></row>
 <row><entry>L1(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>1</subscript>(x)</action></entry></row>
 <row><entry>L2(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>2</subscript>(x)</action></entry></row>
@@ -930,15 +930,15 @@ For more information about the functions see the documentation of GSL.
 <row><entry>Ql(l,x)</entry><entry><action>Legendre polynomials Q<subscript>l</subscript>(x)</action></entry></row>
 <row><entry>Plm(l,m,x)</entry><entry><action>associated Legendre polynomial P<subscript>l</subscript><superscript>m</superscript>(x)</action></entry></row>
 <row><entry>Pslm(l,m,x)</entry><entry><action>normalized associated Legendre polynomial &radic;{(2l+1)/(4&pi;)} &radic;{(l-m)!/(l+m)!} P<subscript>l</subscript><superscript>m</superscript>(x) suitable for use in spherical harmonics</action></entry></row>
-<row><entry>Phalf(lambda,x)</entry><entry><action>irregular Spherical Conical Function P<superscript>1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>Pmhalf(lambda,x)</entry><entry><action>regular Spherical Conical Function P<superscript>-1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>Pc0(lambda,x)</entry><entry><action>conical function P<superscript>0</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>Pc1(lambda,x)</entry><entry><action>conical function P<superscript>1</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>Psr(l,lambda,x)</entry><entry><action>Regular Spherical Conical Function P<superscript>-1/2-l</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, l &gt;= -1</action></entry></row>
-<row><entry>Pcr(l,lambda,x)</entry><entry><action>Regular Cylindrical Conical Function P<superscript>-m</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, m &gt;= -1</action></entry></row>
-<row><entry>H3d0(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>0</subscript>(lambda,eta) := sin(lambda eta)/(lambda sinh(eta)) for eta &gt;= 0</action></entry></row>
-<row><entry>H3d1(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>1</subscript>(lambda,eta) := 1/&radic;{lambda<superscript>2</superscript> + 1} sin(lambda eta)/(lambda sinh(eta)) (coth(eta) - lambda cot(lambda eta)) for eta &gt;= 0</action></entry></row>
-<row><entry>H3d(l,lambda,eta)</entry><entry><action>L'th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space eta &gt;= 0, l &gt;= 0</action></entry></row>
+<row><entry>Phalf(&lambda;,x)</entry><entry><action>irregular Spherical Conical Function P<superscript>1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pmhalf(&lambda;,x)</entry><entry><action>regular Spherical Conical Function P<superscript>-1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pc0(&lambda;,x)</entry><entry><action>conical function P<superscript>0</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pc1(&lambda;,x)</entry><entry><action>conical function P<superscript>1</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Psr(l,&lambda;,x)</entry><entry><action>Regular Spherical Conical Function P<superscript>-1/2-l</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, l &gt;= -1</action></entry></row>
+<row><entry>Pcr(l,&lambda;,x)</entry><entry><action>Regular Cylindrical Conical Function P<superscript>-m</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, m &gt;= -1</action></entry></row>
+<row><entry>H3d0(&lambda;,&eta;)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>0</subscript>(&lambda;,,&eta;) := sin(&lambda; &eta;)/(&lambda; sinh(&eta;)) for &eta; &gt;= 0</action></entry></row>
+<row><entry>H3d1(&lambda;,&eta;)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>1</subscript>(&lambda;,&eta;) := 1/&radic;{&lambda;<superscript>2</superscript> + 1} sin(&lambda; &eta;)/(&lambda; sinh(&eta;)) (coth(&eta;) - &lambda; cot(&lambda; &eta;)) for &eta; &gt;= 0</action></entry></row>
+<row><entry>H3d(l,&lambda;,&eta;)</entry><entry><action>L'th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space eta &gt;= 0, l &gt;= 0</action></entry></row>
 <row><entry>logabs(x)</entry><entry><action>logarithm of the magnitude of X, log(|x|)</action></entry></row>
 <row><entry>logp(x)</entry><entry><action>log(1 + x) for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
 <row><entry>logm(x)</entry><entry><action>log(1 + x) - x for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
@@ -957,14 +957,14 @@ For more information about the functions see the documentation of GSL.
 <row><entry>sinc(x)</entry><entry><action>sinc(x) = sin(&pi; x) / (&pi; x)</action></entry></row>
 <row><entry>logsinh(x)</entry><entry><action>log(sinh(x)) for x &gt; 0</action></entry></row>
 <row><entry>logcosh(x)</entry><entry><action>log(cosh(x))</action></entry></row>
-<row><entry>anglesymm(theta)</entry><entry><action>force the angle theta to lie in the range (-&pi;,&pi;]</action></entry></row>
-<row><entry>anglepos(theta)</entry><entry><action>force the angle theta to lie in the range (0,2&pi;]</action></entry></row>
-<row><entry>zetaint(n)</entry><entry><action>Riemann zeta function zeta(n) for integer n</action></entry></row>
-<row><entry>zeta(s)</entry><entry><action>Riemann zeta function zeta(s) for arbitrary s</action></entry></row>
-<row><entry>zetam1int(n)</entry><entry><action>Riemann zeta function minus 1 for integer n</action></entry></row>
-<row><entry>zetam1(s)</entry><entry><action>Riemann zeta function minus 1</action></entry></row>
-<row><entry>zetaintm1(s)</entry><entry><action>Riemann zeta function for integer n minus 1</action></entry></row>
-<row><entry>hzeta(s,q)</entry><entry><action>Hurwitz zeta function zeta(s,q) for s &gt; 1, q &gt; 0</action></entry></row>
+<row><entry>anglesymm(&alpha;)</entry><entry><action>force the angle &alpha; to lie in the range (-&pi;,&pi;]</action></entry></row>
+<row><entry>anglepos(&alpha;)</entry><entry><action>force the angle &alpha; to lie in the range (0,2&pi;]</action></entry></row>
+<row><entry>zetaint(n)</entry><entry><action>Riemann zeta function &zeta;(n) for integer n</action></entry></row>
+<row><entry>zeta(s)</entry><entry><action>Riemann zeta function &zeta;(s) for arbitrary s</action></entry></row>
+<row><entry>zetam1int(n)</entry><entry><action>Riemann &zeta; function minus 1 for integer n</action></entry></row>
+<row><entry>zetam1(s)</entry><entry><action>Riemann &zeta; function minus 1</action></entry></row>
+<row><entry>zetaintm1(s)</entry><entry><action>Riemann &zeta; function for integer n minus 1</action></entry></row>
+<row><entry>hzeta(s,q)</entry><entry><action>Hurwitz zeta function &zeta;(s,q) for s &gt; 1, q &gt; 0</action></entry></row>
 <row><entry>etaint(n)</entry><entry><action>eta function &eta;(n) for integer n</action></entry></row>
 <row><entry>eta(s)</entry><entry><action>eta function &eta;(s) for arbitrary s</action></entry></row>
 <row><entry>gsl_log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
