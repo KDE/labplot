@@ -40,7 +40,7 @@
 #include <QDir>
 #include <QPainter>
 #include <KMessageBox>
-
+#include <QDebug>
 #include <math.h>
 
  /*!
@@ -830,6 +830,7 @@ void AxisDock::majorTicksIncrementChanged(){
 	return;
 
   double value = ui.leMajorTicksIncrement->text().toDouble();
+  if (value<0) value = -1*value; //don't allow negative values
   foreach(Axis* axis, m_axesList)
 	axis->setMajorTicksIncrement(value);
 }
@@ -997,6 +998,7 @@ void AxisDock::minorTicksIncrementChanged(){
 	return;
 
   double value = ui.leMinorTicksIncrement->text().toDouble();
+  if (value<0) value = -1*value; //don't allow negative values
   foreach(Axis* axis, m_axesList)
 	axis->setMinorTicksIncrement(value);
 }
