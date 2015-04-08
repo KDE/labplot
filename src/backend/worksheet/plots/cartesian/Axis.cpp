@@ -673,7 +673,7 @@ void Axis::setLabelsOffset(float offset) {
 		exec(new AxisSetLabelsOffsetCmd(d, offset, i18n("%1: set label offset")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabelPositions);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, recalcShapeAndBoundingRect);
 void Axis::setLabelsRotationAngle(qreal angle) {
 	Q_D(Axis);
 	if (angle != d->labelsRotationAngle)
