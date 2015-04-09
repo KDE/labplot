@@ -115,7 +115,7 @@ Many functions are reachable via the main menu and via object specific toolbars 
 	  <!--these ids are used only internally by DocBook so we keep them short-->
 	  <area id="im-win1a1" linkends="project-explorer" coords="28,69,234,724" />
 	  <area id="im-win1a2" linkends="worksheet" coords="456,382,804,688" />
-	  <area id="im-win1a3" linkends="spreadsheet" coords="249,78,553,319" />
+	  <area id="im-win1a3" linkends="spreadsheet" coords="249,78,553,390" />
 	  <area id="im-win1a4" linkends="toolbar" coords="1,46,640,68" />
 	  <area id="im-win1a5" linkends="commands" coords="1,19,432,45" />
 <!-- 	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777" /> -->
