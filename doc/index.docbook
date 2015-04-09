@@ -113,15 +113,16 @@ Many functions are reachable via the main menu and via object specific toolbars 
       <imageobjectco>
 	<areaspec units="other" otherunits="imagemap">
 	  <!--these ids are used only internally by DocBook so we keep them short-->
-	  <area id="im-win1a1" linkends="project-explorer" coords="37,112,316,747" />
-	  <area id="im-win1a2" linkends="worksheet" coords="314,116,842,741" />
-	  <area id="im-win1a4" linkends="toolbar" coords="38,86,1294,116" />
-	  <area id="im-win1a5" linkends="commands" coords="38,62,520,86" />
+	  <area id="im-win1a1" linkends="project-explorer" coords="28,69,234,724" />
+	  <area id="im-win1a2" linkends="worksheet" coords="456,382,804,688" />
+	  <area id="im-win1a3" linkends="spreadsheet" coords="249,78,553,319" />
+	  <area id="im-win1a4" linkends="toolbar" coords="1,46,640,68" />
+	  <area id="im-win1a5" linkends="commands" coords="1,19,432,45" />
 <!-- 	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777" /> -->
-	  <area id="im-win1a7" linkends="properties-explorer" coords="843,116,1294,741" />
+	  <area id="im-win1a7" linkends="properties-explorer" coords="834,69,1279,724" />
 	</areaspec>
 	<imageobject>
-	  <imagedata fileref="using1.png" format="PNG"/>
+	  <imagedata fileref="labplot.png" format="PNG"/>
 	</imageobject>
       </imageobjectco>
     </mediaobjectco>
