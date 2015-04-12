@@ -479,7 +479,6 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f,gsl_matrix* J) {
 }
 
 void XYFitCurvePrivate::recalculate() {
-	qDebug()<<"XYFitCurvePrivate::recalculate()";
 	QElapsedTimer timer;
 	timer.start();
 
