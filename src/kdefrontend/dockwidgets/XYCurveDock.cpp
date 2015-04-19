@@ -92,6 +92,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	//Lines
 	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
 	connect( ui.sbLineInterpolationPointsCount, SIGNAL(valueChanged(int)), this, SLOT(lineInterpolationPointsCountChanged(int)) );
+	connect( ui.chkLineSkipGaps, SIGNAL(clicked(bool)), this, SLOT(lineSkipGapsChanged(bool)) );
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
 	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
@@ -546,6 +547,7 @@ void XYCurveDock::initTabs() {
 
 	//Line-Tab
 	connect(m_curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(curveLineTypeChanged(XYCurve::LineType)));
+	connect(m_curve, SIGNAL(lineSkipGapsChanged(bool)), this, SLOT(curveLineSkipGapsChanged(bool)));
 	connect(m_curve, SIGNAL(lineInterpolationPointsCountChanged(int)), this, SLOT(curveLineInterpolationPointsCountChanged(int)));
 	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(curveLineOpacityChanged(qreal)));
@@ -795,9 +797,13 @@ void XYCurveDock::lineTypeChanged(int index){
 	  || lineType==XYCurve::SplineAkimaNatural || lineType==XYCurve::SplineAkimaPeriodic){
 	  ui.lLineInterpolationPointsCount->show();
 	  ui.sbLineInterpolationPointsCount->show();
+	  ui.lLineSkipGaps->hide();
+	  ui.chkLineSkipGaps->hide();
 	}else{
 	  ui.lLineInterpolationPointsCount->hide();
 	  ui.sbLineInterpolationPointsCount->hide();
+	  ui.lLineSkipGaps->show();
+	  ui.chkLineSkipGaps->show();
 	 }
   }
 
@@ -806,6 +812,14 @@ void XYCurveDock::lineTypeChanged(int index){
 
   foreach(XYCurve* curve, m_curvesList)
 	curve->setLineType(lineType);
+}
+
+void XYCurveDock::lineSkipGapsChanged(bool skip){
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setLineSkipGaps(skip);
 }
 
 void XYCurveDock::lineInterpolationPointsCountChanged(int count){
@@ -1482,6 +1496,11 @@ void XYCurveDock::curveLineTypeChanged(XYCurve::LineType type) {
 	ui.cbLineType->setCurrentIndex( (int) type);
 	m_initializing = false;
 }
+void XYCurveDock::curveLineSkipGapsChanged(bool skip) {
+	m_initializing = true;
+	ui.chkLineSkipGaps->setChecked(skip);
+	m_initializing = false;
+}
 void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {
 	m_initializing = true;
 	ui.sbLineInterpolationPointsCount->setValue(count);
@@ -1674,6 +1693,7 @@ void XYCurveDock::load() {
 
   	//Line
 	ui.cbLineType->setCurrentIndex( (int) m_curve->lineType() );
+	ui.chkLineSkipGaps->setChecked( m_curve->lineSkipGaps() );
 	ui.sbLineInterpolationPointsCount->setValue( m_curve->lineInterpolationPointsCount() );
 	ui.cbLineStyle->setCurrentIndex( (int) m_curve->linePen().style() );
 	ui.kcbLineColor->setColor( m_curve->linePen().color() );
@@ -1763,6 +1783,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 
   	//Line
 	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", (int) m_curve->lineType()) );
+	ui.chkLineSkipGaps->setChecked( group.readEntry("LineSkipGaps", m_curve->lineSkipGaps()) );
 	ui.sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()) );
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_curve->linePen().style()) );
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_curve->linePen().color()) );
@@ -1830,6 +1851,7 @@ void XYCurveDock::saveConfig(KConfig& config){
 	//It doesn't make sense to load/save them in the template.
 
 	group.writeEntry("LineType", ui.cbLineType->currentIndex());
+	group.writeEntry("LineSkipGaps", ui.chkLineSkipGaps->isChecked());
 	group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value() );
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
 	group.writeEntry("LineColor", ui.kcbLineColor->color());

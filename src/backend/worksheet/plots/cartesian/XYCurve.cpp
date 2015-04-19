@@ -91,6 +91,7 @@ void XYCurve::init(){
 	d->yColumn = NULL;
 
 	d->lineType = (XYCurve::LineType) group.readEntry("LineType", (int)XYCurve::Line);
+	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
 	d->linePen.setColor( group.readEntry("LineColor", QColor(Qt::black)) );
@@ -149,16 +150,9 @@ void XYCurve::initActions(){
 
 QMenu* XYCurve::createContextMenu(){
 	QMenu *menu = WorksheetElement::createContextMenu();
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
-#endif
-
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
-
 	return menu;
 }
 
@@ -199,6 +193,7 @@ QString& XYCurve::yColumnPath() const {	return d_ptr->yColumnPath; }
 
 //line
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, bool, lineSkipGaps, lineSkipGaps)
 BASIC_SHARED_D_READER_IMPL(XYCurve, int, lineInterpolationPointsCount, lineInterpolationPointsCount)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, lineOpacity, lineOpacity)
@@ -296,6 +291,13 @@ void XYCurve::setLineType(LineType type) {
 	Q_D(XYCurve);
 	if (type != d->lineType)
 		exec(new XYCurveSetLineTypeCmd(d, type, i18n("%1: line type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineSkipGaps, bool, lineSkipGaps, updateLines)
+void XYCurve::setLineSkipGaps(bool skip) {
+	Q_D(XYCurve);
+	if (skip != d->lineSkipGaps)
+		exec(new XYCurveSetLineSkipGapsCmd(d, skip, i18n("%1: set skip line gaps")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineInterpolationPointsCount, int, lineInterpolationPointsCount, updateLines)
@@ -819,6 +821,7 @@ void XYCurvePrivate::retransform(){
 // 	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
+	connectedPoints.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) ){
 		linePath = QPainterPath();
@@ -872,6 +875,10 @@ void XYCurvePrivate::retransform(){
 					break;
 			}
 			symbolPointsLogical.append(tempPoint);
+			connectedPoints.push_back(true);
+		} else {
+			if (connectedPoints.size())
+				connectedPoints[connectedPoints.size()-1] = false;
 		}
 	}
 
@@ -920,12 +927,14 @@ void XYCurvePrivate::updateLines(){
 	switch(lineType){
 	  case XYCurve::Line:{
 		for (int i=0; i<count-1; i++){
+		  if (!lineSkipGaps && !connectedPoints[i]) continue;
 		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		break;
 	  }
 	  case XYCurve::StartHorizontal:{
 		for (int i=0; i<count-1; i++){
+		  if (!lineSkipGaps && !connectedPoints[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(nextPoint.x(), curPoint.y());
@@ -936,6 +945,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::StartVertical:{
 		for (int i=0; i<count-1; i++){
+		  if (!lineSkipGaps && !connectedPoints[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), nextPoint.y());
@@ -946,6 +956,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointHorizontal:{
 		for (int i=0; i<count-1; i++){
+		  if (!lineSkipGaps && !connectedPoints[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
@@ -958,6 +969,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointVertical:{
 		for (int i=0; i<count-1; i++){
+		  if (!lineSkipGaps && !connectedPoints[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
@@ -972,6 +984,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=1){
+			if (!lineSkipGaps && !connectedPoints[i]) {skip=0; continue;}
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 			skip++;
 		  }else{
@@ -984,6 +997,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=2){
+			if (!lineSkipGaps && !connectedPoints[i]) {skip=0; continue;}
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 			skip++;
 		  }else{
@@ -1795,6 +1809,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	//Line
     writer->writeStartElement( "lines" );
 	writer->writeAttribute( "type", QString::number(d->lineType) );
+	writer->writeAttribute( "skipGaps", QString::number(d->lineSkipGaps) );
 	writer->writeAttribute( "interpolationPointsCount", QString::number(d->lineInterpolationPointsCount) );
 	WRITE_QPEN(d->linePen);
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
@@ -1894,6 +1909,12 @@ bool XYCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'type'"));
             else
                 d->lineType = (XYCurve::LineType)str.toInt();
+
+			str = attribs.value("skipGaps").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'skipGps'"));
+            else
+                d->lineSkipGaps = str.toInt();
 
 			str = attribs.value("interpolationPointsCount").toString();
             if(str.isEmpty())

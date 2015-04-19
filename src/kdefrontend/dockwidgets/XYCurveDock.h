@@ -92,6 +92,7 @@ private slots:
 
 	//Line-Tab
 	void lineTypeChanged(int);
+	void lineSkipGapsChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
   	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
@@ -149,6 +150,7 @@ private slots:
 
 	//Line-Tab
 	void curveLineTypeChanged(XYCurve::LineType);
+	void curveLineSkipGapsChanged(bool);
 	void curveLineInterpolationPointsCountChanged(int);
 	void curveLinePenChanged(const QPen&);
 	void curveLineOpacityChanged(qreal);
