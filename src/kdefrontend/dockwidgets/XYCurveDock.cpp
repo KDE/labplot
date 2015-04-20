@@ -41,6 +41,8 @@
 
 #include <QPainter>
 #include <QDir>
+#include <QFileDialog>
+#include <KUrlCompletion>
 #include <QDebug>
 
 /*!
@@ -60,6 +62,14 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
 	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
+
+	//Tab "Filling"
+	ui.cbFillingBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
+	ui.kleFillingBackgroundFileName->setClearButtonShown(true);
+	ui.bFillingOpen->setIcon( KIcon("document-open") );
+
+	KUrlCompletion *comp = new KUrlCompletion();
+	ui.kleFillingBackgroundFileName->setCompletionObject(comp);
 
 	//Tab "Error bars"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
@@ -152,8 +162,6 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
-	ui.tabWidget->removeTab(ui.tabWidget->indexOf(ui.tabAreaFilling)); //TODO
 
 	retranslateUi();
 	init();
@@ -390,6 +398,35 @@ void XYCurveDock::init(){
 	ui.cbValuesPosition->addItem(i18n("below"));
 	ui.cbValuesPosition->addItem(i18n("left"));
 	ui.cbValuesPosition->addItem(i18n("right"));
+
+	//Filling
+	ui.cbFillingDirection->clear();
+	ui.cbFillingDirection->addItem(i18n("above"));
+	ui.cbFillingDirection->addItem(i18n("below"));
+	ui.cbFillingDirection->addItem(i18n("left"));
+	ui.cbFillingDirection->addItem(i18n("right"));
+
+	ui.cbFillingBackgroundType->clear();
+	ui.cbFillingBackgroundType->addItem(i18n("color"));
+	ui.cbFillingBackgroundType->addItem(i18n("image"));
+	ui.cbFillingBackgroundType->addItem(i18n("pattern"));
+
+	ui.cbFillingBackgroundColorStyle->clear();
+	ui.cbFillingBackgroundColorStyle->addItem(i18n("single color"));
+	ui.cbFillingBackgroundColorStyle->addItem(i18n("horizontal linear gradient"));
+	ui.cbFillingBackgroundColorStyle->addItem(i18n("vertical linear gradient"));
+	ui.cbFillingBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
+	ui.cbFillingBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
+	ui.cbFillingBackgroundColorStyle->addItem(i18n("radial gradient"));
+
+	ui.cbFillingBackgroundImageStyle->clear();
+	ui.cbFillingBackgroundImageStyle->addItem(i18n("scaled and cropped"));
+	ui.cbFillingBackgroundImageStyle->addItem(i18n("scaled"));
+	ui.cbFillingBackgroundImageStyle->addItem(i18n("scaled, keep proportions"));
+	ui.cbFillingBackgroundImageStyle->addItem(i18n("centered"));
+	ui.cbFillingBackgroundImageStyle->addItem(i18n("tiled"));
+	ui.cbFillingBackgroundImageStyle->addItem(i18n("center tiled"));
+	GuiTools::updateBrushStyles(ui.cbFillingBackgroundBrushStyle, Qt::SolidPattern);
 
 	//Error-bars
 	pm.fill(Qt::transparent);
