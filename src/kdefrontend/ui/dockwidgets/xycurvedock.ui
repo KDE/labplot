@@ -986,7 +986,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
-        <widget class="QLabel" name="lFillingDirection">
+        <widget class="QLabel" name="lFillingPosition">
          <property name="text">
           <string>Direction</string>
          </property>
@@ -1009,7 +1009,7 @@
         </spacer>
        </item>
        <item row="0" column="2">
-        <widget class="KComboBox" name="cbFillingDirection">
+        <widget class="KComboBox" name="cbFillingPosition">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1019,14 +1019,14 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="lFillingBackgroundType">
+        <widget class="QLabel" name="lFillingType">
          <property name="text">
           <string>Type</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="KComboBox" name="cbFillingBackgroundType">
+        <widget class="KComboBox" name="cbFillingType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1036,14 +1036,14 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="lFillingBackgroundFileName">
+        <widget class="QLabel" name="lFillingFileName">
          <property name="text">
           <string>File name</string>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="KLineEdit" name="kleFillingBackgroundFileName">
+        <widget class="KLineEdit" name="kleFillingFileName">
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
@@ -1069,64 +1069,64 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="lFillingBackgroundColorStyle">
+        <widget class="QLabel" name="lFillingColorStyle">
          <property name="text">
           <string>Color Style</string>
          </property>
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="KComboBox" name="cbFillingBackgroundColorStyle"/>
+        <widget class="KComboBox" name="cbFillingColorStyle"/>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="lFillingBackgroundImageStyle">
+        <widget class="QLabel" name="lFillingImageStyle">
          <property name="text">
           <string>Image Style</string>
          </property>
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="KComboBox" name="cbFillingBackgroundImageStyle"/>
+        <widget class="KComboBox" name="cbFillingImageStyle"/>
        </item>
        <item row="5" column="0">
-        <widget class="QLabel" name="lFillingBackgroundBrushStyle">
+        <widget class="QLabel" name="lFillingBrushStyle">
          <property name="text">
           <string>Brush Style</string>
          </property>
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="KComboBox" name="cbFillingBackgroundBrushStyle"/>
+        <widget class="KComboBox" name="cbFillingBrushStyle"/>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="lFillingBackgroundFirstColor">
+        <widget class="QLabel" name="lFillingFirstColor">
          <property name="text">
           <string>First color</string>
          </property>
         </widget>
        </item>
        <item row="6" column="2">
-        <widget class="KColorButton" name="kcbFillingBackgroundFirstColor"/>
+        <widget class="KColorButton" name="kcbFillingFirstColor"/>
        </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="lFillingBackgroundSecondColor">
+        <widget class="QLabel" name="lFillingSecondColor">
          <property name="text">
           <string>Second color</string>
          </property>
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="KColorButton" name="kcbFillingBackgroundSecondColor"/>
+        <widget class="KColorButton" name="kcbFillingSecondColor"/>
        </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="lFillingBackgroundOpacity">
+        <widget class="QLabel" name="lFillingOpacity">
          <property name="text">
           <string>Opacity</string>
          </property>
         </widget>
        </item>
        <item row="8" column="2">
-        <widget class="QSpinBox" name="sbFillingBackgroundOpacity">
+        <widget class="QSpinBox" name="sbFillingOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>

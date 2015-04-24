@@ -56,6 +56,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		void updateDropLines();
 		void updateSymbols();
 		void updateValues();
+		void updateFilling();
 		void updateErrorBars();
 		bool swapVisible(bool on);
 		void recalcShapeAndBoundingRect();
@@ -66,21 +67,25 @@ class XYCurvePrivate: public QGraphicsItem {
 
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
+		//data columns
 		const AbstractColumn* xColumn;
 		const AbstractColumn* yColumn;
 		QString xColumnPath;
 		QString yColumnPath;
 
+		//line
 		XYCurve::LineType lineType;
 		bool lineSkipGaps;
 		int lineInterpolationPointsCount;
 		QPen linePen;
 		qreal lineOpacity;
 
+		//drop lines
 		XYCurve::DropLineType dropLineType;
 		QPen dropLinePen;
 		qreal dropLineOpacity;
 
+		//symbols
 		XYCurve::SymbolsStyle symbolsStyle;
 		QBrush symbolsBrush;
 		QPen symbolsPen;
@@ -89,6 +94,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		qreal symbolsSize;
 		qreal symbolsAspectRatio;
 
+		//values
 		XYCurve::ValuesType valuesType;
 		const AbstractColumn* valuesColumn;
 		QString valuesColumnPath;
@@ -100,6 +106,17 @@ class XYCurvePrivate: public QGraphicsItem {
 		QString valuesSuffix;
 		QFont valuesFont;
 		QColor valuesColor;
+
+		//filling
+		XYCurve::FillingPosition fillingPosition;
+		PlotArea::BackgroundType fillingType;
+		PlotArea::BackgroundColorStyle fillingColorStyle;
+		PlotArea::BackgroundImageStyle fillingImageStyle;
+		Qt::BrushStyle fillingBrushStyle;
+		QColor fillingFirstColor;
+		QColor fillingSecondColor;
+		QString fillingFileName;
+		qreal fillingOpacity;
 
 		//error bars
 		XYCurve::ErrorType xErrorType;
@@ -122,6 +139,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		QPainterPath linePath;
 		QPainterPath dropLinePath;
 		QPainterPath valuesPath;
+		QPainterPath fillingPath;
 		QPainterPath errorBarsPath;
 		QPainterPath symbolsPath;
 		QRectF boundingRectangle;

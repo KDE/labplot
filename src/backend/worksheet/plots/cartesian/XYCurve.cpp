@@ -126,6 +126,16 @@ void XYCurve::init(){
 	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
+	d->fillingPosition = (XYCurve::FillingPosition) group.readEntry("FillingPosition", (int)XYCurve::NoFilling);
+	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", (int)PlotArea::Color);
+	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", (int) PlotArea::SingleColor);
+	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", (int) PlotArea::Scaled);
+	d->fillingBrushStyle = (Qt::BrushStyle) group.readEntry("FillingBrushStyle", (int) Qt::SolidPattern);
+	d->fillingFileName = group.readEntry("FillingFileName", QString());
+	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
+	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
+	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
+
 	d->xErrorType = (XYCurve::ErrorType) group.readEntry("XErrorType", (int)XYCurve::NoError);
 	d->xErrorPlusColumn = NULL;
 	d->xErrorMinusColumn = NULL;
@@ -223,6 +233,17 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, valuesColor, valuesColor)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
+
+//filling
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::FillingPosition, fillingPosition, fillingPosition)
+BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundType, fillingType, fillingType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
+BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
+CLASS_SHARED_D_READER_IMPL(XYCurve, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, fillingFirstColor, fillingFirstColor)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, fillingSecondColor, fillingSecondColor)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, fillingFileName, fillingFileName)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, fillingOpacity, fillingOpacity)
 
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
@@ -465,6 +486,70 @@ void XYCurve::setValuesColor(const QColor& color) {
 		exec(new XYCurveSetValuesColorCmd(d, color, i18n("%1: set values color")));
 }
 
+//Filling
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingPosition, XYCurve::FillingPosition, fillingPosition, updateFilling)
+void XYCurve::setFillingPosition(FillingPosition position) {
+	Q_D(XYCurve);
+	if (position != d->fillingPosition)
+		exec(new XYCurveSetFillingPositionCmd(d, position, i18n("%1: filling position changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, PlotArea::BackgroundType, fillingType, updateFilling)
+void XYCurve::setFillingType(PlotArea::BackgroundType type) {
+	Q_D(XYCurve);
+	if (type != d->fillingType)
+		exec(new XYCurveSetFillingTypeCmd(d, type, i18n("%1: filling type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updateFilling)
+void XYCurve::setFillingColorStyle(PlotArea::BackgroundColorStyle style) {
+	Q_D(XYCurve);
+	if (style != d->fillingColorStyle)
+		exec(new XYCurveSetFillingColorStyleCmd(d, style, i18n("%1: filling color style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updateFilling)
+void XYCurve::setFillingImageStyle(PlotArea::BackgroundImageStyle style) {
+	Q_D(XYCurve);
+	if (style != d->fillingImageStyle)
+		exec(new XYCurveSetFillingImageStyleCmd(d, style, i18n("%1: filling image style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updateFilling)
+void XYCurve::setFillingBrushStyle(Qt::BrushStyle style) {
+	Q_D(XYCurve);
+	if (style != d->fillingBrushStyle)
+		exec(new XYCurveSetFillingBrushStyleCmd(d, style, i18n("%1: filling brush style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updateFilling)
+void XYCurve::setFillingFirstColor(const QColor& color) {
+	Q_D(XYCurve);
+	if (color!= d->fillingFirstColor)
+		exec(new XYCurveSetFillingFirstColorCmd(d, color, i18n("%1: set filling first color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updateFilling)
+void XYCurve::setFillingSecondColor(const QColor& color) {
+	Q_D(XYCurve);
+	if (color!= d->fillingSecondColor)
+		exec(new XYCurveSetFillingSecondColorCmd(d, color, i18n("%1: set filling second color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updateFilling)
+void XYCurve::setFillingFileName(const QString& fileName) {
+	Q_D(XYCurve);
+	if (fileName!= d->fillingFileName)
+		exec(new XYCurveSetFillingFileNameCmd(d, fileName, i18n("%1: set filling image")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingOpacity, qreal, fillingOpacity, updateFilling)
+void XYCurve::setFillingOpacity(qreal opacity) {
+	Q_D(XYCurve);
+	if (opacity != d->fillingOpacity)
+		exec(new XYCurveSetFillingOpacityCmd(d, opacity, i18n("%1: set filling opacity")));
+}
+
 //Error bars
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorType, XYCurve::ErrorType, xErrorType, updateErrorBars)
 void XYCurve::setXErrorType(ErrorType type) {
@@ -673,6 +758,7 @@ QString XYCurve::symbolsNameFromStyle(XYCurve::SymbolsStyle style) {
 
 	return name;
 }
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -898,6 +984,7 @@ void XYCurvePrivate::retransform(){
 	updateSymbols();
 	updateValues();
 	m_suppressRecalc = false;
+	updateFilling();
 	updateErrorBars();
 }
 
@@ -1360,6 +1447,17 @@ void XYCurvePrivate::updateValues(){
 	recalcShapeAndBoundingRect();
 }
 
+void XYCurvePrivate::updateFilling() {
+	fillingPath = QPainterPath();
+
+	if (fillingPosition!=XYCurve::NoFilling) {
+		QRectF rect = linePath.boundingRect();
+		fillingPath.addRect(rect);
+	}
+
+	updatePixmap();
+}
+
 void XYCurvePrivate::updateErrorBars(){
   	errorBarsPath = QPainterPath();
 	if (xErrorType==XYCurve::NoError && yErrorType==XYCurve::NoError){
@@ -1579,6 +1677,92 @@ void XYCurvePrivate::draw(QPainter *painter) {
 		painter->setPen(valuesColor);
 		painter->setBrush(Qt::SolidPattern);
 		drawValues(painter);
+	}
+
+	//draw filling
+	if (fillingPosition != XYCurve::NoFilling) {
+		painter->setOpacity(fillingOpacity);
+		painter->setPen(Qt::NoPen);
+		QRectF rect = fillingPath.boundingRect();
+		if (fillingType == PlotArea::Color){
+			switch (fillingColorStyle){
+				case PlotArea::SingleColor:{
+					painter->setBrush(QBrush(fillingFirstColor));
+					break;
+				}
+				case PlotArea::HorizontalLinearGradient:{
+					QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
+					linearGrad.setColorAt(0, fillingFirstColor);
+					linearGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(linearGrad));
+					break;
+				}
+				case PlotArea::VerticalLinearGradient:{
+					QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
+					linearGrad.setColorAt(0, fillingFirstColor);
+					linearGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(linearGrad));
+					break;
+				}
+				case PlotArea::TopLeftDiagonalLinearGradient:{
+					QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
+					linearGrad.setColorAt(0, fillingFirstColor);
+					linearGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(linearGrad));
+					break;
+				}
+				case PlotArea::BottomLeftDiagonalLinearGradient:{
+					QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
+					linearGrad.setColorAt(0, fillingFirstColor);
+					linearGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(linearGrad));
+					break;
+				}
+				case PlotArea::RadialGradient:{
+					QRadialGradient radialGrad(rect.center(), rect.width()/2);
+					radialGrad.setColorAt(0, fillingFirstColor);
+					radialGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(radialGrad));
+					break;
+				}
+			}
+		}else if (fillingType == PlotArea::Image){
+			if ( !fillingFileName.trimmed().isEmpty() ) {
+				QPixmap pix(fillingFileName);
+				switch (fillingImageStyle){
+					case PlotArea::ScaledCropped:
+						pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+						painter->setBrush(QBrush(pix));
+						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+						break;
+					case PlotArea::Scaled:
+						pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+						painter->setBrush(QBrush(pix));
+						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+						break;
+					case PlotArea::ScaledAspectRatio:
+						pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+						painter->setBrush(QBrush(pix));
+						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+						break;
+					case PlotArea::Centered:
+	// 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
+						break;
+					case PlotArea::Tiled:
+						painter->setBrush(QBrush(pix));
+	// 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+						break;
+					case PlotArea::CenterTiled:
+						painter->setBrush(QBrush(pix));
+						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+	// 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+				}
+			}
+		} else if (fillingType == PlotArea::Pattern){
+			painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
+		}
+
+		painter->drawPath(fillingPath);
 	}
 
 }
