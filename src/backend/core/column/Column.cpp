@@ -521,19 +521,7 @@ void Column::save(QXmlStreamWriter * writer) const
 			{
 				writer->writeStartElement("row");
 				writer->writeAttribute("index", QString::number(i));
-#if QT_VERSION < 0x040400  // avoid a bug in Qt < 4.4
-				QString str = dateTimeAt(i).toString("yyyy-dd-MM hh:mm:ss:zzz");
-				int should_be_length = 4;
-				int actual_length = dateTimeAt(i).toString("yyyy").length();
-				while (actual_length < should_be_length)
-				{
-					str.prepend("0");
-					actual_length++;
-				}
-				writer->writeCharacters(str);
-#else
 				writer->writeCharacters(dateTimeAt(i).toString("yyyy-dd-MM hh:mm:ss:zzz"));
-#endif
 				writer->writeEndElement();
 			}
 			break;

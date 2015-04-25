@@ -1,3 +1,10 @@
+-----2.0.3-----
+New features:
+	*  In xy-curve the points may not be connected by the line if there are NANs in-between. This behaviour is controlled by the parameter "skip gaps"
+
+Bug fixes:
+
+
 -----2.0.2-----
 New features:
 	* Plot 2D-curves defined by mathematical equations in cartesian and polar coordinates or via a parametric equation.

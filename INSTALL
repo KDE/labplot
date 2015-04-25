@@ -1,5 +1,6 @@
-LabPlot requires Qt version 4.7 or newer.
-Please update your Qt installation if necessary.
+LabPlot requires
+	* Qt version 4.7 or higher
+	* GSL version 1.16 or higher
 
 ===============================================================================
 To build LabPlot just execute

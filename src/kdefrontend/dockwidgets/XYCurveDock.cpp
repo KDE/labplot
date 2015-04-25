@@ -843,6 +843,7 @@ void XYCurveDock::lineTypeChanged(int index){
   XYCurve::LineType lineType = XYCurve::LineType(index);
 
   if ( lineType == XYCurve::NoLine){
+	ui.chkLineSkipGaps->setEnabled(false);
 	ui.cbLineStyle->setEnabled(false);
 	ui.kcbLineColor->setEnabled(false);
 	ui.sbLineWidth->setEnabled(false);
@@ -850,6 +851,7 @@ void XYCurveDock::lineTypeChanged(int index){
 	ui.lLineInterpolationPointsCount->hide();
 	ui.sbLineInterpolationPointsCount->hide();
   }else{
+	ui.chkLineSkipGaps->setEnabled(true);
 	ui.cbLineStyle->setEnabled(true);
 	ui.kcbLineColor->setEnabled(true);
 	ui.sbLineWidth->setEnabled(true);
