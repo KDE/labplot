@@ -1071,7 +1071,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lFillingColorStyle">
          <property name="text">
-          <string>Color Style</string>
+          <string>Style</string>
          </property>
         </widget>
        </item>
@@ -1081,7 +1081,7 @@
        <item row="4" column="0">
         <widget class="QLabel" name="lFillingImageStyle">
          <property name="text">
-          <string>Image Style</string>
+          <string>Style</string>
          </property>
         </widget>
        </item>
@@ -1091,7 +1091,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lFillingBrushStyle">
          <property name="text">
-          <string>Brush Style</string>
+          <string>Style</string>
          </property>
         </widget>
        </item>
