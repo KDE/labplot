@@ -59,7 +59,7 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPositio
 
 	setMainWidget( mainWidget );
 
-    setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
 	m_optionsShown = conf.readEntry("ShowOptions", false);
