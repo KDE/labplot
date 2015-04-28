@@ -1498,7 +1498,7 @@ void XYCurvePrivate::updateFilling() {
 		if (i!=0 && p1!=fillLines.at(i-1).p2()) {
 			//the first point of the current line is not equal to the last point of the previous line
 			//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
-			if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow) {
+			if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
 				pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
 				pol << QPointF(start.x(), yEnd);
 			} else {
@@ -1513,7 +1513,7 @@ void XYCurvePrivate::updateFilling() {
 	}
 
 	//close the last polygon
-	if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow) {
+	if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
 		pol << QPointF(p2.x(), yEnd);
 		pol << QPointF(start.x(), yEnd);
 	} else {

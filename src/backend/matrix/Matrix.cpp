@@ -34,10 +34,6 @@
 #include "lib/ActionManager.h"
 #include "lib/XmlStreamReader.h"
 
-#include <QtCore>
-#include <QtGui>
-#include <QtDebug>
-
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
