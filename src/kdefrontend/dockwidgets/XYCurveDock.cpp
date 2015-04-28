@@ -417,6 +417,7 @@ void XYCurveDock::init(){
 	ui.cbFillingPosition->addItem(i18n("none"));
 	ui.cbFillingPosition->addItem(i18n("above"));
 	ui.cbFillingPosition->addItem(i18n("below"));
+	ui.cbFillingPosition->addItem(i18n("zero baseline"));
 	ui.cbFillingPosition->addItem(i18n("left"));
 	ui.cbFillingPosition->addItem(i18n("right"));
 
@@ -1314,17 +1315,24 @@ void XYCurveDock::valuesColorChanged(const QColor& color){
 
 //Filling-tab
 void XYCurveDock::fillingPositionChanged(int index){
-  XYCurve::FillingPosition fillingPosition = XYCurve::FillingPosition(index);
+	XYCurve::FillingPosition fillingPosition = XYCurve::FillingPosition(index);
 
-  if ( fillingPosition == XYCurve::NoFilling){
+	bool b = (fillingPosition != XYCurve::NoFilling);
+	ui.cbFillingType->setEnabled(b);
+	ui.cbFillingColorStyle->setEnabled(b);
+	ui.cbFillingBrushStyle->setEnabled(b);
+	ui.cbFillingImageStyle->setEnabled(b);
+	ui.kcbFillingFirstColor->setEnabled(b);
+	ui.kcbFillingSecondColor->setEnabled(b);
+	ui.kleFillingFileName->setEnabled(b);
+	ui.bFillingOpen->setEnabled(b);
+	ui.sbFillingOpacity->setEnabled(b);
 
-  }
+	if (m_initializing)
+		return;
 
-  if (m_initializing)
-	return;
-
-  foreach(XYCurve* curve, m_curvesList)
-	curve->setFillingPosition(fillingPosition);
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingPosition(fillingPosition);
 }
 
 void XYCurveDock::fillingTypeChanged(int index){

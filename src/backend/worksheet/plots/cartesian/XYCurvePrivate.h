@@ -62,6 +62,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		void recalcShapeAndBoundingRect();
 		void drawSymbols(QPainter*);
 		void drawValues(QPainter*);
+		void drawFilling(QPainter*);
 		void draw(QPainter*);
 		void updatePixmap();
 
@@ -139,11 +140,11 @@ class XYCurvePrivate: public QGraphicsItem {
 		QPainterPath linePath;
 		QPainterPath dropLinePath;
 		QPainterPath valuesPath;
-		QPainterPath fillingPath;
 		QPainterPath errorBarsPath;
 		QPainterPath symbolsPath;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
+		QList<QLineF> lines;
 		QList<QPointF> symbolPointsLogical;	//points in logical coordinates
 		QList<QPointF> symbolPointsScene;	//points in scene coordinates
 		std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
@@ -151,6 +152,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		std::vector<bool> connectedPoints;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
 											//false otherwise (don't connect because of a gap (NAN) in-between)
 		QList<QString> valuesStrings;
+		QList<QPolygonF> fillPolygons;
 
 		XYCurve* const q;
 

@@ -52,7 +52,7 @@ class XYCurve: public WorksheetElement {
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
-		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingLeft, FillingRight};
+		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
 
 		explicit XYCurve(const QString &name);
