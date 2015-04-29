@@ -1,8 +1,15 @@
+-----2.0.3-----
+New features:
+	*  In xy-curve the points may not be connected by the line if there are NANs in-between. This behaviour is controlled by the parameter "skip gaps"
+
+Bug fixes:
+
+
 -----2.0.2-----
 New features:
 	* Plot 2D-curves defined by mathematical equations in cartesian and polar coordinates or via a parametric equation.
 	* Linear and non-linear regression analysis. Several predefined fit-models are provided. User-defined models are also possible.
-	* Besides fixed worksheet sizes (predefined und user-defined), complete view size can be used. All sizes are automatically adjusted on resize.
+	* Besides fixed worksheet sizes (predefined sizes like A4 etc. or user-defined), complete view size can be used. All sizes are automatically adjusted on resize.
 	* Different axis arrow types.
 	* "select region and zoom in", "select x-region and zoom in", "select y-region and zoom in" functions for cartesian plot.
 	* Rounded border for several worksheet objects  (plot area, legend etc.)

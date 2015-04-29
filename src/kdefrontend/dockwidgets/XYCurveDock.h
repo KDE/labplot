@@ -32,6 +32,7 @@
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
 #include <KConfig>
@@ -93,6 +94,7 @@ private slots:
 
 	//Line-Tab
 	void lineTypeChanged(int);
+	void lineSkipGapsChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
   	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
@@ -128,6 +130,18 @@ private slots:
 	void valuesFontChanged(const QFont&);
 	void valuesColorChanged(const QColor&);
 
+	//Filling-tab
+	void fillingPositionChanged(int);
+  	void fillingTypeChanged(int);
+	void fillingColorStyleChanged(int);
+	void fillingImageStyleChanged(int);
+	void fillingBrushStyleChanged(int);
+	void fillingFirstColorChanged(const QColor&);
+	void fillingSecondColorChanged(const QColor&);
+	void selectFile();
+	void fileNameChanged();
+	void fillingOpacityChanged(int);
+
 	//"Error bars"-Tab
 	void xErrorTypeChanged(int) const;
 	void yErrorTypeChanged(int) const;
@@ -150,6 +164,7 @@ private slots:
 
 	//Line-Tab
 	void curveLineTypeChanged(XYCurve::LineType);
+	void curveLineSkipGapsChanged(bool);
 	void curveLineInterpolationPointsCountChanged(int);
 	void curveLinePenChanged(const QPen&);
 	void curveLineOpacityChanged(qreal);
@@ -176,6 +191,17 @@ private slots:
 	void curveValuesSuffixChanged(QString);
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
+
+	//Filling-Tab
+	void curveFillingPositionChanged(XYCurve::FillingPosition);
+	void curveFillingTypeChanged(PlotArea::BackgroundType);
+	void curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle);
+	void curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void curveFillingBrushStyleChanged(Qt::BrushStyle);
+	void curveFillingFirstColorChanged(QColor&);
+	void curveFillingSecondColorChanged(QColor&);
+	void curveFillingFileNameChanged(QString&);
+	void curveFillingOpacityChanged(float);
 
 	//"Error bars"-Tab
 	void curveXErrorTypeChanged(XYCurve::ErrorType);

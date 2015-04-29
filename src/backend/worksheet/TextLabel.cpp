@@ -470,7 +470,7 @@ void TextLabelPrivate::recalcShapeAndBoundingRect(){
 	prepareGeometryChange();
 
 	QMatrix matrix;
-	matrix.rotate(rotationAngle);
+	matrix.rotate(-rotationAngle);
 	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
 
 	labelShape = QPainterPath();
@@ -489,7 +489,7 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 		return;
 
 	painter->save();
-	painter->rotate(rotationAngle);
+	painter->rotate(-rotationAngle);
 
 	if (textWrapper.teXUsed){
 		if (boundingRect().width()!=0.0 &&  boundingRect().height()!=0.0){

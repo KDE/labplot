@@ -41,6 +41,8 @@
 
 #include <QPainter>
 #include <QDir>
+#include <QFileDialog>
+#include <KUrlCompletion>
 #include <QDebug>
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -62,6 +64,14 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
 	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
+
+	//Tab "Filling"
+	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
+	ui.kleFillingFileName->setClearButtonShown(true);
+	ui.bFillingOpen->setIcon( KIcon("document-open") );
+
+	KUrlCompletion *comp = new KUrlCompletion();
+	ui.kleFillingFileName->setCompletionObject(comp);
 
 	//Tab "Error bars"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
@@ -94,6 +104,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	//Lines
 	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
 	connect( ui.sbLineInterpolationPointsCount, SIGNAL(valueChanged(int)), this, SLOT(lineInterpolationPointsCountChanged(int)) );
+	connect( ui.chkLineSkipGaps, SIGNAL(clicked(bool)), this, SLOT(lineSkipGapsChanged(bool)) );
 	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
 	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
@@ -132,6 +143,19 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	connect( ui.kfrValuesFont, SIGNAL(fontSelected(QFont)), this, SLOT(valuesFontChanged(QFont)) );
 	connect( ui.kcbValuesColor, SIGNAL(changed(QColor)), this, SLOT(valuesColorChanged(QColor)) );
 
+	//Filling
+	connect( ui.cbFillingPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingPositionChanged(int)) );
+	connect( ui.cbFillingType, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingTypeChanged(int)) );
+	connect( ui.cbFillingColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingColorStyleChanged(int)) );
+	connect( ui.cbFillingImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingImageStyleChanged(int)) );
+	connect( ui.cbFillingBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingBrushStyleChanged(int)) );
+	connect(ui.bFillingOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
+	connect( ui.kleFillingFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect( ui.kleFillingFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
+	connect( ui.kcbFillingFirstColor, SIGNAL(changed(QColor)), this, SLOT(fillingFirstColorChanged(QColor)) );
+	connect( ui.kcbFillingSecondColor, SIGNAL(changed(QColor)), this, SLOT(fillingSecondColorChanged(QColor)) );
+	connect( ui.sbFillingOpacity, SIGNAL(valueChanged(int)), this, SLOT(fillingOpacityChanged(int)) );
+
 	//Error bars
 	connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
 	connect( cbXErrorPlusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorPlusColumnChanged(QModelIndex)) );
@@ -153,8 +177,6 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
-	ui.tabWidget->removeTab(ui.tabWidget->indexOf(ui.tabAreaFilling)); //TODO
 
 	retranslateUi();
 	init();
@@ -392,6 +414,37 @@ void XYCurveDock::init(){
 	ui.cbValuesPosition->addItem(i18n("left"));
 	ui.cbValuesPosition->addItem(i18n("right"));
 
+	//Filling
+	ui.cbFillingPosition->clear();
+	ui.cbFillingPosition->addItem(i18n("none"));
+	ui.cbFillingPosition->addItem(i18n("above"));
+	ui.cbFillingPosition->addItem(i18n("below"));
+	ui.cbFillingPosition->addItem(i18n("zero baseline"));
+	ui.cbFillingPosition->addItem(i18n("left"));
+	ui.cbFillingPosition->addItem(i18n("right"));
+
+	ui.cbFillingType->clear();
+	ui.cbFillingType->addItem(i18n("color"));
+	ui.cbFillingType->addItem(i18n("image"));
+	ui.cbFillingType->addItem(i18n("pattern"));
+
+	ui.cbFillingColorStyle->clear();
+	ui.cbFillingColorStyle->addItem(i18n("single color"));
+	ui.cbFillingColorStyle->addItem(i18n("horizontal linear gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("vertical linear gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
+	ui.cbFillingColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
+	ui.cbFillingColorStyle->addItem(i18n("radial gradient"));
+
+	ui.cbFillingImageStyle->clear();
+	ui.cbFillingImageStyle->addItem(i18n("scaled and cropped"));
+	ui.cbFillingImageStyle->addItem(i18n("scaled"));
+	ui.cbFillingImageStyle->addItem(i18n("scaled, keep proportions"));
+	ui.cbFillingImageStyle->addItem(i18n("centered"));
+	ui.cbFillingImageStyle->addItem(i18n("tiled"));
+	ui.cbFillingImageStyle->addItem(i18n("center tiled"));
+	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, Qt::SolidPattern);
+
 	//Error-bars
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
@@ -548,6 +601,7 @@ void XYCurveDock::initTabs() {
 
 	//Line-Tab
 	connect(m_curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(curveLineTypeChanged(XYCurve::LineType)));
+	connect(m_curve, SIGNAL(lineSkipGapsChanged(bool)), this, SLOT(curveLineSkipGapsChanged(bool)));
 	connect(m_curve, SIGNAL(lineInterpolationPointsCountChanged(int)), this, SLOT(curveLineInterpolationPointsCountChanged(int)));
 	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(curveLineOpacityChanged(qreal)));
@@ -574,6 +628,17 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(valuesSuffixChanged(QString)), this, SLOT(curveValuesSuffixChanged(QString)));
 	connect(m_curve, SIGNAL(valuesFontChanged(QFont)), this, SLOT(curveValuesFontChanged(QFont)));
 	connect(m_curve, SIGNAL(valuesColorChanged(QColor)), this, SLOT(curveValuesColorChanged(QColor)));
+
+	//Filling-Tab
+	connect( m_curve, SIGNAL(fillingPositionChanged(XYCurve::FillingPosition)), this, SLOT(curveFillingPositionChanged(XYCurve::FillingPosition)) );
+	connect( m_curve, SIGNAL(fillingTypeChanged(PlotArea::BackgroundType)), this, SLOT(curveFillingTypeChanged(PlotArea::BackgroundType)) );
+	connect( m_curve, SIGNAL(fillingColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle)) );
+	connect( m_curve, SIGNAL(fillingImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle)) );
+	connect( m_curve, SIGNAL(fillingBrushStyleChanged(Qt::BrushStyle)), this, SLOT(curveFillingBrushStyleChanged(Qt::BrushStyle)) );
+	connect( m_curve, SIGNAL(fillingFirstColorChanged(QColor&)), this, SLOT(curveFillingFirstColorChanged(QColor&)) );
+	connect( m_curve, SIGNAL(fillingSecondColorChanged(QColor&)), this, SLOT(curveFillingSecondColorChanged(QColor&)) );
+	connect( m_curve, SIGNAL(fillingFileNameChanged(QString&)), this, SLOT(curveFillingFileNameChanged(QString&)) );
+	connect( m_curve, SIGNAL(fillingOpacityChanged(float)), this, SLOT(curveFillingOpacityChanged(float)) );
 
 	//"Error bars"-Tab
 	connect(m_curve, SIGNAL(xErrorTypeChanged(XYCurve::ErrorType)), this, SLOT(curveXErrorTypeChanged(XYCurve::ErrorType)));
@@ -781,6 +846,7 @@ void XYCurveDock::lineTypeChanged(int index){
   XYCurve::LineType lineType = XYCurve::LineType(index);
 
   if ( lineType == XYCurve::NoLine){
+	ui.chkLineSkipGaps->setEnabled(false);
 	ui.cbLineStyle->setEnabled(false);
 	ui.kcbLineColor->setEnabled(false);
 	ui.sbLineWidth->setEnabled(false);
@@ -788,6 +854,7 @@ void XYCurveDock::lineTypeChanged(int index){
 	ui.lLineInterpolationPointsCount->hide();
 	ui.sbLineInterpolationPointsCount->hide();
   }else{
+	ui.chkLineSkipGaps->setEnabled(true);
 	ui.cbLineStyle->setEnabled(true);
 	ui.kcbLineColor->setEnabled(true);
 	ui.sbLineWidth->setEnabled(true);
@@ -797,9 +864,13 @@ void XYCurveDock::lineTypeChanged(int index){
 	  || lineType==XYCurve::SplineAkimaNatural || lineType==XYCurve::SplineAkimaPeriodic){
 	  ui.lLineInterpolationPointsCount->show();
 	  ui.sbLineInterpolationPointsCount->show();
+	  ui.lLineSkipGaps->hide();
+	  ui.chkLineSkipGaps->hide();
 	}else{
 	  ui.lLineInterpolationPointsCount->hide();
 	  ui.sbLineInterpolationPointsCount->hide();
+	  ui.lLineSkipGaps->show();
+	  ui.chkLineSkipGaps->show();
 	 }
   }
 
@@ -808,6 +879,14 @@ void XYCurveDock::lineTypeChanged(int index){
 
   foreach(XYCurve* curve, m_curvesList)
 	curve->setLineType(lineType);
+}
+
+void XYCurveDock::lineSkipGapsChanged(bool skip){
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setLineSkipGaps(skip);
 }
 
 void XYCurveDock::lineInterpolationPointsCountChanged(int count){
@@ -942,7 +1021,6 @@ void XYCurveDock::dropLineOpacityChanged(int value){
 
 //"Symbol"-tab
 void XYCurveDock::symbolsStyleChanged(int index){
-  Q_UNUSED(index);
   XYCurve::SymbolsStyle style = XYCurve::SymbolsStyle(index);
 
   if (style==XYCurve::NoSymbols){
@@ -1237,6 +1315,196 @@ void XYCurveDock::valuesColorChanged(const QColor& color){
 		curve->setValuesColor(color);
 }
 
+//Filling-tab
+void XYCurveDock::fillingPositionChanged(int index){
+	XYCurve::FillingPosition fillingPosition = XYCurve::FillingPosition(index);
+
+	bool b = (fillingPosition != XYCurve::NoFilling);
+	ui.cbFillingType->setEnabled(b);
+	ui.cbFillingColorStyle->setEnabled(b);
+	ui.cbFillingBrushStyle->setEnabled(b);
+	ui.cbFillingImageStyle->setEnabled(b);
+	ui.kcbFillingFirstColor->setEnabled(b);
+	ui.kcbFillingSecondColor->setEnabled(b);
+	ui.kleFillingFileName->setEnabled(b);
+	ui.bFillingOpen->setEnabled(b);
+	ui.sbFillingOpacity->setEnabled(b);
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingPosition(fillingPosition);
+}
+
+void XYCurveDock::fillingTypeChanged(int index){
+	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
+
+	if (type == PlotArea::Color){
+		ui.lFillingColorStyle->show();
+		ui.cbFillingColorStyle->show();
+		ui.lFillingImageStyle->hide();
+		ui.cbFillingImageStyle->hide();
+		ui.lFillingBrushStyle->hide();
+		ui.cbFillingBrushStyle->hide();
+
+		ui.lFillingFileName->hide();
+		ui.kleFillingFileName->hide();
+		ui.bFillingOpen->hide();
+
+		ui.lFillingFirstColor->show();
+		ui.kcbFillingFirstColor->show();
+
+		PlotArea::BackgroundColorStyle style =
+			(PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
+		if (style == PlotArea::SingleColor){
+			ui.lFillingFirstColor->setText(i18n("Color"));
+			ui.lFillingSecondColor->hide();
+			ui.kcbFillingSecondColor->hide();
+		}else{
+			ui.lFillingFirstColor->setText(i18n("First Color"));
+			ui.lFillingSecondColor->show();
+			ui.kcbFillingSecondColor->show();
+		}
+	}else if(type == PlotArea::Image){
+		ui.lFillingColorStyle->hide();
+		ui.cbFillingColorStyle->hide();
+		ui.lFillingImageStyle->show();
+		ui.cbFillingImageStyle->show();
+		ui.lFillingBrushStyle->hide();
+		ui.cbFillingBrushStyle->hide();
+		ui.lFillingFileName->show();
+		ui.kleFillingFileName->show();
+		ui.bFillingOpen->show();
+
+		ui.lFillingFirstColor->hide();
+		ui.kcbFillingFirstColor->hide();
+		ui.lFillingSecondColor->hide();
+		ui.kcbFillingSecondColor->hide();
+	}else if(type == PlotArea::Pattern) {
+		ui.lFillingFirstColor->setText(i18n("Color"));
+		ui.lFillingColorStyle->hide();
+		ui.cbFillingColorStyle->hide();
+		ui.lFillingImageStyle->hide();
+		ui.cbFillingImageStyle->hide();
+		ui.lFillingBrushStyle->show();
+		ui.cbFillingBrushStyle->show();
+		ui.lFillingFileName->hide();
+		ui.kleFillingFileName->hide();
+		ui.bFillingOpen->hide();
+
+		ui.lFillingFirstColor->show();
+		ui.kcbFillingFirstColor->show();
+		ui.lFillingSecondColor->hide();
+		ui.kcbFillingSecondColor->hide();
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingType(type);
+}
+
+void XYCurveDock::fillingColorStyleChanged(int index){
+	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+
+	if (style == PlotArea::SingleColor){
+		ui.lFillingFirstColor->setText(i18n("Color"));
+		ui.lFillingSecondColor->hide();
+		ui.kcbFillingSecondColor->hide();
+		ui.lFillingBrushStyle->show();
+		ui.cbFillingBrushStyle->show();
+	}else{
+		ui.lFillingFirstColor->setText(i18n("First Color"));
+		ui.lFillingSecondColor->show();
+		ui.kcbFillingSecondColor->show();
+		ui.lFillingBrushStyle->hide();
+		ui.cbFillingBrushStyle->hide();
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingColorStyle(style);
+}
+
+void XYCurveDock::fillingImageStyleChanged(int index){
+	if (m_initializing)
+		return;
+
+	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingImageStyle(style);
+}
+
+void XYCurveDock::fillingBrushStyleChanged(int index){
+	if (m_initializing)
+		return;
+
+	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingBrushStyle(style);
+}
+
+void XYCurveDock::fillingFirstColorChanged(const QColor& c){
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingFirstColor(c);
+}
+
+void XYCurveDock::fillingSecondColorChanged(const QColor& c){
+	if (m_initializing)
+		return;
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingSecondColor(c);
+}
+
+/*!
+	opens a file dialog and lets the user select the image file.
+*/
+void XYCurveDock::selectFile() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "XYCurveDock");
+	QString dir = conf.readEntry("LastImageDir", "");
+    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+    if (path.isEmpty())
+        return; //cancel was clicked in the file-dialog
+
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos!=-1) {
+		QString newDir = path.left(pos);
+		if (newDir!=dir)
+			conf.writeEntry("LastImageDir", newDir);
+	}
+
+    ui.kleFillingFileName->setText( path );
+
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingFileName(path);
+}
+
+void XYCurveDock::fileNameChanged(){
+	if (m_initializing)
+		return;
+
+	QString fileName = ui.kleFillingFileName->text();
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingFileName(fileName);
+}
+
+void XYCurveDock::fillingOpacityChanged(int value){
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(XYCurve* curve, m_curvesList)
+		curve->setFillingOpacity(opacity);
+}
+
 //"Error bars"-Tab
 void XYCurveDock::xErrorTypeChanged(int index) const {
 	if (index == 0) {
@@ -1484,6 +1752,11 @@ void XYCurveDock::curveLineTypeChanged(XYCurve::LineType type) {
 	ui.cbLineType->setCurrentIndex( (int) type);
 	m_initializing = false;
 }
+void XYCurveDock::curveLineSkipGapsChanged(bool skip) {
+	m_initializing = true;
+	ui.chkLineSkipGaps->setChecked(skip);
+	m_initializing = false;
+}
 void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {
 	m_initializing = true;
 	ui.sbLineInterpolationPointsCount->setValue(count);
@@ -1611,6 +1884,54 @@ void XYCurveDock::curveValuesColorChanged(QColor color) {
 	m_initializing = false;
 }
 
+//Filling
+void XYCurveDock::curveFillingPositionChanged(XYCurve::FillingPosition position) {
+	m_initializing = true;
+	ui.cbFillingPosition->setCurrentIndex((int)position);
+	m_initializing = false;
+}
+void XYCurveDock::curveFillingTypeChanged(PlotArea::BackgroundType type){
+	m_initializing = true;
+	ui.cbFillingType->setCurrentIndex(type);
+	m_initializing = false;
+}
+void XYCurveDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style){
+	m_initializing = true;
+	ui.cbFillingColorStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void XYCurveDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style){
+	m_initializing = true;
+	ui.cbFillingImageStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void XYCurveDock::curveFillingBrushStyleChanged(Qt::BrushStyle style){
+	m_initializing = true;
+	ui.cbFillingBrushStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void XYCurveDock::curveFillingFirstColorChanged(QColor& color){
+	m_initializing = true;
+	ui.kcbFillingFirstColor->setColor(color);
+	m_initializing = false;
+}
+void XYCurveDock::curveFillingSecondColorChanged(QColor& color){
+	m_initializing = true;
+	ui.kcbFillingSecondColor->setColor(color);
+	m_initializing = false;
+}
+void XYCurveDock::curveFillingFileNameChanged(QString& filename){
+	m_initializing = true;
+	ui.kleFillingFileName->setText(filename);
+	m_initializing = false;
+}
+void XYCurveDock::curveFillingOpacityChanged(float opacity){
+	m_initializing = true;
+	ui.sbFillingOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+
+
 //"Error bars"-Tab
 void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
 	m_initializing = true;
@@ -1676,6 +1997,7 @@ void XYCurveDock::load() {
 
   	//Line
 	ui.cbLineType->setCurrentIndex( (int) m_curve->lineType() );
+	ui.chkLineSkipGaps->setChecked( m_curve->lineSkipGaps() );
 	ui.sbLineInterpolationPointsCount->setValue( m_curve->lineInterpolationPointsCount() );
 	ui.cbLineStyle->setCurrentIndex( (int) m_curve->linePen().style() );
 	ui.kcbLineColor->setColor( m_curve->linePen().color() );
@@ -1714,9 +2036,18 @@ void XYCurveDock::load() {
   	ui.kfrValuesFont->setFont(valuesFont);
   	ui.kcbValuesColor->setColor( m_curve->valuesColor() );
 
-	//TODO: Area Filling
+	//Filling
+	ui.cbFillingPosition->setCurrentIndex( (int) m_curve->fillingPosition() );
+	ui.cbFillingType->setCurrentIndex( (int)m_curve->fillingType() );
+	ui.cbFillingColorStyle->setCurrentIndex( (int) m_curve->fillingColorStyle() );
+	ui.cbFillingImageStyle->setCurrentIndex( (int) m_curve->fillingImageStyle() );
+	ui.cbFillingBrushStyle->setCurrentIndex( (int) m_curve->fillingBrushStyle() );
+	ui.kleFillingFileName->setText( m_curve->fillingFileName() );
+	ui.kcbFillingFirstColor->setColor( m_curve->fillingFirstColor() );
+	ui.kcbFillingSecondColor->setColor( m_curve->fillingSecondColor() );
+	ui.sbFillingOpacity->setValue( round(m_curve->fillingOpacity()*100.0) );
 
-	//"Error bars"-Tab
+	//Error bars
 	ui.cbXErrorType->setCurrentIndex( (int) m_curve->xErrorType() );
 	ui.cbYErrorType->setCurrentIndex( (int) m_curve->yErrorType() );
 	ui.cbErrorBarsType->setCurrentIndex( (int) m_curve->errorBarsType() );
@@ -1765,6 +2096,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 
   	//Line
 	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", (int) m_curve->lineType()) );
+	ui.chkLineSkipGaps->setChecked( group.readEntry("LineSkipGaps", m_curve->lineSkipGaps()) );
 	ui.sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()) );
 	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_curve->linePen().style()) );
 	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_curve->linePen().color()) );
@@ -1803,9 +2135,18 @@ void XYCurveDock::loadConfig(KConfig& config) {
   	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
   	ui.kcbValuesColor->setColor( group.readEntry("ValuesColor", m_curve->valuesColor()) );
 
-	//TODO: Area Filling
+	//Filling
+	ui.cbFillingPosition->setCurrentIndex( group.readEntry("FillingPosition", (int) m_curve->fillingPosition()) );
+	ui.cbFillingType->setCurrentIndex( group.readEntry("FillingType", (int) m_curve->fillingType()) );
+	ui.cbFillingColorStyle->setCurrentIndex( group.readEntry("FillingColorStyle", (int) m_curve->fillingColorStyle()) );
+	ui.cbFillingImageStyle->setCurrentIndex( group.readEntry("FillingImageStyle", (int) m_curve->fillingImageStyle()) );
+	ui.cbFillingBrushStyle->setCurrentIndex( group.readEntry("FillingBrushStyle", (int) m_curve->fillingBrushStyle()) );
+	ui.kleFillingFileName->setText( group.readEntry("FillingFileName", m_curve->fillingFileName()) );
+	ui.kcbFillingFirstColor->setColor( group.readEntry("FillingFirstColor", m_curve->fillingFirstColor()) );
+	ui.kcbFillingSecondColor->setColor( group.readEntry("FillingSecondColor", m_curve->fillingSecondColor()) );
+	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_curve->fillingOpacity())*100.0) );
 
-	//"Error bars"-Tab
+	//Error bars
 	ui.cbXErrorType->setCurrentIndex( group.readEntry("XErrorType", (int) m_curve->xErrorType()) );
 	ui.cbYErrorType->setCurrentIndex( group.readEntry("YErrorType", (int) m_curve->yErrorType()) );
 	ui.cbErrorBarsType->setCurrentIndex( group.readEntry("ErrorBarsType", (int) m_curve->errorBarsType()) );
@@ -1832,6 +2173,7 @@ void XYCurveDock::saveConfig(KConfig& config){
 	//It doesn't make sense to load/save them in the template.
 
 	group.writeEntry("LineType", ui.cbLineType->currentIndex());
+	group.writeEntry("LineSkipGaps", ui.chkLineSkipGaps->isChecked());
 	group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value() );
 	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
@@ -1867,7 +2209,16 @@ void XYCurveDock::saveConfig(KConfig& config){
 	group.writeEntry("ValuesFont", ui.kfrValuesFont->font());
 	group.writeEntry("ValuesColor", ui.kcbValuesColor->color());
 
-	//TODO: Area Filling,
+	//Filling
+	group.writeEntry("FillingPosition", ui.cbFillingPosition->currentIndex());
+	group.writeEntry("FillingType", ui.cbFillingType->currentIndex());
+	group.writeEntry("FillingColorStyle", ui.cbFillingColorStyle->currentIndex());
+	group.writeEntry("FillingImageStyle", ui.cbFillingImageStyle->currentIndex());
+	group.writeEntry("FillingBrushStyle", ui.cbFillingBrushStyle->currentIndex());
+	group.writeEntry("FillingFileName", ui.kleFillingFileName->text());
+	group.writeEntry("FillingFirstColor", ui.kcbFillingFirstColor->color());
+	group.writeEntry("FillingSecondColor", ui.kcbFillingSecondColor->color());
+	group.writeEntry("FillingOpacity", ui.sbFillingOpacity->value()/100.0);
 
 	//Error bars
 	group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());

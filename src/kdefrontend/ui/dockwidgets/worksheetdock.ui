@@ -262,7 +262,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="2" column="0">
         <widget class="QLabel" name="lBackgroundColorStyle">
          <property name="text">
-          <string>Color Style</string>
+          <string>Style</string>
          </property>
         </widget>
        </item>
@@ -272,7 +272,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="3" column="0">
         <widget class="QLabel" name="lBackgroundImageStyle">
          <property name="text">
-          <string>Image Style</string>
+          <string>Style</string>
          </property>
         </widget>
        </item>
@@ -350,7 +350,7 @@ Note, the content is automatically rescaled if a layout is active.</string>
        <item row="4" column="0">
         <widget class="QLabel" name="lBackgroundBrushStyle">
          <property name="text">
-          <string>Brush Style</string>
+          <string>Style</string>
          </property>
         </widget>
        </item>

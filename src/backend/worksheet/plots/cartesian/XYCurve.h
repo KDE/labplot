@@ -31,6 +31,7 @@
 #define XYCURVE_H
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
 #include "backend/core/AbstractColumn.h"
 
@@ -51,6 +52,7 @@ class XYCurve: public WorksheetElement {
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
+		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
 
 		explicit XYCurve(const QString &name);
@@ -68,6 +70,7 @@ class XYCurve: public WorksheetElement {
 		QString& yColumnPath() const;
 
 		BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
+		BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)
 		BASIC_D_ACCESSOR_DECL(int, lineInterpolationPointsCount, LineInterpolationPointsCount)
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
@@ -94,6 +97,16 @@ class XYCurve: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QString, valuesSuffix, ValuesSuffix)
 		CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 		CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
+
+		BASIC_D_ACCESSOR_DECL(FillingPosition, fillingPosition, FillingPosition)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, fillingType, FillingType)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
+		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, fillingImageStyle, FillingImageStyle)
+		BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, fillingBrushStyle, FillingBrushStyle)
+		CLASS_D_ACCESSOR_DECL(QColor, fillingFirstColor, FillingFirstColor)
+		CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
+		CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
+		BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
 
 		BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
@@ -163,6 +176,7 @@ class XYCurve: public WorksheetElement {
 
 		//Line-Tab
 		friend class XYCurveSetLineTypeCmd;
+		friend class XYCurveSetLineSkipGapsCmd;
 		friend class XYCurveSetLineInterpolationPointsCountCmd;
 		friend class XYCurveSetLinePenCmd;
 		friend class XYCurveSetLineOpacityCmd;
@@ -170,6 +184,7 @@ class XYCurve: public WorksheetElement {
 		friend class XYCurveSetDropLinePenCmd;
 		friend class XYCurveSetDropLineOpacityCmd;
 		void lineTypeChanged(XYCurve::LineType);
+		void lineSkipGapsChanged(bool);
 		void lineInterpolationPointsCountChanged(int);
 		void linePenChanged(const QPen&);
 		void lineOpacityChanged(qreal);
@@ -213,7 +228,27 @@ class XYCurve: public WorksheetElement {
 		void valuesFontChanged(QFont);
 		void valuesColorChanged(QColor);
 
-		//"Error bars"-Tab
+		//Filling
+		friend class XYCurveSetFillingPositionCmd;
+		friend class XYCurveSetFillingTypeCmd;
+		friend class XYCurveSetFillingColorStyleCmd;
+		friend class XYCurveSetFillingImageStyleCmd;
+		friend class XYCurveSetFillingBrushStyleCmd;
+		friend class XYCurveSetFillingFirstColorCmd;
+		friend class XYCurveSetFillingSecondColorCmd;
+		friend class XYCurveSetFillingFileNameCmd;
+		friend class XYCurveSetFillingOpacityCmd;
+		void fillingPositionChanged(XYCurve::FillingPosition);
+		void fillingTypeChanged(PlotArea::BackgroundType);
+		void fillingColorStyleChanged(PlotArea::BackgroundColorStyle);
+		void fillingImageStyleChanged(PlotArea::BackgroundImageStyle);
+		void fillingBrushStyleChanged(Qt::BrushStyle);
+		void fillingFirstColorChanged(QColor&);
+		void fillingSecondColorChanged(QColor&);
+		void fillingFileNameChanged(QString&);
+		void fillingOpacityChanged(float);
+
+		//Error bars
 		friend class XYCurveSetXErrorTypeCmd;
 		friend class XYCurveSetXErrorPlusColumnCmd;
 		friend class XYCurveSetXErrorMinusColumnCmd;

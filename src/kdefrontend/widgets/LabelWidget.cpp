@@ -119,7 +119,11 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new Q
     connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
     connect( ui.sbOffset, SIGNAL(valueChanged(double)), this, SLOT(offsetChanged(double)) );
 
-    connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+
+	//TODO: https://bugreports.qt.io/browse/QTBUG-25420
+	ui.tbFontUnderline->hide();
+	ui.tbFontStrikeOut->hide();
 }
 
 void LabelWidget::setLabels(QList<TextLabel*> labels){
@@ -265,14 +269,17 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format){
 }
 
 void LabelWidget::teXUsedChanged(bool checked){
-    //hide text editing elements if TeX-option is used
-    ui.tbFontBold->setVisible(!checked);
-    ui.tbFontItalic->setVisible(!checked);
-    ui.tbFontUnderline->setVisible(!checked);
-    ui.tbFontSuperScript->setVisible(!checked);
-    ui.tbFontSubScript->setVisible(!checked);
-    ui.tbFontStrikeOut->setVisible(!checked);
-    ui.tbSymbols->setVisible(!checked);
+	//hide text editing elements if TeX-option is used
+	ui.tbFontBold->setVisible(!checked);
+	ui.tbFontItalic->setVisible(!checked);
+
+	//TODO: https://bugreports.qt.io/browse/QTBUG-25420
+// 	ui.tbFontUnderline->setVisible(!checked);
+// 	ui.tbFontStrikeOut->setVisible(!checked);
+
+	ui.tbFontSubScript->setVisible(!checked);
+	ui.tbFontSuperScript->setVisible(!checked);
+	ui.tbSymbols->setVisible(!checked);
 
     ui.lFont->setVisible(!checked);
     ui.kfontRequester->setVisible(!checked);

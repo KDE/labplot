@@ -287,10 +287,10 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << "Legendre form of complete elliptic integral K";
         m_functionsNames << "Legendre form of complete elliptic integral E";
         m_functionsNames << "Legendre form of complete elliptic integral Pi";
-        m_functionsNames << "Legendre form of incomplete elliptic Integral F";
-        m_functionsNames << "Legendre form of incomplete elliptic Integral E";
-        m_functionsNames << "Legendre form of incomplete elliptic Integral P";
-        m_functionsNames << "Legendre form of incomplete elliptic Integral D";
+        m_functionsNames << "Legendre form of incomplete elliptic integral F";
+        m_functionsNames << "Legendre form of incomplete elliptic integral E";
+        m_functionsNames << "Legendre form of incomplete elliptic integral P";
+        m_functionsNames << "Legendre form of incomplete elliptic integral D";
         m_functionsNames << "Carlson form of incomplete elliptic integral RC";
         m_functionsNames << "Carlson form of incomplete elliptic integral RD";
         m_functionsNames << "Carlson form of incomplete elliptic integral RF";
@@ -353,9 +353,9 @@ void ExpressionParser::initFunctions() {
 	// Gamma and Beta Functions
         m_functionsNames << "Gamma function";
         m_functionsNames << "Gamma function";
-        m_functionsNames << "Logarithm of the Gamma function";
-        m_functionsNames << "Logarithm of the Gamma function";
-        m_functionsNames << "Regulated Gamma Function";
+        m_functionsNames << "Logarithm of the gamma function";
+        m_functionsNames << "Logarithm of the gamma function";
+        m_functionsNames << "Regulated gamma function";
         m_functionsNames << "Reciprocal of the gamma function";
         m_functionsNames << "Factorial n!";
         m_functionsNames << "Double factorial n!!";
@@ -368,13 +368,13 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << "Pochhammer symbol";
         m_functionsNames << "Logarithm of the Pochhammer symbol";
         m_functionsNames << "Relative Pochhammer symbol";
-        m_functionsNames << "Unnormalized incomplete Gamma Function";
-        m_functionsNames << "Normalized incomplete Gamma Function";
-        m_functionsNames << "Complementary normalized incomplete Gamma Function";
+        m_functionsNames << "Unnormalized incomplete gamma gunction";
+        m_functionsNames << "Normalized incomplete gamma function";
+        m_functionsNames << "Complementary normalized incomplete gamma function";
         m_functionsNames << "Beta function";
 
-        m_functionsNames << "Logarithm of the Beta function";
-        m_functionsNames << "Normalized incomplete Beta function";
+        m_functionsNames << "Logarithm of the beta function";
+        m_functionsNames << "Normalized incomplete beta function";
 
 	for(int i=0;i<22;i++)
 		m_functionsGroupIndex << 14;
@@ -581,7 +581,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroupIndex << 33;
 
 	// Gamma Distribution
-        m_functionsNames << "Probability density for a Gamma distribution";
+        m_functionsNames << "Probability density for a gamma distribution";
         m_functionsNames << "Cumulative distribution function P";
         m_functionsNames << "Cumulative distribution function Q";
         m_functionsNames << "Inverse cumulative distribution function P";
@@ -651,7 +651,7 @@ void ExpressionParser::initFunctions() {
 		m_functionsGroupIndex << 40;
 
 	// Logistic Distribution
-        m_functionsNames << "Probability density for a logisitc distribution";
+        m_functionsNames << "Probability density for a logistic distribution";
         m_functionsNames << "Cumulative distribution function P";
         m_functionsNames << "Cumulative distribution function Q";
         m_functionsNames << "Inverse cumulative distribution function P";

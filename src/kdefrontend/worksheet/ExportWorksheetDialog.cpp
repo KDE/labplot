@@ -60,9 +60,9 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	ui.cbFormat->insertSeparator(3);
     ui.cbFormat->addItem(QIcon::fromTheme("image-x-generic"), "Portable Network Graphics (PNG)");
 
-	ui.cbExportArea->addItem("Object's bounding box");
-	ui.cbExportArea->addItem("Current selection");
-	ui.cbExportArea->addItem("Complete worksheet");
+	ui.cbExportArea->addItem(i18n("Object's bounding box"));
+	ui.cbExportArea->addItem(i18n("Current selection"));
+	ui.cbExportArea->addItem(i18n("Complete worksheet"));
 
 	ui.cbResolution->addItem(QString::number(QApplication::desktop()->physicalDpiX()) + " (" + i18n("desktop") + ')');
 	ui.cbResolution->addItem("100");

@@ -98,69 +98,86 @@ Features:
 
 <chapter id="using-LabPlot">
 <title>Using &LabPlot;</title>
-
-<!--TODO:
-
-Describe the general structure of the software, intoduce the different 
-objects that can be created within the software and introduce the project-
-explorer as the tool to manage all created stuff. Folders and sub-folders can 
-be created to bring in more structure into the project.
--->
 <sect1 id="interface-overview">
   <title>Interface Overview</title>
+  <para>
+&LabPlot; follows the MDI (Multiple Document Interface) philosophy - all the created application objects are placed as sub-windows in the <link linkend="main-area">Main Area</link> of the application window. The <link linkend="project-explorer">Project Explorer</link> serves as the tool to create and organize those objects in a tree-like structure.
+
+The <link linkend="properties-explorer">Properties Explorer</link> is used to modify the properties of the currently selected object(s).
+Many functions are reachable via the main menu and via object specific toolbars and context menus. Additional information and application notifications are shown in the status bar.
+</para>
+
   <screenshot>
     <screeninfo>The default &LabPlot; window</screeninfo>
     <mediaobjectco>
       <imageobjectco>
 	<areaspec units="other" otherunits="imagemap">
 	  <!--these ids are used only internally by DocBook so we keep them short-->
-	  <area id="im-win1a1" linkends="project-explorer" coords="37,112,316,747" />
-	  <area id="im-win1a2" linkends="worksheet" coords="314,116,842,741" />
-	  <area id="im-win1a4" linkends="toolbar" coords="38,86,1294,116" />
-	  <area id="im-win1a5" linkends="commands" coords="38,62,520,86" />
-	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777" />
-	  <area id="im-win1a7" linkends="properties" coords="843,116,1294,741" />
+	  <area id="im-win1a1" linkends="project-explorer" coords="28,69,234,724" />
+	  <area id="im-win1a2" linkends="worksheet" coords="456,382,804,688" />
+	  <area id="im-win1a3" linkends="spreadsheet" coords="249,78,553,390" />
+	  <area id="im-win1a4" linkends="toolbar" coords="1,46,640,68" />
+	  <area id="im-win1a5" linkends="commands" coords="1,19,432,45" />
+<!-- 	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777" /> -->
+	  <area id="im-win1a7" linkends="properties-explorer" coords="834,69,1279,724" />
 	</areaspec>
 	<imageobject>
-	  <imagedata fileref="using1.png" format="PNG"/>
+	  <imagedata fileref="labplot.png" format="PNG"/>
 	</imageobject>
       </imageobjectco>
     </mediaobjectco>
   </screenshot>
-  <para>
-    The default &LabPlot; window has the <link linkend="project-explorer">Project Explorer</link> pane on the left, the <link linkend="properties">Properties</link> pane on the right, <link linkend="spreadsheet">spreadsheet</link>/<link linkend="worksheet">worksheet</link> area in the center, the <link linkend="toolbar">main toolbar</link> on the top and the status bar on the bottom.
-  </para>
+<!--  <para>
+    The default &LabPlot; window has the <link linkend="project-explorer">Project Explorer</link> pane on the left, the <link linkend="properties-explorer">Properties</link> pane on the right, <link linkend="spreadsheet">spreadsheet</link>/<link linkend="worksheet">worksheet</link> area in the center, the <link linkend="toolbar">main toolbar</link> on the top and the status bar on the bottom.
+  </para>-->
 </sect1>
 
 <sect1 id="project-explorer">
-<title>The Project Explorer</title>
+<title>Project Explorer</title>
+<para>
+The Project Explorer is the main part of &LabPlot; aimed to handle its objects. Objects are organized in a tree-like structure representing the parent-child relations between the different objects.
+Folders and sub-folders can introduce additional grouping for the different objects.
+</para>
+<para>
+Project explorer is a dockable window and can be placed at an arbitrary place. The user can determine which columns should be shown by selecting/deselecting the columns of interest in the context menu (&RMB; click on an empty place in the tree-view or its header). Furthermore, the list of shown objects can be reduced by providing a filter in the <guilabel>Search/Filter</guilabel> text field.
+</para>
 <screenshot><mediaobject><imageobject>
       <imagedata fileref="project-explorer.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
-<para>
-The Project Explorer is the main part of &LabPlot; aimed to handle its objects.
-</para>
-<para>
-  You can access the action list for an object by clicking with the &RMB; on its item in the Project Explorer list. The content of the list depends on the type of the clicked object.
-</para>
-<para>
-  The list of objects can be filtered using the <guilabel>Search/Filter</guilabel> bar. Just enter the search or filtering term and &LabPlot; would filter out those objects in the list whose name does not contain the term. The filtering can be made case sensitive or matching just whole words by clicking on <guibutton>Options</guibutton> button.
-</para>
-<para>
-  It is possible to configure the content of the Project Explorer pane itself. To do this click with the &RMB; on the empty space in the list of objects. You can expand or collapse all nested items, hide or show the <guilabel>Search/Filter</guilabel> bar, and choose the data columns to be shown in the list.
-</para>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="pe-context-menu.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
 </sect1>
 
+<sect1 id="main-area">
+<title>Main Area</title>
+<para>
+Created objects having a view (like worksheet, spreadsheet etc.) are placed in the main area of the application. Depending on the current setting for the user interface, windows are placed either as independent and freely moveable sub-windows (interface "Sub-window view") or as tabs in a tabbed view (interface "Tabbed view").
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="sub_window_tabbed_view_interfaces.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+When sub-windows are used, all windows of objects belonging to the currently selected folder only are shown. Alternatively, the visibility of windows can be extended to the currently selected folder and its sub-folders or to all windows in the project. This behaviour is controlled via the parameter "Window visibility policy" accessible via the context menu of the project explorer.
+</para>
+</sect1>
+
+<sect1 id="properties-explorer">
+<title>Properties Explorer</title>
+<para>
+Properties explorer allows the user to modify the currently selected object in the project explorer. A great variety of object properties can be edited in undoable/redoable way. Editing of multiple objects of the same time is also possible. 
+</para>
+<para>
+Properties explorer is a dockable window and can be placed at an arbitrary place.
+</para>
+</sect1>
 
 <sect1 id="spreadsheet">
-<title>The Spreadsheet</title>
+<title>Spreadsheet</title>
 <para>
 The spreadsheet is the main part of &LabPlot; when working with data and consists of columns.
 Column is the basic data set in LabPlot used for plotting and data analysis.
-Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and data and time.
+Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and date and time.
 Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns etc.
 </para>
 <para>
@@ -209,9 +226,11 @@ by fixing the total number of values in that range or by fixing the increment (d
 <para>
 Random values (for numeric columns only) - values are randomly generated according to the selected distribution.
 To generate uniformly distributed random numbers, select "Flat" distribution.
+</para>
 <screenshot><mediaobject><imageobject>
       <imagedata fileref="spreadsheet_generate_random_values.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
+<para>
 In the simplest cases a non-uniform distribution is calculated analytically from the uniform distribution of a random number generator by applying
 an appropriate transformation. More complicated distributions are created by the acceptance-rejection method, which compares the desired distribution
 against a distribution which is similar and known analytically.
@@ -242,7 +261,7 @@ Imported data will be stored in the project file. Changes on data, performed eit
 
 
 <sect1 id="worksheet">
-<title>The Worksheet</title>
+<title>Worksheet</title>
 <para>
 The worksheet is, besides the <link linkend="spreadsheet">spreadsheet</link>, the second central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
 </para>
@@ -269,50 +288,74 @@ The results shown on the worksheet can be exported to different formats via the 
 </sect1>
 
 
-<!-- TODO: Describe the basic concepts and functionality of the file data source. -->
 <sect1 id="file_data_source">
 <title>File Data Source</title>
 <para>
-Similar in spirit to importing the data to a spreadsheet...
+A file data source is very similar in spirit to a spreadsheet with imported data from an external file. The difference is that the imported data cannot be shown and edited in LabPlot after the import anymore. This can be sufficient e.g. if you only want to plot the data stemming from a calculation in an external program (and exported to an ASCII-file afterwards).
 </para>
-</sect1>
-
-<!-- TODO:
-
-Describe the basic functionality of the properties pane.
--->
-
-<sect1 id="properties">
-<title>The Properties Pane</title>
+<para>
+Since no spreadsheet has to be filled with the imported data, the import into a file data source is faster than into a spreadsheet which can be advantageously when dealing with big files.
+</para>
+<para>
+It is possible to store the link to the external file in the project file only and not its content. Each time the project file is opened in LabPlot, the content is read from the external file again. Also, it is possible to let LabPlot watch the file for changes - the content of the file data source is updated if the external file was changed.
+</para>
+<para>
 <screenshot><mediaobject><imageobject>
-      <imagedata fileref="properties.png" format="PNG"/>
+      <imagedata fileref="file_data_source.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
-<para>
-The Properties pane is a part of the &LabPlot; window used to modify object properties.
-</para>
-<sect2 id="axes">
-<title>Axes Properties</title>
-<para>
-The axes page lets you change the settings for the different axes. It can be opened by clicking with &LMB; on one of the axes items in the <link linkend="project-explorer">Project Explorer</link> pane.
 </para>
 <para>
-There are different tabs to change a lot axis settings (color, ticks, grid, &etc;) on this page.
+The additional options determining the import of the data are equivalent to those provided in <link linkend="importdialog">Import Dialog</link>.
 </para>
-</sect2>
-
-<sect2 id="legend">
-<title>Legend Properties</title>
-<para>
-The legend properties page allows you to change parameters of the legend (title border, spacing, layout, font &etc;). The page can be opened by clicking with &LMB; on the legend item in the <link linkend="project-explorer">Project Explorer</link> pane.
-</para>
-</sect2>
 </sect1>
 
-<sect1 id="statusbar">
-<title>Status Bar</title>
+<sect1 id="importdialog">
+<title>Import Dialog</title>
 <para>
-The horizontal and vertical positions of the mouse pointer in the plot area are displayed
-in data units on the left side of the status bar at the bottom of the &LabPlot; window.
+In the import dialog you can import data into one of the available spreadsheets in &LabPlot;.
+</para>
+<para>
+The name of the file containing the data to import has to be provided. The <guibutton>File Info</guibutton> button opens a dialog where some information about the selected file is shown. The type of the data can be specified - currently, only ASCII files containing several data sets (vectors) stored as columns are supported.
+The filter - automatic or custom - determines how the file has to be parsed. Selecting the filter "custom", several parameters like separating character etc. can be provided manually in this case.
+</para>
+<para>
+The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
+</para>
+<screenshot>
+  <screeninfo>Importing data into &LabPlot;</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="import-dialog.png" format="PNG" />
+    </imageobject>
+    <textobject>
+      <phrase>Importing data into &LabPlot;</phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+
+<sect1 id="exportdialog">
+<title>Export Dialog</title>
+<para>
+	A worksheet can be exported to several graphics format (vector and raster). The export is done via the export dialog reachable via the <guibutton>Export</guibutton> in the main toolbar or <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice> in the main menu.
+</para>
+<para>
+	Besides the graphics format, the user can specify which part of the worksheet has to be exported and whether the background has to be exported or not.
+	Also, for raster graphics the image resolution can be provided.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="export_worksheet_dialog.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+	The content of a spreadsheet can be exported to an external text file. In the export dialog for spreadsheets the user can specify the character separating values of different columns. Optionally, the header of the spreadsheet (names of the columns in the spreadsheet) can be exported.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="export_spreadsheet_dialog.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
 </para>
 </sect1>
 
@@ -541,70 +584,57 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
 
 </chapter>
 
-<!-- TODO:
-
-Cartesian plots, curves and legends. General description of the many 
-editing possibilities in the corresponding dock widgets.
--->
-
 <chapter id="plotting">
 <title>Plotting</title>
 
-<sect1 id="func">
-<title>Function</title>
-<para>
-The curve properties pane is used to create and modify the settings
-for function plots. It looks the similar for data curves and curves from mathematical equations.</para>
-<para>
-  The <guilabel>y=f(x)</guilabel> for xy-equation-curves contains the expression for the plot function. The entered expression is evaluated
-via a powerful parser. For a complete list of supported functions see the
-<link linkend="parser">parser section</link>.
-</para>
-<para>
-With the remaining style items you can influence the appearance of the function.
-If you create a normal function the first selection defines
-the line style (no line, solid line, dash line, dot line, dash-dot line, or dash-dot-dot line), the color and if you want it to have drop line
-(with a different color). The other items select the symbol for the plot points, with color, size, if
-it should be filled and with which color.
-Then you can select if values should be shown on the plot and define the style of the values.
-</para>
+<sect1 id="plots">
+  <title>Plots</title>
+  <para>
+      Plots can be created inside a worksheet via "Add new" in the context menu or in the application menu via "Worksheet"
+      by selecting "xy-plot" and the type of plot you like to have.
+  </para>
+  <para>
+    Within this xy-plot you can add a xy-curve containing data to show (again via the context menu or application menu).
+  </para>
+  <para>
+    The settings of a plot can be changed in the corresponding dock widget. There are general settings like geometry 
+    but also the range of the x- and y-axis (including scaling). The plot title can be set in the "Title" tab of the
+    dock widget. Background and border styles can be changed in the "Plot Area" tab.
+  </para>
+</sect1>
+  
+<sect1 id="curves">
+  <title>Curves</title>
+  <para>
+    Curves contain data points that can be shown in a plot. 
+    There are three different method to create curves: the standard xy-curve, a xy-curve from a mathematical expression
+    and a xy-curve from a fit to data.
+    </para>
+    <para>
+    The standard xy-curve can be filled with values of a spreadsheet by selecting the x-data and y-data as column of the 
+    spreadsheet in the xy-curve dock widget. Another method to fill a curve is to use a mathematical expression. Here you can
+    select any mathematical function and range to create the curve.
+    The third method to create a curve is to fit a function to data. The data to fit and the fit function can be
+    selected in the dock widget of the xy-fit curve.
+  </para>
+  <para>
+   For all types of curves the line and symbols styles can be changed in the dock widget. Also annotated values
+   and error bar settings can be changed here.
+  </para>
 </sect1>
 
-<sect1 id="importdialog">
-<title>Import Dialog</title>
-<screenshot>
-  <screeninfo>Importing data into &LabPlot;</screeninfo>
-  <mediaobject>
-    <imageobject>
-      <imagedata fileref="import-dialog.png" format="PNG" />
-    </imageobject>
-    <textobject>
-      <phrase>Importing data into &LabPlot;</phrase>
-    </textobject>
-  </mediaobject>
-</screenshot>
-<para>
-With the import dialog you can import data into &LabPlot;. 
-</para>
-<para>
-  In the line edit you can specify a data file to read. The <guibutton>File Info</guibutton> button shows you some information about the selected
-files. You can also specify the type of the data, the filter, the separating character (for instance ",") and the comment line character.
-</para>
-<para>
-  The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
-</para>
+<sect1 id="legends">
+  <title>Legends</title>
+  <para>
+    A legend can be easily added to a plot by using the context of application menu. It contains information
+    about all curves in a plot.
+  </para>
+  <para>
+    The settings of a legend (format and geometry) can be changed in the legend dock widget. Also the legend title
+    settings, the legend background and the layout can be changed in the corresponding tab of the legend dock widget.
+  </para>
 </sect1>
-
-<!-- TODO:
-	Describe the export of worksheet and spreadsheet.
--->
-<sect1 id="exportdialog">
-<title>Export Dialog</title>
-<para>
-	
-</para>
-</sect1>
-
+  
 </chapter>
 
 <!-- TODO:
@@ -626,7 +656,7 @@ Here you will find some explanations of advanced topics.
 <title>Topics</title>
 <sect2 id="errorbar">
 <title>Error bars</title>
-<para>If you want to plot data with error bars just import your data with the <link linkend="importdialog">import dialog</link> into your project. Then use the <guilabel>Error bars</guilabel> tab of <link linkend="properties">the curve properties</link> to select <guilabel>Error type</guilabel>, choose the error column from the <guilabel>Data, +-</guilabel> list. Format of the error bars can be defined using the <guilabel>Format:</guilabel> pane.</para>
+<para>If you want to plot data with error bars just import your data with the <link linkend="importdialog">import dialog</link> into your project. Then use the <guilabel>Error bars</guilabel> tab of <link linkend="properties-explorer">the curve properties</link> to select <guilabel>Error type</guilabel>, choose the error column from the <guilabel>Data, +-</guilabel> list. Format of the error bars can be defined using the <guilabel>Format:</guilabel> pane.</para>
 </sect2>
 
 <sect2 id="texlabel">
@@ -730,23 +760,16 @@ The &LabPlot; parser allows you to use following functions:
 <row><entry>ceil(x)</entry><entry><action>Truncate upward to integer</action></entry></row>
 <row><entry>cos(x)</entry><entry><action>Cosine</action></entry></row>
 <row><entry>cosh(x)</entry><entry><action>Hyperbolic cosine</action></entry></row>
-<row><entry>erf(x)</entry><entry><action>error function erf(x) = (2 / &radic;&pi;) &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
-<row><entry>erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = (2 / &radic;&pi;) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
 <row><entry>exp(x)</entry><entry><action>Exponential, base e</action></entry></row>
 <row><entry>expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
 <row><entry>fabs(x)</entry><entry><action>Absolute value</action></entry></row>
 <row><entry>gamma(x)</entry><entry><action>Gamma function</action></entry></row>
 <row><entry>hypot(x,y)</entry><entry><action>Hypotenuse function &radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
-<row><entry>j0(x)</entry><entry><action>Bessel, order 0</action></entry></row>
-<row><entry>j1(x)</entry><entry><action>Bessel, order 1</action></entry></row>
-<row><entry>jn(n,x)</entry><entry><action>Bessel, order n</action></entry></row>
-<row><entry>lgamma(x)</entry><entry><action>Natural log of |gamma|</action></entry></row>
 <row><entry>ln(x)</entry><entry><action>Logarithm, base e</action></entry></row>
 <row><entry>log(x)</entry><entry><action>Logarithm, base e</action></entry></row>
 <row><entry>log10(x)</entry><entry><action>Logarithm, base 10</action></entry></row>
 <row><entry>logb(x)</entry><entry><action>Radix-independent exponent</action></entry></row>
-<row><entry>log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
-<row><entry>pow(x,y)</entry><entry><action>power function</action></entry></row>
+<row><entry>pow(x,n)</entry><entry><action>power function x<superscript>n</superscript></action></entry></row>
 <row><entry>rint(x)</entry><entry><action>round to nearest integer</action></entry></row>
 <row><entry>round(x)</entry><entry><action>round to nearest integer</action></entry></row>
 <row><entry>sin(x)</entry><entry><action>Sine</action></entry></row>
@@ -756,15 +779,12 @@ The &LabPlot; parser allows you to use following functions:
 <row><entry>tanh(x)</entry><entry><action>Hyperbolic tangent</action></entry></row>
 <row><entry>tgamma(x)</entry><entry><action>Gamma function</action></entry></row>
 <row><entry>trunc(x)</entry><entry><action>Returns the greatest integer less than or equal to x</action></entry></row>
-<row><entry>y0(x)</entry><entry><action>Bessel, second kind, order 0</action></entry></row>
-<row><entry>y1(x)</entry><entry><action>Bessel, second kind, order 1</action></entry></row>
-<row><entry>yn(n,x)</entry><entry><action>Bessel, second kind, order n</action></entry></row>
 
 </tbody></tgroup></informaltable>
 </sect1>
 
 <sect1 id="parser-gsl">
-<title>GSL special functions</title>
+<title>Special functions</title>
 <para>
 For more information about the functions see the documentation of GSL.
 </para>
@@ -774,20 +794,14 @@ For more information about the functions see the documentation of GSL.
 
 <tbody>
 
-<row><entry>gsl_log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
-<row><entry>gsl_expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
-<row><entry>gsl_hypot(x,y)</entry><entry><action>&radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
-<row><entry>gsl_acosh(x)</entry><entry><action>arccosh(x)</action></entry></row>
-<row><entry>gsl_asinh(x)</entry><entry><action>arcsinh(x)</action></entry></row>
-<row><entry>gsl_atanh(x)</entry><entry><action>arctanh(x)</action></entry></row>
 <row><entry>Ai(x)</entry><entry><action>Airy function Ai(x)</action></entry></row>
 <row><entry>Bi(x)</entry><entry><action>Airy function Bi(x)</action></entry></row>
-<row><entry>Ais(x)</entry><entry><action>scaled version of the Airy function S<subscript>A</subscript>(x) Ai(x)</action></entry></row>
-<row><entry>Bis(x)</entry><entry><action>scaled version of the Airy function S<subscript>B</subscript>(x) Bi(x)</action></entry></row>
+<row><entry>Ais(x)</entry><entry><action>scaled version of the Airy function S<subscript>Ai</subscript>(x)</action></entry></row>
+<row><entry>Bis(x)</entry><entry><action>scaled version of the Airy function S<subscript>Bi</subscript>(x)</action></entry></row>
 <row><entry>Aid(x)</entry><entry><action>Airy function derivative Ai'(x)</action></entry></row>
 <row><entry>Bid(x)</entry><entry><action>Airy function derivative Bi'(x)</action></entry></row>
-<row><entry>Aids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>A</subscript>(x) Ai(x)</action></entry></row>
-<row><entry>Bids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>B</subscript>(x) Bi(x)</action></entry></row>
+<row><entry>Aids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>Ai</subscript>(x)</action></entry></row>
+<row><entry>Bids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>Bi</subscript>(x)</action></entry></row>
 <row><entry>Ai0(s)</entry><entry><action>s-th zero of the Airy function Ai(x)</action></entry></row>
 <row><entry>Bi0(s)</entry><entry><action>s-th zero of the Airy function Bi(x)</action></entry></row>
 <row><entry>Aid0(s)</entry><entry><action>s-th zero of the Airy function derivative Ai'(x)</action></entry></row>
@@ -810,12 +824,12 @@ For more information about the functions see the documentation of GSL.
 <row><entry>K0s(x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of zeroth order, exp(x) K<subscript>0</subscript>(x)</action></entry></row>
 <row><entry>K1s(x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of first order, exp(x) K<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>Kns(n,x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of order n, exp(x) K<subscript>n</subscript>(x)</action></entry></row>
-<row><entry>gsl_j0(x)</entry><entry><action>regular spherical Bessel function of zeroth order, j<subscript>0</subscript>(x)</action></entry></row>
-<row><entry>gsl_j1(x)</entry><entry><action>regular spherical Bessel function of first order, j<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>j0(x)</entry><entry><action>regular spherical Bessel function of zeroth order, j<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>j1(x)</entry><entry><action>regular spherical Bessel function of first order, j<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>j2(x)</entry><entry><action>regular spherical Bessel function of second order, j<subscript>2</subscript>(x)</action></entry></row>
 <row><entry>jl(l,x)</entry><entry><action>regular spherical Bessel function of order l, j<subscript>l</subscript>(x)</action></entry></row>
-<row><entry>gsl_y0(x)</entry><entry><action>irregular spherical Bessel function of zeroth order, y<subscript>0</subscript>(x)</action></entry></row>
-<row><entry>gsl_y1(x)</entry><entry><action>irregular spherical Bessel function of first order, y<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>y0(x)</entry><entry><action>irregular spherical Bessel function of zeroth order, y<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>y1(x)</entry><entry><action>irregular spherical Bessel function of first order, y<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>y2(x)</entry><entry><action>irregular spherical Bessel function of second order, y<subscript>2</subscript>(x)</action></entry></row>
 <row><entry>yl(l,x)</entry><entry><action>irregular spherical Bessel function of order l, y<subscript>l</subscript>(x)</action></entry></row>
 <row><entry>i0s(x)</entry><entry><action>scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) i<subscript>0</subscript>(x)</action></entry></row>
@@ -826,13 +840,13 @@ For more information about the functions see the documentation of GSL.
 <row><entry>k1s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of first order, exp(x) k<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>k2s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of second order, exp(x) k<subscript>2</subscript>(x)</action></entry></row>
 <row><entry>kls(l,x)</entry><entry><action>scaled irregular modified spherical Bessel function of order l, exp(x) k<subscript>l</subscript>(x)</action></entry></row>
-<row><entry>Jnu(nu,x)</entry><entry><action>regular cylindrical Bessel function of fractional order nu, J<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>Ynu(nu,x)</entry><entry><action>irregular cylindrical Bessel function of fractional order nu, Y<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>Inu(nu,x)</entry><entry><action>regular modified Bessel function of fractional order nu, I<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>Inus(nu,x)</entry><entry><action>scaled regular modified Bessel function of fractional order nu, exp(-|x|) I<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>Knu(nu,x)</entry><entry><action>irregular modified Bessel function of fractional order nu, K<subscript>&nu;</subscript>(x)</action></entry></row>
-<row><entry>lnKnu(nu,x)</entry><entry><action>logarithm of the irregular modified Bessel function of fractional order nu,ln(K<subscript>&nu;</subscript>(x))</action></entry></row>
-<row><entry>Knus(nu,x)</entry><entry><action>scaled irregular modified Bessel function of fractional order nu, exp(|x|) K<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Jnu(&nu;,x)</entry><entry><action>regular cylindrical Bessel function of fractional order &nu;, J<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Ynu(&nu;,x)</entry><entry><action>irregular cylindrical Bessel function of fractional order &nu;, Y<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Inu(&nu;,x)</entry><entry><action>regular modified Bessel function of fractional order &nu;, I<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Inus(&nu;,x)</entry><entry><action>scaled regular modified Bessel function of fractional order &nu;, exp(-|x|) I<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Knu(&nu;,x)</entry><entry><action>irregular modified Bessel function of fractional order &nu;, K<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>lnKnu(&nu;,x)</entry><entry><action>logarithm of the irregular modified Bessel function of fractional order &nu;,ln(K<subscript>&nu;</subscript>(x))</action></entry></row>
+<row><entry>Knus(&nu;,x)</entry><entry><action>scaled irregular modified Bessel function of fractional order &nu;, exp(|x|) K<subscript>&nu;</subscript>(x)</action></entry></row>
 <row><entry>J0_0(s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>0</subscript>(x)</action></entry></row>
 <row><entry>J1_0(s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>1</subscript>(x)</action></entry></row>
 <row><entry>Jnu_0(nu,s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>&nu;</subscript>(x)</action></entry></row>
@@ -840,51 +854,52 @@ For more information about the functions see the documentation of GSL.
 <row><entry>hydrogenicR_1(Z,R)</entry><entry><action>lowest-order normalized hydrogenic bound state radial wavefunction R<subscript>1</subscript> := 2Z &radic;Z exp(-Z r)</action></entry></row>
 <row><entry>hydrogenicR(n,l,Z,R)</entry><entry><action>n-th normalized hydrogenic bound state radial wavefunction</action></entry></row>
 <row><entry>dawson(x)</entry><entry><action>Dawson's integral</action></entry></row>
-<row><entry>debye_1(x)</entry><entry><action>first-order Debye function D<subscript>1</subscript>(x) = (1/x) &int;<subscript>0</subscript><superscript>x</superscript>(t/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_2(x)</entry><entry><action>second-order Debye function D<subscript>2</subscript>(x) = (2/x<superscript>2</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>2</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_3(x)</entry><entry><action>third-order Debye function D<subscript>3</subscript>(x) =  (3/x<superscript>3</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>3</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_4(x)</entry><entry><action>fourth-order Debye function D<subscript>4</subscript>(x) =  (4/x<superscript>4</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>4</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_5(x)</entry><entry><action>fifth-order Debye function D<subscript>5</subscript>(x) =  (5/x<superscript>5</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>5</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>debye_6(x)</entry><entry><action>sixth-order Debye function D<subscript>6</subscript>(x) =  (6/x<superscript>6</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>6</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
-<row><entry>dilog(x)</entry><entry><action>dilogarithm</action></entry></row>
-<row><entry>ellint_Kc(k)</entry><entry><action>complete elliptic integral K(k)</action></entry></row>
-<row><entry>ellint_Ec(k)</entry><entry><action>complete elliptic integral E(k)</action></entry></row>
-<row><entry>ellint_F(phi,k)</entry><entry><action>incomplete elliptic integral F(phi,k)</action></entry></row>
-<row><entry>ellint_E(phi,k)</entry><entry><action>incomplete elliptic integral E(phi,k)</action></entry></row>
-<row><entry>ellint_P(phi,k,n)</entry><entry><action>incomplete elliptic integral P(phi,k,n)</action></entry></row>
-<row><entry>ellint_D(phi,k,n)</entry><entry><action>incomplete elliptic integral D(phi,k,n)</action></entry></row>
-<row><entry>ellint_RC(x,y)</entry><entry><action>incomplete elliptic integral RC(x,y)</action></entry></row>
-<row><entry>ellint_RD(x,y,z)</entry><entry><action>incomplete elliptic integral RD(x,y,z)</action></entry></row>
-<row><entry>ellint_RF(x,y,z)</entry><entry><action>incomplete elliptic integral RF(x,y,z)</action></entry></row>
-<row><entry>ellint_RJ(x,y,z)</entry><entry><action>incomplete elliptic integral RJ(x,y,z,p)</action></entry></row>
-<row><entry>gsl_erf(x)</entry><entry><action>error function erf(x) = 2/&radic;&pi; &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
-<row><entry>gsl_erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = 2/&radic;&pi; &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>D1(x)</entry><entry><action>first-order Debye function D<subscript>1</subscript>(x) = (1/x) &int;<subscript>0</subscript><superscript>x</superscript>(t/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D2(x)</entry><entry><action>second-order Debye function D<subscript>2</subscript>(x) = (2/x<superscript>2</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>2</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D3(x)</entry><entry><action>third-order Debye function D<subscript>3</subscript>(x) =  (3/x<superscript>3</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>3</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D4(x)</entry><entry><action>fourth-order Debye function D<subscript>4</subscript>(x) =  (4/x<superscript>4</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>4</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D5(x)</entry><entry><action>fifth-order Debye function D<subscript>5</subscript>(x) =  (5/x<superscript>5</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>5</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D6(x)</entry><entry><action>sixth-order Debye function D<subscript>6</subscript>(x) =  (6/x<superscript>6</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>6</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>Li2(x)</entry><entry><action>dilogarithm</action></entry></row>
+<row><entry>Kc(k)</entry><entry><action>complete elliptic integral K(k)</action></entry></row>
+<row><entry>Ec(k)</entry><entry><action>complete elliptic integral E(k)</action></entry></row>
+<row><entry>F(phi,k)</entry><entry><action>incomplete elliptic integral F(phi,k)</action></entry></row>
+<row><entry>E(phi,k)</entry><entry><action>incomplete elliptic integral E(phi,k)</action></entry></row>
+<row><entry>P(phi,k,n)</entry><entry><action>incomplete elliptic integral P(phi,k,n)</action></entry></row>
+<row><entry>D(phi,k,n)</entry><entry><action>incomplete elliptic integral D(phi,k,n)</action></entry></row>
+<row><entry>RC(x,y)</entry><entry><action>incomplete elliptic integral RC(x,y)</action></entry></row>
+<row><entry>RD(x,y,z)</entry><entry><action>incomplete elliptic integral RD(x,y,z)</action></entry></row>
+<row><entry>RF(x,y,z)</entry><entry><action>incomplete elliptic integral RF(x,y,z)</action></entry></row>
+<row><entry>RJ(x,y,z)</entry><entry><action>incomplete elliptic integral RJ(x,y,z,p)</action></entry></row>
+<row><entry>erf(x)</entry><entry><action>error function erf(x) = 2/&radic;&pi; &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = 2/&radic;&pi; &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
 <row><entry>log_erfc(x)</entry><entry><action>logarithm of the complementary error function log(erfc(x))</action></entry></row>
-<row><entry>erf_z(x)</entry><entry><action>Gaussian probability function Z(x) = (1/(2&pi;)) exp(-x<superscript>2</superscript>/2)</action></entry></row>
-<row><entry>erf_q(x)</entry><entry><action>upper tail of the Gaussian probability function Q(x) = (1/(2&pi;)) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>/2) dt</action></entry></row>
-<row><entry>gsl_exp(x)</entry><entry><action>exponential function</action></entry></row>
+<row><entry>erf_Z(x)</entry><entry><action>Gaussian probability function Z(x) = (1/(2&pi;)) exp(-x<superscript>2</superscript>/2)</action></entry></row>
+<row><entry>erf_Q(x)</entry><entry><action>upper tail of the Gaussian probability function Q(x) = (1/(2&pi;)) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>/2) dt</action></entry></row>
+<row><entry>hazard(x)</entry><entry><action>hazard function for the normal distribution</action></entry></row>
+<row><entry>exp_mult(x,x)</entry><entry><action>exponentiate x and multiply by the factor y to return the product y exp(x)</action></entry></row>
 <row><entry>exprel(x)</entry><entry><action>(exp(x)-1)/x using an algorithm that is accurate for small x</action></entry></row>
-<row><entry>exprel_2(x)</entry><entry><action>2(exp(x)-1-x)/x<superscript>2</superscript> using an algorithm that is accurate for small x</action></entry></row>
-<row><entry>exprel_n(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `gsl_sf_exprel'</action></entry></row>
-<row><entry>expint_e1(x)</entry><entry><action>exponential integral E<subscript>1</subscript>(x), E<subscript>1</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t dt</action></entry></row>
-<row><entry>expint_e2(x)</entry><entry><action>second-order exponential integral E<subscript>2</subscript>(x), E<subscript>2</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>2</superscript> dt</action></entry></row>
-<row><entry>expint_ei(x)</entry><entry><action>exponential integral E_i(x), Ei(x) := PV(&int;<subscript>-x</subscript><superscript>&infin;</superscript> exp(-t)/t dt)</action></entry></row>
+<row><entry>exprel2(x)</entry><entry><action>2(exp(x)-1-x)/x<superscript>2</superscript> using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>expreln(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `exprel'</action></entry></row>
+<row><entry>E1(x)</entry><entry><action>exponential integral E<subscript>1</subscript>(x), E<subscript>1</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t dt</action></entry></row>
+<row><entry>E2(x)</entry><entry><action>second-order exponential integral E<subscript>2</subscript>(x), E<subscript>2</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>2</superscript> dt</action></entry></row>
+<row><entry>En(x)</entry><entry><action>exponential integral E_n(x) of order n, E<subscript>n</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>n</superscript> dt)</action></entry></row>
+<row><entry>Ei(x)</entry><entry><action>exponential integral E_i(x), Ei(x) := PV(&int;<subscript>-x</subscript><superscript>&infin;</superscript> exp(-t)/t dt)</action></entry></row>
 <row><entry>shi(x)</entry><entry><action>Shi(x) = &int;<subscript>0</subscript><superscript>x</superscript> sinh(t)/t dt</action></entry></row>
 <row><entry>chi(x)</entry><entry><action>integral Chi(x) := Re[ &gamma;<subscript>E</subscript> + log(x) + &int;<subscript>0</subscript><superscript>x</superscript> (cosh[t]-1)/t dt ]</action></entry></row>
-<row><entry>expint_3(x)</entry><entry><action>exponential integral Ei<subscript>3</subscript>(x) = &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>3</superscript>) dt for x &gt;= 0</action></entry></row>
+<row><entry>Ei3(x)</entry><entry><action>exponential integral Ei<subscript>3</subscript>(x) = &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>3</superscript>) dt for x &gt;= 0</action></entry></row>
 <row><entry>si(x)</entry><entry><action>Sine integral Si(x) = &int;<subscript>0</subscript><superscript>x</superscript> sin(t)/t dt</action></entry></row>
 <row><entry>ci(x)</entry><entry><action>Cosine integral Ci(x) = -&int;<subscript>x</subscript><superscript>&infin;</superscript> cos(t)/t dt for x &gt; 0</action></entry></row>
 <row><entry>atanint(x)</entry><entry><action>Arctangent integral AtanInt(x) = &int;<subscript>0</subscript><superscript>x</superscript> arctan(t)/t dt</action></entry></row>
-<row><entry>fermi_dirac_m1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of -1, F<subscript>-1</subscript>(x) = e<superscript>x</superscript> / (1 + e<superscript>x</superscript>)</action></entry></row>
-<row><entry>fermi_dirac_0(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 0, F<subscript>0</subscript>(x) = ln(1 + e<superscript>x</superscript>)</action></entry></row>
-<row><entry>fermi_dirac_1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 1, F<subscript>1</subscript>(x) = &int;<subscript>0</subscript><superscript>&infin;</superscript> (t /(exp(t-x)+1)) dt</action></entry></row>
-<row><entry>fermi_dirac_2(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 2, F<subscript>2</subscript>(x) = (1/2) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>2</superscript> /(exp(t-x)+1)) dt</action></entry></row>
-<row><entry>fermi_dirac_int(j,x)</entry><entry><action>complete Fermi-Dirac integral with an index of j, F<subscript>j</subscript>(x) = (1/&Gamma;(j+1)) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>j</superscript> /(exp(t-x)+1)) dt</action></entry></row>
-<row><entry>fermi_dirac_mhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>-1/2</subscript>(x)</action></entry></row>
-<row><entry>fermi_dirac_half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>1/2</subscript>(x)</action></entry></row>
-<row><entry>fermi_dirac_3half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>3/2</subscript>(x)</action></entry></row>
-<row><entry>fermi_dirac_inc_0(x,b)</entry><entry><action>incomplete Fermi-Dirac integral with an index of zero, F<subscript>0</subscript>(x,b) = ln(1 + e<superscript>b-x</superscript>) - (b-x)</action></entry></row>
-<row><entry>gsl_gamma(x)</entry><entry><action>Gamma function</action></entry></row>
+<row><entry>Fm1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of -1, F<subscript>-1</subscript>(x) = e<superscript>x</superscript> / (1 + e<superscript>x</superscript>)</action></entry></row>
+<row><entry>F0(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 0, F<subscript>0</subscript>(x) = ln(1 + e<superscript>x</superscript>)</action></entry></row>
+<row><entry>F1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 1, F<subscript>1</subscript>(x) = &int;<subscript>0</subscript><superscript>&infin;</superscript> (t /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>F2(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 2, F<subscript>2</subscript>(x) = (1/2) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>2</superscript> /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>Fj(j,x)</entry><entry><action>complete Fermi-Dirac integral with an index of j, F<subscript>j</subscript>(x) = (1/&Gamma;(j+1)) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>j</superscript> /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>Fmhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>-1/2</subscript>(x)</action></entry></row>
+<row><entry>Fhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>1/2</subscript>(x)</action></entry></row>
+<row><entry>F3half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>3/2</subscript>(x)</action></entry></row>
+<row><entry>Finc0(x,b)</entry><entry><action>incomplete Fermi-Dirac integral with an index of zero, F<subscript>0</subscript>(x,b) = ln(1 + e<superscript>b-x</superscript>) - (b-x)</action></entry></row>
 <row><entry>lngamma(x)</entry><entry><action>logarithm of the Gamma function</action></entry></row>
 <row><entry>gammastar(x)</entry><entry><action>regulated Gamma Function &Gamma;<superscript>*</superscript>(x) for x &gt; 0</action></entry></row>
 <row><entry>gammainv(x)</entry><entry><action>reciprocal of the gamma function, 1/&Gamma;(x) using the real Lanczos method.</action></entry></row>
@@ -894,87 +909,94 @@ For more information about the functions see the documentation of GSL.
 <row><entry>lndoublefact(n)</entry><entry><action>logarithm of the double factorial log(n!!)</action></entry></row>
 <row><entry>choose(n,m)</entry><entry><action>combinatorial factor `n choose m' = n!/(m!(n-m)!)</action></entry></row>
 <row><entry>lnchoose(n,m)</entry><entry><action>logarithm of `n choose m'</action></entry></row>
+<row><entry>taylor(n,x)</entry><entry><action>Taylor coefficient x<superscript>n</superscript> / n! for x >= 0, n >= 0</action></entry></row>
 <row><entry>poch(a,x)</entry><entry><action>Pochhammer symbol (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(x)</action></entry></row>
 <row><entry>lnpoch(a,x)</entry><entry><action>logarithm of the Pochhammer symbol (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(x)</action></entry></row>
 <row><entry>pochrel(a,x)</entry><entry><action>relative Pochhammer symbol ((a,x) - 1)/x where (a,x) = (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(a)</action></entry></row>
-<row><entry>gamma_inc(a,x)</entry><entry><action>incomplete Gamma Function &Gamma;(a,x) = &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
-<row><entry>gamma_inc_Q(a,x)</entry><entry><action>normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
-<row><entry>gamma_inc_P(a,x)</entry><entry><action>complementary normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>0</subscript><superscript>x</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gammainc(a,x)</entry><entry><action>incomplete Gamma Function &Gamma;(a,x) = &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gammaincQ(a,x)</entry><entry><action>normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gammaincP(a,x)</entry><entry><action>complementary normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>0</subscript><superscript>x</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
 <row><entry>beta(a,b)</entry><entry><action>Beta Function, B(a,b) = &Gamma;(a) &Gamma;(b)/&Gamma;(a+b) for a &gt; 0, b &gt; 0</action></entry></row>
 <row><entry>lnbeta(a,b)</entry><entry><action>logarithm of the Beta Function, log(B(a,b)) for a &gt; 0, b &gt; 0</action></entry></row>
-<row><entry>beta_inc(a,b,x)</entry><entry><action>normalize incomplete Beta function B_x(a,b)/B(a,b) for a &gt; 0, b &gt; 0 </action></entry></row>
-<row><entry>gegenpoly_1(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>1</subscript>(x)</action></entry></row>
-<row><entry>gegenpoly_2(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>2</subscript>(x)</action></entry></row>
-<row><entry>gegenpoly_3(lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>3</subscript>(x)</action></entry></row>
-<row><entry>gegenpoly_n(n,lambda,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>n</subscript>(x)</action></entry></row>
+<row><entry>betainc(a,b,x)</entry><entry><action>normalize incomplete Beta function B_x(a,b)/B(a,b) for a &gt; 0, b &gt; 0 </action></entry></row>
+<row><entry>C1(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>C2(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>C3(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>Cn(n,&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>n</subscript>(x)</action></entry></row>
 <row><entry>hyperg_0F1(c,x)</entry><entry><action>hypergeometric function <subscript>0</subscript>F<subscript>1</subscript>(c,x)</action></entry></row>
 <row><entry>hyperg_1F1i(m,n,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(m,n,x) = M(m,n,x) for integer parameters m, n</action></entry></row>
 <row><entry>hyperg_1F1(a,b,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(a,b,x) = M(a,b,x) for general parameters a,b</action></entry></row>
 <row><entry>hyperg_Ui(m,n,x)</entry><entry><action>confluent hypergeometric function U(m,n,x) for integer parameters m,n</action></entry></row>
 <row><entry>hyperg_U(a,b,x)</entry><entry><action>confluent hypergeometric function U(a,b,x)</action></entry></row>
 <row><entry>hyperg_2F1(a,b,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x)</action></entry></row>
-<row><entry>hyperg_2F1c(ar,ai,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) with complex parameters</action></entry></row>
-<row><entry>hyperg_2F1r(ar,ai,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x) / &Gamma;(c)</action></entry></row>
-<row><entry>hyperg_2F1cr(ar,ai,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) / &Gamma;(c)</action></entry></row>
+<row><entry>hyperg_2F1c(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) with complex parameters</action></entry></row>
+<row><entry>hyperg_2F1r(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x) / &Gamma;(c)</action></entry></row>
+<row><entry>hyperg_2F1cr(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) / &Gamma;(c)</action></entry></row>
 <row><entry>hyperg_2F0(a,b,x)</entry><entry><action>hypergeometric function <subscript>2</subscript>F<subscript>0</subscript>(a,b,x)</action></entry></row>
-<row><entry>laguerre_1(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>1</subscript>(x)</action></entry></row>
-<row><entry>laguerre_2(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>2</subscript>(x)</action></entry></row>
-<row><entry>laguerre_3(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>3</subscript>(x)</action></entry></row>
-<row><entry>lambert_W0(x)</entry><entry><action>principal branch of the Lambert W function, W<subscript>0</subscript>(x)</action></entry></row>
-<row><entry>lambert_Wm1(x)</entry><entry><action>secondary real-valued branch of the Lambert W function, W<subscript>-1</subscript>(x)</action></entry></row>
-<row><entry>legendre_p1(x)</entry><entry><action>Legendre polynomials P<subscript>1</subscript>(x)</action></entry></row>
-<row><entry>legendre_p2(x)</entry><entry><action>Legendre polynomials P<subscript>2</subscript>(x)</action></entry></row>
-<row><entry>legendre_p3(x)</entry><entry><action>Legendre polynomials P<subscript>3</subscript>(x)</action></entry></row>
-<row><entry>legendre_pl(l,x)</entry><entry><action>Legendre polynomials P<subscript>l</subscript>(x)</action></entry></row>
-<row><entry>legendre_Q0(x)</entry><entry><action>Legendre polynomials Q<subscript>0</subscript>(x)</action></entry></row>
-<row><entry>legendre_Q1(x)</entry><entry><action>Legendre polynomials Q<subscript>1</subscript>(x)</action></entry></row>
-<row><entry>legendre_Ql(l,x)</entry><entry><action>Legendre polynomials Q<subscript>l</subscript>(x)</action></entry></row>
-<row><entry>legendre_Plm(l,m,x)</entry><entry><action>associated Legendre polynomial P<subscript>l</subscript><superscript>m</superscript>(x)</action></entry></row>
-<row><entry>legendre_sphPlm(l,m,x)</entry><entry><action>normalized associated Legendre polynomial &radic;{(2l+1)/(4&pi;)} &radic;{(l-m)!/(l+m)!} P<subscript>l</subscript><superscript>m</superscript>(x) suitable for use in spherical harmonics</action></entry></row>
-<row><entry>conicalP_half(lambda,x)</entry><entry><action>irregular Spherical Conical Function P<superscript>1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>conicalP_mhalf(lambda,x)</entry><entry><action>regular Spherical Conical Function P<superscript>-1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>conicalP_0(lambda,x)</entry><entry><action>conical function P<superscript>0</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>conicalP_1(lambda,x)</entry><entry><action>conical function P<superscript>1</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
-<row><entry>conicalP_sphreg(l,lambda,x)</entry><entry><action>Regular Spherical Conical Function P<superscript>-1/2-l</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, l &gt;= -1</action></entry></row>
-<row><entry>conicalP_cylreg(l,lambda,x)</entry><entry><action>Regular Cylindrical Conical Function P<superscript>-m</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, m &gt;= -1</action></entry></row>
-<row><entry>legendre_H3d_0(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>0</subscript>(lambda,eta) := sin(lambda eta)/(lambda sinh(eta)) for eta &gt;= 0</action></entry></row>
-<row><entry>legendre_H3d_1(lambda,eta)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>1</subscript>(lambda,eta) := 1/&radic;{lambda<superscript>2</superscript> + 1} sin(lambda eta)/(lambda sinh(eta)) (coth(eta) - lambda cot(lambda eta)) for eta &gt;= 0</action></entry></row>
-<row><entry>legendre_H3d(l,lambda,eta)</entry><entry><action>L'th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space eta &gt;= 0, l &gt;= 0</action></entry></row>
-<row><entry>gsl_log(x)</entry><entry><action>logarithm of x</action></entry></row>
-<row><entry>loga(x)</entry><entry><action>logarithm of the magnitude of X, log(|x|)</action></entry></row>
+<row><entry>L1(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>L2(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>L3(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>W0(x)</entry><entry><action>principal branch of the Lambert W function, W<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>Wm1(x)</entry><entry><action>secondary real-valued branch of the Lambert W function, W<subscript>-1</subscript>(x)</action></entry></row>
+<row><entry>P1(x)</entry><entry><action>Legendre polynomials P<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>P2(x)</entry><entry><action>Legendre polynomials P<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>P3(x)</entry><entry><action>Legendre polynomials P<subscript>3</subscript>(x)</action></entry></row>
+<row><entry>Pl(l,x)</entry><entry><action>Legendre polynomials P<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>Q0(x)</entry><entry><action>Legendre polynomials Q<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>Q1(x)</entry><entry><action>Legendre polynomials Q<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Ql(l,x)</entry><entry><action>Legendre polynomials Q<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>Plm(l,m,x)</entry><entry><action>associated Legendre polynomial P<subscript>l</subscript><superscript>m</superscript>(x)</action></entry></row>
+<row><entry>Pslm(l,m,x)</entry><entry><action>normalized associated Legendre polynomial &radic;{(2l+1)/(4&pi;)} &radic;{(l-m)!/(l+m)!} P<subscript>l</subscript><superscript>m</superscript>(x) suitable for use in spherical harmonics</action></entry></row>
+<row><entry>Phalf(&lambda;,x)</entry><entry><action>irregular Spherical Conical Function P<superscript>1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pmhalf(&lambda;,x)</entry><entry><action>regular Spherical Conical Function P<superscript>-1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pc0(&lambda;,x)</entry><entry><action>conical function P<superscript>0</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pc1(&lambda;,x)</entry><entry><action>conical function P<superscript>1</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Psr(l,&lambda;,x)</entry><entry><action>Regular Spherical Conical Function P<superscript>-1/2-l</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, l &gt;= -1</action></entry></row>
+<row><entry>Pcr(l,&lambda;,x)</entry><entry><action>Regular Cylindrical Conical Function P<superscript>-m</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, m &gt;= -1</action></entry></row>
+<row><entry>H3d0(&lambda;,&eta;)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>0</subscript>(&lambda;,,&eta;) := sin(&lambda; &eta;)/(&lambda; sinh(&eta;)) for &eta; &gt;= 0</action></entry></row>
+<row><entry>H3d1(&lambda;,&eta;)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>1</subscript>(&lambda;,&eta;) := 1/&radic;{&lambda;<superscript>2</superscript> + 1} sin(&lambda; &eta;)/(&lambda; sinh(&eta;)) (coth(&eta;) - &lambda; cot(&lambda; &eta;)) for &eta; &gt;= 0</action></entry></row>
+<row><entry>H3d(l,&lambda;,&eta;)</entry><entry><action>L'th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space eta &gt;= 0, l &gt;= 0</action></entry></row>
+<row><entry>logabs(x)</entry><entry><action>logarithm of the magnitude of X, log(|x|)</action></entry></row>
 <row><entry>logp(x)</entry><entry><action>log(1 + x) for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
 <row><entry>logm(x)</entry><entry><action>log(1 + x) - x for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
-<row><entry>gsl_pow(x,n)</entry><entry><action>power x<superscript>n</superscript> for integer n</action></entry></row>
-<row><entry>psii(n)</entry><entry><action>digamma function &psi;(n) for positive integer n</action></entry></row>
+<row><entry>psiint(n)</entry><entry><action>digamma function &psi;(n) for positive integer n</action></entry></row>
 <row><entry>psi(x)</entry><entry><action>digamma function &psi;(n) for general x</action></entry></row>
-<row><entry>psiy(y)</entry><entry><action>real part of the digamma function on the line 1+i y, Re[&psi;(1 + i y)]</action></entry></row>
-<row><entry>ps1i(n)</entry><entry><action>Trigamma function &psi;'(n) for positive integer n</action></entry></row>
-<row><entry>psi_n(m,x)</entry><entry><action>polygamma function &psi;<superscript>(m)</superscript>(x) for m &gt;= 0, x &gt; 0</action></entry></row>
-<row><entry>synchrotron_1(x)</entry><entry><action>first synchrotron function x &int;<subscript>x</subscript><superscript>&infin;</superscript> K<subscript>5/3</subscript>(t) dt for x &gt;= 0</action></entry></row>
-<row><entry>synchrotron_2(x)</entry><entry><action>second synchrotron function x K<subscript>2/3</subscript>(x) for x &gt;= 0</action></entry></row>
-<row><entry>transport_2(x)</entry><entry><action>transport function J(2,x)</action></entry></row>
-<row><entry>transport_3(x)</entry><entry><action>transport function J(3,x)</action></entry></row>
-<row><entry>transport_4(x)</entry><entry><action>transport function J(4,x)</action></entry></row>
-<row><entry>transport_5(x)</entry><entry><action>transport function J(5,x)</action></entry></row>
-<row><entry>gsl_sin(x)</entry><entry><action>sine function</action></entry></row>
-<row><entry>gsl_cos(x)</entry><entry><action>cosine function</action></entry></row>
-<row><entry>gsl_hypot(x,y)</entry><entry><action>hypotenuse function &radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
+<row><entry>psi1piy(y)</entry><entry><action>real part of the digamma function on the line 1+i y, Re[&psi;(1 + i y)]</action></entry></row>
+<row><entry>psi1int(n)</entry><entry><action>Trigamma function &psi;'(n) for positive integer n</action></entry></row>
+<row><entry>psi1(n)</entry><entry><action>Trigamma function &psi;'(x) for general x</action></entry></row>
+<row><entry>psin(m,x)</entry><entry><action>polygamma function &psi;<superscript>(m)</superscript>(x) for m &gt;= 0, x &gt; 0</action></entry></row>
+<row><entry>synchrotron1(x)</entry><entry><action>first synchrotron function x &int;<subscript>x</subscript><superscript>&infin;</superscript> K<subscript>5/3</subscript>(t) dt for x &gt;= 0</action></entry></row>
+<row><entry>synchrotron2(x)</entry><entry><action>second synchrotron function x K<subscript>2/3</subscript>(x) for x &gt;= 0</action></entry></row>
+<row><entry>J2(x)</entry><entry><action>transport function J(2,x)</action></entry></row>
+<row><entry>J3(x)</entry><entry><action>transport function J(3,x)</action></entry></row>
+<row><entry>J4(x)</entry><entry><action>transport function J(4,x)</action></entry></row>
+<row><entry>J5(x)</entry><entry><action>transport function J(5,x)</action></entry></row>
 <row><entry>sinc(x)</entry><entry><action>sinc(x) = sin(&pi; x) / (&pi; x)</action></entry></row>
-<row><entry>lnsinh(x)</entry><entry><action>log(sinh(x)) for x &gt; 0</action></entry></row>
-<row><entry>lncosh(x)</entry><entry><action>log(cosh(x))</action></entry></row>
-<row><entry>zetai(n)</entry><entry><action>Riemann zeta function zeta(n) for integer N</action></entry></row>
-<row><entry>zeta(s)</entry><entry><action>Riemann zeta function zeta(s) for arbitrary s</action></entry></row>
-<row><entry>zetam1(s)</entry><entry><action>Riemann zeta function minus 1</action></entry></row>
-<row><entry>hzeta(s,q)</entry><entry><action>Hurwitz zeta function zeta(s,q) for s &gt; 1, q &gt; 0</action></entry></row>
-<row><entry>etai(n)</entry><entry><action>eta function &eta;(n) for integer n</action></entry></row>
+<row><entry>logsinh(x)</entry><entry><action>log(sinh(x)) for x &gt; 0</action></entry></row>
+<row><entry>logcosh(x)</entry><entry><action>log(cosh(x))</action></entry></row>
+<row><entry>anglesymm(&alpha;)</entry><entry><action>force the angle &alpha; to lie in the range (-&pi;,&pi;]</action></entry></row>
+<row><entry>anglepos(&alpha;)</entry><entry><action>force the angle &alpha; to lie in the range (0,2&pi;]</action></entry></row>
+<row><entry>zetaint(n)</entry><entry><action>Riemann zeta function &zeta;(n) for integer n</action></entry></row>
+<row><entry>zeta(s)</entry><entry><action>Riemann zeta function &zeta;(s) for arbitrary s</action></entry></row>
+<row><entry>zetam1int(n)</entry><entry><action>Riemann &zeta; function minus 1 for integer n</action></entry></row>
+<row><entry>zetam1(s)</entry><entry><action>Riemann &zeta; function minus 1</action></entry></row>
+<row><entry>zetaintm1(s)</entry><entry><action>Riemann &zeta; function for integer n minus 1</action></entry></row>
+<row><entry>hzeta(s,q)</entry><entry><action>Hurwitz zeta function &zeta;(s,q) for s &gt; 1, q &gt; 0</action></entry></row>
+<row><entry>etaint(n)</entry><entry><action>eta function &eta;(n) for integer n</action></entry></row>
 <row><entry>eta(s)</entry><entry><action>eta function &eta;(s) for arbitrary s</action></entry></row>
+<row><entry>gsl_log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
+<row><entry>gsl_expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
+<row><entry>gsl_hypot(x,y)</entry><entry><action>&radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
+<row><entry>gsl_acosh(x)</entry><entry><action>arccosh(x)</action></entry></row>
+<row><entry>gsl_asinh(x)</entry><entry><action>arcsinh(x)</action></entry></row>
+<row><entry>gsl_atanh(x)</entry><entry><action>arctanh(x)</action></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
 </sect1>
 
 <sect1 id="parser-ran-gsl">
-<title>GSL random number distributions</title>
+<title>Random number distributions</title>
 <para>
 For more information about the functions see the documentation of GSL.
 </para>
@@ -984,38 +1006,125 @@ For more information about the functions see the documentation of GSL.
 
 <tbody>
 
-<row><entry>gaussian(x,sigma)</entry><entry><action>probability density p(x) at X for a Gaussian distribution with standard deviation SIGMA</action></entry></row>
-<row><entry>ugaussian(x)</entry><entry><action>unit Gaussian distribution.  They are equivalent to the functions above with a standard deviation of one, SIGMA = 1</action></entry></row>
-<row><entry>gaussian_tail(x,a,sigma)</entry><entry><action>probability density p(x) at X for a Gaussian tail distribution with standard deviation SIGMA and lower limit A</action></entry></row>
-<row><entry>ugaussian_tail(x,a)</entry><entry><action>tail of a unit Gaussian distribution. They are equivalent to the functions above with a standard deviation of one, SIGMA = 1</action></entry></row>
-<row><entry>bivariate_gaussian(x,y,sigma_x,sigma_y,rho)</entry><entry><action>probability density p(x,y) at (X,Y) for a bivariate gaussian distribution with standard deviations SIGMA_X, SIGMA_Y and correlation coefficient RHO</action></entry></row>
-<row><entry>exponential(x,mu)</entry><entry><action>probability density p(x) at X for an exponential distribution with mean MU</action></entry></row>
-<row><entry>laplace(x,a)</entry><entry><action>probability density p(x) at X for a Laplace distribution with mean A</action></entry></row>
-<row><entry>exppow(x,a,b)</entry><entry><action>probability density p(x) at X for an exponential power distribution with scale parameter A and exponent B</action></entry></row>
-<row><entry>cauchy(x,a)</entry><entry><action>probability density p(x) at X for a Cauchy distribution with scale parameter A</action></entry></row>
-<row><entry>rayleigh(x,sigma)</entry><entry><action>probability density p(x) at X for a Rayleigh distribution with scale parameter SIGMA</action></entry></row>
-<row><entry>rayleigh_tail(x,a,sigma)</entry><entry><action>probability density p(x) at X for a Rayleigh tail distribution with scale parameter SIGMA and lower limit A</action></entry></row>
-<row><entry>landau(x)</entry><entry><action>probability density p(x) at X for the Landau distribution</action></entry></row>
-<row><entry>gamma_pdf(x,a,b)</entry><entry><action>probability density p(x) at X for a gamma distribution with parameters A and B</action></entry></row>
-<row><entry>flat(x,a,b)</entry><entry><action>probability density p(x) at X for a uniform distribution from A to B</action></entry></row>
-<row><entry>lognormal(x,zeta,sigma)</entry><entry><action>probability density p(x) at X for a lognormal distribution with parameters ZETA and SIGMA</action></entry></row>
-<row><entry>chisq(x,nu)</entry><entry><action>probability density p(x) at X for a chi-squared distribution with NU degrees of freedom</action></entry></row>
-<row><entry>fdist(x,nu1,nu2)</entry><entry><action>probability density p(x) at X for an F-distribution with NU1 and NU2 degrees of freedom</action></entry></row>
-<row><entry>tdist(x,nu)</entry><entry><action>probability density p(x) at X for a t-distribution with NU degrees of freedom</action></entry></row>
-<row><entry>beta_pdf(x,a,b)</entry><entry><action>probability density p(x) at X for a beta distribution with parameters A and B</action></entry></row>
-<row><entry>logistic(x,a)</entry><entry><action>probability density p(x) at X for a logistic distribution with scale parameter A</action></entry></row>
-<row><entry>pareto(x,a,b)</entry><entry><action>probability density p(x) at X for a Pareto distribution with exponent A and scale B</action></entry></row>
-<row><entry>weibull(x,a,b)</entry><entry><action>probability density p(x) at X for a Weibull distribution with scale A and exponent B</action></entry></row>
-<row><entry>gumbel1(x,a,b)</entry><entry><action>probability density p(x) at X for a Type-1 Gumbel distribution with parameters A and B</action></entry></row>
+<row><entry>gaussian(x,&sigma;)</entry><entry><action>probability density p(x) for a Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>ugaussian(x)</entry><entry><action>unit Gaussian distribution.  They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
+<row><entry>gaussianP(x,&sigma;)</entry><entry><action>cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianQ(x,&sigma;)</entry><entry><action>cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianPinv(P,&sigma;)</entry><entry><action>inverse cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianQinv(Q,&sigma;)</entry><entry><action>inverse cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>ugaussianP(x)</entry><entry><action>cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianQ(x)</entry><entry><action>cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianPinv(P)</entry><entry><action>inverse cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianQinv(Q)</entry><entry><action>inverse cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>gaussiantail(x,a,&sigma;)</entry><entry><action>probability density p(x) for a Gaussian tail distribution with standard deviation &sigma; and lower limit a</action></entry></row>
+<row><entry>ugaussiantail(x,a)</entry><entry><action>tail of a unit Gaussian distribution. They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
+<row><entry>gaussianbi(x,y,&sigma;<subscript>x</subscript>,&sigma;<subscript>y</subscript>,&rho;)</entry><entry><action>probability density p(x,y) for a bivariate gaussian distribution 
+      with standard deviations &sigma;<subscript>x</subscript>, &sigma;<subscript>y</subscript> and correlation coefficient &rho;</action></entry></row>
+<row><entry>exponential(x,&mu;)</entry><entry><action>probability density p(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialP(x,&mu;)</entry><entry><action>cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialQ(x,&mu;)</entry><entry><action>cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialPinv(P,&mu;)</entry><entry><action>inverse cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialQinv(Q,&mu;)</entry><entry><action>inverse cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>laplace(x,a)</entry><entry><action>probability density p(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceP(x,a)</entry><entry><action>cumulative distribution function P(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplacePinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for an Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for an Laplace distribution with width a</action></entry></row>
+<row><entry>exppow(x,a,b)</entry><entry><action>probability density p(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>exppowP(x,a,b)</entry><entry><action>cumulative probability density P(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>exppowQ(x,a,b)</entry><entry><action>cumulative probability density Q(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>cauchy(x,a)</entry><entry><action>probability density p(x) for a Cauchy (Lorentz) distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyP(x,a)</entry><entry><action>cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyPinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>rayleigh(x,&sigma;)</entry><entry><action>probability density p(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighP(x,&sigma;)</entry><entry><action>cumulative distribution function P(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighQ(x,&sigma;)</entry><entry><action>cumulative distribution function Q(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighPinv(P,&sigma;)</entry><entry><action>inverse cumulative distribution function P(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighQinv(Q,&sigma;)</entry><entry><action>inverse cumulative distribution function Q(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleigh_tail(x,a,&sigma;)</entry><entry><action>probability density p(x) for a Rayleigh tail distribution with scale parameter &sigma; and lower limit a</action></entry></row>
+<row><entry>landau(x)</entry><entry><action>probability density p(x) for the Landau distribution</action></entry></row>
+<row><entry>gammapdf(x,a,b)</entry><entry><action>probability density p(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>flat(x,a,b)</entry><entry><action>probability density p(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>lognormal(x,&zeta;,&sigma;)</entry><entry><action>probability density p(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalP(x,&zeta;,&sigma;)</entry><entry><action>cumulative distribution function P(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalQ(x,&zeta;,&sigma;)</entry><entry><action>cumulative distribution function Q(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalPinv(P,&zeta;,&sigma;)</entry><entry><action>inverse cumulative distribution function P(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalQinv(Q,&zeta;,&sigma;)</entry><entry><action>inverse cumulative distribution function Q(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>chisq(x,&nu;)</entry><entry><action>probability density p(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqP(x,&nu;)</entry><entry><action>cumulative distribution function P(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqQ(x,&nu;)</entry><entry><action>cumulative distribution function Q(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqPinv(P,&nu;)</entry><entry><action>inverse cumulative distribution function P(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqQinv(Q,&nu;)</entry><entry><action>inverse cumulative distribution function Q(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>fdist(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>probability density p(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistP(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>cumulative distribution function P(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistQ(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>cumulative distribution function Q(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistPinv(P,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>inverse cumulative distribution function P(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistQinv(Q,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>inverse cumulative distribution function Q(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>tdist(x,&nu;)</entry><entry><action>probability density p(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistP(x,&nu;)</entry><entry><action>cumulative distribution function P(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistQ(x,&nu;)</entry><entry><action>cumulative distribution function Q(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistPinv(P,&nu;)</entry><entry><action>inverse cumulative distribution function P(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistQinv(Q,&nu;)</entry><entry><action>inverse cumulative distribution function Q(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>betapdf(x,a,b)</entry><entry><action>probability density p(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>logistic(x,a)</entry><entry><action>probability density p(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticP(x,a)</entry><entry><action>cumulative distribution function P(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticPinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>pareto(x,a,b)</entry><entry><action>probability density p(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>weibull(x,a,b)</entry><entry><action>probability density p(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>gumbel1(x,a,b)</entry><entry><action>probability density p(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1P(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Q(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Pinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Qinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
 <row><entry>gumbel2(x,a,b)</entry><entry><action>probability density p(x) at X for a Type-2 Gumbel distribution with parameters A and B</action></entry></row>
-<row><entry>poisson(k,mu)</entry><entry><action>probability p(k) of obtaining  K from a Poisson distribution with mean mu</action></entry></row>
-<row><entry>bernoulli(k,p)</entry><entry><action>probability p(k) of obtaining K from a Bernoulli distribution with probability parameter P</action></entry></row>
-<row><entry>binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a binomial distribution with parameters P and N</action></entry></row>
-<row><entry>negative_binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a negative binomial distribution with parameters P and N</action></entry></row>
-<row><entry>pascal(k,p,n)</entry><entry><action>probability p(k) of obtaining K from a Pascal distribution with parameters P and N</action></entry></row>
-<row><entry>geometric(k,p)</entry><entry><action>probability p(k) of obtaining K from a geometric distribution with probability parameter P</action></entry></row>
-<row><entry>hypergeometric(k,n1,n2,t)</entry><entry><action>probability p(k) of obtaining K from a hypergeometric distribution with parameters N1, N2, N3</action></entry></row>
-<row><entry>logarithmic(k,p)</entry><entry><action>probability p(k) of obtaining K from a logarithmic distribution with probability parameter P</action></entry></row>
+<row><entry>gumbel2P(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Q(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Pinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Qinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>poisson(k,&mu;)</entry><entry><action>probability p(k) of obtaining k from a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>poissonP(k,&mu;)</entry><entry><action>cumulative distribution functions P(k) for a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>poissonQ(k,&mu;)</entry><entry><action>cumulative distribution functions Q(k) for a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>bernoulli(k,p)</entry><entry><action>probability p(k) of obtaining k from a Bernoulli distribution with probability parameter p</action></entry></row>
+<row><entry>binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining p from a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>binomialP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>binomialQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomial(k,p,n)</entry><entry><action>probability p(k) of obtaining k from a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomialP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomialQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>pascal(k,p,n)</entry><entry><action>probability p(k) of obtaining k from a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>pascalP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>pascalQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>geometric(k,p)</entry><entry><action>probability p(k) of obtaining k from a geometric distribution with probability parameter p</action></entry></row>
+<row><entry>geometricP(k,p)</entry><entry><action>cumulative distribution functions P(k) for a geometric distribution with parameter p</action></entry></row>
+<row><entry>geometricQ(k,p)</entry><entry><action>cumulative distribution functions Q(k) for a geometric distribution with parameter p</action></entry></row>
+<row><entry>hypergeometric(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>probability p(k) of obtaining k from a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
+<row><entry>hypergeometricP(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>cumulative distribution function P(k) for a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
+<row><entry>hypergeometricQ(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>cumulative distribution function Q(k) for a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
+<row><entry>logarithmic(k,p)</entry><entry><action>probability p(k) of obtaining K from a logarithmic distribution with probability parameter p</action></entry></row>
 </tbody>
 </tgroup>
 </informaltable>
@@ -1065,7 +1174,7 @@ For more information about this constants see the documentation of GSL.
 <row><entry>pc</entry><entry><action>The distance of 1 parsec</action></entry></row>
 <row><entry>gg</entry><entry><action>The standard gravitational acceleration on Earth</action></entry></row>
 <row><entry>ms</entry><entry><action>The mass of the Sun</action></entry></row>
-<row><entry>e</entry><entry><action>The charge of the electron</action></entry></row>
+<row><entry>ee</entry><entry><action>The charge of the electron</action></entry></row>
 <row><entry>eV</entry><entry><action>The energy of 1 electron volt</action></entry></row>
 <row><entry>amu</entry><entry><action>The unified atomic mass</action></entry></row>
 <row><entry>me</entry><entry><action>The mass of the electron</action></entry></row>

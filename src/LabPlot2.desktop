@@ -3,6 +3,7 @@ Type=Application
 Exec=labplot2 -caption "%c" %i
 Icon=LabPlot2
 Name=LabPlot2
+Name[ast]=LabPlot2
 Name[bs]=LabPlot2
 Name[cs]=LabPlot2
 Name[da]=LabPlot2
