@@ -1,11 +1,9 @@
 /***************************************************************************
-    File                 : ImportFileDialog.h
+    File                 : BinaryFilterPrivate.h
     Project              : LabPlot
-    Description          : import data dialog
+    Description          : Private implementation class for BinaryFilter.
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
-
+	Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,56 +25,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTFILEDIALOG_H
-#define IMPORTFILEDIALOG_H
+#ifndef BINARYFILTERPRIVATE_H
+#define BINARYFILTERPPRIVATE_H
 
-#include <KDialog>
-#include <memory>
-class ImportFileWidget;
-class FileDataSource;
-class TreeViewComboBox;
+class AbstractDataSource;
 
-class QStatusBar;
-class QAbstractItemModel;
-class QModelIndex;
-class QVBoxLayout;
-class QLabel;
-class QComboBox;
-class QGroupBox;
-class QProgressBar;
+class BinaryFilterPrivate {
 
-class ImportFileDialog: public KDialog {
-  Q_OBJECT
+	public:
+		explicit BinaryFilterPrivate(BinaryFilter*);
 
-  public:
-	explicit ImportFileDialog(QWidget*);
-	~ImportFileDialog();
+		void read(const QString & fileName, AbstractDataSource* dataSource,
+					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		void write(const QString & fileName, AbstractDataSource* dataSource);
 
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	void importToSpreadsheet(QStatusBar*) const;
-	void setModel(std::auto_ptr<QAbstractItemModel>);
-	void updateModel(std::auto_ptr<QAbstractItemModel>);
-	void setCurrentIndex(const QModelIndex&);
+		const BinaryFilter* q;
 
-  private:
-	QVBoxLayout* vLayout;
-	ImportFileWidget *importFileWidget;
-	QGroupBox* frameAddTo;
-	TreeViewComboBox* cbAddTo;
-	QLabel* lPosition;
-	QComboBox* cbPosition;
-	QWidget* mainWidget;
-	QPushButton* bNewSpreadsheet;
-	std::auto_ptr<QAbstractItemModel> m_model;
-	bool m_optionsShown;
+		BinaryFilter::DataFormat dataFormat;
+		BinaryFilter::ByteOrder byteOrder;
 
-  private slots:
-	void toggleOptions();
-	void currentAddToIndexChanged(QModelIndex);
-	void newSpreadsheet();
-
-	signals:
-		void newSpreadsheetRequested(const QString&);
+	private:
+		void clearDataSource(AbstractDataSource*) const;
 };
 
-#endif //IMPORTFILEDIALOG_H
+#endif

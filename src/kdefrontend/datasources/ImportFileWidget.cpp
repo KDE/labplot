@@ -31,7 +31,7 @@
 #include "FileInfoDialog.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
-//#include "backend/datasources/filters/BinaryFilter.h"
+#include "backend/datasources/filters/BinaryFilter.h"
 
 #include <QInputDialog>
 #include <QDir>
@@ -56,16 +56,20 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.cbFileType->addItems(FileDataSource::fileTypes());
 
-	QWidget* w1=new QWidget(0);
-	asciiOptionsWidget.setupUi(w1);
+	QWidget* asciiw=new QWidget(0);
+	asciiOptionsWidget.setupUi(asciiw);
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
-	ui.swOptions->insertWidget(0, w1);
+	ui.swOptions->insertWidget(0, asciiw);
 
-	QWidget* w2=new QWidget(0);
-	binaryOptionsWidget.setupUi(w2);
-	ui.swOptions->insertWidget(1, w2);
+	QWidget* binaryw=new QWidget(0);
+	binaryOptionsWidget.setupUi(binaryw);
+	binaryOptionsWidget.cbFormat->addItems(BinaryFilter::dataFormats());
+	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
+	ui.swOptions->insertWidget(1, binaryw);
+
+	//TODO: add widgets for other file types
 
 	ui.swOptions->setCurrentIndex(0);
 
@@ -168,6 +172,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	if ( fileType==FileDataSource::AsciiVector ) {
 		 //TODO use auto_ptr
 	    AsciiFilter* filter = new AsciiFilter();
+	
 	    if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
 		  filter->setAutoModeEnabled(true);
 	    } else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
@@ -184,7 +189,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	    }
 
 	    //save the data portion to import
-	    filter->setStartRow( ui.sbStartRow->value()-1 );
+	filter->setStartRow( ui.sbStartRow->value()-1 );
 		if (ui.sbEndRow->value()==-1)
 			filter->setEndRow(-1);
 		else
@@ -198,8 +203,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 //         source->setFilter(filter);
-	}else if ( fileType==FileDataSource::BinaryVector ) {
-	  //TODO
+	} else if ( fileType==FileDataSource::BinaryVector ) {
+//TODO
 // 		BinaryFilter filter;
 // 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 // 			filter.setAutoMode(true);
@@ -210,7 +215,12 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 // 			filter.setFilterName( ui.cbFilter->currentText() );
 // 		}
 // 		source->setFilter(filter);
+	} else if ( fileType==FileDataSource::AsciiMatrix ) {
+//TODO
+	} else if ( fileType==FileDataSource::BinaryMatrix ) {
+//TODO
 	}
+
 	return 0;
 }
 
@@ -323,9 +333,9 @@ void ImportFileWidget::fileTypeChanged(int id) {
 	ui.swOptions->setCurrentIndex(id);
 
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-	if (fileType==FileDataSource::AsciiVector || fileType==FileDataSource::AsciiMatrix)
+	if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix)
 	  ui.swOptions->setCurrentIndex(0);
-	else if (fileType==FileDataSource::BinaryVector || fileType==FileDataSource::BinaryMatrix)
+	else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix)
 	  ui.swOptions->setCurrentIndex(1);
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
@@ -387,14 +397,21 @@ void ImportFileWidget::refreshPreview(){
 	QFile file(fileName);
 	QString importedText;
 	if ( file.open(QFile::ReadOnly)){
-		QTextStream stream(&file);
+		FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 		int lines = ui.sbPreviewLines->value();
-		for (int i=0; i<lines; ++i){
-			if( stream.atEnd() )
-				break;
 
-			importedText += stream.readLine();
-			importedText += '\n';
+		if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
+			QTextStream stream(&file);
+			for (int i=0; i<lines; ++i){
+				if( stream.atEnd() )
+					break;
+
+				importedText += stream.readLine();
+				importedText += '\n';
+			}
+		}
+		else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
+			//TODO: read portion of binary file
 		}
 	}
 
