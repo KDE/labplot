@@ -44,6 +44,9 @@ class BinaryFilterPrivate {
 		BinaryFilter::DataFormat dataFormat;
 		BinaryFilter::ByteOrder byteOrder;
 
+		int startByte;
+		int endByte;
+
 	private:
 		void clearDataSource(AbstractDataSource*) const;
 };

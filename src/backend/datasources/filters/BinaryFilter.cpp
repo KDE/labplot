@@ -98,7 +98,7 @@ BinaryFilter::ByteOrder BinaryFilter::byteOrder() const{
 //#####################################################################
 
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : 
-	q(owner), dataFormat(BinaryFilter::UINT16), byteOrder(BinaryFilter::LittleEndian) {
+	q(owner), dataFormat(BinaryFilter::UINT16), byteOrder(BinaryFilter::LittleEndian), startByte(0), endByte(-1) {
 }
 
 /*!
@@ -106,10 +106,26 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
     Uses the settings defined in the data source.
 */
 void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-    Q_UNUSED(fileName);
-    Q_UNUSED(dataSource);
-    Q_UNUSED(mode);
-	//TODO
+	Q_UNUSED(dataSource);
+	Q_UNUSED(mode);
+	
+	QFile file(fileName);
+	if ( !file.exists() )
+		return;
+
+	if (!file.open(QIODevice::ReadOnly))
+        	return;
+
+	QDataStream in(&file);
+
+	//TODO: skip bytes, if required
+	// if number of bytes is bigger than file ...
+	for (int i=0; i<startByte; i++){
+		qint8 tmp;
+		in >> tmp;
+	}
+
+	//TODO: see AsciiFilterPrivate::read()
 }
 
 /*!

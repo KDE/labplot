@@ -278,8 +278,8 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	if ( !file.exists() )
 		return;
 
-     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        	return;
 
 	QTextStream in(&file);
 
@@ -304,9 +304,9 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	//parse the first row:
-    //use the first row to determine the number of columns,
+	//use the first row to determine the number of columns,
 	//create the columns and use (optionaly) the first row to name them
-    if( in.atEnd() ) {
+	if( in.atEnd() ) {
 		if (mode==AbstractFileFilter::Replace) {
 			//file with no data to be imported. In replace-mode clear the spreadsheet
 			this->clearDataSource(dataSource);
@@ -317,7 +317,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	line = in.readLine();
 	if( simplifyWhitespacesEnabled)
 		line = line.simplified();
-
+	
 	QString separator;
 	if( separatingCharacter == "auto" ){
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
@@ -329,15 +329,15 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			if (lineStringList.size()>1){
 				int pos2 = line.indexOf(lineStringList.at(1));
 				separator = line.mid(length1, pos2-length1);
-		  }else{
+			}else {
 				separator = line.right(line.length()-length1);
-		  }
-	  }
-    }else{
-	  separator = separatingCharacter.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
-	  separator = separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
-	  lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
-    }
+			}
+		}
+	}else {
+		separator = separatingCharacter.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
+		separator = separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+		lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
+	}
 // 	qDebug() << "separator '"<<separator << "'";
 
 	if (endColumn == -1)
@@ -495,11 +495,11 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 
 		currentRow++;
 		emit q->completed(100*currentRow/numLines);
-    }
+	}
 
-    //set the comments for each of the columns
-    //TODO: generalize to different data types
-    QString comment;
+	//set the comments for each of the columns
+	//TODO: generalize to different data types
+	QString comment;
 	if (headerEnabled)
 		comment = i18np("numerical data, %1 element", "numerical data, %1 elements", currentRow);
 	else

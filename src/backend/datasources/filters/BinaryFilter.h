@@ -49,7 +49,20 @@ class BinaryFilter : public AbstractFileFilter{
 
 	BinaryFilter::DataFormat dataFormat() const;
 	BinaryFilter::ByteOrder byteOrder() const;
+	
+	void setStartByte(const int);
+	int startByte() const;
 
+	void setEndByte(const int);
+	int endByte() const;
+
+//TODO: or use start/end row?
+/*	void setStartRow(const int);
+	int startRow() const;
+
+	void setEndRow(const int);
+	int endRow() const;
+*/
   private:
 	BinaryFilterPrivate* const d;
 	friend class BinaryFilterPrivate;
