@@ -1,9 +1,9 @@
 /***************************************************************************
-File                 : AsciiFilter.cpp
+File                 : BinaryFilter.cpp
 Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 ***************************************************************************/
 
@@ -43,7 +43,6 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni-konstanz.d
 
 	\ingroup datasources
  */
-
 BinaryFilter::BinaryFilter():AbstractFileFilter(), d(new BinaryFilterPrivate(this)){
 
 }
@@ -58,7 +57,6 @@ BinaryFilter::~BinaryFilter(){
 void BinaryFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
   d->read(fileName, dataSource, importMode);
 }
-
 
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
@@ -76,7 +74,7 @@ QStringList BinaryFilter::dataFormats(){
 	<<"int64 (64 bit signed integer)"<<"int128 (128 bit signed integer)"
   	<<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint24 (24 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"
 	<<"uint64 (64 bit unsigned integer)"<<"uint128 (128 bit unsigned integer)"
-	<<"real32 (single precision numbers)"<<"real64 (double precision numbers)"<<"real128 (quad precision numbers)"
+	<<"real32 (single precision floats)"<<"real64 (double precision floats)"<<"real128 (quad precision floats)"
 	);
 }
 
@@ -95,20 +93,22 @@ BinaryFilter::ByteOrder BinaryFilter::byteOrder() const{
   return d->byteOrder;
 }
 
-
-
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
+
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : 
 	q(owner), dataFormat(BinaryFilter::UINT16), byteOrder(BinaryFilter::LittleEndian) {
-
 }
+
 /*!
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
 void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
+    Q_UNUSED(fileName);
+    Q_UNUSED(dataSource);
+    Q_UNUSED(mode);
 	//TODO
 }
 

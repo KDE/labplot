@@ -1,10 +1,9 @@
 /***************************************************************************
-File                 : AsciiFilter.h
+File                 : BinaryFilter.h
 Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015 Stefan Gerlach
-Email (use @ for *)  : stefan.gerlach*uni.kn
+Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
