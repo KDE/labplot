@@ -494,56 +494,56 @@ void XYCurve::setFillingPosition(FillingPosition position) {
 		exec(new XYCurveSetFillingPositionCmd(d, position, i18n("%1: filling position changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, PlotArea::BackgroundType, fillingType, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, PlotArea::BackgroundType, fillingType, updatePixmap)
 void XYCurve::setFillingType(PlotArea::BackgroundType type) {
 	Q_D(XYCurve);
 	if (type != d->fillingType)
 		exec(new XYCurveSetFillingTypeCmd(d, type, i18n("%1: filling type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updatePixmap)
 void XYCurve::setFillingColorStyle(PlotArea::BackgroundColorStyle style) {
 	Q_D(XYCurve);
 	if (style != d->fillingColorStyle)
 		exec(new XYCurveSetFillingColorStyleCmd(d, style, i18n("%1: filling color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updatePixmap)
 void XYCurve::setFillingImageStyle(PlotArea::BackgroundImageStyle style) {
 	Q_D(XYCurve);
 	if (style != d->fillingImageStyle)
 		exec(new XYCurveSetFillingImageStyleCmd(d, style, i18n("%1: filling image style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updatePixmap)
 void XYCurve::setFillingBrushStyle(Qt::BrushStyle style) {
 	Q_D(XYCurve);
 	if (style != d->fillingBrushStyle)
 		exec(new XYCurveSetFillingBrushStyleCmd(d, style, i18n("%1: filling brush style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updatePixmap)
 void XYCurve::setFillingFirstColor(const QColor& color) {
 	Q_D(XYCurve);
 	if (color!= d->fillingFirstColor)
 		exec(new XYCurveSetFillingFirstColorCmd(d, color, i18n("%1: set filling first color")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updatePixmap)
 void XYCurve::setFillingSecondColor(const QColor& color) {
 	Q_D(XYCurve);
 	if (color!= d->fillingSecondColor)
 		exec(new XYCurveSetFillingSecondColorCmd(d, color, i18n("%1: set filling second color")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updatePixmap)
 void XYCurve::setFillingFileName(const QString& fileName) {
 	Q_D(XYCurve);
 	if (fileName!= d->fillingFileName)
 		exec(new XYCurveSetFillingFileNameCmd(d, fileName, i18n("%1: set filling image")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingOpacity, qreal, fillingOpacity, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingOpacity, qreal, fillingOpacity, updatePixmap)
 void XYCurve::setFillingOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->fillingOpacity)
@@ -1452,7 +1452,7 @@ void XYCurvePrivate::updateFilling() {
 	fillPolygons.clear();
 
 	if (fillingPosition==XYCurve::NoFilling) {
-		updatePixmap();
+		recalcShapeAndBoundingRect();
 		return;
 	}
 
@@ -1522,7 +1522,7 @@ void XYCurvePrivate::updateFilling() {
 	}
 
 	fillPolygons << pol;
-	updatePixmap();
+	recalcShapeAndBoundingRect();
 }
 
 void XYCurvePrivate::updateErrorBars(){
@@ -1698,7 +1698,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = curveShape.boundingRect();
 
 	foreach(const QPolygonF& pol, fillPolygons)
-		boundingRectangle = boundingRectangle.unite(pol.boundingRect());
+		boundingRectangle = boundingRectangle.united(pol.boundingRect());
 
 	//TODO: when the selection is painted, line intersections are visible.
 	//simplified() removes those artifacts but is horrible slow for curves with large number of points.
