@@ -47,7 +47,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lFormat">
      <property name="text">
-      <string>Format:</string>
+      <string>Data type:</string>
      </property>
     </widget>
    </item>
@@ -80,6 +80,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>KIntNumInput</class>
    <extends>QWidget</extends>

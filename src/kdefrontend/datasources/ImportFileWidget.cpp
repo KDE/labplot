@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data widget
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2009-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -72,6 +72,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	//TODO: add widgets for other file types
 
+	// default filter
 	ui.swOptions->setCurrentIndex(0);
 
 	ui.gbOptions->hide();
@@ -339,10 +340,32 @@ void ImportFileWidget::fileTypeChanged(int id) {
 	ui.swOptions->setCurrentIndex(id);
 
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-	if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix)
-	  ui.swOptions->setCurrentIndex(0);
-	else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix)
-	  ui.swOptions->setCurrentIndex(1);
+	if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
+		ui.swOptions->setCurrentIndex(0);
+
+		//show/hide specific portion options
+		ui.lStartColumn->show();
+		ui.sbStartColumn->show();
+		ui.lEndColumn->show();
+		ui.sbEndColumn->show();
+		ui.lSkipStartBytes->hide();
+		ui.sbSkipStartBytes->hide();
+		ui.lSkipBytes->hide();
+		ui.sbSkipBytes->hide();
+	}
+	else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
+		ui.swOptions->setCurrentIndex(1);
+
+		//show/hide specific portion options
+		ui.lStartColumn->hide();
+		ui.sbStartColumn->hide();
+		ui.lEndColumn->hide();
+		ui.sbEndColumn->hide();
+		ui.lSkipStartBytes->show();
+		ui.sbSkipStartBytes->show();
+		ui.lSkipBytes->show();
+		ui.sbSkipBytes->show();
+	}
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
@@ -369,15 +392,15 @@ void ImportFileWidget::fileInfoDialog() {
 */
 void ImportFileWidget::filterChanged(int index) {
 	if (index==0){// "automatic"
-	  ui.swOptions->setEnabled(false);
-	  ui.bSaveFilter->setEnabled(false);
+		ui.swOptions->setEnabled(false);
+		ui.bSaveFilter->setEnabled(false);
 	}else if (index==1) { //custom
-	  ui.swOptions->setEnabled(true);
-	  ui.bSaveFilter->setEnabled(true);
+		ui.swOptions->setEnabled(true);
+		ui.bSaveFilter->setEnabled(true);
 	}else{
-	  // predefined filter settings were selected.
-	  //load and show them in the GUI.
-	  //TODO
+		// predefined filter settings were selected.
+		//load and show them in the GUI.
+		//TODO
 	}
 }
 
@@ -425,10 +448,23 @@ void ImportFileWidget::refreshPreview(){
 			else if (byteOrder == BinaryFilter::LittleEndian)
 				in.setByteOrder(QDataStream::LittleEndian);
 
-			//use number of vectors and data size to read lines * vectors*size
 			int vectors = binaryOptionsWidget.niVectors->value();
 			BinaryFilter::DataFormat format = (BinaryFilter::DataFormat) binaryOptionsWidget.cbFormat->currentIndex();
 			//qDebug() <<" vectors ="<<vectors<<"  format ="<<format;
+
+			// skip at start
+			for (int i=0; i<ui.sbSkipStartBytes->value(); ++i){
+				qint8 tmp;
+				in >> tmp;
+			}
+
+			// skip until start row
+			for (int i=0; i<(ui.sbStartRow->value()-1)*vectors; ++i){
+				for(int j=0;j<BinaryFilter::dataSize(format);++j) {
+					qint8 tmp;
+					in >> tmp;
+				}
+			}
 
 			for (int i=0; i<lines; ++i){
 				if( in.atEnd() )
@@ -498,6 +534,12 @@ void ImportFileWidget::refreshPreview(){
 					}
 					}
 					importedText += ' ';
+					
+					// skip after each value
+					for (int i=0; i<ui.sbSkipBytes->value(); ++i){
+						qint8 tmp;
+						in >> tmp;
+					}
 				}
 				importedText += '\n';
 			}

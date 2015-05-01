@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : BinaryFilterPrivate.h
-    Project              : LabPlot
-    Description          : Private implementation class for BinaryFilter.
-    --------------------------------------------------------------------
-	Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+File                 : BinaryFilterPrivate.h
+Project              : LabPlot
+Description          : Private implementation class for BinaryFilter.
+--------------------------------------------------------------------
+Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -24,7 +24,6 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-
 #ifndef BINARYFILTERPRIVATE_H
 #define BINARYFILTERPPRIVATE_H
 
@@ -45,9 +44,9 @@ class BinaryFilterPrivate {
 		BinaryFilter::DataFormat dataFormat;
 		BinaryFilter::ByteOrder byteOrder;
 
-		int skipStartBytes;	// bytes to at start
-		int startValue;		// start value to read
-		int endValue;		// end value to read
+		int skipStartBytes;	// bytes to skip at start
+		int startRow;		// start row (value*vectors) to read
+		int endRow;		// end row to (value*vectors) read
 		int skipBytes;		// bytes to skip after each value
 
 	private:

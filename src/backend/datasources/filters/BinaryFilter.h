@@ -43,6 +43,7 @@ class BinaryFilter : public AbstractFileFilter{
 
 	static QStringList dataFormats();
 	static QStringList byteOrders();
+	static int dataSize(BinaryFilter::DataFormat);
 
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
@@ -56,11 +57,14 @@ class BinaryFilter : public AbstractFileFilter{
 	void setByteOrder(const BinaryFilter::ByteOrder);
 	BinaryFilter::ByteOrder byteOrder() const;
 
-	void setStartValue(const int);
-	int startValue() const;
+	void setSkipStartBytes(const int);
+	int skipStartBytes() const;
 
-	void setEndValue(const int);
-	int endValue() const;
+	void setStartRow(const int);
+	int startRow() const;
+
+	void setEndRow(const int);
+	int endRow() const;
 
 	void setSkipBytes(const int);
 	int skipBytes() const;

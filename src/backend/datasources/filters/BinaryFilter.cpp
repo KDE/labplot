@@ -4,7 +4,6 @@ Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
 Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
 ***************************************************************************/
 
 /***************************************************************************
@@ -83,6 +82,18 @@ QStringList BinaryFilter::byteOrders(){
   return (QStringList()<<"Little endian"<<"Big endian");
 }
 
+int BinaryFilter::dataSize(BinaryFilter::DataFormat format) {
+	int sizes[]={1,2,4,8,1,2,4,8,4,8};
+
+	return sizes[(int)format];
+}
+
+///////////////////////////////////////////////////////////////////////
+
+int BinaryFilter::vectors() const{
+  return d->vectors;
+}
+
 BinaryFilter::DataFormat BinaryFilter::dataFormat() const{
   return d->dataFormat;
 }
@@ -91,12 +102,28 @@ BinaryFilter::ByteOrder BinaryFilter::byteOrder() const{
   return d->byteOrder;
 }
 
+int BinaryFilter::skipStartBytes() const{
+  return d->skipStartBytes;
+}
+
+int BinaryFilter::startRow() const{
+  return d->startRow;
+}
+
+int BinaryFilter::endRow() const{
+  return d->endRow;
+}
+
+int BinaryFilter::skipBytes() const{
+  return d->skipBytes;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
 
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : 
-	q(owner), vectors(2), dataFormat(BinaryFilter::UINT16), byteOrder(BinaryFilter::LittleEndian), skipStartBytes(0), startValue(0), endValue(-1), skipBytes(0) {
+	q(owner), vectors(2), dataFormat(BinaryFilter::INT8), byteOrder(BinaryFilter::LittleEndian), skipStartBytes(0), startRow(0), endRow(-1), skipBytes(0) {
 }
 
 /*!
@@ -124,7 +151,13 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		in >> tmp;
 	}
 
-	// TODO: skip startValue values at start
+	// skip until start row
+	for (int i=0; i<(startRow-1)*vectors; ++i){
+		for(int j=0;j<BinaryFilter::dataSize(dataFormat);++j) {
+			qint8 tmp;
+			in >> tmp;
+		}
+	}
 
 //	QStringList vectorNameList;
 //	for (int k=0; k<endColumn-startColumn+1-size; k++ )
