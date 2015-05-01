@@ -43,7 +43,6 @@
 #include <QDir>
 #include <QFileDialog>
 #include <KUrlCompletion>
-#include <QDebug>
 
 /*!
   \class XYCurveDock
@@ -1234,7 +1233,7 @@ void XYCurveDock::valuesTypeChanged(int index){
 void XYCurveDock::valuesColumnChanged(const QModelIndex& index){
   if (m_initializing)
 	return;
-qDebug()<<"in slot";
+
   Column* column= static_cast<Column*>(index.internalPointer());
   this->showValuesColumnFormat(column);
 
@@ -1411,8 +1410,6 @@ void XYCurveDock::fillingColorStyleChanged(int index){
 		ui.lFillingFirstColor->setText(i18n("Color"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
-		ui.lFillingBrushStyle->show();
-		ui.cbFillingBrushStyle->show();
 	}else{
 		ui.lFillingFirstColor->setText(i18n("First Color"));
 		ui.lFillingSecondColor->show();
