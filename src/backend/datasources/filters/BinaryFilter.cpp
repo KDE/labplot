@@ -70,11 +70,9 @@ void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSourc
 returns the list of all predefined data formats.
 */
 QStringList BinaryFilter::dataFormats(){
-  return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int24 (24 bit signed integer)"<<"int32 (32 bit signed integer)"
-	<<"int64 (64 bit signed integer)"<<"int128 (128 bit signed integer)"
-  	<<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint24 (24 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"
-	<<"uint64 (64 bit unsigned integer)"<<"uint128 (128 bit unsigned integer)"
-	<<"real32 (single precision floats)"<<"real64 (double precision floats)"<<"real128 (quad precision floats)"
+  return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int32 (32 bit signed integer)"<<"int64 (64 bit signed integer)"
+  	<<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"<<"uint64 (64 bit unsigned integer)"
+	<<"real32 (single precision floats)"<<"real64 (double precision floats)"
 	);
 }
 
@@ -98,7 +96,7 @@ BinaryFilter::ByteOrder BinaryFilter::byteOrder() const{
 //#####################################################################
 
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : 
-	q(owner), dataFormat(BinaryFilter::UINT16), byteOrder(BinaryFilter::LittleEndian), startByte(0), endByte(-1) {
+	q(owner), vectors(2), dataFormat(BinaryFilter::UINT16), byteOrder(BinaryFilter::LittleEndian), skipStartBytes(0), startValue(0), endValue(-1), skipBytes(0) {
 }
 
 /*!
@@ -118,12 +116,28 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 
 	QDataStream in(&file);
 
-	//TODO: skip bytes, if required
-	// if number of bytes is bigger than file ...
-	for (int i=0; i<startByte; i++){
+	//TODO: catch case that skipStartBytes or startValue is bigger than file
+
+	// skip bytes at start
+	for (int i=0; i<skipStartBytes; i++){
 		qint8 tmp;
 		in >> tmp;
 	}
+
+	// TODO: skip startValue values at start
+
+//	QStringList vectorNameList;
+//	for (int k=0; k<endColumn-startColumn+1-size; k++ )
+//		vectorNameList.append( "Column " + QString::number(size+k+1) );
+
+	//TODO: make sure we have enough columns in the data source.
+
+	//TODO: resize the spreadsheet
+
+	//TODO: pointers to the actual data containers
+
+	//TODO: read data
+
 
 	//TODO: see AsciiFilterPrivate::read()
 }
@@ -132,6 +146,7 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
     writes the content of \c dataSource to the file \c fileName.
 */
 void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource){
-    Q_UNUSED(fileName);
-    Q_UNUSED(dataSource);
+	Q_UNUSED(fileName);
+	Q_UNUSED(dataSource);
+	//TODO
 }

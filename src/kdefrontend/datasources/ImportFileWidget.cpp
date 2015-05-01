@@ -39,6 +39,7 @@
 #include <QProcess>
 #include <QTextStream>
 #include <KUrlCompletion>
+#include <QDebug>
 
 /*!
    \class ImportFileWidget
@@ -107,6 +108,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	asciiOptionsWidget.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
 	asciiOptionsWidget.kleVectorNames->setText(conf.readEntry("Names", ""));
 
+	//TODO: settings for binary data
+
 	filterChanged(ui.cbFilter->currentIndex());
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
@@ -130,6 +133,8 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("SkipEmptyParts", asciiOptionsWidget.chbSkipEmptyParts->isChecked());
 	conf.writeEntry("UseFirstRow", asciiOptionsWidget.chbHeader->isChecked());
 	conf.writeEntry("Names", asciiOptionsWidget.kleVectorNames->text());
+
+	//TODO: settings for binary data
 }
 
 void ImportFileWidget::hideDataSource() const{
@@ -169,6 +174,7 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+
 	if ( fileType==FileDataSource::AsciiVector ) {
 		 //TODO use auto_ptr
 	    AsciiFilter* filter = new AsciiFilter();
@@ -401,17 +407,100 @@ void ImportFileWidget::refreshPreview(){
 		int lines = ui.sbPreviewLines->value();
 
 		if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
-			QTextStream stream(&file);
+			QTextStream in(&file);
 			for (int i=0; i<lines; ++i){
-				if( stream.atEnd() )
+				if( in.atEnd() )
 					break;
 
-				importedText += stream.readLine();
+				importedText += in.readLine();
 				importedText += '\n';
 			}
 		}
 		else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
-			//TODO: read portion of binary file
+			QDataStream in(&file);
+
+			BinaryFilter::ByteOrder byteOrder = (BinaryFilter::ByteOrder) binaryOptionsWidget.cbByteOrder->currentIndex();
+			if (byteOrder == BinaryFilter::BigEndian)
+				in.setByteOrder(QDataStream::BigEndian);
+			else if (byteOrder == BinaryFilter::LittleEndian)
+				in.setByteOrder(QDataStream::LittleEndian);
+
+			//use number of vectors and data size to read lines * vectors*size
+			int vectors = binaryOptionsWidget.niVectors->value();
+			BinaryFilter::DataFormat format = (BinaryFilter::DataFormat) binaryOptionsWidget.cbFormat->currentIndex();
+			//qDebug() <<" vectors ="<<vectors<<"  format ="<<format;
+
+			for (int i=0; i<lines; ++i){
+				if( in.atEnd() )
+					break;
+
+				for(int j=0;j < vectors; ++j) {
+					switch(format) {
+					case BinaryFilter::INT8: {
+						qint8 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::INT16: {
+						qint16 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::INT32: {
+						qint32 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::INT64: {
+						qint64 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::UINT8: {
+						quint8 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::UINT16: {
+						quint16 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::UINT32: {
+						quint32 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::UINT64: {
+						quint64 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::REAL32: {
+						float tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::REAL64: {
+						double tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					}
+					importedText += ' ';
+				}
+				importedText += '\n';
+			}
 		}
 	}
 

@@ -41,11 +41,14 @@ class BinaryFilterPrivate {
 
 		const BinaryFilter* q;
 
+		int vectors;
 		BinaryFilter::DataFormat dataFormat;
 		BinaryFilter::ByteOrder byteOrder;
 
-		int startByte;
-		int endByte;
+		int skipStartBytes;	// bytes to at start
+		int startValue;		// start value to read
+		int endValue;		// end value to read
+		int skipBytes;		// bytes to skip after each value
 
 	private:
 		void clearDataSource(AbstractDataSource*) const;

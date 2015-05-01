@@ -35,7 +35,7 @@ class BinaryFilter : public AbstractFileFilter{
 	Q_OBJECT
 
   public:
-	enum DataFormat{INT8,INT16,INT24,INT32,INT64,INT128,UINT8,UINT16,UINT24,UINT32,UINT64,UINT128,REAL32,REAL64,REAL128};
+	enum DataFormat{INT8,INT16,INT32,INT64,UINT8,UINT16,UINT32,UINT64,REAL32,REAL64};
 	enum ByteOrder{LittleEndian, BigEndian};
 
 	BinaryFilter();
@@ -47,22 +47,24 @@ class BinaryFilter : public AbstractFileFilter{
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
 
+	void setVectors(const int);
+	int vectors() const;
+
+	void setDataFormat(const BinaryFilter::DataFormat);
 	BinaryFilter::DataFormat dataFormat() const;
+
+	void setByteOrder(const BinaryFilter::ByteOrder);
 	BinaryFilter::ByteOrder byteOrder() const;
-	
-	void setStartByte(const int);
-	int startByte() const;
 
-	void setEndByte(const int);
-	int endByte() const;
+	void setStartValue(const int);
+	int startValue() const;
 
-//TODO: or use start/end row?
-/*	void setStartRow(const int);
-	int startRow() const;
+	void setEndValue(const int);
+	int endValue() const;
 
-	void setEndRow(const int);
-	int endRow() const;
-*/
+	void setSkipBytes(const int);
+	int skipBytes() const;
+
   private:
 	BinaryFilterPrivate* const d;
 	friend class BinaryFilterPrivate;
