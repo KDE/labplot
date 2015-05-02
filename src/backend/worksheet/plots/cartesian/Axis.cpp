@@ -1422,6 +1422,7 @@ void AxisPrivate::retransformTickLabelPositions(){
 		} else {
 			td.setHtml(tickLabelStrings.at(i));
 			width = td.size().width();
+			height = td.size().height();
 		}
 		anchorPoint = majorTickPoints.at(i);
 
@@ -1611,7 +1612,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				tempPath.addRect( fm.boundingRect(tickLabelStrings.at(i)) );
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
-				tempPath.addRect( QRectF(0, -td.size().height()/2, td.size().width(), td.size().height()) );
+				tempPath.addRect( QRectF(0, -td.size().height(), td.size().width(), td.size().height()) );
 			}
 
 			trafo.reset();
@@ -1727,7 +1728,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 				painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
-				painter->translate(0, -td.size().height()/2);
+				painter->translate(0, -td.size().height());
 				td.drawContents(painter);
 			}
 
