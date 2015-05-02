@@ -1,11 +1,9 @@
 /***************************************************************************
-    File                 : AsciiOptionsWidget.h
-    Project              : LabPlot
-    Description          : widget providing options for the import of ascii data
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2009 by Alexander Semke (alexander.semke@web.de)
-
+File                 : BinaryFilterPrivate.h
+Project              : LabPlot
+Description          : Private implementation class for BinaryFilter.
+--------------------------------------------------------------------
+Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,20 +24,33 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef ASCIIOPTIONSWIDGET_H
-#define ASCIIOPTIONSWIDGET_H
+#ifndef BINARYFILTERPRIVATE_H
+#define BINARYFILTERPPRIVATE_H
 
-#include "ui_asciioptionswidget.h"
+class AbstractDataSource;
 
-class AsciiOptionsWidget : public QWidget{
-    Q_OBJECT
+class BinaryFilterPrivate {
 
-public:
-	explicit AsciiOptionsWidget(QWidget*);
-	~AsciiOptionsWidget();
+	public:
+		explicit BinaryFilterPrivate(BinaryFilter*);
 
-private:
-	Ui::AsciiOptionsWidget ui;
+		void read(const QString & fileName, AbstractDataSource* dataSource,
+					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		void write(const QString & fileName, AbstractDataSource* dataSource);
+
+		const BinaryFilter* q;
+
+		int vectors;
+		BinaryFilter::DataFormat dataFormat;
+		BinaryFilter::ByteOrder byteOrder;
+
+		int skipStartBytes;	// bytes to skip at start
+		int startRow;		// start row (value*vectors) to read
+		int endRow;		// end row to (value*vectors) read
+		int skipBytes;		// bytes to skip after each value
+
+	private:
+		void clearDataSource(AbstractDataSource*) const;
 };
 
 #endif

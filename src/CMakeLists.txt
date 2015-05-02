@@ -112,7 +112,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/FileDataSource.cpp
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
-	#${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
+	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
  	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp

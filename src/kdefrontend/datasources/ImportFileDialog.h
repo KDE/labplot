@@ -66,7 +66,7 @@ class ImportFileDialog: public KDialog {
 	QLabel* lPosition;
 	QComboBox* cbPosition;
 	QWidget* mainWidget;
-    QPushButton* bNewSpreadsheet;
+	QPushButton* bNewSpreadsheet;
 	std::auto_ptr<QAbstractItemModel> m_model;
 	bool m_optionsShown;
 

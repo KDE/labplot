@@ -44,7 +44,6 @@
 #include <QTableView>
 #include <QHBoxLayout>
 #include <QKeyEvent>
-#include <QMessageBox>
 #include <QClipboard>
 #include <QInputDialog>
 #include <QDate>
@@ -977,7 +976,7 @@ void SpreadsheetView::unmaskSelection(){
 
 // TODO
 void SpreadsheetView::recalculateSelectedCells(){
-	QMessageBox::information(0, "info", "not yet implemented");
+// 	QMessageBox::information(0, "info", "not yet implemented");
 }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
@@ -1344,12 +1343,12 @@ void SpreadsheetView::sortSelectedColumns(){
 
 // TODO
 void SpreadsheetView::statisticsOnSelectedColumns(){
-	QMessageBox::information(0, "info", "not yet implemented");
+// 	QMessageBox::information(0, "info", "not yet implemented");
 }
 
 // TODO
 void SpreadsheetView::statisticsOnSelectedRows(){
-	QMessageBox::information(0, "info", "not yet implemented");
+// 	QMessageBox::information(0, "info", "not yet implemented");
 }
 
 /*!

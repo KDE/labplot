@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data widget
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2009-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -31,7 +31,7 @@
 #include "FileInfoDialog.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
-//#include "backend/datasources/filters/BinaryFilter.h"
+#include "backend/datasources/filters/BinaryFilter.h"
 
 #include <QInputDialog>
 #include <QDir>
@@ -39,6 +39,7 @@
 #include <QProcess>
 #include <QTextStream>
 #include <KUrlCompletion>
+#include <QDebug>
 
 /*!
    \class ImportFileWidget
@@ -49,43 +50,48 @@
 
 ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
-    ui.setupUi(this);
+	ui.setupUi(this);
 
-    KUrlCompletion *comp = new KUrlCompletion();
-    ui.kleFileName->setCompletionObject(comp);
+	KUrlCompletion *comp = new KUrlCompletion();
+	ui.kleFileName->setCompletionObject(comp);
 
-    ui.cbFileType->addItems(FileDataSource::fileTypes());
+	ui.cbFileType->addItems(FileDataSource::fileTypes());
 
-    QWidget* w1=new QWidget(0);
-    asciiOptionsWidget.setupUi(w1);
-    asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
-    asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
+	QWidget* asciiw=new QWidget(0);
+	asciiOptionsWidget.setupUi(asciiw);
+	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
+	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
-    ui.swOptions->insertWidget(0, w1);
+	ui.swOptions->insertWidget(0, asciiw);
 
-    QWidget* w2=new QWidget(0);
-    binaryOptionsWidget.setupUi(w2);
-    ui.swOptions->insertWidget(1, w2);
+	QWidget* binaryw=new QWidget(0);
+	binaryOptionsWidget.setupUi(binaryw);
+	binaryOptionsWidget.cbFormat->addItems(BinaryFilter::dataFormats());
+	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
+	ui.swOptions->insertWidget(1, binaryw);
 
-    ui.swOptions->setCurrentIndex(0);
+	//TODO: add widgets for other file types
+
+	// default filter
+	ui.swOptions->setCurrentIndex(0);
 
 	ui.gbOptions->hide();
 
-    ui.bOpen->setIcon( KIcon("document-open") );
-    ui.bFileInfo->setIcon( KIcon("help-about") );
-    ui.bManageFilters->setIcon( KIcon("configure") );
+	ui.bOpen->setIcon( KIcon("document-open") );
+	ui.bFileInfo->setIcon( KIcon("help-about") );
+	ui.bManageFilters->setIcon( KIcon("configure") );
 	ui.bSaveFilter->setIcon( KIcon("document-save") );
 	ui.bRefreshPreview->setIcon( KIcon("view-refresh") );
 
-    connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
-    connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-    connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
+	connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
+	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
+	connect( ui.bFileInfo, SIGNAL(clicked()), this, SLOT (fileInfoDialog()) );
 	connect( ui.bSaveFilter, SIGNAL(clicked()), this, SLOT (saveFilter()) );
 	connect( ui.bManageFilters, SIGNAL(clicked()), this, SLOT (manageFilters()) );
-    connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
-    connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
+	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
+	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-    connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
+	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 
 	//load last used settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
@@ -103,6 +109,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	asciiOptionsWidget.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
 	asciiOptionsWidget.kleVectorNames->setText(conf.readEntry("Names", ""));
 
+	//TODO: settings for binary data
+
 	filterChanged(ui.cbFilter->currentIndex());
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
@@ -111,11 +119,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 }
 
 ImportFileWidget::~ImportFileWidget() {
-    //save current settings
-    KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 
 	//general settings
-    conf.writeEntry("LastImportedFile", ui.kleFileName->text());
+	conf.writeEntry("LastImportedFile", ui.kleFileName->text());
 	conf.writeEntry("Type", ui.cbFileType->currentIndex());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 
@@ -126,13 +134,15 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("SkipEmptyParts", asciiOptionsWidget.chbSkipEmptyParts->isChecked());
 	conf.writeEntry("UseFirstRow", asciiOptionsWidget.chbHeader->isChecked());
 	conf.writeEntry("Names", asciiOptionsWidget.kleVectorNames->text());
+
+	//TODO: settings for binary data
 }
 
 void ImportFileWidget::hideDataSource() const{
-  ui.lSourceName->hide();
-  ui.kleSourceName->hide();
-  ui.chbWatchFile->hide();
-  ui.chbLinkFile->hide();
+	ui.lSourceName->hide();
+	ui.kleSourceName->hide();
+	ui.chbWatchFile->hide();
+	ui.chbLinkFile->hide();
 }
 
 void ImportFileWidget::showOptions(bool b) {
@@ -141,19 +151,19 @@ void ImportFileWidget::showOptions(bool b) {
 }
 
 QString ImportFileWidget::fileName() const{
-  return ui.kleFileName->text();
+	return ui.kleFileName->text();
 }
 
 /*!
 	saves the settings to the data source \c source.
 */
 void ImportFileWidget::saveSettings(FileDataSource* source) const {
-    //save the data source information
-    source->setFileName( ui.kleFileName->text() );
-    source->setName( ui.kleSourceName->text() );
-    source->setComment( ui.kleFileName->text() );
-    source->setFileWatched( ui.chbWatchFile->isChecked() );
-    source->setFileLinked( ui.chbLinkFile->isChecked() );
+	//save the data source information
+	source->setFileName( ui.kleFileName->text() );
+	source->setName( ui.kleSourceName->text() );
+	source->setComment( ui.kleFileName->text() );
+	source->setFileWatched( ui.chbWatchFile->isChecked() );
+	source->setFileLinked( ui.chbLinkFile->isChecked() );
 
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 	source->setFileType(fileType);
@@ -161,16 +171,18 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 }
 
 /*!
-  returns the currently used filter.
+	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
-    FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-	 if ( fileType==FileDataSource::AsciiVector ) {
+	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+
+	if ( fileType==FileDataSource::AsciiVector ) {
 		 //TODO use auto_ptr
-        AsciiFilter* filter = new AsciiFilter();
-        if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
+	    AsciiFilter* filter = new AsciiFilter();
+	
+	    if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
 		  filter->setAutoModeEnabled(true);
-        } else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
+	    } else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
 		  filter->setAutoModeEnabled(false);
 		  filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
 		  filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
@@ -179,12 +191,12 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		  filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
 		  filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
 		  filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
-        } else {
+	    } else {
 		  filter->loadFilterSettings( ui.cbFilter->currentText() );
-        }
+	    }
 
-        //save the data portion to import
-        filter->setStartRow( ui.sbStartRow->value()-1 );
+	    //save the data portion to import
+	filter->setStartRow( ui.sbStartRow->value()-1 );
 		if (ui.sbEndRow->value()==-1)
 			filter->setEndRow(-1);
 		else
@@ -198,8 +210,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 //         source->setFilter(filter);
-	}else if ( fileType==FileDataSource::BinaryVector ) {
-	  //TODO
+	} else if ( fileType==FileDataSource::BinaryVector ) {
+//TODO
 // 		BinaryFilter filter;
 // 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 // 			filter.setAutoMode(true);
@@ -210,7 +222,12 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 // 			filter.setFilterName( ui.cbFilter->currentText() );
 // 		}
 // 		source->setFilter(filter);
-    }
+	} else if ( fileType==FileDataSource::AsciiMatrix ) {
+//TODO
+	} else if ( fileType==FileDataSource::BinaryMatrix ) {
+//TODO
+	}
+
 	return 0;
 }
 
@@ -221,9 +238,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 void ImportFileWidget::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
 	QString dir = conf.readEntry("LastDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
-    if (path.isEmpty())
-        return; //cancel was clicked in the file-dialog
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
+	if (path.isEmpty())
+	    return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {
@@ -232,16 +249,16 @@ void ImportFileWidget::selectFile() {
 			conf.writeEntry("LastDir", newDir);
 	}
 
-    ui.kleFileName->setText( path );
+	ui.kleFileName->setText( path );
 
-    //use the file name as the name of the data source,
-    //if there is no data source name provided yet
-    if (ui.kleSourceName->text().isEmpty()) {
-        QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-        ui.kleSourceName->setText(fileName);
-    }
+	//use the file name as the name of the data source,
+	//if there is no data source name provided yet
+	if (ui.kleSourceName->text().isEmpty()) {
+	    QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+	    ui.kleSourceName->setText(fileName);
+	}
 
-    //TODO: decide whether the selection of several files should be possible
+	//TODO: decide whether the selection of several files should be possible
 // 	QStringList filelist = QFileDialog::getOpenFileNames(this,i18n("Select one or more files to open"));
 // 	if (! filelist.isEmpty() )
 // 		ui.kleFileName->setText(filelist.join(";"));
@@ -253,16 +270,16 @@ void ImportFileWidget::selectFile() {
 
 /*!
 	called on file name changes.
-    Determines the file format (ASCII, binary etc.), if the file exists,
-    and activates the corresponding options.
+	Determines the file format (ASCII, binary etc.), if the file exists,
+	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-    QString fileName=name;
-    if ( fileName.left(1)!=QDir::separator()) {
-        fileName=QDir::homePath() + QDir::separator() + fileName;
-    }
+	QString fileName=name;
+	if ( fileName.left(1)!=QDir::separator()) {
+	    fileName=QDir::homePath() + QDir::separator() + fileName;
+	}
 
-    bool fileExists = QFile::exists(fileName);
+	bool fileExists = QFile::exists(fileName);
 	ui.gbOptions->setEnabled(fileExists);
 	ui.bFileInfo->setEnabled(fileExists);
 	ui.cbFileType->setEnabled(fileExists);
@@ -272,41 +289,40 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
 
-    if ( !fileExists )
+	if ( !fileExists )
 		return;
 
 	//check, whether the file has ascii or binary contant
-    QProcess *proc = new QProcess(this);
-    QStringList args;
-    args<<"-b"<<ui.kleFileName->text();
-    proc->start("file", args);
+	QProcess *proc = new QProcess(this);
+	QStringList args;
+	args<<"-b"<<ui.kleFileName->text();
+	proc->start("file", args);
 
-    if ( proc->waitForReadyRead(1000) == false ) {
-        // 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
-    } else {
-        QString info = proc->readLine();
-        //TODO
-        if ( info.contains( ("ASCII") ) ) {
-            //select "ASCII vector data"
-            this->fileTypeChanged(0);
-        } else {
-            this->fileTypeChanged(2);
-        }
-    }
+	if ( proc->waitForReadyRead(1000) == false ) {
+	    // 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
+	} else {
+	    QString info = proc->readLine();
+	    //TODO
+	    if ( info.contains( ("ASCII") ) ) {
+	        //select "ASCII vector data"
+	        this->fileTypeChanged(0);
+	    } else {
+	        this->fileTypeChanged(2);
+	    }
+	}
 }
 
 /*!
   saves the current filter settings
 */
 void ImportFileWidget::saveFilter(){
-  bool ok;
-  QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"),
-												i18n("Filter name:"), QLineEdit::Normal,
-												i18n("new filter"), &ok);
-  if (ok && !text.isEmpty()){
-	//TODO
-	//AsciiFilter::saveFilter()
-  }
+	bool ok;
+	QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"),
+		i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
+	if (ok && !text.isEmpty()){
+		//TODO
+		//AsciiFilter::saveFilter()
+	}
 }
 
 /*!
@@ -321,20 +337,42 @@ void ImportFileWidget::manageFilters(){
 	and populates the combobox with the available pre-defined fllter settings for the selected type.
 */
 void ImportFileWidget::fileTypeChanged(int id) {
-    ui.swOptions->setCurrentIndex(id);
+	ui.swOptions->setCurrentIndex(id);
 
-    FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-	if (fileType==FileDataSource::AsciiVector || fileType==FileDataSource::AsciiMatrix)
-	  ui.swOptions->setCurrentIndex(0);
-	else if (fileType==FileDataSource::BinaryVector || fileType==FileDataSource::BinaryMatrix)
-	  ui.swOptions->setCurrentIndex(1);
+	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+	if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
+		ui.swOptions->setCurrentIndex(0);
+
+		//show/hide specific portion options
+		ui.lStartColumn->show();
+		ui.sbStartColumn->show();
+		ui.lEndColumn->show();
+		ui.sbEndColumn->show();
+		ui.lSkipStartBytes->hide();
+		ui.sbSkipStartBytes->hide();
+		ui.lSkipBytes->hide();
+		ui.sbSkipBytes->hide();
+	}
+	else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
+		ui.swOptions->setCurrentIndex(1);
+
+		//show/hide specific portion options
+		ui.lStartColumn->hide();
+		ui.sbStartColumn->hide();
+		ui.lEndColumn->hide();
+		ui.sbEndColumn->hide();
+		ui.lSkipStartBytes->show();
+		ui.sbSkipStartBytes->show();
+		ui.lSkipBytes->show();
+		ui.sbSkipBytes->show();
+	}
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
-    ui.cbFilter->addItem( i18n("Automatic") );
-    ui.cbFilter->addItem( i18n("Custom") );
+	ui.cbFilter->addItem( i18n("Automatic") );
+	ui.cbFilter->addItem( i18n("Custom") );
 
-    //TODO: populate the combobox with the available pre-defined flter settings for the selected type
+	//TODO: populate the combobox with the available pre-defined filter settings for the selected type
 
 	ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
 }
@@ -343,26 +381,26 @@ void ImportFileWidget::fileTypeChanged(int id) {
 	shows the dialog with the information about the file(s) to be imported.
 */
 void ImportFileWidget::fileInfoDialog() {
-    QStringList files = ui.kleFileName->text().split(';');
-    FileInfoDialog* dlg = new FileInfoDialog(this);
-    dlg->setFiles(files);
-    dlg->exec();
+	QStringList files = ui.kleFileName->text().split(';');
+	FileInfoDialog* dlg = new FileInfoDialog(this);
+	dlg->setFiles(files);
+	dlg->exec();
 }
 
 /*!
 	enables the options if the filter "custom" was chosen. Disables the options otherwise.
 */
 void ImportFileWidget::filterChanged(int index) {
-    if (index==0){// "automatic"
-	  ui.swOptions->setEnabled(false);
-	  ui.bSaveFilter->setEnabled(false);
+	if (index==0){// "automatic"
+		ui.swOptions->setEnabled(false);
+		ui.bSaveFilter->setEnabled(false);
 	}else if (index==1) { //custom
-	  ui.swOptions->setEnabled(true);
-	  ui.bSaveFilter->setEnabled(true);
+		ui.swOptions->setEnabled(true);
+		ui.bSaveFilter->setEnabled(true);
 	}else{
-	  // predefined filter settings were selected.
-	  //load and show them in the GUI.
-	  //TODO
+		// predefined filter settings were selected.
+		//load and show them in the GUI.
+		//TODO
 	}
 }
 
@@ -371,31 +409,140 @@ void ImportFileWidget::filterChanged(int index) {
   Disables it otherwise.
 */
 void ImportFileWidget::headerChanged(int state) {
-    if (state==Qt::Checked){
-        asciiOptionsWidget.kleVectorNames->setEnabled(false);
+	if (state==Qt::Checked){
+	    asciiOptionsWidget.kleVectorNames->setEnabled(false);
 		asciiOptionsWidget.lVectorNames->setEnabled(false);
 	}else{
-        asciiOptionsWidget.kleVectorNames->setEnabled(true);
+	    asciiOptionsWidget.kleVectorNames->setEnabled(true);
 		asciiOptionsWidget.lVectorNames->setEnabled(true);
 	}
 }
 
 void ImportFileWidget::refreshPreview(){
 	QString fileName = ui.kleFileName->text();
-    if ( fileName.left(1) != QDir::separator() )
-        fileName = QDir::homePath() + QDir::separator() + fileName;
+	if ( fileName.left(1) != QDir::separator() )
+	    fileName = QDir::homePath() + QDir::separator() + fileName;
 
 	QFile file(fileName);
 	QString importedText;
 	if ( file.open(QFile::ReadOnly)){
-		QTextStream stream(&file);
+		FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 		int lines = ui.sbPreviewLines->value();
-		for (int i=0; i<lines; ++i){
-			if( stream.atEnd() )
-				break;
 
-			importedText += stream.readLine();
-			importedText += '\n';
+		if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
+			QTextStream in(&file);
+			for (int i=0; i<lines; ++i){
+				if( in.atEnd() )
+					break;
+
+				importedText += in.readLine();
+				importedText += '\n';
+			}
+		}
+		else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
+			QDataStream in(&file);
+
+			BinaryFilter::ByteOrder byteOrder = (BinaryFilter::ByteOrder) binaryOptionsWidget.cbByteOrder->currentIndex();
+			if (byteOrder == BinaryFilter::BigEndian)
+				in.setByteOrder(QDataStream::BigEndian);
+			else if (byteOrder == BinaryFilter::LittleEndian)
+				in.setByteOrder(QDataStream::LittleEndian);
+
+			int vectors = binaryOptionsWidget.niVectors->value();
+			BinaryFilter::DataFormat format = (BinaryFilter::DataFormat) binaryOptionsWidget.cbFormat->currentIndex();
+			//qDebug() <<" vectors ="<<vectors<<"  format ="<<format;
+
+			// skip at start
+			for (int i=0; i<ui.sbSkipStartBytes->value(); ++i){
+				qint8 tmp;
+				in >> tmp;
+			}
+
+			// skip until start row
+			for (int i=0; i<(ui.sbStartRow->value()-1)*vectors; ++i){
+				for(int j=0;j<BinaryFilter::dataSize(format);++j) {
+					qint8 tmp;
+					in >> tmp;
+				}
+			}
+
+			for (int i=0; i<lines; ++i){
+				if( in.atEnd() )
+					break;
+
+				for(int j=0;j < vectors; ++j) {
+					switch(format) {
+					case BinaryFilter::INT8: {
+						qint8 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::INT16: {
+						qint16 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::INT32: {
+						qint32 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::INT64: {
+						qint64 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::UINT8: {
+						quint8 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::UINT16: {
+						quint16 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::UINT32: {
+						quint32 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::UINT64: {
+						quint64 tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::REAL32: {
+						float tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					case BinaryFilter::REAL64: {
+						double tmp;
+						in >> tmp;
+						importedText += QString::number(tmp);
+						break;
+					}
+					}
+					importedText += ' ';
+					
+					// skip after each value
+					for (int i=0; i<ui.sbSkipBytes->value(); ++i){
+						qint8 tmp;
+						in >> tmp;
+					}
+				}
+				importedText += '\n';
+			}
 		}
 	}
 

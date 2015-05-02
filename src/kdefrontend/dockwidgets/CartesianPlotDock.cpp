@@ -683,8 +683,6 @@ void CartesianPlotDock::backgroundColorStyleChanged(int index){
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
-		ui.lBackgroundBrushStyle->show();
-		ui.cbBackgroundBrushStyle->show();
 	}else{
 		ui.lBackgroundFirstColor->setText(i18n("First Color"));
 		ui.lBackgroundSecondColor->show();

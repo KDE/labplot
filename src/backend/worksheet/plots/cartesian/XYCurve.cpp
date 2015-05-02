@@ -126,6 +126,16 @@ void XYCurve::init(){
 	d->valuesFont.setPixelSize( Worksheet::convertToSceneUnits( 8, Worksheet::Point ) );
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
+	d->fillingPosition = (XYCurve::FillingPosition) group.readEntry("FillingPosition", (int)XYCurve::NoFilling);
+	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", (int)PlotArea::Color);
+	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", (int) PlotArea::SingleColor);
+	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", (int) PlotArea::Scaled);
+	d->fillingBrushStyle = (Qt::BrushStyle) group.readEntry("FillingBrushStyle", (int) Qt::SolidPattern);
+	d->fillingFileName = group.readEntry("FillingFileName", QString());
+	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
+	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
+	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
+
 	d->xErrorType = (XYCurve::ErrorType) group.readEntry("XErrorType", (int)XYCurve::NoError);
 	d->xErrorPlusColumn = NULL;
 	d->xErrorMinusColumn = NULL;
@@ -223,6 +233,17 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, valuesColor, valuesColor)
 CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
+
+//filling
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::FillingPosition, fillingPosition, fillingPosition)
+BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundType, fillingType, fillingType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
+BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
+CLASS_SHARED_D_READER_IMPL(XYCurve, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, fillingFirstColor, fillingFirstColor)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, fillingSecondColor, fillingSecondColor)
+CLASS_SHARED_D_READER_IMPL(XYCurve, QString, fillingFileName, fillingFileName)
+BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, fillingOpacity, fillingOpacity)
 
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
@@ -465,6 +486,70 @@ void XYCurve::setValuesColor(const QColor& color) {
 		exec(new XYCurveSetValuesColorCmd(d, color, i18n("%1: set values color")));
 }
 
+//Filling
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingPosition, XYCurve::FillingPosition, fillingPosition, updateFilling)
+void XYCurve::setFillingPosition(FillingPosition position) {
+	Q_D(XYCurve);
+	if (position != d->fillingPosition)
+		exec(new XYCurveSetFillingPositionCmd(d, position, i18n("%1: filling position changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, PlotArea::BackgroundType, fillingType, updatePixmap)
+void XYCurve::setFillingType(PlotArea::BackgroundType type) {
+	Q_D(XYCurve);
+	if (type != d->fillingType)
+		exec(new XYCurveSetFillingTypeCmd(d, type, i18n("%1: filling type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updatePixmap)
+void XYCurve::setFillingColorStyle(PlotArea::BackgroundColorStyle style) {
+	Q_D(XYCurve);
+	if (style != d->fillingColorStyle)
+		exec(new XYCurveSetFillingColorStyleCmd(d, style, i18n("%1: filling color style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updatePixmap)
+void XYCurve::setFillingImageStyle(PlotArea::BackgroundImageStyle style) {
+	Q_D(XYCurve);
+	if (style != d->fillingImageStyle)
+		exec(new XYCurveSetFillingImageStyleCmd(d, style, i18n("%1: filling image style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updatePixmap)
+void XYCurve::setFillingBrushStyle(Qt::BrushStyle style) {
+	Q_D(XYCurve);
+	if (style != d->fillingBrushStyle)
+		exec(new XYCurveSetFillingBrushStyleCmd(d, style, i18n("%1: filling brush style changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updatePixmap)
+void XYCurve::setFillingFirstColor(const QColor& color) {
+	Q_D(XYCurve);
+	if (color!= d->fillingFirstColor)
+		exec(new XYCurveSetFillingFirstColorCmd(d, color, i18n("%1: set filling first color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updatePixmap)
+void XYCurve::setFillingSecondColor(const QColor& color) {
+	Q_D(XYCurve);
+	if (color!= d->fillingSecondColor)
+		exec(new XYCurveSetFillingSecondColorCmd(d, color, i18n("%1: set filling second color")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updatePixmap)
+void XYCurve::setFillingFileName(const QString& fileName) {
+	Q_D(XYCurve);
+	if (fileName!= d->fillingFileName)
+		exec(new XYCurveSetFillingFileNameCmd(d, fileName, i18n("%1: set filling image")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingOpacity, qreal, fillingOpacity, updatePixmap)
+void XYCurve::setFillingOpacity(qreal opacity) {
+	Q_D(XYCurve);
+	if (opacity != d->fillingOpacity)
+		exec(new XYCurveSetFillingOpacityCmd(d, opacity, i18n("%1: set filling opacity")));
+}
+
 //Error bars
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXErrorType, XYCurve::ErrorType, xErrorType, updateErrorBars)
 void XYCurve::setXErrorType(ErrorType type) {
@@ -673,6 +758,7 @@ QString XYCurve::symbolsNameFromStyle(XYCurve::SymbolsStyle style) {
 
 	return name;
 }
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -907,7 +993,9 @@ void XYCurvePrivate::retransform(){
 */
 void XYCurvePrivate::updateLines(){
   	linePath = QPainterPath();
+	lines.clear();
 	if (lineType == XYCurve::NoLine){
+	  updateFilling();
 	  recalcShapeAndBoundingRect();
 	  return;
 	}
@@ -921,7 +1009,6 @@ void XYCurvePrivate::updateLines(){
 	}
 
 	//calculate the lines connecting the data points
-	QList<QLineF> lines;
 	QPointF tempPoint1, tempPoint2;
 	QPointF curPoint, nextPoint;
 	switch(lineType){
@@ -1098,6 +1185,7 @@ void XYCurvePrivate::updateLines(){
 		linePath.lineTo(line.p2());
 	}
 
+	updateFilling();
 	recalcShapeAndBoundingRect();
 }
 
@@ -1360,6 +1448,83 @@ void XYCurvePrivate::updateValues(){
 	recalcShapeAndBoundingRect();
 }
 
+void XYCurvePrivate::updateFilling() {
+	fillPolygons.clear();
+
+	if (fillingPosition==XYCurve::NoFilling) {
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
+	QList<QLineF> fillLines;
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+
+	//if there're no interpolation lines available (XYCurve::NoLine selected)create line-interpolation,
+	//use already available lines otherwise.
+	if (lines.size()) {
+		fillLines = lines;
+	} else {
+		for (int i=0; i<symbolPointsLogical.count()-1; i++){
+		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+		}
+		fillLines = cSystem->mapLogicalToScene(fillLines);
+	}
+
+	//no lines available (no points), nothing to do
+	if (!fillLines.size())
+		return;
+
+	QPolygonF pol;
+	QPointF p1, p2;
+	float xEnd, yEnd;
+	if (fillingPosition == XYCurve::FillingAbove)
+		yEnd = cSystem->mapLogicalToScene(QPointF(0, plot->yMax())).y();
+	else if (fillingPosition == XYCurve::FillingBelow)
+		yEnd = cSystem->mapLogicalToScene(QPointF(0, plot->yMin())).y();
+	else if (fillingPosition == XYCurve::FillingZeroBaseline)
+		yEnd = cSystem->mapLogicalToScene(QPointF(0, 0)).y();
+	else if (fillingPosition == XYCurve::FillingLeft)
+		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), 0)).x();
+	else
+		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMax(), 0)).x();
+
+	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon
+	for (int i=0; i<fillLines.size(); ++i) {
+		const QLineF& line = fillLines.at(i);
+		p1 = line.p1();
+		p2 = line.p2();
+		if (i!=0 && p1!=fillLines.at(i-1).p2()) {
+			//the first point of the current line is not equal to the last point of the previous line
+			//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
+			if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
+				pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
+				pol << QPointF(start.x(), yEnd);
+			} else {
+				pol << QPointF(xEnd, fillLines.at(i-1).p2().y());
+				pol << QPointF(xEnd, start.y());
+			}
+			fillPolygons << pol;
+			pol.clear();
+			start = p1;
+		}
+		pol << p1 << p2;
+	}
+
+	//close the last polygon
+	if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
+		pol << QPointF(p2.x(), yEnd);
+		pol << QPointF(start.x(), yEnd);
+	} else {
+		pol << QPointF(xEnd, p2.y());
+		pol << QPointF(xEnd, start.y());
+	}
+
+	fillPolygons << pol;
+	recalcShapeAndBoundingRect();
+}
+
 void XYCurvePrivate::updateErrorBars(){
   	errorBarsPath = QPainterPath();
 	if (xErrorType==XYCurve::NoError && yErrorType==XYCurve::NoError){
@@ -1532,6 +1697,9 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 	boundingRectangle = curveShape.boundingRect();
 
+	foreach(const QPolygonF& pol, fillPolygons)
+		boundingRectangle = boundingRectangle.united(pol.boundingRect());
+
 	//TODO: when the selection is painted, line intersections are visible.
 	//simplified() removes those artifacts but is horrible slow for curves with large number of points.
 	//search for an alternative.
@@ -1541,6 +1709,13 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 }
 
 void XYCurvePrivate::draw(QPainter *painter) {
+	//draw filling
+	if (fillingPosition != XYCurve::NoFilling) {
+		painter->setOpacity(fillingOpacity);
+		painter->setPen(Qt::SolidLine);
+		drawFilling(painter);
+	}
+
 	//draw lines
 	if (lineType != XYCurve::NoLine){
 		painter->setOpacity(lineOpacity);
@@ -1580,7 +1755,6 @@ void XYCurvePrivate::draw(QPainter *painter) {
 		painter->setBrush(Qt::SolidPattern);
 		drawValues(painter);
 	}
-
 }
 
 void XYCurvePrivate::updatePixmap() {
@@ -1770,6 +1944,91 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 	}
 }
 
+void XYCurvePrivate::drawFilling(QPainter* painter) {
+	foreach(const QPolygonF& pol, fillPolygons) {
+		QRectF rect = pol.boundingRect();
+		if (fillingType == PlotArea::Color){
+			switch (fillingColorStyle){
+				case PlotArea::SingleColor:{
+					painter->setBrush(QBrush(fillingFirstColor));
+					break;
+				}
+				case PlotArea::HorizontalLinearGradient:{
+					QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
+					linearGrad.setColorAt(0, fillingFirstColor);
+					linearGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(linearGrad));
+					break;
+				}
+				case PlotArea::VerticalLinearGradient:{
+					QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
+					linearGrad.setColorAt(0, fillingFirstColor);
+					linearGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(linearGrad));
+					break;
+				}
+				case PlotArea::TopLeftDiagonalLinearGradient:{
+					QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
+					linearGrad.setColorAt(0, fillingFirstColor);
+					linearGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(linearGrad));
+					break;
+				}
+				case PlotArea::BottomLeftDiagonalLinearGradient:{
+					QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
+					linearGrad.setColorAt(0, fillingFirstColor);
+					linearGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(linearGrad));
+					break;
+				}
+				case PlotArea::RadialGradient:{
+					QRadialGradient radialGrad(rect.center(), rect.width()/2);
+					radialGrad.setColorAt(0, fillingFirstColor);
+					radialGrad.setColorAt(1, fillingSecondColor);
+					painter->setBrush(QBrush(radialGrad));
+					break;
+				}
+			}
+		}else if (fillingType == PlotArea::Image){
+			if ( !fillingFileName.trimmed().isEmpty() ) {
+				QPixmap pix(fillingFileName);
+				switch (fillingImageStyle){
+					case PlotArea::ScaledCropped:
+						pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+						painter->setBrush(QBrush(pix));
+						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+						break;
+					case PlotArea::Scaled:
+						pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+						painter->setBrush(QBrush(pix));
+						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+						break;
+					case PlotArea::ScaledAspectRatio:
+						pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+						painter->setBrush(QBrush(pix));
+						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+						break;
+					case PlotArea::Centered:
+	// 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
+						break;
+					case PlotArea::Tiled:
+						painter->setBrush(QBrush(pix));
+	// 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+						break;
+					case PlotArea::CenterTiled:
+						painter->setBrush(QBrush(pix));
+						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+	// 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+				}
+			}
+		} else if (fillingType == PlotArea::Pattern){
+			painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
+		}
+
+		painter->drawPolygon(pol);
+	}
+}
+
 void XYCurvePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
@@ -1845,6 +2104,23 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "suffix", d->valuesSuffix );
 	WRITE_QCOLOR(d->valuesColor);
 	WRITE_QFONT(d->valuesFont);
+	writer->writeEndElement();
+
+	//Filling
+	writer->writeStartElement( "filling" );
+	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
+    writer->writeAttribute( "type", QString::number(d->fillingType) );
+    writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
+    writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
+    writer->writeAttribute( "brushStyle", QString::number(d->fillingBrushStyle) );
+    writer->writeAttribute( "firstColor_r", QString::number(d->fillingFirstColor.red()) );
+    writer->writeAttribute( "firstColor_g", QString::number(d->fillingFirstColor.green()) );
+    writer->writeAttribute( "firstColor_b", QString::number(d->fillingFirstColor.blue()) );
+    writer->writeAttribute( "secondColor_r", QString::number(d->fillingSecondColor.red()) );
+    writer->writeAttribute( "secondColor_g", QString::number(d->fillingSecondColor.green()) );
+    writer->writeAttribute( "secondColor_b", QString::number(d->fillingSecondColor.blue()) );
+    writer->writeAttribute( "fileName", d->fillingFileName );
+	writer->writeAttribute( "opacity", QString::number(d->fillingOpacity) );
 	writer->writeEndElement();
 
 	//Error bars
@@ -2021,6 +2297,83 @@ bool XYCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
                 d->valuesOpacity = str.toDouble();
+		}else if (reader->name() == "filling"){
+            attribs = reader->attributes();
+
+			str = attribs.value("position").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("position"));
+            else
+                d->fillingPosition = XYCurve::FillingPosition(str.toInt());
+
+            str = attribs.value("type").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("type"));
+            else
+                d->fillingType = PlotArea::BackgroundType(str.toInt());
+
+            str = attribs.value("colorStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("colorStyle"));
+            else
+                d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
+
+            str = attribs.value("imageStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("imageStyle"));
+            else
+                d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
+
+            str = attribs.value("brushStyle").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("brushStyle"));
+            else
+                d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
+
+            str = attribs.value("firstColor_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+            else
+                d->fillingFirstColor.setRed(str.toInt());
+
+            str = attribs.value("firstColor_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+            else
+                d->fillingFirstColor.setGreen(str.toInt());
+
+            str = attribs.value("firstColor_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+            else
+                d->fillingFirstColor.setBlue(str.toInt());
+
+            str = attribs.value("secondColor_r").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+            else
+                d->fillingSecondColor.setRed(str.toInt());
+
+            str = attribs.value("secondColor_g").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+            else
+                d->fillingSecondColor.setGreen(str.toInt());
+
+            str = attribs.value("secondColor_b").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+            else
+                d->fillingSecondColor.setBlue(str.toInt());
+
+            str = attribs.value("fileName").toString();
+            d->fillingFileName = str;
+
+            str = attribs.value("opacity").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("opacity"));
+            else
+                d->fillingOpacity = str.toDouble();
 		}else if (reader->name() == "errorBars"){
 			attribs = reader->attributes();
 

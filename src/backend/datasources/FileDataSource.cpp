@@ -63,7 +63,6 @@ FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& n
      m_fileLinked(false),
      m_filter(0),
      m_fileSystemWatcher(0)
-
 {
 	initActions();
 }
@@ -102,15 +101,15 @@ QWidget *FileDataSource::view() const{
 */
 QStringList FileDataSource::fileTypes(){
     return (QStringList()<< i18n("ASCII vector data")
-//                         << i18n("BINARY vector data")
+                         << i18n("BINARY vector data")
 //                         << i18n("ASCII matrix data")
 //                         << i18n("BINARY matrix data")
 //                         << i18n("Image")
 //                         << i18n("Sound")
-//                         << "FITS"
 //                         << "NetCDF"
-//                         << "HDF"
+//                         << "HDF5"
 //                         << "CDF"
+//                         << "FITS"
                         );
 }
 
@@ -170,13 +169,13 @@ bool FileDataSource::isFileLinked() const{
 QIcon FileDataSource::icon() const{
 	QIcon icon;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-  if (m_fileType==AsciiVector || m_fileType==AsciiMatrix)
+  if (m_fileType == FileDataSource::AsciiVector || m_fileType == FileDataSource::AsciiMatrix)
 	  icon = KIcon("text-plain");
-  else if (m_fileType==BinaryVector || m_fileType==BinaryMatrix)
+  else if (m_fileType == FileDataSource::BinaryVector || m_fileType == FileDataSource::BinaryMatrix)
 	icon = KIcon("application-octet-stream");
-  else if (m_fileType==Image)
+  else if (m_fileType == FileDataSource::Image)
 	icon = KIcon("image-x-generic");
-  else if (m_fileType==Sound)
+  else if (m_fileType == FileDataSource::Sound)
 	icon = KIcon("audio-x-generic");
 #endif
 	return icon;
@@ -344,7 +343,7 @@ void FileDataSource::save(QXmlStreamWriter* writer) const
 	writeCommentElement(writer);
 
 	//general
-    writer->writeStartElement( "general" );
+	writer->writeStartElement( "general" );
 	writer->writeAttribute( "fileName", m_fileName );
 	writer->writeAttribute( "fileType", QString::number(m_fileType) );
 	writer->writeAttribute( "fileWatched", QString::number(m_fileWatched) );
