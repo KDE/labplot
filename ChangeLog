@@ -1,6 +1,7 @@
 -----2.0.3-----
 New features:
-	*  In xy-curve the points may not be connected by the line if there are NANs in-between. This behaviour is controlled by the parameter "skip gaps"
+	* In xy-curve the points may not be connected by the line if there are NANs in-between. This behaviour is controlled by the parameter "skip gaps"
+	* Multiplier of Pi format of the plot axis for periodical functions
 
 Bug fixes:
 
