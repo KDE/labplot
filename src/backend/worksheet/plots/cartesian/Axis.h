@@ -44,7 +44,7 @@ class Axis: public WorksheetElement {
 	public:
 		enum AxisOrientation {AxisHorizontal, AxisVertical};
 		enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCentered, AxisCustom};
-		enum LabelsFormat {FormatDecimal, FormatScientificE, FormatPowers10, FormatPowers2, FormatPowersE};
+		enum LabelsFormat {FormatDecimal, FormatScientificE, FormatPowers10, FormatPowers2, FormatPowersE, FormatPowersPi};
 		enum TicksFlags {
 			noTicks = 0x00,
 			ticksIn = 0x01,

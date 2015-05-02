@@ -1318,6 +1318,12 @@ void AxisPrivate::retransformTickLabelStrings(){
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
+	} else if (labelsFormat == Axis::FormatPowersPi) {
+		foreach(float value, tickLabelValues) {
+			str = "<span>"+ QString::number(value / M_PI,'f',labelsPrecision)+"</span>" + QChar(0x03C0);
+			str = labelsPrefix + str + labelsSuffix;
+			tickLabelStrings << str;
+		}
 	}
 
 	//recalculate the position of the tick labels
