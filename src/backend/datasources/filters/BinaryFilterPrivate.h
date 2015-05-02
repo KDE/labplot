@@ -49,6 +49,8 @@ class BinaryFilterPrivate {
 		int endRow;		// end row to (value*vectors) read
 		int skipBytes;		// bytes to skip after each value
 
+		bool autoModeEnabled;
+
 	private:
 		void clearDataSource(AbstractDataSource*) const;
 };

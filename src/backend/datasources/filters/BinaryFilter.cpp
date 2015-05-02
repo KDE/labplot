@@ -71,8 +71,7 @@ returns the list of all predefined data formats.
 QStringList BinaryFilter::dataFormats(){
   return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int32 (32 bit signed integer)"<<"int64 (64 bit signed integer)"
   	<<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"<<"uint64 (64 bit unsigned integer)"
-	<<"real32 (single precision floats)"<<"real64 (double precision floats)"
-	);
+	<<"real32 (single precision floats)"<<"real64 (double precision floats)");
 }
 
 /*!
@@ -88,36 +87,113 @@ int BinaryFilter::dataSize(BinaryFilter::DataFormat format) {
 	return sizes[(int)format];
 }
 
-///////////////////////////////////////////////////////////////////////
+/*!
+  returns the number of rows (length of vectors) in the file \c fileName.
+*/
+long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataFormat format) {
+	QFile file(fileName);
+	if ( !file.exists() )
+		return 0;
 
-int BinaryFilter::vectors() const{
-  return d->vectors;
+	if (!file.open(QIODevice::ReadOnly))
+		return 0;
+
+	QDataStream in(&file);
+	long rows=0;
+	while (!in.atEnd()){
+		// one row
+		for (int i=0; i<vectors; ++i){
+			for(int j=0;j<BinaryFilter::dataSize(format);++j) {
+				qint8 tmp;
+				in >> tmp;
+			}
+		}
+		rows++;
+	}
+
+	return rows;
 }
 
+///////////////////////////////////////////////////////////////////////
+/*!
+  loads the predefined filter settings for \c filterName
+*/
+void BinaryFilter::loadFilterSettings(const QString& filterName){
+    Q_UNUSED(filterName);
+}
+
+/*!
+  saves the current settings as a new filter with the name \c filterName
+*/
+void BinaryFilter::saveFilterSettings(const QString& filterName) const{
+    Q_UNUSED(filterName);
+}
+
+///////////////////////////////////////////////////////////////////////
+
+void BinaryFilter::setVectors(const int v){
+	d->vectors = v;
+}
+
+int BinaryFilter::vectors() const{
+	return d->vectors;
+}
+
+void BinaryFilter::setDataFormat(const BinaryFilter::DataFormat f) {
+	d->dataFormat = f;
+} 
+
 BinaryFilter::DataFormat BinaryFilter::dataFormat() const{
-  return d->dataFormat;
+	return d->dataFormat;
+}
+
+void BinaryFilter::setByteOrder(const BinaryFilter::ByteOrder b) {
+	d->byteOrder = b;
 }
 
 BinaryFilter::ByteOrder BinaryFilter::byteOrder() const{
-  return d->byteOrder;
+	return d->byteOrder;
+}
+
+void BinaryFilter::setSkipStartBytes(const int s) {
+	d->skipStartBytes = s;
 }
 
 int BinaryFilter::skipStartBytes() const{
-  return d->skipStartBytes;
+	return d->skipStartBytes;
+}
+
+void BinaryFilter::setStartRow(const int s) {
+	d->startRow = s;
 }
 
 int BinaryFilter::startRow() const{
-  return d->startRow;
+	return d->startRow;
+}
+
+void BinaryFilter::setEndRow(const int e) {
+	d->endRow = e;
 }
 
 int BinaryFilter::endRow() const{
-  return d->endRow;
+	return d->endRow;
+}
+
+void BinaryFilter::setSkipBytes(const int s) {
+	d->skipBytes = s;
 }
 
 int BinaryFilter::skipBytes() const{
-  return d->skipBytes;
+	return d->skipBytes;
 }
 
+void BinaryFilter::setAutoModeEnabled(bool b){
+	d->autoModeEnabled = b;
+}
+
+bool BinaryFilter::isAutoModeEnabled() const{
+	return d->autoModeEnabled;
+}
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -131,8 +207,7 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
     Uses the settings defined in the data source.
 */
 void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-	Q_UNUSED(dataSource);
-	Q_UNUSED(mode);
+	qDebug()<<"BinaryFilterPrivate::read()";
 	
 	QFile file(fileName);
 	if ( !file.exists() )
@@ -159,20 +234,128 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		}
 	}
 
-//	QStringList vectorNameList;
-//	for (int k=0; k<endColumn-startColumn+1-size; k++ )
-//		vectorNameList.append( "Column " + QString::number(size+k+1) );
+	QStringList vectorNameList;
+	for (int k=0; k<vectors; k++ )
+		vectorNameList.append( "Column " + QString::number(k+1) );
 
-	//TODO: make sure we have enough columns in the data source.
+	qDebug()<<"OK";
 
-	//TODO: resize the spreadsheet
+	//make sure we have enough columns in the data source.
+	Column * newColumn;
+	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
+	dataSource->setUndoAware(false);
+	if (mode==AbstractFileFilter::Append){
+		columnOffset=dataSource->childCount<Column>();
+		for ( int n=1; n<=vectors; n++ ){
+			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
+			newColumn->setUndoAware(false);
+			dataSource->addChild(newColumn);
+		}
+	}else if (mode==AbstractFileFilter::Prepend){
+		Column* firstColumn = dataSource->child<Column>(0);
+		for ( int n=1; n<=vectors; n++ ){
+			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
+			newColumn->setUndoAware(false);
+			dataSource->insertChildBefore(newColumn, firstColumn);
+		}
+	}else if (mode==AbstractFileFilter::Replace){
+		//replace completely the previous content of the data source with the content to be imported.
+		int columns = dataSource->childCount<Column>();
 
-	//TODO: pointers to the actual data containers
+		if (columns>(vectors)){
+			//there're more columns in the data source then required
+			//-> remove the superfluous columns
+			for(int i=0;i<columns-(vectors);i++) {
+				dataSource->removeChild(dataSource->child<Column>(0));
+			}
 
-	//TODO: read data
+			//rename the columns, that are already available
+			for (int i=0; i<vectors-1; i++){
+				dataSource->child<Column>(i)->setUndoAware(false);
+				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
+				dataSource->child<Column>(i)->setName(vectorNameList.at(i+1));
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
+			}
+		}else{
+			//rename the columns, that are already available
+			for (int i=0; i<columns; i++){
+				dataSource->child<Column>(i)->setUndoAware(false);
+				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
+				dataSource->child<Column>(i)->setName(vectorNameList.at(i+1));
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
+			}
 
+			//create additional columns if needed
+			for(int i=0; i<=(vectors-columns-1); i++) {
+				newColumn = new Column(vectorNameList.at(columns+i+1), AbstractColumn::Numeric);
+				newColumn->setUndoAware(false);
+				dataSource->addChild(newColumn);
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
+			}
+		}
+	}
 
-	//TODO: see AsciiFilterPrivate::read()
+	qDebug()<<"OK";
+
+	// set range of rows
+	int numRows=BinaryFilter::rowNumber(fileName,vectors,dataFormat);
+	qDebug()<<"	numRows ="<<numRows;
+	int actualEndRow;
+	if (endRow == -1)
+		actualEndRow = numRows;
+	else if (endRow > numRows-1)
+		actualEndRow = numRows-1;
+	else
+		actualEndRow = endRow;
+
+	// resize the spreadsheet
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (mode==AbstractFileFilter::Replace){
+		spreadsheet->clear();
+		spreadsheet->setRowCount(numRows);
+	}else{
+		if (spreadsheet->rowCount()<numRows)
+			spreadsheet->setRowCount(numRows);
+	}
+
+	// pointers to the actual data containers
+	QVector<QVector<double>*> dataPointers;
+	for ( int n=1; n<=vectors; n++ ){
+		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-1)->data());
+		vector->reserve(numRows);
+		vector->resize(numRows);
+		dataPointers.push_back(vector);
+	}
+
+	// read data
+	for (int i=0; i<numRows; i++){
+		//TODO
+		//lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
+
+		for ( int n=1; n<=vectors; n++ ){
+/*			if (n<lineStringList.size()) {
+				const double value = lineStringList.at(n).toDouble(&isNumber);
+				isNumber ? dataPointers[n-startColumn]->operator[](currentRow) = value : dataPointers[n-startColumn]->operator[](currentRow) = NAN;
+			} else {
+				dataPointers[n-startColumn]->operator[](currentRow) = NAN;
+			}
+*/
+		}
+
+	}
+
+	for ( int n=1; n<=vectors; n++ ){
+		Column* column = spreadsheet->column(columnOffset+n-1);
+// 		column->setUndoAware(false);
+//		column->setComment(comment);
+		column->setUndoAware(true);
+		if (mode==AbstractFileFilter::Replace) {
+			column->setSuppressDataChangedSignal(true);
+			column->setChanged();
+		}
+	}
+
+	spreadsheet->setUndoAware(true);
 }
 
 /*!
@@ -182,4 +365,26 @@ void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* da
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
 	//TODO
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+
+/*!
+  Saves as XML.
+ */
+void BinaryFilter::save(QXmlStreamWriter* writer) const {
+	Q_UNUSED(writer);
+	//TODO
+}
+
+/*!
+  Loads from XML.
+*/
+bool BinaryFilter::load(XmlStreamReader* reader) {
+	Q_UNUSED(reader);
+	//TODO
+	//TODO
+	return true;
 }

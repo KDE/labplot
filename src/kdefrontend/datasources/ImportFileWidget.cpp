@@ -1,12 +1,12 @@
 /***************************************************************************
-    File                 : ImportFileWidget.cpp
-    Project              : LabPlot
-    Description          : import file data widget
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
+File                 : ImportFileWidget.cpp
+Project              : LabPlot
+Description          : import file data widget
+--------------------------------------------------------------------
+Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -178,25 +178,25 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 	if ( fileType==FileDataSource::AsciiVector ) {
 		 //TODO use auto_ptr
-	    AsciiFilter* filter = new AsciiFilter();
+		AsciiFilter* filter = new AsciiFilter();
 	
-	    if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
-		  filter->setAutoModeEnabled(true);
-	    } else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
-		  filter->setAutoModeEnabled(false);
-		  filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
-		  filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
-		  filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
-		  filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
-		  filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
-		  filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
-		  filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
-	    } else {
-		  filter->loadFilterSettings( ui.cbFilter->currentText() );
-	    }
+		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
+			filter->setAutoModeEnabled(true);
+		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
+			filter->setAutoModeEnabled(false);
+			filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
+			filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
+			filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
+			filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
+			filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
+			filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
+			filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
+		} else {
+			filter->loadFilterSettings( ui.cbFilter->currentText() );
+		}
 
-	    //save the data portion to import
-	filter->setStartRow( ui.sbStartRow->value()-1 );
+		//save the data portion to import
+		filter->setStartRow( ui.sbStartRow->value()-1 );
 		if (ui.sbEndRow->value()==-1)
 			filter->setEndRow(-1);
 		else
@@ -209,19 +209,19 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 			filter->setEndColumn( ui.sbEndColumn->value()-1 );
 
 		return filter;
-//         source->setFilter(filter);
+//		source->setFilter(filter);
 	} else if ( fileType==FileDataSource::BinaryVector ) {
-//TODO
-// 		BinaryFilter filter;
-// 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
-// 			filter.setAutoMode(true);
-// 		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
-// 			filter.setNumberOfVectors( binaryOptionsWidget.niVectors->value() );
-// 			filter.setFormat( binaryOptionsWidget.cbFormat->currentText() );
-// 		}else{
-// 			filter.setFilterName( ui.cbFilter->currentText() );
-// 		}
-// 		source->setFilter(filter);
+		BinaryFilter* filter = new BinaryFilter();
+ 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
+//TODO			filter->setAutoMode(true);
+ 		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
+ 			filter->setVectors( binaryOptionsWidget.niVectors->value() );
+ 			filter->setDataFormat( (BinaryFilter::DataFormat) binaryOptionsWidget.cbFormat->currentIndex() );
+ 		}else{
+// 			filter->setFilterName( ui.cbFilter->currentText() );
+ 		}
+//		source->setFilter(filter);
+		return filter;
 	} else if ( fileType==FileDataSource::AsciiMatrix ) {
 //TODO
 	} else if ( fileType==FileDataSource::BinaryMatrix ) {
@@ -240,7 +240,7 @@ void ImportFileWidget::selectFile() {
 	QString dir = conf.readEntry("LastDir", "");
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
 	if (path.isEmpty())
-	    return; //cancel was clicked in the file-dialog
+		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {
@@ -254,8 +254,8 @@ void ImportFileWidget::selectFile() {
 	//use the file name as the name of the data source,
 	//if there is no data source name provided yet
 	if (ui.kleSourceName->text().isEmpty()) {
-	    QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-	    ui.kleSourceName->setText(fileName);
+		QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+		ui.kleSourceName->setText(fileName);
 	}
 
 	//TODO: decide whether the selection of several files should be possible
@@ -276,7 +276,7 @@ void ImportFileWidget::selectFile() {
 void ImportFileWidget::fileNameChanged(const QString& name) {
 	QString fileName=name;
 	if ( fileName.left(1)!=QDir::separator()) {
-	    fileName=QDir::homePath() + QDir::separator() + fileName;
+		fileName=QDir::homePath() + QDir::separator() + fileName;
 	}
 
 	bool fileExists = QFile::exists(fileName);
@@ -301,14 +301,14 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	if ( proc->waitForReadyRead(1000) == false ) {
 	    // 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
 	} else {
-	    QString info = proc->readLine();
-	    //TODO
-	    if ( info.contains( ("ASCII") ) ) {
-	        //select "ASCII vector data"
-	        this->fileTypeChanged(0);
-	    } else {
-	        this->fileTypeChanged(2);
-	    }
+		QString info = proc->readLine();
+		//TODO
+		if ( info.contains( ("ASCII") ) ) {
+			//select "ASCII vector data"
+			this->fileTypeChanged(0);
+		} else {
+			this->fileTypeChanged(2);
+		}
 	}
 }
 

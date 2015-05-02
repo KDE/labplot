@@ -44,9 +44,13 @@ class BinaryFilter : public AbstractFileFilter{
 	static QStringList dataFormats();
 	static QStringList byteOrders();
 	static int dataSize(BinaryFilter::DataFormat);
+	static long rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataFormat format);
 
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
+
+	void loadFilterSettings(const QString&);
+	void saveFilterSettings(const QString&) const;
 
 	void setVectors(const int);
 	int vectors() const;
@@ -69,6 +73,11 @@ class BinaryFilter : public AbstractFileFilter{
 	void setSkipBytes(const int);
 	int skipBytes() const;
 
+	void setAutoModeEnabled(const bool);
+	bool isAutoModeEnabled() const;
+
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
   private:
 	BinaryFilterPrivate* const d;
 	friend class BinaryFilterPrivate;

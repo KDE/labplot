@@ -3,7 +3,7 @@ File                 : AsciiFilter.cpp
 Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
@@ -132,22 +132,22 @@ int AsciiFilter::columnNumber(const QString & fileName){
   returns the number of lines in the file \c fileName.
 */
 long AsciiFilter::lineNumber(const QString & fileName){
-  //TODO: compare the speed of this function with the speed of wc from GNU-coreutils.
-  QFile file(fileName);
-  if ( !file.exists() )
-	  return 0;
+	//TODO: compare the speed of this function with the speed of wc from GNU-coreutils.
+	QFile file(fileName);
+	if ( !file.exists() )
+		return 0;
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-	  return 0;
+		return 0;
 
-  QTextStream in(&file);
-  long rows=0;
-  while (!in.atEnd()){
-	  in.readLine();
-	  rows++;
-  }
+	QTextStream in(&file);
+	long rows=0;
+	while (!in.atEnd()){
+		in.readLine();
+		rows++;
+	}
 
-  return rows;
+	return rows;
 }
 
 void AsciiFilter::setTransposed(const bool b){
@@ -542,15 +542,15 @@ void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dat
 	//TODO
 }
 
-
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
+
 /*!
   Saves as XML.
  */
 void AsciiFilter::save(QXmlStreamWriter* writer) const {
-    writer->writeStartElement( "asciiFilter" );
+	writer->writeStartElement( "asciiFilter" );
 	writer->writeAttribute( "commentCharacter", d->commentCharacter );
 	writer->writeAttribute( "separatingCharacter", d->separatingCharacter );
 	writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled) );
@@ -571,11 +571,11 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
 	if(!reader->isStartElement() || reader->name() != "asciiFilter"){
-        reader->raiseError(i18n("no ascii filter element found"));
-        return false;
-    }
+		reader->raiseError(i18n("no ascii filter element found"));
+		return false;
+	}
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value("commentCharacter").toString();
