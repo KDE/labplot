@@ -1460,7 +1460,7 @@ void XYCurvePrivate::updateFilling() {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 
-	//if there're no interpolation lines available (XYCurve::NoLine selected)create line-interpolation,
+	//if there're no interpolation lines available (XYCurve::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.
 	if (lines.size()) {
 		fillLines = lines;
@@ -1476,21 +1476,24 @@ void XYCurvePrivate::updateFilling() {
 	if (!fillLines.size())
 		return;
 
-	QPolygonF pol;
-	QPointF p1, p2;
+	//determine the end point in scene coordinates where the last polygon line should be closed,
+	//use a point in logical coordinates on the edge and map it to scene coordinates
 	float xEnd, yEnd;
 	if (fillingPosition == XYCurve::FillingAbove)
-		yEnd = cSystem->mapLogicalToScene(QPointF(0, plot->yMax())).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax())).y();
 	else if (fillingPosition == XYCurve::FillingBelow)
-		yEnd = cSystem->mapLogicalToScene(QPointF(0, plot->yMin())).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).y();
 	else if (fillingPosition == XYCurve::FillingZeroBaseline)
-		yEnd = cSystem->mapLogicalToScene(QPointF(0, 0)).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
 	else if (fillingPosition == XYCurve::FillingLeft)
-		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), 0)).x();
+		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).x();
 	else
-		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMax(), 0)).x();
+		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin())).x();
 
+	//create polygon(s)
 	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon
+	QPointF p1, p2;
+	QPolygonF pol;
 	for (int i=0; i<fillLines.size(); ++i) {
 		const QLineF& line = fillLines.at(i);
 		p1 = line.p1();
@@ -2008,17 +2011,15 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 						painter->setBrush(QBrush(pix));
 						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 						break;
-					case PlotArea::Centered:
-	// 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
-						break;
+					case PlotArea::Centered:{
+						//TODO
+					}
 					case PlotArea::Tiled:
 						painter->setBrush(QBrush(pix));
-	// 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 						break;
 					case PlotArea::CenterTiled:
 						painter->setBrush(QBrush(pix));
 						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-	// 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				}
 			}
 		} else if (fillingType == PlotArea::Pattern){
