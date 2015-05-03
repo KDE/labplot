@@ -66,7 +66,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	QWidget* binaryw=new QWidget(0);
 	binaryOptionsWidget.setupUi(binaryw);
-	binaryOptionsWidget.cbFormat->addItems(BinaryFilter::dataFormats());
+	binaryOptionsWidget.cbDataType->addItems(BinaryFilter::dataTypes());
 	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
 	ui.swOptions->insertWidget(1, binaryw);
 
@@ -213,13 +213,17 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	} else if ( fileType==FileDataSource::BinaryVector ) {
 		BinaryFilter* filter = new BinaryFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
-//TODO			filter->setAutoMode(true);
+			filter->setAutoModeEnabled(true);
  		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
  			filter->setVectors( binaryOptionsWidget.niVectors->value() );
- 			filter->setDataFormat( (BinaryFilter::DataFormat) binaryOptionsWidget.cbFormat->currentIndex() );
+ 			filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
  		}else{
 // 			filter->setFilterName( ui.cbFilter->currentText() );
  		}
+
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+
 //		source->setFilter(filter);
 		return filter;
 	} else if ( fileType==FileDataSource::AsciiMatrix ) {
@@ -449,8 +453,8 @@ void ImportFileWidget::refreshPreview(){
 				in.setByteOrder(QDataStream::LittleEndian);
 
 			int vectors = binaryOptionsWidget.niVectors->value();
-			BinaryFilter::DataFormat format = (BinaryFilter::DataFormat) binaryOptionsWidget.cbFormat->currentIndex();
-			//qDebug() <<" vectors ="<<vectors<<"  format ="<<format;
+			BinaryFilter::DataType type = (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex();
+			//qDebug() <<" vectors ="<<vectors<<"  type ="<<type;
 
 			// skip at start
 			for (int i=0; i<ui.sbSkipStartBytes->value(); ++i){
@@ -460,7 +464,7 @@ void ImportFileWidget::refreshPreview(){
 
 			// skip until start row
 			for (int i=0; i<(ui.sbStartRow->value()-1)*vectors; ++i){
-				for(int j=0;j<BinaryFilter::dataSize(format);++j) {
+				for(int j=0;j<BinaryFilter::dataSize(type);++j) {
 					qint8 tmp;
 					in >> tmp;
 				}
@@ -471,7 +475,7 @@ void ImportFileWidget::refreshPreview(){
 					break;
 
 				for(int j=0;j < vectors; ++j) {
-					switch(format) {
+					switch(type) {
 					case BinaryFilter::INT8: {
 						qint8 tmp;
 						in >> tmp;

@@ -68,7 +68,7 @@ void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSourc
 /*!
 returns the list of all predefined data formats.
 */
-QStringList BinaryFilter::dataFormats(){
+QStringList BinaryFilter::dataTypes(){
   return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int32 (32 bit signed integer)"<<"int64 (64 bit signed integer)"
   	<<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"<<"uint64 (64 bit unsigned integer)"
 	<<"real32 (single precision floats)"<<"real64 (double precision floats)");
@@ -81,16 +81,16 @@ QStringList BinaryFilter::byteOrders(){
   return (QStringList()<<"Little endian"<<"Big endian");
 }
 
-int BinaryFilter::dataSize(BinaryFilter::DataFormat format) {
+int BinaryFilter::dataSize(BinaryFilter::DataType type) {
 	int sizes[]={1,2,4,8,1,2,4,8,4,8};
 
-	return sizes[(int)format];
+	return sizes[(int)type];
 }
 
 /*!
   returns the number of rows (length of vectors) in the file \c fileName.
 */
-long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataFormat format) {
+long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataType type) {
 	QFile file(fileName);
 	if ( !file.exists() )
 		return 0;
@@ -103,7 +103,7 @@ long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const 
 	while (!in.atEnd()){
 		// one row
 		for (int i=0; i<vectors; ++i){
-			for(int j=0;j<BinaryFilter::dataSize(format);++j) {
+			for(int j=0;j<BinaryFilter::dataSize(type);++j) {
 				qint8 tmp;
 				in >> tmp;
 			}
@@ -139,12 +139,12 @@ int BinaryFilter::vectors() const{
 	return d->vectors;
 }
 
-void BinaryFilter::setDataFormat(const BinaryFilter::DataFormat f) {
-	d->dataFormat = f;
+void BinaryFilter::setDataType(const BinaryFilter::DataType t) {
+	d->dataType = t;
 } 
 
-BinaryFilter::DataFormat BinaryFilter::dataFormat() const{
-	return d->dataFormat;
+BinaryFilter::DataType BinaryFilter::dataType() const{
+	return d->dataType;
 }
 
 void BinaryFilter::setByteOrder(const BinaryFilter::ByteOrder b) {
@@ -199,7 +199,7 @@ bool BinaryFilter::isAutoModeEnabled() const{
 //#####################################################################
 
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : 
-	q(owner), vectors(2), dataFormat(BinaryFilter::INT8), byteOrder(BinaryFilter::LittleEndian), skipStartBytes(0), startRow(0), endRow(-1), skipBytes(0) {
+	q(owner), vectors(2), dataType(BinaryFilter::INT8), byteOrder(BinaryFilter::LittleEndian), skipStartBytes(0), startRow(1), endRow(-1), skipBytes(0) {
 }
 
 /*!
@@ -207,8 +207,10 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
     Uses the settings defined in the data source.
 */
 void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
+#ifdef QT_DEBUG
 	qDebug()<<"BinaryFilterPrivate::read()";
-	
+#endif	
+
 	QFile file(fileName);
 	if ( !file.exists() )
 		return;
@@ -218,7 +220,17 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 
 	QDataStream in(&file);
 
-	//TODO: catch case that skipStartBytes or startValue is bigger than file
+	if (byteOrder == BinaryFilter::BigEndian)
+		in.setByteOrder(QDataStream::BigEndian);
+	else if (byteOrder == BinaryFilter::LittleEndian)
+		in.setByteOrder(QDataStream::LittleEndian);
+
+	int numRows=BinaryFilter::rowNumber(fileName,vectors,dataType);
+
+	// catch case that skipStartBytes or startRow is bigger than file
+	if(skipStartBytes >= BinaryFilter::dataSize(dataType)*vectors*numRows || startRow > numRows) {
+		return;
+	}
 
 	// skip bytes at start
 	for (int i=0; i<skipStartBytes; i++){
@@ -228,7 +240,7 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 
 	// skip until start row
 	for (int i=0; i<(startRow-1)*vectors; ++i){
-		for(int j=0;j<BinaryFilter::dataSize(dataFormat);++j) {
+		for(int j=0;j<BinaryFilter::dataSize(dataType);++j) {
 			qint8 tmp;
 			in >> tmp;
 		}
@@ -238,12 +250,11 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 	for (int k=0; k<vectors; k++ )
 		vectorNameList.append( "Column " + QString::number(k+1) );
 
-	qDebug()<<"OK";
-
 	//make sure we have enough columns in the data source.
 	Column * newColumn;
 	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 	dataSource->setUndoAware(false);
+
 	if (mode==AbstractFileFilter::Append){
 		columnOffset=dataSource->childCount<Column>();
 		for ( int n=1; n<=vectors; n++ ){
@@ -262,7 +273,7 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		//replace completely the previous content of the data source with the content to be imported.
 		int columns = dataSource->childCount<Column>();
 
-		if (columns>(vectors)){
+		if (columns > vectors){
 			//there're more columns in the data source then required
 			//-> remove the superfluous columns
 			for(int i=0;i<columns-(vectors);i++) {
@@ -281,12 +292,12 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 			for (int i=0; i<columns; i++){
 				dataSource->child<Column>(i)->setUndoAware(false);
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(i+1));
+				dataSource->child<Column>(i)->setName(vectorNameList.at(i));
 				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 
 			//create additional columns if needed
-			for(int i=0; i<=(vectors-columns-1); i++) {
+			for(int i=0; i < (vectors-columns); i++) {
 				newColumn = new Column(vectorNameList.at(columns+i+1), AbstractColumn::Numeric);
 				newColumn->setUndoAware(false);
 				dataSource->addChild(newColumn);
@@ -295,53 +306,108 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		}
 	}
 
-	qDebug()<<"OK";
-
 	// set range of rows
-	int numRows=BinaryFilter::rowNumber(fileName,vectors,dataFormat);
-	qDebug()<<"	numRows ="<<numRows;
-	int actualEndRow;
+	int actualRows;
 	if (endRow == -1)
-		actualEndRow = numRows;
-	else if (endRow > numRows-1)
-		actualEndRow = numRows-1;
+		actualRows = numRows-startRow+1;
+	else if (endRow > numRows-startRow+1)
+		actualRows = numRows;
 	else
-		actualEndRow = endRow;
+		actualRows = endRow-startRow+1;
+#ifdef QT_DEBUG
+	qDebug()<<"	numRows ="<<numRows;
+	qDebug()<<"	startRow ="<<startRow;
+	qDebug()<<"	endRow ="<<endRow;
+	qDebug()<<"	actualRows ="<<actualRows;
+#endif
 
 	// resize the spreadsheet
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-	if (mode==AbstractFileFilter::Replace){
+	if (mode==AbstractFileFilter::Replace) {
 		spreadsheet->clear();
-		spreadsheet->setRowCount(numRows);
+		spreadsheet->setRowCount(actualRows);
 	}else{
-		if (spreadsheet->rowCount()<numRows)
-			spreadsheet->setRowCount(numRows);
+		if (spreadsheet->rowCount() < actualRows)
+			spreadsheet->setRowCount(actualRows);
 	}
 
 	// pointers to the actual data containers
 	QVector<QVector<double>*> dataPointers;
 	for ( int n=1; n<=vectors; n++ ){
 		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-1)->data());
-		vector->reserve(numRows);
-		vector->resize(numRows);
+		vector->reserve(actualRows);
+		vector->resize(actualRows);
 		dataPointers.push_back(vector);
 	}
 
+	//qDebug()<<" data format = "<<BinaryFilter::dataTypes()[dataType];
+
 	// read data
-	for (int i=0; i<numRows; i++){
-		//TODO
-		//lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
-
-		for ( int n=1; n<=vectors; n++ ){
-/*			if (n<lineStringList.size()) {
-				const double value = lineStringList.at(n).toDouble(&isNumber);
-				isNumber ? dataPointers[n-startColumn]->operator[](currentRow) = value : dataPointers[n-startColumn]->operator[](currentRow) = NAN;
-			} else {
-				dataPointers[n-startColumn]->operator[](currentRow) = NAN;
+	for (int i=0; i<actualRows; i++){
+		for ( int n=0; n<vectors; n++ ){
+			switch(dataType) {
+			case BinaryFilter::INT8: {
+				qint8 value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
 			}
-*/
+			case BinaryFilter::INT16: {
+				qint16 value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			case BinaryFilter::INT32: {
+				qint32 value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			case BinaryFilter::INT64: {
+				qint64 value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			case BinaryFilter::UINT8: {
+				quint8 value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			case BinaryFilter::UINT16: {
+				quint16 value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			case BinaryFilter::UINT32: {
+				quint32 value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			case BinaryFilter::UINT64: {
+				quint64 value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			case BinaryFilter::REAL32: {
+				float value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			case BinaryFilter::REAL64: {
+				double value;
+				in >> value;
+				dataPointers[n]->operator[](i) = value;
+				break;
+			}
+			}
 		}
-
 	}
 
 	for ( int n=1; n<=vectors; n++ ){
@@ -375,16 +441,78 @@ void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* da
   Saves as XML.
  */
 void BinaryFilter::save(QXmlStreamWriter* writer) const {
-	Q_UNUSED(writer);
-	//TODO
+	writer->writeStartElement("binaryFilter");
+	writer->writeAttribute("vectors", QString::number(d->vectors) );
+	writer->writeAttribute("dataType", QString::number(d->dataType) );
+	writer->writeAttribute("byteOrder", QString::number(d->byteOrder) );
+	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled) );
+	writer->writeAttribute("startRow", QString::number(d->startRow) );
+	writer->writeAttribute("endRow", QString::number(d->endRow) );
+	writer->writeAttribute("skipStartBytes", QString::number(d->skipStartBytes) );
+	writer->writeAttribute("skipBytes", QString::number(d->skipBytes) );
+	writer->writeEndElement();
 }
 
 /*!
   Loads from XML.
 */
 bool BinaryFilter::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
-	//TODO
-	//TODO
+	if(!reader->isStartElement() || reader->name() != "asciiFilter"){
+		reader->raiseError(i18n("no ascii filter element found"));
+		return false;
+	}
+
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs = reader->attributes();
+
+	// read attributes
+	QString str = attribs.value("vectors").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'vectors'"));
+	else
+		d->vectors = str.toInt();
+
+	str = attribs.value("dataType").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'dataType'"));
+	else
+		d->dataType = (BinaryFilter::DataType) str.toInt();
+
+	str = attribs.value("byteOrder").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'byteOrder'"));
+	else
+		d->byteOrder = (BinaryFilter::ByteOrder) str.toInt();
+
+	str = attribs.value("autoMode").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
+	else
+		d->autoModeEnabled = str.toInt();
+
+	str = attribs.value("startRow").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'startRow'"));
+	else
+		d->startRow = str.toInt();
+
+	str = attribs.value("endRow").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'endRow'"));
+	else
+		d->endRow = str.toInt();
+
+	str = attribs.value("skipStartBytes").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'skipStartBytes'"));
+	else
+		d->skipStartBytes = str.toInt();
+
+	str = attribs.value("skipBytes").toString();
+	if(str.isEmpty())
+		reader->raiseWarning(attributeWarning.arg("'skipBytes'"));
+	else
+		d->skipBytes = str.toInt();
+
 	return true;
 }

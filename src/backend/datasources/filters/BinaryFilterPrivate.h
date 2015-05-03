@@ -41,7 +41,7 @@ class BinaryFilterPrivate {
 		const BinaryFilter* q;
 
 		int vectors;
-		BinaryFilter::DataFormat dataFormat;
+		BinaryFilter::DataType dataType;
 		BinaryFilter::ByteOrder byteOrder;
 
 		int skipStartBytes;	// bytes to skip at start
