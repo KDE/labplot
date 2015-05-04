@@ -70,6 +70,14 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
 	ui.swOptions->insertWidget(1, binaryw);
 
+	QWidget* hdfw=new QWidget(0);
+	hdfOptionsWidget.setupUi(hdfw);
+	//TODO: fill hdfw with HDF items (hidden for the moment)
+	hdfOptionsWidget.niVectors->hide();
+	hdfOptionsWidget.cbDataType->hide();
+	hdfOptionsWidget.cbByteOrder->hide();
+	ui.swOptions->insertWidget(2, hdfw);
+
 	//TODO: add widgets for other file types
 
 	// default filter
@@ -102,6 +110,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
 
 	//settings for ascii data
+	//TODO: check if this works (character gets currentItem?)
 	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
 	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
 	asciiOptionsWidget.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));
@@ -109,7 +118,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	asciiOptionsWidget.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
 	asciiOptionsWidget.kleVectorNames->setText(conf.readEntry("Names", ""));
 
-	//TODO: settings for binary data
+	// settings for binary data
+	binaryOptionsWidget.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
+	binaryOptionsWidget.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
+	binaryOptionsWidget.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
+
+	//TODO: settings for HDF data
 
 	filterChanged(ui.cbFilter->currentIndex());
 
@@ -119,15 +133,15 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 }
 
 ImportFileWidget::~ImportFileWidget() {
-	//save current settings
+	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 
-	//general settings
+	// general settings
 	conf.writeEntry("LastImportedFile", ui.kleFileName->text());
 	conf.writeEntry("Type", ui.cbFileType->currentIndex());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 
-	//settings for ascii data
+	// settings for ascii data
 	conf.writeEntry("CommentCharacter", asciiOptionsWidget.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", asciiOptionsWidget.cbSeparatingCharacter->currentText());
 	conf.writeEntry("SimplifyWhitespaces", asciiOptionsWidget.chbSimplifyWhitespaces->isChecked());
@@ -135,7 +149,12 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("UseFirstRow", asciiOptionsWidget.chbHeader->isChecked());
 	conf.writeEntry("Names", asciiOptionsWidget.kleVectorNames->text());
 
-	//TODO: settings for binary data
+	// settings for binary data
+	conf.writeEntry("Vectors", binaryOptionsWidget.niVectors->value());
+	conf.writeEntry("ByteOrder", binaryOptionsWidget.cbByteOrder->currentIndex());
+	conf.writeEntry("DataType", binaryOptionsWidget.cbDataType->currentIndex());
+
+	//TODO: settings for HDF data
 }
 
 void ImportFileWidget::hideDataSource() const{
@@ -227,9 +246,11 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 //		source->setFilter(filter);
 		return filter;
 	} else if ( fileType==FileDataSource::AsciiMatrix ) {
-//TODO
+		//TODO
 	} else if ( fileType==FileDataSource::BinaryMatrix ) {
-//TODO
+		//TODO
+	} else if ( fileType==FileDataSource::HDF ) {
+		//TODO
 	}
 
 	return 0;
@@ -369,6 +390,20 @@ void ImportFileWidget::fileTypeChanged(int id) {
 		ui.sbSkipStartBytes->show();
 		ui.lSkipBytes->show();
 		ui.sbSkipBytes->show();
+	}
+	else if (fileType == FileDataSource::HDF) {
+		ui.swOptions->setCurrentIndex(2);
+
+		ui.lStartColumn->show();
+		ui.sbStartColumn->show();
+		ui.lEndColumn->show();
+		ui.sbEndColumn->show();
+		ui.lSkipStartBytes->hide();
+                ui.sbSkipStartBytes->hide();
+                ui.lSkipBytes->hide();
+                ui.sbSkipBytes->hide();
+
+		//TODO
 	}
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
@@ -547,6 +582,9 @@ void ImportFileWidget::refreshPreview(){
 				}
 				importedText += '\n';
 			}
+		}
+		else if (fileType == FileDataSource::HDF) {
+			//TODO
 		}
 	}
 

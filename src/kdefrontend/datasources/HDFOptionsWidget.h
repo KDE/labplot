@@ -1,12 +1,11 @@
 /***************************************************************************
-    File                 : ImportFileWidget.h
-    Project              : LabPlot
-    Description          : import file data widget
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
+File                 : HDFOptionsWidget.h
+Project              : LabPlot
+Description          : widget providing options for the import of HDF data
+--------------------------------------------------------------------
+Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
- ***************************************************************************/
+**************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -26,46 +25,21 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef IMPORTFILEWIDGET_H
-#define IMPORTFILEWIDGET_H
+#ifndef HDFOPTIONSWIDGET_H
+#define HDFOPTIONSWIDGET_H
 
-#include "ui_importfilewidget.h"
-#include "AsciiOptionsWidget.h"
-#include "BinaryOptionsWidget.h"
-#include "HDFOptionsWidget.h"
+#include "ui_hdfoptionswidget.h"
 
-class FileDataSource;
-class AbstractFileFilter;
 
-class ImportFileWidget : public QWidget{
+class HDFOptionsWidget : public QWidget{
     Q_OBJECT
 
 public:
-	explicit ImportFileWidget(QWidget*);
-	~ImportFileWidget();
-
-	void showOptions(bool);
-	void saveSettings(FileDataSource*) const;
-	AbstractFileFilter* currentFileFilter() const;
-	QString fileName() const;
-	void hideDataSource() const;
+	explicit HDFOptionsWidget(QWidget*);
+	~HDFOptionsWidget();
 
 private:
-	Ui::ImportFileWidget ui;
-	Ui::AsciiOptionsWidget asciiOptionsWidget;
-	Ui::BinaryOptionsWidget binaryOptionsWidget;
-	Ui::HDFOptionsWidget hdfOptionsWidget;
-
-private slots:
-	void fileNameChanged(const QString&);
-	void fileTypeChanged(int);
-	void saveFilter();
-	void manageFilters();
-	void filterChanged(int);
-	void headerChanged(int);
-	void selectFile();
- 	void fileInfoDialog();
-	void refreshPreview();
+	Ui::HDFOptionsWidget ui;
 };
 
 #endif

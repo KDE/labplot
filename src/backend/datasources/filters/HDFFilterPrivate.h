@@ -1,11 +1,9 @@
 /***************************************************************************
-    File                 : ImportFileWidget.h
-    Project              : LabPlot
-    Description          : import file data widget
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
-
+File                 : HDFFilterPrivate.h
+Project              : LabPlot
+Description          : Private implementation class for HDFFilter.
+--------------------------------------------------------------------
+Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,46 +24,26 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef IMPORTFILEWIDGET_H
-#define IMPORTFILEWIDGET_H
+#ifndef HDFFILTERPRIVATE_H
+#define HDFFILTERPRIVATE_H
 
-#include "ui_importfilewidget.h"
-#include "AsciiOptionsWidget.h"
-#include "BinaryOptionsWidget.h"
-#include "HDFOptionsWidget.h"
+class AbstractDataSource;
 
-class FileDataSource;
-class AbstractFileFilter;
+class HDFFilterPrivate {
 
-class ImportFileWidget : public QWidget{
-    Q_OBJECT
+	public:
+		explicit HDFFilterPrivate(HDFFilter*);
 
-public:
-	explicit ImportFileWidget(QWidget*);
-	~ImportFileWidget();
+		void read(const QString & fileName, AbstractDataSource* dataSource,
+					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		void write(const QString & fileName, AbstractDataSource* dataSource);
 
-	void showOptions(bool);
-	void saveSettings(FileDataSource*) const;
-	AbstractFileFilter* currentFileFilter() const;
-	QString fileName() const;
-	void hideDataSource() const;
+		const HDFFilter* q;
 
-private:
-	Ui::ImportFileWidget ui;
-	Ui::AsciiOptionsWidget asciiOptionsWidget;
-	Ui::BinaryOptionsWidget binaryOptionsWidget;
-	Ui::HDFOptionsWidget hdfOptionsWidget;
+		bool autoModeEnabled;
 
-private slots:
-	void fileNameChanged(const QString&);
-	void fileTypeChanged(int);
-	void saveFilter();
-	void manageFilters();
-	void filterChanged(int);
-	void headerChanged(int);
-	void selectFile();
- 	void fileInfoDialog();
-	void refreshPreview();
+	private:
+		void clearDataSource(AbstractDataSource*) const;
 };
 
 #endif

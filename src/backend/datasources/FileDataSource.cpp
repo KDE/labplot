@@ -100,14 +100,15 @@ QWidget *FileDataSource::view() const{
   returns the list with all supported data file formats.
 */
 QStringList FileDataSource::fileTypes(){
-    return (QStringList()<< i18n("ASCII vector data")
+// see FileDataSource::FileType
+	return (QStringList()<< i18n("ASCII vector data")
                          << i18n("BINARY vector data")
-//                         << i18n("ASCII matrix data")
-//                         << i18n("BINARY matrix data")
+                         << i18n("ASCII matrix data")
+                         << i18n("BINARY matrix data")
+                         << "HDF"
+//                         << "NetCDF"
 //                         << i18n("Image")
 //                         << i18n("Sound")
-//                         << "NetCDF"
-//                         << "HDF5"
 //                         << "CDF"
 //                         << "FITS"
                         );

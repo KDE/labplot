@@ -457,8 +457,8 @@ void BinaryFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool BinaryFilter::load(XmlStreamReader* reader) {
-	if(!reader->isStartElement() || reader->name() != "asciiFilter"){
-		reader->raiseError(i18n("no ascii filter element found"));
+	if(!reader->isStartElement() || reader->name() != "binaryFilter"){
+		reader->raiseError(i18n("no binary filter element found"));
 		return false;
 	}
 

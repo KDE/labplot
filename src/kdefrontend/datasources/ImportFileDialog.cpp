@@ -137,8 +137,8 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	//hide the data-source related widgets
 	importFileWidget->hideDataSource();
 
-  //ok is only available if a valid spreadsheet was selected
-  enableButtonOk(false);
+	//ok is only available if a valid spreadsheet was selected
+	enableButtonOk(false);
 }
 
 void ImportFileDialog::updateModel(std::auto_ptr<QAbstractItemModel> model){
@@ -147,8 +147,8 @@ void ImportFileDialog::updateModel(std::auto_ptr<QAbstractItemModel> model){
 }
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
-  cbAddTo->setCurrentModelIndex(index);
-  this->currentAddToIndexChanged(index);
+	cbAddTo->setCurrentModelIndex(index);
+	this->currentAddToIndexChanged(index);
 }
 
 
@@ -158,7 +158,7 @@ void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
 void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar* statusBar) const {
 	importFileWidget->saveSettings(source);
 
-		//show a progress bar in the status bar
+	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);

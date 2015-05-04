@@ -25,7 +25,7 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
  *                                                                         *
  ***************************************************************************/
 #ifndef BINARYFILTERPRIVATE_H
-#define BINARYFILTERPPRIVATE_H
+#define BINARYFILTERPRIVATE_H
 
 class AbstractDataSource;
 
