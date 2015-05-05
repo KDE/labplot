@@ -317,7 +317,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	line = in.readLine();
 	if( simplifyWhitespacesEnabled)
 		line = line.simplified();
-	
+
 	QString separator;
 	if( separatingCharacter == "auto" ){
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
@@ -499,19 +499,13 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 
 	//set the comments for each of the columns
 	//TODO: generalize to different data types
-	QString comment;
-	if (headerEnabled)
-		comment = i18np("numerical data, %1 element", "numerical data, %1 elements", currentRow);
-	else
-		comment = i18np("numerical data, %1 element", "numerical data, %1 elements", currentRow+1);
-
+	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", headerEnabled ? currentRow : currentRow+1);
 	for ( int n=startColumn; n<=endColumn; n++ ){
 		Column* column = spreadsheet->column(columnOffset+n-startColumn);
-// 		column->setUndoAware(false);
 		column->setComment(comment);
 		column->setUndoAware(true);
 		if (mode==AbstractFileFilter::Replace) {
-			column->setSuppressDataChangedSignal(true);
+			column->setSuppressDataChangedSignal(false);
 			column->setChanged();
 		}
 	}

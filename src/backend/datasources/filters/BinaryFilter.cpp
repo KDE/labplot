@@ -141,7 +141,7 @@ int BinaryFilter::vectors() const{
 
 void BinaryFilter::setDataType(const BinaryFilter::DataType t) {
 	d->dataType = t;
-} 
+}
 
 BinaryFilter::DataType BinaryFilter::dataType() const{
 	return d->dataType;
@@ -198,7 +198,7 @@ bool BinaryFilter::isAutoModeEnabled() const{
 //################### Private implementation ##########################
 //#####################################################################
 
-BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : 
+BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
 	q(owner), vectors(2), dataType(BinaryFilter::INT8), byteOrder(BinaryFilter::LittleEndian), skipStartBytes(0), startRow(1), endRow(-1), skipBytes(0) {
 }
 
@@ -209,7 +209,7 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
 void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
 #ifdef QT_DEBUG
 	qDebug()<<"BinaryFilterPrivate::read()";
-#endif	
+#endif
 
 	QFile file(fileName);
 	if ( !file.exists() )
@@ -410,13 +410,13 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		}
 	}
 
+	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
 	for ( int n=1; n<=vectors; n++ ){
 		Column* column = spreadsheet->column(columnOffset+n-1);
-// 		column->setUndoAware(false);
-//		column->setComment(comment);
+		column->setComment(comment);
 		column->setUndoAware(true);
 		if (mode==AbstractFileFilter::Replace) {
-			column->setSuppressDataChangedSignal(true);
+			column->setSuppressDataChangedSignal(false);
 			column->setChanged();
 		}
 	}
