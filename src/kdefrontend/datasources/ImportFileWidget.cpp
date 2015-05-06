@@ -32,6 +32,7 @@ Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
+#include "backend/datasources/filters/HDFFilter.h"
 
 #include <QInputDialog>
 #include <QDir>
@@ -72,7 +73,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	QWidget* hdfw=new QWidget(0);
 	hdfOptionsWidget.setupUi(hdfw);
-	//TODO: fill hdfw with HDF items (hidden for the moment)
+	//TODO: fill hdfw with HDF items (hidden at the moment)
 	hdfOptionsWidget.niVectors->hide();
 	hdfOptionsWidget.cbDataType->hide();
 	hdfOptionsWidget.cbByteOrder->hide();
@@ -250,6 +251,15 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	} else if ( fileType==FileDataSource::BinaryMatrix ) {
 		//TODO
 	} else if ( fileType==FileDataSource::HDF ) {
+		HDFFilter* filter = new HDFFilter();
+ 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
+			filter->setAutoModeEnabled(true);
+ 		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
+			//TODO
+		} else {
+			//TODO
+		}
+
 		//TODO
 	}
 
