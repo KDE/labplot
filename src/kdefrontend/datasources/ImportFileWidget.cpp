@@ -63,26 +63,31 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
-	ui.swOptions->insertWidget(0, asciiw);
+	ui.swOptions->insertWidget(FileDataSource::AsciiVector, asciiw);
+
+	//TODO
+	QWidget* asciiMatrixw=new QWidget(0);
+	ui.swOptions->insertWidget(FileDataSource::AsciiMatrix, asciiMatrixw);
 
 	QWidget* binaryw=new QWidget(0);
 	binaryOptionsWidget.setupUi(binaryw);
 	binaryOptionsWidget.cbDataType->addItems(BinaryFilter::dataTypes());
 	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
-	ui.swOptions->insertWidget(1, binaryw);
+	ui.swOptions->insertWidget(FileDataSource::BinaryVector, binaryw);
+
+	//TODO
+	QWidget* binaryMatrixw=new QWidget(0);
+	ui.swOptions->insertWidget(FileDataSource::BinaryMatrix, binaryMatrixw);
 
 	QWidget* hdfw=new QWidget(0);
 	hdfOptionsWidget.setupUi(hdfw);
-	//TODO: fill hdfw with HDF items (hidden at the moment)
-	hdfOptionsWidget.niVectors->hide();
-	hdfOptionsWidget.cbDataType->hide();
-	hdfOptionsWidget.cbByteOrder->hide();
-	ui.swOptions->insertWidget(2, hdfw);
+	//TODO: fill hdfw with HDF items (everything hidden at the moment)
+	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
 	//TODO: add widgets for other file types
 
 	// default filter
-	ui.swOptions->setCurrentIndex(0);
+	ui.swOptions->setCurrentIndex(FileDataSource::AsciiVector);
 
 	ui.gbOptions->hide();
 
@@ -123,8 +128,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	binaryOptionsWidget.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
 	binaryOptionsWidget.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
 	binaryOptionsWidget.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
+	binaryOptionsWidget.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
+	binaryOptionsWidget.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
 
 	//TODO: settings for HDF data
+
+	//TODO: settings for other file types
 
 	filterChanged(ui.cbFilter->currentIndex());
 
@@ -154,6 +163,8 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Vectors", binaryOptionsWidget.niVectors->value());
 	conf.writeEntry("ByteOrder", binaryOptionsWidget.cbByteOrder->currentIndex());
 	conf.writeEntry("DataType", binaryOptionsWidget.cbDataType->currentIndex());
+	conf.writeEntry("SkipStartBytes", binaryOptionsWidget.sbSkipStartBytes->value());
+	conf.writeEntry("SkipBytes", binaryOptionsWidget.sbSkipBytes->value());
 
 	//TODO: settings for HDF data
 }
@@ -230,6 +241,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 //		source->setFilter(filter);
+	} else if ( fileType==FileDataSource::AsciiMatrix ) {
+		//TODO
 	} else if ( fileType==FileDataSource::BinaryVector ) {
 		BinaryFilter* filter = new BinaryFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
@@ -246,8 +259,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 //		source->setFilter(filter);
 		return filter;
-	} else if ( fileType==FileDataSource::AsciiMatrix ) {
-		//TODO
 	} else if ( fileType==FileDataSource::BinaryMatrix ) {
 		//TODO
 	} else if ( fileType==FileDataSource::HDF ) {
@@ -337,12 +348,15 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	    // 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
 	} else {
 		QString info = proc->readLine();
-		//TODO
 		if ( info.contains( ("ASCII") ) ) {
-			//select "ASCII vector data"
-			this->fileTypeChanged(0);
+			qDebug()<<"detected ASCII";
+			ui.cbFileType->setCurrentIndex(FileDataSource::AsciiVector);
+		} else if (info.contains(("Hierarchical Data Format"))) {
+			qDebug()<<"detected HDF";
+			ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
 		} else {
-			this->fileTypeChanged(2);
+			qDebug()<<"probably BINARY";
+			ui.cbFileType->setCurrentIndex(FileDataSource::BinaryVector);
 		}
 	}
 }
@@ -371,49 +385,31 @@ void ImportFileWidget::manageFilters(){
 	Depending on the selected file type, activates the corresponding options
 	and populates the combobox with the available pre-defined fllter settings for the selected type.
 */
-void ImportFileWidget::fileTypeChanged(int id) {
-	ui.swOptions->setCurrentIndex(id);
+void ImportFileWidget::fileTypeChanged(int fileType) {
+	ui.swOptions->setCurrentIndex(fileType);
 
-	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+	//FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 	if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
-		ui.swOptions->setCurrentIndex(0);
-
 		//show/hide specific portion options
 		ui.lStartColumn->show();
 		ui.sbStartColumn->show();
 		ui.lEndColumn->show();
 		ui.sbEndColumn->show();
-		ui.lSkipStartBytes->hide();
-		ui.sbSkipStartBytes->hide();
-		ui.lSkipBytes->hide();
-		ui.sbSkipBytes->hide();
 	}
 	else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
-		ui.swOptions->setCurrentIndex(1);
-
 		//show/hide specific portion options
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
 		ui.sbEndColumn->hide();
-		ui.lSkipStartBytes->show();
-		ui.sbSkipStartBytes->show();
-		ui.lSkipBytes->show();
-		ui.sbSkipBytes->show();
 	}
 	else if (fileType == FileDataSource::HDF) {
-		ui.swOptions->setCurrentIndex(2);
-
 		ui.lStartColumn->show();
 		ui.sbStartColumn->show();
 		ui.lEndColumn->show();
 		ui.sbEndColumn->show();
-		ui.lSkipStartBytes->hide();
-                ui.sbSkipStartBytes->hide();
-                ui.lSkipBytes->hide();
-                ui.sbSkipBytes->hide();
 
-		//TODO
+		//TODO: update widgets using current files
 	}
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
@@ -501,8 +497,10 @@ void ImportFileWidget::refreshPreview(){
 			BinaryFilter::DataType type = (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex();
 			//qDebug() <<" vectors ="<<vectors<<"  type ="<<type;
 
+			// TODO: this is also done in BinaryFilter: reuse it
+
 			// skip at start
-			for (int i=0; i<ui.sbSkipStartBytes->value(); ++i){
+			for (int i=0; i<binaryOptionsWidget.sbSkipStartBytes->value(); ++i){
 				qint8 tmp;
 				in >> tmp;
 			}
@@ -585,7 +583,7 @@ void ImportFileWidget::refreshPreview(){
 					importedText += ' ';
 					
 					// skip after each value
-					for (int i=0; i<ui.sbSkipBytes->value(); ++i){
+					for (int i=0; i<binaryOptionsWidget.sbSkipBytes->value(); ++i){
 						qint8 tmp;
 						in >> tmp;
 					}
@@ -594,7 +592,7 @@ void ImportFileWidget::refreshPreview(){
 			}
 		}
 		else if (fileType == FileDataSource::HDF) {
-			//TODO
+			//TODO: read data from selected dataset
 		}
 	}
 

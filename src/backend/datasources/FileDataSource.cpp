@@ -102,8 +102,8 @@ QWidget *FileDataSource::view() const{
 QStringList FileDataSource::fileTypes(){
 // see FileDataSource::FileType
 	return (QStringList()<< i18n("ASCII vector data")
-                         << i18n("BINARY vector data")
                          << i18n("ASCII matrix data")
+                         << i18n("BINARY vector data")
                          << i18n("BINARY matrix data")
                          << "HDF"
 //                         << "NetCDF"
