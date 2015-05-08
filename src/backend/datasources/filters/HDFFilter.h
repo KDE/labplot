@@ -28,6 +28,7 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define HDFFILTER_H
 
 #include <QStringList>
+#include <QTreeWidgetItem>
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class HDFFilterPrivate;
@@ -39,6 +40,7 @@ class HDFFilter : public AbstractFileFilter{
 	HDFFilter();
 	~HDFFilter();
 
+	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
 

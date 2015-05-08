@@ -1,6 +1,8 @@
 LabPlot requires
 	* Qt version 4.7 or higher
 	* GSL version 1.15 or higher
+optional
+	* HDF5 1.8 or higher
 
 ===============================================================================
 To build LabPlot just execute

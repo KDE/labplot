@@ -81,7 +81,10 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	QWidget* hdfw=new QWidget(0);
 	hdfOptionsWidget.setupUi(hdfw);
-	//TODO: fill hdfw with HDF items (everything hidden at the moment)
+	QStringList headers;
+	headers<<i18n("Name")<<i18n("Type");
+	hdfOptionsWidget.twContent->setHeaderLabels(headers);
+	//TODO: fill hdfw with HDF items
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
 	//TODO: add widgets for other file types
@@ -272,6 +275,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		}
 
 		//TODO
+		return filter;
 	}
 
 	return 0;
@@ -349,13 +353,29 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	} else {
 		QString info = proc->readLine();
 		if ( info.contains( ("ASCII") ) ) {
-			qDebug()<<"detected ASCII";
+#ifdef QT_DEBUG
+			qDebug()<<"detected ASCII file";
+#endif
 			ui.cbFileType->setCurrentIndex(FileDataSource::AsciiVector);
 		} else if (info.contains(("Hierarchical Data Format"))) {
-			qDebug()<<"detected HDF";
+#ifdef QT_DEBUG
+			qDebug()<<"detected HDF file";
+#endif
 			ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
+
+			// update HDF tree widget using current selected file
+			hdfOptionsWidget.twContent->clear();
+			QString fileName = ui.kleFileName->text();
+			QFileInfo fileInfo(fileName);
+			QTreeWidgetItem *rootItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<fileInfo.baseName());
+			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
+			filter->parse(fileName, rootItem);
+			hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
+			hdfOptionsWidget.twContent->expandAll();
 		} else {
-			qDebug()<<"probably BINARY";
+#ifdef QT_DEBUG
+			qDebug()<<"probably BINARY file";
+#endif
 			ui.cbFileType->setCurrentIndex(FileDataSource::BinaryVector);
 		}
 	}
@@ -390,14 +410,12 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 
 	//FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 	if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
-		//show/hide specific portion options
 		ui.lStartColumn->show();
 		ui.sbStartColumn->show();
 		ui.lEndColumn->show();
 		ui.sbEndColumn->show();
 	}
 	else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
-		//show/hide specific portion options
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
@@ -409,8 +427,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.lEndColumn->show();
 		ui.sbEndColumn->show();
 
-		//TODO: update widgets using current files
-	}
+	}	
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();

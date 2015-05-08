@@ -51,10 +51,17 @@ HDFFilter::~HDFFilter(){
 }
 
 /*!
+  parses the content of the file \c fileName.
+*/
+void HDFFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem){
+	d->parse(fileName, rootItem);
+}
+
+/*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void HDFFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
-  d->read(fileName, dataSource, importMode);
+	d->read(fileName, dataSource, importMode);
 }
 
 /*!
@@ -97,6 +104,31 @@ HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 	q(owner) {
 }
 
+#ifdef HAVE_HDF5
+void HDFFilterPrivate::scanHDFGroup(hid_t gid, QTreeWidgetItem* parentItem) {
+	char groupName[1024];
+
+	ssize_t len = H5Iget_name (gid, groupName, 1024);
+	QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<"group");
+	parentItem->addChild(item);
+	//TODO
+}
+#endif
+
+/*!
+    parses the content of the file \c fileName and fill the tree using rootItem.
+*/
+void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
+#ifdef HAVE_HDF5
+	// parse file fileName
+	QByteArray bafileName = fileName.toLatin1();
+	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
+	hid_t group = H5Gopen(file, "/", H5P_DEFAULT);
+	scanHDFGroup(group, rootItem);
+	H5Fclose(file);
+#endif
+}
+
 /*!
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
@@ -108,6 +140,7 @@ void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSo
 #ifdef QT_DEBUG
 	qDebug()<<"HDFFilterPrivate::read()";
 #endif	
+	//TODO: how to get the selected data set?
 
 	//TODO
 }

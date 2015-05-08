@@ -27,6 +27,8 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef HDFFILTERPRIVATE_H
 #define HDFFILTERPRIVATE_H
 
+#include <hdf5.h>
+
 class AbstractDataSource;
 
 class HDFFilterPrivate {
@@ -34,6 +36,7 @@ class HDFFilterPrivate {
 	public:
 		explicit HDFFilterPrivate(HDFFilter*);
 
+		void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 		void read(const QString & fileName, AbstractDataSource* dataSource,
 					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
@@ -44,6 +47,9 @@ class HDFFilterPrivate {
 
 	private:
 		void clearDataSource(AbstractDataSource*) const;
+#ifdef HAVE_HDF5
+		void scanHDFGroup(hid_t gid, QTreeWidgetItem* parentItem);
+#endif
 };
 
 #endif

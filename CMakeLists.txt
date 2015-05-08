@@ -56,20 +56,28 @@ ELSE (GSL_FOUND)
 	MESSAGE (FATAL_ERROR "GNU Scientific Library not found.")
 ENDIF (GSL_FOUND)
 
-# ### HDF5 #####################################
-# FIND_LIBRARY(HDF5_LIBRARY
-#   NAMES hdf5
-# )
-# IF(HDF5_LIBRARY)
-# MESSAGE ("-- Found HDF5 library: ${HDF5_LIBRARY}")
-# add_definitions (-DHAVE_HDF5=1)
-# ###### version 1.8 has different API
-# add_definitions (-DH5_USE_16_API=1)
-# ELSE(HDF5_LIBRARY)
-# MESSAGE ("-- HDF5 library NOT FOUND!")
-# SET(HDF5_LIBRARY "")
-# ENDIF(HDF5_LIBRARY)
-#  
+### HDF5 #####################################
+FIND_LIBRARY(HDF5_LIBRARY hdf5
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (HDF5_INCLUDE_DIR hdf5.h
+	/usr/include/
+	/usr/local/include/
+)
+IF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+	SET (HDF5_FOUND TRUE)
+ELSE (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+	SET (HDF5_FOUND FALSE)
+ENDIF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+IF (HDF5_FOUND)
+	MESSAGE (STATUS "Found Hierarchical Data Format (HDF) 5 Library: ${HDF5_INCLUDE_DIR} ${HDF5_LIBRARY}")
+	add_definitions (-DHAVE_HDF5=1)
+ELSE (HDF5_FOUND)
+	MESSAGE ("Hierarchical Data Format (HDF) 5 Library not found.")
+ENDIF (HDF5_FOUND)
+
 # ### NETCDF #####################################
 # FIND_LIBRARY(NETCDF_LIBRARY
 #   NAMES netcdf

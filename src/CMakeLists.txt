@@ -164,7 +164,7 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
 kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
-target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY})
 # ${OPJ_LIBRARY}
 
 ############## installation ################################
