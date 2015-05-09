@@ -57,7 +57,7 @@ AsciiFilter::~AsciiFilter(){
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void AsciiFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
-  d->read(fileName, dataSource, importMode);
+	d->read(fileName, dataSource, importMode);
 }
 
 
@@ -73,14 +73,14 @@ void AsciiFilter::write(const QString & fileName, AbstractDataSource* dataSource
   loads the predefined filter settings for \c filterName
 */
 void AsciiFilter::loadFilterSettings(const QString& filterName){
-    Q_UNUSED(filterName);
+	Q_UNUSED(filterName);
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
 void AsciiFilter::saveFilterSettings(const QString& filterName) const{
-    Q_UNUSED(filterName);
+	Q_UNUSED(filterName);
 }
 
 /*!
@@ -95,7 +95,7 @@ QStringList AsciiFilter::predefinedFilters(){
   returns the list of all predefined separator characters.
 */
 QStringList AsciiFilter::separatorCharacters(){
-  return (QStringList()<<"auto"<<"TAB"<<"SPACE"<<","<<";"<<":"
+	return (QStringList()<<"auto"<<"TAB"<<"SPACE"<<","<<";"<<":"
 				  <<",TAB"<<";TAB"<<":TAB"
 				  <<",SPACE"<<";SPACE"<<":SPACE");
 }
@@ -104,27 +104,27 @@ QStringList AsciiFilter::separatorCharacters(){
 returns the list of all predefined comment characters.
 */
 QStringList AsciiFilter::commentCharacters(){
-  return (QStringList()<<"#"<<"!"<<"//"<<"+"<<"c"<<":"<<";");
+	return (QStringList()<<"#"<<"!"<<"//"<<"+"<<"c"<<":"<<";");
 }
 
 /*!
     returns the number of columns in the file \c fileName.
 */
 int AsciiFilter::columnNumber(const QString & fileName){
-  QString line;
-  QStringList lineStringList;
+	QString line;
+	QStringList lineStringList;
 
-  QFile file(fileName);
-  if ( !file.exists() )
-	  return 0;
+	QFile file(fileName);
+	if ( !file.exists() )
+		return 0;
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-	  return 0;
+		return 0;
 
-  QTextStream in(&file);
-  line = in.readLine();
-  lineStringList = line.split( QRegExp("\\s+")); //TODO
-  return lineStringList.size();
+	QTextStream in(&file);
+	line = in.readLine();
+	lineStringList = line.split( QRegExp("\\s+")); //TODO
+	return lineStringList.size();
 }
 
 
@@ -151,15 +151,15 @@ long AsciiFilter::lineNumber(const QString & fileName){
 }
 
 void AsciiFilter::setTransposed(const bool b){
-  d->transposed=b;
+	d->transposed=b;
 }
 
 bool AsciiFilter::isTransposed() const{
-  return d->transposed;
+	return d->transposed;
 }
 
 void AsciiFilter::setCommentCharacter(const QString& s){
-  d->commentCharacter=s;
+	d->commentCharacter=s;
 }
 
 QString AsciiFilter::commentCharacter() const{
@@ -167,31 +167,31 @@ QString AsciiFilter::commentCharacter() const{
 }
 
 void AsciiFilter::setSeparatingCharacter(const QString& s){
-  d->separatingCharacter=s;
+	d->separatingCharacter=s;
 }
 
 QString AsciiFilter::separatingCharacter() const{
-  return d->separatingCharacter;
+	return d->separatingCharacter;
 }
 
 void AsciiFilter::setAutoModeEnabled(bool b){
-  d->autoModeEnabled=b;
+	d->autoModeEnabled=b;
 }
 
 bool AsciiFilter::isAutoModeEnabled() const{
-  return d->autoModeEnabled;
+	return d->autoModeEnabled;
 }
 
 void AsciiFilter::setHeaderEnabled(bool b){
-  d->headerEnabled=b;
+	d->headerEnabled=b;
 }
 
 bool AsciiFilter::isHeaderEnabled() const{
-  return d->headerEnabled;
+	return d->headerEnabled;
 }
 
 void AsciiFilter::setVectorNames(const QString s){
-  d->vectorNames=s.simplified();
+	d->vectorNames=s.simplified();
 }
 
 QString AsciiFilter::vectorNames() const{
@@ -199,69 +199,68 @@ QString AsciiFilter::vectorNames() const{
 }
 
 void AsciiFilter::setSkipEmptyParts(bool b){
-  d->skipEmptyParts=b;
+	d->skipEmptyParts=b;
 }
 
 bool AsciiFilter::skipEmptyParts() const{
-  return d->skipEmptyParts;
+	return d->skipEmptyParts;
 }
 
 void AsciiFilter::setSimplifyWhitespacesEnabled(bool b){
-  d->simplifyWhitespacesEnabled=b;
+	d->simplifyWhitespacesEnabled=b;
 }
 
 bool AsciiFilter::simplifyWhitespacesEnabled() const{
-  return d->simplifyWhitespacesEnabled;
+	return d->simplifyWhitespacesEnabled;
 }
 
 void AsciiFilter::setStartRow(const int r){
-  d->startRow=r;
+	d->startRow=r;
 }
 
 int AsciiFilter::startRow() const{
-  return d->startRow;
+	return d->startRow;
 }
 
 void AsciiFilter::setEndRow(const int r){
-  d->endRow=r;
+	d->endRow=r;
 }
 
 int AsciiFilter::endRow() const{
-  return d->endRow;
+	return d->endRow;
 }
 
 void AsciiFilter::setStartColumn(const int c){
-  d->startColumn=c;
+	d->startColumn=c;
 }
 
 int AsciiFilter::startColumn() const{
-  return d->startColumn;
+	return d->startColumn;
 }
 
 void AsciiFilter::setEndColumn(const int c){
-  d->endColumn=c;
+	d->endColumn=c;
 }
 
 int AsciiFilter::endColumn() const{
-  return d->endColumn;
+	return d->endColumn;
 }
 
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
 AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
-  commentCharacter("#"),
-  separatingCharacter("auto"),
-  autoModeEnabled(true),
-  headerEnabled(true),
-  skipEmptyParts(false),
-  simplifyWhitespacesEnabled(true),
-  transposed(false),
-  startRow(0),
-  endRow(-1),
-  startColumn(0),
-  endColumn(-1)
-  {
+	commentCharacter("#"),
+	separatingCharacter("auto"),
+	autoModeEnabled(true),
+	headerEnabled(true),
+	skipEmptyParts(false),
+	simplifyWhitespacesEnabled(true),
+	transposed(false),
+	startRow(0),
+	endRow(-1),
+	startColumn(0),
+	endColumn(-1) {
 }
 
 /*!

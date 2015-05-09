@@ -109,9 +109,51 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, QTreeWidgetItem* parentItem) {
 	char groupName[1024];
 
 	ssize_t len = H5Iget_name (gid, groupName, 1024);
-	QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<"group");
-	parentItem->addChild(item);
-	//TODO
+	QTreeWidgetItem *groupItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<"group");
+	parentItem->addChild(groupItem);
+
+	// scanHDFAttrs(gid);
+
+	hsize_t numObj;
+	herr_t err = H5Gget_num_objs(gid, &numObj);
+
+	for (unsigned int i = 0; i < numObj; i++) {
+                char memberName[1024];
+                len = H5Gget_objname_by_idx(gid, (hsize_t)i, memberName, (size_t)1024 );
+                int otype =  H5Gget_objtype_by_idx(gid, (size_t)i );
+                switch(otype) {
+                case H5G_LINK: {
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"symlink");
+			groupItem->addChild(objectItem);
+                        //scanHDFLink(gid,memberName);
+                        break;
+                }
+                case H5G_GROUP: {
+                        hid_t grpid = H5Gopen(gid,memberName, H5P_DEFAULT);
+                        scanHDFGroup(grpid,groupItem);
+                        H5Gclose(grpid);
+                        break;
+                }
+                case H5G_DATASET: {
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"data set");
+			groupItem->addChild(objectItem);
+                        hid_t dsid = H5Dopen(gid,memberName, H5P_DEFAULT);
+                        //scanHDFDataset(dsid);
+                        H5Dclose(dsid);
+                        break;
+                }
+                case H5G_TYPE: {
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"data type");
+			groupItem->addChild(objectItem);
+                        hid_t tid = H5Topen(gid,memberName, H5P_DEFAULT);
+                        //scanHDFDatatype(tid);
+                }
+                default:
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"UNKNOWN");
+			groupItem->addChild(objectItem);
+                        break;
+                }
+	}
 }
 #endif
 

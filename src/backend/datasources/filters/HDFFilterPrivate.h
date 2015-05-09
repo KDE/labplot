@@ -27,7 +27,9 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef HDFFILTERPRIVATE_H
 #define HDFFILTERPRIVATE_H
 
+#ifdef HAVE_HDF5
 #include <hdf5.h>
+#endif
 
 class AbstractDataSource;
 

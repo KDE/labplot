@@ -54,7 +54,7 @@ BinaryFilter::~BinaryFilter(){
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void BinaryFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
-  d->read(fileName, dataSource, importMode);
+	d->read(fileName, dataSource, importMode);
 }
 
 /*!
@@ -69,7 +69,7 @@ void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSourc
 returns the list of all predefined data formats.
 */
 QStringList BinaryFilter::dataTypes(){
-  return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int32 (32 bit signed integer)"<<"int64 (64 bit signed integer)"
+	return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int32 (32 bit signed integer)"<<"int64 (64 bit signed integer)"
   	<<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"<<"uint64 (64 bit unsigned integer)"
 	<<"real32 (single precision floats)"<<"real64 (double precision floats)");
 }
@@ -78,7 +78,7 @@ QStringList BinaryFilter::dataTypes(){
 returns the list of all predefined byte order.
 */
 QStringList BinaryFilter::byteOrders(){
-  return (QStringList()<<"Little endian"<<"Big endian");
+	return (QStringList()<<"Little endian"<<"Big endian");
 }
 
 int BinaryFilter::dataSize(BinaryFilter::DataType type) {
@@ -119,14 +119,14 @@ long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const 
   loads the predefined filter settings for \c filterName
 */
 void BinaryFilter::loadFilterSettings(const QString& filterName){
-    Q_UNUSED(filterName);
+	Q_UNUSED(filterName);
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
 void BinaryFilter::saveFilterSettings(const QString& filterName) const{
-    Q_UNUSED(filterName);
+	Q_UNUSED(filterName);
 }
 
 ///////////////////////////////////////////////////////////////////////
