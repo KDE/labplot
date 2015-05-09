@@ -372,6 +372,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			filter->parse(fileName, rootItem);
 			hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
 			hdfOptionsWidget.twContent->expandAll();
+			hdfOptionsWidget.twContent->resizeColumnToContents(0);
+			hdfOptionsWidget.twContent->resizeColumnToContents(1);
 		} else {
 #ifdef QT_DEBUG
 			qDebug()<<"probably BINARY file";

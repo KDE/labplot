@@ -106,12 +106,102 @@ HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 }
 
 #ifdef HAVE_HDF5
+QStringList HDFFilterPrivate::scanHDFAttrs(hid_t aid) {
+	QStringList attr;
+
+	char buf[MAXNAMELENGTH];
+	H5Aget_name(aid, MAXNAMELENGTH, buf );
+	attr<<QString(buf);
+
+        hid_t aspace = H5Aget_space(aid); /* the dimensions of the attribute data */
+        hid_t atype  = H5Aget_type(aid);
+        //readDatatype(atype);
+
+        /* ... read data with H5Aread etc. */
+
+        H5Tclose(atype);
+        H5Sclose(aspace);
+
+	//TODO
+	attr<<"test";
+
+	return attr;
+}
+
+void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidgetItem* parentItem) {
+	H5T_class_t typeClass = H5Tget_class(tid);
+
+	QStringList typeProps;
+	switch(typeClass) {
+        case H5T_INTEGER:
+		typeProps<<"INTEGER";
+                break;
+        case H5T_FLOAT:
+		typeProps<<"FLOAT";
+                break;
+        case H5T_STRING:
+		typeProps<<"STRING";
+                break;
+        case H5T_BITFIELD:
+		typeProps<<"BITFIELD";
+                break;
+        case H5T_OPAQUE:
+		typeProps<<"OPAQUE";
+                break;
+        case H5T_COMPOUND:
+		typeProps<<"COMPOUND";
+                break;
+        case H5T_ARRAY:
+		typeProps<<"ARRAY";
+                break;
+        case H5T_ENUM:
+		typeProps<<"ENUM";
+                break;
+        default:
+		typeProps<<"UNKNOWN";
+                break;
+        }
+
+        size_t size = H5Tget_size(tid);
+	typeProps<<"("<<QString::number(size)<<")";
+
+	H5T_order_t order = H5Tget_order(tid);
+        switch(order) {
+        case H5T_ORDER_LE:
+		typeProps<<"LE";
+                break;
+        case H5T_ORDER_BE:
+		typeProps<<"BE";
+                break;
+        case H5T_ORDER_VAX:
+		typeProps<<"VAX";
+                break;
+        case H5T_ORDER_MIXED:
+		typeProps<<"MIXED";
+                break;
+        case H5T_ORDER_NONE:
+		typeProps<<"NONE";
+                break;
+        case H5T_ORDER_ERROR:
+		typeProps<<"ERROR";
+                break;
+        }
+
+	//TODO scanHDFAttrs(tid);
+	
+	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<typeProps.join(" ")<<"attributes");
+	dataTypeItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+	parentItem->addChild(dataTypeItem);
+
+}
+
 void HDFFilterPrivate::scanHDFDataSet(hid_t dsid, char *dataSetName, QTreeWidgetItem* parentItem) {
+	//TODO: read attributes
+
 	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<"data set");
 	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
 	parentItem->addChild(dataSetItem);
 
-	//TODO
 }
 
 void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* parentItem) {
@@ -119,8 +209,10 @@ void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* p
         H5Gget_linkval(gid, linkName, MAXNAMELENGTH, target) ;
 	//TODO: check for broken links
 
+	//TODO: read attributes
+
 	QTreeWidgetItem *linkItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(linkName)<<"symlink"<<QString(target));
-	linkItem->setIcon(0,QIcon(KIcon("link")));
+	linkItem->setIcon(0,QIcon(KIcon("emblem-symbolic-link")));
 	parentItem->addChild(linkItem);
 }
 
@@ -132,6 +224,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	if (statbuf.nlink > 1) {
 		if(multiLinkList.contains(statbuf.objno[0])) {
 			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<"hard link");
+			objectItem->setIcon(0,QIcon(KIcon("link")));
                 	parentItem->addChild(objectItem);
 			return;
 		} else {
@@ -147,6 +240,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	//TODO scanHDFAttrs(gid);
 
 	hsize_t numObj;
+	//TODO: check for errors
 	herr_t err = H5Gget_num_objs(gid, &numObj);
 
 	for (unsigned int i = 0; i < numObj; i++) {
@@ -172,10 +266,9 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
                         break;
                 }
                 case H5G_TYPE: {
-			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"data type");
-			groupItem->addChild(objectItem);
                         hid_t tid = H5Topen(gid,memberName, H5P_DEFAULT);
-                        //TODO: scanHDFDatatype(tid);
+                        scanHDFDataType(tid, memberName, groupItem);
+			break;
                 }
                 default:
 			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"UNKNOWN");
