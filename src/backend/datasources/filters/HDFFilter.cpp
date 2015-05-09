@@ -59,6 +59,13 @@ void HDFFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem){
 }
 
 /*!
+  reads the content of the data set \c dataSet from file \c fileName.
+*/
+QString HDFFilter::readDataSet(const QString & fileName, const QString & dataSet){
+	return d->readDataSet(fileName, dataSet);
+}
+
+/*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void HDFFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
@@ -106,24 +113,36 @@ HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 }
 
 #ifdef HAVE_HDF5
-QStringList HDFFilterPrivate::scanHDFAttrs(hid_t aid) {
+QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 	QStringList attr;
 
-	char buf[MAXNAMELENGTH];
-	H5Aget_name(aid, MAXNAMELENGTH, buf );
-	attr<<QString(buf);
+        char name[MAXNAMELENGTH];
+        H5Aget_name(aid, MAXNAMELENGTH, name );
+	attr << QString(name);
 
-        hid_t aspace = H5Aget_space(aid); /* the dimensions of the attribute data */
+	//TODO
+        hid_t aspace = H5Aget_space(aid); // the dimensions of the attribute data
         hid_t atype  = H5Aget_type(aid);
         //readDatatype(atype);
 
-        /* ... read data with H5Aread etc. */
+        // ... read data with H5Aread etc.
 
         H5Tclose(atype);
         H5Sclose(aspace);
 
-	//TODO
-	attr<<"test";
+	return attr;
+}
+
+QStringList HDFFilterPrivate::scanHDFAttrs(hid_t oid) {
+	QStringList attr;
+
+	int numAttr = H5Aget_num_attrs(oid);
+
+        for (int i = 0; i < numAttr; i++) {
+                hid_t aid = H5Aopen_idx(oid, i);
+                attr<<readHDFAttr(aid);
+                H5Aclose(aid);
+        }
 
 	return attr;
 }
@@ -187,21 +206,32 @@ void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidget
                 break;
         }
 
-	//TODO scanHDFAttrs(tid);
-	
-	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<typeProps.join(" ")<<"attributes");
+	QString attr = scanHDFAttrs(tid).join(" ");
+
+	char link[MAXNAMELENGTH];
+        H5Iget_name(tid, link, MAXNAMELENGTH);
+
+	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join(" ")<<attr);
 	dataTypeItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
 	parentItem->addChild(dataTypeItem);
 
 }
 
-void HDFFilterPrivate::scanHDFDataSet(hid_t dsid, char *dataSetName, QTreeWidgetItem* parentItem) {
-	//TODO: read attributes
+void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetItem* parentItem) {
+	QString attr = scanHDFAttrs(did).join(" ");
 
-	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<"data set");
+	char link[MAXNAMELENGTH];
+        H5Iget_name(did, link, MAXNAMELENGTH);
+
+	QStringList dataSetProps;
+	hsize_t size = H5Dget_storage_size(did);
+	dataSetProps<<"size ="<<QString::number(size);
+	//TODO: data set properties
+
+	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join(" ")<<attr);
 	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
+	dataSetItem->setBackground(0,QBrush(QColor(192,255,192)));
 	parentItem->addChild(dataSetItem);
-
 }
 
 void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* parentItem) {
@@ -209,9 +239,7 @@ void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* p
         H5Gget_linkval(gid, linkName, MAXNAMELENGTH, target) ;
 	//TODO: check for broken links
 
-	//TODO: read attributes
-
-	QTreeWidgetItem *linkItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(linkName)<<"symlink"<<QString(target));
+	QTreeWidgetItem *linkItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(linkName)<<" "<<i18n("symbolic link")<<QString(target));
 	linkItem->setIcon(0,QIcon(KIcon("emblem-symbolic-link")));
 	parentItem->addChild(linkItem);
 }
@@ -223,7 +251,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	H5Gget_objinfo(gid, ".", TRUE, &statbuf);
 	if (statbuf.nlink > 1) {
 		if(multiLinkList.contains(statbuf.objno[0])) {
-			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<"hard link");
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<" "<<i18n("hard link"));
 			objectItem->setIcon(0,QIcon(KIcon("link")));
                 	parentItem->addChild(objectItem);
 			return;
@@ -233,11 +261,14 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 		}
 	}
 
-	QTreeWidgetItem *groupItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<"group");
+	char link[MAXNAMELENGTH];
+        H5Iget_name(gid, link, MAXNAMELENGTH);
+
+	QString attr = scanHDFAttrs(gid).join(" ");
+
+	QTreeWidgetItem *groupItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<QString(link)<<i18n("group")<<" "<<attr);
 	groupItem->setIcon(0,QIcon(KIcon("folder")));
 	parentItem->addChild(groupItem);
-
-	//TODO scanHDFAttrs(gid);
 
 	hsize_t numObj;
 	//TODO: check for errors
@@ -271,7 +302,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 			break;
                 }
                 default:
-			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"UNKNOWN");
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<i18n("unknown"));
 			groupItem->addChild(objectItem);
                         break;
                 }
@@ -293,6 +324,16 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 	scanHDFGroup(group,rootName, rootItem);
 	H5Fclose(file);
 #endif
+}
+
+/*!
+    reads the content of the date set in the file \c fileName to a string.
+*/
+QString HDFFilterPrivate::readDataSet(const QString & fileName, const QString & dataSet){
+	Q_UNUSED(fileName);
+	Q_UNUSED(dataSet);
+	//TODO
+	return QString("TODO");
 }
 
 /*!

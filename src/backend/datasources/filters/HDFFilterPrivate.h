@@ -41,6 +41,7 @@ class HDFFilterPrivate {
 		void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 		void read(const QString & fileName, AbstractDataSource* dataSource,
 					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		QString readDataSet(const QString & fileName, const QString & dataSet);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
 
 		const HDFFilter* q;
@@ -52,7 +53,8 @@ class HDFFilterPrivate {
 		QList<unsigned long> multiLinkList;	// used to find hard links
 		void clearDataSource(AbstractDataSource*) const;
 #ifdef HAVE_HDF5
-		QStringList scanHDFAttrs(hid_t aid);
+		QStringList readHDFAttr(hid_t aid);
+		QStringList scanHDFAttrs(hid_t oid);
 		void scanHDFDataType(hid_t tid, char *dataTypeName,  QTreeWidgetItem* parentItem);
 		void scanHDFLink(hid_t gid, char *linkName,  QTreeWidgetItem* parentItem);
 		void scanHDFDataSet(hid_t dsid, char *dataSetName,  QTreeWidgetItem* parentItem);

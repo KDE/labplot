@@ -85,7 +85,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	QWidget* hdfw=new QWidget(0);
 	hdfOptionsWidget.setupUi(hdfw);
 	QStringList headers;
-	headers<<i18n("Name")<<i18n("Type")<<i18n("Attributes");
+	headers<<i18n("Name")<<i18n("Link")<<i18n("Type")<<i18n("Properties")<<i18n("Attributes");
 	hdfOptionsWidget.twContent->setHeaderLabels(headers);
 	//TODO: fill hdfw with HDF items
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
@@ -111,7 +111,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 
 	//load last used settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
@@ -122,6 +121,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
 
 	//settings for ascii data
+	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 	//TODO: check if this works (character gets currentItem?)
 	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
 	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
@@ -138,6 +138,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	binaryOptionsWidget.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
 
 	//TODO: settings for HDF data
+	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 
 	//TODO: settings for other file types
 
@@ -376,7 +377,12 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
 			hdfOptionsWidget.twContent->expandAll();
 			hdfOptionsWidget.twContent->resizeColumnToContents(0);
-			hdfOptionsWidget.twContent->resizeColumnToContents(1);
+			// link and type column is filled but we dont need to show it
+			//hdfOptionsWidget.twContent->resizeColumnToContents(1);
+			//hdfOptionsWidget.twContent->resizeColumnToContents(2);
+			hdfOptionsWidget.twContent->hideColumn(1);
+			hdfOptionsWidget.twContent->hideColumn(2);
+			hdfOptionsWidget.twContent->resizeColumnToContents(3);
 		} else {
 #ifdef QT_DEBUG
 			qDebug()<<"probably BINARY file";
@@ -442,6 +448,19 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	//TODO: populate the combobox with the available pre-defined filter settings for the selected type
 
 	ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
+}
+
+/*!
+	updates the data set of a HDF file when the tree widget item is selected
+*/
+void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item,int column) {
+	Q_UNUSED(column);
+	if( item->data(2,Qt::DisplayRole).toString() == i18n("data set") ) {
+		// the data link is saved in the second column
+		QString dataSetLink = item->data(1,Qt::DisplayRole).toString();
+		hdfOptionsWidget.leDataSet->setText(dataSetLink);
+	} else
+		qDebug()<<"non data set selected in HDF tree widget";
 }
 
 /*!
@@ -614,7 +633,10 @@ void ImportFileWidget::refreshPreview(){
 			}
 		}
 		else if (fileType == FileDataSource::HDF) {
-			//TODO: read data from selected dataset
+			// read data from selected data set
+			QString dataSetName = hdfOptionsWidget.leDataSet->text();
+			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
+			importedText = filter->readDataSet(fileName,dataSetName);
 		}
 	}
 
