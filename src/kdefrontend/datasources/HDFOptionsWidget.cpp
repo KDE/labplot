@@ -4,7 +4,6 @@ Project              : LabPlot
 Description          : widget providing options for the import of HDF data
 --------------------------------------------------------------------
 Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
-
 ***************************************************************************/
 
 /***************************************************************************

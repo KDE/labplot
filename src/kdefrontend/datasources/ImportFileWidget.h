@@ -31,7 +31,9 @@
 
 #include "ui_importfilewidget.h"
 #include "AsciiOptionsWidget.h"
+#include "AsciiMatrixOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
+//TODO: #include "BinaryMatrixOptionsWidget.h"
 #include "HDFOptionsWidget.h"
 
 class FileDataSource;
@@ -53,7 +55,9 @@ public:
 private:
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;
+	Ui::AsciiMatrixOptionsWidget asciiMatrixOptionsWidget;
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
+	//TODO: Ui::BinaryMatrixOptionsWidget binaryMatrixOptionsWidget;
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 
 private slots:

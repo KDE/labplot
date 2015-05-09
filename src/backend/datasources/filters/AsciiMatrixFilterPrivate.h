@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : AsciiFilterPrivate.h
-    Project              : LabPlot/SciDAVis
-    Description          : Private implementation class for AsciiFilter.
-    --------------------------------------------------------------------
-	Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
-						   (replace * with @ in the email addresses)
+File                 : AsciiMatrixFilterPrivate.h
+Project              : LabPlot
+Description          : Private implementation class for AsciiMatrixFilter.
+--------------------------------------------------------------------
+Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,21 +25,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ASCIIFILTERPRIVATE_H
-#define ASCIIFILTERPRIVATE_H
+#ifndef ASCIIMATRIXFILTERPRIVATE_H
+#define ASCIIMATRIXFILTERPRIVATE_H
 
 class AbstractDataSource;
 
-class AsciiFilterPrivate {
+class AsciiMatrixFilterPrivate {
 
 	public:
-		explicit AsciiFilterPrivate(AsciiFilter*);
+		explicit AsciiMatrixFilterPrivate(AsciiMatrixFilter*);
 
 		void read(const QString & fileName, AbstractDataSource* dataSource,
 					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
 
-		const AsciiFilter* q;
+		const AsciiMatrixFilter* q;
 
 		QString commentCharacter;
 		QString separatingCharacter;

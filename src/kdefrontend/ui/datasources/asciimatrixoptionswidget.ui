@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AsciiMatrixOptionsWidget</class>
+ <widget class="QWidget" name="AsciiMatrixOptionsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>297</width>
+    <height>248</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="3">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Comment character</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="KComboBox" name="cbCommentCharacter">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>91</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="QLabel" name="lSeparatingCharacter">
+     <property name="text">
+      <string>Separating character</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="KComboBox" name="cbSeparatingCharacter">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" colspan="4">
+    <widget class="QCheckBox" name="chbSimplifyWhitespaces">
+     <property name="toolTip">
+      <string>Removes the whitespaces from the start and the end, and replaces each sequence of internal whitespaces with a single space.</string>
+     </property>
+     <property name="text">
+      <string>Simplify whitespaces</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <widget class="QCheckBox" name="chbSkipEmptyParts">
+     <property name="text">
+      <string>Skip empty parts</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QCheckBox" name="chbTranspose">
+     <property name="toolTip">
+      <string>Interchanges the role of the rows and the columns. Treats the rows as data vectors, if selected.</string>
+     </property>
+     <property name="text">
+      <string>Transpose</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="5">
+    <widget class="QCheckBox" name="chbHeader">
+     <property name="text">
+      <string>Use the first row to name the vectors</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="lVectorNames">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Vector names:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1" colspan="4">
+    <widget class="KLineEdit" name="kleVectorNames">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="toolTip">
+      <string>Vector names, space separated. E.g. &quot;x y&quot;</string>
+     </property>
+     <property name="showClearButton" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="3">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>45</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>KLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

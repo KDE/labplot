@@ -1,11 +1,10 @@
 /***************************************************************************
-    File                 : AsciiFilterPrivate.h
-    Project              : LabPlot/SciDAVis
-    Description          : Private implementation class for AsciiFilter.
-    --------------------------------------------------------------------
-	Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
-						   (replace * with @ in the email addresses)
- ***************************************************************************/
+File		: AsciiOptionsWidget.cpp
+Project		: LabPlot
+Description	: widget providing options for the import of ascii data
+--------------------------------------------------------------------
+Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -25,39 +24,18 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#include "AsciiMatrixOptionsWidget.h"
 
-#ifndef ASCIIFILTERPRIVATE_H
-#define ASCIIFILTERPRIVATE_H
+ /*!
+	\class AsciiMatrixOptionsWidget
+	\brief Widget providing options for the import of ascii matrix data
 
-class AbstractDataSource;
+	\ingroup kdefrontend
+ */
 
-class AsciiFilterPrivate {
+AsciiMatrixOptionsWidget::AsciiMatrixOptionsWidget(QWidget* parent) : QWidget(parent) {
+  ui.setupUi(this);
+}
 
-	public:
-		explicit AsciiFilterPrivate(AsciiFilter*);
-
-		void read(const QString & fileName, AbstractDataSource* dataSource,
-					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		void write(const QString & fileName, AbstractDataSource* dataSource);
-
-		const AsciiFilter* q;
-
-		QString commentCharacter;
-		QString separatingCharacter;
-		bool autoModeEnabled;
-		bool headerEnabled;
-		QString vectorNames;
-		bool skipEmptyParts;
-		bool simplifyWhitespacesEnabled;
-		bool transposed;
-
-		int startRow;
-		int endRow;
-		int startColumn;
-		int endColumn;
-
-	private:
-		void clearDataSource(AbstractDataSource*) const;
-};
-
-#endif
+AsciiMatrixOptionsWidget::~AsciiMatrixOptionsWidget() {
+}

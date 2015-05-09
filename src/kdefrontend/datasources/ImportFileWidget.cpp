@@ -31,7 +31,9 @@ Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 #include "FileInfoDialog.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiMatrixFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
+//TODO #include "backend/datasources/filters/BinaryMatrixFilter.h"
 #include "backend/datasources/filters/HDFFilter.h"
 
 #include <QInputDialog>
@@ -67,6 +69,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	//TODO
 	QWidget* asciiMatrixw=new QWidget(0);
+	asciiMatrixOptionsWidget.setupUi(asciiMatrixw);
 	ui.swOptions->insertWidget(FileDataSource::AsciiMatrix, asciiMatrixw);
 
 	QWidget* binaryw=new QWidget(0);
