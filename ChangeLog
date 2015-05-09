@@ -2,6 +2,7 @@
 New features:
 	* In xy-curve the points may not be connected by the line if there are NANs in-between. This behaviour is controlled by the parameter "skip gaps"
 	* Multiplier of Pi format of the plot axis for periodical functions
+	* Import of binary data into spreadsheet via import dialog
 
 Bug fixes:
 
