@@ -48,9 +48,13 @@ class HDFFilterPrivate {
 		bool autoModeEnabled;
 
 	private:
+		const static int MAXNAMELENGTH=1024;
+		QList<unsigned long> multiLinkList;	// used to find hard links
 		void clearDataSource(AbstractDataSource*) const;
 #ifdef HAVE_HDF5
-		void scanHDFGroup(hid_t gid, QTreeWidgetItem* parentItem);
+		void scanHDFLink(hid_t gid, char *linkName,  QTreeWidgetItem* parentItem);
+		void scanHDFDataSet(hid_t dsid, char *dataSetName,  QTreeWidgetItem* parentItem);
+		void scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem* parentItem);
 #endif
 };
 

@@ -35,6 +35,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QTextStream>
 #include <QDebug>
 #include <KLocale>
+#include <KIcon>
 
  /*!
 	\class HDFFilter
@@ -105,40 +106,68 @@ HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 }
 
 #ifdef HAVE_HDF5
-void HDFFilterPrivate::scanHDFGroup(hid_t gid, QTreeWidgetItem* parentItem) {
-	char groupName[1024];
+void HDFFilterPrivate::scanHDFDataSet(hid_t dsid, char *dataSetName, QTreeWidgetItem* parentItem) {
+	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<"data set");
+	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
+	parentItem->addChild(dataSetItem);
 
-	ssize_t len = H5Iget_name (gid, groupName, 1024);
+	//TODO
+}
+
+void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* parentItem) {
+        char target[MAXNAMELENGTH];
+        H5Gget_linkval(gid, linkName, MAXNAMELENGTH, target) ;
+	//TODO: check for broken links
+
+	QTreeWidgetItem *linkItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(linkName)<<"symlink"<<QString(target));
+	linkItem->setIcon(0,QIcon(KIcon("link")));
+	parentItem->addChild(linkItem);
+}
+
+void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem* parentItem) {
+
+	//check for hard link
+	H5G_stat_t  statbuf;
+	H5Gget_objinfo(gid, ".", TRUE, &statbuf);
+	if (statbuf.nlink > 1) {
+		if(multiLinkList.contains(statbuf.objno[0])) {
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<"hard link");
+                	parentItem->addChild(objectItem);
+			return;
+		} else {
+			multiLinkList.append(statbuf.objno[0]);
+			//qDebug()<<" group multiple links: "<<statbuf.objno[0]<<' '<<statbuf.objno[1];
+		}
+	}
+
 	QTreeWidgetItem *groupItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<"group");
+	groupItem->setIcon(0,QIcon(KIcon("folder")));
 	parentItem->addChild(groupItem);
 
-	// scanHDFAttrs(gid);
+	//TODO scanHDFAttrs(gid);
 
 	hsize_t numObj;
 	herr_t err = H5Gget_num_objs(gid, &numObj);
 
 	for (unsigned int i = 0; i < numObj; i++) {
-                char memberName[1024];
-                len = H5Gget_objname_by_idx(gid, (hsize_t)i, memberName, (size_t)1024 );
+                char memberName[MAXNAMELENGTH];
+                H5Gget_objname_by_idx(gid, (hsize_t)i, memberName, (size_t)MAXNAMELENGTH );
+
                 int otype =  H5Gget_objtype_by_idx(gid, (size_t)i );
                 switch(otype) {
                 case H5G_LINK: {
-			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"symlink");
-			groupItem->addChild(objectItem);
-                        //scanHDFLink(gid,memberName);
+                        scanHDFLink(gid,memberName, groupItem);
                         break;
                 }
                 case H5G_GROUP: {
                         hid_t grpid = H5Gopen(gid,memberName, H5P_DEFAULT);
-                        scanHDFGroup(grpid,groupItem);
+                        scanHDFGroup(grpid, memberName, groupItem);
                         H5Gclose(grpid);
                         break;
                 }
                 case H5G_DATASET: {
-			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"data set");
-			groupItem->addChild(objectItem);
                         hid_t dsid = H5Dopen(gid,memberName, H5P_DEFAULT);
-                        //scanHDFDataset(dsid);
+                        scanHDFDataSet(dsid, memberName, groupItem);
                         H5Dclose(dsid);
                         break;
                 }
@@ -146,7 +175,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, QTreeWidgetItem* parentItem) {
 			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"data type");
 			groupItem->addChild(objectItem);
                         hid_t tid = H5Topen(gid,memberName, H5P_DEFAULT);
-                        //scanHDFDatatype(tid);
+                        //TODO: scanHDFDatatype(tid);
                 }
                 default:
 			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"UNKNOWN");
@@ -165,8 +194,10 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 	// parse file fileName
 	QByteArray bafileName = fileName.toLatin1();
 	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
-	hid_t group = H5Gopen(file, "/", H5P_DEFAULT);
-	scanHDFGroup(group, rootItem);
+	char rootName[]="/";
+	hid_t group = H5Gopen(file, rootName, H5P_DEFAULT);
+	multiLinkList.clear();
+	scanHDFGroup(group,rootName, rootItem);
 	H5Fclose(file);
 #endif
 }

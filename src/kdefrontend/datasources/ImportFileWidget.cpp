@@ -82,7 +82,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	QWidget* hdfw=new QWidget(0);
 	hdfOptionsWidget.setupUi(hdfw);
 	QStringList headers;
-	headers<<i18n("Name")<<i18n("Type");
+	headers<<i18n("Name")<<i18n("Type")<<i18n("Attributes");
 	hdfOptionsWidget.twContent->setHeaderLabels(headers);
 	//TODO: fill hdfw with HDF items
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
