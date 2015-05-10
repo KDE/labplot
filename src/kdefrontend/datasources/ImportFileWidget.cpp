@@ -294,6 +294,11 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
  		}else{
 // 			filter->setFilterName( ui.cbFilter->currentText() );
 		}
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value() );
+		filter->setEndColumn( ui.sbEndColumn->value() );
+
 		return filter;
 	} else if ( fileType==FileDataSource::HDF ) {
 		HDFFilter* filter = new HDFFilter();

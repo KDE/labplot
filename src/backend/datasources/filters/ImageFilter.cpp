@@ -170,15 +170,15 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	
 	if (mode==AbstractFileFilter::Append){
 		columnOffset=dataSource->childCount<Column>();
-		for ( int n=1; n<=actualCols; n++ ){
-			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
+		for ( int n=0; n<actualCols; n++ ){
+			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->addChild(newColumn);
 		}
 	}else if (mode==AbstractFileFilter::Prepend){
 		Column* firstColumn = dataSource->child<Column>(0);
-		for ( int n=1; n<=actualCols; n++ ){
-			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
+		for ( int n=0; n<actualCols; n++ ){
+			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->insertChildBefore(newColumn, firstColumn);
 		}
@@ -239,9 +239,9 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	// read data
-	for (int i=startRow-1; i<endRow; i++){
-		for ( int j=startColumn-1; j<endColumn; j++ ){
-			double value=qGray(image.pixel(i, j));
+	for (int i=0; i<actualRows; i++){
+		for ( int j=0; j<actualCols; j++ ){
+			double value=qGray(image.pixel(i+startRow-1, j+startColumn-1));
 			dataPointers[j]->operator[](i) = value;
 		}
 	}
