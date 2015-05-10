@@ -76,6 +76,10 @@ class SpreadsheetView : public QWidget {
 
 	private:
 	  	void init();
+		void initActions();
+		void initMenus();
+		void connectActions();
+
 		QTableView* m_tableView;
 		Spreadsheet* m_spreadsheet;
 		SpreadsheetItemDelegate* m_delegate;
@@ -85,10 +89,6 @@ class SpreadsheetView : public QWidget {
 
 		bool eventFilter(QObject*, QEvent*);
 		void keyPressEvent(QKeyEvent*);
-
-		void initActions();
-		void initMenus();
-		void connectActions();
 
 		//selection related actions
 		QAction* action_cut_selection;
