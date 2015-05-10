@@ -35,6 +35,7 @@
 #include "BinaryOptionsWidget.h"
 //TODO: #include "BinaryMatrixOptionsWidget.h"
 #include "HDFOptionsWidget.h"
+#include "ImageOptionsWidget.h"
 
 class FileDataSource;
 class AbstractFileFilter;
@@ -59,6 +60,7 @@ private:
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
 	//TODO: Ui::BinaryMatrixOptionsWidget binaryMatrixOptionsWidget;
 	Ui::HDFOptionsWidget hdfOptionsWidget;
+	Ui::ImageOptionsWidget imageOptionsWidget;
 
 private slots:
 	void fileNameChanged(const QString&);

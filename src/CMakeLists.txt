@@ -20,6 +20,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/AsciiMatrixOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDFOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
@@ -60,6 +61,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/asciimatrixoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/hdfoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
@@ -119,6 +121,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/AsciiMatrixFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
 	${BACKEND_DIR}/datasources/filters/HDFFilter.cpp
+	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
  	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp

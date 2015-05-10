@@ -273,6 +273,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	hsize_t numObj;
 	//TODO: check for errors
 	herr_t err = H5Gget_num_objs(gid, &numObj);
+	Q_UNUSED(err);
 
 	for (unsigned int i = 0; i < numObj; i++) {
                 char memberName[MAXNAMELENGTH];

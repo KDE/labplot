@@ -105,10 +105,10 @@ QStringList FileDataSource::fileTypes(){
                          << i18n("ASCII matrix data")
                          << i18n("BINARY vector data")
                          << i18n("BINARY matrix data")
+                         << i18n("Image")
+//                         << i18n("Sound")
                          << "HDF"
 //                         << "NetCDF"
-//                         << i18n("Image")
-//                         << i18n("Sound")
 //                         << "CDF"
 //                         << "FITS"
                         );

@@ -60,6 +60,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.cbFileType->addItems(FileDataSource::fileTypes());
 
+	// file type specific option widgets
 	QWidget* asciiw=new QWidget(0);
 	asciiOptionsWidget.setupUi(asciiw);
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
@@ -67,7 +68,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
 	ui.swOptions->insertWidget(FileDataSource::AsciiVector, asciiw);
 
-	//TODO
 	QWidget* asciiMatrixw=new QWidget(0);
 	asciiMatrixOptionsWidget.setupUi(asciiMatrixw);
 	ui.swOptions->insertWidget(FileDataSource::AsciiMatrix, asciiMatrixw);
@@ -78,22 +78,28 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
 	ui.swOptions->insertWidget(FileDataSource::BinaryVector, binaryw);
 
-	//TODO
 	QWidget* binaryMatrixw=new QWidget(0);
 	ui.swOptions->insertWidget(FileDataSource::BinaryMatrix, binaryMatrixw);
+
+	QWidget* imagew=new QWidget(0);
+	imageOptionsWidget.setupUi(imagew);
+	ui.swOptions->insertWidget(FileDataSource::Image, imagew);
 
 	QWidget* hdfw=new QWidget(0);
 	hdfOptionsWidget.setupUi(hdfw);
 	QStringList headers;
 	headers<<i18n("Name")<<i18n("Link")<<i18n("Type")<<i18n("Properties")<<i18n("Attributes");
 	hdfOptionsWidget.twContent->setHeaderLabels(headers);
-	//TODO: fill hdfw with HDF items
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
 	//TODO: add widgets for other file types
 
 	// default filter
 	ui.swOptions->setCurrentIndex(FileDataSource::AsciiVector);
+	// disabled for the moment
+	ui.cbFileType->setItemData(FileDataSource::AsciiMatrix, 0, Qt::UserRole - 1);
+	ui.cbFileType->setItemData(FileDataSource::BinaryMatrix, 0, Qt::UserRole - 1);
+	ui.cbFileType->setItemData(FileDataSource::Image, 0, Qt::UserRole - 1);
 
 	ui.gbOptions->hide();
 
@@ -120,7 +126,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
 
-	//settings for ascii data
+	//settings for data type specific widgets
+	// ascii data
 	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 	//TODO: check if this works (character gets currentItem?)
 	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
@@ -130,17 +137,19 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	asciiOptionsWidget.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
 	asciiOptionsWidget.kleVectorNames->setText(conf.readEntry("Names", ""));
 
-	// settings for binary data
+	// binary data
 	binaryOptionsWidget.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
 	binaryOptionsWidget.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
 	binaryOptionsWidget.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
 	binaryOptionsWidget.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
 	binaryOptionsWidget.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
 
-	//TODO: settings for HDF data
+	//TODO: image data
+
+	//TODO: HDF data
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 
-	//TODO: settings for other file types
+	//TODO: other file types
 
 	filterChanged(ui.cbFilter->currentIndex());
 
@@ -158,7 +167,8 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Type", ui.cbFileType->currentIndex());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 
-	// settings for ascii data
+	// data type specific settings
+	// ascii data
 	conf.writeEntry("CommentCharacter", asciiOptionsWidget.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", asciiOptionsWidget.cbSeparatingCharacter->currentText());
 	conf.writeEntry("SimplifyWhitespaces", asciiOptionsWidget.chbSimplifyWhitespaces->isChecked());
@@ -166,14 +176,16 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("UseFirstRow", asciiOptionsWidget.chbHeader->isChecked());
 	conf.writeEntry("Names", asciiOptionsWidget.kleVectorNames->text());
 
-	// settings for binary data
+	// binary data
 	conf.writeEntry("Vectors", binaryOptionsWidget.niVectors->value());
 	conf.writeEntry("ByteOrder", binaryOptionsWidget.cbByteOrder->currentIndex());
 	conf.writeEntry("DataType", binaryOptionsWidget.cbDataType->currentIndex());
 	conf.writeEntry("SkipStartBytes", binaryOptionsWidget.sbSkipStartBytes->value());
 	conf.writeEntry("SkipBytes", binaryOptionsWidget.sbSkipBytes->value());
 
-	//TODO: settings for HDF data
+	//TODO: image data
+	//TODO: HDF data
+	//TODO: other file types
 }
 
 void ImportFileWidget::hideDataSource() const{
@@ -268,6 +280,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		return filter;
 	} else if ( fileType==FileDataSource::BinaryMatrix ) {
 		//TODO
+	} else if ( fileType==FileDataSource::Image ) {
+		//TODO
 	} else if ( fileType==FileDataSource::HDF ) {
 		HDFFilter* filter = new HDFFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
@@ -346,7 +360,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	if ( !fileExists )
 		return;
 
-	//check, whether the file has ascii or binary contant
+	//check, if we can guess the file type by content
 	QProcess *proc = new QProcess(this);
 	QStringList args;
 	args<<"-b"<<ui.kleFileName->text();
@@ -383,6 +397,13 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			hdfOptionsWidget.twContent->hideColumn(1);
 			hdfOptionsWidget.twContent->hideColumn(2);
 			hdfOptionsWidget.twContent->resizeColumnToContents(3);
+		} else if (info.contains(("image data"))) {
+#ifdef QT_DEBUG
+			qDebug()<<"detected IMAGE file";
+#endif
+			ui.cbFileType->setCurrentIndex(FileDataSource::Image);
+
+			//TODO: update image preview
 		} else {
 #ifdef QT_DEBUG
 			qDebug()<<"probably BINARY file";
@@ -413,7 +434,7 @@ void ImportFileWidget::manageFilters(){
 }
 
 /*!
-	Depending on the selected file type, activates the corresponding options
+	Depending on the selected file type, activates the corresponding options in the data portion tab
 	and populates the combobox with the available pre-defined fllter settings for the selected type.
 */
 void ImportFileWidget::fileTypeChanged(int fileType) {
