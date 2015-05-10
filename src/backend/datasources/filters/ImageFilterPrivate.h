@@ -40,6 +40,11 @@ class ImageFilterPrivate {
 
 		const ImageFilter* q;
 
+		int startRow;		// start row
+		int endRow;		// end row
+		int startColumn;	// start column
+		int endColumn;		// end column
+
 		bool autoModeEnabled;
 
 	private:

@@ -66,7 +66,6 @@ class BinaryFilter : public AbstractFileFilter{
 
 	void setStartRow(const int);
 	int startRow() const;
-
 	void setEndRow(const int);
 	int endRow() const;
 

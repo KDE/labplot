@@ -44,6 +44,15 @@ class ImageFilter : public AbstractFileFilter{
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
 
+	void setStartRow(const int);
+	int startRow() const;
+	void setEndRow(const int);
+	int endRow() const;
+	void setStartColumn(const int);
+	int startColumn() const;
+	void setEndColumn(const int);
+	int endColumn() const;
+
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
 

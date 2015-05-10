@@ -81,6 +81,37 @@ void ImageFilter::saveFilterSettings(const QString& filterName) const{
 }
 
 ///////////////////////////////////////////////////////////////////////
+void ImageFilter::setStartRow(const int s) {
+	d->startRow = s;
+}
+
+int ImageFilter::startRow() const{
+	return d->startRow;
+}
+
+void ImageFilter::setEndRow(const int e) {
+	d->endRow = e;
+}
+
+int ImageFilter::endRow() const{
+	return d->endRow;
+}
+
+void ImageFilter::setStartColumn(const int s) {
+	d->startColumn = s;
+}
+
+int ImageFilter::startColumn() const{
+	return d->startColumn;
+}
+
+void ImageFilter::setEndColumn(const int e) {
+	d->endColumn = e;
+}
+
+int ImageFilter::endColumn() const{
+	return d->endColumn;
+}
 
 void ImageFilter::setAutoModeEnabled(bool b){
 	d->autoModeEnabled = b;
@@ -94,7 +125,7 @@ bool ImageFilter::isAutoModeEnabled() const{
 //#####################################################################
 
 ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
-	q(owner){
+	q(owner),startRow(1),endRow(-1),startColumn(1),endColumn(-1) {
 }
 
 /*!
@@ -102,8 +133,6 @@ ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
     Uses the settings defined in the data source.
 */
 void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-	Q_UNUSED(dataSource)
-	Q_UNUSED(mode)
 #ifdef QT_DEBUG
 	qDebug()<<"ImageFilterPrivate::read()";
 #endif
@@ -114,13 +143,24 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		return;
 	}
 
-	qDebug()<<"image format ="<<image.format();
 	int cols = image.width();
 	int rows = image.height();
+
+	// set range of rows
+	if (endColumn == -1)
+		endColumn = cols;
+	if (endRow == -1)
+		endRow = rows;
+	int actualCols=endColumn-startColumn+1;
+	int actualRows=endRow-startRow+1;
+#ifdef QT_DEBUG
+	qDebug()<<"image format ="<<image.format();
 	qDebug()<<"image w/h ="<<cols<<rows;
+	qDebug()<<"actual rows/cols ="<<actualRows<<actualCols;
+#endif
 
 	QStringList vectorNameList;
-	for (int k=0; k<cols; k++ )
+	for (int k=0; k<actualCols; k++ )
 		vectorNameList.append( "Column " + QString::number(k+1) );
 
 	//make sure we have enough columns in the data source.
@@ -130,14 +170,14 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	
 	if (mode==AbstractFileFilter::Append){
 		columnOffset=dataSource->childCount<Column>();
-		for ( int n=1; n<=cols; n++ ){
+		for ( int n=1; n<=actualCols; n++ ){
 			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->addChild(newColumn);
 		}
 	}else if (mode==AbstractFileFilter::Prepend){
 		Column* firstColumn = dataSource->child<Column>(0);
-		for ( int n=1; n<=cols; n++ ){
+		for ( int n=1; n<=actualCols; n++ ){
 			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->insertChildBefore(newColumn, firstColumn);
@@ -146,15 +186,15 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		//replace completely the previous content of the data source with the content to be imported.
 		int columns = dataSource->childCount<Column>();
 
-		if (columns > cols){
+		if (columns > actualCols){
 			//there're more columns in the data source then required
 			//-> remove the superfluous columns
-			for(int i=0;i<columns-cols;i++) {
+			for(int i=0;i<columns-actualCols;i++) {
 				dataSource->removeChild(dataSource->child<Column>(0));
 			}
 
 			//rename the columns, that are already available
-			for (int i=0; i<cols-1; i++){
+			for (int i=0; i<actualCols; i++){
 				dataSource->child<Column>(i)->setUndoAware(false);
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
 				dataSource->child<Column>(i)->setName(vectorNameList.at(i+1));
@@ -170,7 +210,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 			}
 
 			//create additional columns if needed
-			for(int i=columns; i < cols; i++) {
+			for(int i=columns; i < actualCols; i++) {
 				newColumn = new Column(vectorNameList.at(i), AbstractColumn::Numeric);
 				newColumn->setUndoAware(false);
 				dataSource->addChild(newColumn);
@@ -183,31 +223,31 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (mode==AbstractFileFilter::Replace) {
 		spreadsheet->clear();
-		spreadsheet->setRowCount(rows);
+		spreadsheet->setRowCount(actualRows);
 	}else{
-		if (spreadsheet->rowCount() < rows)
-			spreadsheet->setRowCount(rows);
+		if (spreadsheet->rowCount() < actualRows)
+			spreadsheet->setRowCount(actualRows);
 	}
 
 	// pointers to the actual data containers
 	QVector<QVector<double>*> dataPointers;
-	for ( int n=1; n<=cols; n++ ){
-		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-1)->data());
-		vector->reserve(rows);
-		vector->resize(rows);
+	for ( int n=0; n<actualCols; n++ ){
+		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
+		vector->reserve(actualRows);
+		vector->resize(actualRows);
 		dataPointers.push_back(vector);
 	}
 
 	// read data
-	for (int i=0; i<rows; i++){
-		for ( int j=0; j<cols; j++ ){
+	for (int i=startRow-1; i<endRow; i++){
+		for ( int j=startColumn-1; j<endColumn; j++ ){
 			double value=qGray(image.pixel(i, j));
 			dataPointers[j]->operator[](i) = value;
 		}
 	}
 
 	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-	for ( int n=1; n<=cols; n++ ){
+	for ( int n=1; n<=actualCols; n++ ){
 		Column* column = spreadsheet->column(columnOffset+n-1);
 		column->setComment(comment);
 		column->setUndoAware(true);
