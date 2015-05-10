@@ -51,6 +51,13 @@ ImageFilter::~ImageFilter(){
 }
 
 /*!
+returns the list of all predefined import formats.
+*/
+QStringList ImageFilter::importFormats(){
+	return (QStringList()<<i18n("Matrix")<<i18n("XYZ"));
+}
+
+/*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void ImageFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
@@ -81,6 +88,14 @@ void ImageFilter::saveFilterSettings(const QString& filterName) const{
 }
 
 ///////////////////////////////////////////////////////////////////////
+void ImageFilter::setImportFormat(const ImageFilter::ImportFormat f) {
+	d->importFormat = f;
+}
+
+ImageFilter::ImportFormat ImageFilter::importFormat() const {
+	return d->importFormat;
+}
+
 void ImageFilter::setStartRow(const int s) {
 	d->startRow = s;
 }
@@ -125,7 +140,7 @@ bool ImageFilter::isAutoModeEnabled() const{
 //#####################################################################
 
 ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
-	q(owner),startRow(1),endRow(-1),startColumn(1),endColumn(-1) {
+	q(owner),importFormat(ImageFilter::MATRIX),startRow(1),endRow(-1),startColumn(1),endColumn(-1) {
 }
 
 /*!
@@ -136,6 +151,8 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 #ifdef QT_DEBUG
 	qDebug()<<"ImageFilterPrivate::read()";
 #endif
+	//TODO: use this
+	qDebug()<<"	import as"<<importFormat;
 
 	QImage image = QImage(fileName);
 	if(image.isNull() || image.format() == QImage::Format_Invalid) {

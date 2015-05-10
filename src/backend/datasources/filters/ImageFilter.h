@@ -35,14 +35,21 @@ class ImageFilter : public AbstractFileFilter{
 	Q_OBJECT
 
   public:
+	enum ImportFormat{MATRIX,XYZ};
+
 	ImageFilter();
 	~ImageFilter();
+
+	static QStringList importFormats();
 
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
+
+	void setImportFormat(const ImageFilter::ImportFormat);
+	ImageFilter::ImportFormat importFormat() const;
 
 	void setStartRow(const int);
 	int startRow() const;

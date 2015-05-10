@@ -40,6 +40,8 @@ class ImageFilterPrivate {
 
 		const ImageFilter* q;
 
+		ImageFilter::ImportFormat importFormat;	// how to import the image
+
 		int startRow;		// start row
 		int endRow;		// end row
 		int startColumn;	// start column

@@ -81,6 +81,9 @@ QStringList BinaryFilter::byteOrders(){
 	return (QStringList()<<"Little endian"<<"Big endian");
 }
 
+/*!
+returns the size of the predefined data types
+*/
 int BinaryFilter::dataSize(BinaryFilter::DataType type) {
 	int sizes[]={1,2,4,8,1,2,4,8,4,8};
 

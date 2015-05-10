@@ -84,6 +84,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	QWidget* imagew=new QWidget(0);
 	imageOptionsWidget.setupUi(imagew);
+	imageOptionsWidget.cbImportFormat->addItems(ImageFilter::importFormats());
 	ui.swOptions->insertWidget(FileDataSource::Image, imagew);
 
 	QWidget* hdfw=new QWidget(0);
@@ -145,9 +146,10 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	binaryOptionsWidget.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
 	binaryOptionsWidget.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
 
-	//TODO: image data
+	// image data
+	imageOptionsWidget.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
 
-	//TODO: HDF data
+	// HDF data
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 
 	//TODO: other file types
@@ -184,7 +186,9 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("SkipStartBytes", binaryOptionsWidget.sbSkipStartBytes->value());
 	conf.writeEntry("SkipBytes", binaryOptionsWidget.sbSkipBytes->value());
 
-	//TODO: image data
+	// image data
+	conf.writeEntry("ImportFormat", imageOptionsWidget.cbImportFormat->currentIndex());
+
 	//TODO: HDF data
 	//TODO: other file types
 }
@@ -294,6 +298,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
  		}else{
 // 			filter->setFilterName( ui.cbFilter->currentText() );
 		}
+		filter->setImportFormat((ImageFilter::ImportFormat)imageOptionsWidget.cbImportFormat->currentIndex());
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );
@@ -670,6 +675,9 @@ void ImportFileWidget::refreshPreview(){
 				}
 				importedText += '\n';
 			}
+		}
+		else if (fileType == FileDataSource::Image) {
+			//TODO
 		}
 		else if (fileType == FileDataSource::HDF) {
 			// read data from selected data set
