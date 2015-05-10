@@ -297,8 +297,8 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 			}
 
 			//create additional columns if needed
-			for(int i=0; i < (vectors-columns); i++) {
-				newColumn = new Column(vectorNameList.at(columns+i+1), AbstractColumn::Numeric);
+			for(int i=columns; i < vectors; i++) {
+				newColumn = new Column(vectorNameList.at(i), AbstractColumn::Numeric);
 				newColumn->setUndoAware(false);
 				dataSource->addChild(newColumn);
 				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);

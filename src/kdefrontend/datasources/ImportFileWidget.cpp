@@ -35,6 +35,7 @@ Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/BinaryFilter.h"
 //TODO #include "backend/datasources/filters/BinaryMatrixFilter.h"
 #include "backend/datasources/filters/HDFFilter.h"
+#include "backend/datasources/filters/ImageFilter.h"
 
 #include <QInputDialog>
 #include <QDir>
@@ -99,7 +100,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	// disabled for the moment
 	ui.cbFileType->setItemData(FileDataSource::AsciiMatrix, 0, Qt::UserRole - 1);
 	ui.cbFileType->setItemData(FileDataSource::BinaryMatrix, 0, Qt::UserRole - 1);
-	ui.cbFileType->setItemData(FileDataSource::Image, 0, Qt::UserRole - 1);
+	//ui.cbFileType->setItemData(FileDataSource::Image, 0, Qt::UserRole - 1);
 
 	ui.gbOptions->hide();
 
@@ -261,12 +262,14 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		return filter;
 //		source->setFilter(filter);
 	} else if ( fileType==FileDataSource::AsciiMatrix ) {
-		//TODO
+		AsciiMatrixFilter* filter = new AsciiMatrixFilter();
+		return filter;
 	} else if ( fileType==FileDataSource::BinaryVector ) {
 		BinaryFilter* filter = new BinaryFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 			filter->setAutoModeEnabled(true);
  		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
+			filter->setAutoModeEnabled(false);
  			filter->setVectors( binaryOptionsWidget.niVectors->value() );
  			filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
  		}else{
@@ -280,14 +283,24 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		return filter;
 	} else if ( fileType==FileDataSource::BinaryMatrix ) {
 		//TODO
+		//BinaryMatrixFilter* filter = new BinaryMatrixFilter();
+		//return filter;
 	} else if ( fileType==FileDataSource::Image ) {
-		//TODO
+		ImageFilter* filter = new ImageFilter();
+ 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
+			filter->setAutoModeEnabled(true);
+ 		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
+			filter->setAutoModeEnabled(false);
+ 		}else{
+// 			filter->setFilterName( ui.cbFilter->currentText() );
+		}
+		return filter;
 	} else if ( fileType==FileDataSource::HDF ) {
 		HDFFilter* filter = new HDFFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 			filter->setAutoModeEnabled(true);
  		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
-			//TODO
+			filter->setAutoModeEnabled(false);
 		} else {
 			//TODO
 		}
@@ -370,7 +383,14 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	    // 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
 	} else {
 		QString info = proc->readLine();
-		if ( info.contains( ("ASCII") ) ) {
+		if (info.contains("image") || info.contains("bitmap" )) {
+#ifdef QT_DEBUG
+			qDebug()<<"detected IMAGE file";
+#endif
+			ui.cbFileType->setCurrentIndex(FileDataSource::Image);
+
+			//TODO: update image preview
+		} else if ( info.contains( ("ASCII") ) ) {
 #ifdef QT_DEBUG
 			qDebug()<<"detected ASCII file";
 #endif
@@ -397,13 +417,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			hdfOptionsWidget.twContent->hideColumn(1);
 			hdfOptionsWidget.twContent->hideColumn(2);
 			hdfOptionsWidget.twContent->resizeColumnToContents(3);
-		} else if (info.contains(("image data"))) {
-#ifdef QT_DEBUG
-			qDebug()<<"detected IMAGE file";
-#endif
-			ui.cbFileType->setCurrentIndex(FileDataSource::Image);
-
-			//TODO: update image preview
 		} else {
 #ifdef QT_DEBUG
 			qDebug()<<"probably BINARY file";

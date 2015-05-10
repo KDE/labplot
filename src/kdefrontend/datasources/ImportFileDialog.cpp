@@ -40,6 +40,7 @@
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
+#include <QDebug>
 
 /*!
 	\class ImportFileDialog

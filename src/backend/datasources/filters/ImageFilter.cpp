@@ -102,20 +102,122 @@ ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
     Uses the settings defined in the data source.
 */
 void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
+	Q_UNUSED(dataSource)
+	Q_UNUSED(mode)
 #ifdef QT_DEBUG
 	qDebug()<<"ImageFilterPrivate::read()";
 #endif
 
-	QFile file(fileName);
-	if ( !file.exists() )
+	QImage image = QImage(fileName);
+	if(image.isNull() || image.format() == QImage::Format_Invalid) {
+		qDebug()<<"failed to read image"<<fileName<<"or invalid image format";
 		return;
+	}
 
-	if (!file.open(QIODevice::ReadOnly))
-        	return;
+	qDebug()<<"image format ="<<image.format();
+	int cols = image.width();
+	int rows = image.height();
+	qDebug()<<"image w/h ="<<cols<<rows;
 
-	QDataStream in(&file);
+	QStringList vectorNameList;
+	for (int k=0; k<cols; k++ )
+		vectorNameList.append( "Column " + QString::number(k+1) );
 
-	// see binary filter
+	//make sure we have enough columns in the data source.
+	Column * newColumn;
+	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
+	dataSource->setUndoAware(false);
+	
+	if (mode==AbstractFileFilter::Append){
+		columnOffset=dataSource->childCount<Column>();
+		for ( int n=1; n<=cols; n++ ){
+			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
+			newColumn->setUndoAware(false);
+			dataSource->addChild(newColumn);
+		}
+	}else if (mode==AbstractFileFilter::Prepend){
+		Column* firstColumn = dataSource->child<Column>(0);
+		for ( int n=1; n<=cols; n++ ){
+			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
+			newColumn->setUndoAware(false);
+			dataSource->insertChildBefore(newColumn, firstColumn);
+		}
+	}else if (mode==AbstractFileFilter::Replace){
+		//replace completely the previous content of the data source with the content to be imported.
+		int columns = dataSource->childCount<Column>();
+
+		if (columns > cols){
+			//there're more columns in the data source then required
+			//-> remove the superfluous columns
+			for(int i=0;i<columns-cols;i++) {
+				dataSource->removeChild(dataSource->child<Column>(0));
+			}
+
+			//rename the columns, that are already available
+			for (int i=0; i<cols-1; i++){
+				dataSource->child<Column>(i)->setUndoAware(false);
+				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
+				dataSource->child<Column>(i)->setName(vectorNameList.at(i+1));
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
+			}
+		}else{
+			//rename the columns, that are already available
+			for (int i=0; i<columns; i++){
+				dataSource->child<Column>(i)->setUndoAware(false);
+				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
+				dataSource->child<Column>(i)->setName(vectorNameList.at(i));
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
+			}
+
+			//create additional columns if needed
+			for(int i=columns; i < cols; i++) {
+				newColumn = new Column(vectorNameList.at(i), AbstractColumn::Numeric);
+				newColumn->setUndoAware(false);
+				dataSource->addChild(newColumn);
+				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
+			}
+		}
+	}
+
+	// resize the spreadsheet
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (mode==AbstractFileFilter::Replace) {
+		spreadsheet->clear();
+		spreadsheet->setRowCount(rows);
+	}else{
+		if (spreadsheet->rowCount() < rows)
+			spreadsheet->setRowCount(rows);
+	}
+
+	// pointers to the actual data containers
+	QVector<QVector<double>*> dataPointers;
+	for ( int n=1; n<=cols; n++ ){
+		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-1)->data());
+		vector->reserve(rows);
+		vector->resize(rows);
+		dataPointers.push_back(vector);
+	}
+
+	// read data
+	for (int i=0; i<rows; i++){
+		for ( int j=0; j<cols; j++ ){
+			double value=qGray(image.pixel(i, j));
+			dataPointers[j]->operator[](i) = value;
+		}
+	}
+
+	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
+	for ( int n=1; n<=cols; n++ ){
+		Column* column = spreadsheet->column(columnOffset+n-1);
+		column->setComment(comment);
+		column->setUndoAware(true);
+		if (mode==AbstractFileFilter::Replace) {
+			column->setSuppressDataChangedSignal(false);
+			column->setChanged();
+		}
+	}
+
+	spreadsheet->setUndoAware(true);
 }
 
 /*!
