@@ -260,15 +260,15 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 
 	if (mode==AbstractFileFilter::Append){
 		columnOffset=dataSource->childCount<Column>();
-		for ( int n=1; n<=vectors; n++ ){
-			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
+		for ( int n=0; n<vectors; n++ ){
+			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->addChild(newColumn);
 		}
 	}else if (mode==AbstractFileFilter::Prepend){
 		Column* firstColumn = dataSource->child<Column>(0);
-		for ( int n=1; n<=vectors; n++ ){
-			newColumn = new Column(vectorNameList.at(n-1), AbstractColumn::Numeric);
+		for ( int n=0; n<vectors; n++ ){
+			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->insertChildBefore(newColumn, firstColumn);
 		}
@@ -279,7 +279,7 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		if (columns > vectors){
 			//there're more columns in the data source then required
 			//-> remove the superfluous columns
-			for(int i=0;i<columns-(vectors);i++) {
+			for(int i=0;i<columns-vectors;i++) {
 				dataSource->removeChild(dataSource->child<Column>(0));
 			}
 
@@ -336,8 +336,8 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 
 	// pointers to the actual data containers
 	QVector<QVector<double>*> dataPointers;
-	for ( int n=1; n<=vectors; n++ ){
-		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-1)->data());
+	for ( int n=0; n<vectors; n++ ){
+		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
 		vector->reserve(actualRows);
 		vector->resize(actualRows);
 		dataPointers.push_back(vector);
@@ -414,8 +414,8 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 	}
 
 	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-	for ( int n=1; n<=vectors; n++ ){
-		Column* column = spreadsheet->column(columnOffset+n-1);
+	for ( int n=0; n<vectors; n++ ){
+		Column* column = spreadsheet->column(columnOffset+n);
 		column->setComment(comment);
 		column->setUndoAware(true);
 		if (mode==AbstractFileFilter::Replace) {
