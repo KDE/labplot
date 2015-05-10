@@ -151,8 +151,6 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 #ifdef QT_DEBUG
 	qDebug()<<"ImageFilterPrivate::read()";
 #endif
-	//TODO: use this
-	qDebug()<<"	import as"<<importFormat;
 
 	QImage image = QImage(fileName);
 	if(image.isNull() || image.format() == QImage::Format_Invalid) {
@@ -168,11 +166,25 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		endColumn = cols;
 	if (endRow == -1)
 		endRow = rows;
-	int actualCols=endColumn-startColumn+1;
-	int actualRows=endRow-startRow+1;
+	int actualCols=0, actualRows=0;
+	if (importFormat == ImageFilter::MATRIX) {
+		actualCols = endColumn-startColumn+1;
+		actualRows = endRow-startRow+1;
+	} else if (importFormat == ImageFilter::XYZ) {
+		actualCols = 3;
+		actualRows = (endColumn-startColumn+1)*(endRow-startRow+1);
+	} else {
+		qDebug()<<"UNKNOWN import format! Giving up.";
+		return;
+	}
 #ifdef QT_DEBUG
 	qDebug()<<"image format ="<<image.format();
 	qDebug()<<"image w/h ="<<cols<<rows;
+	if (importFormat == ImageFilter::MATRIX) {
+		qDebug()<<"import as MATRIX";
+	} else if (importFormat == ImageFilter::XYZ) {
+		qDebug()<<"import as XYZ";
+	}
 	qDebug()<<"actual rows/cols ="<<actualRows<<actualCols;
 #endif
 
@@ -241,7 +253,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	if (mode==AbstractFileFilter::Replace) {
 		spreadsheet->clear();
 		spreadsheet->setRowCount(actualRows);
-	}else{
+	}else {
 		if (spreadsheet->rowCount() < actualRows)
 			spreadsheet->setRowCount(actualRows);
 	}
@@ -256,16 +268,29 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	// read data
-	for (int i=0; i<actualRows; i++){
-		for ( int j=0; j<actualCols; j++ ){
-			double value=qGray(image.pixel(i+startRow-1, j+startColumn-1));
-			dataPointers[j]->operator[](i) = value;
+	if (importFormat == ImageFilter::MATRIX) {
+		for (int i=0; i<actualRows; i++){
+			for ( int j=0; j<actualCols; j++ ){
+				double value=qGray(image.pixel(i+startRow-1, j+startColumn-1));
+				dataPointers[j]->operator[](i) = value;
+			}
+		}
+	} else if (importFormat == ImageFilter::XYZ) {
+		int currentRow=0;
+		for (int i=startRow; i<=endRow; i++){
+			for ( int j=startColumn; j<=endColumn; j++ ){
+				double value=qGray(image.pixel(i-1, j-1));
+				dataPointers[0]->operator[](currentRow) = i;
+				dataPointers[1]->operator[](currentRow) = j;
+				dataPointers[2]->operator[](currentRow) = value;
+				currentRow++;
+			}
 		}
 	}
 
 	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-	for ( int n=1; n<=actualCols; n++ ){
-		Column* column = spreadsheet->column(columnOffset+n-1);
+	for ( int n=0; n<actualCols; n++ ){
+		Column* column = spreadsheet->column(columnOffset+n);
 		column->setComment(comment);
 		column->setUndoAware(true);
 		if (mode==AbstractFileFilter::Replace) {
