@@ -65,7 +65,6 @@ writes the content of the data source \c dataSource to the file \c fileName.
 */
 void AsciiMatrixFilter::write(const QString & fileName, AbstractDataSource* dataSource){
  	d->write(fileName, dataSource);
-// 	emit()
 }
 
 /*!
@@ -181,22 +180,6 @@ bool AsciiMatrixFilter::isAutoModeEnabled() const{
 	return d->autoModeEnabled;
 }
 
-void AsciiMatrixFilter::setHeaderEnabled(bool b){
-	d->headerEnabled=b;
-}
-
-bool AsciiMatrixFilter::isHeaderEnabled() const{
-	return d->headerEnabled;
-}
-
-void AsciiMatrixFilter::setVectorNames(const QString s){
-	d->vectorNames=s.simplified();
-}
-
-QString AsciiMatrixFilter::vectorNames() const{
-	return d->vectorNames;
-}
-
 void AsciiMatrixFilter::setSkipEmptyParts(bool b){
 	d->skipEmptyParts=b;
 }
@@ -252,7 +235,6 @@ AsciiMatrixFilterPrivate::AsciiMatrixFilterPrivate(AsciiMatrixFilter* owner) : q
 	commentCharacter("#"),
 	separatingCharacter("auto"),
 	autoModeEnabled(true),
-	headerEnabled(true),
 	skipEmptyParts(false),
 	simplifyWhitespacesEnabled(true),
 	transposed(false),
@@ -341,23 +323,6 @@ void AsciiMatrixFilterPrivate::read(const QString & fileName, AbstractDataSource
 	if (endColumn == -1)
 		endColumn = lineStringList.size()-1; //use the last available column index
 
-	QStringList vectorNameList;
-	if ( headerEnabled ){
-		vectorNameList = lineStringList;
-	}else{
-		//create vector names out of the space separated vectorNames-string, if not empty
-		if (!vectorNames.isEmpty()){
-			vectorNameList = vectorNames.split(' ');
-		}
-
-		//if there were no (or not enough) strings provided, add the default descriptions for the columns/vectors
-		if ( vectorNameList.size() < endColumn-startColumn+1 ) {
-			int size=vectorNameList.size();
-			for (int k=0; k<endColumn-startColumn+1-size; k++ )
-				vectorNameList.append( "Column " + QString::number(size+k+1) );
-		}
-	}
-
 	//make sure we have enough columns in the data source.
 	//we need in total (endColumn-startColumn+1) columns.
 	//Create new columns, if needed.
@@ -366,14 +331,14 @@ void AsciiMatrixFilterPrivate::read(const QString & fileName, AbstractDataSource
 	if (mode==AbstractFileFilter::Append){
 		columnOffset=dataSource->childCount<Column>();
 		for ( int n=startColumn; n<=endColumn; n++ ){
-			newColumn = new Column(vectorNameList.at(n-startColumn), AbstractColumn::Numeric);
+			newColumn = new Column(QString(""), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->addChild(newColumn);
 		}
 	}else if (mode==AbstractFileFilter::Prepend){
 		Column* firstColumn = dataSource->child<Column>(0);
 		for ( int n=startColumn; n<=endColumn; n++ ){
-			newColumn = new Column(vectorNameList.at(n-startColumn), AbstractColumn::Numeric);
+			newColumn = new Column(QString(""), AbstractColumn::Numeric);
 			newColumn->setUndoAware(false);
 			dataSource->insertChildBefore(newColumn, firstColumn);
 		}
@@ -392,7 +357,7 @@ void AsciiMatrixFilterPrivate::read(const QString & fileName, AbstractDataSource
 			for (int i=0; i<endColumn-startColumn; i++){
 				dataSource->child<Column>(i)->setUndoAware(false);
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
+				dataSource->child<Column>(i)->setName(QString(""));
 				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 		}else{
@@ -400,13 +365,13 @@ void AsciiMatrixFilterPrivate::read(const QString & fileName, AbstractDataSource
 			for (int i=0; i<columns; i++){
 				dataSource->child<Column>(i)->setUndoAware(false);
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
+				dataSource->child<Column>(i)->setName(QString(""));
 				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 
 			//create additional columns if needed
 			for(int i=0; i<=(endColumn-startColumn-columns); i++) {
-				newColumn = new Column(vectorNameList.at(columns+startColumn+i), AbstractColumn::Numeric);
+				newColumn = new Column(QString(""), AbstractColumn::Numeric);
 				newColumn->setUndoAware(false);
 				dataSource->addChild(newColumn);
 				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
@@ -424,10 +389,7 @@ void AsciiMatrixFilterPrivate::read(const QString & fileName, AbstractDataSource
 	else
 		actualEndRow = endRow;
 
-	if (headerEnabled)
-		numLines = actualEndRow-startRow-1;
-	else
-		numLines = actualEndRow-startRow;
+	numLines = actualEndRow-startRow;
 
 	//resize the spreadsheet
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -449,18 +411,16 @@ void AsciiMatrixFilterPrivate::read(const QString & fileName, AbstractDataSource
 	}
 
 	//import the values in the first line, if they were not used as the header (as the names for the columns)
-	if (!headerEnabled){
-		for ( int n=startColumn; n<=endColumn; n++ ){
-			if (n<lineStringList.size()) {
-				bool isNumber;
-				const double value = lineStringList.at(n).toDouble(&isNumber);
-				isNumber ? dataPointers[n-startColumn]->operator[](0) = value : dataPointers[n-startColumn]->operator[](0) = NAN;
-			} else {
-				dataPointers[n]->operator[](0) = NAN;
-			}
+	for ( int n=startColumn; n<=endColumn; n++ ){
+		if (n<lineStringList.size()) {
+			bool isNumber;
+			const double value = lineStringList.at(n).toDouble(&isNumber);
+			isNumber ? dataPointers[n-startColumn]->operator[](0) = value : dataPointers[n-startColumn]->operator[](0) = NAN;
+		} else {
+			dataPointers[n]->operator[](0) = NAN;
 		}
-		currentRow++;
 	}
+	currentRow++;
 
 	//first line in the file is parsed. Read the remainder of the file.
 	bool isNumber;
@@ -497,7 +457,7 @@ void AsciiMatrixFilterPrivate::read(const QString & fileName, AbstractDataSource
 
 	//set the comments for each of the columns
 	//TODO: generalize to different data types
-	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", headerEnabled ? currentRow : currentRow+1);
+	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", currentRow+1);
 	for ( int n=startColumn; n<=endColumn; n++ ){
 		Column* column = spreadsheet->column(columnOffset+n-startColumn);
 		column->setComment(comment);
@@ -542,12 +502,10 @@ void AsciiMatrixFilterPrivate::write(const QString & fileName, AbstractDataSourc
   Saves as XML.
  */
 void AsciiMatrixFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement( "asciiFilter" );
+	writer->writeStartElement( "asciiMatrixFilter" );
 	writer->writeAttribute( "commentCharacter", d->commentCharacter );
 	writer->writeAttribute( "separatingCharacter", d->separatingCharacter );
 	writer->writeAttribute( "autoMode", QString::number(d->autoModeEnabled) );
-	writer->writeAttribute( "header", QString::number(d->headerEnabled) );
-	writer->writeAttribute( "vectorNames", d->vectorNames );
 	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts) );
 	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled) );
 	writer->writeAttribute( "transposed", QString::number(d->transposed) );
@@ -562,7 +520,7 @@ void AsciiMatrixFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiMatrixFilter::load(XmlStreamReader* reader) {
-	if(!reader->isStartElement() || reader->name() != "asciiFilter"){
+	if(!reader->isStartElement() || reader->name() != "asciiMatrixFilter"){
 		reader->raiseError(i18n("no ascii filter element found"));
 		return false;
 	}
@@ -587,15 +545,6 @@ bool AsciiMatrixFilter::load(XmlStreamReader* reader) {
 		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
 	else
 		d->autoModeEnabled = str.toInt();
-
-	str = attribs.value("header").toString();
-	if(str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'header'"));
-	else
-		d->headerEnabled = str.toInt();
-
-	str = attribs.value("vectorNames").toString();
-	d->vectorNames = str; //may be empty
 
 	str = attribs.value("simplifyWhitespaces").toString();
 	if(str.isEmpty())

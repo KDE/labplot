@@ -267,6 +267,11 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 //		source->setFilter(filter);
 	} else if ( fileType==FileDataSource::AsciiMatrix ) {
 		AsciiMatrixFilter* filter = new AsciiMatrixFilter();
+		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
+			filter->setAutoModeEnabled(true);
+		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
+			filter->setAutoModeEnabled(false);
+		}
 		return filter;
 	} else if ( fileType==FileDataSource::BinaryVector ) {
 		BinaryFilter* filter = new BinaryFilter();

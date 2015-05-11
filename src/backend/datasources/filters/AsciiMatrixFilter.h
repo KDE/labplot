@@ -63,12 +63,6 @@ class AsciiMatrixFilter : public AbstractFileFilter{
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
 
-	void setHeaderEnabled(const bool);
-	bool isHeaderEnabled() const;
-
-	void setVectorNames(const QString);
-	QString vectorNames() const;
-
 	void setSkipEmptyParts(const bool);
 	bool skipEmptyParts() const;
 

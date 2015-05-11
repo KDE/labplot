@@ -81,14 +81,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="QCheckBox" name="chbSkipEmptyParts">
-     <property name="text">
-      <string>Skip empty parts</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="2">
+   <item row="4" column="0" colspan="2">
     <widget class="QCheckBox" name="chbTranspose">
      <property name="toolTip">
       <string>Interchanges the role of the rows and the columns. Treats the rows as data vectors, if selected.</string>
@@ -98,40 +91,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="5">
-    <widget class="QCheckBox" name="chbHeader">
-     <property name="text">
-      <string>Use the first row to name the vectors</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="lVectorNames">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Vector names:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1" colspan="4">
-    <widget class="KLineEdit" name="kleVectorNames">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="toolTip">
-      <string>Vector names, space separated. E.g. &quot;x y&quot;</string>
-     </property>
-     <property name="showClearButton" stdset="0">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="3">
+   <item row="5" column="3">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -148,9 +108,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KLineEdit</class>
-   <extends>KLineEdit</extends>
-   <header>klineedit.h</header>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

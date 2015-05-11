@@ -44,8 +44,6 @@ class AsciiMatrixFilterPrivate {
 		QString commentCharacter;
 		QString separatingCharacter;
 		bool autoModeEnabled;
-		bool headerEnabled;
-		QString vectorNames;
 		bool skipEmptyParts;
 		bool simplifyWhitespacesEnabled;
 		bool transposed;
