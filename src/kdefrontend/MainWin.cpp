@@ -33,6 +33,7 @@
 #include "backend/core/Folder.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
 
@@ -215,10 +216,10 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
 
-// 	m_newMatrixAction = new KAction(KIcon("insert-table"),i18n("Matrix"),this);
+	m_newMatrixAction = new KAction(KIcon("insert-table"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-// 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
-// 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
+	actionCollection()->addAction("new_matrix", m_newMatrixAction);
+	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
 	m_newWorksheetAction= new KAction(KIcon("archive-insert"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
@@ -1079,7 +1080,9 @@ void MainWin::newScript(){
 }
 
 void MainWin::newMatrix(){
-	//TODO
+	Matrix* matrix = new Matrix(0, 10, 10, i18n("Matrix"));
+// 	matrix->initDefault();
+	this->addAspectToProject(matrix);
 }
 
 void MainWin::newFolder() {

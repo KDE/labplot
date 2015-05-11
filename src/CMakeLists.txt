@@ -124,6 +124,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
  	${BACKEND_DIR}/gsl/parser.tab.c
+	${BACKEND_DIR}/matrix/Matrix.cpp
+	${BACKEND_DIR}/matrix/matrixcommands.cpp
+	${BACKEND_DIR}/matrix/MatrixModel.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -146,6 +149,7 @@ set(BACKEND_SOURCES
 )
 
 set(COMMONFRONTEND_SOURCES
+	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetDoubleHeaderView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp

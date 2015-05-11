@@ -150,7 +150,6 @@ class SpreadsheetView : public QWidget {
 		void activateFormulaMode(bool on);
 		void goToCell(int row, int col);
 		void toggleComments();
-		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 		void goToNextColumn();
 		void goToPreviousColumn();
 		void goToCell();
@@ -204,6 +203,7 @@ class SpreadsheetView : public QWidget {
 
 	private  slots:
 		void advanceCell();
+		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 		void handleHorizontalSectionMoved(int index, int from, int to);
 		void handleHorizontalHeaderDoubleClicked(int index);
 		void handleHeaderDataChanged(Qt::Orientation orientation, int first, int last);
