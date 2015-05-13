@@ -42,11 +42,14 @@ class HDFFilter : public AbstractFileFilter{
 
 	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	QString readDataSet(const QString & fileName, const QString & dataSet);
+	QString readCurrentDataSet(const QString & fileName, unsigned int lines);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
+
+	void setCurrentDataSet(const QString);
+	QString currentDataSet() const;
 
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;

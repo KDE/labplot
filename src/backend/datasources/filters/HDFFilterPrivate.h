@@ -41,17 +41,17 @@ class HDFFilterPrivate {
 		void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 		void read(const QString & fileName, AbstractDataSource* dataSource,
 					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		QString readDataSet(const QString & fileName, const QString & dataSet);
+		QString readCurrentDataSet(const QString & fileName,unsigned int lines);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
 
 		const HDFFilter* q;
 
+		QString currentDataSet;
 		bool autoModeEnabled;
 
 	private:
 		const static int MAXNAMELENGTH=1024;
 		QList<unsigned long> multiLinkList;	// used to find hard links
-		void clearDataSource(AbstractDataSource*) const;
 #ifdef HAVE_HDF5
 		QStringList readHDFAttr(hid_t aid);
 		QStringList scanHDFAttrs(hid_t oid);

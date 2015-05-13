@@ -324,8 +324,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		} else {
 			//TODO
 		}
+		filter->setCurrentDataSet(hdfOptionsWidget.leDataSet->text());
 
-		//TODO
 		return filter;
 	}
 
@@ -691,9 +691,8 @@ void ImportFileWidget::refreshPreview(){
 		}
 		else if (fileType == FileDataSource::HDF) {
 			// read data from selected data set
-			QString dataSetName = hdfOptionsWidget.leDataSet->text();
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
-			importedText = filter->readDataSet(fileName,dataSetName);
+			importedText = filter->readCurrentDataSet(fileName,lines);
 		}
 	}
 
