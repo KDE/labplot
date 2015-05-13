@@ -92,6 +92,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	QStringList headers;
 	headers<<i18n("Name")<<i18n("Link")<<i18n("Type")<<i18n("Properties")<<i18n("Attributes");
 	hdfOptionsWidget.twContent->setHeaderLabels(headers);
+	// link and type column is filled but we dont need to show it
+	//hdfOptionsWidget.twContent->resizeColumnToContents(1);
+	//hdfOptionsWidget.twContent->resizeColumnToContents(2);
+	hdfOptionsWidget.twContent->hideColumn(1);
+	hdfOptionsWidget.twContent->hideColumn(2);
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
 	//TODO: add widgets for other file types
@@ -308,7 +313,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );
 		filter->setEndColumn( ui.sbEndColumn->value() );
-
+		
 		return filter;
 	} else if ( fileType==FileDataSource::HDF ) {
 		HDFFilter* filter = new HDFFilter();
@@ -426,11 +431,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
 			hdfOptionsWidget.twContent->expandAll();
 			hdfOptionsWidget.twContent->resizeColumnToContents(0);
-			// link and type column is filled but we dont need to show it
-			//hdfOptionsWidget.twContent->resizeColumnToContents(1);
-			//hdfOptionsWidget.twContent->resizeColumnToContents(2);
-			hdfOptionsWidget.twContent->hideColumn(1);
-			hdfOptionsWidget.twContent->hideColumn(2);
 			hdfOptionsWidget.twContent->resizeColumnToContents(3);
 		} else {
 #ifdef QT_DEBUG
@@ -468,12 +468,17 @@ void ImportFileWidget::manageFilters(){
 void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.swOptions->setCurrentIndex(fileType);
 
+	//default
+	ui.lStartColumn->show();
+	ui.sbStartColumn->show();
+	ui.lEndColumn->show();
+	ui.sbEndColumn->show();
+	ui.tePreview->show();
+	ui.lPreviewLines->show();
+	ui.sbPreviewLines->show();
+
 	//FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 	if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
-		ui.lStartColumn->show();
-		ui.sbStartColumn->show();
-		ui.lEndColumn->show();
-		ui.sbEndColumn->show();
 	}
 	else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
 		ui.lStartColumn->hide();
@@ -482,12 +487,12 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.sbEndColumn->hide();
 	}
 	else if (fileType == FileDataSource::HDF) {
-		ui.lStartColumn->show();
-		ui.sbStartColumn->show();
-		ui.lEndColumn->show();
-		ui.sbEndColumn->show();
-
 	}	
+	else if (fileType == FileDataSource::Image) {
+		ui.tePreview->hide();
+		ui.lPreviewLines->hide();
+		ui.sbPreviewLines->hide();
+	}
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();

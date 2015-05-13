@@ -1,11 +1,10 @@
 /***************************************************************************
-    File                 : AbstractFileFilter.h
-    Project              : LabPlot/SciDAVis
-    Description          : file I/O-filter related interface for plugins
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
-    					   (use @ for *)
- ***************************************************************************/
+File                 : AbstractFileFilter.h
+Project              : LabPlot/SciDAVis
+Description          : file I/O-filter related interface for plugins
+--------------------------------------------------------------------
+Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -56,7 +55,5 @@ class AbstractFileFilter : public QObject {
 	signals:
 		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process		
 };
-
-// Q_DECLARE_INTERFACE(AbstractFileFilter, "net.sf.scidavis.datasources.abstractfilefilter/0.1")
 
 #endif

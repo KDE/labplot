@@ -37,6 +37,7 @@ class AbstractDataSource : public AbstractPart, public scripted{
 	public:
    		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
 		virtual ~AbstractDataSource() {};
+		void clear();
 };
 
 #endif // ifndef ABSTRACTDATASOURCE_H

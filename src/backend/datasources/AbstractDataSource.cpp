@@ -1,11 +1,9 @@
 /***************************************************************************
-File                 : AbstractDataSource.cpp
-Project              : LabPlot/SciDAVis
-Description 		: Abstract interface for data sources
+File			: AbstractDataSource.cpp
+Project			: LabPlot/SciDAVis
+Description		: Abstract interface for data sources
 --------------------------------------------------------------------
-Copyright		            : (C) 2009 Alexander Semke
-Email (use @ for *)		: alexander.semke*web.de
-
+Copyright		: (C) 2009 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -27,6 +25,7 @@ Email (use @ for *)		: alexander.semke*web.de
 *                                                                         *
 ***************************************************************************/
 #include "AbstractDataSource.h"
+#include "backend/core/column/Column.h"
 
 /*!
 \class AbstractDataSource
@@ -38,4 +37,16 @@ Email (use @ for *)		: alexander.semke*web.de
 AbstractDataSource::AbstractDataSource(AbstractScriptingEngine *engine, const QString& name):
 	AbstractPart(name), scripted(engine){
 
+}
+
+void AbstractDataSource::clear() {
+	int columns = childCount<Column>();
+        for (int i=0; i<columns; i++){
+                child<Column>(i)->setUndoAware(false);
+                child<Column>(i)->setSuppressDataChangedSignal(true);
+                child<Column>(i)->clear();
+                child<Column>(i)->setUndoAware(true);
+                child<Column>(i)->setSuppressDataChangedSignal(false);
+                child<Column>(i)->setChanged();
+        }
 }

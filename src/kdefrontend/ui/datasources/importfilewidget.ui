@@ -227,7 +227,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tabDataFormat">
          <attribute name="title">
@@ -330,10 +330,13 @@
           <item row="0" column="1">
            <widget class="QSpinBox" name="sbStartRow">
             <property name="toolTip">
-             <string>Specify the number of the start row to import</string>
+             <string>Specify the start row for import</string>
             </property>
             <property name="minimum">
-             <number>1</number>
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>2147483647</number>
             </property>
            </widget>
           </item>
@@ -376,10 +379,13 @@
           <item row="0" column="4">
            <widget class="QSpinBox" name="sbEndRow">
             <property name="toolTip">
-             <string>Specify the number of the end row to import; -1 stands for the last row</string>
+             <string>Specify the end row to import; -1 stands for the last row</string>
             </property>
             <property name="minimum">
              <number>-1</number>
+            </property>
+            <property name="maximum">
+             <number>2147483647</number>
             </property>
             <property name="value">
              <number>-1</number>
@@ -396,10 +402,13 @@
           <item row="1" column="1">
            <widget class="QSpinBox" name="sbStartColumn">
             <property name="toolTip">
-             <string>Specify the number of the start column to import</string>
+             <string>Specify the start column for import</string>
             </property>
             <property name="minimum">
              <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>2147483647</number>
             </property>
            </widget>
           </item>
@@ -429,10 +438,13 @@
           <item row="1" column="4">
            <widget class="QSpinBox" name="sbEndColumn">
             <property name="toolTip">
-             <string>Specify the number of the end column to import; -1 stands for the last column</string>
+             <string>Specify the end column to import; -1 stands for the last column</string>
             </property>
             <property name="minimum">
              <number>-1</number>
+            </property>
+            <property name="maximum">
+             <number>2147483647</number>
             </property>
             <property name="value">
              <number>-1</number>

@@ -232,6 +232,7 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 
 	// catch case that skipStartBytes or startRow is bigger than file
 	if(skipStartBytes >= BinaryFilter::dataSize(dataType)*vectors*numRows || startRow > numRows) {
+		dataSource->clear();
 		return;
 	}
 
@@ -284,10 +285,10 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 			}
 
 			//rename the columns, that are already available
-			for (int i=0; i<vectors-1; i++){
+			for (int i=0; i<vectors; i++){
 				dataSource->child<Column>(i)->setUndoAware(false);
 				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(i+1));
+				dataSource->child<Column>(i)->setName(vectorNameList.at(i));
 				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
 			}
 		}else{
