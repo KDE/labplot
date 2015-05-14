@@ -105,6 +105,38 @@ QString HDFFilter::currentDataSet() const{
 	return d->currentDataSet;
 }
 
+void HDFFilter::setStartRow(const int s) {
+        d->startRow = s;
+}
+
+int HDFFilter::startRow() const{
+        return d->startRow;
+}
+
+void HDFFilter::setEndRow(const int e) {
+        d->endRow = e;
+}
+
+int HDFFilter::endRow() const{
+        return d->endRow;
+}
+
+void HDFFilter::setStartColumn(const int c){
+	d->startColumn=c;
+}
+
+int HDFFilter::startColumn() const{
+	return d->startColumn;
+}
+
+void HDFFilter::setEndColumn(const int c){
+	d->endColumn=c;
+}
+
+int HDFFilter::endColumn() const{
+	return d->endColumn;
+}
+
 void HDFFilter::setAutoModeEnabled(bool b){
 	d->autoModeEnabled = b;
 }
@@ -117,7 +149,7 @@ bool HDFFilter::isAutoModeEnabled() const{
 //#####################################################################
 
 HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) : 
-	q(owner),currentDataSet("") {
+	q(owner),currentDataSet(""),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
 }
 
 #ifdef HAVE_HDF5
@@ -396,8 +428,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	hid_t dataspace = H5Dget_space(dataset);
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 	if( rank != 2) {
-		dataString<<"rank ="<<QString::number(rank)<<"not supported";
-		qDebug()<<dataString.join(" ");
+		dataString<<"rank = "<<QString::number(rank)<<" not supported";
+		qDebug()<<dataString.join("");
 		H5Sclose(dataspace);
 		H5Tclose(datatype);
 		H5Dclose(dataset);
@@ -412,31 +444,43 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	if (lines == -1)
 		lines=rows;
 
+	if(endRow == -1)
+		endRow=rows;
+	if(endColumn == -1)
+		endColumn=cols;
+	int actualRows=endRow-startRow+1;
+	int actualCols=endColumn-startColumn+1;
+
 #ifdef QT_DEBUG
 	H5T_order_t order = H5Tget_order(datatype);
 	qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<rows<<"x"<<cols;
+	qDebug()<<" startRow/endRow"<<startRow<<endRow;
+	qDebug()<<" startColumn/endColumn"<<startColumn<<endColumn;
+	qDebug()<<" actual rows"<<actualRows;
+	qDebug()<<" actual cols"<<actualCols;
+	qDebug()<<" lines"<<lines;
 #endif
-	//TODO: use start/end row/col
 
 	QVector<QVector<double>*> dataPointers;
 	int columnOffset = 0;
 	Spreadsheet* spreadsheet=0;
 	if (dataSource != NULL) {
-		columnOffset = dataSource->resize(mode,QStringList(),cols);
+		columnOffset = dataSource->resize(mode,QStringList(),actualCols);
+		qDebug()<<" col offset"<<columnOffset;
 		
 		// resize the spreadsheet
 		spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 		if (mode==AbstractFileFilter::Replace) {
 			spreadsheet->clear();
-			spreadsheet->setRowCount(rows);
+			spreadsheet->setRowCount(actualRows);
 		}else{
-			if (spreadsheet->rowCount() < (int)rows)
-				spreadsheet->setRowCount(rows);
+			if (spreadsheet->rowCount() < actualRows)
+				spreadsheet->setRowCount(actualRows);
 		}
-		for (int n=0; n<cols; n++ ){
+		for (int n=0; n<actualCols; n++ ){
 			QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
-			vector->reserve(rows);
-			vector->resize(rows);
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
 			dataPointers.push_back(vector);
 		}
 	}
@@ -448,10 +492,10 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
 
 	  	H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
-		for (int i=0; i < qMin(rows,lines); i++) {
-			for (int j=0; j < cols; j++) {
+		for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+			for (int j=startColumn-1; j < endColumn; j++) {
 				if (dataSource != NULL) {
-					dataPointers[j]->operator[](i) = data_out[i][j];
+					dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
 				}else {
 					dataString<<QString::number(data_out[i][j])<<" ";
 				}
@@ -468,10 +512,10 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
 
 		  	H5Dread(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
-			for (int i=0; i < qMin(rows,lines); i++) {
-				for (int j=0; j < cols; j++) {
+			for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+				for (int j=startColumn-1; j < endColumn; j++) {
 					if (dataSource != NULL) {
-						dataPointers[j]->operator[](i) = data_out[i][j];
+						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
 					}else {
 						dataString<<QString::number(data_out[i][j])<<" ";
 					}
@@ -487,10 +531,10 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
 
 		  	H5Dread(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,H5P_DEFAULT, &data_out[0][0]);
-			for (int i=0; i < qMin(rows,lines); i++) {
-				for (int j=0; j < cols; j++) {
+			for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+				for (int j=startColumn-1; j < endColumn; j++) {
 					if (dataSource != NULL) {
-						dataPointers[j]->operator[](i) = data_out[i][j];
+						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
 					}else {
 						dataString<<QString::number(data_out[i][j])<<" ";
 					}
@@ -516,7 +560,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 	if (dataSource != NULL) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-		for ( int n=0; n<cols; n++ ){
+		for ( int n=0; n<actualCols; n++ ){
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setUndoAware(true);

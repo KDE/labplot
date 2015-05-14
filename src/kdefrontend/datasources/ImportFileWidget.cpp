@@ -320,9 +320,13 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
  		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
 			filter->setAutoModeEnabled(false);
 		} else {
-			//TODO
+// 			filter->setFilterName( ui.cbFilter->currentText() );
 		}
 		filter->setCurrentDataSet(hdfOptionsWidget.leDataSet->text());
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value() );
+		filter->setEndColumn( ui.sbEndColumn->value() );
 
 		return filter;
 	}

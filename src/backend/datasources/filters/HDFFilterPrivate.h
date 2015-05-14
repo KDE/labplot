@@ -47,6 +47,10 @@ class HDFFilterPrivate {
 		const HDFFilter* q;
 
 		QString currentDataSet;
+		int startRow;
+		int endRow;
+		int startColumn;
+		int endColumn;
 		bool autoModeEnabled;
 
 	private:

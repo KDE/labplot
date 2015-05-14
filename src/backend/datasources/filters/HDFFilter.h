@@ -51,6 +51,15 @@ class HDFFilter : public AbstractFileFilter{
 	void setCurrentDataSet(const QString);
 	QString currentDataSet() const;
 
+	void setStartRow(const int);
+	int startRow() const;
+	void setEndRow(const int);
+	int endRow() const;
+	void setStartColumn(const int);
+	int startColumn() const;
+	void setEndColumn(const int);
+	int endColumn() const;
+
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
 
