@@ -294,8 +294,8 @@ MatrixSetFormatCmd::MatrixSetFormatCmd(MatrixPrivate * private_obj, char new_for
 
 void MatrixSetFormatCmd::redo()
 {
-	char tmp = m_private_obj->numericFormat();
-	m_private_obj->setNumericFormat(m_other_format);
+	char tmp = m_private_obj->numericFormat;
+	m_private_obj->numericFormat = m_other_format;
 	m_other_format = tmp;
 }
 
@@ -319,8 +319,8 @@ MatrixSetDigitsCmd::MatrixSetDigitsCmd(MatrixPrivate * private_obj, int new_digi
 
 void MatrixSetDigitsCmd::redo()
 {
-	int tmp = m_private_obj->displayedDigits();
-	m_private_obj->setDisplayedDigits(m_other_digits);
+	int tmp = m_private_obj->displayedDigits;
+	m_private_obj->displayedDigits = m_other_digits;
 	m_other_digits = tmp;
 }
 

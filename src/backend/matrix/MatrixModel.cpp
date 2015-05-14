@@ -97,41 +97,62 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 
 QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	QString result;
+	Matrix::HeaderFormat headerFormat = m_matrix->headerFormat();
 	switch(orientation) {
 		case Qt::Horizontal:
 			switch(role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
-					//TODO: implemente different header formats (section numbers only, secstion plus values, values only)
-					result += QString::number(section+1) + QString(" (");
-					double diff = m_matrix->xEnd() - m_matrix->xStart();
-					double step = 0.0;
-					if (m_matrix->columnCount() > 1)
-						step = diff/double(m_matrix->columnCount()-1);
-					result += QLocale().toString(m_matrix->xStart()+double(section)*step,
-							m_matrix->numericFormat(), m_matrix->displayedDigits());
+					if (headerFormat==Matrix::HeaderRowsColumns) {
+						result = QString::number(section+1);
+					} else if (headerFormat == Matrix::HeaderValues) {
+						double diff = m_matrix->xEnd() - m_matrix->xStart();
+						double step = 0.0;
+						if (m_matrix->columnCount() > 1)
+							step = diff/double(m_matrix->columnCount()-1);
+						result = QLocale().toString(m_matrix->xStart()+double(section)*step,
+								m_matrix->numericFormat(), m_matrix->displayedDigits());
+					} else {
+						result = QString::number(section+1) + QString(" (");
+						double diff = m_matrix->xEnd() - m_matrix->xStart();
+						double step = 0.0;
+						if (m_matrix->columnCount() > 1)
+							step = diff/double(m_matrix->columnCount()-1);
+						result += QLocale().toString(m_matrix->xStart()+double(section)*step,
+								m_matrix->numericFormat(), m_matrix->displayedDigits());
 
-					result += QString(")");
+						result += QString(")");
+					}
 					return QVariant(result);
 			}
 		case Qt::Vertical:
 			switch(role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
-					result += QString::number(section+1) + QString(" (");
-					double diff = m_matrix->yEnd() - m_matrix->yStart();
-					double step = 0.0;
-					if (m_matrix->rowCount() > 1)
-						step = diff/double(m_matrix->rowCount()-1);
-					// TODO: implement decent double == 0 check
-					if (diff < 1e-10)
-						result += QLocale().toString(m_matrix->yStart(),
-								m_matrix->numericFormat(), m_matrix->displayedDigits());
-					else
+					if (headerFormat==Matrix::HeaderRowsColumns) {
+						result = QString::number(section+1);
+					} else if (headerFormat==Matrix::HeaderValues) {
+						double diff = m_matrix->yEnd() - m_matrix->yStart();
+						double step = 0.0;
+						if (m_matrix->rowCount() > 1)
+							step = diff/double(m_matrix->rowCount()-1);
+						// TODO: implement decent double == 0 check
+// 						if (diff < 1e-10)
+// 							result += QLocale().toString(m_matrix->yStart(),
+// 									m_matrix->numericFormat(), m_matrix->displayedDigits());
 						result += QLocale().toString(m_matrix->yStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->displayedDigits());
+					} else {
+						result = QString::number(section+1) + QString(" (");
+						double diff = m_matrix->yEnd() - m_matrix->yStart();
+						double step = 0.0;
+						if (m_matrix->rowCount() > 1)
+							step = diff/double(m_matrix->rowCount()-1);
+							result += QLocale().toString(m_matrix->yStart()+double(section)*step,
+									m_matrix->numericFormat(), m_matrix->displayedDigits());
 
-					result += QString(")");
+						result += QString(")");
+					}
 					return QVariant(result);
 			}
 	}
@@ -170,6 +191,10 @@ QModelIndex MatrixModel::index(int row, int column, const QModelIndex& parent) c
 QModelIndex MatrixModel::parent(const QModelIndex& child) const {
 	Q_UNUSED(child)
     return QModelIndex();
+}
+
+void MatrixModel::updateHeader() {
+	emit headerDataChanged(Qt::Vertical, 0, m_matrix->rowCount());
 }
 
 void MatrixModel::handleColumnsAboutToBeInserted(int before, int count) {

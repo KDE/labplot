@@ -42,6 +42,7 @@ class Matrix : public AbstractPart, public scripted {
 		Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name);
 		~Matrix();
 
+		enum HeaderFormat {HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues};
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
@@ -86,6 +87,9 @@ class Matrix : public AbstractPart, public scripted {
 		void setYStart(double y);
 		void setYEnd(double y);
 		void setCoordinates(double x1, double x2, double y1, double y2);
+
+		HeaderFormat headerFormat();
+		void setHeaderFormat(HeaderFormat);
 
 		char numericFormat() const;
 		void setNumericFormat(char format);

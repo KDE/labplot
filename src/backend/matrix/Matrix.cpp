@@ -29,6 +29,7 @@
 #include "Matrix.h"
 #include "MatrixPrivate.h"
 #include "matrixcommands.h"
+#include "backend/matrix/MatrixModel.h"
 #include "backend/core/AbstractScript.h"
 #include "backend/core/Folder.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -41,13 +42,14 @@
 #include <KLocale>
 
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractPart(name), scripted(engine), d(new MatrixPrivate(this)) {
+	: AbstractPart(name), scripted(engine), d(new MatrixPrivate(this)), m_view(0) {
 
 	// set initial number of rows and columns
 	appendColumns(cols);
 	appendRows(rows);
 
-	m_view = NULL;
+	//TODO: move initialization of private to init()
+	d->headerFormat = Matrix::HeaderRowsColumns;
 }
 
 Matrix::~Matrix() {
@@ -191,7 +193,7 @@ void Matrix::copy(Matrix* other) {
 
 //! Return the text displayed in the given cell
 QString Matrix::text(int row, int col) {
-	return QLocale().toString(cell(row,col), d->numericFormat(), d->displayedDigits());
+	return QLocale().toString(cell(row,col), d->numericFormat, d->displayedDigits);
 }
 
 //! Set the value of the cell
@@ -259,20 +261,6 @@ void Matrix::setCoordinates(double x1, double x2, double y1, double y2) {
 	RESET_CURSOR;
 }
 
-void Matrix::setNumericFormat(char format) {
-	if (format == numericFormat()) return;
-	WAIT_CURSOR;
-	exec(new MatrixSetFormatCmd(d, format));
-	RESET_CURSOR;
-}
-
-void Matrix::setDisplayedDigits(int digits) {
-	if (digits == displayedDigits()) return;
-	WAIT_CURSOR;
-	exec(new MatrixSetDigitsCmd(d, digits));
-	RESET_CURSOR;
-}
-
 double Matrix::xStart() const {
 	return d->xStart();
 }
@@ -299,12 +287,37 @@ void Matrix::setFormula(const QString& formula) {
 	RESET_CURSOR;
 }
 
+void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
+	d->headerFormat = format;
+	m_view->model()->updateHeader();
+}
+
+Matrix::HeaderFormat Matrix::headerFormat() {
+	return d->headerFormat;
+}
+
 char Matrix::numericFormat() const {
-	return d->numericFormat();
+	return d->numericFormat;
+}
+
+void Matrix::setNumericFormat(char format) {
+	if (format == numericFormat()) return;
+	WAIT_CURSOR;
+	exec(new MatrixSetFormatCmd(d, format));
+	RESET_CURSOR;
+	emit formatChanged();
 }
 
 int Matrix::displayedDigits() const {
-	return d->displayedDigits();
+	return d->displayedDigits;
+}
+
+void Matrix::setDisplayedDigits(int digits) {
+	if (digits == displayedDigits()) return;
+	WAIT_CURSOR;
+	exec(new MatrixSetDigitsCmd(d, digits));
+	RESET_CURSOR;
+	emit formatChanged();
 }
 
 //! This method should only be called by the view.
@@ -392,8 +405,8 @@ void Matrix::mirrorVertically() {
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), m_column_count(0), m_row_count(0) {
 	m_block_change_signals = false;
-	m_numeric_format = 'f';
-	m_displayed_digits = 6;
+	numericFormat = 'f';
+	displayedDigits = 6;
 	m_x_start = 0.0;
 	m_x_end = 1.0;
 	m_y_start = 0.0;

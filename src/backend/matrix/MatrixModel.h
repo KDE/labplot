@@ -52,6 +52,8 @@ class MatrixModel : public QAbstractItemModel {
 		QModelIndex parent(const QModelIndex& child) const;
 		//@}
 
+		void updateHeader();
+
 	private slots:
 		void handleColumnsAboutToBeInserted(int before, int count);
 		void handleColumnsInserted(int first, int count);

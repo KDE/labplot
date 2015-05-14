@@ -45,6 +45,7 @@ class MatrixView : public QWidget {
 		MatrixView(Matrix*);
 		virtual ~MatrixView();
 
+		MatrixModel* model() const;
 		void setRowHeight(int row, int height);
 		void setColumnWidth(int col, int width);
 		int rowHeight(int row) const;
@@ -102,6 +103,10 @@ class MatrixView : public QWidget {
 		QAction* action_mirror_vertically;
 		QAction* action_mirror_horizontally;
 
+		QAction* action_header_format_1;
+		QAction* action_header_format_2;
+		QAction* action_header_format_3;
+
 		QAction* action_insert_columns;
 		QAction* action_remove_columns;
 		QAction* action_clear_columns;
@@ -117,6 +122,7 @@ class MatrixView : public QWidget {
 		QMenu* m_columnMenu;
 		QMenu* m_rowMenu;
 		QMenu* m_matrixMenu;
+		QMenu* m_headerFormatMenu;
 
 	private slots:
 		void goToCell();
@@ -130,6 +136,7 @@ class MatrixView : public QWidget {
 		void clearSelectedCells();
 
 		void dimensionsDialog();
+		void headerFormatChanged(QAction*);
 
 		void addColumns();
 		void insertEmptyColumns();

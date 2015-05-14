@@ -65,6 +65,10 @@ MatrixView::~MatrixView() {
 	delete m_model;
 }
 
+MatrixModel* MatrixView::model() const {
+	return m_model;
+}
+
 void MatrixView::init() {
 	initActions();
 	connectActions();
@@ -125,6 +129,22 @@ void MatrixView::initActions() {
 	action_dimensions_dialog = new QAction(KIcon("transform-scale"), i18nc("matrix size", "&Dimensions"), this);
 	action_edit_coordinates = new QAction(i18n("Set &Coordinates"), this);
 	action_edit_format = new QAction(i18n("Set Display &Format"), this);
+
+	QActionGroup* headerFormatActionGroup = new QActionGroup(this);
+	headerFormatActionGroup->setExclusive(true);
+	action_header_format_1= new QAction(i18n("Rows and Columns"), headerFormatActionGroup);
+	action_header_format_1->setCheckable(true);
+	action_header_format_2= new QAction(i18n("xy-Values"), headerFormatActionGroup);
+	action_header_format_2->setCheckable(true);
+	action_header_format_3= new QAction(i18n("Rows, Columns and xy-Values"), headerFormatActionGroup);
+	action_header_format_3->setCheckable(true);
+	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
+		action_header_format_1->setChecked(true);
+	else if (m_matrix->headerFormat() == Matrix::HeaderValues)
+		action_header_format_2->setChecked(true);
+	else
+		action_header_format_3->setChecked(true);
+	connect(headerFormatActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(headerFormatChanged(QAction*)));
 
 	// column related actions
 	action_add_columns = new KAction(KIcon("edit-table-insert-column-right"), i18n("&Add Columns"), this);
@@ -207,6 +227,13 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addAction(action_recalculate);
 	m_matrixMenu->addSeparator();
 	m_matrixMenu->addAction(action_edit_format);
+
+	m_headerFormatMenu = new QMenu(i18n("Header format"));
+	m_headerFormatMenu->addAction(action_header_format_1);
+	m_headerFormatMenu->addAction(action_header_format_2);
+	m_headerFormatMenu->addAction(action_header_format_3);
+
+	m_matrixMenu->addMenu(m_headerFormatMenu);
 	m_matrixMenu->addSeparator();
 	m_matrixMenu->addAction(action_go_to_cell);
 }
@@ -641,6 +668,18 @@ void MatrixView::dimensionsDialog() {
 	m_matrix->setDimensions(rows, cols);
 }
 
+void MatrixView::headerFormatChanged(QAction* action) {
+	if (action == action_header_format_1)
+		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumns);
+	else if (action == action_header_format_2)
+		m_matrix->setHeaderFormat(Matrix::HeaderValues);
+	else
+		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumnsValues);
+
+// 	m_tableView->model()->setHeaderData(m_tableView->model()->headerData());
+// 	m_tableView->horizontalHeader()->repaint();
+// 	m_tableView->verticalHeader()->repaint();
+}
 
 //############################# column related slots ###########################
 /*!
