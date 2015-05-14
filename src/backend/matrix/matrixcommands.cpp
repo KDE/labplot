@@ -101,7 +101,7 @@ void MatrixRemoveColumnsCmd::redo()
 {
 	if(m_backups.isEmpty())
 	{
-		int last_row = m_private_obj->rowCount()-1;
+		int last_row = m_private_obj->rowCount-1;
 		for(int i=0; i<m_count; i++)
 			m_backups.append(m_private_obj->columnCells(m_first+i, 0, last_row));
 	}
@@ -111,7 +111,7 @@ void MatrixRemoveColumnsCmd::redo()
 void MatrixRemoveColumnsCmd::undo()
 {
 	m_private_obj->insertColumns(m_first, m_count);
-	int last_row = m_private_obj->rowCount()-1;
+	int last_row = m_private_obj->rowCount-1;
 	for(int i=0; i<m_count; i++)
 		m_private_obj->setColumnCells(m_first+i, 0, last_row, m_backups.at(i));
 }
@@ -137,7 +137,7 @@ void MatrixRemoveRowsCmd::redo()
 	if(m_backups.isEmpty())
 	{
 		int last_row = m_first+m_count-1;
-		for(int col=0; col<m_private_obj->columnCount(); col++)
+		for(int col=0; col<m_private_obj->columnCount; col++)
 			m_backups.append(m_private_obj->columnCells(col, m_first, last_row));
 	}
 	m_private_obj->removeRows(m_first, m_count);
@@ -147,7 +147,7 @@ void MatrixRemoveRowsCmd::undo()
 {
 	m_private_obj->insertRows(m_first, m_count);
 	int last_row = m_first+m_count-1;
-	for(int col=0; col<m_private_obj->columnCount(); col++)
+	for(int col=0; col<m_private_obj->columnCount; col++)
 		m_private_obj->setColumnCells(col, m_first, last_row, m_backups.at(col));
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -171,18 +171,18 @@ void MatrixClearCmd::redo()
 {
 	if(m_backups.isEmpty())
 	{
-		int last_row = m_private_obj->rowCount()-1;
-		for(int i=0; i<m_private_obj->columnCount(); i++)
+		int last_row = m_private_obj->rowCount-1;
+		for(int i=0; i<m_private_obj->columnCount; i++)
 			m_backups.append(m_private_obj->columnCells(i, 0, last_row));
 	}
-	for(int i=0; i<m_private_obj->columnCount(); i++)
+	for(int i=0; i<m_private_obj->columnCount; i++)
 		m_private_obj->clearColumn(i);
 }
 
 void MatrixClearCmd::undo()
 {
-	int last_row = m_private_obj->rowCount()-1;
-	for(int i=0; i<m_private_obj->columnCount(); i++)
+	int last_row = m_private_obj->rowCount-1;
+	for(int i=0; i<m_private_obj->columnCount; i++)
 		m_private_obj->setColumnCells(i, 0, last_row, m_backups.at(i));
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -205,13 +205,13 @@ MatrixClearColumnCmd::~MatrixClearColumnCmd()
 void MatrixClearColumnCmd::redo()
 {
 	if(m_backup.isEmpty())
-		m_backup = m_private_obj->columnCells(m_col, 0, m_private_obj->rowCount()-1);
+		m_backup = m_private_obj->columnCells(m_col, 0, m_private_obj->rowCount-1);
 	m_private_obj->clearColumn(m_col);
 }
 
 void MatrixClearColumnCmd::undo()
 {
-	m_private_obj->setColumnCells(m_col, 0, m_private_obj->rowCount()-1, m_backup);
+	m_private_obj->setColumnCells(m_col, 0, m_private_obj->rowCount-1, m_backup);
 }
 ///////////////////////////////////////////////////////////////////////////
 // end of class MatrixClearColumnCmd
@@ -259,24 +259,22 @@ MatrixSetCoordinatesCmd::~MatrixSetCoordinatesCmd()
 {
 }
 
-void MatrixSetCoordinatesCmd::redo()
-{
-	m_old_x1 = m_private_obj->xStart();
-	m_old_x2 = m_private_obj->xEnd();
-	m_old_y1 = m_private_obj->yStart();
-	m_old_y2 = m_private_obj->yEnd();
-	m_private_obj->setXStart(m_new_x1);
-	m_private_obj->setXEnd(m_new_x2);
-	m_private_obj->setYStart(m_new_y1);
-	m_private_obj->setYEnd(m_new_y2);
+void MatrixSetCoordinatesCmd::redo() {
+	m_old_x1 = m_private_obj->xStart;
+	m_old_x2 = m_private_obj->xEnd;
+	m_old_y1 = m_private_obj->yStart;
+	m_old_y2 = m_private_obj->yEnd;
+	m_private_obj->xStart = m_new_x1;
+	m_private_obj->xEnd = m_new_x2;
+	m_private_obj->yStart = m_new_y1;
+	m_private_obj->yEnd = m_new_y2;
 }
 
-void MatrixSetCoordinatesCmd::undo()
-{
-	m_private_obj->setXStart(m_old_x1);
-	m_private_obj->setXEnd(m_old_x2);
-	m_private_obj->setYStart(m_old_y1);
-	m_private_obj->setYEnd(m_old_y2);
+void MatrixSetCoordinatesCmd::undo() {
+	m_private_obj->xStart = m_old_x1;
+	m_private_obj->xEnd = m_old_x2;
+	m_private_obj->yStart = m_old_y1;
+	m_private_obj->yEnd = m_old_y2;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -344,8 +342,8 @@ MatrixSetFormulaCmd::MatrixSetFormulaCmd(MatrixPrivate * private_obj, QString fo
 
 void MatrixSetFormulaCmd::redo()
 {
-	QString tmp = m_private_obj->formula();
-	m_private_obj->setFormula(m_other_formula);
+	QString tmp = m_private_obj->formula;
+	m_private_obj->formula = m_other_formula;
 	m_other_formula = tmp;
 }
 
@@ -433,10 +431,10 @@ MatrixTransposeCmd::~MatrixTransposeCmd()
 
 void MatrixTransposeCmd::redo()
 {
-	int rows = m_private_obj->rowCount();
-	int cols = m_private_obj->columnCount();
+	int rows = m_private_obj->rowCount;
+	int cols = m_private_obj->columnCount;
 	int temp_size = qMax(rows, cols);
-	m_private_obj->blockChangeSignals(true);
+	m_private_obj->suppressDataChange = true;
 	if (cols < rows)
 		m_private_obj->insertColumns(cols, temp_size - cols);
 	else if (cols > rows)
@@ -452,8 +450,8 @@ void MatrixTransposeCmd::redo()
 		m_private_obj->removeRows(cols, temp_size - cols);
 	else if (cols > rows)
 		m_private_obj->removeColumns(rows, temp_size - rows);
-	m_private_obj->blockChangeSignals(false);
-	m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount()-1, m_private_obj->columnCount()-1);
+	m_private_obj->suppressDataChange = false;
+	m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount-1, m_private_obj->columnCount-1);
 }
 
 void MatrixTransposeCmd::undo()
@@ -479,17 +477,17 @@ MatrixMirrorHorizontallyCmd::~MatrixMirrorHorizontallyCmd()
 
 void MatrixMirrorHorizontallyCmd::redo()
 {
-	int rows = m_private_obj->rowCount();
-	int cols = m_private_obj->columnCount();
+	int rows = m_private_obj->rowCount;
+	int cols = m_private_obj->columnCount;
 	int middle = cols/2;
-	m_private_obj->blockChangeSignals(true);
+	m_private_obj->suppressDataChange = true;
 	for(int i = 0; i<middle; i++)
 	{
 		QVector<double> temp = m_private_obj->columnCells(i, 0, rows-1);
 		m_private_obj->setColumnCells(i, 0, rows-1, m_private_obj->columnCells(cols-i-1, 0, rows-1));
 		m_private_obj->setColumnCells(cols-i-1, 0, rows-1, temp);
 	}
-	m_private_obj->blockChangeSignals(false);
+	m_private_obj->suppressDataChange = false;
 	m_private_obj->emitDataChanged(0, 0, rows-1, cols-1);
 }
 
@@ -516,17 +514,17 @@ MatrixMirrorVerticallyCmd::~MatrixMirrorVerticallyCmd()
 
 void MatrixMirrorVerticallyCmd::redo()
 {
-	int rows = m_private_obj->rowCount();
-	int cols = m_private_obj->columnCount();
+	int rows = m_private_obj->rowCount;
+	int cols = m_private_obj->columnCount;
 	int middle = rows/2;
-	m_private_obj->blockChangeSignals(true);
+	m_private_obj->suppressDataChange = true;
 	for(int i = 0; i<middle; i++)
 	{
 		QVector<double> temp = m_private_obj->rowCells(i, 0, cols-1);
 		m_private_obj->setRowCells(i, 0, cols-1, m_private_obj->rowCells(rows-i-1, 0, cols-1));
 		m_private_obj->setRowCells(rows-i-1, 0, cols-1, temp);
 	}
-	m_private_obj->blockChangeSignals(false);
+	m_private_obj->suppressDataChange = false;
 	m_private_obj->emitDataChanged(0, 0, rows-1, cols-1);
 }
 

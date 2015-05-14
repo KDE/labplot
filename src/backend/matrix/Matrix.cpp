@@ -41,8 +41,18 @@
 #include <KIcon>
 #include <KLocale>
 
+/*!
+	This class manages matrix based data (i.e., mathematically
+	a MxN matrix with M rows, N columns). This data is typically
+	used to for 3D plots.
+
+	The values of the matrix are stored as double precision values. Each columng
+	of the matrix is stored in a QVector<double> objects.
+
+	\ingroup backend
+*/
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractPart(name), scripted(engine), d(new MatrixPrivate(this)), m_view(0) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_view(0) {
 
 	// set initial number of rows and columns
 	appendColumns(cols);
@@ -55,7 +65,6 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 Matrix::~Matrix() {
 	delete d;
 }
-
 
 /*!
   Returns an icon to be used for decorating my views.
@@ -76,9 +85,12 @@ QMenu* Matrix::createContextMenu() {
 QWidget* Matrix::view() const {
 	if (!m_view) 	{
 		m_view = new MatrixView(const_cast<Matrix*>(this));
-		//TODO: connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
 	return m_view;
+}
+
+QVector<QVector<double> > Matrix::data() const {
+	return d->matrixData;
 }
 
 int Matrix::defaultRowHeight() const {
@@ -152,17 +164,15 @@ void Matrix::setDimensions(int rows, int cols) {
 }
 
 int Matrix::columnCount() const {
-	return d->columnCount();
+	return d->columnCount;
 }
 
 int Matrix::rowCount() const {
-	return d->rowCount();
+	return d->rowCount;
 }
 
 //! Return the value in the given cell
 double Matrix::cell(int row, int col) const {
-	if(row < 0 || row >= rowCount() ||
-	   col < 0 || col >= columnCount()) return 0.0;
 	return d->cell(row, col);
 }
 
@@ -176,14 +186,14 @@ void Matrix::copy(Matrix* other) {
 		setRowHeight(i, other->rowHeight(i));
 	for (int i=0; i<columns; i++)
 		setColumnWidth(i, other->columnWidth(i));
-	d->blockChangeSignals(true);
+	d->suppressDataChange = true;
 	for (int i=0; i<columns; i++)
 		setColumnCells(i, 0, rows-1, other->columnCells(i, 0, rows-1));
 	setCoordinates(other->xStart(), other->xEnd(), other->yStart(), other->yEnd());
 	setNumericFormat(other->numericFormat());
 	setDisplayedDigits(other->displayedDigits());
-	setFormula(other->formula());
-	d->blockChangeSignals(false);
+	d->formula = other->formula();
+	d->suppressDataChange = false;
 	emit dataChanged(0, 0, rows-1, columns-1);
 	if (m_view) m_view->adjustHeaders();
 	endMacro();
@@ -233,25 +243,29 @@ void Matrix::addColumns() {
 
 void Matrix::setXStart(double x) {
 	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, x, xEnd(), yStart(), yEnd()));
+	exec(new MatrixSetCoordinatesCmd(d, x, d->xEnd, d->yStart, d->yEnd));
+	emit coordinatesChanged();
 	RESET_CURSOR;
 }
 
 void Matrix::setXEnd(double x) {
 	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, xStart(), x, yStart(), yEnd()));
+	exec(new MatrixSetCoordinatesCmd(d, d->xStart, x, d->yStart, d->yEnd));
+	emit coordinatesChanged();
 	RESET_CURSOR;
 }
 
 void Matrix::setYStart(double y) {
 	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, xStart(), xEnd(), y, yEnd()));
+	exec(new MatrixSetCoordinatesCmd(d, d->xStart, d->xEnd, y, d->yEnd));
+	emit coordinatesChanged();
 	RESET_CURSOR;
 }
 
 void Matrix::setYEnd(double y) {
 	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, xStart(), xEnd(), yStart(), y));
+	exec(new MatrixSetCoordinatesCmd(d, d->xStart, d->xEnd, d->yStart, y));
+	emit coordinatesChanged();
 	RESET_CURSOR;
 }
 
@@ -262,28 +276,29 @@ void Matrix::setCoordinates(double x1, double x2, double y1, double y2) {
 }
 
 double Matrix::xStart() const {
-	return d->xStart();
+	return d->xStart;
 }
 
 double Matrix::yStart() const {
-	return d->yStart();
+	return d->yStart;
 }
 
 double Matrix::xEnd() const {
-	return d->xEnd();
+	return d->xEnd;
 }
 
 double Matrix::yEnd() const {
-	return d->yEnd();
+	return d->yEnd;
 }
 
 QString Matrix::formula() const {
-	return d->formula();
+	return d->formula;
 }
 
 void Matrix::setFormula(const QString& formula) {
 	WAIT_CURSOR;
 	exec(new MatrixSetFormulaCmd(d, formula));
+	emit formulaChanged();
 	RESET_CURSOR;
 }
 
@@ -403,184 +418,155 @@ void Matrix::mirrorVertically() {
 //######################  Private implementation ###############################
 //##############################################################################
 
-MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), m_column_count(0), m_row_count(0) {
-	m_block_change_signals = false;
+MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
 	numericFormat = 'f';
 	displayedDigits = 6;
-	m_x_start = 0.0;
-	m_x_end = 1.0;
-	m_y_start = 0.0;
-	m_y_end = 1.0;
+	xStart = 0.0;
+	xEnd = 1.0;
+	yStart = 0.0;
+	yEnd = 1.0;
 }
 
+/*!
+	Insert \count columns before column number \c before
+*/
 void MatrixPrivate::insertColumns(int before, int count) {
 	Q_ASSERT(before >= 0);
-	Q_ASSERT(before <= m_column_count);
+	Q_ASSERT(before <= columnCount);
 
 	emit q->columnsAboutToBeInserted(before, count);
 	for(int i=0; i<count; i++) {
-		m_data.insert(before+i, QVector<double>(m_row_count));
+		matrixData.insert(before+i, QVector<double>(rowCount));
 		m_column_widths.insert(before+i, q->defaultColumnWidth());
 	}
 
-	m_column_count += count;
+	columnCount += count;
 	emit q->columnsInserted(before, count);
 }
 
+/*!
+	Remove \c count columns starting with column index \c first
+*/
 void MatrixPrivate::removeColumns(int first, int count) {
 	emit q->columnsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
-	Q_ASSERT(first+count <= m_column_count);
-	m_data.remove(first, count);
+	Q_ASSERT(first+count <= columnCount);
+	matrixData.remove(first, count);
 	for (int i=0; i<count; i++)
 		m_column_widths.removeAt(first);
-	m_column_count -= count;
+	columnCount -= count;
 	emit q->columnsRemoved(first, count);
 }
 
+/*!
+	Insert \c count rows before row with the index \c before
+*/
 void MatrixPrivate::insertRows(int before, int count) {
 	emit q->rowsAboutToBeInserted(before, count);
 	Q_ASSERT(before >= 0);
-	Q_ASSERT(before <= m_row_count);
-	for(int col=0; col<m_column_count; col++)
+	Q_ASSERT(before <= rowCount);
+	for(int col=0; col<columnCount; col++)
 		for(int i=0; i<count; i++)
-			m_data[col].insert(before+i, 0.0);
+			matrixData[col].insert(before+i, 0.0);
 	for(int i=0; i<count; i++)
 		m_row_heights.insert(before+i, q->defaultRowHeight());
 
-	m_row_count += count;
+	rowCount += count;
 	emit q->rowsInserted(before, count);
 }
 
+/*!
+	Remove \c count columns starting from the column with index \c first
+*/
 void MatrixPrivate::removeRows(int first, int count) {
 	emit q->rowsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
-	Q_ASSERT(first+count <= m_row_count);
-	for(int col=0; col<m_column_count; col++)
-		m_data[col].remove(first, count);
+	Q_ASSERT(first+count <= rowCount);
+	for(int col=0; col<columnCount; col++)
+		matrixData[col].remove(first, count);
 	for (int i=0; i<count; i++)
 		m_row_heights.removeAt(first);
 
-	m_row_count -= count;
+	rowCount -= count;
 	emit q->rowsRemoved(first, count);
 }
 
+//! Return the value in the given cell
 double MatrixPrivate::cell(int row, int col) const {
-	Q_ASSERT(row >= 0 && row < m_row_count);
-	Q_ASSERT(col >= 0 && col < m_column_count);
-	return m_data.at(col).at(row);
+	Q_ASSERT(row >= 0 && row < rowCount);
+	Q_ASSERT(col >= 0 && col < columnCount);
+// 	if(row < 0 || row >= rowCount() || col < 0 || col >= columnCount())
+// 		return 0.0;
+
+	return matrixData.at(col).at(row);
 }
 
 void MatrixPrivate::setCell(int row, int col, double value) {
-	Q_ASSERT(row >= 0 && row < m_row_count);
-	Q_ASSERT(col >= 0 && col < m_column_count);
-	m_data[col][row] = value;
-	if (!m_block_change_signals)
+	Q_ASSERT(row >= 0 && row < rowCount);
+	Q_ASSERT(col >= 0 && col < columnCount);
+	matrixData[col][row] = value;
+	if (!suppressDataChange)
 		emit q->dataChanged(row, col, row, col);
 }
 
 QVector<double> MatrixPrivate::columnCells(int col, int first_row, int last_row) {
-	Q_ASSERT(first_row >= 0 && first_row < m_row_count);
-	Q_ASSERT(last_row >= 0 && last_row < m_row_count);
+	Q_ASSERT(first_row >= 0 && first_row < rowCount);
+	Q_ASSERT(last_row >= 0 && last_row < rowCount);
 
-	if(first_row == 0 && last_row == m_row_count-1)
-		return m_data.at(col);
+	if(first_row == 0 && last_row == rowCount-1)
+		return matrixData.at(col);
 
 	QVector<double> result;
 	for(int i=first_row; i<=last_row; i++)
-		result.append(m_data.at(col).at(i));
+		result.append(matrixData.at(col).at(i));
 	return result;
 }
 
 void MatrixPrivate::setColumnCells(int col, int first_row, int last_row, const QVector<double> & values) {
-	Q_ASSERT(first_row >= 0 && first_row < m_row_count);
-	Q_ASSERT(last_row >= 0 && last_row < m_row_count);
+	Q_ASSERT(first_row >= 0 && first_row < rowCount);
+	Q_ASSERT(last_row >= 0 && last_row < rowCount);
 	Q_ASSERT(values.count() > last_row - first_row);
 
-	if(first_row == 0 && last_row == m_row_count-1) {
-		m_data[col] = values;
-		m_data[col].resize(m_row_count);  // values may be larger
-		if (!m_block_change_signals)
+	if(first_row == 0 && last_row == rowCount-1) {
+		matrixData[col] = values;
+		matrixData[col].resize(rowCount);  // values may be larger
+		if (!suppressDataChange)
 			emit q->dataChanged(first_row, col, last_row, col);
 		return;
 	}
 
 	for(int i=first_row; i<=last_row; i++)
-		m_data[col][i] = values.at(i-first_row);
-	if (!m_block_change_signals)
+		matrixData[col][i] = values.at(i-first_row);
+	if (!suppressDataChange)
 		emit q->dataChanged(first_row, col, last_row, col);
 }
 
 QVector<double> MatrixPrivate::rowCells(int row, int first_column, int last_column) {
-	Q_ASSERT(first_column >= 0 && first_column < m_column_count);
-	Q_ASSERT(last_column >= 0 && last_column < m_column_count);
+	Q_ASSERT(first_column >= 0 && first_column < columnCount);
+	Q_ASSERT(last_column >= 0 && last_column < columnCount);
 
 	QVector<double> result;
 	for(int i=first_column; i<=last_column; i++)
-		result.append(m_data.at(i).at(row));
+		result.append(matrixData.at(i).at(row));
 	return result;
 }
 
 void MatrixPrivate::setRowCells(int row, int first_column, int last_column, const QVector<double>& values) {
-	Q_ASSERT(first_column >= 0 && first_column < m_column_count);
-	Q_ASSERT(last_column >= 0 && last_column < m_column_count);
+	Q_ASSERT(first_column >= 0 && first_column < columnCount);
+	Q_ASSERT(last_column >= 0 && last_column < columnCount);
 	Q_ASSERT(values.count() > last_column - first_column);
 
 	for(int i=first_column; i<=last_column; i++)
-		m_data[i][row] = values.at(i-first_column);
-	if (!m_block_change_signals)
+		matrixData[i][row] = values.at(i-first_column);
+	if (!suppressDataChange)
 		emit q->dataChanged(row, first_column, row, last_column);
 }
 
+//! Fill column with zeroes
 void MatrixPrivate::clearColumn(int col) {
-	m_data[col].fill(0.0);
-	if (!m_block_change_signals)
-		emit q->dataChanged(0, col, m_row_count-1, col);
-}
-
-double MatrixPrivate::xStart() const {
-	return m_x_start;
-}
-
-double MatrixPrivate::yStart() const {
-	return m_y_start;
-}
-
-double MatrixPrivate::xEnd() const {
-	return m_x_end;
-}
-
-double MatrixPrivate::yEnd() const {
-	return m_y_end;
-}
-
-void MatrixPrivate::setXStart(double x) {
-	m_x_start = x;
-	emit q->coordinatesChanged();
-}
-
-void MatrixPrivate::setXEnd(double x) {
-	m_x_end = x;
-	emit q->coordinatesChanged();
-}
-
-void MatrixPrivate::setYStart(double y) {
-	m_y_start = y;
-	emit q->coordinatesChanged();
-}
-
-void MatrixPrivate::setYEnd(double y) {
-	m_y_end = y;
-	emit q->coordinatesChanged();
-}
-
-QString MatrixPrivate::formula() const {
-	return m_formula;
-}
-
-void MatrixPrivate::setFormula(const QString& formula) {
-	m_formula = formula;
-	emit q->formulaChanged();
+	matrixData[col].fill(0.0);
+	if (!suppressDataChange)
+		emit q->dataChanged(0, col, rowCount-1, col);
 }
 
 //##############################################################################
@@ -598,14 +584,15 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	writer->writeCharacters(formula());
 	writer->writeEndElement();
 	writer->writeStartElement("display");
-	writer->writeAttribute("numeric_format", QString(QChar(numericFormat())));
-	writer->writeAttribute("displayed_digits", QString::number(displayedDigits()));
+	writer->writeAttribute("headerFormat", QString::number(d->headerFormat));
+	writer->writeAttribute("numericFormat", QString(QChar(d->numericFormat)));
+	writer->writeAttribute("displayedDigits", QString::number(d->displayedDigits));
 	writer->writeEndElement();
 	writer->writeStartElement("coordinates");
-	writer->writeAttribute("x_start", QString::number(xStart()));
-	writer->writeAttribute("x_end", QString::number(xEnd()));
-	writer->writeAttribute("y_start", QString::number(yStart()));
-	writer->writeAttribute("y_end", QString::number(yEnd()));
+	writer->writeAttribute("x_start", QString::number(d->xStart));
+	writer->writeAttribute("x_end", QString::number(d->xEnd));
+	writer->writeAttribute("y_start", QString::number(d->yStart));
+	writer->writeAttribute("y_end", QString::number(d->yEnd));
 	writer->writeEndElement();
 
 	for (int col=0; col<cols; col++) {
@@ -640,7 +627,7 @@ bool Matrix::load(XmlStreamReader* reader) {
 
 	setDimensions(0, 0);
 	setComment("");
-	setFormula("");
+// 	setFormula("");
 	setNumericFormat('f');
 	setDisplayedDigits(6);
 	setCoordinates(0.0, 1.0, 0.0, 1.0);
@@ -656,7 +643,7 @@ bool Matrix::load(XmlStreamReader* reader) {
 		reader->raiseError(i18n("invalid row or column count"));
 		return false;
 	}
-	d->blockChangeSignals(true);
+	d->suppressDataChange = true;
 	setDimensions(rows, cols);
 
 	// read child elements
@@ -689,7 +676,7 @@ bool Matrix::load(XmlStreamReader* reader) {
 			if(!ret_val) return false;
 		}
 	}
-	d->blockChangeSignals(false);
+	d->suppressDataChange = false;
 
 	return true;
 }
@@ -752,11 +739,12 @@ bool Matrix::readCoordinatesElement(XmlStreamReader* reader) {
 	setYEnd(val);
 	if (!reader->skipToEndElement()) return false;
 
+	emit coordinatesChanged();//TODO: really required
 	return true;
 }
 
 bool Matrix::readFormulaElement(XmlStreamReader* reader) {
-	setFormula(reader->readElementText());
+	d->formula = reader->readElementText();
 	return true;
 }
 

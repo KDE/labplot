@@ -128,7 +128,7 @@ void MatrixView::initActions() {
 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
 	action_dimensions_dialog = new QAction(KIcon("transform-scale"), i18nc("matrix size", "&Dimensions"), this);
 	action_edit_coordinates = new QAction(i18n("Set &Coordinates"), this);
-	action_edit_format = new QAction(i18n("Set Display &Format"), this);
+	action_edit_format = new QAction(i18n("Display &Format"), this);
 
 	QActionGroup* headerFormatActionGroup = new QActionGroup(this);
 	headerFormatActionGroup->setExclusive(true);

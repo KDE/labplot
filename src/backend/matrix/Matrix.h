@@ -29,13 +29,12 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "backend/core/AbstractScriptingEngine.h"
-#include "backend/core/AbstractPart.h"
+#include "backend/datasources/AbstractDataSource.h"
 
 class MatrixPrivate;
 class MatrixView;
 
-class Matrix : public AbstractPart, public scripted {
+class Matrix : public AbstractDataSource {
     Q_OBJECT
 
 	public:
@@ -46,6 +45,8 @@ class Matrix : public AbstractPart, public scripted {
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
+
+		QVector<QVector<double> > data() const;
 
 		int defaultRowHeight() const;
 		int defaultColumnWidth() const;
