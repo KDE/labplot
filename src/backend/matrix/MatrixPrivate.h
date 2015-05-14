@@ -95,10 +95,6 @@ class MatrixPrivate{
 		QVector<double> rowCells(int row, int first_column, int last_column);
 		//! Set the values in the given cells from a double vector
 		void setRowCells(int row, int first_column, int last_column, const QVector<double> & values);
-		char numericFormat() const { return m_numeric_format; }
-		void setNumericFormat(char format) { m_numeric_format = format; emit q->formatChanged(); }
-		int displayedDigits()  const { return m_displayed_digits; }
-		void setDisplayedDigits(int digits) { m_displayed_digits = digits;  emit q->formatChanged(); }
 		//! Fill column with zeroes
 		void clearColumn(int col);
 		double xStart() const;
@@ -132,7 +128,6 @@ class MatrixPrivate{
 		//! Access to the dataChanged signal for commands
 		void emitDataChanged(int top, int left, int bottom, int right) { emit q->dataChanged(top, left, bottom, right); }
 
-	private:
 		//! The owner aspect
 		Matrix* q;
 		//! The number of columns
@@ -147,10 +142,11 @@ class MatrixPrivate{
 		QList<int> m_column_widths;
 		//! Last formula used to calculate cell values
 		QString m_formula; // TODO: should we support interval/rectangle based formulas?
-		//! Format code for displaying numbers
-		char m_numeric_format;
-		//! Number of significant digits
-		int m_displayed_digits;
+
+		Matrix::HeaderFormat headerFormat;
+		char numericFormat; //!< Format code for displaying numbers
+		int displayedDigits;//!< Number of significant digits
+
 		double m_x_start, //!< X value corresponding to column 1
 			   m_x_end,  //!< X value corresponding to the last column
 			   m_y_start,  //!< Y value corresponding to row 1
