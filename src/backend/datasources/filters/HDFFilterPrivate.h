@@ -61,6 +61,7 @@ class HDFFilterPrivate {
 		QString translateHDFClass(H5T_class_t);
 		QStringList readHDFAttr(hid_t aid);
 		QStringList scanHDFAttrs(hid_t oid);
+		QStringList readHDFDataType(hid_t tid);
 		void scanHDFDataType(hid_t tid, char *dataTypeName,  QTreeWidgetItem* parentItem);
 		void scanHDFLink(hid_t gid, char *linkName,  QTreeWidgetItem* parentItem);
 		void scanHDFDataSet(hid_t dsid, char *dataSetName,  QTreeWidgetItem* parentItem);
