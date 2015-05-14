@@ -174,7 +174,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		actualCols = 3;
 		actualRows = (endColumn-startColumn+1)*(endRow-startRow+1);
 	} else {
-		qDebug()<<"UNKNOWN import format! Giving up.";
+		qDebug()<<"Unknown image format! Giving up.";
 		return;
 	}
 #ifdef QT_DEBUG
@@ -188,65 +188,8 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	qDebug()<<"actual rows/cols ="<<actualRows<<actualCols;
 #endif
 
-	QStringList vectorNameList;
-	for (int k=0; k<actualCols; k++ )
-		vectorNameList.append( "Column " + QString::number(k+1) );
-
 	//make sure we have enough columns in the data source.
-	Column * newColumn;
-	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
-	dataSource->setUndoAware(false);
-	
-	if (mode==AbstractFileFilter::Append){
-		columnOffset=dataSource->childCount<Column>();
-		for ( int n=0; n<actualCols; n++ ){
-			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
-			newColumn->setUndoAware(false);
-			dataSource->addChild(newColumn);
-		}
-	}else if (mode==AbstractFileFilter::Prepend){
-		Column* firstColumn = dataSource->child<Column>(0);
-		for ( int n=0; n<actualCols; n++ ){
-			newColumn = new Column(vectorNameList.at(n), AbstractColumn::Numeric);
-			newColumn->setUndoAware(false);
-			dataSource->insertChildBefore(newColumn, firstColumn);
-		}
-	}else if (mode==AbstractFileFilter::Replace){
-		//replace completely the previous content of the data source with the content to be imported.
-		int columns = dataSource->childCount<Column>();
-
-		if (columns > actualCols){
-			//there're more columns in the data source then required
-			//-> remove the superfluous columns
-			for(int i=0;i<columns-actualCols;i++) {
-				dataSource->removeChild(dataSource->child<Column>(0));
-			}
-
-			//rename the columns, that are already available
-			for (int i=0; i<actualCols; i++){
-				dataSource->child<Column>(i)->setUndoAware(false);
-				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(i+1));
-				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
-			}
-		}else{
-			//rename the columns, that are already available
-			for (int i=0; i<columns; i++){
-				dataSource->child<Column>(i)->setUndoAware(false);
-				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(i));
-				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
-			}
-
-			//create additional columns if needed
-			for(int i=columns; i < actualCols; i++) {
-				newColumn = new Column(vectorNameList.at(i), AbstractColumn::Numeric);
-				newColumn->setUndoAware(false);
-				dataSource->addChild(newColumn);
-				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
-			}
-		}
-	}
+	int columnOffset = dataSource->resize(mode,QStringList(),actualCols);
 
 	// resize the spreadsheet
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
