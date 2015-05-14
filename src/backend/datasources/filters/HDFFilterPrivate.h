@@ -53,6 +53,8 @@ class HDFFilterPrivate {
 		const static int MAXNAMELENGTH=1024;
 		QList<unsigned long> multiLinkList;	// used to find hard links
 #ifdef HAVE_HDF5
+		QString translateHDFOrder(H5T_order_t);
+		QString translateHDFClass(H5T_class_t);
 		QStringList readHDFAttr(hid_t aid);
 		QStringList scanHDFAttrs(hid_t oid);
 		void scanHDFDataType(hid_t tid, char *dataTypeName,  QTreeWidgetItem* parentItem);

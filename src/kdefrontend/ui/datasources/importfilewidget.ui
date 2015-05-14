@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>379</width>
+    <width>460</width>
     <height>551</height>
    </rect>
   </property>
@@ -227,7 +227,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tabDataFormat">
          <attribute name="title">
@@ -333,10 +333,13 @@
              <string>Specify the start row for import</string>
             </property>
             <property name="minimum">
-             <number>0</number>
+             <number>1</number>
             </property>
             <property name="maximum">
              <number>2147483647</number>
+            </property>
+            <property name="value">
+             <number>1</number>
             </property>
            </widget>
           </item>

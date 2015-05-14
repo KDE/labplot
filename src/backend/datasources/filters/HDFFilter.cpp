@@ -121,6 +121,68 @@ HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 }
 
 #ifdef HAVE_HDF5
+QString HDFFilterPrivate::translateHDFOrder(H5T_order_t o) {
+	QString order;
+        switch(o) {
+        case H5T_ORDER_LE:
+		order="LE";
+                break;
+        case H5T_ORDER_BE:
+		order="BE";
+                break;
+        case H5T_ORDER_VAX:
+		order="VAX";
+                break;
+        case H5T_ORDER_MIXED:
+		order="MIXED";
+                break;
+        case H5T_ORDER_NONE:
+		order="NONE";
+                break;
+        case H5T_ORDER_ERROR:
+		order="ERROR";
+                break;
+	default:
+		order="UNKNOWN";
+        }
+
+	return order;
+}
+
+QString HDFFilterPrivate::translateHDFClass(H5T_class_t c) {
+	QString dclass;
+	switch(c) {
+        case H5T_INTEGER:
+		dclass="INTEGER";
+                break;
+        case H5T_FLOAT:
+		dclass="FLOAT";
+                break;
+        case H5T_STRING:
+		dclass="STRING";
+                break;
+        case H5T_BITFIELD:
+		dclass="BITFIELD";
+                break;
+        case H5T_OPAQUE:
+		dclass="OPAQUE";
+                break;
+        case H5T_COMPOUND:
+		dclass="COMPOUND";
+                break;
+        case H5T_ARRAY:
+		dclass="ARRAY";
+                break;
+        case H5T_ENUM:
+		dclass="ENUM";
+                break;
+        default:
+		dclass="UNKNOWN";
+                break;
+        }
+	return dclass;
+}
+
 QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 	QStringList attr;
 
@@ -157,69 +219,21 @@ QStringList HDFFilterPrivate::scanHDFAttrs(hid_t oid) {
 
 void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidgetItem* parentItem) {
 	H5T_class_t typeClass = H5Tget_class(tid);
-
 	QStringList typeProps;
-	switch(typeClass) {
-        case H5T_INTEGER:
-		typeProps<<"INTEGER";
-                break;
-        case H5T_FLOAT:
-		typeProps<<"FLOAT";
-                break;
-        case H5T_STRING:
-		typeProps<<"STRING";
-                break;
-        case H5T_BITFIELD:
-		typeProps<<"BITFIELD";
-                break;
-        case H5T_OPAQUE:
-		typeProps<<"OPAQUE";
-                break;
-        case H5T_COMPOUND:
-		typeProps<<"COMPOUND";
-                break;
-        case H5T_ARRAY:
-		typeProps<<"ARRAY";
-                break;
-        case H5T_ENUM:
-		typeProps<<"ENUM";
-                break;
-        default:
-		typeProps<<"UNKNOWN";
-                break;
-        }
+
+	typeProps<<translateHDFClass(typeClass);
 
         size_t size = H5Tget_size(tid);
-	typeProps<<"("<<QString::number(size)<<")";
+	typeProps<<" ("<<QString::number(size)<<") ";
 
 	H5T_order_t order = H5Tget_order(tid);
-        switch(order) {
-        case H5T_ORDER_LE:
-		typeProps<<"LE";
-                break;
-        case H5T_ORDER_BE:
-		typeProps<<"BE";
-                break;
-        case H5T_ORDER_VAX:
-		typeProps<<"VAX";
-                break;
-        case H5T_ORDER_MIXED:
-		typeProps<<"MIXED";
-                break;
-        case H5T_ORDER_NONE:
-		typeProps<<"NONE";
-                break;
-        case H5T_ORDER_ERROR:
-		typeProps<<"ERROR";
-                break;
-        }
-
+	typeProps<<translateHDFOrder(order);
 	QString attr = scanHDFAttrs(tid).join(" ");
 
 	char link[MAXNAMELENGTH];
         H5Iget_name(tid, link, MAXNAMELENGTH);
 
-	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join(" ")<<attr);
+	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join("")<<attr);
 	dataTypeItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
 	parentItem->addChild(dataTypeItem);
 
@@ -233,10 +247,33 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 
 	QStringList dataSetProps;
 	hsize_t size = H5Dget_storage_size(did);
-	dataSetProps<<"size ="<<QString::number(size);
-	//TODO: data set properties
+	hid_t datatype  = H5Dget_type(did);
+	H5T_class_t dclass = H5Tget_class(datatype);
+	H5T_order_t order = H5Tget_order(datatype);
+	size_t typeSize  = H5Tget_size(datatype);
 
-	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join(" ")<<attr);
+	dataSetProps<<translateHDFClass(dclass)<<" ("<<QString::number(typeSize)<<") ";
+	dataSetProps<<translateHDFOrder(order);
+
+	hid_t dataspace = H5Dget_space(did);
+	int rank = H5Sget_simple_extent_ndims(dataspace);
+	if(rank == 2) {
+		hsize_t dims_out[2];
+    		H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+		unsigned int rows = dims_out[0];
+		unsigned int cols = dims_out[1];
+		dataSetProps<<", "<<QString::number(rows)<<"x"<<QString::number(cols)<<" ("<<QString::number(size/typeSize)<<")";
+	}
+	else if(rank == 3) {
+		hsize_t dims_out[3];
+    		H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+		unsigned int rows = dims_out[0];
+		unsigned int cols = dims_out[1];
+		unsigned int regs = dims_out[2];
+		dataSetProps<<", "<<QString::number(rows)<<"x"<<QString::number(cols)<<"x"<<QString::number(regs)<<" ("<<QString::number(size/typeSize)<<")";
+	}
+
+	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
 	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
 	dataSetItem->setBackground(0,QBrush(QColor(192,255,192)));
 	parentItem->addChild(dataSetItem);
@@ -279,9 +316,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	parentItem->addChild(groupItem);
 
 	hsize_t numObj;
-	//TODO: check for errors
-	herr_t err = H5Gget_num_objs(gid, &numObj);
-	Q_UNUSED(err);
+	H5Gget_num_objs(gid, &numObj);
 
 	for (unsigned int i = 0; i < numObj; i++) {
                 char memberName[MAXNAMELENGTH];
@@ -339,7 +374,7 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
     reads the content of the date set in the file \c fileName to a string (for preview).
 */
 QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, unsigned int lines){
-	Q_UNUSED(fileName);
+	QStringList dataString;
 
 	if(currentDataSet.isEmpty())
 		return QString("No data set selected");
@@ -353,52 +388,91 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, unsigned 
 	QByteArray badataSet = currentDataSet.toLatin1();
 	hid_t dataset = H5Dopen2(file, badataSet.data(), H5P_DEFAULT);
 
-	/* Get datatype and dataspace handles and then query
-		dataset class, order, size, rank and dimensions  */
-	hid_t datatype  = H5Dget_type(dataset);     /* datatype handle */ 
-	//H5T_class_t dclass = H5Tget_class(datatype);
-	//if (dclass == H5T_INTEGER) printf("Data set has INTEGER type \n");
-	//H5T_order_t order = H5Tget_order(datatype);
-	//if (order == H5T_ORDER_LE) printf("Little endian order \n");
+	// Get datatype and dataspace
+	hid_t datatype = H5Dget_type(dataset);
+	H5T_class_t dclass = H5Tget_class(datatype);
+	size_t typeSize = H5Tget_size(datatype);
 
-	//size_t size  = H5Tget_size(datatype);
-	//printf(" Data size is %d \n", size);
-
-	hid_t dataspace = H5Dget_space(dataset);    /* dataspace handle */
-	//int rank = H5Sget_simple_extent_ndims(dataspace);
-	hsize_t dims_out[2];
-    	H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
-    	//printf("rank %d, dimensions %lu x %lu \n", rank,
-	//	(unsigned long)(dims_out[0]), (unsigned long)(dims_out[1]));
-
-	int rows = dims_out[0];
-	int cols = dims_out[1];
-
-	// read integer data
-	int** data_out = (int**) malloc(rows*sizeof(int*));
-	data_out[0] = (int*)malloc( cols*rows*sizeof(int) );
-	for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
-	for (unsigned int j=0; j < dims_out[0]; j++) {
-		for (unsigned int i=0; i < dims_out[1]; i++) {
-                	data_out[j][i] = 0;
-		}
+	hid_t dataspace = H5Dget_space(dataset);
+	int rank = H5Sget_simple_extent_ndims(dataspace);
+	if( rank != 2) {
+		dataString<<"rank ="<<QString::number(rank)<<"not supported";
+		qDebug()<<dataString.join(" ");
+		H5Sclose(dataspace);
+		H5Tclose(datatype);
+		H5Dclose(dataset);
+		H5Fclose(file);
+		return dataString.join("");
 	}
 
-  	H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL,H5P_DEFAULT, &data_out[0][0]);
-	QStringList dataString;
-	for (unsigned int j=0; j < lines; j++) {
-		for (unsigned int i=0; i < dims_out[1]; i++)
-			dataString<<QString::number(data_out[j][i])<<" ";
-		dataString<<"\n";
+	hsize_t dims_out[2];
+    	H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+	unsigned int rows = dims_out[0];
+	unsigned int cols = dims_out[1];
+
+#ifdef QT_DEBUG
+	H5T_order_t order = H5Tget_order(datatype);
+	qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<rows<<"x"<<cols;
+#endif
+
+	// read data
+	if (dclass == H5T_INTEGER) {
+		int** data_out = (int**) malloc(rows*sizeof(int*));
+		data_out[0] = (int*)malloc( cols*rows*sizeof(int) );
+		for (unsigned int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+	  	H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+		for (unsigned int i=0; i < qMin(rows,lines); i++) {
+			for (unsigned int j=0; j < cols; j++) {
+				dataString<<QString::number(data_out[i][j])<<" ";
+			}
+			dataString<<"\n";
+		}
+
+		free(data_out[0]);
+		free(data_out);
+	} else if (dclass == H5T_FLOAT) {
+		if(typeSize == 4) {
+			float** data_out = (float**) malloc(rows*sizeof(float*));
+			data_out[0] = (float*)malloc( cols*rows*sizeof(float) );
+			for (unsigned int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+		  	H5Dread(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+			for (unsigned int i=0; i < qMin(rows,lines); i++) {
+				for (unsigned int j=0; j < cols; j++)
+					dataString<<QString::number(data_out[i][j])<<" ";
+				dataString<<"\n";
+			}
+
+			free(data_out[0]);
+			free(data_out);
+		}else if(typeSize == 8) {
+			double** data_out = (double**) malloc(rows*sizeof(double*));
+			data_out[0] = (double*)malloc( cols*rows*sizeof(double) );
+			for (unsigned int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+		  	H5Dread(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,H5P_DEFAULT, &data_out[0][0]);
+			for (unsigned int i=0; i < qMin(rows,lines); i++) {
+				for (unsigned int j=0; j < cols; j++)
+					dataString<<QString::number(data_out[i][j])<<" ";
+				dataString<<"\n";
+			}
+
+			free(data_out[0]);
+			free(data_out);
+		}else {
+			dataString<<" data type size"<<QString::number(typeSize)<<"not supported";
+			qDebug()<<dataString.join(" ");
+		}
+	} else {
+		dataString<<translateHDFClass(dclass)<<"data class not supported";
+		qDebug()<<dataString.join(" ");
 	}
 
 	H5Sclose(dataspace);
 	H5Tclose(datatype);
 	H5Dclose(dataset);
 	H5Fclose(file);
-
-	free(data_out[0]);
-	free(data_out);
 
 	return dataString.join("");
 }
