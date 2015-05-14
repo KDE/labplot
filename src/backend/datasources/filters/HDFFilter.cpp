@@ -61,8 +61,8 @@ void HDFFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem){
 /*!
   reads the content of the data set \c dataSet from file \c fileName.
 */
-QString HDFFilter::readCurrentDataSet(const QString & fileName,unsigned int lines){
-	return d->readCurrentDataSet(fileName, lines);
+QString HDFFilter::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  unsigned int lines){
+	return d->readCurrentDataSet(fileName, dataSource, importMode, lines);
 }
 
 /*!
@@ -371,9 +371,9 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 }
 
 /*!
-    reads the content of the date set in the file \c fileName to a string (for preview).
+    reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
-QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, unsigned int lines){
+QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, unsigned int lines){
 	QStringList dataString;
 
 	if(currentDataSet.isEmpty())
@@ -414,7 +414,14 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, unsigned 
 	H5T_order_t order = H5Tget_order(datatype);
 	qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<rows<<"x"<<cols;
 #endif
+	//TODO: use start/end row/col
 
+	if (dataSource != NULL) {
+		int columnOffset = dataSource->resize(mode,QStringList(),cols);
+		
+		//TODO
+	}
+	
 	// read data
 	if (dclass == H5T_INTEGER) {
 		int** data_out = (int**) malloc(rows*sizeof(int*));
@@ -482,14 +489,36 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, unsigned 
     Uses the settings defined in the data source.
 */
 void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)
 	Q_UNUSED(mode)
 #ifdef QT_DEBUG
 	qDebug()<<"HDFFilterPrivate::read()";
 #endif	
 	
-	//TODO: use currentDataSet
+	if(currentDataSet.isEmpty()) {
+		qDebug()<<" No data set selected";
+		return;
+	}
+#ifdef QT_DEBUG
+	else
+		qDebug()<<" current data set ="<<currentDataSet;
+#endif
+
+	readCurrentDataSet(fileName,dataSource,mode);
+/*	// same as readCurrentDataSet()
+	QByteArray bafileName = fileName.toLatin1();
+	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
+	QByteArray badataSet = currentDataSet.toLatin1();
+	hid_t dataset = H5Dopen2(file, badataSet.data(), H5P_DEFAULT);
+
+	// Get datatype and dataspace
+	hid_t datatype = H5Dget_type(dataset);
+	H5T_class_t dclass = H5Tget_class(datatype);
+	size_t typeSize = H5Tget_size(datatype);
+
+	hid_t dataspace = H5Dget_space(dataset);
+	int rank = H5Sget_simple_extent_ndims(dataspace);
+*/
 
 	//TODO
 }

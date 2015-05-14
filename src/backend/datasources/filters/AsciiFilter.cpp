@@ -257,9 +257,9 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 	skipEmptyParts(false),
 	simplifyWhitespacesEnabled(true),
 	transposed(false),
-	startRow(0),
+	startRow(1),
 	endRow(-1),
-	startColumn(0),
+	startColumn(1),
 	endColumn(-1) {
 }
 
@@ -270,7 +270,6 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
 	int currentRow=0; //indexes the position in the vector(column)
 	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
-	QString line;
 	QStringList lineStringList;
 
 	QFile file(fileName);
@@ -288,7 +287,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	//...
 
 	//skip rows, if required
-	for (int i=0; i<startRow; i++){
+	for (int i=0; i<startRow-1; i++){
         //if the number of rows to skip is bigger then the actual number
 		//of the rows in the file, then quit the function.
 		if( in.atEnd() ) {
@@ -313,7 +312,7 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		return;
 	}
 
-	line = in.readLine();
+	QString line = in.readLine();
 	if( simplifyWhitespacesEnabled)
 		line = line.simplified();
 
@@ -340,7 +339,9 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 // 	qDebug() << "separator '"<<separator << "'";
 
 	if (endColumn == -1)
-		endColumn = lineStringList.size()-1; //use the last available column index
+		endColumn = lineStringList.size(); //use the last available column index
+
+	int cols=endColumn-startColumn+1;
 
 	QStringList vectorNameList;
 	if ( headerEnabled ){
@@ -350,71 +351,9 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		if (!vectorNames.isEmpty()){
 			vectorNameList = vectorNames.split(' ');
 		}
-
-		//if there were no (or not enough) strings provided, add the default descriptions for the columns/vectors
-		if ( vectorNameList.size() < endColumn-startColumn+1 ) {
-			int size=vectorNameList.size();
-			for (int k=0; k<endColumn-startColumn+1-size; k++ )
-				vectorNameList.append( "Column " + QString::number(size+k+1) );
-		}
 	}
-
-	//make sure we have enough columns in the data source.
-	//we need in total (endColumn-startColumn+1) columns.
-	//Create new columns, if needed.
-	Column * newColumn;
-	dataSource->setUndoAware(false);
-	if (mode==AbstractFileFilter::Append){
-		columnOffset=dataSource->childCount<Column>();
-		for ( int n=startColumn; n<=endColumn; n++ ){
-			newColumn = new Column(vectorNameList.at(n-startColumn), AbstractColumn::Numeric);
-			newColumn->setUndoAware(false);
-			dataSource->addChild(newColumn);
-		}
-	}else if (mode==AbstractFileFilter::Prepend){
-		Column* firstColumn = dataSource->child<Column>(0);
-		for ( int n=startColumn; n<=endColumn; n++ ){
-			newColumn = new Column(vectorNameList.at(n-startColumn), AbstractColumn::Numeric);
-			newColumn->setUndoAware(false);
-			dataSource->insertChildBefore(newColumn, firstColumn);
-		}
-	}else if (mode==AbstractFileFilter::Replace){
-		//replace completely the previous content of the data source with the content to be imported.
-		int columns = dataSource->childCount<Column>();
-
-		if (columns>(endColumn-startColumn+1)){
-			//there're more columns in the data source then required
-			//-> remove the superfluous columns
-			for(int i=0;i<columns-(endColumn-startColumn+1);i++) {
-				dataSource->removeChild(dataSource->child<Column>(0));
-			}
-
-			//rename the columns, that are already available
-			for (int i=0; i<endColumn-startColumn; i++){
-				dataSource->child<Column>(i)->setUndoAware(false);
-				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
-				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
-			}
-		}else{
-			//rename the columns, that are already available
-			for (int i=0; i<columns; i++){
-				dataSource->child<Column>(i)->setUndoAware(false);
-				dataSource->child<Column>(i)->setColumnMode( AbstractColumn::Numeric);
-				dataSource->child<Column>(i)->setName(vectorNameList.at(startColumn+i));
-				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
-			}
-
-			//create additional columns if needed
-			for(int i=0; i<=(endColumn-startColumn-columns); i++) {
-				newColumn = new Column(vectorNameList.at(columns+startColumn+i), AbstractColumn::Numeric);
-				newColumn->setUndoAware(false);
-				dataSource->addChild(newColumn);
-				dataSource->child<Column>(i)->setSuppressDataChangedSignal(true);
-			}
-		}
-	}
-
+	//qDebug()<<"	vector names ="<<vectorNameList;
+	columnOffset = dataSource->resize(mode, vectorNameList, cols);
 
 	int numLines=AsciiFilter::lineNumber(fileName);
 	int actualEndRow;
@@ -430,6 +369,16 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	else
 		numLines = actualEndRow-startRow;
 
+#ifdef QT_DEBUG
+	qDebug()<<"	column offset ="<<columnOffset;
+	qDebug()<<"	start column ="<<startColumn;
+	qDebug()<<"	end column ="<<endColumn;
+	qDebug()<<"	cols ="<<cols;
+	qDebug()<<"	start row ="<<startRow;
+	qDebug()<<"	end row ="<<actualEndRow;
+	qDebug()<<"	rows ="<<numLines;
+#endif
+
 	//resize the spreadsheet
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (mode==AbstractFileFilter::Replace){
@@ -442,8 +391,8 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 
 	//pointers to the actual data containers
 	QVector<QVector<double>*> dataPointers;
-	for ( int n=startColumn; n<=endColumn; n++ ){
-		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n-startColumn)->data());
+	for ( int n=0; n<cols; n++ ){
+		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
 		vector->reserve(numLines);
 		vector->resize(numLines);
 		dataPointers.push_back(vector);
@@ -451,11 +400,11 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 
 	//import the values in the first line, if they were not used as the header (as the names for the columns)
 	if (!headerEnabled){
-		for ( int n=startColumn; n<=endColumn; n++ ){
+		for ( int n=0; n<cols; n++ ){
 			if (n<lineStringList.size()) {
 				bool isNumber;
 				const double value = lineStringList.at(n).toDouble(&isNumber);
-				isNumber ? dataPointers[n-startColumn]->operator[](0) = value : dataPointers[n-startColumn]->operator[](0) = NAN;
+				isNumber ? dataPointers[n]->operator[](0) = value : dataPointers[n]->operator[](0) = NAN;
 			} else {
 				dataPointers[n]->operator[](0) = NAN;
 			}
@@ -483,12 +432,12 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
 
 		// TODO : read strings (comments) or datetime too
-		for ( int n=startColumn; n<=endColumn; n++ ){
+		for ( int n=0; n<cols; n++ ){
 			if (n<lineStringList.size()) {
 				const double value = lineStringList.at(n).toDouble(&isNumber);
-				isNumber ? dataPointers[n-startColumn]->operator[](currentRow) = value : dataPointers[n-startColumn]->operator[](currentRow) = NAN;
+				isNumber ? dataPointers[n]->operator[](currentRow) = value : dataPointers[n]->operator[](currentRow) = NAN;
 			} else {
-				dataPointers[n-startColumn]->operator[](currentRow) = NAN;
+				dataPointers[n]->operator[](currentRow) = NAN;
 			}
 		}
 

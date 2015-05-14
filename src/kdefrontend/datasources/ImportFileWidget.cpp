@@ -60,6 +60,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.kleFileName->setCompletionObject(comp);
 
 	ui.cbFileType->addItems(FileDataSource::fileTypes());
+	QStringList filterItems;
+	filterItems<<i18n("Automatic")<<i18n("Custom");
+	ui.cbFilter->addItems( filterItems );
 
 	// file type specific option widgets
 	QWidget* asciiw=new QWidget(0);
@@ -236,6 +239,8 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
+	//qDebug()<<"	current filter ="<<ui.cbFilter->currentIndex();
+
 	if ( fileType==FileDataSource::AsciiVector ) {
 		 //TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
@@ -256,17 +261,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		}
 
 		//save the data portion to import
-		filter->setStartRow( ui.sbStartRow->value()-1 );
-		if (ui.sbEndRow->value()==-1)
-			filter->setEndRow(-1);
-		else
-			filter->setEndRow( ui.sbEndRow->value() );
-
-		filter->setStartColumn( ui.sbStartColumn->value()-1 );
-		if (ui.sbEndColumn->value() == -1)
-			filter->setEndColumn(-1);
-		else
-			filter->setEndColumn( ui.sbEndColumn->value()-1 );
+		filter->setStartRow( ui.sbStartRow->value());
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value());
+		filter->setEndColumn( ui.sbEndColumn->value());
 
 		return filter;
 //		source->setFilter(filter);
@@ -692,7 +690,7 @@ void ImportFileWidget::refreshPreview(){
 		else if (fileType == FileDataSource::HDF) {
 			// read data from selected data set
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
-			importedText = filter->readCurrentDataSet(fileName,lines);
+			importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
 		}
 	}
 
