@@ -263,7 +263,7 @@ QStringList HDFFilterPrivate::scanHDFAttrs(hid_t oid) {
                 hid_t aid = H5Aopen_idx(oid, i);
                 attr<<readHDFAttr(aid);
 		if(i != numAttr-1)
-			attr<<",";
+			attr<<", ";
                 H5Aclose(aid);
         }
 
@@ -315,6 +315,98 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 	return typeProps;
 }
 
+QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
+	QStringList props;
+
+	hsize_t chunk_dims_out[2];
+	if(H5D_CHUNKED == H5Pget_layout(pid)){
+                int rank_chunk = H5Pget_chunk(pid, 2, chunk_dims_out);
+		props<<"chunk rank"<<QString::number(rank_chunk)<<", dimension"<<QString::number(chunk_dims_out[0])<<QString::number(chunk_dims_out[1]);
+        }
+
+	int nfilters = H5Pget_nfilters(pid);
+	props<<" "<<QString::number(nfilters)<<" filter";
+        for (int i = 0; i < nfilters; i++) {
+		size_t cd_nelmts = 32;
+		unsigned int filt_flags, filt_conf;
+		unsigned int cd_values[32];
+		char f_name[MAXNAMELENGTH];
+                H5Z_filter_t filtn = H5Pget_filter(pid, (unsigned)i, &filt_flags, &cd_nelmts, cd_values,(size_t)MAXNAMELENGTH, f_name, &filt_conf);
+
+		switch (filtn) {
+		case H5Z_FILTER_DEFLATE:  /* AKA GZIP compression */
+			props<<": DEFLATE level ="<<QString::number(cd_values[0]);
+			break;
+		case H5Z_FILTER_SHUFFLE: 
+			props<<": SHUFFLE"; /* no parms */
+			break;
+		case H5Z_FILTER_FLETCHER32:
+			props<<": FLETCHER32";  /* Error Detection Code */
+			break;
+		case H5Z_FILTER_SZIP: {
+			//unsigned int szip_options_mask=cd_values[0];;
+			unsigned int szip_pixels_per_block=cd_values[1];
+
+			props<<": SZIP COMPRESSION - PIXELS_PER_BLOCK "<<QString::number(szip_pixels_per_block);
+			break;
+		}
+		default:
+			props<<": Unknown filter";
+			break;
+		}
+	}
+
+	props<<", ALLOC_TIME:";
+	H5D_alloc_time_t at;
+        H5Pget_alloc_time(pid, &at);
+
+        switch (at) {
+	case H5D_ALLOC_TIME_EARLY:
+		props<<" EARLY";
+		break;
+	case H5D_ALLOC_TIME_INCR:
+		props<<" INCR";
+		break;
+	case H5D_ALLOC_TIME_LATE:
+		props<<" LATE";
+		break;
+	default:
+		props<<" unknown allocation policy";
+		break;
+        }
+
+	props<<", FILL_TIME:";
+        H5D_fill_time_t ft;
+	H5Pget_fill_time(pid, &ft);
+        switch ( ft ) {
+	case H5D_FILL_TIME_ALLOC:
+		props<<" ALLOW";
+		break;
+	case H5D_FILL_TIME_NEVER:
+		props<<" NEVER";
+		break;
+	case H5D_FILL_TIME_IFSET:
+		props<<" IFSET";
+		break;
+	default:
+		props<<" unknown";
+		break;
+        }
+
+	H5D_fill_value_t fvstatus;
+	H5Pfill_value_defined(pid, &fvstatus);
+        if (fvstatus == H5D_FILL_VALUE_UNDEFINED) {
+		props<<" No fill value defined";
+        } else {
+                /* TODO: Read  the fill value with H5Pget_fill_value. 
+                 * Fill value is the same data type as the dataset.
+                 * (details not shown) 
+                 **/
+        }
+
+	return props;
+}
+
 void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidgetItem* parentItem) {
 	QStringList typeProps=readHDFDataType(tid);
 
@@ -330,7 +422,7 @@ void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidget
 }
 
 void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetItem* parentItem) {
-	QString attr = scanHDFAttrs(did).join(" ");
+	QString attr = scanHDFAttrs(did).join("");
 
 	char link[MAXNAMELENGTH];
         H5Iget_name(did, link, MAXNAMELENGTH);
@@ -359,6 +451,9 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 		unsigned int regs = dims_out[2];
 		dataSetProps<<", "<<QString::number(rows)<<"x"<<QString::number(cols)<<"x"<<QString::number(regs)<<" ("<<QString::number(size/typeSize)<<")";
 	}
+
+	hid_t pid = H5Dget_create_plist(did);
+	dataSetProps<<","<<readHDFPropertyList(pid).join("");
 
 	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
 	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
