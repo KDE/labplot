@@ -67,6 +67,7 @@ class ImportFileDialog: public KDialog {
 	QComboBox* cbPosition;
 	QWidget* mainWidget;
 	QPushButton* bNewSpreadsheet;
+	QPushButton* bNewMatrix;
 	std::auto_ptr<QAbstractItemModel> m_model;
 	bool m_optionsShown;
 
@@ -74,9 +75,11 @@ class ImportFileDialog: public KDialog {
 	void toggleOptions();
 	void currentAddToIndexChanged(QModelIndex);
 	void newSpreadsheet();
+	void newMatrix();
 
 	signals:
 		void newSpreadsheetRequested(const QString&);
+		void newMatrixRequested(const QString&);
 };
 
 #endif //IMPORTFILEDIALOG_H

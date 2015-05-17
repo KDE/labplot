@@ -95,7 +95,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
 	QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
-	hLayout->addWidget( new QLabel(i18n("Spreadsheet"),  frameAddTo) );
+	hLayout->addWidget( new QLabel(i18n("Spreadsheet/Matrix"),  frameAddTo) );
 
 	cbAddTo = new TreeViewComboBox(frameAddTo);
 	cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
@@ -114,6 +114,12 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
 	hLayout->addWidget( bNewSpreadsheet);
 	connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
+
+	bNewMatrix = new QPushButton(frameAddTo);
+	bNewMatrix->setIcon(KIcon("insert-table"));
+	bNewMatrix->setToolTip(i18n("Add new matrix"));
+	hLayout->addWidget( bNewMatrix);
+	connect( bNewMatrix, SIGNAL(clicked()), this, SLOT(newMatrix()));
 
 	hLayout->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
 
@@ -256,6 +262,26 @@ void ImportFileDialog::newSpreadsheet(){
 // 	name = KInputDialog::getText( i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), name, &ok);
 	if (ok)
 		emit newSpreadsheetRequested(name);
+
+	delete dlg;
+}
+
+void ImportFileDialog::newMatrix(){
+	QString path = importFileWidget->fileName();
+	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+
+	if (name.isEmpty())
+		name = i18n("new Matrix");
+
+	bool ok;
+	//TODO: how to set the icon in QInputDialog or in KInputDialog?
+	QInputDialog* dlg = new QInputDialog(this);
+
+	dlg->setWindowIcon( QIcon(KIcon("insert-table")) );
+	name = dlg->getText(this, i18n("Add new Matrix"), i18n("Matrix name:"), QLineEdit::Normal, name, &ok);
+// 	name = KInputDialog::getText( i18n("Add new Matrix"), i18n("Matrix name:"), name, &ok);
+	if (ok)
+		emit newMatrixRequested(name);
 
 	delete dlg;
 }

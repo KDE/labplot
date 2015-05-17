@@ -39,6 +39,7 @@ class ProjectExplorer;
 class Project;
 class Worksheet;
 class Spreadsheet;
+class Matrix;
 class GuiObserver;
 class AxisDock;
 class CartesianPlotDock;
@@ -191,6 +192,7 @@ private slots:
 	void newFolder();
 	void newSpreadsheet();
 	void newSpreadsheetForImportFileDialog(const QString&);
+	void newMatrixForImportFileDialog(const QString&);
 	void newWorksheet();
 	void newScript();
 	void newMatrix();
