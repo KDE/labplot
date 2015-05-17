@@ -321,7 +321,7 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 	hsize_t chunk_dims_out[2];
 	if(H5D_CHUNKED == H5Pget_layout(pid)){
                 int rank_chunk = H5Pget_chunk(pid, 2, chunk_dims_out);
-		props<<"chunk rank"<<QString::number(rank_chunk)<<", dimension"<<QString::number(chunk_dims_out[0])<<QString::number(chunk_dims_out[1]);
+		props<<"chunk rank="<<QString::number(rank_chunk)<<", dimension="<<QString::number(chunk_dims_out[0])<<QString::number(chunk_dims_out[1]);
         }
 
 	int nfilters = H5Pget_nfilters(pid);
@@ -453,7 +453,7 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	}
 
 	hid_t pid = H5Dget_create_plist(did);
-	dataSetProps<<","<<readHDFPropertyList(pid).join("");
+	dataSetProps<<", "<<readHDFPropertyList(pid).join("");
 
 	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
 	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
