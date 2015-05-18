@@ -1285,15 +1285,12 @@ void MainWin::historyDialog(){
 */
 void MainWin::importFileDialog(){
 	m_importFileDialog = new ImportFileDialog(this);
-	connect (m_importFileDialog, SIGNAL(newSpreadsheetRequested(QString)),
-			 this, SLOT(newSpreadsheetForImportFileDialog(QString)));
-	connect (m_importFileDialog, SIGNAL(newMatrixRequested(QString)),
-			 this, SLOT(newMatrixForImportFileDialog(QString)));
+	connect (m_importFileDialog, SIGNAL(newSpreadsheetRequested(QString)),this, SLOT(newSpreadsheetForImportFileDialog(QString)));
+	connect (m_importFileDialog, SIGNAL(newMatrixRequested(QString)),this, SLOT(newMatrixForImportFileDialog(QString)));
 	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
 	m_importFileDialog->setModel( model );
 
-	//TODO add Matrix here in future.
-	 if ( m_currentAspect->inherits("Spreadsheet") ) {
+	 if ( m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") ) {
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
 	 } else if ( m_currentAspect->inherits("Column") ) {
 		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
@@ -1301,7 +1298,7 @@ void MainWin::importFileDialog(){
 	 }
 
 	if ( m_importFileDialog->exec() == QDialog::Accepted ) {
-		m_importFileDialog->importToSpreadsheet(statusBar());
+		m_importFileDialog->importTo(statusBar());
 		m_project->setChanged(true);
 	}
 

@@ -692,7 +692,6 @@ void ImportFileWidget::refreshPreview(){
 			//TODO
 		}
 		else if (fileType == FileDataSource::HDF) {
-			// read data from selected data set
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 			importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
 		}

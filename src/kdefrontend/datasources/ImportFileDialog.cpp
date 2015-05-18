@@ -32,6 +32,7 @@
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <kmessagebox.h>
@@ -158,7 +159,6 @@ void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
 	this->currentAddToIndexChanged(index);
 }
 
-
 /*!
   triggers data import to the file data source \c source
 */
@@ -185,11 +185,10 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 }
 
 /*!
-  triggers data import to the currently selected spreadsheet
+  triggers data import to the currently selected spreadsheet/matrix
 */
-void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
+void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
-	Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
 	QString fileName = importFileWidget->fileName();
 	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
@@ -208,7 +207,16 @@ void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
 
 	QTime timer;
 	timer.start();
-	filter->read(fileName, sheet, mode);
+	if(aspect->inherits("Matrix")) {
+		qDebug()<<" import to Matrix";
+		Matrix* matrix = qobject_cast<Matrix*>(aspect);
+		filter->read(fileName, matrix, mode);
+	}
+	else if (aspect->inherits("Spreadsheet")) {
+		qDebug()<<" import to Spreadsheet";
+		Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
+		filter->read(fileName, sheet, mode);
+	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();

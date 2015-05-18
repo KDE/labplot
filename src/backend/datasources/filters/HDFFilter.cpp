@@ -637,10 +637,17 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 	QVector<QVector<double>*> dataPointers;
 	int columnOffset = 0;
+	if(dataSource->inherits("Spreadsheet"))
+		qDebug()<<"	import HDF data set into Spreadsheet";
+	else if (dataSource->inherits("Matrix")) {
+		qDebug()<<"	import HDF data set into Matrix (not implemented yet)";
+	}
+
+	//TODO: implement datasource == Matrix
 	Spreadsheet* spreadsheet=0;
 	if (dataSource != NULL) {
 		columnOffset = dataSource->resize(mode,QStringList(),actualCols);
-		qDebug()<<"col offset"<<columnOffset;
+		qDebug()<<"column offset"<<columnOffset;
 		
 		// resize the spreadsheet
 		spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
