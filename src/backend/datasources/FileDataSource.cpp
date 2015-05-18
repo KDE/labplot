@@ -56,8 +56,8 @@ Email (use @ for *)  : alexander.semke*web.de
   \ingroup datasources
 */
 
-FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& name)
-     : Spreadsheet(engine, name),
+FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
+     : Spreadsheet(engine, name, loading),
      m_fileType(AsciiVector),
      m_fileWatched(false),
      m_fileLinked(false),

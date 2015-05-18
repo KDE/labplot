@@ -58,12 +58,29 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 	appendColumns(cols);
 	appendRows(rows);
 
-	//TODO: move initialization of private to init()
-	d->headerFormat = Matrix::HeaderRowsColumns;
+	init();
+
 }
+
+Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_view(0) {
+
+	if (!loading)
+		init();
+
+}
+
 
 Matrix::~Matrix() {
 	delete d;
+}
+
+void Matrix::init() {
+	//TODO
+		// set initial number of rows and columns
+// 	appendColumns(cols);
+// 	appendRows(rows);
+	d->headerFormat = Matrix::HeaderRowsColumns;
 }
 
 /*!

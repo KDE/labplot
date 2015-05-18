@@ -897,7 +897,6 @@ void MainWin::printPreview(){
 */
 void MainWin::newSpreadsheet(){
 	Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
-	spreadsheet->initDefault();
 	this->addAspectToProject(spreadsheet);
 }
 
@@ -910,14 +909,11 @@ void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
 		return;
 
 	Spreadsheet* spreadsheet = new Spreadsheet(0, name);
-	spreadsheet->initDefault();
 	this->addAspectToProject(spreadsheet);
 
 	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
 	m_importFileDialog->updateModel( model );
 
-	//TODO add Matrix here in future.
-	// really? 
 	 if ( m_currentAspect->inherits("Spreadsheet") )
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
 }
@@ -931,7 +927,6 @@ void MainWin::newMatrixForImportFileDialog(const QString& name){
 		return;
 
 	Matrix* matrix = new Matrix(0,10,10, name);
-	//TODO: matrix->initDefault();
 	this->addAspectToProject(matrix);
 
 	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
@@ -1102,7 +1097,6 @@ void MainWin::newScript(){
 
 void MainWin::newMatrix(){
 	Matrix* matrix = new Matrix(0, 10, 10, i18n("Matrix"));
-// 	matrix->initDefault();
 	this->addAspectToProject(matrix);
 }
 

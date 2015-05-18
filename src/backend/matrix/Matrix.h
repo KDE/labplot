@@ -38,6 +38,7 @@ class Matrix : public AbstractDataSource {
     Q_OBJECT
 
 	public:
+		Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 		Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name);
 		~Matrix();
 
@@ -127,6 +128,7 @@ class Matrix : public AbstractDataSource {
 		void formatChanged();
 
 	private:
+		void init();
 		bool readDisplayElement(XmlStreamReader*);
 		bool readCoordinatesElement(XmlStreamReader*);
 		bool readFormulaElement(XmlStreamReader*);

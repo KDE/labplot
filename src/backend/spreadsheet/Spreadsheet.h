@@ -37,13 +37,12 @@ class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
 
 	public:
-		Spreadsheet(AbstractScriptingEngine* engine, const QString& name);
+		Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-		void initDefault();
 		int columnCount() const;
 		int columnCount(AbstractColumn::PlotDesignation) const;
 		Column* column(int index) const;
@@ -85,6 +84,7 @@ class Spreadsheet : public AbstractDataSource {
 
 		void moveColumn(int from, int to);
 		void sortColumns(Column* leading, QList<Column*> cols, bool ascending);
+
 	private:
 		void init();
 

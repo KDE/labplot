@@ -40,7 +40,7 @@ class FileDataSource : public Spreadsheet {
     Q_OBJECT
 
 	public:
-		FileDataSource(AbstractScriptingEngine* engine,  const QString& name);
+		FileDataSource(AbstractScriptingEngine* engine,  const QString& name, bool loading = false);
 		~FileDataSource();
 
 		enum FileType{AsciiVector, AsciiMatrix, BinaryVector, BinaryMatrix, Image, HDF, NETCDF, Sound};

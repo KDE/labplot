@@ -39,11 +39,11 @@ class QRectF;
 
 class WorksheetPrivate;
 
-class Worksheet: public AbstractPart, public scripted{
+class Worksheet: public AbstractPart, public scripted {
 	Q_OBJECT
 
 	public:
-		Worksheet(AbstractScriptingEngine *engine, const QString &name);
+		Worksheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 		~Worksheet();
 
 		enum Unit {Millimeter, Centimeter, Inch, Point};
@@ -52,11 +52,11 @@ class Worksheet: public AbstractPart, public scripted{
 		static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
 
 		virtual QIcon icon() const;
-		virtual QMenu *createContextMenu();
-		virtual QWidget *view() const;
+		virtual QMenu* createContextMenu();
+		virtual QWidget* view() const;
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);

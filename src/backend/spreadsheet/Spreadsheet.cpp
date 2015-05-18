@@ -31,17 +31,12 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/AbstractAspect.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KIcon>
-#include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
 
 #include <QApplication>
-#include <QDateTime>
-#include <QMenu>
 
 /*!
   \class Spreadsheet
@@ -64,15 +59,17 @@
   \ingroup backend
 */
 
-Spreadsheet::Spreadsheet(AbstractScriptingEngine *engine, const QString& name)
+Spreadsheet::Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
   : AbstractDataSource(engine, name){
 
+	if (!loading)
+		init();
 }
 
 /*!
 	initializes the spreadsheet with the default number of columns and rows
 */
-void Spreadsheet::initDefault() {
+void Spreadsheet::init() {
 	int columns, rows;
 	KConfig config;
 	KConfigGroup group = config.group( "Spreadsheet" );
