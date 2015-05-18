@@ -907,7 +907,7 @@ void XYCurvePrivate::retransform(){
 // 	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
-	connectedPoints.clear();
+	connectedPointsLogical.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) ){
 		linePath = QPainterPath();
@@ -961,10 +961,10 @@ void XYCurvePrivate::retransform(){
 					break;
 			}
 			symbolPointsLogical.append(tempPoint);
-			connectedPoints.push_back(true);
+			connectedPointsLogical.push_back(true);
 		} else {
-			if (connectedPoints.size())
-				connectedPoints[connectedPoints.size()-1] = false;
+			if (connectedPointsLogical.size())
+				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
 		}
 	}
 
@@ -1014,14 +1014,14 @@ void XYCurvePrivate::updateLines(){
 	switch(lineType){
 	  case XYCurve::Line:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		break;
 	  }
 	  case XYCurve::StartHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(nextPoint.x(), curPoint.y());
@@ -1032,7 +1032,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::StartVertical:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), nextPoint.y());
@@ -1043,7 +1043,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
@@ -1056,7 +1056,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointVertical:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
@@ -1071,7 +1071,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=1){
-			if (!lineSkipGaps && !connectedPoints[i]) {skip=0; continue;}
+			if (!lineSkipGaps && !connectedPointsLogical[i]) {skip=0; continue;}
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 			skip++;
 		  }else{
@@ -1084,7 +1084,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=2){
-			if (!lineSkipGaps && !connectedPoints[i]) {skip=0; continue;}
+			if (!lineSkipGaps && !connectedPointsLogical[i]) {skip=0; continue;}
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 			skip++;
 		  }else{
@@ -1466,7 +1466,7 @@ void XYCurvePrivate::updateFilling() {
 		fillLines = lines;
 	} else {
 		for (int i=0; i<symbolPointsLogical.count()-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		fillLines = cSystem->mapLogicalToScene(fillLines);
@@ -1476,51 +1476,165 @@ void XYCurvePrivate::updateFilling() {
 	if (!fillLines.size())
 		return;
 
-	//determine the end point in scene coordinates where the last polygon line should be closed,
-	//use a point in logical coordinates on the edge and map it to scene coordinates
-	float xEnd, yEnd;
-	if (fillingPosition == XYCurve::FillingAbove)
-		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax())).y();
-	else if (fillingPosition == XYCurve::FillingBelow)
-		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).y();
-	else if (fillingPosition == XYCurve::FillingZeroBaseline)
-		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
-	else if (fillingPosition == XYCurve::FillingLeft)
-		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).x();
-	else
-		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin())).x();
 
-	//create polygon(s)
-	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon
-	QPointF p1, p2;
+	//create polygon(s):
+	//1. Depending on the current zoom-level, only a subset of the curve may be visible in the plot
+	//and more of the filling area should be shown than the area defined by the start and end points of the currently visible points.
+	//We check first whether the curve crosses the boundaries of the plot and determine new start and end points and put them to the boundaries.
+	//2. Furthermore, depending on the current filling type we determine the end point (x- or y-coordinate) where all polygons are closed at the end.
 	QPolygonF pol;
+	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon, initialize with the first visible point
+	QPointF end = fillLines.at(fillLines.size()-1).p2(); //starting point of the current polygon, initialize with the last visible point
+	const QPointF& first = symbolPointsLogical.at(0); //first point of the curve, may not be visible currently
+	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//first point of the curve, may not be visible currently
+	QPointF edge;
+	float xEnd, yEnd;
+	if (fillingPosition == XYCurve::FillingAbove) {
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+			if (first.x() < plot->xMin())
+				start = edge;
+			else if (first.x() > plot->xMax())
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+			else
+				start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMin()));
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+			if (last.x() < plot->xMin())
+				end = edge;
+			else if (last.x() > plot->xMax())
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+			else
+				end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMin()));
+		}
+
+		//coordinate at which to close all polygons
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax())).y();
+	} else if (fillingPosition == XYCurve::FillingBelow) {
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+			if (first.x() < plot->xMin())
+				start = edge;
+			else if (first.x() > plot->xMax())
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else
+				start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMax()));
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+			if (last.x() < plot->xMin())
+				end = edge;
+			else if (last.x() > plot->xMax())
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else
+				end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMax()));
+		}
+
+		//coordinate at which to close all polygons
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).y();
+	} else if (fillingPosition == XYCurve::FillingZeroBaseline) {
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
+	}else if (fillingPosition == XYCurve::FillingLeft) {
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.x(), edge.x())) {
+			if (first.y() < plot->yMin())
+				start = edge;
+			else if (first.y() > plot->yMax())
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), first.y()));
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.x(), edge.x())) {
+			if (last.y() < plot->yMin())
+				end = edge;
+			else if (last.y() > plot->yMax())
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), last.y()));
+		}
+
+		//coordinate at which to close all polygons
+		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).x();
+	} else { //FillingRight
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.x(), edge.x())) {
+			if (first.y() < plot->yMin())
+				start = edge;
+			else if (first.y() > plot->yMax())
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+			else
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMin(), first.y()));
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.x(), edge.x())) {
+			if (last.y() < plot->yMin())
+				end = edge;
+			else if (last.y() > plot->yMax())
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+			else
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMin(), last.y()));
+		}
+
+		//coordinate at which to close all polygons
+		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin())).x();
+	}
+
+	if (start != fillLines.at(0).p1())
+		pol << start;
+
+	QPointF p1, p2;
 	for (int i=0; i<fillLines.size(); ++i) {
 		const QLineF& line = fillLines.at(i);
 		p1 = line.p1();
 		p2 = line.p2();
 		if (i!=0 && p1!=fillLines.at(i-1).p2()) {
 			//the first point of the current line is not equal to the last point of the previous line
-			//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
-			if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
-				pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
-				pol << QPointF(start.x(), yEnd);
+			//->check whether we have a break in between.
+			bool gap = false; //TODO
+			if (!gap) {
+				//-> we have no break in the curve -> connect the points by a horizontal/vertical line
+				pol << fillLines.at(i-1).p2() << p1;
 			} else {
-				pol << QPointF(xEnd, fillLines.at(i-1).p2().y());
-				pol << QPointF(xEnd, start.y());
+				//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
+				if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
+					pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
+					pol << QPointF(start.x(), yEnd);
+				} else {
+					pol << QPointF(xEnd, fillLines.at(i-1).p2().y());
+					pol << QPointF(xEnd, start.y());
+				}
+
+				fillPolygons << pol;
+				pol.clear();
+				start = p1;
 			}
-			fillPolygons << pol;
-			pol.clear();
-			start = p1;
 		}
 		pol << p1 << p2;
 	}
 
+	if (p2!=end)
+		pol << end;
+
 	//close the last polygon
 	if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
-		pol << QPointF(p2.x(), yEnd);
+		pol << QPointF(end.x(), yEnd);
 		pol << QPointF(start.x(), yEnd);
 	} else {
-		pol << QPointF(xEnd, p2.y());
+		pol << QPointF(xEnd, end.y());
 		pol << QPointF(xEnd, start.y());
 	}
 
