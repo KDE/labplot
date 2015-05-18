@@ -94,38 +94,38 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	//Frame for the "Add To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
-	QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
-	hLayout->addWidget( new QLabel(i18n("Spreadsheet/Matrix"),  frameAddTo) );
+	QGridLayout *grid = new QGridLayout(frameAddTo);
+	grid->addWidget( new QLabel(i18n("Spreadsheet/Matrix"),  frameAddTo),0,0 );
 
 	cbAddTo = new TreeViewComboBox(frameAddTo);
 	cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 	QList<const char *> list;
-	list<<"Folder"<<"Spreadsheet";
+	list<<"Folder"<<"Spreadsheet"<<"Matrix";
 	cbAddTo->setTopLevelClasses(list);
-	hLayout->addWidget( cbAddTo);
+	grid->addWidget(cbAddTo,0,1);
 	connect( cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)) );
 
 	list.clear();
-	list<<"Spreadsheet";
+	list<<"Spreadsheet"<<"Matrix";
 	cbAddTo->setSelectableClasses(list);
 
 	bNewSpreadsheet = new QPushButton(frameAddTo);
 	bNewSpreadsheet->setIcon(KIcon("insert-table"));
 	bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
-	hLayout->addWidget( bNewSpreadsheet);
+	grid->addWidget( bNewSpreadsheet,0,2);
 	connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
 
 	bNewMatrix = new QPushButton(frameAddTo);
 	bNewMatrix->setIcon(KIcon("insert-table"));
 	bNewMatrix->setToolTip(i18n("Add new matrix"));
-	hLayout->addWidget( bNewMatrix);
+	grid->addWidget( bNewMatrix,0,3);
 	connect( bNewMatrix, SIGNAL(clicked()), this, SLOT(newMatrix()));
 
-	hLayout->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
+	//grid->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
 
-	lPosition = new QLabel(i18n("Position"),  frameAddTo);
+	lPosition = new QLabel(i18n("Position"), frameAddTo);
 	lPosition->setEnabled(false);
-	hLayout->addWidget(lPosition);
+	grid->addWidget(lPosition,1,0);
 
 	cbPosition = new QComboBox(frameAddTo);
 	cbPosition->setEnabled(false);
@@ -135,8 +135,8 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
 	cbPosition->setCurrentIndex( conf.readEntry("Position", 0) );
 
-	cbPosition->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-	hLayout->addWidget( cbPosition);
+	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+	grid->addWidget(cbPosition,1,1);
 
 	vLayout->addWidget(frameAddTo);
 	cbAddTo->setModel(m_model.get());
