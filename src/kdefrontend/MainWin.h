@@ -134,6 +134,7 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
+	QMenu* m_newCantorWorksheetMenu;
 
 	//Docks
 	QStackedWidget* stackedWidget;
@@ -192,6 +193,7 @@ private slots:
 
 	void newFolder();
 	void newSpreadsheet();
+	void newCantorWorksheet(QAction* action);
 	void newSpreadsheetForImportFileDialog(const QString&);
 	void newWorksheet();
 	void newScript();

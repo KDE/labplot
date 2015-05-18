@@ -61,6 +61,7 @@
 #include <QFileDialog>
 #include <QElapsedTimer>
 #include <QDebug>
+#include <QHash>
 
 #include <KActionCollection>
 #include <KFileDialog>
@@ -71,6 +72,8 @@
 #include <KStatusBar>
 #include <KLocalizedString>
 #include <KFilterDev>
+
+#include <cantor/backend.h>
 
  /*!
     \class MainWin
@@ -137,7 +140,7 @@ void MainWin::initGUI(const QString& fileName){
     statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
     initActions();
     initMenus();
-    setupGUI();
+    setupGUI(Default, QLatin1String("LabPlot2ui.rc"));
     setWindowIcon(QIcon::fromTheme("LabPlot2"));
     setAttribute( Qt::WA_DeleteOnClose );
 
@@ -199,67 +202,68 @@ void MainWin::initActions() {
 
     // ******************** File-menu *******************************
     //add some standard actions
-    action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
-    action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
-    m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(KUrl)),actionCollection());
-    m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
-    m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
-    m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
-    m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
-    m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
-    KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+    KActionCollection* ac = actionCollection();;
+    action = KStandardAction::openNew(this, SLOT(newProject()),ac);
+    action = KStandardAction::open(this, SLOT(openProject()),ac);
+    m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(QUrl)),ac);
+    m_closeAction = KStandardAction::close(this, SLOT(closeProject()),ac);
+    m_saveAction = KStandardAction::save(this, SLOT(saveProject()),ac);
+    m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),ac);
+    m_printAction = KStandardAction::print(this, SLOT(print()),ac);
+    m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),ac);
+    KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, ac);
 
     //New Folder/Spreadsheet/Worksheet/Datasources
     m_newSpreadsheetAction = new QAction(QIcon::fromTheme("insert-table"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-    actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
+    ac->addAction("new_spreadsheet", m_newSpreadsheetAction);
     connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
 
 // 	m_newMatrixAction = new QAction(QIcon::fromTheme("insert-table"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-// 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
+// 	ac->addAction("new_matrix", m_newMatrixAction);
 // 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
     m_newWorksheetAction= new QAction(QIcon::fromTheme("archive-insert"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
-    actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
+    ac->addAction("new_worksheet", m_newWorksheetAction);
     connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
 
 // 	m_newScriptAction = new QAction(QIcon::fromTheme("insert-text"),i18n("Note/Script"),this);
-// 	actionCollection()->addAction("new_script", m_newScriptAction);
+// 	ac->addAction("new_script", m_newScriptAction);
 // 	connect(m_newScriptAction, SIGNAL(triggered()),SLOT(newScript()));
 
     m_newFolderAction = new QAction(QIcon::fromTheme("folder-new"),i18n("Folder"),this);
-    actionCollection()->addAction("new_folder", m_newFolderAction);
+    ac->addAction("new_folder", m_newFolderAction);
     connect(m_newFolderAction, SIGNAL(triggered()),SLOT(newFolder()));
 
     //"New file datasources"
     m_newFileDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("File Data Source"),this);
-    actionCollection()->addAction("new_file_datasource", m_newFileDataSourceAction);
+    ac->addAction("new_file_datasource", m_newFileDataSourceAction);
     connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
 
     //"New database datasources"
 // 	m_newSqlDataSourceAction = new QAction(QIcon::fromTheme("server-database"),i18n("SQL Data Source "),this);
-// 	actionCollection()->addAction("new_database_datasource", m_newSqlDataSourceAction);
+// 	ac->addAction("new_database_datasource", m_newSqlDataSourceAction);
 // 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
-    m_importAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import"), this);
-    m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
-    actionCollection()->addAction("import", m_importAction);
+    m_importAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import"), this);    
+    ac->addAction("import", m_importAction);
+    ac->setDefaultShortcut(m_importAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
     connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
 
     m_exportAction = new QAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this);
-    m_exportAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
-    actionCollection()->addAction("export", m_exportAction);
+    ac->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
+    ac->addAction("export", m_exportAction);
     connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
 
     // Edit
     //Undo/Redo-stuff
-    m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
-    m_redoAction = KStandardAction::redo(this, SLOT(redo()), actionCollection());
+    m_undoAction = KStandardAction::undo(this, SLOT(undo()), ac);
+    m_redoAction = KStandardAction::redo(this, SLOT(redo()), ac);
 
     m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History"),this);
-    actionCollection()->addAction("history", m_historyAction);
+    ac->addAction("history", m_historyAction);
     connect(m_historyAction, SIGNAL(triggered()),SLOT(historyDialog()));
 
     // Appearance
@@ -269,39 +273,39 @@ void MainWin::initActions() {
 
     //Windows
     action  = new QAction(i18n("Cl&ose"), this);
-    action->setShortcut(i18n("Ctrl+W"));
+    ac->setDefaultShortcut(action, Qt::CTRL+Qt::Key_W);
     action->setStatusTip(i18n("Close the active window"));
-    actionCollection()->addAction("close window", action);
+    ac->addAction("close window", action);
     connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
 
     action = new QAction(i18n("Close &All"), this);
     action->setStatusTip(i18n("Close all the windows"));
-    actionCollection()->addAction("close all windows", action);
+    ac->addAction("close all windows", action);
     connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeAllSubWindows()));
 
     m_tileWindows = new QAction(i18n("&Tile"), this);
     m_tileWindows->setStatusTip(i18n("Tile the windows"));
-    actionCollection()->addAction("tile windows", m_tileWindows);
+    ac->addAction("tile windows", m_tileWindows);
     connect(m_tileWindows, SIGNAL(triggered()), m_mdiArea, SLOT(tileSubWindows()));
 
     m_cascadeWindows = new QAction(i18n("&Cascade"), this);
     m_cascadeWindows->setStatusTip(i18n("Cascade the windows"));
-    actionCollection()->addAction("cascade windows", m_cascadeWindows);
+    ac->addAction("cascade windows", m_cascadeWindows);
     connect(m_cascadeWindows, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
 
     action = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
     action->setStatusTip(i18n("Move the focus to the next window"));
-    actionCollection()->addAction("next window", action);
+    ac->addAction("next window", action);
     connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
 
     action = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
     action->setStatusTip(i18n("Move the focus to the previous window"));
-    actionCollection()->addAction("previous window", action);
+    ac->addAction("previous window", action);
     connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
 
     //"Standard actions"
-    KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
-    KStandardAction::quit(this, SLOT(close()), actionCollection());
+    KStandardAction::preferences(this, SLOT(settingsDialog()), ac);
+    KStandardAction::quit(this, SLOT(close()), ac);
 
     //Actions for window visibility
     QActionGroup* windowVisibilityActions = new QActionGroup(this);
@@ -328,12 +332,12 @@ void MainWin::initActions() {
     m_toggleProjectExplorerDockAction = new QAction(QIcon::fromTheme("view-list-tree"), i18n("Project explorer"), docksActions);
     m_toggleProjectExplorerDockAction->setCheckable(true);
     m_toggleProjectExplorerDockAction->setChecked(true);
-    actionCollection()->addAction("toggle_project_explorer_dock", m_toggleProjectExplorerDockAction);
+    ac->addAction("toggle_project_explorer_dock", m_toggleProjectExplorerDockAction);
 
     m_togglePropertiesDockAction = new QAction(QIcon::fromTheme("view-list-details"), i18n("Properties explorer"), docksActions);
     m_togglePropertiesDockAction->setCheckable(true);
     m_togglePropertiesDockAction->setChecked(true);
-    actionCollection()->addAction("toggle_properties_explorer_dock", m_togglePropertiesDockAction);
+    ac->addAction("toggle_properties_explorer_dock", m_togglePropertiesDockAction);
 
     connect(docksActions, SIGNAL(triggered(QAction*)), this, SLOT(toggleDockWidget(QAction*)));
 }
@@ -347,6 +351,31 @@ void MainWin::initMenus(){
     m_newMenu->addAction(m_newWorksheetAction);
     m_newMenu->addSeparator();
     m_newMenu->addAction(m_newFileDataSourceAction);
+    m_newMenu->addSeparator();
+    
+    QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
+    
+    if(m_availableBackend.count() > 0) {
+	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
+	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
+	
+	foreach(QString backend_name, m_availableBackend) {
+	    QAction* backend = new QAction(backend_name,this);
+	    backend->setData(backend_name);
+	    m_newCantorWorksheetMenu->addAction(backend);
+	}
+	
+	connect(m_newCantorWorksheetMenu, SIGNAL(triggered(QAction*)), this, SLOT(newCantorWorksheet(QAction*)));
+	
+	m_newMenu->addMenu(m_newCantorWorksheetMenu);
+    } else {
+	int choice = KMessageBox::warningContinueCancel(this, i18n("No backend for Cantor is installed."), i18n("Warning"));
+	switch(choice) {
+	    case KMessageBox::Cancel:
+		close();
+		break;
+	}
+    }
 // 	m_newMenu->addAction(m_newSqlDataSourceAction);
 
     //menu subwindow visibility policy
@@ -355,6 +384,13 @@ void MainWin::initMenus(){
     m_visibilityMenu ->addAction(m_visibilityFolderAction);
     m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
     m_visibilityMenu ->addAction(m_visibilityAllAction);
+}
+
+/*!
+    adds a new Cantor Spreadsheet to the project.
+*/
+void MainWin::newCantorWorksheet(QAction* action) {
+    KMessageBox::information(this, "Action " + action->data().toString() + " is selected.", "Information");
 }
 
 /*!

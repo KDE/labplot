@@ -68,7 +68,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	//Tab "Filling"
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleFillingFileName->setClearButtonShown(true);
-	ui.bFillingOpen->setIcon( KIcon("document-open") );
+	ui.bFillingOpen->setIcon( QIcon("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleFillingFileName->setCompletionObject(comp);

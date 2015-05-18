@@ -45,6 +45,11 @@ FIND_LIBRARY (GSL_CBLAS_LIBRARIES gslcblas
 	/usr/lib
 	/usr/local/lib
 )
+FIND_LIBRARY (CANTOR_LIBS cantorlibs
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
 FIND_PATH (GSL_INCLUDE_DIR gsl_multimin.h
 	/usr/include/gsl
 	/usr/local/include/gsl
@@ -53,6 +58,13 @@ FIND_PROGRAM (GSL_CONFIG gsl-config
 	/usr/bin
 	/usr/local/bin
 )
+
+IF(CANTOR_LIBS) 
+	MESSAGE (STATUS "Found CANTOR LIBS Library")
+ELSE (GSL_FOUND)
+	MESSAGE (FATAL_ERROR "cantorlibs Library not found.")
+ENDIF (CANTOR_LIBS)
+
 IF (GSL_CONFIG)
 	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)
 	SET (GSL_VERSION ${gsl_version} CACHE STRING "GNU Scientific Library Version")
