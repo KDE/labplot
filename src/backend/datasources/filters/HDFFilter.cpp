@@ -639,7 +639,6 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	int columnOffset = 0;
 
 	Spreadsheet* spreadsheet=0;
-	Matrix* matrix=0;
 	if (dataSource != NULL) {
 		if(dataSource->inherits("Spreadsheet")) {
 			columnOffset = dataSource->resize(mode,QStringList(),actualCols);
@@ -661,7 +660,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 				dataPointers.push_back(vector);
 			}
 		} else if (dataSource->inherits("Matrix")) {
-			matrix = dynamic_cast<Matrix*>(dataSource);
+			Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
 			// resize the matrix
 			if (mode==AbstractFileFilter::Replace) {
 				matrix->clear();

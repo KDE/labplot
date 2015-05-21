@@ -250,8 +250,6 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		}
 	}
 
-	//make sure we have enough columns in the data source.
-	int columnOffset = dataSource->resize(mode,QStringList(),vectors);
 
 	// set range of rows
 	int actualRows;
@@ -268,23 +266,51 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 	qDebug()<<"	actualRows ="<<actualRows;
 #endif
 
-	// resize the spreadsheet
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-	if (mode==AbstractFileFilter::Replace) {
-		spreadsheet->clear();
-		spreadsheet->setRowCount(actualRows);
-	}else{
-		if (spreadsheet->rowCount() < actualRows)
-			spreadsheet->setRowCount(actualRows);
-	}
-
 	// pointers to the actual data containers
 	QVector<QVector<double>*> dataPointers;
-	for ( int n=0; n<vectors; n++ ){
-		QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
-		vector->reserve(actualRows);
-		vector->resize(actualRows);
-		dataPointers.push_back(vector);
+	int columnOffset = 0;
+
+	Spreadsheet* spreadsheet=0;
+	if(dataSource->inherits("Spreadsheet")) {
+		//make sure we have enough columns in the data source.
+		columnOffset = dataSource->resize(mode,QStringList(),vectors);
+		spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+
+		// resize the spreadsheet
+		if (mode==AbstractFileFilter::Replace) {
+			spreadsheet->clear();
+			spreadsheet->setRowCount(actualRows);
+		}else{
+			if (spreadsheet->rowCount() < actualRows)
+				spreadsheet->setRowCount(actualRows);
+		}
+
+		for ( int n=0; n<vectors; n++ ){
+			QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataPointers.push_back(vector);
+		}
+	} else if(dataSource->inherits("Matrix")) {
+		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+		// resize the matrix
+		if (mode==AbstractFileFilter::Replace) {
+			matrix->clear();
+			matrix->setDimensions(actualRows,vectors);
+		}else{
+			if (matrix->rowCount() < actualRows)
+				matrix->setDimensions(actualRows,vectors);
+			else
+				matrix->setDimensions(matrix->rowCount(),vectors);
+		}
+
+		QVector<QVector<double> >& matrixColumns = matrix->data();
+		for ( int n=0; n<vectors; n++ ){
+			QVector<double>* vector = &matrixColumns[n];
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataPointers.push_back(vector);
+		}
 	}
 
 	//qDebug()<<" data format = "<<BinaryFilter::dataTypes()[dataType];
@@ -357,18 +383,20 @@ void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		}
 	}
 
-	QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-	for ( int n=0; n<vectors; n++ ){
-		Column* column = spreadsheet->column(columnOffset+n);
-		column->setComment(comment);
-		column->setUndoAware(true);
-		if (mode==AbstractFileFilter::Replace) {
-			column->setSuppressDataChangedSignal(false);
-			column->setChanged();
+	if (dataSource->inherits("Spreadsheet")) {
+		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
+		for ( int n=0; n<vectors; n++ ){
+			Column* column = spreadsheet->column(columnOffset+n);
+			column->setComment(comment);
+			column->setUndoAware(true);
+			if (mode==AbstractFileFilter::Replace) {
+				column->setSuppressDataChangedSignal(false);
+				column->setChanged();
+			}
 		}
-	}
 
-	spreadsheet->setUndoAware(true);
+		spreadsheet->setUndoAware(true);
+	}
 }
 
 /*!
