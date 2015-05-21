@@ -37,12 +37,12 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <KLocale>
 #include <KIcon>
 
- /*!
+/*!
 	\class HDFFilter
 	\brief Manages the import/export of data from/to a HDF file.
 
 	\ingroup datasources
- */
+*/
 HDFFilter::HDFFilter():AbstractFileFilter(), d(new HDFFilterPrivate(this)){
 
 }
@@ -636,36 +636,68 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 #endif
 
 	QVector<QVector<double>*> dataPointers;
+	//TODO: for testing
+	QVector<double> *data = NULL;
 	int columnOffset = 0;
-	if(dataSource->inherits("Spreadsheet"))
-		qDebug()<<"	import HDF data set into Spreadsheet";
-	else if (dataSource->inherits("Matrix")) {
-		qDebug()<<"	import HDF data set into Matrix (not implemented yet)";
+
+	Spreadsheet* spreadsheet=0;
+	Matrix* matrix=0;
+	if (dataSource != NULL) {
+		if(dataSource->inherits("Spreadsheet")) {
+			columnOffset = dataSource->resize(mode,QStringList(),actualCols);
+			//qDebug()<<"column offset"<<columnOffset;
+		
+			// resize the spreadsheet
+			spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+			if (mode==AbstractFileFilter::Replace) {
+				spreadsheet->clear();
+				spreadsheet->setRowCount(actualRows);
+			}else{
+				if (spreadsheet->rowCount() < actualRows)
+					spreadsheet->setRowCount(actualRows);
+			}
+			for (int n=0; n<actualCols; n++ ){
+				QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
+				vector->reserve(actualRows);
+				vector->resize(actualRows);
+				dataPointers.push_back(vector);
+			}
+		} else if (dataSource->inherits("Matrix")) {
+			qDebug()<<"	import HDF data set into Matrix";
+
+			matrix = dynamic_cast<Matrix*>(dataSource);
+			if (mode==AbstractFileFilter::Replace) {
+				matrix->clear();
+				matrix->setDimensions(actualRows,actualCols);
+			}else{
+				if (matrix->rowCount() < actualRows)
+					matrix->setDimensions(actualRows,actualCols);
+				else
+					matrix->setDimensions(matrix->rowCount(),actualCols);
+			}
+			// TODO: for testing
+			// matrix->data()	QVector< QVector<double> > 
+			//QVector<double> *data = static_cast<QVector<double>* > (matrix->data().data());
+			data = matrix->data().data();
+			// data[j] - j-th column
+			/*for(int i=0;i<actualRows;i++) {
+				for(int j=0;j<actualCols;j++) {
+					//data[j][i]=i+j;
+				}
+			}*/
+
+			//QVector< QVector<double> > m = matrix->data();
+			/*for (int n=0; n<actualCols; n++ ){
+				//QVector<double> vector = matrix->data()[n];
+				//qDebug()<<vector;
+				//dataPointers.push_back(&vector);
+
+				//dataPointers.push_back(&(data[n]));
+				//dataPointers.push_back(&(matrix->data()[n]));
+			}*/
+                }
 	}
 
-	//TODO: implement datasource == Matrix
-	Spreadsheet* spreadsheet=0;
-	if (dataSource != NULL) {
-		columnOffset = dataSource->resize(mode,QStringList(),actualCols);
-		qDebug()<<"column offset"<<columnOffset;
-		
-		// resize the spreadsheet
-		spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-		if (mode==AbstractFileFilter::Replace) {
-			spreadsheet->clear();
-			spreadsheet->setRowCount(actualRows);
-		}else{
-			if (spreadsheet->rowCount() < actualRows)
-				spreadsheet->setRowCount(actualRows);
-		}
-		for (int n=0; n<actualCols; n++ ){
-			QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
-			vector->reserve(actualRows);
-			vector->resize(actualRows);
-			dataPointers.push_back(vector);
-		}
-	}
-	
 	// read data
 	if (dclass == H5T_INTEGER) {
 		int** data_out = (int**) malloc(rows*sizeof(int*));
@@ -676,8 +708,14 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
 			for (int j=startColumn-1; j < endColumn; j++) {
 				if (dataSource != NULL) {
-					dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
-				}else {
+					if(dataSource->inherits("Spreadsheet")) {
+						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
+					/*} else if(dataSource->inherits("Matrix")) {
+						qDebug()<<"	INTEGER MATRIX";
+						qDebug()<<j-startColumn+1<<i-startRow+1;
+						data[j-startColumn+1][i-startRow+1] = data_out[i][j];
+					*/}
+				} else {
 					dataString<<QString::number(data_out[i][j])<<" ";
 				}
 			}
@@ -744,7 +782,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	H5Dclose(dataset);
 	H5Fclose(file);
 
-	if (dataSource != NULL) {
+	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 		for ( int n=0; n<actualCols; n++ ){
 			Column* column = spreadsheet->column(columnOffset+n);
@@ -755,7 +793,6 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 				column->setChanged();
 			}
 		}
-
 		spreadsheet->setUndoAware(true);
 	}
 

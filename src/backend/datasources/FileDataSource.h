@@ -30,6 +30,7 @@
 #define FILEDATASOURCE_H
 
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 #include <QString>
 
 class AbstractFileFilter;

@@ -208,12 +208,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	QTime timer;
 	timer.start();
 	if(aspect->inherits("Matrix")) {
-		qDebug()<<" import to Matrix";
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
 		filter->read(fileName, matrix, mode);
 	}
 	else if (aspect->inherits("Spreadsheet")) {
-		qDebug()<<" import to Spreadsheet";
 		Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
 		filter->read(fileName, sheet, mode);
 	}
