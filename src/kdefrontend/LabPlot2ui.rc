@@ -13,6 +13,7 @@
 <Action name="import" />
 <Action name="export" />
 <Action name="new_spreadsheet" />
+<Action name="new_matrix" />
 <Action name="new_worksheet" />
 
 </ToolBar>
@@ -53,6 +54,7 @@
 	<Action name="history" />
 </Menu>
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
+<!-- <Menu name="matrix"><text>&amp;Matrix</text></Menu> -->
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
 <!-- <Menu name="analysis"><text>&amp;Analysis</text></Menu> -->
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->

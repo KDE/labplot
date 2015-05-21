@@ -4,7 +4,7 @@
     Description          : Main window of the application
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -210,7 +210,7 @@ void MainWin::initActions() {
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
 	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 
-	//New Folder/Spreadsheet/Worksheet/Datasources
+	//New Folder/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
@@ -345,6 +345,7 @@ void MainWin::initMenus(){
 	m_newMenu->setIcon(KIcon("document-new"));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newSpreadsheetAction);
+	m_newMenu->addAction(m_newMatrixAction);
 	m_newMenu->addAction(m_newWorksheetAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
@@ -404,6 +405,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_importAction->setEnabled(!b);
 	m_exportAction->setEnabled(!b);
 	m_newSpreadsheetAction->setEnabled(!b);
+	m_newMatrixAction->setEnabled(!b);
 	m_newWorksheetAction->setEnabled(!b);
 	m_closeAction->setEnabled(!b);
 	m_toggleProjectExplorerDockAction->setEnabled(!b);
@@ -411,6 +413,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	factory->container("new", this)->setEnabled(!b);
 	factory->container("edit", this)->setEnabled(!b);
 	factory->container("spreadsheet", this)->setEnabled(!b);
+//TODO	factory->container("matrix", this)->setEnabled(!b);
 	factory->container("worksheet", this)->setEnabled(!b);
 // 		factory->container("analysis", this)->setEnabled(!b);
 //  	factory->container("script", this)->setEnabled(!b);
@@ -463,6 +466,8 @@ void MainWin::updateGUI() {
 		//disable spreadsheet related menus
 		factory->container("spreadsheet", this)->setEnabled(false);
 // 		factory->container("analysis", this)->setEnabled(false);
+
+//TODO:		//disable matrix related menus
 
 		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
@@ -848,6 +853,7 @@ void MainWin::print(){
 	QPrinter printer;
 
 	//determine first, whether we want to export a worksheet or a spreadsheet
+	// TODO: also handle matrix
 	Worksheet* w=this->activeWorksheet();
 	if (w!=0){ //worksheet
 		QPrintDialog *dialog = new QPrintDialog(&printer, this);
@@ -874,6 +880,7 @@ void MainWin::print(){
 }
 
 void MainWin::printPreview(){
+	//TODO: also handle matrix
 	Worksheet* w=this->activeWorksheet();
 	if (w!=0){ //worksheet
 		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
@@ -957,6 +964,8 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	Q_ASSERT(part);
 	return dynamic_cast<Spreadsheet*>(part);
 }
+
+//TODO: do we need a MainWin::activeMatrix() method?
 
 /*!
 	returns a pointer to a Worksheet-object, if the currently active Mdi-Subwindow is \a WorksheetView
@@ -1083,7 +1092,7 @@ void MainWin::setMdiWindowVisibility(QAction * action){
 }
 
 /*!
-	shows the sub window of a worksheet or a spreadsheet.
+	shows the sub window of a worksheet, matrix or a spreadsheet.
 	Used if the window was closed before and the user asks to show
 	the window again via the context menu in the project explorer.
 */
@@ -1281,7 +1290,7 @@ void MainWin::historyDialog(){
 }
 
 /*!
-  Opens the dialog to import data to the selected spreadsheet
+  Opens the dialog to import data to the selected spreadsheet or matrix
 */
 void MainWin::importFileDialog(){
 	m_importFileDialog = new ImportFileDialog(this);
@@ -1308,6 +1317,7 @@ void MainWin::importFileDialog(){
 
 /*!
 	opens the dialog for the export of the currently active worksheet/spreadsheet.
+	TODO: handle matrix
  */
 void MainWin::exportDialog(){
 	//determine first, whether we want to export a worksheet or a spreadsheet
