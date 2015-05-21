@@ -47,7 +47,7 @@ class Matrix : public AbstractDataSource {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-		QVector<QVector<double> > data() const;
+		QVector<QVector<double> >& data() const;
 
 		int defaultRowHeight() const;
 		int defaultColumnWidth() const;

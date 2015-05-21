@@ -636,8 +636,6 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 #endif
 
 	QVector<QVector<double>*> dataPointers;
-	//TODO: for testing
-	QVector<double> *data = NULL;
 	int columnOffset = 0;
 
 	Spreadsheet* spreadsheet=0;
@@ -663,9 +661,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 				dataPointers.push_back(vector);
 			}
 		} else if (dataSource->inherits("Matrix")) {
-			qDebug()<<"	import HDF data set into Matrix";
-
 			matrix = dynamic_cast<Matrix*>(dataSource);
+			// resize the matrix
 			if (mode==AbstractFileFilter::Replace) {
 				matrix->clear();
 				matrix->setDimensions(actualRows,actualCols);
@@ -675,26 +672,14 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 				else
 					matrix->setDimensions(matrix->rowCount(),actualCols);
 			}
-			// TODO: for testing
-			// matrix->data()	QVector< QVector<double> > 
-			//QVector<double> *data = static_cast<QVector<double>* > (matrix->data().data());
-			data = matrix->data().data();
-			// data[j] - j-th column
-			/*for(int i=0;i<actualRows;i++) {
-				for(int j=0;j<actualCols;j++) {
-					//data[j][i]=i+j;
-				}
-			}*/
 
-			//QVector< QVector<double> > m = matrix->data();
-			/*for (int n=0; n<actualCols; n++ ){
-				//QVector<double> vector = matrix->data()[n];
-				//qDebug()<<vector;
-				//dataPointers.push_back(&vector);
-
-				//dataPointers.push_back(&(data[n]));
-				//dataPointers.push_back(&(matrix->data()[n]));
-			}*/
+			QVector<QVector<double> >& matrixColumns = matrix->data();
+			for ( int n=0; n<actualCols; n++ ){
+				QVector<double>* vector = &matrixColumns[n];
+				vector->reserve(actualRows);
+				vector->resize(actualRows);
+				dataPointers.push_back(vector);
+			}
                 }
 	}
 
@@ -708,13 +693,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
 			for (int j=startColumn-1; j < endColumn; j++) {
 				if (dataSource != NULL) {
-					if(dataSource->inherits("Spreadsheet")) {
-						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
-					/*} else if(dataSource->inherits("Matrix")) {
-						qDebug()<<"	INTEGER MATRIX";
-						qDebug()<<j-startColumn+1<<i-startRow+1;
-						data[j-startColumn+1][i-startRow+1] = data_out[i][j];
-					*/}
+					dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
 				} else {
 					dataString<<QString::number(data_out[i][j])<<" ";
 				}

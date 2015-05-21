@@ -106,7 +106,7 @@ QWidget* Matrix::view() const {
 	return m_view;
 }
 
-QVector<QVector<double> > Matrix::data() const {
+QVector<QVector<double> >& Matrix::data() const {
 	return d->matrixData;
 }
 
