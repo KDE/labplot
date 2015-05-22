@@ -45,6 +45,7 @@ class AxisDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
 class ColumnDock;
+class MatrixDock;
 class ProjectDock;
 class SpreadsheetDock;
 class XYCurveDock;
@@ -140,6 +141,7 @@ private:
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
+	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;
 	XYCurveDock* xyCurveDock;

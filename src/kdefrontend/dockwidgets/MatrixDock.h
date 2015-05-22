@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : SpreadsheetDock.h
+    File                 : MatrixDock.h
     Project              : LabPlot
-    Description          : widget for spreadsheet properties
+    Description          : widget for matrix properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,41 +26,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SPREADSHEETDOCK_H
-#define SPREADSHEETDOCK_H
+#ifndef MATRIXDOCK_H
+#define MATRIXDOCK_H
 
 #include <QtGui/QWidget>
-#include "ui_spreadsheetdock.h"
+#include "ui_matrixdock.h"
 
-class Spreadsheet;
+class Matrix;
 class AbstractAspect;
 
-class SpreadsheetDock: public QWidget {
+class MatrixDock: public QWidget {
 	Q_OBJECT
 
 public:
-	explicit SpreadsheetDock(QWidget*);
-	void setSpreadsheets(QList<Spreadsheet*>);
+	explicit MatrixDock(QWidget*);
+	void setMatrices(QList<Matrix*>);
 
 private:
-	Ui::SpreadsheetDock ui;
-	QList<Spreadsheet*> m_spreadsheetList;
-	Spreadsheet* m_spreadsheet;
+	Ui::MatrixDock ui;
+	QList<Matrix*> m_matrixList;
+	Matrix* m_matrix;
 	bool m_initializing;
 
 private slots:
-	//SLOTs for changes triggered in SpreadsheetDock
+	//SLOTs for changes triggered in MatrixDock
 	void nameChanged();
 	void commentChanged();
 	void rowCountChanged(int);
 	void columnCountChanged(int);
-	void commentsShownChanged(int);
 
-	//SLOTs for changes triggered in Spreadsheet
-	void spreadsheetDescriptionChanged(const AbstractAspect*);
-	void spreadsheetRowCountChanged(int);
-	void spreadsheetColumnCountChanged(int);
-	void spreadsheetShowCommentsChanged(int);
+	//SLOTs for changes triggered in Matrix
+	void matrixDescriptionChanged(const AbstractAspect*);
+	void matrixRowCountChanged(int);
+	void matrixColumnCountChanged(int);
 
 	void loadConfigFromTemplate(KConfig&);
 	void loadConfig(KConfig&);
@@ -71,4 +68,4 @@ signals:
 	void info(const QString&);
 };
 
-#endif // SPREADSHEETDOCK_H
+#endif // MATRIXDOCK_H

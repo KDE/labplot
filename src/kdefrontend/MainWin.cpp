@@ -99,6 +99,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	cartesianPlotDock(0),
 	cartesianPlotLegendDock(0),
 	columnDock(0),
+	matrixDock(0),
 	spreadsheetDock(0),
 	projectDock(0),
 	xyCurveDock(0),
@@ -933,7 +934,7 @@ void MainWin::newMatrixForImportFileDialog(const QString& name){
 	if (!m_importFileDialog)
 		return;
 
-	Matrix* matrix = new Matrix(0,10,10, name);
+	Matrix* matrix = new Matrix(0, name);
 	this->addAspectToProject(matrix);
 
 	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
@@ -1105,7 +1106,7 @@ void MainWin::newScript(){
 }
 
 void MainWin::newMatrix(){
-	Matrix* matrix = new Matrix(0, 10, 10, i18n("Matrix"));
+	Matrix* matrix = new Matrix(0, i18n("Matrix"));
 	this->addAspectToProject(matrix);
 }
 

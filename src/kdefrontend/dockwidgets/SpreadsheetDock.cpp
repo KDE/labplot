@@ -40,9 +40,8 @@
   \ingroup kdefrontend
 */
 
-SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent) {
+SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_initializing(false) {
 	ui.setupUi(this);
-	m_initializing = false;
 
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
@@ -51,7 +50,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent) {
 	connect(ui.cbShowComments, SIGNAL(stateChanged(int)), this, SLOT(commentsShownChanged(int)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
-	ui.gridLayout->addWidget(templateHandler, 6, 0, 1, 3);
+	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 3);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
