@@ -561,8 +561,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	if(currentDataSet.isEmpty())
 		return QString("No data set selected");
 #ifdef QT_DEBUG
-	else
-		qDebug()<<" current data set ="<<currentDataSet;
+	qDebug()<<" current data set ="<<currentDataSet;
 #endif
 
 	QByteArray bafileName = fileName.toLatin1();
@@ -577,32 +576,40 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 	hid_t dataspace = H5Dget_space(dataset);
 	int rank = H5Sget_simple_extent_ndims(dataspace);
-	if( rank > 2) {
-		dataString<<"rank = "<<QString::number(rank)<<" not supported";
-		qDebug()<<dataString.join("");
-		H5Sclose(dataspace);
-		H5Tclose(datatype);
-		H5Dclose(dataset);
-		H5Fclose(file);
-		return dataString.join("");
-	}
-	else if (rank == 1) {
-		hsize_t dims_out;
-    		H5Sget_simple_extent_dims(dataspace, &dims_out, NULL);
-		int items = dims_out;
-		H5T_order_t order = H5Tget_order(datatype);
-		qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<items<<"items";
-		if (dclass == H5T_STRING) {
-			//TODO
-			dataString<<"not implemented yet";
-			//char *string = (char *) malloc ((typeSize+1) * items * sizeof (char));
-	  		//H5Dread(dataset, H5T_C_S1, H5S_ALL, H5S_ALL, H5P_DEFAULT, string);
-			//dataString<<string;
-			//qDebug()<<dataString.join("");
-			//free(string);
+
+	if (rank != 2) {
+		if( rank > 2 || rank == 0) {
+			dataString<<"rank = "<<QString::number(rank)<<" not supported";
+			qDebug()<<dataString.join("");
 		}
-		else {
-			dataString<<"rank = 1 not supported for type "<<translateHDFClass(dclass);
+		else if (rank == 1) {
+			hsize_t size, maxSize;
+			H5Sget_simple_extent_dims(dataspace, &size, &maxSize);
+#ifdef QT_DEBUG
+			H5T_order_t order = H5Tget_order(datatype);
+			qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<", size:"<<size<<" max:"<<maxSize;
+#endif
+			if (dclass == H5T_STRING) {
+				char** data = (char **) malloc(size * sizeof (char *));
+				data[0] = (char *) malloc(size * typeSize * sizeof (char));
+				for (unsigned int i=1; i<size; i++)
+					data[i] = data[0] + i * typeSize;
+
+				hid_t memtype = H5Tcopy(H5T_C_S1);
+				H5Tset_size(memtype, typeSize);
+				
+				H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
+
+				for (unsigned int i=0; i<size; i++)
+					dataString<<data[i]<<"\n";
+				//qDebug()<<dataString;
+				
+				free(data[0]);
+				free(data);
+			} else {
+				dataString<<"rank = 1 not supported for type "<<translateHDFClass(dclass);
+				qDebug()<<dataString.join("");
+			}
 		}
 		H5Sclose(dataspace);
 		H5Tclose(datatype);
