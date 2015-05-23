@@ -840,11 +840,6 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
     Uses the settings defined in the data source.
 */
 void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-	Q_UNUSED(dataSource)
-	Q_UNUSED(mode)
-#ifdef QT_DEBUG
-	qDebug()<<"HDFFilterPrivate::read()";
-#endif	
 	
 	if(currentDataSet.isEmpty()) {
 		qDebug()<<" No data set selected";

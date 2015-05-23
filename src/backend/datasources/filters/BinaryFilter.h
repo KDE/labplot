@@ -47,6 +47,7 @@ class BinaryFilter : public AbstractFileFilter{
 	static long rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataType type);
 
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
+	QString readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
 
 	void loadFilterSettings(const QString&);

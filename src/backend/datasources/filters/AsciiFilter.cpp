@@ -381,48 +381,8 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	//pointers to the actual data containers
 	QVector<QVector<double>*> dataPointers;
 
-	Spreadsheet* spreadsheet = NULL;
-	if(dataSource->inherits("Spreadsheet")) {
-		columnOffset = dataSource->resize(mode, vectorNameList, actualCols);
-		//qDebug()<<"	column offset ="<<columnOffset;
-
-		//resize the spreadsheet
-		spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-		if (mode==AbstractFileFilter::Replace){
-			spreadsheet->clear();
-			spreadsheet->setRowCount(actualRows);
-		}else{
-			if (spreadsheet->rowCount()<actualRows)
-				spreadsheet->setRowCount(actualRows);
-		}
-
-		for ( int n=0; n<actualCols; n++ ){
-			QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
-			vector->reserve(actualRows);
-			vector->resize(actualRows);
-			dataPointers.push_back(vector);
-		}
-	} else if(dataSource->inherits("Matrix")) {
-		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-		// resize the matrix
-		if (mode==AbstractFileFilter::Replace) {
-			matrix->clear();
-			matrix->setDimensions(actualRows,actualCols);
-		}else{
-			if (matrix->rowCount() < actualRows)
-				matrix->setDimensions(actualRows,actualCols);
-			else
-				matrix->setDimensions(matrix->rowCount(),actualCols);
-		}
-
-		QVector<QVector<double> >& matrixColumns = matrix->data();
-		for ( int n=0; n<actualCols; n++ ){
-			QVector<double>* vector = &matrixColumns[n];
-			vector->reserve(actualRows);
-			vector->resize(actualRows);
-			dataPointers.push_back(vector);
-		}
-	}
+	if(dataSource != NULL)
+		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
 
 	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
 	if (!headerEnabled){
@@ -472,7 +432,8 @@ void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	//set the comments for each of the columns
-	if (dataSource->inherits("Spreadsheet")) {
+	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
+		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 		//TODO: generalize to different data types
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", headerEnabled ? currentRow : currentRow+1);
 		for ( int n=startColumn; n<=endColumn; n++ ){
