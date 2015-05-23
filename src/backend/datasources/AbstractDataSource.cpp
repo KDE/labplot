@@ -27,6 +27,8 @@ Copyright		: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 #include "AbstractDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 
 /*!
 \class AbstractDataSource
@@ -115,6 +117,53 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
                                 child<Column>(i)->setSuppressDataChangedSignal(true);
                         }
                 }
+	}
+
+	return columnOffset;
+}
+
+int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode, int actualRows, int actualCols) {
+	int columnOffset = 0;
+
+	if(this->inherits("Spreadsheet")) {
+		columnOffset = this->resize(mode,QStringList(),actualCols);
+		//qDebug()<<"column offset"<<columnOffset;
+
+		// resize the spreadsheet
+		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(this);
+		if (mode==AbstractFileFilter::Replace) {
+			spreadsheet->clear();
+			spreadsheet->setRowCount(actualRows);
+		}else{
+			if (spreadsheet->rowCount() < actualRows)
+				spreadsheet->setRowCount(actualRows);
+		}
+		for (int n=0; n<actualCols; n++ ){
+			QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataPointers.push_back(vector);
+		}
+	} else if (this->inherits("Matrix")) {
+		Matrix* matrix = dynamic_cast<Matrix*>(this);
+		// resize the matrix
+		if (mode==AbstractFileFilter::Replace) {
+			matrix->clear();
+			matrix->setDimensions(actualRows,actualCols);
+		}else{
+			if (matrix->rowCount() < actualRows)
+				matrix->setDimensions(actualRows,actualCols);
+			else
+				matrix->setDimensions(matrix->rowCount(),actualCols);
+		}
+
+		QVector<QVector<double> >& matrixColumns = matrix->data();
+		for ( int n=0; n<actualCols; n++ ){
+			QVector<double>* vector = &matrixColumns[n];
+			vector->reserve(actualRows);
+			vector->resize(actualRows);
+			dataPointers.push_back(vector);
+		}
 	}
 
 	return columnOffset;

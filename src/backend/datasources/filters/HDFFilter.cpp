@@ -577,10 +577,10 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	hid_t dataspace = H5Dget_space(dataset);
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 
-	Spreadsheet* spreadsheet=0;
-	int columnOffset = 0;	// offset to first column
+	int columnOffset = 0;	// offset to import data
 	int actualRows=0, actualCols=0;	// rows and cols to read
 
+	QVector<QVector<double>*> dataPointers;
 	switch(rank) {
 	case 0: {
 		actualRows=1;
@@ -594,6 +594,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 			H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 			dataString<<data<<"\n";
+			free(data);
 			break;
 		}
 		//TODO: other types
@@ -619,6 +620,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		H5T_order_t order = H5Tget_order(datatype);
 		qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<", rows:"<<rows<<" max:"<<maxSize;
 #endif
+		if(dataSource != NULL)
+			columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+
 		switch(dclass) {
 		case H5T_STRING: {
 			char** data = (char **) malloc(rows * sizeof (char *));
@@ -638,7 +642,54 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			free(data);
 			break;
 		}
-		//TODO: other types
+		case H5T_INTEGER: {
+			int* data_out = (int*) malloc(rows*sizeof(int*));
+
+			H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
+			for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+				if (dataSource != NULL) {
+					dataPointers[0]->operator[](i-startRow+1) = data_out[i];
+				} else {
+					dataString<<QString::number(data_out[i])<<" ";
+				}
+				dataString<<"\n";
+			}
+
+			free(data_out);
+			break;
+		}
+		case H5T_FLOAT: {
+			if(typeSize == 4) {
+				float* data_out = (float*) malloc(rows*sizeof(float*));
+
+				H5Dread(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					if (dataSource != NULL) {
+						dataPointers[0]->operator[](i-startRow+1) = data_out[i];
+					} else {
+						dataString<<QString::number(data_out[i])<<" ";
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out);
+			} else if (typeSize == 8) {
+				double* data_out = (double*) malloc(rows*sizeof(double*));
+
+				H5Dread(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					if (dataSource != NULL) {
+						dataPointers[0]->operator[](i-startRow+1) = data_out[i];
+					} else {
+						dataString<<QString::number(data_out[i])<<" ";
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out);
+			}
+			break;
+		}
 		default:
 			dataString<<"rank = 1 not implemented yet for type "<<translateHDFClass(dclass);
 			qDebug()<<dataString.join("");
@@ -670,53 +721,12 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		qDebug()<<"lines"<<lines;
 #endif
 
-		QVector<QVector<double>*> dataPointers;
-
-		if (dataSource != NULL) {
-			if(dataSource->inherits("Spreadsheet")) {
-				columnOffset = dataSource->resize(mode,QStringList(),actualCols);
-				//qDebug()<<"column offset"<<columnOffset;
-		
-				// resize the spreadsheet
-				spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-				if (mode==AbstractFileFilter::Replace) {
-					spreadsheet->clear();
-					spreadsheet->setRowCount(actualRows);
-				}else{
-					if (spreadsheet->rowCount() < actualRows)
-						spreadsheet->setRowCount(actualRows);
-				}
-				for (int n=0; n<actualCols; n++ ){
-					QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
-					vector->reserve(actualRows);
-					vector->resize(actualRows);
-					dataPointers.push_back(vector);
-				}
-			} else if (dataSource->inherits("Matrix")) {
-				Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-				// resize the matrix
-				if (mode==AbstractFileFilter::Replace) {
-					matrix->clear();
-					matrix->setDimensions(actualRows,actualCols);
-				}else{
-					if (matrix->rowCount() < actualRows)
-						matrix->setDimensions(actualRows,actualCols);
-					else
-						matrix->setDimensions(matrix->rowCount(),actualCols);
-				}
-
-				QVector<QVector<double> >& matrixColumns = matrix->data();
-				for ( int n=0; n<actualCols; n++ ){
-					QVector<double>* vector = &matrixColumns[n];
-					vector->reserve(actualRows);
-					vector->resize(actualRows);
-					dataPointers.push_back(vector);
-				}
-			}
-		}
+		if(dataSource != NULL)
+			columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
 
 		// read data
-		if (dclass == H5T_INTEGER) {
+		switch(dclass) {
+		case H5T_INTEGER: {
 			int** data_out = (int**) malloc(rows*sizeof(int*));
 			data_out[0] = (int*)malloc( cols*rows*sizeof(int) );
 			for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
@@ -735,7 +745,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 			free(data_out[0]);
 			free(data_out);
-		} else if (dclass == H5T_FLOAT) {
+			break;
+		}
+		case H5T_FLOAT: {
 			if(typeSize == 4) {
 				float** data_out = (float**) malloc(rows*sizeof(float*));
 				data_out[0] = (float*)malloc( cols*rows*sizeof(float) );
@@ -778,14 +790,19 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 				dataString<<"data type size"<<QString::number(typeSize)<<"not supported";
 				qDebug()<<dataString.join(" ");
 			}
-		} else if (dclass == H5T_STRING) {
+			break;
+		}
+		case H5T_STRING: {
 			//TODO
 			dataString<<translateHDFClass(dclass)<<" not implemented yet";
 			dataString<<", size ="<<QString::number(typeSize);
 			qDebug()<<dataString.join("");
-		} else {
+			break;
+		}
+		default: {
 			dataString<<translateHDFClass(dclass)<<" data class not supported";
 			qDebug()<<dataString.join("");
+		}
 		}
 		break;
 	}
@@ -800,7 +817,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	H5Fclose(file);
 
 	// set column comments in spreadsheet
-	if (dataSource != NULL && spreadsheet != NULL) {
+	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
+		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
 		for ( int n=0; n<actualCols; n++ ){
 			Column* column = spreadsheet->column(columnOffset+n);

@@ -102,12 +102,12 @@ QWidget *FileDataSource::view() const{
 QStringList FileDataSource::fileTypes(){
 // see FileDataSource::FileType
 	return (QStringList()<< i18n("ASCII vector data")
-                         << i18n("ASCII matrix data")
-                         << i18n("BINARY vector data")
-                         << i18n("BINARY matrix data")
-                         << i18n("Image")
+		<< i18n("ASCII matrix data")
+		<< i18n("BINARY vector data")
+//		<< i18n("BINARY matrix data")
+		<< i18n("Image")
 //                         << i18n("Sound")
-                         << "HDF"
+		<< i18n("Hierarchical Data Format (HDF)")
 //                         << "NetCDF"
 //                         << "CDF"
 //                         << "FITS"
@@ -172,7 +172,7 @@ QIcon FileDataSource::icon() const{
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
   if (m_fileType == FileDataSource::AsciiVector || m_fileType == FileDataSource::AsciiMatrix)
 	  icon = KIcon("text-plain");
-  else if (m_fileType == FileDataSource::BinaryVector || m_fileType == FileDataSource::BinaryMatrix)
+  else if (m_fileType == FileDataSource::BinaryVector)
 	icon = KIcon("application-octet-stream");
   else if (m_fileType == FileDataSource::Image)
 	icon = KIcon("image-x-generic");

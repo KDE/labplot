@@ -82,8 +82,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
 	ui.swOptions->insertWidget(FileDataSource::BinaryVector, binaryw);
 
-	QWidget* binaryMatrixw=new QWidget(0);
-	ui.swOptions->insertWidget(FileDataSource::BinaryMatrix, binaryMatrixw);
+	//QWidget* binaryMatrixw=new QWidget(0);
+	//ui.swOptions->insertWidget(FileDataSource::BinaryMatrix, binaryMatrixw);
 
 	QWidget* imagew=new QWidget(0);
 	imageOptionsWidget.setupUi(imagew);
@@ -95,20 +95,15 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	QStringList headers;
 	headers<<i18n("Name")<<i18n("Link")<<i18n("Type")<<i18n("Properties")<<i18n("Attributes");
 	hdfOptionsWidget.twContent->setHeaderLabels(headers);
-	// link and type column is filled but we dont need to show it
-	//hdfOptionsWidget.twContent->resizeColumnToContents(1);
-	//hdfOptionsWidget.twContent->resizeColumnToContents(2);
+	// link and type column are filled but we don't need to show it
 	hdfOptionsWidget.twContent->hideColumn(1);
 	hdfOptionsWidget.twContent->hideColumn(2);
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
-
-	//TODO: add widgets for other file types
 
 	// default filter
 	ui.swOptions->setCurrentIndex(FileDataSource::AsciiVector);
 	// disabled for the moment
 	ui.cbFileType->setItemData(FileDataSource::AsciiMatrix, 0, Qt::UserRole - 1);
-	ui.cbFileType->setItemData(FileDataSource::BinaryMatrix, 0, Qt::UserRole - 1);
 	//ui.cbFileType->setItemData(FileDataSource::Image, 0, Qt::UserRole - 1);
 
 	ui.gbOptions->hide();
@@ -241,7 +236,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 	//qDebug()<<"	current filter ="<<ui.cbFilter->currentIndex();
 
-	if ( fileType==FileDataSource::AsciiVector ) {
+	switch(fileType) {
+	case FileDataSource::AsciiVector: {
 		 //TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
 	
@@ -268,7 +264,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 //		source->setFilter(filter);
-	} else if ( fileType==FileDataSource::AsciiMatrix ) {
+		break;
+	}
+	case FileDataSource::AsciiMatrix: {
 		AsciiMatrixFilter* filter = new AsciiMatrixFilter();
 		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
 			filter->setAutoModeEnabled(true);
@@ -276,7 +274,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 			filter->setAutoModeEnabled(false);
 		}
 		return filter;
-	} else if ( fileType==FileDataSource::BinaryVector ) {
+		break;
+	}
+	case FileDataSource::BinaryVector: {
 		BinaryFilter* filter = new BinaryFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 			filter->setAutoModeEnabled(true);
@@ -293,11 +293,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 //		source->setFilter(filter);
 		return filter;
-	} else if ( fileType==FileDataSource::BinaryMatrix ) {
-		//TODO
-		//BinaryMatrixFilter* filter = new BinaryMatrixFilter();
-		//return filter;
-	} else if ( fileType==FileDataSource::Image ) {
+		break;
+	}
+	case FileDataSource::Image: {
 		ImageFilter* filter = new ImageFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 			filter->setAutoModeEnabled(true);
@@ -313,7 +311,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		filter->setEndColumn( ui.sbEndColumn->value() );
 		
 		return filter;
-	} else if ( fileType==FileDataSource::HDF ) {
+		break;
+	}
+	case FileDataSource::HDF: {
 		HDFFilter* filter = new HDFFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 			filter->setAutoModeEnabled(true);
@@ -329,6 +329,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		filter->setEndColumn( ui.sbEndColumn->value() );
 
 		return filter;
+		break;
+	}
+	default: 
+		qDebug()<<"Unknown file type!";	
 	}
 
 	return 0;
@@ -479,21 +483,29 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
 
-	//FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-	if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
+	switch (fileType) {
+	case FileDataSource::AsciiVector:
+	case FileDataSource::AsciiMatrix: {
+		break;
 	}
-	else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
+	case FileDataSource::BinaryVector: {
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
 		ui.sbEndColumn->hide();
+		break;
 	}
-	else if (fileType == FileDataSource::HDF) {
+	case FileDataSource::HDF: {
+		break;
 	}	
-	else if (fileType == FileDataSource::Image) {
+	case FileDataSource::Image: {
 		ui.tePreview->hide();
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
+		break;
+	}
+	default:
+		qDebug()<<"unknown file type!";
 	}
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
@@ -581,7 +593,7 @@ void ImportFileWidget::refreshPreview(){
 				importedText += '\n';
 			}
 		}
-		else if (fileType == FileDataSource::BinaryVector || fileType == FileDataSource::BinaryMatrix) {
+		else if (fileType == FileDataSource::BinaryVector) {
 			QDataStream in(&file);
 
 			BinaryFilter::ByteOrder byteOrder = (BinaryFilter::ByteOrder) binaryOptionsWidget.cbByteOrder->currentIndex();
