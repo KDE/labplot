@@ -134,16 +134,8 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		}
 		addChild(folder);
 		loaded = true;
-	} else if (element_name == "column") {
-		Column* column = new Column("", AbstractColumn::Text);
-		if (!column->load(reader)) {
-			delete column;
-			return false;
-		}
-		addChild(column);
-		loaded = true;
 	} else if (element_name == "spreadsheet") {
-		Spreadsheet * spreadsheet = new Spreadsheet(0, "", true);
+		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
 		if (!spreadsheet->load(reader)) {
 			delete spreadsheet;
 			return false;
@@ -159,7 +151,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		addChild(matrix);
 		loaded = true;
 	} else if (element_name == "worksheet") {
-		Worksheet* worksheet = new Worksheet(0, "", true);
+		Worksheet* worksheet = new Worksheet(0, "");
 		if (!worksheet->load(reader)){
 			delete worksheet;
 			return false;
