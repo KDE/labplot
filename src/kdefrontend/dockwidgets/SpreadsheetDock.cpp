@@ -50,7 +50,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_initializi
 	connect(ui.cbShowComments, SIGNAL(stateChanged(int)), this, SLOT(commentsShownChanged(int)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Spreadsheet);
-	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 3);
+	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));

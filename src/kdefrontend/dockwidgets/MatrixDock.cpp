@@ -52,18 +52,25 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) 
 	ui.cbHeader->addItem(i18n("xy-Values"));
 	ui.cbHeader->addItem(i18n("Rows, Columns and xy-Values"));
 
+	ui.pbResize->setIcon(KIcon("transform-scale"));
+
+	//Validators
+	ui.kleXMin->setValidator( new QDoubleValidator(ui.kleXMin) );
+	ui.kleXMax->setValidator( new QDoubleValidator(ui.kleXMax) );
+	ui.kleYMin->setValidator( new QDoubleValidator(ui.kleYMin) );
+	ui.kleYMax->setValidator( new QDoubleValidator(ui.kleYMax) );
+
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
 	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
 	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
-// 	connect(ui.cbShowComments, SIGNAL(stateChanged(int)), this, SLOT(commentsShownChanged(int)));
 
-// 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Matrix);
-// 	ui.gridLayout->addWidget(templateHandler, 6, 0, 1, 3);
-// 	templateHandler->show();
-// 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-// 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-// 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Matrix);
+	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
+	templateHandler->show();
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
 /*!
@@ -81,7 +88,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list){
 		ui.leName->setText(m_matrix->name());
 		ui.leComment->setText(m_matrix->comment());
 	}else{
-		//disable the fields "Name" and "Comment" if there are >1 Matrixs
+		//disable the fields "Name" and "Comment" if there are more the one matrix
 		ui.leName->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
@@ -90,8 +97,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list){
 	}
 
 	//show the properties of the first Matrix in the list, if there are >1 matrixs
-	KConfig config("", KConfig::SimpleConfig);
-	loadConfig(config);
+	this->load();
 
 	// undo functions
 	connect(m_matrix, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
@@ -166,6 +172,21 @@ void MatrixDock::matrixColumnCountChanged(int count) {
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
+void MatrixDock::load() {
+	//format
+
+	//x-range
+	ui.kleXMin->setText(QString::number(m_matrix->xStart()));
+	ui.kleXMax->setText(QString::number(m_matrix->xEnd()));
+	ui.sbRowCount->setValue(m_matrix->rowCount());
+
+	//y-range
+	ui.kleYMin->setText(QString::number(m_matrix->yStart()));
+	ui.kleYMax->setText(QString::number(m_matrix->yEnd()));
+	ui.sbColumnCount->setValue(m_matrix->columnCount());
+
+}
+
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
@@ -192,14 +213,17 @@ void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 void MatrixDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Matrix" );
 
-	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
+	//x-range
 	ui.sbRowCount->setValue(group.readEntry("RowCount", m_matrix->rowCount()));
+
+	//y-range
+	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
 }
 
 /*!
 	saves matrix properties to \c config.
  */
-void MatrixDock::saveConfig(KConfig& config){
+void MatrixDock::saveConfigAsTemplate(KConfig& config){
 	KConfigGroup group = config.group( "Matrix" );
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 	group.writeEntry("RowCount", ui.sbRowCount->value());

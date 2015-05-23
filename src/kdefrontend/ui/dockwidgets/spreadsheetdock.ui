@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>282</width>
+    <width>280</width>
     <height>324</height>
    </rect>
   </property>
@@ -14,21 +14,37 @@
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="text">
-      <string>Name:</string>
+      <string>Name</string>
      </property>
     </widget>
    </item>
    <item row="0" column="2">
+    <spacer name="horizontalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>23</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="3">
     <widget class="KLineEdit" name="leName"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Comment:</string>
+      <string>Comment</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="1" column="3">
     <widget class="KLineEdit" name="leComment">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -67,14 +83,14 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item row="4" column="0">
     <widget class="QLabel" name="lRowCount">
      <property name="text">
-      <string>Number of rows:</string>
+      <string>Rows</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
+   <item row="4" column="3">
     <widget class="QSpinBox" name="sbRowCount">
      <property name="minimum">
       <number>0</number>
@@ -84,14 +100,14 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
+   <item row="5" column="0">
     <widget class="QLabel" name="lColumnCount">
      <property name="text">
-      <string>Number of columns:</string>
+      <string>Columns</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
+   <item row="5" column="3">
     <widget class="QSpinBox" name="sbColumnCount">
      <property name="minimum">
       <number>0</number>
@@ -137,7 +153,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="2">
+   <item row="8" column="3">
     <widget class="QCheckBox" name="cbShowComments">
      <property name="text">
       <string/>

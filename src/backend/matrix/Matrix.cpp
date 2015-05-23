@@ -40,6 +40,7 @@
 
 #include <KIcon>
 #include <KLocale>
+#include <KConfigGroup>
 
 /*!
 	This class manages matrix based data (i.e., mathematically
@@ -54,7 +55,7 @@
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
 	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_view(0) {
 
-	// set initial number of rows and columns
+	//set initial number of rows and columns
 	appendColumns(cols);
 	appendRows(rows);
 
@@ -76,11 +77,26 @@ Matrix::~Matrix() {
 }
 
 void Matrix::init() {
-	//TODO
-		// set initial number of rows and columns
-// 	appendColumns(cols);
-// 	appendRows(rows);
+	KConfig config;
+	KConfigGroup group = config.group("Matrix");
+
+	//format
+	//TODO: read from config
 	d->headerFormat = Matrix::HeaderRowsColumns;
+	d->numericFormat = 'f';
+	d->displayedDigits = 6;
+
+	//x-range
+	d->xStart = group.readEntry("xStart", 0.0);
+	d->xEnd = group.readEntry("xEnd", 1.0);
+	int rows = group.readEntry("rows", 10);
+	appendRows(rows);
+
+	//
+	d->yStart = group.readEntry("yStart", 0.0);
+	d->yEnd = group.readEntry("yEnd", 1.0);
+	int cols = group.readEntry("columns", 10);
+	appendColumns(cols);
 }
 
 /*!
@@ -436,12 +452,6 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
-	numericFormat = 'f';
-	displayedDigits = 6;
-	xStart = 0.0;
-	xEnd = 1.0;
-	yStart = 0.0;
-	yEnd = 1.0;
 }
 
 /*!
