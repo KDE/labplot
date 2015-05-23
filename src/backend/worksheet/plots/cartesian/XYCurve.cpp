@@ -57,7 +57,6 @@
 #include <QElapsedTimer>
 
 #include <KIcon>
-#include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
 

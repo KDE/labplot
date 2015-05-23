@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for spreadsheet properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -53,7 +53,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_initializi
 	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
@@ -72,7 +72,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 		ui.leName->setText(m_spreadsheet->name());
 		ui.leComment->setText(m_spreadsheet->comment());
 	}else{
-		//disable the fields "Name" and "Comment" if there are >1 Spreadsheets
+		//disable the fields "Name" and "Comment" if there are more then one spreadsheet
 		ui.leName->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
@@ -80,9 +80,8 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list){
 		ui.leComment->setText("");
   	}
 
-  	//show the properties of the first Spreadsheet in the list, if there are >1 spreadsheets
-	KConfig config("", KConfig::SimpleConfig);
-	loadConfig(config);
+	//show the properties of the first Spreadsheet in the list
+	this->load();
 
 	// undo functions
 	connect(m_spreadsheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
@@ -173,6 +172,14 @@ void SpreadsheetDock::spreadsheetShowCommentsChanged(int checked) {
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
+void SpreadsheetDock::load() {
+	ui.sbColumnCount->setValue(m_spreadsheet->columnCount());
+	ui.sbRowCount->setValue(m_spreadsheet->rowCount());
+
+	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
+	ui.cbShowComments->setChecked(view->areCommentsShown());
+}
+
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
@@ -199,17 +206,17 @@ void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 void SpreadsheetDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Spreadsheet" );
 
-  	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_spreadsheet->columnCount()));
-  	ui.sbRowCount->setValue(group.readEntry("RowCount", m_spreadsheet->rowCount()));
+	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_spreadsheet->columnCount()));
+	ui.sbRowCount->setValue(group.readEntry("RowCount", m_spreadsheet->rowCount()));
 
 	SpreadsheetView* view= qobject_cast<SpreadsheetView*>(m_spreadsheet->view());
-  	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
+	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
 }
 
 /*!
 	saves spreadsheet properties to \c config.
  */
-void SpreadsheetDock::saveConfig(KConfig& config){
+void SpreadsheetDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "Spreadsheet" );
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 	group.writeEntry("RowCount", ui.sbRowCount->value());

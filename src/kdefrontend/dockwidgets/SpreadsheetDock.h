@@ -49,6 +49,9 @@ private:
 	Spreadsheet* m_spreadsheet;
 	bool m_initializing;
 
+	void load();
+	void loadConfig(KConfig&);
+
 private slots:
 	//SLOTs for changes triggered in SpreadsheetDock
 	void nameChanged();
@@ -63,9 +66,9 @@ private slots:
 	void spreadsheetColumnCountChanged(int);
 	void spreadsheetShowCommentsChanged(int);
 
+	//save/load template
 	void loadConfigFromTemplate(KConfig&);
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);
