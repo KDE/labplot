@@ -577,189 +577,221 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	hid_t dataspace = H5Dget_space(dataset);
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 
-	if (rank != 2) {
-		if( rank > 2 || rank == 0) {
-			dataString<<"rank = "<<QString::number(rank)<<" not supported";
+	Spreadsheet* spreadsheet=0;
+	int columnOffset = 0;	// offset to first column
+	int actualRows=0, actualCols=0;	// rows and cols to read
+
+	switch(rank) {
+	case 0: {
+		actualRows=1;
+		actualCols=1;
+
+		switch(dclass) {
+		case H5T_STRING: {
+			char* data = (char *) malloc(typeSize * sizeof (char *));
+			hid_t memtype = H5Tcopy(H5T_C_S1);
+			H5Tset_size(memtype, typeSize);
+
+			H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+			dataString<<data<<"\n";
+			break;
+		}
+		//TODO: other types
+		default: {
+			dataString<<"rank = 0 not implemented yet for type "<<translateHDFClass(dclass);
 			qDebug()<<dataString.join("");
 		}
-		else if (rank == 1) {
-			hsize_t size, maxSize;
-			H5Sget_simple_extent_dims(dataspace, &size, &maxSize);
-#ifdef QT_DEBUG
-			H5T_order_t order = H5Tget_order(datatype);
-			qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<", size:"<<size<<" max:"<<maxSize;
-#endif
-			if (dclass == H5T_STRING) {
-				char** data = (char **) malloc(size * sizeof (char *));
-				data[0] = (char *) malloc(size * typeSize * sizeof (char));
-				for (unsigned int i=1; i<size; i++)
-					data[i] = data[0] + i * typeSize;
-
-				hid_t memtype = H5Tcopy(H5T_C_S1);
-				H5Tset_size(memtype, typeSize);
-				
-				H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
-
-				for (unsigned int i=0; i<size; i++)
-					dataString<<data[i]<<"\n";
-				//qDebug()<<dataString;
-				
-				free(data[0]);
-				free(data);
-			} else {
-				dataString<<"rank = 1 not supported for type "<<translateHDFClass(dclass);
-				qDebug()<<dataString.join("");
-			}
 		}
-		H5Sclose(dataspace);
-		H5Tclose(datatype);
-		H5Dclose(dataset);
-		H5Fclose(file);
-		return dataString.join("");
+
+		break;
 	}
+	case 1: {
+		hsize_t size, maxSize;
+		H5Sget_simple_extent_dims(dataspace, &size, &maxSize);
+		int rows=size;
+		if(endRow == -1)
+			endRow=rows;
+		if (lines == -1)
+			lines=endRow;
+		actualRows=endRow-startRow+1;
+		actualCols=1;
+#ifdef QT_DEBUG
+		H5T_order_t order = H5Tget_order(datatype);
+		qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<", rows:"<<rows<<" max:"<<maxSize;
+#endif
+		switch(dclass) {
+		case H5T_STRING: {
+			char** data = (char **) malloc(rows * sizeof (char *));
+			data[0] = (char *) malloc(rows * typeSize * sizeof (char));
+			for (int i=1; i<rows; i++)
+				data[i] = data[0] + i * typeSize;
 
-	hsize_t dims_out[2];
-    	H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
-	int rows = dims_out[0];
-	int cols = dims_out[1];
-	if (lines == -1)
-		lines=rows;
+			hid_t memtype = H5Tcopy(H5T_C_S1);
+			H5Tset_size(memtype, typeSize);
 
-	if(endRow == -1)
-		endRow=rows;
-	if(endColumn == -1)
-		endColumn=cols;
-	int actualRows=endRow-startRow+1;
-	int actualCols=endColumn-startColumn+1;
+			H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
+
+			for (int i=startRow-1; i<qMin(endRow,lines+startRow-1); i++)
+				dataString<<data[i]<<"\n";
+
+			free(data[0]);
+			free(data);
+			break;
+		}
+		//TODO: other types
+		default:
+			dataString<<"rank = 1 not implemented yet for type "<<translateHDFClass(dclass);
+			qDebug()<<dataString.join("");
+		}
+		break;
+	}
+	case 2: {
+		hsize_t dims_out[2];
+		H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+		int rows = dims_out[0];
+		int cols = dims_out[1];
+
+		if(endRow == -1)
+			endRow=rows;
+		if (lines == -1)
+			lines=endRow;
+		if(endColumn == -1)
+			endColumn=cols;
+		actualRows=endRow-startRow+1;
+		actualCols=endColumn-startColumn+1;
 
 #ifdef QT_DEBUG
-	H5T_order_t order = H5Tget_order(datatype);
-	qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<rows<<"x"<<cols;
-	qDebug()<<"startRow/endRow"<<startRow<<endRow;
-	qDebug()<<"startColumn/endColumn"<<startColumn<<endColumn;
-	qDebug()<<"actual rows"<<actualRows;
-	qDebug()<<"actual cols"<<actualCols;
-	qDebug()<<"lines"<<lines;
+		H5T_order_t order = H5Tget_order(datatype);
+		qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<rows<<"x"<<cols;
+		qDebug()<<"startRow/endRow"<<startRow<<endRow;
+		qDebug()<<"startColumn/endColumn"<<startColumn<<endColumn;
+		qDebug()<<"actual rows"<<actualRows;
+		qDebug()<<"actual cols"<<actualCols;
+		qDebug()<<"lines"<<lines;
 #endif
 
-	QVector<QVector<double>*> dataPointers;
-	int columnOffset = 0;
+		QVector<QVector<double>*> dataPointers;
 
-	Spreadsheet* spreadsheet=0;
-	if (dataSource != NULL) {
-		if(dataSource->inherits("Spreadsheet")) {
-			columnOffset = dataSource->resize(mode,QStringList(),actualCols);
-			//qDebug()<<"column offset"<<columnOffset;
+		if (dataSource != NULL) {
+			if(dataSource->inherits("Spreadsheet")) {
+				columnOffset = dataSource->resize(mode,QStringList(),actualCols);
+				//qDebug()<<"column offset"<<columnOffset;
 		
-			// resize the spreadsheet
-			spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-			if (mode==AbstractFileFilter::Replace) {
-				spreadsheet->clear();
-				spreadsheet->setRowCount(actualRows);
-			}else{
-				if (spreadsheet->rowCount() < actualRows)
+				// resize the spreadsheet
+				spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+				if (mode==AbstractFileFilter::Replace) {
+					spreadsheet->clear();
 					spreadsheet->setRowCount(actualRows);
-			}
-			for (int n=0; n<actualCols; n++ ){
-				QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
-				vector->reserve(actualRows);
-				vector->resize(actualRows);
-				dataPointers.push_back(vector);
-			}
-		} else if (dataSource->inherits("Matrix")) {
-			Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-			// resize the matrix
-			if (mode==AbstractFileFilter::Replace) {
-				matrix->clear();
-				matrix->setDimensions(actualRows,actualCols);
-			}else{
-				if (matrix->rowCount() < actualRows)
+				}else{
+					if (spreadsheet->rowCount() < actualRows)
+						spreadsheet->setRowCount(actualRows);
+				}
+				for (int n=0; n<actualCols; n++ ){
+					QVector<double>* vector = static_cast<QVector<double>* >(dataSource->child<Column>(columnOffset+n)->data());
+					vector->reserve(actualRows);
+					vector->resize(actualRows);
+					dataPointers.push_back(vector);
+				}
+			} else if (dataSource->inherits("Matrix")) {
+				Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+				// resize the matrix
+				if (mode==AbstractFileFilter::Replace) {
+					matrix->clear();
 					matrix->setDimensions(actualRows,actualCols);
-				else
-					matrix->setDimensions(matrix->rowCount(),actualCols);
+				}else{
+					if (matrix->rowCount() < actualRows)
+						matrix->setDimensions(actualRows,actualCols);
+					else
+						matrix->setDimensions(matrix->rowCount(),actualCols);
+				}
+
+				QVector<QVector<double> >& matrixColumns = matrix->data();
+				for ( int n=0; n<actualCols; n++ ){
+					QVector<double>* vector = &matrixColumns[n];
+					vector->reserve(actualRows);
+					vector->resize(actualRows);
+					dataPointers.push_back(vector);
+				}
+			}
+		}
+
+		// read data
+		if (dclass == H5T_INTEGER) {
+			int** data_out = (int**) malloc(rows*sizeof(int*));
+			data_out[0] = (int*)malloc( cols*rows*sizeof(int) );
+			for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+			H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+			for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+				for (int j=startColumn-1; j < endColumn; j++) {
+					if (dataSource != NULL) {
+						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
+					} else {
+						dataString<<QString::number(data_out[i][j])<<" ";
+					}
+				}
+				dataString<<"\n";
 			}
 
-			QVector<QVector<double> >& matrixColumns = matrix->data();
-			for ( int n=0; n<actualCols; n++ ){
-				QVector<double>* vector = &matrixColumns[n];
-				vector->reserve(actualRows);
-				vector->resize(actualRows);
-				dataPointers.push_back(vector);
+			free(data_out[0]);
+			free(data_out);
+		} else if (dclass == H5T_FLOAT) {
+			if(typeSize == 4) {
+				float** data_out = (float**) malloc(rows*sizeof(float*));
+				data_out[0] = (float*)malloc( cols*rows*sizeof(float) );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					for (int j=startColumn-1; j < endColumn; j++) {
+						if (dataSource != NULL) {
+							dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
+						}else {
+							dataString<<QString::number(data_out[i][j])<<" ";
+						}
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out[0]);
+				free(data_out);
+			}else if(typeSize == 8) {
+				double** data_out = (double**) malloc(rows*sizeof(double*));
+				data_out[0] = (double*)malloc( cols*rows*sizeof(double) );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,H5P_DEFAULT, &data_out[0][0]);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					for (int j=startColumn-1; j < endColumn; j++) {
+						if (dataSource != NULL) {
+							dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
+						}else {
+							dataString<<QString::number(data_out[i][j])<<" ";
+						}
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out[0]);
+				free(data_out);
+			}else {
+				dataString<<"data type size"<<QString::number(typeSize)<<"not supported";
+				qDebug()<<dataString.join(" ");
 			}
-                }
+		} else if (dclass == H5T_STRING) {
+			//TODO
+			dataString<<translateHDFClass(dclass)<<" not implemented yet";
+			dataString<<", size ="<<QString::number(typeSize);
+			qDebug()<<dataString.join("");
+		} else {
+			dataString<<translateHDFClass(dclass)<<" data class not supported";
+			qDebug()<<dataString.join("");
+		}
+		break;
 	}
-
-	// read data
-	if (dclass == H5T_INTEGER) {
-		int** data_out = (int**) malloc(rows*sizeof(int*));
-		data_out[0] = (int*)malloc( cols*rows*sizeof(int) );
-		for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
-
-	  	H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
-		for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
-			for (int j=startColumn-1; j < endColumn; j++) {
-				if (dataSource != NULL) {
-					dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
-				} else {
-					dataString<<QString::number(data_out[i][j])<<" ";
-				}
-			}
-			dataString<<"\n";
-		}
-
-		free(data_out[0]);
-		free(data_out);
-	} else if (dclass == H5T_FLOAT) {
-		if(typeSize == 4) {
-			float** data_out = (float**) malloc(rows*sizeof(float*));
-			data_out[0] = (float*)malloc( cols*rows*sizeof(float) );
-			for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
-
-		  	H5Dread(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
-			for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
-				for (int j=startColumn-1; j < endColumn; j++) {
-					if (dataSource != NULL) {
-						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
-					}else {
-						dataString<<QString::number(data_out[i][j])<<" ";
-					}
-				}
-				dataString<<"\n";
-			}
-
-			free(data_out[0]);
-			free(data_out);
-		}else if(typeSize == 8) {
-			double** data_out = (double**) malloc(rows*sizeof(double*));
-			data_out[0] = (double*)malloc( cols*rows*sizeof(double) );
-			for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
-
-		  	H5Dread(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL,H5P_DEFAULT, &data_out[0][0]);
-			for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
-				for (int j=startColumn-1; j < endColumn; j++) {
-					if (dataSource != NULL) {
-						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
-					}else {
-						dataString<<QString::number(data_out[i][j])<<" ";
-					}
-				}
-				dataString<<"\n";
-			}
-
-			free(data_out[0]);
-			free(data_out);
-		}else {
-			dataString<<"data type size"<<QString::number(typeSize)<<"not supported";
-			qDebug()<<dataString.join(" ");
-		}
-	} else if (dclass == H5T_STRING) {
-		//TODO
-		dataString<<translateHDFClass(dclass)<<"not implemented yet";
-		dataString<<", size ="<<QString::number(typeSize);
-		qDebug()<<dataString.join(" ");
-	} else {
-		dataString<<translateHDFClass(dclass)<<"data class not supported";
-		qDebug()<<dataString.join(" ");
+	default:
+		dataString<<"rank = "<<QString::number(rank)<<" not supported";
+		qDebug()<<dataString.join("");
 	}
 
 	H5Sclose(dataspace);
@@ -767,8 +799,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	H5Dclose(dataset);
 	H5Fclose(file);
 
-	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
-		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
+	// set column comments in spreadsheet
+	if (dataSource != NULL && spreadsheet != NULL) {
+		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
 		for ( int n=0; n<actualCols; n++ ){
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
