@@ -44,7 +44,7 @@ class FileDataSource : public Spreadsheet {
 		FileDataSource(AbstractScriptingEngine* engine,  const QString& name, bool loading = false);
 		~FileDataSource();
 
-		enum FileType{AsciiVector, AsciiMatrix, BinaryVector, Image, HDF, NETCDF, Sound};
+		enum FileType{AsciiVector, BinaryVector, Image, HDF, NETCDF, CDF, FITS, Sound};
 
 		static QStringList fileTypes();
 		static QString fileInfoString(const QString&);

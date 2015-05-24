@@ -89,7 +89,7 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 		case Qt::DisplayRole:
 			return QVariant(m_matrix->text(row, col));
 		case Qt::BackgroundRole:
-			return QVariant(QBrush(Qt::yellow));
+			return QVariant(QBrush(QColor(192,255,255)));
 	}
 
 	return QVariant();

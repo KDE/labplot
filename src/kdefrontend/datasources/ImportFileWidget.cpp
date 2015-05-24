@@ -31,9 +31,7 @@ Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 #include "FileInfoDialog.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/filters/AsciiMatrixFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
-//TODO #include "backend/datasources/filters/BinaryMatrixFilter.h"
 #include "backend/datasources/filters/HDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 
@@ -72,18 +70,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
 	ui.swOptions->insertWidget(FileDataSource::AsciiVector, asciiw);
 
-	QWidget* asciiMatrixw=new QWidget(0);
-	asciiMatrixOptionsWidget.setupUi(asciiMatrixw);
-	ui.swOptions->insertWidget(FileDataSource::AsciiMatrix, asciiMatrixw);
-
 	QWidget* binaryw=new QWidget(0);
 	binaryOptionsWidget.setupUi(binaryw);
 	binaryOptionsWidget.cbDataType->addItems(BinaryFilter::dataTypes());
 	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
 	ui.swOptions->insertWidget(FileDataSource::BinaryVector, binaryw);
-
-	//QWidget* binaryMatrixw=new QWidget(0);
-	//ui.swOptions->insertWidget(FileDataSource::BinaryMatrix, binaryMatrixw);
 
 	QWidget* imagew=new QWidget(0);
 	imageOptionsWidget.setupUi(imagew);
@@ -102,8 +93,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	// default filter
 	ui.swOptions->setCurrentIndex(FileDataSource::AsciiVector);
-	// disabled for the moment
-	ui.cbFileType->setItemData(FileDataSource::AsciiMatrix, 0, Qt::UserRole - 1);
+	// disable items
 	//ui.cbFileType->setItemData(FileDataSource::Image, 0, Qt::UserRole - 1);
 
 	ui.gbOptions->hide();
@@ -155,8 +145,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	// HDF data
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 
-	//TODO: other file types
-
 	filterChanged(ui.cbFilter->currentIndex());
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
@@ -192,8 +180,8 @@ ImportFileWidget::~ImportFileWidget() {
 	// image data
 	conf.writeEntry("ImportFormat", imageOptionsWidget.cbImportFormat->currentIndex());
 
-	//TODO: HDF data
-	//TODO: other file types
+	//HDF data
+	// nothing
 }
 
 void ImportFileWidget::hideDataSource() const{
@@ -264,16 +252,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 //		source->setFilter(filter);
-		break;
-	}
-	case FileDataSource::AsciiMatrix: {
-		AsciiMatrixFilter* filter = new AsciiMatrixFilter();
-		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
-			filter->setAutoModeEnabled(true);
-		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
-			filter->setAutoModeEnabled(false);
-		}
-		return filter;
 		break;
 	}
 	case FileDataSource::BinaryVector: {
@@ -414,8 +392,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			qDebug()<<"detected IMAGE file";
 #endif
 			ui.cbFileType->setCurrentIndex(FileDataSource::Image);
-
-			//TODO: update image preview
 		} else if ( info.contains( ("ASCII") ) ) {
 #ifdef QT_DEBUG
 			qDebug()<<"detected ASCII file";
@@ -429,6 +405,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			// update HDF tree widget using current selected file
 			hdfOptionsWidget.twContent->clear();
+			hdfOptionsWidget.leDataSet->clear();
+
 			QString fileName = ui.kleFileName->text();
 			QFileInfo fileInfo(fileName);
 			QTreeWidgetItem *rootItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<fileInfo.baseName());
@@ -445,6 +423,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			ui.cbFileType->setCurrentIndex(FileDataSource::BinaryVector);
 		}
 	}
+
+	refreshPreview();
 }
 
 /*!
@@ -484,8 +464,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.sbPreviewLines->show();
 
 	switch (fileType) {
-	case FileDataSource::AsciiVector:
-	case FileDataSource::AsciiMatrix: {
+	case FileDataSource::AsciiVector: {
 		break;
 	}
 	case FileDataSource::BinaryVector: {
@@ -499,7 +478,6 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		break;
 	}	
 	case FileDataSource::Image: {
-		ui.tePreview->hide();
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
 		break;
@@ -521,13 +499,15 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 /*!
 	updates the data set of a HDF file when the tree widget item is selected
 */
-void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item,int column) {
+void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
 	if( item->data(2,Qt::DisplayRole).toString() == i18n("data set") ) {
 		// the data link is saved in the second column
 		QString dataSetLink = item->data(1,Qt::DisplayRole).toString();
 		hdfOptionsWidget.leDataSet->setText(dataSetLink);
-	} else
+		refreshPreview();
+	}
+	else
 		qDebug()<<"non data set selected in HDF tree widget";
 }
 
@@ -573,6 +553,9 @@ void ImportFileWidget::headerChanged(int state) {
 }
 
 void ImportFileWidget::refreshPreview(){
+	// reset preview text edit palette if there was an image before
+	ui.tePreview->setPalette(this->palette());
+
 	QString fileName = ui.kleFileName->text();
 	if ( fileName.left(1) != QDir::separator() )
 	    fileName = QDir::homePath() + QDir::separator() + fileName;
@@ -583,7 +566,8 @@ void ImportFileWidget::refreshPreview(){
 		FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 		int lines = ui.sbPreviewLines->value();
 
-		if (fileType == FileDataSource::AsciiVector || fileType == FileDataSource::AsciiMatrix) {
+		switch (fileType) {
+		case FileDataSource::AsciiVector: {
 			QTextStream in(&file);
 			for (int i=0; i<lines; ++i){
 				if( in.atEnd() )
@@ -592,17 +576,29 @@ void ImportFileWidget::refreshPreview(){
 				importedText += in.readLine();
 				importedText += '\n';
 			}
+			break;
 		}
-		else if (fileType == FileDataSource::BinaryVector) {
+		case FileDataSource::BinaryVector: {
 			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 			importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+			break;
 		}
-		else if (fileType == FileDataSource::Image) {
-			//TODO
+		case FileDataSource::Image: {
+			QImage image(fileName);
+			QImage scaledImage = image.scaled(ui.tePreview->size());
+
+			QPalette palette;
+			palette.setBrush(QPalette::Base, QBrush(scaledImage));
+			ui.tePreview->setPalette(palette);
+			break;
 		}
-		else if (fileType == FileDataSource::HDF) {
+		case FileDataSource::HDF: {
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 			importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
+			break;
+		}
+		default:
+			importedText += "Unknown file type";
 		}
 	}
 

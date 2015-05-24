@@ -260,7 +260,6 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 		}
 	}
 
-
 	// set range of rows
 	int actualRows;
 	if (endRow == -1)
@@ -271,12 +270,14 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 		actualRows = endRow-startRow+1;
 	int actualCols=vectors;
 	if (lines == -1)
-		lines=endRow;
+		lines=actualRows;
 #ifdef QT_DEBUG
 	qDebug()<<"	numRows ="<<numRows;
 	qDebug()<<"	startRow ="<<startRow;
 	qDebug()<<"	endRow ="<<endRow;
 	qDebug()<<"	actualRows ="<<actualRows;
+	qDebug()<<"	actualCols ="<<actualCols;
+	qDebug()<<"	lines ="<<lines;
 #endif
 
 	QVector<QVector<double>*> dataPointers;
@@ -400,7 +401,6 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 
 		spreadsheet->setUndoAware(true);
 	}
-
 
 	return dataString.join("");
 }

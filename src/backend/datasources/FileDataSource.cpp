@@ -101,17 +101,15 @@ QWidget *FileDataSource::view() const{
 */
 QStringList FileDataSource::fileTypes(){
 // see FileDataSource::FileType
-	return (QStringList()<< i18n("ASCII vector data")
-		<< i18n("ASCII matrix data")
-		<< i18n("BINARY vector data")
-//		<< i18n("BINARY matrix data")
+	return (QStringList()<< i18n("ASCII data")
+		<< i18n("Binary data")
 		<< i18n("Image")
-//                         << i18n("Sound")
 		<< i18n("Hierarchical Data Format (HDF)")
-//                         << "NetCDF"
-//                         << "CDF"
-//                         << "FITS"
-                        );
+//		<< "NetCDF"
+//		<< "CDF"
+//		<< "FITS"
+//		<< i18n("Sound")
+		);
 }
 
 void FileDataSource::setFileName(const QString& name){
@@ -170,7 +168,7 @@ bool FileDataSource::isFileLinked() const{
 QIcon FileDataSource::icon() const{
 	QIcon icon;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-  if (m_fileType == FileDataSource::AsciiVector || m_fileType == FileDataSource::AsciiMatrix)
+  if (m_fileType == FileDataSource::AsciiVector)
 	  icon = KIcon("text-plain");
   else if (m_fileType == FileDataSource::BinaryVector)
 	icon = KIcon("application-octet-stream");
