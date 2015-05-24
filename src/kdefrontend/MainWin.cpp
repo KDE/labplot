@@ -35,6 +35,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -384,13 +385,6 @@ void MainWin::initMenus(){
     m_visibilityMenu ->addAction(m_visibilityFolderAction);
     m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
     m_visibilityMenu ->addAction(m_visibilityAllAction);
-}
-
-/*!
-    adds a new Cantor Spreadsheet to the project.
-*/
-void MainWin::newCantorWorksheet(QAction* action) {
-    KMessageBox::information(this, "Action " + action->data().toString() + " is selected.", "Information");
 }
 
 /*!
@@ -957,6 +951,14 @@ void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
 void MainWin::newWorksheet() {
     Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
     this->addAspectToProject(worksheet);
+}
+
+/*!
+    adds a new Cantor Spreadsheet to the project.
+*/
+void MainWin::newCantorWorksheet(QAction* action) {
+    CantorWorksheet* cantorworksheet = new CantorWorksheet(0, i18n(action->data().toString().toStdString().c_str()));
+    this->addAspectToProject(cantorworksheet);
 }
 
 /*!

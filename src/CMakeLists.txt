@@ -134,6 +134,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+	${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
 )
 
 set(COMMONFRONTEND_SOURCES
@@ -145,6 +146,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
 )
 
 set(TOOLS_SOURCES
