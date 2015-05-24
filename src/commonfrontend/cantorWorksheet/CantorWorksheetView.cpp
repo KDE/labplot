@@ -38,7 +38,7 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QGraphics
     m_worksheet(worksheet) {
 	initActions();
 	
-	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), (CantorWorksheetView) this, SLOT(createContextMenu(QMenu*)));
+	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 }
 
 void CantorWorksheetView::initActions() {
