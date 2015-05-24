@@ -43,6 +43,8 @@ Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 #include <KUrlCompletion>
 #include <QDebug>
 
+#include <kfilterdev.h>
+
 /*!
    \class ImportFileWidget
    \brief Widget for importing data from a file.
@@ -68,13 +70,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
 	asciiOptionsWidget.chbTranspose->hide(); //TODO: enable later
-	ui.swOptions->insertWidget(FileDataSource::AsciiVector, asciiw);
+	ui.swOptions->insertWidget(FileDataSource::Ascii, asciiw);
 
 	QWidget* binaryw=new QWidget(0);
 	binaryOptionsWidget.setupUi(binaryw);
 	binaryOptionsWidget.cbDataType->addItems(BinaryFilter::dataTypes());
 	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
-	ui.swOptions->insertWidget(FileDataSource::BinaryVector, binaryw);
+	ui.swOptions->insertWidget(FileDataSource::Binary, binaryw);
 
 	QWidget* imagew=new QWidget(0);
 	imageOptionsWidget.setupUi(imagew);
@@ -92,7 +94,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
 	// default filter
-	ui.swOptions->setCurrentIndex(FileDataSource::AsciiVector);
+	ui.swOptions->setCurrentIndex(FileDataSource::Ascii);
 	// disable items
 	//ui.cbFileType->setItemData(FileDataSource::Image, 0, Qt::UserRole - 1);
 
@@ -225,7 +227,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	//qDebug()<<"	current filter ="<<ui.cbFilter->currentIndex();
 
 	switch(fileType) {
-	case FileDataSource::AsciiVector: {
+	case FileDataSource::Ascii: {
 		 //TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
 	
@@ -254,7 +256,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 //		source->setFilter(filter);
 		break;
 	}
-	case FileDataSource::BinaryVector: {
+	case FileDataSource::Binary: {
 		BinaryFilter* filter = new BinaryFilter();
  		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
 			filter->setAutoModeEnabled(true);
@@ -383,24 +385,24 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	args<<"-b"<<ui.kleFileName->text();
 	proc->start("file", args);
 
+	QString debug;
 	if ( proc->waitForReadyRead(1000) == false ) {
 	    // 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
 	} else {
 		QString info = proc->readLine();
-		if (info.contains("image") || info.contains("bitmap" )) {
-#ifdef QT_DEBUG
-			qDebug()<<"detected IMAGE file";
-#endif
+		if (info.contains("compressed data")) {
+			debug="detected compressed data";
+			//probably ascii data
+			ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
+		}
+		else if (info.contains("image") || info.contains("bitmap" )) {
+			debug="detected IMAGE file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::Image);
 		} else if ( info.contains( ("ASCII") ) ) {
-#ifdef QT_DEBUG
-			qDebug()<<"detected ASCII file";
-#endif
-			ui.cbFileType->setCurrentIndex(FileDataSource::AsciiVector);
+			debug="detected ASCII file";
+			ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
 		} else if (info.contains(("Hierarchical Data Format"))) {
-#ifdef QT_DEBUG
-			qDebug()<<"detected HDF file";
-#endif
+			debug="detected HDF file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
 
 			// update HDF tree widget using current selected file
@@ -417,12 +419,13 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			hdfOptionsWidget.twContent->resizeColumnToContents(0);
 			hdfOptionsWidget.twContent->resizeColumnToContents(3);
 		} else {
-#ifdef QT_DEBUG
-			qDebug()<<"probably BINARY file";
-#endif
-			ui.cbFileType->setCurrentIndex(FileDataSource::BinaryVector);
+			debug="probably BINARY file";
+			ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
 		}
 	}
+#ifdef QT_DEBUG
+	qDebug()<<debug;
+#endif
 
 	refreshPreview();
 }
@@ -464,10 +467,10 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.sbPreviewLines->show();
 
 	switch (fileType) {
-	case FileDataSource::AsciiVector: {
+	case FileDataSource::Ascii: {
 		break;
 	}
-	case FileDataSource::BinaryVector: {
+	case FileDataSource::Binary: {
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
@@ -560,15 +563,16 @@ void ImportFileWidget::refreshPreview(){
 	if ( fileName.left(1) != QDir::separator() )
 	    fileName = QDir::homePath() + QDir::separator() + fileName;
 
-	QFile file(fileName);
+	QIODevice *device = KFilterDev::deviceForFile(fileName);
 	QString importedText;
-	if ( file.open(QFile::ReadOnly)){
+	if ( device->open(QFile::ReadOnly)){
 		FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 		int lines = ui.sbPreviewLines->value();
 
 		switch (fileType) {
-		case FileDataSource::AsciiVector: {
-			QTextStream in(&file);
+		case FileDataSource::Ascii: {
+			//TODO: use filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+			QTextStream in(device);
 			for (int i=0; i<lines; ++i){
 				if( in.atEnd() )
 					break;
@@ -578,7 +582,7 @@ void ImportFileWidget::refreshPreview(){
 			}
 			break;
 		}
-		case FileDataSource::BinaryVector: {
+		case FileDataSource::Binary: {
 			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 			importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
 			break;

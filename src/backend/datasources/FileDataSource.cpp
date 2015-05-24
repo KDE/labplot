@@ -58,7 +58,7 @@ Email (use @ for *)  : alexander.semke*web.de
 
 FileDataSource::FileDataSource(AbstractScriptingEngine* engine, const QString& name, bool loading)
      : Spreadsheet(engine, name, loading),
-     m_fileType(AsciiVector),
+     m_fileType(Ascii),
      m_fileWatched(false),
      m_fileLinked(false),
      m_filter(0),
@@ -168,9 +168,9 @@ bool FileDataSource::isFileLinked() const{
 QIcon FileDataSource::icon() const{
 	QIcon icon;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-  if (m_fileType == FileDataSource::AsciiVector)
+  if (m_fileType == FileDataSource::Ascii)
 	  icon = KIcon("text-plain");
-  else if (m_fileType == FileDataSource::BinaryVector)
+  else if (m_fileType == FileDataSource::Binary)
 	icon = KIcon("application-octet-stream");
   else if (m_fileType == FileDataSource::Image)
 	icon = KIcon("image-x-generic");

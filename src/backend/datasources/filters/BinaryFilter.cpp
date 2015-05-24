@@ -31,10 +31,10 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include <math.h>
 
-#include <QFile>
-#include <QTextStream>
+#include <QDataStream>
 #include <QDebug>
 #include <KLocale>
+#include <kfilterdev.h>
 
  /*!
 	\class BinaryFilter
@@ -101,14 +101,11 @@ int BinaryFilter::dataSize(BinaryFilter::DataType type) {
   returns the number of rows (length of vectors) in the file \c fileName.
 */
 long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataType type) {
-	QFile file(fileName);
-	if ( !file.exists() )
+	QIODevice *device = KFilterDev::deviceForFile(fileName);
+	if (!device->open(QIODevice::ReadOnly))
 		return 0;
 
-	if (!file.open(QIODevice::ReadOnly))
-		return 0;
-
-	QDataStream in(&file);
+	QDataStream in(device);
 	long rows=0;
 	while (!in.atEnd()){
 		// one row
@@ -223,14 +220,11 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 	qDebug()<<"BinaryFilterPrivate::read()";
 #endif
 
-	QFile file(fileName);
-	if ( !file.exists() )
-		return i18n("file does not exist");
-
-	if (!file.open(QIODevice::ReadOnly))
+	QIODevice *device = KFilterDev::deviceForFile(fileName);
+	if (! device->open(QIODevice::ReadOnly))
         	return i18n("could not open file for reading");
 
-	QDataStream in(&file);
+	QDataStream in(device);
 
 	if (byteOrder == BinaryFilter::BigEndian)
 		in.setByteOrder(QDataStream::BigEndian);

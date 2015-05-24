@@ -33,10 +33,10 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 #include <math.h>
 
-#include <QFile>
 #include <QTextStream>
 #include <QDebug>
 #include <KLocale>
+#include <kfilterdev.h>
 
  /*!
 	\class AsciiFilter
@@ -114,14 +114,11 @@ int AsciiFilter::columnNumber(const QString & fileName){
 	QString line;
 	QStringList lineStringList;
 
-	QFile file(fileName);
-	if ( !file.exists() )
+	QIODevice *device = KFilterDev::deviceForFile(fileName);
+	if (!device->open(QIODevice::ReadOnly))
 		return 0;
 
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-		return 0;
-
-	QTextStream in(&file);
+	QTextStream in(device);
 	line = in.readLine();
 	lineStringList = line.split( QRegExp("\\s+")); //TODO
 	return lineStringList.size();
@@ -133,14 +130,11 @@ int AsciiFilter::columnNumber(const QString & fileName){
 */
 long AsciiFilter::lineNumber(const QString & fileName){
 	//TODO: compare the speed of this function with the speed of wc from GNU-coreutils.
-	QFile file(fileName);
-	if ( !file.exists() )
+	QIODevice *device = KFilterDev::deviceForFile(fileName);
+	if (!device->open(QIODevice::ReadOnly))
 		return 0;
 
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-		return 0;
-
-	QTextStream in(&file);
+	QTextStream in(device);
 	long rows=0;
 	while (!in.atEnd()){
 		in.readLine();
@@ -270,15 +264,11 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
 	QStringList lineStringList;
 
-	QFile file(fileName);
-	if ( !file.exists() )
-		return;
-
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	QIODevice *device = KFilterDev::deviceForFile(fileName);
+	if (!device->open(QIODevice::ReadOnly))
         	return;
 
-	QTextStream in(&file);
-
+	QTextStream in(device);
 
 	//TODO implement
 	// if (transposed)
