@@ -59,6 +59,9 @@ class HDFFilterPrivate {
 #ifdef HAVE_HDF5
 		QString translateHDFOrder(H5T_order_t);
 		QString translateHDFClass(H5T_class_t);
+		QStringList readHDFCompound(hid_t tid);
+		QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines);
+		QStringList readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
 		QStringList readHDFAttr(hid_t aid);
 		QStringList scanHDFAttrs(hid_t oid);
 		QStringList readHDFDataType(hid_t tid);

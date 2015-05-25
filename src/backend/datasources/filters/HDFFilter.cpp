@@ -215,6 +215,210 @@ QString HDFFilterPrivate::translateHDFClass(H5T_class_t c) {
 	return dclass;
 }
 
+QStringList HDFFilterPrivate::readHDFCompound(hid_t tid) {
+	QStringList dataString;
+	size_t typeSize = H5Tget_size(tid);
+	
+	dataString<<"COMPOUND("<<QString::number(typeSize)<<"):(";
+	int members = H5Tget_nmembers(tid);
+	for(int i=0;i<members;i++) {
+		H5T_class_t mclass = H5Tget_member_class(tid,i);
+		hid_t mtype = H5Tget_member_type(tid,i); 
+		size_t size = H5Tget_size(mtype);
+		dataString<<H5Tget_member_name(tid,i)<<"["<<translateHDFClass(mclass)<<"("<<QString::number(size)<<")]";
+		if(i==members-1)
+			dataString<<")";
+		else
+			dataString<<",";
+		H5Tclose(mtype);
+	}
+	dataString<<"\n";
+
+
+	return dataString;
+}
+
+QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines) {
+	int members = H5Tget_nmembers(tid);
+
+	QString data[rows][members];
+	for(int m=0;m<members;m++) {
+		hid_t mtype = H5Tget_member_type(tid,m);
+                size_t msize = H5Tget_size(mtype);
+		hid_t ctype = H5Tcreate(H5T_COMPOUND,msize);
+		H5Tinsert(ctype, H5Tget_member_name(tid,m), 0, mtype);
+
+		H5T_class_t mclass = H5Tget_member_class(tid,m);
+		switch(mclass) {
+		case H5T_INTEGER: {
+			if(msize == 2) {
+				short* data_out = (short*) malloc(rows*msize);
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++)
+					data[i][m]=QString::number(data_out[i]);
+			}
+			else if(msize == 4) {
+				int* data_out = (int*) malloc(rows*msize);
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++)
+					data[i][m]=QString::number(data_out[i]);
+			}
+			break;
+		}
+		case H5T_FLOAT: {
+			if(msize == 4) {
+				float* data_out = (float*) malloc(rows*msize);
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++)
+					data[i][m]=QString::number(data_out[i]);
+			} 
+			else if (msize == 8) {
+				double* data_out = (double*) malloc(rows*msize);
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++)
+					data[i][m]=QString::number(data_out[i]);
+
+			}
+			break;
+		}
+		default:
+			qDebug()<<"	not supported class"<<translateHDFClass(mclass);
+		}
+
+		H5Tclose(ctype);
+	}
+	
+	// create dataString from data
+	QStringList dataString;
+	for(int i=0;i<qMin(rows,lines);i++) {
+		dataString<<"(";
+
+		for(int m=0;m<members;m++) {
+			dataString<<data[i][m];
+			if(m==members-1)
+				dataString<<")";
+		else
+			dataString<<",";
+		}
+		dataString<<"\n";
+	}
+
+	return dataString;
+}
+
+QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines) {
+	int members = H5Tget_nmembers(tid);
+
+	QString data[rows][cols][members];
+	for(int m=0;m<members;m++) {
+		hid_t mtype = H5Tget_member_type(tid,m);
+                size_t msize = H5Tget_size(mtype);
+		hid_t ctype = H5Tcreate(H5T_COMPOUND,msize);
+		H5Tinsert(ctype, H5Tget_member_name(tid,m), 0, mtype);
+
+		H5T_class_t mclass = H5Tget_member_class(tid,m);
+		switch(mclass) {
+		case H5T_INTEGER: {
+			if(msize == 2) {
+				short** data_out = (short**) malloc(rows*sizeof(short*));
+				data_out[0] = (short*)malloc( cols*rows*msize );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++) {
+					for (int j=0; j < cols; j++) {
+						data[i][j][m]=QString::number(data_out[i][j]);
+					}
+				}
+				free(data_out[0]);
+				free(data_out);
+			}
+			else if(msize == 4) {
+				int** data_out = (int**) malloc(rows*sizeof(int*));
+				data_out[0] = (int*)malloc( cols*rows*msize );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++) {
+					for (int j=0; j < cols; j++) {
+						data[i][j][m]=QString::number(data_out[i][j]);
+					}
+				}
+				free(data_out[0]);
+				free(data_out);
+			}
+			break;
+		}
+		case H5T_FLOAT: {
+			if(msize == 4) {
+				float** data_out = (float**) malloc(rows*sizeof(float*));
+				data_out[0] = (float*)malloc( cols*rows*msize );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++) {
+					for (int j=0; j < cols; j++) {
+						data[i][j][m]=QString::number(data_out[i][j]);
+					}
+				}
+				free(data_out[0]);
+				free(data_out);
+			} else if (msize == 8) {
+				double** data_out = (double**) malloc(rows*sizeof(double*));
+				data_out[0] = (double*)malloc( cols*rows*msize );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++) {
+					for (int j=0; j < cols; j++) {
+						data[i][j][m]=QString::number(data_out[i][j]);
+					}
+				}
+				free(data_out[0]);
+				free(data_out);
+			}
+			break;
+		}
+		default:
+			qDebug()<<"	not supported class"<<translateHDFClass(mclass);
+		}
+
+		H5Tclose(ctype);
+	}
+	
+	// create dataString from data
+	QStringList dataString;
+	for(int i=0;i<qMin(rows,lines);i++) {
+		for(int j=0;j<cols;j++) {
+			dataString<<"(";
+
+			for(int m=0;m<members;m++) {
+				dataString<<data[i][j][m];
+				if(m==members-1)
+					dataString<<")";
+			else
+				dataString<<",";
+			}
+			dataString<<" ";
+		}
+		dataString<<"\n";
+	}
+
+	return dataString;
+}
+
 QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 	QStringList attr;
 
@@ -226,22 +430,28 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
         hid_t atype  = H5Aget_type(aid);
         hid_t aclass = H5Tget_class(atype);
 
+	size_t typeSize = H5Tget_size(atype);
 	if (aclass == H5T_STRING) {
 		hid_t amem = H5Tget_native_type(atype, H5T_DIR_ASCEND);
 		H5Aread(aid, amem, name);
 		attr<<"="<<QString(name);
 		H5Tclose(amem);
 	}else if(aclass == H5T_INTEGER) {
-		int value;
-		H5Aread(aid, H5T_NATIVE_INT, &value);
-		attr<<"="<<QString::number(value);
+		if(typeSize == 2) {
+			short value;
+			H5Aread(aid, H5T_NATIVE_SHORT, &value);
+			attr<<"="<<QString::number(value);
+		} else if (typeSize == 4) {
+			int value;
+			H5Aread(aid, H5T_NATIVE_INT, &value);
+			attr<<"="<<QString::number(value);
+		}
 	}else if(aclass == H5T_FLOAT) {
-		size_t typeSize = H5Tget_size(atype);
 		if(typeSize == 4) {
 			float value;
 			H5Aread(aid, H5T_NATIVE_FLOAT, &value);
 			attr<<"="<<QString::number(value);
-		}else if (typeSize == 8) {
+		} else if (typeSize == 8) {
 			double value;
 			H5Aread(aid, H5T_NATIVE_DOUBLE, &value);
 			attr<<"="<<QString::number(value);
@@ -306,6 +516,15 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		default:
 			break;
 		}
+		break;
+	}
+	case H5T_COMPOUND: {
+		// not shown in tree widget
+		qDebug()<<readHDFCompound(tid).join("");
+		break;
+	}
+	case H5T_ENUM: {
+		//TODO
 		break;
 	}
 	default:
@@ -588,7 +807,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 		switch(dclass) {
 		case H5T_STRING: {
-			char* data = (char *) malloc(typeSize * sizeof (char *));
+			char* data = (char *) malloc(typeSize * sizeof (char));
 			hid_t memtype = H5Tcopy(H5T_C_S1);
 			H5Tset_size(memtype, typeSize);
 
@@ -643,24 +862,40 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			break;
 		}
 		case H5T_INTEGER: {
-			int* data_out = (int*) malloc(rows*sizeof(int*));
+			if(typeSize == 2) {
+				short* data_out = (short*) malloc(rows*typeSize);
 
-			H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
-			for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
-				if (dataSource != NULL) {
-					dataPointers[0]->operator[](i-startRow+1) = data_out[i];
-				} else {
-					dataString<<QString::number(data_out[i])<<" ";
+				H5Dread(dataset, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					if (dataSource != NULL) {
+						dataPointers[0]->operator[](i-startRow+1) = data_out[i];
+					} else {
+						dataString<<QString::number(data_out[i])<<" ";
+					}
+					dataString<<"\n";
 				}
-				dataString<<"\n";
-			}
 
-			free(data_out);
+				free(data_out);
+			} else if(typeSize == 4) {
+				int* data_out = (int*) malloc(rows*typeSize);
+
+				H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					if (dataSource != NULL) {
+						dataPointers[0]->operator[](i-startRow+1) = data_out[i];
+					} else {
+						dataString<<QString::number(data_out[i])<<" ";
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out);
+			}
 			break;
 		}
 		case H5T_FLOAT: {
 			if(typeSize == 4) {
-				float* data_out = (float*) malloc(rows*sizeof(float*));
+				float* data_out = (float*) malloc(rows*typeSize);
 
 				H5Dread(dataset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
 				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
@@ -674,7 +909,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 				free(data_out);
 			} else if (typeSize == 8) {
-				double* data_out = (double*) malloc(rows*sizeof(double*));
+				double* data_out = (double*) malloc(rows*typeSize);
 
 				H5Dread(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
 				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
@@ -688,6 +923,12 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 				free(data_out);
 			}
+			break;
+		}
+		case H5T_COMPOUND: {
+			dataString<<readHDFCompound(datatype);
+			//qDebug()<<dataString.join("");
+			dataString<<readHDFCompoundData1D(dataset,datatype,rows,lines);
 			break;
 		}
 		default:
@@ -727,24 +968,45 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		// read data
 		switch(dclass) {
 		case H5T_INTEGER: {
-			int** data_out = (int**) malloc(rows*sizeof(int*));
-			data_out[0] = (int*)malloc( cols*rows*sizeof(int) );
-			for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+			if(typeSize == 2) {
+				short** data_out = (short**) malloc(rows*sizeof(short*));
+				data_out[0] = (short*)malloc( cols*rows*sizeof(short) );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
 
-			H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
-			for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
-				for (int j=startColumn-1; j < endColumn; j++) {
-					if (dataSource != NULL) {
-						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
-					} else {
-						dataString<<QString::number(data_out[i][j])<<" ";
+				H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					for (int j=startColumn-1; j < endColumn; j++) {
+						if (dataSource != NULL) {
+							dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
+						} else {
+							dataString<<QString::number(data_out[i][j])<<" ";
+						}
 					}
+					dataString<<"\n";
 				}
-				dataString<<"\n";
-			}
 
-			free(data_out[0]);
-			free(data_out);
+				free(data_out[0]);
+				free(data_out);
+			} else if(typeSize == 4) {
+				int** data_out = (int**) malloc(rows*sizeof(int*));
+				data_out[0] = (int*)malloc( cols*rows*sizeof(int) );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					for (int j=startColumn-1; j < endColumn; j++) {
+						if (dataSource != NULL) {
+							dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
+						} else {
+							dataString<<QString::number(data_out[i][j])<<" ";
+						}
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out[0]);
+				free(data_out);
+			}
 			break;
 		}
 		case H5T_FLOAT: {
@@ -792,10 +1054,16 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			}
 			break;
 		}
+		case H5T_COMPOUND: {
+			dataString<<readHDFCompound(datatype);
+			//qDebug()<<dataString.join("");
+			dataString<<readHDFCompoundData2D(dataset,datatype,rows,cols,lines);
+			break;
+		}
 		case H5T_STRING: {
 			//TODO
 			dataString<<translateHDFClass(dclass)<<" not implemented yet";
-			dataString<<", size ="<<QString::number(typeSize);
+			dataString<<", size = "<<QString::number(typeSize);
 			qDebug()<<dataString.join("");
 			break;
 		}
