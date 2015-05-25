@@ -36,8 +36,8 @@ class AsciiFilterPrivate {
 	public:
 		explicit AsciiFilterPrivate(AsciiFilter*);
 
-		void read(const QString & fileName, AbstractDataSource* dataSource,
-					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		QString readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
 
 		const AsciiFilter* q;

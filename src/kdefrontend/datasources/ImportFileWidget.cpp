@@ -118,11 +118,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	//load last used settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 
-	//general settings
-	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
-	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
-	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
-
 	//settings for data type specific widgets
 	// ascii data
 	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
@@ -147,6 +142,10 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	// HDF data
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 
+	//general settings
+	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
+	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
+	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
 	filterChanged(ui.cbFilter->currentIndex());
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
@@ -563,47 +562,37 @@ void ImportFileWidget::refreshPreview(){
 	if ( fileName.left(1) != QDir::separator() )
 	    fileName = QDir::homePath() + QDir::separator() + fileName;
 
-	QIODevice *device = KFilterDev::deviceForFile(fileName);
 	QString importedText;
-	if ( device->open(QFile::ReadOnly)){
-		FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-		int lines = ui.sbPreviewLines->value();
+	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+	int lines = ui.sbPreviewLines->value();
 
-		switch (fileType) {
-		case FileDataSource::Ascii: {
-			//TODO: use filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
-			QTextStream in(device);
-			for (int i=0; i<lines; ++i){
-				if( in.atEnd() )
-					break;
+	switch (fileType) {
+	case FileDataSource::Ascii: {
+		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
+		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+		break;
+	}
+	case FileDataSource::Binary: {
+		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
+		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+		break;
+	}
+	case FileDataSource::Image: {
+		QImage image(fileName);
+		QImage scaledImage = image.scaled(ui.tePreview->size());
 
-				importedText += in.readLine();
-				importedText += '\n';
-			}
-			break;
-		}
-		case FileDataSource::Binary: {
-			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
-			importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
-			break;
-		}
-		case FileDataSource::Image: {
-			QImage image(fileName);
-			QImage scaledImage = image.scaled(ui.tePreview->size());
-
-			QPalette palette;
-			palette.setBrush(QPalette::Base, QBrush(scaledImage));
-			ui.tePreview->setPalette(palette);
-			break;
-		}
-		case FileDataSource::HDF: {
-			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
-			importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
-			break;
-		}
-		default:
-			importedText += "Unknown file type";
-		}
+		QPalette palette;
+		palette.setBrush(QPalette::Base, QBrush(scaledImage));
+		ui.tePreview->setPalette(palette);
+		break;
+	}
+	case FileDataSource::HDF: {
+		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
+		importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
+		break;
+	}
+	default:
+		importedText += "Unknown file type";
 	}
 
 	ui.tePreview->setPlainText(importedText);

@@ -210,15 +210,11 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
 }
 
 /*!
-    reads the content of the file \c fileName to the data source \c dataSource.
+    reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
 */
 QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
 	QStringList dataString;
-
-#ifdef QT_DEBUG
-	qDebug()<<"BinaryFilterPrivate::read()";
-#endif
 
 	QIODevice *device = KFilterDev::deviceForFile(fileName);
 	if (! device->open(QIODevice::ReadOnly))
@@ -278,8 +274,6 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 	int columnOffset = 0;
 	if(dataSource != NULL)
 		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
-
-	//qDebug()<<" data format = "<<BinaryFilter::dataTypes()[dataType];
 
 	// read data
 	for (int i=0; i<qMin(actualRows,lines); i++){

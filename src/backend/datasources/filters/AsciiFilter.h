@@ -47,6 +47,7 @@ class AsciiFilter : public AbstractFileFilter{
 	static long lineNumber(const QString & fileName);
 
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
+	QString readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
 
 	void loadFilterSettings(const QString&);
