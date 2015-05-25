@@ -47,6 +47,10 @@ class Matrix : public AbstractDataSource {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
+		BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
+		BASIC_D_ACCESSOR_DECL(int, precision, Precision)
+		BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
+
 		QVector<QVector<double> >& data() const;
 
 		int defaultRowHeight() const;
@@ -90,17 +94,10 @@ class Matrix : public AbstractDataSource {
 		void setYEnd(double y);
 		void setCoordinates(double x1, double x2, double y1, double y2);
 
-		HeaderFormat headerFormat();
-		void setHeaderFormat(HeaderFormat);
-
-		char numericFormat() const;
-		void setNumericFormat(char format);
-
-		int displayedDigits()  const;
-		void setDisplayedDigits(int digits);
-
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+
+		typedef MatrixPrivate Private;
 
 	public slots:
 		void clear();
@@ -125,7 +122,11 @@ class Matrix : public AbstractDataSource {
 		void dataChanged(int top, int left, int bottom, int right);
 		void coordinatesChanged();
 		void formulaChanged();
-		void formatChanged();
+
+		friend class MatrixSetNumericFormatCmd;
+		friend class MatrixSetPrecisionCmd;
+		void numericFormatChanged(char);
+		void precisionChanged(int);
 
 	private:
 		void init();

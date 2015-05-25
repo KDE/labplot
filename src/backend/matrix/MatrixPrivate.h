@@ -66,7 +66,7 @@ class MatrixPrivate {
 		QList<int> m_column_widths;//!< Columns widths
 		Matrix::HeaderFormat headerFormat;
 		char numericFormat; //!< Format code for displaying numbers
-		int displayedDigits; //!< Number of significant digits
+		int precision; //!< Number of significant digits
 		QString formula; //!<formula used to calculate the cells
 		double xStart;
 		double xEnd;

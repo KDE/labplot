@@ -55,11 +55,16 @@ private slots:
 	//SLOTs for changes triggered in MatrixDock
 	void nameChanged();
 	void commentChanged();
+	void numericFormatChanged(int);
+	void precisionChanged(int);
+	void headerFormatChanged(int);
 	void rowCountChanged(int);
 	void columnCountChanged(int);
 
 	//SLOTs for changes triggered in Matrix
 	void matrixDescriptionChanged(const AbstractAspect*);
+	void matrixNumericFormatChanged(char);
+	void matrixPrecisionChanged(int);
 	void matrixRowCountChanged(int);
 	void matrixColumnCountChanged(int);
 

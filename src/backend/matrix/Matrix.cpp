@@ -34,6 +34,7 @@
 #include "backend/core/Folder.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/matrix/MatrixView.h"
+#include "backend/lib/commandtemplates.h"
 
 #include <QApplication>
 #include <QLocale>
@@ -81,10 +82,9 @@ void Matrix::init() {
 	KConfigGroup group = config.group("Matrix");
 
 	//format
-	//TODO: read from config
-	d->headerFormat = Matrix::HeaderRowsColumns;
-	d->numericFormat = 'f';
-	d->displayedDigits = 6;
+	d->numericFormat = *group.readEntry("NumericFormat", "f").toLatin1().data();
+	d->precision = group.readEntry("Precision", 3);
+	d->headerFormat = (Matrix::HeaderFormat)group.readEntry("HeaderFormat", (int)Matrix::HeaderRowsColumns);
 
 	//x-range
 	d->xStart = group.readEntry("xStart", 0.0);
@@ -122,6 +122,12 @@ QWidget* Matrix::view() const {
 	return m_view;
 }
 
+
+/* ========================================== getter methods ============================================= */
+BASIC_D_READER_IMPL(Matrix, char, numericFormat, numericFormat)
+BASIC_D_READER_IMPL(Matrix, int, precision, precision)
+BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
+
 QVector<QVector<double> >& Matrix::data() const {
 	return d->matrixData;
 }
@@ -132,6 +138,26 @@ int Matrix::defaultRowHeight() const {
 
 int Matrix::defaultColumnWidth() const {
 	return  100;
+}
+
+
+/* ========================================== setter methods ============================================= */
+STD_SETTER_CMD_IMPL_S(Matrix, SetNumericFormat, char, numericFormat)
+void Matrix::setNumericFormat(char format) {
+	if (format != d->numericFormat)
+		exec(new MatrixSetNumericFormatCmd(d, format, i18n("%1: numeric format changed")));
+}
+
+STD_SETTER_CMD_IMPL_S(Matrix, SetPrecision, int, precision)
+void Matrix::setPrecision(int precision) {
+	if (precision != d->precision)
+		exec(new MatrixSetPrecisionCmd(d, precision, i18n("%1: precision changed")));
+}
+
+//TODO: made this undoable?
+void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
+	d->headerFormat = format;
+	m_view->model()->updateHeader();
 }
 
 void Matrix::insertColumns(int before, int count) {
@@ -224,7 +250,7 @@ void Matrix::copy(Matrix* other) {
 		setColumnCells(i, 0, rows-1, other->columnCells(i, 0, rows-1));
 	setCoordinates(other->xStart(), other->xEnd(), other->yStart(), other->yEnd());
 	setNumericFormat(other->numericFormat());
-	setDisplayedDigits(other->displayedDigits());
+	setPrecision(other->precision());
 	d->formula = other->formula();
 	d->suppressDataChange = false;
 	emit dataChanged(0, 0, rows-1, columns-1);
@@ -236,7 +262,7 @@ void Matrix::copy(Matrix* other) {
 
 //! Return the text displayed in the given cell
 QString Matrix::text(int row, int col) {
-	return QLocale().toString(cell(row,col), d->numericFormat, d->displayedDigits);
+	return QLocale().toString(cell(row,col), d->numericFormat, d->precision);
 }
 
 //! Set the value of the cell
@@ -335,38 +361,7 @@ void Matrix::setFormula(const QString& formula) {
 	RESET_CURSOR;
 }
 
-void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
-	d->headerFormat = format;
-	m_view->model()->updateHeader();
-}
 
-Matrix::HeaderFormat Matrix::headerFormat() {
-	return d->headerFormat;
-}
-
-char Matrix::numericFormat() const {
-	return d->numericFormat;
-}
-
-void Matrix::setNumericFormat(char format) {
-	if (format == numericFormat()) return;
-	WAIT_CURSOR;
-	exec(new MatrixSetFormatCmd(d, format));
-	RESET_CURSOR;
-	emit formatChanged();
-}
-
-int Matrix::displayedDigits() const {
-	return d->displayedDigits;
-}
-
-void Matrix::setDisplayedDigits(int digits) {
-	if (digits == displayedDigits()) return;
-	WAIT_CURSOR;
-	exec(new MatrixSetDigitsCmd(d, digits));
-	RESET_CURSOR;
-	emit formatChanged();
-}
 
 //! This method should only be called by the view.
 /** This method does not change the view, it only changes the
@@ -613,7 +608,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("display");
 	writer->writeAttribute("headerFormat", QString::number(d->headerFormat));
 	writer->writeAttribute("numericFormat", QString(QChar(d->numericFormat)));
-	writer->writeAttribute("displayedDigits", QString::number(d->displayedDigits));
+	writer->writeAttribute("precision", QString::number(d->precision));
 	writer->writeEndElement();
 	writer->writeStartElement("coordinates");
 	writer->writeAttribute("x_start", QString::number(d->xStart));
@@ -651,13 +646,6 @@ bool Matrix::load(XmlStreamReader* reader) {
         reader->raiseError(i18n("no matrix element found"));
         return false;
     }
-
-	setDimensions(0, 0);
-	setComment("");
-// 	setFormula("");
-	setNumericFormat('f');
-	setDisplayedDigits(6);
-	setCoordinates(0.0, 1.0, 0.0, 1.0);
 
 	if (!readBasicAttributes(reader)) return false;
 
@@ -725,7 +713,7 @@ bool Matrix::readDisplayElement(XmlStreamReader* reader) {
 		reader->raiseError(i18n("invalid or missing number of displayed digits"));
 		return false;
 	}
-	setDisplayedDigits(digits);
+	setPrecision(digits);
 	if (!reader->skipToEndElement()) return false;
 
 	return true;

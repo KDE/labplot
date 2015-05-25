@@ -62,8 +62,11 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) 
 
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
-	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
-	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
+	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(numericFormatChanged(int)));
+	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)));
+	connect(ui.cbHeader, SIGNAL(currentIndexChanged(int)), this, SLOT(headerFormatChanged(int)));
+// 	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
+// 	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Matrix);
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
@@ -102,6 +105,8 @@ void MatrixDock::setMatrices(QList<Matrix*> list){
 	// undo functions
 	connect(m_matrix, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 			this, SLOT(matrixDescriptionChanged(const AbstractAspect*)));
+	connect(m_matrix, SIGNAL(numericFormatChanged(char)), this, SLOT(matrixNumericFormatChanged(char)));
+	connect(m_matrix, SIGNAL(precisionChanged(int)), this, SLOT(matrixPrecisionChanged(int)));
 // 	connect(m_matrix, SIGNAL(rowCountChanged(int)),this, SLOT(matrixRowCountChanged(int)));
 // 	connect(m_matrix, SIGNAL(columnCountChanged(int)),this, SLOT(matrixColumnCountChanged(int)));
 
@@ -123,6 +128,32 @@ void MatrixDock::commentChanged(){
 		return;
 
 	m_matrix->setComment(ui.leComment->text());
+}
+
+void MatrixDock::numericFormatChanged(int index) {
+	if (m_initializing)
+		return;
+
+	char format = ui.cbFormat->itemData(index).toChar().toLatin1();
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setNumericFormat(format);
+}
+
+void MatrixDock::precisionChanged(int precision) {
+	if (m_initializing)
+		return;
+
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setPrecision(precision);
+}
+
+void MatrixDock::headerFormatChanged(int value) {
+	if (m_initializing)
+		return;
+
+	Matrix::HeaderFormat format = (Matrix::HeaderFormat)value;
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setHeaderFormat(format);
 }
 
 void MatrixDock::rowCountChanged(int rows){
@@ -157,6 +188,20 @@ void MatrixDock::matrixDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
+void MatrixDock::matrixNumericFormatChanged(char format) {
+	m_initializing = true;
+	int index = ui.cbFormat->findData((int)format);
+	ui.cbFormat->setCurrentIndex(index);
+	m_initializing = false;
+}
+
+
+void MatrixDock::matrixPrecisionChanged(int precision) {
+	m_initializing = true;
+	ui.sbPrecision->setValue(precision);
+	m_initializing = false;
+}
+
 void MatrixDock::matrixRowCountChanged(int count) {
 	m_initializing = true;
 	ui.sbRowCount->setValue(count);
@@ -174,6 +219,9 @@ void MatrixDock::matrixColumnCountChanged(int count) {
 //*************************************************************
 void MatrixDock::load() {
 	//format
+	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData((int)m_matrix->numericFormat()));
+	ui.sbPrecision->setValue(m_matrix->precision());
+	ui.cbHeader->setCurrentIndex(m_matrix->headerFormat());
 
 	//x-range
 	ui.kleXMin->setText(QString::number(m_matrix->xStart()));
@@ -211,7 +259,12 @@ void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 	loads saved matrix properties from \c config.
  */
 void MatrixDock::loadConfig(KConfig& config){
-	KConfigGroup group = config.group( "Matrix" );
+	KConfigGroup group = config.group("Matrix");
+
+	//format
+	ui.cbFormat->setCurrentIndex( ui.cbFormat->findData(group.readEntry("numericFormat", QString(m_matrix->numericFormat()))) );
+	ui.sbPrecision->setValue(group.readEntry("Precision", m_matrix->precision()));
+	ui.cbHeader->setCurrentIndex(group.readEntry("HeaderFormat", (int)m_matrix->headerFormat()));
 
 	//x-range
 	ui.sbRowCount->setValue(group.readEntry("RowCount", m_matrix->rowCount()));
@@ -224,8 +277,17 @@ void MatrixDock::loadConfig(KConfig& config){
 	saves matrix properties to \c config.
  */
 void MatrixDock::saveConfigAsTemplate(KConfig& config){
-	KConfigGroup group = config.group( "Matrix" );
+	KConfigGroup group = config.group("Matrix");
+
+	//format
+	group.writeEntry("NumericFormat", ui.cbFormat->itemData(ui.cbFormat->currentIndex()));
+	group.writeEntry("Precision", ui.sbPrecision->value());
+	group.writeEntry("HeaderFormat", ui.cbHeader->currentIndex());
+
+	//x-range
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
+
+	//y-range
 	group.writeEntry("RowCount", ui.sbRowCount->value());
 	config.sync();
 }
