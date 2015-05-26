@@ -108,6 +108,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
     xyEquationCurveDock(0),
     xyFitCurveDock(0),
     worksheetDock(0),
+    cantorWorksheetDock(0),
     textLabelDock(0){
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore

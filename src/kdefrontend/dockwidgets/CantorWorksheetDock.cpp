@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : CantorWorksheetView.h
+    File                 : CantorWorksheetDock.cpp
     Project              : LabPlot
     Description          : Aspect providing a Cantor Worksheets for Multiple backends
     --------------------------------------------------------------------
@@ -26,31 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CANTORWORKSHEETVIEW_H
-#define CANTORWORKSHEETVIEW_H
+#include "CantorWorksheetDock.h"
 
-#include <QGraphicsView>
-#include <QAction>
-#include <QMenu>
-
-#include "backend/cantorWorksheet/CantorWorksheet.h"
-
-class CantorWorksheetView : public QGraphicsView {
-    Q_OBJECT
-    
-    public:
-	CantorWorksheetView(CantorWorksheet* cantorWorksheet);
-	
-	~CantorWorksheetView();
-	
-    public slots:
-	void createContextMenu(QMenu*) const;
-
-    private:
-	CantorWorksheet* m_worksheet;  
-	QAction* m_restartBackendAction;
-	
-	void initActions();
-};
-
-#endif // CANTORWORKSHEETVIEW_H
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent) {
+    ui.setupUi(this);
+}

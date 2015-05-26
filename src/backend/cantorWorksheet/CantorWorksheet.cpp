@@ -30,15 +30,16 @@
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
 #include <QDebug>
+#include <QPushButton>
 
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine *engine, const QString &name)
 		: AbstractPart(name), scripted(engine){
+    addChild(new QPushButton("Hey"));
 }
 
 QWidget* CantorWorksheet::view() const {
     if (!m_view) {
 	m_view = new CantorWorksheetView(const_cast<CantorWorksheet *>(this));
-// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;
 }
@@ -50,6 +51,5 @@ QMenu *CantorWorksheet::createContextMenu() {
     QMenu *menu = AbstractPart::createContextMenu();
     Q_ASSERT(menu);
     emit requestProjectContextMenu(menu);
-    qDebug() << "Emiting";
     return menu;
 }

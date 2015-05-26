@@ -36,6 +36,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "backend/core/Project.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
@@ -49,6 +50,7 @@
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
+#include "kdefrontend/dockwidgets/CantorWorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 
 #include <kstatusbar.h>
@@ -109,7 +111,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
   }
 
   if (mainWindow->stackedWidget->currentWidget())
-	mainWindow->stackedWidget->currentWidget()->show();
+	mainWindow->stackedWidget->currentWidget()->show();  
 
   if (className=="Spreadsheet"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Spreadsheet properties"));
@@ -284,6 +286,23 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->projectDock->setProject(mainWindow->m_project);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
+  }else if (className=="CantorWorksheet"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("CAS properties"));
+
+	if (!mainWindow->cantorWorksheetDock){
+	  mainWindow->cantorWorksheetDock = new CantorWorksheetDock(mainWindow->stackedWidget);
+	  connect(mainWindow->cantorWorksheetDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+	  mainWindow->stackedWidget->addWidget(mainWindow->cantorWorksheetDock);
+	}
+
+	QList<CantorWorksheet*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<CantorWorksheet *>(aspect);
+	}
+// 	mainWindow->cantorWorksheetDock->setSpreadsheets(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cantorWorksheetDock);
+      
   }else{
     mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 	if (mainWindow->stackedWidget->currentWidget())

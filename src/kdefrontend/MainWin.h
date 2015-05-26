@@ -50,6 +50,7 @@ class XYCurveDock;
 class XYEquationCurveDock;
 class XYFitCurveDock;
 class WorksheetDock;
+class CantorWorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
 
@@ -148,6 +149,7 @@ private:
 	XYEquationCurveDock* xyEquationCurveDock;
 	XYFitCurveDock* xyFitCurveDock;
 	WorksheetDock* worksheetDock;
+	CantorWorksheetDock* cantorWorksheetDock;
 	LabelWidget* textLabelDock;
 
 	bool openXML(QIODevice*);
