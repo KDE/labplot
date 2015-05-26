@@ -3,10 +3,14 @@ cmake_minimum_required(VERSION 2.6)
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
+set(VTK_LIBRARIES vtkRendering vtkCommon vtkFiltering vtkGraphics vtkIO vtkImaging vtkRendering vtkHybrid)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
-include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${VTK_INCLUDE_DIRS})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions (-DLVERSION='\"2.0.2\"')
 # add_definitions (-DLDEBUG='1')
