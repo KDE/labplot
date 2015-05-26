@@ -251,16 +251,29 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		H5T_class_t mclass = H5Tget_member_class(tid,m);
 		switch(mclass) {
 		case H5T_INTEGER: {
-			if(msize == 2) {
+			if(msize == 1) {
+				char* data_out = (char*) malloc(rows*msize);
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++)
+					data[i][m]=QString::number(data_out[i]);
+			} else if(msize == 2) {
 				short* data_out = (short*) malloc(rows*msize);
 
 				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0]);
 			
 				for (int i=0; i < qMin(rows,lines); i++)
 					data[i][m]=QString::number(data_out[i]);
-			}
-			else if(msize == 4) {
+			} else if(msize == 4) {
 				int* data_out = (int*) malloc(rows*msize);
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++)
+					data[i][m]=QString::number(data_out[i]);
+			} else if(msize == 8) {
+				long long* data_out = (long long*) malloc(rows*msize);
 
 				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0]);
 			
@@ -327,7 +340,20 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		H5T_class_t mclass = H5Tget_member_class(tid,m);
 		switch(mclass) {
 		case H5T_INTEGER: {
-			if(msize == 2) {
+			if(msize == 1) {
+				char** data_out = (char**) malloc(rows*sizeof(char*));
+				data_out[0] = (char*)malloc( cols*rows*msize );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++) {
+					for (int j=0; j < cols; j++) {
+						data[i][j][m]=QString::number(data_out[i][j]);
+					}
+				}
+				free(data_out[0]);
+			} else if(msize == 2) {
 				short** data_out = (short**) malloc(rows*sizeof(short*));
 				data_out[0] = (short*)malloc( cols*rows*msize );
 				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
@@ -341,8 +367,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 				}
 				free(data_out[0]);
 				free(data_out);
-			}
-			else if(msize == 4) {
+			} else if(msize == 4) {
 				int** data_out = (int**) malloc(rows*sizeof(int*));
 				data_out[0] = (int*)malloc( cols*rows*msize );
 				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
@@ -356,6 +381,19 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 				}
 				free(data_out[0]);
 				free(data_out);
+			} else if(msize == 8) {
+				long long** data_out = (long long**) malloc(rows*sizeof(long long*));
+				data_out[0] = (long long*)malloc( cols*rows*msize );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, ctype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+			
+				for (int i=0; i < qMin(rows,lines); i++) {
+					for (int j=0; j < cols; j++) {
+						data[i][j][m]=QString::number(data_out[i][j]);
+					}
+				}
+				free(data_out[0]);
 			}
 			break;
 		}
@@ -437,13 +475,21 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 		attr<<"="<<QString(name);
 		H5Tclose(amem);
 	}else if(aclass == H5T_INTEGER) {
-		if(typeSize == 2) {
+		if(typeSize == 1) {
+			char value;
+			H5Aread(aid, H5T_NATIVE_CHAR, &value);
+			attr<<"="<<QString::number(value);
+		} else if(typeSize == 2) {
 			short value;
 			H5Aread(aid, H5T_NATIVE_SHORT, &value);
 			attr<<"="<<QString::number(value);
 		} else if (typeSize == 4) {
 			int value;
 			H5Aread(aid, H5T_NATIVE_INT, &value);
+			attr<<"="<<QString::number(value);
+		} else if (typeSize == 8) {
+			long long value;
+			H5Aread(aid, H5T_NATIVE_LLONG, &value);
 			attr<<"="<<QString::number(value);
 		}
 	}else if(aclass == H5T_FLOAT) {
@@ -862,7 +908,21 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			break;
 		}
 		case H5T_INTEGER: {
-			if(typeSize == 2) {
+			if(typeSize == 1) {
+				char* data_out = (char*) malloc(rows*typeSize);
+
+				H5Dread(dataset, H5T_NATIVE_CHAR, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					if (dataSource != NULL) {
+						dataPointers[0]->operator[](i-startRow+1) = data_out[i];
+					} else {
+						dataString<<QString::number(data_out[i])<<" ";
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out);
+			} else if(typeSize == 2) {
 				short* data_out = (short*) malloc(rows*typeSize);
 
 				H5Dread(dataset, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
@@ -880,6 +940,20 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 				int* data_out = (int*) malloc(rows*typeSize);
 
 				H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					if (dataSource != NULL) {
+						dataPointers[0]->operator[](i-startRow+1) = data_out[i];
+					} else {
+						dataString<<QString::number(data_out[i])<<" ";
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out);
+			} else if(typeSize == 8) {
+				long long* data_out = (long long*) malloc(rows*typeSize);
+
+				H5Dread(dataset, H5T_NATIVE_LLONG, H5S_ALL, H5S_ALL, H5P_DEFAULT, data_out);
 				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
 					if (dataSource != NULL) {
 						dataPointers[0]->operator[](i-startRow+1) = data_out[i];
@@ -968,9 +1042,47 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		// read data
 		switch(dclass) {
 		case H5T_INTEGER: {
-			if(typeSize == 2) {
+			if(typeSize == 1) {
+				char** data_out = (char**) malloc(rows*sizeof(char*));
+				data_out[0] = (char*)malloc( cols*rows*typeSize );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, H5T_NATIVE_CHAR, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					for (int j=startColumn-1; j < endColumn; j++) {
+						if (dataSource != NULL) {
+							dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
+						} else {
+							dataString<<QString::number(data_out[i][j])<<" ";
+						}
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out[0]);
+				free(data_out);
+			} else if(typeSize == 2) {
 				short** data_out = (short**) malloc(rows*sizeof(short*));
-				data_out[0] = (short*)malloc( cols*rows*sizeof(short) );
+				data_out[0] = (short*)malloc( cols*rows*typeSize );
+				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
+
+				H5Dread(dataset, H5T_NATIVE_SHORT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+					for (int j=startColumn-1; j < endColumn; j++) {
+						if (dataSource != NULL) {
+							dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data_out[i][j];
+						} else {
+							dataString<<QString::number(data_out[i][j])<<" ";
+						}
+					}
+					dataString<<"\n";
+				}
+
+				free(data_out[0]);
+				free(data_out);
+			} else if(typeSize == 4) {
+				int** data_out = (int**) malloc(rows*sizeof(int*));
+				data_out[0] = (int*)malloc( cols*rows*typeSize );
 				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
 
 				H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
@@ -987,12 +1099,12 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 				free(data_out[0]);
 				free(data_out);
-			} else if(typeSize == 4) {
-				int** data_out = (int**) malloc(rows*sizeof(int*));
-				data_out[0] = (int*)malloc( cols*rows*sizeof(int) );
+			} else if(typeSize == 8) {
+				long long** data_out = (long long**) malloc(rows*sizeof(long long*));
+				data_out[0] = (long long*)malloc( cols*rows*typeSize );
 				for (int i=1; i < rows; i++) data_out[i] = data_out[0]+i*cols;
 
-				H5Dread(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
+				H5Dread(dataset, H5T_NATIVE_LLONG, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data_out[0][0]);
 				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
 					for (int j=startColumn-1; j < endColumn; j++) {
 						if (dataSource != NULL) {
