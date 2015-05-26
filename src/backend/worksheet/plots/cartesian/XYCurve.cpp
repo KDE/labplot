@@ -2125,7 +2125,14 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 						break;
 					case PlotArea::Centered:{
-						//TODO
+						QPixmap backpix(rect.size().toSize());
+						backpix.fill();
+						QPainter p(&backpix);
+						p.drawPixmap(QPointF(0,0),pix);
+						p.end();
+						painter->setBrush(QBrush(backpix));
+						painter->setBrushOrigin(-pix.size().width()/2,-pix.size().height()/2);
+						break;
 					}
 					case PlotArea::Tiled:
 						painter->setBrush(QBrush(pix));
