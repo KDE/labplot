@@ -1539,6 +1539,46 @@ void XYCurvePrivate::updateFilling() {
 		//coordinate at which to close all polygons
 		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).y();
 	} else if (fillingPosition == XYCurve::FillingZeroBaseline) {
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+			if (plot->yMax()>0) {
+				if (first.x() < plot->xMin())
+					start = edge;
+				else if (first.x() > plot->xMax())
+					start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+				else
+					start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMax()));
+			} else {
+				if (first.x() < plot->xMin())
+					start = edge;
+				else if (first.x() > plot->xMax())
+					start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+				else
+					start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMin()));
+			}
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+			if (plot->yMax()>0) {
+				if (last.x() < plot->xMin())
+					end = edge;
+				else if (last.x() > plot->xMax())
+					end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+				else
+					end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMax()));
+			} else {
+				if (last.x() < plot->xMin())
+					end = edge;
+				else if (last.x() > plot->xMax())
+					end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+				else
+					end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMin()));
+			}
+		}
+
 		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
 	}else if (fillingPosition == XYCurve::FillingLeft) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
