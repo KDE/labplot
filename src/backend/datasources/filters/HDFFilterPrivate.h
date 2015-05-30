@@ -62,7 +62,7 @@ class HDFFilterPrivate {
 		QString translateHDFClass(H5T_class_t);
 		QStringList readHDFCompound(hid_t tid);
 		template <typename T> QStringList readHDFData1D(hid_t dataset, hid_t type, int rows, int lines, QVector<double> *dataPointer=NULL);
-		QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines);
+		QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines,QVector< QVector<double>* >& dataPointer);
 		template <typename T> QStringList readHDFData2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer);
 		QStringList readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
 		QStringList readHDFAttr(hid_t aid);
