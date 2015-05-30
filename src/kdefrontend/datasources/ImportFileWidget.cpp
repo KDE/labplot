@@ -97,6 +97,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.swOptions->setCurrentIndex(FileDataSource::Ascii);
 	// disable items
 	//ui.cbFileType->setItemData(FileDataSource::Image, 0, Qt::UserRole - 1);
+#ifndef HAVE_HDF5
+	ui.cbFileType->setItemData(FileDataSource::HDF, 0, Qt::UserRole - 1);
+#endif
 
 	ui.gbOptions->hide();
 
