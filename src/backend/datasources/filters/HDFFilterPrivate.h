@@ -58,9 +58,12 @@ class HDFFilterPrivate {
 		QList<unsigned long> multiLinkList;	// used to find hard links
 #ifdef HAVE_HDF5
 		QString translateHDFOrder(H5T_order_t);
+		QString translateHDFType(hid_t);
 		QString translateHDFClass(H5T_class_t);
 		QStringList readHDFCompound(hid_t tid);
+		template <typename T> QStringList readHDFData1D(hid_t dataset, hid_t type, int rows, int lines, QVector<double> *dataPointer=NULL);
 		QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines);
+		template <typename T> QStringList readHDFData2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer);
 		QStringList readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
 		QStringList readHDFAttr(hid_t aid);
 		QStringList scanHDFAttrs(hid_t oid);
