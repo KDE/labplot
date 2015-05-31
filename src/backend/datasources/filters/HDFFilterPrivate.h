@@ -58,7 +58,7 @@ class HDFFilterPrivate {
 		QList<unsigned long> multiLinkList;	// used to find hard links
 #ifdef HAVE_HDF5
 		int status;
-		void handleError(int status, QString function, QString arg=QString());
+		void handleError(int err, QString function, QString arg=QString());
 		QString translateHDFOrder(H5T_order_t);
 		QString translateHDFType(hid_t);
 		QString translateHDFClass(H5T_class_t);

@@ -153,9 +153,9 @@ HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 }
 
 #ifdef HAVE_HDF5
-void HDFFilterPrivate::handleError(int status, QString function, QString arg) {
-	if (status < 0) {
-		qDebug()<<"ERROR"<<status<<":"<<function<<"() - "<<arg;
+void HDFFilterPrivate::handleError(int err, QString function, QString arg) {
+	if (err < 0) {
+		qDebug()<<"ERROR"<<err<<":"<<function<<"() - "<<arg;
 	}
 }
 
@@ -930,8 +930,6 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 */
 void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
 #ifdef HAVE_HDF5
-	int status;
-
 	QByteArray bafileName = fileName.toLatin1();
 	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file,"H5Fopen",fileName);
@@ -954,7 +952,6 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
     reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
 QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
-	int status;
 	QStringList dataString;
 
 	if(currentDataSet.isEmpty())
