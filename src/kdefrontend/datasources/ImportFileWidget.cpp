@@ -33,6 +33,7 @@ Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/HDFFilter.h"
+#include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 
 #include <QInputDialog>
@@ -85,20 +86,29 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	QWidget* hdfw=new QWidget(0);
 	hdfOptionsWidget.setupUi(hdfw);
-	QStringList headers;
-	headers<<i18n("Name")<<i18n("Link")<<i18n("Type")<<i18n("Properties")<<i18n("Attributes");
-	hdfOptionsWidget.twContent->setHeaderLabels(headers);
+	QStringList hdfheaders;
+	hdfheaders<<i18n("Name")<<i18n("Link")<<i18n("Type")<<i18n("Properties")<<i18n("Attributes");
+	hdfOptionsWidget.twContent->setHeaderLabels(hdfheaders);
 	// link and type column are filled but we don't need to show it
 	hdfOptionsWidget.twContent->hideColumn(1);
 	hdfOptionsWidget.twContent->hideColumn(2);
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
+	QWidget* netcdfw=new QWidget(0);
+	netcdfOptionsWidget.setupUi(netcdfw);
+	QStringList headers;
+	headers<<i18n("Name")<<i18n("Properties")<<i18n("Values");
+	netcdfOptionsWidget.twContent->setHeaderLabels(headers);
+	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
+
 	// default filter
 	ui.swOptions->setCurrentIndex(FileDataSource::Ascii);
 	// disable items
-	//ui.cbFileType->setItemData(FileDataSource::Image, 0, Qt::UserRole - 1);
 #ifndef HAVE_HDF5
 	ui.cbFileType->setItemData(FileDataSource::HDF, 0, Qt::UserRole - 1);
+#endif
+#ifndef HAVE_NETCDF
+	ui.cbFileType->setItemData(FileDataSource::NETCDF, 0, Qt::UserRole - 1);
 #endif
 
 	ui.gbOptions->hide();
@@ -145,6 +155,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	// HDF data
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 
+	// NetCDF data
+
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
@@ -184,7 +196,7 @@ ImportFileWidget::~ImportFileWidget() {
 	// image data
 	conf.writeEntry("ImportFormat", imageOptionsWidget.cbImportFormat->currentIndex());
 
-	//HDF data
+	//HDF/NetCDF data
 	// nothing
 }
 
@@ -313,6 +325,23 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		return filter;
 		break;
 	}
+	case FileDataSource::NETCDF: {
+		NetCDFFilter* filter = new NetCDFFilter();
+ 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
+			filter->setAutoModeEnabled(true);
+ 		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
+			filter->setAutoModeEnabled(false);
+		} else {
+// 			filter->setFilterName( ui.cbFilter->currentText() );
+		}
+		filter->setStartRow( ui.sbStartRow->value() );
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value() );
+		filter->setEndColumn( ui.sbEndColumn->value() );
+
+		return filter;
+		break;
+	}
 	default: 
 		qDebug()<<"Unknown file type!";	
 	}
@@ -420,6 +449,24 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			hdfOptionsWidget.twContent->expandAll();
 			hdfOptionsWidget.twContent->resizeColumnToContents(0);
 			hdfOptionsWidget.twContent->resizeColumnToContents(3);
+		} else if (info.contains(("NetCDF Data Format"))) {
+			debug="detected NetCDF file";
+			ui.cbFileType->setCurrentIndex(FileDataSource::NETCDF);
+
+			// update NetCDF tree widget using current selected file
+			netcdfOptionsWidget.twContent->clear();
+			netcdfOptionsWidget.leDataSet->clear();
+
+			QString fileName = ui.kleFileName->text();
+			QFileInfo fileInfo(fileName);
+			QTreeWidgetItem *rootItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<fileInfo.baseName());
+			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
+			filter->parse(fileName, rootItem);
+			netcdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
+			netcdfOptionsWidget.twContent->expandAll();
+			netcdfOptionsWidget.twContent->resizeColumnToContents(0);
+			netcdfOptionsWidget.twContent->resizeColumnToContents(1);
+			
 		} else {
 			debug="probably BINARY file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
@@ -479,7 +526,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.sbEndColumn->hide();
 		break;
 	}
-	case FileDataSource::HDF: {
+	case FileDataSource::HDF:
+	case FileDataSource::NETCDF: {
 		break;
 	}	
 	case FileDataSource::Image: {
@@ -592,6 +640,11 @@ void ImportFileWidget::refreshPreview(){
 	case FileDataSource::HDF: {
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 		importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
+		break;
+	}
+	case FileDataSource::NETCDF: {
+		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
+		//TODO: importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
 		break;
 	}
 	default:

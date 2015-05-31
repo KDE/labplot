@@ -2,7 +2,7 @@
 New features:
 	* New Matrix view for handling matrix data
 	* Import of binary, image and HDF data into spreadsheet or matrix
-	* Visual HDF parser to view content of files and import data sets
+	* Visual HDF and NetCDF parser to view content of files and import data sets
 	* Preview of all supported file types in import dialog
 	* Transparently import compressed data files
 	* In xy-curve the points may not be connected by the line if there are NANs in-between. This behaviour is controlled by the parameter "skip gaps"

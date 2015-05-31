@@ -3,6 +3,7 @@ LabPlot requires
 	* GSL version 1.15 or higher
 optional
 	* HDF5 1.8 or higher
+	* NetCDF 3 or higher
 
 ===============================================================================
 To build LabPlot just execute

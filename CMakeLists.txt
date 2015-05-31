@@ -80,17 +80,28 @@ ELSE (HDF5_FOUND)
 ENDIF (HDF5_FOUND)
 
 # ### NETCDF #####################################
-# FIND_LIBRARY(NETCDF_LIBRARY
-#   NAMES netcdf
-# )
-# IF(NETCDF_LIBRARY)
-# MESSAGE ("-- Found NETCDF library: ${NETCDF_LIBRARY}")
-# add_definitions (-DHAVE_NETCDF=1)
-# ELSE(NETCDF_LIBRARY)
-# MESSAGE ("-- NETCDF library NOT FOUND!")
-# SET(NETCDF_LIBRARY "")
-# ENDIF(NETCDF_LIBRARY)
-#  
+FIND_LIBRARY(NETCDF_LIBRARY netcdf
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (NETCDF_INCLUDE_DIR netcdf.h
+	/usr/include/
+	/usr/local/include/
+)
+IF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+	SET (NETCDF_FOUND TRUE)
+ELSE (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+	SET (NETCDF_FOUND FALSE)
+	SET (NETCDF_LIBRARY "")
+ENDIF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+IF (NETCDF_FOUND)
+	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library: ${NETCDF_INCLUDE_DIR} ${NETCDF_LIBRARY}")
+	add_definitions (-DHAVE_NETCDF=1)
+ELSE (NETCDF_FOUND)
+	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
+ENDIF (NETCDF_FOUND)
+  
 # ### CDF #####################################
 # FIND_LIBRARY(CDF_LIBRARY
 #   NAMES cdf
