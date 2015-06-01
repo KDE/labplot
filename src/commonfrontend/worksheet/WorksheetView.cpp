@@ -278,7 +278,7 @@ void WorksheetView::initActions(){
 	zoomOutXAction = new KAction(KIcon("zoom-out-x"), i18n("zoom out X"), this);
 	zoomInYAction = new KAction(KIcon("zoom-in-y"), i18n("zoom in Y"), this);
 	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), this);
-    shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
+	shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
 	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
 	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
 	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
