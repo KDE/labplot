@@ -174,6 +174,7 @@ void WorksheetView::initActions(){
 	addCartesianPlot2Action = new KAction(KIcon("cartesian-plot-two-axes"), i18n("box plot, two axes"), addNewActionGroup);
 	addCartesianPlot3Action = new KAction(KIcon("cartesian-plot-two-axes-centered"), i18n("two axes, centered"), addNewActionGroup);
 	addCartesianPlot4Action = new KAction(KIcon("cartesian-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
+	add3DPlotAction = new KAction(KIcon("office-chart-line"), i18n("3D plot"), addNewActionGroup);
 	addTextLabelAction = new KAction(KIcon("draw-text"), i18n("text label"), addNewActionGroup);
 
 	//Layout actions
@@ -312,8 +313,12 @@ void WorksheetView::initMenus(){
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
 
+	m_addNew3DPlotMenu = new QMenu(i18n("3D-plot"));
+	m_addNew3DPlotMenu->addAction(add3DPlotAction);
+
 	m_addNewMenu = new QMenu(i18n("Add new"));
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(KIcon("office-chart-line"));
+	m_addNewMenu->addMenu(m_addNew3DPlotMenu)->setIcon(KIcon("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 
@@ -867,6 +872,9 @@ void WorksheetView::addNew(QAction* action){
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
+	}else if ( action == add3DPlotAction ){
+		// TODO: Create a 3D plot widget
+		qDebug() << Q_FUNC_INFO << "Add3dPlot menu clicked";
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel(i18n("text label"));
 		l->setText(i18n("text label"));

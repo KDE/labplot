@@ -99,6 +99,7 @@ class WorksheetView : public QGraphicsView {
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
+	QMenu* m_addNew3DPlotMenu;
 	QMenu* m_zoomMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
@@ -134,6 +135,7 @@ class WorksheetView : public QGraphicsView {
 	QAction* addCartesianPlot3Action;
 	QAction* addCartesianPlot4Action;
 	QAction* addTextLabelAction;
+	QAction* add3DPlotAction;
 
 	QAction* verticalLayoutAction;
 	QAction* horizontalLayoutAction;
