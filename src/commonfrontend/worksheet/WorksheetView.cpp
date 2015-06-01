@@ -32,6 +32,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/3d/Plot3D.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/worksheet/GridDialog.h"
@@ -875,6 +876,8 @@ void WorksheetView::addNew(QAction* action){
 	}else if ( action == add3DPlotAction ){
 		// TODO: Create a 3D plot widget
 		qDebug() << Q_FUNC_INFO << "Add3dPlot menu clicked";
+		Plot3D* plot = new Plot3D(i18n("3D Plot"));
+		aspect = plot;
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel(i18n("text label"));
 		l->setText(i18n("text label"));

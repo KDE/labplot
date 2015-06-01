@@ -133,6 +133,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/3d/Plot3D.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
 
