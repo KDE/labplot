@@ -20,7 +20,7 @@
  */
 
 #include "commandentry.h"
-#include "worksheet.h"
+#include "CantorWorksheetScene.h"
 #include "worksheettextitem.h"
 #include "resultitem.h"
 #include "loadedexpression.h"
@@ -49,7 +49,7 @@ const QString CommandEntry::Prompt=QLatin1String(">>> ");
 const double CommandEntry::HorizontalSpacing = 4;
 const double CommandEntry::VerticalSpacing = 4;
 
-CommandEntry::CommandEntry(Worksheet* worksheet) : WorksheetEntry(worksheet)
+CommandEntry::CommandEntry(CantorWorksheetScene* worksheet) : WorksheetEntry(worksheet)
 {
     m_expression = 0;
     m_completionObject = 0;

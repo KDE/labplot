@@ -150,8 +150,8 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetview.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheet.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetViewHolder.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetScene.cpp
 	${COMMONFRONTEND_DIR}/cantorWorksheet/epsrenderer.cpp
 	${COMMONFRONTEND_DIR}/cantorWorksheet/latexrenderer.cpp
 	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetcursor.cpp
@@ -188,7 +188,7 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 qt5_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive Qt5::Svg KF5::WidgetsAddons KF5::KIOWidgets KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS})
+target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive Qt5::Svg KF5::WidgetsAddons KF5::KIOWidgets KF5::XmlGui ${Qt5XmlPatterns_LIBRARIES} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS})
 # ${OPJ_LIBRARY}
 
 ############## installation ################################

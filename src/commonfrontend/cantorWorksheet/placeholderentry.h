@@ -26,7 +26,7 @@
 class PlaceHolderEntry : public WorksheetEntry
 {
   public:
-    PlaceHolderEntry(Worksheet* worksheet, QSizeF s);
+    PlaceHolderEntry(CantorWorksheetScene* worksheet, QSizeF s);
     ~PlaceHolderEntry();
 
     enum {Type = UserType + 6};

@@ -52,7 +52,7 @@ struct AnimationData
 
 const qreal WorksheetEntry::VerticalMargin = 4;
 
-WorksheetEntry::WorksheetEntry(Worksheet* worksheet) : QGraphicsObject()
+WorksheetEntry::WorksheetEntry(CantorWorksheetScene* worksheet) : QGraphicsObject()
 {
     m_next = 0;
     m_prev = 0;
@@ -82,7 +82,7 @@ int WorksheetEntry::type() const
     return Type;
 }
 
-WorksheetEntry* WorksheetEntry::create(int t, Worksheet* worksheet)
+WorksheetEntry* WorksheetEntry::create(int t, CantorWorksheetScene* worksheet)
 {
     switch(t)
     {
@@ -242,12 +242,12 @@ void WorksheetEntry::moveToNextEntry(int pos, qreal x)
         entry = entry->next();
 }
 
-Worksheet* WorksheetEntry::worksheet()
+CantorWorksheetScene* WorksheetEntry::worksheet()
 {
-    return qobject_cast<Worksheet*>(scene());
+    return qobject_cast<CantorWorksheetScene*>(scene());
 }
 
-WorksheetView* WorksheetEntry::worksheetView()
+CantorWorksheetViewHolder* WorksheetEntry::worksheetView()
 {
     return worksheet()->worksheetView();
 }

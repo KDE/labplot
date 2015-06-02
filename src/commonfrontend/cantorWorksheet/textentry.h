@@ -35,7 +35,7 @@ class TextEntry : public WorksheetEntry
 {
   Q_OBJECT
   public:
-    TextEntry(Worksheet* worksheet);
+    TextEntry(CantorWorksheetScene* worksheet);
     ~TextEntry();
 
     enum {Type = UserType + 1};

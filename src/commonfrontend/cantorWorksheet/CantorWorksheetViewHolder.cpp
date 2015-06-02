@@ -18,15 +18,15 @@
     Copyright (C) 2012 Martin Kuettler <martin.kuettler@gmail.com>
  */
 
-#include "worksheetview.h"
-#include "worksheet.h"
+#include "CantorWorksheetViewHolder.h"
+#include "CantorWorksheetScene.h"
 
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QScrollBar>
 #include <QDebug>
 
-WorksheetView::WorksheetView(Worksheet* scene, QWidget* parent)
+CantorWorksheetViewHolder::CantorWorksheetViewHolder(CantorWorksheetScene* scene, QWidget* parent)
     : QGraphicsView(scene, parent)
 {
     m_scale = 1;
@@ -41,11 +41,11 @@ WorksheetView::WorksheetView(Worksheet* scene, QWidget* parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
-WorksheetView::~WorksheetView()
+CantorWorksheetViewHolder::~CantorWorksheetViewHolder()
 {
 }
 
-void WorksheetView::makeVisible(const QRectF& sceneRect)
+void CantorWorksheetViewHolder::makeVisible(const QRectF& sceneRect)
 {
     const qreal w = viewport()->width();
     const qreal h = viewport()->height();
@@ -145,11 +145,11 @@ void WorksheetView::makeVisible(const QRectF& sceneRect)
         m_vAnimation = 0;
     }
 
-    connect(m_animation, &QParallelAnimationGroup::finished, this, &WorksheetView::endAnimation);
+    connect(m_animation, &QParallelAnimationGroup::finished, this, &CantorWorksheetViewHolder::endAnimation);
     m_animation->start();
 }
 
-bool WorksheetView::isVisible(const QRectF& sceneRect)
+bool CantorWorksheetViewHolder::isVisible(const QRectF& sceneRect)
 {
     const qreal w = viewport()->width();
     const qreal h = viewport()->height();
@@ -174,7 +174,7 @@ bool WorksheetView::isVisible(const QRectF& sceneRect)
     return QRectF(x,y,w,h).contains(rect);
 }
 
-bool WorksheetView::isAtEnd()
+bool CantorWorksheetViewHolder::isAtEnd()
 {
     bool atEnd = true;
     if (verticalScrollBar())
@@ -182,13 +182,13 @@ bool WorksheetView::isAtEnd()
     return atEnd;
 }
 
-void WorksheetView::scrollToEnd()
+void CantorWorksheetViewHolder::scrollToEnd()
 {
     if (verticalScrollBar())
         verticalScrollBar()->setValue(verticalScrollBar()->maximum());
 }
 
-void WorksheetView::scrollBy(int dy)
+void CantorWorksheetViewHolder::scrollBy(int dy)
 {
     if (!verticalScrollBar())
         return;
@@ -210,7 +210,7 @@ void WorksheetView::scrollBy(int dy)
     makeVisible(QRectF(x, ny, w, h));
 }
 
-void WorksheetView::endAnimation()
+void CantorWorksheetViewHolder::endAnimation()
 {
     if (!m_animation)
         return;
@@ -221,17 +221,17 @@ void WorksheetView::endAnimation()
     m_animation = 0;
 }
 
-QPoint WorksheetView::viewCursorPos()
+QPoint CantorWorksheetViewHolder::viewCursorPos()
 {
     return viewport()->mapFromGlobal(QCursor::pos());
 }
 
-QPointF WorksheetView::sceneCursorPos()
+QPointF CantorWorksheetViewHolder::sceneCursorPos()
 {
     return mapToScene(viewCursorPos());
 }
 
-QRectF WorksheetView::viewRect()
+QRectF CantorWorksheetViewHolder::viewRect()
 {
     const qreal w = viewport()->width() / m_scale;
     const qreal h = viewport()->height() / m_scale;
@@ -240,25 +240,25 @@ QRectF WorksheetView::viewRect()
     return QRectF(x, y, w, h);
 }
 
-void WorksheetView::resizeEvent(QResizeEvent * event)
+void CantorWorksheetViewHolder::resizeEvent(QResizeEvent * event)
 {
     QGraphicsView::resizeEvent(event);
     updateSceneSize();
 }
 
-qreal WorksheetView::scaleFactor()
+qreal CantorWorksheetViewHolder::scaleFactor()
 {
     return m_scale;
 }
 
-void WorksheetView::updateSceneSize()
+void CantorWorksheetViewHolder::updateSceneSize()
 {
     QSize s = viewport()->size();
     m_worksheet->setViewSize(s.width()/m_scale, s.height()/m_scale, m_scale);
     sendViewRectChange();
 }
 
-void WorksheetView::sceneRectChanged(const QRectF& sceneRect)
+void CantorWorksheetViewHolder::sceneRectChanged(const QRectF& sceneRect)
 {
     Q_UNUSED(sceneRect);
     if (verticalScrollBar())
@@ -269,19 +269,19 @@ void WorksheetView::sceneRectChanged(const QRectF& sceneRect)
                 this, SLOT(sendViewRectChange()), Qt::UniqueConnection);
 }
 
-void WorksheetView::sendViewRectChange()
+void CantorWorksheetViewHolder::sendViewRectChange()
 {
     emit viewRectChanged(viewRect());
 }
 
-void WorksheetView::zoomIn()
+void CantorWorksheetViewHolder::zoomIn()
 {
     m_scale *= 1.1;
     scale(1.1, 1.1);
     updateSceneSize();
 }
 
-void WorksheetView::zoomOut()
+void CantorWorksheetViewHolder::zoomOut()
 {
     m_scale /= 1.1;
     scale(1/1.1, 1/1.1);

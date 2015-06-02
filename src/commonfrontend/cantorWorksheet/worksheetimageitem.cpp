@@ -19,7 +19,7 @@
  */
 
 #include "worksheetimageitem.h"
-#include "worksheet.h"
+#include "CantorWorksheetScene.h"
 
 #include <QMovie>
 #include <QImage>
@@ -151,9 +151,9 @@ void WorksheetImageItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     menu->popup(event->screenPos());
 }
 
-Worksheet* WorksheetImageItem::worksheet()
+CantorWorksheetScene* WorksheetImageItem::worksheet()
 {
-    return qobject_cast<Worksheet*>(scene());
+    return qobject_cast<CantorWorksheetScene*>(scene());
 }
 
 

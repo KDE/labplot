@@ -30,7 +30,7 @@ class PageBreakEntry : public WorksheetEntry
   Q_OBJECT;
 
   public:
-    PageBreakEntry(Worksheet* worksheet);
+    PageBreakEntry(CantorWorksheetScene* worksheet);
     ~PageBreakEntry();
 
     enum {Type = UserType + 3};

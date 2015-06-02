@@ -29,8 +29,8 @@
 #include <QMenu>
 #include <KStandardAction>
 
-class Worksheet;
-class WorksheetView;
+class CantorWorksheetScene;
+class CantorWorksheetViewHolder;
 class WorksheetCursor;
 
 namespace Cantor {
@@ -74,8 +74,8 @@ class WorksheetTextItem : public QGraphicsTextItem
     double height() const;
     virtual qreal setGeometry(qreal x, qreal y, qreal w, bool centered=false);
 
-    Worksheet* worksheet();
-    WorksheetView* worksheetView();
+    CantorWorksheetScene* worksheet();
+    CantorWorksheetViewHolder* worksheetView();
 
     void clearSelection();
 

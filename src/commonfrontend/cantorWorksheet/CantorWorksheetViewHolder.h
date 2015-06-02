@@ -18,22 +18,22 @@
     Copyright (C) 2012 Martin Kuettler <martin.kuettler@gmail.com>
  */
 
-#ifndef WORKSHEETVIEW_H
-#define WORKSHEETVIEW_H
+#ifndef CANTORWORKSHEETVIEWHOLDER_H
+#define CANTORWORKSHEETVIEWHOLDER_H
 
 #include <QGraphicsView>
 
 class QParallelAnimationGroup;
 class QPropertyAnimation;
 
-class Worksheet;
+class CantorWorksheetScene;
 
-class WorksheetView : public QGraphicsView
+class CantorWorksheetViewHolder : public QGraphicsView
 {
   Q_OBJECT
   public:
-    WorksheetView(Worksheet* scene, QWidget* parent);
-    ~WorksheetView();
+    CantorWorksheetViewHolder(CantorWorksheetScene* scene, QWidget* parent);
+    ~CantorWorksheetViewHolder();
 
     void makeVisible(const QRectF& sceneRect);
     bool isVisible(const QRectF& sceneRect);
@@ -67,7 +67,7 @@ class WorksheetView : public QGraphicsView
     QParallelAnimationGroup* m_animation;
     QPropertyAnimation* m_hAnimation;
     QPropertyAnimation* m_vAnimation;
-    Worksheet* m_worksheet;
+    CantorWorksheetScene* m_worksheet;
 };
 
-#endif //WORKSHEETVIEW_H
+#endif //CANTORWORKSHEETVIEWHOLDER_H

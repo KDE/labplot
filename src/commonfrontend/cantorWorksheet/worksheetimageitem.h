@@ -24,7 +24,7 @@
 #include <QPixmap>
 #include <QGraphicsObject>
 
-class Worksheet;
+class CantorWorksheetScene;
 class QMovie;
 class QImage;
 class QGraphicsSceneContextMenuEvent;
@@ -61,7 +61,7 @@ class WorksheetImageItem : public QGraphicsObject
     void setPixmap(QPixmap pixmap);
 
     virtual void populateMenu(QMenu *menu, const QPointF& pos);
-    Worksheet* worksheet();
+    CantorWorksheetScene* worksheet();
 
   Q_SIGNALS:
     void sizeChanged();

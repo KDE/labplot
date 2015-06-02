@@ -36,9 +36,7 @@
 #include <QHBoxLayout>
 
 #include <KLocalizedString>
-
-#include "commonfrontend/cantorWorksheet/worksheetview.h"
-#include "commonfrontend/cantorWorksheet/worksheet.h"
+#include <KMessageBox>
 #include <cantor/backend.h>
 
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
@@ -47,15 +45,49 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	
-	Worksheet* scene = new Worksheet(Cantor::Backend::createBackend("Maxima"), this);
-	WorksheetView* m_view = new WorksheetView(scene, this);
-	layout->addWidget(m_view);
+	m_worksheetscene = new CantorWorksheetScene(Cantor::Backend::createBackend("Maxima"), this);
+	m_worksheetview = new CantorWorksheetViewHolder(m_worksheetscene, this);
+	m_worksheetview->setEnabled(false);
 	
+	connect(m_worksheetscene, SIGNAL(sessionChanged()), this, SLOT(worksheetSessionChanged()));
+
+	
+	layout->addWidget(m_worksheetview);
 	
 	initActions();
 	
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 }
+
+void CantorWorksheetView::worksheetSessionChanged() {
+    connect(m_worksheetscene->session(), SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(worksheetStatusChanged(Cantor::Session::Status)));
+    connect(m_worksheetscene->session(), SIGNAL(ready()),this, SLOT(initialized()));
+    connect(m_worksheetscene->session(), SIGNAL(error(const QString&)), this, SLOT(showSessionError(const QString&)));        
+}
+
+void CantorWorksheetView::worksheetStatusChanged(Cantor::Session::Status stauts) {
+
+}
+
+void CantorWorksheetView::initialized() {
+    if (m_worksheetscene->isEmpty())
+        m_worksheetscene->appendCommandEntry();
+    m_worksheetview->setEnabled(true);
+    m_worksheetview->setFocus();
+}
+
+void CantorWorksheetView::showSessionError(const QString& error) {
+    int choice = KMessageBox::warningContinueCancel(this, i18n(error.toStdString().c_str()), i18n("Error"));
+	switch(choice) {
+	    case KMessageBox::Cancel:
+		close();
+		break;
+	}
+}
+
+
+
+
 
 void CantorWorksheetView::initActions() {
     m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), this);    

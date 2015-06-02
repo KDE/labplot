@@ -36,7 +36,7 @@ class ImageEntry : public WorksheetEntry
   Q_OBJECT;
 
   public:
-    ImageEntry(Worksheet* worksheet);
+    ImageEntry(CantorWorksheetScene* worksheet);
     ~ImageEntry();
 
     enum {Type = UserType + 4};

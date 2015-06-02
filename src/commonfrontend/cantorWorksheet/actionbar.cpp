@@ -19,7 +19,7 @@
  */
 
 #include "actionbar.h"
-#include "worksheet.h"
+#include "CantorWorksheetScene.h"
 #include "worksheetentry.h"
 #include "worksheettoolbutton.h"
 
@@ -91,7 +91,7 @@ void ActionBar::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 {
 }
 
-Worksheet* ActionBar::worksheet()
+CantorWorksheetScene* ActionBar::worksheet()
 {
-    return qobject_cast<Worksheet*>(scene());
+    return qobject_cast<CantorWorksheetScene*>(scene());
 }

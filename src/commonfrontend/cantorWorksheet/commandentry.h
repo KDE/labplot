@@ -30,7 +30,7 @@
 #include "worksheettextitem.h"
 #include "cantor/expression.h"
 
-class Worksheet;
+class CantorWorksheetScene;
 class ResultItem;
 
 namespace Cantor{
@@ -45,7 +45,7 @@ class CommandEntry : public WorksheetEntry
   public:
     static const QString Prompt;
 
-    CommandEntry(Worksheet* worksheet);
+    CommandEntry(CantorWorksheetScene* worksheet);
     ~CommandEntry();
 
     enum {Type = UserType + 2};

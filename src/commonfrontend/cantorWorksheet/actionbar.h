@@ -25,7 +25,7 @@
 
 #include <QIcon>
 
-class Worksheet;
+class CantorWorksheetScene;
 class WorksheetEntry;
 class WorksheetToolButton;
 
@@ -50,7 +50,7 @@ class ActionBar : public QGraphicsObject
     void updatePosition();
 
   private:
-    Worksheet* worksheet();
+    CantorWorksheetScene* worksheet();
 
   private:
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity);

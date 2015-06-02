@@ -22,7 +22,7 @@
 
 #include <QPropertyAnimation>
 
-PlaceHolderEntry::PlaceHolderEntry(Worksheet* worksheet, QSizeF s)
+PlaceHolderEntry::PlaceHolderEntry(CantorWorksheetScene* worksheet, QSizeF s)
     : WorksheetEntry(worksheet)
 {
     setSize(s);

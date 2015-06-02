@@ -26,7 +26,7 @@
 #include <QDomElement>
 #include <KZip>
 
-#include "worksheet.h"
+#include "CantorWorksheetScene.h"
 #include "worksheettextitem.h"
 #include "worksheetcursor.h"
 
@@ -49,7 +49,7 @@ class WorksheetEntry : public QGraphicsObject
 {
   Q_OBJECT
   public:
-    WorksheetEntry(Worksheet* worksheet);
+    WorksheetEntry(CantorWorksheetScene* worksheet);
     virtual ~WorksheetEntry();
 
     enum {Type = UserType};
@@ -58,7 +58,7 @@ class WorksheetEntry : public QGraphicsObject
 
     virtual bool isEmpty()=0;
 
-    static WorksheetEntry* create(int t, Worksheet* worksheet);
+    static WorksheetEntry* create(int t, CantorWorksheetScene* worksheet);
 
     WorksheetEntry* next() const;
     WorksheetEntry* previous() const;
@@ -146,8 +146,8 @@ class WorksheetEntry : public QGraphicsObject
     void aboutToBeDeleted();
 
   protected:
-    Worksheet* worksheet();
-    WorksheetView* worksheetView();
+    CantorWorksheetScene* worksheet();
+    CantorWorksheetViewHolder* worksheetView();
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void evaluateNext(EvaluationOption opt);

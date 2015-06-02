@@ -30,7 +30,7 @@ class LatexEntry : public WorksheetEntry
   Q_OBJECT
 
   public:
-    LatexEntry(Worksheet* worksheet);
+    LatexEntry(CantorWorksheetScene* worksheet);
     ~LatexEntry();
 
     enum {Type = UserType + 5};

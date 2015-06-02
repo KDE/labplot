@@ -19,8 +19,8 @@
     Copyright (C) 2012 Martin Kuettler <martin.kuettler@gmail.com>
  */
 
-#ifndef WORKSHEET_H
-#define WORKSHEET_H
+#ifndef CANTORWORKSHEETSCENE_H
+#define CANTORWORKSHEETSCENE_H
 
 #include <QGraphicsScene>
 #include <QDomElement>
@@ -31,7 +31,7 @@
 #include <KZip>
 #include <QMenu>
 
-#include "worksheetview.h"
+#include "CantorWorksheetViewHolder.h"
 #include "epsrenderer.h"
 #include "worksheetcursor.h"
 
@@ -52,12 +52,12 @@ class KToggleAction;
 class KFontAction;
 class KFontSizeAction;
 
-class Worksheet : public QGraphicsScene
+class CantorWorksheetScene : public QGraphicsScene
 {
   Q_OBJECT
   public:
-    Worksheet(Cantor::Backend* backend, QWidget* parent);
-    ~Worksheet();
+    CantorWorksheetScene(Cantor::Backend* backend, QWidget* parent);
+    ~CantorWorksheetScene();
 
     Cantor::Session* session();
 
@@ -71,7 +71,7 @@ class Worksheet : public QGraphicsScene
 
     void setViewSize(qreal w, qreal h, qreal s, bool forceUpdate = false);
 
-    WorksheetView* worksheetView();
+    CantorWorksheetViewHolder* worksheetView();
 
     void makeVisible(WorksheetEntry* entry);
     void makeVisible(const WorksheetCursor& cursor);
@@ -271,4 +271,4 @@ class Worksheet : public QGraphicsScene
     bool m_isPrinting;
 };
 
-#endif // WORKSHEET_H
+#endif // CANTORWORKSHEETSCENE_H

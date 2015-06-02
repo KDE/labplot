@@ -165,7 +165,7 @@ void TextResultItem::deleteLater()
 
 EpsRenderer* TextResultItem::epsRenderer()
 {
-    return qobject_cast<Worksheet*>(scene())->epsRenderer();
+    return qobject_cast<CantorWorksheetScene*>(scene())->epsRenderer();
 }
 
 CommandEntry* TextResultItem::parentEntry()

@@ -26,7 +26,7 @@
 #include <KColorScheme>
 #include <KLocale>
 
-PageBreakEntry::PageBreakEntry(Worksheet* worksheet)
+PageBreakEntry::PageBreakEntry(CantorWorksheetScene* worksheet)
   : WorksheetEntry(worksheet)
 {
     m_msgItem = new WorksheetTextItem(this);

@@ -22,7 +22,7 @@
 #include "latexentry.h"
 
 #include "worksheetentry.h"
-#include "worksheet.h"
+#include "CantorWorksheetScene.h"
 #include "epsrenderer.h"
 #include "cantor/defaulthighlighter.h"
 #include "latexrenderer.h"
@@ -33,7 +33,7 @@
 #include <KGlobal>
 #include <KLocale>
 
-LatexEntry::LatexEntry(Worksheet* worksheet) : WorksheetEntry(worksheet), m_textItem(new WorksheetTextItem(this, Qt::TextEditorInteraction))
+LatexEntry::LatexEntry(CantorWorksheetScene* worksheet) : WorksheetEntry(worksheet), m_textItem(new WorksheetTextItem(this, Qt::TextEditorInteraction))
 {
     connect(m_textItem, &WorksheetTextItem::moveToPrevious, this, &LatexEntry::moveToPreviousEntry);
     connect(m_textItem, &WorksheetTextItem::moveToNext, this, &LatexEntry::moveToNextEntry);

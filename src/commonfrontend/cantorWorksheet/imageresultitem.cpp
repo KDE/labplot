@@ -98,7 +98,7 @@ void ImageResultItem::deleteLater()
 
 EpsRenderer* ImageResultItem::epsRenderer()
 {
-    return qobject_cast<Worksheet*>(scene())->epsRenderer();
+    return qobject_cast<CantorWorksheetScene*>(scene())->epsRenderer();
 }
 
 CommandEntry* ImageResultItem::parentEntry()

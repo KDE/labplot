@@ -26,7 +26,7 @@
 #include <QMenu>
 #include <QDebug>
 
-ImageEntry::ImageEntry(Worksheet* worksheet) : WorksheetEntry(worksheet)
+ImageEntry::ImageEntry(CantorWorksheetScene* worksheet) : WorksheetEntry(worksheet)
 {
     m_imageItem = 0;
     m_textItem = new WorksheetTextItem(this);

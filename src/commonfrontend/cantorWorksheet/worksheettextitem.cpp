@@ -19,7 +19,7 @@
  */
 
 #include "worksheettextitem.h"
-#include "worksheet.h"
+#include "CantorWorksheetScene.h"
 #include "worksheetentry.h"
 #include "epsrenderer.h"
 #include "worksheetcursor.h"
@@ -704,12 +704,12 @@ double WorksheetTextItem::height() const
     return m_size.height();
 }
 
-Worksheet* WorksheetTextItem::worksheet()
+CantorWorksheetScene* WorksheetTextItem::worksheet()
 {
-    return qobject_cast<Worksheet*>(scene());
+    return qobject_cast<CantorWorksheetScene*>(scene());
 }
 
-WorksheetView* WorksheetTextItem::worksheetView()
+CantorWorksheetViewHolder* WorksheetTextItem::worksheetView()
 {
     return worksheet()->worksheetView();
 }
@@ -776,7 +776,7 @@ void WorksheetTextItem::updateRichTextActions(QTextCursor cursor)
 {
     if (cursor.isNull())
         return;
-    Worksheet::RichTextInfo info;
+    CantorWorksheetScene::RichTextInfo info;
     QTextCharFormat fmt = cursor.charFormat();
     info.bold = (fmt.fontWeight() == QFont::Bold);
     info.italic = fmt.fontItalic();
