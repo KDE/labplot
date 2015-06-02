@@ -36,7 +36,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 	public:
 		explicit Plot3DPrivate(Plot3D* owner);
 
-		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+		virtual void retransform();
 
 		Plot3D* const q;
 };

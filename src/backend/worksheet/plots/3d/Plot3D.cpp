@@ -65,7 +65,9 @@ QIcon Plot3D::icon() const{
 }
 
 void Plot3D::setRect(const QRectF &rect){
-	m_plotArea->setRect(rect);
+	Q_D(Plot3D);
+	d->rect = rect;
+	d->retransform();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -74,7 +76,16 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	: AbstractPlotPrivate(owner), q(owner){
 }
 
+void Plot3DPrivate::retransform(){
+	prepareGeometryChange();
+	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
+
+	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
+	q->plotArea()->setRect(rect);
+
+	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
+}
+
 void Plot3DPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
-	painter->fillRect(q->plotArea()->rect(), QBrush(Qt::red));
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
 }
