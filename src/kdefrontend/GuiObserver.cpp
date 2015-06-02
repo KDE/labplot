@@ -35,12 +35,14 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/3d/Plot3D.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
+#include "kdefrontend/dockwidgets/Plot3DDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
@@ -173,7 +175,20 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->cartesianPlotDock->setPlots(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
-  }else if (className=="CartesianPlotLegend"){
+  }else if (className=="Plot3D"){
+		if (!mainWindow->plot3dDock){
+			mainWindow->plot3dDock = new Plot3DDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->plot3dDock);
+		}
+
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Plot Properties"));
+		QList<Plot3D*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<Plot3D*>(aspect);
+		}
+		mainWindow->plot3dDock->setPlots(list);
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->plot3dDock);
+	}else if (className=="CartesianPlotLegend"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot legend properties"));
 
 	if (!mainWindow->cartesianPlotLegendDock){
@@ -290,6 +305,14 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 }
 
+template<class TDockWidget>
+void GuiObserver::initDockWidget(TDockWidget*& dockWidget){
+	if (dockWidget == 0){
+		dockWidget = new TDockWidget(mainWindow->stackedWidget);
+		mainWindow->stackedWidget->addWidget(dockWidget);
+	}
+}
+
 /*!
 	handles the selection of a hidden aspect \c aspect in the view (relevant for WorksheetView only at the moment).
 	Currently, a hidden aspect can only be a plot title lable or an axis label.
@@ -302,22 +325,15 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect){
 
 	QString className = parent->metaObject()->className();
 	if (className == "Axis") {
-		if (!mainWindow->axisDock) {
-			mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
-			mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
-		}
-		mainWindow->axisDock->activateTitleTab();
+		initDockWidget(mainWindow->axisDock);
+		mainWindow->stackedWidget->addWidget(mainWindow->axisDock);
 	} else if (className == "CartesianPlot") {
-		if (!mainWindow->cartesianPlotDock) {
-			mainWindow->cartesianPlotDock = new CartesianPlotDock(mainWindow->stackedWidget);
-			mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
-		}
-		mainWindow->cartesianPlotDock->activateTitleTab();
+		initDockWidget(mainWindow->cartesianPlotDock);
+		mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
 	} else if (className=="CartesianPlotLegend") {
-		if (!mainWindow->cartesianPlotLegendDock){
-			mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(mainWindow->stackedWidget);
-			mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotLegendDock);
-		}
-		mainWindow->cartesianPlotLegendDock->activateTitleTab();
+		initDockWidget(mainWindow->cartesianPlotLegendDock);
+		mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotLegendDock);
+	} else if (className == "Plot3D"){
+		initDockWidget(mainWindow->plot3dDock);
 	}
 }

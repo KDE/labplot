@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GuiObserver.h
+    File                 : Plot3DDock.h
     Project              : LabPlot
-    Description          : GUI observer
+    Description          : widget for 3D plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
  ***************************************************************************/
 
@@ -25,32 +25,20 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef GUIOBSERVER_H
-#define GUIOBSERVER_H
 
-#include <QModelIndex>
-#include <QItemSelection>
-class MainWin;
-class AbstractAspect;
-class CartesianPlot;
+#ifndef PLOT3DDOCK_H
+#define PLOT3DDOCK_H
 
-class GuiObserver:public QObject{
+#include <QWidget>
+
+class Plot3D;
+
+class Plot3DDock: public QWidget{
 	Q_OBJECT
 
-  public:
-		explicit GuiObserver(MainWin*);
-
-  private:
-		MainWin* mainWindow;
-		CartesianPlot* m_lastCartesianPlot;
-
-	private:
-		template<class TDockWidget>
-		void initDockWidget(TDockWidget*& dockWidget);
-
-  private slots:
-		void selectedAspectsChanged(QList<AbstractAspect*>&);
-		void hiddenAspectSelected(const AbstractAspect*);
+public:
+	explicit Plot3DDock(QWidget* parent);
+	void setPlots(const QList<Plot3D*>& plots);
 };
 
 #endif
