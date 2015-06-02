@@ -28,18 +28,22 @@
 
 #include "CantorWorksheet.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
+#include "backend/core/column/Column.h"
 
 #include <QDebug>
-#include <QPushButton>
+
+#include <cantor/backend.h>
 
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine *engine, const QString &name)
 		: AbstractPart(name), scripted(engine){
-    addChild(new QPushButton("Hey"));
 }
 
 QWidget* CantorWorksheet::view() const {
     if (!m_view) {
 	m_view = new CantorWorksheetView(const_cast<CantorWorksheet *>(this));
+// 	Worksheet* scene = new Worksheet(Cantor::Backend::createBackend("Maxima"), m_view);
+// 	m_view = new WorksheetView(scene);
+// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;
 }

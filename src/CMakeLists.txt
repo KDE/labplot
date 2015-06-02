@@ -75,6 +75,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
+	${COMMONFRONTEND_DIR}/cantorWorksheet/imagesettings.ui
 )
 
 set(BACKEND_SOURCES
@@ -149,6 +150,28 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetview.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheet.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/epsrenderer.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/latexrenderer.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetcursor.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/commandentry.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetentry.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheettextitem.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/resultitem.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/loadedexpression.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/textentry.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/latexentry.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/imageentry.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/pagebreakentry.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/imagesettingsdialog.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/placeholderentry.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/actionbar.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheettoolbutton.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/textresultitem.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/imageresultitem.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetimageitem.cpp
+	${COMMONFRONTEND_DIR}/cantorWorksheet/animationresultitem.cpp
 )
 
 set(TOOLS_SOURCES

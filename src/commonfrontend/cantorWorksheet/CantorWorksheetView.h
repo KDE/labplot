@@ -29,13 +29,14 @@
 #ifndef CANTORWORKSHEETVIEW_H
 #define CANTORWORKSHEETVIEW_H
 
-#include <QGraphicsView>
+#include <QWidget>
 #include <QAction>
 #include <QMenu>
+#include <QTableView>
 
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 
-class CantorWorksheetView : public QGraphicsView {
+class CantorWorksheetView : public QWidget {
     Q_OBJECT
     
     public:

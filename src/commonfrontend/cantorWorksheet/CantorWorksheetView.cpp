@@ -31,11 +31,27 @@
 #include <QIcon>
 #include <QAction>
 #include <QDebug>
+#include <QTableView>
+#include <QPushButton>
+#include <QHBoxLayout>
 
 #include <KLocalizedString>
 
-CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QGraphicsView(),
+#include "commonfrontend/cantorWorksheet/worksheetview.h"
+#include "commonfrontend/cantorWorksheet/worksheet.h"
+#include <cantor/backend.h>
+
+CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
     m_worksheet(worksheet) {
+	
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setContentsMargins(0,0,0,0);
+	
+	Worksheet* scene = new Worksheet(Cantor::Backend::createBackend("Maxima"), this);
+	WorksheetView* m_view = new WorksheetView(scene, this);
+	layout->addWidget(m_view);
+	
+	
 	initActions();
 	
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
