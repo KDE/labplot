@@ -41,12 +41,12 @@ class NetCDFFilterPrivate {
 		void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 		void read(const QString & fileName, AbstractDataSource* dataSource,
 					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		//QString readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
+		QString readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
 
 		const NetCDFFilter* q;
 
-		//QString currentDataSet;
+		QString currentVarName;
 		int startRow;
 		int endRow;
 		int startColumn;
@@ -54,6 +54,7 @@ class NetCDFFilterPrivate {
 		bool autoModeEnabled;
 
 	private:
+		int status;
 		//const static int MAXNAMELENGTH=1024;
 		//QList<unsigned long> multiLinkList;	// used to find hard links
 #ifdef HAVE_NETCDF

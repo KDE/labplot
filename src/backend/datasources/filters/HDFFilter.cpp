@@ -1140,8 +1140,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<rows<<"x"<<cols;
 		qDebug()<<"startRow/endRow"<<startRow<<endRow;
 		qDebug()<<"startColumn/endColumn"<<startColumn<<endColumn;
-		qDebug()<<"actual rows"<<actualRows;
-		qDebug()<<"actual cols"<<actualCols;
+		qDebug()<<"actual rows/cols"<<actualRows<<actualCols;
 		qDebug()<<"lines"<<lines;
 #endif
 

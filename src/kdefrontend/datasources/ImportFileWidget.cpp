@@ -97,7 +97,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	QWidget* netcdfw=new QWidget(0);
 	netcdfOptionsWidget.setupUi(netcdfw);
 	QStringList headers;
-	headers<<i18n("Name")<<i18n("Properties")<<i18n("Values");
+	headers<<i18n("Name")<<i18n("Type")<<i18n("Properties")<<i18n("Values");
+	// type is hidden
+	hdfOptionsWidget.twContent->hideColumn(1);
 	netcdfOptionsWidget.twContent->setHeaderLabels(headers);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
@@ -156,6 +158,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 
 	// NetCDF data
+	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
@@ -334,6 +337,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		} else {
 // 			filter->setFilterName( ui.cbFilter->currentText() );
 		}
+		filter->setCurrentVarName(netcdfOptionsWidget.leVarName->text());
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );
@@ -455,7 +459,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			// update NetCDF tree widget using current selected file
 			netcdfOptionsWidget.twContent->clear();
-			netcdfOptionsWidget.leDataSet->clear();
+			netcdfOptionsWidget.leVarName->clear();
 
 			QString fileName = ui.kleFileName->text();
 			QFileInfo fileInfo(fileName);
@@ -465,7 +469,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			netcdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
 			netcdfOptionsWidget.twContent->expandAll();
 			netcdfOptionsWidget.twContent->resizeColumnToContents(0);
-			netcdfOptionsWidget.twContent->resizeColumnToContents(1);
+			netcdfOptionsWidget.twContent->resizeColumnToContents(2);
 			
 		} else {
 			debug="probably BINARY file";
@@ -550,7 +554,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 }
 
 /*!
-	updates the data set of a HDF file when the tree widget item is selected
+	updates the selected data set of a HDF file when the tree widget item is selected
 */
 void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
@@ -562,6 +566,21 @@ void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int colu
 	}
 	else
 		qDebug()<<"non data set selected in HDF tree widget";
+}
+
+/*!
+	updates the selected var name of a NetCDF file when the tree widget item is selected
+*/
+void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
+	Q_UNUSED(column);
+	if( item->data(1,Qt::DisplayRole).toString() == i18n("variable") ) {
+		// the data link is saved in the second column
+		QString varName = item->data(0,Qt::DisplayRole).toString();
+		netcdfOptionsWidget.leVarName->setText(varName);
+		refreshPreview();
+	}
+	else
+		qDebug()<<"non variable selected in NetCDF tree widget";
 }
 
 /*!
@@ -644,7 +663,7 @@ void ImportFileWidget::refreshPreview(){
 	}
 	case FileDataSource::NETCDF: {
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
-		//TODO: importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
+		importedText = filter->readCurrentVar(fileName,NULL,AbstractFileFilter::Replace,lines);
 		break;
 	}
 	default:

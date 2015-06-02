@@ -14,16 +14,16 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="lDataSet">
+      <widget class="QLabel" name="lVariable">
        <property name="text">
-        <string>Data set:</string>
+        <string>Variable:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="leDataSet">
+      <widget class="QLineEdit" name="leVarName">
        <property name="toolTip">
-        <string>Selected data set</string>
+        <string>Selected variable name</string>
        </property>
       </widget>
      </item>

@@ -42,15 +42,15 @@ class NetCDFFilter : public AbstractFileFilter{
 
 	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-//	QString readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
+	QString readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
 
-/*	void setCurrentDataSet(const QString);
-	QString currentDataSet() const;
-*/
+	void setCurrentVarName(const QString);
+	QString currentVarName() const;
+
 	void setStartRow(const int);
 	int startRow() const;
 	void setEndRow(const int);

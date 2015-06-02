@@ -77,9 +77,9 @@ class ImportFileDialog: public KDialog {
 	void newSpreadsheet();
 	void newMatrix();
 
-	signals:
-		void newSpreadsheetRequested(const QString&);
-		void newMatrixRequested(const QString&);
+  signals:
+	void newSpreadsheetRequested(const QString&);
+	void newMatrixRequested(const QString&);
 };
 
 #endif //IMPORTFILEDIALOG_H
