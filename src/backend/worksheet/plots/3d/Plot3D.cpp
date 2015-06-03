@@ -33,6 +33,9 @@
 
 #include <QDebug>
 #include <QGraphicsItem>
+#include <QGraphicsScene>
+#include <QGraphicsProxyWidget>
+#include <QLineEdit>
 #include <QPainter>
 #include <QWidget>
 
@@ -53,6 +56,9 @@ Plot3D::Plot3D(const QString &name, Plot3DPrivate *dd)
 void Plot3D::init(){
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
+
+	Q_D(Plot3D);
+	d->init();
 }
 
 Plot3D::~Plot3D(){
@@ -76,16 +82,25 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	: AbstractPlotPrivate(owner), q(owner){
 }
 
+void Plot3DPrivate::init(){
+	QLineEdit *label = new QLineEdit("Test");
+
+	m_proxyWidget = new QGraphicsProxyWidget(q->plotArea()->graphicsItem());
+	m_proxyWidget->setWidget(label);
+}
+
 void Plot3DPrivate::retransform(){
 	prepareGeometryChange();
-	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
+	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	q->plotArea()->setRect(rect);
+	m_proxyWidget->setGeometry(q->plotArea()->rect());
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
 
 void Plot3DPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
+	painter->fillRect(q->plotArea()->rect(), QBrush(Qt::red));
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
 }
