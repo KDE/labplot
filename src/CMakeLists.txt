@@ -75,7 +75,6 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
-	${COMMONFRONTEND_DIR}/cantorWorksheet/imagesettings.ui
 )
 
 set(BACKEND_SOURCES
@@ -150,28 +149,31 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetViewHolder.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetScene.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/epsrenderer.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/latexrenderer.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetcursor.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/commandentry.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetentry.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheettextitem.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/resultitem.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/loadedexpression.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/textentry.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/latexentry.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/imageentry.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/pagebreakentry.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/imagesettingsdialog.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/placeholderentry.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/actionbar.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheettoolbutton.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/textresultitem.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/imageresultitem.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/worksheetimageitem.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/animationresultitem.cpp
+)
+
+set(CANTOR_SOURCES
+	${CANTOR_DIR}/CantorWorksheetViewHolder.cpp
+	${CANTOR_DIR}/CantorWorksheetScene.cpp
+	${CANTOR_DIR}/epsrenderer.cpp
+	${CANTOR_DIR}/latexrenderer.cpp
+	${CANTOR_DIR}/worksheetcursor.cpp
+	${CANTOR_DIR}/commandentry.cpp
+	${CANTOR_DIR}/worksheetentry.cpp
+	${CANTOR_DIR}/worksheettextitem.cpp
+	${CANTOR_DIR}/resultitem.cpp
+	${CANTOR_DIR}/loadedexpression.cpp
+	${CANTOR_DIR}/textentry.cpp
+	${CANTOR_DIR}/latexentry.cpp
+	${CANTOR_DIR}/imageentry.cpp
+	${CANTOR_DIR}/pagebreakentry.cpp
+	${CANTOR_DIR}/imagesettingsdialog.cpp
+	${CANTOR_DIR}/placeholderentry.cpp
+	${CANTOR_DIR}/actionbar.cpp
+	${CANTOR_DIR}/worksheettoolbutton.cpp
+	${CANTOR_DIR}/textresultitem.cpp
+	${CANTOR_DIR}/imageresultitem.cpp
+	${CANTOR_DIR}/worksheetimageitem.cpp
+	${CANTOR_DIR}/animationresultitem.cpp
 )
 
 set(TOOLS_SOURCES
@@ -188,7 +190,7 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 qt5_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive Qt5::Svg KF5::WidgetsAddons KF5::KIOWidgets KF5::XmlGui ${Qt5XmlPatterns_LIBRARIES} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS})
+target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Parts KF5::Archive Qt5::Svg KF5::WidgetsAddons KF5::KIOWidgets KF5::XmlGui ${Qt5XmlPatterns_LIBRARIES} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS})
 # ${OPJ_LIBRARY}
 
 ############## installation ################################

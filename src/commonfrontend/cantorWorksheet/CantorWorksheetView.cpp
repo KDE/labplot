@@ -32,7 +32,6 @@
 #include <QAction>
 #include <QDebug>
 #include <QTableView>
-#include <QPushButton>
 #include <QHBoxLayout>
 
 #include <KLocalizedString>
@@ -42,52 +41,38 @@
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
     m_worksheet(worksheet) {
 	
-	QHBoxLayout* layout = new QHBoxLayout(this);
-	layout->setContentsMargins(0,0,0,0);
-	
-	m_worksheetscene = new CantorWorksheetScene(Cantor::Backend::createBackend("Maxima"), this);
-	m_worksheetview = new CantorWorksheetViewHolder(m_worksheetscene, this);
-	m_worksheetview->setEnabled(false);
-	
-	connect(m_worksheetscene, SIGNAL(sessionChanged()), this, SLOT(worksheetSessionChanged()));
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0,0,0,0);
+    KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
+    if (factory)
+    {
+        // now that the Part is loaded, we cast it to a Part to get
+        // our hands on it
+	char* backendName = "Maxima";
+        KParts::ReadWritePart* part = factory->create<KParts::ReadWritePart>(worksheet, QVariantList()<<backendName);
+// 
+        if (part)
+        {
+//             connect(part, SIGNAL(setWindowCaption(const QString&)), this, SLOT(setTabCaption(const QString&)));
+	    layout->addWidget(part->widget());
+        }
+        else
+        {
+            qDebug()<<"error creating part ";
+        }
 
-	
-	layout->addWidget(m_worksheetview);
-	
-	initActions();
-	
-	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+    }
+    else
+    {
+        // if we couldn't find our Part, we exit since the Shell by
+        // itself can't do anything useful
+        KMessageBox::error(this, i18n("Could not find the Cantor Part."));
+        qApp->quit();
+        // we return here, cause qApp->quit() only means "exit the
+        // next time we enter the event loop...
+        return;
+    }
 }
-
-void CantorWorksheetView::worksheetSessionChanged() {
-    connect(m_worksheetscene->session(), SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(worksheetStatusChanged(Cantor::Session::Status)));
-    connect(m_worksheetscene->session(), SIGNAL(ready()),this, SLOT(initialized()));
-    connect(m_worksheetscene->session(), SIGNAL(error(const QString&)), this, SLOT(showSessionError(const QString&)));        
-}
-
-void CantorWorksheetView::worksheetStatusChanged(Cantor::Session::Status stauts) {
-
-}
-
-void CantorWorksheetView::initialized() {
-    if (m_worksheetscene->isEmpty())
-        m_worksheetscene->appendCommandEntry();
-    m_worksheetview->setEnabled(true);
-    m_worksheetview->setFocus();
-}
-
-void CantorWorksheetView::showSessionError(const QString& error) {
-    int choice = KMessageBox::warningContinueCancel(this, i18n(error.toStdString().c_str()), i18n("Error"));
-	switch(choice) {
-	    case KMessageBox::Cancel:
-		close();
-		break;
-	}
-}
-
-
-
-
 
 void CantorWorksheetView::initActions() {
     m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), this);    

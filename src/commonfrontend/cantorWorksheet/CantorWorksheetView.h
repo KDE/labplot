@@ -33,10 +33,9 @@
 #include <QAction>
 #include <QMenu>
 #include <QTableView>
-#include "commonfrontend/cantorWorksheet/CantorWorksheetViewHolder.h"
-#include "commonfrontend/cantorWorksheet/CantorWorksheetScene.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <cantor/session.h>
+#include <KParts/ReadWritePart>
 
 class CantorWorksheetView : public QWidget {
     Q_OBJECT
@@ -49,18 +48,9 @@ class CantorWorksheetView : public QWidget {
     public slots:
 	void createContextMenu(QMenu*) const;
 
-    protected slots:
-	void worksheetSessionChanged();
-	void worksheetStatusChanged(Cantor::Session::Status stauts);
-	void showSessionError(const QString& error);
-	void initialized();
-
     private:
 	CantorWorksheet* m_worksheet;  
 	QAction* m_restartBackendAction;
-	
-	CantorWorksheetViewHolder* m_worksheetview;
-	CantorWorksheetScene* m_worksheetscene;
 	
 	void initActions();
 };
