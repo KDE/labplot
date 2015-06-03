@@ -4,8 +4,6 @@ find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 
 find_package(VTK REQUIRED)
-include(${VTK_USE_FILE})
-set(VTK_LIBRARIES vtkRendering vtkCommon vtkFiltering vtkGraphics vtkIO vtkImaging vtkRendering vtkHybrid)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
 

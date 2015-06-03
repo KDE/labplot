@@ -41,6 +41,8 @@
 
 #include <KIcon>
 
+#include <vtk/QVTKWidget2.h>
+
 Plot3D::Plot3D(const QString& name)
 	: AbstractPlot(name, new Plot3DPrivate(this)){
 	qDebug() << Q_FUNC_INFO;
@@ -83,10 +85,10 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 }
 
 void Plot3DPrivate::init(){
-	QLineEdit *label = new QLineEdit("Test");
+	QVTKWidget2 *w = new QVTKWidget2;
 
 	m_proxyWidget = new QGraphicsProxyWidget(q->plotArea()->graphicsItem());
-	m_proxyWidget->setWidget(label);
+	m_proxyWidget->setWidget(w);
 }
 
 void Plot3DPrivate::retransform(){
