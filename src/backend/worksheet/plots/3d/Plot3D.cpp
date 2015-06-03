@@ -35,7 +35,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
-#include <QLineEdit>
+#include <QGraphicsView>
 #include <QPainter>
 #include <QWidget>
 
@@ -85,7 +85,7 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 }
 
 void Plot3DPrivate::init(){
-	QVTKWidget2 *w = new QVTKWidget2;
+	QVTKWidget2 *w = new QVTKWidget2();
 
 	m_proxyWidget = new QGraphicsProxyWidget(q->plotArea()->graphicsItem());
 	m_proxyWidget->setWidget(w);
