@@ -191,9 +191,6 @@ QString NetCDFFilterPrivate::translateDataType(nc_type type) {
 	case NC_UINT:
 		typeString="UINT";
 		break;
-//	case NC_LONG:
-//		typeString="LONG";
-//		break;
 	case NC_INT64:
 		typeString="INT64";
 		break;
@@ -238,7 +235,9 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 
 		status = nc_inq_att(ncid, varid, name, &type, &len);
 		handleError(status,"nc_inq_att");
-		//qDebug()<<"	attr"<<i+1<<": name/type/len="<<name<<translateDataType(type)<<len;
+#ifdef QT_DEBUG
+		qDebug()<<"	attr"<<i+1<<": name/type/len="<<name<<translateDataType(type)<<len;
+#endif
 
 		//read attribute
 		switch(type) {
@@ -375,7 +374,9 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 	for(int i=0;i<ndims;i++) {
 		status = nc_inq_dim(ncid, i, name, &len);
 		handleError(status,"nc_inq_att");
-		//qDebug()<<"	dim"<<i+1<<": name/len="<<name<<len;
+#ifdef QT_DEBUG
+		qDebug()<<"	dim"<<i+1<<": name/len="<<name<<len;
+#endif
 		
 		QStringList props;
 		props<<"length = "<<QString::number(len);
@@ -398,8 +399,10 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		status = nc_inq_var(ncid, i, name, &type, &ndims, dimids, &nattrs);
 		handleError(status,"nc_inq_att");
 
-		//qDebug()<<"	var"<<i+1<<": name/type="<<name<<translateDataType(type);
-		//qDebug()<<"		ndims/nattr"<<ndims<<nattrs;
+#ifdef QT_DEBUG
+		qDebug()<<"	var"<<i+1<<": name/type="<<name<<translateDataType(type);
+		qDebug()<<"		ndims/nattr"<<ndims<<nattrs;
+#endif
 
 		QStringList props;
 		props<<translateDataType(type);
@@ -438,7 +441,9 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	int ndims, nvars, nattr, uldid;
 	status = nc_inq(ncid, &ndims, &nvars, &nattr, &uldid);
 	handleError(status,"nc_inq");
-	//qDebug()<<" nattr/ndims/nvars ="<<nattr<<ndims<<nvars;
+#ifdef QT_DEBUG
+	qDebug()<<" nattr/ndims/nvars ="<<nattr<<ndims<<nvars;
+#endif
 
 	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Attributes"));
 	attrItem->setIcon(0,QIcon(KIcon("folder")));
@@ -461,8 +466,6 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 }
 
 QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QString & name, const QString & varName) {
-	QString dataString;
-
 	int ncid;
 	QByteArray bafileName = fileName.toLatin1();
 	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
@@ -474,7 +477,7 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 		varid = NC_GLOBAL;
 	} else {
 		QByteArray bavarName = varName.toLatin1();
-		status = nc_inq_varid(ncid, bavarName.data(), &varid );
+		status = nc_inq_varid(ncid, bavarName.data(), &varid);
 		handleError(status,"nc_inq_varid");
 	}
 
@@ -484,9 +487,7 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 	status = nc_inq_attid(ncid, varid, baName.data(), &attid);
 	handleError(status,"nc_inq_attid");
 
-	dataString = scanAttrs(ncid,varid,attid);
-
-	return dataString;
+	return scanAttrs(ncid,varid,attid);
 }
 
 /*!
@@ -531,7 +532,6 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 		qDebug()<<"zero dimensions";
 		break;
 	case 1: {
-		//qDebug()<<"dimension: 1";
 		size_t size;
 		status = nc_inq_dimlen(ncid, dimids[0], &size);
 		handleError(status,"nc_inq_dimlen");
@@ -566,13 +566,11 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 		break;
 	}
 	case 2: {
-		//qDebug()<<"dimension: 2";
 		size_t rows, cols;
 		status = nc_inq_dimlen(ncid, dimids[0], &rows);
 		handleError(status,"nc_inq_dimlen");
 		status = nc_inq_dimlen(ncid, dimids[1], &cols);
 		handleError(status,"nc_inq_dimlen");
-		//qDebug()<<"	dim:"<<rows<<"x"<<cols;
 
 		if(endRow == -1)
 			endRow=rows;
@@ -584,6 +582,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 		actualCols=endColumn-startColumn+1;
 
 #ifdef QT_DEBUG
+		qDebug()<<"dim ="<<rows<<"x"<<cols;
 		qDebug()<<"startRow/endRow"<<startRow<<endRow;
 		qDebug()<<"startColumn/endColumn"<<startColumn<<endColumn;
 		qDebug()<<"actual rows/cols"<<actualRows<<actualCols;

@@ -154,9 +154,8 @@ HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 
 #ifdef HAVE_HDF5
 void HDFFilterPrivate::handleError(int err, QString function, QString arg) {
-	if (err < 0) {
+	if (err < 0)
 		qDebug()<<"ERROR"<<err<<":"<<function<<"() - "<<arg;
-	}
 }
 
 QString HDFFilterPrivate::translateHDFOrder(H5T_order_t o) {
@@ -862,7 +861,9 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 			return;
 		} else {
 			multiLinkList.append(statbuf.objno[0]);
-			//qDebug()<<" group multiple links: "<<statbuf.objno[0]<<' '<<statbuf.objno[1];
+#ifdef QT_DEBUG
+			qDebug()<<" group multiple links: "<<statbuf.objno[0]<<' '<<statbuf.objno[1];
+#endif
 		}
 	}
 
@@ -1004,7 +1005,6 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			free(data);
 			break;
 		}
-		//TODO: other types
 		default: {
 			dataString<<"rank = 0 not implemented yet for type "<<translateHDFClass(dclass);
 			qDebug()<<dataString.join("");
@@ -1107,7 +1107,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			}
 			else
 				dataString<<readHDFCompound(dtype);
-			//qDebug()<<dataString.join("");
+#ifdef QT_DEBUG
+			qDebug()<<dataString.join("");
+#endif
 			dataString<<readHDFCompoundData1D(dataset,dtype,rows,lines,dataPointers);
 			break;
 		}
@@ -1191,7 +1193,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		}
 		case H5T_COMPOUND: {
 			dataString<<readHDFCompound(dtype);
-			//qDebug()<<dataString.join("");
+#ifdef QT_DEBUG
+			qDebug()<<dataString.join("");
+#endif
 			dataString<<readHDFCompoundData2D(dataset,dtype,rows,cols,lines);
 			break;
 		}
