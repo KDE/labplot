@@ -31,7 +31,6 @@
 
 #include "ui_importfilewidget.h"
 #include "AsciiOptionsWidget.h"
-#include "AsciiMatrixOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
 #include "HDFOptionsWidget.h"
 #include "ImageOptionsWidget.h"
@@ -56,7 +55,6 @@ public:
 private:
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;
-	Ui::AsciiMatrixOptionsWidget asciiMatrixOptionsWidget;
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 	Ui::ImageOptionsWidget imageOptionsWidget;

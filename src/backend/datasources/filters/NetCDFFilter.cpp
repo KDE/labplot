@@ -466,6 +466,7 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 }
 
 QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QString & name, const QString & varName) {
+#ifdef HAVE_NETCDF
 	int ncid;
 	QByteArray bafileName = fileName.toLatin1();
 	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
@@ -488,6 +489,12 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 	handleError(status,"nc_inq_attid");
 
 	return scanAttrs(ncid,varid,attid);
+#else
+	Q_UNUSED(fileName)
+	Q_UNUSED(name)
+	Q_UNUSED(varName)
+	return QString();
+#endif
 }
 
 /*!
@@ -635,6 +642,11 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 		spreadsheet->setUndoAware(true);
 	}
 
+#else
+	Q_UNUSED(fileName)
+	Q_UNUSED(dataSource)
+	Q_UNUSED(mode)
+	Q_UNUSED(lines)
 #endif
 
 	return dataString.join("");
