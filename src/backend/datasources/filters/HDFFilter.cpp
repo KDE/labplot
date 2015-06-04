@@ -358,6 +358,12 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		else if (H5Tequal(mtype,H5T_NATIVE_LDOUBLE))
 			data[m]=readHDFData1D<long double>(dataset,ctype,rows,lines,dataP);
 		else {
+			for(int i=0;i<rows;i++)
+				data[m]<<"_"<<"\n";
+			if(dataP != NULL) {
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) 
+					dataP->operator[](i-startRow+1) = 0;
+			}
 			H5T_class_t mclass = H5Tget_member_class(tid,m);
 			handleError((int)mclass,"H5Tget_member_class");
 			qDebug()<<"	not supported type of class"<<translateHDFClass(mclass);
@@ -458,6 +464,12 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		else if (H5Tequal(mtype,H5T_NATIVE_LDOUBLE))
 			data[m]=readHDFData2D<long double>(dataset,ctype,rows,cols,lines,dummy);
 		else {
+			for (int i=0; i < rows; i++) {
+				for (int j=0; j < cols; j++) {
+					data[m]<<"_"<<" ";
+				}
+				data[m]<<"\n";
+			}
 			H5T_class_t mclass = H5Tget_member_class(tid,m);
 			qDebug()<<"	not supported class"<<translateHDFClass(mclass);
 		}
@@ -465,7 +477,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		status = H5Tclose(ctype);
 		handleError(status,"H5Tclose");
 	}
-	
+
 	// create dataString from data
 	QStringList dataString;
 	for(int i=0;i<qMin(rows,lines);i++) {
