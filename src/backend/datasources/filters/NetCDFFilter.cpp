@@ -59,7 +59,14 @@ void NetCDFFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem){
 }
 
 /*!
-  reads the content of the data set \c dataSet from file \c fileName.
+  reads the content of the selected attribute from file \c fileName.
+*/
+QString NetCDFFilter::readAttribute(const QString & fileName, const QString & name, const QString & varName){
+	return d->readAttribute(fileName, name, varName);
+}
+
+/*!
+  reads the content of the current variable from file \c fileName.
 */
 QString NetCDFFilter::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines){
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
@@ -209,11 +216,23 @@ QString NetCDFFilterPrivate::translateDataType(nc_type type) {
 	return typeString;
 }
 
-void NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int nattr, QTreeWidgetItem* parentItem) {
+QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem) {
 	char name[NC_MAX_NAME + 1];
+
+	int nattr, nstart=0;
+	if(attid == -1) {
+		status = nc_inq_varnatts(ncid, varid, &nattr);
+		handleError(status,"nc_inq_varnatts");
+	} else {
+		nstart=attid;
+		nattr=attid+1;
+	}
+
 	nc_type type;
 	size_t len;
-	for(int i=0;i<nattr;i++) {
+	QStringList valueString;
+	for(int i=nstart;i<nattr;i++) {
+		valueString.clear();
 		status = nc_inq_attname(ncid,varid,i,name);
 		handleError(status,"nc_inq_attname");
 
@@ -222,7 +241,6 @@ void NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int nattr, QTreeWidgetI
 		//qDebug()<<"	attr"<<i+1<<": name/type/len="<<name<<translateDataType(type)<<len;
 
 		//read attribute
-		QStringList valueString;
 		switch(type) {
 		case NC_BYTE: {
 			signed char *value = (signed char *)malloc(len*sizeof(signed char));
@@ -327,12 +345,24 @@ void NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int nattr, QTreeWidgetI
 			valueString<<"not supported";
 		}
 
-		QStringList props;
-		props<<translateDataType(type)<<" ("<<QString::number(len)<<")";
-		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<i18n("attribute")<<props.join("")<<valueString.join(", "));
-		attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
-		parentItem->addChild(attrItem);
+		if(parentItem != NULL) {
+			QString typeName;
+			if(varid == NC_GLOBAL)
+				typeName="global attribute";
+			else {
+				char varName[NC_MAX_NAME + 1];
+				status = nc_inq_varname(ncid, varid, varName);
+				typeName=QString(varName)+QString(" attribute");
+			}
+			QStringList props;
+			props<<translateDataType(type)<<" ("<<QString::number(len)<<")";
+			QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<typeName<<props.join("")<<valueString.join(", "));
+			attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+			parentItem->addChild(attrItem);
+		}
 	}
+
+	return valueString.join("\n");
 }
 
 void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem) {
@@ -352,7 +382,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 		QString value;
 		if(i == ulid)
 			value="unlimited";
-		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<i18n("dimension")<<props.join("")<<value);
+		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"dimension"<<props.join("")<<value);
 		attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
 		parentItem->addChild(attrItem);
 	}
@@ -384,12 +414,12 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		}
 		props<<")";
 
-		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<i18n("variable")<<props.join(""));
+		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"variable"<<props.join(""));
 		varItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
 		varItem->setBackground(0,QBrush(QColor(192,255,192)));
 		parentItem->addChild(varItem);
 
-		scanAttrs(ncid,i,nattrs,varItem);
+		scanAttrs(ncid,i,-1,varItem);
 	}
 }
 #endif
@@ -413,7 +443,7 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Attributes"));
 	attrItem->setIcon(0,QIcon(KIcon("folder")));
 	rootItem->addChild(attrItem);
-	scanAttrs(ncid,NC_GLOBAL,nattr,attrItem);
+	scanAttrs(ncid,NC_GLOBAL,-1,attrItem);
 
 	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Dimensions"));
 	dimItem->setIcon(0,QIcon(KIcon("folder")));
@@ -430,8 +460,37 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 #endif
 }
 
+QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QString & name, const QString & varName) {
+	QString dataString;
+
+	int ncid;
+	QByteArray bafileName = fileName.toLatin1();
+	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
+	handleError(status,"nc_open");
+
+	// get varid
+	int varid;
+	if(varName == "global") {
+		varid = NC_GLOBAL;
+	} else {
+		QByteArray bavarName = varName.toLatin1();
+		status = nc_inq_varid(ncid, bavarName.data(), &varid );
+		handleError(status,"nc_inq_varid");
+	}
+
+	// attribute 'name'
+	int attid;
+	QByteArray baName = name.toLatin1();
+	status = nc_inq_attid(ncid, varid, baName.data(), &attid);
+	handleError(status,"nc_inq_attid");
+
+	dataString = scanAttrs(ncid,varid,attid);
+
+	return dataString;
+}
+
 /*!
-    reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
+    reads the content of the variable in the file \c fileName to a string (for preview) or to the data source.
 */
 QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
 	QStringList dataString;
@@ -627,7 +686,7 @@ void NetCDFFilter::save(QXmlStreamWriter* writer) const {
 */
 bool NetCDFFilter::load(XmlStreamReader* reader) {
 	if(!reader->isStartElement() || reader->name() != "netcdfFilter"){
-		reader->raiseError(i18n("no hdf filter element found"));
+		reader->raiseError(i18n("no netcdf filter element found"));
 		return false;
 	}
 

@@ -89,7 +89,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	QStringList hdfheaders;
 	hdfheaders<<i18n("Name")<<i18n("Link")<<i18n("Type")<<i18n("Properties")<<i18n("Attributes");
 	hdfOptionsWidget.twContent->setHeaderLabels(hdfheaders);
-	// link and type column are filled but we don't need to show it
+	// link and type column are hidden
 	hdfOptionsWidget.twContent->hideColumn(1);
 	hdfOptionsWidget.twContent->hideColumn(2);
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
@@ -98,9 +98,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	netcdfOptionsWidget.setupUi(netcdfw);
 	QStringList headers;
 	headers<<i18n("Name")<<i18n("Type")<<i18n("Properties")<<i18n("Values");
-	// type is hidden
-	hdfOptionsWidget.twContent->hideColumn(1);
 	netcdfOptionsWidget.twContent->setHeaderLabels(headers);
+	// type is hidden
+	netcdfOptionsWidget.twContent->hideColumn(1);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
 	// default filter
@@ -558,7 +558,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 */
 void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
-	if( item->data(2,Qt::DisplayRole).toString() == i18n("data set") ) {
+	if( item->data(2,Qt::DisplayRole).toString() == "data set" ) {
 		// the data link is saved in the second column
 		QString dataSetLink = item->data(1,Qt::DisplayRole).toString();
 		hdfOptionsWidget.leDataSet->setText(dataSetLink);
@@ -573,14 +573,22 @@ void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int colu
 */
 void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
-	if( item->data(1,Qt::DisplayRole).toString() == i18n("variable") ) {
+	if( item->data(1,Qt::DisplayRole).toString() == "variable" ) {
 		// the data link is saved in the second column
 		QString varName = item->data(0,Qt::DisplayRole).toString();
 		netcdfOptionsWidget.leVarName->setText(varName);
 		refreshPreview();
+	} else if( item->data(1,Qt::DisplayRole).toString().contains("attribute") ) {
+		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
+		QString fileName = ui.kleFileName->text();
+		QString name = item->data(0,Qt::DisplayRole).toString();
+		QString varName = item->data(1,Qt::DisplayRole).toString().split(" ")[0];
+
+		QString importedText = filter->readAttribute(fileName,name,varName);
+		ui.tePreview->setPlainText(importedText);
 	}
 	else
-		qDebug()<<"non variable selected in NetCDF tree widget";
+		qDebug()<<"non showable object selected in NetCDF tree widget";
 }
 
 /*!

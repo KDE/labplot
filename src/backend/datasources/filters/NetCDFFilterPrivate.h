@@ -41,6 +41,7 @@ class NetCDFFilterPrivate {
 		void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 		void read(const QString & fileName, AbstractDataSource* dataSource,
 					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+		QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
 		QString readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
 
@@ -60,7 +61,7 @@ class NetCDFFilterPrivate {
 #ifdef HAVE_NETCDF
 		void handleError(int status, QString function);
 		QString translateDataType(nc_type type);
-		void scanAttrs(int ncid, int varid, int nattr, QTreeWidgetItem* parentItem);
+		QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem=NULL);
 		void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
 		void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);
 /*		QString translateHDFOrder(H5T_order_t);

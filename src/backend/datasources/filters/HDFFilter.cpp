@@ -784,7 +784,7 @@ void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidget
         status = H5Iget_name(tid, link, MAXNAMELENGTH);
 	handleError(status,"H5Iget_name");
 
-	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join("")<<attr);
+	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<"data type"<<typeProps.join("")<<attr);
 	dataTypeItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
 	parentItem->addChild(dataTypeItem);
 
@@ -832,7 +832,7 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	handleError((int)pid,"H5Dget_create_plist");
 	dataSetProps<<", "<<readHDFPropertyList(pid).join("");
 
-	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
+	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<"data set"<<dataSetProps.join("")<<attr);
 	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
 	dataSetItem->setBackground(0,QBrush(QColor(192,255,192)));
 	parentItem->addChild(dataSetItem);
@@ -843,7 +843,7 @@ void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* p
         status = H5Gget_linkval(gid, linkName, MAXNAMELENGTH, target) ;
 	handleError(status,"H5Gget_linkval");
 
-	QTreeWidgetItem *linkItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(linkName)<<" "<<i18n("symbolic link")<<i18n("link to ")+QString(target));
+	QTreeWidgetItem *linkItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(linkName)<<" "<<"symbolic link"<<i18n("link to ")+QString(target));
 	linkItem->setIcon(0,QIcon(KIcon("emblem-symbolic-link")));
 	parentItem->addChild(linkItem);
 }
@@ -856,7 +856,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	handleError(status,"H5Gget_objinfo");
 	if (statbuf.nlink > 1) {
 		if(multiLinkList.contains(statbuf.objno[0])) {
-			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<" "<<i18n("hard link"));
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<" "<<"hard link");
 			objectItem->setIcon(0,QIcon(KIcon("link")));
                 	parentItem->addChild(objectItem);
 			return;
@@ -872,7 +872,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 
 	QString attr = scanHDFAttrs(gid).join(" ");
 
-	QTreeWidgetItem *groupItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<QString(link)<<i18n("group")<<" "<<attr);
+	QTreeWidgetItem *groupItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<QString(link)<<"group"<<" "<<attr);
 	groupItem->setIcon(0,QIcon(KIcon("folder")));
 	parentItem->addChild(groupItem);
 
@@ -917,7 +917,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 			break;
                 }
                 default:
-			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<i18n("unknown"));
+			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"unknown");
 			groupItem->addChild(objectItem);
                         break;
                 }
