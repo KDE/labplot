@@ -44,8 +44,6 @@ class QVTKWidget2;
 class AbstractAspect;
 class WorksheetElement;
 
-
-
 class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
