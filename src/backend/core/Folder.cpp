@@ -30,6 +30,7 @@
 
 #include "backend/core/Folder.h"
 #include "backend/core/Project.h"
+#include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/matrix/Matrix.h"
@@ -133,6 +134,14 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(folder);
+		loaded = true;
+	} else if (element_name == "workbook") {
+		Workbook* workbook = new Workbook(0, "");
+		if (!workbook->load(reader)) {
+			delete workbook;
+			return false;
+		}
+		addChild(workbook);
 		loaded = true;
 	} else if (element_name == "spreadsheet") {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);

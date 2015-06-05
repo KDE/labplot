@@ -175,7 +175,6 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 }
 
 void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect){
-// 	qDebug()<<"ProjectExplorer::setCurrentAspect" << aspect->name();
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(tree_model)
 	  m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
@@ -250,15 +249,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
 
 	//Menu for showing/hiding the columns in the tree view
-	QMenu* columnsMenu;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	columnsMenu = new QMenu(h);
-	//TODO how to add a caption/title for the QMenu, when used as a context menu?
-#else
-	columnsMenu = new KMenu(h);
-	(qobject_cast<KMenu*>(columnsMenu))->addTitle(i18n("Columns"));
-#endif
-
+	KMenu* columnsMenu = new KMenu(h);
+	columnsMenu->addTitle(i18n("Columns"));
 	columnsMenu->addAction(showAllColumnsAction);
 	columnsMenu->addSeparator();
 	for (int i=0; i<list_showColumnActions.size(); i++)

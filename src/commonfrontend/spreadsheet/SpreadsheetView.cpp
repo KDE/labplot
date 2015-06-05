@@ -63,7 +63,7 @@
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 
 /*!
-	\class SpreahsheetView
+	\class SpreadsheetView
 	\brief View class for Spreadsheet
 
 	\ingroup commonfrontend

@@ -36,8 +36,6 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-#include <QApplication>
-
 /*!
   \class Spreadsheet
   \brief Aspect providing a spreadsheet table with column logic.

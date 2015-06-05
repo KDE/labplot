@@ -479,7 +479,7 @@ void XYCurveDock::init(){
 
 void XYCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);

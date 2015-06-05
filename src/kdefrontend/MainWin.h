@@ -38,6 +38,7 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
+class Workbook;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
@@ -93,6 +94,7 @@ private:
 	KAction* m_exportAction;
 	KAction* m_closeAction;
 	KAction* m_newFolderAction;
+	KAction* m_newWorkbookAction;
 	KAction* m_newSpreadsheetAction;
 	KAction* m_newMatrixAction;
 	KAction* m_newWorksheetAction;
@@ -160,6 +162,7 @@ private:
 	bool save(const QString&);
 	void closeEvent(QCloseEvent*);
 
+	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
 	Worksheet* activeWorksheet() const;
 
@@ -192,6 +195,7 @@ private slots:
 	void projectChanged();
 
 	void newFolder();
+	void newWorkbook();
 	void newSpreadsheet();
 	void newSpreadsheetForImportFileDialog(const QString&);
 	void newMatrixForImportFileDialog(const QString&);

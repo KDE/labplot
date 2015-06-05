@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Main window of the application
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -32,6 +32,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Folder.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Workbook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
@@ -211,7 +212,11 @@ void MainWin::initActions() {
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
 	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 
-	//New Folder/Spreadsheet/Matrix/Worksheet/Datasources
+	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
+	m_newWorkbookAction = new KAction(KIcon("tab-new-background"),i18n("Workbook"),this);
+	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
+	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
+
 	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
@@ -345,6 +350,7 @@ void MainWin::initMenus(){
 	m_newMenu = new QMenu(i18n("Add new"));
 	m_newMenu->setIcon(KIcon("document-new"));
 	m_newMenu->addAction(m_newFolderAction);
+	m_newMenu->addAction(m_newWorkbookAction);
 	m_newMenu->addAction(m_newSpreadsheetAction);
 	m_newMenu->addAction(m_newMatrixAction);
 	m_newMenu->addAction(m_newWorksheetAction);
@@ -504,7 +510,12 @@ void MainWin::updateGUI() {
 		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
 
 		//Handle the Spreadsheet-object
-		Spreadsheet* spreadsheet = this->activeSpreadsheet();
+		const  Spreadsheet* spreadsheet = 0;
+		Workbook* workbook = this->activeWorkbook();
+		if (workbook)
+			spreadsheet = workbook->currentSpreadsheet();
+		else
+			spreadsheet = this->activeSpreadsheet();
 		if (spreadsheet){
 			//enable spreadsheet related menus
 // 			factory->container("analysis", this)->setEnabled(true);
@@ -905,6 +916,19 @@ void MainWin::printPreview(){
 */
 void MainWin::newSpreadsheet(){
 	Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+
+	//if the current active window is a workbook and no folder/project is selected in the project explorer,
+	//add the new spreadsheet to the workbook
+	Workbook* workbook = activeWorkbook();
+	if (workbook) {
+		QModelIndex index = m_projectExplorer->currentIndex();
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		if (!aspect->inherits("Folder")) {
+			workbook->addChild(spreadsheet);
+			return;
+		}
+	}
+
 	this->addAspectToProject(spreadsheet);
 }
 
@@ -950,6 +974,21 @@ void MainWin::newMatrixForImportFileDialog(const QString& name){
 void MainWin::newWorksheet() {
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
 	this->addAspectToProject(worksheet);
+}
+
+
+/*!
+	returns a pointer to a Workbook-object, if the currently active Mdi-Subwindow is \a WorkbookView.
+	Otherwise returns \a 0.
+*/
+Workbook* MainWin::activeWorkbook() const {
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
+
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	return dynamic_cast<Workbook*>(part);
 }
 
 /*!
@@ -1056,15 +1095,26 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
 	//activate the corresponding MDI sub window for the current aspect
 	activateSubWindowForAspect(aspect);
 	m_suppressCurrentSubWindowChangedEvent = false;
+
+	//TODO: updateGUI();
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
+		//for FileDataSource we currently don't show any view
 		if (dynamic_cast<const FileDataSource*>(part))
 			return;
 
-		PartMdiView* win = part->mdiSubWindow();
+		PartMdiView* win;
+
+		//for aspects being children of a Workbook,we show workbook's window, otherwise the window of the selected part
+		const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
+		if (workbook)
+			win = workbook->mdiSubWindow();
+		else
+			win = part->mdiSubWindow();
+
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
 			m_mdiArea->addSubWindow(win);
 			connect(win, SIGNAL(statusChanged(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)),
@@ -1105,13 +1155,31 @@ void MainWin::newScript(){
 	//TODO
 }
 
+void MainWin::newWorkbook(){
+	Workbook* workbook = new Workbook(0, i18n("Workbook"));
+	this->addAspectToProject(workbook);
+}
+
 void MainWin::newMatrix(){
 	Matrix* matrix = new Matrix(0, i18n("Matrix"));
+
+	//if the current active window is a workbook and no folder/project is selected in the project explorer,
+	//add the new spreadsheet to the workbook
+	Workbook* workbook = activeWorkbook();
+	if (workbook) {
+		QModelIndex index = m_projectExplorer->currentIndex();
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		if (!aspect->inherits("Folder")) {
+			workbook->addChild(matrix);
+			return;
+		}
+	}
+
 	this->addAspectToProject(matrix);
 }
 
 void MainWin::newFolder() {
-	Folder * folder = new Folder(i18n("Folder %1", 1));
+	Folder* folder = new Folder(i18n("Folder %1", 1));
 	this->addAspectToProject(folder);
 }
 

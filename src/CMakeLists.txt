@@ -100,6 +100,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/ScriptingEngineManager.cpp
 	${BACKEND_DIR}/core/Project.cpp
 	${BACKEND_DIR}/core/AbstractPart.cpp
+	${BACKEND_DIR}/core/Workbook.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
 	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
@@ -156,6 +157,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetDoubleHeaderView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
+	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
