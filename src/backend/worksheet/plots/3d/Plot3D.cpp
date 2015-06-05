@@ -49,6 +49,8 @@
 #include <vtkProperty.h>
 #include <vtkRendererCollection.h>
 #include <vtkOBJReader.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkInteractorStyleTrackballCamera.h>
 
 
 Plot3D::Plot3D(const QString& name, QGLContext *context)
@@ -134,6 +136,10 @@ void Plot3DPrivate::init(){
 	renderWindow->AddRenderer(renderer);
 
 	renderer->SetBackground(1, 1, 1);
+
+	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
+
+	renderWindow->GetInteractor()->SetInteractorStyle(style);
 }
 
 void Plot3DPrivate::clearActors(){
