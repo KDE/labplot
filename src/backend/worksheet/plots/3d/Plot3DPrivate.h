@@ -29,11 +29,18 @@
 #ifndef CARTESIANPLOTPRIVATE_H
 #define CARTESIANPLOTPRIVATE_H
 
+#include "Plot3D.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
-class Plot3D;
+#include <KUrl>
+
+#include <vtkSmartPointer.h>
+#include <vtkRenderer.h>
+
 class QGLContext;
 class QVTKGraphicsItem;
+class vtkRenderer;
+class vtkActor;
 
 class Plot3DPrivate:public AbstractPlotPrivate{
 	public:
@@ -45,9 +52,23 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		virtual void retransform();
 
 	private:
-		Plot3D* const q;
+		void addSphere();
+		void readFromFile();
+
+		void clearActors();
+
+	private:
+		Plot3D* const q_ptr;
+		Q_DECLARE_PUBLIC(Plot3D);
 		QGLContext *context;
 		QVTKGraphicsItem *vtkItem;
+		Plot3D::VisualizationType visType;
+		Plot3D::DataSource sourceType;
+		KUrl path;
+		bool isChanged;
+
+		vtkSmartPointer<vtkRenderer> renderer;
+		QVector<vtkSmartPointer<vtkActor> > actors;
 };
 
 #endif

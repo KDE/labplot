@@ -30,15 +30,33 @@
 #define PLOT3DDOCK_H
 
 #include <QWidget>
+#include "ui_plot3ddock.h"
 
 class Plot3D;
+class KUrl;
 
 class Plot3DDock: public QWidget{
 	Q_OBJECT
 
-public:
-	explicit Plot3DDock(QWidget* parent);
-	void setPlots(const QList<Plot3D*>& plots);
+	public:
+		explicit Plot3DDock(QWidget* parent);
+		void setPlots(const QList<Plot3D*>& plots);
+
+	private:
+		void hideDataSource(bool hide = true);
+		void hideFileUrl(bool hide = true);
+
+	private slots:
+		void onVisualizationTypeChanged(int index);
+		void onDataSourceChanged(int index);
+		void onFileChanged(const KUrl& path);
+
+	private:
+		Ui::Plot3DDock ui;
+		QList<Plot3D*> plots;
+
+	signals:
+		void needRepaint();
 };
 
 #endif

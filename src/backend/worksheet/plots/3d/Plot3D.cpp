@@ -42,13 +42,13 @@
 #include <KIcon>
 
 #include <QVTKGraphicsItem.h>
-#include <vtkSmartPointer.h>
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
-#include <vtkRenderer.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkProperty.h>
+#include <vtkRendererCollection.h>
+#include <vtkOBJReader.h>
 
 
 Plot3D::Plot3D(const QString& name, QGLContext *context)
@@ -86,25 +86,64 @@ void Plot3D::setRect(const QRectF &rect){
 	d->retransform();
 }
 
+void Plot3D::setVisualizationType(VisualizationType type){
+	Q_D(Plot3D);
+	d->visType = type;
+	d->isChanged = true;
+}
+
+void Plot3D::setDataSource(DataSource source){
+	Q_D(Plot3D);
+	d->sourceType = source;
+	d->isChanged = true;
+}
+
+void Plot3D::setFile(const KUrl& path){
+	Q_D(Plot3D);
+	d->path = path;
+	d->isChanged = true;
+}
+
+void Plot3D::retransform(){
+	Q_D(Plot3D);
+	d->retransform();
+	WorksheetElementContainer::retransform();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
-	: AbstractPlotPrivate(owner), q(owner), context(context){
+	: AbstractPlotPrivate(owner)
+	, q_ptr(owner)
+	, context(context)
+	, visType(Plot3D::VisualizationType_Triangles)
+	, sourceType(Plot3D::DataSource_Empty)
+	, isChanged(false){
 }
 
 Plot3DPrivate::~Plot3DPrivate(){
 }
 
 void Plot3DPrivate::init(){
+	Q_Q(Plot3D);
 	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
 
 	vtkGenericOpenGLRenderWindow *renderWindow = vtkItem->GetRenderWindow();
 
-	vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+	renderer = vtkSmartPointer<vtkRenderer>::New();
 	renderWindow->AddRenderer(renderer);
 
 	renderer->SetBackground(1, 1, 1);
+}
 
+void Plot3DPrivate::clearActors(){
+	foreach(vtkActor *actor, actors){
+		renderer->RemoveActor(actor);
+	}
+	actors.clear();
+}
+
+void Plot3DPrivate::addSphere(){
 	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 	sphereSource->Update();
 	vtkSmartPointer<vtkPolyDataMapper> sphereMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
@@ -113,6 +152,22 @@ void Plot3DPrivate::init(){
 	sphereActor->GetProperty()->SetFrontfaceCulling(true);
 	sphereActor->SetMapper(sphereMapper);
 	renderer->AddActor(sphereActor);
+	actors.push_back(sphereActor);
+}
+
+void Plot3DPrivate::readFromFile(){
+	vtkSmartPointer<vtkOBJReader> reader = vtkSmartPointer<vtkOBJReader>::New();
+	qDebug() << Q_FUNC_INFO << "Read from the file:" << path.path().toAscii();
+	reader->SetFileName(path.path().toAscii().constData());
+	reader->Update();
+	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+  mapper->SetInputConnection(reader->GetOutputPort());
+
+  vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+  actor->SetMapper(mapper);
+
+	renderer->AddActor(actor);
+	actors.push_back(actor);
 }
 
 void Plot3DPrivate::retransform(){
@@ -120,7 +175,22 @@ void Plot3DPrivate::retransform(){
 	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
+	Q_Q(Plot3D);
 	q->plotArea()->setRect(rect);
+
+	if (isChanged){
+		clearActors();
+		if (sourceType == Plot3D::DataSource_Empty){
+			qDebug() << Q_FUNC_INFO << "Add Sphere";
+			addSphere();
+		}else if(sourceType == Plot3D::DataSource_File){
+			qDebug() << Q_FUNC_INFO << "Read file";
+			readFromFile();
+		}else if(sourceType == Plot3D::DataSource_Spreadsheet){
+		}
+
+		isChanged = false;
+	}
 	vtkItem->setGeometry(q->plotArea()->rect());
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();

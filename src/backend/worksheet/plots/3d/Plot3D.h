@@ -33,9 +33,22 @@
 
 class QGLContext;
 class Plot3DPrivate;
+class KUrl;
 
 class Plot3D:public AbstractPlot{
 	Q_OBJECT
+	Q_DECLARE_PRIVATE(Plot3D);
+
+	public:
+		enum VisualizationType{
+			VisualizationType_Triangles = 0
+		};
+
+		enum DataSource{
+			DataSource_File = 0,
+			DataSource_Spreadsheet = 1,
+			DataSource_Empty
+		};
 
 	public:
 		explicit Plot3D(const QString &name, QGLContext *context);
@@ -44,15 +57,16 @@ class Plot3D:public AbstractPlot{
 		QIcon icon() const;
 		void setRect(const QRectF&);
 
-		typedef Plot3D BaseClass;
-		typedef Plot3DPrivate Private;
+		void setVisualizationType(VisualizationType type);
+		void setDataSource(DataSource source);
+		void setFile(const KUrl& path);
+
+		void retransform();
 
 	protected:
 		Plot3D(const QString &name, Plot3DPrivate *dd);
 
 	private:
-		Q_DECLARE_PRIVATE(Plot3D);
-
 		void init();
 };
 
