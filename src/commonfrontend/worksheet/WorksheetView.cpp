@@ -50,10 +50,14 @@
 #include <QMessageBox>
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
+#include <QGLContext>
 
 #include <KAction>
 #include <KLocale>
 #include <KMessageBox>
+
+#include <QVTKWidget2.h>
+#include <vtkGenericOpenGLRenderWindow.h>
 
 /**
  * \class WorksheetView
@@ -75,7 +79,14 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
 	tbNewCartesianPlot(0),
-	tbZoom(0) {
+	tbZoom(0),
+	glContext(new QGLContext(QGLFormat(QGL::DoubleBuffer))),
+	vtkWidget(new QVTKWidget2(glContext)){
+
+	setViewport(vtkWidget);
+	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+	vtkWidget->GetRenderWindow()->SetSwapBuffers(0);
+	vtkWidget->setAutoBufferSwap(true);
 
 	setScene(m_worksheet->scene());
 
@@ -666,6 +677,13 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 
 	invalidateScene(rect, QGraphicsScene::BackgroundLayer);
 	painter->restore();
+
+	painter->beginNativePainting();
+	vtkWidget->GetRenderWindow()->PushState();
+	vtkWidget->GetRenderWindow()->OpenGLInitState();
+	vtkWidget->GetRenderWindow()->Render();
+	vtkWidget->GetRenderWindow()->PopState();
+	painter->endNativePainting();
 }
 
 //##############################################################################
@@ -676,6 +694,7 @@ void WorksheetView::resizeEvent(QResizeEvent *event) {
 		this->processResize();
 
 	QGraphicsView::resizeEvent(event);
+	vtkWidget->GetRenderWindow()->SetSize(event->size().width(), event->size().height());
 }
 
 void WorksheetView::wheelEvent(QWheelEvent *event) {
@@ -876,7 +895,7 @@ void WorksheetView::addNew(QAction* action){
 	}else if ( action == add3DPlotAction ){
 		// TODO: Create a 3D plot widget
 		qDebug() << Q_FUNC_INFO << "Add3dPlot menu clicked";
-		Plot3D* plot = new Plot3D(i18n("3D Plot"));
+		Plot3D* plot = new Plot3D(i18n("3D Plot"), glContext);
 		aspect = plot;
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel(i18n("text label"));
@@ -983,13 +1002,15 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
 void WorksheetView::fadeIn(qreal value) {
 	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
 	effect->setOpacity(value);
-	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
+	if (lastAddedWorksheetElement->graphicsItem())
+		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
 
 void WorksheetView::fadeOut(qreal value) {
 	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
 	effect->setOpacity(1-value);
-	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
+	if (lastAddedWorksheetElement->graphicsItem())
+		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
 
 /*!

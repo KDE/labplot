@@ -15,7 +15,17 @@ include(${VTK_USE_FILE})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
-include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${VTK_INCLUDE_DIRS} ${VTK_INCLUDE_DIR})
+
+get_filename_component(VTK_INSTALL_PREFIXX "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${VTK_INCLUDE_DIRS})
+
+# Temporary solution for the VTK bug #15065 http://www.paraview.org/Bug/view.php?id=15065
+# The patch is only available for the 6.2.0 version https://gitlab.kitware.com/vtk/vtk/commit/ab4dc579c340167b6b3ae6cd82b3fd645642796a
+get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+foreach(dir ${dirs})
+	include_directories(${dir}/vtk)
+endforeach()
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions (-DLVERSION='\"2.0.2\"')
 # add_definitions (-DLDEBUG='1')

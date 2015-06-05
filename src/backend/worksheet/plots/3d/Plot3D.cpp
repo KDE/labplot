@@ -41,10 +41,18 @@
 
 #include <KIcon>
 
-#include <vtk/QVTKWidget2.h>
+#include <QVTKGraphicsItem.h>
+#include <vtkSmartPointer.h>
+#include <vtkSphereSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkRenderer.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkProperty.h>
 
-Plot3D::Plot3D(const QString& name)
-	: AbstractPlot(name, new Plot3DPrivate(this)){
+
+Plot3D::Plot3D(const QString& name, QGLContext *context)
+	: AbstractPlot(name, new Plot3DPrivate(this, context)){
 	qDebug() << Q_FUNC_INFO;
 	init();
 }
@@ -80,15 +88,31 @@ void Plot3D::setRect(const QRectF &rect){
 
 /////////////////////////////////////////////////////////////////////////////
 
-Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
-	: AbstractPlotPrivate(owner), q(owner){
+Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
+	: AbstractPlotPrivate(owner), q(owner), context(context){
+}
+
+Plot3DPrivate::~Plot3DPrivate(){
 }
 
 void Plot3DPrivate::init(){
-	QVTKWidget2 *w = new QVTKWidget2();
+	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
 
-	m_proxyWidget = new QGraphicsProxyWidget(q->plotArea()->graphicsItem());
-	m_proxyWidget->setWidget(w);
+	vtkGenericOpenGLRenderWindow *renderWindow = vtkItem->GetRenderWindow();
+
+	vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+	renderWindow->AddRenderer(renderer);
+
+	renderer->SetBackground(1, 1, 1);
+
+	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
+	sphereSource->Update();
+	vtkSmartPointer<vtkPolyDataMapper> sphereMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	sphereMapper->SetInputConnection(sphereSource->GetOutputPort());
+	vtkSmartPointer<vtkActor> sphereActor = vtkSmartPointer<vtkActor>::New();
+	sphereActor->GetProperty()->SetFrontfaceCulling(true);
+	sphereActor->SetMapper(sphereMapper);
+	renderer->AddActor(sphereActor);
 }
 
 void Plot3DPrivate::retransform(){
@@ -97,12 +121,7 @@ void Plot3DPrivate::retransform(){
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	q->plotArea()->setRect(rect);
-	m_proxyWidget->setGeometry(q->plotArea()->rect());
+	vtkItem->setGeometry(q->plotArea()->rect());
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
-}
-
-void Plot3DPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
-	painter->fillRect(q->plotArea()->rect(), QBrush(Qt::red));
-	WorksheetElementContainerPrivate::paint(painter, option, widget);
 }

@@ -31,13 +31,14 @@
 
 #include "backend/worksheet/plots/AbstractPlot.h"
 
+class QGLContext;
 class Plot3DPrivate;
 
 class Plot3D:public AbstractPlot{
 	Q_OBJECT
 
 	public:
-		explicit Plot3D(const QString &name);
+		explicit Plot3D(const QString &name, QGLContext *context);
 		virtual ~Plot3D();
 
 		QIcon icon() const;

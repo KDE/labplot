@@ -29,23 +29,25 @@
 #ifndef CARTESIANPLOTPRIVATE_H
 #define CARTESIANPLOTPRIVATE_H
 
-#include "Plot3D.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
-class QGraphicsProxyWidget;
+class Plot3D;
+class QGLContext;
+class QVTKGraphicsItem;
 
 class Plot3DPrivate:public AbstractPlotPrivate{
 	public:
-		explicit Plot3DPrivate(Plot3D* owner);
+		explicit Plot3DPrivate(Plot3D* owner, QGLContext *context);
+		virtual ~Plot3DPrivate();
 
 		void init();
 
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 		virtual void retransform();
 
-		Plot3D* const q;
 	private:
-		QGraphicsProxyWidget* m_proxyWidget;
+		Plot3D* const q;
+		QGLContext *context;
+		QVTKGraphicsItem *vtkItem;
 };
 
 #endif

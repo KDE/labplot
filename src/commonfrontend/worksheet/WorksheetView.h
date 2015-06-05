@@ -38,9 +38,13 @@ class QToolBar;
 class QToolButton;
 class QWheelEvent;
 class QTimeLine;
+class QGLContext;
+class QVTKWidget2;
 
 class AbstractAspect;
 class WorksheetElement;
+
+
 
 class WorksheetView : public QGraphicsView {
 	Q_OBJECT
@@ -178,6 +182,9 @@ class WorksheetView : public QGraphicsView {
 	QAction* shiftRightXAction;
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
+
+	QGLContext* glContext;
+	QVTKWidget2* vtkWidget;
 
   public slots:
 	void createContextMenu(QMenu*) const;
