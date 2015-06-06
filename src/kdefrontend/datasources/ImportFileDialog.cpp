@@ -101,7 +101,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	cbAddTo = new TreeViewComboBox(frameAddTo);
 	cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 	QList<const char *> list;
-	list<<"Folder"<<"Spreadsheet"<<"Matrix";
+	list<<"Folder"<<"Spreadsheet"<<"Matrix"<<"Workbook";
 	cbAddTo->setTopLevelClasses(list);
 	grid->addWidget(cbAddTo,0,1);
 	connect( cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)) );
