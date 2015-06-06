@@ -34,6 +34,7 @@
 class QGLContext;
 class Plot3DPrivate;
 class KUrl;
+class AbstractColumn;
 
 class Plot3D:public AbstractPlot{
 	Q_OBJECT
@@ -60,6 +61,10 @@ class Plot3D:public AbstractPlot{
 		void setVisualizationType(VisualizationType type);
 		void setDataSource(DataSource source);
 		void setFile(const KUrl& path);
+
+		void setXColumn(AbstractColumn *column);
+		void setYColumn(AbstractColumn *column);
+		void setZColumn(AbstractColumn *column);
 
 		void retransform();
 

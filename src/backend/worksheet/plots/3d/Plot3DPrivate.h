@@ -41,6 +41,7 @@ class QGLContext;
 class QVTKGraphicsItem;
 class vtkRenderer;
 class vtkActor;
+class AbstractColumn;
 
 class Plot3DPrivate:public AbstractPlotPrivate{
 	public:
@@ -54,6 +55,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 	private:
 		void addSphere();
 		void readFromFile();
+		void readFromColumns();
 
 		void clearActors();
 
@@ -69,6 +71,10 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 
 		vtkSmartPointer<vtkRenderer> renderer;
 		QVector<vtkSmartPointer<vtkActor> > actors;
+
+		AbstractColumn *xColumn;
+		AbstractColumn *yColumn;
+		AbstractColumn *zColumn;
 };
 
 #endif

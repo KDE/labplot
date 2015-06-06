@@ -39,35 +39,8 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="2">
-        <widget class="KComboBox" name="cbTypeComboBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="labelType">
-         <property name="text">
-          <string>Type</string>
-         </property>
-        </widget>
+       <item row="4" column="2">
+        <widget class="TreeViewComboBox" name="cbYCoordinate"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="labelSource">
@@ -109,6 +82,63 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="2">
+        <widget class="KComboBox" name="cbTypeComboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelType">
+         <property name="text">
+          <string>Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="TreeViewComboBox" name="cbXCoordinate"/>
+       </item>
+       <item row="5" column="2">
+        <widget class="TreeViewComboBox" name="cbZCoordinate"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelX">
+         <property name="text">
+          <string>X</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelY">
+         <property name="text">
+          <string>Y</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="labelZ">
+         <property name="text">
+          <string>Z</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -125,6 +155,11 @@
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TreeViewComboBox</class>
+   <extends>QComboBox</extends>
+   <header>commonfrontend/widgets/TreeViewComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

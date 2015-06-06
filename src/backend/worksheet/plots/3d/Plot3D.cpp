@@ -28,6 +28,7 @@
 
 #include "Plot3D.h"
 #include "Plot3DPrivate.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/TextLabel.h"
 
@@ -51,6 +52,8 @@
 #include <vtkOBJReader.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleTrackballCamera.h>
+#include <vtkTriangle.h>
+#include <vtkCellArray.h>
 
 
 Plot3D::Plot3D(const QString& name, QGLContext *context)
@@ -98,12 +101,32 @@ void Plot3D::setDataSource(DataSource source){
 	Q_D(Plot3D);
 	d->sourceType = source;
 	d->isChanged = true;
+	if (source != DataSource_Spreadsheet){
+		setXColumn(0);
+		setYColumn(0);
+		setZColumn(0);
+	}
 }
 
 void Plot3D::setFile(const KUrl& path){
 	Q_D(Plot3D);
 	d->path = path;
 	d->isChanged = true;
+}
+
+void Plot3D::setXColumn(AbstractColumn *column){
+	Q_D(Plot3D);
+	d->xColumn= column;
+}
+
+void Plot3D::setYColumn(AbstractColumn *column){
+	Q_D(Plot3D);
+	d->yColumn= column;
+}
+
+void Plot3D::setZColumn(AbstractColumn *column){
+	Q_D(Plot3D);
+	d->zColumn= column;
 }
 
 void Plot3D::retransform(){
@@ -120,7 +143,10 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	, context(context)
 	, visType(Plot3D::VisualizationType_Triangles)
 	, sourceType(Plot3D::DataSource_Empty)
-	, isChanged(false){
+	, isChanged(false)
+	, xColumn(0)
+	, yColumn(0)
+	, zColumn(0){
 }
 
 Plot3DPrivate::~Plot3DPrivate(){
@@ -176,6 +202,63 @@ void Plot3DPrivate::readFromFile(){
 	actors.push_back(actor);
 }
 
+void Plot3DPrivate::readFromColumns(){
+	if (xColumn == 0 || yColumn == 0 || zColumn == 0){
+		return;
+	}
+
+	if (visType == Plot3D::VisualizationType_Triangles){
+		qDebug() << Q_FUNC_INFO << "Triangles rendering";
+		vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
+		vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+
+		qDebug() << Q_FUNC_INFO << "Row count:" << xColumn->rowCount() << yColumn->rowCount() << zColumn->rowCount();
+		// Each triangle has 3 nodes
+		const int thirdPart = std::min(xColumn->rowCount(), std::min(yColumn->rowCount(), zColumn->rowCount())) / 3;
+		for (int i = 0, max = thirdPart; i < max; ++i){
+			const int id1 = 3 * i;
+			const int id2 = id1 + 1;
+			const int id3 = id2 + 1;
+			const int x1 = static_cast<int>(xColumn->valueAt(id1));
+			const int y1 = static_cast<int>(yColumn->valueAt(id1));
+			const int z1 = static_cast<int>(zColumn->valueAt(id1));
+
+			const int x2 = static_cast<int>(xColumn->valueAt(id2));
+			const int y2 = static_cast<int>(yColumn->valueAt(id2));
+			const int z2 = static_cast<int>(zColumn->valueAt(id2));
+
+			const int x3 = static_cast<int>(xColumn->valueAt(id3));
+			const int y3 = static_cast<int>(yColumn->valueAt(id3));
+			const int z3 = static_cast<int>(zColumn->valueAt(id3));
+
+			points->InsertNextPoint(x1, y1, z1);
+			points->InsertNextPoint(x2, y2, z2);
+			points->InsertNextPoint(x3, y3, z3);
+
+			vtkSmartPointer<vtkTriangle> triangle = vtkSmartPointer<vtkTriangle>::New();
+			triangle->GetPointIds()->SetId(0, id1);
+			triangle->GetPointIds()->SetId(1, id2);
+			triangle->GetPointIds()->SetId(2, id3);
+
+			triangles->InsertNextCell(triangle);
+		}
+		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << thirdPart;
+
+		vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
+
+		polydata->SetPoints(points);
+		polydata->SetPolys(triangles);
+		vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+		mapper->SetInputData(polydata);
+
+		vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+		actor->SetMapper(mapper);
+
+		renderer->AddActor(actor);
+		actors.push_back(actor);
+	}
+}
+
 void Plot3DPrivate::retransform(){
 	prepareGeometryChange();
 	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);
@@ -193,6 +276,7 @@ void Plot3DPrivate::retransform(){
 			qDebug() << Q_FUNC_INFO << "Read file";
 			readFromFile();
 		}else if(sourceType == Plot3D::DataSource_Spreadsheet){
+			readFromColumns();
 		}
 
 		isChanged = false;

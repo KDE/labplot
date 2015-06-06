@@ -34,6 +34,7 @@
 
 class Plot3D;
 class KUrl;
+class AbstractColumn;
 
 class Plot3DDock: public QWidget{
 	Q_OBJECT
@@ -45,11 +46,18 @@ class Plot3DDock: public QWidget{
 	private:
 		void hideDataSource(bool hide = true);
 		void hideFileUrl(bool hide = true);
+		void hideCoordinates(bool hide = true);
+
+		AbstractColumn* getColumn(const QModelIndex& index) const;
 
 	private slots:
 		void onVisualizationTypeChanged(int index);
 		void onDataSourceChanged(int index);
 		void onFileChanged(const KUrl& path);
+
+		void onXCoordinateSourceChanged(const QModelIndex& index);
+		void onYCoordinateSourceChanged(const QModelIndex& index);
+		void onZCoordinatedSourceChanged(const QModelIndex& index);
 
 	private:
 		Ui::Plot3DDock ui;
