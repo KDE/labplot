@@ -38,6 +38,7 @@
 
 #include <QApplication>
 #include <QLocale>
+#include <QDebug>
 
 #include <KIcon>
 #include <KLocale>
@@ -69,9 +70,7 @@ Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loadin
 
 	if (!loading)
 		init();
-
 }
-
 
 Matrix::~Matrix() {
 	delete d;
@@ -154,7 +153,7 @@ void Matrix::setPrecision(int precision) {
 		exec(new MatrixSetPrecisionCmd(d, precision, i18n("%1: precision changed")));
 }
 
-//TODO: made this undoable?
+//TODO: make this undoable?
 void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	d->headerFormat = format;
 	m_view->model()->updateHeader();
@@ -362,7 +361,6 @@ void Matrix::setFormula(const QString& formula) {
 }
 
 
-
 //! This method should only be called by the view.
 /** This method does not change the view, it only changes the
 	* values that are saved when the matrix is saved. The view
@@ -459,7 +457,7 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	emit q->columnsAboutToBeInserted(before, count);
 	for(int i=0; i<count; i++) {
 		matrixData.insert(before+i, QVector<double>(rowCount));
-		m_column_widths.insert(before+i, q->defaultColumnWidth());
+		columnWidths.insert(before+i, q->defaultColumnWidth());
 	}
 
 	columnCount += count;
@@ -475,7 +473,7 @@ void MatrixPrivate::removeColumns(int first, int count) {
 	Q_ASSERT(first+count <= columnCount);
 	matrixData.remove(first, count);
 	for (int i=0; i<count; i++)
-		m_column_widths.removeAt(first);
+		columnWidths.remove(first);
 	columnCount -= count;
 	emit q->columnsRemoved(first, count);
 }
@@ -491,7 +489,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 		for(int i=0; i<count; i++)
 			matrixData[col].insert(before+i, 0.0);
 	for(int i=0; i<count; i++)
-		m_row_heights.insert(before+i, q->defaultRowHeight());
+		rowHeights.insert(before+i, q->defaultRowHeight());
 
 	rowCount += count;
 	emit q->rowsInserted(before, count);
@@ -507,7 +505,7 @@ void MatrixPrivate::removeRows(int first, int count) {
 	for(int col=0; col<columnCount; col++)
 		matrixData[col].remove(first, count);
 	for (int i=0; i<count; i++)
-		m_row_heights.removeAt(first);
+		rowHeights.remove(first);
 
 	rowCount -= count;
 	emit q->rowsRemoved(first, count);
@@ -595,49 +593,56 @@ void MatrixPrivate::clearColumn(int col) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 void Matrix::save(QXmlStreamWriter* writer) const {
-	int cols = columnCount();
-	int rows = rowCount();
+	qDebug()<<"in save";
 	writer->writeStartElement("matrix");
 	writeBasicAttributes(writer);
-	writer->writeAttribute("columns", QString::number(cols));
-	writer->writeAttribute("rows", QString::number(rows));
 	writeCommentElement(writer);
+
+	//formula
 	writer->writeStartElement("formula");
-	writer->writeCharacters(formula());
+	writer->writeCharacters(d->formula);
 	writer->writeEndElement();
-	writer->writeStartElement("display");
+
+	//format
+	writer->writeStartElement("format");
 	writer->writeAttribute("headerFormat", QString::number(d->headerFormat));
 	writer->writeAttribute("numericFormat", QString(QChar(d->numericFormat)));
 	writer->writeAttribute("precision", QString::number(d->precision));
 	writer->writeEndElement();
-	writer->writeStartElement("coordinates");
+
+	//dimensions
+	writer->writeStartElement("dimension");
+	writer->writeAttribute("columns", QString::number(d->columnCount));
+	writer->writeAttribute("rows", QString::number(d->rowCount));
 	writer->writeAttribute("x_start", QString::number(d->xStart));
 	writer->writeAttribute("x_end", QString::number(d->xEnd));
 	writer->writeAttribute("y_start", QString::number(d->yStart));
 	writer->writeAttribute("y_end", QString::number(d->yEnd));
 	writer->writeEndElement();
 
-	for (int col=0; col<cols; col++) {
-		for (int row=0; row<rows; row++) {
-			writer->writeStartElement("cell");
-			writer->writeAttribute("row", QString::number(row));
-			writer->writeAttribute("column", QString::number(col));
-			writer->writeCharacters(QString::number(cell(row, col), 'e', 16));
-			writer->writeEndElement();
-		}
-	}
-	for (int col=0; col<cols; col++) {
-		writer->writeStartElement("column_width");
-		writer->writeAttribute("column", QString::number(col));
-		writer->writeCharacters(QString::number(columnWidth(col)));
+	//vector with row heights
+	writer->writeStartElement("row_heights");
+	const char* data = reinterpret_cast<const char*>(d->rowHeights.constData());
+	int size = d->rowHeights.size()*sizeof(int);
+	writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
+	writer->writeEndElement();
+
+	//vector with column widths
+	writer->writeStartElement("column_widths");
+	data = reinterpret_cast<const char*>(d->columnWidths.constData());
+	size = d->columnWidths.size()*sizeof(int);
+	writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
+	writer->writeEndElement();
+
+	//columns
+	size = d->rowCount*sizeof(double);
+	for (int i=0; i<d->columnCount; ++i) {
+		data = reinterpret_cast<const char*>(d->matrixData.at(i).constData());
+		writer->writeStartElement("column");
+		writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
 		writer->writeEndElement();
 	}
-	for (int row=0; row<rows; row++) {
-		writer->writeStartElement("row_height");
-		writer->writeAttribute("row", QString::number(row));
-		writer->writeCharacters(QString::number(rowHeight(row)));
-		writer->writeEndElement();
-	}
+
 	writer->writeEndElement(); // "matrix"
 }
 
@@ -649,184 +654,112 @@ bool Matrix::load(XmlStreamReader* reader) {
 
 	if (!readBasicAttributes(reader)) return false;
 
-	// read dimensions
-	bool ok1, ok2;
-	int rows, cols;
-	rows = reader->readAttributeInt("rows", &ok1);
-	cols = reader->readAttributeInt("columns", &ok2);
-	if(!ok1 || !ok2) {
-		reader->raiseError(i18n("invalid row or column count"));
-		return false;
-	}
-	d->suppressDataChange = true;
-	setDimensions(rows, cols);
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
 
 	// read child elements
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement()) break;
+		if (reader->isEndElement() && reader->name() == "workbook")
+            break;
 
-		if (reader->isStartElement()) {
-			bool ret_val = true;
-			if (reader->name() == "comment")
-				ret_val = readCommentElement(reader);
-			else if(reader->name() == "formula")
-				ret_val = readFormulaElement(reader);
-			else if(reader->name() == "display")
-				ret_val = readDisplayElement(reader);
-			else if(reader->name() == "coordinates")
-				ret_val = readCoordinatesElement(reader);
-			else if(reader->name() == "cell")
-				ret_val = readCellElement(reader);
-			else if(reader->name() == "row_height")
-				ret_val = readRowHeightElement(reader);
-			else if(reader->name() == "column_width")
-				ret_val = readColumnWidthElement(reader);
-			else // unknown element
-			{
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-				if (!reader->skipToEndElement()) return false;
-			}
-			if(!ret_val) return false;
-		}
+        if (!reader->isStartElement())
+            continue;
+
+/*
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader)) return false;
+		} else if(reader->name() == "formula") {
+			d->formula = reader->text().toString().trimmed();
+		} else if (reader->name() == "format") {
+			attribs = reader->attributes();
+
+            str = attribs.value("headerFormat").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'headerFormat'"));
+            else
+                d->headerFormat = Matrix::HeaderFormat(str.toInt());
+
+			str = attribs.value("numericFormat").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'numericFormat'"));
+            else
+                d->numericFormat = *str.toLatin1().data();
+
+            str = attribs.value("precision").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'precision'"));
+            else
+                d->precision = str.toInt();
+
+		} else if (reader->name() == "dimension") {
+			attribs = reader->attributes();
+
+			str = attribs.value("columns").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'columns'"));
+            else
+                d->columnCount = str.toInt();
+
+			str = attribs.value("rows").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'rows'"));
+            else
+                d->rowCount = str.toInt();
+
+			str = attribs.value("x_start").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'x_start'"));
+            else
+                d->xStart = str.toDouble();
+
+			str = attribs.value("x_end").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'x_end'"));
+            else
+                d->xEnd = str.toDouble();
+
+			str = attribs.value("y_start").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'y_start'"));
+            else
+                d->yStart = str.toDouble();
+
+			str = attribs.value("y_end").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'y_end'"));
+            else
+                d->yEnd = str.toDouble();
+		} else if (reader->name() == "row_heights") {
+			QString content = reader->text().toString().trimmed();
+			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
+			int count = bytes.size()/sizeof(int);
+			d->rowHeights.resize(count);
+			memcpy(d->rowHeights.data(), bytes.data(), count*sizeof(int));
+		} else if (reader->name() == "column_widths") {
+			QString content = reader->text().toString().trimmed();
+			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
+			int count = bytes.size()/sizeof(int);
+			d->columnWidths.resize(count);
+			memcpy(d->columnWidths.data(), bytes.data(), count*sizeof(int));
+		} else if (reader->name() == "column") {
+			//TODO: parallelize reading of columns?
+			QString content = reader->text().toString().trimmed();
+			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
+			int count = bytes.size()/sizeof(double);
+			QVector<double> column;
+			column.resize(count);
+			memcpy(column.data(), bytes.data(), count*sizeof(int));
+			d->matrixData.append(column);
+		} else { // unknown element
+            reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+            if (!reader->skipToEndElement())
+				return false;
+        }
+        */
 	}
-	d->suppressDataChange = false;
-
-	return true;
-}
-
-bool Matrix::readDisplayElement(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() && reader->name() == "display");
-	QXmlStreamAttributes attribs = reader->attributes();
-
-	QString str = attribs.value(reader->namespaceUri().toString(), "numeric_format").toString();
-	if(str.isEmpty() || str.length() != 1) {
-		reader->raiseError(i18n("invalid or missing numeric format"));
-		return false;
-	}
-	setNumericFormat(str.at(0).toAscii());
-
-	bool ok;
-	int digits = reader->readAttributeInt("displayed_digits", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid or missing number of displayed digits"));
-		return false;
-	}
-	setPrecision(digits);
-	if (!reader->skipToEndElement()) return false;
-
-	return true;
-}
-
-bool Matrix::readCoordinatesElement(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() && reader->name() == "coordinates");
-
-	bool ok;
-	int val;
-
-	val = reader->readAttributeInt("x_start", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid x start value"));
-		return false;
-	}
-	setXStart(val);
-
-	val = reader->readAttributeInt("x_end", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid x end value"));
-		return false;
-	}
-	setXEnd(val);
-
-	val = reader->readAttributeInt("y_start", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid y start value"));
-		return false;
-	}
-	setYStart(val);
-
-	val = reader->readAttributeInt("y_end", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid y end value"));
-		return false;
-	}
-	setYEnd(val);
-	if (!reader->skipToEndElement()) return false;
-
-	emit coordinatesChanged();//TODO: really required
-	return true;
-}
-
-bool Matrix::readFormulaElement(XmlStreamReader* reader) {
-	d->formula = reader->readElementText();
-	return true;
-}
-
-bool Matrix::readRowHeightElement(XmlStreamReader* reader) {
-	bool ok;
-	int row = reader->readAttributeInt("row", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid or missing row index"));
-		return false;
-	}
-	QString str = reader->readElementText();
-	int value = str.toInt(&ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid row height"));
-		return false;
-	}
-	if (m_view)
-		m_view->setRowHeight(row, value);
-	else
-		setRowHeight(row, value);
-	return true;
-}
-
-bool Matrix::readColumnWidthElement(XmlStreamReader* reader) {
-	bool ok;
-	int col = reader->readAttributeInt("column", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid or missing column index"));
-		return false;
-	}
-	QString str = reader->readElementText();
-	int value = str.toInt(&ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid column width"));
-		return false;
-	}
-	if (m_view)
-		m_view->setColumnWidth(col, value);
-	else
-		setColumnWidth(col, value);
-	return true;
-}
-
-bool Matrix::readCellElement(XmlStreamReader* reader) {
-	QString str;
-	int row, col;
-	bool ok;
-
-	QXmlStreamAttributes attribs = reader->attributes();
-	row = reader->readAttributeInt("row", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid or missing row index"));
-		return false;
-	}
-	col = reader->readAttributeInt("column", &ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid or missing column index"));
-		return false;
-	}
-
-	str = reader->readElementText();
-	double value = str.toDouble(&ok);
-	if(!ok) {
-		reader->raiseError(i18n("invalid cell value"));
-		return false;
-	}
-	setCell(row, col, value);
 
 	return true;
 }

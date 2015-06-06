@@ -51,10 +51,10 @@ class MatrixPrivate {
 		void setRowCells(int row, int first_column, int last_column, const QVector<double> & values);
 		void clearColumn(int col);
 
-		void setRowHeight(int row, int height) { m_row_heights[row] = height; }
-		void setColumnWidth(int col, int width) { m_column_widths[col] = width; }
-		int rowHeight(int row) const { return m_row_heights.at(row); }
-		int columnWidth(int col) const { return m_column_widths.at(col); }
+		void setRowHeight(int row, int height) { rowHeights[row] = height; }
+		void setColumnWidth(int col, int width) { columnWidths[col] = width; }
+		int rowHeight(int row) const { return rowHeights.at(row); }
+		int columnWidth(int col) const { return columnWidths.at(col); }
 
 		void emitDataChanged(int top, int left, int bottom, int right) { emit q->dataChanged(top, left, bottom, right); }
 
@@ -62,8 +62,8 @@ class MatrixPrivate {
 		int columnCount;
 		int rowCount;
 		QVector< QVector<double> > matrixData;
-		QList<int> m_row_heights;//!< Row widths
-		QList<int> m_column_widths;//!< Columns widths
+		QVector<int> rowHeights;//!< Row widths
+		QVector<int> columnWidths;//!< Columns widths
 		Matrix::HeaderFormat headerFormat;
 		char numericFormat; //!< Format code for displaying numbers
 		int precision; //!< Number of significant digits

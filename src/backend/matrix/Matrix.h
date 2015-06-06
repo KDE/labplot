@@ -130,12 +130,6 @@ class Matrix : public AbstractDataSource {
 
 	private:
 		void init();
-		bool readDisplayElement(XmlStreamReader*);
-		bool readCoordinatesElement(XmlStreamReader*);
-		bool readFormulaElement(XmlStreamReader*);
-		bool readCellElement(XmlStreamReader*);
-		bool readRowHeightElement(XmlStreamReader*);
-		bool readColumnWidthElement(XmlStreamReader*);
 
 		MatrixPrivate* const d;
 		friend class MatrixPrivate;
