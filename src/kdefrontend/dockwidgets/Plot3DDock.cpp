@@ -163,12 +163,10 @@ void Plot3DDock::onDataSourceChanged(int index){
 		}
 		emit needRepaint();
 	}else if (index == Plot3D::DataSource_Spreadsheet){
-		/*
 		foreach(Plot3D* plot, plots){
 			plot->setDataSource(Plot3D::DataSource_Spreadsheet);
 			plot->retransform();
 		}
-		*/
 	}
 }
 
