@@ -52,8 +52,6 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) 
 	ui.cbHeader->addItem(i18n("xy-Values"));
 	ui.cbHeader->addItem(i18n("Rows, Columns and xy-Values"));
 
-	ui.pbResize->setIcon(KIcon("transform-scale"));
-
 	//Validators
 	ui.kleXMin->setValidator( new QDoubleValidator(ui.kleXMin) );
 	ui.kleXMax->setValidator( new QDoubleValidator(ui.kleXMax) );
@@ -65,8 +63,8 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) 
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(numericFormatChanged(int)));
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)));
 	connect(ui.cbHeader, SIGNAL(currentIndexChanged(int)), this, SLOT(headerFormatChanged(int)));
-// 	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
-// 	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
+	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
+	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Matrix);
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
