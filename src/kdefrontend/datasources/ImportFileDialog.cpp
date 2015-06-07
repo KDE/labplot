@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2008 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -33,6 +33,7 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/core/Workbook.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <kmessagebox.h>
@@ -74,7 +75,7 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPositio
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
-	setCaption(i18n("Import Data to Spreadsheet/Matrix"));
+	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
@@ -107,7 +108,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	connect( cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)) );
 
 	list.clear();
-	list<<"Spreadsheet"<<"Matrix";
+	list<<"Spreadsheet"<<"Matrix"<<"Workbook";
 	cbAddTo->setSelectableClasses(list);
 
 	bNewSpreadsheet = new QPushButton(frameAddTo);
@@ -215,6 +216,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
 		filter->read(fileName, sheet, mode);
 	}
+	else if (aspect->inherits("Workbook")) {
+		qDebug()<<"Import to workbook not implemented yet";
+		//Workbook* book = qobject_cast<Workbook*>(aspect);
+		//TODO: import to which matrix/spreadsheet?
+		// Replace:
+		// Append:
+		// Prepend:
+	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();
@@ -259,13 +268,9 @@ void ImportFileDialog::newSpreadsheet(){
 		name = i18n("new Spreadsheet");
 
 	bool ok;
-	//TODO: how to set the icon in QInputDialog or in KInputDialog?
+	// child widgets can't have own icons
 	QInputDialog* dlg = new QInputDialog(this);
-
-//	this->setWindowIcon( QIcon(KIcon("insert-table")) );
-	dlg->setWindowIcon( QIcon(KIcon("insert-table")) );
 	name = dlg->getText(this, i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), QLineEdit::Normal, name, &ok);
-// 	name = KInputDialog::getText( i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), name, &ok);
 	if (ok)
 		emit newSpreadsheetRequested(name);
 
@@ -280,12 +285,9 @@ void ImportFileDialog::newMatrix(){
 		name = i18n("new Matrix");
 
 	bool ok;
-	//TODO: how to set the icon in QInputDialog or in KInputDialog?
+	// child widgets can't have own icons
 	QInputDialog* dlg = new QInputDialog(this);
-
-	dlg->setWindowIcon( QIcon(KIcon("insert-table")) );
 	name = dlg->getText(this, i18n("Add new Matrix"), i18n("Matrix name:"), QLineEdit::Normal, name, &ok);
-// 	name = KInputDialog::getText( i18n("Add new Matrix"), i18n("Matrix name:"), name, &ok);
 	if (ok)
 		emit newMatrixRequested(name);
 
