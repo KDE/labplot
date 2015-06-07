@@ -1,4 +1,4 @@
-project(LabPlot2)
+project(labplot2)
 cmake_minimum_required(VERSION 2.8.10) 
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)

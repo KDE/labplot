@@ -388,7 +388,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("3.0");
 	}
 
-	QString file = KStandardDirs::locate("data", "LabPlot2/pics/gsl_distributions/" + m_formulaPixs[distr] + ".jpg");
+	QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + m_formulaPixs[distr] + ".jpg");
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 

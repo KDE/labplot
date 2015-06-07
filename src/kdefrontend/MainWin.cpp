@@ -398,7 +398,7 @@ void MainWin::updateGUIOnProjectChanges() {
 
 	KXMLGUIFactory* factory=this->guiFactory();
 	if (factory->container("worksheet", this)==NULL) {
-		//no worksheet menu found, most probably Labplotui.rc
+		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
 		return;
 	}
@@ -452,7 +452,7 @@ void MainWin::updateGUI() {
 
 	KXMLGUIFactory* factory=this->guiFactory();
 	if (factory->container("worksheet", this)==NULL) {
-		//no worksheet menu found, most probably Labplotui.rc
+		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
 		return;
 	}
@@ -631,9 +631,7 @@ bool MainWin::newProject(){
 void MainWin::openProject(){
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
-	QString path = KFileDialog::getOpenFileName(KUrl(dir),
-												i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"),
-												this, i18n("Open project"));
+	QString path = KFileDialog::getOpenFileName(KUrl(dir),i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"),this, i18n("Open project"));
 
 	if (!path.isEmpty()) {
 		this->openProject(path);
@@ -788,8 +786,8 @@ bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
 	QString fileName = KFileDialog::getSaveFileName(KUrl(dir),
-								i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"),
-								this, i18n("Save project as"));
+		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"),
+		this, i18n("Save project as"));
 
 	if( fileName.isEmpty() )// "Cancel" was clicked
 		return false;

@@ -184,7 +184,7 @@ target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARI
 ############## installation ################################
 
 install(TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR})
-install(FILES ${KDEFRONTEND_DIR}/LabPlot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME})
-install(PROGRAMS LabPlot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME})
+install(PROGRAMS labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )

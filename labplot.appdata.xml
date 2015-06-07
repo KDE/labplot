@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
-  <id>LabPlot2.desktop</id>
+  <id>labplot2.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>LabPlot</name>
@@ -98,6 +98,6 @@
   </screenshots>
   <project_group>KDE</project_group>
   <provides>
-    <binary>LabPlot2</binary>
+    <binary>labplot2</binary>
   </provides>
 </component>
