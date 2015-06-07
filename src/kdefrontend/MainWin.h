@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Main window of the application
  ***************************************************************************/
 
@@ -164,6 +164,7 @@ private:
 
 	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
+	//TODO: Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
 
 	friend class GuiObserver;
@@ -197,11 +198,12 @@ private slots:
 	void newFolder();
 	void newWorkbook();
 	void newSpreadsheet();
+	void newMatrix();
+	void newWorksheet();
+	//TODO: void newScript();
+	void newWorkbookForImportFileDialog(const QString&);
 	void newSpreadsheetForImportFileDialog(const QString&);
 	void newMatrixForImportFileDialog(const QString&);
-	void newWorksheet();
-	void newScript();
-	void newMatrix();
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
 

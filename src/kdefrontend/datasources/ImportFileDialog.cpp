@@ -123,6 +123,12 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	grid->addWidget( bNewMatrix,0,3);
 	connect( bNewMatrix, SIGNAL(clicked()), this, SLOT(newMatrix()));
 
+	bNewWorkbook = new QPushButton(frameAddTo);
+	bNewWorkbook->setIcon(KIcon("tab-new-background"));
+	bNewWorkbook->setToolTip(i18n("Add new workbook"));
+	grid->addWidget( bNewWorkbook,0,4);
+	connect( bNewWorkbook, SIGNAL(clicked()), this, SLOT(newWorkbook()));
+
 	//grid->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
 
 	lPosition = new QLabel(i18n("Position"), frameAddTo);
@@ -213,16 +219,23 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		filter->read(fileName, matrix, mode);
 	}
 	else if (aspect->inherits("Spreadsheet")) {
-		Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
-		filter->read(fileName, sheet, mode);
+		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		filter->read(fileName, spreadsheet, mode);
 	}
 	else if (aspect->inherits("Workbook")) {
-		qDebug()<<"Import to workbook not implemented yet";
-		//Workbook* book = qobject_cast<Workbook*>(aspect);
-		//TODO: import to which matrix/spreadsheet?
-		// Replace:
-		// Append:
-		// Prepend:
+		const Workbook* workbook = qobject_cast<const Workbook*>(aspect);
+
+		// use active spreadsheet/matrix if present, else new spreadsheet
+		Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
+		Matrix* matrix = workbook->currentMatrix();
+		if(spreadsheet != NULL)
+			filter->read(fileName, spreadsheet, mode);
+		else if (matrix != NULL)
+			filter->read(fileName, matrix, mode);
+		else {
+			qDebug()<<"Import to empty workbook not implemented yet";
+			// TODO: add new spreadsheet or let filter do it
+		}
 	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
 
@@ -258,6 +271,23 @@ void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
 		cbPosition->setEnabled(false);
 		enableButtonOk(false);
 	}
+}
+
+void ImportFileDialog::newWorkbook(){
+	QString path = importFileWidget->fileName();
+	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+
+	if (name.isEmpty())
+		name = i18n("new Workbook");
+
+	bool ok;
+	// child widgets can't have own icons
+	QInputDialog* dlg = new QInputDialog(this);
+	name = dlg->getText(this, i18n("Add new Workbook"), i18n("Workbook name:"), QLineEdit::Normal, name, &ok);
+	if (ok)
+		emit newWorkbookRequested(name);
+
+	delete dlg;
 }
 
 void ImportFileDialog::newSpreadsheet(){

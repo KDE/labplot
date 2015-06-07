@@ -33,6 +33,7 @@
 #include "backend/core/AbstractScriptingEngine.h"
 
 class Spreadsheet;
+class Matrix;
 class QXmlStreamWriter;
 class XmlStreamReader;
 
@@ -46,7 +47,8 @@ class Workbook : public AbstractPart, public scripted {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-		const Spreadsheet* currentSpreadsheet() const;
+		Spreadsheet* currentSpreadsheet() const;
+		Matrix* currentMatrix() const;
 		void setChildSelectedInView(int index, bool selected);
 
 		virtual void save(QXmlStreamWriter*) const;

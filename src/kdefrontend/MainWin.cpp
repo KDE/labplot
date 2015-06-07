@@ -911,6 +911,24 @@ void MainWin::printPreview(){
 	}
 }
 
+/**************************************************************************************/
+
+/*!
+	adds a new Folder to the project.
+*/
+void MainWin::newFolder() {
+	Folder* folder = new Folder(i18n("Folder %1", 1));
+	this->addAspectToProject(folder);
+}
+
+/*!
+	adds a new Workbook to the project.
+*/
+void MainWin::newWorkbook(){
+	Workbook* workbook = new Workbook(0, i18n("Workbook"));
+	this->addAspectToProject(workbook);
+}
+
 /*!
 	adds a new Spreadsheet to the project.
 */
@@ -933,7 +951,56 @@ void MainWin::newSpreadsheet(){
 }
 
 /*!
- * adds a new Spreadsheet to the project.
+	adds a new Matrix to the project.
+*/
+void MainWin::newMatrix(){
+	Matrix* matrix = new Matrix(0, i18n("Matrix"));
+
+	//if the current active window is a workbook and no folder/project is selected in the project explorer,
+	//add the new spreadsheet to the workbook
+	Workbook* workbook = activeWorkbook();
+	if (workbook) {
+		QModelIndex index = m_projectExplorer->currentIndex();
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		if (!aspect->inherits("Folder")) {
+			workbook->addChild(matrix);
+			return;
+		}
+	}
+
+	this->addAspectToProject(matrix);
+}
+
+/*!
+	adds a new Worksheet to the project.
+*/
+void MainWin::newWorksheet() {
+	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
+	this->addAspectToProject(worksheet);
+}
+
+//TODO: void MainWin::newScript(){}
+
+/*!
+ * adds a new WorkbookView to the project.
+ * this slot is only supposed to be called from ImportFileDialog
+ */
+void MainWin::newWorkbookForImportFileDialog(const QString& name){
+	if (!m_importFileDialog)
+		return;
+
+	Workbook* workbook = new Workbook(0, name);
+	this->addAspectToProject(workbook);
+
+	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
+	m_importFileDialog->updateModel( model );
+
+	 if ( m_currentAspect->inherits("Workbook") )
+		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
+}
+
+/*!
+ * adds a new SpreadsheetView to the project.
  * this slot is only supposed to be called from ImportFileDialog
  */
 void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
@@ -966,14 +1033,6 @@ void MainWin::newMatrixForImportFileDialog(const QString& name){
 
 	 if ( m_currentAspect->inherits("Matrix") )
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-}
-
-/*!
-	adds a new Worksheet to the project.
-*/
-void MainWin::newWorksheet() {
-	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
-	this->addAspectToProject(worksheet);
 }
 
 
@@ -1020,6 +1079,8 @@ Worksheet* MainWin::activeWorksheet() const{
 	Q_ASSERT(part);
 	return dynamic_cast<Worksheet*>(part);
 }
+
+/********************************************************************************/
 
 /*!
 	called if there were changes in the project.
@@ -1149,38 +1210,6 @@ void MainWin::setMdiWindowVisibility(QAction * action){
 */
 void MainWin::handleShowSubWindowRequested() {
 	activateSubWindowForAspect(m_currentAspect);
-}
-
-void MainWin::newScript(){
-	//TODO
-}
-
-void MainWin::newWorkbook(){
-	Workbook* workbook = new Workbook(0, i18n("Workbook"));
-	this->addAspectToProject(workbook);
-}
-
-void MainWin::newMatrix(){
-	Matrix* matrix = new Matrix(0, i18n("Matrix"));
-
-	//if the current active window is a workbook and no folder/project is selected in the project explorer,
-	//add the new spreadsheet to the workbook
-	Workbook* workbook = activeWorkbook();
-	if (workbook) {
-		QModelIndex index = m_projectExplorer->currentIndex();
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits("Folder")) {
-			workbook->addChild(matrix);
-			return;
-		}
-	}
-
-	this->addAspectToProject(matrix);
-}
-
-void MainWin::newFolder() {
-	Folder* folder = new Folder(i18n("Folder %1", 1));
-	this->addAspectToProject(folder);
 }
 
 /*!
@@ -1359,21 +1388,23 @@ void MainWin::historyDialog(){
 }
 
 /*!
-  Opens the dialog to import data to the selected spreadsheet or matrix
+  Opens the dialog to import data to the selected workbook, spreadsheet or matrix
 */
 void MainWin::importFileDialog(){
 	m_importFileDialog = new ImportFileDialog(this);
+	connect (m_importFileDialog, SIGNAL(newWorkbookRequested(QString)),this, SLOT(newWorkbookForImportFileDialog(QString)));
 	connect (m_importFileDialog, SIGNAL(newSpreadsheetRequested(QString)),this, SLOT(newSpreadsheetForImportFileDialog(QString)));
 	connect (m_importFileDialog, SIGNAL(newMatrixRequested(QString)),this, SLOT(newMatrixForImportFileDialog(QString)));
+
 	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
 	m_importFileDialog->setModel( model );
 
-	 if ( m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") ) {
+	if ( m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook") ) {
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-	 } else if ( m_currentAspect->inherits("Column") ) {
+	} else if ( m_currentAspect->inherits("Column") ) {
 		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
 			m_importFileDialog->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
-	 }
+	}
 
 	if ( m_importFileDialog->exec() == QDialog::Accepted ) {
 		m_importFileDialog->importTo(statusBar());

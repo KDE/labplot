@@ -28,8 +28,8 @@
  ***************************************************************************/
 
 #include "Workbook.h"
-#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/workbook/WorkbookView.h"
 
@@ -74,16 +74,34 @@ QWidget* Workbook::view() const {
 	return m_view;
 }
 
-const Spreadsheet* Workbook::currentSpreadsheet() const {
+Spreadsheet* Workbook::currentSpreadsheet() const {
 	if (!m_view)
 		return 0;
 
 	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
-	AbstractAspect* aspect = child<AbstractAspect>(index);
-	return dynamic_cast<const Spreadsheet*>(aspect);
+	if(index != -1) {
+		AbstractAspect* aspect = child<AbstractAspect>(index);
+		if(aspect->inherits("Spreadsheet"))
+			return dynamic_cast<Spreadsheet*>(aspect);
+	}
+	return 0;
+}
+
+Matrix* Workbook::currentMatrix() const {
+	if (!m_view)
+		return 0;
+
+	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
+	if(index != -1) {
+		AbstractAspect* aspect = child<AbstractAspect>(index);
+		if(aspect->inherits("Matrix"))
+			return dynamic_cast<Matrix*>(aspect);
+	}
+	return 0;
 }
 
 void Workbook::handleAspectAdded(const AbstractAspect* aspect) {
+	Q_UNUSED(aspect);
 }
 
 
@@ -110,6 +128,7 @@ void Workbook::childSelected(const AbstractAspect* aspect){
 	in order to deselect the corresponding \c QGraphicsItem.
  */
 void Workbook::childDeselected(const AbstractAspect* aspect){
+	Q_UNUSED(aspect);
 }
 
 /*!
