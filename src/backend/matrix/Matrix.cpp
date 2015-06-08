@@ -662,13 +662,13 @@ bool Matrix::load(XmlStreamReader* reader) {
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement() && reader->name() == "workbook")
+		if (reader->isEndElement() && reader->name() == "matrix")
             break;
 
         if (!reader->isStartElement())
             continue;
 
-/*
+
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
 		} else if(reader->name() == "formula") {
@@ -733,12 +733,14 @@ bool Matrix::load(XmlStreamReader* reader) {
             else
                 d->yEnd = str.toDouble();
 		} else if (reader->name() == "row_heights") {
+			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(int);
 			d->rowHeights.resize(count);
 			memcpy(d->rowHeights.data(), bytes.data(), count*sizeof(int));
 		} else if (reader->name() == "column_widths") {
+			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(int);
@@ -746,19 +748,19 @@ bool Matrix::load(XmlStreamReader* reader) {
 			memcpy(d->columnWidths.data(), bytes.data(), count*sizeof(int));
 		} else if (reader->name() == "column") {
 			//TODO: parallelize reading of columns?
+			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(double);
 			QVector<double> column;
 			column.resize(count);
-			memcpy(column.data(), bytes.data(), count*sizeof(int));
+			memcpy(column.data(), bytes.data(), count*sizeof(double));
 			d->matrixData.append(column);
 		} else { // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement())
 				return false;
         }
-        */
 	}
 
 	return true;
