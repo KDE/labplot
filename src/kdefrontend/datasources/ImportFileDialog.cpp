@@ -111,23 +111,12 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	list<<"Spreadsheet"<<"Matrix"<<"Workbook";
 	cbAddTo->setSelectableClasses(list);
 
-	bNewSpreadsheet = new QPushButton(frameAddTo);
-	bNewSpreadsheet->setIcon(KIcon("insert-table"));
-	bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
-	grid->addWidget( bNewSpreadsheet,0,2);
-	connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
-
-	bNewMatrix = new QPushButton(frameAddTo);
-	bNewMatrix->setIcon(KIcon("insert-table"));
-	bNewMatrix->setToolTip(i18n("Add new matrix"));
-	grid->addWidget( bNewMatrix,0,3);
-	connect( bNewMatrix, SIGNAL(clicked()), this, SLOT(newMatrix()));
-
-	bNewWorkbook = new QPushButton(frameAddTo);
-	bNewWorkbook->setIcon(KIcon("tab-new-background"));
-	bNewWorkbook->setToolTip(i18n("Add new workbook"));
-	grid->addWidget( bNewWorkbook,0,4);
-	connect( bNewWorkbook, SIGNAL(clicked()), this, SLOT(newWorkbook()));
+	cbNewDataContainer = new QComboBox(frameAddTo);
+	cbNewDataContainer->addItem(QIcon(KIcon("tab-new-background")),0);
+	cbNewDataContainer->addItem(QIcon(KIcon("insert-table")),0);
+	cbNewDataContainer->addItem(QIcon(KIcon("resource-calendar-insert")),0);
+	grid->addWidget( cbNewDataContainer,0,2);
+	connect(cbNewDataContainer, SIGNAL(activated(int)),this,SLOT(newDataContainer(int)));
 
 	//grid->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
 
@@ -273,53 +262,49 @@ void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
 	}
 }
 
-void ImportFileDialog::newWorkbook(){
+void ImportFileDialog::newDataContainer(int type){
 	QString path = importFileWidget->fileName();
 	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
 
-	if (name.isEmpty())
-		name = i18n("new Workbook");
+	QString title, label;
+	switch(type) {
+	case 0:
+		if (name.isEmpty())
+			name = i18n("new Workbook");
+		title = i18n("Add new Workbook");
+		label = i18n("Workbook name:");
+		break;
+	case 1:
+		if (name.isEmpty())
+			name = i18n("new Spreadsheet");
+		title = i18n("Add new Spreadsheet");
+		label = i18n("Spreadsheet name:");
+		break;
+	case 2:
+		if (name.isEmpty())
+			name = i18n("new Matrix");
+		title = i18n("Add new Matrix");
+		label = i18n("Matrix name:");
+		break;
+	}
 
 	bool ok;
 	// child widgets can't have own icons
 	QInputDialog* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add new Workbook"), i18n("Workbook name:"), QLineEdit::Normal, name, &ok);
-	if (ok)
-		emit newWorkbookRequested(name);
-
-	delete dlg;
-}
-
-void ImportFileDialog::newSpreadsheet(){
-	QString path = importFileWidget->fileName();
-	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-
-	if (name.isEmpty())
-		name = i18n("new Spreadsheet");
-
-	bool ok;
-	// child widgets can't have own icons
-	QInputDialog* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), QLineEdit::Normal, name, &ok);
-	if (ok)
-		emit newSpreadsheetRequested(name);
-
-	delete dlg;
-}
-
-void ImportFileDialog::newMatrix(){
-	QString path = importFileWidget->fileName();
-	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-
-	if (name.isEmpty())
-		name = i18n("new Matrix");
-
-	bool ok;
-	// child widgets can't have own icons
-	QInputDialog* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add new Matrix"), i18n("Matrix name:"), QLineEdit::Normal, name, &ok);
-	if (ok)
-		emit newMatrixRequested(name);
+	name = dlg->getText(this, title, label, QLineEdit::Normal, name, &ok);
+	if (ok) {
+		switch(type) {
+		case 0:
+			emit newWorkbookRequested(name);
+			break;
+		case 1:
+			emit newSpreadsheetRequested(name);
+			break;
+		case 2:
+			emit newMatrixRequested(name);
+			break;
+		}
+	}
 
 	delete dlg;
 }
