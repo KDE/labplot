@@ -27,7 +27,22 @@
  ***************************************************************************/
 
 #include "CantorWorksheetDock.h"
+#include <QDebug>
 
 CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent) {
     ui.setupUi(this);
+    ui.general->setFocus();
 }
+
+void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
+    m_cantorworksheetlist = list;
+    m_cantorworksheet = list.first();
+    if (list.size()==1){
+	if(w) ui.tabWidget->addTab(w, "Variable Manager");
+    } else {
+	int index = ui.tabWidget->indexOf(ui.variable_manager);
+	w = ui.tabWidget->widget(index);
+	ui.tabWidget->removeTab(index);
+    }
+}
+

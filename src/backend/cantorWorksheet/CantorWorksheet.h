@@ -39,9 +39,13 @@ class CantorWorksheet : public AbstractPart, public scripted{
 	CantorWorksheet(AbstractScriptingEngine *engine, const QString &name);
 	virtual QWidget* view() const;
 	virtual QMenu *createContextMenu();
+	QString BackendName();
 
     signals:
 	void requestProjectContextMenu(QMenu*);
+    
+    private:
+	   QString backendName;
 };
 
 #endif // CANTORWORKSHEET_H

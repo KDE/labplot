@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>319</width>
+    <width>331</width>
     <height>413</height>
    </rect>
   </property>
@@ -14,9 +14,9 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="general">
       <attribute name="title">
        <string>General</string>
       </attribute>
@@ -96,7 +96,9 @@
             <string>Evaluate Worksheet</string>
            </property>
            <property name="icon">
-            <iconset theme="system-run"/>
+            <iconset theme="system-run">
+             <normaloff/>
+            </iconset>
            </property>
           </widget>
          </item>
@@ -106,7 +108,9 @@
             <string>Restart Backend</string>
            </property>
            <property name="icon">
-            <iconset theme="system-reboot"/>
+            <iconset theme="system-reboot">
+             <normaloff/>
+            </iconset>
            </property>
           </widget>
          </item>
@@ -127,166 +131,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Options</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Wosksheet</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Linear Algebra</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Calculate</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QComboBox" name="comboBox">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>1</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <item>
-              <property name="text">
-               <string>Evaluate Worksheet</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Evaluate Entry</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Insert Command Entry</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Insert text Entry</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Insert Latex Entry</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Insert Page Break</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Remove Current Entry</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="comboBox_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>1</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <item>
-              <property name="text">
-               <string>Compute Eigenvectors</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Create Matrix</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Compute Eigenvalues</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Invert Matrix</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="comboBox_3">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>1</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <item>
-              <property name="text">
-               <string>Differentiation</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Integration</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Solve Equations</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="variable_manager">
       <attribute name="title">
        <string>Variable Manager</string>
       </attribute>

@@ -33,7 +33,7 @@
 
 #include "ui_cantorworksheetdock.h"
 
-class Spreadsheet;
+class CantorWorksheet;
 class AbstractAspect;
 
 class CantorWorksheetDock : public QWidget {
@@ -41,9 +41,13 @@ class CantorWorksheetDock : public QWidget {
     
     public:
 	explicit CantorWorksheetDock(QWidget *parent);
+	void setCantorWorksheets(QList<CantorWorksheet*>);
 	
     private:
 	Ui::CantorWorksheetDock ui;
+	CantorWorksheet* m_cantorworksheet;
+	QList< CantorWorksheet* > m_cantorworksheetlist;
+	QWidget* w = NULL;
 	
     signals:
 	void info(const QString&);

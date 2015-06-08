@@ -39,6 +39,7 @@ class ProjectExplorer;
 class Project;
 class Worksheet;
 class Spreadsheet;
+class CantorWorksheet;
 class GuiObserver;
 class AxisDock;
 class CartesianPlotDock;
@@ -164,6 +165,7 @@ private:
 
 	Spreadsheet* activeSpreadsheet() const;
 	Worksheet* activeWorksheet() const;
+	CantorWorksheet* activeCantorWorksheet() const;
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;

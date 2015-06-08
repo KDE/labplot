@@ -1,4 +1,4 @@
-project(LabPlot2)
+project(labplot2)
 cmake_minimum_required(VERSION 2.8.12)
 
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)

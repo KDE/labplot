@@ -34,26 +34,29 @@
 
 #include <cantor/backend.h>
 
-CantorWorksheet::CantorWorksheet(AbstractScriptingEngine *engine, const QString &name)
-		: AbstractPart(name), scripted(engine){
+CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name)
+		: AbstractPart(name), scripted(engine), backendName(name){
 }
 
 QWidget* CantorWorksheet::view() const {
     if (!m_view) {
-	m_view = new CantorWorksheetView(const_cast<CantorWorksheet *>(this));
-// 	Worksheet* scene = new Worksheet(Cantor::Backend::createBackend("Maxima"), m_view);
-// 	m_view = new WorksheetView(scene);
+	m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
 // 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;
 }
+
 //! Return a new context menu.
 /**
  * The caller takes ownership of the menu.
  */
-QMenu *CantorWorksheet::createContextMenu() {
-    QMenu *menu = AbstractPart::createContextMenu();
+QMenu* CantorWorksheet::createContextMenu() {
+    QMenu* menu = AbstractPart::createContextMenu();
     Q_ASSERT(menu);
     emit requestProjectContextMenu(menu);
     return menu;
+}
+
+QString CantorWorksheet::BackendName() {
+    return this->backendName;
 }

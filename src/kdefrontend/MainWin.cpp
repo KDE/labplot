@@ -40,6 +40,7 @@
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
@@ -142,7 +143,7 @@ void MainWin::initGUI(const QString& fileName){
     statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
     initActions();
     initMenus();
-    setupGUI(Default, QLatin1String("LabPlot2ui.rc"));
+    setupGUI(Default, QLatin1String("labplot2ui.rc"));
     setWindowIcon(QIcon::fromTheme("LabPlot2"));
     setAttribute( Qt::WA_DeleteOnClose );
 
@@ -446,6 +447,7 @@ void MainWin::updateGUIOnProjectChanges() {
 //  	factory->container("script", this)->setEnabled(!b);
 // 		factory->container("drawing", this)->setEnabled(!b);
     factory->container("windows", this)->setEnabled(!b);
+    factory->container("casWorksheet", this)->setEnabled(!b);
 
     if (b) {
         factory->container("worksheet_toolbar", this)->hide();
@@ -494,6 +496,9 @@ void MainWin::updateGUI() {
         factory->container("spreadsheet", this)->setEnabled(false);
 // 		factory->container("analysis", this)->setEnabled(false);
 
+	//disable cantor worksheet related menus
+	factory->container("casWorksheet", this)->setEnabled(false);
+	
         //populate worksheet-menu
         WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
         QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
@@ -549,10 +554,28 @@ void MainWin::updateGUI() {
             toolbar->clear();
             view->fillToolBar(toolbar);
         }else{
-            //no spreadsheet selected -> deactivate spreadsheet related menus
-// 			factory->container("analysis", this)->setEnabled(false);
-            factory->container("spreadsheet", this)->setEnabled(false);
-            factory->container("spreadsheet_toolbar", this)->setVisible(false);
+	    //no spreadsheet selected -> deactivate spreadsheet related menus and the toolbar
+	    factory->container("spreadsheet", this)->setEnabled(false);
+	    factory->container("spreadsheet_toolbar", this)->setVisible(false);
+	    
+	    //Handle the Cantor Worksheet-object
+	    CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
+	    if(cantorworksheet) {
+		// enable Cantor Worksheet related menues
+		factory->container("casWorksheet", this)->setEnabled(true);
+		CantorWorksheetView* view=qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("casWorksheet", this));
+		menu->clear();
+		view->createContextMenu(menu);
+		
+		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("cantorworksheet_toolbar", this));
+		toolbar->setVisible(true);
+		toolbar->clear();
+		view->fillToolBar(toolbar);
+	    } else {
+		//no cantor worksheet selected -> deactivate cantor worksheet related menus
+		factory->container("casWorksheet", this)->setEnabled(false);
+	    }
         }
     }
 }
@@ -989,6 +1012,17 @@ Worksheet* MainWin::activeWorksheet() const{
     Q_ASSERT(part);
     return dynamic_cast<Worksheet*>(part);
 }
+
+CantorWorksheet* MainWin::activeCantorWorksheet() const{
+    QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+    if (!win)
+        return 0;
+
+    AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+    Q_ASSERT(part);
+    return dynamic_cast<CantorWorksheet*>(part);
+}
+
 
 /*!
     called if there were changes in the project.

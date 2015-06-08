@@ -25,6 +25,10 @@
 <text>Spreadsheet</text>
 </ToolBar>
 
+<ToolBar name="cantorworksheet_toolbar" >
+<text>CAS Worksheet</text>
+</ToolBar>
+
 <ToolBar name="cartesian_plot_toolbar" >
 <text>CartesianPlot</text>
 </ToolBar>
@@ -54,6 +58,7 @@
 </Menu>
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
+<Menu name="casWorksheet"><text>&amp;CAS Worksheet</text></Menu>
 <!-- <Menu name="analysis"><text>&amp;Analysis</text></Menu> -->
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
 <!-- <Menu name="script"><text>&amp;Script</text></Menu> -->

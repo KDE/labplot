@@ -32,6 +32,8 @@
 #include <QWidget>
 #include <QAction>
 #include <QMenu>
+#include <QToolBar>
+#include <QHBoxLayout>
 #include <QTableView>
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <cantor/session.h>
@@ -47,12 +49,51 @@ class CantorWorksheetView : public QWidget {
 	
     public slots:
 	void createContextMenu(QMenu*) const;
+	void fillToolBar(QToolBar*);
+
+    private slots:
+	void restartActionTriggered();
+	void evaluateWorsheetActionTriggered();
+	void evaluateEntryActionTriggered();
+	void insertCommandEntryActionTriggered();
+	void insertTextEntryActionTriggered();
+	void insertLatexEntryActionTriggered();
+	void insertPageBreakActionTriggered();
+	void removeCurrentEntryActionTriggered();
+	void computeEigenvectorsActionTriggered();
+	void createMattrixActionTriggered();
+	void computeEigenvaluesActionTriggered();
+	void invertMattrixActionTriggered();
+	void differentiationActionTriggered();
+	void integrationActionTriggered();
+	void solveEquationsActionTriggered();
 
     private:
 	CantorWorksheet* m_worksheet;  
 	QAction* m_restartBackendAction;
+	QAction* m_evaluateWorsheetAction;
+	QAction* m_evaluateEntryAction;
+	QAction* m_insertCommandEntryAction;
+	QAction* m_insertTextEntryAction;
+	QAction* m_insertLatexEntryAction;
+	QAction* m_insertPageBreakAction;
+	QAction* m_removeCurrentEntryAction;
+	QAction* m_computeEigenvectorsAction;
+	QAction* m_createMattrixAction;
+	QAction* m_computeEigenvaluesAction;
+	QAction* m_invertMattrixAction;
+	QAction* m_differentiationAction;
+	QAction* m_integrationAction;
+	QAction* m_solveEquationsAction;
+	QMenu* m_worksheetMenu;
+	QMenu* m_linearAlgebraMenu;
+	QMenu* m_calculateMenu;
+	QHBoxLayout* layout;
+	KParts::ReadWritePart* part;
 	
 	void initActions();
+	void initMenus();
+	void initialize();
 };
 
 #endif // CANTORWORKSHEETVIEW_H
