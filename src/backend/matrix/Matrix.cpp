@@ -30,14 +30,11 @@
 #include "MatrixPrivate.h"
 #include "matrixcommands.h"
 #include "backend/matrix/MatrixModel.h"
-#include "backend/core/AbstractScript.h"
 #include "backend/core/Folder.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <QApplication>
-#include <QLocale>
 #include <QDebug>
 
 #include <KIcon>
@@ -80,22 +77,22 @@ void Matrix::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Matrix");
 
+	//matrix dimension
+	int rows = group.readEntry("rows", 10);
+	int cols = group.readEntry("columns", 10);
+	appendRows(rows);
+	appendColumns(cols);
+
+	//mapping to logical x- and y-coordinates
+	d->xStart = group.readEntry("xStart", 0.0);
+	d->xEnd = group.readEntry("xEnd", 1.0);
+	d->yStart = group.readEntry("yStart", 0.0);
+	d->yEnd = group.readEntry("yEnd", 1.0);
+
 	//format
 	d->numericFormat = *group.readEntry("NumericFormat", "f").toLatin1().data();
 	d->precision = group.readEntry("Precision", 3);
 	d->headerFormat = (Matrix::HeaderFormat)group.readEntry("HeaderFormat", (int)Matrix::HeaderRowsColumns);
-
-	//x-range
-	d->xStart = group.readEntry("xStart", 0.0);
-	d->xEnd = group.readEntry("xEnd", 1.0);
-	int rows = group.readEntry("rows", 10);
-	appendRows(rows);
-
-	//
-	d->yStart = group.readEntry("yStart", 0.0);
-	d->yEnd = group.readEntry("yEnd", 1.0);
-	int cols = group.readEntry("columns", 10);
-	appendColumns(cols);
 }
 
 /*!
@@ -121,8 +118,13 @@ QWidget* Matrix::view() const {
 	return m_view;
 }
 
-
 /* ========================================== getter methods ============================================= */
+BASIC_D_READER_IMPL(Matrix, int, columnCount, columnCount)
+BASIC_D_READER_IMPL(Matrix, int, rowCount, rowCount)
+BASIC_D_READER_IMPL(Matrix, double, xStart, xStart)
+BASIC_D_READER_IMPL(Matrix, double, xEnd, xEnd)
+BASIC_D_READER_IMPL(Matrix, double, yStart, yStart)
+BASIC_D_READER_IMPL(Matrix, double, yEnd, yEnd)
 BASIC_D_READER_IMPL(Matrix, char, numericFormat, numericFormat)
 BASIC_D_READER_IMPL(Matrix, int, precision, precision)
 BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
@@ -139,8 +141,31 @@ int Matrix::defaultColumnWidth() const {
 	return  100;
 }
 
-
 /* ========================================== setter methods ============================================= */
+STD_SETTER_CMD_IMPL_F_S(Matrix, SetXStart, double, xStart, updateViewHeader)
+void Matrix::setXStart(double xStart) {
+	if (xStart != d->xStart)
+		exec(new MatrixSetXStartCmd(d, xStart, i18n("%1: x-start changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Matrix, SetXEnd, double, xEnd, updateViewHeader)
+void Matrix::setXEnd(double xEnd) {
+	if (xEnd != d->xEnd)
+		exec(new MatrixSetXEndCmd(d, xEnd, i18n("%1: x-end changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Matrix, SetYStart, double, yStart, updateViewHeader)
+void Matrix::setYStart(double yStart) {
+	if (yStart != d->yStart)
+		exec(new MatrixSetYStartCmd(d, yStart, i18n("%1: y-start changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Matrix, SetYEnd, double, yEnd, updateViewHeader)
+void Matrix::setYEnd(double yEnd) {
+	if (yEnd != d->yEnd)
+		exec(new MatrixSetYEndCmd(d, yEnd, i18n("%1: y-end changed")));
+}
+
 STD_SETTER_CMD_IMPL_S(Matrix, SetNumericFormat, char, numericFormat)
 void Matrix::setNumericFormat(char format) {
 	if (format != d->numericFormat)
@@ -221,14 +246,6 @@ void Matrix::setDimensions(int rows, int cols) {
 	RESET_CURSOR;
 }
 
-int Matrix::columnCount() const {
-	return d->columnCount;
-}
-
-int Matrix::rowCount() const {
-	return d->rowCount;
-}
-
 //! Return the value in the given cell
 double Matrix::cell(int row, int col) const {
 	return d->cell(row, col);
@@ -299,54 +316,10 @@ void Matrix::addColumns() {
 	RESET_CURSOR;
 }
 
-void Matrix::setXStart(double x) {
-	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, x, d->xEnd, d->yStart, d->yEnd));
-	emit coordinatesChanged();
-	RESET_CURSOR;
-}
-
-void Matrix::setXEnd(double x) {
-	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, d->xStart, x, d->yStart, d->yEnd));
-	emit coordinatesChanged();
-	RESET_CURSOR;
-}
-
-void Matrix::setYStart(double y) {
-	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, d->xStart, d->xEnd, y, d->yEnd));
-	emit coordinatesChanged();
-	RESET_CURSOR;
-}
-
-void Matrix::setYEnd(double y) {
-	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, d->xStart, d->xEnd, d->yStart, y));
-	emit coordinatesChanged();
-	RESET_CURSOR;
-}
-
 void Matrix::setCoordinates(double x1, double x2, double y1, double y2) {
 	WAIT_CURSOR;
 	exec(new MatrixSetCoordinatesCmd(d, x1, x2, y1, y2));
 	RESET_CURSOR;
-}
-
-double Matrix::xStart() const {
-	return d->xStart;
-}
-
-double Matrix::yStart() const {
-	return d->yStart;
-}
-
-double Matrix::xEnd() const {
-	return d->xEnd;
-}
-
-double Matrix::yEnd() const {
-	return d->yEnd;
 }
 
 QString Matrix::formula() const {
@@ -445,6 +418,10 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
+}
+
+void MatrixPrivate::updateViewHeader() {
+	q->m_view->model()->updateHeader();
 }
 
 /*!

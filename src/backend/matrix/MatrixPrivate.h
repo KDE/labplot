@@ -56,6 +56,7 @@ class MatrixPrivate {
 		int rowHeight(int row) const { return rowHeights.at(row); }
 		int columnWidth(int col) const { return columnWidths.at(col); }
 
+		void updateViewHeader();
 		void emitDataChanged(int top, int left, int bottom, int right) { emit q->dataChanged(top, left, bottom, right); }
 
 		Matrix* q;

@@ -39,7 +39,7 @@
     </widget>
    </item>
    <item row="9" column="2" colspan="2">
-    <widget class="KLineEdit" name="kleXMax">
+    <widget class="KLineEdit" name="kleXEnd">
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
@@ -62,9 +62,9 @@
     </spacer>
    </item>
    <item row="11" column="0">
-    <widget class="QLabel" name="lYMin">
+    <widget class="QLabel" name="lYStart">
      <property name="text">
-      <string>y-Min</string>
+      <string>y-Start</string>
      </property>
     </widget>
    </item>
@@ -152,16 +152,16 @@
     </widget>
    </item>
    <item row="11" column="2" colspan="2">
-    <widget class="KLineEdit" name="kleYMin">
+    <widget class="KLineEdit" name="kleYStart">
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="12" column="0">
-    <widget class="QLabel" name="lYMax">
+    <widget class="QLabel" name="lYEnd">
      <property name="text">
-      <string>y-Max</string>
+      <string>y-End</string>
      </property>
     </widget>
    </item>
@@ -173,14 +173,14 @@
     </widget>
    </item>
    <item row="8" column="0">
-    <widget class="QLabel" name="lXMin">
+    <widget class="QLabel" name="lXStart">
      <property name="text">
-      <string>x-Min</string>
+      <string>x-Start</string>
      </property>
     </widget>
    </item>
    <item row="8" column="2" colspan="2">
-    <widget class="KLineEdit" name="kleXMin">
+    <widget class="KLineEdit" name="kleXStart">
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
@@ -189,7 +189,7 @@
    <item row="9" column="0">
     <widget class="QLabel" name="lXMax">
      <property name="text">
-      <string>x-Max</string>
+      <string>x-End</string>
      </property>
     </widget>
    </item>
@@ -217,7 +217,7 @@
     </widget>
    </item>
    <item row="12" column="2" colspan="2">
-    <widget class="KLineEdit" name="kleYMax">
+    <widget class="KLineEdit" name="kleYEnd">
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>

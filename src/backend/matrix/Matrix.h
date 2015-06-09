@@ -47,6 +47,12 @@ class Matrix : public AbstractDataSource {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
+		BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
+		BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
+		BASIC_D_ACCESSOR_DECL(double, xStart, XStart)
+		BASIC_D_ACCESSOR_DECL(double, xEnd, XEnd)
+		BASIC_D_ACCESSOR_DECL(double, yStart, YStart)
+		BASIC_D_ACCESSOR_DECL(double, yEnd, YEnd)
 		BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
 		BASIC_D_ACCESSOR_DECL(int, precision, Precision)
 		BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
@@ -61,8 +67,8 @@ class Matrix : public AbstractDataSource {
 		int columnWidth(int col) const;
 		void setColumnWidth(int col, int width);
 
-		int columnCount() const;
-		int rowCount() const;
+		void setDimensions(int rows, int cols);
+		void setCoordinates(double x1, double x2, double y1, double y2);
 
 		void insertColumns(int before, int count);
 		void appendColumns(int count);
@@ -70,8 +76,6 @@ class Matrix : public AbstractDataSource {
 		void insertRows(int before, int count);
 		void appendRows(int count);
 		void removeRows(int first, int count);
-
-		void setDimensions(int rows, int cols);
 
 		double cell(int row, int col) const;
 		void setCell(int row, int col, double value );
@@ -82,17 +86,8 @@ class Matrix : public AbstractDataSource {
 
 		QString text(int row, int col);
 		void copy(Matrix* other);
-		double xStart() const;
-		double yStart() const;
-		double xEnd() const;
-		double yEnd() const;
 		QString formula() const;
 		void setFormula(const QString&);
-		void setXStart(double x);
-		void setXEnd(double x);
-		void setYStart(double y);
-		void setYEnd(double y);
-		void setCoordinates(double x1, double x2, double y1, double y2);
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
@@ -122,6 +117,15 @@ class Matrix : public AbstractDataSource {
 		void dataChanged(int top, int left, int bottom, int right);
 		void coordinatesChanged();
 		void formulaChanged();
+
+		friend class MatrixSetXStartCmd;
+		friend class MatrixSetXEndCmd;
+		friend class MatrixSetYStartCmd;
+		friend class MatrixSetYEndCmd;
+		void xStartChanged(double);
+		void xEndChanged(double);
+		void yStartChanged(double);
+		void yEndChanged(double);
 
 		friend class MatrixSetNumericFormatCmd;
 		friend class MatrixSetPrecisionCmd;
