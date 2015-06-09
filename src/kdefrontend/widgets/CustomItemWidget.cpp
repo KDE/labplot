@@ -49,12 +49,12 @@ CustomItemWidget::CustomItemWidget(QWidget *parent): QWidget(parent) {
 
     init();
 
-    TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CustomItem);
-    ui.gridLayout->addWidget(templateHandler);
-    templateHandler->show();
-    connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-    connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-    connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+//     TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CustomItem);
+//     ui.gridLayout->addWidget(templateHandler);
+//     templateHandler->show();
+//     connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
+//     connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+//     connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
 void CustomItemWidget::init() {
