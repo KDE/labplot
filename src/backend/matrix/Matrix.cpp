@@ -78,16 +78,16 @@ void Matrix::init() {
 	KConfigGroup group = config.group("Matrix");
 
 	//matrix dimension
-	int rows = group.readEntry("rows", 10);
-	int cols = group.readEntry("columns", 10);
+	int rows = group.readEntry("RowCount", 10);
+	int cols = group.readEntry("ColumnCount", 10);
 	appendRows(rows);
 	appendColumns(cols);
 
 	//mapping to logical x- and y-coordinates
-	d->xStart = group.readEntry("xStart", 0.0);
-	d->xEnd = group.readEntry("xEnd", 1.0);
-	d->yStart = group.readEntry("yStart", 0.0);
-	d->yEnd = group.readEntry("yEnd", 1.0);
+	d->xStart = group.readEntry("XStart", 0.0);
+	d->xEnd = group.readEntry("XEnd", 1.0);
+	d->yStart = group.readEntry("YStart", 0.0);
+	d->yEnd = group.readEntry("YEnd", 1.0);
 
 	//format
 	d->numericFormat = *group.readEntry("NumericFormat", "f").toLatin1().data();

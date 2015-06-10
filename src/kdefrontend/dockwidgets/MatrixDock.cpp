@@ -299,21 +299,20 @@ void MatrixDock::matrixPrecisionChanged(int precision) {
 //******************** SETTINGS *******************************
 //*************************************************************
 void MatrixDock::load() {
+	//matrix dimensions
+	ui.sbRowCount->setValue(m_matrix->rowCount());
+	ui.sbColumnCount->setValue(m_matrix->columnCount());
+
+	//mapping to the logical coordinates
+	ui.kleXStart->setText(QString::number(m_matrix->xStart()));
+	ui.kleXEnd->setText(QString::number(m_matrix->xEnd()));
+	ui.kleYStart->setText(QString::number(m_matrix->yStart()));
+	ui.kleYEnd->setText(QString::number(m_matrix->yEnd()));
+
 	//format
 	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData((int)m_matrix->numericFormat()));
 	ui.sbPrecision->setValue(m_matrix->precision());
 	ui.cbHeader->setCurrentIndex(m_matrix->headerFormat());
-
-	//x-range
-	ui.kleXStart->setText(QString::number(m_matrix->xStart()));
-	ui.kleXEnd->setText(QString::number(m_matrix->xEnd()));
-	ui.sbRowCount->setValue(m_matrix->rowCount());
-
-	//y-range
-	ui.kleYStart->setText(QString::number(m_matrix->yStart()));
-	ui.kleYEnd->setText(QString::number(m_matrix->yEnd()));
-	ui.sbColumnCount->setValue(m_matrix->columnCount());
-
 }
 
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {
@@ -342,16 +341,20 @@ void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 void MatrixDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group("Matrix");
 
+	//matrix dimensions
+	ui.sbRowCount->setValue(group.readEntry("RowCount", m_matrix->rowCount()));
+	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
+
+	//mapping to the logical coordinates
+	ui.kleXStart->setText( QString::number(group.readEntry("XStart", m_matrix->xStart())) );
+	ui.kleXEnd->setText( QString::number(group.readEntry("XEnd", m_matrix->xEnd())) );
+	ui.kleYStart->setText( QString::number(group.readEntry("YStart", m_matrix->yStart())) );
+	ui.kleYEnd->setText( QString::number(group.readEntry("YEnd", m_matrix->yEnd())) );
+
 	//format
-	ui.cbFormat->setCurrentIndex( ui.cbFormat->findData(group.readEntry("numericFormat", QString(m_matrix->numericFormat()))) );
+	ui.cbFormat->setCurrentIndex( ui.cbFormat->findData(group.readEntry("NumericFormat", QString(m_matrix->numericFormat()))) );
 	ui.sbPrecision->setValue(group.readEntry("Precision", m_matrix->precision()));
 	ui.cbHeader->setCurrentIndex(group.readEntry("HeaderFormat", (int)m_matrix->headerFormat()));
-
-	//x-range
-	ui.sbRowCount->setValue(group.readEntry("RowCount", m_matrix->rowCount()));
-
-	//y-range
-	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
 }
 
 /*!
@@ -360,15 +363,20 @@ void MatrixDock::loadConfig(KConfig& config){
 void MatrixDock::saveConfigAsTemplate(KConfig& config){
 	KConfigGroup group = config.group("Matrix");
 
+	//matrix dimensions
+	group.writeEntry("RowCount", ui.sbRowCount->value());
+	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
+
+	//mapping to the logical coordinates
+	group.writeEntry("XStart", ui.kleXStart->text().toInt());
+	group.writeEntry("XEnd", ui.kleXEnd->text().toInt());
+	group.writeEntry("YStart", ui.kleYStart->text().toInt());
+	group.writeEntry("YEnd", ui.kleYEnd->text().toInt());
+
 	//format
 	group.writeEntry("NumericFormat", ui.cbFormat->itemData(ui.cbFormat->currentIndex()));
 	group.writeEntry("Precision", ui.sbPrecision->value());
 	group.writeEntry("HeaderFormat", ui.cbHeader->currentIndex());
 
-	//x-range
-	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
-
-	//y-range
-	group.writeEntry("RowCount", ui.sbRowCount->value());
 	config.sync();
 }
