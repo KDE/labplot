@@ -42,7 +42,10 @@
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
+#include <QToolButton>
+#include <KMenu>
 #include <QDebug>
+
 
 /*!
 	\class ImportFileDialog
@@ -51,7 +54,7 @@
 	\ingroup kdefrontend
  */
 
-ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPosition(0), m_optionsShown(false) {
+ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPosition(0), m_optionsShown(false), m_newDataContainerMenu(new KMenu(this)) {
 	mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
 	vLayout->setSpacing(0);
@@ -97,7 +100,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
 	QGridLayout *grid = new QGridLayout(frameAddTo);
-	grid->addWidget( new QLabel(i18n("Spreadsheet/Matrix"),  frameAddTo),0,0 );
+	grid->addWidget( new QLabel(i18n("Data container"),  frameAddTo),0,0 );
 
 	cbAddTo = new TreeViewComboBox(frameAddTo);
 	cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
@@ -111,12 +114,11 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	list<<"Spreadsheet"<<"Matrix"<<"Workbook";
 	cbAddTo->setSelectableClasses(list);
 
-	cbNewDataContainer = new QComboBox(frameAddTo);
-	cbNewDataContainer->addItem(QIcon(KIcon("tab-new-background")),0);
-	cbNewDataContainer->addItem(QIcon(KIcon("insert-table")),0);
-	cbNewDataContainer->addItem(QIcon(KIcon("resource-calendar-insert")),0);
-	grid->addWidget( cbNewDataContainer,0,2);
-	connect(cbNewDataContainer, SIGNAL(activated(int)),this,SLOT(newDataContainer(int)));
+	tbNewDataContainer = new QToolButton(frameAddTo);
+	tbNewDataContainer->setIcon( KIcon("list-add") );
+	grid->addWidget( tbNewDataContainer,0,2);
+	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
+	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
 
 	//grid->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
 
@@ -262,49 +264,36 @@ void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
 	}
 }
 
-void ImportFileDialog::newDataContainer(int type){
+void ImportFileDialog::newDataContainer(QAction *action){
 	QString path = importFileWidget->fileName();
 	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
 
-	QString title, label;
-	switch(type) {
-	case 0:
-		if (name.isEmpty())
-			name = i18n("new Workbook");
-		title = i18n("Add new Workbook");
-		label = i18n("Workbook name:");
-		break;
-	case 1:
-		if (name.isEmpty())
-			name = i18n("new Spreadsheet");
-		title = i18n("Add new Spreadsheet");
-		label = i18n("Spreadsheet name:");
-		break;
-	case 2:
-		if (name.isEmpty())
-			name = i18n("new Matrix");
-		title = i18n("Add new Matrix");
-		label = i18n("Matrix name:");
-		break;
-	}
+	QString type = action->iconText().split(' ')[1];
+	if (name.isEmpty())
+		name = action->iconText();
 
 	bool ok;
 	// child widgets can't have own icons
 	QInputDialog* dlg = new QInputDialog(this);
-	name = dlg->getText(this, title, label, QLineEdit::Normal, name, &ok);
+	name = dlg->getText(this, i18n("Add ") + action->iconText(), type + i18n(" name:"), QLineEdit::Normal, name, &ok);
 	if (ok) {
-		switch(type) {
-		case 0:
+		if( action->iconText() == i18n("new Workbook"))
 			emit newWorkbookRequested(name);
-			break;
-		case 1:
+		else if( action->iconText() == i18n("new Spreadsheet"))
 			emit newSpreadsheetRequested(name);
-			break;
-		case 2:
+		else if( action->iconText() == i18n("new Matrix"))
 			emit newMatrixRequested(name);
-			break;
-		}
 	}
 
 	delete dlg;
+}
+
+void ImportFileDialog::newDataContainerMenu() {
+        m_newDataContainerMenu->clear();
+
+        m_newDataContainerMenu->addAction( QIcon(KIcon("tab-new-background")), i18n("new Workbook") );
+        m_newDataContainerMenu->addAction( QIcon(KIcon("insert-table")), i18n("new Spreadsheet") );
+        m_newDataContainerMenu->addAction( QIcon(KIcon("resource-calendar-insert")), i18n("new Matrix") );
+
+        m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
 }
