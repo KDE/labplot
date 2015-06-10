@@ -60,6 +60,8 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) 
 
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
+	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
+	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 	connect(ui.kleXStart, SIGNAL(returnPressed()), this, SLOT(xStartChanged()));
 	connect(ui.kleXEnd, SIGNAL(returnPressed()), this, SLOT(xEndChanged()));
 	connect(ui.kleYStart, SIGNAL(returnPressed()), this, SLOT(yStartChanged()));
@@ -67,8 +69,6 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) 
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(numericFormatChanged(int)));
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)));
 	connect(ui.cbHeader, SIGNAL(currentIndexChanged(int)), this, SLOT(headerFormatChanged(int)));
-	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
-	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Matrix);
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
@@ -107,6 +107,9 @@ void MatrixDock::setMatrices(QList<Matrix*> list){
 	// undo functions
 	connect(m_matrix, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(matrixDescriptionChanged(const AbstractAspect*)));
 
+	connect(m_matrix, SIGNAL(rowCountChanged(int)), this, SLOT(matrixRowCountChanged(int)));
+	connect(m_matrix, SIGNAL(columnCountChanged(int)), this, SLOT(matrixColumnCountChanged(int)));
+
 	connect(m_matrix, SIGNAL(xStartChanged(double)), this, SLOT(matrixXStartChanged(double)));
 	connect(m_matrix, SIGNAL(xEndChanged(double)), this, SLOT(matrixXEndChanged(double)));
 	connect(m_matrix, SIGNAL(yStartChanged(double)), this, SLOT(matrixYStartChanged(double)));
@@ -114,8 +117,6 @@ void MatrixDock::setMatrices(QList<Matrix*> list){
 
 	connect(m_matrix, SIGNAL(numericFormatChanged(char)), this, SLOT(matrixNumericFormatChanged(char)));
 	connect(m_matrix, SIGNAL(precisionChanged(int)), this, SLOT(matrixPrecisionChanged(int)));
-// 	connect(m_matrix, SIGNAL(rowCountChanged(int)),this, SLOT(matrixRowCountChanged(int)));
-// 	connect(m_matrix, SIGNAL(columnCountChanged(int)),this, SLOT(matrixColumnCountChanged(int)));
 
 	m_initializing = false;
 }
@@ -214,16 +215,16 @@ void MatrixDock::rowCountChanged(int rows){
 	if (m_initializing)
 		return;
 
-// 	foreach(Matrix* matrix, m_matrixList)
-// 		matrix->setRowCount(rows);
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setRowCount(rows);
 }
 
 void MatrixDock::columnCountChanged(int columns){
 	if (m_initializing)
 		return;
 
-// 	foreach(Matrix* matrix, m_matrixList)
-// 		matrix->setColumnCount(columns);
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setColumnCount(columns);
 }
 
 //*************************************************************
@@ -239,6 +240,19 @@ void MatrixDock::matrixDescriptionChanged(const AbstractAspect* aspect) {
 	} else if (aspect->comment() != ui.leComment->text()) {
 		ui.leComment->setText(aspect->comment());
 	}
+	m_initializing = false;
+}
+
+//matrix dimensions
+void MatrixDock::matrixRowCountChanged(int count) {
+	m_initializing = true;
+	ui.sbRowCount->setValue(count);
+	m_initializing = false;
+}
+
+void MatrixDock::matrixColumnCountChanged(int count) {
+	m_initializing = true;
+	ui.sbColumnCount->setValue(count);
 	m_initializing = false;
 }
 
@@ -264,19 +278,6 @@ void MatrixDock::matrixYStartChanged(double value) {
 void MatrixDock::matrixYEndChanged(double value) {
 	m_initializing = true;
 	ui.kleYEnd->setText(QString::number(value));
-	m_initializing = false;
-}
-
-//matrix dimensions
-void MatrixDock::matrixRowCountChanged(int count) {
-	m_initializing = true;
-	ui.sbRowCount->setValue(count);
-	m_initializing = false;
-}
-
-void MatrixDock::matrixColumnCountChanged(int count) {
-	m_initializing = true;
-	ui.sbColumnCount->setValue(count);
 	m_initializing = false;
 }
 

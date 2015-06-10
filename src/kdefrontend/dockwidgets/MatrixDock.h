@@ -56,13 +56,13 @@ private slots:
 	void nameChanged();
 	void commentChanged();
 
+	void rowCountChanged(int);
+	void columnCountChanged(int);
+
 	void xStartChanged();
 	void xEndChanged();
 	void yStartChanged();
 	void yEndChanged();
-
-	void rowCountChanged(int);
-	void columnCountChanged(int);
 
 	void numericFormatChanged(int);
 	void precisionChanged(int);

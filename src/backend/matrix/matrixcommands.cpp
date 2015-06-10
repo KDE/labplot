@@ -3,8 +3,8 @@
     Project              : SciDAVis
     Description          : Commands used in Matrix (part of the undo/redo framework)
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -31,109 +31,75 @@
 #include "MatrixPrivate.h"
 #include <KLocale>
 
-
-///////////////////////////////////////////////////////////////////////////
-// class MatrixInsertColumnsCmd
-///////////////////////////////////////////////////////////////////////////
+//Insert columns
 MatrixInsertColumnsCmd::MatrixInsertColumnsCmd( MatrixPrivate * private_obj, int before, int count, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_before(before), m_count(count)
 {
 	setText(i18np("%1: insert %2 column", "%1: insert %2 columns", m_private_obj->name(), m_count));
 }
 
-MatrixInsertColumnsCmd::~MatrixInsertColumnsCmd()
-{
-}
-
-void MatrixInsertColumnsCmd::redo()
-{
+void MatrixInsertColumnsCmd::redo() {
 	m_private_obj->insertColumns(m_before, m_count);
+	emit m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
 }
 
-void MatrixInsertColumnsCmd::undo()
-{
+void MatrixInsertColumnsCmd::undo() {
 	m_private_obj->removeColumns(m_before, m_count);
+	emit m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
 }
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixInsertColumnsCmd
-///////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////
-// class MatrixInsertRowsCmd
-///////////////////////////////////////////////////////////////////////////
+//Insert rows
 MatrixInsertRowsCmd::MatrixInsertRowsCmd( MatrixPrivate * private_obj, int before, int count, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_before(before), m_count(count)
 {
 	setText(i18np("%1: insert %2 row", "%1: insert %2 rows", m_private_obj->name(), m_count));
 }
 
-MatrixInsertRowsCmd::~MatrixInsertRowsCmd()
-{
-}
-
-void MatrixInsertRowsCmd::redo()
-{
+void MatrixInsertRowsCmd::redo() {
 	m_private_obj->insertRows(m_before, m_count);
+	emit m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
 }
 
-void MatrixInsertRowsCmd::undo()
-{
+void MatrixInsertRowsCmd::undo() {
 	m_private_obj->removeRows(m_before, m_count);
+	emit m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
 }
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixInsertRowsCmd
-///////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////
-// class MatrixRemoveColumnsCmd
-///////////////////////////////////////////////////////////////////////////
+//Remove columns
 MatrixRemoveColumnsCmd::MatrixRemoveColumnsCmd( MatrixPrivate * private_obj, int first, int count, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_first(first), m_count(count)
 {
 	setText(i18np("%1: remove %2 column", "%1: remove %2 columns", m_private_obj->name(), m_count));
 }
 
-MatrixRemoveColumnsCmd::~MatrixRemoveColumnsCmd()
-{
-}
-
-void MatrixRemoveColumnsCmd::redo()
-{
-	if(m_backups.isEmpty())
-	{
+void MatrixRemoveColumnsCmd::redo() {
+	if(m_backups.isEmpty()) {
 		int last_row = m_private_obj->rowCount-1;
 		for(int i=0; i<m_count; i++)
 			m_backups.append(m_private_obj->columnCells(m_first+i, 0, last_row));
 	}
 	m_private_obj->removeColumns(m_first, m_count);
+	emit m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
 }
 
-void MatrixRemoveColumnsCmd::undo()
-{
+void MatrixRemoveColumnsCmd::undo() {
 	m_private_obj->insertColumns(m_first, m_count);
 	int last_row = m_private_obj->rowCount-1;
+	//TODO: use memcopy to copy from the backup vector
 	for(int i=0; i<m_count; i++)
 		m_private_obj->setColumnCells(m_first+i, 0, last_row, m_backups.at(i));
-}
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixRemoveColumnsCmd
-///////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////
-// class MatrixRemoveRowsCmd
-///////////////////////////////////////////////////////////////////////////
+	emit m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
+}
+
+//Remove rows
 MatrixRemoveRowsCmd::MatrixRemoveRowsCmd( MatrixPrivate * private_obj, int first, int count, QUndoCommand * parent)
  : QUndoCommand( parent ), m_private_obj(private_obj), m_first(first), m_count(count)
 {
 	setText(i18np("%1: remove %2 row", "%1: remove %2 rows", m_private_obj->name(), m_count));
 }
 
-MatrixRemoveRowsCmd::~MatrixRemoveRowsCmd()
-{
-}
-
-void MatrixRemoveRowsCmd::redo()
-{
+void MatrixRemoveRowsCmd::redo() {
 	if(m_backups.isEmpty())
 	{
 		int last_row = m_first+m_count-1;
@@ -141,18 +107,18 @@ void MatrixRemoveRowsCmd::redo()
 			m_backups.append(m_private_obj->columnCells(col, m_first, last_row));
 	}
 	m_private_obj->removeRows(m_first, m_count);
+	emit m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
 }
 
-void MatrixRemoveRowsCmd::undo()
-{
+void MatrixRemoveRowsCmd::undo() {
 	m_private_obj->insertRows(m_first, m_count);
 	int last_row = m_first+m_count-1;
 	for(int col=0; col<m_private_obj->columnCount; col++)
 		m_private_obj->setColumnCells(col, m_first, last_row, m_backups.at(col));
+	emit m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
 }
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixRemoveRowsCmd
-///////////////////////////////////////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////////////////////////////////
 // class MatrixClearCmd

@@ -118,6 +118,13 @@ class Matrix : public AbstractDataSource {
 		void coordinatesChanged();
 		void formulaChanged();
 
+		friend class MatrixInsertRowsCmd;
+		friend class MatrixRemoveRowsCmd;
+		friend class MatrixInsertColumnsCmd;
+		friend class MatrixRemoveColumnsCmd;
+		void rowCountChanged(int);
+		void columnCountChanged(int);
+
 		friend class MatrixSetXStartCmd;
 		friend class MatrixSetXEndCmd;
 		friend class MatrixSetYStartCmd;

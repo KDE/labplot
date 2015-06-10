@@ -142,6 +142,30 @@ int Matrix::defaultColumnWidth() const {
 }
 
 /* ========================================== setter methods ============================================= */
+void Matrix::setRowCount(int count) {
+	if (count == d->rowCount)
+		return;
+
+	int diff = count - d->rowCount;
+	if(diff > 0)
+		exec(new MatrixInsertRowsCmd(d, rowCount(), diff));
+	else if(diff < 0)
+		exec(new MatrixRemoveRowsCmd(d, rowCount()+diff, -diff));
+}
+
+void Matrix::setColumnCount(int count) {
+	if (count == d->columnCount)
+		return;
+
+	int diff = count - columnCount();
+	if(diff > 0)
+		exec(new MatrixInsertColumnsCmd(d, columnCount(), diff));
+	else if(diff < 0)
+		exec(new MatrixRemoveColumnsCmd(d, columnCount()+diff, -diff));
+}
+
+
+
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXStart, double, xStart, updateViewHeader)
 void Matrix::setXStart(double xStart) {
 	if (xStart != d->xStart)
