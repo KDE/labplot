@@ -43,7 +43,7 @@ class CantorWorksheetView : public QWidget {
     Q_OBJECT
     
     public:
-	CantorWorksheetView(CantorWorksheet* cantorWorksheet);
+	CantorWorksheetView(CantorWorksheet* cantorWorksheet, KParts::ReadWritePart*);
 	
 	~CantorWorksheetView();
 	
@@ -93,7 +93,6 @@ class CantorWorksheetView : public QWidget {
 	
 	void initActions();
 	void initMenus();
-	void initialize();
 };
 
 #endif // CANTORWORKSHEETVIEW_H

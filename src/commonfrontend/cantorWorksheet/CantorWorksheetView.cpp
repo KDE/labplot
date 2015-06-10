@@ -38,40 +38,16 @@
 #include <KMessageBox>
 #include <cantor/backend.h>
 
-CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
+CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet, KParts::ReadWritePart* part) : QWidget(),
     m_worksheet(worksheet) {
 	
     layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0,0,0,0);
-    initialize();
+    layout->setContentsMargins(0, 0, 0, 0);
+    this->part = part;
+    layout->addWidget(this->part->widget());
     initActions();
     initMenus();
     connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-}
-
-void CantorWorksheetView::initialize() {
-    KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
-    if (factory) {
-        // now that the Part is loaded, we cast it to a Part to get
-        // our hands on it
-        part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<m_worksheet->BackendName());
-        if (part) {
-	    layout->addWidget(part->widget());
-        }
-        else {
-            qDebug()<<"error creating part ";
-        }
-
-    }
-    else {
-        // if we couldn't find our Part, we exit since the Shell by
-        // itself can't do anything useful
-        KMessageBox::error(this, i18n("Could not find the Cantor Part."));
-        qApp->quit();
-        // we return here, cause qApp->quit() only means "exit the
-        // next time we enter the event loop...
-        return;
-    }
 }
 
 void CantorWorksheetView::initActions() {
@@ -213,5 +189,5 @@ void CantorWorksheetView::solveEquationsActionTriggered() {
 }
 
 CantorWorksheetView::~CantorWorksheetView() {
-
+    part->widget()->setParent(0);
 }

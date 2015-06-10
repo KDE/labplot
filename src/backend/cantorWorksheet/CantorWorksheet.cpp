@@ -31,16 +31,41 @@
 #include "backend/core/column/Column.h"
 
 #include <QDebug>
-
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <cantor/backend.h>
 
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name)
 		: AbstractPart(name), scripted(engine), backendName(name){
+    initialize();
+}
+
+void CantorWorksheet::initialize() {
+    KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
+    if (factory) {
+        // now that the Part is loaded, we cast it to a Part to get
+        // our hands on it
+        part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<BackendName());
+        if (!part) {
+            qDebug()<<"error creating part ";
+	    return;
+        }
+
+    }
+    else {
+        // if we couldn't find our Part, we exit since the Shell by
+        // itself can't do anything useful
+        KMessageBox::error(view(), i18n("Could not find the Cantor Part."));
+        qApp->quit();
+        // we return here, cause qApp->quit() only means "exit the
+        // next time we enter the event loop...
+        return;
+    }
 }
 
 QWidget* CantorWorksheet::view() const {
     if (!m_view) {
-	m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
+	m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this), part);
 // 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;

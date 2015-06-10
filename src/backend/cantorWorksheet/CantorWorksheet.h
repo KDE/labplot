@@ -30,6 +30,8 @@
 #define CANTORWORKSHEET_H
 
 #include <backend/core/AbstractPart.h>
+#include <cantor/session.h>
+#include <KParts/ReadWritePart>
 #include "backend/core/AbstractScriptingEngine.h"
 
 class CantorWorksheet : public AbstractPart, public scripted{
@@ -45,7 +47,10 @@ class CantorWorksheet : public AbstractPart, public scripted{
 	void requestProjectContextMenu(QMenu*);
     
     private:
-	   QString backendName;
+	KParts::ReadWritePart* part;
+	QString backendName;
+	
+	void initialize();
 };
 
 #endif // CANTORWORKSHEET_H
