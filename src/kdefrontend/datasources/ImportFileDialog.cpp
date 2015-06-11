@@ -183,7 +183,7 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 }
 
 /*!
-  triggers data import to the currently selected spreadsheet/matrix
+  triggers data import to the currently selected data container
 */
 void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
@@ -251,13 +251,13 @@ void ImportFileDialog::toggleOptions(){
 }
 
 void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
-	AbstractAspect * aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	AbstractAspect* aspect = static_cast<AbstractAspect *>(index.internalPointer());
 
-	if ( aspect ){
+	if (aspect) {
 		lPosition->setEnabled(true);
 		cbPosition->setEnabled(true);
 		enableButtonOk(true);
-	}else{
+	} else{
 		lPosition->setEnabled(false);
 		cbPosition->setEnabled(false);
 		enableButtonOk(false);
