@@ -116,19 +116,17 @@ void MatrixView::initActions() {
 	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
 
 	// matrix related actions
-	action_set_formula = new QAction(KIcon(""), i18n("Assign &Formula"), this);
-	action_recalculate = new QAction(KIcon(""), i18n("Recalculate"), this);
+// 	action_set_formula = new QAction(KIcon(""), i18n("Assign &Formula"), this);
+// 	action_recalculate = new QAction(KIcon(""), i18n("Recalculate"), this);
 	action_clear_matrix = new QAction(KIcon("edit-clear"), i18n("Clear Matrix"), this);
 	action_go_to_cell = new QAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
 
 	action_transpose = new QAction(i18n("&Transpose"), this);
-	action_mirror_horizontally = new QAction(QIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
-	action_mirror_vertically = new QAction(QIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
-	action_import_image = new QAction(i18nc("import image as matrix", "&Import image"), this);
-	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
-	action_dimensions_dialog = new QAction(KIcon("transform-scale"), i18nc("matrix size", "&Dimensions"), this);
-	action_edit_coordinates = new QAction(i18n("Set &Coordinates"), this);
-	action_edit_format = new QAction(i18n("Display &Format"), this);
+	action_mirror_horizontally = new QAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
+	action_mirror_vertically = new QAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
+// 	action_import_image = new QAction(i18nc("import image as matrix", "&Import image"), this);
+// 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
+// 	action_edit_format = new QAction(i18n("Display &Format"), this);
 
 	QActionGroup* headerFormatActionGroup = new QActionGroup(this);
 	headerFormatActionGroup->setExclusive(true);
@@ -169,10 +167,8 @@ void MatrixView::connectActions() {
 
 	// matrix related actions
 	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
-	connect(action_dimensions_dialog, SIGNAL(triggered()), this, SLOT(dimensionsDialog()));
 // 	connect(action_set_formula, SIGNAL(triggered()), this, SLOT(editFormula()));
 // 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculate()));
-// 	connect(action_edit_coordinates, SIGNAL(triggered()), this, SLOT(editCoordinates()));
 // 	connect(action_edit_format, SIGNAL(triggered()), this, SLOT(editFormat()));
 	//connect(action_import_image, SIGNAL(triggered()), this, SLOT(importImageDialog()));
 	//connect(action_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
@@ -207,26 +203,27 @@ void MatrixView::initMenus() {
 	m_columnMenu->addAction(action_insert_columns);
 	m_columnMenu->addAction(action_remove_columns);
 	m_columnMenu->addAction(action_clear_columns);
-	m_columnMenu->addSeparator();
-	m_columnMenu->addAction(action_edit_coordinates);
 
 	//row menu
 	m_rowMenu = new QMenu();
 	m_rowMenu->addAction(action_insert_rows);
 	m_rowMenu->addAction(action_remove_rows);
 	m_rowMenu->addAction(action_clear_rows);
-	m_rowMenu->addSeparator();
-	m_rowMenu->addAction(action_edit_coordinates);
 
 	//matrix menu
 	m_matrixMenu = new QMenu();
 	m_matrixMenu->addAction(action_select_all);
 	m_matrixMenu->addAction(action_clear_matrix);
 	m_matrixMenu->addSeparator();
-	m_matrixMenu->addAction(action_set_formula);
-	m_matrixMenu->addAction(action_recalculate);
+// 	m_matrixMenu->addAction(action_set_formula);
+// 	m_matrixMenu->addAction(action_recalculate);
+// 	m_matrixMenu->addSeparator();
+// 	m_matrixMenu->addAction(action_edit_format);
+
+	m_matrixMenu->addAction(action_transpose);
+	m_matrixMenu->addAction(action_mirror_horizontally);
+	m_matrixMenu->addAction(action_mirror_vertically);
 	m_matrixMenu->addSeparator();
-	m_matrixMenu->addAction(action_edit_format);
 
 	m_headerFormatMenu = new QMenu(i18n("Header format"));
 	m_headerFormatMenu->addAction(action_header_format_1);
@@ -255,20 +252,20 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-	menu->insertAction(firstAction, action_edit_coordinates);
-	menu->insertAction(firstAction, action_dimensions_dialog);
-	menu->insertAction(firstAction, action_edit_format);
-	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_set_formula);
-	menu->insertAction(firstAction, action_recalculate);
-	menu->insertSeparator(firstAction);
+// 	menu->insertAction(firstAction, action_set_formula);
+// 	menu->insertAction(firstAction, action_recalculate);
+// 	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_select_all);
 	menu->insertAction(firstAction, action_clear_matrix);
+	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_transpose);
 	menu->insertAction(firstAction, action_mirror_horizontally);
 	menu->insertAction(firstAction, action_mirror_vertically);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, action_duplicate);
-	menu->insertAction(firstAction, action_import_image);
+// 	menu->insertAction(firstAction, action_duplicate);
+// 	menu->insertAction(firstAction, action_import_image);
+// 	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_headerFormatMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
@@ -654,20 +651,6 @@ void MatrixView::clearSelectedCells() {
 
 //############################# matrix related slots ###########################
 
-void MatrixView::dimensionsDialog() {
-	bool ok;
-
-	int cols = QInputDialog::getInteger(0, i18n("Set Matrix Dimensions"), i18n("Enter number of columns"),
-			m_matrix->columnCount(), 1, 1e9, 1, &ok);
-	if (!ok) return;
-
-	int rows = QInputDialog::getInteger(0, i18n("Set Matrix Dimensions"), i18n("Enter number of rows"),
-			m_matrix->rowCount(), 1, 1e9, 1, &ok);
-	if (!ok) return;
-
-	m_matrix->setDimensions(rows, cols);
-}
-
 void MatrixView::headerFormatChanged(QAction* action) {
 	if (action == action_header_format_1)
 		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumns);
@@ -675,10 +658,6 @@ void MatrixView::headerFormatChanged(QAction* action) {
 		m_matrix->setHeaderFormat(Matrix::HeaderValues);
 	else
 		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumnsValues);
-
-// 	m_tableView->model()->setHeaderData(m_tableView->model()->headerData());
-// 	m_tableView->horizontalHeader()->repaint();
-// 	m_tableView->verticalHeader()->repaint();
 }
 
 //############################# column related slots ###########################

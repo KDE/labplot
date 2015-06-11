@@ -92,9 +92,7 @@ class MatrixView : public QWidget {
 		QAction* action_select_all;
 		QAction* action_clear_matrix;
 		QAction* action_go_to_cell;
-		QAction* action_dimensions_dialog;
 		QAction* action_edit_format;
-		QAction* action_edit_coordinates;
 		QAction* action_set_formula;
 		QAction* action_recalculate;
 		QAction* action_import_image;
@@ -135,7 +133,6 @@ class MatrixView : public QWidget {
 		void pasteIntoSelection();
 		void clearSelectedCells();
 
-		void dimensionsDialog();
 		void headerFormatChanged(QAction*);
 
 		void addColumns();

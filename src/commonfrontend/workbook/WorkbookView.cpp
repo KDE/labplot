@@ -56,12 +56,16 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	m_tabWidget->setTabShape(QTabWidget::Rounded);
 	m_tabWidget->setMovable(true);
 	m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+	m_tabWidget->setMinimumSize(200, 200);
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tabWidget);
-	m_tabWidget->show();
-	this->resize(200, 200);
+
+	//TODO:
+// 	foreach(const AbstractAspect* aspect, m_workbook->children<AbstractAspect>())
+// 		handleAspectAdded(aspect);
+
 
 	//Actions
 	action_add_spreadsheet = new KAction(KIcon("insert-table"), i18n("Add new Spreadsheet"), this);

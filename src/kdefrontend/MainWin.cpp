@@ -51,7 +51,6 @@
 #include "kdefrontend/GuiObserver.h"
 
 #include <QMdiArea>
-#include <QToolBar>
 #include <QMenu>
 #include <QDockWidget>
 #include <QStackedWidget>
@@ -149,12 +148,6 @@ void MainWin::initGUI(const QString& fileName){
 
 	//load recently used projects
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
-// 	qDebug()<<"LOADED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
-// 	qDebug()<<"LOADED m_recentProjectsAction->urls().first()="<<m_recentProjectsAction->urls().first()<<endl;
-// 	for(int i=0;i<m_recentProjectsAction->urls().size();i++) {
-// 		qDebug()<<"LOADED m_recentProjectsAction->urls().action("<<i<<")="<<m_recentProjectsAction->action(i)<<endl;
-// 		qDebug()<<"LOADED m_recentProjectsAction->urls().urls("<<i<<")="<<m_recentProjectsAction->urls().at(i)<<endl;
-// 	}
 
 	//set the view mode of the mdi area
 	KConfigGroup group = KGlobal::config()->group("General");
@@ -742,12 +735,6 @@ bool MainWin::openXML(QIODevice *file) {
 bool MainWin::closeProject(){
 	if (m_project==0)
 		return true; //nothing to close
-
-// 	int b = KMessageBox::warningYesNo( this,
-// 										i18n("The current project %1 will be closed. Do you want to continue?", m_project->name()),
-// 										i18n("Close Project"));
-// 	if (b==KMessageBox::No)
-// 		return false;
 
 	if(warnModified())
 		return false;

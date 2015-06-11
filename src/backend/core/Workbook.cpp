@@ -69,7 +69,6 @@ QMenu* Workbook::createContextMenu() {
 QWidget* Workbook::view() const {
 	if (!m_view) {
 		m_view = new WorkbookView(const_cast<Workbook*>(this));
-		m_view->resize(200,200);
 	}
 	return m_view;
 }
@@ -81,8 +80,7 @@ Spreadsheet* Workbook::currentSpreadsheet() const {
 	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
 	if(index != -1) {
 		AbstractAspect* aspect = child<AbstractAspect>(index);
-		if(aspect->inherits("Spreadsheet"))
-			return dynamic_cast<Spreadsheet*>(aspect);
+		return dynamic_cast<Spreadsheet*>(aspect);
 	}
 	return 0;
 }
@@ -94,8 +92,7 @@ Matrix* Workbook::currentMatrix() const {
 	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
 	if(index != -1) {
 		AbstractAspect* aspect = child<AbstractAspect>(index);
-		if(aspect->inherits("Matrix"))
-			return dynamic_cast<Matrix*>(aspect);
+		return dynamic_cast<Matrix*>(aspect);
 	}
 	return 0;
 }

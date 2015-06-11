@@ -32,10 +32,8 @@
 #include <QMenu>
 #include <QStyle>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
 #include <KLocale>
-#endif
 
 /**
  * \class AbstractPart
@@ -113,15 +111,9 @@ QMenu* AbstractPart::createContextMenu(){
 	menu->addSeparator();
 
 	if (m_mdiWindow) {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		menu->addAction(QIcon(KIcon("document-export-database")), i18n("Export"), this, SIGNAL(exportRequested()));
-		menu->addAction(QIcon(KIcon("document-print")), i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(QIcon(KIcon("document-print-preview")), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
-#else
-		menu->addAction(i18n("Export"), this, SIGNAL(exportRequested()));
-		menu->addAction(i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
-#endif
+		menu->addAction(KIcon("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
+		menu->addAction(KIcon("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
+		menu->addAction(KIcon("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
 		menu->addSeparator();
 
 		const QStyle *widget_style = m_mdiWindow->style();
