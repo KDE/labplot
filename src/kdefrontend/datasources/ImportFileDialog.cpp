@@ -275,7 +275,7 @@ void ImportFileDialog::newDataContainer(QAction *action){
 	bool ok;
 	// child widgets can't have own icons
 	QInputDialog* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add ") + action->iconText(), type + i18n(" name:"), QLineEdit::Normal, name, &ok);
+	name = dlg->getText(this, i18n("Add %1", action->iconText()), i18n("%1 name:", type), QLineEdit::Normal, name, &ok);
 	if (ok) {
 		if( action->iconText() == i18n("new Workbook"))
 			emit newWorkbookRequested(name);
