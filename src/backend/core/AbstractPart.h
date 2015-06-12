@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : Base class of Aspects with MDI windows as views.
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -49,12 +48,6 @@ class AbstractPart : public AbstractAspect {
 		void deleteMdiSubWindow();
 
 		virtual QMenu* createContextMenu();
-		virtual bool fillProjectMenu(QMenu* menu);
-
-	public slots:
-		virtual void editCopy();
-		virtual void editCut();
-		virtual void editPaste();
 
 	private:
 		mutable PartMdiView* m_mdiWindow;

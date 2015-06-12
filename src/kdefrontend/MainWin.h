@@ -215,7 +215,6 @@ private slots:
 	void handleAspectRemoved(const AbstractAspect* parent);
 	void handleCurrentAspectChanged(AbstractAspect* );
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
-	void handleSubWindowStatusChange(PartMdiView* view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
 	void handleShowSubWindowRequested();
 
 	void handleSettingsChanges();

@@ -60,6 +60,7 @@
 #include <QPrintPreviewDialog>
 #include <QCloseEvent>
 #include <QElapsedTimer>
+#include <QDebug>
 
 #include <KApplication>
 #include <KActionCollection>
@@ -70,7 +71,6 @@
 #include <KToolBar>
 #include <KStatusBar>
 #include <KLocale>
-#include <KDebug>
 #include <KFilterDev>
 
  /*!
@@ -113,8 +113,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 }
 
 MainWin::~MainWin() {
-	kDebug()<<"write settings"<<endl;
-
 	//write settings
 	m_recentProjectsAction->saveEntries( KGlobal::config()->group("Recent Files") );
 // 	qDebug()<<"SAVED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
@@ -410,25 +408,22 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_closeAction->setEnabled(!b);
 	m_toggleProjectExplorerDockAction->setEnabled(!b);
 	m_togglePropertiesDockAction->setEnabled(!b);
-	factory->container("new", this)->setEnabled(!b);
-	factory->container("edit", this)->setEnabled(!b);
-	factory->container("spreadsheet", this)->setEnabled(!b);
-//TODO	factory->container("matrix", this)->setEnabled(!b);
-	factory->container("worksheet", this)->setEnabled(!b);
-// 		factory->container("analysis", this)->setEnabled(!b);
-//  	factory->container("script", this)->setEnabled(!b);
-// 		factory->container("drawing", this)->setEnabled(!b);
-	factory->container("windows", this)->setEnabled(!b);
 
-	if (b) {
+	if (!m_mdiArea->currentSubWindow()) {
+		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
+	}
+
+	factory->container("new", this)->setEnabled(!b);
+	factory->container("edit", this)->setEnabled(!b);
+
+	if (b)
 		setCaption("LabPlot2");
-	}
-	else {
+	else
  		setCaption(m_project->name());
-	}
 
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
@@ -447,6 +442,15 @@ void MainWin::updateGUI() {
 	if (factory->container("worksheet", this)==NULL) {
 		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
+		return;
+	}
+
+	if (!m_mdiArea->currentSubWindow()) {
+		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("worksheet_toolbar", this)->hide();
+		factory->container("cartesian_plot_toolbar", this)->hide();
+		factory->container("spreadsheet_toolbar", this)->hide();
 		return;
 	}
 
@@ -709,9 +713,8 @@ bool MainWin::openXML(QIODevice *file) {
 	XmlStreamReader reader(file);
 	if (m_project->load(&reader) == false) {
 		RESET_CURSOR;
-		kDebug()<<"ERROR: reading file content"<<endl;
 		QString msg_text = reader.errorString();
-		KMessageBox::error(this, msg_text, i18n("Error opening project"));
+		KMessageBox::error(this, msg_text, i18n("Error when opening the project"));
 		statusBar()->showMessage(msg_text);
 		return false;
 	}
@@ -1080,8 +1083,10 @@ void MainWin::projectChanged(){
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 	PartMdiView *view = qobject_cast<PartMdiView*>(win);
-	if (!view)
+	if (!view) {
+		updateGUI();
 		return;
+	}
 
 	if (view == m_currentSubWindow){
 		//do nothing, if the current sub-window gets selected again.
@@ -1114,10 +1119,7 @@ void MainWin::handleAspectRemoved(const AbstractAspect *parent){
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
 	if (!part) return;
-	PartMdiView *win = part->mdiSubWindow();
-	Q_ASSERT(win);
-	disconnect(win, SIGNAL(statusChanged(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)),
-		this, SLOT(handleSubWindowStatusChange(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)));
+	PartMdiView* win = part->mdiSubWindow();
 	m_mdiArea->removeSubWindow(win);
 	updateGUI();
 }
@@ -1163,25 +1165,16 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
 			m_mdiArea->addSubWindow(win);
-			connect(win, SIGNAL(statusChanged(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)),
-				this, SLOT(handleSubWindowStatusChange(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)));
 		}
 		win->show();
 		m_mdiArea->setActiveSubWindow(win);
 	} else {
+		//activate the mdiView of the parent, if a child was selected
 		AbstractAspect* parent = aspect->parentAspect();
 		if (parent)
 			activateSubWindowForAspect(parent);
 	}
 	return;
-}
-
-void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to){
-	Q_UNUSED(from);
-	Q_UNUSED(to);
-	if (view == m_mdiArea->currentSubWindow()) {
-		updateGUI();
-	}
 }
 
 void MainWin::setMdiWindowVisibility(QAction * action){
@@ -1250,11 +1243,9 @@ void MainWin::updateMdiWindowVisibility() const{
 	PartMdiView * part_view;
 	switch(m_project->mdiWindowVisibility()){
 		case Project::allMdiWindows:
-			foreach(QMdiSubWindow *window, windows){
-				part_view = qobject_cast<PartMdiView *>(window);
-				Q_ASSERT(part_view);
-				part_view->show();
-			}
+			foreach(QMdiSubWindow* window, windows)
+				window->show();
+
 			break;
 		case Project::folderOnly:
 			foreach(QMdiSubWindow *window, windows){
@@ -1297,7 +1288,6 @@ void MainWin::toggleFullScreen() {
 		this->setWindowState(m_lastWindowState);
 	} else {
 		m_lastWindowState = this->windowState();
-		qDebug()<<"m_lastWindowState " << m_lastWindowState;
 		this->showFullScreen();
 	}
 }
@@ -1451,7 +1441,6 @@ void MainWin::newFileDataSourceActionTriggered(){
 	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
 	  dlg->importToFileDataSource(dataSource, statusBar());
 	  this->addAspectToProject(dataSource);
-	  kDebug()<<"new file data source created"<<endl;
   }
   delete dlg;
 }
