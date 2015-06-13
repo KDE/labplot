@@ -52,7 +52,7 @@
 	\ingroup backend
 */
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_view(0) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -63,7 +63,7 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 }
 
 Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_view(0) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)) {
 
 	if (!loading)
 		init();
@@ -205,7 +205,7 @@ void Matrix::setPrecision(int precision) {
 //TODO: make this undoable?
 void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	d->headerFormat = format;
-	m_view->model()->updateHeader();
+	reinterpret_cast<MatrixView*>(m_view)->model()->updateHeader();
 }
 
 void Matrix::insertColumns(int before, int count) {
@@ -294,7 +294,7 @@ void Matrix::copy(Matrix* other) {
 	d->formula = other->formula();
 	d->suppressDataChange = false;
 	emit dataChanged(0, 0, rows-1, columns-1);
-	if (m_view) m_view->adjustHeaders();
+	if (m_view) reinterpret_cast<MatrixView*>(m_view)->adjustHeaders();
 	endMacro();
 	RESET_CURSOR;
 }
@@ -323,7 +323,7 @@ void Matrix::duplicate() {
 void Matrix::addRows() {
 	if (!m_view) return;
 	WAIT_CURSOR;
-	int count = m_view->selectedRowCount(false);
+	int count = reinterpret_cast<MatrixView*>(m_view)->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 rows", "%1: add %2 rows", name(), count));
 	exec(new MatrixInsertRowsCmd(d, rowCount(), count));
 	endMacro();
@@ -333,7 +333,7 @@ void Matrix::addRows() {
 void Matrix::addColumns() {
 	if (!m_view) return;
 	WAIT_CURSOR;
-	int count = m_view->selectedRowCount(false);
+	int count = reinterpret_cast<MatrixView*>(m_view)->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 column", "%1: add %2 columns", name(), count));
 	exec(new MatrixInsertColumnsCmd(d, columnCount(), count));
 	endMacro();
@@ -445,7 +445,7 @@ MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount
 }
 
 void MatrixPrivate::updateViewHeader() {
-	q->m_view->model()->updateHeader();
+	reinterpret_cast<MatrixView*>(q->m_view)->model()->updateHeader();
 }
 
 /*!

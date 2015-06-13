@@ -30,24 +30,38 @@
 #define WORKBOOKVIEW_H
 
 #include <QWidget>
+#include <QTabWidget>
+#include <QTabBar>
 
 class AbstractAspect;
 class Workbook;
 class QAction;
 class QMenu;
 class QPrinter;
-class QTabWidget;
 class QToolBar;
+
+class TabWidget : public QTabWidget {
+	Q_OBJECT
+	public:
+		TabWidget(QWidget* parent) : QTabWidget(parent) {
+			connect(tabBar(),SIGNAL(tabMoved(int,int)),this, SIGNAL(tabMoved(int,int)));
+		}
+
+	signals:
+		void tabMoved(int, int);
+};
 
 class WorkbookView : public QWidget {
     Q_OBJECT
 
 	public:
 		explicit WorkbookView(Workbook*);
+		virtual ~WorkbookView();
+
 		int currentIndex() const;
 
 	private:
-		QTabWidget* m_tabWidget;
+		TabWidget* m_tabWidget;
 		Workbook* m_workbook;
 		int lastSelectedIndex;
 
@@ -60,6 +74,7 @@ class WorkbookView : public QWidget {
 		void showTabContextMenu(const QPoint&);
 		void addSpreadsheet();
 		void addMatrix();
+		void itemSelected(int);
 		void tabChanged(int);
 		void tabMoved(int,int);
 		void handleAspectAdded(const AbstractAspect*);

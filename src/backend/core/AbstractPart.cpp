@@ -29,6 +29,7 @@
 
 #include "backend/core/AbstractPart.h"
 #include "commonfrontend/core/PartMdiView.h"
+#include "backend/core/Workbook.h"
 #include <QMenu>
 #include <QStyle>
 
@@ -92,8 +93,14 @@ void AbstractPart::deleteMdiSubWindow() {
  * this function is called when PartMdiView, the mdi-subwindow-wrapper of the actual view,
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
-//TODO: maybe this part needs to be redesigned. the view can be deleted in PartMdiView
 void AbstractPart::deleteView() const {
+	//if the parent is a Workbook, the actual view was already deleted when QTabWidget was deleted.
+	//here just set the pointer to 0.
+	if (dynamic_cast<const Workbook*>(parentAspect())) {
+		m_view = 0;
+		return;
+	}
+
 	if (m_view) {
 		delete m_view;
 		m_view = 0;

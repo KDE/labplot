@@ -1120,7 +1120,8 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
 	if (!part) return;
 	PartMdiView* win = part->mdiSubWindow();
-	m_mdiArea->removeSubWindow(win);
+	if (win)
+		m_mdiArea->removeSubWindow(win);
 	updateGUI();
 }
 

@@ -144,7 +144,6 @@ class Matrix : public AbstractDataSource {
 
 		MatrixPrivate* const d;
 		friend class MatrixPrivate;
-		mutable MatrixView* m_view;
 };
 
 #endif
