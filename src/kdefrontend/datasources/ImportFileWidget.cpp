@@ -155,10 +155,14 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	imageOptionsWidget.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
 
 	// HDF data
+	hdfOptionsWidget.bRefreshPreview->setIcon( KIcon("view-refresh") );
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
+	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	// NetCDF data
+	netcdfOptionsWidget.bRefreshPreview->setIcon( KIcon("view-refresh") );
 	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
+	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
@@ -502,13 +506,14 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	//default
 	ui.lFilter->show();
 	ui.cbFilter->show();
+	ui.tabWidget->setTabText(0,i18n("Data format"));
+	ui.tabWidget->insertTab(1,ui.tabDataPreview,i18n("Preview"));
+	ui.lPreviewLines->show();
+	ui.sbPreviewLines->show();
 	ui.lStartColumn->show();
 	ui.sbStartColumn->show();
 	ui.lEndColumn->show();
 	ui.sbEndColumn->show();
-	ui.tePreview->show();
-	ui.lPreviewLines->show();
-	ui.sbPreviewLines->show();
 
 	switch (fileType) {
 	case FileDataSource::Ascii: {
@@ -525,6 +530,10 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	case FileDataSource::NETCDF: {
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
+		// hide global preview tab. we have our own
+		ui.tabWidget->setTabText(0,i18n("Data format && preview"));
+		ui.tabWidget->removeTab(1);
+		ui.tabWidget->setCurrentIndex(0);
 		break;
 	}	
 	case FileDataSource::Image: {
@@ -578,7 +587,7 @@ void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int c
 		QString varName = item->data(1,Qt::DisplayRole).toString().split(" ")[0];
 
 		QString importedText = filter->readAttribute(fileName,name,varName);
-		ui.tePreview->setPlainText(importedText);
+		netcdfOptionsWidget.tePreview->setPlainText(importedText);
 	}
 	else
 		qDebug()<<"non showable object selected in NetCDF tree widget";
@@ -665,17 +674,22 @@ void ImportFileWidget::refreshPreview(){
 	}
 	case FileDataSource::HDF: {
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
+		lines = hdfOptionsWidget.sbPreviewLines->value();
 		importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
+		hdfOptionsWidget.tePreview->setPlainText(importedText);
 		break;
 	}
 	case FileDataSource::NETCDF: {
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
+		lines = netcdfOptionsWidget.sbPreviewLines->value();
 		importedText = filter->readCurrentVar(fileName,NULL,AbstractFileFilter::Replace,lines);
+		netcdfOptionsWidget.tePreview->setPlainText(importedText);
 		break;
 	}
 	default:
 		importedText += "Unknown file type";
 	}
 
-	ui.tePreview->setPlainText(importedText);
+	if(fileType != FileDataSource::HDF && fileType != FileDataSource::NETCDF)
+		ui.tePreview->setPlainText(importedText);
 }
