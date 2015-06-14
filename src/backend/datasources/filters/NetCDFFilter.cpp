@@ -104,12 +104,12 @@ void NetCDFFilter::saveFilterSettings(const QString& filterName) const{
 
 ///////////////////////////////////////////////////////////////////////
 
-void NetCDFFilter::setCurrentVarName(QString ds){
-	d->currentVarName = ds;
+void NetCDFFilter::setCurrentVarNames(QStringList ds){
+	d->currentVarNames = ds;
 }
 
-QString NetCDFFilter::currentVarName() const{
-	return d->currentVarName;
+QStringList NetCDFFilter::currentVarNames() const{
+	return d->currentVarNames;
 }
 
 void NetCDFFilter::setStartRow(const int s) {
@@ -357,6 +357,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			props<<translateDataType(type)<<" ("<<QString::number(len)<<")";
 			QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<typeName<<props.join("")<<valueString.join(", "));
 			attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+			attrItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(attrItem);
 		}
 	}
@@ -385,6 +386,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 			value="unlimited";
 		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"dimension"<<props.join("")<<value);
 		attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+		attrItem->setFlags(Qt::ItemIsEnabled);
 		parentItem->addChild(attrItem);
 	}
 }
@@ -419,6 +421,7 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 
 		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"variable"<<props.join("")<<"");
 		varItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
+		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item
 		for(int c=0;c<varItem->columnCount();c++)
 			varItem->setBackground(c,QBrush(QColor(192,255,192)));
@@ -449,16 +452,19 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 
 	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Attributes"));
 	attrItem->setIcon(0,QIcon(KIcon("folder")));
+	attrItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(attrItem);
 	scanAttrs(ncid,NC_GLOBAL,-1,attrItem);
 
 	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Dimensions"));
 	dimItem->setIcon(0,QIcon(KIcon("folder")));
+	dimItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(dimItem);
 	scanDims(ncid,ndims,dimItem);
 
 	QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Variables"));
 	varItem->setIcon(0,QIcon(KIcon("folder")));
+	varItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(varItem);
 	scanVars(ncid,nvars,varItem);
 #else
@@ -505,10 +511,10 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
 	QStringList dataString;
 
-	if(currentVarName.isEmpty())
-		return QString("No variable selected");
+	if(currentVarNames.isEmpty())
+		return QString("No variables selected");
 #ifdef QT_DEBUG
-	qDebug()<<" current variable ="<<currentVarName;
+	qDebug()<<" current variables ="<<currentVarName;
 #endif
 
 #ifdef HAVE_NETCDF
@@ -518,7 +524,8 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 	handleError(status,"nc_open");
 
 	int varid;
-	QByteArray baVarName = currentVarName.toLatin1();
+	//TODO: loop over all variables
+	QByteArray baVarName = currentVarNames[0].toLatin1();
 	status = nc_inq_varid(ncid,baVarName.data(),&varid);
 	handleError(status,"nc_inq_varid");
 
@@ -659,14 +666,14 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
     Uses the settings defined in the data source.
 */
 void NetCDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-	if(currentVarName.isEmpty()) {
-		qDebug()<<" No variable selected";
+	if(currentVarNames.isEmpty()) {
+		qDebug()<<" No variables selected";
 		return;
 	}
 
 #ifdef QT_DEBUG
 	else
-		qDebug()<<" current variable ="<<currentVarName;
+		qDebug()<<" current variables ="<<currentVarNames;
 #endif
 
 	readCurrentVar(fileName,dataSource,mode);

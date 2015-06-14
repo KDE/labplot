@@ -46,7 +46,7 @@ class HDFFilterPrivate {
 
 		const HDFFilter* q;
 
-		QString currentDataSet;
+		QStringList currentDataSetNames;
 		int startRow;
 		int endRow;
 		int startColumn;

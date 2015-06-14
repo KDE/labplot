@@ -92,6 +92,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	// link and type column are hidden
 	hdfOptionsWidget.twContent->hideColumn(1);
 	hdfOptionsWidget.twContent->hideColumn(2);
+	hdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
 	QWidget* netcdfw=new QWidget(0);
@@ -101,6 +102,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	netcdfOptionsWidget.twContent->setHeaderLabels(headers);
 	// type is hidden
 	netcdfOptionsWidget.twContent->hideColumn(1);
+	netcdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
 	// default filter
@@ -318,7 +320,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	case FileDataSource::HDF: {
 		HDFFilter* filter = new HDFFilter();
 
-		filter->setCurrentDataSet(hdfOptionsWidget.leDataSet->text());
+		filter->setCurrentDataSetNames(selectedHDFNames());
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );
@@ -330,7 +332,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	case FileDataSource::NETCDF: {
 		NetCDFFilter* filter = new NetCDFFilter();
 
-		filter->setCurrentVarName(netcdfOptionsWidget.leVarName->text());
+		filter->setCurrentVarNames(selectedNetCDFNames());
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );
@@ -345,7 +347,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 	return 0;
 }
-
 
 /*!
 	opens a file dialog and lets the user select the file data source.
@@ -435,7 +436,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			// update HDF tree widget using current selected file
 			hdfOptionsWidget.twContent->clear();
-			hdfOptionsWidget.leDataSet->clear();
 
 			QString fileName = ui.kleFileName->text();
 			QFileInfo fileInfo(fileName);
@@ -452,7 +452,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			// update NetCDF tree widget using current selected file
 			netcdfOptionsWidget.twContent->clear();
-			netcdfOptionsWidget.leVarName->clear();
 
 			QString fileName = ui.kleFileName->text();
 			QFileInfo fileInfo(fileName);
@@ -560,15 +559,27 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 */
 void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
-	if( item->data(2,Qt::DisplayRole).toString() == "data set" ) {
-		// the data link is saved in the second column
-		QString dataSetLink = item->data(1,Qt::DisplayRole).toString();
-		hdfOptionsWidget.leDataSet->setText(dataSetLink);
+	if( item->data(2,Qt::DisplayRole).toString() == "data set" )
 		refreshPreview();
-	}
 	else
 		qDebug()<<"non data set selected in HDF tree widget";
 }
+
+/*!
+	return list of selected HDF item names
+*/
+const QStringList ImportFileWidget::selectedHDFNames() const {
+	QStringList names;
+	QList<QTreeWidgetItem *> items = hdfOptionsWidget.twContent->selectedItems();
+
+	// the data link is saved in the second column
+	for(int i=0;i<items.size();i++)
+		names<<items[i]->data(1,Qt::DisplayRole).toString();
+
+	qDebug()<<"	HDF names:"<<names;
+	return names;
+}
+
 
 /*!
 	updates the selected var name of a NetCDF file when the tree widget item is selected
@@ -576,11 +587,9 @@ void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int colu
 void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
 	if( item->data(1,Qt::DisplayRole).toString() == "variable" ) {
-		// the data link is saved in the second column
-		QString varName = item->data(0,Qt::DisplayRole).toString();
-		netcdfOptionsWidget.leVarName->setText(varName);
 		refreshPreview();
 	} else if( item->data(1,Qt::DisplayRole).toString().contains("attribute") ) {
+		// reads attributes (only for preview)
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		QString fileName = ui.kleFileName->text();
 		QString name = item->data(0,Qt::DisplayRole).toString();
@@ -591,6 +600,20 @@ void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int c
 	}
 	else
 		qDebug()<<"non showable object selected in NetCDF tree widget";
+}
+
+/*!
+	return list of selected NetCDF item names
+*/
+const QStringList ImportFileWidget::selectedNetCDFNames() const {
+	QStringList names;
+	QList<QTreeWidgetItem *> items = netcdfOptionsWidget.twContent->selectedItems();
+
+	for(int i=0;i<items.size();i++)
+		names<<items[i]->data(0,Qt::DisplayRole).toString();
+
+	qDebug()<<"	NetCDF names:"<<names;
+	return names;
 }
 
 /*!

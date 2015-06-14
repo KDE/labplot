@@ -59,6 +59,8 @@ private:
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 	Ui::ImageOptionsWidget imageOptionsWidget;
 	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
+	const QStringList selectedHDFNames() const;
+	const QStringList selectedNetCDFNames() const;
 
 private slots:
 	void fileNameChanged(const QString&);
