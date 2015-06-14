@@ -30,6 +30,7 @@
 #include "WorksheetPrivate.h"
 #include "WorksheetElement.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "commonfrontend/datapicker/ImageReaderElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
@@ -157,10 +158,13 @@ QMenu *Worksheet::createContextMenu() {
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
 QWidget *Worksheet::view() const {
-	if (!m_view) {
-		m_view = new WorksheetView(const_cast<Worksheet *>(this));
-		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
-	}
+    if (!m_view) {
+        if (d->isDatapicker)
+            m_view = new ImageReaderElement(const_cast<Worksheet *>(this));
+        else
+            m_view = new WorksheetView(const_cast<Worksheet *>(this));
+        connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+    }
 	return m_view;
 }
 
@@ -522,6 +526,10 @@ void Worksheet::setPrinting(bool on) const {
 		elem->setPrinting(on);
 }
 
+void Worksheet::setDatapicker(bool on) {
+    d->isDatapicker = on;
+}
+
 
 //##############################################################################
 //######################  Private implementation ###############################
@@ -529,7 +537,8 @@ void Worksheet::setPrinting(bool on) const {
 WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner),
 	pageRect(0, 0, 1500, 1500),
 	m_scene(new QGraphicsScene(pageRect)),
-	scaleContent(false) {
+    scaleContent(false),
+    isDatapicker(false){
 }
 
 QString WorksheetPrivate::name() const{

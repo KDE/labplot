@@ -60,6 +60,7 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(visibleChanged(bool)), this, SLOT(imageVisibleChanged(bool)) );
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)), this,SLOT(handleAspectRemoved()));
     connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()));
+    connect( m_image, SIGNAL(updateLogicalPositions()), this, SLOT(updateLogicalPositions()));
 }
 
 //**********************************************************

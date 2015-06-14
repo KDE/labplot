@@ -69,8 +69,8 @@ void Image::handleAspectAdded(const AbstractAspect *aspect) {
         }
         //calculate logical position of added aspect should be independent with its origin
         if (itemCount > 3) {
-            //update logical value of ref point
-            //send item->position().point;
+            emit updateLogicalPositions();
+            //mapScenetoLogical
         }
     }
 }

@@ -37,6 +37,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
+#include "backend/core/Datapicker.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -107,7 +108,9 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	xyEquationCurveDock(0),
 	xyFitCurveDock(0),
 	worksheetDock(0),
-	textLabelDock(0){
+    textLabelDock(0),
+    imageDock(0),
+    customItemDock(0){
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
@@ -216,6 +219,10 @@ void MainWin::initActions() {
 	m_newWorkbookAction = new KAction(KIcon("tab-new-background"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
 	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
+
+    m_newDatapickerAction = new KAction(KIcon(""),i18n("Datapicker"),this);
+    actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
+    connect(m_newDatapickerAction, SIGNAL(triggered()),SLOT(newDatapicker()));
 
 	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
@@ -354,6 +361,7 @@ void MainWin::initMenus(){
 	m_newMenu->addAction(m_newSpreadsheetAction);
 	m_newMenu->addAction(m_newMatrixAction);
 	m_newMenu->addAction(m_newWorksheetAction);
+    m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
 // 	m_newMenu->addAction(m_newSqlDataSourceAction);
@@ -414,6 +422,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_newSpreadsheetAction->setEnabled(!b);
 	m_newMatrixAction->setEnabled(!b);
 	m_newWorksheetAction->setEnabled(!b);
+    m_newDatapickerAction->setEnabled(!b);
 	m_closeAction->setEnabled(!b);
 	m_toggleProjectExplorerDockAction->setEnabled(!b);
 	m_togglePropertiesDockAction->setEnabled(!b);
@@ -923,8 +932,14 @@ void MainWin::newFolder() {
 	adds a new Workbook to the project.
 */
 void MainWin::newWorkbook(){
-	Workbook* workbook = new Workbook(0, i18n("Workbook"));
+    Workbook* workbook = new Workbook(0, i18n("Workbook"));
 	this->addAspectToProject(workbook);
+}
+
+void MainWin::newDatapicker(){
+    Datapicker* datapicker = new Datapicker(0, i18n("Datapicker"));
+    this->addAspectToProject(datapicker);
+    datapicker->initDefault();
 }
 
 /*!
@@ -1048,6 +1063,16 @@ Workbook* MainWin::activeWorkbook() const {
 	return dynamic_cast<Workbook*>(part);
 }
 
+Datapicker* MainWin::activeDatapicker() const {
+    QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+    if (!win)
+        return 0;
+
+    AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+    Q_ASSERT(part);
+    return dynamic_cast<Datapicker*>(part);
+}
+
 /*!
 	returns a pointer to a Spreadsheet-object, if the currently active Mdi-Subwindow is \a SpreadsheetView.
 	Otherwise returns \a 0.
@@ -1169,7 +1194,10 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		//for aspects being children of a Workbook,we show workbook's window, otherwise the window of the selected part
 		const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-		if (workbook)
+        const Datapicker* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
+        if (datapicker)
+            win = datapicker->mdiSubWindow();
+        else if (workbook)
 			win = workbook->mdiSubWindow();
 		else
 			win = part->mdiSubWindow();

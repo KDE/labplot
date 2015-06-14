@@ -52,6 +52,8 @@
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+#include "kdefrontend/widgets/ImageWidget.h"
+#include "kdefrontend/widgets/CustomItemWidget.h"
 
 #include <kstatusbar.h>
 
@@ -289,7 +291,37 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->textLabelDock->setLabels(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
-  }else if (className=="Project"){
+  }else if (className=="Image"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("Image properties"));
+
+      if (!mainWindow->imageDock){
+        mainWindow->imageDock = new ImageWidget(mainWindow->stackedWidget);
+        mainWindow->stackedWidget->addWidget(mainWindow->imageDock);
+      }
+
+      QList<Image*> list;
+      foreach(aspect, selectedAspects){
+        list<<qobject_cast<Image*>(aspect);
+      }
+      mainWindow->imageDock->setImages(list);
+
+      mainWindow->stackedWidget->setCurrentWidget(mainWindow->imageDock);
+    }else if (className=="CustomItem"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("CustomItem properties"));
+
+      if (!mainWindow->customItemDock){
+        mainWindow->customItemDock = new CustomItemWidget(mainWindow->stackedWidget);
+        mainWindow->stackedWidget->addWidget(mainWindow->customItemDock);
+      }
+
+      QList<CustomItem*> list;
+      foreach(aspect, selectedAspects){
+        list<<qobject_cast<CustomItem*>(aspect);
+      }
+      mainWindow->customItemDock->setCustomItems(list);
+
+      mainWindow->stackedWidget->setCurrentWidget(mainWindow->customItemDock);
+    }else if (className=="Project"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Project properties"));
 
 	if (!mainWindow->projectDock){

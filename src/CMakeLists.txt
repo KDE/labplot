@@ -155,6 +155,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/worksheet/CustomItem.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
+	${BACKEND_DIR}/core/Datapicker.cpp
+	${BACKEND_DIR}/core/Transform.cpp
 )
 
 set(COMMONFRONTEND_SOURCES
@@ -168,6 +170,8 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
+	${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
+	${COMMONFRONTEND_DIR}/datapicker/ImageReaderElement.cpp
 )
 
 set(TOOLS_SOURCES

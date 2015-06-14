@@ -9,6 +9,8 @@
 #include "backend/worksheet/WorksheetElement.h"
 
 class ImagePrivate;
+class Transform;
+
 class Image : public WorksheetElement{
 	Q_OBJECT
 
@@ -59,11 +61,11 @@ class Image : public WorksheetElement{
 
 	public slots:
 		virtual void retransform();
+        void setReferencePoints();
+        void setCurvePoints();
 
 	private slots:
 		void visibilityChanged();
-        void setReferencePoints();
-        void setCurvePoints();
         void handleAspectAdded(const AbstractAspect*);
         void handleAspectRemoved();
 
@@ -79,6 +81,7 @@ class Image : public WorksheetElement{
 		QAction* visibilityAction;
         QAction* setReferencePointsAction;
         QAction* setCurvePointsAction;
+        Transform* m_transform;
 
 	signals:
         friend class ImageSetPositionCmd;
@@ -87,6 +90,7 @@ class Image : public WorksheetElement{
 		void rotationAngleChanged(float);
 		void visibleChanged(bool);
 		void changed();
+        void updateLogicalPositions();
 };
 
 #endif
