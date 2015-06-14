@@ -141,6 +141,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	cbAddTo->setModel(m_model.get());
 
 	//hide the data-source related widgets
+	//TODO: disable for file data sources
 	importFileWidget->hideDataSource();
 
 	//ok is only available if a valid spreadsheet was selected

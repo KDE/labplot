@@ -417,9 +417,12 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		}
 		props<<")";
 
-		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"variable"<<props.join(""));
+		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"variable"<<props.join("")<<"");
 		varItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
-		varItem->setBackground(0,QBrush(QColor(192,255,192)));
+		qDebug()<<"	column count ="<<varItem->columnCount();
+		// highlight item
+		for(int c=0;c<varItem->columnCount();c++)
+			varItem->setBackground(c,QBrush(QColor(192,255,192)));
 		parentItem->addChild(varItem);
 
 		scanAttrs(ncid,i,-1,varItem);
