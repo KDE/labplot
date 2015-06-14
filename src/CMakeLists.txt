@@ -3,6 +3,7 @@ set(KDE_FRONTEND true)
 set(KDEFRONTEND_DIR kdefrontend)
 set(BACKEND_DIR backend)
 set(COMMONFRONTEND_DIR commonfrontend)
+set(CANTOR_DIR cantor)
 set(TOOLS_DIR tools)
 set(CMAKE_AUTOMOC ON)
 
@@ -152,28 +153,9 @@ set(COMMONFRONTEND_SOURCES
 )
 
 set(CANTOR_SOURCES
-	${CANTOR_DIR}/CantorWorksheetViewHolder.cpp
-	${CANTOR_DIR}/CantorWorksheetScene.cpp
-	${CANTOR_DIR}/epsrenderer.cpp
-	${CANTOR_DIR}/latexrenderer.cpp
-	${CANTOR_DIR}/worksheetcursor.cpp
-	${CANTOR_DIR}/commandentry.cpp
-	${CANTOR_DIR}/worksheetentry.cpp
-	${CANTOR_DIR}/worksheettextitem.cpp
-	${CANTOR_DIR}/resultitem.cpp
-	${CANTOR_DIR}/loadedexpression.cpp
-	${CANTOR_DIR}/textentry.cpp
-	${CANTOR_DIR}/latexentry.cpp
-	${CANTOR_DIR}/imageentry.cpp
-	${CANTOR_DIR}/pagebreakentry.cpp
-	${CANTOR_DIR}/imagesettingsdialog.cpp
-	${CANTOR_DIR}/placeholderentry.cpp
-	${CANTOR_DIR}/actionbar.cpp
-	${CANTOR_DIR}/worksheettoolbutton.cpp
-	${CANTOR_DIR}/textresultitem.cpp
-	${CANTOR_DIR}/imageresultitem.cpp
-	${CANTOR_DIR}/worksheetimageitem.cpp
-	${CANTOR_DIR}/animationresultitem.cpp
+	${CANTOR_DIR}/panelplugin.cp
+	${CANTOR_DIR}/panelpluginhandler.cpp
+	${CANTOR_DIR}/cantor_export.cpp
 )
 
 set(TOOLS_SOURCES

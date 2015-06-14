@@ -42,6 +42,7 @@ class CantorWorksheet : public AbstractPart, public scripted{
 	virtual QWidget* view() const;
 	virtual QMenu *createContextMenu();
 	QString BackendName();
+	KParts::ReadWritePart* getPart();
 
     signals:
 	void requestProjectContextMenu(QMenu*);

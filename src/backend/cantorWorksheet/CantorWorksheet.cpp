@@ -63,6 +63,11 @@ void CantorWorksheet::initialize() {
     }
 }
 
+KParts::ReadWritePart* CantorWorksheet::getPart() {
+    if(part) return part;
+    else return NULL;
+}
+
 QWidget* CantorWorksheet::view() const {
     if (!m_view) {
 	m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this), part);

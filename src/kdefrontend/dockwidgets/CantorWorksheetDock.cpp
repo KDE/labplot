@@ -27,7 +27,10 @@
  ***************************************************************************/
 
 #include "CantorWorksheetDock.h"
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <QDebug>
+#include <cantor/session.h>
+#include <KParts/ReadWritePart>
 
 CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent) {
     ui.setupUi(this);
@@ -37,12 +40,35 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent) {
 void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
     m_cantorworksheetlist = list;
     m_cantorworksheet = list.first();
-    if (list.size()==1){
-	if(w) ui.tabWidget->addTab(w, "Variable Manager");
+    if (list.size()==1) {
+	if(index.empty()) {
+	    QList<QAction*> panelActions;
+	    KParts::ReadWritePart* m_part = m_cantorworksheet->getPart();
+	    Cantor::PanelPluginHandler* handler=m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
+	    if(!handler) {
+		qDebug()<<"no PanelPluginHandle found for this part";
+		return;
+	    }
+	    QList<Cantor::PanelPlugin*> plugins = handler->plugins();
+	    index.clear();
+	    foreach(Cantor::PanelPlugin* plugin, plugins) {
+		plugin->setParentWidget(this);
+		int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
+		index.append(i);
+	    }
+	} else {
+	    QPair<QString, QWidget*> p;
+	    index.clear();
+	    foreach(p, panelsWidgets) {
+		int i = ui.tabWidget->addTab(p.second, p.first);
+		index.append(i);
+	    }
+	}
     } else {
-	int index = ui.tabWidget->indexOf(ui.variable_manager);
-	w = ui.tabWidget->widget(index);
-	ui.tabWidget->removeTab(index);
+	foreach(int i, index) {
+	    panelsWidgets.append(qMakePair(ui.tabWidget->tabText(i), ui.tabWidget->widget(i)));
+	    ui.tabWidget->removeTab(i);
+	}
     }
 }
 
