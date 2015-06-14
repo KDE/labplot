@@ -129,20 +129,25 @@ void Workbook::childDeselected(const AbstractAspect* aspect){
 }
 
 /*!
- *  Emits the signal to select or to deselect the column number \c index in the project explorer,
- *  if \c selected=true or \c selected=false, respectively.
+ *  Emits the signal to select or to deselect the workbook item (spreadsheet or matrix) with the index \c index
+ *  in the project explorer, if \c selected=true or \c selected=false, respectively.
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
- * This function is called in \c SpreadsheetView upon selection changes.
+ *  This function is called in \c WorkbookView when the current tab was changed
  */
 void Workbook::setChildSelectedInView(int index, bool selected){
+	AbstractAspect* aspect = child<AbstractAspect>(index);
 	if (selected) {
-		emit childAspectSelectedInView(child<AbstractAspect>(index));
+		emit childAspectSelectedInView(aspect);
 
 		//deselect the workbook in the project explorer, if a child (spreadsheet or matrix) was selected.
 		//prevents unwanted multiple selection with workbook if it was selected before.
 		emit childAspectDeselectedInView(this);
 	} else {
-		emit childAspectDeselectedInView(child<AbstractAspect>(index));
+		emit childAspectDeselectedInView(aspect);
+
+		//deselect also all children that were potentially selected before (columns of a spreadsheet)
+		foreach(AbstractAspect* child, aspect->children<AbstractAspect>())
+			emit childAspectDeselectedInView(child);
 	}
 }
 
@@ -175,14 +180,14 @@ bool Workbook::load(XmlStreamReader* reader){
 
     while (!reader->atEnd()){
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "cartesianPlot")
+        if (reader->isEndElement() && reader->name() == "workbook")
             break;
 
         if (!reader->isStartElement())
             continue;
 
 		if(reader->name() == "spreadsheet"){
-            Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet");
+            Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
             if (!spreadsheet->load(reader)){
                 delete spreadsheet;
                 return false;

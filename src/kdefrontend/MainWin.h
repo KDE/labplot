@@ -164,7 +164,7 @@ private:
 
 	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
-	//TODO: Matrix* activeMatrix() const;
+	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
 
 	friend class GuiObserver;

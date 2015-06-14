@@ -507,12 +507,7 @@ void MainWin::updateGUI() {
 		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
 
 		//Handle the Spreadsheet-object
-		const  Spreadsheet* spreadsheet = 0;
-		Workbook* workbook = this->activeWorkbook();
-		if (workbook)
-			spreadsheet = workbook->currentSpreadsheet();
-		else
-			spreadsheet = this->activeSpreadsheet();
+		const  Spreadsheet* spreadsheet = this->activeSpreadsheet();
 		if (spreadsheet){
 			//enable spreadsheet related menus
 // 			factory->container("analysis", this)->setEnabled(true);
@@ -1039,8 +1034,9 @@ Workbook* MainWin::activeWorkbook() const {
 }
 
 /*!
-	returns a pointer to a Spreadsheet-object, if the currently active Mdi-Subwindow is \a SpreadsheetView.
-	Otherwise returns \a 0.
+	returns a pointer to a \c Spreadsheet object, if the currently active Mdi-Subwindow
+	or if the currently selected tab in a \c WorkbookView is a \c SpreadsheetView
+	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const{
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
@@ -1049,10 +1045,43 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
-	return dynamic_cast<Spreadsheet*>(part);
+	Spreadsheet* spreadsheet = 0;
+	if (dynamic_cast<Workbook*>(part)) {
+		//check whether we have a spreadsheet or one of its columns currently selected in the workbook
+		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+		if (!spreadsheet) {
+			if (m_currentAspect->parentAspect())
+				spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
+		}
+	} else{
+		spreadsheet = dynamic_cast<Spreadsheet*>(part);
+	}
+
+	return spreadsheet;
 }
 
-//TODO: do we need a MainWin::activeMatrix() method?
+/*!
+	returns a pointer to a \c Matrix object, if the currently active Mdi-Subwindow
+	or if the currently selected tab in a \c WorkbookView is a \c MatrixView
+	Otherwise returns \c 0.
+*/
+Matrix* MainWin::activeMatrix() const{
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
+
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	Matrix* matrix = 0;
+	if (dynamic_cast<Workbook*>(part)) {
+		//check whether we have a matrix currently selected in the workbook
+		matrix = dynamic_cast<Matrix*>(m_currentAspect);
+	} else{
+		matrix = dynamic_cast<Matrix*>(part);
+	}
+
+	return matrix;
+}
 
 /*!
 	returns a pointer to a Worksheet-object, if the currently active Mdi-Subwindow is \a WorksheetView
@@ -1122,7 +1151,6 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	PartMdiView* win = part->mdiSubWindow();
 	if (win)
 		m_mdiArea->removeSubWindow(win);
-	updateGUI();
 }
 
 /*!
@@ -1145,7 +1173,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
 	activateSubWindowForAspect(aspect);
 	m_suppressCurrentSubWindowChangedEvent = false;
 
-	//TODO: updateGUI();
+	updateGUI();
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
@@ -1157,7 +1185,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		PartMdiView* win;
 
-		//for aspects being children of a Workbook,we show workbook's window, otherwise the window of the selected part
+		//for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
 		const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
 		if (workbook)
 			win = workbook->mdiSubWindow();
@@ -1393,7 +1421,6 @@ void MainWin::importFileDialog(){
 
 /*!
 	opens the dialog for the export of the currently active worksheet/spreadsheet.
-	TODO: handle matrix
  */
 void MainWin::exportDialog(){
 	//determine first, whether we want to export a worksheet or a spreadsheet
@@ -1413,11 +1440,13 @@ void MainWin::exportDialog(){
 			view->exportToFile(path, format, area, background, resolution);
 			RESET_CURSOR;
 		}
-	}else{//Spreadsheet
-		Spreadsheet* s = this->activeSpreadsheet();
-		if (!s)
-			return;
 
+		return;
+	}
+
+
+	Spreadsheet* s = this->activeSpreadsheet();
+	if (s) {
 		ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
 		dlg->setFileName(s->name());
 		if (dlg->exec()==QDialog::Accepted){
@@ -1430,6 +1459,13 @@ void MainWin::exportDialog(){
 			view->exportToFile(path, exportHeader, separator);
 			RESET_CURSOR;
 		}
+
+		return;
+	}
+
+	Matrix* m = this->activeMatrix();
+	if (m) {
+		//TODO provide export dialog for Matrix
 	}
 }
 
