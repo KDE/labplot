@@ -164,7 +164,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
-	filterChanged(ui.cbFilter->currentIndex());
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
@@ -282,6 +281,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
  			filter->setVectors( binaryOptionsWidget.niVectors->value() );
  			filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
  		}else{
+			//TODO: load filter settings
 // 			filter->setFilterName( ui.cbFilter->currentText() );
  		}
 
@@ -299,6 +299,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
  		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
 			filter->setAutoModeEnabled(false);
  		}else{
+			//TODO: load filter settings
 // 			filter->setFilterName( ui.cbFilter->currentText() );
 		}
 		filter->setImportFormat((ImageFilter::ImportFormat)imageOptionsWidget.cbImportFormat->currentIndex());
@@ -312,13 +313,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	}
 	case FileDataSource::HDF: {
 		HDFFilter* filter = new HDFFilter();
- 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
-			filter->setAutoModeEnabled(true);
- 		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
-			filter->setAutoModeEnabled(false);
-		} else {
-// 			filter->setFilterName( ui.cbFilter->currentText() );
-		}
+
 		filter->setCurrentDataSet(hdfOptionsWidget.leDataSet->text());
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
@@ -330,13 +325,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	}
 	case FileDataSource::NETCDF: {
 		NetCDFFilter* filter = new NetCDFFilter();
- 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
-			filter->setAutoModeEnabled(true);
- 		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
-			filter->setAutoModeEnabled(false);
-		} else {
-// 			filter->setFilterName( ui.cbFilter->currentText() );
-		}
+
 		filter->setCurrentVarName(netcdfOptionsWidget.leVarName->text());
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
@@ -511,6 +500,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.swOptions->setCurrentIndex(fileType);
 
 	//default
+	ui.lFilter->show();
+	ui.cbFilter->show();
 	ui.lStartColumn->show();
 	ui.sbStartColumn->show();
 	ui.lEndColumn->show();
@@ -532,6 +523,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	}
 	case FileDataSource::HDF:
 	case FileDataSource::NETCDF: {
+		ui.lFilter->hide();
+		ui.cbFilter->hide();
 		break;
 	}	
 	case FileDataSource::Image: {
@@ -549,8 +542,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.cbFilter->addItem( i18n("Custom") );
 
 	//TODO: populate the combobox with the available pre-defined filter settings for the selected type
-
 	ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
+	filterChanged(lastUsedFilterIndex);
 }
 
 /*!
@@ -605,6 +598,12 @@ void ImportFileWidget::fileInfoDialog() {
 	enables the options if the filter "custom" was chosen. Disables the options otherwise.
 */
 void ImportFileWidget::filterChanged(int index) {
+	// ignore filter for these formats
+	if (ui.cbFileType->currentIndex() == FileDataSource::HDF || ui.cbFileType->currentIndex() == FileDataSource::NETCDF ) {
+		ui.swOptions->setEnabled(true);
+		return;
+	}
+
 	if (index==0){// "automatic"
 		ui.swOptions->setEnabled(false);
 		ui.bSaveFilter->setEnabled(false);
