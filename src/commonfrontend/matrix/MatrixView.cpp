@@ -33,6 +33,7 @@
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/matrixcommands.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/matrix/MatrixFunctionDialog.h"
 
 #include <QTableView>
 #include <QHeaderView>
@@ -116,14 +117,14 @@ void MatrixView::initActions() {
 	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
 
 	// matrix related actions
-// 	action_set_formula = new QAction(KIcon(""), i18n("Assign &Formula"), this);
-// 	action_recalculate = new QAction(KIcon(""), i18n("Recalculate"), this);
-	action_clear_matrix = new QAction(KIcon("edit-clear"), i18n("Clear Matrix"), this);
-	action_go_to_cell = new QAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
+	action_fill_function = new KAction(KIcon(""), i18n("Function Values"), this);
+	action_fill_const = new KAction(KIcon(""), i18n("Const Values"), this);
+	action_clear_matrix = new KAction(KIcon("edit-clear"), i18n("Clear Matrix"), this);
+	action_go_to_cell = new KAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
 
-	action_transpose = new QAction(i18n("&Transpose"), this);
-	action_mirror_horizontally = new QAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
-	action_mirror_vertically = new QAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
+	action_transpose = new KAction(i18n("&Transpose"), this);
+	action_mirror_horizontally = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
+	action_mirror_vertically = new KAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
 // 	action_import_image = new QAction(i18nc("import image as matrix", "&Import image"), this);
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
 // 	action_edit_format = new QAction(i18n("Display &Format"), this);
@@ -166,9 +167,10 @@ void MatrixView::connectActions() {
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 
 	// matrix related actions
+	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
+	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
+
 	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
-// 	connect(action_set_formula, SIGNAL(triggered()), this, SLOT(editFormula()));
-// 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculate()));
 // 	connect(action_edit_format, SIGNAL(triggered()), this, SLOT(editFormat()));
 	//connect(action_import_image, SIGNAL(triggered()), this, SLOT(importImageDialog()));
 	//connect(action_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
@@ -212,6 +214,13 @@ void MatrixView::initMenus() {
 
 	//matrix menu
 	m_matrixMenu = new QMenu();
+
+	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	submenu->addAction(action_fill_const);
+	submenu->addAction(action_fill_function);
+	m_matrixMenu->addMenu(submenu);
+	m_matrixMenu->addSeparator();
+
 	m_matrixMenu->addAction(action_select_all);
 	m_matrixMenu->addAction(action_clear_matrix);
 	m_matrixMenu->addSeparator();
@@ -522,6 +531,29 @@ void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int
 			v_header->resizeSection(i, newSize);
 
 	inside = false;
+}
+
+void MatrixView::fillWithFunctionValues() {
+	MatrixFunctionDialog* dlg = new MatrixFunctionDialog(m_matrix);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->exec();
+}
+
+void MatrixView::fillWithConstValues() {
+	bool ok = false;
+	double value = QInputDialog::getDouble(this, i18n("Fill the matrix with constant value"),
+												i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
+	if (ok) {
+		WAIT_CURSOR;
+		QVector<QVector<double> >& matrixData = m_matrix->data();
+		for (int col=0; col<m_matrix->columnCount(); ++col) {
+			for (int row=0; row<m_matrix->rowCount(); row++) {
+				matrixData[col][row] = value;
+			}
+		}
+
+		RESET_CURSOR;
+	}
 }
 
 //############################ selection related slots #########################

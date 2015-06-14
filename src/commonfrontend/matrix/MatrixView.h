@@ -115,6 +115,9 @@ class MatrixView : public QWidget {
 		QAction* action_clear_rows;
 		QAction* action_add_rows;
 
+		QAction* action_fill_function;
+		QAction* action_fill_const;
+
 		//Menus
 		QMenu* m_selectionMenu;
 		QMenu* m_columnMenu;
@@ -127,6 +130,9 @@ class MatrixView : public QWidget {
 		void advanceCell();
 		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 		void handleVerticalSectionResized(int logicalIndex, int oldSize, int newSize);
+
+		void fillWithFunctionValues();
+		void fillWithConstValues();
 
 		void cutSelection();
 		void copySelection();

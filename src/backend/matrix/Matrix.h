@@ -56,6 +56,7 @@ class Matrix : public AbstractDataSource {
 		BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
 		BASIC_D_ACCESSOR_DECL(int, precision, Precision)
 		BASIC_D_ACCESSOR_DECL(HeaderFormat, headerFormat, HeaderFormat)
+		CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
 
 		QVector<QVector<double> >& data() const;
 
@@ -86,8 +87,6 @@ class Matrix : public AbstractDataSource {
 
 		QString text(int row, int col);
 		void copy(Matrix* other);
-		QString formula() const;
-		void setFormula(const QString&);
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);

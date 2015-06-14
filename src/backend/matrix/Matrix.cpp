@@ -129,6 +129,10 @@ BASIC_D_READER_IMPL(Matrix, char, numericFormat, numericFormat)
 BASIC_D_READER_IMPL(Matrix, int, precision, precision)
 BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
 
+QString Matrix ::formula () const{
+	return d->formula;
+}
+
 QVector<QVector<double> >& Matrix::data() const {
 	return d->matrixData;
 }
@@ -346,10 +350,7 @@ void Matrix::setCoordinates(double x1, double x2, double y1, double y2) {
 	RESET_CURSOR;
 }
 
-QString Matrix::formula() const {
-	return d->formula;
-}
-
+//TODO:
 void Matrix::setFormula(const QString& formula) {
 	WAIT_CURSOR;
 	exec(new MatrixSetFormulaCmd(d, formula));
