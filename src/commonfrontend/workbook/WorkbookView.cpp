@@ -185,6 +185,7 @@ void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {
 	m_tabWidget->insertTab(index, part->view(), aspect->name());
 	m_tabWidget->setCurrentIndex(index);
 	m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());
+	this->tabChanged(index);
 }
 
 void WorkbookView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
