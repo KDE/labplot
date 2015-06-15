@@ -47,7 +47,7 @@ class NetCDFFilterPrivate {
 
 		const NetCDFFilter* q;
 
-		QStringList currentVarNames;
+		QString currentVarName;
 		int startRow;
 		int endRow;
 		int startColumn;

@@ -215,7 +215,42 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		filter->read(fileName, spreadsheet, mode);
 	}
 	else if (aspect->inherits("Workbook")) {
-		const Workbook* workbook = qobject_cast<const Workbook*>(aspect);
+		Workbook* workbook = qobject_cast<Workbook*>(aspect);
+
+		//TODO: handle multiple data sets/variables
+		switch(importFileWidget->currentFileType()) {
+		case FileDataSource::HDF: {
+			QStringList names = importFileWidget->selectedHDFNames();
+			qDebug()<<"	Importing HDF data sets "<<names;
+			//TODO: see NetCDF
+
+			break;
+		}
+		case FileDataSource::NETCDF: {
+			QStringList names = importFileWidget->selectedNetCDFNames();
+			qDebug()<<"	Importing NetCDF variables "<<names;
+			int nrNames = names.size();
+			//TODO: resize workbook to handle all variables: use mode
+			switch(mode) {
+			case AbstractFileFilter::Replace: {
+				QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
+				qDebug()<<"	workbook nr sheets ="<<sheets.size();
+				break;
+			}
+			case AbstractFileFilter::Append:
+				break;
+			case AbstractFileFilter::Prepend:
+				break;
+			default:
+				qDebug()<<"	unknown AbstractFileFilter mode";
+			}
+
+			break;
+		}
+		default: {
+			break;
+		}
+		}
 
 		// use active spreadsheet/matrix if present, else new spreadsheet
 		Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
@@ -225,8 +260,9 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		else if (matrix != NULL)
 			filter->read(fileName, matrix, mode);
 		else {
-			qDebug()<<"Import to empty workbook not implemented yet";
-			// TODO: add new spreadsheet or let filter do it
+			spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+			workbook->addChild(spreadsheet);
+			filter->read(fileName, spreadsheet, mode);
 		}
 	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );

@@ -104,12 +104,12 @@ void NetCDFFilter::saveFilterSettings(const QString& filterName) const{
 
 ///////////////////////////////////////////////////////////////////////
 
-void NetCDFFilter::setCurrentVarNames(QStringList ds){
-	d->currentVarNames = ds;
+void NetCDFFilter::setCurrentVarName(QString ds){
+	d->currentVarName = ds;
 }
 
-QStringList NetCDFFilter::currentVarNames() const{
-	return d->currentVarNames;
+const QString NetCDFFilter::currentVarName() const{
+	return d->currentVarName;
 }
 
 void NetCDFFilter::setStartRow(const int s) {
@@ -511,10 +511,10 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
 	QStringList dataString;
 
-	if(currentVarNames.isEmpty())
-		return QString("No variables selected");
+	if(currentVarName.isEmpty())
+		return QString("No variable selected");
 #ifdef QT_DEBUG
-	qDebug()<<" current variables ="<<currentVarName;
+	qDebug()<<" current variable ="<<currentVarName;
 #endif
 
 #ifdef HAVE_NETCDF
@@ -524,8 +524,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 	handleError(status,"nc_open");
 
 	int varid;
-	//TODO: loop over all variables
-	QByteArray baVarName = currentVarNames[0].toLatin1();
+	QByteArray baVarName = currentVarName.toLatin1();
 	status = nc_inq_varid(ncid,baVarName.data(),&varid);
 	handleError(status,"nc_inq_varid");
 
@@ -662,18 +661,18 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 }
 
 /*!
-    reads the content of the file \c fileName to the data source \c dataSource.
+    reads the content of the current selected variable from file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
 void NetCDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-	if(currentVarNames.isEmpty()) {
-		qDebug()<<" No variables selected";
+	if(currentVarName.isEmpty()) {
+		qDebug()<<" No variable selected";
 		return;
 	}
 
 #ifdef QT_DEBUG
 	else
-		qDebug()<<" current variables ="<<currentVarNames;
+		qDebug()<<" current variable ="<<currentVarName;
 #endif
 
 	readCurrentVar(fileName,dataSource,mode);

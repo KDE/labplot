@@ -29,7 +29,6 @@ Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 
 #include "ImportFileWidget.h"
 #include "FileInfoDialog.h"
-#include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/HDFFilter.h"
@@ -100,14 +99,14 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	QStringList headers;
 	headers<<i18n("Name")<<i18n("Type")<<i18n("Properties")<<i18n("Values");
 	netcdfOptionsWidget.twContent->setHeaderLabels(headers);
-	// type is hidden
+	// type column is hidden
 	netcdfOptionsWidget.twContent->hideColumn(1);
 	netcdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
 	// default filter
 	ui.swOptions->setCurrentIndex(FileDataSource::Ascii);
-	// disable items
+	// disable items (undocumented feature)
 #ifndef HAVE_HDF5
 	ui.cbFileType->setItemData(FileDataSource::HDF, 0, Qt::UserRole - 1);
 #endif
@@ -241,9 +240,17 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 }
 
 /*!
+	returns the currently used file type.
+*/
+FileDataSource::FileType ImportFileWidget::currentFileType() const{
+	return (FileDataSource::FileType)ui.cbFileType->currentIndex();
+}
+
+/*!
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
+	//FileDataSource::FileType fileType = this->currentFileType();
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	//qDebug()<<"	current filter ="<<ui.cbFilter->currentIndex();
@@ -320,6 +327,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	case FileDataSource::HDF: {
 		HDFFilter* filter = new HDFFilter();
 
+		//TODO: see NetCDF
 		filter->setCurrentDataSetNames(selectedHDFNames());
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
@@ -332,7 +340,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	case FileDataSource::NETCDF: {
 		NetCDFFilter* filter = new NetCDFFilter();
 
-		filter->setCurrentVarNames(selectedNetCDFNames());
+		if(!selectedNetCDFNames().isEmpty())
+			filter->setCurrentVarName(selectedNetCDFNames()[0]);
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );
@@ -380,9 +389,7 @@ void ImportFileWidget::selectFile() {
 // 		ui.kleFileName->setText(filelist.join(";"));
 }
 
-
-
-//SLOTS
+/************** SLOTS **************************************************************/
 
 /*!
 	called on file name changes.
@@ -576,7 +583,6 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 	for(int i=0;i<items.size();i++)
 		names<<items[i]->data(1,Qt::DisplayRole).toString();
 
-	qDebug()<<"	HDF names:"<<names;
 	return names;
 }
 
@@ -612,7 +618,6 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	for(int i=0;i<items.size();i++)
 		names<<items[i]->data(0,Qt::DisplayRole).toString();
 
-	qDebug()<<"	NetCDF names:"<<names;
 	return names;
 }
 
