@@ -39,6 +39,7 @@
 #include "backend/datasources/FileDataSource.h"
 
 #include "commonfrontend/ProjectExplorer.h"
+#include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 
@@ -412,6 +413,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	if (!m_mdiArea->currentSubWindow()) {
 		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
@@ -448,6 +450,7 @@ void MainWin::updateGUI() {
 	if (!m_mdiArea->currentSubWindow()) {
 		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
@@ -461,17 +464,18 @@ void MainWin::updateGUI() {
 	//TODO: is this the usual behaviour for toolbars defined in the rc-file?
 	KConfigGroup group = KGlobal::config()->group("MainWindow");
 
+
+	//Handle the Worksheet-object
 	Worksheet* w = this->activeWorksheet();
 	if (w!=0){
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
 // 		factory->container("drawing", this)->setEnabled(true);
 
-		//disable spreadsheet related menus
+		//disable spreadsheet and matrix related menus
 		factory->container("spreadsheet", this)->setEnabled(false);
 // 		factory->container("analysis", this)->setEnabled(false);
-
-//TODO:		//disable matrix related menus
+		factory->container("matrix", this)->setEnabled(false);
 
 		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
@@ -500,39 +504,52 @@ void MainWin::updateGUI() {
 		//hide the spreadsheet toolbar
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	}else{
-		//no worksheet selected -> deactivate worksheet related menus and the toolbar
 		factory->container("worksheet", this)->setEnabled(false);
-//  		factory->container("drawing", this)->setEnabled(false);
+//  	factory->container("drawing", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->setVisible(false);
 		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
 
-		//Handle the Spreadsheet-object
-		const  Spreadsheet* spreadsheet = this->activeSpreadsheet();
-		if (spreadsheet){
-			//enable spreadsheet related menus
-// 			factory->container("analysis", this)->setEnabled(true);
-			factory->container("spreadsheet", this)->setEnabled(true);
+	}
 
-			//populate spreadsheet-menu
-			SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
-			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
-			menu->clear();
-			view->createContextMenu(menu);
+	//Handle the Spreadsheet-object
+	const  Spreadsheet* spreadsheet = this->activeSpreadsheet();
+	if (spreadsheet){
+		//enable spreadsheet related menus
+		factory->container("spreadsheet", this)->setEnabled(true);
+// 		factory->container("analysis", this)->setEnabled(true);
 
-			//populate spreadsheet-toolbar
-			QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
-			if (group.groupList().indexOf("Toolbar spreadsheet_toolbar")==-1)
-				toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+		//populate spreadsheet-menu
+		SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
+		menu->clear();
+		view->createContextMenu(menu);
 
-			toolbar->setVisible(true);
-			toolbar->clear();
-			view->fillToolBar(toolbar);
-		}else{
-			//no spreadsheet selected -> deactivate spreadsheet related menus
-// 			factory->container("analysis", this)->setEnabled(false);
-			factory->container("spreadsheet", this)->setEnabled(false);
-			factory->container("spreadsheet_toolbar", this)->setVisible(false);
-		}
+		//populate spreadsheet-toolbar
+		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
+		if (group.groupList().indexOf("Toolbar spreadsheet_toolbar")==-1)
+			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
+		toolbar->setVisible(true);
+		toolbar->clear();
+		view->fillToolBar(toolbar);
+	}else{
+		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+// 		factory->container("analysis", this)->setEnabled(false);
+	}
+
+	//Handle the Matrix-object
+	const  Matrix* matrix = this->activeMatrix();
+	if (matrix){
+		factory->container("matrix", this)->setEnabled(true);
+
+		//populate spreadsheet-menu
+		MatrixView* view=qobject_cast<MatrixView*>(matrix->view());
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("matrix", this));
+		menu->clear();
+		view->createContextMenu(menu);
+	}else{
+		factory->container("matrix", this)->setEnabled(false);
 	}
 }
 

@@ -261,9 +261,12 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-// 	menu->insertAction(firstAction, action_set_formula);
-// 	menu->insertAction(firstAction, action_recalculate);
-// 	menu->insertSeparator(firstAction);
+	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	submenu->addAction(action_fill_const);
+	submenu->addAction(action_fill_function);
+	menu->insertMenu(firstAction, submenu);
+	menu->insertSeparator(firstAction);
+
 	menu->insertAction(firstAction, action_select_all);
 	menu->insertAction(firstAction, action_clear_matrix);
 	menu->insertSeparator(firstAction);
