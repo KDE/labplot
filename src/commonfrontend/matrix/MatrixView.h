@@ -65,11 +65,11 @@ class MatrixView : public QWidget {
 		void getCurrentCell(int* row, int* col);
 
 		void adjustHeaders();
-
 		void exportToFile(const QString& path, const QString& separator) const;
 
 	public slots:
 		void createContextMenu(QMenu*) const;
+		void print(QPrinter*) const;
 
 	private:
 		void init();

@@ -859,55 +859,87 @@ void MainWin::autoSaveProject() {
 }
 
 /*!
-	prints the current sheet (worksheet or spreadsheet)
+	prints the current sheet (worksheet, spreadsheet or matrix)
 */
 void MainWin::print(){
-	QPrinter printer;
-
-	//determine first, whether we want to export a worksheet or a spreadsheet
-	// TODO: also handle matrix
-	Worksheet* w=this->activeWorksheet();
+	//Worksheet
+	Worksheet* w = this->activeWorksheet();
 	if (w!=0){ //worksheet
+		QPrinter printer;
 		QPrintDialog *dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(i18n("Print worksheet"));
+		dialog->setWindowTitle(i18n("Print Worksheet"));
 		if (dialog->exec() != QDialog::Accepted)
 			return;
 
 		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
 		view->print(&printer);
 		statusBar()->showMessage(i18n("Worksheet printed"));
-	}else{
-		//Spreadsheet
-		Spreadsheet* s=this->activeSpreadsheet();
-		QPrintDialog *dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(i18n("Print spreadsheet"));
+
+		return;
+	}
+
+	//Spreadsheet
+	Spreadsheet* s = this->activeSpreadsheet();
+	if (s) {
+		QPrinter printer;
+		QPrintDialog* dialog = new QPrintDialog(&printer, this);
+		dialog->setWindowTitle(i18n("Print Spreadsheet"));
 		if (dialog->exec() != QDialog::Accepted)
 			return;
 
 		SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
 		view->print(&printer);
-
 		statusBar()->showMessage(i18n("Spreadsheet printed"));
+
+		return;
+	}
+
+	//Matrix
+	Matrix* m = this->activeMatrix();
+	if (m) {
+		QPrinter printer;
+		QPrintDialog* dialog = new QPrintDialog(&printer, this);
+		dialog->setWindowTitle(i18n("Print Matrix"));
+		if (dialog->exec() != QDialog::Accepted)
+			return;
+
+		MatrixView* view = qobject_cast<MatrixView*>(m->view());
+		view->print(&printer);
+		statusBar()->showMessage(i18n("Spreadsheet printed"));
+
+		return;
 	}
 }
 
 void MainWin::printPreview(){
-	//TODO: also handle matrix
-	Worksheet* w=this->activeWorksheet();
+	//Worksheet
+	Worksheet* w = this->activeWorksheet();
 	if (w!=0){ //worksheet
 		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
-		QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
+		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
 		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
 		dialog->exec();
-	}else{
-		//Spreadsheet
-		Spreadsheet* s=this->activeSpreadsheet();
-		if (s!=0){
-			SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
-			QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
-			connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-			dialog->exec();
-		}
+		return;
+	}
+
+	//Spreadsheet
+	Spreadsheet* s = this->activeSpreadsheet();
+	if (s!=0){
+		SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
+		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
+		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+		dialog->exec();
+		return;
+	}
+
+	//Matrix
+	Matrix* m = this->activeMatrix();
+	if (m!=0){
+		MatrixView* view = qobject_cast<MatrixView*>(m->view());
+		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
+		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+		dialog->exec();
+		return;
 	}
 }
 
