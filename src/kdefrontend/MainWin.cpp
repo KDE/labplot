@@ -1095,12 +1095,18 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = 0;
-	if (dynamic_cast<Workbook*>(part)) {
-		//check whether we have a spreadsheet or one of its columns currently selected in the workbook
-		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+	Workbook* workbook = dynamic_cast<Workbook*>(part);
+	if (workbook) {
+		spreadsheet = workbook->currentSpreadsheet();
 		if (!spreadsheet) {
-			if (m_currentAspect->parentAspect())
-				spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
+			//potentially, the spreadsheet was not selected in workbook yet since the selection in project explorer
+			//arrives in workbook's slot later than in this function
+			//->check whether we have a spreadsheet or one of its columns currently selected in the project explorer
+			spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+			if (!spreadsheet) {
+				if (m_currentAspect->parentAspect())
+					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
+			}
 		}
 	} else{
 		spreadsheet = dynamic_cast<Spreadsheet*>(part);
@@ -1122,9 +1128,15 @@ Matrix* MainWin::activeMatrix() const{
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
 	Matrix* matrix = 0;
-	if (dynamic_cast<Workbook*>(part)) {
-		//check whether we have a matrix currently selected in the workbook
-		matrix = dynamic_cast<Matrix*>(m_currentAspect);
+	Workbook* workbook = dynamic_cast<Workbook*>(part);
+	if (workbook) {
+		matrix = workbook->currentMatrix();
+		if (!matrix) {
+			//potentially, the matrix was not selected in workbook yet since the selection in project explorer
+			//arrives in workbook's slot later than in this function
+			//->check whether we have a matrix currently selected in the project explorer
+			matrix = dynamic_cast<Matrix*>(m_currentAspect);
+		}
 	} else{
 		matrix = dynamic_cast<Matrix*>(part);
 	}
