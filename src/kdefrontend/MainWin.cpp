@@ -1248,9 +1248,19 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		m_mdiArea->setActiveSubWindow(win);
 	} else {
 		//activate the mdiView of the parent, if a child was selected
-		AbstractAspect* parent = aspect->parentAspect();
-		if (parent)
+		const AbstractAspect* parent = aspect->parentAspect();
+		if (parent) {
 			activateSubWindowForAspect(parent);
+
+			//if the parent's parent is a Workbook (a column of a spreadsheet in workbook was selected),
+			//we need to select the corresponding tab in WorkbookView too
+			if (parent->parentAspect()) {
+				Workbook* workbook = dynamic_cast<Workbook*>(parent->parentAspect());
+				if (workbook) {
+					workbook->childSelected(parent);
+				}
+			}
+		}
 	}
 	return;
 }

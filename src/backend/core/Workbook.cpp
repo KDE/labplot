@@ -44,12 +44,6 @@
  */
 Workbook::Workbook(AbstractScriptingEngine* engine, const QString& name)
 		: AbstractPart(name), scripted(engine){
-
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-		this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-		this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
-
 }
 
 QIcon Workbook::icon() const {
@@ -97,22 +91,10 @@ Matrix* Workbook::currentMatrix() const {
 	return 0;
 }
 
-void Workbook::handleAspectAdded(const AbstractAspect* aspect) {
-	Q_UNUSED(aspect);
-}
-
-
-void Workbook::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child){
-	Q_UNUSED(parent);
-	Q_UNUSED(before);
-	Q_UNUSED(child);
-
-}
-
 /*!
-	this slot is called when a worksheet element is selected in the project explorer.
-	emits \c itemSelected() which forwards this event to the \c WorkbookView
-	in order to select the corresponding \c QGraphicsItem.
+	this slot is called when a workbook child is selected in the project explorer.
+	emits \c workbookItemSelected() to forward this event to the \c WorkbookView
+	in order to select the corresponding tab.
  */
 void Workbook::childSelected(const AbstractAspect* aspect){
 	int index = indexOfChild<AbstractAspect>(aspect);
@@ -121,11 +103,10 @@ void Workbook::childSelected(const AbstractAspect* aspect){
 
 /*!
 	this slot is called when a worksheet element is deselected in the project explorer.
-	emits \c itemDeselected() which forwards this event to \c WorkbookView
-	in order to deselect the corresponding \c QGraphicsItem.
  */
 void Workbook::childDeselected(const AbstractAspect* aspect){
 	Q_UNUSED(aspect);
+	//TODO: do we need this slot?
 }
 
 /*!
