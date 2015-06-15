@@ -155,7 +155,7 @@ bool NetCDFFilter::isAutoModeEnabled() const{
 //################### Private implementation ##########################
 //#####################################################################
 
-NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : 
+NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) :
 	q(owner),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
 }
 
@@ -378,7 +378,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 #ifdef QT_DEBUG
 		qDebug()<<"	dim"<<i+1<<": name/len="<<name<<len;
 #endif
-		
+
 		QStringList props;
 		props<<"length = "<<QString::number(len);
 		QString value;
@@ -442,7 +442,7 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	int ncid;
 	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
 	handleError(status,"nc_open");
-	
+
 	int ndims, nvars, nattr, uldid;
 	status = nc_inq(ncid, &ndims, &nvars, &nattr, &uldid);
 	handleError(status,"nc_inq");
@@ -514,7 +514,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 	if(currentVarNames.isEmpty())
 		return QString("No variables selected");
 #ifdef QT_DEBUG
-	qDebug()<<" current variables ="<<currentVarName;
+// 	qDebug()<<" current variables ="<<currentVarName;
 #endif
 
 #ifdef HAVE_NETCDF

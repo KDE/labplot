@@ -807,3 +807,28 @@ void MatrixView::clearSelectedRows() {
 // 	m_matrix->endMacro();
 // 	RESET_CURSOR;
 }
+
+void MatrixView::exportToFile(const QString& path, const QString& separator) const {
+	QFile file(path);
+	if (!file.open(QFile::WriteOnly | QFile::Truncate))
+		return;
+
+	QTextStream out(&file);
+
+	QString sep = separator;
+	sep = sep.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
+	sep = sep.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+
+	//export values
+	const int cols = m_matrix->columnCount();
+	const int rows = m_matrix->rowCount();
+	QVector<QVector<double> >& matrixData = m_matrix->data();
+	for (int row=0; row<rows; ++row) {
+		for (int col=0; col<cols; ++col) {
+			out << matrixData[col][row];
+			if (col!=cols-1)
+				out<<sep;
+		}
+		out << '\n';
+	}
+}

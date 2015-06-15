@@ -66,6 +66,8 @@ class MatrixView : public QWidget {
 
 		void adjustHeaders();
 
+		void exportToFile(const QString& path, const QString& separator) const;
+
 	public slots:
 		void createContextMenu(QMenu*) const;
 

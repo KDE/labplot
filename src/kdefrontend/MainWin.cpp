@@ -1437,10 +1437,9 @@ void MainWin::importFileDialog(){
 }
 
 /*!
-	opens the dialog for the export of the currently active worksheet/spreadsheet.
+	opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
 void MainWin::exportDialog(){
-	//determine first, whether we want to export a worksheet or a spreadsheet
 	Worksheet* w=this->activeWorksheet();
 	if (w!=0){ //worksheet
 		ExportWorksheetDialog* dlg = new ExportWorksheetDialog(this);
@@ -1482,7 +1481,20 @@ void MainWin::exportDialog(){
 
 	Matrix* m = this->activeMatrix();
 	if (m) {
-		//TODO provide export dialog for Matrix
+		ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
+		dlg->setFileName(m->name());
+		dlg->setMatrixMode(true);
+		if (dlg->exec()==QDialog::Accepted){
+			QString path = dlg->path();
+			QString separator = dlg->separator();
+
+			MatrixView* view = qobject_cast<MatrixView*>(m->view());
+			WAIT_CURSOR;
+			view->exportToFile(path, separator);
+			RESET_CURSOR;
+		}
+
+		return;
 	}
 }
 
