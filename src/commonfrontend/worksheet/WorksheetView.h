@@ -101,7 +101,6 @@ class WorksheetView : public QGraphicsView {
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
-	QMenu* m_addNew3DPlotMenu;
 	QMenu* m_zoomMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;

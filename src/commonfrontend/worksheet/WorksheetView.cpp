@@ -325,12 +325,10 @@ void WorksheetView::initMenus(){
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
 
-	m_addNew3DPlotMenu = new QMenu(i18n("3D-plot"));
-	m_addNew3DPlotMenu->addAction(add3DPlotAction);
 
 	m_addNewMenu = new QMenu(i18n("Add new"));
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(KIcon("office-chart-line"));
-	m_addNewMenu->addMenu(m_addNew3DPlotMenu)->setIcon(KIcon("office-chart-line"));
+	m_addNewMenu->addAction(add3DPlotAction);
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 
