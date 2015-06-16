@@ -34,8 +34,11 @@
 
 class Matrix;
 class MatrixModel;
+
 class QAction;
+class QLabel;
 class QMenu;
+class QStackedWidget;
 class QTableView;
 
 class MatrixView : public QWidget {
@@ -77,13 +80,18 @@ class MatrixView : public QWidget {
 		void initMenus();
 		void connectActions();
 		void goToCell(int row, int col);
+		void updateImage();
 
 		bool eventFilter(QObject*, QEvent*);
 		virtual void keyPressEvent(QKeyEvent*);
 
+		QStackedWidget* m_stackedWidget;
 		QTableView* m_tableView;
+		QLabel* m_imageLabel;
 		Matrix* m_matrix;
 		MatrixModel* m_model;
+		QImage m_image;
+		bool m_imageIsDirty;
 
 		//Actions
 		QAction* action_cut_selection;
@@ -117,6 +125,8 @@ class MatrixView : public QWidget {
 		QAction* action_clear_rows;
 		QAction* action_add_rows;
 
+		QAction* action_data_view;
+		QAction* action_image_view;
 		QAction* action_fill_function;
 		QAction* action_fill_const;
 
@@ -132,6 +142,9 @@ class MatrixView : public QWidget {
 		void advanceCell();
 		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 		void handleVerticalSectionResized(int logicalIndex, int oldSize, int newSize);
+
+		void switchView(QAction*);
+		void matrixDataChanged();
 
 		void fillWithFunctionValues();
 		void fillWithConstValues();

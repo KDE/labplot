@@ -35,6 +35,7 @@
 #include "backend/lib/macros.h"
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 
+#include <QStackedWidget>
 #include <QTableView>
 #include <QHeaderView>
 #include <QHBoxLayout>
@@ -43,22 +44,25 @@
 #include <QMenu>
 #include <QPainter>
 #include <QPrinter>
+#include <QScrollArea>
 #include <QInputDialog>
-#include <QDebug>
-
 #include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
 #include <QInputDialog>
+#include <QDebug>
 
 #include <KLocale>
 #include <KAction>
 #include <KIcon>
 
 MatrixView::MatrixView(Matrix* matrix) : QWidget(),
+	m_stackedWidget(new QStackedWidget(this)),
 	m_tableView(new QTableView(this)),
+	m_imageLabel(new QLabel(this)),
 	m_matrix(matrix),
-	m_model(new MatrixModel(matrix)) {
+	m_model(new MatrixModel(matrix)),
+	m_imageIsDirty(true) {
 
 	init();
 }
@@ -78,13 +82,16 @@ void MatrixView::init() {
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
-	layout->addWidget(m_tableView);
 	setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
 	installEventFilter(this);
 
+	layout->addWidget(m_stackedWidget);
+
+	//table data view
 	m_tableView->setModel(m_model);
+	m_stackedWidget->addWidget(m_tableView);
 
 	//horizontal header
 	QHeaderView* h_header = m_tableView->horizontalHeader();
@@ -102,11 +109,20 @@ void MatrixView::init() {
 
 	adjustHeaders();
 
-	// keyboard shortcuts
-	QShortcut * sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
+	//image view
+	QScrollArea* area = new QScrollArea(this);
+	m_stackedWidget->addWidget(area);
+	area->setWidget(m_imageLabel);
+
+
+	//SLOTs
+	connect(m_matrix, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+	connect(m_model, SIGNAL(changed()), this, SLOT(matrixDataChanged()));
+
+	//keyboard shortcuts
+	QShortcut* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
 	connect(sel_all, SIGNAL(activated()), m_tableView, SLOT(selectAll()));
 
-	connect(m_matrix, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 }
 
 void MatrixView::initActions() {
@@ -118,6 +134,15 @@ void MatrixView::initActions() {
 	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
 
 	// matrix related actions
+	QActionGroup* viewActionGroup = new QActionGroup(this);
+	viewActionGroup->setExclusive(true);
+	action_data_view = new KAction(KIcon(""), i18n("Data"), viewActionGroup);
+	action_data_view->setCheckable(true);
+	action_data_view->setChecked(true);
+	action_image_view = new KAction(KIcon("image-x-generic"), i18n("Image"), viewActionGroup);
+	action_image_view->setCheckable(true);
+	connect(viewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchView(QAction*)));
+
 	action_fill_function = new KAction(KIcon(""), i18n("Function Values"), this);
 	action_fill_const = new KAction(KIcon(""), i18n("Const Values"), this);
 	action_clear_matrix = new KAction(KIcon("edit-clear"), i18n("Clear Matrix"), this);
@@ -168,6 +193,8 @@ void MatrixView::connectActions() {
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 
 	// matrix related actions
+	connect(action_data_view, SIGNAL(triggered()), this, SLOT(switchView()));
+	connect(action_image_view, SIGNAL(triggered()), this, SLOT(switchView()));
 	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
 	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
 
@@ -222,12 +249,15 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addMenu(submenu);
 	m_matrixMenu->addSeparator();
 
+	submenu = new QMenu(i18n("View"));
+	submenu->addAction(action_data_view);
+	submenu->addAction(action_image_view);
+	m_matrixMenu->addMenu(submenu);
+	m_matrixMenu->addSeparator();
+
 	m_matrixMenu->addAction(action_select_all);
 	m_matrixMenu->addAction(action_clear_matrix);
 	m_matrixMenu->addSeparator();
-// 	m_matrixMenu->addAction(action_set_formula);
-// 	m_matrixMenu->addAction(action_recalculate);
-// 	m_matrixMenu->addSeparator();
 // 	m_matrixMenu->addAction(action_edit_format);
 
 	m_matrixMenu->addAction(action_transpose);
@@ -265,6 +295,12 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	QMenu* submenu = new QMenu(i18n("Generate Data"));
 	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_function);
+	menu->insertMenu(firstAction, submenu);
+	menu->insertSeparator(firstAction);
+
+	submenu = new QMenu(i18n("View"));
+	submenu->addAction(action_data_view);
+	submenu->addAction(action_image_view);
 	menu->insertMenu(firstAction, submenu);
 	menu->insertSeparator(firstAction);
 
@@ -685,7 +721,40 @@ void MatrixView::clearSelectedCells() {
 // 	RESET_CURSOR;
 }
 
+void MatrixView::updateImage() {
+	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
+
+	//TODO: use faster QImage::scanLine()-method here
+	const QVector<QVector<double> >& matrixData = m_matrix->data();
+	for (int col=0; col<m_matrix->columnCount(); ++col) {
+		for (int row=0; row<m_matrix->rowCount(); ++row) {
+			int gray = matrixData[col][row];
+			m_image.setPixel(col, row, QColor(gray, gray, gray).rgb());
+		}
+	}
+
+	m_imageLabel->resize(m_matrix->columnCount(), m_matrix->rowCount());
+	m_imageLabel->setPixmap(QPixmap::fromImage(m_image));
+	m_imageIsDirty = false;
+}
+
 //############################# matrix related slots ###########################
+void MatrixView::switchView(QAction* action) {
+	if (action == action_data_view) {
+		m_stackedWidget->setCurrentIndex(0);
+	} else {
+		if (m_imageIsDirty)
+			this->updateImage();
+
+		m_stackedWidget->setCurrentIndex(1);
+	}
+}
+
+void MatrixView::matrixDataChanged() {
+	m_imageIsDirty = true;
+	if (m_stackedWidget->currentIndex() == 1)
+		this->updateImage();
+}
 
 void MatrixView::headerFormatChanged(QAction* action) {
 	if (action == action_header_format_1)
