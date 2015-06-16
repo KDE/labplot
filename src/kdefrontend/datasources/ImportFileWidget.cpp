@@ -327,8 +327,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	case FileDataSource::HDF: {
 		HDFFilter* filter = new HDFFilter();
 
-		//TODO: see NetCDF
-		filter->setCurrentDataSetNames(selectedHDFNames());
+		if(!selectedHDFNames().isEmpty())
+			filter->setCurrentDataSetName(selectedHDFNames()[0]);
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );

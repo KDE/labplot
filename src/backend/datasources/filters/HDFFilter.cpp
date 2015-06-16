@@ -97,12 +97,12 @@ void HDFFilter::saveFilterSettings(const QString& filterName) const{
 
 ///////////////////////////////////////////////////////////////////////
 
-void HDFFilter::setCurrentDataSetNames(QStringList ds){
-	d->currentDataSetNames = ds;
+void HDFFilter::setCurrentDataSetName(QString ds){
+	d->currentDataSetName = ds;
 }
 
-const QStringList HDFFilter::currentDataSetNames() const{
-	return d->currentDataSetNames;
+const QString HDFFilter::currentDataSetName() const{
+	return d->currentDataSetName;
 }
 
 void HDFFilter::setStartRow(const int s) {
@@ -149,7 +149,7 @@ bool HDFFilter::isAutoModeEnabled() const{
 //#####################################################################
 
 HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) : 
-	q(owner),currentDataSetNames(""),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
+	q(owner),currentDataSetName(""),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
 }
 
 #ifdef HAVE_HDF5
@@ -974,20 +974,19 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
 	QStringList dataString;
 
-	if(currentDataSetNames.isEmpty())
-		return QString("No data sets selected");
+	if(currentDataSetName.isEmpty())
+		return QString("No data set selected");
 #ifdef QT_DEBUG
-	qDebug()<<" current data sets ="<<currentDataSetNames;
+	qDebug()<<" current data set ="<<currentDataSetName;
 #endif
 
 #ifdef HAVE_HDF5
 	QByteArray bafileName = fileName.toLatin1();
 	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file,"H5Fopen",fileName);
-	//TODO: import all data sets
-	QByteArray badataSet = currentDataSetNames[0].toLatin1();
+	QByteArray badataSet = currentDataSetName.toLatin1();
 	hid_t dataset = H5Dopen2(file, badataSet.data(), H5P_DEFAULT);
-	handleError((int)file,"H5Dopen2",currentDataSetNames[0]);
+	handleError((int)file,"H5Dopen2",currentDataSetName);
 
 	// Get datatype and dataspace
 	hid_t dtype = H5Dget_type(dataset);
@@ -1278,13 +1277,13 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 */
 void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
 	
-	if(currentDataSetNames.isEmpty()) {
-		qDebug()<<" No data sets selected";
+	if(currentDataSetName.isEmpty()) {
+		qDebug()<<" No data set selected";
 		return;
 	}
 #ifdef QT_DEBUG
 	else
-		qDebug()<<" current data sets ="<<currentDataSetNames;
+		qDebug()<<" current data set ="<<currentDataSetName;
 #endif
 
 	readCurrentDataSet(fileName,dataSource,mode);

@@ -31,6 +31,8 @@
 #include "ImportFileWidget.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/HDFFilter.h"
+#include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/core/Workbook.h"
@@ -216,54 +218,63 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	}
 	else if (aspect->inherits("Workbook")) {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
+		QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();				
 
-		//TODO: handle multiple data sets/variables
-		switch(importFileWidget->currentFileType()) {
-		case FileDataSource::HDF: {
-			QStringList names = importFileWidget->selectedHDFNames();
-			qDebug()<<"	Importing HDF data sets "<<names;
-			//TODO: see NetCDF
+		QStringList names;
+		FileDataSource::FileType fileType = importFileWidget->currentFileType();
+		if(fileType == FileDataSource::HDF)
+			names = importFileWidget->selectedHDFNames();
+		else if (fileType == FileDataSource::NETCDF)
+			names = importFileWidget->selectedNetCDFNames();
 
-			break;
-		}
-		case FileDataSource::NETCDF: {
-			QStringList names = importFileWidget->selectedNetCDFNames();
-			qDebug()<<"	Importing NetCDF variables "<<names;
-			int nrNames = names.size();
-			//TODO: resize workbook to handle all variables: use mode
-			switch(mode) {
-			case AbstractFileFilter::Replace: {
-				QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
-				qDebug()<<"	workbook nr sheets ="<<sheets.size();
-				break;
-			}
-			case AbstractFileFilter::Append:
-				break;
-			case AbstractFileFilter::Prepend:
-				break;
-			default:
-				qDebug()<<"	unknown AbstractFileFilter mode";
+		// multiple data sets/variables for HDF/NetCDF
+		if( fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF) {
+			int nrNames = names.size(), offset = sheets.size();
+
+			int start=0;
+			if(mode == AbstractFileFilter::Replace)
+				start=offset;
+
+			// add additional sheets
+			for(int i=start;i<nrNames;i++) {
+				Spreadsheet *spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+				if(mode == AbstractFileFilter::Prepend)
+					workbook->insertChildBefore(spreadsheet,sheets[0]);
+				else
+					workbook->addChild(spreadsheet);
 			}
 
-			break;
-		}
-		default: {
-			break;
-		}
+			if(mode != AbstractFileFilter::Append)
+				offset=0;
+
+			// import to sheets
+			sheets = workbook->children<AbstractAspect>();				
+			for(int i=0;i<nrNames;i++) {
+				if( fileType == FileDataSource::HDF)
+					((HDFFilter*) filter)->setCurrentDataSetName(names[i]);
+				else
+					((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
+
+				if(sheets[i+offset]->inherits("Matrix"))
+					filter->read(fileName, qobject_cast<Matrix*>(sheets[i+offset]), AbstractFileFilter::Replace);
+				else if (sheets[i+offset]->inherits("Spreadsheet"))
+					filter->read(fileName, qobject_cast<Spreadsheet*>(sheets[i+offset]), AbstractFileFilter::Replace);
+			}
+		} else { // single import file types
+			// use active spreadsheet/matrix if present, else new spreadsheet
+			Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
+			Matrix* matrix = workbook->currentMatrix();
+			if(spreadsheet != NULL)
+				filter->read(fileName, spreadsheet, mode);
+			else if (matrix != NULL)
+				filter->read(fileName, matrix, mode);
+			else {
+				spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+				workbook->addChild(spreadsheet);
+				filter->read(fileName, spreadsheet, mode);
+			}
 		}
 
-		// use active spreadsheet/matrix if present, else new spreadsheet
-		Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
-		Matrix* matrix = workbook->currentMatrix();
-		if(spreadsheet != NULL)
-			filter->read(fileName, spreadsheet, mode);
-		else if (matrix != NULL)
-			filter->read(fileName, matrix, mode);
-		else {
-			spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
-			workbook->addChild(spreadsheet);
-			filter->read(fileName, spreadsheet, mode);
-		}
 	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
 
