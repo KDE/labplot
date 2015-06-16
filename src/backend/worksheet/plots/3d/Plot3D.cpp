@@ -54,6 +54,8 @@
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkTriangle.h>
 #include <vtkCellArray.h>
+#include <vtkOrientationMarkerWidget.h>
+#include <vtkAxesActor.h>
 
 
 Plot3D::Plot3D(const QString& name, QGLContext *context)
@@ -166,6 +168,7 @@ void Plot3DPrivate::init(){
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
 
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
+	addAxes();
 }
 
 void Plot3DPrivate::clearActors(){
@@ -200,6 +203,17 @@ void Plot3DPrivate::readFromFile(){
 
 	renderer->AddActor(actor);
 	actors.push_back(actor);
+}
+
+void Plot3DPrivate::addAxes(){
+	axes = vtkSmartPointer<vtkAxesActor>::New();
+	axesWidget = vtkSmartPointer<vtkOrientationMarkerWidget>::New();
+	axesWidget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
+	axesWidget->SetOrientationMarker(axes);
+	axesWidget->SetInteractor(vtkItem->GetRenderWindow()->GetInteractor());
+	axesWidget->SetViewport(0.0, 0.0, 0.4, 0.4);
+	axesWidget->SetEnabled(1);
+	axesWidget->InteractiveOn();
 }
 
 void Plot3DPrivate::readFromColumns(){

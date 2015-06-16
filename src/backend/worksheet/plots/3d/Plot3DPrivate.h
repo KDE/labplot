@@ -37,11 +37,15 @@
 #include <vtkSmartPointer.h>
 #include <vtkRenderer.h>
 
+class AbstractColumn;
+
+class vtkActor;
+class vtkAxesActor;
+class vtkRenderer;
+class vtkOrientationMarkerWidget;
+
 class QGLContext;
 class QVTKGraphicsItem;
-class vtkRenderer;
-class vtkActor;
-class AbstractColumn;
 
 class Plot3DPrivate:public AbstractPlotPrivate{
 	public:
@@ -56,6 +60,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void addSphere();
 		void readFromFile();
 		void readFromColumns();
+		void addAxes();
 
 		void clearActors();
 
@@ -71,6 +76,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 
 		vtkSmartPointer<vtkRenderer> renderer;
 		QVector<vtkSmartPointer<vtkActor> > actors;
+		vtkSmartPointer<vtkAxesActor> axes;
+		vtkSmartPointer<vtkOrientationMarkerWidget> axesWidget;
 
 		AbstractColumn *xColumn;
 		AbstractColumn *yColumn;
