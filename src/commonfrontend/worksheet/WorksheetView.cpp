@@ -87,7 +87,6 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	vtkWidget->GetRenderWindow()->SetSwapBuffers(0);
 	vtkWidget->setAutoBufferSwap(true);
-
 	setScene(m_worksheet->scene());
 
 	setRenderHint(QPainter::Antialiasing);

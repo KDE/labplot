@@ -46,8 +46,10 @@
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
+#include <vtkLight.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkProperty.h>
+#include <vtkTextProperty.h>
 #include <vtkRendererCollection.h>
 #include <vtkOBJReader.h>
 #include <vtkRenderWindowInteractor.h>
@@ -55,7 +57,7 @@
 #include <vtkTriangle.h>
 #include <vtkCellArray.h>
 #include <vtkOrientationMarkerWidget.h>
-#include <vtkAxesActor.h>
+#include <vtkCubeAxesActor.h>
 
 
 Plot3D::Plot3D(const QString& name, QGLContext *context)
@@ -163,11 +165,15 @@ void Plot3DPrivate::init(){
 	renderer = vtkSmartPointer<vtkRenderer>::New();
 	renderWindow->AddRenderer(renderer);
 
-	renderer->SetBackground(1, 1, 1);
-
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
 
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
+
+	vtkSmartPointer<vtkLight> light = vtkSmartPointer<vtkLight>::New();
+	light->SetFocalPoint(1.875, 0.6125, 0);
+	light->SetPosition(0.875, 1.6125, 1);
+	renderer->AddLight(light);
+
 	addAxes();
 }
 
@@ -186,6 +192,7 @@ void Plot3DPrivate::addSphere(){
 	vtkSmartPointer<vtkActor> sphereActor = vtkSmartPointer<vtkActor>::New();
 	sphereActor->GetProperty()->SetFrontfaceCulling(true);
 	sphereActor->SetMapper(sphereMapper);
+	axes->SetBounds(sphereSource->GetOutput()->GetBounds());
 	renderer->AddActor(sphereActor);
 	actors.push_back(sphereActor);
 }
@@ -198,22 +205,44 @@ void Plot3DPrivate::readFromFile(){
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
   mapper->SetInputConnection(reader->GetOutputPort());
 
-  vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-  actor->SetMapper(mapper);
+	axes->SetBounds(reader->GetOutput()->GetBounds());
+
+	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+	actor->SetMapper(mapper);
 
 	renderer->AddActor(actor);
 	actors.push_back(actor);
 }
 
 void Plot3DPrivate::addAxes(){
-	axes = vtkSmartPointer<vtkAxesActor>::New();
-	axesWidget = vtkSmartPointer<vtkOrientationMarkerWidget>::New();
-	axesWidget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
-	axesWidget->SetOrientationMarker(axes);
-	axesWidget->SetInteractor(vtkItem->GetRenderWindow()->GetInteractor());
-	axesWidget->SetViewport(0.0, 0.0, 0.4, 0.4);
-	axesWidget->SetEnabled(1);
-	axesWidget->InteractiveOn();
+	axes = vtkSmartPointer<vtkCubeAxesActor>::New();
+
+	axes->SetCamera(renderer->GetActiveCamera());
+	axes->DrawXGridlinesOn();
+	axes->DrawYGridlinesOn();
+	axes->DrawZGridlinesOn();
+
+	const double colors[][3] = {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}};
+
+	const int fontSize = 72;
+	for (int i = 0; i < 3; ++i){
+		vtkTextProperty *titleProp = axes->GetTitleTextProperty(i);
+		titleProp->SetColor(colors[i][0], colors[i][1], colors[i][2]);
+		titleProp->SetBold(true);
+		titleProp->SetFontSize(fontSize);
+
+		vtkTextProperty *labelProp = axes->GetLabelTextProperty(i);
+		labelProp->SetColor(colors[i][0], colors[i][1], colors[i][2]);
+		labelProp->SetBold(true);
+		labelProp->SetFontSize(fontSize);
+	}
+
+	axes->GetXAxesLinesProperty()->SetLineWidth(10);
+	axes->GetYAxesLinesProperty()->SetLineWidth(10);
+	axes->GetZAxesLinesProperty()->SetLineWidth(10);
+	axes->GetAxisLabels(0);
+
+	renderer->AddActor(axes);
 }
 
 void Plot3DPrivate::readFromColumns(){
@@ -262,6 +291,8 @@ void Plot3DPrivate::readFromColumns(){
 
 		polydata->SetPoints(points);
 		polydata->SetPolys(triangles);
+
+		axes->SetBounds(polydata->GetBounds());
 		vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 		mapper->SetInputData(polydata);
 
@@ -279,6 +310,7 @@ void Plot3DPrivate::retransform(){
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	Q_Q(Plot3D);
+	vtkItem->setGeometry(q->plotArea()->rect());
 	q->plotArea()->setRect(rect);
 
 	if (isChanged){
@@ -295,7 +327,6 @@ void Plot3DPrivate::retransform(){
 
 		isChanged = false;
 	}
-	vtkItem->setGeometry(q->plotArea()->rect());
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }

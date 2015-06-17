@@ -40,7 +40,7 @@
 class AbstractColumn;
 
 class vtkActor;
-class vtkAxesActor;
+class vtkCubeAxesActor;
 class vtkRenderer;
 class vtkOrientationMarkerWidget;
 
@@ -74,9 +74,9 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		KUrl path;
 		bool isChanged;
 
+		vtkSmartPointer<vtkCubeAxesActor> axes;
 		vtkSmartPointer<vtkRenderer> renderer;
 		QVector<vtkSmartPointer<vtkActor> > actors;
-		vtkSmartPointer<vtkAxesActor> axes;
 		vtkSmartPointer<vtkOrientationMarkerWidget> axesWidget;
 
 		AbstractColumn *xColumn;
