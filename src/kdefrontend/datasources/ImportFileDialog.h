@@ -36,6 +36,7 @@ class ImportFileWidget;
 class FileDataSource;
 class TreeViewComboBox;
 
+class KMenu;
 class QStatusBar;
 class QAbstractItemModel;
 class QModelIndex;
@@ -43,6 +44,7 @@ class QVBoxLayout;
 class QLabel;
 class QComboBox;
 class QGroupBox;
+class QToolButton;
 class QProgressBar;
 
 class ImportFileDialog: public KDialog {
@@ -69,15 +71,16 @@ class ImportFileDialog: public KDialog {
 	QPushButton* bNewSpreadsheet;
 	QPushButton* bNewMatrix;
 	QPushButton* bNewWorkbook;
+	QToolButton* tbNewDataContainer;
 	std::auto_ptr<QAbstractItemModel> m_model;
 	bool m_optionsShown;
+	KMenu* m_newDataContainerMenu;
 
   private slots:
 	void toggleOptions();
 	void currentAddToIndexChanged(QModelIndex);
-	void newSpreadsheet();
-	void newMatrix();
-	void newWorkbook();
+	void newDataContainerMenu();
+	void newDataContainer(QAction*);
 
   signals:
 	void newSpreadsheetRequested(const QString&);

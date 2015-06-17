@@ -30,14 +30,11 @@
 #include "MatrixPrivate.h"
 #include "matrixcommands.h"
 #include "backend/matrix/MatrixModel.h"
-#include "backend/core/AbstractScript.h"
 #include "backend/core/Folder.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <QApplication>
-#include <QLocale>
 #include <QDebug>
 
 #include <KIcon>
@@ -55,7 +52,7 @@
 	\ingroup backend
 */
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_view(0) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -66,7 +63,7 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 }
 
 Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_view(0) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)) {
 
 	if (!loading)
 		init();
@@ -80,22 +77,22 @@ void Matrix::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Matrix");
 
+	//matrix dimension
+	int rows = group.readEntry("RowCount", 10);
+	int cols = group.readEntry("ColumnCount", 10);
+	appendRows(rows);
+	appendColumns(cols);
+
+	//mapping to logical x- and y-coordinates
+	d->xStart = group.readEntry("XStart", 0.0);
+	d->xEnd = group.readEntry("XEnd", 1.0);
+	d->yStart = group.readEntry("YStart", 0.0);
+	d->yEnd = group.readEntry("YEnd", 1.0);
+
 	//format
 	d->numericFormat = *group.readEntry("NumericFormat", "f").toLatin1().data();
 	d->precision = group.readEntry("Precision", 3);
 	d->headerFormat = (Matrix::HeaderFormat)group.readEntry("HeaderFormat", (int)Matrix::HeaderRowsColumns);
-
-	//x-range
-	d->xStart = group.readEntry("xStart", 0.0);
-	d->xEnd = group.readEntry("xEnd", 1.0);
-	int rows = group.readEntry("rows", 10);
-	appendRows(rows);
-
-	//
-	d->yStart = group.readEntry("yStart", 0.0);
-	d->yEnd = group.readEntry("yEnd", 1.0);
-	int cols = group.readEntry("columns", 10);
-	appendColumns(cols);
 }
 
 /*!
@@ -121,11 +118,20 @@ QWidget* Matrix::view() const {
 	return m_view;
 }
 
-
 /* ========================================== getter methods ============================================= */
+BASIC_D_READER_IMPL(Matrix, int, columnCount, columnCount)
+BASIC_D_READER_IMPL(Matrix, int, rowCount, rowCount)
+BASIC_D_READER_IMPL(Matrix, double, xStart, xStart)
+BASIC_D_READER_IMPL(Matrix, double, xEnd, xEnd)
+BASIC_D_READER_IMPL(Matrix, double, yStart, yStart)
+BASIC_D_READER_IMPL(Matrix, double, yEnd, yEnd)
 BASIC_D_READER_IMPL(Matrix, char, numericFormat, numericFormat)
 BASIC_D_READER_IMPL(Matrix, int, precision, precision)
 BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
+
+QString Matrix ::formula () const{
+	return d->formula;
+}
 
 QVector<QVector<double> >& Matrix::data() const {
 	return d->matrixData;
@@ -139,8 +145,55 @@ int Matrix::defaultColumnWidth() const {
 	return  100;
 }
 
-
 /* ========================================== setter methods ============================================= */
+void Matrix::setRowCount(int count) {
+	if (count == d->rowCount)
+		return;
+
+	int diff = count - d->rowCount;
+	if(diff > 0)
+		exec(new MatrixInsertRowsCmd(d, rowCount(), diff));
+	else if(diff < 0)
+		exec(new MatrixRemoveRowsCmd(d, rowCount()+diff, -diff));
+}
+
+void Matrix::setColumnCount(int count) {
+	if (count == d->columnCount)
+		return;
+
+	int diff = count - columnCount();
+	if(diff > 0)
+		exec(new MatrixInsertColumnsCmd(d, columnCount(), diff));
+	else if(diff < 0)
+		exec(new MatrixRemoveColumnsCmd(d, columnCount()+diff, -diff));
+}
+
+
+
+STD_SETTER_CMD_IMPL_F_S(Matrix, SetXStart, double, xStart, updateViewHeader)
+void Matrix::setXStart(double xStart) {
+	if (xStart != d->xStart)
+		exec(new MatrixSetXStartCmd(d, xStart, i18n("%1: x-start changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Matrix, SetXEnd, double, xEnd, updateViewHeader)
+void Matrix::setXEnd(double xEnd) {
+	if (xEnd != d->xEnd)
+		exec(new MatrixSetXEndCmd(d, xEnd, i18n("%1: x-end changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Matrix, SetYStart, double, yStart, updateViewHeader)
+void Matrix::setYStart(double yStart) {
+	if (yStart != d->yStart)
+		exec(new MatrixSetYStartCmd(d, yStart, i18n("%1: y-start changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Matrix, SetYEnd, double, yEnd, updateViewHeader)
+void Matrix::setYEnd(double yEnd) {
+	if (yEnd != d->yEnd)
+		exec(new MatrixSetYEndCmd(d, yEnd, i18n("%1: y-end changed")));
+}
+
 STD_SETTER_CMD_IMPL_S(Matrix, SetNumericFormat, char, numericFormat)
 void Matrix::setNumericFormat(char format) {
 	if (format != d->numericFormat)
@@ -156,7 +209,7 @@ void Matrix::setPrecision(int precision) {
 //TODO: make this undoable?
 void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	d->headerFormat = format;
-	m_view->model()->updateHeader();
+	reinterpret_cast<MatrixView*>(m_view)->model()->updateHeader();
 }
 
 void Matrix::insertColumns(int before, int count) {
@@ -221,14 +274,6 @@ void Matrix::setDimensions(int rows, int cols) {
 	RESET_CURSOR;
 }
 
-int Matrix::columnCount() const {
-	return d->columnCount;
-}
-
-int Matrix::rowCount() const {
-	return d->rowCount;
-}
-
 //! Return the value in the given cell
 double Matrix::cell(int row, int col) const {
 	return d->cell(row, col);
@@ -253,7 +298,7 @@ void Matrix::copy(Matrix* other) {
 	d->formula = other->formula();
 	d->suppressDataChange = false;
 	emit dataChanged(0, 0, rows-1, columns-1);
-	if (m_view) m_view->adjustHeaders();
+	if (m_view) reinterpret_cast<MatrixView*>(m_view)->adjustHeaders();
 	endMacro();
 	RESET_CURSOR;
 }
@@ -282,7 +327,7 @@ void Matrix::duplicate() {
 void Matrix::addRows() {
 	if (!m_view) return;
 	WAIT_CURSOR;
-	int count = m_view->selectedRowCount(false);
+	int count = reinterpret_cast<MatrixView*>(m_view)->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 rows", "%1: add %2 rows", name(), count));
 	exec(new MatrixInsertRowsCmd(d, rowCount(), count));
 	endMacro();
@@ -292,38 +337,10 @@ void Matrix::addRows() {
 void Matrix::addColumns() {
 	if (!m_view) return;
 	WAIT_CURSOR;
-	int count = m_view->selectedRowCount(false);
+	int count = reinterpret_cast<MatrixView*>(m_view)->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 column", "%1: add %2 columns", name(), count));
 	exec(new MatrixInsertColumnsCmd(d, columnCount(), count));
 	endMacro();
-	RESET_CURSOR;
-}
-
-void Matrix::setXStart(double x) {
-	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, x, d->xEnd, d->yStart, d->yEnd));
-	emit coordinatesChanged();
-	RESET_CURSOR;
-}
-
-void Matrix::setXEnd(double x) {
-	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, d->xStart, x, d->yStart, d->yEnd));
-	emit coordinatesChanged();
-	RESET_CURSOR;
-}
-
-void Matrix::setYStart(double y) {
-	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, d->xStart, d->xEnd, y, d->yEnd));
-	emit coordinatesChanged();
-	RESET_CURSOR;
-}
-
-void Matrix::setYEnd(double y) {
-	WAIT_CURSOR;
-	exec(new MatrixSetCoordinatesCmd(d, d->xStart, d->xEnd, d->yStart, y));
-	emit coordinatesChanged();
 	RESET_CURSOR;
 }
 
@@ -333,26 +350,7 @@ void Matrix::setCoordinates(double x1, double x2, double y1, double y2) {
 	RESET_CURSOR;
 }
 
-double Matrix::xStart() const {
-	return d->xStart;
-}
-
-double Matrix::yStart() const {
-	return d->yStart;
-}
-
-double Matrix::xEnd() const {
-	return d->xEnd;
-}
-
-double Matrix::yEnd() const {
-	return d->yEnd;
-}
-
-QString Matrix::formula() const {
-	return d->formula;
-}
-
+//TODO:
 void Matrix::setFormula(const QString& formula) {
 	WAIT_CURSOR;
 	exec(new MatrixSetFormulaCmd(d, formula));
@@ -445,6 +443,10 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
+}
+
+void MatrixPrivate::updateViewHeader() {
+	reinterpret_cast<MatrixView*>(q->m_view)->model()->updateHeader();
 }
 
 /*!
@@ -662,13 +664,13 @@ bool Matrix::load(XmlStreamReader* reader) {
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement() && reader->name() == "workbook")
+		if (reader->isEndElement() && reader->name() == "matrix")
             break;
 
         if (!reader->isStartElement())
             continue;
 
-/*
+
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
 		} else if(reader->name() == "formula") {
@@ -733,12 +735,14 @@ bool Matrix::load(XmlStreamReader* reader) {
             else
                 d->yEnd = str.toDouble();
 		} else if (reader->name() == "row_heights") {
+			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(int);
 			d->rowHeights.resize(count);
 			memcpy(d->rowHeights.data(), bytes.data(), count*sizeof(int));
 		} else if (reader->name() == "column_widths") {
+			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(int);
@@ -746,19 +750,19 @@ bool Matrix::load(XmlStreamReader* reader) {
 			memcpy(d->columnWidths.data(), bytes.data(), count*sizeof(int));
 		} else if (reader->name() == "column") {
 			//TODO: parallelize reading of columns?
+			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toAscii());
 			int count = bytes.size()/sizeof(double);
 			QVector<double> column;
 			column.resize(count);
-			memcpy(column.data(), bytes.data(), count*sizeof(int));
+			memcpy(column.data(), bytes.data(), count*sizeof(double));
 			d->matrixData.append(column);
 		} else { // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement())
 				return false;
         }
-        */
 	}
 
 	return true;

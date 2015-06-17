@@ -55,18 +55,32 @@ private slots:
 	//SLOTs for changes triggered in MatrixDock
 	void nameChanged();
 	void commentChanged();
-	void numericFormatChanged(int);
-	void precisionChanged(int);
-	void headerFormatChanged(int);
+
 	void rowCountChanged(int);
 	void columnCountChanged(int);
 
+	void xStartChanged();
+	void xEndChanged();
+	void yStartChanged();
+	void yEndChanged();
+
+	void numericFormatChanged(int);
+	void precisionChanged(int);
+	void headerFormatChanged(int);
+
 	//SLOTs for changes triggered in Matrix
 	void matrixDescriptionChanged(const AbstractAspect*);
-	void matrixNumericFormatChanged(char);
-	void matrixPrecisionChanged(int);
+
+	void matrixXStartChanged(double);
+	void matrixXEndChanged(double);
+	void matrixYStartChanged(double);
+	void matrixYEndChanged(double);
+
 	void matrixRowCountChanged(int);
 	void matrixColumnCountChanged(int);
+
+	void matrixNumericFormatChanged(char);
+	void matrixPrecisionChanged(int);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

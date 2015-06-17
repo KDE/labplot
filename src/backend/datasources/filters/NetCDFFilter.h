@@ -50,7 +50,7 @@ class NetCDFFilter : public AbstractFileFilter{
 	void saveFilterSettings(const QString&) const;
 
 	void setCurrentVarName(const QString);
-	QString currentVarName() const;
+	const QString currentVarName() const;
 
 	void setStartRow(const int);
 	int startRow() const;

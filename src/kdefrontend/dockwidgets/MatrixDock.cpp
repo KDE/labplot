@@ -53,18 +53,22 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) 
 	ui.cbHeader->addItem(i18n("Rows, Columns and xy-Values"));
 
 	//Validators
-	ui.kleXMin->setValidator( new QDoubleValidator(ui.kleXMin) );
-	ui.kleXMax->setValidator( new QDoubleValidator(ui.kleXMax) );
-	ui.kleYMin->setValidator( new QDoubleValidator(ui.kleYMin) );
-	ui.kleYMax->setValidator( new QDoubleValidator(ui.kleYMax) );
+	ui.kleXStart->setValidator( new QDoubleValidator(ui.kleXStart) );
+	ui.kleXEnd->setValidator( new QDoubleValidator(ui.kleXEnd) );
+	ui.kleYStart->setValidator( new QDoubleValidator(ui.kleYStart) );
+	ui.kleYEnd->setValidator( new QDoubleValidator(ui.kleYEnd) );
 
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()));
+	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
+	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
+	connect(ui.kleXStart, SIGNAL(returnPressed()), this, SLOT(xStartChanged()));
+	connect(ui.kleXEnd, SIGNAL(returnPressed()), this, SLOT(xEndChanged()));
+	connect(ui.kleYStart, SIGNAL(returnPressed()), this, SLOT(yStartChanged()));
+	connect(ui.kleYEnd, SIGNAL(returnPressed()), this, SLOT(yEndChanged()));
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(numericFormatChanged(int)));
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)));
 	connect(ui.cbHeader, SIGNAL(currentIndexChanged(int)), this, SLOT(headerFormatChanged(int)));
-	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
-	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Matrix);
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
@@ -101,12 +105,18 @@ void MatrixDock::setMatrices(QList<Matrix*> list){
 	this->load();
 
 	// undo functions
-	connect(m_matrix, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-			this, SLOT(matrixDescriptionChanged(const AbstractAspect*)));
+	connect(m_matrix, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(matrixDescriptionChanged(const AbstractAspect*)));
+
+	connect(m_matrix, SIGNAL(rowCountChanged(int)), this, SLOT(matrixRowCountChanged(int)));
+	connect(m_matrix, SIGNAL(columnCountChanged(int)), this, SLOT(matrixColumnCountChanged(int)));
+
+	connect(m_matrix, SIGNAL(xStartChanged(double)), this, SLOT(matrixXStartChanged(double)));
+	connect(m_matrix, SIGNAL(xEndChanged(double)), this, SLOT(matrixXEndChanged(double)));
+	connect(m_matrix, SIGNAL(yStartChanged(double)), this, SLOT(matrixYStartChanged(double)));
+	connect(m_matrix, SIGNAL(yEndChanged(double)), this, SLOT(matrixYEndChanged(double)));
+
 	connect(m_matrix, SIGNAL(numericFormatChanged(char)), this, SLOT(matrixNumericFormatChanged(char)));
 	connect(m_matrix, SIGNAL(precisionChanged(int)), this, SLOT(matrixPrecisionChanged(int)));
-// 	connect(m_matrix, SIGNAL(rowCountChanged(int)),this, SLOT(matrixRowCountChanged(int)));
-// 	connect(m_matrix, SIGNAL(columnCountChanged(int)),this, SLOT(matrixColumnCountChanged(int)));
 
 	m_initializing = false;
 }
@@ -128,6 +138,53 @@ void MatrixDock::commentChanged(){
 	m_matrix->setComment(ui.leComment->text());
 }
 
+
+//mapping to the logical coordinates
+void MatrixDock::xStartChanged() {
+	if (m_initializing)
+		return;
+
+	QString str = ui.kleXStart->text().trimmed();
+	if (str.isEmpty()) return;
+	double value = str.toDouble();
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setXStart(value);
+}
+
+void MatrixDock::xEndChanged() {
+	if (m_initializing)
+		return;
+
+	QString str = ui.kleXEnd->text().trimmed();
+	if (str.isEmpty()) return;
+	double value = str.toDouble();
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setXEnd(value);
+}
+
+void MatrixDock::yStartChanged() {
+	if (m_initializing)
+		return;
+
+	QString str = ui.kleYStart->text().trimmed();
+	if (str.isEmpty()) return;
+	double value = str.toDouble();
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setYStart(value);
+}
+
+void MatrixDock::yEndChanged() {
+	if (m_initializing)
+		return;
+
+	QString str = ui.kleYEnd->text().trimmed();
+	if (str.isEmpty()) return;
+	double value = str.toDouble();
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setYEnd(value);
+}
+
+//format
 void MatrixDock::numericFormatChanged(int index) {
 	if (m_initializing)
 		return;
@@ -158,16 +215,16 @@ void MatrixDock::rowCountChanged(int rows){
 	if (m_initializing)
 		return;
 
-// 	foreach(Matrix* matrix, m_matrixList)
-// 		matrix->setRowCount(rows);
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setRowCount(rows);
 }
 
 void MatrixDock::columnCountChanged(int columns){
 	if (m_initializing)
 		return;
 
-// 	foreach(Matrix* matrix, m_matrixList)
-// 		matrix->setColumnCount(columns);
+	foreach(Matrix* matrix, m_matrixList)
+		matrix->setColumnCount(columns);
 }
 
 //*************************************************************
@@ -186,20 +243,7 @@ void MatrixDock::matrixDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void MatrixDock::matrixNumericFormatChanged(char format) {
-	m_initializing = true;
-	int index = ui.cbFormat->findData((int)format);
-	ui.cbFormat->setCurrentIndex(index);
-	m_initializing = false;
-}
-
-
-void MatrixDock::matrixPrecisionChanged(int precision) {
-	m_initializing = true;
-	ui.sbPrecision->setValue(precision);
-	m_initializing = false;
-}
-
+//matrix dimensions
 void MatrixDock::matrixRowCountChanged(int count) {
 	m_initializing = true;
 	ui.sbRowCount->setValue(count);
@@ -212,25 +256,63 @@ void MatrixDock::matrixColumnCountChanged(int count) {
 	m_initializing = false;
 }
 
+//mapping to the logical coordinates
+void MatrixDock::matrixXStartChanged(double value) {
+	m_initializing = true;
+	ui.kleXStart->setText(QString::number(value));
+	m_initializing = false;
+}
+
+void MatrixDock::matrixXEndChanged(double value) {
+	m_initializing = true;
+	ui.kleXEnd->setText(QString::number(value));
+	m_initializing = false;
+}
+
+void MatrixDock::matrixYStartChanged(double value) {
+	m_initializing = true;
+	ui.kleYStart->setText(QString::number(value));
+	m_initializing = false;
+}
+
+void MatrixDock::matrixYEndChanged(double value) {
+	m_initializing = true;
+	ui.kleYEnd->setText(QString::number(value));
+	m_initializing = false;
+}
+
+//format
+void MatrixDock::matrixNumericFormatChanged(char format) {
+	m_initializing = true;
+	int index = ui.cbFormat->findData((int)format);
+	ui.cbFormat->setCurrentIndex(index);
+	m_initializing = false;
+}
+
+void MatrixDock::matrixPrecisionChanged(int precision) {
+	m_initializing = true;
+	ui.sbPrecision->setValue(precision);
+	m_initializing = false;
+}
+
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
 void MatrixDock::load() {
+	//matrix dimensions
+	ui.sbRowCount->setValue(m_matrix->rowCount());
+	ui.sbColumnCount->setValue(m_matrix->columnCount());
+
+	//mapping to the logical coordinates
+	ui.kleXStart->setText(QString::number(m_matrix->xStart()));
+	ui.kleXEnd->setText(QString::number(m_matrix->xEnd()));
+	ui.kleYStart->setText(QString::number(m_matrix->yStart()));
+	ui.kleYEnd->setText(QString::number(m_matrix->yEnd()));
+
 	//format
 	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData((int)m_matrix->numericFormat()));
 	ui.sbPrecision->setValue(m_matrix->precision());
 	ui.cbHeader->setCurrentIndex(m_matrix->headerFormat());
-
-	//x-range
-	ui.kleXMin->setText(QString::number(m_matrix->xStart()));
-	ui.kleXMax->setText(QString::number(m_matrix->xEnd()));
-	ui.sbRowCount->setValue(m_matrix->rowCount());
-
-	//y-range
-	ui.kleYMin->setText(QString::number(m_matrix->yStart()));
-	ui.kleYMax->setText(QString::number(m_matrix->yEnd()));
-	ui.sbColumnCount->setValue(m_matrix->columnCount());
-
 }
 
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {
@@ -259,16 +341,20 @@ void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 void MatrixDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group("Matrix");
 
+	//matrix dimensions
+	ui.sbRowCount->setValue(group.readEntry("RowCount", m_matrix->rowCount()));
+	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
+
+	//mapping to the logical coordinates
+	ui.kleXStart->setText( QString::number(group.readEntry("XStart", m_matrix->xStart())) );
+	ui.kleXEnd->setText( QString::number(group.readEntry("XEnd", m_matrix->xEnd())) );
+	ui.kleYStart->setText( QString::number(group.readEntry("YStart", m_matrix->yStart())) );
+	ui.kleYEnd->setText( QString::number(group.readEntry("YEnd", m_matrix->yEnd())) );
+
 	//format
-	ui.cbFormat->setCurrentIndex( ui.cbFormat->findData(group.readEntry("numericFormat", QString(m_matrix->numericFormat()))) );
+	ui.cbFormat->setCurrentIndex( ui.cbFormat->findData(group.readEntry("NumericFormat", QString(m_matrix->numericFormat()))) );
 	ui.sbPrecision->setValue(group.readEntry("Precision", m_matrix->precision()));
 	ui.cbHeader->setCurrentIndex(group.readEntry("HeaderFormat", (int)m_matrix->headerFormat()));
-
-	//x-range
-	ui.sbRowCount->setValue(group.readEntry("RowCount", m_matrix->rowCount()));
-
-	//y-range
-	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
 }
 
 /*!
@@ -277,15 +363,20 @@ void MatrixDock::loadConfig(KConfig& config){
 void MatrixDock::saveConfigAsTemplate(KConfig& config){
 	KConfigGroup group = config.group("Matrix");
 
+	//matrix dimensions
+	group.writeEntry("RowCount", ui.sbRowCount->value());
+	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
+
+	//mapping to the logical coordinates
+	group.writeEntry("XStart", ui.kleXStart->text().toInt());
+	group.writeEntry("XEnd", ui.kleXEnd->text().toInt());
+	group.writeEntry("YStart", ui.kleYStart->text().toInt());
+	group.writeEntry("YEnd", ui.kleYEnd->text().toInt());
+
 	//format
 	group.writeEntry("NumericFormat", ui.cbFormat->itemData(ui.cbFormat->currentIndex()));
 	group.writeEntry("Precision", ui.sbPrecision->value());
 	group.writeEntry("HeaderFormat", ui.cbHeader->currentIndex());
 
-	//x-range
-	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
-
-	//y-range
-	group.writeEntry("RowCount", ui.sbRowCount->value());
 	config.sync();
 }

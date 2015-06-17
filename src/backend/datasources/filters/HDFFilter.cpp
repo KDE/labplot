@@ -97,12 +97,12 @@ void HDFFilter::saveFilterSettings(const QString& filterName) const{
 
 ///////////////////////////////////////////////////////////////////////
 
-void HDFFilter::setCurrentDataSet(QString ds){
-	d->currentDataSet = ds;
+void HDFFilter::setCurrentDataSetName(QString ds){
+	d->currentDataSetName = ds;
 }
 
-QString HDFFilter::currentDataSet() const{
-	return d->currentDataSet;
+const QString HDFFilter::currentDataSetName() const{
+	return d->currentDataSetName;
 }
 
 void HDFFilter::setStartRow(const int s) {
@@ -149,7 +149,7 @@ bool HDFFilter::isAutoModeEnabled() const{
 //#####################################################################
 
 HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) : 
-	q(owner),currentDataSet(""),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
+	q(owner),currentDataSetName(""),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
 }
 
 #ifdef HAVE_HDF5
@@ -797,6 +797,7 @@ void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidget
 
 	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<"data type"<<typeProps.join("")<<attr);
 	dataTypeItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+	dataTypeItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(dataTypeItem);
 
 }
@@ -845,7 +846,9 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 
 	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<"data set"<<dataSetProps.join("")<<attr);
 	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
-	dataSetItem->setBackground(0,QBrush(QColor(192,255,192)));
+	for(int i=0;i<dataSetItem->columnCount();i++)
+		dataSetItem->setBackground(i,QBrush(QColor(192,255,192)));
+	dataSetItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 	parentItem->addChild(dataSetItem);
 }
 
@@ -856,6 +859,7 @@ void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* p
 
 	QTreeWidgetItem *linkItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(linkName)<<" "<<"symbolic link"<<i18n("link to ")+QString(target));
 	linkItem->setIcon(0,QIcon(KIcon("emblem-symbolic-link")));
+	linkItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(linkItem);
 }
 
@@ -869,6 +873,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 		if(multiLinkList.contains(statbuf.objno[0])) {
 			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<" "<<"hard link");
 			objectItem->setIcon(0,QIcon(KIcon("link")));
+			objectItem->setFlags(Qt::ItemIsEnabled);
                 	parentItem->addChild(objectItem);
 			return;
 		} else {
@@ -887,6 +892,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 
 	QTreeWidgetItem *groupItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<QString(link)<<"group"<<" "<<attr);
 	groupItem->setIcon(0,QIcon(KIcon("folder")));
+	groupItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(groupItem);
 
 	hsize_t numObj;
@@ -931,6 +937,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
                 }
                 default:
 			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(memberName)<<"unknown");
+			objectItem->setFlags(Qt::ItemIsEnabled);
 			groupItem->addChild(objectItem);
                         break;
                 }
@@ -967,19 +974,19 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
 	QStringList dataString;
 
-	if(currentDataSet.isEmpty())
+	if(currentDataSetName.isEmpty())
 		return QString("No data set selected");
 #ifdef QT_DEBUG
-	qDebug()<<" current data set ="<<currentDataSet;
+	qDebug()<<" current data set ="<<currentDataSetName;
 #endif
 
 #ifdef HAVE_HDF5
 	QByteArray bafileName = fileName.toLatin1();
 	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file,"H5Fopen",fileName);
-	QByteArray badataSet = currentDataSet.toLatin1();
+	QByteArray badataSet = currentDataSetName.toLatin1();
 	hid_t dataset = H5Dopen2(file, badataSet.data(), H5P_DEFAULT);
-	handleError((int)file,"H5Dopen2",currentDataSet);
+	handleError((int)file,"H5Dopen2",currentDataSetName);
 
 	// Get datatype and dataspace
 	hid_t dtype = H5Dget_type(dataset);
@@ -1270,13 +1277,13 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 */
 void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
 	
-	if(currentDataSet.isEmpty()) {
+	if(currentDataSetName.isEmpty()) {
 		qDebug()<<" No data set selected";
 		return;
 	}
 #ifdef QT_DEBUG
 	else
-		qDebug()<<" current data set ="<<currentDataSet;
+		qDebug()<<" current data set ="<<currentDataSetName;
 #endif
 
 	readCurrentDataSet(fileName,dataSource,mode);

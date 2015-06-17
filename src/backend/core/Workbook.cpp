@@ -44,12 +44,6 @@
  */
 Workbook::Workbook(AbstractScriptingEngine* engine, const QString& name)
 		: AbstractPart(name), scripted(engine){
-
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-		this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-		this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
-
 }
 
 QIcon Workbook::icon() const {
@@ -69,7 +63,6 @@ QMenu* Workbook::createContextMenu() {
 QWidget* Workbook::view() const {
 	if (!m_view) {
 		m_view = new WorkbookView(const_cast<Workbook*>(this));
-		m_view->resize(200,200);
 	}
 	return m_view;
 }
@@ -81,8 +74,7 @@ Spreadsheet* Workbook::currentSpreadsheet() const {
 	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
 	if(index != -1) {
 		AbstractAspect* aspect = child<AbstractAspect>(index);
-		if(aspect->inherits("Spreadsheet"))
-			return dynamic_cast<Spreadsheet*>(aspect);
+		return dynamic_cast<Spreadsheet*>(aspect);
 	}
 	return 0;
 }
@@ -94,28 +86,15 @@ Matrix* Workbook::currentMatrix() const {
 	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
 	if(index != -1) {
 		AbstractAspect* aspect = child<AbstractAspect>(index);
-		if(aspect->inherits("Matrix"))
-			return dynamic_cast<Matrix*>(aspect);
+		return dynamic_cast<Matrix*>(aspect);
 	}
 	return 0;
 }
 
-void Workbook::handleAspectAdded(const AbstractAspect* aspect) {
-	Q_UNUSED(aspect);
-}
-
-
-void Workbook::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child){
-	Q_UNUSED(parent);
-	Q_UNUSED(before);
-	Q_UNUSED(child);
-
-}
-
 /*!
-	this slot is called when a worksheet element is selected in the project explorer.
-	emits \c itemSelected() which forwards this event to the \c WorkbookView
-	in order to select the corresponding \c QGraphicsItem.
+	this slot is called when a workbook child is selected in the project explorer.
+	emits \c workbookItemSelected() to forward this event to the \c WorkbookView
+	in order to select the corresponding tab.
  */
 void Workbook::childSelected(const AbstractAspect* aspect){
 	int index = indexOfChild<AbstractAspect>(aspect);
@@ -124,28 +103,32 @@ void Workbook::childSelected(const AbstractAspect* aspect){
 
 /*!
 	this slot is called when a worksheet element is deselected in the project explorer.
-	emits \c itemDeselected() which forwards this event to \c WorkbookView
-	in order to deselect the corresponding \c QGraphicsItem.
  */
 void Workbook::childDeselected(const AbstractAspect* aspect){
 	Q_UNUSED(aspect);
+	//TODO: do we need this slot?
 }
 
 /*!
- *  Emits the signal to select or to deselect the column number \c index in the project explorer,
- *  if \c selected=true or \c selected=false, respectively.
+ *  Emits the signal to select or to deselect the workbook item (spreadsheet or matrix) with the index \c index
+ *  in the project explorer, if \c selected=true or \c selected=false, respectively.
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
- * This function is called in \c SpreadsheetView upon selection changes.
+ *  This function is called in \c WorkbookView when the current tab was changed
  */
 void Workbook::setChildSelectedInView(int index, bool selected){
+	AbstractAspect* aspect = child<AbstractAspect>(index);
 	if (selected) {
-		emit childAspectSelectedInView(child<AbstractAspect>(index));
+		emit childAspectSelectedInView(aspect);
 
 		//deselect the workbook in the project explorer, if a child (spreadsheet or matrix) was selected.
 		//prevents unwanted multiple selection with workbook if it was selected before.
 		emit childAspectDeselectedInView(this);
 	} else {
-		emit childAspectDeselectedInView(child<AbstractAspect>(index));
+		emit childAspectDeselectedInView(aspect);
+
+		//deselect also all children that were potentially selected before (columns of a spreadsheet)
+		foreach(AbstractAspect* child, aspect->children<AbstractAspect>())
+			emit childAspectDeselectedInView(child);
 	}
 }
 
@@ -178,14 +161,14 @@ bool Workbook::load(XmlStreamReader* reader){
 
     while (!reader->atEnd()){
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "cartesianPlot")
+        if (reader->isEndElement() && reader->name() == "workbook")
             break;
 
         if (!reader->isStartElement())
             continue;
 
 		if(reader->name() == "spreadsheet"){
-            Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet");
+            Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
             if (!spreadsheet->load(reader)){
                 delete spreadsheet;
                 return false;

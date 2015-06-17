@@ -3,8 +3,8 @@
     Project              : SciDAVis
     Description          : Commands used in Matrix (part of the undo/redo framework)
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -34,15 +34,10 @@
 #include <QVector>
 #include "Matrix.h"
 
-///////////////////////////////////////////////////////////////////////////
-// class MatrixInsertColumnsCmd
-///////////////////////////////////////////////////////////////////////////
 //! Insert columns
-class MatrixInsertColumnsCmd : public QUndoCommand
-{
+class MatrixInsertColumnsCmd : public QUndoCommand {
 public:
-	MatrixInsertColumnsCmd( MatrixPrivate * private_obj, int before, int count, QUndoCommand * parent = 0 );
-	~MatrixInsertColumnsCmd();
+	MatrixInsertColumnsCmd(MatrixPrivate* private_obj, int before, int count, QUndoCommand* parent = 0 );
 
 	virtual void redo();
 	virtual void undo();
@@ -56,45 +51,27 @@ private:
 	int m_count;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixInsertColumnsCmd
-///////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-// class MatrixInsertRowsCmd
-///////////////////////////////////////////////////////////////////////////
 //! Insert rows
-class MatrixInsertRowsCmd : public QUndoCommand
-{
+class MatrixInsertRowsCmd : public QUndoCommand {
 public:
-	MatrixInsertRowsCmd( MatrixPrivate * private_obj, int before, int count, QUndoCommand * parent = 0 );
-	~MatrixInsertRowsCmd();
+	MatrixInsertRowsCmd(MatrixPrivate* private_obj, int before, int count, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
 
 private:
 	//! The private object to modify
-	MatrixPrivate * m_private_obj;
+	MatrixPrivate* m_private_obj;
 	//! Row to insert before
 	int m_before;
 	//! The number of new rows
 	int m_count;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixInsertRowsCmd
-///////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-// class MatrixRemoveColumnsCmd
-///////////////////////////////////////////////////////////////////////////
 //! Remove columns
-class MatrixRemoveColumnsCmd : public QUndoCommand
-{
+class MatrixRemoveColumnsCmd : public QUndoCommand {
 public:
-	MatrixRemoveColumnsCmd( MatrixPrivate * private_obj, int first, int count, QUndoCommand * parent = 0 );
-	~MatrixRemoveColumnsCmd();
+	MatrixRemoveColumnsCmd(MatrixPrivate* private_obj, int first, int count, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
@@ -110,19 +87,10 @@ private:
 	QVector< QVector<double> > m_backups;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixRemoveColumnsCmd
-///////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-// class MatrixRemoveRowsCmd
-///////////////////////////////////////////////////////////////////////////
 //! Remove rows
-class MatrixRemoveRowsCmd : public QUndoCommand
-{
+class MatrixRemoveRowsCmd : public QUndoCommand {
 public:
-	MatrixRemoveRowsCmd( MatrixPrivate * private_obj, int first, int count, QUndoCommand * parent = 0 );
-	~MatrixRemoveRowsCmd();
+	MatrixRemoveRowsCmd(MatrixPrivate* private_obj, int first, int count, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
@@ -138,9 +106,6 @@ private:
 	QVector< QVector<double> > m_backups;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixRemoveRowsCmd
-///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
 // class MatrixClearCmd

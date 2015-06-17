@@ -40,6 +40,7 @@
 #include "backend/core/Datapicker.h"
 
 #include "commonfrontend/ProjectExplorer.h"
+#include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 
@@ -52,7 +53,6 @@
 #include "kdefrontend/GuiObserver.h"
 
 #include <QMdiArea>
-#include <QToolBar>
 #include <QMenu>
 #include <QDockWidget>
 #include <QStackedWidget>
@@ -62,6 +62,7 @@
 #include <QPrintPreviewDialog>
 #include <QCloseEvent>
 #include <QElapsedTimer>
+#include <QDebug>
 
 #include <KApplication>
 #include <KActionCollection>
@@ -72,7 +73,6 @@
 #include <KToolBar>
 #include <KStatusBar>
 #include <KLocale>
-#include <KDebug>
 #include <KFilterDev>
 
  /*!
@@ -117,8 +117,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 }
 
 MainWin::~MainWin() {
-	kDebug()<<"write settings"<<endl;
-
 	//write settings
 	m_recentProjectsAction->saveEntries( KGlobal::config()->group("Recent Files") );
 // 	qDebug()<<"SAVED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
@@ -152,12 +150,6 @@ void MainWin::initGUI(const QString& fileName){
 
 	//load recently used projects
   	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
-// 	qDebug()<<"LOADED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
-// 	qDebug()<<"LOADED m_recentProjectsAction->urls().first()="<<m_recentProjectsAction->urls().first()<<endl;
-// 	for(int i=0;i<m_recentProjectsAction->urls().size();i++) {
-// 		qDebug()<<"LOADED m_recentProjectsAction->urls().action("<<i<<")="<<m_recentProjectsAction->action(i)<<endl;
-// 		qDebug()<<"LOADED m_recentProjectsAction->urls().urls("<<i<<")="<<m_recentProjectsAction->urls().at(i)<<endl;
-// 	}
 
 	//set the view mode of the mdi area
 	KConfigGroup group = KGlobal::config()->group("General");
@@ -229,7 +221,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
 
-	m_newMatrixAction = new KAction(KIcon("insert-table"),i18n("Matrix"),this);
+	m_newMatrixAction = new KAction(KIcon("resource-calendar-insert"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
@@ -426,25 +418,23 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_closeAction->setEnabled(!b);
 	m_toggleProjectExplorerDockAction->setEnabled(!b);
 	m_togglePropertiesDockAction->setEnabled(!b);
-	factory->container("new", this)->setEnabled(!b);
-	factory->container("edit", this)->setEnabled(!b);
-	factory->container("spreadsheet", this)->setEnabled(!b);
-//TODO	factory->container("matrix", this)->setEnabled(!b);
-	factory->container("worksheet", this)->setEnabled(!b);
-// 		factory->container("analysis", this)->setEnabled(!b);
-//  	factory->container("script", this)->setEnabled(!b);
-// 		factory->container("drawing", this)->setEnabled(!b);
-	factory->container("windows", this)->setEnabled(!b);
 
-	if (b) {
+	if (!m_mdiArea->currentSubWindow()) {
+		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
+	}
+
+	factory->container("new", this)->setEnabled(!b);
+	factory->container("edit", this)->setEnabled(!b);
+
+	if (b)
 		setCaption("LabPlot2");
-	}
-	else {
+	else
  		setCaption(m_project->name());
-	}
 
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
@@ -466,6 +456,16 @@ void MainWin::updateGUI() {
 		return;
 	}
 
+	if (!m_mdiArea->currentSubWindow()) {
+		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("matrix", this)->setEnabled(false);
+		factory->container("worksheet_toolbar", this)->hide();
+		factory->container("cartesian_plot_toolbar", this)->hide();
+		factory->container("spreadsheet_toolbar", this)->hide();
+		return;
+	}
+
 	//for the toolbar worksheet_toolbar, spreadsheet_toolbar and cartesian_plot_toolbar
 	//the default desktop style is ignored and the buttons are shown with icons and texts.
 	//We need to set the style explicitly when the toolbar is shown for the first time
@@ -473,17 +473,18 @@ void MainWin::updateGUI() {
 	//TODO: is this the usual behaviour for toolbars defined in the rc-file?
 	KConfigGroup group = KGlobal::config()->group("MainWindow");
 
+
+	//Handle the Worksheet-object
 	Worksheet* w = this->activeWorksheet();
 	if (w!=0){
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
 // 		factory->container("drawing", this)->setEnabled(true);
 
-		//disable spreadsheet related menus
+		//disable spreadsheet and matrix related menus
 		factory->container("spreadsheet", this)->setEnabled(false);
 // 		factory->container("analysis", this)->setEnabled(false);
-
-//TODO:		//disable matrix related menus
+		factory->container("matrix", this)->setEnabled(false);
 
 		//populate worksheet-menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
@@ -512,44 +513,52 @@ void MainWin::updateGUI() {
 		//hide the spreadsheet toolbar
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	}else{
-		//no worksheet selected -> deactivate worksheet related menus and the toolbar
 		factory->container("worksheet", this)->setEnabled(false);
-//  		factory->container("drawing", this)->setEnabled(false);
+//  	factory->container("drawing", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->setVisible(false);
 		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
 
-		//Handle the Spreadsheet-object
-		const  Spreadsheet* spreadsheet = 0;
-		Workbook* workbook = this->activeWorkbook();
-		if (workbook)
-			spreadsheet = workbook->currentSpreadsheet();
-		else
-			spreadsheet = this->activeSpreadsheet();
-		if (spreadsheet){
-			//enable spreadsheet related menus
-// 			factory->container("analysis", this)->setEnabled(true);
-			factory->container("spreadsheet", this)->setEnabled(true);
+	}
 
-			//populate spreadsheet-menu
-			SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
-			QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
-			menu->clear();
-			view->createContextMenu(menu);
+	//Handle the Spreadsheet-object
+	const  Spreadsheet* spreadsheet = this->activeSpreadsheet();
+	if (spreadsheet){
+		//enable spreadsheet related menus
+		factory->container("spreadsheet", this)->setEnabled(true);
+// 		factory->container("analysis", this)->setEnabled(true);
 
-			//populate spreadsheet-toolbar
-			QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
-			if (group.groupList().indexOf("Toolbar spreadsheet_toolbar")==-1)
-				toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+		//populate spreadsheet-menu
+		SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
+		menu->clear();
+		view->createContextMenu(menu);
 
-			toolbar->setVisible(true);
-			toolbar->clear();
-			view->fillToolBar(toolbar);
-		}else{
-			//no spreadsheet selected -> deactivate spreadsheet related menus
-// 			factory->container("analysis", this)->setEnabled(false);
-			factory->container("spreadsheet", this)->setEnabled(false);
-			factory->container("spreadsheet_toolbar", this)->setVisible(false);
-		}
+		//populate spreadsheet-toolbar
+		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
+		if (group.groupList().indexOf("Toolbar spreadsheet_toolbar")==-1)
+			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
+		toolbar->setVisible(true);
+		toolbar->clear();
+		view->fillToolBar(toolbar);
+	}else{
+		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+// 		factory->container("analysis", this)->setEnabled(false);
+	}
+
+	//Handle the Matrix-object
+	const  Matrix* matrix = this->activeMatrix();
+	if (matrix){
+		factory->container("matrix", this)->setEnabled(true);
+
+		//populate spreadsheet-menu
+		MatrixView* view=qobject_cast<MatrixView*>(matrix->view());
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("matrix", this));
+		menu->clear();
+		view->createContextMenu(menu);
+	}else{
+		factory->container("matrix", this)->setEnabled(false);
 	}
 }
 
@@ -725,9 +734,8 @@ bool MainWin::openXML(QIODevice *file) {
 	XmlStreamReader reader(file);
 	if (m_project->load(&reader) == false) {
 		RESET_CURSOR;
-		kDebug()<<"ERROR: reading file content"<<endl;
 		QString msg_text = reader.errorString();
-		KMessageBox::error(this, msg_text, i18n("Error opening project"));
+		KMessageBox::error(this, msg_text, i18n("Error when opening the project"));
 		statusBar()->showMessage(msg_text);
 		return false;
 	}
@@ -751,12 +759,6 @@ bool MainWin::openXML(QIODevice *file) {
 bool MainWin::closeProject(){
 	if (m_project==0)
 		return true; //nothing to close
-
-// 	int b = KMessageBox::warningYesNo( this,
-// 										i18n("The current project %1 will be closed. Do you want to continue?", m_project->name()),
-// 										i18n("Close Project"));
-// 	if (b==KMessageBox::No)
-// 		return false;
 
 	if(warnModified())
 		return false;
@@ -866,55 +868,87 @@ void MainWin::autoSaveProject() {
 }
 
 /*!
-	prints the current sheet (worksheet or spreadsheet)
+	prints the current sheet (worksheet, spreadsheet or matrix)
 */
 void MainWin::print(){
-	QPrinter printer;
-
-	//determine first, whether we want to export a worksheet or a spreadsheet
-	// TODO: also handle matrix
-	Worksheet* w=this->activeWorksheet();
+	//Worksheet
+	Worksheet* w = this->activeWorksheet();
 	if (w!=0){ //worksheet
+		QPrinter printer;
 		QPrintDialog *dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(i18n("Print worksheet"));
+		dialog->setWindowTitle(i18n("Print Worksheet"));
 		if (dialog->exec() != QDialog::Accepted)
 			return;
 
 		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
 		view->print(&printer);
 		statusBar()->showMessage(i18n("Worksheet printed"));
-	}else{
-		//Spreadsheet
-		Spreadsheet* s=this->activeSpreadsheet();
-		QPrintDialog *dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(i18n("Print spreadsheet"));
+
+		return;
+	}
+
+	//Spreadsheet
+	Spreadsheet* s = this->activeSpreadsheet();
+	if (s) {
+		QPrinter printer;
+		QPrintDialog* dialog = new QPrintDialog(&printer, this);
+		dialog->setWindowTitle(i18n("Print Spreadsheet"));
 		if (dialog->exec() != QDialog::Accepted)
 			return;
 
 		SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
 		view->print(&printer);
-
 		statusBar()->showMessage(i18n("Spreadsheet printed"));
+
+		return;
+	}
+
+	//Matrix
+	Matrix* m = this->activeMatrix();
+	if (m) {
+		QPrinter printer;
+		QPrintDialog* dialog = new QPrintDialog(&printer, this);
+		dialog->setWindowTitle(i18n("Print Matrix"));
+		if (dialog->exec() != QDialog::Accepted)
+			return;
+
+		MatrixView* view = qobject_cast<MatrixView*>(m->view());
+		view->print(&printer);
+		statusBar()->showMessage(i18n("Spreadsheet printed"));
+
+		return;
 	}
 }
 
 void MainWin::printPreview(){
-	//TODO: also handle matrix
-	Worksheet* w=this->activeWorksheet();
+	//Worksheet
+	Worksheet* w = this->activeWorksheet();
 	if (w!=0){ //worksheet
 		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
-		QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
+		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
 		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
 		dialog->exec();
-	}else{
-		//Spreadsheet
-		Spreadsheet* s=this->activeSpreadsheet();
-		if (s!=0){
-			SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
-			QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
-			connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-			dialog->exec();
-		}
+		return;
+	}
+
+	//Spreadsheet
+	Spreadsheet* s = this->activeSpreadsheet();
+	if (s!=0){
+		SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
+		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
+		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+		dialog->exec();
+		return;
+	}
+
+	//Matrix
+	Matrix* m = this->activeMatrix();
+	if (m!=0){
+		MatrixView* view = qobject_cast<MatrixView*>(m->view());
+		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
+		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+		dialog->exec();
+		return;
 	}
 }
 
@@ -1074,8 +1108,9 @@ Datapicker* MainWin::activeDatapicker() const {
 }
 
 /*!
-	returns a pointer to a Spreadsheet-object, if the currently active Mdi-Subwindow is \a SpreadsheetView.
-	Otherwise returns \a 0.
+	returns a pointer to a \c Spreadsheet object, if the currently active Mdi-Subwindow
+	or if the currently selected tab in a \c WorkbookView is a \c SpreadsheetView
+	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const{
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
@@ -1084,10 +1119,55 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
-	return dynamic_cast<Spreadsheet*>(part);
+	Spreadsheet* spreadsheet = 0;
+	Workbook* workbook = dynamic_cast<Workbook*>(part);
+	if (workbook) {
+		spreadsheet = workbook->currentSpreadsheet();
+		if (!spreadsheet) {
+			//potentially, the spreadsheet was not selected in workbook yet since the selection in project explorer
+			//arrives in workbook's slot later than in this function
+			//->check whether we have a spreadsheet or one of its columns currently selected in the project explorer
+			spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+			if (!spreadsheet) {
+				if (m_currentAspect->parentAspect())
+					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
+			}
+		}
+	} else{
+		spreadsheet = dynamic_cast<Spreadsheet*>(part);
+	}
+
+	return spreadsheet;
 }
 
-//TODO: do we need a MainWin::activeMatrix() method?
+/*!
+	returns a pointer to a \c Matrix object, if the currently active Mdi-Subwindow
+	or if the currently selected tab in a \c WorkbookView is a \c MatrixView
+	Otherwise returns \c 0.
+*/
+Matrix* MainWin::activeMatrix() const{
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
+
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	Matrix* matrix = 0;
+	Workbook* workbook = dynamic_cast<Workbook*>(part);
+	if (workbook) {
+		matrix = workbook->currentMatrix();
+		if (!matrix) {
+			//potentially, the matrix was not selected in workbook yet since the selection in project explorer
+			//arrives in workbook's slot later than in this function
+			//->check whether we have a matrix currently selected in the project explorer
+			matrix = dynamic_cast<Matrix*>(m_currentAspect);
+		}
+	} else{
+		matrix = dynamic_cast<Matrix*>(part);
+	}
+
+	return matrix;
+}
 
 /*!
 	returns a pointer to a Worksheet-object, if the currently active Mdi-Subwindow is \a WorksheetView
@@ -1118,8 +1198,10 @@ void MainWin::projectChanged(){
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 	PartMdiView *view = qobject_cast<PartMdiView*>(win);
-	if (!view)
+	if (!view) {
+		updateGUI();
 		return;
+	}
 
 	if (view == m_currentSubWindow){
 		//do nothing, if the current sub-window gets selected again.
@@ -1152,12 +1234,9 @@ void MainWin::handleAspectRemoved(const AbstractAspect *parent){
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
 	if (!part) return;
-	PartMdiView *win = part->mdiSubWindow();
-	Q_ASSERT(win);
-	disconnect(win, SIGNAL(statusChanged(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)),
-		this, SLOT(handleSubWindowStatusChange(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)));
-	m_mdiArea->removeSubWindow(win);
-	updateGUI();
+	PartMdiView* win = part->mdiSubWindow();
+	if (win)
+		m_mdiArea->removeSubWindow(win);
 }
 
 /*!
@@ -1180,7 +1259,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
 	activateSubWindowForAspect(aspect);
 	m_suppressCurrentSubWindowChangedEvent = false;
 
-	//TODO: updateGUI();
+	updateGUI();
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
@@ -1192,7 +1271,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		PartMdiView* win;
 
-		//for aspects being children of a Workbook,we show workbook's window, otherwise the window of the selected part
+		//for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
 		const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
         const Datapicker* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
         if (datapicker)
@@ -1204,25 +1283,26 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
 			m_mdiArea->addSubWindow(win);
-			connect(win, SIGNAL(statusChanged(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)),
-				this, SLOT(handleSubWindowStatusChange(PartMdiView*,PartMdiView::SubWindowStatus,PartMdiView::SubWindowStatus)));
 		}
 		win->show();
 		m_mdiArea->setActiveSubWindow(win);
 	} else {
-		AbstractAspect* parent = aspect->parentAspect();
-		if (parent)
+		//activate the mdiView of the parent, if a child was selected
+		const AbstractAspect* parent = aspect->parentAspect();
+		if (parent) {
 			activateSubWindowForAspect(parent);
+
+			//if the parent's parent is a Workbook (a column of a spreadsheet in workbook was selected),
+			//we need to select the corresponding tab in WorkbookView too
+			if (parent->parentAspect()) {
+				Workbook* workbook = dynamic_cast<Workbook*>(parent->parentAspect());
+				if (workbook) {
+					workbook->childSelected(parent);
+				}
+			}
+		}
 	}
 	return;
-}
-
-void MainWin::handleSubWindowStatusChange(PartMdiView * view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to){
-	Q_UNUSED(from);
-	Q_UNUSED(to);
-	if (view == m_mdiArea->currentSubWindow()) {
-		updateGUI();
-	}
 }
 
 void MainWin::setMdiWindowVisibility(QAction * action){
@@ -1291,11 +1371,9 @@ void MainWin::updateMdiWindowVisibility() const{
 	PartMdiView * part_view;
 	switch(m_project->mdiWindowVisibility()){
 		case Project::allMdiWindows:
-			foreach(QMdiSubWindow *window, windows){
-				part_view = qobject_cast<PartMdiView *>(window);
-				Q_ASSERT(part_view);
-				part_view->show();
-			}
+			foreach(QMdiSubWindow* window, windows)
+				window->show();
+
 			break;
 		case Project::folderOnly:
 			foreach(QMdiSubWindow *window, windows){
@@ -1338,7 +1416,6 @@ void MainWin::toggleFullScreen() {
 		this->setWindowState(m_lastWindowState);
 	} else {
 		m_lastWindowState = this->windowState();
-		qDebug()<<"m_lastWindowState " << m_lastWindowState;
 		this->showFullScreen();
 	}
 }
@@ -1442,11 +1519,9 @@ void MainWin::importFileDialog(){
 }
 
 /*!
-	opens the dialog for the export of the currently active worksheet/spreadsheet.
-	TODO: handle matrix
+	opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
 void MainWin::exportDialog(){
-	//determine first, whether we want to export a worksheet or a spreadsheet
 	Worksheet* w=this->activeWorksheet();
 	if (w!=0){ //worksheet
 		ExportWorksheetDialog* dlg = new ExportWorksheetDialog(this);
@@ -1463,11 +1538,13 @@ void MainWin::exportDialog(){
 			view->exportToFile(path, format, area, background, resolution);
 			RESET_CURSOR;
 		}
-	}else{//Spreadsheet
-		Spreadsheet* s = this->activeSpreadsheet();
-		if (!s)
-			return;
 
+		return;
+	}
+
+
+	Spreadsheet* s = this->activeSpreadsheet();
+	if (s) {
 		ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
 		dlg->setFileName(s->name());
 		if (dlg->exec()==QDialog::Accepted){
@@ -1480,6 +1557,26 @@ void MainWin::exportDialog(){
 			view->exportToFile(path, exportHeader, separator);
 			RESET_CURSOR;
 		}
+
+		return;
+	}
+
+	Matrix* m = this->activeMatrix();
+	if (m) {
+		ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
+		dlg->setFileName(m->name());
+		dlg->setMatrixMode(true);
+		if (dlg->exec()==QDialog::Accepted){
+			QString path = dlg->path();
+			QString separator = dlg->separator();
+
+			MatrixView* view = qobject_cast<MatrixView*>(m->view());
+			WAIT_CURSOR;
+			view->exportToFile(path, separator);
+			RESET_CURSOR;
+		}
+
+		return;
 	}
 }
 
@@ -1492,7 +1589,6 @@ void MainWin::newFileDataSourceActionTriggered(){
 	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
 	  dlg->importToFileDataSource(dataSource, statusBar());
 	  this->addAspectToProject(dataSource);
-	  kDebug()<<"new file data source created"<<endl;
   }
   delete dlg;
 }

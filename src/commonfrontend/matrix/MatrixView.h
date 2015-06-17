@@ -34,8 +34,11 @@
 
 class Matrix;
 class MatrixModel;
+
 class QAction;
+class QLabel;
 class QMenu;
+class QStackedWidget;
 class QTableView;
 
 class MatrixView : public QWidget {
@@ -65,9 +68,11 @@ class MatrixView : public QWidget {
 		void getCurrentCell(int* row, int* col);
 
 		void adjustHeaders();
+		void exportToFile(const QString& path, const QString& separator) const;
 
 	public slots:
 		void createContextMenu(QMenu*) const;
+		void print(QPrinter*) const;
 
 	private:
 		void init();
@@ -75,13 +80,18 @@ class MatrixView : public QWidget {
 		void initMenus();
 		void connectActions();
 		void goToCell(int row, int col);
+		void updateImage();
 
 		bool eventFilter(QObject*, QEvent*);
 		virtual void keyPressEvent(QKeyEvent*);
 
+		QStackedWidget* m_stackedWidget;
 		QTableView* m_tableView;
+		QLabel* m_imageLabel;
 		Matrix* m_matrix;
 		MatrixModel* m_model;
+		QImage m_image;
+		bool m_imageIsDirty;
 
 		//Actions
 		QAction* action_cut_selection;
@@ -92,9 +102,7 @@ class MatrixView : public QWidget {
 		QAction* action_select_all;
 		QAction* action_clear_matrix;
 		QAction* action_go_to_cell;
-		QAction* action_dimensions_dialog;
 		QAction* action_edit_format;
-		QAction* action_edit_coordinates;
 		QAction* action_set_formula;
 		QAction* action_recalculate;
 		QAction* action_import_image;
@@ -117,6 +125,11 @@ class MatrixView : public QWidget {
 		QAction* action_clear_rows;
 		QAction* action_add_rows;
 
+		QAction* action_data_view;
+		QAction* action_image_view;
+		QAction* action_fill_function;
+		QAction* action_fill_const;
+
 		//Menus
 		QMenu* m_selectionMenu;
 		QMenu* m_columnMenu;
@@ -130,12 +143,17 @@ class MatrixView : public QWidget {
 		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 		void handleVerticalSectionResized(int logicalIndex, int oldSize, int newSize);
 
+		void switchView(QAction*);
+		void matrixDataChanged();
+
+		void fillWithFunctionValues();
+		void fillWithConstValues();
+
 		void cutSelection();
 		void copySelection();
 		void pasteIntoSelection();
 		void clearSelectedCells();
 
-		void dimensionsDialog();
 		void headerFormatChanged(QAction*);
 
 		void addColumns();

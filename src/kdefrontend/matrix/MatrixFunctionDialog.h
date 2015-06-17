@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : FunctionValuesDialog.h
+    File                 : MatrixFunctionDialog.h
     Project              : LabPlot
-    Description          : Dialog for generating values from a mathematical function
+    Description          : Dialog for generating matrix values from a mathematical function
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,32 +25,23 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef FUNCTIONVALUESDIALOG_H
-#define FUNCTIONVALUESDIALOG_H
+#ifndef MATRIXFUNCTIONDIALOG_H
+#define MATRIXFUNCTIONDIALOG_H
 
-#include "ui_functionvalueswidget.h"
+#include "ui_matrixfunctionwidget.h"
 #include <KDialog>
 
-#include <memory>
+class Matrix;
 
-class Column;
-class Spreadsheet;
-class TreeViewComboBox;
-class AspectTreeModel;
-
-class FunctionValuesDialog : public KDialog{
+class MatrixFunctionDialog : public KDialog {
 	Q_OBJECT
 
 	public:
-		explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
-		void setColumns(QList<Column*>);
+		explicit MatrixFunctionDialog(Matrix* m, QWidget* parent = 0, Qt::WFlags fl = 0);
 
 	private:
-		Ui::FunctionValuesWidget ui;
-		TreeViewComboBox* cbXDataColumn;
-		QList<Column*> m_columns;
-		Spreadsheet* m_spreadsheet;
-		std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
+		Ui::MatrixFunctionWidget ui;
+		Matrix* m_matrix;
 
 	private slots:
 		void generate();

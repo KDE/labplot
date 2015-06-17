@@ -83,9 +83,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
-// 	ui.chkExportHeader->setChecked(conf.readEntry("Header", "").toInt());
 	ui.chkExportHeader->setChecked(conf.readEntry("Header", true));
-	ui.cbSeparator->setCurrentItem(conf.readEntry("Separator", ""));
+	ui.cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
 
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
@@ -96,6 +95,13 @@ void ExportSpreadsheetDialog::setFileName(const QString& name){
 	if (dir.isEmpty()) dir = QDir::homePath();
 	ui.kleFileName->setText(dir + QDir::separator() +  name);
 	this->formatChanged(ui.cbFormat->currentIndex());
+}
+
+void ExportSpreadsheetDialog::setMatrixMode(bool b) {
+	if (b) {
+		ui.lExportHeader->hide();
+		ui.chkExportHeader->hide();
+	}
 }
 
 QString ExportSpreadsheetDialog::path() const{

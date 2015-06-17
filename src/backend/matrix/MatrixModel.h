@@ -69,6 +69,9 @@ class MatrixModel : public QAbstractItemModel {
 
 	private:
 		Matrix* m_matrix;
+
+	signals:
+		void changed();
 };
 
 #endif

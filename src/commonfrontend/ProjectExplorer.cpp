@@ -74,13 +74,9 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 	lFilter = new QLabel(i18n("Search/Filter:"));
 	layoutFilter->addWidget(lFilter);
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	leFilter= new QLineEdit(frameFilter);
-#else
 	leFilter= new KLineEdit(frameFilter);
 	qobject_cast<KLineEdit*>(leFilter)->setClearButtonShown(true);
 	qobject_cast<KLineEdit*>(leFilter)->setClickMessage(i18n("Search/Filter text"));
-#endif
 	layoutFilter->addWidget(leFilter);
 
 	bFilterOptions = new QPushButton(frameFilter);
