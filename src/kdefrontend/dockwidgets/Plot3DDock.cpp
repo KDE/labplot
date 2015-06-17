@@ -197,5 +197,7 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 		ui.cbXCoordinate->setModel(aspectTreeModel);
 		ui.cbYCoordinate->setModel(aspectTreeModel);
 		ui.cbZCoordinate->setModel(aspectTreeModel);
+		if (ui.cbTypeComboBox->currentIndex() != -1)
+			onVisualizationTypeChanged(ui.cbTypeComboBox->currentIndex());
 	}
 }
