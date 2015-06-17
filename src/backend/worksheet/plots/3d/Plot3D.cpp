@@ -39,6 +39,7 @@
 #include <QGraphicsView>
 #include <QPainter>
 #include <QWidget>
+#include <QFileInfo>
 
 #include <KIcon>
 
@@ -52,6 +53,7 @@
 #include <vtkTextProperty.h>
 #include <vtkRendererCollection.h>
 #include <vtkOBJReader.h>
+#include <vtkSTLReader.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkTriangle.h>
@@ -212,13 +214,41 @@ void Plot3DPrivate::addSphere(){
 	actors.push_back(sphereActor);
 }
 
+namespace{
+	template<class TReader>
+	vtkSmartPointer<TReader> createReaderImpl(const KUrl& filePath){
+		const QByteArray ascii = filePath.path().toAscii();
+		const char *path = ascii.constData();
+		vtkSmartPointer<TReader> reader = vtkSmartPointer<TReader>::New();
+		reader->SetFileName(path);
+		reader->Update();
+		return reader;
+	}
+}
+
+vtkSmartPointer<vtkPolyDataAlgorithm> Plot3DPrivate::createReader(const KUrl& filePath) const{
+	const QString& fileName = filePath.fileName();
+	qDebug() << Q_FUNC_INFO << "Read from the file:" << filePath.path().toAscii();
+	const QString& fileType = fileName.split('.').last().toLower();
+
+	if (fileType == "obj"){
+		qDebug() << Q_FUNC_INFO << "Create obj reader";
+		return createReaderImpl<vtkOBJReader>(filePath);
+	} else if (fileType == "stl"){
+		qDebug() << Q_FUNC_INFO << "Create STL reader";
+		return createReaderImpl<vtkSTLReader>(filePath);
+	}
+
+	return vtkSmartPointer<vtkPolyDataAlgorithm>();
+}
+
 void Plot3DPrivate::readFromFile(){
-	vtkSmartPointer<vtkOBJReader> reader = vtkSmartPointer<vtkOBJReader>::New();
-	qDebug() << Q_FUNC_INFO << "Read from the file:" << path.path().toAscii();
-	reader->SetFileName(path.path().toAscii().constData());
-	reader->Update();
+	vtkSmartPointer<vtkPolyDataAlgorithm> reader = createReader(path);
+	if (reader.Get() == 0)
+		return;
+
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputConnection(reader->GetOutputPort());
+	mapper->SetInputConnection(reader->GetOutputPort());
 
 	axes->SetBounds(reader->GetOutput()->GetBounds());
 

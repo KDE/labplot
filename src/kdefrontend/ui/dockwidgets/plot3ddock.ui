@@ -118,7 +118,7 @@
        <item row="2" column="2">
         <widget class="KUrlRequester" name="cbFileRequester">
          <property name="filter">
-          <string>*.obj</string>
+          <string>*.obj *.stl</string>
          </property>
         </widget>
        </item>
