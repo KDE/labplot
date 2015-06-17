@@ -50,7 +50,7 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 
 	hideDataSource();
 	hideFileUrl();
-	hideCoordinates();
+	hideTriangleInfo();
 
 	ui.cbDataSourceComboBox->insertItem(Plot3D::DataSource_File, i18n("From file"));
 	ui.cbDataSourceComboBox->insertItem(Plot3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
@@ -68,19 +68,22 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 
 	QList<const char*>  list;
 	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
-	ui.cbXCoordinate->setTopLevelClasses(list);
-	ui.cbYCoordinate->setTopLevelClasses(list);
-	ui.cbZCoordinate->setTopLevelClasses(list);
+
+	const QVector<TreeViewComboBox*> treeViews(QVector<TreeViewComboBox*>()
+			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
+			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3);
+
+	foreach(TreeViewComboBox* view, treeViews){
+		view->setTopLevelClasses(list);
+	}
 
 	list.clear();
 	list<<"Column";
-	ui.cbXCoordinate->setSelectableClasses(list);
-	ui.cbYCoordinate->setSelectableClasses(list);
-	ui.cbZCoordinate->setSelectableClasses(list);
 
-	connect(ui.cbXCoordinate, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onXCoordinateSourceChanged(const QModelIndex&)));
-	connect(ui.cbYCoordinate, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onYCoordinateSourceChanged(const QModelIndex&)));
-	connect(ui.cbZCoordinate, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onZCoordinatedSourceChanged(const QModelIndex&)));
+	foreach(TreeViewComboBox* view, treeViews){
+		view->setSelectableClasses(list);
+		connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onTreeViewIndexChanged(const QModelIndex&)));
+	}
 }
 
 AbstractColumn* Plot3DDock::getColumn(const QModelIndex& index) const{
@@ -88,38 +91,26 @@ AbstractColumn* Plot3DDock::getColumn(const QModelIndex& index) const{
 	return aspect ? dynamic_cast<AbstractColumn*>(aspect) : 0;
 }
 
-void Plot3DDock::onXCoordinateSourceChanged(const QModelIndex& index){
+void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
 	qDebug() << Q_FUNC_INFO;
 	AbstractColumn* column = getColumn(index);
 	Q_ASSERT(column);
 
 	foreach(Plot3D* plot, plots){
 		plot->setDataSource(Plot3D::DataSource_Spreadsheet);
-		plot->setXColumn(column);
-		plot->retransform();
-	}
-}
-
-void Plot3DDock::onYCoordinateSourceChanged(const QModelIndex& index){
-	qDebug() << Q_FUNC_INFO;
-	AbstractColumn* column = getColumn(index);
-	Q_ASSERT(column);
-
-	foreach(Plot3D* plot, plots){
-		plot->setDataSource(Plot3D::DataSource_Spreadsheet);
-		plot->setYColumn(column);
-		plot->retransform();
-	}
-}
-
-void Plot3DDock::onZCoordinatedSourceChanged(const QModelIndex& index){
-	qDebug() << Q_FUNC_INFO;
-	AbstractColumn* column = getColumn(index);
-	Q_ASSERT(column);
-
-	foreach(Plot3D* plot, plots){
-		plot->setDataSource(Plot3D::DataSource_Spreadsheet);
-		plot->setZColumn(column);
+		QObject *senderW = sender();
+		if(senderW == ui.cbXCoordinate)
+			plot->setXColumn(column);
+		else if(senderW  == ui.cbYCoordinate)
+			plot->setYColumn(column);
+		else if(senderW  == ui.cbZCoordinate)
+			plot->setZColumn(column);
+		else if(senderW  == ui.cbNode1)
+			plot->setNodeColumn(0, column);
+		else if(senderW  == ui.cbNode2)
+			plot->setNodeColumn(1, column);
+		else if(senderW == ui.cbNode3)
+			plot->setNodeColumn(2, column);
 		plot->retransform();
 	}
 }
@@ -137,7 +128,7 @@ void Plot3DDock::onVisualizationTypeChanged(int index){
 	}else{
 		hideDataSource();
 		hideFileUrl();
-		hideCoordinates();
+		hideTriangleInfo();
 	}
 }
 
@@ -155,7 +146,7 @@ void Plot3DDock::onFileChanged(const KUrl& path){
 void Plot3DDock::onDataSourceChanged(int index){
 	qDebug() << Q_FUNC_INFO << index;
 	hideFileUrl(index != Plot3D::DataSource_File);
-	hideCoordinates(index != Plot3D::DataSource_Spreadsheet);
+	hideTriangleInfo(index != Plot3D::DataSource_Spreadsheet);
 	if (index == Plot3D::DataSource_Empty){
 		foreach(Plot3D* plot, plots){
 			plot->setDataSource(Plot3D::DataSource_Empty);
@@ -180,23 +171,31 @@ void Plot3DDock::hideFileUrl(bool hide){
 	ui.cbFileRequester->setVisible(!hide);
 }
 
-void Plot3DDock::hideCoordinates(bool hide){
-	ui.labelX->setVisible(!hide);
-	ui.labelY->setVisible(!hide);
-	ui.labelZ->setVisible(!hide);
+void Plot3DDock::hideTriangleInfo(bool hide){
+	const QVector<QWidget*> widgets(QVector<QWidget*>()
+			<< ui.labelX << ui.labelY << ui.labelZ
+			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
+			<< ui.labelNode1 << ui.labelNode2 << ui.labelNode3
+			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3);
 
-	ui.cbXCoordinate->setVisible(!hide);
-	ui.cbYCoordinate->setVisible(!hide);
-	ui.cbZCoordinate->setVisible(!hide);
+	foreach(QWidget* w, widgets){
+		w->setVisible(!hide);
+	}
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	this->plots = plots;
 	if (!plots.empty()){
 		QAbstractItemModel *aspectTreeModel = new AspectTreeModel(plots.first()->project());
-		ui.cbXCoordinate->setModel(aspectTreeModel);
-		ui.cbYCoordinate->setModel(aspectTreeModel);
-		ui.cbZCoordinate->setModel(aspectTreeModel);
+
+		const QVector<TreeViewComboBox*> treeViews(QVector<TreeViewComboBox*>()
+				<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
+				<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3);
+
+		foreach(TreeViewComboBox* cb, treeViews){
+			cb->setModel(aspectTreeModel);
+		}
+
 		if (ui.cbTypeComboBox->currentIndex() != -1)
 			onVisualizationTypeChanged(ui.cbTypeComboBox->currentIndex());
 	}

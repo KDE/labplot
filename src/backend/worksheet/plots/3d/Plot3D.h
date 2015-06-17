@@ -66,6 +66,8 @@ class Plot3D:public AbstractPlot{
 		void setYColumn(AbstractColumn *column);
 		void setZColumn(AbstractColumn *column);
 
+		void setNodeColumn(int node, AbstractColumn *column);
+
 		void retransform();
 
 	protected:

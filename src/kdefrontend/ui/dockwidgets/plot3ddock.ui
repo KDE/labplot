@@ -39,6 +39,9 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="7" column="2">
+        <widget class="TreeViewComboBox" name="cbNode2"/>
+       </item>
        <item row="4" column="2">
         <widget class="TreeViewComboBox" name="cbYCoordinate"/>
        </item>
@@ -49,40 +52,21 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="2">
-        <widget class="KUrlRequester" name="cbFileRequester">
-         <property name="filter">
-          <string>*.obj</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="KComboBox" name="cbDataSourceComboBox"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelFile">
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelY">
          <property name="text">
-          <string>File</string>
+          <string>Y</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="5" column="0">
+        <widget class="QLabel" name="labelZ">
+         <property name="text">
+          <string>Z</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -105,6 +89,22 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>13</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="labelType">
          <property name="text">
@@ -114,6 +114,23 @@
        </item>
        <item row="3" column="2">
         <widget class="TreeViewComboBox" name="cbXCoordinate"/>
+       </item>
+       <item row="2" column="2">
+        <widget class="KUrlRequester" name="cbFileRequester">
+         <property name="filter">
+          <string>*.obj</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="KComboBox" name="cbDataSourceComboBox"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelFile">
+         <property name="text">
+          <string>File</string>
+         </property>
+        </widget>
        </item>
        <item row="5" column="2">
         <widget class="TreeViewComboBox" name="cbZCoordinate"/>
@@ -125,17 +142,30 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="labelY">
+       <item row="6" column="2">
+        <widget class="TreeViewComboBox" name="cbNode1"/>
+       </item>
+       <item row="8" column="2">
+        <widget class="TreeViewComboBox" name="cbNode3"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelNode1">
          <property name="text">
-          <string>Y</string>
+          <string>Node 1</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="labelZ">
+       <item row="7" column="0">
+        <widget class="QLabel" name="labelNode2">
          <property name="text">
-          <string>Z</string>
+          <string>Node 2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="labelNode3">
+         <property name="text">
+          <string>Node 3</string>
          </property>
         </widget>
        </item>

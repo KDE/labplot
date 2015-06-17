@@ -82,6 +82,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		AbstractColumn *xColumn;
 		AbstractColumn *yColumn;
 		AbstractColumn *zColumn;
+
+		AbstractColumn *nodeColumn[3];
 };
 
 #endif

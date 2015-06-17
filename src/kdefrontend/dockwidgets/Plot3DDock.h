@@ -46,7 +46,7 @@ class Plot3DDock: public QWidget{
 	private:
 		void hideDataSource(bool hide = true);
 		void hideFileUrl(bool hide = true);
-		void hideCoordinates(bool hide = true);
+		void hideTriangleInfo(bool hide = true);
 
 		AbstractColumn* getColumn(const QModelIndex& index) const;
 
@@ -55,9 +55,7 @@ class Plot3DDock: public QWidget{
 		void onDataSourceChanged(int index);
 		void onFileChanged(const KUrl& path);
 
-		void onXCoordinateSourceChanged(const QModelIndex& index);
-		void onYCoordinateSourceChanged(const QModelIndex& index);
-		void onZCoordinatedSourceChanged(const QModelIndex& index);
+		void onTreeViewIndexChanged(const QModelIndex& index);
 
 	private:
 		Ui::Plot3DDock ui;

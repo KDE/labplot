@@ -119,18 +119,29 @@ void Plot3D::setFile(const KUrl& path){
 }
 
 void Plot3D::setXColumn(AbstractColumn *column){
+	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->xColumn= column;
 }
 
 void Plot3D::setYColumn(AbstractColumn *column){
+	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->yColumn= column;
 }
 
 void Plot3D::setZColumn(AbstractColumn *column){
+	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->zColumn= column;
+}
+
+void Plot3D::setNodeColumn(int node, AbstractColumn* column){
+	qDebug() << Q_FUNC_INFO;
+	if (node >= 0 && node < 3){
+		Q_D(Plot3D);
+		d->nodeColumn[node] = column;
+	}
 }
 
 void Plot3D::retransform(){
@@ -151,6 +162,10 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	, xColumn(0)
 	, yColumn(0)
 	, zColumn(0){
+
+	for (int i = 0; i < 3; ++i){
+		nodeColumn[i] = 0;
+	}
 }
 
 Plot3DPrivate::~Plot3DPrivate(){
@@ -250,42 +265,47 @@ void Plot3DPrivate::readFromColumns(){
 		return;
 	}
 
+	for (int i = 0; i < 3; ++i)
+		if (nodeColumn[i] == 0){
+			qDebug() << Q_FUNC_INFO << "Node" << i << "== 0";
+			return;
+		}
+
 	if (visType == Plot3D::VisualizationType_Triangles){
 		qDebug() << Q_FUNC_INFO << "Triangles rendering";
 		vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
 		vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
 
 		qDebug() << Q_FUNC_INFO << "Row count:" << xColumn->rowCount() << yColumn->rowCount() << zColumn->rowCount();
-		// Each triangle has 3 nodes
-		const int thirdPart = std::min(xColumn->rowCount(), std::min(yColumn->rowCount(), zColumn->rowCount())) / 3;
-		for (int i = 0, max = thirdPart; i < max; ++i){
-			const int id1 = 3 * i;
-			const int id2 = id1 + 1;
-			const int id3 = id2 + 1;
-			const int x1 = static_cast<int>(xColumn->valueAt(id1));
-			const int y1 = static_cast<int>(yColumn->valueAt(id1));
-			const int z1 = static_cast<int>(zColumn->valueAt(id1));
 
-			const int x2 = static_cast<int>(xColumn->valueAt(id2));
-			const int y2 = static_cast<int>(yColumn->valueAt(id2));
-			const int z2 = static_cast<int>(zColumn->valueAt(id2));
+		const int numPoints = std::min(xColumn->rowCount(), std::min(yColumn->rowCount(), zColumn->rowCount()));
+		for (int i = 0; i < numPoints; ++i){
+			const int x = static_cast<int>(xColumn->valueAt(i));
+			const int y = static_cast<int>(yColumn->valueAt(i));
+			const int z = static_cast<int>(zColumn->valueAt(i));
 
-			const int x3 = static_cast<int>(xColumn->valueAt(id3));
-			const int y3 = static_cast<int>(yColumn->valueAt(id3));
-			const int z3 = static_cast<int>(zColumn->valueAt(id3));
+			points->InsertNextPoint(x, y, z);
+		}
 
-			points->InsertNextPoint(x1, y1, z1);
-			points->InsertNextPoint(x2, y2, z2);
-			points->InsertNextPoint(x3, y3, z3);
-
+		const int numTrianges = std::min(nodeColumn[0]->rowCount(), std::min(nodeColumn[1]->rowCount(), nodeColumn[2]->rowCount()));
+		for (int i = 0; i < numTrianges; ++i){
 			vtkSmartPointer<vtkTriangle> triangle = vtkSmartPointer<vtkTriangle>::New();
+			const int id1 = static_cast<int>(nodeColumn[0]->valueAt(i));
+			const int id2 = static_cast<int>(nodeColumn[1]->valueAt(i));
+			const int id3 = static_cast<int>(nodeColumn[2]->valueAt(i));
+
+			if (id1 < 1 || id2 < 1 || id3 < 1 || id1 > numPoints || id2 > numPoints || id3 > numPoints)
+				// TODO: Return error
+				continue;
+
 			triangle->GetPointIds()->SetId(0, id1);
 			triangle->GetPointIds()->SetId(1, id2);
 			triangle->GetPointIds()->SetId(2, id3);
 
 			triangles->InsertNextCell(triangle);
 		}
-		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << thirdPart;
+
+		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetSize();
 
 		vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 
