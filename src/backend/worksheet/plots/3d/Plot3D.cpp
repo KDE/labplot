@@ -244,8 +244,9 @@ vtkSmartPointer<vtkPolyDataAlgorithm> Plot3DPrivate::createReader(const KUrl& fi
 
 void Plot3DPrivate::readFromFile(){
 	vtkSmartPointer<vtkPolyDataAlgorithm> reader = createReader(path);
-	if (reader.Get() == 0)
-		return;
+	//TODO
+// 	if (reader.Get() == 0)
+// 		return;
 
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	mapper->SetInputConnection(reader->GetOutputPort());
