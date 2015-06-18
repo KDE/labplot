@@ -1,27 +1,47 @@
 #include "Transform.h"
 #include "math.h"
 
-Transform::Transform() {
+#define PI 3.14159265
+
+Transform::Transform(Image *image): m_image(image) {
 }
 
-bool Transform::setType(const Image::GraphType& type) {
-    if (type == Image::Cartesian) {
-        return cartesianTransformation();
-    } else if (type == Image::Logarithmic) {
-        return logarithmicTransformation();
-    } else if (type == Image::Polar) {
-        return polarTransformation();
+bool Transform::setType() {
+    if (m_points.type == Image::Logarithmic) {
+        for(int i=0;i<3;i++){
+            if (m_points.logicalPos[i].x() <= 0)
+                return false;
+            x[i] = log(m_points.logicalPos[i].x());
+            y[i] = m_points.logicalPos[i].y();
+            X[i] = m_points.scenePos[i].x();
+            Y[i] = m_points.scenePos[i].y();
+        }
+    } else if (m_points.type == Image::Polar) {
+        for(int i=0;i<3;i++){
+            if (m_points.logicalPos[i].x() < 0)
+                return false;
+            x[i] = m_points.logicalPos[i].x()*cos(m_points.logicalPos[i].y()*PI / 180.0);
+            y[i] = m_points.logicalPos[i].x()*sin(m_points.logicalPos[i].y()*PI / 180.0);
+            X[i] = m_points.scenePos[i].x();
+            Y[i] = m_points.scenePos[i].y();
+        }
+    } else {
+        for(int i=0;i<3;i++){
+            x[i] = m_points.logicalPos[i].x();
+            y[i] = m_points.logicalPos[i].y();
+            X[i] = m_points.scenePos[i].x();
+            Y[i] = m_points.scenePos[i].y();
+        }
     }
-
-    return false;
+    return true;
 }
 
-QPointF Transform::mapSceneToLogical(const Image::ReferencePoints& points, const QPointF& scenePoint) {
-    m_points = points;
+QPointF Transform::mapSceneToLogical(const QPointF& scenePoint) {
+    m_points = m_image->points();
     X[3] = scenePoint.x();
     Y[3] = scenePoint.y();
 
-    if (setType(points.type)){
+    if (setType()){
         double tan;
         double sin;
         double cos;
@@ -47,41 +67,20 @@ QPointF Transform::mapSceneToLogical(const Image::ReferencePoints& points, const
         }
         x[3] = x[0] + (((X[3] - X[0])*cos - (Y[3] - Y[0])*sin)*scaleOfX);
         y[3] = y[0] + (((X[3] - X[0])*sin + (Y[3] - Y[0])*cos)*scaleOfY);
-        return QPointF(x[3], y[3]);
+        return setOutput(QPointF(x[3], y[3]));
     }
     return QPointF();
 }
 
-bool Transform::logarithmicTransformation() {
-    for(int i=0;i<3;i++){
-        if (m_points.logicalPos[i].x() <= 0)
-            return false;
-        x[i] = log(m_points.logicalPos[i].x());
-        y[i] = m_points.logicalPos[i].y();
-        X[i] = m_points.scenePos[i].x();
-        Y[i] = m_points.scenePos[i].y();
+QPointF Transform::setOutput(const QPointF& point){
+    if (m_points.type == Image::Logarithmic) {
+        return QPoint(exp(point.x()), point.y());
+    } else if (m_points.type == Image::Polar) {
+        double r = sqrt(point.x()*point.x() + point.y()*point.y());
+        double angle = atan(point.y()*180/(point.x()*PI));
+        return QPointF(r, angle);
+    } else {
+        return point;
     }
-    return true;
 }
 
-bool Transform::polarTransformation() {
-    for(int i=0;i<3;i++){
-        if (m_points.logicalPos[i].x() < 0)
-            return false;
-        x[i] = m_points.logicalPos[i].x()*cos(m_points.logicalPos[i].y());
-        y[i] = m_points.logicalPos[i].x()*sin(m_points.logicalPos[i].y());
-        X[i] = m_points.scenePos[i].x();
-        Y[i] = m_points.scenePos[i].y();
-    }
-    return true;
-}
-
-bool Transform::cartesianTransformation() {
-    for(int i=0;i<3;i++){
-        x[i] = m_points.logicalPos[i].x();
-        y[i] = m_points.logicalPos[i].y();
-        X[i] = m_points.scenePos[i].x();
-        Y[i] = m_points.scenePos[i].y();
-    }
-    return true;
-}

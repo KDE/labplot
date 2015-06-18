@@ -47,7 +47,7 @@ private slots:
     void customItemPositionChanged(const CustomItem::PositionWrapper&);
     void customItemStyleChanged(CustomItem::ItemsStyle);
     void customItemSizeChanged(qreal);
-    void customItemRotationAngleChanged(float);
+    void customItemRotationAngleChanged(qreal);
     void customItemOpacityChanged(qreal);
     void customItemBrushChanged(QBrush);
     void customItemPenChanged(const QPen&);

@@ -1,8 +1,8 @@
-#ifndef IMAGEREADERELEMENT_H
-#define IMAGEREADERELEMENT_H
+#ifndef IMAGEVIEW_H
+#define IMAGEVIEW_H
 
 #include <QGraphicsView>
-#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/Image.h"
 
 class QMenu;
 class QToolBar;
@@ -12,58 +12,49 @@ class QWheelEvent;
 class AbstractAspect;
 class WorksheetElement;
 
-class ImageReaderElement: public QGraphicsView {
+class ImageView : public QGraphicsView {
 	Q_OBJECT
 
   public:
-    explicit ImageReaderElement(Worksheet* worksheet);
+    explicit ImageView(Image* image);
 
 	enum ExportFormat{Pdf, Eps, Svg, Png};
-	enum ExportArea{ExportBoundingBox, ExportSelection, ExportWorksheet};
 
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
+    void exportToFile(const QString&, const ExportFormat, const int);
 
   private:
 	enum MouseMode{SelectionMode, NavigationMode, ZoomSelectionMode};
 
 	void initActions();
 	void initMenus();
-	void processResize();
 	void drawForeground(QPainter*, const QRectF&);
 	void drawBackground(QPainter*, const QRectF&);
-	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
+    void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
 
 	//events
-	void resizeEvent(QResizeEvent*);
 	void contextMenuEvent(QContextMenuEvent*);
 	void wheelEvent(QWheelEvent*);
 	void mousePressEvent(QMouseEvent*);
 	void mouseReleaseEvent(QMouseEvent*);
 	void mouseMoveEvent(QMouseEvent*);
 
-	Worksheet* m_worksheet;
+    Image* m_image;
 	MouseMode m_mouseMode;
 	bool m_selectionBandIsShown;
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
-	QList<QGraphicsItem*> m_selectedItems;
-	bool m_suppressSelectionChangedEvent;
 
+	//Menus
 	QMenu* m_zoomMenu;
 	QMenu* m_viewMouseModeMenu;
-    QMenu* m_imageMenu;
+    QMenu* m_viewImageMenu;
+
 
 	QToolButton* tbZoom;
 	QAction* currentZoomAction;
 
-    QAction* setReferencePointsAction;
-    QAction* setCurvePointsAction;
-
-	QAction* selectAllAction;
-	QAction* deleteAction;
-	QAction* backspaceAction;
-
+	//Actions
 	QAction* zoomInViewAction;
 	QAction* zoomOutViewAction;
 	QAction* zoomOriginAction;
@@ -71,35 +62,25 @@ class ImageReaderElement: public QGraphicsView {
 	QAction* zoomFitPageWidthAction;
 	QAction* zoomFitSelectionAction;
 
+    QAction* setReferencePointsAction;
+    QAction* setCurvePointsAction;
+
 	QAction* navigationModeAction;
 	QAction* zoomSelectionModeAction;
 	QAction* selectionModeAction;
-
-    QAction* addImageAction;
 
   public slots:
 	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
-	void selectItem(QGraphicsItem*);
 
   private slots:
-    void addNewImage();
-    void aspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
-    void selectAllElements();
-	void deleteElement();
-
-    void setImageReferencePoints();
-    void setImageCurvePoints();
-    void handleImageActions();
-
 	void mouseModeChanged(QAction*);
-	void useViewSizeRequested();
 	void changeZoom(QAction*);
-
-	void deselectItem(QGraphicsItem*);
-	void selectionChanged();
+    void handleImageActions();
 	void updateBackground();
+    void setReferencePoints();
+    void setCurvePoints();
 
   signals:
 	void statusInfo(const QString&);

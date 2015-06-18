@@ -64,8 +64,6 @@ class Worksheet: public AbstractPart, public scripted {
 		void update();
 		void setPrinting(bool) const;
 
-        void setDatapicker(bool);
-
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
 		void setSelectedInView(const bool);
 		void deleteAspectFromGraphicsItem(const QGraphicsItem*);

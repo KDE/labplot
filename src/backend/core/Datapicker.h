@@ -5,7 +5,7 @@
 #include "backend/core/AbstractScriptingEngine.h"
 
 class Spreadsheet;
-class Worksheet;
+class Image;
 class QXmlStreamWriter;
 class XmlStreamReader;
 
@@ -18,22 +18,22 @@ class Datapicker : public AbstractPart, public scripted {
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
-
         void initDefault();
 
 		Spreadsheet* currentSpreadsheet() const;
-        Worksheet* currentWorksheet() const;
+        Image* currentImage() const;
 		void setChildSelectedInView(int index, bool selected);
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
-	private slots:
-		virtual void childSelected(const AbstractAspect*);
+    public slots:
+        virtual void childSelected(const AbstractAspect*);
+
+    private slots:
 		virtual void childDeselected(const AbstractAspect*);
 
 	signals:
-		void requestProjectContextMenu(QMenu*);
         void datapickerItemSelected(int);
 };
 

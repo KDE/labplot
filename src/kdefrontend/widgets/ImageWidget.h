@@ -28,21 +28,17 @@ private:
     void initConnections();
 
 signals:
+    //delete it
 	void dataChanged(bool);
 
 private slots:
-
-	void positionXChanged(int);
-	void positionYChanged(int);
-	void customPositionXChanged(double);
-	void customPositionYChanged(double);
-	void rotationChanged(int);
-	void visibilityChanged(bool);
+    void rotationChanged(double);
     void updateLogicalPositions();
+    void selectFile();
+    void fileNameChanged();
 
-    void imagePositionChanged(const Image::PositionWrapper&);
+    void imageFileNameChanged(const QString&);
     void imageRotationAngleChanged(float);
-    void imageVisibleChanged(bool);
     void handleAspectRemoved();
     void handleAspectAdded();
 };

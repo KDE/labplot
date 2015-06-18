@@ -1,6 +1,6 @@
 #include "Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/Image.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
 
@@ -9,15 +9,7 @@
 #include <QDebug>
 
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
-		: AbstractPart(name), scripted(engine){
-}
-
-void Datapicker::initDefault() {
-    Spreadsheet* spreadsheet = new Spreadsheet(0,i18n("datasheet"));
-    addChild(spreadsheet);
-    Worksheet* worksheet = new Worksheet(0, i18n("Worksheet"));
-    worksheet->setDatapicker(true);
-    addChild(worksheet);
+        : AbstractPart(name), scripted(engine){
 }
 
 QIcon Datapicker::icon() const {
@@ -28,62 +20,88 @@ QIcon Datapicker::icon() const {
  * Returns a new context menu. The caller takes ownership of the menu.
  */
 QMenu* Datapicker::createContextMenu() {
-	QMenu *menu = AbstractPart::createContextMenu();
-	Q_ASSERT(menu);
-    //emit requestProjectContextMenu(menu);
-	return menu;
+    QMenu *menu = AbstractPart::createContextMenu();
+    Q_ASSERT(menu);
+    return menu;
 }
 
 QWidget* Datapicker::view() const {
-	if (!m_view) {
+    if (!m_view) {
         m_view = new DatapickerView(const_cast<Datapicker*>(this));
-		m_view->resize(200,200);
-	}
-	return m_view;
+    }
+    return m_view;
+}
+
+void Datapicker::initDefault() {
+    Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+    addChild(spreadsheet);
+    Image* image = new Image(0, i18n("Image"));
+    addChild(image);
 }
 
 Spreadsheet* Datapicker::currentSpreadsheet() const {
-	if (!m_view)
-		return 0;
+    if (!m_view)
+        return 0;
 
     int index = reinterpret_cast<const DatapickerView*>(m_view)->currentIndex();
-	if(index != -1) {
-		AbstractAspect* aspect = child<AbstractAspect>(index);
-		if(aspect->inherits("Spreadsheet"))
-			return dynamic_cast<Spreadsheet*>(aspect);
-	}
-	return 0;
+    if(index != -1) {
+        AbstractAspect* aspect = child<AbstractAspect>(index);
+        return dynamic_cast<Spreadsheet*>(aspect);
+    }
+    return 0;
 }
 
-Worksheet* Datapicker::currentWorksheet() const {
-	if (!m_view)
-		return 0;
+Image* Datapicker::currentImage() const {
+    if (!m_view)
+        return 0;
 
     int index = reinterpret_cast<const DatapickerView*>(m_view)->currentIndex();
-	if(index != -1) {
-		AbstractAspect* aspect = child<AbstractAspect>(index);
-        if(aspect->inherits("Worksheet"))
-            return dynamic_cast<Worksheet*>(aspect);
-	}
-	return 0;
+    if(index != -1) {
+        AbstractAspect* aspect = child<AbstractAspect>(index);
+        return dynamic_cast<Image*>(aspect);
+    }
+    return 0;
 }
 
+/*!
+    this slot is called when a Datapicker child is selected in the project explorer.
+    emits \c DatapickerItemSelected() to forward this event to the \c DatapickerView
+    in order to select the corresponding tab.
+ */
 void Datapicker::childSelected(const AbstractAspect* aspect){
-	int index = indexOfChild<AbstractAspect>(aspect);
+    int index = indexOfChild<AbstractAspect>(aspect);
     emit datapickerItemSelected(index);
 }
 
+/*!
+    this slot is called when a worksheet element is deselected in the project explorer.
+ */
 void Datapicker::childDeselected(const AbstractAspect* aspect){
-	Q_UNUSED(aspect);
+    Q_UNUSED(aspect);
+    //TODO: do we need this slot?
 }
 
+/*!
+ *  Emits the signal to select or to deselect the Datapicker item (spreadsheet or image) with the index \c index
+ *  in the project explorer, if \c selected=true or \c selected=false, respectively.
+ *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
+ *  This function is called in \c DatapickerView when the current tab was changed
+ */
 void Datapicker::setChildSelectedInView(int index, bool selected){
-	if (selected) {
-		emit childAspectSelectedInView(child<AbstractAspect>(index));
-		emit childAspectDeselectedInView(this);
-	} else {
-		emit childAspectDeselectedInView(child<AbstractAspect>(index));
-	}
+    AbstractAspect* aspect = child<AbstractAspect>(index);
+    if (selected) {
+        emit childAspectSelectedInView(aspect);
+
+        //deselect the Datapicker in the project explorer, if a child (spreadsheet or image) was selected.
+        //prevents unwanted multiple selection with Datapicker if it was selected before.
+        emit childAspectDeselectedInView(this);
+    } else {
+        emit childAspectDeselectedInView(aspect);
+
+        //deselect also all children that were potentially selected before (columns of a spreadsheet)
+        foreach(AbstractAspect* child, aspect->children<AbstractAspect>())
+            emit childAspectDeselectedInView(child);
+    }
 }
 
 //##############################################################################
@@ -100,7 +118,7 @@ void Datapicker::save(QXmlStreamWriter* writer) const{
     foreach(AbstractAspect* aspect, children<AbstractAspect>())
         aspect->save(writer);
 
-    writer->writeEndElement();
+    writer->writeEndElement(); // close "worksheet" section
 }
 
 //! Load from XML
@@ -121,21 +139,21 @@ bool Datapicker::load(XmlStreamReader* reader){
         if (!reader->isStartElement())
             continue;
 
-		if(reader->name() == "spreadsheet"){
-            Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet");
+        if(reader->name() == "spreadsheet"){
+            Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
             if (!spreadsheet->load(reader)){
                 delete spreadsheet;
                 return false;
             }else{
                 addChild(spreadsheet);
             }
-        } else if (reader->name() == "worksheet"){
-            Worksheet* worksheet = new Worksheet(0, i18n("worksheet"));
-            if (!worksheet->load(reader)){
-                delete worksheet;
+        } else if (reader->name() == "image"){
+            Image* image = new Image(0, i18n("image"));
+            if (!image->load(reader)){
+                delete image;
                 return false;
             }else{
-                addChild(worksheet);
+                addChild(image);
             }
         }else{ // unknown element
             reader->raiseWarning(i18n("unknown datapicker element '%1'", reader->name().toString()));

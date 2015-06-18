@@ -173,7 +173,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
-	${COMMONFRONTEND_DIR}/datapicker/ImageReaderElement.cpp
+	${COMMONFRONTEND_DIR}/datapicker/ImageView.cpp
 )
 
 set(TOOLS_SOURCES

@@ -1,50 +1,29 @@
 #ifndef IMAGEPRIVATE_H
 #define IMAGEPRIVATE_H
 
-#include <QStaticText>
-#include <QFutureWatcher>
-#include <QGraphicsItem>
+#include <QBrush>
 
+class Image;
+class QGraphicsScene;
 
-class ImagePrivate: public QGraphicsItem {
+class ImagePrivate{
 	public:
 		explicit ImagePrivate(Image*);
-
-		float rotationAngle;
-		float scaleFactor;
-
-		Image::PositionWrapper position;
-		Image::ReferencePoints points;
+		virtual ~ImagePrivate();
 		
-		QImage graphImage;
-		QPointF refPointCoordinate[3];
-		QString name() const;
-		void retransform();
-		bool swapVisible(bool on);
-		bool swapSelectPoint(bool on);
-		virtual void recalcShapeAndBoundingRect();
-		void updatePosition();
-
-		bool suppressItemChangeEvent;
-		bool suppressRetransform;
-		bool m_printing;
-		bool selectPoint;
-
-		QRectF boundingRectangle; 
-		QRectF transformedBoundingRectangle;
-		QPainterPath imageShape;
-
-		//reimplemented from QGraphicsItem
-		virtual QRectF boundingRect() const;
- 		virtual QPainterPath shape() const;
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-
+		Image::ReferencePoints points;
 		Image* const q;
+		QRectF pageRect;
+		QGraphicsScene* m_scene;
+		float rotationAngle;
+		bool drawPoints;
 
-	private:
-        virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+		QString name() const;
+		void update();
+		void updateFileName();
+		void updatePageRect();
+
+		QString imageFileName;
 };
 
 #endif

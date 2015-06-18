@@ -6,6 +6,9 @@
 #include <QWidgetAction>
 #include <QGridLayout>
 #include <QDoubleSpinBox>
+#include <KUrlCompletion>
+#include <QFileDialog>
+#include <QDir>
 
 
 ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
@@ -17,17 +20,11 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     customItemWidget->hidePositionWidgets();
     customItemWidget->setEnabled(false);
 
-    //Positioning
-	ui.cbPositionX->addItem(i18n("left"));
-    ui.cbPositionX->addItem(i18n("center"));
-	ui.cbPositionX->addItem(i18n("right"));
-	ui.cbPositionX->addItem(i18n("custom"));
+    ui.kleBackgroundFileName->setClearButtonShown(true);
+    ui.bOpen->setIcon( KIcon("document-open") );
 
-
-    ui.cbPositionY->addItem(i18n("top"));
-    ui.cbPositionY->addItem(i18n("center"));
-	ui.cbPositionY->addItem(i18n("bottom"));
-    ui.cbPositionY->addItem(i18n("custom"));
+    KUrlCompletion *comp = new KUrlCompletion();
+    ui.kleBackgroundFileName->setCompletionObject(comp);
 
     ui.cbGraphType->addItem(i18n("Cartesian (x, y)"));
     ui.cbGraphType->addItem(i18n("Polar (x, y°)"));
@@ -36,13 +33,11 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     m_itemsList.clear();
 	//SLOTS
 	// geometry
-	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
-	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
-	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
-	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
-	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
+    connect( ui.sbRotation, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged(double)) );
+    connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
+    connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+    connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
 
-	connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 }
 
 void ImageWidget::setImages(QList<Image*> list){
@@ -54,10 +49,7 @@ void ImageWidget::setImages(QList<Image*> list){
 }
 
 void ImageWidget::initConnections() {
-    connect( m_image, SIGNAL(positionChanged(Image::PositionWrapper)),
-             this, SLOT(imagePositionChanged(Image::PositionWrapper)) );
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
-    connect( m_image, SIGNAL(visibleChanged(bool)), this, SLOT(imageVisibleChanged(bool)) );
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)), this,SLOT(handleAspectRemoved()));
     connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()));
     connect( m_image, SIGNAL(updateLogicalPositions()), this, SLOT(updateLogicalPositions()));
@@ -66,27 +58,34 @@ void ImageWidget::initConnections() {
 //**********************************************************
 //****** SLOTs for changes triggered in ImageWidget ********
 //**********************************************************
+void ImageWidget::selectFile() {
+    KConfigGroup conf(KSharedConfig::openConfig(), "ImageWidget");
+    QString dir = conf.readEntry("LastImageDir", "");
+    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+    if (path.isEmpty())
+        return; //cancel was clicked in the file-dialog
 
-// geometry slots
+    int pos = path.lastIndexOf(QDir::separator());
+    if (pos!=-1) {
+        QString newDir = path.left(pos);
+        if (newDir!=dir)
+            conf.writeEntry("LastImageDir", newDir);
+    }
 
-/*!
-	called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
-*/
-void ImageWidget::positionXChanged(int index){
-	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionX->count()-1 ){
-		ui.sbPositionX->setEnabled(true);
-	}else{
-		ui.sbPositionX->setEnabled(false);
-	}
+    ui.kleBackgroundFileName->setText( path );
 
-	if (m_initializing)
-		return;
-
-    Image::PositionWrapper position = m_image->position();
-    position.horizontalPosition = Image::HorizontalPosition(index);
     foreach(Image* image, m_imagesList)
-        image->setPosition(position);
+        image->setImageFileName(path);
+}
+
+void ImageWidget::fileNameChanged(){
+    if (m_initializing)
+        return;
+
+    QString fileName = ui.kleBackgroundFileName->text();
+    foreach(Image* image, m_imagesList){
+        image->setImageFileName(fileName);
+  }
 }
 
 void ImageWidget::updateLogicalPositions() {
@@ -98,50 +97,10 @@ void ImageWidget::updateLogicalPositions() {
     points.logicalPos[2].setX(ui.sbPoisitionX3->value());
     points.logicalPos[2].setY(ui.sbPoisitionY3->value());
     points.type = Image::GraphType(ui.cbGraphType->currentIndex());
-    m_image->setLogicalPoints(points);
+    m_image->setPoints(points);
 }
 
-/*!
-    called when image's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
-*/
-void ImageWidget::positionYChanged(int index){
-	//Enable/disable the spinbox for the y- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionY->count()-1 ){
-		ui.sbPositionY->setEnabled(true);
-	}else{
-		ui.sbPositionY->setEnabled(false);
-	}
-
-	if (m_initializing)
-		return;
-
-    Image::PositionWrapper position = m_image->position();
-    position.verticalPosition = Image::VerticalPosition(index);
-    foreach(Image* image, m_imagesList)
-        image->setPosition(position);
-}
-
-void ImageWidget::customPositionXChanged(double value){
-	if (m_initializing)
-		return;
-
-    Image::PositionWrapper position = m_image->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-    foreach(Image* image, m_imagesList)
-        image->setPosition(position);
-}
-
-void ImageWidget::customPositionYChanged(double value){
-	if (m_initializing)
-		return;
-
-    Image::PositionWrapper position = m_image->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-    foreach(Image* image, m_imagesList)
-        image->setPosition(position);
-}
-
-void ImageWidget::rotationChanged(int value){
+void ImageWidget::rotationChanged(double value){
 	if (m_initializing)
 		return;
 
@@ -149,37 +108,19 @@ void ImageWidget::rotationChanged(int value){
         image->setRotationAngle(value);
 }
 
-void ImageWidget::visibilityChanged(bool state){
-	if (m_initializing)
-		return;
-
-    foreach(Image* image, m_imagesList)
-        image->setVisible(state);
-}
-
 //*********************************************************
 //****** SLOTs for changes triggered in Image *********
 //*********************************************************
-
-void ImageWidget::imagePositionChanged(const Image::PositionWrapper& position){
-	m_initializing = true;
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
-	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
-	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
-	m_initializing = false;
+void ImageWidget::imageFileNameChanged(const QString& name) {
+    m_initializing = true;
+    ui.kleBackgroundFileName->setText(name);
+    m_initializing = false;
 }
 
 void ImageWidget::imageRotationAngleChanged(float angle){
 	m_initializing = true;
 	ui.sbRotation->setValue(angle);
 	m_initializing = false;
-}
-
-void ImageWidget::imageVisibleChanged(bool on){
-	m_initializing = true;
-	ui.chbVisible->setChecked(on);
-    m_initializing = false;
 }
 
 void ImageWidget::handleAspectRemoved() {
@@ -218,14 +159,9 @@ void ImageWidget::load() {
 		return;
 
 	m_initializing = true;
-
-    ui.chbVisible->setChecked( m_image->isVisible() );
 	// Geometry
-    ui.cbPositionX->setCurrentIndex( (int) m_image->position().horizontalPosition );
-    ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.x(),Worksheet::Centimeter) );
-    ui.cbPositionY->setCurrentIndex( (int) m_image->position().verticalPosition );
-    ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.y(),Worksheet::Centimeter) );
     ui.sbRotation->setValue( m_image->rotationAngle() );
+    ui.kleBackgroundFileName->setText( m_image->imageFileName() );
     ui.cbGraphType->setCurrentIndex((int) m_image->points().type);
     ui.sbPoisitionX1->setValue(m_image->points().logicalPos[0].x());
     ui.sbPoisitionY1->setValue(m_image->points().logicalPos[0].y());

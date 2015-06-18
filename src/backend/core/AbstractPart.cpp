@@ -30,6 +30,7 @@
 #include "backend/core/AbstractPart.h"
 #include "commonfrontend/core/PartMdiView.h"
 #include "backend/core/Workbook.h"
+#include "backend/core/Datapicker.h"
 #include <QMenu>
 #include <QStyle>
 
@@ -94,9 +95,9 @@ void AbstractPart::deleteMdiSubWindow() {
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
 void AbstractPart::deleteView() const {
-	//if the parent is a Workbook, the actual view was already deleted when QTabWidget was deleted.
+    //if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
 	//here just set the pointer to 0.
-	if (dynamic_cast<const Workbook*>(parentAspect())) {
+    if (dynamic_cast<const Workbook*>(parentAspect()) || dynamic_cast<const Datapicker*>(parentAspect())) {
 		m_view = 0;
 		return;
 	}

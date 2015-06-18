@@ -68,7 +68,6 @@ class WorksheetPrivate{
 		float layoutHorizontalSpacing;
 		int layoutColumnCount;
 		int layoutRowCount;
-		bool isDatapicker;
 };
 
 #endif

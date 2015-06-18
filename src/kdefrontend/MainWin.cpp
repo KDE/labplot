@@ -38,6 +38,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/Datapicker.h"
+#include "backend/worksheet/Image.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
@@ -966,16 +967,18 @@ void MainWin::newFolder() {
 	adds a new Workbook to the project.
 */
 void MainWin::newWorkbook(){
-    Workbook* workbook = new Workbook(0, i18n("Workbook"));
+	Workbook* workbook = new Workbook(0, i18n("Workbook"));
 	this->addAspectToProject(workbook);
 }
 
+/*!
+    adds a new Datapicker to the project.
+*/
 void MainWin::newDatapicker(){
     Datapicker* datapicker = new Datapicker(0, i18n("Datapicker"));
     this->addAspectToProject(datapicker);
     datapicker->initDefault();
 }
-
 /*!
 	adds a new Spreadsheet to the project.
 */
@@ -1097,6 +1100,10 @@ Workbook* MainWin::activeWorkbook() const {
 	return dynamic_cast<Workbook*>(part);
 }
 
+/*!
+    returns a pointer to a Datapicker-object, if the currently active Mdi-Subwindow is \a DatapickerView.
+    Otherwise returns \a 0.
+*/
 Datapicker* MainWin::activeDatapicker() const {
     QMdiSubWindow* win = m_mdiArea->currentSubWindow();
     if (!win)
@@ -1106,7 +1113,6 @@ Datapicker* MainWin::activeDatapicker() const {
     Q_ASSERT(part);
     return dynamic_cast<Datapicker*>(part);
 }
-
 /*!
 	returns a pointer to a \c Spreadsheet object, if the currently active Mdi-Subwindow
 	or if the currently selected tab in a \c WorkbookView is a \c SpreadsheetView
@@ -1121,6 +1127,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = 0;
 	Workbook* workbook = dynamic_cast<Workbook*>(part);
+    Datapicker* datapicker = dynamic_cast<Datapicker*>(part);
 	if (workbook) {
 		spreadsheet = workbook->currentSpreadsheet();
 		if (!spreadsheet) {
@@ -1133,9 +1140,21 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
 			}
 		}
-	} else{
-		spreadsheet = dynamic_cast<Spreadsheet*>(part);
-	}
+    } else if (datapicker) {
+        spreadsheet = datapicker->currentSpreadsheet();
+        if (!spreadsheet) {
+            //potentially, the spreadsheet was not selected in datapicker yet since the selection in project explorer
+            //arrives in datapicker's slot later than in this function
+            //->check whether we have a spreadsheet or one of its columns currently selected in the project explorer
+            spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+            if (!spreadsheet) {
+                if (m_currentAspect->parentAspect())
+                    spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
+            }
+        }
+    } else {
+        spreadsheet = dynamic_cast<Spreadsheet*>(part);
+    }
 
 	return spreadsheet;
 }
@@ -1167,6 +1186,32 @@ Matrix* MainWin::activeMatrix() const{
 	}
 
 	return matrix;
+}
+
+/*!
+    returns a pointer to a \c Matrix object, if the currently active Mdi-Subwindow
+    or if the currently selected tab in a \c DatapickerView is a \c MatrixView
+    Otherwise returns \c 0.
+*/
+Image* MainWin::activeImage() const{
+    QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+    if (!win)
+        return 0;
+
+    AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+    Q_ASSERT(part);
+    Image* image = 0;
+    Datapicker* datapicker = dynamic_cast<Datapicker*>(part);
+    if (datapicker) {
+        image = datapicker->currentImage();
+        if (!image) {
+            //potentially, the matrix was not selected in Datapicker yet since the selection in project explorer
+            //arrives in Datapicker's slot later than in this function
+            //->check whether we have a matrix currently selected in the project explorer
+            image = dynamic_cast<Image*>(m_currentAspect);
+        }
+    }
+    return image;
 }
 
 /*!
@@ -1274,12 +1319,12 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		//for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
 		const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
         const Datapicker* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
-        if (datapicker)
+        if (workbook)
+            win = workbook->mdiSubWindow();
+        else if (datapicker)
             win = datapicker->mdiSubWindow();
-        else if (workbook)
-			win = workbook->mdiSubWindow();
-		else
-			win = part->mdiSubWindow();
+        else
+            win = part->mdiSubWindow();
 
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
 			m_mdiArea->addSubWindow(win);
@@ -1296,9 +1341,12 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			//we need to select the corresponding tab in WorkbookView too
 			if (parent->parentAspect()) {
 				Workbook* workbook = dynamic_cast<Workbook*>(parent->parentAspect());
+                Datapicker* datapicker = dynamic_cast<Datapicker*>(parent->parentAspect());
 				if (workbook) {
 					workbook->childSelected(parent);
-				}
+                } else if (datapicker) {
+                    datapicker->childSelected(parent);
+                }
 			}
 		}
 	}

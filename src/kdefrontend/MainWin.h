@@ -40,6 +40,7 @@ class Project;
 class Worksheet;
 class Workbook;
 class Datapicker;
+class Image;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
@@ -174,6 +175,8 @@ private:
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
     Datapicker* activeDatapicker() const;
+    Image* activeImage() const;
+
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;

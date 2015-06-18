@@ -1,29 +1,24 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include <QObject>
-#include <QFont>
-#include <QBrush>
-#include <QPen>
+#include "backend/core/AbstractPart.h"
+#include "backend/core/AbstractScriptingEngine.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/WorksheetElement.h"
+#include <QGraphicsScene>
 
+class QGraphicsItem;
+class QRectF;
 class ImagePrivate;
 class Transform;
 
-class Image : public WorksheetElement{
+class Image: public AbstractPart, public scripted {
 	Q_OBJECT
 
 	public:
-		enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
-        enum GraphType {Cartesian,Polar,Logarithmic};
+		Image(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+		~Image();
 
-		struct PositionWrapper{
-			QPointF 		   point;
-			HorizontalPosition horizontalPosition;
-			VerticalPosition   verticalPosition;
-		};
+        enum GraphType {Cartesian,Polar,Logarithmic};
 
         struct ReferencePoints{
             GraphType type;
@@ -31,66 +26,53 @@ class Image : public WorksheetElement{
             QPointF logicalPos[2];
         };
 
-        explicit Image(const QString& name, QString filename );
-        ~Image();
-
-        QString m_filename;
-        QPointF referencePoint[2];
-        bool selectPoint;
-        void setImage();
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem *graphicsItem() const;
+		virtual QWidget* view() const;
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
-		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
-        CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, points, Points);
+		QRectF pageRect() const;
+		void setPageRect(const QRectF&);
+		QGraphicsScene *scene() const;
+		void update();
+		void setPrinting(bool) const;
+        void setSelectedInView(const bool);
+        //void setPoints(const ReferencePoints&);
 
-		void setPosition(const QPointF&);
-        void setLogicalPoints(const ReferencePoints&);
-		BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle);
+        bool isLoaded;
+        QPixmap imagePixmap;
 
-		virtual void setVisible(bool on);
-		virtual bool isVisible() const;
-		virtual void setPrinting(bool);
-        void setSelectPoint(bool on);
-
-        typedef ImagePrivate Private;
-
-	public slots:
-		virtual void retransform();
-        void setReferencePoints();
-        void setCurvePoints();
-
-	private slots:
-		void visibilityChanged();
-        void handleAspectAdded(const AbstractAspect*);
-        void handleAspectRemoved();
+        CLASS_D_ACCESSOR_DECL(QString, imageFileName, ImageFileName)
+        CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, points, Points)
+        BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
+        BASIC_D_ACCESSOR_DECL(bool, drawPoints, DrawPoints)
 
 
-	protected:
-        ImagePrivate* const d_ptr;
+		typedef ImagePrivate Private;
 
 	private:
-        Q_DECLARE_PRIVATE(Image)
 		void init();
-		void initActions();
+		ImagePrivate* const d;
+		friend class ImagePrivate;
 
-		QAction* visibilityAction;
-        QAction* setReferencePointsAction;
-        QAction* setCurvePointsAction;
         Transform* m_transform;
 
-	signals:
-        friend class ImageSetPositionCmd;
-        friend class ImageSetRotationAngleCmd;
-        void positionChanged(const Image::PositionWrapper&);
-		void rotationAngleChanged(float);
-		void visibleChanged(bool);
-		void changed();
+	 private slots:
+		void handleAspectAdded(const AbstractAspect*);
+		void handleAspectAboutToBeRemoved(const AbstractAspect*);
+		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+
+	 signals:
+		void requestProjectContextMenu(QMenu*);
+		void requestUpdate();
         void updateLogicalPositions();
+
+        friend class ImageSetImageFileNameCmd;
+        void imageFileNameChanged(const QString&);
+        friend class ImageSetRotationAngleCmd;
+        void rotationAngleChanged(float);
 };
 
 #endif

@@ -6,11 +6,12 @@
 class Transform
 {
 public:
-    Transform();
-    bool setType(const Image::GraphType&);
-    QPointF mapSceneToLogical(const Image::ReferencePoints& , const QPointF&);
+    Transform(Image*);
+    QPointF mapSceneToLogical(const QPointF&);
 
     Image::ReferencePoints m_points;
+    Image* m_image;
+
     //logical coordinates
     double x[3];
     double y[3];
@@ -20,10 +21,9 @@ public:
     double Y[3];
 
 private:
+    bool setType();
+    QPointF setOutput(const QPointF&);
 
-    bool logarithmicTransformation();
-    bool polarTransformation();
-    bool cartesianTransformation();
 };
 
 #endif // TRANSFORM_H

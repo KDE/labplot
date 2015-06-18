@@ -95,7 +95,7 @@ void CustomItemWidget::initConnections() {
              this, SLOT(customItemPositionChanged(CustomItem::PositionWrapper)) );
     connect(m_item, SIGNAL(itemsStyleChanged(CustomItem::ItemsStyle)), this, SLOT(customItemStyleChanged(CustomItem::ItemsStyle)));
     connect(m_item, SIGNAL(itemsSizeChanged(qreal)), this, SLOT(customItemSizeChanged(qreal)));
-    connect( m_item, SIGNAL(rotationAngleChanged(float)), this, SLOT(customItemRotationAngleChanged(float)) );
+    connect( m_item, SIGNAL(itemsRotationAngleChanged(qreal)), this, SLOT(customItemRotationAngleChanged(qreal)) );
     connect(m_item, SIGNAL(itemsOpacityChanged(qreal)), this, SLOT(customItemOpacityChanged(qreal)));
     connect(m_item, SIGNAL(itemsBrushChanged(QBrush)), this, SLOT(customItemBrushChanged(QBrush)));
     connect(m_item, SIGNAL(itemsPenChanged(QPen)), this, SLOT(customItemPenChanged(QPen)));
@@ -370,9 +370,9 @@ void CustomItemWidget::customItemSizeChanged(qreal size) {
     m_initializing = false;
 }
 
-void CustomItemWidget::customItemRotationAngleChanged(float angle) {
+void CustomItemWidget::customItemRotationAngleChanged(qreal angle) {
     m_initializing = true;
-    ui.sbRotation->setValue(angle);
+    ui.sbRotation->setValue(round(angle));
     m_initializing = false;
 }
 
