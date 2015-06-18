@@ -38,6 +38,7 @@
 #include <vtkRenderer.h>
 
 class AbstractColumn;
+class Matrix;
 
 class vtkActor;
 class vtkCubeAxesActor;
@@ -61,6 +62,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void addSphere();
 		void readFromFile();
 		void readFromColumns();
+		void readFromMatrix();
 		void addAxes();
 
 		void clearActors();
@@ -85,8 +87,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		AbstractColumn *xColumn;
 		AbstractColumn *yColumn;
 		AbstractColumn *zColumn;
-
 		AbstractColumn *nodeColumn[3];
+		Matrix* matrix;
 };
 
 #endif

@@ -48,14 +48,18 @@ class Plot3D:public AbstractPlot{
 		enum DataSource{
 			DataSource_File = 0,
 			DataSource_Spreadsheet = 1,
+			DataSource_Matrix = 2,
 			DataSource_Empty
 		};
 
-	public:
 		explicit Plot3D(const QString &name, QGLContext *context);
 		virtual ~Plot3D();
 
 		QIcon icon() const;
+		virtual QMenu* createContextMenu();
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+		
 		void setRect(const QRectF&);
 
 		void setVisualizationType(VisualizationType type);
