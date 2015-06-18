@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Main window of the application
  ***************************************************************************/
 
@@ -38,13 +38,16 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
+class Workbook;
 class Spreadsheet;
+class Matrix;
 class GuiObserver;
 class AxisDock;
 class CartesianPlotDock;
 class Plot3DDock;
 class CartesianPlotLegendDock;
 class ColumnDock;
+class MatrixDock;
 class ProjectDock;
 class SpreadsheetDock;
 class XYCurveDock;
@@ -92,6 +95,7 @@ private:
 	KAction* m_exportAction;
 	KAction* m_closeAction;
 	KAction* m_newFolderAction;
+	KAction* m_newWorkbookAction;
 	KAction* m_newSpreadsheetAction;
 	KAction* m_newMatrixAction;
 	KAction* m_newWorksheetAction;
@@ -141,6 +145,7 @@ private:
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	Plot3DDock *plot3dDock;
 	ColumnDock* columnDock;
+	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;
 	XYCurveDock* xyCurveDock;
@@ -159,7 +164,9 @@ private:
 	bool save(const QString&);
 	void closeEvent(QCloseEvent*);
 
+	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
+	//TODO: Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
 
 	friend class GuiObserver;
@@ -191,11 +198,14 @@ private slots:
 	void projectChanged();
 
 	void newFolder();
+	void newWorkbook();
 	void newSpreadsheet();
-	void newSpreadsheetForImportFileDialog(const QString&);
-	void newWorksheet();
-	void newScript();
 	void newMatrix();
+	void newWorksheet();
+	//TODO: void newScript();
+	void newWorkbookForImportFileDialog(const QString&);
+	void newSpreadsheetForImportFileDialog(const QString&);
+	void newMatrixForImportFileDialog(const QString&);
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
 
@@ -207,7 +217,6 @@ private slots:
 	void handleAspectRemoved(const AbstractAspect* parent);
 	void handleCurrentAspectChanged(AbstractAspect* );
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
-	void handleSubWindowStatusChange(PartMdiView* view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
 	void handleShowSubWindowRequested();
 
 	void handleSettingsChanges();

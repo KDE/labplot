@@ -73,7 +73,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 		m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 
 		QList<const char *>  list;
-		list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+		list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 		cbXDataColumn->setTopLevelClasses(list);
 
 		list.clear();

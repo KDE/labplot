@@ -53,7 +53,6 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
  	resize( QSize(500,300) );
 }
 
-
 void FileInfoDialog::setFiles(QStringList& files){
 	QString fileName;
 	QString infoString;

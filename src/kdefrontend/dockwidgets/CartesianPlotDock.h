@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -37,11 +37,11 @@
 
 class LabelWidget;
 
-class CartesianPlotDock: public QWidget{
+class CartesianPlotDock : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit CartesianPlotDock(QWidget* parent);
+	explicit CartesianPlotDock(QWidget*);
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
 
@@ -51,6 +51,9 @@ private:
 	CartesianPlot* m_plot;
 	LabelWidget* labelWidget;
 	bool m_initializing;
+
+	void load();
+	void loadConfig(KConfig&);
 
 private slots:
 	void init();
@@ -140,11 +143,9 @@ private slots:
 	void plotHorizontalPaddingChanged(float);
 	void plotVerticalPaddingChanged(float);
 
-	//save/load
-	void load();
+	//save/load template
 	void loadConfigFromTemplate(KConfig&);
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);

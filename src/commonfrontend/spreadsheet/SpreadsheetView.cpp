@@ -63,7 +63,7 @@
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 
 /*!
-	\class SpreahsheetView
+	\class SpreadsheetView
 	\brief View class for Spreadsheet
 
 	\ingroup commonfrontend
@@ -90,6 +90,8 @@ void SpreadsheetView::init(){
 	initMenus();
 
 	m_tableView->setModel(m_model);
+	m_tableView->setItemDelegate(new SpreadsheetItemDelegate(this));
+	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 	//horizontal header
 	m_horizontalHeader = new SpreadsheetDoubleHeaderView(this);
@@ -102,6 +104,11 @@ void SpreadsheetView::init(){
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
 	connect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
+	connect(m_horizontalHeader, SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
+
+	int i=0;
+	foreach(Column * col, m_spreadsheet->children<Column>())
+		m_horizontalHeader->resizeSection(i++, col->width());
 
 	// vertical header
 	QHeaderView * v_header = m_tableView->verticalHeader();
@@ -110,29 +117,17 @@ void SpreadsheetView::init(){
 	v_header->setMovable(false);
 	v_header->installEventFilter(this);
 
-	m_delegate = new SpreadsheetItemDelegate(this);
-	m_tableView->setItemDelegate(m_delegate);
 
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
-	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-
 	installEventFilter(this);
+	connectActions();
+	showComments(false);
 
 	connect(m_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this,
 		SLOT(updateHeaderGeometry(Qt::Orientation,int,int)) );
 	connect(m_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this,
 		SLOT(handleHeaderDataChanged(Qt::Orientation,int,int)) );
-
-	int i=0;
-	foreach(Column * col, m_spreadsheet->children<Column>())
-		m_horizontalHeader->resizeSection(i++, col->width());
-
-
-	connectActions();
-	showComments(false);
-
 	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
 			this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -141,8 +136,7 @@ void SpreadsheetView::init(){
 
 
 	//selection relevant connections
-	QItemSelectionModel * sel_model = m_tableView->selectionModel();
-
+	QItemSelectionModel* sel_model = m_tableView->selectionModel();
 	connect(sel_model, SIGNAL(currentColumnChanged(QModelIndex,QModelIndex)),
 		this, SLOT(currentColumnChanged(QModelIndex,QModelIndex)));
 	connect(sel_model, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -152,7 +146,6 @@ void SpreadsheetView::init(){
 
 	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) );
 	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) );
-	connect(m_tableView->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
 }
 
 void SpreadsheetView::initActions(){
@@ -162,9 +155,10 @@ void SpreadsheetView::initActions(){
 	action_paste_into_selection = new KAction(KIcon("edit-paste"), i18n("Past&e"), this);
 	action_mask_selection = new KAction(KIcon("edit-node"), i18n("&Mask Selection"), this);
 	action_unmask_selection = new KAction(KIcon("format-remove-node"), i18n("&Unmask Selection"), this);
+	action_clear_selection = new KAction(KIcon("edit-clear"), i18n("Clea&r Selection"), this);
+	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
 
 	action_set_formula = new KAction(KIcon(""), i18n("Assign &Formula"), this);
-	action_clear_selection = new KAction(KIcon("edit-clear"), i18n("Clea&r Selection"), this);
 	action_recalculate = new KAction(KIcon(""), i18n("Recalculate"), this);
 	action_fill_row_numbers = new KAction(KIcon(""), i18n("Row Numbers"), this);
 	action_fill_random = new KAction(KIcon(""), i18n("Uniform Random Values"), this);
@@ -175,7 +169,6 @@ void SpreadsheetView::initActions(){
 
 	//spreadsheet related actions
 	action_toggle_comments = new KAction(KIcon("document-properties"), i18n("Show Comments"), this);
-	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
 	action_add_column = new KAction(KIcon("edit-table-insert-column-left"), i18n("&Add Column"), this);
 	action_clear_spreadsheet = new KAction(KIcon("edit-clear"), i18n("Clear Spreadsheet"), this);
 	action_clear_masks = new KAction(KIcon("format-remove-node"), i18n("Clear Masks"), this);
@@ -392,19 +385,15 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar){
  *   - as the "spreadsheet menu" in the main menu-bar (called form MainWin)
  *   - as a part of the spreadsheet context menu in project explorer
  */
-void SpreadsheetView::createContextMenu(QMenu * menu) const {
+void SpreadsheetView::createContextMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
 	QAction* firstAction = 0;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
-#endif
 
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertAction(firstAction, action_toggle_comments);

@@ -32,6 +32,9 @@
 #include "ui_importfilewidget.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
+#include "HDFOptionsWidget.h"
+#include "ImageOptionsWidget.h"
+#include "NetCDFOptionsWidget.h"
 
 class FileDataSource;
 class AbstractFileFilter;
@@ -53,10 +56,15 @@ private:
 	Ui::ImportFileWidget ui;
 	Ui::AsciiOptionsWidget asciiOptionsWidget;
 	Ui::BinaryOptionsWidget binaryOptionsWidget;
+	Ui::HDFOptionsWidget hdfOptionsWidget;
+	Ui::ImageOptionsWidget imageOptionsWidget;
+	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
 
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
+	void hdfTreeWidgetItemSelected(QTreeWidgetItem*,int);
+	void netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int);
 	void saveFilter();
 	void manageFilters();
 	void filterChanged(int);

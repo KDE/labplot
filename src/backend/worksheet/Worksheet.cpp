@@ -33,18 +33,13 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/XmlStreamReader.h"
 #include <math.h>
 
-#include <QGraphicsScene>
-#include <QWidget>
-#include <QDebug>
 #include "KIcon"
-#include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
-
+#include <QDebug>
 
 /**
  * \class Worksheet
@@ -54,7 +49,7 @@
  *
  * * \ingroup worksheet
  */
-Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
+Worksheet::Worksheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
 		: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)){
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
@@ -63,7 +58,9 @@ Worksheet::Worksheet(AbstractScriptingEngine *engine, const QString &name)
 		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 		this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
-	init();
+
+	if (!loading)
+		init();
 }
 
 Worksheet::~Worksheet() {

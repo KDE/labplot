@@ -41,11 +41,11 @@ class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
 
-class XYCurveDock: public QWidget{
+class XYCurveDock : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit XYCurveDock(QWidget *parent);
+	explicit XYCurveDock(QWidget*);
     virtual ~XYCurveDock();
 
 	void setCurves(QList<XYCurve*>);
@@ -68,6 +68,9 @@ private:
 	virtual void initGeneralTab();
 	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
 	void showValuesColumnFormat(const Column*);
+
+	void load();
+	void loadConfig(KConfig&);
 
 protected:
 	bool m_initializing;
@@ -215,10 +218,8 @@ private slots:
 	void curveErrorBarsOpacityChanged(qreal);
 
 	//load and save
-	void load();
 	void loadConfigFromTemplate(KConfig&);
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);

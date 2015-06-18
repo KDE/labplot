@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Folder in a project
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
 
@@ -30,21 +30,15 @@
 
 #include "backend/core/Folder.h"
 #include "backend/core/Project.h"
-#include "backend/lib/XmlStreamReader.h"
+#include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
 
-#include <QXmlStreamWriter>
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <QIcon>
-#include "core/plugin/PluginManager.h"
-#else
 #include <KIcon>
-#include <klocalizedstring.h>
-#endif
+#include <KLocale>
 
 /**
  * \class Folder
@@ -55,16 +49,8 @@ Folder::Folder(const QString &name) : AbstractAspect(name) {}
 
 Folder::~Folder(){}
 
-QIcon Folder::icon() const
-{
-	QIcon result;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	result.addFile(":/folder_closed.xpm", QSize(), QIcon::Normal, QIcon::Off);
-	result.addFile(":/folder_open.xpm", QSize(), QIcon::Normal, QIcon::On);
-#else
-	result=KIcon("folder");
-#endif
-	return result;
+QIcon Folder::icon() const {
+	return KIcon("folder");
 }
 
 /**
@@ -72,28 +58,21 @@ QIcon Folder::icon() const
  *
  * The caller takes ownership of the menu.
  */
-QMenu *Folder::createContextMenu()
-{
+QMenu* Folder::createContextMenu() {
 	if (project())
 		return project()->createFolderContextMenu(this);
 	return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//! \name serialize/deserialize
-//@{
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * \brief Save as XML
  */
-void Folder::save(QXmlStreamWriter * writer) const
-{
+void Folder::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("folder");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	foreach(AbstractAspect * child, children<AbstractAspect>(IncludeHidden)) {
+	foreach(AbstractAspect* child, children<AbstractAspect>(IncludeHidden)) {
 		writer->writeStartElement("child_aspect");
 		child->save(writer);
 		writer->writeEndElement(); // "child_aspect"
@@ -104,36 +83,27 @@ void Folder::save(QXmlStreamWriter * writer) const
 /**
  * \brief Load from XML
  */
-bool Folder::load(XmlStreamReader * reader)
-{
-	if(reader->isStartElement() && reader->name() == "folder")
-	{
+bool Folder::load(XmlStreamReader* reader) {
+	if(reader->isStartElement() && reader->name() == "folder") {
 		setComment("");
 		removeAllChildren();
 
 		if (!readBasicAttributes(reader)) return false;
 
 		// read child elements
-		while (!reader->atEnd())
-		{
+		while (!reader->atEnd()) {
 			reader->readNext();
 
 			if (reader->isEndElement()) break;
 
-			if (reader->isStartElement())
-			{
-				if (reader->name() == "comment")
-				{
+			if (reader->isStartElement()) {
+				if (reader->name() == "comment") {
 					if (!readCommentElement(reader))
 						return false;
-				}
-				else if(reader->name() == "child_aspect")
-				{
+				} else if(reader->name() == "child_aspect") {
 					if (!readChildAspectElement(reader))
 						return false;
-				}
-				else // unknown element
-				{
+				} else {// unknown element
 					reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 					if (!reader->skipToEndElement()) return false;
 				}
@@ -149,76 +119,48 @@ bool Folder::load(XmlStreamReader * reader)
 /**
  * \brief Read child aspect from XML
  */
-bool Folder::readChildAspectElement(XmlStreamReader * reader)
-{
+bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 	bool loaded = false;
 	Q_ASSERT(reader->isStartElement() && reader->name() == "child_aspect");
 
 	if (!reader->skipToNextTag()) return false;
 	if (reader->isEndElement() && reader->name() == "child_aspect") return true; // empty element tag
+
 	QString element_name = reader->name().toString();
-	if (element_name == "folder")
-	{
-		Folder * folder = new Folder("");
-		if (!folder->load(reader))
-		{
+	if (element_name == "folder") {
+		Folder* folder = new Folder("");
+		if (!folder->load(reader)) {
 			delete folder;
 			return false;
 		}
 		addChild(folder);
 		loaded = true;
-	}
-	else if (element_name == "column")
-	{
-		Column * column = new Column("", AbstractColumn::Text);
-		if (!column->load(reader))
-		{
-			delete column;
+	} else if (element_name == "workbook") {
+		Workbook* workbook = new Workbook(0, "");
+		if (!workbook->load(reader)) {
+			delete workbook;
 			return false;
 		}
-		addChild(column);
+		addChild(workbook);
 		loaded = true;
-	}
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	else
-	{
-		foreach(QObject *plugin, PluginManager::plugins())
-		{
-			XmlElementAspectMaker * maker = qobject_cast<XmlElementAspectMaker *>(plugin);
-			if (maker && maker->canCreate(element_name))
-			{
-				AbstractAspect * aspect = maker->createAspectFromXml(reader);
-				if (aspect)
-				{
-					addChild(aspect);
-					loaded = true;
-					break;
-				}
-				else
-				{
-					reader->raiseError(i18n("creation of aspect from element '%1' failed", element_name));
-					return false;
-				}
-			}
-		}
-	}
-	if (!loaded)
-	{
-		reader->raiseWarning(i18n("no plugin to load element '%1' found", element_name));
-		if (!reader->skipToEndElement()) return false;
-	}
-#else
-	else if (element_name == "spreadsheet")
-	{
-		Spreadsheet * spreadsheet = new Spreadsheet(0, "");
-		if (!spreadsheet->load(reader)){
+	} else if (element_name == "spreadsheet") {
+		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
+		if (!spreadsheet->load(reader)) {
 			delete spreadsheet;
 			return false;
 		}
 		addChild(spreadsheet);
 		loaded = true;
-	}else if (element_name == "worksheet"){
-		Worksheet * worksheet = new Worksheet(0, "");
+	} else if (element_name == "matrix") {
+		Matrix* matrix = new Matrix(0, "", true);
+		if (!matrix->load(reader)) {
+			delete matrix;
+			return false;
+		}
+		addChild(matrix);
+		loaded = true;
+	} else if (element_name == "worksheet") {
+		Worksheet* worksheet = new Worksheet(0, "");
 		if (!worksheet->load(reader)){
 			delete worksheet;
 			return false;
@@ -226,7 +168,7 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 		addChild(worksheet);
 		loaded = true;
 	} else if (element_name == "fileDataSource") {
-		FileDataSource* fileDataSource = new FileDataSource(0, "");
+		FileDataSource* fileDataSource = new FileDataSource(0, "", true);
 		if (!fileDataSource->load(reader)){
 			delete fileDataSource;
 			return false;
@@ -235,17 +177,12 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 		loaded = true;
 	}
 
-	if (!loaded)
-	{
+	if (!loaded) {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
 		if (!reader->skipToEndElement()) return false;
 	}
-#endif
+
 	if (!reader->skipToNextTag()) return false;
 	Q_ASSERT(reader->isEndElement() && reader->name() == "child_aspect");
 	return !reader->hasError();
 }
-
-////////////////////////////////////////////////////////////////////////////////
-//@}
-////////////////////////////////////////////////////////////////////////////////

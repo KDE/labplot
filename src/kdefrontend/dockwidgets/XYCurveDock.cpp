@@ -172,7 +172,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	retranslateUi();
@@ -479,7 +479,7 @@ void XYCurveDock::init(){
 
 void XYCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);
@@ -2160,7 +2160,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	m_initializing=false;
 }
 
-void XYCurveDock::saveConfig(KConfig& config){
+void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "XYCurve" );
 
   	//General

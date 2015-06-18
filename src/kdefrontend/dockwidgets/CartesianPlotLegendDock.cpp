@@ -2,8 +2,7 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2014 by Alexander Semke (alexander.semke*web.de)
-							(use @ for *)
+    Copyright            : (C) 2013-2015 by Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian plot legend properties
 
  ***************************************************************************/
@@ -126,7 +125,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	init();
@@ -982,7 +981,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	m_initializing=false;
 }
 
-void CartesianPlotLegendDock::saveConfig(KConfig& config) {
+void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
 	//General-tab

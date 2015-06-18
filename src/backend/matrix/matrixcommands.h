@@ -3,9 +3,9 @@
     Project              : SciDAVis
     Description          : Commands used in Matrix (part of the undo/redo framework)
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,76 +31,54 @@
 #define MATRIX_COMMANDS_H
 
 #include <QUndoCommand>
+#include <QVector>
 #include "Matrix.h"
 
-///////////////////////////////////////////////////////////////////////////
-// class MatrixInsertColumnsCmd
-///////////////////////////////////////////////////////////////////////////
 //! Insert columns
-class MatrixInsertColumnsCmd : public QUndoCommand
-{
+class MatrixInsertColumnsCmd : public QUndoCommand {
 public:
-	MatrixInsertColumnsCmd( Matrix::Private * private_obj, int before, int count, QUndoCommand * parent = 0 );
-	~MatrixInsertColumnsCmd();
+	MatrixInsertColumnsCmd(MatrixPrivate* private_obj, int before, int count, QUndoCommand* parent = 0 );
 
 	virtual void redo();
 	virtual void undo();
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	//! Column to insert before
 	int m_before;
 	//! The number of new columns
 	int m_count;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixInsertColumnsCmd
-///////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-// class MatrixInsertRowsCmd
-///////////////////////////////////////////////////////////////////////////
 //! Insert rows
-class MatrixInsertRowsCmd : public QUndoCommand
-{
+class MatrixInsertRowsCmd : public QUndoCommand {
 public:
-	MatrixInsertRowsCmd( Matrix::Private * private_obj, int before, int count, QUndoCommand * parent = 0 );
-	~MatrixInsertRowsCmd();
+	MatrixInsertRowsCmd(MatrixPrivate* private_obj, int before, int count, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate* m_private_obj;
 	//! Row to insert before
 	int m_before;
 	//! The number of new rows
 	int m_count;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixInsertRowsCmd
-///////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-// class MatrixRemoveColumnsCmd
-///////////////////////////////////////////////////////////////////////////
 //! Remove columns
-class MatrixRemoveColumnsCmd : public QUndoCommand
-{
+class MatrixRemoveColumnsCmd : public QUndoCommand {
 public:
-	MatrixRemoveColumnsCmd( Matrix::Private * private_obj, int first, int count, QUndoCommand * parent = 0 );
-	~MatrixRemoveColumnsCmd();
+	MatrixRemoveColumnsCmd(MatrixPrivate* private_obj, int first, int count, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	//! First column to remove
 	int m_first;
 	//! The number of columns to remove
@@ -109,26 +87,17 @@ private:
 	QVector< QVector<double> > m_backups;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixRemoveColumnsCmd
-///////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-// class MatrixRemoveRowsCmd
-///////////////////////////////////////////////////////////////////////////
 //! Remove rows
-class MatrixRemoveRowsCmd : public QUndoCommand
-{
+class MatrixRemoveRowsCmd : public QUndoCommand {
 public:
-	MatrixRemoveRowsCmd( Matrix::Private * private_obj, int first, int count, QUndoCommand * parent = 0 );
-	~MatrixRemoveRowsCmd();
+	MatrixRemoveRowsCmd(MatrixPrivate* private_obj, int first, int count, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	//! First row to remove
 	int m_first;
 	//! The number of rows to remove
@@ -137,9 +106,6 @@ private:
 	QVector< QVector<double> > m_backups;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixRemoveRowsCmd
-///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
 // class MatrixClearCmd
@@ -148,7 +114,7 @@ private:
 class MatrixClearCmd : public QUndoCommand
 {
 public:
-	explicit MatrixClearCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
+	explicit MatrixClearCmd( MatrixPrivate * private_obj, QUndoCommand * parent = 0 );
 	~MatrixClearCmd();
 
 	virtual void redo();
@@ -156,7 +122,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	//! Backups of the cleared cells
 	QVector< QVector<double> > m_backups;
 };
@@ -172,7 +138,7 @@ private:
 class MatrixClearColumnCmd : public QUndoCommand
 {
 public:
-	MatrixClearColumnCmd( Matrix::Private * private_obj, int col, QUndoCommand * parent = 0 );
+	MatrixClearColumnCmd( MatrixPrivate * private_obj, int col, QUndoCommand * parent = 0 );
 	~MatrixClearColumnCmd();
 
 	virtual void redo();
@@ -180,7 +146,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	//! The index of the column
 	int m_col;
 	//! Backup of the cleared column
@@ -198,7 +164,7 @@ private:
 class MatrixSetCellValueCmd : public QUndoCommand
 {
 public:
-	MatrixSetCellValueCmd( Matrix::Private * private_obj, int row, int col, double value, QUndoCommand * parent = 0 );
+	MatrixSetCellValueCmd( MatrixPrivate * private_obj, int row, int col, double value, QUndoCommand * parent = 0 );
 	~MatrixSetCellValueCmd();
 
 	virtual void redo();
@@ -206,7 +172,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	//! The index of the row
 	int m_row;
 	//! The index of the column
@@ -228,7 +194,7 @@ private:
 class MatrixSetCoordinatesCmd : public QUndoCommand
 {
 public:
-	MatrixSetCoordinatesCmd( Matrix::Private * private_obj, double x1, double x2, double y1, double y2, QUndoCommand * parent = 0 );
+	MatrixSetCoordinatesCmd( MatrixPrivate * private_obj, double x1, double x2, double y1, double y2, QUndoCommand * parent = 0 );
 	~MatrixSetCoordinatesCmd();
 
 	virtual void redo();
@@ -236,7 +202,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	double m_new_x1;
 	double m_new_x2;
 	double m_new_y1;
@@ -252,62 +218,20 @@ private:
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
-// class MatrixSetFormatCmd
-///////////////////////////////////////////////////////////////////////////
-//! Set numeric format
-class MatrixSetFormatCmd : public QUndoCommand
-{
-	public:
-		MatrixSetFormatCmd( Matrix::Private * private_obj, char new_format);
-
-		virtual void redo();
-		virtual void undo();
-
-	private:
-		//! The private object to modify
-		Matrix::Private * m_private_obj;
-		char m_other_format;
-};
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixSetFormatCmd
-///////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
-// class MatrixSetDigitsCmd
-///////////////////////////////////////////////////////////////////////////
-//! Set displayed digits
-class MatrixSetDigitsCmd : public QUndoCommand
-{
-	public:
-		MatrixSetDigitsCmd( Matrix::Private * private_obj, int new_digits);
-
-		virtual void redo();
-		virtual void undo();
-
-	private:
-		//! The private object to modify
-		Matrix::Private * m_private_obj;
-		int m_other_digits;
-};
-///////////////////////////////////////////////////////////////////////////
-// end of class MatrixSetDigitsCmd
-///////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////
 // class MatrixSetFormulaCmd
 ///////////////////////////////////////////////////////////////////////////
 //! Set matrix formula
 class MatrixSetFormulaCmd : public QUndoCommand
 {
 	public:
-		MatrixSetFormulaCmd( Matrix::Private * private_obj, QString formula);
+		MatrixSetFormulaCmd( MatrixPrivate * private_obj, QString formula);
 
 		virtual void redo();
 		virtual void undo();
 
 	private:
 		//! The private object to modify
-		Matrix::Private * m_private_obj;
+		MatrixPrivate * m_private_obj;
 		QString m_other_formula;
 };
 ///////////////////////////////////////////////////////////////////////////
@@ -321,7 +245,7 @@ class MatrixSetFormulaCmd : public QUndoCommand
 class MatrixSetColumnCellsCmd : public QUndoCommand
 {
 public:
-	MatrixSetColumnCellsCmd( Matrix::Private * private_obj, int col, int first_row, int last_row, const QVector<double> & values, QUndoCommand * parent = 0 );
+	MatrixSetColumnCellsCmd( MatrixPrivate * private_obj, int col, int first_row, int last_row, const QVector<double> & values, QUndoCommand * parent = 0 );
 	~MatrixSetColumnCellsCmd();
 
 	virtual void redo();
@@ -329,7 +253,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	//! The index of the column
 	int m_col;
 	//! The index of the first row
@@ -353,7 +277,7 @@ private:
 class MatrixSetRowCellsCmd : public QUndoCommand
 {
 public:
-	MatrixSetRowCellsCmd( Matrix::Private * private_obj, int row, int first_column, int last_column, const QVector<double> & values, QUndoCommand * parent = 0 );
+	MatrixSetRowCellsCmd( MatrixPrivate * private_obj, int row, int first_column, int last_column, const QVector<double> & values, QUndoCommand * parent = 0 );
 	~MatrixSetRowCellsCmd();
 
 	virtual void redo();
@@ -361,7 +285,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 	//! The index of the row
 	int m_row;
 	//! The index of the first column
@@ -385,7 +309,7 @@ private:
 class MatrixTransposeCmd : public QUndoCommand
 {
 public:
-	explicit MatrixTransposeCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
+	explicit MatrixTransposeCmd( MatrixPrivate * private_obj, QUndoCommand * parent = 0 );
 	~MatrixTransposeCmd();
 
 	virtual void redo();
@@ -393,7 +317,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -407,7 +331,7 @@ private:
 class MatrixMirrorHorizontallyCmd : public QUndoCommand
 {
 public:
-	explicit MatrixMirrorHorizontallyCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
+	explicit MatrixMirrorHorizontallyCmd( MatrixPrivate * private_obj, QUndoCommand * parent = 0 );
 	~MatrixMirrorHorizontallyCmd();
 
 	virtual void redo();
@@ -415,7 +339,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -429,7 +353,7 @@ private:
 class MatrixMirrorVerticallyCmd : public QUndoCommand
 {
 public:
-	explicit MatrixMirrorVerticallyCmd( Matrix::Private * private_obj, QUndoCommand * parent = 0 );
+	explicit MatrixMirrorVerticallyCmd( MatrixPrivate * private_obj, QUndoCommand * parent = 0 );
 	~MatrixMirrorVerticallyCmd();
 
 	virtual void redo();
@@ -437,7 +361,7 @@ public:
 
 private:
 	//! The private object to modify
-	Matrix::Private * m_private_obj;
+	MatrixPrivate * m_private_obj;
 };
 
 ///////////////////////////////////////////////////////////////////////////

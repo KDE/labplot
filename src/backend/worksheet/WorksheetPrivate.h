@@ -1,10 +1,9 @@
 /***************************************************************************
     File                 : WorksheetPrivate.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Private members of Worksheet.
     --------------------------------------------------------------------
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses) 
+    Copyright            : (C) 2012 by Alexander Semke (alexander.semke@web.de)
                            
  ***************************************************************************/
 
@@ -37,10 +36,10 @@ class QGraphicsScene;
 
 class WorksheetPrivate{
 	public:
-		explicit WorksheetPrivate(Worksheet *owner);
+		explicit WorksheetPrivate(Worksheet*);
 		virtual ~WorksheetPrivate();
 
-		Worksheet * const q;
+		Worksheet* const q;
 		QRectF pageRect;
 		QGraphicsScene* m_scene;
 		bool useViewSize;

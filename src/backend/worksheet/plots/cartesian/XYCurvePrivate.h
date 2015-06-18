@@ -149,8 +149,8 @@ class XYCurvePrivate: public QGraphicsItem {
 		QList<QPointF> symbolPointsScene;	//points in scene coordinates
 		std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
 		QList<QPointF> valuesPoints;
-		std::vector<bool> connectedPoints;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
-											//false otherwise (don't connect because of a gap (NAN) in-between)
+		std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
+											       //false otherwise (don't connect because of a gap (NAN) in-between)
 		QList<QString> valuesStrings;
 		QList<QPolygonF> fillPolygons;
 

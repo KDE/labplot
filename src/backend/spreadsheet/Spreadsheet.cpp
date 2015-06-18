@@ -3,10 +3,9 @@
     Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief@yahoo.fr)
 
  ***************************************************************************/
 
@@ -32,21 +31,11 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/AbstractAspect.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
-#include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
-#endif
 
-#include <QApplication>
-#include <QDateTime>
-#include <QMenu>
-#include <QPrinter>
-#include <QDebug>
 /*!
   \class Spreadsheet
   \brief Aspect providing a spreadsheet table with column logic.
@@ -68,25 +57,22 @@
   \ingroup backend
 */
 
-Spreadsheet::Spreadsheet(AbstractScriptingEngine *engine, const QString& name)
+Spreadsheet::Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
   : AbstractDataSource(engine, name){
 
+	if (!loading)
+		init();
 }
 
 /*!
 	initializes the spreadsheet with the default number of columns and rows
 */
-void Spreadsheet::initDefault() {
+void Spreadsheet::init() {
 	int columns, rows;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	columns = 2;
-	rows = 100;
-#else
 	KConfig config;
 	KConfigGroup group = config.group( "Spreadsheet" );
 	columns = group.readEntry("ColumnCount", 2);
 	rows = group.readEntry("RowCount", 100);
-#endif
 
 	for(int i=0; i<columns; i++) {
 		Column* new_col = new Column(QString::number(i+1), AbstractColumn::Numeric);
@@ -104,11 +90,9 @@ QWidget *Spreadsheet::view() const
 {
 	if (!m_view) {
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 		KConfig config;
 		KConfigGroup group = config.group( "Spreadsheet" );
 		reinterpret_cast<SpreadsheetView*>(m_view)->showComments(group.readEntry("ShowComments", false));
-#endif
 	}
 
 	return m_view;

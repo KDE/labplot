@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2008 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -36,6 +36,7 @@ class ImportFileWidget;
 class FileDataSource;
 class TreeViewComboBox;
 
+class KMenu;
 class QStatusBar;
 class QAbstractItemModel;
 class QModelIndex;
@@ -43,6 +44,7 @@ class QVBoxLayout;
 class QLabel;
 class QComboBox;
 class QGroupBox;
+class QToolButton;
 class QProgressBar;
 
 class ImportFileDialog: public KDialog {
@@ -53,7 +55,7 @@ class ImportFileDialog: public KDialog {
 	~ImportFileDialog();
 
 	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	void importToSpreadsheet(QStatusBar*) const;
+	void importTo(QStatusBar*) const;
 	void setModel(std::auto_ptr<QAbstractItemModel>);
 	void updateModel(std::auto_ptr<QAbstractItemModel>);
 	void setCurrentIndex(const QModelIndex&);
@@ -67,16 +69,23 @@ class ImportFileDialog: public KDialog {
 	QComboBox* cbPosition;
 	QWidget* mainWidget;
 	QPushButton* bNewSpreadsheet;
+	QPushButton* bNewMatrix;
+	QPushButton* bNewWorkbook;
+	QToolButton* tbNewDataContainer;
 	std::auto_ptr<QAbstractItemModel> m_model;
 	bool m_optionsShown;
+	KMenu* m_newDataContainerMenu;
 
   private slots:
 	void toggleOptions();
 	void currentAddToIndexChanged(QModelIndex);
-	void newSpreadsheet();
+	void newDataContainerMenu();
+	void newDataContainer(QAction*);
 
-	signals:
-		void newSpreadsheetRequested(const QString&);
+  signals:
+	void newSpreadsheetRequested(const QString&);
+	void newMatrixRequested(const QString&);
+	void newWorkbookRequested(const QString&);
 };
 
 #endif //IMPORTFILEDIALOG_H

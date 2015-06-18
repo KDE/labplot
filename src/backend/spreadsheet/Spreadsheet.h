@@ -3,9 +3,8 @@
     Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
+    Copyright            : (C) 2010-2015 Alexander Semke(alexander.semke@web.de)
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2006-2007 Ion Vasilief (ion_vasilief@yahoo.fr)
 
  ***************************************************************************/
 
@@ -34,21 +33,20 @@
 #include "backend/core/column/Column.h"
 #include <QList>
 
-class Spreadsheet : public AbstractDataSource{
+class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
 
 	public:
-		Spreadsheet(AbstractScriptingEngine* engine, const QString &name);
+		Spreadsheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 
 		virtual QIcon icon() const;
-		virtual QMenu *createContextMenu();
-		virtual QWidget *view() const;
+		virtual QMenu* createContextMenu();
+		virtual QWidget* view() const;
 
-		void initDefault();
 		int columnCount() const;
 		int columnCount(AbstractColumn::PlotDesignation) const;
 		Column* column(int index) const;
-		Column* column(const QString &name) const;
+		Column* column(const QString&) const;
 		int rowCount() const;
 
 		void removeRows(int first, int count);
@@ -60,10 +58,10 @@ class Spreadsheet : public AbstractDataSource{
 		int colY(int col);
 		QString text(int row, int col) const;
 
-		void copy(Spreadsheet * other);
+		void copy(Spreadsheet* other);
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		void setColumnSelectedInView(int index, bool selected);
 
@@ -85,7 +83,8 @@ class Spreadsheet : public AbstractDataSource{
 		void clearMasks();
 
 		void moveColumn(int from, int to);
-		void sortColumns(Column * leading, QList<Column*> cols, bool ascending);
+		void sortColumns(Column* leading, QList<Column*> cols, bool ascending);
+
 	private:
 		void init();
 
@@ -94,8 +93,7 @@ class Spreadsheet : public AbstractDataSource{
 		virtual void childDeselected(const AbstractAspect*);
 
 	signals:
-		void requestProjectMenu(QMenu *menu, bool *rc);
-		void requestProjectContextMenu(QMenu *menu);
+		void requestProjectContextMenu(QMenu*);
 		void columnSelected(int);
 		void columnDeselected(int);
 

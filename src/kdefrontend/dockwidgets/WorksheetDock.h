@@ -4,7 +4,7 @@
     Description          : widget for worksheet properties
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -37,11 +37,11 @@
 class Worksheet;
 class AbstractAspect;
 
-class WorksheetDock: public QWidget {
+class WorksheetDock : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit WorksheetDock(QWidget* parent);
+	explicit WorksheetDock(QWidget*);
 	void setWorksheets(QList<Worksheet*>);
 
 private:
@@ -51,6 +51,9 @@ private:
 	bool m_initializing;
 
 	void updatePaperSize();
+
+	void load();
+	void loadConfig(KConfig&);
 
 private slots:
 	void retranslateUi();
@@ -109,10 +112,8 @@ private slots:
 	void worksheetLayoutColumnCountChanged(int);
 
 	//saving/loading
-	void load();
 	void loadConfigFromTemplate(KConfig&);
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);
