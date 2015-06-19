@@ -9,7 +9,7 @@
 #include <QDebug>
 
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
-        : AbstractPart(name), scripted(engine){
+        : AbstractPart(name), scripted(engine), m_datasheet(0), m_image(0){
 }
 
 QIcon Datapicker::icon() const {
@@ -33,10 +33,14 @@ QWidget* Datapicker::view() const {
 }
 
 void Datapicker::initDefault() {
-    Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
-    addChild(spreadsheet);
-    Image* image = new Image(0, i18n("Image"));
-    addChild(image);
+    m_image = new Image(0, i18n("Image"));
+    addChild(m_image);
+    initImageConnections();
+}
+
+void Datapicker::initImageConnections() {
+    connect(m_image, SIGNAL(addDataToSheet(QPointF,int)),
+            this, SLOT(addDataToDatasheet(QPointF,int)));
 }
 
 Spreadsheet* Datapicker::currentSpreadsheet() const {
@@ -104,6 +108,31 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
     }
 }
 
+void Datapicker::addDataToDatasheet(const QPointF& data, int index){
+    //add spreadsheet if its not present
+    //change code
+    int count = childCount<Spreadsheet>();
+    if (!count) {
+        m_datasheet = new Spreadsheet(0, i18n("Data"));
+        addChild(m_datasheet);
+    }
+
+    //add column if its not present
+    if(m_datasheet->columnCount() < 2) {
+        m_datasheet->appendColumns(2 - m_datasheet->columnCount());
+    }
+
+    //add row if its not present
+    if(m_datasheet->rowCount() < index) {
+        m_datasheet->appendRows(index - m_datasheet->rowCount());
+    }
+
+    m_datasheet->setUndoAware(false);
+    m_datasheet->column(0)->setValueAt(index, data.x());
+    m_datasheet->column(1)->setValueAt(index, data.y());
+    m_datasheet->setUndoAware(true);
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -146,6 +175,7 @@ bool Datapicker::load(XmlStreamReader* reader){
                 return false;
             }else{
                 addChild(spreadsheet);
+                m_datasheet = spreadsheet;
             }
         } else if (reader->name() == "image"){
             Image* image = new Image(0, i18n("image"));
@@ -154,6 +184,7 @@ bool Datapicker::load(XmlStreamReader* reader){
                 return false;
             }else{
                 addChild(image);
+                m_image = image;
             }
         }else{ // unknown element
             reader->raiseWarning(i18n("unknown datapicker element '%1'", reader->name().toString()));
@@ -161,5 +192,6 @@ bool Datapicker::load(XmlStreamReader* reader){
         }
     }
 
+    initImageConnections();
     return true;
 }

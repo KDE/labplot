@@ -132,14 +132,17 @@ void ImageWidget::handleAspectRemoved() {
 
 void ImageWidget::handleAspectAdded() {
     m_itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+    CustomItem* m_item = m_itemsList.first();
     if ( m_itemsList.count() == 1 ) {
         customItemWidget->setEnabled(true);
+        m_item->setUndoAware(false);
+        m_item->setItemsStyle(CustomItem::Cross);
+        m_item->setUndoAware(true);
         customItemWidget->setCustomItems(m_itemsList);
     } else {
         customItemWidget->updateItemList(m_itemsList);
         //set properties of new item
         CustomItem* newItem = m_itemsList.last();
-        CustomItem* m_item = m_itemsList.first();
         newItem->setUndoAware(false);
         newItem->setItemsBrush(m_item->itemsBrush());
         newItem->setItemsOpacity(m_item->itemsOpacity());

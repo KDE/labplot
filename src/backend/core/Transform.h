@@ -7,22 +7,21 @@ class Transform
 {
 public:
     Transform(Image*);
-    QPointF mapSceneToLogical(const QPointF&);
+    QPointF mapSceneToLogical(const QPointF &);
 
+private:
+    bool mapTypeToCartesian();
+    QPointF mapCartesianToType(const QPointF&);
     Image::ReferencePoints m_points;
     Image* m_image;
 
     //logical coordinates
-    double x[3];
-    double y[3];
+    double x[4];
+    double y[4];
 
     //Scene coordinates
-    double X[3];
-    double Y[3];
-
-private:
-    bool setType();
-    QPointF setOutput(const QPointF&);
+    double X[4];
+    double Y[4];
 
 };
 

@@ -6,6 +6,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/datapicker/ImageView.h"
 #include "backend/core/Transform.h"
+#include "backend/core/Datapicker.h"
 
 #include "KIcon"
 #include <KConfigGroup>
@@ -68,17 +69,17 @@ void Image::handleAspectAdded(const AbstractAspect* aspect) {
 		if (aspect->parentAspect() == this){
 			QGraphicsItem *item = addedElement->graphicsItem();
 			Q_ASSERT(item != NULL);
-			d->m_scene->addItem(item);
-
+            d->m_scene->addItem(item);
 
             if (count <= 3) {
                 d->points.scenePos[count - 1].setX(item->pos().x());
                 d->points.scenePos[count - 1].setY(item->pos().y());
-
                 if (count == 3)
                     d->drawPoints = false;
             } else {
                 emit updateLogicalPositions();
+                QPointF point = m_transform->mapSceneToLogical(item->pos());
+                emit addDataToSheet(point, count - 4);
             }
 
             qreal zVal = 0;

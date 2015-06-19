@@ -22,8 +22,8 @@ class Image: public AbstractPart, public scripted {
 
         struct ReferencePoints{
             GraphType type;
-            QPointF scenePos[2];
-            QPointF logicalPos[2];
+            QPointF scenePos[3];
+            QPointF logicalPos[3];
         };
 
 		virtual QIcon icon() const;
@@ -69,6 +69,7 @@ class Image: public AbstractPart, public scripted {
 		void requestUpdate();
         void updateLogicalPositions();
 
+        void addDataToSheet(const QPointF&, int);
         friend class ImageSetImageFileNameCmd;
         void imageFileNameChanged(const QString&);
         friend class ImageSetRotationAngleCmd;

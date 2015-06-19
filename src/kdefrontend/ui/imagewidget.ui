@@ -26,6 +26,12 @@
          <property name="decimals">
           <number>2</number>
          </property>
+         <property name="minimum">
+          <double>-9999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
         </widget>
        </item>
        <item row="6" column="4">
@@ -43,17 +49,34 @@
         </widget>
        </item>
        <item row="7" column="6">
-        <widget class="QDoubleSpinBox" name="sbPoisitionY2"/>
+        <widget class="QDoubleSpinBox" name="sbPoisitionY2">
+         <property name="minimum">
+          <double>-9999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="6" column="6">
         <widget class="QDoubleSpinBox" name="sbPoisitionY1">
+         <property name="minimum">
+          <double>-9999.000000000000000</double>
+         </property>
          <property name="maximum">
-          <double>99.989999999999995</double>
+          <double>9999.000000000000000</double>
          </property>
         </widget>
        </item>
        <item row="8" column="3">
-        <widget class="QDoubleSpinBox" name="sbPoisitionX3"/>
+        <widget class="QDoubleSpinBox" name="sbPoisitionX3">
+         <property name="minimum">
+          <double>-9999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="9" column="1">
         <spacer name="verticalSpacer">
@@ -89,7 +112,14 @@
         </widget>
        </item>
        <item row="7" column="3">
-        <widget class="QDoubleSpinBox" name="sbPoisitionX2"/>
+        <widget class="QDoubleSpinBox" name="sbPoisitionX2">
+         <property name="minimum">
+          <double>-9999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="lPoisitionX3">
@@ -166,7 +196,14 @@
         </widget>
        </item>
        <item row="8" column="6">
-        <widget class="QDoubleSpinBox" name="sbPoisitionY3"/>
+        <widget class="QDoubleSpinBox" name="sbPoisitionY3">
+         <property name="minimum">
+          <double>-9999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="lRotation">

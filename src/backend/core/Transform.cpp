@@ -6,7 +6,7 @@
 Transform::Transform(Image *image): m_image(image) {
 }
 
-bool Transform::setType() {
+bool Transform::mapTypeToCartesian() {
     if (m_points.type == Image::Logarithmic) {
         for(int i=0;i<3;i++){
             if (m_points.logicalPos[i].x() <= 0)
@@ -38,10 +38,11 @@ bool Transform::setType() {
 
 QPointF Transform::mapSceneToLogical(const QPointF& scenePoint) {
     m_points = m_image->points();
+
     X[3] = scenePoint.x();
     Y[3] = scenePoint.y();
 
-    if (setType()){
+    if (mapTypeToCartesian()){
         double tan;
         double sin;
         double cos;
@@ -67,14 +68,14 @@ QPointF Transform::mapSceneToLogical(const QPointF& scenePoint) {
         }
         x[3] = x[0] + (((X[3] - X[0])*cos - (Y[3] - Y[0])*sin)*scaleOfX);
         y[3] = y[0] + (((X[3] - X[0])*sin + (Y[3] - Y[0])*cos)*scaleOfY);
-        return setOutput(QPointF(x[3], y[3]));
+        return mapCartesianToType(QPointF(x[3], y[3]));
     }
     return QPointF();
 }
 
-QPointF Transform::setOutput(const QPointF& point){
+QPointF Transform::mapCartesianToType(const QPointF& point){
     if (m_points.type == Image::Logarithmic) {
-        return QPoint(exp(point.x()), point.y());
+        return QPointF(exp(point.x()), point.y());
     } else if (m_points.type == Image::Polar) {
         double r = sqrt(point.x()*point.x() + point.y()*point.y());
         double angle = atan(point.y()*180/(point.x()*PI));
