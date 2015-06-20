@@ -121,16 +121,12 @@ void ImageView::initMenus(){
 void ImageView::createContextMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
 	QAction* firstAction = 0;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
-#endif
 
 	menu->insertMenu(firstAction, m_viewMouseModeMenu);
 	menu->insertMenu(firstAction, m_zoomMenu);
@@ -191,11 +187,13 @@ void ImageView::drawBackground(QPainter* painter, const QRectF& rect) {
 
 
     // canvas
-
     if (m_image->isLoaded) {
         painter->rotate(-m_image->rotationAngle());
         painter->drawPixmap(scene_rect.topLeft(),m_image->imagePixmap);
-    }
+    } else {
+		painter->setBrush(QBrush(Qt::white));
+		painter->drawRect(scene_rect);
+	}
 
 	invalidateScene(rect, QGraphicsScene::BackgroundLayer);
 	painter->restore();

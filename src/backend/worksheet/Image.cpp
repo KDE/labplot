@@ -8,14 +8,15 @@
 #include "backend/core/Transform.h"
 #include "backend/core/Datapicker.h"
 
+#include <QMenu>
 #include "KIcon"
 #include <KConfigGroup>
 #include <KLocale>
 
 
 Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
-        : AbstractPart(name), scripted(engine), d(new ImagePrivate(this)),
-          isLoaded(false), m_transform(new Transform(this)){
+        : AbstractPart(name), scripted(engine), isLoaded(false),
+        d(new ImagePrivate(this)), m_transform(new Transform(this)){
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -42,12 +43,13 @@ void Image::init() {
 }
 
 QIcon Image::icon() const {
-    return KIcon("");
+    return KIcon("image-x-generic");
 }
 
 QMenu *Image::createContextMenu() {
-	QMenu *menu = AbstractPart::createContextMenu();
-    Q_ASSERT(menu);
+// 	QMenu *menu = AbstractPart::createContextMenu();
+//     Q_ASSERT(menu);
+	QMenu* menu = new QMenu(0);
 	emit requestProjectContextMenu(menu);
 	return menu;
 }

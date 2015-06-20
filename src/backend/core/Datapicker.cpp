@@ -13,7 +13,7 @@ Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
 }
 
 QIcon Datapicker::icon() const {
-    return KIcon("");
+    return KIcon("color-picker-black");
 }
 
 /*!
