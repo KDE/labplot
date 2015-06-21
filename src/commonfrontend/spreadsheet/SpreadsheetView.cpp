@@ -158,8 +158,8 @@ void SpreadsheetView::initActions(){
 	action_clear_selection = new KAction(KIcon("edit-clear"), i18n("Clea&r Selection"), this);
 	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
 
-	action_set_formula = new KAction(KIcon(""), i18n("Assign &Formula"), this);
-	action_recalculate = new KAction(KIcon(""), i18n("Recalculate"), this);
+// 	action_set_formula = new KAction(KIcon(""), i18n("Assign &Formula"), this);
+// 	action_recalculate = new KAction(KIcon(""), i18n("Recalculate"), this);
 	action_fill_row_numbers = new KAction(KIcon(""), i18n("Row Numbers"), this);
 	action_fill_random = new KAction(KIcon(""), i18n("Uniform Random Values"), this);
 	action_fill_random_nonuniform = new KAction(KIcon(""), i18n("Random Values"), this);
@@ -186,7 +186,10 @@ void SpreadsheetView::initActions(){
 // 	action_set_as_xerr = new KAction(KIcon(""), i18n("X Error, Plot Designation"), this);
 // 	action_set_as_yerr = new KAction(KIcon(""), i18n("Y Error, Plot Designation"), this);
 // 	action_set_as_none = new KAction(KIcon(""), i18n("None, Plot Designation"), this);
-	action_normalize_columns = new KAction(KIcon(""), i18n("&Normalize Columns"), this);
+	action_reverse_columns = new KAction(KIcon(""), i18n("Reverse"), this);
+	action_drop_values = new KAction(KIcon(""), i18n("Drop Values"), this);
+	action_join_columns = new KAction(KIcon(""), i18n("Join"), this);
+	action_normalize_columns = new KAction(KIcon(""), i18n("&Normalize"), this);
 	action_normalize_selection = new KAction(KIcon(""), i18n("&Normalize Selection"), this);
 	action_sort_columns = new KAction(KIcon(""), i18n("&Selected Columns"), this);
 	action_sort_asc_column = new KAction(KIcon("view-sort-ascending"), i18n("&Ascending"), this);
@@ -254,12 +257,9 @@ void SpreadsheetView::initMenus(){
 	m_columnMenu->addMenu(submenu);
 	m_columnMenu->addSeparator();
 
-	m_columnMenu->addAction(action_insert_columns);
-	m_columnMenu->addAction(action_remove_columns);
-	m_columnMenu->addAction(action_clear_columns);
-	m_columnMenu->addAction(action_add_columns);
-	m_columnMenu->addSeparator();
-
+	m_columnMenu->addAction(action_reverse_columns);
+	m_columnMenu->addAction(action_drop_values);
+	m_columnMenu->addAction(action_join_columns);
 	m_columnMenu->addAction(action_normalize_columns);
 
 	submenu = new QMenu(i18n("Sort"));
@@ -270,11 +270,16 @@ void SpreadsheetView::initMenus(){
 	m_columnMenu->addMenu(submenu);
 	m_columnMenu->addSeparator();
 
+	m_columnMenu->addAction(action_insert_columns);
+	m_columnMenu->addAction(action_remove_columns);
+	m_columnMenu->addAction(action_clear_columns);
+	m_columnMenu->addAction(action_add_columns);
+	m_columnMenu->addSeparator();
+
 	m_columnMenu->addAction(action_toggle_comments);
 	m_columnMenu->addSeparator();
 
-	//TODO
-// 	m_columnMenu->addAction(action_statistics_columns);
+// 	TODO: m_columnMenu->addAction(action_statistics_columns);
 
 
 	//Spreadsheet menu
@@ -321,7 +326,7 @@ void SpreadsheetView::connectActions(){
 	connect(action_unmask_selection, SIGNAL(triggered()), this, SLOT(unmaskSelection()));
 
 	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
-	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
+// 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
 	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 // 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
 	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithRandomValues()));
@@ -345,8 +350,11 @@ void SpreadsheetView::connectActions(){
 // 	connect(action_set_as_xerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsXError()));
 // 	connect(action_set_as_yerr, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsYError()));
 // 	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
+	connect(action_reverse_columns, SIGNAL(triggered()), this, SLOT(reverseColumns()));
+	connect(action_drop_values, SIGNAL(triggered()), this, SLOT(dropColumnValues()));
+	connect(action_join_columns, SIGNAL(triggered()), this, SLOT(joinColumns()));
 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
-	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
+-	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
 	connect(action_sort_asc_column, SIGNAL(triggered()), this, SLOT(sortColumnAscending()));
 	connect(action_sort_desc_column, SIGNAL(triggered()), this, SLOT(sortColumnDescending()));
@@ -963,10 +971,8 @@ void SpreadsheetView::unmaskSelection(){
 	RESET_CURSOR;
 }
 
-// TODO
-void SpreadsheetView::recalculateSelectedCells(){
-// 	QMessageBox::information(0, "info", "not yet implemented");
-}
+// void SpreadsheetView::recalculateSelectedCells(){
+// }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 	if (selectedColumnCount() < 1) return;
@@ -1241,40 +1247,54 @@ void SpreadsheetView::clearSelectedColumns(){
 	RESET_CURSOR;
 }
 
-void SpreadsheetView::setSelectionAs(AbstractColumn::PlotDesignation pd){
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: set plot designation", m_spreadsheet->name()));
+// void SpreadsheetView::setSelectionAs(AbstractColumn::PlotDesignation pd){
+// 	WAIT_CURSOR;
+// 	m_spreadsheet->beginMacro(i18n("%1: set plot designation", m_spreadsheet->name()));
+//
+// 	QList< Column* > list = selectedColumns();
+// 	foreach(Column* ptr, list)
+// 		ptr->setPlotDesignation(pd);
+//
+// 	m_spreadsheet->endMacro();
+// 	RESET_CURSOR;
+// }
 
-	QList< Column* > list = selectedColumns();
-	foreach(Column* ptr, list)
-		ptr->setPlotDesignation(pd);
+// void SpreadsheetView::setSelectedColumnsAsX(){
+// 	setSelectionAs(AbstractColumn::X);
+// }
+//
+// void SpreadsheetView::setSelectedColumnsAsY(){
+// 	setSelectionAs(AbstractColumn::Y);
+// }
+//
+// void SpreadsheetView::setSelectedColumnsAsZ(){
+// 	setSelectionAs(AbstractColumn::Z);
+// }
+//
+// void SpreadsheetView::setSelectedColumnsAsYError(){
+// 	setSelectionAs(AbstractColumn::yErr);
+// }
+//
+// void SpreadsheetView::setSelectedColumnsAsXError(){
+// 	setSelectionAs(AbstractColumn::xErr);
+// }
+//
+// void SpreadsheetView::setSelectedColumnsAsNone(){
+// 	setSelectionAs(AbstractColumn::noDesignation);
+// }
+void SpreadsheetView::reverseColumns()
+{
 
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
-void SpreadsheetView::setSelectedColumnsAsX(){
-	setSelectionAs(AbstractColumn::X);
+void SpreadsheetView::dropColumnValues()
+{
+
 }
 
-void SpreadsheetView::setSelectedColumnsAsY(){
-	setSelectionAs(AbstractColumn::Y);
-}
+void SpreadsheetView::joinColumns()
+{
 
-void SpreadsheetView::setSelectedColumnsAsZ(){
-	setSelectionAs(AbstractColumn::Z);
-}
-
-void SpreadsheetView::setSelectedColumnsAsYError(){
-	setSelectionAs(AbstractColumn::yErr);
-}
-
-void SpreadsheetView::setSelectedColumnsAsXError(){
-	setSelectionAs(AbstractColumn::xErr);
-}
-
-void SpreadsheetView::setSelectedColumnsAsNone(){
-	setSelectionAs(AbstractColumn::noDesignation);
 }
 
 void SpreadsheetView::normalizeSelectedColumns(){

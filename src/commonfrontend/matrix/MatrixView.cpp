@@ -193,8 +193,6 @@ void MatrixView::connectActions() {
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 
 	// matrix related actions
-	connect(action_data_view, SIGNAL(triggered()), this, SLOT(switchView()));
-	connect(action_image_view, SIGNAL(triggered()), this, SLOT(switchView()));
 	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
 	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
 

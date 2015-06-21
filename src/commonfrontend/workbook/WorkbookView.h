@@ -77,6 +77,7 @@ class WorkbookView : public QWidget {
 		void itemSelected(int);
 		void tabChanged(int);
 		void tabMoved(int,int);
+		void handleDescriptionChanged(const AbstractAspect*);
 		void handleAspectAdded(const AbstractAspect*);
 		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 
