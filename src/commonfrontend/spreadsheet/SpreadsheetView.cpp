@@ -62,6 +62,8 @@
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 
+#include <algorithm>
+
 /*!
 	\class SpreadsheetView
 	\brief View class for Spreadsheet
@@ -1282,9 +1284,25 @@ void SpreadsheetView::clearSelectedColumns(){
 // void SpreadsheetView::setSelectedColumnsAsNone(){
 // 	setSelectionAs(AbstractColumn::noDesignation);
 // }
-void SpreadsheetView::reverseColumns()
-{
 
+void SpreadsheetView::reverseColumns() {
+	WAIT_CURSOR;
+	QList<Column*> cols = selectedColumns();
+	m_spreadsheet->beginMacro(i18np("%1: reverse column",
+								"%1: reverse columns",
+								m_spreadsheet->name(),
+								cols.size()));
+	foreach(Column* col, cols) {
+		if (col->columnMode() != AbstractColumn::Numeric)
+			continue;
+
+		QVector<double>* data = static_cast<QVector<double>* >(col->data());
+		QVector<double> new_data(*data);
+		std::reverse(new_data.begin(), new_data.end());
+		col->replaceValues(0, new_data);
+	}
+	m_spreadsheet->endMacro();
+	RESET_CURSOR;
 }
 
 void SpreadsheetView::dropColumnValues()

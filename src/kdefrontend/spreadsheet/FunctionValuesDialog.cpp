@@ -160,7 +160,7 @@ void FunctionValuesDialog::generate() {
 	Q_ASSERT(m_spreadsheet);
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: fill column function values",
+	m_spreadsheet->beginMacro(i18np("%1: fill column with function values",
 									"%1: fill columns with function values",
 									m_spreadsheet->name(),
 									m_columns.size()));
