@@ -7,6 +7,7 @@
 #include "commonfrontend/datapicker/ImageView.h"
 #include "backend/core/Transform.h"
 #include "backend/core/Datapicker.h"
+#include "backend/core/ImageEditor.h"
 
 #include <QMenu>
 #include "KIcon"
@@ -16,7 +17,7 @@
 
 Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
         : AbstractPart(name), scripted(engine), isLoaded(false),
-        d(new ImagePrivate(this)), m_transform(new Transform(this)){
+        d(new ImagePrivate(this)), m_transform(new Transform(this)), m_imageEditor(new ImageEditor(this)){
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
 		this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -130,6 +131,7 @@ void Image::update(){
 /* =============================== getter methods for background options ================================= */
 CLASS_D_READER_IMPL(Image, QString, imageFileName, imageFileName)
 CLASS_D_READER_IMPL(Image, Image::ReferencePoints, points, points)
+CLASS_D_READER_IMPL(Image, Image::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(Image, float, rotationAngle, rotationAngle)
 BASIC_D_READER_IMPL(Image, bool, drawPoints, drawPoints)
 
@@ -138,6 +140,12 @@ STD_SETTER_CMD_IMPL_F_S(Image, SetImageFileName, QString, imageFileName, updateF
 void Image::setImageFileName(const QString& fileName) {
     if (fileName!= d->imageFileName)
         exec(new ImageSetImageFileNameCmd(d, fileName, i18n("%1: set image")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Image, SetSettings, Image::EditorSettings, settings, update)
+void Image::setSettings(const EditorSettings& settings) {
+    if (memcmp(&settings, &d->settings, sizeof(settings)) != 0)
+        exec(new ImageSetSettingsCmd(d, settings, i18n("%1: set image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetRotationAngle, float, rotationAngle, update)

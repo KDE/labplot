@@ -10,6 +10,7 @@ class QGraphicsItem;
 class QRectF;
 class ImagePrivate;
 class Transform;
+class ImageEditor;
 
 class Image: public AbstractPart, public scripted {
 	Q_OBJECT
@@ -19,11 +20,27 @@ class Image: public AbstractPart, public scripted {
 		~Image();
 
         enum GraphType {Cartesian,Polar,Logarithmic};
+        enum ColorAttributes{ None, Intensity, Foreground, Hue, Saturation, Value };
 
         struct ReferencePoints{
             GraphType type;
             QPointF scenePos[3];
             QPointF logicalPos[3];
+        };
+
+        struct EditorSettings
+        {
+          ColorAttributes type;
+          int intensityThresholdLow;
+          int intensityThresholdHigh;
+          int foregroundThresholdLow;
+          int foregroundThresholdHigh;
+          int hueThresholdLow;
+          int hueThresholdHigh;
+          int saturationThresholdLow;
+          int saturationThresholdHigh;
+          int valueThresholdLow;
+          int valueThresholdHigh;
         };
 
 		virtual QIcon icon() const;
@@ -46,6 +63,7 @@ class Image: public AbstractPart, public scripted {
 
         CLASS_D_ACCESSOR_DECL(QString, imageFileName, ImageFileName)
         CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, points, Points)
+        CLASS_D_ACCESSOR_DECL(Image::EditorSettings, settings, Settings)
         BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
         BASIC_D_ACCESSOR_DECL(bool, drawPoints, DrawPoints)
 
@@ -58,6 +76,7 @@ class Image: public AbstractPart, public scripted {
 		friend class ImagePrivate;
 
         Transform* m_transform;
+        ImageEditor* m_imageEditor;
 
 	 private slots:
 		void handleAspectAdded(const AbstractAspect*);
@@ -68,12 +87,15 @@ class Image: public AbstractPart, public scripted {
 		void requestProjectContextMenu(QMenu*);
 		void requestUpdate();
         void updateLogicalPositions();
+        void settingsChanged(const Image::EditorSettings&);
+
 
         void addDataToSheet(const QPointF&, int);
-        friend class ImageSetImageFileNameCmd;
         void imageFileNameChanged(const QString&);
-        friend class ImageSetRotationAngleCmd;
         void rotationAngleChanged(float);
+        friend class ImageSetSettingsCmd;
+        friend class ImageSetImageFileNameCmd;
+        friend class ImageSetRotationAngleCmd;
 };
 
 #endif

@@ -159,6 +159,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/Image.cpp
 	${BACKEND_DIR}/core/Datapicker.cpp
 	${BACKEND_DIR}/core/Transform.cpp
+        ${BACKEND_DIR}/core/ImageEditor.cpp
 )
 
 set(COMMONFRONTEND_SOURCES

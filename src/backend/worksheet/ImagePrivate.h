@@ -12,6 +12,7 @@ class ImagePrivate{
 		virtual ~ImagePrivate();
 		
 		Image::ReferencePoints points;
+		Image::EditorSettings settings;
 		Image* const q;
 		QRectF pageRect;
 		QGraphicsScene* m_scene;
