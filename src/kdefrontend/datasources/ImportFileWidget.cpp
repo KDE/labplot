@@ -669,8 +669,7 @@ void ImportFileWidget::headerChanged(int state) {
 }
 
 void ImportFileWidget::refreshPreview(){
-	// reset preview text edit palette if there was an image before
-	ui.tePreview->setPalette(this->palette());
+	ui.tePreview->clear();
 
 	QString fileName = ui.kleFileName->text();
 	if ( fileName.left(1) != QDir::separator() )
@@ -684,20 +683,19 @@ void ImportFileWidget::refreshPreview(){
 	case FileDataSource::Ascii: {
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
 		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+		ui.tePreview->setPlainText(importedText);
 		break;
 	}
 	case FileDataSource::Binary: {
 		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+		ui.tePreview->setPlainText(importedText);
 		break;
 	}
 	case FileDataSource::Image: {
 		QImage image(fileName);
-		QImage scaledImage = image.scaled(ui.tePreview->size());
-
-		QPalette palette;
-		palette.setBrush(QPalette::Base, QBrush(scaledImage));
-		ui.tePreview->setPalette(palette);
+		QTextCursor cursor = ui.tePreview->textCursor();
+		cursor.insertImage(image);
 		break;
 	}
 	case FileDataSource::HDF: {
@@ -716,8 +714,6 @@ void ImportFileWidget::refreshPreview(){
 	}
 	default:
 		importedText += "Unknown file type";
-	}
-
-	if(fileType != FileDataSource::HDF && fileType != FileDataSource::NETCDF)
 		ui.tePreview->setPlainText(importedText);
+	}
 }
