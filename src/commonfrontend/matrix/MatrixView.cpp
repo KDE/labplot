@@ -56,6 +56,8 @@
 #include <KAction>
 #include <KIcon>
 
+#include <float.h>
+
 MatrixView::MatrixView(Matrix* matrix) : QWidget(),
 	m_stackedWidget(new QStackedWidget(this)),
 	m_tableView(new QTableView(this)),
@@ -193,8 +195,6 @@ void MatrixView::connectActions() {
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 
 	// matrix related actions
-	connect(action_data_view, SIGNAL(triggered()), this, SLOT(switchView()));
-	connect(action_image_view, SIGNAL(triggered()), this, SLOT(switchView()));
 	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
 	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
 
@@ -725,10 +725,21 @@ void MatrixView::updateImage() {
 	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
 
 	//TODO: use faster QImage::scanLine()-method here
+
+	//find min/max value
+	double dmax= -DBL_MAX, dmin= DBL_MAX;
 	const QVector<QVector<double> >& matrixData = m_matrix->data();
 	for (int col=0; col<m_matrix->columnCount(); ++col) {
 		for (int row=0; row<m_matrix->rowCount(); ++row) {
-			int gray = matrixData[col][row];
+			double value = matrixData[col][row];
+			if (dmax<value) dmax=value;
+			if (dmin>value) dmin=value;
+		}
+	}
+
+	for (int col=0; col<m_matrix->columnCount(); ++col) {
+		for (int row=0; row<m_matrix->rowCount(); ++row) {
+			int gray = 255.0*(matrixData[col][row]-dmin)/(dmax-dmin);
 			m_image.setPixel(col, row, QColor(gray, gray, gray).rgb());
 		}
 	}

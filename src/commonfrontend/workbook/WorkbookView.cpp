@@ -74,6 +74,7 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	connect(action_add_matrix, SIGNAL(triggered()), this, SLOT(addMatrix()));
 
 	//SIGNALs/SLOTs
+	connect(m_workbook, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(handleDescriptionChanged(const AbstractAspect*)));
 	connect(m_workbook, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_workbook, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_workbook, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
@@ -174,6 +175,13 @@ void WorkbookView::addMatrix() {
 void WorkbookView::addSpreadsheet() {
 	Spreadsheet* spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
 	m_workbook->addChild(spreadsheet);
+}
+
+void WorkbookView::handleDescriptionChanged(const AbstractAspect* aspect) {
+	int index = m_workbook->indexOfChild<AbstractAspect>(aspect);
+	if (index != -1 && index<m_tabWidget->count())
+		m_tabWidget->setTabText(index, aspect->name());
+
 }
 
 void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {

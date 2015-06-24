@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : WorkbookView.h
+    File                 : DropValuesDialog.h
     Project              : LabPlot
-    Description          : View class for Workbook
+    Description          : Dialog for droping and masking values in columns
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
@@ -25,62 +25,35 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef DROPVALUESDIALOG_H
+#define DROPVALUESDIALOG_H
 
-#ifndef WORKBOOKVIEW_H
-#define WORKBOOKVIEW_H
+#include "ui_dropvalueswidget.h"
+#include <KDialog>
 
-#include <QWidget>
-#include <QTabWidget>
-#include <QTabBar>
 
-class AbstractAspect;
-class Workbook;
-class QAction;
-class QMenu;
-class QPrinter;
-class QToolBar;
+class Column;
+class Spreadsheet;
 
-class TabWidget : public QTabWidget {
+class DropValuesDialog : public KDialog {
 	Q_OBJECT
-	public:
-		TabWidget(QWidget* parent) : QTabWidget(parent) {
-			connect(tabBar(),SIGNAL(tabMoved(int,int)),this, SIGNAL(tabMoved(int,int)));
-		}
-
-	signals:
-		void tabMoved(int, int);
-};
-
-class WorkbookView : public QWidget {
-    Q_OBJECT
 
 	public:
-		explicit WorkbookView(Workbook*);
-		virtual ~WorkbookView();
-
-		int currentIndex() const;
+		explicit DropValuesDialog(Spreadsheet* s, bool mask = false, QWidget* parent = 0, Qt::WFlags fl = 0);
+		void setColumns(QList<Column*>);
 
 	private:
-		TabWidget* m_tabWidget;
-		Workbook* m_workbook;
-		int lastSelectedIndex;
+		Ui::DropValuesWidget ui;
+		QList<Column*> m_columns;
+		Spreadsheet* m_spreadsheet;
+		bool m_mask;
 
-		//actions
-		QAction* action_add_spreadsheet;
-		QAction* action_add_matrix;
+		void dropValues() const;
+		void maskValues() const;
 
-	private  slots:
-		void createContextMenu(QMenu*) const;
-		void showTabContextMenu(const QPoint&);
-		void addSpreadsheet();
-		void addMatrix();
-		void itemSelected(int);
-		void tabChanged(int);
-		void tabMoved(int,int);
-		void handleDescriptionChanged(const AbstractAspect*);
-		void handleAspectAdded(const AbstractAspect*);
-		void handleAspectAboutToBeRemoved(const AbstractAspect*);
-
+	private slots:
+		void operatorChanged(int) const;
+		void okClicked() const;
 };
 
 #endif

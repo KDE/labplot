@@ -96,9 +96,9 @@ class SpreadsheetView : public QWidget {
 		QAction* action_paste_into_selection;
 		QAction* action_mask_selection;
 		QAction* action_unmask_selection;
-		QAction* action_set_formula;
 		QAction* action_clear_selection;
-		QAction* action_recalculate;
+// 		QAction* action_set_formula;
+// 		QAction* action_recalculate;
 		QAction* action_fill_row_numbers;
 		QAction* action_fill_random;
 		QAction* action_fill_equidistant;
@@ -120,12 +120,15 @@ class SpreadsheetView : public QWidget {
 		QAction* action_remove_columns;
 		QAction* action_clear_columns;
 		QAction* action_add_columns;
-		QAction* action_set_as_x;
-		QAction* action_set_as_y;
-		QAction* action_set_as_z;
-		QAction* action_set_as_xerr;
-		QAction* action_set_as_yerr;
-		QAction* action_set_as_none;
+// 		QAction* action_set_as_x;
+// 		QAction* action_set_as_y;
+// 		QAction* action_set_as_z;
+// 		QAction* action_set_as_xerr;
+// 		QAction* action_set_as_yerr;
+// 		QAction* action_set_as_none;
+		QAction* action_reverse_columns;
+		QAction* action_drop_values;
+		QAction* action_join_columns;
 		QAction* action_normalize_columns;
 		QAction* action_normalize_selection;
 		QAction* action_sort_columns;
@@ -147,6 +150,11 @@ class SpreadsheetView : public QWidget {
 		QMenu* m_spreadsheetMenu;
 
 	public slots:
+		void createContextMenu(QMenu*) const;
+		void fillToolBar(QToolBar*);
+		void print(QPrinter*) const;
+
+	private slots:
 		void activateFormulaMode(bool on);
 		void goToCell(int row, int col);
 		void toggleComments();
@@ -154,54 +162,55 @@ class SpreadsheetView : public QWidget {
 		void goToPreviousColumn();
 		void goToCell();
 		void sortSpreadsheet();
+		void sortDialog(QList<Column*>);
 
-		void setSelectionAs(AbstractColumn::PlotDesignation);
 		void cutSelection();
 		void copySelection();
 		void pasteIntoSelection();
 		void clearSelectedCells();
 		void maskSelection();
 		void unmaskSelection();
-		void recalculateSelectedCells();
+// 		void recalculateSelectedCells();
+
 		void fillSelectedCellsWithRowNumbers();
 		void fillSelectedCellsWithRandomNumbers();
 		void fillWithRandomValues();
 		void fillWithEquidistantValues();
 		void fillWithFunctionValues();
 		void fillSelectedCellsWithConstValues();
+
+		void addRows();
+		void insertEmptyRows();
+		void removeSelectedRows();
+		void clearSelectedRows();
+
+		void addColumns();
 		void insertEmptyColumns();
 		void removeSelectedColumns();
 		void clearSelectedColumns();
-		void clearSelectedRows();
 
-		void setSelectedColumnsAsX();
-		void setSelectedColumnsAsY();
-		void setSelectedColumnsAsZ();
-		void setSelectedColumnsAsXError();
-		void setSelectedColumnsAsYError();
-		void setSelectedColumnsAsNone();
+		void reverseColumns();
+		void dropColumnValues();
+		void joinColumns();
 		void normalizeSelectedColumns();
 		void normalizeSelection();
 		void sortSelectedColumns();
 		void sortColumnAscending();
 		void sortColumnDescending();
+
+// 		void setSelectionAs(AbstractColumn::PlotDesignation);
+// 		void setSelectedColumnsAsX();
+// 		void setSelectedColumnsAsY();
+// 		void setSelectedColumnsAsZ();
+// 		void setSelectedColumnsAsXError();
+// 		void setSelectedColumnsAsYError();
+// 		void setSelectedColumnsAsNone();
+
 		void statisticsOnSelectedColumns();
 		void statisticsOnSelectedRows();
-		void insertEmptyRows();
-		void removeSelectedRows();
-
-		void addColumns();
-		void addRows();
 
 		bool formulaModeActive() const;
 
-		void createContextMenu(QMenu*) const;
-		void fillToolBar(QToolBar*);
-		void sortDialog(QList<Column*>);
-
-		void print(QPrinter*) const;
-
-	private  slots:
 		void advanceCell();
 		void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 		void handleHorizontalSectionMoved(int index, int from, int to);
