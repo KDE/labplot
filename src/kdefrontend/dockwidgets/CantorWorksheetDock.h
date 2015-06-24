@@ -31,7 +31,7 @@
 
 #include <QtWidgets/QWidget>
 #include <QPair>
-#include <cantor/panelpluginhandler.h>
+
 #include <cantor/panelplugin.h>
 #include "ui_cantorworksheetdock.h"
 
@@ -47,9 +47,7 @@ class CantorWorksheetDock : public QWidget {
 	
     private:
 	Ui::CantorWorksheetDock ui;
-	CantorWorksheet* m_cantorworksheet;
 	QList< CantorWorksheet* > m_cantorworksheetlist;
-	QList<QPair<QString, QWidget*> > panelsWidgets;
 	QList<int> index;
 	QWidget* w = NULL;
 	

@@ -33,17 +33,19 @@
 #include <QDebug>
 #include <QTableView>
 #include <QSizePolicy>
+#include <QPainter>
+#include <QPrintDialog>
 
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <cantor/backend.h>
 
-CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet, KParts::ReadWritePart* part) : QWidget(),
+CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
     m_worksheet(worksheet) {
 	
     layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    this->part = part;
+    part = worksheet->getPart();
     layout->addWidget(this->part->widget());
     initActions();
     initMenus();
@@ -56,6 +58,7 @@ void CantorWorksheetView::initActions() {
     m_evaluateWorsheetAction = new QAction(QIcon::fromTheme("system-run"), i18n("Evaluate Worksheet"), this);
     connect(m_evaluateWorsheetAction, SIGNAL(triggered()), this, SLOT(evaluateWorsheetActionTriggered()));
     m_evaluateEntryAction = new QAction(i18n("Evaluate Entry"), this);
+    m_evaluateEntryAction->setShortcut(Qt::CTRL + Qt::Key_Return);
     connect(m_evaluateEntryAction, SIGNAL(triggered()), this, SLOT(evaluateEntryActionTriggered()));
     m_insertCommandEntryAction = new QAction(i18n("Insert Command Entry"), this);
     connect(m_insertCommandEntryAction, SIGNAL(triggered()), this, SLOT(insertCommandEntryActionTriggered()));

@@ -46,11 +46,16 @@ void CantorWorksheet::initialize() {
         // now that the Part is loaded, we cast it to a Part to get
         // our hands on it
         part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<BackendName());
-        if (!part) {
+	if (!part) {
             qDebug()<<"error creating part ";
 	    return;
         }
-
+	Cantor::PanelPluginHandler* handler=part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
+	if(!handler) {
+	    KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
+	    qApp->quit();
+	}
+	plugins = handler->plugins();
     }
     else {
         // if we couldn't find our Part, we exit since the Shell by
@@ -63,6 +68,10 @@ void CantorWorksheet::initialize() {
     }
 }
 
+QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins(){
+    return plugins;
+}
+
 KParts::ReadWritePart* CantorWorksheet::getPart() {
     if(part) return part;
     else return NULL;
@@ -70,7 +79,7 @@ KParts::ReadWritePart* CantorWorksheet::getPart() {
 
 QWidget* CantorWorksheet::view() const {
     if (!m_view) {
-	m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this), part);
+	m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
 // 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;

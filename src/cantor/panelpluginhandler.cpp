@@ -26,9 +26,9 @@ using namespace Cantor;
 #include <KServiceTypeTrader>
 #include <KPluginInfo>
 
-#include "session.h"
+#include "cantor/session.h"'
 #include "panelplugin.h"
-#include "backend.h"
+#include "cantor/backend.h"
 
 class Cantor::PanelPluginHandlerPrivate
 {

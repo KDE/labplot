@@ -910,15 +910,20 @@ void MainWin::print(){
     }else{
         //Spreadsheet
         Spreadsheet* s=this->activeSpreadsheet();
-        QPrintDialog *dialog = new QPrintDialog(&printer, this);
-        dialog->setWindowTitle(i18n("Print spreadsheet"));
-        if (dialog->exec() != QDialog::Accepted)
-            return;
+	if(s!=0){
+	    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+	    dialog->setWindowTitle(i18n("Print spreadsheet"));
+	    if (dialog->exec() != QDialog::Accepted)
+		return;
+    
+	    SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
+	    view->print(&printer);
 
-        SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
-        view->print(&printer);
-
-        statusBar()->showMessage(i18n("Spreadsheet printed"));
+	    statusBar()->showMessage(i18n("Spreadsheet printed"));
+	}else{
+	    CantorWorksheet *c = this->activeCantorWorksheet();
+	    c->getPart()->action("file_print")->trigger();
+	}
     }
 }
 

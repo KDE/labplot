@@ -31,6 +31,8 @@
 
 #include <backend/core/AbstractPart.h>
 #include <cantor/session.h>
+#include <cantor/panelpluginhandler.h>
+#include <cantor/panelplugin.h>
 #include <KParts/ReadWritePart>
 #include "backend/core/AbstractScriptingEngine.h"
 
@@ -43,12 +45,14 @@ class CantorWorksheet : public AbstractPart, public scripted{
 	virtual QMenu *createContextMenu();
 	QString BackendName();
 	KParts::ReadWritePart* getPart();
+	QList<Cantor::PanelPlugin*> getPlugins();
 
     signals:
 	void requestProjectContextMenu(QMenu*);
     
     private:
 	KParts::ReadWritePart* part;
+	QList<Cantor::PanelPlugin*> plugins;
 	QString backendName;
 	
 	void initialize();

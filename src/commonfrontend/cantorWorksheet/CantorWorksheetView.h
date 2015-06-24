@@ -35,6 +35,8 @@
 #include <QToolBar>
 #include <QHBoxLayout>
 #include <QTableView>
+#include <QPrinter>
+
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <cantor/session.h>
 #include <KParts/ReadWritePart>
@@ -43,13 +45,13 @@ class CantorWorksheetView : public QWidget {
     Q_OBJECT
     
     public:
-	CantorWorksheetView(CantorWorksheet* cantorWorksheet, KParts::ReadWritePart*);
+	CantorWorksheetView(CantorWorksheet* cantorWorksheet);
 	
 	~CantorWorksheetView();
 	
     public slots:
 	void createContextMenu(QMenu*) const;
-	void fillToolBar(QToolBar*);
+	void fillToolBar(QToolBar*);	
 
     private slots:
 	void restartActionTriggered();

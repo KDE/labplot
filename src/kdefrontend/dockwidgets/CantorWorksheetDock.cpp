@@ -33,42 +33,27 @@
 #include <KParts/ReadWritePart>
 
 CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent) {
-    ui.setupUi(this);
-    ui.general->setFocus();
+    ui.setupUi(this);   
+    ui.tabWidget->setMovable(true);
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
     m_cantorworksheetlist = list;
-    m_cantorworksheet = list.first();
-    if (list.size()==1) {
-	if(index.empty()) {
-	    QList<QAction*> panelActions;
-	    KParts::ReadWritePart* m_part = m_cantorworksheet->getPart();
-	    Cantor::PanelPluginHandler* handler=m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
-	    if(!handler) {
-		qDebug()<<"no PanelPluginHandle found for this part";
-		return;
-	    }
-	    QList<Cantor::PanelPlugin*> plugins = handler->plugins();
-	    index.clear();
-	    foreach(Cantor::PanelPlugin* plugin, plugins) {
-		plugin->setParentWidget(this);
-		int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
-		index.append(i);
-	    }
-	} else {
-	    QPair<QString, QWidget*> p;
-	    index.clear();
-	    foreach(p, panelsWidgets) {
-		int i = ui.tabWidget->addTab(p.second, p.first);
-		index.append(i);
-	    }
-	}
-    } else {
-	foreach(int i, index) {
-	    panelsWidgets.append(qMakePair(ui.tabWidget->tabText(i), ui.tabWidget->widget(i)));
-	    ui.tabWidget->removeTab(i);
+    int k = 0;
+    int prev_index = ui.tabWidget->currentIndex();
+    foreach(int i, index) {
+	ui.tabWidget->removeTab(i-k);
+	++k;
+    }
+    if (m_cantorworksheetlist.size()==1) {
+	QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
+	index.clear();
+	foreach(Cantor::PanelPlugin* plugin, plugins) {
+	    plugin->setParentWidget(this);
+	    int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
+	    index.append(i);
 	}
     }
+    ui.tabWidget->setCurrentIndex(prev_index);
 }
 
