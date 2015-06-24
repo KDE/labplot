@@ -16,31 +16,43 @@
 
 
 Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
-        : AbstractPart(name), scripted(engine), isLoaded(false),
-        d(new ImagePrivate(this)), m_transform(new Transform(this)), m_imageEditor(new ImageEditor(this)){
+    : AbstractPart(name), scripted(engine), d(new ImagePrivate(this)),
+      isLoaded(false), m_transform(new Transform(this)), m_imageEditor(new ImageEditor(this)){
 
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-		this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-		this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
+    connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
+            this, SLOT(handleAspectAdded(const AbstractAspect*)));
+    connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+            this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+    connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+            this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
 
-	if (!loading)
-		init();
+    if (!loading)
+        init();
 }
 
 Image::~Image() {
-	delete d;
+    delete d;
 }
 
 void Image::init() {
-	KConfig config;
+    KConfig config;
     KConfigGroup group = config.group( "Image" );
     d->imageFileName = group.readEntry("ImageFileName", QString());
     d->drawPoints = group.readEntry("DrawPoints", false);
     d->rotationAngle = group.readEntry("RotationAngle", 0.0);
     d->points.type = (Image::GraphType) group.readEntry("GraphType", (int) Image::Cartesian);
+    d->settings.type = (Image::ColorAttributes) group.readEntry("ColorAttributesType", (int) Image::Intensity);
+    d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 10);
+    d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 0);
+    d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", 360);
+    d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", 180);
+    d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", 50);
+    d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", 0);
+    d->settings.saturationThresholdHigh = group.readEntry("SaturationThresholdHigh", 100);
+    d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 50);
+    d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 50);
+    d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 0);
+    plotImageType = (Image::PlotImageType) group.readEntry("PlotImageType", (int) Image::OriginalImage);
 }
 
 QIcon Image::icon() const {
@@ -48,11 +60,11 @@ QIcon Image::icon() const {
 }
 
 QMenu *Image::createContextMenu() {
-// 	QMenu *menu = AbstractPart::createContextMenu();
-//     Q_ASSERT(menu);
-	QMenu* menu = new QMenu(0);
-	emit requestProjectContextMenu(menu);
-	return menu;
+    // 	QMenu *menu = AbstractPart::createContextMenu();
+    //     Q_ASSERT(menu);
+    QMenu* menu = new QMenu(0);
+    emit requestProjectContextMenu(menu);
+    return menu;
 }
 
 QWidget *Image::view() const {
@@ -60,7 +72,7 @@ QWidget *Image::view() const {
         m_view = new ImageView(const_cast<Image *>(this));
         connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
-	return m_view;
+    return m_view;
 }
 
 
@@ -68,10 +80,10 @@ QWidget *Image::view() const {
 void Image::handleAspectAdded(const AbstractAspect* aspect) {
     const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
     int count = childCount<WorksheetElement>(IncludeHidden);
-	if (addedElement) {
-		if (aspect->parentAspect() == this){
-			QGraphicsItem *item = addedElement->graphicsItem();
-			Q_ASSERT(item != NULL);
+    if (addedElement) {
+        if (aspect->parentAspect() == this){
+            QGraphicsItem *item = addedElement->graphicsItem();
+            Q_ASSERT(item != NULL);
             d->m_scene->addItem(item);
 
             if (count <= 3) {
@@ -86,27 +98,27 @@ void Image::handleAspectAdded(const AbstractAspect* aspect) {
             }
 
             qreal zVal = 0;
-			QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-			foreach(WorksheetElement *elem, childElements) {
-				elem->graphicsItem()->setZValue(zVal++);
+            QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+            foreach(WorksheetElement *elem, childElements) {
+                elem->graphicsItem()->setZValue(zVal++);
             }
-		}
+        }
     }
 }
 
 void Image::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
-	if (removedElement) {
-		QGraphicsItem *item = removedElement->graphicsItem();
-		Q_ASSERT(item != NULL);
-		d->m_scene->removeItem(item);
-	}
+    const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
+    if (removedElement) {
+        QGraphicsItem *item = removedElement->graphicsItem();
+        Q_ASSERT(item != NULL);
+        d->m_scene->removeItem(item);
+    }
 }
 
 void Image::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child){
-	Q_UNUSED(parent);
-	Q_UNUSED(before);
-	Q_UNUSED(child);
+    Q_UNUSED(parent);
+    Q_UNUSED(before);
+    Q_UNUSED(child);
 }
 
 void Image::setSelectedInView(const bool b){
@@ -117,15 +129,37 @@ void Image::setSelectedInView(const bool b){
 }
 
 QGraphicsScene *Image::scene() const {
-	return d->m_scene;
+    return d->m_scene;
 }
 
 QRectF Image::pageRect() const {
-	return d->m_scene->sceneRect();
+    return d->m_scene->sceneRect();
 }
 
-void Image::update(){
-	emit requestUpdate();
+void Image::update() {
+    emit requestUpdate();
+}
+
+void Image::uploadFile(const QString& fileName) {
+    originalPlotImage.load(fileName);
+
+    processedPlotImage = originalPlotImage;
+    m_imageEditor->discretize(&processedPlotImage, settings());
+
+    QRect rect = originalPlotImage.rect();
+    rect.translate(-rect.width()/2,-rect.height()/2);
+    d->m_scene->setSceneRect(rect);
+}
+
+void Image::discretize(const EditorSettings& newSettings){
+    d->settings = newSettings;
+    m_imageEditor->discretize(&processedPlotImage, newSettings);
+    emit requestUpdate();
+}
+
+void Image::setPlotImageType(const Image::PlotImageType& type){
+    plotImageType = type;
+    emit requestUpdate();
 }
 
 /* =============================== getter methods for background options ================================= */
@@ -140,12 +174,6 @@ STD_SETTER_CMD_IMPL_F_S(Image, SetImageFileName, QString, imageFileName, updateF
 void Image::setImageFileName(const QString& fileName) {
     if (fileName!= d->imageFileName)
         exec(new ImageSetImageFileNameCmd(d, fileName, i18n("%1: set image")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetSettings, Image::EditorSettings, settings, update)
-void Image::setSettings(const EditorSettings& settings) {
-    if (memcmp(&settings, &d->settings, sizeof(settings)) != 0)
-        exec(new ImageSetSettingsCmd(d, settings, i18n("%1: set image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetRotationAngle, float, rotationAngle, update)
@@ -171,34 +199,31 @@ void Image::setDrawPoints(const bool value) {
 //Private implementation
 
 ImagePrivate::ImagePrivate(Image *owner):q(owner),
-	pageRect(0, 0, 1500, 1500),
+    pageRect(0, 0, 1500, 1500),
     m_scene(new QGraphicsScene(pageRect)){
 }
 
 QString ImagePrivate::name() const{
-	return q->name();
+    return q->name();
 }
 
 void ImagePrivate::updatePageRect() {
-	m_scene->setSceneRect(pageRect);
+    m_scene->setSceneRect(pageRect);
 }
 
 void ImagePrivate::update(){
-	q->update();
+    q->update();
 }
 
 ImagePrivate::~ImagePrivate(){
-	delete m_scene;
+    delete m_scene;
 }
 
 void ImagePrivate::updateFileName(){
     q->removeAllChildren();
     const QString& fileName = imageFileName.trimmed();
     if ( !fileName.isEmpty() ){
-        q->imagePixmap.load(fileName);
-        QRect rect = q->imagePixmap.rect();
-        rect.translate(-rect.width()/2,-rect.height()/2);
-        m_scene->setSceneRect(rect);
+        q->uploadFile(fileName);
         q->isLoaded = true;
     } else {
         q->isLoaded = false;

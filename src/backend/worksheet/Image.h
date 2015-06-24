@@ -21,6 +21,7 @@ class Image: public AbstractPart, public scripted {
 
         enum GraphType {Cartesian,Polar,Logarithmic};
         enum ColorAttributes{ None, Intensity, Foreground, Hue, Saturation, Value };
+        enum PlotImageType{OriginalImage, ProcessedImage};
 
         struct ReferencePoints{
             GraphType type;
@@ -56,10 +57,14 @@ class Image: public AbstractPart, public scripted {
 		void update();
 		void setPrinting(bool) const;
         void setSelectedInView(const bool);
-        //void setPoints(const ReferencePoints&);
+        void uploadFile(const QString&);
+        void discretize(const EditorSettings&);
+        void setPlotImageType(const Image::PlotImageType&);
 
         bool isLoaded;
-        QPixmap imagePixmap;
+        QImage originalPlotImage;
+        QImage processedPlotImage;
+        PlotImageType plotImageType;
 
         CLASS_D_ACCESSOR_DECL(QString, imageFileName, ImageFileName)
         CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, points, Points)
@@ -87,13 +92,10 @@ class Image: public AbstractPart, public scripted {
 		void requestProjectContextMenu(QMenu*);
 		void requestUpdate();
         void updateLogicalPositions();
-        void settingsChanged(const Image::EditorSettings&);
-
 
         void addDataToSheet(const QPointF&, int);
         void imageFileNameChanged(const QString&);
         void rotationAngleChanged(float);
-        friend class ImageSetSettingsCmd;
         friend class ImageSetImageFileNameCmd;
         friend class ImageSetRotationAngleCmd;
 };

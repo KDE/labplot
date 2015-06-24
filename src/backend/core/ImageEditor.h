@@ -18,10 +18,10 @@ class ImageEditor {
 
         bool colorCompare(QRgb color1, QRgb color2);
 
-        int discretizeValueNotForeground(const QImage*, int, int, Image::ColorAttributes) const;
-        int discretizeValueForeground(const QImage*, int, int, int, int, int) const;
+        int discretizeValueNotForeground(int, int, Image::ColorAttributes) const;
+        int discretizeValueForeground(int, int, int, int, int) const;
 
-        void discretize(QImage*, Image::EditorSettings, QRgb backgroundColor = 0);
+        void discretize(QImage*, Image::EditorSettings);
 
         bool pixelIsOn(int, Image::EditorSettings) const;
         bool processedPixelIsOn(const QImage&, int, int) const;

@@ -67,22 +67,24 @@ bool ImageEditor::colorCompare(QRgb color1, QRgb color2) {
     return (color1 & MASK) == (color2 & MASK);
 }
 
-void ImageEditor::discretize(QImage* plotImage, Image::EditorSettings settings, QRgb backgroundColor) {
-    QColor background(backgroundColor);
-    int rBg = background.red();
-    int gBg = background.green();
-    int bBg = background.blue();
+void ImageEditor::discretize(QImage* plotImage, Image::EditorSettings settings) {
+    QColor background;
+    int rBg, gBg, bBg;
     int value;
     static Image::EditorSettings settingsLatest;
     settingsLatest = settings;
 
     for (int x = 0; x < plotImage->width(); x++) {
         for (int y = 0; y < plotImage->height(); y++) {
-            if (settings.type == Image::Foreground)
-                value = discretizeValueForeground(plotImage, x, y, rBg, gBg, bBg);
-            else
-                value = discretizeValueNotForeground(plotImage, x, y, settings.type);
-
+            if (settings.type == Image::Foreground) {
+                background = backgroundColor(&m_image->originalPlotImage);
+                rBg = background.red();
+                gBg = background.green();
+                bBg = background.blue();
+                value = discretizeValueForeground(x, y, rBg, gBg, bBg);
+            } else {
+                value = discretizeValueNotForeground(x, y, settings.type);
+            }
             if (pixelIsOn(value, settings))
                 plotImage->setPixel(x, y, QColor(Qt::black).rgb());
             else
@@ -95,10 +97,10 @@ void ImageEditor::discretize(QImage* plotImage, Image::EditorSettings settings, 
     }
 }
 
-int ImageEditor::discretizeValueForeground(const QImage* plotImage, int x, int y, int rBg, int gBg, int bBg) const {
+int ImageEditor::discretizeValueForeground(int x, int y, int rBg, int gBg, int bBg) const {
     int attributeMax = colorAttributeMax(Image::Foreground);
 
-    QColor color(plotImage->pixel(x,y));
+    QColor color(m_image->originalPlotImage.pixel(x,y));
     int r = color.red();
     int g = color.green();
     int b = color.blue();
@@ -114,8 +116,8 @@ int ImageEditor::discretizeValueForeground(const QImage* plotImage, int x, int y
     return value;
 }
 
-int ImageEditor::discretizeValueNotForeground(const QImage* plotImage, int x, int y, Image::ColorAttributes type) const{
-    QColor color(plotImage->pixel(x,y));
+int ImageEditor::discretizeValueNotForeground(int x, int y, Image::ColorAttributes type) const{
+    QColor color(m_image->originalPlotImage.pixel(x,y));
     int r, g, b, h, s, v;
     double intensity;
     int attributeMax = colorAttributeMax(type);

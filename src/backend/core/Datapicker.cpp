@@ -33,6 +33,8 @@ QWidget* Datapicker::view() const {
 }
 
 void Datapicker::initDefault() {
+    m_datasheet = new Spreadsheet(0, i18n("Data"));
+    addChild(m_datasheet);
     m_image = new Image(0, i18n("Image"));
     addChild(m_image);
     initImageConnections();

@@ -44,6 +44,7 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "commonfrontend/datapicker/ImageView.h"
 
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
@@ -423,10 +424,12 @@ void MainWin::updateGUIOnProjectChanges() {
 	if (!m_mdiArea->currentSubWindow()) {
 		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
+        factory->container("datapicker", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
+        factory->container("datapicker_toolbar", this)->hide();
 	}
 
 	factory->container("new", this)->setEnabled(!b);
@@ -460,10 +463,12 @@ void MainWin::updateGUI() {
 	if (!m_mdiArea->currentSubWindow()) {
 		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
+        factory->container("datapicker", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
+        factory->container("datapicker_toolbar", this)->hide();
 		return;
 	}
 
@@ -561,6 +566,28 @@ void MainWin::updateGUI() {
 	}else{
 		factory->container("matrix", this)->setEnabled(false);
 	}
+
+    const  Image* image = this->activeImage();
+    if (image){
+        factory->container("datapicker", this)->setEnabled(true);
+        //populate datapicker-menu
+        ImageView* view=qobject_cast<ImageView*>(image->view());
+        QMenu* menu=qobject_cast<QMenu*>(factory->container("datapicker", this));
+        menu->clear();
+        view->createContextMenu(menu);
+
+        //populate spreadsheet-toolbar
+        QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
+        if (group.groupList().indexOf("Toolbar datapicker_toolbar")==-1)
+            toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
+        toolbar->setVisible(true);
+        toolbar->clear();
+        view->fillToolBar(toolbar);
+    }else{
+        factory->container("datapicker", this)->setEnabled(false);
+        factory->container("datapicker_toolbar", this)->setVisible(false);
+    }
 }
 
 /*!

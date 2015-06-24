@@ -6,6 +6,7 @@
 
 class CustomItem;
 class CustomItemWidget;
+class QxtSpanSlider;
 
 class ImageWidget: public QWidget{
 	Q_OBJECT
@@ -16,6 +17,12 @@ public:
 
     void setImages(QList<Image*>);
 	void load();
+
+    QxtSpanSlider* ssIntensity;
+    QxtSpanSlider* ssForeground;
+    QxtSpanSlider* ssHue;
+    QxtSpanSlider* ssSaturation;
+    QxtSpanSlider* ssValue;
 
 private:
 	Ui::ImageWidget ui;
@@ -41,6 +48,15 @@ private slots:
     void imageRotationAngleChanged(float);
     void handleAspectRemoved();
     void handleAspectAdded();
+    void handleWidgetActions();
+
+    void plotImageTypeChanged(int);
+    void intensitySpanChanged(int, int);
+    void foregroundSpanChanged(int, int);
+    void hueSpanChanged(int, int);
+    void saturationSpanChanged(int, int);
+    void valueSpanChanged(int, int);
+    void rbClicked();
 };
 
 #endif
