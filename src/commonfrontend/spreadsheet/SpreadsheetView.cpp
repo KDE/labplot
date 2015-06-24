@@ -57,6 +57,7 @@
 
 #include <KAction>
 #include <KLocale>
+#include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
@@ -1305,9 +1306,12 @@ void SpreadsheetView::reverseColumns() {
 	RESET_CURSOR;
 }
 
-void SpreadsheetView::dropColumnValues()
-{
-
+void SpreadsheetView::dropColumnValues() {
+	if (selectedColumnCount() < 1) return;
+	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
 }
 
 void SpreadsheetView::joinColumns()
