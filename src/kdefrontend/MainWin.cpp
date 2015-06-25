@@ -214,7 +214,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
 	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
 
-    m_newDatapickerAction = new KAction(KIcon(""),i18n("Datapicker"),this);
+    m_newDatapickerAction = new KAction(KIcon("color-picker-black"),i18n("Datapicker"),this);
     actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
     connect(m_newDatapickerAction, SIGNAL(triggered()),SLOT(newDatapicker()));
 
