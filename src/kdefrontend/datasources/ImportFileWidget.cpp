@@ -607,7 +607,21 @@ void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int c
 		QString varName = item->data(1,Qt::DisplayRole).toString().split(" ")[0];
 
 		QString importedText = filter->readAttribute(fileName,name,varName);
-		netcdfOptionsWidget.tePreview->setPlainText(importedText);
+		netcdfOptionsWidget.twPreview->clear();
+
+		QStringList lineStrings = importedText.split("\n");
+		netcdfOptionsWidget.twPreview->setRowCount(lineStrings.size());
+		for(int i=0;i<lineStrings.size();i++) {
+			QStringList lineString = lineStrings[i].split(" ");
+			if(i==0)
+				netcdfOptionsWidget.twPreview->setColumnCount(lineString.size()-1);
+
+			for(int j=0;j<lineString.size();j++) {
+				QTableWidgetItem* item = new QTableWidgetItem();
+				item->setText(lineString[j]);
+				netcdfOptionsWidget.twPreview->setItem(i,j,item);
+			}
+		}
 	}
 	else
 		qDebug()<<"non showable object selected in NetCDF tree widget";
@@ -674,8 +688,6 @@ void ImportFileWidget::headerChanged(int state) {
 }
 
 void ImportFileWidget::refreshPreview(){
-	ui.tePreview->clear();
-
 	QString fileName = ui.kleFileName->text();
 	if ( fileName.left(1) != QDir::separator() )
 	    fileName = QDir::homePath() + QDir::separator() + fileName;
@@ -684,18 +696,23 @@ void ImportFileWidget::refreshPreview(){
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 	int lines = ui.sbPreviewLines->value();
 
+	QTableWidget *tmpTableWidget=0;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
 		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+		tmpTableWidget = twPreview;
 		break;
 	}
 	case FileDataSource::Binary: {
 		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+		tmpTableWidget = twPreview;
 		break;
 	}
 	case FileDataSource::Image: {
+		ui.tePreview->clear();
+
 		QImage image(fileName);
 		QTextCursor cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
@@ -705,14 +722,14 @@ void ImportFileWidget::refreshPreview(){
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 		lines = hdfOptionsWidget.sbPreviewLines->value();
 		importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
-		hdfOptionsWidget.tePreview->setPlainText(importedText);
+		tmpTableWidget = hdfOptionsWidget.twPreview;
 		break;
 	}
 	case FileDataSource::NETCDF: {
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		lines = netcdfOptionsWidget.sbPreviewLines->value();
 		importedText = filter->readCurrentVar(fileName,NULL,AbstractFileFilter::Replace,lines);
-		netcdfOptionsWidget.tePreview->setPlainText(importedText);
+		tmpTableWidget = netcdfOptionsWidget.twPreview;
 		break;
 	}
 	default:
@@ -720,24 +737,30 @@ void ImportFileWidget::refreshPreview(){
 		ui.tePreview->setPlainText(importedText);
 	}
 
-	// fill table widget
-	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary ) {
-		twPreview->setRowCount(lines);
+	// fill the table widget
+	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary || fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF ) {
+		tmpTableWidget->clear();
 
 		QStringList lineStrings = importedText.split("\n");
+		tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
 		for(int i=0;i<lineStrings.size();i++) {
 			QStringList lineString = lineStrings[i].split(" ");
 			if(i==0)
-				twPreview->setColumnCount(lineString.size()-1);
+				tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
 
 			for(int j=0;j<lineString.size();j++) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
-				twPreview->setItem(i,j,item);
+				tmpTableWidget->setItem(i,j,item);
 			}
 		}
-		twPreview->show();
+
+		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
+
+	// generic table widget
+	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary)
+		twPreview->show();
 	else
 		twPreview->hide();
 }
