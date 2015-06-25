@@ -33,6 +33,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/Worksheet.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -128,6 +129,7 @@ void Plot3D::setFile(const KUrl& path){
 	Q_D(Plot3D);
 	d->path = path;
 	d->isChanged = true;
+	retransform();
 }
 
 void Plot3D::setXColumn(AbstractColumn *column){
@@ -160,6 +162,11 @@ void Plot3D::retransform(){
 	Q_D(Plot3D);
 	d->retransform();
 	WorksheetElementContainer::retransform();
+
+	//TODO:do we really need to trigger an update in the view?
+// 	Worksheet* w = dynamic_cast<Worksheet*>(this->parentAspect());
+// 	if (w)
+// 		w->view()->update();
 }
 
 //##############################################################################
@@ -376,7 +383,7 @@ void Plot3DPrivate::readFromMatrix(){
 
 	//TODO:
 }
-	
+
 void Plot3DPrivate::retransform(){
 	prepareGeometryChange();
 	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);

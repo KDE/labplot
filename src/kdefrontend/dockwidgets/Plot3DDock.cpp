@@ -53,7 +53,7 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	hideTriangleInfo();
 	//######
 
-	ui.cbDataSource->insertItem(Plot3D::DataSource_File, i18n("From file"));
+	ui.cbDataSource->insertItem(Plot3D::DataSource_File, i18n("File"));
 	ui.cbDataSource->insertItem(Plot3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
 	ui.cbDataSource->insertItem(Plot3D::DataSource_Matrix, i18n("Matrix"));
 	ui.cbDataSource->insertItem(Plot3D::DataSource_Empty, i18n("Demo"));
@@ -64,7 +64,7 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	onVisualizationTypeChanged(ui.cbType->currentIndex());
 
 
-	//Spreadsheet data source 
+	//Spreadsheet data source
 	QList<const char*>  list;
 	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 
@@ -83,16 +83,16 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 		view->setSelectableClasses(list);
 		connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 	}
-	
+
 	//Matrix data source
 	list.clear();
 	list<<"Folder"<<"Workbook"<<"Matrix";
 	ui.cbMatrix->setTopLevelClasses(list);
-	
+
 	list.clear();
 	list<<"Matrix";
 	ui.cbMatrix->setSelectableClasses(list);
-	
+
 	//SIGNALs/SLOTs
 	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)));
@@ -146,33 +146,23 @@ void Plot3DDock::onVisualizationTypeChanged(int index){
 }
 
 void Plot3DDock::onFileChanged(const KUrl& path){
-	if (path.isLocalFile()){
-		foreach(Plot3D* plot, plots){
-			plot->setDataSource(Plot3D::DataSource_File);
-			plot->setFile(path);
-			plot->retransform();
-		}
-		emit needRepaint();
-	}
+	if (!path.isLocalFile())
+		return;
+
+	foreach(Plot3D* plot, plots)
+		plot->setFile(path);
 }
 
 void Plot3DDock::onDataSourceChanged(int index){
 	qDebug() << Q_FUNC_INFO << index;
+	Plot3D::DataSource type = (Plot3D::DataSource)index;
 	hideFileUrl(index != Plot3D::DataSource_File);
 	hideTriangleInfo(index != Plot3D::DataSource_Spreadsheet);
 	
-	Plot3D::DataSource type = (Plot3D::DataSource)index;
-	if (type == Plot3D::DataSource_Empty){
-		ui.labelMatrix->hide();
-		ui.cbMatrix->hide();
-	}else if (type == Plot3D::DataSource_Spreadsheet){
-		ui.labelMatrix->hide();
-		ui.cbMatrix->hide();
-	} else if (type == Plot3D::DataSource_Matrix){
-		ui.labelMatrix->show();
-		ui.cbMatrix->show();
-	}
-	
+	bool b = (type==Plot3D::DataSource_Matrix);
+	ui.labelMatrix->setVisible(b);
+	ui.cbMatrix->setVisible(b);
+
 	foreach(Plot3D* plot, plots)
 		plot->setDataSource(type);
 }

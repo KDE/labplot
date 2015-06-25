@@ -197,7 +197,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		if (!mainWindow->plot3dDock){
 			mainWindow->plot3dDock = new Plot3DDock(mainWindow->stackedWidget);
 			mainWindow->stackedWidget->addWidget(mainWindow->plot3dDock);
-			connect(mainWindow->plot3dDock, SIGNAL(needRepaint()), mainWindow->activeWorksheet()->view(), SLOT(update()));
 		}
 
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Plot Properties"));

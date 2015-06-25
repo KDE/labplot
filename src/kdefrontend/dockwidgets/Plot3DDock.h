@@ -60,9 +60,6 @@ class Plot3DDock: public QWidget{
 	private:
 		Ui::Plot3DDock ui;
 		QList<Plot3D*> plots;
-
-	signals:
-		void needRepaint();
 };
 
 #endif
