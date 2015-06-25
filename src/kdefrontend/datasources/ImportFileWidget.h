@@ -36,6 +36,7 @@
 #include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
+#include <QTableWidget>
 
 class FileDataSource;
 class AbstractFileFilter;
@@ -63,6 +64,7 @@ private:
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 	Ui::ImageOptionsWidget imageOptionsWidget;
 	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
+	QTableWidget *twPreview;
 
 private slots:
 	void fileNameChanged(const QString&);
