@@ -65,6 +65,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void readFromMatrix();
 		void addAxes();
 
+		void setShowAxes(bool show);
+
 		void clearActors();
 
 		template<class TReader>
@@ -79,6 +81,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		Plot3D::DataSource sourceType;
 		KUrl path;
 		bool isChanged;
+		bool showAxes;
 
 		vtkSmartPointer<vtkCubeAxesActor> axes;
 		vtkSmartPointer<vtkRenderer> renderer;

@@ -57,6 +57,8 @@ class Plot3DDock: public QWidget{
 
 		void onTreeViewIndexChanged(const QModelIndex& index);
 
+		void onShowAxes(bool show);
+
 	private:
 		Ui::Plot3DDock ui;
 		QList<Plot3D*> plots;

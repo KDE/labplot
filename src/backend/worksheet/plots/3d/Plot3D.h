@@ -72,6 +72,8 @@ class Plot3D:public AbstractPlot{
 
 		void setNodeColumn(int node, AbstractColumn *column);
 
+		void setShowAxes(bool show);
+
 		void retransform();
 
 	protected:

@@ -160,6 +160,11 @@ void Plot3D::setNodeColumn(int node, AbstractColumn* column){
 	}
 }
 
+void Plot3D::setShowAxes(bool show){
+	Q_D(Plot3D);
+	d->setShowAxes(show);
+}
+
 void Plot3D::retransform(){
 	Q_D(Plot3D);
 	d->retransform();
@@ -181,6 +186,7 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	, visType(Plot3D::VisualizationType_Triangles)
 	, sourceType(Plot3D::DataSource_Empty)
 	, isChanged(false)
+	, showAxes(true)
 	, xColumn(0)
 	, yColumn(0)
 	, zColumn(0)
@@ -211,8 +217,8 @@ void Plot3DPrivate::init(){
 	vtkSmartPointer<vtkLight> light = vtkSmartPointer<vtkLight>::New();
 	renderer->AddLight(light);
 
-	//TODO: make the axes optional
-	addAxes();
+	if (showAxes)
+		addAxes();
 
 	//TODO: read default settings
 	KConfig config;
@@ -222,6 +228,16 @@ void Plot3DPrivate::init(){
 	light->SetPosition(0.875, 1.6125, 1);
 
 	//renderer->SetBackground(.3, .6, .3);
+}
+
+void Plot3DPrivate::setShowAxes(bool show){
+	const bool prevState = showAxes;
+	showAxes = show;
+	if (!showAxes && axes){
+		renderer->RemoveActor(axes);
+	} else if (showAxes && !prevState){
+		addAxes();
+	}
 }
 
 void Plot3DPrivate::clearActors(){

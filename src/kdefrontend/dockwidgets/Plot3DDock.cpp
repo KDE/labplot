@@ -51,6 +51,7 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	hideDataSource();
 	hideFileUrl();
 	hideTriangleInfo();
+	onShowAxes(ui.showAxes->isChecked());
 	//######
 
 	ui.cbDataSource->insertItem(Plot3D::DataSource_File, i18n("File"));
@@ -97,6 +98,7 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)));
 	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)));
+	connect(ui.showAxes, SIGNAL(toggled(bool)), this, SLOT(onShowAxes(bool)));
 }
 
 AbstractColumn* Plot3DDock::getColumn(const QModelIndex& index) const{
@@ -142,6 +144,13 @@ void Plot3DDock::onVisualizationTypeChanged(int index){
 		hideDataSource();
 		hideFileUrl();
 		hideTriangleInfo();
+	}
+}
+
+void Plot3DDock::onShowAxes(bool show){
+	foreach(Plot3D* plot, plots){
+		plot->setShowAxes(show);
+		plot->retransform();
 	}
 }
 
