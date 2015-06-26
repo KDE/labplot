@@ -214,49 +214,38 @@ void Plot3DPrivate::addSphere(){
 	actors.push_back(sphereActor);
 }
 
-namespace{
-	template<class TReader>
-	vtkSmartPointer<TReader> createReaderImpl(const KUrl& filePath){
-		const QByteArray ascii = filePath.path().toAscii();
-		const char *path = ascii.constData();
-		vtkSmartPointer<TReader> reader = vtkSmartPointer<TReader>::New();
-		reader->SetFileName(path);
-		reader->Update();
-		return reader;
-	}
-}
-
-vtkSmartPointer<vtkPolyDataAlgorithm> Plot3DPrivate::createReader(const KUrl& filePath) const{
-	const QString& fileName = filePath.fileName();
-	qDebug() << Q_FUNC_INFO << "Read from the file:" << filePath.path().toAscii();
-	const QString& fileType = fileName.split('.').last().toLower();
-
-	if (fileType == "obj"){
-		qDebug() << Q_FUNC_INFO << "Create obj reader";
-		return createReaderImpl<vtkOBJReader>(filePath);
-	} else if (fileType == "stl"){
-		qDebug() << Q_FUNC_INFO << "Create STL reader";
-		return createReaderImpl<vtkSTLReader>(filePath);
-	}
-
-	return vtkSmartPointer<vtkPolyDataAlgorithm>();
-}
-
-void Plot3DPrivate::readFromFile(){
-	vtkSmartPointer<vtkPolyDataAlgorithm> reader = createReader(path);
-	if (reader.Get() == 0)
-		return;
+template<class TReader>
+void Plot3DPrivate::createReader(){
+	const QByteArray ascii = path.path().toAscii();
+	const char *path = ascii.constData();
+	vtkSmartPointer<TReader> reader = vtkSmartPointer<TReader>::New();
+	reader->SetFileName(path);
+	reader->Update();
 
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	mapper->SetInputConnection(reader->GetOutputPort());
 
-	axes->SetBounds(reader->GetOutput()->GetBounds());
+	axes->SetBounds(mapper->GetBounds());
 
 	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
 	actor->SetMapper(mapper);
 
 	renderer->AddActor(actor);
 	actors.push_back(actor);
+}
+
+void Plot3DPrivate::readFromFile(){
+	const QString& fileName = path.fileName();
+	qDebug() << Q_FUNC_INFO << "Read from the file:" << path.path().toAscii();
+	const QString& fileType = fileName.split('.').last().toLower();
+
+	if (fileType == "obj"){
+		qDebug() << Q_FUNC_INFO << "Create obj reader";
+		createReader<vtkOBJReader>();
+	} else if (fileType == "stl"){
+		qDebug() << Q_FUNC_INFO << "Create STL reader";
+		createReader<vtkSTLReader>();
+	}
 }
 
 void Plot3DPrivate::addAxes(){

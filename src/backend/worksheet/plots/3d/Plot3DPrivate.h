@@ -42,8 +42,8 @@ class AbstractColumn;
 class vtkActor;
 class vtkCubeAxesActor;
 class vtkRenderer;
+class vtkPolyDataMapper;
 class vtkOrientationMarkerWidget;
-class vtkPolyDataAlgorithm;
 
 class QGLContext;
 class QVTKGraphicsItem;
@@ -65,7 +65,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 
 		void clearActors();
 
-		vtkSmartPointer<vtkPolyDataAlgorithm> createReader(const KUrl& fileType) const;
+		template<class TReader>
+		void createReader();
 
 	private:
 		Plot3D* const q_ptr;
